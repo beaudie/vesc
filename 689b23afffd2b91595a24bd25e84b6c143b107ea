@@ -16,6 +16,29 @@
       "message": "thanks shabi",
       "revId": "689b23afffd2b91595a24bd25e84b6c143b107ea",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "5ab1f37a_a442407c",
+        "filename": "src/libANGLE/renderer/vulkan/doc/DeferredClears.md",
+        "patchSetId": 1
+      },
+      "lineNbr": 41,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2021-10-19T12:31:17Z",
+      "side": 1,
+      "message": "nit: run-on sentence, suggest you split it up into two or three",
+      "range": {
+        "startLine": 37,
+        "startChar": 77,
+        "endLine": 41,
+        "endChar": 0
+      },
+      "revId": "689b23afffd2b91595a24bd25e84b6c143b107ea",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
