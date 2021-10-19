@@ -1,0 +1,67 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "561e5ae6_728d8532",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.cpp",
+        "patchSetId": 36
+      },
+      "lineNbr": 3822,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2021-10-19T15:08:40Z",
+      "side": 1,
+      "message": "FYI, this should fix anglebug.com/6444 (see Comment 11 on how to easily reproduce it with the swiftshader hack in Comment 9 reverted)",
+      "revId": "c2b85798e4feedf102bc3af9a5d00aa36e2cc90d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "4bdb41b1_79e588e2",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.cpp",
+        "patchSetId": 36
+      },
+      "lineNbr": 3843,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2021-10-19T15:08:40Z",
+      "side": 1,
+      "message": "nit: retry",
+      "range": {
+        "startLine": 3843,
+        "startChar": 55,
+        "endLine": 3843,
+        "endChar": 59
+      },
+      "revId": "c2b85798e4feedf102bc3af9a5d00aa36e2cc90d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "7bc9458a_9737de7d",
+        "filename": "src/libANGLE/renderer/vulkan/vk_mem_alloc_wrapper.h",
+        "patchSetId": 36
+      },
+      "lineNbr": 24,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2021-10-19T15:08:40Z",
+      "side": 1,
+      "message": "nit: as much as I personally dislike camel case, ANGLE names these like kPoolCreate...",
+      "range": {
+        "startLine": 24,
+        "startChar": 4,
+        "endLine": 24,
+        "endChar": 51
+      },
+      "revId": "c2b85798e4feedf102bc3af9a5d00aa36e2cc90d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
