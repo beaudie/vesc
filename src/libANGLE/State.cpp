@@ -2476,6 +2476,9 @@ void State::getBooleanv(GLenum pname, GLboolean *params) const
         case GL_CLIP_DEPTH_MODE_EXT:
             *params = GL_TRUE;
             break;
+        case GL_ROBUST_FRAGMENT_SHADER_OUTPUT_ANGLE:
+            *params = mExtensions.robustFragmentShaderOutputANGLE ? GL_TRUE : GL_FALSE;
+            break;
         default:
             UNREACHABLE();
             break;
@@ -3360,8 +3363,12 @@ angle::Result State::syncDrawAttachments(const Context *context, Command command
 
 angle::Result State::syncReadFramebuffer(const Context *context, Command command)
 {
+    // Sync for the draw framebuffer as well if we're bound to both.
+    GLenum effectiveBinding =
+        mReadFramebuffer == mDrawFramebuffer ? GL_DRAW_FRAMEBUFFER : GL_READ_FRAMEBUFFER;
+
     ASSERT(mReadFramebuffer);
-    return mReadFramebuffer->syncState(context, GL_READ_FRAMEBUFFER, command);
+    return mReadFramebuffer->syncState(context, effectiveBinding, command);
 }
 
 angle::Result State::syncDrawFramebuffer(const Context *context, Command command)
