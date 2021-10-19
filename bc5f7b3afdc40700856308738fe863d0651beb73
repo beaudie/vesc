@@ -22,6 +22,23 @@
       },
       "revId": "bc5f7b3afdc40700856308738fe863d0651beb73",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "cb1fbb5d_56984e7d",
+        "filename": "src/libANGLE/renderer/vulkan/SemaphoreVk.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 234,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2021-10-19T00:46:58Z",
+      "side": 1,
+      "message": "How bad is it to just do a finishToSerial() here instead?",
+      "revId": "bc5f7b3afdc40700856308738fe863d0651beb73",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
