@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "18f16b6f_19e31ae0",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 8
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1359249
+      },
+      "writtenOn": "2021-10-19T13:50:29Z",
+      "side": 1,
+      "message": "Please look at added barrier for setting layout.\nI now see that 1 test platform seems to be running and failing. Little info with that.",
+      "revId": "6c034dd9d585a9f48196e38e939f3f9bc1b0044d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}

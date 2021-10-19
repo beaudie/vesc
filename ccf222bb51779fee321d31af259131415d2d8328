@@ -39,6 +39,30 @@
       },
       "revId": "ccf222bb51779fee321d31af259131415d2d8328",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "c9ac02aa_d36918f4",
+        "filename": "src/libANGLE/renderer/vulkan/SurfaceVk.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 1653,
+      "author": {
+        "id": 1359249
+      },
+      "writtenOn": "2021-10-19T13:50:29Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "2a7fbf04_cc493b84",
+      "range": {
+        "startLine": 1652,
+        "startChar": 0,
+        "endLine": 1653,
+        "endChar": 95
+      },
+      "revId": "ccf222bb51779fee321d31af259131415d2d8328",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
