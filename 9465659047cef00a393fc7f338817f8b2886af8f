@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "179fa931_42ccc82b",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 5
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2021-10-19T20:21:24Z",
+      "side": 1,
+      "message": "Very sorry for the slow review on these Gert... \n\nI haven\u0027t had a chance to dig into this in depth. I had two ideas:\n\n1) we replace Bind calls in the trace with a custom fixture call. the custom call would update the resource map if it detects the bind is a create.\n\n2) the capture harness detects when a bind is a create, and calls the fixture to update the resource map explictly.\n\nor 3) always update the resource map in a bind anyway, which is similar to 1)\n\nWould be good to hear your thoughts \u0026 Cody too.",
+      "revId": "9465659047cef00a393fc7f338817f8b2886af8f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
