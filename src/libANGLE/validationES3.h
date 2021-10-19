@@ -15,7 +15,6 @@
 namespace gl
 {
 bool ValidateES3TexImageParametersBase(const Context *context,
-                                       angle::EntryPoint entryPoint,
                                        TextureTarget target,
                                        GLint level,
                                        GLenum internalformat,
@@ -34,7 +33,6 @@ bool ValidateES3TexImageParametersBase(const Context *context,
                                        const void *pixels);
 
 bool ValidateProgramParameteriBase(const Context *context,
-                                   angle::EntryPoint entryPoint,
                                    ShaderProgramID program,
                                    GLenum pname,
                                    GLint value);
