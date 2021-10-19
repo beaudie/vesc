@@ -18,6 +18,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "18d7fb6d_02834c05",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.cpp",
+        "patchSetId": 36
+      },
+      "lineNbr": 3822,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2021-10-19T16:05:14Z",
+      "side": 1,
+      "message": "Right, I think the bug with original code is it is using createInfo-\u003esize instead of vkMemReq.size which swiftshader should have adjusted with extra bytes.",
+      "parentUuid": "561e5ae6_728d8532",
+      "revId": "c2b85798e4feedf102bc3af9a5d00aa36e2cc90d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "4bdb41b1_79e588e2",
@@ -41,6 +59,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "e5d5a4b2_3e870f52",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.cpp",
+        "patchSetId": 36
+      },
+      "lineNbr": 3843,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2021-10-19T16:05:14Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "4bdb41b1_79e588e2",
+      "range": {
+        "startLine": 3843,
+        "startChar": 55,
+        "endLine": 3843,
+        "endChar": 59
+      },
+      "revId": "c2b85798e4feedf102bc3af9a5d00aa36e2cc90d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "7bc9458a_9737de7d",
@@ -54,6 +96,30 @@
       "writtenOn": "2021-10-19T15:08:40Z",
       "side": 1,
       "message": "nit: as much as I personally dislike camel case, ANGLE names these like kPoolCreate...",
+      "range": {
+        "startLine": 24,
+        "startChar": 4,
+        "endLine": 24,
+        "endChar": 51
+      },
+      "revId": "c2b85798e4feedf102bc3af9a5d00aa36e2cc90d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "18e2d2d1_f500ebda",
+        "filename": "src/libANGLE/renderer/vulkan/vk_mem_alloc_wrapper.h",
+        "patchSetId": 36
+      },
+      "lineNbr": 24,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2021-10-19T16:05:14Z",
+      "side": 1,
+      "message": "The reason for this is to make it consistent with VMA #defines. I have to redefine it here mainly because as it is structured now, VMA is not directly exposed to the rest of code. This file is playing the role of bridge between ANGLE and VMA. If I make it more ANGLE like, then search that string in VMA will a bit harder and also make my static_assert a bit harder.",
+      "parentUuid": "7bc9458a_9737de7d",
       "range": {
         "startLine": 24,
         "startChar": 4,
