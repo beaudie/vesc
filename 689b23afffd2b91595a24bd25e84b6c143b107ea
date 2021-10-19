@@ -39,6 +39,30 @@
       },
       "revId": "689b23afffd2b91595a24bd25e84b6c143b107ea",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "2a78d693_aa275e61",
+        "filename": "src/libANGLE/renderer/vulkan/doc/DeferredClears.md",
+        "patchSetId": 1
+      },
+      "lineNbr": 41,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2021-10-19T13:53:10Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "5ab1f37a_a442407c",
+      "range": {
+        "startLine": 37,
+        "startChar": 77,
+        "endLine": 41,
+        "endChar": 0
+      },
+      "revId": "689b23afffd2b91595a24bd25e84b6c143b107ea",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
