@@ -1,0 +1,157 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "57d3edb3_f7501bb9",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2021-10-19T23:02:42Z",
+      "side": 1,
+      "message": "Great work Jonah getting this working. A few comments about ensuring this can land without regressions, while we\u0027re progressing toward switching to the Metal backend.\n",
+      "revId": "ee33eec32ac59b91992d7a81c26e97c5064985c2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "4f7be3f9_2e9b4947",
+        "filename": "extensions/EGL_ANGLE_power_preference.txt",
+        "patchSetId": 2
+      },
+      "lineNbr": 12,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2021-10-19T23:02:42Z",
+      "side": 1,
+      "message": "Please add yourself as contributor Jonah.",
+      "revId": "ee33eec32ac59b91992d7a81c26e97c5064985c2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "04f974b2_f9860c4f",
+        "filename": "extensions/EGL_ANGLE_power_preference.txt",
+        "patchSetId": 2
+      },
+      "lineNbr": 15,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2021-10-19T23:02:42Z",
+      "side": 1,
+      "message": "Also as a contact.",
+      "revId": "ee33eec32ac59b91992d7a81c26e97c5064985c2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "8a419d68_9f27f17b",
+        "filename": "extensions/EGL_ANGLE_power_preference.txt",
+        "patchSetId": 2
+      },
+      "lineNbr": 80,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2021-10-19T23:02:42Z",
+      "side": 1,
+      "message": "context -\u003e display",
+      "revId": "ee33eec32ac59b91992d7a81c26e97c5064985c2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "79905ffa_fca33d5e",
+        "filename": "extensions/EGL_ANGLE_power_preference.txt",
+        "patchSetId": 2
+      },
+      "lineNbr": 83,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2021-10-19T23:02:42Z",
+      "side": 1,
+      "message": "Should we delete here through the bottom?\n\nWe won\u0027t be able to support dynamically switching between GPUs on anything except macOS OpenGL, and since that code path\u0027s being removed, I think we should just delete the obsolete function references from the spec, even if ANGLE continues to allow them to be called for a brief period of time.\n\nIdeally we\u0027d put these functions on a deprecation path in the header - is there a way to do that? We\u0027ll need to maintain the path as long as passthrough + OpenGL is shipping in Chrome, but again hopefully not for much longer. Let\u0027s file a bug about removing both those old entry points, and also support for using this as a context creation attribute.\n\nFurther below I see that this CL aims to make a clean switch over to using multiple EGLDisplays to handle GPU selection. From today\u0027s ANGLE meeting it\u0027s clear that that\u0027s actually a very large task Chrome-side, so we\u0027ll have to take a more incremental approach. Let\u0027s temporarily continue to support using this attribute as a context creation attribute only on the Mac OpenGL backend, keep that code working the same way it currently does, and roll in the EGLDisplay-based support with the Metal backend.",
+      "revId": "ee33eec32ac59b91992d7a81c26e97c5064985c2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "854d64f4_a354ecc4",
+        "filename": "src/libANGLE/Display.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 1806,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2021-10-19T23:02:42Z",
+      "side": 1,
+      "message": "Let\u0027s advertise this extension here conditionally - only when on the Metal backend.",
+      "revId": "ee33eec32ac59b91992d7a81c26e97c5064985c2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "06f81a3d_ede88849",
+        "filename": "src/tests/egl_tests/EGLPowerPreferenceTest.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 160,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2021-10-19T23:02:42Z",
+      "side": 1,
+      "message": "Nice test.",
+      "revId": "ee33eec32ac59b91992d7a81c26e97c5064985c2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "355c9f1d_96e021a6",
+        "filename": "src/tests/egl_tests/EGLPowerPreferenceTest.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 206,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2021-10-19T23:02:42Z",
+      "side": 1,
+      "message": "Nice test.",
+      "revId": "ee33eec32ac59b91992d7a81c26e97c5064985c2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "90956072_873e9cc5",
+        "filename": "src/tests/egl_tests/EGLPowerPreferenceTest.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 249,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2021-10-19T23:02:42Z",
+      "side": 1,
+      "message": "Per above - we shouldn\u0027t worry about getting these tests to run on the OpenGL backend.",
+      "revId": "ee33eec32ac59b91992d7a81c26e97c5064985c2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
