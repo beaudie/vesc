@@ -38,6 +38,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "128b08ee_d5c1da41",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 8
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1359249
+      },
+      "writtenOn": "2021-10-19T22:00:45Z",
+      "side": 1,
+      "message": "I saw run on 2 test platforms previously. Probably both android. One skipped, because feature was not supported, the other gave no pass or fail, would indicate pass, but I was uncertain, no log messages were printed out either. That was pre barrier.\n\nMy local desktop and pixel device don\u0027t support this feature. Spencer has provided me a patch for our driver, and we have android that supports for it. This was uncertain before, and some effort to setup, so haven\u0027t tried yet.\nI was hoping to get everything in place first, the major design fixes.\n\nOf course now I want to know the cause of the failures on that Android device run.",
+      "parentUuid": "68689f54_aba85814",
+      "revId": "6c034dd9d585a9f48196e38e939f3f9bc1b0044d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "45bcc5dc_e797b111",
         "filename": "src/libANGLE/renderer/vulkan/SurfaceVk.cpp",
         "patchSetId": 8
@@ -49,6 +67,30 @@
       "writtenOn": "2021-10-19T15:22:54Z",
       "side": 1,
       "message": "Use ANGLE_VK_TRY",
+      "range": {
+        "startLine": 1664,
+        "startChar": 12,
+        "endLine": 1664,
+        "endChar": 18
+      },
+      "revId": "6c034dd9d585a9f48196e38e939f3f9bc1b0044d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b430fefe_6c09c40b",
+        "filename": "src/libANGLE/renderer/vulkan/SurfaceVk.cpp",
+        "patchSetId": 8
+      },
+      "lineNbr": 1664,
+      "author": {
+        "id": 1359249
+      },
+      "writtenOn": "2021-10-19T22:00:45Z",
+      "side": 1,
+      "message": "this will exit acquireNextSwapchainImage, wasn\u0027t certain that was a good idea.",
+      "parentUuid": "45bcc5dc_e797b111",
       "range": {
         "startLine": 1664,
         "startChar": 12,
@@ -84,6 +126,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "dad18628_f7aaf764",
+        "filename": "src/libANGLE/renderer/vulkan/SurfaceVk.cpp",
+        "patchSetId": 8
+      },
+      "lineNbr": 1666,
+      "author": {
+        "id": 1359249
+      },
+      "writtenOn": "2021-10-19T22:00:45Z",
+      "side": 1,
+      "message": "Had to pick best error returned by vkQueueSubmit. ANGLE_TRY/ANGLE_VK_TRY not compatible. Compiler errors.",
+      "parentUuid": "f8bfa387_088f20a8",
+      "range": {
+        "startLine": 1666,
+        "startChar": 12,
+        "endLine": 1666,
+        "endChar": 18
+      },
+      "revId": "6c034dd9d585a9f48196e38e939f3f9bc1b0044d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "1ecb5fc0_b6ec0818",
         "filename": "src/libANGLE/renderer/vulkan/vk_helpers.h",
         "patchSetId": 8
@@ -95,6 +161,30 @@
       "writtenOn": "2021-10-19T15:22:54Z",
       "side": 1,
       "message": "nit: you can call this recordWriteBarrierOneOff to mirror the other similar function.",
+      "range": {
+        "startLine": 1824,
+        "startChar": 9,
+        "endLine": 1824,
+        "endChar": 38
+      },
+      "revId": "6c034dd9d585a9f48196e38e939f3f9bc1b0044d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "c77f19bc_505c2079",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.h",
+        "patchSetId": 8
+      },
+      "lineNbr": 1824,
+      "author": {
+        "id": 1359249
+      },
+      "writtenOn": "2021-10-19T22:00:45Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "1ecb5fc0_b6ec0818",
       "range": {
         "startLine": 1824,
         "startChar": 9,
