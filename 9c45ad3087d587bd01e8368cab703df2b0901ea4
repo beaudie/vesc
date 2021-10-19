@@ -173,6 +173,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "4bf1d12e_57c29f68",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 1129,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2021-10-19T15:35:13Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "d06d255c_beb0a887",
+      "range": {
+        "startLine": 1129,
+        "startChar": 23,
+        "endLine": 1129,
+        "endChar": 58
+      },
+      "revId": "9c45ad3087d587bd01e8368cab703df2b0901ea4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "7ca99171_8ffe21fd",
@@ -186,6 +210,30 @@
       "writtenOn": "2021-10-07T18:49:59Z",
       "side": 1,
       "message": "nit: explicit",
+      "range": {
+        "startLine": 2336,
+        "startChar": 92,
+        "endLine": 2336,
+        "endChar": 93
+      },
+      "revId": "9c45ad3087d587bd01e8368cab703df2b0901ea4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "616ccf3d_574d69ec",
+        "filename": "src/libANGLE/renderer/vulkan/vk_cache_utils.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 2336,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2021-10-19T15:35:13Z",
+      "side": 1,
+      "message": "Number of bits in a byte? We don\u0027t do that anywhere else (including other functions in this file). I changed `kSize` to `kSizeBits` to make it clearer though.",
+      "parentUuid": "7ca99171_8ffe21fd",
       "range": {
         "startLine": 2336,
         "startChar": 92,
