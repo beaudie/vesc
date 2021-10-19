@@ -24,6 +24,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "c6621844_a6241add",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 3
+      },
+      "lineNbr": 20,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2021-10-19T14:55:48Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "65030413_3c3a78c9",
+      "range": {
+        "startLine": 20,
+        "startChar": 5,
+        "endLine": 20,
+        "endChar": 17
+      },
+      "revId": "b810c91cf6917a423afb213e5324388c87c60bfe",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "c2a7021b_234aa1d6",
@@ -37,6 +61,30 @@
       "writtenOn": "2021-10-19T14:08:58Z",
       "side": 1,
       "message": "How about \u0027ensureNoPendingWork\u0027, \u0027flushQueuedCommands\u0027 or \u0027submitQueuedCommands\u0027 ?",
+      "range": {
+        "startLine": 320,
+        "startChar": 26,
+        "endLine": 320,
+        "endChar": 51
+      },
+      "revId": "b810c91cf6917a423afb213e5324388c87c60bfe",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "a0330c3b_ee235bd6",
+        "filename": "src/libANGLE/renderer/vulkan/CommandProcessor.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 320,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2021-10-19T14:55:48Z",
+      "side": 1,
+      "message": "flushQueuedCommands: flush is overriden too often\nsubmitQueuedCommands: most commands are not submissions\nensureNoPendingWork: I changed it to submission, since technically that\u0027s the one we want not pending, but ok, done (changed to this).",
+      "parentUuid": "c2a7021b_234aa1d6",
       "range": {
         "startLine": 320,
         "startChar": 26,
