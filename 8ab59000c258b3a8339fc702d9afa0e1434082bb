@@ -16,6 +16,23 @@
       "message": "Relanding this now that downstream test has been updated.",
       "revId": "8ab59000c258b3a8339fc702d9afa0e1434082bb",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "2db12a29_57c9f4f7",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2021-10-19T01:36:53Z",
+      "side": 1,
+      "message": "For future reference, you can \"Reland\" the original CL that got reverted, instead of \"Revert\"ing the reverted CL. The commit message ends up being nicer. \"Reland\" can be found in the ... menu.",
+      "revId": "8ab59000c258b3a8339fc702d9afa0e1434082bb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
