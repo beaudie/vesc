@@ -16,6 +16,24 @@
       "message": "Weird that you need an extension for this, but LGTM.  Thanks Jamie.",
       "revId": "56ab0e58ddeeb5c294f32a604dd03f7d5e8a682d",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "3fe991d9_e2e7e6cb",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2021-10-19T14:48:00Z",
+      "side": 1,
+      "message": "So the behaviour could be deterministically tested using the GLES API.",
+      "parentUuid": "970a3b61_c5032a52",
+      "revId": "56ab0e58ddeeb5c294f32a604dd03f7d5e8a682d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
