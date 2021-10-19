@@ -158,13 +158,79 @@ angle::Result InitImageHelper(DisplayVk *displayVk,
     return angle::Result::Continue;
 }
 
-VkColorSpaceKHR MapEglColorSpaceToVkColorSpace(EGLenum EGLColorspace)
+void GetSupportedVkColorSpace(RendererVk *renderer, std::vector<VkColorSpaceKHR> *supported)
 {
-    switch (EGLColorspace)
+    if (!renderer || !supported)
+    {
+        return;
+    }
+
+    // Use the VK_GOOGLE_surfaceless_query extension to query the available formats and
+    // colorspaces by using a VK_NULL_HANDLE for the VkSurfaceKHR handle.
+    VkPhysicalDevice physicalDevice              = renderer->getPhysicalDevice();
+    VkPhysicalDeviceSurfaceInfo2KHR surfaceInfo2 = {};
+    surfaceInfo2.sType          = VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_SURFACE_INFO_2_KHR;
+    surfaceInfo2.surface        = VK_NULL_HANDLE;
+    uint32_t surfaceFormatCount = 0;
+
+    VkResult result = vkGetPhysicalDeviceSurfaceFormats2KHR(physicalDevice, &surfaceInfo2,
+                                                            &surfaceFormatCount, nullptr);
+    if (result != VK_SUCCESS)
+    {
+        return;
+    }
+
+    std::vector<VkSurfaceFormat2KHR> surfaceFormats2(surfaceFormatCount);
+    for (VkSurfaceFormat2KHR &surfaceFormat2 : surfaceFormats2)
+    {
+        surfaceFormat2.sType = VK_STRUCTURE_TYPE_SURFACE_FORMAT_2_KHR;
+    }
+    result = vkGetPhysicalDeviceSurfaceFormats2KHR(physicalDevice, &surfaceInfo2,
+                                                   &surfaceFormatCount, surfaceFormats2.data());
+    if (result != VK_SUCCESS)
+    {
+        return;
+    }
+
+    for (const VkSurfaceFormat2KHR &surfaceFormat2 : surfaceFormats2)
+    {
+        VkColorSpaceKHR colorSpace = surfaceFormat2.surfaceFormat.colorSpace;
+        if (std::find(supported->begin(), supported->end(), colorSpace) != supported->end())
+        {
+            supported->push_back(colorSpace);
+        }
+    }
+}
+
+VkColorSpaceKHR MapEglColorSpaceToVkColorSpace(EGLenum eglColorspace, RendererVk *renderer)
+{
+    bool bt709LinearSupport                = false;
+    std::vector<VkColorSpaceKHR> supported = std::vector<VkColorSpaceKHR>();
+    GetSupportedVkColorSpace(renderer, &supported);
+
+    for (const VkColorSpaceKHR &colorSpace : supported)
+    {
+        if (colorSpace == VK_COLOR_SPACE_BT709_LINEAR_EXT)
+        {
+            bt709LinearSupport = true;
+        }
+    }
+
+    switch (eglColorspace)
     {
         case EGL_NONE:
+            return VK_COLOR_SPACE_SRGB_NONLINEAR_KHR;
         case EGL_GL_COLORSPACE_LINEAR:
+            if (bt709LinearSupport)
+            {
+                return VK_COLOR_SPACE_BT709_LINEAR_EXT;
+            }
+            else
+            {
+                return VK_COLOR_SPACE_PASS_THROUGH_EXT;
+            }
         case EGL_GL_COLORSPACE_SRGB_KHR:
+            return VK_COLOR_SPACE_SRGB_NONLINEAR_KHR;
         case EGL_GL_COLORSPACE_DISPLAY_P3_PASSTHROUGH_EXT:
             return VK_COLOR_SPACE_SRGB_NONLINEAR_KHR;
         case EGL_GL_COLORSPACE_DISPLAY_P3_LINEAR_EXT:
@@ -1009,7 +1075,8 @@ angle::Result WindowSurfaceVk::initializeImpl(DisplayVk *displayVk)
 
     bool surfaceFormatSupported = false;
     VkColorSpaceKHR colorSpace  = MapEglColorSpaceToVkColorSpace(
-        static_cast<EGLenum>(mState.attributes.get(EGL_GL_COLORSPACE, EGL_NONE)));
+        static_cast<EGLenum>(mState.attributes.get(EGL_GL_COLORSPACE, EGL_NONE)),
+        displayVk->getRenderer());
 
     if (renderer->getFeatures().supportsSurfaceCapabilities2Extension.enabled)
     {
@@ -1285,7 +1352,7 @@ angle::Result WindowSurfaceVk::createSwapChain(vk::Context *context,
     swapchainInfo.minImageCount   = mMinImageCount;
     swapchainInfo.imageFormat     = vk::GetVkFormatFromFormatID(actualFormatID);
     swapchainInfo.imageColorSpace = MapEglColorSpaceToVkColorSpace(
-        static_cast<EGLenum>(mState.attributes.get(EGL_GL_COLORSPACE, EGL_NONE)));
+        static_cast<EGLenum>(mState.attributes.get(EGL_GL_COLORSPACE, EGL_NONE)), renderer);
     // Note: Vulkan doesn't allow 0-width/height swapchains.
     swapchainInfo.imageExtent.width     = std::max(rotatedExtents.width, 1);
     swapchainInfo.imageExtent.height    = std::max(rotatedExtents.height, 1);
