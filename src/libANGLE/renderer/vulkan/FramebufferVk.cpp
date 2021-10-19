@@ -1898,7 +1898,7 @@ angle::Result FramebufferVk::syncState(const gl::Context *context,
 
     // Only defer clears for draw framebuffer ops.  Note that this will result in a render area that
     // completely covers the framebuffer, even if the operation that follows is scissored.
-    bool deferClears = binding == GL_DRAW_FRAMEBUFFER;
+    bool deferClears = mState.isBoundAsDrawFramebuffer(context);
 
     // If we are notified that any attachment is dirty, but we have deferred clears for them, a
     // flushDeferredClears() call is missing somewhere.  ASSERT this to catch these bugs.
@@ -1939,8 +1939,12 @@ angle::Result FramebufferVk::syncState(const gl::Context *context,
     // Deactivate Framebuffer
     mFramebuffer = nullptr;
 
-    // Notify the ContextVk to update the pipeline desc.
-    return contextVk->onFramebufferChange(this, command);
+    if (mState.isBoundAsDrawFramebuffer(context))
+    {
+        ANGLE_TRY(contextVk->onFramebufferChange(this, command));
+    }
+
+    return angle::Result::Continue;
 }
 
 void FramebufferVk::updateRenderPassDesc(ContextVk *contextVk)
