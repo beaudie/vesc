@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "022ac994_34823ec5",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2021-10-19T01:17:18Z",
+      "side": 1,
+      "message": "Per anglebug.com/6575#c3 this change is not the culprit, so no need for this revert",
+      "revId": "48333fe99382e0c1892eee71ce60966ae5627585",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
