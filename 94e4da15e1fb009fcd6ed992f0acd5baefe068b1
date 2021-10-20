@@ -33,6 +33,75 @@
       "message": "Comment",
       "revId": "94e4da15e1fb009fcd6ed992f0acd5baefe068b1",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "dee15c35_595aa6f5",
+        "filename": "src/libANGLE/Surface.cpp",
+        "patchSetId": 9
+      },
+      "lineNbr": 698,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2021-10-20T15:43:43Z",
+      "side": 1,
+      "message": "nit: use ANGLE_TRY",
+      "range": {
+        "startLine": 694,
+        "startChar": 0,
+        "endLine": 698,
+        "endChar": 5
+      },
+      "revId": "94e4da15e1fb009fcd6ed992f0acd5baefe068b1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "586a63b6_0609b9fd",
+        "filename": "src/libANGLE/renderer/vulkan/SurfaceVk.cpp",
+        "patchSetId": 9
+      },
+      "lineNbr": 2053,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2021-10-20T15:43:43Z",
+      "side": 1,
+      "message": "is this an implementation error? this ideally would be something we could catch in the validation layer, i.e. by rejecting this config somewhere before the call.",
+      "range": {
+        "startLine": 2048,
+        "startChar": 0,
+        "endLine": 2053,
+        "endChar": 0
+      },
+      "revId": "94e4da15e1fb009fcd6ed992f0acd5baefe068b1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "c75f11d0_2a1b40bf",
+        "filename": "src/libGLESv2/egl_stubs.cpp",
+        "patchSetId": 9
+      },
+      "lineNbr": 623,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2021-10-20T15:43:43Z",
+      "side": 1,
+      "message": "can we not use a try macro here as well?",
+      "range": {
+        "startLine": 623,
+        "startChar": 23,
+        "endLine": 623,
+        "endChar": 39
+      },
+      "revId": "94e4da15e1fb009fcd6ed992f0acd5baefe068b1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
