@@ -11,6 +11,7 @@
 
 #include "angle_trace_gl.h"
 
+#include <sstream>
 #include <string>
 
 namespace
@@ -99,7 +100,12 @@ void DeleteUniformLocations(GLuint program)
 
 void UpdateUniformBlockIndex(GLuint program, const char *name, GLuint index)
 {
-    gUniformBlockIndexes[program][index] = glGetUniformBlockIndex(program, name);
+    std::stringstream nameWithIndex;
+    nameWithIndex << name << "[" << index << "]";
+    GLuint uniformBlockIndex = glGetUniformBlockIndex(program, nameWithIndex.str().c_str());
+    if (uniformBlockIndex == GL_INVALID_INDEX)
+        uniformBlockIndex = glGetUniformBlockIndex(program, name);
+    gUniformBlockIndexes[program][index] = uniformBlockIndex;
 }
 void UpdateCurrentProgram(GLuint program)
 {
