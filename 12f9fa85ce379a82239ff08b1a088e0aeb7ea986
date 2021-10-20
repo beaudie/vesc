@@ -33,6 +33,23 @@
       "message": "Doh! I just spent time fixing the same issue 😭\n\nCan you also remove same FAIL expectations in deqp_gles3_test_expectations.txt that this fixes\n\nAlso, AFAIK the code that\u0027s clipping the the rect is not needed? The rect that comes in here is already clipped in ContextMtl::updateScissor?",
       "revId": "12f9fa85ce379a82239ff08b1a088e0aeb7ea986",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "9bff8818_55ccf525",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2021-10-20T22:28:11Z",
+      "side": 1,
+      "message": "Please see Gregg\u0027s CL:\nhttps://chromium-review.googlesource.com/c/angle/angle/+/3233837\n\nwhich enabled the associated dEQP GLES3 tests.\n",
+      "revId": "12f9fa85ce379a82239ff08b1a088e0aeb7ea986",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
