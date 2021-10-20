@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "7935c126_0f6f8289",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2021-10-20T03:17:41Z",
+      "side": 1,
+      "message": "Fix for a regression Lubosz found when he rebased his Dota Underlords work on the setup filtering CL.",
+      "revId": "8dcc2765ac0548baea4aebac73f9d57873139ef7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
