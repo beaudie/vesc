@@ -11,6 +11,7 @@
 
 #include "angle_trace_gl.h"
 
+#include <sstream>
 #include <string>
 
 namespace
@@ -99,7 +100,17 @@ void DeleteUniformLocations(GLuint program)
 
 void UpdateUniformBlockIndex(GLuint program, const char *name, GLuint index)
 {
-    gUniformBlockIndexes[program][index] = glGetUniformBlockIndex(program, name);
+    // Try querying the uniform block index as array element, if that fails use the plain uniform
+    // name. One would expect that one could also just query the uniform with the plain name for
+    // the element with index 0, and then add the array index to the string for index > 0, but this
+    // fails with certain traces, so always try with array index first, and if this fails,
+    // try the plain uniform name.
+    std::stringstream nameWithIndex;
+    nameWithIndex << name << "[" << index << "]";
+    GLuint uniformBlockIndex = glGetUniformBlockIndex(program, nameWithIndex.str().c_str());
+    if (uniformBlockIndex == GL_INVALID_INDEX)
+        uniformBlockIndex = glGetUniformBlockIndex(program, name);
+    gUniformBlockIndexes[program][index] = uniformBlockIndex;
 }
 void UpdateCurrentProgram(GLuint program)
 {
