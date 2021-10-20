@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "75c9ca50_2624f667",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2021-10-20T18:39:57Z",
+      "side": 1,
+      "message": "Verified locally, this gets Zillow running again.\n\nWorth noting this is based on the formats supported here:\nhttps://cs.android.com/android/platform/superproject/+/master:frameworks/native/vulkan/libvulkan/swapchain.cpp;l\u003d465-486?q\u003dGetNativePixelFormat",
+      "revId": "f02187b9fa02472795166dbd1e9ec7d841bce876",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
