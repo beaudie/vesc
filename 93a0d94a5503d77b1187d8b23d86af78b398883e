@@ -18,6 +18,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "2a229f99_17fbe8a2",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 2
+      },
+      "lineNbr": 9,
+      "author": {
+        "id": 1500872
+      },
+      "writtenOn": "2021-10-20T17:34:06Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "e8ca4535_057a57c4",
+      "revId": "93a0d94a5503d77b1187d8b23d86af78b398883e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "42a5165e_17be6104",
@@ -31,6 +49,24 @@
       "writtenOn": "2021-10-19T23:06:07Z",
       "side": 1,
       "message": "Please reference:\n\nBug: angleproject:5107",
+      "revId": "93a0d94a5503d77b1187d8b23d86af78b398883e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "f8fa4ff7_d5db3a68",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 2
+      },
+      "lineNbr": 14,
+      "author": {
+        "id": 1500872
+      },
+      "writtenOn": "2021-10-20T17:34:06Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "42a5165e_17be6104",
       "revId": "93a0d94a5503d77b1187d8b23d86af78b398883e",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
