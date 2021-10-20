@@ -18,6 +18,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "b0dbb9ec_8d445b5f",
+        "filename": "src/libANGLE/Caps.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 1274,
+      "author": {
+        "id": 1326275
+      },
+      "writtenOn": "2021-10-20T16:55:44Z",
+      "side": 0,
+      "message": "Done",
+      "parentUuid": "c6f9ac02_fc1d4b45",
+      "revId": "b30dc00cd03e9eab55ef6ac64bdaac79486d0b6d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "5989ff6d_8497ed38",
@@ -31,6 +49,24 @@
       "writtenOn": "2021-10-19T23:02:42Z",
       "side": 0,
       "message": "To avoid regressions I think we\u0027ll need to advertise this as a display extension only on the macOS OpenGL backend. We should add a big TODO about removing this once the Metal backend\u0027s shipped.",
+      "revId": "b30dc00cd03e9eab55ef6ac64bdaac79486d0b6d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "ab28cd49_53113542",
+        "filename": "src/libANGLE/Caps.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 554,
+      "author": {
+        "id": 1326275
+      },
+      "writtenOn": "2021-10-20T16:55:44Z",
+      "side": 0,
+      "message": "Done",
+      "parentUuid": "5989ff6d_8497ed38",
       "revId": "b30dc00cd03e9eab55ef6ac64bdaac79486d0b6d",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
@@ -52,6 +88,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "fde471fa_75f97d2b",
+        "filename": "src/libANGLE/renderer/gl/cgl/DisplayCGL.mm",
+        "patchSetId": 2
+      },
+      "lineNbr": 484,
+      "author": {
+        "id": 1326275
+      },
+      "writtenOn": "2021-10-20T16:55:44Z",
+      "side": 0,
+      "message": "Done",
+      "parentUuid": "bb75e34f_3791191a",
+      "revId": "b30dc00cd03e9eab55ef6ac64bdaac79486d0b6d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "c7d98a9b_79281278",
@@ -65,6 +119,30 @@
       "writtenOn": "2021-10-19T23:02:42Z",
       "side": 0,
       "message": "Per above - let\u0027s maintain this code for the moment, with a big TODO about cleaning it up once passthrough\u0027s switched over to the Metal backend by default.",
+      "range": {
+        "startLine": 1875,
+        "startChar": 21,
+        "endLine": 1875,
+        "endChar": 28
+      },
+      "revId": "b30dc00cd03e9eab55ef6ac64bdaac79486d0b6d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "03cdde45_959fe5b3",
+        "filename": "src/libANGLE/validationEGL.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 1875,
+      "author": {
+        "id": 1326275
+      },
+      "writtenOn": "2021-10-20T16:55:44Z",
+      "side": 0,
+      "message": "Done",
+      "parentUuid": "c7d98a9b_79281278",
       "range": {
         "startLine": 1875,
         "startChar": 21,
