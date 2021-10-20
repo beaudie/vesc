@@ -3,6 +3,29 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "7e8b1edb_0c4ed8a5",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.cpp",
+        "patchSetId": 37
+      },
+      "lineNbr": 3684,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2021-10-20T16:31:51Z",
+      "side": 1,
+      "message": "nit: I believe you can use range-for for both the outer and inner loops",
+      "range": {
+        "startLine": 3681,
+        "startChar": 0,
+        "endLine": 3684,
+        "endChar": 9
+      },
+      "revId": "d0e27090695166cb958bef64c75b639b0bb6e295",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "0d0d6ed8_57116373",
         "filename": "src/libANGLE/renderer/vulkan/RendererVk.cpp",
         "patchSetId": 37
@@ -26,6 +49,52 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "a1463318_dc065bcf",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.cpp",
+        "patchSetId": 37
+      },
+      "lineNbr": 3698,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2021-10-20T16:31:51Z",
+      "side": 1,
+      "message": "same nit about range-for",
+      "range": {
+        "startLine": 3695,
+        "startChar": 0,
+        "endLine": 3698,
+        "endChar": 9
+      },
+      "revId": "d0e27090695166cb958bef64c75b639b0bb6e295",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "109fa10c_dd004967",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.cpp",
+        "patchSetId": 37
+      },
+      "lineNbr": 3744,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2021-10-20T16:31:51Z",
+      "side": 1,
+      "message": "I don\u0027t see any references to member variables (variables prefixed with \"m\") in this method, seems like it can be a private static method local to this file.",
+      "range": {
+        "startLine": 3744,
+        "startChar": 31,
+        "endLine": 3744,
+        "endChar": 44
+      },
+      "revId": "d0e27090695166cb958bef64c75b639b0bb6e295",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "41cf0131_dbad6d47",
         "filename": "src/libANGLE/renderer/vulkan/RendererVk.cpp",
         "patchSetId": 37
@@ -37,6 +106,52 @@
       "writtenOn": "2021-10-20T01:45:07Z",
       "side": 1,
       "message": "This is ignoring the return value of vma::CreatePool().   This function should be updated to something like:\n\n  VkResult BufferMemoryAllocator::createVMAPool(const Allocator \u0026allocator,\n                                                uint32_t memoryTypeIndex,\n                                                VMAPoolType poolType,\n                                                VmaPool *poolOut)",
+      "revId": "d0e27090695166cb958bef64c75b639b0bb6e295",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "19c98490_14eb8a3a",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.cpp",
+        "patchSetId": 37
+      },
+      "lineNbr": 3782,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2021-10-20T16:31:51Z",
+      "side": 1,
+      "message": "nit: uses the",
+      "range": {
+        "startLine": 3782,
+        "startChar": 82,
+        "endLine": 3782,
+        "endChar": 86
+      },
+      "revId": "d0e27090695166cb958bef64c75b639b0bb6e295",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "3886a99c_9f70a10c",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.cpp",
+        "patchSetId": 37
+      },
+      "lineNbr": 3783,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2021-10-20T16:31:51Z",
+      "side": 1,
+      "message": "nit: is added at the end of the allocation",
+      "range": {
+        "startLine": 3783,
+        "startChar": 66,
+        "endLine": 3783,
+        "endChar": 79
+      },
       "revId": "d0e27090695166cb958bef64c75b639b0bb6e295",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
@@ -66,6 +181,29 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "4e12ac01_e60914b6",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.cpp",
+        "patchSetId": 37
+      },
+      "lineNbr": 3831,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2021-10-20T16:31:51Z",
+      "side": 1,
+      "message": "I suggest you make a TRY type pattern so you can avoid these recursive indents. Use RAII wrappers to handle freeing early exit / error.",
+      "range": {
+        "startLine": 3831,
+        "startChar": 11,
+        "endLine": 3831,
+        "endChar": 37
+      },
+      "revId": "d0e27090695166cb958bef64c75b639b0bb6e295",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "b43aafa8_3aa7e406",
         "filename": "src/libANGLE/renderer/vulkan/RendererVk.h",
         "patchSetId": 37
@@ -82,6 +220,52 @@
         "startChar": 4,
         "endLine": 92,
         "endChar": 17
+      },
+      "revId": "d0e27090695166cb958bef64c75b639b0bb6e295",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "f3424a31_933f3587",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.h",
+        "patchSetId": 37
+      },
+      "lineNbr": 105,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2021-10-20T16:31:51Z",
+      "side": 1,
+      "message": "nit: please use lowercase camelCase for non-static member functions as per the ANGLE style guide",
+      "range": {
+        "startLine": 105,
+        "startChar": 18,
+        "endLine": 105,
+        "endChar": 41
+      },
+      "revId": "d0e27090695166cb958bef64c75b639b0bb6e295",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "a9d9b9fe_d5aa4584",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.h",
+        "patchSetId": 37
+      },
+      "lineNbr": 144,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2021-10-20T16:31:51Z",
+      "side": 1,
+      "message": "can you make a RAII wrapper type for VmaPool that ensures it is freed before the destructor completes, and is not copied around?",
+      "range": {
+        "startLine": 144,
+        "startChar": 53,
+        "endLine": 144,
+        "endChar": 60
       },
       "revId": "d0e27090695166cb958bef64c75b639b0bb6e295",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"

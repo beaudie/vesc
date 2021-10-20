@@ -128,6 +128,30 @@
       },
       "revId": "c2b85798e4feedf102bc3af9a5d00aa36e2cc90d",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "f41160a9_415a86a7",
+        "filename": "src/libANGLE/renderer/vulkan/vk_mem_alloc_wrapper.h",
+        "patchSetId": 36
+      },
+      "lineNbr": 24,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2021-10-20T16:31:51Z",
+      "side": 1,
+      "message": "I\u0027m fine with leaving these to match VMA, please add a comment so other reviewers / Shabi aren\u0027t confused when reading this.",
+      "parentUuid": "18e2d2d1_f500ebda",
+      "range": {
+        "startLine": 24,
+        "startChar": 4,
+        "endLine": 24,
+        "endChar": 51
+      },
+      "revId": "c2b85798e4feedf102bc3af9a5d00aa36e2cc90d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
