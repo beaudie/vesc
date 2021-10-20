@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "983017ed_83a7580e",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2021-10-20T00:27:06Z",
+      "side": 1,
+      "message": "lgtm\n\nNeed a code OWNER to review. Yuly\u0027s on vacation. +jonahr\n",
+      "revId": "34f7fcfc8b509ebc9b6d4271e078b54d8a6dd011",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
