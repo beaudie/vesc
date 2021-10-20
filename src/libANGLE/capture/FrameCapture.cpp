@@ -1602,6 +1602,9 @@ void CaptureUpdateUniformBlockIndexes(const gl::Program *program,
 {
     const std::vector<gl::InterfaceBlock> &uniformBlocks = program->getState().getUniformBlocks();
 
+    std::string lastUniformBlockName;
+    GLuint runningIndex = 0;
+
     for (GLuint index = 0; index < uniformBlocks.size(); ++index)
     {
         ParamBuffer params;
@@ -1610,7 +1613,21 @@ void CaptureUpdateUniformBlockIndexes(const gl::Program *program,
         params.addValueParam("program", ParamType::TShaderProgramID, program->id());
 
         ParamCapture nameParam("name", ParamType::TGLcharConstPointer);
-        CaptureString(uniformBlocks[index].name.c_str(), &nameParam);
+
+        std::stringstream fullName;
+        if (lastUniformBlockName != uniformBlocks[index].name)
+        {
+            runningIndex         = 0;
+            lastUniformBlockName = uniformBlocks[index].name;
+            fullName << lastUniformBlockName;
+        }
+        else
+        {
+            ++runningIndex;
+            fullName << lastUniformBlockName << "[" << runningIndex << "]";
+        }
+
+        CaptureString(fullName.str().c_str(), &nameParam);
         params.addParam(std::move(nameParam));
 
         params.addValueParam("index", ParamType::TGLuint, index);
