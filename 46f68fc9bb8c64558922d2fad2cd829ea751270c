@@ -16,6 +16,24 @@
       "message": "Can you link to any documentation that indicates this is the correct mapping? Lubosz do you have any input here?",
       "revId": "46f68fc9bb8c64558922d2fad2cd829ea751270c",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "425ef5a8_87548aac",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2021-10-20T13:47:28Z",
+      "side": 1,
+      "message": "Documentation is sparse. Discussion happened in the SI WG and chat. That\u0027s briefly documented here: https://gitlab.khronos.org/vulkan/vulkan/-/issues/2827",
+      "parentUuid": "3d368ab6_62d853a5",
+      "revId": "46f68fc9bb8c64558922d2fad2cd829ea751270c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
