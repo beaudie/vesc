@@ -16,6 +16,57 @@
       "message": "most of this code is new to me so not sure about what I don\u0027t know but walking over it lgtm",
       "revId": "14e3fd9b30c4508b504ffabd440a8710e9f202a0",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "c9239a14_11ea09ff",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 6
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2021-10-20T19:53:25Z",
+      "side": 1,
+      "message": "lgtm\n\nThe test failures on the Mac AMD machines are probably happening because the tests are now actually running on the Intel GPU. Gregg ran into this in his own testing - the ANGLE_PREFERRED_DEVICE environment variable switches which GPU ANGLE uses, but not how test expectations are parsed.\n\nI think the way to fix this is to set the display creation attribute in src/third_party/angle/util/EGLWindow.cpp . Not sure whether it needs to honor ANGLE_PREFERRED_DEVICE - haven\u0027t checked to see how that\u0027s handled. Needs local testing though in particular of the failed tests.",
+      "revId": "14e3fd9b30c4508b504ffabd440a8710e9f202a0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "80f53daa_180ac0b3",
+        "filename": "extensions/EGL_ANGLE_display_power_preference.txt",
+        "patchSetId": 6
+      },
+      "lineNbr": 75,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2021-10-20T19:53:25Z",
+      "side": 1,
+      "message": "This paragraph\u0027s incorrect - it was only needed for the dynamic GPU switching in the OpenGL backend. Please remove it.",
+      "revId": "14e3fd9b30c4508b504ffabd440a8710e9f202a0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ff2dce19_5ea09eaf",
+        "filename": "src/libANGLE/validationEGL.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 917,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2021-10-20T19:53:25Z",
+      "side": 1,
+      "message": "EGL_ANGLE_display_power_preference",
+      "revId": "14e3fd9b30c4508b504ffabd440a8710e9f202a0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
