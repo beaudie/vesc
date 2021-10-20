@@ -34,6 +34,23 @@
       "parentUuid": "022ac994_34823ec5",
       "revId": "48333fe99382e0c1892eee71ce60966ae5627585",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "30a9b740_65f0b6a4",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2021-10-20T01:24:27Z",
+      "side": 1,
+      "message": "Thanks Yuxin for being willing to revert this and glad it wasn\u0027t the root cause! Abandoning this CL.\n",
+      "revId": "48333fe99382e0c1892eee71ce60966ae5627585",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
