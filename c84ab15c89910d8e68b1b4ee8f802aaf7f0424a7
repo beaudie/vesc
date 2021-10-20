@@ -18,6 +18,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "e4ce2c36_e6c97f21",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 41
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2021-10-20T16:11:59Z",
+      "side": 1,
+      "message": "Right, that was what I was looking yesterday. I understand the root cause now. There is an existing bug and my CL made it occur more easily. basically getIndexRange end up getting into mapRangeImpl and we may end up reallocate storage, but vertexarrayVk already cached the current storage and causing the bug. This is both the correctness bug and performance bug. I am working on a fix right now. see https://issuetracker.google.com/203582620",
+      "parentUuid": "61b7462b_6a1d43b8",
+      "revId": "c84ab15c89910d8e68b1b4ee8f802aaf7f0424a7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "d22332db_6634b1b1",
