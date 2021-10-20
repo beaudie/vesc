@@ -123,9 +123,6 @@
 6180 WIN : TransformFeedbackTest.DrawWithoutTransformFeedbackThenWith/ES3_Vulkan_SwiftShader = FAIL
 6513 : TransformFeedbackTest.MultiContext/ES3_Vulkan_SwiftShader = FLAKY
 
-6180 : UniformBufferTest.BlockArrayContainingArrayOfStructs/ES3_Vulkan_SwiftShader = FAIL
-6180 : UniformBufferTest.ManyBlocks/ES3_Vulkan_SwiftShader = FAIL
-
 # Skip because crashes
 6313 : CopyTextureTestES3.InvalidateBlitThenBlend1000Layers/ES3_Vulkan_SwiftShader = SKIP_FOR_CAPTURE
 6313 : CopyTextureTestES3.InvalidateBlitThenBlend3Layers/ES3_Vulkan_SwiftShader = SKIP_FOR_CAPTURE
