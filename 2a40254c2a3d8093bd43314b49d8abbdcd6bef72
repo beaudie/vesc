@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "1557a473_d9df8f47",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1115588
+      },
+      "writtenOn": "2021-10-20T17:54:39Z",
+      "side": 1,
+      "message": "BTW, the code in mtl_command_buffer.mm that is clipping the rectangle seems un-needed. I wrote some tests and stepped through the code and the code in ContextMtl::updateScissor seems to already do the clipping. I didn\u0027t remove it since I wasn\u0027t sure why it was there in the first place or what tests to run to check. Should I remove it?",
+      "revId": "2a40254c2a3d8093bd43314b49d8abbdcd6bef72",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
