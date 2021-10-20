@@ -74,6 +74,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "5b3b0e71_06eecf2f",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 8
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2021-10-20T14:57:05Z",
+      "side": 1,
+      "message": "Good catch!",
+      "parentUuid": "65399e9f_18fb2466",
+      "revId": "6c034dd9d585a9f48196e38e939f3f9bc1b0044d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "45bcc5dc_e797b111",
         "filename": "src/libANGLE/renderer/vulkan/SurfaceVk.cpp",
         "patchSetId": 8
@@ -121,6 +139,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "4cb422c7_537caf1c",
+        "filename": "src/libANGLE/renderer/vulkan/SurfaceVk.cpp",
+        "patchSetId": 8
+      },
+      "lineNbr": 1664,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2021-10-20T14:57:05Z",
+      "side": 1,
+      "message": "That\u0027s a valid concern. Unfortunately it\u0027s not clear what should be \"rolled back\" if this returns early. You could leave a note about it for future reference.\n\nYou should move this below the `if (mode \u003d\u003d SHARED) {}`:\n\n    // The semaphore will be waited on in the next flush.\n    mAcquireImageSemaphores.next();\n    mAcquireImageSemaphore \u003d acquireImageSemaphore;\n\nThen inside the if, queueSubmitOneOff should use acquireImageSemaphore and reset it to nullptr (so the next submission doesn\u0027t wait on the same semaphore)",
+      "parentUuid": "b430fefe_6c09c40b",
+      "range": {
+        "startLine": 1664,
+        "startChar": 12,
+        "endLine": 1664,
+        "endChar": 18
+      },
+      "revId": "6c034dd9d585a9f48196e38e939f3f9bc1b0044d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "f8bfa387_088f20a8",
         "filename": "src/libANGLE/renderer/vulkan/SurfaceVk.cpp",
         "patchSetId": 8
@@ -156,6 +198,30 @@
       "side": 1,
       "message": "Had to pick best error returned by vkQueueSubmit. ANGLE_TRY/ANGLE_VK_TRY not compatible. Compiler errors.",
       "parentUuid": "f8bfa387_088f20a8",
+      "range": {
+        "startLine": 1666,
+        "startChar": 12,
+        "endLine": 1666,
+        "endChar": 18
+      },
+      "revId": "6c034dd9d585a9f48196e38e939f3f9bc1b0044d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "5ecbb563_f4fbf4c1",
+        "filename": "src/libANGLE/renderer/vulkan/SurfaceVk.cpp",
+        "patchSetId": 8
+      },
+      "lineNbr": 1666,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2021-10-20T14:57:05Z",
+      "side": 1,
+      "message": "Ok, to do it really right, we should change the return value of this function to angle::Result, then add a parameter like `bool *isSuboptimalOut` to handle suboptimal.\n\nThen this could use ANGLE_TRY.",
+      "parentUuid": "dad18628_f7aaf764",
       "range": {
         "startLine": 1666,
         "startChar": 12,
