@@ -1,0 +1,136 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "0d0d6ed8_57116373",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.cpp",
+        "patchSetId": 37
+      },
+      "lineNbr": 3690,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2021-10-20T01:45:07Z",
+      "side": 1,
+      "message": "Looks like this can just be a \u0027void\u0027 since it always returns angle::Result::Continue.",
+      "range": {
+        "startLine": 3690,
+        "startChar": 0,
+        "endLine": 3690,
+        "endChar": 13
+      },
+      "revId": "d0e27090695166cb958bef64c75b639b0bb6e295",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "41cf0131_dbad6d47",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.cpp",
+        "patchSetId": 37
+      },
+      "lineNbr": 3757,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2021-10-20T01:45:07Z",
+      "side": 1,
+      "message": "This is ignoring the return value of vma::CreatePool().   This function should be updated to something like:\n\n  VkResult BufferMemoryAllocator::createVMAPool(const Allocator \u0026allocator,\n                                                uint32_t memoryTypeIndex,\n                                                VMAPoolType poolType,\n                                                VmaPool *poolOut)",
+      "revId": "d0e27090695166cb958bef64c75b639b0bb6e295",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "437e5d80_932050b9",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.cpp",
+        "patchSetId": 37
+      },
+      "lineNbr": 3816,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2021-10-20T01:45:07Z",
+      "side": 1,
+      "message": "typo",
+      "range": {
+        "startLine": 3816,
+        "startChar": 48,
+        "endLine": 3816,
+        "endChar": 51
+      },
+      "revId": "d0e27090695166cb958bef64c75b639b0bb6e295",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b43aafa8_3aa7e406",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.h",
+        "patchSetId": 37
+      },
+      "lineNbr": 92,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2021-10-20T01:45:07Z",
+      "side": 1,
+      "message": "It\u0027s not clear in the review and it\u0027s been a while since I\u0027ve gone over these CLs: why did you change these all from VkResult to angle::Result?",
+      "range": {
+        "startLine": 92,
+        "startChar": 4,
+        "endLine": 92,
+        "endChar": 17
+      },
+      "revId": "d0e27090695166cb958bef64c75b639b0bb6e295",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "f4b0686d_2244a788",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 37
+      },
+      "lineNbr": 3546,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2021-10-20T01:45:07Z",
+      "side": 1,
+      "message": "kInvalidMemoryTypeIndex",
+      "range": {
+        "startLine": 3546,
+        "startChar": 37,
+        "endLine": 3546,
+        "endChar": 47
+      },
+      "revId": "d0e27090695166cb958bef64c75b639b0bb6e295",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "d082b58b_bcef32a0",
+        "filename": "src/libANGLE/renderer/vulkan/vk_utils.cpp",
+        "patchSetId": 37
+      },
+      "lineNbr": 624,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2021-10-20T01:45:07Z",
+      "side": 1,
+      "message": "kInvalidMemoryTypeIndex",
+      "range": {
+        "startLine": 624,
+        "startChar": 51,
+        "endLine": 624,
+        "endChar": 61
+      },
+      "revId": "d0e27090695166cb958bef64c75b639b0bb6e295",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
