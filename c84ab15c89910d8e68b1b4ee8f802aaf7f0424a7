@@ -1,0 +1,44 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "61b7462b_6a1d43b8",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 41
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2021-10-20T01:44:59Z",
+      "side": 1,
+      "message": "Looks like the traces are hitting VVL errors:\n\n  RendererVk.cpp:589 (DebugUtilsMessenger): [ UNASSIGNED-GeneralParameterError-RequiredParameter ] Validation Error: [ UNASSIGNED-GeneralParameterError-RequiredParameter ] Object 0: handle \u003d 0x5572ef94dc20, type \u003d VK_OBJECT_TYPE_DEVICE; | MessageID \u003d 0x99fb7dfd | vkCmdBindIndexBuffer: required parameter buffer specified as VK_NULL_HANDLE\n\n\n  RendererVk.cpp:589 (DebugUtilsMessenger): [ VUID-vkCmdBindIndexBuffer-buffer-parameter ] Validation Error: [ VUID-vkCmdBindIndexBuffer-buffer-parameter ] Object 0: handle \u003d 0x5572ef324b90, type \u003d VK_OBJECT_TYPE_INSTANCE; | MessageID \u003d 0xceb15aed | Invalid VkBuffer Object 0x0. The Vulkan spec states: buffer must be a valid VkBuffer handle (https://www.khronos.org/registry/vulkan/specs/1.2-extensions/html/vkspec.html#VUID-vkCmdBindIndexBuffer-buffer-parameter)\n",
+      "revId": "c84ab15c89910d8e68b1b4ee8f802aaf7f0424a7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "d22332db_6634b1b1",
+        "filename": "src/libANGLE/renderer/vulkan/BufferVk.h",
+        "patchSetId": 41
+      },
+      "lineNbr": 138,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2021-10-20T01:44:59Z",
+      "side": 1,
+      "message": "nit: being",
+      "range": {
+        "startLine": 138,
+        "startChar": 29,
+        "endLine": 138,
+        "endChar": 33
+      },
+      "revId": "c84ab15c89910d8e68b1b4ee8f802aaf7f0424a7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
