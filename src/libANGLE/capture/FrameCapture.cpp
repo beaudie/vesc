@@ -641,6 +641,19 @@ uintptr_t SyncIndexValue(GLsync sync)
     return reinterpret_cast<uintptr_t>(sync);
 }
 
+void WriteComment(std::ostream &out, const CallCapture &call)
+{
+    // Read the string parameter
+    const ParamCapture &stringParam =
+        call.params.getParam("comment", ParamType::TGLcharConstPointer, 0);
+    const std::vector<uint8_t> &data = stringParam.data[0];
+    ASSERT(data.size() > 0 && data.back() == '\0');
+    std::string str(data.begin(), data.end() - 1);
+
+    // Write the string prefixed with single line comment
+    out << "// " << str;
+}
+
 void WriteCppReplayForCall(const CallCapture &call,
                            DataTracker *dataTracker,
                            std::ostream &out,
@@ -648,6 +661,13 @@ void WriteCppReplayForCall(const CallCapture &call,
                            std::vector<uint8_t> *binaryData)
 {
     std::ostringstream callOut;
+
+    if (call.customFunctionName == "Comment")
+    {
+        // Just write it directly to the file and move on
+        WriteComment(out, call);
+        return;
+    }
 
     if (call.entryPoint == EntryPoint::GLCreateShader ||
         call.entryPoint == EntryPoint::GLCreateProgram ||
@@ -4729,6 +4749,16 @@ void FrameCaptureShared::updateCopyImageSubData(CallCapture &call)
     }
 }
 
+void AddComment(std::vector<CallCapture> &outCalls, const std::string &comment)
+{
+
+    ParamBuffer commentParamBuffer;
+    ParamCapture commentParam("comment", ParamType::TGLcharConstPointer);
+    CaptureString(comment.c_str(), &commentParam);
+    commentParamBuffer.addParam(std::move(commentParam));
+    outCalls.emplace_back("Comment", std::move(commentParamBuffer));
+}
+
 void FrameCaptureShared::overrideProgramBinary(const gl::Context *context,
                                                CallCapture &inCall,
                                                std::vector<CallCapture> &outCalls)
@@ -4781,8 +4811,16 @@ void FrameCaptureShared::overrideProgramBinary(const gl::Context *context,
     gl::Program *program = context->getProgramResolveLink(id);
     ASSERT(program);
 
+    std::stringstream startingOverride;
+    startingOverride << "Starting override of glProgramBinary for programID " << id.value;
+    AddComment(outCalls, startingOverride.str());
+
     GenerateLinkedProgram(context, context->getState(), &mResourceTracker, &outCalls, program, id,
                           getProgramSources(id));
+
+    std::stringstream endingOverride;
+    endingOverride << "Finished override for programID " << id.value;
+    AddComment(outCalls, endingOverride.str());
 }
 
 void FrameCaptureShared::maybeOverrideEntryPoint(const gl::Context *context,
@@ -5350,6 +5388,10 @@ void FrameCaptureShared::captureCall(const gl::Context *context,
 {
     if (SkipCall(inCall.entryPoint))
     {
+        // Capture the current buffer data with a binary param
+        std::stringstream skipCall;
+        skipCall << "Skipping call to " << GetEntryPointName(inCall.entryPoint);
+        AddComment(mFrameCalls, skipCall.str());
         return;
     }
 
