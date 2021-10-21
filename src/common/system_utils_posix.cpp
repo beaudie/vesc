@@ -23,6 +23,9 @@
 #include <sys/wait.h>
 #include <unistd.h>
 
+#include <signal.h>
+#include <sys/mman.h>
+
 namespace angle
 {
 
@@ -227,4 +230,102 @@ double GetCurrentProcessCpuTime()
 #endif
 }
 
+namespace
+{
+bool SetMemoryProtection(uintptr_t start, size_t size, int protections)
+{
+    int ret = mprotect(reinterpret_cast<void *>(start), size, protections);
+    if (ret < 0)
+    {
+        perror("mprotect failed");
+    }
+    return ret == 0;
+}
+
+#ifdef ANGLE_PLATFORM_MACOS
+constexpr int MPROTECT_SIGNAL = SIGBUS;
+#else
+constexpr int MPROTECT_SIGNAL = SIGSEGV;
+#endif
+
+class PosixPageFaultHandler : public PageFaultHandler
+{
+  public:
+    PosixPageFaultHandler(PageFaultCallback callback) : PageFaultHandler(callback) {}
+    ~PosixPageFaultHandler() override {}
+
+    bool enable() override;
+    bool disable() override;
+    void handle(int sig, siginfo_t *info, void *unused);
+
+  private:
+    struct sigaction mDefaultAction = {};
+};
+
+PosixPageFaultHandler *gPosixPageFaultHandler = nullptr;
+void SegfaultHandlerFunction(int sig, siginfo_t *info, void *unused)
+{
+    gPosixPageFaultHandler->handle(sig, info, unused);
+}
+
+void PosixPageFaultHandler::handle(int sig, siginfo_t *info, void *unused)
+{
+    bool found = false;
+    if (sig == MPROTECT_SIGNAL && info->si_code == SEGV_ACCERR)
+    {
+        found = mCallback(reinterpret_cast<uintptr_t>(info->si_addr)) ==
+                PageFaultHandlerRangeType::InRange;
+    }
+
+    // Fall back to default signal handler
+    if (!found)
+    {
+        mDefaultAction.sa_sigaction(sig, info, unused);
+    }
+}
+
+bool PosixPageFaultHandler::disable()
+{
+    return sigaction(MPROTECT_SIGNAL, &mDefaultAction, nullptr) == 0;
+}
+
+bool PosixPageFaultHandler::enable()
+{
+    struct sigaction sigAction = {};
+    sigAction.sa_flags         = SA_SIGINFO;
+    sigAction.sa_sigaction     = &SegfaultHandlerFunction;
+    sigemptyset(&sigAction.sa_mask);
+
+    return sigaction(MPROTECT_SIGNAL, &sigAction, &mDefaultAction) == 0;
+}
+}  // namespace
+
+// Set write protection
+bool ProtectMemory(uintptr_t start, size_t size)
+{
+    return SetMemoryProtection(start, size, PROT_READ);
+}
+
+// Allow reading and writing
+bool UnprotectMemory(uintptr_t start, size_t size)
+{
+    return SetMemoryProtection(start, size, PROT_READ | PROT_WRITE);
+}
+
+size_t GetPageSize()
+{
+    long pageSize = sysconf(_SC_PAGE_SIZE);
+    if (pageSize < 0)
+    {
+        perror("Could not get sysconf page size");
+        return 0;
+    }
+    return static_cast<size_t>(pageSize);
+}
+
+PageFaultHandler *CreatePageFaultHandler(PageFaultCallback callback)
+{
+    gPosixPageFaultHandler = new PosixPageFaultHandler(callback);
+    return gPosixPageFaultHandler;
+}
 }  // namespace angle
