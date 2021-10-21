@@ -125,6 +125,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "15146c1e_4035e252",
+        "filename": "src/libANGLE/Display.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 644,
+      "author": {
+        "id": 1449558
+      },
+      "writtenOn": "2021-10-21T19:28:03Z",
+      "side": 1,
+      "message": "\u003e I can explain this history here and the decision:\n\nThank you, makes sense.\n\n\u003e I think every parameter is too much to key on, many are small tweaks\n\nI don\u0027t think anything passed as the display attributes is optional. I think omitting any of the attributes that WebKit passes causes similar bugs in WebKit that we have with the power preference.\nNot saying this patch should block on it..",
+      "parentUuid": "c7532078_b77ede29",
+      "revId": "14e3fd9b30c4508b504ffabd440a8710e9f202a0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "ff2dce19_5ea09eaf",
         "filename": "src/libANGLE/validationEGL.cpp",
         "patchSetId": 6
