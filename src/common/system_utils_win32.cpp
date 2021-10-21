@@ -6,6 +6,7 @@
 // system_utils_win32.cpp: Implementation of OS-specific functions for Windows.
 
 #include "common/FastVector.h"
+#include "common/debug.h"
 #include "system_utils.h"
 
 #include <windows.h>
@@ -127,5 +128,124 @@ Library *OpenSharedLibrary(const char *libraryName, SearchType searchType)
 Library *OpenSharedLibraryWithExtension(const char *libraryName, SearchType searchType)
 {
     return new Win32Library(libraryName, searchType);
+}
+
+class Win32PageFaultHandler : public PageFaultHandler
+{
+  public:
+    Win32PageFaultHandler(PageFaultCallback callback) : PageFaultHandler(callback) {}
+    ~Win32PageFaultHandler() override {}
+
+    bool enable() override;
+    bool disable() override;
+
+    LONG handle(PEXCEPTION_POINTERS pExceptionInfo);
+
+  private:
+    void *mVectoredExceptionHandler = nullptr;
+};
+
+Win32PageFaultHandler *gWin32PageFaultHandler = nullptr;
+static LONG CALLBACK VectoredExceptionHandler(PEXCEPTION_POINTERS info)
+{
+    return gWin32PageFaultHandler->handle(info);
+}
+
+LONG Win32PageFaultHandler::handle(PEXCEPTION_POINTERS info)
+{
+    bool found = false;
+
+    if (info->ExceptionRecord->ExceptionCode == EXCEPTION_ACCESS_VIOLATION &&
+        info->ExceptionRecord->NumberParameters >= 2 &&
+        info->ExceptionRecord->ExceptionInformation[0] == 1)
+    {
+        found = mCallback(static_cast<uintptr_t>(info->ExceptionRecord->ExceptionInformation[1])) ==
+                SignalRangeType::InRange;
+    }
+
+    if (found)
+    {
+        return EXCEPTION_CONTINUE_EXECUTION;
+    }
+    else
+    {
+        return EXCEPTION_CONTINUE_SEARCH;
+    }
+}
+
+bool Win32PageFaultHandler::disable()
+{
+    if (mVectoredExceptionHandler)
+    {
+        ULONG res                 = RemoveVectoredExceptionHandler(mVectoredExceptionHandler);
+        mVectoredExceptionHandler = nullptr;
+        if (res == 0)
+        {
+            DWORD lastError = GetLastError();
+            fprintf(stderr, "RemoveVectoredExceptionHandler failed: 0x%lx\n", lastError);
+            return false;
+        }
+    }
+    return true;
+}
+
+bool Win32PageFaultHandler::enable()
+{
+    if (mVectoredExceptionHandler)
+    {
+        return true;
+    }
+
+    PVECTORED_EXCEPTION_HANDLER handler =
+        reinterpret_cast<PVECTORED_EXCEPTION_HANDLER>(&VectoredExceptionHandler);
+
+    mVectoredExceptionHandler = AddVectoredExceptionHandler(1, handler);
+
+    if (!mVectoredExceptionHandler)
+    {
+        DWORD lastError = GetLastError();
+        fprintf(stderr, "AddVectoredExceptionHandler failed: 0x%lx\n", lastError);
+        return false;
+    }
+    return true;
+}
+
+bool SetMemoryProtection(uintptr_t start, size_t size, DWORD protections)
+{
+    DWORD oldProtect;
+    BOOL res = VirtualProtect(reinterpret_cast<LPVOID>(start), size, protections, &oldProtect);
+    if (!res)
+    {
+        DWORD lastError = GetLastError();
+        fprintf(stderr, "VirtualProtect failed: 0x%lx\n", lastError);
+        return false;
+    }
+
+    return true;
+}
+
+// Set write protection
+bool ProtectMemory(uintptr_t start, size_t size)
+{
+    return SetMemoryProtection(start, size, PAGE_READONLY);
+}
+
+// Allow reading and writing
+bool UnprotectMemory(uintptr_t start, size_t size)
+{
+    return SetMemoryProtection(start, size, PAGE_READWRITE);
+}
+
+size_t GetPageSize()
+{
+    SYSTEM_INFO info;
+    GetSystemInfo(&info);
+    return static_cast<size_t>(info.dwPageSize);
+}
+
+PageFaultHandler *CreatePageFaultHandler(PageFaultCallback callback)
+{
+    gWin32PageFaultHandler = new Win32PageFaultHandler(callback);
+    return gWin32PageFaultHandler;
 }
 }  // namespace angle
