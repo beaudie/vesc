@@ -56,6 +56,30 @@
       },
       "revId": "c77104ed900e58e511d46e7c1d8b1edbdb3502e3",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "8f3ed32a_f599c26a",
+        "filename": "src/common/FastVector_unittest.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 42,
+      "author": {
+        "id": 1518892
+      },
+      "writtenOn": "2021-10-21T23:19:44Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "be5b19b9_987e2478",
+      "range": {
+        "startLine": 27,
+        "startChar": 0,
+        "endLine": 42,
+        "endChar": 0
+      },
+      "revId": "c77104ed900e58e511d46e7c1d8b1edbdb3502e3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
