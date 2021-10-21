@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "dc6cb22a_e54da5b5",
+        "filename": "doc/DevSetup.md",
+        "patchSetId": 1
+      },
+      "lineNbr": 69,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2021-10-21T10:52:37Z",
+      "side": 1,
+      "message": "nit: please include in bold or italics that this is \"not recommended\"",
+      "range": {
+        "startLine": 69,
+        "startChar": 75,
+        "endLine": 69,
+        "endChar": 80
+      },
+      "revId": "6f36101f512a4abafa952879705389d92590e65d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
