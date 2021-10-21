@@ -59,7 +59,10 @@ gn gen out/Debug
 
 On Windows only, ensure you **set `DEPOT_TOOLS_WIN_TOOLCHAIN=0` in your environment** (if you are not a Googler).
 
-GN will generate ninja files. To change the default build options run `gn args out/Debug`.  Some commonly used options are:
+GN will generate ninja files. The default build options build ANGLE with clang and in release mode.
+Often, the default options are the desired ones, but they can be changed by running
+`gn args out/Debug`. Some options that are commonly overriden for development are:
+
 ```
 is_component_build = false      (links dependencies into the build targets)
 target_cpu = "x86"              (default is "x64")
