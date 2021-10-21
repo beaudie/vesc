@@ -142,6 +142,30 @@
       },
       "revId": "6b6427c291d9c77f12714f439457e81caf432cce",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "788e8cf1_d138993e",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 318,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2021-10-21T18:49:19Z",
+      "side": 1,
+      "message": "Well what do you know! There is a new validation error [1] that\u0027s complaining about the fact that ANGEL is using preinitialized with external images.\n\nThat\u0027s blocking the vulkan-deps roll right now. I\u0027m going to rebase the roll on top of this to be double sure that this change fixes the VVL bug.\n\n[1]: https://chromium.googlesource.com/external/github.com/KhronosGroup/Vulkan-ValidationLayers.git/+/62aa24fae5372c9c046c15b27d5a859069a1cc99%5E%21/#F0",
+      "parentUuid": "a178293e_2d7ed6e8",
+      "range": {
+        "startLine": 318,
+        "startChar": 12,
+        "endLine": 318,
+        "endChar": 38
+      },
+      "revId": "6b6427c291d9c77f12714f439457e81caf432cce",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
