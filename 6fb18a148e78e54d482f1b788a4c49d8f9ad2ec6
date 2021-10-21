@@ -63,6 +63,24 @@
       "message": "LGTM - a regression test that fails in ASAN would be welcome.",
       "revId": "6fb18a148e78e54d482f1b788a4c49d8f9ad2ec6",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "abf17f5e_59d335fc",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1518892
+      },
+      "writtenOn": "2021-10-21T12:51:48Z",
+      "side": 1,
+      "message": "This was already failing ASAN on Windows in one of the DebugLabel tests, though it probably could be made to fail harder by using a really long debug label or something.",
+      "parentUuid": "e01570ba_d9395a07",
+      "revId": "6fb18a148e78e54d482f1b788a4c49d8f9ad2ec6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
