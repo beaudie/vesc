@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "bd31268a_b61c312f",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1491687
+      },
+      "writtenOn": "2021-10-21T19:42:49Z",
+      "side": 1,
+      "message": "Since ANGLE\u0027s roundUpPow2 function matched RoundUpAlignedAddress from AGI,\nI added roundDownPow2 accordingly.\n\nThis is analogous to what AGI does here:\nhttps://github.com/google/agi/blob/master/core/memory_tracker/cc/memory_tracker.h#L55",
+      "revId": "501608a545d619df444e0b6252d47b6a297c2b1e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
