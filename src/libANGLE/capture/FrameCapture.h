@@ -430,7 +430,7 @@ class CoherentBufferTracker final : angle::NonCopyable
     // Returns a map to found buffers and the corresponding pages for a given address.
     // For addresses that are in a page shared by 2 buffers, 2 results are returned.
     std::map<std::shared_ptr<CoherentBuffer>, size_t> getBufferPagesForAddress(uintptr_t address);
-    bool handleWrite(uintptr_t address);
+    SignalRangeType handleWrite(uintptr_t address);
     bool haveBuffer(gl::BufferID id);
 
   public:

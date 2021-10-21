@@ -13,6 +13,7 @@
 #include <cstring>
 #include <fstream>
 #include <string>
+#include <thread>
 
 #include "sys/stat.h"
 
@@ -4708,7 +4709,7 @@ void CoherentBuffer::protect()
         WARN() << "Protecting buffer that was already clean.";
     }
 
-    if (!Protect(mProtectionStart, mProtectionSize))
+    if (!ProtectMemory(mProtectionStart, mProtectionSize))
     {
         ERR() << "Could not set protection for buffer at " << mProtectionStart << " with size "
               << mProtectionSize;
@@ -4736,7 +4737,7 @@ void CoherentBuffer::setDirty(size_t relativePage)
         return;
     }
 
-    if (!UnProtect(pageStart, mPageSize))
+    if (!UnprotectMemory(pageStart, mPageSize))
     {
         ERR() << "Could not remove protection from buffer page " << relativePage << "  at "
               << pageStart << " with size " << mPageSize;
@@ -4746,7 +4747,7 @@ void CoherentBuffer::setDirty(size_t relativePage)
 
 void CoherentBuffer::removeProtection()
 {
-    if (!UnProtect(mProtectionStart, mProtectionSize))
+    if (!UnprotectMemory(mProtectionStart, mProtectionSize))
     {
         ERR() << "Could not remove protection for buffer at " << mProtectionStart << " with size "
               << mProtectionSize;
@@ -4768,7 +4769,7 @@ CoherentBufferTracker::~CoherentBufferTracker()
     delete mPageFaultHandler;
 }
 
-bool CoherentBufferTracker::handleWrite(uintptr_t address)
+SignalRangeType CoherentBufferTracker::handleWrite(uintptr_t address)
 {
     std::unique_lock<std::mutex> lock(mMutex);
     auto pages = getBufferPagesForAddress(address);
@@ -4789,7 +4790,7 @@ bool CoherentBufferTracker::handleWrite(uintptr_t address)
         page.first->setDirty(page.second);
     }
 
-    return !pages.empty();
+    return pages.empty() ? SignalRangeType::OutOfRange : SignalRangeType::InRange;
 }
 
 std::map<std::shared_ptr<CoherentBuffer>, size_t> CoherentBufferTracker::getBufferPagesForAddress(
@@ -5387,12 +5388,14 @@ void FrameCaptureShared::maybeCapturePreCallUpdates(
                 call.params.getParamFlexName("instancecount", "primcount", ParamType::TGLsizei, 3)
                     .value.GLsizeiVal;
             maybeCaptureDrawArraysClientData(context, call, instancecount);
+            maybeCaptureCoherentBuffers(context);
             break;
         }
 
         case EntryPoint::GLDrawElements:
         {
             maybeCaptureDrawElementsClientData(context, call, 1);
+            maybeCaptureCoherentBuffers(context);
             break;
         }
 
@@ -5404,6 +5407,7 @@ void FrameCaptureShared::maybeCapturePreCallUpdates(
                 call.params.getParamFlexName("instancecount", "primcount", ParamType::TGLsizei, 4)
                     .value.GLsizeiVal;
             maybeCaptureDrawElementsClientData(context, call, instancecount);
+            maybeCaptureCoherentBuffers(context);
             break;
         }
 
@@ -5900,6 +5904,8 @@ void FrameCaptureShared::captureCoherentBufferSnapshot(const gl::Context *contex
 
     std::vector<std::pair<uintptr_t, size_t>> dirtyRanges =
         mCoherentBufferTracker.mBuffers.at(id)->getDirtyRanges();
+
+    std::this_thread::sleep_for(std::chrono::milliseconds(1));
 
     uintptr_t start   = reinterpret_cast<uintptr_t>(buffer->getMapPointer());
     GLsizeiptr length = mBufferDataMap[id].second;
