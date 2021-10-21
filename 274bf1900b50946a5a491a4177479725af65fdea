@@ -16,6 +16,24 @@
       "message": "Had to add another suppression, because apparently the macOS OpenGL backend doesn\u0027t pass this test for some reason.",
       "revId": "274bf1900b50946a5a491a4177479725af65fdea",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "b77a24e4_d946007c",
+        "filename": "src/tests/angle_end2end_tests_expectations.txt",
+        "patchSetId": 6
+      },
+      "lineNbr": 109,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2021-10-21T14:55:25Z",
+      "side": 1,
+      "message": "Ack. Please open a new bug for that, this one points to a metal issue.",
+      "parentUuid": "2db4228c_5d7bddd2",
+      "revId": "274bf1900b50946a5a491a4177479725af65fdea",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
