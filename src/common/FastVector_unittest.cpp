@@ -22,8 +22,10 @@ TEST(FastVector, Constructors)
     FastVector<int, 5> count(3);
     EXPECT_EQ(3u, count.size());
 
-    FastVector<int, 5> countAndValue(3, 2);
-    EXPECT_EQ(3u, countAndValue.size());
+    // Deliberately filled larger than stack-allocated size to force copies of
+    // this vector to grow to fit, and possibly trigger ASAN.
+    FastVector<int, 5> countAndValue(16, 2);
+    EXPECT_EQ(16u, countAndValue.size());
     EXPECT_EQ(2, countAndValue[1]);
 
     FastVector<int, 5> copy(countAndValue);
