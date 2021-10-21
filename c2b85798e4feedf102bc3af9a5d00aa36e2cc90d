@@ -152,6 +152,30 @@
       },
       "revId": "c2b85798e4feedf102bc3af9a5d00aa36e2cc90d",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "a1d84f7f_abc5f981",
+        "filename": "src/libANGLE/renderer/vulkan/vk_mem_alloc_wrapper.h",
+        "patchSetId": 36
+      },
+      "lineNbr": 24,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2021-10-21T00:03:22Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "f41160a9_415a86a7",
+      "range": {
+        "startLine": 24,
+        "startChar": 4,
+        "endLine": 24,
+        "endChar": 51
+      },
+      "revId": "c2b85798e4feedf102bc3af9a5d00aa36e2cc90d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
