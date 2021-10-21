@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "0c552227_0775fb6e",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2021-10-21T02:02:51Z",
+      "side": 1,
+      "message": "I\u0027m surprised it\u0027s all working with the combined lists, but if CQ is happy, then so am I.",
+      "revId": "6cc2d310c66aaeb8cc0dc896ba65406f5061e15a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
