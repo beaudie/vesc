@@ -105,6 +105,24 @@
       "parentUuid": "e01570ba_d9395a07",
       "revId": "6fb18a148e78e54d482f1b788a4c49d8f9ad2ec6",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "5ddf307c_d7753530",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1518892
+      },
+      "writtenOn": "2021-10-21T13:55:07Z",
+      "side": 1,
+      "message": "Ah, it was DebugMarkerTest.BasicValidation/ES2_Vulkan:\n\nhttps://gist.github.com/tycho/fb1904e08512f9d5e70bc71521ff4c32\n\nI don\u0027t see how a directed test could be better written here, exept to create some stack variables as shadow for ASAN, and that would still depend on knowing the alignment that commonDebugUtilsLabel intends to use -- seems like the existing test coverage is probably enough.",
+      "parentUuid": "abf17f5e_59d335fc",
+      "revId": "6fb18a148e78e54d482f1b788a4c49d8f9ad2ec6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
