@@ -177,3 +177,81 @@
 6578 : ImageTestES3.Source2DTargetExternalESSL3_Colorspace/ES3_Vulkan_SwiftShader = FAIL
 6578 : ImageTestES3.SourceCubeTargetExternalESSL3_Colorspace/ES3_Vulkan_SwiftShader = FAIL
 6578 : ImageTestES3.SourceRenderbufferTargetTextureExternalESSL3_Colorspace/ES3_Vulkan_SwiftShader = FAIL
+
+# ES3_1
+6180 : ProgramPipelineTest31.DifferentTextureTypes/ES3_1_Vulkan_SwiftShader = FAIL
+6180 : ProgramPipelineTest31.DrawWith2DTexture/ES3_1_Vulkan_SwiftShader = FAIL
+6180 : ProgramPipelineTest31.FragmentStageUniformTest/ES3_1_Vulkan_SwiftShader = FAIL
+6180 : ProgramPipelineTest31.ImageUniforms/ES3_1_Vulkan_SwiftShader = FAIL
+6180 : ProgramPipelineTest31.MaxFragmentShaderStorageBufferObjects/ES3_1_Vulkan_SwiftShader = FAIL
+6180 : ProgramPipelineTest31.MaxFragmentUniformBufferObjects/ES3_1_Vulkan_SwiftShader = FAIL
+6180 : ProgramPipelineTest31.PipelineWithoutVertexShader/ES3_1_Vulkan_SwiftShader = FAIL
+6180 : ProgramPipelineTest31.ProgramPipelineVaryings/ES3_1_Vulkan_SwiftShader = FAIL
+6180 : ProgramPipelineTest31.SampleTextureAThenTextureB/ES3_1_Vulkan_SwiftShader = FAIL
+6180 : ProgramPipelineTest31.UseCreateShaderProgramv/ES3_1_Vulkan_SwiftShader = FAIL
+6180 : ProgramPipelineTest31.VaryingIOBlockSeparableProgram/ES3_1_Vulkan_SwiftShader = FAIL
+6180 : ProgramPipelineTest31.VaryingLocationMismatch/ES3_1_Vulkan_SwiftShader = FAIL
+6180 : ProgramPipelineTest31.VerifyPpoLinkErrorSignalledCorrectly/ES3_1_Vulkan_SwiftShader = FAIL
+6180 : SimpleStateChangeTestComputeES31PPO.DeleteImageTextureInUse/ES3_1_Vulkan_SwiftShader = FAIL
+6180 : Texture2DTestES31PPO.TexStorage/ES3_1_Vulkan_SwiftShader = FAIL
+6180 : Texture2DTestES31PPO.SingleTextureMultipleSamplers/ES3_1_Vulkan_SwiftShader = FAIL
+
+
+# ES3_1 Crashed
+6180 : ComputeShaderTest.ImageBufferMapWrite/ES3_1_Vulkan_SwiftShader = SKIP_FOR_CAPTURE
+6180 : EGLMultiContextTest.ComputeShaderOkayWithRendering/ES3_1_Vulkan_SwiftShader = SKIP_FOR_CAPTURE
+6180 : EGLMultiContextTest.TestContextDestroySimple/ES3_1_Vulkan_SwiftShader = SKIP_FOR_CAPTURE
+6180 : FramebufferFetchES31.BasicInout_NonCoherent/ES3_1_Vulkan_SwiftShader = SKIP_FOR_CAPTURE
+6180 : FramebufferFetchES31.DrawFetchBlitDrawFetch_NonCoherent/ES3_1_Vulkan_SwiftShader = SKIP_FOR_CAPTURE
+6180 : FramebufferFetchES31.DrawFetchDrawNonFetch_NonCoherent/ES3_1_Vulkan_SwiftShader = SKIP_FOR_CAPTURE
+6180 : FramebufferFetchES31.DrawNonFetchDrawFetchWithDifferentAttachments_NonCoherent/ES3_1_Vulkan_SwiftShader = SKIP_FOR_CAPTURE
+6180 : FramebufferFetchES31.DrawNonFetchDrawFetchWithDifferentPrograms_NonCoherent/ES3_1_Vulkan_SwiftShader = SKIP_FOR_CAPTURE
+6180 : FramebufferFetchES31.DrawNonFetchDrawFetch_NonCoherent/ES3_1_Vulkan_SwiftShader = SKIP_FOR_CAPTURE
+6180 : FramebufferFetchES31.FixedUniformLocation/ES3_1_Vulkan_SwiftShader = SKIP_FOR_CAPTURE
+6180 : FramebufferFetchES31.MultipleDraw_NonCoherent/ES3_1_Vulkan_SwiftShader = SKIP_FOR_CAPTURE
+6180 : FramebufferFetchES31.MultipleRenderTargetWithInoutArray_NonCoherent/ES3_1_Vulkan_SwiftShader = SKIP_FOR_CAPTURE
+6180 : FramebufferFetchES31.MultipleRenderTarget_NonCoherent/ES3_1_Vulkan_SwiftShader = SKIP_FOR_CAPTURE
+6180 : FramebufferFetchES31.ProgramPipeline_NonCoherent/ES3_1_Vulkan_SwiftShader = SKIP_FOR_CAPTURE
+6180 : GLSLTest_ES31.IOBlockArray/ES3_1_Vulkan_SwiftShader = SKIP_FOR_CAPTURE
+6180 : GLSLTest_ES31.StructBothInvariantAndNot/ES3_1_Vulkan_SwiftShader = SKIP_FOR_CAPTURE
+6180 : TextureMultisampleArrayWebGLTest.FramebufferColorClearAndBlit/ES3_1_Vulkan_SwiftShader = SKIP_FOR_CAPTURE
+6180 : TextureMultisampleArrayWebGLTest.FramebufferCompleteness/ES3_1_Vulkan_SwiftShader = SKIP_FOR_CAPTURE
+6180 : TextureMultisampleArrayWebGLTest.IntegerTexelFetch/ES3_1_Vulkan_SwiftShader = SKIP_FOR_CAPTURE
+6180 : TextureMultisampleArrayWebGLTest.InvalidFramebufferTextureLayer/ES3_1_Vulkan_SwiftShader = SKIP_FOR_CAPTURE
+6180 : TextureMultisampleArrayWebGLTest.SimpleTexelFetch/ES3_1_Vulkan_SwiftShader = SKIP_FOR_CAPTURE
+6180 : TextureMultisampleArrayWebGLTest.TexStorage3DMultisample/ES3_1_Vulkan_SwiftShader = SKIP_FOR_CAPTURE
+6180 : TextureMultisampleArrayWebGLTest.TextureSizeInShader/ES3_1_Vulkan_SwiftShader = SKIP_FOR_CAPTURE
+6180 : TextureMultisampleTest.GetTexLevelParameter/ES3_1_Vulkan_SwiftShader = SKIP_FOR_CAPTURE
+6180 : TextureMultisampleTest.MultisampleTargetFramebufferTexture2D/ES3_1_Vulkan_SwiftShader = SKIP_FOR_CAPTURE
+6180 : TextureMultisampleTest.ResolveToDefaultFramebuffer/ES3_1_Vulkan_SwiftShader = SKIP_FOR_CAPTURE
+6180 : TextureMultisampleTest.ValidateTextureStorageMultisampleParameters/ES3_1_Vulkan_SwiftShader = SKIP_FOR_CAPTURE
+6180 : TransformFeedbackTestIOBlocks.Interleaved/ES3_1_Vulkan_SwiftShader = SKIP_FOR_CAPTURE
+6180 : TransformFeedbackTestIOBlocks.Separate/ES3_1_Vulkan_SwiftShader = SKIP_FOR_CAPTURE
+6180 : TextureBufferTestES31.MapTextureBufferInvalidateThenWrite/ES3_1_Vulkan_SwiftShader = SKIP_FOR_CAPTURE
+6180 : TextureBufferTestES31.UseAsUBOThenUpdateThenAsTextureBuffer/ES3_1_Vulkan_SwiftShader = SKIP_FOR_CAPTURE
+
+# ES3_1 CompileFailed
+6180 : GLSLTest_ES31.ArraysOfArraysBlockBasicType/ES3_1_Vulkan_SwiftShader = SKIP_FOR_CAPTURE
+6180 : GLSLTest_ES31.InactiveAtomicCounters/ES3_1_Vulkan_SwiftShader = SKIP_FOR_CAPTURE
+6180 : GLSLTest_ES31.InactiveImages/ES3_1_Vulkan_SwiftShader = SKIP_FOR_CAPTURE
+6180 : GeometryShaderTest.ReferencedByGeometryShaderWithoutExtensionEnabled/ES3_1_Vulkan_SwiftShader = SKIP_FOR_CAPTURE
+6180 : ProgramInterfaceTestES31.GetAtomicCounterProperties/ES3_1_Vulkan_SwiftShader = SKIP_FOR_CAPTURE
+6180 : ProgramInterfaceTestES31.GetBufferVariableProperties/ES3_1_Vulkan_SwiftShader = SKIP_FOR_CAPTURE
+6180 : ProgramInterfaceTestES31.GetResourceIndex/ES3_1_Vulkan_SwiftShader = SKIP_FOR_CAPTURE
+6180 : ProgramInterfaceTestES31.GetResourceName/ES3_1_Vulkan_SwiftShader = SKIP_FOR_CAPTURE
+6180 : ProgramInterfaceTestES31.GetShaderStorageBlockProperties/ES3_1_Vulkan_SwiftShader = SKIP_FOR_CAPTURE
+6180 : ProgramInterfaceTestES31.GetStd430BufferVariableProperties/ES3_1_Vulkan_SwiftShader = SKIP_FOR_CAPTURE
+6180 : ProgramInterfaceTestES31.GetUniformBlockProperties/ES3_1_Vulkan_SwiftShader = SKIP_FOR_CAPTURE
+6180 : ProgramInterfaceTestES31.GetUniformProperties/ES3_1_Vulkan_SwiftShader = SKIP_FOR_CAPTURE
+6180 : ProgramInterfaceTestES31.QueryTransformFeedbackVarying/ES3_1_Vulkan_SwiftShader = SKIP_FOR_CAPTURE
+6180 : ProgramInterfaceTestES31.TopLevelArrayStrideWithAggregateType/ES3_1_Vulkan_SwiftShader = SKIP_FOR_CAPTURE
+6180 : ShaderStorageBufferTest31.BigStructUnsizedFloatArraySize/ES3_1_Vulkan_SwiftShader = SKIP_FOR_CAPTURE
+6180 : ShaderStorageBufferTest31.BigStructUnsizedStructArraySize/ES3_1_Vulkan_SwiftShader = SKIP_FOR_CAPTURE
+6180 : ShaderStorageBufferTest31.MultiStorageBuffersForMultiPrograms/ES3_1_Vulkan_SwiftShader = SKIP_FOR_CAPTURE
+6180 : TextureBufferTestES31.QueryWidthAfterBufferResize/ES3_1_Vulkan_SwiftShader = SKIP_FOR_CAPTURE
+
+# ES3_1 gtest skips
+6180 : GLSLTest_ES31.InterpolateAtWithSwizzle/ES3_1_Vulkan_SwiftShader = SKIPPED_BY_GTEST
+6180 : GLSLTest_ES31.VaryingTessellationSampleInAndOut/ES3_1_Vulkan_SwiftShader = SKIPPED_BY_GTEST
+6180 : GeometryShaderTest.LayeredFramebufferPreRenderClear2DArrayColor/ES3_1_Vulkan_SwiftShader = SKIPPED_BY_GTEST
+6180 : GeometryShaderTest.LayeredFramebufferPreRenderClear3DColor/ES3_1_Vulkan_SwiftShader = SKIPPED_BY_GTEST
