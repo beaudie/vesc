@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "3d83251f_b1d0ce5a",
+        "filename": "src/libANGLE/renderer/vulkan/SurfaceVk.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 943,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2021-10-21T02:01:52Z",
+      "side": 1,
+      "message": "Regarding failures, can you try making the EGL_NONE case `return VK_COLOR_SPACE_SRGB_NONLINEAR_KHR;` like it used to? I\u0027m taking a wild guess that generally we are getting EGL_NONE here.",
+      "revId": "86ba7684ef141bd6696fcd9e917253a9ea1e2405",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
