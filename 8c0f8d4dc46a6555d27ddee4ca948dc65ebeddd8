@@ -16,6 +16,24 @@
       "message": "LGTM - wonder why our ASAN didn\u0027t catch this.",
       "revId": "8c0f8d4dc46a6555d27ddee4ca948dc65ebeddd8",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "2dca5c76_355b8dff",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2021-10-21T15:40:07Z",
+      "side": 1,
+      "message": "It looks like Linux ASAN doesn\u0027t run end2end tests, while mac ASAN does. Maybe these tests don\u0027t run on Mac?",
+      "parentUuid": "0d4ce1a8_dc1f7051",
+      "revId": "8c0f8d4dc46a6555d27ddee4ca948dc65ebeddd8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
