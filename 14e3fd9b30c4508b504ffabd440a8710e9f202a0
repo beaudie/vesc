@@ -54,6 +54,23 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "10d83f4f_b994f34c",
+        "filename": "src/libANGLE/Display.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 644,
+      "author": {
+        "id": 1449558
+      },
+      "writtenOn": "2021-10-21T06:17:47Z",
+      "side": 1,
+      "message": "I don\u0027t think this is how GetDisplayFromNativeDisplay is specified in EGL_ANGLE_platform_angle.\n\n    If \u003cnative_display\u003e is EGL_DEFAULT_DISPLAY a default display is returned.\n    Multiple calls with the same \u003cnative_display\u003e will return the same\n    EGLDisplay handle. If \u003cplatform\u003e is set to EGL_PLATFORM_ANGLE_ANGLE and\n    the returned display is in an uninitialized state, its attributes are\n    overwritten by those provided in the \u003cattrib_list\u003e, if any.\n\nI think the overall logic even with \u003cnative_display\u003e is that there is one EGLDisplay for one \u003cnative_display\u003e.\nThis is consistent with ANGLE Windows implementation, where the native_display is used to select the backend, as opposed to using attributes to select the backend..\n\nThe \"problem\" is also that it interacts with core EGL:\n\n    EGLDisplay eglGetDisplay(EGLNativeDisplayType display_id);\n    \n     If display id is EGL_DEFAULT_DISPLAY, a default display is returned. Multiple calls made to eglGetDisplay with the same display id will return the same EGLDisplay handle.\n     \n(I don\u0027t fully understand the significance of the core EGL language wrt \"implementation defined\" vs \"platform defined\" and how it would interact with ANGLE specifically but I don\u0027t think this changes the logic)",
+      "revId": "14e3fd9b30c4508b504ffabd440a8710e9f202a0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "ff2dce19_5ea09eaf",
         "filename": "src/libANGLE/validationEGL.cpp",
         "patchSetId": 6
