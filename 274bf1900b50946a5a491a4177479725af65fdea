@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "2db4228c_5d7bddd2",
+        "filename": "src/tests/angle_end2end_tests_expectations.txt",
+        "patchSetId": 6
+      },
+      "lineNbr": 109,
+      "author": {
+        "id": 1518892
+      },
+      "writtenOn": "2021-10-21T03:20:45Z",
+      "side": 1,
+      "message": "Had to add another suppression, because apparently the macOS OpenGL backend doesn\u0027t pass this test for some reason.",
+      "revId": "274bf1900b50946a5a491a4177479725af65fdea",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
