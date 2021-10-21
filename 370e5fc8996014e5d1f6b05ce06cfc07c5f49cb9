@@ -63,6 +63,30 @@
       },
       "revId": "370e5fc8996014e5d1f6b05ce06cfc07c5f49cb9",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "074ff0b1_477eba52",
+        "filename": "src/tests/capture_replay_tests/capture_replay_expectations.txt",
+        "patchSetId": 1
+      },
+      "lineNbr": 207,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2021-10-21T15:52:39Z",
+      "side": 1,
+      "message": "If we were to support other back-ends you\u0027d be right. I\u0027d like to define a policy that the back-end is a) always going to be SwiftShader for now and b) the back-end is defined to the left in the tags section, not in the right in the test name. Eventually in the far future we can remove the back-end from the test name.\n\nSee angle_end2end_tests_expectations.txt for how this can look WRT to the back-end. Anyway not a big deal, just a small consistency cleanup that doesn\u0027t need to block progress.",
+      "parentUuid": "7adb4a70_d8f0c102",
+      "range": {
+        "startLine": 207,
+        "startChar": 86,
+        "endLine": 207,
+        "endChar": 111
+      },
+      "revId": "370e5fc8996014e5d1f6b05ce06cfc07c5f49cb9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
