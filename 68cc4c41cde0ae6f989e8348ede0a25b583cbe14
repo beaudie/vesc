@@ -1,0 +1,44 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "924d139b_47700971",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 39
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2021-10-21T10:59:50Z",
+      "side": 1,
+      "message": "LGTM - Shabi might want to finalize his review before landing. Two last nits.",
+      "revId": "68cc4c41cde0ae6f989e8348ede0a25b583cbe14",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "f13847b6_92e08974",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.cpp",
+        "patchSetId": 39
+      },
+      "lineNbr": 3822,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2021-10-21T10:59:50Z",
+      "side": 1,
+      "message": "can you make this a try as well?",
+      "range": {
+        "startLine": 3822,
+        "startChar": 21,
+        "endLine": 3822,
+        "endChar": 35
+      },
+      "revId": "68cc4c41cde0ae6f989e8348ede0a25b583cbe14",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
