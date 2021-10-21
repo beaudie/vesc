@@ -16,6 +16,23 @@
       "message": "I\u0027m surprised it\u0027s all working with the combined lists, but if CQ is happy, then so am I.",
       "revId": "6cc2d310c66aaeb8cc0dc896ba65406f5061e15a",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "d1d14b66_062f0945",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2021-10-21T03:01:47Z",
+      "side": 1,
+      "message": "+2 I guess. I do wonder what happens for example if the attached compute program uses an SSBO but the graphics one doesn\u0027t. Are we binding an empty buffer for SSBO anyway when issuing a draw call? Not a big deal, just curious, since having compute in a pipeline is nonsense anyway.",
+      "revId": "6cc2d310c66aaeb8cc0dc896ba65406f5061e15a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
