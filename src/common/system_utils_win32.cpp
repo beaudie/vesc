@@ -5,6 +5,7 @@
 //
 // system_utils_win32.cpp: Implementation of OS-specific functions for Windows.
 
+#include "common/debug.h"
 #include "system_utils.h"
 
 #include <windows.h>
@@ -119,5 +120,50 @@ Library *OpenSharedLibrary(const char *libraryName, SearchType searchType)
 Library *OpenSharedLibraryWithExtension(const char *libraryName, SearchType searchType)
 {
     return new Win32Library(libraryName, searchType);
+}
+
+class Win32PageFaultHandler : public PageFaultHandler
+{
+  public:
+    Win32PageFaultHandler(PageFaultCallback callback) : PageFaultHandler(callback) {}
+    ~Win32PageFaultHandler() override {}
+
+    bool enable() override;
+    bool disable() override;
+};
+
+bool Win32PageFaultHandler::disable()
+{
+    UNIMPLEMENTED();
+    return true;
+}
+
+bool Win32PageFaultHandler::enable()
+{
+    UNIMPLEMENTED();
+    return true;
+}
+
+bool Protect(uintptr_t start, size_t size)
+{
+    UNIMPLEMENTED();
+    return true;
+}
+
+bool UnProtect(uintptr_t start, size_t size)
+{
+    UNIMPLEMENTED();
+    return true;
+}
+
+size_t GetPageSize()
+{
+    UNIMPLEMENTED();
+    return 0;
+}
+
+PageFaultHandler *CreatePageFaultHandler(PageFaultCallback callback)
+{
+    return new Win32PageFaultHandler(callback);
 }
 }  // namespace angle
