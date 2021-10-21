@@ -16,6 +16,46 @@
       "message": "PTAL",
       "revId": "fbffec22fcd510a6ac4110f124c5b6781eb27333",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "8879d406_4fae2344",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 8
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2021-10-21T15:06:19Z",
+      "side": 1,
+      "message": "This feels like more than a refactor, but if the tests/bots are good, looks okay to me.",
+      "revId": "fbffec22fcd510a6ac4110f124c5b6781eb27333",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "2ef77f5c_32fe7ca6",
+        "filename": "src/libANGLE/renderer/vulkan/ProgramPipelineVk.cpp",
+        "patchSetId": 8
+      },
+      "lineNbr": 248,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2021-10-21T15:06:19Z",
+      "side": 1,
+      "message": "Why change this code?  Isn\u0027t the early return faster and gives the same result?",
+      "range": {
+        "startLine": 248,
+        "startChar": 4,
+        "endLine": 248,
+        "endChar": 20
+      },
+      "revId": "fbffec22fcd510a6ac4110f124c5b6781eb27333",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
