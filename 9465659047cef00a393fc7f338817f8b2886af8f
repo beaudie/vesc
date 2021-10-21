@@ -52,6 +52,24 @@
       "parentUuid": "e66e48f6_4e7edf5d",
       "revId": "9465659047cef00a393fc7f338817f8b2886af8f",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "d3090da6_2d4dc741",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 5
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2021-10-21T14:44:36Z",
+      "side": 1,
+      "message": "Sure, if the solution works without adding a Gen, that\u0027s fine.  My main point was, do it with a parameter change (which is already a lookup), not replacing the whole Bind call with a fixture call.",
+      "parentUuid": "99df17fa_4c22f24f",
+      "revId": "9465659047cef00a393fc7f338817f8b2886af8f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
