@@ -53,6 +53,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "c5c50240_e366a127",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 6
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2021-10-21T23:42:18Z",
+      "side": 1,
+      "message": "Correct, the bots are not using ANGLE_PREFERRED_DEVICE. Gregg has been using it in his local testing and found that the test expectations don\u0027t pay attention to this environment variable.\n\nThe bots are using --bot-mode most significantly. Please tell us if we can help track down the test failures in this CL.",
+      "parentUuid": "816ce41d_04e9172a",
+      "revId": "14e3fd9b30c4508b504ffabd440a8710e9f202a0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "80f53daa_180ac0b3",
