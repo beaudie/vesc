@@ -35,6 +35,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "816ce41d_04e9172a",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 6
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1326275
+      },
+      "writtenOn": "2021-10-21T17:06:59Z",
+      "side": 1,
+      "message": "Looking at DisplayMtl.mm, it looks like ANGLE_PREFERRED_DEVICE is still respected by an early return in getMetalDeviceMatchingAttribute\nLocal testing confirms this, I\u0027m able to run the tests with ANGLE_PREFERRED_DEVICE\u003damd and I see AMD, same for intel. It even causes the new tests I added to fail because it no longer respects EGL_POWER_PREFERENCE_ANGLE (a separate issue, maybe worth it to skip the tests if ANGLE_PREFERRED_DEVICE is present)\n\nIt also looks like the bots aren\u0027t running with ANGLE_PREFERRED_DEVICE?\n\nI can\u0027t seem to reproduce any of the failures. Also, the failures aren\u0027t due to mismatched expectations, none of the failed tests have expectations for either intel or amd.\n\nI\u0027m still looking into what\u0027s going on.",
+      "parentUuid": "c9239a14_11ea09ff",
+      "revId": "14e3fd9b30c4508b504ffabd440a8710e9f202a0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "80f53daa_180ac0b3",
@@ -48,6 +66,24 @@
       "writtenOn": "2021-10-20T19:53:25Z",
       "side": 1,
       "message": "This paragraph\u0027s incorrect - it was only needed for the dynamic GPU switching in the OpenGL backend. Please remove it.",
+      "revId": "14e3fd9b30c4508b504ffabd440a8710e9f202a0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "777d2519_ea6e59fe",
+        "filename": "extensions/EGL_ANGLE_display_power_preference.txt",
+        "patchSetId": 6
+      },
+      "lineNbr": 75,
+      "author": {
+        "id": 1326275
+      },
+      "writtenOn": "2021-10-21T17:06:59Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "80f53daa_180ac0b3",
       "revId": "14e3fd9b30c4508b504ffabd440a8710e9f202a0",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
@@ -100,6 +136,24 @@
       "writtenOn": "2021-10-20T19:53:25Z",
       "side": 1,
       "message": "EGL_ANGLE_display_power_preference",
+      "revId": "14e3fd9b30c4508b504ffabd440a8710e9f202a0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "70d589f6_23963231",
+        "filename": "src/libANGLE/validationEGL.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 917,
+      "author": {
+        "id": 1326275
+      },
+      "writtenOn": "2021-10-21T17:06:59Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "ff2dce19_5ea09eaf",
       "revId": "14e3fd9b30c4508b504ffabd440a8710e9f202a0",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }

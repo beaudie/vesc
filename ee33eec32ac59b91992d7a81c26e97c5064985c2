@@ -242,6 +242,24 @@
       "message": "Per above - we shouldn\u0027t worry about getting these tests to run on the OpenGL backend.",
       "revId": "ee33eec32ac59b91992d7a81c26e97c5064985c2",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "1a102306_08294591",
+        "filename": "src/tests/egl_tests/EGLPowerPreferenceTest.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 249,
+      "author": {
+        "id": 1326275
+      },
+      "writtenOn": "2021-10-21T17:06:59Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "90956072_873e9cc5",
+      "revId": "ee33eec32ac59b91992d7a81c26e97c5064985c2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
