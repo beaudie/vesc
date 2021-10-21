@@ -16,6 +16,46 @@
       "message": "OK, modified the FastVector unit test to try and make copies of a vector that\u0027s filled larger than the stack-allocated size. In my local testing that triggers ASAN when the copies try to happen.",
       "revId": "c77104ed900e58e511d46e7c1d8b1edbdb3502e3",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "deba5e1d_fb25bee2",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2021-10-21T18:22:03Z",
+      "side": 1,
+      "message": "Thanks for the fix!",
+      "revId": "c77104ed900e58e511d46e7c1d8b1edbdb3502e3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "be5b19b9_987e2478",
+        "filename": "src/common/FastVector_unittest.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 42,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2021-10-21T18:22:03Z",
+      "side": 1,
+      "message": "For completeness, can you please add a loop (over {3, 16}) around this so that we can try all these with `countAndValue` having a size of 3 and then having a size of 16 (or feel free to make larger too)?\n\nThat way we don\u0027t swap coverage of small vectors for large vectors but can have both :)",
+      "range": {
+        "startLine": 27,
+        "startChar": 0,
+        "endLine": 42,
+        "endChar": 0
+      },
+      "revId": "c77104ed900e58e511d46e7c1d8b1edbdb3502e3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
