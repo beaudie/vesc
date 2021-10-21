@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "48d859d8_0862c627",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1491687
+      },
+      "writtenOn": "2021-10-21T19:44:24Z",
+      "side": 1,
+      "message": "This will probably fail on the CI, I will stub the functions for non-POSIX platforms.",
+      "revId": "f2682439addde835cfb370cbec55a183787c88e6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
