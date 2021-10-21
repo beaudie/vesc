@@ -12,6 +12,7 @@
 #include "common/Optional.h"
 #include "common/angleutils.h"
 
+#include <functional>
 #include <string>
 
 namespace angle
@@ -88,6 +89,39 @@ bool IsDebuggerAttached();
 
 // Calls system APIs to break into the debugger.
 void BreakDebugger();
+
+bool ProtectMemory(uintptr_t start, size_t size);
+bool UnprotectMemory(uintptr_t start, size_t size);
+
+size_t GetPageSize();
+
+// Return type of the PageFaultCallback
+enum class SignalRangeType
+{
+    // The memory address was known by the page fault handler
+    InRange,
+    // The memory address was not in the page fault handler's range
+    // and the signal will be forwarded to the default page handler.
+    OutOfRange,
+};
+
+typedef std::function<SignalRangeType(uintptr_t)> PageFaultCallback;
+
+class PageFaultHandler : angle::NonCopyable
+{
+  public:
+    PageFaultHandler(PageFaultCallback callback);
+    virtual ~PageFaultHandler();
+
+    virtual bool enable()  = 0;
+    virtual bool disable() = 0;
+
+  protected:
+    PageFaultCallback mCallback;
+};
+
+PageFaultHandler *CreatePageFaultHandler(PageFaultCallback callback);
+
 }  // namespace angle
 
 #endif  // COMMON_SYSTEM_UTILS_H_
