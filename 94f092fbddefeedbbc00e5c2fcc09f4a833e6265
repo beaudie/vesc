@@ -16,6 +16,24 @@
       "message": "I\u0027m not sure you\u0027d want this enabled by default. You\u0027d risk accidentally shipping ANGLE with Fuchsia.\n\nHow about instead add `angle_enable_swiftshader \u003d true` to the args only on the test bots?",
       "revId": "94f092fbddefeedbbc00e5c2fcc09f4a833e6265",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "9070d934_e07648d4",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1116023
+      },
+      "writtenOn": "2021-10-21T06:16:17Z",
+      "side": 1,
+      "message": "Official bots still run tests, so I don\u0027t think we can make this per-bot option.\nTo avoid shipping SwiftShader we currently exclude SwiftShader libs from the WebEngine package and we can do the same here as well, see: https://chromium-review.googlesource.com/c/chromium/src/+/3235676\nLonger term we should be able to run tests without swiftshader dependency",
+      "parentUuid": "6c6585ed_82d7c85a",
+      "revId": "94f092fbddefeedbbc00e5c2fcc09f4a833e6265",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
