@@ -18,6 +18,23 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "000fdcfe_9b50e7b6",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 39
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2021-10-21T15:38:05Z",
+      "side": 1,
+      "message": "LGTM, I wasn\u0027t a main reviewer.",
+      "revId": "68cc4c41cde0ae6f989e8348ede0a25b583cbe14",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "f13847b6_92e08974",
@@ -36,6 +53,53 @@
         "startChar": 21,
         "endLine": 3822,
         "endChar": 35
+      },
+      "revId": "68cc4c41cde0ae6f989e8348ede0a25b583cbe14",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "7fcf2cb0_19a1eb31",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.cpp",
+        "patchSetId": 39
+      },
+      "lineNbr": 3822,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2021-10-21T15:38:05Z",
+      "side": 1,
+      "message": "I think the point is to gracefully fall back to the next memory type.\n\nAlso, would help readability if this if (or the one above) is refactored into a helper function that can easily early out and reduce indentation.",
+      "parentUuid": "f13847b6_92e08974",
+      "range": {
+        "startLine": 3822,
+        "startChar": 21,
+        "endLine": 3822,
+        "endChar": 35
+      },
+      "revId": "68cc4c41cde0ae6f989e8348ede0a25b583cbe14",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "261db8f8_9cc8ef6a",
+        "filename": "src/libANGLE/renderer/vulkan/vk_utils.h",
+        "patchSetId": 39
+      },
+      "lineNbr": 1110,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2021-10-21T15:38:05Z",
+      "side": 1,
+      "message": "Not sure if this is what Jamie meant. It\u0027s very confusing to see this macro return on success, as opposed to all the other macros.",
+      "range": {
+        "startLine": 1108,
+        "startChar": 0,
+        "endLine": 1110,
+        "endChar": 45
       },
       "revId": "68cc4c41cde0ae6f989e8348ede0a25b583cbe14",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
