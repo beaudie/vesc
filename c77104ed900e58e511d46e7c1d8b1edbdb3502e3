@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "d013873f_c31d4967",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1518892
+      },
+      "writtenOn": "2021-10-21T13:24:47Z",
+      "side": 1,
+      "message": "OK, modified the FastVector unit test to try and make copies of a vector that\u0027s filled larger than the stack-allocated size. In my local testing that triggers ASAN when the copies try to happen.",
+      "revId": "c77104ed900e58e511d46e7c1d8b1edbdb3502e3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
