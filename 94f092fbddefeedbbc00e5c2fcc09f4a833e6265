@@ -52,6 +52,23 @@
       "parentUuid": "9070d934_e07648d4",
       "revId": "94f092fbddefeedbbc00e5c2fcc09f4a833e6265",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "eab49c5d_2254e01b",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1116023
+      },
+      "writtenOn": "2021-10-21T17:00:03Z",
+      "side": 1,
+      "message": "This change failed on the bots because it depends on https://swiftshader-review.googlesource.com/c/SwiftShader/+/58408 and that change hadn\u0027t been rolled to Angle yet. It should pass now. Can you please try pushing it to CQ again?",
+      "revId": "94f092fbddefeedbbc00e5c2fcc09f4a833e6265",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
