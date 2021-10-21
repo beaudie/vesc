@@ -13,6 +13,7 @@
 #include <cstring>
 #include <fstream>
 #include <string>
+#include <thread>
 
 #include "sys/stat.h"
 
@@ -5387,12 +5388,14 @@ void FrameCaptureShared::maybeCapturePreCallUpdates(
                 call.params.getParamFlexName("instancecount", "primcount", ParamType::TGLsizei, 3)
                     .value.GLsizeiVal;
             maybeCaptureDrawArraysClientData(context, call, instancecount);
+            maybeCaptureCoherentBuffers(context);
             break;
         }
 
         case EntryPoint::GLDrawElements:
         {
             maybeCaptureDrawElementsClientData(context, call, 1);
+            maybeCaptureCoherentBuffers(context);
             break;
         }
 
@@ -5404,6 +5407,7 @@ void FrameCaptureShared::maybeCapturePreCallUpdates(
                 call.params.getParamFlexName("instancecount", "primcount", ParamType::TGLsizei, 4)
                     .value.GLsizeiVal;
             maybeCaptureDrawElementsClientData(context, call, instancecount);
+            maybeCaptureCoherentBuffers(context);
             break;
         }
 
@@ -5900,6 +5904,8 @@ void FrameCaptureShared::captureCoherentBufferSnapshot(const gl::Context *contex
 
     std::vector<std::pair<uintptr_t, size_t>> dirtyRanges =
         mCoherentBufferTracker.mBuffers.at(id)->getDirtyRanges();
+
+    std::this_thread::sleep_for(std::chrono::milliseconds(1));
 
     uintptr_t start   = reinterpret_cast<uintptr_t>(buffer->getMapPointer());
     GLsizeiptr length = mBufferDataMap[id].second;
