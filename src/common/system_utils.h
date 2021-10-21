@@ -88,6 +88,29 @@ bool IsDebuggerAttached();
 
 // Calls system APIs to break into the debugger.
 void BreakDebugger();
+
+bool Protect(uintptr_t start, size_t size);
+bool UnProtect(uintptr_t start, size_t size);
+
+size_t GetPageSize();
+
+typedef std::function<bool(uintptr_t)> PageFaultCallback;
+
+class PageFaultHandler : angle::NonCopyable
+{
+  public:
+    PageFaultHandler(PageFaultCallback callback);
+    virtual ~PageFaultHandler();
+
+    virtual bool enable()  = 0;
+    virtual bool disable() = 0;
+
+  protected:
+    PageFaultCallback mCallback;
+};
+
+PageFaultHandler *CreatePageFaultHandler(PageFaultCallback callback);
+
 }  // namespace angle
 
 #endif  // COMMON_SYSTEM_UTILS_H_

@@ -17,6 +17,9 @@
 #include <sys/wait.h>
 #include <unistd.h>
 
+#include <signal.h>
+#include <sys/mman.h>
+
 namespace angle
 {
 
@@ -199,4 +202,92 @@ std::string GetRootDirectory()
 {
     return "/";
 }
+
+class PosixPageFaultHandler : public PageFaultHandler
+{
+  public:
+    PosixPageFaultHandler(PageFaultCallback callback) : PageFaultHandler(callback) {}
+    ~PosixPageFaultHandler() override {}
+
+    bool enable() override;
+    bool disable() override;
+    void handle(int sig, siginfo_t *info, void *unused);
+
+  private:
+    struct sigaction mDefaultAction;
+};
+
+PosixPageFaultHandler *gPosixPageFaultHandler = nullptr;
+static void SegfaultHandlerFunction(int sig, siginfo_t *info, void *unused)
+{
+    gPosixPageFaultHandler->handle(sig, info, unused);
+}
+
+void PosixPageFaultHandler::handle(int sig, siginfo_t *info, void *unused)
+{
+    bool found = false;
+    if (sig == SIGSEGV && info->si_code == SEGV_ACCERR)
+    {
+        found = mCallback(reinterpret_cast<uintptr_t>(info->si_addr));
+    }
+
+    // Fall back to default signal handler
+    if (!found)
+    {
+        fprintf(stderr, "Falling back to default signal handler.\n");
+        mDefaultAction.sa_sigaction(sig, info, unused);
+    }
+}
+
+bool PosixPageFaultHandler::disable()
+{
+    return sigaction(SIGSEGV, &mDefaultAction, nullptr) != 1;
+}
+
+bool PosixPageFaultHandler::enable()
+{
+    struct sigaction sigAction;
+    sigAction.sa_flags     = SA_SIGINFO;
+    sigAction.sa_sigaction = &SegfaultHandlerFunction;
+    sigemptyset(&sigAction.sa_mask);
+
+    return sigaction(SIGSEGV, &sigAction, &mDefaultAction) != 1;
+}
+
+static bool SetProtection(uintptr_t p, size_t size, uint32_t protections)
+{
+    int ret = mprotect(reinterpret_cast<void *>(p), size, protections);
+    if (ret < 0)
+    {
+        fprintf(stderr, "mprotect failed: %s.\n", strerror(errno));
+    }
+    return ret == 0;
+}
+
+bool Protect(uintptr_t start, size_t size)
+{
+    return SetProtection(start, size, PROT_READ);
+}
+
+bool UnProtect(uintptr_t start, size_t size)
+{
+    return SetProtection(start, size, PROT_READ | PROT_WRITE);
+}
+
+size_t GetPageSize()
+{
+    size_t pageSize = sysconf(_SC_PAGE_SIZE);
+    if (pageSize < 0)
+    {
+        fprintf(stderr, "Could not get sysconf page size: %s.\n", strerror(errno));
+    }
+    return pageSize;
+}
+
+PageFaultHandler *CreatePageFaultHandler(PageFaultCallback callback)
+{
+    gPosixPageFaultHandler = new PosixPageFaultHandler(callback);
+    return gPosixPageFaultHandler;
+}
+
 }  // namespace angle
