@@ -24,6 +24,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": true,
+      "key": {
+        "uuid": "fcfb966d_a090ee11",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 14,
+      "author": {
+        "id": 1518892
+      },
+      "writtenOn": "2021-10-21T12:49:26Z",
+      "side": 1,
+      "message": "Ah, sorry. It\u0027s a habit, I\u0027ll have to retrain my fingers. 😊",
+      "parentUuid": "af50e70f_a64a2b78",
+      "range": {
+        "startLine": 14,
+        "startChar": 0,
+        "endLine": 14,
+        "endChar": 55
+      },
+      "revId": "6fb18a148e78e54d482f1b788a4c49d8f9ad2ec6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": false,
       "key": {
         "uuid": "e01570ba_d9395a07",
