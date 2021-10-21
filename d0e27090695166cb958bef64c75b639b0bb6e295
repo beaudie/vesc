@@ -215,6 +215,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "f53dce6c_72aba235",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.cpp",
+        "patchSetId": 37
+      },
+      "lineNbr": 3744,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2021-10-21T17:34:49Z",
+      "side": 1,
+      "message": "I see. It does not use member variable, but does use the class private types (VMAPoolType). I can make VMAPoolType public so that this function can use it, but that seems a bit overkill though. THe decision of which pool to use is private to this class at this point.",
+      "parentUuid": "a75265c4_6359abe7",
+      "range": {
+        "startLine": 3744,
+        "startChar": 31,
+        "endLine": 3744,
+        "endChar": 44
+      },
+      "revId": "d0e27090695166cb958bef64c75b639b0bb6e295",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "41cf0131_dbad6d47",
         "filename": "src/libANGLE/renderer/vulkan/RendererVk.cpp",
         "patchSetId": 37
