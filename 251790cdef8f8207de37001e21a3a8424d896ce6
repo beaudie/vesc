@@ -34,6 +34,24 @@
       "parentUuid": "cb8c11b4_2d24d096",
       "revId": "251790cdef8f8207de37001e21a3a8424d896ce6",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "6a9c57cd_0d60b0fc",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1518892
+      },
+      "writtenOn": "2021-10-21T23:12:44Z",
+      "side": 1,
+      "message": "Per MSDN:\n\n\u003e If lpBuffer is not large enough to hold the data, the return value is the buffer size, in characters, required to hold the string and its terminating null character and the contents of lpBuffer are undefined.\n\nThe value is (annoyingly) different the second time it\u0027s called when we give it a sufficiently large buffer:\n\n\u003e If the function succeeds, the return value is the number of characters stored in the buffer pointed to by lpBuffer, not including the terminating null character.\n\nSo the first time it\u0027s the len(\u0027string\\0\u0027), and the second time it\u0027s len(\u0027string\u0027).\n\nI\u0027ll just let std::string() do strlen on it I guess. I\u0027m just not feeling too trusting of GetEnvironmentVariableA right now given the weirdness of the API.",
+      "parentUuid": "cb8c11b4_2d24d096",
+      "revId": "251790cdef8f8207de37001e21a3a8424d896ce6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
