@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "cb8c11b4_2d24d096",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1518892
+      },
+      "writtenOn": "2021-10-21T13:30:03Z",
+      "side": 1,
+      "message": "Noticed that this doesn\u0027t pass the SystemUtils.Environment unittest, because it has an extra byte:\n\n[ RUN      ] SystemUtils.Environment\n../../src/common/system_utils_unittest.cpp(51): error: Expected equality of these values:\n  kEnvVarValue\n    Which is: \"The quick brown fox jumps over the lazy dog\"\n  readback\n    Which is: \"The quick brown fox jumps over the lazy dog\\0\"\n[  FAILED  ] SystemUtils.Environment (0 ms)\n\nGoing to fix that momentarily.",
+      "revId": "251790cdef8f8207de37001e21a3a8424d896ce6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
