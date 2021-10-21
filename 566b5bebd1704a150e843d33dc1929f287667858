@@ -16,6 +16,24 @@
       "message": "LGTM - a regression test that fails in ASAN would be welcome in FastVector_unittest.cpp.",
       "revId": "566b5bebd1704a150e843d33dc1929f287667858",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "78fd9882_8bda8689",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1518892
+      },
+      "writtenOn": "2021-10-21T12:59:49Z",
+      "side": 1,
+      "message": "It already fails ASAN (on Windows) in e.g. BasicDrawTest.DrawColor/ES1_Vulkan:\n\nhttps://gist.github.com/tycho/73475970bef037943dfb37f475fa47b2\n\nBut I\u0027ll see about making a more directed test.\n\n\nI think the reason a lot of these aren\u0027t caught on other platforms is maybe because you\u0027re forced to use !is_debug with is_asan on Windows?\n\nERROR at //build/config/sanitizers/sanitizers.gni:244:1: Assertion failed.\nassert(!is_win || !is_debug || !is_asan,\n^-----\nASan on Windows doesn\u0027t work in debug (set is_debug\u003dfalse).\nSee //gni/angle.gni:27:3: whence it was imported.\n  import(\"//build/config/sanitizers/sanitizers.gni\")\n  ^------------------------------------------------\nSee //BUILD.gn:6:1: whence it was imported.\nimport(\"gni/angle.gni\")\n^---------------------",
+      "parentUuid": "095d36f3_f4a157bb",
+      "revId": "566b5bebd1704a150e843d33dc1929f287667858",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
