@@ -166,6 +166,30 @@
       },
       "revId": "6b6427c291d9c77f12714f439457e81caf432cce",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "47b37864_88a9dc2d",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 318,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2021-10-21T19:37:02Z",
+      "side": 1,
+      "message": "Yes, this does fix the VVL error. Charlie, can I go ahead with landing this?",
+      "parentUuid": "788e8cf1_d138993e",
+      "range": {
+        "startLine": 318,
+        "startChar": 12,
+        "endLine": 318,
+        "endChar": 38
+      },
+      "revId": "6b6427c291d9c77f12714f439457e81caf432cce",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
