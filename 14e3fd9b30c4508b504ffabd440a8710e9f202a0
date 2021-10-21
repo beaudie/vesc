@@ -71,6 +71,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "c7532078_b77ede29",
+        "filename": "src/libANGLE/Display.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 644,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2021-10-21T15:20:56Z",
+      "side": 1,
+      "message": "I can explain this history here and the decision:\n\neglGetDisplay does have the requirement that display_id directly maps to an EGLDisplay. We wrote EGL_ANGLE_platform_angle before EGL 1.5 and eglGetPlatformDisplay existed so we borrowed the text. Now with EGL 1.5 and eglGetPlatformDisplay becoming core, the language is:\n\n   Multiple calls made to eglGetPlatformDisplay with the same parameters will\nreturn the same EGLDisplay handle\n\nparameters here is pretty ambiguous and I think we can decide what parameters will be a key for the display. I think every parameter is too much to key on, many are small tweaks and don\u0027t represent a different GPU but some greatly change the resulting display (like power preference) and I think it makes sense that we key on them.\n\nLet\u0027s update the EGL_ANGLE_platform_angle spec to use the same language as core eglGetPlatformDisplay too.",
+      "parentUuid": "10d83f4f_b994f34c",
+      "revId": "14e3fd9b30c4508b504ffabd440a8710e9f202a0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "ff2dce19_5ea09eaf",
         "filename": "src/libANGLE/validationEGL.cpp",
         "patchSetId": 6
