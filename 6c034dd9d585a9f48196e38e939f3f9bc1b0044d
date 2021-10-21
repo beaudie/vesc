@@ -90,6 +90,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "37279ca6_dd169c9f",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 8
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1359249
+      },
+      "writtenOn": "2021-10-21T22:58:58Z",
+      "side": 1,
+      "message": "done",
+      "parentUuid": "5b3b0e71_06eecf2f",
+      "revId": "6c034dd9d585a9f48196e38e939f3f9bc1b0044d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "45bcc5dc_e797b111",
@@ -163,6 +181,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "17ec635a_4eb27cf6",
+        "filename": "src/libANGLE/renderer/vulkan/SurfaceVk.cpp",
+        "patchSetId": 8
+      },
+      "lineNbr": 1664,
+      "author": {
+        "id": 1359249
+      },
+      "writtenOn": "2021-10-21T22:58:58Z",
+      "side": 1,
+      "message": "RE: early exit. Maybe should set mDesiredSwapchainPresentMode \u003d VK_PRESENT_MODE_FIFO_KHR, back to default, and return OUT_OF_DATE and that should cause a revert to BACK_BUFFER, multi Image mode. Just so it goes back to operational state?",
+      "parentUuid": "4cb422c7_537caf1c",
+      "range": {
+        "startLine": 1664,
+        "startChar": 12,
+        "endLine": 1664,
+        "endChar": 18
+      },
+      "revId": "6c034dd9d585a9f48196e38e939f3f9bc1b0044d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "f8bfa387_088f20a8",
         "filename": "src/libANGLE/renderer/vulkan/SurfaceVk.cpp",
         "patchSetId": 8
@@ -222,6 +264,30 @@
       "side": 1,
       "message": "Ok, to do it really right, we should change the return value of this function to angle::Result, then add a parameter like `bool *isSuboptimalOut` to handle suboptimal.\n\nThen this could use ANGLE_TRY.",
       "parentUuid": "dad18628_f7aaf764",
+      "range": {
+        "startLine": 1666,
+        "startChar": 12,
+        "endLine": 1666,
+        "endChar": 18
+      },
+      "revId": "6c034dd9d585a9f48196e38e939f3f9bc1b0044d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "2760be3e_f7406dab",
+        "filename": "src/libANGLE/renderer/vulkan/SurfaceVk.cpp",
+        "patchSetId": 8
+      },
+      "lineNbr": 1666,
+      "author": {
+        "id": 1359249
+      },
+      "writtenOn": "2021-10-21T22:58:58Z",
+      "side": 1,
+      "message": "Yea, need to deal with return SUBOPTIMAL. Still working",
+      "parentUuid": "5ecbb563_f4fbf4c1",
       "range": {
         "startLine": 1666,
         "startChar": 12,
