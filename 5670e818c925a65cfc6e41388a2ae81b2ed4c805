@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "e499f66f_0208221f",
+        "filename": "src/common/system_utils_win32.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 28,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2021-10-21T18:26:43Z",
+      "side": 1,
+      "message": "nit: While you are here, maybe rename this to \"value\"? There is nothing old about it 😄",
+      "range": {
+        "startLine": 28,
+        "startChar": 31,
+        "endLine": 28,
+        "endChar": 39
+      },
+      "revId": "5670e818c925a65cfc6e41388a2ae81b2ed4c805",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
