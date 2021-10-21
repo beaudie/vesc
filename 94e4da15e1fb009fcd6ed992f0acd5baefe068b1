@@ -35,6 +35,23 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "e9526356_50070452",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 9
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1359249
+      },
+      "writtenOn": "2021-10-21T21:21:04Z",
+      "side": 1,
+      "message": "Feedback for for @Jamie.\n\nWorking fixes per Shahbaz. We upload when ready.",
+      "revId": "94e4da15e1fb009fcd6ed992f0acd5baefe068b1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "dee15c35_595aa6f5",
@@ -48,6 +65,30 @@
       "writtenOn": "2021-10-20T15:43:43Z",
       "side": 1,
       "message": "nit: use ANGLE_TRY",
+      "range": {
+        "startLine": 694,
+        "startChar": 0,
+        "endLine": 698,
+        "endChar": 5
+      },
+      "revId": "94e4da15e1fb009fcd6ed992f0acd5baefe068b1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "7ffb8255_c709d861",
+        "filename": "src/libANGLE/Surface.cpp",
+        "patchSetId": 9
+      },
+      "lineNbr": 698,
+      "author": {
+        "id": 1359249
+      },
+      "writtenOn": "2021-10-21T21:21:04Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "dee15c35_595aa6f5",
       "range": {
         "startLine": 694,
         "startChar": 0,
@@ -83,6 +124,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "03490f46_7b83e8cf",
+        "filename": "src/libANGLE/renderer/vulkan/SurfaceVk.cpp",
+        "patchSetId": 9
+      },
+      "lineNbr": 2053,
+      "author": {
+        "id": 1359249
+      },
+      "writtenOn": "2021-10-21T21:21:04Z",
+      "side": 1,
+      "message": "We don\u0027t have the supported presentations modes until we have a VkSurface. See WindowSurfaceVk::initializeImpl above. I\u0027m scanning the modes to be sure the one I need is supported. I think that is in a VU somewhere (need to find again). I was trying to limit the surfaceAttrib error to the validation but this seemed a requirement, and thus error code added. Lets dbl check on that requirement.\n\nHere:\n\"VUID-VkSwapchainCreateInfoKHR-presentMode-01281\npresentMode must be one of the VkPresentModeKHR values returned by vkGetPhysicalDeviceSurfacePresentModesKHR for the surface\"\n\nWhat do you think?",
+      "parentUuid": "586a63b6_0609b9fd",
+      "range": {
+        "startLine": 2048,
+        "startChar": 0,
+        "endLine": 2053,
+        "endChar": 0
+      },
+      "revId": "94e4da15e1fb009fcd6ed992f0acd5baefe068b1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "c75f11d0_2a1b40bf",
         "filename": "src/libGLESv2/egl_stubs.cpp",
         "patchSetId": 9
@@ -94,6 +159,30 @@
       "writtenOn": "2021-10-20T15:43:43Z",
       "side": 1,
       "message": "can we not use a try macro here as well?",
+      "range": {
+        "startLine": 623,
+        "startChar": 23,
+        "endLine": 623,
+        "endChar": 39
+      },
+      "revId": "94e4da15e1fb009fcd6ed992f0acd5baefe068b1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "985d7b85_43076010",
+        "filename": "src/libGLESv2/egl_stubs.cpp",
+        "patchSetId": 9
+      },
+      "lineNbr": 623,
+      "author": {
+        "id": 1359249
+      },
+      "writtenOn": "2021-10-21T21:21:04Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "c75f11d0_2a1b40bf",
       "range": {
         "startLine": 623,
         "startChar": 23,
