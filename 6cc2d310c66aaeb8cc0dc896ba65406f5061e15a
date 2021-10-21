@@ -33,6 +33,24 @@
       "message": "+2 I guess. I do wonder what happens for example if the attached compute program uses an SSBO but the graphics one doesn\u0027t. Are we binding an empty buffer for SSBO anyway when issuing a draw call? Not a big deal, just curious, since having compute in a pipeline is nonsense anyway.",
       "revId": "6cc2d310c66aaeb8cc0dc896ba65406f5061e15a",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "aec2338c_b235f739",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2021-10-21T11:11:42Z",
+      "side": 1,
+      "message": "I\u0027m not sure the CTS tests cover that. In that scenario as long as the compute program can see the SSBO and the graphics program links properly and can\u0027t accidentally access the SSBO, I imagine we could leave it bound in the descriptor set state. In practice I\u0027m not sure exactly what would happen.\n\nIn any case, we do pass the CTS test, and I suggest we don\u0027t invest too much additional time in covering potential edge cases given the pretty niche nature of this functionality.",
+      "parentUuid": "d1d14b66_062f0945",
+      "revId": "6cc2d310c66aaeb8cc0dc896ba65406f5061e15a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
