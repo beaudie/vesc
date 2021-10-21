@@ -6,6 +6,7 @@
 
 // system_utils_winuwp.cpp: Implementation of OS-specific functions for Windows UWP
 
+#include "common/debug.h"
 #include "system_utils.h"
 
 #include <stdarg.h>
@@ -109,5 +110,29 @@ Library *OpenSharedLibrary(const char *libraryName, SearchType searchType)
 Library *OpenSharedLibraryWithExtension(const char *libraryName, SearchType searchType)
 {
     return new UwpLibrary(libraryName, searchType);
+}
+
+bool Protect(uintptr_t start, size_t size)
+{
+    UNIMPLEMENTED();
+    return false;
+}
+
+bool UnProtect(uintptr_t start, size_t size)
+{
+    UNIMPLEMENTED();
+    return false;
+}
+
+size_t GetPageSize()
+{
+    UNIMPLEMENTED();
+    return 0;
+}
+
+PageFaultHandler *CreatePageFaultHandler(PageFaultCallback callback)
+{
+    UNIMPLEMENTED();
+    return nullptr;
 }
 }  // namespace angle

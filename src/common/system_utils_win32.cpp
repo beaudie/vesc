@@ -5,6 +5,7 @@
 //
 // system_utils_win32.cpp: Implementation of OS-specific functions for Windows.
 
+#include "common/debug.h"
 #include "system_utils.h"
 
 #include <windows.h>
@@ -120,4 +121,29 @@ Library *OpenSharedLibraryWithExtension(const char *libraryName, SearchType sear
 {
     return new Win32Library(libraryName, searchType);
 }
+
+bool Protect(uintptr_t start, size_t size)
+{
+    UNIMPLEMENTED();
+    return false;
+}
+
+bool UnProtect(uintptr_t start, size_t size)
+{
+    UNIMPLEMENTED();
+    return false;
+}
+
+size_t GetPageSize()
+{
+    UNIMPLEMENTED();
+    return 0;
+}
+
+PageFaultHandler *CreatePageFaultHandler(PageFaultCallback callback)
+{
+    UNIMPLEMENTED();
+    return nullptr;
+}
+
 }  // namespace angle
