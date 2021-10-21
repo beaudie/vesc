@@ -5,6 +5,7 @@
 //
 // system_utils_win32.cpp: Implementation of OS-specific functions for Windows.
 
+#include "common/FastVector.h"
 #include "system_utils.h"
 
 #include <windows.h>
@@ -24,17 +25,27 @@ bool SetEnvironmentVar(const char *variableName, const char *value)
 
 std::string GetEnvironmentVar(const char *variableName)
 {
-    std::array<char, MAX_PATH> oldValue;
-    DWORD result =
-        GetEnvironmentVariableA(variableName, oldValue.data(), static_cast<DWORD>(oldValue.size()));
+    FastVector<char, MAX_PATH> oldValue;
+
+    DWORD result;
+
+    // First get the length of the variable
+    result = GetEnvironmentVariableA(variableName, nullptr, 0);
+
+    // Zero means not found, so return now.
     if (result == 0)
     {
         return std::string();
     }
-    else
-    {
-        return std::string(oldValue.data());
-    }
+
+    // Now size the vector to fit the data, and read the environment variable.
+    oldValue.resize(result, 0);
+    result = GetEnvironmentVariableA(variableName, oldValue.data(), result);
+
+    // Explicitly pass the size we know it should be. We use size()-1 to
+    // exclude the null terminator byte that GetEnvironmentVariableA includes
+    // in its length response.
+    return std::string(oldValue.data(), oldValue.size() - 1);
 }
 
 class Win32Library : public Library
