@@ -34,7 +34,7 @@ vars = {
   'checkout_android_native_support': 'checkout_android or checkout_chromeos',
 
   # Version of Chromium our Chromium-based DEPS are mirrored from.
-  'chromium_revision': '75578cc5e47dbb08fe455623937d5fc51443398d',
+  'chromium_revision': '996298e52fc7dc0794b1cd756e3a1caafe39db57',
   # We never want to checkout chromium,
   # but need a dummy DEPS entry for the autoroller
   'dummy_checkout_chromium': False,
@@ -119,7 +119,7 @@ vars = {
 deps = {
 
   'build': {
-    'url': '{chromium_git}/chromium/src/build.git@4d4596dc668ecab4879b024d2d027634f3c6fa95',
+    'url': '{chromium_git}/chromium/src/build.git@b60878a223cbb61936dc90150753c2ffcc5a9a35',
     'condition': 'not build_with_chromium',
   },
 
@@ -182,7 +182,7 @@ deps = {
   },
 
   'testing': {
-    'url': '{chromium_git}/chromium/src/testing@93811b76abbe290958f122777034b4015d1ab61a',
+    'url': '{chromium_git}/chromium/src/testing@a5d84976a806fd9a475c362503c37923ebfcefd4',
     'condition': 'not build_with_chromium',
   },
 
@@ -626,7 +626,7 @@ deps = {
       'packages': [
         {
           'package': 'skia/tools/goldctl/mac-amd64',
-          'version': 'rhRaADork6USXDGEk0fWwnbWVaKKc0YLzENNVBVsHkAC',
+          'version': 'Ee-Y58INmdIA4z_rfmJjvZ-ljrcn-L2tk9nMJVDkidkC',
         },
       ],
       'dep_type': 'cipd',
