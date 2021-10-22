@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "0fa470f8_3081afae",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1118354
+      },
+      "writtenOn": "2021-10-22T19:26:19Z",
+      "side": 1,
+      "message": "LGTM, though mine probably has no power here.",
+      "revId": "69011957e7704d3b7ea74530fc47115d1136864e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
