@@ -37,6 +37,23 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "86e0e35b_b936e509",
+        "filename": "src/libANGLE/ProgramPipeline.cpp",
+        "patchSetId": 8
+      },
+      "lineNbr": 210,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2021-10-22T01:35:50Z",
+      "side": 1,
+      "message": "With this, can the programPipeline-\u003elink() call be removed from ValidateDrawStates() [ref1]?",
+      "revId": "fbffec22fcd510a6ac4110f124c5b6781eb27333",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "2ef77f5c_32fe7ca6",
         "filename": "src/libANGLE/renderer/vulkan/ProgramPipelineVk.cpp",
         "patchSetId": 8
@@ -54,6 +71,23 @@
         "endLine": 248,
         "endChar": 20
       },
+      "revId": "fbffec22fcd510a6ac4110f124c5b6781eb27333",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "e5ef7a81_cb5c8c3c",
+        "filename": "src/libANGLE/validationES.cpp",
+        "patchSetId": 8
+      },
+      "lineNbr": 4055,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2021-10-22T01:35:50Z",
+      "side": 1,
+      "message": "ref1",
       "revId": "fbffec22fcd510a6ac4110f124c5b6781eb27333",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
