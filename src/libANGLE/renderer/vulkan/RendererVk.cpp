@@ -370,6 +370,9 @@ constexpr SkippedSyncvalMessage kSkippedSyncvalMessages[] = {
      "EXT|SYNC_COLOR_ATTACHMENT_OUTPUT_COLOR_ATTACHMENT_READ|SYNC_COLOR_ATTACHMENT_OUTPUT_COLOR_"
      "ATTACHMENT_WRITE, command: vkCmdEndRenderPass",
      "", false},
+    {"UNASSIGNED-BestPractices-vkBindBufferMemory-requirements-not-retrieved",
+     "BindBufferMemory(): Binding memory to VkBuffer ",
+     "but vkGetBufferMemoryRequirements() has not been called on that buffer.", false},
 };
 
 enum class DebugMessageReport
@@ -632,11 +635,35 @@ VKAPI_ATTR VkBool32 VKAPI_CALL DebugReportCallback(VkDebugReportFlagsEXT flags,
     return VK_FALSE;
 }
 
+// Calback from vulkan
 VKAPI_ATTR void VKAPI_CALL
 MemoryReportCallback(const VkDeviceMemoryReportCallbackDataEXT *callbackData, void *userData)
 {
     RendererVk *rendererVk = static_cast<RendererVk *>(userData);
     rendererVk->processMemoryReportCallback(*callbackData);
+}
+
+// Callback from VMA
+VKAPI_PTR void VKAPI_CALL VmaAllocateDeviceMemoryCallback(VmaAllocator allocator,
+                                                          uint32_t memoryTypeIndex,
+                                                          VkDeviceMemory deviceMemory,
+                                                          VkDeviceSize size,
+                                                          void *pUserData)
+{
+    RendererVk *rendererVk                           = static_cast<RendererVk *>(pUserData);
+    vk::BufferMemoryAllocator &buffermemoryAllocator = rendererVk->getBufferMemoryAllocator();
+    buffermemoryAllocator.deviceMemoryAllocated(rendererVk, memoryTypeIndex, deviceMemory, size);
+}
+
+VKAPI_PTR void VKAPI_CALL VmaFreeDeviceMemoryCallback(VmaAllocator allocator,
+                                                      uint32_t memoryTypeIndex,
+                                                      VkDeviceMemory deviceMemory,
+                                                      VkDeviceSize size,
+                                                      void *pUserData)
+{
+    RendererVk *rendererVk                           = static_cast<RendererVk *>(pUserData);
+    vk::BufferMemoryAllocator &buffermemoryAllocator = rendererVk->getBufferMemoryAllocator();
+    buffermemoryAllocator.deviceMemoryWillFree(rendererVk, memoryTypeIndex, deviceMemory, size);
 }
 
 bool ShouldUseValidationLayers(const egl::AttributeMap &attribs)
@@ -1408,7 +1435,8 @@ angle::Result RendererVk::initialize(DisplayVk *displayVk,
     // Create VMA allocator
     ANGLE_VK_TRY(displayVk,
                  mAllocator.init(mPhysicalDevice, mDevice, mInstance, applicationInfo.apiVersion,
-                                 preferredLargeHeapBlockSize));
+                                 preferredLargeHeapBlockSize, &VmaAllocateDeviceMemoryCallback,
+                                 &VmaFreeDeviceMemoryCallback, this));
 
     // Create buffer memory allocator
     mBufferMemoryAllocator.initialize(this);
@@ -3697,6 +3725,39 @@ BufferMemoryAllocator::~BufferMemoryAllocator()
             ASSERT(!vmaPool.valid());
         }
     }
+    ASSERT(mDeviceMemoryToBufferMap.empty());
+}
+
+void BufferMemoryAllocator::initialize(RendererVk *renderer)
+{
+    // We could potentially use multiple backing buffers for different usages.
+    // For now keep a single buffer with all relevant usage flags.
+    mDefaultBufferUsageFlags =
+        VK_BUFFER_USAGE_VERTEX_BUFFER_BIT | VK_BUFFER_USAGE_TRANSFER_DST_BIT |
+        VK_BUFFER_USAGE_INDEX_BUFFER_BIT | VK_BUFFER_USAGE_TRANSFER_SRC_BIT |
+        VK_BUFFER_USAGE_UNIFORM_BUFFER_BIT | VK_BUFFER_USAGE_STORAGE_BUFFER_BIT |
+        VK_BUFFER_USAGE_UNIFORM_TEXEL_BUFFER_BIT | VK_BUFFER_USAGE_STORAGE_TEXEL_BUFFER_BIT |
+        VK_BUFFER_USAGE_INDIRECT_BUFFER_BIT;
+    if (renderer->getFeatures().supportsTransformFeedbackExtension.enabled)
+    {
+        mDefaultBufferUsageFlags |= VK_BUFFER_USAGE_TRANSFORM_FEEDBACK_BUFFER_BIT_EXT;
+    }
+
+    VkBufferCreateInfo createInfo    = {};
+    createInfo.sType                 = VK_STRUCTURE_TYPE_BUFFER_CREATE_INFO;
+    createInfo.flags                 = 0;
+    createInfo.size                  = 256;
+    createInfo.usage                 = mDefaultBufferUsageFlags;
+    createInfo.sharingMode           = VK_SHARING_MODE_EXCLUSIVE;
+    createInfo.queueFamilyIndexCount = 0;
+    createInfo.pQueueFamilyIndices   = nullptr;
+
+    Buffer buffer;
+    buffer.init(renderer->getDevice(), createInfo);
+
+    // Call driver to determine memory requirements for the default buffers.
+    buffer.getMemoryRequirements(renderer->getDevice(), &mDefaultBufferMemReq);
+    buffer.destroy(renderer->getDevice());
 }
 
 void BufferMemoryAllocator::destroy(RendererVk *renderer)
@@ -3710,6 +3771,55 @@ void BufferMemoryAllocator::destroy(RendererVk *renderer)
         {
             vmaPool.destroy(allocator);
         }
+    }
+
+    mDeviceMemoryToBufferMap.clear();
+}
+
+void BufferMemoryAllocator::deviceMemoryAllocated(RendererVk *renderer,
+                                                  uint32_t memoryTypeIndex,
+                                                  VkDeviceMemory memory,
+                                                  VkDeviceSize size)
+{
+    VkBuffer vkBuffer = mDeviceMemoryToBufferMap[memory];
+    ASSERT(vkBuffer == VK_NULL_HANDLE);
+
+    VkBufferCreateInfo createInfo    = {};
+    createInfo.sType                 = VK_STRUCTURE_TYPE_BUFFER_CREATE_INFO;
+    createInfo.flags                 = 0;
+    createInfo.size                  = size;
+    createInfo.usage                 = mDefaultBufferUsageFlags;
+    createInfo.sharingMode           = VK_SHARING_MODE_EXCLUSIVE;
+    createInfo.queueFamilyIndexCount = 0;
+    createInfo.pQueueFamilyIndices   = nullptr;
+
+    DeviceMemory deviceMemory;
+    deviceMemory.setHandle(memory);
+
+    Buffer buffer;
+    buffer.init(renderer->getDevice(), createInfo);
+    buffer.bindMemory(renderer->getDevice(), deviceMemory);
+
+    // The release call is to release it to mDeviceMemoryToBufferMap so that Buffer destructor will
+    // not try to free it. mDeviceMemoryToBufferMap owns VkBuffer object and VMA owns
+    // VkDeviceMemory.
+    mDeviceMemoryToBufferMap[memory] = buffer.release();
+    deviceMemory.release();
+}
+
+void BufferMemoryAllocator::deviceMemoryWillFree(RendererVk *renderer,
+                                                 uint32_t memoryTypeIndex,
+                                                 VkDeviceMemory memory,
+                                                 VkDeviceSize size)
+{
+    VkBuffer vkBuffer = mDeviceMemoryToBufferMap[memory];
+    if (vkBuffer != VK_NULL_HANDLE)
+    {
+        mDeviceMemoryToBufferMap[memory] = VK_NULL_HANDLE;
+        // Destroy the VkBuffer object
+        Buffer buffer;
+        buffer.setHandle(vkBuffer);
+        buffer.destroy(renderer->getDevice());
     }
 }
 
@@ -3804,6 +3914,8 @@ angle::Result BufferMemoryAllocator::allocateMemoryForBuffer(Context *context,
     VkMemoryRequirements vkMemReq;
     buffer.getMemoryRequirements(context->getDevice(), &vkMemReq);
 
+    VkDeviceMemory deviceMemory;
+    VkDeviceSize offset;
     uint32_t memoryTypeIndex = kInvalidMemoryTypeIndex;
     // We loop through each memory type bit in case of failure.
     // This will immediate return if FindMemoryTypeIndex fail, in the case that we have tried
@@ -3824,8 +3936,8 @@ angle::Result BufferMemoryAllocator::allocateMemoryForBuffer(Context *context,
         VMAPool &pool =
             getVMAPool(context, memoryTypeIndex, vkMemReq.size, robustResourceInitEnabled, flags);
         if (vma::AllocateMemory(allocator.getHandle(), &vkMemReq, requiredFlags, preferredFlags,
-                                flags, pool.getHandle(), memoryTypeIndexOut,
-                                &allocationOut->mHandle, sizeOut) != VK_SUCCESS)
+                                flags, pool.getHandle(), memoryTypeIndexOut, &deviceMemory, &offset,
+                                sizeOut, &allocationOut->mHandle) != VK_SUCCESS)
         {
             // Allocation failed and retry.
             vkMemReq.memoryTypeBits &= ~(1u << memoryTypeIndex);
@@ -3844,6 +3956,68 @@ angle::Result BufferMemoryAllocator::allocateMemoryForBuffer(Context *context,
         }
 
         // Successfully allocate and bind memory
+        return angle::Result::Continue;
+    }
+
+    // We reach here when we loop through all of memoryTypeBits and still can't allocate
+    ANGLE_VK_TRY(context, VK_ERROR_OUT_OF_DEVICE_MEMORY);
+
+    return angle::Result::Continue;
+}
+
+angle::Result BufferMemoryAllocator::createBufferWithDefaultUsage(
+    Context *context,
+    VkDeviceSize requestedSize,
+    VkMemoryPropertyFlags requiredFlags,
+    VkMemoryPropertyFlags preferredFlags,
+    bool persistentlyMapped,
+    bool robustResourceInitEnabled,
+    uint32_t *memoryTypeIndexOut,
+    Allocation *allocationOut,
+    VkDeviceSize *sizeOut,
+    Buffer *bufferOut,
+    VkDeviceSize *offsetOut)
+{
+    RendererVk *renderer                     = context->getRenderer();
+    const Allocator &allocator               = renderer->getAllocator();
+    const MemoryProperties &memoryProperties = renderer->getMemoryProperties();
+    vma::AllocationCreateFlags flags = persistentlyMapped ? vma::ALLOCATION_CREATE_MAPPED_BIT : 0;
+
+    VkMemoryRequirements vkMemReq = mDefaultBufferMemReq;
+    vkMemReq.size                 = requestedSize;
+
+    VkDeviceMemory deviceMemory;
+    uint32_t memoryTypeIndex = kInvalidMemoryTypeIndex;
+    // We loop through each memory type bit in case of failure.
+    // This will immediate return if FindMemoryTypeIndex fail, in the case that we have tried
+    // all memory types that are compatible and still fail to allocate.
+    while (vkMemReq.memoryTypeBits &&
+           vma::FindMemoryTypeIndex(allocator.getHandle(), vkMemReq.memoryTypeBits, requiredFlags,
+                                    preferredFlags, persistentlyMapped,
+                                    &memoryTypeIndex) == VK_SUCCESS)
+    {
+        if (vkMemReq.size > memoryProperties.getHeapSizeForMemoryType(memoryTypeIndex))
+        {
+            // Remove old memTypeIndex from list of possibilities and loop again
+            vkMemReq.memoryTypeBits &= ~(1u << memoryTypeIndex);
+            continue;
+        }
+
+        // Allocate memory using sub-allocator
+        VMAPool &pool =
+            getVMAPool(context, memoryTypeIndex, vkMemReq.size, robustResourceInitEnabled, flags);
+        if (vma::AllocateMemory(allocator.getHandle(), &vkMemReq, requiredFlags, preferredFlags,
+                                flags, pool.getHandle(), memoryTypeIndexOut, &deviceMemory,
+                                offsetOut, sizeOut, &allocationOut->mHandle) != VK_SUCCESS)
+        {
+            // Allocation failed and retry.
+            vkMemReq.memoryTypeBits &= ~(1u << memoryTypeIndex);
+            continue;
+        }
+
+        // Successfully allocate and bind memory
+        ASSERT(mDeviceMemoryToBufferMap[deviceMemory]);
+        bufferOut->setHandle(mDeviceMemoryToBufferMap[deviceMemory]);
         return angle::Result::Continue;
     }
 

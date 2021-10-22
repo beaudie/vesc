@@ -3498,7 +3498,9 @@ void PipelineBarrier::addDiagnosticsString(std::ostringstream &out) const
 // BufferHelper implementation.
 BufferHelper::BufferHelper()
     : mMemoryPropertyFlags{},
+      mOffset(0),
       mSize(0),
+      mOwnsBuffer(true),
       mCurrentQueueFamilyIndex(std::numeric_limits<uint32_t>::max()),
       mCurrentWriteAccess(0),
       mCurrentReadAccess(0),
@@ -3586,6 +3588,67 @@ angle::Result BufferHelper::init(ContextVk *contextVk,
     return angle::Result::Continue;
 }
 
+angle::Result BufferHelper::initWithDefaultUsage(ContextVk *contextVk,
+                                                 VkDeviceSize requestedSize,
+                                                 VkMemoryPropertyFlags memoryPropertyFlags)
+{
+    RendererVk *renderer = contextVk->getRenderer();
+
+    mSerial = renderer->getResourceSerialFactory().generateBufferSerial();
+
+    if (renderer->getFeatures().padBuffersToMaxVertexAttribStride.enabled)
+    {
+        const VkDeviceSize maxVertexAttribStride = renderer->getMaxVertexAttribStride();
+        ASSERT(maxVertexAttribStride);
+        requestedSize += maxVertexAttribStride;
+    }
+
+    VkMemoryPropertyFlags requiredFlags =
+        (memoryPropertyFlags & VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT);
+    VkMemoryPropertyFlags preferredFlags =
+        (memoryPropertyFlags & (~VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT));
+
+    BufferMemoryAllocator &bufferMemoryAllocator = renderer->getBufferMemoryAllocator();
+    bool persistentlyMapped = renderer->getFeatures().persistentlyMappedBuffers.enabled;
+
+    ANGLE_TRY(mMemory.init());
+
+    bool robustResourceInitEnabled = contextVk->isRobustResourceInitEnabled();
+    uint32_t memoryTypeIndex       = kInvalidMemoryTypeIndex;
+    ANGLE_TRY(bufferMemoryAllocator.createBufferWithDefaultUsage(
+        contextVk, requestedSize, requiredFlags, preferredFlags, persistentlyMapped,
+        robustResourceInitEnabled, &memoryTypeIndex, mMemory.getAllocationObject(), &mSize,
+        &mBuffer, &mOffset));
+
+    bufferMemoryAllocator.getMemoryTypeProperties(renderer, memoryTypeIndex, &mMemoryPropertyFlags);
+    mCurrentQueueFamilyIndex = renderer->getQueueFamilyIndex();
+
+    // We get mBuffer object from BufferMemoryAllocator. We do not own it.
+    mOwnsBuffer = false;
+
+    if (renderer->getFeatures().allocateNonZeroMemory.enabled)
+    {
+        // This memory can't be mapped, so the buffer must be marked as a transfer destination so we
+        // can use a staging resource to initialize it to a non-zero value. If the memory is
+        // mappable we do the initialization in AllocateBufferMemory.
+        if ((mMemoryPropertyFlags & VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT) == 0)
+        {
+            ANGLE_TRY(initializeNonZeroMemory(contextVk, mSize));
+        }
+        else
+        {
+            // Can map the memory.
+            // Pick an arbitrary value to initialize non-zero memory for sanitization.
+            constexpr int kNonZeroInitValue = 55;
+            ANGLE_TRY(InitMappableAllocation(contextVk, renderer->getAllocator(),
+                                             mMemory.getAllocationObject(), mSize,
+                                             kNonZeroInitValue, mMemoryPropertyFlags));
+        }
+    }
+
+    return angle::Result::Continue;
+}
+
 angle::Result BufferHelper::initExternal(ContextVk *contextVk,
                                          VkMemoryPropertyFlags memoryProperties,
                                          const VkBufferCreateInfo &requestedCreateInfo,
@@ -3660,7 +3723,17 @@ void BufferHelper::destroy(RendererVk *renderer)
     unmap(renderer);
     mSize = 0;
 
-    mBuffer.destroy(device);
+    if (mOwnsBuffer)
+    {
+        mBuffer.destroy(device);
+    }
+    else
+    {
+        // Don't call destroy on object that we do not own. The owner (BufferMemoryAllocator) will
+        // be responsible to destroy it
+        mBuffer.release();
+    }
+
     mMemory.destroy(renderer);
 }
 
@@ -3668,7 +3741,12 @@ void BufferHelper::release(RendererVk *renderer)
 {
     unmap(renderer);
     mSize = 0;
-
+    if (!mOwnsBuffer)
+    {
+        // Don't garbage collect on object that we do not own. The owner (BufferMemoryAllocator)
+        // will be responsible to destroy it
+        mBuffer.release();
+    }
     renderer->collectGarbageAndReinit(&mReadOnlyUse, &mBuffer, mMemory.getDeviceMemoryObject(),
                                       mMemory.getAllocationObject());
     mReadWriteUse.release();

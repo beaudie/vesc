@@ -527,9 +527,10 @@ angle::Result BufferVk::copySubData(const gl::Context *context,
     ANGLE_TRY(contextVk->getOutsideRenderPassCommandBuffer(access, &commandBuffer));
 
     // Enqueue a copy command on the GPU.
-    const VkBufferCopy copyRegion = {static_cast<VkDeviceSize>(sourceOffset) + sourceBufferOffset,
-                                     static_cast<VkDeviceSize>(destOffset) + mBufferOffset,
-                                     static_cast<VkDeviceSize>(size)};
+    const VkBufferCopy copyRegion = {
+        static_cast<VkDeviceSize>(sourceOffset) + sourceBufferOffset,
+        static_cast<VkDeviceSize>(destOffset) + mBuffer->getOffset() + mBufferOffset,
+        static_cast<VkDeviceSize>(size)};
 
     commandBuffer->copyBuffer(sourceBuffer.getBuffer(), mBuffer->getBuffer(), 1, &copyRegion);
     mHasBeenReferencedByGPU = true;
@@ -560,7 +561,8 @@ angle::Result BufferVk::handleDeviceLocalBufferMap(ContextVk *contextVk,
     vk::BufferHelper *hostVisibleBuffer = mHostVisibleBufferPool.getCurrentBuffer();
     ASSERT(hostVisibleBuffer && hostVisibleBuffer->valid());
 
-    VkBufferCopy copyRegion = {mBufferOffset + offset, mHostVisibleBufferOffset, size};
+    VkBufferCopy copyRegion = {mBuffer->getOffset() + mBufferOffset + offset,
+                               mHostVisibleBufferOffset, size};
     ANGLE_TRY(hostVisibleBuffer->copyFromBuffer(contextVk, mBuffer, 1, &copyRegion));
     ANGLE_TRY(
         hostVisibleBuffer->waitForIdle(contextVk, "GPU stall due to mapping device local buffer"));
@@ -576,7 +578,8 @@ angle::Result BufferVk::handleDeviceLocalBufferUnmap(ContextVk *contextVk,
     vk::BufferHelper *hostVisibleBuffer = mHostVisibleBufferPool.getCurrentBuffer();
     ASSERT(hostVisibleBuffer && hostVisibleBuffer->valid());
 
-    VkBufferCopy copyRegion = {mHostVisibleBufferOffset, mBufferOffset + offset, size};
+    VkBufferCopy copyRegion = {mHostVisibleBufferOffset,
+                               mBuffer->getOffset() + mBufferOffset + offset, size};
     ANGLE_TRY(mBuffer->copyFromBuffer(contextVk, hostVisibleBuffer, 1, &copyRegion));
     mHasBeenReferencedByGPU = true;
 
@@ -879,7 +882,8 @@ angle::Result BufferVk::stagedUpdate(ContextVk *contextVk,
     ANGLE_TRY(stagingBuffer->flush(contextVk));
 
     // Enqueue a copy command on the GPU.
-    VkBufferCopy copyRegion = {stagingBufferOffset, mBufferOffset + offset, size};
+    VkBufferCopy copyRegion = {stagingBufferOffset, mBuffer->getOffset() + mBufferOffset + offset,
+                               size};
     ANGLE_TRY(
         mBuffer->copyFromBuffer(contextVk, stagingBuffer->getCurrentBuffer(), 1, &copyRegion));
     mHasBeenReferencedByGPU = true;
@@ -1128,19 +1132,11 @@ angle::Result BufferVk::acquireBufferHelper(ContextVk *contextVk,
         // Allocate the buffer directly
         std::unique_ptr<vk::BufferHelper> buffer = std::make_unique<vk::BufferHelper>();
 
-        VkBufferCreateInfo createInfo    = {};
-        createInfo.sType                 = VK_STRUCTURE_TYPE_BUFFER_CREATE_INFO;
-        createInfo.flags                 = 0;
-        createInfo.size                  = size;
-        createInfo.usage                 = usageFlags;
-        createInfo.sharingMode           = VK_SHARING_MODE_EXCLUSIVE;
-        createInfo.queueFamilyIndexCount = 0;
-        createInfo.pQueueFamilyIndices   = nullptr;
-
-        ANGLE_TRY(buffer->init(contextVk, createInfo, mMemoryPropertyFlags));
+        ANGLE_TRY(buffer->initWithDefaultUsage(contextVk, size, mMemoryPropertyFlags));
         ASSERT(buffer->valid());
 
-        mBuffer = buffer.release();
+        mBuffer       = buffer.release();
+        mBufferOffset = 0;
     }
 
     ASSERT(mBuffer);

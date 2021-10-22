@@ -8,7 +8,6 @@
 //
 
 #include "vk_mem_alloc_wrapper.h"
-
 #include <vk_mem_alloc.h>
 
 namespace vma
@@ -29,6 +28,9 @@ VkResult InitAllocator(VkPhysicalDevice physicalDevice,
                        VkInstance instance,
                        uint32_t apiVersion,
                        VkDeviceSize preferredLargeHeapBlockSize,
+                       vmaAllocateDeviceMemoryCallbackFunction allocDeviceMemoryCallbackFunc,
+                       vmaFreeDeviceMemoryCallbackFunction freeDeviceMemoryCallbackFunc,
+                       void *deviceMemoryCallbackUserData,
                        VmaAllocator *pAllocator)
 {
     VmaVulkanFunctions funcs                  = {};
@@ -67,11 +69,18 @@ VkResult InitAllocator(VkPhysicalDevice physicalDevice,
         funcs.vkGetPhysicalDeviceMemoryProperties2KHR = vkGetPhysicalDeviceMemoryProperties2KHR;
     }
 
+    // Device Memory alloc and free callbacks
+    VmaDeviceMemoryCallbacks deviceMemoryCallbacks = {};
+    deviceMemoryCallbacks.pfnAllocate              = allocDeviceMemoryCallbackFunc;
+    deviceMemoryCallbacks.pfnFree                  = freeDeviceMemoryCallbackFunc;
+    deviceMemoryCallbacks.pUserData                = deviceMemoryCallbackUserData;
+
     VmaAllocatorCreateInfo allocatorInfo      = {};
     allocatorInfo.physicalDevice              = physicalDevice;
     allocatorInfo.device                      = device;
     allocatorInfo.instance                    = instance;
     allocatorInfo.pVulkanFunctions            = &funcs;
+    allocatorInfo.pDeviceMemoryCallbacks      = &deviceMemoryCallbacks;
     allocatorInfo.vulkanApiVersion            = apiVersion;
     allocatorInfo.preferredLargeHeapBlockSize = preferredLargeHeapBlockSize;
 
@@ -109,8 +118,10 @@ VkResult AllocateMemory(VmaAllocator allocator,
                         AllocationCreateFlags flags,
                         VmaPool customPool,
                         uint32_t *pMemoryTypeIndexOut,
-                        VmaAllocation *pAllocation,
-                        VkDeviceSize *sizeOut)
+                        VkDeviceMemory *deviceMemoryOut,
+                        VkDeviceSize *offsetOut,
+                        VkDeviceSize *sizeOut,
+                        VmaAllocation *pAllocation)
 {
     VkResult result;
     VmaAllocationCreateInfo allocationCreateInfo = {};
@@ -124,6 +135,9 @@ VkResult AllocateMemory(VmaAllocator allocator,
                                &allocationInfo);
     *pMemoryTypeIndexOut = allocationInfo.memoryType;
     *sizeOut             = allocationInfo.size;
+    *deviceMemoryOut     = allocationInfo.deviceMemory;
+    *offsetOut           = allocationInfo.offset;
+
     return result;
 }
 
