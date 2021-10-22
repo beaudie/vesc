@@ -450,7 +450,10 @@ class Allocator : public WrappedObject<Allocator, VmaAllocator>
                   VkDevice device,
                   VkInstance instance,
                   uint32_t apiVersion,
-                  VkDeviceSize preferredLargeHeapBlockSize);
+                  VkDeviceSize preferredLargeHeapBlockSize,
+                  vma::vmaAllocateDeviceMemoryCallbackFunction allocDeviceMemoryCallbackFunc,
+                  vma::vmaFreeDeviceMemoryCallbackFunction freeDeviceMemoryCallbackFunc,
+                  void *deviceMemoryCallbackUserData);
 
     void buildStatsString(char **statsString, VkBool32 detailedMap);
     void freeStatsString(char *statsString);
@@ -1328,15 +1331,20 @@ ANGLE_INLINE void Allocator::destroy()
     }
 }
 
-ANGLE_INLINE VkResult Allocator::init(VkPhysicalDevice physicalDevice,
-                                      VkDevice device,
-                                      VkInstance instance,
-                                      uint32_t apiVersion,
-                                      VkDeviceSize preferredLargeHeapBlockSize)
+ANGLE_INLINE VkResult
+Allocator::init(VkPhysicalDevice physicalDevice,
+                VkDevice device,
+                VkInstance instance,
+                uint32_t apiVersion,
+                VkDeviceSize preferredLargeHeapBlockSize,
+                vma::vmaAllocateDeviceMemoryCallbackFunction allocDeviceMemoryCallbackFunc,
+                vma::vmaFreeDeviceMemoryCallbackFunction freeDeviceMemoryCallbackFunc,
+                void *deviceMemoryCallbackUserData)
 {
     ASSERT(!valid());
     return vma::InitAllocator(physicalDevice, device, instance, apiVersion,
-                              preferredLargeHeapBlockSize, &mHandle);
+                              preferredLargeHeapBlockSize, allocDeviceMemoryCallbackFunc,
+                              freeDeviceMemoryCallbackFunc, deviceMemoryCallbackUserData, &mHandle);
 }
 
 ANGLE_INLINE void Allocator::buildStatsString(char **statsString, VkBool32 detailedMap)

@@ -89,7 +89,7 @@ class BufferMemoryAllocator : angle::NonCopyable
     BufferMemoryAllocator();
     ~BufferMemoryAllocator();
 
-    void initialize(RendererVk *renderer) {}
+    void initialize(RendererVk *renderer);
     void destroy(RendererVk *renderer);
 
     // Initializes the buffer handle and memory allocation.
@@ -112,15 +112,37 @@ class BufferMemoryAllocator : angle::NonCopyable
                                           Allocation *allocationOut,
                                           VkDeviceSize *sizeOut);
 
+    angle::Result createBufferWithDefaultUsage(Context *context,
+                                               VkDeviceSize requestedSize,
+                                               VkMemoryPropertyFlags requiredFlags,
+                                               VkMemoryPropertyFlags preferredFlags,
+                                               bool persistentlyMapped,
+                                               bool robustResourceInitEnabled,
+                                               uint32_t *memoryTypeIndexOut,
+                                               Allocation *allocationOut,
+                                               VkDeviceSize *sizeOut,
+                                               Buffer *bufferOut,
+                                               VkDeviceSize *offsetOut);
+
     void getMemoryTypeProperties(RendererVk *renderer,
                                  uint32_t memoryTypeIndex,
                                  VkMemoryPropertyFlags *flagsOut) const;
+
     angle::Result findMemoryTypeIndexForBufferInfo(Context *context,
                                                    const VkBufferCreateInfo &bufferCreateInfo,
                                                    VkMemoryPropertyFlags requiredFlags,
                                                    VkMemoryPropertyFlags preferredFlags,
                                                    bool persistentlyMappedBuffers,
                                                    uint32_t *memoryTypeIndexOut) const;
+
+    void deviceMemoryAllocated(RendererVk *renderer,
+                               uint32_t memoryTypeIndex,
+                               VkDeviceMemory deviceMemory,
+                               VkDeviceSize size);
+    void deviceMemoryWillFree(RendererVk *renderer,
+                              uint32_t memoryTypeIndex,
+                              VkDeviceMemory deviceMemory,
+                              VkDeviceSize size);
 
   private:
     enum class VMAPoolType : uint8_t
@@ -143,6 +165,8 @@ class BufferMemoryAllocator : angle::NonCopyable
                         bool robustResourceInitEnabled,
                         vma::AllocationCreateFlags &flags);
 
+    angle::HashMap<VkDeviceMemory, VkBuffer> mDeviceMemoryToBufferMap;
+
     using VMAPoolArray  = std::array<VMAPool, VK_MAX_MEMORY_TYPES>;
     using VMAPoolArrays = angle::PackedEnumMap<VMAPoolType, VMAPoolArray>;
     VMAPoolArrays mVMAPools;
@@ -163,6 +187,10 @@ class BufferMemoryAllocator : angle::NonCopyable
     static constexpr VkDeviceSize kMaxSizeToUseSubAllocator = 1024 * 1024;  // 1M
     static constexpr VkDeviceSize kMaxSizeToUseSmallPool    = 4 * 1024;     // 4k
     static constexpr VkDeviceSize kSmallPoolBlockSize       = 128 * 1024;   // 128K
+
+    // The usage flag for default buffer creation.
+    VkImageUsageFlags mDefaultBufferUsageFlags;
+    VkMemoryRequirements mDefaultBufferMemReq;
 };
 }  // namespace vk
 

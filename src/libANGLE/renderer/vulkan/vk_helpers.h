@@ -809,17 +809,20 @@ class BufferHelper final : public ReadWriteResource
     angle::Result init(ContextVk *contextVk,
                        const VkBufferCreateInfo &createInfo,
                        VkMemoryPropertyFlags memoryPropertyFlags);
+    angle::Result initWithDefaultUsage(ContextVk *contextVk,
+                                       VkDeviceSize requestedSize,
+                                       VkMemoryPropertyFlags memoryPropertyFlags);
     angle::Result initExternal(ContextVk *contextVk,
                                VkMemoryPropertyFlags memoryProperties,
                                const VkBufferCreateInfo &requestedCreateInfo,
                                GLeglClientBufferEXT clientBuffer);
     void destroy(RendererVk *renderer);
-
     void release(RendererVk *renderer);
 
     BufferSerial getBufferSerial() const { return mSerial; }
     bool valid() const { return mBuffer.valid(); }
     const Buffer &getBuffer() const { return mBuffer; }
+    VkDeviceSize getOffset() const { return mOffset; }
     VkDeviceSize getSize() const { return mSize; }
     uint8_t *getMappedMemory() const
     {
@@ -899,7 +902,11 @@ class BufferHelper final : public ReadWriteResource
 
     // Cached properties.
     VkMemoryPropertyFlags mMemoryPropertyFlags;
+    VkDeviceSize mOffset;
     VkDeviceSize mSize;
+    // True if we owns mBuffer. This will be false if mBuffer was pre-created and owned by
+    // BufferMemoryAllocator
+    bool mOwnsBuffer;
     uint32_t mCurrentQueueFamilyIndex;
 
     // For memory barriers.
