@@ -569,7 +569,7 @@ def _EnsureUpdatedMasterBranch(dry_run):
             sys.exit(-1)
 
     logging.info('Updating master branch...')
-    _RunCommand(['git', 'pull'])
+    #_RunCommand(['git', 'pull'])
 
 
 def _CreateRollBranch(dry_run):
