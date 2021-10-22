@@ -70,6 +70,24 @@
       "parentUuid": "6a9c57cd_0d60b0fc",
       "revId": "251790cdef8f8207de37001e21a3a8424d896ce6",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "24f1668c_3d1a8912",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2021-10-22T02:37:29Z",
+      "side": 1,
+      "message": "Ack, since this behavior is documented, using the second result was also fine (and not +1). Really doesn\u0027t matter, we don\u0027t look up envvars in hot loops ;)\n\nIt\u0027s win32 after all, can\u0027t expect much",
+      "parentUuid": "073f95a0_fe15d47d",
+      "revId": "251790cdef8f8207de37001e21a3a8424d896ce6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
