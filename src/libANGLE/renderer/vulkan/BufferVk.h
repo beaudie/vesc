@@ -113,7 +113,7 @@ class BufferVk : public BufferImpl
     vk::BufferHelper &getBufferAndOffset(VkDeviceSize *offsetOut)
     {
         ASSERT(isBufferValid());
-        *offsetOut = mBufferOffset;
+        *offsetOut = mBufferOffset + mBuffer->getOffset();
         // Every place try to use the buffer, it will have to call this API to get hold of the
         // underline BufferHelper object. So this is the safe place to tell that this has ever been
         // referenced by GPU command, whether pending submission or not.

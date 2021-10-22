@@ -36,11 +36,25 @@ typedef enum AllocationCreateFlagBits
     ALLOCATION_CREATE_MAPPED_BIT           = 0x4,
 } AllocationCreateFlagBits;
 
+typedef void(VKAPI_PTR *vmaAllocateDeviceMemoryCallbackFunction)(VmaAllocator allocator,
+                                                                 uint32_t memoryType,
+                                                                 VkDeviceMemory memory,
+                                                                 VkDeviceSize size,
+                                                                 void *pUserData);
+typedef void(VKAPI_PTR *vmaFreeDeviceMemoryCallbackFunction)(VmaAllocator allocator,
+                                                             uint32_t memoryType,
+                                                             VkDeviceMemory memory,
+                                                             VkDeviceSize size,
+                                                             void *pUserData);
+
 VkResult InitAllocator(VkPhysicalDevice physicalDevice,
                        VkDevice device,
                        VkInstance instance,
                        uint32_t apiVersion,
                        VkDeviceSize preferredLargeHeapBlockSize,
+                       vmaAllocateDeviceMemoryCallbackFunction allocDeviceMemoryCallbackFunc,
+                       vmaFreeDeviceMemoryCallbackFunction freeDeviceMemoryCallbackFunc,
+                       void *deviceMemoryCallbackUserData,
                        VmaAllocator *pAllocator);
 
 void DestroyAllocator(VmaAllocator allocator);
@@ -59,8 +73,10 @@ VkResult AllocateMemory(VmaAllocator allocator,
                         AllocationCreateFlags flags,
                         VmaPool customPool,
                         uint32_t *pMemoryTypeIndexOut,
-                        VmaAllocation *pAllocation,
-                        VkDeviceSize *sizeOut);
+                        VkDeviceMemory *deviceMemoryOut,
+                        VkDeviceSize *offsetOut,
+                        VkDeviceSize *sizeOut,
+                        VmaAllocation *pAllocation);
 void FreeMemory(VmaAllocator allocator, VmaAllocation allocation);
 
 VkResult BindBufferMemory(VmaAllocator allocator, VmaAllocation allocation, VkBuffer buffer);
