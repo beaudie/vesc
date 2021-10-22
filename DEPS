@@ -34,7 +34,7 @@ vars = {
   'checkout_android_native_support': 'checkout_android or checkout_chromeos',
 
   # Version of Chromium our Chromium-based DEPS are mirrored from.
-  'chromium_revision': '75578cc5e47dbb08fe455623937d5fc51443398d',
+  'chromium_revision': '2a269f7b8d635ecd06b306ea98e3c760c10c5a9c',
   # We never want to checkout chromium,
   # but need a dummy DEPS entry for the autoroller
   'dummy_checkout_chromium': False,
@@ -119,7 +119,7 @@ vars = {
 deps = {
 
   'build': {
-    'url': '{chromium_git}/chromium/src/build.git@4d4596dc668ecab4879b024d2d027634f3c6fa95',
+    'url': '{chromium_git}/chromium/src/build.git@b60878a223cbb61936dc90150753c2ffcc5a9a35',
     'condition': 'not build_with_chromium',
   },
 
@@ -166,7 +166,7 @@ deps = {
   },
 
   'buildtools/third_party/libunwind/trunk': {
-    'url': '{chromium_git}/external/github.com/llvm/llvm-project/libunwind.git@6f77fbf9fa51d9696b48151709e90f03364243de',
+    'url': '{chromium_git}/external/github.com/llvm/llvm-project/libunwind.git@fa8d4c81f6a8ca2cb66539b88121d98c93f36736',
     'condition': 'not build_with_chromium',
   },
 
@@ -182,7 +182,7 @@ deps = {
   },
 
   'testing': {
-    'url': '{chromium_git}/chromium/src/testing@93811b76abbe290958f122777034b4015d1ab61a',
+    'url': '{chromium_git}/chromium/src/testing@a5d84976a806fd9a475c362503c37923ebfcefd4',
     'condition': 'not build_with_chromium',
   },
 
@@ -626,7 +626,7 @@ deps = {
       'packages': [
         {
           'package': 'skia/tools/goldctl/mac-amd64',
-          'version': 'rhRaADork6USXDGEk0fWwnbWVaKKc0YLzENNVBVsHkAC',
+          'version': 'Ee-Y58INmdIA4z_rfmJjvZ-ljrcn-L2tk9nMJVDkidkC',
         },
       ],
       'dep_type': 'cipd',
