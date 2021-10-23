@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "4d2ae32b_27fd8f83",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1518892
+      },
+      "writtenOn": "2021-10-23T04:20:18Z",
+      "side": 1,
+      "message": "As an aside, I notice we are inconsistent about the version of fxc.exe being used:\n\n git grep \u0027HLSL Shader Compiler\u0027 | awk \u0027{ print $NF }\u0027 | sort | uniq -c\n      10 6.3.9600.16384\n     178 9.29.952.3111\n\nPresumably that\u0027s because only deliberately modified shaders get committed/submitted after someone runs the generate_shaders.bat script, but it\u0027d be nice to make them consistent. Perhaps at the same time, consider using an fxc.exe from a recent Windows 10 SDK instead of the Windows 8.1 SDK currently being used. (I actually had to go *find* a Windows 8.1 SDK installer in order to get mine to match what generate_shaders.bat was expecting to use.)",
+      "revId": "6631ec521a6504be904cd64e55e2da10ddc13e57",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
