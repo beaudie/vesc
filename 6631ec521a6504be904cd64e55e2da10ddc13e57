@@ -51,6 +51,42 @@
       "parentUuid": "4d2ae32b_27fd8f83",
       "revId": "6631ec521a6504be904cd64e55e2da10ddc13e57",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "c9a1a4e9_401af515",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1518892
+      },
+      "writtenOn": "2021-10-24T03:22:08Z",
+      "side": 1,
+      "message": "Well it doesn\u0027t seem to have any impact on rendering aside from making the debug layers complain, and those aren\u0027t enabled by default.\n\nOne option to make this break in tests would be to call whatever APIs are necessary to enable the D3D11 debug layers globally, with debug breaks enabled, and then run the tests. Assuming gtest knows to treat debug breaks as failures, that\u0027d probably catch it.",
+      "parentUuid": "19ea6f5f_1a372e30",
+      "revId": "6631ec521a6504be904cd64e55e2da10ddc13e57",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "6ba48f0e_e4b565a0",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1518892
+      },
+      "writtenOn": "2021-10-24T03:22:08Z",
+      "side": 1,
+      "message": "I will probably do a separate change to move it to the Windows 10 19041 SDK\u0027s version of fxc.exe. It actually produces better-commented output from what I saw, too.",
+      "parentUuid": "eddc88e1_771ac876",
+      "revId": "6631ec521a6504be904cd64e55e2da10ddc13e57",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
