@@ -34,6 +34,24 @@
       "parentUuid": "3d83251f_b1d0ce5a",
       "revId": "86ba7684ef141bd6696fcd9e917253a9ea1e2405",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "e5d075c5_228b9f59",
+        "filename": "src/libANGLE/renderer/vulkan/SurfaceVk.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 943,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2021-10-25T13:38:18Z",
+      "side": 1,
+      "message": "Well I figured it\u0027s translating EGL_NONE to BT709_LINEAR then fail, but I see there are still failures, so no it wasn\u0027t it.",
+      "parentUuid": "870319c6_ca1f4184",
+      "revId": "86ba7684ef141bd6696fcd9e917253a9ea1e2405",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
