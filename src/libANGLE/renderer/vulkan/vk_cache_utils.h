@@ -1152,8 +1152,21 @@ class ShaderBuffersDescriptorDesc
     ANGLE_INLINE void appendBufferSerial(BufferSerial bufferSerial)
     {
         mPayload.push_back(bufferSerial.getValue());
+        if (mPayload.size() > kFastBufferWordLimit)
+        {
+            WARN() << "TIMTIM >> mPayload.size() = " << mPayload.size();
+            UNREACHABLE();
+        }
     }
-    ANGLE_INLINE void append32BitValue(uint32_t value) { mPayload.push_back(value); }
+    ANGLE_INLINE void append32BitValue(uint32_t value)
+    {
+        mPayload.push_back(value);
+        if (mPayload.size() > kFastBufferWordLimit)
+        {
+            WARN() << "TIMTIM >> mPayload.size() = " << mPayload.size();
+            UNREACHABLE();
+        }
+    }
 
   private:
     // After a preliminary minimum size, use heap memory.
