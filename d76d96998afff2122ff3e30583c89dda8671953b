@@ -16,6 +16,23 @@
       "message": "Update.\n",
       "revId": "d76d96998afff2122ff3e30583c89dda8671953b",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "97defdcf_5106e9aa",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 6
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1359249
+      },
+      "writtenOn": "2021-10-25T18:15:25Z",
+      "side": 1,
+      "message": "Failures seem to be a channel ordering RGBA vs BGRA",
+      "revId": "d76d96998afff2122ff3e30583c89dda8671953b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
