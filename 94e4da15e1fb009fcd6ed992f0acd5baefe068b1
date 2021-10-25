@@ -69,6 +69,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "14aefc1d_738aed01",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 9
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1359249
+      },
+      "writtenOn": "2021-10-25T22:18:33Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "4d01ab75_99952fb1",
+      "revId": "94e4da15e1fb009fcd6ed992f0acd5baefe068b1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "dee15c35_595aa6f5",
@@ -177,6 +195,30 @@
       "side": 1,
       "message": "Hi Jeff,\n\nI\u0027m going to start working again on a Vulkan extension that ANGLE needs, so we can query supported swapchain formats (and colorspaces) BEFORE ANGLE has a VkSurfaceKHR.  Seems like it would be good to add the ability to query present modes as well.  Correct?\n\nIan",
       "parentUuid": "03490f46_7b83e8cf",
+      "range": {
+        "startLine": 2048,
+        "startChar": 0,
+        "endLine": 2053,
+        "endChar": 0
+      },
+      "revId": "94e4da15e1fb009fcd6ed992f0acd5baefe068b1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "125b6cc9_f2bb6fd9",
+        "filename": "src/libANGLE/renderer/vulkan/SurfaceVk.cpp",
+        "patchSetId": 9
+      },
+      "lineNbr": 2053,
+      "author": {
+        "id": 1359249
+      },
+      "writtenOn": "2021-10-25T22:18:33Z",
+      "side": 1,
+      "message": "In this particular case, there is a feature check from the driver to let us know that SHARED_PRESENTABLE_IMAGE is supported, so we enable the EGL extension. But, The spec also says/indicates need to check that the specific mode is supported. So I scan in the code to the right for that mode - if, Jamie also interprets the spec text that way too. So yes, if that mode available before VkSurface, then we could be certain and the scan would not be needed, and therefore no return error on fail, and then there would be no inconsistency with declaring support for the extension.\nI don\u0027t think its as necessary as other cases. Here we can return an error to the app, but, its not consistent with supporting the EGL extension so that could exit an application expecting success.",
+      "parentUuid": "169dfefb_ece16b58",
       "range": {
         "startLine": 2048,
         "startChar": 0,
