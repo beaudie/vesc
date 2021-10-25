@@ -16,6 +16,23 @@
       "message": "Hi Shahbaz ptal - an alternative is to add a __declspec(guard(nocf)) in the .cpp file but I think I prefer this build.gn approach as it only applies to win x86 where the codegen bug seems to be.\n\nlanding this will allow us to turn cfg on again for Chrome builds.",
       "revId": "388a0fa37d56f87ba726a6263fd930b2566e960f",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "0ead07f6_78c9cf22",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2021-10-25T20:12:42Z",
+      "side": 1,
+      "message": "Is this a compiler bug? Should probably be reported to someone.",
+      "revId": "388a0fa37d56f87ba726a6263fd930b2566e960f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
