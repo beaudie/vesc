@@ -105,6 +105,24 @@
       "parentUuid": "c9a1a4e9_401af515",
       "revId": "6631ec521a6504be904cd64e55e2da10ddc13e57",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "073485d7_96cab11f",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1518892
+      },
+      "writtenOn": "2021-10-25T02:54:54Z",
+      "side": 1,
+      "message": "Well when I turn the D3D11 debug layers on, I can get it to hit the relevant shaders and spew errors in MultisampleTestES3.ResolveToFBO/ES3_D3D11_NoFixture. If I modify that test to use the Checkered shader, it still seems to read back just fine after resolve.\n\nI suspect D3D *is* magically fixing this under the hood somehow.\n\nIncidentally there are a bunch of tests that trigger D3D11 errors even with the \"TEXCORD0\" typo corrected. For a couple of examples...\n\nIncompleteTextureTestES3.IntegerType/ES3_D3D11:\n\n  D3D11 ERROR: ID3D11DeviceContext::Draw: The resource return type for component 0 declared in the shader code (SINT) is not compatible with the Shader Resource View format bound to slot 0 of the Pixel Shader unit (UNORM).  This mismatch is invalid if the shader actually uses the view (e.g. it is not skipped due to shader code branching). [ EXECUTION ERROR #361: DEVICE_DRAW_RESOURCE_RETURN_TYPE_MISMATCH]\n\nRobustResourceInitTestES3.D3D11RecoverFromStorageBug/ES3_D3D11:\n\n  D3D11 ERROR: ID3D11DeviceContext::CopySubresourceRegion: When offset by the destination coordinates, pSrcBox does not fit on the destination subresource. OffsetSrcBox \u003d { left:0, top:0, front:0, right:12, bottom:12, back:1 }. DstSubresource \u003d { left:0, top:0, front:0, right:8, bottom:8, back:1 }. [ RESOURCE_MANIPULATION ERROR #280: COPYSUBRESOURCEREGION_INVALIDSOURCEBOX]\n\nAnd yet those tests also *pass* despite validation errors. D3D is weird. I guess it\u0027s doing a \"you screwed up, but here\u0027s my best effort to make it right\" thing.",
+      "parentUuid": "39cbef86_2b393596",
+      "revId": "6631ec521a6504be904cd64e55e2da10ddc13e57",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
