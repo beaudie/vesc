@@ -229,6 +229,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "2265aa7b_acdcb2c8",
+        "filename": "src/libANGLE/renderer/vulkan/SurfaceVk.cpp",
+        "patchSetId": 9
+      },
+      "lineNbr": 2053,
+      "author": {
+        "id": 1290487
+      },
+      "writtenOn": "2021-10-25T22:34:27Z",
+      "side": 1,
+      "message": "Thanks for replying.  It sounds it would be \"nice to have\", but not essential.\n\nFYI ... I just filed https://gitlab.khronos.org/vulkan/vulkan/-/issues/2886 for the broader issue.",
+      "parentUuid": "125b6cc9_f2bb6fd9",
+      "range": {
+        "startLine": 2048,
+        "startChar": 0,
+        "endLine": 2053,
+        "endChar": 0
+      },
+      "revId": "94e4da15e1fb009fcd6ed992f0acd5baefe068b1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "c75f11d0_2a1b40bf",
