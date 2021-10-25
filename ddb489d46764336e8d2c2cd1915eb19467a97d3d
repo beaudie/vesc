@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "78c6b1c0_84d6acf2",
+        "filename": "src/libANGLE/renderer/vulkan/SurfaceVk.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 950,
+      "author": {
+        "id": 1525877
+      },
+      "writtenOn": "2021-10-25T08:13:55Z",
+      "side": 1,
+      "message": "I think EGL_GL_COLORSPACE_DISPLAY_P3_PASSTHROUGH_EXT also need to be mapped to VK_COLOR_SPACE_DISPLAY_P3_NONLINEAR_EXT as well as discussed on https://gitlab.khronos.org/vulkan/vulkan/-/issues/2827#note_333114",
+      "revId": "ddb489d46764336e8d2c2cd1915eb19467a97d3d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
