@@ -123,6 +123,24 @@
       "parentUuid": "39cbef86_2b393596",
       "revId": "6631ec521a6504be904cd64e55e2da10ddc13e57",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "4f9f6048_6d34cc1e",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2021-10-25T13:35:41Z",
+      "side": 1,
+      "message": "\u003e I guess it\u0027s doing a \"you screwed up, but here\u0027s my best effort to make it right\" thing.\n\nAck. That must be a side effect of all sorts of games running on it. ANGLE actually has to \"fix the app\" too in a few places.\n\nProbably still a good idea to use the Checkered shader wherever we can, but not a blocker for this change.",
+      "parentUuid": "073485d7_96cab11f",
+      "revId": "6631ec521a6504be904cd64e55e2da10ddc13e57",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
