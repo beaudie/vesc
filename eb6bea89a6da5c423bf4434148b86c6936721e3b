@@ -35,6 +35,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "11fd7507_8f5fff3b",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 5
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1359249
+      },
+      "writtenOn": "2021-10-25T17:20:06Z",
+      "side": 1,
+      "message": "Not going to work. Removed.",
+      "parentUuid": "7f389333_dae4cef2",
+      "revId": "eb6bea89a6da5c423bf4434148b86c6936721e3b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "a6f7e07c_119f00fa",
@@ -72,6 +90,30 @@
       "side": 1,
       "message": "@Shahbaz.\nI removed any checks with early return from flushStagedUpdates2, but still no clear.\nI\u0027m hesitant to do a CPU blit to the buffer - extra work. But that may have to happen. This glClear no draw, might actually be a small corner case. \n\nI\u0027m wondering about putting the equivalent of glReadPixels(0,0,1,1) at makeUncurrent IFF, a clear is pending, provided I can detect pending clear (uncurrent should cause a implicit flush anyways). This will cause the flush, and should be more efficient, event with staging buffer for readpixels (1 pixel). What do you think? pitfalls? Worth trying before blit?\n\nI\u0027m going to add initializing Surface with a texture contents to one for the test cases, to get that scenario.",
       "parentUuid": "a6f7e07c_119f00fa",
+      "range": {
+        "startLine": 7166,
+        "startChar": 20,
+        "endLine": 7166,
+        "endChar": 39
+      },
+      "revId": "eb6bea89a6da5c423bf4434148b86c6936721e3b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "a1271dbc_ae560081",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 7166,
+      "author": {
+        "id": 1359249
+      },
+      "writtenOn": "2021-10-25T17:20:06Z",
+      "side": 1,
+      "message": "Mohan and I have a new path to handle deferred clear. Cache clear info. Then fill lock buffer with clear color. And second part, Is at make current, flush the deferred Clear, and then write back the lock buffer info to the surface.\n\nOtherwise, the app must always, have a draw after glClear and before LockSurface.",
+      "parentUuid": "b2323712_fe3b05c8",
       "range": {
         "startLine": 7166,
         "startChar": 20,

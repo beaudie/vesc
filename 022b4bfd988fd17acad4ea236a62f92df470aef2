@@ -18,6 +18,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "1aa1ab96_9bc78c12",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1359249
+      },
+      "writtenOn": "2021-10-25T17:20:06Z",
+      "side": 1,
+      "message": "Not going to go this route. Removed",
+      "parentUuid": "ad36e653_1443ecc2",
+      "revId": "022b4bfd988fd17acad4ea236a62f92df470aef2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "9f3c9197_22a695a9",
@@ -31,6 +49,24 @@
       "writtenOn": "2021-10-07T14:12:28Z",
       "side": 1,
       "message": "WIP",
+      "revId": "022b4bfd988fd17acad4ea236a62f92df470aef2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "8fd45e83_ee453c31",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 6980,
+      "author": {
+        "id": 1359249
+      },
+      "writtenOn": "2021-10-25T17:20:06Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "9f3c9197_22a695a9",
       "revId": "022b4bfd988fd17acad4ea236a62f92df470aef2",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
@@ -52,6 +88,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "f63499a4_0531e55e",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 7274,
+      "author": {
+        "id": 1359249
+      },
+      "writtenOn": "2021-10-25T17:20:06Z",
+      "side": 1,
+      "message": "removed. not going to go this route",
+      "parentUuid": "e893efb0_81d43af8",
+      "revId": "022b4bfd988fd17acad4ea236a62f92df470aef2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "0ee0f329_2edd5c12",
@@ -65,6 +119,24 @@
       "writtenOn": "2021-10-07T14:12:28Z",
       "side": 1,
       "message": "TODO: Need to order these: flushStagedUpdates2 and copyImageToBuffer, seems flush is happening after copy, so I am always returning buffer with empty pixels.",
+      "revId": "022b4bfd988fd17acad4ea236a62f92df470aef2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "aa43014d_460c0123",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 7522,
+      "author": {
+        "id": 1359249
+      },
+      "writtenOn": "2021-10-25T17:20:06Z",
+      "side": 1,
+      "message": "removed",
+      "parentUuid": "0ee0f329_2edd5c12",
       "revId": "022b4bfd988fd17acad4ea236a62f92df470aef2",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
