@@ -3849,6 +3849,50 @@ bool BufferHelper::recordWriteBarrier(VkAccessFlags writeAccessType,
     return barrierModified;
 }
 
+void BufferHelper::fillWithColor(const angle::Color<uint8_t> &color,
+                                 const gl::InternalFormat &internalFormat)
+{
+    uint32_t count =
+        static_cast<uint32_t>(mSize) / static_cast<uint32_t>(internalFormat.pixelBytes);
+
+    switch (internalFormat.internalFormat)
+    {
+        case GL_RGB565:
+        {
+            uint16_t pixelColor =
+                ((color.blue & 0xF8) << 11) | ((color.green & 0xFC) << 5) | (color.red & 0xF8);
+            uint16_t *pixelPtr = (uint16_t *)getMappedMemory();
+            std::fill_n<uint16_t *, uint32_t, uint16_t>(pixelPtr, count, pixelColor);
+        }
+        break;
+        case GL_RGBA8:
+        {
+            uint32_t pixelColor =
+                (color.alpha << 24) | (color.blue << 16) | (color.green << 8) | (color.red);
+            uint32_t *pixelPtr = (uint32_t *)getMappedMemory();
+            std::fill_n<uint32_t *, uint32_t, uint32_t>(pixelPtr, count, pixelColor);
+        }
+        break;
+        case GL_BGR565_ANGLEX:
+        {
+            uint16_t pixelColor =
+                ((color.red & 0xF8) << 11) | ((color.green & 0xFC) << 5) | (color.blue & 0xF8);
+            uint16_t *pixelPtr = (uint16_t *)getMappedMemory();
+            std::fill_n<uint16_t *, uint32_t, uint16_t>(pixelPtr, count, pixelColor);
+        }
+        break;
+        case GL_BGRA8_EXT:
+        {
+            uint32_t pixelColor =
+                (color.alpha << 24) | (color.red << 16) | (color.green << 8) | (color.blue);
+            uint32_t *pixelPtr = (uint32_t *)getMappedMemory();
+            std::fill_n<uint32_t *, uint32_t, uint32_t>(pixelPtr, count, pixelColor);
+        }
+        break;
+        default:;  // Unsupported format
+    }
+}
+
 // ImageHelper implementation.
 ImageHelper::ImageHelper()
 {
@@ -6757,6 +6801,42 @@ bool ImageHelper::hasStagedUpdatesForSubresource(gl::LevelIndex levelGL,
     return false;
 }
 
+bool ImageHelper::hasStagedClearUpdates(gl::LevelIndex levelGL,
+                                        const VkClearColorValue **color,
+                                        bool remove)
+{
+    std::vector<SubresourceUpdate> *levelUpdates = getLevelUpdates(levelGL);
+    if (levelUpdates == nullptr || levelUpdates->empty())
+    {
+        return false;
+    }
+
+    bool result = false;
+
+    for (size_t index = 0; index < levelUpdates->size();)
+    {
+        auto update = levelUpdates->begin() + index;
+        if (update->updateSource == UpdateSource::Clear)
+        {
+            if (color != nullptr)
+            {
+                *color = &update->data.clear.value.color;
+            }
+            if (remove)
+            {
+                levelUpdates->erase(update);
+            }
+            else
+            {
+                index++;
+            }
+            result = true;
+        }
+    }
+
+    return result;
+}
+
 gl::LevelIndex ImageHelper::getLastAllocatedLevel() const
 {
     return mFirstAllocatedLevel + mLevelCount - 1;
@@ -7156,6 +7236,43 @@ angle::Result ImageHelper::copyBufferToSurfaceImage(DisplayVk *displayVk,
 
     mUse.updateSerialOneOff(serial);
     return rendererVk->finishToSerial(displayVk, serial);
+}
+
+angle::Result ImageHelper::copyBufferToSurfaceImage2(ContextVk *contextVk,
+                                                     gl::LevelIndex sourceLevelGL,
+                                                     uint32_t layerCount,
+                                                     uint32_t baseLayer,
+                                                     const gl::Box &sourceArea,
+                                                     vk::BufferHelper *bufferHelper)
+{
+    ANGLE_TRACE_EVENT0("gpu.angle", "ImageHelper::copyBufferToSurfaceImage2");
+
+    VkBufferImageCopy region               = {};
+    region.bufferOffset                    = 0;
+    region.bufferRowLength                 = 0;
+    region.bufferImageHeight               = 0;
+    region.imageExtent.width               = sourceArea.width;
+    region.imageExtent.height              = sourceArea.height;
+    region.imageExtent.depth               = sourceArea.depth;
+    region.imageOffset.x                   = sourceArea.x;
+    region.imageOffset.y                   = sourceArea.y;
+    region.imageOffset.z                   = sourceArea.z;
+    region.imageSubresource.aspectMask     = getAspectFlags();
+    region.imageSubresource.baseArrayLayer = baseLayer;
+    region.imageSubresource.layerCount     = layerCount;
+    region.imageSubresource.mipLevel       = toVkLevel(sourceLevelGL).get();
+
+    CommandBufferAccess access;
+    access.onBufferTransferRead(bufferHelper);
+    access.onImageTransferWrite(sourceLevelGL, 1, 0, 1, getAspectFlags(), this);
+
+    CommandBuffer *commandBuffer;
+    ANGLE_TRY(contextVk->getOutsideRenderPassCommandBuffer(access, &commandBuffer));
+
+    commandBuffer->copyBufferToImage(bufferHelper->getBuffer().getHandle(), mImage,
+                                     getCurrentLayout(), 1, &region);
+
+    return angle::Result::Continue;
 }
 
 // static

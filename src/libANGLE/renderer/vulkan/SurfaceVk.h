@@ -51,6 +51,7 @@ class OffscreenSurfaceVk : public SurfaceVk
 
     FramebufferImpl *createDefaultFramebuffer(const gl::Context *context,
                                               const gl::FramebufferState &state) override;
+    egl::Error makeCurrent(const gl::Context *context) override;
     egl::Error swap(const gl::Context *context) override;
     egl::Error postSubBuffer(const gl::Context *context,
                              EGLint x,
@@ -202,6 +203,7 @@ class WindowSurfaceVk : public SurfaceVk
                                             FramebufferAttachmentRenderTarget **rtOut) override;
     FramebufferImpl *createDefaultFramebuffer(const gl::Context *context,
                                               const gl::FramebufferState &state) override;
+    egl::Error makeCurrent(const gl::Context *context) override;
     egl::Error swap(const gl::Context *context) override;
     egl::Error swapWithDamage(const gl::Context *context,
                               const EGLint *rects,

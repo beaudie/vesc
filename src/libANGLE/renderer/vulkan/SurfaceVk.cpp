@@ -531,6 +531,11 @@ vk::ImageHelper *OffscreenSurfaceVk::getColorAttachmentImage()
     return &mColorAttachment.image;
 }
 
+egl::Error OffscreenSurfaceVk::makeCurrent(const gl::Context *context)
+{
+    return egl::NoError();
+}
+
 egl::Error OffscreenSurfaceVk::lockSurface(const egl::Display *display,
                                            EGLint usageHint,
                                            bool preservePixels,
@@ -582,12 +587,24 @@ egl::Error OffscreenSurfaceVk::lockSurface(const egl::Display *display,
     {
         if (preservePixels)
         {
-            gl::Box sourceArea(0, 0, 0, getWidth(), getHeight(), 1);
             gl::LevelIndex sourceLevelGL(0);
+            const VkClearColorValue *clearColor;
+            if (image->hasStagedClearUpdates(sourceLevelGL, &clearColor, true))
+            {
+                angle::Color<uint8_t> color(
+                    (uint8_t)(clearColor->float32[0]), (uint8_t)(clearColor->float32[1]),
+                    (uint8_t)(clearColor->float32[2]), (uint8_t)(clearColor->float32[3]));
+                mLockBufferHelper.fillWithColor(color, internalFormat);
+            }
+            else
+            {
 
-            ANGLE_TRY_RETURN(image->copySurfaceImageToBuffer(displayVk, sourceLevelGL, 1, 0,
-                                                             sourceArea, &mLockBufferHelper),
-                             egl::EglBadAccess());
+                gl::Box sourceArea(0, 0, 0, getWidth(), getHeight(), 1);
+
+                ANGLE_TRY_RETURN(image->copySurfaceImageToBuffer(displayVk, sourceLevelGL, 1, 0,
+                                                                 sourceArea, &mLockBufferHelper),
+                                 egl::EglBadAccess());
+            }
         }
         vkDeviceWaitIdle(displayVk->getRenderer()->getDevice());
 
@@ -707,7 +724,8 @@ WindowSurfaceVk::WindowSurfaceVk(const egl::SurfaceState &surfaceState, EGLNativ
       mDepthStencilImageBinding(this, kAnySurfaceImageSubjectIndex),
       mColorImageMSBinding(this, kAnySurfaceImageSubjectIndex),
       mNeedToAcquireNextSwapchainImage(false),
-      mFrameCount(1)
+      mFrameCount(1),
+      mLockBufferHelper()
 {
     // Initialize the color render target with the multisampled targets.  If not multisampled, the
     // render target will be updated to refer to a swapchain image on every acquire.
@@ -2190,6 +2208,11 @@ egl::Error WindowSurfaceVk::getBufferAge(const gl::Context *context, EGLint *age
     return egl::NoError();
 }
 
+egl::Error WindowSurfaceVk::makeCurrent(const gl::Context *context)
+{
+    return egl::NoError();
+}
+
 egl::Error WindowSurfaceVk::lockSurface(const egl::Display *display,
                                         EGLint usageHint,
                                         bool preservePixels,
@@ -2249,12 +2272,22 @@ egl::Error WindowSurfaceVk::lockSurface(const egl::Display *display,
     {
         if (preservePixels)
         {
-            gl::Box sourceArea(0, 0, 0, getWidth(), getHeight(), 1);
             gl::LevelIndex sourceLevelGL(0);
-
-            ANGLE_TRY_RETURN(image->copySurfaceImageToBuffer(displayVk, sourceLevelGL, 1, 0,
-                                                             sourceArea, &mLockBufferHelper),
-                             egl::EglBadAccess());
+            const VkClearColorValue *clearColor;
+            if (image->hasStagedClearUpdates(sourceLevelGL, &clearColor, true))
+            {
+                angle::Color<uint8_t> color(
+                    (uint8_t)(clearColor->float32[0]), (uint8_t)(clearColor->float32[1]),
+                    (uint8_t)(clearColor->float32[2]), (uint8_t)(clearColor->float32[3]));
+                mLockBufferHelper.fillWithColor(color, internalFormat);
+            }
+            else
+            {
+                gl::Box sourceArea(0, 0, 0, getWidth(), getHeight(), 1);
+                ANGLE_TRY_RETURN(image->copySurfaceImageToBuffer(displayVk, sourceLevelGL, 1, 0,
+                                                                 sourceArea, &mLockBufferHelper),
+                                 egl::EglBadAccess());
+            }
         }
         vkDeviceWaitIdle(displayVk->getRenderer()->getDevice());
 

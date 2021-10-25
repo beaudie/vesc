@@ -318,8 +318,8 @@ TEST_P(EGLLockSurface3Test, AttributeTest)
     EXPECT_TRUE(eglUnlockSurfaceKHR(mDisplay, pBufferSurface));
 }
 
-// Create PBufferSurface, glClear Green, Draw red quad, Lock, check buffer for red, Write pixels,
-// Unlock, Test pixels
+// Create PBufferSurface, glClear Green, Draw red quad, Lock, check buffer for red,
+//  Write white pixels, Unlock, Test pixels for white
 TEST_P(EGLLockSurface3Test, PbufferSurfaceReadWriteTest)
 {
     ANGLE_SKIP_TEST_IF(!mExtensionSupported);
@@ -368,6 +368,79 @@ TEST_P(EGLLockSurface3Test, PbufferSurfaceReadWriteTest)
     EXPECT_TRUE(renderTexture(texture));
     glFinish();
     ASSERT_GL_NO_ERROR() << "glFinish failed";
+
+    EXPECT_TRUE(eglMakeCurrent(mDisplay, EGL_NO_SURFACE, EGL_NO_SURFACE, context));
+
+    EGLint lockAttribs[] = {EGL_LOCK_USAGE_HINT_KHR, EGL_WRITE_SURFACE_BIT_KHR,
+                            EGL_MAP_PRESERVE_PIXELS_KHR, EGL_TRUE, EGL_NONE};
+    EXPECT_TRUE(eglLockSurfaceKHR(mDisplay, pBufferSurface, lockAttribs));
+
+    EGLAttribKHR bitMap = 0;
+    EXPECT_TRUE(eglQuerySurface64KHR(mDisplay, pBufferSurface, EGL_BITMAP_POINTER_KHR, &bitMap));
+    EGLAttribKHR bitMapPitch = 0;
+    uint32_t *bitMapPtr      = (uint32_t *)(bitMap);
+    EXPECT_TRUE(eglQuerySurface64KHR(mDisplay, pBufferSurface, EGL_BITMAP_PITCH_KHR, &bitMapPitch));
+
+    EXPECT_TRUE(checkBitMapRGBA32(drawColor, bitMapPtr, bitMapPitch));
+
+    const GLColor fillColor = GLColor::white;
+    fillBitMapRGBA32(fillColor, bitMapPtr, bitMapPitch);
+
+    EXPECT_TRUE(eglUnlockSurfaceKHR(mDisplay, pBufferSurface));
+
+    EXPECT_TRUE(eglMakeCurrent(mDisplay, pBufferSurface, pBufferSurface, context));
+    ASSERT_EGL_SUCCESS() << "eglMakeCurrent failed.";
+
+    EXPECT_TRUE(checkSurfaceRGBA32(fillColor));
+
+    EXPECT_TRUE(eglMakeCurrent(mDisplay, EGL_NO_SURFACE, EGL_NO_SURFACE, context));
+}
+
+// Create PBufferSurface, glClear Green, Lock, check buffer for green, Write white pixels,
+// Unlock, Test pixels for white.
+// This expects that a glClear() alone is sufficient to pre-color the Surface
+TEST_P(EGLLockSurface3Test, PbufferSurfaceReadWriteDeferredCleaarTest)
+{
+    ANGLE_SKIP_TEST_IF(!mExtensionSupported);
+
+    EGLint clientVersion = mMajorVersion == 3 ? EGL_OPENGL_ES3_BIT : EGL_OPENGL_ES2_BIT;
+    EGLint attribs[]     = {EGL_RED_SIZE,
+                        8,
+                        EGL_GREEN_SIZE,
+                        8,
+                        EGL_BLUE_SIZE,
+                        8,
+                        EGL_ALPHA_SIZE,
+                        8,
+                        EGL_RENDERABLE_TYPE,
+                        clientVersion,
+                        EGL_SURFACE_TYPE,
+                        (EGL_PBUFFER_BIT | EGL_LOCK_SURFACE_BIT_KHR),
+                        EGL_NONE};
+    EGLint count         = 0;
+    EGLConfig config     = EGL_NO_CONFIG_KHR;
+    EXPECT_TRUE(eglChooseConfig(mDisplay, attribs, &config, 1, &count));
+    ANGLE_SKIP_TEST_IF(config == EGL_NO_CONFIG_KHR);
+    EXPECT_EGL_TRUE(count > 0);
+
+    EGLint pBufferAttribs[]   = {EGL_WIDTH, kWidth, EGL_HEIGHT, kHeight, EGL_NONE};
+    EGLSurface pBufferSurface = EGL_NO_SURFACE;
+    pBufferSurface            = eglCreatePbufferSurface(mDisplay, config, pBufferAttribs);
+    EXPECT_TRUE(pBufferSurface != EGL_NO_SURFACE);
+
+    EGLint ctxAttribs[] = {EGL_CONTEXT_MAJOR_VERSION, mMajorVersion, EGL_NONE};
+    EGLContext context  = eglCreateContext(mDisplay, config, nullptr, ctxAttribs);
+    EXPECT_TRUE(context != EGL_NO_CONTEXT);
+
+    EXPECT_TRUE(eglMakeCurrent(mDisplay, pBufferSurface, pBufferSurface, context));
+    ASSERT_EGL_SUCCESS() << "eglMakeCurrent failed.";
+
+    const GLColor clearColor = GLColor::green;
+    glClearColor(clearColor.R, clearColor.G, clearColor.B, clearColor.A);
+    glClear(GL_COLOR_BUFFER_BIT);
+    ASSERT_GL_NO_ERROR() << "glClear failed";
+
+    const GLColor drawColor = clearColor;
 
     EXPECT_TRUE(eglMakeCurrent(mDisplay, EGL_NO_SURFACE, EGL_NO_SURFACE, context));
 
