@@ -218,6 +218,30 @@
       },
       "revId": "eb6bea89a6da5c423bf4434148b86c6936721e3b",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "e7598cf9_76d09ec8",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 7166,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2021-10-26T16:50:25Z",
+      "side": 1,
+      "message": "\u003e The surface must be uncurrent to any api/context before lockSurface/unlockSurface can be called.\n\nAh ok.\n\n\u003e And then at LockSurface we fill the BufferHelper with clear color, if deferredClear, and provide buffer to app. App fills it with pixels.\n\nOk that is in line with what I had in mind!\n\nYou don\u0027t need to cache anything in unmakeCurrent IMO. The ImageHelper has the clear staged, and that remains so after unmakeCurrent. You can just leave it untouched until lock(), then extract the clear at lock()-time.\n\n\u003e At UnlockBuffer we wait to write buffer back to Image until MakeCurrent is called and then flush the clear to Image or discard, then write BufferHelper to Image.\n\nSure, staging the buffer to be flushed to the image is an option, but I think your current solution of doing a one-off submission to do the copy is simpler. Staging the update adds more complexity for example if the application does unlock/lock without any make/unmake current.\n\n\u003e Talking thursday would be good, I am also am under pressure to finish soon because I\u0027m on to another task with a pressing schedule.\n\nOk let\u0027s sync on Thursday and see what we can do about landing this.",
+      "parentUuid": "081395ed_7b804f99",
+      "range": {
+        "startLine": 7166,
+        "startChar": 20,
+        "endLine": 7166,
+        "endChar": 39
+      },
+      "revId": "eb6bea89a6da5c423bf4434148b86c6936721e3b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
