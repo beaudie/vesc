@@ -59,6 +59,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "1c63a5b2_944662c2",
+        "filename": "src/common/system_utils.h",
+        "patchSetId": 5
+      },
+      "lineNbr": 93,
+      "author": {
+        "id": 1491687
+      },
+      "writtenOn": "2021-10-26T10:41:09Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "f839597c_8244472b",
+      "range": {
+        "startLine": 93,
+        "startChar": 5,
+        "endLine": 93,
+        "endChar": 12
+      },
+      "revId": "aa357d126763e226a6ded940f21ce2459f3c4f0b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "2a670aca_50bc039f",
@@ -72,6 +96,30 @@
       "writtenOn": "2021-10-26T04:32:44Z",
       "side": 1,
       "message": "Suggest an `enum` to void having to explain this, and seeing meaningless trues and falses.",
+      "range": {
+        "startLine": 98,
+        "startChar": 0,
+        "endLine": 99,
+        "endChar": 44
+      },
+      "revId": "aa357d126763e226a6ded940f21ce2459f3c4f0b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "3db9a20a_49e4457b",
+        "filename": "src/common/system_utils.h",
+        "patchSetId": 5
+      },
+      "lineNbr": 99,
+      "author": {
+        "id": 1491687
+      },
+      "writtenOn": "2021-10-26T10:41:09Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "2a670aca_50bc039f",
       "range": {
         "startLine": 98,
         "startChar": 0,
@@ -105,6 +153,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "606609ae_ea868791",
+        "filename": "src/common/system_utils_posix.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 217,
+      "author": {
+        "id": 1491687
+      },
+      "writtenOn": "2021-10-26T10:41:09Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "cf8561ca_1f724884",
+      "range": {
+        "startLine": 217,
+        "startChar": 21,
+        "endLine": 217,
+        "endChar": 35
+      },
+      "revId": "aa357d126763e226a6ded940f21ce2459f3c4f0b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "216e9d9f_ee7adcc1",
@@ -118,6 +190,24 @@
       "writtenOn": "2021-10-26T04:32:44Z",
       "side": 1,
       "message": "Remember to remove before submission.",
+      "revId": "aa357d126763e226a6ded940f21ce2459f3c4f0b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "78790736_b71c094a",
+        "filename": "src/common/system_utils_posix.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 237,
+      "author": {
+        "id": 1491687
+      },
+      "writtenOn": "2021-10-26T10:41:09Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "216e9d9f_ee7adcc1",
       "revId": "aa357d126763e226a6ded940f21ce2459f3c4f0b",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
@@ -141,6 +231,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "13f700a2_bb983db8",
+        "filename": "src/common/system_utils_posix.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 238,
+      "author": {
+        "id": 1491687
+      },
+      "writtenOn": "2021-10-26T10:41:09Z",
+      "side": 1,
+      "message": "I suppose that there should always be a valid handler for SIGSEGV.\n\nAn error should be returned if \"oldact\" is not in a valid address space:\nEFAULT act or oldact points to memory which is not a valid part\n              of the process address space.\n\nI could add an assertion in addition to checking for errors though.\n\nThe default handler can\u0027t be called here, since it will always result in a crash / SIGSEGV. For the protected area we must override it.",
+      "parentUuid": "88a6bf21_d4437791",
+      "revId": "aa357d126763e226a6ded940f21ce2459f3c4f0b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "d401eacf_3fb87896",
         "filename": "src/common/system_utils_posix.cpp",
         "patchSetId": 5
@@ -152,6 +260,30 @@
       "writtenOn": "2021-10-26T04:32:44Z",
       "side": 1,
       "message": "Use \u003d\u003d 0. According to the man page, that signifies success. There\u0027s no 1 return value.",
+      "range": {
+        "startLine": 244,
+        "startChar": 56,
+        "endLine": 244,
+        "endChar": 60
+      },
+      "revId": "aa357d126763e226a6ded940f21ce2459f3c4f0b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "71af1afb_52a87795",
+        "filename": "src/common/system_utils_posix.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 244,
+      "author": {
+        "id": 1491687
+      },
+      "writtenOn": "2021-10-26T10:41:09Z",
+      "side": 1,
+      "message": "Thanks for finding this, I seem to have dropped a minus here.",
+      "parentUuid": "d401eacf_3fb87896",
       "range": {
         "startLine": 244,
         "startChar": 56,
@@ -185,6 +317,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "a605febb_91724d82",
+        "filename": "src/common/system_utils_posix.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 254,
+      "author": {
+        "id": 1491687
+      },
+      "writtenOn": "2021-10-26T10:41:09Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "0cdfc4d4_8ec5f7e1",
+      "range": {
+        "startLine": 254,
+        "startChar": 59,
+        "endLine": 254,
+        "endChar": 63
+      },
+      "revId": "aa357d126763e226a6ded940f21ce2459f3c4f0b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "4ae1844c_fba3fdda",
@@ -198,6 +354,30 @@
       "writtenOn": "2021-10-26T04:32:44Z",
       "side": 1,
       "message": "nit: Per ANGLE style, remove `static` and move to an anonymous namespace.",
+      "range": {
+        "startLine": 257,
+        "startChar": 0,
+        "endLine": 257,
+        "endChar": 6
+      },
+      "revId": "aa357d126763e226a6ded940f21ce2459f3c4f0b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "e8d09079_1178f166",
+        "filename": "src/common/system_utils_posix.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 257,
+      "author": {
+        "id": 1491687
+      },
+      "writtenOn": "2021-10-26T10:41:09Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "4ae1844c_fba3fdda",
       "range": {
         "startLine": 257,
         "startChar": 0,
@@ -225,6 +405,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "beef511f_4c470e44",
+        "filename": "src/common/system_utils_posix.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 262,
+      "author": {
+        "id": 1491687
+      },
+      "writtenOn": "2021-10-26T10:41:09Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "9c6cc6be_abe5244d",
+      "revId": "aa357d126763e226a6ded940f21ce2459f3c4f0b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "43a6cc06_e84dc6ce",
@@ -238,6 +436,24 @@
       "writtenOn": "2021-10-26T04:32:44Z",
       "side": 1,
       "message": "nit: Use perror",
+      "revId": "aa357d126763e226a6ded940f21ce2459f3c4f0b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "a4b8682d_b8ab7b1e",
+        "filename": "src/common/system_utils_posix.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 282,
+      "author": {
+        "id": 1491687
+      },
+      "writtenOn": "2021-10-26T10:41:09Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "43a6cc06_e84dc6ce",
       "revId": "aa357d126763e226a6ded940f21ce2459f3c4f0b",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
