@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "efe5c80b_17b88a06",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 5
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2021-10-26T13:22:53Z",
+      "side": 1,
+      "message": "Re-LGTM. I tested it on my laptop and it correctly chooses Intel over llvmpipe.",
+      "revId": "4db77a5985e39f413b4c985b75ccf8fd905c97a2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}

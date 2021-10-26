@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "f426aa74_906d73d1",
+        "filename": "src/common/vulkan/vulkan_icd.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 279,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2021-10-26T13:22:53Z",
+      "side": 1,
+      "message": "I was just going to point this out :)",
+      "revId": "a28730bd8704dfecfc3f35af56e48cb426705007",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
