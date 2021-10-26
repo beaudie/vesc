@@ -37,6 +37,23 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "b8b372d8_fc1fb062",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 6
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1359249
+      },
+      "writtenOn": "2021-10-26T15:34:28Z",
+      "side": 1,
+      "message": "Reply for Shahbaz",
+      "revId": "d76d96998afff2122ff3e30583c89dda8671953b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "46496080_ae5de52c",
         "filename": "src/libANGLE/renderer/vulkan/SurfaceVk.cpp",
         "patchSetId": 6
@@ -54,6 +71,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "0537ff91_06538f71",
+        "filename": "src/libANGLE/renderer/vulkan/SurfaceVk.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 624,
+      "author": {
+        "id": 1359249
+      },
+      "writtenOn": "2021-10-26T15:34:28Z",
+      "side": 1,
+      "message": "I\u0027ll look into that.",
+      "parentUuid": "46496080_ae5de52c",
+      "revId": "d76d96998afff2122ff3e30583c89dda8671953b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "140b9207_97e53418",
         "filename": "src/libANGLE/renderer/vulkan/SurfaceVk.cpp",
         "patchSetId": 6
@@ -65,6 +100,24 @@
       "writtenOn": "2021-10-26T03:59:50Z",
       "side": 1,
       "message": "Why destroy? Can\u0027t you leave it there until the Suraface is destroyed?",
+      "revId": "d76d96998afff2122ff3e30583c89dda8671953b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "955cc267_9bf88a32",
+        "filename": "src/libANGLE/renderer/vulkan/SurfaceVk.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 2257,
+      "author": {
+        "id": 1359249
+      },
+      "writtenOn": "2021-10-26T15:34:28Z",
+      "side": 1,
+      "message": "Sure. Just thought I needed to clean up memory.",
+      "parentUuid": "140b9207_97e53418",
       "revId": "d76d96998afff2122ff3e30583c89dda8671953b",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }

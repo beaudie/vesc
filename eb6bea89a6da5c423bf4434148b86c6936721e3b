@@ -146,6 +146,30 @@
       },
       "revId": "eb6bea89a6da5c423bf4434148b86c6936721e3b",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "820dc197_ac89a33e",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 7166,
+      "author": {
+        "id": 1359249
+      },
+      "writtenOn": "2021-10-26T15:34:28Z",
+      "side": 1,
+      "message": "So, If there is a glClear before the lock-unlock sequence, we need a draw and a glFinish. If we don\u0027t have these, what happens is the deferred glClear happens after the lock-unlock sequence, and thus overwrites the EGL Surface/Image.\nTo support a glClear without draw; at makeUncurrent, we cache the clear color, and if deferredClears are pending and save that in the Surface State. Lock-Unlock happens. When the Surface is made current again, if there is pending deferredClears, we flush the clear (hopefully that is doable), then do the unlock step of writing the BufferHelper to the Image.\nMohan thinks this needed, I am concerned about complexity and possible interaction elsewhere. I am staging this as the 4th commit.",
+      "parentUuid": "42fb4821_0b30b18c",
+      "range": {
+        "startLine": 7166,
+        "startChar": 20,
+        "endLine": 7166,
+        "endChar": 39
+      },
+      "revId": "eb6bea89a6da5c423bf4434148b86c6936721e3b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
