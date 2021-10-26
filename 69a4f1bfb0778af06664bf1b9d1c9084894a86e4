@@ -33,6 +33,24 @@
       "message": "PTAL\n\nsteven@valvesoftware.com noted in anglebug.com/6591 that the crashes are still occurring for him even after this CL was reverted.   I\u0027ve also tried running with valgrind and haven\u0027t seen anything, though I only have Linux+Nvidia.",
       "revId": "69a4f1bfb0778af06664bf1b9d1c9084894a86e4",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "fb261da9_8b8da8f3",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2021-10-26T02:31:38Z",
+      "side": 1,
+      "message": "Not a problem. Hopefully it can stick with a second try.",
+      "parentUuid": "5224786d_5d7942dd",
+      "revId": "69a4f1bfb0778af06664bf1b9d1c9084894a86e4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
