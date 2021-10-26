@@ -16,6 +16,23 @@
       "message": "Kind of wonder if this should just go in third_party?",
       "revId": "6e53b117208a2040c5110c0199b8e4bf5b6563b4",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "94022ed3_c1b9e56e",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2021-10-26T02:12:37Z",
+      "side": 1,
+      "message": "third_party/VK-GL-CTS/src is a separate repo, it doesn\u0027t get reformatted with `git cl format`. What happened?",
+      "revId": "6e53b117208a2040c5110c0199b8e4bf5b6563b4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
