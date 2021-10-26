@@ -242,6 +242,30 @@
       },
       "revId": "eb6bea89a6da5c423bf4434148b86c6936721e3b",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "536358bc_5ee65966",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 7166,
+      "author": {
+        "id": 1359249
+      },
+      "writtenOn": "2021-10-26T17:05:40Z",
+      "side": 1,
+      "message": "\"Ok that is in line with what I had in mind!\" - Yes\n\n\"You don\u0027t need to cache anything in unmakeCurrent\" after that point the context and the Framebuffer are inaccessible from the Surface, so no clearColor or hasDeferredClears\n\n\"one-off submission to do the copy is simpler\" - I need to be sure the copy is after the clear. Unfortunately right now, unlockSurface does the copy, and then the first draw after the MakeCurrent cause the clear to flush.",
+      "parentUuid": "e7598cf9_76d09ec8",
+      "range": {
+        "startLine": 7166,
+        "startChar": 20,
+        "endLine": 7166,
+        "endChar": 39
+      },
+      "revId": "eb6bea89a6da5c423bf4434148b86c6936721e3b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
