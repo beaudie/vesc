@@ -194,6 +194,30 @@
       },
       "revId": "eb6bea89a6da5c423bf4434148b86c6936721e3b",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "081395ed_7b804f99",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 7166,
+      "author": {
+        "id": 1359249
+      },
+      "writtenOn": "2021-10-26T16:31:57Z",
+      "side": 1,
+      "message": "\"how does unMakeCurrent come into play\"? The surface must be uncurrent to any api/context before lockSurface/unlockSurface can be called. So at unMakeUncurrent, before locksurface, we still have the context, thus the clearColor, and framebuffer, thus the deferredClear state. So cache that.\n(Correction) And then at LockSurface we fill the BufferHelper with clear color, if deferredClear, and provide buffer to app. App fills it with pixels.\nAt UnlockBuffer we wait to write buffer back to Image until MakeCurrent is called and then flush the clear to Image or discard, then write BufferHelper to Image.\nIt needs to be made Current again, after UnlockSurface, to use with swapbuffers, or any other use.\n\nTo me its a bit overly complex and I am concerned. We are delaying 2 operations.\n\nTheoretically, If the app wants to prefill a Surface, then use LockSurface, I guess glClear would be common use case?. Requiring a glFinish makes sense just for timing. Should we also require a draw with clear before LockSurface?\n\nAlso, I think win-test failure above is failing even with a draw and glFinish before eglLockSurface. So there may be platform differences here with deferredClear?\n\nTalking thursday would be good, I am also am under pressure to finish soon because I\u0027m on to another task with a pressing schedule.",
+      "parentUuid": "2805628c_4300ac66",
+      "range": {
+        "startLine": 7166,
+        "startChar": 20,
+        "endLine": 7166,
+        "endChar": 39
+      },
+      "revId": "eb6bea89a6da5c423bf4434148b86c6936721e3b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
