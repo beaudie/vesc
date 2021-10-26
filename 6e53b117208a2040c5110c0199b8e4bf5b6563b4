@@ -51,6 +51,24 @@
       "parentUuid": "94022ed3_c1b9e56e",
       "revId": "6e53b117208a2040c5110c0199b8e4bf5b6563b4",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "3c3ff9de_b363b88c",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2021-10-26T16:17:48Z",
+      "side": 1,
+      "message": ":shrug: I wouldn\u0027t know about that. It definitely seems strange to have this added to only one of the third_party repos. Adding it to the parent has the risk that some files don\u0027t get formatted, i.e. the files that are \"copied\" in third_party, and aren\u0027t a git repo. Adding it to chromium/src/third_party means that ANGLE no longer formats, so doesn\u0027t work?\n\nIdeally the tool should be fixed to behave identically to `git cl format`, but I have no opposition to landing this to make your life easier :)",
+      "parentUuid": "1009168d_9521f8db",
+      "revId": "6e53b117208a2040c5110c0199b8e4bf5b6563b4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
