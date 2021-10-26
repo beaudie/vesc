@@ -77,6 +77,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "15572d39_f1949501",
+        "filename": "src/libANGLE/validationES2.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 1416,
+      "author": {
+        "id": 1394635
+      },
+      "writtenOn": "2021-10-26T09:53:44Z",
+      "side": 1,
+      "message": "dEQP has been changed quite recently to expect R8/RG8 texture support on ES2 contexts:\nhttps://github.com/KhronosGroup/VK-GL-CTS/pull/241\n\nArguably, the extension language remains ambiguous.\n\nGL map is used only for GL backends; src/libANGLE/formatutils.cpp has its own BuildInternalFormatInfoMap.",
+      "parentUuid": "00554913_525c9749",
+      "revId": "3981ea34b127d7c0ec8e0929bb0facaac7ade049",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "65edd4c9_57660abf",
         "filename": "src/libANGLE/validationES2.cpp",
         "patchSetId": 1
