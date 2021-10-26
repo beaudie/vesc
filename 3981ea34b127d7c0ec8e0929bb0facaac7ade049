@@ -22,6 +22,40 @@
       },
       "revId": "3981ea34b127d7c0ec8e0929bb0facaac7ade049",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "309e8119_ad9141b2",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2021-10-26T03:29:07Z",
+      "side": 1,
+      "message": "Great find Kyle!\n\nThis looks good to me overall - let\u0027s see how the trybots look.\n",
+      "revId": "3981ea34b127d7c0ec8e0929bb0facaac7ade049",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "65edd4c9_57660abf",
+        "filename": "src/libANGLE/validationES2.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 1422,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2021-10-26T03:29:07Z",
+      "side": 1,
+      "message": "Would you consider moving the SR8 and SRG8 case statement down, just above the GL_SRGB_EXT case statement? It would keep the related formats (RED/RG, R8/RG8) closer together.",
+      "revId": "3981ea34b127d7c0ec8e0929bb0facaac7ade049",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
