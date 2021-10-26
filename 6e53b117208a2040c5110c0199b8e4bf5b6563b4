@@ -33,6 +33,24 @@
       "message": "third_party/VK-GL-CTS/src is a separate repo, it doesn\u0027t get reformatted with `git cl format`. What happened?",
       "revId": "6e53b117208a2040c5110c0199b8e4bf5b6563b4",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "1009168d_9521f8db",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1115588
+      },
+      "writtenOn": "2021-10-26T16:03:21Z",
+      "side": 1,
+      "message": "It does with vscode and chrome\u0027s vscode integration. Probably because of working out of the chrome repo because src/chromium/src/.clang-format exists. Maybe I should go ask chromium to add src/chromium/src/third_party/.clang_format",
+      "parentUuid": "94022ed3_c1b9e56e",
+      "revId": "6e53b117208a2040c5110c0199b8e4bf5b6563b4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
