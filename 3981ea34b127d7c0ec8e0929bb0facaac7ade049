@@ -95,6 +95,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "f7b54938_a556caa0",
+        "filename": "src/libANGLE/validationES2.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 1416,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2021-10-26T13:27:58Z",
+      "side": 1,
+      "message": "\u003e I don\u0027t fully understand how src/libANGLE/formatutils.cpp determines texture format support\n\nTexture format support is determined by the backend filling in a TextureCap, and Caps.cpp determining support based on that. See for example DetermineRGTextureSupport. If metal/ is exposing the extensions incorrectly, it must be filling the TextureCaps wrong.",
+      "parentUuid": "15572d39_f1949501",
+      "revId": "3981ea34b127d7c0ec8e0929bb0facaac7ade049",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "65edd4c9_57660abf",
         "filename": "src/libANGLE/validationES2.cpp",
         "patchSetId": 1
