@@ -195,7 +195,15 @@ BufferVk::VertexConversionBuffer::~VertexConversionBuffer() = default;
 
 // BufferVk implementation.
 BufferVk::BufferVk(const gl::BufferState &state)
+<<<<<<< HEAD   (86bd45 Vulkan: Fix accessing stale FB cached variable.)
     : BufferImpl(state), mBuffer(nullptr), mBufferOffset(0)
+=======
+    : BufferImpl(state),
+      mBuffer(nullptr),
+      mBufferOffset(0),
+      mHasValidData(false),
+      mHasBeenReferencedByGPU(false)
+>>>>>>> CHANGE (6b315a Revert "Vulkan: Let BufferVk call into VMA for allocation wh)
 {}
 
 BufferVk::~BufferVk() {}
@@ -394,6 +402,13 @@ angle::Result BufferVk::setDataWithMemoryType(const gl::Context *context,
 {
     ContextVk *contextVk = vk::GetImpl(context);
     RendererVk *renderer = contextVk->getRenderer();
+<<<<<<< HEAD   (86bd45 Vulkan: Fix accessing stale FB cached variable.)
+=======
+
+    // Reset the flag since the buffer contents are being reinitialized. If the caller passed in
+    // data to fill the buffer, the flag will be updated when the data is copied to the buffer.
+    mHasValidData = false;
+>>>>>>> CHANGE (6b315a Revert "Vulkan: Let BufferVk call into VMA for allocation wh)
 
     if (size == 0)
     {
@@ -880,6 +895,13 @@ angle::Result BufferVk::acquireAndUpdate(ContextVk *contextVk,
     // double-retaining the buffer, which is a necessary side-effect to prevent a use-after-free.
     if (updateRegionBeforeSubData || updateRegionAfterSubData)
     {
+<<<<<<< HEAD   (86bd45 Vulkan: Fix accessing stale FB cached variable.)
+=======
+        // It's possible for acquireBufferHelper() to garbage collect the original (src) buffer
+        // before copyFromBuffer() has a chance to retain it, so retain it now. This may end up
+        // double-retaining the buffer, which is a necessary side-effect to prevent a
+        // use-after-free.
+>>>>>>> CHANGE (6b315a Revert "Vulkan: Let BufferVk call into VMA for allocation wh)
         src->retainReadOnly(&contextVk->getResourceUseList());
     }
 
@@ -903,6 +925,10 @@ angle::Result BufferVk::acquireAndUpdate(ContextVk *contextVk,
     {
         ANGLE_TRY(mBuffer->copyFromBuffer(contextVk, src, static_cast<uint32_t>(copyRegions.size()),
                                           copyRegions.data()));
+<<<<<<< HEAD   (86bd45 Vulkan: Fix accessing stale FB cached variable.)
+=======
+        mHasBeenReferencedByGPU = true;
+>>>>>>> CHANGE (6b315a Revert "Vulkan: Let BufferVk call into VMA for allocation wh)
     }
 
     return angle::Result::Continue;
@@ -989,6 +1015,12 @@ angle::Result BufferVk::acquireBufferHelper(ContextVk *contextVk,
     ANGLE_TRY(mBufferPool.allocate(contextVk, size, nullptr, nullptr, &mBufferOffset,
                                    &needToReleasePreviousBuffers));
 
+<<<<<<< HEAD   (86bd45 Vulkan: Fix accessing stale FB cached variable.)
+=======
+    // We just got a new range, no one has ever referenced it yet.
+    mHasBeenReferencedByGPU = false;
+
+>>>>>>> CHANGE (6b315a Revert "Vulkan: Let BufferVk call into VMA for allocation wh)
     if (needToReleasePreviousBuffers)
     {
         // Release previous buffers
