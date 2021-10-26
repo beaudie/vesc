@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "8e033856_1a3172dd",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000050
+      },
+      "writtenOn": "2021-10-26T12:58:20Z",
+      "side": 1,
+      "message": "Hi Geoff and Shahbaz, PTAL. Thanks",
+      "revId": "b6914d04be0d2714fa879c579aefa71f7f129ef0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
