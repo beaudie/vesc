@@ -266,6 +266,30 @@
       },
       "revId": "eb6bea89a6da5c423bf4434148b86c6936721e3b",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "4afcda76_5a3479e6",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 7166,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2021-10-26T18:05:35Z",
+      "side": 1,
+      "message": "\u003e \"You don\u0027t need to cache anything in unmakeCurrent\" after that point the context and the Framebuffer are inaccessible from the Surface, so no clearColor or hasDeferredClears\n\nYou don\u0027t need the context or the framebuffer. The clear is staged in the ImageHelper, and you have access to that!",
+      "parentUuid": "536358bc_5ee65966",
+      "range": {
+        "startLine": 7166,
+        "startChar": 20,
+        "endLine": 7166,
+        "endChar": 39
+      },
+      "revId": "eb6bea89a6da5c423bf4434148b86c6936721e3b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
