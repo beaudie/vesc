@@ -170,6 +170,30 @@
       },
       "revId": "eb6bea89a6da5c423bf4434148b86c6936721e3b",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "2805628c_4300ac66",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 7166,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2021-10-26T15:57:23Z",
+      "side": 1,
+      "message": "Let\u0027s talk about this on Thursday. The situation is still not very clear to me, in particular, how does makeUncurrent come into play? Is the mutable surface somehow accessible when it\u0027s not current? If not, the deferred clear can remain staged.\n\nAnd my suggestion is, to apply the staged clear on lock(), so the application can see the clear applied to the buffer. When the buffer is copied back during unlock() everything Just Works (TM).",
+      "parentUuid": "820dc197_ac89a33e",
+      "range": {
+        "startLine": 7166,
+        "startChar": 20,
+        "endLine": 7166,
+        "endChar": 39
+      },
+      "revId": "eb6bea89a6da5c423bf4434148b86c6936721e3b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
