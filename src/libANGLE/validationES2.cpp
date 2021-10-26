@@ -1410,7 +1410,24 @@ bool ValidateES2TexImageParametersBase(const Context *context,
                         return false;
                     }
                     break;
-
+                case GL_R8_EXT:
+                case GL_RG8_EXT:
+                    nonEqualFormatsAllowed = true;
+                    if (!context->getExtensions().textureRgEXT)
+                    {
+                        context->validationError(entryPoint, GL_INVALID_ENUM, kInvalidFormat);
+                        return false;
+                    }
+                    break;
+                case GL_SR8_EXT:
+                case GL_SRG8_EXT:
+                    nonEqualFormatsAllowed = true;
+                    if (!context->getExtensions().textureSRGBR8EXT)
+                    {
+                        context->validationError(entryPoint, GL_INVALID_ENUM, kInvalidFormat);
+                        return false;
+                    }
+                    break;
                 case GL_RED:
                 case GL_RG:
                     if (!context->getExtensions().textureRgEXT)
