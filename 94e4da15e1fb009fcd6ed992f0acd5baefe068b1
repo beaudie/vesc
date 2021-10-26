@@ -253,6 +253,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "d45db114_7735d14a",
+        "filename": "src/libANGLE/renderer/vulkan/SurfaceVk.cpp",
+        "patchSetId": 9
+      },
+      "lineNbr": 2053,
+      "author": {
+        "id": 1359249
+      },
+      "writtenOn": "2021-10-26T19:58:40Z",
+      "side": 1,
+      "message": "What I have come across so far is that some details are needed so that EGL can advertise support for certain extensions, and the second, that configs can be created with all their bits and formats.",
+      "parentUuid": "2265aa7b_acdcb2c8",
+      "range": {
+        "startLine": 2048,
+        "startChar": 0,
+        "endLine": 2053,
+        "endChar": 0
+      },
+      "revId": "94e4da15e1fb009fcd6ed992f0acd5baefe068b1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "c75f11d0_2a1b40bf",
