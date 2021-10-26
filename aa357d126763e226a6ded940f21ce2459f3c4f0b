@@ -249,6 +249,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "f49a5c87_36c41f05",
+        "filename": "src/common/system_utils_posix.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 238,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2021-10-26T13:11:54Z",
+      "side": 1,
+      "message": "Ack, I wasn\u0027t sure if the crash happens because there is a default handler that does it, or if it happens because there is no handler installed.",
+      "parentUuid": "13f700a2_bb983db8",
+      "revId": "aa357d126763e226a6ded940f21ce2459f3c4f0b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "d401eacf_3fb87896",
         "filename": "src/common/system_utils_posix.cpp",
         "patchSetId": 5
@@ -378,6 +396,30 @@
       "side": 1,
       "message": "Done",
       "parentUuid": "4ae1844c_fba3fdda",
+      "range": {
+        "startLine": 257,
+        "startChar": 0,
+        "endLine": 257,
+        "endChar": 6
+      },
+      "revId": "aa357d126763e226a6ded940f21ce2459f3c4f0b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "f37b3744_e97c245a",
+        "filename": "src/common/system_utils_posix.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 257,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2021-10-26T13:11:54Z",
+      "side": 1,
+      "message": "Re-nit: Move to anonymous namespace above!",
+      "parentUuid": "e8d09079_1178f166",
       "range": {
         "startLine": 257,
         "startChar": 0,
