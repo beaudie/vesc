@@ -484,7 +484,11 @@ class Allocation final : public WrappedObject<Allocation, VmaAllocation>
     void invalidate(const Allocator &allocator, VkDeviceSize offset, VkDeviceSize size);
 
   private:
+<<<<<<< HEAD   (86bd45 Vulkan: Fix accessing stale FB cached variable.)
     friend class Allocator;
+=======
+    friend class BufferMemoryAllocator;
+>>>>>>> CHANGE (421dbf Revert "Vulkan: Use different strategy for buffer memory all)
 };
 
 class RenderPass final : public WrappedObject<RenderPass, VkRenderPass>

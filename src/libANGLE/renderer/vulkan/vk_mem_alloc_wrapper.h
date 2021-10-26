@@ -26,6 +26,16 @@ VkResult InitAllocator(VkPhysicalDevice physicalDevice,
 
 void DestroyAllocator(VmaAllocator allocator);
 
+<<<<<<< HEAD   (86bd45 Vulkan: Fix accessing stale FB cached variable.)
+=======
+VkResult CreatePool(VmaAllocator allocator,
+                    uint32_t memoryTypeIndex,
+                    bool buddyAlgorithm,
+                    VkDeviceSize blockSize,
+                    VmaPool *pPool);
+void DestroyPool(VmaAllocator allocator, VmaPool pool);
+
+>>>>>>> CHANGE (421dbf Revert "Vulkan: Use different strategy for buffer memory all)
 void FreeMemory(VmaAllocator allocator, VmaAllocation allocation);
 
 VkResult CreateBuffer(VmaAllocator allocator,

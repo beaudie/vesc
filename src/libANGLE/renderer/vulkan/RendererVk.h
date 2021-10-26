@@ -82,6 +82,41 @@ class MemoryReport final : angle::NonCopyable
     VkDeviceSize mMaxTotalImportedMemory;
     angle::HashMap<uint64_t, int> mUniqueIDCounts;
 };
+<<<<<<< HEAD   (86bd45 Vulkan: Fix accessing stale FB cached variable.)
+=======
+
+class BufferMemoryAllocator : angle::NonCopyable
+{
+  public:
+    BufferMemoryAllocator();
+    ~BufferMemoryAllocator();
+
+    VkResult initialize(RendererVk *renderer, VkDeviceSize preferredLargeHeapBlockSize);
+    void destroy(RendererVk *renderer);
+
+    // Initializes the buffer handle and memory allocation.
+    VkResult createBuffer(RendererVk *renderer,
+                          const VkBufferCreateInfo &bufferCreateInfo,
+                          VkMemoryPropertyFlags requiredFlags,
+                          VkMemoryPropertyFlags preferredFlags,
+                          bool persistentlyMapped,
+                          uint32_t *memoryTypeIndexOut,
+                          Buffer *bufferOut,
+                          Allocation *allocationOut);
+
+    void getMemoryTypeProperties(RendererVk *renderer,
+                                 uint32_t memoryTypeIndex,
+                                 VkMemoryPropertyFlags *flagsOut) const;
+    VkResult findMemoryTypeIndexForBufferInfo(RendererVk *renderer,
+                                              const VkBufferCreateInfo &bufferCreateInfo,
+                                              VkMemoryPropertyFlags requiredFlags,
+                                              VkMemoryPropertyFlags preferredFlags,
+                                              bool persistentlyMappedBuffers,
+                                              uint32_t *memoryTypeIndexOut) const;
+
+  private:
+};
+>>>>>>> CHANGE (421dbf Revert "Vulkan: Use different strategy for buffer memory all)
 }  // namespace vk
 
 // Supports one semaphore from current surface, and one semaphore passed to

@@ -1387,8 +1387,13 @@ angle::Result RendererVk::initialize(DisplayVk *displayVk,
                  mAllocator.init(mPhysicalDevice, mDevice, mInstance, applicationInfo.apiVersion,
                                  preferredLargeHeapBlockSize));
 
+<<<<<<< HEAD   (86bd45 Vulkan: Fix accessing stale FB cached variable.)
     // Store the physical device memory properties so we can find the right memory pools.
     mMemoryProperties.init(mPhysicalDevice);
+=======
+    // Create buffer memory allocator
+    ANGLE_VK_TRY(displayVk, mBufferMemoryAllocator.initialize(this, preferredLargeHeapBlockSize));
+>>>>>>> CHANGE (421dbf Revert "Vulkan: Use different strategy for buffer memory all)
 
     {
         ANGLE_TRACE_EVENT0("gpu.angle,startup", "GlslangWarmup");
@@ -3636,4 +3641,61 @@ void vk::MemoryReport::logMemoryReportStats() const
                << " (max=" << std::setw(10) << importedMemoryMax << ")";
     }
 }
+<<<<<<< HEAD   (86bd45 Vulkan: Fix accessing stale FB cached variable.)
+=======
+
+// BufferMemoryAllocator implementation.
+BufferMemoryAllocator::BufferMemoryAllocator() {}
+
+BufferMemoryAllocator::~BufferMemoryAllocator() {}
+
+VkResult BufferMemoryAllocator::initialize(RendererVk *renderer,
+                                           VkDeviceSize preferredLargeHeapBlockSize)
+{
+    ASSERT(renderer->getAllocator().valid());
+    return VK_SUCCESS;
+}
+
+void BufferMemoryAllocator::destroy(RendererVk *renderer) {}
+
+VkResult BufferMemoryAllocator::createBuffer(RendererVk *renderer,
+                                             const VkBufferCreateInfo &bufferCreateInfo,
+                                             VkMemoryPropertyFlags requiredFlags,
+                                             VkMemoryPropertyFlags preferredFlags,
+                                             bool persistentlyMappedBuffers,
+                                             uint32_t *memoryTypeIndexOut,
+                                             Buffer *bufferOut,
+                                             Allocation *allocationOut)
+{
+    ASSERT(bufferOut && !bufferOut->valid());
+    ASSERT(allocationOut && !allocationOut->valid());
+    const Allocator &allocator = renderer->getAllocator();
+    return vma::CreateBuffer(allocator.getHandle(), &bufferCreateInfo, requiredFlags,
+                             preferredFlags, persistentlyMappedBuffers, memoryTypeIndexOut,
+                             &bufferOut->mHandle, &allocationOut->mHandle);
+}
+
+void BufferMemoryAllocator::getMemoryTypeProperties(RendererVk *renderer,
+                                                    uint32_t memoryTypeIndex,
+                                                    VkMemoryPropertyFlags *flagsOut) const
+{
+    const Allocator &allocator = renderer->getAllocator();
+    vma::GetMemoryTypeProperties(allocator.getHandle(), memoryTypeIndex, flagsOut);
+}
+
+VkResult BufferMemoryAllocator::findMemoryTypeIndexForBufferInfo(
+    RendererVk *renderer,
+    const VkBufferCreateInfo &bufferCreateInfo,
+    VkMemoryPropertyFlags requiredFlags,
+    VkMemoryPropertyFlags preferredFlags,
+    bool persistentlyMappedBuffers,
+    uint32_t *memoryTypeIndexOut) const
+{
+    const Allocator &allocator = renderer->getAllocator();
+    return vma::FindMemoryTypeIndexForBufferInfo(allocator.getHandle(), &bufferCreateInfo,
+                                                 requiredFlags, preferredFlags,
+                                                 persistentlyMappedBuffers, memoryTypeIndexOut);
+}
+}  // namespace vk
+>>>>>>> CHANGE (421dbf Revert "Vulkan: Use different strategy for buffer memory all)
 }  // namespace rx

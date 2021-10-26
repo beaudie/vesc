@@ -72,6 +72,32 @@ void DestroyAllocator(VmaAllocator allocator)
     vmaDestroyAllocator(allocator);
 }
 
+<<<<<<< HEAD   (86bd45 Vulkan: Fix accessing stale FB cached variable.)
+=======
+VkResult CreatePool(VmaAllocator allocator,
+                    uint32_t memoryTypeIndex,
+                    bool buddyAlgorithm,
+                    VkDeviceSize blockSize,
+                    VmaPool *pPool)
+{
+    VmaPoolCreateInfo poolCreateInfo = {};
+    poolCreateInfo.memoryTypeIndex   = memoryTypeIndex;
+    poolCreateInfo.flags             = VMA_POOL_CREATE_IGNORE_BUFFER_IMAGE_GRANULARITY_BIT;
+    if (buddyAlgorithm)
+    {
+        poolCreateInfo.flags |= VMA_POOL_CREATE_BUDDY_ALGORITHM_BIT;
+    }
+    poolCreateInfo.blockSize     = blockSize;
+    poolCreateInfo.maxBlockCount = -1;  // unlimited
+    return vmaCreatePool(allocator, &poolCreateInfo, pPool);
+}
+
+void DestroyPool(VmaAllocator allocator, VmaPool pool)
+{
+    vmaDestroyPool(allocator, pool);
+}
+
+>>>>>>> CHANGE (421dbf Revert "Vulkan: Use different strategy for buffer memory all)
 void FreeMemory(VmaAllocator allocator, VmaAllocation allocation)
 {
     vmaFreeMemory(allocator, allocation);
@@ -90,7 +116,11 @@ VkResult CreateBuffer(VmaAllocator allocator,
     VmaAllocationCreateInfo allocationCreateInfo = {};
     allocationCreateInfo.requiredFlags           = requiredFlags;
     allocationCreateInfo.preferredFlags          = preferredFlags;
+<<<<<<< HEAD   (86bd45 Vulkan: Fix accessing stale FB cached variable.)
     allocationCreateInfo.flags = (persistentlyMappedBuffers) ? VMA_ALLOCATION_CREATE_MAPPED_BIT : 0;
+=======
+    allocationCreateInfo.flags       = (persistentlyMapped) ? VMA_ALLOCATION_CREATE_MAPPED_BIT : 0;
+>>>>>>> CHANGE (421dbf Revert "Vulkan: Use different strategy for buffer memory all)
     VmaAllocationInfo allocationInfo = {};
 
     result = vmaCreateBuffer(allocator, pBufferCreateInfo, &allocationCreateInfo, pBuffer,

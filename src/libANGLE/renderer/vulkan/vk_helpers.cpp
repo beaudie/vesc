@@ -3653,19 +3653,33 @@ angle::Result BufferHelper::init(ContextVk *contextVk,
 
     // Check that the allocation is not too large.
     uint32_t memoryTypeIndex = 0;
+<<<<<<< HEAD   (86bd45 Vulkan: Fix accessing stale FB cached variable.)
     ANGLE_VK_TRY(contextVk, allocator.findMemoryTypeIndexForBufferInfo(
                                 *createInfo, requiredFlags, preferredFlags, persistentlyMapped,
                                 &memoryTypeIndex));
+=======
+    ANGLE_VK_TRY(contextVk, bufferMemoryAllocator.findMemoryTypeIndexForBufferInfo(
+                                renderer, *createInfo, requiredFlags, preferredFlags,
+                                persistentlyMapped, &memoryTypeIndex));
+>>>>>>> CHANGE (421dbf Revert "Vulkan: Use different strategy for buffer memory all)
 
     VkDeviceSize heapSize =
         renderer->getMemoryProperties().getHeapSizeForMemoryType(memoryTypeIndex);
 
     ANGLE_VK_CHECK(contextVk, createInfo->size <= heapSize, VK_ERROR_OUT_OF_DEVICE_MEMORY);
 
+<<<<<<< HEAD   (86bd45 Vulkan: Fix accessing stale FB cached variable.)
     ANGLE_VK_TRY(contextVk, allocator.createBuffer(*createInfo, requiredFlags, preferredFlags,
                                                    persistentlyMapped, &memoryTypeIndex, &mBuffer,
                                                    mMemory.getMemoryObject()));
     allocator.getMemoryTypeProperties(memoryTypeIndex, &mMemoryPropertyFlags);
+=======
+    ANGLE_VK_TRY(contextVk, bufferMemoryAllocator.createBuffer(renderer, *createInfo, requiredFlags,
+                                                               preferredFlags, persistentlyMapped,
+                                                               &memoryTypeIndex, &mBuffer,
+                                                               mMemory.getMemoryObject()));
+    bufferMemoryAllocator.getMemoryTypeProperties(renderer, memoryTypeIndex, &mMemoryPropertyFlags);
+>>>>>>> CHANGE (421dbf Revert "Vulkan: Use different strategy for buffer memory all)
     mCurrentQueueFamilyIndex = renderer->getQueueFamilyIndex();
 
     if (renderer->getFeatures().allocateNonZeroMemory.enabled)
@@ -3680,6 +3694,7 @@ angle::Result BufferHelper::init(ContextVk *contextVk,
         }
         else if ((mMemoryPropertyFlags & VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT) != 0)
         {
+            const Allocator &allocator = renderer->getAllocator();
             // Can map the memory.
             // Pick an arbitrary value to initialize non-zero memory for sanitization.
             constexpr int kNonZeroInitValue = 55;
