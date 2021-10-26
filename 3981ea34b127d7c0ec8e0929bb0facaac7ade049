@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "d53f9258_19454608",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2021-10-26T02:29:09Z",
+      "side": 1,
+      "message": "nits:\n\n- We use \"Metal: \" as prefix, ANGLE is definitely redundant :)\n- This is a front-end fix, so the prefix is not necessary at all.",
+      "range": {
+        "startLine": 7,
+        "startChar": 0,
+        "endLine": 7,
+        "endChar": 14
+      },
+      "revId": "3981ea34b127d7c0ec8e0929bb0facaac7ade049",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
