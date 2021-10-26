@@ -122,6 +122,30 @@
       },
       "revId": "eb6bea89a6da5c423bf4434148b86c6936721e3b",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "42fb4821_0b30b18c",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 7166,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2021-10-26T03:59:50Z",
+      "side": 1,
+      "message": "\u003e Then fill lock buffer with clear color.\n\nIs that different from my suggestion above?\n\n    if (thereIsClearStaged())\n    {\n        ASSERT(noOtherUpdateStaged());\n        memset(buffer, clearColor);\n    }\n    else\n    {\n        getCommandBufferOneOff();\n        doTheCopy();\n        submitOneOff();\n    }\n\n\u003e at make current, flush the deferred Clear, and then write back the lock buffer info to the surface.\n\nIt sounds like then you should be able to *drop* the deferred clear since you are overwriting the results? Maybe I misunderstood.",
+      "parentUuid": "a1271dbc_ae560081",
+      "range": {
+        "startLine": 7166,
+        "startChar": 20,
+        "endLine": 7166,
+        "endChar": 39
+      },
+      "revId": "eb6bea89a6da5c423bf4434148b86c6936721e3b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }

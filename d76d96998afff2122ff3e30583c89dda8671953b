@@ -33,6 +33,40 @@
       "message": "Failures seem to be a channel ordering RGBA vs BGRA",
       "revId": "d76d96998afff2122ff3e30583c89dda8671953b",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "46496080_ae5de52c",
+        "filename": "src/libANGLE/renderer/vulkan/SurfaceVk.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 624,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2021-10-26T03:59:50Z",
+      "side": 1,
+      "message": "You should remove this in favor of releasing mLockBufferHelper to be garbage collected at the appropriate time. You would need to `retain()` it for its serial to be updated.\n\nAlso, it\u0027d be a good idea to stop recreating/destroying this on every lock/unlock and only do so when the surface size changes.",
+      "revId": "d76d96998afff2122ff3e30583c89dda8671953b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "140b9207_97e53418",
+        "filename": "src/libANGLE/renderer/vulkan/SurfaceVk.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 2257,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2021-10-26T03:59:50Z",
+      "side": 1,
+      "message": "Why destroy? Can\u0027t you leave it there until the Suraface is destroyed?",
+      "revId": "d76d96998afff2122ff3e30583c89dda8671953b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
