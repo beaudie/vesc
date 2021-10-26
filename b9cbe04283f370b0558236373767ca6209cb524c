@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "effa8d2f_3d08243d",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2021-10-26T00:25:13Z",
+      "side": 1,
+      "message": "This addresses Shabi\u0027s comment:\nhttps://chromium-review.googlesource.com/c/angle/angle/+/3204152/comments/a1937805_90e9a210",
+      "revId": "b9cbe04283f370b0558236373767ca6209cb524c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
