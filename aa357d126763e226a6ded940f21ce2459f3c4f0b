@@ -265,6 +265,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "09eba801_394615fb",
+        "filename": "src/common/system_utils_posix.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 238,
+      "author": {
+        "id": 1491687
+      },
+      "writtenOn": "2021-10-26T16:11:20Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "f49a5c87_36c41f05",
+      "revId": "aa357d126763e226a6ded940f21ce2459f3c4f0b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "d401eacf_3fb87896",
@@ -420,6 +438,30 @@
       "side": 1,
       "message": "Re-nit: Move to anonymous namespace above!",
       "parentUuid": "e8d09079_1178f166",
+      "range": {
+        "startLine": 257,
+        "startChar": 0,
+        "endLine": 257,
+        "endChar": 6
+      },
+      "revId": "aa357d126763e226a6ded940f21ce2459f3c4f0b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "5e3de8c2_ba34ef57",
+        "filename": "src/common/system_utils_posix.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 257,
+      "author": {
+        "id": 1491687
+      },
+      "writtenOn": "2021-10-26T16:11:20Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "f37b3744_e97c245a",
       "range": {
         "startLine": 257,
         "startChar": 0,
