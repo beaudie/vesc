@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "472bb85a_44e32236",
+        "filename": "src/libANGLE/capture/FrameCapture.cpp",
+        "patchSetId": 10
+      },
+      "lineNbr": 5370,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2021-10-26T04:24:02Z",
+      "side": 1,
+      "message": "I missed this before, but we should do this on EGLSwapBuffers too. An application can pace itself with EGLSwapBuffers in vsync mode and never use these primitives to synchronize. I\u0027m not sure if that\u0027s entirely legal, but it \"works\" and applications may be doing it.",
+      "revId": "ba61f89a32a6b65f51ea63b42f87ee1488e73e84",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
