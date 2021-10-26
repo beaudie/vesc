@@ -113,6 +113,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "a5e0a2ab_4f5a911c",
+        "filename": "src/libANGLE/validationES2.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 1416,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2021-10-26T20:08:42Z",
+      "side": 1,
+      "message": "Alexey:\n\u003e dEQP has been changed quite recently to expect R8/RG8 texture support on ES2\n\u003e contexts:\n\u003e https://github.com/KhronosGroup/VK-GL-CTS/pull/241\n\u003e \n\u003e Arguably, the extension language remains ambiguous.\n\nOK, thanks for that pointer. I suspect that ANGLE\u0027s other backends are failing the support check for R8/RG8, and therefore not exposing EXT_texture_rg on ES2 contexts; that\u0027s why these tests are passing (or not running / being skipped) on the other backends.\n\nShabi:\n\u003e Texture format support is determined by the backend filling in a TextureCap, and\n\u003e Caps.cpp determining support based on that. See for example\n\u003e DetermineRGTextureSupport. If metal/ is exposing the extensions incorrectly, it\n\u003e must be filling the TextureCaps wrong.\n\nThanks for this pointer. The fact that both files have functions with the same name was confusing when looking through code search.",
+      "parentUuid": "f7b54938_a556caa0",
+      "revId": "3981ea34b127d7c0ec8e0929bb0facaac7ade049",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "65edd4c9_57660abf",
         "filename": "src/libANGLE/validationES2.cpp",
         "patchSetId": 1
