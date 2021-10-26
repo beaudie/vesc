@@ -338,6 +338,30 @@
       },
       "revId": "eb6bea89a6da5c423bf4434148b86c6936721e3b",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "946c4e75_62e5e6c4",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 7166,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2021-10-26T20:37:08Z",
+      "side": 1,
+      "message": "👍\n\nMaybe too late, but there\u0027s this doc that describes the high level of how clears are deferred: https://chromium.googlesource.com/angle/angle/+/main/src/libANGLE/renderer/vulkan/doc/DeferredClears.md",
+      "parentUuid": "4b9f6dd2_dc2f3fa0",
+      "range": {
+        "startLine": 7166,
+        "startChar": 20,
+        "endLine": 7166,
+        "endChar": 39
+      },
+      "revId": "eb6bea89a6da5c423bf4434148b86c6936721e3b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
