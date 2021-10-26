@@ -179,6 +179,24 @@
       "parentUuid": "311194df_456fd80d",
       "revId": "3981ea34b127d7c0ec8e0929bb0facaac7ade049",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "5bc3cda8_3802a5e6",
+        "filename": "src/libANGLE/validationES2.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 1425,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2021-10-26T20:21:39Z",
+      "side": 1,
+      "message": "Thanks for this pointer Alexey. It strongly seems that the format tables have to be made per-context rather than per-display so they have a knowledge of the associated context version. If they are, then this problem will basically disappear and we won\u0027t have to filter out those extensions in Context.cpp.",
+      "parentUuid": "e7dfb14b_fef92240",
+      "revId": "3981ea34b127d7c0ec8e0929bb0facaac7ade049",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
