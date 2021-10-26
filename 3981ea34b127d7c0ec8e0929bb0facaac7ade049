@@ -107,6 +107,24 @@
       "message": "Upon looking more deeply I\u0027m not sure this is correct.\n\nhttps://www.khronos.org/registry/OpenGL/extensions/EXT/EXT_texture_sRGB_R8.txt and https://www.khronos.org/registry/OpenGL/extensions/EXT/EXT_texture_sRGB_RG8.txt are only defined against ES3 contexts. These texture formats shouldn\u0027t be being advertised on ES2 contexts.",
       "revId": "3981ea34b127d7c0ec8e0929bb0facaac7ade049",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "e7dfb14b_fef92240",
+        "filename": "src/libANGLE/validationES2.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 1425,
+      "author": {
+        "id": 1394635
+      },
+      "writtenOn": "2021-10-26T08:35:12Z",
+      "side": 1,
+      "message": "Confirmed. R8_SRGB and RG8_SRGB extensions should be added there and therefore omitted from the ES2 validation:\nhttps://chromium.googlesource.com/angle/angle/+/refs/heads/main/src/libANGLE/Context.cpp#3465",
+      "parentUuid": "311194df_456fd80d",
+      "revId": "3981ea34b127d7c0ec8e0929bb0facaac7ade049",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
