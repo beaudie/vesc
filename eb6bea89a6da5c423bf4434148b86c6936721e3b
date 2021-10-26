@@ -290,6 +290,30 @@
       },
       "revId": "eb6bea89a6da5c423bf4434148b86c6936721e3b",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "694ce79d_c9531979",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 7166,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2021-10-26T18:07:55Z",
+      "side": 1,
+      "message": "FYI, if at any moment you see FramebufferVk::syncState hoisting the clear out of the ImageHelper but the entry point that caused the syncState doesn\u0027t end up flushing that clear, that\u0027s a separate bug that needs fixing.\n\nIn other words (bugs aside), you should find the clear in ImageHelper::mSubresourceUpdates and **NOT** FramebufferVk::mDeferredClears.",
+      "parentUuid": "4afcda76_5a3479e6",
+      "range": {
+        "startLine": 7166,
+        "startChar": 20,
+        "endLine": 7166,
+        "endChar": 39
+      },
+      "revId": "eb6bea89a6da5c423bf4434148b86c6936721e3b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
