@@ -1428,7 +1428,7 @@ void Program::attachShader(Shader *shader)
 {
     ShaderType shaderType = shader->getType();
     ASSERT(shaderType != ShaderType::InvalidEnum);
-
+    INFO() << "Yuxin Debug Program::attachShader shaderType: " << shaderType;
     mState.mAttachedShaders[shaderType] = shader;
     mState.mAttachedShaders[shaderType]->addRef();
 }

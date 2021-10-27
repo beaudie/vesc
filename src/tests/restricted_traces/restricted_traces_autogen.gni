@@ -6025,6 +6025,28 @@ angle_restricted_traces = [
     "wordscapes/wordscapes_capture_context3",
   ],
   [
+    "world_cricket_championship_2",
+    1,
+    [
+      "world_cricket_championship_2/world_cricket_championship_2_context1_frame001.cpp",
+      "world_cricket_championship_2/world_cricket_championship_2_context1_frame002.cpp",
+      "world_cricket_championship_2/world_cricket_championship_2_context1_frame003.cpp",
+      "world_cricket_championship_2/world_cricket_championship_2_context1_frame004.cpp",
+      "world_cricket_championship_2/world_cricket_championship_2_context1_frame005.cpp",
+      "world_cricket_championship_2/world_cricket_championship_2_context1_frame006.cpp",
+      "world_cricket_championship_2/world_cricket_championship_2_context1_frame007.cpp",
+      "world_cricket_championship_2/world_cricket_championship_2_context1_frame008.cpp",
+      "world_cricket_championship_2/world_cricket_championship_2_context1_frame009.cpp",
+      "world_cricket_championship_2/world_cricket_championship_2_context1_frame010.cpp",
+      "world_cricket_championship_2/world_cricket_championship_2_shared.cpp",
+    ],
+    [
+      "world_cricket_championship_2/world_cricket_championship_2.angledata.gz",
+      "world_cricket_championship_2/world_cricket_championship_2.json",
+    ],
+    "world_cricket_championship_2/world_cricket_championship_2_context1",
+  ],
+  [
     "world_of_kings",
     3,
     [

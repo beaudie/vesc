@@ -2362,14 +2362,17 @@ void GenerateLinkedProgram(const gl::Context *context,
 {
     // Bump up our max program ID before creating temp shaders
     resourceTracker->onShaderProgramAccess(id);
-
+    std::unordered_map<gl::ShaderType, gl::ShaderProgramID> tempShaderIDTracker;
     // Use max ID as a temporary shader ID.
     // Note this isn't the real ID of the shader, just a lookup into the gShaderProgram map.
     gl::ShaderProgramID tempShaderID = {resourceTracker->getMaxShaderPrograms()};
-
     // Compile with last linked sources.
     for (gl::ShaderType shaderType : program->getExecutable().getLinkedShaderStages())
     {
+        // resourceTracker->onShaderProgramAccess(tempShaderID); // bump the ID
+        // tempShaderID = {resourceTracker->getMaxShaderPrograms()}; //assign the bumped ID to the
+        // tempShaderID
+        tempShaderIDTracker[shaderType] = tempShaderID;
         const std::string &sourceString = linkedSources[shaderType];
         const char *sourcePointer       = sourceString.c_str();
 
@@ -2391,7 +2394,7 @@ void GenerateLinkedProgram(const gl::Context *context,
                 CaptureShaderSource(replayState, true, tempShaderID, 1, &sourcePointer, nullptr));
         Capture(setupCalls, CaptureCompileShader(replayState, true, tempShaderID));
         Capture(setupCalls, CaptureAttachShader(replayState, true, id, tempShaderID));
-        Capture(setupCalls, CaptureDeleteShader(replayState, true, tempShaderID));
+        tempShaderID.value += 1;
     }
 
     // Gather XFB varyings
@@ -2456,6 +2459,21 @@ void GenerateLinkedProgram(const gl::Context *context,
         GLuint blockBinding = program->getUniformBlockBinding(uniformBlockIndex);
         Capture(setupCalls, CaptureUniformBlockBinding(replayState, true, id, {uniformBlockIndex},
                                                        blockBinding));
+    }
+
+    // Yuxin TODO: add DetachShader call if that's what the app does so that the shader ID can
+    // be reused.
+    for (gl::ShaderType shaderType : program->getExecutable().getLinkedShaderStages())
+    {
+
+        gl::Shader *attachedShader = program->getAttachedShader(shaderType);
+        if (attachedShader == nullptr)
+        {
+            Capture(setupCalls,
+                    CaptureDetachShader(replayState, true, id, tempShaderIDTracker[shaderType]));
+        }
+        Capture(setupCalls,
+                CaptureDeleteShader(replayState, true, tempShaderIDTracker[shaderType]));
     }
 }
 
@@ -5103,6 +5121,7 @@ void FrameCaptureShared::maybeCapturePreCallUpdates(
         case EntryPoint::GLCreateProgram:
         {
             // If we're capturing, track which programs have been created
+            INFO() << "Yuxin Debug GLCreateProgram called";
             gl::ShaderProgramID programID = {call.params.getReturnValue().value.GLuintVal};
             handleGennedResource(programID);
             break;
@@ -5114,6 +5133,18 @@ void FrameCaptureShared::maybeCapturePreCallUpdates(
             const ParamCapture &param =
                 call.params.getParam("programPacked", ParamType::TShaderProgramID, 0);
             handleDeletedResource(param.value.ShaderProgramIDVal);
+            break;
+        }
+
+        case EntryPoint::GLCreateShader:
+        {
+            INFO() << "Yuxin Debug GLCreateShader called";
+            break;
+        }
+
+        case EntryPoint::GLAttachShader:
+        {
+            INFO() << "Yuxin Debug GLAttachShader called";
             break;
         }
 
@@ -5129,6 +5160,12 @@ void FrameCaptureShared::maybeCapturePreCallUpdates(
             {
                 setShaderSource(shaderID, shader->getSourceString());
             }
+            break;
+        }
+
+        case EntryPoint::GLDeleteShader:
+        {
+            INFO() << "Yuxin Debug GLDeleteShader called";
             break;
         }
 
@@ -5704,6 +5741,9 @@ void FrameCaptureShared::runMidExecutionCapture(const gl::Context *mainContext)
 
 void FrameCaptureShared::onEndFrame(const gl::Context *context)
 {
+    INFO() << "Yuxin Debug onEndFrame() mFrameIndex: " << mFrameIndex
+           << " mCaptureStartFrame: " << mCaptureStartFrame
+           << " mCaptureEndFrame: " << mCaptureEndFrame;
     if (!enabled() || mFrameIndex > mCaptureEndFrame)
     {
         setCaptureInactive();
@@ -6627,6 +6667,7 @@ void FrameCaptureShared::markResourceSetupCallsInactive(std::vector<CallCapture>
 {
     if (!mTrimEnabled)
     {
+        INFO() << "Yuxin Debug mTrimEnabled is false";
         return;
     }
 

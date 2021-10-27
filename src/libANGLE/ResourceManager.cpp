@@ -165,12 +165,15 @@ ShaderProgramID ShaderProgramManager::createShader(rx::GLImplFactory *factory,
 {
     ASSERT(type != ShaderType::InvalidEnum);
     ShaderProgramID handle = ShaderProgramID{mHandleAllocator.allocate()};
+    INFO() << "Yuxin Debug ShaderProgramManager createShader handle: " << handle.value;
     mShaders.assign(handle, new Shader(this, factory, rendererLimitations, type, handle));
     return handle;
 }
 
 void ShaderProgramManager::deleteShader(const Context *context, ShaderProgramID shader)
 {
+    INFO() << "Yuxin Debug ShaderProgramManager deleteShader handle: " << shader.value
+           << " shader ref count: " << mShaders.query(shader)->getRefCount();
     deleteObject(context, &mShaders, shader);
 }
 
@@ -182,6 +185,7 @@ Shader *ShaderProgramManager::getShader(ShaderProgramID handle) const
 ShaderProgramID ShaderProgramManager::createProgram(rx::GLImplFactory *factory)
 {
     ShaderProgramID handle = ShaderProgramID{mHandleAllocator.allocate()};
+    INFO() << "Yuxin Debug ShaderProgramManager createProgram handle: " << handle.value;
     mPrograms.assign(handle, new Program(factory, this, handle));
     return handle;
 }

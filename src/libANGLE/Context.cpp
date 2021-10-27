@@ -6058,7 +6058,11 @@ void Context::attachShader(ShaderProgramID program, ShaderProgramID shader)
     Program *programObject = mState.mShaderProgramManager->getProgram(program);
     Shader *shaderObject   = mState.mShaderProgramManager->getShader(shader);
     ASSERT(programObject && shaderObject);
+    INFO() << "Yuxin Debug Context::before attachShader shader refCount: "
+           << shaderObject->getRefCount();
     programObject->attachShader(shaderObject);
+    INFO() << "Yuxin Debug Context::after attachShader shader refCount: "
+           << shaderObject->getRefCount();
 }
 
 void Context::copyBufferSubData(BufferBinding readTarget,
@@ -6621,8 +6625,11 @@ void Context::detachShader(ShaderProgramID program, ShaderProgramID shader)
 
     Shader *shaderObject = getShader(shader);
     ASSERT(shaderObject);
-
+    INFO() << "Yuxin Debug Context::detachShader before detach shader ref count: "
+           << shaderObject->getRefCount();
     programObject->detachShader(this, shaderObject);
+    INFO() << "Yuxin Debug Context::detachShader after detach shader ref count: "
+           << shaderObject->getRefCount();
 }
 
 void Context::genBuffers(GLsizei n, BufferID *buffers)
