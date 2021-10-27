@@ -2363,6 +2363,10 @@ void GenerateLinkedProgram(const gl::Context *context,
     // Bump up our max program ID before creating temp shaders
     resourceTracker->onShaderProgramAccess(id);
 
+    // A map to store the tempShaderIDs of the shaders we attached below. We need this map to
+    // retrieve the tempShaderIDs we will pass to detachShader call
+    std::unordered_map<gl::ShaderType, gl::ShaderProgramID> tempShaderIDTracker;
+
     // Use max ID as a temporary shader ID.
     // Note this isn't the real ID of the shader, just a lookup into the gShaderProgram map.
     gl::ShaderProgramID tempShaderID = {resourceTracker->getMaxShaderPrograms()};
@@ -2370,6 +2374,7 @@ void GenerateLinkedProgram(const gl::Context *context,
     // Compile with last linked sources.
     for (gl::ShaderType shaderType : program->getExecutable().getLinkedShaderStages())
     {
+        tempShaderIDTracker[shaderType] = tempShaderID;
         const std::string &sourceString = linkedSources[shaderType];
         const char *sourcePointer       = sourceString.c_str();
 
@@ -2391,7 +2396,7 @@ void GenerateLinkedProgram(const gl::Context *context,
                 CaptureShaderSource(replayState, true, tempShaderID, 1, &sourcePointer, nullptr));
         Capture(setupCalls, CaptureCompileShader(replayState, true, tempShaderID));
         Capture(setupCalls, CaptureAttachShader(replayState, true, id, tempShaderID));
-        Capture(setupCalls, CaptureDeleteShader(replayState, true, tempShaderID));
+        tempShaderID.value += 1;
     }
 
     // Gather XFB varyings
@@ -2456,6 +2461,21 @@ void GenerateLinkedProgram(const gl::Context *context,
         GLuint blockBinding = program->getUniformBlockBinding(uniformBlockIndex);
         Capture(setupCalls, CaptureUniformBlockBinding(replayState, true, id, {uniformBlockIndex},
                                                        blockBinding));
+    }
+
+    // add DetachShader call if that's what the app does, so that the shader ID can be released and
+    // reused after glDeleteShader call
+    for (gl::ShaderType shaderType : program->getExecutable().getLinkedShaderStages())
+    {
+
+        gl::Shader *attachedShader = program->getAttachedShader(shaderType);
+        if (attachedShader == nullptr)
+        {
+            Capture(setupCalls,
+                    CaptureDetachShader(replayState, true, id, tempShaderIDTracker[shaderType]));
+        }
+        Capture(setupCalls,
+                CaptureDeleteShader(replayState, true, tempShaderIDTracker[shaderType]));
     }
 }
 
