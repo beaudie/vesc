@@ -2745,6 +2745,74 @@ TEST_P(TransformFeedbackTest, RecordAndDrawWithScissorTest)
     EXPECT_GL_NO_ERROR();
 }
 
+// Test that transform feedback primitives written query with pause/resume works.
+TEST_P(TransformFeedbackTest, PrimitivesWrittenQueryPauseResume)
+{
+    // http://crbug.com/1135841
+    ANGLE_SKIP_TEST_IF(IsAMD() && IsOSX());
+
+    glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
+    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+    glDepthMask(GL_TRUE);
+    glEnable(GL_DEPTH_TEST);
+
+    // Set the program's transform feedback varyings (just gl_Position)
+    std::vector<std::string> tfVaryings;
+    tfVaryings.push_back("gl_Position");
+    compileDefaultProgram(tfVaryings, GL_INTERLEAVED_ATTRIBS);
+
+    glUseProgram(mProgram);
+
+    GLint positionLocation = glGetAttribLocation(mProgram, essl1_shaders::PositionAttrib());
+
+    // First pass: draw 6 points to the XFB buffer
+    glEnable(GL_RASTERIZER_DISCARD);
+
+    const GLfloat vertices[] = {
+        -1.0f, 1.0f, 0.5f, -1.0f, -1.0f, 0.5f, 1.0f, -1.0f, 0.5f,
+
+        -1.0f, 1.0f, 0.5f, 1.0f,  -1.0f, 0.5f, 1.0f, 1.0f,  0.5f,
+    };
+
+    glVertexAttribPointer(positionLocation, 3, GL_FLOAT, GL_FALSE, 0, vertices);
+    glEnableVertexAttribArray(positionLocation);
+
+    // Bind the buffer for transform feedback output and start transform feedback
+    glBindBufferBase(GL_TRANSFORM_FEEDBACK_BUFFER, 0, mTransformFeedbackBuffer);
+    glBeginTransformFeedback(GL_POINTS);
+
+    // Create a query to check how many primitives were written
+    GLQuery primitivesWrittenQuery;
+    glBeginQuery(GL_TRANSFORM_FEEDBACK_PRIMITIVES_WRITTEN, primitivesWrittenQuery);
+
+    glDrawArrays(GL_POINTS, 0, 3);
+
+    // Pause/Resume while the query is active.
+    glPauseTransformFeedback();
+    glDrawArrays(GL_POINTS, 0, 3);
+    glResumeTransformFeedback();
+
+    glDrawArrays(GL_POINTS, 3, 3);
+
+    glDisableVertexAttribArray(positionLocation);
+    glVertexAttribPointer(positionLocation, 4, GL_FLOAT, GL_FALSE, 0, nullptr);
+    // End the query and transform feedback
+    glEndQuery(GL_TRANSFORM_FEEDBACK_PRIMITIVES_WRITTEN);
+    glEndTransformFeedback();
+
+    glBindBufferBase(GL_TRANSFORM_FEEDBACK_BUFFER, 0, 0);
+
+    glDisable(GL_RASTERIZER_DISCARD);
+
+    // Check how many primitives were written and verify that some were written even if
+    // no pixels were rendered
+    GLuint primitivesWritten = 0;
+    glGetQueryObjectuiv(primitivesWrittenQuery, GL_QUERY_RESULT_EXT, &primitivesWritten);
+    EXPECT_GL_NO_ERROR();
+
+    EXPECT_EQ(6u, primitivesWritten);
+}
+
 // Test XFB with depth write enabled.
 class TransformFeedbackWithDepthBufferTest : public TransformFeedbackTest
 {
