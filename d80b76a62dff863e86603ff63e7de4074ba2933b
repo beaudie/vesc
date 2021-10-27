@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "dc069a04_e269be6b",
+        "filename": "src/libANGLE/renderer/vulkan/BufferVk.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 615,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2021-10-27T00:36:38Z",
+      "side": 1,
+      "message": "BufferVk::map() knows the access bits and this is called for several read-only cases:\n\n* ContextVk::setupIndexedDraw()\n* LineLoopHelper::getIndexBufferForElementArrayBuffer()\n* TextureVk::setSubImageImpl()\n* VertexArrayVk::convertVertexBufferCPU()\n* VertexArrayVk::updateStreamedAttribs()\n\nI think this should also take the access bits as input and pass them along to mapRangeImpl(), so we can be more accurate and potentially avoid extra stalls.",
+      "revId": "d80b76a62dff863e86603ff63e7de4074ba2933b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
