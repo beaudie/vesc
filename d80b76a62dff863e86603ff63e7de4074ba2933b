@@ -1,6 +1,23 @@
 {
   "comments": [
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "2efb29f3_f6574a33",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2021-10-27T08:39:07Z",
+      "side": 1,
+      "message": "Nice, LGTM with the access mask added to mapImpl!",
+      "revId": "d80b76a62dff863e86603ff63e7de4074ba2933b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "dc069a04_e269be6b",
