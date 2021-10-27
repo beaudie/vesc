@@ -41,6 +41,8 @@ class QueryVk : public QueryImpl
         return &mQueryHelper.get();
     }
 
+    bool isQueryHelperReferenced() { return mQueryHelper.isReferenced(); }
+
     // Called by ContextVk on render pass start / end for render pass queries.  These will
     // stash and create new queries as needed.
     angle::Result onRenderPassStart(ContextVk *contextVk);
