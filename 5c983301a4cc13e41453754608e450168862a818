@@ -91,6 +91,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "0253d727_a5b6ef26",
+        "filename": "src/libANGLE/renderer/vulkan/BufferVk.cpp",
+        "patchSetId": 40
+      },
+      "lineNbr": 1122,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2021-10-27T09:27:10Z",
+      "side": 1,
+      "message": "\u003e Actually std::move does not work, because ReadWriteResource is noncopyable.\n\nI don\u0027t know what the code really was for that error to be generated, but most things in ANGLE are noncopyable, and we std::move them just fine.",
+      "parentUuid": "36199328_ad00b6bf",
+      "range": {
+        "startLine": 1122,
+        "startChar": 13,
+        "endLine": 1122,
+        "endChar": 23
+      },
+      "revId": "5c983301a4cc13e41453754608e450168862a818",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "e487bc79_e708748c",
         "filename": "src/libANGLE/renderer/vulkan/BufferVk.h",
         "patchSetId": 40
