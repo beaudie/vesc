@@ -70,6 +70,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "b77c12e0_555f3b29",
+        "filename": "src/libANGLE/ProgramPipeline.cpp",
+        "patchSetId": 8
+      },
+      "lineNbr": 210,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2021-10-27T16:59:46Z",
+      "side": 1,
+      "message": "One test failure, fixed it with a dirty notification.",
+      "parentUuid": "a71b0eb7_aad81e0f",
+      "revId": "fbffec22fcd510a6ac4110f124c5b6781eb27333",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "2ef77f5c_32fe7ca6",
@@ -130,6 +148,24 @@
       "writtenOn": "2021-10-22T01:35:50Z",
       "side": 1,
       "message": "ref1",
+      "revId": "fbffec22fcd510a6ac4110f124c5b6781eb27333",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "0a45192c_822d5483",
+        "filename": "src/libANGLE/validationES.cpp",
+        "patchSetId": 8
+      },
+      "lineNbr": 4055,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2021-10-27T16:59:46Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "e5ef7a81_cb5c8c3c",
       "revId": "fbffec22fcd510a6ac4110f124c5b6781eb27333",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
