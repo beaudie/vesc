@@ -20,6 +20,24 @@
     {
       "unresolved": false,
       "key": {
+        "uuid": "d818fc38_4f702361",
+        "filename": "src/libANGLE/renderer/vulkan/vk_format_utils.cpp",
+        "patchSetId": 28
+      },
+      "lineNbr": 259,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2021-10-27T01:36:12Z",
+      "side": 1,
+      "message": "Addressed with this CL:\nhttps://chromium-review.googlesource.com/c/angle/angle/+/3243068",
+      "parentUuid": "a1937805_90e9a210",
+      "revId": "eb1d24741b7b34b02a957e09ee25febc8eac779f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
         "uuid": "923fc710_5cc360c9",
         "filename": "src/tests/gl_tests/TextureTest.cpp",
         "patchSetId": 28
