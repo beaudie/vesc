@@ -54,6 +54,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "a71b0eb7_aad81e0f",
+        "filename": "src/libANGLE/ProgramPipeline.cpp",
+        "patchSetId": 8
+      },
+      "lineNbr": 210,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2021-10-27T16:32:02Z",
+      "side": 1,
+      "message": "I\u0027m not sure. I removed it in the latest patch set. I\u0027ll see if the bots stay green.",
+      "parentUuid": "86e0e35b_b936e509",
+      "revId": "fbffec22fcd510a6ac4110f124c5b6781eb27333",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "2ef77f5c_32fe7ca6",
         "filename": "src/libANGLE/renderer/vulkan/ProgramPipelineVk.cpp",
         "patchSetId": 8
@@ -65,6 +83,30 @@
       "writtenOn": "2021-10-21T15:06:19Z",
       "side": 1,
       "message": "Why change this code?  Isn\u0027t the early return faster and gives the same result?",
+      "range": {
+        "startLine": 248,
+        "startChar": 4,
+        "endLine": 248,
+        "endChar": 20
+      },
+      "revId": "fbffec22fcd510a6ac4110f124c5b6781eb27333",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "f96f6218_73307f6d",
+        "filename": "src/libANGLE/renderer/vulkan/ProgramPipelineVk.cpp",
+        "patchSetId": 8
+      },
+      "lineNbr": 248,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2021-10-27T16:32:02Z",
+      "side": 1,
+      "message": "My mistake - I thought this function was dirtying uniforms instead of checking if the pipeline has dirty uniforms. I renamed this to \"hasDirtyUniforms\" to prevent further confusion.",
+      "parentUuid": "2ef77f5c_32fe7ca6",
       "range": {
         "startLine": 248,
         "startChar": 4,
