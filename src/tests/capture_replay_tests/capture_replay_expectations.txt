@@ -177,3 +177,5 @@
 6578 : ImageTestES3.Source2DTargetExternalESSL3_Colorspace/ES3_Vulkan_SwiftShader = FAIL
 6578 : ImageTestES3.SourceCubeTargetExternalESSL3_Colorspace/ES3_Vulkan_SwiftShader = FAIL
 6578 : ImageTestES3.SourceRenderbufferTargetTextureExternalESSL3_Colorspace/ES3_Vulkan_SwiftShader = FAIL
+
+6631 : ProgramBinaryES3Test.SaveAndLoadDetachedShaders/ES3_Vulkan_SwiftShader = FAIL
