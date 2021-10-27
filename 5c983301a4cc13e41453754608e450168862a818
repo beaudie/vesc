@@ -67,6 +67,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "36199328_ad00b6bf",
+        "filename": "src/libANGLE/renderer/vulkan/BufferVk.cpp",
+        "patchSetId": 40
+      },
+      "lineNbr": 1122,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2021-10-27T05:32:40Z",
+      "side": 1,
+      "message": "This is causing memory leaks in the ANGLE roll:\nhttps://ci.chromium.org/ui/p/chromium/builders/try/linux_chromium_asan_rel_ng/999924/overview\n\nIn particular:\nhttps://chromium-swarm.appspot.com/task?id\u003d56d5ec0e39ef4311\u0026w\u003dtrue\n\n    \u003d\u003d22873\u003d\u003dERROR: LeakSanitizer: detected memory leaks\n\n    Direct leak of 224 byte(s) in 2 object(s) allocated from:\n        #0 0x5654c69e1afd in operator new(unsigned long) /b/s/w/ir/cache/builder/src/third_party/llvm/compiler-rt/lib/asan/asan_new_delete.cpp:95:3\n        #1 0x7f2591783b1d in make_unique\u003crx::vk::BufferHelper\u003e buildtools/third_party/libc++/trunk/include/__memory/unique_ptr.h:725:28\n        #2 0x7f2591783b1d in rx::BufferVk::acquireBufferHelper(rx::ContextVk*, unsigned long, rx::BufferUpdateType) third_party/angle/src/libANGLE/renderer/vulkan/BufferVk.cpp:1129:52\n        #3 0x7f2591782be2 in rx::BufferVk::setDataWithMemoryType(gl::Context const*, gl::BufferBinding, void const*, unsigned long, unsigned int, bool, gl::BufferUsage) third_party/angle/src/libANGLE/renderer/vulkan/BufferVk.cpp:444:9\n        #4 0x7f2591782883 in rx::BufferVk::setDataWithUsageFlags(gl::Context const*, gl::BufferBinding, void*, void const*, unsigned long, gl::BufferUsage, unsigned int) third_party/angle/src/libANGLE/renderer/vulkan/BufferVk.cpp:397:12\n        #5 0x7f259098353a in gl::Buffer::bufferDataImpl(gl::Context*, gl::BufferBinding, void const*, long, gl::BufferUsage, unsigned int) third_party/angle/src/libANGLE/Buffer.cpp:136:16\n        #6 0x7f25909838d3 in gl::Buffer::bufferData(gl::Context*, gl::BufferBinding, void const*, long, gl::BufferUsage) third_party/angle/src/libANGLE/Buffer.cpp:100:12\n        #7 0x7f2590a16e6e in gl::Context::bufferData(gl::BufferBinding, long, void const*, gl::BufferUsage) third_party/angle/src/libANGLE/Context.cpp:6038:5\n        #8 0x7f259093c130 in GL_BufferData third_party/angle/src/libGLESv2/entry_points_gles_2_0_autogen.cpp:355:22",
+      "parentUuid": "087cebc2_16fb676d",
+      "range": {
+        "startLine": 1122,
+        "startChar": 13,
+        "endLine": 1122,
+        "endChar": 23
+      },
+      "revId": "5c983301a4cc13e41453754608e450168862a818",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "e487bc79_e708748c",
         "filename": "src/libANGLE/renderer/vulkan/BufferVk.h",
         "patchSetId": 40
