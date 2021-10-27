@@ -1956,6 +1956,9 @@ angle::Result ContextVk::handleDirtyGraphicsTransformFeedbackResume(
     {
         mRenderPassCommands->resumeTransformFeedback();
     }
+
+    ANGLE_TRY(resumeRenderPassQueriesIfActive());
+
     return angle::Result::Continue;
 }
 
@@ -5591,8 +5594,6 @@ angle::Result ContextVk::startRenderPass(gl::Rectangle renderArea,
     // setupDraw(), which clears this bit automatically).
     mGraphicsDirtyBits.reset(DIRTY_BIT_RENDER_PASS);
 
-    ANGLE_TRY(resumeRenderPassQueriesIfActive());
-
     const gl::DepthStencilState &dsState = mState.getDepthStencilState();
     vk::ResourceAccess depthAccess       = GetDepthAccess(dsState);
     vk::ResourceAccess stencilAccess     = GetStencilAccess(dsState);
@@ -5893,6 +5894,8 @@ angle::Result ContextVk::beginRenderPassQuery(QueryVk *queryVk)
 
 angle::Result ContextVk::endRenderPassQuery(QueryVk *queryVk)
 {
+    gl::QueryType type = queryVk->getType();
+
     // Emit debug-util markers before calling the query command.
     ANGLE_TRY(handleGraphicsEventLog(rx::GraphicsEventCmdBuf::InRenderPassCmdBufQueryCmd));
 
@@ -5901,13 +5904,11 @@ angle::Result ContextVk::endRenderPassQuery(QueryVk *queryVk)
         queryVk->getQueryHelper()->endRenderPassQuery(this);
 
         // Update rasterizer discard emulation with primitives generated query if necessary.
-        if (queryVk->getType() == gl::QueryType::PrimitivesGenerated)
+        if (type == gl::QueryType::PrimitivesGenerated)
         {
             updateRasterizerDiscardEnabled(false);
         }
     }
-
-    gl::QueryType type = queryVk->getType();
 
     ASSERT(mActiveRenderPassQueries[type] == queryVk);
     mActiveRenderPassQueries[type] = nullptr;
@@ -5943,6 +5944,19 @@ angle::Result ContextVk::resumeRenderPassQueriesIfActive()
     {
         if (activeQuery)
         {
+            if (activeQuery->getType() == gl::QueryType::TransformFeedbackPrimitivesWritten)
+            {
+                gl::TransformFeedback *transformFeedback = mState.getCurrentTransformFeedback();
+                if (transformFeedback &&
+                    (!transformFeedback->isActive() || transformFeedback->isPaused()))
+                {
+                    // XFB is either not active or it's paused, in which case no primitives will be
+                    // generated. Additionally, vulkan drivers will not complete any
+                    // PrimitivesGenerated queries while XFB is inactive or paused.
+                    return angle::Result::Continue;
+                }
+            }
+
             ANGLE_TRY(activeQuery->onRenderPassStart(this));
 
             // Update rasterizer discard emulation with primitives generated query if necessary.
