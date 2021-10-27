@@ -1,0 +1,112 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ee4c9ebe_da40f69d",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 2
+      },
+      "lineNbr": 14,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2021-10-27T09:24:48Z",
+      "side": 1,
+      "message": "Is there a \"\u003crender pass broken\u003e\" line missing here?",
+      "revId": "6164e9703bc82ee45db3a2aef588c2ce72d9ae38",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "a4bfc9af_875b5daa",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 2
+      },
+      "lineNbr": 16,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2021-10-27T09:24:48Z",
+      "side": 1,
+      "message": "Also here?",
+      "revId": "6164e9703bc82ee45db3a2aef588c2ce72d9ae38",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "5e2769f3_c75c517e",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2021-10-27T09:24:48Z",
+      "side": 1,
+      "message": "I don\u0027t see a `ContextVk::onResumeTransformFeedback`. We are likely missing enabling the query on resume. So basically something like this:\n\n- ...\n- pause\n- break RP\n\n- draw \u003c-- starts RP without query\n- resume \u003c-- doesn\u0027t start the query\n- draw \u003c-- Bug: not capturing this",
+      "revId": "6164e9703bc82ee45db3a2aef588c2ce72d9ae38",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "9ddc0bc1_01735c0e",
+        "filename": "src/libANGLE/renderer/vulkan/QueryVk.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 194,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2021-10-27T09:24:48Z",
+      "side": 1,
+      "message": "nit: It feels like this is a detail that ContextVk should deal with before calling here.",
+      "revId": "6164e9703bc82ee45db3a2aef588c2ce72d9ae38",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "de353cf5_708d2514",
+        "filename": "src/libANGLE/renderer/vulkan/QueryVk.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 202,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2021-10-27T09:24:48Z",
+      "side": 1,
+      "message": "Unfortunately that\u0027s the case for PGQ on every platform (hence the need for a new extension)",
+      "range": {
+        "startLine": 201,
+        "startChar": 40,
+        "endLine": 202,
+        "endChar": 40
+      },
+      "revId": "6164e9703bc82ee45db3a2aef588c2ce72d9ae38",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "fffe20ce_86dcae7a",
+        "filename": "src/libANGLE/renderer/vulkan/QueryVk.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 44,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2021-10-27T09:24:48Z",
+      "side": 1,
+      "message": "Unused",
+      "revId": "6164e9703bc82ee45db3a2aef588c2ce72d9ae38",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
