@@ -141,6 +141,23 @@
       "parentUuid": "073485d7_96cab11f",
       "revId": "6631ec521a6504be904cd64e55e2da10ddc13e57",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "fbc3dba7_205e2876",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2021-10-27T20:02:18Z",
+      "side": 1,
+      "message": "LGTM, also surprised no tests were affected but fixing warnings is great. Ideally we have a way of generating test errors when we get debug layer issues like with Vulkan. Maybe one day.",
+      "revId": "6631ec521a6504be904cd64e55e2da10ddc13e57",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
