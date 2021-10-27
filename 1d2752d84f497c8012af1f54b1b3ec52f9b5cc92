@@ -16,6 +16,24 @@
       "message": "Thanks! The tester is now green.\n\nI\u0027m not able to manipulate the associated angle bug so that\u0027s still open.",
       "revId": "1d2752d84f497c8012af1f54b1b3ec52f9b5cc92",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "407c2536_36f015c8",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2021-10-27T19:56:20Z",
+      "side": 1,
+      "message": "Awesome. Gonna close that for you.",
+      "parentUuid": "9a9c9dbe_6e597eb7",
+      "revId": "1d2752d84f497c8012af1f54b1b3ec52f9b5cc92",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
