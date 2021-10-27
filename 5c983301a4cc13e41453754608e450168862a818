@@ -20,6 +20,52 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "91433d72_3ef3bc1f",
+        "filename": "src/libANGLE/renderer/vulkan/BufferVk.cpp",
+        "patchSetId": 40
+      },
+      "lineNbr": 1118,
+      "author": {
+        "id": 1000050
+      },
+      "writtenOn": "2021-10-27T13:09:14Z",
+      "side": 1,
+      "message": "I saw L 1136 \u0027mBuffer \u003d buffer.release();\u0027 Seems mBuffer is a raw pointer. Does mBuffer-\u003erelease() call will dealloc the vk::BufferHelper?",
+      "range": {
+        "startLine": 1118,
+        "startChar": 12,
+        "endLine": 1118,
+        "endChar": 39
+      },
+      "revId": "5c983301a4cc13e41453754608e450168862a818",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "efd63d13_538160a9",
+        "filename": "src/libANGLE/renderer/vulkan/BufferVk.cpp",
+        "patchSetId": 40
+      },
+      "lineNbr": 1119,
+      "author": {
+        "id": 1000050
+      },
+      "writtenOn": "2021-10-27T13:09:14Z",
+      "side": 1,
+      "message": "This is confusing. L1143. `mBuffer \u003d buffer.release();`, seems mBuffer is a raw pointer. and the buffer is allocated with `std::make_unique\u003cvk::BufferHelper\u003e();`. Does mBuffer-\u003erelease() call will deallocate the vk::BufferHelper?",
+      "range": {
+        "startLine": 1119,
+        "startChar": 12,
+        "endLine": 1119,
+        "endChar": 30
+      },
+      "revId": "5c983301a4cc13e41453754608e450168862a818",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "7b121829_8013f243",
         "filename": "src/libANGLE/renderer/vulkan/BufferVk.cpp",
         "patchSetId": 40
