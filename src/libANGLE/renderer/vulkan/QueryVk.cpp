@@ -191,6 +191,19 @@ angle::Result QueryVk::onRenderPassStart(ContextVk *contextVk)
 {
     ASSERT(IsRenderPassQuery(contextVk, mType));
 
+    if (mType == gl::QueryType::TransformFeedbackPrimitivesWritten)
+    {
+        gl::TransformFeedback *transformFeedback =
+            contextVk->getState().getCurrentTransformFeedback();
+        if (transformFeedback && (!transformFeedback->isActive() || transformFeedback->isPaused()))
+        {
+            // XFB is either not active or it's paused, in which case no primitives will be
+            // generated. Additionally, ARM will not complete any PrimitivesGenerated queries while
+            // XFB is inactive or paused.
+            return angle::Result::Continue;
+        }
+    }
+
     // If there is a query helper already, stash it and allocate a new one for this render pass.
     if (mQueryHelper.isReferenced())
     {
@@ -214,12 +227,13 @@ angle::Result QueryVk::onRenderPassStart(ContextVk *contextVk)
 void QueryVk::onRenderPassEnd(ContextVk *contextVk)
 {
     ASSERT(IsRenderPassQuery(contextVk, mType));
-    ASSERT(mQueryHelper.isReferenced());
 
     QueryVk *shareQuery = GetOnRenderPassStartEndShareQuery(contextVk, mType);
 
     // If present, share query has already taken care of ending the query.
-    if (shareQuery == nullptr)
+    // The query may not be referenced if it's a transform feedback query that was never resumed due
+    // to transform feedback being paused when the render pass was broken.
+    if (shareQuery == nullptr && mQueryHelper.isReferenced())
     {
         mQueryHelper.get().endRenderPassQuery(contextVk);
     }
