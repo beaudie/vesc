@@ -1,6 +1,40 @@
 {
   "comments": [
     {
+      "unresolved": true,
+      "key": {
+        "uuid": "29381707_ee4fbd98",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 5
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2021-10-27T18:29:20Z",
+      "side": 1,
+      "message": "Suggest \"Metal:\" instead of \"[Metal]\" per Shabi\u0027s request.\n\nAlso: _EXT rather than _EX.",
+      "revId": "acb4886de2904880dcd52e27b3294b4d736061dd",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "473abe7d_4c29bcb9",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 5
+      },
+      "lineNbr": 9,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2021-10-27T18:29:20Z",
+      "side": 1,
+      "message": "Fix 6 fbocompleteness tests ...",
+      "revId": "acb4886de2904880dcd52e27b3294b4d736061dd",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": false,
       "key": {
         "uuid": "27b2ffa7_e06fb17f",
@@ -14,6 +48,23 @@
       "writtenOn": "2021-10-27T18:25:51Z",
       "side": 1,
       "message": "Very nice. Let\u0027s see how this looks on the trybots.\n",
+      "revId": "acb4886de2904880dcd52e27b3294b4d736061dd",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "d7fbc534_5185a640",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 5
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2021-10-27T18:29:20Z",
+      "side": 1,
+      "message": "Looks good to me if this passes the trybots! Thanks for persisting with this change. Couple of small comment suggestions.\n",
       "revId": "acb4886de2904880dcd52e27b3294b4d736061dd",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
