@@ -67,6 +67,23 @@
       "message": "Looks good to me if this passes the trybots! Thanks for persisting with this change. Couple of small comment suggestions.\n",
       "revId": "acb4886de2904880dcd52e27b3294b4d736061dd",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "c7e16d92_7f4a245e",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 5
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2021-10-27T21:33:23Z",
+      "side": 1,
+      "message": "LGTM. Given this fails on other backends in the same way, I suspect this is a test bug in ES2 or ANGLE validation bug. Either way, I\u0027m happy with this fix because ES3 is getting close anwyays.",
+      "revId": "acb4886de2904880dcd52e27b3294b4d736061dd",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
