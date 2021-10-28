@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "6045c3fb_a3dc5c38",
+        "filename": "src/libANGLE/renderer/vulkan/BufferVk.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 619,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2021-10-28T18:35:00Z",
+      "side": 1,
+      "message": "This needs to be updated to pass along \u0027access\u0027.",
+      "range": {
+        "startLine": 619,
+        "startChar": 24,
+        "endLine": 619,
+        "endChar": 58
+      },
+      "revId": "4dc3b6f7dfee1fe93dbb0acb9b298a5697503963",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
