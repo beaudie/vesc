@@ -75,6 +75,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "a29193f8_6579893f",
+        "filename": "src/libANGLE/renderer/vulkan/DeviceVk.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 35,
+      "author": {
+        "id": 1000050
+      },
+      "writtenOn": "2021-10-28T16:17:22Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "4c3eeaa6_df3472f7",
+      "range": {
+        "startLine": 35,
+        "startChar": 21,
+        "endLine": 35,
+        "endChar": 44
+      },
+      "revId": "f37a00401bf2f52a04c88e36d4c39f53aa0f0632",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "af314c58_e8f400bd",
@@ -88,6 +112,24 @@
       "writtenOn": "2021-10-28T16:07:09Z",
       "side": 1,
       "message": "nit: I\u0027d say just rename enabledDeviceExtensions to mEnabledDeviceExtensions below instead.",
+      "revId": "f37a00401bf2f52a04c88e36d4c39f53aa0f0632",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "8996b3b9_e9d67c91",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 1729,
+      "author": {
+        "id": 1000050
+      },
+      "writtenOn": "2021-10-28T16:17:22Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "af314c58_e8f400bd",
       "revId": "f37a00401bf2f52a04c88e36d4c39f53aa0f0632",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
