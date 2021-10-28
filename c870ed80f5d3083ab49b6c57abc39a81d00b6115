@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "80e5ebec_56e57079",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 5
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2021-10-28T16:19:45Z",
+      "side": 1,
+      "message": "Cody/Tim, what do you think of always specifying an offset? I don\u0027t think the extra addition would be that much overhead, and it would reduce the number of functions by one.",
+      "revId": "c870ed80f5d3083ab49b6c57abc39a81d00b6115",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
