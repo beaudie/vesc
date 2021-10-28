@@ -35,6 +35,23 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "10e0d14c_f696e324",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2021-10-28T16:11:02Z",
+      "side": 1,
+      "message": "Peng: Can you please add an extension .txt to extensions/?",
+      "revId": "f37a00401bf2f52a04c88e36d4c39f53aa0f0632",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "4c3eeaa6_df3472f7",
