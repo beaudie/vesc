@@ -22,6 +22,30 @@
       },
       "revId": "88eabbef7246d6c08c9b9b5591a9bb3a4695f373",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "2c8e4af0_78b8983b",
+        "filename": "src/libANGLE/capture/capture_gles_3_1_params.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 271,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2021-10-28T16:16:55Z",
+      "side": 1,
+      "message": "Ah, n/m, you\u0027re using propCount as a base of number of GLints... still it\u0027s not clear to me what you\u0027re doing with the ACTIVE_VARIABLES enums and if we can simplify this a bit.",
+      "parentUuid": "3b2caf4e_2156436e",
+      "range": {
+        "startLine": 257,
+        "startChar": 3,
+        "endLine": 271,
+        "endChar": 13
+      },
+      "revId": "88eabbef7246d6c08c9b9b5591a9bb3a4695f373",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
