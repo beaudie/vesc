@@ -103,6 +103,24 @@
       "message": "I found out about .git/info/exclude which is a project local .gitignore file so I can have an angle/third_party/.clang_format and then add that to .git/info/exclude so it\u0027s ignored\n\nShould I \n\nA) Check this in as is\n\nB) move it to from third_party/VT-GL-CTS/.clang_format to third_party/.clang_format\n\nC) abandon this and use .git/info/exclude locally\n\nthoughts?",
       "revId": "6e53b117208a2040c5110c0199b8e4bf5b6563b4",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "511cd61b_45ba792c",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2021-10-28T20:35:06Z",
+      "side": 1,
+      "message": "Both A and C LGTM. Slight preference for C, but it\u0027s a small file that\u0027s not getting in anyone\u0027s way so no harm in it landing.",
+      "parentUuid": "7705007e_4a3d62fe",
+      "revId": "6e53b117208a2040c5110c0199b8e4bf5b6563b4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
