@@ -37,6 +37,29 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "4c3eeaa6_df3472f7",
+        "filename": "src/libANGLE/renderer/vulkan/DeviceVk.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 35,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2021-10-28T16:10:43Z",
+      "side": 1,
+      "message": "nit: suggest you use a switch",
+      "range": {
+        "startLine": 35,
+        "startChar": 21,
+        "endLine": 35,
+        "endChar": 44
+      },
+      "revId": "f37a00401bf2f52a04c88e36d4c39f53aa0f0632",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "af314c58_e8f400bd",
         "filename": "src/libANGLE/renderer/vulkan/RendererVk.cpp",
         "patchSetId": 4
