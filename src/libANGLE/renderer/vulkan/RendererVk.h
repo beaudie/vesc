@@ -276,6 +276,18 @@ class RendererVk : angle::NonCopyable
         }
     }
 
+    VkQueue getQueue(egl::ContextPriority priority)
+    {
+        if (mFeatures.asyncCommandQueue.enabled)
+        {
+            return mCommandProcessor.getQueue(priority);
+        }
+        else
+        {
+            return mCommandQueue.getQueue(priority);
+        }
+    }
+
     // This command buffer should be submitted immediately via queueSubmitOneOff.
     angle::Result getCommandBufferOneOff(vk::Context *context,
                                          bool hasProtectedContent,
@@ -488,6 +500,11 @@ class RendererVk : angle::NonCopyable
         return mMaxCopyBytesUsingCPUWhenPreservingBufferData;
     }
 
+    const vk::ExtensionNameList &getEnabledDeviceExtensions() const
+    {
+        return mEnabledDeviceExtensions;
+    }
+
   private:
     angle::Result initializeDevice(DisplayVk *displayVk, uint32_t queueFamilyIndex);
     void ensureCapsInitialized() const;
@@ -647,6 +664,8 @@ class RendererVk : angle::NonCopyable
 
     // Use thread pool to compress cache data.
     std::shared_ptr<rx::WaitableCompressEvent> mCompressEvent;
+
+    vk::ExtensionNameList mEnabledDeviceExtensions;
 };
 
 }  // namespace rx
