@@ -18,6 +18,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "1b333220_16516477",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2021-10-28T19:13:21Z",
+      "side": 1,
+      "message": "There\u0027s a dEQP test that uses an ES 100 shader in a ES 3.0 context, and writes to gl_FragData[uniformIndex] where uniformIndex \u003e 1. I don\u0027t think it uses the extension and technically it\u0027s an OOB access I think. The test may be broken, but this CL fixed it. Because as you noticed it accidentally turned off the size limiting. The test in question regressed when I started filtering out \"unused\" shader outputs because it detected this 2 slot as unused.\n\nNow that you pointed out the bug, I\u0027m not sure what the right action should be.",
+      "parentUuid": "529b77cf_ab4c256b",
+      "revId": "1aa9d09d70899be4af60a40b65a5ef780f14746e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "b0ee1ba8_97bbf1cb",
