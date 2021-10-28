@@ -125,7 +125,11 @@ class BufferVk : public BufferImpl
                                GLbitfield access,
                                void **mapPtr);
     angle::Result unmapImpl(ContextVk *contextVk);
-    angle::Result ghostMappedBuffer(ContextVk *contextVk, VkDeviceSize offset, void **mapPtr);
+    angle::Result ghostMappedBuffer(ContextVk *contextVk,
+                                    VkDeviceSize offset,
+                                    VkDeviceSize length,
+                                    GLbitfield access,
+                                    void **mapPtr);
 
     ConversionBuffer *getVertexConversionBuffer(RendererVk *renderer,
                                                 angle::FormatID formatID,
@@ -226,6 +230,11 @@ class BufferVk : public BufferImpl
     // operation by elimnating the need to wait on any recorded or in-flight GPU commands.
     // We use DynamicShadowBuffer class to encapsulate all the bookeeping logic.
     vk::DynamicShadowBuffer mShadowBuffer;
+
+    // A buffer to service GL_MAP_INVALIDATE_RANGE_BIT -style uploads.
+    bool mMapInvalidateRangeBufferValid;
+    vk::DynamicShadowBuffer mMapInvalidateRangeBuffer;
+    void *mMapInvalidateRangeMappedPtr;
 
     // A cache of converted vertex data.
     std::vector<VertexConversionBuffer> mVertexConversionBuffers;
