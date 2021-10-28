@@ -6,10 +6,12 @@
 
 // GLES1Shaders.inc: Defines GLES1 emulation shader.
 
-constexpr char kGLES1DrawVShader[] = R"(#version 300 es
+constexpr char kGLES1DrawVShaderHeader[] = R"(#version 300 es
 precision highp float;
 
-#define kMaxTexUnits 4
+#define kMaxTexUnits 4)";
+
+constexpr char kGLES1DrawVShader[] = R"(
 
 in vec4 pos;
 in vec3 normal;
@@ -25,19 +27,14 @@ uniform mat4 modelview;
 uniform mat4 modelview_invtr;
 uniform mat4 texture_matrix[kMaxTexUnits];
 
-uniform bool enable_rescale_normal;
-uniform bool enable_normalize;
-
 // Point rasterization//////////////////////////////////////////////////////////
 
-uniform bool point_rasterization;
 uniform float point_size_min;
 uniform float point_size_max;
 uniform vec3 point_distance_attenuation;
 
 // GL_OES_draw_texture uniforms/////////////////////////////////////////////////
 
-uniform bool enable_draw_texture;
 uniform vec4 draw_texture_coords;
 uniform vec2 draw_texture_dims;
 uniform vec4 draw_texture_normalized_crop_rect[kMaxTexUnits];
@@ -312,14 +309,12 @@ in vec4 texcoord3_varying;
 
 // Alpha test///////////////////////////////////////////////////////////////////
 
-uniform bool enable_alpha_test;
 uniform int alpha_func;
 uniform float alpha_test_ref;
 
 // Shading: flat shading, lighting, and materials///////////////////////////////
 
 uniform bool shade_model_flat;
-uniform bool enable_lighting;
 uniform bool enable_color_material;
 
 uniform vec4 material_ambient;
@@ -345,7 +340,6 @@ uniform float light_attenuation_quadratics[kMaxLights];
 
 // Fog /////////////////////////////////////////////////////////////////////////
 
-uniform bool enable_fog;
 uniform int fog_mode;
 uniform float fog_density;
 uniform float fog_start;
@@ -354,18 +348,12 @@ uniform vec4 fog_color;
 
 // User clip plane /////////////////////////////////////////////////////////////
 
-uniform bool enable_clip_planes;
 uniform bool clip_plane_enables[kMaxClipPlanes];
 uniform vec4 clip_planes[kMaxClipPlanes];
 
 // Point rasterization//////////////////////////////////////////////////////////
 
-uniform bool point_rasterization;
-uniform bool point_sprite_enabled;
-
 // GL_OES_draw_texture//////////////////////////////////////////////////////////
-
-uniform bool enable_draw_texture;
 
 // Outgoing fragment////////////////////////////////////////////////////////////
 
