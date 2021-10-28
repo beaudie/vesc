@@ -20,6 +20,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "7e039843_0ff11e80",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 2
+      },
+      "lineNbr": 14,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2021-10-28T00:35:14Z",
+      "side": 1,
+      "message": "I wasn\u0027t intending to list all of the onRenderPassFinished()/pauseRenderPassQueriesIfActive()/resumeRenderPassQueriesIfActive() calls here, just the GL sequence that causes issues.\n\nThe renderpass is broken with every glDrawArrays() (as you know).   The important part is that the pauseRenderPassQueriesIfActive() / resumeRenderPassQueriesIfActive() calls don\u0027t take into consideration that XFB is active/unpaused when looping through the \"active\" queries.   This leads to creating 1 VK query for each draw call, even though XFB is paused during one of them.\n\nI\u0027ve updated the commit message to indicate this.",
+      "parentUuid": "ee4c9ebe_da40f69d",
+      "revId": "6164e9703bc82ee45db3a2aef588c2ce72d9ae38",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "a4bfc9af_875b5daa",
         "filename": "/COMMIT_MSG",
         "patchSetId": 2
@@ -69,6 +87,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "8d60c192_c3ae06a1",
+        "filename": "src/libANGLE/renderer/vulkan/QueryVk.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 194,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2021-10-28T00:35:14Z",
+      "side": 1,
+      "message": "I went back and forth on this, but I\u0027m fine having it live in ContextVk.",
+      "parentUuid": "9ddc0bc1_01735c0e",
+      "revId": "6164e9703bc82ee45db3a2aef588c2ce72d9ae38",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "de353cf5_708d2514",
@@ -92,6 +128,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "71da78db_62a8560a",
+        "filename": "src/libANGLE/renderer/vulkan/QueryVk.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 202,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2021-10-28T00:35:14Z",
+      "side": 1,
+      "message": "Ack\n\nI updated the comment to change \"ARM\" to \"vulkan drivers\".",
+      "parentUuid": "de353cf5_708d2514",
+      "range": {
+        "startLine": 201,
+        "startChar": 40,
+        "endLine": 202,
+        "endChar": 40
+      },
+      "revId": "6164e9703bc82ee45db3a2aef588c2ce72d9ae38",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "fffe20ce_86dcae7a",
@@ -105,6 +165,24 @@
       "writtenOn": "2021-10-27T09:24:48Z",
       "side": 1,
       "message": "Unused",
+      "revId": "6164e9703bc82ee45db3a2aef588c2ce72d9ae38",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "55ce3635_d3e0adc3",
+        "filename": "src/libANGLE/renderer/vulkan/QueryVk.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 44,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2021-10-28T00:35:14Z",
+      "side": 1,
+      "message": "Oops. Done.",
+      "parentUuid": "fffe20ce_86dcae7a",
       "revId": "6164e9703bc82ee45db3a2aef588c2ce72d9ae38",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
