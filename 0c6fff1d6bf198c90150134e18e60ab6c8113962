@@ -16,6 +16,23 @@
       "message": "Please take a look.",
       "revId": "0c6fff1d6bf198c90150134e18e60ab6c8113962",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "3bb98349_d7fee325",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1001629
+      },
+      "writtenOn": "2021-10-28T12:28:23Z",
+      "side": 1,
+      "message": "Oh, not an owner, removing cq+2 again.",
+      "revId": "0c6fff1d6bf198c90150134e18e60ab6c8113962",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
