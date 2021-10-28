@@ -1008,7 +1008,7 @@ TracePerfTest::TracePerfTest(const TracePerfParams &params)
     {
         if (IsWindows() && IsIntel() && mParams.driver != GLESDriverType::AngleEGL)
         {
-            mSkipTest = true;
+            // mSkipTest = true;
         }
     }
 

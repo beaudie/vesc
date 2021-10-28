@@ -117,6 +117,32 @@ class GLES1Renderer final : angle::NonCopyable
     bool mRendererProgramInitialized;
     ShaderProgramManager *mShaderPrograms;
 
+    enum GLES1StateEnables
+    {
+        Lighting           = 0,
+        Fog                = 1,
+        ClipPlanes         = 2,
+        DrawTexture        = 3,
+        PointRasterization = 4,
+        PointSprite        = 5,
+        RescaleNormal      = 6,
+        Normalize          = 7,
+        AlphaTest          = 8,
+        ShadeModelFlat     = 9,
+        ColorMaterial      = 10,
+        LightModelTwoSided = 11,
+
+        InvalidEnum = 12,
+        EnumCount   = 12,
+    };
+    using GLES1StateEnabledBitSet = angle::PackedEnumBitSet<GLES1StateEnables, uint64_t>;
+
+    GLES1StateEnabledBitSet mGLES1StateEnabled;
+
+    void addShaderDefine(std::stringstream &outStream,
+                         GLES1StateEnables state,
+                         const char *enableString);
+
     struct GLES1ProgramState
     {
         ShaderProgramID program;
@@ -155,15 +181,11 @@ class GLES1Renderer final : angle::NonCopyable
         UniformLocation pointSpriteCoordReplaceLoc;
 
         // Alpha test
-        UniformLocation enableAlphaTestLoc;
         UniformLocation alphaFuncLoc;
         UniformLocation alphaTestRefLoc;
 
         // Shading, materials, and lighting
         UniformLocation shadeModelFlatLoc;
-        UniformLocation enableLightingLoc;
-        UniformLocation enableRescaleNormalLoc;
-        UniformLocation enableNormalizeLoc;
         UniformLocation enableColorMaterialLoc;
 
         UniformLocation materialAmbientLoc;
@@ -188,7 +210,6 @@ class GLES1Renderer final : angle::NonCopyable
         UniformLocation lightAttenuationQuadraticsLoc;
 
         // Fog
-        UniformLocation fogEnableLoc;
         UniformLocation fogModeLoc;
         UniformLocation fogDensityLoc;
         UniformLocation fogStartLoc;
@@ -196,19 +217,15 @@ class GLES1Renderer final : angle::NonCopyable
         UniformLocation fogColorLoc;
 
         // Clip planes
-        UniformLocation enableClipPlanesLoc;
         UniformLocation clipPlaneEnablesLoc;
         UniformLocation clipPlanesLoc;
 
         // Point rasterization
-        UniformLocation pointRasterizationLoc;
         UniformLocation pointSizeMinLoc;
         UniformLocation pointSizeMaxLoc;
         UniformLocation pointDistanceAttenuationLoc;
-        UniformLocation pointSpriteEnabledLoc;
 
         // Draw texture
-        UniformLocation enableDrawTextureLoc;
         UniformLocation drawTextureCoordsLoc;
         UniformLocation drawTextureDimsLoc;
         UniformLocation drawTextureNormalizedCropRectLoc;
@@ -262,8 +279,8 @@ class GLES1Renderer final : angle::NonCopyable
         std::array<Vec4Uniform, kTexUnitCount> texCropRects;
     };
 
-    GLES1UniformBuffers mUniformBuffers;
-    GLES1ProgramState mProgramState;
+    std::map<uint64_t, GLES1UniformBuffers> mUniformBuffers;
+    std::map<uint64_t, GLES1ProgramState> mProgramStates;
 
     bool mDrawTextureEnabled      = false;
     GLfloat mDrawTextureCoords[4] = {0.0f, 0.0f, 0.0f, 0.0f};
