@@ -30,6 +30,7 @@ void CollectVariables(TIntermBlock *root,
                       ShHashFunction64 hashFunction,
                       TSymbolTable *symbolTable,
                       GLenum shaderType,
+                      int shaderVersion,
                       const TExtensionBehavior &extensionBehavior,
                       const ShBuiltInResources &resources,
                       int tessControlShaderOutputVertices);
