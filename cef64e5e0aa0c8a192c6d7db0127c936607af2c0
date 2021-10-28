@@ -1,0 +1,44 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "3d7348e0_b5e65398",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2021-10-28T18:49:44Z",
+      "side": 1,
+      "message": "Nice work Yuxin! Might be worth mentioning the primary motivation for this change is to setup a Program that more closely mirrors the original app, which is what MEC strives to do.  This is the first one we\u0027ve seen that detaches right away.",
+      "revId": "cef64e5e0aa0c8a192c6d7db0127c936607af2c0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b3d65865_d26e8116",
+        "filename": "src/libANGLE/capture/FrameCapture.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 2361,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2021-10-28T18:49:44Z",
+      "side": 1,
+      "message": "It looks like this is always set to resourceTracker-\u003egetMaxShaderPrograms(). Is there a reason you chose to move it outside of the function?",
+      "range": {
+        "startLine": 2361,
+        "startChar": 47,
+        "endLine": 2361,
+        "endChar": 58
+      },
+      "revId": "cef64e5e0aa0c8a192c6d7db0127c936607af2c0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
