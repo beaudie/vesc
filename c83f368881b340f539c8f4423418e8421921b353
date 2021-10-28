@@ -16,6 +16,40 @@
       "message": "Here\u0027s the merge-up commit as promised! This also includes one bug-fix for Occlusion Query Tests. See comments for additions not present in Webkit. ",
       "revId": "c83f368881b340f539c8f4423418e8421921b353",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "1006ed08_d01a8cf3",
+        "filename": "src/libANGLE/renderer/metal/mtl_resources.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 66,
+      "author": {
+        "id": 1500872
+      },
+      "writtenOn": "2021-10-28T17:38:27Z",
+      "side": 1,
+      "message": "These three methods are part of a bug fix for Occlusion Query buffers/ and other buffers to map correctly. Although we don\u0027t need to sync every single buffer, if we\u0027ve encoded a blit synchronize, we do have to wait on the command buffer before map.",
+      "revId": "c83f368881b340f539c8f4423418e8421921b353",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "e61186ff_46780990",
+        "filename": "src/libANGLE/renderer/metal/mtl_resources.mm",
+        "patchSetId": 2
+      },
+      "lineNbr": 1006,
+      "author": {
+        "id": 1500872
+      },
+      "writtenOn": "2021-10-28T17:38:27Z",
+      "side": 1,
+      "message": "This method will toggle CPUReadMemSyncPending to true, which is why we wait \nuntil after synchronization to clear it.",
+      "revId": "c83f368881b340f539c8f4423418e8421921b353",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
