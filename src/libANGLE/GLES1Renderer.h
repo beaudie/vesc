@@ -117,6 +117,60 @@ class GLES1Renderer final : angle::NonCopyable
     bool mRendererProgramInitialized;
     ShaderProgramManager *mShaderPrograms;
 
+    enum GLES1StateEnables
+    {
+        Lighting                  = 0,
+        Fog                       = 1,
+        ClipPlanes                = 2,
+        DrawTexture               = 3,
+        PointRasterization        = 4,
+        PointSprite               = 5,
+        RescaleNormal             = 6,
+        Normalize                 = 7,
+        AlphaTest                 = 8,
+        ShadeModelFlat            = 9,
+        ColorMaterial             = 10,
+        LightModelTwoSided        = 11,
+        Tex2d0                    = 12,
+        Tex2d1                    = 13,
+        Tex2d2                    = 14,
+        Tex2d3                    = 15,
+        TexCube0                  = 16,
+        TexCube1                  = 17,
+        TexCube2                  = 18,
+        TexCube3                  = 19,
+        PointSpriteCoordReplaces0 = 20,
+        PointSpriteCoordReplaces1 = 21,
+        PointSpriteCoordReplaces2 = 22,
+        PointSpriteCoordReplaces3 = 23,
+        Light0                    = 24,
+        Light1                    = 25,
+        Light2                    = 26,
+        Light3                    = 27,
+        Light4                    = 28,
+        Light5                    = 29,
+        Light6                    = 30,
+        Light7                    = 31,
+        ClipPlane0                = 32,
+        ClipPlane1                = 33,
+        ClipPlane2                = 34,
+        ClipPlane3                = 35,
+        ClipPlane4                = 36,
+        ClipPlane5                = 37,
+
+        InvalidEnum = 38,
+        EnumCount   = 38,
+    };
+    using GLES1StateEnabledBitSet = angle::PackedEnumBitSet<GLES1StateEnables, uint64_t>;
+
+    GLES1StateEnabledBitSet mGLES1StateEnabled;
+
+    void addShaderDefine(std::stringstream &outStream,
+                         GLES1StateEnables state,
+                         const char *enableString);
+
+    void addShaderBool(std::stringstream &outStream, GLES1StateEnables state);
+
     struct GLES1ProgramState
     {
         ShaderProgramID program;
@@ -155,15 +209,11 @@ class GLES1Renderer final : angle::NonCopyable
         UniformLocation pointSpriteCoordReplaceLoc;
 
         // Alpha test
-        UniformLocation enableAlphaTestLoc;
         UniformLocation alphaFuncLoc;
         UniformLocation alphaTestRefLoc;
 
         // Shading, materials, and lighting
         UniformLocation shadeModelFlatLoc;
-        UniformLocation enableLightingLoc;
-        UniformLocation enableRescaleNormalLoc;
-        UniformLocation enableNormalizeLoc;
         UniformLocation enableColorMaterialLoc;
 
         UniformLocation materialAmbientLoc;
@@ -175,7 +225,6 @@ class GLES1Renderer final : angle::NonCopyable
         UniformLocation lightModelSceneAmbientLoc;
         UniformLocation lightModelTwoSidedLoc;
 
-        UniformLocation lightEnablesLoc;
         UniformLocation lightAmbientsLoc;
         UniformLocation lightDiffusesLoc;
         UniformLocation lightSpecularsLoc;
@@ -188,7 +237,6 @@ class GLES1Renderer final : angle::NonCopyable
         UniformLocation lightAttenuationQuadraticsLoc;
 
         // Fog
-        UniformLocation fogEnableLoc;
         UniformLocation fogModeLoc;
         UniformLocation fogDensityLoc;
         UniformLocation fogStartLoc;
@@ -196,19 +244,14 @@ class GLES1Renderer final : angle::NonCopyable
         UniformLocation fogColorLoc;
 
         // Clip planes
-        UniformLocation enableClipPlanesLoc;
-        UniformLocation clipPlaneEnablesLoc;
         UniformLocation clipPlanesLoc;
 
         // Point rasterization
-        UniformLocation pointRasterizationLoc;
         UniformLocation pointSizeMinLoc;
         UniformLocation pointSizeMaxLoc;
         UniformLocation pointDistanceAttenuationLoc;
-        UniformLocation pointSpriteEnabledLoc;
 
         // Draw texture
-        UniformLocation enableDrawTextureLoc;
         UniformLocation drawTextureCoordsLoc;
         UniformLocation drawTextureDimsLoc;
         UniformLocation drawTextureNormalizedCropRectLoc;
@@ -239,10 +282,8 @@ class GLES1Renderer final : angle::NonCopyable
         std::array<Vec4Uniform, kTexUnitCount> texEnvColors;
         std::array<GLfloat, kTexUnitCount> texEnvRgbScales;
         std::array<GLfloat, kTexUnitCount> texEnvAlphaScales;
-        std::array<GLint, kTexUnitCount> pointSpriteCoordReplaces;
 
         // Lighting
-        std::array<GLint, kLightCount> lightEnables;
         std::array<Vec4Uniform, kLightCount> lightAmbients;
         std::array<Vec4Uniform, kLightCount> lightDiffuses;
         std::array<Vec4Uniform, kLightCount> lightSpeculars;
@@ -255,15 +296,14 @@ class GLES1Renderer final : angle::NonCopyable
         std::array<GLfloat, kLightCount> attenuationQuadratics;
 
         // Clip planes
-        std::array<GLint, kClipPlaneCount> clipPlaneEnables;
         std::array<Vec4Uniform, kClipPlaneCount> clipPlanes;
 
         // Texture crop rectangles
         std::array<Vec4Uniform, kTexUnitCount> texCropRects;
     };
 
-    GLES1UniformBuffers mUniformBuffers;
-    GLES1ProgramState mProgramState;
+    std::map<uint64_t, GLES1UniformBuffers> mUniformBuffers;
+    std::map<uint64_t, GLES1ProgramState> mProgramStates;
 
     bool mDrawTextureEnabled      = false;
     GLfloat mDrawTextureCoords[4] = {0.0f, 0.0f, 0.0f, 0.0f};
