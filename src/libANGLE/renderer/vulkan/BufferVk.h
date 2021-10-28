@@ -227,6 +227,14 @@ class BufferVk : public BufferImpl
     // We use DynamicShadowBuffer class to encapsulate all the bookeeping logic.
     vk::DynamicShadowBuffer mShadowBuffer;
 
+    // A buffer to service GL_MAP_INVALIDATE_RANGE_BIT -style uploads.
+    bool mMapInvalidateRangeActive;
+    bool mMapInvalidateRangeBufferValid;
+    vk::DynamicShadowBuffer mMapInvalidateRangeBuffer;
+    VkDeviceSize mMapInvalidateRangeClientOffset;
+    VkDeviceSize mMapInvalidateRangeSize;
+    void *mMapInvalidateRangeMappedPtr;
+
     // A cache of converted vertex data.
     std::vector<VertexConversionBuffer> mVertexConversionBuffers;
 
