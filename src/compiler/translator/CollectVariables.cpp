@@ -124,6 +124,7 @@ class CollectVariablesTraverser : public TIntermTraverser
                               ShHashFunction64 hashFunction,
                               TSymbolTable *symbolTable,
                               GLenum shaderType,
+                              int shaderVersion,
                               const TExtensionBehavior &extensionBehavior,
                               const ShBuiltInResources &resources,
                               int tessControlShaderOutputVertices);
@@ -244,6 +245,7 @@ class CollectVariablesTraverser : public TIntermTraverser
     ShHashFunction64 mHashFunction;
 
     GLenum mShaderType;
+    int mShaderVersion;
     const TExtensionBehavior &mExtensionBehavior;
     const ShBuiltInResources &mResources;
 };
@@ -260,6 +262,7 @@ CollectVariablesTraverser::CollectVariablesTraverser(
     ShHashFunction64 hashFunction,
     TSymbolTable *symbolTable,
     GLenum shaderType,
+    GLint shaderVersion,
     const TExtensionBehavior &extensionBehavior,
     const ShBuiltInResources &resources,
     int tessControlShaderOutputVertices)
@@ -315,6 +318,7 @@ CollectVariablesTraverser::CollectVariablesTraverser(
       mTessControlShaderOutputVertices(tessControlShaderOutputVertices),
       mHashFunction(hashFunction),
       mShaderType(shaderType),
+      mShaderVersion(shaderVersion),
       mExtensionBehavior(extensionBehavior),
       mResources(resources)
 {}
@@ -600,7 +604,8 @@ void CollectVariablesTraverser::visitSymbol(TIntermSymbol *symbol)
                 {
                     ShaderVariable info;
                     setBuiltInInfoFromSymbol(symbol->variable(), &info);
-                    if (!IsExtensionEnabled(mExtensionBehavior, TExtension::EXT_draw_buffers))
+                    if (mShaderVersion == 100 &&
+                        !IsExtensionEnabled(mExtensionBehavior, TExtension::EXT_draw_buffers))
                     {
                         ASSERT(info.arraySizes.size() == 1u);
                         info.arraySizes.back() = 1u;
@@ -1277,13 +1282,14 @@ void CollectVariables(TIntermBlock *root,
                       ShHashFunction64 hashFunction,
                       TSymbolTable *symbolTable,
                       GLenum shaderType,
+                      int shaderVersion,
                       const TExtensionBehavior &extensionBehavior,
                       const ShBuiltInResources &resources,
                       int tessControlShaderOutputVertices)
 {
     CollectVariablesTraverser collect(
         attributes, outputVariables, uniforms, inputVaryings, outputVaryings, sharedVariables,
-        uniformBlocks, shaderStorageBlocks, hashFunction, symbolTable, shaderType,
+        uniformBlocks, shaderStorageBlocks, hashFunction, symbolTable, shaderType, shaderVersion,
         extensionBehavior, resources, tessControlShaderOutputVertices);
     root->traverse(&collect);
 }

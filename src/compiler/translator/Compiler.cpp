@@ -964,7 +964,8 @@ bool TCompiler::checkAndSimplifyAST(TIntermBlock *root,
         CollectVariables(root, &mAttributes, &mOutputVariables, &mUniforms, &mInputVaryings,
                          &mOutputVaryings, &mSharedVariables, &mUniformBlocks,
                          &mShaderStorageBlocks, mResources.HashFunction, &mSymbolTable, mShaderType,
-                         mExtensionBehavior, mResources, mTessControlShaderOutputVertices);
+                         mShaderVersion, mExtensionBehavior, mResources,
+                         mTessControlShaderOutputVertices);
         collectInterfaceBlocks();
         mVariablesCollected = true;
         if ((compileOptions & SH_USE_UNUSED_STANDARD_SHARED_BLOCKS) != 0)
