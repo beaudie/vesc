@@ -73,6 +73,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "7908cd77_7b2c3884",
+        "filename": "src/libANGLE/renderer/metal/FrameBufferMtl.mm",
+        "patchSetId": 4
+      },
+      "lineNbr": 274,
+      "author": {
+        "id": 1115588
+      },
+      "writtenOn": "2021-10-28T20:57:11Z",
+      "side": 1,
+      "message": "I need clearer direction. Are you telling me to template gl::Rectangle and search and replace gl::Rectangle with gl::Rectangle\u003cint\u003e in this CL? That\u0027s 576 replacements. Are you telling me to do it in another CL before this? After this?",
+      "parentUuid": "9f960b6e_45a94dc2",
+      "revId": "1b5f0b6b095ab838908f3f9d6533e52ae1a6d94f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "865e3cd6_794eb1f7",
         "filename": "src/libANGLE/renderer/metal/FrameBufferMtl.mm",
         "patchSetId": 4
