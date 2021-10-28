@@ -243,18 +243,36 @@ void CaptureGetProgramResourceiv_params(const State &glState,
                                         GLint *params,
                                         ParamCapture *paramCapture)
 {
-    // See QueryProgramResourceiv for details on how these are handled
-    for (int i = 0; i < propCount; ++i)
+    int paramLength = propCount;
+
+    if (length != nullptr)
     {
-        if (props[i] == GL_ACTIVE_VARIABLES)
+        paramLength = *length;
+    }
+    else
+    {
+        int numActiveVariables = -1;
+        for (int i = 0; i < propCount; ++i)
         {
-            // This appears to be the only property that isn't a single integer
-            UNIMPLEMENTED();
-            return;
+            if (props[i] == GL_NUM_ACTIVE_VARIABLES)
+            {
+                numActiveVariables = params[i];
+            }
+            else if (props[i] == GL_ACTIVE_VARIABLES)
+            {
+                if (numActiveVariables >= 0)
+                {
+                    paramLength += numActiveVariables - 1;
+                }
+                else
+                {
+                    ASSERT(0 && "Querying ACTIVE_VARIABLES but don't know the count");
+                }
+            }
         }
     }
 
-    CaptureMemory(props, sizeof(GLint) * propCount, paramCapture);
+    CaptureMemory(params, sizeof(GLint) * paramLength, paramCapture);
 }
 
 void CaptureGetTexLevelParameterfv_params(const State &glState,
