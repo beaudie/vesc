@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "3b2caf4e_2156436e",
+        "filename": "src/libANGLE/capture/capture_gles_3_1_params.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 271,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2021-10-28T16:15:49Z",
+      "side": 1,
+      "message": "to make this easier to extend to other properties, I suggest you use a switch and use +\u003d to add to paramLength instead of \"int numActiveVariables\". Also I believe length is a boundary, we might not actually capture that much data. i.e. it\u0027s valid to specify length as MAXINT while only capturing a small amount of data.",
+      "range": {
+        "startLine": 257,
+        "startChar": 3,
+        "endLine": 271,
+        "endChar": 13
+      },
+      "revId": "88eabbef7246d6c08c9b9b5591a9bb3a4695f373",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
