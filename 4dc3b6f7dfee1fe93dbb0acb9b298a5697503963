@@ -65,6 +65,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "2308bbdb_a509669e",
+        "filename": "src/libANGLE/renderer/vulkan/BufferVk.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 601,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2021-10-28T19:52:46Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "520b94e7_e5d1de84",
+      "range": {
+        "startLine": 601,
+        "startChar": 21,
+        "endLine": 601,
+        "endChar": 38
+      },
+      "revId": "4dc3b6f7dfee1fe93dbb0acb9b298a5697503963",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "6045c3fb_a3dc5c38",
