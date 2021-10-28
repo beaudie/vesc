@@ -37,6 +37,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "7ba17878_8c3e37eb",
+        "filename": "src/libANGLE/renderer/metal/FrameBufferMtl.mm",
+        "patchSetId": 4
+      },
+      "lineNbr": 274,
+      "author": {
+        "id": 1115588
+      },
+      "writtenOn": "2021-10-28T20:39:37Z",
+      "side": 1,
+      "message": "I thought about gl::Rectangle\u003cT\u003e but I ran into `empty` which would need to be specialized, and I didn\u0027t really want to have to go change all the other code using Rectangle. I could make RectangleImpl\u003cT\u003e and then typedef RectangleImpl\u003cint\u003e Rectangle but that seems confusing.  I guess I\u0027d prefer if someone wants those merge than can be a TODO for another CL?",
+      "parentUuid": "7d5974e1_62e6b388",
+      "revId": "1b5f0b6b095ab838908f3f9d6533e52ae1a6d94f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "865e3cd6_794eb1f7",
         "filename": "src/libANGLE/renderer/metal/FrameBufferMtl.mm",
         "patchSetId": 4
@@ -48,6 +66,24 @@
       "writtenOn": "2021-10-28T20:03:42Z",
       "side": 1,
       "message": "Could this be impacted by something else? Scissor or multiple attachments?\nNon-equal attachment sizes would clamp this blit, but we don\u0027t support this, so we end up with dstFramebufferDimensions.",
+      "revId": "1b5f0b6b095ab838908f3f9d6533e52ae1a6d94f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "df162a37_b8e18bd1",
+        "filename": "src/libANGLE/renderer/metal/FrameBufferMtl.mm",
+        "patchSetId": 4
+      },
+      "lineNbr": 494,
+      "author": {
+        "id": 1115588
+      },
+      "writtenOn": "2021-10-28T20:39:37Z",
+      "side": 1,
+      "message": "So here\u0027s the same CL with that line changed, it passes the tests.\n\nhttps://chromium-review.googlesource.com/c/angle/angle/+/3251687\n\nMaybe I should just use dstFramebufferDimensions here until we find a test that fails and can add a comment why it\u0027s need?",
+      "parentUuid": "865e3cd6_794eb1f7",
       "revId": "1b5f0b6b095ab838908f3f9d6533e52ae1a6d94f",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
