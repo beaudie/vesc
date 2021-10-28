@@ -18,6 +18,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "55829d7f_0140853d",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1520902
+      },
+      "writtenOn": "2021-10-28T20:02:42Z",
+      "side": 1,
+      "message": "Thank you Cody! Sure I will add this comments in the CL description. Thank you for helping me make the CL description clearer.",
+      "parentUuid": "3d7348e0_b5e65398",
+      "revId": "cef64e5e0aa0c8a192c6d7db0127c936607af2c0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "b3d65865_d26e8116",
@@ -31,6 +49,30 @@
       "writtenOn": "2021-10-28T18:49:44Z",
       "side": 1,
       "message": "It looks like this is always set to resourceTracker-\u003egetMaxShaderPrograms(). Is there a reason you chose to move it outside of the function?",
+      "range": {
+        "startLine": 2361,
+        "startChar": 47,
+        "endLine": 2361,
+        "endChar": 58
+      },
+      "revId": "cef64e5e0aa0c8a192c6d7db0127c936607af2c0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "a1d6be04_90f5e99b",
+        "filename": "src/libANGLE/capture/FrameCapture.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 2361,
+      "author": {
+        "id": 1520902
+      },
+      "writtenOn": "2021-10-28T20:02:42Z",
+      "side": 1,
+      "message": "The reason is that this change will modify the resourceTracker-\u003egetMaxShaderPrograms() inside the GenerateLinkedPrograms(), but I want to always start from the same tempID. This is because I need a unique tempID for each shader object created inside GenerateLinkedPrograms(), therefore the total number of tempIDs I am using in GenerateLinkedPrograms()is more than 1, and I am bumping the resourceTracker-\u003egetMaxShaderPrograms() for each unique tempID used. But I want to always start from the same tempID (The next ID right after the max ID of shader programs), so I thought I need to save that tempIDStart before looping through the programs (https://chromium-review.googlesource.com/c/angle/angle/+/3246533/2/src/libANGLE/capture/FrameCapture.cpp#3046), and pass that tempIDStart into the GenerateLinkedPrograms(). If start from resourceTracker-\u003egetMaxShaderPrograms() inside this function, the start tempID will keep changing each time. Here is a visual explanation: https://screenshot.googleplex.com/3aqzAyffiWbmg96.png",
+      "parentUuid": "b3d65865_d26e8116",
       "range": {
         "startLine": 2361,
         "startChar": 47,
