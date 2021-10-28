@@ -46,6 +46,30 @@
       },
       "revId": "88eabbef7246d6c08c9b9b5591a9bb3a4695f373",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "553c932a_c763cd24",
+        "filename": "src/libANGLE/capture/capture_gles_3_1_params.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 271,
+      "author": {
+        "id": 1491823
+      },
+      "writtenOn": "2021-10-28T16:51:09Z",
+      "side": 1,
+      "message": "According to the GLES 3.1 spec \"If length is not NULL, the actual number of\nvalues written to params will be written to length.\", so it is the pointer to a valued that is returned (and the unit test is implemented to check this). \n\nAbout ACTIVE_VARIABLES ... if NUM_ACTIVE_VARIABLES is queried, we get the number of active variables that can be expected in the return buffer, but only when we actually query ACTIVE_VARIABLES these are actually added to the buffer (otherwise they wouldn\u0027t end up in the buffer), but since one value is already \"expected\" with propCount, we have to subtract one, and since all other parameters require only one return buffer entry, the formula is this. \n\nNow if length \u003d\u003d nullptr and the NUM_ACTIVE_VARIABLES is not yet read, we actually don\u0027t know how many entries are there, and we can\u0027t capture. However, a caller would also not know how to interpret the buffer, unless they query NUM_ACTIVE_VARIABLES in a separate call, an unlikely but possible case we can\u0027t handle easily, and probably not with the interface as is. (One could possibly inject a length parameter on capture if it is nullptr to force the backend to return the size of the buffer).",
+      "parentUuid": "2c8e4af0_78b8983b",
+      "range": {
+        "startLine": 257,
+        "startChar": 3,
+        "endLine": 271,
+        "endChar": 13
+      },
+      "revId": "88eabbef7246d6c08c9b9b5591a9bb3a4695f373",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
