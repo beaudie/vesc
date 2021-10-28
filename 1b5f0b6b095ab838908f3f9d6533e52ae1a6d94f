@@ -16,6 +16,40 @@
       "message": "not sure who should review this.",
       "revId": "1b5f0b6b095ab838908f3f9d6533e52ae1a6d94f",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "7d5974e1_62e6b388",
+        "filename": "src/libANGLE/renderer/metal/FrameBufferMtl.mm",
+        "patchSetId": 4
+      },
+      "lineNbr": 274,
+      "author": {
+        "id": 1500872
+      },
+      "writtenOn": "2021-10-28T20:03:42Z",
+      "side": 1,
+      "message": "The only other name I could think of would be RectangleF, FloatRectangle seems fine.\n\nI don\u0027t suppose we could use Rectangle\u003cT\u003e and reuse some of the rect code?",
+      "revId": "1b5f0b6b095ab838908f3f9d6533e52ae1a6d94f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "865e3cd6_794eb1f7",
+        "filename": "src/libANGLE/renderer/metal/FrameBufferMtl.mm",
+        "patchSetId": 4
+      },
+      "lineNbr": 494,
+      "author": {
+        "id": 1500872
+      },
+      "writtenOn": "2021-10-28T20:03:42Z",
+      "side": 1,
+      "message": "Could this be impacted by something else? Scissor or multiple attachments?\nNon-equal attachment sizes would clamp this blit, but we don\u0027t support this, so we end up with dstFramebufferDimensions.",
+      "revId": "1b5f0b6b095ab838908f3f9d6533e52ae1a6d94f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
