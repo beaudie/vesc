@@ -18,6 +18,23 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "42d152bf_b5ab4b95",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2021-10-28T22:01:24Z",
+      "side": 1,
+      "message": "Just awesome work Gregg diagnosing and fixing these important bugs!\n\n+geofflang and jonahr - need their OWNERS review.\n",
+      "revId": "1b5f0b6b095ab838908f3f9d6533e52ae1a6d94f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "7d5974e1_62e6b388",
@@ -91,6 +108,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "9ccaeb35_85cf1e86",
+        "filename": "src/libANGLE/renderer/metal/FrameBufferMtl.mm",
+        "patchSetId": 4
+      },
+      "lineNbr": 274,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2021-10-28T22:01:24Z",
+      "side": 1,
+      "message": "Let\u0027s not touch a ton of call sites in this CL or require that as a prerequisite.\n\nRectangleImpl\u003cT\u003e, and \"typedef RectangleImpl\u003cint\u003e Rectangle\", \"typedef RectangleImpl\u003cfloat\u003e FloatRectangle\" seems reasonable to me, if you\u0027d be interested in adding that.\n\nOtherwise, adding FloatRectangle in this CL seems fine. It\u0027s a small amount of code and fixes a concrete bug for which there are tests.",
+      "parentUuid": "7908cd77_7b2c3884",
+      "revId": "1b5f0b6b095ab838908f3f9d6533e52ae1a6d94f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "865e3cd6_794eb1f7",
         "filename": "src/libANGLE/renderer/metal/FrameBufferMtl.mm",
         "patchSetId": 4
@@ -120,6 +155,24 @@
       "side": 1,
       "message": "So here\u0027s the same CL with that line changed, it passes the tests.\n\nhttps://chromium-review.googlesource.com/c/angle/angle/+/3251687\n\nMaybe I should just use dstFramebufferDimensions here until we find a test that fails and can add a comment why it\u0027s need?",
       "parentUuid": "865e3cd6_794eb1f7",
+      "revId": "1b5f0b6b095ab838908f3f9d6533e52ae1a6d94f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "de1f1bb1_29fac884",
+        "filename": "src/libANGLE/renderer/metal/FrameBufferMtl.mm",
+        "patchSetId": 4
+      },
+      "lineNbr": 494,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2021-10-28T22:01:24Z",
+      "side": 1,
+      "message": "Sounds like a good idea to make that change.",
+      "parentUuid": "df162a37_b8e18bd1",
       "revId": "1b5f0b6b095ab838908f3f9d6533e52ae1a6d94f",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
