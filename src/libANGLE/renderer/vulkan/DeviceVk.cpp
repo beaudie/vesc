@@ -10,6 +10,9 @@
 #include "libANGLE/renderer/vulkan/DeviceVk.h"
 
 #include "common/debug.h"
+#include "libANGLE/Display.h"
+#include "libANGLE/renderer/vulkan/DisplayVk.h"
+#include "libANGLE/renderer/vulkan/RendererVk.h"
 
 namespace rx
 {
@@ -26,19 +29,46 @@ egl::Error DeviceVk::initialize()
 
 egl::Error DeviceVk::getAttribute(const egl::Display *display, EGLint attribute, void **outValue)
 {
-    UNIMPLEMENTED();
+    RendererVk *renderer =
+        static_cast<rx::DisplayVk *>(display->getImplementation())->getRenderer();
+    if (attribute == EGL_VULKAN_DEVICE_ANGLE)
+    {
+        *outValue = renderer->getDevice();
+        return egl::NoError();
+    }
+    else if (attribute == EGL_VULKAN_PHYSICAL_DEVICE_ANGLE)
+    {
+        *outValue = renderer->getPhysicalDevice();
+        return egl::NoError();
+    }
+    else if (attribute == EGL_VULKAN_QUEUE_ANGLE)
+    {
+        // egl::ContextPriority::Medium is the default context priority.
+        *outValue = renderer->getQueue(egl::ContextPriority::Medium);
+        return egl::NoError();
+    }
+    else if (attribute == EGL_VULKAN_QUEUE_FAMILIY_INDEX_ANGLE)
+    {
+        *outValue = reinterpret_cast<void *>(renderer->getQueueFamilyIndex());
+        return egl::NoError();
+    }
+    else if (attribute == EGL_VULKAN_EXTENSIONS_ANGLE)
+    {
+        char **extensions = const_cast<char **>(renderer->getEnabledDeviceExtensions().data());
+        *outValue         = reinterpret_cast<void *>(extensions);
+        return egl::NoError();
+    }
     return egl::EglBadAccess();
 }
 
 EGLint DeviceVk::getType()
 {
-    UNIMPLEMENTED();
-    return EGLint();
+    return EGL_VULKAN_DEVICE_ANGLE;
 }
 
 void DeviceVk::generateExtensions(egl::DeviceExtensions *outExtensions) const
 {
-    UNIMPLEMENTED();
+    outExtensions->deviceVulkan = true;
 }
 
 }  // namespace rx

@@ -1726,7 +1726,7 @@ angle::Result RendererVk::initializeDevice(DisplayVk *displayVk, uint32_t queueF
         std::sort(deviceExtensionNames.begin(), deviceExtensionNames.end(), StrLess);
     }
 
-    vk::ExtensionNameList enabledDeviceExtensions;
+    vk::ExtensionNameList &enabledDeviceExtensions = mEnabledDeviceExtensions;
     if (displayVk->isUsingSwapchain())
     {
         enabledDeviceExtensions.push_back(VK_KHR_SWAPCHAIN_EXTENSION_NAME);
@@ -2184,7 +2184,7 @@ angle::Result RendererVk::initializeDevice(DisplayVk *displayVk, uint32_t queueF
         unsupportedStages |= VK_PIPELINE_STAGE_GEOMETRY_SHADER_BIT;
     }
     mSupportedVulkanPipelineStageMask = ~unsupportedStages;
-
+    mEnabledDeviceExtensions.push_back(nullptr);
     return angle::Result::Continue;
 }
 
