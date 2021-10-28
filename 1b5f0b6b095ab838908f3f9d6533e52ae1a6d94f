@@ -124,6 +124,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "645673e2_846aa285",
+        "filename": "src/libANGLE/renderer/metal/FrameBufferMtl.mm",
+        "patchSetId": 4
+      },
+      "lineNbr": 274,
+      "author": {
+        "id": 1115588
+      },
+      "writtenOn": "2021-10-28T22:09:14Z",
+      "side": 1,
+      "message": "ok. I\u0027m happy to do the template in another CL later",
+      "parentUuid": "9ccaeb35_85cf1e86",
+      "revId": "1b5f0b6b095ab838908f3f9d6533e52ae1a6d94f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "865e3cd6_794eb1f7",
@@ -173,6 +191,24 @@
       "side": 1,
       "message": "Sounds like a good idea to make that change.",
       "parentUuid": "df162a37_b8e18bd1",
+      "revId": "1b5f0b6b095ab838908f3f9d6533e52ae1a6d94f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "24766357_844ac2d6",
+        "filename": "src/libANGLE/renderer/metal/FrameBufferMtl.mm",
+        "patchSetId": 4
+      },
+      "lineNbr": 494,
+      "author": {
+        "id": 1115588
+      },
+      "writtenOn": "2021-10-28T22:09:14Z",
+      "side": 1,
+      "message": "done",
+      "parentUuid": "de1f1bb1_29fac884",
       "revId": "1b5f0b6b095ab838908f3f9d6533e52ae1a6d94f",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
