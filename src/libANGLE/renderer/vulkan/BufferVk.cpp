@@ -212,6 +212,9 @@ BufferVk::BufferVk(const gl::BufferState &state)
     : BufferImpl(state),
       mBuffer(nullptr),
       mBufferOffset(0),
+      mMapInvalidateRangeActive(false),
+      mMapInvalidateRangeBufferValid(false),
+      mMapInvalidateRangeClientOffset(0),
       mHasValidData(false),
       mHasBeenReferencedByGPU(false)
 {}
@@ -669,10 +672,29 @@ angle::Result BufferVk::mapRangeImpl(ContextVk *contextVk,
             // 1.) Caller has told us it doesn't care about previous contents, or
             // 2.) The GPU won't write to the buffer.
 
-            if ((access & GL_MAP_INVALIDATE_BUFFER_BIT) != 0)
+            bool entireBufferInvalidated =
+                (access & GL_MAP_INVALIDATE_BUFFER_BIT) ||
+                ((access & GL_MAP_INVALIDATE_RANGE_BIT) && (0 == offset) &&
+                 (static_cast<VkDeviceSize>(mState.getSize()) == length));
+
+            bool rangeInvalidate = (access & GL_MAP_INVALIDATE_RANGE_BIT);
+
+            if (entireBufferInvalidated)
             {
                 ANGLE_TRY(acquireBufferHelper(contextVk, static_cast<size_t>(mState.getSize()),
                                               BufferUpdateType::ContentsUpdate));
+            }
+            else if (rangeInvalidate)
+            {
+                if (!mMapInvalidateRangeBufferValid)
+                    mMapInvalidateRangeBuffer.init(static_cast<size_t>(length));
+                ANGLE_TRY(mMapInvalidateRangeBuffer.allocate(static_cast<size_t>(length)));
+                mMapInvalidateRangeBuffer.map(0, mapPtr);
+                mMapInvalidateRangeClientOffset = offset;
+                mMapInvalidateRangeSize         = length;
+                mMapInvalidateRangeMappedPtr    = *mapPtr;
+                mMapInvalidateRangeActive       = true;
+                return angle::Result::Continue;
             }
             else if (!mBuffer->isCurrentlyInUseForWrite(contextVk->getLastCompletedQueueSerial()))
             {
@@ -729,7 +751,18 @@ angle::Result BufferVk::unmapImpl(ContextVk *contextVk)
 
     bool writeOperation = ((mState.getAccessFlags() & GL_MAP_WRITE_BIT) != 0);
 
-    if (!mShadowBuffer.valid() && mBuffer->isHostVisible())
+    if (mMapInvalidateRangeActive)
+    {
+        // We do not use setDataImpl/setSubData because they might actually go down the path of
+        // acquireAndUpdate, which just ghosts the entire buffer again!
+        ANGLE_TRY(stagedUpdate(contextVk, reinterpret_cast<uint8_t *>(mMapInvalidateRangeMappedPtr),
+                               static_cast<size_t>(mMapInvalidateRangeSize),
+                               static_cast<size_t>(mMapInvalidateRangeClientOffset)));
+        mMapInvalidateRangeBuffer.unmap();
+        mMapInvalidateRangeBuffer.release();
+        mMapInvalidateRangeActive = false;
+    }
+    else if (!mShadowBuffer.valid() && mBuffer->isHostVisible())
     {
         mBuffer->unmap(contextVk->getRenderer());
     }
