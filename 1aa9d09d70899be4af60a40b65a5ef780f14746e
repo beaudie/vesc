@@ -36,6 +36,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "f6dc97ac_acccd8c6",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2021-10-28T19:52:01Z",
+      "side": 1,
+      "message": "Yeah, the test seems broken if it\u0027s an ES 100 shader.\n\nSo, not sure what\u0027s going on now, is Genshin fixed with this change? If so, I\u0027m sorry you had to go through the whole make-undefined-defined thing!",
+      "parentUuid": "1b333220_16516477",
+      "revId": "1aa9d09d70899be4af60a40b65a5ef780f14746e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "b0ee1ba8_97bbf1cb",
