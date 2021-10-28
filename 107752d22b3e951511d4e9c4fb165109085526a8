@@ -16,6 +16,23 @@
       "message": "Also, jmadill is out for a few more days afaik, so +syoussefi :)",
       "revId": "107752d22b3e951511d4e9c4fb165109085526a8",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "7db8aec4_594a68b6",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2021-10-28T13:34:58Z",
+      "side": 1,
+      "message": "Thanks!",
+      "revId": "107752d22b3e951511d4e9c4fb165109085526a8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
