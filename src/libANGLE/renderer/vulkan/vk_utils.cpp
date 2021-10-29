@@ -885,6 +885,9 @@ void GarbageObject::destroy(RendererVk *renderer)
         case HandleType::Allocation:
             vma::FreeMemory(renderer->getAllocator().getHandle(), (VmaAllocation)mHandle);
             break;
+        case HandleType::BufferSubAllocation:
+            DestroyVmaBufferSubAllocation((VmaBufferSubAllocation)mHandle);
+            break;
         default:
             UNREACHABLE();
             break;
