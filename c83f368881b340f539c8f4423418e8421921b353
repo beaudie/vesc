@@ -52,6 +52,23 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "f7009e23_ffe0ac74",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2021-10-29T14:15:59Z",
+      "side": 1,
+      "message": "LGTM too, mostly removals!",
+      "revId": "c83f368881b340f539c8f4423418e8421921b353",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "1006ed08_d01a8cf3",
@@ -65,6 +82,29 @@
       "writtenOn": "2021-10-28T17:38:27Z",
       "side": 1,
       "message": "These three methods are part of a bug fix for Occlusion Query buffers/ and other buffers to map correctly. Although we don\u0027t need to sync every single buffer, if we\u0027ve encoded a blit synchronize, we do have to wait on the command buffer before map.",
+      "revId": "c83f368881b340f539c8f4423418e8421921b353",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "92c0ac84_028bface",
+        "filename": "src/libANGLE/renderer/metal/mtl_resources.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 91,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2021-10-29T14:15:59Z",
+      "side": 1,
+      "message": "nit: stray space here, \u0027git cl format\u0027 will clean it up for you. (also failing presubmit because of this)",
+      "range": {
+        "startLine": 91,
+        "startChar": 60,
+        "endLine": 91,
+        "endChar": 61
+      },
       "revId": "c83f368881b340f539c8f4423418e8421921b353",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
