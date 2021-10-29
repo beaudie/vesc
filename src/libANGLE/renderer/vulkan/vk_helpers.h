@@ -725,11 +725,16 @@ class PipelineBarrier : angle::NonCopyable
           mDstStageMask(0),
           mMemoryBarrierSrcAccess(0),
           mMemoryBarrierDstAccess(0),
+          mBufferMemoryBarriers(),
           mImageMemoryBarriers()
     {}
     ~PipelineBarrier() = default;
 
-    bool isEmpty() const { return mImageMemoryBarriers.empty() && mMemoryBarrierDstAccess == 0; }
+    bool isEmpty() const
+    {
+        return mBufferMemoryBarriers.empty() && mImageMemoryBarriers.empty() &&
+               mMemoryBarrierDstAccess == 0;
+    }
 
     void execute(PrimaryCommandBuffer *primary)
     {
@@ -749,7 +754,8 @@ class PipelineBarrier : angle::NonCopyable
             memoryBarrierCount++;
         }
         primary->pipelineBarrier(
-            mSrcStageMask, mDstStageMask, 0, memoryBarrierCount, &memoryBarrier, 0, nullptr,
+            mSrcStageMask, mDstStageMask, 0, memoryBarrierCount, &memoryBarrier,
+            static_cast<uint32_t>(mBufferMemoryBarriers.size()), mBufferMemoryBarriers.data(),
             static_cast<uint32_t>(mImageMemoryBarriers.size()), mImageMemoryBarriers.data());
 
         reset();
@@ -763,20 +769,26 @@ class PipelineBarrier : angle::NonCopyable
         }
 
         // Issue vkCmdPipelineBarrier call
-        VkMemoryBarrier memoryBarrier = {};
-        uint32_t memoryBarrierCount   = 0;
         if (mMemoryBarrierDstAccess != 0)
         {
-            memoryBarrier.sType         = VK_STRUCTURE_TYPE_MEMORY_BARRIER;
-            memoryBarrier.srcAccessMask = mMemoryBarrierSrcAccess;
-            memoryBarrier.dstAccessMask = mMemoryBarrierDstAccess;
-            memoryBarrierCount++;
+            VkMemoryBarrier memoryBarrier = {};
+            memoryBarrier.sType           = VK_STRUCTURE_TYPE_MEMORY_BARRIER;
+            memoryBarrier.srcAccessMask   = mMemoryBarrierSrcAccess;
+            memoryBarrier.dstAccessMask   = mMemoryBarrierDstAccess;
+            primary->pipelineBarrier(mSrcStageMask, mDstStageMask, 0, 1, &memoryBarrier, 0, nullptr,
+                                     0, nullptr);
+        }
+
+        for (const VkBufferMemoryBarrier &bufferBarrier : mBufferMemoryBarriers)
+        {
+            primary->pipelineBarrier(mSrcStageMask, mDstStageMask, 0, 0, nullptr, 1, &bufferBarrier,
+                                     0, nullptr);
         }
 
         for (const VkImageMemoryBarrier &imageBarrier : mImageMemoryBarriers)
         {
-            primary->pipelineBarrier(mSrcStageMask, mDstStageMask, 0, memoryBarrierCount,
-                                     &memoryBarrier, 0, nullptr, 1, &imageBarrier);
+            primary->pipelineBarrier(mSrcStageMask, mDstStageMask, 0, 0, nullptr, 0, nullptr, 1,
+                                     &imageBarrier);
         }
 
         reset();
@@ -789,6 +801,9 @@ class PipelineBarrier : angle::NonCopyable
         mDstStageMask |= other->mDstStageMask;
         mMemoryBarrierSrcAccess |= other->mMemoryBarrierSrcAccess;
         mMemoryBarrierDstAccess |= other->mMemoryBarrierDstAccess;
+        mBufferMemoryBarriers.insert(mBufferMemoryBarriers.end(),
+                                     other->mBufferMemoryBarriers.begin(),
+                                     other->mBufferMemoryBarriers.end());
         mImageMemoryBarriers.insert(mImageMemoryBarriers.end(), other->mImageMemoryBarriers.begin(),
                                     other->mImageMemoryBarriers.end());
         other->reset();
@@ -803,6 +818,16 @@ class PipelineBarrier : angle::NonCopyable
         mDstStageMask |= dstStageMask;
         mMemoryBarrierSrcAccess |= srcAccess;
         mMemoryBarrierDstAccess |= dstAccess;
+    }
+
+    void mergeBufferBarrier(VkPipelineStageFlags srcStageMask,
+                            VkPipelineStageFlags dstStageMask,
+                            const VkBufferMemoryBarrier &bufferMemoryBarrier)
+    {
+        ASSERT(bufferMemoryBarrier.pNext == nullptr);
+        mSrcStageMask |= srcStageMask;
+        mDstStageMask |= dstStageMask;
+        mBufferMemoryBarriers.push_back(bufferMemoryBarrier);
     }
 
     void mergeImageBarrier(VkPipelineStageFlags srcStageMask,
@@ -821,6 +846,7 @@ class PipelineBarrier : angle::NonCopyable
         mDstStageMask           = 0;
         mMemoryBarrierSrcAccess = 0;
         mMemoryBarrierDstAccess = 0;
+        mBufferMemoryBarriers.clear();
         mImageMemoryBarriers.clear();
     }
 
@@ -831,13 +857,14 @@ class PipelineBarrier : angle::NonCopyable
     VkPipelineStageFlags mDstStageMask;
     VkAccessFlags mMemoryBarrierSrcAccess;
     VkAccessFlags mMemoryBarrierDstAccess;
+    std::vector<VkBufferMemoryBarrier> mBufferMemoryBarriers;
     std::vector<VkImageMemoryBarrier> mImageMemoryBarriers;
 };
 using PipelineBarrierArray = angle::PackedEnumMap<PipelineStage, PipelineBarrier>;
 
 class FramebufferHelper;
 
-class BufferHelper final : public ReadWriteResource
+class BufferHelper : public ReadWriteResource
 {
   public:
     BufferHelper();
@@ -850,18 +877,25 @@ class BufferHelper final : public ReadWriteResource
                                VkMemoryPropertyFlags memoryProperties,
                                const VkBufferCreateInfo &requestedCreateInfo,
                                GLeglClientBufferEXT clientBuffer);
-    void destroy(RendererVk *renderer);
+    angle::Result initSubAllocation(ContextVk *contextVk,
+                                    uint32_t memoryTypeIndex,
+                                    size_t size,
+                                    size_t alignment);
 
+    void destroy(RendererVk *renderer);
     void release(RendererVk *renderer);
 
     BufferSerial getBufferSerial() const { return mSerial; }
     bool valid() const { return mBuffer.valid(); }
     const Buffer &getBuffer() const { return mBuffer; }
+    const Buffer &getBufferAndOffset(VkDeviceSize *offsetOut) const;
+    VkDeviceSize getOffset() const;
     VkDeviceSize getSize() const { return mSize; }
     uint8_t *getMappedMemory() const
     {
         ASSERT(isMapped());
-        return mMemory.getMappedMemory();
+        return mBufferSubAllocation.valid() ? mBufferSubAllocation.getMappedMemory()
+                                            : mMemory.getMappedMemory() + getOffset();
     }
     bool isHostVisible() const
     {
@@ -872,7 +906,11 @@ class BufferHelper final : public ReadWriteResource
         return (mMemoryPropertyFlags & VK_MEMORY_PROPERTY_HOST_COHERENT_BIT) != 0;
     }
 
-    bool isMapped() const { return mMemory.getMappedMemory() != nullptr; }
+    bool isMapped() const
+    {
+        return mBufferSubAllocation.valid() ? mBufferSubAllocation.isMapped()
+                                            : mMemory.getMappedMemory() != nullptr;
+    }
     bool isExternalBuffer() const { return mMemory.isExternalBuffer(); }
 
     // Also implicitly sets up the correct barriers.
@@ -881,25 +919,14 @@ class BufferHelper final : public ReadWriteResource
                                  uint32_t regionCount,
                                  const VkBufferCopy *copyRegions);
 
-    angle::Result map(ContextVk *contextVk, uint8_t **ptrOut)
-    {
-        return mMemory.map(contextVk, mSize, ptrOut);
-    }
-
-    angle::Result mapWithOffset(ContextVk *contextVk, uint8_t **ptrOut, size_t offset)
-    {
-        uint8_t *mapBufPointer;
-        ANGLE_TRY(mMemory.map(contextVk, mSize, &mapBufPointer));
-        *ptrOut = mapBufPointer + offset;
-        return angle::Result::Continue;
-    }
-
+    angle::Result map(ContextVk *contextVk, uint8_t **ptrOut);
+    angle::Result mapWithOffset(ContextVk *contextVk, uint8_t **ptrOut, size_t offset);
     void unmap(RendererVk *renderer);
-
     // After a sequence of writes, call flush to ensure the data is visible to the device.
+    angle::Result flush(RendererVk *renderer);
     angle::Result flush(RendererVk *renderer, VkDeviceSize offset, VkDeviceSize size);
-
     // After a sequence of writes, call invalidate to ensure the data is visible to the host.
+    angle::Result invalidate(RendererVk *renderer);
     angle::Result invalidate(RendererVk *renderer, VkDeviceSize offset, VkDeviceSize size);
 
     void changeQueue(uint32_t newQueueFamilyIndex, CommandBuffer *commandBuffer);
@@ -919,6 +946,12 @@ class BufferHelper final : public ReadWriteResource
     // Returns true if the image is owned by an external API or instance.
     bool isReleasedToExternal() const;
 
+    void initBufferMemoryBarrierStruct(VkPipelineStageFlags srcStageMask,
+                                       VkPipelineStageFlags dstStageMask,
+                                       VkFlags srcAccess,
+                                       VkFlags dstAccess,
+                                       VkBufferMemoryBarrier *bufferMemoryBarrier) const;
+
     bool recordReadBarrier(VkAccessFlags readAccessType,
                            VkPipelineStageFlags readStage,
                            PipelineBarrier *barrier);
@@ -928,11 +961,16 @@ class BufferHelper final : public ReadWriteResource
                             PipelineBarrier *barrier);
 
   private:
-    angle::Result initializeNonZeroMemory(Context *context, VkDeviceSize size);
+    angle::Result initializeNonZeroMemory(Context *context,
+                                          VkBufferUsageFlags usage,
+                                          VkDeviceSize size);
 
-    // Vulkan objects.
+    // Vulkan objects. When mBufferSubAllocation is valid, these two objects are week references to
+    // the buffer blocks that sub-allocated from.
     Buffer mBuffer;
     BufferMemory mMemory;
+    // SubAllocation object. Only use it when it is valid.
+    BufferSubAllocation mBufferSubAllocation;
 
     // Cached properties.
     VkMemoryPropertyFlags mMemoryPropertyFlags;
@@ -947,6 +985,66 @@ class BufferHelper final : public ReadWriteResource
 
     BufferSerial mSerial;
 };
+
+class BufferPool : angle::NonCopyable
+{
+  public:
+    BufferPool();
+    BufferPool(BufferPool &&other);
+    ~BufferPool();
+
+    // Init that gives the ability to pass in specified memory property flags for the buffer.
+    void initWithFlags(RendererVk *renderer,
+                       vma::VirtualBlockCreateFlags flags,
+                       VkBufferUsageFlags usage,
+                       VkDeviceSize alignment,
+                       VkDeviceSize initialSize,
+                       uint32_t memoryTypeIndex,
+                       VkMemoryPropertyFlags memoryProperty);
+
+    // This call will allocate a new region at the end of the buffer. It internally may trigger
+    // a new buffer to be created (which is returned in the optional parameter
+    // `newBufferAllocatedOut`).  The new region will be in the returned buffer at given offset. If
+    // a memory pointer is given, the buffer will be automatically map()ed.
+    angle::Result allocateWithAlignment(ContextVk *contextVk,
+                                        VkDeviceSize sizeInBytes,
+                                        VkDeviceSize alignment,
+                                        BufferSubAllocation *suballocation);
+
+    // This frees resources immediately.
+    void destroy(RendererVk *renderer);
+
+    void pruneEmptyBuffers(VkDevice device, const Allocator &allocator);
+
+    VkDeviceSize getAlignment() const { return mAlignment; }
+
+    bool isCoherent() const
+    {
+        return (mMemoryPropertyFlags & VK_MEMORY_PROPERTY_HOST_COHERENT_BIT) != 0;
+    }
+
+    bool valid() const { return mSize != 0; }
+
+  private:
+    angle::Result allocateNewBuffer(ContextVk *contextVk, VkDeviceSize sizeInBytes);
+    bool newBufferAllocatedSinceLastPrune()
+    {
+        return bufferAllocateCountWhenPruned != bufferAllocateCount;
+    }
+
+    vma::VirtualBlockCreateFlags mVirtualBlockCreateFlags;
+    VkBufferUsageFlags mUsage;
+    bool mHostVisible;
+    VkDeviceSize mSize;
+    VkDeviceSize mAlignment;
+    uint32_t mMemoryTypeIndex;
+    VkMemoryPropertyFlags mMemoryPropertyFlags;
+    int32_t mMaxEmptyBufferCount;
+    BufferBlockPointerVector mBufferBlocks;
+    uint32_t bufferAllocateCount;
+    uint32_t bufferAllocateCountWhenPruned;
+};
+using BufferPoolPointerArray = std::array<std::unique_ptr<BufferPool>, VK_MAX_MEMORY_TYPES>;
 
 enum class BufferAccess
 {
