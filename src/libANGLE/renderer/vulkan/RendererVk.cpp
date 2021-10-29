@@ -47,7 +47,6 @@ constexpr bool kExposeNonConformantExtensionsAndVersions = true;
 #else
 constexpr bool kExposeNonConformantExtensionsAndVersions = false;
 #endif
-
 }  // anonymous namespace
 
 namespace rx
@@ -3627,6 +3626,28 @@ void RendererVk::onDeallocateHandle(vk::HandleType handleType)
 {
     std::lock_guard<std::mutex> localLock(mActiveHandleCountsMutex);
     mActiveHandleCounts.onDeallocate(handleType);
+}
+
+VkDeviceSize RendererVk::getPreferedBufferBlockSize(uint32_t memoryTypeIndex) const
+{
+    VkDeviceSize preferredBlockSize;
+    if (mFeatures.preferredLargeHeapBlockSize4MB.enabled)
+    {
+        // This number matches Chromium and was picked by looking at memory usage of
+        // Android apps. The allocator will start making blocks at 1/8 the max size
+        // and builds up block size as needed before capping at the max set here.
+        preferredBlockSize = 4 * 1024 * 1024;
+    }
+    else
+    {
+        preferredBlockSize = 32ull * 1024 * 1024;
+    }
+
+    // Try not to exceed 1/64 of heap size to begin with.
+    const VkDeviceSize heapSize = getMemoryProperties().getHeapSizeForMemoryType(memoryTypeIndex);
+    preferredBlockSize          = std::min(heapSize / 64, preferredBlockSize);
+
+    return preferredBlockSize;
 }
 
 namespace vk

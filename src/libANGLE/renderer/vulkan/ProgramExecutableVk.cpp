@@ -1395,8 +1395,8 @@ angle::Result ProgramExecutableVk::updateAtomicCounterBuffersDescriptorSet(
     size_t writeCount                   = 0;
     for (size_t binding : ~writtenBindings)
     {
-        WriteBufferDescriptorSetBinding(emptyBuffer, 0, VK_WHOLE_SIZE, descriptorSet,
-                                        kStorageBufferDescriptorType, info.binding,
+        WriteBufferDescriptorSetBinding(emptyBuffer, emptyBuffer.getOffset(), emptyBuffer.getSize(),
+                                        descriptorSet, kStorageBufferDescriptorType, info.binding,
                                         static_cast<uint32_t>(binding), 0, &bufferInfos[writeCount],
                                         &writeInfos[writeCount]);
         writeCount++;
