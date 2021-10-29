@@ -499,6 +499,8 @@ class RendererVk : angle::NonCopyable
         return mEnabledDeviceExtensions;
     }
 
+    VkDeviceSize getPreferedBufferBlockSize(uint32_t memoryTypeIndex) const;
+
   private:
     angle::Result initializeDevice(DisplayVk *displayVk, uint32_t queueFamilyIndex);
     void ensureCapsInitialized() const;
