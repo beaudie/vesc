@@ -38,6 +38,24 @@
     {
       "unresolved": false,
       "key": {
+        "uuid": "ecb5fd39_29d87306",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2021-10-29T21:43:48Z",
+      "side": 1,
+      "message": "Even better, thanks!",
+      "parentUuid": "5053e391_5c110e19",
+      "revId": "0a7efea5246abf5f0ee96104b20b8264879c41c9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
         "uuid": "93873818_5b6ebca6",
         "filename": "/PATCHSET_LEVEL",
         "patchSetId": 1
