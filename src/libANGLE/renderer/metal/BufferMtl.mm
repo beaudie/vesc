@@ -324,10 +324,13 @@ ConversionBufferMtl *BufferMtl::getVertexConversionBuffer(ContextMtl *context,
                                                           GLuint stride,
                                                           size_t offset)
 {
+    NSLog(@"Get conversion %d %lu", stride, offset);
     for (VertexConversionBufferMtl &buffer : mVertexConversionBuffers)
     {
-        if (buffer.formatID == formatID && buffer.stride == stride && buffer.offset == offset)
+        if (buffer.formatID == formatID && buffer.stride == stride && buffer.offset <= offset &&
+            buffer.offset % buffer.stride == offset % stride)
         {
+            NSLog(@"found conversion %d %lu", stride, buffer.offset);
             return &buffer;
         }
     }
