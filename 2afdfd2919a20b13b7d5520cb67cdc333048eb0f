@@ -43,6 +43,47 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "2e3da6a3_79e7b0a5",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 12
+      },
+      "lineNbr": 10,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2021-10-29T17:09:15Z",
+      "side": 1,
+      "message": "The hw implementations seem to not modify outputs that are not writtten to.",
+      "parentUuid": "9df04231_634e2a40",
+      "range": {
+        "startLine": 10,
+        "startChar": 43,
+        "endLine": 10,
+        "endChar": 54
+      },
+      "revId": "2afdfd2919a20b13b7d5520cb67cdc333048eb0f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "5b3cd207_18860ce9",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 12
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2021-10-29T17:09:15Z",
+      "side": 1,
+      "message": "Missing tests are missing!",
+      "revId": "2afdfd2919a20b13b7d5520cb67cdc333048eb0f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "cfa195ed_3f0dd5b2",
         "filename": "src/libANGLE/renderer/vulkan/FramebufferVk.cpp",
         "patchSetId": 12
@@ -54,6 +95,24 @@
       "writtenOn": "2021-10-29T17:02:41Z",
       "side": 1,
       "message": "This is already checked in ContextVk::onFramebufferChange(), making one of them redundant.   Please remove one of them.",
+      "revId": "2afdfd2919a20b13b7d5520cb67cdc333048eb0f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "1d55eee7_160db120",
+        "filename": "src/libANGLE/renderer/vulkan/FramebufferVk.cpp",
+        "patchSetId": 12
+      },
+      "lineNbr": 1942,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2021-10-29T17:09:15Z",
+      "side": 1,
+      "message": "+1",
+      "parentUuid": "cfa195ed_3f0dd5b2",
       "revId": "2afdfd2919a20b13b7d5520cb67cdc333048eb0f",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
