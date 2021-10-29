@@ -4335,12 +4335,22 @@ bool ValidateGetAttribLocation(const Context *context,
                                ShaderProgramID program,
                                const GLchar *name)
 {
-    // The WebGL spec (section 6.20) disallows strings containing invalid ESSL characters for
-    // shader-related entry points
-    if (context->isWebGL() && !IsValidESSLString(name, strlen(name)))
+    if (context->isWebGL())
     {
-        context->validationError(entryPoint, GL_INVALID_VALUE, kInvalidNameCharacters);
-        return false;
+        const size_t length = strlen(name);
+        if (!IsValidESSLString(name, length))
+        {
+            // The WebGL spec (section 6.20) disallows strings containing invalid ESSL characters
+            // for shader-related entry points
+            context->validationError(entryPoint, GL_INVALID_VALUE, kInvalidNameCharacters);
+            return false;
+        }
+
+        if (!ValidateWebGLNameLength(context, entryPoint, length) ||
+            !ValidateWebGLNamePrefix(context, entryPoint, name))
+        {
+            return false;
+        }
     }
 
     Program *programObject = GetValidProgram(context, entryPoint, program);
