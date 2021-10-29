@@ -942,8 +942,11 @@ angle::Result VertexArrayMtl::convertVertexBuffer(const gl::Context *glContext,
     // Has the content of the buffer has changed since last conversion?
     if (!conversion->dirty)
     {
+        VertexConversionBufferMtl * vertexConversionMtl = static_cast<VertexConversionBufferMtl *>(conversion);
+        ASSERT((binding.getOffset() - vertexConversionMtl->offset) % stride == 0);
         mConvertedArrayBufferHolders[attribIndex].set(conversion->convertedBuffer);
-        mCurrentArrayBufferOffsets[attribIndex] = conversion->convertedOffset;
+        mCurrentArrayBufferOffsets[attribIndex] = conversion->convertedOffset + 
+            stride * ((binding.getOffset() - vertexConversionMtl->offset)/binding.getStride());
 
         mCurrentArrayBuffers[attribIndex]       = &mConvertedArrayBufferHolders[attribIndex];
         mCurrentArrayBufferFormats[attribIndex] = &convertedFormat;
@@ -1016,8 +1019,8 @@ angle::Result VertexArrayMtl::convertVertexBufferCPU(ContextMtl *contextMtl,
 
     const uint8_t *srcBytes = srcBuffer->getClientShadowCopyData(contextMtl);
     ANGLE_CHECK_GL_ALLOC(contextMtl, srcBytes);
-
-    srcBytes += binding.getOffset();
+    VertexConversionBufferMtl * vertexConverison = static_cast<VertexConversionBufferMtl *>(conversion);
+    srcBytes += MIN(binding.getOffset(), static_cast<GLintptr>(vertexConverison->offset));
 
     ANGLE_TRY(StreamVertexData(
         contextMtl, &conversion->data, srcBytes, numVertices * targetStride, 0, numVertices,
@@ -1049,9 +1052,9 @@ angle::Result VertexArrayMtl::convertVertexBufferGPU(const gl::Context *glContex
     ANGLE_CHECK_GL_MATH(contextMtl, numVertices <= std::numeric_limits<uint32_t>::max());
 
     mtl::VertexFormatConvertParams params;
-
+    VertexConversionBufferMtl * vertexConversion = static_cast<VertexConversionBufferMtl *>(conversion);
     params.srcBuffer            = srcBuffer->getCurrentBuffer();
-    params.srcBufferStartOffset = static_cast<uint32_t>(binding.getOffset());
+    params.srcBufferStartOffset = static_cast<uint32_t>(MIN(static_cast<GLintptr>(vertexConversion->offset),binding.getOffset()));
     params.srcStride            = binding.getStride();
     params.srcDefaultAlphaData  = convertedFormat.defaultAlpha;
 
