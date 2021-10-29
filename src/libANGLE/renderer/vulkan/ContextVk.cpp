@@ -311,6 +311,7 @@ template <typename MaskT>
 void AppendBufferVectorToDesc(vk::ShaderBuffersDescriptorDesc *desc,
                               const gl::BufferVector &buffers,
                               const MaskT &buffersMask,
+                              bool isDynamicDescriptor,
                               bool appendOffset)
 {
     if (buffersMask.any())
@@ -329,25 +330,37 @@ void AppendBufferVectorToDesc(vk::ShaderBuffersDescriptorDesc *desc,
             }
 
             BufferVk *bufferVk = vk::GetImpl(bufferGL);
-
             if (!bufferVk->isBufferValid())
             {
                 desc->append32BitValue(0);
                 continue;
             }
 
-            VkDeviceSize bufferOffset = 0;
-            vk::BufferSerial bufferSerial =
-                bufferVk->getBufferAndOffset(&bufferOffset).getBufferSerial();
+            const vk::BufferHelper &bufferHelper = bufferVk->getBuffer();
 
+            vk::BufferSerial bufferSerial;
+            if (isDynamicDescriptor)
+            {
+                // If this is dynamic descriptor, we should use the main buffer's serial to
+                // increase the cache hit rate. Otherwise we have to use sub-allocation's serial
+                // number to trigger a cache miss.
+                bufferSerial = bufferHelper.getBlockBufferSerial();
+            }
+            else
+            {
+                bufferSerial = bufferHelper.getBufferSerial();
+            }
             desc->appendBufferSerial(bufferSerial);
+
             ASSERT(static_cast<uint64_t>(binding.getSize()) <=
                    static_cast<uint64_t>(std::numeric_limits<uint32_t>::max()));
             desc->append32BitValue(static_cast<uint32_t>(binding.getSize()));
+
             if (appendOffset)
             {
                 ASSERT(static_cast<uint64_t>(binding.getOffset()) <
                        static_cast<uint64_t>(std::numeric_limits<uint32_t>::max()));
+                VkDeviceSize bufferOffset = bufferHelper.getOffset();
                 desc->append32BitValue(static_cast<uint32_t>(bufferOffset + binding.getOffset()));
             }
         }
@@ -1268,9 +1281,7 @@ bool ContextVk::renderPassUsesStorageResources() const
 
         if (texture->getType() == gl::TextureType::Buffer)
         {
-            VkDeviceSize bufferOffset = 0;
-            vk::BufferHelper &buffer =
-                vk::GetImpl(textureVk->getBuffer().get())->getBufferAndOffset(&bufferOffset);
+            vk::BufferHelper &buffer = vk::GetImpl(textureVk->getBuffer().get())->getBuffer();
             if (mRenderPassCommands->usesBuffer(buffer))
             {
                 return true;
@@ -1633,9 +1644,8 @@ ANGLE_INLINE angle::Result ContextVk::handleDirtyTexturesImpl(
         // If it's a texture buffer, get the attached buffer.
         if (textureVk->getBuffer().get() != nullptr)
         {
-            BufferVk *bufferVk        = vk::GetImpl(textureVk->getBuffer().get());
-            VkDeviceSize bufferOffset = 0;
-            vk::BufferHelper &buffer  = bufferVk->getBufferAndOffset(&bufferOffset);
+            BufferVk *bufferVk       = vk::GetImpl(textureVk->getBuffer().get());
+            vk::BufferHelper &buffer = bufferVk->getBuffer();
 
             gl::ShaderBitSet stages =
                 executable->getSamplerShaderBitsForTextureUnitIndex(textureUnit);
@@ -1824,7 +1834,8 @@ angle::Result ContextVk::handleDirtyGraphicsIndexBuffer(DirtyBits::Iterator *dir
     VkDeviceSize offset =
         mVertexArray->getCurrentElementArrayBufferOffset() + mCurrentIndexBufferOffset;
 
-    mRenderPassCommandBuffer->bindIndexBuffer(elementArrayBuffer->getBuffer(), offset,
+    mRenderPassCommandBuffer->bindIndexBuffer(elementArrayBuffer->getBuffer(),
+                                              elementArrayBuffer->getOffset() + offset,
                                               getVkIndexType(mCurrentDrawElementsType));
 
     mRenderPassCommands->bufferRead(this, VK_ACCESS_INDEX_READ_BIT, vk::PipelineStage::VertexInput,
@@ -2623,6 +2634,9 @@ void ContextVk::flushGpuEvents(double nextSyncGpuTimestampS, double nextSyncCpuT
 void ContextVk::clearAllGarbage()
 {
     ANGLE_TRACE_EVENT0("gpu.angle", "ContextVk::clearAllGarbage");
+
+    mRenderer->cleanupCompletedCommandsGarbage();
+
     for (vk::GarbageObject &garbage : mCurrentGarbage)
     {
         garbage.destroy(mRenderer);
@@ -2911,12 +2925,9 @@ angle::Result ContextVk::multiDrawArraysIndirectHelper(const gl::Context *contex
     // drawcount > 1).
     uint32_t vkStride = (stride == 0 && drawcount > 1) ? sizeof(VkDrawIndirectCommand) : stride;
 
-    gl::Buffer *indirectBuffer        = mState.getTargetBuffer(gl::BufferBinding::DrawIndirect);
-    VkDeviceSize indirectBufferOffset = 0;
-    vk::BufferHelper *currentIndirectBuf =
-        &vk::GetImpl(indirectBuffer)->getBufferAndOffset(&indirectBufferOffset);
-    VkDeviceSize currentIndirectBufOffset =
-        indirectBufferOffset + reinterpret_cast<VkDeviceSize>(indirect);
+    gl::Buffer *indirectBuffer            = mState.getTargetBuffer(gl::BufferBinding::DrawIndirect);
+    vk::BufferHelper *currentIndirectBuf  = &vk::GetImpl(indirectBuffer)->getBuffer();
+    VkDeviceSize currentIndirectBufOffset = reinterpret_cast<VkDeviceSize>(indirect);
 
     if (mVertexArray->getStreamingVertexAttribsMask().any())
     {
@@ -2952,16 +2963,19 @@ angle::Result ContextVk::multiDrawArraysIndirectHelper(const gl::Context *contex
                                             currentIndirectBufOffset, &dstIndirectBuf,
                                             &dstIndirectBufOffset));
 
-        mRenderPassCommandBuffer->drawIndexedIndirect(dstIndirectBuf->getBuffer(),
-                                                      dstIndirectBufOffset, drawcount, vkStride);
+        mRenderPassCommandBuffer->drawIndexedIndirect(
+            dstIndirectBuf->getBuffer(), dstIndirectBuf->getOffset() + dstIndirectBufOffset,
+            drawcount, vkStride);
         return angle::Result::Continue;
     }
 
     ANGLE_TRY(setupIndirectDraw(context, mode, mNonIndexedDirtyBitsMask, currentIndirectBuf,
                                 currentIndirectBufOffset));
 
-    mRenderPassCommandBuffer->drawIndirect(currentIndirectBuf->getBuffer(),
-                                           currentIndirectBufOffset, drawcount, vkStride);
+    mRenderPassCommandBuffer->drawIndirect(
+        currentIndirectBuf->getBuffer(), currentIndirectBuf->getOffset() + currentIndirectBufOffset,
+        drawcount, vkStride);
+
     return angle::Result::Continue;
 }
 
@@ -3017,11 +3031,8 @@ angle::Result ContextVk::multiDrawElementsIndirectHelper(const gl::Context *cont
 
     gl::Buffer *indirectBuffer = mState.getTargetBuffer(gl::BufferBinding::DrawIndirect);
     ASSERT(indirectBuffer);
-    VkDeviceSize indirectBufferOffset = 0;
-    vk::BufferHelper *currentIndirectBuf =
-        &vk::GetImpl(indirectBuffer)->getBufferAndOffset(&indirectBufferOffset);
-    VkDeviceSize currentIndirectBufOffset =
-        indirectBufferOffset + reinterpret_cast<VkDeviceSize>(indirect);
+    vk::BufferHelper *currentIndirectBuf  = &vk::GetImpl(indirectBuffer)->getBuffer();
+    VkDeviceSize currentIndirectBufOffset = reinterpret_cast<VkDeviceSize>(indirect);
 
     if (mVertexArray->getStreamingVertexAttribsMask().any())
     {
@@ -3084,8 +3095,10 @@ angle::Result ContextVk::multiDrawElementsIndirectHelper(const gl::Context *cont
                                            currentIndirectBufOffset));
     }
 
-    mRenderPassCommandBuffer->drawIndexedIndirect(currentIndirectBuf->getBuffer(),
-                                                  currentIndirectBufOffset, drawcount, vkStride);
+    mRenderPassCommandBuffer->drawIndexedIndirect(
+        currentIndirectBuf->getBuffer(), currentIndirectBuf->getOffset() + currentIndirectBufOffset,
+        drawcount, vkStride);
+
     return angle::Result::Continue;
 }
 
@@ -4450,19 +4463,26 @@ angle::Result ContextVk::invalidateCurrentShaderResources(gl::Command command)
         }
 
         const gl::BufferVector &uniformBuffers = mState.getOffsetBindingPointerUniformBuffers();
+        bool isDynamicDescriptor = executableVk->usesDynamicUniformBufferDescriptors();
+        bool appendOffset        = !isDynamicDescriptor;
         AppendBufferVectorToDesc(&mShaderBuffersDescriptorDesc, uniformBuffers,
-                                 mState.getUniformBuffersMask(),
-                                 !executableVk->usesDynamicUniformBufferDescriptors());
+                                 mState.getUniformBuffersMask(), isDynamicDescriptor, appendOffset);
 
         const gl::BufferVector &shaderStorageBuffers =
             mState.getOffsetBindingPointerShaderStorageBuffers();
+        isDynamicDescriptor = executableVk->usesDynamicShaderStorageBufferDescriptors();
+        appendOffset        = true;
         AppendBufferVectorToDesc(&mShaderBuffersDescriptorDesc, shaderStorageBuffers,
-                                 mState.getShaderStorageBuffersMask(), true);
+                                 mState.getShaderStorageBuffersMask(), isDynamicDescriptor,
+                                 appendOffset);
 
         const gl::BufferVector &atomicCounterBuffers =
             mState.getOffsetBindingPointerAtomicCounterBuffers();
+        isDynamicDescriptor = executableVk->usesDynamicAtomicCounterBufferDescriptors();
+        appendOffset        = true;
         AppendBufferVectorToDesc(&mShaderBuffersDescriptorDesc, atomicCounterBuffers,
-                                 mState.getAtomicCounterBuffersMask(), true);
+                                 mState.getAtomicCounterBuffersMask(), isDynamicDescriptor,
+                                 appendOffset);
     }
 
     return angle::Result::Continue;
@@ -5448,9 +5468,8 @@ angle::Result ContextVk::updateActiveImages(vk::CommandBufferHelper *commandBuff
         // Special handling of texture buffers.  They have a buffer attached instead of an image.
         if (texture->getType() == gl::TextureType::Buffer)
         {
-            BufferVk *bufferVk        = vk::GetImpl(textureVk->getBuffer().get());
-            VkDeviceSize bufferOffset = 0;
-            vk::BufferHelper &buffer  = bufferVk->getBufferAndOffset(&bufferOffset);
+            BufferVk *bufferVk       = vk::GetImpl(textureVk->getBuffer().get());
+            vk::BufferHelper &buffer = bufferVk->getBuffer();
 
             // TODO: accept multiple stages in bufferWrite.  http://anglebug.com/3573
             for (gl::ShaderType stage : shaderStages)
