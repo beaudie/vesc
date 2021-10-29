@@ -107,6 +107,7 @@ enum class TextureDimension
 // A maximum offset of 4096 covers almost every Vulkan driver on desktop (80%) and mobile (99%). The
 // next highest values to meet native drivers are 16 bits or 32 bits.
 constexpr uint32_t kAttributeOffsetMaxBits = 15;
+constexpr uint32_t kInvalidMemoryTypeIndex = UINT32_MAX;
 
 namespace vk
 {
@@ -519,6 +520,23 @@ class DeviceScoped final : angle::NonCopyable
     T mVar;
 };
 
+template <typename T>
+class AllocatorScoped final : angle::NonCopyable
+{
+  public:
+    AllocatorScoped(const Allocator &allocator) : mAllocator(allocator) {}
+    ~AllocatorScoped() { mVar.destroy(mAllocator); }
+
+    const T &get() const { return mVar; }
+    T &get() { return mVar; }
+
+    T &&release() { return std::move(mVar); }
+
+  private:
+    const Allocator &mAllocator;
+    T mVar;
+};
+
 // Similar to DeviceScoped, but releases objects instead of destroying them. Requires that T have a
 // release method that takes a ContextVk * and returns void.
 template <typename T>
@@ -898,6 +916,90 @@ class ResourceSerialFactory final : angle::NonCopyable
     std::atomic<uint32_t> mCurrentUniqueSerial;
 };
 
+// BufferBlock
+class BufferBlock final : angle::NonCopyable
+{
+  public:
+    BufferBlock();
+    BufferBlock(BufferBlock &&other);
+    ~BufferBlock();
+
+    void destroy(RendererVk *renderer);
+    angle::Result init(ContextVk *contextVk,
+                       Buffer &buffer,
+                       vma::VirtualBlockCreateFlags flags,
+                       Allocation &allocation,
+                       VkMemoryPropertyFlags memoryPropertyFlags,
+                       VkDeviceSize size);
+
+    VirtualBlock &getVirtualBlock();
+    const Buffer &getBuffer() const;
+    const Allocation &getAllocation() const;
+    BufferSerial getBufferSerial() const { return mSerial; }
+
+    VkMemoryPropertyFlags getMemoryPropertyFlags() const;
+    VkDeviceSize getMemorySize() const;
+
+    VkResult allocate(VkDeviceSize size, VkDeviceSize alignment, VkDeviceSize *offsetOut);
+    void free(VkDeviceSize offset);
+    VkBool32 isEmpty() const;
+
+    bool isMapped() const;
+    angle::Result map(ContextVk *contextVk);
+    void unmap(const Allocator &allocator);
+    uint8_t *getMappedMemory() const;
+
+  private:
+    VirtualBlock mVirtualBlock;
+    Buffer mBuffer;
+    Allocation mAllocation;
+    VkMemoryPropertyFlags mMemoryPropertyFlags;
+    VkDeviceSize mSize;
+    uint8_t *mMappedMemory;
+    BufferSerial mSerial;
+};
+using BufferBlockPointerVector = std::vector<std::unique_ptr<BufferBlock>>;
+
+// BufferSubAllocation
+struct VmaBufferSubAllocation_T
+{
+    BufferBlock *mBufferBlock;
+    VkDeviceSize mOffset;
+    VkDeviceSize mSize;
+};
+VK_DEFINE_HANDLE(VmaBufferSubAllocation)
+ANGLE_INLINE VkResult
+CreateVmaBufferSubAllocation(BufferBlock *block,
+                             VkDeviceSize offset,
+                             VkDeviceSize size,
+                             VmaBufferSubAllocation *vmaBufferSubAllocationOut)
+{
+    *vmaBufferSubAllocationOut = new VmaBufferSubAllocation_T{block, offset, size};
+    return *vmaBufferSubAllocationOut != VK_NULL_HANDLE ? VK_SUCCESS : VK_ERROR_OUT_OF_HOST_MEMORY;
+}
+ANGLE_INLINE void DestroyVmaBufferSubAllocation(VmaBufferSubAllocation vmaBufferSubAllocation)
+{
+    vmaBufferSubAllocation->mBufferBlock->getVirtualBlock().free(vmaBufferSubAllocation->mOffset);
+    delete vmaBufferSubAllocation;
+}
+
+class BufferSubAllocation final : public WrappedObject<BufferSubAllocation, VmaBufferSubAllocation>
+{
+  public:
+    BufferSubAllocation() = default;
+    void destroy(VkDevice device);
+    VkResult init(VkDevice device, BufferBlock *block, VkDeviceSize offset, VkDeviceSize size);
+
+    const BufferBlock *getBlock() const;
+    const Buffer &getBuffer() const;
+    const Allocation &getAllocation() const;
+    bool isMapped() const;
+    uint8_t *getMappedMemory() const;
+    void flush(const Allocator &allocator) const;
+    void invalidate(const Allocator &allocator) const;
+    VkDeviceSize getOffset() const;
+};
+
 #if defined(ANGLE_ENABLE_PERF_COUNTER_OUTPUT)
 constexpr bool kOutputCumulativePerfCounters = ANGLE_ENABLE_PERF_COUNTER_OUTPUT;
 #else
@@ -1166,6 +1268,16 @@ enum class RenderPassClosureReason
 };
 
 }  // namespace rx
+
+#define VK_RESULT_TRY(command)                             \
+    do                                                     \
+    {                                                      \
+        auto ANGLE_LOCAL_VAR = command;                    \
+        if (ANGLE_UNLIKELY(ANGLE_LOCAL_VAR != VK_SUCCESS)) \
+        {                                                  \
+            return ANGLE_LOCAL_VAR;                        \
+        }                                                  \
+    } while (0)
 
 #define ANGLE_VK_TRY(context, command)                                                   \
     do                                                                                   \
