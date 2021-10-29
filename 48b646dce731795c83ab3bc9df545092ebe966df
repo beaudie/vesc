@@ -16,6 +16,23 @@
       "message": "We should just suppress the flaky test failures on Mac NVIDIA:\nUniformBlockWithOneLargeArrayMemberTest.MemberTypeIsStruct/ES3_Metal\nUniformBlockWithOneLargeArrayMemberTest.MemberTypeIsMixStructFloatAndMat4/ES3_Metal\n",
       "revId": "48b646dce731795c83ab3bc9df545092ebe966df",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "740a50a9_d58def78",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 5
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2021-10-29T14:04:30Z",
+      "side": 1,
+      "message": "LGTM too",
+      "revId": "48b646dce731795c83ab3bc9df545092ebe966df",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
