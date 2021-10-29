@@ -190,7 +190,7 @@ angle::Result ProgramPipelineVk::updateUniforms(ContextVk *contextVk)
     // allocate a new descriptor set whenever there is uniform buffer switch.
     vk::BufferHelper *defaultUniformBuffer = defaultUniformStorage->getCurrentBuffer();
     if (mExecutable.getCurrentDefaultUniformBufferSerial() !=
-        defaultUniformBuffer->getBufferSerial())
+        defaultUniformBuffer->getBlockBufferSerial())
     {
         // We need to reinitialize the descriptor sets if we newly allocated buffers since we can't
         // modify the descriptor sets once initialized.
@@ -203,11 +203,12 @@ angle::Result ProgramPipelineVk::updateUniforms(ContextVk *contextVk)
                 vk::GetImpl(contextVk->getState().getCurrentTransformFeedback());
             uniformsAndXfbBufferDesc = &transformFeedbackVk->getTransformFeedbackDesc();
             uniformsAndXfbBufferDesc->updateDefaultUniformBuffer(
-                defaultUniformBuffer->getBufferSerial());
+                defaultUniformBuffer->getBlockBufferSerial());
         }
         else
         {
-            defaultUniformsDesc.updateDefaultUniformBuffer(defaultUniformBuffer->getBufferSerial());
+            defaultUniformsDesc.updateDefaultUniformBuffer(
+                defaultUniformBuffer->getBlockBufferSerial());
             uniformsAndXfbBufferDesc = &defaultUniformsDesc;
         }
 

@@ -768,7 +768,7 @@ angle::Result ProgramVk::updateUniforms(ContextVk *contextVk)
 
     vk::BufferHelper *defaultUniformBuffer = defaultUniformStorage->getCurrentBuffer();
     if (mExecutable.getCurrentDefaultUniformBufferSerial() !=
-        defaultUniformBuffer->getBufferSerial())
+        defaultUniformBuffer->getBlockBufferSerial())
     {
         // We need to reinitialize the descriptor sets if we newly allocated buffers since we can't
         // modify the descriptor sets once initialized.
@@ -782,11 +782,12 @@ angle::Result ProgramVk::updateUniforms(ContextVk *contextVk)
                 vk::GetImpl(glState.getCurrentTransformFeedback());
             uniformsAndXfbBufferDesc = &transformFeedbackVk->getTransformFeedbackDesc();
             uniformsAndXfbBufferDesc->updateDefaultUniformBuffer(
-                defaultUniformBuffer->getBufferSerial());
+                defaultUniformBuffer->getBlockBufferSerial());
         }
         else
         {
-            defaultUniformsDesc.updateDefaultUniformBuffer(defaultUniformBuffer->getBufferSerial());
+            defaultUniformsDesc.updateDefaultUniformBuffer(
+                defaultUniformBuffer->getBlockBufferSerial());
             uniformsAndXfbBufferDesc = &defaultUniformsDesc;
         }
 
