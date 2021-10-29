@@ -1631,7 +1631,7 @@ angle::Result WindowSurfaceVk::swapImpl(const gl::Context *context,
 
     if (mNeedToAcquireNextSwapchainImage)
     {
-        // Acquire the next image (previously deferred).  The image may not have been already
+        // Acquire the next image (previously deferred). The image may not have been already
         // acquired if there was no rendering done at all to the default framebuffer in this frame,
         // for example if all rendering was done to FBOs.
         ANGLE_VK_TRACE_EVENT_AND_MARKER(contextVk, "Acquire Swap Image Before Swap");
@@ -1653,6 +1653,8 @@ angle::Result WindowSurfaceVk::swapImpl(const gl::Context *context,
         ANGLE_VK_TRACE_EVENT_AND_MARKER(contextVk, "Out-of-Date Swapbuffer");
         ANGLE_TRY(doDeferredAcquireNextImage(context, presentOutOfDate));
     }
+
+    contextVk->pruneDefaultBufferPools();
 
     return angle::Result::Continue;
 }
