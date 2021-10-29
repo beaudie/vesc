@@ -1,0 +1,136 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "667a2985_9d5f13e8",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 3
+      },
+      "lineNbr": 14,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2021-10-29T17:45:22Z",
+      "side": 1,
+      "message": "typo",
+      "range": {
+        "startLine": 14,
+        "startChar": 13,
+        "endLine": 14,
+        "endChar": 19
+      },
+      "revId": "74a350843c2a82fe5a1eb92af343903bd6a0e5f2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ba6378be_41eaaf25",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 3
+      },
+      "lineNbr": 17,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2021-10-29T17:45:22Z",
+      "side": 1,
+      "message": "nit: deleting",
+      "range": {
+        "startLine": 17,
+        "startChar": 7,
+        "endLine": 17,
+        "endChar": 14
+      },
+      "revId": "74a350843c2a82fe5a1eb92af343903bd6a0e5f2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "a7a9fd29_62ae3a47",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 3
+      },
+      "lineNbr": 19,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2021-10-29T17:45:22Z",
+      "side": 1,
+      "message": "typo",
+      "range": {
+        "startLine": 19,
+        "startChar": 18,
+        "endLine": 19,
+        "endChar": 26
+      },
+      "revId": "74a350843c2a82fe5a1eb92af343903bd6a0e5f2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "0b731255_357ad2fe",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 3
+      },
+      "lineNbr": 22,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2021-10-29T17:45:22Z",
+      "side": 1,
+      "message": "Is this handle reuse necessary, or just a coincidence?   It doesn\u0027t seem like something the app or trace can actually rely on.",
+      "range": {
+        "startLine": 20,
+        "startChar": 37,
+        "endLine": 22,
+        "endChar": 49
+      },
+      "revId": "74a350843c2a82fe5a1eb92af343903bd6a0e5f2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "60eefec4_07dce173",
+        "filename": "src/libANGLE/capture/FrameCapture.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 2366,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2021-10-29T17:45:22Z",
+      "side": 1,
+      "message": "nit: Try and use the full 100 column width for your comments, to reduce the overall line count of these types of block comments.\n\nYou can add a visual marker to Clion to show the 100 column width by doing:\n\n  File -\u003e Settings -\u003e Editor -\u003e Code Style\n  \nThen, in the \"Visual Guides\" box input \"100\".\n\nWhen coding, you don\u0027t actually need to manually wrap either, since \u0027git cl format\u0027 will take care of that for you by breaking lines apart.",
+      "range": {
+        "startLine": 2364,
+        "startChar": 0,
+        "endLine": 2366,
+        "endChar": 69
+      },
+      "revId": "74a350843c2a82fe5a1eb92af343903bd6a0e5f2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "931813f9_d3246f0b",
+        "filename": "src/libANGLE/capture/FrameCapture.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 4818,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2021-10-29T17:45:22Z",
+      "side": 1,
+      "message": "Why is this call still necessary?",
+      "revId": "74a350843c2a82fe5a1eb92af343903bd6a0e5f2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
