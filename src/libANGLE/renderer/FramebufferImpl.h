@@ -21,7 +21,9 @@ class Buffer;
 class Framebuffer;
 class FramebufferAttachment;
 struct PixelPackState;
-struct Rectangle;
+template <typename T>
+struct RectangleImpl;
+typedef RectangleImpl<int> Rectangle;
 class State;
 }  // namespace gl
 
