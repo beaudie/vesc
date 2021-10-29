@@ -111,6 +111,30 @@
       },
       "revId": "1aa9d09d70899be4af60a40b65a5ef780f14746e",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "5f71cb15_80df086d",
+        "filename": "src/compiler/translator/CollectVariables.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 607,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2021-10-29T16:40:30Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "b0ee1ba8_97bbf1cb",
+      "range": {
+        "startLine": 607,
+        "startChar": 42,
+        "endLine": 607,
+        "endChar": 45
+      },
+      "revId": "1aa9d09d70899be4af60a40b65a5ef780f14746e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
