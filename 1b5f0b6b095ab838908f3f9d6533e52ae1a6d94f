@@ -211,6 +211,24 @@
       "parentUuid": "de1f1bb1_29fac884",
       "revId": "1b5f0b6b095ab838908f3f9d6533e52ae1a6d94f",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "0f16117d_2525d9cf",
+        "filename": "src/libANGLE/renderer/metal/FrameBufferMtl.mm",
+        "patchSetId": 4
+      },
+      "lineNbr": 494,
+      "author": {
+        "id": 1374244
+      },
+      "writtenOn": "2021-10-29T02:37:31Z",
+      "side": 1,
+      "message": "`mState.getExtents()` is basically the same as `dstFramebufferDimensions` albeit excluding (x, y). If you take a look at `getCompleteRenderArea` it actually calls getExtents() internally.\n\nThe difference is that Extents contains width x height only while `dstFramebufferDimensions` contains (x, y, width, height) with x, y being zeros.\n\nthe `dstTextureSize` parameter only needs Extents in this case",
+      "parentUuid": "24766357_844ac2d6",
+      "revId": "1b5f0b6b095ab838908f3f9d6533e52ae1a6d94f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
