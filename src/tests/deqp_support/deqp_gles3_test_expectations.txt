@@ -703,12 +703,12 @@
 5666 MAC METAL AMD : dEQP-GLES3.functional.texture.filtering.2d_array.formats.rgb9_e5_nearest_mipmap_linear = FAIL
 
 // Test failures introduced by Apple's changes (anglebug.com/5505)
-6467 MAC METAL : dEQP-GLES3.functional.fbo.invalidate.sub.unbind_blit_msaa_color = FAIL
-6467 MAC METAL : dEQP-GLES3.functional.fbo.invalidate.sub.unbind_blit_msaa_stencil = FAIL
-6467 MAC METAL : dEQP-GLES3.functional.fbo.invalidate.whole.unbind_blit_msaa_color = FAIL
-6467 MAC METAL : dEQP-GLES3.functional.fbo.invalidate.whole.unbind_blit_msaa_stencil = FAIL
+6467 MAC METAL INTEL : dEQP-GLES3.functional.fbo.invalidate.sub.unbind_blit_msaa_color = FAIL
+6467 MAC METAL INTEL : dEQP-GLES3.functional.fbo.invalidate.sub.unbind_blit_msaa_stencil = FAIL
+6467 MAC METAL INTEL : dEQP-GLES3.functional.fbo.invalidate.whole.unbind_blit_msaa_color = FAIL
+6467 MAC METAL INTEL : dEQP-GLES3.functional.fbo.invalidate.whole.unbind_blit_msaa_stencil = FAIL
 
-6467 MAC METAL : dEQP-GLES3.functional.fbo.msaa.*_samples.depth* = FAIL
+6467 MAC METAL INTEL : dEQP-GLES3.functional.fbo.msaa.*_samples.depth* = FAIL
 
 // Failures introduced after switching to the direct Metal backend
 
