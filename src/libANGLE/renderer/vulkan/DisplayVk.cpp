@@ -12,6 +12,7 @@
 #include "common/debug.h"
 #include "libANGLE/Context.h"
 #include "libANGLE/Display.h"
+#include "libANGLE/renderer/vulkan/BufferVk.h"
 #include "libANGLE/renderer/vulkan/ContextVk.h"
 #include "libANGLE/renderer/vulkan/DeviceVk.h"
 #include "libANGLE/renderer/vulkan/ImageVk.h"
@@ -22,6 +23,8 @@
 
 namespace rx
 {
+
+constexpr size_t kDefaultBufferPoolInitialBufferSize = 1 * 1024 * 1024;  // start with 1M
 
 DisplayVk::DisplayVk(const egl::DisplayState &state)
     : DisplayImpl(state),
@@ -330,11 +333,53 @@ ShareGroupVk::ShareGroupVk() {}
 
 void ShareGroupVk::onDestroy(const egl::Display *display)
 {
-    DisplayVk *displayVk = vk::GetImpl(display);
+    RendererVk *renderer = vk::GetImpl(display)->getRenderer();
 
-    mPipelineLayoutCache.destroy(displayVk->getRenderer());
-    mDescriptorSetLayoutCache.destroy(displayVk->getRenderer());
+    for (std::unique_ptr<vk::BufferPool> &pool : mDefaultBufferPools)
+    {
+        if (pool)
+        {
+            pool->destroy(renderer);
+        }
+    }
+
+    mPipelineLayoutCache.destroy(renderer);
+    mDescriptorSetLayoutCache.destroy(renderer);
 
     ASSERT(mResourceUseLists.empty());
+}
+
+vk::BufferPool *ShareGroupVk::getDefaultBufferPool(RendererVk *renderer, uint32_t memoryTypeIndex)
+{
+    if (!mDefaultBufferPools[memoryTypeIndex])
+    {
+        vk::BufferMemoryAllocator &bufferMemoryAllocator = renderer->getBufferMemoryAllocator();
+
+        VkImageUsageFlags usageFlags = GetDefaultBufferUsageFlags(renderer);
+        size_t alignment             = GetDefaultBufferAlignment(renderer);
+        size_t initialSize           = kDefaultBufferPoolInitialBufferSize;
+
+        VkMemoryPropertyFlags memoryPropertyFlags;
+        bufferMemoryAllocator.getMemoryTypeProperties(renderer, memoryTypeIndex,
+                                                      &memoryPropertyFlags);
+
+        std::unique_ptr<vk::BufferPool> pool = std::make_unique<vk::BufferPool>();
+        pool->initWithFlags(renderer, usageFlags, alignment, initialSize, memoryTypeIndex,
+                            memoryPropertyFlags);
+        mDefaultBufferPools[memoryTypeIndex] = std::move(pool);
+    }
+
+    return mDefaultBufferPools[memoryTypeIndex].get();
+}
+
+void ShareGroupVk::pruneDefaultBufferPools()
+{
+    for (std::unique_ptr<vk::BufferPool> &pool : mDefaultBufferPools)
+    {
+        if (pool)
+        {
+            pool->pruneEmptyBuffers();
+        }
+    }
 }
 }  // namespace rx

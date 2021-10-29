@@ -700,15 +700,12 @@ angle::Result VertexArrayVk::syncDirtyAttrib(ContextVk *contextVk,
                     mCurrentArrayBuffers[attribIndex] = &bufferHelper;
                     mCurrentArrayBufferHandles[attribIndex] = bufferHelper.getBuffer().getHandle();
 
-                    ASSERT(bufferOffset < bufferHelper.getSize());
-                    VkDeviceSize availableSize = bufferHelper.getSize() - bufferOffset;
-
                     // Vulkan requires the offset is within the buffer. We use robust access
                     // behaviour to reset the offset if it starts outside the buffer.
                     mCurrentArrayBufferOffsets[attribIndex] =
-                        binding.getOffset() < static_cast<GLint64>(availableSize)
+                        binding.getOffset() < static_cast<GLint64>(bufferHelper.getSize())
                             ? binding.getOffset() + bufferOffset
-                            : 0;
+                            : bufferOffset;
 
                     stride = binding.getStride();
                 }

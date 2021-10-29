@@ -2491,6 +2491,164 @@ void DynamicShadowBuffer::reset()
     mSize = 0;
 }
 
+// BufferPool implementation.
+BufferPool::BufferPool()
+    : mUsage(0),
+      mHostVisible(false),
+      mSize(0),
+      mAlignment(0),
+      mMemoryTypeIndex(0),
+      mMemoryPropertyFlags(0),
+      mMaxEmptyBufferCount(1)
+{}
+
+BufferPool::BufferPool(BufferPool &&other)
+    : mUsage(other.mUsage),
+      mHostVisible(other.mHostVisible),
+      mSize(other.mSize),
+      mAlignment(other.mAlignment),
+      mMemoryTypeIndex(other.mMemoryTypeIndex),
+      mMemoryPropertyFlags(other.mMemoryPropertyFlags)
+{}
+
+void BufferPool::initWithFlags(RendererVk *renderer,
+                               VkBufferUsageFlags usage,
+                               size_t alignment,
+                               size_t initialSize,
+                               uint32_t memoryTypeIndex,
+                               VkMemoryPropertyFlags memoryPropertyFlags)
+{
+    mUsage               = usage;
+    mMemoryTypeIndex     = memoryTypeIndex;
+    mMemoryPropertyFlags = memoryPropertyFlags;
+    mAlignment           = alignment;
+    // Should be power of two
+    ASSERT((initialSize & (initialSize - 1)) == 0);
+    mSize        = initialSize;
+    mHostVisible = ((memoryPropertyFlags & VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT) != 0);
+}
+
+BufferPool::~BufferPool()
+{
+    ASSERT(mBufferBlocks.empty());
+}
+
+void BufferPool::pruneEmptyBuffers()
+{
+    int emptyBufferCount = 0;
+    for (auto iter = mBufferBlocks.begin(); iter != mBufferBlocks.end();)
+    {
+        if (!(*iter)->isEmpty())
+        {
+            ++iter;
+            continue;
+        }
+
+        if (emptyBufferCount >= mMaxEmptyBufferCount)
+        {
+            (*iter)->release();
+            iter = mBufferBlocks.erase(iter);
+        }
+        else
+        {
+            emptyBufferCount++;
+            ++iter;
+        }
+    }
+}
+
+angle::Result BufferPool::allocateNewBuffer(ContextVk *contextVk, size_t sizeInBytes)
+{
+    RendererVk *renderer                         = contextVk->getRenderer();
+    BufferMemoryAllocator &bufferMemoryAllocator = renderer->getBufferMemoryAllocator();
+    VkDeviceSize heapSize =
+        renderer->getMemoryProperties().getHeapSizeForMemoryType(mMemoryTypeIndex);
+
+    // Gather statistics
+    const gl::OverlayType *overlay = contextVk->getOverlay();
+    if (overlay->isEnabled())
+    {
+        gl::RunningGraphWidget *dynamicBufferAllocations =
+            overlay->getRunningGraphWidget(gl::WidgetId::VulkanDynamicBufferAllocations);
+        dynamicBufferAllocations->add(1);
+    }
+
+    // Double the size until meet the requirement. This also helps reducing the fragmenttaion. Since
+    // this is global pool, we have less worry about memory waste.
+    while (mSize < sizeInBytes)
+    {
+        mSize <<= 1;
+    }
+    mSize = std::min(mSize, heapSize);
+
+    // Allocate the buffer
+    std::unique_ptr<BufferBlock> block = std::make_unique<BufferBlock>();
+
+    VkBufferCreateInfo createInfo    = {};
+    createInfo.sType                 = VK_STRUCTURE_TYPE_BUFFER_CREATE_INFO;
+    createInfo.flags                 = 0;
+    createInfo.size                  = mSize;
+    createInfo.usage                 = mUsage;
+    createInfo.sharingMode           = VK_SHARING_MODE_EXCLUSIVE;
+    createInfo.queueFamilyIndexCount = 0;
+    createInfo.pQueueFamilyIndices   = nullptr;
+
+    Buffer buffer;
+    Allocation allocation;
+    uint32_t memoryTypeIndex = 0;
+    ANGLE_VK_TRY(contextVk, bufferMemoryAllocator.createBuffer(
+                                renderer, createInfo, mMemoryPropertyFlags, 0,
+                                renderer->getFeatures().persistentlyMappedBuffers.enabled,
+                                &memoryTypeIndex, &buffer, &allocation));
+    ASSERT(memoryTypeIndex == mMemoryTypeIndex);
+
+    ANGLE_VK_TRY(contextVk,
+                 block->init(renderer->getDevice(), buffer.release(), allocation.release(),
+                             memoryTypeIndex, mMemoryPropertyFlags, mSize));
+    mBufferBlocks.push_back(std::move(block));
+
+    return angle::Result::Continue;
+}
+
+angle::Result BufferPool::allocateWithAlignment(ContextVk *contextVk,
+                                                size_t sizeInBytes,
+                                                size_t alignment,
+                                                BufferSubAllocation *suballocation)
+{
+    VkDeviceSize offset;
+    // We always allocate from reverse order so that older buffers have a chance to age out.
+    for (auto iter = mBufferBlocks.rbegin(); iter != mBufferBlocks.rend(); ++iter)
+    {
+        std::unique_ptr<BufferBlock> &block = *iter;
+        if (block->allocate(sizeInBytes, alignment ? alignment : mAlignment, &offset) == VK_SUCCESS)
+        {
+            suballocation->init(contextVk->getDevice(), block.get(), offset);
+            return angle::Result::Continue;
+        }
+    }
+
+    ANGLE_TRY(allocateNewBuffer(contextVk, sizeInBytes));
+
+    std::unique_ptr<BufferBlock> &block = mBufferBlocks.back();
+    if (block->allocate(sizeInBytes, alignment ? alignment : mAlignment, &offset) == VK_SUCCESS)
+    {
+        suballocation->init(contextVk->getDevice(), block.get(), offset);
+        return angle::Result::Continue;
+    }
+
+    return angle::Result::Stop;
+}
+
+void BufferPool::destroy(RendererVk *renderer)
+{
+    for (std::unique_ptr<BufferBlock> &block : mBufferBlocks)
+    {
+        ASSERT(block->isEmpty());
+        block->destroy(renderer->getDevice(), renderer->getAllocator());
+    }
+    mBufferBlocks.clear();
+}
+
 // DescriptorPoolHelper implementation.
 DescriptorPoolHelper::DescriptorPoolHelper() : mFreeDescriptorSets(0) {}
 
@@ -3637,6 +3795,56 @@ angle::Result BufferHelper::initExternal(ContextVk *contextVk,
     return angle::Result::Continue;
 }
 
+angle::Result BufferHelper::initSubAllocation(ContextVk *contextVk,
+                                              uint32_t memoryTypeIndex,
+                                              size_t size,
+                                              size_t alignment)
+{
+    RendererVk *renderer = contextVk->getRenderer();
+
+    mSerial = renderer->getResourceSerialFactory().generateBufferSerial();
+    mSize   = size;
+
+    if (renderer->getFeatures().padBuffersToMaxVertexAttribStride.enabled)
+    {
+        const VkDeviceSize maxVertexAttribStride = renderer->getMaxVertexAttribStride();
+        ASSERT(maxVertexAttribStride);
+        size += maxVertexAttribStride;
+    }
+
+    vk::BufferPool *pool = contextVk->getDefaultBufferPool(memoryTypeIndex);
+    ANGLE_TRY(pool->allocateWithAlignment(contextVk, mSize, alignment, &mBufferSubAllocation));
+
+    mMemoryPropertyFlags     = mBufferSubAllocation.getBlock()->getMemoryPropertyFlags();
+    mCurrentQueueFamilyIndex = renderer->getQueueFamilyIndex();
+
+    // For sub-allocated buffer, we do not own the actual buffer. The BufferBlock object owns it. We
+    // still set the mBuffer for convenience so that other APIs will still work.
+    mBuffer.setHandle(mBufferSubAllocation.getBuffer().getHandle());
+    mMemory.getMemoryObject()->setHandle(mBufferSubAllocation.getAllocation().getHandle());
+
+    return angle::Result::Continue;
+}
+
+const Buffer &BufferHelper::getBufferAndOffset(VkDeviceSize *offsetOut) const
+{
+    if (mBufferSubAllocation.valid())
+    {
+        *offsetOut = mBufferSubAllocation.getOffset();
+        return mBufferSubAllocation.getBuffer();
+    }
+    else
+    {
+        *offsetOut = 0;
+        return mBuffer;
+    }
+}
+
+VkDeviceSize BufferHelper::getOffset() const
+{
+    return mBufferSubAllocation.valid() ? mBufferSubAllocation.getOffset() : 0;
+}
+
 angle::Result BufferHelper::initializeNonZeroMemory(Context *context, VkDeviceSize size)
 {
     // Staging buffer memory is non-zero-initialized in 'init'.
@@ -3678,8 +3886,15 @@ void BufferHelper::destroy(RendererVk *renderer)
     unmap(renderer);
     mSize = 0;
 
-    mBuffer.destroy(device);
-    mMemory.destroy(renderer);
+    if (mBufferSubAllocation.valid())
+    {
+        mBufferSubAllocation.destroy(device);
+    }
+    else
+    {
+        mBuffer.destroy(device);
+        mMemory.destroy(renderer);
+    }
 }
 
 void BufferHelper::release(RendererVk *renderer)
@@ -3687,8 +3902,20 @@ void BufferHelper::release(RendererVk *renderer)
     unmap(renderer);
     mSize = 0;
 
-    renderer->collectGarbageAndReinit(&mReadOnlyUse, &mBuffer, mMemory.getExternalMemoryObject(),
-                                      mMemory.getMemoryObject());
+    if (mBufferSubAllocation.valid())
+    {
+        // ToDo: for now we are still initializing mBuffer even though it is not owned by us.
+        mBuffer.release();
+        mMemory.getMemoryObject()->release();
+
+        renderer->collectGarbageAndReinit(&mReadOnlyUse, &mBufferSubAllocation);
+    }
+    else
+    {
+        renderer->collectGarbageAndReinit(
+            &mReadOnlyUse, &mBuffer, mMemory.getExternalMemoryObject(), mMemory.getMemoryObject());
+    }
+
     mReadWriteUse.release();
     mReadWriteUse.init();
 }
@@ -3729,7 +3956,7 @@ angle::Result BufferHelper::flush(RendererVk *renderer, VkDeviceSize offset, VkD
     bool hostCoherent = mMemoryPropertyFlags & VK_MEMORY_PROPERTY_HOST_COHERENT_BIT;
     if (hostVisible && !hostCoherent)
     {
-        mMemory.flush(renderer, mMemoryPropertyFlags, offset, size);
+        mMemory.flush(renderer, mMemoryPropertyFlags, getOffset() + offset, size);
     }
     return angle::Result::Continue;
 }
@@ -3740,7 +3967,7 @@ angle::Result BufferHelper::invalidate(RendererVk *renderer, VkDeviceSize offset
     bool hostCoherent = mMemoryPropertyFlags & VK_MEMORY_PROPERTY_HOST_COHERENT_BIT;
     if (hostVisible && !hostCoherent)
     {
-        mMemory.invalidate(renderer, mMemoryPropertyFlags, offset, size);
+        mMemory.invalidate(renderer, mMemoryPropertyFlags, getOffset() + offset, size);
     }
     return angle::Result::Continue;
 }
@@ -3754,8 +3981,8 @@ void BufferHelper::changeQueue(uint32_t newQueueFamilyIndex, CommandBuffer *comm
     bufferMemoryBarrier.srcQueueFamilyIndex   = mCurrentQueueFamilyIndex;
     bufferMemoryBarrier.dstQueueFamilyIndex   = newQueueFamilyIndex;
     bufferMemoryBarrier.buffer                = mBuffer.getHandle();
-    bufferMemoryBarrier.offset                = 0;
-    bufferMemoryBarrier.size                  = VK_WHOLE_SIZE;
+    bufferMemoryBarrier.offset                = getOffset();
+    bufferMemoryBarrier.size                  = mSize;
 
     commandBuffer->bufferBarrier(VK_PIPELINE_STAGE_ALL_COMMANDS_BIT,
                                  VK_PIPELINE_STAGE_ALL_COMMANDS_BIT, &bufferMemoryBarrier);
@@ -3795,6 +4022,24 @@ bool BufferHelper::isReleasedToExternal() const
 #endif
 }
 
+ANGLE_INLINE void BufferHelper::initBufferMemoryBarrierStruct(
+    VkPipelineStageFlags srcStageMask,
+    VkPipelineStageFlags dstStageMask,
+    VkFlags srcAccess,
+    VkFlags dstAccess,
+    VkBufferMemoryBarrier *bufferMemoryBarrier) const
+{
+    ASSERT(mBufferSubAllocation.valid());
+    bufferMemoryBarrier->sType               = VK_STRUCTURE_TYPE_BUFFER_MEMORY_BARRIER;
+    bufferMemoryBarrier->srcAccessMask       = srcAccess;
+    bufferMemoryBarrier->dstAccessMask       = dstAccess;
+    bufferMemoryBarrier->srcQueueFamilyIndex = mCurrentQueueFamilyIndex;
+    bufferMemoryBarrier->dstQueueFamilyIndex = mCurrentQueueFamilyIndex;
+    bufferMemoryBarrier->buffer              = getBuffer().getHandle();
+    bufferMemoryBarrier->offset              = getOffset();
+    bufferMemoryBarrier->size                = getSize();
+}
+
 bool BufferHelper::recordReadBarrier(VkAccessFlags readAccessType,
                                      VkPipelineStageFlags readStage,
                                      PipelineBarrier *barrier)
@@ -3805,8 +4050,18 @@ bool BufferHelper::recordReadBarrier(VkAccessFlags readAccessType,
     if (mCurrentWriteAccess != 0 && (((mCurrentReadAccess & readAccessType) != readAccessType) ||
                                      ((mCurrentReadStages & readStage) != readStage)))
     {
-        barrier->mergeMemoryBarrier(mCurrentWriteStages, readStage, mCurrentWriteAccess,
-                                    readAccessType);
+        if (mBufferSubAllocation.valid())
+        {
+            VkBufferMemoryBarrier bufferMemoryBarrier = {};
+            initBufferMemoryBarrierStruct(mCurrentWriteStages, readStage, mCurrentWriteAccess,
+                                          readAccessType, &bufferMemoryBarrier);
+            barrier->mergeBufferBarrier(mCurrentWriteStages, readStage, bufferMemoryBarrier);
+        }
+        else
+        {
+            barrier->mergeMemoryBarrier(mCurrentWriteStages, readStage, mCurrentWriteAccess,
+                                        readAccessType);
+        }
         barrierModified = true;
     }
 
@@ -3827,8 +4082,19 @@ bool BufferHelper::recordWriteBarrier(VkAccessFlags writeAccessType,
            (mCurrentReadStages && mCurrentReadAccess));
     if (mCurrentReadAccess != 0 || mCurrentWriteAccess != 0)
     {
-        barrier->mergeMemoryBarrier(mCurrentWriteStages | mCurrentReadStages, writeStage,
-                                    mCurrentWriteAccess, writeAccessType);
+        VkPipelineStageFlags srcStageMask = mCurrentWriteStages | mCurrentReadStages;
+        if (mBufferSubAllocation.valid())
+        {
+            VkBufferMemoryBarrier bufferMemoryBarrier = {};
+            initBufferMemoryBarrierStruct(srcStageMask, writeStage, mCurrentWriteAccess,
+                                          writeAccessType, &bufferMemoryBarrier);
+            barrier->mergeBufferBarrier(srcStageMask, writeStage, bufferMemoryBarrier);
+        }
+        else
+        {
+            barrier->mergeMemoryBarrier(srcStageMask, writeStage, mCurrentWriteAccess,
+                                        writeAccessType);
+        }
         barrierModified = true;
     }
 
