@@ -18,6 +18,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": true,
+      "key": {
+        "uuid": "5053e391_5c110e19",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1525982
+      },
+      "writtenOn": "2021-10-29T20:48:15Z",
+      "side": 1,
+      "message": "Updated. Thanks!\nIn addition, I added two unit tests as well. Please let me know if the update looks OK.",
+      "parentUuid": "20d0a142_cdcb6092",
+      "revId": "0a7efea5246abf5f0ee96104b20b8264879c41c9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": false,
       "key": {
         "uuid": "93873818_5b6ebca6",
