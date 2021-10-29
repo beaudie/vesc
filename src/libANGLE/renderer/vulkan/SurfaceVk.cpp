@@ -1629,7 +1629,7 @@ angle::Result WindowSurfaceVk::swapImpl(const gl::Context *context,
 
     if (mNeedToAcquireNextSwapchainImage)
     {
-        // Acquire the next image (previously deferred).  The image may not have been already
+        // Acquire the next image (previously deferred). The image may not have been already
         // acquired if there was no rendering done at all to the default framebuffer in this frame,
         // for example if all rendering was done to FBOs.
         ANGLE_TRY(doDeferredAcquireNextImage(context, false));
@@ -1649,6 +1649,8 @@ angle::Result WindowSurfaceVk::swapImpl(const gl::Context *context,
         // swapchain (potentially because of a rotation change), and recreate it.
         ANGLE_TRY(doDeferredAcquireNextImage(context, presentOutOfDate));
     }
+
+    contextVk->pruneDefaultBufferPools();
 
     return angle::Result::Continue;
 }
