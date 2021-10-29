@@ -2249,6 +2249,33 @@ TEST_P(WebGLCompatibilityTest, BindAttribLocationLimitation)
     EXPECT_GL_ERROR(GL_INVALID_VALUE);
 }
 
+// Tests getAttribLocation for reserved prefixes
+TEST_P(WebGLCompatibilityTest, GetAttribLocationNameLimitation)
+{
+    const char *reservedPrefixes[] = {
+        "gl_attr",
+        "webgl_attr",
+        "_webgl_attr",
+    };
+
+    for (const char *prefix : reservedPrefixes)
+    {
+        GLint attrLocation = glGetAttribLocation(0, prefix);
+        EXPECT_EQ(-1, attrLocation);
+    }
+}
+
+// Tests getAttribLocation for length limits
+TEST_P(WebGLCompatibilityTest, GetAttribLocationLengthLimitation)
+{
+    constexpr int maxLocStringLength = 256;
+    const std::string tooLongString(maxLocStringLength + 1, '_');
+
+    glGetAttribLocation(0, static_cast<const GLchar *>(tooLongString.c_str()));
+
+    EXPECT_GL_ERROR(GL_INVALID_VALUE);
+}
+
 // Test that having no attributes with a zero divisor is valid in WebGL2
 TEST_P(WebGL2CompatibilityTest, InstancedDrawZeroDivisor)
 {
@@ -5400,6 +5427,17 @@ TEST_P(WebGL2CompatibilityTest, BindAttribLocationLimitation)
     const std::string tooLongString(maxLocStringLength + 1, '_');
 
     glBindAttribLocation(0, 0, static_cast<const GLchar *>(tooLongString.c_str()));
+
+    EXPECT_GL_ERROR(GL_INVALID_VALUE);
+}
+
+// Tests getAttribLocation for length limit
+TEST_P(WebGL2CompatibilityTest, GetAttribLocationLimitation)
+{
+    constexpr int maxLocStringLength = 1024;
+    const std::string tooLongString(maxLocStringLength + 1, '_');
+
+    glGetAttribLocation(0, static_cast<const GLchar *>(tooLongString.c_str()));
 
     EXPECT_GL_ERROR(GL_INVALID_VALUE);
 }
