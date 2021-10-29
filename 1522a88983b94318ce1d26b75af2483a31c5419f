@@ -22,6 +22,30 @@
       },
       "revId": "1522a88983b94318ce1d26b75af2483a31c5419f",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "be1194bf_cc875415",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 5953,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2021-10-29T23:38:35Z",
+      "side": 1,
+      "message": "Yes.   The test that does the sequence in the commit message passes on ARM with these changes, which includes verifying the query returns the correct value.",
+      "parentUuid": "6964dd37_fcff04a5",
+      "range": {
+        "startLine": 5953,
+        "startChar": 18,
+        "endLine": 5953,
+        "endChar": 84
+      },
+      "revId": "1522a88983b94318ce1d26b75af2483a31c5419f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
