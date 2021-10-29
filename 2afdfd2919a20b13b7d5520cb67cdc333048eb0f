@@ -18,6 +18,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "5edd5e13_a970d143",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 12
+      },
+      "lineNbr": 8,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2021-10-29T18:30:57Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "10143353_0c500ef9",
+      "revId": "2afdfd2919a20b13b7d5520cb67cdc333048eb0f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "9df04231_634e2a40",
@@ -67,6 +85,30 @@
     {
       "unresolved": false,
       "key": {
+        "uuid": "2fe44c04_2a98e6f4",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 12
+      },
+      "lineNbr": 10,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2021-10-29T18:30:57Z",
+      "side": 1,
+      "message": "Yeah, most drivers don\u0027t seem to modify unused outputs, despite the pixels being undefined.",
+      "parentUuid": "2e3da6a3_79e7b0a5",
+      "range": {
+        "startLine": 10,
+        "startChar": 43,
+        "endLine": 10,
+        "endChar": 54
+      },
+      "revId": "2afdfd2919a20b13b7d5520cb67cdc333048eb0f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
         "uuid": "5b3cd207_18860ce9",
         "filename": "/PATCHSET_LEVEL",
         "patchSetId": 12
@@ -78,6 +120,24 @@
       "writtenOn": "2021-10-29T17:09:15Z",
       "side": 1,
       "message": "Missing tests are missing!",
+      "revId": "2afdfd2919a20b13b7d5520cb67cdc333048eb0f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "82988fc8_1a7b25fd",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 12
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2021-10-29T18:30:57Z",
+      "side": 1,
+      "message": "There are tests in RobustShaderOutputTests that are automatically turned on as we start exposing the extension in this CL. See the test results output.",
+      "parentUuid": "5b3cd207_18860ce9",
       "revId": "2afdfd2919a20b13b7d5520cb67cdc333048eb0f",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
@@ -117,6 +177,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "126eaa8a_021c3a94",
+        "filename": "src/libANGLE/renderer/vulkan/FramebufferVk.cpp",
+        "patchSetId": 12
+      },
+      "lineNbr": 1942,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2021-10-29T18:30:57Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "1d55eee7_160db120",
+      "revId": "2afdfd2919a20b13b7d5520cb67cdc333048eb0f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "078c40f7_a05466e7",
@@ -130,6 +208,24 @@
       "writtenOn": "2021-10-29T17:02:41Z",
       "side": 1,
       "message": "Should this also be checking robustFragmentShaderOutputANGLE?\n\nOtherwise, I don\u0027t see robustFragmentShaderOutputANGLE being used anywhere.",
+      "revId": "2afdfd2919a20b13b7d5520cb67cdc333048eb0f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "44c2c492_3e76353d",
+        "filename": "src/libANGLE/renderer/vulkan/vk_cache_utils.cpp",
+        "patchSetId": 12
+      },
+      "lineNbr": 2074,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2021-10-29T18:30:57Z",
+      "side": 1,
+      "message": "Done. This will let us force the extension off if we ever need to test that somehow. I had this behaviour unconditionally enabled because we need it for app compat. What exposing the extension does is allow me to make a CTS test for the behaviour so it won\u0027t regress, and it becomes defined behaviour instead of implicitly doing a certain thing when behaviour is undefined (e.g. what non-SwS GLES drivers do)",
+      "parentUuid": "078c40f7_a05466e7",
       "revId": "2afdfd2919a20b13b7d5520cb67cdc333048eb0f",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
