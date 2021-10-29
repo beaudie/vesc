@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "20d0a142_cdcb6092",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2021-10-29T20:36:43Z",
+      "side": 1,
+      "message": "Suggest: Complete validation of glGetAttribLocation\n\n- That tells better what\u0027s changing (there was validation missing, and this change adds it)\n- Uses the imperative mood (do instead of did) as the preferred style of writing git commit titles",
+      "revId": "0a7efea5246abf5f0ee96104b20b8264879c41c9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "93873818_5b6ebca6",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2021-10-29T20:36:43Z",
+      "side": 1,
+      "message": "Excellent. Feel free to land after the commit message update. Hint: you can do modify the commit message from gerrit\u0027s UI.",
+      "revId": "0a7efea5246abf5f0ee96104b20b8264879c41c9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
