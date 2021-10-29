@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "6a32a1e3_1b9e5fae",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1500872
+      },
+      "writtenOn": "2021-10-29T15:39:36Z",
+      "side": 1,
+      "message": "OSS port of this Webkit bug: https://bugs.webkit.org/show_bug.cgi?id\u003d231607",
+      "revId": "f0d07d2cebfdd5d6775c2093255386a7611f65f4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
