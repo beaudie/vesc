@@ -30,7 +30,9 @@ namespace gl
 struct Box;
 struct Extents;
 struct Offset;
-struct Rectangle;
+template <typename T>
+struct RectangleImpl;
+typedef RectangleImpl<int> Rectangle;
 class Framebuffer;
 class MemoryObject;
 struct PixelUnpackState;
