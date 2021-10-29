@@ -57,7 +57,9 @@ struct Box;
 class MockOverlay;
 struct Extents;
 struct RasterizerState;
-struct Rectangle;
+template <typename T>
+struct RectangleImpl;
+typedef RectangleImpl<int> Rectangle;
 class State;
 struct SwizzleState;
 struct VertexAttribute;

@@ -24,7 +24,9 @@ class ImageIndex;
 struct Box;
 struct Extents;
 struct Offset;
-struct Rectangle;
+template <typename T>
+struct RectangleImpl;
+typedef RectangleImpl<int> Rectangle;
 struct PixelUnpackState;
 }  // namespace gl
 
