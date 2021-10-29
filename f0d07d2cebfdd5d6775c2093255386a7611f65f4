@@ -33,6 +33,23 @@
       "message": "OSS port of this Webkit bug: https://bugs.webkit.org/show_bug.cgi?id\u003d231607",
       "revId": "f0d07d2cebfdd5d6775c2093255386a7611f65f4",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "e3add210_3b0a1a83",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2021-10-29T17:19:55Z",
+      "side": 1,
+      "message": "Looks like this is more than just a memory optimization. If I understand correctly, you\u0027d also be avoiding retranslations, is that correct?\n\nIn that case, could you please add a perf test in src/tests/perf_tests for this? It would also help if you point out in which situation you hit this issue (tests? applications? webgl pages?). It\u0027s very likely that we should do this in vulkan/ too.",
+      "revId": "f0d07d2cebfdd5d6775c2093255386a7611f65f4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
