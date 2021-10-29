@@ -1,0 +1,78 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "10143353_0c500ef9",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 12
+      },
+      "lineNbr": 8,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2021-10-29T17:02:41Z",
+      "side": 1,
+      "message": "The verb tenses is this commit message are confusing since they are changing between current and past tense.   I\u0027m not sure what ANGLE currently does versus what this CL is changing.\n\nFor example:\n\n\u003e We pass the mask of missing shader outputs down to pipeline creation\n\nThis sounds like ANGLE already does it, and this CL will be building on this logic.\n\nCan you clarify things a bit more and explicitly state what this CL is changing?",
+      "revId": "2afdfd2919a20b13b7d5520cb67cdc333048eb0f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "9df04231_634e2a40",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 12
+      },
+      "lineNbr": 10,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2021-10-29T17:02:41Z",
+      "side": 1,
+      "message": "What\u0027s special about SwS?   Why not all vulkan drivers?",
+      "range": {
+        "startLine": 10,
+        "startChar": 43,
+        "endLine": 10,
+        "endChar": 54
+      },
+      "revId": "2afdfd2919a20b13b7d5520cb67cdc333048eb0f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "cfa195ed_3f0dd5b2",
+        "filename": "src/libANGLE/renderer/vulkan/FramebufferVk.cpp",
+        "patchSetId": 12
+      },
+      "lineNbr": 1942,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2021-10-29T17:02:41Z",
+      "side": 1,
+      "message": "This is already checked in ContextVk::onFramebufferChange(), making one of them redundant.   Please remove one of them.",
+      "revId": "2afdfd2919a20b13b7d5520cb67cdc333048eb0f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "078c40f7_a05466e7",
+        "filename": "src/libANGLE/renderer/vulkan/vk_cache_utils.cpp",
+        "patchSetId": 12
+      },
+      "lineNbr": 2074,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2021-10-29T17:02:41Z",
+      "side": 1,
+      "message": "Should this also be checking robustFragmentShaderOutputANGLE?\n\nOtherwise, I don\u0027t see robustFragmentShaderOutputANGLE being used anywhere.",
+      "revId": "2afdfd2919a20b13b7d5520cb67cdc333048eb0f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
