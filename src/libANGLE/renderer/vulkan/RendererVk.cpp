@@ -47,7 +47,6 @@ constexpr bool kExposeNonConformantExtensionsAndVersions = true;
 #else
 constexpr bool kExposeNonConformantExtensionsAndVersions = false;
 #endif
-
 }  // anonymous namespace
 
 namespace rx
@@ -387,6 +386,13 @@ constexpr SkippedSyncvalMessage kSkippedSyncvalMessages[] = {
      "SYNC_EARLY_FRAGMENT_TESTS_DEPTH_STENCIL_ATTACHMENT_WRITE, prior_usage: "
      "SYNC_IMAGE_LAYOUT_TRANSITION",
      "", false},
+    // From:
+    // IndexBufferOffsetTestES3.UseAsUBOThenUpdateThenUInt16IndexSmallUpdates/ES3_Vulkan_SwiftShader
+    // The validation layer does not calculate th exact vertexCounts been accessed.
+    // http://anglebug.com/6725
+    {"SYNC-HAZARD-READ_AFTER_WRITE",
+     "vkCmdDrawIndexed: Hazard READ_AFTER_WRITE for vertex VkBuffer",
+     "SYNC_VERTEX_ATTRIBUTE_INPUT_VERTEX_ATTRIBUTE_READ", false},
 };
 
 enum class DebugMessageReport
@@ -3627,6 +3633,28 @@ void RendererVk::onDeallocateHandle(vk::HandleType handleType)
 {
     std::lock_guard<std::mutex> localLock(mActiveHandleCountsMutex);
     mActiveHandleCounts.onDeallocate(handleType);
+}
+
+VkDeviceSize RendererVk::getPreferedBufferBlockSize(uint32_t memoryTypeIndex) const
+{
+    VkDeviceSize preferredBlockSize;
+    if (mFeatures.preferredLargeHeapBlockSize4MB.enabled)
+    {
+        // This number matches Chromium and was picked by looking at memory usage of
+        // Android apps. The allocator will start making blocks at 1/8 the max size
+        // and builds up block size as needed before capping at the max set here.
+        preferredBlockSize = 4 * 1024 * 1024;
+    }
+    else
+    {
+        preferredBlockSize = 32ull * 1024 * 1024;
+    }
+
+    // Try not to exceed 1/64 of heap size to begin with.
+    const VkDeviceSize heapSize = getMemoryProperties().getHeapSizeForMemoryType(memoryTypeIndex);
+    preferredBlockSize          = std::min(heapSize / 64, preferredBlockSize);
+
+    return preferredBlockSize;
 }
 
 namespace vk

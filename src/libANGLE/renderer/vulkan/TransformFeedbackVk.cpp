@@ -250,14 +250,14 @@ void TransformFeedbackVk::initDescriptorSet(ContextVk *contextVk,
 
     VkDescriptorBufferInfo *descriptorBufferInfo =
         contextVk->allocDescriptorBufferInfos(xfbBufferCount);
-    vk::BufferHelper *emptyBuffer = &contextVk->getEmptyBuffer();
+    const vk::BufferHelper &emptyBuffer = contextVk->getEmptyBuffer();
 
     for (size_t bufferIndex = 0; bufferIndex < xfbBufferCount; ++bufferIndex)
     {
         VkDescriptorBufferInfo &bufferInfo = descriptorBufferInfo[bufferIndex];
-        bufferInfo.buffer                  = emptyBuffer->getBuffer().getHandle();
-        bufferInfo.offset                  = 0;
-        bufferInfo.range                   = VK_WHOLE_SIZE;
+        bufferInfo.buffer                  = emptyBuffer.getBuffer().getHandle();
+        bufferInfo.offset                  = emptyBuffer.getOffset();
+        bufferInfo.range                   = emptyBuffer.getSize();
     }
 
     writeDescriptorSet(contextVk, variableInfoMap, xfbBufferCount, descriptorBufferInfo, descSet);
