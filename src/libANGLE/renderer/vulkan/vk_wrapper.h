@@ -22,6 +22,16 @@ enum class DescriptorSetIndex : uint32_t;
 
 namespace vk
 {
+#define VK_RESULT_TRY(command)                             \
+    do                                                     \
+    {                                                      \
+        auto ANGLE_LOCAL_VAR = command;                    \
+        if (ANGLE_UNLIKELY(ANGLE_LOCAL_VAR != VK_SUCCESS)) \
+        {                                                  \
+            return ANGLE_LOCAL_VAR;                        \
+        }                                                  \
+    } while (0)
+
 // Helper macros that apply to all the wrapped object types.
 // Unimplemented handle types:
 // Instance
@@ -52,7 +62,8 @@ namespace vk
     FUNC(Sampler)                  \
     FUNC(SamplerYcbcrConversion)   \
     FUNC(Semaphore)                \
-    FUNC(ShaderModule)
+    FUNC(ShaderModule)             \
+    FUNC(BufferSubAllocation)
 
 #define ANGLE_COMMA_SEP_FUNC(TYPE) TYPE,
 
@@ -464,8 +475,8 @@ class Allocation final : public WrappedObject<Allocation, VmaAllocation>
 
     VkResult map(const Allocator &allocator, uint8_t **mapPointer) const;
     void unmap(const Allocator &allocator) const;
-    void flush(const Allocator &allocator, VkDeviceSize offset, VkDeviceSize size);
-    void invalidate(const Allocator &allocator, VkDeviceSize offset, VkDeviceSize size);
+    void flush(const Allocator &allocator, VkDeviceSize offset, VkDeviceSize size) const;
+    void invalidate(const Allocator &allocator, VkDeviceSize offset, VkDeviceSize size) const;
 
   private:
     friend class BufferMemoryAllocator;
@@ -627,6 +638,138 @@ class QueryPool final : public WrappedObject<QueryPool, VkQueryPool>
                         void *data,
                         VkDeviceSize stride,
                         VkQueryResultFlags flags) const;
+};
+
+// VirtualBlock
+class VirtualBlock final : public WrappedObject<VirtualBlock, VmaVirtualBlock>
+{
+  public:
+    VirtualBlock() = default;
+    void destroy(VkDevice device);
+    VkResult init(VkDevice device, vma::VirtualBlockCreateFlags flags, VkDeviceSize size);
+
+    VkResult allocate(VkDeviceSize size, VkDeviceSize alignment, VkDeviceSize *offsetOut);
+    void free(VkDeviceSize offset);
+};
+
+// BufferBlock
+struct VmaBufferBlock_T
+{
+    VirtualBlock mVirtualBlock;
+    Buffer mBuffer;
+    Allocation mAllocation;
+    uint32_t mMemoryTypeIndex;
+    VkMemoryPropertyFlags mMemoryPropertyFlags;
+    VkDeviceSize mSize;
+    uint8_t *mMappedMemory;
+};
+VK_DEFINE_HANDLE(VmaBufferBlock)
+ANGLE_INLINE VkResult CreateVmaBufferBlock(VkDevice device,
+                                           const VkBuffer &vkBuffer,
+                                           vma::VirtualBlockCreateFlags flags,
+                                           const VmaAllocation &vmaAllocation,
+                                           uint32_t memoryTypeIndex,
+                                           VkMemoryPropertyFlags memoryPropertyFlags,
+                                           VkDeviceSize size,
+                                           VmaBufferBlock *vmaBufferBlockOut)
+{
+    VmaBufferBlock block = new VmaBufferBlock_T;
+    if (block && block->mVirtualBlock.init(device, flags, size) == VK_SUCCESS)
+    {
+        block->mBuffer.setHandle(vkBuffer);
+        block->mAllocation.setHandle(vmaAllocation);
+        block->mMemoryTypeIndex     = memoryTypeIndex;
+        block->mMemoryPropertyFlags = memoryPropertyFlags;
+        block->mSize                = size;
+        block->mMappedMemory        = nullptr;
+        *vmaBufferBlockOut          = block;
+        return VK_SUCCESS;
+    }
+
+    delete block;
+    return VK_ERROR_OUT_OF_HOST_MEMORY;
+}
+
+ANGLE_INLINE void DestroyVmaBufferBlock(VkDevice device,
+                                        const Allocator &allocator,
+                                        VmaBufferBlock vmaBufferBlock)
+{
+    vmaBufferBlock->mVirtualBlock.destroy(device);
+    vmaBufferBlock->mBuffer.destroy(device);
+    vmaBufferBlock->mAllocation.destroy(allocator);
+    delete vmaBufferBlock;
+}
+
+class BufferBlock final : public WrappedObject<BufferBlock, VmaBufferBlock>
+{
+  public:
+    BufferBlock() = default;
+    void destroy(VkDevice device, const Allocator &allocator);
+    VkResult init(VkDevice device,
+                  const VkBuffer &buffer,
+                  vma::VirtualBlockCreateFlags flags,
+                  const VmaAllocation &allocation,
+                  uint32_t mMemoryTypeIndex,
+                  VkMemoryPropertyFlags memoryPropertyFlags,
+                  VkDeviceSize size);
+
+    VirtualBlock &getVirtualBlock() const;
+    const Buffer &getBuffer() const;
+    const Allocation &getAllocation() const;
+
+    uint32_t getMemoryTypeIndex() const;
+    VkMemoryPropertyFlags getMemoryPropertyFlags() const;
+    VkDeviceSize getMemorySize() const;
+
+    VkResult allocate(VkDeviceSize size, VkDeviceSize alignment, VkDeviceSize *offsetOut);
+    void free(VkDeviceSize offset);
+    VkBool32 isEmpty() const;
+
+    bool isMapped() const;
+    VkResult map(const Allocator &allocator) const;
+    void unmap(const Allocator &allocator) const;
+    uint8_t *getMappedMemory() const;
+};
+using BufferBlockPointerVector = std::vector<std::unique_ptr<BufferBlock>>;
+
+// BufferSubAllocation
+struct VmaBufferSubAllocation_T
+{
+    BufferBlock *mBufferBlock;
+    VkDeviceSize mOffset;
+    VkDeviceSize mSize;
+};
+VK_DEFINE_HANDLE(VmaBufferSubAllocation)
+ANGLE_INLINE VkResult
+CreateVmaBufferSubAllocation(BufferBlock *block,
+                             VkDeviceSize offset,
+                             VkDeviceSize size,
+                             VmaBufferSubAllocation *vmaBufferSubAllocationOut)
+{
+    *vmaBufferSubAllocationOut = new VmaBufferSubAllocation_T{block, offset, size};
+    return *vmaBufferSubAllocationOut != VK_NULL_HANDLE ? VK_SUCCESS : VK_ERROR_OUT_OF_HOST_MEMORY;
+}
+ANGLE_INLINE void DestroyVmaBufferSubAllocation(VmaBufferSubAllocation vmaBufferSubAllocation)
+{
+    vmaBufferSubAllocation->mBufferBlock->getVirtualBlock().free(vmaBufferSubAllocation->mOffset);
+    delete vmaBufferSubAllocation;
+}
+
+class BufferSubAllocation final : public WrappedObject<BufferSubAllocation, VmaBufferSubAllocation>
+{
+  public:
+    BufferSubAllocation() = default;
+    void destroy(VkDevice device);
+    VkResult init(VkDevice device, BufferBlock *block, VkDeviceSize offset, VkDeviceSize size);
+
+    const BufferBlock *getBlock() const;
+    const Buffer &getBuffer() const;
+    const Allocation &getAllocation() const;
+    bool isMapped() const;
+    uint8_t *getMappedMemory() const;
+    void flush(const Allocator &allocator) const;
+    void invalidate(const Allocator &allocator) const;
+    VkDeviceSize getOffset() const;
 };
 
 // CommandPool implementation.
@@ -1365,7 +1508,7 @@ ANGLE_INLINE void Allocation::unmap(const Allocator &allocator) const
 
 ANGLE_INLINE void Allocation::flush(const Allocator &allocator,
                                     VkDeviceSize offset,
-                                    VkDeviceSize size)
+                                    VkDeviceSize size) const
 {
     ASSERT(valid());
     vma::FlushAllocation(allocator.getHandle(), mHandle, offset, size);
@@ -1373,7 +1516,7 @@ ANGLE_INLINE void Allocation::flush(const Allocator &allocator,
 
 ANGLE_INLINE void Allocation::invalidate(const Allocator &allocator,
                                          VkDeviceSize offset,
-                                         VkDeviceSize size)
+                                         VkDeviceSize size) const
 {
     ASSERT(valid());
     vma::InvalidateAllocation(allocator.getHandle(), mHandle, offset, size);
@@ -1746,6 +1889,187 @@ ANGLE_INLINE VkResult QueryPool::getResults(VkDevice device,
     ASSERT(valid());
     return vkGetQueryPoolResults(device, mHandle, firstQuery, queryCount, dataSize, data, stride,
                                  flags);
+}
+
+// VirtualBlock implementation.
+ANGLE_INLINE void VirtualBlock::destroy(VkDevice device)
+{
+    if (valid())
+    {
+        vma::DestroyVirtualBlock(mHandle);
+        mHandle = VK_NULL_HANDLE;
+    }
+}
+
+ANGLE_INLINE VkResult VirtualBlock::init(VkDevice device,
+                                         vma::VirtualBlockCreateFlags flags,
+                                         VkDeviceSize size)
+{
+    return vma::CreateVirtualBlock(size, flags, &mHandle);
+}
+
+ANGLE_INLINE VkResult VirtualBlock::allocate(VkDeviceSize size,
+                                             VkDeviceSize alignment,
+                                             VkDeviceSize *offsetOut)
+{
+    return vma::VirtualAllocate(mHandle, size, alignment, offsetOut);
+}
+
+ANGLE_INLINE void VirtualBlock::free(VkDeviceSize offset)
+{
+    vma::VirtualFree(mHandle, offset);
+}
+
+// BufferBlock implementation.
+ANGLE_INLINE void BufferBlock::destroy(VkDevice device, const Allocator &allocator)
+{
+    if (valid())
+    {
+        if (mHandle->mMappedMemory)
+        {
+            unmap(allocator);
+        }
+        DestroyVmaBufferBlock(device, allocator, mHandle);
+        mHandle = VK_NULL_HANDLE;
+    }
+}
+
+ANGLE_INLINE VkResult BufferBlock::init(VkDevice device,
+                                        const VkBuffer &vkBuffer,
+                                        vma::VirtualBlockCreateFlags flags,
+                                        const VmaAllocation &vmaAllocation,
+                                        uint32_t memoryTypeIndex,
+                                        VkMemoryPropertyFlags memoryPropertyFlags,
+                                        VkDeviceSize size)
+{
+    ASSERT(!valid());
+    return CreateVmaBufferBlock(device, vkBuffer, flags, vmaAllocation, memoryTypeIndex,
+                                memoryPropertyFlags, size, &mHandle);
+}
+
+ANGLE_INLINE VirtualBlock &BufferBlock::getVirtualBlock() const
+{
+    return mHandle->mVirtualBlock;
+}
+
+ANGLE_INLINE const Buffer &BufferBlock::getBuffer() const
+{
+    return mHandle->mBuffer;
+}
+
+ANGLE_INLINE const Allocation &BufferBlock::getAllocation() const
+{
+    return mHandle->mAllocation;
+}
+
+ANGLE_INLINE uint32_t BufferBlock::getMemoryTypeIndex() const
+{
+    return mHandle->mMemoryTypeIndex;
+}
+
+ANGLE_INLINE VkMemoryPropertyFlags BufferBlock::getMemoryPropertyFlags() const
+{
+    return mHandle->mMemoryPropertyFlags;
+}
+
+ANGLE_INLINE VkDeviceSize BufferBlock::getMemorySize() const
+{
+    return mHandle->mSize;
+}
+
+ANGLE_INLINE VkBool32 BufferBlock::isEmpty() const
+{
+    return vma::IsVirtualBlockEmpty(mHandle->mVirtualBlock.getHandle());
+}
+
+ANGLE_INLINE bool BufferBlock::isMapped() const
+{
+    return mHandle->mMappedMemory != nullptr;
+}
+ANGLE_INLINE VkResult BufferBlock::map(const Allocator &allocator) const
+{
+    ASSERT(mHandle->mMappedMemory == nullptr);
+    return mHandle->mAllocation.map(allocator, &mHandle->mMappedMemory);
+}
+ANGLE_INLINE void BufferBlock::unmap(const Allocator &allocator) const
+{
+    mHandle->mAllocation.unmap(allocator);
+    mHandle->mMappedMemory = nullptr;
+}
+ANGLE_INLINE uint8_t *BufferBlock::getMappedMemory() const
+{
+    ASSERT(mHandle->mMappedMemory != nullptr);
+    return mHandle->mMappedMemory;
+}
+
+ANGLE_INLINE VkResult BufferBlock::allocate(VkDeviceSize size,
+                                            VkDeviceSize alignment,
+                                            VkDeviceSize *offsetOut)
+{
+    return mHandle->mVirtualBlock.allocate(size, alignment, offsetOut);
+}
+
+ANGLE_INLINE void BufferBlock::free(VkDeviceSize offset)
+{
+    mHandle->mVirtualBlock.free(offset);
+}
+
+// BufferSubAllocation implementation.
+ANGLE_INLINE void BufferSubAllocation::destroy(VkDevice device)
+{
+    if (valid())
+    {
+        DestroyVmaBufferSubAllocation(mHandle);
+        mHandle = VK_NULL_HANDLE;
+    }
+}
+
+ANGLE_INLINE VkResult BufferSubAllocation::init(VkDevice device,
+                                                BufferBlock *block,
+                                                VkDeviceSize offset,
+                                                VkDeviceSize size)
+{
+    ASSERT(!valid());
+    ASSERT(block != nullptr);
+    ASSERT(offset != VK_WHOLE_SIZE);
+    return CreateVmaBufferSubAllocation(block, offset, size, &mHandle);
+}
+
+ANGLE_INLINE const BufferBlock *BufferSubAllocation::getBlock() const
+{
+    return mHandle->mBufferBlock;
+}
+
+ANGLE_INLINE const Buffer &BufferSubAllocation::getBuffer() const
+{
+    return mHandle->mBufferBlock->getBuffer();
+}
+
+ANGLE_INLINE const Allocation &BufferSubAllocation::getAllocation() const
+{
+    return mHandle->mBufferBlock->getAllocation();
+}
+
+ANGLE_INLINE bool BufferSubAllocation::isMapped() const
+{
+    return mHandle->mBufferBlock->isMapped();
+}
+ANGLE_INLINE uint8_t *BufferSubAllocation::getMappedMemory() const
+{
+    return mHandle->mBufferBlock->getMappedMemory() + getOffset();
+}
+ANGLE_INLINE void BufferSubAllocation::flush(const Allocator &allocator) const
+{
+    mHandle->mBufferBlock->getAllocation().flush(allocator, getOffset(), mHandle->mSize);
+}
+ANGLE_INLINE void BufferSubAllocation::invalidate(const Allocator &allocator) const
+{
+    mHandle->mBufferBlock->getAllocation().invalidate(allocator, getOffset(), mHandle->mSize);
+}
+
+ANGLE_INLINE VkDeviceSize BufferSubAllocation::getOffset() const
+{
+    return mHandle->mOffset;
 }
 }  // namespace vk
 }  // namespace rx
