@@ -44,7 +44,9 @@ class Context;
 struct Extensions;
 class Framebuffer;
 class ImageIndex;
-struct Rectangle;
+template <typename T>
+struct RectangleImpl;
+typedef RectangleImpl<int> Rectangle;
 class Renderbuffer;
 class State;
 class Texture;
