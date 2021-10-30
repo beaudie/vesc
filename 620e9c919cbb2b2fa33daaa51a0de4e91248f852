@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "154133a8_fd825f72",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2021-10-30T01:42:25Z",
+      "side": 1,
+      "message": "This change is failing some webgl tests. You can debug this without actually building Chrome (but rather overriding the ANGLE build in installed chrome Dev by following these instructions: https://chromium.googlesource.com/angle/angle/+/main/doc/DebuggingTips.md#testing-with-chrome-canary-setup-linux",
+      "revId": "620e9c919cbb2b2fa33daaa51a0de4e91248f852",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
