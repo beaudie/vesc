@@ -1,0 +1,140 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ad886b16_d3c6fa10",
+        "filename": "src/libANGLE/Framebuffer.h",
+        "patchSetId": 5
+      },
+      "lineNbr": 49,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2021-10-30T01:39:14Z",
+      "side": 1,
+      "message": "Just include angletypes.h at this point.",
+      "revId": "1b988c3badf37afbee6d2aa51c500afb34465577",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "5cb7bb1d_d2a329b7",
+        "filename": "src/libANGLE/angletypes.h",
+        "patchSetId": 5
+      },
+      "lineNbr": 117,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2021-10-30T01:39:14Z",
+      "side": 1,
+      "message": "nit: ANGLE\u0027s style is `using Rectangle \u003d RectangleImpl\u003cint\u003e;`.",
+      "revId": "1b988c3badf37afbee6d2aa51c500afb34465577",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "6c6ad377_0cf6fec2",
+        "filename": "src/libANGLE/renderer/FramebufferImpl.h",
+        "patchSetId": 5
+      },
+      "lineNbr": 26,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2021-10-30T01:39:14Z",
+      "side": 1,
+      "message": "ditto",
+      "revId": "1b988c3badf37afbee6d2aa51c500afb34465577",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "6ccb9f4c_30ef9969",
+        "filename": "src/libANGLE/renderer/TextureImpl.h",
+        "patchSetId": 5
+      },
+      "lineNbr": 35,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2021-10-30T01:39:14Z",
+      "side": 1,
+      "message": "ditto",
+      "revId": "1b988c3badf37afbee6d2aa51c500afb34465577",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "c484dc57_0da7bc37",
+        "filename": "src/libANGLE/renderer/d3d/ImageD3D.h",
+        "patchSetId": 5
+      },
+      "lineNbr": 29,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2021-10-30T01:39:14Z",
+      "side": 1,
+      "message": "ditto",
+      "revId": "1b988c3badf37afbee6d2aa51c500afb34465577",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "cd0788ee_6baa8bc3",
+        "filename": "src/libANGLE/renderer/metal/FrameBufferMtl.mm",
+        "patchSetId": 5
+      },
+      "lineNbr": 273,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2021-10-30T01:39:14Z",
+      "side": 1,
+      "message": "ditto",
+      "revId": "1b988c3badf37afbee6d2aa51c500afb34465577",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "6bb42b03_10b217f4",
+        "filename": "src/libANGLE/renderer/metal/mtl_common.h",
+        "patchSetId": 5
+      },
+      "lineNbr": 100,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2021-10-30T01:39:14Z",
+      "side": 1,
+      "message": "ditto",
+      "revId": "1b988c3badf37afbee6d2aa51c500afb34465577",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "73988990_1e05f129",
+        "filename": "src/libANGLE/renderer/vulkan/vk_utils.h",
+        "patchSetId": 5
+      },
+      "lineNbr": 62,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2021-10-30T01:39:14Z",
+      "side": 1,
+      "message": "ditto",
+      "revId": "1b988c3badf37afbee6d2aa51c500afb34465577",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
