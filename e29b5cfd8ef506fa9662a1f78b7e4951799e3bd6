@@ -51,6 +51,24 @@
       "parentUuid": "f1ecbcc8_2f173723",
       "revId": "e29b5cfd8ef506fa9662a1f78b7e4951799e3bd6",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "1ac1e7e3_4d7123dc",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 5636,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2021-10-30T01:53:41Z",
+      "side": 1,
+      "message": "Ok looking at it again, it seems to be fine.\n\nIn that case, you can save yourself one if and move the contents of this block to after `if (!RP-\u003estarted()) return ...;`",
+      "parentUuid": "ba2c6113_8be8ad34",
+      "revId": "e29b5cfd8ef506fa9662a1f78b7e4951799e3bd6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
