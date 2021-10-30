@@ -126,6 +126,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "321d1d92_97835119",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2021-10-30T01:54:01Z",
+      "side": 1,
+      "message": "Oops, yeah, missed this comment.\n\nContextVk::onResumeTransformFeedback() is not required, because there\u0027s nothing for it to do.   The queries are restarted by ContextVk::startRenderPass() with a call to resumeRenderPassQueriesIfActive().\n\nFor example, the test dEQP-GLES3.functional.transform_feedback.array.interleaved.lines.highp_float does the following for iteration 6:\n\n    Iteration 6 / 10\n    Testing 3 draw calls, (element count, TF state): { (64, resumed), (64, paused), (64, resumed) }\n    GL_TRANSFORM_FEEDBACK_PRIMITIVES_WRITTEN status after submit: GL_FALSE\n    GL_TRANSFORM_FEEDBACK_PRIMITIVES_WRITTEN \u003d 64\n    Rendering result comparison between TF enabled and TF disabled passed.\n\nThis results in the following GL calls:\n\n    glBeginQuery(context \u003d 1, target \u003d GL_TRANSFORM_FEEDBACK_PRIMITIVES_WRITTEN, id \u003d 1)\n    glGetError(context \u003d 1)\n    glClear(context \u003d 1, mask \u003d GL_COLOR_BUFFER_BIT)\n    glBeginTransformFeedback(context \u003d 1, primitiveMode \u003d GL_LINES)\n    glDrawArrays(context \u003d 1, mode \u003d GL_LINES, first \u003d 0, count \u003d 64)\n    glPauseTransformFeedback(context \u003d 1)\n    glDrawArrays(context \u003d 1, mode \u003d GL_LINES, first \u003d 64, count \u003d 64)\n    glResumeTransformFeedback(context \u003d 1)\n    glDrawArrays(context \u003d 1, mode \u003d GL_LINES, first \u003d 128, count \u003d 64)\n    glEndTransformFeedback(context \u003d 1)\n    glGetError(context \u003d 1)\n    glEndQuery(context \u003d 1, target \u003d GL_TRANSFORM_FEEDBACK_PRIMITIVES_WRITTEN)\n\nThe number of primitives generated returned by the query is correct and the test passes.",
+      "parentUuid": "966fab8b_bca709fb",
+      "revId": "6164e9703bc82ee45db3a2aef588c2ce72d9ae38",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "9ddc0bc1_01735c0e",
         "filename": "src/libANGLE/renderer/vulkan/QueryVk.cpp",
         "patchSetId": 2
