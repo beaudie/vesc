@@ -144,6 +144,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "352600da_e1f2356c",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2021-10-30T02:09:18Z",
+      "side": 1,
+      "message": "I\u0027m sure you are right, but I can\u0027t seem to find the relevant piece of code. In this sequence:\n\n    glDrawArrays(context \u003d 1, mode \u003d GL_LINES, first \u003d 64, count \u003d 64)\n    glResumeTransformFeedback(context \u003d 1)\n\nThere is no call to ContextVk::startRenderPass() as part of glResumeTransformFeedback, right? And we know that the query was not active in the last draw call (because that\u0027s what this change is doing). So who is starting the query on glResumeTransformFeedback?",
+      "parentUuid": "321d1d92_97835119",
+      "revId": "6164e9703bc82ee45db3a2aef588c2ce72d9ae38",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "9ddc0bc1_01735c0e",
         "filename": "src/libANGLE/renderer/vulkan/QueryVk.cpp",
         "patchSetId": 2
