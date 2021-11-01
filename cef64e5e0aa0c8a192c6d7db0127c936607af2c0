@@ -81,6 +81,30 @@
       },
       "revId": "cef64e5e0aa0c8a192c6d7db0127c936607af2c0",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "7e8f6398_5b8feaa9",
+        "filename": "src/libANGLE/capture/FrameCapture.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 2361,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2021-11-01T22:04:55Z",
+      "side": 1,
+      "message": "Thanks Yuxin, I think I follow.",
+      "parentUuid": "a1d6be04_90f5e99b",
+      "range": {
+        "startLine": 2361,
+        "startChar": 47,
+        "endLine": 2361,
+        "endChar": 58
+      },
+      "revId": "cef64e5e0aa0c8a192c6d7db0127c936607af2c0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
