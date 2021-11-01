@@ -16,6 +16,24 @@
       "message": "Super, Kyle!\n\nShould we include this new test along with any fix for it? Perhaps in https://chromium-review.googlesource.com/c/angle/angle/+/3254434 , but skip the test on Vulkan for the moment?\n",
       "revId": "08b6b6ea1b107c6ed614ffe95d822fdbb0aeb4ef",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "5df1c923_14f5d910",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1500872
+      },
+      "writtenOn": "2021-11-01T23:00:29Z",
+      "side": 1,
+      "message": "That\u0027s what I\u0027m planning, yes. I\u0027ll add skip to expectations, and tag it with this bug.",
+      "parentUuid": "b989feed_70d30d06",
+      "revId": "08b6b6ea1b107c6ed614ffe95d822fdbb0aeb4ef",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
