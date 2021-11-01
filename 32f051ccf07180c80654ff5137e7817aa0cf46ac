@@ -52,6 +52,23 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "30d8737c_34fa5fa6",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2021-11-01T22:00:32Z",
+      "side": 1,
+      "message": "As Kyle pointed out on Slack - if there\u0027s an issue where Depth32F isn\u0027t filterable on all hardware but Depth16Unorm is - is there another upgrade path (perhaps to Depth24Unorm?) which would preserve filterability and also work around the depth bias bug?\n",
+      "revId": "32f051ccf07180c80654ff5137e7817aa0cf46ac",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "ae18f4cd_9f6b9cd6",
