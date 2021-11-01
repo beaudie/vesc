@@ -103,6 +103,7 @@
           'x86-64',
         ],
         'test_suites': {
+          'gtest_tests': 'swangle_gtests',
         },
       },
       'mac-amd': {
@@ -197,6 +198,7 @@
           'timeout_15m',
         ],
         'test_suites': {
+          'gtest_tests': 'swangle_gtests',
         },
       },
       'win7-x64-nvidia': {
