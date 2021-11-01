@@ -125,6 +125,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "a24ce634_aa50b80e",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1115588
+      },
+      "writtenOn": "2021-11-01T23:21:01Z",
+      "side": 1,
+      "message": "The root cause is a metal bug where setDepthBias does\u0027t work correctly for depth16Unorm. I gave Ken a small metal only repo to file with Apple.",
+      "parentUuid": "eced950b_239de23d",
+      "revId": "32f051ccf07180c80654ff5137e7817aa0cf46ac",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "ae18f4cd_9f6b9cd6",
         "filename": "src/image_util/loadimage.cpp",
         "patchSetId": 2
