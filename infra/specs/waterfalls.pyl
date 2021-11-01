@@ -103,6 +103,7 @@
           'x86-64',
         ],
         'test_suites': {
+          'gtest_tests': 'swangle_gtests',
         },
       },
       'mac-amd': {
