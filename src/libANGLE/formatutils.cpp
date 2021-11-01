@@ -1444,10 +1444,6 @@ GLenum GetConfigColorBufferFormat(const egl::Config *config)
             return sizedInternalFormat;
         }
     }
-
-    // Only expect to get here if there is no color bits in the config
-    ASSERT(config->redSize == 0 && config->greenSize == 0 && config->blueSize == 0 &&
-           config->alphaSize == 0);
     return GL_NONE;
 }
 
