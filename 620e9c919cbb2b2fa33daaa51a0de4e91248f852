@@ -16,6 +16,23 @@
       "message": "This change is failing some webgl tests. You can debug this without actually building Chrome (but rather overriding the ANGLE build in installed chrome Dev by following these instructions: https://chromium.googlesource.com/angle/angle/+/main/doc/DebuggingTips.md#testing-with-chrome-canary-setup-linux",
       "revId": "620e9c919cbb2b2fa33daaa51a0de4e91248f852",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "f18003f0_94531eef",
+        "filename": "src/libANGLE/validationES2.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 4340,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2021-11-01T19:00:03Z",
+      "side": 1,
+      "message": "The suggestion in the description of the associated bug http://anglebug.com/2419 is not correct. https://www.khronos.org/registry/OpenGL-Refpages/es2.0/xhtml/glGetAttribLocation.xml (and the ES spec, which is the definitive authority) says that this situation returns -1 without generating an error. This new code is the cause of the widespread errors in this CL.",
+      "revId": "620e9c919cbb2b2fa33daaa51a0de4e91248f852",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
