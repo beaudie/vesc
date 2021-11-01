@@ -189,6 +189,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "b7c7b51c_7a8d2384",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 3
+      },
+      "lineNbr": 22,
+      "author": {
+        "id": 1520902
+      },
+      "writtenOn": "2021-11-01T21:58:30Z",
+      "side": 1,
+      "message": "Mark this thread as resolved.",
+      "parentUuid": "caaa4784_2a9c38a0",
+      "range": {
+        "startLine": 20,
+        "startChar": 37,
+        "endLine": 22,
+        "endChar": 49
+      },
+      "revId": "74a350843c2a82fe5a1eb92af343903bd6a0e5f2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "60eefec4_07dce173",
