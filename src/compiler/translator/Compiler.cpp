@@ -1607,7 +1607,10 @@ bool TCompiler::initializeOutputVariables(TIntermBlock *root)
         ASSERT(mShaderType == GL_FRAGMENT_SHADER);
         for (const sh::ShaderVariable &var : mOutputVariables)
         {
-            list.push_back(var);
+            if (!var.isFragmentInOut)
+            {
+                list.push_back(var);
+            }
         }
     }
     return InitializeVariables(this, root, list, &mSymbolTable, mShaderVersion, mExtensionBehavior,
