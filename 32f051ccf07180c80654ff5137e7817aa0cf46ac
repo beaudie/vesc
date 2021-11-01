@@ -16,6 +16,74 @@
       "message": "not sure who to ask for a review. The code is metal related but the changes really don\u0027t touch much metal code directly.",
       "revId": "32f051ccf07180c80654ff5137e7817aa0cf46ac",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "bf9969ef_eb73a52d",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2021-11-01T21:12:28Z",
+      "side": 1,
+      "message": "Awesome work Gregg! lgtm with a couple of small comments.\n",
+      "revId": "32f051ccf07180c80654ff5137e7817aa0cf46ac",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ae18f4cd_9f6b9cd6",
+        "filename": "src/image_util/loadimage.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 1721,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2021-11-01T21:12:28Z",
+      "side": 1,
+      "message": "Can a comment be left here that the unorm16-\u003e32f and unorm32-\u003e32f upgrades are being done because of anglebug.com/6597 ? That way other people coming across these would understand that they\u0027re mainly a workaround.",
+      "revId": "32f051ccf07180c80654ff5137e7817aa0cf46ac",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "252d608e_89d9b6c8",
+        "filename": "src/libANGLE/renderer/load_functions_data.json",
+        "patchSetId": 2
+      },
+      "lineNbr": 260,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2021-11-01T21:12:28Z",
+      "side": 1,
+      "message": "I wish JSON supported comments so that a breadcrumb could be left here indicating that these are workarounds for bugs in Metal.",
+      "revId": "32f051ccf07180c80654ff5137e7817aa0cf46ac",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "0a167e05_7af63513",
+        "filename": "src/libANGLE/renderer/metal/mtl_format_map.json",
+        "patchSetId": 2
+      },
+      "lineNbr": 219,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2021-11-01T21:12:28Z",
+      "side": 1,
+      "message": "Similarly I wish there were a way here to indicate that this upgrade is a workaround.",
+      "revId": "32f051ccf07180c80654ff5137e7817aa0cf46ac",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
