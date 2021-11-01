@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "75c28832_f91ac9f6",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1115588
+      },
+      "writtenOn": "2021-11-01T23:49:52Z",
+      "side": 1,
+      "message": "Here\u0027s one that\u0027s Mac only. not sure I did it correctly.\n\nJust FYI thought, iOS is/was already set to use D32_FLOAT???!?\n\nhttps://chromium.googlesource.com/angle/angle/+/refs/heads/main/src/libANGLE/renderer/metal/mtl_format_map.json#225",
+      "revId": "7c179a97bd2a11bfea03befc641cc493d69dc67b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
