@@ -107,6 +107,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "eced950b_239de23d",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2021-11-01T23:07:59Z",
+      "side": 1,
+      "message": "Gregg:\n\u003e There is no depth24Unorm.\n\nApologies for misspeaking. I didn\u0027t look at the full search result for https://developer.apple.com/documentation/metal/mtlpixelformat/mtlpixelformatdepth24unorm_stencil8 .\n\n\u003e We could make this desktop only or only on GPUs that support it.\n\u003e That would still leave iOS with the bug.\n\nCould you try limiting this conversion to desktop only? I don\u0027t know how that\u0027d be done in the json files. On the whole, I think people are less likely to find that polygon offset is broken on iOS, and more likely to see that their depth textures are no longer filterable.\n\nKyle:\n\u003e That being said, we already disallow all depth filtering on iOS.\n\u003e I\u0027m working on a fix for that. Is there any chance that\u0027s the root cause\n\u003e of the issue?\n\nProbably not since these test failures are happening on macOS.",
+      "parentUuid": "7862c4bc_73cdcb71",
+      "revId": "32f051ccf07180c80654ff5137e7817aa0cf46ac",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "ae18f4cd_9f6b9cd6",
         "filename": "src/image_util/loadimage.cpp",
         "patchSetId": 2
