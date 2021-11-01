@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "8b04f02f_b46740fb",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2021-11-01T19:58:58Z",
+      "side": 1,
+      "message": "The bots haven\u0027t yet showed up in \"choose tryjobs\".",
+      "revId": "f308f903a01ca8333d7ca31cea2772583c6c3073",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
