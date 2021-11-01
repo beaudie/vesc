@@ -83,7 +83,7 @@
 // Fails on older mesa in some sequence of test
 6563 LINUX INTEL VULKAN : TransformFeedbackTest.EndWithDifferentProgram/* = SKIP
 
-// Mac
+//  Mac
 
 6025 MAC AMD OPENGL : IndexBufferOffsetTestES3.UseAsUBOThenUpdateThenUInt8Index/* = SKIP
 6025 MAC AMD OPENGL : IndexBufferOffsetTestES3.UseAsUBOThenUpdateThenUInt8IndexSmallUpdates/* = SKIP
