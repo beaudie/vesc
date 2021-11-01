@@ -101,3 +101,6 @@
 
 // New failures with latest dEQP roll (2020-04-28)
 4593 SWIFTSHADER : KHR-GLES3.core.nearest_edge.offset_left = FAIL
+
+// ASAN Test failures
+6678 ASAN : KHR-GLES3.packed_pixels.varied_rectangle.* = SKIP
