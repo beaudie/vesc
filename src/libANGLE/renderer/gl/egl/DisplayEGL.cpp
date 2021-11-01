@@ -644,8 +644,8 @@ egl::ConfigSet DisplayEGL::generateConfigs()
             config.renderTargetFormat = gl::GetConfigColorBufferFormat(&config);
             if (config.renderTargetFormat == GL_NONE)
             {
-                ERR() << "RGBA(" << config.redSize << "," << config.greenSize << ","
-                      << config.blueSize << "," << config.alphaSize << ") not handled";
+                WARN() << "RGBA(" << config.redSize << "," << config.greenSize << ","
+                       << config.blueSize << "," << config.alphaSize << ") not handled";
                 continue;
             }
         }
