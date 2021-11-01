@@ -162,6 +162,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "d31de74a_18d2dea1",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2021-11-01T17:11:47Z",
+      "side": 1,
+      "message": "From a query perspective, we don\u0027t want/need to start the query immediately when glResumeTransformFeedback() is called.   Instead, we actually need to wait until the next draw command (when the primitives are generated), so we don\u0027t start it too early (and then need to end it again without a draw to generate primitives).   Imagine the following GL calls where the pause/resume multiple times between draw calls:\n\n    glBeginQuery(context \u003d 1, target \u003d GL_TRANSFORM_FEEDBACK_PRIMITIVES_WRITTEN, id \u003d 1)\n    glGetError(context \u003d 1)\n    glClear(context \u003d 1, mask \u003d GL_COLOR_BUFFER_BIT)\n    glBeginTransformFeedback(context \u003d 1, primitiveMode \u003d GL_LINES)\n    glDrawArrays(context \u003d 1, mode \u003d GL_LINES, first \u003d 0, count \u003d 64)\n    glPauseTransformFeedback(context \u003d 1)\n    glResumeTransformFeedback(context \u003d 1)\n    glPauseTransformFeedback(context \u003d 1)\n    glResumeTransformFeedback(context \u003d 1)\n    glPauseTransformFeedback(context \u003d 1)\n    glDrawArrays(context \u003d 1, mode \u003d GL_LINES, first \u003d 64, count \u003d 64)\n    glResumeTransformFeedback(context \u003d 1)\n    glDrawArrays(context \u003d 1, mode \u003d GL_LINES, first \u003d 128, count \u003d 64)\n    glEndTransformFeedback(context \u003d 1)\n    glGetError(context \u003d 1)\n    glEndQuery(context \u003d 1, target \u003d GL_TRANSFORM_FEEDBACK_PRIMITIVES_WRITTEN)\n\nWe don\u0027t want to begin/end the queries each time.   All we need is to make sure the queries are active during draw calls.\n\nIf we did a begin/end each time, we would need to record the results for each query (so they can be accumulated for the glEndQuery), but without a draw command ARM would never complete the query - which is the source of this CL.\n\nFor some extra details:\n\nHere is the stack to resume the queries:\n\n    rx::ContextVk::resumeRenderPassQueriesIfActive ContextVk.cpp:5942\n    rx::ContextVk::startRenderPass ContextVk.cpp:5594\n    rx::ContextVk::handleDirtyGraphicsRenderPass ContextVk.cpp:1431\n    rx::ContextVk::setupDraw ContextVk.cpp:874\n    rx::ContextVk::drawArrays ContextVk.cpp:2514\n    gl::Context::drawArrays Context.inl.h:133\n\nThe dirty bit DIRTY_BIT_RENDER_PASS (which triggers handleDirtyGraphicsRenderPass) is set by ContextVk::onRenderPassFinished(), which is called quite a bit, including even within handleDirtyGraphicsRenderPass():\n\n    rx::ContextVk::onRenderPassFinished ContextVk.cpp:371\n    rx::ContextVk::flushCommandsAndEndRenderPassImpl ContextVk.cpp:5662\n    rx::ContextVk::flushCommandsAndEndRenderPass ContextVk.cpp:5731\n    rx::ContextVk::beginNewRenderPass ContextVk.cpp:5575\n    rx::FramebufferVk::startNewRenderPass FramebufferVk.cpp:2661\n    rx::ContextVk::startRenderPass ContextVk.cpp:5587\n    rx::ContextVk::handleDirtyGraphicsRenderPass ContextVk.cpp:1431\n    rx::ContextVk::setupDraw ContextVk.cpp:874\n    rx::ContextVk::drawArrays ContextVk.cpp:2514\n    gl::Context::drawArrays Context.inl.h:133\n    \nAdmittedly, I\u0027m not entirely sure which call to onRenderPassFinished() is the necessary one that triggers the call to startRenderPass() that we need.\n\nHopefully that answers your question, but let me know if it looks like there\u0027s still a gap somewhere.",
+      "parentUuid": "352600da_e1f2356c",
+      "revId": "6164e9703bc82ee45db3a2aef588c2ce72d9ae38",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "9ddc0bc1_01735c0e",
         "filename": "src/libANGLE/renderer/vulkan/QueryVk.cpp",
         "patchSetId": 2
