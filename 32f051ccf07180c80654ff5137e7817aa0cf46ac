@@ -89,6 +89,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "7862c4bc_73cdcb71",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1500872
+      },
+      "writtenOn": "2021-11-01T22:57:34Z",
+      "side": 1,
+      "message": "Catalyst in this case is iOS on Mac apps, it\u0027s a separate SDK. \nThat being said, we already disallow all depth filtering on iOS. I\u0027m working on a fix for that. Is there any chance that\u0027s the root cause of the issue?",
+      "parentUuid": "bd6e9774_b6ba70b6",
+      "revId": "32f051ccf07180c80654ff5137e7817aa0cf46ac",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "ae18f4cd_9f6b9cd6",
         "filename": "src/image_util/loadimage.cpp",
         "patchSetId": 2
