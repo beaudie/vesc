@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "e2998c0c_db2f82ec",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 7
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2021-11-01T23:13:36Z",
+      "side": 1,
+      "message": "I removed CQ+2 because the test should be made more complete. Please see below.\n",
+      "revId": "fcb22181ced91aa1040a0044d651b21fd8c12ded",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "5efdc098_f81d43cb",
+        "filename": "src/tests/gl_tests/WebGLCompatibilityTest.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 2259,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2021-11-01T23:13:36Z",
+      "side": 1,
+      "message": "This test should also check for the \"webgl_\" and \"_webgl_\" prefixes in conjunction with glGetAttribLocation:\n\nhttps://source.chromium.org/chromium/chromium/src/+/main:third_party/angle/src/libANGLE/validationES2.cpp;l\u003d722?q\u003dValidateWebGLNamePrefix",
+      "revId": "fcb22181ced91aa1040a0044d651b21fd8c12ded",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
