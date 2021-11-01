@@ -70,6 +70,30 @@
       },
       "revId": "1522a88983b94318ce1d26b75af2483a31c5419f",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "9f2b2930_5bccf8a6",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 5953,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2021-11-01T20:25:26Z",
+      "side": 1,
+      "message": "Since you didn\u0027t believe it 😄, here\u0027s a test that fails with this change:\n\nhttps://chromium-review.googlesource.com/c/angle/angle/+/3254432\n\nReplying to the other thread, ack regarding onResumeXfb not wanting to resume/pause the query, but maybe it should set a dirty bit that gets processed in setupDraw(). That could get set when a render pass is broken (and a bunch of dirty bits are added) too, and then xfb queries aren\u0027t automatically started on render passes at all.",
+      "parentUuid": "52f1d2ce_41d2a251",
+      "range": {
+        "startLine": 5953,
+        "startChar": 18,
+        "endLine": 5953,
+        "endChar": 84
+      },
+      "revId": "1522a88983b94318ce1d26b75af2483a31c5419f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
