@@ -71,6 +71,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "bd6e9774_b6ba70b6",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1115588
+      },
+      "writtenOn": "2021-11-01T22:40:54Z",
+      "side": 1,
+      "message": "There is no depth24Unorm. I guess maybe we just have to live with the bug until Apple fixes it? Looking at the chart, there is no depth format on iOS that\u0027s filterable except depth16Unorm. (well, not sure what Cataylst is. Maybe that\u0027s M1?) We could make this desktop only or only on GPUs that support it. That would still leave iOS with the bug.\n\nhttps://developer.apple.com/metal/Metal-Feature-Set-Tables.pdf",
+      "parentUuid": "30d8737c_34fa5fa6",
+      "revId": "32f051ccf07180c80654ff5137e7817aa0cf46ac",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "ae18f4cd_9f6b9cd6",
         "filename": "src/image_util/loadimage.cpp",
         "patchSetId": 2
@@ -103,6 +121,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "dbbe161a_7daf2a7b",
+        "filename": "src/libANGLE/renderer/load_functions_data.json",
+        "patchSetId": 2
+      },
+      "lineNbr": 260,
+      "author": {
+        "id": 1115588
+      },
+      "writtenOn": "2021-11-01T22:40:54Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "252d608e_89d9b6c8",
+      "revId": "32f051ccf07180c80654ff5137e7817aa0cf46ac",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "0a167e05_7af63513",
@@ -116,6 +152,24 @@
       "writtenOn": "2021-11-01T21:12:28Z",
       "side": 1,
       "message": "Similarly I wish there were a way here to indicate that this upgrade is a workaround.",
+      "revId": "32f051ccf07180c80654ff5137e7817aa0cf46ac",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "b7b8b0be_b747cd5c",
+        "filename": "src/libANGLE/renderer/metal/mtl_format_map.json",
+        "patchSetId": 2
+      },
+      "lineNbr": 219,
+      "author": {
+        "id": 1115588
+      },
+      "writtenOn": "2021-11-01T22:40:54Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "0a167e05_7af63513",
       "revId": "32f051ccf07180c80654ff5137e7817aa0cf46ac",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
