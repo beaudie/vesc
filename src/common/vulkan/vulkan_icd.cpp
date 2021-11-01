@@ -16,7 +16,9 @@
 #include "common/debug.h"
 #include "common/system_utils.h"
 
-#include "common/vulkan/vk_google_filtering_precision.h"
+#if defined(ANGLE_ENABLE_SWIFTSHADER)
+#    include "vk_google_filtering_precision.h"
+#endif  // defined(ANGLE_ENABLE_SWIFTSHADER)
 
 namespace
 {
@@ -220,10 +222,12 @@ bool ScopedVkLoaderEnvironment::setCustomExtensionsEnvironment()
     };
 
     CustomExtension customExtensions[] = {
-
+#if defined(ANGLE_ENABLE_SWIFTSHADER)
         {VK_STRUCTURE_TYPE_SAMPLER_FILTERING_PRECISION_GOOGLE,
          sizeof(VkSamplerFilteringPrecisionGOOGLE)},
-
+        {VK_STRUCTURE_TYPE_PIPELINE_RASTERIZATION_SUBPIXEL_PRECISION_STATE_CREATE_INFO_GOOGLE,
+         sizeof(VkPipelineRasterizationSubpixelPrecisionStateCreateInfoGOOGLE)},
+#endif  // defined(ANGLE_ENABLE_SWIFTSHADER)
     };
 
     mPreviousCustomExtensionsEnv = angle::GetEnvironmentVar(kValidationLayersCustomSTypeListEnv);

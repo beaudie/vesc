@@ -217,9 +217,6 @@ if (is_mac) {
 
 config("angle_vulkan_backend_config") {
   defines = [ "ANGLE_ENABLE_VULKAN" ]
-  if (angle_enable_swiftshader) {
-    defines += [ "ANGLE_ENABLE_SWIFTSHADER" ]
-  }
   if (angle_enable_custom_vulkan_cmd_buffers) {
     defines += [ "ANGLE_USE_CUSTOM_VULKAN_CMD_BUFFERS=1" ]
   }

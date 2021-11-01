@@ -42,13 +42,19 @@ if (angle_enable_vulkan) {
     if (angle_shared_libvulkan) {
       defines = [ "ANGLE_SHARED_LIBVULKAN=1" ]
     }
+    if (angle_enable_swiftshader) {
+      include_dirs = [ "$swiftshader_dir/include/vulkan" ]
+    }
   }
 
   angle_source_set("angle_vulkan_headers") {
-    sources = [
-      "vk_google_filtering_precision.h",
-      "vk_headers.h",
-    ]
+    sources = [ "vk_headers.h" ]
+    if (angle_enable_swiftshader) {
+      sources += [
+        "$swiftshader_dir/include/vulkan/vk_google_filtering_precision.h",
+        "$swiftshader_dir/include/vulkan/vk_google_subpixel_precision.h",
+      ]
+    }
     if (angle_shared_libvulkan) {
       public_deps = [ "$angle_root/src/third_party/volk:volk" ]
     } else {

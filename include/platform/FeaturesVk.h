@@ -112,6 +112,11 @@ struct FeaturesVk : FeatureSetBase
         "supportsFilteringPrecision", FeatureCategory::VulkanFeatures,
         "VkDevice supports the VK_GOOGLE_sampler_filtering_precision extension", &members};
 
+    // Needed by ANGLE on SwiftShader to correctly render many Android apps.
+    Feature supportsPipelineSubpixelPrecision = {
+        "supportsPipelineSubpixelPrecision", FeatureCategory::VulkanFeatures,
+        "VkDevice supports the VK_GOOGLE_pipeline_subpixel_precision extension", &members};
+
     // Whether the VkDevice supports the VK_KHR_external_fence_capabilities extension.
     Feature supportsExternalFenceCapabilities = {
         "supportsExternalFenceCapabilities", FeatureCategory::VulkanFeatures,

@@ -656,6 +656,12 @@ angle_source_set("translator_fuzzer") {
   deps = [ ":translator" ]
 }
 
+config("angle_swiftshader_config") {
+  if (angle_enable_swiftshader) {
+    defines = [ "ANGLE_ENABLE_SWIFTSHADER" ]
+  }
+}
+
 config("angle_commit_id_config") {
   include_dirs = [ "$root_gen_dir/angle" ]
   visibility = [ ":angle_commit_id" ]

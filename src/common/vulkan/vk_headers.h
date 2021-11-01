@@ -46,6 +46,9 @@ typedef struct VkMultisampledRenderToSingleSampledInfoEXT
 } VkMultisampledRenderToSingleSampledInfoEXT;
 #endif /* VK_EXT_multisampled_render_to_single_sampled */
 
+#include "vk_google_filtering_precision.h"
+#include "vk_google_subpixel_precision.h"
+
 #if !defined(ANGLE_SHARED_LIBVULKAN)
 
 namespace rx

@@ -11,7 +11,6 @@
 #include "libANGLE/renderer/vulkan/vk_cache_utils.h"
 
 #include "common/aligned_memory.h"
-#include "common/vulkan/vk_google_filtering_precision.h"
 #include "libANGLE/BlobCache.h"
 #include "libANGLE/VertexAttribute.h"
 #include "libANGLE/renderer/vulkan/DisplayVk.h"
@@ -1986,6 +1985,16 @@ angle::Result GraphicsPipelineDesc::initializePipeline(
         rasterStreamState.rasterizationStream = 0;
         *pNextPtr                             = &rasterStreamState;
         pNextPtr                              = &rasterStreamState.pNext;
+    }
+
+    VkPipelineRasterizationSubpixelPrecisionStateCreateInfoGOOGLE subpixelBitsState = {};
+    subpixelBitsState.sType =
+        VK_STRUCTURE_TYPE_PIPELINE_RASTERIZATION_SUBPIXEL_PRECISION_STATE_CREATE_INFO_GOOGLE;
+    if (contextVk->getFeatures().supportsPipelineSubpixelPrecision.enabled)
+    {
+        subpixelBitsState.subPixelPrecisionBits = 8;
+        *pNextPtr                               = &subpixelBitsState;
+        pNextPtr                                = &subpixelBitsState.pNext;
     }
 
     // Multisample state.
