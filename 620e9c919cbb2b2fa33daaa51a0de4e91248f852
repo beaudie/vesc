@@ -33,6 +33,24 @@
       "message": "The suggestion in the description of the associated bug http://anglebug.com/2419 is not correct. https://www.khronos.org/registry/OpenGL-Refpages/es2.0/xhtml/glGetAttribLocation.xml (and the ES spec, which is the definitive authority) says that this situation returns -1 without generating an error. This new code is the cause of the widespread errors in this CL.",
       "revId": "620e9c919cbb2b2fa33daaa51a0de4e91248f852",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "f7a72a14_3d905a57",
+        "filename": "src/libANGLE/validationES2.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 4340,
+      "author": {
+        "id": 1525982
+      },
+      "writtenOn": "2021-11-01T23:08:59Z",
+      "side": 1,
+      "message": "Thank you. Function no longer returns false when it encounters the reserved prefix \"gl_\". Test updated to expect the function\u0027s output to be -1.",
+      "parentUuid": "f18003f0_94531eef",
+      "revId": "620e9c919cbb2b2fa33daaa51a0de4e91248f852",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
