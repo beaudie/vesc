@@ -196,6 +196,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "de4bcbb0_da89cb44",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2021-11-01T17:55:12Z",
+      "side": 1,
+      "message": "Note that nothing is changing here in terms of when the GL query is started/ended.  It\u0027s just not issuing a begin/end pair when there\u0027s a draw with XFB disabled/paused.   I\u0027m going to mark this command resolved, since it\u0027s going down a rabbit hole that\u0027s unrelated to this change.\n\n\u003e Is the example code you listed above using XFB output result in the renderpass?\n\nYes.   It\u0027s rendering with the transform feedback buffer.\n\nVS:\n    #version 300 es\n    in highp vec4 a_position;\n    in highp float a_varA_e0;\n    in highp float a_varA_e1;\n    in highp float a_varA_e2;\n    in highp float a_varB_e0;\n    in highp float a_varB_e1;\n    in highp float a_varB_e2;\n    in highp float a_varB_e3;\n    smooth out highp float v_varA[3];\n    smooth out highp float v_varB[4];\n\n    void main (void)\n    {\n        gl_Position \u003d a_position;\n        v_varA[0] \u003d a_varA_e0;\n        v_varA[1] \u003d a_varA_e1;\n        v_varA[2] \u003d a_varA_e2;\n        v_varB[0] \u003d a_varB_e0;\n        v_varB[1] \u003d a_varB_e1;\n        v_varB[2] \u003d a_varB_e2;\n        v_varB[3] \u003d a_varB_e3;\n    }\n\nFS:\n    #version 300 es\n    layout(location \u003d 0) out mediump vec4 o_color;\n    uniform highp vec4 u_scale;\n    uniform highp vec4 u_bias;\n    smooth in highp float v_varA[3];\n    smooth in highp float v_varB[4];\n\n    void main (void)\n    {\n        highp vec4 res \u003d vec4(0.0);\n        res +\u003d vec4(v_varA[0]);\n        res +\u003d vec4(v_varA[1]);\n        res +\u003d vec4(v_varA[2]);\n        res +\u003d vec4(v_varB[0]);\n        res +\u003d vec4(v_varB[1]);\n        res +\u003d vec4(v_varB[2]);\n        res +\u003d vec4(v_varB[3]);\n        o_color \u003d res * u_scale + u_bias;\n    }",
+      "parentUuid": "4153921c_4ae0989a",
+      "revId": "6164e9703bc82ee45db3a2aef588c2ce72d9ae38",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "9ddc0bc1_01735c0e",
