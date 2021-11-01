@@ -16,6 +16,23 @@
       "message": "Geoff or Shabi, can you review this? ",
       "revId": "4503aedca53b1d8b07be526c677eb6baa85bbc88",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "b3e60add_0c33cce7",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2021-11-01T23:00:14Z",
+      "side": 1,
+      "message": "lgtm\n\nI vaguely recall having a discussion with Shabi about this line of code but regardless let\u0027s get this fix in.\n\nWould you consider incorporating your new test from https://chromium-review.googlesource.com/c/angle/angle/+/3254433 into this CL, and skipping that test on Vulkan in angle_end2end_expectations.txt as necessary?\n\nNeed code-owners review; Geoff, Shabi or Jonah can provide that.\n",
+      "revId": "4503aedca53b1d8b07be526c677eb6baa85bbc88",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
