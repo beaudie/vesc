@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "940b3b80_69e69642",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 8
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2021-11-02T00:39:54Z",
+      "side": 1,
+      "message": "lgtm with one comment. Thanks for adding the new test cases.\n",
+      "revId": "b26d49ad304f2aaf5018cf7d7ebbd94f700100e0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b465755d_79518664",
+        "filename": "src/tests/gl_tests/WebGLCompatibilityTest.cpp",
+        "patchSetId": 8
+      },
+      "lineNbr": 2264,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2021-11-02T00:39:54Z",
+      "side": 1,
+      "message": "Also EXPECT_GL_NO_ERROR(); please.",
+      "revId": "b26d49ad304f2aaf5018cf7d7ebbd94f700100e0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
