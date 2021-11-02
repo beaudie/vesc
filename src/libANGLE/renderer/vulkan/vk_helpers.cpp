@@ -2374,12 +2374,16 @@ void DynamicBuffer::requireAlignment(RendererVk *renderer, size_t alignment)
 
     size_t prevAlignment = mAlignment;
 
-    // If alignment was never set, initialize it with the atom size limit.
+    // If alignment was never set, initialize it with the max of atom size limit and the optimal
+    // buffer offset alignment.
     if (prevAlignment == 0)
     {
-        prevAlignment =
-            static_cast<size_t>(renderer->getPhysicalDeviceProperties().limits.nonCoherentAtomSize);
-        ASSERT(gl::isPow2(prevAlignment));
+        prevAlignment = static_cast<size_t>(std::max(
+            renderer->getPhysicalDeviceProperties().limits.nonCoherentAtomSize,
+            renderer->getPhysicalDeviceProperties().limits.optimalBufferCopyOffsetAlignment));
+        ASSERT(gl::isPow2(renderer->getPhysicalDeviceProperties().limits.nonCoherentAtomSize));
+        ASSERT(gl::isPow2(
+            renderer->getPhysicalDeviceProperties().limits.optimalBufferCopyOffsetAlignment));
     }
 
     // We need lcm(prevAlignment, alignment).  Usually, one divides the other so std::max() could be
@@ -5753,9 +5757,8 @@ angle::Result ImageHelper::reformatStagedBufferUpdates(ContextVk *contextVk,
                 VkBuffer dstBufferHandle     = VK_NULL_HANDLE;
                 VkDeviceSize dstBufferOffset = 0;
                 GLuint dstBufferSize         = dstDataDepthPitch * copy.imageExtent.depth;
-                ANGLE_TRY(mStagingBuffer.allocateWithAlignment(
-                    contextVk, dstBufferSize, mStagingBuffer.getAlignment(), &dstData,
-                    &dstBufferHandle, &dstBufferOffset, nullptr));
+                ANGLE_TRY(mStagingBuffer.allocate(contextVk, dstBufferSize, &dstData,
+                                                  &dstBufferHandle, &dstBufferOffset, nullptr));
                 BufferHelper *dstBuffer = mStagingBuffer.getCurrentBuffer();
 
                 rx::PixelReadFunction pixelReadFunction   = srcFormat.pixelReadFunction;
@@ -6990,10 +6993,8 @@ angle::Result ImageHelper::copyImageDataToBuffer(ContextVk *contextVk,
 
     // Allocate staging buffer data from context
     VkBuffer bufferHandle;
-    size_t alignment = mStagingBuffer.getAlignment();
-    ANGLE_TRY(mStagingBuffer.allocateWithAlignment(contextVk, *bufferSize, alignment, outDataPtr,
-                                                   &bufferHandle, &(*bufferOffsetsOut)[0],
-                                                   nullptr));
+    ANGLE_TRY(mStagingBuffer.allocate(contextVk, *bufferSize, outDataPtr, &bufferHandle,
+                                      &(*bufferOffsetsOut)[0], nullptr));
     *bufferOut = mStagingBuffer.getCurrentBuffer();
 
     LevelIndex sourceLevelVk = toVkLevel(sourceLevelGL);
