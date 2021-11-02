@@ -74,6 +74,30 @@
       },
       "revId": "7c179a97bd2a11bfea03befc641cc493d69dc67b",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "a13448e1_4ea0171a",
+        "filename": "src/image_util/loadimage.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 1764,
+      "author": {
+        "id": 1115588
+      },
+      "writtenOn": "2021-11-02T18:10:28Z",
+      "side": 1,
+      "message": "I\u0027m not sure what you\u0027re suggesting I do.",
+      "parentUuid": "3f173c78_cd9bef49",
+      "range": {
+        "startLine": 1724,
+        "startChar": 5,
+        "endLine": 1764,
+        "endChar": 46
+      },
+      "revId": "7c179a97bd2a11bfea03befc641cc493d69dc67b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }

@@ -161,6 +161,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "c56e9b93_bce7551a",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1115588
+      },
+      "writtenOn": "2021-11-02T18:10:28Z",
+      "side": 1,
+      "message": "depth textures are required to be filterable \n\nOpenGL ES 3.0.6 section 3.8.8\n\n\u003e Depth Component Textures\n\u003e \n\u003e Depth textures and the depth components of depth/stencil textures can be\n\u003e treated as RED textures during texture filtering and application.",
+      "parentUuid": "36d8a466_79655009",
+      "revId": "32f051ccf07180c80654ff5137e7817aa0cf46ac",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "ae18f4cd_9f6b9cd6",
         "filename": "src/image_util/loadimage.cpp",
         "patchSetId": 2
