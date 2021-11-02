@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "eabf9792_92f3d388",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2021-11-02T20:15:02Z",
+      "side": 1,
+      "message": "Shabi: could you review this? I\u0027m taking over Kyle\u0027s https://chromium-review.googlesource.com/c/angle/angle/+/3254433 for landing today.\n\nThanks.\n",
+      "revId": "5ba3842b95f2e8ef1e6ea4d84516e412ddb30b46",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
