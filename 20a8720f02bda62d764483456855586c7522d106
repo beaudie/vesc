@@ -16,6 +16,24 @@
       "message": "Should RGB10 be added to BuildInternalFormatInfoMap instead?",
       "revId": "20a8720f02bda62d764483456855586c7522d106",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "838ecce0_ae4ee030",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2021-11-02T14:33:42Z",
+      "side": 1,
+      "message": "Good point, I thought there was no sized internal format for this one but it turns out GL_RGB10_EXT is under the ES1 extension GL_OES_required_internalformat.\n\nMaksim, could you add it to the format table? Even if it is marked as not supported for anything I *think* it will still work because surfaces are considered always renderable.\n\nSorry for not noticing earlier.",
+      "parentUuid": "0f7d2e98_f90fbbde",
+      "revId": "20a8720f02bda62d764483456855586c7522d106",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
