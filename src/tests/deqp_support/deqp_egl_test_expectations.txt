@@ -274,3 +274,5 @@
 
 6707 NVIDIA : dEQP-EGL.functional.robustness.reset_context.shaders.out_of_bounds.reset_status.reads.uniform_block.compute = SKIP
 6707 NVIDIA : dEQP-EGL.functional.robustness.reset_context.shaders.out_of_bounds.reset_status.writes.uniform_block.compute = SKIP
+
+6678 TSAN : dEQP-EGL.functional.multithread.* = SKIP
