@@ -20,6 +20,14 @@
 #include "libANGLE/renderer/vulkan/android/WindowSurfaceVkAndroid.h"
 #include "libANGLE/renderer/vulkan/vk_caps_utils.h"
 
+#ifdef OLD_CODE
+#else  // OLD_CODE
+#    include <android/log.h>
+#    include <unistd.h>
+#    undef INFO
+#    define INFO(...) __android_log_print(ANDROID_LOG_INFO, "ANGLE", __VA_ARGS__)
+#endif  // OLD_CODE
+
 namespace rx
 {
 
@@ -60,11 +68,13 @@ egl::ConfigSet DisplayVkAndroid::generateConfigs()
     // The Android Vulkan loader supports one format that ANGLE wants to use for an EGLConfig.
     // Other formats must be queried using the VK_ANDROID_surfaceless_query extension.
     std::vector<GLenum> kColorFormats = {GL_RGBA8};
+    INFO("%s(): GOT TO HERE 1--kColorFormats contains GL_RGBA8 = 0x%x", __FUNCTION__, GL_RGBA8);
 
     // TODO(ianelliott): Define a Vulkan extension and enable it in RendererVk::initialize().
     bool surfacelessQueryExtensionEnabled = true;
     if (surfacelessQueryExtensionEnabled)
     {
+        INFO("%s(): GOT TO HERE 1.1", __FUNCTION__);
         // Query the available formats and colorspaces by using a VK_NULL_HANDLE for the
         // VkSurfaceKHR handle.
         VkPhysicalDevice physicalDevice              = mRenderer->getPhysicalDevice();
@@ -76,6 +86,7 @@ egl::ConfigSet DisplayVkAndroid::generateConfigs()
         // TODO(ianelliott): Do this properly, given this method's return type
         VkResult /*Hack*/ result = vkGetPhysicalDeviceSurfaceFormats2KHR(
             physicalDevice, &surfaceInfo2, &surfaceFormatCount, nullptr);
+        INFO("%s(): GOT TO HERE 2--surfaceFormatCount = %u", __FUNCTION__, surfaceFormatCount);
         if (result != VK_SUCCESS)
         {
             return egl::ConfigSet();
@@ -91,6 +102,8 @@ egl::ConfigSet DisplayVkAndroid::generateConfigs()
         {
             return egl::ConfigSet();
         }
+        INFO("%s(): GOT TO HERE 3--kColorFormats.size() = %d", __FUNCTION__,
+             (int)kColorFormats.size());
 
         for (VkSurfaceFormat2KHR &surfaceFormat2 : surfaceFormats2)
         {
@@ -100,23 +113,30 @@ egl::ConfigSet DisplayVkAndroid::generateConfigs()
                 vk::GetFormatIDFromVkFormat(surfaceFormat2.surfaceFormat.format);
             const angle::Format &angleFormat = angle::Format::Get(angleFormatID);
             GLenum glFormat                  = angleFormat.glInternalFormat;
+            INFO("%s(): GOT TO HERE 3.1--Vulkan format = %d, GLES format = 0x%x", __FUNCTION__,
+                 surfaceFormat2.surfaceFormat.format, glFormat);
 
             if (glFormat == GL_SRGB8_ALPHA8_EXT)
             {
                 // We don't use GL_SRGB8_ALPHA8_EXT for an EGLConfig, which the Android Vulkan
                 // loader returns.
+                INFO("%s(): GOT TO HERE 3.1.0--DO NOT USE GL_SRGB8_ALPHA8_EXT", __FUNCTION__);
                 continue;
             }
             if (std::find(kColorFormats.begin(), kColorFormats.end(), glFormat) ==
                 kColorFormats.end())
             {
+                INFO("%s(): GOT TO HERE 3.1.1", __FUNCTION__);
                 kColorFormats.push_back(glFormat);
+                INFO("%s(): GOT TO HERE 3.1.2--kColorFormats.size() = %d", __FUNCTION__,
+                     (int)kColorFormats.size());
                 continue;
             }
 
             // TODO(ianelliott): Look at surfaceFormat2.surfaceFormat.colorSpace too
         }
     }
+    INFO("%s(): GOT TO HERE 4--kColorFormats.size() = %d", __FUNCTION__, (int)kColorFormats.size());
 #endif  // OLD_CODE
 
     std::vector<GLenum> depthStencilFormats(
