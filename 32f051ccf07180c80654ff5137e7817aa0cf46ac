@@ -179,6 +179,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "1593c259_04575857",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1374244
+      },
+      "writtenOn": "2021-11-02T19:15:23Z",
+      "side": 1,
+      "message": "This is a bit confusing. The term filtering and filterable in the spec might not be the same IMO. From my understanding, filterable means it supports filtering mode other than GL_NEAREST.\n\nES 3.0 spec has these paragraphs in section 3.8.13 Texture Completeness. A texture is considered incomplete if either: \n\u003e The effective internal format specified for the texture arrays is a sized internal color format that is not texture-filterable (see table 3.13), and either\n\u003e the magnification filter is not NEAREST or the minification filter is neither\n\u003e NEAREST nor NEAREST_MIPMAP_NEAREST.\n\n\u003e The effective internal format specified for the texture arrays is a sized\n\u003e internal depth or depth and stencil format (see table 3.14), the value of\n\u003e TEXTURE_COMPARE_MODE is NONE, and either the magnification filter is\n\u003e not NEAREST or the minification filter is neither NEAREST nor NEAREST_MIPMAP_NEAREST.\n\n\nSo the ES 3.0 spec does say depth textures must use GL_NEAREST filtering mode (equivalent to not filterable at all to me)",
+      "parentUuid": "c56e9b93_bce7551a",
+      "revId": "32f051ccf07180c80654ff5137e7817aa0cf46ac",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "ae18f4cd_9f6b9cd6",
         "filename": "src/image_util/loadimage.cpp",
         "patchSetId": 2
