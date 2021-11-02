@@ -88,6 +88,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "6882bbc0_1a15ea3d",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2021-11-02T21:14:34Z",
+      "side": 1,
+      "message": "\u003e I\u0027m still confused. It sounds like Le Quyen is saying it\u0027s fine to use D32F on iOS because filtering depth textures is not allow, in which case this CL is fine as is?\n\u003e \n\u003e As for the link above, that just confirms that Metal\u0027s D16 is incompatible with WebGL/WebGL2/OpenGL ES which is why this CL uses D32F.\n\nI probably misunderstood. I thought the explanation was that WebKit wanted to use the depth16unorm format on iOS despite the depth bias incompatibility, because the Safari team didn\u0027t care about supporting iOS \u003c\u003d 13.0.\n\nNever mind my comment above. Let\u0027s just get a code owners review of this and get it landed.",
+      "parentUuid": "080dbb52_02f98f55",
+      "revId": "7c179a97bd2a11bfea03befc641cc493d69dc67b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "3f173c78_cd9bef49",
