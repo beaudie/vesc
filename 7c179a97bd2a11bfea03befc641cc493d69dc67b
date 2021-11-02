@@ -51,6 +51,29 @@
       "message": "Still lgtm\n",
       "revId": "7c179a97bd2a11bfea03befc641cc493d69dc67b",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "3f173c78_cd9bef49",
+        "filename": "src/image_util/loadimage.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 1764,
+      "author": {
+        "id": 1374244
+      },
+      "writtenOn": "2021-11-02T10:23:09Z",
+      "side": 1,
+      "message": "nit: FYI, previously these functions are not needed because `mtl::FormatTable::intialize()` would ignore the load functions for depth stencil formats (ignored because D16-D32F load function didn\u0027t exist and would crash):\nhttps://chromium.googlesource.com/angle/angle/+/b7cfbac4f8c5f77a1e45064ea9decb6bf654544c/src/libANGLE/renderer/metal/mtl_format_utils.mm#196\n\nThe tex data uploading process at that point would use a custom function in TextureMtl.mm instead which supports D16-\u003eD32F: https://chromium.googlesource.com/angle/angle/+/refs/heads/main/src/libANGLE/renderer/metal/TextureMtl.mm#202\n\nHowever, the Webkit upstream patch removed the skipping of depth stencil formats\u0027 load functions: https://chromium.googlesource.com/angle/angle/+/refs/heads/main/src/libANGLE/renderer/metal/mtl_format_utils.mm#263\nBut iOS\u0027s \"D16_UNORM\": \"D32_FLOAT\" overriding entry was still kept in the json file. This is a divergent point between Webkit and ANGLE, on Webkit repo, this entry was removed: https://github.com/WebKit/WebKit/blob/main/Source/ThirdParty/ANGLE/src/libANGLE/renderer/metal/mtl_format_map.json#L211\n\nThis most likely happened due to mistake in the merging process.",
+      "range": {
+        "startLine": 1724,
+        "startChar": 5,
+        "endLine": 1764,
+        "endChar": 46
+      },
+      "revId": "7c179a97bd2a11bfea03befc641cc493d69dc67b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
