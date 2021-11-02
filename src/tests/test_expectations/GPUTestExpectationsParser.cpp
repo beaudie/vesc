@@ -84,6 +84,7 @@ enum Token
     kConfigPreRotation180,
     kConfigPreRotation270,
     // Sanitizers
+    kConfigNoSan,
     kConfigASan,
     kConfigTSan,
     kConfigUBSan,
@@ -185,6 +186,7 @@ constexpr TokenInfo kTokenData[kNumberOfTokens] = {
     {"prerotation90", GPUTestConfig::kConditionPreRotation90},
     {"prerotation180", GPUTestConfig::kConditionPreRotation180},
     {"prerotation270", GPUTestConfig::kConditionPreRotation270},
+    {"nosan", GPUTestConfig::kConditionNoSan},
     {"asan", GPUTestConfig::kConditionASan},
     {"tsan", GPUTestConfig::kConditionTSan},
     {"ubsan", GPUTestConfig::kConditionUBSan},
@@ -511,6 +513,7 @@ bool GPUTestExpectationsParser::parseLine(const GPUTestConfig *config,
             case kConfigPreRotation90:
             case kConfigPreRotation180:
             case kConfigPreRotation270:
+            case kConfigNoSan:
             case kConfigASan:
             case kConfigTSan:
             case kConfigUBSan:
