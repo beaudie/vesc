@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "f50e855b_39b7db5e",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 2381,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2021-11-02T05:31:56Z",
+      "side": 1,
+      "message": "std::max() or roundUpPow2()?",
+      "range": {
+        "startLine": 2381,
+        "startChar": 44,
+        "endLine": 2381,
+        "endChar": 52
+      },
+      "revId": "f1f98391b28940e7bb65c01b6b16b91826550007",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
