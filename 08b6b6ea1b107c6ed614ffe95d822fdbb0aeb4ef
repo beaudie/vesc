@@ -68,6 +68,23 @@
       "message": "I think it\u0027d be easiest if you fold this into https://chromium-review.googlesource.com/c/angle/angle/+/3254434 and skip it on the Vulkan backend in the same CL.\n",
       "revId": "08b6b6ea1b107c6ed614ffe95d822fdbb0aeb4ef",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "896d7b41_2f7a0cac",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2021-11-02T17:52:08Z",
+      "side": 1,
+      "message": "Kyle, this is great - let\u0027s get it in - do you want to suppress this on Vulkan in angle_end2end_expectations.txt and CQ it?\n",
+      "revId": "08b6b6ea1b107c6ed614ffe95d822fdbb0aeb4ef",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
