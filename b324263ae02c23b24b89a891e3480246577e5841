@@ -16,6 +16,29 @@
       "message": "Geoff: PTAL. Thanks!\n\n(Note that I copied Dawn\u0027s implementation, which only works on clang. Happy to copy abseil\u0027s instead, which works on g++ as well, but is more verbose.)",
       "revId": "b324263ae02c23b24b89a891e3480246577e5841",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "718a63b9_fe2a8e26",
+        "filename": "src/common/angleutils.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 433,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2021-11-02T16:32:32Z",
+      "side": 1,
+      "message": "I think __has_cpp_attribute(clang::fallthrough) is more precise (from https://clang.llvm.org/docs/LanguageExtensions.html#has-cpp-attribute)",
+      "range": {
+        "startLine": 433,
+        "startChar": 7,
+        "endLine": 433,
+        "endChar": 16
+      },
+      "revId": "b324263ae02c23b24b89a891e3480246577e5841",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
