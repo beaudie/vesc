@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "b8d570af_d5df9d88",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 10
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2021-11-02T05:23:07Z",
+      "side": 1,
+      "message": "Any progress figuring out a way to allow the new test to run?\n\nCan a test-only API overriding the default behavior of the test harness be added, which the tests can call?\n",
+      "revId": "8f09e6760875e7d5899f281d37008cc8e2bac562",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
