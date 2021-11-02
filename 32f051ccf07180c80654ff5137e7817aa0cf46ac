@@ -143,6 +143,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "36d8a466_79655009",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1374244
+      },
+      "writtenOn": "2021-11-02T00:31:03Z",
+      "side": 1,
+      "message": "ES 3.0 doesn\u0027t require depth textures to be filterable (at least I don\u0027t see it being mentioned).\nhttps://www.khronos.org/registry/OpenGL-Refpages/es3.0/html/glTexStorage2D.xhtml\nOnly OES_depth_texture extension (ES2.0 extension) does.\n\nOn iOS,`D16_UNORM` is already overridden to `D32_FLOAT` because previously it was not supported, Apple only added `D16_UNORM` support since iOS 13.0 last year. In fact, before iOS 13.0, none of iOS\u0027s depth formats support filtering. Here in Apple\u0027s docs, they also say pre-A8 GPUs have bugs with depth bias using this `D16` format:\nhttps://developer.apple.com/documentation/metal/mtlpixelformat/mtlpixelformatdepth16unorm?language\u003dobjc\n\nbtw, I don\u0027t think filtering on depth textures are useful (filtering here refers to bilinear + anisotropic, etc). The only thing useful should be hardware doing the some kinds of PCF on depth comparisons for us. I don\u0027t think this PCF is referred as filtering in Apple features table. Otherwise none of their iOS devices prior to iOS 13.0 would work correctly.",
+      "parentUuid": "a24ce634_aa50b80e",
+      "revId": "32f051ccf07180c80654ff5137e7817aa0cf46ac",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "ae18f4cd_9f6b9cd6",
         "filename": "src/image_util/loadimage.cpp",
         "patchSetId": 2
