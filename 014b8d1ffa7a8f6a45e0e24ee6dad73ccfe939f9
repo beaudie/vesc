@@ -20,6 +20,121 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "dbe27338_6608c411",
+        "filename": "src/libANGLE/GLES1Renderer.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 40,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2021-11-02T13:00:38Z",
+      "side": 1,
+      "message": "nit: if you use auto for a map iterator, alias the parts of the pair you use so it can be more readable. the style guide explicitly mentions this.",
+      "range": {
+        "startLine": 40,
+        "startChar": 19,
+        "endLine": 40,
+        "endChar": 24
+      },
+      "revId": "014b8d1ffa7a8f6a45e0e24ee6dad73ccfe939f9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "4d441f61_19edd7d2",
+        "filename": "src/libANGLE/GLES1Renderer.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 57,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2021-11-02T13:00:38Z",
+      "side": 1,
+      "message": "how about a bitset here?",
+      "range": {
+        "startLine": 56,
+        "startChar": 0,
+        "endLine": 57,
+        "endChar": 39
+      },
+      "revId": "014b8d1ffa7a8f6a45e0e24ee6dad73ccfe939f9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "f2e09682_527559d9",
+        "filename": "src/libANGLE/GLES1Renderer.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 879,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2021-11-02T13:00:38Z",
+      "side": 1,
+      "message": "are we still using one program at a time or something? wondering if we can improve the dirtyness here.",
+      "range": {
+        "startLine": 878,
+        "startChar": 0,
+        "endLine": 879,
+        "endChar": 35
+      },
+      "revId": "014b8d1ffa7a8f6a45e0e24ee6dad73ccfe939f9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "62fdf5e4_8e790df8",
+        "filename": "src/libANGLE/GLES1Renderer.h",
+        "patchSetId": 5
+      },
+      "lineNbr": 120,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2021-11-02T13:00:38Z",
+      "side": 1,
+      "message": "could style suggestions:\n\nif possible use enum class to isolate the namespace\nI suggest you pull the types out of the class as it makes it awkward if we ever want to forward declare them\nthe style guide says to put functions before member variables",
+      "range": {
+        "startLine": 120,
+        "startChar": 4,
+        "endLine": 120,
+        "endChar": 9
+      },
+      "revId": "014b8d1ffa7a8f6a45e0e24ee6dad73ccfe939f9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "707cde91_65acd5f4",
+        "filename": "src/libANGLE/GLES1Renderer.h",
+        "patchSetId": 5
+      },
+      "lineNbr": 299,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2021-11-02T13:00:38Z",
+      "side": 1,
+      "message": "nit: angle::HashMap",
+      "range": {
+        "startLine": 299,
+        "startChar": 9,
+        "endLine": 299,
+        "endChar": 22
+      },
+      "revId": "014b8d1ffa7a8f6a45e0e24ee6dad73ccfe939f9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "8b1c222a_41eccbe7",
         "filename": "src/libANGLE/GLES1Shaders.inc",
         "patchSetId": 5
