@@ -367,7 +367,8 @@ OffscreenSurfaceVk::OffscreenSurfaceVk(const egl::SurfaceState &surfaceState, Re
       mHeight(mState.attributes.getAsInt(EGL_HEIGHT, 0)),
       mColorAttachment(this),
       mDepthStencilAttachment(this),
-      mLockBufferHelper()
+      mLockBufferHelper(),
+      hasDeferredClearAndUnlockSurface(false)
 {
     mColorRenderTarget.init(&mColorAttachment.image, &mColorAttachment.imageViews, nullptr, nullptr,
                             gl::LevelIndex(0), 0, 1, RenderTargetTransience::Default);
@@ -531,6 +532,25 @@ vk::ImageHelper *OffscreenSurfaceVk::getColorAttachmentImage()
     return &mColorAttachment.image;
 }
 
+egl::Error OffscreenSurfaceVk::makeCurrent(const gl::Context *context)
+{
+    if (hasDeferredClearAndUnlockSurface)
+    {
+        ContextVk *contextVk   = vk::GetImpl(context);
+        vk::ImageHelper *image = &mColorAttachment.image;
+        ASSERT(image->valid());
+        ANGLE_TRY_RETURN(image->flushAllStagedUpdates(contextVk), egl::EglBadAccess());
+
+        hasDeferredClearAndUnlockSurface = false;
+        gl::LevelIndex destinationLevelGL(0);
+        gl::Box destinationArea(0, 0, 0, getWidth(), getHeight(), 1);
+        ANGLE_TRY_RETURN(image->copyBufferToSurfaceImage2(contextVk, destinationLevelGL, 1, 0,
+                                                          destinationArea, &mLockBufferHelper),
+                         egl::EglBadAccess());
+    }
+    return egl::NoError();
+}
+
 egl::Error OffscreenSurfaceVk::lockSurface(const egl::Display *display,
                                            EGLint usageHint,
                                            bool preservePixels,
@@ -582,12 +602,23 @@ egl::Error OffscreenSurfaceVk::lockSurface(const egl::Display *display,
     {
         if (preservePixels)
         {
-            gl::Box sourceArea(0, 0, 0, getWidth(), getHeight(), 1);
             gl::LevelIndex sourceLevelGL(0);
+            const VkClearColorValue *clearColor;
+            if (image->hasStagedClearUpdates(sourceLevelGL, &clearColor))
+            {
+                hasDeferredClearAndUnlockSurface = true;
+                mLockBufferHelper.fillWithColor(getWidth(), getHeight(), clearColor,
+                                                &internalFormat);
+            }
+            else
+            {
 
-            ANGLE_TRY_RETURN(image->copySurfaceImageToBuffer(displayVk, sourceLevelGL, 1, 0,
-                                                             sourceArea, &mLockBufferHelper),
-                             egl::EglBadAccess());
+                gl::Box sourceArea(0, 0, 0, getWidth(), getHeight(), 1);
+
+                ANGLE_TRY_RETURN(image->copySurfaceImageToBuffer(displayVk, sourceLevelGL, 1, 0,
+                                                                 sourceArea, &mLockBufferHelper),
+                                 egl::EglBadAccess());
+            }
         }
 
         *bufferPitchOut = rowStride;
@@ -602,6 +633,11 @@ egl::Error OffscreenSurfaceVk::unlockSurface(const egl::Display *display, bool p
     if (!mLockBufferHelper.valid())
     {
         return egl::Error(EGL_BAD_ACCESS);
+    }
+
+    if (hasDeferredClearAndUnlockSurface)
+    {
+        return egl::NoError();
     }
 
     DisplayVk *displayVk = vk::GetImpl(display);
@@ -706,7 +742,9 @@ WindowSurfaceVk::WindowSurfaceVk(const egl::SurfaceState &surfaceState, EGLNativ
       mDepthStencilImageBinding(this, kAnySurfaceImageSubjectIndex),
       mColorImageMSBinding(this, kAnySurfaceImageSubjectIndex),
       mNeedToAcquireNextSwapchainImage(false),
-      mFrameCount(1)
+      mFrameCount(1),
+      mLockBufferHelper(),
+      hasDeferredClearAndUnlockSurface(false)
 {
     // Initialize the color render target with the multisampled targets.  If not multisampled, the
     // render target will be updated to refer to a swapchain image on every acquire.
@@ -2189,6 +2227,21 @@ egl::Error WindowSurfaceVk::getBufferAge(const gl::Context *context, EGLint *age
     return egl::NoError();
 }
 
+egl::Error WindowSurfaceVk::makeCurrent(const gl::Context *context)
+{
+    if (hasDeferredClearAndUnlockSurface)
+    {
+        ContextVk *contextVk   = vk::GetImpl(context);
+        vk::ImageHelper *image = &mSwapchainImages[mCurrentSwapchainImageIndex].image;
+        ASSERT(image->valid());
+        ANGLE_TRY_RETURN(image->flushAllStagedUpdates(contextVk), egl::EglBadAccess());
+
+        hasDeferredClearAndUnlockSurface = false;
+        ANGLE_TRY_RETURN(unlockSurface(context->getDisplay(), true), egl::EglBadAccess());
+    }
+    return egl::NoError();
+}
+
 egl::Error WindowSurfaceVk::lockSurface(const egl::Display *display,
                                         EGLint usageHint,
                                         bool preservePixels,
@@ -2248,12 +2301,21 @@ egl::Error WindowSurfaceVk::lockSurface(const egl::Display *display,
     {
         if (preservePixels)
         {
-            gl::Box sourceArea(0, 0, 0, getWidth(), getHeight(), 1);
             gl::LevelIndex sourceLevelGL(0);
-
-            ANGLE_TRY_RETURN(image->copySurfaceImageToBuffer(displayVk, sourceLevelGL, 1, 0,
-                                                             sourceArea, &mLockBufferHelper),
-                             egl::EglBadAccess());
+            const VkClearColorValue *clearColor;
+            if (image->hasStagedClearUpdates(sourceLevelGL, &clearColor))
+            {
+                hasDeferredClearAndUnlockSurface = true;
+                mLockBufferHelper.fillWithColor(getWidth(), getHeight(), clearColor,
+                                                &internalFormat);
+            }
+            else
+            {
+                gl::Box sourceArea(0, 0, 0, getWidth(), getHeight(), 1);
+                ANGLE_TRY_RETURN(image->copySurfaceImageToBuffer(displayVk, sourceLevelGL, 1, 0,
+                                                                 sourceArea, &mLockBufferHelper),
+                                 egl::EglBadAccess());
+            }
         }
 
         *bufferPitchOut = rowStride;
@@ -2268,6 +2330,11 @@ egl::Error WindowSurfaceVk::unlockSurface(const egl::Display *display, bool pres
     if (!mLockBufferHelper.valid())
     {
         return egl::Error(EGL_BAD_ACCESS);
+    }
+
+    if (hasDeferredClearAndUnlockSurface)
+    {
+        return egl::NoError();
     }
 
     DisplayVk *displayVk = vk::GetImpl(display);

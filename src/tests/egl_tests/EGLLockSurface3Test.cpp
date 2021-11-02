@@ -361,13 +361,7 @@ TEST_P(EGLLockSurface3Test, PbufferSurfaceReadWriteTest)
     glClear(GL_COLOR_BUFFER_BIT);
     ASSERT_GL_NO_ERROR() << "glClear failed";
 
-    const GLColor drawColor = GLColor::red;
-    GLuint texture          = 0;
-    EXPECT_TRUE(createTexture(&texture));
-    EXPECT_TRUE(fillTexture(texture, drawColor));
-    EXPECT_TRUE(renderTexture(texture));
-    glFinish();
-    ASSERT_GL_NO_ERROR() << "glFinish failed";
+    const GLColor drawColor = clearColor;
 
     EXPECT_TRUE(eglMakeCurrent(mDisplay, EGL_NO_SURFACE, EGL_NO_SURFACE, context));
 

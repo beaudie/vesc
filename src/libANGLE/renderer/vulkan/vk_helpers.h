@@ -912,6 +912,10 @@ class BufferHelper final : public ReadWriteResource
     bool recordWriteBarrier(VkAccessFlags writeAccessType,
                             VkPipelineStageFlags writeStage,
                             PipelineBarrier *barrier);
+    void fillWithColor(EGLint width,
+                       EGLint height,
+                       const VkClearColorValue *color,
+                       const gl::InternalFormat *internalFormat);
 
   private:
     angle::Result initializeNonZeroMemory(Context *context, VkDeviceSize size);
@@ -1827,6 +1831,8 @@ class ImageHelper final : public Resource, public angle::Subject
                                         uint32_t layerCount) const;
     bool hasStagedUpdatesInAllocatedLevels() const;
 
+    bool hasStagedClearUpdates(gl::LevelIndex levelGL, const VkClearColorValue **color) const;
+
     void recordWriteBarrier(Context *context,
                             VkImageAspectFlags aspectMask,
                             ImageLayout newLayout,
@@ -1917,6 +1923,13 @@ class ImageHelper final : public Resource, public angle::Subject
                                            uint32_t baseLayer,
                                            const gl::Box &destArea,
                                            vk::BufferHelper *bufferHelper);
+
+    angle::Result copyBufferToSurfaceImage2(ContextVk *contextVk,
+                                            gl::LevelIndex destLevelGL,
+                                            uint32_t layerCount,
+                                            uint32_t baseLayer,
+                                            const gl::Box &destArea,
+                                            vk::BufferHelper *bufferHelper);
 
     static angle::Result GetReadPixelsParams(ContextVk *contextVk,
                                              const gl::PixelPackState &packState,

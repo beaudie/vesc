@@ -51,6 +51,7 @@ class OffscreenSurfaceVk : public SurfaceVk
 
     FramebufferImpl *createDefaultFramebuffer(const gl::Context *context,
                                               const gl::FramebufferState &state) override;
+    egl::Error makeCurrent(const gl::Context *context) override;
     egl::Error swap(const gl::Context *context) override;
     egl::Error postSubBuffer(const gl::Context *context,
                              EGLint x,
@@ -126,6 +127,7 @@ class OffscreenSurfaceVk : public SurfaceVk
 
     // EGL_KHR_lock_surface3
     vk::BufferHelper mLockBufferHelper;
+    bool hasDeferredClearAndUnlockSurface;
 };
 
 // Data structures used in WindowSurfaceVk
@@ -202,6 +204,7 @@ class WindowSurfaceVk : public SurfaceVk
                                             FramebufferAttachmentRenderTarget **rtOut) override;
     FramebufferImpl *createDefaultFramebuffer(const gl::Context *context,
                                               const gl::FramebufferState &state) override;
+    egl::Error makeCurrent(const gl::Context *context) override;
     egl::Error swap(const gl::Context *context) override;
     egl::Error swapWithDamage(const gl::Context *context,
                               const EGLint *rects,
@@ -398,6 +401,7 @@ class WindowSurfaceVk : public SurfaceVk
 
     // EGL_KHR_lock_surface3
     vk::BufferHelper mLockBufferHelper;
+    bool hasDeferredClearAndUnlockSurface;
 };
 
 }  // namespace rx
