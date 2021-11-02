@@ -98,6 +98,30 @@
       },
       "revId": "7c179a97bd2a11bfea03befc641cc493d69dc67b",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "c59ab541_bb8cb61e",
+        "filename": "src/image_util/loadimage.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 1764,
+      "author": {
+        "id": 1374244
+      },
+      "writtenOn": "2021-11-02T19:31:23Z",
+      "side": 1,
+      "message": "Actually that was not a suggestion. I just wanted to point out that the format table\u0027s code is currently having some inconsistencies between Webkit \u0026 ANGLE after an upstream patch.\nThe long explanation was just for everyone to better understand the situation.\nSorry if that didn\u0027t help.",
+      "parentUuid": "a13448e1_4ea0171a",
+      "range": {
+        "startLine": 1724,
+        "startChar": 5,
+        "endLine": 1764,
+        "endChar": 46
+      },
+      "revId": "7c179a97bd2a11bfea03befc641cc493d69dc67b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
