@@ -2407,8 +2407,6 @@ angle::Result FramebufferVk::startNewRenderPass(ContextVk *contextVk,
                                                 vk::CommandBuffer **commandBufferOut,
                                                 bool *renderPassDescChangedOut)
 {
-    ANGLE_TRY(contextVk->flushCommandsAndEndRenderPass());
-
     // Initialize RenderPass info.
     vk::AttachmentOpsArray renderPassAttachmentOps;
     vk::PackedClearValuesArray packedClearValues;
