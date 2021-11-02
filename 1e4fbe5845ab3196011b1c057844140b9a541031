@@ -16,6 +16,24 @@
       "message": "Charlie/Shabi,\n\nPTAL and let me know how you\u0027d like the test modified to hit the case you\u0027re describing.\n\nThis is still setting shouldEndRenderPass\u003dtrue in ContextVk::onBeginTransformFeedback(), presumably because you always need a buffer to write generated primitives into, though I don\u0027t know enough about XFB to say for sure.",
       "revId": "1e4fbe5845ab3196011b1c057844140b9a541031",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "96e1990b_307530bf",
+        "filename": "src/tests/gl_tests/TransformFeedbackTest.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 2749,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2021-11-02T05:43:57Z",
+      "side": 1,
+      "message": "N/A\n\nShabi\u0027s test recreates the issue.",
+      "parentUuid": "a6669962_646b69e1",
+      "revId": "1e4fbe5845ab3196011b1c057844140b9a541031",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
