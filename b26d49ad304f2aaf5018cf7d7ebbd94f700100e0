@@ -33,6 +33,24 @@
       "message": "Also EXPECT_GL_NO_ERROR(); please.",
       "revId": "b26d49ad304f2aaf5018cf7d7ebbd94f700100e0",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "aee1ccae_2489d0ac",
+        "filename": "src/tests/gl_tests/WebGLCompatibilityTest.cpp",
+        "patchSetId": 8
+      },
+      "lineNbr": 2264,
+      "author": {
+        "id": 1525982
+      },
+      "writtenOn": "2021-11-02T03:23:53Z",
+      "side": 1,
+      "message": "Added.",
+      "parentUuid": "b465755d_79518664",
+      "revId": "b26d49ad304f2aaf5018cf7d7ebbd94f700100e0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
