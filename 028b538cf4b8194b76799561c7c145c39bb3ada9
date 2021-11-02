@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "ccbd6355_80fa66e6",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2021-11-02T21:16:14Z",
+      "side": 1,
+      "message": "PTAL. Taking over Kyle\u0027s https://chromium-review.googlesource.com/c/angle/angle/+/3254434 to help him get it landed today.\n\nThis is the same as that patch, but the associated tests have already landed, so unskipping them on Metal.\n",
+      "revId": "028b538cf4b8194b76799561c7c145c39bb3ada9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
