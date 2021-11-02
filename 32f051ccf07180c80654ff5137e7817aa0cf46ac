@@ -197,6 +197,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "b29af867_750e32b1",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1374244
+      },
+      "writtenOn": "2021-11-02T19:21:45Z",
+      "side": 1,
+      "message": "\"nearest\" is already supported by Metal for every format:\n\u003e All graphics and compute functions can read or sample from any texture,\n\u003e regardless of its pixel format\".\nhttps://developer.apple.com/metal/Metal-Feature-Set-Tables.pdf\n\nBefore iOS 13.0, `D16` was not supported on iOS devices, if the depth textures hadn\u0027t supported sampling even with nearest filtering mode, no shadow map algorithms would have worked.",
+      "parentUuid": "1593c259_04575857",
+      "revId": "32f051ccf07180c80654ff5137e7817aa0cf46ac",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "ae18f4cd_9f6b9cd6",
         "filename": "src/image_util/loadimage.cpp",
         "patchSetId": 2
