@@ -1796,3 +1796,7 @@
 
 6709 LINUX NVIDIA GTX1660 VULKAN : dEQP-GLES3.functional.shaders.random.all_features.fragment.26 = FAIL
 6709 LINUX NVIDIA GTX1660 VULKAN : dEQP-GLES3.functional.shaders.random.all_features.fragment.31 = FAIL
+
+6705 UBSAN : dEQP-GLES3.functional.shaders.random.comparison_ops.fragment.* = SKIP
+6705 UBSAN : dEQP-GLES3.functional.shaders.operator.binary_operator.* = SKIP
+6705 UBSAN : dEQP-GLES3.functional.shaders.precision.int.* = SKIP
