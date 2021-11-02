@@ -33,6 +33,24 @@
       "message": "This test should also check for the \"webgl_\" and \"_webgl_\" prefixes in conjunction with glGetAttribLocation:\n\nhttps://source.chromium.org/chromium/chromium/src/+/main:third_party/angle/src/libANGLE/validationES2.cpp;l\u003d722?q\u003dValidateWebGLNamePrefix",
       "revId": "fcb22181ced91aa1040a0044d651b21fd8c12ded",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "8b8295e2_c9340f1b",
+        "filename": "src/tests/gl_tests/WebGLCompatibilityTest.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 2259,
+      "author": {
+        "id": 1525982
+      },
+      "writtenOn": "2021-11-02T00:17:18Z",
+      "side": 1,
+      "message": "Thanks. Added in the new version.",
+      "parentUuid": "5efdc098_f81d43cb",
+      "revId": "fcb22181ced91aa1040a0044d651b21fd8c12ded",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
