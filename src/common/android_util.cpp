@@ -361,8 +361,13 @@ int GLInternalFormatToNativePixelFormat(GLenum internalFormat)
     {
         case GL_RGBA8:
             return AHARDWAREBUFFER_FORMAT_R8G8B8A8_UNORM;
+#ifdef OLD_CODE
         case GL_RGB8:
             return AHARDWAREBUFFER_FORMAT_R8G8B8X8_UNORM;
+#else   // OLD_CODE
+        case GL_RGB8:
+            return AHARDWAREBUFFER_FORMAT_R8G8B8_UNORM;
+#endif  // OLD_CODE
         case GL_RGB565:
             return AHARDWAREBUFFER_FORMAT_R5G6B5_UNORM;
         case GL_BGRA8_EXT:
