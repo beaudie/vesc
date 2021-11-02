@@ -1,0 +1,78 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "00269a50_7eae3cd9",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 5
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2021-11-02T06:49:59Z",
+      "side": 1,
+      "message": "Nice! I have a few follow up ideas to try.",
+      "revId": "014b8d1ffa7a8f6a45e0e24ee6dad73ccfe939f9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "8b1c222a_41eccbe7",
+        "filename": "src/libANGLE/GLES1Shaders.inc",
+        "patchSetId": 5
+      },
+      "lineNbr": 29,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2021-11-02T06:49:59Z",
+      "side": 1,
+      "message": "Next up, try making this mediump and see how much improvement we can potentially get!",
+      "revId": "014b8d1ffa7a8f6a45e0e24ee6dad73ccfe939f9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "91adde2b_261aee77",
+        "filename": "src/libANGLE/GLES1Shaders.inc",
+        "patchSetId": 5
+      },
+      "lineNbr": 407,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2021-11-02T06:49:59Z",
+      "side": 1,
+      "message": "Another experiment is to turn the light info into an array-of-struct instead of struct-of-array for more efficient loads here.",
+      "range": {
+        "startLine": 398,
+        "startChar": 0,
+        "endLine": 407,
+        "endChar": 58
+      },
+      "revId": "014b8d1ffa7a8f6a45e0e24ee6dad73ccfe939f9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "2198b0e1_a65c354f",
+        "filename": "src/libANGLE/GLES1Shaders.inc",
+        "patchSetId": 5
+      },
+      "lineNbr": 638,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2021-11-02T06:49:59Z",
+      "side": 1,
+      "message": "We should figure out if the shaders are bottlenecked by the amount of ALU or uniform load. Does AGI output these counters yet? If we are bottlenecked by uniform load, there is a lot here that can be packed. If it\u0027s ALU, we\u0027ll see about it after turning precision to mediump wherever possible.",
+      "revId": "014b8d1ffa7a8f6a45e0e24ee6dad73ccfe939f9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
