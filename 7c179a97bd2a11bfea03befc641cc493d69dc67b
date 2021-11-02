@@ -53,6 +53,23 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "a474b1ff_2c781a9c",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2021-11-02T20:03:54Z",
+      "side": 1,
+      "message": "Quyen, thanks for pointing out the difference in the JSON table between WebKit and ANGLE.\n\nGregg, it\u0027s probably OK to remove the iOS entry in this case, since Apple will be the main customer of the iOS backend. (Other apps could bundle ANGLE and might want to support \u003c\u003d iOS 13.0, but let\u0027s not worry about that for now)\n\nRegardless - let\u0027s try to get a second review of this today and land it. We can do follow-ups in subsequent patches.\n\nP.S. From Quyen\u0027s pointer, here\u0027s an interesting mention of differences in the application of the depth bias between unorm and float depth textures:\n\nhttps://developer.apple.com/documentation/metal/mtlrendercommandencoder/1516269-setdepthbias?language\u003dobjc\n\nIs it possible these differ enough from OpenGL\u0027s rules that it\u0027s not possible to build a conformant OpenGL implementation on top of Metal?\n",
+      "revId": "7c179a97bd2a11bfea03befc641cc493d69dc67b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "3f173c78_cd9bef49",
