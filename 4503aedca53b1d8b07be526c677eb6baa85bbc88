@@ -50,6 +50,23 @@
       "message": "The android-arm64-test failures look like an infra issue. Don\u0027t worry about them.\n\nRegarding the failures of the new test - I\u0027d recommend pulling the new test into this CL, and skipping it on the Vulkan backend at the same time as fixing the issue on the Metal backend. You can reference both:\n\nBug: angleproject:6641\nBug: angleproject:6642\n\nin the commit description.\n",
       "revId": "4503aedca53b1d8b07be526c677eb6baa85bbc88",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "3009bcde_a17ca7f2",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2021-11-02T17:51:28Z",
+      "side": 1,
+      "message": "BTW I was wrong about the Android failures - they\u0027re the new test asserting and crashing, and wiping out the results from the following tests in those shards.\n",
+      "revId": "4503aedca53b1d8b07be526c677eb6baa85bbc88",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
