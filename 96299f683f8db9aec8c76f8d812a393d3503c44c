@@ -110,6 +110,30 @@
       },
       "revId": "96299f683f8db9aec8c76f8d812a393d3503c44c",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "eb6127e9_5b97e743",
+        "filename": "src/libANGLE/renderer/vulkan/vk_caps_utils.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 915,
+      "author": {
+        "id": 1525982
+      },
+      "writtenOn": "2021-11-03T03:42:14Z",
+      "side": 1,
+      "message": "It seems that this causes some tests to crash, e.g., linux-test and mac-test. Reverted to the original.",
+      "parentUuid": "03c6f842_2b25a3df",
+      "range": {
+        "startLine": 915,
+        "startChar": 50,
+        "endLine": 915,
+        "endChar": 67
+      },
+      "revId": "96299f683f8db9aec8c76f8d812a393d3503c44c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
