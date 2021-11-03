@@ -2794,6 +2794,11 @@ void RendererVk::initFeatures(DisplayVk *displayVk,
     // descriptor counts for such immutable samplers
     ANGLE_FEATURE_CONDITION(&mFeatures, useMultipleDescriptorsForExternalFormats, true);
 
+    // http://anglebug.com/6651
+    // When creating a surface with the format GL_RGB8, override the format to be GL_RGBA8, since
+    // Android prevents creating swapchain images with VK_FORMAT_R8G8B8_UNORM.
+    ANGLE_FEATURE_CONDITION(&mFeatures, overrideSurfaceFormatRGB8toRGBA8, IsAndroid());
+
     angle::PlatformMethods *platform = ANGLEPlatformCurrent();
     platform->overrideFeaturesVk(platform, &mFeatures);
 
