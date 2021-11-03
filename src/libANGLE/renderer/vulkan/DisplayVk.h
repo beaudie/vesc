@@ -117,6 +117,8 @@ class DisplayVk : public DisplayImpl, public vk::Context
     gl::Version getMaxSupportedESVersion() const override;
     gl::Version getMaxConformantESVersion() const override;
 
+    void initializeFrontendFeatures(angle::FrontendFeatures *features) const override;
+
     virtual const char *getWSIExtension() const = 0;
     virtual const char *getWSILayer() const;
     virtual bool isUsingSwapchain() const;

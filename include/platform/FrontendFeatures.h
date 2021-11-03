@@ -83,6 +83,11 @@ struct FrontendFeatures : angle::FeatureSetBase
         "enableProgramBinaryForCapture", angle::FeatureCategory::FrontendFeatures,
         "Even if FrameCapture is enabled, enable GL_OES_get_program_binary", &members,
         "http://anglebug.com/5658"};
+
+    // Whether surface format GL_RGB8 should be overridden to GL_RGBA8.
+    angle::Feature overrideSurfaceFormatRGB8toRGBA8 = {
+        "overrideSurfaceFormatRGB8toRGBA8", FeatureCategory::VulkanWorkarounds,
+        "Override surface format GL_RGB8 to GL_RGBA8", &members, "http://anglebug.com/6651"};
 };
 
 inline FrontendFeatures::FrontendFeatures()  = default;

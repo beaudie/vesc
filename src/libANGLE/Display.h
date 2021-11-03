@@ -272,7 +272,7 @@ class Display final : public LabeledObject,
 
     const DisplayState &getState() const { return mState; }
 
-    const angle::FrontendFeatures &getFrontendFeatures() { return mFrontendFeatures; }
+    const angle::FrontendFeatures &getFrontendFeatures() const { return mFrontendFeatures; }
     void overrideFrontendFeatures(const std::vector<std::string> &featureNames, bool enabled);
 
     const angle::FeatureList &getFeatures() const { return mFeatures; }
