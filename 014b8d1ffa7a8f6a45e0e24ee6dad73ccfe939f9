@@ -35,6 +35,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "0bee7073_cb30da06",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 5
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2021-11-03T05:18:13Z",
+      "side": 1,
+      "message": "It looks like the failures are consistent (happened with first and second patch sets).  I\u0027m inclined to think these are bugs with the different backends.  Other backends pass fine.  The AMD ones we can probably skip, but the Mac ones include at least one very basic one \"DrawTextureTest.Basic/ES1_OpenGL\".",
+      "parentUuid": "9c8358fa_8c3c41b0",
+      "revId": "014b8d1ffa7a8f6a45e0e24ee6dad73ccfe939f9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "dbe27338_6608c411",
@@ -58,6 +76,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "e0445824_c8b848d0",
+        "filename": "src/libANGLE/GLES1Renderer.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 40,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2021-11-03T05:18:13Z",
+      "side": 1,
+      "message": "I can\u0027t find what you are referring to in the style guides, but took a pass at making the code more readable.",
+      "parentUuid": "dbe27338_6608c411",
+      "range": {
+        "startLine": 40,
+        "startChar": 19,
+        "endLine": 40,
+        "endChar": 24
+      },
+      "revId": "014b8d1ffa7a8f6a45e0e24ee6dad73ccfe939f9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "4d441f61_19edd7d2",
@@ -71,6 +113,30 @@
       "writtenOn": "2021-11-02T13:00:38Z",
       "side": 1,
       "message": "how about a bitset here?",
+      "range": {
+        "startLine": 56,
+        "startChar": 0,
+        "endLine": 57,
+        "endChar": 39
+      },
+      "revId": "014b8d1ffa7a8f6a45e0e24ee6dad73ccfe939f9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "8deaa2cc_9ce1eb50",
+        "filename": "src/libANGLE/GLES1Renderer.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 57,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2021-11-03T05:18:13Z",
+      "side": 1,
+      "message": "I tried that, but you end up casting back to a bool anyway, so would prefer to keep this as is.",
+      "parentUuid": "4d441f61_19edd7d2",
       "range": {
         "startLine": 56,
         "startChar": 0,
@@ -106,6 +172,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "994b33b3_e3edacc9",
+        "filename": "src/libANGLE/GLES1Renderer.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 879,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2021-11-03T05:18:13Z",
+      "side": 1,
+      "message": "We hit this after we\u0027ve created a new program object and need to populate all of its states.  I don\u0027t think this one can be improved, but we might be able to improve the one above to only dirty states that differ between the new and old programs.",
+      "parentUuid": "f2e09682_527559d9",
+      "range": {
+        "startLine": 878,
+        "startChar": 0,
+        "endLine": 879,
+        "endChar": 35
+      },
+      "revId": "014b8d1ffa7a8f6a45e0e24ee6dad73ccfe939f9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "62fdf5e4_8e790df8",
         "filename": "src/libANGLE/GLES1Renderer.h",
         "patchSetId": 5
@@ -117,6 +207,30 @@
       "writtenOn": "2021-11-02T13:00:38Z",
       "side": 1,
       "message": "could style suggestions:\n\nif possible use enum class to isolate the namespace\nI suggest you pull the types out of the class as it makes it awkward if we ever want to forward declare them\nthe style guide says to put functions before member variables",
+      "range": {
+        "startLine": 120,
+        "startChar": 4,
+        "endLine": 120,
+        "endChar": 9
+      },
+      "revId": "014b8d1ffa7a8f6a45e0e24ee6dad73ccfe939f9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "b516f8d1_089fc78d",
+        "filename": "src/libANGLE/GLES1Renderer.h",
+        "patchSetId": 5
+      },
+      "lineNbr": 120,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2021-11-03T05:18:13Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "62fdf5e4_8e790df8",
       "range": {
         "startLine": 120,
         "startChar": 4,
@@ -150,6 +264,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "66c8b43b_e4a5b41a",
+        "filename": "src/libANGLE/GLES1Renderer.h",
+        "patchSetId": 5
+      },
+      "lineNbr": 299,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2021-11-03T05:18:13Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "707cde91_65acd5f4",
+      "range": {
+        "startLine": 299,
+        "startChar": 9,
+        "endLine": 299,
+        "endChar": 22
+      },
+      "revId": "014b8d1ffa7a8f6a45e0e24ee6dad73ccfe939f9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "8b1c222a_41eccbe7",
@@ -163,6 +301,24 @@
       "writtenOn": "2021-11-02T06:49:59Z",
       "side": 1,
       "message": "Next up, try making this mediump and see how much improvement we can potentially get!",
+      "revId": "014b8d1ffa7a8f6a45e0e24ee6dad73ccfe939f9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "1d65f0b1_60ea0f90",
+        "filename": "src/libANGLE/GLES1Shaders.inc",
+        "patchSetId": 5
+      },
+      "lineNbr": 29,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2021-11-03T05:18:13Z",
+      "side": 1,
+      "message": "I think next bang for buck change is to extract more fixed values like texture_format and texture_env_mode, since a lot of control flow is driven by those values.  But I agree it is worth dialing this down to see what gains it provides.",
+      "parentUuid": "8b1c222a_41eccbe7",
       "revId": "014b8d1ffa7a8f6a45e0e24ee6dad73ccfe939f9",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
@@ -190,6 +346,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "8652eab0_0a63d2aa",
+        "filename": "src/libANGLE/GLES1Shaders.inc",
+        "patchSetId": 5
+      },
+      "lineNbr": 407,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2021-11-03T05:18:13Z",
+      "side": 1,
+      "message": "Agreed, I\u0027ll track your suggestions in a write up.",
+      "parentUuid": "91adde2b_261aee77",
+      "range": {
+        "startLine": 398,
+        "startChar": 0,
+        "endLine": 407,
+        "endChar": 58
+      },
+      "revId": "014b8d1ffa7a8f6a45e0e24ee6dad73ccfe939f9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "2198b0e1_a65c354f",
@@ -203,6 +383,24 @@
       "writtenOn": "2021-11-02T06:49:59Z",
       "side": 1,
       "message": "We should figure out if the shaders are bottlenecked by the amount of ALU or uniform load. Does AGI output these counters yet? If we are bottlenecked by uniform load, there is a lot here that can be packed. If it\u0027s ALU, we\u0027ll see about it after turning precision to mediump wherever possible.",
+      "revId": "014b8d1ffa7a8f6a45e0e24ee6dad73ccfe939f9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "f5d5fb5e_e77fea10",
+        "filename": "src/libANGLE/GLES1Shaders.inc",
+        "patchSetId": 5
+      },
+      "lineNbr": 638,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2021-11-03T05:18:13Z",
+      "side": 1,
+      "message": "I haven\u0027t looked into AGI counters yet, but agree there\u0027s room to tune this beyond improving the control flow.  There were enough gains from that I haven\u0027t dug deeper yet.",
+      "parentUuid": "2198b0e1_a65c354f",
       "revId": "014b8d1ffa7a8f6a45e0e24ee6dad73ccfe939f9",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
