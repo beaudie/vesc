@@ -1,0 +1,90 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "88964439_eb303508",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 11
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2021-11-03T01:28:41Z",
+      "side": 1,
+      "message": "Perfect thanks.\n\nThere\u0027s a little problem that now the comment that says \"queries should start in order\" is now violated, _but_ that only applies to when PGQ (Primitives Generated Query) is emulated with XFBQ, which is a hack and actually not conformant, so don\u0027t need to worry about it especially since CQ is happy already.\n\nI\u0027m going to go ahead and remove that emulation now that we have at least one implementation for PGQ in place.",
+      "revId": "4f3860dfae36431bc9c81c5fbbba483d3d7db98e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "a74e3296_1129e3e5",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 11
+      },
+      "lineNbr": 5975,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2021-11-03T01:28:41Z",
+      "side": 1,
+      "message": "Just use `QueryVk *xfbQuery \u003d mActiveRenderPassQueries[gl::QueryType::TransformFeedbackPrimitivesWritten];`, no need to loop. Also remove the comment above.",
+      "range": {
+        "startLine": 5973,
+        "startChar": 0,
+        "endLine": 5975,
+        "endChar": 24
+      },
+      "revId": "4f3860dfae36431bc9c81c5fbbba483d3d7db98e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "6444de78_79978679",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 11
+      },
+      "lineNbr": 5985,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2021-11-03T01:28:41Z",
+      "side": 1,
+      "message": "Can be an ASSERT now? Should only get here when xfb is resumed.",
+      "range": {
+        "startLine": 5984,
+        "startChar": 0,
+        "endLine": 5985,
+        "endChar": 82
+      },
+      "revId": "4f3860dfae36431bc9c81c5fbbba483d3d7db98e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "8485d7e8_b68a8367",
+        "filename": "src/tests/angle_end2end_tests_expectations.txt",
+        "patchSetId": 11
+      },
+      "lineNbr": 110,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2021-11-03T01:28:41Z",
+      "side": 1,
+      "message": "nit: Use * here",
+      "range": {
+        "startLine": 110,
+        "startChar": 83,
+        "endLine": 110,
+        "endChar": 93
+      },
+      "revId": "4f3860dfae36431bc9c81c5fbbba483d3d7db98e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
