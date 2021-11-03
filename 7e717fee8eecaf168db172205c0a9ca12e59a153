@@ -16,6 +16,24 @@
       "message": "Re-LGTM. Any measurable improvements?",
       "revId": "7e717fee8eecaf168db172205c0a9ca12e59a153",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "3f1bb306_7f9860e3",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2021-11-03T05:17:14Z",
+      "side": 1,
+      "message": "There won\u0027t be a difference at all on ARM, since they have the same value for both:\n\n  \"optimalBufferCopyOffsetAlignment\" : \"0x0000000000000040\",\n  \"nonCoherentAtomSize\" : \"0x0000000000000040\",\n\nQC and Nvidia may show an improvement, but I haven\u0027t checked yet.",
+      "parentUuid": "2dafba26_d7060439",
+      "revId": "7e717fee8eecaf168db172205c0a9ca12e59a153",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
