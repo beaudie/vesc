@@ -856,7 +856,16 @@ angle::Result WindowSurfaceVk::initializeImpl(DisplayVk *displayVk)
     }
     setSwapInterval(preferredSwapInterval);
 
-    const vk::Format &format = renderer->getFormat(mState.config->renderTargetFormat);
+    // TODO(http://anglebug.com/6651): Remove once we can correctly determine surface capabilities
+    // when determining format support.
+    GLenum renderTargetFormat = mState.config->renderTargetFormat;
+    if (renderer->getFeatures().overrideSurfaceFormatRGB8toRGBA8.enabled &&
+        mState.config->renderTargetFormat == GL_RGB8)
+    {
+        renderTargetFormat = GL_RGBA8;
+    }
+
+    const vk::Format &format = renderer->getFormat(renderTargetFormat);
     VkFormat nativeFormat    = format.getActualRenderableImageVkFormat();
 
     bool surfaceFormatSupported = false;
