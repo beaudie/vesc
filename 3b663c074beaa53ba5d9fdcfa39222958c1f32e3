@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "6d19d39b_a036467b",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 7
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1500872
+      },
+      "writtenOn": "2021-11-03T21:28:17Z",
+      "side": 1,
+      "message": "Newest update moves one last change in from Webkit: using GetVertexCountWithConversion to get the total number of converted vertices. ",
+      "revId": "3b663c074beaa53ba5d9fdcfa39222958c1f32e3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
