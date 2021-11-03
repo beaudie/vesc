@@ -18,6 +18,23 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "b720bdc5_6b416c24",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2021-11-03T14:37:19Z",
+      "side": 1,
+      "message": "Feels like this should be done in the Vulkan back-end, rather than Surface.cpp.",
+      "revId": "0e87e12ad1ec242536a84a23254c4570357a8b91",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "7aa78d3d_7b6cab71",
