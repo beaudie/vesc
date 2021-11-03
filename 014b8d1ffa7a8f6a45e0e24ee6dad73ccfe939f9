@@ -323,6 +323,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "7440b8f7_3d6fbb75",
+        "filename": "src/libANGLE/GLES1Shaders.inc",
+        "patchSetId": 5
+      },
+      "lineNbr": 29,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2021-11-03T06:04:11Z",
+      "side": 1,
+      "message": "Ack. My suggestion is to try changing to mediump and ignore visual errors, just to see what\u0027s the upper bound of the gain.",
+      "parentUuid": "1d65f0b1_60ea0f90",
+      "revId": "014b8d1ffa7a8f6a45e0e24ee6dad73ccfe939f9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "91adde2b_261aee77",
