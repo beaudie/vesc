@@ -281,7 +281,7 @@ deps = {
               'version': Var('android_sdk_platforms_version'),
           },
           {
-              'package': 'chromium/third_party/android_sdk/public/sources/android-30',
+              'package': 'chromium/third_party/android_sdk/public/sources/android-31',
               'version': Var('android_sdk_sources_version'),
           },
           {
