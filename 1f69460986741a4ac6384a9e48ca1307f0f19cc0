@@ -1,0 +1,44 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "fed6dd64_df691682",
+        "filename": "src/tests/gl_tests/gles1/BootAnimationTest.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 228,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2021-11-03T14:59:18Z",
+      "side": 1,
+      "message": "please use the expectations file.",
+      "range": {
+        "startLine": 228,
+        "startChar": 0,
+        "endLine": 228,
+        "endChar": 59
+      },
+      "revId": "1f69460986741a4ac6384a9e48ca1307f0f19cc0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "77a3fa4b_06011c63",
+        "filename": "src/tests/gles1_conformance_tests/ConformanceTests.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 518,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2021-11-03T14:59:18Z",
+      "side": 1,
+      "message": "ditto",
+      "revId": "1f69460986741a4ac6384a9e48ca1307f0f19cc0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}

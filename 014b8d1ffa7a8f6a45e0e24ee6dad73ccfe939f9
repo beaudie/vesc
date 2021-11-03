@@ -100,6 +100,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "5e1ad572_fdaf1244",
+        "filename": "src/libANGLE/GLES1Renderer.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 40,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2021-11-03T14:59:18Z",
+      "side": 1,
+      "message": "https://google.github.io/styleguide/cppguide.html#Type_deduction\n\nLook under local type deduction, and see their example that uses a reference to \"second\".",
+      "parentUuid": "e0445824_c8b848d0",
+      "range": {
+        "startLine": 40,
+        "startChar": 19,
+        "endLine": 40,
+        "endChar": 24
+      },
+      "revId": "014b8d1ffa7a8f6a45e0e24ee6dad73ccfe939f9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "4d441f61_19edd7d2",
@@ -147,6 +171,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "04727ebb_2c29aa7c",
+        "filename": "src/libANGLE/GLES1Renderer.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 57,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2021-11-03T14:59:18Z",
+      "side": 1,
+      "message": "Then how about std::array?",
+      "parentUuid": "8deaa2cc_9ce1eb50",
+      "range": {
+        "startLine": 56,
+        "startChar": 0,
+        "endLine": 57,
+        "endChar": 39
+      },
+      "revId": "014b8d1ffa7a8f6a45e0e24ee6dad73ccfe939f9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "f2e09682_527559d9",
@@ -184,6 +232,30 @@
       "side": 1,
       "message": "We hit this after we\u0027ve created a new program object and need to populate all of its states.  I don\u0027t think this one can be improved, but we might be able to improve the one above to only dirty states that differ between the new and old programs.",
       "parentUuid": "f2e09682_527559d9",
+      "range": {
+        "startLine": 878,
+        "startChar": 0,
+        "endLine": 879,
+        "endChar": 35
+      },
+      "revId": "014b8d1ffa7a8f6a45e0e24ee6dad73ccfe939f9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "93334836_f81a9a2d",
+        "filename": "src/libANGLE/GLES1Renderer.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 879,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2021-11-03T14:59:18Z",
+      "side": 1,
+      "message": "Sounds like it can be improved then. Maybe leave a comment as to what states would be potentially dirty.",
+      "parentUuid": "994b33b3_e3edacc9",
       "range": {
         "startLine": 878,
         "startChar": 0,
