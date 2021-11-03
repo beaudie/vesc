@@ -22,6 +22,30 @@
       },
       "revId": "7bf35d813e5f1b67471ad4cd0a5e49a89b6548b8",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "f0070ddb_6789f24c",
+        "filename": "src/libANGLE/renderer/vulkan/vk_caps_utils.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 920,
+      "author": {
+        "id": 1525982
+      },
+      "writtenOn": "2021-11-03T18:16:06Z",
+      "side": 1,
+      "message": "Thanks! Updated.\nHowever, the following seems to cause android-angle-chromium-try to fail:\n```enableOverrideValue !\u003d \"0\"```\nIt was replaced with the following, which fixed it:\n```enableOverrideValue.compare(\"0\") !\u003d 0```",
+      "parentUuid": "1345aba6_0273fd46",
+      "range": {
+        "startLine": 918,
+        "startChar": 0,
+        "endLine": 920,
+        "endChar": 60
+      },
+      "revId": "7bf35d813e5f1b67471ad4cd0a5e49a89b6548b8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
