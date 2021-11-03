@@ -46,6 +46,30 @@
       },
       "revId": "3643748c58106276220031e6f9b0c7f1e035169b",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "f80ba7ff_a937b631",
+        "filename": "src/libANGLE/Surface.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 182,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2021-11-03T17:08:56Z",
+      "side": 1,
+      "message": "I created an ANGLE bug for this workaround: anglebug.com/6277",
+      "parentUuid": "61916503_4ba99225",
+      "range": {
+        "startLine": 182,
+        "startChar": 7,
+        "endLine": 182,
+        "endChar": 13
+      },
+      "revId": "3643748c58106276220031e6f9b0c7f1e035169b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
