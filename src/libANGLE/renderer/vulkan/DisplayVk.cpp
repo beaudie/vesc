@@ -201,6 +201,11 @@ gl::Version DisplayVk::getMaxConformantESVersion() const
     return mRenderer->getMaxConformantESVersion();
 }
 
+void DisplayVk::initializeFrontendFeatures(angle::FrontendFeatures *features) const
+{
+    mRenderer->initializeFrontendFeatures(features);
+}
+
 void DisplayVk::generateExtensions(egl::DisplayExtensions *outExtensions) const
 {
     outExtensions->createContextRobustness    = getRenderer()->getNativeExtensions().robustnessEXT;

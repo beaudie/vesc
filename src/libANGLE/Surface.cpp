@@ -178,6 +178,13 @@ Error Surface::initialize(const Display *display)
 {
     GLenum overrideRenderTargetFormat = mState.config->renderTargetFormat;
 
+    bool overrideSurfaceFormatRGB8toRGBA8 =
+        display->getFrontendFeatures().overrideSurfaceFormatRGB8toRGBA8.enabled;
+    if (overrideSurfaceFormatRGB8toRGBA8 && mState.config->renderTargetFormat == GL_RGB8)
+    {
+        overrideRenderTargetFormat = GL_RGBA8;
+    }
+
     // To account for color space differences, override the renderTargetFormat with the
     // non-linear format. If no suitable non-linear format was found, return
     // EGL_BAD_MATCH error

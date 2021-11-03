@@ -38,6 +38,7 @@
 namespace angle
 {
 class Library;
+struct FrontendFeatures;
 }  // namespace angle
 
 namespace egl
@@ -491,6 +492,8 @@ class RendererVk : angle::NonCopyable
     {
         return mEnabledDeviceExtensions;
     }
+
+    void initializeFrontendFeatures(angle::FrontendFeatures *features) const;
 
   private:
     angle::Result initializeDevice(DisplayVk *displayVk, uint32_t queueFamilyIndex);

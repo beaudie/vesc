@@ -2800,6 +2800,16 @@ void RendererVk::initFeatures(DisplayVk *displayVk,
     ApplyFeatureOverrides(&mFeatures, displayVk->getState());
 }
 
+void RendererVk::initializeFrontendFeatures(angle::FrontendFeatures *features) const
+{
+    ensureCapsInitialized();
+
+    // http://anglebug.com/6651
+    // When creating a surface with the format GL_RGB8, override the format to be GL_RGBA8, since
+    // Android prevents creating swapchain images with VK_FORMAT_R8G8B8_UNORM.
+    ANGLE_FEATURE_CONDITION(features, overrideSurfaceFormatRGB8toRGBA8, IsAndroid());
+}
+
 angle::Result RendererVk::initPipelineCache(DisplayVk *display,
                                             vk::PipelineCache *pipelineCache,
                                             bool *success)
