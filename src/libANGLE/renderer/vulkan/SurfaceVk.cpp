@@ -398,9 +398,18 @@ angle::Result OffscreenSurfaceVk::initializeImpl(DisplayVk *displayVk)
 
     if (config->renderTargetFormat != GL_NONE)
     {
-        ANGLE_TRY(mColorAttachment.initialize(displayVk, mWidth, mHeight,
-                                              renderer->getFormat(config->renderTargetFormat),
-                                              samples, robustInit, mState.hasProtectedContent()));
+        // TODO(http://anglebug.com/6651): Remove once we can create swapchain images with
+        // VK_FORMAT_R8G8B8_UNORM.
+        GLenum renderTargetFormat = mState.config->renderTargetFormat;
+        if (renderer->getFeatures().overrideSurfaceFormatRGB8toRGBA8.enabled &&
+            renderTargetFormat == GL_RGB8)
+        {
+            renderTargetFormat = GL_RGBA8;
+        }
+        const vk::Format &format = renderer->getFormat(renderTargetFormat);
+
+        ANGLE_TRY(mColorAttachment.initialize(displayVk, mWidth, mHeight, format, samples,
+                                              robustInit, mState.hasProtectedContent()));
         mColorRenderTarget.init(&mColorAttachment.image, &mColorAttachment.imageViews, nullptr,
                                 nullptr, gl::LevelIndex(0), 0, 1, RenderTargetTransience::Default);
     }
@@ -856,7 +865,16 @@ angle::Result WindowSurfaceVk::initializeImpl(DisplayVk *displayVk)
     }
     setSwapInterval(preferredSwapInterval);
 
-    const vk::Format &format = renderer->getFormat(mState.config->renderTargetFormat);
+    // TODO(http://anglebug.com/6651): Remove once we can create swapchain images with
+    // VK_FORMAT_R8G8B8_UNORM.
+    GLenum renderTargetFormat = mState.config->renderTargetFormat;
+    if (renderer->getFeatures().overrideSurfaceFormatRGB8toRGBA8.enabled &&
+        renderTargetFormat == GL_RGB8)
+    {
+        renderTargetFormat = GL_RGBA8;
+    }
+
+    const vk::Format &format = renderer->getFormat(renderTargetFormat);
     VkFormat nativeFormat    = format.getActualRenderableImageVkFormat();
 
     bool surfaceFormatSupported = false;
@@ -1094,7 +1112,16 @@ angle::Result WindowSurfaceVk::createSwapChain(vk::Context *context,
     RendererVk *renderer = context->getRenderer();
     VkDevice device      = renderer->getDevice();
 
-    const vk::Format &format = renderer->getFormat(mState.config->renderTargetFormat);
+    // TODO(http://anglebug.com/6651): Remove once we can create swapchain images with
+    // VK_FORMAT_R8G8B8_UNORM.
+    GLenum renderTargetFormat = mState.config->renderTargetFormat;
+    if (renderer->getFeatures().overrideSurfaceFormatRGB8toRGBA8.enabled &&
+        renderTargetFormat == GL_RGB8)
+    {
+        renderTargetFormat = GL_RGBA8;
+    }
+
+    const vk::Format &format = renderer->getFormat(renderTargetFormat);
     VkFormat nativeFormat    = format.getActualRenderableImageVkFormat();
 
     gl::Extents rotatedExtents = extents;

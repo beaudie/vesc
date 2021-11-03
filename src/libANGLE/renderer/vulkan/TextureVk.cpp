@@ -2244,7 +2244,14 @@ angle::Result TextureVk::bindTexImage(const gl::Context *context, egl::Surface *
 
     releaseAndDeleteImageAndViews(contextVk);
 
-    GLenum internalFormat    = surface->getConfig()->renderTargetFormat;
+    // TODO(http://anglebug.com/6651): Remove once we can create swapchain images with
+    // VK_FORMAT_R8G8B8_UNORM.
+    GLenum internalFormat = surface->getConfig()->renderTargetFormat;
+    if (renderer->getFeatures().overrideSurfaceFormatRGB8toRGBA8.enabled &&
+        internalFormat == GL_RGB8)
+    {
+        internalFormat = GL_RGBA8;
+    }
     const vk::Format &format = renderer->getFormat(internalFormat);
 
     // eglBindTexImage can only be called with pbuffer (offscreen) surfaces
