@@ -14,6 +14,7 @@
 
 #include "libANGLE/Config.h"
 #include "libANGLE/Context.h"
+#include "libANGLE/Device.h"
 #include "libANGLE/Display.h"
 #include "libANGLE/Framebuffer.h"
 #include "libANGLE/Texture.h"
@@ -177,6 +178,14 @@ void Surface::postSwap(const gl::Context *context)
 Error Surface::initialize(const Display *display)
 {
     GLenum overrideRenderTargetFormat = mState.config->renderTargetFormat;
+
+    // TODO(): Remove once we can correctly determine surface capabilities when determining format
+    // support.
+    bool isVulkan = display->getDevice()->getExtensions().deviceVulkan;
+    if (isVulkan && mState.config->renderTargetFormat == GL_RGB8)
+    {
+        overrideRenderTargetFormat = GL_RGBA8;
+    }
 
     // To account for color space differences, override the renderTargetFormat with the
     // non-linear format. If no suitable non-linear format was found, return
