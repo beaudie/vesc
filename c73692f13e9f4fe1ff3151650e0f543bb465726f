@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "d22a39ab_17d29be4",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2021-11-03T04:49:18Z",
+      "side": 1,
+      "message": "Looks good Yuxin!  I checked the Skia Gold results and also found your trace report.  Also tested it locally on Windows.",
+      "revId": "c73692f13e9f4fe1ff3151650e0f543bb465726f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
