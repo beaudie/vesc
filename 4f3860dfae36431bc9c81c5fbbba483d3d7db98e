@@ -41,6 +41,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "34c78178_8771082f",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 11
+      },
+      "lineNbr": 5975,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2021-11-03T02:35:38Z",
+      "side": 1,
+      "message": "Good catch.",
+      "parentUuid": "a74e3296_1129e3e5",
+      "range": {
+        "startLine": 5973,
+        "startChar": 0,
+        "endLine": 5975,
+        "endChar": 24
+      },
+      "revId": "4f3860dfae36431bc9c81c5fbbba483d3d7db98e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "6444de78_79978679",
@@ -64,6 +88,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "8a608970_7f685b10",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 11
+      },
+      "lineNbr": 5985,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2021-11-03T02:35:38Z",
+      "side": 1,
+      "message": "It can\u0027t, since the dirty bit isn\u0027t cleared when XFB is paused.   Imagine the following:\n\n    glBeginTransformFeedback(context \u003d 1, primitiveMode \u003d GL_LINES)\n    glDrawArrays(context \u003d 1, mode \u003d GL_LINES, first \u003d 0, count \u003d 64)\n    glPauseTransformFeedback(context \u003d 1)\n    glResumeTransformFeedback(context \u003d 1)\n    glPauseTransformFeedback(context \u003d 1)\n    glResumeTransformFeedback(context \u003d 1)\n    glPauseTransformFeedback(context \u003d 1)\n    glDrawArrays(context \u003d 1, mode \u003d GL_LINES, first \u003d 64, count \u003d 64)\n    \nThe dirty bit will be set with each Resume, but never cleared.\n    \nIn fact, pauseTransformFeedbackIfActiveUnpaused() actually sets the dirty bit too, so we\u0027ll end up here when XFB is paused:\n\n    void ContextVk::pauseTransformFeedbackIfActiveUnpaused()\n    {\n        if (mRenderPassCommands-\u003eisTransformFeedbackActiveUnpaused())\n        {\n            ASSERT(getFeatures().supportsTransformFeedbackExtension.enabled);\n            mRenderPassCommands-\u003epauseTransformFeedback();\n\n            // Note that this function is called when render pass break is imminent\n            // (flushCommandsAndEndRenderPass(), or UtilsVk::clearFramebuffer which will close the\n            // render pass after the clear).  This dirty bit allows transform feedback to resume\n            // automatically on next render pass.\n            mGraphicsDirtyBits.set(DIRTY_BIT_TRANSFORM_FEEDBACK_RESUME);\n        }\n    }",
+      "parentUuid": "6444de78_79978679",
+      "range": {
+        "startLine": 5984,
+        "startChar": 0,
+        "endLine": 5985,
+        "endChar": 82
+      },
+      "revId": "4f3860dfae36431bc9c81c5fbbba483d3d7db98e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "8485d7e8_b68a8367",
@@ -77,6 +125,30 @@
       "writtenOn": "2021-11-03T01:28:41Z",
       "side": 1,
       "message": "nit: Use * here",
+      "range": {
+        "startLine": 110,
+        "startChar": 83,
+        "endLine": 110,
+        "endChar": 93
+      },
+      "revId": "4f3860dfae36431bc9c81c5fbbba483d3d7db98e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "843c12b3_add7e668",
+        "filename": "src/tests/angle_end2end_tests_expectations.txt",
+        "patchSetId": 11
+      },
+      "lineNbr": 110,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2021-11-03T02:35:38Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "8485d7e8_b68a8367",
       "range": {
         "startLine": 110,
         "startChar": 83,
