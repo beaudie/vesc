@@ -16,6 +16,207 @@
       "message": "Kyle, great work and Quyen, thanks for reviewing this thoroughly.\n\nShabi, good point about the perf test. Kyle, do you think that\u0027s feasible for you to add? If not then I think we should get this in ASAP and follow up with the test.\n\nGeoff / Jonah, could one of you please review this? I\u0027m not a code owner so my review is less important.\n\nThanks.\n",
       "revId": "aaceaffff92af0dfc73614f39e55f27620de5658",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "e46ec4fd_2ae4d93a",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1326275
+      },
+      "writtenOn": "2021-11-03T17:09:52Z",
+      "side": 1,
+      "message": "LGTM after a few nits",
+      "revId": "aaceaffff92af0dfc73614f39e55f27620de5658",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "3aa2bbde_5d9ecedd",
+        "filename": "src/libANGLE/renderer/metal/VertexArrayMtl.mm",
+        "patchSetId": 4
+      },
+      "lineNbr": 158,
+      "author": {
+        "id": 1326275
+      },
+      "writtenOn": "2021-11-03T17:09:52Z",
+      "side": 1,
+      "message": "Please avoid c-style casts",
+      "range": {
+        "startLine": 158,
+        "startChar": 32,
+        "endLine": 158,
+        "endChar": 42
+      },
+      "revId": "aaceaffff92af0dfc73614f39e55f27620de5658",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "10f60d0e_f2c1e9f2",
+        "filename": "src/libANGLE/renderer/metal/VertexArrayMtl.mm",
+        "patchSetId": 4
+      },
+      "lineNbr": 967,
+      "author": {
+        "id": 1326275
+      },
+      "writtenOn": "2021-11-03T17:09:52Z",
+      "side": 1,
+      "message": "ditto",
+      "range": {
+        "startLine": 967,
+        "startChar": 57,
+        "endLine": 967,
+        "endChar": 86
+      },
+      "revId": "aaceaffff92af0dfc73614f39e55f27620de5658",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "6e5846c4_6f67102e",
+        "filename": "src/libANGLE/renderer/metal/VertexArrayMtl.mm",
+        "patchSetId": 4
+      },
+      "lineNbr": 980,
+      "author": {
+        "id": 1326275
+      },
+      "writtenOn": "2021-11-03T17:09:52Z",
+      "side": 1,
+      "message": "ditto",
+      "range": {
+        "startLine": 980,
+        "startChar": 58,
+        "endLine": 980,
+        "endChar": 87
+      },
+      "revId": "aaceaffff92af0dfc73614f39e55f27620de5658",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "f87aaf81_2da42bf4",
+        "filename": "src/libANGLE/renderer/metal/VertexArrayMtl.mm",
+        "patchSetId": 4
+      },
+      "lineNbr": 1015,
+      "author": {
+        "id": 1326275
+      },
+      "writtenOn": "2021-11-03T17:09:52Z",
+      "side": 1,
+      "message": "ditto",
+      "range": {
+        "startLine": 1015,
+        "startChar": 42,
+        "endLine": 1015,
+        "endChar": 71
+      },
+      "revId": "aaceaffff92af0dfc73614f39e55f27620de5658",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "45b551a4_96e8b6e5",
+        "filename": "src/libANGLE/renderer/metal/VertexArrayMtl.mm",
+        "patchSetId": 4
+      },
+      "lineNbr": 1052,
+      "author": {
+        "id": 1326275
+      },
+      "writtenOn": "2021-11-03T17:09:52Z",
+      "side": 1,
+      "message": "ditto",
+      "range": {
+        "startLine": 1052,
+        "startChar": 50,
+        "endLine": 1052,
+        "endChar": 79
+      },
+      "revId": "aaceaffff92af0dfc73614f39e55f27620de5658",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "75832f52_0b306781",
+        "filename": "src/libANGLE/renderer/metal/VertexArrayMtl.mm",
+        "patchSetId": 4
+      },
+      "lineNbr": 1053,
+      "author": {
+        "id": 1326275
+      },
+      "writtenOn": "2021-11-03T17:09:52Z",
+      "side": 1,
+      "message": "ditto",
+      "range": {
+        "startLine": 1053,
+        "startChar": 41,
+        "endLine": 1053,
+        "endChar": 51
+      },
+      "revId": "aaceaffff92af0dfc73614f39e55f27620de5658",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b470e0c3_8f184281",
+        "filename": "src/libANGLE/renderer/metal/VertexArrayMtl.mm",
+        "patchSetId": 4
+      },
+      "lineNbr": 1086,
+      "author": {
+        "id": 1326275
+      },
+      "writtenOn": "2021-11-03T17:09:52Z",
+      "side": 1,
+      "message": "ditto",
+      "range": {
+        "startLine": 1086,
+        "startChar": 50,
+        "endLine": 1086,
+        "endChar": 79
+      },
+      "revId": "aaceaffff92af0dfc73614f39e55f27620de5658",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "531c974e_66aac3c2",
+        "filename": "src/libANGLE/renderer/metal/VertexArrayMtl.mm",
+        "patchSetId": 4
+      },
+      "lineNbr": 1089,
+      "author": {
+        "id": 1326275
+      },
+      "writtenOn": "2021-11-03T17:09:52Z",
+      "side": 1,
+      "message": "ditto",
+      "range": {
+        "startLine": 1089,
+        "startChar": 34,
+        "endLine": 1089,
+        "endChar": 44
+      },
+      "revId": "aaceaffff92af0dfc73614f39e55f27620de5658",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
