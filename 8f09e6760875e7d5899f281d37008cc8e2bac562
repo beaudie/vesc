@@ -16,6 +16,24 @@
       "message": "Any progress figuring out a way to allow the new test to run?\n\nCan a test-only API overriding the default behavior of the test harness be added, which the tests can call?\n",
       "revId": "8f09e6760875e7d5899f281d37008cc8e2bac562",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "7712e1cf_7ff57af7",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 10
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1326275
+      },
+      "writtenOn": "2021-11-03T18:06:46Z",
+      "side": 1,
+      "message": "Sorry, OOO the past few days. I made ANGLE_PREFERRED_DEVICE not override device selection done via code, it seems to make more sense this way since it\u0027s not ANGLE_FORCE_DEVICE or something.",
+      "parentUuid": "b8d570af_d5df9d88",
+      "revId": "8f09e6760875e7d5899f281d37008cc8e2bac562",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
