@@ -35,6 +35,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "5caf9173_0795d77d",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1500872
+      },
+      "writtenOn": "2021-11-03T17:51:12Z",
+      "side": 1,
+      "message": "I\u0027d need to check in w/ the team here, I\u0027m not quite sure how to do allocation performance tests. This page runs \u0027fine\u0027, but allocates way too much memory, or crashes on systems with memory limitations. If you have any suggestions, let me know!",
+      "parentUuid": "a252970c_6dd34ce8",
+      "revId": "aaceaffff92af0dfc73614f39e55f27620de5658",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "3aa2bbde_5d9ecedd",
