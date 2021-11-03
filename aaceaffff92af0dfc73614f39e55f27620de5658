@@ -58,6 +58,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "bf34e369_adf5e635",
+        "filename": "src/libANGLE/renderer/metal/VertexArrayMtl.mm",
+        "patchSetId": 4
+      },
+      "lineNbr": 158,
+      "author": {
+        "id": 1500872
+      },
+      "writtenOn": "2021-11-03T17:50:14Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "3aa2bbde_5d9ecedd",
+      "range": {
+        "startLine": 158,
+        "startChar": 32,
+        "endLine": 158,
+        "endChar": 42
+      },
+      "revId": "aaceaffff92af0dfc73614f39e55f27620de5658",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "10f60d0e_f2c1e9f2",
@@ -71,6 +95,30 @@
       "writtenOn": "2021-11-03T17:09:52Z",
       "side": 1,
       "message": "ditto",
+      "range": {
+        "startLine": 967,
+        "startChar": 57,
+        "endLine": 967,
+        "endChar": 86
+      },
+      "revId": "aaceaffff92af0dfc73614f39e55f27620de5658",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "c3b011c2_4f21a5ba",
+        "filename": "src/libANGLE/renderer/metal/VertexArrayMtl.mm",
+        "patchSetId": 4
+      },
+      "lineNbr": 967,
+      "author": {
+        "id": 1500872
+      },
+      "writtenOn": "2021-11-03T17:50:14Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "10f60d0e_f2c1e9f2",
       "range": {
         "startLine": 967,
         "startChar": 57,
@@ -104,6 +152,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "b7cb98ce_5f696bef",
+        "filename": "src/libANGLE/renderer/metal/VertexArrayMtl.mm",
+        "patchSetId": 4
+      },
+      "lineNbr": 980,
+      "author": {
+        "id": 1500872
+      },
+      "writtenOn": "2021-11-03T17:50:14Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "6e5846c4_6f67102e",
+      "range": {
+        "startLine": 980,
+        "startChar": 58,
+        "endLine": 980,
+        "endChar": 87
+      },
+      "revId": "aaceaffff92af0dfc73614f39e55f27620de5658",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "f87aaf81_2da42bf4",
@@ -117,6 +189,30 @@
       "writtenOn": "2021-11-03T17:09:52Z",
       "side": 1,
       "message": "ditto",
+      "range": {
+        "startLine": 1015,
+        "startChar": 42,
+        "endLine": 1015,
+        "endChar": 71
+      },
+      "revId": "aaceaffff92af0dfc73614f39e55f27620de5658",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "ceef1662_5ab68ab5",
+        "filename": "src/libANGLE/renderer/metal/VertexArrayMtl.mm",
+        "patchSetId": 4
+      },
+      "lineNbr": 1015,
+      "author": {
+        "id": 1500872
+      },
+      "writtenOn": "2021-11-03T17:50:14Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "f87aaf81_2da42bf4",
       "range": {
         "startLine": 1015,
         "startChar": 42,
@@ -150,6 +246,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "56d47cc4_b9a5cec6",
+        "filename": "src/libANGLE/renderer/metal/VertexArrayMtl.mm",
+        "patchSetId": 4
+      },
+      "lineNbr": 1052,
+      "author": {
+        "id": 1500872
+      },
+      "writtenOn": "2021-11-03T17:50:14Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "45b551a4_96e8b6e5",
+      "range": {
+        "startLine": 1052,
+        "startChar": 50,
+        "endLine": 1052,
+        "endChar": 79
+      },
+      "revId": "aaceaffff92af0dfc73614f39e55f27620de5658",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "75832f52_0b306781",
@@ -163,6 +283,30 @@
       "writtenOn": "2021-11-03T17:09:52Z",
       "side": 1,
       "message": "ditto",
+      "range": {
+        "startLine": 1053,
+        "startChar": 41,
+        "endLine": 1053,
+        "endChar": 51
+      },
+      "revId": "aaceaffff92af0dfc73614f39e55f27620de5658",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "6294c78f_e5ec6fe2",
+        "filename": "src/libANGLE/renderer/metal/VertexArrayMtl.mm",
+        "patchSetId": 4
+      },
+      "lineNbr": 1053,
+      "author": {
+        "id": 1500872
+      },
+      "writtenOn": "2021-11-03T17:50:14Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "75832f52_0b306781",
       "range": {
         "startLine": 1053,
         "startChar": 41,
@@ -196,6 +340,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "b33983f1_4be84973",
+        "filename": "src/libANGLE/renderer/metal/VertexArrayMtl.mm",
+        "patchSetId": 4
+      },
+      "lineNbr": 1086,
+      "author": {
+        "id": 1500872
+      },
+      "writtenOn": "2021-11-03T17:50:14Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "b470e0c3_8f184281",
+      "range": {
+        "startLine": 1086,
+        "startChar": 50,
+        "endLine": 1086,
+        "endChar": 79
+      },
+      "revId": "aaceaffff92af0dfc73614f39e55f27620de5658",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "531c974e_66aac3c2",
@@ -209,6 +377,30 @@
       "writtenOn": "2021-11-03T17:09:52Z",
       "side": 1,
       "message": "ditto",
+      "range": {
+        "startLine": 1089,
+        "startChar": 34,
+        "endLine": 1089,
+        "endChar": 44
+      },
+      "revId": "aaceaffff92af0dfc73614f39e55f27620de5658",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "9f68cd68_c9348815",
+        "filename": "src/libANGLE/renderer/metal/VertexArrayMtl.mm",
+        "patchSetId": 4
+      },
+      "lineNbr": 1089,
+      "author": {
+        "id": 1500872
+      },
+      "writtenOn": "2021-11-03T17:50:14Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "531c974e_66aac3c2",
       "range": {
         "startLine": 1089,
         "startChar": 34,
