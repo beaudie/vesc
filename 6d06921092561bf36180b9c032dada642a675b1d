@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "8394453d_9beebe72",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 11
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1326275
+      },
+      "writtenOn": "2021-11-03T20:10:06Z",
+      "side": 1,
+      "message": "Jamie can you review the changes to the test infrastructure?\nI\u0027m ok with the ANGLETest changes but the angle_deqp_gtest changes could be better I think. I need to be able to pass the result of IsAMD etc (taken from SystemInfo) to some point before running the tests where we can set the env variable, and then unset it when the tests are done.",
+      "revId": "6d06921092561bf36180b9c032dada642a675b1d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
