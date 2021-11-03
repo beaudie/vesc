@@ -14,6 +14,7 @@
 
 #include "libANGLE/Config.h"
 #include "libANGLE/Context.h"
+#include "libANGLE/Device.h"
 #include "libANGLE/Display.h"
 #include "libANGLE/Framebuffer.h"
 #include "libANGLE/Texture.h"
