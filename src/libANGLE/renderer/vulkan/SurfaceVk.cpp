@@ -132,13 +132,20 @@ angle::Result InitImageHelper(DisplayVk *displayVk,
     VkExtent3D extents = {std::max(static_cast<uint32_t>(width), 1u),
                           std::max(static_cast<uint32_t>(height), 1u), 1u};
 
+    angle::FormatID renderableFormatId = vkFormat.getActualRenderableImageFormatID();
+    RendererVk *rendererVk             = displayVk->getRenderer();
+    if (rendererVk->getFeatures().overrideSurfaceFormatRGB8toRGBA8.enabled &&
+        renderableFormatId == angle::FormatID::R8G8B8_UNORM)
+    {
+        renderableFormatId = angle::FormatID::R8G8B8A8_UNORM;
+    }
+
     VkImageCreateFlags imageCreateFlags =
         hasProtectedContent ? VK_IMAGE_CREATE_PROTECTED_BIT : vk::kVkImageCreateFlagsNone;
     ANGLE_TRY(imageHelper->initExternal(
         displayVk, gl::TextureType::_2D, extents, vkFormat.getIntendedFormatID(),
-        vkFormat.getActualRenderableImageFormatID(), samples, usage, imageCreateFlags,
-        vk::ImageLayout::Undefined, nullptr, gl::LevelIndex(0), 1, 1, isRobustResourceInitEnabled,
-        nullptr, hasProtectedContent));
+        renderableFormatId, samples, usage, imageCreateFlags, vk::ImageLayout::Undefined, nullptr,
+        gl::LevelIndex(0), 1, 1, isRobustResourceInitEnabled, nullptr, hasProtectedContent));
 
     return angle::Result::Continue;
 }
@@ -859,6 +866,15 @@ angle::Result WindowSurfaceVk::initializeImpl(DisplayVk *displayVk)
     const vk::Format &format = renderer->getFormat(mState.config->renderTargetFormat);
     VkFormat nativeFormat    = format.getActualRenderableImageVkFormat();
 
+    // TODO(http://anglebug.com/6651): Remove once we can create swapchain images with
+    // VK_FORMAT_R8G8B8_UNORM.
+    RendererVk *rendererVk = displayVk->getRenderer();
+    if (rendererVk->getFeatures().overrideSurfaceFormatRGB8toRGBA8.enabled &&
+        nativeFormat == VK_FORMAT_R8G8B8_UNORM)
+    {
+        nativeFormat = VK_FORMAT_R8G8B8A8_UNORM;
+    }
+
     bool surfaceFormatSupported = false;
     VkColorSpaceKHR colorSpace  = MapEglColorSpaceToVkColorSpace(
         static_cast<EGLenum>(mState.attributes.get(EGL_GL_COLORSPACE, EGL_NONE)));
@@ -1097,6 +1113,14 @@ angle::Result WindowSurfaceVk::createSwapChain(vk::Context *context,
     const vk::Format &format = renderer->getFormat(mState.config->renderTargetFormat);
     VkFormat nativeFormat    = format.getActualRenderableImageVkFormat();
 
+    // TODO(http://anglebug.com/6651): Remove once we can create swapchain images with
+    // VK_FORMAT_R8G8B8_UNORM.
+    if (renderer->getFeatures().overrideSurfaceFormatRGB8toRGBA8.enabled &&
+        nativeFormat == VK_FORMAT_R8G8B8_UNORM)
+    {
+        nativeFormat = VK_FORMAT_R8G8B8A8_UNORM;
+    }
+
     gl::Extents rotatedExtents = extents;
     if (Is90DegreeRotation(getPreTransform()))
     {
@@ -1202,12 +1226,23 @@ angle::Result WindowSurfaceVk::createSwapChain(vk::Context *context,
 
     ANGLE_TRY(resizeSwapchainImages(context, imageCount));
 
+    // TODO(http://anglebug.com/6651): Remove once we can create swapchain images with
+    // VK_FORMAT_R8G8B8_UNORM.
+    angle::FormatID intendedFormatID = format.getIntendedFormatID();
+    angle::FormatID actualFormatID   = format.getActualRenderableImageFormatID();
+    if (renderer->getFeatures().overrideSurfaceFormatRGB8toRGBA8.enabled &&
+        intendedFormatID == angle::FormatID::R8G8B8_UNORM)
+    {
+        actualFormatID = angle::FormatID::R8G8B8A8_UNORM;
+    }
+
     for (uint32_t imageIndex = 0; imageIndex < imageCount; ++imageIndex)
     {
         SwapchainImage &member = mSwapchainImages[imageIndex];
+
         member.image.init2DWeakReference(context, swapchainImages[imageIndex], extents,
-                                         Is90DegreeRotation(getPreTransform()), format, 1,
-                                         robustInit);
+                                         Is90DegreeRotation(getPreTransform()), intendedFormatID,
+                                         actualFormatID, 1, robustInit);
         member.imageViews.init(renderer);
         member.mFrameNumber = 0;
     }

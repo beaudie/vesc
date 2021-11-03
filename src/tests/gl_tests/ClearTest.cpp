@@ -362,13 +362,16 @@ TEST_P(ClearTestRGB, InvalidateDefaultFramebufferRGB)
     ANGLE_SKIP_TEST_IF(getClientMajorVersion() < 3);
     ANGLE_SKIP_TEST_IF(IsD3D11());
 
+    glClearColor(0.0f, 0.0f, 0.0f, 0.0f);
+    glClear(GL_COLOR_BUFFER_BIT);
+    EXPECT_PIXEL_COLOR_EQ(0, 0, GLColor::black);
+
     const GLenum discards[] = {GL_COLOR};
     glInvalidateFramebuffer(GL_FRAMEBUFFER, 1, discards);
-    EXPECT_PIXEL_NEAR(0, 0, 0, 0, 0, 255, 1.0);
 
     // Don't explicitly clear, but draw blue (make sure alpha is not cleared)
     drawQuad(blueProgram, essl1_shaders::PositionAttrib(), 0.5f);
-    EXPECT_PIXEL_NEAR(0, 0, 0, 0, 255, 255, 1.0);
+    EXPECT_PIXEL_COLOR_EQ(0, 0, GLColor::blue);
 }
 
 // Test clearing a RGBA8 Framebuffer
