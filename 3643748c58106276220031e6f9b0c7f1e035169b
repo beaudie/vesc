@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "879b18bc_29328fac",
+        "filename": "src/libANGLE/Surface.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 182,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2021-11-03T05:11:36Z",
+      "side": 1,
+      "message": "@Ian: Which bug is being used to track the necessary Android/ANGLE work to allow us to determine a fallback format when GL_RGB8 is requested?",
+      "range": {
+        "startLine": 182,
+        "startChar": 7,
+        "endLine": 182,
+        "endChar": 13
+      },
+      "revId": "3643748c58106276220031e6f9b0c7f1e035169b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
