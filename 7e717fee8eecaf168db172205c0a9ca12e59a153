@@ -34,6 +34,29 @@
       "parentUuid": "2dafba26_d7060439",
       "revId": "7e717fee8eecaf168db172205c0a9ca12e59a153",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "6b73f114_e06a5c73",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 2383,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2021-11-03T16:34:13Z",
+      "side": 1,
+      "message": "Do you have numbers for various platforms? If the number is too big, we could potentially only set it in stagingBuffer instead of all dynamic buffers.",
+      "range": {
+        "startLine": 2383,
+        "startChar": 59,
+        "endLine": 2383,
+        "endChar": 91
+      },
+      "revId": "7e717fee8eecaf168db172205c0a9ca12e59a153",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
