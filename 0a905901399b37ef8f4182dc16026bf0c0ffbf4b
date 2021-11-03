@@ -16,6 +16,23 @@
       "message": "PTAL",
       "revId": "0a905901399b37ef8f4182dc16026bf0c0ffbf4b",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "a03656ef_02e136b6",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 6
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2021-11-03T17:40:12Z",
+      "side": 1,
+      "message": "Moving back to WIP, since (better) testing is showing corruption - I missed reverting the DisplayVkAndroid::generateConfigs() case each time.",
+      "revId": "0a905901399b37ef8f4182dc16026bf0c0ffbf4b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
