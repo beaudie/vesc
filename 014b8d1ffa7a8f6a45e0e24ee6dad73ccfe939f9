@@ -124,6 +124,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "5c28362e_a6aab8c8",
+        "filename": "src/libANGLE/GLES1Renderer.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 40,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2021-11-03T21:17:59Z",
+      "side": 1,
+      "message": "Okay, I believe I\u0027ve captured the spirit of that example.",
+      "parentUuid": "5e1ad572_fdaf1244",
+      "range": {
+        "startLine": 40,
+        "startChar": 19,
+        "endLine": 40,
+        "endChar": 24
+      },
+      "revId": "014b8d1ffa7a8f6a45e0e24ee6dad73ccfe939f9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "4d441f61_19edd7d2",
@@ -195,6 +219,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "72fb1775_f153f804",
+        "filename": "src/libANGLE/GLES1Renderer.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 57,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2021-11-03T21:17:59Z",
+      "side": 1,
+      "message": "Sure, std::array it is.",
+      "parentUuid": "04727ebb_2c29aa7c",
+      "range": {
+        "startLine": 56,
+        "startChar": 0,
+        "endLine": 57,
+        "endChar": 39
+      },
+      "revId": "014b8d1ffa7a8f6a45e0e24ee6dad73ccfe939f9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "f2e09682_527559d9",
@@ -256,6 +304,30 @@
       "side": 1,
       "message": "Sounds like it can be improved then. Maybe leave a comment as to what states would be potentially dirty.",
       "parentUuid": "994b33b3_e3edacc9",
+      "range": {
+        "startLine": 878,
+        "startChar": 0,
+        "endLine": 879,
+        "endChar": 35
+      },
+      "revId": "014b8d1ffa7a8f6a45e0e24ee6dad73ccfe939f9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "2ab0744e_d3351ad4",
+        "filename": "src/libANGLE/GLES1Renderer.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 879,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2021-11-03T21:17:59Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "93334836_f81a9a2d",
       "range": {
         "startLine": 878,
         "startChar": 0,

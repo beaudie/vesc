@@ -48,6 +48,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "c11631e7_d16fa6b9",
+        "filename": "src/tests/gl_tests/gles1/BootAnimationTest.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 228,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2021-11-03T21:17:59Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "9bc0672f_d628c455",
+      "range": {
+        "startLine": 228,
+        "startChar": 0,
+        "endLine": 228,
+        "endChar": 59
+      },
+      "revId": "1f69460986741a4ac6384a9e48ca1307f0f19cc0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "77a3fa4b_06011c63",
@@ -97,6 +121,24 @@
       "side": 1,
       "message": "Sorry, we don\u0027t have one for this, can keep it here with the bug #",
       "parentUuid": "ccd1a36b_f2a33824",
+      "revId": "1f69460986741a4ac6384a9e48ca1307f0f19cc0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "9e7f25f0_8405bc52",
+        "filename": "src/tests/gles1_conformance_tests/ConformanceTests.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 518,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2021-11-03T21:17:59Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "6865cab8_8f0480ca",
       "revId": "1f69460986741a4ac6384a9e48ca1307f0f19cc0",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
