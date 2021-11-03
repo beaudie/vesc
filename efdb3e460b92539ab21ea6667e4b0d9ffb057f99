@@ -33,6 +33,29 @@
       "message": "Mostly LGTM.\n\nGeneral comment:  When we emulated this format before, we had a special flag so that we\u0027d only clear it once (I think once per eglSwapBuffers) and then never write to it otherwise.  I don\u0027t see that in this CL.  If that\u0027s not done, it can lead to strange bugs like we saw with the Ragnarok game (that was semi-transparent with the Android desktop below it).",
       "revId": "efdb3e460b92539ab21ea6667e4b0d9ffb057f99",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "06a07fd3_1294190f",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.h",
+        "patchSetId": 8
+      },
+      "lineNbr": 496,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2021-11-03T21:07:14Z",
+      "side": 1,
+      "message": "Drive-by nit: `override..` instead of `initialize...`? Presumably front-end features are already initialized.",
+      "range": {
+        "startLine": 496,
+        "startChar": 9,
+        "endLine": 496,
+        "endChar": 35
+      },
+      "revId": "efdb3e460b92539ab21ea6667e4b0d9ffb057f99",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
