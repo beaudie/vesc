@@ -41,6 +41,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "07e810df_292154d8",
+        "filename": "src/libANGLE/renderer/vulkan/vk_caps_utils.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 30,
+      "author": {
+        "id": 1525982
+      },
+      "writtenOn": "2021-11-03T02:25:43Z",
+      "side": 1,
+      "message": "Names updated.",
+      "parentUuid": "c75ba989_ae8bbeb8",
+      "range": {
+        "startLine": 30,
+        "startChar": 57,
+        "endLine": 30,
+        "endChar": 89
+      },
+      "revId": "96299f683f8db9aec8c76f8d812a393d3503c44c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "f65c8f63_27ac3196",
@@ -54,6 +78,30 @@
       "writtenOn": "2021-11-03T01:38:00Z",
       "side": 1,
       "message": "nit: `enableOverride !\u003d \"0\"` reads more naturally",
+      "range": {
+        "startLine": 915,
+        "startChar": 50,
+        "endLine": 915,
+        "endChar": 67
+      },
+      "revId": "96299f683f8db9aec8c76f8d812a393d3503c44c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "03c6f842_2b25a3df",
+        "filename": "src/libANGLE/renderer/vulkan/vk_caps_utils.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 915,
+      "author": {
+        "id": 1525982
+      },
+      "writtenOn": "2021-11-03T02:25:43Z",
+      "side": 1,
+      "message": "Updated.",
+      "parentUuid": "f65c8f63_27ac3196",
       "range": {
         "startLine": 915,
         "startChar": 50,
