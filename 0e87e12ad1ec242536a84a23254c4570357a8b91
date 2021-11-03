@@ -35,6 +35,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "94b4bc82_599ed4d8",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2021-11-03T14:38:04Z",
+      "side": 1,
+      "message": "A Vulkan-controlled frontend feature would be better as well.",
+      "parentUuid": "b720bdc5_6b416c24",
+      "revId": "0e87e12ad1ec242536a84a23254c4570357a8b91",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "7aa78d3d_7b6cab71",
