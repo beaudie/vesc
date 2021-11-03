@@ -22,6 +22,30 @@
       },
       "revId": "e06544fdbdd7d46ac284fb5809ec79d89f1dd2f1",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "332332b2_b25dffc9",
+        "filename": "DEPS",
+        "patchSetId": 1
+      },
+      "lineNbr": 285,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2021-11-03T15:19:14Z",
+      "side": 1,
+      "message": "Done.  I used the hash from the error message.",
+      "parentUuid": "76afa659_28667e2a",
+      "range": {
+        "startLine": 285,
+        "startChar": 30,
+        "endLine": 285,
+        "endChar": 57
+      },
+      "revId": "e06544fdbdd7d46ac284fb5809ec79d89f1dd2f1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
