@@ -53,6 +53,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "65c2b175_544a95fc",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2021-11-03T21:10:51Z",
+      "side": 1,
+      "message": "Having the test is a great first step, even if checking memory usage would be done manually. That would at least help verify things if needs be and drive optimization on other backends.\n\nThat said, I believe this change also affects performance, and that would be measured by the test. You should enable trackGpuTimes in the test too.",
+      "parentUuid": "5caf9173_0795d77d",
+      "revId": "aaceaffff92af0dfc73614f39e55f27620de5658",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "3aa2bbde_5d9ecedd",
