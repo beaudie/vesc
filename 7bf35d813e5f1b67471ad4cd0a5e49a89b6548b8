@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "1345aba6_0273fd46",
+        "filename": "src/libANGLE/renderer/vulkan/vk_caps_utils.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 920,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2021-11-03T06:01:43Z",
+      "side": 1,
+      "message": "Other nits:\n\n- You can make `enableOverride` const.\n- It would be cleaner to use temporary variables with meaningful names to capture subexpressions and make the if more readable. For example:\n\n    const std::string enableOverrideValue \u003d ...;\n    const bool enableOverride \u003d !enableOverrideValue.empty() \u0026\u0026 enableOverrideValue !\u003d \"0\";\n    if (enableOverride || !(IsARM(..) || IsQC(...))) { ... }",
+      "range": {
+        "startLine": 918,
+        "startChar": 0,
+        "endLine": 920,
+        "endChar": 60
+      },
+      "revId": "7bf35d813e5f1b67471ad4cd0a5e49a89b6548b8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
