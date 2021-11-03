@@ -81,6 +81,30 @@
       },
       "revId": "7e717fee8eecaf168db172205c0a9ca12e59a153",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "3ed5fd40_c0763468",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 2383,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2021-11-03T17:51:22Z",
+      "side": 1,
+      "message": "I am okay with it, but probably still better to limit to staging buffer though to avoid unnecessary alignment.",
+      "parentUuid": "7038c86f_9f493c80",
+      "range": {
+        "startLine": 2383,
+        "startChar": 59,
+        "endLine": 2383,
+        "endChar": 91
+      },
+      "revId": "7e717fee8eecaf168db172205c0a9ca12e59a153",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
