@@ -1,0 +1,95 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "db1869b2_79663a81",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 7
+      },
+      "lineNbr": 15,
+      "author": {
+        "id": 1290487
+      },
+      "writtenOn": "2021-11-03T18:52:57Z",
+      "side": 1,
+      "message": "Should also add bug 6651",
+      "revId": "67a94da8222b5eaa9a70f260594284298ded4781",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "3b67d366_339522cc",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 2800,
+      "author": {
+        "id": 1290487
+      },
+      "writtenOn": "2021-11-03T18:52:57Z",
+      "side": 1,
+      "message": "I think the truth is that we will need to keep this code, and change when it\u0027s enabled/disabled based on the underlying HW/driver.",
+      "revId": "67a94da8222b5eaa9a70f260594284298ded4781",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "4e4b3b3b_5fe055f7",
+        "filename": "src/libANGLE/renderer/vulkan/SurfaceVk.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 402,
+      "author": {
+        "id": 1290487
+      },
+      "writtenOn": "2021-11-03T18:52:57Z",
+      "side": 1,
+      "message": "As mentioned in \"RendererVk.cpp\", I think we need to keep this code for HW/drivers that either don\u0027t support 888 or don\u0027t support it well (e.g. too slow).",
+      "range": {
+        "startLine": 401,
+        "startChar": 8,
+        "endLine": 402,
+        "endChar": 34
+      },
+      "revId": "67a94da8222b5eaa9a70f260594284298ded4781",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "4d5855b6_cb5c1d5c",
+        "filename": "src/libANGLE/renderer/vulkan/SurfaceVk.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 407,
+      "author": {
+        "id": 1290487
+      },
+      "writtenOn": "2021-11-03T18:52:57Z",
+      "side": 1,
+      "message": "General comment I\u0027ll mention here.  When we emulated this format before, we had a special flag so that we\u0027d only clear it once (I think once per eglSwapBuffers) and then never write to it otherwise.  I don\u0027t see that in this CL, and that can lead to strange bugs like we saw with the Ragnarok game.",
+      "revId": "67a94da8222b5eaa9a70f260594284298ded4781",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b97bc57d_44b70ca4",
+        "filename": "src/libANGLE/renderer/vulkan/TextureVk.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 2254,
+      "author": {
+        "id": 1290487
+      },
+      "writtenOn": "2021-11-03T18:52:57Z",
+      "side": 1,
+      "message": "Is this needed for textures?  I thought dEQP needed textures to use actual GL_RGB?",
+      "revId": "67a94da8222b5eaa9a70f260594284298ded4781",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
