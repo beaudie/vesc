@@ -81,6 +81,24 @@
       "parentUuid": "77a3fa4b_06011c63",
       "revId": "1f69460986741a4ac6384a9e48ca1307f0f19cc0",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "6865cab8_8f0480ca",
+        "filename": "src/tests/gles1_conformance_tests/ConformanceTests.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 518,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2021-11-03T15:52:53Z",
+      "side": 1,
+      "message": "Sorry, we don\u0027t have one for this, can keep it here with the bug #",
+      "parentUuid": "ccd1a36b_f2a33824",
+      "revId": "1f69460986741a4ac6384a9e48ca1307f0f19cc0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
