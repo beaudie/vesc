@@ -1,6 +1,29 @@
 {
   "comments": [
     {
+      "unresolved": true,
+      "key": {
+        "uuid": "3bf6e74c_180bfbf9",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 3
+      },
+      "lineNbr": 16,
+      "author": {
+        "id": 1290487
+      },
+      "writtenOn": "2021-11-03T16:56:59Z",
+      "side": 1,
+      "message": "This is incorrect.  This is not a matter of lack of ICD support.  It\u0027s a problem with the Android Vulkan loader limiting what formats can be used with swapchains.  Turns out (for the devices I\u0027ve tried) that both Arm and Qualcomm Vulkan drivers will let VK_FORMAT_R8G8B8_UNORM be used for a swapchain format.  We just need to change the loader (which change will take a while to roll out to devices).",
+      "range": {
+        "startLine": 10,
+        "startChar": 16,
+        "endLine": 16,
+        "endChar": 20
+      },
+      "revId": "0e87e12ad1ec242536a84a23254c4570357a8b91",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": false,
       "key": {
         "uuid": "56a605e6_6d9a8a42",
@@ -53,6 +76,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "b017b42d_8bfd6e2c",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1290487
+      },
+      "writtenOn": "2021-11-03T16:56:59Z",
+      "side": 1,
+      "message": "Agreed (back-end and feature controlled)",
+      "parentUuid": "94b4bc82_599ed4d8",
+      "revId": "0e87e12ad1ec242536a84a23254c4570357a8b91",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "7aa78d3d_7b6cab71",
@@ -84,6 +125,24 @@
       "side": 1,
       "message": "Oops, ignore. This should be a FeaturesVk to track it better.",
       "parentUuid": "7aa78d3d_7b6cab71",
+      "revId": "0e87e12ad1ec242536a84a23254c4570357a8b91",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "7ebc9562_38ccd51e",
+        "filename": "src/libANGLE/Surface.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 184,
+      "author": {
+        "id": 1290487
+      },
+      "writtenOn": "2021-11-03T16:56:59Z",
+      "side": 1,
+      "message": "Yes, a feature is better",
+      "parentUuid": "96acbb93_7a4f3c61",
       "revId": "0e87e12ad1ec242536a84a23254c4570357a8b91",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
