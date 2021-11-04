@@ -39,6 +39,30 @@
       },
       "revId": "e3d913b322c8178d52d5cabcf084b14c5d447bd5",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b7175d21_2b2d1ad9",
+        "filename": "src/libANGLE/formatutils.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 1382,
+      "author": {
+        "id": 1228974
+      },
+      "writtenOn": "2021-11-04T18:43:22Z",
+      "side": 1,
+      "message": "Yes, that\u0027s the issue. It asserts at bits\u0027 check. Maybe you can suggest another solution? Or is it OK like that?",
+      "parentUuid": "b2c5b302_4749394a",
+      "range": {
+        "startLine": 1382,
+        "startChar": 65,
+        "endLine": 1382,
+        "endChar": 68
+      },
+      "revId": "e3d913b322c8178d52d5cabcf084b14c5d447bd5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
