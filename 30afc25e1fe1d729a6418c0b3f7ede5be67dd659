@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "a5169933_e805f3a5",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2021-11-04T21:23:24Z",
+      "side": 1,
+      "message": "Kyle, Kimmo - FYI. This won\u0027t affect Apple\u0027s builds of ANGLE, but support even for testing ANGLE\u0027s build with Xcode\u0027s clang in Chromium\u0027s build infrastructure has been removed.\n",
+      "revId": "30afc25e1fe1d729a6418c0b3f7ede5be67dd659",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
