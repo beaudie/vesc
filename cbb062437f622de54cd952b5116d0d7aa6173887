@@ -16,6 +16,23 @@
       "message": "LGTM - I\u0027m running into the same problem with Fortnite.  This CL fixes it.",
       "revId": "cbb062437f622de54cd952b5116d0d7aa6173887",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "0fcc367c_aaf264fb",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2021-11-04T14:22:04Z",
+      "side": 1,
+      "message": "Any regression test you can add that would fail in ASAN?",
+      "revId": "cbb062437f622de54cd952b5116d0d7aa6173887",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
