@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "b8b4f99a_5f9cb02d",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 13
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2021-11-04T22:12:19Z",
+      "side": 1,
+      "message": "Note: the M1 Mac trybot failures are being fixed in http://crbug.com/1266604 .\n\nPlease feel empowered to skip the flaking UniformBlockWithOneLargeArrayMemberTest tests on Mac NVIDIA.\n\nThanks for getting this over the finish line; still LGTM.",
+      "revId": "2bb04e0f485b8b7ffde6109bf03319fa82e328b3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "93401868_bb79cefd",
+        "filename": "src/libANGLE/renderer/metal/DisplayMtl.mm",
+        "patchSetId": 13
+      },
+      "lineNbr": 255,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2021-11-04T22:12:19Z",
+      "side": 1,
+      "message": "Nit: probably TODO(kpiddington).",
+      "revId": "2bb04e0f485b8b7ffde6109bf03319fa82e328b3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
