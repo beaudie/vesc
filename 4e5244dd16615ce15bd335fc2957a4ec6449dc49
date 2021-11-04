@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "832d9baf_58549a1d",
+        "filename": "src/libANGLE/Surface.cpp",
+        "patchSetId": 9
+      },
+      "lineNbr": 185,
+      "author": {
+        "id": 1290487
+      },
+      "writtenOn": "2021-11-04T03:21:59Z",
+      "side": 1,
+      "message": "As I wrote in a general comment, is this approach going to set FramebufferVk::mEmulatedAlphaAttachmentMask, so that the alpha channel is set to 0xFF and then not touched?  If not, we can see strange bugs with GL_RGB8 windows, like with b/180139027.\n\nA potential way to overcome this is to create a format that\u0027s like the old GL_RGB8 that we set overridRenderTargetFormat to here, and that format will cause the FramebufferVk code to work like GL_RGB8 used to.",
+      "range": {
+        "startLine": 185,
+        "startChar": 7,
+        "endLine": 185,
+        "endChar": 46
+      },
+      "revId": "4e5244dd16615ce15bd335fc2957a4ec6449dc49",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
