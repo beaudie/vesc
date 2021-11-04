@@ -6310,8 +6310,8 @@ bool ValidateFramebufferTexture2DMultisampleEXT(const Context *context,
     if (texture.value != 0 && context->getClientMajorVersion() >= 3)
     {
         Texture *tex                  = context->getTexture(texture);
-        GLenum internalformat         = tex->getFormat(textarget, level).info->internalFormat;
-        const TextureCaps &formatCaps = context->getTextureCaps().get(internalformat);
+        GLenum sizedInternalformat    = tex->getFormat(textarget, level).info->sizedInternalformat;
+        const TextureCaps &formatCaps = context->getTextureCaps().get(sizedInternalformat);
         if (static_cast<GLuint>(samples) > formatCaps.getMaxSamples())
         {
             context->validationError(entryPoint, GL_INVALID_OPERATION, kSamplesOutOfRange);
