@@ -1,0 +1,61 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "84e3a4a4_5195ed0a",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 2
+      },
+      "lineNbr": 15,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2021-11-04T18:03:25Z",
+      "side": 1,
+      "message": "You don\u0027t need to do any such juggling! It should be much easier.\n\nFirst, observe ImageHelper::flushSingleSubresourceStagedUpdates, it does two things:\n\n1. Extract clears as \"deferred clears\" (only if clear is the only update)\n2. Flush staged updates (if no deferred clears were extracted)\n\nWhat this change is missing is that while the buffer is cleared, the clear update itself is not removed from ImageHelper, and that\u0027s what\u0027s causing all this trouble.\n\nSo my suggestion is to:\n\n-- Extract the first part of ImageHelper::flushSingleSubresourceStagedUpdates into its own function\n   * This function has only one job, and that\u0027s to extract deferred clears, if that\u0027s the only staged update\n-- In lock(), call this function, and if there\u0027s a clear staged, apply that to the buffer\n   * Note that the clear is no longer staged in the image\n   * You should ASSERT that there is no other update staged to the image\n-- Don\u0027t touch unlock()\n-- Nothing to do in makeCurrent()\n\nThat should do the trick.",
+      "range": {
+        "startLine": 9,
+        "startChar": 0,
+        "endLine": 15,
+        "endChar": 32
+      },
+      "revId": "bcaaa2a3a4fac026cafa7f8fb2a3905ffd6f38c6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "a265510f_8f6b5766",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 3867,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2021-11-04T18:03:25Z",
+      "side": 1,
+      "message": "I get the feeling we must have helpers for these. I don\u0027t see anything in src/image_util/ that would apply to all four cases though. Jamie?",
+      "revId": "bcaaa2a3a4fac026cafa7f8fb2a3905ffd6f38c6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "10d7ac5a_70c5af30",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 3869,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2021-11-04T18:03:25Z",
+      "side": 1,
+      "message": "You should copy row-by-row and take rowStride into account.\n\nEither that, or (preferably) use mSize/pixelBytes instead of width*height.",
+      "revId": "bcaaa2a3a4fac026cafa7f8fb2a3905ffd6f38c6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
