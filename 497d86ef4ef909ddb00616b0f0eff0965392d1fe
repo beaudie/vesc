@@ -16,6 +16,23 @@
       "message": "Please take a look.",
       "revId": "497d86ef4ef909ddb00616b0f0eff0965392d1fe",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "97001f2e_af15e57d",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2021-11-04T18:32:41Z",
+      "side": 1,
+      "message": "@Ken, FYI support for something mac-related is being dropped.",
+      "revId": "497d86ef4ef909ddb00616b0f0eff0965392d1fe",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
