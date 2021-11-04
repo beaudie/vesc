@@ -3611,8 +3611,8 @@ angle::Result LineLoopHelper::getIndexBufferForElementArrayBuffer(ContextVk *con
                                            bufferOffsetOut, nullptr));
     *bufferOut = mDynamicIndexBuffer.getCurrentBuffer();
 
-    VkDeviceSize sourceBufferOffset = 0;
-    BufferHelper *sourceBuffer = &elementArrayBufferVk->getBufferAndOffset(&sourceBufferOffset);
+    BufferHelper *sourceBuffer      = &elementArrayBufferVk->getBuffer();
+    VkDeviceSize sourceBufferOffset = sourceBuffer->getOffset();
 
     VkDeviceSize sourceOffset = static_cast<VkDeviceSize>(elementArrayOffset) + sourceBufferOffset;
     uint64_t unitCount        = static_cast<VkDeviceSize>(indexCount);
@@ -3956,20 +3956,6 @@ angle::Result BufferHelper::initSubAllocation(ContextVk *contextVk,
     }
 
     return angle::Result::Continue;
-}
-
-const Buffer &BufferHelper::getBufferAndOffset(VkDeviceSize *offsetOut) const
-{
-    if (mBufferSubAllocation.valid())
-    {
-        *offsetOut = mBufferSubAllocation.getOffset();
-        return mBufferSubAllocation.getBuffer();
-    }
-    else
-    {
-        *offsetOut = 0;
-        return mBuffer;
-    }
 }
 
 VkDeviceSize BufferHelper::getOffset() const
@@ -7816,9 +7802,8 @@ angle::Result ImageHelper::readPixels(ContextVk *contextVk,
     if (packPixelsParams.packBuffer &&
         canCopyWithTransformForReadPixels(packPixelsParams, readFormat))
     {
-        VkDeviceSize packBufferOffset = 0;
-        BufferHelper &packBuffer =
-            GetImpl(packPixelsParams.packBuffer)->getBufferAndOffset(&packBufferOffset);
+        BufferHelper &packBuffer      = GetImpl(packPixelsParams.packBuffer)->getBuffer();
+        VkDeviceSize packBufferOffset = packBuffer.getOffset();
 
         CommandBufferAccess copyAccess;
         copyAccess.onBufferTransferWrite(&packBuffer);
