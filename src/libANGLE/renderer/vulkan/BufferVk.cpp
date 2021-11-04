@@ -620,7 +620,11 @@ angle::Result BufferVk::mapImpl(ContextVk *contextVk, void **mapPtr)
     return mapRangeImpl(contextVk, 0, static_cast<VkDeviceSize>(mState.getSize()), 0, mapPtr);
 }
 
-angle::Result BufferVk::ghostMappedBuffer(ContextVk *contextVk, VkDeviceSize offset, void **mapPtr)
+angle::Result BufferVk::ghostMappedBuffer(ContextVk *contextVk,
+                                          VkDeviceSize offset,
+                                          VkDeviceSize length,
+                                          GLbitfield access,
+                                          void **mapPtr)
 {
     vk::BufferHelper *previousBuffer = nullptr;
     VkDeviceSize previousOffset      = 0;
@@ -646,7 +650,25 @@ angle::Result BufferVk::ghostMappedBuffer(ContextVk *contextVk, VkDeviceSize off
 
     ASSERT(previousBuffer->isCoherent());
     ASSERT(mBuffer->isCoherent());
-    memcpy(newBufferMapPtr, previousBufferMapPtr, static_cast<size_t>(mState.getSize()));
+
+    // No need to copy over [offset, offset + length), just around it
+    if (access & GL_MAP_INVALIDATE_RANGE_BIT)
+    {
+        if (0 != offset)
+            memcpy(newBufferMapPtr, previousBufferMapPtr, static_cast<size_t>(offset));
+        size_t totalSize      = static_cast<size_t>(mState.getSize());
+        size_t remainingStart = static_cast<size_t>(offset + length);
+        size_t remainingSize  = totalSize - remainingStart;
+        if (0 != remainingSize)
+        {
+            memcpy(newBufferMapPtr + remainingStart, previousBufferMapPtr + remainingStart,
+                   remainingSize);
+        }
+    }
+    else
+    {
+        memcpy(newBufferMapPtr, previousBufferMapPtr, static_cast<size_t>(mState.getSize()));
+    }
 
     previousBuffer->unmap(contextVk->getRenderer());
     // Return the already mapped pointer with the offset adjustment to avoid the call to unmap().
@@ -699,7 +721,7 @@ angle::Result BufferVk::mapRangeImpl(ContextVk *contextVk,
             else if (!mBuffer->isCurrentlyInUseForWrite(contextVk->getLastCompletedQueueSerial()))
             {
                 // This will keep the new buffer mapped and update mapPtr, so return immediately.
-                return ghostMappedBuffer(contextVk, offset, mapPtr);
+                return ghostMappedBuffer(contextVk, offset, length, access, mapPtr);
             }
             else if ((access & GL_MAP_UNSYNCHRONIZED_BIT) == 0)
             {
