@@ -917,7 +917,8 @@ GLuint Context::createShaderProgramv(ShaderType type, GLsizei count, const GLcha
                 // to recreate the Shader and Program during MEC setup:
                 // 1.) Shader ID
                 // 2.) Shader source
-                if (!getShareGroup()->getFrameCaptureShared()->enabled())
+                if (!getShareGroup()->getFrameCaptureShared()->enabled() &&
+                    !getFrontendFeatures().captureLimits.enabled)
                 {
                     programObject->detachShader(this, shaderObject);
                 }
