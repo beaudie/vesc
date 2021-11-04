@@ -69,6 +69,24 @@
       "parentUuid": "93ed151d_70a6d593",
       "revId": "cbb062437f622de54cd952b5116d0d7aa6173887",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "df447b8c_755b1cce",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2021-11-04T16:37:07Z",
+      "side": 1,
+      "message": "The test already exists, but is skipped:\n\n    6180 : EGLMultiContextTest.TestContextDestroySimple/* \u003d SKIP_FOR_CAPTURE\n    \nThat fails to replay for other reasons though:\n[ RUN      ] EGLMultiContextTest.TestContextDestroySimple/ES3_1_Vulkan_SwiftShader\nSaved \u0027src/tests/capture_replay_tests/traces0/EGLMultiContextTest_TestContextDestroySimple_ES3_1_Vulkan_SwiftShader_context1_frame001.cpp\u0027.\n../../../src/tests/test_utils/ANGLETest.cpp:828: Failure\nExpected equality of these values:\n  (0x3000)\n    Which is: 12288\n  l_eglGetError()\n    Which is: 12301\nSaved \u0027src/tests/capture_replay_tests/traces0/EGLMultiContextTest_TestContextDestroySimple_ES3_1_Vulkan_SwiftShader_context1_frame002.cpp\u0027.\nSaved \u0027src/tests/capture_replay_tests/traces0/EGLMultiContextTest_TestContextDestroySimple_ES3_1_Vulkan_SwiftShader.json\u0027.\nSaved \u0027src/tests/capture_replay_tests/traces0/EGLMultiContextTest_TestContextDestroySimple_ES3_1_Vulkan_SwiftShader_context1.h\u0027.\nSaved \u0027src/tests/capture_replay_tests/traces0/EGLMultiContextTest_TestContextDestroySimple_ES3_1_Vulkan_SwiftShader_context1.cpp\u0027.\nSaved \u0027src/tests/capture_replay_tests/traces0/EGLMultiContextTest_TestContextDestroySimple_ES3_1_Vulkan_SwiftShader.angledata.gz\u0027.\n[  FAILED  ] EGLMultiContextTest.TestContextDestroySimple/ES3_1_Vulkan_SwiftShader, where GetParam() \u003d ES3_1_Vulkan_SwiftShader (66 ms)",
+      "parentUuid": "296a20a1_a23ecf19",
+      "revId": "cbb062437f622de54cd952b5116d0d7aa6173887",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
