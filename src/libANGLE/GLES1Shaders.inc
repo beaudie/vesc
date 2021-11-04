@@ -24,6 +24,55 @@
 // point_sprite_coord_replace
 // point_sprite_enabled
 // shade_model_flat
+// int texture_format[kMaxTexUnits];
+// int texture_env_mode[kMaxTexUnits];
+// int combine_rgb[kMaxTexUnits];
+// int combine_alpha[kMaxTexUnits];
+// int src0_rgb[kMaxTexUnits];
+// int src0_alpha[kMaxTexUnits];
+// int src1_rgb[kMaxTexUnits];
+// int src1_alpha[kMaxTexUnits];
+// int src2_rgb[kMaxTexUnits];
+// int src2_alpha[kMaxTexUnits];
+// int op0_rgb[kMaxTexUnits];
+// int op0_alpha[kMaxTexUnits];
+// int op1_rgb[kMaxTexUnits];
+// int op1_alpha[kMaxTexUnits];
+// int op2_rgb[kMaxTexUnits];
+// int op2_alpha[kMaxTexUnits];
+// vec4 texture_env_color[kMaxTexUnits];
+// float texture_env_rgb_scale[kMaxTexUnits];
+// float texture_env_alpha_scale[kMaxTexUnits];
+// int alpha_func;
+// float alpha_test_ref;
+// vec4 material_ambient;
+// vec4 material_diffuse;
+// vec4 material_specular;
+// vec4 material_emissive;
+// float material_specular_exponent;
+// vec4 light_model_scene_ambient;
+// vec4 light_ambients[kMaxLights];
+// vec4 light_diffuses[kMaxLights];
+// vec4 light_speculars[kMaxLights];
+// vec4 light_positions[kMaxLights];
+// vec3 light_directions[kMaxLights];
+// float light_spotlight_exponents[kMaxLights];
+// float light_spotlight_cutoff_angles[kMaxLights];
+// float light_attenuation_consts[kMaxLights];
+// float light_attenuation_linears[kMaxLights];
+// float light_attenuation_quadratics[kMaxLights];
+// int fog_mode;
+// float fog_density;
+// float fog_start;
+// float fog_end;
+// vec4 fog_color;
+// vec4 clip_planes[kMaxClipPlanes];
+// float point_size_min;
+// float point_size_max;
+// vec3 point_distance_attenuation;
+// vec4 draw_texture_coords;
+// vec2 draw_texture_dims;
+// vec4 draw_texture_normalized_crop_rect[kMaxTexUnits];
 
 constexpr char kGLES1DrawVShaderHeader[] = R"(#version 300 es
 precision highp float;
@@ -46,17 +95,6 @@ uniform mat4 modelview;
 uniform mat4 modelview_invtr;
 uniform mat4 texture_matrix[kMaxTexUnits];
 
-// Point rasterization//////////////////////////////////////////////////////////
-
-uniform float point_size_min;
-uniform float point_size_max;
-uniform vec3 point_distance_attenuation;
-
-// GL_OES_draw_texture uniforms/////////////////////////////////////////////////
-
-uniform vec4 draw_texture_coords;
-uniform vec2 draw_texture_dims;
-uniform vec4 draw_texture_normalized_crop_rect[kMaxTexUnits];
 
 // Varyings/////////////////////////////////////////////////////////////////////
 
@@ -290,26 +328,7 @@ uniform samplerCube tex_cube_sampler2;
 uniform sampler2D tex_sampler3;
 uniform samplerCube tex_cube_sampler3;
 
-uniform int texture_format[kMaxTexUnits];
 
-uniform int texture_env_mode[kMaxTexUnits];
-uniform int combine_rgb[kMaxTexUnits];
-uniform int combine_alpha[kMaxTexUnits];
-uniform int src0_rgb[kMaxTexUnits];
-uniform int src0_alpha[kMaxTexUnits];
-uniform int src1_rgb[kMaxTexUnits];
-uniform int src1_alpha[kMaxTexUnits];
-uniform int src2_rgb[kMaxTexUnits];
-uniform int src2_alpha[kMaxTexUnits];
-uniform int op0_rgb[kMaxTexUnits];
-uniform int op0_alpha[kMaxTexUnits];
-uniform int op1_rgb[kMaxTexUnits];
-uniform int op1_alpha[kMaxTexUnits];
-uniform int op2_rgb[kMaxTexUnits];
-uniform int op2_alpha[kMaxTexUnits];
-uniform vec4 texture_env_color[kMaxTexUnits];
-uniform float texture_env_rgb_scale[kMaxTexUnits];
-uniform float texture_env_alpha_scale[kMaxTexUnits];
 
 // Vertex attributes////////////////////////////////////////////////////////////
 
@@ -321,48 +340,6 @@ in vec4 texcoord0_varying;
 in vec4 texcoord1_varying;
 in vec4 texcoord2_varying;
 in vec4 texcoord3_varying;
-
-// Alpha test///////////////////////////////////////////////////////////////////
-
-uniform int alpha_func;
-uniform float alpha_test_ref;
-
-// Shading: flat shading, lighting, and materials///////////////////////////////
-
-uniform vec4 material_ambient;
-uniform vec4 material_diffuse;
-uniform vec4 material_specular;
-uniform vec4 material_emissive;
-uniform float material_specular_exponent;
-
-uniform vec4 light_model_scene_ambient;
-
-uniform vec4 light_ambients[kMaxLights];
-uniform vec4 light_diffuses[kMaxLights];
-uniform vec4 light_speculars[kMaxLights];
-uniform vec4 light_positions[kMaxLights];
-uniform vec3 light_directions[kMaxLights];
-uniform float light_spotlight_exponents[kMaxLights];
-uniform float light_spotlight_cutoff_angles[kMaxLights];
-uniform float light_attenuation_consts[kMaxLights];
-uniform float light_attenuation_linears[kMaxLights];
-uniform float light_attenuation_quadratics[kMaxLights];
-
-// Fog /////////////////////////////////////////////////////////////////////////
-
-uniform int fog_mode;
-uniform float fog_density;
-uniform float fog_start;
-uniform float fog_end;
-uniform vec4 fog_color;
-
-// User clip plane /////////////////////////////////////////////////////////////
-
-uniform vec4 clip_planes[kMaxClipPlanes];
-
-// Point rasterization//////////////////////////////////////////////////////////
-
-// GL_OES_draw_texture//////////////////////////////////////////////////////////
 
 // Outgoing fragment////////////////////////////////////////////////////////////
 
