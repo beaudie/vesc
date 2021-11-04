@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "ef37eca7_3028c91b",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1491823
+      },
+      "writtenOn": "2021-11-04T17:15:38Z",
+      "side": 1,
+      "message": "I would like it better if there was a real \"this is a replay\" flag, so that one could drop the capture limits eventually without breaking this. ",
+      "revId": "28644fef3ce4af92b9354b370c024037dc46a0f6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
