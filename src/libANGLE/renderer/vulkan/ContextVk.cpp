@@ -312,9 +312,8 @@ void AppendBufferVectorToDesc(vk::ShaderBuffersDescriptorDesc *desc,
                 continue;
             }
 
-            VkDeviceSize bufferOffset = 0;
-            vk::BufferSerial bufferSerial =
-                bufferVk->getBufferAndOffset(&bufferOffset).getBufferSerial();
+            vk::BufferSerial bufferSerial = bufferVk->getBuffer().getBufferSerial();
+            VkDeviceSize bufferOffset     = bufferVk->getBuffer().getOffset();
 
             desc->appendBufferSerial(bufferSerial);
             ASSERT(static_cast<uint64_t>(binding.getSize()) <=
@@ -1032,8 +1031,7 @@ angle::Result ContextVk::setupIndexedDraw(const gl::Context *context,
                                   "lack of hardware support");
 
             BufferVk *bufferVk             = vk::GetImpl(elementArrayBuffer);
-            VkDeviceSize bufferOffset      = 0;
-            vk::BufferHelper &bufferHelper = bufferVk->getBufferAndOffset(&bufferOffset);
+            vk::BufferHelper &bufferHelper = bufferVk->getBuffer();
 
             if (bufferHelper.isHostVisible() &&
                 !bufferHelper.isCurrentlyInUse(getLastCompletedQueueSerial()))
@@ -1285,9 +1283,7 @@ bool ContextVk::renderPassUsesStorageResources() const
                 continue;
             }
 
-            VkDeviceSize bufferOffset = 0;
-            vk::BufferHelper &buffer =
-                vk::GetImpl(bufferBinding.get())->getBufferAndOffset(&bufferOffset);
+            vk::BufferHelper &buffer = vk::GetImpl(bufferBinding.get())->getBuffer();
             if (mRenderPassCommands->usesBuffer(buffer))
             {
                 return true;
@@ -1309,9 +1305,7 @@ bool ContextVk::renderPassUsesStorageResources() const
                 continue;
             }
 
-            VkDeviceSize bufferOffset = 0;
-            vk::BufferHelper &buffer =
-                vk::GetImpl(bufferBinding.get())->getBufferAndOffset(&bufferOffset);
+            vk::BufferHelper &buffer = vk::GetImpl(bufferBinding.get())->getBuffer();
             if (mRenderPassCommands->usesBuffer(buffer))
             {
                 return true;
@@ -1869,8 +1863,7 @@ ANGLE_INLINE angle::Result ContextVk::handleDirtyShaderResourcesImpl(
             }
 
             BufferVk *bufferVk             = vk::GetImpl(bufferBinding.get());
-            VkDeviceSize bufferOffset      = 0;
-            vk::BufferHelper &bufferHelper = bufferVk->getBufferAndOffset(&bufferOffset);
+            vk::BufferHelper &bufferHelper = bufferVk->getBuffer();
 
             commandBufferHelper->bufferRead(this, VK_ACCESS_UNIFORM_READ_BIT,
                                             vk::GetPipelineStage(shaderType), &bufferHelper);
@@ -1893,8 +1886,7 @@ ANGLE_INLINE angle::Result ContextVk::handleDirtyShaderResourcesImpl(
             }
 
             BufferVk *bufferVk             = vk::GetImpl(bufferBinding.get());
-            VkDeviceSize bufferOffset      = 0;
-            vk::BufferHelper &bufferHelper = bufferVk->getBufferAndOffset(&bufferOffset);
+            vk::BufferHelper &bufferHelper = bufferVk->getBuffer();
 
             // We set the SHADER_READ_BIT to be conservative.
             VkAccessFlags accessFlags = VK_ACCESS_SHADER_READ_BIT | VK_ACCESS_SHADER_WRITE_BIT;
@@ -1915,8 +1907,7 @@ ANGLE_INLINE angle::Result ContextVk::handleDirtyShaderResourcesImpl(
             }
 
             BufferVk *bufferVk             = vk::GetImpl(bufferBinding.get());
-            VkDeviceSize bufferOffset      = 0;
-            vk::BufferHelper &bufferHelper = bufferVk->getBufferAndOffset(&bufferOffset);
+            vk::BufferHelper &bufferHelper = bufferVk->getBuffer();
 
             // We set SHADER_READ_BIT to be conservative.
             commandBufferHelper->bufferWrite(
@@ -4609,9 +4600,8 @@ angle::Result ContextVk::dispatchCompute(const gl::Context *context,
 
 angle::Result ContextVk::dispatchComputeIndirect(const gl::Context *context, GLintptr indirect)
 {
-    gl::Buffer *glBuffer      = getState().getTargetBuffer(gl::BufferBinding::DispatchIndirect);
-    VkDeviceSize bufferOffset = 0;
-    vk::BufferHelper &buffer  = vk::GetImpl(glBuffer)->getBufferAndOffset(&bufferOffset);
+    gl::Buffer *glBuffer     = getState().getTargetBuffer(gl::BufferBinding::DispatchIndirect);
+    vk::BufferHelper &buffer = vk::GetImpl(glBuffer)->getBuffer();
 
     // Break the render pass if the indirect buffer was previously used as the output from transform
     // feedback.
@@ -4628,7 +4618,7 @@ angle::Result ContextVk::dispatchComputeIndirect(const gl::Context *context, GLi
                                            vk::PipelineStage::DrawIndirect, &buffer);
 
     mOutsideRenderPassCommands->getCommandBuffer().dispatchIndirect(buffer.getBuffer(),
-                                                                    bufferOffset + indirect);
+                                                                    buffer.getOffset() + indirect);
 
     return angle::Result::Continue;
 }
@@ -6461,9 +6451,7 @@ angle::Result ContextVk::endRenderPassIfComputeReadAfterTransformFeedbackWrite()
                 continue;
             }
 
-            VkDeviceSize bufferOffset = 0;
-            vk::BufferHelper &buffer =
-                vk::GetImpl(bufferBinding.get())->getBufferAndOffset(&bufferOffset);
+            vk::BufferHelper &buffer = vk::GetImpl(bufferBinding.get())->getBuffer();
             if (mCurrentTransformFeedbackBuffers.contains(&buffer))
             {
                 return flushCommandsAndEndRenderPass(
