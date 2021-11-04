@@ -10,6 +10,7 @@
 #ifndef LIBANGLE_GLES1_RENDERER_H_
 #define LIBANGLE_GLES1_RENDERER_H_
 
+#include "GLES1State.h"
 #include "angle_gl.h"
 #include "common/angleutils.h"
 #include "libANGLE/angletypes.h"
@@ -41,35 +42,68 @@ enum class GLES1StateEnables : uint64_t
     ShadeModelFlat            = 9,
     ColorMaterial             = 10,
     LightModelTwoSided        = 11,
-    Tex2d0                    = 12,
-    Tex2d1                    = 13,
-    Tex2d2                    = 14,
-    Tex2d3                    = 15,
-    TexCube0                  = 16,
-    TexCube1                  = 17,
-    TexCube2                  = 18,
-    TexCube3                  = 19,
-    PointSpriteCoordReplaces0 = 20,
-    PointSpriteCoordReplaces1 = 21,
-    PointSpriteCoordReplaces2 = 22,
-    PointSpriteCoordReplaces3 = 23,
-    Light0                    = 24,
-    Light1                    = 25,
-    Light2                    = 26,
-    Light3                    = 27,
-    Light4                    = 28,
-    Light5                    = 29,
-    Light6                    = 30,
-    Light7                    = 31,
-    ClipPlane0                = 32,
-    ClipPlane1                = 33,
-    ClipPlane2                = 34,
-    ClipPlane3                = 35,
-    ClipPlane4                = 36,
-    ClipPlane5                = 37,
+    PointSpriteCoordReplaces0 = 12,
+    PointSpriteCoordReplaces1 = 13,
+    PointSpriteCoordReplaces2 = 14,
+    PointSpriteCoordReplaces3 = 15,
+    Light0                    = 16,
+    Light1                    = 17,
+    Light2                    = 18,
+    Light3                    = 19,
+    Light4                    = 20,
+    Light5                    = 21,
+    Light6                    = 22,
+    Light7                    = 23,
+    ClipPlane0                = 24,
+    ClipPlane1                = 25,
+    ClipPlane2                = 26,
+    ClipPlane3                = 27,
+    ClipPlane4                = 28,
+    ClipPlane5                = 29,
 
-    InvalidEnum = 38,
-    EnumCount   = 38,
+    InvalidEnum = 30,
+    EnumCount   = 30,
+};
+
+static constexpr int kTexUnitCount = 4;
+static constexpr int kLightCount   = 8;
+
+struct GLES1ShaderStates
+{
+    GLES1ShaderStates();
+    ~GLES1ShaderStates();
+
+    using GLES1StateEnabledBitSet = angle::PackedEnumBitSet<GLES1StateEnables, uint64_t>;
+    GLES1StateEnabledBitSet mGLES1StateEnabled;
+
+    using BoolTexArray   = bool[kTexUnitCount];
+    using IntTexArray    = int[kTexUnitCount];
+    using BoolLightArray = bool[kLightCount];
+
+    BoolTexArray tex2DEnables   = {false, false, false, false};
+    BoolTexArray texCubeEnables = {false, false, false, false};
+
+    IntTexArray tex2DFormats = {GL_RGBA, GL_RGBA, GL_RGBA, GL_RGBA};
+
+    IntTexArray texEnvModes          = {};
+    IntTexArray texCombineRgbs       = {};
+    IntTexArray texCombineAlphas     = {};
+    IntTexArray texCombineSrc0Rgbs   = {};
+    IntTexArray texCombineSrc0Alphas = {};
+    IntTexArray texCombineSrc1Rgbs   = {};
+    IntTexArray texCombineSrc1Alphas = {};
+    IntTexArray texCombineSrc2Rgbs   = {};
+    IntTexArray texCombineSrc2Alphas = {};
+    IntTexArray texCombineOp0Rgbs    = {};
+    IntTexArray texCombineOp0Alphas  = {};
+    IntTexArray texCombineOp1Rgbs    = {};
+    IntTexArray texCombineOp1Alphas  = {};
+    IntTexArray texCombineOp2Rgbs    = {};
+    IntTexArray texCombineOp2Alphas  = {};
+
+    AlphaTestFunc alphaTestFunc = {};
+
+    FogMode fogMode = {};
 };
 
 class GLES1Renderer final : angle::NonCopyable
@@ -93,8 +127,6 @@ class GLES1Renderer final : angle::NonCopyable
                      float z,
                      float width,
                      float height);
-
-    static constexpr int kTexUnitCount = 4;
 
   private:
     using Mat4Uniform = float[16];
@@ -150,7 +182,6 @@ class GLES1Renderer final : angle::NonCopyable
 
     void setAttributesEnabled(Context *context, State *glState, AttributesMask mask);
 
-    static constexpr int kLightCount     = 8;
     static constexpr int kClipPlaneCount = 6;
 
     static constexpr int kVertexAttribIndex           = 0;
@@ -162,14 +193,17 @@ class GLES1Renderer final : angle::NonCopyable
     bool mRendererProgramInitialized;
     ShaderProgramManager *mShaderPrograms;
 
-    using GLES1StateEnabledBitSet = angle::PackedEnumBitSet<GLES1StateEnables, uint64_t>;
-
-    GLES1StateEnabledBitSet mGLES1StateEnabled;
+    GLES1ShaderStates mShaderStates = {};
 
     const char *getShaderBool(GLES1StateEnables state);
     void addShaderDefine(std::stringstream &outStream,
                          GLES1StateEnables state,
                          const char *enableString);
+    void addShaderIntTexState(std::stringstream &outStream,
+                              const char *texString,
+                              GLES1ShaderStates::IntTexArray &texState);
+    void addShaderInt(std::stringstream &outStream, const char *name, int value);
+
     void addVertexShaderDefs(std::stringstream &outStream);
     void addFragmentShaderDefs(std::stringstream &outStream);
 
@@ -186,29 +220,11 @@ class GLES1Renderer final : angle::NonCopyable
         std::array<UniformLocation, kTexUnitCount> tex2DSamplerLocs;
         std::array<UniformLocation, kTexUnitCount> texCubeSamplerLocs;
 
-        UniformLocation textureFormatLoc;
-
-        UniformLocation textureEnvModeLoc;
-        UniformLocation combineRgbLoc;
-        UniformLocation combineAlphaLoc;
-        UniformLocation src0rgbLoc;
-        UniformLocation src0alphaLoc;
-        UniformLocation src1rgbLoc;
-        UniformLocation src1alphaLoc;
-        UniformLocation src2rgbLoc;
-        UniformLocation src2alphaLoc;
-        UniformLocation op0rgbLoc;
-        UniformLocation op0alphaLoc;
-        UniformLocation op1rgbLoc;
-        UniformLocation op1alphaLoc;
-        UniformLocation op2rgbLoc;
-        UniformLocation op2alphaLoc;
         UniformLocation textureEnvColorLoc;
         UniformLocation rgbScaleLoc;
         UniformLocation alphaScaleLoc;
 
         // Alpha test
-        UniformLocation alphaFuncLoc;
         UniformLocation alphaTestRefLoc;
 
         // Shading, materials, and lighting
@@ -232,7 +248,6 @@ class GLES1Renderer final : angle::NonCopyable
         UniformLocation lightAttenuationQuadraticsLoc;
 
         // Fog
-        UniformLocation fogModeLoc;
         UniformLocation fogDensityLoc;
         UniformLocation fogStartLoc;
         UniformLocation fogEndLoc;
@@ -255,25 +270,7 @@ class GLES1Renderer final : angle::NonCopyable
     struct GLES1UniformBuffers
     {
         std::array<Mat4Uniform, kTexUnitCount> textureMatrices;
-        std::array<GLint, kTexUnitCount> tex2DEnables;
-        std::array<GLint, kTexUnitCount> texCubeEnables;
 
-        std::array<GLint, kTexUnitCount> texEnvModes;
-        std::array<GLint, kTexUnitCount> texCombineRgbs;
-        std::array<GLint, kTexUnitCount> texCombineAlphas;
-
-        std::array<GLint, kTexUnitCount> texCombineSrc0Rgbs;
-        std::array<GLint, kTexUnitCount> texCombineSrc0Alphas;
-        std::array<GLint, kTexUnitCount> texCombineSrc1Rgbs;
-        std::array<GLint, kTexUnitCount> texCombineSrc1Alphas;
-        std::array<GLint, kTexUnitCount> texCombineSrc2Rgbs;
-        std::array<GLint, kTexUnitCount> texCombineSrc2Alphas;
-        std::array<GLint, kTexUnitCount> texCombineOp0Rgbs;
-        std::array<GLint, kTexUnitCount> texCombineOp0Alphas;
-        std::array<GLint, kTexUnitCount> texCombineOp1Rgbs;
-        std::array<GLint, kTexUnitCount> texCombineOp1Alphas;
-        std::array<GLint, kTexUnitCount> texCombineOp2Rgbs;
-        std::array<GLint, kTexUnitCount> texCombineOp2Alphas;
         std::array<Vec4Uniform, kTexUnitCount> texEnvColors;
         std::array<GLfloat, kTexUnitCount> texEnvRgbScales;
         std::array<GLfloat, kTexUnitCount> texEnvAlphaScales;
@@ -297,8 +294,8 @@ class GLES1Renderer final : angle::NonCopyable
         std::array<Vec4Uniform, kTexUnitCount> texCropRects;
     };
 
-    angle::HashMap<uint64_t, GLES1UniformBuffers> mUniformBuffers;
-    angle::HashMap<uint64_t, GLES1ProgramState> mProgramStates;
+    angle::HashMap<size_t, GLES1UniformBuffers> mUniformBuffers;
+    angle::HashMap<size_t, GLES1ProgramState> mProgramStates;
 
     bool mDrawTextureEnabled      = false;
     GLfloat mDrawTextureCoords[4] = {0.0f, 0.0f, 0.0f, 0.0f};
