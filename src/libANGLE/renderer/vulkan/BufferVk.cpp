@@ -504,11 +504,11 @@ angle::Result BufferVk::copySubData(const gl::Context *context,
 {
     ASSERT(mBuffer && mBuffer->valid());
 
-    ContextVk *contextVk            = vk::GetImpl(context);
-    BufferVk *sourceVk              = GetAs<BufferVk>(source);
-    VkDeviceSize sourceBufferOffset = 0;
-    vk::BufferHelper &sourceBuffer  = sourceVk->getBufferAndOffset(&sourceBufferOffset);
+    ContextVk *contextVk           = vk::GetImpl(context);
+    BufferVk *sourceVk             = GetAs<BufferVk>(source);
+    vk::BufferHelper &sourceBuffer = sourceVk->getBuffer();
     ASSERT(sourceBuffer.valid());
+    VkDeviceSize sourceBufferOffset = sourceBuffer.getOffset();
 
     // If the shadow buffer is enabled for the destination buffer then
     // we need to update that as well. This will require us to complete
