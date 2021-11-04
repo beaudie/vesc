@@ -79,70 +79,68 @@ def auto_script(script):
 
 
 generators = {
-    'ANGLE format':
-        'src/libANGLE/renderer/gen_angle_format_table.py',
-    'ANGLE load functions table':
-        'src/libANGLE/renderer/gen_load_functions_table.py',
-    'ANGLE load texture border functions table':
-        'src/libANGLE/renderer/gen_load_texture_border_functions_table.py',
-    'ANGLE shader preprocessor':
-        'src/compiler/preprocessor/generate_parser.py',
-    'ANGLE shader translator':
-        'src/compiler/translator/generate_parser.py',
-    'D3D11 blit shader selection':
-        'src/libANGLE/renderer/d3d/d3d11/gen_blit11helper.py',
-    'D3D11 format':
-        'src/libANGLE/renderer/d3d/d3d11/gen_texture_format_table.py',
-    'DXGI format':
-        'src/libANGLE/renderer/gen_dxgi_format_table.py',
-    'DXGI format support':
-        'src/libANGLE/renderer/gen_dxgi_support_tables.py',
-    'Emulated HLSL functions':
-        'src/compiler/translator/gen_emulated_builtin_function_tables.py',
-    'Extension files':
-        'src/libANGLE/gen_extensions.py',
-    'GL copy conversion table':
-        'src/libANGLE/gen_copy_conversion_table.py',
-    'GL CTS (dEQP) build files':
-        'scripts/gen_vk_gl_cts_build.py',
-    'GL/EGL/WGL loader':
-        'scripts/generate_loader.py',
-    'GL/EGL entry points':
-        'scripts/generate_entry_points.py',
-    'GLenum value to string map':
-        'scripts/gen_gl_enum_utils.py',
-    'GL format map':
-        'src/libANGLE/gen_format_map.py',
-    'Metal format table':
-        'src/libANGLE/renderer/metal/gen_mtl_format_table.py',
-    'Metal default shaders':
-        'src/libANGLE/renderer/metal/shaders/gen_mtl_internal_shaders.py',
-    'OpenGL dispatch table':
-        'src/libANGLE/renderer/gl/generate_gl_dispatch_table.py',
-    'overlay fonts':
-        'src/libANGLE/gen_overlay_fonts.py',
-    'overlay widgets':
-        'src/libANGLE/gen_overlay_widgets.py',
-    'packed enum':
-        'src/common/gen_packed_gl_enums.py',
-    'proc table':
-        'scripts/gen_proc_table.py',
-    'restricted traces':
-        'src/tests/restricted_traces/gen_restricted_traces.py',
-    'SPIR-V helpers':
-        'src/common/spirv/gen_spirv_builder_and_parser.py',
-    'Static builtins':
-        'src/compiler/translator/gen_builtin_symbols.py',
-    'Test spec JSON':
-        'infra/specs/generate_test_spec_json.py',
-    'uniform type':
-        'src/common/gen_uniform_type_table.py',
-    'Vulkan format':
-        'src/libANGLE/renderer/vulkan/gen_vk_format_table.py',
-    'Vulkan internal shader programs':
-        'src/libANGLE/renderer/vulkan/gen_vk_internal_shaders.py',
-    'Vulkan mandatory format support table':
-        'src/libANGLE/renderer/vulkan/gen_vk_mandatory_format_support_table.py',
+        'ANGLE format':
+            'src/libANGLE/renderer/gen_angle_format_table.py',
+        'ANGLE load functions table':
+            'src/libANGLE/renderer/gen_load_functions_table.py',
+        'ANGLE load texture border functions table':
+            'src/libANGLE/renderer/gen_load_texture_border_functions_table.py',
+        'ANGLE shader preprocessor':
+            'src/compiler/preprocessor/generate_parser.py',
+        'ANGLE shader translator':
+            'src/compiler/translator/generate_parser.py',
+        'D3D11 blit shader selection':
+            'src/libANGLE/renderer/d3d/d3d11/gen_blit11helper.py',
+        'D3D11 format':
+            'src/libANGLE/renderer/d3d/d3d11/gen_texture_format_table.py',
+        'DXGI format':
+            'src/libANGLE/renderer/gen_dxgi_format_table.py',
+        'DXGI format support':
+            'src/libANGLE/renderer/gen_dxgi_support_tables.py',
+        'Emulated HLSL functions':
+            'src/compiler/translator/gen_emulated_builtin_function_tables.py',
+        'Extension files':
+            'src/libANGLE/gen_extensions.py',
+        'GL copy conversion table':
+            'src/libANGLE/gen_copy_conversion_table.py',
+        'GL CTS (dEQP) build files':
+            'scripts/gen_vk_gl_cts_build.py',
+        'GL/EGL/WGL loader':
+            'scripts/generate_loader.py',
+        'GL/EGL entry points':
+            'scripts/generate_entry_points.py',
+        'GLenum value to string map':
+            'scripts/gen_gl_enum_utils.py',
+        'GL format map':
+            'src/libANGLE/gen_format_map.py',
+    'Metal format table': 'src/libANGLE/renderer/metal/gen_mtl_format_table.py',
+    'Metal default shaders': 'src/libANGLE/renderer/metal/shaders/gen_mtl_internal_shaders.py',
+    #    'OpenGL dispatch table':
+    #        'src/libANGLE/renderer/gl/generate_gl_dispatch_table.py',
+    #    'overlay fonts':
+    #        'src/libANGLE/gen_overlay_fonts.py',
+    #    'overlay widgets':
+    #        'src/libANGLE/gen_overlay_widgets.py',
+    #    'packed enum':
+    #        'src/common/gen_packed_gl_enums.py',
+    #    'proc table':
+    #        'scripts/gen_proc_table.py',
+    #    'restricted traces':
+    #        'src/tests/restricted_traces/gen_restricted_traces.py',
+    #    'SPIR-V helpers':
+    #        'src/common/spirv/gen_spirv_builder_and_parser.py',
+    #    'Static builtins':
+    #        'src/compiler/translator/gen_builtin_symbols.py',
+    #    'Test spec JSON':
+    #        'infra/specs/generate_test_spec_json.py',
+    #    'uniform type':
+    #        'src/common/gen_uniform_type_table.py',
+    #    'Vulkan format':
+    #        'src/libANGLE/renderer/vulkan/gen_vk_format_table.py',
+    #    'Vulkan internal shader programs':
+    #        'src/libANGLE/renderer/vulkan/gen_vk_internal_shaders.py',
+    #    'Vulkan mandatory format support table':
+    #        'src/libANGLE/renderer/vulkan/gen_vk_mandatory_format_support_table.py',
 }
 
 
