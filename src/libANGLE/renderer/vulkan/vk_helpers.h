@@ -866,7 +866,6 @@ class BufferHelper : public ReadWriteResource
     }
     bool valid() const { return mBuffer.valid(); }
     const Buffer &getBuffer() const { return mBuffer; }
-    const Buffer &getBufferAndOffset(VkDeviceSize *offsetOut) const;
     VkDeviceSize getOffset() const;
     VkDeviceSize getSize() const { return mSize; }
     uint8_t *getMappedMemory() const
