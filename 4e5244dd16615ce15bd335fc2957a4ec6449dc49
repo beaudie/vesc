@@ -46,6 +46,30 @@
       },
       "revId": "4e5244dd16615ce15bd335fc2957a4ec6449dc49",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "35bd0a23_c265e0ec",
+        "filename": "src/libANGLE/Surface.cpp",
+        "patchSetId": 9
+      },
+      "lineNbr": 185,
+      "author": {
+        "id": 1290487
+      },
+      "writtenOn": "2021-11-04T16:31:34Z",
+      "side": 1,
+      "message": "\u003e I\u0027m not seeing any issues in the apps I\u0027ve tried, including \"Ragnarok M: Eternal Love\".\n\nNice!  Perhaps this is the better way to have done emulation.\n\n\u003e Is there a specific test you would like me to try?\n\nClearTestRGB.InvalidateDefaultFramebufferRGB",
+      "parentUuid": "5be767a9_944032eb",
+      "range": {
+        "startLine": 185,
+        "startChar": 7,
+        "endLine": 185,
+        "endChar": 46
+      },
+      "revId": "4e5244dd16615ce15bd335fc2957a4ec6449dc49",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
