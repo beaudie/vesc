@@ -125,7 +125,11 @@ class BufferVk : public BufferImpl
                                GLbitfield access,
                                void **mapPtr);
     angle::Result unmapImpl(ContextVk *contextVk);
-    angle::Result ghostMappedBuffer(ContextVk *contextVk, VkDeviceSize offset, void **mapPtr);
+    angle::Result ghostMappedBuffer(ContextVk *contextVk,
+                                    VkDeviceSize offset,
+                                    VkDeviceSize length,
+                                    GLbitfield access,
+                                    void **mapPtr);
 
     ConversionBuffer *getVertexConversionBuffer(RendererVk *renderer,
                                                 angle::FormatID formatID,
