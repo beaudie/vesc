@@ -76,6 +76,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "77a4fd11_203ba768",
+        "filename": "src/libANGLE/Caps.h",
+        "patchSetId": 11
+      },
+      "lineNbr": 736,
+      "author": {
+        "id": 1326275
+      },
+      "writtenOn": "2021-11-04T15:52:53Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "9c69c834_c4e2d841",
+      "range": {
+        "startLine": 736,
+        "startChar": 9,
+        "endLine": 736,
+        "endChar": 32
+      },
+      "revId": "6d06921092561bf36180b9c032dada642a675b1d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "9a18e5e5_8cb3bf28",
@@ -89,6 +113,30 @@
       "writtenOn": "2021-11-04T15:35:06Z",
       "side": 1,
       "message": "I\u0027m confused about what this is doing - can you follow up to explain \u0026 help clean this up?",
+      "range": {
+        "startLine": 390,
+        "startChar": 0,
+        "endLine": 414,
+        "endChar": 25
+      },
+      "revId": "6d06921092561bf36180b9c032dada642a675b1d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "a8f189bc_638dcaed",
+        "filename": "src/tests/deqp_support/angle_deqp_gtest.cpp",
+        "patchSetId": 11
+      },
+      "lineNbr": 414,
+      "author": {
+        "id": 1326275
+      },
+      "writtenOn": "2021-11-04T15:52:53Z",
+      "side": 1,
+      "message": "Updated the comment to say this:\n\nThe test harness reads the active GPU from SystemInfo and uses that for test expectations. However, some ANGLE backends don\u0027t have a concept of an \"active\" GPU, and instead use power preference to select GPU. We can use the environment variable ANGLE_PREFERRED_DEVICE to ensure ANGLE\u0027s selected GPU matches the GPU expected for this test suite.\n\nis that more clear?",
+      "parentUuid": "9a18e5e5_8cb3bf28",
       "range": {
         "startLine": 390,
         "startChar": 0,
@@ -122,6 +170,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "8b402018_a762da9e",
+        "filename": "src/tests/test_utils/angle_test_configs.cpp",
+        "patchSetId": 11
+      },
+      "lineNbr": 308,
+      "author": {
+        "id": 1326275
+      },
+      "writtenOn": "2021-11-04T15:52:53Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "13789dfd_616abaf6",
+      "range": {
+        "startLine": 308,
+        "startChar": 19,
+        "endLine": 308,
+        "endChar": 35
+      },
+      "revId": "6d06921092561bf36180b9c032dada642a675b1d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "6a9ad120_7a27f5df",
@@ -135,6 +207,30 @@
       "writtenOn": "2021-11-04T15:34:19Z",
       "side": 1,
       "message": "nit: for brevity, you can omit \"With\"",
+      "range": {
+        "startLine": 313,
+        "startChar": 19,
+        "endLine": 313,
+        "endChar": 36
+      },
+      "revId": "6d06921092561bf36180b9c032dada642a675b1d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "2d80ee52_53fa65cc",
+        "filename": "src/tests/test_utils/angle_test_configs.cpp",
+        "patchSetId": 11
+      },
+      "lineNbr": 313,
+      "author": {
+        "id": 1326275
+      },
+      "writtenOn": "2021-11-04T15:52:53Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "6a9ad120_7a27f5df",
       "range": {
         "startLine": 313,
         "startChar": 19,
