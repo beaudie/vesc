@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "c8d58de8_ae18ea63",
+        "filename": "src/libANGLE/renderer/vulkan/SurfaceVk.cpp",
+        "patchSetId": 10
+      },
+      "lineNbr": 140,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2021-11-04T20:45:29Z",
+      "side": 1,
+      "message": "RGBX. Otherwise alpha can get changed and cause surprises.\n\nSince you asked about what test, it should be trivial to write one:\n\nCreate an RGB8 swapchain, draw with a shader that outputs alpha\u003d0.5. Readback and ensure that alpha\u003d1.",
+      "range": {
+        "startLine": 140,
+        "startChar": 46,
+        "endLine": 140,
+        "endChar": 60
+      },
+      "revId": "20e66b1d35b5946cc2ce8129b61d317f2faa58aa",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
