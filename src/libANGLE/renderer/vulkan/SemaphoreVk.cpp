@@ -115,8 +115,7 @@ angle::Result SemaphoreVk::wait(gl::Context *context,
         for (gl::Buffer *buffer : bufferBarriers)
         {
             BufferVk *bufferVk             = vk::GetImpl(buffer);
-            VkDeviceSize bufferOffset      = 0;
-            vk::BufferHelper &bufferHelper = bufferVk->getBufferAndOffset(&bufferOffset);
+            vk::BufferHelper &bufferHelper = bufferVk->getBuffer();
 
             vk::CommandBuffer *commandBuffer;
             ANGLE_TRY(contextVk->getOutsideRenderPassCommandBuffer({}, &commandBuffer));
@@ -170,8 +169,7 @@ angle::Result SemaphoreVk::signal(gl::Context *context,
         for (gl::Buffer *buffer : bufferBarriers)
         {
             BufferVk *bufferVk             = vk::GetImpl(buffer);
-            VkDeviceSize bufferOffset      = 0;
-            vk::BufferHelper &bufferHelper = bufferVk->getBufferAndOffset(&bufferOffset);
+            vk::BufferHelper &bufferHelper = bufferVk->getBuffer();
 
             ANGLE_TRY(contextVk->onBufferReleaseToExternal(bufferHelper));
             vk::CommandBuffer *commandBuffer;
