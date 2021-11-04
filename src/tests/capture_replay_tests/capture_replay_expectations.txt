@@ -188,23 +188,7 @@
 6631 : MultithreadingTest.MultiContextDrawWithSwapBuffers/ES3_Vulkan_SwiftShader = SKIP_FOR_CAPTURE
 
 # ES3_1
-6180 : ProgramPipelineTest31.DifferentTextureTypes/ES3_1_Vulkan_SwiftShader = FAIL
-6180 : ProgramPipelineTest31.DrawWith2DTexture/ES3_1_Vulkan_SwiftShader = FAIL
-6180 : ProgramPipelineTest31.FragmentStageUniformTest/ES3_1_Vulkan_SwiftShader = FAIL
-6180 : ProgramPipelineTest31.ImageUniforms/ES3_1_Vulkan_SwiftShader = FAIL
-6180 : ProgramPipelineTest31.MaxFragmentShaderStorageBufferObjects/ES3_1_Vulkan_SwiftShader = FAIL
-6180 : ProgramPipelineTest31.MaxFragmentUniformBufferObjects/ES3_1_Vulkan_SwiftShader = FAIL
-6180 : ProgramPipelineTest31.PipelineWithoutVertexShader/ES3_1_Vulkan_SwiftShader = FAIL
-6180 : ProgramPipelineTest31.ProgramPipelineVaryings/ES3_1_Vulkan_SwiftShader = FAIL
-6180 : ProgramPipelineTest31.SampleTextureAThenTextureB/ES3_1_Vulkan_SwiftShader = FAIL
-6180 : ProgramPipelineTest31.UseCreateShaderProgramv/ES3_1_Vulkan_SwiftShader = FAIL
-6180 : ProgramPipelineTest31.VaryingIOBlockSeparableProgram/ES3_1_Vulkan_SwiftShader = FAIL
-6180 : ProgramPipelineTest31.VaryingLocationMismatch/ES3_1_Vulkan_SwiftShader = FAIL
 6180 : ProgramPipelineTest31.VerifyPpoLinkErrorSignalledCorrectly/ES3_1_Vulkan_SwiftShader = FAIL
-6180 : SimpleStateChangeTestComputeES31PPO.DeleteImageTextureInUse/ES3_1_Vulkan_SwiftShader = FAIL
-6180 : Texture2DTestES31PPO.TexStorage/ES3_1_Vulkan_SwiftShader = FAIL
-6180 : Texture2DTestES31PPO.SingleTextureMultipleSamplers/ES3_1_Vulkan_SwiftShader = FAIL
-
 
 # ES3_1 Crashed
 6605 : ComputeShaderTest.ImageBufferMapWrite/* = SKIP_FOR_CAPTURE
