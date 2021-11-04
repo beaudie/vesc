@@ -410,7 +410,10 @@ angle::Result ContextMtl::drawArraysImpl(const gl::Context *context,
     {
         return angle::Result::Continue;
     }
-
+    if (requiresIndexRewrite(context->getState()))
+    {
+        return drawArraysProvokingVertexImpl(context, mode, first, count, instances);
+    }
     if (mode == gl::PrimitiveMode::TriangleFan)
     {
         return drawTriFanArrays(context, first, count, instanceCount);
@@ -562,6 +565,58 @@ angle::Result ContextMtl::drawLineLoopElements(const gl::Context *context,
     }  // if (count >= 2)
     return drawElementsInstanced(context, gl::PrimitiveMode::Lines, count, type, indices,
                                  instances);
+}
+
+angle::Result ContextMtl::drawArraysProvokingVertexImpl(const gl::Context *context,
+                                                        gl::PrimitiveMode mode,
+                                                        GLsizei first,
+                                                        GLsizei count,
+                                                        GLsizei instances)
+{
+    size_t outIndexCount               = 0;
+    gl::DrawElementsType convertedType = gl::DrawElementsType::UnsignedInt;
+    gl::PrimitiveMode outIndexMode     = gl::PrimitiveMode::InvalidEnum;
+
+    drawIdxBuffer = mProvokingVertexHelper.generateIndexBuffer(
+        mtl::GetImpl(context), first, count, mode, convertedType, outIndexCount, outIndexMode);
+    if (!drawIdxBuffer)
+    {
+        return angle::Result::Stop;
+    }
+#define DRAW_PROVOKING_VERTEX_ARRAY(xfbPass)                                                   \
+    if (xfbPass)                                                                               \
+    {                                                                                          \
+        ANGLE_TRY(setupDraw(context, mode, first, count, instances, type, nullptr, xfbPass));  \
+        if (instances == 0)                                                                    \
+        {                                                                                      \
+            /* This method is called from normal drawArrays() */                               \
+            mRenderEncoder.draw(mtlType, first, count);                                        \
+        }                                                                                      \
+        else                                                                                   \
+        {                                                                                      \
+            mRenderEncoder.drawInstanced(mtlType, first, count, instanceCount);                \
+        }                                                                                      \
+    }                                                                                          \
+    else                                                                                       \
+    {                                                                                          \
+        ANGLE_TRY(setupDraw(context, outIndexMode, 0, outIndexCount, instances, convertedType, \
+                            nullptr, xfbPass));                                                \
+                                                                                               \
+        if (instances == 0)                                                                    \
+        {                                                                                      \
+            mRenderEncoder.drawIndexed(mtlType, outIndexCount, mtlIdxType, drawIdxBuffer, 0);  \
+        }                                                                                      \
+        else                                                                                   \
+        {                                                                                      \
+                                                                                               \
+            mRenderEncoder.drawIndexedInstanced(mtlType, count, mtlIdxType, drawIdxBuffer, 0,  \
+                                                instanceCount);                                \
+        }                                                                                      \
+    }
+
+    ANGLE_MTL_XFB_DRAW(DRAW_PROVOKING_VERTEX_ARRAY)
+
+    return angle::Result::Continue;
 }
 
 angle::Result ContextMtl::drawElementsImpl(const gl::Context *context,
