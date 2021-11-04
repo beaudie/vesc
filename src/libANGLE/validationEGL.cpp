@@ -376,11 +376,13 @@ bool ValidateConfigAttributes(const ValidationContext *val,
                               const Display *display,
                               const AttributeMap &attributes)
 {
+    ANGLE_VALIDATION_TRY(attributes.validate(val, display, ValidateConfigAttribute));
+
     for (const auto &attrib : attributes)
     {
-        ANGLE_VALIDATION_TRY(ValidateConfigAttribute(val, display, attrib.first));
-        ANGLE_VALIDATION_TRY(
-            ValidateConfigAttributeValue(val, display, attrib.first, attrib.second));
+        EGLAttrib pname = attrib.first;
+        EGLAttrib value = attrib.second;
+        ANGLE_VALIDATION_TRY(ValidateConfigAttributeValue(val, display, pname, value));
     }
 
     return true;
@@ -528,6 +530,8 @@ bool ValidateGetPlatformDisplayCommon(const ValidationContext *val,
             val->setError(EGL_BAD_CONFIG, "Bad platform type.");
             return false;
     }
+
+    attribMap.skipValidate();
 
     if (platform == EGL_PLATFORM_ANGLE_ANGLE)
     {
@@ -1606,6 +1610,8 @@ bool ValidateCreateContext(const ValidationContext *val,
         }
     }
 
+    attributes.skipValidate();
+
     // Get the requested client version (default is 1) and check it is 2 or 3.
     EGLAttrib clientMajorVersion = 1;
     EGLAttrib clientMinorVersion = 0;
@@ -2103,6 +2109,8 @@ bool ValidateCreateWindowSurface(const ValidationContext *val,
 
     const DisplayExtensions &displayExtensions = display->getExtensions();
 
+    attributes.skipValidate();
+
     for (const auto &attributeIter : attributes)
     {
         EGLAttrib attribute = attributeIter.first;
@@ -2275,6 +2283,8 @@ bool ValidateCreatePbufferSurface(const ValidationContext *val,
     ANGLE_VALIDATION_TRY(ValidateConfig(val, display, config));
 
     const DisplayExtensions &displayExtensions = display->getExtensions();
+
+    attributes.skipValidate();
 
     for (const auto &attributeIter : attributes)
     {
