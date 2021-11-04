@@ -36,6 +36,15 @@ class ProvokingVertexHelper : public mtl::ProvokingVertexCacheSpecializeShaderFa
                                            gl::DrawElementsType elementsType,
                                            size_t &outIndexcount,
                                            gl::PrimitiveMode &outPrimitiveMode);
+
+    mtl::BufferRef generateIndexBuffer(ContextMtl *context,
+                                       size_t first,
+                                       size_t indexCount,
+                                       gl::PrimitiveMode primitiveMode,
+                                       gl::DrawElementsType elementsType,
+                                       size_t &outIndexcount,
+                                       gl::PrimitiveMode &outPrimitiveMode);
+
     void commitPreconditionCommandBuffer(ContextMtl *context);
     void ensureCommandBufferReady();
     void onDestroy(ContextMtl *context);
