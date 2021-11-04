@@ -190,8 +190,8 @@ angle::Result VertexArrayVk::convertIndexBufferGPU(ContextVk *contextVk,
     mCurrentElementArrayBuffer = mTranslatedByteIndexData.getCurrentBuffer();
 
     vk::BufferHelper *dst        = mTranslatedByteIndexData.getCurrentBuffer();
-    VkDeviceSize srcBufferOffset = 0;
-    vk::BufferHelper *src        = &bufferVk->getBufferAndOffset(&srcBufferOffset);
+    vk::BufferHelper *src        = &bufferVk->getBuffer();
+    VkDeviceSize srcBufferOffset = src->getOffset();
 
     // Copy relevant section of the source into destination at allocated offset.  Note that the
     // offset returned by allocate() above is in bytes. As is the indices offset pointer.
@@ -210,10 +210,9 @@ angle::Result VertexArrayVk::convertIndexBufferIndirectGPU(ContextVk *contextVk,
                                                            VkDeviceSize *indirectBufferVkOffsetOut)
 {
     size_t srcDataSize = static_cast<size_t>(mCurrentElementArrayBuffer->getSize());
-    VkDeviceSize elementArrayBufferOffset = 0;
-    ASSERT(mCurrentElementArrayBuffer == &vk::GetImpl(getState().getElementArrayBuffer())
-                                              ->getBufferAndOffset(&elementArrayBufferOffset));
-    ASSERT(mCurrentElementArrayBufferOffset == elementArrayBufferOffset);
+    ASSERT(mCurrentElementArrayBuffer ==
+           &vk::GetImpl(getState().getElementArrayBuffer())->getBuffer());
+    ASSERT(mCurrentElementArrayBufferOffset == mCurrentElementArrayBuffer->getOffset());
 
     mTranslatedByteIndexData.releaseInFlightBuffers(contextVk);
     mTranslatedByteIndirectData.releaseInFlightBuffers(contextVk);
@@ -398,8 +397,8 @@ angle::Result VertexArrayVk::convertVertexBufferGPU(ContextVk *contextVk,
     ASSERT(conversion->dirty);
     conversion->dirty = false;
 
-    VkDeviceSize srcBufferOffset      = 0;
-    vk::BufferHelper *srcBufferHelper = &srcBuffer->getBufferAndOffset(&srcBufferOffset);
+    vk::BufferHelper *srcBufferHelper = &srcBuffer->getBuffer();
+    VkDeviceSize srcBufferOffset      = srcBufferHelper->getOffset();
 
     UtilsVk::ConvertVertexParameters params;
     params.vertexCount = numVertices;
@@ -479,9 +478,9 @@ angle::Result VertexArrayVk::syncState(const gl::Context *context,
                 {
                     // Note that just updating buffer data may still result in a new
                     // vk::BufferHelper allocation.
-                    BufferVk *bufferVk = vk::GetImpl(bufferGL);
-                    mCurrentElementArrayBuffer =
-                        &bufferVk->getBufferAndOffset(&mCurrentElementArrayBufferOffset);
+                    BufferVk *bufferVk               = vk::GetImpl(bufferGL);
+                    mCurrentElementArrayBuffer       = &bufferVk->getBuffer();
+                    mCurrentElementArrayBufferOffset = mCurrentElementArrayBuffer->getOffset();
                 }
                 else
                 {
@@ -684,9 +683,9 @@ angle::Result VertexArrayVk::syncDirtyAttrib(ContextVk *contextVk,
                 }
                 else
                 {
-                    VkDeviceSize bufferOffset         = 0;
-                    vk::BufferHelper &bufferHelper    = bufferVk->getBufferAndOffset(&bufferOffset);
-                    mCurrentArrayBuffers[attribIndex] = &bufferHelper;
+                    vk::BufferHelper &bufferHelper          = bufferVk->getBuffer();
+                    VkDeviceSize bufferOffset               = bufferHelper.getOffset();
+                    mCurrentArrayBuffers[attribIndex]       = &bufferHelper;
                     mCurrentArrayBufferHandles[attribIndex] = bufferHelper.getBuffer().getHandle();
 
                     // Vulkan requires the offset is within the buffer. We use robust access
