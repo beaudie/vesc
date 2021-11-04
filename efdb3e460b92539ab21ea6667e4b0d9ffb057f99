@@ -73,6 +73,30 @@
       },
       "revId": "efdb3e460b92539ab21ea6667e4b0d9ffb057f99",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "5fd5616f_46aab8f0",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.h",
+        "patchSetId": 8
+      },
+      "lineNbr": 496,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2021-11-04T00:35:04Z",
+      "side": 1,
+      "message": "I\u0027m going to keep this as initializeFrontendFeatures.\n\nFor reference, see DisplayImpl which declares initializeFrontendFeatures(), and all of the various backends that override it.   This is just plumbing through that function and implementing it for the Vulkan backend.",
+      "parentUuid": "06a07fd3_1294190f",
+      "range": {
+        "startLine": 496,
+        "startChar": 9,
+        "endLine": 496,
+        "endChar": 35
+      },
+      "revId": "efdb3e460b92539ab21ea6667e4b0d9ffb057f99",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
