@@ -78,6 +78,29 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "9a18e5e5_8cb3bf28",
+        "filename": "src/tests/deqp_support/angle_deqp_gtest.cpp",
+        "patchSetId": 11
+      },
+      "lineNbr": 414,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2021-11-04T15:35:06Z",
+      "side": 1,
+      "message": "I\u0027m confused about what this is doing - can you follow up to explain \u0026 help clean this up?",
+      "range": {
+        "startLine": 390,
+        "startChar": 0,
+        "endLine": 414,
+        "endChar": 25
+      },
+      "revId": "6d06921092561bf36180b9c032dada642a675b1d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "13789dfd_616abaf6",
         "filename": "src/tests/test_utils/angle_test_configs.cpp",
         "patchSetId": 11
