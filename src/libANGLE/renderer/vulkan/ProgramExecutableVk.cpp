@@ -1293,8 +1293,7 @@ angle::Result ProgramExecutableVk::updateBuffersDescriptorSet(
         ASSERT(bufferBinding.getSize() >= 0);
 
         BufferVk *bufferVk             = vk::GetImpl(bufferBinding.get());
-        VkDeviceSize bufferOffset      = 0;
-        vk::BufferHelper &bufferHelper = bufferVk->getBufferAndOffset(&bufferOffset);
+        vk::BufferHelper &bufferHelper = bufferVk->getBuffer();
 
         if (!cacheHit)
         {
@@ -1304,8 +1303,9 @@ angle::Result ProgramExecutableVk::updateBuffersDescriptorSet(
             VkDescriptorSet descriptorSet;
             ANGLE_TRY(getOrAllocateShaderResourcesDescriptorSet(contextVk, &shaderBuffersDesc,
                                                                 &descriptorSet));
-            VkDeviceSize offset =
-                IsDynamicDescriptor(descriptorType) ? 0 : bufferOffset + bufferBinding.getOffset();
+            VkDeviceSize offset = IsDynamicDescriptor(descriptorType)
+                                      ? 0
+                                      : bufferHelper.getOffset() + bufferBinding.getOffset();
             WriteBufferDescriptorSetBinding(bufferHelper, offset, size, descriptorSet,
                                             descriptorType, binding, arrayElement, 0, &bufferInfo,
                                             &writeInfo);
@@ -1313,7 +1313,7 @@ angle::Result ProgramExecutableVk::updateBuffersDescriptorSet(
         if (IsDynamicDescriptor(descriptorType))
         {
             mDynamicShaderBufferDescriptorOffsets.push_back(
-                static_cast<uint32_t>(bufferOffset + bufferBinding.getOffset()));
+                static_cast<uint32_t>(bufferHelper.getOffset() + bufferBinding.getOffset()));
         }
     }
 
@@ -1374,8 +1374,8 @@ angle::Result ProgramExecutableVk::updateAtomicCounterBuffersDescriptorSet(
         VkWriteDescriptorSet &writeInfo    = contextVk->allocWriteDescriptorSet();
 
         BufferVk *bufferVk             = vk::GetImpl(bufferBinding.get());
-        VkDeviceSize bufferOffset      = 0;
-        vk::BufferHelper &bufferHelper = bufferVk->getBufferAndOffset(&bufferOffset);
+        vk::BufferHelper &bufferHelper = bufferVk->getBuffer();
+        VkDeviceSize bufferOffset      = bufferHelper.getOffset();
 
         VkDeviceSize size = gl::GetBoundBufferAvailableSize(bufferBinding);
         WriteBufferDescriptorSetBinding(
