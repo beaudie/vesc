@@ -33,6 +33,24 @@
       "message": "Maybe we can find another solution. We shouldn\u0027t give ANGLE too many particular if statements for capture.",
       "revId": "28644fef3ce4af92b9354b370c024037dc46a0f6",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "94425dbc_d9a75d32",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2021-11-04T22:03:15Z",
+      "side": 1,
+      "message": "Is there any way when comparing states to say \"I know this is going to be different, just ignore this portion\"?  We could link to where the states diverge in ANGLE.",
+      "parentUuid": "22dfb133_cb1bc002",
+      "revId": "28644fef3ce4af92b9354b370c024037dc46a0f6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
