@@ -16,6 +16,24 @@
       "message": "Jamie can you review the changes to the test infrastructure?\nI\u0027m ok with the ANGLETest changes but the angle_deqp_gtest changes could be better I think. I need to be able to pass the result of IsAMD etc (taken from SystemInfo) to some point before running the tests where we can set the env variable, and then unset it when the tests are done.",
       "revId": "6d06921092561bf36180b9c032dada642a675b1d",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "f153c226_a1246e1c",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 11
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1326275
+      },
+      "writtenOn": "2021-11-04T15:19:54Z",
+      "side": 1,
+      "message": "Actually, just talked to Geoff.\n\nI think we should land pretty much as-is (still with some review) to get this power preference stuff landed.\n\nI can follow up to change the way the tests select the GPU. Instead of using the environment var, I\u0027ll go through and set a display creation attrib in each of the test harnesses\nFor dEQP, here:  https://source.chromium.org/chromium/chromium/src/+/main:third_party/angle/src/tests/deqp_support/tcuANGLEPlatform.cpp;l\u003d35?q\u003dANGLENativeDisplayFactory\u0026ss\u003dchromium%2Fchromium%2Fsrc\nand angle tests, here: https://source.chromium.org/chromium/chromium/src/+/main:third_party/angle/util/EGLWindow.cpp;l\u003d846?q\u003dEGLWindow.\u0026sq\u003d\u0026ss\u003dchromium%2Fchromium%2Fsrc",
+      "parentUuid": "8394453d_9beebe72",
+      "revId": "6d06921092561bf36180b9c032dada642a675b1d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
