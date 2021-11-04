@@ -149,6 +149,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "2373815b_d9abee8a",
+        "filename": "src/tests/deqp_support/angle_deqp_gtest.cpp",
+        "patchSetId": 11
+      },
+      "lineNbr": 414,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2021-11-04T15:57:43Z",
+      "side": 1,
+      "message": "OK. It doesn\u0027t seem dEQP-specific. It would be good to put this in a place where we could reuse it for other test suites.",
+      "parentUuid": "a8f189bc_638dcaed",
+      "range": {
+        "startLine": 390,
+        "startChar": 0,
+        "endLine": 414,
+        "endChar": 25
+      },
+      "revId": "6d06921092561bf36180b9c032dada642a675b1d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "13789dfd_616abaf6",
         "filename": "src/tests/test_utils/angle_test_configs.cpp",
         "patchSetId": 11
