@@ -65,6 +65,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "af621327_4d75398d",
+        "filename": "src/libANGLE/renderer/vulkan/SurfaceVk.cpp",
+        "patchSetId": 10
+      },
+      "lineNbr": 140,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2021-11-05T00:38:38Z",
+      "side": 1,
+      "message": "Done\n\nUpdating these to use angle::FormatID::R8G8B8X8_UNORM (rather than R8G8B8A8_UNORM) causes multiple tests in ClearTest.cpp to fail:\n\n    I   40.353s run_tests_on_device(16291FDF60003H)  RendererVk.cpp:589 (DebugUtilsMessenger): [ VUID-VkSwapchainCreateInfoKHR-imageFormat-01273 ] Validation Error: [ VUID-VkSwapchainCreateInfoKHR-imageFormat-01273 ] Object 0: handle \u003d 0xb400007012350ba0, type \u003d VK_OBJECT_TYPE_DEVICE; | MessageID \u003d 0x9cf8f42b | vkCreateSwapchainKHR() called with a non-supported pCreateInfo-\u003eimageFormat (VK_FORMAT_UNDEFINED). The Vulkan spec states: imageFormat and imageColorSpace must match the format and colorSpace members, respectively, of one of the VkSurfaceFormatKHR structures returned by vkGetPhysicalDeviceSurfaceFormatsKHR for the surface (https://www.khronos.org/registry/vulkan/specs/1.2-extensions/html/vkspec.html#VUID-VkSwapchainCreateInfoKHR-imageFormat-01273)\n\n\nUsing R8G8B8A8_UNORM allows them all to pass, so I\u0027ll keep that.   As Ian notes, this brings us back to using RGBA8 like we were before.\n\nI\u0027ve added ClearTestRGB.ShaderOutputsAlphaVerifyReadingAlphaIsOne.",
+      "parentUuid": "c8d58de8_ae18ea63",
+      "range": {
+        "startLine": 140,
+        "startChar": 46,
+        "endLine": 140,
+        "endChar": 60
+      },
+      "revId": "20e66b1d35b5946cc2ce8129b61d317f2faa58aa",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "a690f673_5a1161ef",
@@ -78,6 +102,30 @@
       "writtenOn": "2021-11-04T21:35:53Z",
       "side": 1,
       "message": "I don\u0027t think we need these TODO comments, as I expect that we\u0027ll always have this need with some device or another.  For devices that don\u0027t need this, DisplayVkAndroid::generateConfigs() can disable the feature flag and we won\u0027t override the nativeFormat.",
+      "range": {
+        "startLine": 869,
+        "startChar": 0,
+        "endLine": 871,
+        "endChar": 0
+      },
+      "revId": "20e66b1d35b5946cc2ce8129b61d317f2faa58aa",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "57f52b1e_f918402b",
+        "filename": "src/libANGLE/renderer/vulkan/SurfaceVk.cpp",
+        "patchSetId": 10
+      },
+      "lineNbr": 871,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2021-11-05T00:38:38Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "a690f673_5a1161ef",
       "range": {
         "startLine": 869,
         "startChar": 0,
@@ -105,6 +153,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "d08ebbba_56f1ebc4",
+        "filename": "src/libANGLE/renderer/vulkan/SurfaceVk.cpp",
+        "patchSetId": 10
+      },
+      "lineNbr": 1230,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2021-11-05T00:38:38Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "b6fb14f8_b07d6129",
+      "revId": "20e66b1d35b5946cc2ce8129b61d317f2faa58aa",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "38f9cc17_90de5bd2",
@@ -118,6 +184,24 @@
       "writtenOn": "2021-11-04T21:35:53Z",
       "side": 1,
       "message": "Nit: Add a comment to the effect that even though alpha is \"cleared to\" 0.0f that it will actually be set to 1.0f because GL_RGB8 is always supposed to have alpha\u003d\u003d1.0f",
+      "revId": "20e66b1d35b5946cc2ce8129b61d317f2faa58aa",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "ddaecf3e_86272211",
+        "filename": "src/tests/gl_tests/ClearTest.cpp",
+        "patchSetId": 10
+      },
+      "lineNbr": 365,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2021-11-05T00:38:38Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "38f9cc17_90de5bd2",
       "revId": "20e66b1d35b5946cc2ce8129b61d317f2faa58aa",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
