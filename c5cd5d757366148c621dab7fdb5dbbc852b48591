@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "971b7d09_72a290c1",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.cpp",
+        "patchSetId": 12
+      },
+      "lineNbr": 2800,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2021-11-05T14:42:03Z",
+      "side": 1,
+      "message": "just make this \"true\".. what\u0027s the downside",
+      "range": {
+        "startLine": 2800,
+        "startChar": 74,
+        "endLine": 2800,
+        "endChar": 83
+      },
+      "revId": "c5cd5d757366148c621dab7fdb5dbbc852b48591",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
