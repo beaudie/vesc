@@ -41,6 +41,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "b23623c8_d7d55d18",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.cpp",
+        "patchSetId": 12
+      },
+      "lineNbr": 2800,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2021-11-05T23:25:36Z",
+      "side": 1,
+      "message": "SGTM",
+      "parentUuid": "971b7d09_72a290c1",
+      "range": {
+        "startLine": 2800,
+        "startChar": 74,
+        "endLine": 2800,
+        "endChar": 83
+      },
+      "revId": "c5cd5d757366148c621dab7fdb5dbbc852b48591",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "2b56ea98_c379cf93",
@@ -54,6 +78,30 @@
       "writtenOn": "2021-11-05T15:46:41Z",
       "side": 1,
       "message": "nit: Could be refactored to a static function (it\u0027s repeated thrice)",
+      "range": {
+        "startLine": 138,
+        "startChar": 0,
+        "endLine": 142,
+        "endChar": 5
+      },
+      "revId": "c5cd5d757366148c621dab7fdb5dbbc852b48591",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "9849ccdb_9e41d364",
+        "filename": "src/libANGLE/renderer/vulkan/SurfaceVk.cpp",
+        "patchSetId": 12
+      },
+      "lineNbr": 142,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2021-11-05T23:25:36Z",
+      "side": 1,
+      "message": "I\u0027m going to keep these as they are.\n\nIt\u0027s not actually repeated 3 times, since one of them is converting a VkFormat, rather than an angle::FormatID, so only 2 of the blocks would call the static function which isn\u0027t worth hiding the conditional in my opinion.",
+      "parentUuid": "2b56ea98_c379cf93",
       "range": {
         "startLine": 138,
         "startChar": 0,
@@ -117,6 +165,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "49092871_354c729d",
+        "filename": "src/libANGLE/renderer/vulkan/SurfaceVk.cpp",
+        "patchSetId": 12
+      },
+      "lineNbr": 321,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2021-11-05T23:25:36Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "e54f6d7f_c15ee46c",
+      "revId": "c5cd5d757366148c621dab7fdb5dbbc852b48591",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "fa1f2794_49c2f5fc",
@@ -130,6 +196,30 @@
       "writtenOn": "2021-11-05T15:46:41Z",
       "side": 1,
       "message": "nit: It doesn\u0027t matter much for this given the current code, but would be double cool to make this use a shader that outputs alpha\u003d0.5",
+      "range": {
+        "startLine": 351,
+        "startChar": 62,
+        "endLine": 351,
+        "endChar": 88
+      },
+      "revId": "c5cd5d757366148c621dab7fdb5dbbc852b48591",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "5015c019_051e868f",
+        "filename": "src/tests/gl_tests/ClearTest.cpp",
+        "patchSetId": 12
+      },
+      "lineNbr": 351,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2021-11-05T23:25:36Z",
+      "side": 1,
+      "message": "ShaderOutputsAlphaVerifyReadingAlphaIsOne is doing that below.   I\u0027ll keep this one Blue(), so there aren\u0027t as many moving parts in this test in case things break in the future.",
+      "parentUuid": "fa1f2794_49c2f5fc",
       "range": {
         "startLine": 351,
         "startChar": 62,
