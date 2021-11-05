@@ -1,6 +1,23 @@
 {
   "comments": [
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "9befb8d7_930d7a33",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 12
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1290487
+      },
+      "writtenOn": "2021-11-05T16:11:29Z",
+      "side": 1,
+      "message": "Re-LGTM.  Thanks for the new test.  I\u0027m fine with Jamie\u0027s suggestion to always enable RGB-\u003eRGBA (not just for Android).",
+      "revId": "c5cd5d757366148c621dab7fdb5dbbc852b48591",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "971b7d09_72a290c1",
@@ -60,6 +77,24 @@
       "writtenOn": "2021-11-05T15:46:41Z",
       "side": 1,
       "message": "You\u0027ll probably have the same issue with this as you did with AHB. That the external memory expects RGB but Vulkan is using RGBA.\n\nI suggest dropping RGB as a supported format for pbuffers, not worth fixing this IMO.",
+      "revId": "c5cd5d757366148c621dab7fdb5dbbc852b48591",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "e54f6d7f_c15ee46c",
+        "filename": "src/libANGLE/renderer/vulkan/SurfaceVk.cpp",
+        "patchSetId": 12
+      },
+      "lineNbr": 321,
+      "author": {
+        "id": 1290487
+      },
+      "writtenOn": "2021-11-05T16:11:29Z",
+      "side": 1,
+      "message": "Actually, AHB supports actual RGB8",
+      "parentUuid": "8356365d_13b64f37",
       "revId": "c5cd5d757366148c621dab7fdb5dbbc852b48591",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
