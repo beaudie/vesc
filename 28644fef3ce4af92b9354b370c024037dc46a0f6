@@ -51,6 +51,24 @@
       "parentUuid": "22dfb133_cb1bc002",
       "revId": "28644fef3ce4af92b9354b370c024037dc46a0f6",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "3e163dbd_e155d239",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1491823
+      },
+      "writtenOn": "2021-11-05T11:25:56Z",
+      "side": 1,
+      "message": "@jamie \nMaybe the comment I added when opening the review git lost ... I\u0027m not very happy about this solution either, especially because we use a flag that is kind of not really needed for capture/replay, we just happen to enable it to ensure that the traces are not dependent on the back-end, and for replay we enable it to make the tests pass. The moment we\u0027d run the capture/replay tests without this flag enabled, this test would fail again.\nI think a better solution would either be to test whether this is a MEC, and only then keep the state (in this case we don\u0027t test whether capture works as expected for MEC), or we add a flag somewhere that says that shaders should not be detached here, and set this flag when capturing or replaying.    \n\n@cody\nConsidering that we don\u0027t use the context serializations (yet) we could just not record a state that is known to be different. Currently. the problem with tagging  is that we compare the strings of the context serializations, and handling them when comparing, is not simple - no more plain strcmp, and no simple diff in capture/replay script.",
+      "parentUuid": "94425dbc_d9a75d32",
+      "revId": "28644fef3ce4af92b9354b370c024037dc46a0f6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
