@@ -146,7 +146,8 @@ angle::Result Buffer::bufferDataImpl(Context *context,
         return angle::Result::Stop;
     }
 
-    bool wholeBuffer = size == mState.mSize;
+    bool storageRedefined =
+        target == BufferBinding::Array ? size > mState.mSize : size != mState.mSize;
 
     mIndexRangeCache.clear();
     mState.mUsage                = usage;
@@ -155,7 +156,7 @@ angle::Result Buffer::bufferDataImpl(Context *context,
     mState.mStorageExtUsageFlags = flags;
 
     // Notify when storage changes.
-    if (wholeBuffer)
+    if (!storageRedefined)
     {
         onContentsChange();
     }
