@@ -70,6 +70,30 @@
       },
       "revId": "88eabbef7246d6c08c9b9b5591a9bb3a4695f373",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "0798f559_d171d497",
+        "filename": "src/libANGLE/capture/capture_gles_3_1_params.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 271,
+      "author": {
+        "id": 1491823
+      },
+      "writtenOn": "2021-11-05T12:58:29Z",
+      "side": 1,
+      "message": "Actually, it seems the place where one could inject a length pointer that is non-null is in auto-generated code, so that doesn\u0027t look like a viable solution anymore.",
+      "parentUuid": "553c932a_c763cd24",
+      "range": {
+        "startLine": 257,
+        "startChar": 3,
+        "endLine": 271,
+        "endChar": 13
+      },
+      "revId": "88eabbef7246d6c08c9b9b5591a9bb3a4695f373",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
