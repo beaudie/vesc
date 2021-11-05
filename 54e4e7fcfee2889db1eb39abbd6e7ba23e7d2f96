@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "2ba47bc4_3bdfb786",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 15
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1326275
+      },
+      "writtenOn": "2021-11-05T20:03:09Z",
+      "side": 1,
+      "message": "I\u0027m pretty confident the time difference is because we were never running on NVIDIA in the first place, just whatever intel chip was installed in the NVIDIA bots. I\u0027m going to land this, and follow up with some re-working of all the NVIDIA test expectations.",
+      "revId": "54e4e7fcfee2889db1eb39abbd6e7ba23e7d2f96",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}

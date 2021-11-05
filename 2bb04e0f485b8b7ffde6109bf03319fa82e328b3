@@ -51,6 +51,24 @@
       "message": "Nit: probably TODO(kpiddington).",
       "revId": "2bb04e0f485b8b7ffde6109bf03319fa82e328b3",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "74c658a6_4bed103b",
+        "filename": "src/libANGLE/renderer/metal/DisplayMtl.mm",
+        "patchSetId": 13
+      },
+      "lineNbr": 255,
+      "author": {
+        "id": 1326275
+      },
+      "writtenOn": "2021-11-05T20:03:09Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "93401868_bb79cefd",
+      "revId": "2bb04e0f485b8b7ffde6109bf03319fa82e328b3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
