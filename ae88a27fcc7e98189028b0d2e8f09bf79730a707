@@ -16,6 +16,144 @@
       "message": "LGTM, thanks for the test.",
       "revId": "ae88a27fcc7e98189028b0d2e8f09bf79730a707",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "a859e5e1_9fe82484",
+        "filename": "src/tests/perf_tests/MapBufferRange.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 2,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2021-11-05T15:44:48Z",
+      "side": 1,
+      "message": "nit: can update",
+      "range": {
+        "startLine": 2,
+        "startChar": 13,
+        "endLine": 2,
+        "endChar": 18
+      },
+      "revId": "ae88a27fcc7e98189028b0d2e8f09bf79730a707",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "bd0411ee_4eb3b435",
+        "filename": "src/tests/perf_tests/MapBufferRange.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 68,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2021-11-05T15:44:48Z",
+      "side": 1,
+      "message": "nit: please use a RAII type like std::vector",
+      "range": {
+        "startLine": 68,
+        "startChar": 13,
+        "endLine": 68,
+        "endChar": 24
+      },
+      "revId": "ae88a27fcc7e98189028b0d2e8f09bf79730a707",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "32bfcf9a_bf070b27",
+        "filename": "src/tests/perf_tests/MapBufferRange.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 72,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2021-11-05T15:44:48Z",
+      "side": 1,
+      "message": "you can return a const *, or a std::vector to be safer",
+      "range": {
+        "startLine": 72,
+        "startChar": 9,
+        "endLine": 72,
+        "endChar": 21
+      },
+      "revId": "ae88a27fcc7e98189028b0d2e8f09bf79730a707",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "82c55b19_5fae0950",
+        "filename": "src/tests/perf_tests/MapBufferRange.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 95,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2021-11-05T15:44:48Z",
+      "side": 1,
+      "message": "nit: maybe use UNREACHABLE()",
+      "range": {
+        "startLine": 95,
+        "startChar": 19,
+        "endLine": 95,
+        "endChar": 26
+      },
+      "revId": "ae88a27fcc7e98189028b0d2e8f09bf79730a707",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "8782fe52_57327a1b",
+        "filename": "src/tests/perf_tests/MapBufferRange.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 100,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2021-11-05T15:44:48Z",
+      "side": 1,
+      "message": "I feel like we already have utilities for this. Is this color data? We have GLColor::toNormalizedVector, maybe you could restructure this into using GLColor if it\u0027s color data.",
+      "range": {
+        "startLine": 100,
+        "startChar": 11,
+        "endLine": 100,
+        "endChar": 28
+      },
+      "revId": "ae88a27fcc7e98189028b0d2e8f09bf79730a707",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "0acf7e38_1c4147ba",
+        "filename": "src/tests/perf_tests/MapBufferRange.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 247,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2021-11-05T15:44:48Z",
+      "side": 1,
+      "message": "if update rate doesn\u0027t need to vary I suggest taking it out from the name to keep the test name a bit simpler",
+      "range": {
+        "startLine": 247,
+        "startChar": 26,
+        "endLine": 247,
+        "endChar": 36
+      },
+      "revId": "ae88a27fcc7e98189028b0d2e8f09bf79730a707",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
