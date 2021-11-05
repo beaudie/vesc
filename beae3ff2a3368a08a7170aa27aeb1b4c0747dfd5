@@ -1,6 +1,23 @@
 {
   "comments": [
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "5b17ebb2_6dfc8082",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1175714
+      },
+      "writtenOn": "2021-11-05T22:47:33Z",
+      "side": 1,
+      "message": "Folded into previous change as we found out that it can matter for real workloads.",
+      "revId": "beae3ff2a3368a08a7170aa27aeb1b4c0747dfd5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "ebb92d23_dabe7cd6",
@@ -24,6 +41,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "d529d1d5_944f665d",
+        "filename": "src/libANGLE/renderer/vulkan/BufferVk.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 658,
+      "author": {
+        "id": 1175714
+      },
+      "writtenOn": "2021-11-05T22:47:33Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "ebb92d23_dabe7cd6",
+      "range": {
+        "startLine": 656,
+        "startChar": 5,
+        "endLine": 658,
+        "endChar": 11
+      },
+      "revId": "beae3ff2a3368a08a7170aa27aeb1b4c0747dfd5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "be16cc8b_f9bbec98",
@@ -37,6 +78,30 @@
       "writtenOn": "2021-11-05T15:46:10Z",
       "side": 1,
       "message": "nit: avoid yoda",
+      "range": {
+        "startLine": 662,
+        "startChar": 5,
+        "endLine": 662,
+        "endChar": 31
+      },
+      "revId": "beae3ff2a3368a08a7170aa27aeb1b4c0747dfd5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "31d22cf7_86d77678",
+        "filename": "src/libANGLE/renderer/vulkan/BufferVk.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 662,
+      "author": {
+        "id": 1175714
+      },
+      "writtenOn": "2021-11-05T22:47:33Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "be16cc8b_f9bbec98",
       "range": {
         "startLine": 662,
         "startChar": 5,
