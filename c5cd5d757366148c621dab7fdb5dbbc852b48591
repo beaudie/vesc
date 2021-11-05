@@ -101,6 +101,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "6ef3a607_2392b590",
+        "filename": "src/libANGLE/renderer/vulkan/SurfaceVk.cpp",
+        "patchSetId": 12
+      },
+      "lineNbr": 321,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2021-11-05T18:52:55Z",
+      "side": 1,
+      "message": "Yes, you can make RGB pbuffers work by first knowing if real RGB is supported etc etc. Given the lack of users, I suggested removing support for now.",
+      "parentUuid": "e54f6d7f_c15ee46c",
+      "revId": "c5cd5d757366148c621dab7fdb5dbbc852b48591",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "fa1f2794_49c2f5fc",
         "filename": "src/tests/gl_tests/ClearTest.cpp",
         "patchSetId": 12
