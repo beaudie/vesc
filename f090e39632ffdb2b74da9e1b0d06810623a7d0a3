@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "157143eb_add14c5c",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 2118,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2021-11-05T15:56:59Z",
+      "side": 1,
+      "message": "This should probably be conditional to `mEnabledFeatures.pNext !\u003d nullptr`. That would effectively be a check for VkPhysicalDeviceFeatures2KHR being supported (otherwise chaining this is not valid IIRC)\n\nAnd why isn\u0027t AddToPNextChain ok (assuming the check for nullptr is added)?",
+      "revId": "f090e39632ffdb2b74da9e1b0d06810623a7d0a3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
