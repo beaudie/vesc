@@ -1,0 +1,73 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "cd9c937b_b9edea15",
+        "filename": "src/libANGLE/renderer/vulkan/BufferVk.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 687,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2021-11-05T19:39:29Z",
+      "side": 1,
+      "message": "I think better to only do this if range\u003c1/2.",
+      "range": {
+        "startLine": 687,
+        "startChar": 21,
+        "endLine": 687,
+        "endChar": 36
+      },
+      "revId": "dbc864f2db747813db67eb71cf69610e483e9b2d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "7ff5ca52_8d8b8cbc",
+        "filename": "src/libANGLE/renderer/vulkan/BufferVk.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 690,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2021-11-05T19:39:29Z",
+      "side": 1,
+      "message": "I think coding style ask for wrap it with \n{\n   mMapInvalidateRangeBuffer.init(static_cast\u003csize_t\u003e(length));\n}",
+      "range": {
+        "startLine": 690,
+        "startChar": 20,
+        "endLine": 690,
+        "endChar": 80
+      },
+      "revId": "dbc864f2db747813db67eb71cf69610e483e9b2d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "85c85ef9_9387307d",
+        "filename": "src/libANGLE/renderer/vulkan/BufferVk.h",
+        "patchSetId": 6
+      },
+      "lineNbr": 231,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2021-11-05T19:39:29Z",
+      "side": 1,
+      "message": "Do you need this? SHouldn\u0027t you able to just check if (mMapInvalidateRangeMappedPtr!\u003dnullptr)?",
+      "range": {
+        "startLine": 231,
+        "startChar": 9,
+        "endLine": 231,
+        "endChar": 34
+      },
+      "revId": "dbc864f2db747813db67eb71cf69610e483e9b2d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
