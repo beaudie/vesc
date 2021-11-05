@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ebb92d23_dabe7cd6",
+        "filename": "src/libANGLE/renderer/vulkan/BufferVk.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 658,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2021-11-05T15:46:10Z",
+      "side": 1,
+      "message": "nit: avoid yoda conditions, use {}",
+      "range": {
+        "startLine": 656,
+        "startChar": 5,
+        "endLine": 658,
+        "endChar": 11
+      },
+      "revId": "beae3ff2a3368a08a7170aa27aeb1b4c0747dfd5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "be16cc8b_f9bbec98",
+        "filename": "src/libANGLE/renderer/vulkan/BufferVk.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 662,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2021-11-05T15:46:10Z",
+      "side": 1,
+      "message": "nit: avoid yoda",
+      "range": {
+        "startLine": 662,
+        "startChar": 5,
+        "endLine": 662,
+        "endChar": 31
+      },
+      "revId": "beae3ff2a3368a08a7170aa27aeb1b4c0747dfd5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
