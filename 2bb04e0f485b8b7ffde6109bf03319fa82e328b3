@@ -18,6 +18,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "efb659f0_066992f5",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 13
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1326275
+      },
+      "writtenOn": "2021-11-05T14:09:48Z",
+      "side": 1,
+      "message": "Unfortunately it really looks like tests on NVIDIA are taking 5-10x longer with my patch. I\u0027m trying to reproduce to see if this is really true.",
+      "parentUuid": "b8b4f99a_5f9cb02d",
+      "revId": "2bb04e0f485b8b7ffde6109bf03319fa82e328b3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "93401868_bb79cefd",
