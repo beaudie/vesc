@@ -1,0 +1,174 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "261f899e_0f6f2db5",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 3
+      },
+      "lineNbr": 10,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2021-11-06T00:12:20Z",
+      "side": 1,
+      "message": "Possible to enumerate the tests either here, or in a linked bug?",
+      "revId": "c968b5addc9f1bb115014ac042f32eb26472081a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "1b067c76_e8d4c472",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 3
+      },
+      "lineNbr": 16,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2021-11-06T00:12:20Z",
+      "side": 1,
+      "message": "typo: triangle",
+      "revId": "c968b5addc9f1bb115014ac042f32eb26472081a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b8371a34_44894e3a",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 3
+      },
+      "lineNbr": 18,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2021-11-06T00:12:20Z",
+      "side": 1,
+      "message": "Does this fix:\n\nBug: angleproject:5325\n\n? If so can you please mention that bug, and if not could you make sure another is filed and referenced?",
+      "revId": "c968b5addc9f1bb115014ac042f32eb26472081a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "275a6171_63b117e5",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2021-11-06T00:12:20Z",
+      "side": 1,
+      "message": "Great work Kyle implementing this!\n\nA few comments on the CL. There are some considerable failures in the transform feedback tests, which may be related to one of the comments below.\n",
+      "revId": "c968b5addc9f1bb115014ac042f32eb26472081a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "36dd62cf_01e5e3a7",
+        "filename": "src/libANGLE/renderer/metal/ContextMtl.mm",
+        "patchSetId": 3
+      },
+      "lineNbr": 608,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2021-11-06T00:12:20Z",
+      "side": 1,
+      "message": "1) Is there any possibility mapReadOnly() will fail? If so, is any more error checking needed? (Only asking - I don\u0027t see any early-outs of mtl::Buffer::mapWithOpt.)\n\n2) Is it guaranteed these indices will be consumed by setupDraw? From what I see here:\nhttps://source.chromium.org/chromium/chromium/src/+/main:third_party/angle/src/libANGLE/renderer/metal/ContextMtl.mm;l\u003d1998?q\u003dsetupDraw%20f:ContextMtl.mm\n\n\"indices\" are only consumed if the context has client attributes enabled - which will never be the case for WebGL.\n\nHow thoroughly do the dEQP tests verify these code paths?",
+      "revId": "c968b5addc9f1bb115014ac042f32eb26472081a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "a60b8d1c_867853e1",
+        "filename": "src/libANGLE/renderer/metal/ContextMtl.mm",
+        "patchSetId": 3
+      },
+      "lineNbr": 2013,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2021-11-06T00:12:20Z",
+      "side": 1,
+      "message": "Typo here.",
+      "revId": "c968b5addc9f1bb115014ac042f32eb26472081a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "2b9f7a83_93762bf9",
+        "filename": "src/libANGLE/renderer/metal/shaders/gen_indices.metal",
+        "patchSetId": 3
+      },
+      "lineNbr": 138,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2021-11-06T00:12:20Z",
+      "side": 1,
+      "message": "Format comment (space after //).",
+      "revId": "c968b5addc9f1bb115014ac042f32eb26472081a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "343ecfa9_d188fd48",
+        "filename": "src/libANGLE/renderer/metal/shaders/gen_indices.metal",
+        "patchSetId": 3
+      },
+      "lineNbr": 142,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2021-11-06T00:12:20Z",
+      "side": 1,
+      "message": "Weird formatting. Did \"git cl format\" do this?",
+      "revId": "c968b5addc9f1bb115014ac042f32eb26472081a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "550012b6_e2948578",
+        "filename": "src/libANGLE/renderer/metal/shaders/rewrite_indices.metal",
+        "patchSetId": 3
+      },
+      "lineNbr": 325,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2021-11-06T00:12:20Z",
+      "side": 1,
+      "message": "Bad whitespace; please fix.",
+      "revId": "c968b5addc9f1bb115014ac042f32eb26472081a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ac288313_2e357694",
+        "filename": "src/libANGLE/renderer/metal/shaders/rewrite_indices.metal",
+        "patchSetId": 3
+      },
+      "lineNbr": 346,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2021-11-06T00:12:20Z",
+      "side": 1,
+      "message": "Why is this index skipped? Please explain in the comment.",
+      "revId": "c968b5addc9f1bb115014ac042f32eb26472081a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
