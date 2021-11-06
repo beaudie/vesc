@@ -742,7 +742,9 @@ angle::Result VertexArrayVk::syncDirtyAttrib(ContextVk *contextVk,
         if (anyVertexBufferConvertedOnGpu &&
             renderer->getFeatures().flushAfterVertexConversion.enabled)
         {
-            ANGLE_TRY(contextVk->flushImpl(nullptr));
+            ANGLE_TRY(contextVk->flushImpl(
+                nullptr,
+                "Render pass closed due to driver workaround after converting vertex attributes"));
         }
     }
     else

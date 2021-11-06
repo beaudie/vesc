@@ -94,7 +94,7 @@ angle::Result SyncHelper::initialize(ContextVk *contextVk, bool isEglSyncObject)
     //   (for example when a buffer is mapped).
     //
     retain(&contextVk->getResourceUseList());
-    return contextVk->flushImpl(nullptr);
+    return contextVk->flushImpl(nullptr, "Render pass closed due to sync object insertion");
 }
 
 angle::Result SyncHelper::clientWait(Context *context,
@@ -224,7 +224,8 @@ angle::Result SyncHelperNativeFence::initializeWithFd(ContextVk *contextVk, int 
       with the newly created sync object.
     */
     // Flush first because the fence comes after current pending set of commands.
-    ANGLE_TRY(contextVk->flushImpl(nullptr));
+    ANGLE_TRY(
+        contextVk->flushImpl(nullptr, "Render pass closed due to sync object with fd insertion"));
 
     retain(&contextVk->getResourceUseList());
 
@@ -274,7 +275,8 @@ angle::Result SyncHelperNativeFence::clientWait(Context *context,
 
     if (flushCommands && contextVk)
     {
-        ANGLE_TRY(contextVk->flushImpl(nullptr));
+        ANGLE_TRY(
+            contextVk->flushImpl(nullptr, "Render pass closed due to sync object client wait"));
     }
 
     VkResult status = VK_SUCCESS;
@@ -318,7 +320,7 @@ angle::Result SyncHelperNativeFence::serverWait(ContextVk *contextVk)
     ANGLE_VK_TRY(contextVk, waitSemaphore.get().importFd(device, importFdInfo));
 
     // Flush current work, block after current pending commands.
-    ANGLE_TRY(contextVk->flushImpl(nullptr));
+    ANGLE_TRY(contextVk->flushImpl(nullptr, "Render pass closed due to sync object server wait"));
 
     // Add semaphore to next submit job.
     contextVk->addWaitSemaphore(waitSemaphore.get().getHandle(),
