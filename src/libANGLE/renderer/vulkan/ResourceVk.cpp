@@ -28,7 +28,7 @@ angle::Result WaitForIdle(ContextVk *contextVk, const char *debugMessage, T *res
     // If there are pending commands for the resource, flush them.
     if (resource->usedInRecordedCommands())
     {
-        ANGLE_TRY(contextVk->flushImpl(nullptr));
+        ANGLE_TRY(contextVk->flushImpl(nullptr, debugMessage));
     }
 
     // Make sure the driver is done with the resource.
