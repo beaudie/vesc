@@ -69,7 +69,7 @@ angle::Result OverlayVk::init(const gl::Context *context, bool *successOut)
 
     mRefreshCulledWidgets = true;
 
-    ANGLE_TRY(contextVk->flushImpl(nullptr));
+    ANGLE_TRY(contextVk->flushImpl(nullptr, "Render pass closed due to creating Overlay font"));
     *successOut = true;
     return angle::Result::Continue;
 }

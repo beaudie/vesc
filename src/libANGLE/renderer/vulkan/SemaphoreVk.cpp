@@ -219,7 +219,8 @@ angle::Result SemaphoreVk::signal(gl::Context *context,
         ANGLE_TRY(contextVk->syncExternalMemory());
     }
 
-    ANGLE_TRY(contextVk->flushImpl(&mSemaphore));
+    ANGLE_TRY(
+        contextVk->flushImpl(&mSemaphore, "Render pass closed due to external semaphore signal"));
 
     // The external has asked for the semaphore to be signaled.  It will wait on this semaphore and
     // so we must ensure that the above flush (resulting in vkQueueSubmit) has actually been

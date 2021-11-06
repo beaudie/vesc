@@ -672,7 +672,9 @@ angle::Result BufferVk::mapRangeImpl(ContextVk *contextVk,
                 // If there are pending commands for the resource, flush them.
                 if (mBuffer->usedInRecordedCommands())
                 {
-                    ANGLE_TRY(contextVk->flushImpl(nullptr));
+                    ANGLE_TRY(contextVk->flushImpl(
+                        nullptr,
+                        "Render pass closed due to mapping buffer being written to by it"));
                 }
                 ANGLE_TRY(mBuffer->finishGPUWriteCommands(contextVk));
             }

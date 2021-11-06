@@ -399,9 +399,11 @@ class ContextVk : public ContextImpl, public vk::Context, public MultisampleText
 
     angle::Result onIndexBufferChange(const vk::BufferHelper *currentIndexBuffer);
 
-    angle::Result flushImpl(const vk::Semaphore *semaphore);
-    angle::Result flushAndGetSerial(const vk::Semaphore *semaphore, Serial *submitSerialOut);
-    angle::Result finishImpl();
+    angle::Result flushImpl(const vk::Semaphore *semaphore, const char *renderPassClosureReason);
+    angle::Result flushAndGetSerial(const vk::Semaphore *semaphore,
+                                    Serial *submitSerialOut,
+                                    const char *renderPassClosureReason);
+    angle::Result finishImpl(const char *renderPassClosureReason);
 
     void addWaitSemaphore(VkSemaphore semaphore, VkPipelineStageFlags stageMask);
 
@@ -567,7 +569,7 @@ class ContextVk : public ContextImpl, public vk::Context, public MultisampleText
                                   vk::CommandBuffer **commandBufferOut,
                                   bool *renderPassDescChangedOut);
     void startNextSubpass();
-    angle::Result flushCommandsAndEndRenderPass();
+    angle::Result flushCommandsAndEndRenderPass(const char *reason);
 
     angle::Result syncExternalMemory();
 
@@ -914,11 +916,11 @@ class ContextVk : public ContextImpl, public vk::Context, public MultisampleText
     // flushCommandsAndEndRenderPass() and flushDirtyGraphicsRenderPass() will set the dirty bits
     // directly or through the iterator respectively.  Outside those two functions, this shouldn't
     // be called directly.
-    angle::Result flushCommandsAndEndRenderPassImpl();
+    angle::Result flushCommandsAndEndRenderPassImpl(const char *reason);
     angle::Result flushDirtyGraphicsRenderPass(DirtyBits::Iterator *dirtyBitsIterator,
                                                DirtyBits dirtyBitMask);
 
-    void onRenderPassFinished();
+    angle::Result onRenderPassFinished(const char *reason);
 
     void initIndexTypeMap();
 
@@ -1195,7 +1197,8 @@ ANGLE_INLINE angle::Result ContextVk::endRenderPassIfTransformFeedbackBuffer(
         return angle::Result::Continue;
     }
 
-    return flushCommandsAndEndRenderPass();
+    return flushCommandsAndEndRenderPass(
+        "Render pass closed due to transform feedback buffer use as vertex/index input");
 }
 
 ANGLE_INLINE angle::Result ContextVk::onIndexBufferChange(
