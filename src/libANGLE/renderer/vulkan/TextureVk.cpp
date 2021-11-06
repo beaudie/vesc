@@ -1693,7 +1693,7 @@ angle::Result TextureVk::copyImageDataToBufferAndGetData(ContextVk *contextVk,
                                             &sourceCopyOffsets, outDataPtr));
 
     // Explicitly finish. If new use cases arise where we don't want to block we can change this.
-    ANGLE_TRY(contextVk->finishImpl());
+    ANGLE_TRY(contextVk->finishImpl("Render pass closed due to CPU fallback in texture operation"));
 
     return angle::Result::Continue;
 }
@@ -2089,10 +2089,7 @@ angle::Result TextureVk::reinitImageAsRenderable(ContextVk *contextVk,
         return angle::Result::Continue;
     }
 
-    ANGLE_VK_PERF_WARNING(contextVk, GL_DEBUG_SEVERITY_LOW,
-                          "Copying data due to texture format fallback");
-
-    // Make sure the source is initialized and it's staged updates are flushed.
+    // Make sure the source is initialized and its staged updates are flushed.
     ANGLE_TRY(flushImageStagedUpdates(contextVk));
 
     const angle::Format &srcFormat = mImage->getActualFormat();
@@ -2104,6 +2101,9 @@ angle::Result TextureVk::reinitImageAsRenderable(ContextVk *contextVk,
     // staged updates that we just staged inside the loop which is wrong.
     if (levelCount == 1 && layerCount == 1)
     {
+        ANGLE_VK_PERF_WARNING(contextVk, GL_DEBUG_SEVERITY_LOW,
+                              "Copying image data due to texture format fallback");
+
         ASSERT(CanCopyWithDraw(renderer, mImage->getActualFormatID(), mImage->getTilingMode(),
                                format.getActualImageFormatID(getRequiredImageAccess()),
                                getTilingMode()));
@@ -2126,6 +2126,9 @@ angle::Result TextureVk::reinitImageAsRenderable(ContextVk *contextVk,
             continue;
         }
 
+        ANGLE_VK_PERF_WARNING(contextVk, GL_DEBUG_SEVERITY_HIGH,
+                              "GPU stall due to texture format fallback");
+
         gl::Box sourceBox(gl::kOffsetZero, mImage->getLevelExtents(levelVk));
         // copy and stage entire layer
         const gl::ImageIndex index =
@@ -2142,7 +2145,8 @@ angle::Result TextureVk::reinitImageAsRenderable(ContextVk *contextVk,
 
         // Explicitly finish. If new use cases arise where we don't want to block we can change
         // this.
-        ANGLE_TRY(contextVk->finishImpl());
+        ANGLE_TRY(contextVk->finishImpl(
+            "Render pass closed due to reformatting texture to a renderable fallback"));
 
         size_t dstBufferSize = sourceBox.width * sourceBox.height * sourceBox.depth *
                                dstFormat.pixelBytes * layerCount;

@@ -363,12 +363,21 @@ void ContextVk::flushDescriptorSetUpdates()
     mDescriptorImageInfos.clear();
 }
 
-ANGLE_INLINE void ContextVk::onRenderPassFinished()
+ANGLE_INLINE angle::Result ContextVk::onRenderPassFinished(const char *reason)
 {
     pauseRenderPassQueriesIfActive();
 
+    if (mRenderPassCommandBuffer != nullptr && reason != nullptr)
+    {
+        // If reason is specified, add it to the command buffer right before ending the render pass,
+        // so it will show up in GPU debuggers.
+        ANGLE_TRY(insertEventMarker(0, reason));
+    }
+
     mRenderPassCommandBuffer = nullptr;
     mGraphicsDirtyBits.set(DIRTY_BIT_RENDER_PASS);
+
+    return angle::Result::Continue;
 }
 
 ContextVk::DriverUniformsDescriptorSet::DriverUniformsDescriptorSet()
@@ -586,7 +595,7 @@ void ContextVk::onDestroy(const gl::Context *context)
     mIncompleteTextures.onDestroy(context);
 
     // Flush and complete current outstanding work before destruction.
-    (void)finishImpl();
+    (void)finishImpl("Render pass closed due to context destruction");
 
     VkDevice device = getDevice();
 
@@ -810,12 +819,12 @@ angle::Result ContextVk::flush(const gl::Context *context)
         return angle::Result::Continue;
     }
 
-    return flushImpl(nullptr);
+    return flushImpl(nullptr, "Render pass closed due to glFlush()");
 }
 
 angle::Result ContextVk::finish(const gl::Context *context)
 {
-    return finishImpl();
+    return finishImpl("Render pass closed due to glFinish()");
 }
 
 angle::Result ContextVk::setupDraw(const gl::Context *context,
@@ -974,7 +983,9 @@ angle::Result ContextVk::setupIndirectDraw(const gl::Context *context,
     // feedback.
     if (mCurrentTransformFeedbackBuffers.contains(indirectBuffer))
     {
-        ANGLE_TRY(flushCommandsAndEndRenderPass());
+        ANGLE_TRY(flushCommandsAndEndRenderPass(
+            "Render pass closed due to indirect draw buffer previously used as transform feedback "
+            "output in render pass"));
     }
 
     ANGLE_TRY(setupDraw(context, mode, firstVertex, vertexCount, instanceCount,
@@ -1249,7 +1260,8 @@ angle::Result ContextVk::handleDirtyMemoryBarrierImpl(DirtyBits::Iterator *dirty
         }
         else
         {
-            return flushCommandsAndEndRenderPass();
+            return flushCommandsAndEndRenderPass(
+                "Render pass closed due to glMemoryBarrier before storage output in render pass");
         }
     }
 
@@ -2162,7 +2174,7 @@ angle::Result ContextVk::submitFrame(const vk::Semaphore *signalSemaphore, Seria
                                      getShareGroupVk()->releaseResourceUseLists(),
                                      std::move(mCurrentGarbage), &mCommandPool, submitSerialOut));
 
-    onRenderPassFinished();
+    ANGLE_TRY(onRenderPassFinished(nullptr));
     mComputeDirtyBits |= mNewComputeCommandBufferDirtyBits;
 
     if (mGpuEventsEnabled)
@@ -3468,7 +3480,8 @@ angle::Result ContextVk::invalidateProgramExecutableHelper(const gl::Context *co
         if (mLastProgramUsesFramebufferFetch != executable->usesFramebufferFetch())
         {
             mLastProgramUsesFramebufferFetch = executable->usesFramebufferFetch();
-            ANGLE_TRY(flushCommandsAndEndRenderPass());
+            ANGLE_TRY(flushCommandsAndEndRenderPass(
+                "Render pass closed due to framebuffer fetch emulation"));
 
             ASSERT(mDrawFramebuffer);
             mDrawFramebuffer->onSwitchProgramFramebufferFetch(this,
@@ -3682,7 +3695,8 @@ angle::Result ContextVk::syncState(const gl::Context *context,
                 // as some optimizations in non-draw commands require the render pass to remain
                 // open, such as invalidate or blit. Note that we always start a new command buffer
                 // because we currently can only support one open RenderPass at a time.
-                onRenderPassFinished();
+                ANGLE_TRY(
+                    onRenderPassFinished("Render pass closed due to framebuffer binding change"));
                 if (mRenderer->getFeatures().preferSubmitAtFBOBoundary.enabled)
                 {
                     // This will behave as if user called glFlush, but the actual flush will be
@@ -3941,7 +3955,7 @@ angle::Result ContextVk::onMakeCurrent(const gl::Context *context)
 
 angle::Result ContextVk::onUnMakeCurrent(const gl::Context *context)
 {
-    ANGLE_TRY(flushImpl(nullptr));
+    ANGLE_TRY(flushImpl(nullptr, "Render pass closed due to context change"));
     mCurrentWindowSurface = nullptr;
     return angle::Result::Continue;
 }
@@ -4289,7 +4303,7 @@ angle::Result ContextVk::onFramebufferChange(FramebufferVk *framebufferVk, gl::C
     // Always consider the render pass finished.  FramebufferVk::syncState (caller of this function)
     // normally closes the render pass, except for blit to allow an optimization.  The following
     // code nevertheless must treat the render pass closed.
-    onRenderPassFinished();
+    ANGLE_TRY(onRenderPassFinished("Render pass closed due to framebuffer change"));
 
     // Ensure that the pipeline description is updated.
     if (mGraphicsPipelineDesc->getRasterizationSamples() !=
@@ -4398,7 +4412,9 @@ angle::Result ContextVk::onBeginTransformFeedback(
 
     if (shouldEndRenderPass)
     {
-        ANGLE_TRY(flushCommandsAndEndRenderPass());
+        ANGLE_TRY(
+            flushCommandsAndEndRenderPass("Render pass closed due to buffer use as transform "
+                                          "feedback output after prior use in render pass"));
     }
 
     populateTransformFeedbackBufferSet(bufferCount, buffers);
@@ -4444,7 +4460,8 @@ angle::Result ContextVk::onPauseTransformFeedback()
         // settings in the render pass.
         if (mRenderPassCommands->isTransformFeedbackActiveUnpaused())
         {
-            return flushCommandsAndEndRenderPass();
+            return flushCommandsAndEndRenderPass(
+                "Render pass closed due to transform feedback pause");
         }
     }
     else if (getFeatures().emulateTransformFeedback.enabled)
@@ -4512,7 +4529,9 @@ angle::Result ContextVk::dispatchComputeIndirect(const gl::Context *context, GLi
     // feedback.
     if (mCurrentTransformFeedbackBuffers.contains(&buffer))
     {
-        ANGLE_TRY(flushCommandsAndEndRenderPass());
+        ANGLE_TRY(flushCommandsAndEndRenderPass(
+            "Render pass closed due to indirect dispatch buffer previously used as transform "
+            "feedback output in render pass"));
     }
 
     ANGLE_TRY(setupDispatch(context));
@@ -4589,7 +4608,8 @@ angle::Result ContextVk::memoryBarrier(const gl::Context *context, GLbitfield ba
     if (mRenderPassCommands->hasShaderStorageOutput())
     {
         // Break the render pass if necessary as future non-draw commands can't know if they should.
-        ANGLE_TRY(flushCommandsAndEndRenderPass());
+        ANGLE_TRY(flushCommandsAndEndRenderPass(
+            "Render pass closed due to glMemoryBarrier after storage output in render pass"));
     }
     else if (mOutsideRenderPassCommands->hasShaderStorageOutput())
     {
@@ -5078,7 +5098,9 @@ angle::Result ContextVk::updateActiveTextures(const gl::Context *context, gl::Co
                 {
                     // To enter depth feedback loop, we must flush and start a new renderpass.
                     // Otherwise it will stick with writable layout and cause validation error.
-                    ANGLE_TRY(flushCommandsAndEndRenderPass());
+                    ANGLE_TRY(
+                        flushCommandsAndEndRenderPass("Render pass closed due to depth/stencil "
+                                                      "attachment use under feedback loop"));
                 }
                 else
                 {
@@ -5279,14 +5301,16 @@ bool ContextVk::hasRecordedCommands()
     return !mOutsideRenderPassCommands->empty() || mRenderPassCommands->started();
 }
 
-angle::Result ContextVk::flushImpl(const vk::Semaphore *signalSemaphore)
+angle::Result ContextVk::flushImpl(const vk::Semaphore *signalSemaphore,
+                                   const char *renderPassClosureReason)
 {
     Serial unusedSerial;
-    return flushAndGetSerial(signalSemaphore, &unusedSerial);
+    return flushAndGetSerial(signalSemaphore, &unusedSerial, renderPassClosureReason);
 }
 
 angle::Result ContextVk::flushAndGetSerial(const vk::Semaphore *signalSemaphore,
-                                           Serial *submitSerialOut)
+                                           Serial *submitSerialOut,
+                                           const char *renderPassClosureReason)
 {
     ANGLE_TRACE_EVENT0("gpu.angle", "ContextVk::flushImpl");
 
@@ -5295,7 +5319,7 @@ angle::Result ContextVk::flushAndGetSerial(const vk::Semaphore *signalSemaphore,
     mHasDeferredFlush = false;
 
     // Avoid calling vkQueueSubmit() twice, since submitFrame() below will do that.
-    ANGLE_TRY(flushCommandsAndEndRenderPassWithoutQueueSubmit());
+    ANGLE_TRY(flushCommandsAndEndRenderPassWithoutQueueSubmit(renderPassClosureReason));
 
     if (mIsAnyHostVisibleBufferWritten)
     {
@@ -5366,11 +5390,11 @@ angle::Result ContextVk::flushAndGetSerial(const vk::Semaphore *signalSemaphore,
     return angle::Result::Continue;
 }
 
-angle::Result ContextVk::finishImpl()
+angle::Result ContextVk::finishImpl(const char *renderPassClosureReason)
 {
     ANGLE_TRACE_EVENT0("gpu.angle", "ContextVk::finishImpl");
 
-    ANGLE_TRY(flushImpl(nullptr));
+    ANGLE_TRY(flushImpl(nullptr, renderPassClosureReason));
     ANGLE_TRY(mRenderer->finish(this, hasProtectedContent()));
 
     clearAllGarbage();
@@ -5578,7 +5602,8 @@ angle::Result ContextVk::onBufferReleaseToExternal(const vk::BufferHelper &buffe
 {
     if (mRenderPassCommands->usesBuffer(buffer))
     {
-        return flushCommandsAndEndRenderPass();
+        return flushCommandsAndEndRenderPass(
+            "Render pass closed due to buffer (used by render pass) release to external");
     }
     return angle::Result::Continue;
 }
@@ -5587,7 +5612,8 @@ angle::Result ContextVk::onImageReleaseToExternal(const vk::ImageHelper &image)
 {
     if (IsRenderPassStartedAndUsesImage(*mRenderPassCommands, image))
     {
-        return flushCommandsAndEndRenderPass();
+        return flushCommandsAndEndRenderPass(
+            "Render pass closed due to image (used by render pass) release to external");
     }
     return angle::Result::Continue;
 }
@@ -5602,8 +5628,9 @@ angle::Result ContextVk::beginNewRenderPass(
     const vk::PackedClearValuesArray &clearValues,
     vk::CommandBuffer **commandBufferOut)
 {
-    // Next end any currently outstanding renderPass
-    ANGLE_TRY(flushCommandsAndEndRenderPass());
+    // Next end any currently outstanding render pass.  The render pass is normally closed before
+    // reaching here for various reasons, except typically when UtilsVk needs to start one.
+    ANGLE_TRY(flushCommandsAndEndRenderPass("Render pass closed due to new render pass starting"));
 
     mPerfCounters.renderPasses++;
     return mRenderPassCommands->beginRenderPass(
@@ -5684,7 +5711,8 @@ uint32_t ContextVk::getCurrentViewCount() const
     return drawFBO->getRenderPassDesc().viewCount();
 }
 
-angle::Result ContextVk::flushCommandsAndEndRenderPassImpl(QueueSubmitType queueSubmit)
+angle::Result ContextVk::flushCommandsAndEndRenderPassImpl(QueueSubmitType queueSubmit,
+                                                           const char *reason)
 {
     // Ensure we flush the RenderPass *after* the prior commands.
     ANGLE_TRY(flushOutsideRenderPassCommands());
@@ -5692,8 +5720,7 @@ angle::Result ContextVk::flushCommandsAndEndRenderPassImpl(QueueSubmitType queue
 
     if (!mRenderPassCommands->started())
     {
-        onRenderPassFinished();
-        return angle::Result::Continue;
+        return onRenderPassFinished(nullptr);
     }
 
     // Set dirty bits if render pass was open (and thus will be closed).
@@ -5716,7 +5743,7 @@ angle::Result ContextVk::flushCommandsAndEndRenderPassImpl(QueueSubmitType queue
         populateTransformFeedbackBufferSet(xfbBufferCount, transformFeedbackVk->getBufferHelpers());
     }
 
-    onRenderPassFinished();
+    ANGLE_TRY(onRenderPassFinished(reason));
 
     if (mGpuEventsEnabled)
     {
@@ -5756,20 +5783,20 @@ angle::Result ContextVk::flushCommandsAndEndRenderPassImpl(QueueSubmitType queue
     if (mHasDeferredFlush && queueSubmit == QueueSubmitType::PerformQueueSubmit)
     {
         // If we have deferred glFlush call in the middle of renderpass, flush them now.
-        ANGLE_TRY(flushImpl(nullptr));
+        ANGLE_TRY(flushImpl(nullptr, nullptr));
     }
 
     return angle::Result::Continue;
 }
 
-angle::Result ContextVk::flushCommandsAndEndRenderPass()
+angle::Result ContextVk::flushCommandsAndEndRenderPass(const char *reason)
 {
-    return flushCommandsAndEndRenderPassImpl(QueueSubmitType::PerformQueueSubmit);
+    return flushCommandsAndEndRenderPassImpl(QueueSubmitType::PerformQueueSubmit, reason);
 }
 
-angle::Result ContextVk::flushCommandsAndEndRenderPassWithoutQueueSubmit()
+angle::Result ContextVk::flushCommandsAndEndRenderPassWithoutQueueSubmit(const char *reason)
 {
-    return flushCommandsAndEndRenderPassImpl(QueueSubmitType::SkipQueueSubmit);
+    return flushCommandsAndEndRenderPassImpl(QueueSubmitType::SkipQueueSubmit, reason);
 }
 
 angle::Result ContextVk::flushDirtyGraphicsRenderPass(DirtyBits::Iterator *dirtyBitsIterator,
@@ -5777,7 +5804,7 @@ angle::Result ContextVk::flushDirtyGraphicsRenderPass(DirtyBits::Iterator *dirty
 {
     ASSERT(mRenderPassCommands->started());
 
-    ANGLE_TRY(flushCommandsAndEndRenderPassImpl(QueueSubmitType::PerformQueueSubmit));
+    ANGLE_TRY(flushCommandsAndEndRenderPassImpl(QueueSubmitType::PerformQueueSubmit, nullptr));
 
     // Set dirty bits that need processing on new render pass on the dirty bits iterator that's
     // being processed right now.
@@ -6158,7 +6185,8 @@ angle::Result ContextVk::updateRenderPassDepthStencilAccess()
             // renderpass here. Otherwise, updating it to writeable layout will produce a writable
             // feedback loop that is illegal in vulkan and will trigger validation errors that depth
             // texture is using the writable layout.
-            ANGLE_TRY(flushCommandsAndEndRenderPass());
+            ANGLE_TRY(flushCommandsAndEndRenderPass(
+                "Render pass closed due to depth/stencil attachment write after feedback loop"));
             // Clear read-only depth feedback mode.
             mDrawFramebuffer->setReadOnlyDepthFeedbackLoopMode(false);
         }
@@ -6260,7 +6288,9 @@ angle::Result ContextVk::flushCommandBuffersIfNecessary(const vk::CommandBufferA
         // the render pass.  http://anglebug.com/4984
         if (IsRenderPassStartedAndUsesImage(*mRenderPassCommands, *imageAccess.image))
         {
-            return flushCommandsAndEndRenderPass();
+            return flushCommandsAndEndRenderPass(
+                "Render pass closed due to non-render-pass read of image that was used in render "
+                "pass");
         }
     }
 
@@ -6269,7 +6299,9 @@ angle::Result ContextVk::flushCommandBuffersIfNecessary(const vk::CommandBufferA
     {
         if (IsRenderPassStartedAndUsesImage(*mRenderPassCommands, *imageWrite.access.image))
         {
-            return flushCommandsAndEndRenderPass();
+            return flushCommandsAndEndRenderPass(
+                "Render pass closed due to non-render-pass write of image that was used in render "
+                "pass");
         }
     }
 
@@ -6280,7 +6312,9 @@ angle::Result ContextVk::flushCommandBuffersIfNecessary(const vk::CommandBufferA
     {
         if (mRenderPassCommands->usesBufferForWrite(*bufferAccess.buffer))
         {
-            return flushCommandsAndEndRenderPass();
+            return flushCommandsAndEndRenderPass(
+                "Render pass closed due to non-render-pass read of buffer that was written to in "
+                "render pass");
         }
         else if (mOutsideRenderPassCommands->usesBufferForWrite(*bufferAccess.buffer))
         {
@@ -6293,7 +6327,9 @@ angle::Result ContextVk::flushCommandBuffersIfNecessary(const vk::CommandBufferA
     {
         if (mRenderPassCommands->usesBuffer(*bufferAccess.buffer))
         {
-            return flushCommandsAndEndRenderPass();
+            return flushCommandsAndEndRenderPass(
+                "Render pass closed due to non-render-pass write of buffer that was used in render "
+                "pass");
         }
         else if (mOutsideRenderPassCommands->usesBuffer(*bufferAccess.buffer))
         {
@@ -6349,7 +6385,9 @@ angle::Result ContextVk::endRenderPassIfComputeReadAfterTransformFeedbackWrite()
                 vk::GetImpl(bufferBinding.get())->getBufferAndOffset(&bufferOffset);
             if (mCurrentTransformFeedbackBuffers.contains(&buffer))
             {
-                return flushCommandsAndEndRenderPass();
+                return flushCommandsAndEndRenderPass(
+                    "Render pass closed due to compute read of buffer previously used as transform "
+                    "feedback output in render pass");
             }
         }
     }
@@ -6385,7 +6423,9 @@ angle::Result ContextVk::endRenderPassIfComputeReadAfterAttachmentWrite()
 
         if (IsRenderPassStartedAndUsesImage(*mRenderPassCommands, image))
         {
-            return flushCommandsAndEndRenderPass();
+            return flushCommandsAndEndRenderPass(
+                "Render pass closed due to compute read of image previously used as framebuffer "
+                "attachment in render pass");
         }
     }
 
