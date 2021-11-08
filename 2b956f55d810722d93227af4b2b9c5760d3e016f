@@ -229,6 +229,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "5b3a0515_a086fec4",
+        "filename": "src/libANGLE/renderer/vulkan/BufferVk.cpp",
+        "patchSetId": 8
+      },
+      "lineNbr": 780,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2021-11-08T20:04:19Z",
+      "side": 1,
+      "message": "Since right now you only get to here if invalidate range is \u003c1/2, It is a bit arguable we should go down ghost path versus stagedUpdate. It does seems bad if we have to clone entire buffer if user only update very small portion of data, even though I have picked the other direction for setDataImpl. So I am also okay with this. One potential thing we could do in future is that we actually stage it (right now we immediately issue vkCmdCopyBuffer) and then at the time buffer is been referenced, we check if GPU is finished referencing it or not and if yes then use cpu memcpy instead of VkCmdCopyBuffer. Because it is deferred, there is a higher chance we will able to use CPU to do memcpy, which will satisfy both needs (no barrier and less data copy).",
+      "parentUuid": "8acdf663_7a94fac5",
+      "range": {
+        "startLine": 780,
+        "startChar": 18,
+        "endLine": 780,
+        "endChar": 30
+      },
+      "revId": "2b956f55d810722d93227af4b2b9c5760d3e016f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "5890217d_212a1501",
