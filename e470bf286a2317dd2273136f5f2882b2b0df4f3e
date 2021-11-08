@@ -16,6 +16,24 @@
       "message": "I don\u0027t see how this wintrace is a related error. Also it disappears with next commit.",
       "revId": "e470bf286a2317dd2273136f5f2882b2b0df4f3e",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "fa4a69a3_30c56fa0",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 11
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2021-11-08T16:09:43Z",
+      "side": 1,
+      "message": "It\u0027s probably a matter of replay expectations. It complains about unexpected expectations for some tests I very recently added:\n\n[INFO/MainProcess] Failure: Obtained 5 results that differ from expectation:\n[INFO/MainProcess] \n[INFO/MainProcess] Unexpected \u0027Skipped\u0027 (5):\n[INFO/MainProcess]      Texture2DTest.UploadThenFSThenVSThenNewRPThenFS/ES2_Vulkan_SwiftShader Skipped (expected Pass or is new test)\n[INFO/MainProcess]      Texture2DTest.UploadThenFSThenNewRPThenFSThenVS/ES2_Vulkan_SwiftShader Skipped (expected Pass or is new test)\n[INFO/MainProcess]      Texture2DTest.UploadThenFSThenNewRPThenVSThenFS/ES2_Vulkan_SwiftShader Skipped (expected Pass or is new test)\n[INFO/MainProcess]      Texture2DTest.UploadThenFSThenNewRPThenVS/ES2_Vulkan_SwiftShader Skipped (expected Pass or is new test)\n[INFO/MainProcess]      Texture2DTest.UploadThenFSThenVS/ES2_Vulkan_SwiftShader Skipped (expected Pass or is new test)",
+      "parentUuid": "00fe2d96_1b1695db",
+      "revId": "e470bf286a2317dd2273136f5f2882b2b0df4f3e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
