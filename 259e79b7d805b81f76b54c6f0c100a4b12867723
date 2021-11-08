@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "a602ed09_3d562ad6",
+        "filename": "src/libANGLE/Context.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 4145,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2021-11-08T21:50:42Z",
+      "side": 1,
+      "message": "nit: modifying parameter variables is a bit error prone, please use a local copy",
+      "range": {
+        "startLine": 4145,
+        "startChar": 43,
+        "endLine": 4145,
+        "endChar": 58
+      },
+      "revId": "259e79b7d805b81f76b54c6f0c100a4b12867723",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
