@@ -22,6 +22,30 @@
       },
       "revId": "d2f233b479f947081f38f4f40ffbb35ef49a6361",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "341f4920_837055af",
+        "filename": "src/libANGLE/renderer/vulkan/BufferVk.cpp",
+        "patchSetId": 9
+      },
+      "lineNbr": 784,
+      "author": {
+        "id": 1175714
+      },
+      "writtenOn": "2021-11-08T22:09:01Z",
+      "side": 1,
+      "message": "I feel like I\u0027m not getting something here; the shadow buffer\u0027s size is only the mState.getMapLength(), so it should still be less work if the length of the map is small. map invalidate shadow buffer is a dynamic shadow buffer, not a dynamic buffer. Also, if we used a dynamic buffer and wanted to GPU copy, the dynamic buffer itself might be in use for a long time (recursively re-entering the original problem), making us need to track all upload ranges dynamically and maintaining a list of dynamic buffer uploads etc. I\u0027d rather wait until we landed more of our planned BufferVk refactorings before attempting something like that.",
+      "parentUuid": "865af8f3_3e6e484c",
+      "range": {
+        "startLine": 780,
+        "startChar": 0,
+        "endLine": 784,
+        "endChar": 76
+      },
+      "revId": "d2f233b479f947081f38f4f40ffbb35ef49a6361",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
