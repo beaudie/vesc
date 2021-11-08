@@ -88,6 +88,24 @@
       "parentUuid": "d3090da6_2d4dc741",
       "revId": "9465659047cef00a393fc7f338817f8b2886af8f",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "243c2597_afca3b17",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 5
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2021-11-08T15:57:01Z",
+      "side": 1,
+      "message": "This approach would work for me.  Using my earlier example, the app would submit:\n\n    glBindBuffer(GL_ARRAY_BUFFER, gBufferMap2[774]);\n\nand we would turn that into:\n\n    InjectBufferID(774);\n    glBindBuffer(GL_ARRAY_BUFFER, gBufferMap2[774]);\n    \nand we would only see new fixture calls for oddball gen-on-bind instances.",
+      "parentUuid": "32d795c7_4f327cf5",
+      "revId": "9465659047cef00a393fc7f338817f8b2886af8f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
