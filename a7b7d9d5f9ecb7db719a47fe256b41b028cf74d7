@@ -16,6 +16,24 @@
       "message": "There is a color clear test in linux here. Could just combine this commit with next since it has no failures.",
       "revId": "a7b7d9d5f9ecb7db719a47fe256b41b028cf74d7",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "c785807f_adda8d92",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 9
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2021-11-08T16:04:49Z",
+      "side": 1,
+      "message": "Yes I think it\u0027s better if this and next commit are merged. The next commit is pretty small now (after the suggested cleanup)",
+      "parentUuid": "90f42945_c7fc63ac",
+      "revId": "a7b7d9d5f9ecb7db719a47fe256b41b028cf74d7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
