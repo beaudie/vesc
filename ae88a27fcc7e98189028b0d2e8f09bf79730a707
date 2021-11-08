@@ -37,6 +37,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "e38a2461_4edc4730",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1175714
+      },
+      "writtenOn": "2021-11-08T18:08:47Z",
+      "side": 1,
+      "message": "This is based on the existing BufferSubData benchmark which updates vertex data. I think it\u0027s also fine to update vertex data; UBO would require a fancier shader and SSBO tests compute, which might have different characteristic than vertex upload which is a use case we know we\u0027ll have to use and we can easily make it use all the data, etc.",
+      "parentUuid": "ceac4290_022f2686",
+      "revId": "ae88a27fcc7e98189028b0d2e8f09bf79730a707",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "a859e5e1_9fe82484",
         "filename": "src/tests/perf_tests/MapBufferRange.cpp",
         "patchSetId": 2
@@ -48,6 +66,30 @@
       "writtenOn": "2021-11-05T15:44:48Z",
       "side": 1,
       "message": "nit: can update",
+      "range": {
+        "startLine": 2,
+        "startChar": 13,
+        "endLine": 2,
+        "endChar": 18
+      },
+      "revId": "ae88a27fcc7e98189028b0d2e8f09bf79730a707",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "9b1e090a_4ecac39f",
+        "filename": "src/tests/perf_tests/MapBufferRange.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 2,
+      "author": {
+        "id": 1175714
+      },
+      "writtenOn": "2021-11-08T18:08:47Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "a859e5e1_9fe82484",
       "range": {
         "startLine": 2,
         "startChar": 13,
@@ -81,6 +123,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "d243ff02_ef52efda",
+        "filename": "src/tests/perf_tests/MapBufferRange.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 32,
+      "author": {
+        "id": 1175714
+      },
+      "writtenOn": "2021-11-08T18:08:47Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "d2bf2cbe_70d6b1be",
+      "range": {
+        "startLine": 31,
+        "startChar": 0,
+        "endLine": 32,
+        "endChar": 35
+      },
+      "revId": "ae88a27fcc7e98189028b0d2e8f09bf79730a707",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "bd0411ee_4eb3b435",
@@ -94,6 +160,30 @@
       "writtenOn": "2021-11-05T15:44:48Z",
       "side": 1,
       "message": "nit: please use a RAII type like std::vector",
+      "range": {
+        "startLine": 68,
+        "startChar": 13,
+        "endLine": 68,
+        "endChar": 24
+      },
+      "revId": "ae88a27fcc7e98189028b0d2e8f09bf79730a707",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "ad666477_1fb2dc07",
+        "filename": "src/tests/perf_tests/MapBufferRange.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 68,
+      "author": {
+        "id": 1175714
+      },
+      "writtenOn": "2021-11-08T18:08:47Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "bd0411ee_4eb3b435",
       "range": {
         "startLine": 68,
         "startChar": 13,
@@ -127,6 +217,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "b53a0345_7d733a15",
+        "filename": "src/tests/perf_tests/MapBufferRange.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 72,
+      "author": {
+        "id": 1175714
+      },
+      "writtenOn": "2021-11-08T18:08:47Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "32bfcf9a_bf070b27",
+      "range": {
+        "startLine": 72,
+        "startChar": 9,
+        "endLine": 72,
+        "endChar": 21
+      },
+      "revId": "ae88a27fcc7e98189028b0d2e8f09bf79730a707",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "82c55b19_5fae0950",
@@ -140,6 +254,30 @@
       "writtenOn": "2021-11-05T15:44:48Z",
       "side": 1,
       "message": "nit: maybe use UNREACHABLE()",
+      "range": {
+        "startLine": 95,
+        "startChar": 19,
+        "endLine": 95,
+        "endChar": 26
+      },
+      "revId": "ae88a27fcc7e98189028b0d2e8f09bf79730a707",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "ea00d85d_fdb53231",
+        "filename": "src/tests/perf_tests/MapBufferRange.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 95,
+      "author": {
+        "id": 1175714
+      },
+      "writtenOn": "2021-11-08T18:08:47Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "82c55b19_5fae0950",
       "range": {
         "startLine": 95,
         "startChar": 19,
@@ -173,6 +311,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "96997d70_6d5391f1",
+        "filename": "src/tests/perf_tests/MapBufferRange.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 100,
+      "author": {
+        "id": 1175714
+      },
+      "writtenOn": "2021-11-08T18:08:47Z",
+      "side": 1,
+      "message": "It\u0027s vertex data. It\u0027s based on the existing BufferSubData perf test.",
+      "parentUuid": "8782fe52_57327a1b",
+      "range": {
+        "startLine": 100,
+        "startChar": 11,
+        "endLine": 100,
+        "endChar": 28
+      },
+      "revId": "ae88a27fcc7e98189028b0d2e8f09bf79730a707",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "b6d4a613_6eeed4b5",
@@ -190,6 +352,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "05bc433a_3b0e7527",
+        "filename": "src/tests/perf_tests/MapBufferRange.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 172,
+      "author": {
+        "id": 1175714
+      },
+      "writtenOn": "2021-11-08T18:08:47Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "b6d4a613_6eeed4b5",
+      "revId": "ae88a27fcc7e98189028b0d2e8f09bf79730a707",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "6e5e365f_4b57f85e",
@@ -203,6 +383,30 @@
       "writtenOn": "2021-11-08T04:20:23Z",
       "side": 1,
       "message": "Maybe \"unknown\" instead to be more obvious we don\u0027t know what this is.   Or just UNREACHABLE().",
+      "range": {
+        "startLine": 242,
+        "startChar": 23,
+        "endLine": 242,
+        "endChar": 29
+      },
+      "revId": "ae88a27fcc7e98189028b0d2e8f09bf79730a707",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "f9cc87bb_b8829aa4",
+        "filename": "src/tests/perf_tests/MapBufferRange.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 242,
+      "author": {
+        "id": 1175714
+      },
+      "writtenOn": "2021-11-08T18:08:47Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "6e5e365f_4b57f85e",
       "range": {
         "startLine": 242,
         "startChar": 23,
@@ -236,6 +440,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "f3b84ea7_7d472cc5",
+        "filename": "src/tests/perf_tests/MapBufferRange.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 247,
+      "author": {
+        "id": 1175714
+      },
+      "writtenOn": "2021-11-08T18:08:47Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "0acf7e38_1c4147ba",
+      "range": {
+        "startLine": 247,
+        "startChar": 26,
+        "endLine": 247,
+        "endChar": 36
+      },
+      "revId": "ae88a27fcc7e98189028b0d2e8f09bf79730a707",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "fd47fa13_cbe1b02e",
@@ -259,6 +487,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "55b2c0f6_97f7b3d9",
+        "filename": "src/tests/perf_tests/MapBufferRange.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 296,
+      "author": {
+        "id": 1175714
+      },
+      "writtenOn": "2021-11-08T18:08:47Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "fd47fa13_cbe1b02e",
+      "range": {
+        "startLine": 296,
+        "startChar": 26,
+        "endLine": 296,
+        "endChar": 46
+      },
+      "revId": "ae88a27fcc7e98189028b0d2e8f09bf79730a707",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "6ea5d5a9_026184b2",
@@ -272,6 +524,30 @@
       "writtenOn": "2021-11-08T04:20:23Z",
       "side": 1,
       "message": "Is there a way to vary this offset, so we can get the cost of copying in the middle of a buffer, and potentially staging updates to the middle of the buffer?",
+      "range": {
+        "startLine": 335,
+        "startChar": 61,
+        "endLine": 335,
+        "endChar": 62
+      },
+      "revId": "ae88a27fcc7e98189028b0d2e8f09bf79730a707",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "c36e160e_36c60056",
+        "filename": "src/tests/perf_tests/MapBufferRange.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 335,
+      "author": {
+        "id": 1175714
+      },
+      "writtenOn": "2021-11-08T18:08:47Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "6ea5d5a9_026184b2",
       "range": {
         "startLine": 335,
         "startChar": 61,
