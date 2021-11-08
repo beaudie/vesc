@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "865af8f3_3e6e484c",
+        "filename": "src/libANGLE/renderer/vulkan/BufferVk.cpp",
+        "patchSetId": 9
+      },
+      "lineNbr": 784,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2021-11-08T21:58:31Z",
+      "side": 1,
+      "message": "This is also essentially \"ghosting\" the buffer, since the entire shadow buffer needs to be copied into the staging buffer.\n\nIs there a way to upload from the shadow buffer directly, so we can skip a memcpy()?",
+      "range": {
+        "startLine": 780,
+        "startChar": 0,
+        "endLine": 784,
+        "endChar": 76
+      },
+      "revId": "d2f233b479f947081f38f4f40ffbb35ef49a6361",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}

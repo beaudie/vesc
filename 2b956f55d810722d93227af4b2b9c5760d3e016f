@@ -149,6 +149,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "d497f03e_34385fa2",
+        "filename": "src/libANGLE/renderer/vulkan/BufferVk.cpp",
+        "patchSetId": 8
+      },
+      "lineNbr": 714,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2021-11-08T21:58:31Z",
+      "side": 1,
+      "message": "Unresolving, since mMapInvalidateRangeBufferValid is still never set to \u0027true\u0027, so init() is always being called.",
+      "parentUuid": "adea844f_e0be4914",
+      "range": {
+        "startLine": 714,
+        "startChar": 21,
+        "endLine": 714,
+        "endChar": 51
+      },
+      "revId": "2b956f55d810722d93227af4b2b9c5760d3e016f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "0a058772_e0534e75",
         "filename": "src/libANGLE/renderer/vulkan/BufferVk.cpp",
         "patchSetId": 8
