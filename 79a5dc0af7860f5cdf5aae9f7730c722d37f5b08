@@ -16,6 +16,24 @@
       "message": "Can the suppression be removed from ANGLE now?",
       "revId": "79a5dc0af7860f5cdf5aae9f7730c722d37f5b08",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "cb888f49_50263a12",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2021-11-08T21:00:06Z",
+      "side": 1,
+      "message": "No, we still issue barriers like this in a few AFAICT legitimate situations (like synchronizing with external stuff). This particular one was a source of spam.",
+      "parentUuid": "89ad0649_77aacda5",
+      "revId": "79a5dc0af7860f5cdf5aae9f7730c722d37f5b08",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
