@@ -69,6 +69,24 @@
       "message": "comment",
       "revId": "e470bf286a2317dd2273136f5f2882b2b0df4f3e",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "2c026f79_f94908a4",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 11
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2021-11-08T19:05:02Z",
+      "side": 1,
+      "message": "No, the green run in the second CL is simply from before the new tests were introduced. If you run the bots again, it will fail too.",
+      "parentUuid": "5290e6b5_e5562358",
+      "revId": "e470bf286a2317dd2273136f5f2882b2b0df4f3e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
