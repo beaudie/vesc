@@ -16,6 +16,97 @@
       "message": "Update",
       "revId": "6be66f1e5fbebb29447033e1184b370e7fd8e571",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "06bd8aec_c5bcb2ac",
+        "filename": "src/libANGLE/renderer/vulkan/SurfaceVk.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 593,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2021-11-08T16:03:30Z",
+      "side": 1,
+      "message": "Please ASSERT(!image-\u003ehasStagedUpdatesForSubresource(..)). Other updates are not expected.",
+      "revId": "6be66f1e5fbebb29447033e1184b370e7fd8e571",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "dad4bade_bdcefe46",
+        "filename": "src/libANGLE/renderer/vulkan/SurfaceVk.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 2278,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2021-11-08T16:03:30Z",
+      "side": 1,
+      "message": "Please ASSERT(!image-\u003ehasStagedUpdatesForSubresource(..)). Other updates are not expected.",
+      "revId": "6be66f1e5fbebb29447033e1184b370e7fd8e571",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "0184eae5_0e8bf4fe",
+        "filename": "src/libANGLE/renderer/vulkan/SurfaceVk.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 54,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2021-11-08T16:03:30Z",
+      "side": 1,
+      "message": "Can remove these now :)",
+      "revId": "6be66f1e5fbebb29447033e1184b370e7fd8e571",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "2afbe35b_e7024d91",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 6806,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2021-11-08T16:03:30Z",
+      "side": 1,
+      "message": "This is always true in the caller, so you can remove it.",
+      "range": {
+        "startLine": 6806,
+        "startChar": 40,
+        "endLine": 6806,
+        "endChar": 51
+      },
+      "revId": "6be66f1e5fbebb29447033e1184b370e7fd8e571",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "58439a49_fa195924",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 1935,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2021-11-08T16:03:30Z",
+      "side": 1,
+      "message": "Unused now, please remove.",
+      "revId": "6be66f1e5fbebb29447033e1184b370e7fd8e571",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }

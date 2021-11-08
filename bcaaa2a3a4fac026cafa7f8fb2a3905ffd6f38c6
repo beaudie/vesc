@@ -98,6 +98,24 @@
       "parentUuid": "10d7ac5a_70c5af30",
       "revId": "bcaaa2a3a4fac026cafa7f8fb2a3905ffd6f38c6",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "f8a8b650_b3c67f35",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 3869,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2021-11-08T16:03:30Z",
+      "side": 1,
+      "message": "Ok, I was probably wrong. We are not filling the image, but rather the buffer. As long as the stride here is the same as the one put in VkBufferImageCopy::bufferRowLength, that\u0027s fine.\n\nIs it more robust to use `count / height` for stride? Or to simplify things, we can change it to ASSERT(width * height \u003d\u003d count) with a comment about stride.\n\n\u003e \u003e Also, the color I got from Clear Update was a colorF[4], I was expecting 0.0-1.0 UN float. But they are all 0.0 - 255.0!? and the int version of the color are not set - random nonsense\n\nThat\u0027s strange. Do you mean the value in ClearUpdate::value? I believe we use that directly to perform a clear, so if the values are wrong, something must have been broken. If that\u0027s really the case, please open a bug and I\u0027ll take a look at what\u0027s going on in a test that reproduces this (I presume one of the ones in EGLLockSurface3Test.cpp).",
+      "parentUuid": "6b4898b0_2fb1f22e",
+      "revId": "bcaaa2a3a4fac026cafa7f8fb2a3905ffd6f38c6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
