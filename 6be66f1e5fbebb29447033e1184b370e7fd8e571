@@ -18,6 +18,23 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "b4b2d25d_d4b46f78",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1359249
+      },
+      "writtenOn": "2021-11-08T21:05:38Z",
+      "side": 1,
+      "message": "Question below",
+      "revId": "6be66f1e5fbebb29447033e1184b370e7fd8e571",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "06bd8aec_c5bcb2ac",
@@ -31,6 +48,24 @@
       "writtenOn": "2021-11-08T16:03:30Z",
       "side": 1,
       "message": "Please ASSERT(!image-\u003ehasStagedUpdatesForSubresource(..)). Other updates are not expected.",
+      "revId": "6be66f1e5fbebb29447033e1184b370e7fd8e571",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "16fa2fb3_43db9fc8",
+        "filename": "src/libANGLE/renderer/vulkan/SurfaceVk.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 593,
+      "author": {
+        "id": 1359249
+      },
+      "writtenOn": "2021-11-08T21:05:38Z",
+      "side": 1,
+      "message": "Sorry, I don\u0027t think I understand. Are you saying to use the other function, or just an ASSERT? It could be 0 or more Clear Update.\nIf there is a Clear Update, they are all removed, and I return the color used from the last one (append end). If not then I copy the existing Surface content.\n\nI renamed to \"removeStatedClearUpdates(...)\" - unless you have better.",
+      "parentUuid": "06bd8aec_c5bcb2ac",
       "revId": "6be66f1e5fbebb29447033e1184b370e7fd8e571",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
@@ -69,6 +104,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "59f768f3_425dcaeb",
+        "filename": "src/libANGLE/renderer/vulkan/SurfaceVk.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 54,
+      "author": {
+        "id": 1359249
+      },
+      "writtenOn": "2021-11-08T21:05:38Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "0184eae5_0e8bf4fe",
+      "revId": "6be66f1e5fbebb29447033e1184b370e7fd8e571",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "2afbe35b_e7024d91",
@@ -92,6 +145,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "6c1d0fd0_d773b06a",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 6806,
+      "author": {
+        "id": 1359249
+      },
+      "writtenOn": "2021-11-08T21:05:38Z",
+      "side": 1,
+      "message": "Yep. Was going to use and not need flag, but now neither.",
+      "parentUuid": "2afbe35b_e7024d91",
+      "range": {
+        "startLine": 6806,
+        "startChar": 40,
+        "endLine": 6806,
+        "endChar": 51
+      },
+      "revId": "6be66f1e5fbebb29447033e1184b370e7fd8e571",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "58439a49_fa195924",
@@ -105,6 +182,24 @@
       "writtenOn": "2021-11-08T16:03:30Z",
       "side": 1,
       "message": "Unused now, please remove.",
+      "revId": "6be66f1e5fbebb29447033e1184b370e7fd8e571",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "10baab33_e97b0c4b",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 1935,
+      "author": {
+        "id": 1359249
+      },
+      "writtenOn": "2021-11-08T21:05:38Z",
+      "side": 1,
+      "message": "Dang, I was in a hurry.",
+      "parentUuid": "58439a49_fa195924",
       "revId": "6be66f1e5fbebb29447033e1184b370e7fd8e571",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }

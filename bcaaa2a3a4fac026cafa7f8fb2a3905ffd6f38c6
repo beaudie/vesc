@@ -116,6 +116,24 @@
       "parentUuid": "6b4898b0_2fb1f22e",
       "revId": "bcaaa2a3a4fac026cafa7f8fb2a3905ffd6f38c6",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "2b869519_438690f4",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 3869,
+      "author": {
+        "id": 1359249
+      },
+      "writtenOn": "2021-11-08T21:05:38Z",
+      "side": 1,
+      "message": "Yes the ClearUpdate::value has a set of int, and a set of float values for RGBA. the float values have integer values like 255 for red. Whereas the int values did not have 255. I expected 1.0 in the float and 255 in the int values, for red. Seemed wrong.",
+      "parentUuid": "f8a8b650_b3c67f35",
+      "revId": "bcaaa2a3a4fac026cafa7f8fb2a3905ffd6f38c6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
