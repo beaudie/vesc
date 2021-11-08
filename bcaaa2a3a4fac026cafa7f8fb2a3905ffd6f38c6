@@ -24,6 +24,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "d6d39060_b8368ba4",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 2
+      },
+      "lineNbr": 15,
+      "author": {
+        "id": 1359249
+      },
+      "writtenOn": "2021-11-08T15:48:34Z",
+      "side": 1,
+      "message": "See new  ImageHelper::hasStagedClearUpdates.\nYep, we got too focused the late clear happening at the next draw.",
+      "parentUuid": "84e3a4a4_5195ed0a",
+      "range": {
+        "startLine": 9,
+        "startChar": 0,
+        "endLine": 15,
+        "endChar": 32
+      },
+      "revId": "bcaaa2a3a4fac026cafa7f8fb2a3905ffd6f38c6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "a265510f_8f6b5766",
@@ -54,6 +78,24 @@
       "writtenOn": "2021-11-04T18:03:25Z",
       "side": 1,
       "message": "You should copy row-by-row and take rowStride into account.\n\nEither that, or (preferably) use mSize/pixelBytes instead of width*height.",
+      "revId": "bcaaa2a3a4fac026cafa7f8fb2a3905ffd6f38c6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "6b4898b0_2fb1f22e",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 3869,
+      "author": {
+        "id": 1359249
+      },
+      "writtenOn": "2021-11-08T15:48:34Z",
+      "side": 1,
+      "message": "I noticed that when the BufferHelper was filled from Surface that there was no row padding, they were packed. rowStride was always width*pixelBytes. Otherwise I expected to do a row by row copy/fill - hence the simple wxhxpb. I\u0027ll look into see if there are helpers first.\n\nAlso, the color I got from Clear Update was a colorF[4], I was expecting 0.0-1.0 UN float. But they are all 0.0 - 255.0!? and the int version of the color are not set - random nonsense.\n\n\u0027use mSize/pixelBytes instead\" - done",
+      "parentUuid": "10d7ac5a_70c5af30",
       "revId": "bcaaa2a3a4fac026cafa7f8fb2a3905ffd6f38c6",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
