@@ -94,6 +94,30 @@
       },
       "revId": "88eabbef7246d6c08c9b9b5591a9bb3a4695f373",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "e38d2cae_2d306efa",
+        "filename": "src/libANGLE/capture/capture_gles_3_1_params.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 271,
+      "author": {
+        "id": 1491823
+      },
+      "writtenOn": "2021-11-08T14:26:17Z",
+      "side": 1,
+      "message": "I have been blind: There is *length, and there is bufSize, and the latter limits the number of entries that are returned, and hence the number of values we must capture. I\u0027ve updated the patch accordingly.",
+      "parentUuid": "0798f559_d171d497",
+      "range": {
+        "startLine": 257,
+        "startChar": 3,
+        "endLine": 271,
+        "endChar": 13
+      },
+      "revId": "88eabbef7246d6c08c9b9b5591a9bb3a4695f373",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
