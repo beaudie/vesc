@@ -1,0 +1,72 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "f764e181_6e878e2c",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 6
+      },
+      "lineNbr": 26,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2021-11-08T22:51:30Z",
+      "side": 1,
+      "message": "typo again: triangle",
+      "revId": "332ff0d6e2a795bb6d9d092f64c837bc391d559b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "62b762e5_16a07a2e",
+        "filename": "src/libANGLE/renderer/metal/ContextMtl.mm",
+        "patchSetId": 6
+      },
+      "lineNbr": 611,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2021-11-08T22:51:30Z",
+      "side": 1,
+      "message": "Appreciate your earlier answer about this - but it looks to me like setupDraw won\u0027t pay attention to these indices unless the app\u0027s using client side vertex attributes:\n\nhttps://source.chromium.org/chromium/chromium/src/+/main:third_party/angle/src/libANGLE/renderer/metal/ContextMtl.mm;l\u003d1997?q\u003dsetupDraw%20f:renderer%2Fmetal\n\nWhich of the dEQP tests verify this particular arm? Can we confirm whether they\u0027re using client side attribs?",
+      "revId": "332ff0d6e2a795bb6d9d092f64c837bc391d559b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "141ad803_719ecafe",
+        "filename": "src/libANGLE/renderer/metal/shaders/rewrite_indices.metal",
+        "patchSetId": 6
+      },
+      "lineNbr": 360,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2021-11-08T22:51:30Z",
+      "side": 1,
+      "message": "ater -\u003e later",
+      "revId": "332ff0d6e2a795bb6d9d092f64c837bc391d559b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "dd505295_de905a52",
+        "filename": "src/libANGLE/renderer/metal/shaders/rewrite_indices.metal",
+        "patchSetId": 6
+      },
+      "lineNbr": 437,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2021-11-08T22:51:30Z",
+      "side": 1,
+      "message": "Stray spaces before semicolons here.",
+      "revId": "332ff0d6e2a795bb6d9d092f64c837bc391d559b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
