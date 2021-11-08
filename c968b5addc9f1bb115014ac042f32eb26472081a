@@ -18,6 +18,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "55f6518a_c244e0d6",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 3
+      },
+      "lineNbr": 10,
+      "author": {
+        "id": 1500872
+      },
+      "writtenOn": "2021-11-08T21:28:38Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "261f899e_0f6f2db5",
+      "revId": "c968b5addc9f1bb115014ac042f32eb26472081a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "1b067c76_e8d4c472",
@@ -31,6 +49,24 @@
       "writtenOn": "2021-11-06T00:12:20Z",
       "side": 1,
       "message": "typo: triangle",
+      "revId": "c968b5addc9f1bb115014ac042f32eb26472081a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "18460a98_0fa25a5f",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 3
+      },
+      "lineNbr": 16,
+      "author": {
+        "id": 1500872
+      },
+      "writtenOn": "2021-11-08T21:28:38Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "1b067c76_e8d4c472",
       "revId": "c968b5addc9f1bb115014ac042f32eb26472081a",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
@@ -103,6 +139,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "2b1ff5b2_4d3c5993",
+        "filename": "src/libANGLE/renderer/metal/ContextMtl.mm",
+        "patchSetId": 3
+      },
+      "lineNbr": 608,
+      "author": {
+        "id": 1500872
+      },
+      "writtenOn": "2021-11-08T21:28:38Z",
+      "side": 1,
+      "message": "The dEQP tests greatly use these paths. Indices will be consumed by setupDraw to map parts of the attrib buffers.",
+      "parentUuid": "36dd62cf_01e5e3a7",
+      "revId": "c968b5addc9f1bb115014ac042f32eb26472081a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "a60b8d1c_867853e1",
@@ -116,6 +170,24 @@
       "writtenOn": "2021-11-06T00:12:20Z",
       "side": 1,
       "message": "Typo here.",
+      "revId": "c968b5addc9f1bb115014ac042f32eb26472081a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "2143b7a5_d1da7f6b",
+        "filename": "src/libANGLE/renderer/metal/ContextMtl.mm",
+        "patchSetId": 3
+      },
+      "lineNbr": 2013,
+      "author": {
+        "id": 1500872
+      },
+      "writtenOn": "2021-11-08T21:28:38Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "a60b8d1c_867853e1",
       "revId": "c968b5addc9f1bb115014ac042f32eb26472081a",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
@@ -137,6 +209,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "4ea322b4_68130159",
+        "filename": "src/libANGLE/renderer/metal/shaders/gen_indices.metal",
+        "patchSetId": 3
+      },
+      "lineNbr": 138,
+      "author": {
+        "id": 1500872
+      },
+      "writtenOn": "2021-11-08T21:28:38Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "2b9f7a83_93762bf9",
+      "revId": "c968b5addc9f1bb115014ac042f32eb26472081a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "343ecfa9_d188fd48",
@@ -150,6 +240,24 @@
       "writtenOn": "2021-11-06T00:12:20Z",
       "side": 1,
       "message": "Weird formatting. Did \"git cl format\" do this?",
+      "revId": "c968b5addc9f1bb115014ac042f32eb26472081a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "822e318f_1d0e5949",
+        "filename": "src/libANGLE/renderer/metal/shaders/gen_indices.metal",
+        "patchSetId": 3
+      },
+      "lineNbr": 142,
+      "author": {
+        "id": 1500872
+      },
+      "writtenOn": "2021-11-08T21:28:38Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "343ecfa9_d188fd48",
       "revId": "c968b5addc9f1bb115014ac042f32eb26472081a",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
@@ -171,6 +279,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "e6056df1_c522b7f9",
+        "filename": "src/libANGLE/renderer/metal/shaders/rewrite_indices.metal",
+        "patchSetId": 3
+      },
+      "lineNbr": 325,
+      "author": {
+        "id": 1500872
+      },
+      "writtenOn": "2021-11-08T21:28:38Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "550012b6_e2948578",
+      "revId": "c968b5addc9f1bb115014ac042f32eb26472081a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "ac288313_2e357694",
@@ -184,6 +310,24 @@
       "writtenOn": "2021-11-06T00:12:20Z",
       "side": 1,
       "message": "Why is this index skipped? Please explain in the comment.",
+      "revId": "c968b5addc9f1bb115014ac042f32eb26472081a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "8ca8b57e_dfefe295",
+        "filename": "src/libANGLE/renderer/metal/shaders/rewrite_indices.metal",
+        "patchSetId": 3
+      },
+      "lineNbr": 346,
+      "author": {
+        "id": 1500872
+      },
+      "writtenOn": "2021-11-08T21:28:38Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "ac288313_2e357694",
       "revId": "c968b5addc9f1bb115014ac042f32eb26472081a",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
