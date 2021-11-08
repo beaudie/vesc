@@ -871,7 +871,8 @@ def main(args):
         while child_processes_manager.IsAnyWorkerAlive():
             logger.info('%d workers running, %d jobs left.' %
                         (child_processes_manager.GetRemainingWorkers(), (job_queue.qsize())))
-            time.sleep(STATUS_MESSAGE_PERIOD)
+            unfinished_jobs = job_queue.qsize() + child_processes_manager.GetRemainingWorkers()
+            time.sleep(min(STATUS_MESSAGE_PERIOD, unfinished_jobs))
 
         child_processes_manager.JoinWorkers()
         end_time = time.time()
