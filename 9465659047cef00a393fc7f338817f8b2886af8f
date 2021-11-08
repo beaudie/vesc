@@ -70,6 +70,24 @@
       "parentUuid": "99df17fa_4c22f24f",
       "revId": "9465659047cef00a393fc7f338817f8b2886af8f",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "32d795c7_4f327cf5",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 5
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1491823
+      },
+      "writtenOn": "2021-11-08T11:12:15Z",
+      "side": 1,
+      "message": "I\u0027ve uploaded a new version of how this could be handled, i.e. update the resource map before the bind call is executed, and only update the resource map if the value at the given ID location was zero.\n\nThis is only done for FBOs at the moment, before I implement it for other types, I\u0027d like to hear your opinion.",
+      "parentUuid": "d3090da6_2d4dc741",
+      "revId": "9465659047cef00a393fc7f338817f8b2886af8f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
