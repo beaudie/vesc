@@ -20,6 +20,23 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "ceac4290_022f2686",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2021-11-08T04:20:23Z",
+      "side": 1,
+      "message": "Is all of the normalized data, float data, numTris, etc. all necessary?   Since this is just trying to measuring mapping/writing to a buffer, it seems this can be simplified quite a bit by just filling an SSBO or UBO with color data.   Then you can copy as much data anywhere you\u0027d like within it, especially if the buffer is already pre-initialized to the output color.\n\nIt\u0027s possible I\u0027m oversimplifying a bit though.",
+      "revId": "ae88a27fcc7e98189028b0d2e8f09bf79730a707",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "a859e5e1_9fe82484",
         "filename": "src/tests/perf_tests/MapBufferRange.cpp",
         "patchSetId": 2
@@ -36,6 +53,29 @@
         "startChar": 13,
         "endLine": 2,
         "endChar": 18
+      },
+      "revId": "ae88a27fcc7e98189028b0d2e8f09bf79730a707",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "d2bf2cbe_70d6b1be",
+        "filename": "src/tests/perf_tests/MapBufferRange.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 32,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2021-11-08T04:20:23Z",
+      "side": 1,
+      "message": "I think it would be better for these to both be powers of 2, since that\u0027s likely how most apps will behave.",
+      "range": {
+        "startLine": 31,
+        "startChar": 0,
+        "endLine": 32,
+        "endChar": 35
       },
       "revId": "ae88a27fcc7e98189028b0d2e8f09bf79730a707",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
@@ -135,6 +175,46 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "b6d4a613_6eeed4b5",
+        "filename": "src/tests/perf_tests/MapBufferRange.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 172,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2021-11-08T04:20:23Z",
+      "side": 1,
+      "message": "UNREACHABLE() for these, depending on how much sticks around based on Jamie\u0027s comment.",
+      "revId": "ae88a27fcc7e98189028b0d2e8f09bf79730a707",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "6e5e365f_4b57f85e",
+        "filename": "src/tests/perf_tests/MapBufferRange.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 242,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2021-11-08T04:20:23Z",
+      "side": 1,
+      "message": "Maybe \"unknown\" instead to be more obvious we don\u0027t know what this is.   Or just UNREACHABLE().",
+      "range": {
+        "startLine": 242,
+        "startChar": 23,
+        "endLine": 242,
+        "endChar": 29
+      },
+      "revId": "ae88a27fcc7e98189028b0d2e8f09bf79730a707",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "0acf7e38_1c4147ba",
         "filename": "src/tests/perf_tests/MapBufferRange.cpp",
         "patchSetId": 2
@@ -151,6 +231,52 @@
         "startChar": 26,
         "endLine": 247,
         "endChar": 36
+      },
+      "revId": "ae88a27fcc7e98189028b0d2e8f09bf79730a707",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "fd47fa13_cbe1b02e",
+        "filename": "src/tests/perf_tests/MapBufferRange.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 296,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2021-11-08T04:20:23Z",
+      "side": 1,
+      "message": "Have GetVertexData return a GLsizei directly.",
+      "range": {
+        "startLine": 296,
+        "startChar": 26,
+        "endLine": 296,
+        "endChar": 46
+      },
+      "revId": "ae88a27fcc7e98189028b0d2e8f09bf79730a707",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "6ea5d5a9_026184b2",
+        "filename": "src/tests/perf_tests/MapBufferRange.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 335,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2021-11-08T04:20:23Z",
+      "side": 1,
+      "message": "Is there a way to vary this offset, so we can get the cost of copying in the middle of a buffer, and potentially staging updates to the middle of the buffer?",
+      "range": {
+        "startLine": 335,
+        "startChar": 61,
+        "endLine": 335,
+        "endChar": 62
       },
       "revId": "ae88a27fcc7e98189028b0d2e8f09bf79730a707",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
