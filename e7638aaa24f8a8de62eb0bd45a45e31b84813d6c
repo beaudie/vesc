@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "eb7ec1b2_f0af3282",
+        "filename": "src/compiler/translator/Compiler.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 1610,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2021-11-08T15:05:53Z",
+      "side": 1,
+      "message": "nit: comment for posterity?",
+      "range": {
+        "startLine": 1610,
+        "startChar": 21,
+        "endLine": 1610,
+        "endChar": 36
+      },
+      "revId": "e7638aaa24f8a8de62eb0bd45a45e31b84813d6c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
