@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "90f42945_c7fc63ac",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 9
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1359249
+      },
+      "writtenOn": "2021-11-08T15:50:10Z",
+      "side": 1,
+      "message": "There is a color clear test in linux here. Could just combine this commit with next since it has no failures.",
+      "revId": "a7b7d9d5f9ecb7db719a47fe256b41b028cf74d7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
