@@ -518,6 +518,8 @@ class FrameCaptureShared final : angle::NonCopyable
                                     CallCapture &call,
                                     std::vector<CallCapture> *shareGroupSetupCalls,
                                     ResourceIDToSetupCallsMap *resourceIDToSetupCalls);
+    template <typename ParamValueType>
+    void maybeGenResourceOnBind(CallCapture &call, const char *paramName, ParamType paramType);
     void maybeCapturePostCallUpdates(const gl::Context *context);
     void maybeCaptureDrawArraysClientData(const gl::Context *context,
                                           CallCapture &call,

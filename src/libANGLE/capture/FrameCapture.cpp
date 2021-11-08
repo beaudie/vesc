@@ -4984,6 +4984,12 @@ void FrameCaptureShared::maybeCapturePreCallUpdates(
             break;
         }
 
+        case EntryPoint::GLBindFramebuffer:
+        case EntryPoint::GLBindFramebufferOES:
+            maybeGenResourceOnBind<gl::FramebufferID>(call, "framebufferPacked",
+                                                      ParamType::TFramebufferID);
+            break;
+
         case EntryPoint::GLGenTextures:
         {
             GLsizei count = call.params.getParam("n", ParamType::TGLsizei, 0).value.GLsizeiVal;
@@ -5345,6 +5351,27 @@ void FrameCaptureShared::maybeCapturePreCallUpdates(
     }
 
     updateResourceCounts(call);
+}
+
+template <typename ParamValueType>
+void FrameCaptureShared::maybeGenResourceOnBind(CallCapture &call,
+                                                const char *paramName,
+                                                ParamType paramType)
+{
+    const ParamCapture &param = call.params.getParam(paramName, paramType, 1);
+    const ParamValueType id   = AccessParamValue<ParamValueType>(paramType, param.value);
+    handleGennedResource(id);
+
+    ResourceIDType resourceIDType = GetResourceIDTypeFromParamType(param.type);
+    const char *resourceName      = GetResourceIDTypeName(resourceIDType);
+
+    std::stringstream updateFuncNameStr;
+    updateFuncNameStr << "Inject" << resourceName << "ID2";
+    std::string updateFuncName = updateFuncNameStr.str();
+
+    ParamBuffer params;
+    params.addValueParam("id", ParamType::TGLuint, id.value);
+    mFrameCalls.emplace_back(updateFuncName, std::move(params));
 }
 
 void FrameCaptureShared::updateResourceCounts(const CallCapture &call)
