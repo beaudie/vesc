@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "89ad0649_77aacda5",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2021-11-08T20:07:14Z",
+      "side": 1,
+      "message": "Can the suppression be removed from ANGLE now?",
+      "revId": "79a5dc0af7860f5cdf5aae9f7730c722d37f5b08",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
