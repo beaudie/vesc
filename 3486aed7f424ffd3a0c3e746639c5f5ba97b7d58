@@ -16,6 +16,46 @@
       "message": "PTAL. I didn\u0027t implement most of the validation methods so I could get back to working on other tasks, but this will fix the ASAN error.",
       "revId": "3486aed7f424ffd3a0c3e746639c5f5ba97b7d58",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "fe09b9d9_57224d84",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 7
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1326275
+      },
+      "writtenOn": "2021-11-08T17:16:06Z",
+      "side": 1,
+      "message": "Nice, this feels like a solid way to handle attribute validation",
+      "revId": "3486aed7f424ffd3a0c3e746639c5f5ba97b7d58",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "8638a497_9bfcfe30",
+        "filename": "src/libANGLE/validationEGL.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 534,
+      "author": {
+        "id": 1326275
+      },
+      "writtenOn": "2021-11-08T17:16:06Z",
+      "side": 1,
+      "message": "nit: To me this name is confusing in context. I\u0027d prefer something like attribMap.initializeWithoutValidation() but it\u0027s up to you",
+      "range": {
+        "startLine": 534,
+        "startChar": 14,
+        "endLine": 534,
+        "endChar": 26
+      },
+      "revId": "3486aed7f424ffd3a0c3e746639c5f5ba97b7d58",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
