@@ -87,6 +87,30 @@
       },
       "revId": "515056471cd70d57c508e1e9c6bac2808efab6e9",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "2b1fa15c_a09b2e0b",
+        "filename": "src/libANGLE/renderer/vulkan/BufferVk.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 720,
+      "author": {
+        "id": 1175714
+      },
+      "writtenOn": "2021-11-08T18:08:53Z",
+      "side": 1,
+      "message": "Old patch set.",
+      "parentUuid": "8a444202_d43c42a4",
+      "range": {
+        "startLine": 718,
+        "startChar": 16,
+        "endLine": 720,
+        "endChar": 0
+      },
+      "revId": "515056471cd70d57c508e1e9c6bac2808efab6e9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }

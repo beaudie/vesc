@@ -35,6 +35,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "dbd9bb7a_568cdb21",
+        "filename": "src/libANGLE/renderer/vulkan/BufferVk.cpp",
+        "patchSetId": 8
+      },
+      "lineNbr": 703,
+      "author": {
+        "id": 1175714
+      },
+      "writtenOn": "2021-11-08T18:08:53Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "e2022864_a31ef33a",
+      "revId": "2b956f55d810722d93227af4b2b9c5760d3e016f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "b0939003_3b57e490",
@@ -48,6 +66,30 @@
       "writtenOn": "2021-11-08T03:42:28Z",
       "side": 1,
       "message": "nit: \u0027smallMapRange\u0027\n\nThis value doesn\u0027t rely on the buffer being invalidated.",
+      "range": {
+        "startLine": 705,
+        "startChar": 17,
+        "endLine": 705,
+        "endChar": 33
+      },
+      "revId": "2b956f55d810722d93227af4b2b9c5760d3e016f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "dd451507_a8c549e2",
+        "filename": "src/libANGLE/renderer/vulkan/BufferVk.cpp",
+        "patchSetId": 8
+      },
+      "lineNbr": 705,
+      "author": {
+        "id": 1175714
+      },
+      "writtenOn": "2021-11-08T18:08:53Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "b0939003_3b57e490",
       "range": {
         "startLine": 705,
         "startChar": 17,
@@ -81,6 +123,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "adea844f_e0be4914",
+        "filename": "src/libANGLE/renderer/vulkan/BufferVk.cpp",
+        "patchSetId": 8
+      },
+      "lineNbr": 714,
+      "author": {
+        "id": 1175714
+      },
+      "writtenOn": "2021-11-08T18:08:53Z",
+      "side": 1,
+      "message": "init() doesn\u0027t make DynamicShadowBuffers valid(), so the user still needs an external variable to track that.",
+      "parentUuid": "1e880d83_df2a1a63",
+      "range": {
+        "startLine": 714,
+        "startChar": 21,
+        "endLine": 714,
+        "endChar": 51
+      },
+      "revId": "2b956f55d810722d93227af4b2b9c5760d3e016f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "0a058772_e0534e75",
@@ -94,6 +160,24 @@
       "writtenOn": "2021-11-08T03:42:28Z",
       "side": 1,
       "message": "Wrap in {}s.",
+      "revId": "2b956f55d810722d93227af4b2b9c5760d3e016f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "ae23d800_a41f9583",
+        "filename": "src/libANGLE/renderer/vulkan/BufferVk.cpp",
+        "patchSetId": 8
+      },
+      "lineNbr": 715,
+      "author": {
+        "id": 1175714
+      },
+      "writtenOn": "2021-11-08T18:08:53Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "0a058772_e0534e75",
       "revId": "2b956f55d810722d93227af4b2b9c5760d3e016f",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
@@ -121,6 +205,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "8acdf663_7a94fac5",
+        "filename": "src/libANGLE/renderer/vulkan/BufferVk.cpp",
+        "patchSetId": 8
+      },
+      "lineNbr": 780,
+      "author": {
+        "id": 1175714
+      },
+      "writtenOn": "2021-11-08T18:08:53Z",
+      "side": 1,
+      "message": "I\u0027ve ran all ANGLE traces multiple times before/after this change and don\u0027t see any regressions that weren\u0027t noise.",
+      "parentUuid": "f7f81ec8_2a7baf98",
+      "range": {
+        "startLine": 780,
+        "startChar": 18,
+        "endLine": 780,
+        "endChar": 30
+      },
+      "revId": "2b956f55d810722d93227af4b2b9c5760d3e016f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "5890217d_212a1501",
@@ -134,6 +242,30 @@
       "writtenOn": "2021-11-08T03:42:28Z",
       "side": 1,
       "message": "This should be a uint8_t*, since we know we\u0027re mapping bytes.\n\nAlso, I think it would be better to move this into the DynamicShadowBuffer class itself.",
+      "range": {
+        "startLine": 237,
+        "startChar": 4,
+        "endLine": 237,
+        "endChar": 10
+      },
+      "revId": "2b956f55d810722d93227af4b2b9c5760d3e016f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "743f383d_5f0f1816",
+        "filename": "src/libANGLE/renderer/vulkan/BufferVk.h",
+        "patchSetId": 8
+      },
+      "lineNbr": 237,
+      "author": {
+        "id": 1175714
+      },
+      "writtenOn": "2021-11-08T18:08:53Z",
+      "side": 1,
+      "message": "Done for conversion to uint8_t*. However, not sure how best to signal that there\u0027s an invalidate range active (Charlie said to use the mapped ptr to signal it), so keeping the member.",
+      "parentUuid": "5890217d_212a1501",
       "range": {
         "startLine": 237,
         "startChar": 4,
