@@ -16,6 +16,132 @@
       "message": "Still LGTM. Will give Tim a chance to +2 sinc ehe is also on the review list.",
       "revId": "2b956f55d810722d93227af4b2b9c5760d3e016f",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "e2022864_a31ef33a",
+        "filename": "src/libANGLE/renderer/vulkan/BufferVk.cpp",
+        "patchSetId": 8
+      },
+      "lineNbr": 703,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2021-11-08T03:42:28Z",
+      "side": 1,
+      "message": "ANGLE prefers to make these types of conditionals return bools:\n\n            bool rangeInvalidate \u003d (access \u0026 GL_MAP_INVALIDATE_RANGE_BIT) !\u003d 0;",
+      "revId": "2b956f55d810722d93227af4b2b9c5760d3e016f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b0939003_3b57e490",
+        "filename": "src/libANGLE/renderer/vulkan/BufferVk.cpp",
+        "patchSetId": 8
+      },
+      "lineNbr": 705,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2021-11-08T03:42:28Z",
+      "side": 1,
+      "message": "nit: \u0027smallMapRange\u0027\n\nThis value doesn\u0027t rely on the buffer being invalidated.",
+      "range": {
+        "startLine": 705,
+        "startChar": 17,
+        "endLine": 705,
+        "endChar": 33
+      },
+      "revId": "2b956f55d810722d93227af4b2b9c5760d3e016f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "1e880d83_df2a1a63",
+        "filename": "src/libANGLE/renderer/vulkan/BufferVk.cpp",
+        "patchSetId": 8
+      },
+      "lineNbr": 714,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2021-11-08T03:42:28Z",
+      "side": 1,
+      "message": "This is never set to true.\n\nGoing further, is this variable necessary?   DynamicShadowBuffer already has a valid().",
+      "range": {
+        "startLine": 714,
+        "startChar": 21,
+        "endLine": 714,
+        "endChar": 51
+      },
+      "revId": "2b956f55d810722d93227af4b2b9c5760d3e016f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "0a058772_e0534e75",
+        "filename": "src/libANGLE/renderer/vulkan/BufferVk.cpp",
+        "patchSetId": 8
+      },
+      "lineNbr": 715,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2021-11-08T03:42:28Z",
+      "side": 1,
+      "message": "Wrap in {}s.",
+      "revId": "2b956f55d810722d93227af4b2b9c5760d3e016f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "f7f81ec8_2a7baf98",
+        "filename": "src/libANGLE/renderer/vulkan/BufferVk.cpp",
+        "patchSetId": 8
+      },
+      "lineNbr": 780,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2021-11-08T03:42:28Z",
+      "side": 1,
+      "message": "I haven\u0027t kept up entirely with Charlie\u0027s findings, but are we worried about this introducing additional GPU transfers and causing bubbles?\n\nAside from the perf test, is there a real app/benchmark that this CL should also be checked with?",
+      "range": {
+        "startLine": 780,
+        "startChar": 18,
+        "endLine": 780,
+        "endChar": 30
+      },
+      "revId": "2b956f55d810722d93227af4b2b9c5760d3e016f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "5890217d_212a1501",
+        "filename": "src/libANGLE/renderer/vulkan/BufferVk.h",
+        "patchSetId": 8
+      },
+      "lineNbr": 237,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2021-11-08T03:42:28Z",
+      "side": 1,
+      "message": "This should be a uint8_t*, since we know we\u0027re mapping bytes.\n\nAlso, I think it would be better to move this into the DynamicShadowBuffer class itself.",
+      "range": {
+        "startLine": 237,
+        "startChar": 4,
+        "endLine": 237,
+        "endChar": 10
+      },
+      "revId": "2b956f55d810722d93227af4b2b9c5760d3e016f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
