@@ -203,6 +203,27 @@ void CaptureDrawElementsInstancedBaseVertexEXT_indices(const State &glState,
     UNIMPLEMENTED();
 }
 
+void CaptureMultiDrawArraysIndirectEXT_indices(const State &glState,
+                                               bool isCallValid,
+                                               GLenum mode,
+                                               const void *indirect,
+                                               GLsizei drawcount,
+                                               GLsizei stride)
+{
+    UNIMPLEMENTED();
+}
+
+void CaptureMultiDrawElementsIndirectEXT_indices(const State &glState,
+                                                 bool isCallValid,
+                                                 GLenum mode,
+                                                 GLenum type,
+                                                 const void *indirect,
+                                                 GLsizei drawcount,
+                                                 GLsizei stride)
+{
+    UNIMPLEMENTED();
+}
+
 void CaptureDrawRangeElementsBaseVertexEXT_indices(const State &glState,
                                                    bool isCallValid,
                                                    PrimitiveMode modePacked,
