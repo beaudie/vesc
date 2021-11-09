@@ -65,6 +65,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "7520e9f2_72e475e4",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 3867,
+      "author": {
+        "id": 1359249
+      },
+      "writtenOn": "2021-11-09T20:05:39Z",
+      "side": 1,
+      "message": "I didn\u0027t find any.",
+      "parentUuid": "a265510f_8f6b5766",
+      "revId": "bcaaa2a3a4fac026cafa7f8fb2a3905ffd6f38c6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "10d7ac5a_70c5af30",
@@ -185,6 +203,24 @@
       "writtenOn": "2021-11-09T19:39:06Z",
       "side": 1,
       "message": "What test is that exactly? If I put logs in and print the float32 and uint32 values from ClearUpdate::value, I get float values in [0, 1] as expected in Clear*Vulkan tests.",
+      "parentUuid": "04fbbfe3_6dbbec47",
+      "revId": "bcaaa2a3a4fac026cafa7f8fb2a3905ffd6f38c6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "255ab933_1f0488ec",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 3869,
+      "author": {
+        "id": 1359249
+      },
+      "writtenOn": "2021-11-09T20:05:39Z",
+      "side": 1,
+      "message": "Done\nThe test I was running is the one attached to this EGLLockSurface3Test.cpp. There is glClearColor and glClear(). Maybe I\u0027m using bad values.",
       "parentUuid": "04fbbfe3_6dbbec47",
       "revId": "bcaaa2a3a4fac026cafa7f8fb2a3905ffd6f38c6",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
