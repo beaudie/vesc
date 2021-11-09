@@ -37,6 +37,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "ce5ac83c_94500547",
+        "filename": "src/libANGLE/renderer/metal/ContextMtl.mm",
+        "patchSetId": 6
+      },
+      "lineNbr": 611,
+      "author": {
+        "id": 1374244
+      },
+      "writtenOn": "2021-11-09T13:00:45Z",
+      "side": 1,
+      "message": "@kpiddington I think you can pass original drawing arguments to setupDraw just fine\ni.e.\n```\nsetupDraw(context, mode, first, count, instances,                               \\\n          gl::DrawElementsType::InvalidEnum, nullptr, xfbPass)\n```\n\nNo need to pass new arguments as if the user is invoking an indexed draw.\n\nThe `indices` passed to `setupDraw` is currently only used by VertexArrayMtl when client attributes are active because `VertexArrayMtl` needs vertex count information from `indices` in order to create an intermediate buffer to hold the client attributes. If you pass original array drawing arguments, `VertexArrayMtl` can use `count` parameter to deduce the number of vertices.\n\nOther than that, `indices` has no use in `setupDraw`.",
+      "parentUuid": "62b762e5_16a07a2e",
+      "revId": "332ff0d6e2a795bb6d9d092f64c837bc391d559b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "141ad803_719ecafe",
         "filename": "src/libANGLE/renderer/metal/shaders/rewrite_indices.metal",
         "patchSetId": 6

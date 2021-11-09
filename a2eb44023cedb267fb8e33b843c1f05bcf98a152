@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "54358551_bd25f19c",
+        "filename": "src/libANGLE/renderer/metal/ContextMtl.mm",
+        "patchSetId": 8
+      },
+      "lineNbr": 582,
+      "author": {
+        "id": 1374244
+      },
+      "writtenOn": "2021-11-09T13:00:45Z",
+      "side": 1,
+      "message": "I think the drawArray\u0027s generated index buffer can be cached and re-used if we already generated an index buffer for a larger draw call with the same primitive type.\nFor example:\n- drawing triangle strip with 6 vertices generated an index buffer:\n  2 0 1, 3 2 1, 4 2 3, 5 4 3\n- drawing triangle strip with 4 vertices needs an index buffer:\n  2 0 1, 3 2 1\n  So it can reuse the first 6 indices from the previous draw call\u0027s generated index buffer.\n  \n  If the `first` vertex is different, we can use `mtl::RenderCommandEncoder::drawIndexedInstancedBaseVertex(..., baseVertex\u003dfirst,...)` (only available since Apple GPU3 though)",
+      "range": {
+        "startLine": 582,
+        "startChar": 35,
+        "endLine": 582,
+        "endChar": 77
+      },
+      "revId": "a2eb44023cedb267fb8e33b843c1f05bcf98a152",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
