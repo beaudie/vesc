@@ -152,6 +152,24 @@
       "parentUuid": "2b869519_438690f4",
       "revId": "bcaaa2a3a4fac026cafa7f8fb2a3905ffd6f38c6",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "04fbbfe3_6dbbec47",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 3869,
+      "author": {
+        "id": 1359249
+      },
+      "writtenOn": "2021-11-09T17:15:35Z",
+      "side": 1,
+      "message": "No test failure, Just when I stepped through the Staged Updates, the Value in the ClearColor I expected float to be 0-1.0, from glClear(). But it wasn\u0027t and that seems odd to me. So, no error.",
+      "parentUuid": "a120f410_586f8ad3",
+      "revId": "bcaaa2a3a4fac026cafa7f8fb2a3905ffd6f38c6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
