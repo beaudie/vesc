@@ -795,6 +795,7 @@ Framebuffer::Framebuffer(const Caps &caps,
       mDirtyDepthAttachmentBinding(this, DIRTY_BIT_DEPTH_ATTACHMENT),
       mDirtyStencilAttachmentBinding(this, DIRTY_BIT_STENCIL_ATTACHMENT)
 {
+    fprintf(stderr, "CREATE\n");
     ASSERT(mImpl != nullptr);
     ASSERT(mState.mColorAttachments.size() == static_cast<size_t>(caps.maxColorAttachments));
 
@@ -816,6 +817,7 @@ Framebuffer::Framebuffer(const Context *context, egl::Surface *surface, egl::Sur
       mDirtyDepthAttachmentBinding(this, DIRTY_BIT_DEPTH_ATTACHMENT),
       mDirtyStencilAttachmentBinding(this, DIRTY_BIT_STENCIL_ATTACHMENT)
 {
+    fprintf(stderr, "CREATE\n");
     ASSERT(mImpl != nullptr);
 
     mDirtyColorAttachmentBindings.emplace_back(this, DIRTY_BIT_COLOR_ATTACHMENT_0);
@@ -859,6 +861,7 @@ Framebuffer::Framebuffer(const Context *context,
       mDirtyDepthAttachmentBinding(this, DIRTY_BIT_DEPTH_ATTACHMENT),
       mDirtyStencilAttachmentBinding(this, DIRTY_BIT_STENCIL_ATTACHMENT)
 {
+    fprintf(stderr, "CREATE\n");
     mDirtyColorAttachmentBindings.emplace_back(this, DIRTY_BIT_COLOR_ATTACHMENT_0);
     SetComponentTypeMask(getDrawbufferWriteType(0), 0, &mState.mDrawBufferTypeMask);
 
@@ -867,11 +870,13 @@ Framebuffer::Framebuffer(const Context *context,
 
 Framebuffer::~Framebuffer()
 {
+    fprintf(stderr, "DELETE\n");
     SafeDelete(mImpl);
 }
 
 void Framebuffer::onDestroy(const Context *context)
 {
+    fprintf(stderr, "Destroy\n");
     if (isDefault())
     {
         mState.mDefaultFramebufferReadAttachment.detach(context, mState.mFramebufferSerial);
