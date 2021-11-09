@@ -224,6 +224,24 @@
       "parentUuid": "04fbbfe3_6dbbec47",
       "revId": "bcaaa2a3a4fac026cafa7f8fb2a3905ffd6f38c6",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "5ca3497b_8c494784",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 3869,
+      "author": {
+        "id": 1359249
+      },
+      "writtenOn": "2021-11-09T20:10:23Z",
+      "side": 1,
+      "message": "Its me. GLColor components are int, and I\u0027m using with glClearColor. I will fix right away.",
+      "parentUuid": "255ab933_1f0488ec",
+      "revId": "bcaaa2a3a4fac026cafa7f8fb2a3905ffd6f38c6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
