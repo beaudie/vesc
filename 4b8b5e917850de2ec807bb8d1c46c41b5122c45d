@@ -283,6 +283,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "49e4ffe4_3936f54f",
+        "filename": "src/libANGLE/Surface.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 152,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2021-11-09T16:08:14Z",
+      "side": 1,
+      "message": "We love \"isX\" bool functions :)",
+      "parentUuid": "b4b34252_ed00e484",
+      "range": {
+        "startLine": 152,
+        "startChar": 9,
+        "endLine": 152,
+        "endChar": 22
+      },
+      "revId": "4b8b5e917850de2ec807bb8d1c46c41b5122c45d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "ada88b12_085609bd",
