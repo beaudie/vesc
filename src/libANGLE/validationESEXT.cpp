@@ -440,6 +440,39 @@ bool ValidateMultiDrawElementsBaseVertexEXT(const Context *context,
     return true;
 }
 
+bool ValidateMultiDrawArraysIndirectEXT(const Context *context,
+                                        angle::EntryPoint entryPoint,
+                                        GLenum mode,
+                                        const void *indirect,
+                                        GLsizei drawcount,
+                                        GLsizei stride)
+{
+    if (context->getClientMajorVersion() < 3 ||
+        (context->getClientMajorVersion() == 3 && context->getClientMinorVersion() < 1))
+    {
+        context->validationError(entryPoint, GL_INVALID_OPERATION, kES31Required);
+        return false;
+    }
+    return true;
+}
+
+bool ValidateMultiDrawElementsIndirectEXT(const Context *context,
+                                          angle::EntryPoint entryPoint,
+                                          GLenum mode,
+                                          GLenum type,
+                                          const void *indirect,
+                                          GLsizei drawcount,
+                                          GLsizei stride)
+{
+    if (context->getClientMajorVersion() < 3 ||
+        (context->getClientMajorVersion() == 3 && context->getClientMinorVersion() < 1))
+    {
+        context->validationError(entryPoint, GL_INVALID_OPERATION, kES31Required);
+        return false;
+    }
+    return true;
+}
+
 bool ValidateDrawElementsBaseVertexOES(const Context *context,
                                        angle::EntryPoint entryPoint,
                                        PrimitiveMode mode,
