@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "34f72c16_6f1c38ef",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 12,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2021-11-09T16:49:22Z",
+      "side": 1,
+      "message": "Missing a `Bug: ...` tag above this line.",
+      "revId": "4eada493394d70280ccf9c499b6119c17cb93f41",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "2cd2d782_d7e7b4dc",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2021-11-09T16:49:22Z",
+      "side": 1,
+      "message": "LGTM",
+      "revId": "4eada493394d70280ccf9c499b6119c17cb93f41",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
