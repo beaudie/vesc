@@ -6452,6 +6452,19 @@ void Context::multiDrawArraysInstanced(PrimitiveMode mode,
                                                                 instanceCounts, drawcount));
 }
 
+void Context::multiDrawArraysIndirect(GLenum mode,
+                                      const void *indirect,
+                                      GLsizei drawcount,
+                                      GLsizei stride)
+{
+    PrimitiveMode primitiveMode = PackParam<PrimitiveMode>(mode);
+
+    ANGLE_CONTEXT_TRY(prepareForDraw(primitiveMode));
+    ANGLE_CONTEXT_TRY(
+        mImplementation->multiDrawArraysIndirect(this, primitiveMode, indirect, drawcount, stride));
+    MarkShaderStorageUsage(this);
+}
+
 void Context::multiDrawElements(PrimitiveMode mode,
                                 const GLsizei *counts,
                                 DrawElementsType type,
@@ -6473,6 +6486,21 @@ void Context::multiDrawElementsInstanced(PrimitiveMode mode,
     ANGLE_CONTEXT_TRY(prepareForDraw(mode));
     ANGLE_CONTEXT_TRY(mImplementation->multiDrawElementsInstanced(this, mode, counts, type, indices,
                                                                   instanceCounts, drawcount));
+}
+
+void Context::multiDrawElementsIndirect(GLenum mode,
+                                        GLenum type,
+                                        const void *indirect,
+                                        GLsizei drawcount,
+                                        GLsizei stride)
+{
+    PrimitiveMode primitiveMode       = PackParam<PrimitiveMode>(mode);
+    DrawElementsType drawElementsType = PackParam<DrawElementsType>(type);
+
+    ANGLE_CONTEXT_TRY(prepareForDraw(primitiveMode));
+    ANGLE_CONTEXT_TRY(mImplementation->multiDrawElementsIndirect(
+        this, primitiveMode, drawElementsType, indirect, drawcount, stride));
+    MarkShaderStorageUsage(this);
 }
 
 void Context::drawArraysInstancedBaseInstance(PrimitiveMode mode,
