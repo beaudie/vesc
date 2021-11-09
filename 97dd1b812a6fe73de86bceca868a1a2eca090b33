@@ -16,6 +16,24 @@
       "message": "Should we eventually make sure that the attribs are always validated, or it doesn\u0027t matter that the others aren\u0027t? Either way a comment would help:\n\n\u003e // TODO: remove this and validate at every call site.\n\nor\n\n\u003e // Skip validation for entry points that access the attributes list safely without it.",
       "revId": "97dd1b812a6fe73de86bceca868a1a2eca090b33",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "13da274d_3132329c",
+        "filename": "src/libANGLE/AttributeMap.h",
+        "patchSetId": 8
+      },
+      "lineNbr": 67,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2021-11-09T16:10:17Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "809e0c9d_50fc378a",
+      "revId": "97dd1b812a6fe73de86bceca868a1a2eca090b33",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
