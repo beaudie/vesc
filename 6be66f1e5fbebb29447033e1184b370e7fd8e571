@@ -271,6 +271,29 @@
       "parentUuid": "58439a49_fa195924",
       "revId": "6be66f1e5fbebb29447033e1184b370e7fd8e571",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "0cbf7624_17b7034d",
+        "filename": "src/tests/egl_tests/EGLLockSurface3Test.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 439,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2021-11-09T20:22:47Z",
+      "side": 1,
+      "message": "Yes, the issue is that you are sending 0, 255, 0, 255 here, while you should do 0, 1, 0, 1.\n\nYou can just use 0, 1, 0, 1. It\u0027s pretty clear that that\u0027s green. Otherwise, we have toNormalizedVector().",
+      "range": {
+        "startLine": 438,
+        "startChar": 0,
+        "endLine": 439,
+        "endChar": 73
+      },
+      "revId": "6be66f1e5fbebb29447033e1184b370e7fd8e571",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
