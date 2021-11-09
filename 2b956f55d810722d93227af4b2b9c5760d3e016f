@@ -346,6 +346,30 @@
       },
       "revId": "2b956f55d810722d93227af4b2b9c5760d3e016f",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "f5a3e3b9_def14a5e",
+        "filename": "src/libANGLE/renderer/vulkan/BufferVk.h",
+        "patchSetId": 8
+      },
+      "lineNbr": 237,
+      "author": {
+        "id": 1175714
+      },
+      "writtenOn": "2021-11-09T02:34:16Z",
+      "side": 1,
+      "message": "Done (if we use DynamicBuffer, it implicitly keeps track of being in use)",
+      "parentUuid": "743f383d_5f0f1816",
+      "range": {
+        "startLine": 237,
+        "startChar": 4,
+        "endLine": 237,
+        "endChar": 10
+      },
+      "revId": "2b956f55d810722d93227af4b2b9c5760d3e016f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
