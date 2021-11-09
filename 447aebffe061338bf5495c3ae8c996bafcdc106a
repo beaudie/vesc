@@ -3,6 +3,29 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "a372decf_0d467d34",
+        "filename": "src/tests/perf_tests/MapBufferRange.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 329,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2021-11-09T16:44:26Z",
+      "side": 1,
+      "message": "It would also be helpful to vary this on every iteration a bit, like `params.updateSize * (17 + it%7) / 20` (varying by 5% every time), so we don\u0027t easily fall into some situation where the worlds align and one thing is a multiple of another and things work out.\n\nI see that Tim suggested making the buffer and update size a power of 2, but that probably makes things even more star-aligny. It would be good to have a test variation for that too, so we have coverage for both POT and NPOT update sizes.",
+      "range": {
+        "startLine": 329,
+        "startChar": 89,
+        "endLine": 329,
+        "endChar": 99
+      },
+      "revId": "447aebffe061338bf5495c3ae8c996bafcdc106a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "21262966_68a145d1",
         "filename": "src/tests/perf_tests/MapBufferRange.cpp",
         "patchSetId": 4
