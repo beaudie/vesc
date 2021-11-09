@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "9614a6f1_f9f8fa3c",
+        "filename": "src/tests/perf_tests/MapBufferRange.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 452,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2021-11-09T20:27:41Z",
+      "side": 1,
+      "message": "Neat. For future reference, you could have also done something like this for less code:\n\n    BufferUpdateVulkanParams(a1, a2, a3),\n    BufferUpdateVulkanParams(b1, b2, b3),\n    BufferUpdateVulkanParams(c1, c2, c3),\n    BufferUpdateVulkanParams(d1, d2, d3),\n    BufferUpdateVulkanParams(e1, e2, e3),\n    BufferUpdateVulkanParams(f1, f2, f3),\n    ...",
+      "range": {
+        "startLine": 447,
+        "startChar": 0,
+        "endLine": 452,
+        "endChar": 62
+      },
+      "revId": "142a3c883767e4c492ff2adbf809b8f088ce67c3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
