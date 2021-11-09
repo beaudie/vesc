@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "0e99c3cd_b2b2b451",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 23
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2021-11-09T17:01:18Z",
+      "side": 1,
+      "message": "Suggest splitting the system info stuff in another change. That has been a thorny part of ANGLE when Chrome gets released in the wild.",
+      "revId": "0fef1142746f80c14a21315b445e6fc54268ae59",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
