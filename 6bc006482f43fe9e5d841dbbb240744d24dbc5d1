@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "ca67e289_f89e8793",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2021-11-09T05:33:48Z",
+      "side": 1,
+      "message": "\u003e [INFO/MainProcess] Unexpected \u0027Skipped\u0027 (1):\n\u003e [INFO/MainProcess]      SimpleStateChangeTestES3.NonZeroBaseMutableTextureThenZeroBaseButIncompleteBug/ES3_Vulkan_SwiftShader Skipped (expected Pass or is new test)\n\n:| It\u0027s a new test that needs to be skipped, what\u0027s wrong with that?\n\nWhat\u0027s the process here, land first, then a separate change that skips it for replay? Is there some other file that needs to be updated?",
+      "revId": "6bc006482f43fe9e5d841dbbb240744d24dbc5d1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
