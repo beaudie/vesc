@@ -187,6 +187,13 @@
 6631 : MultithreadingTestES3.MultithreadFenceTexImage/ES3_Vulkan_SwiftShader = SKIP_FOR_CAPTURE
 6631 : MultithreadingTest.MultiContextDrawWithSwapBuffers/ES3_Vulkan_SwiftShader = SKIP_FOR_CAPTURE
 
+6663 : Texture2DTest.UploadThenFSThenNewRPThenFSThenVS/ES2_Vulkan_SwiftShader = SKIPPED_BY_GTEST
+6663 : Texture2DTest.UploadThenFSThenNewRPThenVS/ES2_Vulkan_SwiftShader = SKIPPED_BY_GTEST
+6663 : Texture2DTest.UploadThenFSThenNewRPThenVSThenFS/ES2_Vulkan_SwiftShader = SKIPPED_BY_GTEST
+6663 : Texture2DTest.UploadThenFSThenVS/ES2_Vulkan_SwiftShader = SKIPPED_BY_GTEST
+6663 : Texture2DTest.UploadThenFSThenVSThenNewRPThenFS/ES2_Vulkan_SwiftShader  = SKIPPED_BY_GTEST
+1267624 VULKAN : SimpleStateChangeTestES3.NonZeroBaseMutableTextureThenZeroBaseButIncompleteBug/ES3_Vulkan_SwiftShader = SKIPPED_BY_GTEST
+
 # ES3_1
 6180 : ProgramPipelineTest31.DifferentTextureTypes/ES3_1_Vulkan_SwiftShader = FAIL
 6180 : ProgramPipelineTest31.DrawWith2DTexture/ES3_1_Vulkan_SwiftShader = FAIL
@@ -257,9 +264,3 @@
 6180 : GLSLTest_ES31.VaryingTessellationSampleInAndOut/ES3_1_Vulkan_SwiftShader = SKIPPED_BY_GTEST
 6180 : GeometryShaderTest.LayeredFramebufferPreRenderClear2DArrayColor/ES3_1_Vulkan_SwiftShader = SKIPPED_BY_GTEST
 6180 : GeometryShaderTest.LayeredFramebufferPreRenderClear3DColor/ES3_1_Vulkan_SwiftShader = SKIPPED_BY_GTEST
-
-6663 : Texture2DTest.UploadThenFSThenNewRPThenFSThenVS/ES2_Vulkan_SwiftShader = SKIPPED_BY_GTEST
-6663 : Texture2DTest.UploadThenFSThenNewRPThenVS/ES2_Vulkan_SwiftShader = SKIPPED_BY_GTEST
-6663 : Texture2DTest.UploadThenFSThenNewRPThenVSThenFS/ES2_Vulkan_SwiftShader = SKIPPED_BY_GTEST
-6663 : Texture2DTest.UploadThenFSThenVS/ES2_Vulkan_SwiftShader = SKIPPED_BY_GTEST
-6663 : Texture2DTest.UploadThenFSThenVSThenNewRPThenFS/ES2_Vulkan_SwiftShader  = SKIPPED_BY_GTEST
