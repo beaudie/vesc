@@ -106,6 +106,24 @@
       "parentUuid": "32d795c7_4f327cf5",
       "revId": "9465659047cef00a393fc7f338817f8b2886af8f",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "e8532b3b_4a067aff",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 5
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1491823
+      },
+      "writtenOn": "2021-11-09T10:36:35Z",
+      "side": 1,
+      "message": "I\u0027ve updated the patch to really only add the Inject*ID once and only if the ID was not yet generated. For that I needed to also track the FBO IDs, something that was not done before. Hence the additional patch that precedes this one.",
+      "parentUuid": "243c2597_afca3b17",
+      "revId": "9465659047cef00a393fc7f338817f8b2886af8f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
