@@ -46,6 +46,30 @@
       },
       "revId": "d2f233b479f947081f38f4f40ffbb35ef49a6361",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "7fc8dc27_8c7d1259",
+        "filename": "src/libANGLE/renderer/vulkan/BufferVk.cpp",
+        "patchSetId": 9
+      },
+      "lineNbr": 784,
+      "author": {
+        "id": 1175714
+      },
+      "writtenOn": "2021-11-09T02:33:12Z",
+      "side": 1,
+      "message": "Done (Uploading from a DynamicBuffer directly using the existing stagedUpdate mechanism, basically the same mechanism as in previous patch sets except without an extra memcpy. I previously thought I\u0027d have to keep track of a bunch of invalidate ranges as they\u0027d not necessarily be done uploading at unmapImpl time, but DynamicBuffer implicitly tracks this already through an internal free list and checking for if buffers are in use).",
+      "parentUuid": "341f4920_837055af",
+      "range": {
+        "startLine": 780,
+        "startChar": 0,
+        "endLine": 784,
+        "endChar": 76
+      },
+      "revId": "d2f233b479f947081f38f4f40ffbb35ef49a6361",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
