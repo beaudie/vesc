@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "21262966_68a145d1",
+        "filename": "src/tests/perf_tests/MapBufferRange.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 379,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2021-11-09T16:17:12Z",
+      "side": 1,
+      "message": "If you\u0027re still taking requests, it would be nice if these were more parameteric (and you can focus on variations on Vulkan). For example, one parameter to vary updateOffset, and another for updateSize (to make it very small, like 128 bytes, in light of the vkCmdUpdateBuffer discussion).",
+      "revId": "447aebffe061338bf5495c3ae8c996bafcdc106a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
