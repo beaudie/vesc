@@ -1,0 +1,113 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "75d778ca_18d52c3f",
+        "filename": "src/libANGLE/renderer/vulkan/BufferVk.cpp",
+        "patchSetId": 11
+      },
+      "lineNbr": 656,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2021-11-09T16:39:34Z",
+      "side": 1,
+      "message": "nit: `if ((a \u0026 b) !\u003d 0)`. There\u0027s some warning like \"did you mean \u0026\u0026?\", maybe we don\u0027t have it enabled, but could fire on other compilers.",
+      "range": {
+        "startLine": 656,
+        "startChar": 8,
+        "endLine": 656,
+        "endChar": 44
+      },
+      "revId": "8fc6ecd8b23463b0794cc7192bb6b35ef6b35e9b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "654ab055_c90440b0",
+        "filename": "src/libANGLE/renderer/vulkan/BufferVk.cpp",
+        "patchSetId": 11
+      },
+      "lineNbr": 716,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2021-11-09T16:39:34Z",
+      "side": 1,
+      "message": "nit: explicit cast to bool: !\u003d 0",
+      "range": {
+        "startLine": 716,
+        "startChar": 54,
+        "endLine": 716,
+        "endChar": 55
+      },
+      "revId": "8fc6ecd8b23463b0794cc7192bb6b35ef6b35e9b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "622e3009_0bd0547f",
+        "filename": "src/libANGLE/renderer/vulkan/BufferVk.cpp",
+        "patchSetId": 11
+      },
+      "lineNbr": 717,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2021-11-09T16:39:34Z",
+      "side": 1,
+      "message": "nit: No Yoda: offset \u003d\u003d 0\n\nAlso (personal pet peeve), maybe a little less parenthesisation could help readability. a \u003d\u003d b \u0026\u0026 c \u003d\u003d d is quite common and doesn\u0027t need parentheses.",
+      "range": {
+        "startLine": 717,
+        "startChar": 60,
+        "endLine": 717,
+        "endChar": 71
+      },
+      "revId": "8fc6ecd8b23463b0794cc7192bb6b35ef6b35e9b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "00b6cc6f_ea789fd6",
+        "filename": "src/libANGLE/renderer/vulkan/BufferVk.cpp",
+        "patchSetId": 11
+      },
+      "lineNbr": 717,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2021-11-09T16:39:34Z",
+      "side": 1,
+      "message": "ditto",
+      "range": {
+        "startLine": 717,
+        "startChar": 54,
+        "endLine": 717,
+        "endChar": 55
+      },
+      "revId": "8fc6ecd8b23463b0794cc7192bb6b35ef6b35e9b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b2a7bb4b_1064a7c8",
+        "filename": "src/libANGLE/renderer/vulkan/BufferVk.cpp",
+        "patchSetId": 11
+      },
+      "lineNbr": 793,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2021-11-09T16:39:34Z",
+      "side": 1,
+      "message": "nit: ASSERT(!mShadowBuffer.valid())",
+      "revId": "8fc6ecd8b23463b0794cc7192bb6b35ef6b35e9b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
