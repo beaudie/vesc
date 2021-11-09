@@ -15,7 +15,6 @@ namespace angle
 namespace spirv
 {
 
-#if defined(ANGLE_ENABLE_ASSERTS)
 namespace
 {
 void ValidateSpirvMessage(spv_message_level_t level,
@@ -27,6 +26,7 @@ void ValidateSpirvMessage(spv_message_level_t level,
 }
 }  // anonymous namespace
 
+#if defined(ANGLE_ENABLE_ASSERTS)
 bool Validate(const Blob &blob)
 {
     spvtools::SpirvTools spirvTools(SPV_ENV_VULKAN_1_1);
@@ -51,6 +51,16 @@ bool Validate(const Blob &blob)
     return false;
 }
 #endif  // ANGLE_ENABLE_ASSERTS
+
+void Disassemble(const Blob &blob)
+{
+    spvtools::SpirvTools spirvTools(SPV_ENV_VULKAN_1_1);
+    spirvTools.SetMessageConsumer(ValidateSpirvMessage);
+
+    std::string readableSpirv;
+    spirvTools.Disassemble(blob, &readableSpirv, 0);
+    fprintf(stderr, "%s\n", readableSpirv.c_str());
+}
 
 }  // namespace spirv
 }  // namespace angle

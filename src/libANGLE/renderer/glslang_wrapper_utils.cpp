@@ -4995,6 +4995,9 @@ angle::Result GlslangTransformSpirvCode(const GlslangSpirvOptions &options,
 
     ASSERT(spirv::Validate(*spirvBlobOut));
 
+    // For debugging
+    spirv::Disassemble(*spirvBlobOut);
+
     return angle::Result::Continue;
 }
 }  // namespace rx
