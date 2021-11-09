@@ -24,6 +24,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "0269b97f_175ffbec",
+        "filename": "src/tests/perf_tests/MapBufferRange.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 329,
+      "author": {
+        "id": 1175714
+      },
+      "writtenOn": "2021-11-09T20:21:45Z",
+      "side": 1,
+      "message": "I see; due to complexity I\u0027ll leave the per iteration variation to a future CL. Did add other variations though.",
+      "parentUuid": "a372decf_0d467d34",
+      "range": {
+        "startLine": 329,
+        "startChar": 89,
+        "endLine": 329,
+        "endChar": 99
+      },
+      "revId": "447aebffe061338bf5495c3ae8c996bafcdc106a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "21262966_68a145d1",
@@ -37,6 +61,24 @@
       "writtenOn": "2021-11-09T16:17:12Z",
       "side": 1,
       "message": "If you\u0027re still taking requests, it would be nice if these were more parameteric (and you can focus on variations on Vulkan). For example, one parameter to vary updateOffset, and another for updateSize (to make it very small, like 128 bytes, in light of the vkCmdUpdateBuffer discussion).",
+      "revId": "447aebffe061338bf5495c3ae8c996bafcdc106a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "34f4633c_72e49efa",
+        "filename": "src/tests/perf_tests/MapBufferRange.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 379,
+      "author": {
+        "id": 1175714
+      },
+      "writtenOn": "2021-11-09T20:21:45Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "21262966_68a145d1",
       "revId": "447aebffe061338bf5495c3ae8c996bafcdc106a",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
