@@ -406,6 +406,19 @@ void UpdateVertexArrayID2(GLuint id, GLsizei readBufferOffset)
     UpdateResourceMap2(gVertexArrayMap2, id, readBufferOffset);
 }
 
+void InjectID(GLuint *map, GLuint id)
+{
+    if (map[id] == 0)
+    {
+        map[id] = id;
+    }
+}
+
+void InjectFramebufferID(GLuint id)
+{
+    InjectID(gFramebufferMap2, id);
+}
+
 void ValidateSerializedState(const char *serializedState, const char *fileName, uint32_t line)
 {
     if (gValidateSerializedStateCallback)
