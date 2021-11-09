@@ -750,6 +750,16 @@ angle::Result ContextGL::multiDrawArraysInstanced(const gl::Context *context,
                                                drawcount);
 }
 
+angle::Result ContextGL::multiDrawArraysIndirect(const gl::Context *context,
+                                                 gl::PrimitiveMode mode,
+                                                 const void *indirect,
+                                                 GLsizei drawcount,
+                                                 GLsizei stride)
+{
+    UNIMPLEMENTED();
+    return angle::Result::Stop;
+}
+
 angle::Result ContextGL::multiDrawElements(const gl::Context *context,
                                            gl::PrimitiveMode mode,
                                            const GLsizei *counts,
@@ -774,6 +784,17 @@ angle::Result ContextGL::multiDrawElementsInstanced(const gl::Context *context,
 
     return rx::MultiDrawElementsInstancedGeneral(this, context, mode, counts, type, indices,
                                                  instanceCounts, drawcount);
+}
+
+angle::Result ContextGL::multiDrawElementsIndirect(const gl::Context *context,
+                                                   gl::PrimitiveMode mode,
+                                                   gl::DrawElementsType type,
+                                                   const void *indirect,
+                                                   GLsizei drawcount,
+                                                   GLsizei stride)
+{
+    UNIMPLEMENTED();
+    return angle::Result::Stop;
 }
 
 angle::Result ContextGL::multiDrawArraysInstancedBaseInstance(const gl::Context *context,
