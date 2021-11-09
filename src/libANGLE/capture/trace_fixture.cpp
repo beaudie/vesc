@@ -11,6 +11,7 @@
 
 #include "angle_trace_gl.h"
 
+#include <assert.h>
 #include <string>
 
 namespace
@@ -404,6 +405,17 @@ void UpdateTransformFeedbackID2(GLuint id, GLsizei readBufferOffset)
 void UpdateVertexArrayID2(GLuint id, GLsizei readBufferOffset)
 {
     UpdateResourceMap2(gVertexArrayMap2, id, readBufferOffset);
+}
+
+void SetResourceID(GLuint *map, GLuint id)
+{
+    assert(map[id] == 0);
+    map[id] = id;
+}
+
+void SetFramebufferID(GLuint id)
+{
+    SetResourceID(gFramebufferMap2, id);
 }
 
 void ValidateSerializedState(const char *serializedState, const char *fileName, uint32_t line)
