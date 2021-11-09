@@ -440,6 +440,27 @@ bool ValidateMultiDrawElementsBaseVertexEXT(const Context *context,
     return true;
 }
 
+bool ValidateMultiDrawArraysIndirectEXT(const Context *context,
+                                        angle::EntryPoint entryPoint,
+                                        GLenum mode,
+                                        const void *indirect,
+                                        GLsizei drawcount,
+                                        GLsizei stride)
+{
+    return true;
+}
+
+bool ValidateMultiDrawElementsIndirectEXT(const Context *context,
+                                          angle::EntryPoint entryPoint,
+                                          GLenum mode,
+                                          GLenum type,
+                                          const void *indirect,
+                                          GLsizei drawcount,
+                                          GLsizei stride)
+{
+    return true;
+}
+
 bool ValidateDrawElementsBaseVertexOES(const Context *context,
                                        angle::EntryPoint entryPoint,
                                        PrimitiveMode mode,
