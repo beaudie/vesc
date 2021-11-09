@@ -134,6 +134,24 @@
       "parentUuid": "f8a8b650_b3c67f35",
       "revId": "bcaaa2a3a4fac026cafa7f8fb2a3905ffd6f38c6",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "a120f410_586f8ad3",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 3869,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2021-11-09T16:05:00Z",
+      "side": 1,
+      "message": "Ok, I\u0027ll take a look at it at some point. What test reproduces this?",
+      "parentUuid": "2b869519_438690f4",
+      "revId": "bcaaa2a3a4fac026cafa7f8fb2a3905ffd6f38c6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }

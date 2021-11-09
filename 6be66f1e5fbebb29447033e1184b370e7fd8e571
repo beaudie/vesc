@@ -72,6 +72,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "d8f0217b_e6eb3853",
+        "filename": "src/libANGLE/renderer/vulkan/SurfaceVk.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 593,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2021-11-09T16:05:00Z",
+      "side": 1,
+      "message": "Just adding the ASSERT here makes sure there aren\u0027t any other updates left other than clears (that are already removed). Because if there is, that would be a bug. The ASSERT would go inside the true-block of the if.\n\nThe name also SGTM, though the old was fine too.",
+      "parentUuid": "16fa2fb3_43db9fc8",
+      "revId": "6be66f1e5fbebb29447033e1184b370e7fd8e571",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "dad4bade_bdcefe46",
         "filename": "src/libANGLE/renderer/vulkan/SurfaceVk.cpp",
         "patchSetId": 3
