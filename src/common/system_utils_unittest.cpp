@@ -9,6 +9,9 @@
 #include "gtest/gtest.h"
 
 #include "common/system_utils.h"
+#include "util/test_utils.h"
+
+#include <vector>
 
 using namespace angle;
 
@@ -55,6 +58,35 @@ TEST(SystemUtils, Environment)
 
     readback = GetEnvironmentVar(kEnvVarName);
     EXPECT_EQ("", readback);
+}
+
+// Test CPU time measurement with a small operation
+// (pretty much the measurement itself)
+TEST(SystemUtils, CpuTimeSmallOp)
+{
+    double cpuTimeStart = GetCurrentProcessCpuTime();
+    double cpuTimeEnd   = GetCurrentProcessCpuTime();
+    EXPECT_GE(cpuTimeEnd, cpuTimeStart);
+}
+
+// Test CPU time measurement with a sleepy operation
+TEST(SystemUtils, CpuTimeSleepy)
+{
+    double cpuTimeStart = GetCurrentProcessCpuTime();
+    angle::Sleep(1);
+    double cpuTimeEnd = GetCurrentProcessCpuTime();
+    EXPECT_GE(cpuTimeEnd, cpuTimeStart);
+}
+
+// Test CPU time measurement with a heavy operation
+TEST(SystemUtils, CpuTimeHeavyOp)
+{
+    constexpr size_t bufferSize = 1048576;
+    std::vector<uint8_t> buffer(bufferSize, 1);
+    double cpuTimeStart = GetCurrentProcessCpuTime();
+    memset(buffer.data(), 0, bufferSize);
+    double cpuTimeEnd = GetCurrentProcessCpuTime();
+    EXPECT_GE(cpuTimeEnd, cpuTimeStart);
 }
 
 #if defined(ANGLE_PLATFORM_POSIX)
