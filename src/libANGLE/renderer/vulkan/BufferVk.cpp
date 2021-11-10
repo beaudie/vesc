@@ -721,28 +721,43 @@ angle::Result BufferVk::mapRangeImpl(ContextVk *contextVk,
 
             bool smallMapRange = (length < static_cast<VkDeviceSize>(mState.getSize()) / 2);
 
-            if (entireBufferInvalidated)
+            bool unsync = (access & GL_MAP_UNSYNCHRONIZED_BIT) != 0;
+
+            if (!unsync)
             {
-                ANGLE_TRY(acquireBufferHelper(contextVk, static_cast<size_t>(mState.getSize()),
-                                              BufferUpdateType::ContentsUpdate));
+                if (entireBufferInvalidated)
+                {
+                    ANGLE_TRY(acquireBufferHelper(contextVk, static_cast<size_t>(mState.getSize()),
+                                                  BufferUpdateType::ContentsUpdate));
+                }
+                else if (smallMapRange && rangeInvalidate)
+                {
+                    ANGLE_TRY(allocMappedStagingBuffer(
+                        contextVk, static_cast<size_t>(length), &mMapInvalidateRangeStagingBuffer,
+                        &mMapInvalidateRangeStagingBufferOffset, &mMapInvalidateRangeMappedPtr));
+                    *mapPtr = reinterpret_cast<void *>(mMapInvalidateRangeMappedPtr);
+                    return angle::Result::Continue;
+                }
+                else if (!mBuffer->isCurrentlyInUseForWrite(
+                             contextVk->getLastCompletedQueueSerial()))
+                {
+                    // This will keep the new buffer mapped and update mapPtr, so return
+                    // immediately.
+                    return ghostMappedBuffer(contextVk, offset, length, access, mapPtr);
+                }
+                else if ((access & GL_MAP_UNSYNCHRONIZED_BIT) == 0)
+                {
+                    ANGLE_TRY(mBuffer->waitForIdle(
+                        contextVk, "GPU stall due to mapping buffer in use by the GPU"));
+                }
             }
-            else if (smallMapRange && rangeInvalidate)
+            else
             {
-                ANGLE_TRY(allocMappedStagingBuffer(
-                    contextVk, static_cast<size_t>(length), &mMapInvalidateRangeStagingBuffer,
-                    &mMapInvalidateRangeStagingBufferOffset, &mMapInvalidateRangeMappedPtr));
-                *mapPtr = reinterpret_cast<void *>(mMapInvalidateRangeMappedPtr);
-                return angle::Result::Continue;
-            }
-            else if (!mBuffer->isCurrentlyInUseForWrite(contextVk->getLastCompletedQueueSerial()))
-            {
-                // This will keep the new buffer mapped and update mapPtr, so return immediately.
-                return ghostMappedBuffer(contextVk, offset, length, access, mapPtr);
-            }
-            else if ((access & GL_MAP_UNSYNCHRONIZED_BIT) == 0)
-            {
-                ANGLE_TRY(mBuffer->waitForIdle(
-                    contextVk, "GPU stall due to mapping buffer in use by the GPU"));
+                // We are unsynchronized; fall through and map the buffer directly!
+                // If the app requested a GL_MAP_UNSYNCHRONIZED_BIT access, the spec states -
+                //      No GL error is generated if pending operations which source or modify the
+                //      buffer overlap the mapped region, but the result of such previous and any
+                //      subsequent operations is undefined
             }
         }
 
