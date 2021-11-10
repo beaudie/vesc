@@ -442,6 +442,8 @@ angle::Result DmaBufImageSiblingVkLinux::initImpl(DisplayVk *displayVk)
 
     // Create the image
     mImage = new vk::ImageHelper();
+    mImage->setTilingMode(VK_IMAGE_TILING_DRM_FORMAT_MODIFIER_EXT);
+
 
     VkExtent3D vkExtents;
     gl_vk::GetExtent(mSize, &vkExtents);
@@ -456,6 +458,13 @@ angle::Result DmaBufImageSiblingVkLinux::initImpl(DisplayVk *displayVk)
 
     VkMemoryRequirements externalMemoryRequirements;
     mImage->getImage().getMemoryRequirements(renderer->getDevice(), &externalMemoryRequirements);
+    fprintf(stderr, "%s:%d width %d height %d rowPitch %d externalMemoryRequirements %d\n",
+        __FILE__, __LINE__,
+        (int)vkExtents.width,
+        (int)vkExtents.height,
+        (int)planes[0].rowPitch,
+        (int)externalMemoryRequirements.size);
+        fflush(stderr);
 
     const VkMemoryPropertyFlags flags =
         VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT |
