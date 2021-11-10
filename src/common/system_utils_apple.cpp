@@ -56,4 +56,5 @@ double GetCurrentSystemTime()
     double secondCoeff = timebaseInfo.numer * 1e-9 / timebaseInfo.denom;
     return secondCoeff * mach_absolute_time();
 }
+
 }  // namespace angle
