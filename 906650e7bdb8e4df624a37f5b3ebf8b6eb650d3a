@@ -33,6 +33,87 @@
       "message": "All green.\nBig thanks to Shahbaz for all the help",
       "revId": "906650e7bdb8e4df624a37f5b3ebf8b6eb650d3a",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "80971f66_90115ca4",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 10
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2021-11-10T03:21:04Z",
+      "side": 1,
+      "message": "My pleasure! Thanks for working through the issues with me!",
+      "parentUuid": "0451ba67_ac2ed0f9",
+      "revId": "906650e7bdb8e4df624a37f5b3ebf8b6eb650d3a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "320a5f03_98fd20ab",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 10
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2021-11-10T03:21:04Z",
+      "side": 1,
+      "message": "LGTM, excellent work.\n\nOne final clean up comment is to deduplicate the lockSurface() and unlockSurface() functions where the implementation is mostly identical between offscreen and window surfaces. Once you get the image, it seems the rest is identical? You can create two helper functions (in anonymous namespace) at the top of the file to do the job, and have both offscreen and window surfaces use those helpers.",
+      "revId": "906650e7bdb8e4df624a37f5b3ebf8b6eb650d3a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "4f690f0e_3d2a1992",
+        "filename": "src/libANGLE/renderer/vulkan/vk_utils.cpp",
+        "patchSetId": 10
+      },
+      "lineNbr": 575,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2021-11-10T03:21:04Z",
+      "side": 1,
+      "message": "ditto",
+      "range": {
+        "startLine": 575,
+        "startChar": 36,
+        "endLine": 575,
+        "endChar": 40
+      },
+      "revId": "906650e7bdb8e4df624a37f5b3ebf8b6eb650d3a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "6f4a1855_e9868939",
+        "filename": "src/libANGLE/renderer/vulkan/vk_utils.h",
+        "patchSetId": 10
+      },
+      "lineNbr": 386,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2021-11-10T03:21:04Z",
+      "side": 1,
+      "message": "nit: this is namespace vk already, no need for vk::\n\nAlso below",
+      "range": {
+        "startLine": 386,
+        "startChar": 22,
+        "endLine": 386,
+        "endChar": 26
+      },
+      "revId": "906650e7bdb8e4df624a37f5b3ebf8b6eb650d3a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
