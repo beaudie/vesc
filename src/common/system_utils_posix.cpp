@@ -12,6 +12,7 @@
 #include <iostream>
 
 #include <dlfcn.h>
+#include <sys/resource.h>
 #include <sys/stat.h>
 #include <sys/types.h>
 #include <sys/wait.h>
@@ -199,4 +200,14 @@ std::string GetRootDirectory()
 {
     return "/";
 }
+
+double GetCurrentProcessCpuTime()
+{
+    struct rusage usage;
+    getrusage(RUSAGE_SELF, &usage);
+    double userTime   = usage.ru_utime.tv_sec + usage.ru_utime.tv_usec * 1e-6;
+    double systemTime = usage.ru_stime.tv_sec + usage.ru_stime.tv_usec * 1e-6;
+    return userTime + systemTime;
+}
+
 }  // namespace angle
