@@ -16,6 +16,29 @@
       "message": "PTAL, config-only change.",
       "revId": "1bef6c426d8ff8bac03ffdf523b08c47e8e0efd9",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b387f7ae_b60e455a",
+        "filename": "infra/specs/angle.json",
+        "patchSetId": 2
+      },
+      "lineNbr": 2301,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2021-11-10T21:37:57Z",
+      "side": 1,
+      "message": "Question - why the name changeover here?  Do you anticipate running these on other backends?  If not, could use swiftshader in all the names above.",
+      "range": {
+        "startLine": 2301,
+        "startChar": 3,
+        "endLine": 2301,
+        "endChar": 26
+      },
+      "revId": "1bef6c426d8ff8bac03ffdf523b08c47e8e0efd9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
