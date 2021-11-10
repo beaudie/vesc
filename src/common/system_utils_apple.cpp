@@ -14,6 +14,7 @@
 #include <mach-o/dyld.h>
 #include <mach/mach.h>
 #include <mach/mach_time.h>
+#include <sys/times.h>
 #include <cstdlib>
 #include <vector>
 
@@ -56,4 +57,16 @@ double GetCurrentSystemTime()
     double secondCoeff = timebaseInfo.numer * 1e-9 / timebaseInfo.denom;
     return secondCoeff * mach_absolute_time();
 }
+
+double GetCurrentProcessCpuTime()
+{
+    tms times = {};
+    ::times(&times);
+    const long int ticksPerSec = ::sysconf(_SC_CLK_TCK);
+    double systemTime          = times.tms_stime * 1000.0 / ticksPerSec;
+    double userTime            = times.tms_utime * 1000.0 / ticksPerSec;
+
+    return systemTime + userTime;
+}
+
 }  // namespace angle
