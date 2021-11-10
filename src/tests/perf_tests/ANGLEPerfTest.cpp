@@ -264,6 +264,7 @@ ANGLEPerfTest::ANGLEPerfTest(const std::string &name,
     }
     mReporter = std::make_unique<perf_test::PerfResultReporter>(mName + mBackend, mStory);
     mReporter->RegisterImportantMetric(".wall_time", units);
+    mReporter->RegisterImportantMetric(".cpu_time", units);
     mReporter->RegisterImportantMetric(".gpu_time", units);
     mReporter->RegisterFyiMetric(".trial_steps", "count");
     mReporter->RegisterFyiMetric(".total_steps", "count");
@@ -389,18 +390,20 @@ void ANGLEPerfTest::TearDown() {}
 
 double ANGLEPerfTest::printResults()
 {
-    double elapsedTimeSeconds[2] = {
+    double elapsedTimeSeconds[3] = {
         mTimer.getElapsedTime(),
+        mTimer.getElapsedCpuTime(),
         mGPUTimeNs * 1e-9,
     };
 
-    const char *clockNames[2] = {
+    const char *clockNames[3] = {
         ".wall_time",
+        ".cpu_time",
         ".gpu_time",
     };
 
     // If measured gpu time is non-zero, print that too.
-    size_t clocksToOutput = mGPUTimeNs > 0 ? 2 : 1;
+    size_t clocksToOutput = mGPUTimeNs > 0 ? 3 : 2;
 
     double retValue = 0.0;
     for (size_t i = 0; i < clocksToOutput; ++i)
