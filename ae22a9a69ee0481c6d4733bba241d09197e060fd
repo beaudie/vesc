@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "ea5854c1_16dd759c",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2021-11-10T20:13:12Z",
+      "side": 1,
+      "message": "Fixes the black rendering. Still doesn\u0027t address the assertion, I\u0027ll follow up on that.",
+      "revId": "ae22a9a69ee0481c6d4733bba241d09197e060fd",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
