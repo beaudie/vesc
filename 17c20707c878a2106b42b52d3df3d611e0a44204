@@ -1,0 +1,67 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "51634057_8851e174",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 8
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2021-11-10T21:12:21Z",
+      "side": 1,
+      "message": "Approach LGTM, just some nits.",
+      "revId": "17c20707c878a2106b42b52d3df3d611e0a44204",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "18512024_1466c3ea",
+        "filename": "src/libANGLE/capture/trace_fixture.cpp",
+        "patchSetId": 8
+      },
+      "lineNbr": 412,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2021-11-10T21:12:21Z",
+      "side": 1,
+      "message": "Would prefer curly braces here, and no need for the 2 here either.",
+      "range": {
+        "startLine": 411,
+        "startChar": 0,
+        "endLine": 412,
+        "endChar": 22
+      },
+      "revId": "17c20707c878a2106b42b52d3df3d611e0a44204",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "15d3c40b_10079886",
+        "filename": "src/libANGLE/capture/trace_fixture.h",
+        "patchSetId": 8
+      },
+      "lineNbr": 179,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2021-11-10T21:12:21Z",
+      "side": 1,
+      "message": "You shouldn\u0027t need to append the 2 here.  That\u0027s just to distinguish new and old versions of other entry points to preserve backwards compatibility.",
+      "range": {
+        "startLine": 179,
+        "startChar": 5,
+        "endLine": 179,
+        "endChar": 25
+      },
+      "revId": "17c20707c878a2106b42b52d3df3d611e0a44204",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
