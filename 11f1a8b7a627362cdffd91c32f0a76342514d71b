@@ -1,0 +1,55 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "637cf7cf_098df606",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2021-11-10T03:11:47Z",
+      "side": 1,
+      "message": "LGTM",
+      "revId": "11f1a8b7a627362cdffd91c32f0a76342514d71b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ad7b8928_571ee771",
+        "filename": "src/tests/deqp_support/angle_deqp_gtest.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 144,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2021-11-10T03:11:47Z",
+      "side": 1,
+      "message": "Should we add a --no-renderdoc option to override the default? That might be useful if the UI\u0027s \"Queue Capture\" is used for some reason. Like if running a sequence of tests (because some test fails only after another set of tests) and you want to only capture starting from frame N.",
+      "revId": "11f1a8b7a627362cdffd91c32f0a76342514d71b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "06f31a8f_6711ff93",
+        "filename": "src/tests/test_utils/ANGLETest.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 415,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2021-11-10T03:11:47Z",
+      "side": 1,
+      "message": "Same here",
+      "revId": "11f1a8b7a627362cdffd91c32f0a76342514d71b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
