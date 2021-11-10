@@ -16,6 +16,41 @@
       "message": "Suggest splitting the system info stuff in another change. That has been a thorny part of ANGLE when Chrome gets released in the wild.",
       "revId": "0fef1142746f80c14a21315b445e6fc54268ae59",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "6edd1ca0_bf0d5c52",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 23
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2021-11-10T21:31:42Z",
+      "side": 1,
+      "message": "Cool stuff, thanks Jamie!",
+      "revId": "0fef1142746f80c14a21315b445e6fc54268ae59",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "b024ef0f_82b6201b",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 23
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2021-11-10T21:31:42Z",
+      "side": 1,
+      "message": "I think you\u0027d have to revert two things if the first caused problems.  I\u0027m okay landing them together, but defer to Shabi on Chrome release experience.",
+      "parentUuid": "0e99c3cd_b2b2b451",
+      "revId": "0fef1142746f80c14a21315b445e6fc54268ae59",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
