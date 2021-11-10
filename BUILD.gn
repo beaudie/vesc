@@ -936,7 +936,10 @@ angle_source_set("libANGLE_base") {
   }
 
   if (is_debug) {
-    defines += [ "ANGLE_GENERATE_SHADER_DEBUG_INFO" ]
+    defines += [
+      "ANGLE_GENERATE_SHADER_DEBUG_INFO",
+      "ANGLE_TEST_ENABLE_RENDERDOC_CAPTURE",
+    ]
   }
 
   configs += [ ":debug_annotations_config" ]

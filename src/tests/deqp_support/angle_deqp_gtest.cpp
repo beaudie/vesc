@@ -132,10 +132,16 @@ constexpr uint32_t kDefaultPreRotation = 270;
 constexpr uint32_t kDefaultPreRotation = 0;
 #endif
 
+#if defined(ANGLE_TEST_ENABLE_RENDERDOC_CAPTURE)
+constexpr bool kEnableRenderDocCapture = true;
+#else
+constexpr bool kEnableRenderDocCapture = false;
+#endif
+
 const APIInfo *gInitAPI = nullptr;
 dEQPOptions gOptions    = {
-    kDefaultPreRotation,  // preRotation
-    false,                // enableRenderDocCapture
+    kDefaultPreRotation,      // preRotation
+    kEnableRenderDocCapture,  // enableRenderDocCapture
 };
 
 constexpr const char gdEQPEGLConfigNameString[] = "--deqp-gl-config-name=";

@@ -408,7 +408,11 @@ void SetTestStartDelay(const char *testStartDelay)
     gTestStartDelaySeconds = std::stoi(testStartDelay);
 }
 
+#if defined(ANGLE_TEST_ENABLE_RENDERDOC_CAPTURE)
+bool gEnableRenderDocCapture = true;
+#else
 bool gEnableRenderDocCapture = false;
+#endif
 
 // static
 std::array<Vector3, 6> ANGLETestBase::GetQuadVertices()
