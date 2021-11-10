@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "6bf53624_07c9fe67",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1163549
+      },
+      "writtenOn": "2021-11-10T00:35:27Z",
+      "side": 1,
+      "message": "PTAL\n\nangle_white_box_tests passed in https://ci.chromium.org/ui/p/chromium/builders/try/win_optional_gpu_tests_rel/71677/overview which was the cause of this being skipped in the first place, so should be safe to land.",
+      "revId": "ecca8654e6ba03820a8655ce4b65bb5f0107bd44",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
