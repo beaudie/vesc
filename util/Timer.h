@@ -19,11 +19,14 @@ class Timer final
     void start();
     void stop();
     double getElapsedTime() const;
+    double getElapsedCpuTime() const;
 
   private:
     bool mRunning;
     double mStartTime;
     double mStopTime;
+    double mStartCpuTime;
+    double mStopCpuTime;
 };
 
 #endif  // SAMPLE_UTIL_TIMER_H
