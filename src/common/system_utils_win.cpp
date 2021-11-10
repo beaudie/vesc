@@ -83,6 +83,30 @@ double GetCurrentSystemTime()
     return static_cast<double>(curTime.QuadPart) / frequency.QuadPart;
 }
 
+double GetCurrentProcessCpuTime()
+{
+    FILETIME creationTime = {};
+    FILETIME exitTime     = {};
+    FILETIME kernelTime   = {};
+    FILETIME userTime     = {};
+    GetProcessTimes(GetCurrentProcess(), &creationTime, &exitTime, &kernelTime, &userTime);
+    (void)creationTime;
+    (void)exitTime;
+
+    // convert 100-ns intervals from a struct to int64_t milliseconds
+    ULARGE_INTEGER kernelInt64;
+    kernelInt64.LowPart  = kernelTime.dwLowDateTime;
+    kernelInt64.HighPart = kernelTime.dwHighDateTime;
+    double systemTime    = kernelInt64.QuadPart * 1e-7;
+
+    ULARGE_INTEGER userInt64;
+    userInt64.LowPart  = userTime.dwLowDateTime;
+    userInt64.HighPart = userTime.dwHighDateTime;
+    double userTime    = kernelInt64.QuadPart * 1e-7;
+
+    return systemTime + userTime;
+}
+
 bool IsDirectory(const char *filename)
 {
     WIN32_FILE_ATTRIBUTE_DATA fileInformation;

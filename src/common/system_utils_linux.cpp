@@ -8,6 +8,7 @@
 
 #include "system_utils.h"
 
+#include <sys/resource.h>
 #include <sys/stat.h>
 #include <sys/time.h>
 #include <sys/types.h>
@@ -50,6 +51,15 @@ double GetCurrentSystemTime()
     struct timespec currentTime;
     clock_gettime(CLOCK_MONOTONIC, &currentTime);
     return currentTime.tv_sec + currentTime.tv_nsec * 1e-9;
+}
+
+double GetCurrentProcessCpuTime()
+{
+    struct rusage usage;
+    getrusage(RUSAGE_SELF, &usage);
+    double userTime   = usage.ru_utime.tv_sec + usage.ru_utime.tv_usec * 1e-6;
+    double systemTime = usage.ru_stime.tv_sec + usage.ru_stime.tv_usec * 1e-6;
+    return userTime + systemTime;
 }
 
 }  // namespace angle
