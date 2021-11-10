@@ -103,6 +103,42 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "20dd8877_a43e51d6",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 6
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1359249
+      },
+      "writtenOn": "2021-11-10T00:48:24Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "b8b372d8_fc1fb062",
+      "revId": "d76d96998afff2122ff3e30583c89dda8671953b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "18510174_0b7d7eb6",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 6
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1359249
+      },
+      "writtenOn": "2021-11-10T00:48:24Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "97defdcf_5106e9aa",
+      "revId": "d76d96998afff2122ff3e30583c89dda8671953b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "46496080_ae5de52c",
@@ -138,6 +174,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "60e4d0d5_33e1ec53",
+        "filename": "src/libANGLE/renderer/vulkan/SurfaceVk.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 624,
+      "author": {
+        "id": 1359249
+      },
+      "writtenOn": "2021-11-10T00:48:24Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "0537ff91_06538f71",
+      "revId": "d76d96998afff2122ff3e30583c89dda8671953b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "140b9207_97e53418",
@@ -169,6 +223,24 @@
       "side": 1,
       "message": "Sure. Just thought I needed to clean up memory.",
       "parentUuid": "140b9207_97e53418",
+      "revId": "d76d96998afff2122ff3e30583c89dda8671953b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "2dc6f925_7db7eb60",
+        "filename": "src/libANGLE/renderer/vulkan/SurfaceVk.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 2257,
+      "author": {
+        "id": 1359249
+      },
+      "writtenOn": "2021-11-10T00:48:24Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "955cc267_9bf88a32",
       "revId": "d76d96998afff2122ff3e30583c89dda8671953b",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
