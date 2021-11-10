@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "971814b8_ef775c69",
+        "filename": "src/libANGLE/AttributeMap.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 124,
+      "author": {
+        "id": 1326275
+      },
+      "writtenOn": "2021-11-10T18:38:00Z",
+      "side": 1,
+      "message": "Are we ok with c style casts in this case?",
+      "range": {
+        "startLine": 124,
+        "startChar": 4,
+        "endLine": 124,
+        "endChar": 10
+      },
+      "revId": "c6c4db8fd832abab3c90b1c70117511d06bc86f0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
