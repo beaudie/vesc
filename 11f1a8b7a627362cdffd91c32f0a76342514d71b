@@ -20,6 +20,29 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "1f86626c_e093682d",
+        "filename": "BUILD.gn",
+        "patchSetId": 1
+      },
+      "lineNbr": 941,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2021-11-10T14:19:04Z",
+      "side": 1,
+      "message": "instead of tying this to is_debug, I\u0027d just piggy back on \"are debug layers enabled\" which will allow us to use it by default in release assert builds.",
+      "range": {
+        "startLine": 941,
+        "startChar": 7,
+        "endLine": 941,
+        "endChar": 42
+      },
+      "revId": "11f1a8b7a627362cdffd91c32f0a76342514d71b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "ad7b8928_571ee771",
         "filename": "src/tests/deqp_support/angle_deqp_gtest.cpp",
         "patchSetId": 1
