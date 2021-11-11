@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "e8677f14_de3243b6",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2021-11-11T02:46:25Z",
+      "side": 1,
+      "message": "The capacity issue should have been resolved in https://chromium-review.googlesource.com/c/chromium/src/+/3271952 . Re-CQ\u0027ing.\n",
+      "revId": "abdc1a14428a50b49eb0f34da8ebaa6ed3eda5dc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
