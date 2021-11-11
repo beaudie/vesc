@@ -46,6 +46,30 @@
       },
       "revId": "707c6273eedf69adad606a0ad0ed162b8f8f73df",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "c9fb8858_b5e6aa68",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 598,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2021-11-11T15:35:13Z",
+      "side": 1,
+      "message": "By take it out I meant to say - factor it out, and put it in a common shared place so you don\u0027t have to specify it in every instance. Using an enum would put all the strings in one place which would be nice.",
+      "parentUuid": "28cbc293_4393f8c5",
+      "range": {
+        "startLine": 598,
+        "startChar": 22,
+        "endLine": 598,
+        "endChar": 41
+      },
+      "revId": "707c6273eedf69adad606a0ad0ed162b8f8f73df",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
