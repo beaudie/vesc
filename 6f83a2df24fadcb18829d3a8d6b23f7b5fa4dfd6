@@ -46,6 +46,30 @@
       },
       "revId": "6f83a2df24fadcb18829d3a8d6b23f7b5fa4dfd6",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "774587d4_b8f925cf",
+        "filename": "src/libANGLE/renderer/vulkan/VulkanSecondaryCommandBuffer.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 436,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2021-11-11T16:25:43Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "e9fecc81_509c3065",
+      "range": {
+        "startLine": 435,
+        "startChar": 0,
+        "endLine": 436,
+        "endChar": 29
+      },
+      "revId": "6f83a2df24fadcb18829d3a8d6b23f7b5fa4dfd6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
