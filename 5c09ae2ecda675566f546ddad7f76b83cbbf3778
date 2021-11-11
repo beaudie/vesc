@@ -16,6 +16,24 @@
       "message": "Can you update those tests to use warnings as errors? See \"treatPlatformWarningsAsErrors\"",
       "revId": "5c09ae2ecda675566f546ddad7f76b83cbbf3778",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "01af9b62_a50865c6",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2021-11-11T15:16:33Z",
+      "side": 1,
+      "message": "Unfortunately there are still warnings produced by them. On some platforms, they complain that we are using a VK1.1 extensions but asked for a VK1.0 instance.",
+      "parentUuid": "353b5078_be9cb84c",
+      "revId": "5c09ae2ecda675566f546ddad7f76b83cbbf3778",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
