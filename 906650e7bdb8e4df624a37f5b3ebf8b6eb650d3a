@@ -70,6 +70,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "808dd395_a9649f47",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 10
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1359249
+      },
+      "writtenOn": "2021-11-11T00:25:19Z",
+      "side": 1,
+      "message": "\u003e LGTM, excellent work.\n\u003e \n\u003e One final clean up comment is to deduplicate the lockSurface() and unlockSurface() functions where the implementation is mostly identical between offscreen and window surfaces. Once you get the image, it seems the rest is identical? You can create two helper functions (in anonymous namespace) at the top of the file to do the job, and have both offscreen and window surfaces use those helpers.\n\nRefactored, has a lot params.",
+      "parentUuid": "320a5f03_98fd20ab",
+      "revId": "906650e7bdb8e4df624a37f5b3ebf8b6eb650d3a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "4f690f0e_3d2a1992",
@@ -93,6 +111,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "535a7f30_a4f86d60",
+        "filename": "src/libANGLE/renderer/vulkan/vk_utils.cpp",
+        "patchSetId": 10
+      },
+      "lineNbr": 575,
+      "author": {
+        "id": 1359249
+      },
+      "writtenOn": "2021-11-11T00:25:19Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "4f690f0e_3d2a1992",
+      "range": {
+        "startLine": 575,
+        "startChar": 36,
+        "endLine": 575,
+        "endChar": 40
+      },
+      "revId": "906650e7bdb8e4df624a37f5b3ebf8b6eb650d3a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "6f4a1855_e9868939",
@@ -106,6 +148,30 @@
       "writtenOn": "2021-11-10T03:21:04Z",
       "side": 1,
       "message": "nit: this is namespace vk already, no need for vk::\n\nAlso below",
+      "range": {
+        "startLine": 386,
+        "startChar": 22,
+        "endLine": 386,
+        "endChar": 26
+      },
+      "revId": "906650e7bdb8e4df624a37f5b3ebf8b6eb650d3a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "b6ddb969_0659d707",
+        "filename": "src/libANGLE/renderer/vulkan/vk_utils.h",
+        "patchSetId": 10
+      },
+      "lineNbr": 386,
+      "author": {
+        "id": 1359249
+      },
+      "writtenOn": "2021-11-11T00:25:19Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "6f4a1855_e9868939",
       "range": {
         "startLine": 386,
         "startChar": 22,
