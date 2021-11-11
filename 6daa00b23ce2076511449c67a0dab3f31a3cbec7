@@ -74,6 +74,30 @@
       },
       "revId": "6daa00b23ce2076511449c67a0dab3f31a3cbec7",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "38842da1_541fba25",
+        "filename": "extensions/ANGLE_external_objects_flags.txt",
+        "patchSetId": 2
+      },
+      "lineNbr": 62,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2021-11-11T17:08:33Z",
+      "side": 1,
+      "message": "I get the appeal, but there are a number of things in VkImageCreateInfo that maybe shouldn\u0027t be shared?\n\nThis is building on EXT_external_objects, which is why it looks like this. Since you are working on making ANGLE and Chromium directly share the image handles, I think this whole extension can be thrown away once that\u0027s done.",
+      "parentUuid": "da817e23_97de6663",
+      "range": {
+        "startLine": 62,
+        "startChar": 51,
+        "endLine": 62,
+        "endChar": 71
+      },
+      "revId": "6daa00b23ce2076511449c67a0dab3f31a3cbec7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
