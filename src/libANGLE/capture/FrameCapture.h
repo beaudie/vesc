@@ -505,7 +505,12 @@ class FrameCaptureShared final : angle::NonCopyable
                                                     EntryPoint entryPoint);
 
     // Capture coherent buffer storages
-    void captureCoherentBufferSnapshot(const gl::Context *context, gl::BufferID bufferID);
+    void captureCoherentBufferSnapshot(const gl::Context *context,
+                                       gl::BufferID bufferID,
+                                       EntryPoint entryPoint,
+                                       GLsizei count,
+                                       const void *indices,
+                                       gl::DrawElementsType drawElementsType);
 
     // Remove any cached texture levels on deletion
     void deleteCachedTextureLevelData(gl::TextureID id);
@@ -603,7 +608,11 @@ class FrameCaptureShared final : angle::NonCopyable
     void maybeCaptureDrawElementsClientData(const gl::Context *context,
                                             CallCapture &call,
                                             size_t instanceCount);
-    void maybeCaptureCoherentBuffers(const gl::Context *context);
+    void maybeCaptureCoherentBuffers(const gl::Context *context,
+                                     EntryPoint entryPoint,
+                                     GLsizei count,
+                                     const void *indices,
+                                     gl::DrawElementsType drawElementsType);
     void updateCopyImageSubData(CallCapture &call);
     void overrideProgramBinary(const gl::Context *context,
                                CallCapture &call,

@@ -5190,7 +5190,11 @@ void FrameCaptureShared::maybeOverrideEntryPoint(const gl::Context *context,
     }
 }
 
-void FrameCaptureShared::maybeCaptureCoherentBuffers(const gl::Context *context)
+void FrameCaptureShared::maybeCaptureCoherentBuffers(const gl::Context *context,
+                                                     EntryPoint entryPoint,
+                                                     GLsizei count,
+                                                     const void *indices,
+                                                     gl::DrawElementsType drawElementsType)
 {
     if (!isCaptureActive())
     {
@@ -5201,7 +5205,8 @@ void FrameCaptureShared::maybeCaptureCoherentBuffers(const gl::Context *context)
     {
         if (mCoherentBufferTracker.isDirty(pair.first))
         {
-            captureCoherentBufferSnapshot(context, pair.first);
+            captureCoherentBufferSnapshot(context, pair.first, entryPoint, count, indices,
+                                          drawElementsType);
         }
     }
 }
@@ -5417,7 +5422,9 @@ void FrameCaptureShared::maybeCapturePreCallUpdates(
         case EntryPoint::GLDrawArrays:
         {
             maybeCaptureDrawArraysClientData(context, call, 1);
-            maybeCaptureCoherentBuffers(context);
+            GLsizei count = call.params.getParam("count", ParamType::TGLsizei, 2).value.GLsizeiVal;
+            maybeCaptureCoherentBuffers(context, call.entryPoint, count, nullptr,
+                                        gl::DrawElementsType::InvalidEnum);
             break;
         }
 
@@ -5429,15 +5436,27 @@ void FrameCaptureShared::maybeCapturePreCallUpdates(
                 call.params.getParamFlexName("instancecount", "primcount", ParamType::TGLsizei, 3)
                     .value.GLsizeiVal;
 
+            GLsizei count = call.params.getParam("count", ParamType::TGLsizei, 2).value.GLsizeiVal;
+
             maybeCaptureDrawArraysClientData(context, call, instancecount);
-            maybeCaptureCoherentBuffers(context);
+            maybeCaptureCoherentBuffers(context, call.entryPoint, count, nullptr,
+                                        gl::DrawElementsType::InvalidEnum);
             break;
         }
 
         case EntryPoint::GLDrawElements:
         {
             maybeCaptureDrawElementsClientData(context, call, 1);
-            maybeCaptureCoherentBuffers(context);
+            GLsizei count = call.params.getParam("count", ParamType::TGLsizei, 1).value.GLsizeiVal;
+
+            gl::DrawElementsType drawElementsType =
+                call.params.getParam("typePacked", ParamType::TDrawElementsType, 2)
+                    .value.DrawElementsTypeVal;
+
+            const void *indices = call.params.getParam("indices", ParamType::TvoidConstPointer, 3)
+                                      .value.voidConstPointerVal;
+
+            maybeCaptureCoherentBuffers(context, call.entryPoint, count, indices, drawElementsType);
             break;
         }
 
@@ -5449,8 +5468,17 @@ void FrameCaptureShared::maybeCapturePreCallUpdates(
                 call.params.getParamFlexName("instancecount", "primcount", ParamType::TGLsizei, 4)
                     .value.GLsizeiVal;
 
+            GLsizei count = call.params.getParam("count", ParamType::TGLsizei, 1).value.GLsizeiVal;
+
+            gl::DrawElementsType drawElementsType =
+                call.params.getParam("typePacked", ParamType::TDrawElementsType, 2)
+                    .value.DrawElementsTypeVal;
+
+            const void *indices = call.params.getParam("indices", ParamType::TvoidConstPointer, 3)
+                                      .value.voidConstPointerVal;
+
             maybeCaptureDrawElementsClientData(context, call, instancecount);
-            maybeCaptureCoherentBuffers(context);
+            maybeCaptureCoherentBuffers(context, call.entryPoint, count, indices, drawElementsType);
             break;
         }
 
@@ -5920,13 +5948,67 @@ void FrameCaptureShared::captureClientArraySnapshot(const gl::Context *context,
     }
 }
 
-void FrameCaptureShared::captureCoherentBufferSnapshot(const gl::Context *context, gl::BufferID id)
+std::pair<uintptr_t, uintptr_t> FindDrawReadingRange(const gl::Context *context,
+                                                     gl::BufferID id,
+                                                     GLsizei count)
+{
+    std::pair<uintptr_t, uintptr_t> readingRange;
+    bool startValid = false;
+
+    for (const auto &vertexArrayIter : context->getVertexArraysForCapture())
+    {
+        gl::VertexArrayID vertexArrayID = {vertexArrayIter.first};
+        if (vertexArrayID.value != 0 && vertexArrayIter.second)
+        {
+            const gl::VertexArray *vertexArray = vertexArrayIter.second;
+
+            const std::vector<gl::VertexAttribute> &vertexAttribs =
+                vertexArray->getVertexAttributes();
+            const std::vector<gl::VertexBinding> &vertexBindings = vertexArray->getVertexBindings();
+
+            for (GLuint attribIndex = 0; attribIndex < gl::MAX_VERTEX_ATTRIBS; ++attribIndex)
+            {
+                const gl::VertexAttribute &attrib = vertexAttribs[attribIndex];
+                const gl::VertexBinding &binding  = vertexBindings[attrib.bindingIndex];
+
+                if (attrib.enabled && binding.getBuffer().get()->id() == id)
+                {
+                    uintptr_t attribStart = reinterpret_cast<uintptr_t>(attrib.pointer);
+                    ASSERT(attrib.vertexAttribArrayStride != 0);
+                    uintptr_t attribEnd = attribStart + count * attrib.vertexAttribArrayStride;
+
+                    if (!startValid || attribStart < readingRange.first)
+                    {
+                        readingRange.first = attribStart;
+                        startValid         = true;
+                    }
+
+                    if (attribEnd > readingRange.second)
+                    {
+                        readingRange.second = attribEnd;
+                    }
+                }
+            }
+        }
+    }
+
+    return readingRange;
+}
+
+void FrameCaptureShared::captureCoherentBufferSnapshot(const gl::Context *context,
+                                                       gl::BufferID id,
+                                                       EntryPoint entryPoint,
+                                                       GLsizei count,
+                                                       const void *indices,
+                                                       gl::DrawElementsType drawElementsType)
 {
     FrameCaptureShared *frameCaptureShared = context->getShareGroup()->getFrameCaptureShared();
 
     gl::Buffer *buffer = nullptr;
 
     const gl::State &apiState = context->getState();
+
+    bool isArray = false;
 
     // An application may update mapped coherent buffers that are not bound on a
     // different thread. To prevent capture during writing and also minimize the trace size and
@@ -5936,7 +6018,8 @@ void FrameCaptureShared::captureCoherentBufferSnapshot(const gl::Context *contex
     {
         if (id == boundBuffers[binding].id())
         {
-            buffer = context->getState().getTargetBuffer(binding);
+            isArray = binding == gl::BufferBinding::Array;
+            buffer  = context->getState().getTargetBuffer(binding);
             break;
         }
     }
@@ -5973,7 +6056,72 @@ void FrameCaptureShared::captureCoherentBufferSnapshot(const gl::Context *contex
     uintptr_t start   = reinterpret_cast<uintptr_t>(buffer->getMapPointer());
     GLsizeiptr length = mBufferDataMap[id].second;
 
-    for (auto &pageRange : dirtyPageRanges)
+    if ((entryPoint == EntryPoint::GLDrawElementsInstanced ||
+         entryPoint == EntryPoint::GLDrawElements) &&
+        isArray)
+    {
+        gl::Buffer *elementArrayBuffer =
+            context->getState().getVertexArray()->getElementArrayBuffer();
+        if (elementArrayBuffer)
+        {
+            bool restart  = context->getState().isPrimitiveRestartEnabled();
+            size_t offset = reinterpret_cast<size_t>(indices);
+            gl::IndexRange indexRange;
+            (void)elementArrayBuffer->getIndexRange(context, drawElementsType, offset, count,
+                                                    restart, &indexRange);
+            count = (GLsizei)indexRange.end + 1;
+        }
+    }
+
+    std::vector<std::pair<int32_t, int32_t>> *iterPageRanges = &dirtyPageRanges;
+
+    std::vector<std::pair<int32_t, int32_t>> filteredPageRanges;
+    if ((entryPoint == EntryPoint::GLDrawElements ||
+         entryPoint == EntryPoint::GLDrawElementsInstanced ||
+         entryPoint == EntryPoint::GLDrawArrays ||
+         entryPoint == EntryPoint::GLDrawArraysInstanced) &&
+        isArray)
+    {
+        // Check which area of the array will be read
+        std::pair<uintptr_t, uintptr_t> readingRange = FindDrawReadingRange(context, id, count);
+
+        for (auto &pageRange : dirtyPageRanges)
+        {
+            std::pair<uintptr_t, size_t> range =
+                mCoherentBufferTracker.mBuffers.at(id)->getDirtyAddressRange(pageRange);
+
+            // Check if dirty range overlaps with reading range
+            uintptr_t readingStart = start + readingRange.first;
+            uintptr_t readingEnd   = start + readingRange.second;
+
+            uintptr_t rangeStart = range.first;
+            uintptr_t rangeEnd   = range.first + range.second;
+
+            bool dirtyStartIsInReadingRange = rangeStart >= readingStart && rangeStart < readingEnd;
+            bool dirtyEndIsInReadingRange   = rangeEnd >= readingStart && rangeEnd < readingEnd;
+
+            bool readingStartIsInDirtyRange = readingStart >= rangeStart && readingStart < rangeEnd;
+            bool readingEndIsInDirtyRange   = readingEnd >= rangeStart && readingEnd < rangeEnd;
+
+            if (dirtyStartIsInReadingRange || dirtyEndIsInReadingRange ||
+                readingStartIsInDirtyRange || readingEndIsInDirtyRange)
+            {
+                // Dirty page range overlaps with reading range
+                filteredPageRanges.push_back(pageRange);
+            }
+        }
+
+        if (filteredPageRanges.empty())
+        {
+            return;
+        }
+        else if (filteredPageRanges.size() != dirtyPageRanges.size())
+        {
+            iterPageRanges = &filteredPageRanges;
+        }
+    }
+
+    for (auto &pageRange : *iterPageRanges)
     {
         std::pair<uintptr_t, size_t> range =
             mCoherentBufferTracker.mBuffers.at(id)->getDirtyAddressRange(pageRange);
