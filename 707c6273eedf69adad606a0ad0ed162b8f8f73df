@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "10f22399_8c861552",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 598,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2021-11-11T15:01:12Z",
+      "side": 1,
+      "message": "\u0027render pass closed\u0027 is redundant with all these reasons, I suggest you take it out.\n\nI think it would be cleaner using an enum and then a string dictionary as well.",
+      "range": {
+        "startLine": 598,
+        "startChar": 22,
+        "endLine": 598,
+        "endChar": 41
+      },
+      "revId": "707c6273eedf69adad606a0ad0ed162b8f8f73df",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
