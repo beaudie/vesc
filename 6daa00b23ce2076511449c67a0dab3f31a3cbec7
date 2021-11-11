@@ -98,6 +98,30 @@
       },
       "revId": "6daa00b23ce2076511449c67a0dab3f31a3cbec7",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "2666c35d_918716f2",
+        "filename": "extensions/ANGLE_external_objects_flags.txt",
+        "patchSetId": 2
+      },
+      "lineNbr": 62,
+      "author": {
+        "id": 1000050
+      },
+      "writtenOn": "2021-11-11T17:16:21Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "38842da1_541fba25",
+      "range": {
+        "startLine": 62,
+        "startChar": 51,
+        "endLine": 62,
+        "endChar": 71
+      },
+      "revId": "6daa00b23ce2076511449c67a0dab3f31a3cbec7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
