@@ -22,6 +22,30 @@
       },
       "revId": "707c6273eedf69adad606a0ad0ed162b8f8f73df",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "28cbc293_4393f8c5",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 598,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2021-11-11T15:12:00Z",
+      "side": 1,
+      "message": "I can\u0027t really take it out, because then the message would be meaningless in playback.\n\nI\u0027ll see what I can do about enum. The only complication is the one in ResourceVk.cpp which is not in this form (RP closed due to ...) because I was lazy.",
+      "parentUuid": "10f22399_8c861552",
+      "range": {
+        "startLine": 598,
+        "startChar": 22,
+        "endLine": 598,
+        "endChar": 41
+      },
+      "revId": "707c6273eedf69adad606a0ad0ed162b8f8f73df",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
