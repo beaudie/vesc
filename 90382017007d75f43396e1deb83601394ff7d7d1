@@ -16,6 +16,91 @@
       "message": "Found that I was checking instance extensions not device extensions. We now see it and enable feature.",
       "revId": "90382017007d75f43396e1deb83601394ff7d7d1",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "809b29d5_b7f21e44",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 11
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1359249
+      },
+      "writtenOn": "2021-11-11T23:53:03Z",
+      "side": 1,
+      "message": "One question about barrierImpl() that seems wrong.",
+      "revId": "90382017007d75f43396e1deb83601394ff7d7d1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "d44d8451_551c23bc",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.cpp",
+        "patchSetId": 11
+      },
+      "lineNbr": 1225,
+      "author": {
+        "id": 1359249
+      },
+      "writtenOn": "2021-11-11T23:53:03Z",
+      "side": 1,
+      "message": "This needs to be in device extensions section.",
+      "revId": "90382017007d75f43396e1deb83601394ff7d7d1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "cb48bf3e_8806464b",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.cpp",
+        "patchSetId": 11
+      },
+      "lineNbr": 1232,
+      "author": {
+        "id": 1359249
+      },
+      "writtenOn": "2021-11-11T23:53:03Z",
+      "side": 1,
+      "message": "Remove debug.",
+      "revId": "90382017007d75f43396e1deb83601394ff7d7d1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "52762a39_2bd60ddd",
+        "filename": "src/libANGLE/renderer/vulkan/SurfaceVk.cpp",
+        "patchSetId": 11
+      },
+      "lineNbr": 1771,
+      "author": {
+        "id": 1359249
+      },
+      "writtenOn": "2021-11-11T23:53:03Z",
+      "side": 1,
+      "message": "Need to save new Layout here.\nimage.image.setCurrentImageLayout(ImageLayout::SharedPresent);",
+      "revId": "90382017007d75f43396e1deb83601394ff7d7d1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "3beb64b8_5a624086",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 11
+      },
+      "lineNbr": 4984,
+      "author": {
+        "id": 1359249
+      },
+      "writtenOn": "2021-11-11T23:53:03Z",
+      "side": 1,
+      "message": "Is this right? \nWe are getting a call after we are in SharedPresent to go to TransferDst. Maybe from flush. Should the transition just be ignored?",
+      "revId": "90382017007d75f43396e1deb83601394ff7d7d1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
