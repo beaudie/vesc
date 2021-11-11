@@ -16,6 +16,24 @@
       "message": "What are you using the other dEQP flags for? We parse out flags intentionally to avoid passing certain incompatible things to dEQP.",
       "revId": "989c27f64ab43d26a6a8b996b8ad01dfabdc1f87",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "6712a9f3_c9071cd4",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2021-11-11T15:15:29Z",
+      "side": 1,
+      "message": "There was a bug report that we fail tests when `--deqp-surface-type\u003dfbo` is used. There is no way currently to provide that to our build of dEQP. The bug report also had --deqp-surface-width\u003d64 --deqp-surface-height\u003d-1 --deqp-watchdog\u003ddisable --deqp-base-seed\u003d3 --deqp-gl-config-name\u003drgba8888d24s8 none of which we support either. It made more sense to be able to forward these.\n\n\u003e We parse out flags intentionally to avoid passing certain incompatible things to dEQP.\n\nWhat incompatible things? And was that ever a problem? Note that this change only passes the --deqp-* flags that aren\u0027t otherwise known to us, so we are still protected against passing incompatible things on the flags we care about.",
+      "parentUuid": "a600838a_c43f2c50",
+      "revId": "989c27f64ab43d26a6a8b996b8ad01dfabdc1f87",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
