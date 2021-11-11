@@ -34,6 +34,46 @@
       "parentUuid": "6bcf7b5d_d03f791f",
       "revId": "6daa00b23ce2076511449c67a0dab3f31a3cbec7",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "4eb95958_8eff718c",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000050
+      },
+      "writtenOn": "2021-11-11T17:02:52Z",
+      "side": 1,
+      "message": "lgtm with a suggestion.",
+      "revId": "6daa00b23ce2076511449c67a0dab3f31a3cbec7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "da817e23_97de6663",
+        "filename": "extensions/ANGLE_external_objects_flags.txt",
+        "patchSetId": 2
+      },
+      "lineNbr": 62,
+      "author": {
+        "id": 1000050
+      },
+      "writtenOn": "2021-11-11T17:02:52Z",
+      "side": 1,
+      "message": "suggestion: instead of adding the new param, maybe we could add a new method like\nTexStorageMemImageCreateInfo which accepts VkImageCreateInfo, and most of other params of TexStorageMemFlags2DANGLE could be removed.",
+      "range": {
+        "startLine": 62,
+        "startChar": 51,
+        "endLine": 62,
+        "endChar": 71
+      },
+      "revId": "6daa00b23ce2076511449c67a0dab3f31a3cbec7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
