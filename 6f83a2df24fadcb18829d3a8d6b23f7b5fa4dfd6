@@ -22,6 +22,30 @@
       },
       "revId": "6f83a2df24fadcb18829d3a8d6b23f7b5fa4dfd6",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "e9fecc81_509c3065",
+        "filename": "src/libANGLE/renderer/vulkan/VulkanSecondaryCommandBuffer.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 436,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2021-11-11T15:09:19Z",
+      "side": 1,
+      "message": "Yes. onRecordCommand() is specific to Vulkan SCBs, just to be able to answer the empty() query (and is called on every command, not just clear and draw)",
+      "parentUuid": "27935b72_bec2e8bf",
+      "range": {
+        "startLine": 435,
+        "startChar": 0,
+        "endLine": 436,
+        "endChar": 29
+      },
+      "revId": "6f83a2df24fadcb18829d3a8d6b23f7b5fa4dfd6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
