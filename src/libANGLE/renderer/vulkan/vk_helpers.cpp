@@ -5264,12 +5264,12 @@ angle::Result ImageHelper::CopyImageSubData(const gl::Context *context,
 
         VkImageCopy region = {};
 
-        region.srcSubresource.aspectMask     = VK_IMAGE_ASPECT_COLOR_BIT;
+        region.srcSubresource.aspectMask     = srcImage->getAspectFlags();
         region.srcSubresource.mipLevel       = srcImage->toVkLevel(srcLevelGL).get();
         region.srcSubresource.baseArrayLayer = isSrc3D ? 0 : srcZ;
         region.srcSubresource.layerCount     = isSrc3D ? 1 : srcDepth;
 
-        region.dstSubresource.aspectMask     = VK_IMAGE_ASPECT_COLOR_BIT;
+        region.dstSubresource.aspectMask     = dstImage->getAspectFlags();
         region.dstSubresource.mipLevel       = dstImage->toVkLevel(dstLevelGL).get();
         region.dstSubresource.baseArrayLayer = isDst3D ? 0 : dstZ;
         region.dstSubresource.layerCount     = isDst3D ? 1 : srcDepth;
@@ -5285,9 +5285,9 @@ angle::Result ImageHelper::CopyImageSubData(const gl::Context *context,
         region.extent.depth  = (isSrc3D || isDst3D) ? srcDepth : 1;
 
         CommandBufferAccess access;
-        access.onImageTransferRead(VK_IMAGE_ASPECT_COLOR_BIT, srcImage);
+        access.onImageTransferRead(srcImage->getAspectFlags(), srcImage);
         access.onImageTransferWrite(dstLevelGL, 1, region.dstSubresource.baseArrayLayer,
-                                    region.dstSubresource.layerCount, VK_IMAGE_ASPECT_COLOR_BIT,
+                                    region.dstSubresource.layerCount, dstImage->getAspectFlags(),
                                     dstImage);
 
         CommandBuffer *commandBuffer;
@@ -5336,9 +5336,9 @@ angle::Result ImageHelper::generateMipmapsWithBlit(ContextVk *contextVk,
                                                    LevelIndex maxLevel)
 {
     CommandBufferAccess access;
-    gl::LevelIndex baseLevelGL = toGLLevel(baseLevel);
-    access.onImageTransferWrite(baseLevelGL + 1, maxLevel.get(), 0, mLayerCount,
-                                VK_IMAGE_ASPECT_COLOR_BIT, this);
+    VkImageAspectFlags aspectFlags = getAspectFlags();
+    gl::LevelIndex baseLevelGL     = toGLLevel(baseLevel);
+    access.onImageTransferWrite(baseLevelGL + 1, maxLevel.get(), 0, mLayerCount, aspectFlags, this);
 
     CommandBuffer *commandBuffer;
     ANGLE_TRY(contextVk->getOutsideRenderPassCommandBuffer(access, &commandBuffer));
@@ -5355,7 +5355,7 @@ angle::Result ImageHelper::generateMipmapsWithBlit(ContextVk *contextVk,
     barrier.image                           = mImage.getHandle();
     barrier.srcQueueFamilyIndex             = VK_QUEUE_FAMILY_IGNORED;
     barrier.dstQueueFamilyIndex             = VK_QUEUE_FAMILY_IGNORED;
-    barrier.subresourceRange.aspectMask     = VK_IMAGE_ASPECT_COLOR_BIT;
+    barrier.subresourceRange.aspectMask     = aspectFlags;
     barrier.subresourceRange.baseArrayLayer = 0;
     barrier.subresourceRange.layerCount     = mLayerCount;
     barrier.subresourceRange.levelCount     = 1;
@@ -5383,13 +5383,13 @@ angle::Result ImageHelper::generateMipmapsWithBlit(ContextVk *contextVk,
             VkImageBlit blit                   = {};
             blit.srcOffsets[0]                 = {0, 0, 0};
             blit.srcOffsets[1]                 = {mipWidth, mipHeight, mipDepth};
-            blit.srcSubresource.aspectMask     = VK_IMAGE_ASPECT_COLOR_BIT;
+            blit.srcSubresource.aspectMask     = aspectFlags;
             blit.srcSubresource.mipLevel       = mipLevel.get() - 1;
             blit.srcSubresource.baseArrayLayer = 0;
             blit.srcSubresource.layerCount     = mLayerCount;
             blit.dstOffsets[0]                 = {0, 0, 0};
             blit.dstOffsets[1]                 = {nextMipWidth, nextMipHeight, nextMipDepth};
-            blit.dstSubresource.aspectMask     = VK_IMAGE_ASPECT_COLOR_BIT;
+            blit.dstSubresource.aspectMask     = aspectFlags;
             blit.dstSubresource.mipLevel       = mipLevel.get();
             blit.dstSubresource.baseArrayLayer = 0;
             blit.dstSubresource.layerCount     = mLayerCount;
@@ -6146,10 +6146,10 @@ void ImageHelper::stageSubresourceUpdateFromImage(RefCounted<ImageHelper> *image
     gl::LevelIndex updateLevelGL(index.getLevelIndex());
 
     VkImageCopy copyToImage               = {};
-    copyToImage.srcSubresource.aspectMask = VK_IMAGE_ASPECT_COLOR_BIT;
+    copyToImage.srcSubresource.aspectMask = image->get().getAspectFlags();
     copyToImage.srcSubresource.mipLevel   = srcMipLevel.get();
     copyToImage.srcSubresource.layerCount = index.getLayerCount();
-    copyToImage.dstSubresource.aspectMask = VK_IMAGE_ASPECT_COLOR_BIT;
+    copyToImage.dstSubresource.aspectMask = getAspectFlags();
     copyToImage.dstSubresource.mipLevel   = updateLevelGL.get();
 
     if (imageType == VK_IMAGE_TYPE_3D)
