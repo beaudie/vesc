@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "a600838a_c43f2c50",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2021-11-11T15:06:44Z",
+      "side": 1,
+      "message": "What are you using the other dEQP flags for? We parse out flags intentionally to avoid passing certain incompatible things to dEQP.",
+      "revId": "989c27f64ab43d26a6a8b996b8ad01dfabdc1f87",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
