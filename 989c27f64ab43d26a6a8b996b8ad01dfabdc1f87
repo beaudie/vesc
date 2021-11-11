@@ -34,6 +34,24 @@
       "parentUuid": "a600838a_c43f2c50",
       "revId": "989c27f64ab43d26a6a8b996b8ad01dfabdc1f87",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "c2c72907_5d828f20",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2021-11-11T15:32:13Z",
+      "side": 1,
+      "message": "The only bug report I see is one you filed - is there any more context on the need for these parameters? I\u0027d have to look more closely to give you a complete answer on potential incompats. The ones I see now are the display type, config name, and log images. Anyway what\u0027s the request all about?",
+      "parentUuid": "6712a9f3_c9071cd4",
+      "revId": "989c27f64ab43d26a6a8b996b8ad01dfabdc1f87",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
