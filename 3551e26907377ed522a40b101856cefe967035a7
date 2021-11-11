@@ -16,6 +16,24 @@
       "message": "Is there any test on the CQ that would cover this fix?",
       "revId": "3551e26907377ed522a40b101856cefe967035a7",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "8b803586_415e6f63",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2021-11-11T15:07:56Z",
+      "side": 1,
+      "message": "Yes, VulkanExternalImageTest* and some AHB tests. They are warnings, so nothing was failing.",
+      "parentUuid": "a32dc00d_c0b05a5a",
+      "revId": "3551e26907377ed522a40b101856cefe967035a7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
