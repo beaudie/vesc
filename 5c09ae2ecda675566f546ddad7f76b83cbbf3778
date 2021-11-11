@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "353b5078_be9cb84c",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2021-11-11T15:09:11Z",
+      "side": 1,
+      "message": "Can you update those tests to use warnings as errors? See \"treatPlatformWarningsAsErrors\"",
+      "revId": "5c09ae2ecda675566f546ddad7f76b83cbbf3778",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
