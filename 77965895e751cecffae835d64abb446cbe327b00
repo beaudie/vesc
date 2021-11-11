@@ -121,6 +121,23 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "e3241006_ed4f4023",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 10
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1359249
+      },
+      "writtenOn": "2021-11-11T17:46:52Z",
+      "side": 1,
+      "message": "Reply for Ian.",
+      "revId": "77965895e751cecffae835d64abb446cbe327b00",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "004c02a7_6d33ea80",
@@ -152,6 +169,24 @@
       "side": 1,
       "message": "Shabi referred me to this comment ... Jeff, this could be because of your Vulkan driver?\n\nPlease look at what\u0027s going on in the EnumerateDeviceExtensionProperties() function of the \"driver.cpp\" file of the Vulkan loader.  This is where the VK_KHR_SHARED_PRESENTABLE_IMAGE_EXTENSION_NAME can be added to the list of device extensions.  It\u0027s based on a query to the underlying Vulkan driver.\n\nhttps://android.googlesource.com/platform/frameworks/native/+/master/vulkan/libvulkan/driver.cpp#1019",
       "parentUuid": "004c02a7_6d33ea80",
+      "revId": "77965895e751cecffae835d64abb446cbe327b00",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "efc3a82e_b947f6f1",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.cpp",
+        "patchSetId": 10
+      },
+      "lineNbr": 1215,
+      "author": {
+        "id": 1359249
+      },
+      "writtenOn": "2021-11-11T17:46:52Z",
+      "side": 1,
+      "message": "Thanks Ian. Spencer has a patch we are using that does create that struct (VkPhysicalDevicePresentationPropertiesANDROID) and set \"sharedImage\" member to true.\nSince it wasn\u0027t working I second guessed myself and thought I did not have the right thing in RendererVk.cpp.\nWe are debugging to see where the disconnect is.\nIf you think of anything else. pls share.",
+      "parentUuid": "a6734fb0_49aaf41c",
       "revId": "77965895e751cecffae835d64abb446cbe327b00",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
