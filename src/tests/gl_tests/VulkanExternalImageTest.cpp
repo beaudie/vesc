@@ -365,7 +365,7 @@ void RunShouldClearTest(bool useMemoryObjectFlags,
         if (useMemoryObjectFlags)
         {
             glTexStorageMemFlags2DANGLE(GL_TEXTURE_2D, 1, GL_RGBA8, 1, 1, memoryObject, 0,
-                                        createFlags, usageFlags);
+                                        createFlags, usageFlags, nullptr);
         }
         else
         {
@@ -529,8 +529,8 @@ void RunTextureFormatCompatChromiumTest(bool useMemoryObjectFlags,
             if (useMemoryObjectFlags)
             {
                 glTexStorageMemFlags2DANGLE(GL_TEXTURE_2D, 1, format.internalFormat, extent.width,
-                                            extent.height, memoryObject, 0, createFlags,
-                                            usageFlags);
+                                            extent.height, memoryObject, 0, createFlags, usageFlags,
+                                            nullptr);
             }
             else
             {
@@ -697,7 +697,7 @@ void RunShouldClearWithSemaphoresTest(bool useMemoryObjectFlags,
         if (useMemoryObjectFlags)
         {
             glTexStorageMemFlags2DANGLE(GL_TEXTURE_2D, 1, GL_RGBA8, 1, 1, memoryObject, 0,
-                                        createFlags, usageFlags);
+                                        createFlags, usageFlags, nullptr);
         }
         else
         {

@@ -173,7 +173,8 @@ angle::Result MemoryObjectVk::createImage(ContextVk *contextVk,
                                           GLuint64 offset,
                                           vk::ImageHelper *image,
                                           GLbitfield createFlags,
-                                          GLbitfield usageFlags)
+                                          GLbitfield usageFlags,
+                                          const void *imageCreateInfoPNext)
 {
     RendererVk *renderer = contextVk->getRenderer();
 
@@ -197,13 +198,15 @@ angle::Result MemoryObjectVk::createImage(ContextVk *contextVk,
 
     // ANGLE_external_objects_flags allows create flags to be specified by the application instead
     // of getting defaulted to zero.  Note that the GL enum values constituting the bits of
-    // |createFlags| are identical to their corresponding Vulkan value.
+    // |createFlags| are identical to their corresponding Vulkan value.  There are no additional
+    // structs allowed to be chained to VkImageCreateInfo other than
+    // VkExternalMemoryImageCreateInfo.
     bool hasProtectedContent = mProtectedMemory;
     ANGLE_TRY(image->initExternal(
         contextVk, type, vkExtents, vkFormat.getIntendedFormatID(), actualFormatID, 1,
         imageUsageFlags, createFlags, vk::ImageLayout::ExternalPreInitialized,
         &externalMemoryImageCreateInfo, gl::LevelIndex(0), static_cast<uint32_t>(levels),
-        layerCount, contextVk->isRobustResourceInitEnabled(), nullptr, hasProtectedContent));
+        layerCount, contextVk->isRobustResourceInitEnabled(), hasProtectedContent));
 
     VkMemoryRequirements externalMemoryRequirements;
     image->getImage().getMemoryRequirements(renderer->getDevice(), &externalMemoryRequirements);
