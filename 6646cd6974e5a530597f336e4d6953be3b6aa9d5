@@ -71,6 +71,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "f9789f99_9e2af090",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 13
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2021-11-12T20:06:55Z",
+      "side": 1,
+      "message": "https://chromium-review.googlesource.com/c/angle/angle/+/3279226\n\nI know see a VVL error about an image being in PRESENT layout, instead of SHARED_PRESENT. Hunting that down now.",
+      "parentUuid": "d12964db_8faf594f",
+      "revId": "6646cd6974e5a530597f336e4d6953be3b6aa9d5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "1da8ec14_08bf59aa",
