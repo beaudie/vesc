@@ -211,6 +211,41 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "d3ade69c_1d0e330e",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 11
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1359249
+      },
+      "writtenOn": "2021-11-12T17:04:15Z",
+      "side": 1,
+      "message": "The pixel4 seems to run it, only thing on CI that I noticed ran it, BUT that was when the extension was not detected correctly.. Brandon should be uploading the latest soon. Latest has 2 fixes, the extension detection, and setCurrentLayout in ImageHelper. You will want those.",
+      "parentUuid": "4169a198_9be0bcfd",
+      "revId": "90382017007d75f43396e1deb83601394ff7d7d1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "84123b1e_45ba1d13",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 11
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1359249
+      },
+      "writtenOn": "2021-11-12T17:04:15Z",
+      "side": 1,
+      "message": "Response",
+      "revId": "90382017007d75f43396e1deb83601394ff7d7d1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "0e9cb0f0_9c0c7586",
         "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
         "patchSetId": 11
