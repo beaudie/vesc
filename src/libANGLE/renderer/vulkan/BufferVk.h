@@ -166,6 +166,10 @@ class BufferVk : public BufferImpl
                                const uint8_t *data,
                                size_t size,
                                size_t offset);
+    angle::Result directMap(ContextVk *contextVk,
+                            VkDeviceSize offset,
+                            VkDeviceSize size,
+                            uint8_t **mapPtr);
     angle::Result allocMappedStagingBuffer(ContextVk *contextVk,
                                            size_t size,
                                            vk::DynamicBuffer **stagingBuffer,
@@ -191,7 +195,7 @@ class BufferVk : public BufferImpl
     angle::Result handleDeviceLocalBufferMap(ContextVk *contextVk,
                                              VkDeviceSize offset,
                                              VkDeviceSize size,
-                                             void **mapPtr);
+                                             uint8_t **mapPtr);
     angle::Result handleDeviceLocalBufferUnmap(ContextVk *contextVk,
                                                VkDeviceSize offset,
                                                VkDeviceSize size);
