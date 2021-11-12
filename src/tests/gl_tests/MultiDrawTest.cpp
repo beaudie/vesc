@@ -15,7 +15,7 @@ namespace
 {
 
 // Create a kWidth * kHeight canvas equally split into kCountX * kCountY tiles
-// each containing a quad partially coverting each tile
+// each containing a quad partially covering each tile
 constexpr uint32_t kWidth                  = 256;
 constexpr uint32_t kHeight                 = 256;
 constexpr uint32_t kCountX                 = 8;
@@ -85,7 +85,25 @@ struct PrintToStringParamName
     }
 };
 
-// These tests check correctness of the ANGLE_multi_draw extension.
+struct DrawArraysIndirectCommand
+{
+    GLuint count;
+    GLuint instanceCount;
+    GLuint first;
+    GLuint baseInstance;
+};
+
+struct DrawElementsIndirectCommand
+{
+    GLuint count;
+    GLuint primCount;
+    GLuint firstIndex;
+    GLint baseVertex;
+    GLuint baseInstance;
+};
+
+// The tests in MultiDrawTest and MultiDrawNoInstancingSupportTest check the correctness
+// of the ANGLE_multi_draw extension.
 // An array of quads is drawn across the screen.
 // gl_DrawID is checked by using it to select the color of the draw.
 // MultiDraw*Instanced entrypoints use the existing instancing APIs which are
@@ -101,7 +119,9 @@ class MultiDrawTest : public ANGLETestBase, public ::testing::TestWithParam<Mult
           mVertexBuffer(0u),
           mIndexBuffer(0u),
           mInstanceBuffer(0u),
-          mProgram(0u)
+          mProgram(0u),
+          mPositionLoc(0u),
+          mInstanceLoc(0u)
     {
         setWindowWidth(kWidth);
         setWindowHeight(kHeight);
@@ -269,7 +289,7 @@ void main()
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
         glBindBuffer(GL_ARRAY_BUFFER, mNonIndexedVertexBuffer);
         glEnableVertexAttribArray(mPositionLoc);
-        glVertexAttribPointer(mPositionLoc, 3, GL_FLOAT, GL_FALSE, 0, 0);
+        glVertexAttribPointer(mPositionLoc, 3, GL_FLOAT, GL_FALSE, 0, nullptr);
 
         std::vector<GLint> firsts(kTriCount);
         std::vector<GLsizei> counts(kTriCount, 3);
@@ -280,7 +300,7 @@ void main()
         {
             glBindBuffer(GL_ARRAY_BUFFER, mInstanceBuffer);
             glEnableVertexAttribArray(mInstanceLoc);
-            glVertexAttribPointer(mInstanceLoc, 1, GL_FLOAT, GL_FALSE, 0, 0);
+            glVertexAttribPointer(mInstanceLoc, 1, GL_FLOAT, GL_FALSE, 0, nullptr);
             DoVertexAttribDivisor(mInstanceLoc, 1);
             std::vector<GLsizei> instanceCounts(kTriCount, 4);
             glMultiDrawArraysInstancedANGLE(GL_TRIANGLES, firsts.data(), counts.data(),
@@ -298,7 +318,7 @@ void main()
         glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, mIndexBuffer);
         glBindBuffer(GL_ARRAY_BUFFER, mVertexBuffer);
         glEnableVertexAttribArray(mPositionLoc);
-        glVertexAttribPointer(mPositionLoc, 3, GL_FLOAT, GL_FALSE, 0, 0);
+        glVertexAttribPointer(mPositionLoc, 3, GL_FLOAT, GL_FALSE, 0, nullptr);
 
         std::vector<GLsizei> counts(kTriCount, 3);
         std::vector<const GLvoid *> indices(kTriCount);
@@ -309,7 +329,7 @@ void main()
         {
             glBindBuffer(GL_ARRAY_BUFFER, mInstanceBuffer);
             glEnableVertexAttribArray(mInstanceLoc);
-            glVertexAttribPointer(mInstanceLoc, 1, GL_FLOAT, GL_FALSE, 0, 0);
+            glVertexAttribPointer(mInstanceLoc, 1, GL_FLOAT, GL_FALSE, 0, nullptr);
             DoVertexAttribDivisor(mInstanceLoc, 1);
             std::vector<GLsizei> instanceCounts(kTriCount, 4);
             glMultiDrawElementsInstancedANGLE(GL_TRIANGLES, counts.data(), GL_UNSIGNED_SHORT,
@@ -386,34 +406,11 @@ void main()
         ANGLETestBase::ANGLETestTearDown();
     }
 
-    bool requestMultiDrawExtension()
-    {
-        if (IsGLExtensionRequestable("GL_ANGLE_multi_draw"))
-        {
-            glRequestExtensionANGLE("GL_ANGLE_multi_draw");
-        }
-
-        if (!IsGLExtensionEnabled("GL_ANGLE_multi_draw"))
-        {
-            return false;
-        }
-
-        return true;
-    }
+    bool requestMultiDrawExtension() { return EnsureGLExtensionEnabled("GL_ANGLE_multi_draw"); }
 
     bool requestInstancedExtension()
     {
-        if (IsGLExtensionRequestable("GL_ANGLE_instanced_arrays"))
-        {
-            glRequestExtensionANGLE("GL_ANGLE_instanced_arrays");
-        }
-
-        if (!IsGLExtensionEnabled("GL_ANGLE_instanced_arrays"))
-        {
-            return false;
-        }
-
-        return true;
+        return EnsureGLExtensionEnabled("GL_ANGLE_instanced_arrays");
     }
 
     bool requestExtensions()
@@ -448,6 +445,57 @@ class MultiDrawNoInstancingSupportTest : public MultiDrawTest
         ASSERT_TRUE(IsInstancedTest());
         MultiDrawTest::SetUp();
     }
+};
+
+// The tests in MultiDrawIndirectTest check the correctness
+// of the EXT_multi_draw_indirect extension.
+// 4 magenta triangles are drawn at the corners of the screen
+// in different orders from the same vertex and index arrays.
+class MultiDrawIndirectTest : public MultiDrawTest
+{
+  protected:
+    MultiDrawIndirectTest() : MultiDrawTest(), mIndirectBuffer(0u) {}
+    void SetUp() override
+    {
+        ASSERT_GE(getClientMajorVersion(), 3);
+        ASSERT_GE(getClientMinorVersion(), 1);
+        MultiDrawTest::SetUp();
+    }
+
+    void SetupProgramIndirect()
+    {
+        // Define the vertex and fragment shaders
+        constexpr char kVS[] = R"(#version 310 es
+in vec3 aPos;
+void main()
+{
+    gl_Position = vec4(aPos.x, aPos.y, 0, 1);
+})";
+
+        constexpr char kFS[] = R"(#version 310 es
+precision mediump float;
+out vec4 colorOut;
+void main()
+{
+    colorOut = vec4(1.0, 0.0, 1.0, 1.0);
+})";
+        mProgram             = CompileProgram(kVS, kFS);
+        EXPECT_GL_NO_ERROR();
+        ASSERT_GE(mProgram, 1u);
+        glUseProgram(mProgram);
+        mPositionLoc = glGetAttribLocation(mProgram, "aPos");
+    }
+
+    void TearDown() override
+    {
+        if (mIndirectBuffer != 0u)
+        {
+            glDeleteBuffers(1, &mIndirectBuffer);
+        }
+        MultiDrawTest::TearDown();
+    }
+
+    GLuint mIndirectBuffer;
 };
 
 // glMultiDraw*ANGLE are emulated and should always be available
@@ -489,6 +537,275 @@ TEST_P(MultiDrawTest, MultiDrawElements)
     CheckDrawResult();
 }
 
+// Tests basic functionality of glMultiDrawArraysIndirectEXT
+TEST_P(MultiDrawIndirectTest, MultiDrawArraysIndirect)
+{
+    ANGLE_SKIP_TEST_IF(!EnsureGLExtensionEnabled("GL_EXT_multi_draw_indirect"));
+
+    // Set up the vertex array
+    const GLint triangleCount           = 4;
+    const std::vector<GLfloat> vertices = {
+        -1, 1,  0, -1, 0, 0, 0, 1,  0, 1, 1,  0, 1, 0,  0, 0, 1, 0,
+        -1, -1, 0, -1, 0, 0, 0, -1, 0, 1, -1, 0, 0, -1, 0, 1, 0, 0,
+    };
+
+    // Set up the vertex buffer
+    GLVertexArray vao;
+    glBindVertexArray(vao);
+
+    glGenBuffers(1, &mVertexBuffer);
+    glBindBuffer(GL_ARRAY_BUFFER, mVertexBuffer);
+    glBufferData(GL_ARRAY_BUFFER, sizeof(GLfloat) * vertices.size(), vertices.data(),
+                 GL_STATIC_DRAW);
+    EXPECT_GL_NO_ERROR();
+
+    // Generate program
+    SetupProgramIndirect();
+
+    // Set up the vertex array format
+    glEnableVertexAttribArray(mPositionLoc);
+    glVertexAttribPointer(mPositionLoc, 3, GL_FLOAT, GL_FALSE, 0, nullptr);
+    EXPECT_GL_NO_ERROR();
+
+    // Set up the indirect data array
+    DrawArraysIndirectCommand indirectData[triangleCount];
+    const GLsizei icSize = sizeof(DrawArraysIndirectCommand);
+    for (auto i = 0; i < triangleCount; i++)
+    {
+        indirectData[i].count         = 3;
+        indirectData[i].instanceCount = 1;
+        indirectData[i].first         = 3 * i;
+        indirectData[i].baseInstance  = i;
+    }
+
+    glGenBuffers(1, &mIndirectBuffer);
+    glBindBuffer(GL_DRAW_INDIRECT_BUFFER, mIndirectBuffer);
+    glBufferData(GL_DRAW_INDIRECT_BUFFER, sizeof(indirectData), indirectData, GL_STATIC_DRAW);
+    EXPECT_GL_NO_ERROR();
+
+    // Invalid value check for drawcount and stride
+    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+    glMultiDrawArraysIndirectEXT(GL_TRIANGLES, nullptr, 0, 0);
+    EXPECT_GL_ERROR(GL_INVALID_VALUE);
+    glMultiDrawArraysIndirectEXT(GL_TRIANGLES, nullptr, -1, 0);
+    EXPECT_GL_ERROR(GL_INVALID_VALUE);
+    glMultiDrawArraysIndirectEXT(GL_TRIANGLES, nullptr, 1, 2);
+    EXPECT_GL_ERROR(GL_INVALID_VALUE);
+
+    // Draw all triangles using glMultiDrawArraysIndirect
+    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+    glMultiDrawArraysIndirectEXT(GL_TRIANGLES, nullptr, triangleCount, 0);
+    EXPECT_GL_NO_ERROR();
+
+    EXPECT_PIXEL_COLOR_EQ(0, 0, GLColor::magenta);
+    EXPECT_PIXEL_COLOR_EQ(0, kHeight - 1, GLColor::magenta);
+    EXPECT_PIXEL_COLOR_EQ(kWidth - 1, 0, GLColor::magenta);
+    EXPECT_PIXEL_COLOR_EQ(kWidth - 1, kHeight - 1, GLColor::magenta);
+    EXPECT_PIXEL_COLOR_EQ(kWidth / 2, kHeight / 2, GLColor::transparentBlack);
+
+    // Draw the triangles in different order
+    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+    glMultiDrawArraysIndirectEXT(GL_TRIANGLES, reinterpret_cast<const void *>(icSize * 2),
+                                 triangleCount - 2, 0);
+    glMultiDrawArraysIndirectEXT(GL_TRIANGLES, reinterpret_cast<const void *>(0), 1, 0);
+    glMultiDrawArraysIndirectEXT(GL_TRIANGLES, reinterpret_cast<const void *>(icSize), 1, 0);
+    EXPECT_GL_NO_ERROR();
+
+    EXPECT_PIXEL_COLOR_EQ(0, 0, GLColor::magenta);
+    EXPECT_PIXEL_COLOR_EQ(0, kHeight - 1, GLColor::magenta);
+    EXPECT_PIXEL_COLOR_EQ(kWidth - 1, 0, GLColor::magenta);
+    EXPECT_PIXEL_COLOR_EQ(kWidth - 1, kHeight - 1, GLColor::magenta);
+    EXPECT_PIXEL_COLOR_EQ(kWidth / 2, kHeight / 2, GLColor::transparentBlack);
+
+    // Draw the triangles partially using stride
+    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+    glMultiDrawArraysIndirectEXT(GL_TRIANGLES, nullptr, 2, icSize * 3);
+    EXPECT_GL_NO_ERROR();
+
+    EXPECT_PIXEL_COLOR_EQ(0, 0, GLColor::transparentBlack);
+    EXPECT_PIXEL_COLOR_EQ(0, kHeight - 1, GLColor::magenta);
+    EXPECT_PIXEL_COLOR_EQ(kWidth - 1, 0, GLColor::magenta);
+    EXPECT_PIXEL_COLOR_EQ(kWidth - 1, kHeight - 1, GLColor::transparentBlack);
+    EXPECT_PIXEL_COLOR_EQ(kWidth / 2, kHeight / 2, GLColor::transparentBlack);
+}
+
+// Tests basic functionality of glMultiDrawElementsIndirectEXT
+TEST_P(MultiDrawIndirectTest, MultiDrawElementsIndirect)
+{
+    ANGLE_SKIP_TEST_IF(!EnsureGLExtensionEnabled("GL_EXT_multi_draw_indirect"));
+
+    // Set up the vertex array
+    const GLint triangleCount           = 4;
+    const std::vector<GLfloat> vertices = {
+        -1, 1, 0, 0, 1, 0, 1, 1, 0, 1, 0, 0, 1, -1, 0, 0, -1, 0, -1, -1, 0, -1, 0, 0,
+    };
+    const std::vector<GLuint> indices = {
+        1, 2, 3, 3, 4, 5, 5, 6, 7, 7, 0, 1,
+    };
+
+    // Set up the vertex and index buffers
+    GLVertexArray vao;
+    glBindVertexArray(vao);
+
+    glGenBuffers(1, &mVertexBuffer);
+    glBindBuffer(GL_ARRAY_BUFFER, mVertexBuffer);
+    glBufferData(GL_ARRAY_BUFFER, sizeof(GLfloat) * vertices.size(), vertices.data(),
+                 GL_STATIC_DRAW);
+
+    glGenBuffers(1, &mIndexBuffer);
+    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, mIndexBuffer);
+    glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(GLuint) * indices.size(), indices.data(),
+                 GL_STATIC_DRAW);
+    EXPECT_GL_NO_ERROR();
+
+    // Generate program
+    SetupProgramIndirect();
+
+    // Set up the vertex array format
+    glEnableVertexAttribArray(mPositionLoc);
+    glVertexAttribPointer(mPositionLoc, 3, GL_FLOAT, GL_FALSE, 0, nullptr);
+    EXPECT_GL_NO_ERROR();
+
+    // Set up the indirect data array
+    DrawElementsIndirectCommand indirectData[triangleCount];
+    const GLsizei icSize = sizeof(DrawElementsIndirectCommand);
+    for (auto i = 0; i < triangleCount; i++)
+    {
+        indirectData[i].count        = 3;
+        indirectData[i].primCount    = 1;
+        indirectData[i].firstIndex   = 3 * i;
+        indirectData[i].baseVertex   = 0;
+        indirectData[i].baseInstance = i;
+    }
+
+    glGenBuffers(1, &mIndirectBuffer);
+    glBindBuffer(GL_DRAW_INDIRECT_BUFFER, mIndirectBuffer);
+    glBufferData(GL_DRAW_INDIRECT_BUFFER, sizeof(indirectData), indirectData, GL_STATIC_DRAW);
+    EXPECT_GL_NO_ERROR();
+
+    // Invalid value check for drawcount and stride
+    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+    glMultiDrawElementsIndirectEXT(GL_TRIANGLES, GL_UNSIGNED_INT, nullptr, 0, 0);
+    EXPECT_GL_ERROR(GL_INVALID_VALUE);
+    glMultiDrawElementsIndirectEXT(GL_TRIANGLES, GL_UNSIGNED_INT, nullptr, -1, 0);
+    EXPECT_GL_ERROR(GL_INVALID_VALUE);
+    glMultiDrawElementsIndirectEXT(GL_TRIANGLES, GL_UNSIGNED_INT, nullptr, 1, 2);
+    EXPECT_GL_ERROR(GL_INVALID_VALUE);
+
+    // Draw all triangles using glMultiDrawElementsIndirect
+    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+    glMultiDrawElementsIndirectEXT(GL_TRIANGLES, GL_UNSIGNED_INT, nullptr, triangleCount, 0);
+    EXPECT_GL_NO_ERROR();
+
+    EXPECT_PIXEL_COLOR_EQ(0, 0, GLColor::magenta);
+    EXPECT_PIXEL_COLOR_EQ(0, kHeight - 1, GLColor::magenta);
+    EXPECT_PIXEL_COLOR_EQ(kWidth - 1, 0, GLColor::magenta);
+    EXPECT_PIXEL_COLOR_EQ(kWidth - 1, kHeight - 1, GLColor::magenta);
+    EXPECT_PIXEL_COLOR_EQ(kWidth / 2, kHeight / 2, GLColor::transparentBlack);
+
+    // Draw the triangles in a different order
+    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+    glMultiDrawElementsIndirectEXT(GL_TRIANGLES, GL_UNSIGNED_INT,
+                                   reinterpret_cast<const void *>(icSize), triangleCount - 2, 0);
+    glMultiDrawElementsIndirectEXT(GL_TRIANGLES, GL_UNSIGNED_INT, reinterpret_cast<const void *>(0),
+                                   1, 0);
+    glMultiDrawElementsIndirectEXT(GL_TRIANGLES, GL_UNSIGNED_INT,
+                                   reinterpret_cast<const void *>(icSize * 3), 1, 0);
+    EXPECT_GL_NO_ERROR();
+
+    EXPECT_PIXEL_COLOR_EQ(0, 0, GLColor::magenta);
+    EXPECT_PIXEL_COLOR_EQ(0, kHeight - 1, GLColor::magenta);
+    EXPECT_PIXEL_COLOR_EQ(kWidth - 1, 0, GLColor::magenta);
+    EXPECT_PIXEL_COLOR_EQ(kWidth - 1, kHeight - 1, GLColor::magenta);
+    EXPECT_PIXEL_COLOR_EQ(kWidth / 2, kHeight / 2, GLColor::transparentBlack);
+
+    // Draw the triangles partially using stride
+    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+    glMultiDrawElementsIndirectEXT(GL_TRIANGLES, GL_UNSIGNED_INT, nullptr, 2, icSize * 3);
+    EXPECT_GL_NO_ERROR();
+
+    EXPECT_PIXEL_COLOR_EQ(0, 0, GLColor::transparentBlack);
+    EXPECT_PIXEL_COLOR_EQ(0, kHeight - 1, GLColor::magenta);
+    EXPECT_PIXEL_COLOR_EQ(kWidth - 1, 0, GLColor::transparentBlack);
+    EXPECT_PIXEL_COLOR_EQ(kWidth - 1, kHeight - 1, GLColor::magenta);
+    EXPECT_PIXEL_COLOR_EQ(kWidth / 2, kHeight / 2, GLColor::transparentBlack);
+}
+
+// Tests functionality of glMultiDrawElementsIndirectEXT with more than one triangle in one element
+// of the indirect buffer.
+TEST_P(MultiDrawIndirectTest, MultiDrawElementsIndirectMultipleTriangles)
+{
+    ANGLE_SKIP_TEST_IF(!EnsureGLExtensionEnabled("GL_EXT_multi_draw_indirect"));
+
+    // Set up the vertex array
+    const GLint triangleCount           = 4;
+    const std::vector<GLfloat> vertices = {
+        -1, 1, 0, 0, 1, 0, 1, 1, 0, 1, 0, 0, 1, -1, 0, 0, -1, 0, -1, -1, 0, -1, 0, 0,
+    };
+    const std::vector<GLuint> indices = {
+        1, 2, 3, 3, 4, 5, 5, 6, 7, 7, 0, 1,
+    };
+
+    // Set up the vertex and index buffers
+    GLVertexArray vao;
+    glBindVertexArray(vao);
+
+    glGenBuffers(1, &mVertexBuffer);
+    glBindBuffer(GL_ARRAY_BUFFER, mVertexBuffer);
+    glBufferData(GL_ARRAY_BUFFER, sizeof(GLfloat) * vertices.size(), vertices.data(),
+                 GL_STATIC_DRAW);
+
+    glGenBuffers(1, &mIndexBuffer);
+    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, mIndexBuffer);
+    glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(GLuint) * indices.size(), indices.data(),
+                 GL_STATIC_DRAW);
+    EXPECT_GL_NO_ERROR();
+
+    // Generate program
+    SetupProgramIndirect();
+
+    // Set up the vertex array format
+    glEnableVertexAttribArray(mPositionLoc);
+    glVertexAttribPointer(mPositionLoc, 3, GL_FLOAT, GL_FALSE, 0, nullptr);
+    EXPECT_GL_NO_ERROR();
+
+    // Set up the indirect data array; first element represents two triangles.
+    DrawElementsIndirectCommand indirectData[triangleCount - 1];
+    for (auto i = 0; i < triangleCount - 1; i++)
+    {
+        if (i == 0)
+        {
+            indirectData[i].count      = 6;
+            indirectData[i].primCount  = 2;
+            indirectData[i].firstIndex = 0;
+        }
+        else
+        {
+            indirectData[i].count      = 3;
+            indirectData[i].primCount  = 1;
+            indirectData[i].firstIndex = 3 * (i + 1);
+        }
+        indirectData[i].baseVertex   = 0;
+        indirectData[i].baseInstance = i;
+    }
+
+    glGenBuffers(1, &mIndirectBuffer);
+    glBindBuffer(GL_DRAW_INDIRECT_BUFFER, mIndirectBuffer);
+    glBufferData(GL_DRAW_INDIRECT_BUFFER, sizeof(indirectData), indirectData, GL_STATIC_DRAW);
+    EXPECT_GL_NO_ERROR();
+
+    // Draw all triangles using glMultiDrawElementsIndirect
+    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+    glMultiDrawElementsIndirectEXT(GL_TRIANGLES, GL_UNSIGNED_INT, nullptr, triangleCount - 1, 0);
+    EXPECT_GL_NO_ERROR();
+
+    EXPECT_PIXEL_COLOR_EQ(0, 0, GLColor::magenta);
+    EXPECT_PIXEL_COLOR_EQ(0, kHeight - 1, GLColor::magenta);
+    EXPECT_PIXEL_COLOR_EQ(kWidth - 1, 0, GLColor::magenta);
+    EXPECT_PIXEL_COLOR_EQ(kWidth - 1, kHeight - 1, GLColor::magenta);
+    EXPECT_PIXEL_COLOR_EQ(kWidth / 2, kHeight / 2, GLColor::transparentBlack);
+}
+
 // Check that glMultiDraw*Instanced without instancing support results in GL_INVALID_OPERATION
 TEST_P(MultiDrawNoInstancingSupportTest, InvalidOperation)
 {
@@ -499,13 +816,13 @@ TEST_P(MultiDrawNoInstancingSupportTest, InvalidOperation)
 
     GLint first       = 0;
     GLsizei count     = 3;
-    GLvoid *indices   = 0;
+    GLvoid *indices   = nullptr;
     GLsizei instances = 1;
 
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
     glBindBuffer(GL_ARRAY_BUFFER, mNonIndexedVertexBuffer);
     glEnableVertexAttribArray(mPositionLoc);
-    glVertexAttribPointer(mPositionLoc, 3, GL_FLOAT, GL_FALSE, 0, 0);
+    glVertexAttribPointer(mPositionLoc, 3, GL_FLOAT, GL_FALSE, 0, nullptr);
     glMultiDrawArraysInstancedANGLE(GL_TRIANGLES, &first, &count, &instances, 1);
     EXPECT_GL_ERROR(GL_INVALID_OPERATION);
 
@@ -513,7 +830,7 @@ TEST_P(MultiDrawNoInstancingSupportTest, InvalidOperation)
     glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, mIndexBuffer);
     glBindBuffer(GL_ARRAY_BUFFER, mVertexBuffer);
     glEnableVertexAttribArray(mPositionLoc);
-    glVertexAttribPointer(mPositionLoc, 3, GL_FLOAT, GL_FALSE, 0, 0);
+    glVertexAttribPointer(mPositionLoc, 3, GL_FLOAT, GL_FALSE, 0, nullptr);
     glMultiDrawElementsInstancedANGLE(GL_TRIANGLES, &count, GL_UNSIGNED_SHORT, &indices, &instances,
                                       1);
     EXPECT_GL_ERROR(GL_INVALID_OPERATION);
@@ -531,6 +848,13 @@ const angle::PlatformParameters es2_platforms[] = {
     ES2_VULKAN(),
 };
 
+const angle::PlatformParameters es31_platforms[] = {
+    ES31_D3D11(),
+    ES31_OPENGL(),
+    ES31_OPENGLES(),
+    ES31_VULKAN(),
+};
+
 INSTANTIATE_TEST_SUITE_P(
     ,
     MultiDrawTest,
@@ -539,6 +863,16 @@ INSTANTIATE_TEST_SUITE_P(
         testing::Values(DrawIDOption::NoDrawID, DrawIDOption::UseDrawID),
         testing::Values(InstancingOption::NoInstancing, InstancingOption::UseInstancing),
         testing::Values(BufferDataUsageOption::StaticDraw, BufferDataUsageOption::DynamicDraw)),
+    PrintToStringParamName());
+
+INSTANTIATE_TEST_SUITE_P(
+    ,
+    MultiDrawIndirectTest,
+    testing::Combine(testing::ValuesIn(::angle::FilterTestParams(es31_platforms,
+                                                                 ArraySize(es31_platforms))),
+                     testing::Values(DrawIDOption::NoDrawID, DrawIDOption::UseDrawID),
+                     testing::Values(InstancingOption::NoInstancing),
+                     testing::Values(BufferDataUsageOption::StaticDraw)),
     PrintToStringParamName());
 
 INSTANTIATE_TEST_SUITE_P(
