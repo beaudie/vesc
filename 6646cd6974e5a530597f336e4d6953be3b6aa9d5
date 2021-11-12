@@ -212,6 +212,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "f3b6e8f4_56e4a53a",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 13
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2021-11-12T21:33:47Z",
+      "side": 1,
+      "message": "I have a fix for this as well.\n\nI\u0027ll see if I can somehow put the changes up without overwriting your changes!",
+      "parentUuid": "d68bc8b7_0f621749",
+      "revId": "6646cd6974e5a530597f336e4d6953be3b6aa9d5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "1da8ec14_08bf59aa",
@@ -279,6 +297,24 @@
       "side": 1,
       "message": "No its not specific. PbufferSurface is always BACK_BUFFER, spec doesn\u0027t say error if you try to change. WindowsSurface defaults to BACK_BUFFER but can go to SINGLE_BUFFER. Shouldn\u0027t cause failure, I expect this would be expected behavior. And I would NOT expect it to be part of dEQP test.",
       "parentUuid": "4c286838_7064b44a",
+      "revId": "6646cd6974e5a530597f336e4d6953be3b6aa9d5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "708fc471_9da5e323",
+        "filename": "src/libANGLE/renderer/SurfaceImpl.cpp",
+        "patchSetId": 13
+      },
+      "lineNbr": 146,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2021-11-12T21:33:47Z",
+      "side": 1,
+      "message": "Well like I said this is failing with the GLES backend, so there\u0027s either a test bug or implementation bug.",
+      "parentUuid": "51172a16_4590ebfe",
       "revId": "6646cd6974e5a530597f336e4d6953be3b6aa9d5",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
