@@ -107,6 +107,23 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "e25de2ed_930cdcfa",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 11
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1359249
+      },
+      "writtenOn": "2021-11-12T15:39:18Z",
+      "side": 1,
+      "message": "onResourceAccess is called from ContextVk getOutsideRenderPassCommandBuffer(). So called from many places.",
+      "revId": "90382017007d75f43396e1deb83601394ff7d7d1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "0e9cb0f0_9c0c7586",
         "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
         "patchSetId": 11
@@ -240,6 +257,24 @@
       "side": 1,
       "message": "Yes, We are now getting a transition to TransferDst from ContextVk::onResourceAccess(), and I don\u0027t know what to do. \nTried ignoring if in SharedPresent, Also tried forcing to stay SharePresent - crash.\nWe have a Monday deadline. Any help to get this working would be greatly appreciated.",
       "parentUuid": "3c654db7_2b4ba5b5",
+      "revId": "90382017007d75f43396e1deb83601394ff7d7d1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "4f5c242c_2ec6c478",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 11
+      },
+      "lineNbr": 4984,
+      "author": {
+        "id": 1359249
+      },
+      "writtenOn": "2021-11-12T15:39:18Z",
+      "side": 1,
+      "message": "onResourceAccess is called from ContextVk getOutsideRenderPassCommandBuffer().",
+      "parentUuid": "ea94b0b3_cf3b0d16",
       "revId": "90382017007d75f43396e1deb83601394ff7d7d1",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
