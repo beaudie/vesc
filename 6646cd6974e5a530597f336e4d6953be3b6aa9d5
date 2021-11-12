@@ -34,6 +34,23 @@
       "parentUuid": "696429b6_aaa83b7a",
       "revId": "6646cd6974e5a530597f336e4d6953be3b6aa9d5",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "f64747b3_af10d847",
+        "filename": "src/libANGLE/renderer/vulkan/SurfaceVk.cpp",
+        "patchSetId": 13
+      },
+      "lineNbr": 1772,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2021-11-12T19:20:54Z",
+      "side": 1,
+      "message": "This is unnecessary, recordWriteBarrierOneOff does the same, doesn\u0027t it?",
+      "revId": "6646cd6974e5a530597f336e4d6953be3b6aa9d5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
