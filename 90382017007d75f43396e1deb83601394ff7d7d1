@@ -159,6 +159,23 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "51cfe341_6d6a64dc",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 11
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1359249
+      },
+      "writtenOn": "2021-11-12T16:03:00Z",
+      "side": 1,
+      "message": "I think I tried that. We can do again once my helper is in office.\n\nI have this left from a log, if it helps:\nINFO: ContextVk.cpp:6276 (onResourceAccess): \nINFO: vk_helpers.h:1843 (recordWriteBarrier): recordWriteBarrier\nINFO: vk_helpers.cpp:4989 (barrierImpl): mCurrentLayout: SharedPresent\nINFO: vk_helpers.cpp:4990 (barrierImpl): newLayout: TransferDst\nINFO: vk_helpers.h:1868 (recordReadBarrier): recordReadBarrier\nINFO: vk_helpers.cpp:4989 (barrierImpl): mCurrentLayout: SharedPresent\nINFO: vk_helpers.cpp:4990 (barrierImpl): newLayout: Present\nWARN: Debug.cpp:180 (insertMessage): GL error: HIGH: Internal Vulkan error (2): A wait operation has not completed in the specified time.\nINFO: Debug.cpp:490 (insertMessage): EGL ERROR: eglSwapBuffers: Internal Vulkan error (0): Command successfully completed, in , :0.\nWARN: Debug.cpp:180 (insertMessage): GL error: HIGH: Internal Vulkan error (2): A wait operation has not completed in the specified time.\n",
+      "revId": "90382017007d75f43396e1deb83601394ff7d7d1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "0e9cb0f0_9c0c7586",
         "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
         "patchSetId": 11
@@ -328,6 +345,24 @@
       "side": 1,
       "message": "Ok we missed this function. See what we did for ImageHelper::updateLayoutAndBarrier:\n\n    // Once you transition to ImageLayout::SharedPresent, you never transition out of it.\n    if (mCurrentLayout \u003d\u003d ImageLayout::SharedPresent)\n    {\n        newLayout \u003d ImageLayout::SharedPresent;\n    }\n\nCan you put that in ImageHelper::barrierImpl too? We shouldn\u0027t ignore the barrier, just keep the layout the same.\n\n---\n\nIf that still crashes, can you please detail what the crash is?",
       "parentUuid": "4f5c242c_2ec6c478",
+      "revId": "90382017007d75f43396e1deb83601394ff7d7d1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "90297bb8_a256bb18",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 11
+      },
+      "lineNbr": 4984,
+      "author": {
+        "id": 1359249
+      },
+      "writtenOn": "2021-11-12T16:03:00Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "fd2b6e89_4eec4af2",
       "revId": "90382017007d75f43396e1deb83601394ff7d7d1",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
