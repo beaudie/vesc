@@ -35,6 +35,40 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": true,
+      "key": {
+        "uuid": "35245941_43cb670c",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 11
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1359249
+      },
+      "writtenOn": "2021-11-12T00:20:19Z",
+      "side": 1,
+      "message": "Call for feedback. See below where layout is changed.",
+      "revId": "90382017007d75f43396e1deb83601394ff7d7d1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "0e9cb0f0_9c0c7586",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 11
+      },
+      "lineNbr": 6213,
+      "author": {
+        "id": 1359249
+      },
+      "writtenOn": "2021-11-12T00:20:19Z",
+      "side": 1,
+      "message": "This is changing the layout to TransferDst after we are in SharedPresent.\nWhat should be done? Ignore?",
+      "revId": "90382017007d75f43396e1deb83601394ff7d7d1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": false,
       "key": {
         "uuid": "d44d8451_551c23bc",
