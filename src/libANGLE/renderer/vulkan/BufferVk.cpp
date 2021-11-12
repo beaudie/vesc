@@ -558,13 +558,13 @@ angle::Result BufferVk::copySubData(const gl::Context *context,
 angle::Result BufferVk::handleDeviceLocalBufferMap(ContextVk *contextVk,
                                                    VkDeviceSize offset,
                                                    VkDeviceSize size,
-                                                   void **mapPtr)
+                                                   uint8_t **mapPtr)
 {
     // The buffer is device local, create a copy of the buffer and return its CPU pointer.
     bool needToReleasePreviousBuffers = false;
-    ANGLE_TRY(mHostVisibleBufferPool.allocate(
-        contextVk, static_cast<size_t>(size), reinterpret_cast<uint8_t **>(mapPtr), nullptr,
-        &mHostVisibleBufferOffset, &needToReleasePreviousBuffers));
+    ANGLE_TRY(mHostVisibleBufferPool.allocate(contextVk, static_cast<size_t>(size), mapPtr, nullptr,
+                                              &mHostVisibleBufferOffset,
+                                              &needToReleasePreviousBuffers));
     if (needToReleasePreviousBuffers)
     {
         // Release previous buffers
@@ -687,81 +687,7 @@ angle::Result BufferVk::mapRangeImpl(ContextVk *contextVk,
                                      GLbitfield access,
                                      void **mapPtr)
 {
-    if (!mShadowBuffer.valid())
-    {
-        ASSERT(mBuffer && mBuffer->valid());
-
-        if ((access & GL_MAP_WRITE_BIT) == 0)
-        {
-            // If app is not going to write, all we need is to ensure GPU write is finished.
-            // Concurrent reads from CPU and GPU is allowed.
-            if (mBuffer->isCurrentlyInUseForWrite(contextVk->getLastCompletedQueueSerial()))
-            {
-                // If there are pending commands for the resource, flush them.
-                if (mBuffer->usedInRecordedCommands())
-                {
-                    ANGLE_TRY(
-                        contextVk->flushImpl(nullptr, RenderPassClosureReason::BufferWriteThenMap));
-                }
-                ANGLE_TRY(mBuffer->finishGPUWriteCommands(contextVk));
-            }
-        }
-        else if (isCurrentlyInUse(contextVk) && !mBuffer->isExternalBuffer() &&
-                 mBuffer->isHostVisible())
-        {
-            // We try to map the buffer, but it's busy. Instead of waiting for the GPU to
-            // finish, we just allocate a new buffer if:
-            // 1.) Caller has told us it doesn't care about previous contents, or
-            // 2.) The GPU won't write to the buffer.
-
-            bool entireBufferInvalidated =
-                ((access & GL_MAP_INVALIDATE_BUFFER_BIT) != 0) ||
-                ((access & GL_MAP_INVALIDATE_RANGE_BIT) != 0 && offset == 0 &&
-                 static_cast<VkDeviceSize>(mState.getSize()) == length);
-
-            bool rangeInvalidate = (access & GL_MAP_INVALIDATE_RANGE_BIT) != 0;
-
-            bool smallMapRange = (length < static_cast<VkDeviceSize>(mState.getSize()) / 2);
-
-            if (entireBufferInvalidated)
-            {
-                ANGLE_TRY(acquireBufferHelper(contextVk, static_cast<size_t>(mState.getSize()),
-                                              BufferUpdateType::ContentsUpdate));
-            }
-            else if (smallMapRange && rangeInvalidate)
-            {
-                ANGLE_TRY(allocMappedStagingBuffer(
-                    contextVk, static_cast<size_t>(length), &mMapInvalidateRangeStagingBuffer,
-                    &mMapInvalidateRangeStagingBufferOffset, &mMapInvalidateRangeMappedPtr));
-                *mapPtr = reinterpret_cast<void *>(mMapInvalidateRangeMappedPtr);
-                return angle::Result::Continue;
-            }
-            else if (!mBuffer->isCurrentlyInUseForWrite(contextVk->getLastCompletedQueueSerial()))
-            {
-                // This will keep the new buffer mapped and update mapPtr, so return immediately.
-                return ghostMappedBuffer(contextVk, offset, length, access, mapPtr);
-            }
-            else if ((access & GL_MAP_UNSYNCHRONIZED_BIT) == 0)
-            {
-                ANGLE_TRY(mBuffer->waitForIdle(
-                    contextVk, "GPU stall due to mapping buffer in use by the GPU",
-                    RenderPassClosureReason::BufferInUseWhenSynchronizedMap));
-            }
-        }
-
-        if (mBuffer->isHostVisible())
-        {
-            // If the buffer is host visible, map and return.
-            ANGLE_TRY(mBuffer->mapWithOffset(contextVk, reinterpret_cast<uint8_t **>(mapPtr),
-                                             static_cast<size_t>(mBufferOffset + offset)));
-        }
-        else
-        {
-            // Handle device local buffers.
-            ANGLE_TRY(handleDeviceLocalBufferMap(contextVk, offset, length, mapPtr));
-        }
-    }
-    else
+    if (mShadowBuffer.valid())
     {
         // If the app requested a GL_MAP_UNSYNCHRONIZED_BIT access, the spec states -
         //      No GL error is generated if pending operations which source or modify the
@@ -770,8 +696,85 @@ angle::Result BufferVk::mapRangeImpl(ContextVk *contextVk,
         // To keep the code simple, irrespective of whether the access was GL_MAP_UNSYNCHRONIZED_BIT
         // or not, just return the shadow buffer.
         mShadowBuffer.map(static_cast<size_t>(offset), reinterpret_cast<uint8_t **>(mapPtr));
+        return angle::Result::Continue;
     }
 
+    ASSERT(mBuffer && mBuffer->valid());
+
+    // Read case
+    if ((access & GL_MAP_WRITE_BIT) == 0)
+    {
+        // If app is not going to write, all we need is to ensure GPU write is finished.
+        // Concurrent reads from CPU and GPU is allowed.
+        if (mBuffer->isCurrentlyInUseForWrite(contextVk->getLastCompletedQueueSerial()))
+        {
+            // If there are pending commands for the resource, flush them.
+            if (mBuffer->usedInRecordedCommands())
+            {
+                ANGLE_TRY(
+                    contextVk->flushImpl(nullptr, RenderPassClosureReason::BufferWriteThenMap));
+            }
+            ANGLE_TRY(mBuffer->finishGPUWriteCommands(contextVk));
+        }
+        ANGLE_TRY(directMap(contextVk, offset, length, reinterpret_cast<uint8_t **>(mapPtr)));
+        return angle::Result::Continue;
+    }
+
+    // Write case
+
+    // Write case, buffer not in use.
+    if (!mBuffer->isHostVisible() || mBuffer->isExternalBuffer() || !isCurrentlyInUse(contextVk))
+    {
+        ANGLE_TRY(directMap(contextVk, offset, length, reinterpret_cast<uint8_t **>(mapPtr)));
+        return angle::Result::Continue;
+    }
+
+    // Write case, buffer in use.
+    //
+    // Here, we try to map the buffer, but it's busy. Instead of waiting for the GPU to
+    // finish, we just allocate a new buffer if:
+    // 1.) Caller has told us it doesn't care about previous contents, or
+    // 2.) The GPU won't write to the buffer.
+
+    bool entireBufferInvalidated = ((access & GL_MAP_INVALIDATE_BUFFER_BIT) != 0) ||
+                                   ((access & GL_MAP_INVALIDATE_RANGE_BIT) != 0 && offset == 0 &&
+                                    static_cast<VkDeviceSize>(mState.getSize()) == length);
+
+    bool rangeInvalidate = (access & GL_MAP_INVALIDATE_RANGE_BIT) != 0;
+
+    bool smallMapRange = (length < static_cast<VkDeviceSize>(mState.getSize()) / 2);
+
+    if (entireBufferInvalidated)
+    {
+        ANGLE_TRY(acquireBufferHelper(contextVk, static_cast<size_t>(mState.getSize()),
+                                      BufferUpdateType::ContentsUpdate));
+        ANGLE_TRY(directMap(contextVk, offset, length, reinterpret_cast<uint8_t **>(mapPtr)));
+        return angle::Result::Continue;
+    }
+
+    if (smallMapRange && rangeInvalidate)
+    {
+        ANGLE_TRY(allocMappedStagingBuffer(
+            contextVk, static_cast<size_t>(length), &mMapInvalidateRangeStagingBuffer,
+            &mMapInvalidateRangeStagingBufferOffset, &mMapInvalidateRangeMappedPtr));
+        *mapPtr = reinterpret_cast<void *>(mMapInvalidateRangeMappedPtr);
+        return angle::Result::Continue;
+    }
+
+    if (!mBuffer->isCurrentlyInUseForWrite(contextVk->getLastCompletedQueueSerial()))
+    {
+        // This will keep the new buffer mapped and update mapPtr, so return immediately.
+        return ghostMappedBuffer(contextVk, offset, length, access, mapPtr);
+    }
+
+    if ((access & GL_MAP_UNSYNCHRONIZED_BIT) == 0)
+    {
+        ANGLE_TRY(mBuffer->waitForIdle(contextVk,
+                                       "GPU stall due to mapping buffer in use by the GPU",
+                                       RenderPassClosureReason::BufferInUseWhenSynchronizedMap));
+    }
+
+    ANGLE_TRY(directMap(contextVk, offset, length, reinterpret_cast<uint8_t **>(mapPtr)));
     return angle::Result::Continue;
 }
 
@@ -944,6 +947,26 @@ angle::Result BufferVk::stagedUpdate(ContextVk *contextVk,
     memcpy(mapPointer, data, size);
     ANGLE_TRY(
         flushMappedStagingBuffer(contextVk, stagingBuffer, stagingBufferOffset, size, offset));
+
+    return angle::Result::Continue;
+}
+
+angle::Result BufferVk::directMap(ContextVk *contextVk,
+                                  VkDeviceSize offset,
+                                  VkDeviceSize size,
+                                  uint8_t **mapPtr)
+{
+    if (mBuffer->isHostVisible())
+    {
+        // If the buffer is host visible, map and return.
+        ANGLE_TRY(
+            mBuffer->mapWithOffset(contextVk, mapPtr, static_cast<size_t>(mBufferOffset + offset)));
+    }
+    else
+    {
+        // Handle device local buffers.
+        ANGLE_TRY(handleDeviceLocalBufferMap(contextVk, offset, size, mapPtr));
+    }
 
     return angle::Result::Continue;
 }
