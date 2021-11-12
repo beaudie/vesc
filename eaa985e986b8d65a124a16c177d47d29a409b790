@@ -24,6 +24,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "17b26e90_aecd6753",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 4
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1525982
+      },
+      "writtenOn": "2021-11-12T19:06:22Z",
+      "side": 1,
+      "message": "Fixed. Thanks :)",
+      "parentUuid": "ad857f66_c871754c",
+      "range": {
+        "startLine": 7,
+        "startChar": 36,
+        "endLine": 7,
+        "endChar": 38
+      },
+      "revId": "eaa985e986b8d65a124a16c177d47d29a409b790",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "b0d8085c_8366fef7",
@@ -37,6 +61,30 @@
       "writtenOn": "2021-11-12T15:02:05Z",
       "side": 1,
       "message": "Need to also put in stub implementations in Context.cpp for these functions so the change can build",
+      "range": {
+        "startLine": 5693,
+        "startChar": 21,
+        "endLine": 5693,
+        "endChar": 44
+      },
+      "revId": "eaa985e986b8d65a124a16c177d47d29a409b790",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "0bb2ef18_17addc49",
+        "filename": "src/libGLESv2/entry_points_gles_ext_autogen.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 5693,
+      "author": {
+        "id": 1525982
+      },
+      "writtenOn": "2021-11-12T19:06:22Z",
+      "side": 1,
+      "message": "Stub implementation moved from Context_gl.cpp to Context.cpp",
+      "parentUuid": "b0d8085c_8366fef7",
       "range": {
         "startLine": 5693,
         "startChar": 21,
