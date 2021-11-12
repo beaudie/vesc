@@ -489,6 +489,20 @@ TEST_P(MultiDrawTest, MultiDrawElements)
     CheckDrawResult();
 }
 
+// Tests basic functionality of glMultiDrawArraysIndirectANGLE
+TEST_P(MultiDrawTest, MultiDrawArraysIndirect)
+{
+    ANGLE_SKIP_TEST_IF(!IsGLExtensionEnabled("GL_EXT_multi_draw_indirect"));
+    EXPECT_GL_NO_ERROR();
+}
+
+// Tests basic functionality of glMultiDrawElementsIndirectANGLE
+TEST_P(MultiDrawTest, MultiDrawElementsIndirect)
+{
+    ANGLE_SKIP_TEST_IF(!IsGLExtensionEnabled("GL_EXT_multi_draw_indirect"));
+    EXPECT_GL_NO_ERROR();
+}
+
 // Check that glMultiDraw*Instanced without instancing support results in GL_INVALID_OPERATION
 TEST_P(MultiDrawNoInstancingSupportTest, InvalidOperation)
 {
