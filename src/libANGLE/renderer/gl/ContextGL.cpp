@@ -750,6 +750,31 @@ angle::Result ContextGL::multiDrawArraysInstanced(const gl::Context *context,
                                                drawcount);
 }
 
+angle::Result ContextGL::multiDrawArraysIndirect(const gl::Context *context,
+                                                 gl::PrimitiveMode mode,
+                                                 const void *indirect,
+                                                 GLsizei drawcount,
+                                                 GLsizei stride)
+{
+    const uint8_t *ptr = (const uint8_t *)indirect;
+
+    for (auto count = 0; count < drawcount; count++)
+    {
+        ANGLE_GL_TRY(context, getFunctions()->drawArraysIndirect(
+                                  ToGLenum(mode), (gl::DrawArraysIndirectCommand *)ptr));
+        if (stride == 0)
+        {
+            ptr += sizeof(gl::DrawArraysIndirectCommand);
+        }
+        else
+        {
+            ptr += stride;
+        }
+    }
+
+    return angle::Result::Continue;
+}
+
 angle::Result ContextGL::multiDrawElements(const gl::Context *context,
                                            gl::PrimitiveMode mode,
                                            const GLsizei *counts,
@@ -774,6 +799,33 @@ angle::Result ContextGL::multiDrawElementsInstanced(const gl::Context *context,
 
     return rx::MultiDrawElementsInstancedGeneral(this, context, mode, counts, type, indices,
                                                  instanceCounts, drawcount);
+}
+
+angle::Result ContextGL::multiDrawElementsIndirect(const gl::Context *context,
+                                                   gl::PrimitiveMode mode,
+                                                   gl::DrawElementsType type,
+                                                   const void *indirect,
+                                                   GLsizei drawcount,
+                                                   GLsizei stride)
+{
+    const uint8_t *ptr = (const uint8_t *)indirect;
+
+    for (auto count = 0; count < drawcount; count++)
+    {
+        ANGLE_GL_TRY(context,
+                     getFunctions()->drawElementsIndirect(ToGLenum(mode), ToGLenum(type),
+                                                          (gl::DrawElementsIndirectCommand *)ptr));
+        if (stride == 0)
+        {
+            ptr += sizeof(gl::DrawElementsIndirectCommand);
+        }
+        else
+        {
+            ptr += stride;
+        }
+    }
+
+    return angle::Result::Continue;
 }
 
 angle::Result ContextGL::multiDrawArraysInstancedBaseInstance(const gl::Context *context,
