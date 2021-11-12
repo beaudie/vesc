@@ -156,6 +156,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "68a69624_25d88527",
+        "filename": "src/libANGLE/renderer/vulkan/SurfaceVk.cpp",
+        "patchSetId": 11
+      },
+      "lineNbr": 1771,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2021-11-12T01:58:38Z",
+      "side": 1,
+      "message": "No, that would skip the transition to SharedPresent. The way the current code is, the transition to SharedPresent would happen as soon as the image transitions to anything.",
+      "parentUuid": "52762a39_2bd60ddd",
+      "revId": "90382017007d75f43396e1deb83601394ff7d7d1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "3beb64b8_5a624086",
@@ -169,6 +187,24 @@
       "writtenOn": "2021-11-11T23:53:03Z",
       "side": 1,
       "message": "Is this right? \nWe are getting a call after we are in SharedPresent to go to TransferDst. Maybe from flush. Should the transition just be ignored?",
+      "revId": "90382017007d75f43396e1deb83601394ff7d7d1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "3c654db7_2b4ba5b5",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 11
+      },
+      "lineNbr": 4984,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2021-11-12T01:58:38Z",
+      "side": 1,
+      "message": "We had this discussion in the past, see Ref. Your comment was:\n\n\u003e My interpretation is that it transitions once to SHARED_PRESENT and stays there.\n\nThat\u0027s why we made everything such that on first transition, we transition to SharedPresent, and then we make sure it stays SharedPresent forever.",
+      "parentUuid": "3beb64b8_5a624086",
       "revId": "90382017007d75f43396e1deb83601394ff7d7d1",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
