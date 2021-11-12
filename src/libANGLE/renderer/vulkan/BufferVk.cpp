@@ -701,6 +701,13 @@ angle::Result BufferVk::mapRangeImpl(ContextVk *contextVk,
 
     ASSERT(mBuffer && mBuffer->valid());
 
+    // MAP_UNSYNCHRONIZED_BIT, so immediately map.
+    if ((access & GL_MAP_UNSYNCHRONIZED_BIT) != 0)
+    {
+        ANGLE_TRY(directMap(contextVk, offset, length, reinterpret_cast<uint8_t **>(mapPtr)));
+        return angle::Result::Continue;
+    }
+
     // Read case
     if ((access & GL_MAP_WRITE_BIT) == 0)
     {
@@ -720,8 +727,6 @@ angle::Result BufferVk::mapRangeImpl(ContextVk *contextVk,
         return angle::Result::Continue;
     }
 
-    // Write case
-
     // Write case, buffer not in use.
     if (!mBuffer->isHostVisible() || mBuffer->isExternalBuffer() || !isCurrentlyInUse(contextVk))
     {
@@ -736,13 +741,10 @@ angle::Result BufferVk::mapRangeImpl(ContextVk *contextVk,
     // 1.) Caller has told us it doesn't care about previous contents, or
     // 2.) The GPU won't write to the buffer.
 
-    bool entireBufferInvalidated = ((access & GL_MAP_INVALIDATE_BUFFER_BIT) != 0) ||
-                                   ((access & GL_MAP_INVALIDATE_RANGE_BIT) != 0 && offset == 0 &&
-                                    static_cast<VkDeviceSize>(mState.getSize()) == length);
-
     bool rangeInvalidate = (access & GL_MAP_INVALIDATE_RANGE_BIT) != 0;
-
-    bool smallMapRange = (length < static_cast<VkDeviceSize>(mState.getSize()) / 2);
+    bool entireBufferInvalidated =
+        ((access & GL_MAP_INVALIDATE_BUFFER_BIT) != 0) ||
+        (rangeInvalidate && offset == 0 && static_cast<VkDeviceSize>(mState.getSize()) == length);
 
     if (entireBufferInvalidated)
     {
@@ -751,6 +753,8 @@ angle::Result BufferVk::mapRangeImpl(ContextVk *contextVk,
         ANGLE_TRY(directMap(contextVk, offset, length, reinterpret_cast<uint8_t **>(mapPtr)));
         return angle::Result::Continue;
     }
+
+    bool smallMapRange = (length < static_cast<VkDeviceSize>(mState.getSize()) / 2);
 
     if (smallMapRange && rangeInvalidate)
     {
@@ -767,13 +771,9 @@ angle::Result BufferVk::mapRangeImpl(ContextVk *contextVk,
         return ghostMappedBuffer(contextVk, offset, length, access, mapPtr);
     }
 
-    if ((access & GL_MAP_UNSYNCHRONIZED_BIT) == 0)
-    {
-        ANGLE_TRY(mBuffer->waitForIdle(contextVk,
-                                       "GPU stall due to mapping buffer in use by the GPU",
-                                       RenderPassClosureReason::BufferInUseWhenSynchronizedMap));
-    }
-
+    // Write case (worst case, buffer in use for write)
+    ANGLE_TRY(mBuffer->waitForIdle(contextVk, "GPU stall due to mapping buffer in use by the GPU",
+                                   RenderPassClosureReason::BufferInUseWhenSynchronizedMap));
     ANGLE_TRY(directMap(contextVk, offset, length, reinterpret_cast<uint8_t **>(mapPtr)));
     return angle::Result::Continue;
 }
