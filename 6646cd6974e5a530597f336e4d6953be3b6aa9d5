@@ -248,6 +248,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "010878f1_51713a46",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 13
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1359249
+      },
+      "writtenOn": "2021-11-12T21:49:32Z",
+      "side": 1,
+      "message": "I did not expect it would be this involved. So much thank you!\n\nI will download patch and merge.\nOur repo is not in sync with yours, and there is a proxy issue that keeps me from uploading (that\u0027s why Brandon does it for me) and running cl format - just to add to the fun.",
+      "parentUuid": "24750eb7_d025017b",
+      "revId": "6646cd6974e5a530597f336e4d6953be3b6aa9d5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "1da8ec14_08bf59aa",
