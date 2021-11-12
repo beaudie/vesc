@@ -564,6 +564,7 @@ class RendererVk : angle::NonCopyable
     VkPhysicalDeviceMultiviewProperties mMultiviewProperties;
     VkPhysicalDeviceDriverPropertiesKHR mDriverProperties;
     VkPhysicalDeviceCustomBorderColorFeaturesEXT mCustomBorderColorFeatures;
+    VkPhysicalDeviceMultiDrawFeaturesEXT mMultiDrawFeatures;
     VkPhysicalDeviceProtectedMemoryFeatures mProtectedMemoryFeatures;
     VkPhysicalDeviceProtectedMemoryProperties mProtectedMemoryProperties;
     VkExternalFenceProperties mExternalFenceProperties;
