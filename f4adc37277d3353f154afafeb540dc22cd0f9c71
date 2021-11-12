@@ -98,6 +98,30 @@
       },
       "revId": "f4adc37277d3353f154afafeb540dc22cd0f9c71",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "5b700991_cb15b53f",
+        "filename": "src/libANGLE/renderer/vulkan/VulkanSecondaryCommandBuffer.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 294,
+      "author": {
+        "id": 1290487
+      },
+      "writtenOn": "2021-11-12T02:07:25Z",
+      "side": 1,
+      "message": "Ack, thanks!",
+      "parentUuid": "4e92058a_380508d0",
+      "range": {
+        "startLine": 274,
+        "startChar": 0,
+        "endLine": 294,
+        "endChar": 1
+      },
+      "revId": "f4adc37277d3353f154afafeb540dc22cd0f9c71",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
