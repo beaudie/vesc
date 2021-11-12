@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "24d0aea4_0114fe18",
+        "filename": "src/libANGLE/renderer/vulkan/BufferVk.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 724,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2021-11-12T21:49:02Z",
+      "side": 1,
+      "message": "nit: move this check before the `else if` above, like:\n\n    if (...)\n    else if ((access \u0026 GL_MAP_UNSYNCHRONIZED_BIT) \u003d\u003d 0)\n    {\n        // YOLO\n    }\n    else if (isCurrentlyInUse(...) ...)\n    {\n    }\n\nto avoid an extra nesting level",
+      "range": {
+        "startLine": 724,
+        "startChar": 26,
+        "endLine": 724,
+        "endChar": 67
+      },
+      "revId": "9cfe3d3c74374431e46d5208ada8e533f3dd0881",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
