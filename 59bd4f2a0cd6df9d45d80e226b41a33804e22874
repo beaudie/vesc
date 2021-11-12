@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "99ef76c6_b46f8b63",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 2
+      },
+      "lineNbr": 9,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2021-11-12T15:07:41Z",
+      "side": 1,
+      "message": "seems to be using enums rather than colors?",
+      "range": {
+        "startLine": 9,
+        "startChar": 47,
+        "endLine": 9,
+        "endChar": 53
+      },
+      "revId": "59bd4f2a0cd6df9d45d80e226b41a33804e22874",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
