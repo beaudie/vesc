@@ -257,6 +257,29 @@
       "parentUuid": "f64747b3_af10d847",
       "revId": "6646cd6974e5a530597f336e4d6953be3b6aa9d5",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "1b7f3b25_72460b31",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 13
+      },
+      "lineNbr": 309,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2021-11-12T20:56:59Z",
+      "side": 1,
+      "message": "Here\u0027s another bug, this should be SHARED_PRESENT",
+      "range": {
+        "startLine": 309,
+        "startChar": 12,
+        "endLine": 309,
+        "endChar": 43
+      },
+      "revId": "6646cd6974e5a530597f336e4d6953be3b6aa9d5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
