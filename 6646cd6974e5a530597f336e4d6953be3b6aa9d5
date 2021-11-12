@@ -160,6 +160,23 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "735b2858_2dee2e03",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 13
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2021-11-12T21:24:48Z",
+      "side": 1,
+      "message": "I\u0027m seeing a crash inside VVL when it\u0027s trying to generate an error, and the error is that we are issuing a layout transition from SHARED_PRESENT to SHARED_PRESENT, but that\u0027s apparently not valid. I\u0027m not sure if that\u0027s per spec or a VVL bug.\n\nCommenting that code in VVL out, dEQP-EGL.functional.mutable_render_buffer.basic passes :)",
+      "revId": "6646cd6974e5a530597f336e4d6953be3b6aa9d5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "1da8ec14_08bf59aa",
