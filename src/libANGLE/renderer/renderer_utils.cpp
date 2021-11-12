@@ -1059,6 +1059,32 @@ angle::Result MultiDrawArraysGeneral(ContextImpl *contextImpl,
     return angle::Result::Continue;
 }
 
+angle::Result MultiDrawArraysIndirectGeneral(ContextImpl *contextImpl,
+                                             const gl::Context *context,
+                                             gl::PrimitiveMode mode,
+                                             const void *indirect,
+                                             GLsizei drawcount,
+                                             GLsizei stride)
+{
+    const uint8_t *indirectPtr = (const uint8_t *)indirect;
+
+    for (auto count = 0; count < drawcount; count++)
+    {
+        ANGLE_TRY(contextImpl->drawArraysIndirect(context, mode,
+                                                  (gl::DrawArraysIndirectCommand *)indirectPtr));
+        if (stride == 0)
+        {
+            indirectPtr += sizeof(gl::DrawArraysIndirectCommand);
+        }
+        else
+        {
+            indirectPtr += stride;
+        }
+    }
+
+    return angle::Result::Continue;
+}
+
 angle::Result MultiDrawArraysInstancedGeneral(ContextImpl *contextImpl,
                                               const gl::Context *context,
                                               gl::PrimitiveMode mode,
@@ -1098,6 +1124,33 @@ angle::Result MultiDrawElementsGeneral(ContextImpl *contextImpl,
     else
     {
         MULTI_DRAW_BLOCK(ELEMENTS, _, _, 0, 0, 0)
+    }
+
+    return angle::Result::Continue;
+}
+
+angle::Result MultiDrawElementsIndirectGeneral(ContextImpl *contextImpl,
+                                               const gl::Context *context,
+                                               gl::PrimitiveMode mode,
+                                               gl::DrawElementsType type,
+                                               const void *indirect,
+                                               GLsizei drawcount,
+                                               GLsizei stride)
+{
+    const uint8_t *indirectPtr = (const uint8_t *)indirect;
+
+    for (auto count = 0; count < drawcount; count++)
+    {
+        ANGLE_TRY(contextImpl->drawElementsIndirect(
+            context, mode, type, (gl::DrawElementsIndirectCommand *)indirectPtr));
+        if (stride == 0)
+        {
+            indirectPtr += sizeof(gl::DrawElementsIndirectCommand);
+        }
+        else
+        {
+            indirectPtr += stride;
+        }
     }
 
     return angle::Result::Continue;
