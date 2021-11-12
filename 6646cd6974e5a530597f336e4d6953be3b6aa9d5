@@ -16,6 +16,24 @@
       "message": "pixel4 runs dEQP.EGL/functional_mutable_render_buffer_querySurface that is failing - no details",
       "revId": "6646cd6974e5a530597f336e4d6953be3b6aa9d5",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "01b55c3c_c787cee6",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 13
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2021-11-12T19:18:54Z",
+      "side": 1,
+      "message": "Ok, I can try and debug that a little big. Is the change good on your platform now, or does it still fail?",
+      "parentUuid": "696429b6_aaa83b7a",
+      "revId": "6646cd6974e5a530597f336e4d6953be3b6aa9d5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
