@@ -139,6 +139,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "938427d0_8e03e704",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 11
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2021-11-12T15:54:57Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "462463cf_f4bcd1bc",
+      "revId": "90382017007d75f43396e1deb83601394ff7d7d1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "0e9cb0f0_9c0c7586",
@@ -292,6 +310,24 @@
       "side": 1,
       "message": "onResourceAccess is called from ContextVk getOutsideRenderPassCommandBuffer().",
       "parentUuid": "ea94b0b3_cf3b0d16",
+      "revId": "90382017007d75f43396e1deb83601394ff7d7d1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "fd2b6e89_4eec4af2",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 11
+      },
+      "lineNbr": 4984,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2021-11-12T15:54:57Z",
+      "side": 1,
+      "message": "Ok we missed this function. See what we did for ImageHelper::updateLayoutAndBarrier:\n\n    // Once you transition to ImageLayout::SharedPresent, you never transition out of it.\n    if (mCurrentLayout \u003d\u003d ImageLayout::SharedPresent)\n    {\n        newLayout \u003d ImageLayout::SharedPresent;\n    }\n\nCan you put that in ImageHelper::barrierImpl too? We shouldn\u0027t ignore the barrier, just keep the layout the same.\n\n---\n\nIf that still crashes, can you please detail what the crash is?",
+      "parentUuid": "4f5c242c_2ec6c478",
       "revId": "90382017007d75f43396e1deb83601394ff7d7d1",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
