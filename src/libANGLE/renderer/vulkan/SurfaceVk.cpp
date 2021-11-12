@@ -1761,10 +1761,10 @@ VkResult WindowSurfaceVk::acquireNextSwapchainImage(vk::Context *context)
                 return VK_ERROR_OUT_OF_DATE_KHR;
             }
             Serial serial;
-            if (rendererVk->queueSubmitOneOff(context, std::move(primaryCommandBuffer), false,
-                                              egl::ContextPriority::Medium, acquireImageSemaphore,
-                                              nullptr, vk::SubmitPolicy::EnsureSubmitted,
-                                              &serial) != angle::Result::Continue)
+            if (rendererVk->queueSubmitOneOff(
+                    context, std::move(primaryCommandBuffer), false, egl::ContextPriority::Medium,
+                    acquireImageSemaphore, VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT, nullptr,
+                    vk::SubmitPolicy::EnsureSubmitted, &serial) != angle::Result::Continue)
             {
                 mDesiredSwapchainPresentMode = VK_PRESENT_MODE_FIFO_KHR;
                 return VK_ERROR_OUT_OF_DATE_KHR;

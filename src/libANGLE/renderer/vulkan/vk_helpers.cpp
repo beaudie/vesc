@@ -306,7 +306,7 @@ constexpr angle::PackedEnumMap<ImageLayout, ImageMemoryBarrierData> kImageMemory
         ImageLayout::SharedPresent,
         ImageMemoryBarrierData{
             "SharedPresent",
-            VK_IMAGE_LAYOUT_PRESENT_SRC_KHR,
+            VK_IMAGE_LAYOUT_SHARED_PRESENT_KHR,
             VK_PIPELINE_STAGE_BOTTOM_OF_PIPE_BIT,
             VK_PIPELINE_STAGE_TOP_OF_PIPE_BIT,
             // Transition to: all reads and writes must happen after barrier.
@@ -5002,13 +5002,19 @@ void ImageHelper::barrierImpl(Context *context,
                               uint32_t newQueueFamilyIndex,
                               CommandBufferT *commandBuffer)
 {
-    // Debug jvigil
-    INFO() << "Debug: newLayout requested = " << kImageMemoryBarrierData[newLayout].name;
     if (mCurrentLayout == ImageLayout::SharedPresent)
     {
-        newLayout = ImageLayout::SharedPresent;
+        const ImageMemoryBarrierData &transition = kImageMemoryBarrierData[mCurrentLayout];
+
+        VkMemoryBarrier memoryBarrier = {};
+        memoryBarrier.sType           = VK_STRUCTURE_TYPE_MEMORY_BARRIER;
+        memoryBarrier.srcAccessMask   = transition.srcAccessMask;
+        memoryBarrier.dstAccessMask   = transition.dstAccessMask;
+
+        commandBuffer->memoryBarrier(transition.srcStageMask, transition.dstStageMask,
+                                     &memoryBarrier);
+        return;
     }
-    INFO() << "Debug: newLayout applied = " << kImageMemoryBarrierData[newLayout].name;
 
     // Make sure we never transition out of SharedPresent
     ASSERT(mCurrentLayout != ImageLayout::SharedPresent || newLayout == ImageLayout::SharedPresent);
