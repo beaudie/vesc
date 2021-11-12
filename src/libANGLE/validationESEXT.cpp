@@ -12,7 +12,6 @@
 #include "libANGLE/MemoryObject.h"
 #include "libANGLE/validationES.h"
 #include "libANGLE/validationES2.h"
-#include "libANGLE/validationES3.h"
 #include "libANGLE/validationES31.h"
 #include "libANGLE/validationES32.h"
 
@@ -438,6 +437,29 @@ bool ValidateMultiDrawElementsBaseVertexEXT(const Context *context,
                                             const GLint *basevertex)
 {
     return true;
+}
+
+bool ValidateMultiDrawArraysIndirectEXT(const Context *context,
+                                        angle::EntryPoint entryPoint,
+                                        GLenum mode,
+                                        const void *indirect,
+                                        GLsizei drawcount,
+                                        GLsizei stride)
+{
+    UNIMPLEMENTED();
+    return false;
+}
+
+bool ValidateMultiDrawElementsIndirectEXT(const Context *context,
+                                          angle::EntryPoint entryPoint,
+                                          GLenum mode,
+                                          GLenum type,
+                                          const void *indirect,
+                                          GLsizei drawcount,
+                                          GLsizei stride)
+{
+    UNIMPLEMENTED();
+    return false;
 }
 
 bool ValidateDrawElementsBaseVertexOES(const Context *context,
