@@ -177,6 +177,23 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "1b6ba489_ac92c084",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 13
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1359249
+      },
+      "writtenOn": "2021-11-12T21:27:23Z",
+      "side": 1,
+      "message": "response.\nI\u0027m collection changes and will upload when we got them all and your fix is passing.",
+      "revId": "6646cd6974e5a530597f336e4d6953be3b6aa9d5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "1da8ec14_08bf59aa",
@@ -226,6 +243,24 @@
       "side": 1,
       "message": "The thing is, setRenderBuffer is a call that\u0027s not specific to this extension, right? So this change shouldn\u0027t make it fail.",
       "parentUuid": "59ad2d83_f2e3e3dd",
+      "revId": "6646cd6974e5a530597f336e4d6953be3b6aa9d5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "51172a16_4590ebfe",
+        "filename": "src/libANGLE/renderer/SurfaceImpl.cpp",
+        "patchSetId": 13
+      },
+      "lineNbr": 146,
+      "author": {
+        "id": 1359249
+      },
+      "writtenOn": "2021-11-12T21:27:23Z",
+      "side": 1,
+      "message": "No its not specific. PbufferSurface is always BACK_BUFFER, spec doesn\u0027t say error if you try to change. WindowsSurface defaults to BACK_BUFFER but can go to SINGLE_BUFFER. Shouldn\u0027t cause failure, I expect this would be expected behavior. And I would NOT expect it to be part of dEQP test.",
+      "parentUuid": "4c286838_7064b44a",
       "revId": "6646cd6974e5a530597f336e4d6953be3b6aa9d5",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
@@ -301,6 +336,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "de2775cb_fd4e4f89",
+        "filename": "src/libANGLE/renderer/SurfaceImpl.h",
+        "patchSetId": 13
+      },
+      "lineNbr": 123,
+      "author": {
+        "id": 1359249
+      },
+      "writtenOn": "2021-11-12T21:27:23Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "1e9000bf_95530766",
+      "range": {
+        "startLine": 123,
+        "startChar": 23,
+        "endLine": 123,
+        "endChar": 38
+      },
+      "revId": "6646cd6974e5a530597f336e4d6953be3b6aa9d5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "f64747b3_af10d847",
@@ -349,6 +408,30 @@
       "writtenOn": "2021-11-12T20:56:59Z",
       "side": 1,
       "message": "Here\u0027s another bug, this should be SHARED_PRESENT",
+      "range": {
+        "startLine": 309,
+        "startChar": 12,
+        "endLine": 309,
+        "endChar": 43
+      },
+      "revId": "6646cd6974e5a530597f336e4d6953be3b6aa9d5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "f8a7db78_e0352dce",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 13
+      },
+      "lineNbr": 309,
+      "author": {
+        "id": 1359249
+      },
+      "writtenOn": "2021-11-12T21:27:23Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "1b7f3b25_72460b31",
       "range": {
         "startLine": 309,
         "startChar": 12,
