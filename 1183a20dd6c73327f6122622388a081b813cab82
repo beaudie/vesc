@@ -1,0 +1,101 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "b9ba919d_c3777fae",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 5
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2021-11-12T02:27:12Z",
+      "side": 1,
+      "message": "Looks good.   This should be really helpful during the performance work.",
+      "revId": "1183a20dd6c73327f6122622388a081b813cab82",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "5a854b14_5514a15e",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 363,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2021-11-12T02:27:12Z",
+      "side": 1,
+      "message": "nit: Just to remove any ambiguity: \"render pass\".",
+      "range": {
+        "startLine": 363,
+        "startChar": 67,
+        "endLine": 363,
+        "endChar": 69
+      },
+      "revId": "1183a20dd6c73327f6122622388a081b813cab82",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "eb50250d_8e2a0057",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 5893,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2021-11-12T02:27:12Z",
+      "side": 1,
+      "message": "Why \u0027AlreadySpecifiedElsewhere\u0027 here?   Looking at the callers of flushDirtyGraphicsRenderPass(), I don\u0027t see additional flushes that indicate why the RP was broken.",
+      "revId": "1183a20dd6c73327f6122622388a081b813cab82",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "72b4a69b_5f98b3f9",
+        "filename": "src/libANGLE/renderer/vulkan/FramebufferVk.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 1422,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2021-11-12T02:27:12Z",
+      "side": 1,
+      "message": "This looks special enough to have its own reason.   Which RP break are you expecting to be the duplicate (my guess would have been the FBO binding as part of the blit, but we specifically don\u0027t end the RP in that case)?",
+      "revId": "1183a20dd6c73327f6122622388a081b813cab82",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "31726038_39f99b7c",
+        "filename": "src/libANGLE/renderer/vulkan/SurfaceVk.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 1564,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2021-11-12T02:27:12Z",
+      "side": 1,
+      "message": "nit: To match the ANGLE_TRACE_EVENT0() calls above, I think this should be \"Present\".",
+      "range": {
+        "startLine": 1564,
+        "startChar": 92,
+        "endLine": 1564,
+        "endChar": 96
+      },
+      "revId": "1183a20dd6c73327f6122622388a081b813cab82",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
