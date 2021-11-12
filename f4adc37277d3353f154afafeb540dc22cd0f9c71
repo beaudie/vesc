@@ -18,6 +18,41 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "f9a1e4ce_cd54959e",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2021-11-12T01:51:57Z",
+      "side": 1,
+      "message": "We immediately break the render pass when invalidating color at the moment. While tests are always good, they would basically just prove we\u0027re being inefficient at the moment. Let\u0027s leave that to if and when we optimize for them.",
+      "parentUuid": "7f3890c7_4c478a56",
+      "revId": "f4adc37277d3353f154afafeb540dc22cd0f9c71",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "3739b00b_be3f14f5",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2021-11-12T01:51:57Z",
+      "side": 1,
+      "message": "1+1\u003d2. Ian, I presume you didn\u0027t +2 because of the comment on the other clear commands. If there are still outstanding issues, I\u0027ll follow up.",
+      "revId": "f4adc37277d3353f154afafeb540dc22cd0f9c71",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "5d9b943c_34c13cd7",
@@ -31,6 +66,30 @@
       "writtenOn": "2021-11-12T00:38:39Z",
       "side": 1,
       "message": "Why not add `mCommandTracker.onClearAttachments();` to these methods?",
+      "range": {
+        "startLine": 274,
+        "startChar": 0,
+        "endLine": 294,
+        "endChar": 1
+      },
+      "revId": "f4adc37277d3353f154afafeb540dc22cd0f9c71",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "4e92058a_380508d0",
+        "filename": "src/libANGLE/renderer/vulkan/VulkanSecondaryCommandBuffer.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 294,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2021-11-12T01:51:57Z",
+      "side": 1,
+      "message": "These aren\u0027t render pass commands. onClearAttachments is for vkCmdClearAttachments :)",
+      "parentUuid": "5d9b943c_34c13cd7",
       "range": {
         "startLine": 274,
         "startChar": 0,
