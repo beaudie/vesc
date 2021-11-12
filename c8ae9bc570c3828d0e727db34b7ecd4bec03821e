@@ -80,6 +80,30 @@
       },
       "revId": "c8ae9bc570c3828d0e727db34b7ecd4bec03821e",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "eff0e675_0f9302c4",
+        "filename": "extensions/EGL_ANGLE_device_vulkan.txt",
+        "patchSetId": 1
+      },
+      "lineNbr": 71,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2021-11-12T18:40:45Z",
+      "side": 1,
+      "message": "Awesome, thank you. Please ensure you also update the google doc to mention this enum.",
+      "parentUuid": "de8673ba_d66a3781",
+      "range": {
+        "startLine": 71,
+        "startChar": 8,
+        "endLine": 71,
+        "endChar": 45
+      },
+      "revId": "c8ae9bc570c3828d0e727db34b7ecd4bec03821e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
