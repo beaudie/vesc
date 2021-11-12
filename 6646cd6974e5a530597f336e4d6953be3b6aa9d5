@@ -230,6 +230,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "24750eb7_d025017b",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 13
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2021-11-12T21:38:21Z",
+      "side": 1,
+      "message": "Ok I had to at least rebase your change, but managed to isolate my changes from yours so you see what I did, and apply it to your current local version:\n\nhttps://chromium-review.googlesource.com/c/angle/angle/+/3279227",
+      "parentUuid": "f3b6e8f4_56e4a53a",
+      "revId": "6646cd6974e5a530597f336e4d6953be3b6aa9d5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "1da8ec14_08bf59aa",
