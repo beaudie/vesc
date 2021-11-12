@@ -16,6 +16,23 @@
       "message": "No idea if this will be green, but PTAL.",
       "revId": "878990e6dbc2905512bf0a95fb0b107c2074b5f0",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "71c0d08e_f6d627ff",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2021-11-12T00:01:36Z",
+      "side": 1,
+      "message": "Thanks!",
+      "revId": "878990e6dbc2905512bf0a95fb0b107c2074b5f0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
