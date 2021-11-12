@@ -375,6 +375,7 @@ void RendererVk::ensureCapsInitialized() const
     mNativeExtensions.discardFramebufferEXT = true;
     mNativeExtensions.textureBorderClampOES = getFeatures().supportsCustomBorderColorEXT.enabled;
     mNativeExtensions.textureBorderClampEXT = getFeatures().supportsCustomBorderColorEXT.enabled;
+    mNativeExtensions.multiDrawIndirectEXT  = getFeatures().supportsMultiDrawIndirectEXT.enabled;
     // Enable EXT_texture_type_2_10_10_10_REV
     mNativeExtensions.textureType2101010REVEXT = true;
 
