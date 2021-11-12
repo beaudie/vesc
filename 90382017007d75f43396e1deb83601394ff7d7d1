@@ -124,6 +124,23 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "462463cf_f4bcd1bc",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 11
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1359249
+      },
+      "writtenOn": "2021-11-12T15:43:02Z",
+      "side": 1,
+      "message": "Reference: https://www.khronos.org/registry/vulkan/specs/1.2-extensions/html/chap50.html#VK_KHR_shared_presentable_image\nIssue #6\n\n6) What should the layout of the shared presentable image be?\n\nRESOLVED: After acquiring the shared presentable image, the application must transition it to the VK_IMAGE_LAYOUT_SHARED_PRESENT_KHR layout prior to it being used. After this initial transition, any image usage that was requested during swapchain creation can be performed on the image without layout transitions being performed.\n",
+      "revId": "90382017007d75f43396e1deb83601394ff7d7d1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "0e9cb0f0_9c0c7586",
         "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
         "patchSetId": 11
