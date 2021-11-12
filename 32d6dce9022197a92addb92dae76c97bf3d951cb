@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "401d8d08_8e8813cb",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2021-11-12T15:15:21Z",
+      "side": 1,
+      "message": "I took a look a the spec again, and actually we can have a front-end (but inefficient) implementation for the extension so that we can enable it everywhere. Then in a follow up CL, we can optimize it for Vulkan.\n\nSearch for MultiDrawArrays and MultiDrawElements in the code as it\u0027s done in the same way.\n\n- The front-end calls into the backend like you did here\n- If the backend has an optimal path, it will use it (which currently none of the backends do, it\u0027s something we can improve on later)\n- Otherwise the backend calls into a shared piece of code that emulates it, namely rx::MultiDrawArraysGeneral and rx::MultiDrawElementsGeneral in renderer_utils.cpp\n\nThe spec for the extension basically tells what that piece of code is. For MultiDrawArraysIndirect, it says it\u0027s:\n\n    It is equivalent to\n\n        if (\u003cmode\u003e is invalid)\n            generate appropriate error\n        else {\n            const ubyte * ptr \u003d (const ubyte *)\u003cindirect\u003e;\n            for (i \u003d 0; i \u003c \u003cdrawcount\u003e; i++) {\n                DrawArraysIndirect(\u003cmode\u003e,\n                                   (DrawArraysIndirectCommand*)ptr);\n                if (\u003cstride\u003e \u003d\u003d 0) {\n                    ptr +\u003d sizeof(DrawArraysIndirectCommand);\n                } else {\n                    ptr +\u003d \u003cstride\u003e;\n                }\n            }\n        }\n\nThere\u0027s another piece of code for MultiDrawElementsIndirect.",
+      "revId": "32d6dce9022197a92addb92dae76c97bf3d951cb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
