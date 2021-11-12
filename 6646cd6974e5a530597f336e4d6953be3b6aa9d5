@@ -36,6 +36,23 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "c9afdf4a_ea0ca20c",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 13
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2021-11-12T19:38:57Z",
+      "side": 1,
+      "message": "I\u0027m looking into the Vulkan errors, but this VVL error is probably the reason for your issue:\n\nI  322.892s run_tests_on_device(98081FFAZ000UJ)  [ RUN      ] dEQP.EGL/functional_mutable_render_buffer_basic\nI  322.892s run_tests_on_device(98081FFAZ000UJ)  dEQP-EGL.functional.mutable_render_buffer.basic\nI  322.892s run_tests_on_device(98081FFAZ000UJ)  ../../src/tests/deqp_support/angle_deqp_gtest.cpp:51: Failure\nI  322.892s run_tests_on_device(98081FFAZ000UJ)  Failed\nI  322.892s run_tests_on_device(98081FFAZ000UJ)  RendererVk.cpp:599 (DebugUtilsMessenger): [ VUID_Undefined ] Validation Error: [ VUID_Undefined ] Object 0: handle \u003d 0xb40000707b3a61f0, type \u003d VK_OBJECT_TYPE_DEVICE; | MessageID \u003d 0x79de34d4 | vkQueueSubmit: required parameter pSubmits[0].pWaitDstStageMask specified as NULL.",
+      "revId": "6646cd6974e5a530597f336e4d6953be3b6aa9d5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "1da8ec14_08bf59aa",
