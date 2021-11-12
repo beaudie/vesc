@@ -446,8 +446,30 @@ bool ValidateMultiDrawArraysIndirectEXT(const Context *context,
                                         GLsizei drawcount,
                                         GLsizei stride)
 {
-    UNIMPLEMENTED();
-    return false;
+    PrimitiveMode primitiveMode = PackParam<PrimitiveMode>(mode);
+
+    if (!ValidateDrawArraysIndirect(context, entryPoint, primitiveMode, indirect))
+    {
+        return false;
+    }
+
+    if (!(stride == 0 || stride % 4 == 0))
+    {
+        context->validationError(entryPoint, GL_INVALID_VALUE, kInvalidDrawBufferValue);
+        return false;
+    }
+
+    if (drawcount <= 0)
+    {
+        context->validationError(entryPoint, GL_INVALID_VALUE, kInvalidValueNonPositive);
+        return false;
+    }
+
+    //    [[ If EXT_base_instance is not supported. ]]
+    //    Results are undefined if <reservedMustBeZero> is non-zero, but may not
+    //    result in program termination."
+
+    return true;
 }
 
 bool ValidateMultiDrawElementsIndirectEXT(const Context *context,
@@ -458,8 +480,59 @@ bool ValidateMultiDrawElementsIndirectEXT(const Context *context,
                                           GLsizei drawcount,
                                           GLsizei stride)
 {
-    UNIMPLEMENTED();
-    return false;
+    PrimitiveMode primitiveMode             = PackParam<PrimitiveMode>(mode);
+    DrawElementsType drawElementsType       = PackParam<DrawElementsType>(type);
+    const State &state                      = context->getState();
+    TransformFeedback *curTransformFeedback = state.getCurrentTransformFeedback();
+
+    if (!ValidateDrawElementsIndirect(context, entryPoint, primitiveMode, drawElementsType,
+                                      indirect))
+    {
+        return false;
+    }
+
+    if (!(stride == 0 || stride % 4 == 0))
+    {
+        context->validationError(entryPoint, GL_INVALID_VALUE, kInvalidDrawBufferValue);
+        return false;
+    }
+
+    if (drawcount <= 0)
+    {
+        context->validationError(entryPoint, GL_INVALID_VALUE, kInvalidValueNonPositive);
+        return false;
+    }
+
+    if (curTransformFeedback && curTransformFeedback->isActive() &&
+        !curTransformFeedback->isPaused())
+    {
+        // EXT_geometry_shader allows transform feedback to work with all draw commands.
+        // [EXT_geometry_shader] Section 12.1, "Transform Feedback"
+        if (context->getExtensions().geometryShaderAny() || context->getClientVersion() >= ES_3_2)
+        {
+            if (!ValidateTransformFeedbackPrimitiveMode(
+                    context, entryPoint, curTransformFeedback->getPrimitiveMode(), primitiveMode))
+            {
+                context->validationError(entryPoint, GL_INVALID_OPERATION,
+                                         kInvalidDrawModeTransformFeedback);
+                return false;
+            }
+        }
+        else
+        {
+            // An INVALID_OPERATION error is generated if transform feedback is active and not
+            // paused.
+            context->validationError(entryPoint, GL_INVALID_OPERATION,
+                                     kUnsupportedDrawModeForTransformFeedback);
+            return false;
+        }
+    }
+
+    //    [[ If EXT_base_instance is not supported. ]]
+    //    Results are undefined if <reservedMustBeZero> is non-zero, but may not
+    //    result in program termination."
+
+    return true;
 }
 
 bool ValidateDrawElementsBaseVertexOES(const Context *context,
