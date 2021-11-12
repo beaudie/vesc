@@ -1,6 +1,23 @@
 {
   "comments": [
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "26584717_e7bae5a7",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 8
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2021-11-12T23:05:39Z",
+      "side": 1,
+      "message": "LGTM. One note is that this looks measuring the current thread\u0027s cpu time. Some driver (for example, ARM native driver) do the data copy in another thread while angle almost always do thing in same thread, so this may penalize angle a bit. But there is not really exact measurement here, so this still looks very useful to me.\n",
+      "revId": "d4c6b4e3fe1964b4d669f62a41f1b2dc88299181",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "363313de_462536eb",
