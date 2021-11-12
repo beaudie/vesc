@@ -35,6 +35,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "e96afcc3_72b3117b",
+        "filename": "src/libANGLE/Context_gl.cpp",
+        "patchSetId": 9
+      },
+      "lineNbr": 2758,
+      "author": {
+        "id": 1525982
+      },
+      "writtenOn": "2021-11-12T03:58:58Z",
+      "side": 1,
+      "message": "I see. I will move the definitions to Context.cpp for now.",
+      "parentUuid": "5dddf301_d5ea5fa0",
+      "revId": "d239997361b9330cd1871adde6e5381411c1cc3a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "aa607306_1eb4c384",
@@ -48,6 +66,30 @@
       "writtenOn": "2021-11-12T02:06:13Z",
       "side": 1,
       "message": "Use:\n\n    UNIMPLEMENTED();\n    return angle::Result::Stop;\n\nThe GL backend doesn\u0027t expose the extension, so this shouldn\u0027t get called anyway.\n\nPlease don\u0027t use Incomplete, we should remove that.",
+      "range": {
+        "startLine": 759,
+        "startChar": 0,
+        "endLine": 761,
+        "endChar": 37
+      },
+      "revId": "d239997361b9330cd1871adde6e5381411c1cc3a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "7c32f51a_c96cfe4c",
+        "filename": "src/libANGLE/renderer/gl/ContextGL.cpp",
+        "patchSetId": 9
+      },
+      "lineNbr": 761,
+      "author": {
+        "id": 1525982
+      },
+      "writtenOn": "2021-11-12T03:58:58Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "aa607306_1eb4c384",
       "range": {
         "startLine": 759,
         "startChar": 0,
@@ -75,6 +117,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "c58317c4_69f47836",
+        "filename": "src/libANGLE/renderer/gl/ContextGL.cpp",
+        "patchSetId": 9
+      },
+      "lineNbr": 773,
+      "author": {
+        "id": 1525982
+      },
+      "writtenOn": "2021-11-12T03:58:58Z",
+      "side": 1,
+      "message": "Mistakenly written in the wrong function. Fixed. Thanks!",
+      "parentUuid": "73a65536_1806f95c",
+      "revId": "d239997361b9330cd1871adde6e5381411c1cc3a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "2939d73c_352e4675",
@@ -98,6 +158,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "cc7ab1ca_8766d6c3",
+        "filename": "src/libANGLE/renderer/gl/ContextGL.cpp",
+        "patchSetId": 9
+      },
+      "lineNbr": 801,
+      "author": {
+        "id": 1525982
+      },
+      "writtenOn": "2021-11-12T03:58:58Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "2939d73c_352e4675",
+      "range": {
+        "startLine": 798,
+        "startChar": 0,
+        "endLine": 801,
+        "endChar": 37
+      },
+      "revId": "d239997361b9330cd1871adde6e5381411c1cc3a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "0f42b063_e1e6b144",
@@ -111,6 +195,30 @@
       "writtenOn": "2021-11-12T02:06:13Z",
       "side": 1,
       "message": "Same here and below",
+      "range": {
+        "startLine": 2875,
+        "startChar": 26,
+        "endLine": 2875,
+        "endChar": 36
+      },
+      "revId": "d239997361b9330cd1871adde6e5381411c1cc3a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "816b4ce5_a58413fe",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 9
+      },
+      "lineNbr": 2875,
+      "author": {
+        "id": 1525982
+      },
+      "writtenOn": "2021-11-12T03:58:58Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "0f42b063_e1e6b144",
       "range": {
         "startLine": 2875,
         "startChar": 26,
