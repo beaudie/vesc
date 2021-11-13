@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ade4b3fb_58c4f502",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 5266,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2021-11-13T02:45:48Z",
+      "side": 1,
+      "message": "nit: Avoid recalculation, cache in local variable",
+      "range": {
+        "startLine": 5266,
+        "startChar": 35,
+        "endLine": 5266,
+        "endChar": 61
+      },
+      "revId": "529c3219990f1f9990d3439cd4eaf0a62bcc8c97",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
