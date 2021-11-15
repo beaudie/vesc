@@ -16,6 +16,46 @@
       "message": "This patch could reduce ~3% glBufferData calling time in blackdesert",
       "revId": "50d4f9ce3f17adb21a3c55a8360d7368e2a61a19",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "fcf5441f_57ea23a6",
+        "filename": "src/libANGLE/Buffer.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 149,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2021-11-15T15:32:20Z",
+      "side": 1,
+      "message": "This seems a little problematic, as the front-end is deciding here whether the backend will change the storage. The code was previously doing this too, but this is making it less trivial.\n\nJamie, why isn\u0027t it the backend that notifies when the storage changes, instead of making that decision here?",
+      "range": {
+        "startLine": 149,
+        "startChar": 9,
+        "endLine": 149,
+        "endChar": 25
+      },
+      "revId": "50d4f9ce3f17adb21a3c55a8360d7368e2a61a19",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "bbc1588e_003b045d",
+        "filename": "src/libANGLE/renderer/vulkan/BufferVk.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 428,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2021-11-15T15:32:20Z",
+      "side": 1,
+      "message": "You could potentially take this a step further and keep two sizes; the buffer size (as specified by glBufferData) and the allocated size (the real storage size). So you would avoid reallocating storage when the buffer size increases back.\n\nFor example, if the application does:\n\n    glBufferData(20);\n    glBufferData(10);\n    glBufferData(20);\n    glBufferData(10);\n    glBufferData(20);\n    glBufferData(10);\n\nyou would never reallocate the storage.",
+      "revId": "50d4f9ce3f17adb21a3c55a8360d7368e2a61a19",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
