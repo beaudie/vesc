@@ -1682,6 +1682,7 @@ class ImageHelper final : public Resource, public angle::Subject
     bool hasEmulatedImageChannels() const;
     bool hasEmulatedImageFormat() const { return mActualFormatID != mIntendedFormatID; }
     GLint getSamples() const { return mSamples; }
+    VkSampleCountFlagBits getVkSampleCountFlagBits() const { return gl_vk::GetSamples(mSamples); }
 
     ImageSerial getImageSerial() const
     {
@@ -1700,6 +1701,7 @@ class ImageHelper final : public Resource, public angle::Subject
     gl::Extents getRotatedLevelExtents2D(LevelIndex levelVk) const;
 
     bool isDepthOrStencil() const;
+    bool getVkImageCreateInfo(VkImageCreateInfo *imageInfo) const;
 
     void setRenderPassUsageFlag(RenderPassUsage flag);
     void clearRenderPassUsageFlag(RenderPassUsage flag);
