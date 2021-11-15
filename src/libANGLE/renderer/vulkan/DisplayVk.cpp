@@ -18,6 +18,7 @@
 #include "libANGLE/renderer/vulkan/RendererVk.h"
 #include "libANGLE/renderer/vulkan/SurfaceVk.h"
 #include "libANGLE/renderer/vulkan/SyncVk.h"
+#include "libANGLE/renderer/vulkan/VkImageImageSiblingVk.h"
 #include "libANGLE/trace.h"
 
 namespace rx
@@ -202,6 +203,37 @@ gl::Version DisplayVk::getMaxConformantESVersion() const
     return mRenderer->getMaxConformantESVersion();
 }
 
+egl::Error DisplayVk::validateImageClientBuffer(const gl::Context *context,
+                                                EGLenum target,
+                                                EGLClientBuffer clientBuffer,
+                                                const egl::AttributeMap &attribs) const
+{
+    switch (target)
+    {
+        case EGL_VULKAN_IMAGE_ANGLE:
+            return egl::NoError();
+
+        default:
+            return DisplayImpl::validateImageClientBuffer(context, target, clientBuffer, attribs);
+    }
+}
+
+ExternalImageSiblingImpl *DisplayVk::createExternalImageSibling(const gl::Context *context,
+                                                                EGLenum target,
+                                                                EGLClientBuffer buffer,
+                                                                const egl::AttributeMap &attribs)
+{
+    switch (target)
+    {
+        case EGL_VULKAN_IMAGE_ANGLE:
+            ASSERT(context == nullptr);
+            ASSERT(buffer != nullptr);
+            return new VkImageImageSiblingVk(buffer, attribs);
+        default:
+            return DisplayImpl::createExternalImageSibling(context, target, buffer, attribs);
+    }
+}
+
 void DisplayVk::generateExtensions(egl::DisplayExtensions *outExtensions) const
 {
     outExtensions->createContextRobustness    = getRenderer()->getNativeExtensions().robustnessEXT;
@@ -266,6 +298,7 @@ void DisplayVk::generateExtensions(egl::DisplayExtensions *outExtensions) const
          getRenderer()->getFeatures().supportsSurfaceProtectedSwapchains.enabled);
 
     outExtensions->createSurfaceSwapIntervalANGLE = true;
+    outExtensions->vulkanImageClientBufferANGLE   = true;
 }
 
 void DisplayVk::generateCaps(egl::Caps *outCaps) const
