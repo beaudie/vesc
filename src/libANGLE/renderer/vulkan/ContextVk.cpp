@@ -2979,7 +2979,31 @@ angle::Result ContextVk::multiDrawArraysIndirect(const gl::Context *context,
                                                  GLsizei drawcount,
                                                  GLsizei stride)
 {
-    return rx::MultiDrawArraysIndirectGeneral(this, context, mode, indirect, drawcount, stride);
+    if (!getFeatures().supportsMultiDrawIndirectEXT.enabled)
+    {
+        return rx::MultiDrawArraysIndirectGeneral(this, context, mode, indirect, drawcount, stride);
+    }
+
+    if (mode == gl::PrimitiveMode::LineLoop)
+    {
+        return rx::MultiDrawArraysIndirectGeneral(this, context, mode, indirect, drawcount, stride);
+    }
+
+    uint32_t vkStride = (stride == 0) ? sizeof(VkDrawIndirectCommand) : stride;
+
+    gl::Buffer *indirectBuffer        = mState.getTargetBuffer(gl::BufferBinding::DrawIndirect);
+    VkDeviceSize indirectBufferOffset = 0;
+    vk::BufferHelper *currentIndirectBuf =
+        &vk::GetImpl(indirectBuffer)->getBufferAndOffset(&indirectBufferOffset);
+    VkDeviceSize currentIndirectBufOffset =
+        indirectBufferOffset + reinterpret_cast<VkDeviceSize>(indirect);
+
+    ANGLE_TRY(setupIndirectDraw(context, mode, mNonIndexedDirtyBitsMask, currentIndirectBuf,
+                                currentIndirectBufOffset));
+
+    mRenderPassCommandBuffer->drawIndirect(currentIndirectBuf->getBuffer(),
+                                           currentIndirectBufOffset, drawcount, vkStride);
+    return angle::Result::Continue;
 }
 
 angle::Result ContextVk::multiDrawElements(const gl::Context *context,
@@ -3011,8 +3035,52 @@ angle::Result ContextVk::multiDrawElementsIndirect(const gl::Context *context,
                                                    GLsizei drawcount,
                                                    GLsizei stride)
 {
-    return rx::MultiDrawElementsIndirectGeneral(this, context, mode, type, indirect, drawcount,
-                                                stride);
+    if (!getFeatures().supportsMultiDrawIndirectEXT.enabled)
+    {
+        return rx::MultiDrawElementsIndirectGeneral(this, context, mode, type, indirect, drawcount,
+                                                    stride);
+    }
+
+    if (mode == gl::PrimitiveMode::LineLoop)
+    {
+        return rx::MultiDrawElementsIndirectGeneral(this, context, mode, type, indirect, drawcount,
+                                                    stride);
+    }
+
+    uint32_t vkStride = (stride == 0) ? sizeof(VkDrawIndexedIndirectCommand) : stride;
+
+    gl::Buffer *indirectBuffer = mState.getTargetBuffer(gl::BufferBinding::DrawIndirect);
+    ASSERT(indirectBuffer);
+    VkDeviceSize indirectBufferOffset = 0;
+    vk::BufferHelper *currentIndirectBuf =
+        &vk::GetImpl(indirectBuffer)->getBufferAndOffset(&indirectBufferOffset);
+    VkDeviceSize currentIndirectBufOffset =
+        indirectBufferOffset + reinterpret_cast<VkDeviceSize>(indirect);
+
+    if (shouldConvertUint8VkIndexType(type) && mGraphicsDirtyBits[DIRTY_BIT_INDEX_BUFFER])
+    {
+        ANGLE_VK_PERF_WARNING(
+            this, GL_DEBUG_SEVERITY_LOW,
+            "Potential inefficiency emulating uint8 vertex attributes due to lack "
+            "of hardware support");
+
+        vk::BufferHelper *dstIndirectBuf;
+        VkDeviceSize dstIndirectBufOffset;
+
+        ANGLE_TRY(mVertexArray->convertIndexBufferIndirectGPU(
+            this, currentIndirectBuf, currentIndirectBufOffset, &dstIndirectBuf,
+            &dstIndirectBufOffset));
+
+        currentIndirectBuf       = dstIndirectBuf;
+        currentIndirectBufOffset = dstIndirectBufOffset;
+    }
+
+    ANGLE_TRY(setupIndexedIndirectDraw(context, mode, type, currentIndirectBuf,
+                                       currentIndirectBufOffset));
+
+    mRenderPassCommandBuffer->drawIndexedIndirect(currentIndirectBuf->getBuffer(),
+                                                  currentIndirectBufOffset, drawcount, vkStride);
+    return angle::Result::Continue;
 }
 
 angle::Result ContextVk::multiDrawArraysInstancedBaseInstance(const gl::Context *context,
