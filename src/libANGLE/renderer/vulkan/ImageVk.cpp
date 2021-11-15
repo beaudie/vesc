@@ -163,4 +163,12 @@ angle::Result ImageVk::orphan(const gl::Context *context, egl::ImageSibling *sib
     return contextVk->flushImpl(nullptr, RenderPassClosureReason::ImageOrphan);
 }
 
+egl::Error ImageVk::exportVkImage(void *vk_image, void *vk_image_create_info)
+{
+    *reinterpret_cast<VkImage *>(vk_image) = mImage->getImage().getHandle();
+    auto *info = reinterpret_cast<VkImageCreateInfo *>(vk_image_create_info);
+    mImage->getVkImageCreateInfo(info);
+    return egl::NoError();
+}
+
 }  // namespace rx
