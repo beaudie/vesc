@@ -273,6 +273,15 @@ std::ostream &operator<<(std::ostream &stream, const PlatformParameters &pp)
         stream << "_NoVulkanViewportFlip";
     }
 
+    if (pp.eglParameters.supportsMultiDrawIndirect == EGL_TRUE)
+    {
+        stream << "_MultiDrawIndirect";
+    }
+    else if (pp.eglParameters.supportsMultiDrawIndirect == EGL_FALSE)
+    {
+        stream << "_NoMultiDrawIndirect";
+    }
+
     if (pp.eglParameters.emulatedVAOs == EGL_TRUE)
     {
         stream << "_EmulatedVAOs";

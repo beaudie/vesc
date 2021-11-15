@@ -279,6 +279,13 @@ inline PlatformParameters WithNoVulkanViewportFlip(const PlatformParameters &par
     return withoutVulkanViewportFlip;
 }
 
+inline PlatformParameters WithNoMultiDrawIndirectSupport(const PlatformParameters &params)
+{
+    PlatformParameters withoutMultiDrawIndirectSupport                      = params;
+    withoutMultiDrawIndirectSupport.eglParameters.supportsMultiDrawIndirect = EGL_FALSE;
+    return withoutMultiDrawIndirectSupport;
+}
+
 inline PlatformParameters WithEmulatedVAOs(const PlatformParameters &params)
 {
     PlatformParameters emualtedVAOParams         = params;

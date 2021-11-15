@@ -245,6 +245,15 @@ bool EGLWindow::initializeDisplay(OSWindow *osWindow,
         disabledFeatureOverrides.push_back("supportsViewportFlip");
     }
 
+    if (params.supportsMultiDrawIndirect == EGL_TRUE)
+    {
+        enabledFeatureOverrides.push_back("supportsMultiDrawIndirect");
+    }
+    else if (params.supportsMultiDrawIndirect == EGL_FALSE)
+    {
+        disabledFeatureOverrides.push_back("supportsMultiDrawIndirect");
+    }
+
     switch (params.emulatedPrerotation)
     {
         case 90:
