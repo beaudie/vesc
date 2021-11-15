@@ -18,6 +18,23 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "036423c4_16c7e297",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 14
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1359249
+      },
+      "writtenOn": "2021-11-15T23:29:30Z",
+      "side": 1,
+      "message": "added note",
+      "revId": "e664cb7a424526a6ec8833f970fbf86d4c4f8a9b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "d0df4646_13be0c84",
@@ -48,6 +65,24 @@
       "writtenOn": "2021-11-15T22:33:24Z",
       "side": 1,
       "message": "It seems this acquireImageSemaphore is not being signaled. Getting 120 sec timeout.",
+      "revId": "e664cb7a424526a6ec8833f970fbf86d4c4f8a9b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "0ea21f88_0aebcd3f",
+        "filename": "src/libANGLE/renderer/vulkan/SurfaceVk.cpp",
+        "patchSetId": 14
+      },
+      "lineNbr": 1765,
+      "author": {
+        "id": 1359249
+      },
+      "writtenOn": "2021-11-15T23:29:30Z",
+      "side": 1,
+      "message": "replacing acquireImageSeamphore with nullptr and the api_dump looks OK",
+      "parentUuid": "5cc9dd41_9b1b13b8",
       "revId": "e664cb7a424526a6ec8833f970fbf86d4c4f8a9b",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
