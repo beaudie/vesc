@@ -1700,6 +1700,7 @@ class ImageHelper final : public Resource, public angle::Subject
     gl::Extents getRotatedLevelExtents2D(LevelIndex levelVk) const;
 
     bool isDepthOrStencil() const;
+    bool getVkImageCreateInfo(VkImageCreateInfo *imageInfo) const;
 
     void setRenderPassUsageFlag(RenderPassUsage flag);
     void clearRenderPassUsageFlag(RenderPassUsage flag);
