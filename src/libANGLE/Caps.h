@@ -639,6 +639,9 @@ struct DisplayExtensions
 
     // EGL_KHR_lock_surface3
     bool lockSurface3KHR = false;
+
+    // EGL_ANGLE_vulkan_image_client_buffer
+    bool vulkanImageClientBufferANGLE = false;
 };
 
 struct DeviceExtensions
