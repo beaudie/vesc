@@ -60,6 +60,23 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "9821e821_0c01b14d",
+        "filename": "src/libANGLE/renderer/vulkan/BufferVk.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 954,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2021-11-15T19:23:01Z",
+      "side": 1,
+      "message": "Is it worth having this function and attempting to do all of the fancy checks for buffers that aren\u0027t host visible?   The cost of this is calling isHostVisible() in mapRangeImpl() and again here for every other map call.\n\nInstead, I think we should just treat isHostVisible() and isExternalBuffer() as special cases in mapRangeImpl(), and everything else calls mapWithOffset() directly.",
+      "revId": "ceadaef86ec1e362634e0d575388cd096b432d86",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "16d058dc_0e15fedf",
         "filename": "src/libANGLE/renderer/vulkan/BufferVk.cpp",
         "patchSetId": 3
