@@ -4146,22 +4146,10 @@ angle::Result ImageHelper::initExternal(Context *context,
         mCreateFlags |= VK_IMAGE_CREATE_PROTECTED_BIT;
     }
 
-    VkImageCreateInfo imageInfo     = {};
-    imageInfo.sType                 = VK_STRUCTURE_TYPE_IMAGE_CREATE_INFO;
-    imageInfo.pNext                 = imageCreateInfoPNext;
-    imageInfo.flags                 = mCreateFlags;
-    imageInfo.imageType             = mImageType;
-    imageInfo.format                = actualVkFormat;
-    imageInfo.extent                = mExtents;
-    imageInfo.mipLevels             = mLevelCount;
-    imageInfo.arrayLayers           = mLayerCount;
-    imageInfo.samples               = gl_vk::GetSamples(mSamples);
-    imageInfo.tiling                = mTilingMode;
-    imageInfo.usage                 = mUsage;
-    imageInfo.sharingMode           = VK_SHARING_MODE_EXCLUSIVE;
-    imageInfo.queueFamilyIndexCount = 0;
-    imageInfo.pQueueFamilyIndices   = nullptr;
-    imageInfo.initialLayout         = ConvertImageLayoutToVkImageLayout(initialLayout);
+    VkImageCreateInfo imageInfo = {};
+    getVkImageCreateInfo(&imageInfo);
+    imageInfo.pNext         = imageCreateInfoPNext;
+    imageInfo.initialLayout = ConvertImageLayoutToVkImageLayout(initialLayout);
 
     mCurrentLayout = initialLayout;
 
@@ -4693,21 +4681,10 @@ angle::Result ImageHelper::initStaging(Context *context,
 
     mCurrentLayout = ImageLayout::Undefined;
 
-    VkImageCreateInfo imageInfo     = {};
-    imageInfo.sType                 = VK_STRUCTURE_TYPE_IMAGE_CREATE_INFO;
-    imageInfo.flags                 = hasProtectedContent ? VK_IMAGE_CREATE_PROTECTED_BIT : 0;
-    imageInfo.imageType             = mImageType;
-    imageInfo.format                = GetVkFormatFromFormatID(actualFormatID);
-    imageInfo.extent                = mExtents;
-    imageInfo.mipLevels             = mLevelCount;
-    imageInfo.arrayLayers           = mLayerCount;
-    imageInfo.samples               = gl_vk::GetSamples(mSamples);
-    imageInfo.tiling                = VK_IMAGE_TILING_OPTIMAL;
-    imageInfo.usage                 = usage;
-    imageInfo.sharingMode           = VK_SHARING_MODE_EXCLUSIVE;
-    imageInfo.queueFamilyIndexCount = 0;
-    imageInfo.pQueueFamilyIndices   = nullptr;
-    imageInfo.initialLayout         = getCurrentLayout();
+    VkImageCreateInfo imageInfo = {};
+    getVkImageCreateInfo(&imageInfo);
+    imageInfo.flags         = hasProtectedContent ? VK_IMAGE_CREATE_PROTECTED_BIT : 0;
+    imageInfo.initialLayout = getCurrentLayout();
 
     ANGLE_VK_TRY(context, mImage.init(context->getDevice(), imageInfo));
 
@@ -4834,6 +4811,26 @@ gl::Extents ImageHelper::getRotatedLevelExtents2D(LevelIndex levelVk) const
 bool ImageHelper::isDepthOrStencil() const
 {
     return getActualFormat().hasDepthOrStencilBits();
+}
+
+bool ImageHelper::getVkImageCreateInfo(VkImageCreateInfo *imageInfo) const
+{
+    imageInfo->sType                 = VK_STRUCTURE_TYPE_IMAGE_CREATE_INFO;
+    imageInfo->pNext                 = nullptr;
+    imageInfo->flags                 = mCreateFlags;
+    imageInfo->imageType             = mImageType;
+    imageInfo->format                = GetVkFormatFromFormatID(mActualFormatID);
+    imageInfo->extent                = mExtents;
+    imageInfo->mipLevels             = mLevelCount;
+    imageInfo->arrayLayers           = mLayerCount;
+    imageInfo->samples               = gl_vk::GetSamples(mSamples);
+    imageInfo->tiling                = mTilingMode;
+    imageInfo->usage                 = mUsage;
+    imageInfo->sharingMode           = VK_SHARING_MODE_EXCLUSIVE;
+    imageInfo->queueFamilyIndexCount = 0;
+    imageInfo->pQueueFamilyIndices   = nullptr;
+    imageInfo->initialLayout         = VK_IMAGE_LAYOUT_UNDEFINED;
+    return true;
 }
 
 void ImageHelper::setRenderPassUsageFlag(RenderPassUsage flag)
