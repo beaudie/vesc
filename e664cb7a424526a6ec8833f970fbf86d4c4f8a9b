@@ -1,0 +1,89 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "f9acc0c2_16f9f9d0",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 14
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1359249
+      },
+      "writtenOn": "2021-11-15T22:33:24Z",
+      "side": 1,
+      "message": "Fixes we have found. Once added the api_dump looks a lot better\n\nFYI:\nAlso dEQP-EGL.functional.mutable_render_buffer.basic is failing. it does a glClear and glReadPixels and not getting what is expected.",
+      "revId": "e664cb7a424526a6ec8833f970fbf86d4c4f8a9b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "d0df4646_13be0c84",
+        "filename": "src/libANGLE/renderer/vulkan/SurfaceVk.cpp",
+        "patchSetId": 14
+      },
+      "lineNbr": 1748,
+      "author": {
+        "id": 1359249
+      },
+      "writtenOn": "2021-11-15T22:33:24Z",
+      "side": 1,
+      "message": "if ((mSwapchainPresentMode \u003d\u003d VK_PRESENT_MODE_SHARED_DEMAND_REFRESH_KHR) \u0026\u0026\n        (image.image.getCurrentLayout !\u003d vk::ImageLayout::SharedPresent))",
+      "revId": "e664cb7a424526a6ec8833f970fbf86d4c4f8a9b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "5cc9dd41_9b1b13b8",
+        "filename": "src/libANGLE/renderer/vulkan/SurfaceVk.cpp",
+        "patchSetId": 14
+      },
+      "lineNbr": 1765,
+      "author": {
+        "id": 1359249
+      },
+      "writtenOn": "2021-11-15T22:33:24Z",
+      "side": 1,
+      "message": "It seems this acquireImageSemaphore is not being signaled. Getting 120 sec timeout.",
+      "revId": "e664cb7a424526a6ec8833f970fbf86d4c4f8a9b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "29ac34b2_6ed72618",
+        "filename": "src/libANGLE/renderer/vulkan/SurfaceVk.cpp",
+        "patchSetId": 14
+      },
+      "lineNbr": 1772,
+      "author": {
+        "id": 1359249
+      },
+      "writtenOn": "2021-11-15T22:33:24Z",
+      "side": 1,
+      "message": "remove.",
+      "revId": "e664cb7a424526a6ec8833f970fbf86d4c4f8a9b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "88429539_87b82bc6",
+        "filename": "src/libANGLE/renderer/vulkan/SurfaceVk.cpp",
+        "patchSetId": 14
+      },
+      "lineNbr": 1773,
+      "author": {
+        "id": 1359249
+      },
+      "writtenOn": "2021-11-15T22:33:24Z",
+      "side": 1,
+      "message": "This doesn\u0027t seem to matter, and seems like it needs to be removed?",
+      "revId": "e664cb7a424526a6ec8833f970fbf86d4c4f8a9b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
