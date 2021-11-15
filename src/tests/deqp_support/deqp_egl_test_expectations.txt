@@ -271,3 +271,4 @@
 6528 PIXEL4ORXL GLES : dEQP-EGL.functional.choose_config.simple.selection_and_sort.transparent_blue_value = FAIL
 6528 PIXEL4ORXL GLES : dEQP-EGL.functional.thread_cleanup.multi_context_* = FAIL
 6528 PIXEL4ORXL GLES : dEQP-EGL.functional.thread_cleanup.single_context_* = FAIL
+
