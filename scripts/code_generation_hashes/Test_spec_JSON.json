@@ -1,10 +1,10 @@
 {
   "infra/specs/angle.json":
-    "19a7b6cd8dbef54943402bab3bac9ed3",
+    "cf80595b5433e5f5daa25267e0a79e54",
   "infra/specs/generate_test_spec_json.py":
-    "348921bf70270ec6ee51fbb7e97d6925",
+    "f19ae2a31a0a6498f46c810ca9d82252",
   "infra/specs/mixins.pyl":
-    "5f35dcedcd2b83ea31b29edfba7d93b2",
+    "7b0d2e728eadddd2e2041a0a16d4cfcc",
   "infra/specs/test_suite_exceptions.pyl":
     "723460da84a90884a9668c07a0893390",
   "infra/specs/test_suites.pyl":
@@ -12,7 +12,7 @@
   "infra/specs/variants.pyl":
     "8cfcaa99fa07ad2a2d5d14f220fd5037",
   "infra/specs/waterfalls.pyl":
-    "cba65d3fe884e348b62cbac6dd5102be",
+    "1cdc78102194cc73700bc246bfc88db1",
   "testing/buildbot/generate_buildbot_json.py":
     "f958374820a3ac8369e3f740f0fa2a09",
   "testing/buildbot/mixins.pyl":
