@@ -266,6 +266,7 @@ void DisplayVk::generateExtensions(egl::DisplayExtensions *outExtensions) const
          getRenderer()->getFeatures().supportsSurfaceProtectedSwapchains.enabled);
 
     outExtensions->createSurfaceSwapIntervalANGLE = true;
+    outExtensions->vulkanImageClientBufferANGLE   = true;
 }
 
 void DisplayVk::generateCaps(egl::Caps *outCaps) const
