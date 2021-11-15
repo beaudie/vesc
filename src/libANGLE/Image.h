@@ -176,6 +176,8 @@ class Image final : public RefCountObject, public LabeledObject
     gl::InitState sourceInitState() const;
     void setInitState(gl::InitState initState);
 
+    Error exportVkImage(void *vk_image, void *vk_image_create_info);
+
   private:
     friend class ImageSibling;
 
