@@ -938,6 +938,10 @@ angle::Result WindowSurfaceVk::getAttachmentRenderTarget(const gl::Context *cont
     if (mNeedToAcquireNextSwapchainImage)
     {
         // Acquire the next image (previously deferred) before it is drawn to or read from.
+        ContextVk *contextVk = vk::GetImpl(context);
+        const char *reasonText = "First Swap Image Use";
+        ANGLE_TRACE_EVENT0("gpu.angle", reasonText);
+        contextVk->insertEventMarkerImpl(GL_DEBUG_SOURCE_API, reasonText);
         ANGLE_TRY(doDeferredAcquireNextImage(context, false));
     }
     return SurfaceVk::getAttachmentRenderTarget(context, binding, imageIndex, samples, rtOut);
@@ -1632,6 +1636,9 @@ angle::Result WindowSurfaceVk::swapImpl(const gl::Context *context,
         // Acquire the next image (previously deferred).  The image may not have been already
         // acquired if there was no rendering done at all to the default framebuffer in this frame,
         // for example if all rendering was done to FBOs.
+        const char *reasonText = "Acquire Swap Image Before Swap";
+        ANGLE_TRACE_EVENT0("gpu.angle", reasonText);
+        contextVk->insertEventMarkerImpl(GL_DEBUG_SOURCE_API, reasonText);
         ANGLE_TRY(doDeferredAcquireNextImage(context, false));
     }
 
@@ -1647,6 +1654,9 @@ angle::Result WindowSurfaceVk::swapImpl(const gl::Context *context,
     {
         // Immediately try to acquire the next image, which will recognize the out-of-date
         // swapchain (potentially because of a rotation change), and recreate it.
+        const char *reasonText = "Out-of-Date Swapbuffer";
+        ANGLE_TRACE_EVENT0("gpu.angle", reasonText);
+        contextVk->insertEventMarkerImpl(GL_DEBUG_SOURCE_API, reasonText);
         ANGLE_TRY(doDeferredAcquireNextImage(context, presentOutOfDate));
     }
 
@@ -2008,6 +2018,9 @@ angle::Result WindowSurfaceVk::initializeContents(const gl::Context *context,
         // Acquire the next image (previously deferred).  Some tests (e.g.
         // GenerateMipmapWithRedefineBenchmark.Run/vulkan_webgl) cause this path to be taken,
         // because of dirty-object processing.
+        const char *reasonText = "Initialize Swap Image";
+        ANGLE_TRACE_EVENT0("gpu.angle", reasonText);
+        contextVk->insertEventMarkerImpl(GL_DEBUG_SOURCE_API, reasonText);
         ANGLE_TRY(doDeferredAcquireNextImage(context, false));
     }
 
