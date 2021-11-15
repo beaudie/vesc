@@ -16,6 +16,23 @@
       "message": "PTAL and land if looks good.",
       "revId": "c26a1cf0e63543e70746af0454ff15fb21141f21",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "fa79001e_afcf84db",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1002539
+      },
+      "writtenOn": "2021-11-15T19:58:42Z",
+      "side": 1,
+      "message": "Ping",
+      "revId": "c26a1cf0e63543e70746af0454ff15fb21141f21",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
