@@ -2832,6 +2832,68 @@ angle::Result ContextVk::drawArraysIndirect(const gl::Context *context,
                                             gl::PrimitiveMode mode,
                                             const void *indirect)
 {
+    return multiDrawArraysIndirectHelper(context, mode, indirect, 1, 0);
+}
+
+angle::Result ContextVk::drawElementsIndirect(const gl::Context *context,
+                                              gl::PrimitiveMode mode,
+                                              gl::DrawElementsType type,
+                                              const void *indirect)
+{
+    return multiDrawElementsIndirectHelper(context, mode, type, indirect, 1, 0);
+}
+
+angle::Result ContextVk::multiDrawArrays(const gl::Context *context,
+                                         gl::PrimitiveMode mode,
+                                         const GLint *firsts,
+                                         const GLsizei *counts,
+                                         GLsizei drawcount)
+{
+    return rx::MultiDrawArraysGeneral(this, context, mode, firsts, counts, drawcount);
+}
+
+angle::Result ContextVk::multiDrawArraysInstanced(const gl::Context *context,
+                                                  gl::PrimitiveMode mode,
+                                                  const GLint *firsts,
+                                                  const GLsizei *counts,
+                                                  const GLsizei *instanceCounts,
+                                                  GLsizei drawcount)
+{
+    return rx::MultiDrawArraysInstancedGeneral(this, context, mode, firsts, counts, instanceCounts,
+                                               drawcount);
+}
+
+angle::Result ContextVk::multiDrawArraysIndirect(const gl::Context *context,
+                                                 gl::PrimitiveMode mode,
+                                                 const void *indirect,
+                                                 GLsizei drawcount,
+                                                 GLsizei stride)
+{
+    return multiDrawArraysIndirectHelper(context, mode, indirect, drawcount, stride);
+}
+
+angle::Result ContextVk::multiDrawArraysIndirectHelper(const gl::Context *context,
+                                                       gl::PrimitiveMode mode,
+                                                       const void *indirect,
+                                                       GLsizei drawcount,
+                                                       GLsizei stride)
+{
+    // If the corresponding feature is disabled, use the default implementation.
+    if (!getFeatures().supportsMultiDrawIndirectEXT.enabled)
+    {
+        return rx::MultiDrawArraysIndirectGeneral(this, context, mode, indirect, drawcount, stride);
+    }
+
+    // If the line loop mode is being used for drawcount > 1, use the default implementation.
+    if (mode == gl::PrimitiveMode::LineLoop && drawcount > 1)
+    {
+        return rx::MultiDrawArraysIndirectGeneral(this, context, mode, indirect, drawcount, stride);
+    }
+
+    // Stride must be a multiple of the size of VkDrawIndirectCommand (stride = 0 is invalid when
+    // drawcount > 1).
+    uint32_t vkStride = (stride == 0 && drawcount > 1) ? sizeof(VkDrawIndirectCommand) : stride;
+
     gl::Buffer *indirectBuffer        = mState.getTargetBuffer(gl::BufferBinding::DrawIndirect);
     VkDeviceSize indirectBufferOffset = 0;
     vk::BufferHelper *currentIndirectBuf =
@@ -2839,7 +2901,7 @@ angle::Result ContextVk::drawArraysIndirect(const gl::Context *context,
     VkDeviceSize currentIndirectBufOffset =
         indirectBufferOffset + reinterpret_cast<VkDeviceSize>(indirect);
 
-    if (mVertexArray->getStreamingVertexAttribsMask().any())
+    if (mVertexArray->getStreamingVertexAttribsMask().any() && drawcount <= 1)
     {
         // We have instanced vertex attributes that need to be emulated for Vulkan.
         // invalidate any cache and map the buffer so that we can read the indirect data.
@@ -2857,7 +2919,7 @@ angle::Result ContextVk::drawArraysIndirect(const gl::Context *context,
         return angle::Result::Continue;
     }
 
-    if (mode == gl::PrimitiveMode::LineLoop)
+    if (mode == gl::PrimitiveMode::LineLoop && drawcount <= 1)
     {
         ASSERT(indirectBuffer);
         vk::BufferHelper *dstIndirectBuf  = nullptr;
@@ -2868,7 +2930,7 @@ angle::Result ContextVk::drawArraysIndirect(const gl::Context *context,
                                             &dstIndirectBufOffset));
 
         mRenderPassCommandBuffer->drawIndexedIndirect(dstIndirectBuf->getBuffer(),
-                                                      dstIndirectBufOffset, 1, 0);
+                                                      dstIndirectBufOffset, drawcount, vkStride);
         return angle::Result::Continue;
     }
 
@@ -2876,15 +2938,68 @@ angle::Result ContextVk::drawArraysIndirect(const gl::Context *context,
                                 currentIndirectBufOffset));
 
     mRenderPassCommandBuffer->drawIndirect(currentIndirectBuf->getBuffer(),
-                                           currentIndirectBufOffset, 1, 0);
+                                           currentIndirectBufOffset, drawcount, vkStride);
     return angle::Result::Continue;
 }
 
-angle::Result ContextVk::drawElementsIndirect(const gl::Context *context,
-                                              gl::PrimitiveMode mode,
-                                              gl::DrawElementsType type,
-                                              const void *indirect)
+angle::Result ContextVk::multiDrawElements(const gl::Context *context,
+                                           gl::PrimitiveMode mode,
+                                           const GLsizei *counts,
+                                           gl::DrawElementsType type,
+                                           const GLvoid *const *indices,
+                                           GLsizei drawcount)
 {
+    return rx::MultiDrawElementsGeneral(this, context, mode, counts, type, indices, drawcount);
+}
+
+angle::Result ContextVk::multiDrawElementsInstanced(const gl::Context *context,
+                                                    gl::PrimitiveMode mode,
+                                                    const GLsizei *counts,
+                                                    gl::DrawElementsType type,
+                                                    const GLvoid *const *indices,
+                                                    const GLsizei *instanceCounts,
+                                                    GLsizei drawcount)
+{
+    return rx::MultiDrawElementsInstancedGeneral(this, context, mode, counts, type, indices,
+                                                 instanceCounts, drawcount);
+}
+
+angle::Result ContextVk::multiDrawElementsIndirect(const gl::Context *context,
+                                                   gl::PrimitiveMode mode,
+                                                   gl::DrawElementsType type,
+                                                   const void *indirect,
+                                                   GLsizei drawcount,
+                                                   GLsizei stride)
+{
+    return multiDrawElementsIndirectHelper(context, mode, type, indirect, drawcount, stride);
+}
+
+angle::Result ContextVk::multiDrawElementsIndirectHelper(const gl::Context *context,
+                                                         gl::PrimitiveMode mode,
+                                                         gl::DrawElementsType type,
+                                                         const void *indirect,
+                                                         GLsizei drawcount,
+                                                         GLsizei stride)
+{
+    // If the corresponding feature is disabled, use the default implementation.
+    if (!getFeatures().supportsMultiDrawIndirectEXT.enabled)
+    {
+        return rx::MultiDrawElementsIndirectGeneral(this, context, mode, type, indirect, drawcount,
+                                                    stride);
+    }
+
+    // If the line loop mode is being used for drawcount > 1, use the default implementation.
+    if (mode == gl::PrimitiveMode::LineLoop && drawcount > 1)
+    {
+        return rx::MultiDrawElementsIndirectGeneral(this, context, mode, type, indirect, drawcount,
+                                                    stride);
+    }
+
+    // Stride must be a multiple of the size of VkDrawIndexedIndirectCommand (stride = 0 is invalid
+    // when drawcount > 1).
+    uint32_t vkStride =
+        (stride == 0 && drawcount > 1) ? sizeof(VkDrawIndexedIndirectCommand) : stride;
+
     gl::Buffer *indirectBuffer = mState.getTargetBuffer(gl::BufferBinding::DrawIndirect);
     ASSERT(indirectBuffer);
     VkDeviceSize indirectBufferOffset = 0;
@@ -2893,7 +3008,7 @@ angle::Result ContextVk::drawElementsIndirect(const gl::Context *context,
     VkDeviceSize currentIndirectBufOffset =
         indirectBufferOffset + reinterpret_cast<VkDeviceSize>(indirect);
 
-    if (mVertexArray->getStreamingVertexAttribsMask().any())
+    if (mVertexArray->getStreamingVertexAttribsMask().any() && drawcount <= 1)
     {
         // We have instanced vertex attributes that need to be emulated for Vulkan.
         // invalidate any cache and map the buffer so that we can read the indirect data.
@@ -2930,7 +3045,7 @@ angle::Result ContextVk::drawElementsIndirect(const gl::Context *context,
         currentIndirectBufOffset = dstIndirectBufOffset;
     }
 
-    if (mode == gl::PrimitiveMode::LineLoop)
+    if (mode == gl::PrimitiveMode::LineLoop && drawcount <= 1)
     {
         vk::BufferHelper *dstIndirectBuf;
         VkDeviceSize dstIndirectBufOffset;
@@ -2949,70 +3064,8 @@ angle::Result ContextVk::drawElementsIndirect(const gl::Context *context,
     }
 
     mRenderPassCommandBuffer->drawIndexedIndirect(currentIndirectBuf->getBuffer(),
-                                                  currentIndirectBufOffset, 1, 0);
+                                                  currentIndirectBufOffset, drawcount, vkStride);
     return angle::Result::Continue;
-}
-
-angle::Result ContextVk::multiDrawArrays(const gl::Context *context,
-                                         gl::PrimitiveMode mode,
-                                         const GLint *firsts,
-                                         const GLsizei *counts,
-                                         GLsizei drawcount)
-{
-    return rx::MultiDrawArraysGeneral(this, context, mode, firsts, counts, drawcount);
-}
-
-angle::Result ContextVk::multiDrawArraysInstanced(const gl::Context *context,
-                                                  gl::PrimitiveMode mode,
-                                                  const GLint *firsts,
-                                                  const GLsizei *counts,
-                                                  const GLsizei *instanceCounts,
-                                                  GLsizei drawcount)
-{
-    return rx::MultiDrawArraysInstancedGeneral(this, context, mode, firsts, counts, instanceCounts,
-                                               drawcount);
-}
-
-angle::Result ContextVk::multiDrawArraysIndirect(const gl::Context *context,
-                                                 gl::PrimitiveMode mode,
-                                                 const void *indirect,
-                                                 GLsizei drawcount,
-                                                 GLsizei stride)
-{
-    return rx::MultiDrawArraysIndirectGeneral(this, context, mode, indirect, drawcount, stride);
-}
-
-angle::Result ContextVk::multiDrawElements(const gl::Context *context,
-                                           gl::PrimitiveMode mode,
-                                           const GLsizei *counts,
-                                           gl::DrawElementsType type,
-                                           const GLvoid *const *indices,
-                                           GLsizei drawcount)
-{
-    return rx::MultiDrawElementsGeneral(this, context, mode, counts, type, indices, drawcount);
-}
-
-angle::Result ContextVk::multiDrawElementsInstanced(const gl::Context *context,
-                                                    gl::PrimitiveMode mode,
-                                                    const GLsizei *counts,
-                                                    gl::DrawElementsType type,
-                                                    const GLvoid *const *indices,
-                                                    const GLsizei *instanceCounts,
-                                                    GLsizei drawcount)
-{
-    return rx::MultiDrawElementsInstancedGeneral(this, context, mode, counts, type, indices,
-                                                 instanceCounts, drawcount);
-}
-
-angle::Result ContextVk::multiDrawElementsIndirect(const gl::Context *context,
-                                                   gl::PrimitiveMode mode,
-                                                   gl::DrawElementsType type,
-                                                   const void *indirect,
-                                                   GLsizei drawcount,
-                                                   GLsizei stride)
-{
-    return rx::MultiDrawElementsIndirectGeneral(this, context, mode, type, indirect, drawcount,
-                                                stride);
 }
 
 angle::Result ContextVk::multiDrawArraysInstancedBaseInstance(const gl::Context *context,
