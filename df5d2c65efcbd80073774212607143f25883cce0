@@ -46,6 +46,30 @@
       },
       "revId": "df5d2c65efcbd80073774212607143f25883cce0",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "a60cb7f4_1567b0c1",
+        "filename": "src/libANGLE/renderer/vulkan/SurfaceVk.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 941,
+      "author": {
+        "id": 1290487
+      },
+      "writtenOn": "2021-11-15T23:34:48Z",
+      "side": 1,
+      "message": "Looking at it more, if I were going to change anything, I\u0027d take out the \"WindowSurfaceVk::\u003cmethod\u003e: \" and just leave the reason for the ANI.  That would save more time when analyzing AGI system traces.",
+      "parentUuid": "97673016_2bb03d4c",
+      "range": {
+        "startLine": 941,
+        "startChar": 8,
+        "endLine": 941,
+        "endChar": 26
+      },
+      "revId": "df5d2c65efcbd80073774212607143f25883cce0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
