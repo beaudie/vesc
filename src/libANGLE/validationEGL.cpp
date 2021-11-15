@@ -3212,11 +3212,11 @@ bool ValidateCreateImage(const ValidationContext *val,
 
             case EGL_WIDTH:
             case EGL_HEIGHT:
-                if (target != EGL_LINUX_DMA_BUF_EXT)
+                if (target != EGL_LINUX_DMA_BUF_EXT && target != EGL_VULKAN_IMAGE_ANGLE)
                 {
-                    val->setError(
-                        EGL_BAD_PARAMETER,
-                        "Parameter cannot be used if target is not EGL_LINUX_DMA_BUF_EXT");
+                    val->setError(EGL_BAD_PARAMETER,
+                                  "Parameter cannot be used if target is not EGL_LINUX_DMA_BUF_EXT "
+                                  "or EGL_VULKAN_IMAGE_ANGLE");
                     return false;
                 }
                 break;
@@ -3720,7 +3720,39 @@ bool ValidateCreateImage(const ValidationContext *val,
                 display->validateImageClientBuffer(context, target, buffer, attributes),
                 val->entryPoint, val->labeledObject, false);
             break;
+        case EGL_VULKAN_IMAGE_ANGLE:
+            if (!displayExtensions.vulkanImageClientBufferANGLE)
+            {
+                val->setError(EGL_BAD_PARAMETER, "EGL_ANGLE_vulkan_image not supported.");
+                return false;
+            }
 
+            if (context != nullptr)
+            {
+                val->setError(EGL_BAD_CONTEXT, "ctx must be EGL_NO_CONTEXT.");
+                return false;
+            }
+
+            {
+                EGLenum kRequiredParameters[] = {EGL_WIDTH, EGL_HEIGHT};
+                for (EGLenum requiredParameter : kRequiredParameters)
+                {
+                    if (!attributes.contains(requiredParameter))
+                    {
+                        val->setError(EGL_BAD_PARAMETER,
+                                      "Missing required parameter 0x%X for image target "
+                                      "EGL_VULKAN_IMAGE_ANGLE.",
+                                      requiredParameter);
+                        return false;
+                    }
+                }
+            }
+
+            ANGLE_EGL_TRY_RETURN(
+                val->eglThread,
+                display->validateImageClientBuffer(context, target, buffer, attributes),
+                val->entryPoint, val->labeledObject, false);
+            break;
         default:
             val->setError(EGL_BAD_PARAMETER, "invalid target: 0x%X", target);
             return false;
@@ -6341,6 +6373,36 @@ bool ValidateUnlockSurfaceKHR(const ValidationContext *val,
     if (!surface->isLocked())
     {
         val->setError(EGL_BAD_PARAMETER, "Surface is not locked.");
+        return false;
+    }
+
+    return true;
+}
+
+bool ValidateExportVkImageANGLE(const ValidationContext *val,
+                                const Display *dpy,
+                                const Image *image,
+                                const void *vk_image,
+                                const void *vk_image_create_info)
+{
+    ANGLE_VALIDATION_TRY(ValidateDisplay(val, dpy));
+    ANGLE_VALIDATION_TRY(ValidateImage(val, dpy, image));
+
+    if (!dpy->getExtensions().vulkanImageClientBufferANGLE)
+    {
+        val->setError(EGL_BAD_ACCESS);
+        return false;
+    }
+
+    if (!vk_image)
+    {
+        val->setError(EGL_BAD_PARAMETER, "Output VkImage pointer is null.");
+        return false;
+    }
+
+    if (!vk_image_create_info)
+    {
+        val->setError(EGL_BAD_PARAMETER, "Output VkImageCreateInfo pointer is null.");
         return false;
     }
 

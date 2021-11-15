@@ -56,6 +56,8 @@ class ImageImpl : angle::NonCopyable
 
     virtual angle::Result orphan(const gl::Context *context, egl::ImageSibling *sibling) = 0;
 
+    virtual egl::Error exportVkImage(void *vk_image, void *vk_image_create_info);
+
   protected:
     const egl::ImageState &mState;
 };
