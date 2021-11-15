@@ -1,0 +1,44 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "df628415_6251a0c6",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 17,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2021-11-15T16:52:01Z",
+      "side": 1,
+      "message": "I think instroducing would be a cool word, but I don\u0027t think it exists. :)",
+      "range": {
+        "startLine": 17,
+        "startChar": 0,
+        "endLine": 17,
+        "endChar": 12
+      },
+      "revId": "e62cf078cdd8890296f1785c0f560094ace8b683",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "504f3c22_f95f332b",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2021-11-15T16:52:01Z",
+      "side": 1,
+      "message": "It was useful to see constant names in the debugger when investigating this, but I understand it isn\u0027t useful in the final product when all constants are folded.",
+      "revId": "e62cf078cdd8890296f1785c0f560094ace8b683",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
