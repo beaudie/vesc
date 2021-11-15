@@ -202,6 +202,35 @@ gl::Version DisplayVk::getMaxConformantESVersion() const
     return mRenderer->getMaxConformantESVersion();
 }
 
+egl::Error DisplayVk::validateImageClientBuffer(const gl::Context *context,
+                                                EGLenum target,
+                                                EGLClientBuffer clientBuffer,
+                                                const egl::AttributeMap &attribs) const
+{
+    switch (target)
+    {
+        case EGL_VULKAN_IMAGE_ANGLE:
+            return egl::NoError();
+
+        default:
+            return DisplayImpl::validateImageClientBuffer(context, target, clientBuffer, attribs);
+    }
+}
+
+ExternalImageSiblingImpl *DisplayVk::createExternalImageSibling(const gl::Context *context,
+                                                                EGLenum target,
+                                                                EGLClientBuffer buffer,
+                                                                const egl::AttributeMap &attribs)
+{
+    switch (target)
+    {
+        case EGL_VULKAN_IMAGE_ANGLE:
+            return nullptr;
+        default:
+            return DisplayImpl::createExternalImageSibling(context, target, buffer, attribs);
+    }
+}
+
 void DisplayVk::generateExtensions(egl::DisplayExtensions *outExtensions) const
 {
     outExtensions->createContextRobustness    = getRenderer()->getNativeExtensions().robustnessEXT;
@@ -266,6 +295,7 @@ void DisplayVk::generateExtensions(egl::DisplayExtensions *outExtensions) const
          getRenderer()->getFeatures().supportsSurfaceProtectedSwapchains.enabled);
 
     outExtensions->createSurfaceSwapIntervalANGLE = true;
+    outExtensions->vulkanImageClientBufferANGLE   = true;
 }
 
 void DisplayVk::generateCaps(egl::Caps *outCaps) const
