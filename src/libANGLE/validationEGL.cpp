@@ -3214,9 +3214,8 @@ bool ValidateCreateImage(const ValidationContext *val,
             case EGL_HEIGHT:
                 if (target != EGL_LINUX_DMA_BUF_EXT)
                 {
-                    val->setError(
-                        EGL_BAD_PARAMETER,
-                        "Parameter cannot be used if target is not EGL_LINUX_DMA_BUF_EXT");
+                    val->setError(EGL_BAD_PARAMETER,
+                                  "Parameter cannot be used if target is not EGL_LINUX_DMA_BUF_EXT");
                     return false;
                 }
                 break;
@@ -3720,7 +3719,6 @@ bool ValidateCreateImage(const ValidationContext *val,
                 display->validateImageClientBuffer(context, target, buffer, attributes),
                 val->entryPoint, val->labeledObject, false);
             break;
-
         default:
             val->setError(EGL_BAD_PARAMETER, "invalid target: 0x%X", target);
             return false;
@@ -6341,6 +6339,36 @@ bool ValidateUnlockSurfaceKHR(const ValidationContext *val,
     if (!surface->isLocked())
     {
         val->setError(EGL_BAD_PARAMETER, "Surface is not locked.");
+        return false;
+    }
+
+    return true;
+}
+
+bool ValidateExportVkImageANGLE(const ValidationContext *val,
+                                const Display *dpy,
+                                const Image *image,
+                                const void *vk_image,
+                                const void *vk_image_create_info)
+{
+    ANGLE_VALIDATION_TRY(ValidateDisplay(val, dpy));
+    ANGLE_VALIDATION_TRY(ValidateImage(val, dpy, image));
+
+    if (!dpy->getExtensions().vulkanImageANGLE)
+    {
+        val->setError(EGL_BAD_ACCESS);
+        return false;
+    }
+
+    if (!vk_image)
+    {
+        val->setError(EGL_BAD_PARAMETER, "Output VkImage pointer is null.");
+        return false;
+    }
+
+    if (!vk_image_create_info)
+    {
+        val->setError(EGL_BAD_PARAMETER, "Output VkImageCreateInfo pointer is null.");
         return false;
     }
 
