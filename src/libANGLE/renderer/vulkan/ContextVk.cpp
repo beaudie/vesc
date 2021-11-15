@@ -2979,7 +2979,29 @@ angle::Result ContextVk::multiDrawArraysIndirect(const gl::Context *context,
                                                  GLsizei drawcount,
                                                  GLsizei stride)
 {
-    return rx::MultiDrawArraysIndirectGeneral(this, context, mode, indirect, drawcount, stride);
+    if (!getFeatures().supportsMultiDrawIndirectEXT.enabled)
+    {
+        return rx::MultiDrawArraysIndirectGeneral(this, context, mode, indirect, drawcount, stride);
+    }
+
+    if (mode == gl::PrimitiveMode::LineLoop)
+    {
+        return rx::MultiDrawArraysIndirectGeneral(this, context, mode, indirect, drawcount, stride);
+    }
+
+    gl::Buffer *indirectBuffer        = mState.getTargetBuffer(gl::BufferBinding::DrawIndirect);
+    VkDeviceSize indirectBufferOffset = 0;
+    vk::BufferHelper *currentIndirectBuf =
+        &vk::GetImpl(indirectBuffer)->getBufferAndOffset(&indirectBufferOffset);
+    VkDeviceSize currentIndirectBufOffset =
+        indirectBufferOffset + reinterpret_cast<VkDeviceSize>(indirect);
+
+    ANGLE_TRY(setupIndirectDraw(context, mode, mNonIndexedDirtyBitsMask, currentIndirectBuf,
+                                currentIndirectBufOffset));
+
+    mRenderPassCommandBuffer->drawIndirect(currentIndirectBuf->getBuffer(),
+                                           currentIndirectBufOffset, drawcount, stride);
+    return angle::Result::Continue;
 }
 
 angle::Result ContextVk::multiDrawElements(const gl::Context *context,
