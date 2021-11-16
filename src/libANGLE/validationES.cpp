@@ -1166,7 +1166,8 @@ bool ValidImageDataSize(const Context *context,
                         GLenum format,
                         GLenum type,
                         const void *pixels,
-                        GLsizei imageSize)
+                        GLsizei imageSize,
+                        bool isCompressed)
 {
     Buffer *pixelUnpackBuffer = context->getState().getTargetBuffer(BufferBinding::PixelUnpack);
     if (pixelUnpackBuffer == nullptr && imageSize < 0)
@@ -1213,16 +1214,21 @@ bool ValidImageDataSize(const Context *context,
     else
     {
         ASSERT(imageSize >= 0);
-        if (pixels == nullptr && imageSize != 0)
+        if (isCompressed)
         {
-            context->validationError(entryPoint, GL_INVALID_OPERATION, kImageSizeMustBeZero);
-            return false;
+            if (pixels != nullptr && endByte != static_cast<GLuint>(imageSize))
+            {
+                context->validationError(entryPoint, GL_INVALID_OPERATION, kImageSizeTooSmall);
+                return false;
+            }
         }
-
-        if (pixels != nullptr && endByte > static_cast<GLuint>(imageSize))
+        else
         {
-            context->validationError(entryPoint, GL_INVALID_OPERATION, kImageSizeTooSmall);
-            return false;
+            if (pixels != nullptr && endByte > static_cast<GLuint>(imageSize))
+            {
+                context->validationError(entryPoint, GL_INVALID_OPERATION, kImageSizeTooSmall);
+                return false;
+            }
         }
     }
 
