@@ -35,6 +35,23 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "eb0335f7_d372198c",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 14
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1359249
+      },
+      "writtenOn": "2021-11-16T16:03:20Z",
+      "side": 1,
+      "message": "Question below about correct command for transitioning new image to SharedPresent. \n\nCurrent OneOffCommand isn\u0027t working and maybe isn\u0027t the right thing to use.",
+      "revId": "e664cb7a424526a6ec8833f970fbf86d4c4f8a9b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "d0df4646_13be0c84",
@@ -48,6 +65,23 @@
       "writtenOn": "2021-11-15T22:33:24Z",
       "side": 1,
       "message": "if ((mSwapchainPresentMode \u003d\u003d VK_PRESENT_MODE_SHARED_DEMAND_REFRESH_KHR) \u0026\u0026\n        (image.image.getCurrentLayout !\u003d vk::ImageLayout::SharedPresent))",
+      "revId": "e664cb7a424526a6ec8833f970fbf86d4c4f8a9b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "beade09a_44521548",
+        "filename": "src/libANGLE/renderer/vulkan/SurfaceVk.cpp",
+        "patchSetId": 14
+      },
+      "lineNbr": 1752,
+      "author": {
+        "id": 1359249
+      },
+      "writtenOn": "2021-11-16T16:03:20Z",
+      "side": 1,
+      "message": "Please comment:\nSince we are in context, we probably shouldn\u0027t use a OneOffCommandBuffer ?\nA barrier needs to be added, but after the semaphore is used to block draws until signaled. Right?\nneed a recordWriteBarrier(), but were buffer is accessible.?",
       "revId": "e664cb7a424526a6ec8833f970fbf86d4c4f8a9b",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
