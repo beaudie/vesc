@@ -70,6 +70,30 @@
       },
       "revId": "8f0c5d96126b1c697a967724e5cf7bd347e3a3cb",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "f77a07ba_5f16e468",
+        "filename": "src/libANGLE/renderer/vulkan/SurfaceVk.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 2023,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2021-11-16T17:28:10Z",
+      "side": 1,
+      "message": "Sure, that\u0027s fine. If you use a macro, prefix with ANGLE_.",
+      "parentUuid": "bd9d1220_008edab2",
+      "range": {
+        "startLine": 2021,
+        "startChar": 0,
+        "endLine": 2023,
+        "endChar": 74
+      },
+      "revId": "8f0c5d96126b1c697a967724e5cf7bd347e3a3cb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
