@@ -2121,6 +2121,7 @@ TEST_P(GLSLTest_ES3, MaxVaryingWithFeedbackAndGLline)
     }
     // Generate the vertex shader
     vertexShaderSource.clear();
+    vertexShaderSource << "//PLEASE_DUMP_THIS_SHADER_TO_FILE\n";
     vertexShaderSource << varyingDeclaration;
     vertexShaderSource << "\nattribute vec4 a_position;\n";
     vertexShaderSource << "\nvoid main()\n{\n";

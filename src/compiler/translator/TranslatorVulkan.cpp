@@ -1388,6 +1388,16 @@ bool TranslatorVulkan::translate(TIntermBlock *root,
         TOutputVulkanGLSL outputGLSL(this, sink, enablePrecision, compileOptions);
         root->traverse(&outputGLSL);
 
+        if (!mDumpShaderFileNameStringStream.str().empty())
+        {
+            std::stringstream translatedGLSLFileName;
+            translatedGLSLFileName << mDumpShaderFileNameStringStream.str().c_str()
+                                   << ".translated";
+            INFO() << "Writing " << translatedGLSLFileName.str().c_str();
+            writeFile(translatedGLSLFileName.str().c_str(), sink.str().c_str(),
+                      sizeof(sink.str().c_str()));
+        }
+
         return compileToSpirv(sink);
     }
 #endif
@@ -1411,7 +1421,8 @@ bool TranslatorVulkan::shouldFlattenPragmaStdglInvariantAll()
 bool TranslatorVulkan::compileToSpirv(const TInfoSinkBase &glsl)
 {
     angle::spirv::Blob spirvBlob;
-    if (!GlslangCompileToSpirv(getResources(), getShaderType(), glsl.str(), &spirvBlob))
+    if (!GlslangCompileToSpirv(getResources(), getShaderType(), glsl.str(), &spirvBlob,
+                               mDumpShaderFileNameStringStream))
     {
         return false;
     }
