@@ -18,6 +18,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "7ef322a0_47ebf2e5",
+        "filename": "src/common/system_utils_apple.cpp",
+        "patchSetId": 11
+      },
+      "lineNbr": 59,
+      "author": {
+        "id": 1175714
+      },
+      "writtenOn": "2021-11-16T02:37:54Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "2adae7b7_882792e8",
+      "revId": "5fa3a142948f55b5d6ea9bfdc7c3a970ea165c5a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "79cf6e30_ea973fce",
@@ -31,6 +49,30 @@
       "writtenOn": "2021-11-15T16:10:40Z",
       "side": 1,
       "message": "nit: please flip to a positive condition, #if defined(ANGLE_PLATFORM_FUCHSIA)",
+      "range": {
+        "startLine": 211,
+        "startChar": 0,
+        "endLine": 211,
+        "endChar": 30
+      },
+      "revId": "5fa3a142948f55b5d6ea9bfdc7c3a970ea165c5a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "290d060d_47fce5bd",
+        "filename": "src/common/system_utils_posix.cpp",
+        "patchSetId": 11
+      },
+      "lineNbr": 211,
+      "author": {
+        "id": 1175714
+      },
+      "writtenOn": "2021-11-16T02:37:54Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "79cf6e30_ea973fce",
       "range": {
         "startLine": 211,
         "startChar": 0,
@@ -64,6 +106,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "23246da4_dfb33551",
+        "filename": "src/common/system_utils_posix.cpp",
+        "patchSetId": 11
+      },
+      "lineNbr": 213,
+      "author": {
+        "id": 1175714
+      },
+      "writtenOn": "2021-11-16T02:37:54Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "5cf8ab17_833e4005",
+      "range": {
+        "startLine": 213,
+        "startChar": 4,
+        "endLine": 213,
+        "endChar": 13
+      },
+      "revId": "5fa3a142948f55b5d6ea9bfdc7c3a970ea165c5a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "5a6447c4_eacc02e2",
@@ -77,6 +143,30 @@
       "writtenOn": "2021-11-15T16:10:40Z",
       "side": 1,
       "message": "nit: we have ANGLE_UNUSED_VARIABLE, but you can just omit these lines",
+      "range": {
+        "startLine": 103,
+        "startChar": 5,
+        "endLine": 103,
+        "endChar": 9
+      },
+      "revId": "5fa3a142948f55b5d6ea9bfdc7c3a970ea165c5a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "2b36d9b0_dce71b44",
+        "filename": "src/common/system_utils_win.cpp",
+        "patchSetId": 11
+      },
+      "lineNbr": 103,
+      "author": {
+        "id": 1175714
+      },
+      "writtenOn": "2021-11-16T02:37:54Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "5a6447c4_eacc02e2",
       "range": {
         "startLine": 103,
         "startChar": 5,
@@ -104,6 +194,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "32f73ac4_3ac334ed",
+        "filename": "src/tests/perf_tests/CpuTimePerf.cpp",
+        "patchSetId": 11
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1175714
+      },
+      "writtenOn": "2021-11-16T02:37:54Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "2bf2c53d_007154fb",
+      "revId": "5fa3a142948f55b5d6ea9bfdc7c3a970ea165c5a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "4a3df822_e0ed872b",
@@ -117,6 +225,30 @@
       "writtenOn": "2021-11-15T16:10:40Z",
       "side": 1,
       "message": "suggest you rename this to getElapsedWallClockTime",
+      "range": {
+        "startLine": 21,
+        "startChar": 11,
+        "endLine": 21,
+        "endChar": 25
+      },
+      "revId": "5fa3a142948f55b5d6ea9bfdc7c3a970ea165c5a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "aa7600c0_cd5347b7",
+        "filename": "util/Timer.h",
+        "patchSetId": 11
+      },
+      "lineNbr": 21,
+      "author": {
+        "id": 1175714
+      },
+      "writtenOn": "2021-11-16T02:37:54Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "4a3df822_e0ed872b",
       "range": {
         "startLine": 21,
         "startChar": 11,
