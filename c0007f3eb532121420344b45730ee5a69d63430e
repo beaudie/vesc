@@ -16,6 +16,23 @@
       "message": "Per private chat with Shabi, I added calls to insertEventMarkerImpl()",
       "revId": "c0007f3eb532121420344b45730ee5a69d63430e",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "e5470210_eb2a2373",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2021-11-16T03:28:32Z",
+      "side": 1,
+      "message": "LGTM, thanks for adding the event markers too. I realized Jamie hadn\u0027t +1ed yet, so I\u0027ll leave it to him to +2.",
+      "revId": "c0007f3eb532121420344b45730ee5a69d63430e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
