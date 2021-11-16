@@ -1389,6 +1389,19 @@ std::string getTempPath()
 #    endif
 }
 
+void readFile(const char *path, char *buffer, size_t size)
+{
+    FILE *file = fopen(path, "r");
+    if (!file)
+    {
+        UNREACHABLE();
+        return;
+    }
+
+    fgets(buffer, static_cast<int>(size), file);
+    fclose(file);
+}
+
 void writeFile(const char *path, const void *content, size_t size)
 {
     FILE *file = fopen(path, "w");

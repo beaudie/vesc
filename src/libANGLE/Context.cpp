@@ -767,6 +767,11 @@ egl::Error Context::makeCurrent(egl::Display *display,
 {
     mDisplay = display;
 
+    // Only Android has big/mid/little cores we need to optimize for.
+#if defined(ANGLE_PLATFORM_ANDROID)
+    angle::SetThreadAffinity();
+#endif
+
     if (!mHasBeenCurrent)
     {
         initializeDefaultResources();
