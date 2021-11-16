@@ -69,6 +69,23 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "a3b82f66_f078e3a6",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 14
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1359249
+      },
+      "writtenOn": "2021-11-16T21:46:07Z",
+      "side": 1,
+      "message": "Thanks. responses below.",
+      "revId": "e664cb7a424526a6ec8833f970fbf86d4c4f8a9b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "d0df4646_13be0c84",
@@ -117,6 +134,24 @@
       "side": 1,
       "message": "We don\u0027t have a \"ContextVk\", but a vk::Context. vk::Context is really just a wrapper for RendererVk, so yes we do need OneOffCB.\n\nI didn\u0027t understand your second question. There\u0027s already a barrier added below (recordWriteBarrierOneOff). The barrier is recorded in the command buffer (CB), and the semaphore is used to block the running of that CB. So the ordering is ok here.",
       "parentUuid": "beade09a_44521548",
+      "revId": "e664cb7a424526a6ec8833f970fbf86d4c4f8a9b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "bdfd7091_f8997544",
+        "filename": "src/libANGLE/renderer/vulkan/SurfaceVk.cpp",
+        "patchSetId": 14
+      },
+      "lineNbr": 1752,
+      "author": {
+        "id": 1359249
+      },
+      "writtenOn": "2021-11-16T21:46:07Z",
+      "side": 1,
+      "message": "I noticed, that when we don\u0027t have a current context, we need to use the OneOffCommandBuffers - this is a primary command buffer and we can begin, end and submit this. \n\nIf we have a current context, then a primary command buffer is started, and then other commands atr secondary and just made part of the primary. Question? MUST we use secondary command buffers when context is current? or is it valid to use OneOffCommandBuffers?\n\nProblem here is the semaphore gives us a TIMEOUT 120 sec. The default max.\nSo in the middle of the night I thought, maybe I can\u0027t use OnOffCommandBuffers because the context is current. If it is valid to use, then we have a different issue.",
+      "parentUuid": "2029aaca_859b35cb",
       "revId": "e664cb7a424526a6ec8833f970fbf86d4c4f8a9b",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
@@ -176,6 +211,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "137aecee_2f88568b",
+        "filename": "src/libANGLE/renderer/vulkan/SurfaceVk.cpp",
+        "patchSetId": 14
+      },
+      "lineNbr": 1765,
+      "author": {
+        "id": 1359249
+      },
+      "writtenOn": "2021-11-16T21:46:07Z",
+      "side": 1,
+      "message": "I did change it so that we do the barrier/SharedPresent just the first time. That was an improvement. \nWe do need to vkQueuePresent with each eglSwapBuffers, but no, I think you might be right, that ANI is only needed once, but need to getStatus so we know when it becomes OUT_OF_DATE. I\u0027ll check the spec.",
+      "parentUuid": "4140143d_dc6863ad",
+      "revId": "e664cb7a424526a6ec8833f970fbf86d4c4f8a9b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "29ac34b2_6ed72618",
         "filename": "src/libANGLE/renderer/vulkan/SurfaceVk.cpp",
         "patchSetId": 14
@@ -222,6 +275,24 @@
       "side": 1,
       "message": "Should be done if you use it in queueSubmitOneOff above, otherwise another submission may also want to wait on the same semaphore and deadlock.",
       "parentUuid": "88429539_87b82bc6",
+      "revId": "e664cb7a424526a6ec8833f970fbf86d4c4f8a9b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "661ae6d5_78c25b78",
+        "filename": "src/libANGLE/renderer/vulkan/SurfaceVk.cpp",
+        "patchSetId": 14
+      },
+      "lineNbr": 1773,
+      "author": {
+        "id": 1359249
+      },
+      "writtenOn": "2021-11-16T21:46:07Z",
+      "side": 1,
+      "message": "That semaphore would not be valid for both?\n\nIsn\u0027t this acquireImageSemaphore used to block draws until signaled, indicating Image is acquired and can be drawn. Isn\u0027t it backed by a SurfaceFlinger syncpoint fd? I don\u0027t see the semaphore used anywhere. Different ones are created for flush.",
+      "parentUuid": "bcabfb22_197b19bb",
       "revId": "e664cb7a424526a6ec8833f970fbf86d4c4f8a9b",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
