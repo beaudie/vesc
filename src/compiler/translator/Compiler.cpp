@@ -1123,6 +1123,31 @@ bool TCompiler::compile(const char *const shaderStrings[],
     if (numStrings == 0)
         return true;
 
+    mDumpShaderFileNameStringStream.str("");
+    mDumpShaderFileNameStringStream.clear();
+    if (strstr(shaderStrings[0], "//PLEASE_DUMP_THIS_SHADER_TO_FILE"))
+    {
+        static int shaderID = 0;
+        mDumpShaderFileNameStringStream << getTempPath() << "/"
+                                        << "Shader_" << shaderID++;
+        switch (mShaderType)
+        {
+            case GL_VERTEX_SHADER:
+                mDumpShaderFileNameStringStream << ".vert";
+                break;
+            case GL_FRAGMENT_SHADER:
+                mDumpShaderFileNameStringStream << ".frag";
+                break;
+            default:
+                break;
+        }
+
+        std::stringstream originalShaderFileName;
+        originalShaderFileName << mDumpShaderFileNameStringStream.str().c_str() << ".original";
+        INFO() << "Writing " << originalShaderFileName.str().c_str();
+        writeFile(originalShaderFileName.str().c_str(), shaderStrings, numStrings);
+    }
+
     ShCompileOptions compileOptions = compileOptionsIn;
 
     // Apply key workarounds.

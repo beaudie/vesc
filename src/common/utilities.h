@@ -293,6 +293,7 @@ EGLClientBuffer GLObjectHandleToEGLClientBuffer(GLuint handle);
 #if !defined(ANGLE_ENABLE_WINDOWS_UWP)
 std::string getTempPath();
 void writeFile(const char *path, const void *data, size_t size);
+void writeFile(const char *path, const char *const strings[], size_t numStrings);
 #endif
 
 #if defined(ANGLE_PLATFORM_WINDOWS)

@@ -237,6 +237,9 @@ class TCompiler : public TShHandleBase
     // Specialization constant usage bits
     SpecConstUsageBits mSpecConstUsageBits;
 
+    // Debug only. The file name used for dumpping out shaders
+    std::stringstream mDumpShaderFileNameStringStream;
+
   private:
     // Initialize symbol-table with built-in symbols.
     bool initBuiltInSymbolTable(const ShBuiltInResources &resources);
