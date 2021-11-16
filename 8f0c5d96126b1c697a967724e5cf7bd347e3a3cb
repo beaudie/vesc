@@ -46,6 +46,30 @@
       },
       "revId": "8f0c5d96126b1c697a967724e5cf7bd347e3a3cb",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "bd9d1220_008edab2",
+        "filename": "src/libANGLE/renderer/vulkan/SurfaceVk.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 2023,
+      "author": {
+        "id": 1290487
+      },
+      "writtenOn": "2021-11-16T16:23:32Z",
+      "side": 1,
+      "message": "How about in ContextVk.h, as the pattern is also used in ContextVk.cpp?",
+      "parentUuid": "92977f9f_c71e1eea",
+      "range": {
+        "startLine": 2021,
+        "startChar": 0,
+        "endLine": 2023,
+        "endChar": 74
+      },
+      "revId": "8f0c5d96126b1c697a967724e5cf7bd347e3a3cb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
