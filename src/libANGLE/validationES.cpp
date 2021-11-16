@@ -1169,7 +1169,8 @@ bool ValidImageDataSize(const Context *context,
                         GLsizei imageSize)
 {
     Buffer *pixelUnpackBuffer = context->getState().getTargetBuffer(BufferBinding::PixelUnpack);
-    if (pixelUnpackBuffer == nullptr && imageSize < 0)
+    const Extents size(width, height, depth);
+    if (pixelUnpackBuffer == nullptr && imageSize < 0 && size.empty())
     {
         // Checks are not required
         return true;
@@ -1179,7 +1180,6 @@ bool ValidImageDataSize(const Context *context,
     // would exceed the data store size.
     const InternalFormat &formatInfo = GetInternalFormatInfo(format, type);
     ASSERT(formatInfo.internalFormat != GL_NONE);
-    const Extents size(width, height, depth);
     const auto &unpack = context->getState().getUnpackState();
 
     bool targetIs3D = texType == TextureType::_3D || texType == TextureType::_2DArray;
