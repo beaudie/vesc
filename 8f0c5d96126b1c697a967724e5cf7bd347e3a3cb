@@ -22,6 +22,30 @@
       },
       "revId": "8f0c5d96126b1c697a967724e5cf7bd347e3a3cb",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "92977f9f_c71e1eea",
+        "filename": "src/libANGLE/renderer/vulkan/SurfaceVk.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 2023,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2021-11-16T14:20:31Z",
+      "side": 1,
+      "message": "Actually trace.h is probably not the best place given how it\u0027s vulkan-specific, but somewhere in vk_utils might make sense.",
+      "parentUuid": "b6e07039_fa670188",
+      "range": {
+        "startLine": 2021,
+        "startChar": 0,
+        "endLine": 2023,
+        "endChar": 74
+      },
+      "revId": "8f0c5d96126b1c697a967724e5cf7bd347e3a3cb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
