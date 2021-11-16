@@ -35,6 +35,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "1f47336b_e0b4f4eb",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1175714
+      },
+      "writtenOn": "2021-11-16T02:38:03Z",
+      "side": 1,
+      "message": ":)",
+      "parentUuid": "d3fe4ab1_cbfb73a4",
+      "revId": "ceadaef86ec1e362634e0d575388cd096b432d86",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "eb1f2e63_a84e595f",
@@ -48,6 +66,30 @@
       "writtenOn": "2021-11-13T02:43:40Z",
       "side": 1,
       "message": "Nit: You can `return directMap()` right away, also above in a few places",
+      "range": {
+        "startLine": 751,
+        "startChar": 8,
+        "endLine": 751,
+        "endChar": 17
+      },
+      "revId": "ceadaef86ec1e362634e0d575388cd096b432d86",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "1629e488_be48b0c4",
+        "filename": "src/libANGLE/renderer/vulkan/BufferVk.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 751,
+      "author": {
+        "id": 1175714
+      },
+      "writtenOn": "2021-11-16T02:38:03Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "eb1f2e63_a84e595f",
       "range": {
         "startLine": 751,
         "startChar": 8,
@@ -75,6 +117,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "ae3b9d79_c6da9f8e",
+        "filename": "src/libANGLE/renderer/vulkan/BufferVk.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 954,
+      "author": {
+        "id": 1175714
+      },
+      "writtenOn": "2021-11-16T02:38:03Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "9821e821_0c01b14d",
+      "revId": "ceadaef86ec1e362634e0d575388cd096b432d86",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "16d058dc_0e15fedf",
@@ -88,6 +148,30 @@
       "writtenOn": "2021-11-13T02:43:40Z",
       "side": 1,
       "message": "Could be a little simpler:\n\n    if (mBuffer-\u003eisHostVisible())\n    {\n        // If the buffer is host visible, map and return.\n        return mBuffer-\u003emapWithOffset(contextVk, mapPtr, static_cast\u003csize_t\u003e(mBufferOffset + offset));\n    }\n\n    // Handle device local buffers.\n    return handleDeviceLocalBufferMap(contextVk, offset, size, mapPtr);",
+      "range": {
+        "startLine": 959,
+        "startChar": 0,
+        "endLine": 971,
+        "endChar": 35
+      },
+      "revId": "ceadaef86ec1e362634e0d575388cd096b432d86",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "78a5d483_a27765d5",
+        "filename": "src/libANGLE/renderer/vulkan/BufferVk.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 971,
+      "author": {
+        "id": 1175714
+      },
+      "writtenOn": "2021-11-16T02:38:03Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "16d058dc_0e15fedf",
       "range": {
         "startLine": 959,
         "startChar": 0,
