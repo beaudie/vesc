@@ -67,6 +67,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "8a5a3d4f_69a353dd",
+        "filename": "src/libANGLE/Buffer.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 149,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2021-11-16T13:48:46Z",
+      "side": 1,
+      "message": "The patch is not changing how the buffer is recreated, but instead only changing how the notifications work. I was referring to a change to the back-end.\n\nWe might have to re-think how these notifications work if black desert is so dependent on this kind of pattern.",
+      "parentUuid": "0c8c50d7_168665b0",
+      "range": {
+        "startLine": 149,
+        "startChar": 9,
+        "endLine": 149,
+        "endChar": 25
+      },
+      "revId": "50d4f9ce3f17adb21a3c55a8360d7368e2a61a19",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "bbc1588e_003b045d",
         "filename": "src/libANGLE/renderer/vulkan/BufferVk.cpp",
         "patchSetId": 1
