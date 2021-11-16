@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "07aa0786_03f1d596",
+        "filename": "BUILD.gn",
+        "patchSetId": 7
+      },
+      "lineNbr": 405,
+      "author": {
+        "id": 1001921
+      },
+      "writtenOn": "2021-11-16T20:44:05Z",
+      "side": 1,
+      "message": "I think we have targets which don\u0027t depend on angle_common, so maybe better to add this in the templates or in some config?",
+      "range": {
+        "startLine": 403,
+        "startChar": 0,
+        "endLine": 405,
+        "endChar": 3
+      },
+      "revId": "133fc4c4dd1a957b7b822549ca4bb576c3804173",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
