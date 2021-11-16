@@ -28,14 +28,16 @@ void GlslangFinalize();
 ANGLE_NO_DISCARD bool GlslangCompileToSpirv(const ShBuiltInResources &resources,
                                             sh::GLenum shaderType,
                                             const std::string &shaderSource,
-                                            angle::spirv::Blob *spirvBlobOut);
+                                            angle::spirv::Blob *spirvBlobOut,
+                                            const std::stringstream &dumpShaderFileName);
 #else
 ANGLE_INLINE void GlslangInitialize() {}
 ANGLE_INLINE void GlslangFinalize() {}
 ANGLE_INLINE bool GlslangCompileToSpirv(const ShBuiltInResources &resources,
                                         sh::GLenum shaderType,
                                         const std::string &shaderSource,
-                                        angle::spirv::Blob *spirvBlobOut)
+                                        angle::spirv::Blob *spirvBlobOut,
+                                        const std::stringstream &dumpShaderFileName)
 {
     UNREACHABLE();
     return false;

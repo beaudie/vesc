@@ -11,6 +11,7 @@
 #include "common/mathutil.h"
 #include "common/platform.h"
 #include "common/string_utils.h"
+#include "common/system_utils.h"
 
 #include <set>
 
@@ -1383,9 +1384,48 @@ std::string getTempPath()
     }
 
     return path;
-#    else
-    UNIMPLEMENTED();
-    return "";
+#    elif ANGLE_PLATFORM_LINUX
+    return "/tmp";
+#    elif ANGLE_PLATFORM_ANDROID
+    std::string tmpPaths[]  = {"/sdcard", "/sdcard/Android/data/" + angle::GetExecutableName(),
+                              "/data/user/0/" + angle::GetExecutableName()};
+    static int tmpPathIndex = -1;
+    if (tmpPathIndex < 0)
+    {
+        // Try on three different directory to see which one works. It appears that this maybe
+        // different depends on the device. onPixel6, "/sdcard" works while others won't.
+        for (int i = 0; i < 3; i++)
+        {
+            std::stringstream fileName;
+            fileName << tmpPaths[i] << "/"
+                     << "1.txt";
+            FILE *fileWrite = fopen(fileName.str().c_str(), "w");
+            if (fileWrite)
+            {
+                const char writeData[] = {"hello"};
+                fwrite(writeData, sizeof(writeData), 1, fileWrite);
+                fflush(fileWrite);
+                fclose(fileWrite);
+                // Now read out and verify the data
+                FILE *fileRead = fopen(fileName.str().c_str(), "r");
+                if (fileRead)
+                {
+                    char readData[] = {"deadbeef"};
+                    size_t size     = fread(readData, sizeof(writeData), 1, fileRead);
+                    fclose(fileWrite);
+                    if (size == sizeof(writeData) && strncmp(readData, writeData, size) == 0)
+                    {
+                        tmpPathIndex = i;
+                        break;
+                    }
+                }
+            }
+        }
+        // If failed, just set to first choice
+        tmpPathIndex = 0;
+    }
+
+    return tmpPaths[tmpPathIndex];
 #    endif
 }
 
@@ -1399,6 +1439,24 @@ void writeFile(const char *path, const void *content, size_t size)
     }
 
     fwrite(content, sizeof(char), size, file);
+    fflush(file);
+    fclose(file);
+}
+
+void writeFile(const char *path, const char *const strings[], size_t numStrings)
+{
+    FILE *file = fopen(path, "w");
+    if (!file)
+    {
+        UNREACHABLE();
+        return;
+    }
+
+    for (size_t i = 0; i < numStrings; i++)
+    {
+        fwrite(strings[i], sizeof(char), sizeof(strings[i]), file);
+    }
+    fflush(file);
     fclose(file);
 }
 #endif  // !ANGLE_ENABLE_WINDOWS_UWP
