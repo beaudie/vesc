@@ -512,17 +512,8 @@ ContextImpl *DisplayEGL::createContext(const gl::State &state,
         renderer = mVirtualizationGroups[virtualizationGroup].lock();
         if (!renderer)
         {
-            EGLContext nativeShareContext = EGL_NO_CONTEXT;
-            if (shareContext)
-            {
-                ContextEGL *shareContextEGL = GetImplAs<ContextEGL>(shareContext);
-                nativeShareContext          = shareContextEGL->getContext();
-            }
-
-            // Create a new renderer for this context.  It only needs to share with the user's
-            // requested share context because there are no internal resources in DisplayEGL that
-            // are shared at the GL level.
-            egl::Error error = createRenderer(nativeShareContext, false, false, &renderer);
+            // Create a new renderer for this context.
+            egl::Error error = createRenderer(mRenderer->getContext(), false, false, &renderer);
             if (error.isError())
             {
                 ERR() << "Failed to create a shared renderer: " << error.getMessage();
