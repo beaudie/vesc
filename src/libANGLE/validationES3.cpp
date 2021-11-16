@@ -776,10 +776,9 @@ bool ValidateES3TexImageParametersBase(const Context *context,
             return false;
         }
     }
-
     GLenum sizeCheckFormat = isSubImage ? format : internalformat;
     if (!ValidImageDataSize(context, entryPoint, texType, width, height, depth, sizeCheckFormat,
-                            type, pixels, imageSize))
+                            type, pixels, imageSize, isCompressed))
     {
         return false;
     }
@@ -1943,19 +1942,6 @@ bool ValidateCompressedTexImage3D(const Context *context,
         return false;
     }
 
-    GLuint blockSize = 0;
-    if (!formatInfo.computeCompressedImageSize(Extents(width, height, depth), &blockSize))
-    {
-        context->validationError(entryPoint, GL_INVALID_VALUE, kIntegerOverflow);
-        return false;
-    }
-
-    if (imageSize < 0 || static_cast<GLuint>(imageSize) != blockSize)
-    {
-        context->validationError(entryPoint, GL_INVALID_VALUE, kInvalidCompressedImageSize);
-        return false;
-    }
-
     // 3D texture target validation
     if (target != TextureTarget::_3D && target != TextureTarget::_2DArray)
     {
@@ -1966,7 +1952,7 @@ bool ValidateCompressedTexImage3D(const Context *context,
     // validateES3TexImageFormat sets the error code if there is an error
     if (!ValidateES3TexImage3DParameters(context, entryPoint, target, level, internalformat, true,
                                          false, 0, 0, 0, width, height, depth, border, GL_NONE,
-                                         GL_NONE, -1, data))
+                                         GL_NONE, imageSize, data))
     {
         return false;
     }

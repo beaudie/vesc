@@ -1722,6 +1722,35 @@ bool InternalFormat::computeCompressedImageSize(const Extents &size, GLuint *res
     return CheckedMathResult(bytes, resultOut);
 }
 
+bool InternalFormat::computeCompressedImageSize(const Extents &size,
+                                                GLuint *resultOut,
+                                                GLsizei rowPitch,
+                                                GLsizei depthPitch) const
+{
+    CheckedNumeric<GLuint> checkedWidth(size.width);
+    CheckedNumeric<GLuint> checkedHeight(size.height);
+    CheckedNumeric<GLuint> checkedDepth(size.depth);
+    CheckedNumeric<GLuint> checkedBlockWidth(compressedBlockWidth);
+    CheckedNumeric<GLuint> checkedBlockHeight(compressedBlockHeight);
+    CheckedNumeric<GLuint> checkedBlockDepth(compressedBlockDepth);
+    GLuint minBlockWidth, minBlockHeight;
+    std::tie(minBlockWidth, minBlockHeight) = getCompressedImageMinBlocks();
+
+    ASSERT(compressed);
+    auto numBlocksWide = (checkedWidth + checkedBlockWidth - 1u) / checkedBlockWidth;
+    auto numBlocksHigh = (checkedHeight + checkedBlockHeight - 1u) / checkedBlockHeight;
+    auto numBlocksDeep = (checkedDepth + checkedBlockDepth - 1u) / checkedBlockDepth;
+    if (numBlocksWide.IsValid() && numBlocksWide.ValueOrDie() < minBlockWidth)
+        numBlocksWide = minBlockWidth;
+    if (numBlocksHigh.IsValid() && numBlocksHigh.ValueOrDie() < minBlockHeight)
+        numBlocksHigh = minBlockHeight;
+    if (numBlocksDeep.IsValid() && numBlocksDeep.ValueOrDie() < 1)
+        numBlocksDeep = 1;
+    auto bytes = numBlocksWide * checkedBlockWidth + (numBlocksHigh - 1) * rowPitch +
+                 (numBlocksDeep - 1) * depthPitch;
+    return CheckedMathResult(bytes, resultOut);
+}
+
 std::pair<GLuint, GLuint> InternalFormat::getCompressedImageMinBlocks() const
 {
     GLuint minBlockWidth  = 0;
@@ -1798,7 +1827,7 @@ bool InternalFormat::computePackUnpackEndByte(GLenum formatType,
     if (compressed)
     {
         GLuint copyBytes = 0;
-        if (!computeCompressedImageSize(size, &copyBytes))
+        if (!computeCompressedImageSize(size, &copyBytes, rowPitch, depthPitch))
         {
             return false;
         }

@@ -161,6 +161,10 @@ struct InternalFormat
                                             GLuint *resultOut) const;
 
     ANGLE_NO_DISCARD bool computeCompressedImageSize(const Extents &size, GLuint *resultOut) const;
+    ANGLE_NO_DISCARD bool computeCompressedImageSize(const Extents &size,
+                                                     GLuint *resultOut,
+                                                     GLsizei rowPitch,
+                                                     GLsizei depthPitch) const;
 
     ANGLE_NO_DISCARD std::pair<GLuint, GLuint> getCompressedImageMinBlocks() const;
 
