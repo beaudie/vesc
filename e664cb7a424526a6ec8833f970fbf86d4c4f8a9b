@@ -52,6 +52,23 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "c0e014df_5e39ac1b",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 14
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1359249
+      },
+      "writtenOn": "2021-11-16T18:10:04Z",
+      "side": 1,
+      "message": "Shahbaz, should the acquireImageSemaphore/mAcquireImageSemaphore be used to block draws until signaled? I can not find that anywhere. Isn\u0027t that where we want to add the barrier to transition to SharedPresent?\nPlease correct me. I\u0027m suspecting the OneOffCommand is not the right thing to use.",
+      "revId": "e664cb7a424526a6ec8833f970fbf86d4c4f8a9b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "d0df4646_13be0c84",
