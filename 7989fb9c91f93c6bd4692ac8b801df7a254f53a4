@@ -50,6 +50,40 @@
       "message": "Hey Ian, I suggest we prototype the Vulkan implementation in SwiftShader.",
       "revId": "7989fb9c91f93c6bd4692ac8b801df7a254f53a4",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "2dcfd388_6f4aedac",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1452687
+      },
+      "writtenOn": "2021-11-16T17:39:54Z",
+      "side": 1,
+      "message": "LGTM!",
+      "revId": "7989fb9c91f93c6bd4692ac8b801df7a254f53a4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "bb094235_7597fdd1",
+        "filename": "src/libANGLE/renderer/vulkan/android/DisplayVkAndroid.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 62,
+      "author": {
+        "id": 1452687
+      },
+      "writtenOn": "2021-11-16T17:39:54Z",
+      "side": 1,
+      "message": "As an aside, it\u0027s a little worrying that RGB565 was assumed by default previously. I don\u0027t love that this CL isn\u0027t laser focused on the extension alone, but removing a previous cruft like this is truly welcomed.\n\nWhat happens in the case that a device doesn\u0027t support surfacelessQueryExtensionEnabled? Shouldn\u0027t 565 be included then?",
+      "revId": "7989fb9c91f93c6bd4692ac8b801df7a254f53a4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
