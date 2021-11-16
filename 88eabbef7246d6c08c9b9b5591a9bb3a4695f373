@@ -118,6 +118,30 @@
       },
       "revId": "88eabbef7246d6c08c9b9b5591a9bb3a4695f373",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "757f1ff0_5cfca791",
+        "filename": "src/libANGLE/capture/capture_gles_3_1_params.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 271,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2021-11-16T06:16:26Z",
+      "side": 1,
+      "message": "I\u0027m looking at the 3.2 spec and it reads:\n\n\u003e The values associated with the properties of the active resource are written\n\u003e to consecutive entries in params, in increasing order according to position\n\u003e in props. If no error is generated, only the first count integer values will\n\u003e be written to params; any extra values will not be written.\n\nIn this instance, it looks like \"count\" has been renamed \"bufSize\", so I think your solution is correct.",
+      "parentUuid": "e38d2cae_2d306efa",
+      "range": {
+        "startLine": 257,
+        "startChar": 3,
+        "endLine": 271,
+        "endChar": 13
+      },
+      "revId": "88eabbef7246d6c08c9b9b5591a9bb3a4695f373",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
