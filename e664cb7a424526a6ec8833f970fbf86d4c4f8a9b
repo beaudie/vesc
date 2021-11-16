@@ -105,6 +105,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "2029aaca_859b35cb",
+        "filename": "src/libANGLE/renderer/vulkan/SurfaceVk.cpp",
+        "patchSetId": 14
+      },
+      "lineNbr": 1752,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2021-11-16T21:32:12Z",
+      "side": 1,
+      "message": "We don\u0027t have a \"ContextVk\", but a vk::Context. vk::Context is really just a wrapper for RendererVk, so yes we do need OneOffCB.\n\nI didn\u0027t understand your second question. There\u0027s already a barrier added below (recordWriteBarrierOneOff). The barrier is recorded in the command buffer (CB), and the semaphore is used to block the running of that CB. So the ordering is ok here.",
+      "parentUuid": "beade09a_44521548",
+      "revId": "e664cb7a424526a6ec8833f970fbf86d4c4f8a9b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "5cc9dd41_9b1b13b8",
         "filename": "src/libANGLE/renderer/vulkan/SurfaceVk.cpp",
         "patchSetId": 14
@@ -140,6 +158,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "4140143d_dc6863ad",
+        "filename": "src/libANGLE/renderer/vulkan/SurfaceVk.cpp",
+        "patchSetId": 14
+      },
+      "lineNbr": 1765,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2021-11-16T21:32:12Z",
+      "side": 1,
+      "message": "Is vkAcquireNextImage (ANI) still necessary with this present mode? Could ANGLE acquire the image once, and keep it forever? I don\u0027t know the Vulkan extension well enough.",
+      "parentUuid": "0ea21f88_0aebcd3f",
+      "revId": "e664cb7a424526a6ec8833f970fbf86d4c4f8a9b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "29ac34b2_6ed72618",
         "filename": "src/libANGLE/renderer/vulkan/SurfaceVk.cpp",
         "patchSetId": 14
@@ -168,6 +204,24 @@
       "writtenOn": "2021-11-15T22:33:24Z",
       "side": 1,
       "message": "This doesn\u0027t seem to matter, and seems like it needs to be removed?",
+      "revId": "e664cb7a424526a6ec8833f970fbf86d4c4f8a9b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "bcabfb22_197b19bb",
+        "filename": "src/libANGLE/renderer/vulkan/SurfaceVk.cpp",
+        "patchSetId": 14
+      },
+      "lineNbr": 1773,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2021-11-16T21:32:12Z",
+      "side": 1,
+      "message": "Should be done if you use it in queueSubmitOneOff above, otherwise another submission may also want to wait on the same semaphore and deadlock.",
+      "parentUuid": "88429539_87b82bc6",
       "revId": "e664cb7a424526a6ec8833f970fbf86d4c4f8a9b",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
