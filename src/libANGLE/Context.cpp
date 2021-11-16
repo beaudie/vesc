@@ -3441,7 +3441,7 @@ Extensions Context::generateSupportedExtensions() const
     Extensions supportedExtensions = mImplementation->getNativeExtensions();
 
     // Explicitly enable GL_KHR_parallel_shader_compile
-    supportedExtensions.parallelShaderCompileKHR = true;
+    supportedExtensions.parallelShaderCompileKHR = false;
 
     if (getClientVersion() < ES_2_0)
     {

@@ -11,6 +11,8 @@
 //
 
 #include "compiler/translator/glslang_wrapper.h"
+#include "common/system_utils.h"
+#include "common/utilities.h"
 
 // glslang has issues with some specific warnings.
 ANGLE_DISABLE_SHADOWING_WARNING
@@ -108,7 +110,8 @@ void GlslangFinalize()
 ANGLE_NO_DISCARD bool GlslangCompileToSpirv(const ShBuiltInResources &resources,
                                             sh::GLenum shaderType,
                                             const std::string &shaderSource,
-                                            angle::spirv::Blob *spirvBlobOut)
+                                            angle::spirv::Blob *spirvBlobOut,
+                                            const std::stringstream &dumpShaderFileName)
 {
     TBuiltInResource builtInResources(glslang::DefaultTBuiltInResource);
     GetBuiltInResources(resources, &builtInResources);
@@ -175,12 +178,25 @@ ANGLE_NO_DISCARD bool GlslangCompileToSpirv(const ShBuiltInResources &resources,
     glslang::TIntermediate *intermediate = program.getIntermediate(language);
     glslang::GlslangToSpv(*intermediate, *spirvBlobOut);
 
-#if ANGLE_DEBUG_SPIRV_GENERATION
-    spvtools::SpirvTools spirvTools(SPV_ENV_VULKAN_1_1);
-    std::string readableSpirv;
-    spirvTools.Disassemble(*spirvBlobOut, &readableSpirv, 0);
-    fprintf(stderr, "%s\n", readableSpirv.c_str());
-#endif  // ANGLE_DEBUG_SPIRV_GENERATION
+    if (!dumpShaderFileName.str().empty())
+    {
+        spvtools::SpirvTools spirvTools(SPV_ENV_VULKAN_1_1);
+        std::string readableSpirv;
+        spirvTools.Disassemble(*spirvBlobOut, &readableSpirv, 0);
+
+        // Write spirv binary to a file
+        std::stringstream spvasmFileName;
+        spvasmFileName << dumpShaderFileName.str().c_str() << ".spvasm";
+        INFO() << "Writing " << spvasmFileName.str().c_str();
+        writeFile(spvasmFileName.str().c_str(), readableSpirv.c_str(), readableSpirv.size());
+
+        // Write spirv binary to a file
+        std::stringstream spvFileName;
+        spvFileName << dumpShaderFileName.str().c_str() << ".spv";
+        INFO() << "Writing " << spvFileName.str().c_str();
+        writeFile(spvFileName.str().c_str(), spirvBlobOut->data(),
+                  spirvBlobOut->size() * sizeof(uint32_t));
+    }
 
     return true;
 }
