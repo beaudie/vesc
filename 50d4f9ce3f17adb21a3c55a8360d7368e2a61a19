@@ -43,6 +43,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "0c8c50d7_168665b0",
+        "filename": "src/libANGLE/Buffer.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 149,
+      "author": {
+        "id": 1446209
+      },
+      "writtenOn": "2021-11-16T08:47:33Z",
+      "side": 1,
+      "message": "Black desert took much more time than native gles in BufferData,that\u0027s because changing vertex buffer size will iterate over all VertexArrays that enabled this vertex attribute to set dirty bit. According to Jamie,\"One possible fix is to only recreate the buffer if the new size is larger. Then we would stabilize to the maximum size and wouldn\u0027t need to create a new VkBuffer every time\".This is what the patch does.\nMore details could be found in https://bugs.chromium.org/p/angleproject/issues/detail?id\u003d6371.",
+      "parentUuid": "fcf5441f_57ea23a6",
+      "range": {
+        "startLine": 149,
+        "startChar": 9,
+        "endLine": 149,
+        "endChar": 25
+      },
+      "revId": "50d4f9ce3f17adb21a3c55a8360d7368e2a61a19",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "bbc1588e_003b045d",
         "filename": "src/libANGLE/renderer/vulkan/BufferVk.cpp",
         "patchSetId": 1
@@ -54,6 +78,24 @@
       "writtenOn": "2021-11-15T15:32:20Z",
       "side": 1,
       "message": "You could potentially take this a step further and keep two sizes; the buffer size (as specified by glBufferData) and the allocated size (the real storage size). So you would avoid reallocating storage when the buffer size increases back.\n\nFor example, if the application does:\n\n    glBufferData(20);\n    glBufferData(10);\n    glBufferData(20);\n    glBufferData(10);\n    glBufferData(20);\n    glBufferData(10);\n\nyou would never reallocate the storage.",
+      "revId": "50d4f9ce3f17adb21a3c55a8360d7368e2a61a19",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "446a456d_38353918",
+        "filename": "src/libANGLE/renderer/vulkan/BufferVk.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 428,
+      "author": {
+        "id": 1446209
+      },
+      "writtenOn": "2021-11-16T08:47:33Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "bbc1588e_003b045d",
       "revId": "50d4f9ce3f17adb21a3c55a8360d7368e2a61a19",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
