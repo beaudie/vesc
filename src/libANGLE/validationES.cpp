@@ -1169,12 +1169,6 @@ bool ValidImageDataSize(const Context *context,
                         GLsizei imageSize)
 {
     Buffer *pixelUnpackBuffer = context->getState().getTargetBuffer(BufferBinding::PixelUnpack);
-    if (pixelUnpackBuffer == nullptr && imageSize < 0)
-    {
-        // Checks are not required
-        return true;
-    }
-
     // ...the data would be unpacked from the buffer object such that the memory reads required
     // would exceed the data store size.
     const InternalFormat &formatInfo = GetInternalFormatInfo(format, type);
@@ -1189,7 +1183,16 @@ bool ValidImageDataSize(const Context *context,
         context->validationError(entryPoint, GL_INVALID_OPERATION, kIntegerOverflow);
         return false;
     }
-
+    if (endByte > static_cast<GLuint>(size.width * size.height * size.depth))
+    {
+        context->validationError(entryPoint, GL_INVALID_OPERATION, kImageSizeTooSmall);
+        return false;
+    }
+    if (pixelUnpackBuffer == nullptr && imageSize < 0)
+    {
+        // Checks are not required
+        return true;
+    }
     if (pixelUnpackBuffer)
     {
         CheckedNumeric<size_t> checkedEndByte(endByte);
