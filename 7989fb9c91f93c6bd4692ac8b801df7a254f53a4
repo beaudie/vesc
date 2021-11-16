@@ -16,6 +16,23 @@
       "message": "Hi Shabi (cc some others),\n\nI created this prototype CL to help me develop and debug the Vulkan extension we want to create for calling WSI \"surface\" queries before we have a VkSurfaceKHR.\n\nFor now, I suggest the extension name: VK_ANDROID_surfaceless_query.  Perhaps it should be a KHR or EXT, and perhaps there\u0027s reason to change the name, but it\u0027s a start.\n\nThis CL combined with two Android platform CLs (ag/16168795 and ag/16168796) allow me to get EGLConfig\u0027s with the following formats on two test different devices:\n\n- GL_RGBA8 (always had this one)\n- GL_RGB_565 (always had this one, but ANGLE should be querying it)\n- GL_RGB8 (used to have this one, and I optionally added it to Android)\n- GL_RGB10_A2 (want this, and Yiwei optionally added it to Android)\n- GL_RGBA16F (want this, and Yiwei optionally added it to Android)\n\nThere\u0027s definitely clean-up that\u0027s needed (input welcome).  We can\u0027t land this CL until the extension is defined and in place.  Thus, I -2\u0027d my own CL:-).",
       "revId": "7989fb9c91f93c6bd4692ac8b801df7a254f53a4",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "f8e1f103_e4734a03",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1290487
+      },
+      "writtenOn": "2021-11-16T02:16:02Z",
+      "side": 1,
+      "message": "Adding Trevor as a reviewer.  He\u0027ll be dealing with colorspaces.",
+      "revId": "7989fb9c91f93c6bd4692ac8b801df7a254f53a4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
