@@ -37,6 +37,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "951c4775_00f31b53",
+        "filename": "src/libANGLE/Context.cpp",
+        "patchSetId": 9
+      },
+      "lineNbr": 6460,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2021-11-16T21:07:56Z",
+      "side": 1,
+      "message": "Just an oversight, please update the auto-gen to handle this. Can be a split CL.",
+      "parentUuid": "974c9749_7248d033",
+      "revId": "70fe137fccff3d5e1b8c8b68d453769a03f40934",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "7cc349cb_61381fe0",
         "filename": "src/libANGLE/renderer/renderer_utils.cpp",
         "patchSetId": 9
