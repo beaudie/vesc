@@ -3878,4 +3878,110 @@ ANGLE_INSTANTIATE_TEST_ES2_AND_ES3_AND(
                                              /* hasBarrier */ false,
                                              /* cheapRenderPass */ false));
 
+class VertexAttributeUByteTest : public ANGLETest
+{
+  protected:
+    VertexAttributeUByteTest()
+    {
+        setWindowWidth(16);
+        setWindowHeight(16);
+        setConfigRedBits(8);
+        setConfigGreenBits(8);
+        setConfigBlueBits(8);
+        setConfigAlphaBits(8);
+        setConfigDepthBits(24);
+    }
+
+    void testSetUp() override
+    {
+        glClearColor(0, 0, 0, 0);
+        glClearDepthf(0.0);
+        glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+
+        glDisable(GL_DEPTH_TEST);
+
+        GLubyte kVertices[] = {0, 1, 2, 2, 1, 3};
+
+        glBindBuffer(GL_ARRAY_BUFFER, mVertexBuffer.get());
+        glBufferData(GL_ARRAY_BUFFER, sizeof(kVertices), kVertices, GL_DYNAMIC_DRAW);
+
+        ASSERT_GL_NO_ERROR();
+    }
+
+    void drawQuad(const char *vsSource)
+    {
+        GLuint program = CompileProgram(vsSource, essl3_shaders::fs::Green());
+        glUseProgram(program);
+        ASSERT_NE(program, 0U);
+
+        GLint vLoc = glGetAttribLocation(program, "indices");
+        glVertexAttribPointer(vLoc, 1, GL_UNSIGNED_BYTE, GL_FALSE, 1 * sizeof(GLubyte), nullptr);
+        glEnableVertexAttribArray(vLoc);
+
+        glDrawArrays(GL_TRIANGLES, 0, 6);
+
+        ASSERT_GL_NO_ERROR();
+
+        EXPECT_PIXEL_COLOR_EQ(0, 0, GLColor::green);
+
+        glUseProgram(0);
+        glDeleteProgram(program);
+    }
+
+    GLBuffer mVertexBuffer;
+};
+
+TEST_P(VertexAttributeUByteTest, Vec4)
+{
+    constexpr char kVSVec4[] = R"(#version 300 es
+
+in vec4 indices;
+
+const vec2 positions[4] = vec2[4](
+    vec2(-1.0f, -1.0f),
+    vec2(-1.0f, 1.0f),
+    vec2(1.0f, -1.0f),
+    vec2(1.0f, 1.0f)
+);
+
+void main()
+{
+    uint i = uint(indices.x);
+    vec2 position = positions[i];
+
+    gl_Position = vec4(position, 0, 1);
+})";
+
+    drawQuad(kVSVec4);
+}
+
+TEST_P(VertexAttributeUByteTest, Uvec4)
+{
+    ANGLE_SKIP_TEST_IF(!IsQualcomm() || !IsOpenGLES());
+
+    constexpr char kVSVec4[] = R"(#version 300 es
+
+in uvec4 indices;
+
+const vec2 positions[4] = vec2[4](
+    vec2(-1.0f, -1.0f),
+    vec2(-1.0f, 1.0f),
+    vec2(1.0f, -1.0f),
+    vec2(1.0f, 1.0f)
+);
+
+void main()
+{
+    uint i = uint(indices.x);
+    vec2 position = positions[i];
+
+    gl_Position = vec4(position, 0, 1);
+})";
+
+    drawQuad(kVSVec4);
+}
+
+GTEST_ALLOW_UNINSTANTIATED_PARAMETERIZED_TEST(VertexAttributeUByteTest);
+ANGLE_INSTANTIATE_TEST_ES3(VertexAttributeUByteTest);
+
 }  // anonymous namespace
