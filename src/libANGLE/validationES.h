@@ -81,7 +81,8 @@ bool ValidImageDataSize(const Context *context,
                         GLenum format,
                         GLenum type,
                         const void *pixels,
-                        GLsizei imageSize);
+                        GLsizei imageSize,
+                        bool isCompressed);
 
 bool ValidQueryType(const Context *context, QueryType queryType);
 
