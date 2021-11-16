@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "87d2f78d_9811dfd1",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1001921
+      },
+      "writtenOn": "2021-11-16T20:39:08Z",
+      "side": 1,
+      "message": "I didn\u0027t know we were running trace tests on CQ.\nThe bug tangentially mentions this in anglebug.com/6496#c2, I didn\u0027t realize this was the plan.\nWe\u0027re taking away from resources which could be used for VK-GL-CTS for SwS and WebGL SwANGLE.\nHopefully it\u0027s a good tradeoff?",
+      "revId": "756effdeb6d4c64b53e9ad49d3d0dd0416e7d02a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
