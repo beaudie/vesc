@@ -16,6 +16,24 @@
       "message": "Asphalt 9 uses GL_UNSIGNED_BYTE attributes as uvec4 in the vertex shader for indexing arrays in an uniform buffer.\nWhile this works on native GLES QC, it fails when replaying the trace on ANGLE. This also fails with Mesa native OpenGL on Intel and AMD.\nThis test is able to reproduce the issue, where VertexAttributeUByteTest.Vec4 passes everywhere and VertexAttributeUByteTest.Uvec4 only passes when running with native GLES on QC.",
       "revId": "06f2df631aaf36e5bb08e59f558e13ee7f599d66",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "a023ee3a_613ae5f3",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2021-11-16T15:22:13Z",
+      "side": 1,
+      "message": "The test added doesn\u0027t use the attribute to index a *uniform* buffer, but a constant array. Also, doesn\u0027t seem to be failing anywhere (but metal)?",
+      "parentUuid": "ae085cb0_6a73661c",
+      "revId": "06f2df631aaf36e5bb08e59f558e13ee7f599d66",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
