@@ -1,0 +1,84 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "04f6c458_89904df6",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 9
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2021-11-16T20:53:31Z",
+      "side": 1,
+      "message": "Looking good! Per our talk:\n\n- Don\u0027t forget to add this to metal and d3d backends\n- Enable the extension on some (or all) backends\n- Add tests!",
+      "revId": "70fe137fccff3d5e1b8c8b68d453769a03f40934",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "974c9749_7248d033",
+        "filename": "src/libANGLE/Context.cpp",
+        "patchSetId": 9
+      },
+      "lineNbr": 6460,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2021-11-16T20:53:31Z",
+      "side": 1,
+      "message": "@Jamie, why is this not being done in autogen? I see `group\u003d\"PrimitiveType\"` specified on it in gl.xml.",
+      "revId": "70fe137fccff3d5e1b8c8b68d453769a03f40934",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "7cc349cb_61381fe0",
+        "filename": "src/libANGLE/renderer/renderer_utils.cpp",
+        "patchSetId": 9
+      },
+      "lineNbr": 1069,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2021-11-16T20:53:31Z",
+      "side": 1,
+      "message": "static_cast is what ANGLE uses",
+      "range": {
+        "startLine": 1069,
+        "startChar": 33,
+        "endLine": 1069,
+        "endChar": 50
+      },
+      "revId": "70fe137fccff3d5e1b8c8b68d453769a03f40934",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "844ad059_729d9eff",
+        "filename": "src/libANGLE/renderer/renderer_utils.cpp",
+        "patchSetId": 9
+      },
+      "lineNbr": 1074,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2021-11-16T20:53:31Z",
+      "side": 1,
+      "message": "ditto",
+      "range": {
+        "startLine": 1074,
+        "startChar": 50,
+        "endLine": 1074,
+        "endChar": 83
+      },
+      "revId": "70fe137fccff3d5e1b8c8b68d453769a03f40934",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
