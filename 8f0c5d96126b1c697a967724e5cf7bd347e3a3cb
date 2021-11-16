@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b6e07039_fa670188",
+        "filename": "src/libANGLE/renderer/vulkan/SurfaceVk.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 2023,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2021-11-16T13:51:45Z",
+      "side": 1,
+      "message": "can you make this into some kind of macro in trace.h? the code pattern is repeated several times.",
+      "range": {
+        "startLine": 2021,
+        "startChar": 0,
+        "endLine": 2023,
+        "endChar": 74
+      },
+      "revId": "8f0c5d96126b1c697a967724e5cf7bd347e3a3cb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
