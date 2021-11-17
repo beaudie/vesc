@@ -21,7 +21,8 @@ class EmulateGLBaseVertexBaseInstanceTest : public MatchOutputCodeTest
     EmulateGLBaseVertexBaseInstanceTest()
         : MatchOutputCodeTest(GL_VERTEX_SHADER, SH_VARIABLES, SH_GLSL_COMPATIBILITY_OUTPUT)
     {
-        getResources()->ANGLE_base_vertex_base_instance = 1;
+        getResources()->ANGLE_base_vertex_base_instance                = 1;
+        getResources()->ANGLE_base_vertex_base_instance_shader_builtin = 1;
     }
 
   protected:
@@ -45,6 +46,7 @@ class EmulateGLBaseVertexBaseInstanceTest : public MatchOutputCodeTest
 TEST_F(EmulateGLBaseVertexBaseInstanceTest, RequiresEmulation)
 {
     CheckCompileFailure(
+        "#version 300 es\n"
         "#extension GL_ANGLE_base_vertex_base_instance : require\n"
         "void main() {\n"
         "   gl_Position = vec4(float(gl_BaseVertex), float(gl_BaseInstance), 0.0, 1.0);\n"
@@ -52,18 +54,17 @@ TEST_F(EmulateGLBaseVertexBaseInstanceTest, RequiresEmulation)
         "extension is not supported");
 }
 
-// Check that compiling with emulation with gl_BaseVertex and gl_BaseInstance works with different
-// shader versions
+// Check that compiling with emulation with gl_BaseVertex and gl_BaseInstance works
 TEST_F(EmulateGLBaseVertexBaseInstanceTest, CheckCompile)
 {
     const std::string shaderString =
+        "#version 300 es\n"
         "#extension GL_ANGLE_base_vertex_base_instance : require\n"
         "void main() {\n"
         "   gl_Position = vec4(float(gl_BaseVertex), float(gl_BaseInstance), 0.0, 1.0);\n"
         "}\n";
 
-    compile("#version 300 es\n" + shaderString,
-            SH_OBJECT_CODE | SH_VARIABLES | SH_EMULATE_GL_BASE_VERTEX_BASE_INSTANCE);
+    compile(shaderString, SH_OBJECT_CODE | SH_VARIABLES | SH_EMULATE_GL_BASE_VERTEX_BASE_INSTANCE);
 }
 
 // Check that gl_BaseVertex and gl_BaseInstance is properly emulated

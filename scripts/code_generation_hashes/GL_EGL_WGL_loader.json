@@ -12,7 +12,7 @@
   "scripts/gl_angle_ext.xml":
     "b39cf42f4ac168d1ae40888e59c51f7b",
   "scripts/registry_xml.py":
-    "4218ba00e734cfb650444c87f6f54cdd",
+    "c1f7f9d732cea749644565b3c37144d5",
   "scripts/wgl.xml":
     "c36001431919e1c435f1215a85f7e1db",
   "src/libEGL/egl_loader_autogen.cpp":
