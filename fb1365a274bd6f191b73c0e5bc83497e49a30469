@@ -22,6 +22,30 @@
       },
       "revId": "fb1365a274bd6f191b73c0e5bc83497e49a30469",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "73fcacf4_e3572066",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 397,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2021-11-17T14:20:17Z",
+      "side": 0,
+      "message": "Ack - going to proceed with landing as-is as it seems to work this way as well.",
+      "parentUuid": "d2a0b705_bc24e188",
+      "range": {
+        "startLine": 395,
+        "startChar": 66,
+        "endLine": 397,
+        "endChar": 86
+      },
+      "revId": "fb1365a274bd6f191b73c0e5bc83497e49a30469",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
