@@ -9,11 +9,13 @@
 
 import argparse
 import fnmatch
+import io
 import json
 import logging
 import time
 import os
 import re
+import subprocess
 import sys
 
 # Add //src/testing into sys.path for importing xvfb and test_env, and
@@ -35,11 +37,11 @@ from tracing.value import merge_histograms
 
 DEFAULT_TEST_SUITE = 'angle_perftests'
 DEFAULT_LOG = 'info'
-DEFAULT_SAMPLES = 5
+DEFAULT_SAMPLES = 4
 DEFAULT_TRIALS = 3
 DEFAULT_MAX_ERRORS = 3
-DEFAULT_WARMUP_LOOPS = 3
-DEFAULT_CALIBRATION_TIME = 3
+DEFAULT_WARMUP_LOOPS = 2
+DEFAULT_CALIBRATION_TIME = 2
 
 # Filters out stuff like: " I   72.572s run_tests_on_device(96071FFAZ00096) "
 ANDROID_LOGGING_PREFIX = r'I +\d+.\d+s \w+\(\w+\)  '
@@ -48,6 +50,9 @@ ANDROID_LOGGING_PREFIX = r'I +\d+.\d+s \w+\(\w+\)  '
 FAIL = 'FAIL'
 PASS = 'PASS'
 SKIP = 'SKIP'
+
+EXIT_FAILURE = 1
+EXIT_SUCCESS = 0
 
 
 def is_windows():
@@ -61,15 +66,36 @@ def get_binary_name(binary):
         return './%s' % binary
 
 
+def _popen(*args, **kwargs):
+    assert 'creationflags' not in kwargs
+    if sys.platform == 'win32':
+        # Necessary for signal handling. See crbug.com/733612#c6.
+        kwargs['creationflags'] = subprocess.CREATE_NEW_PROCESS_GROUP
+    return subprocess.Popen(*args, **kwargs)
+
+
+def run_command_with_output(argv, stdoutfile, env=None, cwd=None, log=True):
+    assert stdoutfile
+    with io.open(stdoutfile, 'wb') as writer:
+        process = _popen(argv, env=env, cwd=cwd, stdout=writer, stderr=subprocess.STDOUT)
+        test_env.forward_signals([process])
+        while process.poll() is None:
+            # This sleep is needed for signal propagation. See the
+            # wait_with_signals() docstring.
+            time.sleep(0.1)
+        return process.returncode
+
+
 def _run_and_get_output(args, cmd, env):
     lines = []
+    logging.debug(' '.join(cmd))
     with common.temporary_file() as tempfile_path:
         if args.xvfb:
-            ret = xvfb.run_executable(cmd, env, stdoutfile=tempfile_path)
+            exit_code = xvfb.run_executable(cmd, env, stdoutfile=tempfile_path)
         else:
-            ret = test_env.run_command_with_output(cmd, env=env, stdoutfile=tempfile_path)
-        if ret:
-            logging.error('Error running test suite.')
+            exit_code = run_command_with_output(cmd, env=env, stdoutfile=tempfile_path, log=False)
+        if exit_code:
+            logging.error('%s returned exit code %d.' % (cmd[0], exit_code))
             return None
         with open(tempfile_path) as f:
             for line in f:
@@ -97,7 +123,7 @@ def _get_results_from_output(output, result):
     logging.debug('Searching for %s in output' % pattern)
     m = re.findall(pattern, output)
     if not m:
-        logging.warning('Did not find the result "%s" in the test output.' % result)
+        logging.warning('Did not find the result "%s" in the test output:\n%s' % (result, output))
         return None
 
     return [float(value) for value in m]
@@ -227,7 +253,9 @@ def main():
         default=DEFAULT_CALIBRATION_TIME)
 
     args, extra_flags = parser.parse_known_args()
-    logging.basicConfig(level=args.log.upper(), stream=sys.stdout)
+
+    reload(logging)
+    logging.basicConfig(level=args.log.upper())
 
     start_time = time.time()
 
@@ -260,6 +288,12 @@ def main():
     # Get tests for this shard (if using sharding args)
     tests = _shard_tests(tests, args.shard_count, args.shard_index)
 
+    num_tests = len(tests)
+    if num_tests == 0:
+        logging.error('No tests to run.')
+
+    logging.info('Running %d test%s' % (num_tests, 's' if num_tests > 1 else ' '))
+
     # Run tests
     results = {
         'tests': {},
@@ -278,7 +312,8 @@ def main():
     histograms = histogram_set.HistogramSet()
     total_errors = 0
 
-    for test in tests:
+    for test_index in range(num_tests):
+        test = tests[test_index]
         cmd = [
             get_binary_name(args.test_suite),
             '--gtest_filter=%s' % test,
@@ -300,25 +335,23 @@ def main():
             ]
             calibrate_output = _run_and_get_output(args, cmd_calibrate, env)
             if not calibrate_output:
-                logging.error('Failed to get calibration output')
-                test_results[test] = {'expected': PASS, 'actual': FAIL, 'is_unexpected': True}
-                results['num_failures_by_type'][FAIL] += 1
-                total_errors += 1
-                continue
+                logging.error('%s failed, stopping tests.' % cmd_calibrate[0])
+                return EXIT_FAILURE
             steps_per_trial = _get_results_from_output(calibrate_output, 'steps_to_run')
             if not steps_per_trial:
                 logging.warning('Skipping test %s' % test)
                 continue
             assert (len(steps_per_trial) == 1)
             steps_per_trial = int(steps_per_trial[0])
-        logging.info('Running %s %d times with %d trials and %d steps per trial.' %
-                     (test, args.samples_per_test, args.trials_per_sample, steps_per_trial))
+        logging.info('Test %d/%d: %s (samples=%d trials_per_sample=%d steps_per_trial=%d)' %
+                     (test_index + 1, num_tests, test, args.samples_per_test,
+                      args.trials_per_sample, steps_per_trial))
         wall_times = []
         test_histogram_set = histogram_set.HistogramSet()
         for sample in range(args.samples_per_test):
             if total_errors >= args.max_errors:
                 logging.error('Error count exceeded max errors (%d). Aborting.' % args.max_errors)
-                return 1
+                return EXIT_FAILURE
 
             cmd_run = cmd + [
                 '--steps-per-trial',
@@ -333,22 +366,23 @@ def main():
             with common.temporary_file() as histogram_file_path:
                 cmd_run += ['--isolated-script-test-perf-output=%s' % histogram_file_path]
                 output = _run_and_get_output(args, cmd_run, env)
-                if output:
-                    sample_wall_times = _get_results_from_output(output, 'wall_time')
-                    if not sample_wall_times:
-                        logging.warning('Test %s failed to produce a sample output' % test)
-                        break
-                    logging.info('Sample %d wall_time results: %s' %
-                                 (sample, str(sample_wall_times)))
-                    wall_times += sample_wall_times
-                    with open(histogram_file_path) as histogram_file:
-                        sample_json = json.load(histogram_file)
-                        sample_histogram = histogram_set.HistogramSet()
-                        sample_histogram.ImportDicts(sample_json)
-                        test_histogram_set.Merge(sample_histogram)
-                else:
-                    logging.error('Failed to get sample for test %s' % test)
-                    total_errors += 1
+                if not output:
+                    logging.error('%s failed, stopping tests.' % cmd_run[0])
+                    return EXIT_FAILURE
+
+                sample_wall_times = _get_results_from_output(output, 'wall_time')
+                if not sample_wall_times:
+                    logging.warning('Test %s failed to produce a sample output' % test)
+                    break
+                logging.info('Test %d/%d Sample %d/%d wall_times: %s' %
+                             (test_index + 1, num_tests, sample + 1, args.samples_per_test,
+                              str(sample_wall_times)))
+                wall_times += sample_wall_times
+                with open(histogram_file_path) as histogram_file:
+                    sample_json = json.load(histogram_file)
+                    sample_histogram = histogram_set.HistogramSet()
+                    sample_histogram.ImportDicts(sample_json)
+                    test_histogram_set.Merge(sample_histogram)
 
         if not wall_times:
             logging.warning('Skipping test %s. Assuming this is intentional.' % test)
@@ -357,15 +391,15 @@ def main():
         elif len(wall_times) == (args.samples_per_test * args.trials_per_sample):
             if len(wall_times) > 7:
                 truncation_n = len(wall_times) >> 3
-                logging.info(
+                logging.debug(
                     'Truncation: Removing the %d highest and lowest times from wall_times.' %
                     truncation_n)
                 wall_times = _truncated_list(wall_times, truncation_n)
 
             if len(wall_times) > 1:
-                logging.info(
-                    'Mean wall_time for %s is %.2f, with coefficient of variation %.2f%%' %
-                    (test, _mean(wall_times), (_coefficient_of_variation(wall_times) * 100.0)))
+                logging.info('Test %d/%d: %s: truncated mean wall_time = %.2f, cov = %.2f%%' %
+                             (test_index + 1, num_tests, test, _mean(wall_times),
+                              (_coefficient_of_variation(wall_times) * 100.0)))
             test_results[test] = {'expected': PASS, 'actual': PASS}
             results['num_failures_by_type'][PASS] += 1
 
@@ -402,7 +436,7 @@ def main():
     end_time = time.time()
     logging.info('Elapsed time: %.2lf seconds.' % (end_time - start_time))
 
-    return 0
+    return EXIT_SUCCESS
 
 
 # This is not really a "script test" so does not need to manually add
