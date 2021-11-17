@@ -16,6 +16,23 @@
       "message": "\u003e Patch Set 10:\n\u003e \n\u003e Gold has detected about 12 new digest(s) on patchset 10.\n\u003e \n\u003e Please triage them at https://angle-gold.skia.org/cl/gerrit/3283163.\n\nSwS issue - something to do with an X-Windows race condition I think. Not related to the 1660.",
       "revId": "c8316aa13e52143b51774b36181ce05bed3d44ac",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "61310452_4fa3ec9e",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 10
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2021-11-17T20:22:59Z",
+      "side": 1,
+      "message": "I\u0027ve seen that Linux swapchain size flakiness before. It would be fixed by using a single Window size in the tests, but I\u0027m not sure if there\u0027s a way to fix it with multiple sized test windows in the same process.",
+      "revId": "c8316aa13e52143b51774b36181ce05bed3d44ac",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
