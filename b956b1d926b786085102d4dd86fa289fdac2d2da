@@ -3,6 +3,23 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "9d0aa8fe_dd5cba1b",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2021-11-17T23:21:19Z",
+      "side": 1,
+      "message": "Please add a description that describes what the issue is that this is fixing.   The bug doesn\u0027t provide any details.\n\nIn particular, why doesn\u0027t the global mutex protect this value already?   Here are the callers:\n\n    DescriptorSetLayoutCache::destroy (rx::DescriptorSetLayoutCache)\n    FramebufferCache::destroy (rx::FramebufferCache)\n    HasCacheStats::accumulateCacheStats (rx::HasCacheStats)\n    RenderPassCache::destroy (rx::RenderPassCache)(2 usages)\n    SamplerCache::destroy (rx::SamplerCache)\n    SamplerYcbcrConversionCache::destroy (rx::SamplerYcbcrConversionCache)\n\nIt seems like all of those would already need the global mutex, otherwise the caches themselves could be destroyed while someone else is using still using them.",
+      "revId": "b956b1d926b786085102d4dd86fa289fdac2d2da",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "45c4db3a_8268decc",
         "filename": "src/libANGLE/renderer/vulkan/RendererVk.h",
         "patchSetId": 1
