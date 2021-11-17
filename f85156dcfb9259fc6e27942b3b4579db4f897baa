@@ -1,0 +1,44 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "bcb67975_16903c4d",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 9
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1163549
+      },
+      "writtenOn": "2021-11-17T18:17:45Z",
+      "side": 1,
+      "message": "LGTM % comment",
+      "revId": "f85156dcfb9259fc6e27942b3b4579db4f897baa",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ef60043f_ced83cb5",
+        "filename": "src/tests/test_expectations/GPUTestConfig.cpp",
+        "patchSetId": 9
+      },
+      "lineNbr": 460,
+      "author": {
+        "id": 1163549
+      },
+      "writtenOn": "2021-11-17T18:17:45Z",
+      "side": 1,
+      "message": "GTX 1660",
+      "range": {
+        "startLine": 460,
+        "startChar": 44,
+        "endLine": 460,
+        "endChar": 55
+      },
+      "revId": "f85156dcfb9259fc6e27942b3b4579db4f897baa",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
