@@ -55,6 +55,8 @@ if (angle_enable_vulkan || angle_build_vulkan_system_info) {
       "ANGLE_VK_MOCK_ICD_JSON=\"$angle_data_dir/VkICD_mock_icd.json\"",
     ]
 
+    configs += [ "$angle_root:angle_no_cfi_icall" ]
+
     data_deps = []
 
     if (angle_enable_swiftshader) {
