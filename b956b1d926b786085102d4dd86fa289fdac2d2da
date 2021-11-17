@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "45c4db3a_8268decc",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 473,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2021-11-17T21:39:20Z",
+      "side": 1,
+      "message": "Please move to cpp and early out with:\n\n    if (!vk::kOutputCumulativePerfCounters)\n    {\n        return;\n    }\n\nTo avoid mutex locks in non-debug code.",
+      "range": {
+        "startLine": 469,
+        "startChar": 0,
+        "endLine": 473,
+        "endChar": 5
+      },
+      "revId": "b956b1d926b786085102d4dd86fa289fdac2d2da",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
