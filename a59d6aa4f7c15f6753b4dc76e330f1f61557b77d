@@ -1,6 +1,46 @@
 {
   "comments": [
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "d471a253_14cf0e6d",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2021-11-17T21:28:51Z",
+      "side": 1,
+      "message": "A couple traces are broken, there seems to be a bug here.",
+      "revId": "a59d6aa4f7c15f6753b4dc76e330f1f61557b77d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "fb053517_6310693b",
+        "filename": "src/libANGLE/Buffer.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 59,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2021-11-17T21:28:51Z",
+      "side": 1,
+      "message": "nit: mStorageSize",
+      "range": {
+        "startLine": 59,
+        "startChar": 13,
+        "endLine": 59,
+        "endChar": 21
+      },
+      "revId": "a59d6aa4f7c15f6753b4dc76e330f1f61557b77d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "fd587cd9_774ad722",
