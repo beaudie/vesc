@@ -1707,19 +1707,31 @@ angle::Result RendererVk::initializeDevice(DisplayVk *displayVk, uint32_t queueF
         enabledDeviceLayerNames.push_back(wsiLayer);
     }
 
-    // Enumerate device extensions that are provided by the vulkan
-    // implementation and implicit layers.
+    // Enumerate device extensions that are provided by the vulkan implementation and implicit
+    // layers.
     uint32_t deviceExtensionCount = 0;
-    ANGLE_VK_TRY(displayVk, vkEnumerateDeviceExtensionProperties(mPhysicalDevice, nullptr,
-                                                                 &deviceExtensionCount, nullptr));
 
-    std::vector<VkExtensionProperties> deviceExtensionProps(deviceExtensionCount);
-    if (deviceExtensionCount > 0)
+    // There is a race condition in the Android platform during Android start-up.  This can cause
+    // the second call to vkEnumerateDeviceExtensionProperties to have an additional extension.
+    // This means that the second call will return VK_INCOMPLETE.  In this case, repeating the
+    // first call again will get the new value of deviceExtensionCount, and will allow the second
+    // call to return VK_SUCCESS.  See: http://anglebug.com/6715
+    VkResult res = VK_SUCCESS;
+    std::vector<VkExtensionProperties> deviceExtensionProps(0);
+    do
     {
-        ANGLE_VK_TRY(displayVk, vkEnumerateDeviceExtensionProperties(mPhysicalDevice, nullptr,
-                                                                     &deviceExtensionCount,
-                                                                     deviceExtensionProps.data()));
-    }
+        ANGLE_VK_TRY(displayVk, vkEnumerateDeviceExtensionProperties(
+                                    mPhysicalDevice, nullptr, &deviceExtensionCount, nullptr));
+
+        if (deviceExtensionCount > 0)
+        {
+            deviceExtensionProps.resize(deviceExtensionCount);
+
+            res = vkEnumerateDeviceExtensionProperties(
+                mPhysicalDevice, nullptr, &deviceExtensionCount, deviceExtensionProps.data());
+        }
+    } while (res == VK_INCOMPLETE);
+    ANGLE_VK_TRY(displayVk, res);
 
     // Enumerate device extensions that are provided by explicit layers.
     for (const char *layerName : enabledDeviceLayerNames)
