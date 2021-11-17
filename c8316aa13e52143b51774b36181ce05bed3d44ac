@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "dbe2c6d3_5a630b1e",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 10
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2021-11-17T20:16:26Z",
+      "side": 1,
+      "message": "\u003e Patch Set 10:\n\u003e \n\u003e Gold has detected about 12 new digest(s) on patchset 10.\n\u003e \n\u003e Please triage them at https://angle-gold.skia.org/cl/gerrit/3283163.\n\nSwS issue - something to do with an X-Windows race condition I think. Not related to the 1660.",
+      "revId": "c8316aa13e52143b51774b36181ce05bed3d44ac",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
