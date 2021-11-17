@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "1d5e052e_68188158",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 643,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2021-11-17T21:43:04Z",
+      "side": 1,
+      "message": "Looks unused, maybe delete it?\n\nIf it\u0027s used for some statistics tracking, preferably add a constexpr flag that\u0027s enabled only in debug and have on*llocateHandle early out before it. Again, to avoid locking for no reason.",
+      "range": {
+        "startLine": 643,
+        "startChar": 28,
+        "endLine": 643,
+        "endChar": 47
+      },
+      "revId": "7570cd026393ae3e17b59ccca545a37b21262220",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
