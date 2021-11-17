@@ -152,6 +152,17 @@ void TDirectiveHandler::handleExtension(const angle::pp::SourceLocation &loc,
     if (iter != mExtensionBehavior.end())
     {
         iter->second = behaviorVal;
+        // ANGLE_base_vertex_base_instance is implicitly enabled when
+        // ANGLE_base_vertex_base_instance_shader_builtin is enabled
+        if (name == "GL_ANGLE_base_vertex_base_instance_shader_builtin")
+        {
+            constexpr char kBaseVertexBaseInstanceName[] = "GL_ANGLE_base_vertex_base_instance";
+            iter = mExtensionBehavior.find(GetExtensionByName(kBaseVertexBaseInstanceName));
+            if (iter != mExtensionBehavior.end())
+            {
+                iter->second = behaviorVal;
+            }
+        }
         // OVR_multiview is implicitly enabled when OVR_multiview2 is enabled
         if (name == "GL_OVR_multiview2")
         {

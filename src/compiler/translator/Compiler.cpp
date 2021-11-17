@@ -422,14 +422,35 @@ TIntermBlock *TCompiler::compileTreeImpl(const char *const shaderStrings[],
         }
     }
 
+    // {
+    //     auto it =
+    //         mExtensionBehavior.find(TExtension::ANGLE_base_vertex_base_instance_shader_builtin);
+    //     if (it != mExtensionBehavior.end())
+    //     {
+    //         const bool glBaseVertexBaseInstanceSupported =
+    //             (compileOptions & SH_EMULATE_GL_BASE_VERTEX_BASE_INSTANCE) != 0;
+    //         if (!glBaseVertexBaseInstanceSupported)
+    //         {
+    //             mExtensionBehavior.erase(it);
+    //         }
+    //         else
+    //         {
+
+    //         }
+    //     }
+    // }
+
     const bool glBaseVertexBaseInstanceSupported =
         (compileOptions & SH_EMULATE_GL_BASE_VERTEX_BASE_INSTANCE) != 0;
     if (!glBaseVertexBaseInstanceSupported)
     {
-        auto it = mExtensionBehavior.find(TExtension::ANGLE_base_vertex_base_instance);
-        if (it != mExtensionBehavior.end())
         {
-            mExtensionBehavior.erase(it);
+            auto it =
+                mExtensionBehavior.find(TExtension::ANGLE_base_vertex_base_instance_shader_builtin);
+            if (it != mExtensionBehavior.end())
+            {
+                mExtensionBehavior.erase(it);
+            }
         }
     }
 
@@ -860,7 +881,11 @@ bool TCompiler::checkAndSimplifyAST(TIntermBlock *root,
     }
 
     if (mShaderType == GL_VERTEX_SHADER &&
-        IsExtensionEnabled(mExtensionBehavior, TExtension::ANGLE_base_vertex_base_instance))
+        IsExtensionEnabled(mExtensionBehavior, TExtension::ANGLE_base_vertex_base_instance) &&
+        IsExtensionEnabled(mExtensionBehavior,
+                           TExtension::ANGLE_base_vertex_base_instance_shader_builtin))
+    // if (mShaderType == GL_VERTEX_SHADER &&
+    //     IsExtensionEnabled(mExtensionBehavior, TExtension::ANGLE_base_vertex_base_instance))
     {
         if ((compileOptions & SH_EMULATE_GL_BASE_VERTEX_BASE_INSTANCE) != 0)
         {
@@ -1157,8 +1182,10 @@ bool TCompiler::compile(const char *const shaderStrings[],
                 IsExtensionEnabled(mExtensionBehavior, TExtension::ANGLE_multi_draw) &&
                 (compileOptions & SH_EMULATE_GL_DRAW_ID) != 0;
             bool lookForBaseVertexBaseInstance =
+                // IsExtensionEnabled(mExtensionBehavior,
+                //                    TExtension::ANGLE_base_vertex_base_instance) &&
                 IsExtensionEnabled(mExtensionBehavior,
-                                   TExtension::ANGLE_base_vertex_base_instance) &&
+                                   TExtension::ANGLE_base_vertex_base_instance_shader_builtin) &&
                 (compileOptions & SH_EMULATE_GL_BASE_VERTEX_BASE_INSTANCE) != 0;
 
             if (lookForDrawID || lookForBaseVertexBaseInstance)
@@ -1257,6 +1284,7 @@ void TCompiler::setResourceString()
         << ":NV_draw_buffers:" << mResources.NV_draw_buffers
         << ":ANGLE_multi_draw:" << mResources.ANGLE_multi_draw
         << ":ANGLE_base_vertex_base_instance:" << mResources.ANGLE_base_vertex_base_instance
+        << ":ANGLE_base_vertex_base_instance_shader_builtin:" << mResources.ANGLE_base_vertex_base_instance_shader_builtin
         << ":APPLE_clip_distance:" << mResources.APPLE_clip_distance
         << ":OES_texture_cube_map_array:" << mResources.OES_texture_cube_map_array
         << ":EXT_texture_cube_map_array:" << mResources.EXT_texture_cube_map_array
