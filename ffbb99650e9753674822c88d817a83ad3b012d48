@@ -16,6 +16,29 @@
       "message": "PTAL\n\nI messed up the last one. Not enough targets. Verified this locally.",
       "revId": "ffbb99650e9753674822c88d817a83ad3b012d48",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "4784ac39_f40cf923",
+        "filename": "src/tests/BUILD.gn",
+        "patchSetId": 1
+      },
+      "lineNbr": 776,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2021-11-17T17:58:20Z",
+      "side": 1,
+      "message": "nit: suggest you put this in a config somewhere.",
+      "range": {
+        "startLine": 773,
+        "startChar": 0,
+        "endLine": 776,
+        "endChar": 7
+      },
+      "revId": "ffbb99650e9753674822c88d817a83ad3b012d48",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
