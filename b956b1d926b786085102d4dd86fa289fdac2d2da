@@ -22,6 +22,30 @@
       },
       "revId": "b956b1d926b786085102d4dd86fa289fdac2d2da",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "f1cf7340_36bfc978",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 473,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2021-11-17T21:47:59Z",
+      "side": 1,
+      "message": "Ack, but we still want to calculate the cache stats even if we don\u0027t output them.",
+      "parentUuid": "45c4db3a_8268decc",
+      "range": {
+        "startLine": 469,
+        "startChar": 0,
+        "endLine": 473,
+        "endChar": 5
+      },
+      "revId": "b956b1d926b786085102d4dd86fa289fdac2d2da",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
