@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "bfb73d62_8ee470b5",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 10
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1525982
+      },
+      "writtenOn": "2021-11-17T00:52:43Z",
+      "side": 1,
+      "message": "Thanks!\n\nExtension added to Metal and D3D as well.\nExtension enable flag added to back-ends.",
+      "revId": "cfd8c94ea1bfe2b6d8bdc605fcffbcb05f58934f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}

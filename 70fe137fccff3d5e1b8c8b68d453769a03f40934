@@ -76,6 +76,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "93a137e3_814bde2a",
+        "filename": "src/libANGLE/renderer/renderer_utils.cpp",
+        "patchSetId": 9
+      },
+      "lineNbr": 1069,
+      "author": {
+        "id": 1525982
+      },
+      "writtenOn": "2021-11-17T00:52:43Z",
+      "side": 1,
+      "message": "Updated to static_cast",
+      "parentUuid": "7cc349cb_61381fe0",
+      "range": {
+        "startLine": 1069,
+        "startChar": 33,
+        "endLine": 1069,
+        "endChar": 50
+      },
+      "revId": "70fe137fccff3d5e1b8c8b68d453769a03f40934",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "844ad059_729d9eff",
@@ -89,6 +113,30 @@
       "writtenOn": "2021-11-16T20:53:31Z",
       "side": 1,
       "message": "ditto",
+      "range": {
+        "startLine": 1074,
+        "startChar": 50,
+        "endLine": 1074,
+        "endChar": 83
+      },
+      "revId": "70fe137fccff3d5e1b8c8b68d453769a03f40934",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "5e506150_873e0e50",
+        "filename": "src/libANGLE/renderer/renderer_utils.cpp",
+        "patchSetId": 9
+      },
+      "lineNbr": 1074,
+      "author": {
+        "id": 1525982
+      },
+      "writtenOn": "2021-11-17T00:52:43Z",
+      "side": 1,
+      "message": "Updated to reinterpret_cast",
+      "parentUuid": "844ad059_729d9eff",
       "range": {
         "startLine": 1074,
         "startChar": 50,
