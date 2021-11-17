@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "fd587cd9_774ad722",
+        "filename": "src/libANGLE/renderer/vulkan/BufferVk.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 429,
+      "author": {
+        "id": 1446209
+      },
+      "writtenOn": "2021-11-17T02:31:10Z",
+      "side": 1,
+      "message": "Here is the change of buffer recreate,only recreating the buffer if the new size is larger.",
+      "revId": "a59d6aa4f7c15f6753b4dc76e330f1f61557b77d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}

@@ -115,6 +115,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "57c11601_4a4ffaad",
+        "filename": "src/libANGLE/Buffer.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 149,
+      "author": {
+        "id": 1446209
+      },
+      "writtenOn": "2021-11-17T02:31:10Z",
+      "side": 1,
+      "message": "Add mState.mExternalSize to store maximum size of buffer data to avoid reallocating buffer when the buffer size increases like this :\n    glBufferData(20);\n    glBufferData(10);\n    glBufferData(20);\n    glBufferData(10);\n    glBufferData(20);\n    glBufferData(10);",
+      "parentUuid": "c1cd13ee_294bf81f",
+      "range": {
+        "startLine": 149,
+        "startChar": 9,
+        "endLine": 149,
+        "endChar": 25
+      },
+      "revId": "50d4f9ce3f17adb21a3c55a8360d7368e2a61a19",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "bbc1588e_003b045d",
         "filename": "src/libANGLE/renderer/vulkan/BufferVk.cpp",
         "patchSetId": 1
