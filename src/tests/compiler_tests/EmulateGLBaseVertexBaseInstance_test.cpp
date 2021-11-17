@@ -21,7 +21,8 @@ class EmulateGLBaseVertexBaseInstanceTest : public MatchOutputCodeTest
     EmulateGLBaseVertexBaseInstanceTest()
         : MatchOutputCodeTest(GL_VERTEX_SHADER, SH_VARIABLES, SH_GLSL_COMPATIBILITY_OUTPUT)
     {
-        getResources()->ANGLE_base_vertex_base_instance = 1;
+        getResources()->ANGLE_base_vertex_base_instance                = 1;
+        getResources()->ANGLE_base_vertex_base_instance_shader_builtin = 1;
     }
 
   protected:

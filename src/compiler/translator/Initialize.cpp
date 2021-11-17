@@ -129,6 +129,10 @@ void InitExtensionBehavior(const ShBuiltInResources &resources, TExtensionBehavi
     {
         extBehavior[TExtension::ANGLE_base_vertex_base_instance] = EBhUndefined;
     }
+    if (resources.ANGLE_base_vertex_base_instance_shader_builtin)
+    {
+        extBehavior[TExtension::ANGLE_base_vertex_base_instance_shader_builtin] = EBhUndefined;
+    }
     if (resources.WEBGL_video_texture)
     {
         extBehavior[TExtension::WEBGL_video_texture] = EBhUndefined;
