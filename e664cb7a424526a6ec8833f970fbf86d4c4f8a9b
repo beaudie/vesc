@@ -86,6 +86,23 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "ba64d105_dc78fade",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 14
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1359249
+      },
+      "writtenOn": "2021-11-17T22:01:01Z",
+      "side": 1,
+      "message": "P.S. it looks like the BAD_SURFACE and failure in dEQP-EGL teglMutanleRenderBufferTest - is a loss in precision used with color to glClearColor and then expected with glReadPixels. We round up color value by 1/2 digit and it passes.\nWe are curious if any other platform fails dEQP-EGL.functional.mutable_render_buffer.basic",
+      "revId": "e664cb7a424526a6ec8833f970fbf86d4c4f8a9b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "d0df4646_13be0c84",
@@ -170,6 +187,24 @@
       "side": 1,
       "message": "\u003e If we have a current context ...\n\nbut you don\u0027t have access to it, right? Also, the context might not be current, what then? It feels like this problem should be solvable with one off CBs. It\u0027s still valid to do one off submissions when a context is current.\n\nWhat might be causing you trouble is if both the context\u0027s current CB and the one being submitted here both depend on the same semaphore. You\u0027d have to verify if that\u0027s the case.",
       "parentUuid": "bdfd7091_f8997544",
+      "revId": "e664cb7a424526a6ec8833f970fbf86d4c4f8a9b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "321626a5_fdcff89a",
+        "filename": "src/libANGLE/renderer/vulkan/SurfaceVk.cpp",
+        "patchSetId": 14
+      },
+      "lineNbr": 1752,
+      "author": {
+        "id": 1359249
+      },
+      "writtenOn": "2021-11-17T22:01:01Z",
+      "side": 1,
+      "message": "Makes sense. Right now working OK if we just use nullptr for semaphore. My reason that a new swapchain with one image, the vkAcquireNextImage probably returns immediately - no wait. But we will see if we can get this semaphore working.",
+      "parentUuid": "76e81898_7e72fe19",
       "revId": "e664cb7a424526a6ec8833f970fbf86d4c4f8a9b",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
