@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "fcba4f6a_e463c79b",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2021-11-17T13:33:24Z",
+      "side": 1,
+      "message": "I\u0027m addressing this in https://chromium-review.googlesource.com/c/angle/angle/+/3285445 - just need to land that.",
+      "revId": "3d7f83526dec45a3c4bb50ba7d620d4e1c8a1450",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
