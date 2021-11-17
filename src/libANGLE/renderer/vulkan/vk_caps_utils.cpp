@@ -617,9 +617,18 @@ void RendererVk::ensureCapsInitialized() const
     mNativeCaps.vertexHighpInt.setTwosComplementInt(32);
     mNativeCaps.vertexMediumpInt.setTwosComplementInt(32);
     mNativeCaps.vertexLowpInt.setTwosComplementInt(32);
+    // mNativeCaps.vertexMediumpInt.setTwosComplementInt(
+    // IsARM(mPhysicalDeviceProperties.vendorID) ? 16 : 32);
+    // mNativeCaps.vertexLowpInt.setTwosComplementInt(IsARM(mPhysicalDeviceProperties.vendorID) ? 16
+    //                                                                                         :
+    //                                                                                         32);
     mNativeCaps.fragmentHighpInt.setTwosComplementInt(32);
     mNativeCaps.fragmentMediumpInt.setTwosComplementInt(32);
     mNativeCaps.fragmentLowpInt.setTwosComplementInt(32);
+    // mNativeCaps.fragmentMediumpInt.setTwosComplementInt(
+    // IsARM(mPhysicalDeviceProperties.vendorID) ? 16 : 32);
+    // mNativeCaps.fragmentLowpInt.setTwosComplementInt(
+    // IsARM(mPhysicalDeviceProperties.vendorID) ? 16 : 32);
 
     // Compute shader limits.
     mNativeCaps.maxComputeWorkGroupCount[0] = LimitToInt(limitsVk.maxComputeWorkGroupCount[0]);
