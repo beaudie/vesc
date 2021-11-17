@@ -1716,9 +1716,19 @@ angle::Result RendererVk::initializeDevice(DisplayVk *displayVk, uint32_t queueF
     std::vector<VkExtensionProperties> deviceExtensionProps(deviceExtensionCount);
     if (deviceExtensionCount > 0)
     {
-        ANGLE_VK_TRY(displayVk, vkEnumerateDeviceExtensionProperties(mPhysicalDevice, nullptr,
-                                                                     &deviceExtensionCount,
-                                                                     deviceExtensionProps.data()));
+        VkResult res = VK_SUCCESS;
+        // There is a race condition in the Android platform during Android start-up.  This can
+        // cause the second call to vkEnumerateDeviceExtensionProperties to have an additional
+        // extension.  This means that the second call will return VK_INCOMPLETE, and
+        // deviceExtensionCount will be larger than it was from the first call.  Work around this
+        // by looping until vkEnumerateDeviceExtensionProperties does not return VK_INCOMPLETE.
+        do
+        {
+            deviceExtensionProps.resize(deviceExtensionCount);
+            res = vkEnumerateDeviceExtensionProperties(
+                mPhysicalDevice, nullptr, &deviceExtensionCount, deviceExtensionProps.data());
+        } while (res == VK_INCOMPLETE);
+        ANGLE_VK_TRY(displayVk, res);
     }
 
     // Enumerate device extensions that are provided by explicit layers.
