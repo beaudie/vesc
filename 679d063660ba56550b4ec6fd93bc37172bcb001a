@@ -1,0 +1,67 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "2f06d5d2_47568ab7",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 7
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2021-11-18T00:50:37Z",
+      "side": 1,
+      "message": "LGTM, though I\u0027m not very familiar with the perf tests script.",
+      "revId": "679d063660ba56550b4ec6fd93bc37172bcb001a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "07208940_a46df1ed",
+        "filename": "src/tests/run_perf_tests.py",
+        "patchSetId": 7
+      },
+      "lineNbr": 336,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2021-11-18T00:50:37Z",
+      "side": 1,
+      "message": "Should this be an error?   It seems like it would be unexpected.",
+      "range": {
+        "startLine": 335,
+        "startChar": 0,
+        "endLine": 336,
+        "endChar": 41
+      },
+      "revId": "679d063660ba56550b4ec6fd93bc37172bcb001a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "2bd723ff_9a3392d4",
+        "filename": "src/tests/run_perf_tests.py",
+        "patchSetId": 7
+      },
+      "lineNbr": 412,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2021-11-18T00:50:37Z",
+      "side": 1,
+      "message": "Why isn\u0027t this an error?",
+      "range": {
+        "startLine": 410,
+        "startChar": 0,
+        "endLine": 412,
+        "endChar": 25
+      },
+      "revId": "679d063660ba56550b4ec6fd93bc37172bcb001a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
