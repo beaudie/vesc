@@ -16,6 +16,23 @@
       "message": "LGTM - regression test would be welcome.",
       "revId": "d4b76c045d1113d10758fd837636fb1deedbfc69",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "45feb204_a533d397",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2021-11-18T17:48:20Z",
+      "side": 1,
+      "message": "This LGTM too. ",
+      "revId": "d4b76c045d1113d10758fd837636fb1deedbfc69",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
