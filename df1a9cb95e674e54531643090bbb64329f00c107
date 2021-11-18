@@ -16,6 +16,23 @@
       "message": "Per private discussion, this is reworked to not use a loop.  Instead, we add 1 to the count and that should work around the current issue with Android.",
       "revId": "df1a9cb95e674e54531643090bbb64329f00c107",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "848cdd5c_41b5d1e6",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 1721,
+      "author": {
+        "id": 1420952
+      },
+      "writtenOn": "2021-11-18T20:46:25Z",
+      "side": 1,
+      "message": "this just accounts for one extension. Why can\u0027t we hyst retry in case of VK_INCOMPLETE?",
+      "revId": "df1a9cb95e674e54531643090bbb64329f00c107",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
