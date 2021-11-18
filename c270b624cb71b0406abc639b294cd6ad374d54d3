@@ -22,6 +22,30 @@
       },
       "revId": "c270b624cb71b0406abc639b294cd6ad374d54d3",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "f9d1ffc7_10554706",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 1722,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2021-11-18T03:00:52Z",
+      "side": 1,
+      "message": "As you\u0027re pointing out, this doesn\u0027t fix the issue.\n\nThe issue is the following (using made up numbers):\n1.) vkEnumerateDeviceExtensionProperties(..., \u0026deviceExtensionCount, nullptr)\n- This returns deviceExtensionCount \u003d 10.\n2.) Race condition occurs.   There are now actually 11 extensions due to SF updating the property service.sf.present_timestamp (which adds VK_GOOGLE_display_timing).\n3.) vkEnumerateDeviceExtensionProperties(..., \u0026deviceExtensionCount, deviceExtensionProps.data())\n- This is requesting 10 properties, but there are actually 11 available, so we get VK_INCOMPLETE.\n\nInstead, we need to do both calls to vkEnumerateDeviceExtensionProperties() inside the loop so we get the updated count after SF has added the extension.",
+      "parentUuid": "ac3830b5_c693c42a",
+      "range": {
+        "startLine": 1720,
+        "startChar": 0,
+        "endLine": 1722,
+        "endChar": 78
+      },
+      "revId": "c270b624cb71b0406abc639b294cd6ad374d54d3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
