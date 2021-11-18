@@ -33,6 +33,24 @@
       "message": "this just accounts for one extension. Why can\u0027t we hyst retry in case of VK_INCOMPLETE?",
       "revId": "df1a9cb95e674e54531643090bbb64329f00c107",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "f268ee1a_aa4f8a57",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 1721,
+      "author": {
+        "id": 1290487
+      },
+      "writtenOn": "2021-11-18T21:01:55Z",
+      "side": 1,
+      "message": "It comes down to preference of some of the ANGLE developers.  A loop can loop forever (as would have happened with patchset 1, but not with patchset 3).  We know about 1 extension at this point.  The conservative, though still hacky work-around is to just add 1 for the 2nd call.  We could add more than 1.",
+      "parentUuid": "848cdd5c_41b5d1e6",
+      "revId": "df1a9cb95e674e54531643090bbb64329f00c107",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
