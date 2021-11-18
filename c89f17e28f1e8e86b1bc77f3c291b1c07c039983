@@ -110,6 +110,30 @@
       },
       "revId": "c89f17e28f1e8e86b1bc77f3c291b1c07c039983",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "bca32d27_3fc94c26",
+        "filename": "src/libANGLE/capture/trace_fixture.cpp",
+        "patchSetId": 9
+      },
+      "lineNbr": 411,
+      "author": {
+        "id": 1491823
+      },
+      "writtenOn": "2021-11-18T10:50:57Z",
+      "side": 1,
+      "message": "What I meant is that it would require the replay executable to pull in that library.",
+      "parentUuid": "ef1972e6_b5f59f3b",
+      "range": {
+        "startLine": 411,
+        "startChar": 2,
+        "endLine": 411,
+        "endChar": 21
+      },
+      "revId": "c89f17e28f1e8e86b1bc77f3c291b1c07c039983",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
