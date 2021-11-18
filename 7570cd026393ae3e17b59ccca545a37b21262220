@@ -22,6 +22,30 @@
       },
       "revId": "7570cd026393ae3e17b59ccca545a37b21262220",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "e8f6bcec_5368405f",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 643,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2021-11-18T13:37:02Z",
+      "side": 1,
+      "message": "Ack, it\u0027ll be useful for us when we do more stats reporting. Although I would have to dig around to see why I never ended up landing the CL that exposes this to the performance counter tests.",
+      "parentUuid": "1d5e052e_68188158",
+      "range": {
+        "startLine": 643,
+        "startChar": 28,
+        "endLine": 643,
+        "endChar": 47
+      },
+      "revId": "7570cd026393ae3e17b59ccca545a37b21262220",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
