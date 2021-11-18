@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "a6e77eef_5f91ec04",
+        "filename": "src/libANGLE/capture/trace_fixture.cpp",
+        "patchSetId": 10
+      },
+      "lineNbr": 61,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2021-11-18T13:42:36Z",
+      "side": 1,
+      "message": "ref",
+      "range": {
+        "startLine": 57,
+        "startChar": 0,
+        "endLine": 61,
+        "endChar": 9
+      },
+      "revId": "4ed875a5f99b7cd5131863dee1577a8d0d8dea45",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
