@@ -1048,6 +1048,7 @@ T AccessParamValue(ParamType paramType, const ParamValue &value)
     {{
 {access_param_value_cases}
     }}
+    return GetParamVal<PType, T>(value);
 }}
 
 template <ParamType PType, typename T>

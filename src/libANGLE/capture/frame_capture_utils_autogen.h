@@ -1661,6 +1661,7 @@ T AccessParamValue(ParamType paramType, const ParamValue &value)
         case ParamType::TvoidPointerPointer:
             return GetParamVal<ParamType::TvoidPointerPointer, T>(value);
     }
+    return GetParamVal<PType, T>(value);
 }
 
 template <ParamType PType, typename T>
