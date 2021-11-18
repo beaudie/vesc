@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ac3830b5_c693c42a",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 1722,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2021-11-18T02:15:28Z",
+      "side": 1,
+      "message": "Does it at least return deviceExtensionCount correctly?\n\nCould you add an ASSERT(deviceExtensionCount \u003d\u003d deviceExtensionProps.size()); after the loop?",
+      "range": {
+        "startLine": 1720,
+        "startChar": 0,
+        "endLine": 1722,
+        "endChar": 78
+      },
+      "revId": "c270b624cb71b0406abc639b294cd6ad374d54d3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
