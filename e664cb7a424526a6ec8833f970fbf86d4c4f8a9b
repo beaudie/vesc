@@ -120,6 +120,23 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "ec50d306_75025fac",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 14
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1359249
+      },
+      "writtenOn": "2021-11-18T20:43:23Z",
+      "side": 1,
+      "message": "QUESTION:\nIn test: dEQP-EGL.functional.mutable_render_buffer.basic\n\n1. sequence1: Frame/loop 5\nglClearColor(5/255f, ...) - each channel same color\nglClear()\nglFlush\nglReadPixels() - we get 5 back for red channel and all channels.\n\n2. sequence2: Frame/Loop 6\nglClearColor(6/255f, ...) - each channel same color\nglClear()\neglSwapBuffers()  // Note change to SwapBuffers\nglReadPixels() - we get 6 back for red channel and all channels.\n\nAt first it seemed that precision was lost on change from GLFloat to Uint8_t of the color channel, with a round down. Added a 0.5 and it fixed it. But with the sequence above we are not sure, seems like we might be getting/readpixels of frame before. Seems like it might be something to do with deferredClear ? But glReadPixels MUST force a finish. That I have observed before.\n\nIs there something different about eglSwapBuffers that will result in a different glReadPixels()? When we have just one buffer?\n\n",
+      "revId": "e664cb7a424526a6ec8833f970fbf86d4c4f8a9b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "d0df4646_13be0c84",
