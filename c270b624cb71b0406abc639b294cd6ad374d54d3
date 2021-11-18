@@ -18,6 +18,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "8a96174a_35e25913",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2021-11-18T17:37:52Z",
+      "side": 1,
+      "message": "\u003e It feels like this is not a correct fix. Like, if SF happens to update the extension count between our two queries, ok we caught that, but what if that happens afterwards? We\u0027d miss the extension it adds.\n\nAgreed, and I brought this up in the chat thread also (which I added you to).   It would be nice to fix the underlying race condition, but any fixes that land won\u0027t be available in the Android framework for a while, and this is a relatively straightforward workaround for now.   I think this is a good compromise to solve the immediate problem while the underlying Android issue is investigated.\n\nUnfortunately, it may be a while before we can remove this fix, depending on which versions of Android ANGLE will support.",
+      "parentUuid": "f7d79bcd_f4014b47",
+      "revId": "c270b624cb71b0406abc639b294cd6ad374d54d3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "ac3830b5_c693c42a",
@@ -103,6 +121,30 @@
       "side": 1,
       "message": "Yes, thanks for the fix!  I updated the comment as well as added the resize.",
       "parentUuid": "0e32a68d_bac7d272",
+      "range": {
+        "startLine": 1720,
+        "startChar": 0,
+        "endLine": 1722,
+        "endChar": 78
+      },
+      "revId": "c270b624cb71b0406abc639b294cd6ad374d54d3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "1c19ed1f_2735a654",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 1722,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2021-11-18T17:37:52Z",
+      "side": 1,
+      "message": "Unresolving, since this version still doesn\u0027t work correctly.   We do need both queries:\n\nIf pProperties is NULL, then the number of extensions properties available is returned in pPropertyCount. Otherwise, pPropertyCount must point to a variable set by the user to the number of elements in the pProperties array, and on return the variable is overwritten with the number of structures actually written to pProperties. If pPropertyCount is less than the number of extension properties available, at most pPropertyCount structures will be written, and VK_INCOMPLETE will be returned instead of VK_SUCCESS, to indicate that not all the available properties were returned.\n\nWe need to pass null with the first query in the loop so pPropertyCount is correctly updated to the full number of extensions.   Otherwise, it will never be updated since it can only write N-1 extensions and will always return VK_INCOMPLETE.",
+      "parentUuid": "b1dc3572_aa345ee9",
       "range": {
         "startLine": 1720,
         "startChar": 0,
