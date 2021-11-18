@@ -136,6 +136,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "674372f7_1d9d9ef9",
+        "filename": "src/tests/run_perf_tests.py",
+        "patchSetId": 7
+      },
+      "lineNbr": 336,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2021-11-18T17:18:44Z",
+      "side": 1,
+      "message": "I mean that 0 tests would be unexpected.   It seems like we should always expect to run at least something, so exiting with failure is the right move to me.\n\nUpdate LGTM.",
+      "parentUuid": "059ebe08_f15b054f",
+      "range": {
+        "startLine": 335,
+        "startChar": 0,
+        "endLine": 336,
+        "endChar": 41
+      },
+      "revId": "679d063660ba56550b4ec6fd93bc37172bcb001a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "2bd723ff_9a3392d4",
