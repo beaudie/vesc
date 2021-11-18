@@ -1,6 +1,23 @@
 {
   "comments": [
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "f7d79bcd_f4014b47",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2021-11-18T06:30:10Z",
+      "side": 1,
+      "message": "It feels like this is not a correct fix. Like, if SF happens to update the extension count between our two queries, ok we caught that, but what if that happens afterwards? We\u0027d miss the extension it adds.\n\nGranted, we don\u0027t use that extension, but it begs the question of why Android is tweaking Vulkan extensions after ANGLE has been loaded.",
+      "revId": "c270b624cb71b0406abc639b294cd6ad374d54d3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "ac3830b5_c693c42a",
@@ -38,6 +55,30 @@
       "side": 1,
       "message": "As you\u0027re pointing out, this doesn\u0027t fix the issue.\n\nThe issue is the following (using made up numbers):\n1.) vkEnumerateDeviceExtensionProperties(..., \u0026deviceExtensionCount, nullptr)\n- This returns deviceExtensionCount \u003d 10.\n2.) Race condition occurs.   There are now actually 11 extensions due to SF updating the property service.sf.present_timestamp (which adds VK_GOOGLE_display_timing).\n3.) vkEnumerateDeviceExtensionProperties(..., \u0026deviceExtensionCount, deviceExtensionProps.data())\n- This is requesting 10 properties, but there are actually 11 available, so we get VK_INCOMPLETE.\n\nInstead, we need to do both calls to vkEnumerateDeviceExtensionProperties() inside the loop so we get the updated count after SF has added the extension.",
       "parentUuid": "ac3830b5_c693c42a",
+      "range": {
+        "startLine": 1720,
+        "startChar": 0,
+        "endLine": 1722,
+        "endChar": 78
+      },
+      "revId": "c270b624cb71b0406abc639b294cd6ad374d54d3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "0e32a68d_bac7d272",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 1722,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2021-11-18T06:30:10Z",
+      "side": 1,
+      "message": "No need to do both calls, just:\n\n    deviceExtensionProps.resize(deviceExtensionCount);\n\nat the beginning of the loop to update the vector size.",
+      "parentUuid": "f9d1ffc7_10554706",
       "range": {
         "startLine": 1720,
         "startChar": 0,
