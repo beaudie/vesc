@@ -36,6 +36,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "27f9044d_99587564",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1290487
+      },
+      "writtenOn": "2021-11-18T17:38:55Z",
+      "side": 1,
+      "message": "Documenting some background: This is for an OEM device using ANGLE as its native GLES driver.  The race condition affects one process, during Android start-up.  Surface Flinger uses Hardware Composer (HWC) for hardware-based composition (e.g. using overlays), and Render Engine (RE) for GPU composition (e.g. rendering to combine multiple app and system windows together).  SF, RE, and HWC all start about the same time.  HWC sets a property if it can support display timing.  This gets passed through SF to RE\u0027s Vulkan loader.\n\nThe Vulkan loader used to do a synchronous call in vkEnumerateDeviceExtensionProperties() in order to get this property.  That took some number of milliseconds to complete and affected the start-up time of every Vulkan/ANGLE app.  Thus, theere was push-back about this (I think from the OEM), and so this was changed to an asynchronous approach.  IIUC early testing indicated that RE would get the property in time.  However, the partner is now finding that this case is happening 0.5% of the time.  That could mean that the property is getting there early enough some time, and too late other times.\n\nI am pushing for the Android platform to try to fix this, but it\u0027s not clear how easy it will be.",
+      "parentUuid": "f7d79bcd_f4014b47",
+      "revId": "c270b624cb71b0406abc639b294cd6ad374d54d3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "ac3830b5_c693c42a",
