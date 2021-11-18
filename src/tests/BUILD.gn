@@ -793,6 +793,10 @@ if (build_angle_gles1_conform_tests) {
         "test_utils/ANGLETest.h",
       ]
 
+      if (is_clang) {
+        cflags_c = [ "-Wno-shadow" ]
+      }
+
       configs += [
         ":angle_gles1_conform_support",
         "${angle_root}:libANGLE_config",
@@ -936,11 +940,15 @@ if (build_angle_gles1_conform_tests) {
 
     defines += [ "COMMON" ]
 
+    if (is_clang) {
+      cflags = [ "-Wno-shadow" ]
+    }
+
     if (is_win) {
       if (is_clang) {
-        cflags = [ "-Wno-incompatible-pointer-types" ]
+        cflags += [ "-Wno-incompatible-pointer-types" ]
       } else {
-        cflags = [ "/wd4133" ]  # 'function': incompatible types
+        cflags += [ "/wd4133" ]  # 'function': incompatible types
       }
 
       suppressed_configs += [
