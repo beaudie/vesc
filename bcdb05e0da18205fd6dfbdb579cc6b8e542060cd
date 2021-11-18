@@ -220,6 +220,30 @@
       },
       "revId": "bcdb05e0da18205fd6dfbdb579cc6b8e542060cd",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "e24d5e1b_aa713fac",
+        "filename": "src/libANGLE/GLES1Renderer.h",
+        "patchSetId": 15
+      },
+      "lineNbr": 295,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2021-11-18T17:48:59Z",
+      "side": 1,
+      "message": "Then it would be a code improvement to use the type itself as the hash key instead of the resulting hash value. See other instances where we use a struct as a key.",
+      "parentUuid": "650c833c_20921539",
+      "range": {
+        "startLine": 295,
+        "startChar": 19,
+        "endLine": 295,
+        "endChar": 25
+      },
+      "revId": "bcdb05e0da18205fd6dfbdb579cc6b8e542060cd",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
