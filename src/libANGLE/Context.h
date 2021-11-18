@@ -736,6 +736,7 @@ class Context final : public egl::LabeledObject, angle::NonCopyable, public angl
     std::vector<const char *> mRequestableExtensionStrings;
 
     // GLES1 renderer state
+    bool mIsGLES1;
     std::unique_ptr<GLES1Renderer> mGLES1Renderer;
 
     // Current/lost context flags

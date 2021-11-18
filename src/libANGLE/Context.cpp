@@ -575,7 +575,8 @@ void Context::initializeDefaultResources()
     }
 
     // Initialize GLES1 renderer if appropriate.
-    if (getClientVersion() < Version(2, 0))
+    mIsGLES1 = getClientVersion() < Version(2, 0);
+    if (mIsGLES1)
     {
         mGLES1Renderer.reset(new GLES1Renderer());
     }
@@ -8904,7 +8905,7 @@ void Context::maxShaderCompilerThreads(GLuint count)
 
 bool Context::isGLES1() const
 {
-    return mState.getClientVersion() < Version(2, 0);
+    return mIsGLES1;
 }
 
 void Context::onSubjectStateChange(angle::SubjectIndex index, angle::SubjectMessage message)
