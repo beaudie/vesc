@@ -171,6 +171,30 @@
       },
       "revId": "c270b624cb71b0406abc639b294cd6ad374d54d3",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "d4112a0c_cf258405",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 1722,
+      "author": {
+        "id": 1290487
+      },
+      "writtenOn": "2021-11-18T17:49:09Z",
+      "side": 1,
+      "message": "Yes, I looked at both the spec and the Android implementation, and you are correct.  It\u0027s been so long since I worked on that part of the spec and code that I forgot.\n\nUpdate coming shortly!",
+      "parentUuid": "1c19ed1f_2735a654",
+      "range": {
+        "startLine": 1720,
+        "startChar": 0,
+        "endLine": 1722,
+        "endChar": 78
+      },
+      "revId": "c270b624cb71b0406abc639b294cd6ad374d54d3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
