@@ -41,6 +41,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "f90c76b2_620a5593",
+        "filename": "src/libANGLE/capture/trace_fixture.cpp",
+        "patchSetId": 9
+      },
+      "lineNbr": 409,
+      "author": {
+        "id": 1491823
+      },
+      "writtenOn": "2021-11-18T10:48:15Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "fed1e26f_b3cd042e",
+      "range": {
+        "startLine": 409,
+        "startChar": 5,
+        "endLine": 409,
+        "endChar": 13
+      },
+      "revId": "c89f17e28f1e8e86b1bc77f3c291b1c07c039983",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "6d5b524a_a32b0d65",
@@ -54,6 +78,30 @@
       "writtenOn": "2021-11-17T20:47:03Z",
       "side": 1,
       "message": "I believe this can be an ASSERT",
+      "range": {
+        "startLine": 411,
+        "startChar": 2,
+        "endLine": 411,
+        "endChar": 21
+      },
+      "revId": "c89f17e28f1e8e86b1bc77f3c291b1c07c039983",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ef1972e6_b5f59f3b",
+        "filename": "src/libANGLE/capture/trace_fixture.cpp",
+        "patchSetId": 9
+      },
+      "lineNbr": 411,
+      "author": {
+        "id": 1491823
+      },
+      "writtenOn": "2021-11-18T10:48:15Z",
+      "side": 1,
+      "message": "This requires  gl::priv::ShouldCreatePlatformLogMessage, do we really want to pull the according library in, or would it be okay to use \"assert\" (as I nave done to test whether it\u0027s correct)?",
+      "parentUuid": "6d5b524a_a32b0d65",
       "range": {
         "startLine": 411,
         "startChar": 2,
