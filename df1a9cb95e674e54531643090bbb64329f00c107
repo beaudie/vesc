@@ -69,6 +69,47 @@
       "parentUuid": "f268ee1a_aa4f8a57",
       "revId": "df1a9cb95e674e54531643090bbb64329f00c107",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "3b081204_04abe0e0",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 1721,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2021-11-18T21:32:03Z",
+      "side": 1,
+      "message": "This was my suggestion. The point is that the vector below is not taking too much memory, and is freed pretty quickly afterwards. It doesn\u0027t hurt to allocate a few slots more.\n\nIn reality, this sort of error shouldn\u0027t happen at all, and knowing the race condition is in Android and it only affects the extension list by a count of 1, I think having this ++ is a reasonable workaround.\n\nLike I mentioned to Ian, if you want to be paranoid, you can also just do +\u003d10, it doesn\u0027t really hurt anyone!",
+      "parentUuid": "8c0fe6f8_5b611f17",
+      "revId": "df1a9cb95e674e54531643090bbb64329f00c107",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "29aa3132_ffdc3302",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 1723,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2021-11-18T21:32:03Z",
+      "side": 1,
+      "message": "nit: you can keep this 0, or honestly just remove the `if`. There are _always_ device extensions, so this is not saving anything. Worst case you\u0027ve called vkEnumerateDeviceExtensionProperties twice and in both cases got nothing back.",
+      "range": {
+        "startLine": 1723,
+        "startChar": 31,
+        "endLine": 1723,
+        "endChar": 32
+      },
+      "revId": "df1a9cb95e674e54531643090bbb64329f00c107",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }

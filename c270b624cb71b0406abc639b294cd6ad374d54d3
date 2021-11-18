@@ -219,6 +219,30 @@
       },
       "revId": "c270b624cb71b0406abc639b294cd6ad374d54d3",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "9d3e1136_e47d41b6",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 1722,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2021-11-18T21:32:03Z",
+      "side": 1,
+      "message": "It\u0027s weird that the spec doesn\u0027t mention this, but usually APIs like this always return the potential count, even if all couldn\u0027t be written. That way, you could do things like take a guess and allocate space for 20, then hope the actual number is less, and if not you already get the correct number from the first call to use in the second call.\n\nI\u0027ll try and get clarification if the current wording is intentionally trying to say that pPropertyCount is not set to correct number of pProperties is NULL.",
+      "parentUuid": "d4112a0c_cf258405",
+      "range": {
+        "startLine": 1720,
+        "startChar": 0,
+        "endLine": 1722,
+        "endChar": 78
+      },
+      "revId": "c270b624cb71b0406abc639b294cd6ad374d54d3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
