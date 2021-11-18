@@ -87,6 +87,30 @@
       },
       "revId": "c270b624cb71b0406abc639b294cd6ad374d54d3",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "b1dc3572_aa345ee9",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 1722,
+      "author": {
+        "id": 1290487
+      },
+      "writtenOn": "2021-11-18T16:52:53Z",
+      "side": 1,
+      "message": "Yes, thanks for the fix!  I updated the comment as well as added the resize.",
+      "parentUuid": "0e32a68d_bac7d272",
+      "range": {
+        "startLine": 1720,
+        "startChar": 0,
+        "endLine": 1722,
+        "endChar": 78
+      },
+      "revId": "c270b624cb71b0406abc639b294cd6ad374d54d3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
