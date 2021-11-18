@@ -16,6 +16,29 @@
       "message": "Round two of GLES1 optimizations.  Things are looking pretty good!",
       "revId": "bcdb05e0da18205fd6dfbdb579cc6b8e542060cd",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "7cbec307_d8a2614d",
+        "filename": "src/libANGLE/GLES1Renderer.h",
+        "patchSetId": 15
+      },
+      "lineNbr": 295,
+      "author": {
+        "id": 1175714
+      },
+      "writtenOn": "2021-11-18T17:21:34Z",
+      "side": 1,
+      "message": "Should this be a fixed size to be platform size_t size independent?",
+      "range": {
+        "startLine": 295,
+        "startChar": 19,
+        "endLine": 295,
+        "endChar": 25
+      },
+      "revId": "bcdb05e0da18205fd6dfbdb579cc6b8e542060cd",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
