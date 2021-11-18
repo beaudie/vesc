@@ -243,6 +243,30 @@
       },
       "revId": "c270b624cb71b0406abc639b294cd6ad374d54d3",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "b8e14045_c298e9f0",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 1722,
+      "author": {
+        "id": 1290487
+      },
+      "writtenOn": "2021-11-18T22:38:09Z",
+      "side": 1,
+      "message": "The new approach is good.  The only time pPropertyCount is overwritten in the 2nd call is when fewer items were copied than requested.  Looking at the spec (which  points to that of vkEnumerateInstanceExtensionProperties), it says:\n\n\u003e If pProperties is NULL, then the number of extensions properties available is returned in pPropertyCount. Otherwise, pPropertyCount must point to a variable set by the user to the number of elements in the pProperties array, and on return the variable is overwritten with the number of structures actually written to pProperties. If pPropertyCount is less than the number of extension properties available, at most pPropertyCount structures will be written, and VK_INCOMPLETE will be returned instead of VK_SUCCESS, to indicate that not all the available properties were returned.\n\nThus, we can create a huge array and ask for that many.  pPropertyCount will be \"overwritten with the number of structures actually written to pProperties.\"",
+      "parentUuid": "9d3e1136_e47d41b6",
+      "range": {
+        "startLine": 1720,
+        "startChar": 0,
+        "endLine": 1722,
+        "endChar": 78
+      },
+      "revId": "c270b624cb71b0406abc639b294cd6ad374d54d3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }

@@ -18,6 +18,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "61a2c604_61b1f96f",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 4
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1290487
+      },
+      "writtenOn": "2021-11-18T22:38:09Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "5d3a896c_7ffea298",
+      "revId": "df1a9cb95e674e54531643090bbb64329f00c107",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "6c906ab2_f27ce61b",
@@ -35,6 +53,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "a57b3911_e68af293",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 4
+      },
+      "lineNbr": 11,
+      "author": {
+        "id": 1290487
+      },
+      "writtenOn": "2021-11-18T22:38:09Z",
+      "side": 1,
+      "message": "Done.  There\u0027s enough info there for people to understand the issue and understand when it\u0027s been fixed.  Too much info?",
+      "parentUuid": "6c906ab2_f27ce61b",
+      "revId": "df1a9cb95e674e54531643090bbb64329f00c107",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "86df8233_4cdd3638",
@@ -48,6 +84,24 @@
       "writtenOn": "2021-11-18T21:59:55Z",
       "side": 1,
       "message": "Please add b/206733351.",
+      "revId": "df1a9cb95e674e54531643090bbb64329f00c107",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "8f2cc411_cf875e12",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 4
+      },
+      "lineNbr": 13,
+      "author": {
+        "id": 1290487
+      },
+      "writtenOn": "2021-11-18T22:38:09Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "86df8233_4cdd3638",
       "revId": "df1a9cb95e674e54531643090bbb64329f00c107",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
@@ -82,6 +136,30 @@
       "writtenOn": "2021-11-18T21:59:55Z",
       "side": 1,
       "message": "Please add the Buganizer issue also, so Googlers can monitor when it\u0027s fixed and (potentially) remove this workaround some day: b/206733351",
+      "range": {
+        "startLine": 1720,
+        "startChar": 14,
+        "endLine": 1720,
+        "endChar": 43
+      },
+      "revId": "df1a9cb95e674e54531643090bbb64329f00c107",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "0b7b13c6_831f7e0f",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 1720,
+      "author": {
+        "id": 1290487
+      },
+      "writtenOn": "2021-11-18T22:38:09Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "5eca166a_31ef008a",
       "range": {
         "startLine": 1720,
         "startChar": 14,
@@ -218,6 +296,30 @@
       "side": 1,
       "message": "+1 to removing the if.",
       "parentUuid": "29aa3132_ffdc3302",
+      "range": {
+        "startLine": 1723,
+        "startChar": 31,
+        "endLine": 1723,
+        "endChar": 32
+      },
+      "revId": "df1a9cb95e674e54531643090bbb64329f00c107",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "ad9ee044_57a02200",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 1723,
+      "author": {
+        "id": 1290487
+      },
+      "writtenOn": "2021-11-18T22:38:09Z",
+      "side": 1,
+      "message": "Done.  I did it to the instance query above (for consistency).",
+      "parentUuid": "af698d67_a0b741bd",
       "range": {
         "startLine": 1723,
         "startChar": 31,
