@@ -43,6 +43,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "ab352a8e_284a0e92",
+        "filename": "src/tests/perf_tests/TracePerfTest.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 1072,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2021-11-18T13:51:02Z",
+      "side": 1,
+      "message": "https://ci.chromium.org/ui/p/angle/builders/try/linux-test/688/overview\n\nI\u0027ll try running it again as we switched to 1660s, maybe they can handle it.",
+      "parentUuid": "34b082c2_45293db4",
+      "range": {
+        "startLine": 1072,
+        "startChar": 8,
+        "endLine": 1072,
+        "endChar": 78
+      },
+      "revId": "679d063660ba56550b4ec6fd93bc37172bcb001a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "07208940_a46df1ed",
         "filename": "src/tests/run_perf_tests.py",
         "patchSetId": 7
@@ -66,6 +90,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "059ebe08_f15b054f",
+        "filename": "src/tests/run_perf_tests.py",
+        "patchSetId": 7
+      },
+      "lineNbr": 336,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2021-11-18T13:51:02Z",
+      "side": 1,
+      "message": "Do you mean 0 tests would be unexpected, or an error would be unexpected? I made it return failure as well as generate a logging error.",
+      "parentUuid": "07208940_a46df1ed",
+      "range": {
+        "startLine": 335,
+        "startChar": 0,
+        "endLine": 336,
+        "endChar": 41
+      },
+      "revId": "679d063660ba56550b4ec6fd93bc37172bcb001a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "2bd723ff_9a3392d4",
         "filename": "src/tests/run_perf_tests.py",
         "patchSetId": 7
@@ -77,6 +125,30 @@
       "writtenOn": "2021-11-18T00:50:37Z",
       "side": 1,
       "message": "Why isn\u0027t this an error?",
+      "range": {
+        "startLine": 410,
+        "startChar": 0,
+        "endLine": 412,
+        "endChar": 25
+      },
+      "revId": "679d063660ba56550b4ec6fd93bc37172bcb001a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "f49a4b2d_d6af832f",
+        "filename": "src/tests/run_perf_tests.py",
+        "patchSetId": 7
+      },
+      "lineNbr": 412,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2021-11-18T13:51:02Z",
+      "side": 1,
+      "message": "For skipped tests, they run without output. They are handled below. Updated comment.",
+      "parentUuid": "2bd723ff_9a3392d4",
       "range": {
         "startLine": 410,
         "startChar": 0,
