@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "8b6b0e1e_c41cd29a",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 9
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1185214
+      },
+      "writtenOn": "2021-11-19T14:00:17Z",
+      "side": 1,
+      "message": "Not sure if this has been raised yet, but this is blocking the ANGLE -\u003e Skia roll: https://logs.chromium.org/logs/skia/574a8da482bd4211/+/steps/gn_gen/0/stdout",
+      "revId": "89e3de9720ced82ad9ee7fbaf11a6a1ca2aa2349",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
