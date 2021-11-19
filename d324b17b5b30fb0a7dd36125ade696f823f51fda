@@ -16,6 +16,69 @@
       "message": "Thanks for the feedback so far.",
       "revId": "d324b17b5b30fb0a7dd36125ade696f823f51fda",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "6e6cecd1_3270a185",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 17
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2021-11-19T14:58:19Z",
+      "side": 1,
+      "message": "re-lgtm",
+      "revId": "d324b17b5b30fb0a7dd36125ade696f823f51fda",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "52a3f2eb_cd55eb79",
+        "filename": "src/libANGLE/GLES1Renderer.h",
+        "patchSetId": 17
+      },
+      "lineNbr": 116,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2021-11-19T14:58:19Z",
+      "side": 1,
+      "message": "nit: consider implementing this as a ::hash member function that lives in the cpp, so you don\u0027t need to import the hash_utils header.",
+      "range": {
+        "startLine": 112,
+        "startChar": 0,
+        "endLine": 116,
+        "endChar": 2
+      },
+      "revId": "d324b17b5b30fb0a7dd36125ade696f823f51fda",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "d7215043_66b9047f",
+        "filename": "src/libANGLE/GLES1Renderer.h",
+        "patchSetId": 17
+      },
+      "lineNbr": 316,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2021-11-19T14:58:19Z",
+      "side": 1,
+      "message": "nit: mild preference for UberShader over Ubershader",
+      "range": {
+        "startLine": 316,
+        "startChar": 11,
+        "endLine": 316,
+        "endChar": 31
+      },
+      "revId": "d324b17b5b30fb0a7dd36125ade696f823f51fda",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
