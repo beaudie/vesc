@@ -4748,6 +4748,54 @@ void ContextVk::framebufferFetchBarrier()
     mGraphicsDirtyBits.set(DIRTY_BIT_FRAMEBUFFER_FETCH_BARRIER);
 }
 
+angle::Result ContextVk::acquireTextures(const gl::TextureVector &textures, const GLenum *layouts)
+{
+    for (size_t i = 0; i < textures.size(); ++i)
+    {
+        if (gl::Texture *texture = textures[i])
+        {
+            TextureVk *textureVk   = vk::GetImpl(texture);
+            vk::ImageHelper &image = textureVk->getImage();
+            vk::ImageLayout layout = vk::GetImageLayoutFromGLImageLayout(layouts[i]);
+            image.setCurrentImageLayout(layout);
+        }
+    }
+    return angle::Result::Continue;
+}
+
+angle::Result ContextVk::releaseTextures(const gl::TextureVector &textures, GLenum *layouts)
+{
+    bool needFlush = false;
+    for (size_t i = 0; i < textures.size(); ++i)
+    {
+        if (gl::Texture *texture = textures[i])
+        {
+            TextureVk *textureVk = vk::GetImpl(texture);
+            ANGLE_TRY(textureVk->ensureImageInitialized(this, ImageMipLevels::EnabledLevels));
+
+            vk::ImageHelper &image = textureVk->getImage();
+            ANGLE_TRY(onImageReleaseToExternal(image));
+
+            layouts[i] = vk::ConvertImageLayoutToGLImageLayout(image.getCurrentImageLayout());
+            needFlush  = true;
+        }
+        else
+        {
+            layouts[i] = GL_NONE;
+        }
+    }
+
+    if (needFlush)
+    {
+        ANGLE_TRY(flushImpl(nullptr, RenderPassClosureReason::ImageUseThenReleaseToExternal));
+        return mRenderer->ensureNoPendingWork(this);
+    }
+    else
+    {
+        return angle::Result::Continue;
+    }
+}
+
 vk::DynamicQueryPool *ContextVk::getQueryPool(gl::QueryType queryType)
 {
     ASSERT(queryType == gl::QueryType::AnySamples ||
