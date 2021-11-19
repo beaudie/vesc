@@ -155,6 +155,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "8b0723e7_559e3705",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 14
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1359249
+      },
+      "writtenOn": "2021-11-19T15:35:32Z",
+      "side": 1,
+      "message": "Sorry, got a detail typed wrong. In the case of the glFlush() - we don\u0027t get back 5, we get 4. At first we convinced ourselves it was a round error, round down. But then we would expect the same for eglSwapBuffers and it is not.",
+      "parentUuid": "976a1bac_5eb98f5c",
+      "revId": "e664cb7a424526a6ec8833f970fbf86d4c4f8a9b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "d0df4646_13be0c84",
