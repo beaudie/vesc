@@ -58,6 +58,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "9c046384_b3718931",
+        "filename": "src/common/system_utils.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 126,
+      "author": {
+        "id": 1116023
+      },
+      "writtenOn": "2021-11-19T21:42:49Z",
+      "side": 1,
+      "message": "AFAICT the idea is that when the second component is a full path then it doesn\u0027t make sense to append it to something else. When concatenating \"/foo/dir\" and \"/full/path/file.txt\" this function is supposed to return \"/full/path/file.txt\" . It wasn\u0027t implemented correctly and the test was broken as well. I\u0027ve updated the test now.\n\nIt needs to be fixed in this CL because ANGLE_VK_SWIFTSHADER_ICD_JSON is a full path on Fuchsia, while it\u0027s relative on other platforms (relative to the path to the .exe).",
+      "parentUuid": "7fa48651_881b6ede",
+      "range": {
+        "startLine": 123,
+        "startChar": 0,
+        "endLine": 126,
+        "endChar": 5
+      },
+      "revId": "eff8909171d23b0186723b7744e234098dca3dae",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "14c76741_a75a0991",
@@ -105,6 +129,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "4aa22fd5_aa0190bc",
+        "filename": "src/common/vulkan/BUILD.gn",
+        "patchSetId": 1
+      },
+      "lineNbr": 59,
+      "author": {
+        "id": 1116023
+      },
+      "writtenOn": "2021-11-19T21:42:49Z",
+      "side": 1,
+      "message": "\u003e nit: I suggest defining `ANGLE_VK_LAYERS_DIR` instead to empty on Fuchsia (see other comment)\n\nThat doesn\u0027t work due to unreachable code warning. Also I think it\u0027s best to keep it consistent with ANGLE_VK_SWIFTSHADER_ICD_JSON\n\n\u003e How about using the already-existing ANGLE_PLATFORM_FUCSHIA define in the cpp file instead of doing more GN stuff?\n\nWe could, but it would make it inconsistent with ANGLE_VK_SWIFTSHADER_ICD_JSON. IMO it\u0027s cleaner to keep this platform-dependent logic either in .cpp file or in .gn instead of spreading it across these two files.",
+      "parentUuid": "7584563b_0d6fa6ba",
+      "range": {
+        "startLine": 57,
+        "startChar": 0,
+        "endLine": 59,
+        "endChar": 5
+      },
+      "revId": "eff8909171d23b0186723b7744e234098dca3dae",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "8f0d1d27_929b577f",
@@ -128,6 +176,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "8f6d6c48_5e9d05f1",
+        "filename": "src/common/vulkan/vulkan_icd.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 62,
+      "author": {
+        "id": 1116023
+      },
+      "writtenOn": "2021-11-19T21:42:49Z",
+      "side": 1,
+      "message": "Done. \nAlso added ANGLE_MAYBE_UNUSED for WrapICDEnvironment and kLayerEnablesEnv and remvoed ifdefs",
+      "parentUuid": "8f0d1d27_929b577f",
+      "range": {
+        "startLine": 59,
+        "startChar": 0,
+        "endLine": 62,
+        "endChar": 0
+      },
+      "revId": "eff8909171d23b0186723b7744e234098dca3dae",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "31ec2bab_822cc2ed",
@@ -141,6 +213,24 @@
       "writtenOn": "2021-11-19T02:46:16Z",
       "side": 1,
       "message": "... so that you don\u0027t need `#if`s, and you can do `ANGLE_VK_LAYERS_DIR[0] !\u003d 0 \u0026\u0026 ...` instead here.",
+      "revId": "eff8909171d23b0186723b7744e234098dca3dae",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "9cb6dd27_42d7e366",
+        "filename": "src/common/vulkan/vulkan_icd.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 164,
+      "author": {
+        "id": 1116023
+      },
+      "writtenOn": "2021-11-19T21:42:49Z",
+      "side": 1,
+      "message": "That way it fail to compile due to the unreachable code warning: \n\n../../third_party/angle/src/common/vulkan/vulkan_icd.cpp:157:14: error: code will never be executed [-Werror,-Wunreachable-code]\n            !angle::PrependPathToEnvironmentVar(kLoaderLayersPathEnv, ANGLE_VK_LAYERS_DIR))\n             ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~",
+      "parentUuid": "31ec2bab_822cc2ed",
       "revId": "eff8909171d23b0186723b7744e234098dca3dae",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
