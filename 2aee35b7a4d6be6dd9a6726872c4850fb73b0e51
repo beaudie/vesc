@@ -1,0 +1,112 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "076756f8_e4a891e4",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 13
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2021-11-19T02:59:04Z",
+      "side": 1,
+      "message": "Very nice! I have one more test idea in mind where we know things can potentially go south with a careless implementation (can you guess?), but let\u0027s leave that for the next change.\n\nBy the way, we usually do two reviewers per change (unless super trivial), so make sure to choose another reviewer as well.",
+      "revId": "2aee35b7a4d6be6dd9a6726872c4850fb73b0e51",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "39c30606_42eb3584",
+        "filename": "src/libANGLE/renderer/d3d/d3d9/Context9.cpp",
+        "patchSetId": 13
+      },
+      "lineNbr": 313,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2021-11-19T02:59:04Z",
+      "side": 1,
+      "message": "nit: use UNREACHABLE() instead, indirect calls are not supported by d3d",
+      "revId": "2aee35b7a4d6be6dd9a6726872c4850fb73b0e51",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "51694ade_329fcd7e",
+        "filename": "src/libANGLE/renderer/d3d/d3d9/Context9.cpp",
+        "patchSetId": 13
+      },
+      "lineNbr": 346,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2021-11-19T02:59:04Z",
+      "side": 1,
+      "message": "ditto",
+      "revId": "2aee35b7a4d6be6dd9a6726872c4850fb73b0e51",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "03cb7c5d_9e763c23",
+        "filename": "src/libANGLE/renderer/d3d/d3d9/renderer9_utils.cpp",
+        "patchSetId": 13
+      },
+      "lineNbr": 766,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2021-11-19T02:59:04Z",
+      "side": 1,
+      "message": "No need to specify, it\u0027s false by default.",
+      "revId": "2aee35b7a4d6be6dd9a6726872c4850fb73b0e51",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "3a93525c_3051c04c",
+        "filename": "src/libANGLE/renderer/gl/renderergl_utils.cpp",
+        "patchSetId": 13
+      },
+      "lineNbr": 1443,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2021-11-19T02:59:04Z",
+      "side": 1,
+      "message": "Set to `true` instead, we are not actually using the GL extension. That could be a future optimization (that we would never get to)",
+      "revId": "2aee35b7a4d6be6dd9a6726872c4850fb73b0e51",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "502a283a_10ea8310",
+        "filename": "src/tests/gl_tests/MultiDrawTest.cpp",
+        "patchSetId": 13
+      },
+      "lineNbr": 879,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2021-11-19T02:59:04Z",
+      "side": 1,
+      "message": "These test variations don\u0027t really make sense for the indirect call, so you might as well just run the tests once per platform. That is this:\n\n    ANGLE_INSTANTIATE_TEST_ES31(MultiDrawIndirectTest);\n\ninstead of the whole `INSTANTIATE_TEST_SUITE_P(...)`.",
+      "range": {
+        "startLine": 877,
+        "startChar": 0,
+        "endLine": 879,
+        "endChar": 73
+      },
+      "revId": "2aee35b7a4d6be6dd9a6726872c4850fb73b0e51",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
