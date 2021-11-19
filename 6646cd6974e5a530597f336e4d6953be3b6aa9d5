@@ -393,6 +393,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "a492c5ef_9882bc22",
+        "filename": "src/libANGLE/renderer/SurfaceImpl.cpp",
+        "patchSetId": 13
+      },
+      "lineNbr": 146,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2021-11-19T20:36:31Z",
+      "side": 1,
+      "message": "If you mean WindowSurfaceVk::setRenderBuffer(), that\u0027s true for the Vulkan backend, but not the other backends. The bug is that Surface::setRenderBuffer() (called when EGL_RENDER_BUFFER is specified) is not specific to this extension, so you shouldn\u0027t make it fail.\n\nThe solution is to either make `SurfaceImpl::setRenderBuffer()` no-op and **succeed**, or implement it for every other backend with a no-op implementation that also succeeds.",
+      "parentUuid": "045de90c_79170822",
+      "revId": "6646cd6974e5a530597f336e4d6953be3b6aa9d5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "3ecbc9da_e82b7818",
         "filename": "src/libANGLE/renderer/SurfaceImpl.h",
         "patchSetId": 13
