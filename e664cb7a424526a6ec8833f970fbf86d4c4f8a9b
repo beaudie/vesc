@@ -137,6 +137,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "976a1bac_5eb98f5c",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 14
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2021-11-19T02:16:28Z",
+      "side": 1,
+      "message": "I\u0027m confused, what\u0027s the issue? Based on your comments, after clearing to 5, it reads back 5 (scenario 1) and after clearing to 6, it reads back 6 (scenario 2). What am I missing? Where is the error?",
+      "parentUuid": "ec50d306_75025fac",
+      "revId": "e664cb7a424526a6ec8833f970fbf86d4c4f8a9b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "d0df4646_13be0c84",

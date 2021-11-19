@@ -357,6 +357,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "c4416986_3cd584de",
+        "filename": "src/libANGLE/renderer/SurfaceImpl.cpp",
+        "patchSetId": 13
+      },
+      "lineNbr": 146,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2021-11-19T02:16:28Z",
+      "side": 1,
+      "message": "It looks like Pixel 4 is passing on Vulkan now. You\u0027d just need to address this so the GLES backend can run too.",
+      "parentUuid": "708fc471_9da5e323",
+      "revId": "6646cd6974e5a530597f336e4d6953be3b6aa9d5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "3ecbc9da_e82b7818",
         "filename": "src/libANGLE/renderer/SurfaceImpl.h",
         "patchSetId": 13
