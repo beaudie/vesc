@@ -14,6 +14,7 @@
 
 #include <EGL/eglext.h>
 
+#include "../../../../../vulkan-deps/vulkan-loader/src/loader/temp_extra_icd.h"
 #include "common/debug.h"
 #include "common/platform.h"
 #include "common/system_utils.h"
@@ -1296,6 +1297,24 @@ angle::Result RendererVk::initialize(DisplayVk *displayVk,
         vk::AddToPNextChain(&instanceInfo, &validationFeatures);
     }
 
+    HMODULE sw = LoadLibraryA("vk_swiftShader.dll");
+
+    VkExtraInstanceICDEXT extra_icd{};
+    extra_icd.sType                     = (VkStructureType)VK_STRUCTURE_TYPE_EXTRA_INSTANCE_ICD_EXT;
+    extra_icd.api_version               = VK_MAKE_API_VERSION(0, 1, 0, 0);
+    extra_icd.icd_name                  = "TestingExtraICD";
+    extra_icd.mode                      = VK_EXTRA_INSTANCE_ICD_MODE_EXCLUSIVE_EXT;
+    extra_icd.vk_icdGetInstanceProcAddr = reinterpret_cast<PFN_vk_icdGetInstanceProcAddr>(
+        GetProcAddress(sw, "vk_icdGetInstanceProcAddr"));
+    extra_icd.vk_icdGetPhysicalDeviceProcAddr =
+        reinterpret_cast<PFN_vk_icdGetPhysicalDeviceProcAddr>(
+            GetProcAddress(sw, "vk_icdGetPhysicalDeviceProcAddr"));
+    extra_icd.vk_icdNegotiateLoaderICDInterfaceVersion =
+        reinterpret_cast<PFN_vk_icdNegotiateLoaderICDInterfaceVersion>(
+            GetProcAddress(sw, "vk_icdNegotiateLoaderICDInterfaceVersion"));
+
+    instanceInfo.pNext = &extra_icd;
+
     ANGLE_VK_TRY(displayVk, vkCreateInstance(&instanceInfo, nullptr, &mInstance));
 #if defined(ANGLE_SHARED_LIBVULKAN)
     // Load volk if we are linking dynamically
@@ -1362,7 +1381,6 @@ angle::Result RendererVk::initialize(DisplayVk *displayVk,
     ANGLE_VK_TRY(displayVk, vkEnumeratePhysicalDevices(mInstance, &physicalDeviceCount, nullptr));
     ANGLE_VK_CHECK(displayVk, physicalDeviceCount > 0, VK_ERROR_INITIALIZATION_FAILED);
 
-    // TODO(jmadill): Handle multiple physical devices. For now, use the first device.
     std::vector<VkPhysicalDevice> physicalDevices(physicalDeviceCount);
     ANGLE_VK_TRY(displayVk, vkEnumeratePhysicalDevices(mInstance, &physicalDeviceCount,
                                                        physicalDevices.data()));
