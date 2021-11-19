@@ -1426,6 +1426,10 @@ enum class ImageLayout
 
 VkImageCreateFlags GetImageCreateFlags(gl::TextureType textureType);
 
+ImageLayout GetImageLayoutFromGLImageLayout(GLenum layout);
+
+GLenum ConvertImageLayoutToGLImageLayout(ImageLayout imageLayout);
+
 VkImageLayout ConvertImageLayoutToVkImageLayout(ImageLayout imageLayout);
 
 // How the ImageHelper object is being used by the renderpass
