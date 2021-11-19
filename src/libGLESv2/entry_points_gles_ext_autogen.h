@@ -630,6 +630,16 @@ ANGLE_EXPORT void GL_APIENTRY GL_GetTranslatedShaderSourceANGLE(GLuint shader,
                                                                 GLsizei *length,
                                                                 GLchar *source);
 
+// GL_ANGLE_vulkan_image
+ANGLE_EXPORT void GL_APIENTRY GL_AcquireTexturesANGLE(GLuint numTextures,
+                                                      const GLuint *textures,
+                                                      const GLenum *layouts,
+                                                      const GLenum *stageMasks);
+ANGLE_EXPORT void GL_APIENTRY GL_ReleaseTexturesANGLE(GLuint numTextures,
+                                                      const GLuint *textures,
+                                                      GLenum *layouts,
+                                                      GLenum *stageMasks);
+
 // GL_APPLE_clip_distance
 
 // GL_ARB_sync

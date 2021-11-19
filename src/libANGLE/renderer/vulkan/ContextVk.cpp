@@ -4848,6 +4848,61 @@ void ContextVk::framebufferFetchBarrier()
     mGraphicsDirtyBits.set(DIRTY_BIT_FRAMEBUFFER_FETCH_BARRIER);
 }
 
+angle::Result ContextVk::acquireTextures(const gl::TextureVector &textures,
+                                         const GLenum *layouts,
+                                         const GLenum *stageMasks)
+{
+    for (size_t i = 0; i < textures.size(); ++i)
+    {
+        if (gl::Texture *texture = textures[i])
+        {
+            TextureVk *textureVk   = vk::GetImpl(texture);
+            vk::ImageHelper &image = textureVk->getImage();
+            vk::ImageLayout layout = vk::GetImageLayoutFromGLImageLayout(layouts[i]);
+            // Image should not be accessed while unowned. Emulated formats may have staged updates
+            // to clear the image after initialization.
+            ASSERT(!image.hasStagedUpdatesInAllocatedLevels() || image.hasEmulatedImageChannels());
+            image.setCurrentImageLayout(layout);
+        }
+    }
+    return angle::Result::Continue;
+}
+
+angle::Result ContextVk::releaseTextures(const gl::TextureVector &textures,
+                                         GLenum *layouts,
+                                         GLenum *stageMasks)
+{
+    bool needFlush = false;
+    for (size_t i = 0; i < textures.size(); ++i)
+    {
+        if (gl::Texture *texture = textures[i])
+        {
+            TextureVk *textureVk = vk::GetImpl(texture);
+            ANGLE_TRY(textureVk->ensureImageInitialized(this, ImageMipLevels::EnabledLevels));
+
+            vk::ImageHelper &image = textureVk->getImage();
+            ANGLE_TRY(onImageReleaseToExternal(image));
+
+            layouts[i] = vk::ConvertImageLayoutToGLImageLayout(image.getCurrentImageLayout());
+            needFlush  = true;
+        }
+        else
+        {
+            layouts[i] = GL_NONE;
+        }
+    }
+
+    if (needFlush)
+    {
+        ANGLE_TRY(flushImpl(nullptr, RenderPassClosureReason::ImageUseThenReleaseToExternal));
+        return mRenderer->ensureNoPendingWork(this);
+    }
+    else
+    {
+        return angle::Result::Continue;
+    }
+}
+
 vk::DynamicQueryPool *ContextVk::getQueryPool(gl::QueryType queryType)
 {
     ASSERT(queryType == gl::QueryType::AnySamples ||

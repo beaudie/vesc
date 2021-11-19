@@ -532,6 +532,11 @@
     void invalidateTexture(TextureType targetPacked);                                              \
     /* GL_ANGLE_texture_multisample */                                                             \
     /* GL_ANGLE_texture_rectangle */                                                               \
+    /* GL_ANGLE_vulkan_image */                                                                    \
+    void acquireTextures(GLuint numTextures, const TextureID *texturesPacked,                      \
+                         const GLenum *layouts, const GLenum *stageMasks);                         \
+    void releaseTextures(GLuint numTextures, const TextureID *texturesPacked, GLenum *layouts,     \
+                         GLenum *stageMasks);                                                      \
     /* GL_ANGLE_webgl_compatibility */                                                             \
     /* GL_ANGLE_yuv_internal_format */                                                             \
     /* GL_CHROMIUM_bind_generates_resource */                                                      \

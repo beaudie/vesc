@@ -3728,6 +3728,23 @@ void GL_APIENTRY glGetTranslatedShaderSourceANGLE(GLuint shader,
     return GL_GetTranslatedShaderSourceANGLE(shader, bufsize, length, source);
 }
 
+// GL_ANGLE_vulkan_image
+void GL_APIENTRY glAcquireTexturesANGLE(GLuint numTextures,
+                                        const GLuint *textures,
+                                        const GLenum *layouts,
+                                        const GLenum *stageMasks)
+{
+    return GL_AcquireTexturesANGLE(numTextures, textures, layouts, stageMasks);
+}
+
+void GL_APIENTRY glReleaseTexturesANGLE(GLuint numTextures,
+                                        const GLuint *textures,
+                                        GLenum *layouts,
+                                        GLenum *stageMasks)
+{
+    return GL_ReleaseTexturesANGLE(numTextures, textures, layouts, stageMasks);
+}
+
 // GL_APPLE_clip_distance
 
 // GL_ARB_sync

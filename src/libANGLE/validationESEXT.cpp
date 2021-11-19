@@ -2533,4 +2533,45 @@ bool ValidateEGLImageTargetTexStorageEXT(const Context *context,
     return false;
 }
 
+bool ValidateAcquireTexturesANGLE(const Context *context,
+                                  angle::EntryPoint entryPoint,
+                                  GLuint numTextures,
+                                  const TextureID *textures,
+                                  const GLenum *layouts,
+                                  const GLenum *stageMasks)
+{
+    if (!context->getExtensions().vulkanImageANGLE)
+    {
+        context->validationError(entryPoint, GL_INVALID_OPERATION, kExtensionNotEnabled);
+        return false;
+    }
+
+    for (GLuint i = 0; i < numTextures; ++i)
+    {
+        if (!IsValidImageLayout(FromGLenum<ImageLayout>(layouts[i])))
+        {
+            context->validationError(entryPoint, GL_INVALID_ENUM, kInvalidImageLayout);
+            return false;
+        }
+    }
+
+    return true;
+}
+
+bool ValidateReleaseTexturesANGLE(const Context *context,
+                                  angle::EntryPoint entryPoint,
+                                  GLuint numTextures,
+                                  const TextureID *textures,
+                                  const GLenum *layouts,
+                                  const GLenum *stageMasks)
+{
+    if (!context->getExtensions().vulkanImageANGLE)
+    {
+        context->validationError(entryPoint, GL_INVALID_OPERATION, kExtensionNotEnabled);
+        return false;
+    }
+
+    return true;
+}
+
 }  // namespace gl
