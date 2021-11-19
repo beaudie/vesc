@@ -52,6 +52,24 @@
       "parentUuid": "a25e8bdb_94edcfd8",
       "revId": "80ffe977545f4ae2020a9664cd264830c4ea3817",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "81f1e0a6_10fb4be0",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 12
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000050
+      },
+      "writtenOn": "2021-11-19T13:35:03Z",
+      "side": 1,
+      "message": "BTW, [1] is change in chrome for using this new EGL api.\n\n[1] https://chromium-review.googlesource.com/c/chromium/src/+/3288838/2/ui/gl/gl_image_egl_angle_vulkan.cc",
+      "parentUuid": "b2e610d4_255de555",
+      "revId": "80ffe977545f4ae2020a9664cd264830c4ea3817",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
