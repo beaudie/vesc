@@ -16,6 +16,24 @@
       "message": "LGTM, but not an expert in the potential pitfalls of this change.",
       "revId": "f640e479fb3c93166aa253082e938cb505c0be96",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "79106339_af19a876",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2021-11-19T17:30:37Z",
+      "side": 1,
+      "message": "This solution will only work for the test, not the apps we want to record.  I\u0027ll look around for a way to force this outside of the manifest.\n\nNote that this may eventually be on by default and can\u0027t be turned off.  If there\u0027s any way to solve this that allows tagging, that will be future proof.",
+      "parentUuid": "96f3e601_5ae39126",
+      "revId": "f640e479fb3c93166aa253082e938cb505c0be96",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
