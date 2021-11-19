@@ -1,0 +1,84 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "3ab33dec_2d830b48",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2021-11-19T02:46:16Z",
+      "side": 1,
+      "message": "+Jamie who may have opinions here",
+      "revId": "eff8909171d23b0186723b7744e234098dca3dae",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "7fa48651_881b6ede",
+        "filename": "src/common/system_utils.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 126,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2021-11-19T02:46:16Z",
+      "side": 1,
+      "message": "Admittedly the behavior here is rather nonesense, but why this change? A unit test is failing here.",
+      "range": {
+        "startLine": 123,
+        "startChar": 0,
+        "endLine": 126,
+        "endChar": 5
+      },
+      "revId": "eff8909171d23b0186723b7744e234098dca3dae",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "14c76741_a75a0991",
+        "filename": "src/common/vulkan/BUILD.gn",
+        "patchSetId": 1
+      },
+      "lineNbr": 59,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2021-11-19T02:46:16Z",
+      "side": 1,
+      "message": "nit: I suggest defining `ANGLE_VK_LAYERS_DIR` instead to empty on Fuchsia (see other comment)",
+      "range": {
+        "startLine": 57,
+        "startChar": 0,
+        "endLine": 59,
+        "endChar": 5
+      },
+      "revId": "eff8909171d23b0186723b7744e234098dca3dae",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "31ec2bab_822cc2ed",
+        "filename": "src/common/vulkan/vulkan_icd.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 164,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2021-11-19T02:46:16Z",
+      "side": 1,
+      "message": "... so that you don\u0027t need `#if`s, and you can do `ANGLE_VK_LAYERS_DIR[0] !\u003d 0 \u0026\u0026 ...` instead here.",
+      "revId": "eff8909171d23b0186723b7744e234098dca3dae",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
