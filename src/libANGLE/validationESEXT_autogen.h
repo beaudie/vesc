@@ -828,6 +828,18 @@ bool ValidateGetTranslatedShaderSourceANGLE(const Context *context,
                                             const GLsizei *length,
                                             const GLchar *source);
 
+// GL_ANGLE_vulkan_image
+bool ValidateAcquireTextures(const Context *context,
+                             angle::EntryPoint entryPoint,
+                             GLuint numTextures,
+                             const TextureID *texturesPacked,
+                             const GLenum *layouts);
+bool ValidateReleaseTextures(const Context *context,
+                             angle::EntryPoint entryPoint,
+                             GLuint numTextures,
+                             const TextureID *texturesPacked,
+                             const GLenum *layouts);
+
 // GL_APPLE_clip_distance
 
 // GL_ARB_sync
