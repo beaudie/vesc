@@ -87,6 +87,24 @@
       "parentUuid": "6a53de05_e2269929",
       "revId": "06f2df631aaf36e5bb08e59f558e13ee7f599d66",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "09cb57c3_7611563c",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1491687
+      },
+      "writtenOn": "2021-11-19T13:37:32Z",
+      "side": 1,
+      "message": "Thanks for the pointer, but ANGLE_FEATURE_OVERRIDES_ENABLED\u003dgenerateSPIRVThroughGlslang unfortunately did not help to run the test on Vulkan AMD/Mesa for me.\nI moved the skipped tests to the expectations file.",
+      "parentUuid": "9f8ab2da_bcfd9275",
+      "revId": "06f2df631aaf36e5bb08e59f558e13ee7f599d66",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
