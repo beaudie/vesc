@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "3f5fad5a_8796590f",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 8
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1328182
+      },
+      "writtenOn": "2021-11-19T21:49:21Z",
+      "side": 1,
+      "message": "There\u0027s a decision made to decouple shader builtins emulations (gl_BaseVertex/gl_BaseInstance) from the ANGLE_base_vertex_base_instance extension back in May 2021. This CL make a new ANGLE_base_vertex_base_instance_shader_builtin extension for those.\n\nThanks for spending time reviewing this edge case extension in advance...",
+      "revId": "d3754c7d082b9f070d73ce49051e920f76884dd4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
