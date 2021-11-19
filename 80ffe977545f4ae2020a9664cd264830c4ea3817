@@ -70,6 +70,24 @@
       "parentUuid": "b2e610d4_255de555",
       "revId": "80ffe977545f4ae2020a9664cd264830c4ea3817",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "41e14e5d_7124a2fe",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 12
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2021-11-19T19:18:07Z",
+      "side": 1,
+      "message": "Is this extension useful without the other extension? Because if not, it may be hard to justify separating them.",
+      "parentUuid": "81f1e0a6_10fb4be0",
+      "revId": "80ffe977545f4ae2020a9664cd264830c4ea3817",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
