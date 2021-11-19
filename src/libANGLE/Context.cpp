@@ -8639,6 +8639,42 @@ void Context::getSemaphoreParameterui64v(SemaphoreID semaphore, GLenum pname, GL
     UNIMPLEMENTED();
 }
 
+void Context::acquireTextures(GLuint numTextures,
+                              const TextureID *textureIds,
+                              const GLenum *layouts,
+                              const GLenum *stageMasks)
+{
+    TextureBarrierVector textureBarriers(numTextures);
+    for (size_t i = 0; i < numTextures; i++)
+    {
+        textureBarriers[i].texture   = getTexture(textureIds[i]);
+        textureBarriers[i].layout    = layouts[i];
+        textureBarriers[i].stageMask = stageMasks ? stageMasks[i] : GL_NONE;
+    }
+    ANGLE_CONTEXT_TRY(mImplementation->acquireTextures(textureBarriers));
+}
+
+void Context::releaseTextures(GLuint numTextures,
+                              const TextureID *textureIds,
+                              GLenum *layouts,
+                              GLenum *stageMasks)
+{
+    TextureBarrierVector textureBarriers(numTextures);
+    for (size_t i = 0; i < numTextures; i++)
+    {
+        textureBarriers[i].texture = getTexture(textureIds[i]);
+    }
+    ANGLE_CONTEXT_TRY(mImplementation->releaseTextures(&textureBarriers));
+    for (size_t i = 0; i < numTextures; i++)
+    {
+        layouts[i] = textureBarriers[i].layout;
+        if (stageMasks)
+        {
+            stageMasks[i] = textureBarriers[i].stageMask;
+        }
+    }
+}
+
 void Context::waitSemaphore(SemaphoreID semaphoreHandle,
                             GLuint numBufferBarriers,
                             const BufferID *buffers,

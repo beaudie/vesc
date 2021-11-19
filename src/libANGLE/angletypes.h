@@ -901,12 +901,13 @@ using BarrierVector = angle::FastVector<T, kBarrierVectorDefaultSize>;
 
 using BufferBarrierVector = BarrierVector<Buffer *>;
 
-struct TextureAndLayout
+struct TextureData
 {
     Texture *texture;
     GLenum layout;
+    GLenum stageMask;
 };
-using TextureBarrierVector = BarrierVector<TextureAndLayout>;
+using TextureBarrierVector = BarrierVector<TextureData>;
 
 // OffsetBindingPointer.getSize() returns the size specified by the user, which may be larger than
 // the size of the bound buffer. This function reduces the returned size to fit the bound buffer if

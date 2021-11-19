@@ -3568,6 +3568,73 @@ void GL_APIENTRY GL_GetTranslatedShaderSourceANGLE(GLuint shader,
     }
 }
 
+// GL_ANGLE_vulkan_image
+void GL_APIENTRY GL_AcquireTexturesANGLE(GLuint numTextures,
+                                         const GLuint *textures,
+                                         const GLenum *layouts,
+                                         const GLenum *stageMasks)
+{
+    Context *context = GetValidGlobalContext();
+    EVENT(context, GLAcquireTexturesANGLE,
+          "context = %d, numTextures = %u, textures = 0x%016" PRIxPTR ", layouts = 0x%016" PRIxPTR
+          ", stageMasks = 0x%016" PRIxPTR "",
+          CID(context), numTextures, (uintptr_t)textures, (uintptr_t)layouts,
+          (uintptr_t)stageMasks);
+
+    if (context)
+    {
+        const TextureID *texturesPacked = PackParam<const TextureID *>(textures);
+        std::unique_lock<angle::GlobalMutex> shareContextLock = GetContextLock(context);
+        bool isCallValid =
+            (context->skipValidation() ||
+             ValidateAcquireTexturesANGLE(context, angle::EntryPoint::GLAcquireTexturesANGLE,
+                                          numTextures, texturesPacked, layouts, stageMasks));
+        if (isCallValid)
+        {
+            context->acquireTextures(numTextures, texturesPacked, layouts, stageMasks);
+        }
+        ANGLE_CAPTURE(AcquireTexturesANGLE, isCallValid, context, numTextures, texturesPacked,
+                      layouts, stageMasks);
+    }
+    else
+    {
+        GenerateContextLostErrorOnCurrentGlobalContext();
+    }
+}
+
+void GL_APIENTRY GL_ReleaseTexturesANGLE(GLuint numTextures,
+                                         const GLuint *textures,
+                                         GLenum *layouts,
+                                         GLenum *stageMasks)
+{
+    Context *context = GetValidGlobalContext();
+    EVENT(context, GLReleaseTexturesANGLE,
+          "context = %d, numTextures = %u, textures = 0x%016" PRIxPTR ", layouts = 0x%016" PRIxPTR
+          ", stageMasks = 0x%016" PRIxPTR "",
+          CID(context), numTextures, (uintptr_t)textures, (uintptr_t)layouts,
+          (uintptr_t)stageMasks);
+
+    if (context)
+    {
+        const TextureID *texturesPacked = PackParam<const TextureID *>(textures);
+        std::unique_lock<angle::GlobalMutex> shareContextLock = GetContextLock(context);
+        bool isCallValid =
+            (context->skipValidation() ||
+             ValidateReleaseTexturesANGLE(context, angle::EntryPoint::GLReleaseTexturesANGLE,
+                                          numTextures, texturesPacked, layouts, stageMasks));
+        if (isCallValid)
+        {
+            context->releaseTextures(numTextures, texturesPacked, layouts, stageMasks);
+        }
+        ANGLE_CAPTURE(ReleaseTexturesANGLE, isCallValid, context, numTextures, texturesPacked,
+                      layouts, stageMasks);
+    }
+    else
+    {
+        GenerateContextLostErrorOnCurrentGlobalContext();
+    }
+}
+
 // GL_APPLE_clip_distance
 
 // GL_ARB_sync
