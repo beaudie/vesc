@@ -27,6 +27,14 @@ void FrameCaptureShared::ReplayCall(gl::Context *context,
     const ParamBuffer &params = call.params;
     switch (call.entryPoint)
     {
+        case angle::EntryPoint::GLAcquireTextures:
+            context->acquireTextures(
+                params.getParam("numTextures", ParamType::TGLuint, 0).value.GLuintVal,
+                replayContext->getAsConstPointer<const TextureID *>(
+                    params.getParam("texturesPacked", ParamType::TTextureIDConstPointer, 1)),
+                replayContext->getAsConstPointer<const GLenum *>(
+                    params.getParam("layouts", ParamType::TGLenumConstPointer, 2)));
+            break;
         case angle::EntryPoint::GLActiveShaderProgram:
             context->activeShaderProgram(
                 params.getParam("pipelinePacked", ParamType::TProgramPipelineID, 0)
@@ -2530,6 +2538,14 @@ void FrameCaptureShared::ReplayCall(gl::Context *context,
             break;
         case angle::EntryPoint::GLReleaseShaderCompiler:
             context->releaseShaderCompiler();
+            break;
+        case angle::EntryPoint::GLReleaseTextures:
+            context->releaseTextures(
+                params.getParam("numTextures", ParamType::TGLuint, 0).value.GLuintVal,
+                replayContext->getAsConstPointer<const TextureID *>(
+                    params.getParam("texturesPacked", ParamType::TTextureIDConstPointer, 1)),
+                replayContext->getReadBufferPointer<GLenum *>(
+                    params.getParam("layouts", ParamType::TGLenumPointer, 2)));
             break;
         case angle::EntryPoint::GLRenderbufferStorage:
             context->renderbufferStorage(

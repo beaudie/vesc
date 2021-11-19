@@ -3568,6 +3568,63 @@ void GL_APIENTRY GL_GetTranslatedShaderSourceANGLE(GLuint shader,
     }
 }
 
+// GL_ANGLE_vulkan_image
+void GL_APIENTRY GL_AcquireTextures(GLuint numTextures,
+                                    const GLuint *textures,
+                                    const GLenum *layouts)
+{
+    Context *context = GetValidGlobalContext();
+    EVENT(context, GLAcquireTextures,
+          "context = %d, numTextures = %u, textures = 0x%016" PRIxPTR ", layouts = 0x%016" PRIxPTR
+          "",
+          CID(context), numTextures, (uintptr_t)textures, (uintptr_t)layouts);
+
+    if (context)
+    {
+        const TextureID *texturesPacked = PackParam<const TextureID *>(textures);
+        std::unique_lock<angle::GlobalMutex> shareContextLock = GetContextLock(context);
+        bool isCallValid                                      = (context->skipValidation() ||
+                            ValidateAcquireTextures(context, angle::EntryPoint::GLAcquireTextures,
+                                                    numTextures, texturesPacked, layouts));
+        if (isCallValid)
+        {
+            context->acquireTextures(numTextures, texturesPacked, layouts);
+        }
+        ANGLE_CAPTURE(AcquireTextures, isCallValid, context, numTextures, texturesPacked, layouts);
+    }
+    else
+    {
+        GenerateContextLostErrorOnCurrentGlobalContext();
+    }
+}
+
+void GL_APIENTRY GL_ReleaseTextures(GLuint numTextures, const GLuint *textures, GLenum *layouts)
+{
+    Context *context = GetValidGlobalContext();
+    EVENT(context, GLReleaseTextures,
+          "context = %d, numTextures = %u, textures = 0x%016" PRIxPTR ", layouts = 0x%016" PRIxPTR
+          "",
+          CID(context), numTextures, (uintptr_t)textures, (uintptr_t)layouts);
+
+    if (context)
+    {
+        const TextureID *texturesPacked = PackParam<const TextureID *>(textures);
+        std::unique_lock<angle::GlobalMutex> shareContextLock = GetContextLock(context);
+        bool isCallValid                                      = (context->skipValidation() ||
+                            ValidateReleaseTextures(context, angle::EntryPoint::GLReleaseTextures,
+                                                    numTextures, texturesPacked, layouts));
+        if (isCallValid)
+        {
+            context->releaseTextures(numTextures, texturesPacked, layouts);
+        }
+        ANGLE_CAPTURE(ReleaseTextures, isCallValid, context, numTextures, texturesPacked, layouts);
+    }
+    else
+    {
+        GenerateContextLostErrorOnCurrentGlobalContext();
+    }
+}
+
 // GL_APPLE_clip_distance
 
 // GL_ARB_sync
