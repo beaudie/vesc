@@ -16,6 +16,24 @@
       "message": "Hi Jamie \u0026 Shahbaz, PTAL. Thanks",
       "revId": "80ffe977545f4ae2020a9664cd264830c4ea3817",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "a25e8bdb_94edcfd8",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 12
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2021-11-19T02:00:00Z",
+      "side": 1,
+      "message": "Are you planning on implementing one extension per entry point or bundle them all in one extension? In other words, is this WIP and will be expanded or is it good for review already?",
+      "parentUuid": "795ea278_9eda5e78",
+      "revId": "80ffe977545f4ae2020a9664cd264830c4ea3817",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
