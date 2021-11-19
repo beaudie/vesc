@@ -332,6 +332,11 @@ class ContextVk : public ContextImpl, public vk::Context, public MultisampleText
     // EXT_shader_framebuffer_fetch_non_coherent
     void framebufferFetchBarrier() override;
 
+    // GL_ANGLE_vulkan_image
+    angle::Result acquireTextures(const gl::TextureVector &textures,
+                                  const GLenum *layouts) override;
+    angle::Result releaseTextures(const gl::TextureVector &textures, GLenum *layouts) override;
+
     VkDevice getDevice() const;
     egl::ContextPriority getPriority() const { return mContextPriority; }
     bool hasProtectedContent() const { return mState.hasProtectedContent(); }
