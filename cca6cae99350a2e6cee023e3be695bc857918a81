@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "f4c9bce3_6862e96c",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2021-11-19T01:40:35Z",
+      "side": 1,
+      "message": "lgtm\n\nSorry I didn\u0027t get to the bottom of this, and that the earlier OSXWindow changes didn\u0027t work.\n",
+      "revId": "cca6cae99350a2e6cee023e3be695bc857918a81",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
