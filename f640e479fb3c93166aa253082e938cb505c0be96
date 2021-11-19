@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "96f3e601_5ae39126",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2021-11-19T15:27:32Z",
+      "side": 1,
+      "message": "LGTM, but not an expert in the potential pitfalls of this change.",
+      "revId": "f640e479fb3c93166aa253082e938cb505c0be96",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
