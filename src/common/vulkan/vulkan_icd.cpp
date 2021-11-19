@@ -48,8 +48,7 @@ namespace
 {
 
 // This function is unused on Android/Fuschia/GGP
-#if !defined(ANGLE_PLATFORM_ANDROID) && !defined(ANGLE_PLATFORM_FUCHSIA) && \
-    !defined(ANGLE_PLATFORM_GGP)
+#if !defined(ANGLE_PLATFORM_ANDROID) && !defined(ANGLE_PLATFORM_GGP)
 const std::string WrapICDEnvironment(const char *icdEnvironment)
 {
     // The libraries are bundled into the module directory
@@ -57,8 +56,11 @@ const std::string WrapICDEnvironment(const char *icdEnvironment)
     return ret;
 }
 
+#    if defined(ANGLE_VK_LAYERS_DIR)
 constexpr char kLoaderLayersPathEnv[] = "VK_LAYER_PATH";
-constexpr char kLayerEnablesEnv[]     = "VK_LAYER_ENABLES";
+#    endif
+
+constexpr char kLayerEnablesEnv[] = "VK_LAYER_ENABLES";
 #endif
 
 constexpr char kLoaderICDFilenamesEnv[]              = "VK_ICD_FILENAMES";
@@ -115,8 +117,7 @@ ScopedVkLoaderEnvironment::ScopedVkLoaderEnvironment(bool enableValidationLayers
 // Changing CWD and setting environment variables makes no sense on Android,
 // since this code is a part of Java application there.
 // Android Vulkan loader doesn't need this either.
-#if !defined(ANGLE_PLATFORM_ANDROID) && !defined(ANGLE_PLATFORM_FUCHSIA) && \
-    !defined(ANGLE_PLATFORM_GGP)
+#if !defined(ANGLE_PLATFORM_ANDROID) && !defined(ANGLE_PLATFORM_GGP)
     if (icd == vk::ICD::Mock)
     {
         if (!setICDEnvironment(WrapICDEnvironment(ANGLE_VK_MOCK_ICD_JSON).c_str()))
@@ -133,6 +134,7 @@ ScopedVkLoaderEnvironment::ScopedVkLoaderEnvironment(bool enableValidationLayers
         }
     }
 #    endif  // defined(ANGLE_VK_SWIFTSHADER_ICD_JSON)
+
     if (mEnableValidationLayers || icd != vk::ICD::Default)
     {
         const auto &cwd = angle::GetCWD();
@@ -159,11 +161,14 @@ ScopedVkLoaderEnvironment::ScopedVkLoaderEnvironment(bool enableValidationLayers
     // Override environment variable to use the ANGLE layers.
     if (mEnableValidationLayers)
     {
+#    if defined(ANGLE_VK_LAYERS_DIR)
         if (!angle::PrependPathToEnvironmentVar(kLoaderLayersPathEnv, ANGLE_VK_LAYERS_DIR))
         {
             ERR() << "Error setting environment for Vulkan layers init.";
             mEnableValidationLayers = false;
         }
+#    endif  // defined(ANGLE_VK_LAYERS_DIR)
+
         if (!angle::PrependPathToEnvironmentVar(
                 kLayerEnablesEnv, "VK_VALIDATION_FEATURE_ENABLE_SYNCHRONIZATION_VALIDATION"))
         {
