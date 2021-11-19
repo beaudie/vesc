@@ -4098,6 +4098,11 @@ angle::Result ImageHelper::initExternal(Context *context,
             DeriveCreateInfoPNext(context, actualFormatID, nullptr, &imageFormatListInfoStorage,
                                   &imageListFormatsStorage, &mCreateFlags);
     }
+    else
+    {
+        // Derive the tiling for external images.
+        deriveExternalImageTiling(externalImageCreateInfo);
+    }
 
     mYuvConversionSampler.reset();
     mExternalFormat = 0;
@@ -4214,6 +4219,22 @@ const void *ImageHelper::DeriveCreateInfoPNext(
     }
 
     return pNext;
+}
+
+void ImageHelper::deriveExternalImageTiling(const void *createInfoChain)
+{
+    const VkBaseInStructure *chain = reinterpret_cast<const VkBaseInStructure *>(createInfoChain);
+    while (chain != nullptr)
+    {
+        if (chain->sType == VK_STRUCTURE_TYPE_IMAGE_DRM_FORMAT_MODIFIER_LIST_CREATE_INFO_EXT ||
+            chain->sType == VK_STRUCTURE_TYPE_IMAGE_DRM_FORMAT_MODIFIER_EXPLICIT_CREATE_INFO_EXT)
+        {
+            mTilingMode = VK_IMAGE_TILING_DRM_FORMAT_MODIFIER_EXT;
+            return;
+        }
+
+        chain = reinterpret_cast<const VkBaseInStructure *>(chain->pNext);
+    }
 }
 
 void ImageHelper::releaseImage(RendererVk *renderer)
