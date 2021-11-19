@@ -75,6 +75,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "7f0f3678_8b3d6731",
+        "filename": "src/libANGLE/GLES1Renderer.h",
+        "patchSetId": 17
+      },
+      "lineNbr": 116,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2021-11-19T17:11:00Z",
+      "side": 1,
+      "message": "Got it, done.",
+      "parentUuid": "52a3f2eb_cd55eb79",
+      "range": {
+        "startLine": 112,
+        "startChar": 0,
+        "endLine": 116,
+        "endChar": 2
+      },
+      "revId": "d324b17b5b30fb0a7dd36125ade696f823f51fda",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "d7215043_66b9047f",
@@ -88,6 +112,30 @@
       "writtenOn": "2021-11-19T14:58:19Z",
       "side": 1,
       "message": "nit: mild preference for UberShader over Ubershader",
+      "range": {
+        "startLine": 316,
+        "startChar": 11,
+        "endLine": 316,
+        "endChar": 31
+      },
+      "revId": "d324b17b5b30fb0a7dd36125ade696f823f51fda",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "3bd4b0f4_f759c827",
+        "filename": "src/libANGLE/GLES1Renderer.h",
+        "patchSetId": 17
+      },
+      "lineNbr": 316,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2021-11-19T17:11:00Z",
+      "side": 1,
+      "message": "Works for me.",
+      "parentUuid": "d7215043_66b9047f",
       "range": {
         "startLine": 316,
         "startChar": 11,
