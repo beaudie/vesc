@@ -16,6 +16,23 @@
       "message": "Thanks again for the feedback and improvement ideas.",
       "revId": "a2e5e690d4cbd01028649ba399ce496ddbdbec17",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "25a90968_a5779d63",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 18
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2021-11-19T17:12:58Z",
+      "side": 1,
+      "message": "re-lgtm",
+      "revId": "a2e5e690d4cbd01028649ba399ce496ddbdbec17",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
