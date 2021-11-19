@@ -3977,4 +3977,43 @@ void CaptureTexStorageMemFlags3DMultisampleANGLE_imageCreateInfoPNext(
 {
     UNIMPLEMENTED();
 }
+
+void CaptureSignalAcquireTexturesANGLE_texturesPacked(const State &glState,
+                                                      bool isCallValid,
+                                                      GLuint numTextures,
+                                                      const TextureID *textures,
+                                                      const GLenum *layouts,
+                                                      ParamCapture *paramCapture)
+{
+    CaptureArray(textures, numTextures, paramCapture);
+}
+
+void CaptureSignalAcquireTexturesANGLE_layouts(const State &glState,
+                                               bool isCallValid,
+                                               GLuint numTextures,
+                                               const TextureID *textures,
+                                               const GLenum *layouts,
+                                               ParamCapture *paramCapture)
+{
+    CaptureArray(layouts, numTextures * sizeof(GLenum), paramCapture);
+}
+
+void CaptureSignalReleaseTexturesANGLE_texturesPacked(const State &glState,
+                                                      bool isCallValid,
+                                                      GLuint numTextures,
+                                                      const TextureID *textures,
+                                                      const GLenum *layouts,
+                                                      ParamCapture *paramCapture)
+{
+    CaptureArray(textures, numTextures, paramCapture);
+}
+
+void CaptureSignalReleaseTexturesANGLE_layouts(const State &glState,
+                                               bool isCallValid,
+                                               GLuint numTextures,
+                                               const TextureID *textures,
+                                               const GLenum *layouts,
+                                               ParamCapture *paramCapture)
+{}
+
 }  // namespace gl
