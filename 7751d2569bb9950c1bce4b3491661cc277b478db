@@ -16,6 +16,57 @@
       "message": "Shahbaz, this has fixes, and your changes https://chromium-review.googlesource.com/c/angle/angle/+/3279227\nLets see how it does on pixel4. ",
       "revId": "7751d2569bb9950c1bce4b3491661cc277b478db",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "dc53ca22_503fb9d9",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 15
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2021-11-19T02:19:47Z",
+      "side": 1,
+      "message": "Very close to the finish line!",
+      "revId": "7751d2569bb9950c1bce4b3491661cc277b478db",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "c92f9f2c_5caa7db6",
+        "filename": "src/libANGLE/renderer/vulkan/SurfaceVk.cpp",
+        "patchSetId": 15
+      },
+      "lineNbr": 1755,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2021-11-19T02:19:47Z",
+      "side": 1,
+      "message": "nit: Revert this back to ASSERT",
+      "revId": "7751d2569bb9950c1bce4b3491661cc277b478db",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "bf3c793a_548ec913",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 15
+      },
+      "lineNbr": 5007,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2021-11-19T02:19:47Z",
+      "side": 1,
+      "message": "I would appreciate it if you added a comment here with a quote from the spec that \"once you go shared_present, you stay shared_present\"",
+      "revId": "7751d2569bb9950c1bce4b3491661cc277b478db",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
