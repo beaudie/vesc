@@ -182,6 +182,30 @@
       },
       "revId": "c89f17e28f1e8e86b1bc77f3c291b1c07c039983",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "041bd46e_f674478f",
+        "filename": "src/libANGLE/capture/trace_fixture.cpp",
+        "patchSetId": 9
+      },
+      "lineNbr": 411,
+      "author": {
+        "id": 1491823
+      },
+      "writtenOn": "2021-11-19T08:27:24Z",
+      "side": 1,
+      "message": "There were two problems: 1. the FBO tests for GLES1 started to fail, because for glGenFramebufferOES the IDs were not created (fixed in this patch too), and some MSVC bug seems to have thrashed all the builds on Windows, so I created an extra CL to work around this bug.",
+      "parentUuid": "d6e88201_770ca75c",
+      "range": {
+        "startLine": 411,
+        "startChar": 2,
+        "endLine": 411,
+        "endChar": 21
+      },
+      "revId": "c89f17e28f1e8e86b1bc77f3c291b1c07c039983",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
