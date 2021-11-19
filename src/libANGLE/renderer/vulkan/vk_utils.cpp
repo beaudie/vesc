@@ -1607,6 +1607,7 @@ vk::LevelIndex GetLevelIndex(gl::LevelIndex levelGL, gl::LevelIndex baseLevel)
     ASSERT(baseLevel <= levelGL);
     return vk::LevelIndex(levelGL.get() - baseLevel.get());
 }
+
 }  // namespace gl_vk
 
 namespace vk_gl

@@ -456,6 +456,8 @@ const char *GetEntryPointName(EntryPoint ep)
             return "eglWaitSyncKHR";
         case EntryPoint::GLAccum:
             return "glAccum";
+        case EntryPoint::GLAcquireTextures:
+            return "glAcquireTextures";
         case EntryPoint::GLActiveShaderProgram:
             return "glActiveShaderProgram";
         case EntryPoint::GLActiveShaderProgramEXT:
@@ -2500,6 +2502,8 @@ const char *GetEntryPointName(EntryPoint ep)
             return "glRectsv";
         case EntryPoint::GLReleaseShaderCompiler:
             return "glReleaseShaderCompiler";
+        case EntryPoint::GLReleaseTextures:
+            return "glReleaseTextures";
         case EntryPoint::GLRenderMode:
             return "glRenderMode";
         case EntryPoint::GLRenderbufferStorage:
