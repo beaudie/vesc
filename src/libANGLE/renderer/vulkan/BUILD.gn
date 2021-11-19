@@ -217,7 +217,11 @@ if (is_mac) {
 }
 
 config("angle_vulkan_backend_config") {
-  defines = [ "ANGLE_ENABLE_VULKAN" ]
+  defines = [
+    "ANGLE_ENABLE_VULKAN",
+    "ANGLE_STD_ASYNC_WORKERS=ANGLE_DISABLED",
+    "ANGLE_THREAD_POOL_WORKERS=ANGLE_ENABLED",
+  ]
   if (angle_enable_swiftshader) {
     defines += [ "ANGLE_ENABLE_SWIFTSHADER" ]
   }

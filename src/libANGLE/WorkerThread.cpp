@@ -12,13 +12,15 @@
 
 #include "libANGLE/trace.h"
 
-#if (ANGLE_DELEGATE_WORKERS == ANGLE_ENABLED) || (ANGLE_STD_ASYNC_WORKERS == ANGLE_ENABLED)
+#if (ANGLE_DELEGATE_WORKERS == ANGLE_ENABLED) || (ANGLE_STD_ASYNC_WORKERS == ANGLE_ENABLED) || \
+    (ANGLE_THREAD_POOL_WORKERS == ANGLE_ENABLED)
 #    include <condition_variable>
 #    include <future>
 #    include <mutex>
 #    include <queue>
 #    include <thread>
 #endif  // (ANGLE_DELEGATE_WORKERS == ANGLE_ENABLED) || (ANGLE_STD_ASYNC_WORKERS == ANGLE_ENABLED)
+        // || (ANGLE_THREAD_POOL_WORKERS == ANGLE_ENABLED)
 
 namespace angle
 {
@@ -314,6 +316,178 @@ bool DelegateWorkerPool::isAsync()
 }
 #endif
 
+#if (ANGLE_THREAD_POOL_WORKERS == ANGLE_ENABLED)
+class ThreadPoolEvent final : public WaitableEvent
+{
+  public:
+    ThreadPoolEvent() : mIsPending(true) {}
+    ~ThreadPoolEvent() override = default;
+
+    void wait() override;
+    bool isReady() override;
+
+  private:
+    friend class ThreadPool;
+    void setFuture(std::future<void> &&future);
+
+    // To block wait() when the task is still in queue to be run.
+    // Also to protect the concurrent accesses from both main thread and
+    // background threads to the member fields.
+    std::mutex mMutex;
+
+    bool mIsPending;
+    std::condition_variable mCondition;
+    std::future<void> mFuture;
+};
+
+void ThreadPoolEvent::setFuture(std::future<void> &&future)
+{
+    mFuture = std::move(future);
+}
+
+void ThreadPoolEvent::wait()
+{
+    ANGLE_TRACE_EVENT0("gpu.angle", "ThreadPoolEvent::wait");
+    {
+        std::unique_lock<std::mutex> lock(mMutex);
+        mCondition.wait(lock, [this] { return !mIsPending; });
+    }
+
+    ASSERT(mFuture.valid());
+    mFuture.wait();
+}
+
+bool ThreadPoolEvent::isReady()
+{
+    std::lock_guard<std::mutex> lock(mMutex);
+    if (mIsPending)
+    {
+        return false;
+    }
+    ASSERT(mFuture.valid());
+    return mFuture.wait_for(std::chrono::seconds(0)) == std::future_status::ready;
+}
+
+class ThreadPool final : public WorkerThreadPool
+{
+  public:
+    ThreadPool(size_t maxThreads);
+    ~ThreadPool() override;
+
+    std::shared_ptr<WaitableEvent> postWorkerTask(std::shared_ptr<Closure> task) override;
+    void setMaxThreads(size_t maxThreads) override;
+    bool isAsync() override;
+
+  private:
+    void checkToRunPendingTasks();
+
+    // To protect the concurrent accesses from both main thread and background
+    // threads to the member fields.
+    std::mutex mMutex;
+
+    size_t mMaxThreads;
+    size_t mRunningThreads;
+    std::queue<std::pair<std::shared_ptr<ThreadPoolEvent>, std::shared_ptr<Closure>>> mTaskQueue;
+    // Signal worker thread when work is available
+    std::condition_variable mWorkAvailableCondition;
+
+    std::vector<std::thread> mThreads;
+    bool mTerminatePool = false;
+};
+
+// ThreadPool implementation.
+ThreadPool::ThreadPool(size_t maxThreads) : mMaxThreads(maxThreads), mRunningThreads(0)
+{
+    for (size_t i = 0; i < maxThreads; ++i)
+    {
+        mThreads.emplace_back(std::thread(&ThreadPool::checkToRunPendingTasks, this));
+    }
+}
+
+ThreadPool::~ThreadPool()
+{
+    {
+        std::unique_lock<std::mutex> lock(mMutex);
+        mTerminatePool = true;
+    }
+
+    mWorkAvailableCondition.notify_all();
+
+    for (std::thread &thread : mThreads)
+    {
+        thread.join();
+    }
+    mThreads.clear();
+}
+
+std::shared_ptr<WaitableEvent> ThreadPool::postWorkerTask(std::shared_ptr<Closure> task)
+{
+    ASSERT(mMaxThreads > 0);
+
+    auto waitable = std::make_shared<ThreadPoolEvent>();
+    {
+        std::lock_guard<std::mutex> lock(mMutex);
+        mTaskQueue.push(std::make_pair(waitable, task));
+        mWorkAvailableCondition.notify_one();
+    }
+
+    return std::move(waitable);
+}
+
+void ThreadPool::setMaxThreads(size_t maxThreads)
+{
+    {
+        std::lock_guard<std::mutex> lock(mMutex);
+        mMaxThreads = (maxThreads == 0xFFFFFFFF ? std::thread::hardware_concurrency() : maxThreads);
+    }
+    checkToRunPendingTasks();
+}
+
+bool ThreadPool::isAsync()
+{
+    return true;
+}
+
+void ThreadPool::checkToRunPendingTasks()
+{
+    while (true)
+    {
+        std::unique_lock<std::mutex> lock(mMutex);
+        if (mTaskQueue.empty())
+        {
+            // Only wake if notified and command queue is not empty
+            mWorkAvailableCondition.wait(lock,
+                                         [this] { return !mTaskQueue.empty() || mTerminatePool; });
+        }
+
+        if (mTerminatePool)
+        {
+            return;
+        }
+
+        ++mRunningThreads;
+        auto task = mTaskQueue.front();
+        mTaskQueue.pop();
+        auto waitable = task.first;
+        auto closure  = task.second;
+
+        std::promise<void> promise;
+        std::future<void> future = promise.get_future();
+        ANGLE_TRACE_EVENT0("gpu.angle", "ThreadPool::RunTask");
+        (*closure)();
+
+        {
+            std::lock_guard<std::mutex> waitableLock(waitable->mMutex);
+            waitable->mIsPending = false;
+            waitable->setFuture(std::move(future));
+        }
+        waitable->mCondition.notify_all();
+        ASSERT(mRunningThreads != 0);
+        --mRunningThreads;
+    }
+}
+#endif  // (ANGLE_THREAD_POOL_WORKERS == ANGLE_ENABLED)
+
 // static
 std::shared_ptr<WorkerThreadPool> WorkerThreadPool::Create(bool multithreaded)
 {
@@ -333,6 +507,14 @@ std::shared_ptr<WorkerThreadPool> WorkerThreadPool::Create(bool multithreaded)
             new AsyncWorkerPool(std::thread::hardware_concurrency()));
     }
 #endif
+#if (ANGLE_THREAD_POOL_WORKERS == ANGLE_ENABLED)
+    if (!pool && multithreaded)
+    {
+        pool =
+            std::shared_ptr<WorkerThreadPool>(new ThreadPool(std::thread::hardware_concurrency()));
+    }
+#endif
+
     if (!pool)
     {
         return std::shared_ptr<WorkerThreadPool>(new SingleThreadedWorkerPool());
