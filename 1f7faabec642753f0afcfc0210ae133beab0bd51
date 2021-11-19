@@ -1,0 +1,199 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "63291f2a_d7bae5a9",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 12
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2021-11-19T16:36:56Z",
+      "side": 1,
+      "message": "The Mac failures seem to be because on OSX it throws SIGBUS instead of SEGV. Can you also handle SIGBUS?",
+      "revId": "1f7faabec642753f0afcfc0210ae133beab0bd51",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "6cab3ce5_c265c27b",
+        "filename": "src/common/system_utils.h",
+        "patchSetId": 12
+      },
+      "lineNbr": 101,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2021-11-19T16:36:56Z",
+      "side": 1,
+      "message": "nit: would call this PageFaultHandlerRangeType",
+      "range": {
+        "startLine": 101,
+        "startChar": 11,
+        "endLine": 101,
+        "endChar": 26
+      },
+      "revId": "1f7faabec642753f0afcfc0210ae133beab0bd51",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b96c8482_812651b1",
+        "filename": "src/common/system_utils.h",
+        "patchSetId": 12
+      },
+      "lineNbr": 110,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2021-11-19T16:36:56Z",
+      "side": 1,
+      "message": "nit: using PageFaultCallback \u003d",
+      "range": {
+        "startLine": 110,
+        "startChar": 0,
+        "endLine": 110,
+        "endChar": 7
+      },
+      "revId": "1f7faabec642753f0afcfc0210ae133beab0bd51",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "d30da007_e8969c27",
+        "filename": "src/common/system_utils.h",
+        "patchSetId": 12
+      },
+      "lineNbr": 119,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2021-11-19T16:36:56Z",
+      "side": 1,
+      "message": "How many page fault handlers would you install typically? At most one? Just wondering if these need to be virtual or if you can just skip the handler callback when it\u0027s disabled inside the implementation, and use a boolean here to track if it\u0027s enabled.",
+      "range": {
+        "startLine": 117,
+        "startChar": 0,
+        "endLine": 119,
+        "endChar": 31
+      },
+      "revId": "1f7faabec642753f0afcfc0210ae133beab0bd51",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b1a7602c_6ec98981",
+        "filename": "src/common/system_utils_posix.cpp",
+        "patchSetId": 12
+      },
+      "lineNbr": 263,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2021-11-19T16:36:56Z",
+      "side": 1,
+      "message": "nit: most of the new code can be hidden inside anonymous namespace blocks, except the parts that are exposed to the header.",
+      "range": {
+        "startLine": 263,
+        "startChar": 5,
+        "endLine": 263,
+        "endChar": 26
+      },
+      "revId": "1f7faabec642753f0afcfc0210ae133beab0bd51",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "d986302c_ec55b58c",
+        "filename": "src/common/system_utils_unittest.cpp",
+        "patchSetId": 12
+      },
+      "lineNbr": 209,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2021-11-19T16:36:56Z",
+      "side": 1,
+      "message": "nit: please comment before each new test.",
+      "revId": "1f7faabec642753f0afcfc0210ae133beab0bd51",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "265b42b6_c1755794",
+        "filename": "src/common/system_utils_unittest.cpp",
+        "patchSetId": 12
+      },
+      "lineNbr": 225,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2021-11-19T16:36:56Z",
+      "side": 1,
+      "message": "nit: please use unique_ptr",
+      "range": {
+        "startLine": 225,
+        "startChar": 4,
+        "endLine": 225,
+        "endChar": 10
+      },
+      "revId": "1f7faabec642753f0afcfc0210ae133beab0bd51",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "0c22cc5d_b0c4638b",
+        "filename": "src/common/system_utils_unittest.cpp",
+        "patchSetId": 12
+      },
+      "lineNbr": 285,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2021-11-19T16:36:56Z",
+      "side": 1,
+      "message": "nit: please use std::vector, angle::MemoryBuffer or similar RAII containers.",
+      "range": {
+        "startLine": 285,
+        "startChar": 4,
+        "endLine": 285,
+        "endChar": 10
+      },
+      "revId": "1f7faabec642753f0afcfc0210ae133beab0bd51",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "cc88fdde_561bf8e9",
+        "filename": "src/common/system_utils_win32.cpp",
+        "patchSetId": 12
+      },
+      "lineNbr": 133,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2021-11-19T16:36:56Z",
+      "side": 1,
+      "message": "nit: same comment about anonymous namespaces",
+      "range": {
+        "startLine": 133,
+        "startChar": 6,
+        "endLine": 133,
+        "endChar": 27
+      },
+      "revId": "1f7faabec642753f0afcfc0210ae133beab0bd51",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
