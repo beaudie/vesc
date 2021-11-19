@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "8b905283_b2ca37d6",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 5
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2021-11-19T17:18:04Z",
+      "side": 1,
+      "message": "I like the idea and the approach, but it looks like the expectations need more updates, per CI results.",
+      "revId": "21b875c58f9639aba4a047d618170b32ce23caeb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
