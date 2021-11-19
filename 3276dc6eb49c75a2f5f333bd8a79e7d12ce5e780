@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "67144ca1_0810d10e",
+        "filename": "BUILD.gn",
+        "patchSetId": 1
+      },
+      "lineNbr": 9,
+      "author": {
+        "id": 1001921
+      },
+      "writtenOn": "2021-11-19T15:51:00Z",
+      "side": 1,
+      "message": "Is this where using_sanitizer is usually defined?\nWould be more readable if these were grouped together, like:\nif (angle_has_build) {\n  import(\"//build/config/sanitizers/sanitizers.gni\")\n} else {\n  using_sanitizer \u003d false\n}\n\nOr maybe just put it in default_args in \".gn\", hopefully //build/config/sanitizers/sanitizers.gni will override it?",
+      "range": {
+        "startLine": 9,
+        "startChar": 0,
+        "endLine": 9,
+        "endChar": 52
+      },
+      "revId": "3276dc6eb49c75a2f5f333bd8a79e7d12ce5e780",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
