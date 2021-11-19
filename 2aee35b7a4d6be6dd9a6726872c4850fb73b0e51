@@ -35,6 +35,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "ecddb316_4b7b0b24",
+        "filename": "src/libANGLE/renderer/d3d/d3d9/Context9.cpp",
+        "patchSetId": 13
+      },
+      "lineNbr": 313,
+      "author": {
+        "id": 1525982
+      },
+      "writtenOn": "2021-11-19T04:57:36Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "39c30606_42eb3584",
+      "revId": "2aee35b7a4d6be6dd9a6726872c4850fb73b0e51",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "51694ade_329fcd7e",
@@ -48,6 +66,24 @@
       "writtenOn": "2021-11-19T02:59:04Z",
       "side": 1,
       "message": "ditto",
+      "revId": "2aee35b7a4d6be6dd9a6726872c4850fb73b0e51",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "15947f4a_69e37aef",
+        "filename": "src/libANGLE/renderer/d3d/d3d9/Context9.cpp",
+        "patchSetId": 13
+      },
+      "lineNbr": 346,
+      "author": {
+        "id": 1525982
+      },
+      "writtenOn": "2021-11-19T04:57:36Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "51694ade_329fcd7e",
       "revId": "2aee35b7a4d6be6dd9a6726872c4850fb73b0e51",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
@@ -69,6 +105,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "b954cf16_1fd6fdf5",
+        "filename": "src/libANGLE/renderer/d3d/d3d9/renderer9_utils.cpp",
+        "patchSetId": 13
+      },
+      "lineNbr": 766,
+      "author": {
+        "id": 1525982
+      },
+      "writtenOn": "2021-11-19T04:57:36Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "03cb7c5d_9e763c23",
+      "revId": "2aee35b7a4d6be6dd9a6726872c4850fb73b0e51",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "3a93525c_3051c04c",
@@ -86,6 +140,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "1c5367eb_65161f97",
+        "filename": "src/libANGLE/renderer/gl/renderergl_utils.cpp",
+        "patchSetId": 13
+      },
+      "lineNbr": 1443,
+      "author": {
+        "id": 1525982
+      },
+      "writtenOn": "2021-11-19T04:57:36Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "3a93525c_3051c04c",
+      "revId": "2aee35b7a4d6be6dd9a6726872c4850fb73b0e51",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "502a283a_10ea8310",
@@ -99,6 +171,30 @@
       "writtenOn": "2021-11-19T02:59:04Z",
       "side": 1,
       "message": "These test variations don\u0027t really make sense for the indirect call, so you might as well just run the tests once per platform. That is this:\n\n    ANGLE_INSTANTIATE_TEST_ES31(MultiDrawIndirectTest);\n\ninstead of the whole `INSTANTIATE_TEST_SUITE_P(...)`.",
+      "range": {
+        "startLine": 877,
+        "startChar": 0,
+        "endLine": 879,
+        "endChar": 73
+      },
+      "revId": "2aee35b7a4d6be6dd9a6726872c4850fb73b0e51",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "a4ad7d23_480528dd",
+        "filename": "src/tests/gl_tests/MultiDrawTest.cpp",
+        "patchSetId": 13
+      },
+      "lineNbr": 879,
+      "author": {
+        "id": 1525982
+      },
+      "writtenOn": "2021-11-19T04:57:36Z",
+      "side": 1,
+      "message": "Done. Added \"MultiDrawIndirectTestParams\" and made some changes to the MultiDrawIndirectTest class for macro compatibility.",
+      "parentUuid": "502a283a_10ea8310",
       "range": {
         "startLine": 877,
         "startChar": 0,
