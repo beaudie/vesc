@@ -152,6 +152,29 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "c3fb97b3_296bee55",
+        "filename": "src/common/system_utils_unittest.cpp",
+        "patchSetId": 12
+      },
+      "lineNbr": 247,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2021-11-19T20:57:45Z",
+      "side": 1,
+      "message": "Is it safe to lock a mutex inside a signal handler? What about mprotect?\n\nGenerally, you\u0027d use a `volatile sig_atomic_t` flag that you set inside the handler and do the actual job outside.",
+      "range": {
+        "startLine": 247,
+        "startChar": 45,
+        "endLine": 247,
+        "endChar": 50
+      },
+      "revId": "1f7faabec642753f0afcfc0210ae133beab0bd51",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "0c22cc5d_b0c4638b",
         "filename": "src/common/system_utils_unittest.cpp",
         "patchSetId": 12
