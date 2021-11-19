@@ -1,0 +1,44 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "1a7b65ec_14d55324",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 4
+      },
+      "lineNbr": 13,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2021-11-19T17:21:51Z",
+      "side": 1,
+      "message": "Can you tag angleproject:6542 ?",
+      "range": {
+        "startLine": 13,
+        "startChar": 5,
+        "endLine": 13,
+        "endChar": 9
+      },
+      "revId": "0e624ada9a3b086ffb3217a9cbe8f2c7f23c4393",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "4041ed38_6f7737bb",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2021-11-19T17:21:51Z",
+      "side": 1,
+      "message": "Digging out the root cause when this script fails is definitely a problem.  Mostly because the processes interleave their output.  If this helps with that, it is an improvement.",
+      "revId": "0e624ada9a3b086ffb3217a9cbe8f2c7f23c4393",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
