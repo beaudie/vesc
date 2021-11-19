@@ -563,6 +563,8 @@
 #define glSampleMaskiANGLE t_glSampleMaskiANGLE
 #define glTexStorage2DMultisampleANGLE t_glTexStorage2DMultisampleANGLE
 #define glGetTranslatedShaderSourceANGLE t_glGetTranslatedShaderSourceANGLE
+#define glAcquireTextures t_glAcquireTextures
+#define glReleaseTextures t_glReleaseTextures
 #define glBindUniformLocationCHROMIUM t_glBindUniformLocationCHROMIUM
 #define glCompressedCopyTextureCHROMIUM t_glCompressedCopyTextureCHROMIUM
 #define glCopySubTextureCHROMIUM t_glCopySubTextureCHROMIUM
@@ -1409,6 +1411,8 @@ ANGLE_TRACE_LOADER_EXPORT extern PFNGLTEXSTORAGE2DMULTISAMPLEANGLEPROC
     t_glTexStorage2DMultisampleANGLE;
 ANGLE_TRACE_LOADER_EXPORT extern PFNGLGETTRANSLATEDSHADERSOURCEANGLEPROC
     t_glGetTranslatedShaderSourceANGLE;
+ANGLE_TRACE_LOADER_EXPORT extern PFNGLACQUIRETEXTURESPROC t_glAcquireTextures;
+ANGLE_TRACE_LOADER_EXPORT extern PFNGLRELEASETEXTURESPROC t_glReleaseTextures;
 ANGLE_TRACE_LOADER_EXPORT extern PFNGLBINDUNIFORMLOCATIONCHROMIUMPROC
     t_glBindUniformLocationCHROMIUM;
 ANGLE_TRACE_LOADER_EXPORT extern PFNGLCOMPRESSEDCOPYTEXTURECHROMIUMPROC

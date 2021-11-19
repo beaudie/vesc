@@ -908,6 +908,9 @@ struct TextureAndLayout
 };
 using TextureBarrierVector = BarrierVector<TextureAndLayout>;
 
+constexpr size_t kTextureVectorDefaultSize = 16;
+using TextureVector = angle::FastVector<Texture *, kTextureVectorDefaultSize>;
+
 // OffsetBindingPointer.getSize() returns the size specified by the user, which may be larger than
 // the size of the bound buffer. This function reduces the returned size to fit the bound buffer if
 // necessary. Returns 0 if no buffer is bound or if integer overflow occurs.
