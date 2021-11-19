@@ -4391,6 +4391,98 @@ CallCapture CaptureGetTranslatedShaderSourceANGLE(const State &glState,
     return CallCapture(angle::EntryPoint::GLGetTranslatedShaderSourceANGLE, std::move(paramBuffer));
 }
 
+CallCapture CaptureAcquireTextures(const State &glState,
+                                   bool isCallValid,
+                                   GLuint numTextures,
+                                   const TextureID *texturesPacked,
+                                   const GLenum *layouts)
+{
+    ParamBuffer paramBuffer;
+
+    paramBuffer.addValueParam("numTextures", ParamType::TGLuint, numTextures);
+
+    if (isCallValid)
+    {
+        ParamCapture texturesPackedParam("texturesPacked", ParamType::TTextureIDConstPointer);
+        InitParamValue(ParamType::TTextureIDConstPointer, texturesPacked,
+                       &texturesPackedParam.value);
+        CaptureAcquireTextures_texturesPacked(glState, isCallValid, numTextures, texturesPacked,
+                                              layouts, &texturesPackedParam);
+        paramBuffer.addParam(std::move(texturesPackedParam));
+    }
+    else
+    {
+        ParamCapture texturesPackedParam("texturesPacked", ParamType::TTextureIDConstPointer);
+        InitParamValue(ParamType::TTextureIDConstPointer, static_cast<const TextureID *>(nullptr),
+                       &texturesPackedParam.value);
+        paramBuffer.addParam(std::move(texturesPackedParam));
+    }
+
+    if (isCallValid)
+    {
+        ParamCapture layoutsParam("layouts", ParamType::TGLenumConstPointer);
+        InitParamValue(ParamType::TGLenumConstPointer, layouts, &layoutsParam.value);
+        CaptureAcquireTextures_layouts(glState, isCallValid, numTextures, texturesPacked, layouts,
+                                       &layoutsParam);
+        paramBuffer.addParam(std::move(layoutsParam));
+    }
+    else
+    {
+        ParamCapture layoutsParam("layouts", ParamType::TGLenumConstPointer);
+        InitParamValue(ParamType::TGLenumConstPointer, static_cast<const GLenum *>(nullptr),
+                       &layoutsParam.value);
+        paramBuffer.addParam(std::move(layoutsParam));
+    }
+
+    return CallCapture(angle::EntryPoint::GLAcquireTextures, std::move(paramBuffer));
+}
+
+CallCapture CaptureReleaseTextures(const State &glState,
+                                   bool isCallValid,
+                                   GLuint numTextures,
+                                   const TextureID *texturesPacked,
+                                   GLenum *layouts)
+{
+    ParamBuffer paramBuffer;
+
+    paramBuffer.addValueParam("numTextures", ParamType::TGLuint, numTextures);
+
+    if (isCallValid)
+    {
+        ParamCapture texturesPackedParam("texturesPacked", ParamType::TTextureIDConstPointer);
+        InitParamValue(ParamType::TTextureIDConstPointer, texturesPacked,
+                       &texturesPackedParam.value);
+        CaptureReleaseTextures_texturesPacked(glState, isCallValid, numTextures, texturesPacked,
+                                              layouts, &texturesPackedParam);
+        paramBuffer.addParam(std::move(texturesPackedParam));
+    }
+    else
+    {
+        ParamCapture texturesPackedParam("texturesPacked", ParamType::TTextureIDConstPointer);
+        InitParamValue(ParamType::TTextureIDConstPointer, static_cast<const TextureID *>(nullptr),
+                       &texturesPackedParam.value);
+        paramBuffer.addParam(std::move(texturesPackedParam));
+    }
+
+    if (isCallValid)
+    {
+        ParamCapture layoutsParam("layouts", ParamType::TGLenumPointer);
+        InitParamValue(ParamType::TGLenumPointer, layouts, &layoutsParam.value);
+        CaptureReleaseTextures_layouts(glState, isCallValid, numTextures, texturesPacked, layouts,
+                                       &layoutsParam);
+        paramBuffer.addParam(std::move(layoutsParam));
+    }
+    else
+    {
+        ParamCapture layoutsParam("layouts", ParamType::TGLenumPointer);
+        InitParamValue(ParamType::TGLenumPointer, static_cast<GLenum *>(nullptr),
+                       &layoutsParam.value);
+        paramBuffer.addParam(std::move(layoutsParam));
+    }
+
+    return CallCapture(angle::EntryPoint::GLReleaseTextures, std::move(paramBuffer));
+}
+
 CallCapture CaptureBindUniformLocationCHROMIUM(const State &glState,
                                                bool isCallValid,
                                                ShaderProgramID programPacked,

@@ -826,6 +826,65 @@ VkImageCreateFlags GetImageCreateFlags(gl::TextureType textureType)
     }
 }
 
+ImageLayout GetImageLayoutFromGLImageLayout(GLenum layout)
+{
+    switch (layout)
+    {
+        case GL_NONE:
+            return vk::ImageLayout::Undefined;
+        case GL_LAYOUT_GENERAL_EXT:
+            return vk::ImageLayout::ExternalShadersWrite;
+        case GL_LAYOUT_COLOR_ATTACHMENT_EXT:
+            return vk::ImageLayout::ColorAttachment;
+        case GL_LAYOUT_DEPTH_STENCIL_ATTACHMENT_EXT:
+        case GL_LAYOUT_DEPTH_STENCIL_READ_ONLY_EXT:
+        case GL_LAYOUT_DEPTH_READ_ONLY_STENCIL_ATTACHMENT_EXT:
+        case GL_LAYOUT_DEPTH_ATTACHMENT_STENCIL_READ_ONLY_EXT:
+            // Note: once VK_KHR_separate_depth_stencil_layouts becomes core or ubiquitous, we
+            // should optimize depth/stencil image layout transitions to only be performed on the
+            // aspect that needs transition.  In that case, these four layouts can be distinguished
+            // and optimized.  Note that the exact equivalent of these layouts are specified in
+            // VK_KHR_maintenance2, which are also usable, granted we transition the pair of
+            // depth/stencil layouts accordingly elsewhere in ANGLE.
+            return vk::ImageLayout::DepthStencilAttachment;
+        case GL_LAYOUT_SHADER_READ_ONLY_EXT:
+            return vk::ImageLayout::ExternalShadersReadOnly;
+        case GL_LAYOUT_TRANSFER_SRC_EXT:
+            return vk::ImageLayout::TransferSrc;
+        case GL_LAYOUT_TRANSFER_DST_EXT:
+            return vk::ImageLayout::TransferDst;
+        default:
+            UNREACHABLE();
+            return vk::ImageLayout::Undefined;
+    }
+}
+
+GLenum ConvertImageLayoutToGLImageLayout(ImageLayout layout)
+{
+    switch (layout)
+    {
+        case vk::ImageLayout::Undefined:
+            return GL_NONE;
+        case vk::ImageLayout::ExternalShadersWrite:
+            return GL_LAYOUT_GENERAL_EXT;
+        case vk::ImageLayout::ColorAttachment:
+            return GL_LAYOUT_COLOR_ATTACHMENT_EXT;
+        case vk::ImageLayout::DepthStencilAttachmentReadOnly:
+            return GL_LAYOUT_DEPTH_ATTACHMENT_STENCIL_READ_ONLY_EXT;
+        case vk::ImageLayout::DepthStencilAttachment:
+            return GL_LAYOUT_DEPTH_STENCIL_ATTACHMENT_EXT;
+        case vk::ImageLayout::ExternalShadersReadOnly:
+            return GL_LAYOUT_SHADER_READ_ONLY_EXT;
+        case vk::ImageLayout::TransferSrc:
+            return GL_LAYOUT_TRANSFER_SRC_EXT;
+        case vk::ImageLayout::TransferDst:
+            return GL_LAYOUT_TRANSFER_DST_EXT;
+        default:
+            UNREACHABLE();
+            return GL_NONE;
+    }
+}
+
 VkImageLayout ConvertImageLayoutToVkImageLayout(ImageLayout imageLayout)
 {
     return kImageMemoryBarrierData[imageLayout].layout;
