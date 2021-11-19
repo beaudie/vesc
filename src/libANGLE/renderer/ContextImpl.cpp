@@ -65,4 +65,16 @@ egl::Error ContextImpl::reacquireHighPowerGPU(gl::Context *)
     return egl::NoError();
 }
 
+angle::Result ContextImpl::acquireTextures(const gl::TextureBarrierVector &textureBarriers)
+{
+    UNREACHABLE();
+    return angle::Result::Stop;
+}
+
+angle::Result ContextImpl::releaseTextures(gl::TextureBarrierVector *textureBarriers)
+{
+    UNREACHABLE();
+    return angle::Result::Stop;
+}
+
 }  // namespace rx
