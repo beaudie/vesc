@@ -1158,6 +1158,11 @@ void InitExternalMemoryHostFunctions(VkInstance instance)
     GET_INSTANCE_FUNC(vkGetMemoryHostPointerPropertiesEXT);
 }
 
+void InitHostQueryResetFunctions(VkInstance instance)
+{
+    GET_INSTANCE_FUNC(vkGetMemoryHostPointerPropertiesEXT);
+}
+
 // VK_KHR_get_memory_requirements2
 void InitGetMemoryRequirements2KHRFunctions(VkDevice device)
 {
