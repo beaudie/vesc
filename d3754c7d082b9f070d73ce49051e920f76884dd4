@@ -16,6 +16,63 @@
       "message": "There\u0027s a decision made to decouple shader builtins emulations (gl_BaseVertex/gl_BaseInstance) from the ANGLE_base_vertex_base_instance extension back in May 2021. This CL make a new ANGLE_base_vertex_base_instance_shader_builtin extension for those.\n\nThanks for spending time reviewing this edge case extension in advance...",
       "revId": "d3754c7d082b9f070d73ce49051e920f76884dd4",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "4ca6ecd6_9aec989e",
+        "filename": "src/compiler/translator/Compiler.cpp",
+        "patchSetId": 8
+      },
+      "lineNbr": 441,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2021-11-20T02:55:16Z",
+      "side": 1,
+      "message": "Please clean up the commented out code that\u0027s left over in this file",
+      "revId": "d3754c7d082b9f070d73ce49051e920f76884dd4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "2e7dace2_42dcff75",
+        "filename": "src/compiler/translator/Compiler.cpp",
+        "patchSetId": 8
+      },
+      "lineNbr": 447,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2021-11-20T02:55:16Z",
+      "side": 1,
+      "message": "Please remove",
+      "range": {
+        "startLine": 447,
+        "startChar": 0,
+        "endLine": 447,
+        "endChar": 9
+      },
+      "revId": "d3754c7d082b9f070d73ce49051e920f76884dd4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "a7e57cbc_56ade19a",
+        "filename": "src/libANGLE/Shader.cpp",
+        "patchSetId": 8
+      },
+      "lineNbr": 360,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2021-11-20T02:55:16Z",
+      "side": 1,
+      "message": "If these are removed from WebGL, why are they added in a split extension with no users? Why not just delete them altogether?",
+      "revId": "d3754c7d082b9f070d73ce49051e920f76884dd4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
