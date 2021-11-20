@@ -16,6 +16,63 @@
       "message": "In testing on Windows with NVIDIA, I watched the code exercised by the existing tests:\n\n- OcclusionQueriesTest\n- TimerQueriesTest",
       "revId": "197a64109f9413d94c7947e32dcb0d523bb3f767",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "810f1b2a_13564098",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2021-11-20T03:37:11Z",
+      "side": 1,
+      "message": "Nice",
+      "revId": "197a64109f9413d94c7947e32dcb0d523bb3f767",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "bdcfc3d2_cb3b5ce9",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 1641,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2021-11-20T03:37:11Z",
+      "side": 1,
+      "message": "`|| mPhysicalDeviceProperties.apiVersion \u003e\u003d VK_MAKE_VERSION(1, 2, 0)`",
+      "revId": "197a64109f9413d94c7947e32dcb0d523bb3f767",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "16fc91ba_0e537306",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 2974,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2021-11-20T03:37:11Z",
+      "side": 1,
+      "message": "Could you please turn this into a helper?",
+      "range": {
+        "startLine": 2966,
+        "startChar": 0,
+        "endLine": 2974,
+        "endChar": 5
+      },
+      "revId": "197a64109f9413d94c7947e32dcb0d523bb3f767",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
