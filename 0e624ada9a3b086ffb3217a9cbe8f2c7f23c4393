@@ -50,6 +50,30 @@
     {
       "unresolved": false,
       "key": {
+        "uuid": "69bfa296_85ce4007",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 4
+      },
+      "lineNbr": 13,
+      "author": {
+        "id": 1491823
+      },
+      "writtenOn": "2021-11-20T08:41:28Z",
+      "side": 1,
+      "message": "I\u0027ve update the patch a bit: \n- beautify output by separating the logs \n- move the repeated logs before the summary output, so that the summary comes last",
+      "parentUuid": "80a20efb_ef79f66d",
+      "range": {
+        "startLine": 13,
+        "startChar": 5,
+        "endLine": 13,
+        "endChar": 9
+      },
+      "revId": "0e624ada9a3b086ffb3217a9cbe8f2c7f23c4393",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
         "uuid": "4041ed38_6f7737bb",
         "filename": "/PATCHSET_LEVEL",
         "patchSetId": 4
