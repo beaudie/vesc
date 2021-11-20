@@ -54,6 +54,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "90925acf_7085b79f",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 1641,
+      "author": {
+        "id": 1290487
+      },
+      "writtenOn": "2021-11-20T04:16:31Z",
+      "side": 1,
+      "message": "Will do Monday, thanks.",
+      "parentUuid": "bdcfc3d2_cb3b5ce9",
+      "revId": "197a64109f9413d94c7947e32dcb0d523bb3f767",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "16fc91ba_0e537306",
         "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
         "patchSetId": 2
@@ -65,6 +83,30 @@
       "writtenOn": "2021-11-20T03:37:11Z",
       "side": 1,
       "message": "Could you please turn this into a helper?",
+      "range": {
+        "startLine": 2966,
+        "startChar": 0,
+        "endLine": 2974,
+        "endChar": 5
+      },
+      "revId": "197a64109f9413d94c7947e32dcb0d523bb3f767",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "8a05e586_41d572fe",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 2974,
+      "author": {
+        "id": 1290487
+      },
+      "writtenOn": "2021-11-20T04:16:31Z",
+      "side": 1,
+      "message": "Yes, Monday.  Put it at the top of this file?",
+      "parentUuid": "16fc91ba_0e537306",
       "range": {
         "startLine": 2966,
         "startChar": 0,
