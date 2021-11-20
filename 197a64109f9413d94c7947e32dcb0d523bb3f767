@@ -115,6 +115,30 @@
       },
       "revId": "197a64109f9413d94c7947e32dcb0d523bb3f767",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ec2f30b3_07dec5be",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 2974,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2021-11-20T04:36:02Z",
+      "side": 1,
+      "message": "That works. Can also be a member and use mQuery/mQueryCount without needing to pass it.\n\nAs a follow up, we should also look into resetting the whole pool at once after allocating it, instead of once per query; that should almost entirely remove the bubbles even without host reset.",
+      "parentUuid": "8a05e586_41d572fe",
+      "range": {
+        "startLine": 2966,
+        "startChar": 0,
+        "endLine": 2974,
+        "endChar": 5
+      },
+      "revId": "197a64109f9413d94c7947e32dcb0d523bb3f767",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
