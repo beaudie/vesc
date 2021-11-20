@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "c89c40b8_c353fd7f",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1290487
+      },
+      "writtenOn": "2021-11-20T00:29:15Z",
+      "side": 1,
+      "message": "WIP: Initial plumbing, before changing any actual Reset calls",
+      "revId": "f6135a36b710bc4e6de6023bba9aba247a874810",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
