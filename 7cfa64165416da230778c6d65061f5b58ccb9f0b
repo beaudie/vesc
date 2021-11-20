@@ -22,6 +22,30 @@
       },
       "revId": "7cfa64165416da230778c6d65061f5b58ccb9f0b",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "f78a0df8_7e34ce9e",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 335,
+      "author": {
+        "id": 1520902
+      },
+      "writtenOn": "2021-11-20T08:38:57Z",
+      "side": 1,
+      "message": "I need to keep the message with seq_no: 10 as it is still being reported when some tests under test suite \"FramebufferTest_ES3.FramebufferBindToNewLevelAfterMaxIncreaseShouldntCrash\" is run, e.g. FramebufferTest_ES3.FramebufferBindToNewLevelAfterMaxIncreaseShouldntCrash/ES3_Vulkan_PreRotate270",
+      "parentUuid": "ff7398ab_9cc0dd66",
+      "range": {
+        "startLine": 324,
+        "startChar": 0,
+        "endLine": 335,
+        "endChar": 16
+      },
+      "revId": "7cfa64165416da230778c6d65061f5b58ccb9f0b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
