@@ -16,6 +16,24 @@
       "message": "I like the idea and the approach, but it looks like the expectations need more updates, per CI results.",
       "revId": "21b875c58f9639aba4a047d618170b32ce23caeb",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "2f9ca047_bcc2ad3a",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 5
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1491823
+      },
+      "writtenOn": "2021-11-20T10:06:30Z",
+      "side": 1,
+      "message": "I\u0027ve updated the patch to also handle TIMEOUT (but only capture/replay it with -a), so that SKIP_FOR_CAPTURE is no longer needed.",
+      "parentUuid": "8b905283_b2ca37d6",
+      "revId": "21b875c58f9639aba4a047d618170b32ce23caeb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
