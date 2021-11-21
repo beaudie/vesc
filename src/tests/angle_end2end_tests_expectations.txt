@@ -23,6 +23,8 @@
 6743 OPENGL : SimpleStateChangeTestES3.RespecifyBufferAfterBeginTransformFeedback/* = SKIP
 6743 GLES : SimpleStateChangeTestES3.RespecifyBufferAfterBeginTransformFeedback/* = SKIP
 
+// glslang removes the placeholder call used for transform feedback emulation
+4889 VULKAN : GLSLTest_ES3.MaxVaryingWithFeedbackAndGLline/ES3_Vulkan_Glslang = SKIP
 
 // Direct SPIR-V generation.  The following tests pass on some platforms but not others.  Need to investigate.
 4889 VULKAN : GeometryShaderTest.LayeredFramebufferPreRenderClear2DArrayColor/* = SKIP
