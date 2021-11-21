@@ -65,6 +65,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "11c88ace_5d7d565c",
+        "filename": "src/common/tls.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 51,
+      "author": {
+        "id": 1340649
+      },
+      "writtenOn": "2021-11-21T05:04:25Z",
+      "side": 1,
+      "message": "just realized that your comment might have had a typo \"not\" -\u003e \"now\"",
+      "parentUuid": "6f59a8b5_f2896ccf",
+      "range": {
+        "startLine": 49,
+        "startChar": 0,
+        "endLine": 51,
+        "endChar": 47
+      },
+      "revId": "e20a485f6d32d69614e79c3494250eba2d718c9f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "32e12941_31ea8c5f",
