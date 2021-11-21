@@ -753,6 +753,27 @@ Display *Display::GetDisplayFromDevice(Device *device, const AttributeMap &attri
     return display;
 }
 
+// static
+EglDisplaySet Display::GetEglDisplaySet()
+{
+    EglDisplaySet displays;
+
+    ANGLEPlatformDisplayMap *anglePlatformDisplays   = GetANGLEPlatformDisplayMap();
+    DevicePlatformDisplayMap *devicePlatformDisplays = GetDevicePlatformDisplayMap();
+
+    for (auto anglePlatformDisplayMapEntry : *anglePlatformDisplays)
+    {
+        displays.insert(anglePlatformDisplayMapEntry.second);
+    }
+
+    for (auto devicePlatformDisplayMapEntry : *devicePlatformDisplays)
+    {
+        displays.insert(devicePlatformDisplayMapEntry.second);
+    }
+
+    return displays;
+}
+
 Display::Display(EGLenum platform, EGLNativeDisplayType displayId, Device *eglDevice)
     : mState(displayId),
       mImplementation(nullptr),
@@ -984,7 +1005,7 @@ Error Display::initialize()
     return NoError();
 }
 
-Error Display::terminate(Thread *thread)
+Error Display::terminate(Thread *thread, bool forceTerminate)
 {
     mIsTerminated = true;
 
@@ -999,10 +1020,16 @@ Error Display::terminate(Thread *thread)
     // thread, then they are not actually destroyed while they remain current. If other resources
     // created with respect to dpy are in use by any current context or surface, then they are also
     // not destroyed until the corresponding context or surface is no longer current.
-    for (const gl::Context *context : mContextSet)
+    for (gl::Context *context : mContextSet)
     {
         if (context->getRefCount() > 0)
         {
+            if (forceTerminate)
+            {
+                context->release();
+                (void)context->unMakeCurrent(this);
+                continue;
+            }
             return NoError();
         }
     }
@@ -1595,7 +1622,7 @@ Error Display::destroyContext(Thread *thread, gl::Context *context)
             }
         }
 
-        return terminate(thread);
+        return terminate(thread, false);
     }
 
     return NoError();
