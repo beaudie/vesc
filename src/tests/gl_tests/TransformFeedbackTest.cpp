@@ -208,6 +208,45 @@ TEST_P(TransformFeedbackTest, ZeroSizedViewport)
     EXPECT_EQ(2u, primitivesWritten);
 }
 
+// Test that using a transform feedback query in the following scenario doesn't crash:
+//
+// - Enable xfb query
+// - Draw without xfb
+// - Begin xfb
+// - End xfb
+// - End xfb query
+//
+TEST_P(TransformFeedbackTest, QueryActiveNoXfbDrawThenXfbBeginEnd)
+{
+    // Set the program's transform feedback varyings (just gl_Position)
+    std::vector<std::string> tfVaryings;
+    tfVaryings.push_back("gl_Position");
+    ANGLE_GL_PROGRAM_TRANSFORM_FEEDBACK(drawColor, essl3_shaders::vs::Simple(),
+                                        essl3_shaders::fs::Red(), tfVaryings,
+                                        GL_INTERLEAVED_ATTRIBS);
+
+    glUseProgram(drawColor);
+
+    GLQuery primitivesWrittenQuery;
+    glBeginQuery(GL_TRANSFORM_FEEDBACK_PRIMITIVES_WRITTEN, primitivesWrittenQuery);
+    ASSERT_GL_NO_ERROR();
+
+    drawQuad(drawColor, essl3_shaders::PositionAttrib(), 0.5f);
+
+    glBindBufferBase(GL_TRANSFORM_FEEDBACK_BUFFER, 0, mTransformFeedbackBuffer);
+    glBeginTransformFeedback(GL_TRIANGLES);
+    glEndTransformFeedback();
+
+    glEndQuery(GL_TRANSFORM_FEEDBACK_PRIMITIVES_WRITTEN);
+
+    // Check that no primitives were written.
+    GLuint primitivesWritten = 0;
+    glGetQueryObjectuiv(primitivesWrittenQuery, GL_QUERY_RESULT_EXT, &primitivesWritten);
+    EXPECT_GL_NO_ERROR();
+
+    EXPECT_EQ(primitivesWritten, 0u);
+}
+
 // Test that rebinding a buffer with the same offset resets the offset (no longer appending from the
 // old position)
 TEST_P(TransformFeedbackTest, BufferRebinding)
