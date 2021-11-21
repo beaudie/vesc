@@ -41,6 +41,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "6f59a8b5_f2896ccf",
+        "filename": "src/common/tls.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 51,
+      "author": {
+        "id": 1340649
+      },
+      "writtenOn": "2021-11-21T05:03:19Z",
+      "side": 1,
+      "message": "\u003e Looks like this comment is not addressed\n\nwill remove comment but i think this comment has been addressed for Android, instead of for all posix platforms, because i wanted to minimize affected platforms",
+      "parentUuid": "97121eaa_0f2a5e75",
+      "range": {
+        "startLine": 49,
+        "startChar": 0,
+        "endLine": 51,
+        "endChar": 47
+      },
+      "revId": "e20a485f6d32d69614e79c3494250eba2d718c9f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "32e12941_31ea8c5f",
@@ -66,6 +90,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "09e853e8_86238663",
+        "filename": "src/libANGLE/Thread.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 27,
+      "author": {
+        "id": 1340649
+      },
+      "writtenOn": "2021-11-21T05:03:19Z",
+      "side": 1,
+      "message": "\u003e It seems like on non-Android, this will always be 0, so this if is never taken\n\nif you take a look at [1] it is only the Android platform (until a new CL decides to reuse this callback for some other platform) that registers this callback so it is only the Android platform that will ever increment or decrement \"gProcessCleanupRefCount\"\n\n[1] -\u003e https://chromium-review.googlesource.com/c/angle/angle/+/3294581/3/src/libGLESv2/global_state.cpp#73",
+      "parentUuid": "32e12941_31ea8c5f",
+      "range": {
+        "startLine": 27,
+        "startChar": 10,
+        "endLine": 27,
+        "endChar": 33
+      },
+      "revId": "e20a485f6d32d69614e79c3494250eba2d718c9f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "31eab00b_c460a361",
         "filename": "src/libGLESv2/global_state.h",
         "patchSetId": 3
@@ -77,6 +125,24 @@
       "writtenOn": "2021-11-21T03:26:06Z",
       "side": 1,
       "message": "Just add || ANDROID here, the below is a duplicate of this.",
+      "revId": "e20a485f6d32d69614e79c3494250eba2d718c9f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "8995049a_49a96ab3",
+        "filename": "src/libGLESv2/global_state.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 17,
+      "author": {
+        "id": 1340649
+      },
+      "writtenOn": "2021-11-21T05:03:19Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "31eab00b_c460a361",
       "revId": "e20a485f6d32d69614e79c3494250eba2d718c9f",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
