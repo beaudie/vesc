@@ -63,7 +63,7 @@ struct GraphicsDriverUniforms
     // 32 bits for 32 clip planes
     uint32_t enabledClipPlanes;
 
-    uint32_t xfbActiveUnpaused;
+    uint32_t unused;  // Gap usable for future
     int32_t xfbVerticesPerInstance;
 
     // Used to replace gl_NumSamples. Because gl_NumSamples cannot be recognized in SPIR-V.
@@ -4937,8 +4937,6 @@ angle::Result ContextVk::handleDirtyGraphicsDriverUniforms(DirtyBits::Iterator *
         std::swap(glViewport.width, glViewport.height);
     }
 
-    uint32_t xfbActiveUnpaused = mState.isTransformFeedbackActiveUnpaused();
-
     float depthRangeNear = mState.getNearPlane();
     float depthRangeFar  = mState.getFarPlane();
     float depthRangeDiff = depthRangeFar - depthRangeNear;
@@ -4949,14 +4947,14 @@ angle::Result ContextVk::handleDirtyGraphicsDriverUniforms(DirtyBits::Iterator *
         {static_cast<float>(glViewport.x), static_cast<float>(glViewport.y),
          static_cast<float>(glViewport.width), static_cast<float>(glViewport.height)},
         mState.getEnabledClipDistances().bits(),
-        xfbActiveUnpaused,
+        0,
         static_cast<int32_t>(mXfbVertexCountPerInstance),
         numSamples,
         {},
         {},
         {depthRangeNear, depthRangeFar, depthRangeDiff, 0.0f}};
 
-    if (xfbActiveUnpaused)
+    if (mState.isTransformFeedbackActiveUnpaused())
     {
         TransformFeedbackVk *transformFeedbackVk =
             vk::GetImpl(mState.getCurrentTransformFeedback());
