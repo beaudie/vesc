@@ -661,7 +661,7 @@ EGLBoolean Terminate(Thread *thread, Display *display)
 
     ScopedSyncCurrentContextFromThread scopedSyncCurrent(thread);
 
-    ANGLE_EGL_TRY_RETURN(thread, display->terminate(thread), "eglTerminate",
+    ANGLE_EGL_TRY_RETURN(thread, display->terminate(thread, false), "eglTerminate",
                          GetDisplayIfValid(display), EGL_FALSE);
 
     thread->setSuccess();

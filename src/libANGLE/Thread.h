@@ -13,9 +13,14 @@
 
 #include "libANGLE/Debug.h"
 
+#include <atomic>
+
 namespace angle
 {
 extern bool gUseAndroidOpenGLTlsSlot;
+extern std::atomic_int gProcessCleanupRefCount;
+
+void ProcessCleanupCallback(void *ptr);
 }  // namespace angle
 
 namespace gl
@@ -53,6 +58,8 @@ class Thread : public LabeledObject
     EGLenum getAPI() const;
 
     void setCurrent(gl::Context *context);
+    void setProcessCleanupDisplay(egl::Display *display) { mProcessCleanupDisplay = display; }
+    egl::Display *getProcessCleanupDisplay() { return mProcessCleanupDisplay; }
     Surface *getCurrentDrawSurface() const;
     Surface *getCurrentReadSurface() const;
     gl::Context *getContext() const;
@@ -63,6 +70,7 @@ class Thread : public LabeledObject
     EGLint mError;
     EGLenum mAPI;
     gl::Context *mContext;
+    egl::Display *mProcessCleanupDisplay;
 };
 
 void EnsureDebugAllocated();
