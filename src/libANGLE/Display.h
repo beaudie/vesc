@@ -128,7 +128,7 @@ class Display final : public LabeledObject,
     void onSubjectStateChange(angle::SubjectIndex index, angle::SubjectMessage message) override;
 
     Error initialize();
-    Error terminate(Thread *thread);
+    Error terminate(Thread *thread, bool forceTerminate);
     // Called before all display state dependent EGL functions. Backends can set up, for example,
     // thread-specific backend state through this function. Not called for functions that do not
     // need the state.
