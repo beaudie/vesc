@@ -10,11 +10,29 @@
 
 #include "libANGLE/Context.h"
 #include "libANGLE/Debug.h"
+#include "libANGLE/Display.h"
 #include "libANGLE/Error.h"
 
 namespace angle
 {
 bool gUseAndroidOpenGLTlsSlot;
+std::atomic_int gProcessCleanupRefCount(0);
+
+void ProcessCleanupCallback(void *ptr)
+{
+    egl::Thread *thread = static_cast<egl::Thread *>(ptr);
+    ASSERT(thread);
+
+    if (--gProcessCleanupRefCount == 0)
+    {
+        egl::EglDisplaySet displays = egl::Display::GetEglDisplaySet();
+        for (egl::Display *display : displays)
+        {
+            ASSERT(display);
+            (void)display->terminate(thread, true);
+        }
+    }
+}
 }  // namespace angle
 
 namespace egl

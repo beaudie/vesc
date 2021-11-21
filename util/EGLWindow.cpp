@@ -717,12 +717,12 @@ bool EGLWindow::initializeContext()
 
 void EGLWindow::destroyGL()
 {
-    destroyContext();
-    destroySurface();
+    // destroyContext();
+    // destroySurface();
 
     if (mDisplay != EGL_NO_DISPLAY)
     {
-        eglMakeCurrent(mDisplay, EGL_NO_SURFACE, EGL_NO_SURFACE, EGL_NO_CONTEXT);
+        // eglMakeCurrent(mDisplay, EGL_NO_SURFACE, EGL_NO_SURFACE, EGL_NO_CONTEXT);
         eglTerminate(mDisplay);
         mDisplay = EGL_NO_DISPLAY;
     }
