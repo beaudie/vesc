@@ -69,6 +69,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "9302faf9_82432788",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 12
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2021-11-22T02:35:55Z",
+      "side": 1,
+      "message": "The failure is due to this change: https://chromium-review.googlesource.com/c/angle/angle/+/3262478\n\nIt\u0027s failing on an ASSERT failure originating from this code:\n\n    EGLint lockBufferUsageHint \u003d attributes.getAsInt(\n        EGL_LOCK_USAGE_HINT_KHR, (EGL_READ_SURFACE_BIT_KHR | EGL_WRITE_SURFACE_BIT_KHR));\n\nleading to:\n\n    const std::map\u003cEGLAttrib, EGLAttrib\u003e \u0026attribs() const\n    {\n        ASSERT(isValidated());\n        return mValidatedAttributes;\n    }\n\nWhich is failing the assertion. I\u0027m gonna make a fix to the validation code we landed for this extension to fix that, and then rebasing this should fix the issue.",
+      "parentUuid": "6785a6dc_84cd6108",
+      "revId": "117783ea77149a3c072f57cef7afc014f2a00c7b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "25d72a95_dbaf8ec3",
