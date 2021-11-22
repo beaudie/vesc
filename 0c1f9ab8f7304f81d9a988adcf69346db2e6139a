@@ -69,6 +69,24 @@
       "parentUuid": "b06c8bbb_7c24bb68",
       "revId": "0c1f9ab8f7304f81d9a988adcf69346db2e6139a",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "c82f9501_81468c95",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2021-11-22T18:19:12Z",
+      "side": 1,
+      "message": "Yeah, it looks like you\u0027ll need to iterate through these maps of Displays, and release the Contexts in all of them:\n\n    typedef std::map\u003cANGLEPlatformDisplay, Display *\u003e ANGLEPlatformDisplayMap;\n    static ANGLEPlatformDisplayMap *GetANGLEPlatformDisplayMap()\n    {\n        static angle::base::NoDestructor\u003cANGLEPlatformDisplayMap\u003e displays;\n        return displays.get();\n    }\n\n    typedef std::map\u003cDevice *, Display *\u003e DevicePlatformDisplayMap;\n    static DevicePlatformDisplayMap *GetDevicePlatformDisplayMap()\n    {\n        static angle::base::NoDestructor\u003cDevicePlatformDisplayMap\u003e displays;\n        return displays.get();\n    }",
+      "parentUuid": "b8a6ae2c_e4e2515d",
+      "revId": "0c1f9ab8f7304f81d9a988adcf69346db2e6139a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
