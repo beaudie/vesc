@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "a8c723a7_e32d0724",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 16
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1359249
+      },
+      "writtenOn": "2021-11-22T21:56:23Z",
+      "side": 1,
+      "message": "For Mac platform seeing:\n    error: undefined symbol: vkGetSwapchainStatusKHR\n   \n   Maybe it has older version of vulkan_core.h ?",
+      "revId": "1e0f8f8ea91e73495726941d7c0e9e44386b4651",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
