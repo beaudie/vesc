@@ -1,0 +1,44 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b8f22e25_6d359ffa",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 8
+      },
+      "lineNbr": 13,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2021-11-22T13:33:01Z",
+      "side": 1,
+      "message": "nit: can you associate this with something in the issue tracker ?",
+      "range": {
+        "startLine": 13,
+        "startChar": 5,
+        "endLine": 13,
+        "endChar": 9
+      },
+      "revId": "4fef156c99147a28d58671639456e45af82ad304",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "b1f8ac3f_919dbf76",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 8
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2021-11-22T13:33:01Z",
+      "side": 1,
+      "message": "I worry this makes it harder to parse out the unexpected results, and personally I\u0027ve never had problems finding the failing test output. LGTM in any case.",
+      "revId": "4fef156c99147a28d58671639456e45af82ad304",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
