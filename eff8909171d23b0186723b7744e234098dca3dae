@@ -82,6 +82,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "5c777f53_51ade6d5",
+        "filename": "src/common/system_utils.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 126,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2021-11-22T16:21:21Z",
+      "side": 1,
+      "message": "Ack.",
+      "parentUuid": "9c046384_b3718931",
+      "range": {
+        "startLine": 123,
+        "startChar": 0,
+        "endLine": 126,
+        "endChar": 5
+      },
+      "revId": "eff8909171d23b0186723b7744e234098dca3dae",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "14c76741_a75a0991",
@@ -231,6 +255,24 @@
       "side": 1,
       "message": "That way it fail to compile due to the unreachable code warning: \n\n../../third_party/angle/src/common/vulkan/vulkan_icd.cpp:157:14: error: code will never be executed [-Werror,-Wunreachable-code]\n            !angle::PrependPathToEnvironmentVar(kLoaderLayersPathEnv, ANGLE_VK_LAYERS_DIR))\n             ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~",
       "parentUuid": "31ec2bab_822cc2ed",
+      "revId": "eff8909171d23b0186723b7744e234098dca3dae",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "671cb3b5_2e4a3ef9",
+        "filename": "src/common/vulkan/vulkan_icd.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 164,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2021-11-22T16:21:21Z",
+      "side": 1,
+      "message": "~~Sigh~~ Ack",
+      "parentUuid": "9cb6dd27_42d7e366",
       "revId": "eff8909171d23b0186723b7744e234098dca3dae",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
