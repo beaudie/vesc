@@ -3626,6 +3626,9 @@ Extensions Context::generateSupportedExtensions() const
     // Always enabled. Will return a default string if capture is not enabled.
     supportedExtensions.getSerializedContextStringANGLE = true;
 
+    // Always enabled.
+    supportedExtensions.rgbxInternalFormatANGLE = true;
+
     return supportedExtensions;
 }
 
