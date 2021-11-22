@@ -50,6 +50,40 @@
       "message": "Patchset 10 - passes, Patchset 12 fails. I factored SurfaceVk.cpp. I have compared side by side and I don\u0027t see any difference. The other changes seem harmless.\nPlease review diff",
       "revId": "117783ea77149a3c072f57cef7afc014f2a00c7b",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "25d72a95_dbaf8ec3",
+        "filename": "src/libANGLE/renderer/vulkan/SurfaceVk.cpp",
+        "patchSetId": 12
+      },
+      "lineNbr": 320,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2021-11-22T02:16:15Z",
+      "side": 1,
+      "message": "One thing I see missing here is a call to vkInvalidateMappedMemoryRanges, the allocated memory may not be coherent.",
+      "revId": "117783ea77149a3c072f57cef7afc014f2a00c7b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "97858d25_46b9c9ab",
+        "filename": "src/libANGLE/renderer/vulkan/SurfaceVk.cpp",
+        "patchSetId": 12
+      },
+      "lineNbr": 337,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2021-11-22T02:16:15Z",
+      "side": 1,
+      "message": "Also here, a call to vkFlushMappedMemoryRanges is missing before the copy.",
+      "revId": "117783ea77149a3c072f57cef7afc014f2a00c7b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
