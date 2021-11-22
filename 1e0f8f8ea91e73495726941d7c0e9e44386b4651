@@ -33,6 +33,24 @@
       "message": "android-arm64android-arm64-test is passing the mutable_render_buffer tests on pixel4.\n\nSo we just need a fix for the mac compile error of undefined vkGetSwapchainStatusKHR.\n\nAnd there is shader issue with android-angle-chromium-try.",
       "revId": "1e0f8f8ea91e73495726941d7c0e9e44386b4651",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "24844830_ea8079d1",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 16
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1290487
+      },
+      "writtenOn": "2021-11-22T22:36:09Z",
+      "side": 1,
+      "message": "I just happened to see this comment, and it\u0027s an issue I dealt with in a CL earlier today.  Please see: https://chromium-review.googlesource.com/c/angle/angle/+/3294061\n\nIn particular, look at how I handled vkResetQueryPoolEXT (e.g. in \"vk_headers.h\", \"vk_utils.h\", and \"vk_utils.cpp\" and probably elsewhere)",
+      "parentUuid": "a8c723a7_e32d0724",
+      "revId": "1e0f8f8ea91e73495726941d7c0e9e44386b4651",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
