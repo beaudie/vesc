@@ -5045,7 +5045,10 @@ void Context::compressedTexImage3D(TextureTarget target,
 
     Extents size(width, height, depth);
     Texture *texture = getTextureByTarget(target);
-    ANGLE_CONTEXT_TRY(texture->setCompressedImage(this, mState.getUnpackState(), target, level,
+    // From OpenGL 4 spec: By default the pixel storage modes GL_UNPACK_ROW_LENGTH,
+    // GL_UNPACK_SKIP_ROWS, GL_UNPACK_SKIP_PIXELS, GL_UNPACK_IMAGE_HEIGHT and GL_UNPACK_SKIP_IMAGES
+    // are ignored for compressed images.
+    ANGLE_CONTEXT_TRY(texture->setCompressedImage(this, PixelUnpackState(), target, level,
                                                   internalformat, size, imageSize,
                                                   static_cast<const uint8_t *>(data)));
 }
