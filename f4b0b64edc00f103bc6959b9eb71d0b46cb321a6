@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "ab466c7a_79af5912",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2021-11-22T18:02:49Z",
+      "side": 1,
+      "message": "Thanks Yuxin. Looks like the original crash that made me add this CL is still fixed after this revert. Do you know which CL fixed it? If you find out, could explain that in the commit message as well?",
+      "revId": "f4b0b64edc00f103bc6959b9eb71d0b46cb321a6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
