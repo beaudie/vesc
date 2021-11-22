@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "5ed79567_6663aa8a",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2021-11-22T02:07:50Z",
+      "side": 1,
+      "message": "Is it possible to add an end2end test for this in some form? The bug says there are Android tests that catch the issue, but it would be nice if we could catch regressions in the future before ANGLE rolls into Android.",
+      "revId": "0c1f9ab8f7304f81d9a988adcf69346db2e6139a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
