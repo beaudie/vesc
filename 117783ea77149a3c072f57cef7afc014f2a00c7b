@@ -89,6 +89,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "78b9b53f_4db78974",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 12
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1359249
+      },
+      "writtenOn": "2021-11-22T15:46:31Z",
+      "side": 1,
+      "message": "Thank you for the rebase. Admittedly I am forced to test on Windows+Vulkan with older tip, and rebase, with no test and upload to tip. So I never saw this locally.\n\nAre we going to land this, or are the memory range changes above still needed?",
+      "parentUuid": "9302faf9_82432788",
+      "revId": "117783ea77149a3c072f57cef7afc014f2a00c7b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "25d72a95_dbaf8ec3",
         "filename": "src/libANGLE/renderer/vulkan/SurfaceVk.cpp",
         "patchSetId": 12
