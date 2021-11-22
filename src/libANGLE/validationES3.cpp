@@ -1950,6 +1950,7 @@ bool ValidateCompressedTexImage3D(const Context *context,
         return false;
     }
 
+    printf("imageSize %d %d\n", imageSize, blockSize);
     if (imageSize < 0 || static_cast<GLuint>(imageSize) != blockSize)
     {
         context->validationError(entryPoint, GL_INVALID_VALUE, kInvalidCompressedImageSize);
