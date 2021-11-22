@@ -87,6 +87,24 @@
       "parentUuid": "b8a6ae2c_e4e2515d",
       "revId": "0c1f9ab8f7304f81d9a988adcf69346db2e6139a",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "7d2acca6_3cc813c4",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1340649
+      },
+      "writtenOn": "2021-11-22T18:39:27Z",
+      "side": 1,
+      "message": "Done.\n\nModified code to retrieve the set of known EGL displays instead of hoping for correct thread destroy order",
+      "parentUuid": "b8a6ae2c_e4e2515d",
+      "revId": "0c1f9ab8f7304f81d9a988adcf69346db2e6139a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }

@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "d6eafafd_40eeada4",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 5
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1340649
+      },
+      "writtenOn": "2021-11-22T18:39:27Z",
+      "side": 1,
+      "message": "PTAL",
+      "revId": "49bfcb5beb3ff2cb7840347e601244263dd8594d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "19bffe0e_7fca1df3",
+        "filename": "src/tests/egl_tests/EGLMultiContextTest.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 291,
+      "author": {
+        "id": 1340649
+      },
+      "writtenOn": "2021-11-22T18:39:27Z",
+      "side": 1,
+      "message": "shabi, sample end2end test. This along with [1] (which we dont want to check in) helps mirror the cts usecase\n\nThis is the data i got about free ram over a short period of time when i ran this test on my platform with and without the process cleanup callback -\n\n without patch -\n Free RAM: 4,070,817K\n Free RAM: 2,840,289K\n Free RAM: 3,405,569K\n Free RAM: 3,689,346K\n Free RAM: 2,719,860K\n Free RAM: 2,842,136K\n Free RAM: 3,581,172K\n Free RAM: 3,712,790K\n Free RAM: 2,439,057K\n Free RAM: 3,128,018K\n Free RAM: 3,688,579K\n Free RAM: 2,869,339K\n Free RAM: 2,891,414K\n Free RAM: 3,691,229K\n Free RAM: 3,818,636K\n Free RAM: 2,487,520K\n Free RAM: 3,232,679K\n \n with patch -\n Free RAM: 3,972,809K\n Free RAM: 2,621,049K\n Free RAM: 3,268,954K\n Free RAM: 3,743,417K\n Free RAM: 3,793,550K\n Free RAM: 2,512,706K\n Free RAM: 3,290,830K\n Free RAM: 3,649,267K\n Free RAM: 3,078,313K\n Free RAM: 2,912,865K\n Free RAM: 3,577,018K\n Free RAM: 3,706,236K\n Free RAM: 2,591,136K\n Free RAM: 3,366,094K\n Free RAM: 3,737,521K\n Free RAM: 3,805,133K\n\n[1] -\u003e https://chromium-review.googlesource.com/c/angle/angle/+/3294581/5/util/EGLWindow.cpp#718",
+      "revId": "49bfcb5beb3ff2cb7840347e601244263dd8594d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
