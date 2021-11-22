@@ -51,6 +51,24 @@
       "parentUuid": "19bffe0e_7fca1df3",
       "revId": "49bfcb5beb3ff2cb7840347e601244263dd8594d",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "e43796ec_7fbb3ad5",
+        "filename": "src/tests/egl_tests/EGLMultiContextTest.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 291,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2021-11-22T20:44:27Z",
+      "side": 1,
+      "message": "Maybe add a comment on the test that it was really tested with the changes you made to EGLWindow::destroyGL.",
+      "parentUuid": "90b0e606_70d514d1",
+      "revId": "49bfcb5beb3ff2cb7840347e601244263dd8594d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
