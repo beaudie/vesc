@@ -16,6 +16,24 @@
       "message": "Thanks Yuxin. Looks like the original crash that made me add this CL is still fixed after this revert. Do you know which CL fixed it? If you find out, could explain that in the commit message as well?",
       "revId": "f4b0b64edc00f103bc6959b9eb71d0b46cb321a6",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "95960c0a_842a7e93",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2021-11-22T18:51:28Z",
+      "side": 1,
+      "message": "It was indeed Jamie\u0027s fix for updating the image based on base/max in TextureVk::getAttachmentRenderTarget().",
+      "parentUuid": "ab466c7a_79af5912",
+      "revId": "f4b0b64edc00f103bc6959b9eb71d0b46cb321a6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
