@@ -16,6 +16,23 @@
       "message": "Ready to land, or need the memory range changes?",
       "revId": "aef20218aea74f76979fb04164d8fc516eb7bd3c",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "83d43f9f_b9c2e79a",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 13
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1359249
+      },
+      "writtenOn": "2021-11-22T17:21:32Z",
+      "side": 1,
+      "message": "Resolve comment",
+      "revId": "aef20218aea74f76979fb04164d8fc516eb7bd3c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
