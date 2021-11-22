@@ -1,8 +1,8 @@
 {
   "src/libANGLE/es3_format_type_combinations.json":
-    "30346b958cd180089e137daf69b21ab5",
+    "cac8d0857d65addaed5bac57392c6dd1",
   "src/libANGLE/format_map_autogen.cpp":
-    "fe6dd8e61e9b7b77f8b10266a2d8115f",
+    "64c2f3f0d549fbe82e7ac1d92d0a14df",
   "src/libANGLE/format_map_data.json":
     "2e5db33b6d6b142b569123f614f3ddb7",
   "src/libANGLE/gen_format_map.py":
