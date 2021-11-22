@@ -596,4 +596,11 @@ GL_APICALL void GL_APIENTRY glImportSemaphoreZirconHandleANGLE(GLuint memory,
 
 #endif /* GL_ANGLE_yuv_internal_format */
 
+#ifndef GL_ANGLE_rgbx_internal_format
+#define GL_ANGLE_rgbx_internal_format
+
+#define GL_RGBX8_ANGLE 0x96BA
+
+#endif /* GL_ANGLE_rgbx_internal_format */
+
 #endif  // INCLUDE_GLES2_GL2EXT_ANGLE_H_
