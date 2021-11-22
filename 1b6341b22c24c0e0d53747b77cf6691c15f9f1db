@@ -16,6 +16,24 @@
       "message": "Shabi: it looks like we get test failures with this CL. Can you report that to the gitlab issue? And maybe figure out what we need here?",
       "revId": "1b6341b22c24c0e0d53747b77cf6691c15f9f1db",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "64e45b26_595e0319",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 7
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2021-11-22T20:56:16Z",
+      "side": 1,
+      "message": "I fixed the CTS here: https://gerrit.khronos.org/c/vk-gl-cts/+/8455\n\nCheryl, could you please verify that my CTS fix in combination with your change makes the tests pass?",
+      "parentUuid": "6bfd0e13_7745235b",
+      "revId": "1b6341b22c24c0e0d53747b77cf6691c15f9f1db",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
