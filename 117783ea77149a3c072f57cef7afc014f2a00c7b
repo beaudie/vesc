@@ -107,6 +107,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "239cdad1_20723020",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 12
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2021-11-22T16:47:31Z",
+      "side": 1,
+      "message": "Sorry what are the memory range changes? Do you mean the usage of AttributeMap? I need to land that first, and once that\u0027s done, yes this extension is good with me to land. I\u0027ll ping Jamie for his +2.",
+      "parentUuid": "78b9b53f_4db78974",
+      "revId": "117783ea77149a3c072f57cef7afc014f2a00c7b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "25d72a95_dbaf8ec3",
         "filename": "src/libANGLE/renderer/vulkan/SurfaceVk.cpp",
         "patchSetId": 12
