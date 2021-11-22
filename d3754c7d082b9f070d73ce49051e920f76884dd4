@@ -35,6 +35,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "08d87baf_3298ea79",
+        "filename": "src/compiler/translator/Compiler.cpp",
+        "patchSetId": 8
+      },
+      "lineNbr": 441,
+      "author": {
+        "id": 1328182
+      },
+      "writtenOn": "2021-11-22T19:05:46Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "4ca6ecd6_9aec989e",
+      "revId": "d3754c7d082b9f070d73ce49051e920f76884dd4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "2e7dace2_42dcff75",
@@ -58,6 +76,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "0626b437_7469b8aa",
+        "filename": "src/compiler/translator/Compiler.cpp",
+        "patchSetId": 8
+      },
+      "lineNbr": 447,
+      "author": {
+        "id": 1328182
+      },
+      "writtenOn": "2021-11-22T19:05:46Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "2e7dace2_42dcff75",
+      "range": {
+        "startLine": 447,
+        "startChar": 0,
+        "endLine": 447,
+        "endChar": 9
+      },
+      "revId": "d3754c7d082b9f070d73ce49051e920f76884dd4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "a7e57cbc_56ade19a",
@@ -71,6 +113,24 @@
       "writtenOn": "2021-11-20T02:55:16Z",
       "side": 1,
       "message": "If these are removed from WebGL, why are they added in a split extension with no users? Why not just delete them altogether?",
+      "revId": "d3754c7d082b9f070d73ce49051e920f76884dd4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "7f4d027f_e35bd8e2",
+        "filename": "src/libANGLE/Shader.cpp",
+        "patchSetId": 8
+      },
+      "lineNbr": 360,
+      "author": {
+        "id": 1328182
+      },
+      "writtenOn": "2021-11-22T19:05:46Z",
+      "side": 1,
+      "message": "1. The emulated shader builtins is removed because other browser vendor find it hard to add. If any user is requesting to have such builtins a new extension mapping the ANGLE_base_vertex_base_instance_shader_builtin will be added.\n2. Any ANGLE users using the builtins can still use it by changing the #extension required line to the new extension.\n3. It is with least effort to decouple compared to completely remove.",
+      "parentUuid": "a7e57cbc_56ade19a",
       "revId": "d3754c7d082b9f070d73ce49051e920f76884dd4",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
