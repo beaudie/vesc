@@ -16,6 +16,144 @@
       "message": "LGTM - any new tests running with this CL?",
       "revId": "13403366a6921dc56175b05f935559ee500c912d",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ab80aa8b_b65b8e42",
+        "filename": "include/platform/FeaturesVk.h",
+        "patchSetId": 18
+      },
+      "lineNbr": 198,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2021-11-23T16:17:00Z",
+      "side": 1,
+      "message": "nit: supportsMultiDrawIndirect (no EXT). This is specifying that *Vulkan* supports the multiDrawIndirect feature, not that ANGLE intends to support the GL extension.",
+      "range": {
+        "startLine": 198,
+        "startChar": 12,
+        "endLine": 198,
+        "endChar": 40
+      },
+      "revId": "13403366a6921dc56175b05f935559ee500c912d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ade26a1b_21a14753",
+        "filename": "include/platform/FeaturesVk.h",
+        "patchSetId": 18
+      },
+      "lineNbr": 199,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2021-11-23T16:17:00Z",
+      "side": 1,
+      "message": "nit: Somehow you managed to find the only other snake_case feature to duplicate! :) As much as I prefer that, we generally use camelCase, so it\u0027d be better to switch this to camelCase.",
+      "range": {
+        "startLine": 199,
+        "startChar": 9,
+        "endLine": 199,
+        "endChar": 37
+      },
+      "revId": "13403366a6921dc56175b05f935559ee500c912d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "9ecbc048_30839264",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 18
+      },
+      "lineNbr": 2875,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2021-11-23T16:17:00Z",
+      "side": 1,
+      "message": "Same comments as the other helper",
+      "range": {
+        "startLine": 2875,
+        "startChar": 25,
+        "endLine": 2875,
+        "endChar": 54
+      },
+      "revId": "13403366a6921dc56175b05f935559ee500c912d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "a3e02c59_c8547c03",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 18
+      },
+      "lineNbr": 2996,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2021-11-23T16:17:00Z",
+      "side": 1,
+      "message": "nit: to avoid the duplicate code inside the if blocks, you can do something like this:\n\n    const bool supportsMultiDraw \u003d ...\n    const bool isMultiDrawLineLoop \u003d ...\n    const bool isMultiDrawWithStreamingAttribs \u003d ...   \u003c-- see next comment\n    if (!supportsMultiDraw || isMultiDrawLineLoop || isMultiDrawWithStreamingAttribs)\n    {\n        ...\n    }\n\n---\n\nAlso, another check is if drawCount \u003e\u003d maxDrawIndirectCount. You can maxDrawIndirectCount out of renderer-\u003egetPhysicalDeviceProperties().limits.",
+      "range": {
+        "startLine": 2984,
+        "startChar": 0,
+        "endLine": 2996,
+        "endChar": 5
+      },
+      "revId": "13403366a6921dc56175b05f935559ee500c912d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "201b3489_7382d81d",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 18
+      },
+      "lineNbr": 3011,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2021-11-23T16:17:00Z",
+      "side": 1,
+      "message": "Looks like instead you should make sure `mVertexArray-\u003egetStreamingVertexAttribsMask().any() \u0026\u0026 drawcount \u003e 1` falls back to the generic implementation above.\n\nWe should add a test to cover this case too.",
+      "range": {
+        "startLine": 3011,
+        "startChar": 59,
+        "endLine": 3011,
+        "endChar": 77
+      },
+      "revId": "13403366a6921dc56175b05f935559ee500c912d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "17dafab8_876ced6d",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 18
+      },
+      "lineNbr": 3048,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2021-11-23T16:17:00Z",
+      "side": 1,
+      "message": "You can turn this into an ASSERT instead inside the if, with a comment on what\u0027s not supported in drawCount \u003e 1 (it\u0027s that the line loop handling only handles one indirect parameter)",
+      "range": {
+        "startLine": 3048,
+        "startChar": 43,
+        "endLine": 3048,
+        "endChar": 61
+      },
+      "revId": "13403366a6921dc56175b05f935559ee500c912d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
