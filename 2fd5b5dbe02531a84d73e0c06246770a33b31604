@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "c17d3f2c_05006c3e",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2021-11-23T01:32:33Z",
+      "side": 1,
+      "message": "PTAL\n\nEvery other trace is within noise in terms of impact (both good or bad), so it\u0027s just this app that\u0027s impacted by this change.",
+      "revId": "2fd5b5dbe02531a84d73e0c06246770a33b31604",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
