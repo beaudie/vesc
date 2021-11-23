@@ -423,11 +423,13 @@ angle::Result BufferVk::setDataWithMemoryType(const gl::Context *context,
         return angle::Result::Continue;
     }
 
-    const bool wholeSize = size == static_cast<size_t>(mState.getSize());
+    const bool storageRedefined = target == gl::BufferBinding::Array
+                                      ? size > static_cast<size_t>(mState.getStorageSize())
+                                      : size != static_cast<size_t>(mState.getStorageSize());
 
     // BufferData call is re-specifying the entire buffer
     // Release and init a new mBuffer with this new size
-    if (!wholeSize)
+    if (storageRedefined)
     {
         // Release and re-create the memory and buffer.
         release(contextVk);
@@ -469,8 +471,8 @@ angle::Result BufferVk::setDataWithMemoryType(const gl::Context *context,
     if (data)
     {
         // Treat full-buffer updates as SubData calls.
-        BufferUpdateType updateType =
-            wholeSize ? BufferUpdateType::ContentsUpdate : BufferUpdateType::StorageRedefined;
+        BufferUpdateType updateType = storageRedefined ? BufferUpdateType::StorageRedefined
+                                                       : BufferUpdateType::ContentsUpdate;
 
         ANGLE_TRY(setDataImpl(contextVk, static_cast<const uint8_t *>(data), size, 0, updateType));
     }
@@ -910,7 +912,7 @@ angle::Result BufferVk::acquireAndUpdate(ContextVk *contextVk,
     // If the subData size was less than the buffer's size we additionally enqueue
     // a GPU copy of the remaining regions from the old mBuffer to the new one.
     vk::BufferHelper *src          = mBuffer;
-    size_t bufferSize              = static_cast<size_t>(mState.getSize());
+    size_t bufferSize              = static_cast<size_t>(mState.getStorageSize());
     size_t offsetAfterSubdata      = (offset + updateSize);
     bool updateRegionBeforeSubData = mHasValidData && (offset > 0);
     bool updateRegionAfterSubData  = mHasValidData && (offsetAfterSubdata < bufferSize);
