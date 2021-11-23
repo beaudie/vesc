@@ -34,6 +34,24 @@
       "parentUuid": "6bfd0e13_7745235b",
       "revId": "1b6341b22c24c0e0d53747b77cf6691c15f9f1db",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "7a0fa290_028860e2",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 7
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1446209
+      },
+      "writtenOn": "2021-11-23T02:45:28Z",
+      "side": 1,
+      "message": "I test dEQP-GLES3.functional.shaders.operator.unary_operator.minus.* in nv and mali platform with your CTS fix in combination with my change,they all passed.",
+      "parentUuid": "64e45b26_595e0319",
+      "revId": "1b6341b22c24c0e0d53747b77cf6691c15f9f1db",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
