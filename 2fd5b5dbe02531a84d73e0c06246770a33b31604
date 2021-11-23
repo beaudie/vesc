@@ -26,6 +26,30 @@
     {
       "unresolved": false,
       "key": {
+        "uuid": "55d7ba60_4dd26235",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 9,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2021-11-23T18:02:10Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "1c9fb359_984c3412",
+      "range": {
+        "startLine": 9,
+        "startChar": 57,
+        "endLine": 9,
+        "endChar": 63
+      },
+      "revId": "2fd5b5dbe02531a84d73e0c06246770a33b31604",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
         "uuid": "c17d3f2c_05006c3e",
         "filename": "/PATCHSET_LEVEL",
         "patchSetId": 1
@@ -90,6 +114,42 @@
       "side": 1,
       "message": "Isn\u0027t this something that just affects how async compilation works? Or do we use async workers for other tasks? It would be good to know more about what this improvement means, although it seems fairly easy to revert if something undesirable comes up.",
       "parentUuid": "1e4b0613_5ef8882c",
+      "revId": "2fd5b5dbe02531a84d73e0c06246770a33b31604",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "9f1a44f6_389f026b",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2021-11-23T18:02:10Z",
+      "side": 1,
+      "message": "\u003e Have you tried that trace with a lot of programs (which I think hasn\u0027t landed yet)?\n\nI don\u0027t understand what this means.   What do you mean by trying the trace with a lot of programs?   What hasn\u0027t landed yet?\n\nI\u0027ve tried this change with all of the restricted_traces/, but this is the only one that\u0027s affected in either direction (good or bad).   The rest of the traces bounce around the noise range across multiple runs.\n\n\u003e Isn\u0027t this something that just affects how async compilation works?\n\nYes, from what I can tell this should just be affecting the async compilation.\n\n\u003e It would be good to know more about what this improvement means, although it seems fairly easy to revert if something undesirable comes up.\n\nWhat more are you looking for?   This is what the trace is doing:\n\n    glCreateShader(GL_VERTEX_SHADER);\n    glShaderSource();\n    glCompileShader(]);\n    glCreateShader(GL_FRAGMENT_SHADER);\n    glShaderSource();\n    glCompileShader();\n    glGetShaderiv(GL_COMPILE_STATUS);\n    glGetShaderiv(GL_COMPILE_STATUS);\n    glAttachShader();\n    glAttachShader();\n    glLinkProgram();\n    \nWithout this change, we end up stalling in resolveCompile() for a significant amount of time.   I\u0027m not sure why just this trace is reacting this way though.",
+      "parentUuid": "c54f9a1d_34ca7761",
+      "revId": "2fd5b5dbe02531a84d73e0c06246770a33b31604",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "b02444b7_2e4d5bfd",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2021-11-23T18:02:10Z",
+      "side": 1,
+      "message": "I\u0027ve moved it into the vulkan/BUILD.gn, but I don\u0027t want to make this a GN arg that everyone has to enable, since this should be the default behavior for the Vulkan backend.",
+      "parentUuid": "244ef5a6_63f04a3a",
       "revId": "2fd5b5dbe02531a84d73e0c06246770a33b31604",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
