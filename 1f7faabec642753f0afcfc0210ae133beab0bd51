@@ -155,6 +155,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "6e2dcd3f_434ea907",
+        "filename": "src/common/system_utils.h",
+        "patchSetId": 12
+      },
+      "lineNbr": 119,
+      "author": {
+        "id": 1491687
+      },
+      "writtenOn": "2021-11-23T15:15:15Z",
+      "side": 1,
+      "message": "There can be at most one PageFaultHandler. When the handler is disabled there already won\u0027t be any call backs triggered. The enable/disable functions set the system API handler is place / remove it. I could couple that to the PageFaultHandler\u0027s life time, so enabling the system handler on construction and removing it on destruction, which would avoid these functions.\nAs for the boolean for tracking the state. There is also the possibility of querying the current handler with `sigaction`, to check if the override is in place. So I could expose a isEnabled function.",
+      "parentUuid": "d30da007_e8969c27",
+      "range": {
+        "startLine": 117,
+        "startChar": 0,
+        "endLine": 119,
+        "endChar": 31
+      },
+      "revId": "1f7faabec642753f0afcfc0210ae133beab0bd51",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "b1a7602c_6ec98981",
         "filename": "src/common/system_utils_posix.cpp",
         "patchSetId": 12
@@ -307,6 +331,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "98ed19e7_2cc7ba6e",
+        "filename": "src/common/system_utils_unittest.cpp",
+        "patchSetId": 12
+      },
+      "lineNbr": 247,
+      "author": {
+        "id": 1491687
+      },
+      "writtenOn": "2021-11-23T15:15:15Z",
+      "side": 1,
+      "message": "apitrace and AGI do call mprotect from within the signal handler. apitrace also uses std::mutex inside the handler, while AGI implements a custom synchronization `SpinLock` class, which uses `std::atomic\u003cuint32_t\u003e`.\nReading the POSIX documentation, mprotect and threading functions are not part of the \"Async-Signal-Safe functions\" specified:\nhttps://linux.die.net/man/7/signal\n\nIn fact, locking the mutex in the test was only required on Android, while the test passed on Windows and Linux without.\nAlthough in FrameCapture I rely on the mutex in the page fault handler to block the application thread that is writing to the protected memory until the memory is done capturing.\n\nCan you elaborate or give code examples on how to solve this with `volatile sig_atomic_t`?",
+      "parentUuid": "c3fb97b3_296bee55",
+      "range": {
+        "startLine": 247,
+        "startChar": 45,
+        "endLine": 247,
+        "endChar": 50
+      },
+      "revId": "1f7faabec642753f0afcfc0210ae133beab0bd51",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "0c22cc5d_b0c4638b",
         "filename": "src/common/system_utils_unittest.cpp",
         "patchSetId": 12
@@ -365,6 +413,24 @@
       "writtenOn": "2021-11-19T21:01:25Z",
       "side": 1,
       "message": "Another test you can add is to make sure the default page fault handler is called when access is outside the range. You can do that by setting up a signal handler before `CreatePageFaultHandler`, and make sure _that_ is called when `OutOfRange` is returned.",
+      "revId": "1f7faabec642753f0afcfc0210ae133beab0bd51",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "e55436f8_0226d050",
+        "filename": "src/common/system_utils_unittest.cpp",
+        "patchSetId": 12
+      },
+      "lineNbr": 287,
+      "author": {
+        "id": 1491687
+      },
+      "writtenOn": "2021-11-23T15:15:15Z",
+      "side": 1,
+      "message": "I added a `PageFaultHandlerDefaultHandler` test that is only built on `ANGLE_PLATFORM_POSIX` and sets a custom handler in place before calling `CreatePageFaultHandler`.",
+      "parentUuid": "292f5e95_b2db481e",
       "revId": "1f7faabec642753f0afcfc0210ae133beab0bd51",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
