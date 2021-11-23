@@ -14,6 +14,10 @@
 
 #include <vector>
 
+#if defined(ANGLE_PLATFORM_POSIX)
+#    include <signal.h>
+#endif
+
 using namespace angle;
 
 namespace
@@ -284,4 +288,69 @@ TEST(SystemUtils, PageFaultHandlerProtect)
     // Clean up
     EXPECT_TRUE(handler->disable());
 }
+
+#if defined(ANGLE_PLATFORM_POSIX)
+#    ifdef ANGLE_PLATFORM_MACOS
+constexpr int MPROTECT_SIGNAL = SIGBUS;
+#    else
+constexpr int MPROTECT_SIGNAL = SIGSEGV;
+#    endif
+
+std::mutex gCustomHandlerMutex;
+bool gCustomHandlerCalled = false;
+
+void CustomSegfaultHandlerFunction(int sig, siginfo_t *info, void *unused)
+{
+    std::lock_guard<std::mutex> lock(gCustomHandlerMutex);
+    gCustomHandlerCalled = true;
+}
+
+// Test if the default page fault handler is called on OutOfRange.
+TEST(SystemUtils, PageFaultHandlerDefaultHandler)
+{
+    size_t pageSize = GetPageSize();
+    EXPECT_TRUE(pageSize > 0);
+
+    std::vector<float> data   = std::vector<float>(100);
+    size_t dataSize           = sizeof(float) * data.size();
+    uintptr_t dataStart       = reinterpret_cast<uintptr_t>(data.data());
+    uintptr_t protectionStart = rx::roundDownPow2(dataStart, pageSize);
+    uintptr_t protectionEnd   = rx::roundUpPow2(dataStart + dataSize, pageSize);
+
+    // Create custom handler
+    struct sigaction sigAction = {};
+    sigAction.sa_flags         = SA_SIGINFO;
+    sigAction.sa_sigaction     = &CustomSegfaultHandlerFunction;
+    sigemptyset(&sigAction.sa_mask);
+
+    ASSERT(sigaction(MPROTECT_SIGNAL, &sigAction, nullptr) == 0);
+
+    PageFaultCallback callback = [pageSize](uintptr_t address) {
+        uintptr_t pageStart = rx::roundDownPow2(address, pageSize);
+        EXPECT_TRUE(UnprotectMemory(pageStart, pageSize));
+        return PageFaultHandlerRangeType::OutOfRange;
+    };
+
+    std::unique_ptr<PageFaultHandler> handler(CreatePageFaultHandler(callback));
+    handler->enable();
+
+    size_t protectionSize = protectionEnd - protectionStart;
+
+    // Test Protect
+    EXPECT_TRUE(ProtectMemory(protectionStart, protectionSize));
+
+    data[0] = 0.0;
+
+    {
+        std::lock_guard<std::mutex> lock(gCustomHandlerMutex);
+        EXPECT_TRUE(gCustomHandlerCalled);
+    }
+
+    // Clean up
+    EXPECT_TRUE(handler->disable());
+}
+#else
+TEST(SystemUtils, PageFaultHandlerDefaultHandler) {}
+#endif
+
 }  // anonymous namespace
