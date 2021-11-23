@@ -68,6 +68,22 @@ TEST_P(ObjectAllocationTest, BindRenderbuffer)
     EXPECT_GL_NO_ERROR();
 }
 
+// Renderbuffers can be created on the fly by calling glBindRenderbuffer,
+// so// check that the call doesn't fail that the renderbuffer is also deleted
+TEST_P(ObjectAllocationTest, BindRenderbufferBeforeGenAndDelete)
+{
+    GLuint rbId = 1;
+    glBindRenderbuffer(GL_RENDERBUFFER, rbId);
+    EXPECT_GL_NO_ERROR();
+
+    // Swap now to trigger the serialization of the renderbuffer that
+    // was initialized with the default values
+    swapBuffers();
+
+    glDeleteRenderbuffers(1, &rbId);
+    EXPECT_GL_NO_ERROR();
+}
+
 }  // anonymous namespace
 
 GTEST_ALLOW_UNINSTANTIATED_PARAMETERIZED_TEST(ObjectAllocationTest);
