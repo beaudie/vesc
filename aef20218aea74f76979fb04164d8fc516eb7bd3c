@@ -52,6 +52,23 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "b91772b5_88f6a826",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 13
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1359249
+      },
+      "writtenOn": "2021-11-23T18:56:42Z",
+      "side": 1,
+      "message": "Not sure on better way to compute row_pitch",
+      "revId": "aef20218aea74f76979fb04164d8fc516eb7bd3c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "2fce533e_7c17c76a",
@@ -112,6 +129,30 @@
       "writtenOn": "2021-11-23T14:05:09Z",
       "side": 1,
       "message": "usually we like to convert from a Vk to GL format because this can be a lossy conversion. is there a way you can compute the row pitch of the vk format? or otherwise pass the GL format information along without casting from Vk? also when do you expect this row pitch computation to fail?",
+      "range": {
+        "startLine": 260,
+        "startChar": 64,
+        "endLine": 260,
+        "endChar": 80
+      },
+      "revId": "aef20218aea74f76979fb04164d8fc516eb7bd3c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "10a3fc90_c76f3476",
+        "filename": "src/libANGLE/renderer/vulkan/SurfaceVk.cpp",
+        "patchSetId": 13
+      },
+      "lineNbr": 260,
+      "author": {
+        "id": 1359249
+      },
+      "writtenOn": "2021-11-23T18:56:42Z",
+      "side": 1,
+      "message": "Don\u0027t expect error, maybe if invalid format.\nWith the BufferHelper, there I noticed that there is no GPU alignment/padding - so the buffer row pitch is pixel_size * width. I was using anything that would give the right result. InternalFormat has this utility function ComputeRowPitch, so I went with that.",
+      "parentUuid": "42ec022d_022f2139",
       "range": {
         "startLine": 260,
         "startChar": 64,
