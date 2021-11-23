@@ -45,6 +45,7 @@ class BufferState final : angle::NonCopyable
     GLint64 getMapOffset() const { return mMapOffset; }
     GLint64 getMapLength() const { return mMapLength; }
     GLint64 getSize() const { return mSize; }
+    GLint64 getStorageSize() const { return mStorageSize; }
     bool isBoundForTransformFeedback() const { return mTransformFeedbackIndexedBindingCount != 0; }
     std::string getLabel() const { return mLabel; }
 
@@ -55,6 +56,7 @@ class BufferState final : angle::NonCopyable
 
     BufferUsage mUsage;
     GLint64 mSize;
+    GLint64 mStorageSize = 0;
     GLbitfield mAccessFlags;
     GLenum mAccess;
     GLboolean mMapped;

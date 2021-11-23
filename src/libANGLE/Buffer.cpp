@@ -138,7 +138,8 @@ angle::Result Buffer::bufferDataImpl(Context *context,
     {
         // If setData fails, the buffer contents are undefined. Set a zero size to indicate that.
         mIndexRangeCache.clear();
-        mState.mSize = 0;
+        mState.mSize        = 0;
+        mState.mStorageSize = 0;
 
         // Notify when storage changes.
         onStateChange(angle::SubjectMessage::SubjectChanged);
@@ -146,16 +147,20 @@ angle::Result Buffer::bufferDataImpl(Context *context,
         return angle::Result::Stop;
     }
 
-    bool wholeBuffer = size == mState.mSize;
+    bool storageRedefined =
+        target == BufferBinding::Array ? size > mState.mStorageSize : size != mState.mStorageSize;
 
     mIndexRangeCache.clear();
-    mState.mUsage                = usage;
-    mState.mSize                 = size;
+    mState.mUsage       = usage;
+    mState.mSize        = size;
+    mState.mStorageSize = target == BufferBinding::Array
+                              ? (size > mState.mStorageSize ? size : mState.mStorageSize)
+                              : size;
     mState.mImmutable            = (usage == BufferUsage::InvalidEnum);
     mState.mStorageExtUsageFlags = flags;
 
     // Notify when storage changes.
-    if (wholeBuffer)
+    if (!storageRedefined)
     {
         onContentsChange();
     }
@@ -191,7 +196,8 @@ angle::Result Buffer::bufferExternalDataImpl(Context *context,
     {
         // If setData fails, the buffer contents are undefined. Set a zero size to indicate that.
         mIndexRangeCache.clear();
-        mState.mSize = 0;
+        mState.mSize        = 0;
+        mState.mStorageSize = 0;
 
         // Notify when storage changes.
         onStateChange(angle::SubjectMessage::SubjectChanged);
@@ -202,6 +208,7 @@ angle::Result Buffer::bufferExternalDataImpl(Context *context,
     mIndexRangeCache.clear();
     mState.mUsage                = BufferUsage::InvalidEnum;
     mState.mSize                 = size;
+    mState.mStorageSize          = size;
     mState.mImmutable            = GL_TRUE;
     mState.mStorageExtUsageFlags = flags;
     mState.mExternal             = GL_TRUE;
