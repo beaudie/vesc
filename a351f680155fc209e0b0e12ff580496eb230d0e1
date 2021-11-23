@@ -53,6 +53,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "de3a553e_b5152e71",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 7
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1340649
+      },
+      "writtenOn": "2021-11-23T20:07:30Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "0295b6f7_fb4df826",
+      "revId": "a351f680155fc209e0b0e12ff580496eb230d0e1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "6f9ac3fd_555779fb",
@@ -66,6 +84,30 @@
       "writtenOn": "2021-11-23T17:20:21Z",
       "side": 1,
       "message": "terminateForceTerminate isn\u0027t quite precise - more like you\u0027re force releasing the context resources. can you clarify that? also for bonus points replace bool forceTerminate with enum class CleanupPolicy::ForceCleanup and LazyCleanup or something like that",
+      "range": {
+        "startLine": 1008,
+        "startChar": 46,
+        "endLine": 1008,
+        "endChar": 60
+      },
+      "revId": "a351f680155fc209e0b0e12ff580496eb230d0e1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "d6db7203_864fa742",
+        "filename": "src/libANGLE/Display.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 1008,
+      "author": {
+        "id": 1340649
+      },
+      "writtenOn": "2021-11-23T20:07:30Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "6f9ac3fd_555779fb",
       "range": {
         "startLine": 1008,
         "startChar": 46,
@@ -99,6 +141,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "b929cd48_23d47d66",
+        "filename": "src/libANGLE/Display.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 1031,
+      "author": {
+        "id": 1340649
+      },
+      "writtenOn": "2021-11-23T20:07:30Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "7650447c_62fce021",
+      "range": {
+        "startLine": 1031,
+        "startChar": 0,
+        "endLine": 1031,
+        "endChar": 25
+      },
+      "revId": "a351f680155fc209e0b0e12ff580496eb230d0e1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "1c956f94_83cfb748",
@@ -112,6 +178,30 @@
       "writtenOn": "2021-11-23T17:20:21Z",
       "side": 1,
       "message": "you should also check this is not zero",
+      "range": {
+        "startLine": 26,
+        "startChar": 10,
+        "endLine": 26,
+        "endChar": 33
+      },
+      "revId": "a351f680155fc209e0b0e12ff580496eb230d0e1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "5adb5fe8_51336f6d",
+        "filename": "src/libANGLE/Thread.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 26,
+      "author": {
+        "id": 1340649
+      },
+      "writtenOn": "2021-11-23T20:07:30Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "1c956f94_83cfb748",
       "range": {
         "startLine": 26,
         "startChar": 10,
