@@ -5000,8 +5000,7 @@ void FrameCaptureShared::maybeCapturePreCallUpdates(
 
         case EntryPoint::GLBindFramebuffer:
         case EntryPoint::GLBindFramebufferOES:
-            maybeGenResourceOnBind<gl::FramebufferID>(call, "framebufferPacked",
-                                                      ParamType::TFramebufferID);
+            maybeGenResourceOnBind<gl::FramebufferID>(call);
             break;
 
         case EntryPoint::GLGenTextures:
@@ -5368,10 +5367,30 @@ void FrameCaptureShared::maybeCapturePreCallUpdates(
 }
 
 template <typename ParamValueType>
-void FrameCaptureShared::maybeGenResourceOnBind(CallCapture &call,
-                                                const char *paramName,
-                                                ParamType paramType)
+struct ParamValueTrait
 {
+    static const char *name()
+    {
+        static_assert(sizeof(ParamValueType) == 0, "invalid ParamValueType");
+    }
+    static ParamType type()
+    {
+        static_assert(sizeof(ParamValueType) == 0, "invalid ParamValueType");
+    }
+};
+
+template <>
+struct ParamValueTrait<gl::FramebufferID>
+{
+    static const char *name() { return "framebufferPacked"; }
+    static ParamType type() { return ParamType::TFramebufferID; }
+};
+template <typename ParamValueType>
+void FrameCaptureShared::maybeGenResourceOnBind(CallCapture &call)
+{
+    const char *paramName = ParamValueTrait<ParamValueType>::name();
+    ParamType paramType   = ParamValueTrait<ParamValueType>::type();
+
     const ParamCapture &param = call.params.getParam(paramName, paramType, 1);
     const ParamValueType id   = AccessParamValue<ParamValueType>(paramType, param.value);
 
