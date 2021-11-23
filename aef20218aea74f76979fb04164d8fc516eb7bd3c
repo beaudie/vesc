@@ -118,6 +118,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "109842bf_a6dbfb8b",
+        "filename": "src/libANGLE/Error.h",
+        "patchSetId": 13
+      },
+      "lineNbr": 141,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2021-11-23T18:57:37Z",
+      "side": 1,
+      "message": "I see.. instead please just use an Impl function to return vk::Result, set the error in the display, and then call ToEGL. Is there some reason using this pattern is difficult?",
+      "parentUuid": "40abbfe7_c345e191",
+      "range": {
+        "startLine": 132,
+        "startChar": 0,
+        "endLine": 141,
+        "endChar": 0
+      },
+      "revId": "aef20218aea74f76979fb04164d8fc516eb7bd3c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "42ec022d_022f2139",
         "filename": "src/libANGLE/renderer/vulkan/SurfaceVk.cpp",
         "patchSetId": 13
@@ -200,6 +224,30 @@
       "side": 1,
       "message": "mLockBufferHelper is a member of WindowSurfaceVk, not exposed higher. I only return the buffer pointer to the higher levels.\nThis error should never happen, I can\u0027t think of a scenario, there are many checks before this, so its just a sanity check.",
       "parentUuid": "f1e03d5b_8a78140b",
+      "range": {
+        "startLine": 332,
+        "startChar": 0,
+        "endLine": 336,
+        "endChar": 0
+      },
+      "revId": "aef20218aea74f76979fb04164d8fc516eb7bd3c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "9ea49a90_bd2d85f2",
+        "filename": "src/libANGLE/renderer/vulkan/SurfaceVk.cpp",
+        "patchSetId": 13
+      },
+      "lineNbr": 336,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2021-11-23T18:57:37Z",
+      "side": 1,
+      "message": "Please change it to an ASSERT. We don\u0027t want to spend runtime validation cycles for implementation errors. Same for other points in the code if you\u0027re checking for internal errors, unless they\u0027re coming from the Vulkan driver or other external sources.",
+      "parentUuid": "6d4b5630_641cfb30",
       "range": {
         "startLine": 332,
         "startChar": 0,
