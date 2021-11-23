@@ -41,6 +41,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "aace6b13_a76d7719",
+        "filename": "include/platform/FeaturesVk.h",
+        "patchSetId": 18
+      },
+      "lineNbr": 198,
+      "author": {
+        "id": 1525982
+      },
+      "writtenOn": "2021-11-23T20:44:33Z",
+      "side": 1,
+      "message": "I see. Name updated.",
+      "parentUuid": "ab80aa8b_b65b8e42",
+      "range": {
+        "startLine": 198,
+        "startChar": 12,
+        "endLine": 198,
+        "endChar": 40
+      },
+      "revId": "13403366a6921dc56175b05f935559ee500c912d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "ade26a1b_21a14753",
@@ -54,6 +78,30 @@
       "writtenOn": "2021-11-23T16:17:00Z",
       "side": 1,
       "message": "nit: Somehow you managed to find the only other snake_case feature to duplicate! :) As much as I prefer that, we generally use camelCase, so it\u0027d be better to switch this to camelCase.",
+      "range": {
+        "startLine": 199,
+        "startChar": 9,
+        "endLine": 199,
+        "endChar": 37
+      },
+      "revId": "13403366a6921dc56175b05f935559ee500c912d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "0f0bea80_39d76a72",
+        "filename": "include/platform/FeaturesVk.h",
+        "patchSetId": 18
+      },
+      "lineNbr": 199,
+      "author": {
+        "id": 1525982
+      },
+      "writtenOn": "2021-11-23T20:44:33Z",
+      "side": 1,
+      "message": "Amazing! :) Changed to camelCase.\nShould we also update the other snake_case in this CL?",
+      "parentUuid": "ade26a1b_21a14753",
       "range": {
         "startLine": 199,
         "startChar": 9,
@@ -112,6 +160,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "b79dda8c_19fce8e7",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 18
+      },
+      "lineNbr": 2996,
+      "author": {
+        "id": 1525982
+      },
+      "writtenOn": "2021-11-23T20:44:33Z",
+      "side": 1,
+      "message": "Thanks. Updated.\ndrawCount \u003d\u003d maxDrawIndirectCount should also be OK, right?",
+      "parentUuid": "a3e02c59_c8547c03",
+      "range": {
+        "startLine": 2984,
+        "startChar": 0,
+        "endLine": 2996,
+        "endChar": 5
+      },
+      "revId": "13403366a6921dc56175b05f935559ee500c912d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "201b3489_7382d81d",
         "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
         "patchSetId": 18
@@ -123,6 +195,30 @@
       "writtenOn": "2021-11-23T16:17:00Z",
       "side": 1,
       "message": "Looks like instead you should make sure `mVertexArray-\u003egetStreamingVertexAttribsMask().any() \u0026\u0026 drawcount \u003e 1` falls back to the generic implementation above.\n\nWe should add a test to cover this case too.",
+      "range": {
+        "startLine": 3011,
+        "startChar": 59,
+        "endLine": 3011,
+        "endChar": 77
+      },
+      "revId": "13403366a6921dc56175b05f935559ee500c912d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "a736bf70_db22ee38",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 18
+      },
+      "lineNbr": 3011,
+      "author": {
+        "id": 1525982
+      },
+      "writtenOn": "2021-11-23T20:44:33Z",
+      "side": 1,
+      "message": "Check added at the top of the helper functions.",
+      "parentUuid": "201b3489_7382d81d",
       "range": {
         "startLine": 3011,
         "startChar": 59,
@@ -146,6 +242,30 @@
       "writtenOn": "2021-11-23T16:17:00Z",
       "side": 1,
       "message": "You can turn this into an ASSERT instead inside the if, with a comment on what\u0027s not supported in drawCount \u003e 1 (it\u0027s that the line loop handling only handles one indirect parameter)",
+      "range": {
+        "startLine": 3048,
+        "startChar": 43,
+        "endLine": 3048,
+        "endChar": 61
+      },
+      "revId": "13403366a6921dc56175b05f935559ee500c912d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "ed2cb572_b015d67c",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 18
+      },
+      "lineNbr": 3048,
+      "author": {
+        "id": 1525982
+      },
+      "writtenOn": "2021-11-23T20:44:33Z",
+      "side": 1,
+      "message": "Thanks. Changed to ASSERT.",
+      "parentUuid": "17dafab8_876ced6d",
       "range": {
         "startLine": 3048,
         "startChar": 43,
