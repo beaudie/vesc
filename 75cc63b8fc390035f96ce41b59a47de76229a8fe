@@ -22,6 +22,30 @@
       },
       "revId": "75cc63b8fc390035f96ce41b59a47de76229a8fe",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "e6d07656_b6e63e5e",
+        "filename": "src/common/system_utils.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 125,
+      "author": {
+        "id": 1116023
+      },
+      "writtenOn": "2021-11-23T03:08:35Z",
+      "side": 1,
+      "message": "Currently ConcatenatePath() is used only in vulkan_icd.cc with second argument always set to either ANGLE_VK_MOCK_ICD_JSON or ANGLE_VK_SWIFTSHADER_ICD_JSON. These paths are hard-coded for all platforms. So I don\u0027t think it\u0027s really worthwhile to separate this fix to a separate CL - it doesn\u0027t have any effect on other platforms.",
+      "parentUuid": "5a42a6c2_56763965",
+      "range": {
+        "startLine": 125,
+        "startChar": 15,
+        "endLine": 125,
+        "endChar": 21
+      },
+      "revId": "75cc63b8fc390035f96ce41b59a47de76229a8fe",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
