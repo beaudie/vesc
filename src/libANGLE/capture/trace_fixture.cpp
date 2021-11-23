@@ -421,6 +421,11 @@ void SetFramebufferID(GLuint id)
     SetResourceID(gFramebufferMap2, id);
 }
 
+void SetBufferID(GLuint id)
+{
+    SetResourceID(gBufferMap2, id);
+}
+
 void SetRenderbufferID(GLuint id)
 {
     SetResourceID(gRenderbufferMap2, id);
