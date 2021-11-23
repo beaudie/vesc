@@ -34,6 +34,92 @@
       "parentUuid": "ddf53942_05369fc5",
       "revId": "a351f680155fc209e0b0e12ff580496eb230d0e1",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "f415245c_68ca6103",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 7
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2021-11-23T17:20:21Z",
+      "side": 1,
+      "message": "My bad I hadn\u0027t noticed it was already Android-only.",
+      "revId": "a351f680155fc209e0b0e12ff580496eb230d0e1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "6f9ac3fd_555779fb",
+        "filename": "src/libANGLE/Display.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 1008,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2021-11-23T17:20:21Z",
+      "side": 1,
+      "message": "terminateForceTerminate isn\u0027t quite precise - more like you\u0027re force releasing the context resources. can you clarify that? also for bonus points replace bool forceTerminate with enum class CleanupPolicy::ForceCleanup and LazyCleanup or something like that",
+      "range": {
+        "startLine": 1008,
+        "startChar": 46,
+        "endLine": 1008,
+        "endChar": 60
+      },
+      "revId": "a351f680155fc209e0b0e12ff580496eb230d0e1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "7650447c_62fce021",
+        "filename": "src/libANGLE/Display.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 1031,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2021-11-23T17:20:21Z",
+      "side": 1,
+      "message": "nit: suggest you just use an else",
+      "range": {
+        "startLine": 1031,
+        "startChar": 0,
+        "endLine": 1031,
+        "endChar": 25
+      },
+      "revId": "a351f680155fc209e0b0e12ff580496eb230d0e1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "1c956f94_83cfb748",
+        "filename": "src/libANGLE/Thread.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 26,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2021-11-23T17:20:21Z",
+      "side": 1,
+      "message": "you should also check this is not zero",
+      "range": {
+        "startLine": 26,
+        "startChar": 10,
+        "endLine": 26,
+        "endChar": 33
+      },
+      "revId": "a351f680155fc209e0b0e12ff580496eb230d0e1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
