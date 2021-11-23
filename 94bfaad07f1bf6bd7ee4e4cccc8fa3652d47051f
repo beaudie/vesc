@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "966e5140_a30c4d4d",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1115588
+      },
+      "writtenOn": "2021-11-23T04:49:11Z",
+      "side": 1,
+      "message": "I\u0027m not sure if just removing the check is totally ok or not. I just know it passes the tests. Happy to change it to something else. Also, not sure what the implications are for kIndexBufferOffsetAlignment elsewhere in the code.",
+      "revId": "94bfaad07f1bf6bd7ee4e4cccc8fa3652d47051f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
