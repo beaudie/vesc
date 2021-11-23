@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "a7c57224_ff79c44f",
+        "filename": "src/tests/angle_end2end_tests_expectations.txt",
+        "patchSetId": 2
+      },
+      "lineNbr": 23,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2021-11-23T21:17:37Z",
+      "side": 1,
+      "message": "Please expose the extension only from the Vulkan backend, so we don\u0027t need to handle it in GL.",
+      "revId": "056b453ca4e2c66a4259fd96fc77b563e525219b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "75efa11d_45a35dfd",
+        "filename": "src/tests/gl_tests/TextureTest.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 5614,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2021-11-23T21:17:37Z",
+      "side": 1,
+      "message": "Should check the extension",
+      "revId": "056b453ca4e2c66a4259fd96fc77b563e525219b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
