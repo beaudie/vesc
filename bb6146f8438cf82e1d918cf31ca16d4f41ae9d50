@@ -16,6 +16,29 @@
       "message": "Thanks for digging in on this Lubosz.",
       "revId": "bb6146f8438cf82e1d918cf31ca16d4f41ae9d50",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "600fddc3_cd647693",
+        "filename": "src/tests/gl_tests/VertexAttributeTest.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 3918,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2021-11-23T23:20:19Z",
+      "side": 1,
+      "message": "I dug in on why this test is failing (or passing anywhere).  It turns out use of glVertexAttribPointer is the key.  That\u0027s telling ANGLE to convert the values to float straight out of the buffer, even though the values are unnormalized (so \"1\" gets converted to \"1.0\").  If I change this line to glVertexAttribIPointer (which tells ANGLE to keep is as an unsigned int), the Uvec4 test starts passing everywhere.  This could be part of why the trace shows it and not the app.  We may be setting up the attribs incorrectly?\n\nI think the only way to support the case in the CL, where the app says to treat it as a float, but the shader expects an uint, would be some buffer conversion, or ignoring what the app said (allowing the shader expectations to override the entrypoint), which sounds complicated.",
+      "range": {
+        "startLine": 3918,
+        "startChar": 8,
+        "endLine": 3918,
+        "endChar": 29
+      },
+      "revId": "bb6146f8438cf82e1d918cf31ca16d4f41ae9d50",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
