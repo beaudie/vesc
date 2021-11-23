@@ -142,6 +142,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "95beaadf_0cd2d24c",
+        "filename": "src/libANGLE/Error.h",
+        "patchSetId": 13
+      },
+      "lineNbr": 141,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2021-11-23T19:45:32Z",
+      "side": 1,
+      "message": "Sorry, \"angle::Result\" . there\u0027s no such thing as vk::Result.",
+      "parentUuid": "109842bf_a6dbfb8b",
+      "range": {
+        "startLine": 132,
+        "startChar": 0,
+        "endLine": 141,
+        "endChar": 0
+      },
+      "revId": "aef20218aea74f76979fb04164d8fc516eb7bd3c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "42ec022d_022f2139",
         "filename": "src/libANGLE/renderer/vulkan/SurfaceVk.cpp",
         "patchSetId": 13
