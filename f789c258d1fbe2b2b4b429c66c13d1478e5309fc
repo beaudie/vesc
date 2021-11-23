@@ -1,0 +1,96 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "5c50b439_8676160e",
+        "filename": "src/libANGLE/validationESEXT.cpp",
+        "patchSetId": 16
+      },
+      "lineNbr": 450,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2021-11-23T15:53:01Z",
+      "side": 1,
+      "message": "nit: can be placed below the extension check",
+      "range": {
+        "startLine": 450,
+        "startChar": 0,
+        "endLine": 450,
+        "endChar": 66
+      },
+      "revId": "f789c258d1fbe2b2b4b429c66c13d1478e5309fc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "7634fd2a_7d066fc6",
+        "filename": "src/libANGLE/validationESEXT.cpp",
+        "patchSetId": 16
+      },
+      "lineNbr": 463,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2021-11-23T15:53:01Z",
+      "side": 1,
+      "message": "nit: explicitly convert int types to boolean using an operator (!\u003d 0, etc)",
+      "range": {
+        "startLine": 463,
+        "startChar": 9,
+        "endLine": 463,
+        "endChar": 19
+      },
+      "revId": "f789c258d1fbe2b2b4b429c66c13d1478e5309fc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ea1d9c22_bd2115c3",
+        "filename": "src/libANGLE/validationESEXT.cpp",
+        "patchSetId": 16
+      },
+      "lineNbr": 489,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2021-11-23T15:53:01Z",
+      "side": 1,
+      "message": "nit: same nit",
+      "range": {
+        "startLine": 486,
+        "startChar": 0,
+        "endLine": 489,
+        "endChar": 82
+      },
+      "revId": "f789c258d1fbe2b2b4b429c66c13d1478e5309fc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "bd703df4_9100b63c",
+        "filename": "src/libANGLE/validationESEXT.cpp",
+        "patchSetId": 16
+      },
+      "lineNbr": 503,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2021-11-23T15:53:01Z",
+      "side": 1,
+      "message": "nit: same nit\n\nif there\u0027s common code, please feel free to refactor it into a \"Base\" function to make it easier to maintain.",
+      "range": {
+        "startLine": 503,
+        "startChar": 3,
+        "endLine": 503,
+        "endChar": 19
+      },
+      "revId": "f789c258d1fbe2b2b4b429c66c13d1478e5309fc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
