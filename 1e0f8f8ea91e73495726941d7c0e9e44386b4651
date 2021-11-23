@@ -51,6 +51,24 @@
       "parentUuid": "a8c723a7_e32d0724",
       "revId": "1e0f8f8ea91e73495726941d7c0e9e44386b4651",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "c9017164_e8880318",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 16
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2021-11-23T14:05:24Z",
+      "side": 1,
+      "message": "\u003e android-arm64android-arm64-test is passing the mutable_render_buffer tests on pixel4.\n\u003e \n\u003e So we just need a fix for the mac compile error of undefined vkGetSwapchainStatusKHR.\n\u003e \n\u003e And there is shader issue with android-angle-chromium-try.\n\nExcellent. The Android failure was a flake, you can ignore that. We can land the change once you\u0027ve fixed the mac failure (following Ian\u0027s instructions)",
+      "parentUuid": "4c90abb8_2c70defe",
+      "revId": "1e0f8f8ea91e73495726941d7c0e9e44386b4651",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
