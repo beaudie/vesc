@@ -597,10 +597,9 @@ angle::Result ContextMtl::drawElementsImpl(const gl::Context *context,
                                            &convertedOffset, &convertedType));
 
     ASSERT(idxBuffer);
-    ASSERT((convertedOffset % mtl::kIndexBufferOffsetAlignment) == 0);
     uint32_t convertedCounti32 = (uint32_t)count;
 
-    if (requiresIndexRewrite(context->getState()))
+    if (requiresIndexRewrite(context->getState(), mode))
     {
         size_t outIndexCount      = 0;
         gl::PrimitiveMode newMode = gl::PrimitiveMode::InvalidEnum;
@@ -1777,9 +1776,10 @@ void ContextMtl::updateDepthBias(const gl::State &glState)
 // Index rewrite is required if:
 // Provkoing vertex mode is 'last'
 // Program has at least one 'flat' attribute
-bool ContextMtl::requiresIndexRewrite(const gl::State &state)
+// PrimitiveMode is not POINTS.
+bool ContextMtl::requiresIndexRewrite(const gl::State &state, gl::PrimitiveMode mode)
 {
-    return mProgram->hasFlatAttribute() &&
+    return mode != gl::PrimitiveMode::Points && mProgram->hasFlatAttribute() &&
            (state.getProvokingVertex() == gl::ProvokingVertexConvention::LastVertexConvention);
 }
 
