@@ -5036,6 +5036,10 @@ void FrameCaptureShared::maybeCapturePreCallUpdates(
             break;
         }
 
+        case EntryPoint::GLBindTexture:
+            maybeGenResourceOnBind<gl::TextureID>(call);
+            break;
+
         case EntryPoint::GLDeleteBuffers:
         {
             GLsizei count = call.params.getParam("n", ParamType::TGLsizei, 0).value.GLsizeiVal;
@@ -5421,6 +5425,13 @@ struct ParamValueTrait<gl::RenderbufferID>
 {
     static const char *name() { return "renderbufferPacked"; }
     static ParamType type() { return ParamType::TRenderbufferID; }
+};
+
+template <>
+struct ParamValueTrait<gl::TextureID>
+{
+    static const char *name() { return "texturePacked"; }
+    static ParamType type() { return ParamType::TTextureID; }
 };
 
 template <typename ParamValueType>
