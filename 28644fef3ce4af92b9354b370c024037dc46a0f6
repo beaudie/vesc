@@ -105,6 +105,24 @@
       "parentUuid": "a73bcd5e_d729c46c",
       "revId": "28644fef3ce4af92b9354b370c024037dc46a0f6",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "1d76d43c_641654f6",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1491823
+      },
+      "writtenOn": "2021-11-23T17:00:02Z",
+      "side": 1,
+      "message": "I\u0027ve tried to change the code to only not detach the shaders when we actually do MEC (i.e. the start frame is \u003e 1), but it turns out that with that in Context::createShaderProgramv the shaders are then detached right after linking when running the Capture/Replay test, and then, in FrameCapture:cpp:5148 (case EntryPoint::GLCreateShaderProgramv) we hit the assertion, because we no longer can retrieve the shader attached to the program. In other words, when capturing we always have to keep the shaders attached, not only with MEC, and given that, we also have to keep the shaders attached when replaying. \n\nWith that in mind it seems to me that the we either have to change the capturing to not retrieve the shader source from the attached shader, but from call CreateShaderProgramv itself, or keep all the shader attached in all cases.",
+      "parentUuid": "e7283713_aac856f4",
+      "revId": "28644fef3ce4af92b9354b370c024037dc46a0f6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
