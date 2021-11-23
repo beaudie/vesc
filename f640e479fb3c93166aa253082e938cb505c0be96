@@ -52,6 +52,24 @@
       "parentUuid": "79106339_af19a876",
       "revId": "f640e479fb3c93166aa253082e938cb505c0be96",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "6b100cbf_94ee65ef",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2021-11-23T15:45:27Z",
+      "side": 1,
+      "message": "Thanks for the explanation Lubosz.  I do agree this seems wrong and we should follow up with an Android bug.  If this isn\u0027t blocking use of the feature with apps, let\u0027s go ahead with the workaround.\n\nAnother idea would be to write the test such that it mirrors how the app is allocating memory.",
+      "parentUuid": "169527e4_87c59c64",
+      "revId": "f640e479fb3c93166aa253082e938cb505c0be96",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
