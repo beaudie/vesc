@@ -5069,6 +5069,10 @@ void FrameCaptureShared::maybeCapturePreCallUpdates(
             break;
         }
 
+        case EntryPoint::GLBindBuffer:
+            maybeGenResourceOnBind<gl::BufferID>(call);
+            break;
+
         case EntryPoint::GLDeleteProgramPipelines:
         case EntryPoint::GLDeleteProgramPipelinesEXT:
         {
@@ -5404,6 +5408,14 @@ struct ParamValueTrait<gl::FramebufferID>
     static const char *name() { return "framebufferPacked"; }
     static ParamType type() { return ParamType::TFramebufferID; }
 };
+
+template <>
+struct ParamValueTrait<gl::BufferID>
+{
+    static const char *name() { return "bufferPacked"; }
+    static ParamType type() { return ParamType::TBufferID; }
+};
+
 template <>
 struct ParamValueTrait<gl::RenderbufferID>
 {
