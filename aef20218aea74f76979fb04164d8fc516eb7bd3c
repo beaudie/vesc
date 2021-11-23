@@ -33,6 +33,443 @@
       "message": "Resolve comment",
       "revId": "aef20218aea74f76979fb04164d8fc516eb7bd3c",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "2fce533e_7c17c76a",
+        "filename": "src/libANGLE/Error.h",
+        "patchSetId": 13
+      },
+      "lineNbr": 141,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2021-11-23T14:05:09Z",
+      "side": 1,
+      "message": "sorry if you\u0027ve gone over this before, but can this be ANGLE_TRY_TEMPLATE(EXPR, return) ?",
+      "range": {
+        "startLine": 132,
+        "startChar": 0,
+        "endLine": 141,
+        "endChar": 0
+      },
+      "revId": "aef20218aea74f76979fb04164d8fc516eb7bd3c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "42ec022d_022f2139",
+        "filename": "src/libANGLE/renderer/vulkan/SurfaceVk.cpp",
+        "patchSetId": 13
+      },
+      "lineNbr": 260,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2021-11-23T14:05:09Z",
+      "side": 1,
+      "message": "usually we like to convert from a Vk to GL format because this can be a lossy conversion. is there a way you can compute the row pitch of the vk format? or otherwise pass the GL format information along without casting from Vk? also when do you expect this row pitch computation to fail?",
+      "range": {
+        "startLine": 260,
+        "startChar": 64,
+        "endLine": 260,
+        "endChar": 80
+      },
+      "revId": "aef20218aea74f76979fb04164d8fc516eb7bd3c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "f1e03d5b_8a78140b",
+        "filename": "src/libANGLE/renderer/vulkan/SurfaceVk.cpp",
+        "patchSetId": 13
+      },
+      "lineNbr": 336,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2021-11-23T14:05:09Z",
+      "side": 1,
+      "message": "is this something we can detect in the validation layer?",
+      "range": {
+        "startLine": 332,
+        "startChar": 0,
+        "endLine": 336,
+        "endChar": 0
+      },
+      "revId": "aef20218aea74f76979fb04164d8fc516eb7bd3c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "632cc4fa_e8b142fe",
+        "filename": "src/libANGLE/renderer/vulkan/SurfaceVk.cpp",
+        "patchSetId": 13
+      },
+      "lineNbr": 348,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2021-11-23T14:05:09Z",
+      "side": 1,
+      "message": "you\u0027re discarding the VkResult here - please ensure you handle it. ideally you could call something in Renderer instead of calling vkDeviceWaitIdle. we try to not call vk functions directly in the back-end.",
+      "range": {
+        "startLine": 348,
+        "startChar": 8,
+        "endLine": 348,
+        "endChar": 24
+      },
+      "revId": "aef20218aea74f76979fb04164d8fc516eb7bd3c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "4122eaf1_3370942d",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 13
+      },
+      "lineNbr": 3868,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2021-11-23T14:05:09Z",
+      "side": 1,
+      "message": "please use c++ style casts. also please pull the getMappedMemory call out of the switch since it is repeated.",
+      "range": {
+        "startLine": 3868,
+        "startChar": 34,
+        "endLine": 3868,
+        "endChar": 42
+      },
+      "revId": "aef20218aea74f76979fb04164d8fc516eb7bd3c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "33372eae_6939c060",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 13
+      },
+      "lineNbr": 3896,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2021-11-23T14:05:09Z",
+      "side": 1,
+      "message": "please add an UNREACHABLE(); break; here.",
+      "range": {
+        "startLine": 3896,
+        "startChar": 8,
+        "endLine": 3896,
+        "endChar": 15
+      },
+      "revId": "aef20218aea74f76979fb04164d8fc516eb7bd3c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "d3f6efd4_9fb8c5f4",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 13
+      },
+      "lineNbr": 6827,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2021-11-23T14:05:09Z",
+      "side": 1,
+      "message": "AndReturnColor?",
+      "range": {
+        "startLine": 6827,
+        "startChar": 18,
+        "endLine": 6827,
+        "endChar": 42
+      },
+      "revId": "aef20218aea74f76979fb04164d8fc516eb7bd3c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "592185bb_aa428389",
+        "filename": "src/tests/egl_tests/EGLLockSurface3Test.cpp",
+        "patchSetId": 13
+      },
+      "lineNbr": 82,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2021-11-23T14:05:09Z",
+      "side": 1,
+      "message": "please use c++-style casts",
+      "range": {
+        "startLine": 82,
+        "startChar": 31,
+        "endLine": 82,
+        "endChar": 39
+      },
+      "revId": "aef20218aea74f76979fb04164d8fc516eb7bd3c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b0473528_ed722994",
+        "filename": "src/tests/egl_tests/EGLLockSurface3Test.cpp",
+        "patchSetId": 13
+      },
+      "lineNbr": 93,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2021-11-23T14:05:09Z",
+      "side": 1,
+      "message": "\"expected\". is it possible you could make two arrays and compare the arrays instead of using for loops?",
+      "range": {
+        "startLine": 93,
+        "startChar": 34,
+        "endLine": 93,
+        "endChar": 41
+      },
+      "revId": "aef20218aea74f76979fb04164d8fc516eb7bd3c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "fa0dafbc_8e465499",
+        "filename": "src/tests/egl_tests/EGLLockSurface3Test.cpp",
+        "patchSetId": 13
+      },
+      "lineNbr": 104,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2021-11-23T14:05:09Z",
+      "side": 1,
+      "message": "nit: please use std::array or std::vector",
+      "range": {
+        "startLine": 104,
+        "startChar": 8,
+        "endLine": 104,
+        "endChar": 16
+      },
+      "revId": "aef20218aea74f76979fb04164d8fc516eb7bd3c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "a8df4ebb_d4c39b7f",
+        "filename": "src/tests/egl_tests/EGLLockSurface3Test.cpp",
+        "patchSetId": 13
+      },
+      "lineNbr": 127,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2021-11-23T14:05:09Z",
+      "side": 1,
+      "message": "nit: use an RAII type and pass it in here",
+      "range": {
+        "startLine": 127,
+        "startChar": 23,
+        "endLine": 127,
+        "endChar": 29
+      },
+      "revId": "aef20218aea74f76979fb04164d8fc516eb7bd3c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "4ca4cfba_ee80eaf1",
+        "filename": "src/tests/egl_tests/EGLLockSurface3Test.cpp",
+        "patchSetId": 13
+      },
+      "lineNbr": 141,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2021-11-23T14:05:09Z",
+      "side": 1,
+      "message": "nit: EXPECT_NE(texture, 0)... but if you use the RAII type you don\u0027t need to bother with that.",
+      "range": {
+        "startLine": 140,
+        "startChar": 0,
+        "endLine": 141,
+        "endChar": 28
+      },
+      "revId": "aef20218aea74f76979fb04164d8fc516eb7bd3c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "89b9203b_c1715ca6",
+        "filename": "src/tests/egl_tests/EGLLockSurface3Test.cpp",
+        "patchSetId": 13
+      },
+      "lineNbr": 151,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2021-11-23T14:05:09Z",
+      "side": 1,
+      "message": "c++-style cast, std::array or std::vector",
+      "range": {
+        "startLine": 151,
+        "startChar": 26,
+        "endLine": 151,
+        "endChar": 32
+      },
+      "revId": "aef20218aea74f76979fb04164d8fc516eb7bd3c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "d9118a64_97edba34",
+        "filename": "src/tests/egl_tests/EGLLockSurface3Test.cpp",
+        "patchSetId": 13
+      },
+      "lineNbr": 155,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2021-11-23T14:05:09Z",
+      "side": 1,
+      "message": "cast",
+      "range": {
+        "startLine": 155,
+        "startChar": 25,
+        "endLine": 155,
+        "endChar": 29
+      },
+      "revId": "aef20218aea74f76979fb04164d8fc516eb7bd3c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ab8ca826_161b0782",
+        "filename": "src/tests/egl_tests/EGLLockSurface3Test.cpp",
+        "patchSetId": 13
+      },
+      "lineNbr": 160,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2021-11-23T14:05:09Z",
+      "side": 1,
+      "message": "same",
+      "range": {
+        "startLine": 160,
+        "startChar": 23,
+        "endLine": 160,
+        "endChar": 29
+      },
+      "revId": "aef20218aea74f76979fb04164d8fc516eb7bd3c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "af080b11_fbd63a0f",
+        "filename": "src/tests/egl_tests/EGLLockSurface3Test.cpp",
+        "patchSetId": 13
+      },
+      "lineNbr": 184,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2021-11-23T14:05:09Z",
+      "side": 1,
+      "message": "use ANGLE_GL_PROGRAM",
+      "range": {
+        "startLine": 184,
+        "startChar": 8,
+        "endLine": 184,
+        "endChar": 14
+      },
+      "revId": "aef20218aea74f76979fb04164d8fc516eb7bd3c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "efb44394_c485c4b6",
+        "filename": "src/tests/egl_tests/EGLLockSurface3Test.cpp",
+        "patchSetId": 13
+      },
+      "lineNbr": 200,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2021-11-23T14:05:09Z",
+      "side": 1,
+      "message": "nit: can be constexpr",
+      "range": {
+        "startLine": 200,
+        "startChar": 11,
+        "endLine": 200,
+        "endChar": 16
+      },
+      "revId": "aef20218aea74f76979fb04164d8fc516eb7bd3c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "fef0448e_5aed334b",
+        "filename": "src/tests/egl_tests/EGLLockSurface3Test.cpp",
+        "patchSetId": 13
+      },
+      "lineNbr": 207,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2021-11-23T14:05:09Z",
+      "side": 1,
+      "message": "instead of keeping this as a bool, use a helper func to match most (if not all) other tests",
+      "range": {
+        "startLine": 207,
+        "startChar": 24,
+        "endLine": 207,
+        "endChar": 43
+      },
+      "revId": "aef20218aea74f76979fb04164d8fc516eb7bd3c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "8447b454_66bc8e86",
+        "filename": "src/tests/egl_tests/EGLLockSurface3Test.cpp",
+        "patchSetId": 13
+      },
+      "lineNbr": 444,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2021-11-23T14:05:09Z",
+      "side": 1,
+      "message": "I believe these should all be EXPECT_EGL_TRUE",
+      "range": {
+        "startLine": 444,
+        "startChar": 4,
+        "endLine": 444,
+        "endChar": 15
+      },
+      "revId": "aef20218aea74f76979fb04164d8fc516eb7bd3c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
