@@ -1,6 +1,29 @@
 {
   "comments": [
     {
+      "unresolved": true,
+      "key": {
+        "uuid": "1c9fb359_984c3412",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 9,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2021-11-23T15:40:08Z",
+      "side": 1,
+      "message": "nit: workers",
+      "range": {
+        "startLine": 9,
+        "startChar": 57,
+        "endLine": 9,
+        "endChar": 63
+      },
+      "revId": "2fd5b5dbe02531a84d73e0c06246770a33b31604",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": false,
       "key": {
         "uuid": "c17d3f2c_05006c3e",
@@ -49,6 +72,24 @@
       "side": 1,
       "message": "Have you tried that trace with a lot of programs (which I think hasn\u0027t landed yet)?\n\nOne of the things we should improve is to make our thread pool implementation actually be a thread pool, as it currently recreates threads every time :( Perhaps once that\u0027s fixed then threaded compile might be worth it.",
       "parentUuid": "c17d3f2c_05006c3e",
+      "revId": "2fd5b5dbe02531a84d73e0c06246770a33b31604",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "c54f9a1d_34ca7761",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2021-11-23T15:40:08Z",
+      "side": 1,
+      "message": "Isn\u0027t this something that just affects how async compilation works? Or do we use async workers for other tasks? It would be good to know more about what this improvement means, although it seems fairly easy to revert if something undesirable comes up.",
+      "parentUuid": "1e4b0613_5ef8882c",
       "revId": "2fd5b5dbe02531a84d73e0c06246770a33b31604",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
