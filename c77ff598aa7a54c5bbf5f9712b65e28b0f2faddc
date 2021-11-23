@@ -51,6 +51,23 @@
       "message": "No permission for +2",
       "revId": "c77ff598aa7a54c5bbf5f9712b65e28b0f2faddc",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "966069cf_cfa16ab5",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2021-11-23T02:19:22Z",
+      "side": 1,
+      "message": "LGTM\n\nA unit test would be nice, though I don\u0027t know how complicated that would be since this involves DRM.",
+      "revId": "c77ff598aa7a54c5bbf5f9712b65e28b0f2faddc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
