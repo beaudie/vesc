@@ -34,6 +34,24 @@
       "parentUuid": "96f3e601_5ae39126",
       "revId": "f640e479fb3c93166aa253082e938cb505c0be96",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "169527e4_87c59c64",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1491687
+      },
+      "writtenOn": "2021-11-23T11:17:00Z",
+      "side": 1,
+      "message": "Cody, this workaround is indeed only required for the system utils unit tests, as this is the only place where the to be tracked memory is allocated in a test.\nIn the FrameCapture case, VMA allocates the memory, which is not using tagged pointers. Meaning that pointers returned from glMapBuffer are not tagged as well, which can be tested in the end2end tests.\nThis is why this issue only came up for the system utils tests and not for the end2end tests and capturing apps.\n\nAn alternative I see to avoid the flag in the Manifest is to manually remove the tags from the last 2 bytes in the address on Android with an #ifdef, which is less clean than the current solution.\n\nI am also puzzled why the POSIX implementation of AOSP is accepting tagged pointers in the mprotect function, but is returning untagged pointers in it\u0027s page fault callback via the siginfo_t struct.",
+      "parentUuid": "79106339_af19a876",
+      "revId": "f640e479fb3c93166aa253082e938cb505c0be96",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
