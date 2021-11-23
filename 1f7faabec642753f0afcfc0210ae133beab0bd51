@@ -20,6 +20,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "bcb992f9_ad511474",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 12
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1491687
+      },
+      "writtenOn": "2021-11-23T14:34:15Z",
+      "side": 1,
+      "message": "I added handling `sig \u003d\u003d SIGBUS`, but the test still fails. Probably I also need to check for another `info-\u003esi_code`. I will take a deeper look at that.",
+      "parentUuid": "63291f2a_d7bae5a9",
+      "revId": "1f7faabec642753f0afcfc0210ae133beab0bd51",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "6cab3ce5_c265c27b",
         "filename": "src/common/system_utils.h",
         "patchSetId": 12
@@ -31,6 +49,30 @@
       "writtenOn": "2021-11-19T16:36:56Z",
       "side": 1,
       "message": "nit: would call this PageFaultHandlerRangeType",
+      "range": {
+        "startLine": 101,
+        "startChar": 11,
+        "endLine": 101,
+        "endChar": 26
+      },
+      "revId": "1f7faabec642753f0afcfc0210ae133beab0bd51",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "e9b47dec_7885b7bd",
+        "filename": "src/common/system_utils.h",
+        "patchSetId": 12
+      },
+      "lineNbr": 101,
+      "author": {
+        "id": 1491687
+      },
+      "writtenOn": "2021-11-23T14:34:15Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "6cab3ce5_c265c27b",
       "range": {
         "startLine": 101,
         "startChar": 11,
@@ -54,6 +96,30 @@
       "writtenOn": "2021-11-19T16:36:56Z",
       "side": 1,
       "message": "nit: using PageFaultCallback \u003d",
+      "range": {
+        "startLine": 110,
+        "startChar": 0,
+        "endLine": 110,
+        "endChar": 7
+      },
+      "revId": "1f7faabec642753f0afcfc0210ae133beab0bd51",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "a18979c3_10523671",
+        "filename": "src/common/system_utils.h",
+        "patchSetId": 12
+      },
+      "lineNbr": 110,
+      "author": {
+        "id": 1491687
+      },
+      "writtenOn": "2021-11-23T14:34:15Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "b96c8482_812651b1",
       "range": {
         "startLine": 110,
         "startChar": 0,
@@ -110,6 +176,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "bf7de974_fe5b9331",
+        "filename": "src/common/system_utils_posix.cpp",
+        "patchSetId": 12
+      },
+      "lineNbr": 263,
+      "author": {
+        "id": 1491687
+      },
+      "writtenOn": "2021-11-23T14:34:15Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "b1a7602c_6ec98981",
+      "range": {
+        "startLine": 263,
+        "startChar": 5,
+        "endLine": 263,
+        "endChar": 26
+      },
+      "revId": "1f7faabec642753f0afcfc0210ae133beab0bd51",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "d986302c_ec55b58c",
@@ -127,6 +217,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "3f802592_2c87f9fd",
+        "filename": "src/common/system_utils_unittest.cpp",
+        "patchSetId": 12
+      },
+      "lineNbr": 209,
+      "author": {
+        "id": 1491687
+      },
+      "writtenOn": "2021-11-23T14:34:15Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "d986302c_ec55b58c",
+      "revId": "1f7faabec642753f0afcfc0210ae133beab0bd51",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "265b42b6_c1755794",
@@ -140,6 +248,30 @@
       "writtenOn": "2021-11-19T16:36:56Z",
       "side": 1,
       "message": "nit: please use unique_ptr",
+      "range": {
+        "startLine": 225,
+        "startChar": 4,
+        "endLine": 225,
+        "endChar": 10
+      },
+      "revId": "1f7faabec642753f0afcfc0210ae133beab0bd51",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "ac5373d6_fb158bef",
+        "filename": "src/common/system_utils_unittest.cpp",
+        "patchSetId": 12
+      },
+      "lineNbr": 225,
+      "author": {
+        "id": 1491687
+      },
+      "writtenOn": "2021-11-23T14:34:15Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "265b42b6_c1755794",
       "range": {
         "startLine": 225,
         "startChar": 4,
@@ -196,6 +328,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "b6c25fa3_f52c2046",
+        "filename": "src/common/system_utils_unittest.cpp",
+        "patchSetId": 12
+      },
+      "lineNbr": 285,
+      "author": {
+        "id": 1491687
+      },
+      "writtenOn": "2021-11-23T14:34:15Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "0c22cc5d_b0c4638b",
+      "range": {
+        "startLine": 285,
+        "startChar": 4,
+        "endLine": 285,
+        "endChar": 10
+      },
+      "revId": "1f7faabec642753f0afcfc0210ae133beab0bd51",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "292f5e95_b2db481e",
@@ -226,6 +382,30 @@
       "writtenOn": "2021-11-19T16:36:56Z",
       "side": 1,
       "message": "nit: same comment about anonymous namespaces",
+      "range": {
+        "startLine": 133,
+        "startChar": 6,
+        "endLine": 133,
+        "endChar": 27
+      },
+      "revId": "1f7faabec642753f0afcfc0210ae133beab0bd51",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "4f4e9e0a_877ad96b",
+        "filename": "src/common/system_utils_win32.cpp",
+        "patchSetId": 12
+      },
+      "lineNbr": 133,
+      "author": {
+        "id": 1491687
+      },
+      "writtenOn": "2021-11-23T14:34:15Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "cc88fdde_561bf8e9",
       "range": {
         "startLine": 133,
         "startChar": 6,
