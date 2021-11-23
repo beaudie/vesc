@@ -597,7 +597,6 @@ angle::Result ContextMtl::drawElementsImpl(const gl::Context *context,
                                            &convertedOffset, &convertedType));
 
     ASSERT(idxBuffer);
-    ASSERT((convertedOffset % mtl::kIndexBufferOffsetAlignment) == 0);
     uint32_t convertedCounti32 = (uint32_t)count;
 
     if (requiresIndexRewrite(context->getState()))
