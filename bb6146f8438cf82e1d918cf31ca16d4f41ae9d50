@@ -63,6 +63,30 @@
       },
       "revId": "bb6146f8438cf82e1d918cf31ca16d4f41ae9d50",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "93bbe2d2_9c53b19f",
+        "filename": "src/tests/gl_tests/VertexAttributeTest.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 3918,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2021-11-24T17:44:00Z",
+      "side": 1,
+      "message": "It seems suspicious that the test fails on so many platforms. That usually indicates a buggy test. Maybe Cody pinpointed the test bug?",
+      "parentUuid": "b4911703_8305532d",
+      "range": {
+        "startLine": 3918,
+        "startChar": 8,
+        "endLine": 3918,
+        "endChar": 29
+      },
+      "revId": "bb6146f8438cf82e1d918cf31ca16d4f41ae9d50",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
