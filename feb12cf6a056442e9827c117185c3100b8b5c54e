@@ -33,6 +33,24 @@
       "message": "I don\u0027t think we should use this solution. Especially given the WebGL failures. If you can make a perf test that targets the issue, maybe we can devise a solution that fits better with the front-end logic.",
       "revId": "feb12cf6a056442e9827c117185c3100b8b5c54e",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "69c6d653_eb65e02e",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2021-11-24T15:18:25Z",
+      "side": 1,
+      "message": "It looks like a real bug since it\u0027s failing consistently on all GPUs.\n\nThe problem I believe is that there\u0027s logic (storageRedefined) that\u0027s duplicated in both the front-end and the back-end. In a sense, the front-end is trying to guess what the backend will do. It looks to me like the d3d9 backend is behaving differently to what the front-end expects, leading to errors.\n\nI think the best way to solve this is to not second guess the back-end, and let the back-end itself notify when storage has changed.",
+      "parentUuid": "be76f2d8_2b4b86cf",
+      "revId": "feb12cf6a056442e9827c117185c3100b8b5c54e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
