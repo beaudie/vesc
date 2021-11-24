@@ -1,0 +1,44 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "e07d0bb7_893269ac",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 23
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2021-11-24T04:39:20Z",
+      "side": 1,
+      "message": "Feel free to CQ+2 :)",
+      "revId": "f7c7085a77a58b9493121528b4da413908f1dfaa",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "df77d9cb_2ec6665e",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 23
+      },
+      "lineNbr": 158,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2021-11-24T04:39:20Z",
+      "side": 1,
+      "message": "nit: Maybe pass in mVertexArray instead to simplify this.",
+      "range": {
+        "startLine": 158,
+        "startChar": 9,
+        "endLine": 158,
+        "endChar": 60
+      },
+      "revId": "f7c7085a77a58b9493121528b4da413908f1dfaa",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
