@@ -18,6 +18,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "65af7603_dd1cdcab",
+        "filename": "src/tests/angle_end2end_tests_expectations.txt",
+        "patchSetId": 2
+      },
+      "lineNbr": 23,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2021-11-24T01:01:32Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "a7c57224_ff79c44f",
+      "revId": "056b453ca4e2c66a4259fd96fc77b563e525219b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "75efa11d_45a35dfd",
@@ -31,6 +49,24 @@
       "writtenOn": "2021-11-23T21:17:37Z",
       "side": 1,
       "message": "Should check the extension",
+      "revId": "056b453ca4e2c66a4259fd96fc77b563e525219b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "72572b6e_2502d0fd",
+        "filename": "src/tests/gl_tests/TextureTest.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 5614,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2021-11-24T01:01:32Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "75efa11d_45a35dfd",
       "revId": "056b453ca4e2c66a4259fd96fc77b563e525219b",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
