@@ -1633,30 +1633,31 @@ void GraphicsPipelineDesc::initDefaults(const ContextVk *contextVk)
     mRasterizationAndMultisampleStateInfo.bits.alphaToCoverageEnable = 0;
     mRasterizationAndMultisampleStateInfo.bits.alphaToOneEnable      = 0;
 
-    mDepthStencilStateInfo.enable.depthTest  = 0;
-    mDepthStencilStateInfo.enable.depthWrite = 0;
-    SetBitField(mDepthStencilStateInfo.depthCompareOpAndSurfaceRotation.depthCompareOp,
+    mViewportAndDepthStencilStateInfo.enable.viewportNegativeOneToOne = 0;
+    mViewportAndDepthStencilStateInfo.enable.depthTest                = 0;
+    mViewportAndDepthStencilStateInfo.enable.depthWrite               = 0;
+    SetBitField(mViewportAndDepthStencilStateInfo.depthCompareOpAndSurfaceRotation.depthCompareOp,
                 VK_COMPARE_OP_LESS);
-    mDepthStencilStateInfo.enable.depthBoundsTest = 0;
-    mDepthStencilStateInfo.enable.stencilTest     = 0;
-    mDepthStencilStateInfo.minDepthBounds         = 0.0f;
-    mDepthStencilStateInfo.maxDepthBounds         = 0.0f;
-    SetBitField(mDepthStencilStateInfo.front.ops.fail, VK_STENCIL_OP_KEEP);
-    SetBitField(mDepthStencilStateInfo.front.ops.pass, VK_STENCIL_OP_KEEP);
-    SetBitField(mDepthStencilStateInfo.front.ops.depthFail, VK_STENCIL_OP_KEEP);
-    SetBitField(mDepthStencilStateInfo.front.ops.compare, VK_COMPARE_OP_ALWAYS);
-    SetBitField(mDepthStencilStateInfo.front.compareMask, 0xFF);
-    SetBitField(mDepthStencilStateInfo.front.writeMask, 0xFF);
-    mDepthStencilStateInfo.frontStencilReference = 0;
-    SetBitField(mDepthStencilStateInfo.back.ops.fail, VK_STENCIL_OP_KEEP);
-    SetBitField(mDepthStencilStateInfo.back.ops.pass, VK_STENCIL_OP_KEEP);
-    SetBitField(mDepthStencilStateInfo.back.ops.depthFail, VK_STENCIL_OP_KEEP);
-    SetBitField(mDepthStencilStateInfo.back.ops.compare, VK_COMPARE_OP_ALWAYS);
-    SetBitField(mDepthStencilStateInfo.back.compareMask, 0xFF);
-    SetBitField(mDepthStencilStateInfo.back.writeMask, 0xFF);
-    mDepthStencilStateInfo.backStencilReference = 0;
+    mViewportAndDepthStencilStateInfo.enable.depthBoundsTest = 0;
+    mViewportAndDepthStencilStateInfo.enable.stencilTest     = 0;
+    mViewportAndDepthStencilStateInfo.minDepthBounds         = 0.0f;
+    mViewportAndDepthStencilStateInfo.maxDepthBounds         = 0.0f;
+    SetBitField(mViewportAndDepthStencilStateInfo.front.ops.fail, VK_STENCIL_OP_KEEP);
+    SetBitField(mViewportAndDepthStencilStateInfo.front.ops.pass, VK_STENCIL_OP_KEEP);
+    SetBitField(mViewportAndDepthStencilStateInfo.front.ops.depthFail, VK_STENCIL_OP_KEEP);
+    SetBitField(mViewportAndDepthStencilStateInfo.front.ops.compare, VK_COMPARE_OP_ALWAYS);
+    SetBitField(mViewportAndDepthStencilStateInfo.front.compareMask, 0xFF);
+    SetBitField(mViewportAndDepthStencilStateInfo.front.writeMask, 0xFF);
+    mViewportAndDepthStencilStateInfo.frontStencilReference = 0;
+    SetBitField(mViewportAndDepthStencilStateInfo.back.ops.fail, VK_STENCIL_OP_KEEP);
+    SetBitField(mViewportAndDepthStencilStateInfo.back.ops.pass, VK_STENCIL_OP_KEEP);
+    SetBitField(mViewportAndDepthStencilStateInfo.back.ops.depthFail, VK_STENCIL_OP_KEEP);
+    SetBitField(mViewportAndDepthStencilStateInfo.back.ops.compare, VK_COMPARE_OP_ALWAYS);
+    SetBitField(mViewportAndDepthStencilStateInfo.back.compareMask, 0xFF);
+    SetBitField(mViewportAndDepthStencilStateInfo.back.writeMask, 0xFF);
+    mViewportAndDepthStencilStateInfo.backStencilReference = 0;
 
-    mDepthStencilStateInfo.depthCompareOpAndSurfaceRotation.surfaceRotation =
+    mViewportAndDepthStencilStateInfo.depthCompareOpAndSurfaceRotation.surfaceRotation =
         static_cast<uint8_t>(SurfaceRotation::Identity);
 
     PackedInputAssemblyAndColorBlendStateInfo &inputAndBlend = mInputAssemblyAndColorBlendStateInfo;
@@ -1914,6 +1915,17 @@ angle::Result GraphicsPipelineDesc::initializePipeline(
     viewportState.scissorCount  = 1;
     viewportState.pScissors     = nullptr;
 
+    VkPipelineViewportDepthClipControlCreateInfoEXT depthClipControl = {};
+    if (contextVk->getFeatures().supportsDepthClipControl.enabled)
+    {
+        depthClipControl.sType =
+            VK_STRUCTURE_TYPE_PIPELINE_VIEWPORT_DEPTH_CLIP_CONTROL_CREATE_INFO_EXT;
+        depthClipControl.negativeOneToOne = static_cast<VkBool32>(
+            mViewportAndDepthStencilStateInfo.enable.viewportNegativeOneToOne);
+
+        viewportState.pNext = &depthClipControl;
+    }
+
     const PackedRasterizationAndMultisampleStateInfo &rasterAndMS =
         mRasterizationAndMultisampleStateInfo;
 
@@ -2005,21 +2017,23 @@ angle::Result GraphicsPipelineDesc::initializePipeline(
     depthStencilState.sType = VK_STRUCTURE_TYPE_PIPELINE_DEPTH_STENCIL_STATE_CREATE_INFO;
     depthStencilState.flags = 0;
     depthStencilState.depthTestEnable =
-        static_cast<VkBool32>(mDepthStencilStateInfo.enable.depthTest);
+        static_cast<VkBool32>(mViewportAndDepthStencilStateInfo.enable.depthTest);
     depthStencilState.depthWriteEnable =
-        static_cast<VkBool32>(mDepthStencilStateInfo.enable.depthWrite);
+        static_cast<VkBool32>(mViewportAndDepthStencilStateInfo.enable.depthWrite);
     depthStencilState.depthCompareOp = static_cast<VkCompareOp>(
-        mDepthStencilStateInfo.depthCompareOpAndSurfaceRotation.depthCompareOp);
+        mViewportAndDepthStencilStateInfo.depthCompareOpAndSurfaceRotation.depthCompareOp);
     depthStencilState.depthBoundsTestEnable =
-        static_cast<VkBool32>(mDepthStencilStateInfo.enable.depthBoundsTest);
+        static_cast<VkBool32>(mViewportAndDepthStencilStateInfo.enable.depthBoundsTest);
     depthStencilState.stencilTestEnable =
-        static_cast<VkBool32>(mDepthStencilStateInfo.enable.stencilTest);
-    UnpackStencilState(mDepthStencilStateInfo.front, mDepthStencilStateInfo.frontStencilReference,
+        static_cast<VkBool32>(mViewportAndDepthStencilStateInfo.enable.stencilTest);
+    UnpackStencilState(mViewportAndDepthStencilStateInfo.front,
+                       mViewportAndDepthStencilStateInfo.frontStencilReference,
                        &depthStencilState.front);
-    UnpackStencilState(mDepthStencilStateInfo.back, mDepthStencilStateInfo.backStencilReference,
+    UnpackStencilState(mViewportAndDepthStencilStateInfo.back,
+                       mViewportAndDepthStencilStateInfo.backStencilReference,
                        &depthStencilState.back);
-    depthStencilState.minDepthBounds = mDepthStencilStateInfo.minDepthBounds;
-    depthStencilState.maxDepthBounds = mDepthStencilStateInfo.maxDepthBounds;
+    depthStencilState.minDepthBounds = mViewportAndDepthStencilStateInfo.minDepthBounds;
+    depthStencilState.maxDepthBounds = mViewportAndDepthStencilStateInfo.maxDepthBounds;
 
     const PackedInputAssemblyAndColorBlendStateInfo &inputAndBlend =
         mInputAssemblyAndColorBlendStateInfo;
@@ -2170,6 +2184,14 @@ void GraphicsPipelineDesc::updateTopology(GraphicsPipelineTransitionBits *transi
     SetBitField(mInputAssemblyAndColorBlendStateInfo.primitive.topology, vkTopology);
 
     transition->set(ANGLE_GET_TRANSITION_BIT(mInputAssemblyAndColorBlendStateInfo, primitive));
+}
+
+void GraphicsPipelineDesc::updateDepthClipControl(GraphicsPipelineTransitionBits *transition,
+                                                  bool negativeOneToOne)
+{
+    SetBitField(mViewportAndDepthStencilStateInfo.enable.viewportNegativeOneToOne,
+                negativeOneToOne);
+    transition->set(ANGLE_GET_TRANSITION_BIT(mViewportAndDepthStencilStateInfo, enable));
 }
 
 void GraphicsPipelineDesc::updatePrimitiveRestartEnabled(GraphicsPipelineTransitionBits *transition,
@@ -2414,17 +2436,18 @@ void GraphicsPipelineDesc::updateColorWriteMasks(
 
 void GraphicsPipelineDesc::setDepthTestEnabled(bool enabled)
 {
-    mDepthStencilStateInfo.enable.depthTest = enabled;
+    mViewportAndDepthStencilStateInfo.enable.depthTest = enabled;
 }
 
 void GraphicsPipelineDesc::setDepthWriteEnabled(bool enabled)
 {
-    mDepthStencilStateInfo.enable.depthWrite = enabled;
+    mViewportAndDepthStencilStateInfo.enable.depthWrite = enabled;
 }
 
 void GraphicsPipelineDesc::setDepthFunc(VkCompareOp op)
 {
-    SetBitField(mDepthStencilStateInfo.depthCompareOpAndSurfaceRotation.depthCompareOp, op);
+    SetBitField(mViewportAndDepthStencilStateInfo.depthCompareOpAndSurfaceRotation.depthCompareOp,
+                op);
 }
 
 void GraphicsPipelineDesc::setDepthClampEnabled(bool enabled)
@@ -2434,53 +2457,53 @@ void GraphicsPipelineDesc::setDepthClampEnabled(bool enabled)
 
 void GraphicsPipelineDesc::setStencilTestEnabled(bool enabled)
 {
-    mDepthStencilStateInfo.enable.stencilTest = enabled;
+    mViewportAndDepthStencilStateInfo.enable.stencilTest = enabled;
 }
 
 void GraphicsPipelineDesc::setStencilFrontFuncs(uint8_t reference,
                                                 VkCompareOp compareOp,
                                                 uint8_t compareMask)
 {
-    mDepthStencilStateInfo.frontStencilReference = reference;
-    mDepthStencilStateInfo.front.compareMask     = compareMask;
-    SetBitField(mDepthStencilStateInfo.front.ops.compare, compareOp);
+    mViewportAndDepthStencilStateInfo.frontStencilReference = reference;
+    mViewportAndDepthStencilStateInfo.front.compareMask     = compareMask;
+    SetBitField(mViewportAndDepthStencilStateInfo.front.ops.compare, compareOp);
 }
 
 void GraphicsPipelineDesc::setStencilBackFuncs(uint8_t reference,
                                                VkCompareOp compareOp,
                                                uint8_t compareMask)
 {
-    mDepthStencilStateInfo.backStencilReference = reference;
-    mDepthStencilStateInfo.back.compareMask     = compareMask;
-    SetBitField(mDepthStencilStateInfo.back.ops.compare, compareOp);
+    mViewportAndDepthStencilStateInfo.backStencilReference = reference;
+    mViewportAndDepthStencilStateInfo.back.compareMask     = compareMask;
+    SetBitField(mViewportAndDepthStencilStateInfo.back.ops.compare, compareOp);
 }
 
 void GraphicsPipelineDesc::setStencilFrontOps(VkStencilOp failOp,
                                               VkStencilOp passOp,
                                               VkStencilOp depthFailOp)
 {
-    SetBitField(mDepthStencilStateInfo.front.ops.fail, failOp);
-    SetBitField(mDepthStencilStateInfo.front.ops.pass, passOp);
-    SetBitField(mDepthStencilStateInfo.front.ops.depthFail, depthFailOp);
+    SetBitField(mViewportAndDepthStencilStateInfo.front.ops.fail, failOp);
+    SetBitField(mViewportAndDepthStencilStateInfo.front.ops.pass, passOp);
+    SetBitField(mViewportAndDepthStencilStateInfo.front.ops.depthFail, depthFailOp);
 }
 
 void GraphicsPipelineDesc::setStencilBackOps(VkStencilOp failOp,
                                              VkStencilOp passOp,
                                              VkStencilOp depthFailOp)
 {
-    SetBitField(mDepthStencilStateInfo.back.ops.fail, failOp);
-    SetBitField(mDepthStencilStateInfo.back.ops.pass, passOp);
-    SetBitField(mDepthStencilStateInfo.back.ops.depthFail, depthFailOp);
+    SetBitField(mViewportAndDepthStencilStateInfo.back.ops.fail, failOp);
+    SetBitField(mViewportAndDepthStencilStateInfo.back.ops.pass, passOp);
+    SetBitField(mViewportAndDepthStencilStateInfo.back.ops.depthFail, depthFailOp);
 }
 
 void GraphicsPipelineDesc::setStencilFrontWriteMask(uint8_t mask)
 {
-    mDepthStencilStateInfo.front.writeMask = mask;
+    mViewportAndDepthStencilStateInfo.front.writeMask = mask;
 }
 
 void GraphicsPipelineDesc::setStencilBackWriteMask(uint8_t mask)
 {
-    mDepthStencilStateInfo.back.writeMask = mask;
+    mViewportAndDepthStencilStateInfo.back.writeMask = mask;
 }
 
 void GraphicsPipelineDesc::updateDepthTestEnabled(GraphicsPipelineTransitionBits *transition,
@@ -2490,24 +2513,24 @@ void GraphicsPipelineDesc::updateDepthTestEnabled(GraphicsPipelineTransitionBits
     // Only enable the depth test if the draw framebuffer has a depth buffer.  It's possible that
     // we're emulating a stencil-only buffer with a depth-stencil buffer
     setDepthTestEnabled(depthStencilState.depthTest && drawFramebuffer->hasDepth());
-    transition->set(ANGLE_GET_TRANSITION_BIT(mDepthStencilStateInfo, enable));
+    transition->set(ANGLE_GET_TRANSITION_BIT(mViewportAndDepthStencilStateInfo, enable));
 }
 
 void GraphicsPipelineDesc::updateDepthFunc(GraphicsPipelineTransitionBits *transition,
                                            const gl::DepthStencilState &depthStencilState)
 {
     setDepthFunc(PackGLCompareFunc(depthStencilState.depthFunc));
-    transition->set(
-        ANGLE_GET_TRANSITION_BIT(mDepthStencilStateInfo, depthCompareOpAndSurfaceRotation));
+    transition->set(ANGLE_GET_TRANSITION_BIT(mViewportAndDepthStencilStateInfo,
+                                             depthCompareOpAndSurfaceRotation));
 }
 
 void GraphicsPipelineDesc::updateSurfaceRotation(GraphicsPipelineTransitionBits *transition,
                                                  const SurfaceRotation surfaceRotation)
 {
-    SetBitField(mDepthStencilStateInfo.depthCompareOpAndSurfaceRotation.surfaceRotation,
+    SetBitField(mViewportAndDepthStencilStateInfo.depthCompareOpAndSurfaceRotation.surfaceRotation,
                 surfaceRotation);
-    transition->set(
-        ANGLE_GET_TRANSITION_BIT(mDepthStencilStateInfo, depthCompareOpAndSurfaceRotation));
+    transition->set(ANGLE_GET_TRANSITION_BIT(mViewportAndDepthStencilStateInfo,
+                                             depthCompareOpAndSurfaceRotation));
 }
 
 void GraphicsPipelineDesc::updateDepthWriteEnabled(GraphicsPipelineTransitionBits *transition,
@@ -2517,10 +2540,10 @@ void GraphicsPipelineDesc::updateDepthWriteEnabled(GraphicsPipelineTransitionBit
     // Don't write to depth buffers that should not exist
     const bool depthWriteEnabled =
         drawFramebuffer->hasDepth() && depthStencilState.depthTest && depthStencilState.depthMask;
-    if (static_cast<bool>(mDepthStencilStateInfo.enable.depthWrite) != depthWriteEnabled)
+    if (static_cast<bool>(mViewportAndDepthStencilStateInfo.enable.depthWrite) != depthWriteEnabled)
     {
         setDepthWriteEnabled(depthWriteEnabled);
-        transition->set(ANGLE_GET_TRANSITION_BIT(mDepthStencilStateInfo, enable));
+        transition->set(ANGLE_GET_TRANSITION_BIT(mViewportAndDepthStencilStateInfo, enable));
     }
 }
 
@@ -2531,7 +2554,7 @@ void GraphicsPipelineDesc::updateStencilTestEnabled(GraphicsPipelineTransitionBi
     // Only enable the stencil test if the draw framebuffer has a stencil buffer.  It's possible
     // that we're emulating a depth-only buffer with a depth-stencil buffer
     setStencilTestEnabled(depthStencilState.stencilTest && drawFramebuffer->hasStencil());
-    transition->set(ANGLE_GET_TRANSITION_BIT(mDepthStencilStateInfo, enable));
+    transition->set(ANGLE_GET_TRANSITION_BIT(mViewportAndDepthStencilStateInfo, enable));
 }
 
 void GraphicsPipelineDesc::updateStencilFrontFuncs(GraphicsPipelineTransitionBits *transition,
@@ -2541,8 +2564,9 @@ void GraphicsPipelineDesc::updateStencilFrontFuncs(GraphicsPipelineTransitionBit
     setStencilFrontFuncs(static_cast<uint8_t>(ref),
                          PackGLCompareFunc(depthStencilState.stencilFunc),
                          static_cast<uint8_t>(depthStencilState.stencilMask));
-    transition->set(ANGLE_GET_TRANSITION_BIT(mDepthStencilStateInfo, front));
-    transition->set(ANGLE_GET_TRANSITION_BIT(mDepthStencilStateInfo, frontStencilReference));
+    transition->set(ANGLE_GET_TRANSITION_BIT(mViewportAndDepthStencilStateInfo, front));
+    transition->set(
+        ANGLE_GET_TRANSITION_BIT(mViewportAndDepthStencilStateInfo, frontStencilReference));
 }
 
 void GraphicsPipelineDesc::updateStencilBackFuncs(GraphicsPipelineTransitionBits *transition,
@@ -2552,8 +2576,9 @@ void GraphicsPipelineDesc::updateStencilBackFuncs(GraphicsPipelineTransitionBits
     setStencilBackFuncs(static_cast<uint8_t>(ref),
                         PackGLCompareFunc(depthStencilState.stencilBackFunc),
                         static_cast<uint8_t>(depthStencilState.stencilBackMask));
-    transition->set(ANGLE_GET_TRANSITION_BIT(mDepthStencilStateInfo, back));
-    transition->set(ANGLE_GET_TRANSITION_BIT(mDepthStencilStateInfo, backStencilReference));
+    transition->set(ANGLE_GET_TRANSITION_BIT(mViewportAndDepthStencilStateInfo, back));
+    transition->set(
+        ANGLE_GET_TRANSITION_BIT(mViewportAndDepthStencilStateInfo, backStencilReference));
 }
 
 void GraphicsPipelineDesc::updateStencilFrontOps(GraphicsPipelineTransitionBits *transition,
@@ -2562,7 +2587,7 @@ void GraphicsPipelineDesc::updateStencilFrontOps(GraphicsPipelineTransitionBits 
     setStencilFrontOps(PackGLStencilOp(depthStencilState.stencilFail),
                        PackGLStencilOp(depthStencilState.stencilPassDepthPass),
                        PackGLStencilOp(depthStencilState.stencilPassDepthFail));
-    transition->set(ANGLE_GET_TRANSITION_BIT(mDepthStencilStateInfo, front));
+    transition->set(ANGLE_GET_TRANSITION_BIT(mViewportAndDepthStencilStateInfo, front));
 }
 
 void GraphicsPipelineDesc::updateStencilBackOps(GraphicsPipelineTransitionBits *transition,
@@ -2571,7 +2596,7 @@ void GraphicsPipelineDesc::updateStencilBackOps(GraphicsPipelineTransitionBits *
     setStencilBackOps(PackGLStencilOp(depthStencilState.stencilBackFail),
                       PackGLStencilOp(depthStencilState.stencilBackPassDepthPass),
                       PackGLStencilOp(depthStencilState.stencilBackPassDepthFail));
-    transition->set(ANGLE_GET_TRANSITION_BIT(mDepthStencilStateInfo, back));
+    transition->set(ANGLE_GET_TRANSITION_BIT(mViewportAndDepthStencilStateInfo, back));
 }
 
 void GraphicsPipelineDesc::updateStencilFrontWriteMask(
@@ -2582,7 +2607,7 @@ void GraphicsPipelineDesc::updateStencilFrontWriteMask(
     // Don't write to stencil buffers that should not exist
     setStencilFrontWriteMask(static_cast<uint8_t>(
         drawFramebuffer->hasStencil() ? depthStencilState.stencilWritemask : 0));
-    transition->set(ANGLE_GET_TRANSITION_BIT(mDepthStencilStateInfo, front));
+    transition->set(ANGLE_GET_TRANSITION_BIT(mViewportAndDepthStencilStateInfo, front));
 }
 
 void GraphicsPipelineDesc::updateStencilBackWriteMask(
@@ -2593,7 +2618,7 @@ void GraphicsPipelineDesc::updateStencilBackWriteMask(
     // Don't write to stencil buffers that should not exist
     setStencilBackWriteMask(static_cast<uint8_t>(
         drawFramebuffer->hasStencil() ? depthStencilState.stencilBackWritemask : 0));
-    transition->set(ANGLE_GET_TRANSITION_BIT(mDepthStencilStateInfo, back));
+    transition->set(ANGLE_GET_TRANSITION_BIT(mViewportAndDepthStencilStateInfo, back));
 }
 
 void GraphicsPipelineDesc::updatePolygonOffsetFillEnabled(
