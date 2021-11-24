@@ -123,6 +123,24 @@
       "parentUuid": "e7283713_aac856f4",
       "revId": "28644fef3ce4af92b9354b370c024037dc46a0f6",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "6a4f9053_d9606021",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2021-11-24T17:23:56Z",
+      "side": 1,
+      "message": "Hey Gert, the idea is that we would revert the changes to the main ANGLE library and allow shaders to detach when replaying. Then we\u0027d fix whatever breaks with an alternate solution. i.e. by capturing the shaders as we process commands inside FrameCapture, along instead of getting the attached shaders for a program in the switch on line 5148.",
+      "parentUuid": "1d76d43c_641654f6",
+      "revId": "28644fef3ce4af92b9354b370c024037dc46a0f6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
