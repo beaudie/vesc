@@ -1,0 +1,107 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "9dca6b3a_476b3b9f",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 14
+      },
+      "lineNbr": 11,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2021-11-24T03:31:47Z",
+      "side": 1,
+      "message": "typo: underlying",
+      "range": {
+        "startLine": 11,
+        "startChar": 22,
+        "endLine": 11,
+        "endChar": 31
+      },
+      "revId": "5dd075bd0ec7a8cfbd869f8ae200766a901214d7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "8e1af41e_5801384a",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 14
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2021-11-24T03:31:47Z",
+      "side": 1,
+      "message": "Complicated! Is the plan to eventually obviate vk::DynamicBuffer in favor of this? There is probably some room for clean up too, to avoid mistakes regarding offset when suballocation is used or not.",
+      "revId": "5dd075bd0ec7a8cfbd869f8ae200766a901214d7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "f7c74ecc_bfbcd371",
+        "filename": "src/libANGLE/renderer/vulkan/BufferVk.cpp",
+        "patchSetId": 14
+      },
+      "lineNbr": 1210,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2021-11-24T03:31:47Z",
+      "side": 1,
+      "message": "Can you clarify? Aren\u0027t you asking the sub-allocator to use the memory type we need?",
+      "revId": "5dd075bd0ec7a8cfbd869f8ae200766a901214d7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "52c1730b_4be8ec70",
+        "filename": "src/libANGLE/renderer/vulkan/BufferVk.h",
+        "patchSetId": 14
+      },
+      "lineNbr": 125,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2021-11-24T03:31:47Z",
+      "side": 1,
+      "message": "typo",
+      "range": {
+        "startLine": 125,
+        "startChar": 11,
+        "endLine": 125,
+        "endChar": 20
+      },
+      "revId": "5dd075bd0ec7a8cfbd869f8ae200766a901214d7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "2e555960_39961e18",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 14
+      },
+      "lineNbr": 4165,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2021-11-24T03:31:47Z",
+      "side": 1,
+      "message": "Can you please make the usage of buffer barriers instead of global barriers a separate CL? I don\u0027t believe there\u0027s any real gain from it on the GPU and it may be a waste of CPU cycles. We can try and enable that once we can do measure its impact in isolation.",
+      "range": {
+        "startLine": 4157,
+        "startChar": 0,
+        "endLine": 4165,
+        "endChar": 9
+      },
+      "revId": "5dd075bd0ec7a8cfbd869f8ae200766a901214d7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
