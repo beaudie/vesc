@@ -1,0 +1,113 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "a049831a_199f2002",
+        "filename": "extensions/EGL_ANGLE_vulkan_image.txt",
+        "patchSetId": 14
+      },
+      "lineNbr": 67,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2021-11-24T17:34:37Z",
+      "side": 1,
+      "message": ".",
+      "range": {
+        "startLine": 67,
+        "startChar": 73,
+        "endLine": 67,
+        "endChar": 74
+      },
+      "revId": "6636db2185d8743df94e13369c8ae4d47e3b50d2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "09aa5cad_202b0970",
+        "filename": "extensions/EGL_ANGLE_vulkan_image.txt",
+        "patchSetId": 14
+      },
+      "lineNbr": 68,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2021-11-24T17:34:37Z",
+      "side": 1,
+      "message": "The VkImage",
+      "range": {
+        "startLine": 68,
+        "startChar": 4,
+        "endLine": 68,
+        "endChar": 11
+      },
+      "revId": "6636db2185d8743df94e13369c8ae4d47e3b50d2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "82569aff_a7e7cb32",
+        "filename": "extensions/EGL_ANGLE_vulkan_image.txt",
+        "patchSetId": 14
+      },
+      "lineNbr": 68,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2021-11-24T17:34:37Z",
+      "side": 1,
+      "message": ", and VkImageCreateInfo..",
+      "revId": "6636db2185d8743df94e13369c8ae4d47e3b50d2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ec3010a3_b4639af8",
+        "filename": "src/libANGLE/Image.cpp",
+        "patchSetId": 14
+      },
+      "lineNbr": 498,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2021-11-24T17:34:37Z",
+      "side": 1,
+      "message": "nit: ANGLE style (camelCase)",
+      "range": {
+        "startLine": 498,
+        "startChar": 33,
+        "endLine": 498,
+        "endChar": 41
+      },
+      "revId": "6636db2185d8743df94e13369c8ae4d47e3b50d2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ffe8214e_acc28279",
+        "filename": "src/libANGLE/renderer/ImageImpl.cpp",
+        "patchSetId": 14
+      },
+      "lineNbr": 14,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2021-11-24T17:34:37Z",
+      "side": 1,
+      "message": "same for all the var names",
+      "range": {
+        "startLine": 14,
+        "startChar": 42,
+        "endLine": 14,
+        "endChar": 50
+      },
+      "revId": "6636db2185d8743df94e13369c8ae4d47e3b50d2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
