@@ -16,6 +16,23 @@
       "message": "+chrisforbes fyi",
       "revId": "d3c02a462669a0cd4d964dcdf6d4114c2ff4eac1",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "b1ba97e4_1aa473dc",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2021-11-24T17:44:55Z",
+      "side": 1,
+      "message": "re-lgtm",
+      "revId": "d3c02a462669a0cd4d964dcdf6d4114c2ff4eac1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
