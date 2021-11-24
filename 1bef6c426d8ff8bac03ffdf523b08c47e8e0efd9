@@ -39,6 +39,30 @@
       },
       "revId": "1bef6c426d8ff8bac03ffdf523b08c47e8e0efd9",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "0acf84f5_552b0cd4",
+        "filename": "infra/specs/angle.json",
+        "patchSetId": 2
+      },
+      "lineNbr": 2301,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2021-11-24T18:54:54Z",
+      "side": 1,
+      "message": "Comment didn\u0027t get posted.\n\nI don\u0027t think there was a change, you\u0027re probably thinking there is because this is the auto-generated file and the diff isn\u0027t obvious. Better to review \u0026 make comments on the source files (.star in this case).",
+      "parentUuid": "b387f7ae_b60e455a",
+      "range": {
+        "startLine": 2301,
+        "startChar": 3,
+        "endLine": 2301,
+        "endChar": 26
+      },
+      "revId": "1bef6c426d8ff8bac03ffdf523b08c47e8e0efd9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
