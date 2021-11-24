@@ -39,6 +39,30 @@
       },
       "revId": "bb6146f8438cf82e1d918cf31ca16d4f41ae9d50",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b4911703_8305532d",
+        "filename": "src/tests/gl_tests/VertexAttributeTest.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 3918,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2021-11-24T00:49:42Z",
+      "side": 1,
+      "message": "Indeed, I don\u0027t get any hits on CaptureVertexAttribIPointer in FrameCapture.cpp, so I think this is a MEC issue.\n\nI guess the question remains, do we want to support this in the Vulkan backend.  The tests in this CL pass on the D3D11 backend as-is.\n\nI would argue \"No\", but it would be good to think of a warning for this case.  We have multiple changes that have worked around odd attrib/program differences:\nhttps://chromium-review.googlesource.com/c/angle/angle/+/1698567\nhttps://chromium-review.googlesource.com/c/angle/angle/+/2765012",
+      "parentUuid": "600fddc3_cd647693",
+      "range": {
+        "startLine": 3918,
+        "startChar": 8,
+        "endLine": 3918,
+        "endChar": 29
+      },
+      "revId": "bb6146f8438cf82e1d918cf31ca16d4f41ae9d50",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
