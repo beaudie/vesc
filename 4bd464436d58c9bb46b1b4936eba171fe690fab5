@@ -16,6 +16,154 @@
       "message": "Hi Shahbaz @ Jamie, PTAL. Thanks",
       "revId": "4bd464436d58c9bb46b1b4936eba171fe690fab5",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "a54ffc20_ea39feb4",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 11
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2021-11-24T02:33:41Z",
+      "side": 1,
+      "message": "Once the APIs are finalized, please add end2end tests for these to prevent them from breaking. You can base them on Vulkan tests in src/tests/gl_tests/VulkanExternalImageTest.cpp.",
+      "revId": "4bd464436d58c9bb46b1b4936eba171fe690fab5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "a537735e_07147b06",
+        "filename": "extensions/ANGLE_vulkan_image.txt",
+        "patchSetId": 11
+      },
+      "lineNbr": 49,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2021-11-24T02:33:41Z",
+      "side": 1,
+      "message": "I added a note in the doc about adding stage flags to these functions",
+      "revId": "4bd464436d58c9bb46b1b4936eba171fe690fab5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "29d4fa6d_d2f7b39e",
+        "filename": "src/libANGLE/angletypes.h",
+        "patchSetId": 11
+      },
+      "lineNbr": 912,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2021-11-24T02:33:41Z",
+      "side": 1,
+      "message": "For acquireTextures, you can use TextureAndLayout. For releaseTextures, I suggest:\n\n    struct TextureAndLayoutOut\n    {\n        const Texture *texture;\n        GLenum *layout;\n    };\n    using TextureBarrierOutVector \u003d BarrierVector\u003cTextureAndLayoutOut\u003e;\n\nThat makes the API a bit saner, for example because there is no layouts pointer with no size parameter (which the reader should know is implicit)",
+      "range": {
+        "startLine": 912,
+        "startChar": 6,
+        "endLine": 912,
+        "endChar": 19
+      },
+      "revId": "4bd464436d58c9bb46b1b4936eba171fe690fab5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ab6c3891_9e47558c",
+        "filename": "src/libANGLE/renderer/ContextImpl.cpp",
+        "patchSetId": 11
+      },
+      "lineNbr": 70,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2021-11-24T02:33:41Z",
+      "side": 1,
+      "message": "Should be:\n\n    UNREACHABLE();\n    return angle::Result::Stop;",
+      "revId": "4bd464436d58c9bb46b1b4936eba171fe690fab5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "e258bad4_7c625acf",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 11
+      },
+      "lineNbr": 4771,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2021-11-24T02:33:41Z",
+      "side": 1,
+      "message": "nit:\n\n    gl::Texture *texture \u003d textures[i];\n    if (texture !\u003d nullptr)\n\nSame in acquireTextures().\n\nAlso, why support nullptr here? How about adding validation that the specified textures must be valid (and not be texture buffers)?",
+      "revId": "4bd464436d58c9bb46b1b4936eba171fe690fab5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "309b5c04_e9118c1d",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 11
+      },
+      "lineNbr": 4794,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2021-11-24T02:33:41Z",
+      "side": 1,
+      "message": "nit: the if block returns, so else is unnecessary.",
+      "range": {
+        "startLine": 4793,
+        "startChar": 0,
+        "endLine": 4794,
+        "endChar": 5
+      },
+      "revId": "4bd464436d58c9bb46b1b4936eba171fe690fab5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "aa0f3400_22da73cb",
+        "filename": "src/libANGLE/renderer/vulkan/SemaphoreVk.cpp",
+        "patchSetId": 11
+      },
+      "lineNbr": 110,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2021-11-24T02:33:41Z",
+      "side": 1,
+      "message": "Please add this ASSERT to ContextVk::acquireTextures() too.",
+      "revId": "4bd464436d58c9bb46b1b4936eba171fe690fab5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "76844c8a_e02971d2",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 11
+      },
+      "lineNbr": 868,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2021-11-24T02:33:41Z",
+      "side": 1,
+      "message": "You would need to be more exhaustive here. GetImageLayoutFromGLImageLayout enumerates all GL layouts, and ConvertImageLayoutToGLImageLayout should enumerate all vk::ImageLayout layouts.",
+      "revId": "4bd464436d58c9bb46b1b4936eba171fe690fab5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
