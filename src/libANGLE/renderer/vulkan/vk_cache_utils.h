@@ -432,16 +432,19 @@ struct PackedStencilOpState final
 constexpr size_t kPackedStencilOpSize = sizeof(PackedStencilOpState);
 static_assert(kPackedStencilOpSize == 4, "Size check failed");
 
-struct DepthStencilEnableFlags final
+struct ViewportAndDepthStencilEnableFlags final
 {
-    uint8_t depthTest : 2;  // these only need one bit each. the extra is used as padding.
-    uint8_t depthWrite : 2;
+    uint8_t viewportNegativeOneToOne : 1;
+
+    uint8_t depthTest : 1;
+    uint8_t depthWrite : 2;  // these only need one bit each. the extra is used as padding.
     uint8_t depthBoundsTest : 2;
     uint8_t stencilTest : 2;
 };
 
-constexpr size_t kDepthStencilEnableFlagsSize = sizeof(DepthStencilEnableFlags);
-static_assert(kDepthStencilEnableFlagsSize == 1, "Size check failed");
+constexpr size_t kViewportAndDepthStencilEnableFlagsSize =
+    sizeof(ViewportAndDepthStencilEnableFlags);
+static_assert(kViewportAndDepthStencilEnableFlagsSize == 1, "Size check failed");
 
 // We are borrowing three bits here for surface rotation, even though it has nothing to do with
 // depth stencil.
@@ -454,9 +457,9 @@ struct DepthCompareOpAndSurfaceRotation final
 constexpr size_t kDepthCompareOpAndSurfaceRotationSize = sizeof(DepthCompareOpAndSurfaceRotation);
 static_assert(kDepthCompareOpAndSurfaceRotationSize == 1, "Size check failed");
 
-struct PackedDepthStencilStateInfo final
+struct PackedViewportAndDepthStencilStateInfo final
 {
-    DepthStencilEnableFlags enable;
+    ViewportAndDepthStencilEnableFlags enable;
     uint8_t frontStencilReference;
     uint8_t backStencilReference;
     DepthCompareOpAndSurfaceRotation depthCompareOpAndSurfaceRotation;
@@ -467,7 +470,7 @@ struct PackedDepthStencilStateInfo final
     PackedStencilOpState back;
 };
 
-constexpr size_t kPackedDepthStencilStateSize = sizeof(PackedDepthStencilStateInfo);
+constexpr size_t kPackedDepthStencilStateSize = sizeof(PackedViewportAndDepthStencilStateInfo);
 static_assert(kPackedDepthStencilStateSize == 20, "Size check failed");
 static_assert(static_cast<int>(SurfaceRotation::EnumCount) <= 8, "Size check failed");
 
@@ -590,6 +593,9 @@ class GraphicsPipelineDesc final
     void updatePrimitiveRestartEnabled(GraphicsPipelineTransitionBits *transition,
                                        bool primitiveRestartEnabled);
 
+    // Viewport states
+    void updateDepthClipControl(GraphicsPipelineTransitionBits *transition, bool negativeOneToOne);
+
     // Raster states
     void setCullMode(VkCullModeFlagBits cullMode);
     void updateCullMode(GraphicsPipelineTransitionBits *transition,
@@ -702,7 +708,7 @@ class GraphicsPipelineDesc final
     SurfaceRotation getSurfaceRotation() const
     {
         return static_cast<SurfaceRotation>(
-            mDepthStencilStateInfo.depthCompareOpAndSurfaceRotation.surfaceRotation);
+            mViewportAndDepthStencilStateInfo.depthCompareOpAndSurfaceRotation.surfaceRotation);
     }
 
     void updateDrawableSize(GraphicsPipelineTransitionBits *transition,
@@ -716,7 +722,7 @@ class GraphicsPipelineDesc final
     VertexInputAttributes mVertexInputAttribs;
     RenderPassDesc mRenderPassDesc;
     PackedRasterizationAndMultisampleStateInfo mRasterizationAndMultisampleStateInfo;
-    PackedDepthStencilStateInfo mDepthStencilStateInfo;
+    PackedViewportAndDepthStencilStateInfo mViewportAndDepthStencilStateInfo;
     PackedInputAssemblyAndColorBlendStateInfo mInputAssemblyAndColorBlendStateInfo;
     PackedExtent mDrawableSize;
 };
