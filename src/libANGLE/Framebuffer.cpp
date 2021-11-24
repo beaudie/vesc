@@ -2115,6 +2115,20 @@ void Framebuffer::onSubjectStateChange(angle::SubjectIndex index, angle::Subject
         updateFloat32ColorAttachmentBits(index - DIRTY_BIT_COLOR_ATTACHMENT_0,
                                          attachment->getFormat().info);
     }
+
+    // Textures cannot change storage between single and multisample once attached to a framebuffer.
+    // Renderbuffers instead can.  In particular, a render buffer can be created as MSRTT, attached
+    // and then recreated as non-multisampled.  The FramebufferAttachment should update its sample
+    // count in that situation.
+    if (attachment->type() == GL_RENDERBUFFER)
+    {
+        Renderbuffer *renderbuffer = attachment->getRenderbuffer();
+        bool isMSRTT =
+            renderbuffer->getMultisamplingMode() == MultisamplingMode::MultisampledRenderToTexture;
+        attachment->setRenderToTextureSamples(
+            isMSRTT ? renderbuffer->getSamples()
+                    : FramebufferAttachment::kDefaultRenderToTextureSamples);
+    }
 }
 
 FramebufferAttachment *Framebuffer::getAttachmentFromSubjectIndex(angle::SubjectIndex index)
