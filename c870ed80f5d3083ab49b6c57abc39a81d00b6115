@@ -52,6 +52,24 @@
       "parentUuid": "431680ea_9e0eeebc",
       "revId": "c870ed80f5d3083ab49b6c57abc39a81d00b6115",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "49fde939_939bb039",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 5
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2021-11-24T17:44:38Z",
+      "side": 1,
+      "message": "Also fine either way, LGTM so we can unblock this patch chain.",
+      "parentUuid": "3bff454a_300c44d7",
+      "revId": "c870ed80f5d3083ab49b6c57abc39a81d00b6115",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
