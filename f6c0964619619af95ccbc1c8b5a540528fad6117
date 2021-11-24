@@ -1,0 +1,44 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "e796ec01_6ccf1f67",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 22
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2021-11-24T02:53:55Z",
+      "side": 1,
+      "message": "Looking good!",
+      "revId": "f6c0964619619af95ccbc1c8b5a540528fad6117",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "f8200383_fb77aeb3",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 22
+      },
+      "lineNbr": 2892,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2021-11-24T02:53:55Z",
+      "side": 1,
+      "message": "Now this looks like it should be refactored into a helper!\n\nYou can create one in the anonymous namespace at the top with CamelCase (not camelCase), like CanMultiDrawIndirectUseCmd() that returns the opposite of this if condition.",
+      "range": {
+        "startLine": 2884,
+        "startChar": 0,
+        "endLine": 2892,
+        "endChar": 40
+      },
+      "revId": "f6c0964619619af95ccbc1c8b5a540528fad6117",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}

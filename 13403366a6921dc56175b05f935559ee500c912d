@@ -114,6 +114,30 @@
     {
       "unresolved": false,
       "key": {
+        "uuid": "edf67f2c_2ea6d4cc",
+        "filename": "include/platform/FeaturesVk.h",
+        "patchSetId": 18
+      },
+      "lineNbr": 199,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2021-11-24T02:53:55Z",
+      "side": 1,
+      "message": "You are always welcome to clean that up, but definitely in another CL.",
+      "parentUuid": "0f0bea80_39d76a72",
+      "range": {
+        "startLine": 199,
+        "startChar": 9,
+        "endLine": 199,
+        "endChar": 37
+      },
+      "revId": "13403366a6921dc56175b05f935559ee500c912d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
         "uuid": "9ecbc048_30839264",
         "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
         "patchSetId": 18
@@ -172,6 +196,30 @@
       "side": 1,
       "message": "Thanks. Updated.\ndrawCount \u003d\u003d maxDrawIndirectCount should also be OK, right?",
       "parentUuid": "a3e02c59_c8547c03",
+      "range": {
+        "startLine": 2984,
+        "startChar": 0,
+        "endLine": 2996,
+        "endChar": 5
+      },
+      "revId": "13403366a6921dc56175b05f935559ee500c912d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "f6354f04_46b60f18",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 18
+      },
+      "lineNbr": 2996,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2021-11-24T02:53:55Z",
+      "side": 1,
+      "message": "Yes, right.",
+      "parentUuid": "b79dda8c_19fce8e7",
       "range": {
         "startLine": 2984,
         "startChar": 0,
