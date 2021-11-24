@@ -16,6 +16,52 @@
       "message": "Nice, thanks",
       "revId": "6aba8b57457da5235a028663498a49cf2e73130b",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "94abcdd3_b2e11b40",
+        "filename": "extensions/ANGLE_rbgx_internal_format.txt",
+        "patchSetId": 3
+      },
+      "lineNbr": 36,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2021-11-24T02:03:39Z",
+      "side": 1,
+      "message": "2 is fine too?",
+      "range": {
+        "startLine": 36,
+        "startChar": 14,
+        "endLine": 36,
+        "endChar": 15
+      },
+      "revId": "6aba8b57457da5235a028663498a49cf2e73130b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "d6cce66a_b607880f",
+        "filename": "extensions/ANGLE_rbgx_internal_format.txt",
+        "patchSetId": 3
+      },
+      "lineNbr": 54,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2021-11-24T02:03:39Z",
+      "side": 1,
+      "message": "This is no longer an internal enum, so we should rename it to GL_RGBX8_ANGLE (without X at the end).\n\nAlso, there\u0027s a sheet about GL enum values and allocations, I\u0027ll let Jamie guide you to it.",
+      "range": {
+        "startLine": 54,
+        "startChar": 12,
+        "endLine": 54,
+        "endChar": 27
+      },
+      "revId": "6aba8b57457da5235a028663498a49cf2e73130b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
