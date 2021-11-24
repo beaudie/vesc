@@ -373,6 +373,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "145c7d33_0dd9447a",
+        "filename": "src/common/system_utils_unittest.cpp",
+        "patchSetId": 12
+      },
+      "lineNbr": 247,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2021-11-24T02:46:57Z",
+      "side": 1,
+      "message": "Does this work?\n\n    volatile sig_atomic_t handlerCalled \u003d 0;\n\n    // inside handler\n    handlerCalled \u003d 1;\n\n    // outside handler, in unmap() or something\n    if (handlerCalled)\n\nOnly issue might be if the compiler reorders instructions, like if your test does:\n\n    protected_mem[0] \u003d 0;\n    if (handlerCalled)\n\nthat it would load handlerCalled before writing to mem. I don\u0027t think `volatile` itself is enough to stop that, so you might need a compiler barrier in between: See \"Explicit Compiler Barriers\" here: https://preshing.com/20120625/memory-ordering-at-compile-time/\n\nNote that the compiler barrier does not translate to assembly, it just stops instructions from reordering around it.",
+      "parentUuid": "98ed19e7_2cc7ba6e",
+      "range": {
+        "startLine": 247,
+        "startChar": 45,
+        "endLine": 247,
+        "endChar": 50
+      },
+      "revId": "1f7faabec642753f0afcfc0210ae133beab0bd51",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "0c22cc5d_b0c4638b",
         "filename": "src/common/system_utils_unittest.cpp",
         "patchSetId": 12
