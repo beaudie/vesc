@@ -54,6 +54,121 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "897d8a06_49e76952",
+        "filename": "extensions/ANGLE_vulkan_image.txt",
+        "patchSetId": 11
+      },
+      "lineNbr": 65,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2021-11-24T17:32:43Z",
+      "side": 1,
+      "message": ".",
+      "range": {
+        "startLine": 65,
+        "startChar": 33,
+        "endLine": 65,
+        "endChar": 34
+      },
+      "revId": "4bd464436d58c9bb46b1b4936eba171fe690fab5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "f00a0b98_ea9f8bd5",
+        "filename": "extensions/ANGLE_vulkan_image.txt",
+        "patchSetId": 11
+      },
+      "lineNbr": 65,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2021-11-24T17:32:43Z",
+      "side": 1,
+      "message": "will acquire",
+      "range": {
+        "startLine": 65,
+        "startChar": 4,
+        "endLine": 65,
+        "endChar": 11
+      },
+      "revId": "4bd464436d58c9bb46b1b4936eba171fe690fab5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "7ebff8ea_9c902be5",
+        "filename": "extensions/ANGLE_vulkan_image.txt",
+        "patchSetId": 11
+      },
+      "lineNbr": 68,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2021-11-24T17:32:43Z",
+      "side": 1,
+      "message": "delete",
+      "range": {
+        "startLine": 68,
+        "startChar": 66,
+        "endLine": 68,
+        "endChar": 67
+      },
+      "revId": "4bd464436d58c9bb46b1b4936eba171fe690fab5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "2514dcb5_89d7ef68",
+        "filename": "extensions/ANGLE_vulkan_image.txt",
+        "patchSetId": 11
+      },
+      "lineNbr": 78,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2021-11-24T17:32:43Z",
+      "side": 1,
+      "message": "nit: The",
+      "range": {
+        "startLine": 78,
+        "startChar": 35,
+        "endLine": 78,
+        "endChar": 38
+      },
+      "revId": "4bd464436d58c9bb46b1b4936eba171fe690fab5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "004f6ecb_5baa4ad8",
+        "filename": "extensions/ANGLE_vulkan_image.txt",
+        "patchSetId": 11
+      },
+      "lineNbr": 78,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2021-11-24T17:32:43Z",
+      "side": 1,
+      "message": "will release",
+      "range": {
+        "startLine": 78,
+        "startChar": 4,
+        "endLine": 78,
+        "endChar": 11
+      },
+      "revId": "4bd464436d58c9bb46b1b4936eba171fe690fab5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "29d4fa6d_d2f7b39e",
         "filename": "src/libANGLE/angletypes.h",
         "patchSetId": 11
@@ -111,6 +226,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "dff3d7bb_a510203c",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 11
+      },
+      "lineNbr": 4771,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2021-11-24T17:32:43Z",
+      "side": 1,
+      "message": "+1",
+      "parentUuid": "e258bad4_7c625acf",
+      "revId": "4bd464436d58c9bb46b1b4936eba171fe690fab5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "309b5c04_e9118c1d",
         "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
         "patchSetId": 11
@@ -162,6 +295,23 @@
       "writtenOn": "2021-11-24T02:33:41Z",
       "side": 1,
       "message": "You would need to be more exhaustive here. GetImageLayoutFromGLImageLayout enumerates all GL layouts, and ConvertImageLayoutToGLImageLayout should enumerate all vk::ImageLayout layouts.",
+      "revId": "4bd464436d58c9bb46b1b4936eba171fe690fab5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "c80fc94e_e4406bd6",
+        "filename": "src/libANGLE/validationESEXT.cpp",
+        "patchSetId": 11
+      },
+      "lineNbr": 2521,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2021-11-24T17:32:43Z",
+      "side": 1,
+      "message": "also agree with shabi we should perform more validation here",
       "revId": "4bd464436d58c9bb46b1b4936eba171fe690fab5",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
