@@ -16,6 +16,23 @@
       "message": "Shahbaz,do you know how to re-produce webgl_conformance_d3d9_passthrough_tests failures,not sure if these failures are caused by my patch.",
       "revId": "feb12cf6a056442e9827c117185c3100b8b5c54e",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "032674fe_19d8ed27",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2021-11-24T15:17:17Z",
+      "side": 1,
+      "message": "I don\u0027t think we should use this solution. Especially given the WebGL failures. If you can make a perf test that targets the issue, maybe we can devise a solution that fits better with the front-end logic.",
+      "revId": "feb12cf6a056442e9827c117185c3100b8b5c54e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
