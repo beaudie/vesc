@@ -197,6 +197,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "0c2b1cec_d2169d6d",
+        "filename": "src/common/system_utils.h",
+        "patchSetId": 12
+      },
+      "lineNbr": 119,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2021-11-24T17:27:31Z",
+      "side": 1,
+      "message": "Ack, can you mention the number of page handlers in a comment here, and what these functions might do in the OS level?",
+      "parentUuid": "6e2dcd3f_434ea907",
+      "range": {
+        "startLine": 117,
+        "startChar": 0,
+        "endLine": 119,
+        "endChar": 31
+      },
+      "revId": "1f7faabec642753f0afcfc0210ae133beab0bd51",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "b1a7602c_6ec98981",
         "filename": "src/common/system_utils_posix.cpp",
         "patchSetId": 12
@@ -385,6 +409,30 @@
       "side": 1,
       "message": "Does this work?\n\n    volatile sig_atomic_t handlerCalled \u003d 0;\n\n    // inside handler\n    handlerCalled \u003d 1;\n\n    // outside handler, in unmap() or something\n    if (handlerCalled)\n\nOnly issue might be if the compiler reorders instructions, like if your test does:\n\n    protected_mem[0] \u003d 0;\n    if (handlerCalled)\n\nthat it would load handlerCalled before writing to mem. I don\u0027t think `volatile` itself is enough to stop that, so you might need a compiler barrier in between: See \"Explicit Compiler Barriers\" here: https://preshing.com/20120625/memory-ordering-at-compile-time/\n\nNote that the compiler barrier does not translate to assembly, it just stops instructions from reordering around it.",
       "parentUuid": "98ed19e7_2cc7ba6e",
+      "range": {
+        "startLine": 247,
+        "startChar": 45,
+        "endLine": 247,
+        "endChar": 50
+      },
+      "revId": "1f7faabec642753f0afcfc0210ae133beab0bd51",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "f8b29b8f_96f07773",
+        "filename": "src/common/system_utils_unittest.cpp",
+        "patchSetId": 12
+      },
+      "lineNbr": 247,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2021-11-24T17:27:31Z",
+      "side": 1,
+      "message": "I spoke with Shabi offline - let\u0027s move forward with something like the current solution instead of being totally correct in the handler function. There may be a solution that has a minimal handler but it will take more development time to perfect, and we can always fix any issues that come up later down the pipe.",
+      "parentUuid": "145c7d33_0dd9447a",
       "range": {
         "startLine": 247,
         "startChar": 45,

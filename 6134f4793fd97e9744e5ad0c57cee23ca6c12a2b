@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ab10cb3b_5e78cea2",
+        "filename": "src/common/system_utils_posix.cpp",
+        "patchSetId": 17
+      },
+      "lineNbr": 249,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2021-11-24T17:27:31Z",
+      "side": 1,
+      "message": "Although this may work for our testing platforms, another posix implementation might fail. To work properly, you must handle both, not one specific one per-platform. What would it take to handle both?",
+      "range": {
+        "startLine": 244,
+        "startChar": 0,
+        "endLine": 249,
+        "endChar": 6
+      },
+      "revId": "6134f4793fd97e9744e5ad0c57cee23ca6c12a2b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
