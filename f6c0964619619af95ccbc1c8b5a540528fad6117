@@ -39,6 +39,30 @@
       },
       "revId": "f6c0964619619af95ccbc1c8b5a540528fad6117",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "ffda1675_17c5c81f",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 22
+      },
+      "lineNbr": 2892,
+      "author": {
+        "id": 1525982
+      },
+      "writtenOn": "2021-11-24T04:21:31Z",
+      "side": 1,
+      "message": "Sounds good! Refactored into a function in the anonymous namespace (with some changes).",
+      "parentUuid": "f8200383_fb77aeb3",
+      "range": {
+        "startLine": 2884,
+        "startChar": 0,
+        "endLine": 2892,
+        "endChar": 40
+      },
+      "revId": "f6c0964619619af95ccbc1c8b5a540528fad6117",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }

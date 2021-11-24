@@ -138,6 +138,30 @@
     {
       "unresolved": false,
       "key": {
+        "uuid": "1a5d18a4_90bcaab3",
+        "filename": "include/platform/FeaturesVk.h",
+        "patchSetId": 18
+      },
+      "lineNbr": 199,
+      "author": {
+        "id": 1525982
+      },
+      "writtenOn": "2021-11-24T04:21:31Z",
+      "side": 1,
+      "message": "Thanks! I\u0027ll do it in another CL.",
+      "parentUuid": "edf67f2c_2ea6d4cc",
+      "range": {
+        "startLine": 199,
+        "startChar": 9,
+        "endLine": 199,
+        "endChar": 37
+      },
+      "revId": "13403366a6921dc56175b05f935559ee500c912d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
         "uuid": "9ecbc048_30839264",
         "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
         "patchSetId": 18
