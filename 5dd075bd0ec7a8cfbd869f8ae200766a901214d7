@@ -78,6 +78,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "2ee452f3_7a20c6b1",
+        "filename": "src/libANGLE/renderer/vulkan/BufferVk.cpp",
+        "patchSetId": 14
+      },
+      "lineNbr": 1210,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2021-11-24T17:12:52Z",
+      "side": 1,
+      "message": "+1, what kind of situation would need a fallback? Seems like this is working around a bug.",
+      "parentUuid": "f7c74ecc_bfbcd371",
+      "revId": "5dd075bd0ec7a8cfbd869f8ae200766a901214d7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "52c1730b_4be8ec70",
         "filename": "src/libANGLE/renderer/vulkan/BufferVk.h",
         "patchSetId": 14
