@@ -16,6 +16,24 @@
       "message": "Shabi, FYI.\nI think we have some Wayland bots Chromium-side, I hope this doesn\u0027t break them.",
       "revId": "77fa990502c92cee37c7dcaf961c53df08c6cdb2",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "ce5f9b0c_30f061e9",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1228974
+      },
+      "writtenOn": "2021-11-24T07:04:27Z",
+      "side": 1,
+      "message": "thanks. At the moment, we don\u0027t have Wayland bots running with ANGLE. That\u0027s the goal of my task :)",
+      "parentUuid": "d7f65a9d_993fd30f",
+      "revId": "77fa990502c92cee37c7dcaf961c53df08c6cdb2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
