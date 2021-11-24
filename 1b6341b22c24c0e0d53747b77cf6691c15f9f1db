@@ -70,6 +70,23 @@
       "parentUuid": "7a0fa290_028860e2",
       "revId": "1b6341b22c24c0e0d53747b77cf6691c15f9f1db",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "f860b903_c4b886b5",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 7
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2021-11-24T17:28:10Z",
+      "side": 1,
+      "message": "LGTM, you can suppress those tests with an ANGLE bug tracking the upstream GL-CTS bug.",
+      "revId": "1b6341b22c24c0e0d53747b77cf6691c15f9f1db",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
