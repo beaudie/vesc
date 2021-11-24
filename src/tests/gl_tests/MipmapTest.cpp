@@ -1992,6 +1992,44 @@ TEST_P(MipmapTestES3, GenerateMipmapZeroSize)
     glGenerateMipmap(GL_TEXTURE_3D);
 }
 
+static void fill(GLuint tex, GLsizei width, GLsizei height, GLint level)
+{
+    size_t numPixels = width * height;
+    size_t size      = numPixels * 4;
+    const void *buf  = new uint8_t[size];
+    glBindTexture(GL_TEXTURE_2D, tex);
+    glTexImage2D(GL_TEXTURE_2D, level, GL_RGBA, 1, height, 0, GL_RGBA, GL_UNSIGNED_BYTE, buf);
+}
+
+TEST_P(MipmapTestES3, GenerateMipmapTexImage2D)
+{
+    glUseProgram(m2DProgram);
+
+    GLTexture tex;
+    glBindTexture(GL_TEXTURE_2D, tex);
+
+    fill(tex, 1, 1 << 8, 0);
+    fill(tex, 1, 1 << 7, 1);
+    fill(tex, 1, 1 << 6, 2);
+    fill(tex, 1, 1 << 5, 3);
+    fill(tex, 1, 1 << 4, 4);
+    fill(tex, 1, 1 << 3, 5);
+    fill(tex, 1, 1 << 2, 6);
+    fill(tex, 1, 1 << 1, 7);
+    fill(tex, 1, 1 << 0, 8);
+    glDrawArrays(GL_TRIANGLES, 0, 6);
+    fill(tex, 1, 1, 0);
+    fill(tex, 1, 1, 1);
+    fill(tex, 1, 1, 2);
+    fill(tex, 1, 1, 3);
+    fill(tex, 1, 1, 4);
+    fill(tex, 1, 1, 5);
+    fill(tex, 1, 1, 6);
+    fill(tex, 1, 1, 7);
+    glDrawArrays(GL_TRIANGLES, 0, 6);
+    fill(tex, 1, 1, 8);
+}
+
 // Use this to select which configurations (e.g. which renderer, which GLES major version) these
 // tests should be run against.
 ANGLE_INSTANTIATE_TEST_ES2_AND_ES3(MipmapTest);
