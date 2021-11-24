@@ -1127,6 +1127,74 @@ void main()
     ASSERT_GL_NO_ERROR();
 }
 
+TEST_P(FramebufferTest_ES3, BadRenderbuffer)
+{
+    constexpr char kFS[] = R"(precision mediump float;
+uniform vec4 u_color;
+void main() {
+    gl_FragData[0] = u_color;
+})";
+
+    constexpr char kVS[] = R"(attribute vec4 vPosition;
+void main() {
+    gl_Position = vPosition;
+})";
+
+    GLsizei size = 16;
+    glViewport(0, 0, size, size);
+    GLBuffer buffer;
+    glBindBuffer(GL_ARRAY_BUFFER, buffer);
+    static const float bufferData[] = {1.0, 1.0, -1.0, 1.0,  -1.0, -1.0,
+                                       1.0, 1.0, -1.0, -1.0, 1.0,  -1.0};
+    glBufferData(GL_ARRAY_BUFFER, sizeof(bufferData), bufferData, GL_STATIC_DRAW);
+    glEnableVertexAttribArray(0);
+    glVertexAttribPointer(0, 2, GL_FLOAT, false, 0, 0);
+    ANGLE_GL_PROGRAM(program, kVS, kFS);
+    glUseProgram(program);
+
+    GLRenderbuffer renderBuffer;
+    GLFramebuffer fbo;
+    glBindRenderbuffer(GL_RENDERBUFFER, renderBuffer);
+    glRenderbufferStorageMultisample(GL_RENDERBUFFER, 1, GL_RGBA8, size, size);
+    glBindFramebuffer(GL_FRAMEBUFFER, fbo);
+    glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_RENDERBUFFER, renderBuffer);
+    glRenderbufferStorage(GL_RENDERBUFFER, GL_RGBA8, size, size);
+    glUseProgram(program);
+    static const float color[] = {1.0f, 0.0f, 0.0f, 1.0f};
+    glUniform4fv(glGetUniformLocation(program, "u_color"), 1, color);
+    glDrawArrays(GL_TRIANGLES, 0, 6);
+    glBindRenderbuffer(GL_RENDERBUFFER, 0);
+
+    // same sequence repeated 3 times
+    glBindRenderbuffer(GL_RENDERBUFFER, renderBuffer);
+    glRenderbufferStorageMultisample(GL_RENDERBUFFER, 1, GL_RGBA8, size, size);
+    glBindFramebuffer(GL_FRAMEBUFFER, fbo);
+    glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_RENDERBUFFER, renderBuffer);
+    glRenderbufferStorage(GL_RENDERBUFFER, GL_RGBA8, size, size);
+    glUseProgram(program);
+    glUniform4fv(glGetUniformLocation(program, "u_color"), 1, color);
+    glDrawArrays(GL_TRIANGLES, 0, 6);
+    glBindRenderbuffer(GL_RENDERBUFFER, 0);
+
+    glBindRenderbuffer(GL_RENDERBUFFER, renderBuffer);
+    glRenderbufferStorageMultisample(GL_RENDERBUFFER, 1, GL_RGBA8, size, size);
+    glBindFramebuffer(GL_FRAMEBUFFER, fbo);
+    glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_RENDERBUFFER, renderBuffer);
+    glRenderbufferStorage(GL_RENDERBUFFER, GL_RGBA8, size, size);
+    glUseProgram(program);
+    glDrawArrays(GL_TRIANGLES, 0, 6);
+
+    glBindRenderbuffer(GL_RENDERBUFFER, renderBuffer);
+    glRenderbufferStorageMultisample(GL_RENDERBUFFER, 1, GL_RGBA8, size, size);
+    glBindFramebuffer(GL_FRAMEBUFFER, fbo);
+    glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_RENDERBUFFER, renderBuffer);
+    glRenderbufferStorage(GL_RENDERBUFFER, GL_RGBA8, size, size);
+    glUseProgram(program);
+    glUniform4fv(glGetUniformLocation(program, "u_color"), 1, color);
+    glDrawArrays(GL_TRIANGLES, 0, 6);
+    glBindRenderbuffer(GL_RENDERBUFFER, 0);
+}
+
 class FramebufferTestWithFormatFallback : public ANGLETest
 {
   protected:
