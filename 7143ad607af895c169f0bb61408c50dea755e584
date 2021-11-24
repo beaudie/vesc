@@ -1,0 +1,44 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "15701ab5_dca1eb10",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2021-11-24T17:18:58Z",
+      "side": 1,
+      "message": "I\u0027m wonder",
+      "revId": "7143ad607af895c169f0bb61408c50dea755e584",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "3387a610_d38655f2",
+        "filename": "src/libANGLE/renderer/vulkan/BUILD.gn",
+        "patchSetId": 2
+      },
+      "lineNbr": 223,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2021-11-24T17:18:58Z",
+      "side": 1,
+      "message": "this will affect SwiftShader \u0026 Chrome... I wonder if we can make it controlled at runtime rather than compile-time?",
+      "range": {
+        "startLine": 221,
+        "startChar": 0,
+        "endLine": 223,
+        "endChar": 3
+      },
+      "revId": "7143ad607af895c169f0bb61408c50dea755e584",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
