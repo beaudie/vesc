@@ -1,0 +1,176 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "c2c90af8_66352395",
+        "filename": "src/libANGLE/capture/FrameCapture.cpp",
+        "patchSetId": 23
+      },
+      "lineNbr": 4756,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2021-11-24T17:38:54Z",
+      "side": 1,
+      "message": "same comments about WARN().",
+      "revId": "010d41760f4be0f0c2e0702cb7ca0b0d3769fc2d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "6e4e6b12_7468e3d4",
+        "filename": "src/libANGLE/capture/FrameCapture.cpp",
+        "patchSetId": 23
+      },
+      "lineNbr": 4829,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2021-11-24T17:38:54Z",
+      "side": 1,
+      "message": "same comment below about WARN(). is this a useful warning?",
+      "range": {
+        "startLine": 4829,
+        "startChar": 8,
+        "endLine": 4829,
+        "endChar": 12
+      },
+      "revId": "010d41760f4be0f0c2e0702cb7ca0b0d3769fc2d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "bc0161e7_e1f843ce",
+        "filename": "src/libANGLE/capture/FrameCapture.cpp",
+        "patchSetId": 23
+      },
+      "lineNbr": 4838,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2021-11-24T17:38:54Z",
+      "side": 1,
+      "message": "same as below comment about auto",
+      "range": {
+        "startLine": 4838,
+        "startChar": 9,
+        "endLine": 4838,
+        "endChar": 13
+      },
+      "revId": "010d41760f4be0f0c2e0702cb7ca0b0d3769fc2d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "cd961959_b5332f4a",
+        "filename": "src/libANGLE/capture/FrameCapture.cpp",
+        "patchSetId": 23
+      },
+      "lineNbr": 4852,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2021-11-24T17:38:54Z",
+      "side": 1,
+      "message": "nit: if using auto, alias the first/second into a local variable so we can see the type (see style guide)",
+      "range": {
+        "startLine": 4852,
+        "startChar": 9,
+        "endLine": 4852,
+        "endChar": 13
+      },
+      "revId": "010d41760f4be0f0c2e0702cb7ca0b0d3769fc2d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "d569daf1_d844e281",
+        "filename": "src/libANGLE/capture/FrameCapture.cpp",
+        "patchSetId": 23
+      },
+      "lineNbr": 4927,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2021-11-24T17:38:54Z",
+      "side": 1,
+      "message": "what does this warning tell us?",
+      "range": {
+        "startLine": 4927,
+        "startChar": 8,
+        "endLine": 4927,
+        "endChar": 12
+      },
+      "revId": "010d41760f4be0f0c2e0702cb7ca0b0d3769fc2d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "87647995_cc81f340",
+        "filename": "src/libANGLE/capture/FrameCapture.cpp",
+        "patchSetId": 23
+      },
+      "lineNbr": 4942,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2021-11-24T17:38:54Z",
+      "side": 1,
+      "message": "are you going to resolve this TODO? tag with your name \u0026 a bug ID if so. else, remove it, and optionally replace with a comment explaining what would happen.",
+      "range": {
+        "startLine": 4942,
+        "startChar": 7,
+        "endLine": 4942,
+        "endChar": 11
+      },
+      "revId": "010d41760f4be0f0c2e0702cb7ca0b0d3769fc2d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "e96aa0e9_7a3d5f69",
+        "filename": "src/libANGLE/capture/FrameCapture.cpp",
+        "patchSetId": 23
+      },
+      "lineNbr": 5993,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2021-11-24T17:38:54Z",
+      "side": 1,
+      "message": "same comments about TODO",
+      "revId": "010d41760f4be0f0c2e0702cb7ca0b0d3769fc2d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "0d56c74b_cafb60be",
+        "filename": "src/libANGLE/capture/FrameCapture.h",
+        "patchSetId": 23
+      },
+      "lineNbr": 401,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2021-11-24T17:38:54Z",
+      "side": 1,
+      "message": "nit: avoid pair, use a named struct for readability/maintainability.",
+      "range": {
+        "startLine": 401,
+        "startChar": 16,
+        "endLine": 401,
+        "endChar": 43
+      },
+      "revId": "010d41760f4be0f0c2e0702cb7ca0b0d3769fc2d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
