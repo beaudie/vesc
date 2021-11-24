@@ -3900,8 +3900,8 @@ ImageHelper::ImageHelper(ImageHelper &&other)
       mCurrentQueueFamilyIndex(other.mCurrentQueueFamilyIndex),
       mLastNonShaderReadOnlyLayout(other.mLastNonShaderReadOnlyLayout),
       mCurrentShaderReadStageMask(other.mCurrentShaderReadStageMask),
+      mYcbcrConversionDesc(other.mYcbcrConversionDesc),
       mYuvConversionSampler(std::move(other.mYuvConversionSampler)),
-      mExternalFormat(other.mExternalFormat),
       mFirstAllocatedLevel(other.mFirstAllocatedLevel),
       mLayerCount(other.mLayerCount),
       mLevelCount(other.mLevelCount),
@@ -3939,7 +3939,7 @@ void ImageHelper::resetCachedProperties()
     mFirstAllocatedLevel         = gl::LevelIndex(0);
     mLayerCount                  = 0;
     mLevelCount                  = 0;
-    mExternalFormat              = 0;
+    mYcbcrConversionDesc.reset();
     mCurrentSingleClearValue.reset();
     mRenderPassUsageFlags.reset();
 
@@ -4131,8 +4131,8 @@ angle::Result ImageHelper::initExternal(Context *context,
                                   &imageListFormatsStorage, &mCreateFlags);
     }
 
+    mYcbcrConversionDesc.reset();
     mYuvConversionSampler.reset();
-    mExternalFormat = 0;
 
     const angle::Format &actualFormat = angle::Format::Get(actualFormatID);
     VkFormat actualVkFormat           = GetVkFormatFromFormatID(actualFormatID);
@@ -4158,6 +4158,9 @@ angle::Result ImageHelper::initExternal(Context *context,
                                                VK_FORMAT_FEATURE_COSITED_CHROMA_SAMPLES_BIT) != 0)
                                                  ? VK_CHROMA_LOCATION_COSITED_EVEN
                                                  : VK_CHROMA_LOCATION_MIDPOINT;
+        VkSamplerYcbcrModelConversion conversionModel = VK_SAMPLER_YCBCR_MODEL_CONVERSION_YCBCR_601;
+        VkSamplerYcbcrRange colorRange                = VK_SAMPLER_YCBCR_RANGE_ITU_NARROW;
+        VkFilter chromaFilter                         = VK_FILTER_NEAREST;
 
         // Create the VkSamplerYcbcrConversion to associate with image views and samplers
         VkSamplerYcbcrConversionCreateInfo yuvConversionInfo = {};
@@ -4165,12 +4168,16 @@ angle::Result ImageHelper::initExternal(Context *context,
         yuvConversionInfo.format        = actualVkFormat;
         yuvConversionInfo.xChromaOffset = supportedLocation;
         yuvConversionInfo.yChromaOffset = supportedLocation;
-        yuvConversionInfo.ycbcrModel    = VK_SAMPLER_YCBCR_MODEL_CONVERSION_YCBCR_601;
-        yuvConversionInfo.ycbcrRange    = VK_SAMPLER_YCBCR_RANGE_ITU_NARROW;
-        yuvConversionInfo.chromaFilter  = VK_FILTER_NEAREST;
+        yuvConversionInfo.ycbcrModel    = conversionModel;
+        yuvConversionInfo.ycbcrRange    = colorRange;
+        yuvConversionInfo.chromaFilter  = chromaFilter;
+
+        // Update the YuvConversionCache key
+        mYcbcrConversionDesc.update(rendererVk, 0, conversionModel, colorRange, supportedLocation,
+                                    supportedLocation, chromaFilter, intendedFormatID);
 
         ANGLE_TRY(rendererVk->getYuvConversionCache().getYuvConversion(
-            context, actualVkFormat, false, yuvConversionInfo, &mYuvConversionSampler));
+            context, mYcbcrConversionDesc, yuvConversionInfo, &mYuvConversionSampler));
     }
 
     if (hasProtectedContent)
@@ -4480,10 +4487,18 @@ angle::Result ImageHelper::initExternalMemory(
             reinterpret_cast<const VkExternalFormatANDROID *>(
                 samplerYcbcrConversionCreateInfo->pNext);
         ASSERT(vkExternalFormat->sType == VK_STRUCTURE_TYPE_EXTERNAL_FORMAT_ANDROID);
-        mExternalFormat = vkExternalFormat->externalFormat;
+
+        // Update the YuvConversionCache key
+        mYcbcrConversionDesc.update(context->getRenderer(), vkExternalFormat->externalFormat,
+                                    samplerYcbcrConversionCreateInfo->ycbcrModel,
+                                    samplerYcbcrConversionCreateInfo->ycbcrRange,
+                                    samplerYcbcrConversionCreateInfo->xChromaOffset,
+                                    samplerYcbcrConversionCreateInfo->yChromaOffset,
+                                    samplerYcbcrConversionCreateInfo->chromaFilter,
+                                    angle::FormatID::NONE);
 
         ANGLE_TRY(context->getRenderer()->getYuvConversionCache().getYuvConversion(
-            context, mExternalFormat, true, *samplerYcbcrConversionCreateInfo,
+            context, mYcbcrConversionDesc, *samplerYcbcrConversionCreateInfo,
             &mYuvConversionSampler));
     }
 #endif
@@ -4602,7 +4617,7 @@ angle::Result ImageHelper::initLayerImageViewImpl(
 
         // VUID-VkImageViewCreateInfo-image-02399
         // If image has an external format, format must be VK_FORMAT_UNDEFINED
-        if (mExternalFormat)
+        if (mYcbcrConversionDesc.mIsExternalFormat)
         {
             viewInfo.format = VK_FORMAT_UNDEFINED;
         }
@@ -5905,11 +5920,6 @@ angle::Result ImageHelper::CalculateBufferInfo(ContextVk *contextVk,
                                                inputSkipBytes));
 
     return angle::Result::Continue;
-}
-
-bool ImageHelper::hasImmutableSampler() const
-{
-    return mExternalFormat != 0 || getActualFormat().isYUV;
 }
 
 void ImageHelper::onWrite(gl::LevelIndex levelStart,
