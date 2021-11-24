@@ -152,6 +152,24 @@
       "parentUuid": "244ef5a6_63f04a3a",
       "revId": "2fd5b5dbe02531a84d73e0c06246770a33b31604",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "9d125d91_4d14b5fd",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2021-11-24T17:20:19Z",
+      "side": 1,
+      "message": "FYI it looks as though this trace does LinkProgram though the calls. The more comprehensive fix here would be to diagnose \u0026 fix the compilation slowness.",
+      "parentUuid": "9f1a44f6_389f026b",
+      "revId": "2fd5b5dbe02531a84d73e0c06246770a33b31604",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
