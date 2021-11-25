@@ -16,6 +16,23 @@
       "message": "PTAL",
       "revId": "f5fa713bcc82ec007b0d3dc17d241c2c5656423d",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "b820e470_1e670cbf",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2021-11-25T15:56:49Z",
+      "side": 1,
+      "message": "Thanks for the fix! Would you mind adding an end2end test that reproduces (and this fixes) the bug?",
+      "revId": "f5fa713bcc82ec007b0d3dc17d241c2c5656423d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
