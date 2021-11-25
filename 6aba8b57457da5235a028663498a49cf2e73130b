@@ -41,6 +41,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "25c543af_6c60ed7a",
+        "filename": "extensions/ANGLE_rbgx_internal_format.txt",
+        "patchSetId": 3
+      },
+      "lineNbr": 36,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2021-11-25T03:09:40Z",
+      "side": 1,
+      "message": "Done.\n\nSized internal formats are only available starting with GLES 3.0, which is why I went with that here.",
+      "parentUuid": "94abcdd3_b2e11b40",
+      "range": {
+        "startLine": 36,
+        "startChar": 14,
+        "endLine": 36,
+        "endChar": 15
+      },
+      "revId": "6aba8b57457da5235a028663498a49cf2e73130b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "d6cce66a_b607880f",
@@ -78,6 +102,30 @@
       "side": 1,
       "message": "http://go/angle-enum-allocation - google internal link.\n\nCould you also follow the templates in other ext docs, for example, the yuv_internal_format.txt document?",
       "parentUuid": "d6cce66a_b607880f",
+      "range": {
+        "startLine": 54,
+        "startChar": 12,
+        "endLine": 54,
+        "endChar": 27
+      },
+      "revId": "6aba8b57457da5235a028663498a49cf2e73130b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "e7d05724_eff2d0fd",
+        "filename": "extensions/ANGLE_rbgx_internal_format.txt",
+        "patchSetId": 3
+      },
+      "lineNbr": 54,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2021-11-25T03:09:40Z",
+      "side": 1,
+      "message": "\u003e Could you also follow the templates in other ext docs, for example, the yuv_internal_format.txt document?\n\nThis is a copy of ANGLE_yuv_internal_format.txt.   What\u0027s missing?",
+      "parentUuid": "498fad06_4f9a45af",
       "range": {
         "startLine": 54,
         "startChar": 12,
