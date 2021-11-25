@@ -1,6 +1,23 @@
 {
   "comments": [
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "c854e92f_828a1241",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 9
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1500872
+      },
+      "writtenOn": "2021-11-25T00:06:58Z",
+      "side": 1,
+      "message": "Resolved comment offline, that\u0027s an unaligned offset is against the spec and the frontend will catch it. ",
+      "revId": "a10c4157fce399b2e8f7fc82a11219c74cfbbbba",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "4f663c10_f6078f21",
