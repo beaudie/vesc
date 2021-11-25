@@ -222,6 +222,23 @@
       },
       "revId": "6636db2185d8743df94e13369c8ae4d47e3b50d2",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ea0f9c1e_25237957",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 14
+      },
+      "lineNbr": 4686,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2021-11-25T16:18:05Z",
+      "side": 1,
+      "message": "To protect against bugs like this, I suggest making `VkImageCreateInfo` a member of ImageHelper, so the real create info can be returned. You can pass in info like hasProtectedContent to your helper to fix the bug as well.\n\nThe function that returns the cached create info should just have to make sure it sets initialLayout to UNDEFINED and pNext to nullptr.",
+      "revId": "6636db2185d8743df94e13369c8ae4d47e3b50d2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
