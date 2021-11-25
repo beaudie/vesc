@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "3fd875e0_2c93a070",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 7
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1326275
+      },
+      "writtenOn": "2021-11-25T18:24:02Z",
+      "side": 1,
+      "message": "verified the compressedTexImage3D and sub version fails ASAN without my fix.\nBut I can\u0027t get the compressedTexImage2D versions to fail..",
+      "revId": "b8de237804ec33f5566940019e1c8f3779bd0f44",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}

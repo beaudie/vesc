@@ -24,6 +24,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "db566661_9c51c465",
+        "filename": "src/libANGLE/Context.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 5049,
+      "author": {
+        "id": 1326275
+      },
+      "writtenOn": "2021-11-25T18:24:02Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "f64accbc_ea3b8213",
+      "range": {
+        "startLine": 5048,
+        "startChar": 0,
+        "endLine": 5049,
+        "endChar": 50
+      },
+      "revId": "de113ac3aae8fab9588411bb8e812365523cafb7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "f61c7e08_f7827a4b",
@@ -37,6 +61,30 @@
       "writtenOn": "2021-11-25T15:39:51Z",
       "side": 1,
       "message": "nit: I would do \"\u003d { 0 };\" or we will likely get msan failures about reading uninitialized memory.",
+      "range": {
+        "startLine": 5213,
+        "startChar": 20,
+        "endLine": 5213,
+        "endChar": 21
+      },
+      "revId": "de113ac3aae8fab9588411bb8e812365523cafb7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "317da498_2a675994",
+        "filename": "src/tests/gl_tests/TextureTest.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 5213,
+      "author": {
+        "id": 1326275
+      },
+      "writtenOn": "2021-11-25T18:24:02Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "f61c7e08_f7827a4b",
       "range": {
         "startLine": 5213,
         "startChar": 20,
