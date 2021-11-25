@@ -170,6 +170,24 @@
       "parentUuid": "9f1a44f6_389f026b",
       "revId": "2fd5b5dbe02531a84d73e0c06246770a33b31604",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "4b252759_5ff07a4c",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2021-11-25T15:43:38Z",
+      "side": 1,
+      "message": "I think we\u0027ve reached a point where compilation and link is actually quite fast, and the overhead of threading the job is too much in comparison. I did mention improving the thread pool to be more efficient, but there\u0027s still the issue of the threaded compile being scheduled on little cores and end up taking longer.\n\nRegardless of what shape this change takes, I think it makes sense for it to be limited to Android for the time being.",
+      "parentUuid": "9d125d91_4d14b5fd",
+      "revId": "2fd5b5dbe02531a84d73e0c06246770a33b31604",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
