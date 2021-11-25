@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "4f663c10_f6078f21",
+        "filename": "src/libANGLE/renderer/metal/VertexArrayMtl.mm",
+        "patchSetId": 9
+      },
+      "lineNbr": 698,
+      "author": {
+        "id": 1500872
+      },
+      "writtenOn": "2021-11-25T00:03:55Z",
+      "side": 1,
+      "message": "Do we need to still check for unaligned offset here? checking for alignment on the elements / converted elements type, rather than against kIndexBufferOffsetAlignment?",
+      "revId": "a10c4157fce399b2e8f7fc82a11219c74cfbbbba",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
