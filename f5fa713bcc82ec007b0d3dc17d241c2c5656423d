@@ -37,6 +37,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "2b0fff15_e0ba036a",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1340649
+      },
+      "writtenOn": "2021-11-25T17:46:25Z",
+      "side": 1,
+      "message": "\u003e Would you mind adding an end2end test that reproduces (and this fixes) the bug?\n\n1. i am not aware of an AHB function that allows apps to set dataspace\n\n2. if you or jamie provide 1 GLES enum from your block, i can add a glTexParameter enhancement to the \"GL_ANGLE_yuv_internal_format\" spec and then we would be able to have unit tests which will not have to rely on AHBs",
+      "parentUuid": "b820e470_1e670cbf",
+      "revId": "f5fa713bcc82ec007b0d3dc17d241c2c5656423d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "e6feedef_731ee589",
         "filename": "src/libANGLE/renderer/vulkan/vk_cache_utils.h",
         "patchSetId": 2
@@ -48,6 +66,30 @@
       "writtenOn": "2021-11-25T16:53:39Z",
       "side": 1,
       "message": "What kind of enums live in this value? How could we flatten this to a 32-bit enum? I\u0027m wondering if we can keep SamplerDesc a bit smaller. Then you could pack this to 8 bytes pretty easily. Maybe if you only need 24-bits for the packed format you could keep it in 4 bytes.",
+      "range": {
+        "startLine": 854,
+        "startChar": 0,
+        "endLine": 859,
+        "endChar": 33
+      },
+      "revId": "f5fa713bcc82ec007b0d3dc17d241c2c5656423d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "f6dc7be4_4320f010",
+        "filename": "src/libANGLE/renderer/vulkan/vk_cache_utils.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 859,
+      "author": {
+        "id": 1340649
+      },
+      "writtenOn": "2021-11-25T17:46:25Z",
+      "side": 1,
+      "message": "i have only ever seen 32its used for externalFormat or VkFormat, but since the value in VkExternalFormatANDROID::externalFormat is an opaque number that we consume passively, i didn\u0027t feel comfortable truncating to 32bits. Any vendor is free to use the full 64bits to indicate a magic number for one of their formats, though i have not seen any real world usecase like that, yet.\n\nwhat i could do is assert that externalFormat or VkFormat \u003c (2^56 - 1) and use the remaining 8 bits for the other fields. it is kludgy and could break on \"some vendor out there\"",
+      "parentUuid": "e6feedef_731ee589",
       "range": {
         "startLine": 854,
         "startChar": 0,
