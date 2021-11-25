@@ -22,6 +22,30 @@
       },
       "revId": "6134f4793fd97e9744e5ad0c57cee23ca6c12a2b",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "74ef3fd5_ff2c60c1",
+        "filename": "src/common/system_utils_posix.cpp",
+        "patchSetId": 17
+      },
+      "lineNbr": 249,
+      "author": {
+        "id": 1491687
+      },
+      "writtenOn": "2021-11-25T13:44:51Z",
+      "side": 1,
+      "message": "After doing some research, there indeed might be even different versions of POSIX implementations like Debian that can emit the a SIGBUS signal for mprotect. I am now always handling both signals.",
+      "parentUuid": "ab10cb3b_5e78cea2",
+      "range": {
+        "startLine": 244,
+        "startChar": 0,
+        "endLine": 249,
+        "endChar": 6
+      },
+      "revId": "6134f4793fd97e9744e5ad0c57cee23ca6c12a2b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }

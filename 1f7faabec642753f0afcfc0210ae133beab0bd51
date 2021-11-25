@@ -219,6 +219,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "61a377b0_ac9a8369",
+        "filename": "src/common/system_utils.h",
+        "patchSetId": 12
+      },
+      "lineNbr": 119,
+      "author": {
+        "id": 1491687
+      },
+      "writtenOn": "2021-11-25T13:44:51Z",
+      "side": 1,
+      "message": "Added comments.",
+      "parentUuid": "0c2b1cec_d2169d6d",
+      "range": {
+        "startLine": 117,
+        "startChar": 0,
+        "endLine": 119,
+        "endChar": 31
+      },
+      "revId": "1f7faabec642753f0afcfc0210ae133beab0bd51",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "b1a7602c_6ec98981",
@@ -433,6 +457,30 @@
       "side": 1,
       "message": "I spoke with Shabi offline - let\u0027s move forward with something like the current solution instead of being totally correct in the handler function. There may be a solution that has a minimal handler but it will take more development time to perfect, and we can always fix any issues that come up later down the pipe.",
       "parentUuid": "145c7d33_0dd9447a",
+      "range": {
+        "startLine": 247,
+        "startChar": 45,
+        "endLine": 247,
+        "endChar": 50
+      },
+      "revId": "1f7faabec642753f0afcfc0210ae133beab0bd51",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "19cf8d09_40be06f3",
+        "filename": "src/common/system_utils_unittest.cpp",
+        "patchSetId": 12
+      },
+      "lineNbr": 247,
+      "author": {
+        "id": 1491687
+      },
+      "writtenOn": "2021-11-25T13:44:51Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "f8b29b8f_96f07773",
       "range": {
         "startLine": 247,
         "startChar": 45,
