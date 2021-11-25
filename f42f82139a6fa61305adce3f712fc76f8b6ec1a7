@@ -16,6 +16,46 @@
       "message": "Re-LGTM",
       "revId": "f42f82139a6fa61305adce3f712fc76f8b6ec1a7",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "781efe51_368a913b",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1116023
+      },
+      "writtenOn": "2021-11-25T06:55:45Z",
+      "side": 1,
+      "message": "Thank you for this fix. I\u0027m working on a chromium change to integrate this new extension. It seems to work properly now, except for one issue - see my comment.",
+      "revId": "f42f82139a6fa61305adce3f712fc76f8b6ec1a7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "f8c1fe93_d6cbdb48",
+        "filename": "src/libANGLE/formatutils.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 555,
+      "author": {
+        "id": 1116023
+      },
+      "writtenOn": "2021-11-25T06:55:45Z",
+      "side": 1,
+      "message": "Can this be updated to return GL_RGB8 when internalformat is GL_RGBX8_ANGLE? This will allow to blit RGB textures to RGBX.",
+      "range": {
+        "startLine": 555,
+        "startChar": 14,
+        "endLine": 555,
+        "endChar": 42
+      },
+      "revId": "f42f82139a6fa61305adce3f712fc76f8b6ec1a7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
