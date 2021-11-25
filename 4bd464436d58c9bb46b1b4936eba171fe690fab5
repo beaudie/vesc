@@ -52,6 +52,42 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "0e4a0343_e0c0cf09",
+        "filename": "extensions/ANGLE_vulkan_image.txt",
+        "patchSetId": 11
+      },
+      "lineNbr": 49,
+      "author": {
+        "id": 1000050
+      },
+      "writtenOn": "2021-11-25T21:30:06Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "a537735e_07147b06",
+      "revId": "4bd464436d58c9bb46b1b4936eba171fe690fab5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "1507aeba_ed0b84af",
+        "filename": "extensions/ANGLE_vulkan_image.txt",
+        "patchSetId": 11
+      },
+      "lineNbr": 49,
+      "author": {
+        "id": 1000050
+      },
+      "writtenOn": "2021-11-25T21:30:06Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "a537735e_07147b06",
+      "revId": "4bd464436d58c9bb46b1b4936eba171fe690fab5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "897d8a06_49e76952",
@@ -98,6 +134,102 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "b3687e23_dd8f4417",
+        "filename": "extensions/ANGLE_vulkan_image.txt",
+        "patchSetId": 11
+      },
+      "lineNbr": 65,
+      "author": {
+        "id": 1000050
+      },
+      "writtenOn": "2021-11-25T21:30:06Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "f00a0b98_ea9f8bd5",
+      "range": {
+        "startLine": 65,
+        "startChar": 4,
+        "endLine": 65,
+        "endChar": 11
+      },
+      "revId": "4bd464436d58c9bb46b1b4936eba171fe690fab5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "627bc736_bc5e9ff4",
+        "filename": "extensions/ANGLE_vulkan_image.txt",
+        "patchSetId": 11
+      },
+      "lineNbr": 65,
+      "author": {
+        "id": 1000050
+      },
+      "writtenOn": "2021-11-25T21:30:06Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "f00a0b98_ea9f8bd5",
+      "range": {
+        "startLine": 65,
+        "startChar": 4,
+        "endLine": 65,
+        "endChar": 11
+      },
+      "revId": "4bd464436d58c9bb46b1b4936eba171fe690fab5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "64f2b0a4_b6575ab3",
+        "filename": "extensions/ANGLE_vulkan_image.txt",
+        "patchSetId": 11
+      },
+      "lineNbr": 65,
+      "author": {
+        "id": 1000050
+      },
+      "writtenOn": "2021-11-25T21:30:06Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "897d8a06_49e76952",
+      "range": {
+        "startLine": 65,
+        "startChar": 33,
+        "endLine": 65,
+        "endChar": 34
+      },
+      "revId": "4bd464436d58c9bb46b1b4936eba171fe690fab5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "2407e360_17c25e5b",
+        "filename": "extensions/ANGLE_vulkan_image.txt",
+        "patchSetId": 11
+      },
+      "lineNbr": 65,
+      "author": {
+        "id": 1000050
+      },
+      "writtenOn": "2021-11-25T21:30:06Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "897d8a06_49e76952",
+      "range": {
+        "startLine": 65,
+        "startChar": 33,
+        "endLine": 65,
+        "endChar": 34
+      },
+      "revId": "4bd464436d58c9bb46b1b4936eba171fe690fab5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "7ebff8ea_9c902be5",
@@ -111,6 +243,54 @@
       "writtenOn": "2021-11-24T17:32:43Z",
       "side": 1,
       "message": "delete",
+      "range": {
+        "startLine": 68,
+        "startChar": 66,
+        "endLine": 68,
+        "endChar": 67
+      },
+      "revId": "4bd464436d58c9bb46b1b4936eba171fe690fab5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "75ee09f1_0ccf4373",
+        "filename": "extensions/ANGLE_vulkan_image.txt",
+        "patchSetId": 11
+      },
+      "lineNbr": 68,
+      "author": {
+        "id": 1000050
+      },
+      "writtenOn": "2021-11-25T21:30:06Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "7ebff8ea_9c902be5",
+      "range": {
+        "startLine": 68,
+        "startChar": 66,
+        "endLine": 68,
+        "endChar": 67
+      },
+      "revId": "4bd464436d58c9bb46b1b4936eba171fe690fab5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "0bacb9f9_3e299161",
+        "filename": "extensions/ANGLE_vulkan_image.txt",
+        "patchSetId": 11
+      },
+      "lineNbr": 68,
+      "author": {
+        "id": 1000050
+      },
+      "writtenOn": "2021-11-25T21:30:06Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "7ebff8ea_9c902be5",
       "range": {
         "startLine": 68,
         "startChar": 66,
@@ -167,6 +347,102 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "376feb5a_93ba7a7d",
+        "filename": "extensions/ANGLE_vulkan_image.txt",
+        "patchSetId": 11
+      },
+      "lineNbr": 78,
+      "author": {
+        "id": 1000050
+      },
+      "writtenOn": "2021-11-25T21:30:06Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "2514dcb5_89d7ef68",
+      "range": {
+        "startLine": 78,
+        "startChar": 35,
+        "endLine": 78,
+        "endChar": 38
+      },
+      "revId": "4bd464436d58c9bb46b1b4936eba171fe690fab5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "cf10ad88_335d4de0",
+        "filename": "extensions/ANGLE_vulkan_image.txt",
+        "patchSetId": 11
+      },
+      "lineNbr": 78,
+      "author": {
+        "id": 1000050
+      },
+      "writtenOn": "2021-11-25T21:30:06Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "2514dcb5_89d7ef68",
+      "range": {
+        "startLine": 78,
+        "startChar": 35,
+        "endLine": 78,
+        "endChar": 38
+      },
+      "revId": "4bd464436d58c9bb46b1b4936eba171fe690fab5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "3abeadb0_c0a4abd5",
+        "filename": "extensions/ANGLE_vulkan_image.txt",
+        "patchSetId": 11
+      },
+      "lineNbr": 78,
+      "author": {
+        "id": 1000050
+      },
+      "writtenOn": "2021-11-25T21:30:06Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "004f6ecb_5baa4ad8",
+      "range": {
+        "startLine": 78,
+        "startChar": 4,
+        "endLine": 78,
+        "endChar": 11
+      },
+      "revId": "4bd464436d58c9bb46b1b4936eba171fe690fab5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "0eecc34e_bbda85fd",
+        "filename": "extensions/ANGLE_vulkan_image.txt",
+        "patchSetId": 11
+      },
+      "lineNbr": 78,
+      "author": {
+        "id": 1000050
+      },
+      "writtenOn": "2021-11-25T21:30:06Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "004f6ecb_5baa4ad8",
+      "range": {
+        "startLine": 78,
+        "startChar": 4,
+        "endLine": 78,
+        "endChar": 11
+      },
+      "revId": "4bd464436d58c9bb46b1b4936eba171fe690fab5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "29d4fa6d_d2f7b39e",
@@ -207,6 +483,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "af406501_883522c9",
+        "filename": "src/libANGLE/renderer/ContextImpl.cpp",
+        "patchSetId": 11
+      },
+      "lineNbr": 70,
+      "author": {
+        "id": 1000050
+      },
+      "writtenOn": "2021-11-25T21:30:06Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "ab6c3891_9e47558c",
+      "revId": "4bd464436d58c9bb46b1b4936eba171fe690fab5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "e258bad4_7c625acf",
@@ -242,6 +536,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "e1fab160_085241f6",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 11
+      },
+      "lineNbr": 4771,
+      "author": {
+        "id": 1000050
+      },
+      "writtenOn": "2021-11-25T21:30:06Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "dff3d7bb_a510203c",
+      "revId": "4bd464436d58c9bb46b1b4936eba171fe690fab5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "309b5c04_e9118c1d",
@@ -255,6 +567,30 @@
       "writtenOn": "2021-11-24T02:33:41Z",
       "side": 1,
       "message": "nit: the if block returns, so else is unnecessary.",
+      "range": {
+        "startLine": 4793,
+        "startChar": 0,
+        "endLine": 4794,
+        "endChar": 5
+      },
+      "revId": "4bd464436d58c9bb46b1b4936eba171fe690fab5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "2e72054d_b496aa82",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 11
+      },
+      "lineNbr": 4794,
+      "author": {
+        "id": 1000050
+      },
+      "writtenOn": "2021-11-25T21:30:06Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "309b5c04_e9118c1d",
       "range": {
         "startLine": 4793,
         "startChar": 0,
@@ -282,6 +618,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "0223449f_7334cefd",
+        "filename": "src/libANGLE/renderer/vulkan/SemaphoreVk.cpp",
+        "patchSetId": 11
+      },
+      "lineNbr": 110,
+      "author": {
+        "id": 1000050
+      },
+      "writtenOn": "2021-11-25T21:30:06Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "aa0f3400_22da73cb",
+      "revId": "4bd464436d58c9bb46b1b4936eba171fe690fab5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "76844c8a_e02971d2",
@@ -301,6 +655,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "138d715c_b1e4491a",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 11
+      },
+      "lineNbr": 868,
+      "author": {
+        "id": 1000050
+      },
+      "writtenOn": "2021-11-25T21:30:06Z",
+      "side": 1,
+      "message": "I added all ImageLayout here, but I am not sure what\u0027s the right conversion.",
+      "parentUuid": "76844c8a_e02971d2",
+      "revId": "4bd464436d58c9bb46b1b4936eba171fe690fab5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "c80fc94e_e4406bd6",
         "filename": "src/libANGLE/validationESEXT.cpp",
         "patchSetId": 11
@@ -312,6 +684,24 @@
       "writtenOn": "2021-11-24T17:32:43Z",
       "side": 1,
       "message": "also agree with shabi we should perform more validation here",
+      "revId": "4bd464436d58c9bb46b1b4936eba171fe690fab5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "63b6b5f7_5820c986",
+        "filename": "src/libANGLE/validationESEXT.cpp",
+        "patchSetId": 11
+      },
+      "lineNbr": 2521,
+      "author": {
+        "id": 1000050
+      },
+      "writtenOn": "2021-11-25T21:30:06Z",
+      "side": 1,
+      "message": "I handle invalid texture in the context impl to avoid an extra texture looking up.",
+      "parentUuid": "c80fc94e_e4406bd6",
       "revId": "4bd464436d58c9bb46b1b4936eba171fe690fab5",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
