@@ -5241,9 +5241,8 @@ angle::Result ContextVk::updateActiveTextures(const gl::Context *context, gl::Co
     const gl::ActiveTextureMask &activeTextures    = executable->getActiveSamplersMask();
     const gl::ActiveTextureTypeArray &textureTypes = executable->getActiveSamplerTypes();
 
-    bool recreatePipelineLayout                     = false;
-    FormatIndexMap<uint64_t> externalFormatIndexMap = {};
-    FormatIndexMap<VkFormat> vkFormatIndexMap       = {};
+    bool recreatePipelineLayout                       = false;
+    ImmutableSamplerIndexMap immutableSamplerIndexMap = {};
     for (size_t textureUnit : activeTextures)
     {
         gl::Texture *texture        = textures[textureUnit];
@@ -5333,17 +5332,8 @@ angle::Result ContextVk::updateActiveTextures(const gl::Context *context, gl::Co
 
         if (textureVk->getImage().hasImmutableSampler())
         {
-            uint64_t externalFormat = textureVk->getImage().getExternalFormat();
-            VkFormat vkFormat       = textureVk->getImage().getActualVkFormat();
-            if (externalFormat != 0)
-            {
-                externalFormatIndexMap[externalFormat] = static_cast<uint32_t>(textureUnit);
-            }
-            else
-            {
-                ASSERT(vkFormat != 0);
-                vkFormatIndexMap[vkFormat] = static_cast<uint32_t>(textureUnit);
-            }
+            immutableSamplerIndexMap[*textureVk->getImage().getYcbcrConversionDesc()] =
+                static_cast<uint32_t>(textureUnit);
         }
 
         if (textureVk->getAndResetImmutableSamplerDirtyState())
@@ -5352,7 +5342,7 @@ angle::Result ContextVk::updateActiveTextures(const gl::Context *context, gl::Co
         }
     }
 
-    if (!mExecutable->isImmutableSamplerFormatCompatible(externalFormatIndexMap, vkFormatIndexMap))
+    if (!mExecutable->areImmutableSamplersCompatible(immutableSamplerIndexMap))
     {
         recreatePipelineLayout = true;
     }
