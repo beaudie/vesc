@@ -704,6 +704,24 @@
       "parentUuid": "c80fc94e_e4406bd6",
       "revId": "4bd464436d58c9bb46b1b4936eba171fe690fab5",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "46c93bcc_a09fb1b6",
+        "filename": "src/libANGLE/validationESEXT.cpp",
+        "patchSetId": 11
+      },
+      "lineNbr": 2521,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2021-11-26T13:35:00Z",
+      "side": 1,
+      "message": "Unresolving so I can see the answer without having to look in depth.\n\nHow many times a frame is this function called? I\u0027m wondering if it\u0027s really a perfomance hotspot.",
+      "parentUuid": "63b6b5f7_5820c986",
+      "revId": "4bd464436d58c9bb46b1b4936eba171fe690fab5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
