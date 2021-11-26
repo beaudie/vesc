@@ -416,7 +416,7 @@ class CoherentBuffer
     void setDirty(size_t relativePage, bool dirty);
 
     // Removes protection completely
-    void removeProtection();
+    void removeProtection(bool skipFirstPage, bool skipLastPage);
 
     bool contains(size_t page, size_t *relativePage);
     bool isDirty();
@@ -460,6 +460,9 @@ class CoherentBufferTracker final : angle::NonCopyable
     void onEndFrame();
 
   private:
+    // Detect overlapping pages when removing protection
+    void doesBufferSharePage(gl::BufferID id, bool *firstPageShared, bool *lastPageShared);
+
     // Returns a map to found buffers and the corresponding pages for a given address.
     // For addresses that are in a page shared by 2 buffers, 2 results are returned.
     std::map<std::shared_ptr<CoherentBuffer>, size_t> getBufferPagesForAddress(uintptr_t address);
