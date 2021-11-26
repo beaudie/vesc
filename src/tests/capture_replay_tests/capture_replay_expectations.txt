@@ -215,3 +215,5 @@
 6663 : Texture2DTest.UploadThenFSThenNewRPThenVSThenFS/* = SKIPPED_BY_GTEST
 6663 : Texture2DTest.UploadThenFSThenVS/* = SKIPPED_BY_GTEST
 6663 : Texture2DTest.UploadThenFSThenVSThenNewRPThenFS/*  = SKIPPED_BY_GTEST
+
+6741 : VulkanImageTest.PixelTest* = SKIP_FOR_CAPTURE
