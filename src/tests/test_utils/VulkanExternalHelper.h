@@ -22,6 +22,8 @@ class VulkanExternalHelper
 
     void initialize(bool useSwiftshader, bool enableValidationLayers);
 
+    void initializeFromANGLE();
+
     VkInstance getInstance() const { return mInstance; }
     VkPhysicalDevice getPhysicalDevice() const { return mPhysicalDevice; }
     VkDevice getDevice() const { return mDevice; }
@@ -114,6 +116,7 @@ class VulkanExternalHelper
                     size_t pixelsSize);
 
   private:
+    bool mInitializedFromANGLE       = false;
     VkInstance mInstance             = VK_NULL_HANDLE;
     VkPhysicalDevice mPhysicalDevice = VK_NULL_HANDLE;
     VkDevice mDevice                 = VK_NULL_HANDLE;
