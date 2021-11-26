@@ -1666,23 +1666,17 @@ bool InternalFormat::computeDepthPitch(GLsizei height,
                                        GLuint rowPitch,
                                        GLuint *resultOut) const
 {
-    CheckedNumeric<GLuint> pixelsHeight(imageHeight > 0 ? static_cast<GLuint>(imageHeight)
-                                                        : static_cast<GLuint>(height));
-
-    CheckedNumeric<GLuint> rowCount;
+    // Compressed images do not use pack/unpack parameters.
     if (compressed)
     {
-        CheckedNumeric<GLuint> checkedBlockHeight(compressedBlockHeight);
-        rowCount = (pixelsHeight + checkedBlockHeight - 1u) / checkedBlockHeight;
-    }
-    else
-    {
-        rowCount = pixelsHeight;
+        return computeCompressedImageSize(Extents(1, height, 1), resultOut);
     }
 
+    CheckedNumeric<GLuint> pixelsHeight(imageHeight > 0 ? static_cast<GLuint>(imageHeight)
+                                                        : static_cast<GLuint>(height));
     CheckedNumeric<GLuint> checkedRowPitch(rowPitch);
 
-    return CheckedMathResult(checkedRowPitch * rowCount, resultOut);
+    return CheckedMathResult(checkedRowPitch * pixelsHeight, resultOut);
 }
 
 bool InternalFormat::computeDepthPitch(GLenum formatType,
