@@ -267,6 +267,7 @@ if (is_win || is_linux || is_chromeos || is_android || is_fuchsia || is_apple) {
     if (angle_enable_vulkan) {
       sources += [
         "gl_tests/VulkanExternalImageTest.cpp",
+        "gl_tests/VulkanImageTest.cpp",
         "test_utils/VulkanExternalHelper.cpp",
         "test_utils/VulkanExternalHelper.h",
       ]
