@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "0c46d09b_15526724",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1002745
+      },
+      "writtenOn": "2021-11-26T00:16:11Z",
+      "side": 1,
+      "message": "You can ignore the mac-swangle-chromium-try-x64 failure and land this.\n\nEssentially, this CL fixes:\n- conformance/textures/image_bitmap_from_video/tex-2d-luminance_alpha-luminance_alpha-unsigned_byte.html\n- conformance/textures/image_bitmap_from_video/tex-2d-luminance-luminance-unsigned_byte.html\n- conformance/textures/image_bitmap_from_video/tex-2d-rgb-rgb-unsigned_byte.html\n- conformance/textures/image_bitmap_from_video/tex-2d-rgb-rgb-unsigned_short_5_6_5.html\n- conformance/textures/image_bitmap_from_video/tex-2d-rgba-rgba-unsigned_byte.html\n- conformance/textures/image_bitmap_from_video/tex-2d-rgba-rgba-unsigned_short_4_4_4_4.html\n- conformance/textures/image_bitmap_from_video/tex-2d-rgba-rgba-unsigned_short_5_5_5_1.html\n- conformance/textures/misc/copy-tex-image-2d-formats.html\n- conformance/textures/misc/video-rotation.html\n\nbut breaks:\n- conformance/canvas/webgl-to-2d-canvas.html\n- conformance/context/context-attribute-preserve-drawing-buffer.html\n\nThese 2 tests used to start failing when fixing the RGB \u003c-\u003e BGR issue, so breaking them here might actually mean that these tests had 2 issues cancelling each other out and that fixing this will finally enable us to fix the RGB \u003c-\u003e BGR issue.\n",
+      "revId": "411f5add240159bd5430c3fae56af7268a4765bc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
