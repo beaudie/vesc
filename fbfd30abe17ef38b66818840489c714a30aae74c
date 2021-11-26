@@ -53,6 +53,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "2e998f4d_0602aa8a",
+        "filename": "src/tests/gl_tests/VulkanImageTest.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 95,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2021-11-26T20:28:38Z",
+      "side": 1,
+      "message": "Ack.\n\nWe might need to figure out a way for Chrome to tell ANGLE to additionally enable some features that Chrome might need (but ANGLE doesn\u0027t).",
+      "parentUuid": "cbb3f412_f17d587d",
+      "revId": "fbfd30abe17ef38b66818840489c714a30aae74c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "5f7c3d81_0a97e0a7",
@@ -137,6 +155,30 @@
       "side": 1,
       "message": "Is there some test helpers in ANGLE for read pixels from vkimage?",
       "parentUuid": "b335e967_ce000e5c",
+      "range": {
+        "startLine": 143,
+        "startChar": 0,
+        "endLine": 151,
+        "endChar": 25
+      },
+      "revId": "fbfd30abe17ef38b66818840489c714a30aae74c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "4956917e_50031e45",
+        "filename": "src/tests/gl_tests/VulkanImageTest.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 151,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2021-11-26T20:28:38Z",
+      "side": 1,
+      "message": "I don\u0027t believe so, but it should be simple to write a helper in test_utils/, similarly to VulkanExternalHelper.cpp.",
+      "parentUuid": "930785ea_899b0c4c",
       "range": {
         "startLine": 143,
         "startChar": 0,
