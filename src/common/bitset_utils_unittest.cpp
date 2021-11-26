@@ -454,6 +454,18 @@ TYPED_TEST(BitSetArrayTest, BasicTest)
     EXPECT_TRUE(mBits.none());
     EXPECT_EQ(mBits.count(), 0u);
 
+    // Test iterator works with gap in bitset.
+    mBits.set(0);
+    mBits.set(mBits.size() - 1);
+    size_t bitCount = 0;
+    for (auto bit : mBits)
+    {
+        EXPECT_TRUE(mBits.test(bit));
+        bitCount++;
+    }
+    EXPECT_EQ(bitCount, mBits.count());
+    mBits.reset();
+
     // Test intersection logic
     TypeParam testBitSet;
     testBitSet.set(1);
