@@ -22,6 +22,30 @@
       },
       "revId": "a2dc72eea5cd9526ec7feba8e2145995527d7228",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "d24b1ea4_158dcc80",
+        "filename": "src/libANGLE/capture/FrameCapture.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 5576,
+      "author": {
+        "id": 1491687
+      },
+      "writtenOn": "2021-11-26T16:23:04Z",
+      "side": 1,
+      "message": "I suppose in the current version of the CL captureCoherentBufferSnapshot and captureMappedBufferSnapshot are still similar in general, but I\u0027m not sure there is an easy way to abstract here.",
+      "parentUuid": "5b92636d_755d3135",
+      "range": {
+        "startLine": 5561,
+        "startChar": 1,
+        "endLine": 5576,
+        "endChar": 84
+      },
+      "revId": "a2dc72eea5cd9526ec7feba8e2145995527d7228",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }

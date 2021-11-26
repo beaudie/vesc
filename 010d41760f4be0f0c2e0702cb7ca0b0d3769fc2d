@@ -18,6 +18,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "a2c28aab_843d28a2",
+        "filename": "src/libANGLE/capture/FrameCapture.cpp",
+        "patchSetId": 23
+      },
+      "lineNbr": 4756,
+      "author": {
+        "id": 1491687
+      },
+      "writtenOn": "2021-11-26T16:23:04Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "c2c90af8_66352395",
+      "revId": "010d41760f4be0f0c2e0702cb7ca0b0d3769fc2d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "6e4e6b12_7468e3d4",
@@ -31,6 +49,30 @@
       "writtenOn": "2021-11-24T17:38:54Z",
       "side": 1,
       "message": "same comment below about WARN(). is this a useful warning?",
+      "range": {
+        "startLine": 4829,
+        "startChar": 8,
+        "endLine": 4829,
+        "endChar": 12
+      },
+      "revId": "010d41760f4be0f0c2e0702cb7ca0b0d3769fc2d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "32b37624_57156e81",
+        "filename": "src/libANGLE/capture/FrameCapture.cpp",
+        "patchSetId": 23
+      },
+      "lineNbr": 4829,
+      "author": {
+        "id": 1491687
+      },
+      "writtenOn": "2021-11-26T16:23:04Z",
+      "side": 1,
+      "message": "This was mainly useful for development and detecting if buffers that overlap in a page have any impact on the trace. I removed the warnings.",
+      "parentUuid": "6e4e6b12_7468e3d4",
       "range": {
         "startLine": 4829,
         "startChar": 8,
@@ -64,6 +106,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "c98d0fdc_1033ee88",
+        "filename": "src/libANGLE/capture/FrameCapture.cpp",
+        "patchSetId": 23
+      },
+      "lineNbr": 4838,
+      "author": {
+        "id": 1491687
+      },
+      "writtenOn": "2021-11-26T16:23:04Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "bc0161e7_e1f843ce",
+      "range": {
+        "startLine": 4838,
+        "startChar": 9,
+        "endLine": 4838,
+        "endChar": 13
+      },
+      "revId": "010d41760f4be0f0c2e0702cb7ca0b0d3769fc2d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "cd961959_b5332f4a",
@@ -77,6 +143,30 @@
       "writtenOn": "2021-11-24T17:38:54Z",
       "side": 1,
       "message": "nit: if using auto, alias the first/second into a local variable so we can see the type (see style guide)",
+      "range": {
+        "startLine": 4852,
+        "startChar": 9,
+        "endLine": 4852,
+        "endChar": 13
+      },
+      "revId": "010d41760f4be0f0c2e0702cb7ca0b0d3769fc2d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "89584d00_c0784cc1",
+        "filename": "src/libANGLE/capture/FrameCapture.cpp",
+        "patchSetId": 23
+      },
+      "lineNbr": 4852,
+      "author": {
+        "id": 1491687
+      },
+      "writtenOn": "2021-11-26T16:23:04Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "cd961959_b5332f4a",
       "range": {
         "startLine": 4852,
         "startChar": 9,
@@ -110,6 +200,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "b3706204_84fa7f1f",
+        "filename": "src/libANGLE/capture/FrameCapture.cpp",
+        "patchSetId": 23
+      },
+      "lineNbr": 4927,
+      "author": {
+        "id": 1491687
+      },
+      "writtenOn": "2021-11-26T16:23:04Z",
+      "side": 1,
+      "message": "Same as the other overlap warnings, they were useful for development and are now removed.",
+      "parentUuid": "d569daf1_d844e281",
+      "range": {
+        "startLine": 4927,
+        "startChar": 8,
+        "endLine": 4927,
+        "endChar": 12
+      },
+      "revId": "010d41760f4be0f0c2e0702cb7ca0b0d3769fc2d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "87647995_cc81f340",
@@ -123,6 +237,30 @@
       "writtenOn": "2021-11-24T17:38:54Z",
       "side": 1,
       "message": "are you going to resolve this TODO? tag with your name \u0026 a bug ID if so. else, remove it, and optionally replace with a comment explaining what would happen.",
+      "range": {
+        "startLine": 4942,
+        "startChar": 7,
+        "endLine": 4942,
+        "endChar": 11
+      },
+      "revId": "010d41760f4be0f0c2e0702cb7ca0b0d3769fc2d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "85b62db3_1fd24c01",
+        "filename": "src/libANGLE/capture/FrameCapture.cpp",
+        "patchSetId": 23
+      },
+      "lineNbr": 4942,
+      "author": {
+        "id": 1491687
+      },
+      "writtenOn": "2021-11-26T16:23:04Z",
+      "side": 1,
+      "message": "I added a meaningful comment. I have a draft implementation that actually handles this, but makes the code unnecessary complex and I did not encounter the case it covers in an app or in the end2end tests available.",
+      "parentUuid": "87647995_cc81f340",
       "range": {
         "startLine": 4942,
         "startChar": 7,
@@ -150,6 +288,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "5ddcf64f_c4f6806f",
+        "filename": "src/libANGLE/capture/FrameCapture.cpp",
+        "patchSetId": 23
+      },
+      "lineNbr": 5993,
+      "author": {
+        "id": 1491687
+      },
+      "writtenOn": "2021-11-26T16:23:04Z",
+      "side": 1,
+      "message": "I decided to remove the buffer binding detection completely and am now capturing also unbound dirty buffers. It did not have a noticeable performance impact and it is not required for capturing Dota, as it was rather experimental.",
+      "parentUuid": "e96aa0e9_7a3d5f69",
+      "revId": "010d41760f4be0f0c2e0702cb7ca0b0d3769fc2d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "0d56c74b_cafb60be",
@@ -163,6 +319,30 @@
       "writtenOn": "2021-11-24T17:38:54Z",
       "side": 1,
       "message": "nit: avoid pair, use a named struct for readability/maintainability.",
+      "range": {
+        "startLine": 401,
+        "startChar": 16,
+        "endLine": 401,
+        "endChar": 43
+      },
+      "revId": "010d41760f4be0f0c2e0702cb7ca0b0d3769fc2d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "82794dc4_8d760562",
+        "filename": "src/libANGLE/capture/FrameCapture.h",
+        "patchSetId": 23
+      },
+      "lineNbr": 401,
+      "author": {
+        "id": 1491687
+      },
+      "writtenOn": "2021-11-26T16:23:04Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "0d56c74b_cafb60be",
       "range": {
         "startLine": 401,
         "startChar": 16,
