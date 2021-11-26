@@ -722,6 +722,24 @@
       "parentUuid": "63b6b5f7_5820c986",
       "revId": "4bd464436d58c9bb46b1b4936eba171fe690fab5",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "8cad97ee_0e857f51",
+        "filename": "src/libANGLE/validationESEXT.cpp",
+        "patchSetId": 11
+      },
+      "lineNbr": 2521,
+      "author": {
+        "id": 1000050
+      },
+      "writtenOn": "2021-11-26T14:32:26Z",
+      "side": 1,
+      "message": "Once per frame in most cases. I added validating code here. also added validating for glSignalSemaphore() and glWaitSemaphore().",
+      "parentUuid": "46c93bcc_a09fb1b6",
+      "revId": "4bd464436d58c9bb46b1b4936eba171fe690fab5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
