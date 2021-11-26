@@ -16,6 +16,23 @@
       "message": "lgtm, thanks",
       "revId": "aee7691ebdd9bf0ae9c8dc9d8bc2328c9850193a",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "64ea338a_4503bade",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 19
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2021-11-26T15:41:22Z",
+      "side": 1,
+      "message": "LGTM. We can deal with improving the stages and access masks once we settle on a solution.",
+      "revId": "aee7691ebdd9bf0ae9c8dc9d8bc2328c9850193a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
