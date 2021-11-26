@@ -466,6 +466,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "ee103a0a_077eef44",
+        "filename": "src/libANGLE/angletypes.h",
+        "patchSetId": 11
+      },
+      "lineNbr": 912,
+      "author": {
+        "id": 1000050
+      },
+      "writtenOn": "2021-11-26T19:07:16Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "29d4fa6d_d2f7b39e",
+      "range": {
+        "startLine": 912,
+        "startChar": 6,
+        "endLine": 912,
+        "endChar": 19
+      },
+      "revId": "4bd464436d58c9bb46b1b4936eba171fe690fab5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "ab6c3891_9e47558c",
