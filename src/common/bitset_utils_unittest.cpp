@@ -454,6 +454,21 @@ TYPED_TEST(BitSetArrayTest, BasicTest)
     EXPECT_TRUE(mBits.none());
     EXPECT_EQ(mBits.count(), 0u);
 
+    // Test iterator works with gap in bitset.
+    std::set<std::size_t> bitsToBeSet = {0, mBits.size() / 2, mBits.size() - 1};
+    for (auto bit : bitsToBeSet)
+    {
+        mBits.set(bit);
+    }
+    std::set<std::size_t> bitsActuallySet = {};
+    for (auto bit : mBits)
+    {
+        bitsActuallySet.insert(bit);
+    }
+    EXPECT_EQ(bitsToBeSet, bitsActuallySet);
+    EXPECT_EQ(mBits.count(), bitsToBeSet.size());
+    mBits.reset();
+
     // Test intersection logic
     TypeParam testBitSet;
     testBitSet.set(1);
