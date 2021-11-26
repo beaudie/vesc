@@ -62,6 +62,29 @@
       },
       "revId": "17d55ba175f814719bf269b9d15a7b13196e85a9",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "89847c81_d9bbc537",
+        "filename": "src/libANGLE/validationESEXT.cpp",
+        "patchSetId": 18
+      },
+      "lineNbr": 2608,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2021-11-26T14:57:07Z",
+      "side": 1,
+      "message": "nit: I suggest we use INVALID_OPERATION, usually INVALID_VALUE means something is out of range, e.g. a negative texture size, or a uniform block ID greater than MAX_BLOCKS",
+      "range": {
+        "startLine": 2608,
+        "startChar": 49,
+        "endLine": 2608,
+        "endChar": 65
+      },
+      "revId": "17d55ba175f814719bf269b9d15a7b13196e85a9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
