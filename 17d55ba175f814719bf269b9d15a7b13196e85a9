@@ -41,6 +41,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "f9c0d9e4_318ce4b1",
+        "filename": "src/libANGLE/renderer/vulkan/SemaphoreVk.cpp",
+        "patchSetId": 18
+      },
+      "lineNbr": 99,
+      "author": {
+        "id": 1000050
+      },
+      "writtenOn": "2021-11-26T15:11:07Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "5d09eab7_60f689ce",
+      "range": {
+        "startLine": 99,
+        "startChar": 19,
+        "endLine": 99,
+        "endChar": 23
+      },
+      "revId": "17d55ba175f814719bf269b9d15a7b13196e85a9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "32d9a406_fe20b9ca",
@@ -64,6 +88,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "9293c129_42dbfe7d",
+        "filename": "src/libANGLE/renderer/vulkan/SemaphoreVk.cpp",
+        "patchSetId": 18
+      },
+      "lineNbr": 154,
+      "author": {
+        "id": 1000050
+      },
+      "writtenOn": "2021-11-26T15:11:07Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "32d9a406_fe20b9ca",
+      "range": {
+        "startLine": 154,
+        "startChar": 19,
+        "endLine": 154,
+        "endChar": 23
+      },
+      "revId": "17d55ba175f814719bf269b9d15a7b13196e85a9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "89847c81_d9bbc537",
@@ -77,6 +125,30 @@
       "writtenOn": "2021-11-26T14:57:07Z",
       "side": 1,
       "message": "nit: I suggest we use INVALID_OPERATION, usually INVALID_VALUE means something is out of range, e.g. a negative texture size, or a uniform block ID greater than MAX_BLOCKS",
+      "range": {
+        "startLine": 2608,
+        "startChar": 49,
+        "endLine": 2608,
+        "endChar": 65
+      },
+      "revId": "17d55ba175f814719bf269b9d15a7b13196e85a9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "1e5f6dc7_bf5468c1",
+        "filename": "src/libANGLE/validationESEXT.cpp",
+        "patchSetId": 18
+      },
+      "lineNbr": 2608,
+      "author": {
+        "id": 1000050
+      },
+      "writtenOn": "2021-11-26T15:11:07Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "89847c81_d9bbc537",
       "range": {
         "startLine": 2608,
         "startChar": 49,
