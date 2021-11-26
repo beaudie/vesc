@@ -1,0 +1,84 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "dcac2200_7db751ad",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2021-11-26T19:11:59Z",
+      "side": 1,
+      "message": "Thanks a lot for the tests. We should expand them a little bit more to make sure we catch regressions before they show up as \"everything looks black in Chrome\" 😊",
+      "revId": "fbfd30abe17ef38b66818840489c714a30aae74c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "17d61c6c_f645282a",
+        "filename": "src/tests/gl_tests/VulkanImageTest.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 95,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2021-11-26T19:11:59Z",
+      "side": 1,
+      "message": "Is pNext expected to be nullptr? This attribute seems a bit unnecessary, Chrome could have called `vkGetPhysicalDeviceFeatures2` itself. In fact, Chrome probably has to call `vkGetPhysicalDeviceFeatures2` anyway just to query features of the extensions it\u0027s interested in (and that ANGLE might not have queried)\n\nAlso, s/ASSERT/EXPECT here",
+      "revId": "fbfd30abe17ef38b66818840489c714a30aae74c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "5f7c3d81_0a97e0a7",
+        "filename": "src/tests/gl_tests/VulkanImageTest.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 139,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2021-11-26T19:11:59Z",
+      "side": 1,
+      "message": "s/ASSERT/EXPECT",
+      "range": {
+        "startLine": 129,
+        "startChar": 0,
+        "endLine": 139,
+        "endChar": 61
+      },
+      "revId": "fbfd30abe17ef38b66818840489c714a30aae74c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b335e967_ce000e5c",
+        "filename": "src/tests/gl_tests/VulkanImageTest.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 151,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2021-11-26T19:11:59Z",
+      "side": 1,
+      "message": "Ideally, we should also have a more comprehensive test where the test uses the texture that was returned, then hand it to ANGLE and do something in GL, back and forth a little bit. That would exercise correct synchronization (which will be validated by syncval).\n\nAlso, we need to make sure at least that glReleaseTexturesANGLE makes sure it\u0027s done with the texture before it returns. I suggest the following tests:\n\n1. Upload to texture, release and make sure (in VK in the test) that the image has the correct color\n2. Attach texture to framebuffer and glClear(), release and verify the image similarly\n3. Attach texture to framebuffer and glDrawArrays(), release and verify the image similarly\n\nThe first one makes sure staged updates get flushed. The second makes sure there\u0027s no bug with deferred clears, and the last one makes sure the render pass is closed and flushed.",
+      "range": {
+        "startLine": 143,
+        "startChar": 0,
+        "endLine": 151,
+        "endChar": 25
+      },
+      "revId": "fbfd30abe17ef38b66818840489c714a30aae74c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
