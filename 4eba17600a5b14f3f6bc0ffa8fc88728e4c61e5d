@@ -58,6 +58,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "3aa0acdc_ae142dd1",
+        "filename": "src/tests/deqp_support/angle_deqp_gtest.cpp",
+        "patchSetId": 24
+      },
+      "lineNbr": 429,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2021-11-26T13:51:49Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "71f42c2b_18305408",
+      "range": {
+        "startLine": 424,
+        "startChar": 0,
+        "endLine": 429,
+        "endChar": 0
+      },
+      "revId": "4eba17600a5b14f3f6bc0ffa8fc88728e4c61e5d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "ae0edf05_10073feb",
@@ -71,6 +95,30 @@
       "writtenOn": "2021-11-25T17:53:09Z",
       "side": 1,
       "message": "Could you please update tests/deqp_support/README.md?",
+      "range": {
+        "startLine": 76,
+        "startChar": 0,
+        "endLine": 79,
+        "endChar": 24
+      },
+      "revId": "4eba17600a5b14f3f6bc0ffa8fc88728e4c61e5d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "063f94a4_d1769c65",
+        "filename": "src/tests/test_expectations/GPUTestConfig.h",
+        "patchSetId": 24
+      },
+      "lineNbr": 79,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2021-11-26T13:51:49Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "ae0edf05_10073feb",
       "range": {
         "startLine": 76,
         "startChar": 0,
