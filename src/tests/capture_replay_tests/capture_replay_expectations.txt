@@ -214,3 +214,10 @@
 6663 : Texture2DTest.UploadThenFSThenNewRPThenVSThenFS/* = NOT_RUN
 6663 : Texture2DTest.UploadThenFSThenVS/* = NOT_RUN
 6663 : Texture2DTest.UploadThenFSThenVSThenNewRPThenFS/*  = NOT_RUN
+6663 : Texture2DTest.UploadThenFSThenNewRPThenFSThenVS/* = SKIPPED_BY_GTEST
+6663 : Texture2DTest.UploadThenFSThenNewRPThenVS/* = SKIPPED_BY_GTEST
+6663 : Texture2DTest.UploadThenFSThenNewRPThenVSThenFS/* = SKIPPED_BY_GTEST
+6663 : Texture2DTest.UploadThenFSThenVS/* = SKIPPED_BY_GTEST
+6663 : Texture2DTest.UploadThenFSThenVSThenNewRPThenFS/*  = SKIPPED_BY_GTEST
+
+6741 : VulkanImageTest.PixelTest* = SKIP_FOR_CAPTURE
