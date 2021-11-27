@@ -16,6 +16,40 @@
       "message": "PTAL",
       "revId": "3dc32ee8331e71d85a4509a1117ae50caadd9f08",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "280f1e10_a867d415",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2021-11-27T02:30:19Z",
+      "side": 1,
+      "message": "Ouch! Nice catch!",
+      "revId": "3dc32ee8331e71d85a4509a1117ae50caadd9f08",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "2e0ced9a_44cce337",
+        "filename": "src/common/bitset_utils_unittest.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 464,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2021-11-27T02:30:19Z",
+      "side": 1,
+      "message": "Can you instead make a list of the bits that were read back, and make sure `.size() \u003d\u003d 2` and `[0] \u003d\u003d 0` and `[1] \u003d\u003d mBits.size() - 1`?",
+      "revId": "3dc32ee8331e71d85a4509a1117ae50caadd9f08",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
