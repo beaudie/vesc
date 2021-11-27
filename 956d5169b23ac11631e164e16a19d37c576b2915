@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "0731bd47_342df655",
+        "filename": "src/tests/gl_tests/VulkanImageTest.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 154,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2021-11-27T02:27:49Z",
+      "side": 1,
+      "message": "Could you split the test here and make another test? It\u0027d be easier to figure out which operation fails if there\u0027s a regression.\n\nAlso, please add another test with a draw call instead of clear to test glReleaseTexturesANGLE() closing the render pass as well.",
+      "revId": "956d5169b23ac11631e164e16a19d37c576b2915",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}

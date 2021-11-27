@@ -211,6 +211,30 @@
       },
       "revId": "fbfd30abe17ef38b66818840489c714a30aae74c",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "6c42f374_368cccb2",
+        "filename": "src/tests/gl_tests/VulkanImageTest.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 151,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2021-11-27T02:27:49Z",
+      "side": 1,
+      "message": "So there _was_ a readPixels!",
+      "parentUuid": "bafd4aae_77de07dc",
+      "range": {
+        "startLine": 143,
+        "startChar": 0,
+        "endLine": 151,
+        "endChar": 25
+      },
+      "revId": "fbfd30abe17ef38b66818840489c714a30aae74c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
