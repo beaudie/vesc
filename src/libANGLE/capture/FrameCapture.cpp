@@ -2081,6 +2081,8 @@ void CaptureVertexArrayState(std::vector<CallCapture> *setupCalls,
     const std::vector<gl::VertexAttribute> &vertexAttribs = vertexArray->getVertexAttributes();
     const std::vector<gl::VertexBinding> &vertexBindings  = vertexArray->getVertexBindings();
 
+    const gl::ComponentTypeMask typeMask = vertexArray->getAttributesTypeMask();
+
     gl::AttributesMask vertexPointerBindings;
 
     for (GLuint attribIndex = 0; attribIndex < gl::MAX_VERTEX_ATTRIBS; ++attribIndex)
@@ -2090,6 +2092,8 @@ void CaptureVertexArrayState(std::vector<CallCapture> *setupCalls,
 
         const gl::VertexAttribute &attrib = vertexAttribs[attribIndex];
         const gl::VertexBinding &binding  = vertexBindings[attrib.bindingIndex];
+
+        const gl::ComponentType attribType = gl::GetComponentTypeMask(typeMask, attribIndex);
 
         if (attrib.enabled != defaultAttrib.enabled)
         {
@@ -2135,11 +2139,25 @@ void CaptureVertexArrayState(std::vector<CallCapture> *setupCalls,
                 // Check if we can use strictly ES2 semantics, and track indexes that do.
                 vertexPointerBindings.set(attribIndex);
 
-                Capture(setupCalls,
-                        CaptureVertexAttribPointer(
-                            *replayState, true, attribIndex, attrib.format->channelCount,
-                            attrib.format->vertexAttribType, attrib.format->isNorm(),
-                            attrib.vertexAttribArrayStride, attrib.pointer));
+                if (attribType == gl::ComponentType::Float)
+                {
+                    Capture(setupCalls,
+                            CaptureVertexAttribPointer(
+                                *replayState, true, attribIndex, attrib.format->channelCount,
+                                attrib.format->vertexAttribType, attrib.format->isNorm(),
+                                attrib.vertexAttribArrayStride, attrib.pointer));
+                }
+                else
+                {
+                    ASSERT(attribType == gl::ComponentType::Int ||
+                           attribType == gl::ComponentType::UnsignedInt);
+
+                    Capture(setupCalls, CaptureVertexAttribIPointer(*replayState, true, attribIndex,
+                                                                    attrib.format->channelCount,
+                                                                    attrib.format->vertexAttribType,
+                                                                    attrib.vertexAttribArrayStride,
+                                                                    attrib.pointer));
+                }
 
                 if (binding.getDivisor() != 0)
                 {
@@ -2151,11 +2169,25 @@ void CaptureVertexArrayState(std::vector<CallCapture> *setupCalls,
             {
                 ASSERT(context->getClientVersion() >= gl::ES_3_1);
 
-                Capture(setupCalls,
-                        CaptureVertexAttribFormat(*replayState, true, attribIndex,
-                                                  attrib.format->channelCount,
-                                                  attrib.format->vertexAttribType,
-                                                  attrib.format->isNorm(), attrib.relativeOffset));
+                if (attribType == gl::ComponentType::Float)
+                {
+                    Capture(setupCalls, CaptureVertexAttribFormat(*replayState, true, attribIndex,
+                                                                  attrib.format->channelCount,
+                                                                  attrib.format->vertexAttribType,
+                                                                  attrib.format->isNorm(),
+                                                                  attrib.relativeOffset));
+                }
+                else
+                {
+                    ASSERT(attribType == gl::ComponentType::Int ||
+                           attribType == gl::ComponentType::UnsignedInt);
+
+                    Capture(setupCalls, CaptureVertexAttribIFormat(*replayState, true, attribIndex,
+                                                                   attrib.format->channelCount,
+                                                                   attrib.format->vertexAttribType,
+                                                                   attrib.relativeOffset));
+                }
+
                 Capture(setupCalls, CaptureVertexAttribBinding(*replayState, true, attribIndex,
                                                                attrib.bindingIndex));
             }
