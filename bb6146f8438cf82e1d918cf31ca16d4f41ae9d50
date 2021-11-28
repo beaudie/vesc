@@ -87,6 +87,30 @@
       },
       "revId": "bb6146f8438cf82e1d918cf31ca16d4f41ae9d50",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "451a41b6_86cf7549",
+        "filename": "src/tests/gl_tests/VertexAttributeTest.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 3918,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2021-11-28T03:59:13Z",
+      "side": 1,
+      "message": "I put together a fix for Asphalt 9:\nhttps://chromium-review.googlesource.com/c/angle/angle/+/3305057\n\nConfirmed it changes setup:\n\n void SetupReplayContext2Part1()\n {\n     ...\n     glVertexAttribIPointer(1, 4, GL_UNSIGNED_BYTE, 40, ...);\n     ...\n     glVertexAttribIPointer(1, 4, GL_UNSIGNED_BYTE, 36, ...);\n     ...\n     \nReplays look good to me, although I haven\u0027t done native driver comparison yet.",
+      "parentUuid": "93bbe2d2_9c53b19f",
+      "range": {
+        "startLine": 3918,
+        "startChar": 8,
+        "endLine": 3918,
+        "endChar": 29
+      },
+      "revId": "bb6146f8438cf82e1d918cf31ca16d4f41ae9d50",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
