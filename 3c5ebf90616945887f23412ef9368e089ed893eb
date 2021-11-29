@@ -1,0 +1,96 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "3231c9a4_e767e757",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 3
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2021-11-29T18:29:33Z",
+      "side": 1,
+      "message": "nit: redundant",
+      "range": {
+        "startLine": 7,
+        "startChar": 26,
+        "endLine": 7,
+        "endChar": 37
+      },
+      "revId": "3c5ebf90616945887f23412ef9368e089ed893eb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "7318e577_8c150c50",
+        "filename": "src/libANGLE/capture/FrameCapture.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 5370,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2021-11-29T18:29:33Z",
+      "side": 1,
+      "message": "nit: place in the anonymous block at the top",
+      "range": {
+        "startLine": 5370,
+        "startChar": 7,
+        "endLine": 5370,
+        "endChar": 22
+      },
+      "revId": "3c5ebf90616945887f23412ef9368e089ed893eb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "82055aec_7cb9bbc9",
+        "filename": "src/libANGLE/capture/FrameCapture.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 5372,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2021-11-29T18:29:33Z",
+      "side": 1,
+      "message": "nit: \"Name\" capitialization(same for type)",
+      "range": {
+        "startLine": 5372,
+        "startChar": 23,
+        "endLine": 5372,
+        "endChar": 27
+      },
+      "revId": "3c5ebf90616945887f23412ef9368e089ed893eb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "71484f94_fdd281c1",
+        "filename": "src/libANGLE/capture/FrameCapture.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 5376,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2021-11-29T18:29:33Z",
+      "side": 1,
+      "message": "nit: GetParamType()",
+      "range": {
+        "startLine": 5376,
+        "startChar": 21,
+        "endLine": 5376,
+        "endChar": 25
+      },
+      "revId": "3c5ebf90616945887f23412ef9368e089ed893eb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
