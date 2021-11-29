@@ -1722,6 +1722,15 @@ angle::Result WindowSurfaceVk::doDeferredAcquireNextImage(const gl::Context *con
         ANGLE_VK_TRY(contextVk, result);
     }
 
+    // Invalidate the color image if the swap behavior is EGL_BUFFER_DESTROYED. Also invalidate the
+    // multi-sample color image.
+    if (mState.mSwapBehavior == EGL_BUFFER_DESTROYED)
+    {
+        mSwapchainImages[mCurrentSwapchainImageIndex].image.invalidateSubresourceContent(
+            contextVk, gl::LevelIndex(0), 0, 1);
+    }
+    mColorImageMS.invalidateSubresourceContent(contextVk, gl::LevelIndex(0), 0, 1);
+
     RendererVk *renderer = contextVk->getRenderer();
     ANGLE_TRY(renderer->syncPipelineCacheVk(displayVk, context));
 
@@ -2147,9 +2156,17 @@ egl::Error WindowSurfaceVk::getBufferAge(const gl::Context *context, EGLint *age
         DisplayVk *displayVk = vk::GetImpl(context->getDisplay());
         egl::Error result =
             angle::ToEGL(doDeferredAcquireNextImage(context, false), displayVk, EGL_BAD_SURFACE);
+
         if (result.isError())
         {
             return result;
+        }
+
+        // Set age to 0 if swap behavior is EGL_BUFFER_DESTROYED.
+        if (age != nullptr && mState.mSwapBehavior == EGL_BUFFER_DESTROYED)
+        {
+            *age = 0;
+            return egl::NoError();
         }
     }
 
