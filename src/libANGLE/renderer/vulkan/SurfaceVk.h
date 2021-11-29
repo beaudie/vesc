@@ -251,6 +251,16 @@ class WindowSurfaceVk : public SurfaceVk
 
     egl::Error setRenderBuffer(EGLint renderBuffer) override;
 
+    bool isSharedPresentMode() const
+    {
+        if ((mSwapchainPresentMode == VK_PRESENT_MODE_SHARED_DEMAND_REFRESH_KHR) ||
+            (mSwapchainPresentMode == VK_PRESENT_MODE_SHARED_CONTINUOUS_REFRESH_KHR))
+        {
+            return true;
+        }
+        return false;
+    }
+
   protected:
     angle::Result swapImpl(const gl::Context *context,
                            const EGLint *rects,
