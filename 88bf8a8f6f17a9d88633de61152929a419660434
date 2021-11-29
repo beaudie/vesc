@@ -16,6 +16,98 @@
       "message": "PTAL",
       "revId": "88bf8a8f6f17a9d88633de61152929a419660434",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b12cc25d_ec6b5d8f",
+        "filename": "src/common/bitset_utils_unittest.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 459,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2021-11-29T14:57:31Z",
+      "side": 1,
+      "message": "nit: size_t",
+      "range": {
+        "startLine": 459,
+        "startChar": 9,
+        "endLine": 459,
+        "endChar": 14
+      },
+      "revId": "88bf8a8f6f17a9d88633de61152929a419660434",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "8ac709ef_d32af7b3",
+        "filename": "src/common/bitset_utils_unittest.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 463,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2021-11-29T14:57:31Z",
+      "side": 1,
+      "message": "nit: you can omit std::",
+      "range": {
+        "startLine": 463,
+        "startChar": 13,
+        "endLine": 463,
+        "endChar": 16
+      },
+      "revId": "88bf8a8f6f17a9d88633de61152929a419660434",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "c24860d0_7354d4ed",
+        "filename": "src/common/bitset_utils_unittest.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 464,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2021-11-29T14:57:31Z",
+      "side": 1,
+      "message": "nit: size_t",
+      "range": {
+        "startLine": 464,
+        "startChar": 9,
+        "endLine": 464,
+        "endChar": 14
+      },
+      "revId": "88bf8a8f6f17a9d88633de61152929a419660434",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "abeeb481_57507d1c",
+        "filename": "src/common/bitset_utils_unittest.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 471,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2021-11-29T14:57:31Z",
+      "side": 1,
+      "message": "nit: suggest you split this out into a separate test to make it easier to work with if it regresses",
+      "range": {
+        "startLine": 457,
+        "startChar": 0,
+        "endLine": 471,
+        "endChar": 0
+      },
+      "revId": "88bf8a8f6f17a9d88633de61152929a419660434",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
