@@ -18,6 +18,23 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "34e53256_43e84b1f",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 15
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2021-11-29T21:54:20Z",
+      "side": 1,
+      "message": "Some quick reply bellow. Will go through all other comments once I fix the failure.",
+      "revId": "86ee35e1def1d24cf060101e83a7cb2323bed9a7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "a3dcc80c_fc1a482c",
@@ -123,6 +140,30 @@
       "writtenOn": "2021-11-24T17:12:52Z",
       "side": 1,
       "message": "it\u0027s also somewhat confusing that a BufferVk and BufferHelper have separate offsets at the same time. This could be improved by naming them more distinctly.",
+      "range": {
+        "startLine": 339,
+        "startChar": 43,
+        "endLine": 339,
+        "endChar": 69
+      },
+      "revId": "86ee35e1def1d24cf060101e83a7cb2323bed9a7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "52422a70_93ef97a1",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 15
+      },
+      "lineNbr": 339,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2021-11-29T21:54:20Z",
+      "side": 1,
+      "message": "The BufferVk\u0027s offset will be removed in next CL. So this confusion is temporary.",
+      "parentUuid": "c43a5d4f_a4dbb406",
       "range": {
         "startLine": 339,
         "startChar": 43,
@@ -406,6 +447,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "fa197f81_6b07db47",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 15
+      },
+      "lineNbr": 3850,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2021-11-29T21:54:20Z",
+      "side": 1,
+      "message": "I was thinking to split this BufferHelper class into three subclasses to de-duplicate, but after try out myself I abandoned it due to hard to debug. My current thinking is to wait until all these main works are done and hopefully we will only have external buffers and sub-allocation types left, and then I can make external buffers us the same data structure of sub-allocation (except that the sub-range is the entire buffer). I will file a separate bug to track this as todo item.",
+      "parentUuid": "1497237b_e7dc89b8",
+      "revId": "86ee35e1def1d24cf060101e83a7cb2323bed9a7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "1c57ee15_60d24077",
         "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
         "patchSetId": 15
@@ -417,6 +476,30 @@
       "writtenOn": "2021-11-24T17:12:52Z",
       "side": 1,
       "message": "We should be storing the offset in a single place so we don\u0027t need to check if the suballocation is valid. a non-suballocated buffer simply has an offset of zero.",
+      "range": {
+        "startLine": 3876,
+        "startChar": 11,
+        "endLine": 3876,
+        "endChar": 31
+      },
+      "revId": "86ee35e1def1d24cf060101e83a7cb2323bed9a7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "e8727245_81117a85",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 15
+      },
+      "lineNbr": 3876,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2021-11-29T21:54:20Z",
+      "side": 1,
+      "message": "This is the same as previous comment, that eventually I want to go back to just one BufferHelper class without this check.",
+      "parentUuid": "1c57ee15_60d24077",
       "range": {
         "startLine": 3876,
         "startChar": 11,
