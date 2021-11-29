@@ -4122,6 +4122,14 @@ struct ParamValueTrait<gl::RenderbufferID>
     static constexpr const char *name = "renderbufferPacked";
     static const ParamType type       = ParamType::TRenderbufferID;
 };
+
+template <>
+struct ParamValueTrait<gl::TextureID>
+{
+    static constexpr const char *name = "texturePacked";
+    static const ParamType type       = ParamType::TTextureID;
+};
+
 }  // namespace
 
 ParamCapture::ParamCapture() : type(ParamType::TGLenum), enumGroup(gl::GLenumGroup::DefaultGroup) {}
@@ -5062,6 +5070,10 @@ void FrameCaptureShared::maybeCapturePreCallUpdates(
             }
             break;
         }
+
+        case EntryPoint::GLBindTexture:
+            maybeGenResourceOnBind<gl::TextureID>(call);
+            break;
 
         case EntryPoint::GLDeleteBuffers:
         {
