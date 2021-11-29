@@ -52,6 +52,24 @@
       "parentUuid": "c00badbd_c04f5b9c",
       "revId": "2dc92bb1019f64e929e0330ddc7af1cf63d111c0",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "31f27490_20e8b4a3",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2021-11-29T20:40:15Z",
+      "side": 1,
+      "message": "I hit a bug with it this morning.  You would only see it when using mid-execution capture:\nhttps://chromium-review.googlesource.com/c/angle/angle/+/3307778",
+      "parentUuid": "81a700af_f932b14d",
+      "revId": "2dc92bb1019f64e929e0330ddc7af1cf63d111c0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
