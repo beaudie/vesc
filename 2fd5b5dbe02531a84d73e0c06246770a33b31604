@@ -206,6 +206,24 @@
       "parentUuid": "4b252759_5ff07a4c",
       "revId": "2fd5b5dbe02531a84d73e0c06246770a33b31604",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "2cb376a5_33eb1669",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2021-11-29T20:55:05Z",
+      "side": 1,
+      "message": "Deferred/multi-threaded shader compilation is an important feature, especially for app startup, which is not reflected in the traces.  Happy to help push on fixes that implement a proper thread pool.",
+      "parentUuid": "72ce85b6_122de12b",
+      "revId": "2fd5b5dbe02531a84d73e0c06246770a33b31604",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
