@@ -111,6 +111,30 @@
       },
       "revId": "bb6146f8438cf82e1d918cf31ca16d4f41ae9d50",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "f112132c_a9a6d5d1",
+        "filename": "src/tests/gl_tests/VertexAttributeTest.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 3918,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2021-11-29T18:32:34Z",
+      "side": 1,
+      "message": "Just actually read the thread... it is undefined behaviour to use int in the shader and VertexAttribPointer (no I). Are you sure this is what applications are doing?",
+      "parentUuid": "451a41b6_86cf7549",
+      "range": {
+        "startLine": 3918,
+        "startChar": 8,
+        "endLine": 3918,
+        "endChar": 29
+      },
+      "revId": "bb6146f8438cf82e1d918cf31ca16d4f41ae9d50",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
