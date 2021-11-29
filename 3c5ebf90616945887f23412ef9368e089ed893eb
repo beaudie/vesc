@@ -47,6 +47,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "b0245501_12e5dacc",
+        "filename": "src/libANGLE/capture/FrameCapture.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 5370,
+      "author": {
+        "id": 1491823
+      },
+      "writtenOn": "2021-11-29T19:36:58Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "7318e577_8c150c50",
+      "range": {
+        "startLine": 5370,
+        "startChar": 7,
+        "endLine": 5370,
+        "endChar": 22
+      },
+      "revId": "3c5ebf90616945887f23412ef9368e089ed893eb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "82055aec_7cb9bbc9",
@@ -72,6 +96,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "6d79edfe_04a02dfa",
+        "filename": "src/libANGLE/capture/FrameCapture.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 5372,
+      "author": {
+        "id": 1491823
+      },
+      "writtenOn": "2021-11-29T19:36:58Z",
+      "side": 1,
+      "message": "I thought member functions are \"lowerUpper\"? Anyway, since there is nothing to evaluate I\u0027ve replaced the static member functions with static constants, like it is usually done with traits in the STL. I\u0027ve left out the \"m\" prefix, because the members are never addressed without the struct name, if that\u0027s okay with you.",
+      "parentUuid": "82055aec_7cb9bbc9",
+      "range": {
+        "startLine": 5372,
+        "startChar": 23,
+        "endLine": 5372,
+        "endChar": 27
+      },
+      "revId": "3c5ebf90616945887f23412ef9368e089ed893eb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "71484f94_fdd281c1",
         "filename": "src/libANGLE/capture/FrameCapture.cpp",
         "patchSetId": 3
@@ -83,6 +131,30 @@
       "writtenOn": "2021-11-29T18:29:33Z",
       "side": 1,
       "message": "nit: GetParamType()",
+      "range": {
+        "startLine": 5376,
+        "startChar": 21,
+        "endLine": 5376,
+        "endChar": 25
+      },
+      "revId": "3c5ebf90616945887f23412ef9368e089ed893eb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "1a5ec51f_9d9fc0cc",
+        "filename": "src/libANGLE/capture/FrameCapture.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 5376,
+      "author": {
+        "id": 1491823
+      },
+      "writtenOn": "2021-11-29T19:36:58Z",
+      "side": 1,
+      "message": "This is no longer a function.",
+      "parentUuid": "71484f94_fdd281c1",
       "range": {
         "startLine": 5376,
         "startChar": 21,
