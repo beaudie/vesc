@@ -38,6 +38,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "91b37ecb_0583c6f5",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 7
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1491823
+      },
+      "writtenOn": "2021-11-29T17:54:23Z",
+      "side": 1,
+      "message": "It seems that the time this bot takes depends on the all-over load of the CI: \n\nOn patch set 11 it\u0027s only 9:43 min for GLES 2.0 \nhttps://ci.chromium.org/p/angle/builders/try/win-trace/150?\nand has a result\n\nSummary: Passed: 1173, Comparison Failed: 20, Crashed: 4, CompileFailed 2, Skipped: 5, Timeout: 0\n\nand another patch, that didn\u0027t try to run the crashing tests needed 9:03 min for GLES 2.0 \nhttps://ci.chromium.org/p/angle/builders/try/win-trace/118?\nSummary: Passed: 1167, Comparison Failed: 22, Crashed: 0, CompileFailed 0, Skipped: 5, Timeout: 0\n\nSo by running 12 more tests requiring seven more test batches (because we run six tests that need to run in one-test batches) the CI took 40 more seconds. with the full run taking about 24 min (when all is run), I think that is not so much overhead for not having to locally rerun the tests with the -a flag to figure out whether some tests was fixed by some update that seemed unrelated. \n\nEnabling the tests for GLES 3.1 will have a way bigger impact on the all-over run-time of the CI, and in the long run, I think the CI should run the trace tests for the different GLES versions in parallel, always starting from the output of stage preprocess_for_goma|steps/start_cloudtail.",
+      "parentUuid": "7ae4557a_8bd8db58",
+      "revId": "1766168863848bfcc5d48a138b165884c8469ce0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "4bf47a45_bb67f9cd",
         "filename": "src/tests/capture_replay_tests.py",
         "patchSetId": 7
@@ -215,6 +233,30 @@
       "side": 1,
       "message": "NOT_RUN SGTM, NOT_SUPPORTED would be fine but we have skips that are for bugs right now.",
       "parentUuid": "f5c1e173_a833a52c",
+      "range": {
+        "startLine": 225,
+        "startChar": 73,
+        "endLine": 225,
+        "endChar": 89
+      },
+      "revId": "1766168863848bfcc5d48a138b165884c8469ce0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "bcbbb5b4_8a28f7ce",
+        "filename": "src/tests/capture_replay_tests/capture_replay_expectations.txt",
+        "patchSetId": 7
+      },
+      "lineNbr": 225,
+      "author": {
+        "id": 1491823
+      },
+      "writtenOn": "2021-11-29T17:54:23Z",
+      "side": 1,
+      "message": "I went with NOT_RUN",
+      "parentUuid": "3c566d69_f768b0ae",
       "range": {
         "startLine": 225,
         "startChar": 73,
