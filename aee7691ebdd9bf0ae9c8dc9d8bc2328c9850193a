@@ -68,6 +68,24 @@
       "parentUuid": "6cafcb6d_bcaced89",
       "revId": "aee7691ebdd9bf0ae9c8dc9d8bc2328c9850193a",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "35bb272c_534db241",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 19
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000050
+      },
+      "writtenOn": "2021-11-29T16:57:16Z",
+      "side": 1,
+      "message": "Hey Jamie, I saw you landed a CL. Seems it fix the trybot, right? However my CL still fails with the same bot. Do you know why?",
+      "parentUuid": "7df9bef9_b2c10be9",
+      "revId": "aee7691ebdd9bf0ae9c8dc9d8bc2328c9850193a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
