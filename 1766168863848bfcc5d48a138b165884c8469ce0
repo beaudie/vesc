@@ -54,6 +54,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "8d599b56_2d769cd2",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 7
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2021-11-29T18:52:22Z",
+      "side": 1,
+      "message": "Ack, thanks for checking. Regarding parallelism, I\u0027m not sure exactly where you\u0027re wanting to run things in parallel more. We\u0027re already pretty parallel on this machine, and we haven\u0027t yet got the ability to shard between machines, because the normal sharding stuff doesn\u0027t yet know how to package the compilation toolchain.",
+      "parentUuid": "91b37ecb_0583c6f5",
+      "revId": "1766168863848bfcc5d48a138b165884c8469ce0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "4bf47a45_bb67f9cd",
