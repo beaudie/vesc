@@ -18,6 +18,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "28af625c_f78507d4",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 10
+      },
+      "lineNbr": 9,
+      "author": {
+        "id": 1328182
+      },
+      "writtenOn": "2021-11-29T23:45:08Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "dceeb5b2_b6a5608b",
+      "revId": "2a0f6ec9af9591ab6f698c0b7451b422f22e8ae0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "82575d87_06cd3d2d",
@@ -35,6 +53,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "1d9e705b_71495e07",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 10
+      },
+      "lineNbr": 11,
+      "author": {
+        "id": 1328182
+      },
+      "writtenOn": "2021-11-29T23:45:08Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "82575d87_06cd3d2d",
+      "revId": "2a0f6ec9af9591ab6f698c0b7451b422f22e8ae0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "8caf0e26_2d46addc",
@@ -48,6 +84,24 @@
       "writtenOn": "2021-11-29T22:55:07Z",
       "side": 1,
       "message": "Suggest either \"emulated\" -\u003e \"builtin\", or just removing \"emulated\" here.",
+      "revId": "2a0f6ec9af9591ab6f698c0b7451b422f22e8ae0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "3e28f832_8a38b467",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 10
+      },
+      "lineNbr": 13,
+      "author": {
+        "id": 1328182
+      },
+      "writtenOn": "2021-11-29T23:45:08Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "8caf0e26_2d46addc",
       "revId": "2a0f6ec9af9591ab6f698c0b7451b422f22e8ae0",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
@@ -86,6 +140,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "1cada684_675124a4",
+        "filename": "extensions/ANGLE_base_vertex_base_instance_shader_builtin.txt",
+        "patchSetId": 10
+      },
+      "lineNbr": 12,
+      "author": {
+        "id": 1328182
+      },
+      "writtenOn": "2021-11-29T23:45:08Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "16278304_9c8df9f7",
+      "revId": "2a0f6ec9af9591ab6f698c0b7451b422f22e8ae0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "55982915_50157331",
@@ -99,6 +171,24 @@
       "writtenOn": "2021-11-29T22:55:07Z",
       "side": 1,
       "message": "Consider adding \":\" after \"commands\"; see also below.",
+      "revId": "2a0f6ec9af9591ab6f698c0b7451b422f22e8ae0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "db44ba4c_1ec1074d",
+        "filename": "extensions/ANGLE_base_vertex_base_instance_shader_builtin.txt",
+        "patchSetId": 10
+      },
+      "lineNbr": 68,
+      "author": {
+        "id": 1328182
+      },
+      "writtenOn": "2021-11-29T23:45:08Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "55982915_50157331",
       "revId": "2a0f6ec9af9591ab6f698c0b7451b422f22e8ae0",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
@@ -120,6 +210,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "68c9eb72_dce4fc44",
+        "filename": "extensions/ANGLE_base_vertex_base_instance_shader_builtin.txt",
+        "patchSetId": 10
+      },
+      "lineNbr": 90,
+      "author": {
+        "id": 1328182
+      },
+      "writtenOn": "2021-11-29T23:45:08Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "98178bfe_7a7406db",
+      "revId": "2a0f6ec9af9591ab6f698c0b7451b422f22e8ae0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "ee47129b_5f341fc5",
@@ -133,6 +241,24 @@
       "writtenOn": "2021-11-29T22:55:07Z",
       "side": 1,
       "message": "\"can be used to control\" -\u003e \"controls\"",
+      "revId": "2a0f6ec9af9591ab6f698c0b7451b422f22e8ae0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "73269820_dced7c12",
+        "filename": "extensions/ANGLE_base_vertex_base_instance_shader_builtin.txt",
+        "patchSetId": 10
+      },
+      "lineNbr": 117,
+      "author": {
+        "id": 1328182
+      },
+      "writtenOn": "2021-11-29T23:45:08Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "ee47129b_5f341fc5",
       "revId": "2a0f6ec9af9591ab6f698c0b7451b422f22e8ae0",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
@@ -154,6 +280,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "0e59baf1_414144e4",
+        "filename": "src/compiler/translator/Compiler.cpp",
+        "patchSetId": 10
+      },
+      "lineNbr": 868,
+      "author": {
+        "id": 1328182
+      },
+      "writtenOn": "2021-11-29T23:45:08Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "2fbaf7be_35f86470",
+      "revId": "2a0f6ec9af9591ab6f698c0b7451b422f22e8ae0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "cce44551_a42a5552",
@@ -171,6 +315,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "436c3b43_bbed7e37",
+        "filename": "src/compiler/translator/Compiler.cpp",
+        "patchSetId": 10
+      },
+      "lineNbr": 1165,
+      "author": {
+        "id": 1328182
+      },
+      "writtenOn": "2021-11-29T23:45:08Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "cce44551_a42a5552",
+      "revId": "2a0f6ec9af9591ab6f698c0b7451b422f22e8ae0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "94fce280_c07e2c81",
@@ -184,6 +346,24 @@
       "writtenOn": "2021-11-29T22:55:07Z",
       "side": 1,
       "message": "Wonder whether here and throughout we should say \"enable\" rather than \"emulate\". It\u0027s somewhat an implementation detail that these builtins are emulated; some drivers support them directly.",
+      "revId": "2a0f6ec9af9591ab6f698c0b7451b422f22e8ae0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "a4e5c537_07ec282f",
+        "filename": "src/tests/compiler_tests/EmulateGLBaseVertexBaseInstance_test.cpp",
+        "patchSetId": 10
+      },
+      "lineNbr": 45,
+      "author": {
+        "id": 1328182
+      },
+      "writtenOn": "2021-11-29T23:45:08Z",
+      "side": 1,
+      "message": "The gl_BaseVertex/gl_BaseInstance is turned to angle_BaseVertex/angle_BaseInstance and applying any potential offsets workaround. The builtin gl_BaseVertex/gl_BaseInstance is based on OpenGL 4.6 or ARB_shader_draw_parameters extension but we support these builtins even if these are not met (e.g. ES 3.1). This is in similar pattern like gl_DrawID",
+      "parentUuid": "94fce280_c07e2c81",
       "revId": "2a0f6ec9af9591ab6f698c0b7451b422f22e8ae0",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
