@@ -1666,6 +1666,7 @@ angle::Result WindowSurfaceVk::swapImpl(const gl::Context *context,
         ANGLE_VK_TRACE_EVENT_AND_MARKER(contextVk, "Out-of-Date Swapbuffer");
         ANGLE_TRY(doDeferredAcquireNextImage(context, presentOutOfDate));
     }
+    // Could invalidate here?
 
     return angle::Result::Continue;
 }
@@ -1719,8 +1720,19 @@ angle::Result WindowSurfaceVk::doDeferredAcquireNextImage(const gl::Context *con
             // Try one more time and bail if we fail
             result = acquireNextSwapchainImage(contextVk);
         }
+
         ANGLE_VK_TRY(contextVk, result);
     }
+
+    // Invalidate the color if the swap behavior is EGL_BUFFER_DESTROYED. Also invalidate the depth
+    // stencil and multi-sample color image.
+    if (mState.mSwapBehavior == EGL_BUFFER_DESTROYED)
+    {
+        mSwapchainImages[mCurrentSwapchainImageIndex].image.invalidateSubresourceContent(
+            contextVk, gl::LevelIndex(0), 0, 1);
+    }
+    mDepthStencilImage.invalidateSubresourceStencilContent(contextVk, gl::LevelIndex(0), 0, 1);
+    mColorImageMS.invalidateSubresourceContent(contextVk, gl::LevelIndex(0), 0, 1);
 
     RendererVk *renderer = contextVk->getRenderer();
     ANGLE_TRY(renderer->syncPipelineCacheVk(displayVk, context));
@@ -1760,7 +1772,7 @@ VkResult WindowSurfaceVk::acquireNextSwapchainImage(vk::Context *context)
         return result;
     }
 
-    SwapchainImage &image = mSwapchainImages[mCurrentSwapchainImageIndex];
+    SwapchainImage &image = mSwapchainImages[mCurrentSwapchainImageIndex];  // This image!
 
     // Single Image Mode
     if ((mSwapchainPresentMode == VK_PRESENT_MODE_SHARED_DEMAND_REFRESH_KHR) &&
@@ -1981,7 +1993,6 @@ EGLint WindowSurfaceVk::isPostSubBufferSupported() const
 
 EGLint WindowSurfaceVk::getSwapBehavior() const
 {
-    // TODO(jmadill)
     return EGL_BUFFER_DESTROYED;
 }
 
