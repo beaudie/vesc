@@ -24,6 +24,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "fb9e7e46_02048564",
+        "filename": "src/tests/capture_replay_tests/capture_replay_expectations.txt",
+        "patchSetId": 12
+      },
+      "lineNbr": 16,
+      "author": {
+        "id": 1491823
+      },
+      "writtenOn": "2021-11-29T20:57:46Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "0c4be53d_18a69c89",
+      "range": {
+        "startLine": 13,
+        "startChar": 0,
+        "endLine": 16,
+        "endChar": 1
+      },
+      "revId": "411417582d3ac39b575304a48c8f04139c5ebc54",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "d62ce53d_9102758f",
@@ -37,6 +61,30 @@
       "writtenOn": "2021-11-29T18:52:22Z",
       "side": 1,
       "message": "please replace all _Vulkan_Swiftshader with *, I just did this edit, would prefer not to revert it. Cody that OK with you?",
+      "range": {
+        "startLine": 170,
+        "startChar": 58,
+        "endLine": 170,
+        "endChar": 81
+      },
+      "revId": "411417582d3ac39b575304a48c8f04139c5ebc54",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "2df07816_21da6f02",
+        "filename": "src/tests/capture_replay_tests/capture_replay_expectations.txt",
+        "patchSetId": 12
+      },
+      "lineNbr": 170,
+      "author": {
+        "id": 1491823
+      },
+      "writtenOn": "2021-11-29T20:57:46Z",
+      "side": 1,
+      "message": "I did it where this was possible, but there are a few tests that crash with ES3_1 and pass with ES3, so there we have to give the backaned.",
+      "parentUuid": "d62ce53d_9102758f",
       "range": {
         "startLine": 170,
         "startChar": 58,
