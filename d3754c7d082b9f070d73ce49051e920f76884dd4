@@ -133,6 +133,24 @@
       "parentUuid": "a7e57cbc_56ade19a",
       "revId": "d3754c7d082b9f070d73ce49051e920f76884dd4",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "59f99d73_cfdb00b8",
+        "filename": "src/libANGLE/Shader.cpp",
+        "patchSetId": 8
+      },
+      "lineNbr": 360,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2021-11-29T22:55:07Z",
+      "side": 1,
+      "message": "+1. The removal of these variables was a concession to Mozilla. We want to keep the functionality and will add it back into WebGL under a new extension if any user requests it.",
+      "parentUuid": "7f4d027f_e35bd8e2",
+      "revId": "d3754c7d082b9f070d73ce49051e920f76884dd4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
