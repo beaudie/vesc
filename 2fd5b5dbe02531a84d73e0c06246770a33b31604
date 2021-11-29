@@ -224,6 +224,24 @@
       "parentUuid": "72ce85b6_122de12b",
       "revId": "2fd5b5dbe02531a84d73e0c06246770a33b31604",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "1267d841_16e27c40",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2021-11-29T21:00:05Z",
+      "side": 1,
+      "message": "We don\u0027t have any artifacts about the \"thread pool\". It\u0027s not really a thread pool, we just spawn threads on demand. This initial implementation was very loose and was meant to be replaced with a solution that used a pool of threads to avoid the overhead of spawning new threads continually.",
+      "parentUuid": "2cb376a5_33eb1669",
+      "revId": "2fd5b5dbe02531a84d73e0c06246770a33b31604",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
