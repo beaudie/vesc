@@ -251,6 +251,8 @@ class WindowSurfaceVk : public SurfaceVk
 
     egl::Error setRenderBuffer(EGLint renderBuffer) override;
 
+    VkPresentModeKHR getPresentMode() { return mSwapchainPresentMode; }
+
   protected:
     angle::Result swapImpl(const gl::Context *context,
                            const EGLint *rects,
