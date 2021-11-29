@@ -20,6 +20,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "7ae4557a_8bd8db58",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 7
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2021-11-29T15:05:49Z",
+      "side": 1,
+      "message": "Gert: unresolving this comment to bring it to your attention.",
+      "parentUuid": "ba758ba3_3e88ba69",
+      "revId": "1766168863848bfcc5d48a138b165884c8469ce0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "4bf47a45_bb67f9cd",
         "filename": "src/tests/capture_replay_tests.py",
         "patchSetId": 7
@@ -149,6 +167,30 @@
       "side": 1,
       "message": "NO_RESULT seems not very descriptive. These skips usually happen when something is not supported, so how about  NOT_SUPPORTED (similar to the deqp NotSupported), or NOT_RUN.",
       "parentUuid": "313dde75_c56509dc",
+      "range": {
+        "startLine": 225,
+        "startChar": 73,
+        "endLine": 225,
+        "endChar": 89
+      },
+      "revId": "1766168863848bfcc5d48a138b165884c8469ce0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "3c566d69_f768b0ae",
+        "filename": "src/tests/capture_replay_tests/capture_replay_expectations.txt",
+        "patchSetId": 7
+      },
+      "lineNbr": 225,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2021-11-29T15:05:49Z",
+      "side": 1,
+      "message": "NOT_RUN SGTM, NOT_SUPPORTED would be fine but we have skips that are for bugs right now.",
+      "parentUuid": "f5c1e173_a833a52c",
       "range": {
         "startLine": 225,
         "startChar": 73,
