@@ -1667,6 +1667,21 @@ angle::Result WindowSurfaceVk::swapImpl(const gl::Context *context,
         ANGLE_TRY(doDeferredAcquireNextImage(context, presentOutOfDate));
     }
 
+    // Invalidate the color if the swap behavior is EGL_BUFFER_DESTROYED. Also invalidate the depth
+    // stencil and multi-sample color image.
+    if (mState.mSwapBehavior == EGL_BUFFER_DESTROYED)
+    {
+        //        for (auto &swapchainImage : mSwapchainImages)
+        //        {
+        //            swapchainImage.image.invalidateSubresourceContent(contextVk,
+        //            gl::LevelIndex(0), 0, 1);
+        //        }
+        mSwapchainImages[mCurrentSwapchainImageIndex].image.invalidateSubresourceContent(
+            contextVk, gl::LevelIndex(0), 0, 1);
+    }
+    mDepthStencilImage.invalidateSubresourceStencilContent(contextVk, gl::LevelIndex(0), 0, 1);
+    mColorImageMS.invalidateSubresourceContent(contextVk, gl::LevelIndex(0), 0, 1);
+
     return angle::Result::Continue;
 }
 
@@ -1981,7 +1996,6 @@ EGLint WindowSurfaceVk::isPostSubBufferSupported() const
 
 EGLint WindowSurfaceVk::getSwapBehavior() const
 {
-    // TODO(jmadill)
     return EGL_BUFFER_DESTROYED;
 }
 
@@ -2141,29 +2155,31 @@ angle::Result WindowSurfaceVk::drawOverlay(ContextVk *contextVk, SwapchainImage 
 
 egl::Error WindowSurfaceVk::getBufferAge(const gl::Context *context, EGLint *age)
 {
-    if (mNeedToAcquireNextSwapchainImage)
-    {
-        // Acquire the current image if needed.
-        DisplayVk *displayVk = vk::GetImpl(context->getDisplay());
-        egl::Error result =
-            angle::ToEGL(doDeferredAcquireNextImage(context, false), displayVk, EGL_BAD_SURFACE);
-        if (result.isError())
-        {
-            return result;
-        }
-    }
+    //    if (mNeedToAcquireNextSwapchainImage)
+    //    {
+    //        // Acquire the current image if needed.
+    //        DisplayVk *displayVk = vk::GetImpl(context->getDisplay());
+    //        egl::Error result =
+    //            angle::ToEGL(doDeferredAcquireNextImage(context, false), displayVk,
+    //            EGL_BAD_SURFACE);
+    //        if (result.isError())
+    //        {
+    //            return result;
+    //        }
+    //    }
 
     if (age != nullptr)
     {
-        uint64_t frameNumber = mSwapchainImages[mCurrentSwapchainImageIndex].mFrameNumber;
-        if (frameNumber == 0)
-        {
-            *age = 0;  // Has not been used for rendering yet, no age.
-        }
-        else
-        {
-            *age = static_cast<EGLint>(mFrameCount - frameNumber);
-        }
+        //        uint64_t frameNumber = mSwapchainImages[mCurrentSwapchainImageIndex].mFrameNumber;
+        //        if (frameNumber == 0)
+        //        {
+        //            *age = 0;  // Has not been used for rendering yet, no age.
+        //        }
+        //        else
+        //        {
+        //            *age = static_cast<EGLint>(mFrameCount - frameNumber);
+        //        }
+        *age = 0;
     }
     return egl::NoError();
 }
