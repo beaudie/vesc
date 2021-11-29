@@ -16,6 +16,24 @@
       "message": "Lubosz had reported a bug with the Framebuffer ID patch.. until that gets fixed we should double check our implementation is correct.",
       "revId": "2dc92bb1019f64e929e0330ddc7af1cf63d111c0",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "c00badbd_c04f5b9c",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1491823
+      },
+      "writtenOn": "2021-11-29T19:45:38Z",
+      "side": 1,
+      "message": "Did he report the bug in the issue tracker? Because I can\u0027t find any bug report opened by him after Oct/22, and the FBO patch landed only Nov/23.",
+      "parentUuid": "d5f939e7_6c1c3cd1",
+      "revId": "2dc92bb1019f64e929e0330ddc7af1cf63d111c0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
