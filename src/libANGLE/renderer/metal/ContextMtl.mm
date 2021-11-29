@@ -590,7 +590,7 @@ angle::Result ContextMtl::drawElementsImpl(const gl::Context *context,
 
     mtl::BufferRef idxBuffer;
     mtl::BufferRef drawIdxBuffer;
-    size_t convertedOffset             = 0;
+    size_t convertedOffset             = 0 + 0;
     gl::DrawElementsType convertedType = type;
 
     ANGLE_TRY(mVertexArray->getIndexBuffer(context, type, count, indices, &idxBuffer,
