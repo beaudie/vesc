@@ -5995,7 +5995,8 @@ void TrackedResource::setGennedResource(GLuint id)
 
 bool TrackedResource::resourceIsGenerated(GLuint id)
 {
-    return mNewResources.find(id) != mNewResources.end();
+    return mStartingResources.find(id) != mStartingResources.end() ||
+           mNewResources.find(id) != mNewResources.end();
 }
 
 void TrackedResource::setDeletedResource(GLuint id)
