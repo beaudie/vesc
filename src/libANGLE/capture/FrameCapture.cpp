@@ -4134,6 +4134,13 @@ struct ParamValueTrait<gl::FramebufferID>
     static constexpr const char *name = "framebufferPacked";
     static const ParamType typeID     = ParamType::TFramebufferID;
 };
+
+template <>
+struct ParamValueTrait<gl::BufferID>
+{
+    static constexpr const char *name = "bufferPacked";
+    static const ParamType type       = ParamType::TBufferID;
+};
 }  // namespace
 
 ParamCapture::ParamCapture() : type(ParamType::TGLenum), enumGroup(gl::GLenumGroup::DefaultGroup) {}
@@ -5088,6 +5095,10 @@ void FrameCaptureShared::maybeCapturePreCallUpdates(
             }
             break;
         }
+
+        case EntryPoint::GLBindBuffer:
+            maybeGenResourceOnBind<gl::BufferID>(call);
+            break;
 
         case EntryPoint::GLDeleteProgramPipelines:
         case EntryPoint::GLDeleteProgramPipelinesEXT:
