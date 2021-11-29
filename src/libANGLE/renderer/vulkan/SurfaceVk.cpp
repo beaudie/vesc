@@ -1666,6 +1666,7 @@ angle::Result WindowSurfaceVk::swapImpl(const gl::Context *context,
         ANGLE_VK_TRACE_EVENT_AND_MARKER(contextVk, "Out-of-Date Swapbuffer");
         ANGLE_TRY(doDeferredAcquireNextImage(context, presentOutOfDate));
     }
+    // Could invalidate here?
 
     return angle::Result::Continue;
 }
@@ -1719,7 +1720,17 @@ angle::Result WindowSurfaceVk::doDeferredAcquireNextImage(const gl::Context *con
             // Try one more time and bail if we fail
             result = acquireNextSwapchainImage(contextVk);
         }
+
         ANGLE_VK_TRY(contextVk, result);
+    }
+    // Invalidate the color
+    // and the rest here:
+    // TODO: Invalidate content
+    // Invalidate depth stencil
+    // Invalidate multi-sample image
+    if (mState.mSwapBehavior == EGL_BUFFER_DESTROYED)
+    {
+        // Set to undefined
     }
 
     RendererVk *renderer = contextVk->getRenderer();
@@ -1981,7 +1992,6 @@ EGLint WindowSurfaceVk::isPostSubBufferSupported() const
 
 EGLint WindowSurfaceVk::getSwapBehavior() const
 {
-    // TODO(jmadill)
     return EGL_BUFFER_DESTROYED;
 }
 
