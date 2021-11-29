@@ -16,6 +16,23 @@
       "message": "PTAL, locally hacked 2 things to verify functionality with a test -\n\n1. added this code while deciding conversion for YUV textures -\n -        VkSamplerYcbcrModelConversion conversionModel \u003d VK_SAMPLER_YCBCR_MODEL_CONVERSION_YCBCR_601;\n -        VkSamplerYcbcrRange colorRange                \u003d VK_SAMPLER_YCBCR_RANGE_ITU_NARROW;\n +        static int coinToss                \u003d 1;\n +        VkSamplerYcbcrModelConversion conversionModel \u003d\n +            (coinToss \u003d\u003d 2 || coinToss \u003d\u003d 3) ? VK_SAMPLER_YCBCR_MODEL_CONVERSION_YCBCR_709\n +                                             : VK_SAMPLER_YCBCR_MODEL_CONVERSION_YCBCR_601;\n +        coinToss++;\n +        static int coinToss1 \u003d 1;\n +        VkSamplerYcbcrRange colorRange \u003d\n +            (coinToss1 \u003d\u003d 3) ? VK_SAMPLER_YCBCR_RANGE_ITU_FULL : VK_SAMPLER_YCBCR_RANGE_ITU_NARROW;\n +        coinToss1++;\n\n2. added this end2end test -\n +// Test functionality of GL_ANGLE_yuv_internal_format while cycling through YUV sources\n +// with different colorspace\n +TEST_P(Texture2DTestES3, TexStorage2DCycleThroughYuvSources)\n +{\n +    ANGLE_SKIP_TEST_IF(!IsGLExtensionEnabled(\"GL_ANGLE_yuv_internal_format\"));\n +\n +    GLubyte expectedRgbColor[4] \u003d {0, 0, 255, 255};\n +\n +    // Create YUV texture, ITU 601 in narrow range\n +    GLTexture yuvTexture0;\n +    GLubyte yuvColor0[6] \u003d {40, 40, 40, 40, 240, 109};\n +    createImmutableTexture2D(yuvTexture0, 2, 2, GL_G8_B8R8_2PLANE_420_UNORM_ANGLE,\n +                             GL_G8_B8R8_2PLANE_420_UNORM_ANGLE, GL_UNSIGNED_BYTE, 1, yuvColor0);\n +\n +    // Create YUV texture, ITU 709 in narrow range\n +    GLTexture yuvTexture1;\n +    GLubyte yuvColor1[6] \u003d {31, 31, 31, 31, 240, 117};\n +    createImmutableTexture2D(yuvTexture1, 2, 2, GL_G8_B8R8_2PLANE_420_UNORM_ANGLE,\n +                             GL_G8_B8R8_2PLANE_420_UNORM_ANGLE, GL_UNSIGNED_BYTE, 1, yuvColor1);\n +\n +    // Create YUV texture, ITU 709 in full range\n +    GLTexture yuvTexture2;\n +    GLubyte yuvColor2[6] \u003d {18, 18, 18, 18, 255, 116};\n +    createImmutableTexture2D(yuvTexture2, 2, 2, GL_G8_B8R8_2PLANE_420_UNORM_ANGLE,\n +                             GL_G8_B8R8_2PLANE_420_UNORM_ANGLE, GL_UNSIGNED_BYTE, 1, yuvColor2);\n +\n +    // Cycle through source textures\n +    // YUV source 0\n +    verifyResults2D(yuvTexture0, expectedRgbColor);\n +    ASSERT_GL_NO_ERROR();\n +\n +    // YUV source 1\n +    verifyResults2D(yuvTexture1, expectedRgbColor);\n +    ASSERT_GL_NO_ERROR();\n +\n +    // YUV source 2\n +    verifyResults2D(yuvTexture2, expectedRgbColor);\n +    ASSERT_GL_NO_ERROR();\n +\n +    // YUV source 2\n +    verifyResults2D(yuvTexture2, expectedRgbColor);\n +    ASSERT_GL_NO_ERROR();\n +}\n +",
       "revId": "871e4fd6923b84c08106f5615d2bc6e28ebc16b6",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "378f20d5_65bd43a9",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1340649
+      },
+      "writtenOn": "2021-11-29T17:42:25Z",
+      "side": 1,
+      "message": "thanks all, landing this for now",
+      "revId": "871e4fd6923b84c08106f5615d2bc6e28ebc16b6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
