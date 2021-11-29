@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "43deaece_3a7283b6",
+        "filename": "src/libANGLE/capture/FrameCapture.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 2084,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2021-11-29T17:21:06Z",
+      "side": 1,
+      "message": "Is this the correct way to determine which function to call?   My reading is that this function is returning what the attribute type in the shader is, not what the type of the data in the buffer is.\n\nLooking at the spec:\n\n10.3.1 Specifying Arrays for Generic Vertex Attributes\n    The “Integer Handling” column in table 10.2 indicates how integer and fixedpoint data are handled. “integer” means that they remain as integer values; such\n    data are referred to as pure integers. “flag” means that either normalize or cast\n    behavior applies, as described below, depending on whether the normalized flag\n    to the command is TRUE or FALSE, respectively. normalize means that values are\n    converted to floating-point by normalizing to [0, 1] (for unsigned types) or [−1, 1]\n    (for signed types), as described in equations 2.1 and 2.2, respectively. cast means\n    that values are converted to floating-point directly.\n\nThat says the buffer can contain float or int/uint data, and the data will (possibly) be converted by ANGLE.\n\nIt seems we need to know what the underlying data in the buffer is before the conversion, rather than the attribute type that uses the converted data.",
+      "revId": "29883ceed13609ca9841ee28447630d28cbb1eb8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
