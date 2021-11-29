@@ -929,7 +929,12 @@ angle::Result ContextVk::initialize()
 
 angle::Result ContextVk::flush(const gl::Context *context)
 {
-    if (mRenderer->getFeatures().deferFlushUntilEndRenderPass.enabled && hasStartedRenderPass())
+    const bool isSingleBuffer =
+        mCurrentWindowSurface != nullptr &&
+        mCurrentWindowSurface->getPresentMode() == VK_PRESENT_MODE_SHARED_DEMAND_REFRESH_KHR;
+
+    if (mRenderer->getFeatures().deferFlushUntilEndRenderPass.enabled && hasStartedRenderPass() &&
+        !isSingleBuffer)
     {
         mHasDeferredFlush = true;
         return angle::Result::Continue;
