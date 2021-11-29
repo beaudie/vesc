@@ -24,6 +24,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "ae71f58a_d7d2d5b8",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 3
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1491823
+      },
+      "writtenOn": "2021-11-29T20:11:49Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "3231c9a4_e767e757",
+      "range": {
+        "startLine": 7,
+        "startChar": 26,
+        "endLine": 7,
+        "endChar": 37
+      },
+      "revId": "3c5ebf90616945887f23412ef9368e089ed893eb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "7318e577_8c150c50",
@@ -156,6 +180,30 @@
       "side": 1,
       "message": "Yes, generally we follow the rules laid out here:\n\nhttps://chromium.googlesource.com/angle/angle/+/main/doc/CodingStandard.md\n\nWhich \"override\" the Google/Chromium style guide in places. For static functions in ANGLE we use CapsCamelCase, for member functions lowerCaseCamelCase. For structs, we tend to use public data with camelCase, and for classes, private data with mMemberVariables. It\u0027s all documented.",
       "parentUuid": "6d79edfe_04a02dfa",
+      "range": {
+        "startLine": 5372,
+        "startChar": 23,
+        "endLine": 5372,
+        "endChar": 27
+      },
+      "revId": "3c5ebf90616945887f23412ef9368e089ed893eb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "2832a2c0_f0ac5827",
+        "filename": "src/libANGLE/capture/FrameCapture.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 5372,
+      "author": {
+        "id": 1491823
+      },
+      "writtenOn": "2021-11-29T20:11:49Z",
+      "side": 1,
+      "message": "I see, so \"name\" and \"type\" should be okay because it\u0027s public data, and there are not enough nouns for the Case in camelCase :)",
+      "parentUuid": "5185d8e9_06d52f39",
       "range": {
         "startLine": 5372,
         "startChar": 23,
