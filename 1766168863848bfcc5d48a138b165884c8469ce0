@@ -41,6 +41,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "c1e8857a_8d4dacdd",
+        "filename": "src/tests/capture_replay_tests.py",
+        "patchSetId": 7
+      },
+      "lineNbr": 861,
+      "author": {
+        "id": 1491823
+      },
+      "writtenOn": "2021-11-29T11:39:03Z",
+      "side": 1,
+      "message": "Shouldn\u0027t \"git cl format\" take care of this?, anyway, done.",
+      "parentUuid": "4bf47a45_bb67f9cd",
+      "range": {
+        "startLine": 855,
+        "startChar": 0,
+        "endLine": 861,
+        "endChar": 37
+      },
+      "revId": "1766168863848bfcc5d48a138b165884c8469ce0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "b93debaa_c04619e8",
@@ -64,6 +88,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "693f11b7_a2261d0d",
+        "filename": "src/tests/capture_replay_tests/capture_replay_expectations.txt",
+        "patchSetId": 7
+      },
+      "lineNbr": 51,
+      "author": {
+        "id": 1491823
+      },
+      "writtenOn": "2021-11-29T11:39:03Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "b93debaa_c04619e8",
+      "range": {
+        "startLine": 51,
+        "startChar": 40,
+        "endLine": 51,
+        "endChar": 47
+      },
+      "revId": "1766168863848bfcc5d48a138b165884c8469ce0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "313dde75_c56509dc",
@@ -77,6 +125,30 @@
       "writtenOn": "2021-11-24T17:42:47Z",
       "side": 1,
       "message": "can you also now change these to NO_RESULT?",
+      "range": {
+        "startLine": 225,
+        "startChar": 73,
+        "endLine": 225,
+        "endChar": 89
+      },
+      "revId": "1766168863848bfcc5d48a138b165884c8469ce0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "f5c1e173_a833a52c",
+        "filename": "src/tests/capture_replay_tests/capture_replay_expectations.txt",
+        "patchSetId": 7
+      },
+      "lineNbr": 225,
+      "author": {
+        "id": 1491823
+      },
+      "writtenOn": "2021-11-29T11:39:03Z",
+      "side": 1,
+      "message": "NO_RESULT seems not very descriptive. These skips usually happen when something is not supported, so how about  NOT_SUPPORTED (similar to the deqp NotSupported), or NOT_RUN.",
+      "parentUuid": "313dde75_c56509dc",
       "range": {
         "startLine": 225,
         "startChar": 73,
