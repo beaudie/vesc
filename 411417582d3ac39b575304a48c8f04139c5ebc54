@@ -93,6 +93,30 @@
       },
       "revId": "411417582d3ac39b575304a48c8f04139c5ebc54",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "a5a91d7c_d67fb90e",
+        "filename": "src/tests/capture_replay_tests/capture_replay_expectations.txt",
+        "patchSetId": 12
+      },
+      "lineNbr": 170,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2021-11-29T21:01:30Z",
+      "side": 1,
+      "message": "I see. For those, can we use the pattern ES\u003cnum\u003e* and omit the SwiftShader? It is as close as we can get to matching the dEQP expectations format this way.",
+      "parentUuid": "2df07816_21da6f02",
+      "range": {
+        "startLine": 170,
+        "startChar": 58,
+        "endLine": 170,
+        "endChar": 81
+      },
+      "revId": "411417582d3ac39b575304a48c8f04139c5ebc54",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
