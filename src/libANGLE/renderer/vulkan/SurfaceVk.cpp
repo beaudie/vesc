@@ -1722,6 +1722,16 @@ angle::Result WindowSurfaceVk::doDeferredAcquireNextImage(const gl::Context *con
         ANGLE_VK_TRY(contextVk, result);
     }
 
+    // Invalidate the color if the swap behavior is EGL_BUFFER_DESTROYED. Also invalidate the depth
+    // stencil and multi-sample color image.
+    if (mState.mSwapBehavior == EGL_BUFFER_DESTROYED)
+    {
+        mSwapchainImages[mCurrentSwapchainImageIndex].image.invalidateSubresourceContent(
+            contextVk, gl::LevelIndex(0), 0, 1);
+    }
+    mDepthStencilImage.invalidateSubresourceStencilContent(contextVk, gl::LevelIndex(0), 0, 1);
+    mColorImageMS.invalidateSubresourceContent(contextVk, gl::LevelIndex(0), 0, 1);
+
     RendererVk *renderer = contextVk->getRenderer();
     ANGLE_TRY(renderer->syncPipelineCacheVk(displayVk, context));
 
@@ -1981,7 +1991,6 @@ EGLint WindowSurfaceVk::isPostSubBufferSupported() const
 
 EGLint WindowSurfaceVk::getSwapBehavior() const
 {
-    // TODO(jmadill)
     return EGL_BUFFER_DESTROYED;
 }
 
