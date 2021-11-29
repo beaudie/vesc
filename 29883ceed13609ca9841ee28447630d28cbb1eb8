@@ -16,6 +16,24 @@
       "message": "Is this the correct way to determine which function to call?   My reading is that this function is returning what the attribute type in the shader is, not what the type of the data in the buffer is.\n\nLooking at the spec:\n\n10.3.1 Specifying Arrays for Generic Vertex Attributes\n    The “Integer Handling” column in table 10.2 indicates how integer and fixedpoint data are handled. “integer” means that they remain as integer values; such\n    data are referred to as pure integers. “flag” means that either normalize or cast\n    behavior applies, as described below, depending on whether the normalized flag\n    to the command is TRUE or FALSE, respectively. normalize means that values are\n    converted to floating-point by normalizing to [0, 1] (for unsigned types) or [−1, 1]\n    (for signed types), as described in equations 2.1 and 2.2, respectively. cast means\n    that values are converted to floating-point directly.\n\nThat says the buffer can contain float or int/uint data, and the data will (possibly) be converted by ANGLE.\n\nIt seems we need to know what the underlying data in the buffer is before the conversion, rather than the attribute type that uses the converted data.",
       "revId": "29883ceed13609ca9841ee28447630d28cbb1eb8",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "45ab5b95_ef9c874a",
+        "filename": "src/libANGLE/capture/FrameCapture.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 2084,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2021-11-29T18:37:05Z",
+      "side": 1,
+      "message": "I believe the code is correct. It would be clearer to use \n\"attrib.format-\u003eisPureInt()\" rather than using the component types mask.\n\nTim, because he\u0027s querying the mask from the vertex array, it\u0027s an optimized bitset that represents the array states, not the shader. There\u0027s a comparable mask in the program that does represent the shader state, and we use these masks together for fast validation checks. Since this isn\u0027t a fast validation check, we can use the \"canonical\" version of the vertex format.",
+      "parentUuid": "43deaece_3a7283b6",
+      "revId": "29883ceed13609ca9841ee28447630d28cbb1eb8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
