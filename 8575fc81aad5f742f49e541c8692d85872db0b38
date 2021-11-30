@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "1f13599b_b9f1c536",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1491687
+      },
+      "writtenOn": "2021-11-30T17:19:53Z",
+      "side": 1,
+      "message": "For better review and CI test I split this from the rest of the set for now, I can squash it though.",
+      "revId": "8575fc81aad5f742f49e541c8692d85872db0b38",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
