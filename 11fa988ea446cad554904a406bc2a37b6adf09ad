@@ -69,6 +69,24 @@
       "parentUuid": "8208cfd3_31ed0414",
       "revId": "11fa988ea446cad554904a406bc2a37b6adf09ad",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "3b0c513f_347cf45c",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1002767
+      },
+      "writtenOn": "2021-11-30T21:52:22Z",
+      "side": 1,
+      "message": "New passing tests that will be enabled on mac-angle-chromium-try:\n\n- conformance/textures/image_bitmap_from_video/tex-2d-luminance_alpha-luminance_alpha-unsigned_byte.html\n- conformance/textures/image_bitmap_from_video/tex-2d-luminance-luminance-unsigned_byte.html\n- conformance/textures/image_bitmap_from_video/tex-2d-rgb-rgb-unsigned_byte.html\n- conformance/textures/image_bitmap_from_video/tex-2d-rgb-rgb-unsigned_short_5_6_5.html\n- conformance/textures/image_bitmap_from_video/tex-2d-rgba-rgba-unsigned_byte.html\n- conformance/textures/image_bitmap_from_video/tex-2d-rgba-rgba-unsigned_short_4_4_4_4.html\n- conformance/textures/image_bitmap_from_video/tex-2d-rgba-rgba-unsigned_short_5_5_5_1.html\n- conformance/textures/misc/copy-tex-image-2d-formats.html\n- conformance/textures/misc/texture-corner-case-videos.html\n- conformance/textures/misc/video-rotation.html",
+      "parentUuid": "21a6dad5_9da9acf9",
+      "revId": "11fa988ea446cad554904a406bc2a37b6adf09ad",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
