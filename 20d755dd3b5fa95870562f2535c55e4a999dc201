@@ -16,6 +16,46 @@
       "message": "LGTM once fail is fixed.",
       "revId": "20d755dd3b5fa95870562f2535c55e4a999dc201",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "4a3faef8_3f33f219",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2021-11-30T14:55:12Z",
+      "side": 1,
+      "message": "Seems like this might have a bug. I notice you don\u0027t initialize this variable, maybe that\u0027s why?",
+      "revId": "20d755dd3b5fa95870562f2535c55e4a999dc201",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "9d91841d_5281e439",
+        "filename": "src/libANGLE/Context.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 8909,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2021-11-30T14:55:12Z",
+      "side": 1,
+      "message": "nit: place in header to inline",
+      "range": {
+        "startLine": 8906,
+        "startChar": 0,
+        "endLine": 8909,
+        "endChar": 1
+      },
+      "revId": "20d755dd3b5fa95870562f2535c55e4a999dc201",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
