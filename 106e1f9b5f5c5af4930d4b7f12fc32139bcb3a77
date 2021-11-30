@@ -39,6 +39,30 @@
       },
       "revId": "106e1f9b5f5c5af4930d4b7f12fc32139bcb3a77",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "3ee6cd29_920b5a64",
+        "filename": "src/libANGLE/renderer/d3d/VertexDataManager.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 57,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2021-11-30T16:55:31Z",
+      "side": 1,
+      "message": "What would angle::Result give us? It\u0027s OOB with robust access, so we don\u0027t need an error per-spec.",
+      "parentUuid": "46d4b050_68811352",
+      "range": {
+        "startLine": 57,
+        "startChar": 4,
+        "endLine": 57,
+        "endChar": 20
+      },
+      "revId": "106e1f9b5f5c5af4930d4b7f12fc32139bcb3a77",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
