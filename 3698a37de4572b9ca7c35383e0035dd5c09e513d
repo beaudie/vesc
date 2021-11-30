@@ -35,6 +35,23 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "76a967ea_b533bae0",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1359249
+      },
+      "writtenOn": "2021-11-30T21:40:35Z",
+      "side": 1,
+      "message": "Haven\u0027t verified it actually works yet.",
+      "revId": "3698a37de4572b9ca7c35383e0035dd5c09e513d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "511a35fa_d801350e",
@@ -48,6 +65,30 @@
       "writtenOn": "2021-11-30T21:37:56Z",
       "side": 1,
       "message": "This is disabling the feature entirely on surfaceless!\n\nI suggest:\n\n    const bool isSingleBuffer \u003d mCurrentWindowSurface !\u003d nullptr \u0026\u0026\n        mCurrentWindowSurface-\u003egetPresentMode() \u003d\u003d VK_PRESENT_MODE_SHARED_DEMAND_REFRESH_KHR;\n        \n    if (mRenderer-\u003egetFeatures().deferFlushUntilEndRenderPass.enabled \u0026\u0026 hasStartedRenderPass() \u0026\u0026 !isSingleBuffer)\n    {\n        ...\n    }",
+      "range": {
+        "startLine": 932,
+        "startChar": 0,
+        "endLine": 936,
+        "endChar": 1
+      },
+      "revId": "3698a37de4572b9ca7c35383e0035dd5c09e513d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "69959459_56e0aac0",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 936,
+      "author": {
+        "id": 1359249
+      },
+      "writtenOn": "2021-11-30T21:40:35Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "511a35fa_d801350e",
       "range": {
         "startLine": 932,
         "startChar": 0,
