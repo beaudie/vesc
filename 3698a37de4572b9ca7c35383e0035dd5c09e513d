@@ -16,6 +16,40 @@
       "message": "@shahbaz, this was a quick draft hack, to circumvent the deferredFlush. Does this match what you were thinking? It doesn\u0027t seem to work on our device. But I am also working with a much older tip.",
       "revId": "3698a37de4572b9ca7c35383e0035dd5c09e513d",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "9755bedc_90ef4ca6",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1359249
+      },
+      "writtenOn": "2021-11-30T17:07:16Z",
+      "side": 1,
+      "message": "Is this change right?",
+      "revId": "3698a37de4572b9ca7c35383e0035dd5c09e513d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "4197157d_22e9c527",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 941,
+      "author": {
+        "id": 1359249
+      },
+      "writtenOn": "2021-11-30T17:07:16Z",
+      "side": 1,
+      "message": "We see this called for the dEQP-EGL render_buffer basic test when its in SINGLE_BUFFEr and calling glFlush. But we still get a frame old glReadPixels color.",
+      "revId": "3698a37de4572b9ca7c35383e0035dd5c09e513d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
