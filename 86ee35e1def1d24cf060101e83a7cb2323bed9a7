@@ -58,6 +58,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "d05da7f6_11b22f34",
+        "filename": "src/libANGLE/renderer/vulkan/BufferVk.cpp",
+        "patchSetId": 15
+      },
+      "lineNbr": 276,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2021-11-30T03:19:00Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "a3dcc80c_fc1a482c",
+      "range": {
+        "startLine": 276,
+        "startChar": 8,
+        "endLine": 276,
+        "endChar": 26
+      },
+      "revId": "86ee35e1def1d24cf060101e83a7cb2323bed9a7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "95b99332_267bbed6",
@@ -81,6 +105,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "b00dbd30_a71869e3",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 15
+      },
+      "lineNbr": 315,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2021-11-30T03:19:00Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "95b99332_267bbed6",
+      "range": {
+        "startLine": 315,
+        "startChar": 30,
+        "endLine": 315,
+        "endChar": 42
+      },
+      "revId": "86ee35e1def1d24cf060101e83a7cb2323bed9a7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "09ee3bb1_ab6ce492",
@@ -94,6 +142,30 @@
       "writtenOn": "2021-11-24T17:12:52Z",
       "side": 1,
       "message": "nit: inclusivity (main, etc)",
+      "range": {
+        "startLine": 320,
+        "startChar": 68,
+        "endLine": 320,
+        "endChar": 74
+      },
+      "revId": "86ee35e1def1d24cf060101e83a7cb2323bed9a7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "ab229be7_98717327",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 15
+      },
+      "lineNbr": 320,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2021-11-30T03:19:00Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "09ee3bb1_ab6ce492",
       "range": {
         "startLine": 320,
         "startChar": 68,
@@ -199,6 +271,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "bf5a28a0_6c28c956",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 15
+      },
+      "lineNbr": 2614,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2021-11-30T03:19:00Z",
+      "side": 1,
+      "message": "The reason this is needed is that I have assertion in the teardown code to ensure that all sub-ranges are freed before virtual block gets freed. There are cases that somehow the sub-ranges are not gets garbage collected and this will ensure it gets all cleared.",
+      "parentUuid": "d378e22e_267c0817",
+      "range": {
+        "startLine": 2614,
+        "startChar": 4,
+        "endLine": 2614,
+        "endChar": 49
+      },
+      "revId": "86ee35e1def1d24cf060101e83a7cb2323bed9a7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "60a67deb_ee94ab33",
         "filename": "src/libANGLE/renderer/vulkan/DisplayVk.h",
         "patchSetId": 15
@@ -210,6 +306,30 @@
       "writtenOn": "2021-11-24T17:12:52Z",
       "side": 1,
       "message": "what is a default buffer? or a default pool? you could explain the comment.",
+      "range": {
+        "startLine": 65,
+        "startChar": 0,
+        "endLine": 65,
+        "endChar": 26
+      },
+      "revId": "86ee35e1def1d24cf060101e83a7cb2323bed9a7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "80e30419_88140946",
+        "filename": "src/libANGLE/renderer/vulkan/DisplayVk.h",
+        "patchSetId": 15
+      },
+      "lineNbr": 65,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2021-11-30T03:19:00Z",
+      "side": 1,
+      "message": "Comment added. We could explore move it to rendererVk in future to see which way is better.",
+      "parentUuid": "60a67deb_ee94ab33",
       "range": {
         "startLine": 65,
         "startChar": 0,
@@ -233,6 +353,30 @@
       "writtenOn": "2021-11-24T17:12:52Z",
       "side": 1,
       "message": "Looks like you need to lock around this allocator. I recommend implementing atomic APIs inside the Renderer class instead of exposing access to this class.",
+      "range": {
+        "startLine": 2583,
+        "startChar": 4,
+        "endLine": 2583,
+        "endChar": 88
+      },
+      "revId": "86ee35e1def1d24cf060101e83a7cb2323bed9a7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "4b594217_05561863",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 15
+      },
+      "lineNbr": 2583,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2021-11-30T03:19:00Z",
+      "side": 1,
+      "message": "I am not aware of need of lock here. Maybe I miss something here?",
+      "parentUuid": "47384bdf_10eeca61",
       "range": {
         "startLine": 2583,
         "startChar": 4,
@@ -313,6 +457,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "80634293_beeaa510",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 15
+      },
+      "lineNbr": 2644,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2021-11-30T03:19:00Z",
+      "side": 1,
+      "message": "Done. Renamed to allocateBuffer",
+      "parentUuid": "ea97be45_5b966750",
+      "range": {
+        "startLine": 2644,
+        "startChar": 26,
+        "endLine": 2644,
+        "endChar": 47
+      },
+      "revId": "86ee35e1def1d24cf060101e83a7cb2323bed9a7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "73f85464_92c4f362",
@@ -326,6 +494,30 @@
       "writtenOn": "2021-11-24T17:12:52Z",
       "side": 1,
       "message": "nit: a smaller size. It will get",
+      "range": {
+        "startLine": 2656,
+        "startChar": 67,
+        "endLine": 2656,
+        "endChar": 76
+      },
+      "revId": "86ee35e1def1d24cf060101e83a7cb2323bed9a7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "185525a7_06199a7c",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 15
+      },
+      "lineNbr": 2656,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2021-11-30T03:19:00Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "73f85464_92c4f362",
       "range": {
         "startLine": 2656,
         "startChar": 67,
@@ -382,6 +574,54 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "c7e5d386_dcc07b54",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 15
+      },
+      "lineNbr": 2662,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2021-11-30T03:19:00Z",
+      "side": 1,
+      "message": "Some of this was copied from dynamicbuffer class. I have removed mAlignment.",
+      "parentUuid": "97f2a394_6415309d",
+      "range": {
+        "startLine": 2662,
+        "startChar": 42,
+        "endLine": 2662,
+        "endChar": 74
+      },
+      "revId": "86ee35e1def1d24cf060101e83a7cb2323bed9a7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "c3d14e60_624b619f",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 15
+      },
+      "lineNbr": 2662,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2021-11-30T03:19:00Z",
+      "side": 1,
+      "message": "This goes back to the otehr comment in BufferVk::acquireBufferHelper() that why there is fallback allocation. Fail to allocate here may not a GL error. We may try other pool with different memoryType.",
+      "parentUuid": "28fcef54_6436ece9",
+      "range": {
+        "startLine": 2662,
+        "startChar": 89,
+        "endLine": 2662,
+        "endChar": 99
+      },
+      "revId": "86ee35e1def1d24cf060101e83a7cb2323bed9a7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "48e9f09a_45e1a57a",
@@ -418,6 +658,30 @@
       "writtenOn": "2021-11-24T17:12:52Z",
       "side": 1,
       "message": "rather than using a serial per-suballocation, what are the pros/cons of using a 32 bit serial/ 32-bit offset pair?",
+      "range": {
+        "startLine": 3832,
+        "startChar": 0,
+        "endLine": 3833,
+        "endChar": 19
+      },
+      "revId": "86ee35e1def1d24cf060101e83a7cb2323bed9a7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "c10e373d_20adb836",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 15
+      },
+      "lineNbr": 3833,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2021-11-30T03:19:00Z",
+      "side": 1,
+      "message": "Lets discuss this offline tomorrow.",
+      "parentUuid": "6cf724b8_8d9d4e9f",
       "range": {
         "startLine": 3832,
         "startChar": 0,
@@ -535,6 +799,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "d72a9af2_8f265538",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.h",
+        "patchSetId": 15
+      },
+      "lineNbr": 1046,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2021-11-30T03:19:00Z",
+      "side": 1,
+      "message": "I cached here mainly for performance. Otherwise everytime you want to see if it is coherent or not, you will have to call \n        bufferMemoryAllocator.getMemoryTypeProperties(renderer, memoryTypeIndex,\n                                                      \u0026memoryPropertyFlags);\nThere should only  few pools in the process, the memory saving we are talking about is a dozen bytes.",
+      "parentUuid": "907de851_e6c8134f",
+      "range": {
+        "startLine": 1046,
+        "startChar": 4,
+        "endLine": 1046,
+        "endChar": 25
+      },
+      "revId": "86ee35e1def1d24cf060101e83a7cb2323bed9a7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "3de5d784_d0b46a46",
         "filename": "src/libANGLE/renderer/vulkan/vk_helpers.h",
         "patchSetId": 15
@@ -558,6 +846,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "93881d61_c99b0c22",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.h",
+        "patchSetId": 15
+      },
+      "lineNbr": 1049,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2021-11-30T03:19:00Z",
+      "side": 1,
+      "message": "It is counting the number of times BufferPool::allocateNewBuffer() gets called. I have renamed to mBufferAllocateCount.",
+      "parentUuid": "3de5d784_d0b46a46",
+      "range": {
+        "startLine": 1049,
+        "startChar": 13,
+        "endLine": 1049,
+        "endChar": 32
+      },
+      "revId": "86ee35e1def1d24cf060101e83a7cb2323bed9a7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "280453d0_10248b68",
         "filename": "src/libANGLE/renderer/vulkan/vk_helpers.h",
         "patchSetId": 15
@@ -569,6 +881,30 @@
       "writtenOn": "2021-11-24T17:12:52Z",
       "side": 1,
       "message": "we use RAII types in the Vulkan back-end so you should be able to use these by value, as long as you have move operators and a default constructor.\n\nsame for the other vector or array types you\u0027re introducing.",
+      "range": {
+        "startLine": 1052,
+        "startChar": 47,
+        "endLine": 1052,
+        "endChar": 57
+      },
+      "revId": "86ee35e1def1d24cf060101e83a7cb2323bed9a7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b412c879_c3e9ef0c",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.h",
+        "patchSetId": 15
+      },
+      "lineNbr": 1052,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2021-11-30T03:19:00Z",
+      "side": 1,
+      "message": "If you do not mind, could I handle this in follow up CL? I did it this way mostly following the DynamicBuffer examples. I am totally fine to use RAII types, but prefer to do it in separate CL given that this CL is already complicated enough. I have added to https://issuetracker.google.com/208323792",
+      "parentUuid": "280453d0_10248b68",
       "range": {
         "startLine": 1052,
         "startChar": 47,
@@ -638,6 +974,30 @@
       "writtenOn": "2021-11-24T17:12:52Z",
       "side": 1,
       "message": "nit: sort",
+      "range": {
+        "startLine": 56,
+        "startChar": 9,
+        "endLine": 56,
+        "endChar": 28
+      },
+      "revId": "86ee35e1def1d24cf060101e83a7cb2323bed9a7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "9cfb3e8b_a762cc5c",
+        "filename": "src/libANGLE/renderer/vulkan/vk_wrapper.h",
+        "patchSetId": 15
+      },
+      "lineNbr": 56,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2021-11-30T03:19:00Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "55659656_192b01b4",
       "range": {
         "startLine": 56,
         "startChar": 9,

@@ -26,6 +26,30 @@
     {
       "unresolved": false,
       "key": {
+        "uuid": "7666ac3d_e71a61c4",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 14
+      },
+      "lineNbr": 11,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2021-11-30T03:19:00Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "9dca6b3a_476b3b9f",
+      "range": {
+        "startLine": 11,
+        "startChar": 22,
+        "endLine": 11,
+        "endChar": 31
+      },
+      "revId": "5dd075bd0ec7a8cfbd869f8ae200766a901214d7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
         "uuid": "8e1af41e_5801384a",
         "filename": "/PATCHSET_LEVEL",
         "patchSetId": 14
@@ -114,6 +138,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "f99439cd_530fedf3",
+        "filename": "src/libANGLE/renderer/vulkan/BufferVk.cpp",
+        "patchSetId": 14
+      },
+      "lineNbr": 1210,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2021-11-30T03:19:00Z",
+      "side": 1,
+      "message": "https://issuetracker.google.com/208323792",
+      "parentUuid": "48a5542e_c33999c8",
+      "revId": "5dd075bd0ec7a8cfbd869f8ae200766a901214d7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "52c1730b_4be8ec70",
         "filename": "src/libANGLE/renderer/vulkan/BufferVk.h",
         "patchSetId": 14
@@ -125,6 +167,30 @@
       "writtenOn": "2021-11-24T03:31:47Z",
       "side": 1,
       "message": "typo",
+      "range": {
+        "startLine": 125,
+        "startChar": 11,
+        "endLine": 125,
+        "endChar": 20
+      },
+      "revId": "5dd075bd0ec7a8cfbd869f8ae200766a901214d7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "2036d70a_d61ccaff",
+        "filename": "src/libANGLE/renderer/vulkan/BufferVk.h",
+        "patchSetId": 14
+      },
+      "lineNbr": 125,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2021-11-30T03:19:00Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "52c1730b_4be8ec70",
       "range": {
         "startLine": 125,
         "startChar": 11,
