@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "3853e612_06f25ec4",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2021-11-30T15:06:38Z",
+      "side": 1,
+      "message": "If you grep for C++17, there are a couple more of these with notes like \"Remove when C++17\"",
+      "revId": "17261f3bffe2475cab26117719afc62c9fb794e3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
