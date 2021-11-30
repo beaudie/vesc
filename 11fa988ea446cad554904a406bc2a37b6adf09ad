@@ -33,6 +33,24 @@
       "message": "A regression test would be welcome.",
       "revId": "11fa988ea446cad554904a406bc2a37b6adf09ad",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "8208cfd3_31ed0414",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1002767
+      },
+      "writtenOn": "2021-11-30T21:10:38Z",
+      "side": 1,
+      "message": "The MacOS SwANGLE bot will have new passing tests after this, which I will enable in a Chromium CL.",
+      "parentUuid": "c40cc813_76aeed72",
+      "revId": "11fa988ea446cad554904a406bc2a37b6adf09ad",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
