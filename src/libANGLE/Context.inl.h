@@ -139,6 +139,7 @@ ANGLE_INLINE void Context::drawElements(PrimitiveMode mode,
                                         DrawElementsType type,
                                         const void *indices)
 {
+    printf("Context::%s count %d\n", __func__, (int)count);
     // No-op if count draws no primitives for given mode
     if (noopDraw(mode, count))
     {
