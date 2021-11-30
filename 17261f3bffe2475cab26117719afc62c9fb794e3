@@ -16,6 +16,24 @@
       "message": "If you grep for C++17, there are a couple more of these with notes like \"Remove when C++17\"",
       "revId": "17261f3bffe2475cab26117719afc62c9fb794e3",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "1ae0e21c_5ac58899",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1001921
+      },
+      "writtenOn": "2021-11-30T19:06:29Z",
+      "side": 1,
+      "message": "These look like follow up tasks once all platforms have switched (we only had Windows stick for now, other platforms are in revert/reland cycle).\nI\u0027ll open anglebug blocking on crbug.com/752720",
+      "parentUuid": "3853e612_06f25ec4",
+      "revId": "17261f3bffe2475cab26117719afc62c9fb794e3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
