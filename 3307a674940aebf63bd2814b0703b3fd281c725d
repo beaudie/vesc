@@ -16,6 +16,41 @@
       "message": "LGTM - if we have to do this for every resource type it would be nice to somehow generalize the code.",
       "revId": "3307a674940aebf63bd2814b0703b3fd281c725d",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "53078e88_b6c9cb10",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2021-11-30T18:24:20Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "6bbf0ba2_062740c1",
+      "revId": "3307a674940aebf63bd2814b0703b3fd281c725d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "15e37f23_8bcb74e0",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2021-11-30T18:24:20Z",
+      "side": 1,
+      "message": "Lubosz, let me know if this also fixed the apps you were looking at.",
+      "revId": "3307a674940aebf63bd2814b0703b3fd281c725d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
