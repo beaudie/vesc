@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "e4d98b46_f3310aba",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1359249
+      },
+      "writtenOn": "2021-11-30T15:24:24Z",
+      "side": 1,
+      "message": "@shahbaz, this was a quick draft hack, to circumvent the deferredFlush. Does this match what you were thinking? It doesn\u0027t seem to work on our device. But I am also working with a much older tip.",
+      "revId": "3698a37de4572b9ca7c35383e0035dd5c09e513d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
