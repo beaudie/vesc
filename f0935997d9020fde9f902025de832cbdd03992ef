@@ -16,6 +16,161 @@
       "message": "re-lgtm",
       "revId": "f0935997d9020fde9f902025de832cbdd03992ef",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "b2a69493_cac736f5",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 25
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2021-11-30T05:33:27Z",
+      "side": 1,
+      "message": "This looks great Lubosz, nice work!\n\nI\u0027m trying to think of a way to document this while it is fresh in your head, but maybe the code itself is enough, it reads pretty well.  A comment block somewhere that captures any nuance would be good.\n\n+1 for the moment to handle the CopyBuffer feedback, and in case Shabi has any additional feedback.",
+      "revId": "f0935997d9020fde9f902025de832cbdd03992ef",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "2f8965f2_92ed8ee8",
+        "filename": "src/libANGLE/capture/FrameCapture.cpp",
+        "patchSetId": 25
+      },
+      "lineNbr": 4820,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2021-11-30T05:33:27Z",
+      "side": 1,
+      "message": "What\u0027s the significance of having less than three pages?",
+      "range": {
+        "startLine": 4820,
+        "startChar": 4,
+        "endLine": 4820,
+        "endChar": 29
+      },
+      "revId": "f0935997d9020fde9f902025de832cbdd03992ef",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "aaa6f1c2_7a4829b6",
+        "filename": "src/libANGLE/capture/FrameCapture.cpp",
+        "patchSetId": 25
+      },
+      "lineNbr": 4912,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2021-11-30T05:33:27Z",
+      "side": 1,
+      "message": "If you don\u0027t have the mutex before checking whether you have the buffer, couldn\u0027t you accidentally add multiple entries for the buffer?",
+      "range": {
+        "startLine": 4912,
+        "startChar": 0,
+        "endLine": 4912,
+        "endChar": 45
+      },
+      "revId": "f0935997d9020fde9f902025de832cbdd03992ef",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "663310e4_254c45d2",
+        "filename": "src/libANGLE/capture/FrameCapture.cpp",
+        "patchSetId": 25
+      },
+      "lineNbr": 4927,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2021-11-30T05:33:27Z",
+      "side": 1,
+      "message": "This comment is confusing (I know you just removed a TODO).  I think you are saying there\u0027s a possibility that we\u0027re going to miss writes if buffers overlap in a page.  Can we detect that case and spew something indicating we need to fix it?",
+      "range": {
+        "startLine": 4926,
+        "startChar": 4,
+        "endLine": 4927,
+        "endChar": 82
+      },
+      "revId": "f0935997d9020fde9f902025de832cbdd03992ef",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "477bf885_df648749",
+        "filename": "src/libANGLE/capture/FrameCapture.cpp",
+        "patchSetId": 25
+      },
+      "lineNbr": 5986,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2021-11-30T05:33:27Z",
+      "side": 1,
+      "message": "If I\u0027m following correctly, we need to protect the range again because we marked it unprotected in our page fault handler.",
+      "range": {
+        "startLine": 5986,
+        "startChar": 8,
+        "endLine": 5986,
+        "endChar": 52
+      },
+      "revId": "f0935997d9020fde9f902025de832cbdd03992ef",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "8a155de2_5e701440",
+        "filename": "src/libANGLE/capture/FrameCapture.cpp",
+        "patchSetId": 25
+      },
+      "lineNbr": 6012,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2021-11-30T05:33:27Z",
+      "side": 1,
+      "message": "This comment needs an update",
+      "range": {
+        "startLine": 6012,
+        "startChar": 12,
+        "endLine": 6012,
+        "endChar": 54
+      },
+      "revId": "f0935997d9020fde9f902025de832cbdd03992ef",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "16b24971_b1556d06",
+        "filename": "src/libANGLE/capture/FrameCapture.h",
+        "patchSetId": 25
+      },
+      "lineNbr": 393,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2021-11-30T05:33:27Z",
+      "side": 1,
+      "message": "This comment is the same as above",
+      "range": {
+        "startLine": 393,
+        "startChar": 0,
+        "endLine": 393,
+        "endChar": 38
+      },
+      "revId": "f0935997d9020fde9f902025de832cbdd03992ef",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
