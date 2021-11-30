@@ -666,6 +666,14 @@ bool FindRootTraceTestDataPath(char *testDataDirOut, size_t maxDataDirLen)
 TracePerfTest::TracePerfTest(const TracePerfParams &params)
     : ANGLERenderTest("TracePerf", params, "ms"), mParams(params), mStartFrame(0), mEndFrame(0)
 {
+
+    if (mParams.isSwiftshader() && mParams.majorVersion == 3 && mParams.minorVersion >= 2)
+    {
+        // SwiftShader cannot support ES 3.2 yet
+        std::cout << "Test skipped due to missing ES 3.2 support on SwiftShader" << std::endl;
+        mSkipTest = true;
+    }
+
     // TODO: http://anglebug.com/4533 This fails after the upgrade to the 26.20.100.7870 driver.
     if (IsWindows() && IsIntel() && mParams.isVulkan() && traceNameIs("manhattan_10"))
     {
@@ -1149,6 +1157,11 @@ TracePerfTest::TracePerfTest(const TracePerfParams &params)
     if (traceNameIs("township"))
     {
         addExtensionPrerequisite("GL_OES_EGL_image_external");
+    }
+
+    if (traceNameIs("asphalt_9"))
+    {
+        addExtensionPrerequisite("GL_KHR_texture_compression_astc_ldr");
     }
 
     ASSERT(mParams.surfaceType == SurfaceType::Window || gEnableAllTraceTests);
