@@ -70,6 +70,24 @@
       "parentUuid": "a4c7fa43_7c2ae754",
       "revId": "ba61f89a32a6b65f51ea63b42f87ee1488e73e84",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "3e1e2fdf_7db76c58",
+        "filename": "src/libANGLE/capture/FrameCapture.cpp",
+        "patchSetId": 10
+      },
+      "lineNbr": 5370,
+      "author": {
+        "id": 1491687
+      },
+      "writtenOn": "2021-11-30T17:18:10Z",
+      "side": 1,
+      "message": "I am now also checking for dirty at EntryPoint::GLCopyBufferSubData in maybeCapturePreCallUpdates.",
+      "parentUuid": "368ab3f6_32bdf950",
+      "revId": "ba61f89a32a6b65f51ea63b42f87ee1488e73e84",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
