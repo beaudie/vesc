@@ -16,6 +16,23 @@
       "message": "Jamie, WDYT?",
       "revId": "26747dda5a460939c2ac4765740b308f3313051d",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "34c0ebe8_f272e341",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1001921
+      },
+      "writtenOn": "2021-11-30T20:38:52Z",
+      "side": 1,
+      "message": "Thanks!",
+      "revId": "26747dda5a460939c2ac4765740b308f3313051d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
