@@ -64,11 +64,15 @@ int ElementsInBuffer(const gl::VertexAttribute &attrib,
         size = static_cast<unsigned int>(std::numeric_limits<int>::max());
     }
 
-    GLsizei stride = static_cast<GLsizei>(ComputeVertexAttributeStride(attrib, binding));
-    GLsizei offset = static_cast<GLsizei>(ComputeVertexAttributeOffset(attrib, binding));
-    return (size - offset % stride +
-            (stride - static_cast<GLsizei>(ComputeVertexAttributeTypeSize(attrib)))) /
-           stride;
+    angle::CheckedNumeric<size_t> bufferSize(size);
+    angle::CheckedNumeric<size_t> stride      = ComputeVertexAttributeStride(attrib, binding);
+    angle::CheckedNumeric<size_t> offset      = ComputeVertexAttributeOffset(attrib, binding);
+    angle::CheckedNumeric<size_t> elementSize = ComputeVertexAttributeTypeSize(attrib);
+
+    auto elementsInBuffer    = (bufferSize - (offset % stride) + (stride - elementSize)) / stride;
+    auto elementsInBufferInt = elementsInBuffer.Cast<int>();
+
+    return elementsInBufferInt.ValueOrDefault(0);
 }
 
 // Warning: you should ensure binding really matches attrib.bindingIndex before using this function.
