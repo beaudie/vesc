@@ -478,6 +478,9 @@ angle::Result ProgramExecutableVk::allocUniformAndXfbDescriptorSet(
         // time the descriptor set is used in a new command.
         mDescriptorPoolBindings[DescriptorSetIndex::UniformsAndXfb].get().retain(
             &contextVk->getResourceUseList());
+        auto &pc = contextVk->getContextPerfCounters();
+        ++pc.uxfbdRetainCount;
+        ;
         return angle::Result::Continue;
     }
 
@@ -1197,6 +1200,8 @@ void ProgramExecutableVk::updateDefaultUniformsDescriptorSet(
     {
         bufferHelper = &contextVk->getEmptyBuffer();
         bufferHelper->retainReadOnly(&contextVk->getResourceUseList());
+        auto &pc = contextVk->getContextPerfCounters();
+        ++pc.defaultUboRetainCount;
         size = bufferHelper->getSize();
     }
 
@@ -1393,6 +1398,8 @@ angle::Result ProgramExecutableVk::updateAtomicCounterBuffersDescriptorSet(
     // Bind the empty buffer to every array slot that's unused.
     vk::BufferHelper &emptyBuffer = contextVk->getEmptyBuffer();
     emptyBuffer.retainReadOnly(&contextVk->getResourceUseList());
+    auto &pc = contextVk->getContextPerfCounters();
+    ++pc.emptyBufferRetainCount;
     size_t count                        = (~writtenBindings).count();
     VkDescriptorBufferInfo *bufferInfos = contextVk->allocDescriptorBufferInfos(count);
     VkWriteDescriptorSet *writeInfos    = contextVk->allocWriteDescriptorSets(count);
@@ -1563,6 +1570,10 @@ angle::Result ProgramExecutableVk::updateShaderResourcesDescriptorSet(
             // each time the descriptor set is used in a new command.
             mDescriptorPoolBindings[DescriptorSetIndex::ShaderResource].get().retain(
                 &contextVk->getResourceUseList());
+
+            auto &pc = contextVk->getContextPerfCounters();
+            ++pc.usrdRetainCount;
+            ;
         }
     }
 
@@ -1733,6 +1744,8 @@ angle::Result ProgramExecutableVk::updateTexturesDescriptorSet(
         // time the descriptor set is used in a new command.
         mDescriptorPoolBindings[DescriptorSetIndex::Texture].get().retain(
             &contextVk->getResourceUseList());
+        auto &perfCounters = contextVk->getContextPerfCounters();
+        ++perfCounters.utdBindingsRetainCount;
         return angle::Result::Continue;
     }
 

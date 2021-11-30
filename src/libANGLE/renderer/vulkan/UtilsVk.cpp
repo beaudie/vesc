@@ -1459,6 +1459,8 @@ angle::Result UtilsVk::setupProgram(ContextVk *contextVk,
         program->setShader(gl::ShaderType::Compute, fsCsShader);
         ANGLE_TRY(program->getComputePipeline(contextVk, pipelineLayout.get(), &pipeline));
         pipeline->retain(&contextVk->getResourceUseList());
+        auto &pc = contextVk->getContextPerfCounters();
+        ++pc.computePipelineRetainCount;
         commandBuffer->bindComputePipeline(pipeline->getPipeline());
 
         contextVk->invalidateComputePipelineBinding();
@@ -1481,6 +1483,8 @@ angle::Result UtilsVk::setupProgram(ContextVk *contextVk,
                                                gl::AttributesMask(), gl::ComponentTypeMask(),
                                                gl::DrawBufferMask(), &descPtr, &helper));
         helper->retain(&contextVk->getResourceUseList());
+        auto &pc = contextVk->getContextPerfCounters();
+        ++pc.pipelineRetainCount;
         commandBuffer->bindGraphicsPipeline(helper->getPipeline());
 
         contextVk->invalidateGraphicsPipelineBinding();

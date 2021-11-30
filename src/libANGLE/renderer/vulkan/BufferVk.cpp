@@ -1031,6 +1031,8 @@ angle::Result BufferVk::acquireAndUpdate(ContextVk *contextVk,
         // double-retaining the buffer, which is a necessary side-effect to prevent a
         // use-after-free.
         src->retainReadOnly(&contextVk->getResourceUseList());
+        auto &pc = contextVk->getContextPerfCounters();
+        ++pc.bufferAuRetainCount;
 
         // The total bytes that we need to copy from old buffer to new buffer
         size_t copySize = bufferSize - updateSize;

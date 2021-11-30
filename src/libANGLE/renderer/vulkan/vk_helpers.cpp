@@ -1125,6 +1125,8 @@ void CommandBufferHelper::bufferWrite(ContextVk *contextVk,
                                       BufferHelper *buffer)
 {
     buffer->retainReadWrite(&contextVk->getResourceUseList());
+    auto &pc = contextVk->getContextPerfCounters();
+    ++pc.bufferWriteRetainCount;
     VkPipelineStageFlagBits stageBits = kPipelineStageFlagBitMap[writeStage];
     if (buffer->recordWriteBarrier(writeAccessType, stageBits, &mPipelineBarriers[writeStage]))
     {
@@ -1183,6 +1185,8 @@ void CommandBufferHelper::imageWrite(ContextVk *contextVk,
                                      ImageHelper *image)
 {
     image->retain(&contextVk->getResourceUseList());
+    auto &pc = contextVk->getContextPerfCounters();
+    ++pc.imageWriteRetainCount;
     image->onWrite(level, 1, layerStart, layerCount, aspectFlags);
     // Write always requires a barrier
     updateImageLayoutAndBarrier(contextVk, image, aspectFlags, imageLayout);
@@ -2421,6 +2425,8 @@ void DynamicBuffer::releaseInFlightBuffersToResourceUseList(ContextVk *contextVk
         // It's possible this may change in the future, but there isn't a good way to detect that,
         // unfortunately.
         bufferHelper->retainReadOnly(resourceUseList);
+        auto &pc = contextVk->getContextPerfCounters();
+        ++pc.rifRetainCount;
 
         if (ShouldReleaseFreeBuffer(*bufferHelper, mSize, mPolicy, mBufferFreeList.size()))
         {
@@ -2660,6 +2666,8 @@ angle::Result DescriptorPoolHelper::allocateSets(ContextVk *contextVk,
 
     // The pool is still in use every time a new descriptor set is allocated from it.
     retain(&contextVk->getResourceUseList());
+    auto &pc = contextVk->getContextPerfCounters();
+    ++pc.descPoolRetainCount;
 
     return angle::Result::Continue;
 }
@@ -2872,6 +2880,8 @@ void DynamicallyGrowingPool<Pool>::onEntryFreed(ContextVk *contextVk, size_t poo
 {
     ASSERT(poolIndex < mPools.size() && mPools[poolIndex].freedCount < mPoolSize);
     mPools[poolIndex].retain(&contextVk->getResourceUseList());
+    auto &pc = contextVk->getContextPerfCounters();
+    ++pc.dynPoolRetainCount;
     ++mPools[poolIndex].freedCount;
 }
 
@@ -3073,6 +3083,8 @@ void QueryHelper::endQueryImpl(ContextVk *contextVk, CommandBuffer *commandBuffe
     // Query results are available after endQuery, retain this query so that we get its serial
     // updated which is used to indicate that query results are (or will be) available.
     retain(&contextVk->getResourceUseList());
+    auto &pc = contextVk->getContextPerfCounters();
+    ++pc.timestampQueryRetainCount;
 }
 
 angle::Result QueryHelper::beginQuery(ContextVk *contextVk)
@@ -3163,6 +3175,8 @@ void QueryHelper::writeTimestamp(ContextVk *contextVk, CommandBuffer *commandBuf
     // timestamp results are available immediately, retain this query so that we get its serial
     // updated which is used to indicate that query results are (or will be) available.
     retain(&contextVk->getResourceUseList());
+    auto &pc = contextVk->getContextPerfCounters();
+    ++pc.timestampQueryRetainCount;
 }
 
 bool QueryHelper::hasSubmittedCommands() const
@@ -3872,6 +3886,8 @@ void BufferHelper::acquireFromExternal(ContextVk *contextVk,
     mCurrentQueueFamilyIndex = externalQueueFamilyIndex;
 
     retainReadWrite(&contextVk->getResourceUseList());
+    auto &pc = contextVk->getContextPerfCounters();
+    ++pc.bufferWriteRetainCount;
     changeQueue(rendererQueueFamilyIndex, commandBuffer);
 }
 
@@ -3883,6 +3899,8 @@ void BufferHelper::releaseToExternal(ContextVk *contextVk,
     ASSERT(mCurrentQueueFamilyIndex == rendererQueueFamilyIndex);
 
     retainReadWrite(&contextVk->getResourceUseList());
+    auto &pc = contextVk->getContextPerfCounters();
+    ++pc.bufferWriteRetainCount;
     changeQueue(externalQueueFamilyIndex, commandBuffer);
 }
 
@@ -5031,6 +5049,8 @@ void ImageHelper::acquireFromExternal(ContextVk *contextVk,
     mCurrentQueueFamilyIndex = externalQueueFamilyIndex;
 
     retain(&contextVk->getResourceUseList());
+    auto &pc = contextVk->getContextPerfCounters();
+    ++pc.imageWriteRetainCount;
     changeLayoutAndQueue(contextVk, getAspectFlags(), mCurrentLayout, rendererQueueFamilyIndex,
                          commandBuffer);
 
@@ -5055,6 +5075,8 @@ void ImageHelper::releaseToExternal(ContextVk *contextVk,
     ASSERT(mCurrentQueueFamilyIndex == rendererQueueFamilyIndex);
 
     retain(&contextVk->getResourceUseList());
+    auto &pc = contextVk->getContextPerfCounters();
+    ++pc.imageWriteRetainCount;
     changeLayoutAndQueue(contextVk, getAspectFlags(), desiredLayout, externalQueueFamilyIndex,
                          commandBuffer);
 }
@@ -5417,6 +5439,8 @@ angle::Result ImageHelper::CopyImageSubData(const gl::Context *context,
 
         srcImage->retain(&contextVk->getResourceUseList());
         dstImage->retain(&contextVk->getResourceUseList());
+        auto &pc = contextVk->getContextPerfCounters();
+        ++pc.imageCopyRetainCount;
 
         VkImageCopy region = {};
 
@@ -8208,6 +8232,8 @@ angle::Result ImageViewHelper::getLevelStorageImageView(ContextVk *contextVk,
     ASSERT(mImageViewSerial.valid());
 
     retain(&contextVk->getResourceUseList());
+    auto &pc = contextVk->getContextPerfCounters();
+    ++pc.ivhgetlevelstorageRetainCount;
 
     ImageView *imageView =
         GetLevelImageView(&mLevelStorageImageViews, levelVk, image.getLevelCount());
@@ -8237,6 +8263,8 @@ angle::Result ImageViewHelper::getLevelLayerStorageImageView(ContextVk *contextV
     ASSERT(!image.getActualFormat().isBlock);
 
     retain(&contextVk->getResourceUseList());
+    auto &pc = contextVk->getContextPerfCounters();
+    ++pc.ivhgetlevellayerstorageRetainCount;
 
     ImageView *imageView =
         GetLevelLayerImageView(&mLayerLevelStorageImageViews, levelVk, layer, image.getLevelCount(),
@@ -8268,6 +8296,8 @@ angle::Result ImageViewHelper::getLevelDrawImageView(ContextVk *contextVk,
     ASSERT(!image.getActualFormat().isBlock);
 
     retain(&contextVk->getResourceUseList());
+    auto &pc = contextVk->getContextPerfCounters();
+    ++pc.ivhgetleveldrawRetainCount;
 
     ImageSubresourceRange range = MakeImageSubresourceDrawRange(
         image.toGLLevel(levelVk), layer, GetLayerMode(image, layerCount), mode);
@@ -8302,6 +8332,8 @@ angle::Result ImageViewHelper::getLevelLayerDrawImageView(ContextVk *contextVk,
     ASSERT(!image.getActualFormat().isBlock);
 
     retain(&contextVk->getResourceUseList());
+    auto &pc = contextVk->getContextPerfCounters();
+    ++pc.ivhgetlevellayerdrawRetainCount;
 
     LayerLevelImageViewVector &imageViews = (mode == gl::SrgbWriteControlMode::Linear)
                                                 ? mLayerLevelDrawImageViewsLinear

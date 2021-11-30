@@ -1937,6 +1937,8 @@ angle::Result TextureVk::generateMipmap(const gl::Context *context)
 
         mImage->retain(&contextVk->getResourceUseList());
         getImageViews().retain(&contextVk->getResourceUseList());
+        auto &pc = contextVk->getContextPerfCounters();
+        ++pc.textureGmmRetainCount;
 
         return generateMipmapsWithCompute(contextVk);
     }
@@ -2783,6 +2785,8 @@ const vk::ImageView &TextureVk::getReadImageViewAndRecordUse(ContextVk *contextV
 
     const vk::ImageViewHelper &imageViews = getImageViews();
     imageViews.retain(&contextVk->getResourceUseList());
+    auto &pc = contextVk->getContextPerfCounters();
+    ++pc.textureRivRetainCount;
 
     if (mState.isStencilMode() && imageViews.hasStencilReadImageView())
     {
@@ -2807,6 +2811,8 @@ const vk::ImageView &TextureVk::getFetchImageViewAndRecordUse(ContextVk *context
 
     const vk::ImageViewHelper &imageViews = getImageViews();
     imageViews.retain(&contextVk->getResourceUseList());
+    auto &pc = contextVk->getContextPerfCounters();
+    ++pc.textureFivRetainCount;
 
     // We don't currently support fetch for depth/stencil cube map textures.
     ASSERT(!imageViews.hasStencilReadImageView() || !imageViews.hasFetchImageView());
@@ -2827,6 +2833,8 @@ const vk::ImageView &TextureVk::getCopyImageViewAndRecordUse(ContextVk *contextV
 
     const vk::ImageViewHelper &imageViews = getImageViews();
     imageViews.retain(&contextVk->getResourceUseList());
+    auto &pc = contextVk->getContextPerfCounters();
+    ++pc.textureCivRetainCount;
 
     const angle::Format &angleFormat = mImage->getActualFormat();
     ASSERT(angleFormat.isSRGB ==

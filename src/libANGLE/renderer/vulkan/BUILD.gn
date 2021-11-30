@@ -299,4 +299,5 @@ angle_source_set("angle_vulkan_backend") {
   # Include generated shaders.
   import("vk_internal_shaders_autogen.gni")
   sources += angle_vulkan_internal_shaders
+  cflags_cc = [ "-Wno-extra-semi-stmt" ]
 }

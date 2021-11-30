@@ -65,6 +65,43 @@ struct ContextVkPerfCounters
 
     unsigned int outsideRenderPassCmdbufImageRetainCount = 0;
     unsigned int outsideRenderPassCmdbufBufferRead       = 0;
+
+    unsigned int computePipelineRetainCount = 0;
+    unsigned int utdBindingsRetainCount     = 0;
+
+    unsigned int counterBufferRetainCount  = 0;
+    unsigned int timestampQueryRetainCount = 0;
+
+    unsigned int bufferAuRetainCount    = 0;
+    unsigned int defaultUboRetainCount  = 0;
+    unsigned int emptyBufferRetainCount = 0;
+
+    unsigned int rtImageViewRetainCount        = 0;
+    unsigned int rtResolveImageViewRetainCount = 0;
+
+    unsigned int descPoolRetainCount    = 0;
+    unsigned int imageCopyRetainCount   = 0;
+    unsigned int bufferWriteRetainCount = 0;
+    unsigned int imageWriteRetainCount  = 0;
+
+    unsigned int textureRivRetainCount = 0;
+    unsigned int textureFivRetainCount = 0;
+    unsigned int textureCivRetainCount = 0;
+    unsigned int textureGmmRetainCount = 0;
+
+    unsigned int dynPoolRetainCount = 0;
+
+    unsigned int ivhgetlevelstorageRetainCount      = 0;
+    unsigned int ivhgetlevellayerstorageRetainCount = 0;
+    unsigned int ivhgetleveldrawRetainCount         = 0;
+    unsigned int ivhgetlevellayerdrawRetainCount    = 0;
+
+    unsigned int usrdRetainCount  = 0;
+    unsigned int uxfbdRetainCount = 0;
+
+    unsigned int colorImagesDrawCount = 0;
+
+    unsigned int rifRetainCount = 0;
 };
 
 enum class GraphicsEventCmdBuf
@@ -549,6 +586,7 @@ class ContextVk : public ContextImpl, public vk::Context, public MultisampleText
         ASSERT(mRenderPassCommands->started());
         mRenderPassCommands->colorImagesDraw(&mResourceUseList, image, resolveImage,
                                              packedAttachmentIndex);
+        ++mContextPerfCounters.colorImagesDrawCount;
     }
     void onDepthStencilDraw(gl::LevelIndex level,
                             uint32_t layerStart,
@@ -678,6 +716,7 @@ class ContextVk : public ContextImpl, public vk::Context, public MultisampleText
 
     const vk::PerfCounters &getPerfCounters() const { return mPerfCounters; }
     vk::PerfCounters &getPerfCounters() { return mPerfCounters; }
+    rx::ContextVkPerfCounters &getContextPerfCounters() { return mContextPerfCounters; }
 
     // Implementation of MultisampleTextureInitializer
     angle::Result initializeMultisampleTextureToBlack(const gl::Context *context,
