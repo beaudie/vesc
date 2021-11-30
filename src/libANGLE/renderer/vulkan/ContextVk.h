@@ -11,6 +11,7 @@
 #define LIBANGLE_RENDERER_VULKAN_CONTEXTVK_H_
 
 #include <condition_variable>
+#include <unordered_set>
 
 #include "common/PackedEnums.h"
 #include "common/vulkan/vk_headers.h"
@@ -51,6 +52,19 @@ using ContextVkDescriptorSetList = angle::PackedEnumMap<PipelineType, uint32_t>;
 struct ContextVkPerfCounters
 {
     ContextVkDescriptorSetList descriptorSetsAllocated;
+    std::unordered_set<vk::BufferHelper *> buffersRead;
+    std::unordered_set<TextureVk *> texturesRead;
+    unsigned int buffersReadCount  = 0;
+    unsigned int texturesReadCount = 0;
+
+    std::unordered_set<vk::PipelineHelper *> pipelinesRetained;
+    unsigned int pipelineRetainCount                           = 0;
+    unsigned int textureBufferViewRetainCount                  = 0;
+    unsigned int textureImageViewRetainCount                   = 0;
+    unsigned int driverUniformDescriptorPoolBindingRetainCount = 0;
+
+    unsigned int outsideRenderPassCmdbufImageRetainCount = 0;
+    unsigned int outsideRenderPassCmdbufBufferRead       = 0;
 };
 
 enum class GraphicsEventCmdBuf
@@ -1229,6 +1243,8 @@ class ContextVk : public ContextImpl, public vk::Context, public MultisampleText
     // Viewport and scissor are handled as dynamic state.
     VkViewport mViewport;
     VkRect2D mScissor;
+
+    bool mFollow = false;
 };
 
 ANGLE_INLINE angle::Result ContextVk::endRenderPassIfTransformFeedbackBuffer(

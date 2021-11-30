@@ -289,6 +289,15 @@ class TextureVk : public TextureImpl, public angle::ObserverInterface
         return isDirty;
     }
 
+    vk::ImageViewHelper &getImageViews()
+    {
+        return mMultisampledImageViews[gl::RenderToTextureImageIndex::Default];
+    }
+    const vk::ImageViewHelper &getImageViews() const
+    {
+        return mMultisampledImageViews[gl::RenderToTextureImageIndex::Default];
+    }
+
   private:
     // Transform an image index from the frontend into one that can be used on the backing
     // ImageHelper, taking into account mipmap or cube face offsets
@@ -309,14 +318,6 @@ class TextureVk : public TextureImpl, public angle::ObserverInterface
                         uint32_t imageLayerOffset,
                         bool selfOwned);
     void updateImageHelper(ContextVk *contextVk, size_t imageCopyBufferAlignment);
-    vk::ImageViewHelper &getImageViews()
-    {
-        return mMultisampledImageViews[gl::RenderToTextureImageIndex::Default];
-    }
-    const vk::ImageViewHelper &getImageViews() const
-    {
-        return mMultisampledImageViews[gl::RenderToTextureImageIndex::Default];
-    }
 
     // Redefine a mip level of the texture.  If the new size and format don't match the allocated
     // image, the image may be released.  When redefining a mip of a multi-level image, updates are

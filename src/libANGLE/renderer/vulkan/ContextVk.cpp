@@ -1526,7 +1526,10 @@ angle::Result ContextVk::handleDirtyGraphicsPipelineDesc(DirtyBits::Iterator *di
     // Update the queue serial for the pipeline object.
     ASSERT(mCurrentGraphicsPipeline && mCurrentGraphicsPipeline->valid());
 
-    mCurrentGraphicsPipeline->retain(&mResourceUseList);
+    if (!mCurrentGraphicsPipeline->usedInRecordedCommands())
+    {
+        mCurrentGraphicsPipeline->retain(&mResourceUseList);
+    }
 
     const VkPipeline newPipeline = mCurrentGraphicsPipeline->getPipeline().getHandle();
 
@@ -1761,9 +1764,14 @@ ANGLE_INLINE angle::Result ContextVk::handleDirtyTexturesImpl(
             }
         }
         // Ensure the image is in the desired layout
-        commandBufferHelper->imageRead(this, image.getAspectFlags(), textureLayout, &image);
-
-        textureVk->retainImageViews(&mResourceUseList);
+        if (!image.usedInRecordedCommands())
+        {
+            commandBufferHelper->imageRead(this, image.getAspectFlags(), textureLayout, &image);
+        }
+        if (!textureVk->getImageViews().usedInRecordedCommands())
+        {
+            textureVk->retainImageViews(&mResourceUseList);
+        }
     }
 
     if (executable->hasTextures())
@@ -1802,13 +1810,16 @@ angle::Result ContextVk::handleDirtyGraphicsVertexBuffers(DirtyBits::Iterator *d
     // Mark all active vertex buffers as accessed.
     const gl::ProgramExecutable *executable = mState.getProgramExecutable();
     gl::AttributesMask attribsMask          = executable->getActiveAttribLocationsMask();
+    vk::BufferHelper *currentArrayBuffer    = nullptr;
     for (size_t attribIndex : attribsMask)
     {
         vk::BufferHelper *arrayBuffer = arrayBufferResources[attribIndex];
-        if (arrayBuffer)
+        if (arrayBuffer && arrayBuffer != currentArrayBuffer &&
+            !arrayBuffer->usedInRecordedCommands())
         {
             mRenderPassCommands->bufferRead(this, VK_ACCESS_VERTEX_ATTRIBUTE_READ_BIT,
                                             vk::PipelineStage::VertexInput, arrayBuffer);
+            currentArrayBuffer = arrayBuffer;
         }
     }
 
