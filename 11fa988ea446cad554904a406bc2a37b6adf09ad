@@ -16,6 +16,23 @@
       "message": "Here\u0027s our combined CLs.",
       "revId": "11fa988ea446cad554904a406bc2a37b6adf09ad",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "c40cc813_76aeed72",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2021-11-30T21:07:56Z",
+      "side": 1,
+      "message": "A regression test would be welcome.",
+      "revId": "11fa988ea446cad554904a406bc2a37b6adf09ad",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
