@@ -16,6 +16,29 @@
       "message": "Feel free to +2 if this looks good to you.",
       "revId": "106e1f9b5f5c5af4930d4b7f12fc32139bcb3a77",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "46d4b050_68811352",
+        "filename": "src/libANGLE/renderer/d3d/VertexDataManager.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 57,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2021-11-30T16:46:12Z",
+      "side": 1,
+      "message": "I only see this function called from one place. Can we return an angle::Result instead?",
+      "range": {
+        "startLine": 57,
+        "startChar": 4,
+        "endLine": 57,
+        "endChar": 20
+      },
+      "revId": "106e1f9b5f5c5af4930d4b7f12fc32139bcb3a77",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
