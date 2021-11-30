@@ -56,6 +56,30 @@
       },
       "revId": "f42f82139a6fa61305adce3f712fc76f8b6ec1a7",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "69e70942_60c5fc99",
+        "filename": "src/libANGLE/formatutils.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 555,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2021-11-30T00:54:25Z",
+      "side": 1,
+      "message": "That wouldn\u0027t be correct, since the number of channels doesn\u0027t match.\n\nI\u0027m going to resolve this comment, since this change is outside of the scope of this CL.   Please comment on the bug describing this issue in more detail, preferably with the GL commands being issued (an end2end test would be best), so we can chase it outside of comments here.",
+      "parentUuid": "f8c1fe93_d6cbdb48",
+      "range": {
+        "startLine": 555,
+        "startChar": 14,
+        "endLine": 555,
+        "endChar": 42
+      },
+      "revId": "f42f82139a6fa61305adce3f712fc76f8b6ec1a7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }

@@ -89,6 +89,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "354ad54f_9f97f297",
+        "filename": "extensions/ANGLE_rbgx_internal_format.txt",
+        "patchSetId": 3
+      },
+      "lineNbr": 36,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2021-11-30T00:54:25Z",
+      "side": 1,
+      "message": "I\u0027ll leave it 2 for now, and if someone complains we can always update it later.",
+      "parentUuid": "dafdd517_8ef2b533",
+      "range": {
+        "startLine": 36,
+        "startChar": 14,
+        "endLine": 36,
+        "endChar": 15
+      },
+      "revId": "6aba8b57457da5235a028663498a49cf2e73130b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "d6cce66a_b607880f",
@@ -174,6 +198,30 @@
       "side": 1,
       "message": "This line seems differently formatted:\n\nInstead of \n\n#define GL_... 0x96BA\n\nit would be\n\n GL_...                            0x96BA",
       "parentUuid": "e7d05724_eff2d0fd",
+      "range": {
+        "startLine": 54,
+        "startChar": 12,
+        "endLine": 54,
+        "endChar": 27
+      },
+      "revId": "6aba8b57457da5235a028663498a49cf2e73130b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "5e7e7d48_50668f4e",
+        "filename": "extensions/ANGLE_rbgx_internal_format.txt",
+        "patchSetId": 3
+      },
+      "lineNbr": 54,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2021-11-30T00:54:25Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "a1aadfed_4c2da465",
       "range": {
         "startLine": 54,
         "startChar": 12,
