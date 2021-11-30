@@ -34,6 +34,24 @@
       "parentUuid": "43deaece_3a7283b6",
       "revId": "29883ceed13609ca9841ee28447630d28cbb1eb8",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "58985ecf_17eb1adc",
+        "filename": "src/libANGLE/capture/FrameCapture.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 2084,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2021-11-30T00:46:33Z",
+      "side": 1,
+      "message": "Yeah, I spent a decent amount of time in GraphicsPipelineDesc::initializePipeline debugging the issue.  Seeing how ANGLE handles VertexAttribPointer and VertexAttribIPointer led me to this solution.  They each hard code the value that ends up in the type mask based on which entry point was used.\n\nIsPureInt() appears to provide the same info, so I\u0027m fine moving to that. Confirmed it works for our test case.",
+      "parentUuid": "45ab5b95_ef9c874a",
+      "revId": "29883ceed13609ca9841ee28447630d28cbb1eb8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
