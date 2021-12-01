@@ -92,6 +92,30 @@
       },
       "revId": "f0e5334dfc42b14b2c4f5b2edcd04e2babfeb384",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "0d636ddc_5a62b0b4",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 3
+      },
+      "lineNbr": 19,
+      "author": {
+        "id": 1517514
+      },
+      "writtenOn": "2021-12-01T04:27:28Z",
+      "side": 1,
+      "message": "after those changes, we can correctly fix all the layout test cases.( 2 games and one patrace test)",
+      "parentUuid": "43da13e9_1da5786f",
+      "range": {
+        "startLine": 19,
+        "startChar": 8,
+        "endLine": 19,
+        "endChar": 50
+      },
+      "revId": "f0e5334dfc42b14b2c4f5b2edcd04e2babfeb384",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
