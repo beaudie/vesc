@@ -16,6 +16,24 @@
       "message": "I think this causes flaky tests to be incorrectly reported as failed.\nE.g. https://ci.chromium.org/ui/p/angle/builders/try/android-arm64-test/997/overview\nhttps://logs.chromium.org/logs/angle/buildbucket/cr-buildbucket/8829077247262953409/+/steps/angle_deqp_gles31_vulkan_tests_on_Android_device_Pixel_4/0/logs/json.output/0 has:\n      \"GLES31/functional_ubo_2_level_array_std140_vec4_fragment\": {\n        \"actual\": \"FAIL PASS\",\n        \"expected\": \"PASS\",\n        \"is_unexpected\": true\n      },\n\nThe step is green, but the build is still reported as a failure.\nWe might need to revert this.",
       "revId": "8e4302368463012cf78894824a705e5bae57fa6e",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "c1046ec9_6c2c5fbf",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 8
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1170419
+      },
+      "writtenOn": "2021-12-01T05:24:47Z",
+      "side": 1,
+      "message": "Yeah, definitely related.\n\nLooks like angle_deqp_gles31_vulkan_tests has a large amount of those types of results, and the suite\u0027s results exceeds the default limit of 1000 rows that gets returned by rdb. And cutting it off at 1000 returns the first FAIL but not the second PASS for that particular test.\n\nBut https://chromium-review.googlesource.com/c/chromium/tools/build/+/3309495 is the fix. Think the bots can wait for that? Feel free to revert if not.",
+      "parentUuid": "c27ff6cc_03d82826",
+      "revId": "8e4302368463012cf78894824a705e5bae57fa6e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
