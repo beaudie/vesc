@@ -1030,7 +1030,7 @@ class CommandBufferHelper : angle::NonCopyable
                      AliasingMode aliasingMode,
                      BufferHelper *buffer);
 
-    void imageRead(ContextVk *contextVk,
+    bool imageRead(ContextVk *contextVk,
                    VkImageAspectFlags aspectFlags,
                    ImageLayout imageLayout,
                    ImageHelper *image);

@@ -1150,14 +1150,17 @@ void CommandBufferHelper::bufferWrite(ContextVk *contextVk,
     }
 }
 
-void CommandBufferHelper::imageRead(ContextVk *contextVk,
+bool CommandBufferHelper::imageRead(ContextVk *contextVk,
                                     VkImageAspectFlags aspectFlags,
                                     ImageLayout imageLayout,
                                     ImageHelper *image)
 {
+    bool imageRetained = false;
+
     if (!mIsRenderPassCommandBuffer)
     {
         image->retain(&contextVk->getResourceUseList());
+        imageRetained = true;
     }
 
     if (image->isReadBarrierNecessary(imageLayout))
@@ -1173,8 +1176,10 @@ void CommandBufferHelper::imageRead(ContextVk *contextVk,
         {
             mRenderPassUsedImages.insert(image->getImageSerial().getValue());
             image->retain(&contextVk->getResourceUseList());
+            imageRetained = true;
         }
     }
+    return imageRetained;
 }
 
 void CommandBufferHelper::imageWrite(ContextVk *contextVk,
