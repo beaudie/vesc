@@ -70,6 +70,24 @@
       "parentUuid": "fdd2de69_04cea11d",
       "revId": "f7a09569b7ef92fea157665d3c98ad0b11b9ea79",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "029d63a7_5673d486",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2021-12-01T18:59:46Z",
+      "side": 1,
+      "message": "Hm, well, we can take this up if it becomes a pattern. I see this as small win if it only affects a specific app, where we could with a bit of waiting get a comprehensive win for multiple/all apps.\n\nRegarding numbers, what does this to do the whole run of the app, i.e. through the trace, using your cpu metric?",
+      "parentUuid": "87f146ad_dca54701",
+      "revId": "f7a09569b7ef92fea157665d3c98ad0b11b9ea79",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
