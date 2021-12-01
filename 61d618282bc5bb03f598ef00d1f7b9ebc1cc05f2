@@ -104,6 +104,30 @@
       },
       "revId": "61d618282bc5bb03f598ef00d1f7b9ebc1cc05f2",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "72c994b2_7268c5bc",
+        "filename": "src/tests/perf_tests/TracePerfTest.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 675,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2021-12-01T17:05:24Z",
+      "side": 1,
+      "message": "You can add an `|| nonconformant` to `features.shaderImageGatherExtended` to work around this. Cody, please also consider putting in a request for SwiftShader to implement the feature. It should be fairly trivial for them I believe.",
+      "parentUuid": "b5888806_41e87173",
+      "range": {
+        "startLine": 670,
+        "startChar": 0,
+        "endLine": 675,
+        "endChar": 5
+      },
+      "revId": "61d618282bc5bb03f598ef00d1f7b9ebc1cc05f2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
