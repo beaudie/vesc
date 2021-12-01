@@ -1802,13 +1802,15 @@ angle::Result ContextVk::handleDirtyGraphicsVertexBuffers(DirtyBits::Iterator *d
     // Mark all active vertex buffers as accessed.
     const gl::ProgramExecutable *executable = mState.getProgramExecutable();
     gl::AttributesMask attribsMask          = executable->getActiveAttribLocationsMask();
+    vk::BufferHelper *currentArrayBuffer    = nullptr;
     for (size_t attribIndex : attribsMask)
     {
         vk::BufferHelper *arrayBuffer = arrayBufferResources[attribIndex];
-        if (arrayBuffer)
+        if (arrayBuffer && arrayBuffer != currentArrayBuffer)
         {
             mRenderPassCommands->bufferRead(this, VK_ACCESS_VERTEX_ATTRIBUTE_READ_BIT,
                                             vk::PipelineStage::VertexInput, arrayBuffer);
+            currentArrayBuffer = arrayBuffer;
         }
     }
 
