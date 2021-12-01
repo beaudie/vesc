@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "be3538fb_38d03098",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1491687
+      },
+      "writtenOn": "2021-12-01T15:43:20Z",
+      "side": 1,
+      "message": "This trace requires GLES 3.2 and is blocked on https://chromium-review.googlesource.com/c/angle/angle/+/3308852",
+      "revId": "b5789991377d2002a632b98ba6fbeb1074ef594c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
