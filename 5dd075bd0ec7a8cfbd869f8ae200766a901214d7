@@ -156,6 +156,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "fad25610_7c8a2bbc",
+        "filename": "src/libANGLE/renderer/vulkan/BufferVk.cpp",
+        "patchSetId": 14
+      },
+      "lineNbr": 1210,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2021-12-01T15:09:19Z",
+      "side": 1,
+      "message": "What happens if we remove it now? Maybe try it out and see if it breaks anything. Making this a TODO usually means it\u0027ll never get done.",
+      "parentUuid": "f99439cd_530fedf3",
+      "revId": "5dd075bd0ec7a8cfbd869f8ae200766a901214d7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "52c1730b_4be8ec70",
         "filename": "src/libANGLE/renderer/vulkan/BufferVk.h",
         "patchSetId": 14
@@ -262,6 +280,30 @@
       "side": 1,
       "message": "I agree we should track this at suballocation level. My suggestion was to split this change from global-\u003ebuffer barriers. When syncval is fixed, we can potentially revert that if it improves anything.",
       "parentUuid": "498e6f06_13124f2c",
+      "range": {
+        "startLine": 4157,
+        "startChar": 0,
+        "endLine": 4165,
+        "endChar": 9
+      },
+      "revId": "5dd075bd0ec7a8cfbd869f8ae200766a901214d7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "251c1369_4973ed82",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 14
+      },
+      "lineNbr": 4165,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2021-12-01T15:09:19Z",
+      "side": 1,
+      "message": "+1",
+      "parentUuid": "b1966221_4a1e88ac",
       "range": {
         "startLine": 4157,
         "startChar": 0,

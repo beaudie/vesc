@@ -246,6 +246,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "608377a7_deb15840",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 15
+      },
+      "lineNbr": 339,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2021-12-01T15:09:19Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "52422a70_93ef97a1",
+      "range": {
+        "startLine": 339,
+        "startChar": 43,
+        "endLine": 339,
+        "endChar": 69
+      },
+      "revId": "86ee35e1def1d24cf060101e83a7cb2323bed9a7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "d378e22e_267c0817",
@@ -283,6 +307,30 @@
       "side": 1,
       "message": "The reason this is needed is that I have assertion in the teardown code to ensure that all sub-ranges are freed before virtual block gets freed. There are cases that somehow the sub-ranges are not gets garbage collected and this will ensure it gets all cleared.",
       "parentUuid": "d378e22e_267c0817",
+      "range": {
+        "startLine": 2614,
+        "startChar": 4,
+        "endLine": 2614,
+        "endChar": 49
+      },
+      "revId": "86ee35e1def1d24cf060101e83a7cb2323bed9a7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "2a59842f_5e00a7a7",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 15
+      },
+      "lineNbr": 2614,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2021-12-01T15:09:19Z",
+      "side": 1,
+      "message": "OK - maybe add a comment.",
+      "parentUuid": "bf5a28a0_6c28c956",
       "range": {
         "startLine": 2614,
         "startChar": 4,
@@ -389,6 +437,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "5e7696ee_6a71674e",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 15
+      },
+      "lineNbr": 2583,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2021-12-01T15:09:19Z",
+      "side": 1,
+      "message": "Well, it\u0027s calling into renderer, which is accessed by multiple threads without any safety.",
+      "parentUuid": "4b594217_05561863",
+      "range": {
+        "startLine": 2583,
+        "startChar": 4,
+        "endLine": 2583,
+        "endChar": 88
+      },
+      "revId": "86ee35e1def1d24cf060101e83a7cb2323bed9a7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "9ddb826b_0df1a386",
         "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
         "patchSetId": 15
@@ -424,6 +496,30 @@
       "side": 1,
       "message": "This is correct (it will +\u003d1 the current value). What you\u0027d need is a call to dynamicBufferAllocations-\u003enext(); at the end of the frame.",
       "parentUuid": "9ddb826b_0df1a386",
+      "range": {
+        "startLine": 2590,
+        "startChar": 0,
+        "endLine": 2597,
+        "endChar": 5
+      },
+      "revId": "86ee35e1def1d24cf060101e83a7cb2323bed9a7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "3f2654c1_6aee8592",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 15
+      },
+      "lineNbr": 2597,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2021-12-01T15:09:19Z",
+      "side": 1,
+      "message": "Charlie/Shabi, I didn\u0027t see, but is the next() call implemented?",
+      "parentUuid": "8cb5bada_0de7f856",
       "range": {
         "startLine": 2590,
         "startChar": 0,
@@ -729,6 +825,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "5bc72160_32c1ffed",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 15
+      },
+      "lineNbr": 3850,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2021-12-01T15:09:19Z",
+      "side": 1,
+      "message": "Would prefer to avoid all TODOs as they usually just add notes to code that never get implemented. I\u0027m pretty sure we can de-duplicate this easily without adding any classes. When I was thinking about it before, I had a couple solution ideas. Ping me offline if you need - we should fix before landing.",
+      "parentUuid": "fa197f81_6b07db47",
+      "revId": "86ee35e1def1d24cf060101e83a7cb2323bed9a7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "1c57ee15_60d24077",
         "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
         "patchSetId": 15
@@ -823,6 +937,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "6ddf7aa6_21243cae",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.h",
+        "patchSetId": 15
+      },
+      "lineNbr": 1046,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2021-12-01T15:09:19Z",
+      "side": 1,
+      "message": "Well, it\u0027s a memory savings that is part of a design goal of the back-end, which is to only cache on measurable performance improvements, and otherwise de-duplicate. LMK if you need any more concrete guidance here.",
+      "parentUuid": "d72a9af2_8f265538",
+      "range": {
+        "startLine": 1046,
+        "startChar": 4,
+        "endLine": 1046,
+        "endChar": 25
+      },
+      "revId": "86ee35e1def1d24cf060101e83a7cb2323bed9a7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "3de5d784_d0b46a46",
         "filename": "src/libANGLE/renderer/vulkan/vk_helpers.h",
         "patchSetId": 15
@@ -905,6 +1043,30 @@
       "side": 1,
       "message": "If you do not mind, could I handle this in follow up CL? I did it this way mostly following the DynamicBuffer examples. I am totally fine to use RAII types, but prefer to do it in separate CL given that this CL is already complicated enough. I have added to https://issuetracker.google.com/208323792",
       "parentUuid": "280453d0_10248b68",
+      "range": {
+        "startLine": 1052,
+        "startChar": 47,
+        "endLine": 1052,
+        "endChar": 57
+      },
+      "revId": "86ee35e1def1d24cf060101e83a7cb2323bed9a7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "fc17bebb_2721830e",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.h",
+        "patchSetId": 15
+      },
+      "lineNbr": 1052,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2021-12-01T15:09:19Z",
+      "side": 1,
+      "message": "As long as you can do it immediately and not as a TODO/future task, that\u0027s good. Deferring minor cleanups usually means they get forgotten.",
+      "parentUuid": "b412c879_c3e9ef0c",
       "range": {
         "startLine": 1052,
         "startChar": 47,
