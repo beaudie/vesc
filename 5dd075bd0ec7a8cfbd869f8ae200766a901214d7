@@ -246,6 +246,30 @@
       },
       "revId": "5dd075bd0ec7a8cfbd869f8ae200766a901214d7",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b1966221_4a1e88ac",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 14
+      },
+      "lineNbr": 4165,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2021-12-01T03:23:17Z",
+      "side": 1,
+      "message": "I agree we should track this at suballocation level. My suggestion was to split this change from global-\u003ebuffer barriers. When syncval is fixed, we can potentially revert that if it improves anything.",
+      "parentUuid": "498e6f06_13124f2c",
+      "range": {
+        "startLine": 4157,
+        "startChar": 0,
+        "endLine": 4165,
+        "endChar": 9
+      },
+      "revId": "5dd075bd0ec7a8cfbd869f8ae200766a901214d7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
