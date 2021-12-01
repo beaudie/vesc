@@ -1176,7 +1176,7 @@ egl::Config GenerateDefaultConfig(DisplayVk *display,
 
     EGLint surfaceType = EGL_WINDOW_BIT;
     // Don't support RGB8 PBuffers.
-    if (colorFormat.internalFormat != GL_RGB8)
+    //    if (colorFormat.internalFormat != GL_RGB8)    //TIMTIM
     {
         surfaceType |= EGL_PBUFFER_BIT;
     }
