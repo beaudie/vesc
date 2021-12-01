@@ -16,6 +16,23 @@
       "message": "Note the special handling for ES 3.2 on SwiftShader.  This is the first trace we\u0027re attempting to land that creates a 3.2 context.",
       "revId": "61d618282bc5bb03f598ef00d1f7b9ebc1cc05f2",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "709fb4a2_fb2b5956",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2021-12-01T15:40:48Z",
+      "side": 1,
+      "message": "+Lubosz who has a couple of ES 3.2 traces also queued up",
+      "revId": "61d618282bc5bb03f598ef00d1f7b9ebc1cc05f2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
