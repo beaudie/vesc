@@ -1,0 +1,73 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "4a8656b9_46b58374",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 3
+      },
+      "lineNbr": 15,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2021-12-01T03:16:25Z",
+      "side": 1,
+      "message": "Ref",
+      "range": {
+        "startLine": 15,
+        "startChar": 11,
+        "endLine": 15,
+        "endChar": 26
+      },
+      "revId": "f0e5334dfc42b14b2c4f5b2edcd04e2babfeb384",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "f99a6a17_e6fee6aa",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 3
+      },
+      "lineNbr": 16,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2021-12-01T03:16:25Z",
+      "side": 1,
+      "message": "Ref2",
+      "range": {
+        "startLine": 16,
+        "startChar": 0,
+        "endLine": 16,
+        "endChar": 64
+      },
+      "revId": "f0e5334dfc42b14b2c4f5b2edcd04e2babfeb384",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "052c29e2_e1874b37",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 3
+      },
+      "lineNbr": 19,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2021-12-01T03:16:25Z",
+      "side": 1,
+      "message": "I don\u0027t think this is true. There is some transition needed. The quote above exactly says there\u0027s a transition (Ref) and that it\u0027s from the UNDEFINED layout which is a placeholder (Ref2).\n\nI see on the bug that you were talking about PREINITIALIZED. I fixed that a while ago to use UNDEFINED. Maybe if you switch to ToT ANGLE, your issue is already fixed? (I mean, the driver might correctly handle transition from UNDEFINED, but not expect PREINITIALIZED).\n\nAlso, there is a note in the bug about ANGLE not transitioning the image when one thread is drawing to AHB and another is sampling from it. Can you elaborate? Could you write an end2end test demonstrating the issue? That\u0027s not supposed to happen.",
+      "range": {
+        "startLine": 19,
+        "startChar": 8,
+        "endLine": 19,
+        "endChar": 50
+      },
+      "revId": "f0e5334dfc42b14b2c4f5b2edcd04e2babfeb384",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
