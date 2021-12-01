@@ -16,6 +16,24 @@
       "message": "This is very fragile, and breaks under many different situations. What could we do to make it more general without making it a source of additional overhead?",
       "revId": "f7a09569b7ef92fea157665d3c98ad0b11b9ea79",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b755121e_00262ceb",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1175714
+      },
+      "writtenOn": "2021-12-01T18:44:03Z",
+      "side": 1,
+      "message": "Would adding comments around the code help?\n\nOtherwise we\u0027ll end up reaching for stuff like map/set data structures which are going to have lots more overhead (Unless anyone has a better idea, of course)",
+      "parentUuid": "59a54513_e9fbaa0c",
+      "revId": "f7a09569b7ef92fea157665d3c98ad0b11b9ea79",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
