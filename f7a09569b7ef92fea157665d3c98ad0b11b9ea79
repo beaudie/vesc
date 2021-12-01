@@ -106,6 +106,24 @@
       "parentUuid": "029d63a7_5673d486",
       "revId": "f7a09569b7ef92fea157665d3c98ad0b11b9ea79",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "0e1cf600_3b3df966",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1175714
+      },
+      "writtenOn": "2021-12-01T19:07:55Z",
+      "side": 1,
+      "message": "\u003e Regarding numbers, what does this to do the whole run of the app, i.e. through the trace, using your cpu metric?\n\nMost of the other draws don\u0027t do 4x the work as they bind different VBOs in each attribute, so I couldn\u0027t detect much difference overall, it\u0027d be within a percent.\n\nThere are a lot of other cases like this so taken together they would add up though. I suppose I will avoid doing it this way for now then.",
+      "parentUuid": "1a36ef21_422b91f7",
+      "revId": "f7a09569b7ef92fea157665d3c98ad0b11b9ea79",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
