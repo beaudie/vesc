@@ -16,6 +16,24 @@
       "message": "Hi Mohan. I\u0027m guessing your driver has this implemented. Please give it a try in that case.",
       "revId": "ad3600ea2e093716a13750b88b15f457265a6566",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "be162b2e_e96eb50a",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1340649
+      },
+      "writtenOn": "2021-12-01T17:26:48Z",
+      "side": 1,
+      "message": "shabi, left a comment on the bug",
+      "parentUuid": "1713147f_b5f97f62",
+      "revId": "ad3600ea2e093716a13750b88b15f457265a6566",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
