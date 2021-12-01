@@ -33,6 +33,23 @@
       "message": "LGTM, but we don\u0027t really need to revert this either. If the state is going to be ignored, might as well use an empty one.",
       "revId": "12b734a7c24fd829f99046b38d22b88fdb1749de",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "c8de30d9_f98ff8bd",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2021-12-01T14:54:08Z",
+      "side": 1,
+      "message": "LGTM but you\u0027ll need to squash to land.",
+      "revId": "12b734a7c24fd829f99046b38d22b88fdb1749de",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
