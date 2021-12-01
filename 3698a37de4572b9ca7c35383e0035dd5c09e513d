@@ -114,6 +114,24 @@
       "message": "We see this called for the dEQP-EGL render_buffer basic test when its in SINGLE_BUFFEr and calling glFlush. But we still get a frame old glReadPixels color.",
       "revId": "3698a37de4572b9ca7c35383e0035dd5c09e513d",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "27fee533_eccd8930",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 941,
+      "author": {
+        "id": 1359249
+      },
+      "writtenOn": "2021-12-01T19:50:14Z",
+      "side": 1,
+      "message": "Seems to be something internal with us.",
+      "parentUuid": "4197157d_22e9c527",
+      "revId": "3698a37de4572b9ca7c35383e0035dd5c09e513d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
