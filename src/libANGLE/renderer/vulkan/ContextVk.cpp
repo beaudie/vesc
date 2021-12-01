@@ -1025,6 +1025,10 @@ angle::Result ContextVk::setupIndexedDraw(const gl::Context *context,
                                           gl::DrawElementsType indexType,
                                           const void *indices)
 {
+    if (indexCount == 21984)
+    {
+        printf("ContextVk::%s the draw\n", __func__);
+    }
     ASSERT(mode != gl::PrimitiveMode::LineLoop);
 
     if (indexType != mCurrentDrawElementsType)
@@ -2274,6 +2278,7 @@ void ContextVk::addOverlayUsedBuffersCount(vk::CommandBufferHelper *commandBuffe
 
 angle::Result ContextVk::submitFrame(const vk::Semaphore *signalSemaphore, Serial *submitSerialOut)
 {
+    printf("ContextVk::%s resources %zu\n", __func__, mResourceUseList.size());
     if (mCurrentWindowSurface)
     {
         const vk::Semaphore *waitSemaphore =

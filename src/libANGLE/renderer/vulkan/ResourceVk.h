@@ -147,6 +147,8 @@ class ResourceUseList final : angle::NonCopyable
 
     bool empty() { return mResourceUses.empty(); }
 
+    size_t size() const { return mResourceUses.size(); }
+
   private:
     std::vector<SharedResourceUse> mResourceUses;
 };
