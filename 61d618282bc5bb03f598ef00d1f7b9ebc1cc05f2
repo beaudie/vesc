@@ -33,6 +33,29 @@
       "message": "+Lubosz who has a couple of ES 3.2 traces also queued up",
       "revId": "61d618282bc5bb03f598ef00d1f7b9ebc1cc05f2",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "f72dcef0_29617669",
+        "filename": "src/tests/perf_tests/TracePerfTest.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 675,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2021-12-01T15:47:04Z",
+      "side": 1,
+      "message": "Hm... I\u0027d prefer to avoid this kind of skip, because I need all traces to work with SwiftShader for re-tracing. Can you make this work with non-conformant features?",
+      "range": {
+        "startLine": 670,
+        "startChar": 0,
+        "endLine": 675,
+        "endChar": 5
+      },
+      "revId": "61d618282bc5bb03f598ef00d1f7b9ebc1cc05f2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
