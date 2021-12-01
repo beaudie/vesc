@@ -152,6 +152,30 @@
       },
       "revId": "61d618282bc5bb03f598ef00d1f7b9ebc1cc05f2",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "74053cf7_155885f7",
+        "filename": "src/tests/perf_tests/TracePerfTest.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 675,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2021-12-01T17:29:59Z",
+      "side": 1,
+      "message": "The exposeNonConformantExtensionsAndVersions flag wasn\u0027t available inside the util, but checking it just outside provides the same effect.  The trace runs fine on SwS without requiring shaderImageGatherExtended.",
+      "parentUuid": "797620a5_c1115568",
+      "range": {
+        "startLine": 670,
+        "startChar": 0,
+        "endLine": 675,
+        "endChar": 5
+      },
+      "revId": "61d618282bc5bb03f598ef00d1f7b9ebc1cc05f2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
