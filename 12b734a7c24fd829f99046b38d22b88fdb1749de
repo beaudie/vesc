@@ -16,6 +16,23 @@
       "message": "ASAN failures are expected,  fixed with this CL: https://chromium-review.googlesource.com/c/angle/angle/+/3308825\n\nThese are split in two to help with merges",
       "revId": "12b734a7c24fd829f99046b38d22b88fdb1749de",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "37ee6e15_89d94ab2",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2021-12-01T03:05:01Z",
+      "side": 1,
+      "message": "LGTM, but we don\u0027t really need to revert this either. If the state is going to be ignored, might as well use an empty one.",
+      "revId": "12b734a7c24fd829f99046b38d22b88fdb1749de",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
