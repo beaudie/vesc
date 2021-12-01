@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "a819f37d_7064559b",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 6541,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2021-12-01T05:41:25Z",
+      "side": 1,
+      "message": "Ironically I myself previously fixed a fuzzer issue where this was missing from ImageHelper\u0027s move constructor, then went ahead and missed it here :(",
+      "revId": "c9248d4a2042a8b58a6847ea7f2344fa672790b2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
