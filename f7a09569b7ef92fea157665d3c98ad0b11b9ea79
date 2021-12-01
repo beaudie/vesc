@@ -52,6 +52,24 @@
       "parentUuid": "b755121e_00262ceb",
       "revId": "f7a09569b7ef92fea157665d3c98ad0b11b9ea79",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "87f146ad_dca54701",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1175714
+      },
+      "writtenOn": "2021-12-01T18:55:28Z",
+      "side": 1,
+      "message": "This happens for some draws in Aztec Ruins and we can reduce the work in this function to 25% there because there are 4 bufferReads all to the same VBO.\n\nI can maybe punt on this one, but in general I think we shouldn\u0027t be shy about small wins. They add up.",
+      "parentUuid": "fdd2de69_04cea11d",
+      "revId": "f7a09569b7ef92fea157665d3c98ad0b11b9ea79",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
