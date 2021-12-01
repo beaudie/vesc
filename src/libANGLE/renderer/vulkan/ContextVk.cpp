@@ -1774,7 +1774,8 @@ ANGLE_INLINE angle::Result ContextVk::handleDirtyTexturesImpl(
 
     if (executable->hasTextures())
     {
-        ANGLE_TRY(mExecutable->updateTexturesDescriptorSet(this, mActiveTexturesDesc));
+        ANGLE_TRY(mExecutable->updateTexturesDescriptorSet(this, commandBufferHelper,
+                                                           mActiveTexturesDesc));
     }
 
     return angle::Result::Continue;

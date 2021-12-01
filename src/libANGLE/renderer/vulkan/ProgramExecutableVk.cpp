@@ -1715,6 +1715,7 @@ void ProgramExecutableVk::updateTransformFeedbackDescriptorSetImpl(
 
 angle::Result ProgramExecutableVk::updateTexturesDescriptorSet(
     ContextVk *contextVk,
+    vk::CommandBufferHelper *commandBuffer,
     const vk::TextureDescriptorDesc &texturesDesc)
 {
     const gl::ProgramExecutable *executable = contextVk->getState().getProgramExecutable();
@@ -1731,8 +1732,9 @@ angle::Result ProgramExecutableVk::updateTexturesDescriptorSet(
         mDescriptorSets[DescriptorSetIndex::Texture] = descriptorSet;
         // The descriptor pool that this descriptor set was allocated from needs to be retained each
         // time the descriptor set is used in a new command.
-        mDescriptorPoolBindings[DescriptorSetIndex::Texture].get().retain(
-            &contextVk->getResourceUseList());
+        vk::DescriptorPoolHelper &descPool =
+            mDescriptorPoolBindings[DescriptorSetIndex::Texture].get();
+        commandBuffer->addDescriptorPool(contextVk, &descPool);
         return angle::Result::Continue;
     }
 

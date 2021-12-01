@@ -1020,8 +1020,11 @@ angle::Result CommandBufferHelper::initialize(Context *context,
                                               CommandPool *commandPool)
 {
     ASSERT(mUsedBuffers.empty());
+    ASSERT(mUsedDescriptorPools.empty());
     constexpr size_t kInitialBufferCount = 128;
     mUsedBuffers.ensureCapacity(kInitialBufferCount);
+    constexpr size_t kInitialDescriptorPoolCount = 128;
+    mUsedDescriptorPools.ensureCapacity(kInitialDescriptorPoolCount);
 
     mAllocator.initialize(kDefaultPoolAllocatorPageSize, 1);
     // Push a scope into the pool allocator so we can easily free and re-init on reset()
@@ -1049,6 +1052,7 @@ angle::Result CommandBufferHelper::reset(Context *context)
     ANGLE_TRY(initializeCommandBuffer(context));
 
     mUsedBuffers.clear();
+    mUsedDescriptorPools.clear();
 
     if (mIsRenderPassCommandBuffer)
     {
@@ -1208,6 +1212,17 @@ void CommandBufferHelper::imageWrite(ContextVk *contextVk,
             mRenderPassUsedImages.insert(image->getImageSerial().getValue());
         }
     }
+}
+
+bool CommandBufferHelper::addDescriptorPool(ContextVk *contextVk, DescriptorPoolHelper *descPool)
+{
+    if (!mUsedDescriptorPools.contains(descPool->getSerial().getValue()))
+    {
+        mUsedDescriptorPools.insert(descPool->getSerial().getValue());
+        descPool->retain(&contextVk->getResourceUseList());
+        return true;
+    }
+    return false;
 }
 
 void CommandBufferHelper::colorImagesDraw(ResourceUseList *resourceUseList,

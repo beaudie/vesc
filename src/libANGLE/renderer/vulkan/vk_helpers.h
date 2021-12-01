@@ -1215,6 +1215,8 @@ class CommandBufferHelper : angle::NonCopyable
     bool hasGLMemoryBarrierIssued() const { return mHasGLMemoryBarrierIssued; }
     void setImageOptimizeForPresent(ImageHelper *image) { mImageOptimizeForPresent = image; }
 
+    bool addDescriptorPool(ContextVk *contextVk, DescriptorPoolHelper *descPool);
+
   private:
     angle::Result initializeCommandBuffer(Context *context);
 
@@ -1307,6 +1309,7 @@ class CommandBufferHelper : angle::NonCopyable
     // For Buffers, we track the read/write access type so we can enable simultaneous reads.
     // Images have unique layouts unlike buffers therefore we don't support multi-read.
     angle::FastIntegerMap<BufferAccess> mUsedBuffers;
+    angle::FastIntegerSet mUsedDescriptorPools;
     angle::FastIntegerSet mRenderPassUsedImages;
 
     ImageHelper *mDepthStencilImage;

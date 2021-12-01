@@ -158,6 +158,7 @@ class ProgramExecutableVk
                                        gl::ActiveTextureArray<vk::TextureUnit> *activeTextures);
 
     angle::Result updateTexturesDescriptorSet(ContextVk *contextVk,
+                                              vk::CommandBufferHelper *commandBuffer,
                                               const vk::TextureDescriptorDesc &texturesDesc);
     angle::Result updateShaderResourcesDescriptorSet(
         ContextVk *contextVk,
