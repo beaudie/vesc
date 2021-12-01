@@ -34,6 +34,24 @@
       "parentUuid": "59a54513_e9fbaa0c",
       "revId": "f7a09569b7ef92fea157665d3c98ad0b11b9ea79",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "fdd2de69_04cea11d",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2021-12-01T18:47:53Z",
+      "side": 1,
+      "message": "What kind of improvement does this give you?\n\nMy thought is to wait until we can add better tracking before trying to optimize out the bufferReads. Unless it\u0027s a massive improvement for a specific app.",
+      "parentUuid": "b755121e_00262ceb",
+      "revId": "f7a09569b7ef92fea157665d3c98ad0b11b9ea79",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
