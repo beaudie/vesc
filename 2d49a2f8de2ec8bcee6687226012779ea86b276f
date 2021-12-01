@@ -1,0 +1,44 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "e164b46d_b6dda6f5",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2021-12-01T18:35:32Z",
+      "side": 1,
+      "message": "Same comments here.",
+      "revId": "2d49a2f8de2ec8bcee6687226012779ea86b276f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "9d140f95_40b7d506",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 1153,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2021-12-01T18:35:32Z",
+      "side": 1,
+      "message": "nit: suggest you return something other than bool, like a type enum, to give more readability (with a bit more verbosity)",
+      "range": {
+        "startLine": 1153,
+        "startChar": 0,
+        "endLine": 1153,
+        "endChar": 5
+      },
+      "revId": "2d49a2f8de2ec8bcee6687226012779ea86b276f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
