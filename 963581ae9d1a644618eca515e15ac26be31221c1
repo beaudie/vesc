@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b83fc495_230a6479",
+        "filename": "src/libANGLE/renderer/vulkan/SurfaceVk.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 1733,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2021-12-01T02:58:58Z",
+      "side": 1,
+      "message": "Looks like doDeferredAcquireNextImage() is being called from places where we aren\u0027t allowed to do this just yet (I\u0027m guessing WindowSurfaceVk::getBufferAge() being the problem based on the failing tests). I\u0027m not sure why that is, and you could dig into that if you feel like (it would be interesting to know).\n\nYou could also move this to swapImpl() and invalidate all color buffers instead of just the one, so whichever is picked next it wouldn\u0027t matter.",
+      "range": {
+        "startLine": 1725,
+        "startChar": 0,
+        "endLine": 1733,
+        "endChar": 83
+      },
+      "revId": "963581ae9d1a644618eca515e15ac26be31221c1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
