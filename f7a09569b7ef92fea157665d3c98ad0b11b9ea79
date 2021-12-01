@@ -88,6 +88,24 @@
       "parentUuid": "87f146ad_dca54701",
       "revId": "f7a09569b7ef92fea157665d3c98ad0b11b9ea79",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "1a36ef21_422b91f7",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2021-12-01T19:01:29Z",
+      "side": 1,
+      "message": "Also the risk here is that you\u0027re adding some complexity. It doesn\u0027t look like much, but it would make diagnosing bugs with this optimization trickier if it only repros with specific vertex buffer bindings.",
+      "parentUuid": "029d63a7_5673d486",
+      "revId": "f7a09569b7ef92fea157665d3c98ad0b11b9ea79",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
