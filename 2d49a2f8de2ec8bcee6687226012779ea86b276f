@@ -20,6 +20,23 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "54096616_9f877c83",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 1767,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2021-12-01T19:08:26Z",
+      "side": 1,
+      "message": "This is very likely buggy. What if the image is the same, but the views have changed? What if you sample the image once, change the sampler parameters, then sample the image again? This is not retaining the second view.\n\nPlease add a test based on that, so we have a way to verify this.",
+      "revId": "2d49a2f8de2ec8bcee6687226012779ea86b276f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "9d140f95_40b7d506",
         "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
         "patchSetId": 1
