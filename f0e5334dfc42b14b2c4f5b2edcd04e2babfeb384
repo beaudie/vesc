@@ -68,6 +68,30 @@
       },
       "revId": "f0e5334dfc42b14b2c4f5b2edcd04e2babfeb384",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "43da13e9_1da5786f",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 3
+      },
+      "lineNbr": 19,
+      "author": {
+        "id": 1517514
+      },
+      "writtenOn": "2021-12-01T04:24:21Z",
+      "side": 1,
+      "message": "already take the tot code. This change is still under discussion(drift changes).\nI know that this will create a trouble for angle(angle don\u0027t know which layout it is ).  \nit is true for intel driver. other driver( amd and nvidia) seems not care about the layout. so no refence to compare.",
+      "parentUuid": "052c29e2_e1874b37",
+      "range": {
+        "startLine": 19,
+        "startChar": 8,
+        "endLine": 19,
+        "endChar": 50
+      },
+      "revId": "f0e5334dfc42b14b2c4f5b2edcd04e2babfeb384",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
