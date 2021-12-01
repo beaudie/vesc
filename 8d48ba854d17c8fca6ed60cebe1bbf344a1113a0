@@ -1,0 +1,279 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "156f021a_5ec47bfa",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 16
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2021-12-01T00:58:17Z",
+      "side": 1,
+      "message": "I\u0027m getting lost in all of the different classes and how they interact:\n\n- BufferHelper\n- BufferVk\n- vk::Buffer\n- vk::BufferPool\n- BufferBlock\n- BufferSubAllocation\n- VirtualBlock\n\nLooking at go/vangle-buffer-suballocation, it doesn\u0027t seem to have been updated with the design for this CL either.\n\nCan you put together some diagrams for how everything is meant to fit together, who owns what memory, and the life cycle of a buffer?",
+      "revId": "8d48ba854d17c8fca6ed60cebe1bbf344a1113a0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "1c063d82_5a9a42de",
+        "filename": "src/libANGLE/renderer/vulkan/BufferVk.cpp",
+        "patchSetId": 16
+      },
+      "lineNbr": 272,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2021-12-01T00:58:17Z",
+      "side": 1,
+      "message": "Should this comment be updated since isExternalBuffer() isn\u0027t checked anymore so this is done for all buffers?",
+      "range": {
+        "startLine": 271,
+        "startChar": 0,
+        "endLine": 272,
+        "endChar": 82
+      },
+      "revId": "8d48ba854d17c8fca6ed60cebe1bbf344a1113a0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "e1bcec1d_8c88a97b",
+        "filename": "src/libANGLE/renderer/vulkan/BufferVk.cpp",
+        "patchSetId": 16
+      },
+      "lineNbr": 1201,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2021-12-01T00:58:17Z",
+      "side": 1,
+      "message": "Should this free the memory also, since the mBuffer is going to be reassigned below?   If not, how is the memory freed otherwise?",
+      "revId": "8d48ba854d17c8fca6ed60cebe1bbf344a1113a0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "3e09d373_8b1254a8",
+        "filename": "src/libANGLE/renderer/vulkan/BufferVk.h",
+        "patchSetId": 16
+      },
+      "lineNbr": 126,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2021-12-01T00:58:17Z",
+      "side": 1,
+      "message": "nit:\n\nAlways mark the BufferHelper as referenced by the GPU, whether or not there\u0027s a pending submission, since this function is only called when trying to get the underlying BufferHelper object so it can be used in a command.",
+      "range": {
+        "startLine": 124,
+        "startChar": 0,
+        "endLine": 126,
+        "endChar": 72
+      },
+      "revId": "8d48ba854d17c8fca6ed60cebe1bbf344a1113a0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "3060468c_45c8c7ed",
+        "filename": "src/libANGLE/renderer/vulkan/ProgramExecutableVk.cpp",
+        "patchSetId": 16
+      },
+      "lineNbr": 799,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2021-12-01T00:58:17Z",
+      "side": 1,
+      "message": "typo: below",
+      "range": {
+        "startLine": 799,
+        "startChar": 91,
+        "endLine": 799,
+        "endChar": 97
+      },
+      "revId": "8d48ba854d17c8fca6ed60cebe1bbf344a1113a0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "9748c39c_0fbc1fae",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 16
+      },
+      "lineNbr": 2628,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2021-12-01T00:58:17Z",
+      "side": 1,
+      "message": "ASSERT(gl::isPow2(initialSize));",
+      "revId": "8d48ba854d17c8fca6ed60cebe1bbf344a1113a0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "44366fb9_bd0621ab",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 16
+      },
+      "lineNbr": 2729,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2021-12-01T00:58:17Z",
+      "side": 1,
+      "message": "Why do we always map it if it\u0027s host visible?",
+      "range": {
+        "startLine": 2726,
+        "startChar": 0,
+        "endLine": 2729,
+        "endChar": 5
+      },
+      "revId": "8d48ba854d17c8fca6ed60cebe1bbf344a1113a0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "1848bdd0_4891efaf",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 16
+      },
+      "lineNbr": 2744,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2021-12-01T00:58:17Z",
+      "side": 1,
+      "message": "Can you expand on this?   What do you mean by \"age out\" and why do we want older buffers to do that?   Are we not recycling empty buffers?",
+      "revId": "8d48ba854d17c8fca6ed60cebe1bbf344a1113a0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "8ed7ffdd_43f9ecce",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 16
+      },
+      "lineNbr": 3980,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2021-12-01T00:58:17Z",
+      "side": 1,
+      "message": "This isn\u0027t quite what\u0027s being done here.   Instead, what you want is:\n\n    if ((mMemoryPropertyFlags \u0026 VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT) \u003d\u003d 0)\n    {\n        ASSERT(usage \u0026 VK_BUFFER_USAGE_TRANSFER_DST_BIT) !\u003d 0);\n    ...\n    }\n    else\n    {\n    ...\n    }\n    \nOtherwise, it\u0027s possible to not initialize memory that can\u0027t be mapped and doesn\u0027t support transfer_dst.",
+      "range": {
+        "startLine": 3979,
+        "startChar": 0,
+        "endLine": 3980,
+        "endChar": 71
+      },
+      "revId": "8d48ba854d17c8fca6ed60cebe1bbf344a1113a0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "7b3f783c_aa087db5",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.h",
+        "patchSetId": 16
+      },
+      "lineNbr": 1012,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2021-12-01T00:58:17Z",
+      "side": 1,
+      "message": "This doesn\u0027t seem to apply to this function, since these parameters don\u0027t exist.",
+      "range": {
+        "startLine": 1010,
+        "startChar": 34,
+        "endLine": 1012,
+        "endChar": 75
+      },
+      "revId": "8d48ba854d17c8fca6ed60cebe1bbf344a1113a0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "de7a5e63_e4346d6a",
+        "filename": "src/libANGLE/renderer/vulkan/vk_mem_alloc_wrapper.h",
+        "patchSetId": 16
+      },
+      "lineNbr": 32,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2021-12-01T00:58:17Z",
+      "side": 1,
+      "message": "Is this a copy/paste and we want it to match exactly, or can these all be just 2 slashes (//)?",
+      "range": {
+        "startLine": 32,
+        "startChar": 6,
+        "endLine": 32,
+        "endChar": 7
+      },
+      "revId": "8d48ba854d17c8fca6ed60cebe1bbf344a1113a0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "59448d56_fded1e25",
+        "filename": "src/libANGLE/renderer/vulkan/vk_mem_alloc_wrapper.h",
+        "patchSetId": 16
+      },
+      "lineNbr": 34,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2021-12-01T00:58:17Z",
+      "side": 1,
+      "message": "typo",
+      "range": {
+        "startLine": 34,
+        "startChar": 18,
+        "endLine": 34,
+        "endChar": 19
+      },
+      "revId": "8d48ba854d17c8fca6ed60cebe1bbf344a1113a0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "6ee10a8c_ce3e058e",
+        "filename": "src/libANGLE/renderer/vulkan/vk_utils.cpp",
+        "patchSetId": 16
+      },
+      "lineNbr": 1700,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2021-12-01T00:58:17Z",
+      "side": 1,
+      "message": "If the mVirtualBlock.init() call above fails, we\u0027ll lose these handles since they were release()\u0027ed as part of the call to this function.   Presumably that means we can\u0027t destroy the objects when shutting down due to the error, so we may want to set these first.\n\nCan we call mVirtualBlock.init() last and just return that value directly, which would also mean we don\u0027t need VK_RESULT_TRY() anymore either?",
+      "range": {
+        "startLine": 1699,
+        "startChar": 0,
+        "endLine": 1700,
+        "endChar": 41
+      },
+      "revId": "8d48ba854d17c8fca6ed60cebe1bbf344a1113a0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}

@@ -1,0 +1,107 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "43ddb5a0_b053675e",
+        "filename": "src/libANGLE/renderer/vulkan/BufferVk.cpp",
+        "patchSetId": 11
+      },
+      "lineNbr": 645,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2021-12-01T00:58:17Z",
+      "side": 1,
+      "message": "I don\u0027t fully understand the BufferHelper lifecycle in this context.\n\nIs it safe/correct to destroy the BufferHelper once \u0027src\u0027 goes out of scope when this function returns?   We aren\u0027t calling BufferHelper::destroy() beforehand (which we don\u0027t want to do anyway, since the buffer/memory it owns is still in use).",
+      "revId": "9aef30a55af7b0e2305cee27686317d516b23b9f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "c0c47e28_1b3b9831",
+        "filename": "src/libANGLE/renderer/vulkan/BufferVk.cpp",
+        "patchSetId": 11
+      },
+      "lineNbr": 648,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2021-12-01T00:58:17Z",
+      "side": 1,
+      "message": "This was already done above with the std::move(mBuffer).   This comment should be moved up there also.",
+      "range": {
+        "startLine": 647,
+        "startChar": 76,
+        "endLine": 648,
+        "endChar": 99
+      },
+      "revId": "9aef30a55af7b0e2305cee27686317d516b23b9f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "32b0e5cd_143ee036",
+        "filename": "src/libANGLE/renderer/vulkan/BufferVk.cpp",
+        "patchSetId": 11
+      },
+      "lineNbr": 657,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2021-12-01T00:58:17Z",
+      "side": 1,
+      "message": "nit: Update to match the \u0027src\u0027 naming convention.",
+      "range": {
+        "startLine": 657,
+        "startChar": 13,
+        "endLine": 657,
+        "endChar": 33
+      },
+      "revId": "9aef30a55af7b0e2305cee27686317d516b23b9f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b6f56fa1_77cd4264",
+        "filename": "src/libANGLE/renderer/vulkan/BufferVk.cpp",
+        "patchSetId": 11
+      },
+      "lineNbr": 658,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2021-12-01T00:58:17Z",
+      "side": 1,
+      "message": "nti: This should be \u0027dst\u0027 to match the \u0027src\u0027 naming convention.",
+      "range": {
+        "startLine": 658,
+        "startChar": 13,
+        "endLine": 658,
+        "endChar": 28
+      },
+      "revId": "9aef30a55af7b0e2305cee27686317d516b23b9f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "40e16c62_e506e04f",
+        "filename": "src/libANGLE/renderer/vulkan/BufferVk.cpp",
+        "patchSetId": 11
+      },
+      "lineNbr": 1046,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2021-12-01T00:58:17Z",
+      "side": 1,
+      "message": "Were we leaking the BufferHelper memory before this change that will destroy it when \u0027src\u0027 goes out of scope?",
+      "revId": "9aef30a55af7b0e2305cee27686317d516b23b9f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
