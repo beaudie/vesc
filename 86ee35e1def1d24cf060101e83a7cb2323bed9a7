@@ -341,6 +341,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "2788a069_4b76ae7f",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 15
+      },
+      "lineNbr": 2614,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2021-12-01T21:44:48Z",
+      "side": 1,
+      "message": "Done. Comment added.",
+      "parentUuid": "2a59842f_5e00a7a7",
+      "range": {
+        "startLine": 2614,
+        "startChar": 4,
+        "endLine": 2614,
+        "endChar": 49
+      },
+      "revId": "86ee35e1def1d24cf060101e83a7cb2323bed9a7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "60a67deb_ee94ab33",
@@ -461,6 +485,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "6f96df36_db14268d",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 15
+      },
+      "lineNbr": 2583,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2021-12-01T21:44:48Z",
+      "side": 1,
+      "message": "This is just returning a BufferMemoryAllocator objecty which is initailzed when RendererVk is initialized. The createBuffer call bellow does not use any global state. VMA itself has a mutex lock ensures thread safety.",
+      "parentUuid": "5e7696ee_6a71674e",
+      "range": {
+        "startLine": 2583,
+        "startChar": 4,
+        "endLine": 2583,
+        "endChar": 88
+      },
+      "revId": "86ee35e1def1d24cf060101e83a7cb2323bed9a7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "9ddb826b_0df1a386",
         "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
         "patchSetId": 15
@@ -520,6 +568,30 @@
       "side": 1,
       "message": "Charlie/Shabi, I didn\u0027t see, but is the next() call implemented?",
       "parentUuid": "8cb5bada_0de7f856",
+      "range": {
+        "startLine": 2590,
+        "startChar": 0,
+        "endLine": 2597,
+        "endChar": 5
+      },
+      "revId": "86ee35e1def1d24cf060101e83a7cb2323bed9a7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "355baabe_d1c7f058",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 15
+      },
+      "lineNbr": 2597,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2021-12-01T21:44:48Z",
+      "side": 1,
+      "message": "Maybe I should remove this block of code for now. This was carried over from DynamicBuffer code.\n\nThere is a next call and I did not change any of that functionality. LMK if you prefer this block of code to be removed.",
+      "parentUuid": "3f2654c1_6aee8592",
       "range": {
         "startLine": 2590,
         "startChar": 0,

@@ -41,6 +41,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "dcaff3dd_92688ab5",
+        "filename": "src/libANGLE/renderer/vulkan/BufferVk.cpp",
+        "patchSetId": 16
+      },
+      "lineNbr": 272,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2021-12-01T21:44:48Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "1c063d82_5a9a42de",
+      "range": {
+        "startLine": 271,
+        "startChar": 0,
+        "endLine": 272,
+        "endChar": 82
+      },
+      "revId": "8d48ba854d17c8fca6ed60cebe1bbf344a1113a0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "e1bcec1d_8c88a97b",
@@ -60,6 +84,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "0a4214a0_b190dd53",
+        "filename": "src/libANGLE/renderer/vulkan/BufferVk.cpp",
+        "patchSetId": 16
+      },
+      "lineNbr": 1201,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2021-12-01T21:44:48Z",
+      "side": 1,
+      "message": "This is std::uniqueue_ptr, will destroyed when pointer gets reassigned.",
+      "parentUuid": "e1bcec1d_8c88a97b",
+      "revId": "8d48ba854d17c8fca6ed60cebe1bbf344a1113a0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "3e09d373_8b1254a8",
         "filename": "src/libANGLE/renderer/vulkan/BufferVk.h",
         "patchSetId": 16
@@ -71,6 +113,30 @@
       "writtenOn": "2021-12-01T00:58:17Z",
       "side": 1,
       "message": "nit:\n\nAlways mark the BufferHelper as referenced by the GPU, whether or not there\u0027s a pending submission, since this function is only called when trying to get the underlying BufferHelper object so it can be used in a command.",
+      "range": {
+        "startLine": 124,
+        "startChar": 0,
+        "endLine": 126,
+        "endChar": 72
+      },
+      "revId": "8d48ba854d17c8fca6ed60cebe1bbf344a1113a0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "e3be7e23_380fe084",
+        "filename": "src/libANGLE/renderer/vulkan/BufferVk.h",
+        "patchSetId": 16
+      },
+      "lineNbr": 126,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2021-12-01T21:44:48Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "3e09d373_8b1254a8",
       "range": {
         "startLine": 124,
         "startChar": 0,
@@ -104,6 +170,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "c2734294_67d9ab27",
+        "filename": "src/libANGLE/renderer/vulkan/ProgramExecutableVk.cpp",
+        "patchSetId": 16
+      },
+      "lineNbr": 799,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2021-12-01T21:44:48Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "3060468c_45c8c7ed",
+      "range": {
+        "startLine": 799,
+        "startChar": 91,
+        "endLine": 799,
+        "endChar": 97
+      },
+      "revId": "8d48ba854d17c8fca6ed60cebe1bbf344a1113a0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "9748c39c_0fbc1fae",
@@ -117,6 +207,24 @@
       "writtenOn": "2021-12-01T00:58:17Z",
       "side": 1,
       "message": "ASSERT(gl::isPow2(initialSize));",
+      "revId": "8d48ba854d17c8fca6ed60cebe1bbf344a1113a0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "f7a8e039_897eab8b",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 16
+      },
+      "lineNbr": 2628,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2021-12-01T21:44:48Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "9748c39c_0fbc1fae",
       "revId": "8d48ba854d17c8fca6ed60cebe1bbf344a1113a0",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
@@ -146,6 +254,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "b88cc4bc_ab0c08a0",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 16
+      },
+      "lineNbr": 2729,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2021-12-01T21:44:48Z",
+      "side": 1,
+      "message": "There really isn\u0027t much value to unmap it given the buffer is been sub-allocated. It makes life much easier to just keep it mapped.",
+      "parentUuid": "44366fb9_bd0621ab",
+      "range": {
+        "startLine": 2726,
+        "startChar": 0,
+        "endLine": 2729,
+        "endChar": 5
+      },
+      "revId": "8d48ba854d17c8fca6ed60cebe1bbf344a1113a0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "1848bdd0_4891efaf",
         "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
         "patchSetId": 16
@@ -163,6 +295,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "d266e37c_86a2c29d",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 16
+      },
+      "lineNbr": 2744,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2021-12-01T21:44:48Z",
+      "side": 1,
+      "message": "We are recycling empty buffers, but we also are freeing excessive empty buffers. The assumption is that to allocate from new buffers first may have a better chance to leave the older buffers completely empty and we may able to free it. \n\nAll these logic will subject to future tuning. Feel free to continue to improve it. Given this is global pool, we could afford a little bit more complex logic here if you want.",
+      "parentUuid": "1848bdd0_4891efaf",
+      "revId": "8d48ba854d17c8fca6ed60cebe1bbf344a1113a0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "8ed7ffdd_43f9ecce",
         "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
         "patchSetId": 16
@@ -174,6 +324,30 @@
       "writtenOn": "2021-12-01T00:58:17Z",
       "side": 1,
       "message": "This isn\u0027t quite what\u0027s being done here.   Instead, what you want is:\n\n    if ((mMemoryPropertyFlags \u0026 VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT) \u003d\u003d 0)\n    {\n        ASSERT(usage \u0026 VK_BUFFER_USAGE_TRANSFER_DST_BIT) !\u003d 0);\n    ...\n    }\n    else\n    {\n    ...\n    }\n    \nOtherwise, it\u0027s possible to not initialize memory that can\u0027t be mapped and doesn\u0027t support transfer_dst.",
+      "range": {
+        "startLine": 3979,
+        "startChar": 0,
+        "endLine": 3980,
+        "endChar": 71
+      },
+      "revId": "8d48ba854d17c8fca6ed60cebe1bbf344a1113a0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "f77303d7_e3e6a60d",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 16
+      },
+      "lineNbr": 3980,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2021-12-01T21:44:48Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "8ed7ffdd_43f9ecce",
       "range": {
         "startLine": 3979,
         "startChar": 0,
@@ -207,6 +381,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "d83832c3_32442ce7",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.h",
+        "patchSetId": 16
+      },
+      "lineNbr": 1012,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2021-12-01T21:44:48Z",
+      "side": 1,
+      "message": "Yea, this was carried over from DynamicBuffer when I copy the code. Removed.",
+      "parentUuid": "7b3f783c_aa087db5",
+      "range": {
+        "startLine": 1010,
+        "startChar": 34,
+        "endLine": 1012,
+        "endChar": 75
+      },
+      "revId": "8d48ba854d17c8fca6ed60cebe1bbf344a1113a0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "de7a5e63_e4346d6a",
@@ -230,6 +428,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "4fa2d615_71c40353",
+        "filename": "src/libANGLE/renderer/vulkan/vk_mem_alloc_wrapper.h",
+        "patchSetId": 16
+      },
+      "lineNbr": 32,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2021-12-01T21:44:48Z",
+      "side": 1,
+      "message": "Done. Copied from VMA code.",
+      "parentUuid": "de7a5e63_e4346d6a",
+      "range": {
+        "startLine": 32,
+        "startChar": 6,
+        "endLine": 32,
+        "endChar": 7
+      },
+      "revId": "8d48ba854d17c8fca6ed60cebe1bbf344a1113a0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "59448d56_fded1e25",
@@ -243,6 +465,30 @@
       "writtenOn": "2021-12-01T00:58:17Z",
       "side": 1,
       "message": "typo",
+      "range": {
+        "startLine": 34,
+        "startChar": 18,
+        "endLine": 34,
+        "endChar": 19
+      },
+      "revId": "8d48ba854d17c8fca6ed60cebe1bbf344a1113a0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "459fade8_2e69bb76",
+        "filename": "src/libANGLE/renderer/vulkan/vk_mem_alloc_wrapper.h",
+        "patchSetId": 16
+      },
+      "lineNbr": 34,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2021-12-01T21:44:48Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "59448d56_fded1e25",
       "range": {
         "startLine": 34,
         "startChar": 18,

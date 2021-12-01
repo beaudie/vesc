@@ -20,6 +20,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "a7144a46_448c2038",
+        "filename": "src/libANGLE/renderer/vulkan/BufferVk.cpp",
+        "patchSetId": 11
+      },
+      "lineNbr": 645,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2021-12-01T21:44:48Z",
+      "side": 1,
+      "message": "This lifecycle of BufferHelper is simpler with this CL. Before this CL, the BufferHelper object is owned by dynamicBuffer pool, BufferVk object does not own it. It essentially is a weak pointer. That is why we did not call destroy or release. After this CL, BufferVk actually owns bufferHelper object (its a std::unique_ptr, it ensures only one ownership). Since we acquire a new buffer bellow at line 648, this src should be released/destroyed when it goes out of scope. And std::unique_ptr helps ensure that.\n\nI will document it in the ddoc later.",
+      "parentUuid": "43ddb5a0_b053675e",
+      "revId": "9aef30a55af7b0e2305cee27686317d516b23b9f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "c0c47e28_1b3b9831",
         "filename": "src/libANGLE/renderer/vulkan/BufferVk.cpp",
         "patchSetId": 11
@@ -31,6 +49,30 @@
       "writtenOn": "2021-12-01T00:58:17Z",
       "side": 1,
       "message": "This was already done above with the std::move(mBuffer).   This comment should be moved up there also.",
+      "range": {
+        "startLine": 647,
+        "startChar": 76,
+        "endLine": 648,
+        "endChar": 99
+      },
+      "revId": "9aef30a55af7b0e2305cee27686317d516b23b9f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "21d64762_61234ab5",
+        "filename": "src/libANGLE/renderer/vulkan/BufferVk.cpp",
+        "patchSetId": 11
+      },
+      "lineNbr": 648,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2021-12-01T21:44:48Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "c0c47e28_1b3b9831",
       "range": {
         "startLine": 647,
         "startChar": 76,
@@ -64,6 +106,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "5e599ce4_a496683d",
+        "filename": "src/libANGLE/renderer/vulkan/BufferVk.cpp",
+        "patchSetId": 11
+      },
+      "lineNbr": 657,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2021-12-01T21:44:48Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "32b0e5cd_143ee036",
+      "range": {
+        "startLine": 657,
+        "startChar": 13,
+        "endLine": 657,
+        "endChar": 33
+      },
+      "revId": "9aef30a55af7b0e2305cee27686317d516b23b9f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "b6f56fa1_77cd4264",
@@ -87,6 +153,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "3df53884_32e9dca5",
+        "filename": "src/libANGLE/renderer/vulkan/BufferVk.cpp",
+        "patchSetId": 11
+      },
+      "lineNbr": 658,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2021-12-01T21:44:48Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "b6f56fa1_77cd4264",
+      "range": {
+        "startLine": 658,
+        "startChar": 13,
+        "endLine": 658,
+        "endChar": 28
+      },
+      "revId": "9aef30a55af7b0e2305cee27686317d516b23b9f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "40e16c62_e506e04f",
@@ -100,6 +190,24 @@
       "writtenOn": "2021-12-01T00:58:17Z",
       "side": 1,
       "message": "Were we leaking the BufferHelper memory before this change that will destroy it when \u0027src\u0027 goes out of scope?",
+      "revId": "9aef30a55af7b0e2305cee27686317d516b23b9f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "412c47d8_cb037877",
+        "filename": "src/libANGLE/renderer/vulkan/BufferVk.cpp",
+        "patchSetId": 11
+      },
+      "lineNbr": 1046,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2021-12-01T21:44:48Z",
+      "side": 1,
+      "message": "As I explained in the other comment, the main difference is that before this CL, dynamicBufferPool owns the bufferHekper obejct and after this CL, we own it. So we were not leaking memory before this CL.",
+      "parentUuid": "40e16c62_e506e04f",
       "revId": "9aef30a55af7b0e2305cee27686317d516b23b9f",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
