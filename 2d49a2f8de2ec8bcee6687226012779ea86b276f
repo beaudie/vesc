@@ -35,6 +35,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "d351a084_3df20308",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 1767,
+      "author": {
+        "id": 1175714
+      },
+      "writtenOn": "2021-12-01T20:09:57Z",
+      "side": 1,
+      "message": "good point! Will abandon.",
+      "parentUuid": "54096616_9f877c83",
+      "revId": "2d49a2f8de2ec8bcee6687226012779ea86b276f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "8bcf773a_df1282db",
@@ -48,6 +66,30 @@
       "writtenOn": "2021-12-01T19:09:02Z",
       "side": 1,
       "message": "I am not sure if this correct though: iamge could have multiple views and if image is already added to the list, imageRead will return false, but this view might new and never added to the list yet. I think we can not rely on image been added to list or not for image views.",
+      "range": {
+        "startLine": 1764,
+        "startChar": 8,
+        "endLine": 1768,
+        "endChar": 9
+      },
+      "revId": "2d49a2f8de2ec8bcee6687226012779ea86b276f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "4e56b6cb_e389a1e1",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 1768,
+      "author": {
+        "id": 1175714
+      },
+      "writtenOn": "2021-12-01T20:09:57Z",
+      "side": 1,
+      "message": "good point! Will abandon.",
+      "parentUuid": "8bcf773a_df1282db",
       "range": {
         "startLine": 1764,
         "startChar": 8,
