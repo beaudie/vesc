@@ -34,6 +34,24 @@
       "parentUuid": "c27ff6cc_03d82826",
       "revId": "8e4302368463012cf78894824a705e5bae57fa6e",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "b3f12ee4_34e12eaf",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 8
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1170419
+      },
+      "writtenOn": "2021-12-01T21:20:36Z",
+      "side": 1,
+      "message": "Looks like that fix did the trick. Later builds are correctly tracking all results for that suite, eg: https://ci.chromium.org/ui/p/angle/builders/try/android-arm64-test/1027/overview\n\n(You can tell through this log which has 2000+ result rows rather than being capped at 1000: https://logs.chromium.org/logs/angle/buildbucket/cr-buildbucket/8829025887978634849/+/steps/collect_tasks__14_/0/steps/angle_deqp_gles31_vulkan_tests_on_Android_device_Pixel_4_results/0/logs/raw_io.output/0 )",
+      "parentUuid": "c1046ec9_6c2c5fbf",
+      "revId": "8e4302368463012cf78894824a705e5bae57fa6e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
