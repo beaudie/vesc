@@ -56,6 +56,30 @@
       },
       "revId": "61d618282bc5bb03f598ef00d1f7b9ebc1cc05f2",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "509a08df_ad8c26a5",
+        "filename": "src/tests/perf_tests/TracePerfTest.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 675,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2021-12-01T16:18:17Z",
+      "side": 1,
+      "message": "I think so.  The check failing is this one:\n\n    // Limit to ES3.1 if there are any blockers for 3.2.\n    if (!vk::CanSupportGPUShader5EXT(mPhysicalDeviceFeatures))\n    {\n        maxVersion \u003d LimitVersionTo(maxVersion, {3, 1});\n    }",
+      "parentUuid": "f72dcef0_29617669",
+      "range": {
+        "startLine": 670,
+        "startChar": 0,
+        "endLine": 675,
+        "endChar": 5
+      },
+      "revId": "61d618282bc5bb03f598ef00d1f7b9ebc1cc05f2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
