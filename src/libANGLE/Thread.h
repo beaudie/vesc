@@ -62,12 +62,16 @@ class Thread : public LabeledObject
     Surface *getCurrentReadSurface() const;
     gl::Context *getContext() const;
     Display *getDisplay() const;
+    void markAsActive();
+    void markAsInactive();
+    bool isActiveThread() const { return mActiveThread; }
 
   private:
     EGLLabelKHR mLabel;
     EGLint mError;
     EGLenum mAPI;
     gl::Context *mContext;
+    bool mActiveThread;
 };
 
 void EnsureDebugAllocated();

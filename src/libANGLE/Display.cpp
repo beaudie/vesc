@@ -782,6 +782,7 @@ Display::Display(EGLenum platform, EGLNativeDisplayType displayId, Device *eglDe
       mConfigSet(),
       mContextSet(),
       mStreamSet(),
+      mInvalidSurfaceSet(),
       mInitialized(false),
       mDeviceLost(false),
       mCaps(),
@@ -1005,13 +1006,53 @@ Error Display::initialize()
     return NoError();
 }
 
+void Display::destroyInvalidEglObjects(Thread *thread)
+{
+    // Destroy cached EGL surface objects
+    std::lock_guard<std::mutex> lock(mInvalidEglObjectsMutex);
+
+    for (Surface *surface : mInvalidSurfaceSet)
+    {
+        ASSERT(surface->getType() != EGL_WINDOW_BIT);
+        (void)(surface->onDestroy(this));
+    }
+    mInvalidSurfaceSet.clear();
+
+    return;
+}
+
 Error Display::terminate(Thread *thread, TerminateReason terminateReason)
 {
-    mIsTerminated = true;
+    if (terminateReason == TerminateReason::Api)
+    {
+        thread->markAsInactive();
+        mIsTerminated = true;
+    }
 
     if (!mInitialized)
     {
         return NoError();
+    }
+
+    // Cache EGL surfaces that are no longer valid
+    if (terminateReason == TerminateReason::Api)
+    {
+        std::lock_guard<std::mutex> lock(mInvalidEglObjectsMutex);
+
+        SurfaceSet windowSurfaceSet = {};
+        for (Surface *surface : mState.surfaceSet)
+        {
+            if (surface->getType() != EGL_WINDOW_BIT)
+            {
+                mInvalidSurfaceSet.insert(surface);
+            }
+            else
+            {
+                windowSurfaceSet.insert(surface);
+            }
+        }
+        mState.surfaceSet.clear();
+        mState.surfaceSet = windowSurfaceSet;
     }
 
     // EGL 1.5 Specification
@@ -1070,6 +1111,12 @@ Error Display::terminate(Thread *thread, TerminateReason terminateReason)
     while (!mState.surfaceSet.empty())
     {
         ANGLE_TRY(destroySurface(*mState.surfaceSet.begin()));
+    }
+
+    // If we reached here with TerminateReason::Api, clean up cached invalid objects.
+    if (terminateReason == TerminateReason::Api)
+    {
+        destroyInvalidEglObjects(thread);
     }
 
     mConfigSet.clear();
@@ -1444,6 +1491,10 @@ Error Display::makeCurrent(Thread *thread,
         ANGLE_TRY(error);
     }
 
+    if (context != nullptr || drawSurface != nullptr || readSurface != nullptr)
+    {
+        thread->markAsActive();
+    }
     thread->setCurrent(context);
 
     ANGLE_TRY(mImplementation->makeCurrent(this, drawSurface, readSurface, context));

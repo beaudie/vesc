@@ -17,11 +17,31 @@ namespace angle
 {
 bool gUseAndroidOpenGLTlsSlot;
 std::atomic_int gProcessCleanupRefCount(0);
+std::atomic_int gActiveThreadCount(0);
 
 void ProcessCleanupCallback(void *ptr)
 {
     egl::Thread *thread = static_cast<egl::Thread *>(ptr);
     ASSERT(thread);
+
+    if (thread->isActiveThread())
+    {
+        ASSERT(gActiveThreadCount > 0);
+        --gActiveThreadCount;
+    }
+
+    if (gActiveThreadCount == 0)
+    {
+        egl::Display::EglDisplaySet displays = egl::Display::GetEglDisplaySet();
+        for (egl::Display *display : displays)
+        {
+            ASSERT(display);
+            if (display->isTerminated())
+            {
+                display->destroyInvalidEglObjects(thread);
+            }
+        }
+    }
 
     ASSERT(gProcessCleanupRefCount > 0);
     if (--gProcessCleanupRefCount == 0)
@@ -47,7 +67,8 @@ Thread::Thread()
     : mLabel(nullptr),
       mError(EGL_SUCCESS),
       mAPI(EGL_OPENGL_ES_API),
-      mContext(static_cast<gl::Context *>(EGL_NO_CONTEXT))
+      mContext(static_cast<gl::Context *>(EGL_NO_CONTEXT)),
+      mActiveThread(false)
 {}
 
 void Thread::setLabel(EGLLabelKHR label)
@@ -141,6 +162,24 @@ Display *Thread::getDisplay() const
         return mContext->getDisplay();
     }
     return nullptr;
+}
+
+void Thread::markAsActive()
+{
+    if (!mActiveThread)
+    {
+        mActiveThread = true;
+        angle::gActiveThreadCount++;
+    }
+}
+
+void Thread::markAsInactive()
+{
+    if (mActiveThread)
+    {
+        mActiveThread = false;
+        angle::gActiveThreadCount--;
+    }
 }
 
 void EnsureDebugAllocated()
