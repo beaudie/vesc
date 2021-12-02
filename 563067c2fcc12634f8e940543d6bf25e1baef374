@@ -16,6 +16,23 @@
       "message": "PTAL",
       "revId": "563067c2fcc12634f8e940543d6bf25e1baef374",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "0b9cf389_19bf7aac",
+        "filename": "src/tests/gl_tests/RobustBufferAccessBehaviorTest.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 34,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2021-12-02T11:32:57Z",
+      "side": 1,
+      "message": "Looks like you still need to check for EGL_EXT_create_context_robustness being present before you set this.",
+      "revId": "563067c2fcc12634f8e940543d6bf25e1baef374",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
