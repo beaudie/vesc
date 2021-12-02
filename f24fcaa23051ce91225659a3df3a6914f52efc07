@@ -35,6 +35,23 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "b0471698_ce189a8a",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1359249
+      },
+      "writtenOn": "2021-12-02T16:43:56Z",
+      "side": 1,
+      "message": "Proposed tweak from our team members.",
+      "revId": "f24fcaa23051ce91225659a3df3a6914f52efc07",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "3aff2c57_c9569e07",
@@ -48,6 +65,40 @@
       "writtenOn": "2021-12-02T11:22:19Z",
       "side": 1,
       "message": "Thanks. Could you please add a comment here?\n\n    // Don\u0027t defer flushes in single-buffer mode.  In this mode, the application is not required to call eglSwapBuffers(), and glFlush() is expected to ensure that work is submitted.",
+      "revId": "f24fcaa23051ce91225659a3df3a6914f52efc07",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b3b26dd8_c01067a2",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 935,
+      "author": {
+        "id": 1359249
+      },
+      "writtenOn": "2021-12-02T16:43:56Z",
+      "side": 1,
+      "message": "Suggest replace:\nmCurrentWindowSurface-\u003egetPresentMode() \u003d\u003d VK_PRESENT_MODE_SHARED_DEMAND_REFRESH_KHR;\nwith\nmCurrentWindowSurface-\u003eisSharedPresentMode()",
+      "revId": "f24fcaa23051ce91225659a3df3a6914f52efc07",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "e085d012_73f9fc50",
+        "filename": "src/libANGLE/renderer/vulkan/SurfaceVk.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 255,
+      "author": {
+        "id": 1359249
+      },
+      "writtenOn": "2021-12-02T16:43:56Z",
+      "side": 1,
+      "message": "Suggest change to:\n\n bool isSharedPresentMode() const\n    {\n        if (mSwapchainPresentMode \u003d\u003d VK_PRESENT_MODE_SHARED_DEMAND_REFRESH_KHR ||\n            mSwapchainPresentMode \u003d\u003d VK_PRESENT_MODE_SHARED_CONTINUOUS_REFRESH_KHR)\n        {\n            return true;\n        }\n        return false;\n    }",
       "revId": "f24fcaa23051ce91225659a3df3a6914f52efc07",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
