@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "e27f2e1d_7a0fa217",
+        "filename": "src/tests/gl_tests/BlitFramebufferANGLETest.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 1950,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2021-12-02T02:03:59Z",
+      "side": 1,
+      "message": "This doesn\u0027t trigger any errors without the change in EquivalentBlitInternalFormat(), so I\u0027m not sure if that actually fixes anything.",
+      "revId": "1b0ca497246c03eac0eda95beb5b751e2531e181",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
