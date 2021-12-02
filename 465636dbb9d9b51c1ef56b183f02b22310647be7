@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "1327595a_e532e312",
+        "filename": "src/common/utilities.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 137,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2021-12-02T11:10:27Z",
+      "side": 1,
+      "message": "Instead, you should create an entry after Shadow, like \"Unspecified \u003d 4\"? I\u0027m not sure what invalid is supposed to mean here. Could you please CC me on the bug?",
+      "revId": "465636dbb9d9b51c1ef56b183f02b22310647be7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
