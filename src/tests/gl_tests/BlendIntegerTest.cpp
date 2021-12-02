@@ -300,30 +300,12 @@ TEST_P(BlendIntegerTest, RGB10_A2UI)
 // Test that blending does not cancel draws on signed integer attachments.
 TEST_P(BlendIntegerTest, MRTSigned)
 {
-    // http://anglebug.com/5071
-    ANGLE_SKIP_TEST_IF(IsVulkan() && IsWindows() && IsIntel());
-
-    // http://anglebug.com/5125
-    ANGLE_SKIP_TEST_IF(IsOpenGL() && IsOSX() && IsIntel());
-
-    // http://anglebug.com/5126
-    ANGLE_SKIP_TEST_IF(IsVulkan() && IsAdreno());
-
     runTestMRT<true>();
 }
 
 // Test that blending does not cancel draws on unsigned integer attachments.
 TEST_P(BlendIntegerTest, MRTUnsigned)
 {
-    // http://anglebug.com/5071
-    ANGLE_SKIP_TEST_IF(IsVulkan() && IsWindows() && IsIntel());
-
-    // http://anglebug.com/5125
-    ANGLE_SKIP_TEST_IF(IsOpenGL() && IsOSX() && IsIntel());
-
-    // http://anglebug.com/5126
-    ANGLE_SKIP_TEST_IF(IsVulkan() && IsAdreno());
-
     runTestMRT<false>();
 }
 
