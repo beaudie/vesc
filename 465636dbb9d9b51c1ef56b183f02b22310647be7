@@ -110,6 +110,24 @@
       "parentUuid": "8a7900cc_86fb3c97",
       "revId": "465636dbb9d9b51c1ef56b183f02b22310647be7",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "39303060_4e242547",
+        "filename": "src/common/utilities.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 137,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2021-12-02T18:00:53Z",
+      "side": 1,
+      "message": "I thought this is specific to kIncompleteTextureParameters? I looked at the calls, the InvalidEnum is used when texture and shader mismatch or texture missing these sort of situations.",
+      "parentUuid": "1be5effc_2dc9eb6c",
+      "revId": "465636dbb9d9b51c1ef56b183f02b22310647be7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
