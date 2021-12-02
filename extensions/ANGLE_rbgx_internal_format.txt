@@ -40,6 +40,11 @@ Overview
     This extension introduces a sized internal RGBX format. This is a 32-bit representation of the
     24-bit RGB format, with the Alpha channel ignored.
 
+    glBlitFramebuffer() will treat RGBX8 as RGB8 when validating the formats for the READ and DRAW
+    framebuffers match, since the X channel is ignored.
+
+    For WebGL contexts, glReadPixels() will accept GL_RGBX8_ANGLE as a valid format enum value.
+
 New Types
 
     None.
