@@ -1283,6 +1283,13 @@ angle::Result TextureVk::setStorageMultisample(const gl::Context *context,
     const vk::Format &format = renderer->getFormat(internalformat);
     ANGLE_TRY(ensureImageAllocated(contextVk, format));
 
+    if (mImage)
+    {
+        gl::LevelIndex baseLevel(mState.getEffectiveBaseLevel());
+        gl::LevelIndex maxLevel(mState.getMipmapMaxLevel());
+        mImage->removeStagedUpdates(contextVk, baseLevel, maxLevel);
+    }
+
     if (mImage->valid())
     {
         releaseImage(contextVk);
