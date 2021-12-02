@@ -7,6 +7,7 @@
 //   Various tests related for Frambuffers.
 //
 
+#include "GLES2/gl2.h"
 #include "common/mathutil.h"
 #include "platform/FeaturesD3D.h"
 #include "test_utils/ANGLETest.h"
@@ -3689,7 +3690,38 @@ TEST_P(FramebufferTest_ES3, AttachmentsWithUnequalDimensions)
 }
 
 class FramebufferTest : public ANGLETest
-{};
+{
+  protected:
+    void testFormatIsRenderable(GLenum internalFormat, GLenum format, GLenum type)
+    {
+        GLTexture tex;
+        glBindTexture(GL_TEXTURE_2D, tex);
+        glTexImage2D(GL_TEXTURE_2D, 0, internalFormat, 1, 1, 0, format, type, nullptr);
+
+        GLFramebuffer fb;
+        glBindFramebuffer(GL_FRAMEBUFFER, fb);
+        glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, tex, 0);
+
+        EXPECT_EQ(glCheckFramebufferStatus(GL_FRAMEBUFFER),
+                  static_cast<GLenum>(GL_FRAMEBUFFER_COMPLETE));
+
+        glViewport(0, 0, 1, 1);
+        glClearColor(0.5f, 0.5f, 0.5f, 0.5f);
+        glClear(GL_COLOR_BUFFER_BIT);
+
+        ASSERT_GL_NO_ERROR();
+
+        ANGLE_GL_PROGRAM(greenProgram, essl1_shaders::vs::Simple(), essl1_shaders::fs::Green());
+        glUseProgram(greenProgram);
+        drawQuad(greenProgram.get(), std::string(essl1_shaders::PositionAttrib()), 0.0f);
+        EXPECT_PIXEL_COLOR_EQ(0, 0, GLColor::green);
+
+        ANGLE_GL_PROGRAM(redProgram, essl1_shaders::vs::Simple(), essl1_shaders::fs::Red());
+        glUseProgram(redProgram);
+        drawQuad(redProgram.get(), std::string(essl1_shaders::PositionAttrib()), 0.0f);
+        EXPECT_PIXEL_COLOR_EQ(0, 0, GLColor::red);
+    }
+};
 
 template <typename T>
 void FillTexture2D(GLuint texture,
@@ -3889,6 +3921,31 @@ TEST_P(FramebufferTest, BindAndDrawDifferentSizedFBOs)
 
     // 7. Verify FBO 1 is entirely blue
     EXPECT_PIXEL_RECT_EQ(0, 0, kLargeWidth, kLargeHeight, GLColor::blue);
+}
+
+TEST_P(FramebufferTest, FormatIsRenderable_RGBA_UNSIGNED_BYTE)
+{
+    testFormatIsRenderable(GL_RGBA, GL_RGBA, GL_UNSIGNED_BYTE);
+}
+
+TEST_P(FramebufferTest, FormatIsRenderable_RGB_UNSIGNED_BYTE)
+{
+    testFormatIsRenderable(GL_RGB, GL_RGB, GL_UNSIGNED_BYTE);
+}
+
+TEST_P(FramebufferTest, FormatIsRenderable_RGB_UNSIGNED_SHORT_565)
+{
+    testFormatIsRenderable(GL_RGB, GL_RGB, GL_UNSIGNED_SHORT_5_6_5);
+}
+
+TEST_P(FramebufferTest, FormatIsRenderable_RGB_UNSIGNED_SHORT_5551)
+{
+    testFormatIsRenderable(GL_RGBA, GL_RGBA, GL_UNSIGNED_SHORT_5_5_5_1);
+}
+
+TEST_P(FramebufferTest, FormatIsRenderable_RGB_UNSIGNED_SHORT_4444)
+{
+    testFormatIsRenderable(GL_RGBA, GL_RGBA, GL_UNSIGNED_SHORT_4_4_4_4);
 }
 
 // Regression test based on a fuzzer failure.  A crash was encountered in the following situation:
