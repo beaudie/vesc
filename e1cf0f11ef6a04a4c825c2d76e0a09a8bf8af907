@@ -3,6 +3,29 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "393755b3_dcbd0325",
+        "filename": "src/libANGLE/Framebuffer.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 2120,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2021-12-02T21:49:17Z",
+      "side": 1,
+      "message": "nit: Renderbuffer one word",
+      "range": {
+        "startLine": 2120,
+        "startChar": 53,
+        "endLine": 2120,
+        "endChar": 64
+      },
+      "revId": "e1cf0f11ef6a04a4c825c2d76e0a09a8bf8af907",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "a17eec89_c186f970",
         "filename": "src/libANGLE/Framebuffer.cpp",
         "patchSetId": 1
@@ -86,6 +109,30 @@
       "side": 1,
       "message": "I think Alexis added that a while back because something couldn\u0027t have been figured out without it.\n\nIn this particular case, the main issue is that MSRTT interacts with attachments differently:\n\n- Textures are single sampled, attachment can be single sampled or MSRTT\n- Renderbuffers are single sampled or MSRTT, attachments follow that\n\nMaybe I could hack it such that there is a virtual mResource-\u003egetMultisamplingMode() call that\u0027s UNREACHABLE() in texture (because it\u0027s meaningless for textures), then check mType \u003d\u003d GL_RENDERBUFFER() before calling it. It\u0027s _technically_ avoiding the upcasting, but logically is the same thing.",
       "parentUuid": "842e9076_f826cf5b",
+      "range": {
+        "startLine": 2122,
+        "startChar": 8,
+        "endLine": 2131,
+        "endChar": 5
+      },
+      "revId": "e1cf0f11ef6a04a4c825c2d76e0a09a8bf8af907",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "841d1785_a8ef7d20",
+        "filename": "src/libANGLE/Framebuffer.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 2131,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2021-12-02T21:49:17Z",
+      "side": 1,
+      "message": "Alternately you could update getRenderToTextureSamples() to query the resource if the type is GL_RENDERBUFFER, and clarify that the stored sample count is only valid for textures.",
+      "parentUuid": "ea9759e0_0277e3b9",
       "range": {
         "startLine": 2122,
         "startChar": 8,
