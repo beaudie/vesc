@@ -139,6 +139,8 @@ class Display final : public LabeledObject,
         EnumCount = InvalidEnum,
     };
     Error terminate(Thread *thread, TerminateReason terminateReason);
+    bool isTerminated() const { return mIsTerminated; }
+    void destroyInvalidEglObjects(Thread *thread);
     // Called before all display state dependent EGL functions. Backends can set up, for example,
     // thread-specific backend state through this function. Not called for functions that do not
     // need the state.
@@ -348,6 +350,9 @@ class Display final : public LabeledObject,
 
     typedef std::set<Sync *> SyncSet;
     SyncSet mSyncSet;
+
+    std::mutex mInvalidEglObjectsMutex;
+    SurfaceSet mInvalidSurfaceSet;
 
     bool mInitialized;
     bool mDeviceLost;
