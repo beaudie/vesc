@@ -782,6 +782,10 @@ Display::Display(EGLenum platform, EGLNativeDisplayType displayId, Device *eglDe
       mConfigSet(),
       mContextSet(),
       mStreamSet(),
+      mInvalidImageSet(),
+      mInvalidStreamSet(),
+      mInvalidSurfaceSet(),
+      mInvalidSyncSet(),
       mInitialized(false),
       mDeviceLost(false),
       mCaps(),
@@ -1005,13 +1009,85 @@ Error Display::initialize()
     return NoError();
 }
 
+Error Display::destroyInvalidEglObjects(Thread *thread)
+{
+    // Destroy invalid EGL objects
+
+    ImageSet images     = {};
+    StreamSet streams   = {};
+    SurfaceSet surfaces = {};
+    SyncSet syncs       = {};
+    {
+        // Retrieve objects to be destroyed
+        std::lock_guard<std::mutex> lock(mInvalidEglObjectsMutex);
+        images   = mInvalidImageSet;
+        streams  = mInvalidStreamSet;
+        surfaces = mInvalidSurfaceSet;
+        syncs    = mInvalidSyncSet;
+
+        // Update invalid object sets
+        mInvalidImageSet.clear();
+        mInvalidStreamSet.clear();
+        mInvalidSurfaceSet.clear();
+        mInvalidSyncSet.clear();
+    }
+
+    while (!images.empty())
+    {
+        destroyImageImpl(*images.begin(), &images);
+    }
+
+    while (!streams.empty())
+    {
+        destroyStreamImpl(*streams.begin(), &streams);
+    }
+
+    while (!surfaces.empty())
+    {
+        ANGLE_TRY(destroySurfaceImpl(*surfaces.begin(), &surfaces));
+    }
+
+    while (!syncs.empty())
+    {
+        destroySyncImpl(*syncs.begin(), &syncs);
+    }
+
+    return NoError();
+}
+
 Error Display::terminate(Thread *thread, TerminateReason terminateReason)
 {
-    mIsTerminated = true;
+    if (terminateReason == TerminateReason::Api)
+    {
+        thread->markAsInactive();
+        mIsTerminated = true;
+    }
 
     if (!mInitialized)
     {
         return NoError();
+    }
+
+    // EGL 1.5 Specification
+    // 3.2 Initialization
+    // Termination marks all EGL-specific resources, such as contexts and surfaces, associated
+    // with the specified display for deletion. Handles to all such resources are invalid as soon
+    // as eglTerminate returns
+    // Cache EGL objects that are no longer valid
+    {
+        std::lock_guard<std::mutex> lock(mInvalidEglObjectsMutex);
+
+        mInvalidImageSet.insert(mImageSet.begin(), mImageSet.end());
+        mImageSet.clear();
+
+        mInvalidStreamSet.insert(mStreamSet.begin(), mStreamSet.end());
+        mStreamSet.clear();
+
+        mInvalidSurfaceSet.insert(mState.surfaceSet.begin(), mState.surfaceSet.end());
+        mState.surfaceSet.clear();
+
+        mInvalidSyncSet.insert(mSyncSet.begin(), mSyncSet.end());
+        mSyncSet.clear();
     }
 
     // EGL 1.5 Specification
@@ -1052,25 +1128,8 @@ Error Display::terminate(Thread *thread, TerminateReason terminateReason)
     ASSERT(mGlobalTextureShareGroupUsers == 0 && mTextureManager == nullptr);
     ASSERT(mGlobalSemaphoreShareGroupUsers == 0 && mSemaphoreManager == nullptr);
 
-    while (!mImageSet.empty())
-    {
-        destroyImage(*mImageSet.begin());
-    }
-
-    while (!mStreamSet.empty())
-    {
-        destroyStream(*mStreamSet.begin());
-    }
-
-    while (!mSyncSet.empty())
-    {
-        destroySync(*mSyncSet.begin());
-    }
-
-    while (!mState.surfaceSet.empty())
-    {
-        ANGLE_TRY(destroySurface(*mState.surfaceSet.begin()));
-    }
+    // Now that contexts have been destroyed, clean up any remaining invalid objects
+    ANGLE_TRY(destroyInvalidEglObjects(thread));
 
     mConfigSet.clear();
 
@@ -1444,6 +1503,14 @@ Error Display::makeCurrent(Thread *thread,
         ANGLE_TRY(error);
     }
 
+    if (context != nullptr || drawSurface != nullptr || readSurface != nullptr)
+    {
+        thread->markAsActive(this);
+    }
+    if (context == nullptr && drawSurface == nullptr && readSurface == nullptr)
+    {
+        thread->markAsInactive();
+    }
     thread->setCurrent(context);
 
     ANGLE_TRY(mImplementation->makeCurrent(this, drawSurface, readSurface, context));
@@ -1490,7 +1557,7 @@ Error Display::restoreLostDevice()
     return mImplementation->restoreLostDevice(this);
 }
 
-Error Display::destroySurface(Surface *surface)
+Error Display::destroySurfaceImpl(Surface *surface, SurfaceSet *surfaces)
 {
     if (surface->getType() == EGL_WINDOW_BIT)
     {
@@ -1512,22 +1579,24 @@ Error Display::destroySurface(Surface *surface)
         ASSERT(surfaceRemoved);
     }
 
-    mState.surfaceSet.erase(surface);
+    auto iter = surfaces->find(surface);
+    ASSERT(iter != surfaces->end());
+    surfaces->erase(iter);
     ANGLE_TRY(surface->onDestroy(this));
     return NoError();
 }
 
-void Display::destroyImage(egl::Image *image)
+void Display::destroyImageImpl(Image *image, ImageSet *images)
 {
-    auto iter = mImageSet.find(image);
-    ASSERT(iter != mImageSet.end());
+    auto iter = images->find(image);
+    ASSERT(iter != images->end());
     (*iter)->release(this);
-    mImageSet.erase(iter);
+    images->erase(iter);
 }
 
-void Display::destroyStream(egl::Stream *stream)
+void Display::destroyStreamImpl(Stream *stream, StreamSet *streams)
 {
-    mStreamSet.erase(stream);
+    streams->erase(stream);
     SafeDelete(stream);
 }
 
@@ -1630,12 +1699,32 @@ Error Display::destroyContext(Thread *thread, gl::Context *context)
     return NoError();
 }
 
-void Display::destroySync(egl::Sync *sync)
+void Display::destroySyncImpl(Sync *sync, SyncSet *syncs)
 {
-    auto iter = mSyncSet.find(sync);
-    ASSERT(iter != mSyncSet.end());
+    auto iter = syncs->find(sync);
+    ASSERT(iter != syncs->end());
     (*iter)->release(this);
-    mSyncSet.erase(iter);
+    syncs->erase(iter);
+}
+
+void Display::destroyImage(Image *image)
+{
+    return destroyImageImpl(image, &mImageSet);
+}
+
+void Display::destroyStream(Stream *stream)
+{
+    return destroyStreamImpl(stream, &mStreamSet);
+}
+
+Error Display::destroySurface(Surface *surface)
+{
+    return destroySurfaceImpl(surface, &mState.surfaceSet);
+}
+
+void Display::destroySync(Sync *sync)
+{
+    return destroySyncImpl(sync, &mSyncSet);
 }
 
 bool Display::isDeviceLost() const
@@ -1724,6 +1813,11 @@ const Caps &Display::getCaps() const
 bool Display::isInitialized() const
 {
     return mInitialized;
+}
+
+bool Display::isTerminated() const
+{
+    return mIsTerminated;
 }
 
 bool Display::isValidConfig(const Config *config) const
