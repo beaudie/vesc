@@ -22,6 +22,30 @@
       },
       "revId": "8de4be2a054ef94baea32d694216cdedf4e56058",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "80f608cd_8af55cbf",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 2906,
+      "author": {
+        "id": 1525982
+      },
+      "writtenOn": "2021-12-02T19:37:31Z",
+      "side": 1,
+      "message": "`rx::` removed.\n\"drawcount \u003e 1\" conditions have been removed from that function. However, we are still checking if drawcount \u003c\u003d maxDrawIndirectCount.",
+      "parentUuid": "269e9b55_4e56054b",
+      "range": {
+        "startLine": 2906,
+        "startChar": 13,
+        "endLine": 2906,
+        "endChar": 39
+      },
+      "revId": "8de4be2a054ef94baea32d694216cdedf4e56058",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
