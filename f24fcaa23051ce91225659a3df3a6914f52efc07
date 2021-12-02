@@ -101,6 +101,24 @@
       "message": "Suggest change to:\n\n bool isSharedPresentMode() const\n    {\n        if (mSwapchainPresentMode \u003d\u003d VK_PRESENT_MODE_SHARED_DEMAND_REFRESH_KHR ||\n            mSwapchainPresentMode \u003d\u003d VK_PRESENT_MODE_SHARED_CONTINUOUS_REFRESH_KHR)\n        {\n            return true;\n        }\n        return false;\n    }",
       "revId": "f24fcaa23051ce91225659a3df3a6914f52efc07",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "9143b7e0_3b922a5d",
+        "filename": "src/libANGLE/renderer/vulkan/SurfaceVk.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 255,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2021-12-02T17:26:24Z",
+      "side": 1,
+      "message": "nit: `if (x) return true; return false;` is just `return x;`.",
+      "parentUuid": "e085d012_73f9fc50",
+      "revId": "f24fcaa23051ce91225659a3df3a6914f52efc07",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
