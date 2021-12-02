@@ -1007,7 +1007,10 @@ Error Display::initialize()
 
 Error Display::terminate(Thread *thread, TerminateReason terminateReason)
 {
-    mIsTerminated = true;
+    if (terminateReason == TerminateReason::Api)
+    {
+        mIsTerminated = true;
+    }
 
     if (!mInitialized)
     {
@@ -1444,6 +1447,7 @@ Error Display::makeCurrent(Thread *thread,
         ANGLE_TRY(error);
     }
 
+    thread->markAsActive();
     thread->setCurrent(context);
 
     ANGLE_TRY(mImplementation->makeCurrent(this, drawSurface, readSurface, context));
