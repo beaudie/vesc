@@ -37,6 +37,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "f9c1103e_ebb697e4",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1340649
+      },
+      "writtenOn": "2021-12-02T16:22:22Z",
+      "side": 1,
+      "message": "as it stands, these tests are useless since all of them are skipped because the extension is not exposed. More importantly, they give a false sense of assurance that we have tests to catch robustness regressions when we actually don\u0027t (which is what happened internally and led to this patch).",
+      "parentUuid": "2973778f_a68ab41d",
+      "revId": "563067c2fcc12634f8e940543d6bf25e1baef374",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "0b9cf389_19bf7aac",
         "filename": "src/tests/gl_tests/RobustBufferAccessBehaviorTest.cpp",
         "patchSetId": 1
@@ -48,6 +66,24 @@
       "writtenOn": "2021-12-02T11:32:57Z",
       "side": 1,
       "message": "Looks like you still need to check for EGL_EXT_create_context_robustness being present before you set this.",
+      "revId": "563067c2fcc12634f8e940543d6bf25e1baef374",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "5cb5d086_a7aab6e6",
+        "filename": "src/tests/gl_tests/RobustBufferAccessBehaviorTest.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 34,
+      "author": {
+        "id": 1340649
+      },
+      "writtenOn": "2021-12-02T16:22:22Z",
+      "side": 1,
+      "message": "this just sets the configParams, we might need to modify \"EGLWindow::createContext\" to silent ignore or throw a not supported error incase \"EGL_EXT_create_context_robustness\" is not supported. Or the test itself can be modified to skip if \"EGL_EXT_create_context_robustness\" doesn\u0027t exist",
+      "parentUuid": "0b9cf389_19bf7aac",
       "revId": "563067c2fcc12634f8e940543d6bf25e1baef374",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
