@@ -55,6 +55,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "e2b90830_f72fe84e",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2021-12-02T17:33:45Z",
+      "side": 1,
+      "message": "Well, you could use the NoFixture helper to disable automatic context creation, and then in the test body you could init after the constructor where you can skip configs that don\u0027t support the ext.\n\nThere may be other solutions as well. Did this ever work? Maybe we broke it some time ago.",
+      "parentUuid": "f9c1103e_ebb697e4",
+      "revId": "563067c2fcc12634f8e940543d6bf25e1baef374",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "0b9cf389_19bf7aac",
         "filename": "src/tests/gl_tests/RobustBufferAccessBehaviorTest.cpp",
         "patchSetId": 1
