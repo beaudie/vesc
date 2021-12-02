@@ -296,6 +296,12 @@ TEST_P(EGLMultiContextTest, RepeatedEglInitAndTerminate)
 {
     ANGLE_SKIP_TEST_IF(!IsAndroid() || !IsVulkan());
 
+    // eglTerminate and eglReleaseThread the parent thread
+    eglTerminate(getEGLWindow()->getDisplay());
+    EXPECT_EGL_SUCCESS();
+    eglReleaseThread();
+    EXPECT_EGL_SUCCESS();
+
     EGLDisplay dpy;
     EGLSurface srf;
     EGLContext ctx;
@@ -325,6 +331,8 @@ TEST_P(EGLMultiContextTest, RepeatedEglInitAndTerminate)
 
             eglTerminate(dpy);
             EXPECT_EGL_SUCCESS();
+            eglReleaseThread();
+            EXPECT_EGL_SUCCESS();
             dpy = EGL_NO_DISPLAY;
             srf = EGL_NO_SURFACE;
             ctx = EGL_NO_CONTEXT;
@@ -332,6 +340,10 @@ TEST_P(EGLMultiContextTest, RepeatedEglInitAndTerminate)
 
         thread.join();
     }
+
+    // Reinitialize the parent thread for any required cleanup
+    eglInitialize(getEGLWindow()->getDisplay(), nullptr, nullptr);
+    EXPECT_EGL_SUCCESS();
 }
 }  // anonymous namespace
 
