@@ -128,6 +128,24 @@
       "parentUuid": "1be5effc_2dc9eb6c",
       "revId": "465636dbb9d9b51c1ef56b183f02b22310647be7",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "bb75904b_d942076e",
+        "filename": "src/common/utilities.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 137,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2021-12-02T18:02:50Z",
+      "side": 1,
+      "message": "Yeah, that\u0027s an error. See ValidateDrawStates.",
+      "parentUuid": "39303060_4e242547",
+      "revId": "465636dbb9d9b51c1ef56b183f02b22310647be7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
