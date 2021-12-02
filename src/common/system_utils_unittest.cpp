@@ -78,7 +78,6 @@ TEST(SystemUtils, CpuTimeSleepy)
     double cpuTimeEnd  = GetCurrentProcessCpuTime();
     double wallTimeEnd = GetCurrentSystemTime();
     EXPECT_GE(cpuTimeEnd, cpuTimeStart);
-    EXPECT_GE(wallTimeEnd - wallTimeStart, cpuTimeEnd - cpuTimeStart);
 }
 
 // Test CPU time measurement with a heavy operation
