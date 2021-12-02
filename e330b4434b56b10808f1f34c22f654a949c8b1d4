@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "68533179_38a3afcd",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1290487
+      },
+      "writtenOn": "2021-12-02T22:19:11Z",
+      "side": 1,
+      "message": "This version checks that vkResetQueryPoolEXT is not nullptr.",
+      "revId": "e330b4434b56b10808f1f34c22f654a949c8b1d4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
