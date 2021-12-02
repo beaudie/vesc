@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "5522ef3f_fe36a83d",
+        "filename": "src/libANGLE/renderer/vulkan/SurfaceVk.h",
+        "patchSetId": 4
+      },
+      "lineNbr": 257,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2021-12-02T18:22:08Z",
+      "side": 1,
+      "message": "Having the `isSharedPresentMode` helper is fine, but checking VK_PRESENT_MODE_SHARED_CONTINUOUS_REFRESH_KHR is not really necessary. We never use that mode. If we did, there are a few places in SurfaceVk that would have needed to use the helper.",
+      "revId": "09f12e935da62adbaad932ff619b6e2774087710",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
