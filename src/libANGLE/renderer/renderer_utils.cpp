@@ -66,7 +66,8 @@ constexpr angle::PackedEnumMap<gl::SamplerFormat, IncompleteTextureParameters>
          {GL_RGBA8UI, GL_RGBA_INTEGER, GL_UNSIGNED_BYTE, {0, 0, 0, 255}}},
         {gl::SamplerFormat::Signed, {GL_RGBA8I, GL_RGBA_INTEGER, GL_BYTE, {0, 0, 0, 127}}},
         {gl::SamplerFormat::Shadow,
-         {GL_DEPTH_COMPONENT16, GL_DEPTH_COMPONENT, GL_UNSIGNED_SHORT, {0, 0, 0, 0}}}};
+         {GL_DEPTH_COMPONENT16, GL_DEPTH_COMPONENT, GL_UNSIGNED_SHORT, {0, 0, 0, 0}}},
+        {gl::SamplerFormat::InvalidEnum, {GL_RGBA8, GL_RGBA, GL_UNSIGNED_BYTE, {0, 0, 0, 255}}}};
 
 void CopyColor(gl::ColorF *color)
 {

@@ -10157,8 +10157,6 @@ class TextureChangeStorageUploadTest : public ANGLETest
             FAIL() << "shader compilation failed.";
         }
 
-        mColorLocation = glGetUniformLocation(mProgram, essl1_shaders::ColorUniform());
-
         glUseProgram(mProgram);
 
         glClearColor(0, 0, 0, 0);
@@ -10174,7 +10172,6 @@ class TextureChangeStorageUploadTest : public ANGLETest
     void testTearDown() override { glDeleteProgram(mProgram); }
 
     GLuint mProgram;
-    GLint mColorLocation;
 };
 
 // Verify that respecifying storage and re-uploading doesn't crash.
@@ -10198,6 +10195,51 @@ TEST_P(TextureChangeStorageUploadTest, Basic)
                     GL_UNSIGNED_BYTE, kColor.data());
     EXPECT_GL_NO_ERROR();
     glFinish();
+}
+
+class ExtraSamplerCubeShadowUseTest : public ANGLETest
+{
+  protected:
+    ExtraSamplerCubeShadowUseTest() : ANGLETest() {}
+
+    const char *getVertexShaderSource() { return "#version 300 es\nvoid main() {}"; }
+
+    const char *getFragmentShaderSource()
+    {
+        return R"(#version 300 es
+precision mediump float;
+
+uniform mediump samplerCube var_0002; // this has to be there
+uniform highp samplerCubeShadow var_0004; // this has to be a cube shadow sampler
+out vec4 color;
+void main() {
+
+    vec4 var_0031 = texture(var_0002, vec3(1,1,1));
+    textureSize(var_0004, 0) ;
+
+    color = vec4(1,1,1,1);
+})";
+    }
+
+    void testSetUp() override
+    {
+        mProgram = CompileProgram(getVertexShaderSource(), getFragmentShaderSource());
+        if (mProgram == 0)
+        {
+            FAIL() << "shader compilation failed.";
+        }
+        glUseProgram(mProgram);
+        ASSERT_GL_NO_ERROR();
+    }
+
+    void testTearDown() override { glDeleteProgram(mProgram); }
+
+    GLuint mProgram;
+};
+
+TEST_P(ExtraSamplerCubeShadowUseTest, Basic)
+{
+    glDrawArrays(GL_TRIANGLE_FAN, 0, 3);
 }
 
 // Use this to select which configurations (e.g. which renderer, which GLES major version) these
@@ -10309,5 +10351,7 @@ GTEST_ALLOW_UNINSTANTIATED_PARAMETERIZED_TEST(CopyImageTestES31);
 ANGLE_INSTANTIATE_TEST_ES31(CopyImageTestES31);
 
 ANGLE_INSTANTIATE_TEST_ES3(TextureChangeStorageUploadTest);
+
+ANGLE_INSTANTIATE_TEST_ES3(ExtraSamplerCubeShadowUseTest);
 
 }  // anonymous namespace
