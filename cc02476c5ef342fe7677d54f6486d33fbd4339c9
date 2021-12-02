@@ -3,6 +3,29 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "6ab4f6a5_89ebf836",
+        "filename": "src/libANGLE/renderer/vulkan/TextureVk.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 1288,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2021-12-02T14:01:58Z",
+      "side": 1,
+      "message": "I wonder if just releasing the staging buffer would be a better option to reset everything. I\u0027d recommend you move your logic into the else case for !mOwnsImage to avoid calling the same thing twice.",
+      "range": {
+        "startLine": 1288,
+        "startChar": 16,
+        "endLine": 1288,
+        "endChar": 38
+      },
+      "revId": "cc02476c5ef342fe7677d54f6486d33fbd4339c9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "f919a38b_84ec8a68",
         "filename": "src/libANGLE/renderer/vulkan/TextureVk.cpp",
         "patchSetId": 3
@@ -43,6 +66,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "cebd4819_cb2aca85",
+        "filename": "src/tests/gl_tests/CubeMapRespecificationTest.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 12,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2021-12-02T14:01:58Z",
+      "side": 1,
+      "message": "+1, or StateChangeTest.cpp, I use that file for these kind of subtle state interactions.",
+      "parentUuid": "8b5a4631_403a98af",
+      "revId": "cc02476c5ef342fe7677d54f6486d33fbd4339c9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "0c2b4eef_ff5384a3",
         "filename": "src/tests/gl_tests/CubeMapRespecificationTest.cpp",
         "patchSetId": 3
@@ -54,6 +95,24 @@
       "writtenOn": "2021-12-02T11:54:44Z",
       "side": 1,
       "message": "The test can probably be simplified. What if it\u0027s just 2D textures? Like `glTexImage2D(64x64)` followed by `glTexStorage2D(16x16)` then sample from it or something. It\u0027ll probably reproduce the same issue.",
+      "revId": "cc02476c5ef342fe7677d54f6486d33fbd4339c9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "fa2a549c_71648a11",
+        "filename": "src/tests/gl_tests/CubeMapRespecificationTest.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 89,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2021-12-02T14:01:58Z",
+      "side": 1,
+      "message": "+1, or 4x4 or even 2x2",
+      "parentUuid": "0c2b4eef_ff5384a3",
       "revId": "cc02476c5ef342fe7677d54f6486d33fbd4339c9",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
