@@ -1,0 +1,73 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "f2b9c3af_07f4f155",
+        "filename": "src/libANGLE/capture/FrameCapture.h",
+        "patchSetId": 27
+      },
+      "lineNbr": 465,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2021-12-02T15:34:51Z",
+      "side": 1,
+      "message": "suggest angle::HashMap",
+      "range": {
+        "startLine": 465,
+        "startChar": 9,
+        "endLine": 465,
+        "endChar": 12
+      },
+      "revId": "498aae2bdf18307e67a0e8581fa81282a28a7a8a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "304c3a05_7167fd4c",
+        "filename": "src/libANGLE/capture/FrameCapture.h",
+        "patchSetId": 27
+      },
+      "lineNbr": 465,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2021-12-02T15:34:51Z",
+      "side": 1,
+      "message": "can you use unique_ptr here? Is this shared between owners?",
+      "range": {
+        "startLine": 465,
+        "startChar": 18,
+        "endLine": 465,
+        "endChar": 28
+      },
+      "revId": "498aae2bdf18307e67a0e8581fa81282a28a7a8a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "3e57c58c_f04ca6ea",
+        "filename": "src/libANGLE/capture/FrameCapture.h",
+        "patchSetId": 27
+      },
+      "lineNbr": 471,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2021-12-02T15:34:51Z",
+      "side": 1,
+      "message": "same nits",
+      "range": {
+        "startLine": 471,
+        "startChar": 8,
+        "endLine": 471,
+        "endChar": 40
+      },
+      "revId": "498aae2bdf18307e67a0e8581fa81282a28a7a8a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
