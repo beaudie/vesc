@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "a17eec89_c186f970",
+        "filename": "src/libANGLE/Framebuffer.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 2131,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2021-12-02T21:22:17Z",
+      "side": 1,
+      "message": "could you expose this in the RT interface, instead of upcasting? not a huge deal but it\u0027s how we try to do things - so that all knowledge is available from FramebufferAttachment.",
+      "range": {
+        "startLine": 2122,
+        "startChar": 8,
+        "endLine": 2131,
+        "endChar": 5
+      },
+      "revId": "e1cf0f11ef6a04a4c825c2d76e0a09a8bf8af907",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
