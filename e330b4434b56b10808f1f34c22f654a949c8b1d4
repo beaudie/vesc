@@ -33,6 +33,24 @@
       "message": "Does it mean that there is one driver says it support the extension but func pointer is null? Should we try non EXT function? ",
       "revId": "e330b4434b56b10808f1f34c22f654a949c8b1d4",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "d4b32f02_c1f38335",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2021-12-02T22:31:44Z",
+      "side": 1,
+      "message": "I mean the core spec API is not null?",
+      "parentUuid": "3a3ac8ef_6bce7a37",
+      "revId": "e330b4434b56b10808f1f34c22f654a949c8b1d4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
