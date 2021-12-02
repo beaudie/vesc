@@ -76,7 +76,6 @@ Thread *AllocateCurrentThread()
     ASSERT(gProcessCleanupTLSIndex != TLS_INVALID_INDEX);
 
     // Initialize process cleanup TLS slot
-    angle::gProcessCleanupRefCount++;
     SetTLSValue(gProcessCleanupTLSIndex, thread);
 #endif  // ANGLE_PLATFORM_ANDROID
 

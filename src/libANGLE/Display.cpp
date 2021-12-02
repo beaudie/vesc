@@ -1444,6 +1444,7 @@ Error Display::makeCurrent(Thread *thread,
         ANGLE_TRY(error);
     }
 
+    thread->markAsActive();
     thread->setCurrent(context);
 
     ANGLE_TRY(mImplementation->makeCurrent(this, drawSurface, readSurface, context));
