@@ -74,6 +74,24 @@
       "parentUuid": "1327595a_e532e312",
       "revId": "465636dbb9d9b51c1ef56b183f02b22310647be7",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "8a7900cc_86fb3c97",
+        "filename": "src/common/utilities.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 137,
+      "author": {
+        "id": 1175714
+      },
+      "writtenOn": "2021-12-02T17:02:10Z",
+      "side": 1,
+      "message": "We use SamplerFormat::InvalidEnum everywhere and I\u0027m not sure how changing the name helps. The problem is the enum count is used to size packed enum maps. it needs to be there. there is a template to size them based on exactly the EnumCount case.",
+      "parentUuid": "29e80e0e_4f924b43",
+      "revId": "465636dbb9d9b51c1ef56b183f02b22310647be7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
