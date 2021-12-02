@@ -1946,6 +1946,61 @@ TEST_P(BlitFramebufferTest, BlitSRGBToRGBAndScale)
     EXPECT_PIXEL_COLOR_EQ(3 * kWidth / 4, 3 * kHeight / 4, GLColor::green);
 }
 
+// Blit an RGBX8 framebuffer.
+TEST_P(BlitFramebufferTest, BlitRGBX8)
+{
+    ANGLE_SKIP_TEST_IF(!IsGLExtensionEnabled("GL_ANGLE_rgbx_internal_format"));
+
+    constexpr const GLsizei kWidth  = 256;
+    constexpr const GLsizei kHeight = 256;
+
+    GLRenderbuffer sourceRBO, targetRBO;
+    GLFramebuffer sourceFBO, targetFBO;
+    initColorFBOWithCheckerPattern(&sourceFBO, &sourceRBO, GL_RGBX8_ANGLE, kWidth * 2, kHeight * 2);
+    initColorFBO(&targetFBO, &targetRBO, GL_RGB8, kWidth, kHeight);
+    EXPECT_GL_NO_ERROR();
+
+    glBindFramebuffer(GL_READ_FRAMEBUFFER, sourceFBO);
+    glBindFramebuffer(GL_DRAW_FRAMEBUFFER, targetFBO);
+    EXPECT_GL_NO_ERROR();
+
+    glViewport(0, 0, kWidth, kHeight);
+
+    glClearColor(0.0f, 0.0f, 0.0f, 0.0f);
+    glClear(GL_COLOR_BUFFER_BIT);
+
+    // Scale down without flipping.
+    glBlitFramebuffer(0, 0, kWidth * 2, kHeight * 2, 0, 0, kWidth, kHeight, GL_COLOR_BUFFER_BIT,
+                      GL_NEAREST);
+    EXPECT_GL_NO_ERROR();
+
+    glBindFramebuffer(GL_FRAMEBUFFER, targetFBO);
+
+    EXPECT_PIXEL_COLOR_EQ(kWidth / 4, kHeight / 4, GLColor::red);
+    EXPECT_PIXEL_COLOR_EQ(kWidth / 4, 3 * kHeight / 4, GLColor::green);
+    EXPECT_PIXEL_COLOR_EQ(3 * kWidth / 4, kHeight / 4, GLColor::blue);
+    EXPECT_PIXEL_COLOR_EQ(3 * kWidth / 4, 3 * kHeight / 4, GLColor::yellow);
+
+    glBindFramebuffer(GL_READ_FRAMEBUFFER, sourceFBO);
+    glBindFramebuffer(GL_DRAW_FRAMEBUFFER, targetFBO);
+    EXPECT_GL_NO_ERROR();
+
+    glClearColor(0.0f, 0.0f, 0.0f, 0.0f);
+    glClear(GL_COLOR_BUFFER_BIT);
+
+    // Scale down and flip in the X direction.
+    glBlitFramebuffer(0, 0, kWidth * 2, kHeight * 2, kWidth, 0, 0, kHeight, GL_COLOR_BUFFER_BIT,
+                      GL_NEAREST);
+    EXPECT_GL_NO_ERROR();
+
+    glBindFramebuffer(GL_FRAMEBUFFER, targetFBO);
+
+    EXPECT_PIXEL_COLOR_EQ(kWidth / 4, kHeight / 4, GLColor::blue);
+    EXPECT_PIXEL_COLOR_EQ(kWidth / 4, 3 * kHeight / 4, GLColor::yellow);
+    EXPECT_PIXEL_COLOR_EQ(3 * kWidth / 4, kHeight / 4, GLColor::red);
+    EXPECT_PIXEL_COLOR_EQ(3 * kWidth / 4, 3 * kHeight / 4, GLColor::green);
+}
+
 // Blit stencil, with scissor and scale it.
 TEST_P(BlitFramebufferTest, BlitStencilScissoredScaled)
 {

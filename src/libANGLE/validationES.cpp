@@ -156,6 +156,9 @@ bool ValidReadPixelsFormatEnum(const Context *context, GLenum format)
         case GL_BGRA_EXT:
             return context->getExtensions().readFormatBgraEXT;
 
+        case GL_RGBX8_ANGLE:
+            return context->getExtensions().rgbxInternalFormatANGLE;
+
         default:
             return false;
     }
