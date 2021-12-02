@@ -358,6 +358,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "1c1883a5_6b62e69c",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 16
+      },
+      "lineNbr": 3980,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2021-12-02T01:03:56Z",
+      "side": 1,
+      "message": "The original code actually is correct. There are internal buffers that does not need to be zero filled and run into this case. See test failure here https://ci.chromium.org/ui/p/angle/builders/try/linux-test/1129/overview.\n\nBTW, this code is not new, it was moved from existing code BufferHelper::init.",
+      "parentUuid": "f77303d7_e3e6a60d",
+      "range": {
+        "startLine": 3979,
+        "startChar": 0,
+        "endLine": 3980,
+        "endChar": 71
+      },
+      "revId": "8d48ba854d17c8fca6ed60cebe1bbf344a1113a0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "7b3f783c_aa087db5",
