@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "269e9b55_4e56054b",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 2906,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2021-12-02T19:26:03Z",
+      "side": 1,
+      "message": "You should be able to remove drawCount from this function then and assume it\u0027s \u003e1 in that function.\n\nWhile here, you also don\u0027t need the `rx::`.",
+      "range": {
+        "startLine": 2906,
+        "startChar": 13,
+        "endLine": 2906,
+        "endChar": 39
+      },
+      "revId": "8de4be2a054ef94baea32d694216cdedf4e56058",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
