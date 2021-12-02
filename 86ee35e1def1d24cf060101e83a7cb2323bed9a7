@@ -604,6 +604,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "432317ee_a27490fe",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 15
+      },
+      "lineNbr": 2597,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2021-12-02T11:40:00Z",
+      "side": 1,
+      "message": "Feel free to remove.",
+      "parentUuid": "355baabe_d1c7f058",
+      "range": {
+        "startLine": 2590,
+        "startChar": 0,
+        "endLine": 2597,
+        "endChar": 5
+      },
+      "revId": "86ee35e1def1d24cf060101e83a7cb2323bed9a7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "ea97be45_5b966750",
         "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
         "patchSetId": 15
