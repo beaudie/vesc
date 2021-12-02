@@ -3,6 +3,23 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "214b13bf_a6e74b29",
+        "filename": "src/libANGLE/formatutils.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 564,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2021-12-02T11:43:44Z",
+      "side": 1,
+      "message": "Could you please update the spec language for the extension to mention the new validity changes? A comment here would be great too.",
+      "revId": "1b0ca497246c03eac0eda95beb5b751e2531e181",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "e27f2e1d_7a0fa217",
         "filename": "src/tests/gl_tests/BlitFramebufferANGLETest.cpp",
         "patchSetId": 1
@@ -14,6 +31,24 @@
       "writtenOn": "2021-12-02T02:03:59Z",
       "side": 1,
       "message": "This doesn\u0027t trigger any errors without the change in EquivalentBlitInternalFormat(), so I\u0027m not sure if that actually fixes anything.",
+      "revId": "1b0ca497246c03eac0eda95beb5b751e2531e181",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b77f12fd_dfe9a9e1",
+        "filename": "src/tests/gl_tests/BlitFramebufferANGLETest.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 1950,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2021-12-02T11:43:44Z",
+      "side": 1,
+      "message": "The validation error is only there for resolve (i.e. src is multisampled)",
+      "parentUuid": "e27f2e1d_7a0fa217",
       "revId": "1b0ca497246c03eac0eda95beb5b751e2531e181",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
