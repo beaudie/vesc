@@ -51,6 +51,24 @@
       "parentUuid": "3a3ac8ef_6bce7a37",
       "revId": "e330b4434b56b10808f1f34c22f654a949c8b1d4",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "72e9cf38_0fb3ad7c",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1290487
+      },
+      "writtenOn": "2021-12-02T22:46:45Z",
+      "side": 1,
+      "message": "I think the problem was that all of the bots the original CL was tried on either fully had or did not have the extension (or core functionality, which also fills in the extension function).\n\nhttps://bugs.chromium.org/p/chromium/issues/detail?id\u003d1273344\n\nThe failure was on a mac_asan_chrome bot.  IIUC Mac uses Volk to provide Vulkan function pointers.  Elsewhere in ANGLE, we have checks for extension functions (e.g. we check for vkCmdBeginDebugUtilsLabelEXT in \"DebugAnnotatorVk.cpp\" where we expose GLES strings to AGI).  I\u0027ve always seen non-null pointesr everywhere I\u0027ve tested.  Maybe Shabi knows more.",
+      "parentUuid": "d4b32f02_c1f38335",
+      "revId": "e330b4434b56b10808f1f34c22f654a949c8b1d4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
