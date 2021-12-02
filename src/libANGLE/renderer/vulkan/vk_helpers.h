@@ -1762,6 +1762,7 @@ class ImageHelper final : public Resource, public angle::Subject
     void removeStagedUpdates(Context *context,
                              gl::LevelIndex levelGLStart,
                              gl::LevelIndex levelGLEnd);
+    void removeAllStagedUpdates(Context *context);
 
     angle::Result stageSubresourceUpdateImpl(ContextVk *contextVk,
                                              const gl::ImageIndex &index,

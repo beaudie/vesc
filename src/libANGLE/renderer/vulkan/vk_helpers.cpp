@@ -5678,6 +5678,20 @@ void ImageHelper::removeStagedUpdates(Context *context,
     ASSERT(validateSubresourceUpdateImageRefsConsistent());
 }
 
+void ImageHelper::removeAllStagedUpdates(Context *context)
+{
+    ASSERT(validateSubresourceUpdateImageRefsConsistent());
+    for (auto &updatesThisLevel : mSubresourceUpdates)
+    {
+        for (SubresourceUpdate &update : updatesThisLevel)
+        {
+            update.release(context->getRenderer());
+        }
+        updatesThisLevel.clear();
+    }
+    ASSERT(validateSubresourceUpdateImageRefsConsistent());
+}
+
 angle::Result ImageHelper::stageSubresourceUpdateImpl(ContextVk *contextVk,
                                                       const gl::ImageIndex &index,
                                                       const gl::Extents &glExtents,
