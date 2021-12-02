@@ -86,6 +86,42 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "3ab5e0bf_6b565e4e",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 935,
+      "author": {
+        "id": 1359249
+      },
+      "writtenOn": "2021-12-02T17:34:13Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "b3b26dd8_c01067a2",
+      "revId": "f24fcaa23051ce91225659a3df3a6914f52efc07",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "241f4ed5_38930c04",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 935,
+      "author": {
+        "id": 1359249
+      },
+      "writtenOn": "2021-12-02T17:34:13Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "3aff2c57_c9569e07",
+      "revId": "f24fcaa23051ce91225659a3df3a6914f52efc07",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "e085d012_73f9fc50",
@@ -116,6 +152,24 @@
       "writtenOn": "2021-12-02T17:26:24Z",
       "side": 1,
       "message": "nit: `if (x) return true; return false;` is just `return x;`.",
+      "parentUuid": "e085d012_73f9fc50",
+      "revId": "f24fcaa23051ce91225659a3df3a6914f52efc07",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "59dc98c0_bad5e874",
+        "filename": "src/libANGLE/renderer/vulkan/SurfaceVk.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 255,
+      "author": {
+        "id": 1359249
+      },
+      "writtenOn": "2021-12-02T17:34:13Z",
+      "side": 1,
+      "message": "Done.\nSure, coming up.",
       "parentUuid": "e085d012_73f9fc50",
       "revId": "f24fcaa23051ce91225659a3df3a6914f52efc07",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"

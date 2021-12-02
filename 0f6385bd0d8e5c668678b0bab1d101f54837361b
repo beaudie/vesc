@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "b493b78d_fb94ad76",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1359249
+      },
+      "writtenOn": "2021-12-02T17:34:13Z",
+      "side": 1,
+      "message": "I\u0027ll fix nit. ASAP",
+      "revId": "0f6385bd0d8e5c668678b0bab1d101f54837361b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
