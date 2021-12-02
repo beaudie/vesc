@@ -134,7 +134,7 @@ enum class SamplerFormat : uint8_t
     Shadow   = 3,
 
     InvalidEnum = 4,
-    EnumCount   = 4,
+    EnumCount   = 5,  // InvalidEnum is also an enum
 };
 
 struct UniformTypeInfo final : angle::NonCopyable
