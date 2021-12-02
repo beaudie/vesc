@@ -49,6 +49,54 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "8a0b9344_eca0e030",
+        "filename": "src/libANGLE/renderer/vulkan/TextureVk.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 1288,
+      "author": {
+        "id": 1175714
+      },
+      "writtenOn": "2021-12-02T20:03:40Z",
+      "side": 1,
+      "message": "I don\u0027t know, since I don\u0027t know the code that well I feel like removing the offending thing directly is going to be more reliable, since I don\u0027t know if we\u0027ll also have other kinds of staged updates or if there\u0027s some other kind of staging that I don\u0027t know about, etc.",
+      "parentUuid": "6ab4f6a5_89ebf836",
+      "range": {
+        "startLine": 1288,
+        "startChar": 16,
+        "endLine": 1288,
+        "endChar": 38
+      },
+      "revId": "cc02476c5ef342fe7677d54f6486d33fbd4339c9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "4b0737f8_7ff03da2",
+        "filename": "src/libANGLE/renderer/vulkan/TextureVk.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 1288,
+      "author": {
+        "id": 1175714
+      },
+      "writtenOn": "2021-12-02T20:03:40Z",
+      "side": 1,
+      "message": "That actually doesn\u0027t work, it crashes.",
+      "parentUuid": "6b579b78_33b0f970",
+      "range": {
+        "startLine": 1288,
+        "startChar": 8,
+        "endLine": 1288,
+        "endChar": 9
+      },
+      "revId": "cc02476c5ef342fe7677d54f6486d33fbd4339c9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "f919a38b_84ec8a68",
         "filename": "src/libANGLE/renderer/vulkan/TextureVk.cpp",
         "patchSetId": 3
@@ -60,6 +108,30 @@
       "writtenOn": "2021-12-02T11:54:44Z",
       "side": 1,
       "message": "No need, the multisampled images (used to emulate MSRTT) don\u0027t contain updates.",
+      "range": {
+        "startLine": 1291,
+        "startChar": 0,
+        "endLine": 1294,
+        "endChar": 5
+      },
+      "revId": "cc02476c5ef342fe7677d54f6486d33fbd4339c9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "fa3aba9f_bfa02c95",
+        "filename": "src/libANGLE/renderer/vulkan/TextureVk.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 1294,
+      "author": {
+        "id": 1175714
+      },
+      "writtenOn": "2021-12-02T20:03:40Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "f919a38b_84ec8a68",
       "range": {
         "startLine": 1291,
         "startChar": 0,
@@ -105,6 +177,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "1074a844_3fc6d12c",
+        "filename": "src/tests/gl_tests/CubeMapRespecificationTest.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 12,
+      "author": {
+        "id": 1175714
+      },
+      "writtenOn": "2021-12-02T20:03:40Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "cebd4819_cb2aca85",
+      "revId": "cc02476c5ef342fe7677d54f6486d33fbd4339c9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "0c2b4eef_ff5384a3",
@@ -136,6 +226,24 @@
       "side": 1,
       "message": "+1, or 4x4 or even 2x2",
       "parentUuid": "0c2b4eef_ff5384a3",
+      "revId": "cc02476c5ef342fe7677d54f6486d33fbd4339c9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "ca23e926_8c3070b6",
+        "filename": "src/tests/gl_tests/CubeMapRespecificationTest.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 89,
+      "author": {
+        "id": 1175714
+      },
+      "writtenOn": "2021-12-02T20:03:40Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "fa2a549c_71648a11",
       "revId": "cc02476c5ef342fe7677d54f6486d33fbd4339c9",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
