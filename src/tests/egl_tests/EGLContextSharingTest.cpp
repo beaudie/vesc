@@ -111,11 +111,11 @@ class EGLContextSharingTestNoFixture : public EGLContextSharingTest
                             EGL_BLUE_SIZE,
                             8,
                             EGL_ALPHA_SIZE,
-                            0,
+                            8,
                             EGL_RENDERABLE_TYPE,
                             clientVersion,
                             EGL_SURFACE_TYPE,
-                            EGL_WINDOW_BIT,
+                            EGL_WINDOW_BIT | EGL_PBUFFER_BIT,
                             EGL_NONE};
 
         result = eglChooseConfig(mDisplay, attribs, config, 1, &count);
@@ -140,6 +140,21 @@ class EGLContextSharingTestNoFixture : public EGLContextSharingTest
         EGLint attribs[] = {EGL_NONE};
 
         *surface = eglCreateWindowSurface(mDisplay, config, win, attribs);
+        result   = (*surface != EGL_NO_SURFACE);
+        EXPECT_TRUE(result);
+        return result;
+    }
+
+    bool createPbufferSurface(EGLDisplay dpy,
+                              EGLConfig config,
+                              EGLint width,
+                              EGLint height,
+                              EGLSurface *surface)
+    {
+        bool result      = false;
+        EGLint attribs[] = {EGL_WIDTH, width, EGL_HEIGHT, height, EGL_NONE};
+
+        *surface = eglCreatePbufferSurface(dpy, config, attribs);
         result   = (*surface != EGL_NO_SURFACE);
         EXPECT_TRUE(result);
         return result;
@@ -714,6 +729,11 @@ TEST_P(EGLContextSharingTestNoFixture, EglTerminateMultiThreaded)
         config = EGL_NO_CONFIG_KHR;
         EXPECT_TRUE(chooseConfig(&config));
         EXPECT_TRUE(createContext(config, &mContexts[1]));
+
+        // Thread1's terminate call will make mSurface an invalid handle, recreate a new surface
+        EXPECT_TRUE(createPbufferSurface(mDisplay, config, 1280, 720, &mSurface));
+        ASSERT_EGL_SUCCESS() << "eglCreatePbufferSurface failed.";
+
         EXPECT_EGL_TRUE(eglMakeCurrent(mDisplay, mSurface, mSurface, mContexts[1]));
 
         // Clear and read back to make sure thread 0 uses context 1.
@@ -825,7 +845,13 @@ TEST_P(EGLContextSharingTestNoFixture, EglDestoryContextManyTimesSameContext)
         config = EGL_NO_CONFIG_KHR;
         EXPECT_TRUE(chooseConfig(&config));
         EXPECT_TRUE(createContext(config, &mContexts[1]));
+
+        // Thread1's terminate call will make mSurface an invalid handle, recreate a new surface
+        EXPECT_TRUE(createPbufferSurface(mDisplay, config, 1280, 720, &mSurface));
+        ASSERT_EGL_SUCCESS() << "eglCreatePbufferSurface failed.";
+
         EXPECT_EGL_TRUE(eglMakeCurrent(mDisplay, mSurface, mSurface, mContexts[1]));
+        EXPECT_EGL_SUCCESS();
 
         // Clear and read back to make sure thread 0 uses context 1.
         glClearColor(1.0, 1.0, 0.0, 1.0);
@@ -861,6 +887,8 @@ TEST_P(EGLContextSharingTestNoFixture, EglDestoryContextManyTimesSameContext)
         EXPECT_EGL_TRUE(eglDestroyContext(mDisplay, mContexts[0]));
         mContexts[0] = EGL_NO_CONTEXT;
 
+        eglDestroySurface(mDisplay, mSurface);
+        mSurface = EGL_NO_SURFACE;
         eglTerminate(mDisplay);
         mDisplay = EGL_NO_DISPLAY;
         EXPECT_EGL_SUCCESS();

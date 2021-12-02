@@ -39,6 +39,7 @@ class Thread : public LabeledObject
 {
   public:
     Thread();
+    ~Thread() override;
 
     void setLabel(EGLLabelKHR label) override;
     EGLLabelKHR getLabel() const override;
@@ -62,12 +63,19 @@ class Thread : public LabeledObject
     Surface *getCurrentReadSurface() const;
     gl::Context *getContext() const;
     Display *getDisplay() const;
+    void markAsActive(Display *display);
+    void markAsInactive();
+    bool isActiveThread() const { return mActiveThread; }
+    bool isAssociatedWithDisplay(Display *display) const;
 
   private:
     EGLLabelKHR mLabel;
     EGLint mError;
     EGLenum mAPI;
     gl::Context *mContext;
+    bool mActiveThread;
+    using DisplaySet = std::set<Display *>;
+    DisplaySet mAssociatedDisplaySet;
 };
 
 void EnsureDebugAllocated();
