@@ -30,6 +30,9 @@ class RobustBufferAccessBehaviorTest : public ANGLETest
         setConfigBlueBits(8);
         setConfigAlphaBits(8);
 
+        // Enable context with robust access
+        setRobustAccess(true);
+
         // Test flakiness was noticed when reusing displays.
         forceNewDisplay();
     }
@@ -44,7 +47,6 @@ class RobustBufferAccessBehaviorTest : public ANGLETest
         {
             return false;
         }
-        setRobustAccess(true);
         if (!IsGLExtensionEnabled("GL_KHR_robust_buffer_access_behavior"))
         {
             return false;
