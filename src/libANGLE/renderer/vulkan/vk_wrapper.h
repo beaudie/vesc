@@ -1291,6 +1291,7 @@ ANGLE_INLINE void DeviceMemory::destroy(VkDevice device)
 ANGLE_INLINE VkResult DeviceMemory::allocate(VkDevice device, const VkMemoryAllocateInfo &allocInfo)
 {
     ASSERT(!valid());
+    printf("%s: size %u\n", __func__, (uint32_t)allocInfo.allocationSize);
     return vkAllocateMemory(device, &allocInfo, nullptr, &mHandle);
 }
 

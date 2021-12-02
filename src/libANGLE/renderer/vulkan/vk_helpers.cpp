@@ -4519,6 +4519,7 @@ angle::Result ImageHelper::initMemory(Context *context,
         flags |= VK_MEMORY_PROPERTY_PROTECTED_BIT;
     }
     ANGLE_TRY(AllocateImageMemory(context, flags, &flags, nullptr, &mImage, &mDeviceMemory, &size));
+    printf("ImageHelper::%s size %u\n", __func__, (uint32_t)size);
     mCurrentQueueFamilyIndex = context->getRenderer()->getQueueFamilyIndex();
 
     RendererVk *renderer = context->getRenderer();
@@ -5396,6 +5397,7 @@ void ImageHelper::Copy(ImageHelper *srcImage,
     region.extent.height  = copySize.height;
     region.extent.depth   = copySize.depth;
 
+    printf("ImageHelper::%s\n", __func__);
     commandBuffer->copyImage(srcImage->getImage(), srcImage->getCurrentLayout(),
                              dstImage->getImage(), dstImage->getCurrentLayout(), 1, &region);
 }
@@ -5849,6 +5851,14 @@ angle::Result ImageHelper::stageSubresourceUpdateImpl(ContextVk *contextVk,
 
     gl_vk::GetOffset(offset, &copy.imageOffset);
     gl_vk::GetExtent(glExtents, &copy.imageExtent);
+
+    printf(
+        "ImageHelper::%s stagingOff %u rwolen %u height %u level %u layercount %u imageoffset %u "
+        "%u extent %u %u\n",
+        __func__, (uint32_t)stagingOffset, (uint32_t)bufferRowLength, (uint32_t)bufferImageHeight,
+        (uint32_t)copy.imageSubresource.mipLevel, (uint32_t)copy.imageSubresource.layerCount,
+        (uint32_t)copy.imageOffset.x, (uint32_t)copy.imageOffset.y,
+        (uint32_t)copy.imageExtent.width, (uint32_t)copy.imageExtent.height);
 
     if (gl::IsArrayTextureType(index.getType()))
     {
@@ -6436,6 +6446,7 @@ angle::Result ImageHelper::stageRobustResourceClearWithFormat(ContextVk *context
 
 void ImageHelper::stageClearIfEmulatedFormat(bool isRobustResourceInitEnabled, bool isExternalImage)
 {
+    printf("%s: call\n", __func__);
     // Skip staging extra clears if robust resource init is enabled.
     if (!hasEmulatedImageChannels() || isRobustResourceInitEnabled)
     {

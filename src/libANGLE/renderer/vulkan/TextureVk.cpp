@@ -322,6 +322,7 @@ angle::Result TextureVk::setImage(const gl::Context *context,
 {
     const gl::InternalFormat &formatInfo = gl::GetInternalFormatInfo(internalFormat, type);
 
+    printf("TextureVk::%s %u %u\n", __func__, size.width, size.height);
     return setImageImpl(context, index, formatInfo, size, type, unpack, unpackBuffer, pixels);
 }
 
@@ -391,6 +392,7 @@ angle::Result TextureVk::setImageImpl(const gl::Context *context,
                                       gl::Buffer *unpackBuffer,
                                       const uint8_t *pixels)
 {
+    printf("TextureVk::%s\n", __func__);
     ContextVk *contextVk = vk::GetImpl(context);
     RendererVk *renderer = contextVk->getRenderer();
 
@@ -472,6 +474,7 @@ angle::Result TextureVk::setSubImageImpl(const gl::Context *context,
                                          const uint8_t *pixels,
                                          const vk::Format &vkFormat)
 {
+    printf("TextureVk::%s %p\n", __func__, mImage);
     ContextVk *contextVk = vk::GetImpl(context);
 
     // Use context's staging buffer for immutable textures and flush out updates
@@ -481,6 +484,7 @@ angle::Result TextureVk::setSubImageImpl(const gl::Context *context,
         (!shouldUpdateBeStaged(gl::LevelIndex(index.getLevelIndex()),
                                vkFormat.getActualImageFormatID(getRequiredImageAccess()))))
     {
+        printf("%s: used context staging buffer\n", __func__);
         stagingBuffer = contextVk->getStagingBuffer();
     }
 
@@ -552,6 +556,7 @@ angle::Result TextureVk::setSubImageImpl(const gl::Context *context,
     }
     else if (pixels)
     {
+        printf("%s: stage subresource update\n", __func__);
         ANGLE_TRY(mImage->stageSubresourceUpdate(
             contextVk, getNativeImageIndex(index), gl::Extents(area.width, area.height, area.depth),
             gl::Offset(area.x, area.y, area.z), formatInfo, unpack, stagingBuffer, type, pixels,
@@ -1266,6 +1271,7 @@ angle::Result TextureVk::setStorageMultisample(const gl::Context *context,
                                                const gl::Extents &size,
                                                bool fixedSampleLocations)
 {
+    printf("TextureVk::%s size %u %u\n", __func__, size.width, size.height);
     ContextVk *contextVk = GetAs<ContextVk>(context->getImplementation());
     RendererVk *renderer = contextVk->getRenderer();
 
@@ -1285,11 +1291,23 @@ angle::Result TextureVk::setStorageMultisample(const gl::Context *context,
 
     if (mImage->valid())
     {
+        // We don't actually go down this code path bc for some reason size is 0
+        printf("TextureVk::%s releasing image\n", __func__);
         releaseImage(contextVk);
+    }
+
+    if (mImage)
+    {
+        gl::LevelIndex baseLevel(mState.getEffectiveBaseLevel());
+        gl::LevelIndex maxLevel(mState.getMipmapMaxLevel());
+        printf("TextureVk::%s remove staged updates %u %u\n", __func__, baseLevel.get(),
+               maxLevel.get());
+        mImage->removeStagedUpdates(contextVk, baseLevel, maxLevel);
     }
 
     ASSERT(mState.getImmutableFormat());
     ASSERT(!mRedefinedLevels.any());
+    printf("TextureVk::%s init image\n", __func__);
     ANGLE_TRY(initImage(contextVk, format.getIntendedFormatID(),
                         format.getActualImageFormatID(getRequiredImageAccess()),
                         ImageMipLevels::FullMipChain));
@@ -1513,6 +1531,7 @@ angle::Result TextureVk::ensureImageAllocated(ContextVk *contextVk, const vk::Fo
 {
     if (mImage == nullptr)
     {
+        printf("TextureVk::%s setimagehelper\n", __func__);
         setImageHelper(contextVk, new vk::ImageHelper(), mState.getType(), format, 0, 0, true);
     }
     else
@@ -1522,6 +1541,7 @@ angle::Result TextureVk::ensureImageAllocated(ContextVk *contextVk, const vk::Fo
         // the format should not affect the currently allocated image.  The following function only
         // takes the alignment requirement to make sure the format is not accidentally used for any
         // other purpose.
+        printf("TextureVk::%s updateimagehelper\n", __func__);
         updateImageHelper(contextVk, vk::GetImageCopyBufferAlignment(
                                          format.getActualImageFormatID(getRequiredImageAccess())));
     }
@@ -1539,6 +1559,8 @@ void TextureVk::setImageHelper(ContextVk *contextVk,
                                uint32_t imageLayerOffset,
                                bool selfOwned)
 {
+    printf("TextureVk::%s w h %u %u ownd %d\n", __func__, imageHelper->getExtents().width,
+           imageHelper->getExtents().height, selfOwned);
     ASSERT(mImage == nullptr);
 
     mImageObserverBinding.bind(imageHelper);
@@ -1584,6 +1606,7 @@ void TextureVk::setImageHelper(ContextVk *contextVk,
 
 void TextureVk::updateImageHelper(ContextVk *contextVk, size_t imageCopyBufferAlignment)
 {
+    printf("TextureVk::%s\n", __func__);
     RendererVk *renderer = contextVk->getRenderer();
     ASSERT(mImage != nullptr);
     mImage->initStagingBuffer(renderer, imageCopyBufferAlignment, vk::kStagingBufferFlags,
@@ -2376,6 +2399,7 @@ angle::Result TextureVk::getAttachmentRenderTarget(const gl::Context *context,
 
 angle::Result TextureVk::ensureImageInitialized(ContextVk *contextVk, ImageMipLevels mipLevels)
 {
+    printf("TextureVk::%s\n", __func__);
     if (mImage->valid() && !mImage->hasStagedUpdatesInAllocatedLevels())
     {
         return angle::Result::Continue;
@@ -2943,6 +2967,9 @@ angle::Result TextureVk::initImage(ContextVk *contextVk,
     VkExtent3D vkExtent;
     uint32_t layerCount;
     gl_vk::GetExtentsAndLayerCount(mState.getType(), firstLevelExtents, &vkExtent, &layerCount);
+    printf("TextureVk::%s: extent w h d %u %u %u\n", __func__, vkExtent.width, vkExtent.height,
+           vkExtent.depth);
+
     GLint samples = mState.getBaseLevelDesc().samples ? mState.getBaseLevelDesc().samples : 1;
 
     if (mState.hasProtectedContent())
@@ -3008,6 +3035,7 @@ angle::Result TextureVk::initImageViews(ContextVk *contextVk,
 
 void TextureVk::releaseImage(ContextVk *contextVk)
 {
+    printf("TextureVk::%s\n", __func__);
     RendererVk *renderer = contextVk->getRenderer();
 
     if (mImage)
@@ -3027,6 +3055,10 @@ void TextureVk::releaseImage(ContextVk *contextVk)
     {
         if (image.valid())
         {
+
+            gl::LevelIndex baseLevel(mState.getEffectiveBaseLevel());
+            gl::LevelIndex maxLevel(mState.getMipmapMaxLevel());
+            image.removeStagedUpdates(contextVk, baseLevel, maxLevel);
             image.releaseImageFromShareContexts(renderer, contextVk);
         }
     }
