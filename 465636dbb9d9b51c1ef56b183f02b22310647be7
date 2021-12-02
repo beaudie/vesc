@@ -188,6 +188,24 @@
       "parentUuid": "bb75904b_d942076e",
       "revId": "465636dbb9d9b51c1ef56b183f02b22310647be7",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "a5372f58_0c9e4a6c",
+        "filename": "src/common/utilities.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 137,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2021-12-02T21:39:05Z",
+      "side": 1,
+      "message": "Thanks Frank. Here\u0027s what the spec says:\n\nIt is not allowed to have variables of different sampler types pointing to\nthe same texture image unit within a program object. This situation can only\nbe detected at the next rendering command issued which triggers shader invocations, and an INVALID_OPERATION error will then be generated.\n\nIt looks like ANGLE considers \"cube map shadow\" and \"cube map\" to have the same sampler type, with a different format. In \"ProgramExecutable::validateSamplersImpl\" we validate the sampler type only. Note that I think the sampler type/format distinction is an ANGLE concept, not from the spec.\n\nFrank could you double check that shadow samplers are considered a separate type (90% sure they are) and then correct ProgramExecutable::validateSamplersImpl to also consider \"format\" mismatch to be a conflicting type?",
+      "parentUuid": "6abb481e_dc18887d",
+      "revId": "465636dbb9d9b51c1ef56b183f02b22310647be7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
