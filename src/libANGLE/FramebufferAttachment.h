@@ -122,6 +122,7 @@ class FramebufferAttachment final
         return mRenderToTextureSamples != kDefaultRenderToTextureSamples;
     }
     GLsizei getRenderToTextureSamples() const { return mRenderToTextureSamples; }
+    void setRenderToTextureSamples(GLsizei samples) { mRenderToTextureSamples = samples; }
 
     // The size of the underlying resource the attachment points to. The 'depth' value will
     // correspond to a 3D texture depth or the layer count of a 2D array texture. For Surfaces and
