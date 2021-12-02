@@ -69,7 +69,7 @@ class EGLMultiContextTest : public ANGLETest
                             EGL_RENDERABLE_TYPE,
                             clientVersion,
                             EGL_SURFACE_TYPE,
-                            EGL_WINDOW_BIT,
+                            EGL_WINDOW_BIT | EGL_PBUFFER_BIT,
                             EGL_NONE};
 
         result = eglChooseConfig(dpy, attribs, config, 1, &count);
@@ -296,6 +296,9 @@ TEST_P(EGLMultiContextTest, RepeatedEglInitAndTerminate)
 {
     ANGLE_SKIP_TEST_IF(!IsAndroid() || !IsVulkan());
 
+    // Release all resources in parent thread
+    getEGLWindow()->destroyGL();
+
     EGLDisplay dpy;
     EGLSurface srf;
     EGLContext ctx;
@@ -324,6 +327,8 @@ TEST_P(EGLMultiContextTest, RepeatedEglInitAndTerminate)
             EXPECT_PIXEL_EQ(0, 0, 255, 0, 0, 255);
 
             eglTerminate(dpy);
+            EXPECT_EGL_SUCCESS();
+            eglReleaseThread();
             EXPECT_EGL_SUCCESS();
             dpy = EGL_NO_DISPLAY;
             srf = EGL_NO_SURFACE;
