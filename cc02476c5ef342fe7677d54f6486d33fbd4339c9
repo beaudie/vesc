@@ -26,6 +26,29 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "6b579b78_33b0f970",
+        "filename": "src/libANGLE/renderer/vulkan/TextureVk.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 1288,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2021-12-02T18:59:36Z",
+      "side": 1,
+      "message": "Can you just call mImage-\u003eremoveStagedUpdates(context, mImage-\u003egetFirstAllocatedLevel(), mImage-\u003egetLastAllocatedLevel()) instead of adding a new func?",
+      "range": {
+        "startLine": 1288,
+        "startChar": 8,
+        "endLine": 1288,
+        "endChar": 9
+      },
+      "revId": "cc02476c5ef342fe7677d54f6486d33fbd4339c9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "f919a38b_84ec8a68",
         "filename": "src/libANGLE/renderer/vulkan/TextureVk.cpp",
         "patchSetId": 3
