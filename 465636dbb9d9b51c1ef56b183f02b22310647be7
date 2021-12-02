@@ -24,6 +24,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "ee1bce4b_5f95dee4",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 2
+      },
+      "lineNbr": 12,
+      "author": {
+        "id": 1175714
+      },
+      "writtenOn": "2021-12-02T20:05:40Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "cac589ea_ac20f7f2",
+      "range": {
+        "startLine": 12,
+        "startChar": 14,
+        "endLine": 12,
+        "endChar": 20
+      },
+      "revId": "465636dbb9d9b51c1ef56b183f02b22310647be7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "b58e2bc7_4a41bacd",
@@ -144,6 +168,24 @@
       "side": 1,
       "message": "Yeah, that\u0027s an error. See ValidateDrawStates.",
       "parentUuid": "39303060_4e242547",
+      "revId": "465636dbb9d9b51c1ef56b183f02b22310647be7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "6abb481e_dc18887d",
+        "filename": "src/common/utilities.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 137,
+      "author": {
+        "id": 1175714
+      },
+      "writtenOn": "2021-12-02T20:05:40Z",
+      "side": 1,
+      "message": "Repro case is up. It\u0027s necessary to have a sampler and then a samplercubeshadow. I\u0027m not sure why those are necessary.",
+      "parentUuid": "bb75904b_d942076e",
       "revId": "465636dbb9d9b51c1ef56b183f02b22310647be7",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
