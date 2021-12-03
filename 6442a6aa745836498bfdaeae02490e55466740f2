@@ -16,6 +16,29 @@
       "message": "Separating out the ES 3.2 change from Asphalt 9 trace CL.",
       "revId": "6442a6aa745836498bfdaeae02490e55466740f2",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "2fbd89a3_911d5121",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 2386,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2021-12-03T16:34:51Z",
+      "side": 1,
+      "message": "maybe merge these? I believe the GPU shader check can be the else clause of the second if",
+      "range": {
+        "startLine": 2375,
+        "startChar": 0,
+        "endLine": 2386,
+        "endChar": 5
+      },
+      "revId": "6442a6aa745836498bfdaeae02490e55466740f2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
