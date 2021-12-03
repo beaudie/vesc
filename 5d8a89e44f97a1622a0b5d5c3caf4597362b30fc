@@ -33,6 +33,24 @@
       "message": "Why don\u0027t support RGB8 pbuffers?",
       "revId": "5d8a89e44f97a1622a0b5d5c3caf4597362b30fc",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "cb2f84e7_28f34e6f",
+        "filename": "src/libANGLE/renderer/vulkan/vk_caps_utils.cpp",
+        "patchSetId": 15
+      },
+      "lineNbr": 1170,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2021-12-03T00:19:34Z",
+      "side": 1,
+      "message": "This is being resolved with:\n3312361: Vulkan: Re-enable RGB8 for pbuffers. | https://chromium-review.googlesource.com/c/angle/angle/+/3312361",
+      "parentUuid": "ea8aebc4_a1d08fb8",
+      "revId": "5d8a89e44f97a1622a0b5d5c3caf4597362b30fc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
