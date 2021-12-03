@@ -602,19 +602,19 @@ DebugUtilsMessenger(VkDebugUtilsMessageSeverityFlagBitsEXT messageSeverity,
         }
     }
 
-    bool isError    = (messageSeverity & VK_DEBUG_UTILS_MESSAGE_SEVERITY_ERROR_BIT_EXT) != 0;
-    std::string msg = log.str();
+    // bool isError    = (messageSeverity & VK_DEBUG_UTILS_MESSAGE_SEVERITY_ERROR_BIT_EXT) != 0;
+    // std::string msg = log.str();
 
-    rendererVk->onNewValidationMessage(msg);
+    // rendererVk->onNewValidationMessage(msg);
 
-    if (isError)
-    {
-        ERR() << msg;
-    }
-    else
-    {
-        WARN() << msg;
-    }
+    // if (isError)
+    // {
+    //     ERR() << msg;
+    // }
+    // else
+    // {
+    //     WARN() << msg;
+    // }
 
     return VK_FALSE;
 }
