@@ -129,6 +129,10 @@ class VertexArrayVk : public VertexArrayImpl
                                          GLuint relativeOffset,
                                          bool compress);
 
+    angle::Result syncDirtyEnabledAttribSimpleBufferOnly(ContextVk *contextVk,
+                                                         const gl::VertexAttribute &attrib,
+                                                         const gl::VertexBinding &binding,
+                                                         size_t attribIndex);
     angle::Result syncDirtyAttrib(ContextVk *contextVk,
                                   const gl::VertexAttribute &attrib,
                                   const gl::VertexBinding &binding,
