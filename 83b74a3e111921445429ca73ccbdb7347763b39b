@@ -16,6 +16,63 @@
       "message": "Thanks!",
       "revId": "83b74a3e111921445429ca73ccbdb7347763b39b",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "e6927724_0dab4d8c",
+        "filename": "src/libANGLE/renderer/vulkan/SurfaceVk.cpp",
+        "patchSetId": 14
+      },
+      "lineNbr": 1726,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2021-12-03T03:46:26Z",
+      "side": 1,
+      "message": "nit: Please add a comment that optimizeRenderPassForPresent is doing this for depth/stencil.",
+      "revId": "83b74a3e111921445429ca73ccbdb7347763b39b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "dd3765e0_44de2b67",
+        "filename": "src/libANGLE/renderer/vulkan/SurfaceVk.cpp",
+        "patchSetId": 14
+      },
+      "lineNbr": 2166,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2021-12-03T03:46:26Z",
+      "side": 1,
+      "message": "Can you please move this up to the beginning of the function? It shouldn\u0027t matter if we need to acquire the swapchain image or not, age is always zero. In particular, this will make sure we don\u0027t unnecessarily do ANI (acquire next image) because of this query.\n\nAlso as a follow up, it would be good to completely clean out this function, and remove the mFrameCount/mFrameNumber tracking altogether. That clean up CL can always be reverted if we support anything other than DESTROYED, which may be never.",
+      "revId": "83b74a3e111921445429ca73ccbdb7347763b39b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "4df3bd03_1da587c4",
+        "filename": "src/tests/egl_tests/EGLBufferAgeTest.cpp",
+        "patchSetId": 14
+      },
+      "lineNbr": 222,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2021-12-03T03:46:26Z",
+      "side": 1,
+      "message": "nit: we don\u0027t use auto for simple types, they make the code harder to read. Were you getting warnings about this somehow? What if you changed 255.0 to 255.0f?",
+      "range": {
+        "startLine": 222,
+        "startChar": 8,
+        "endLine": 222,
+        "endChar": 12
+      },
+      "revId": "83b74a3e111921445429ca73ccbdb7347763b39b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
