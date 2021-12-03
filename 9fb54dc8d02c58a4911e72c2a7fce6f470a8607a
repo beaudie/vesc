@@ -41,6 +41,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "d0bb6086_33c55459",
+        "filename": "src/common/utilities.h",
+        "patchSetId": 6
+      },
+      "lineNbr": 137,
+      "author": {
+        "id": 1175714
+      },
+      "writtenOn": "2021-12-03T18:20:03Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "50407a78_8bd2b7a5",
+      "range": {
+        "startLine": 137,
+        "startChar": 4,
+        "endLine": 137,
+        "endChar": 16
+      },
+      "revId": "9fb54dc8d02c58a4911e72c2a7fce6f470a8607a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "e0ab0541_8bb216f5",
@@ -64,6 +88,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "0ca07890_65ca59d4",
+        "filename": "src/libANGLE/renderer/renderer_utils.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 70,
+      "author": {
+        "id": 1175714
+      },
+      "writtenOn": "2021-12-03T18:20:03Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "e0ab0541_8bb216f5",
+      "range": {
+        "startLine": 70,
+        "startChar": 13,
+        "endLine": 70,
+        "endChar": 26
+      },
+      "revId": "9fb54dc8d02c58a4911e72c2a7fce6f470a8607a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "bfa5179a_3e404332",
@@ -77,6 +125,30 @@
       "writtenOn": "2021-12-03T17:38:34Z",
       "side": 1,
       "message": "please use the sampler result(s) in the color output to ensure the shader optimizer doesn\u0027t compile out the sampler variables.",
+      "range": {
+        "startLine": 10224,
+        "startChar": 3,
+        "endLine": 10224,
+        "endChar": 26
+      },
+      "revId": "9fb54dc8d02c58a4911e72c2a7fce6f470a8607a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "a87f0400_bad8ec03",
+        "filename": "src/tests/gl_tests/TextureTest.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 10224,
+      "author": {
+        "id": 1175714
+      },
+      "writtenOn": "2021-12-03T18:20:03Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "bfa5179a_3e404332",
       "range": {
         "startLine": 10224,
         "startChar": 3,
