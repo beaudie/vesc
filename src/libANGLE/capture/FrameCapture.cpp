@@ -4756,12 +4756,29 @@ void CoherentBuffer::setDirty(size_t relativePage, bool dirty)
     mDirtyPages[relativePage] = dirty;
 }
 
-void CoherentBuffer::removeProtection()
+void CoherentBuffer::removeProtection(bool skipFirstPage, bool skipLastPage)
 {
-    if (!UnprotectMemory(mProtectionRange.start, mProtectionRange.size))
+    uintptr_t start = mProtectionRange.start;
+    size_t size     = mProtectionRange.size;
+
+    if (skipFirstPage)
     {
-        ERR() << "Could not remove protection for buffer at " << mProtectionRange.start
-              << " with size " << mProtectionRange.size;
+        start += mPageSize;
+        size -= mPageSize;
+    }
+    if (skipLastPage)
+    {
+        size -= mPageSize;
+    }
+
+    if (size == 0)
+    {
+        return;
+    }
+
+    if (!UnprotectMemory(start, size))
+    {
+        ERR() << "Could not remove protection for buffer at " << start << " with size " << size;
     }
 }
 
@@ -4859,7 +4876,7 @@ void CoherentBufferTracker::onEndFrame()
     for (const auto &pair : mBuffers)
     {
         std::shared_ptr<CoherentBuffer> buffer = pair.second;
-        buffer->removeProtection();
+        buffer->removeProtection(false, false);
     }
 
     disable();
@@ -4896,6 +4913,36 @@ void CoherentBufferTracker::addBuffer(gl::BufferID id, uintptr_t start, size_t s
     mBuffers.insert(std::make_pair(id.value, std::move(buffer)));
 }
 
+void CoherentBufferTracker::doesBufferSharePage(gl::BufferID id,
+                                                bool *firstPageShared,
+                                                bool *lastPageShared)
+{
+    std::shared_ptr<CoherentBuffer> buffer = mBuffers[id.value];
+
+    AddressRange range = buffer->getRange();
+
+    size_t firstPage = range.start / mPageSize;
+    size_t lastPage  = range.end() / mPageSize;
+
+    for (const auto &pair : mBuffers)
+    {
+        gl::BufferID otherId = {pair.first};
+        if (otherId != id)
+        {
+            std::shared_ptr<CoherentBuffer> otherBuffer = pair.second;
+            size_t relativePage;
+            if (otherBuffer->contains(firstPage, &relativePage))
+            {
+                *firstPageShared = true;
+            }
+            else if (otherBuffer->contains(lastPage, &relativePage))
+            {
+                *lastPageShared = true;
+            }
+        }
+    }
+}
+
 void CoherentBufferTracker::removeBuffer(gl::BufferID id)
 {
     std::lock_guard<std::mutex> lock(mMutex);
@@ -4905,9 +4952,13 @@ void CoherentBufferTracker::removeBuffer(gl::BufferID id)
         return;
     }
 
-    // Expecting that no buffer that overlapps in a page with another is removed
-    // while the other is kept and still written to. These writes would be missed.
-    mBuffers[id.value]->removeProtection();
+    // If the buffer shares pages with other tracked buffers,
+    // don't unprotect the overlapping pages.
+    bool skipFirstPage = false;
+    bool skipLastPage  = false;
+    doesBufferSharePage(id, &skipFirstPage, &skipLastPage);
+
+    mBuffers[id.value]->removeProtection(skipFirstPage, skipLastPage);
     mBuffers.erase(id.value);
 }
 
