@@ -1,6 +1,29 @@
 {
   "comments": [
     {
+      "unresolved": true,
+      "key": {
+        "uuid": "d4ededdf_b64cc4a9",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 2
+      },
+      "lineNbr": 9,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2021-12-03T19:11:08Z",
+      "side": 1,
+      "message": "cast/cast/cast?",
+      "range": {
+        "startLine": 9,
+        "startChar": 3,
+        "endLine": 9,
+        "endChar": 9
+      },
+      "revId": "2e58e64eda2e15b3aeeac2cd968f3d7bc857b77a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": false,
       "key": {
         "uuid": "68aa884f_37d13873",
@@ -14,6 +37,23 @@
       "writtenOn": "2021-12-03T18:27:58Z",
       "side": 1,
       "message": "LGTM",
+      "revId": "2e58e64eda2e15b3aeeac2cd968f3d7bc857b77a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "363cf9f8_24b22765",
+        "filename": "src/libANGLE/renderer/vulkan/FramebufferVk.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 482,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2021-12-03T19:11:08Z",
+      "side": 1,
+      "message": "I suggest we fix this differently and avoid clearing stencil with a 0 write mask. Context::clear does a few checks, one of which is `mState.getDepthStencilState().stencilWritemask \u003d\u003d 0` to determine if it should skip clearing stencil. I suggest we also cast the write mask there to uint8_t so the clear is no-oped instead of reaching here.",
       "revId": "2e58e64eda2e15b3aeeac2cd968f3d7bc857b77a",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
