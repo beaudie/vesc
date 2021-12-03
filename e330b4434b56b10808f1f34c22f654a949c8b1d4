@@ -121,6 +121,24 @@
       "parentUuid": "13586605_4142bf1c",
       "revId": "e330b4434b56b10808f1f34c22f654a949c8b1d4",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "60231a4b_4263b8e4",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 2541,
+      "author": {
+        "id": 1290487
+      },
+      "writtenOn": "2021-12-03T22:05:55Z",
+      "side": 1,
+      "message": "Can\u0027t be checked here.  This is a Mac issue.  I\u0027ll add a comment in the relevant code.",
+      "parentUuid": "795b6748_ee2195e3",
+      "revId": "e330b4434b56b10808f1f34c22f654a949c8b1d4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }

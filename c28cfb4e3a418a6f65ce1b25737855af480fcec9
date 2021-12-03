@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "7c677d06_2bb3ffc6",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 2202,
+      "author": {
+        "id": 1290487
+      },
+      "writtenOn": "2021-12-03T22:05:55Z",
+      "side": 1,
+      "message": "Shabi, here\u0027s where we try to init the function pointer.  I could try to add a check here and disable the feature if the pointer is nullptr.\n\nThe real problem (for me) is I have no way to test this.  I don\u0027t have a Mac, and can\u0027t reproduce the failure and any proposed fix.  CQ didn\u0027t catch it either.  Thus, I was simply following the pattern I\u0027ve seen with other Vulkan commands/function pointers.\n\nThoughts?",
+      "range": {
+        "startLine": 2198,
+        "startChar": 0,
+        "endLine": 2202,
+        "endChar": 0
+      },
+      "revId": "c28cfb4e3a418a6f65ce1b25737855af480fcec9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b51b952e_32e2ec24",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 3124,
+      "author": {
+        "id": 1290487
+      },
+      "writtenOn": "2021-12-03T22:05:55Z",
+      "side": 1,
+      "message": "I added a check here.  I\u0027ll add a comment in the place where it\u0027s possible that `vkResetQueryPoolEXT \u003d\u003d nullptr`\n\nIs this sufficient?  It\u0027s how we support other functions we load on Mac",
+      "range": {
+        "startLine": 3124,
+        "startChar": 8,
+        "endLine": 3124,
+        "endChar": 42
+      },
+      "revId": "c28cfb4e3a418a6f65ce1b25737855af480fcec9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
