@@ -4269,8 +4269,9 @@ void Context::clear(GLbitfield mask)
 
     // If all stencil bits are masked, don't attempt to clear stencil.
     if (mState.getDrawFramebuffer()->getStencilAttachment() == nullptr ||
-        mState.getDepthStencilState().stencilWritemask == 0)
+        static_cast<uint8_t>(mState.getDepthStencilState().stencilWritemask) == 0)
     {
+        ASSERT(mState.getDrawFramebuffer()->getStencilAttachment()->getStencilSize() <= 8);
         mask &= ~GL_STENCIL_BUFFER_BIT;
     }
 
