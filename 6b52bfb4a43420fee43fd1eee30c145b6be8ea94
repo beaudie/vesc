@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "4eebd587_9f53b3ed",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2021-12-03T03:39:33Z",
+      "side": 1,
+      "message": "I have to ask, have you built Chrome 4692 locally with this reverted to make sure everything\u0027s alright?",
+      "revId": "6b52bfb4a43420fee43fd1eee30c145b6be8ea94",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
