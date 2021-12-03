@@ -1,6 +1,23 @@
 {
   "comments": [
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "ee42b179_8e6cf04e",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2021-12-03T04:44:59Z",
+      "side": 1,
+      "message": "Generally I like the changes in this CL.\n\nI gave it a try with asphalt_9 as well.  It looks like the main shared file didn\u0027t get written:\n\n clang++: error: no such file or directory:\n \u0027../../src/tests/restricted_traces/asphalt_9/asphalt_9_shared.cpp\u0027\n\nI put the trace up here if you\u0027d like to take a look:\nhttps://drive.google.com/drive/folders/1b16n3MJnCeYWDRjWAuSqccQ844pVVB0z?resourcekey\u003d0-QFXTOdTr4SMiks3IeguNTw\u0026usp\u003dsharing\n\nIt looks like the file has been renamed \"asphalt_9_shared_frame001.cpp\".  The json file still refers to \"asphalt_9_shared.cpp\".",
+      "revId": "5af099105dd111aa6360dad6c3feb069c7564490",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "f6280272_85dd46e7",
@@ -36,6 +53,29 @@
         "startChar": 34,
         "endLine": 1329,
         "endChar": 72
+      },
+      "revId": "5af099105dd111aa6360dad6c3feb069c7564490",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "9a612519_cde24e54",
+        "filename": "src/libANGLE/capture/FrameCapture.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 6252,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2021-12-03T04:44:59Z",
+      "side": 1,
+      "message": "For consistency, this can be \"source \u003c\u003c proto\"",
+      "range": {
+        "startLine": 6252,
+        "startChar": 18,
+        "endLine": 6252,
+        "endChar": 80
       },
       "revId": "5af099105dd111aa6360dad6c3feb069c7564490",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
