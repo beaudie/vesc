@@ -74,6 +74,24 @@
       "parentUuid": "363cf9f8_24b22765",
       "revId": "2e58e64eda2e15b3aeeac2cd968f3d7bc857b77a",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "6f5cd517_b04eda02",
+        "filename": "src/libANGLE/renderer/vulkan/FramebufferVk.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 482,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2021-12-03T19:38:35Z",
+      "side": 1,
+      "message": "Still is and has been 8 bits since forever, and doesn\u0027t seem to want to change. It will most definitely not change in *OpenGL*. You could always add an ASSERT in the front-end where you do the cast that `depthStencilFormat.stencilBits \u003c\u003d 8`.",
+      "parentUuid": "c5aa3c5a_dd943c3b",
+      "revId": "2e58e64eda2e15b3aeeac2cd968f3d7bc857b77a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
