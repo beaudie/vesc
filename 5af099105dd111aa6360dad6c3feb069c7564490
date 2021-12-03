@@ -18,6 +18,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "a320d762_89f402cb",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2021-12-03T15:08:02Z",
+      "side": 1,
+      "message": "Cody, sorry to make you waste time on this. I realized after I put this up that it doesn\u0027t handle traces with more than one context properly. In fact I don\u0027t quite understand how multi-context traces work and what happens with \"presentation\" and \"auxiliary\" contexts.",
+      "parentUuid": "ee42b179_8e6cf04e",
+      "revId": "5af099105dd111aa6360dad6c3feb069c7564490",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "f6280272_85dd46e7",
