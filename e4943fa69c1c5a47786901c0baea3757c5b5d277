@@ -24,6 +24,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "29ed00a8_9b92a886",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 151,
+      "author": {
+        "id": 1525982
+      },
+      "writtenOn": "2021-12-03T19:38:35Z",
+      "side": 1,
+      "message": "Updated.",
+      "parentUuid": "48a335d8_c286782a",
+      "range": {
+        "startLine": 151,
+        "startChar": 26,
+        "endLine": 151,
+        "endChar": 62
+      },
+      "revId": "e4943fa69c1c5a47786901c0baea3757c5b5d277",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "f728096c_fbe81e55",
@@ -37,6 +61,30 @@
       "writtenOn": "2021-12-03T03:20:42Z",
       "side": 1,
       "message": "You can remove all but WithNoMultiDrawIndirectSupport(ES31_VULKAN()). Definitely remove OpenGL (the feature is a Vulkan feature, and on that regard, I suggest s/WithNoMultiDrawIndirectSupport/WithNoVulkanMultiDrawIndirect/). We just want to make sure the fallback works, it doesn\u0027t matter if it\u0027s swiftshader or hardware, async or not.",
+      "range": {
+        "startLine": 931,
+        "startChar": 0,
+        "endLine": 934,
+        "endChar": 87
+      },
+      "revId": "e4943fa69c1c5a47786901c0baea3757c5b5d277",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "6351747c_3c8a1db1",
+        "filename": "src/tests/gl_tests/MultiDrawTest.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 934,
+      "author": {
+        "id": 1525982
+      },
+      "writtenOn": "2021-12-03T19:38:35Z",
+      "side": 1,
+      "message": "Names and test cases updated.",
+      "parentUuid": "f728096c_fbe81e55",
       "range": {
         "startLine": 931,
         "startChar": 0,
