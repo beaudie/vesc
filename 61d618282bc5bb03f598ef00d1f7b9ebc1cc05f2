@@ -200,6 +200,30 @@
       },
       "revId": "61d618282bc5bb03f598ef00d1f7b9ebc1cc05f2",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "2939100b_75a17286",
+        "filename": "src/tests/perf_tests/TracePerfTest.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 675,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2021-12-03T15:21:51Z",
+      "side": 1,
+      "message": "Hey Jamie, PTAL when you get a chance.  We have three traces waiting on ES 3.2 resolution.",
+      "parentUuid": "086e21aa_bb8aba42",
+      "range": {
+        "startLine": 670,
+        "startChar": 0,
+        "endLine": 675,
+        "endChar": 5
+      },
+      "revId": "61d618282bc5bb03f598ef00d1f7b9ebc1cc05f2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
