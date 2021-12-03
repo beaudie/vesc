@@ -20,6 +20,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "3a6d078a_6a6bad78",
+        "filename": "src/libANGLE/formatutils.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 564,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2021-12-03T03:00:54Z",
+      "side": 1,
+      "message": "Done.\n\nPlease take a look at the extension language to make sure it\u0027s accurate (and formatted correctly).",
+      "parentUuid": "214b13bf_a6e74b29",
+      "revId": "1b0ca497246c03eac0eda95beb5b751e2531e181",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "e27f2e1d_7a0fa217",
         "filename": "src/tests/gl_tests/BlitFramebufferANGLETest.cpp",
         "patchSetId": 1
@@ -49,6 +67,24 @@
       "side": 1,
       "message": "The validation error is only there for resolve (i.e. src is multisampled)",
       "parentUuid": "e27f2e1d_7a0fa217",
+      "revId": "1b0ca497246c03eac0eda95beb5b751e2531e181",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "23a60d20_859d12cd",
+        "filename": "src/tests/gl_tests/BlitFramebufferANGLETest.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 1950,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2021-12-03T03:00:54Z",
+      "side": 1,
+      "message": "Ah, yup, I\u0027m able to recreate it with a MS FBO.",
+      "parentUuid": "b77f12fd_dfe9a9e1",
       "revId": "1b0ca497246c03eac0eda95beb5b751e2531e181",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
