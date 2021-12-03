@@ -4764,6 +4764,8 @@ bool ValidateEGLImageTargetTexture2DOES(const Context *context,
 
     if (imageObject->getSamples() > 0)
     {
+        fprintf(stderr, "EEEE imageObject->getSamples()=%zu\n", imageObject->getSamples());
+
         context->validationError(entryPoint, GL_INVALID_OPERATION,
                                  kEGLImageCannotCreate2DMultisampled);
         return false;
