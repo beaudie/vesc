@@ -18,6 +18,7 @@
 #include "libANGLE/renderer/vulkan/RendererVk.h"
 #include "libANGLE/renderer/vulkan/SurfaceVk.h"
 #include "libANGLE/renderer/vulkan/SyncVk.h"
+#include "libANGLE/renderer/vulkan/VkImageImageSiblingVk.h"
 #include "libANGLE/trace.h"
 
 namespace rx
@@ -200,6 +201,41 @@ gl::Version DisplayVk::getMaxSupportedESVersion() const
 gl::Version DisplayVk::getMaxConformantESVersion() const
 {
     return mRenderer->getMaxConformantESVersion();
+}
+
+egl::Error DisplayVk::validateImageClientBuffer(const gl::Context *context,
+                                                EGLenum target,
+                                                EGLClientBuffer clientBuffer,
+                                                const egl::AttributeMap &attribs) const
+{
+    switch (target)
+    {
+        case EGL_VULKAN_IMAGE_ANGLE:
+        {
+            VkImage *vkImage = reinterpret_cast<VkImage *>(clientBuffer);
+            if (!vkImage || *vkImage == VK_NULL_HANDLE)
+            {
+                return egl::EglBadParameter() << "clientBuffer is invalid.";
+            }
+            return egl::NoError();
+        }
+        default:
+            return DisplayImpl::validateImageClientBuffer(context, target, clientBuffer, attribs);
+    }
+}
+
+ExternalImageSiblingImpl *DisplayVk::createExternalImageSibling(const gl::Context *context,
+                                                                EGLenum target,
+                                                                EGLClientBuffer buffer,
+                                                                const egl::AttributeMap &attribs)
+{
+    switch (target)
+    {
+        case EGL_VULKAN_IMAGE_ANGLE:
+            return new VkImageImageSiblingVk(buffer, attribs);
+        default:
+            return DisplayImpl::createExternalImageSibling(context, target, buffer, attribs);
+    }
 }
 
 void DisplayVk::generateExtensions(egl::DisplayExtensions *outExtensions) const
