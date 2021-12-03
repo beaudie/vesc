@@ -35,6 +35,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "f250b355_29c112a2",
+        "filename": "src/libANGLE/renderer/vulkan/SurfaceVk.cpp",
+        "patchSetId": 14
+      },
+      "lineNbr": 1726,
+      "author": {
+        "id": 1525982
+      },
+      "writtenOn": "2021-12-03T19:07:46Z",
+      "side": 1,
+      "message": "Comment added.",
+      "parentUuid": "e6927724_0dab4d8c",
+      "revId": "83b74a3e111921445429ca73ccbdb7347763b39b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "dd3765e0_44de2b67",
@@ -52,6 +70,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "19224071_b68fbe40",
+        "filename": "src/libANGLE/renderer/vulkan/SurfaceVk.cpp",
+        "patchSetId": 14
+      },
+      "lineNbr": 2166,
+      "author": {
+        "id": 1525982
+      },
+      "writtenOn": "2021-12-03T19:07:46Z",
+      "side": 1,
+      "message": "Sounds good.\nIf-statement moved to the beginning of the function.",
+      "parentUuid": "dd3765e0_44de2b67",
+      "revId": "83b74a3e111921445429ca73ccbdb7347763b39b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "4df3bd03_1da587c4",
@@ -65,6 +101,30 @@
       "writtenOn": "2021-12-03T03:46:26Z",
       "side": 1,
       "message": "nit: we don\u0027t use auto for simple types, they make the code harder to read. Were you getting warnings about this somehow? What if you changed 255.0 to 255.0f?",
+      "range": {
+        "startLine": 222,
+        "startChar": 8,
+        "endLine": 222,
+        "endChar": 12
+      },
+      "revId": "83b74a3e111921445429ca73ccbdb7347763b39b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "4c481491_899b5206",
+        "filename": "src/tests/egl_tests/EGLBufferAgeTest.cpp",
+        "patchSetId": 14
+      },
+      "lineNbr": 222,
+      "author": {
+        "id": 1525982
+      },
+      "writtenOn": "2021-12-03T19:07:46Z",
+      "side": 1,
+      "message": "I see. Reverted.\nI got warning about double being converted to float. I tried 255.0f, but the warning changed to int being converted to float.",
+      "parentUuid": "4df3bd03_1da587c4",
       "range": {
         "startLine": 222,
         "startChar": 8,
