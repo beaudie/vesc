@@ -133,6 +133,19 @@ TEST_P(VulkanImageTest, ExportVKImage)
     EXPECT_EGL_TRUE(eglDestroyImageKHR(display, eglImage));
 }
 
+// Check extensions with Vukan backend.
+TEST_P(VulkanImageTest, HasVulkanImageExtensions)
+{
+    ANGLE_SKIP_TEST_IF(!IsVulkan());
+
+    EGLWindow *window  = getEGLWindow();
+    EGLDisplay display = window->getDisplay();
+
+    EXPECT_TRUE(IsEGLDisplayExtensionEnabled(display, "EGL_ANGLE_vulkan_image"));
+    EXPECT_TRUE(IsGLExtensionEnabled("GL_ANGLE_vulkan_image"));
+}
+
+// Check pixels after glTexImage2D
 TEST_P(VulkanImageTest, PixelTestTexImage2D)
 {
     ANGLE_SKIP_TEST_IF(!IsVulkan());
@@ -142,9 +155,6 @@ TEST_P(VulkanImageTest, PixelTestTexImage2D)
 
     EGLWindow *window  = getEGLWindow();
     EGLDisplay display = window->getDisplay();
-
-    EXPECT_TRUE(IsEGLDisplayExtensionEnabled(display, "EGL_ANGLE_vulkan_image"));
-    EXPECT_TRUE(IsGLExtensionEnabled("GL_ANGLE_vulkan_image"));
 
     constexpr GLuint kColor = 0xafbfcfdf;
 
@@ -188,15 +198,19 @@ TEST_P(VulkanImageTest, PixelTestTexImage2D)
     EXPECT_EGL_TRUE(eglDestroyImageKHR(display, eglImage));
 }
 
+// Check pixels after glClear
 TEST_P(VulkanImageTest, PixelTestClear)
 {
     ANGLE_SKIP_TEST_IF(!IsVulkan());
 
-    VulkanHelper helper;
-    helper.initializeFromANGLE();
-
     EGLWindow *window  = getEGLWindow();
     EGLDisplay display = window->getDisplay();
+
+    EXPECT_TRUE(IsEGLDisplayExtensionEnabled(display, "EGL_ANGLE_vulkan_image"));
+    EXPECT_TRUE(IsGLExtensionEnabled("GL_ANGLE_vulkan_image"));
+
+    VulkanHelper helper;
+    helper.initializeFromANGLE();
 
     GLTexture texture;
     glBindTexture(GL_TEXTURE_2D, texture);
@@ -256,15 +270,19 @@ TEST_P(VulkanImageTest, PixelTestClear)
     glBindFramebuffer(GL_FRAMEBUFFER, 0);
 }
 
+// Check pixels after GL draw.
 TEST_P(VulkanImageTest, PixelTestDrawQuad)
 {
     ANGLE_SKIP_TEST_IF(!IsVulkan());
 
-    VulkanHelper helper;
-    helper.initializeFromANGLE();
-
     EGLWindow *window  = getEGLWindow();
     EGLDisplay display = window->getDisplay();
+
+    EXPECT_TRUE(IsEGLDisplayExtensionEnabled(display, "EGL_ANGLE_vulkan_image"));
+    EXPECT_TRUE(IsGLExtensionEnabled("GL_ANGLE_vulkan_image"));
+
+    VulkanHelper helper;
+    helper.initializeFromANGLE();
 
     GLTexture texture;
     glBindTexture(GL_TEXTURE_2D, texture);
@@ -314,6 +332,102 @@ TEST_P(VulkanImageTest, PixelTestDrawQuad)
     glBindFramebuffer(GL_FRAMEBUFFER, 0);
 }
 
+// Test importing VkImage with eglCreateImageKHR
+TEST_P(VulkanImageTest, ClientBuffer)
+{
+    ANGLE_SKIP_TEST_IF(!IsVulkan());
+
+    EGLWindow *window  = getEGLWindow();
+    EGLDisplay display = window->getDisplay();
+
+    EXPECT_TRUE(IsEGLDisplayExtensionEnabled(display, "EGL_ANGLE_vulkan_image"));
+    EXPECT_TRUE(IsGLExtensionEnabled("GL_ANGLE_vulkan_image"));
+
+    VulkanHelper helper;
+    helper.initializeFromANGLE();
+
+    constexpr VkImageUsageFlags kDefaultImageUsageFlags =
+        VK_IMAGE_USAGE_TRANSFER_SRC_BIT | VK_IMAGE_USAGE_TRANSFER_DST_BIT |
+        VK_IMAGE_USAGE_SAMPLED_BIT | VK_IMAGE_USAGE_STORAGE_BIT |
+        VK_IMAGE_USAGE_COLOR_ATTACHMENT_BIT | VK_IMAGE_USAGE_INPUT_ATTACHMENT_BIT;
+
+    VkImage vkImage                   = VK_NULL_HANDLE;
+    VkDeviceMemory vkDeviceMemory     = VK_NULL_HANDLE;
+    VkDeviceSize deviceSize           = 0u;
+    VkImageCreateInfo imageCreateInfo = {};
+
+    VkResult result = VK_SUCCESS;
+    result          = helper.createImage2D(VK_FORMAT_R8G8B8A8_UNORM, 0, kDefaultImageUsageFlags,
+                                  {kWidth, kHeight, 1}, &vkImage, &vkDeviceMemory, &deviceSize,
+                                  &imageCreateInfo);
+    EXPECT_EQ(result, VK_SUCCESS);
+    EXPECT_EQ(imageCreateInfo.sType, VK_STRUCTURE_TYPE_IMAGE_CREATE_INFO);
+
+    uint64_t info    = reinterpret_cast<uint64_t>(&imageCreateInfo);
+    EGLint attribs[] = {
+        EGL_VULKAN_IMAGE_CREATE_INFO_HI_ANGLE,
+        static_cast<EGLint>((info >> 32) & 0xffffffff),
+        EGL_VULKAN_IMAGE_CREATE_INFO_LO_ANGLE,
+        static_cast<EGLint>(info & 0xffffffff),
+        EGL_NONE,
+    };
+    EGLImageKHR eglImage = eglCreateImageKHR(display, EGL_NO_CONTEXT, EGL_VULKAN_IMAGE_ANGLE,
+                                             reinterpret_cast<EGLClientBuffer>(&vkImage), attribs);
+    EXPECT_NE(eglImage, EGL_NO_IMAGE_KHR);
+
+    GLTexture texture;
+    glBindTexture(GL_TEXTURE_2D, texture);
+    glEGLImageTargetTexture2DOES(GL_TEXTURE_2D, eglImage);
+
+    GLuint textures[1] = {texture};
+    GLenum layouts[1]  = {GL_NONE};
+    glAcquireTexturesANGLE(1, textures, layouts);
+
+    GLFramebuffer framebuffer;
+    glBindFramebuffer(GL_FRAMEBUFFER, framebuffer);
+    glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, texture, 0);
+    EXPECT_GL_FRAMEBUFFER_COMPLETE(GL_FRAMEBUFFER);
+
+    glViewport(0, 0, kWidth, kHeight);
+    // clear framebuffer with white color.
+    glClearColor(1.f, 1.f, 1.f, 1.f);
+    glClear(GL_COLOR_BUFFER_BIT);
+
+    textures[0] = texture;
+    layouts[0]  = GL_NONE;
+    glReleaseTexturesANGLE(1, textures, layouts);
+    EXPECT_EQ(layouts[0], static_cast<GLenum>(GL_LAYOUT_TRANSFER_DST_EXT));
+
+    std::vector<GLuint> pixels(kWidth * kHeight);
+    helper.readPixels(vkImage, VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL, imageCreateInfo.format, {},
+                      imageCreateInfo.extent, pixels.data(), pixels.size() * sizeof(GLuint));
+    EXPECT_EQ(pixels, std::vector<GLuint>(kWidth * kHeight, kWhite));
+
+    layouts[0] = GL_LAYOUT_TRANSFER_SRC_EXT;
+    glAcquireTexturesANGLE(1, textures, layouts);
+
+    // clear framebuffer with red color.
+    glClearColor(1.f, 0.f, 0.f, 1.f);
+    glClear(GL_COLOR_BUFFER_BIT);
+
+    glReleaseTexturesANGLE(1, textures, layouts);
+    EXPECT_EQ(layouts[0], static_cast<GLenum>(GL_LAYOUT_TRANSFER_DST_EXT));
+
+    helper.readPixels(vkImage, VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL, imageCreateInfo.format, {},
+                      imageCreateInfo.extent, pixels.data(), pixels.size() * sizeof(GLuint));
+    EXPECT_EQ(pixels, std::vector<GLuint>(kWidth * kHeight, kRed));
+
+    EXPECT_GL_NO_ERROR();
+    glBindFramebuffer(GL_FRAMEBUFFER, 0);
+    framebuffer.reset();
+    texture.reset();
+
+    glFinish();
+
+    EXPECT_EGL_TRUE(eglDestroyImageKHR(display, eglImage));
+    vkDestroyImage(helper.getDevice(), vkImage, nullptr);
+    vkFreeMemory(helper.getDevice(), vkDeviceMemory, nullptr);
+}
 // Use this to select which configurations (e.g. which renderer, which GLES major version) these
 // tests should be run against.
 ANGLE_INSTANTIATE_TEST_ES2_AND_ES3(VulkanImageTest);
