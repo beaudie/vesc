@@ -103,6 +103,24 @@
       "message": "Can this check for vkResetQueryPoolEXT !\u003d nullptr instead? Or is this before the entry points are loaded?\n\nIt\u0027s kind of awkward right now that the feature says this is supported, but it\u0027s not really",
       "revId": "e330b4434b56b10808f1f34c22f654a949c8b1d4",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "795b6748_ee2195e3",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 2541,
+      "author": {
+        "id": 1290487
+      },
+      "writtenOn": "2021-12-03T04:06:44Z",
+      "side": 1,
+      "message": "The check I did follows the pattern I\u0027ve seen elsewhere (e.g. DebugAnnotatorVk.cpp).  I\u0027m happy to change this CL if you\u0027d like.  Please advise.",
+      "parentUuid": "13586605_4142bf1c",
+      "revId": "e330b4434b56b10808f1f34c22f654a949c8b1d4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
