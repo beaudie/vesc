@@ -16,6 +16,24 @@
       "message": "I have to ask, have you built Chrome 4692 locally with this reverted to make sure everything\u0027s alright?",
       "revId": "6b52bfb4a43420fee43fd1eee30c145b6be8ea94",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "393f199a_c26002fb",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1116023
+      },
+      "writtenOn": "2021-12-03T17:51:03Z",
+      "side": 1,
+      "message": "Yes, I tried building it - it worked properly.",
+      "parentUuid": "4eebd587_9f53b3ed",
+      "revId": "6b52bfb4a43420fee43fd1eee30c145b6be8ea94",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
