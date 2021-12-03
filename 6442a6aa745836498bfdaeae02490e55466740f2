@@ -104,6 +104,30 @@
       },
       "revId": "6442a6aa745836498bfdaeae02490e55466740f2",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "3f4284d8_10fd0436",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 2386,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2021-12-03T19:06:30Z",
+      "side": 1,
+      "message": "What you\u0027re effectively doing is just removing the `if (gpu shader 5)` altogether, because if !exposeNonConformantExtensionsAndVersions we drop to 3.1 regardless of gpu shader 5 support.\n\nBut Ack, whatever it is here is fine with me, we need to go through all this one day and correct it once we have 3.2 done.",
+      "parentUuid": "73fe73ae_8c8bc5e2",
+      "range": {
+        "startLine": 2375,
+        "startChar": 0,
+        "endLine": 2386,
+        "endChar": 5
+      },
+      "revId": "6442a6aa745836498bfdaeae02490e55466740f2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
