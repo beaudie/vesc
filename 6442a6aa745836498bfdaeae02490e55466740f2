@@ -18,6 +18,23 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "83fffd3c_5d9c9b23",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2021-12-03T18:26:26Z",
+      "side": 1,
+      "message": "re-lgtm",
+      "revId": "6442a6aa745836498bfdaeae02490e55466740f2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "2fbd89a3_911d5121",
@@ -55,6 +72,30 @@
       "side": 1,
       "message": "It\u0027s difficult to merge since the last one is a catch all.\n\nIf I take the else if gpu_shader5 approach, that won\u0027t work:\n\n    if (!mFeatures.exposeNonConformantExtensionsAndVersions.enabled)\n    {\n        maxVersion \u003d LimitVersionTo(maxVersion, {3, 1});\n    }\n    else if (!vk::CanSupportGPUShader5EXT(mPhysicalDeviceFeatures))\n    {\n        // SwiftShader can\u0027t reach this\n        maxVersion \u003d LimitVersionTo(maxVersion, {3, 1});\n    }\n\n\nI tried this, but it also has a problem:\n\n    if (!mFeatures.exposeNonConformantExtensionsAndVersions.enabled)\n    {\n        if (!vk::CanSupportGPUShader5EXT(mPhysicalDeviceFeatures)\n        {\n            maxVersion \u003d LimitVersionTo(maxVersion, {3, 1});\n        }\n\n        // Devices that have gpu_shader5 but not lots of other extensions\n        // will reach this and expose ES 3.2\n    }\n\nMerging them and preserving the functionality is still goofy:\n\n    if (!mFeatures.exposeNonConformantExtensionsAndVersions.enabled)\n    {\n        maxVersion \u003d LimitVersionTo(maxVersion, {3, 1});\n    }\n    else if (!vk::CanSupportGPUShader5EXT(mPhysicalDeviceFeatures) \u0026\u0026\n             !mFeatures.exposeNonConformantExtensionsAndVersions.enabled)\n    {\n        maxVersion \u003d LimitVersionTo(maxVersion, {3, 1});\n    }\n\nWe could leave the first check alone and just flip the logic on the second, bumping the version back up:\n\n    if (mFeatures.exposeNonConformantExtensionsAndVersions.enabled)\n    {\n        maxVersion \u003d gl::Version(3, 2);\n    }\n    else\n    {\n        maxVersion \u003d LimitVersionTo(maxVersion, {3, 1});\n    }\n\nOr we could remove the first check entirely, since it is overridden by the second one.  LMKWYT.",
       "parentUuid": "2fbd89a3_911d5121",
+      "range": {
+        "startLine": 2375,
+        "startChar": 0,
+        "endLine": 2386,
+        "endChar": 5
+      },
+      "revId": "6442a6aa745836498bfdaeae02490e55466740f2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "73fe73ae_8c8bc5e2",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 2386,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2021-12-03T18:26:26Z",
+      "side": 1,
+      "message": "n/m i think what you have now is the best for now. thanks. it\u0027s mostly a documentation thing it seems.",
+      "parentUuid": "c4d9d715_e9a05ee0",
       "range": {
         "startLine": 2375,
         "startChar": 0,
