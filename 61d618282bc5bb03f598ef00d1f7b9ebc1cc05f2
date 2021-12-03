@@ -224,6 +224,30 @@
       },
       "revId": "61d618282bc5bb03f598ef00d1f7b9ebc1cc05f2",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "bc1a78c4_b0932646",
+        "filename": "src/tests/perf_tests/TracePerfTest.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 675,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2021-12-03T15:23:31Z",
+      "side": 1,
+      "message": "Can you split the ES 3.2 stuff? I\u0027m waiting on As9 until I can verify the retrace works as expected ... really want to land my big retrace.",
+      "parentUuid": "2939100b_75a17286",
+      "range": {
+        "startLine": 670,
+        "startChar": 0,
+        "endLine": 675,
+        "endChar": 5
+      },
+      "revId": "61d618282bc5bb03f598ef00d1f7b9ebc1cc05f2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
