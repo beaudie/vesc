@@ -172,6 +172,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "c898a0b6_be09a4f0",
+        "filename": "src/libANGLE/renderer/vulkan/BufferVk.cpp",
+        "patchSetId": 14
+      },
+      "lineNbr": 1210,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2021-12-03T21:37:17Z",
+      "side": 1,
+      "message": "Done. Removed.",
+      "parentUuid": "fad25610_7c8a2bbc",
+      "revId": "5dd075bd0ec7a8cfbd869f8ae200766a901214d7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "52c1730b_4be8ec70",
@@ -304,6 +322,30 @@
       "side": 1,
       "message": "+1",
       "parentUuid": "b1966221_4a1e88ac",
+      "range": {
+        "startLine": 4157,
+        "startChar": 0,
+        "endLine": 4165,
+        "endChar": 9
+      },
+      "revId": "5dd075bd0ec7a8cfbd869f8ae200766a901214d7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "599a6b09_9a1110cb",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 14
+      },
+      "lineNbr": 4165,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2021-12-03T21:37:17Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "251c1369_4973ed82",
       "range": {
         "startLine": 4157,
         "startChar": 0,

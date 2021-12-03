@@ -626,6 +626,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "c9692f6c_4cb1db55",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 15
+      },
+      "lineNbr": 2597,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2021-12-03T21:37:17Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "432317ee_a27490fe",
+      "range": {
+        "startLine": 2590,
+        "startChar": 0,
+        "endLine": 2597,
+        "endChar": 5
+      },
+      "revId": "86ee35e1def1d24cf060101e83a7cb2323bed9a7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "ea97be45_5b966750",
@@ -816,6 +840,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "128ac205_c7ce44b2",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 15
+      },
+      "lineNbr": 2662,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2021-12-03T21:37:17Z",
+      "side": 1,
+      "message": "This one actually is different. This is not a failure. It just failed to allocate in this buffer block. It will loop all buffer blocks.",
+      "parentUuid": "c3d14e60_624b619f",
+      "range": {
+        "startLine": 2662,
+        "startChar": 89,
+        "endLine": 2662,
+        "endChar": 99
+      },
+      "revId": "86ee35e1def1d24cf060101e83a7cb2323bed9a7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "48e9f09a_45e1a57a",
         "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
         "patchSetId": 15
@@ -827,6 +875,30 @@
       "writtenOn": "2021-11-24T17:12:52Z",
       "side": 1,
       "message": "same",
+      "range": {
+        "startLine": 2673,
+        "startChar": 85,
+        "endLine": 2673,
+        "endChar": 95
+      },
+      "revId": "86ee35e1def1d24cf060101e83a7cb2323bed9a7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "8820349f_19dde7b0",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 15
+      },
+      "lineNbr": 2673,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2021-12-03T21:37:17Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "48e9f09a_45e1a57a",
       "range": {
         "startLine": 2673,
         "startChar": 85,
@@ -1045,6 +1117,30 @@
       "side": 1,
       "message": "Well, it\u0027s a memory savings that is part of a design goal of the back-end, which is to only cache on measurable performance improvements, and otherwise de-duplicate. LMK if you need any more concrete guidance here.",
       "parentUuid": "d72a9af2_8f265538",
+      "range": {
+        "startLine": 1046,
+        "startChar": 4,
+        "endLine": 1046,
+        "endChar": 25
+      },
+      "revId": "86ee35e1def1d24cf060101e83a7cb2323bed9a7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "90949c87_42a65d0c",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.h",
+        "patchSetId": 15
+      },
+      "lineNbr": 1046,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2021-12-03T21:37:17Z",
+      "side": 1,
+      "message": "Removed. Done",
+      "parentUuid": "6ddf7aa6_21243cae",
       "range": {
         "startLine": 1046,
         "startChar": 4,
