@@ -56,6 +56,24 @@
       "message": "I suggest we fix this differently and avoid clearing stencil with a 0 write mask. Context::clear does a few checks, one of which is `mState.getDepthStencilState().stencilWritemask \u003d\u003d 0` to determine if it should skip clearing stencil. I suggest we also cast the write mask there to uint8_t so the clear is no-oped instead of reaching here.",
       "revId": "2e58e64eda2e15b3aeeac2cd968f3d7bc857b77a",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "c5aa3c5a_dd943c3b",
+        "filename": "src/libANGLE/renderer/vulkan/FramebufferVk.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 482,
+      "author": {
+        "id": 1175714
+      },
+      "writtenOn": "2021-12-03T19:23:48Z",
+      "side": 1,
+      "message": "I thought of that too, but I think we should leave it to a future CL because it basically means all stencil is really assumed to be 8 bits",
+      "parentUuid": "363cf9f8_24b22765",
+      "revId": "2e58e64eda2e15b3aeeac2cd968f3d7bc857b77a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
