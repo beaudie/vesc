@@ -62,6 +62,7 @@ class AttributeMap final
 
     const_iterator begin() const;
     const_iterator end() const;
+    const_iterator find(EGLAttrib key) const;
 
     ANGLE_NO_DISCARD bool validate(const ValidationContext *val,
                                    const egl::Display *display,
