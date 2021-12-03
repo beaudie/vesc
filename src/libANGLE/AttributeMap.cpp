@@ -80,6 +80,11 @@ AttributeMap::const_iterator AttributeMap::end() const
     return attribs().end();
 }
 
+AttributeMap::const_iterator AttributeMap::find(EGLAttrib key) const
+{
+    return attribs().find(key);
+}
+
 bool AttributeMap::validate(const ValidationContext *val,
                             const egl::Display *display,
                             AttributeValidationFunc validationFunc) const

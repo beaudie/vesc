@@ -9,6 +9,7 @@
 #include "libANGLE/validationEGL_autogen.h"
 
 #include "common/utilities.h"
+#include "common/vulkan/vk_headers.h"
 #include "libANGLE/Config.h"
 #include "libANGLE/Context.h"
 #include "libANGLE/Device.h"
@@ -3347,6 +3348,17 @@ bool ValidateCreateImage(const ValidationContext *val,
                 }
                 break;
 
+            case EGL_VULKAN_IMAGE_CREATE_INFO_HI_ANGLE:
+            case EGL_VULKAN_IMAGE_CREATE_INFO_LO_ANGLE:
+                if (!displayExtensions.vulkanImageANGLE)
+                {
+                    val->setError(EGL_BAD_ATTRIBUTE,
+                                  "Attribute EGL_VULKAN_IMAGE_CREATE_INFO_{HI,LO}_ANGLE require "
+                                  "extension EGL_ANGLE_vulkan_image.");
+                    return false;
+                }
+                break;
+
             default:
                 val->setError(EGL_BAD_PARAMETER, "invalid attribute: 0x%04" PRIxPTR "X", attribute);
                 return false;
@@ -3713,6 +3725,50 @@ bool ValidateCreateImage(const ValidationContext *val,
             {
                 val->setError(EGL_BAD_CONTEXT, "ctx must be EGL_NO_CONTEXT.");
                 return false;
+            }
+
+            ANGLE_EGL_TRY_RETURN(
+                val->eglThread,
+                display->validateImageClientBuffer(context, target, buffer, attributes),
+                val->entryPoint, val->labeledObject, false);
+            break;
+        case EGL_VULKAN_IMAGE_ANGLE:
+            if (!displayExtensions.vulkanImageANGLE)
+            {
+                val->setError(EGL_BAD_PARAMETER, "EGL_ANGLE_vulkan_image not supported.");
+                return false;
+            }
+
+            if (context != nullptr)
+            {
+                val->setError(EGL_BAD_CONTEXT, "ctx must be EGL_NO_CONTEXT.");
+                return false;
+            }
+
+            {
+                auto hi = attributes.find(EGL_VULKAN_IMAGE_CREATE_INFO_HI_ANGLE);
+                auto lo = attributes.find(EGL_VULKAN_IMAGE_CREATE_INFO_LO_ANGLE);
+                if (hi == attributes.end() || lo == attributes.end())
+                {
+                    val->setError(
+                        EGL_BAD_PARAMETER,
+                        "Missing required parameter EGL_VULKAN_IMAGE_CREATE_INFO_HI_ANGLE or "
+                        "EGL_VULKAN_IMAGE_CREATE_INFO_LO_ANGLE for image target "
+                        "EGL_VULKAN_IMAGE_ANGLE.");
+                    return false;
+                }
+
+                uint64_t info = ((static_cast<uint64_t>(hi->second) & 0xffffffff) << 32) |
+                                (static_cast<uint64_t>(lo->second) & 0xffffffff);
+                if (reinterpret_cast<const VkImageCreateInfo *>(info)->sType !=
+                    VK_STRUCTURE_TYPE_IMAGE_CREATE_INFO)
+                {
+                    val->setError(EGL_BAD_PARAMETER,
+                                  "EGL_VULKAN_IMAGE_CREATE_INFO_HI_ANGLE and "
+                                  "EGL_VULKAN_IMAGE_CREATE_INFO_LO_ANGLE are not pointing to a "
+                                  "valid VkImageCreateInfo structure.");
+                    return false;
+                }
             }
 
             ANGLE_EGL_TRY_RETURN(
