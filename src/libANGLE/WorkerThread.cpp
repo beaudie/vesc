@@ -80,7 +80,7 @@ bool SingleThreadedWorkerPool::isAsync()
 class AsyncWaitableEvent final : public WaitableEvent
 {
   public:
-    AsyncWaitableEvent() : mIsPending(true) {}
+    AsyncWaitableEvent() {}
     ~AsyncWaitableEvent() override = default;
 
     void wait() override;
@@ -90,13 +90,6 @@ class AsyncWaitableEvent final : public WaitableEvent
     friend class AsyncWorkerPool;
     void setFuture(std::future<void> &&future);
 
-    // To block wait() when the task is still in queue to be run.
-    // Also to protect the concurrent accesses from both main thread and
-    // background threads to the member fields.
-    std::mutex mMutex;
-
-    bool mIsPending;
-    std::condition_variable mCondition;
     std::future<void> mFuture;
 };
 
@@ -108,22 +101,12 @@ void AsyncWaitableEvent::setFuture(std::future<void> &&future)
 void AsyncWaitableEvent::wait()
 {
     ANGLE_TRACE_EVENT0("gpu.angle", "AsyncWaitableEvent::wait");
-    {
-        std::unique_lock<std::mutex> lock(mMutex);
-        mCondition.wait(lock, [this] { return !mIsPending; });
-    }
-
     ASSERT(mFuture.valid());
     mFuture.wait();
 }
 
 bool AsyncWaitableEvent::isReady()
 {
-    std::lock_guard<std::mutex> lock(mMutex);
-    if (mIsPending)
-    {
-        return false;
-    }
     ASSERT(mFuture.valid());
     return mFuture.wait_for(std::chrono::seconds(0)) == std::future_status::ready;
 }
@@ -198,17 +181,11 @@ void AsyncWorkerPool::checkToRunPendingTasks()
                 ASSERT(mRunningThreads != 0);
                 --mRunningThreads;
             }
-            checkToRunPendingTasks();
         });
 
         ++mRunningThreads;
 
-        {
-            std::lock_guard<std::mutex> waitableLock(waitable->mMutex);
-            waitable->mIsPending = false;
-            waitable->setFuture(std::move(future));
-        }
-        waitable->mCondition.notify_all();
+        waitable->setFuture(std::move(future));
     }
 }
 #endif  // (ANGLE_STD_ASYNC_WORKERS == ANGLE_ENABLED)
