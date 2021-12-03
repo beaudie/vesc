@@ -9,6 +9,7 @@
 #include "libANGLE/validationEGL_autogen.h"
 
 #include "common/utilities.h"
+#include "common/vulkan/vk_headers.h"
 #include "libANGLE/Config.h"
 #include "libANGLE/Context.h"
 #include "libANGLE/Device.h"
@@ -2797,7 +2798,20 @@ bool ValidateCreatePbufferFromClientBuffer(const ValidationContext *val,
                     return false;
                 }
                 break;
-
+            case EGL_VULKAN_IMAGE_CREATE_INFO_ANGLE:
+                if (buftype != EGL_VULKAN_IMAGE_ANGLE)
+                {
+                    val->setError(EGL_BAD_ATTRIBUTE,
+                                  "<buftype> doesn't support setting VkImageCreateInfo");
+                    return false;
+                }
+                if (!value || reinterpret_cast<VkImageCreateInfo *>(value)->sType !=
+                                  VK_STRUCTURE_TYPE_IMAGE_CREATE_INFO)
+                {
+                    val->setError(EGL_BAD_ATTRIBUTE, "not a valid VkImageCreateInfo");
+                    return false;
+                }
+                break;
             default:
                 val->setError(EGL_BAD_ATTRIBUTE);
                 return false;
@@ -3713,6 +3727,39 @@ bool ValidateCreateImage(const ValidationContext *val,
             {
                 val->setError(EGL_BAD_CONTEXT, "ctx must be EGL_NO_CONTEXT.");
                 return false;
+            }
+
+            ANGLE_EGL_TRY_RETURN(
+                val->eglThread,
+                display->validateImageClientBuffer(context, target, buffer, attributes),
+                val->entryPoint, val->labeledObject, false);
+            break;
+        case EGL_VULKAN_IMAGE_ANGLE:
+            if (!displayExtensions.vulkanImageANGLE)
+            {
+                val->setError(EGL_BAD_PARAMETER, "EGL_ANGLE_vulkan_image not supported.");
+                return false;
+            }
+
+            if (context != nullptr)
+            {
+                val->setError(EGL_BAD_CONTEXT, "ctx must be EGL_NO_CONTEXT.");
+                return false;
+            }
+
+            {
+                EGLenum kRequiredParameters[] = {EGL_VULKAN_IMAGE_CREATE_INFO_ANGLE};
+                for (EGLenum requiredParameter : kRequiredParameters)
+                {
+                    if (!attributes.contains(requiredParameter))
+                    {
+                        val->setError(EGL_BAD_PARAMETER,
+                                      "Missing required parameter 0x%X for image target "
+                                      "EGL_VULKAN_IMAGE_ANGLE.",
+                                      requiredParameter);
+                        return false;
+                    }
+                }
             }
 
             ANGLE_EGL_TRY_RETURN(

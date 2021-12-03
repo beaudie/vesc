@@ -371,6 +371,8 @@ EGLAPI EGLBoolean EGLAPIENTRY eglSwapBuffersWithFrameTokenANGLE(EGLDisplay dpy, 
 
 #ifndef EGL_ANGLE_vulkan_image
 #define EGL_ANGLE_vulkan_image
+#define EGL_VULKAN_IMAGE_ANGLE 0x34D2
+#define EGL_VULKAN_IMAGE_CREATE_INFO_ANGLE 0x34D3
 typedef EGLBoolean (EGLAPIENTRYP PFNEGLEXPORTVKIMAGEANGLEPROC)(EGLDisplay dpy, EGLImage image, void* vk_image, void* vk_image_create_info);
 #endif /* EGL_ANGLE_vulkan_image */
 
