@@ -38,6 +38,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "93e70c1d_f3b358e0",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2021-12-03T19:45:27Z",
+      "side": 1,
+      "message": "Cody, I added a multi-context sample to debug with and confirmed it compiles as expected. Can you test again with A9 with the latest version of the CL?",
+      "parentUuid": "a320d762_89f402cb",
+      "revId": "5af099105dd111aa6360dad6c3feb069c7564490",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "f6280272_85dd46e7",
         "filename": "src/libANGLE/capture/FrameCapture.cpp",
         "patchSetId": 3
@@ -55,6 +73,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "247e33de_28e38a41",
+        "filename": "src/libANGLE/capture/FrameCapture.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 499,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2021-12-03T19:45:27Z",
+      "side": 1,
+      "message": "I didn\u0027t quite follow the question. Are you wondering about the prior code or something that I changed?",
+      "parentUuid": "f6280272_85dd46e7",
+      "revId": "5af099105dd111aa6360dad6c3feb069c7564490",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "9a4504ed_3dd69e31",
         "filename": "src/libANGLE/capture/FrameCapture.cpp",
         "patchSetId": 3
@@ -66,6 +102,30 @@
       "writtenOn": "2021-12-02T23:57:43Z",
       "side": 1,
       "message": "nit: Please add when the header file is expected to be written out, since it\u0027s being skipped here.",
+      "range": {
+        "startLine": 1329,
+        "startChar": 34,
+        "endLine": 1329,
+        "endChar": 72
+      },
+      "revId": "5af099105dd111aa6360dad6c3feb069c7564490",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "cff19053_38cb38e6",
+        "filename": "src/libANGLE/capture/FrameCapture.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 1329,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2021-12-03T19:45:27Z",
+      "side": 1,
+      "message": "Removed comment as it wasn\u0027t helpful.",
+      "parentUuid": "9a4504ed_3dd69e31",
       "range": {
         "startLine": 1329,
         "startChar": 34,
@@ -99,6 +159,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "bd32cd51_1e9387ae",
+        "filename": "src/libANGLE/capture/FrameCapture.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 6252,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2021-12-03T19:45:27Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "9a612519_cde24e54",
+      "range": {
+        "startLine": 6252,
+        "startChar": 18,
+        "endLine": 6252,
+        "endChar": 80
+      },
+      "revId": "5af099105dd111aa6360dad6c3feb069c7564490",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "962b847d_72563c31",
@@ -112,6 +196,30 @@
       "writtenOn": "2021-12-02T23:57:43Z",
       "side": 1,
       "message": "Remove.",
+      "range": {
+        "startLine": 6362,
+        "startChar": 37,
+        "endLine": 6363,
+        "endChar": 32
+      },
+      "revId": "5af099105dd111aa6360dad6c3feb069c7564490",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "2b128e81_da8ca9e3",
+        "filename": "src/libANGLE/capture/FrameCapture.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 6363,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2021-12-03T19:45:27Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "962b847d_72563c31",
       "range": {
         "startLine": 6362,
         "startChar": 37,
