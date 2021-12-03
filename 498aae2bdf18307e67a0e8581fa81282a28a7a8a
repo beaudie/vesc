@@ -47,6 +47,54 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "ef870503_b9f0de33",
+        "filename": "src/libANGLE/capture/FrameCapture.h",
+        "patchSetId": 27
+      },
+      "lineNbr": 465,
+      "author": {
+        "id": 1491687
+      },
+      "writtenOn": "2021-12-03T15:16:24Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "f2b9c3af_07f4f155",
+      "range": {
+        "startLine": 465,
+        "startChar": 9,
+        "endLine": 465,
+        "endChar": 12
+      },
+      "revId": "498aae2bdf18307e67a0e8581fa81282a28a7a8a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "d82a20aa_ca3f6094",
+        "filename": "src/libANGLE/capture/FrameCapture.h",
+        "patchSetId": 27
+      },
+      "lineNbr": 465,
+      "author": {
+        "id": 1491687
+      },
+      "writtenOn": "2021-12-03T15:16:24Z",
+      "side": 1,
+      "message": "It is shared between the `std::map\u003cgl::BufferID, std::shared_ptr\u003cCoherentBuffer\u003e\u003e mBuffers;` member and the `HashMap\u003cstd::shared_ptr\u003cCoherentBuffer\u003e, size_t\u003e foundPages` results map in `getBufferPagesForAddress`. Using a `unique_ptr` here resulted in clang errors.",
+      "parentUuid": "304c3a05_7167fd4c",
+      "range": {
+        "startLine": 465,
+        "startChar": 18,
+        "endLine": 465,
+        "endChar": 28
+      },
+      "revId": "498aae2bdf18307e67a0e8581fa81282a28a7a8a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "3e57c58c_f04ca6ea",
@@ -60,6 +108,30 @@
       "writtenOn": "2021-12-02T15:34:51Z",
       "side": 1,
       "message": "same nits",
+      "range": {
+        "startLine": 471,
+        "startChar": 8,
+        "endLine": 471,
+        "endChar": 40
+      },
+      "revId": "498aae2bdf18307e67a0e8581fa81282a28a7a8a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "d743fd87_f8a7f1c2",
+        "filename": "src/libANGLE/capture/FrameCapture.h",
+        "patchSetId": 27
+      },
+      "lineNbr": 471,
+      "author": {
+        "id": 1491687
+      },
+      "writtenOn": "2021-12-03T15:16:24Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "3e57c58c_f04ca6ea",
       "range": {
         "startLine": 471,
         "startChar": 8,
