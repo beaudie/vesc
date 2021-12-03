@@ -2252,6 +2252,8 @@ void ContextVk::addOverlayUsedBuffersCount(vk::CommandBufferHelper *commandBuffe
 
 angle::Result ContextVk::submitFrame(const vk::Semaphore *signalSemaphore, Serial *submitSerialOut)
 {
+    // printf("ContextVk::%s syncstatecalls: %u\n", __func__,
+    //         mPerfCounters.vertexArraySyncStateCalls);
     if (mCurrentWindowSurface)
     {
         const vk::Semaphore *waitSemaphore =
