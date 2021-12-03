@@ -16,6 +16,23 @@
       "message": "Let me know how you like it now",
       "revId": "2e2ef631d4af0480102b141ba711372597bcdeaf",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "4c4d369c_f88156bf",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2021-12-03T14:58:59Z",
+      "side": 1,
+      "message": "LGTM",
+      "revId": "2e2ef631d4af0480102b141ba711372597bcdeaf",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
