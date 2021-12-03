@@ -471,15 +471,15 @@ angle::Result FramebufferVk::clearImpl(const gl::Context *context,
     // When this function is called, there should always be something to clear.
     ASSERT(clearColor || clearDepth || clearStencil);
 
-    const uint8_t stencilMask =
-        static_cast<uint8_t>(contextVk->getState().getDepthStencilState().stencilWritemask);
+    const GLuint fullStencilMask = contextVk->getState().getDepthStencilState().stencilWritemask;
+    const uint8_t stencilMask    = static_cast<uint8_t>(fullStencilMask);
 
     // The front-end should ensure we don't attempt to clear color if all channels are masked.
     ASSERT(!clearColor || colorMasks != 0);
     // The front-end should ensure we don't attempt to clear depth if depth write is disabled.
     ASSERT(!clearDepth || contextVk->getState().getDepthStencilState().depthMask);
     // The front-end should ensure we don't attempt to clear stencil if all bits are masked.
-    ASSERT(!clearStencil || stencilMask != 0);
+    ASSERT(!clearStencil || fullStencilMask != 0);
 
     const bool scissoredClear = scissoredRenderArea != getRotatedCompleteRenderArea(contextVk);
 
