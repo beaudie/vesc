@@ -609,11 +609,11 @@ DebugUtilsMessenger(VkDebugUtilsMessageSeverityFlagBitsEXT messageSeverity,
 
     if (isError)
     {
-        ERR() << msg;
+        // ERR() << msg;
     }
     else
     {
-        WARN() << msg;
+        // WARN() << msg;
     }
 
     return VK_FALSE;
