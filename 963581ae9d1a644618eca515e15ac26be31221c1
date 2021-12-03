@@ -22,6 +22,30 @@
       },
       "revId": "963581ae9d1a644618eca515e15ac26be31221c1",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "8d845177_c31d3fea",
+        "filename": "src/libANGLE/renderer/vulkan/SurfaceVk.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 1733,
+      "author": {
+        "id": 1525982
+      },
+      "writtenOn": "2021-12-03T00:16:46Z",
+      "side": 1,
+      "message": "WindowSurfaceVk::getBufferAge() updated so it sets `age` to 0 when swap behavior is EGL_BUFFER_DESTROYED.",
+      "parentUuid": "b83fc495_230a6479",
+      "range": {
+        "startLine": 1725,
+        "startChar": 0,
+        "endLine": 1733,
+        "endChar": 83
+      },
+      "revId": "963581ae9d1a644618eca515e15ac26be31221c1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
