@@ -248,6 +248,30 @@
       },
       "revId": "61d618282bc5bb03f598ef00d1f7b9ebc1cc05f2",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "4d498109_7cc0c4c5",
+        "filename": "src/tests/perf_tests/TracePerfTest.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 675,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2021-12-03T15:33:35Z",
+      "side": 1,
+      "message": "Sure, I can do that.  The non-conformant change needs to land first, then the traces.  I\u0027ll ping you today so we can sync on end of year plans.  I think we\u0027re all trying to land stuff we\u0027ve invested months on. :)",
+      "parentUuid": "bc1a78c4_b0932646",
+      "range": {
+        "startLine": 670,
+        "startChar": 0,
+        "endLine": 675,
+        "endChar": 5
+      },
+      "revId": "61d618282bc5bb03f598ef00d1f7b9ebc1cc05f2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
