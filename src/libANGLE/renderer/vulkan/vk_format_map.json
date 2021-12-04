@@ -378,7 +378,7 @@
             "buffer": "R8G8B8A8_SNORM"
         },
         "R8G8B8_USCALED": {
-            "buffer": ["R16G16B16_FLOAT", "R16G16B16A16_FLOAT"]
+            "buffer": "R8G8B8A8_USCALED"
         },
         "R8G8B8_SSCALED": {
             "buffer": ["R16G16B16_FLOAT", "R16G16B16A16_FLOAT"]
