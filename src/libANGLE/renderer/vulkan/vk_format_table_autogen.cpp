@@ -2123,11 +2123,9 @@ void Format::initialize(RendererVk *renderer, const angle::Format &angleFormat)
                 static constexpr BufferFormatInitInfo kInfo[] = {
                     {angle::FormatID::R8G8B8_USCALED, false, CopyNativeVertexData<GLubyte, 3, 3, 0>,
                      false},
-                    {angle::FormatID::R16G16B16_FLOAT, false,
-                     CopyToFloatVertexData<GLubyte, 3, 3, false, true>, true},
-                    {angle::FormatID::R16G16B16A16_FLOAT, false,
-                     CopyToFloatVertexData<GLubyte, 3, 4, false, true>, true}};
-                initBufferFallback(renderer, kInfo, ArraySize(kInfo), 3);
+                    {angle::FormatID::R8G8B8A8_USCALED, false,
+                     CopyNativeVertexData<GLubyte, 3, 4, 1>, true}};
+                initBufferFallback(renderer, kInfo, ArraySize(kInfo), 2);
             }
             break;
 
