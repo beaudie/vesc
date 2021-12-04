@@ -1668,6 +1668,25 @@ gl::LevelIndex GetLevelIndex(vk::LevelIndex levelVk, gl::LevelIndex baseLevel)
 namespace vk
 {
 // BufferBlock implementation.
+BufferBlock::BufferBlock() : mMemoryPropertyFlags(0), mSize(0), mMappedMemory(nullptr) {}
+
+BufferBlock::BufferBlock(BufferBlock &&other)
+    : mVirtualBlock(std::move(other.mVirtualBlock)),
+      mBuffer(std::move(other.mBuffer)),
+      mAllocation(std::move(other.mAllocation)),
+      mMemoryPropertyFlags(other.mMemoryPropertyFlags),
+      mSize(other.mSize),
+      mMappedMemory(other.mMappedMemory),
+      mSerial(other.mSerial)
+{}
+
+BufferBlock::~BufferBlock()
+{
+    ASSERT(!mVirtualBlock.valid());
+    ASSERT(!mBuffer.valid());
+    ASSERT(!mAllocation.valid());
+}
+
 void BufferBlock::destroy(RendererVk *renderer)
 {
     ASSERT(mVirtualBlock.valid());
@@ -1683,9 +1702,9 @@ void BufferBlock::destroy(RendererVk *renderer)
 }
 
 VkResult BufferBlock::init(RendererVk *renderer,
-                           const VkBuffer &vkBuffer,
+                           Buffer &buffer,
                            vma::VirtualBlockCreateFlags flags,
-                           const VmaAllocation &vmaAllocation,
+                           Allocation &allocation,
                            uint32_t memoryTypeIndex,
                            VkMemoryPropertyFlags memoryPropertyFlags,
                            VkDeviceSize size)
@@ -1696,9 +1715,8 @@ VkResult BufferBlock::init(RendererVk *renderer,
 
     VK_RESULT_TRY(mVirtualBlock.init(renderer->getDevice(), flags, size));
 
-    mBuffer.setHandle(vkBuffer);
-    mAllocation.setHandle(vmaAllocation);
-    mMemoryTypeIndex     = memoryTypeIndex;
+    mBuffer              = std::move(buffer);
+    mAllocation          = std::move(allocation);
     mMemoryPropertyFlags = memoryPropertyFlags;
     mSize                = size;
     mMappedMemory        = nullptr;
@@ -1720,11 +1738,6 @@ const Buffer &BufferBlock::getBuffer() const
 const Allocation &BufferBlock::getAllocation() const
 {
     return mAllocation;
-}
-
-uint32_t BufferBlock::getMemoryTypeIndex() const
-{
-    return mMemoryTypeIndex;
 }
 
 VkMemoryPropertyFlags BufferBlock::getMemoryPropertyFlags() const

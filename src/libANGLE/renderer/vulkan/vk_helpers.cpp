@@ -2713,9 +2713,8 @@ angle::Result BufferPool::allocateNewBuffer(ContextVk *contextVk, VkDeviceSize s
                                 &memoryTypeIndex, &buffer, &allocation));
     ASSERT(memoryTypeIndex == mMemoryTypeIndex);
 
-    ANGLE_VK_TRY(contextVk,
-                 block->init(renderer, buffer.release(), mVirtualBlockCreateFlags,
-                             allocation.release(), memoryTypeIndex, memoryPropertyFlags, mSize));
+    ANGLE_VK_TRY(contextVk, block->init(renderer, buffer, mVirtualBlockCreateFlags, allocation,
+                                        memoryTypeIndex, memoryPropertyFlags, mSize));
 
     if (mHostVisible)
     {
