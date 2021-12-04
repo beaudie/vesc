@@ -2647,7 +2647,7 @@ void BufferPool::pruneEmptyBuffers(RendererVk *renderer)
     int emptyBufferCount = 0;
     for (auto iter = mBufferBlocks.begin(); iter != mBufferBlocks.end();)
     {
-        if (!(*iter)->isEmpty())
+        if (!(*iter).isEmpty())
         {
             ++iter;
             continue;
@@ -2656,10 +2656,10 @@ void BufferPool::pruneEmptyBuffers(RendererVk *renderer)
         // We will always free empty buffers that has smaller size. Or if there is no new buffer
         // gets allocated since last frame, we will also free all empty buffers. And we also ensure
         // we dont exceed max empty buffers that are allowed to keep.
-        if ((*iter)->getMemorySize() < mSize || !newBufferAllocatedSinceLastPrune() ||
+        if ((*iter).getMemorySize() < mSize || !newBufferAllocatedSinceLastPrune() ||
             emptyBufferCount > mMaxEmptyBufferCount)
         {
-            (*iter)->destroy(renderer);
+            (*iter).destroy(renderer);
             iter = mBufferBlocks.erase(iter);
         }
         else
@@ -2690,7 +2690,7 @@ angle::Result BufferPool::allocateNewBuffer(ContextVk *contextVk, VkDeviceSize s
     mSize = std::min(newSize, heapSize);
 
     // Allocate the buffer
-    std::unique_ptr<BufferBlock> block = std::make_unique<BufferBlock>();
+    BufferBlock block;
 
     VkBufferCreateInfo createInfo    = {};
     createInfo.sType                 = VK_STRUCTURE_TYPE_BUFFER_CREATE_INFO;
@@ -2713,13 +2713,12 @@ angle::Result BufferPool::allocateNewBuffer(ContextVk *contextVk, VkDeviceSize s
                                 &memoryTypeIndex, &buffer, &allocation));
     ASSERT(memoryTypeIndex == mMemoryTypeIndex);
 
-    ANGLE_VK_TRY(contextVk,
-                 block->init(renderer, buffer.release(), mVirtualBlockCreateFlags,
-                             allocation.release(), memoryTypeIndex, memoryPropertyFlags, mSize));
+    ANGLE_VK_TRY(contextVk, block.init(renderer, buffer, mVirtualBlockCreateFlags, allocation,
+                                       memoryTypeIndex, memoryPropertyFlags, mSize));
 
     if (mHostVisible)
     {
-        ANGLE_VK_TRY(contextVk, block->map(renderer->getAllocator()));
+        ANGLE_VK_TRY(contextVk, block.map(renderer->getAllocator()));
     }
 
     mBufferBlocks.push_back(std::move(block));
@@ -2738,8 +2737,8 @@ angle::Result BufferPool::allocateBuffer(ContextVk *contextVk,
     // We always allocate from reverse order so that older buffers have a chance to age out.
     for (auto iter = mBufferBlocks.rbegin(); iter != mBufferBlocks.rend();)
     {
-        std::unique_ptr<BufferBlock> &block = *iter;
-        if (block->isEmpty() && block->getMemorySize() < mSize)
+        BufferBlock &block = *iter;
+        if (block.isEmpty() && block.getMemorySize() < mSize)
         {
             // Don't try to allocate from an empty buffer that has smaller size. It will get
             // released when pruneEmptyBuffers get called later on.
@@ -2747,9 +2746,9 @@ angle::Result BufferPool::allocateBuffer(ContextVk *contextVk,
             continue;
         }
 
-        if (block->allocate(sizeInBytes, alignment, &offset) == VK_SUCCESS)
+        if (block.allocate(sizeInBytes, alignment, &offset) == VK_SUCCESS)
         {
-            suballocation->init(contextVk->getDevice(), block.get(), offset, sizeInBytes);
+            suballocation->init(contextVk->getDevice(), &block, offset, sizeInBytes);
             return angle::Result::Continue;
         }
         ++iter;
@@ -2757,19 +2756,19 @@ angle::Result BufferPool::allocateBuffer(ContextVk *contextVk,
 
     ANGLE_TRY(allocateNewBuffer(contextVk, sizeInBytes));
 
-    std::unique_ptr<BufferBlock> &block = mBufferBlocks.back();
-    ANGLE_VK_TRY(contextVk, block->allocate(sizeInBytes, alignment, &offset));
+    BufferBlock &block = mBufferBlocks.back();
+    ANGLE_VK_TRY(contextVk, block.allocate(sizeInBytes, alignment, &offset));
 
-    suballocation->init(contextVk->getDevice(), block.get(), offset, sizeInBytes);
+    suballocation->init(contextVk->getDevice(), &block, offset, sizeInBytes);
     return angle::Result::Continue;
 }
 
 void BufferPool::destroy(RendererVk *renderer)
 {
-    for (std::unique_ptr<BufferBlock> &block : mBufferBlocks)
+    for (BufferBlock &block : mBufferBlocks)
     {
-        ASSERT(block->isEmpty());
-        block->destroy(renderer);
+        ASSERT(block.isEmpty());
+        block.destroy(renderer);
     }
     mBufferBlocks.clear();
 }

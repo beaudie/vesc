@@ -902,12 +902,15 @@ class ResourceSerialFactory final : angle::NonCopyable
 class BufferBlock final : angle::NonCopyable
 {
   public:
-    BufferBlock() = default;
+    BufferBlock();
+    BufferBlock(BufferBlock &&other);
+    ~BufferBlock();
+
     void destroy(RendererVk *renderer);
     VkResult init(RendererVk *renderer,
-                  const VkBuffer &buffer,
+                  Buffer &buffer,
                   vma::VirtualBlockCreateFlags flags,
-                  const VmaAllocation &allocation,
+                  Allocation &allocation,
                   uint32_t mMemoryTypeIndex,
                   VkMemoryPropertyFlags memoryPropertyFlags,
                   VkDeviceSize size);
@@ -917,7 +920,6 @@ class BufferBlock final : angle::NonCopyable
     const Allocation &getAllocation() const;
     BufferSerial getBufferSerial() const { return mSerial; }
 
-    uint32_t getMemoryTypeIndex() const;
     VkMemoryPropertyFlags getMemoryPropertyFlags() const;
     VkDeviceSize getMemorySize() const;
 
@@ -934,13 +936,12 @@ class BufferBlock final : angle::NonCopyable
     VirtualBlock mVirtualBlock;
     Buffer mBuffer;
     Allocation mAllocation;
-    uint32_t mMemoryTypeIndex;
     VkMemoryPropertyFlags mMemoryPropertyFlags;
     VkDeviceSize mSize;
     uint8_t *mMappedMemory;
     BufferSerial mSerial;
 };
-using BufferBlockPointerVector = std::vector<std::unique_ptr<BufferBlock>>;
+using BufferBlockPointerVector = std::vector<BufferBlock>;
 
 // BufferSubAllocation
 struct VmaBufferSubAllocation_T
