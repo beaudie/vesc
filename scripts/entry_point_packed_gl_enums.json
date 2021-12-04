@@ -1055,6 +1055,12 @@
     "glMultiDrawArrays": {
         "mode": "PrimitiveMode"
     },
+    "glMultiDrawArraysIndirect": {
+        "mode": "PrimitiveMode"
+    },
+    "glMultiDrawArraysIndirectEXT": {
+        "mode": "PrimitiveMode"
+    },
     "glMultiDrawArraysInstanced": {
         "mode": "PrimitiveMode"
     },
@@ -1066,6 +1072,14 @@
         "type": "DrawElementsType"
     },
     "glMultiDrawElementsBaseVertex": {
+        "mode": "PrimitiveMode",
+        "type": "DrawElementsType"
+    },
+    "glMultiDrawElementsIndirect": {
+        "mode": "PrimitiveMode",
+        "type": "DrawElementsType"
+    },
+    "glMultiDrawElementsIndirectEXT": {
         "mode": "PrimitiveMode",
         "type": "DrawElementsType"
     },
