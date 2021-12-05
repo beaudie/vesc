@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "be7d90e9_9d068823",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2021-12-05T02:00:24Z",
+      "side": 1,
+      "message": "I wish there was a more elegant solution, but I think everything about dealing with RPs will drastically change anyway when we support multiple open RPs, or change the way serials are updated etc.\n\nIf we move to recording the primary command buffers per share group, that also allows the more elegant solution described in the commit message to be implemented.",
+      "revId": "ee4aeb9c175b27d0233851fae42aeb02ddedbcdf",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
