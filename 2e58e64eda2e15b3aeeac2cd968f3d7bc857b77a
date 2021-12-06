@@ -128,6 +128,24 @@
       "parentUuid": "142923cd_6573540b",
       "revId": "2e58e64eda2e15b3aeeac2cd968f3d7bc857b77a",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ae0d6e73_6694e84d",
+        "filename": "src/libANGLE/renderer/vulkan/FramebufferVk.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 482,
+      "author": {
+        "id": 1175714
+      },
+      "writtenOn": "2021-12-06T20:13:11Z",
+      "side": 1,
+      "message": "Ok, I\u0027m up for only casting to uint8_t in the frontend and not redefining. Next: there\u0027s a bunch of places where we name some depth stencil format, mostly in the backend renderer, not the frontend, and we only seem to care about the frontend depth stencil for EGL config / surface properties. Do you know what `depthStencilFormat.stencilBits` should be masked?",
+      "parentUuid": "0522a1ea_b2dd4c3c",
+      "revId": "2e58e64eda2e15b3aeeac2cd968f3d7bc857b77a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
