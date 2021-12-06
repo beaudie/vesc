@@ -110,6 +110,24 @@
       "parentUuid": "6f5cd517_b04eda02",
       "revId": "2e58e64eda2e15b3aeeac2cd968f3d7bc857b77a",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "0522a1ea_b2dd4c3c",
+        "filename": "src/libANGLE/renderer/vulkan/FramebufferVk.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 482,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2021-12-06T19:14:10Z",
+      "side": 1,
+      "message": "Ok I agree that this is not a common scenario to optimize for, but FYI the simple fact of reaching here has a high cost, including breaking a render pass, which is why we no-op these calls early in the front-end.\n\nYou can always mask the clear in the front-end based on `angle::BitMask(depthStencilFormat.stencilBits)` so it will bullet-proof. WDYT?",
+      "parentUuid": "142923cd_6573540b",
+      "revId": "2e58e64eda2e15b3aeeac2cd968f3d7bc857b77a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
