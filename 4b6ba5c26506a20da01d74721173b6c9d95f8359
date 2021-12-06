@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "8167fa28_1f8ae974",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2021-12-06T21:51:01Z",
+      "side": 1,
+      "message": "lgtm\n\nNice work tracking this down. There\u0027s a suppression for this failure in Chromium\u0027s src/content/test/gpu/gpu_tests/test_expectations/webgl2_conformance_expectations.txt which we should remove once this lands and ANGLE rolls forward into Chromium.\n",
+      "revId": "4b6ba5c26506a20da01d74721173b6c9d95f8359",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
