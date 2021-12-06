@@ -51,6 +51,24 @@
       "parentUuid": "b569e695_893538c2",
       "revId": "f389d59040c2d57c511af620fa97d2bb01a954fb",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "3d6bf208_9a086bb5",
+        "filename": "samples/multiple_contexts/MultipleContexts.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 199,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2021-12-06T19:22:08Z",
+      "side": 1,
+      "message": "I don\u0027t think blocking here is necessary, since the CPU doesn\u0027t care about the contents of the texture.   A normal glWaitSync() should be good enough.",
+      "parentUuid": "3ffa661c_485ac1ff",
+      "revId": "f389d59040c2d57c511af620fa97d2bb01a954fb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
