@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "a1c8ab49_91d4f4f7",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1163549
+      },
+      "writtenOn": "2021-12-06T22:45:29Z",
+      "side": 1,
+      "message": "PTAL\n\nThe Chromium-side CL has landed, but not sure how long it will take for it to show up in ANGLE.",
+      "revId": "70eb893ae512b46b9599a7adec0739647789c131",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
