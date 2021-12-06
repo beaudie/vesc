@@ -146,6 +146,24 @@
       "parentUuid": "0522a1ea_b2dd4c3c",
       "revId": "2e58e64eda2e15b3aeeac2cd968f3d7bc857b77a",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "6e90ae7b_032cda0e",
+        "filename": "src/libANGLE/renderer/vulkan/FramebufferVk.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 482,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2021-12-06T21:05:48Z",
+      "side": 1,
+      "message": "If you mask based on stencilBits, you wouldn\u0027t need to cast to uint8_t (of course). The number of stencil bits you should be able to get with:\n\n    mState.getDrawFramebuffer()-\u003egetStencilAttachment()-\u003egetStencilSize()\n\nangle::BitMask turns that into a mask.",
+      "parentUuid": "ae0d6e73_6694e84d",
+      "revId": "2e58e64eda2e15b3aeeac2cd968f3d7bc857b77a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
