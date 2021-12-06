@@ -30,7 +30,8 @@ TransformFeedbackVk::TransformFeedbackVk(const gl::TransformFeedbackState &state
       mBufferOffsets{},
       mBufferSizes{},
       mAlignedBufferOffsets{},
-      mCounterBufferHandles{}
+      mCounterBufferHandles{},
+      mBufferObserverBindings{}
 {}
 
 TransformFeedbackVk::~TransformFeedbackVk() {}
@@ -69,6 +70,7 @@ void TransformFeedbackVk::initializeXFBBuffersDesc(ContextVk *contextVk, size_t 
             mBufferHelpers[bufferIndex] = &bufferVk->getBufferAndOffset(&bufferOffset);
             mBufferOffsets[bufferIndex] = binding.getOffset() + bufferOffset;
             mBufferSizes[bufferIndex]   = gl::GetBoundBufferAvailableSize(binding);
+            mBufferObserverBindings[bufferIndex].bind(bufferVk);
         }
         else
         {
@@ -77,6 +79,7 @@ void TransformFeedbackVk::initializeXFBBuffersDesc(ContextVk *contextVk, size_t 
             mBufferHelpers[bufferIndex]  = &nullBuffer;
             mBufferOffsets[bufferIndex]  = 0;
             mBufferSizes[bufferIndex]    = nullBuffer.getSize();
+            mBufferObserverBindings[bufferIndex].reset();
         }
 
         mXFBBuffersDesc.updateTransformFeedbackBuffer(
@@ -93,6 +96,11 @@ angle::Result TransformFeedbackVk::begin(const gl::Context *context,
     const gl::ProgramExecutable *executable = contextVk->getState().getProgramExecutable();
     ASSERT(executable);
     size_t xfbBufferCount = executable->getTransformFeedbackBufferCount();
+
+    for (angle::SubjectIndex bufferIndex = 0; bufferIndex < xfbBufferCount; ++bufferIndex)
+    {
+        mBufferObserverBindings.emplace_back(this, bufferIndex);
+    }
 
     initializeXFBBuffersDesc(contextVk, xfbBufferCount);
 
@@ -155,6 +163,11 @@ angle::Result TransformFeedbackVk::end(const gl::Context *context)
     if (transformFeedbackQuery && contextVk->getFeatures().emulateTransformFeedback.enabled)
     {
         vk::GetImpl(transformFeedbackQuery)->onTransformFeedbackEnd(mState.getPrimitivesDrawn());
+    }
+
+    for (auto &bufferBinding : mBufferObserverBindings)
+    {
+        bufferBinding.reset();
     }
 
     contextVk->onEndTransformFeedback();
@@ -335,6 +348,34 @@ void TransformFeedbackVk::getBufferOffsets(ContextVk *contextVk,
 
         // Assert on overflow.  For now, support transform feedback up to 2GB.
         ASSERT(offsetsOut[bufferIndex] == writeOffset);
+    }
+}
+
+void TransformFeedbackVk::onSubjectStateChange(angle::SubjectIndex index,
+                                               angle::SubjectMessage message)
+{
+    if (message == angle::SubjectMessage::BufferVkStorageChanged)
+    {
+        ASSERT(index < mBufferObserverBindings.size());
+        mBufferHandles[index] = mBufferHelpers[index]->getBuffer().getHandle();
+
+        // Testing
+        //        const gl::OffsetBindingPointer<gl::Buffer> &binding =
+        //        mState.getIndexedBuffer(index); ASSERT(binding.get());
+        //
+        //        BufferVk *bufferVk = vk::GetImpl(binding.get());
+        //
+        //        if (bufferVk->isBufferValid())
+        //        {
+        //            VkDeviceSize bufferOffset = 0;
+        //            mBufferHelpers[index]     = &bufferVk->getBufferAndOffset(&bufferOffset);
+        //            mBufferOffsets[index]     = binding.getOffset() + bufferOffset;
+        //            mBufferSizes[index]       = gl::GetBoundBufferAvailableSize(binding);
+        //            mBufferObserverBindings[index].bind(bufferVk);
+        //        }
+        //
+        //        mXFBBuffersDesc.updateTransformFeedbackBuffer(
+        //            index, mBufferHelpers[index]->getBufferSerial(), mBufferOffsets[index]);
     }
 }
 
