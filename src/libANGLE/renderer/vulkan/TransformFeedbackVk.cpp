@@ -31,7 +31,13 @@ TransformFeedbackVk::TransformFeedbackVk(const gl::TransformFeedbackState &state
       mBufferSizes{},
       mAlignedBufferOffsets{},
       mCounterBufferHandles{}
-{}
+{
+    for (angle::SubjectIndex bufferIndex = 0;
+         bufferIndex < gl::IMPLEMENTATION_MAX_SHADER_STORAGE_BUFFER_BINDINGS; ++bufferIndex)
+    {
+        mBufferObserverBindings.emplace_back(this, bufferIndex);
+    }
+}
 
 TransformFeedbackVk::~TransformFeedbackVk() {}
 
@@ -69,6 +75,7 @@ void TransformFeedbackVk::initializeXFBBuffersDesc(ContextVk *contextVk, size_t 
             mBufferHelpers[bufferIndex] = &bufferVk->getBufferAndOffset(&bufferOffset);
             mBufferOffsets[bufferIndex] = binding.getOffset() + bufferOffset;
             mBufferSizes[bufferIndex]   = gl::GetBoundBufferAvailableSize(binding);
+            mBufferObserverBindings[bufferIndex].bind(bufferVk);
         }
         else
         {
@@ -77,6 +84,7 @@ void TransformFeedbackVk::initializeXFBBuffersDesc(ContextVk *contextVk, size_t 
             mBufferHelpers[bufferIndex]  = &nullBuffer;
             mBufferOffsets[bufferIndex]  = 0;
             mBufferSizes[bufferIndex]    = nullBuffer.getSize();
+            mBufferObserverBindings[bufferIndex].reset();
         }
 
         mXFBBuffersDesc.updateTransformFeedbackBuffer(
@@ -155,6 +163,11 @@ angle::Result TransformFeedbackVk::end(const gl::Context *context)
     if (transformFeedbackQuery && contextVk->getFeatures().emulateTransformFeedback.enabled)
     {
         vk::GetImpl(transformFeedbackQuery)->onTransformFeedbackEnd(mState.getPrimitivesDrawn());
+    }
+
+    for (angle::ObserverBinding &bufferBinding : mBufferObserverBindings)
+    {
+        bufferBinding.reset();
     }
 
     contextVk->onEndTransformFeedback();
@@ -335,6 +348,16 @@ void TransformFeedbackVk::getBufferOffsets(ContextVk *contextVk,
 
         // Assert on overflow.  For now, support transform feedback up to 2GB.
         ASSERT(offsetsOut[bufferIndex] == writeOffset);
+    }
+}
+
+void TransformFeedbackVk::onSubjectStateChange(angle::SubjectIndex index,
+                                               angle::SubjectMessage message)
+{
+    if (message == angle::SubjectMessage::BufferVkStorageChanged)
+    {
+        ASSERT(index < mBufferObserverBindings.size());
+        mBufferHandles[index] = mBufferHelpers[index]->getBuffer().getHandle();
     }
 }
 
