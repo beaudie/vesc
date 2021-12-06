@@ -92,6 +92,24 @@
       "parentUuid": "c5aa3c5a_dd943c3b",
       "revId": "2e58e64eda2e15b3aeeac2cd968f3d7bc857b77a",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "142923cd_6573540b",
+        "filename": "src/libANGLE/renderer/vulkan/FramebufferVk.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 482,
+      "author": {
+        "id": 1175714
+      },
+      "writtenOn": "2021-12-06T18:21:14Z",
+      "side": 1,
+      "message": "Looks like that way, it\u0027s going to end up being an LSC across all the renderers and everything since there are a lot of baked in uint32_t assumptions everywhere for stencil.\n\nI also don\u0027t get why we don\u0027t need to assert for stencil in backend renderer formats too.\n\nI\u0027d prefer the Vk-only fix approach at this point to unblock the bug and leave the redefinition of stencil mask as uint8_t to a future CL.",
+      "parentUuid": "6f5cd517_b04eda02",
+      "revId": "2e58e64eda2e15b3aeeac2cd968f3d7bc857b77a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
