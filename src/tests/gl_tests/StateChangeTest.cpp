@@ -7353,6 +7353,8 @@ TEST_P(SimpleStateChangeTestES3, RespecifyBufferAfterBeginTransformFeedback)
     glBeginTransformFeedback(GL_TRIANGLES);
     glBufferData(GL_TRANSFORM_FEEDBACK_BUFFER, sizeof(float) * 3 * 4 * 6, nullptr, GL_STREAM_DRAW);
     glDrawArrays(GL_TRIANGLES, 0, 6);
+    glEndTransformFeedback();
+    EXPECT_GL_NO_ERROR();
 }
 
 // Regression test for a bug in the Vulkan backend where a draw-based copy after a deferred flush
