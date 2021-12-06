@@ -695,6 +695,15 @@ void VertexArray::onSubjectStateChange(angle::SubjectIndex index, angle::Subject
             setDependentDirtyBit(false, index);
             break;
 
+        case angle::SubjectMessage::BufferVkStorageChanged:
+            if (!IsElementArrayBufferSubjectIndex(index))
+            {
+                const Buffer *buffer = mState.mVertexBindings[index].getBuffer().get();
+                updateCachedTransformFeedbackBindingValidation(index, buffer);
+            }
+            setDependentDirtyBit(false, index);
+            break;
+
         default:
             UNREACHABLE();
             break;
