@@ -110,6 +110,30 @@
       },
       "revId": "ee4aeb9c175b27d0233851fae42aeb02ddedbcdf",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "bd6e7a06_db73edc1",
+        "filename": "src/libANGLE/renderer/vulkan/FramebufferVk.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 1219,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2021-12-06T19:37:34Z",
+      "side": 1,
+      "message": "Flush in `flushCommandsAndEndRenderPass` means get the commands to the primary CB. Flush in the comment means `vkQueueSubmit`. Ending RP is not really a matter, it\u0027s `vkQueueSubmit` that matters since that\u0027s where we increment serials.",
+      "parentUuid": "ddd907f8_c1e7c81e",
+      "range": {
+        "startLine": 1219,
+        "startChar": 38,
+        "endLine": 1219,
+        "endChar": 61
+      },
+      "revId": "ee4aeb9c175b27d0233851fae42aeb02ddedbcdf",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
