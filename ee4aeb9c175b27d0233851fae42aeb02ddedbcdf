@@ -50,6 +50,30 @@
     {
       "unresolved": false,
       "key": {
+        "uuid": "a35bb4fc_3da006ed",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 23,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2021-12-06T19:29:44Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "22ff3751_caa664c8",
+      "range": {
+        "startLine": 23,
+        "startChar": 0,
+        "endLine": 23,
+        "endChar": 49
+      },
+      "revId": "ee4aeb9c175b27d0233851fae42aeb02ddedbcdf",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
         "uuid": "be7d90e9_9d068823",
         "filename": "/PATCHSET_LEVEL",
         "patchSetId": 1
@@ -61,6 +85,29 @@
       "writtenOn": "2021-12-05T02:00:24Z",
       "side": 1,
       "message": "I wish there was a more elegant solution, but I think everything about dealing with RPs will drastically change anyway when we support multiple open RPs, or change the way serials are updated etc.\n\nIf we move to recording the primary command buffers per share group, that also allows the more elegant solution described in the commit message to be implemented.",
+      "revId": "ee4aeb9c175b27d0233851fae42aeb02ddedbcdf",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ddd907f8_c1e7c81e",
+        "filename": "src/libANGLE/renderer/vulkan/FramebufferVk.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 1219,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2021-12-06T19:29:44Z",
+      "side": 1,
+      "message": "This part feels redundant in each of these comments.   I suggest removing it, if there isn\u0027t a particular part of the flush you think should be called out.\n\nUnless you meant to say \"End the render pass\", but I\u0027d argue the flush part still redundant based on the function name.",
+      "range": {
+        "startLine": 1219,
+        "startChar": 38,
+        "endLine": 1219,
+        "endChar": 61
+      },
       "revId": "ee4aeb9c175b27d0233851fae42aeb02ddedbcdf",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
