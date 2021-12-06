@@ -33,6 +33,24 @@
       "message": "This will block the CPU, which no real app will do.   It would be better to use glWaitSync() if this doesn\u0027t need to block the CPU.",
       "revId": "f389d59040c2d57c511af620fa97d2bb01a954fb",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "3ffa661c_485ac1ff",
+        "filename": "samples/multiple_contexts/MultipleContexts.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 199,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2021-12-06T17:44:48Z",
+      "side": 1,
+      "message": "It does need to block the CPU. The alternative is to use a busy wait. Unless I\u0027m mistaken.",
+      "parentUuid": "b569e695_893538c2",
+      "revId": "f389d59040c2d57c511af620fa97d2bb01a954fb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
