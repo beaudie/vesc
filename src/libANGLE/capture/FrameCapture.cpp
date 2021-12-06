@@ -68,12 +68,16 @@ constexpr char kSerializeStateVarName[] = "ANGLE_CAPTURE_SERIALIZE_STATE";
 constexpr char kValidationVarName[]     = "ANGLE_CAPTURE_VALIDATION";
 constexpr char kValidationExprVarName[] = "ANGLE_CAPTURE_VALIDATION_EXPR";
 constexpr char kTrimEnabledVarName[]    = "ANGLE_CAPTURE_TRIM_ENABLED";
+constexpr char kSourceSizeVarName[]     = "ANGLE_CAPTURE_SOURCE_SIZE";
 
 constexpr size_t kBinaryAlignment   = 16;
 constexpr size_t kFunctionSizeLimit = 5000;
 
 // Limit based on MSVC Compiler Error C2026
 constexpr size_t kStringLengthLimit = 16380;
+
+// Default limit to number of bytes in a capture source files.
+constexpr size_t kDefaultSourceFileSizeThreshold = 400000;
 
 // Android debug properties that correspond to the above environment variables
 constexpr char kAndroidEnabled[]        = "debug.angle.capture.enabled";
@@ -86,6 +90,7 @@ constexpr char kAndroidCompression[]    = "debug.angle.capture.compression";
 constexpr char kAndroidValidation[]     = "debug.angle.capture.validation";
 constexpr char kAndroidValidationExpr[] = "debug.angle.capture.validation_expr";
 constexpr char kAndroidTrimEnabled[]    = "debug.angle.capture.trim_enabled";
+constexpr char kAndroidSourceSize[]     = "debug.angle.capture.source_size";
 
 struct FramebufferCaptureFuncs
 {
@@ -4326,6 +4331,21 @@ FrameCaptureShared::FrameCaptureShared()
         mTrimEnabled = false;
     }
 
+    std::string sourceSizeFromEnv =
+        GetEnvironmentVarOrUnCachedAndroidProperty(kSourceSizeVarName, kAndroidSourceSize);
+    if (!sourceSizeFromEnv.empty())
+    {
+        int sourceSize = atoi(sourceSizeFromEnv.c_str());
+        if (sourceSize < 0)
+        {
+            WARN() << "Invalid capture source size: " << sourceSize;
+        }
+        else
+        {
+            mReplayWriter.setSourceFileSizeThreshold(sourceSize);
+        }
+    }
+
     if (mFrameIndex == mCaptureStartFrame)
     {
         // Capture is starting from the first frame, so set the capture active to ensure all GLES
@@ -6132,6 +6152,9 @@ void FrameCaptureShared::writeJSON(const gl::Context *context)
 void FrameCaptureShared::writeCppReplayIndexFiles(const gl::Context *context,
                                                   bool writeResetContextCall)
 {
+    // Ensure the last frame is written. This will no-op if the frame is already written.
+    mReplayWriter.saveFrame(mFrameIndex);
+
     const gl::ContextID contextId = context->id();
 
     {
@@ -6423,7 +6446,14 @@ void FrameCaptureShared::writeMainContextCppReplay(const gl::Context *context,
         mReplayWriter.setFilenamePattern(fnamePattern);
     }
 
-    mReplayWriter.saveFrame(frameIndex);
+    if (mFrameIndex == mCaptureEndFrame)
+    {
+        mReplayWriter.saveFrame(frameIndex);
+    }
+    else
+    {
+        mReplayWriter.saveFrameIfFull(frameIndex);
+    }
 }
 
 void FrameCaptureShared::reset()
@@ -7106,7 +7136,7 @@ void WriteParamValueReplay<ParamType::TEGLSetBlobFuncANDROID>(std::ostream &os,
 }
 
 // ReplayWriter implementation.
-ReplayWriter::ReplayWriter() {}
+ReplayWriter::ReplayWriter() : mSourceFileSizeThreshold(kDefaultSourceFileSizeThreshold) {}
 
 ReplayWriter::~ReplayWriter()
 {
@@ -7116,6 +7146,11 @@ ReplayWriter::~ReplayWriter()
     ASSERT(mPublicFunctions.empty());
     ASSERT(mGlobalVariableDeclarations.empty());
     ASSERT(mReplayHeaders.empty());
+}
+
+void ReplayWriter::setSourceFileSizeThreshold(size_t sourceFileSizeThreshold)
+{
+    mSourceFileSizeThreshold = sourceFileSizeThreshold;
 }
 
 void ReplayWriter::setFilenamePattern(const std::string &pattern)
@@ -7213,6 +7248,24 @@ std::string ReplayWriter::getInlineStringSetVariableName(EntryPoint entryPoint,
     }
 }
 
+size_t ReplayWriter::getStoredReplaySourceSize() const
+{
+    size_t sum = 0;
+    for (const std::string &header : mReplayHeaders)
+    {
+        sum += header.size();
+    }
+    for (const std::string &publicFunc : mPublicFunctions)
+    {
+        sum += publicFunc.size();
+    }
+    for (const std::string &privateFunc : mPrivateFunctions)
+    {
+        sum += privateFunc.size();
+    }
+    return sum;
+}
+
 // static
 std::string ReplayWriter::GetVarName(EntryPoint entryPoint,
                                      const std::string &paramName,
@@ -7225,6 +7278,11 @@ std::string ReplayWriter::GetVarName(EntryPoint entryPoint,
 
 void ReplayWriter::saveFrame(uint32_t frameIndex)
 {
+    if (mReplayHeaders.empty() && mPublicFunctions.empty() && mPrivateFunctions.empty())
+    {
+        return;
+    }
+
     std::stringstream strstr;
     strstr << mFilenamePattern << "_frame" << std::setfill('0') << std::setw(3) << frameIndex
            << ".cpp";
@@ -7232,6 +7290,18 @@ void ReplayWriter::saveFrame(uint32_t frameIndex)
     std::string frameFilePath = strstr.str();
 
     writeReplaySource(frameFilePath);
+}
+
+void ReplayWriter::saveFrameIfFull(uint32_t frameIndex)
+{
+    if (getStoredReplaySourceSize() < mSourceFileSizeThreshold)
+    {
+        INFO() << "Merging captured frame " << frameIndex << ": " << getStoredReplaySourceSize()
+               << " less than threshold of " << mSourceFileSizeThreshold << " bytes";
+        return;
+    }
+
+    saveFrame(frameIndex);
 }
 
 void ReplayWriter::saveHeader()
