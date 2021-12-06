@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "4e826667_d8edab13",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2021-12-06T17:24:35Z",
+      "side": 1,
+      "message": "I\u0027m a little wary about adding more samples when these don\u0027t seem to be maintained, but I\u0027m fine with landing this if it\u0027s helpful.",
+      "revId": "f389d59040c2d57c511af620fa97d2bb01a954fb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b569e695_893538c2",
+        "filename": "samples/multiple_contexts/MultipleContexts.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 199,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2021-12-06T17:24:35Z",
+      "side": 1,
+      "message": "This will block the CPU, which no real app will do.   It would be better to use glWaitSync() if this doesn\u0027t need to block the CPU.",
+      "revId": "f389d59040c2d57c511af620fa97d2bb01a954fb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
