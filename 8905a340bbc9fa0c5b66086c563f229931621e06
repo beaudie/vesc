@@ -16,6 +16,24 @@
       "message": "Trace diffs looked similar enough, so I\u0027ve approved them.\nJamie, Nicolas, please double check if this makes sense\nhttps://angle-gold.skia.org/triagelog?changelist_id\u003d3317473\u0026crs\u003dgerrit",
       "revId": "8905a340bbc9fa0c5b66086c563f229931621e06",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "d5b9d46e_9fa27d91",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2021-12-07T14:06:22Z",
+      "side": 1,
+      "message": "LGTM",
+      "parentUuid": "87b0d97b_f54cdfca",
+      "revId": "8905a340bbc9fa0c5b66086c563f229931621e06",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
