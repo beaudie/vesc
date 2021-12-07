@@ -16,6 +16,47 @@
       "message": "I tried this out locally, and it is functional, but I think we should update the filenames for merged frames.  With asphalt_9, you end up with filenames like this:\n\n $ ll -h asphalt_9\n 240M Dec  7 15:45 asphalt_9.angledata.gz\n 8.1K Dec  7 15:45 asphalt_9_context2.cpp\n 716K Dec  7 15:45 asphalt_9_context2_frame001.cpp \n 446K Dec  7 15:45 asphalt_9_context2_frame003.cpp \n 554K Dec  7 15:45 asphalt_9_context2_frame005.cpp \n 581K Dec  7 15:45 asphalt_9_context2_frame007.cpp \n 485K Dec  7 15:45 asphalt_9_context2_frame009.cpp \n 515K Dec  7 15:45 asphalt_9_context2_frame011.cpp \n 514K Dec  7 15:45 asphalt_9_context2_frame013.cpp \n 444K Dec  7 15:45 asphalt_9_context2_frame015.cpp \n 412K Dec  7 15:45 asphalt_9_context2_frame016.cpp \n ...\n\nOn first glance, it just looks like frames are missing.  Closer inspection shows that frames 2 and 3 are both in frame003.cpp.\n\nI would propose merged files be named something like:\n - frames2throughN.cpp or frames_2_N.cpp\n - frames2and3andN.cpp or frames_2_3_4_N.cpp\n - frames00200300400N.cpp\n",
       "revId": "ada72ac0db55c9f394b53dcccabd81d3c8358780",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "66c7b9e5_bfab4a7a",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 5
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2021-12-07T23:22:38Z",
+      "side": 1,
+      "message": "Good catch Cody.   I agree that this makes the traces look broken.\n\nIf we want to keep the frame number in the filename, my vote would be for:\n    frames_2_3_4_N.cpp\n\nThat of course runs the risk of extremely long filenames since there could be \u003e10 frames per file.\n    \nHowever, I\u0027m leaning towards just dropping the frame number from the file entirely, and just naming the files sequentially (independent of the actual contents/frames).",
+      "parentUuid": "b329b119_88aea143",
+      "revId": "ada72ac0db55c9f394b53dcccabd81d3c8358780",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "d1d0dacb_b084faf5",
+        "filename": "src/libANGLE/capture/FrameCapture.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 4341,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2021-12-07T23:22:38Z",
+      "side": 1,
+      "message": "sourceSize \u003c\u003d 0\n\nThis should also check against something more practical than 0, like 10KB.   Otherwise, a value of \"1\" would never work in practice either.",
+      "range": {
+        "startLine": 4341,
+        "startChar": 12,
+        "endLine": 4341,
+        "endChar": 26
+      },
+      "revId": "ada72ac0db55c9f394b53dcccabd81d3c8358780",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
