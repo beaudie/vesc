@@ -16,6 +16,24 @@
       "message": "LGTM. It\u0027s missing a note for glReadPixels though, and a test for ValidReadPixelsFormatEnum().",
       "revId": "e988375af37a6932752883bc75c8474d22434842",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "9ce98862_e6e33a39",
+        "filename": "extensions/ANGLE_rbgx_internal_format.txt",
+        "patchSetId": 2
+      },
+      "lineNbr": 44,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2021-12-07T23:39:38Z",
+      "side": 1,
+      "message": "\u003e It\u0027s missing a note for glReadPixels\n\nDone.\n\n\u003e and a test for ValidReadPixelsFormatEnum().\n\nValidReadPixelsFormatEnum() is only called for webGL contexts, which we don\u0027t have available in end2end tests, so we\u0027ll have to rely on Chromium CQ for that testing.",
+      "parentUuid": "14724235_00fa06c1",
+      "revId": "e988375af37a6932752883bc75c8474d22434842",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
