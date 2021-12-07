@@ -1271,6 +1271,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "0189f439_827a972a",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.h",
+        "patchSetId": 15
+      },
+      "lineNbr": 1052,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2021-12-07T00:56:17Z",
+      "side": 1,
+      "message": "Per offline discussion, we will be using array of std::unique_ptrs for now, as this is how DynamicBuffer pools as well. In future we could experiment to see performance impact with array of objects versus array of pointers.",
+      "parentUuid": "fc17bebb_2721830e",
+      "range": {
+        "startLine": 1052,
+        "startChar": 47,
+        "endLine": 1052,
+        "endChar": 57
+      },
+      "revId": "86ee35e1def1d24cf060101e83a7cb2323bed9a7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "9a903ca2_20639bae",
         "filename": "src/libANGLE/renderer/vulkan/vk_utils.cpp",
         "patchSetId": 15
@@ -1305,6 +1329,30 @@
       "writtenOn": "2021-11-24T17:12:52Z",
       "side": 1,
       "message": "same comment here",
+      "range": {
+        "startLine": 943,
+        "startChar": 6,
+        "endLine": 943,
+        "endChar": 30
+      },
+      "revId": "86ee35e1def1d24cf060101e83a7cb2323bed9a7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b404f5ea_d73f6cac",
+        "filename": "src/libANGLE/renderer/vulkan/vk_utils.h",
+        "patchSetId": 15
+      },
+      "lineNbr": 943,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2021-12-07T00:56:17Z",
+      "side": 1,
+      "message": "Same per the other comment.",
+      "parentUuid": "057cfbb6_341baeb7",
       "range": {
         "startLine": 943,
         "startChar": 6,
