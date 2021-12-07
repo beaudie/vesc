@@ -83,6 +83,9 @@ TraceEventHandle AddPerfTraceEvent(PlatformMethods *platform,
                                    const unsigned long long *argValues,
                                    unsigned char flags)
 {
+    // Platform integration, if supported.
+    angle::AddTraceEvent(phase, categoryEnabledFlag, name, id, timestamp, numArgs, argNames,
+                         argTypes, argValues, flags);
     if (!gEnableTrace)
         return 0;
 

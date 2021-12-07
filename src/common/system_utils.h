@@ -90,6 +90,19 @@ bool IsDebuggerAttached();
 
 // Calls system APIs to break into the debugger.
 void BreakDebugger();
+
+// Helper to issue a trace event based on the platform, on platforms that support it.
+void AddTraceEvent(char phase,
+                   const unsigned char *categoryEnabledFlag,
+                   const char *name,
+                   unsigned long long id,
+                   double timestamp,
+                   int numArgs,
+                   const char **argNames,
+                   const unsigned char *argTypes,
+                   const unsigned long long *argValues,
+                   unsigned char flags);
+
 }  // namespace angle
 
 #endif  // COMMON_SYSTEM_UTILS_H_

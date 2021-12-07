@@ -16,7 +16,7 @@ namespace angle
 bool gCalibration              = false;
 int gStepsPerTrial             = 0;
 int gMaxStepsPerformed         = 0;
-bool gEnableTrace              = false;
+bool gEnableTrace              = true;
 const char *gTraceFile         = "ANGLETrace.json";
 const char *gScreenShotDir     = nullptr;
 int gScreenShotFrame           = 1;

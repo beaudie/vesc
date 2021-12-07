@@ -169,4 +169,18 @@ std::string GetRootDirectory()
     return "C:\\";
 }
 
+void AddTraceEvent(char phase,
+                   const unsigned char *categoryEnabledFlag,
+                   const char *name,
+                   unsigned long long id,
+                   double timestamp,
+                   int numArgs,
+                   const char **argNames,
+                   const unsigned char *argTypes,
+                   const unsigned long long *argValues,
+                   unsigned char flags)
+{
+    // No platform integration.
+}
+
 }  // namespace angle
