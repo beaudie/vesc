@@ -18,6 +18,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "a7bd6e8c_6b5bc863",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2021-12-07T22:08:51Z",
+      "side": 1,
+      "message": "The samples have been a great test bed for proving FrameCapture features.",
+      "parentUuid": "4e826667_d8edab13",
+      "revId": "f389d59040c2d57c511af620fa97d2bb01a954fb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "b569e695_893538c2",
@@ -67,6 +85,24 @@
       "side": 1,
       "message": "I don\u0027t think blocking here is necessary, since the CPU doesn\u0027t care about the contents of the texture.   A normal glWaitSync() should be good enough.",
       "parentUuid": "3ffa661c_485ac1ff",
+      "revId": "f389d59040c2d57c511af620fa97d2bb01a954fb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "4b92803f_e71bc4af",
+        "filename": "samples/multiple_contexts/MultipleContexts.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 199,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2021-12-07T22:08:51Z",
+      "side": 1,
+      "message": "It does look like glWaitSync would work, but not hung up on it either way.",
+      "parentUuid": "3d6bf208_9a086bb5",
       "revId": "f389d59040c2d57c511af620fa97d2bb01a954fb",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }

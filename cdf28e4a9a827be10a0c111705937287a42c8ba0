@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "fada3c29_5f7b63c1",
+        "filename": "samples/multiple_contexts/MultipleContexts.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 66,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2021-12-07T22:08:51Z",
+      "side": 1,
+      "message": "Worth a comment here and in destroy() that this is the signal from the main thread to stop.",
+      "revId": "cdf28e4a9a827be10a0c111705937287a42c8ba0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
