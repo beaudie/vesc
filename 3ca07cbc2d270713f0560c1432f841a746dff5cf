@@ -1,0 +1,55 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "aac028b6_2f911884",
+        "filename": "src/libANGLE/renderer/vulkan/vk_format_map.json",
+        "patchSetId": 3
+      },
+      "lineNbr": 308,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2021-12-07T08:53:56Z",
+      "side": 1,
+      "message": "Looking at `HasFullBufferFormatSupport`, we look for `VK_FORMAT_FEATURE_VERTEX_BUFFER_BIT` in these formats. I see from the spec that `VK_FORMAT_A2B10G10R10_UINT_PACK32` doesn\u0027t have mandatory support for this feature. If a driver doesn\u0027t support it, we don\u0027t have a fallback. `VK_FORMAT_R16G16B16A16_UINT` does have mandatory support (which is why the fallback was as it was originally). See Table 68 here: https://renderdoc.org/vkspec_chunked/chap43.html#features-required-format-support\n\nIn the very least, this should be turned into a list:\n\n     \"buffer\": [ \"R10G10B10A2_UINT\", \"R16G16B16A16_FLOAT\" ]\n     \nSimilarly with the other formats, based on which have mandatory support.",
+      "revId": "3ca07cbc2d270713f0560c1432f841a746dff5cf",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "9a013491_1792242f",
+        "filename": "src/libANGLE/renderer/vulkan/vk_format_map.json",
+        "patchSetId": 3
+      },
+      "lineNbr": 312,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2021-12-07T08:53:56Z",
+      "side": 1,
+      "message": "Looking at ConvertVertex.comp, it seems that I never implemented swizzling of components. It\u0027s probably a simple case of handling RGB10A2 vs A2RGB10, and wouldn\u0027t need a more generic and complex solution. Let me know if you have trouble with that.",
+      "revId": "3ca07cbc2d270713f0560c1432f841a746dff5cf",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "e1acfb1b_2769eef7",
+        "filename": "src/libANGLE/renderer/vulkan/vk_format_map.json",
+        "patchSetId": 3
+      },
+      "lineNbr": 367,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2021-12-07T08:53:56Z",
+      "side": 1,
+      "message": "Similarly here, according to Table 66 RGB8_USCALED doesn\u0027t have mandatory VERTEX feature support, neither does RGBA8_USCALED, so these need to be a list (like the case with `R8G8B8_SSCALED` below.",
+      "revId": "3ca07cbc2d270713f0560c1432f841a746dff5cf",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
