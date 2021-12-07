@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "43cfcb5c_f1d18c5a",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1491687
+      },
+      "writtenOn": "2021-12-07T17:19:26Z",
+      "side": 1,
+      "message": "I can confirm that this fixes angleproject:6772.",
+      "revId": "2cd86dc438ed8a7f2ba0e4267c835d82b395d6a4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
