@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "266ea2f6_b52a33d3",
+        "filename": "src/tests/egl_tests/EGLMultiContextTest.cpp",
+        "patchSetId": 14
+      },
+      "lineNbr": 336,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2021-12-08T03:18:05Z",
+      "side": 1,
+      "message": "Nit: \"this CL\" is meaningless once the change lands.",
+      "range": {
+        "startLine": 336,
+        "startChar": 43,
+        "endLine": 336,
+        "endChar": 50
+      },
+      "revId": "a3164c8f5ad4d72394cdb5ed5a1ca7a6c3b9263d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
