@@ -16,6 +16,23 @@
       "message": "As already mentioned in the revert thread:\n\nI noticed the `PageFaultHandlerDefaultHandler` to be crashing for me locally as well on Linux and Android on release builds (using `is_debug \u003d false` in args.gn).\n\nApparently the calls wrapped in ASSERT got optimized out: \n```\nASSERT(sigaction(SIGSEGV, \u0026sigAction, nullptr) \u003d\u003d 0);\nASSERT(sigaction(SIGBUS, \u0026sigAction, nullptr) \u003d\u003d 0);\n```\n\nReplacing ASSERT with EXPECT_TRUE fixed the test on both Android and Linux on release builds for me locally.\n\nI split the failing test into a separate commit.\n\nSince the ANGLE CI bots did not pick this up, how can I run it on the Chromium builders to make sure it\u0027s fixed?",
       "revId": "36f3cd64e29218cb96c5b8deb489f086f23e4b34",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "2f62a551_a94d174f",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2021-12-08T13:49:50Z",
+      "side": 1,
+      "message": "Hey Lubosz, please follow this process for re-landing reverts:\n\nhttps://chromium.googlesource.com/angle/angle/+/main/doc/ContributingCode.md#relanding-a-reverted-cl\n\nWhat changed in the re-land?",
+      "revId": "36f3cd64e29218cb96c5b8deb489f086f23e4b34",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
