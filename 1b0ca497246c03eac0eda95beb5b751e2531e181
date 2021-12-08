@@ -36,6 +36,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "22e2c730_caec0388",
+        "filename": "src/libANGLE/formatutils.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 564,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2021-12-08T02:30:23Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "3a6d078a_6a6bad78",
+      "revId": "1b0ca497246c03eac0eda95beb5b751e2531e181",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "e27f2e1d_7a0fa217",
