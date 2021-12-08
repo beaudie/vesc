@@ -117,6 +117,54 @@
       },
       "revId": "ada72ac0db55c9f394b53dcccabd81d3c8358780",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "58a79a66_7a54217b",
+        "filename": "src/libANGLE/capture/FrameCapture.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 4341,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2021-12-08T18:27:13Z",
+      "side": 1,
+      "message": "I would plan to use zero to disable the feature, that\u0027s intuitive.",
+      "parentUuid": "86e239de_0f2f3140",
+      "range": {
+        "startLine": 4341,
+        "startChar": 12,
+        "endLine": 4341,
+        "endChar": 26
+      },
+      "revId": "ada72ac0db55c9f394b53dcccabd81d3c8358780",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ebb54074_7be62d80",
+        "filename": "src/libANGLE/capture/FrameCapture.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 4341,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2021-12-08T18:27:13Z",
+      "side": 1,
+      "message": "I would plan to use zero to disable the feature, that\u0027s intuitive.",
+      "parentUuid": "86e239de_0f2f3140",
+      "range": {
+        "startLine": 4341,
+        "startChar": 12,
+        "endLine": 4341,
+        "endChar": 26
+      },
+      "revId": "ada72ac0db55c9f394b53dcccabd81d3c8358780",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
