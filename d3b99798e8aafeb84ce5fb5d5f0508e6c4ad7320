@@ -33,6 +33,24 @@
       "message": "LGTM.  Do you see the possibility of any unforseen downsides (given previous surprises we\u0027ve seen with RGB8 formats:-)?  Any additional tests/testing that should be done?",
       "revId": "d3b99798e8aafeb84ce5fb5d5f0508e6c4ad7320",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "4a7a648d_1f3c47c7",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2021-12-08T17:19:49Z",
+      "side": 1,
+      "message": "Not that I\u0027m aware of, since this was dead code anyway.   Hopefully Chromium and AOSP are happy also, but it should be fine.   This is a pretty simple CL to revert if there are issues though.",
+      "parentUuid": "dd9e41ff_ff20f784",
+      "revId": "d3b99798e8aafeb84ce5fb5d5f0508e6c4ad7320",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
