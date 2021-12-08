@@ -11,9 +11,11 @@
 #include "common/PackedEnums.h"
 #include "common/string_utils.h"
 #include "common/system_utils.h"
+#include "platform/Platform.h"
 #include "tests/perf_tests/ANGLEPerfTest.h"
 #include "tests/perf_tests/ANGLEPerfTestArgs.h"
 #include "tests/perf_tests/DrawCallPerfParams.h"
+#include "third_party/trace_event/trace_event.h"
 #include "util/capture/frame_capture_test_utils.h"
 #include "util/egl_loader_autogen.h"
 #include "util/png_utils.h"
@@ -1168,6 +1170,8 @@ TracePerfTest::TracePerfTest(const TracePerfParams &params)
 
 void TracePerfTest::initializeBenchmark()
 {
+    TRACE_EVENT0(ANGLEPlatformCurrent(), "gpu.angle", "TracePerfTest::initializeBenchmark");
+
     const TraceInfo &traceInfo = mParams.traceInfo;
 
     mStartingDirectory = angle::GetCWD().value();
@@ -1262,8 +1266,11 @@ void TracePerfTest::initializeBenchmark()
         }
     }
 
-    // Potentially slow. Can load a lot of resources.
-    mTraceLibrary->setupReplay();
+    {
+        // Potentially slow. Can load a lot of resources.
+        TRACE_EVENT0(ANGLEPlatformCurrent(), "gpu.angle", "SetupReplay");
+        mTraceLibrary->setupReplay();
+    }
 
     glFinish();
 
@@ -1284,6 +1291,8 @@ void TracePerfTest::initializeBenchmark()
 
 void TracePerfTest::destroyBenchmark()
 {
+    TRACE_EVENT0(ANGLEPlatformCurrent(), "gpu.angle", "TracePerfTest::destroyBenchmark");
+
     if (mParams.surfaceType == SurfaceType::Offscreen)
     {
         glDeleteTextures(mMaxOffscreenBufferCount, mOffscreenTextures.data());
@@ -1324,6 +1333,8 @@ void TracePerfTest::sampleTime()
 
 void TracePerfTest::drawBenchmark()
 {
+    TRACE_EVENT0(ANGLEPlatformCurrent(), "gpu.angle", "TracePerfTest::drawBenchmark");
+
     constexpr uint32_t kFramesPerX  = 6;
     constexpr uint32_t kFramesPerY  = 4;
     constexpr uint32_t kFramesPerXY = kFramesPerY * kFramesPerX;
@@ -1363,7 +1374,10 @@ void TracePerfTest::drawBenchmark()
     beginInternalTraceEvent(frameName);
 
     startGpuTimer();
-    mTraceLibrary->replayFrame(mCurrentFrame);
+    {
+        TRACE_EVENT0(ANGLEPlatformCurrent(), "gpu.angle", frameName);
+        mTraceLibrary->replayFrame(mCurrentFrame);
+    }
     stopGpuTimer();
 
     if (mParams.surfaceType == SurfaceType::Offscreen)
