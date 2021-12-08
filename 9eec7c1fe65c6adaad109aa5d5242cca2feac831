@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "61561aad_22953f34",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 13
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2021-12-08T00:45:07Z",
+      "side": 1,
+      "message": "CC\u0027ing Geoff since he\u0027s been involved with this EGL stuff a lot too.",
+      "revId": "9eec7c1fe65c6adaad109aa5d5242cca2feac831",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "e719a8b6_11804713",
+        "filename": "src/libANGLE/Thread.cpp",
+        "patchSetId": 13
+      },
+      "lineNbr": 41,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2021-12-08T00:45:07Z",
+      "side": 1,
+      "message": "Why doesn\u0027t Display::terminate() do this already, since there aren\u0027t any other threads with a Context/Surface/etc. active that\u0027s owned by this Display?",
+      "revId": "9eec7c1fe65c6adaad109aa5d5242cca2feac831",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
