@@ -33,6 +33,24 @@
       "message": "Why doesn\u0027t Display::terminate() do this already, since there aren\u0027t any other threads with a Context/Surface/etc. active that\u0027s owned by this Display?",
       "revId": "9eec7c1fe65c6adaad109aa5d5242cca2feac831",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "97393acd_57e22219",
+        "filename": "src/libANGLE/Thread.cpp",
+        "patchSetId": 13
+      },
+      "lineNbr": 41,
+      "author": {
+        "id": 1340649
+      },
+      "writtenOn": "2021-12-08T02:09:08Z",
+      "side": 1,
+      "message": "\u003e Why doesn\u0027t Display::terminate() do this already\n\nbecause the test call sequence is -\n1. eglMakeCurrent(dpy, srf, srf, ctx)\n2. eglTerminate(dpy)\n\nso ANGLE early returns from terminate since ctx is still current",
+      "parentUuid": "e719a8b6_11804713",
+      "revId": "9eec7c1fe65c6adaad109aa5d5242cca2feac831",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
