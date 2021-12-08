@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ee4a8076_602a9881",
+        "filename": "src/common/system_utils_unittest.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 317,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2021-12-08T14:02:40Z",
+      "side": 1,
+      "message": "you can use ASSERT_TRUE here and below... it will do the same as EXPECT but will return from the current test with an unrecoverable failure.",
+      "range": {
+        "startLine": 317,
+        "startChar": 4,
+        "endLine": 317,
+        "endChar": 15
+      },
+      "revId": "cd92d293779a501ba9706823edbaf3b2d2ae029b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
