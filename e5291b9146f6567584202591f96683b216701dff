@@ -66,6 +66,23 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "6de252e6_69090bc3",
+        "filename": "src/libANGLE/Observer.h",
+        "patchSetId": 8
+      },
+      "lineNbr": 59,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2021-12-08T20:21:02Z",
+      "side": 1,
+      "message": "@Jamie, this probably ties in with ARM\u0027s change to avoid reallocating the vertex buffer. I have a feeling this can be used to change how the front-end notifies VertexArray (by not guessing when storage changes).\n\nAll that to say, how about calling this BufferImplStorageChanged or something like that, and make it more centrally used and by all the backends?",
+      "revId": "e5291b9146f6567584202591f96683b216701dff",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "6513fbf7_4f602f1b",
         "filename": "src/libANGLE/renderer/vulkan/TransformFeedbackVk.cpp",
         "patchSetId": 8
