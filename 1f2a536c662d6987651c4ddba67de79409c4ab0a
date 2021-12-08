@@ -16,6 +16,24 @@
       "message": "Drive by: I\u0027m not following what you\u0027re trying to do.  The ANGLE_TRACE_EVENT0 macro we already use seems to insert trace events that show up in AGI system traces.  Can you simply use that macro?  This seems like some duplication to me, but I may be missing something.",
       "revId": "1f2a536c662d6987651c4ddba67de79409c4ab0a",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "7df19122_3e7bd0e5",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2021-12-08T03:15:50Z",
+      "side": 1,
+      "message": "Those macros don\u0027t result in anything visible in ANGLE when running the trace with gtest_filter\u003d.../vulkan_... This change is in fact trying to hook that up. I was talking to Tim about it, and it seems that the events only show when installing the ANGLE apk, enabling it for the test app, then using gtest_filter\u003d.../native_.... I haven\u0027t verified yet.",
+      "parentUuid": "50c8641a_f638dbae",
+      "revId": "1f2a536c662d6987651c4ddba67de79409c4ab0a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
