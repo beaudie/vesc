@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "1323cc20_715ad7d2",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1290487
+      },
+      "writtenOn": "2021-12-08T20:26:29Z",
+      "side": 1,
+      "message": "FYI ... I asked several questions to the \"Samsung / Google ANGLE Patches Sept ‘21 QA\" document about this CL.  I also pointed to the Android platform CL that I did that may solve the underlying issue that this CL is trying to work around.",
+      "revId": "5dd5d786a2d15b6906c4e73bab245e42637dcd0f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
