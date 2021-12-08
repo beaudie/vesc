@@ -338,7 +338,7 @@ void AppendBufferVectorToDesc(vk::ShaderBuffersDescriptorDesc *desc,
 
             const vk::BufferHelper &bufferHelper = bufferVk->getBuffer();
 
-            vk::BufferSerial bufferSerial;
+            /*vk::BufferSerial bufferSerial;
             if (isDynamicDescriptor)
             {
                 // If this is dynamic descriptor, we should use the main buffer's serial to
@@ -349,7 +349,8 @@ void AppendBufferVectorToDesc(vk::ShaderBuffersDescriptorDesc *desc,
             else
             {
                 bufferSerial = bufferHelper.getBufferSerial();
-            }
+            }*/
+            vk::BufferSerial bufferSerial = bufferHelper.getBlockBufferSerial();
             desc->appendBufferSerial(bufferSerial);
 
             ASSERT(static_cast<uint64_t>(binding.getSize()) <=
