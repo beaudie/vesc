@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "67cf2ada_d5f594ad",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2021-12-08T17:09:05Z",
+      "side": 1,
+      "message": "PTAL. See clarification for this solution in the shared document.",
+      "revId": "b6b267b76219968f3eac181dbe295e430c02ab39",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
