@@ -169,6 +169,30 @@
       },
       "revId": "ee4aeb9c175b27d0233851fae42aeb02ddedbcdf",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "9999363a_92703979",
+        "filename": "src/libANGLE/renderer/vulkan/FramebufferVk.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 1219,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2021-12-08T00:49:32Z",
+      "side": 1,
+      "message": "The comment just says \"flush\" twice though, without any of that clarification of what you\u0027re referring to in each case.\n\nIt sounds like updating it to the following would be helpful:\n\n  // Flush the render pass, which may incur a vkQueueSubmit, before taking any views.  Otherwise\n  // the view serials would not reflect the render pass they are really used in.\n  // http://crbug.com/1272266#c22",
+      "parentUuid": "bd6e7a06_db73edc1",
+      "range": {
+        "startLine": 1219,
+        "startChar": 38,
+        "endLine": 1219,
+        "endChar": 61
+      },
+      "revId": "ee4aeb9c175b27d0233851fae42aeb02ddedbcdf",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
