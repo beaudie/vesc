@@ -4187,6 +4187,9 @@ void QueryContextAttrib(const gl::Context *context, EGLint attribute, EGLint *va
         case EGL_CONTEXT_PRIORITY_LEVEL_IMG:
             *value = static_cast<EGLint>(context->getContextPriority());
             break;
+        case EGL_PROTECTED_CONTENT_EXT:
+            *value = context->getState().hasProtectedContent();
+            break;
         default:
             UNREACHABLE();
             break;
@@ -4358,6 +4361,8 @@ egl::Error QuerySurfaceAttrib64KHR(const Display *display,
             break;
         case EGL_BITMAP_POINTER_KHR:
             *value = surface->getBitmapPointer();
+        case EGL_PROTECTED_CONTENT_EXT:
+            *value = surface->hasProtectedContent();
             break;
         default:
             UNREACHABLE();
