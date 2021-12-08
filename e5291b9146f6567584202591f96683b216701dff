@@ -101,6 +101,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "fc0a8172_0dcd98f1",
+        "filename": "src/libANGLE/Observer.h",
+        "patchSetId": 8
+      },
+      "lineNbr": 59,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2021-12-08T20:48:16Z",
+      "side": 1,
+      "message": "I wasn\u0027t suggesting doing that here, just a side note.",
+      "parentUuid": "5a8881e1_734a089f",
+      "revId": "e5291b9146f6567584202591f96683b216701dff",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "6513fbf7_4f602f1b",
         "filename": "src/libANGLE/renderer/vulkan/TransformFeedbackVk.cpp",
         "patchSetId": 8
