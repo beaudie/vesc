@@ -24,6 +24,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": true,
+      "key": {
+        "uuid": "f9ee7cd0_967a4fb8",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 8
+      },
+      "lineNbr": 14,
+      "author": {
+        "id": 1525982
+      },
+      "writtenOn": "2021-12-08T23:11:54Z",
+      "side": 1,
+      "message": "The test was crashing due to failing the assert in TransformFeedbackVk::onDestroy(). I noticed that mCounterBufferHandles have not been released since TransformFeedbackVk::end() was not being called. When I added glEndTransformFeedback() to the test, this was fixed.",
+      "parentUuid": "3f5df27e_a035135a",
+      "range": {
+        "startLine": 14,
+        "startChar": 22,
+        "endLine": 14,
+        "endChar": 24
+      },
+      "revId": "e5291b9146f6567584202591f96683b216701dff",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": false,
       "key": {
         "uuid": "251b25bc_f59f193e",
@@ -54,6 +78,30 @@
       "writtenOn": "2021-12-08T19:56:30Z",
       "side": 1,
       "message": "I suggest you ignore this message instead of passing it to onStateChange - this will prevent changing our existing behaviour",
+      "range": {
+        "startLine": 398,
+        "startChar": 10,
+        "endLine": 398,
+        "endChar": 67
+      },
+      "revId": "e5291b9146f6567584202591f96683b216701dff",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "429c90ff_e43b679c",
+        "filename": "src/libANGLE/Buffer.cpp",
+        "patchSetId": 8
+      },
+      "lineNbr": 398,
+      "author": {
+        "id": 1525982
+      },
+      "writtenOn": "2021-12-08T23:11:54Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "98b4ff98_37314d0a",
       "range": {
         "startLine": 398,
         "startChar": 10,
@@ -140,6 +188,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "9839bd5d_9a0bc813",
+        "filename": "src/libANGLE/renderer/vulkan/TransformFeedbackVk.cpp",
+        "patchSetId": 8
+      },
+      "lineNbr": 34,
+      "author": {
+        "id": 1525982
+      },
+      "writtenOn": "2021-12-08T23:11:54Z",
+      "side": 1,
+      "message": "Removed.",
+      "parentUuid": "6513fbf7_4f602f1b",
+      "range": {
+        "startLine": 34,
+        "startChar": 6,
+        "endLine": 34,
+        "endChar": 29
+      },
+      "revId": "e5291b9146f6567584202591f96683b216701dff",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "21be25c2_f0afe517",
@@ -153,6 +225,30 @@
       "writtenOn": "2021-12-08T19:56:30Z",
       "side": 1,
       "message": "I suggest you init all these in the constructor once, using the maximum number of possible bindings.\n\nI believe your code will emplace_back multiple times if we call begin() multiple times, which seems like a bug.",
+      "range": {
+        "startLine": 100,
+        "startChar": 0,
+        "endLine": 103,
+        "endChar": 5
+      },
+      "revId": "e5291b9146f6567584202591f96683b216701dff",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "82fcfe16_a7e67fcc",
+        "filename": "src/libANGLE/renderer/vulkan/TransformFeedbackVk.cpp",
+        "patchSetId": 8
+      },
+      "lineNbr": 103,
+      "author": {
+        "id": 1525982
+      },
+      "writtenOn": "2021-12-08T23:11:54Z",
+      "side": 1,
+      "message": "Sounds good. Moved to the constructor.",
+      "parentUuid": "21be25c2_f0afe517",
       "range": {
         "startLine": 100,
         "startChar": 0,
@@ -186,6 +282,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "925e60a8_4948abc6",
+        "filename": "src/libANGLE/renderer/vulkan/TransformFeedbackVk.cpp",
+        "patchSetId": 8
+      },
+      "lineNbr": 168,
+      "author": {
+        "id": 1525982
+      },
+      "writtenOn": "2021-12-08T23:11:54Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "a13eb83e_bf15144a",
+      "range": {
+        "startLine": 168,
+        "startChar": 9,
+        "endLine": 168,
+        "endChar": 14
+      },
+      "revId": "e5291b9146f6567584202591f96683b216701dff",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "8d9a477c_3311a681",
@@ -199,6 +319,30 @@
       "writtenOn": "2021-12-08T19:56:30Z",
       "side": 1,
       "message": "please omit this testing code",
+      "range": {
+        "startLine": 362,
+        "startChar": 6,
+        "endLine": 378,
+        "endChar": 94
+      },
+      "revId": "e5291b9146f6567584202591f96683b216701dff",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "780a0dd5_9f3864cd",
+        "filename": "src/libANGLE/renderer/vulkan/TransformFeedbackVk.cpp",
+        "patchSetId": 8
+      },
+      "lineNbr": 378,
+      "author": {
+        "id": 1525982
+      },
+      "writtenOn": "2021-12-08T23:11:54Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "8d9a477c_3311a681",
       "range": {
         "startLine": 362,
         "startChar": 6,
