@@ -201,6 +201,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "559e1d18_075db5b9",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 15
+      },
+      "lineNbr": 328,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2021-12-08T14:57:35Z",
+      "side": 1,
+      "message": "Re-ping on this question.",
+      "parentUuid": "7ffc8237_7530edd0",
+      "range": {
+        "startLine": 318,
+        "startChar": 11,
+        "endLine": 328,
+        "endChar": 13
+      },
+      "revId": "86ee35e1def1d24cf060101e83a7cb2323bed9a7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "c43a5d4f_a4dbb406",
         "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
         "patchSetId": 15
@@ -497,6 +521,30 @@
       "side": 1,
       "message": "This is just returning a BufferMemoryAllocator objecty which is initailzed when RendererVk is initialized. The createBuffer call bellow does not use any global state. VMA itself has a mutex lock ensures thread safety.",
       "parentUuid": "5e7696ee_6a71674e",
+      "range": {
+        "startLine": 2583,
+        "startChar": 4,
+        "endLine": 2583,
+        "endChar": 88
+      },
+      "revId": "86ee35e1def1d24cf060101e83a7cb2323bed9a7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "9b4f304a_1a89a939",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 15
+      },
+      "lineNbr": 2583,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2021-12-08T14:57:35Z",
+      "side": 1,
+      "message": "I didn\u0027t realize BufferMemoryAllocator was just a wrapper class that calls VMA. It sounds stateful. I\u0027d suggest just removing it entirely and making these all calls implemented in RendererVk. Or otherwise making non-member static functions that use RendererVk\u0027s getAllocator method. And that way you\u0027d save making and storing the BMA object. If it becomes stateful in a later patch set, then you\u0027d need a lock around the data in the class.",
+      "parentUuid": "6f96df36_db14268d",
       "range": {
         "startLine": 2583,
         "startChar": 4,
@@ -864,6 +912,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "e5561b46_ecb6855c",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 15
+      },
+      "lineNbr": 2662,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2021-12-08T14:57:35Z",
+      "side": 1,
+      "message": "In that case, don\u0027t use VK results to indicate an expected behaviour. Use a boolean output variable, and reserve VkResult to indicate no-error/unexpected error. This will fit in better with how ANGLE does return value handling.",
+      "parentUuid": "128ac205_c7ce44b2",
+      "range": {
+        "startLine": 2662,
+        "startChar": 89,
+        "endLine": 2662,
+        "endChar": 99
+      },
+      "revId": "86ee35e1def1d24cf060101e83a7cb2323bed9a7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "48e9f09a_45e1a57a",
         "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
         "patchSetId": 15
@@ -1046,6 +1118,30 @@
       "side": 1,
       "message": "This is the same as previous comment, that eventually I want to go back to just one BufferHelper class without this check.",
       "parentUuid": "1c57ee15_60d24077",
+      "range": {
+        "startLine": 3876,
+        "startChar": 11,
+        "endLine": 3876,
+        "endChar": 31
+      },
+      "revId": "86ee35e1def1d24cf060101e83a7cb2323bed9a7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "43b61634_7daf5161",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 15
+      },
+      "lineNbr": 3876,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2021-12-08T14:57:35Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "e8727245_81117a85",
       "range": {
         "startLine": 3876,
         "startChar": 11,
@@ -1293,6 +1389,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "090f2c83_5112a4db",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.h",
+        "patchSetId": 15
+      },
+      "lineNbr": 1052,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2021-12-08T14:57:35Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "0189f439_827a972a",
+      "range": {
+        "startLine": 1052,
+        "startChar": 47,
+        "endLine": 1052,
+        "endChar": 57
+      },
+      "revId": "86ee35e1def1d24cf060101e83a7cb2323bed9a7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "9a903ca2_20639bae",
@@ -1353,6 +1473,30 @@
       "side": 1,
       "message": "Same per the other comment.",
       "parentUuid": "057cfbb6_341baeb7",
+      "range": {
+        "startLine": 943,
+        "startChar": 6,
+        "endLine": 943,
+        "endChar": 30
+      },
+      "revId": "86ee35e1def1d24cf060101e83a7cb2323bed9a7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "4730d48c_f3037c93",
+        "filename": "src/libANGLE/renderer/vulkan/vk_utils.h",
+        "patchSetId": 15
+      },
+      "lineNbr": 943,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2021-12-08T14:57:35Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "b404f5ea_d73f6cac",
       "range": {
         "startLine": 943,
         "startChar": 6,
