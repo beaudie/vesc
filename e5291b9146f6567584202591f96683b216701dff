@@ -83,6 +83,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "5a8881e1_734a089f",
+        "filename": "src/libANGLE/Observer.h",
+        "patchSetId": 8
+      },
+      "lineNbr": 59,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2021-12-08T20:41:27Z",
+      "side": 1,
+      "message": "I\u0027d rather stick with this design and tackle other problems separately. We can always rename or join events later. This seems prudent to avoid escalating difficulty / complexity of this change, which is already tricky.",
+      "parentUuid": "6de252e6_69090bc3",
+      "revId": "e5291b9146f6567584202591f96683b216701dff",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "6513fbf7_4f602f1b",
         "filename": "src/libANGLE/renderer/vulkan/TransformFeedbackVk.cpp",
         "patchSetId": 8
