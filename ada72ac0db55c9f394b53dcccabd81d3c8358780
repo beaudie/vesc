@@ -36,6 +36,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "64506125_730780d4",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 5
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2021-12-08T14:43:04Z",
+      "side": 1,
+      "message": "Done, named files sequentially. I was something I was considering doing already so I went with that.",
+      "parentUuid": "66c7b9e5_bfab4a7a",
+      "revId": "ada72ac0db55c9f394b53dcccabd81d3c8358780",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "d1d0dacb_b084faf5",
@@ -49,6 +67,30 @@
       "writtenOn": "2021-12-07T23:22:38Z",
       "side": 1,
       "message": "sourceSize \u003c\u003d 0\n\nThis should also check against something more practical than 0, like 10KB.   Otherwise, a value of \"1\" would never work in practice either.",
+      "range": {
+        "startLine": 4341,
+        "startChar": 12,
+        "endLine": 4341,
+        "endChar": 26
+      },
+      "revId": "ada72ac0db55c9f394b53dcccabd81d3c8358780",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "86e239de_0f2f3140",
+        "filename": "src/libANGLE/capture/FrameCapture.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 4341,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2021-12-08T14:43:04Z",
+      "side": 1,
+      "message": "Really any number is fine. A negative or zero or non-zero small number just means after one function it\u0027ll split the file. It\u0027s a threshold not a maximum. I left it as-is because \"0\" seems fine to me as a possible option where we want to disable merging.",
+      "parentUuid": "d1d0dacb_b084faf5",
       "range": {
         "startLine": 4341,
         "startChar": 12,
