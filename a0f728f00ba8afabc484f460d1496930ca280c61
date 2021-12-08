@@ -16,6 +16,24 @@
       "message": "LGTM - should we add this to roll_chromium_deps?",
       "revId": "a0f728f00ba8afabc484f460d1496930ca280c61",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "8aa95b4f_76fd0ea3",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1001921
+      },
+      "writtenOn": "2021-12-08T17:54:29Z",
+      "side": 1,
+      "message": "It\u0027s not managed via DEPS in chromium, do we have a way?",
+      "parentUuid": "01cb16ed_b56014bb",
+      "revId": "a0f728f00ba8afabc484f460d1496930ca280c61",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
