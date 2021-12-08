@@ -5546,7 +5546,16 @@ ANGLE_INLINE void ImageHelper::initImageMemoryBarrierStruct(
     imageMemoryBarrier->sType               = VK_STRUCTURE_TYPE_IMAGE_MEMORY_BARRIER;
     imageMemoryBarrier->srcAccessMask       = transitionFrom.srcAccessMask;
     imageMemoryBarrier->dstAccessMask       = transitionTo.dstAccessMask;
-    imageMemoryBarrier->oldLayout           = transitionFrom.layout;
+    if (mCurrentLayout == ImageLayout::ExternalPreInitialized &&
+        (mCurrentQueueFamilyIndex == VK_QUEUE_FAMILY_EXTERNAL ||
+         mCurrentQueueFamilyIndex == VK_QUEUE_FAMILY_FOREIGN_EXT))
+    {
+        imageMemoryBarrier->oldLayout = transitionTo.layout;
+    }
+    else
+    {
+        imageMemoryBarrier->oldLayout = transitionFrom.layout;
+    }
     imageMemoryBarrier->newLayout           = transitionTo.layout;
     imageMemoryBarrier->srcQueueFamilyIndex = mCurrentQueueFamilyIndex;
     imageMemoryBarrier->dstQueueFamilyIndex = newQueueFamilyIndex;
