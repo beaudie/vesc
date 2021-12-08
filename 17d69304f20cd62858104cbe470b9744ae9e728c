@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "b72906ce_b548f771",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1491687
+      },
+      "writtenOn": "2021-12-08T14:46:36Z",
+      "side": 1,
+      "message": "I found another issue with this test. I was able to reproduce the hanging behavior locally as well.\nThe hanging was caused by not resetting to the default handlers at the end of the test, which was triggered on a crash.\nThe actual crash was triggered since I was not unprotecting the whole memory range, but only one page, which crashed when the vector was uninitialized from the stack.\nThis happened only on release builds, only on Linux.\n\nIt can\u0027t explain why I was not introduced to this locally earlier, but just now. Very glad I could reproduce it though.",
+      "revId": "17d69304f20cd62858104cbe470b9744ae9e728c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
