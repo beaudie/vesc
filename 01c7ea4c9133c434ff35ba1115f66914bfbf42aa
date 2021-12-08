@@ -16,6 +16,29 @@
       "message": "LGTM",
       "revId": "01c7ea4c9133c434ff35ba1115f66914bfbf42aa",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "7c0bf982_82504821",
+        "filename": "src/libANGLE/capture/FrameCapture.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 5404,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2021-12-08T01:03:49Z",
+      "side": 1,
+      "message": "Why is this necessary for only these calls?",
+      "range": {
+        "startLine": 5403,
+        "startChar": 0,
+        "endLine": 5404,
+        "endChar": 41
+      },
+      "revId": "01c7ea4c9133c434ff35ba1115f66914bfbf42aa",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
