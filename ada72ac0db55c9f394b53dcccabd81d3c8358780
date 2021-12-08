@@ -54,6 +54,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "8a0851fb_a8ad05f6",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 5
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2021-12-08T16:45:35Z",
+      "side": 1,
+      "message": "Still a little goofy:\n\n asphalt_9$ ls -lah\n 227M Dec  8 09:41 asphalt_9.angledata.gz\n 739K Dec  8 09:41 asphalt_9_context2_005.cpp\n 495K Dec  8 09:41 asphalt_9_context2_006.cpp\n 498K Dec  8 09:41 asphalt_9_context2_007.cpp\n 505K Dec  8 09:41 asphalt_9_context2_008.cpp\n 460K Dec  8 09:41 asphalt_9_context2_009.cpp\n 444K Dec  8 09:41 asphalt_9_context2_010.cpp\n 511K Dec  8 09:41 asphalt_9_context2_011.cpp\n 505K Dec  8 09:41 asphalt_9_context2_012.cpp\n ...\n 626K Dec  8 09:41 asphalt_9_context2_054.cpp\n 540K Dec  8 09:41 asphalt_9_context2_055.cpp\n 567K Dec  8 09:41 asphalt_9_context2_056.cpp\n 8.1K Dec  8 09:41 asphalt_9_context2.cpp\n  14K Dec  8 09:41 asphalt_9_context2.h\n  643 Dec  8 09:41 asphalt_9_context3_002.cpp\n  431 Dec  8 09:41 asphalt_9_context4_001.cpp\n  527 Dec  8 09:41 asphalt_9_context5_003.cpp\n  431 Dec  8 09:41 asphalt_9_context6_004.cpp\n 3.0K Dec  8 09:41 asphalt_9.json\n 5.9M Dec  8 09:41 asphalt_9_shared.cpp\n\nCan you restart the index per context?",
+      "parentUuid": "64506125_730780d4",
+      "revId": "ada72ac0db55c9f394b53dcccabd81d3c8358780",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "d1d0dacb_b084faf5",
