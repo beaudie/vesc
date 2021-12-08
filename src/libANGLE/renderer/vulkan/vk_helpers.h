@@ -865,33 +865,22 @@ class BufferHelper : public ReadWriteResource
     BufferSerial getBufferSerial() const { return mSerial; }
     BufferSerial getBlockBufferSerial() const
     {
-        return mBufferSubAllocation.valid() ? mBufferSubAllocation.getBlock()->getBufferSerial()
-                                            : mSerial;
+        return mBufferSubAllocation.getBlock()->getBufferSerial();
     }
-    bool valid() const { return mBuffer.valid(); }
-    const Buffer &getBuffer() const { return mBuffer; }
-    VkDeviceSize getOffset() const;
-    VkDeviceSize getSize() const { return mSize; }
+    bool valid() const { return mBufferSubAllocation.valid(); }
+    const Buffer &getBuffer() const { return mBufferSubAllocation.getBuffer(); }
+    VkDeviceSize getOffset() const { return mBufferSubAllocation.getOffset(); }
+    VkDeviceSize getSize() const { return mBufferSubAllocation.getSize(); }
     uint8_t *getMappedMemory() const
     {
         ASSERT(isMapped());
-        return mBufferSubAllocation.valid() ? mBufferSubAllocation.getMappedMemory()
-                                            : mMemory.getMappedMemory() + getOffset();
+        return isExternalBuffer() ? mMemory.getMappedMemory()
+                                  : mBufferSubAllocation.getMappedMemory();
     }
-    bool isHostVisible() const
-    {
-        return (mMemoryPropertyFlags & VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT) != 0;
-    }
-    bool isCoherent() const
-    {
-        return (mMemoryPropertyFlags & VK_MEMORY_PROPERTY_HOST_COHERENT_BIT) != 0;
-    }
+    bool isHostVisible() const { return mBufferSubAllocation.isHostVisible(); }
+    bool isCoherent() const { return mBufferSubAllocation.isCoherent(); }
 
-    bool isMapped() const
-    {
-        return mBufferSubAllocation.valid() ? mBufferSubAllocation.isMapped()
-                                            : mMemory.getMappedMemory() != nullptr;
-    }
+    bool isMapped() const { return isExternalBuffer() ? true : mBufferSubAllocation.isMapped(); }
     bool isExternalBuffer() const { return mMemory.isExternalBuffer(); }
 
     // Also implicitly sets up the correct barriers.
@@ -940,19 +929,14 @@ class BufferHelper : public ReadWriteResource
                                           VkBufferUsageFlags usage,
                                           VkDeviceSize size);
 
-    // Vulkan objects. When mBufferSubAllocation is valid, these two objects are week references to
-    // the buffer blocks that sub-allocated from.
-    Buffer mBuffer;
+    // For external memory only
     BufferMemory mMemory;
-    // SubAllocation object. Only use it when it is valid.
+
+    // SubAllocation object.
     BufferSubAllocation mBufferSubAllocation;
 
-    // Cached properties.
-    VkMemoryPropertyFlags mMemoryPropertyFlags;
-    VkDeviceSize mSize;
-    uint32_t mCurrentQueueFamilyIndex;
-
     // For memory barriers.
+    uint32_t mCurrentQueueFamilyIndex;
     VkFlags mCurrentWriteAccess;
     VkFlags mCurrentReadAccess;
     VkPipelineStageFlags mCurrentWriteStages;

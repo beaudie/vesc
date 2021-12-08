@@ -107,6 +107,7 @@ enum class TextureDimension
 // A maximum offset of 4096 covers almost every Vulkan driver on desktop (80%) and mobile (99%). The
 // next highest values to meet native drivers are 16 bits or 32 bits.
 constexpr uint32_t kAttributeOffsetMaxBits = 15;
+constexpr uint32_t kInvalidMemoryTypeIndex = UINT32_MAX;
 
 namespace vk
 {
@@ -928,12 +929,19 @@ class BufferBlock final : angle::NonCopyable
                        Buffer &buffer,
                        vma::VirtualBlockCreateFlags flags,
                        Allocation &allocation,
-                       uint32_t mMemoryTypeIndex,
                        VkMemoryPropertyFlags memoryPropertyFlags,
                        VkDeviceSize size);
+    angle::Result initWithoutVirtualBlock(ContextVk *contextVk,
+                                          Buffer &buffer,
+                                          Allocation &allocation,
+                                          VkMemoryPropertyFlags memoryPropertyFlags,
+                                          VkDeviceSize size);
+
+    BufferBlock &operator=(BufferBlock &&other);
 
     VirtualBlock &getVirtualBlock();
     const Buffer &getBuffer() const;
+    Buffer *getBuffer();
     const Allocation &getAllocation() const;
     BufferSerial getBufferSerial() const { return mSerial; }
 
@@ -944,6 +952,8 @@ class BufferBlock final : angle::NonCopyable
     void free(VkDeviceSize offset);
     VkBool32 isEmpty() const;
 
+    bool isHostVisible() const;
+    bool isCoherent() const;
     bool isMapped() const;
     angle::Result map(ContextVk *contextVk);
     void unmap(const Allocator &allocator);
@@ -977,9 +987,20 @@ CreateVmaBufferSubAllocation(BufferBlock *block,
     *vmaBufferSubAllocationOut = new VmaBufferSubAllocation_T{block, offset, size};
     return *vmaBufferSubAllocationOut != VK_NULL_HANDLE ? VK_SUCCESS : VK_ERROR_OUT_OF_HOST_MEMORY;
 }
-ANGLE_INLINE void DestroyVmaBufferSubAllocation(VmaBufferSubAllocation vmaBufferSubAllocation)
+ANGLE_INLINE void DestroyVmaBufferSubAllocation(RendererVk *renderer,
+                                                VmaBufferSubAllocation vmaBufferSubAllocation)
 {
-    vmaBufferSubAllocation->mBufferBlock->getVirtualBlock().free(vmaBufferSubAllocation->mOffset);
+    ASSERT(vmaBufferSubAllocation->mBufferBlock);
+    if (vmaBufferSubAllocation->mBufferBlock->getVirtualBlock().valid())
+    {
+        vmaBufferSubAllocation->mBufferBlock->getVirtualBlock().free(
+            vmaBufferSubAllocation->mOffset);
+    }
+    else
+    {
+        vmaBufferSubAllocation->mBufferBlock->destroy(renderer);
+    }
+
     delete vmaBufferSubAllocation;
 }
 
@@ -987,12 +1008,17 @@ class BufferSubAllocation final : public WrappedObject<BufferSubAllocation, VmaB
 {
   public:
     BufferSubAllocation() = default;
-    void destroy(VkDevice device);
+    void destroy(RendererVk *renderer);
+
     VkResult init(VkDevice device, BufferBlock *block, VkDeviceSize offset, VkDeviceSize size);
+    VkResult initWithExclusiveBlock(std::unique_ptr<BufferBlock> &block);
 
     const BufferBlock *getBlock() const;
     const Buffer &getBuffer() const;
+    VkDeviceSize getSize() const;
     const Allocation &getAllocation() const;
+    bool isHostVisible() const;
+    bool isCoherent() const;
     bool isMapped() const;
     uint8_t *getMappedMemory() const;
     void flush(const Allocator &allocator) const;
