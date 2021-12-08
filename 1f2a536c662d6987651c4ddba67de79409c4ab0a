@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "50c8641a_f638dbae",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1290487
+      },
+      "writtenOn": "2021-12-08T01:55:00Z",
+      "side": 1,
+      "message": "Drive by: I\u0027m not following what you\u0027re trying to do.  The ANGLE_TRACE_EVENT0 macro we already use seems to insert trace events that show up in AGI system traces.  Can you simply use that macro?  This seems like some duplication to me, but I may be missing something.",
+      "revId": "1f2a536c662d6987651c4ddba67de79409c4ab0a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
