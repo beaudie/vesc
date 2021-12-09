@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "a9896368_ba8cd6e5",
+        "filename": "src/libANGLE/Thread.cpp",
+        "patchSetId": 15
+      },
+      "lineNbr": 22,
+      "author": {
+        "id": 1340649
+      },
+      "writtenOn": "2021-12-09T18:00:22Z",
+      "side": 1,
+      "message": "rename this to -\u003e PthreadDestructorCleanupCallback",
+      "range": {
+        "startLine": 22,
+        "startChar": 5,
+        "endLine": 22,
+        "endChar": 27
+      },
+      "revId": "6c4ed837b55d9128cadb85c494d5cc10021743ad",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
