@@ -309,19 +309,20 @@ egl::ContextPriority GetContextPriority(const gl::State &state)
 
 template <typename MaskT>
 void AppendBufferVectorToDesc(vk::ShaderBuffersDescriptorDesc *desc,
+                              const std::vector<gl::InterfaceBlock> &blocks,
+                              VkDescriptorType descriptorType,
                               const gl::BufferVector &buffers,
                               const MaskT &buffersMask,
                               bool appendOffset)
 {
-    if (buffersMask.any())
+    if (buffersMask.any() && !blocks.empty())
     {
-        typename MaskT::param_type lastBufferIndex = buffersMask.last();
-        for (typename MaskT::param_type bufferIndex = 0; bufferIndex <= lastBufferIndex;
-             ++bufferIndex)
+        for (uint32_t blockIndex = 0; blockIndex < blocks.size(); ++blockIndex)
         {
-            const gl::OffsetBindingPointer<gl::Buffer> &binding = buffers[bufferIndex];
-            const gl::Buffer *bufferGL                          = binding.get();
+            const gl::InterfaceBlock &block                     = blocks[blockIndex];
+            const gl::OffsetBindingPointer<gl::Buffer> &binding = buffers[block.binding];
 
+            const gl::Buffer *bufferGL = binding.get();
             if (!bufferGL)
             {
                 desc->append32BitValue(0);
@@ -329,7 +330,6 @@ void AppendBufferVectorToDesc(vk::ShaderBuffersDescriptorDesc *desc,
             }
 
             BufferVk *bufferVk = vk::GetImpl(bufferGL);
-
             if (!bufferVk->isBufferValid())
             {
                 desc->append32BitValue(0);
@@ -345,7 +345,9 @@ void AppendBufferVectorToDesc(vk::ShaderBuffersDescriptorDesc *desc,
                    static_cast<uint64_t>(std::numeric_limits<uint32_t>::max()));
             // binding's size could be 0 if it is bound by glBindBufferBase call. In this case, the
             // spec says we should use the actual buffer size at the time buffer is been referenced.
-            GLint64 size = binding.getSize() == 0 ? bufferGL->getSize() : binding.getSize();
+            VkDeviceSize size = descriptorType == kStorageBufferDescriptorType
+                                    ? gl::GetBoundBufferAvailableSize(binding)
+                                    : block.dataSize;
             desc->append32BitValue(static_cast<uint32_t>(size));
 
             if (appendOffset)
@@ -354,6 +356,50 @@ void AppendBufferVectorToDesc(vk::ShaderBuffersDescriptorDesc *desc,
                        static_cast<uint64_t>(std::numeric_limits<uint32_t>::max()));
                 desc->append32BitValue(static_cast<uint32_t>(bufferOffset + binding.getOffset()));
             }
+        }
+    }
+
+    desc->append32BitValue(std::numeric_limits<uint32_t>::max());
+}
+
+void AppendAtomicCounterBufferVectorToDesc(
+    vk::ShaderBuffersDescriptorDesc *desc,
+    const gl::BufferVector &buffers,
+    const angle::BitSet<gl::IMPLEMENTATION_MAX_ATOMIC_COUNTER_BUFFER_BINDINGS> &buffersMask)
+{
+    if (buffersMask.any())
+    {
+        for (uint32_t bufferIndex = 0; bufferIndex < buffers.size(); ++bufferIndex)
+        {
+            const gl::OffsetBindingPointer<gl::Buffer> &binding = buffers[bufferIndex];
+
+            const gl::Buffer *bufferGL = binding.get();
+            if (!bufferGL)
+            {
+                desc->append32BitValue(0);
+                continue;
+            }
+
+            BufferVk *bufferVk = vk::GetImpl(bufferGL);
+            if (!bufferVk->isBufferValid())
+            {
+                desc->append32BitValue(0);
+                continue;
+            }
+
+            VkDeviceSize bufferOffset = 0;
+            vk::BufferSerial bufferSerial =
+                bufferVk->getBufferAndOffset(&bufferOffset).getBufferSerial();
+            desc->appendBufferSerial(bufferSerial);
+
+            ASSERT(static_cast<uint64_t>(binding.getSize()) <=
+                   static_cast<uint64_t>(std::numeric_limits<uint32_t>::max()));
+            VkDeviceSize size = gl::GetBoundBufferAvailableSize(binding);
+            desc->append32BitValue(static_cast<uint32_t>(size));
+
+            ASSERT(static_cast<uint64_t>(binding.getOffset()) <
+                   static_cast<uint64_t>(std::numeric_limits<uint32_t>::max()));
+            desc->append32BitValue(static_cast<uint32_t>(bufferOffset + binding.getOffset()));
         }
     }
 
@@ -4460,19 +4506,21 @@ angle::Result ContextVk::invalidateCurrentShaderResources(gl::Command command)
         }
 
         const gl::BufferVector &uniformBuffers = mState.getOffsetBindingPointerUniformBuffers();
-        AppendBufferVectorToDesc(&mShaderBuffersDescriptorDesc, uniformBuffers,
+        AppendBufferVectorToDesc(&mShaderBuffersDescriptorDesc, executable->getUniformBlocks(),
+                                 executableVk->getUniformBufferDescriptorType(), uniformBuffers,
                                  mState.getUniformBuffersMask(),
                                  !executableVk->usesDynamicUniformBufferDescriptors());
 
         const gl::BufferVector &shaderStorageBuffers =
             mState.getOffsetBindingPointerShaderStorageBuffers();
-        AppendBufferVectorToDesc(&mShaderBuffersDescriptorDesc, shaderStorageBuffers,
-                                 mState.getShaderStorageBuffersMask(), true);
+        AppendBufferVectorToDesc(&mShaderBuffersDescriptorDesc,
+                                 executable->getShaderStorageBlocks(), kStorageBufferDescriptorType,
+                                 shaderStorageBuffers, mState.getShaderStorageBuffersMask(), true);
 
         const gl::BufferVector &atomicCounterBuffers =
             mState.getOffsetBindingPointerAtomicCounterBuffers();
-        AppendBufferVectorToDesc(&mShaderBuffersDescriptorDesc, atomicCounterBuffers,
-                                 mState.getAtomicCounterBuffersMask(), true);
+        AppendAtomicCounterBufferVectorToDesc(&mShaderBuffersDescriptorDesc, atomicCounterBuffers,
+                                              mState.getAtomicCounterBuffersMask());
     }
 
     return angle::Result::Continue;

@@ -98,8 +98,6 @@ constexpr bool IsDynamicDescriptor(VkDescriptorType descriptorType)
     }
 }
 
-constexpr VkDescriptorType kStorageBufferDescriptorType = VK_DESCRIPTOR_TYPE_STORAGE_BUFFER;
-
 DescriptorSetIndex CacheTypeToDescriptorSetIndex(VulkanCacheType cacheType)
 {
     switch (cacheType)

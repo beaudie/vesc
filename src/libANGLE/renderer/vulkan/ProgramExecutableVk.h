@@ -23,6 +23,9 @@
 namespace rx
 {
 
+constexpr VkDescriptorType kStorageBufferDescriptorType       = VK_DESCRIPTOR_TYPE_STORAGE_BUFFER;
+constexpr VkDescriptorType kAtomicCounterBufferDescriptorType = VK_DESCRIPTOR_TYPE_STORAGE_BUFFER;
+
 class ShaderInfo final : angle::NonCopyable
 {
   public:
@@ -195,6 +198,7 @@ class ProgramExecutableVk
     {
         return mUniformBufferDescriptorType == VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER_DYNAMIC;
     }
+    VkDescriptorType getUniformBufferDescriptorType() const { return mUniformBufferDescriptorType; }
 
     bool areImmutableSamplersCompatible(
         const ImmutableSamplerIndexMap &immutableSamplerIndexMap) const
