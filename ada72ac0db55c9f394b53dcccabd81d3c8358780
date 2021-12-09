@@ -165,6 +165,30 @@
       },
       "revId": "ada72ac0db55c9f394b53dcccabd81d3c8358780",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ae096311_2c560d8a",
+        "filename": "src/libANGLE/capture/FrameCapture.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 4341,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2021-12-09T20:55:54Z",
+      "side": 1,
+      "message": "As Jamie pointed out, using 0 wouldn\u0027t disable it, but would take this feature to the extreme where every call is in its own file.   There isn\u0027t really a way to disable this feature and break on frame boundaries.",
+      "parentUuid": "ebb54074_7be62d80",
+      "range": {
+        "startLine": 4341,
+        "startChar": 12,
+        "endLine": 4341,
+        "endChar": 26
+      },
+      "revId": "ada72ac0db55c9f394b53dcccabd81d3c8358780",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
