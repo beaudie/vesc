@@ -72,6 +72,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": true,
+      "key": {
+        "uuid": "5ceae3b9_9efb8b9c",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 10,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2021-12-09T23:00:03Z",
+      "side": 1,
+      "message": "This patch just stops updating the mapped status for buffers added to the regen list.  I think this is okay.  We need to make sure we handle this case too:\n\nstart -- buffer created -- buffer mapped -- start capture -- buffer unmapped -- buffer deleted -- buffer created -- buffer mapped -- end of capture\n\nThis means we need to recreate the buffer and map it in Setup. That code is guarded by:\n\n  // If the buffer was mapped at the start, but is not mapped now, we need to map\n  if (resourceTracker-\u003egetStartingBuffersMappedInitial(id) \u0026\u0026\n      !resourceTracker-\u003egetStartingBuffersMappedCurrent(id))\n  {\n      // Emit their map calls\n      for (CallCapture \u0026call : bufferMapCalls[id])\n      {\n          out \u003c\u003c \"    \";\n          WriteCppReplayForCall(call, replayWriter, out, header, binaryData);\n          out \u003c\u003c \";\\n\";\n      }\n  }\n\nSo in this scenario, the current mapping for the buffer would be unmapped, and the mapping logic would fire.\n\nFor the case where the buffer is not unmapped before delete:\n\nstart -- buffer created -- buffer mapped -- start capture -- buffer deleted -- buffer created -- buffer mapped -- end of capture\n\nI\u0027m not finding where we would update the buffer\u0027s currently mapped status to unmapped so the mapping logic would trigger.  We may need to add that to maybeCapturePreCallUpdates in case EntryPoint::GLDeleteBuffers.",
+      "parentUuid": "286c2d62_eef61f2f",
+      "range": {
+        "startLine": 9,
+        "startChar": 0,
+        "endLine": 10,
+        "endChar": 44
+      },
+      "revId": "d0c25bdb88a23464ca357bd48ab668962d7691d1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": false,
       "key": {
         "uuid": "57008bc1_aef77cbb",
