@@ -250,6 +250,13 @@ ANGLE_INLINE void VertexArray::setDirtyAttribBit(size_t attribIndex,
     mDirtyAttribBits[attribIndex].set(dirtyAttribBit);
 }
 
+ANGLE_INLINE void VertexArray::clearDirtyAttribBit(size_t attribIndex,
+                                                   DirtyAttribBitType dirtyAttribBit)
+{
+    // Don't undo the overall mDirtyBits (unsafe)
+    mDirtyAttribBits[attribIndex].set(dirtyAttribBit, false);
+}
+
 ANGLE_INLINE void VertexArray::setDirtyBindingBit(size_t bindingIndex,
                                                   DirtyBindingBitType dirtyBindingBit)
 {
@@ -506,10 +513,20 @@ void VertexArray::enableAttribute(size_t attribIndex, bool enabledState)
 
     attrib.enabled = enabledState;
 
-    setDirtyAttribBit(attribIndex, DIRTY_ATTRIB_ENABLED);
-
     // Update state cache
     mState.mEnabledAttributesMask.set(attribIndex, enabledState);
+    bool enableChanged = mState.mEnabledAttributesMask.test(attribIndex) !=
+                         mState.mLastSyncedEnabledAttributesMask.test(attribIndex);
+
+    if (enableChanged)
+    {
+        setDirtyAttribBit(attribIndex, DIRTY_ATTRIB_ENABLED);
+    }
+    else
+    {
+        clearDirtyAttribBit(attribIndex, DIRTY_ATTRIB_ENABLED);
+    }
+
     mState.updateCachedMutableOrNonPersistentArrayBuffers(attribIndex);
     mState.mCachedInvalidMappedArrayBuffer = mState.mCachedMappedArrayBuffers &
                                              mState.mEnabledAttributesMask &
@@ -616,6 +633,7 @@ angle::Result VertexArray::syncState(const Context *context)
         // The dirty bits should be reset in the back-end. To simplify ASSERTs only check attrib 0.
         ASSERT(mDirtyAttribBits[0].none());
         ASSERT(mDirtyBindingBits[0].none());
+        mState.mLastSyncedEnabledAttributesMask = mState.mEnabledAttributesMask;
     }
     return angle::Result::Continue;
 }
