@@ -716,8 +716,13 @@ void X11Window::processEvent(const XEvent &xEvent)
     }
 }
 
-// static
-OSWindow *OSWindow::New()
+bool IsX11WindowAvailable()
 {
-    return new X11Window();
+    Display *display = XOpenDisplay();
+    if (!display)
+    {
+        return false;
+    }
+    XCloseDisplay(display);
+    return true;
 }
