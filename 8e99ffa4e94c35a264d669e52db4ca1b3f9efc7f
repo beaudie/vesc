@@ -33,6 +33,23 @@
       "message": "Please add a regression test, otherwise this might regress any time. We are actively working on this area of code, so it\u0027d be easy for things to break.",
       "revId": "8e99ffa4e94c35a264d669e52db4ca1b3f9efc7f",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "a756a8df_8ef2be56",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2021-12-09T17:30:42Z",
+      "side": 1,
+      "message": "LGTM",
+      "revId": "8e99ffa4e94c35a264d669e52db4ca1b3f9efc7f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
