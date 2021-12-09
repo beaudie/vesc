@@ -52,6 +52,52 @@
       "parentUuid": "dfda685a_d79fd1c6",
       "revId": "829f3f4ae680b2cb527a2cc222f8da9c833422db",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ccbde6e9_5b20867a",
+        "filename": "src/libANGLE/renderer/vulkan/VertexArrayVk.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 505,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2021-12-09T17:55:52Z",
+      "side": 1,
+      "message": "if(sameEnabled){\n    bits\u003d...\n}",
+      "range": {
+        "startLine": 504,
+        "startChar": 8,
+        "endLine": 505,
+        "endChar": 95
+      },
+      "revId": "829f3f4ae680b2cb527a2cc222f8da9c833422db",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "09d4fce2_765a9f50",
+        "filename": "src/libANGLE/renderer/vulkan/VertexArrayVk.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 508,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2021-12-09T17:55:52Z",
+      "side": 1,
+      "message": "This attribBits[] appears not been used other than this DIRTY_ATTRIB_POINTER_BUFFER. Looks to me the better way for the fix might be pass down this attribBits[] to syncDirtyAttrib() call and let it further inspect the dirty bit and avoid unnecessary code path when needed, not just for DIRTY_ATTRIB_POINTER_BUFFER?\n\nI am wondering why it wasn\u0027t done this way. Looks like we have these finer grain dirty bits but not really using it.",
+      "range": {
+        "startLine": 508,
+        "startChar": 18,
+        "endLine": 508,
+        "endChar": 33
+      },
+      "revId": "829f3f4ae680b2cb527a2cc222f8da9c833422db",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
