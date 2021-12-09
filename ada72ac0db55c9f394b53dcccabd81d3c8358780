@@ -213,6 +213,30 @@
       },
       "revId": "ada72ac0db55c9f394b53dcccabd81d3c8358780",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "36163cd4_b61db3a5",
+        "filename": "src/libANGLE/capture/FrameCapture.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 4341,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2021-12-09T21:51:23Z",
+      "side": 1,
+      "message": "Every function would be in its own file as Tim said, which is what I meant by disabling the merging. I\u0027m totally fine with this to be clear, and don\u0027t see it causing us any problems. Tim/Cody can we proceed with landing this? I would prefer trying to specify some threshold. If anything I could remove this validation if it\u0027s causing confusion - negative numbers should work fine and won\u0027t lead to crashes, which is the only thing I was really thinking about by adding it.",
+      "parentUuid": "7d2b4224_6b681353",
+      "range": {
+        "startLine": 4341,
+        "startChar": 12,
+        "endLine": 4341,
+        "endChar": 26
+      },
+      "revId": "ada72ac0db55c9f394b53dcccabd81d3c8358780",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
