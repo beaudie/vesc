@@ -6,6 +6,7 @@
 
 // validationES31.cpp: Validation functions for OpenGL ES 3.1 entry point parameters
 
+#include "GLES2/gl2.h"
 #include "libANGLE/validationES31_autogen.h"
 
 #include "libANGLE/Context.h"
@@ -1104,7 +1105,9 @@ bool ValidateFramebufferParameteri(const Context *context,
                                    GLenum pname,
                                    GLint param)
 {
-    if (context->getClientVersion() < ES_3_1)
+    // GL_FRAMEBUFFER_FLIP_Y_MESA that is available as an extensions for a lower version of OpenGL
+    // ES, uses this validation path as well.
+    if (pname != GL_FRAMEBUFFER_FLIP_Y_MESA && context->getClientVersion() < ES_3_1)
     {
         context->validationError(entryPoint, GL_INVALID_OPERATION, kES31Required);
         return false;
@@ -1169,6 +1172,14 @@ bool ValidateFramebufferParameteri(const Context *context,
             }
             break;
         }
+        case GL_FRAMEBUFFER_FLIP_Y_MESA:
+        {
+            if (!context->getExtensions().framebufferFlipYMESA)
+            {
+                return false;
+            }
+            break;
+        }
         default:
         {
             context->validationError(entryPoint, GL_INVALID_ENUM, kInvalidPname);
@@ -1192,7 +1203,9 @@ bool ValidateGetFramebufferParameteriv(const Context *context,
                                        GLenum pname,
                                        const GLint *params)
 {
-    if (context->getClientVersion() < ES_3_1)
+    // GL_FRAMEBUFFER_FLIP_Y_MESA that is available as an extensions for a lower version of OpenGL
+    // ES, uses this validation path as well.
+    if (pname != GL_FRAMEBUFFER_FLIP_Y_MESA && context->getClientVersion() < ES_3_1)
     {
         context->validationError(entryPoint, GL_INVALID_OPERATION, kES31Required);
         return false;
@@ -1217,6 +1230,12 @@ bool ValidateGetFramebufferParameteriv(const Context *context,
             {
                 context->validationError(entryPoint, GL_INVALID_ENUM,
                                          kGeometryShaderExtensionNotEnabled);
+                return false;
+            }
+            break;
+        case GL_FRAMEBUFFER_FLIP_Y_MESA:
+            if (!context->getExtensions().framebufferFlipYMESA)
+            {
                 return false;
             }
             break;

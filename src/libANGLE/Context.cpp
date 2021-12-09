@@ -8943,6 +8943,16 @@ void Context::maxShaderCompilerThreads(GLuint count)
     mImplementation->setMaxShaderCompilerThreads(count);
 }
 
+void Context::framebufferParameteriMESA(GLenum target, GLenum pname, GLint param)
+{
+    framebufferParameteri(target, pname, param);
+}
+
+void Context::getFramebufferParameterivMESA(GLenum target, GLenum pname, GLint *params)
+{
+    getFramebufferParameteriv(target, pname, params);
+}
+
 bool Context::isGLES1() const
 {
     return mState.getClientVersion() < Version(2, 0);

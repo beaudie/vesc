@@ -2609,4 +2609,22 @@ bool ValidateReleaseTexturesANGLE(const Context *context,
     return true;
 }
 
+bool ValidateFramebufferParameteriMESA(const Context *context,
+                                       angle::EntryPoint entryPoint,
+                                       GLenum target,
+                                       GLenum pname,
+                                       GLint param)
+{
+    return ValidateFramebufferParameteri(context, entryPoint, target, pname, param);
+}
+
+bool ValidateGetFramebufferParameterivMESA(const Context *context,
+                                           angle::EntryPoint entryPoint,
+                                           GLenum target,
+                                           GLenum pname,
+                                           const GLint *params)
+{
+    return ValidateGetFramebufferParameteriv(context, entryPoint, target, pname, params);
+}
+
 }  // namespace gl
