@@ -16,6 +16,52 @@
       "message": "Is there a simpler way to do this without have to duplicate it for atomic counter buffers.",
       "revId": "7a2ab59e99e702db54b0e33192fe8ad911a398f1",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "c48fe8ac_f9ce0e70",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 349,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2021-12-09T13:29:56Z",
+      "side": 1,
+      "message": "why not always use this method? or use the minimum of the two?",
+      "range": {
+        "startLine": 349,
+        "startChar": 42,
+        "endLine": 349,
+        "endChar": 69
+      },
+      "revId": "7a2ab59e99e702db54b0e33192fe8ad911a398f1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "fb3f31ad_f1f3af2c",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 407,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2021-12-09T13:29:56Z",
+      "side": 1,
+      "message": "this is almost entirely duplicated - what can we do to share code?",
+      "range": {
+        "startLine": 364,
+        "startChar": 0,
+        "endLine": 407,
+        "endChar": 1
+      },
+      "revId": "7a2ab59e99e702db54b0e33192fe8ad911a398f1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
