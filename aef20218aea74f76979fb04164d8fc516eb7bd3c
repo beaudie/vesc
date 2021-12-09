@@ -285,6 +285,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "57332514_e2027994",
+        "filename": "src/libANGLE/renderer/vulkan/SurfaceVk.cpp",
+        "patchSetId": 13
+      },
+      "lineNbr": 260,
+      "author": {
+        "id": 1359249
+      },
+      "writtenOn": "2021-12-09T16:04:45Z",
+      "side": 1,
+      "message": "Note I\u0027m still passing internalFormat to \nlockBufferHelper.fillWithColor(color, internalFormat);\na few lines below.\nNot clear the difference or preference between:\nconst gl::InternalFormat \u0026internalFormat  // do you want to do away with this? keep OK?\nand\nimage-\u003egetActualFormat().glInternalFormat",
+      "parentUuid": "d54e84e5_54bbeb46",
+      "range": {
+        "startLine": 260,
+        "startChar": 64,
+        "endLine": 260,
+        "endChar": 80
+      },
+      "revId": "aef20218aea74f76979fb04164d8fc516eb7bd3c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "f1e03d5b_8a78140b",
         "filename": "src/libANGLE/renderer/vulkan/SurfaceVk.cpp",
         "patchSetId": 13
@@ -463,6 +487,30 @@
       "side": 1,
       "message": "RendererVk::finish ?",
       "parentUuid": "d85fe739_bc9d213e",
+      "range": {
+        "startLine": 348,
+        "startChar": 8,
+        "endLine": 348,
+        "endChar": 24
+      },
+      "revId": "aef20218aea74f76979fb04164d8fc516eb7bd3c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "3655d24c_531b4fad",
+        "filename": "src/libANGLE/renderer/vulkan/SurfaceVk.cpp",
+        "patchSetId": 13
+      },
+      "lineNbr": 348,
+      "author": {
+        "id": 1359249
+      },
+      "writtenOn": "2021-12-09T16:04:45Z",
+      "side": 1,
+      "message": "I think I tried this first and it didn\u0027t do anything. There is no active command/renderpass. We are context uncurrent.\nI think I did a readpixels or something after and observed that copyBufferToSurfaceImage was incomplete, and that is why I added WaitIdle - until I could find something better.\n\nProbably have to put a VkFence in copyBufferToSurfaceImage and wait on fence.?",
+      "parentUuid": "cab1c26d_18c5edf9",
       "range": {
         "startLine": 348,
         "startChar": 8,

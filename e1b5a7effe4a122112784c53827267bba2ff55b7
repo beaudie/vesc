@@ -18,6 +18,23 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "50dde657_529b9011",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 14
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1359249
+      },
+      "writtenOn": "2021-12-09T16:04:45Z",
+      "side": 1,
+      "message": "Comments. Asking for feedback.",
+      "revId": "e1b5a7effe4a122112784c53827267bba2ff55b7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "f850756d_43c42698",
@@ -64,6 +81,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "9744c5ef_d2531cd6",
+        "filename": "src/libANGLE/renderer/vulkan/SurfaceVk.cpp",
+        "patchSetId": 14
+      },
+      "lineNbr": 438,
+      "author": {
+        "id": 1359249
+      },
+      "writtenOn": "2021-12-09T16:04:45Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "2409997f_9d9a15c5",
+      "range": {
+        "startLine": 438,
+        "startChar": 6,
+        "endLine": 438,
+        "endChar": 23
+      },
+      "revId": "e1b5a7effe4a122112784c53827267bba2ff55b7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "1a39c269_3762b8d1",
@@ -77,6 +118,30 @@
       "writtenOn": "2021-12-09T13:26:12Z",
       "side": 1,
       "message": "you can omit vk:: here and above, we\u0027re in the vk:: namespace.",
+      "range": {
+        "startLine": 888,
+        "startChar": 22,
+        "endLine": 888,
+        "endChar": 24
+      },
+      "revId": "e1b5a7effe4a122112784c53827267bba2ff55b7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "1b80d89b_1b7d40e4",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.h",
+        "patchSetId": 14
+      },
+      "lineNbr": 888,
+      "author": {
+        "id": 1359249
+      },
+      "writtenOn": "2021-12-09T16:04:45Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "1a39c269_3762b8d1",
       "range": {
         "startLine": 888,
         "startChar": 22,
