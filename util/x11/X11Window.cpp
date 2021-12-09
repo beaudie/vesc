@@ -717,7 +717,9 @@ void X11Window::processEvent(const XEvent &xEvent)
 }
 
 // static
+#if defined(ANGLE_USE_X11)
 OSWindow *OSWindow::New()
 {
     return new X11Window();
 }
+#endif

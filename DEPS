@@ -516,13 +516,18 @@ deps = {
   },
 
   'third_party/vulkan-deps': {
-    'url': '{chromium_git}/vulkan-deps@d891854a594a8c22bbe5fdea9cf89d93cd04d3e6',
+    'url': '{chromium_git}/vulkan-deps@0fa93555bcf8afccbacee331440a9f7b7aa9cf05',
     'condition': 'not build_with_chromium',
   },
 
   'third_party/vulkan_memory_allocator': {
     'url': '{chromium_git}/external/github.com/GPUOpen-LibrariesAndSDKs/VulkanMemoryAllocator@5e49f57a6e71a026a54eb42e366de09a4142d24e',
     'condition': 'not build_with_chromium',
+  },
+
+  'third_party/wayland': {
+    'url': '{chromium_git}/external/anongit.freedesktop.org/git/wayland/wayland@upstream/1.20.0',
+    'condition': 'not build_with_chromium and host_os == "linux"'
   },
 
   'third_party/zlib': {
