@@ -223,6 +223,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "c012e11f_2464feeb",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 15
+      },
+      "lineNbr": 328,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2021-12-09T19:39:58Z",
+      "side": 1,
+      "message": "Done. This has now changed to always use buffer block\u0027s serial.",
+      "parentUuid": "559e1d18_075db5b9",
+      "range": {
+        "startLine": 318,
+        "startChar": 11,
+        "endLine": 328,
+        "endChar": 13
+      },
+      "revId": "86ee35e1def1d24cf060101e83a7cb2323bed9a7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "c43a5d4f_a4dbb406",
@@ -545,6 +569,30 @@
       "side": 1,
       "message": "I didn\u0027t realize BufferMemoryAllocator was just a wrapper class that calls VMA. It sounds stateful. I\u0027d suggest just removing it entirely and making these all calls implemented in RendererVk. Or otherwise making non-member static functions that use RendererVk\u0027s getAllocator method. And that way you\u0027d save making and storing the BMA object. If it becomes stateful in a later patch set, then you\u0027d need a lock around the data in the class.",
       "parentUuid": "6f96df36_db14268d",
+      "range": {
+        "startLine": 2583,
+        "startChar": 4,
+        "endLine": 2583,
+        "endChar": 88
+      },
+      "revId": "86ee35e1def1d24cf060101e83a7cb2323bed9a7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "429b998f_72bf7926",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 15
+      },
+      "lineNbr": 2583,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2021-12-09T19:39:58Z",
+      "side": 1,
+      "message": "That should be a separate CL, this CL does not change how BufferMemoryAllocator works.",
+      "parentUuid": "9b4f304a_1a89a939",
       "range": {
         "startLine": 2583,
         "startChar": 4,
@@ -934,6 +982,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "61f764cc_db9f3e1f",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 15
+      },
+      "lineNbr": 2662,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2021-12-09T19:39:58Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "e5561b46_ecb6855c",
+      "range": {
+        "startLine": 2662,
+        "startChar": 89,
+        "endLine": 2662,
+        "endChar": 99
+      },
+      "revId": "86ee35e1def1d24cf060101e83a7cb2323bed9a7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "48e9f09a_45e1a57a",
@@ -1030,6 +1102,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "ae70fd75_c3498de6",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 15
+      },
+      "lineNbr": 3833,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2021-12-09T19:39:58Z",
+      "side": 1,
+      "message": "The ShaderDescriptorSetDesc is now always using the buffer block\u0027s serial. This serial is mostly used for barriers. I think we should keep it this way instead of adding extra cost and memory just to compute a serial.",
+      "parentUuid": "c10e373d_20adb836",
+      "range": {
+        "startLine": 3832,
+        "startChar": 0,
+        "endLine": 3833,
+        "endChar": 19
+      },
+      "revId": "86ee35e1def1d24cf060101e83a7cb2323bed9a7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "1497237b_e7dc89b8",
         "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
         "patchSetId": 15
@@ -1077,6 +1173,24 @@
       "side": 1,
       "message": "Would prefer to avoid all TODOs as they usually just add notes to code that never get implemented. I\u0027m pretty sure we can de-duplicate this easily without adding any classes. When I was thinking about it before, I had a couple solution ideas. Ping me offline if you need - we should fix before landing.",
       "parentUuid": "fa197f81_6b07db47",
+      "revId": "86ee35e1def1d24cf060101e83a7cb2323bed9a7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "e27d60fe_987455db",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 15
+      },
+      "lineNbr": 3850,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2021-12-09T19:39:58Z",
+      "side": 1,
+      "message": "See the follow up CL. I have moved non sub-allocated code path also uses BufferBlock so that there is no duplication of mBuffer. I am a little bit worried about performance impact that now you have to dig all the way to bufferBlock to retrieve buffer handle instead of cached in BufferHelper.\n\nhttps://chromium-review.googlesource.com/c/angle/angle/+/3322100",
+      "parentUuid": "5bc72160_32c1ffed",
       "revId": "86ee35e1def1d24cf060101e83a7cb2323bed9a7",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },

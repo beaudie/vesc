@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "f36e88da_1ae70226",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 22
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2021-12-09T19:39:58Z",
+      "side": 1,
+      "message": "PTAL. I think I have addressed most of feedbacks.",
+      "revId": "3b7aeaf9ff0c3454fc7beb76de53a66dd4323fb8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
