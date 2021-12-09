@@ -56,6 +56,13 @@ if (angle_use_x11) {
   ]
 }
 
+if (angle_use_wayland) {
+  _util_sources += [
+    "wayland/WaylandWindow.cpp",
+    "wayland/WaylandWindow.h",
+  ]
+}
+
 if (is_fuchsia) {
   _util_sources += [
     "fuchsia/FuchsiaPixmap.cpp",
@@ -306,7 +313,12 @@ config("angle_test_util_config") {
 
 angle_source_set("angle_test_utils") {
   public_configs = [ ":angle_test_util_config" ]
+
   public_deps = [ "$angle_root:angle_common" ]
+  if (angle_use_wayland) {
+    public_deps += [ "$angle_root:angle_wayland" ]
+  }
+
   deps = []
   sources = [
     "Timer.cpp",
