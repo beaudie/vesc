@@ -34,6 +34,24 @@
       "parentUuid": "968bf66c_373ea940",
       "revId": "829f3f4ae680b2cb527a2cc222f8da9c833422db",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "e4109d52_ba930797",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2021-12-09T16:48:22Z",
+      "side": 1,
+      "message": "The current state seemed to me like what you\u0027re adding here, so it makes sense to do it close to the source. You could potentially even eliminate an entire unnecessary syncState call (although I would skip that for now as it involves more checking)\n\nBasically yeah it\u0027s good, not too controversial, even if it\u0027s the first time we have cleared dirty bits like that, it sounds like something we should be doing as we run into these call patterns.",
+      "parentUuid": "dfda685a_d79fd1c6",
+      "revId": "829f3f4ae680b2cb527a2cc222f8da9c833422db",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
