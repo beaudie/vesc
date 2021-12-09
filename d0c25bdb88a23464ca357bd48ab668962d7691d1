@@ -1,6 +1,29 @@
 {
   "comments": [
     {
+      "unresolved": true,
+      "key": {
+        "uuid": "93049c59_379cdd68",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 10,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2021-12-09T20:55:31Z",
+      "side": 1,
+      "message": "Why aren\u0027t the buffers being remapped when they are recreated?   It seems like that would be the correct fix, rather than not marking them as unmapped when they are deleted since deleting a buffer implicitly unmaps it (so the capture tool is now differing from GL behavior).",
+      "range": {
+        "startLine": 9,
+        "startChar": 0,
+        "endLine": 10,
+        "endChar": 44
+      },
+      "revId": "d0c25bdb88a23464ca357bd48ab668962d7691d1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": false,
       "key": {
         "uuid": "57008bc1_aef77cbb",
