@@ -2615,8 +2615,7 @@ bool ValidateFramebufferParameteriMESA(const Context *context,
                                        GLenum pname,
                                        GLint param)
 {
-    UNIMPLEMENTED();
-    return false;
+    return ValidateFramebufferParameteriBase(context, entryPoint, target, pname, param);
 }
 
 bool ValidateGetFramebufferParameterivMESA(const Context *context,
@@ -2625,8 +2624,7 @@ bool ValidateGetFramebufferParameterivMESA(const Context *context,
                                            GLenum pname,
                                            const GLint *params)
 {
-    UNIMPLEMENTED();
-    return false;
+    return ValidateGetFramebufferParameterivBase(context, entryPoint, target, pname, params);
 }
 
 }  // namespace gl
