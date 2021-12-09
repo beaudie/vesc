@@ -506,8 +506,6 @@ void VertexArray::enableAttribute(size_t attribIndex, bool enabledState)
 
     attrib.enabled = enabledState;
 
-    setDirtyAttribBit(attribIndex, DIRTY_ATTRIB_ENABLED);
-
     // Update state cache
     mState.mEnabledAttributesMask.set(attribIndex, enabledState);
     mState.updateCachedMutableOrNonPersistentArrayBuffers(attribIndex);
@@ -605,6 +603,12 @@ void VertexArray::setVertexAttribIPointer(const Context *context,
 
 angle::Result VertexArray::syncState(const Context *context)
 {
+    AttributesMask dirtyEnables =
+        mState.mLastSyncedEnabledAttributesMask ^ mState.mEnabledAttributesMask;
+    for (auto bitIndex : dirtyEnables)
+    {
+        setDirtyAttribBit(bitIndex, DIRTY_ATTRIB_ENABLED);
+    }
     if (mDirtyBits.any())
     {
         mDirtyBitsGuard = mDirtyBits;
@@ -616,6 +620,7 @@ angle::Result VertexArray::syncState(const Context *context)
         // The dirty bits should be reset in the back-end. To simplify ASSERTs only check attrib 0.
         ASSERT(mDirtyAttribBits[0].none());
         ASSERT(mDirtyBindingBits[0].none());
+        mState.mLastSyncedEnabledAttributesMask = mState.mEnabledAttributesMask;
     }
     return angle::Result::Continue;
 }
