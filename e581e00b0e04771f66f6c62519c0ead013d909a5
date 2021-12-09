@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "47ff4a64_0e2a3a2f",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1359249
+      },
+      "writtenOn": "2021-12-09T00:25:46Z",
+      "side": 1,
+      "message": "I\u0027ll fix",
+      "revId": "e581e00b0e04771f66f6c62519c0ead013d909a5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "68be5312_3604cafd",
+        "filename": "src/libANGLE/queryutils.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 4364,
+      "author": {
+        "id": 1359249
+      },
+      "writtenOn": "2021-12-09T00:25:46Z",
+      "side": 1,
+      "message": "Missed break; here",
+      "revId": "e581e00b0e04771f66f6c62519c0ead013d909a5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
