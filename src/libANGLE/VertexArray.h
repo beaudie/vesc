@@ -92,6 +92,8 @@ class VertexArrayState final : angle::NonCopyable
     std::vector<VertexBinding> mVertexBindings;
     AttributesMask mEnabledAttributesMask;
     ComponentTypeMask mVertexAttributesTypeMask;
+    AttributesMask mLastSyncedEnabledAttributesMask;
+    bool mEverSynced;
 
     // This is a performance optimization for buffer binding. Allows element array buffer updates.
     friend class State;
@@ -319,6 +321,7 @@ class VertexArray final : public angle::ObserverInterface,
 
     void setDirtyAttribBit(size_t attribIndex, DirtyAttribBitType dirtyAttribBit);
     void setDirtyBindingBit(size_t bindingIndex, DirtyBindingBitType dirtyBindingBit);
+    void clearDirtyAttribBit(size_t attribIndex, DirtyAttribBitType dirtyAttribBit);
 
     DirtyBitType getDirtyBitFromIndex(bool contentsChanged, angle::SubjectIndex index) const;
     void setDependentDirtyBit(bool contentsChanged, angle::SubjectIndex index);
