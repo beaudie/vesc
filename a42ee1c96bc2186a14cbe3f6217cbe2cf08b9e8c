@@ -63,6 +63,30 @@
       },
       "revId": "a42ee1c96bc2186a14cbe3f6217cbe2cf08b9e8c",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "23f6c6c8_9ac1903c",
+        "filename": "src/libANGLE/VertexArray.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 611,
+      "author": {
+        "id": 1175714
+      },
+      "writtenOn": "2021-12-09T22:47:12Z",
+      "side": 1,
+      "message": "Done. Thanks for catching that!",
+      "parentUuid": "d65c1fa4_79f5e4d9",
+      "range": {
+        "startLine": 606,
+        "startChar": 0,
+        "endLine": 611,
+        "endChar": 5
+      },
+      "revId": "a42ee1c96bc2186a14cbe3f6217cbe2cf08b9e8c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
