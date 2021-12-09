@@ -142,6 +142,8 @@ class VertexArrayVk : public VertexArrayImpl
     gl::AttribArray<vk::BufferHelper *> mCurrentArrayBuffers;
     // Cache strides of attributes for a fast pipeline cache update when VAOs are changed
     gl::AttribArray<GLuint> mCurrentArrayBufferStrides;
+    // Cache enabledness
+    angle::BitSet<gl::MAX_VERTEX_ATTRIBS> mCurrentArrayEnables;
     gl::AttributesMask mCurrentArrayBufferCompressed;
     VkDeviceSize mCurrentElementArrayBufferOffset;
     vk::BufferHelper *mCurrentElementArrayBuffer;

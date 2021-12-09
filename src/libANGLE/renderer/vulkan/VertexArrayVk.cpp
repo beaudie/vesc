@@ -496,16 +496,19 @@ angle::Result VertexArrayVk::syncState(const gl::Context *context,
                 break;
             }
 
-#define ANGLE_VERTEX_DIRTY_ATTRIB_FUNC(INDEX)                                                 \
-    case gl::VertexArray::DIRTY_BIT_ATTRIB_0 + INDEX:                                         \
-    {                                                                                         \
-        const bool bufferOnly =                                                               \
-            (*attribBits)[INDEX].to_ulong() ==                                                \
-            angle::Bit<unsigned long>(gl::VertexArray::DIRTY_ATTRIB_POINTER_BUFFER);          \
-        ANGLE_TRY(syncDirtyAttrib(contextVk, attribs[INDEX],                                  \
-                                  bindings[attribs[INDEX].bindingIndex], INDEX, bufferOnly)); \
-        (*attribBits)[INDEX].reset();                                                         \
-        break;                                                                                \
+#define ANGLE_VERTEX_DIRTY_ATTRIB_FUNC(INDEX)                                                  \
+    case gl::VertexArray::DIRTY_BIT_ATTRIB_0 + INDEX:                                          \
+    {                                                                                          \
+        unsigned long bits = (*attribBits)[INDEX].to_ulong();                                  \
+        bool sameEnable    = mCurrentArrayEnables.test(INDEX) == attribs[INDEX].enabled;       \
+        if (sameEnable)                                                                        \
+            bits = bits & ~(angle::Bit<unsigned long>(gl::VertexArray::DIRTY_ATTRIB_ENABLED)); \
+        const bool bufferOnly =                                                                \
+            bits == angle::Bit<unsigned long>(gl::VertexArray::DIRTY_ATTRIB_POINTER_BUFFER);   \
+        ANGLE_TRY(syncDirtyAttrib(contextVk, attribs[INDEX],                                   \
+                                  bindings[attribs[INDEX].bindingIndex], INDEX, bufferOnly));  \
+        (*attribBits)[INDEX].reset();                                                          \
+        break;                                                                                 \
     }
 
                 ANGLE_VERTEX_INDEX_CASES(ANGLE_VERTEX_DIRTY_ATTRIB_FUNC)
@@ -727,6 +730,8 @@ angle::Result VertexArrayVk::syncDirtyAttrib(ContextVk *contextVk,
             mCurrentArrayBufferStrides[attribIndex]    = stride;
             mCurrentArrayBufferCompressed[attribIndex] = compressed;
         }
+
+        mCurrentArrayEnables.set(attribIndex, true);
     }
     else
     {
@@ -742,6 +747,7 @@ angle::Result VertexArrayVk::syncDirtyAttrib(ContextVk *contextVk,
         mCurrentArrayBufferRelativeOffsets[attribIndex] = 0;
 
         ANGLE_TRY(setDefaultPackedInput(contextVk, attribIndex));
+        mCurrentArrayEnables.set(attribIndex, false);
     }
 
     return angle::Result::Continue;
