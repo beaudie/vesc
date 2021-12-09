@@ -414,3 +414,7 @@
 6718 TSAN : MultithreadingTestES3.MultithreadFenceDraw/* = SKIP
 6718 TSAN : MultithreadingTestES3.MultithreadFenceTexImage/* = SKIP
 6746 TSAN : *Vulkan_AsyncQueue = SKIP
+
+// Indexed indirect draw offset bug
+6751 METAL D3D11 : MultiDrawIndirectTest.MultiDrawElementsIndirect* = SKIP
+6751 METAL D3D11 : DrawBaseVertexBaseInstanceTest.MultiDrawElementsInstancedBaseVertexBaseInstance/* = SKIP
