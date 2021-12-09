@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "968bf66c_373ea940",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2021-12-09T13:13:39Z",
+      "side": 1,
+      "message": "Maybe this would be better done in VertexArray.cpp than in the Vulkan back-end?",
+      "revId": "829f3f4ae680b2cb527a2cc222f8da9c833422db",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
