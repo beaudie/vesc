@@ -3688,6 +3688,25 @@ TEST_P(FramebufferTest_ES3, AttachmentsWithUnequalDimensions)
     }
 }
 
+TEST_P(FramebufferTest_ES3, FramebufferFlipYMesaExtension)
+{
+    ANGLE_SKIP_TEST_IF(!IsGLExtensionEnabled("GL_MESA_framebuffer_flip_y"));
+
+    GLFramebuffer mFramebuffer;
+    glBindFramebuffer(GL_FRAMEBUFFER, mFramebuffer.get());
+
+    glFramebufferParameteriMESA(GL_FRAMEBUFFER, GL_FRAMEBUFFER_FLIP_Y_MESA, 1);
+
+    GLint flip_y = -1;
+    glGetFramebufferParameterivMESA(GL_FRAMEBUFFER, GL_FRAMEBUFFER_FLIP_Y_MESA, &flip_y);
+    EXPECT_EQ(flip_y, 1);
+
+    flip_y = -1;
+    glFramebufferParameteriMESA(GL_FRAMEBUFFER, GL_FRAMEBUFFER_FLIP_Y_MESA, 0);
+    glGetFramebufferParameterivMESA(GL_FRAMEBUFFER, GL_FRAMEBUFFER_FLIP_Y_MESA, &flip_y);
+    EXPECT_EQ(flip_y, 0);
+}
+
 class FramebufferTest : public ANGLETest
 {};
 
