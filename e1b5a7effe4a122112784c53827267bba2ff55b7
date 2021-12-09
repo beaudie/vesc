@@ -16,6 +16,75 @@
       "message": "I got what I could",
       "revId": "e1b5a7effe4a122112784c53827267bba2ff55b7",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "f850756d_43c42698",
+        "filename": "src/libANGLE/renderer/vulkan/SurfaceVk.cpp",
+        "patchSetId": 14
+      },
+      "lineNbr": 278,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2021-12-09T13:26:12Z",
+      "side": 1,
+      "message": "again, make this pipe through to something in vk::CommandQueue. We want to keep device access centralized at least in RendererVk. Also you\u0027ll need to handle possible errors. You\u0027re still discarding it here.",
+      "range": {
+        "startLine": 278,
+        "startChar": 8,
+        "endLine": 278,
+        "endChar": 24
+      },
+      "revId": "e1b5a7effe4a122112784c53827267bba2ff55b7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "2409997f_9d9a15c5",
+        "filename": "src/libANGLE/renderer/vulkan/SurfaceVk.cpp",
+        "patchSetId": 14
+      },
+      "lineNbr": 438,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2021-12-09T13:26:12Z",
+      "side": 1,
+      "message": "nit: you can omit this.",
+      "range": {
+        "startLine": 438,
+        "startChar": 6,
+        "endLine": 438,
+        "endChar": 23
+      },
+      "revId": "e1b5a7effe4a122112784c53827267bba2ff55b7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "1a39c269_3762b8d1",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.h",
+        "patchSetId": 14
+      },
+      "lineNbr": 888,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2021-12-09T13:26:12Z",
+      "side": 1,
+      "message": "you can omit vk:: here and above, we\u0027re in the vk:: namespace.",
+      "range": {
+        "startLine": 888,
+        "startChar": 22,
+        "endLine": 888,
+        "endChar": 24
+      },
+      "revId": "e1b5a7effe4a122112784c53827267bba2ff55b7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }

@@ -261,6 +261,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "d54e84e5_54bbeb46",
+        "filename": "src/libANGLE/renderer/vulkan/SurfaceVk.cpp",
+        "patchSetId": 13
+      },
+      "lineNbr": 260,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2021-12-09T13:26:12Z",
+      "side": 1,
+      "message": "Just use image-\u003egetActualFormat().pixelBytes * width rather than using computeRowPitch. You won\u0027t potentially generate an error and the likelihood of having an integer overflow seems small.",
+      "parentUuid": "f64b3d21_62e98036",
+      "range": {
+        "startLine": 260,
+        "startChar": 64,
+        "endLine": 260,
+        "endChar": 80
+      },
+      "revId": "aef20218aea74f76979fb04164d8fc516eb7bd3c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "f1e03d5b_8a78140b",
         "filename": "src/libANGLE/renderer/vulkan/SurfaceVk.cpp",
         "patchSetId": 13
@@ -415,6 +439,30 @@
       "side": 1,
       "message": "Quick search, vkDeviceWaitIdle is nowhere else in the ANGLE code. No wrapper, and nothing is RendererVk. Note we don\u0027t have context here, no current command.\nWe can add a VkFence in copyBufferToSurfaceImage, and but then there will be a vkWaitForFences instead.",
       "parentUuid": "173e2ae4_2d1a7cf1",
+      "range": {
+        "startLine": 348,
+        "startChar": 8,
+        "endLine": 348,
+        "endChar": 24
+      },
+      "revId": "aef20218aea74f76979fb04164d8fc516eb7bd3c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "cab1c26d_18c5edf9",
+        "filename": "src/libANGLE/renderer/vulkan/SurfaceVk.cpp",
+        "patchSetId": 13
+      },
+      "lineNbr": 348,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2021-12-09T13:26:12Z",
+      "side": 1,
+      "message": "RendererVk::finish ?",
+      "parentUuid": "d85fe739_bc9d213e",
       "range": {
         "startLine": 348,
         "startChar": 8,
