@@ -189,6 +189,30 @@
       },
       "revId": "ada72ac0db55c9f394b53dcccabd81d3c8358780",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "7d2b4224_6b681353",
+        "filename": "src/libANGLE/capture/FrameCapture.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 4341,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2021-12-09T21:15:52Z",
+      "side": 1,
+      "message": "My reading of is that setting 0 would cause it to revert back to saveFrame() always (see ref).",
+      "parentUuid": "ae096311_2c560d8a",
+      "range": {
+        "startLine": 4341,
+        "startChar": 12,
+        "endLine": 4341,
+        "endChar": 26
+      },
+      "revId": "ada72ac0db55c9f394b53dcccabd81d3c8358780",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
