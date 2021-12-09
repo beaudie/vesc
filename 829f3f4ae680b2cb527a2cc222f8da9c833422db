@@ -16,6 +16,24 @@
       "message": "Maybe this would be better done in VertexArray.cpp than in the Vulkan back-end?",
       "revId": "829f3f4ae680b2cb527a2cc222f8da9c833422db",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "dfda685a_d79fd1c6",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1175714
+      },
+      "writtenOn": "2021-12-09T16:25:46Z",
+      "side": 1,
+      "message": "That was what I initially thought, but VertexArray.cpp already tracks enabled, and then we\u0027d need another \"next enabled\" or \"previous enabled\" member so I thought that would be controversial? Would that be OK actually?",
+      "parentUuid": "968bf66c_373ea940",
+      "revId": "829f3f4ae680b2cb527a2cc222f8da9c833422db",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
