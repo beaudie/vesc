@@ -16,6 +16,40 @@
       "message": "(1) I\u0027m still not sure how I\u0027m supposed to be applying the Apple diffs. Partly I\u0027m wondering why we don\u0027t just apply pretty much the entire patch at once. Currently it\u0027s ~7000 lines.\n\n(2) Taking this tiny patch, ANGLE wants to reformat a line so there will still be a diff. What should we do here? Can we add a different format spec for src/libANGLE/renderer/metal? or use // clang-format off",
       "revId": "53261483431928e76fe48291d07aa886727d6c64",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "075c5f42_fb57dedd",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2021-12-09T02:41:25Z",
+      "side": 1,
+      "message": "lgtm\n\nNice work on the test. Let\u0027s go through the usual ANGLE review processes and get two reviewers.\n\n+Kyle as FYI.\n",
+      "revId": "53261483431928e76fe48291d07aa886727d6c64",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "994d9f97_a6c16f72",
+        "filename": "src/tests/gl_tests/MaxTextureSizeTest.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 290,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2021-12-09T02:41:25Z",
+      "side": 1,
+      "message": "slight typos: \"Make close to the largest possible... ?\"",
+      "revId": "53261483431928e76fe48291d07aa886727d6c64",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
