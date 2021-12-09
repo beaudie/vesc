@@ -16,6 +16,29 @@
       "message": "Thanks for following up",
       "revId": "5bc7553804e2c3558aa5e8810507cedf19673efc",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "bf38c7df_8232b89a",
+        "filename": "scripts/entry_point_packed_gl_enums.json",
+        "patchSetId": 1
+      },
+      "lineNbr": 1063,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2021-12-09T21:54:49Z",
+      "side": 1,
+      "message": "you can omit the EXT versions. If you look in this file you\u0027ll see no other lines that specify enums for EXT or OES or other extension functions - they\u0027re automatically handled no matter the suffix.",
+      "range": {
+        "startLine": 1061,
+        "startChar": 0,
+        "endLine": 1063,
+        "endChar": 6
+      },
+      "revId": "5bc7553804e2c3558aa5e8810507cedf19673efc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
