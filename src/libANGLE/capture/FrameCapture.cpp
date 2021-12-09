@@ -3240,6 +3240,7 @@ void CaptureMidExecutionSetup(const gl::Context *context,
             (!isArray && bufferID.value != 0))
         {
             cap(CaptureBindBuffer(replayState, true, binding, bufferID));
+            replayState.setBufferBinding(context, binding, boundBuffers[binding].get());
         }
 
         // Restore all buffer bindings for Reset
