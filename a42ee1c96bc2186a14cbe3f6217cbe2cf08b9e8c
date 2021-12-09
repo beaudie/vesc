@@ -1,0 +1,44 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "39d859ba_6b0efcd2",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2021-12-09T21:48:04Z",
+      "side": 1,
+      "message": "Rather than this implemention, when we change the :",
+      "revId": "a42ee1c96bc2186a14cbe3f6217cbe2cf08b9e8c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "726825d1_dd86fb75",
+        "filename": "src/libANGLE/VertexArray.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 611,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2021-12-09T21:48:04Z",
+      "side": 1,
+      "message": "this looks wrong - I think you need to restore the code you removed above, remove this, and instead clear the dirty bit if the \"last synced\" value equals the specified value.",
+      "range": {
+        "startLine": 606,
+        "startChar": 0,
+        "endLine": 611,
+        "endChar": 5
+      },
+      "revId": "a42ee1c96bc2186a14cbe3f6217cbe2cf08b9e8c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
