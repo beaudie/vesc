@@ -25,6 +25,7 @@
 #include "libANGLE/renderer/gl/StateManagerGL.h"
 #include "libANGLE/renderer/gl/TextureGL.h"
 #include "libANGLE/renderer/gl/formatutilsgl.h"
+#include "libANGLE/renderer/gl/functionsgl_enums.h"
 #include "libANGLE/renderer/gl/renderergl_utils.h"
 #include "platform/FeaturesGL.h"
 #include "platform/PlatformMethods.h"
@@ -1314,6 +1315,10 @@ angle::Result FramebufferGL::syncState(const gl::Context *context,
             case Framebuffer::DIRTY_BIT_DEFAULT_LAYERS:
                 functions->framebufferParameteri(GL_FRAMEBUFFER, GL_FRAMEBUFFER_DEFAULT_LAYERS_EXT,
                                                  mState.getDefaultLayers());
+                break;
+            case Framebuffer::DIRTY_BIT_FLIP_Y:
+                functions->framebufferParameteri(GL_FRAMEBUFFER, GL_FRAMEBUFFER_FLIP_Y_MESA,
+                                                 mState.getFlipY());
                 break;
             default:
             {
