@@ -24,6 +24,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": true,
+      "key": {
+        "uuid": "286c2d62_eef61f2f",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 10,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2021-12-09T21:46:18Z",
+      "side": 1,
+      "message": "It\u0027s super confusing so I don\u0027t fault you for not understanding.\n\nstart -- buffer created -- start capture -- buffer deleted -- buffer created -- buffer mapped -- end of capture\n\nThe buffer that\u0027s mapped is not the same as the one captured during MEC. Pretty sure the change is correct \u0026 necessary.",
+      "parentUuid": "93049c59_379cdd68",
+      "range": {
+        "startLine": 9,
+        "startChar": 0,
+        "endLine": 10,
+        "endChar": 44
+      },
+      "revId": "d0c25bdb88a23464ca357bd48ab668962d7691d1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": false,
       "key": {
         "uuid": "57008bc1_aef77cbb",
