@@ -161,6 +161,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "4def4a44_80e25d1c",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.h",
+        "patchSetId": 23
+      },
+      "lineNbr": 951,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2021-12-10T19:21:04Z",
+      "side": 1,
+      "message": "Nevermind, it looks like this is what you\u0027re doing with the later CL:\n3322100: Vulkan: Consolidate BufferHelper\u0027s code paths into one | https://chromium-review.googlesource.com/c/angle/angle/+/3322100",
+      "parentUuid": "34f44cc3_ba3cac64",
+      "range": {
+        "startLine": 946,
+        "startChar": 0,
+        "endLine": 951,
+        "endChar": 39
+      },
+      "revId": "1ceacf58e78d51a7b4097f45a02a8b49d217c360",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "41abe40f_8e34eb3a",
