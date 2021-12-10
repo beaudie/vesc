@@ -18,6 +18,23 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "4cc75a81_23d524f6",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2021-12-10T14:41:36Z",
+      "side": 1,
+      "message": "Seems reasonable, maybe also include a sentence in the commit description on how this helps debugging.",
+      "revId": "adc629a3cb3436124871ed4feb36cede1be319ad",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "bc76f896_9aa4c6c2",
@@ -48,6 +65,29 @@
       "writtenOn": "2021-12-10T05:47:57Z",
       "side": 1,
       "message": "nit: This makes pruning actually less than 1Hz. You can both make the frequency more precise and save yourself a gettime call by keeping `mNextPruneTime` and doing `mNextPruneTime +\u003d kTimeElapsedForPruneDefaultBufferPool` here.\n\nIn `isDueForBufferPoolPrune`, you\u0027d reuse the gettime results to also account for time discrepancies (like wake up after suspend etc):\n\n    bool ShareGroupVk::isDueForBufferPoolPrune()\n    {\n        double currentTime \u003d angle::GetCurrentSystemTime()\n        double timeLeft \u003d mNextPruneTime - currentTime;\n\n        // Account for jumps in time due to suspend\n        if (timeLeft \u003c -kTimeElapsedForPruneDefaultBufferPool)\n        {\n            mNextPruneTime \u003d currentTime;\n            timeLeft \u003d 0;\n        }\n\n        return timeLeft \u003c\u003d 0;\n    }\n\nNot a big deal, as the 1Hz frequency is arbitrary anyway, but the precision might help us with debugging later if a report comes in that there\u0027s a hitch every second (vs every more-or-less second!)",
+      "revId": "adc629a3cb3436124871ed4feb36cede1be319ad",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "76940f7b_b1832b31",
+        "filename": "src/libANGLE/renderer/vulkan/vk_utils.h",
+        "patchSetId": 4
+      },
+      "lineNbr": 960,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2021-12-10T14:41:36Z",
+      "side": 1,
+      "message": "wording nit: I\u0027d rename these to make it clearer what they\u0027re doing, like\n\nmEmptyCounter\n\nint32_t getAndIncrementEmptyCounter()",
+      "range": {
+        "startLine": 960,
+        "startChar": 12,
+        "endLine": 960,
+        "endChar": 26
+      },
       "revId": "adc629a3cb3436124871ed4feb36cede1be319ad",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
