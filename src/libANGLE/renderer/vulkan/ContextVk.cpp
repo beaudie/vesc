@@ -4028,6 +4028,7 @@ angle::Result ContextVk::syncState(const gl::Context *context,
             case gl::State::DIRTY_BIT_CURRENT_VALUES:
             {
                 invalidateDefaultAttributes(glState.getAndResetDirtyCurrentValues());
+                mGraphicsDirtyBits.set(DIRTY_BIT_VERTEX_BUFFERS);
                 break;
             }
             case gl::State::DIRTY_BIT_PROVOKING_VERTEX:
