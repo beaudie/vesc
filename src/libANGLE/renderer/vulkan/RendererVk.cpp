@@ -3025,6 +3025,10 @@ void RendererVk::initFeatures(DisplayVk *displayVk,
     ANGLE_FEATURE_CONDITION(&mFeatures, supportsShaderFramebufferFetchNonCoherent,
                             IsAndroid() && !(isARM || isQualcomm));
 
+    // Dithering emulation is not enabled universally for performance reasons.
+    // TODO: update condition and comment (enabled for debugging)
+    ANGLE_FEATURE_CONDITION(&mFeatures, emulateDithering, true);
+
     angle::PlatformMethods *platform = ANGLEPlatformCurrent();
     platform->overrideFeaturesVk(platform, &mFeatures);
 
