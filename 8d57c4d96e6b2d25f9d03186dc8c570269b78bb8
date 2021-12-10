@@ -1,0 +1,44 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "eca02a5e_c39c22f6",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 11,
+      "author": {
+        "id": 1001921
+      },
+      "writtenOn": "2021-12-10T04:02:50Z",
+      "side": 1,
+      "message": "I think this needs to have a capital B, otherwise the bug number is not clickable.",
+      "range": {
+        "startLine": 11,
+        "startChar": 0,
+        "endLine": 11,
+        "endChar": 3
+      },
+      "revId": "8d57c4d96e6b2d25f9d03186dc8c570269b78bb8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "9ed6bcbd_91e5d7f8",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1001921
+      },
+      "writtenOn": "2021-12-10T04:02:50Z",
+      "side": 1,
+      "message": "Not familiar with this code.",
+      "revId": "8d57c4d96e6b2d25f9d03186dc8c570269b78bb8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
