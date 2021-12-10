@@ -18,6 +18,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "4e53c8ca_fba56b33",
+        "filename": "src/libANGLE/renderer/vulkan/vk_format_map.json",
+        "patchSetId": 3
+      },
+      "lineNbr": 308,
+      "author": {
+        "id": 1520902
+      },
+      "writtenOn": "2021-12-10T23:16:48Z",
+      "side": 1,
+      "message": "Thank you Shabi. If \u0027VK_FORMAT_R16G16B16A16_UINT\u0027 does have mandatory support for \u0027VK_FORMAT_FEATURE_VERTEX_BUFFER_BIT\u0027, can I add it to the list before the \"R16G16B16A16_FLOAT\"?\nFor example:\n\"buffer\": [\"R16G16B16A16_UINT\", \"R16G16B16A16_FLOAT\"]",
+      "parentUuid": "aac028b6_2f911884",
+      "revId": "3ca07cbc2d270713f0560c1432f841a746dff5cf",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "9a013491_1792242f",
@@ -35,6 +53,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "e26d223b_6630b1f3",
+        "filename": "src/libANGLE/renderer/vulkan/vk_format_map.json",
+        "patchSetId": 3
+      },
+      "lineNbr": 312,
+      "author": {
+        "id": 1520902
+      },
+      "writtenOn": "2021-12-10T23:16:48Z",
+      "side": 1,
+      "message": "I see. When you say \"never implemented swizzling of components\", do you mean we can\u0027t shift bits from one component to another? e.g. RGB10A2---\u003e A2RGB10 is not supported, because we can\u0027t split 10 R channel bits into 2 + 8 bits and store them in A and R channel respectively?\n\nI think I miss read one thing earlier: I saw that R10G10B10A2_SSCALED maps to VK_FORMAT_A2B10G10R10_SSCALED_PACK32, and I thought it refers to a format of A2BGR10. After reading the specs, it says \"It specifies a four-component, 32-bit packed signed scaled integer format that has a 2-bit A component in bits 30..31, a 10-bit B component in bits 20..29, a 10-bit G component in bits 10..19, and a 10-bit R component in bits 0..9.\", which actually refers to a format of RGB10A2. Am I reading this correctly?\n\nUpdate on Dec 10th: after talking to Shabi offline, I understand that in order to make the fallback from RGB10A2 to A2RGB10 work, I need to make additional changes in ConvertVertex.comp. I will split the change in a separate CL. For current CL, I will only modify formats that do not require additional change in ConvertVertex.comp.",
+      "parentUuid": "9a013491_1792242f",
+      "revId": "3ca07cbc2d270713f0560c1432f841a746dff5cf",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "e1acfb1b_2769eef7",
@@ -48,6 +84,24 @@
       "writtenOn": "2021-12-07T08:53:56Z",
       "side": 1,
       "message": "Similarly here, according to Table 66 RGB8_USCALED doesn\u0027t have mandatory VERTEX feature support, neither does RGBA8_USCALED, so these need to be a list (like the case with `R8G8B8_SSCALED` below.",
+      "revId": "3ca07cbc2d270713f0560c1432f841a746dff5cf",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "d9f8574e_67b4e363",
+        "filename": "src/libANGLE/renderer/vulkan/vk_format_map.json",
+        "patchSetId": 3
+      },
+      "lineNbr": 367,
+      "author": {
+        "id": 1520902
+      },
+      "writtenOn": "2021-12-10T23:16:48Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "e1acfb1b_2769eef7",
       "revId": "3ca07cbc2d270713f0560c1432f841a746dff5cf",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
