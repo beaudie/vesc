@@ -1678,7 +1678,8 @@ BufferBlock::BufferBlock(BufferBlock &&other)
       mMemoryPropertyFlags(other.mMemoryPropertyFlags),
       mSize(other.mSize),
       mMappedMemory(other.mMappedMemory),
-      mSerial(other.mSerial)
+      mSerial(other.mSerial),
+      mCountRemainsEmpty(0)
 {}
 
 BufferBlock &BufferBlock::operator=(BufferBlock &&other)
@@ -1690,6 +1691,7 @@ BufferBlock &BufferBlock::operator=(BufferBlock &&other)
     std::swap(mSize, other.mSize);
     std::swap(mMappedMemory, other.mMappedMemory);
     std::swap(mSerial, other.mSerial);
+    std::swap(mCountRemainsEmpty, other.mCountRemainsEmpty);
     return *this;
 }
 
@@ -1825,12 +1827,18 @@ uint8_t *BufferBlock::getMappedMemory() const
 
 bool BufferBlock::allocate(VkDeviceSize size, VkDeviceSize alignment, VkDeviceSize *offsetOut)
 {
+    mCountRemainsEmpty = 0;
     return mVirtualBlock.allocate(size, alignment, offsetOut) == VK_SUCCESS;
 }
 
 void BufferBlock::free(VkDeviceSize offset)
 {
     mVirtualBlock.free(offset);
+}
+
+int32_t BufferBlock::getAndIncrementEmptyCounter()
+{
+    return ++mCountRemainsEmpty;
 }
 
 // BufferSubAllocation implementation.

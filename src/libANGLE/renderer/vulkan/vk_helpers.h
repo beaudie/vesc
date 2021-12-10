@@ -974,22 +974,18 @@ class BufferPool : angle::NonCopyable
 
   private:
     angle::Result allocateNewBuffer(ContextVk *contextVk, VkDeviceSize sizeInBytes);
-    bool newBufferAllocatedSinceLastPrune()
-    {
-        return mBufferAllocateCountWhenPruned != mBufferAllocateCount;
-    }
 
     vma::VirtualBlockCreateFlags mVirtualBlockCreateFlags;
     VkBufferUsageFlags mUsage;
     bool mHostVisible;
     VkDeviceSize mSize;
     uint32_t mMemoryTypeIndex;
-    int32_t mMaxEmptyBufferCount;
     BufferBlockPointerVector mBufferBlocks;
-    // These two variables are used to figure out if any new buffer been allocated since last prune
-    // call.
-    uint32_t mBufferAllocateCount;
-    uint32_t mBufferAllocateCountWhenPruned;
+    // When pruneDefaultBufferPools gets called, we do not immediately free all empty buffers. Only
+    // buffers that we found are empty for this number of times consecutively, we will actually free
+    // it. That way we avoid the situation that a buffer just becomes empty and gets freed right
+    // after and then we have to allocate a new one next frame.
+    static constexpr int32_t kMaxCountRemainsEmpty = 4;
 };
 using BufferPoolPointerArray = std::array<std::unique_ptr<BufferPool>, VK_MAX_MEMORY_TYPES>;
 

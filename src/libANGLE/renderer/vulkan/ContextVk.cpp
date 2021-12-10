@@ -5621,6 +5621,16 @@ angle::Result ContextVk::flushAndGetSerial(const vk::Semaphore *signalSemaphore,
                                 TRACE_EVENT_PHASE_BEGIN, eventName));
     }
 
+    // Try to detect frame boundary for both on screen and offscreen usage by detecting
+    // fush/finish/swap.
+    if ((renderPassClosureReason == RenderPassClosureReason::GLFlush ||
+         renderPassClosureReason == RenderPassClosureReason::GLFinish ||
+         renderPassClosureReason == RenderPassClosureReason::EGLSwapBuffers) &&
+        mShareGroupVk->isDueForBufferPoolPrune())
+    {
+        mShareGroupVk->pruneDefaultBufferPools(mRenderer);
+    }
+
     return angle::Result::Continue;
 }
 
