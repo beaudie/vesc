@@ -16,6 +16,40 @@
       "message": "Will merge into the first CL. Figured this may easier for you guys to review.",
       "revId": "adc629a3cb3436124871ed4feb36cede1be319ad",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "bc76f896_9aa4c6c2",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 5625,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2021-12-10T05:47:57Z",
+      "side": 1,
+      "message": "This was purely a debug feature until now. Why only flush/finish/swap? Why not client wait sync for example? I suggest enumerating all three reasons instead of a range check, in case the enum gets reordered later.",
+      "revId": "adc629a3cb3436124871ed4feb36cede1be319ad",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "16b00b4e_156391de",
+        "filename": "src/libANGLE/renderer/vulkan/DisplayVk.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 385,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2021-12-10T05:47:57Z",
+      "side": 1,
+      "message": "nit: This makes pruning actually less than 1Hz. You can both make the frequency more precise and save yourself a gettime call by keeping `mNextPruneTime` and doing `mNextPruneTime +\u003d kTimeElapsedForPruneDefaultBufferPool` here.\n\nIn `isDueForBufferPoolPrune`, you\u0027d reuse the gettime results to also account for time discrepancies (like wake up after suspend etc):\n\n    bool ShareGroupVk::isDueForBufferPoolPrune()\n    {\n        double currentTime \u003d angle::GetCurrentSystemTime()\n        double timeLeft \u003d mNextPruneTime - currentTime;\n\n        // Account for jumps in time due to suspend\n        if (timeLeft \u003c -kTimeElapsedForPruneDefaultBufferPool)\n        {\n            mNextPruneTime \u003d currentTime;\n            timeLeft \u003d 0;\n        }\n\n        return timeLeft \u003c\u003d 0;\n    }\n\nNot a big deal, as the 1Hz frequency is arbitrary anyway, but the precision might help us with debugging later if a report comes in that there\u0027s a hitch every second (vs every more-or-less second!)",
+      "revId": "adc629a3cb3436124871ed4feb36cede1be319ad",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
