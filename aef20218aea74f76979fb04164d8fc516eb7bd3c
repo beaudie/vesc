@@ -523,6 +523,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "364aa8de_3d415c28",
+        "filename": "src/libANGLE/renderer/vulkan/SurfaceVk.cpp",
+        "patchSetId": 13
+      },
+      "lineNbr": 348,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2021-12-10T04:22:13Z",
+      "side": 1,
+      "message": "The one-off submission already inserts a fence, to which a serial is assigned. RendererVk::finish() simply waits for the last serial (i.e. fence), which is why it doesn\u0027t look like `vkDeviceWaitIdle`.\n\nYou can debug this by adding some logs: log the serial that the one-off submission is generating, and log the serial that `RendererVk::finish` is trying to wait on (by replacing vkDeviceWaitIdle here with that). If `finish` is waiting for a serial smaller than the one-off submission, that\u0027s a problem we\u0027d need to fix separately.",
+      "parentUuid": "3655d24c_531b4fad",
+      "range": {
+        "startLine": 348,
+        "startChar": 8,
+        "endLine": 348,
+        "endChar": 24
+      },
+      "revId": "aef20218aea74f76979fb04164d8fc516eb7bd3c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "4122eaf1_3370942d",
         "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
         "patchSetId": 13
