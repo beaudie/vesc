@@ -96,6 +96,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": true,
+      "key": {
+        "uuid": "574b3a8c_9409e82a",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 10,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2021-12-10T15:03:51Z",
+      "side": 1,
+      "message": "Cody - thanks for pointing out the additional flaws in the logic. I filed http://anglebug.com/6799 - could we tackle this as a follow-up?",
+      "parentUuid": "5ceae3b9_9efb8b9c",
+      "range": {
+        "startLine": 9,
+        "startChar": 0,
+        "endLine": 10,
+        "endChar": 44
+      },
+      "revId": "d0c25bdb88a23464ca357bd48ab668962d7691d1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": false,
       "key": {
         "uuid": "57008bc1_aef77cbb",
