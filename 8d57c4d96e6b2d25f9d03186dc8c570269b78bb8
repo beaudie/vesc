@@ -74,6 +74,24 @@
       "parentUuid": "6d1daab9_317f9193",
       "revId": "8d57c4d96e6b2d25f9d03186dc8c570269b78bb8",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "2794fcc1_785b35d7",
+        "filename": "src/libANGLE/renderer/metal/ShaderMtl.mm",
+        "patchSetId": 1
+      },
+      "lineNbr": 159,
+      "author": {
+        "id": 1115588
+      },
+      "writtenOn": "2021-12-10T20:08:45Z",
+      "side": 1,
+      "message": "To be clear, what I\u0027m asking is, should the code just be\n\nstd::string ShaderMtl::getDebugInfo() const\n{\n    return mState.getCompiledBinary().empty() ? \"\" : \"\u003cbinary blob\u003e\";\n}",
+      "parentUuid": "f50f1103_6f882434",
+      "revId": "8d57c4d96e6b2d25f9d03186dc8c570269b78bb8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
