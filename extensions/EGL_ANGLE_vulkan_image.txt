@@ -74,9 +74,9 @@ Additions to Chapter 2 of the EGL 1.4 Specification (EGL Operation)
 
     If <target> is EGL_VULKAN_IMAGE_ANGLE, <dpy> must be a valid display, <ctx>
     must be EGL_NO_CONTEXT, <buffer> must be a pointer to a valid VkImage
-    object (cast into the type EGLClientBuffer), the VkImage object must be
-    created with the same VkDevice used by GL implementation and attributes
-    other than EGL_VULKAN_IMAGE_CREATE_INFO_HI_ANGLE or
+    (cast into the type EGLClientBuffer), the VkImage must be created with the
+    same VkDevice used by GL implementation and attributes other than
+    EGL_VULKAN_IMAGE_CREATE_INFO_HI_ANGLE or
     EGL_VULKAN_IMAGE_CREATE_INFO_LO_ANGLE are ignored.
 
     EGL_VULKAN_IMAGE_CREATE_INFO_HI_ANGLE and

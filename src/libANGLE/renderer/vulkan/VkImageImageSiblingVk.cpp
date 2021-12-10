@@ -17,7 +17,7 @@ namespace rx
 
 VkImageImageSiblingVk::VkImageImageSiblingVk(EGLClientBuffer buffer,
                                              const egl::AttributeMap &attribs)
-    : mVkImage(reinterpret_cast<VkImage>(buffer))
+    : mVkImage(*reinterpret_cast<VkImage *>(buffer))
 {
     ASSERT(attribs.contains(EGL_VULKAN_IMAGE_CREATE_INFO_HI_ANGLE));
     ASSERT(attribs.contains(EGL_VULKAN_IMAGE_CREATE_INFO_LO_ANGLE));

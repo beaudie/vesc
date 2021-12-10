@@ -211,8 +211,14 @@ egl::Error DisplayVk::validateImageClientBuffer(const gl::Context *context,
     switch (target)
     {
         case EGL_VULKAN_IMAGE_ANGLE:
+        {
+            VkImage *vkImage = reinterpret_cast<VkImage *>(clientBuffer);
+            if (!vkImage || *vkImage == VK_NULL_HANDLE)
+            {
+                return egl::EglBadParameter() << "clientBuffer is invalid.";
+            }
             return egl::NoError();
-
+        }
         default:
             return DisplayImpl::validateImageClientBuffer(context, target, clientBuffer, attribs);
     }

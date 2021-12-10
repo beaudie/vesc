@@ -350,7 +350,7 @@ TEST_P(VulkanImageTest, ClientBuffer)
         EGL_NONE,
     };
     EGLImageKHR eglImage = eglCreateImageKHR(display, EGL_NO_CONTEXT, EGL_VULKAN_IMAGE_ANGLE,
-                                             reinterpret_cast<EGLClientBuffer>(vkImage), attribs);
+                                             reinterpret_cast<EGLClientBuffer>(&vkImage), attribs);
     EXPECT_NE(eglImage, EGL_NO_IMAGE_KHR);
 
     GLTexture texture;
