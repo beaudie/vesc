@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "10c6ba78_ead5c28b",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 13
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2021-12-10T16:31:04Z",
+      "side": 1,
+      "message": "Sorry for the slow review, LGTM.",
+      "revId": "0ba3d89170a30fd44e4f50f437f09831250b91ad",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
