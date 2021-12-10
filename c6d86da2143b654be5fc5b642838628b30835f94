@@ -16,6 +16,24 @@
       "message": "this test is producing an ASAN failure:\n\nGLSLTest_ES3.GLVertexIDIntegerTextureDrawElements/ES3_Vulkan_SwiftShader\n\nI\u0027ll file a bug later, if still an issue. Crash stacks aren\u0027t working yet but I have a fix for that.",
       "revId": "c6d86da2143b654be5fc5b642838628b30835f94",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "a4f8db6f_a5f35efb",
+        "filename": "src/tests/gl_tests/GLSLTest.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 1178,
+      "author": {
+        "id": 1115588
+      },
+      "writtenOn": "2021-12-10T20:14:07Z",
+      "side": 1,
+      "message": "https://chromium-review.googlesource.com/c/angle/angle/+/3278489",
+      "parentUuid": "2d7ce6f4_533756ad",
+      "revId": "c6d86da2143b654be5fc5b642838628b30835f94",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
