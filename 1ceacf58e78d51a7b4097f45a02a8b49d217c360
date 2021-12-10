@@ -1,0 +1,44 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "36c2c9ac_29aebb4b",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 23
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2021-12-10T17:40:29Z",
+      "side": 1,
+      "message": "Question about Stop/Continue usage.",
+      "revId": "1ceacf58e78d51a7b4097f45a02a8b49d217c360",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "5a041e08_cb3d5a78",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 23
+      },
+      "lineNbr": 2770,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2021-12-10T17:40:29Z",
+      "side": 1,
+      "message": "Similar to the prior code, avoid Stop/Continue to indicate success or failure, and instead only using angle::Result to return control flow the to application layer in the case of an unexpected internal error. Just to confirm that I\u0027m reading this right - Stop/Continue here means we had success in finding a pool or not?",
+      "range": {
+        "startLine": 2769,
+        "startChar": 0,
+        "endLine": 2770,
+        "endChar": 31
+      },
+      "revId": "1ceacf58e78d51a7b4097f45a02a8b49d217c360",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}

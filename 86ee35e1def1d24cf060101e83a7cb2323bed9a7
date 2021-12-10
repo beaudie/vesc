@@ -605,6 +605,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "696f70f4_f7a82bf2",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 15
+      },
+      "lineNbr": 2583,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2021-12-10T17:40:29Z",
+      "side": 1,
+      "message": "OK, sounds good if you can do this in a follow-up.",
+      "parentUuid": "429b998f_72bf7926",
+      "range": {
+        "startLine": 2583,
+        "startChar": 4,
+        "endLine": 2583,
+        "endChar": 88
+      },
+      "revId": "86ee35e1def1d24cf060101e83a7cb2323bed9a7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "9ddb826b_0df1a386",
         "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
         "patchSetId": 15
@@ -1126,6 +1150,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "f6270f75_380f64f0",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 15
+      },
+      "lineNbr": 3833,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2021-12-10T17:40:29Z",
+      "side": 1,
+      "message": "To be clear- you\u0027re excluding offset/size from the serial, so there\u0027s no possible reuse? That\u0027s fine, we can always do this as a follow-up if we can find it improves performance by hitting warm caches more often.",
+      "parentUuid": "ae70fd75_c3498de6",
+      "range": {
+        "startLine": 3832,
+        "startChar": 0,
+        "endLine": 3833,
+        "endChar": 19
+      },
+      "revId": "86ee35e1def1d24cf060101e83a7cb2323bed9a7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "1497237b_e7dc89b8",
         "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
         "patchSetId": 15
@@ -1191,6 +1239,24 @@
       "side": 1,
       "message": "See the follow up CL. I have moved non sub-allocated code path also uses BufferBlock so that there is no duplication of mBuffer. I am a little bit worried about performance impact that now you have to dig all the way to bufferBlock to retrieve buffer handle instead of cached in BufferHelper.\n\nhttps://chromium-review.googlesource.com/c/angle/angle/+/3322100",
       "parentUuid": "5bc72160_32c1ffed",
+      "revId": "86ee35e1def1d24cf060101e83a7cb2323bed9a7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "e80e9ad5_22fdd33a",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 15
+      },
+      "lineNbr": 3850,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2021-12-10T17:40:29Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "e27d60fe_987455db",
       "revId": "86ee35e1def1d24cf060101e83a7cb2323bed9a7",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
@@ -1398,6 +1464,30 @@
       "side": 1,
       "message": "It is counting the number of times BufferPool::allocateNewBuffer() gets called. I have renamed to mBufferAllocateCount.",
       "parentUuid": "3de5d784_d0b46a46",
+      "range": {
+        "startLine": 1049,
+        "startChar": 13,
+        "endLine": 1049,
+        "endChar": 32
+      },
+      "revId": "86ee35e1def1d24cf060101e83a7cb2323bed9a7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "54a6ad71_4b26e417",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.h",
+        "patchSetId": 15
+      },
+      "lineNbr": 1049,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2021-12-10T17:40:29Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "93881d61_c99b0c22",
       "range": {
         "startLine": 1049,
         "startChar": 13,
