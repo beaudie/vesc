@@ -36,6 +36,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "d7e2d841_eb3963d5",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 5
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1175714
+      },
+      "writtenOn": "2021-12-10T23:43:37Z",
+      "side": 1,
+      "message": "Fixed in https://chromium-review.googlesource.com/c/angle/angle/+/3331412",
+      "parentUuid": "7dc71ce0_613d614e",
+      "revId": "2ce20a0a6fcbe7c89b72205d2658bd93260bb4e5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "ab9b70c2_2b3eb5b8",
