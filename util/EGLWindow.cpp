@@ -254,6 +254,11 @@ bool EGLWindow::initializeDisplay(OSWindow *osWindow,
         disabledFeatureOverrides.push_back("supportsMultiDrawIndirect");
     }
 
+    if (params.WithVulkanPreferCPUForBufferSubData == EGL_TRUE)
+    {
+        enabledFeatureOverrides.push_back("preferCPUForBufferSubData");
+    }
+
     switch (params.emulatedPrerotation)
     {
         case 90:
