@@ -58,6 +58,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "89250004_44619350",
+        "filename": "src/common/system_utils_posix.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 276,
+      "author": {
+        "id": 1491687
+      },
+      "writtenOn": "2021-12-10T18:36:04Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "8e14f0e8_7554b87b",
+      "range": {
+        "startLine": 235,
+        "startChar": 0,
+        "endLine": 276,
+        "endChar": 1
+      },
+      "revId": "5ea1c92795da203c51e1a4c0e4d7918410dc2372",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "9ead62f5_056c38b2",
@@ -71,6 +95,30 @@
       "writtenOn": "2021-12-10T18:03:40Z",
       "side": 1,
       "message": "can you follow the MAYBE_ test naming pattern so we can use GTEST disables for these tests? See test_utils_unittest.cpp.",
+      "range": {
+        "startLine": 234,
+        "startChar": 13,
+        "endLine": 234,
+        "endChar": 35
+      },
+      "revId": "5ea1c92795da203c51e1a4c0e4d7918410dc2372",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "eb580a91_f767a097",
+        "filename": "src/common/system_utils_unittest.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 234,
+      "author": {
+        "id": 1491687
+      },
+      "writtenOn": "2021-12-10T18:36:04Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "9ead62f5_056c38b2",
       "range": {
         "startLine": 234,
         "startChar": 13,
