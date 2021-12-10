@@ -70,7 +70,7 @@ Thread *AllocateCurrentThread()
 
     // Create process cleanup TLS slot
     auto CreateProcessCleanupTLSIndex = []() {
-        gProcessCleanupTLSIndex = CreateTLSIndex(angle::ProcessCleanupCallback);
+        gProcessCleanupTLSIndex = CreateTLSIndex(angle::PthreadKeyDestructorCallback);
     };
     pthread_once(&keyOnce, CreateProcessCleanupTLSIndex);
     ASSERT(gProcessCleanupTLSIndex != TLS_INVALID_INDEX);

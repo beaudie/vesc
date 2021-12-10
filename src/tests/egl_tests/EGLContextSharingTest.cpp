@@ -690,6 +690,8 @@ TEST_P(EGLContextSharingTestNoFixture, EglTerminateMultiThreaded)
     // TODO(http://www.anglebug.com/6304): Fails with OpenGL ES backend.
     ANGLE_SKIP_TEST_IF(IsOpenGLES());
 
+    EXPECT_TRUE(eglMakeCurrent(mDisplay, EGL_NO_SURFACE, EGL_NO_SURFACE, EGL_NO_CONTEXT));
+
     // Synchronization tools to ensure the two threads are interleaved as designed by this test.
     std::mutex mutex;
     std::condition_variable condVar;
@@ -805,6 +807,8 @@ TEST_P(EGLContextSharingTestNoFixture, EglDestoryContextManyTimesSameContext)
     ANGLE_SKIP_TEST_IF(!platformSupportsMultithreading());
     // TODO(http://www.anglebug.com/6304): Fails with OpenGL ES backend.
     ANGLE_SKIP_TEST_IF(IsOpenGLES());
+
+    EXPECT_TRUE(eglMakeCurrent(mDisplay, EGL_NO_SURFACE, EGL_NO_SURFACE, EGL_NO_CONTEXT));
 
     // Synchronization tools to ensure the two threads are interleaved as designed by this test.
     std::mutex mutex;
