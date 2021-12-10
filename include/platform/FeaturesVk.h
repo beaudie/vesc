@@ -611,6 +611,10 @@ struct FeaturesVk : FeatureSetBase
     Feature supportsLockSurfaceExtension = {
         "supportsLockSurfaceExtension", FeatureCategory::VulkanFeatures,
         "Surface supports the EGL_KHR_lock_surface3 extension", &members};
+
+    // Whether dithering should be emulated.
+    Feature emulateDithering = {"emulateDithering", FeatureCategory::VulkanFeatures,
+                                "Emulate OpenGL dithering", &members, "http://anglebug.com/6755"};
 };
 
 inline FeaturesVk::FeaturesVk()  = default;

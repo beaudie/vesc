@@ -3028,6 +3028,8 @@ void RendererVk::initFeatures(DisplayVk *displayVk,
     // Support EGL_KHR_lock_surface3 extension.
     ANGLE_FEATURE_CONDITION(&mFeatures, supportsLockSurfaceExtension, IsAndroid());
 
+    ANGLE_FEATURE_CONDITION(&mFeatures, emulateDithering, true);
+
     angle::PlatformMethods *platform = ANGLEPlatformCurrent();
     platform->overrideFeaturesVk(platform, &mFeatures);
 
