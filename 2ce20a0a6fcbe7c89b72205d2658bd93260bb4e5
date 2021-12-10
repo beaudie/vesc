@@ -1,0 +1,44 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "8402e0f4_f1d33682",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 5
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2021-12-10T14:19:38Z",
+      "side": 1,
+      "message": "Seems like you have one remaining failure on the card game trace. Odd that it\u0027s not caught anywhere else.",
+      "revId": "2ce20a0a6fcbe7c89b72205d2658bd93260bb4e5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ab9b70c2_2b3eb5b8",
+        "filename": "src/libANGLE/VertexArray.h",
+        "patchSetId": 5
+      },
+      "lineNbr": 96,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2021-12-10T14:19:38Z",
+      "side": 1,
+      "message": "did you verify you need this? I\u0027m thinking it shouldn\u0027t be necessary.",
+      "range": {
+        "startLine": 96,
+        "startChar": 2,
+        "endLine": 96,
+        "endChar": 21
+      },
+      "revId": "2ce20a0a6fcbe7c89b72205d2658bd93260bb4e5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
