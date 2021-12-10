@@ -48,6 +48,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": true,
+      "key": {
+        "uuid": "2e85aa2b_fbfd69b2",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 8
+      },
+      "lineNbr": 14,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2021-12-10T16:34:48Z",
+      "side": 1,
+      "message": "That\u0027s a bug - we shouldn\u0027t crash no matter the GL stream really. Can you restore the prior test \u0026 we can figure out how to fix the crash?",
+      "parentUuid": "f9ee7cd0_967a4fb8",
+      "range": {
+        "startLine": 14,
+        "startChar": 22,
+        "endLine": 14,
+        "endChar": 24
+      },
+      "revId": "e5291b9146f6567584202591f96683b216701dff",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": false,
       "key": {
         "uuid": "251b25bc_f59f193e",
@@ -161,6 +185,24 @@
       "side": 1,
       "message": "I wasn\u0027t suggesting doing that here, just a side note.",
       "parentUuid": "5a8881e1_734a089f",
+      "revId": "e5291b9146f6567584202591f96683b216701dff",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "dde27934_94265ff9",
+        "filename": "src/libANGLE/Observer.h",
+        "patchSetId": 8
+      },
+      "lineNbr": 59,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2021-12-10T16:34:48Z",
+      "side": 1,
+      "message": "I see. I think we can revisit our design decisions about who maintains the list of observers \u0026 how we manage observers. I\u0027m wondering how much it would make sense to specialize events a lot more, rather than use generic observers \u0026 subjects.",
+      "parentUuid": "fc0a8172_0dcd98f1",
       "revId": "e5291b9146f6567584202591f96683b216701dff",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
