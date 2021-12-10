@@ -72,6 +72,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": true,
+      "key": {
+        "uuid": "187e64ad_d8f0484c",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 8
+      },
+      "lineNbr": 14,
+      "author": {
+        "id": 1525982
+      },
+      "writtenOn": "2021-12-10T19:36:30Z",
+      "side": 1,
+      "message": "I see. Test restored.\nCould we release the counter buffers in TransformFeedbackVk::onDestroy()? (This patch)",
+      "parentUuid": "2e85aa2b_fbfd69b2",
+      "range": {
+        "startLine": 14,
+        "startChar": 22,
+        "endLine": 14,
+        "endChar": 24
+      },
+      "revId": "e5291b9146f6567584202591f96683b216701dff",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": false,
       "key": {
         "uuid": "251b25bc_f59f193e",
