@@ -34,6 +34,23 @@
       "parentUuid": "f52f7f1f_a6509035",
       "revId": "236d412b1ae2f730c247dab972d601096e702dba",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "8d93268b_60f6d61b",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2021-12-10T14:43:54Z",
+      "side": 1,
+      "message": "Shabi, PTAL",
+      "revId": "236d412b1ae2f730c247dab972d601096e702dba",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
