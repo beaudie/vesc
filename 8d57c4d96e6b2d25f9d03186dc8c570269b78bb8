@@ -56,6 +56,24 @@
       "message": "If you aren\u0027t doing SPIR-V anymore, you could just ASSERT this.",
       "revId": "8d57c4d96e6b2d25f9d03186dc8c570269b78bb8",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "f50f1103_6f882434",
+        "filename": "src/libANGLE/renderer/metal/ShaderMtl.mm",
+        "patchSetId": 1
+      },
+      "lineNbr": 159,
+      "author": {
+        "id": 1115588
+      },
+      "writtenOn": "2021-12-10T20:07:25Z",
+      "side": 1,
+      "message": "assert that it\u0027s empty. If we expect empty then should I just not call it?",
+      "parentUuid": "6d1daab9_317f9193",
+      "revId": "8d57c4d96e6b2d25f9d03186dc8c570269b78bb8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
