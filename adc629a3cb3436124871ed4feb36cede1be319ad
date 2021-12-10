@@ -1,6 +1,52 @@
 {
   "comments": [
     {
+      "unresolved": true,
+      "key": {
+        "uuid": "d0f3d09b_92917903",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 4
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2021-12-10T19:41:41Z",
+      "side": 1,
+      "message": "Why is this marked \"Debug\"?",
+      "range": {
+        "startLine": 7,
+        "startChar": 0,
+        "endLine": 7,
+        "endChar": 7
+      },
+      "revId": "adc629a3cb3436124871ed4feb36cede1be319ad",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "90c1dc3a_567eba64",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 4
+      },
+      "lineNbr": 11,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2021-12-10T19:41:41Z",
+      "side": 1,
+      "message": "Why is this better than using the more deterministic rule of number of swapBuffer calls?\n\nAs Shabi pointed out, this will make it more difficult to assign \"random\" overhead to this code, and is complicated by apps going into the background.\n\nWhat about things like 30fps vs 120fps apps? The number of frames where an app could be freeing buffers and building up a larger list of buffers to be freed is faster in the 120fps case, which is more painful since there\u0027s less time each frame to do that work.",
+      "range": {
+        "startLine": 9,
+        "startChar": 0,
+        "endLine": 11,
+        "endChar": 38
+      },
+      "revId": "adc629a3cb3436124871ed4feb36cede1be319ad",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": false,
       "key": {
         "uuid": "23ba43d1_1a6cc5fe",
@@ -65,6 +111,40 @@
       "writtenOn": "2021-12-10T05:47:57Z",
       "side": 1,
       "message": "nit: This makes pruning actually less than 1Hz. You can both make the frequency more precise and save yourself a gettime call by keeping `mNextPruneTime` and doing `mNextPruneTime +\u003d kTimeElapsedForPruneDefaultBufferPool` here.\n\nIn `isDueForBufferPoolPrune`, you\u0027d reuse the gettime results to also account for time discrepancies (like wake up after suspend etc):\n\n    bool ShareGroupVk::isDueForBufferPoolPrune()\n    {\n        double currentTime \u003d angle::GetCurrentSystemTime()\n        double timeLeft \u003d mNextPruneTime - currentTime;\n\n        // Account for jumps in time due to suspend\n        if (timeLeft \u003c -kTimeElapsedForPruneDefaultBufferPool)\n        {\n            mNextPruneTime \u003d currentTime;\n            timeLeft \u003d 0;\n        }\n\n        return timeLeft \u003c\u003d 0;\n    }\n\nNot a big deal, as the 1Hz frequency is arbitrary anyway, but the precision might help us with debugging later if a report comes in that there\u0027s a hitch every second (vs every more-or-less second!)",
+      "revId": "adc629a3cb3436124871ed4feb36cede1be319ad",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "99b227c2_1f4921ac",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 2666,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2021-12-10T19:41:41Z",
+      "side": 1,
+      "message": "While this may have been useful while you were debugging this code, I suggest removing it since the value is never read/logged/etc.\n\nOn its own the value doesn\u0027t seem to provide much information anyway, since we can\u0027t tell if a particular bufferBlock was empty too much (an error), or if we are allocating/destroying bufferBlocks every other frame so it should be incrementing a lot normally (working as intended).\n\nIf you want to keep it, it should be wrapped in a ANGLE_PERF_WARNING() call to indicate to the user that they are allocating/freeing a lot of buffers and reusing them would be better.",
+      "revId": "adc629a3cb3436124871ed4feb36cede1be319ad",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "c479f9cd_f130af6d",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.h",
+        "patchSetId": 4
+      },
+      "lineNbr": 986,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2021-12-10T19:41:41Z",
+      "side": 1,
+      "message": "This isn\u0027t measuring the number of frames since it\u0027s only checked once a second.",
       "revId": "adc629a3cb3436124871ed4feb36cede1be319ad",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
