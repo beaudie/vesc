@@ -116,6 +116,24 @@
       "parentUuid": "f50f1103_6f882434",
       "revId": "8d57c4d96e6b2d25f9d03186dc8c570269b78bb8",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "10ed2124_fb61ab8e",
+        "filename": "src/libANGLE/renderer/metal/ShaderMtl.mm",
+        "patchSetId": 1
+      },
+      "lineNbr": 159,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2021-12-10T23:34:43Z",
+      "side": 1,
+      "message": "Hoping that we can provide the translated shader source on the direct-to-Metal backend. It\u0027ll be helpful.",
+      "parentUuid": "2794fcc1_785b35d7",
+      "revId": "8d57c4d96e6b2d25f9d03186dc8c570269b78bb8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
