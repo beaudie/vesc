@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "00f22a42_b125c111",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1172235
+      },
+      "writtenOn": "2021-12-10T01:55:15Z",
+      "side": 1,
+      "message": "FYI, the reland broke some more angle_unittests here:\nhttps://ci.chromium.org/ui/p/chromium/builders/ci/Mac%20FYI%20Release%20(Apple%20M1)/1405/overview\nand the re-revert fixed them:\nhttps://ci.chromium.org/ui/p/chromium/builders/ci/Mac%20FYI%20Release%20(Apple%20M1)/1416/overview\n\nThe specific issue was that angle_unittests hung inside a test called \"TestUtils.RunApp\".",
+      "revId": "663831aa676c59829cc3d822340812f016bf77f6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
