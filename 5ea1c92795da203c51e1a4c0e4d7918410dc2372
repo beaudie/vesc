@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "84c02603_e0ffb99b",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1491687
+      },
+      "writtenOn": "2021-12-10T13:41:45Z",
+      "side": 1,
+      "message": "I added Stubs for Fuchsia in `system_utils_posix.cpp` and skipped the tests using mprotect on Fuchsia and macOS.",
+      "revId": "5ea1c92795da203c51e1a4c0e4d7918410dc2372",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
