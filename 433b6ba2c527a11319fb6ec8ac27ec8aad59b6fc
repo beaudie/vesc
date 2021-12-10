@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "239ed7a0_a8000f1b",
+        "filename": "util/EGLWindow.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 259,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2021-12-10T17:36:24Z",
+      "side": 1,
+      "message": "Is this the right way to do this? I thought feature flag is persistent, and will carry over to next test unless it gets reset. Will it gets reset? (I am actually don\u0027t know, it\u0027s a real question, hopefully others in the review list can chime in).",
+      "range": {
+        "startLine": 259,
+        "startChar": 8,
+        "endLine": 259,
+        "endChar": 31
+      },
+      "revId": "433b6ba2c527a11319fb6ec8ac27ec8aad59b6fc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
