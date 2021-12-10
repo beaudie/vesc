@@ -16,6 +16,24 @@
       "message": "What exactly is the point of cleaning up memory on process exit? Is the OS not capable of that?",
       "revId": "3745f9f68a6f039b2a780e814850cd6d3eaf1c95",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "f2e12553_3f6aaa0a",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 18
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1340649
+      },
+      "writtenOn": "2021-12-10T17:01:57Z",
+      "side": 1,
+      "message": "\u003e Is the OS not capable of that?\n\nsome platforms are not as good as others and unfortunately we need to get certifications on platforms that are lacking 😊",
+      "parentUuid": "acdb7c38_02771f5a",
+      "revId": "3745f9f68a6f039b2a780e814850cd6d3eaf1c95",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
