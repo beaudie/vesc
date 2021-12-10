@@ -212,6 +212,7 @@ class Display final : public LabeledObject,
     void destroySync(Sync *sync);
 
     bool isInitialized() const;
+    bool isTerminated() const;
     bool isValidConfig(const Config *config) const;
     bool isValidContext(const gl::Context *context) const;
     bool isValidSurface(const Surface *surface) const;
