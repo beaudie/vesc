@@ -202,6 +202,125 @@ TEST_P(BufferDataTest, RepeatedDrawDynamicBug)
     EXPECT_GL_NO_ERROR();
 }
 
+using BufferSubDataTestParams = angle::PlatformParameters;
+
+class BufferSubDataTest : public ANGLETestBase,
+                          public ::testing::TestWithParam<BufferSubDataTestParams>
+{
+  protected:
+    BufferSubDataTest() : ANGLETestBase(GetParam())
+    {
+        setWindowWidth(16);
+        setWindowHeight(16);
+        setConfigRedBits(8);
+        setConfigGreenBits(8);
+        setConfigBlueBits(8);
+        setConfigAlphaBits(8);
+        setConfigDepthBits(24);
+
+        mBuffer  = 0;
+        mProgram = 0;
+    }
+
+    void SetUp() override
+    {
+        ANGLETestBase::ANGLETestSetUp();
+
+        constexpr char kVS[] = R"(attribute vec4 position;
+void main()
+{
+    gl_Position = position;
+})";
+
+        constexpr char kFS[] = R"(precision mediump float;
+uniform vec4 color;
+void main()
+{
+    gl_FragColor = color;
+})";
+
+        glGenBuffers(1, &mBuffer);
+        ASSERT_NE(mBuffer, 0U);
+
+        mProgram = CompileProgram(kVS, kFS);
+        ASSERT_NE(mProgram, 0U);
+
+        mUniformLocation = glGetUniformLocation(mProgram, "color");
+
+        glClearColor(0, 0, 0, 0);
+        glClearDepthf(0.0);
+        glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+
+        glDisable(GL_DEPTH_TEST);
+
+        ASSERT_GL_NO_ERROR();
+    }
+
+    void TearDown() override
+    {
+        glDeleteBuffers(1, &mBuffer);
+        glDeleteProgram(mProgram);
+        ANGLETestBase::ANGLETestTearDown();
+    }
+
+    GLuint mBuffer;
+    GLuint mProgram;
+    GLint mUniformLocation;
+};
+
+// Internally in Vulkan, Dynamic update the buffer when do rendering
+TEST_P(BufferSubDataTest, DynamicCpuUpdateBufferSubData)
+{
+    ANGLE_SKIP_TEST_IF(!IsVulkan());
+
+    GLfloat red[4]   = {1.0f, 0.0f, 0.0f, 1.0f};
+    GLfloat green[4] = {0.0f, 1.0f, 0.0f, 1.0f};
+    // Index buffer data
+    GLuint iData[] = {0, 1, 2, 0};
+    // Vertex buffer data fully cover the screen
+    float vData[] = {-1.0f, -1.0f, 1.0f, -1.0f, -1.0f, 1.0f, 1.0f, 1.0f};
+
+    GLuint indexBuffer = 0;
+    glGenBuffers(1, &indexBuffer);
+    GLint vPos = glGetAttribLocation(mProgram, "position");
+    glUseProgram(mProgram);
+
+    // Bind vertex buffer
+    glBindBuffer(GL_ARRAY_BUFFER, mBuffer);
+    glBufferData(GL_ARRAY_BUFFER, sizeof(vData), vData, GL_STATIC_DRAW);
+    glVertexAttribPointer(vPos, 2, GL_FLOAT, GL_FALSE, 0, nullptr);
+    glEnableVertexAttribArray(vPos);
+
+    // Bind index buffer
+    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, indexBuffer);
+    glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(iData), iData, GL_DYNAMIC_DRAW);
+
+    glUniform4fv(mUniformLocation, 1, red);
+    // Draw left red triangle
+    glDrawElements(GL_TRIANGLES, 3, GL_UNSIGNED_INT, 0);
+    // Update the index buffer data.
+    iData[1] = 1;
+    iData[2] = 2;
+    iData[3] = 3;
+    glBufferSubData(GL_ELEMENT_ARRAY_BUFFER, sizeof(GLuint), 3 * sizeof(GLuint), &iData[1]);
+    // Draw right red triangle to trigger the pool allocation
+    // Draw triangle with index (0, 1, 2).
+    glDrawElements(GL_TRIANGLES, 3, GL_UNSIGNED_INT, (const void *)sizeof(GLuint));
+    // Update the index buffer again
+    iData[0] = 0;
+    iData[1] = 0;
+    iData[2] = 2;
+    glUniform4fv(mUniformLocation, 1, green);
+    glBufferSubData(GL_ELEMENT_ARRAY_BUFFER, 0, 3 * sizeof(GLuint), &iData[0]);
+    // Draw triangle with index (0, 2, 3), hope angle copy the last index 3 back.
+    glDrawElements(GL_TRIANGLES, 3, GL_UNSIGNED_INT, (const void *)sizeof(GLuint));
+
+    // Verify pixel(0,15) is green
+    EXPECT_PIXEL_COLOR_EQ(0, 15, GLColor::green);
+
+    glDeleteBuffers(1, &indexBuffer);
+}
+
 class IndexedBufferCopyTest : public ANGLETest
 {
   protected:
@@ -1298,6 +1417,10 @@ TEST_P(BufferStorageTestES3, StorageBufferSubDataMapped)
 }
 
 ANGLE_INSTANTIATE_TEST_ES2(BufferDataTest);
+
+GTEST_ALLOW_UNINSTANTIATED_PARAMETERIZED_TEST(BufferSubDataTest);
+ANGLE_INSTANTIATE_TEST_ES2_AND(BufferSubDataTest,
+                               WithVulkanPreferCPUForBufferSubData(ES2_VULKAN()));
 
 GTEST_ALLOW_UNINSTANTIATED_PARAMETERIZED_TEST(BufferDataTestES3);
 ANGLE_INSTANTIATE_TEST_ES3(BufferDataTestES3);
