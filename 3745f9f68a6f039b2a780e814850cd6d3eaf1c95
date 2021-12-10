@@ -34,6 +34,24 @@
       "parentUuid": "acdb7c38_02771f5a",
       "revId": "3745f9f68a6f039b2a780e814850cd6d3eaf1c95",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "f0ae9c30_e8789435",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 18
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2021-12-10T17:41:55Z",
+      "side": 1,
+      "message": "I don\u0027t believe Android is incapable of cleaning up after itself. What are the specifics that you believe this is necessary? It really sounds like the platform or the test needs a fix, not ANGLE.",
+      "parentUuid": "f2e12553_3f6aaa0a",
+      "revId": "3745f9f68a6f039b2a780e814850cd6d3eaf1c95",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
