@@ -100,6 +100,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "23eb150f_a6ab56ea",
+        "filename": "src/libANGLE/renderer/vulkan/BufferVk.cpp",
+        "patchSetId": 16
+      },
+      "lineNbr": 1201,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2021-12-10T19:06:24Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "0a4214a0_b190dd53",
+      "revId": "8d48ba854d17c8fca6ed60cebe1bbf344a1113a0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "3e09d373_8b1254a8",
@@ -276,6 +294,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "27dbb478_40350a2f",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 16
+      },
+      "lineNbr": 2729,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2021-12-10T19:06:24Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "b88cc4bc_ab0c08a0",
+      "range": {
+        "startLine": 2726,
+        "startChar": 0,
+        "endLine": 2729,
+        "endChar": 5
+      },
+      "revId": "8d48ba854d17c8fca6ed60cebe1bbf344a1113a0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "1848bdd0_4891efaf",
@@ -307,6 +349,24 @@
       "side": 1,
       "message": "We are recycling empty buffers, but we also are freeing excessive empty buffers. The assumption is that to allocate from new buffers first may have a better chance to leave the older buffers completely empty and we may able to free it. \n\nAll these logic will subject to future tuning. Feel free to continue to improve it. Given this is global pool, we could afford a little bit more complex logic here if you want.",
       "parentUuid": "1848bdd0_4891efaf",
+      "revId": "8d48ba854d17c8fca6ed60cebe1bbf344a1113a0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "46a3562f_93ffd556",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 16
+      },
+      "lineNbr": 2744,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2021-12-10T19:06:24Z",
+      "side": 1,
+      "message": "Can you add this part as a comment here:\n\n\u003e The assumption is that to allocate from new buffers first may have a better chance to leave the older buffers completely empty and we may able to free it.",
+      "parentUuid": "d266e37c_86a2c29d",
       "revId": "8d48ba854d17c8fca6ed60cebe1bbf344a1113a0",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
@@ -372,6 +432,30 @@
       "side": 1,
       "message": "The original code actually is correct. There are internal buffers that does not need to be zero filled and run into this case. See test failure here https://ci.chromium.org/ui/p/angle/builders/try/linux-test/1129/overview.\n\nBTW, this code is not new, it was moved from existing code BufferHelper::init.",
       "parentUuid": "f77303d7_e3e6a60d",
+      "range": {
+        "startLine": 3979,
+        "startChar": 0,
+        "endLine": 3980,
+        "endChar": 71
+      },
+      "revId": "8d48ba854d17c8fca6ed60cebe1bbf344a1113a0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "54df4263_4eb5a160",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 16
+      },
+      "lineNbr": 3980,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2021-12-10T19:06:24Z",
+      "side": 1,
+      "message": "Interesting, so initializeNonZeroMemory() isn\u0027t guaranteed to actually initialize the memory if it\u0027s neither host visible nor supports transfer_dst.   This must not be an issue if no one has gotten upset about it yet.",
+      "parentUuid": "1c1883a5_6b62e69c",
       "range": {
         "startLine": 3979,
         "startChar": 0,
@@ -560,6 +644,30 @@
       "side": 1,
       "message": "I have changed the API to pass in Buffer instead of vkBuffer and calls std::move only if init succeed. I think this should address your concern.",
       "parentUuid": "6ee10a8c_ce3e058e",
+      "range": {
+        "startLine": 1699,
+        "startChar": 0,
+        "endLine": 1700,
+        "endChar": 41
+      },
+      "revId": "8d48ba854d17c8fca6ed60cebe1bbf344a1113a0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "b734f28f_07604554",
+        "filename": "src/libANGLE/renderer/vulkan/vk_utils.cpp",
+        "patchSetId": 16
+      },
+      "lineNbr": 1700,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2021-12-10T19:06:24Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "8a47e3cb_e7877240",
       "range": {
         "startLine": 1699,
         "startChar": 0,
