@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "55ef9855_16d3004b",
+        "filename": "src/libANGLE/capture/FrameCapture.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 7204,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2021-12-10T18:58:07Z",
+      "side": 1,
+      "message": "Technically this isn\u0027t a frame index anymore, but that\u0027s a problem for another day.",
+      "range": {
+        "startLine": 7204,
+        "startChar": 8,
+        "endLine": 7204,
+        "endChar": 19
+      },
+      "revId": "e131002707f8dab710ea6e3db20a6061839aa92e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
