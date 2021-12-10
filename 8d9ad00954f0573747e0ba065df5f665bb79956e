@@ -16,6 +16,23 @@
       "message": "Thanks for this cleanup!",
       "revId": "8d9ad00954f0573747e0ba065df5f665bb79956e",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "8590bc80_80b0a886",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2021-12-10T23:11:38Z",
+      "side": 1,
+      "message": "lgtm too\n\nThanks for handling this upstreaming!\n",
+      "revId": "8d9ad00954f0573747e0ba065df5f665bb79956e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
