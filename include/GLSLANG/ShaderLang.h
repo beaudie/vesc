@@ -824,8 +824,9 @@ enum class SpecializationConstantId : uint32_t
     SurfaceRotation     = 1,
     DrawableWidth       = 2,
     DrawableHeight      = 3,
+    Dither              = 4,
 
-    InvalidEnum = 4,
+    InvalidEnum = 5,
     EnumCount   = InvalidEnum,
 };
 
@@ -850,9 +851,19 @@ enum class SpecConstUsage : uint32_t
     YFlip               = 1,
     Rotation            = 2,
     DrawableSize        = 3,
+    Dither              = 4,
 
-    InvalidEnum = 4,
+    InvalidEnum = 5,
     EnumCount   = InvalidEnum,
+};
+
+enum ColorAttachmentDitherControl
+{
+    // See comments in ContextVk::updateDither and EmulateDithering.cpp
+    kDitherControlNoDither   = 0,
+    kDitherControlDither4444 = 1,
+    kDitherControlDither5551 = 2,
+    kDitherControlDither565  = 3,
 };
 
 // Interface block name containing the aggregate default uniforms
