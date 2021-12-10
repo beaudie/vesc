@@ -47,6 +47,7 @@ class ShareGroupVk : public ShareGroupImpl
 
     vk::BufferPool *getDefaultBufferPool(RendererVk *renderer, uint32_t memoryTypeIndex);
     void pruneDefaultBufferPools(RendererVk *renderer);
+    bool isDueForBufferPoolPrune();
 
   private:
     // ANGLE uses a PipelineLayout cache to store compatible pipeline layouts.
@@ -64,6 +65,8 @@ class ShareGroupVk : public ShareGroupImpl
 
     // The per shared group buffer pools that all buffers should sub-allocate from.
     vk::BufferPoolPointerArray mDefaultBufferPools;
+    // The system time when last pruneEmptyBuffer gets called.
+    double mLastPruneTime;
 };
 
 class DisplayVk : public DisplayImpl, public vk::Context

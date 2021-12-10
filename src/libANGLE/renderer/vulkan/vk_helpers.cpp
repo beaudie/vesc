@@ -2600,9 +2600,7 @@ BufferPool::BufferPool()
       mHostVisible(false),
       mSize(0),
       mMemoryTypeIndex(0),
-      mMaxEmptyBufferCount(1),
-      mBufferAllocateCount(0),
-      mBufferAllocateCountWhenPruned(0)
+      mEmptyBufferCount(0)
 {}
 
 BufferPool::BufferPool(BufferPool &&other)
@@ -2610,7 +2608,8 @@ BufferPool::BufferPool(BufferPool &&other)
       mUsage(other.mUsage),
       mHostVisible(other.mHostVisible),
       mSize(other.mSize),
-      mMemoryTypeIndex(other.mMemoryTypeIndex)
+      mMemoryTypeIndex(other.mMemoryTypeIndex),
+      mEmptyBufferCount(other.mEmptyBufferCount)
 {}
 
 void BufferPool::initWithFlags(RendererVk *renderer,
@@ -2643,9 +2642,7 @@ BufferPool::~BufferPool()
 
 void BufferPool::pruneEmptyBuffers(RendererVk *renderer)
 {
-    mBufferAllocateCountWhenPruned = mBufferAllocateCount;
-
-    int emptyBufferCount = 0;
+    mEmptyBufferCount = 0;
     for (auto iter = mBufferBlocks.begin(); iter != mBufferBlocks.end();)
     {
         if (!(*iter)->isEmpty())
@@ -2654,18 +2651,19 @@ void BufferPool::pruneEmptyBuffers(RendererVk *renderer)
             continue;
         }
 
-        // We will always free empty buffers that has smaller size. Or if there is no new buffer
-        // gets allocated since last frame, we will also free all empty buffers. And we also ensure
-        // we dont exceed max empty buffers that are allowed to keep.
-        if ((*iter)->getMemorySize() < mSize || !newBufferAllocatedSinceLastPrune() ||
-            emptyBufferCount > mMaxEmptyBufferCount)
+        // Record how many times this buffer block has found to be empty  seqentially.
+        int32_t countRemainsEmpty = (*iter)->countEmptyTime();
+
+        // We will always free empty buffers that has smaller size. Or if the empty buffer has been
+        // found empty for long enough time, we also free it.
+        if ((*iter)->getMemorySize() < mSize || countRemainsEmpty >= kMaxCountRemainsEmpty)
         {
             (*iter)->destroy(renderer);
             iter = mBufferBlocks.erase(iter);
         }
         else
         {
-            emptyBufferCount++;
+            mEmptyBufferCount++;
             ++iter;
         }
     }
@@ -2724,7 +2722,6 @@ angle::Result BufferPool::allocateNewBuffer(ContextVk *contextVk, VkDeviceSize s
 
     // Append the bufferBlock into the pool
     mBufferBlocks.push_back(std::move(block));
-    ++mBufferAllocateCount;
 
     return angle::Result::Continue;
 }

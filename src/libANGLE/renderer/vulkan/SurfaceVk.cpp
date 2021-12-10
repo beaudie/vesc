@@ -1626,8 +1626,6 @@ angle::Result WindowSurfaceVk::swapImpl(const gl::Context *context,
         ANGLE_TRY(doDeferredAcquireNextImage(context, presentOutOfDate));
     }
 
-    contextVk->pruneDefaultBufferPools();
-
     return angle::Result::Continue;
 }
 

@@ -683,7 +683,6 @@ class ContextVk : public ContextImpl, public vk::Context, public MultisampleText
     {
         return mShareGroupVk->getDefaultBufferPool(mRenderer, memoryTypeIndex);
     }
-    void pruneDefaultBufferPools() { mShareGroupVk->pruneDefaultBufferPools(mRenderer); }
 
   private:
     // Dirty bits.

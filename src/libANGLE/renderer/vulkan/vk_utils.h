@@ -955,6 +955,10 @@ class BufferBlock final : angle::NonCopyable
     void unmap(const Allocator &allocator);
     uint8_t *getMappedMemory() const;
 
+    // This should be called whenever this found to be empty. The total number of count of empty is
+    // returned.
+    int32_t countEmptyTime();
+
   private:
     VirtualBlock mVirtualBlock;
     Buffer mBuffer;
@@ -963,6 +967,10 @@ class BufferBlock final : angle::NonCopyable
     VkDeviceSize mSize;
     uint8_t *mMappedMemory;
     BufferSerial mSerial;
+    // Heuristic information for pruneEmptyBuffer. This tracks how many times (consecutively) this
+    // buffer block is found to be empty when pruneEmptyBuffer is called. This gets reset whenever
+    // it becomes non-empty.
+    int32_t mCountRemainsEmpty;
 };
 using BufferBlockPointerVector = std::vector<std::unique_ptr<BufferBlock>>;
 

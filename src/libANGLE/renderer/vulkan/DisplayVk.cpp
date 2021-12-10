@@ -10,6 +10,7 @@
 #include "libANGLE/renderer/vulkan/DisplayVk.h"
 
 #include "common/debug.h"
+#include "common/system_utils.h"
 #include "libANGLE/Context.h"
 #include "libANGLE/Display.h"
 #include "libANGLE/renderer/vulkan/BufferVk.h"
@@ -23,6 +24,8 @@
 
 namespace rx
 {
+// Every one second we try to prune default buffer pools
+constexpr double kTimeElapsedForPruneDefaultBufferPool = 1;
 
 DisplayVk::DisplayVk(const egl::DisplayState &state)
     : DisplayImpl(state),
@@ -333,7 +336,10 @@ void DisplayVk::populateFeatureList(angle::FeatureList *features)
     mRenderer->getFeatures().populateFeatureList(features);
 }
 
-ShareGroupVk::ShareGroupVk() {}
+ShareGroupVk::ShareGroupVk()
+{
+    mLastPruneTime = angle::GetCurrentSystemTime();
+}
 
 void ShareGroupVk::onDestroy(const egl::Display *display)
 {
@@ -376,6 +382,8 @@ vk::BufferPool *ShareGroupVk::getDefaultBufferPool(RendererVk *renderer, uint32_
 
 void ShareGroupVk::pruneDefaultBufferPools(RendererVk *renderer)
 {
+    mLastPruneTime = angle::GetCurrentSystemTime();
+
     for (std::unique_ptr<vk::BufferPool> &pool : mDefaultBufferPools)
     {
         if (pool)
@@ -383,5 +391,11 @@ void ShareGroupVk::pruneDefaultBufferPools(RendererVk *renderer)
             pool->pruneEmptyBuffers(renderer);
         }
     }
+}
+
+bool ShareGroupVk::isDueForBufferPoolPrune()
+{
+    double timeElapsed = angle::GetCurrentSystemTime() - mLastPruneTime;
+    return timeElapsed > kTimeElapsedForPruneDefaultBufferPool;
 }
 }  // namespace rx
