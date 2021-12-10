@@ -331,11 +331,15 @@ void main()
 }
 
 // Test that repeated EGL init + terminate with improper cleanup doesn't cause an OOM crash.
-// To reproduce the memleak issue changes need to be made to "EGLWindow::destroyGL" as shown here ->
-// https://chromium-review.googlesource.com/c/angle/angle/+/3294581/5/util/EGLWindow.cpp
+// To reproduce the OOM error -
+//     1. Increase the loop count to a large number
+//     2. Run the test without the rest of this CL
 TEST_P(EGLMultiContextTest, RepeatedEglInitAndTerminate)
 {
     ANGLE_SKIP_TEST_IF(!IsAndroid() || !IsVulkan());
+
+    // Release all resources in parent thread
+    getEGLWindow()->destroyGL();
 
     EGLDisplay dpy;
     EGLSurface srf;
@@ -365,6 +369,8 @@ TEST_P(EGLMultiContextTest, RepeatedEglInitAndTerminate)
             EXPECT_PIXEL_EQ(0, 0, 255, 0, 0, 255);
 
             eglTerminate(dpy);
+            EXPECT_EGL_SUCCESS();
+            eglReleaseThread();
             EXPECT_EGL_SUCCESS();
             dpy = EGL_NO_DISPLAY;
             srf = EGL_NO_SURFACE;

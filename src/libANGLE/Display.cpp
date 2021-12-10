@@ -1057,7 +1057,11 @@ Error Display::destroyInvalidEglObjects(Thread *thread)
 
 Error Display::terminate(Thread *thread, TerminateReason terminateReason)
 {
-    mIsTerminated = true;
+    if (terminateReason == TerminateReason::Api)
+    {
+        thread->markAsInactive();
+        mIsTerminated = true;
+    }
 
     if (!mInitialized)
     {
@@ -1500,6 +1504,14 @@ Error Display::makeCurrent(Thread *thread,
         ANGLE_TRY(error);
     }
 
+    if (context != nullptr || drawSurface != nullptr || readSurface != nullptr)
+    {
+        thread->markAsActive(this);
+    }
+    if (context == nullptr && drawSurface == nullptr && readSurface == nullptr)
+    {
+        thread->markAsInactive();
+    }
     thread->setCurrent(context);
 
     ANGLE_TRY(mImplementation->makeCurrent(this, drawSurface, readSurface, context));
@@ -1802,6 +1814,11 @@ const Caps &Display::getCaps() const
 bool Display::isInitialized() const
 {
     return mInitialized;
+}
+
+bool Display::isTerminated() const
+{
+    return mIsTerminated;
 }
 
 bool Display::isValidConfig(const Config *config) const
