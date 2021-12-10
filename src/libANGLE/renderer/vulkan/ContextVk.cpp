@@ -93,7 +93,8 @@ struct GraphicsDriverUniformsExtended
     std::array<float, 2> halfRenderArea;
     std::array<float, 2> flipXY;
     std::array<float, 2> negFlipXY;
-    std::array<int32_t, 2> padding;
+    uint32_t dither;
+    uint32_t padding;
 
     // Used to pre-rotate gl_FragCoord for swapchain images on Android (a mat2, which is padded to
     // the size of two vec4's).

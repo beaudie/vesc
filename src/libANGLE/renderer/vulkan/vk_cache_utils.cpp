@@ -1329,6 +1329,11 @@ void InitializeSpecializationInfo(
                     offsetof(vk::SpecializationConstants, drawableHeight);
                 (*specializationEntriesOut)[id].size = sizeof(specConsts.drawableHeight);
                 break;
+            case sh::vk::SpecializationConstantId::Dither:
+                (*specializationEntriesOut)[id].offset =
+                    offsetof(vk::SpecializationConstants, dither);
+                (*specializationEntriesOut)[id].size = sizeof(specConsts.dither);
+                break;
             default:
                 UNREACHABLE();
                 break;
@@ -1695,6 +1700,8 @@ void GraphicsPipelineDesc::initDefaults(const ContextVk *contextVk)
 
     mDrawableSize.width  = 1;
     mDrawableSize.height = 1;
+
+    mEmulatedDitherControl = 0;
 }
 
 angle::Result GraphicsPipelineDesc::initializePipeline(

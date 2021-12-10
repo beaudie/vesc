@@ -476,9 +476,130 @@ TEST_P(SixteenBppTextureTestES3, RGB565FramebufferReadback)
     glDeleteProgram(program);
 }
 
+// TODO: Debug banding
+TEST_P(SixteenBppTextureTestES3, RGBA4Banding)
+{
+    for (uint32_t i = 0; i < 3; ++i)
+    {
+        GLFramebuffer fbo;
+        glBindFramebuffer(GL_FRAMEBUFFER, fbo.get());
+
+        GLTexture tex;
+        glBindTexture(GL_TEXTURE_2D, tex);
+        glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA4, 128, 128, 0, GL_RGBA, GL_UNSIGNED_BYTE, nullptr);
+        glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, tex, 0);
+
+        constexpr char kVS[] = R"(#version 300 es
+out mediump vec4 color;
+void main()
+{
+    // gl_VertexID    x    y
+    //      0        -1   -1   Black
+    //      1         1   -1   Red
+    //      2        -1    1   Green
+    //      3         1    1   Yellow
+    int bit0 = gl_VertexID & 1;
+    int bit1 = gl_VertexID >> 1;
+    gl_Position = vec4(bit0 * 2 - 1, bit1 * 2 - 1, 0, 1);
+    color = vec4(bit0, bit1, 0, 1);
+    //color = vec4(0.984, 0, 0, 1);
+    //color = vec4(0.998, 0, 0, 1);
+})";
+
+        constexpr char kFS[] = R"(#version 300 es
+precision mediump float;
+in vec4 color;
+out vec4 colorOut;
+void main()
+{
+    colorOut = color;
+})";
+
+        ANGLE_GL_PROGRAM(program, kVS, kFS);
+        glUseProgram(program);
+
+        glViewport(0, 0, getWindowWidth(), getWindowHeight());
+
+        glDrawArrays(GL_TRIANGLE_STRIP, 0, 4);
+        ASSERT_GL_NO_ERROR();
+
+        glBindFramebuffer(GL_FRAMEBUFFER, 0);
+
+        // Draw a quad using the texture
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+
+        glUseProgram(m2DProgram);
+        glUniform1i(mTexture2DUniformLocation, 0);
+        drawQuad(m2DProgram, "position", 0.5f);
+        ASSERT_GL_NO_ERROR();
+
+        swapBuffers();
+        usleep(3'000'000);
+    }
+}
+
+class SixteenBppSwapchainTestES3 : public ANGLETest
+{
+  protected:
+    SixteenBppSwapchainTestES3()
+    {
+        setWindowWidth(128);
+        setWindowHeight(128);
+        setConfigRedBits(5);
+        setConfigGreenBits(6);
+        setConfigBlueBits(5);
+        setConfigAlphaBits(0);
+    }
+};
+
+// TODO: Debug banding
+TEST_P(SixteenBppSwapchainTestES3, RGB565Banding)
+{
+    constexpr char kVS[] = R"(#version 300 es
+out mediump vec4 color;
+void main()
+{
+    // gl_VertexID    x    y
+    //      0        -1   -1   Black
+    //      1         1   -1   Red
+    //      2        -1    1   Green
+    //      3         1    1   Yellow
+    int bit0 = gl_VertexID & 1;
+    int bit1 = gl_VertexID >> 1;
+    gl_Position = vec4(bit0 * 2 - 1, bit1 * 2 - 1, 0, 1);
+    color = vec4(bit0, bit1, 0, 1);
+    //color = vec4(0.984, 0, 0, 1);
+    //color = vec4(0.998, 0, 0, 1);
+})";
+
+    constexpr char kFS[] = R"(#version 300 es
+precision mediump float;
+in vec4 color;
+out vec4 colorOut;
+void main()
+{
+    colorOut = color;
+})";
+
+    ANGLE_GL_PROGRAM(program, kVS, kFS);
+    glUseProgram(program);
+
+    glViewport(0, 0, getWindowWidth(), getWindowHeight());
+
+    glDrawArrays(GL_TRIANGLE_STRIP, 0, 4);
+    ASSERT_GL_NO_ERROR();
+
+    swapBuffers();
+    usleep(10'000'000);
+}
+
 ANGLE_INSTANTIATE_TEST_ES2(SixteenBppTextureTest);
 
 GTEST_ALLOW_UNINSTANTIATED_PARAMETERIZED_TEST(SixteenBppTextureTestES3);
 ANGLE_INSTANTIATE_TEST_ES3(SixteenBppTextureTestES3);
+
+GTEST_ALLOW_UNINSTANTIATED_PARAMETERIZED_TEST(SixteenBppSwapchainTestES3);
+ANGLE_INSTANTIATE_TEST_ES3(SixteenBppSwapchainTestES3);
 
 }  // namespace

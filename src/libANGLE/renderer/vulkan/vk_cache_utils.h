@@ -526,7 +526,7 @@ static_assert(kPackedInputAssemblyAndColorBlendStateSize == 56, "Size check fail
 constexpr size_t kGraphicsPipelineDescSumOfSizes =
     kVertexInputAttributesSize + kRenderPassDescSize + kPackedRasterizationAndMultisampleStateSize +
     kPackedDepthStencilStateSize + kPackedInputAssemblyAndColorBlendStateSize +
-    sizeof(PackedExtent);
+    sizeof(PackedExtent) + sizeof(uint32_t);
 
 // Number of dirty bits in the dirty bit set.
 constexpr size_t kGraphicsPipelineDirtyBitBytes = 4;
@@ -710,6 +710,7 @@ class GraphicsPipelineDesc final
                             uint32_t width,
                             uint32_t height);
     const PackedExtent &getDrawableSize() const { return mDrawableSize; }
+    uint32_t getEmulatedDitherControl() const { return mEmulatedDitherControl; }
 
   private:
     void updateSubpass(GraphicsPipelineTransitionBits *transition, uint32_t subpass);
@@ -720,6 +721,8 @@ class GraphicsPipelineDesc final
     PackedDepthStencilStateInfo mDepthStencilStateInfo;
     PackedInputAssemblyAndColorBlendStateInfo mInputAssemblyAndColorBlendStateInfo;
     PackedExtent mDrawableSize;
+    // TODO: populate this
+    uint32_t mEmulatedDitherControl;
 };
 
 // Verify the packed pipeline description has no gaps in the packing.

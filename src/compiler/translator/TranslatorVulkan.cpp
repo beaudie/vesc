@@ -1194,6 +1194,23 @@ bool TranslatorVulkan::translateImpl(TInfoSinkBase &sink,
                 }
             }
 
+            // TODO: Add dithering code.  Take a spec const that is:
+            //
+            //     0000000000000000ffffffffeeeeeeee
+            //
+            // Where e[i] means attachment i has dithering enabled and f[i] means:
+            //  0: R5G6B5
+            //  1: R11G11B10
+            //
+            // Only the above formats need dithering.  Take sum(ivec2(gl_FragCoord.xy)) & 1 and do
+            // either + or - some constant that is half of what the format can take.  That should
+            // effectively give a 2x2 dithering.  If it doesn't look good, can always improve the
+            // formula once the infrastructure is in place.
+            //
+            // For test, emit a value that's in between representable values, then readback all
+            // pixels and make sure they are correct with an error margin of 1, and bucketting them
+            // in floor/ceil gives roughly the same number of pixels.
+
             EmitEarlyFragmentTestsGLSL(*this, sink);
             break;
         }
