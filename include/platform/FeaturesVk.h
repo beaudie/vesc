@@ -594,6 +594,10 @@ struct FeaturesVk : FeatureSetBase
     Feature supportsSharedPresentableImageExtension = {
         "supportsSharedPresentableImageExtension", FeatureCategory::VulkanFeatures,
         "VkSurface supports the VK_KHR_shared_presentable_images extension", &members};
+
+    // Whether dithering should be emulated.
+    Feature emulateDithering = {"emulateDithering", FeatureCategory::VulkanFeatures,
+                                "Emulate OpenGL dithering", &members, "http://anglebug.com/6755"};
 };
 
 inline FeaturesVk::FeaturesVk()  = default;

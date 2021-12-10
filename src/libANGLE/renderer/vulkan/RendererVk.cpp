@@ -3012,6 +3012,10 @@ void RendererVk::initFeatures(DisplayVk *displayVk,
     // natively anyway.
     ANGLE_FEATURE_CONDITION(&mFeatures, overrideSurfaceFormatRGB8toRGBA8, true);
 
+    // Dithering emulation is not enabled universally for performance reasons.
+    // TODO: update condition and comment (enabled for debugging)
+    ANGLE_FEATURE_CONDITION(&mFeatures, emulateDithering, true);
+
     angle::PlatformMethods *platform = ANGLEPlatformCurrent();
     platform->overrideFeaturesVk(platform, &mFeatures);
 
