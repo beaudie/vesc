@@ -52,6 +52,24 @@
       "parentUuid": "f2e12553_3f6aaa0a",
       "revId": "3745f9f68a6f039b2a780e814850cd6d3eaf1c95",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "4cfeaaf6_54ca32cb",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 18
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1340649
+      },
+      "writtenOn": "2021-12-10T19:23:51Z",
+      "side": 1,
+      "message": "\u003e What are the specifics that you believe this is necessary? It really sounds like the platform or the test needs a fix, not ANGLE.\n\n1. changed name to \"PthreadKeyDestructorCallback\" to reflect expanded scope\n2. EGL spec is pretty explicit about the driver being responsible for cleaning up invalid objects which means ANGLE is on the hook to do that clean up\n3. Android CTS threadCleanup test will fail without this patch since it spawns a 1000 threads without explicitly destroying EGL objects (which is a valid thing to do per EGL spec)",
+      "parentUuid": "f0ae9c30_e8789435",
+      "revId": "3745f9f68a6f039b2a780e814850cd6d3eaf1c95",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
