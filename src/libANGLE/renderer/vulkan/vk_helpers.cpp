@@ -9011,6 +9011,9 @@ void ShaderProgramHelper::setSpecializationConstant(sh::vk::SpecializationConsta
         case sh::vk::SpecializationConstantId::DrawableHeight:
             mSpecializationConstants.drawableHeight = static_cast<float>(value);
             break;
+        case sh::vk::SpecializationConstantId::Dither:
+            mSpecializationConstants.dither = value;
+            break;
         default:
             UNREACHABLE();
             break;

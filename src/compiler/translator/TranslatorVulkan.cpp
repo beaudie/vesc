@@ -1194,6 +1194,56 @@ bool TranslatorVulkan::translateImpl(TInfoSinkBase &sink,
                 }
             }
 
+            // TODO: Add dithering code.  Take a spec const that is:
+            //
+            //     0000000000000000dfdfdfdfdfdfdfdf
+            //
+            // Where every pair of bits df[i] means for attachment i:
+            //  00: no dithering
+            //  01: dither for the R4G4B4A4 format
+            //  10: dither for the R5G5B5A1 format
+            //  11: dither for the R5G6B5 format
+            //
+            // Only the above formats need dithering.  Cannot be tested because the implementation
+            // is allowed to not dither at all.
+            //
+            // Produce code like this:
+            //
+            //     if (dither != 0)
+            //     {
+            //          float bayer5Bits[4] = { balanced 2x2 bayer divided by 32 }
+            //          float b = bayer5Bits[(int(gl_FragCoord.x) & 1) << 1 | (int(gl_FragCoord.y) &
+            //          1)];
+            //
+            //          // for attachment i
+            //          uint ditheri = dither >> (2 * i) & 0x3;
+            //          if (ditheri != 0)
+            //          {
+            //              vec3 bi = vec3(b);
+            //              if (ditheri == 0b01)
+            //                  bi = vec3(b * 2);
+            //              else if (ditheri == 0b11)
+            //                  bi.y *= 0.5;
+            //              colori += bi;
+            //          }
+            //     }
+            //
+            //
+            //
+            //
+            //
+            //
+            //
+            //
+            //
+            //
+            //
+            //
+            //
+            //
+            //
+            //
+
             EmitEarlyFragmentTestsGLSL(*this, sink);
             break;
         }

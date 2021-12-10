@@ -476,9 +476,370 @@ TEST_P(SixteenBppTextureTestES3, RGB565FramebufferReadback)
     glDeleteProgram(program);
 }
 
+// TODO: Debug banding
+TEST_P(SixteenBppTextureTestES3, RGBA4Banding)
+{
+    for (uint32_t i = 0; i < 3; ++i)
+    {
+        GLFramebuffer fbo;
+        glBindFramebuffer(GL_FRAMEBUFFER, fbo.get());
+
+        GLTexture tex;
+        glBindTexture(GL_TEXTURE_2D, tex);
+        glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA4, getWindowWidth(), getWindowHeight(), 0, GL_RGBA,
+                     GL_UNSIGNED_BYTE, nullptr);
+        glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, tex, 0);
+
+        constexpr char kVS[] = R"(#version 300 es
+out mediump vec4 color;
+void main()
+{
+    // gl_VertexID    x    y
+    //      0        -1   -1   Black
+    //      1         1   -1   Red
+    //      2        -1    1   Green
+    //      3         1    1   Yellow
+    int bit0 = gl_VertexID & 1;
+    int bit1 = gl_VertexID >> 1;
+    gl_Position = vec4(bit0 * 2 - 1, bit1 * 2 - 1, 0, 1);
+    color = vec4(bit0, bit1, 0, 1);
+    //color = vec4(0.984, 0, 0, 1);
+    //color = vec4(0.998, 0, 0, 1);
+})";
+
+        constexpr char kFS[] = R"(#version 300 es
+precision mediump float;
+in vec4 color;
+out vec4 colorOut;
+void main()
+{
+    vec4 incolor = round(color * 16.);
+    if (gl_FragCoord.x + gl_FragCoord.y < 128.)
+{
+#if 0
+    if (int(gl_FragCoord.x + gl_FragCoord.y) % 2 == 0)
+        incolor += 1.;
+    else
+        incolor -= 1.;
+#elif 0
+
+    int bayer[16] = int[16](
+         0,  8,  2, 10,
+        12,  4, 14,  6,
+         3, 11,  1,  9,
+        15,  7, 13,  5);
+
+    incolor += (float(bayer[(int(gl_FragCoord.x) % 4) * 4 + (int(gl_FragCoord.y) % 4)]) - 7.5) / 16.;
+#else
+    int bayer[64] = int[64](
+         0, 32,  8, 40,  2, 34, 10, 42,
+        48, 16, 56, 24, 50, 18, 58, 26,
+        12, 44,  4, 36, 14, 46,  6, 38,
+        60, 28, 52, 20, 62, 30, 54, 22,
+         3, 35, 11, 43,  1, 33,  9, 41,
+        51, 19, 59, 27, 49, 17, 57, 25,
+        15, 47,  7, 39, 13, 45,  5, 37,
+        63, 31, 55, 23, 61, 29, 53, 21);
+
+    incolor += (float(bayer[(int(gl_FragCoord.x) % 8) * 8 + (int(gl_FragCoord.y) % 8)]) - 31.5) / 64.;
+#endif
+}
+    colorOut = incolor / 16.;
+})";
+
+        ANGLE_GL_PROGRAM(program, kVS, kFS);
+        glUseProgram(program);
+
+        glViewport(0, 0, getWindowWidth(), getWindowHeight());
+
+        glDrawArrays(GL_TRIANGLE_STRIP, 0, 4);
+        ASSERT_GL_NO_ERROR();
+
+        glBindFramebuffer(GL_FRAMEBUFFER, 0);
+
+        // Draw a quad using the texture
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+
+        glUseProgram(m2DProgram);
+        glUniform1i(mTexture2DUniformLocation, 0);
+        drawQuad(m2DProgram, "position", 0.5f);
+        ASSERT_GL_NO_ERROR();
+
+        swapBuffers();
+        usleep(3'000'000);
+    }
+}
+
+class SixteenBppSwapchainTestES3 : public ANGLETest
+{
+  protected:
+    SixteenBppSwapchainTestES3()
+    {
+        setWindowWidth(1024);
+        setWindowHeight(1024);
+        setConfigRedBits(5);
+        setConfigGreenBits(6);
+        setConfigBlueBits(5);
+        setConfigAlphaBits(0);
+    }
+};
+
+// TODO: Debug banding
+TEST_P(SixteenBppSwapchainTestES3, RGB565Banding)
+{
+    constexpr char kVS[] = R"(#version 300 es
+out mediump vec4 color;
+void main()
+{
+    // gl_VertexID    x    y
+    //      0        -1   -1   Black
+    //      1         1   -1   Red
+    //      2        -1    1   Green
+    //      3         1    1   Yellow
+    int bit0 = gl_VertexID & 1;
+    int bit1 = gl_VertexID >> 1;
+    gl_Position = vec4(bit0 * 2 - 1, bit1 * 2 - 1, 0, 1);
+    color = vec4(bit0, bit1, 0, 1);
+    //color = vec4(0.984, 0, 0, 1);
+    //color = vec4(0.998, 0, 0, 1);
+})";
+
+    constexpr char kFS[] = R"(#version 300 es
+precision mediump float;
+in vec4 color;
+out vec4 colorOut;
+void main()
+{
+    colorOut = color;
+})";
+
+    ANGLE_GL_PROGRAM(program, kVS, kFS);
+    glUseProgram(program);
+
+    glViewport(0, 0, getWindowWidth(), getWindowHeight());
+
+    glDrawArrays(GL_TRIANGLE_STRIP, 0, 4);
+    ASSERT_GL_NO_ERROR();
+
+    swapBuffers();
+    usleep(10'000'000);
+}
+
+// TODO: Debug banding
+TEST_P(SixteenBppSwapchainTestES3, RGB565Dither)
+{
+    constexpr char kVS[] = R"(#version 300 es
+out mediump vec4 color;
+void main()
+{
+    // gl_VertexID    x    y
+    //      0        -1   -1   Black
+    //      1         1   -1   Red
+    //      2        -1    1   Green
+    //      3         1    1   Yellow
+    int bit0 = gl_VertexID & 1;
+    int bit1 = gl_VertexID >> 1;
+    gl_Position = vec4(bit0 * 2 - 1, bit1 * 2 - 1, 0, 1);
+    color = vec4(bit0, bit1, 0, 1);
+})";
+
+    constexpr char kFS1[] = R"(#version 300 es
+precision mediump float;
+in vec4 color;
+out vec4 colorOut;
+void main()
+{
+    vec3 h = vec3(1. / 32., 1. / 64., 1. / 32.);
+    vec4 incolor = color;
+
+#if 1
+#elif 0
+    if (int(gl_FragCoord.x + gl_FragCoord.y) % 2 == 0)
+        incolor.rgb += h;
+    else
+        incolor.rgb -= h;
+
+#elif 1
+
+    int bayer[4] = int[4](
+         0,  2,
+         3,  1);
+
+    if (gl_FragCoord.x + gl_FragCoord.y < 96.)
+    {
+        incolor.rgb += (float(bayer[(int(gl_FragCoord.x) % 2) * 2 + (int(gl_FragCoord.y) % 2)]) - 1.5) / 4. * h;
+    }
+    else
+    {
+        incolor.r += (float(bayer[(int(gl_FragCoord.x) % 2) * 2 + (int(gl_FragCoord.y) % 2)]) - 1.5) / 4. * h.r;
+        incolor.g += (float(bayer[(1 - int(gl_FragCoord.x) % 2) * 2 + (int(gl_FragCoord.y) % 2)]) - 1.5) / 4. * h.g;
+        incolor.b += (float(bayer[(int(gl_FragCoord.x) % 2) * 2 + (1 - int(gl_FragCoord.y) % 2)]) - 1.5) / 4. * h.b;
+    }
+
+#elif 1
+
+    int bayer[16] = int[16](
+         0,  8,  2, 10,
+        12,  4, 14,  6,
+         3, 11,  1,  9,
+        15,  7, 13,  5);
+
+    if (gl_FragCoord.x + gl_FragCoord.y < 96.)
+    {
+        incolor.rgb += (float(bayer[(int(gl_FragCoord.x) % 4) * 4 + (int(gl_FragCoord.y) % 4)]) - 7.5) / 16. * h;
+    }
+    else
+    {
+        incolor.r += (float(bayer[(int(gl_FragCoord.x) % 4) * 4 + (int(gl_FragCoord.y) % 4)]) - 7.5) / 16. * h.r;
+        incolor.g += (float(bayer[(3 - int(gl_FragCoord.x) % 4) * 4 + (int(gl_FragCoord.y) % 4)]) - 7.5) / 16. * h.g;
+        incolor.b += (float(bayer[(int(gl_FragCoord.x) % 4) * 4 + (3 - int(gl_FragCoord.y) % 4)]) - 7.5) / 16. * h.b;
+    }
+
+#else
+    int bayer[64] = int[64](
+         0, 32,  8, 40,  2, 34, 10, 42,
+        48, 16, 56, 24, 50, 18, 58, 26,
+        12, 44,  4, 36, 14, 46,  6, 38,
+        60, 28, 52, 20, 62, 30, 54, 22,
+         3, 35, 11, 43,  1, 33,  9, 41,
+        51, 19, 59, 27, 49, 17, 57, 25,
+        15, 47,  7, 39, 13, 45,  5, 37,
+        63, 31, 55, 23, 61, 29, 53, 21);
+
+    if (gl_FragCoord.x + gl_FragCoord.y < 96.)
+    {
+        incolor.rgb += (float(bayer[(int(gl_FragCoord.x) % 8) * 8 + (int(gl_FragCoord.y) % 8)]) - 31.5) / 64. * h;
+    }
+    else
+    {
+        incolor.r += (float(bayer[(int(gl_FragCoord.x) % 8) * 8 + (int(gl_FragCoord.y) % 8)]) - 31.5) / 64. * h.r;
+        incolor.g += (float(bayer[(7 - int(gl_FragCoord.x) % 8) * 8 + (int(gl_FragCoord.y) % 8)]) - 31.5) / 64. * h.g;
+        incolor.b += (float(bayer[(int(gl_FragCoord.x) % 8) * 8 + (7 - int(gl_FragCoord.y) % 8)]) - 31.5) / 64. * h.b;
+    }
+
+#endif
+
+    colorOut = incolor;
+})";
+
+    constexpr char kFS2[] = R"(#version 300 es
+precision mediump float;
+in vec4 color;
+out vec4 colorOut;
+void main()
+{
+    vec3 h = vec3(1. / 32., 1. / 64., 1. / 32.);
+    vec4 incolor = color;
+
+#if 0
+#elif 0
+    if (int(gl_FragCoord.x + gl_FragCoord.y) % 2 == 0)
+        incolor.rgb += h;
+    else
+        incolor.rgb -= h;
+
+#elif 1
+
+#if 0
+    int bayer[4] = int[4](
+         0,  2,
+         3,  1);
+
+    if (gl_FragCoord.x + gl_FragCoord.y > 96.)
+    {
+        incolor.rgb += (float(bayer[(int(gl_FragCoord.x) % 2) * 2 + (int(gl_FragCoord.y) % 2)]) - 1.5) / 4. * h;
+    }
+    else
+    {
+        incolor.r += (float(bayer[(int(gl_FragCoord.x) % 2) * 2 + (int(gl_FragCoord.y) % 2)]) - 1.5) / 4. * h.r;
+        incolor.g += (float(bayer[(1 - int(gl_FragCoord.x) % 2) * 2 + (int(gl_FragCoord.y) % 2)]) - 1.5) / 4. * h.g;
+        incolor.b += (float(bayer[(int(gl_FragCoord.x) % 2) * 2 + (1 - int(gl_FragCoord.y) % 2)]) - 1.5) / 4. * h.b;
+    }
+#else
+    float bayer[4] = float[4](
+         -0.01171875,  0.00390625,
+         0.01171875,  -0.00390625);
+
+    float b = float(bayer[(int(gl_FragCoord.x) % 2) * 2 + (int(gl_FragCoord.y) % 2)]);
+    incolor.rgb += vec3(b, b / 2., b);
+#endif
+
+#elif 1
+
+    int bayer[16] = int[16](
+         0,  8,  2, 10,
+        12,  4, 14,  6,
+         3, 11,  1,  9,
+        15,  7, 13,  5);
+
+    if (gl_FragCoord.x + gl_FragCoord.y < 96.)
+    {
+        incolor.rgb += (float(bayer[(int(gl_FragCoord.x) % 4) * 4 + (int(gl_FragCoord.y) % 4)]) - 7.5) / 16. * h;
+    }
+    else
+    {
+        incolor.r += (float(bayer[(int(gl_FragCoord.x) % 4) * 4 + (int(gl_FragCoord.y) % 4)]) - 7.5) / 16. * h.r;
+        incolor.g += (float(bayer[(3 - int(gl_FragCoord.x) % 4) * 4 + (int(gl_FragCoord.y) % 4)]) - 7.5) / 16. * h.g;
+        incolor.b += (float(bayer[(int(gl_FragCoord.x) % 4) * 4 + (3 - int(gl_FragCoord.y) % 4)]) - 7.5) / 16. * h.b;
+    }
+
+#else
+    int bayer[64] = int[64](
+         0, 32,  8, 40,  2, 34, 10, 42,
+        48, 16, 56, 24, 50, 18, 58, 26,
+        12, 44,  4, 36, 14, 46,  6, 38,
+        60, 28, 52, 20, 62, 30, 54, 22,
+         3, 35, 11, 43,  1, 33,  9, 41,
+        51, 19, 59, 27, 49, 17, 57, 25,
+        15, 47,  7, 39, 13, 45,  5, 37,
+        63, 31, 55, 23, 61, 29, 53, 21);
+
+    if (gl_FragCoord.x + gl_FragCoord.y < 96.)
+    {
+        incolor.rgb += (float(bayer[(int(gl_FragCoord.x) % 8) * 8 + (int(gl_FragCoord.y) % 8)]) - 31.5) / 64. * h;
+    }
+    else
+    {
+        incolor.r += (float(bayer[(int(gl_FragCoord.x) % 8) * 8 + (int(gl_FragCoord.y) % 8)]) - 31.5) / 64. * h.r;
+        incolor.g += (float(bayer[(7 - int(gl_FragCoord.x) % 8) * 8 + (int(gl_FragCoord.y) % 8)]) - 31.5) / 64. * h.g;
+        incolor.b += (float(bayer[(int(gl_FragCoord.x) % 8) * 8 + (7 - int(gl_FragCoord.y) % 8)]) - 31.5) / 64. * h.b;
+    }
+
+#endif
+
+    colorOut = incolor;
+})";
+
+    ANGLE_GL_PROGRAM(program1, kVS, kFS1);
+    ANGLE_GL_PROGRAM(program2, kVS, kFS2);
+
+    glViewport(0, 0, getWindowWidth(), getWindowHeight());
+
+    for (int i = 0; i < 5; ++i)
+    {
+        glUseProgram(program1);
+        glDrawArrays(GL_TRIANGLE_STRIP, 0, 4);
+        ASSERT_GL_NO_ERROR();
+
+        swapBuffers();
+        usleep(1'000'000);
+
+        glUseProgram(program2);
+        glDrawArrays(GL_TRIANGLE_STRIP, 0, 4);
+        ASSERT_GL_NO_ERROR();
+
+        swapBuffers();
+        usleep(1'000'000);
+    }
+}
+
 ANGLE_INSTANTIATE_TEST_ES2(SixteenBppTextureTest);
 
 GTEST_ALLOW_UNINSTANTIATED_PARAMETERIZED_TEST(SixteenBppTextureTestES3);
 ANGLE_INSTANTIATE_TEST_ES3(SixteenBppTextureTestES3);
+
+GTEST_ALLOW_UNINSTANTIATED_PARAMETERIZED_TEST(SixteenBppSwapchainTestES3);
+ANGLE_INSTANTIATE_TEST_ES3(SixteenBppSwapchainTestES3);
 
 }  // namespace
