@@ -3404,8 +3404,8 @@ angle::Result SamplerDesc::init(ContextVk *contextVk, Sampler *sampler) const
         // minFilter/magFilter needs to be equal to chromaFilter.
         // HardwareBufferImageSiblingVkAndroid() forces VK_FILTER_NEAREST, so force
         // VK_FILTER_NEAREST here too.
-        createInfo.magFilter = VK_FILTER_NEAREST;
-        createInfo.minFilter = VK_FILTER_NEAREST;
+        // createInfo.magFilter = VK_FILTER_NEAREST;
+        // createInfo.minFilter = VK_FILTER_NEAREST;
     }
 
     VkSamplerCustomBorderColorCreateInfoEXT customBorderColorInfo = {};
