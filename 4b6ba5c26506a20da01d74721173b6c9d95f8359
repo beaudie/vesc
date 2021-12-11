@@ -24,6 +24,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "6a7d02de_3e02947f",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1500872
+      },
+      "writtenOn": "2021-12-11T02:40:31Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "6b9e3b1d_e13f2a6d",
+      "range": {
+        "startLine": 7,
+        "startChar": 1,
+        "endLine": 7,
+        "endChar": 8
+      },
+      "revId": "4b6ba5c26506a20da01d74721173b6c9d95f8359",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "face71bd_2384d235",
@@ -37,6 +61,24 @@
       "writtenOn": "2021-12-06T23:42:41Z",
       "side": 1,
       "message": "Please add the \"Bug:\" ID field.",
+      "revId": "4b6ba5c26506a20da01d74721173b6c9d95f8359",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "cd7ef677_6d7283a2",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 8,
+      "author": {
+        "id": 1500872
+      },
+      "writtenOn": "2021-12-11T02:40:31Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "face71bd_2384d235",
       "revId": "4b6ba5c26506a20da01d74721173b6c9d95f8359",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
