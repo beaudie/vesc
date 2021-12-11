@@ -13,6 +13,7 @@ import os
 import subprocess
 import sys
 import platform
+import argparse
 
 script_dir = sys.path[0]
 root_dir = os.path.abspath(os.path.join(script_dir, '..'))
@@ -214,11 +215,36 @@ def main():
     all_new_hashes = {}
     any_dirty = False
 
-    verify_only = False
-    if len(sys.argv) > 1 and sys.argv[1] == '--verify-no-dirty':
-        verify_only = True
+    parser = argparse.ArgumentParser(description='Generate ANGLE internal code.')
+    parser.add_argument(
+        '-v',
+        '--verify-no-dirty',
+        dest='verify_only',
+        type=bool,
+        help='verify hashes are not dirty')
+    parser.add_argument(
+        '-g', '--generator', action='append', nargs='*', type=str, dest='specifiedGenerators'),
 
-    for name, script in sorted(generators.items()):
+    args = parser.parse_args()
+    filteredGenerators = None
+    runningSingleGenerator = False
+    if (args.specifiedGenerators):
+        filteredGenerators = args.specifiedGenerators[0]
+        runningSingleGenerator = True
+
+    verify_only = args.verify_only
+    ranGenerators = {}
+
+    if (filteredGenerators):
+        ranGenerators = {k: v for k, v in generators.items() if k in filteredGenerators}
+    else:
+        ranGenerators = generators
+
+    if (len(ranGenerators) == 0):
+        print("No valid generators specified.")
+        return -1
+
+    for name, script in sorted(ranGenerators.items()):
         info = auto_script(script)
         fname = get_hash_file_name(name)
         filenames = info['inputs'] + info['outputs'] + [script]
@@ -243,7 +269,7 @@ def main():
         # Update the hash dictionary.
         all_new_hashes[fname] = new_hashes
 
-    if any_old_hash_missing(all_new_hashes, all_old_hashes):
+    if not runningSingleGenerator and ny_old_hash_missing(all_new_hashes, all_old_hashes):
         any_dirty = True
 
     if verify_only:
@@ -257,7 +283,7 @@ def main():
             sys.exit(1)
 
         # Update the output hashes again since they can be formatted.
-        for name, script in sorted(generators.items()):
+        for name, script in sorted(ranGenerators.items()):
             info = auto_script(script)
             fname = get_hash_file_name(name)
             update_output_hashes(name, info['outputs'], all_new_hashes[fname])
