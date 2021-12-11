@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "add33123_c07f3fca",
+        "filename": "src/libANGLE/Display.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 1162,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2021-12-11T00:53:21Z",
+      "side": 1,
+      "message": "I think the follow-on CL can be discarded if you update this to:\n\n    Error Display::releaseThread(Thread *thread)\n    {\n        Error result \u003d mImplementation-\u003ereleaseThread();\n\n        if (!result.isError())\n        {\n            return destroyInvalidEglObjects(thread);\n        }\n\n        return result;\n    }\n    \nI\u0027m able to pass android.opengl.cts.WrapperTest#testThreadCleanup on CF with just this CL when adding this change.\n\nThis version also cleans up the resources for a Display sooner, rather than having to wait until *all* threads have called makeCurrent(dpy, null, null, null).\n\nPlease give this a shot and let me know what you think.",
+      "range": {
+        "startLine": 1159,
+        "startChar": 0,
+        "endLine": 1162,
+        "endChar": 1
+      },
+      "revId": "9a809376121e1288c5fe5d1b7e1b960e2bb69ad2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
