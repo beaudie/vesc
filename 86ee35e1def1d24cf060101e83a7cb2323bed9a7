@@ -627,6 +627,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "2296d179_f71237c4",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 15
+      },
+      "lineNbr": 2583,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2021-12-11T01:09:31Z",
+      "side": 1,
+      "message": "Right, I think there will be more to clean up later. Once we moved all buffer allocation to sub-allocate from the bufferBlock, I think we do not need to use VMA to allocate a VkBuffer and VkDeviceMemory (at least the sub-allocation part). I do intend to do more follow up on this and wont forget this.",
+      "parentUuid": "696f70f4_f7a82bf2",
+      "range": {
+        "startLine": 2583,
+        "startChar": 4,
+        "endLine": 2583,
+        "endChar": 88
+      },
+      "revId": "86ee35e1def1d24cf060101e83a7cb2323bed9a7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "9ddb826b_0df1a386",
@@ -1174,6 +1198,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "32b3a803_38440652",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 15
+      },
+      "lineNbr": 3833,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2021-12-11T01:09:31Z",
+      "side": 1,
+      "message": "This serial number is not been used by ShaderDescriptorSetDesc. This serial is used by CommandBufferHelper::mUsedBuffers etc. ShaderDescriptorSetDesc is using the block\u0027s serial and offset/size when required.",
+      "parentUuid": "f6270f75_380f64f0",
+      "range": {
+        "startLine": 3832,
+        "startChar": 0,
+        "endLine": 3833,
+        "endChar": 19
+      },
+      "revId": "86ee35e1def1d24cf060101e83a7cb2323bed9a7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "1497237b_e7dc89b8",
         "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
         "patchSetId": 15
@@ -1630,6 +1678,54 @@
       "writtenOn": "2021-11-24T17:12:52Z",
       "side": 1,
       "message": "usually we return angle::Result and handle the error in the function. could you update the code to use that pattern, given the other comments about error handling?",
+      "range": {
+        "startLine": 1675,
+        "startChar": 0,
+        "endLine": 1675,
+        "endChar": 8
+      },
+      "revId": "86ee35e1def1d24cf060101e83a7cb2323bed9a7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "a056edd4_3f993dc2",
+        "filename": "src/libANGLE/renderer/vulkan/vk_utils.cpp",
+        "patchSetId": 15
+      },
+      "lineNbr": 1675,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2021-12-11T01:09:31Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "9a903ca2_20639bae",
+      "range": {
+        "startLine": 1675,
+        "startChar": 0,
+        "endLine": 1675,
+        "endChar": 8
+      },
+      "revId": "86ee35e1def1d24cf060101e83a7cb2323bed9a7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "831e6399_37466508",
+        "filename": "src/libANGLE/renderer/vulkan/vk_utils.cpp",
+        "patchSetId": 15
+      },
+      "lineNbr": 1675,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2021-12-11T01:09:31Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "9a903ca2_20639bae",
       "range": {
         "startLine": 1675,
         "startChar": 0,

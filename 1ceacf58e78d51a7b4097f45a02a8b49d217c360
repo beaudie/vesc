@@ -58,6 +58,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "a0fcf59c_ef863038",
+        "filename": "src/libANGLE/renderer/vulkan/BufferVk.cpp",
+        "patchSetId": 23
+      },
+      "lineNbr": 642,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2021-12-11T01:09:31Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "48ae594c_5cbdebb3",
+      "range": {
+        "startLine": 642,
+        "startChar": 84,
+        "endLine": 642,
+        "endChar": 89
+      },
+      "revId": "1ceacf58e78d51a7b4097f45a02a8b49d217c360",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "ab933bd3_4ef5f28e",
@@ -75,6 +99,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "3c5fbedd_bcab05b0",
+        "filename": "src/libANGLE/renderer/vulkan/BufferVk.cpp",
+        "patchSetId": 23
+      },
+      "lineNbr": 1204,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2021-12-11T01:09:31Z",
+      "side": 1,
+      "message": "BufferVk::mBufferOffset will be removed in next CL, since with this CL, the offset is actually in BufferHelper::mSubAllocation.\nhttps://chromium-review.googlesource.com/c/angle/angle/+/3266147",
+      "parentUuid": "ab933bd3_4ef5f28e",
+      "revId": "1ceacf58e78d51a7b4097f45a02a8b49d217c360",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "02bdd2a1_57037d20",
@@ -88,6 +130,24 @@
       "writtenOn": "2021-12-10T19:06:24Z",
       "side": 1,
       "message": "This can probably be removed now, since it\u0027s not really protecting us from anything anymore.",
+      "revId": "1ceacf58e78d51a7b4097f45a02a8b49d217c360",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "2911f365_a5470ced",
+        "filename": "src/libANGLE/renderer/vulkan/BufferVk.cpp",
+        "patchSetId": 23
+      },
+      "lineNbr": 1207,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2021-12-11T01:09:31Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "02bdd2a1_57037d20",
       "revId": "1ceacf58e78d51a7b4097f45a02a8b49d217c360",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
@@ -115,6 +175,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "15b8b4b2_38bcdbdc",
+        "filename": "src/libANGLE/renderer/vulkan/BufferVk.h",
+        "patchSetId": 23
+      },
+      "lineNbr": 117,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2021-12-11T01:09:31Z",
+      "side": 1,
+      "message": "This API will be removed in next CL, so I am leaving it untouched here.",
+      "parentUuid": "03604b54_dd93a6d7",
+      "range": {
+        "startLine": 114,
+        "startChar": 0,
+        "endLine": 117,
+        "endChar": 0
+      },
+      "revId": "1ceacf58e78d51a7b4097f45a02a8b49d217c360",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "5a041e08_cb3d5a78",
@@ -128,6 +212,30 @@
       "writtenOn": "2021-12-10T17:40:29Z",
       "side": 1,
       "message": "Similar to the prior code, avoid Stop/Continue to indicate success or failure, and instead only using angle::Result to return control flow the to application layer in the case of an unexpected internal error. Just to confirm that I\u0027m reading this right - Stop/Continue here means we had success in finding a pool or not?",
+      "range": {
+        "startLine": 2769,
+        "startChar": 0,
+        "endLine": 2770,
+        "endChar": 31
+      },
+      "revId": "1ceacf58e78d51a7b4097f45a02a8b49d217c360",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "f0297bf0_d6aefb42",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 23
+      },
+      "lineNbr": 2770,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2021-12-11T01:09:31Z",
+      "side": 1,
+      "message": "Continue means we successfully allocated in this pool. If we fail, we could try a fall back pool and may get a success (this part has not been implmented and was removed per your prior comment). Given the fallback is removed, I suggest we keep it to return Continue/Stop. But I do think most of these allocation API should all return boolean.",
+      "parentUuid": "5a041e08_cb3d5a78",
       "range": {
         "startLine": 2769,
         "startChar": 0,
@@ -208,6 +316,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "6c0b9609_77d36ae1",
+        "filename": "src/libANGLE/renderer/vulkan/vk_utils.cpp",
+        "patchSetId": 23
+      },
+      "lineNbr": 1707,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2021-12-11T01:09:31Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "41abe40f_8e34eb3a",
+      "range": {
+        "startLine": 1707,
+        "startChar": 26,
+        "endLine": 1707,
+        "endChar": 47
+      },
+      "revId": "1ceacf58e78d51a7b4097f45a02a8b49d217c360",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "b1136c85_223a2614",
@@ -221,6 +353,24 @@
       "writtenOn": "2021-12-10T19:06:24Z",
       "side": 1,
       "message": "Can remove: unused.",
+      "revId": "1ceacf58e78d51a7b4097f45a02a8b49d217c360",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "6c46100f_70baa53d",
+        "filename": "src/libANGLE/renderer/vulkan/vk_utils.h",
+        "patchSetId": 23
+      },
+      "lineNbr": 1274,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2021-12-11T01:09:31Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "b1136c85_223a2614",
       "revId": "1ceacf58e78d51a7b4097f45a02a8b49d217c360",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
