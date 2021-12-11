@@ -70,6 +70,24 @@
       "parentUuid": "f0ae9c30_e8789435",
       "revId": "3745f9f68a6f039b2a780e814850cd6d3eaf1c95",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "51b0ce14_38f45b3e",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 18
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2021-12-11T00:56:29Z",
+      "side": 1,
+      "message": "These CLs fix android.opengl.cts.WrapperTest#testThreadCleanup running on CF.\n\nFor context, here\u0027s the test:\nhttps://source.corp.google.com/aosp-android10/cts/tests/tests/opengl/src/android/opengl/cts/WrapperTest.java;l\u003d163\n\nThe test creates and destroys 1000 threads, with each one creating a Display, Context, and Surface, and then eglTerminate() and eglReleaseThread() to free the resources.   Note that there is no process exit, it\u0027s just threads, so Android cannot free any memory - it\u0027s up to ANGLE to clean up while the process is still alive.\n\nWithout these CLs, the device runs out of memory about halfway through and crashes.   However, I think we can avoid this CL with an update to the previous one in the chain:\nhttps://chromium-review.googlesource.com/c/angle/angle/+/3329273/comment/add33123_c07f3fca/",
+      "parentUuid": "4cfeaaf6_54ca32cb",
+      "revId": "3745f9f68a6f039b2a780e814850cd6d3eaf1c95",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
