@@ -33,6 +33,24 @@
       "message": "Is iOS purely 64 bit at this point, so NSUInteger is 64-bit rather than 32-bit?\n\nIf so then I guess this code is OK, but I would suggest adding a TODO here saying to revisit the use of NSUInteger without any overflow checking.",
       "revId": "8aed6339f42b5abf4495cc090b76dd8f98af1c1e",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "0d6bbcd1_811a8069",
+        "filename": "src/libANGLE/renderer/metal/mtl_state_cache.mm",
+        "patchSetId": 1
+      },
+      "lineNbr": 1010,
+      "author": {
+        "id": 1115588
+      },
+      "writtenOn": "2021-12-11T01:49:39Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "c5390ce5_7142d6b3",
+      "revId": "8aed6339f42b5abf4495cc090b76dd8f98af1c1e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
