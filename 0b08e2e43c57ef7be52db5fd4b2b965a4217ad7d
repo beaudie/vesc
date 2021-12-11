@@ -54,6 +54,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "e9767f30_82499a2d",
+        "filename": "src/libANGLE/renderer/vulkan/vk_utils.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 528,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2021-12-11T01:08:21Z",
+      "side": 1,
+      "message": "The problem is that BufferMemory does not have VkMemoryPropertyFlags, so don\u0027t have that information of coherent or not. What I am thinking for future CL is to get rid of BufferMemory class completely.",
+      "parentUuid": "e49dc147_ce6d4379",
+      "revId": "0b08e2e43c57ef7be52db5fd4b2b965a4217ad7d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "6f407d73_735daa02",
         "filename": "src/libANGLE/renderer/vulkan/vk_utils.cpp",
         "patchSetId": 4
@@ -65,6 +83,24 @@
       "writtenOn": "2021-12-10T19:21:20Z",
       "side": 1,
       "message": "Similar to the above: can we return immediately if isCoherent()?",
+      "revId": "0b08e2e43c57ef7be52db5fd4b2b965a4217ad7d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "ed83a043_f1f1944a",
+        "filename": "src/libANGLE/renderer/vulkan/vk_utils.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 548,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2021-12-11T01:08:21Z",
+      "side": 1,
+      "message": "Same as the above comment. I am marking this one as resolved now and leave the other comment open for you to ACK.",
+      "parentUuid": "6f407d73_735daa02",
       "revId": "0b08e2e43c57ef7be52db5fd4b2b965a4217ad7d",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
