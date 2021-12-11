@@ -16,6 +16,23 @@
       "message": "https://chromium-review.googlesource.com/c/angle/angle/+/3313333 is now merged to this CL.",
       "revId": "c7c699df2c9a9cddea077d28a8a0451975d39f93",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "f68ba95b_f588df5b",
+        "filename": "src/libANGLE/renderer/vulkan/DisplayVk.cpp",
+        "patchSetId": 25
+      },
+      "lineNbr": 28,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2021-12-11T02:07:41Z",
+      "side": 1,
+      "message": "Nit: Please add the units (seconds) as a comment or in the name.",
+      "revId": "c7c699df2c9a9cddea077d28a8a0451975d39f93",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
