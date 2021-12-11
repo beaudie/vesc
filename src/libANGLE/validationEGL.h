@@ -119,16 +119,12 @@ inline const AttributeMap PackParam<const AttributeMap &, const EGLint *>(const 
     return AttributeMap::CreateFromIntArray(attribs);
 }
 
-// In a 32-bit environment the EGLAttrib and EGLint types are the same. We need to mask out one of
-// the two specializations to avoid having an override ambiguity.
-#if defined(ANGLE_IS_64_BIT_CPU)
 template <>
 inline const AttributeMap PackParam<const AttributeMap &, const EGLAttrib *>(
     const EGLAttrib *attribs)
 {
     return AttributeMap::CreateFromAttribArray(attribs);
 }
-#endif  // defined(ANGLE_IS_64_BIT_CPU)
 
 template <typename PackedT, typename FromT>
 inline typename std::enable_if<!std::is_enum<PackedT>::value,
