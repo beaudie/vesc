@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "31b22401_7effbe7f",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2021-12-11T01:45:02Z",
+      "side": 1,
+      "message": "lgtm with one comment\n\nNote that we can just add this TODO here and WebKit will pick it up during their next ANGLE roll.\n",
+      "revId": "8aed6339f42b5abf4495cc090b76dd8f98af1c1e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "c5390ce5_7142d6b3",
+        "filename": "src/libANGLE/renderer/metal/mtl_state_cache.mm",
+        "patchSetId": 1
+      },
+      "lineNbr": 1010,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2021-12-11T01:45:02Z",
+      "side": 1,
+      "message": "Is iOS purely 64 bit at this point, so NSUInteger is 64-bit rather than 32-bit?\n\nIf so then I guess this code is OK, but I would suggest adding a TODO here saying to revisit the use of NSUInteger without any overflow checking.",
+      "revId": "8aed6339f42b5abf4495cc090b76dd8f98af1c1e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
