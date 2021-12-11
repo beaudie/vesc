@@ -913,7 +913,7 @@ void DisplayMtl::initializeExtensions() const
     mNativeExtensions.semaphoreEXT   = false;
     mNativeExtensions.semaphoreFdEXT = false;
 
-    mNativeExtensions.instancedArraysANGLE = mFeatures.hasBaseVertexInstancedDraw.enabled;
+    mNativeExtensions.instancedArraysANGLE = true;
     mNativeExtensions.instancedArraysEXT   = mNativeExtensions.instancedArraysANGLE;
 
     mNativeExtensions.robustBufferAccessBehaviorKHR = false;
