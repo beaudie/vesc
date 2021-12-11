@@ -22,6 +22,30 @@
       },
       "revId": "9a809376121e1288c5fe5d1b7e1b960e2bb69ad2",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ab8d8bb5_0a5e32b7",
+        "filename": "src/libANGLE/Display.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 1162,
+      "author": {
+        "id": 1340649
+      },
+      "writtenOn": "2021-12-11T20:56:53Z",
+      "side": 1,
+      "message": "\u003e This version also cleans up the resources for a Display sooner, rather than having to wait until *all* threads have called makeCurrent(dpy, null, null, null)\n\nthats where i started too but if my reading of the spec is right, a test like \"RepeatedEglInitAndTerminate\" could replace the call to \"releaseThread\" with \"makeCurrent(dpy, null, null, null)\" and be spec compliant and ANGLE would fail to clean up, wouldn\u0027t it? This is what led me to the \"active thread count\" CL.",
+      "parentUuid": "add33123_c07f3fca",
+      "range": {
+        "startLine": 1159,
+        "startChar": 0,
+        "endLine": 1162,
+        "endChar": 1
+      },
+      "revId": "9a809376121e1288c5fe5d1b7e1b960e2bb69ad2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
