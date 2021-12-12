@@ -1684,17 +1684,13 @@ class SamplerYcbcrConversionCache final
 
     void destroy(RendererVk *rendererVk);
 
-    angle::Result getYuvConversion(
-        vk::Context *context,
-        const vk::YcbcrConversionDesc &ycbcrConversionDesc,
-        const VkSamplerYcbcrConversionCreateInfo &yuvConversionCreateInfo,
-        vk::BindingPointer<vk::SamplerYcbcrConversion> *yuvConversionOut);
-    VkSamplerYcbcrConversion getSamplerYcbcrConversion(
-        const vk::YcbcrConversionDesc &ycbcrConversionDesc) const;
+    angle::Result getSamplerYcbcrConversion(vk::Context *context,
+                                            const vk::YcbcrConversionDesc &ycbcrConversionDesc,
+                                            VkSamplerYcbcrConversion *vkSamplerYcbcrConversionOut);
 
   private:
     using SamplerYcbcrConversionMap =
-        std::unordered_map<vk::YcbcrConversionDesc, vk::RefCountedSamplerYcbcrConversion>;
+        std::unordered_map<vk::YcbcrConversionDesc, vk::SamplerYcbcrConversion>;
     SamplerYcbcrConversionMap mExternalFormatPayload;
     SamplerYcbcrConversionMap mVkFormatPayload;
 };

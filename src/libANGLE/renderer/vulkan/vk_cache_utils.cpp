@@ -3280,6 +3280,7 @@ void SamplerDesc::update(ContextVk *contextVk,
 
     if (ycbcrConversionDesc && ycbcrConversionDesc->valid())
     {
+        // Update the SamplerYcbcrConversionCache key
         mYcbcrConversionDesc = *ycbcrConversionDesc;
     }
 
@@ -3379,16 +3380,15 @@ angle::Result SamplerDesc::init(ContextVk *contextVk, Sampler *sampler) const
         AddToPNextChain(&createInfo, &filteringInfo);
     }
 
-    VkSamplerYcbcrConversionInfo yuvConversionInfo = {};
+    VkSamplerYcbcrConversionInfo samplerYcbcrConversionInfo = {};
     if (mYcbcrConversionDesc.valid())
     {
         ASSERT((contextVk->getRenderer()->getFeatures().supportsYUVSamplerConversion.enabled));
-        yuvConversionInfo.sType = VK_STRUCTURE_TYPE_SAMPLER_YCBCR_CONVERSION_INFO;
-        yuvConversionInfo.pNext = nullptr;
-        yuvConversionInfo.conversion =
-            contextVk->getRenderer()->getYuvConversionCache().getSamplerYcbcrConversion(
-                mYcbcrConversionDesc);
-        AddToPNextChain(&createInfo, &yuvConversionInfo);
+        samplerYcbcrConversionInfo.sType = VK_STRUCTURE_TYPE_SAMPLER_YCBCR_CONVERSION_INFO;
+        samplerYcbcrConversionInfo.pNext = nullptr;
+        ANGLE_TRY(contextVk->getRenderer()->getYuvConversionCache().getSamplerYcbcrConversion(
+            contextVk, mYcbcrConversionDesc, &samplerYcbcrConversionInfo.conversion));
+        AddToPNextChain(&createInfo, &samplerYcbcrConversionInfo);
 
         // Vulkan spec requires these settings:
         createInfo.addressModeU            = VK_SAMPLER_ADDRESS_MODE_CLAMP_TO_EDGE;
@@ -3870,18 +3870,16 @@ void SamplerYcbcrConversionCache::destroy(RendererVk *rendererVk)
 
     for (auto &iter : mExternalFormatPayload)
     {
-        vk::RefCountedSamplerYcbcrConversion &yuvSampler = iter.second;
-        ASSERT(!yuvSampler.isReferenced());
-        yuvSampler.get().destroy(device);
+        vk::SamplerYcbcrConversion &samplerYcbcrConversion = iter.second;
+        samplerYcbcrConversion.destroy(device);
 
         rendererVk->onDeallocateHandle(vk::HandleType::SamplerYcbcrConversion);
     }
 
     for (auto &iter : mVkFormatPayload)
     {
-        vk::RefCountedSamplerYcbcrConversion &yuvSampler = iter.second;
-        ASSERT(!yuvSampler.isReferenced());
-        yuvSampler.get().destroy(device);
+        vk::SamplerYcbcrConversion &samplerYcbcrConversion = iter.second;
+        samplerYcbcrConversion.destroy(device);
 
         rendererVk->onDeallocateHandle(vk::HandleType::SamplerYcbcrConversion);
     }
@@ -3890,54 +3888,71 @@ void SamplerYcbcrConversionCache::destroy(RendererVk *rendererVk)
     mVkFormatPayload.clear();
 }
 
-angle::Result SamplerYcbcrConversionCache::getYuvConversion(
+angle::Result SamplerYcbcrConversionCache::getSamplerYcbcrConversion(
     vk::Context *context,
     const vk::YcbcrConversionDesc &ycbcrConversionDesc,
-    const VkSamplerYcbcrConversionCreateInfo &yuvConversionCreateInfo,
-    vk::BindingPointer<vk::SamplerYcbcrConversion> *yuvConversionOut)
+    VkSamplerYcbcrConversion *vkSamplerYcbcrConversionOut)
 {
+    ASSERT(ycbcrConversionDesc.valid());
+    ASSERT(vkSamplerYcbcrConversionOut);
+
     SamplerYcbcrConversionMap &payload =
         (ycbcrConversionDesc.mIsExternalFormat) ? mExternalFormatPayload : mVkFormatPayload;
     const auto iter = payload.find(ycbcrConversionDesc);
     if (iter != payload.end())
     {
-        vk::RefCountedSamplerYcbcrConversion &yuvConversion = iter->second;
-        yuvConversionOut->set(&yuvConversion);
+        vk::SamplerYcbcrConversion &samplerYcbcrConversion = iter->second;
         mCacheStats.hit();
+        *vkSamplerYcbcrConversionOut = samplerYcbcrConversion.getHandle();
         return angle::Result::Continue;
     }
 
     mCacheStats.miss();
-    vk::SamplerYcbcrConversion wrappedYuvConversion;
-    ANGLE_VK_TRY(context, wrappedYuvConversion.init(context->getDevice(), yuvConversionCreateInfo));
+
+    // Create the VkSamplerYcbcrConversion
+    // Will need to account for component mappings when it becomes necessary.
+    VkSamplerYcbcrConversionCreateInfo samplerYcbcrConversionInfo = {};
+    samplerYcbcrConversionInfo.sType  = VK_STRUCTURE_TYPE_SAMPLER_YCBCR_CONVERSION_CREATE_INFO;
+    samplerYcbcrConversionInfo.format = static_cast<VkFormat>(
+        (ycbcrConversionDesc.mIsExternalFormat) ? VK_FORMAT_UNDEFINED
+                                                : ycbcrConversionDesc.mExternalOrVkFormat);
+    samplerYcbcrConversionInfo.xChromaOffset =
+        static_cast<VkChromaLocation>(ycbcrConversionDesc.mXChromaOffset);
+    samplerYcbcrConversionInfo.yChromaOffset =
+        static_cast<VkChromaLocation>(ycbcrConversionDesc.mYChromaOffset);
+    samplerYcbcrConversionInfo.ycbcrModel =
+        static_cast<VkSamplerYcbcrModelConversion>(ycbcrConversionDesc.mConversionModel);
+    samplerYcbcrConversionInfo.ycbcrRange =
+        static_cast<VkSamplerYcbcrRange>(ycbcrConversionDesc.mColorRange);
+    samplerYcbcrConversionInfo.chromaFilter =
+        static_cast<VkFilter>(ycbcrConversionDesc.mChromaFilter);
+
+    if (ycbcrConversionDesc.mIsExternalFormat)
+    {
+#ifdef VK_USE_PLATFORM_ANDROID_KHR
+        VkExternalFormatANDROID externalFormat = {};
+        externalFormat.sType                   = VK_STRUCTURE_TYPE_EXTERNAL_FORMAT_ANDROID;
+        externalFormat.externalFormat          = ycbcrConversionDesc.mExternalOrVkFormat;
+        samplerYcbcrConversionInfo.pNext       = &externalFormat;
+#else
+        // We do not support external format for any platform other than Android.
+        UNREACHABLE();
+        return angle::Result::Stop;
+#endif  // VK_USE_PLATFORM_ANDROID_KHR
+    }
+
+    vk::SamplerYcbcrConversion wrappedSamplerYcbcrConversion;
+    ANGLE_VK_TRY(context, wrappedSamplerYcbcrConversion.init(context->getDevice(),
+                                                             samplerYcbcrConversionInfo));
 
     auto insertedItem = payload.emplace(
-        ycbcrConversionDesc, vk::RefCountedSamplerYcbcrConversion(std::move(wrappedYuvConversion)));
-    vk::RefCountedSamplerYcbcrConversion &insertedYuvConversion = insertedItem.first->second;
-    yuvConversionOut->set(&insertedYuvConversion);
+        ycbcrConversionDesc, vk::SamplerYcbcrConversion(std::move(wrappedSamplerYcbcrConversion)));
+    vk::SamplerYcbcrConversion &insertedSamplerYcbcrConversion = insertedItem.first->second;
+    *vkSamplerYcbcrConversionOut = insertedSamplerYcbcrConversion.getHandle();
 
     context->getRenderer()->onAllocateHandle(vk::HandleType::SamplerYcbcrConversion);
 
     return angle::Result::Continue;
-}
-
-VkSamplerYcbcrConversion SamplerYcbcrConversionCache::getSamplerYcbcrConversion(
-    const vk::YcbcrConversionDesc &ycbcrConversionDesc) const
-{
-    ASSERT(ycbcrConversionDesc.valid());
-
-    const SamplerYcbcrConversionMap &payload =
-        (ycbcrConversionDesc.mIsExternalFormat) ? mExternalFormatPayload : mVkFormatPayload;
-    const auto iter = payload.find(ycbcrConversionDesc);
-    if (iter != payload.end())
-    {
-        const vk::RefCountedSamplerYcbcrConversion &yuvConversion = iter->second;
-        return yuvConversion.get().getHandle();
-    }
-
-    // Should never get here if we have a valid format.
-    UNREACHABLE();
-    return VK_NULL_HANDLE;
 }
 
 // SamplerCache implementation.

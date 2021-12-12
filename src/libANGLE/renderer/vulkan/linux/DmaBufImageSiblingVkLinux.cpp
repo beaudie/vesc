@@ -466,8 +466,6 @@ angle::Result DmaBufImageSiblingVkLinux::initImpl(DisplayVk *displayVk)
         VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT |
         (hasProtectedContent() ? VK_MEMORY_PROPERTY_PROTECTED_BIT : 0);
 
-    VkSamplerYcbcrConversionCreateInfo yuvConversionInfo     = {};
-    VkSamplerYcbcrConversionCreateInfo *yuvConversionInfoPtr = nullptr;
     if (mYUV)
     {
         const VkChromaLocation xChromaOffset =
@@ -480,16 +478,9 @@ angle::Result DmaBufImageSiblingVkLinux::initImpl(DisplayVk *displayVk)
         ANGLE_VK_CHECK(displayVk, renderer->getFeatures().supportsYUVSamplerConversion.enabled,
                        VK_ERROR_FEATURE_NOT_PRESENT);
 
-        yuvConversionInfo.sType         = VK_STRUCTURE_TYPE_SAMPLER_YCBCR_CONVERSION_CREATE_INFO;
-        yuvConversionInfo.format        = vulkanFormat;
-        yuvConversionInfo.xChromaOffset = xChromaOffset;
-        yuvConversionInfo.yChromaOffset = yChromaOffset;
-        yuvConversionInfo.ycbcrModel    = model;
-        yuvConversionInfo.ycbcrRange    = range;
-        yuvConversionInfo.chromaFilter  = VK_FILTER_NEAREST;
-        // yuvConversionInfo.components    = {}; // TODO: swizzle?
-
-        yuvConversionInfoPtr = &yuvConversionInfo;
+        mImage->getYcbcrConversionDesc()->update(renderer, 0, model, range, xChromaOffset,
+                                                 yChromaOffset, VK_FILTER_NEAREST,
+                                                 actualImageFormatID);
     }
 
     AllocateInfo allocateInfo;
@@ -497,7 +488,7 @@ angle::Result DmaBufImageSiblingVkLinux::initImpl(DisplayVk *displayVk)
         mAttribs, mImage->getImage().getHandle(), planeCount, modifierProperties, &allocateInfo);
 
     return mImage->initExternalMemory(displayVk, renderer->getMemoryProperties(),
-                                      externalMemoryRequirements, yuvConversionInfoPtr,
+                                      externalMemoryRequirements, mImage->getYcbcrConversionDesc(),
                                       allocateInfoCount, allocateInfo.allocateInfoPtr.data(),
                                       VK_QUEUE_FAMILY_FOREIGN_EXT, flags);
 }
