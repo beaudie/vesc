@@ -1,0 +1,61 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ba9f2622_e2678ed8",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 4031,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2021-12-13T14:31:54Z",
+      "side": 1,
+      "message": "nit: this technically could be behind getStateCache.getActiveDefaultAttribsMask().any()\n\nalso might as well put it in invalidateDefaultAttributes.",
+      "range": {
+        "startLine": 4031,
+        "startChar": 15,
+        "endLine": 4031,
+        "endChar": 65
+      },
+      "revId": "2f25e3539548aa7986bb112907a15ac4ad48f528",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "93013665_6663d3e9",
+        "filename": "src/tests/restricted_traces/test",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2021-12-13T14:31:54Z",
+      "side": 1,
+      "message": "remove before landing.",
+      "revId": "2f25e3539548aa7986bb112907a15ac4ad48f528",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "a5ac0eaf_b7c2d22b",
+        "filename": "src/tests/restricted_traces/types-of-mappings.txt",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2021-12-13T14:31:54Z",
+      "side": 1,
+      "message": "remove before landing, probably crept in by accident",
+      "revId": "2f25e3539548aa7986bb112907a15ac4ad48f528",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
