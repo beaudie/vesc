@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "c2065851_f6790441",
+        "filename": "scripts/run_code_generation.py",
+        "patchSetId": 1
+      },
+      "lineNbr": 226,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2021-12-13T17:16:34Z",
+      "side": 1,
+      "message": "Looks like this option doesn\u0027t update the hashes in the hashes file. If that\u0027s intended, please add a description here and specify that. In particular, it seems to me that this option is only useful during development.",
+      "range": {
+        "startLine": 226,
+        "startChar": 93,
+        "endLine": 226,
+        "endChar": 94
+      },
+      "revId": "000072bb49f7c44ff4ee0453895747273fe34e03",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "f8fd5e8c_fc7f660d",
+        "filename": "scripts/run_code_generation.py",
+        "patchSetId": 1
+      },
+      "lineNbr": 241,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2021-12-13T17:16:34Z",
+      "side": 1,
+      "message": "I suggest simplifying this to:\n\n    verify_only \u003d args.verify_only\n    ranGenerators \u003d generators\n\n    runningSingleGenerator \u003d False\n    if (args.specifiedGenerators):\n        ranGenerators \u003d {k: v for k, v in generators.items() if k in args.specifiedGenerators[0]}\n        runningSingleGenerator \u003d True\n\nYou might also as well just override `generators` inside of creating a `ranGenerators`.",
+      "range": {
+        "startLine": 229,
+        "startChar": 0,
+        "endLine": 241,
+        "endChar": 34
+      },
+      "revId": "000072bb49f7c44ff4ee0453895747273fe34e03",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
