@@ -18,6 +18,23 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "3aac3963_adf242ae",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1500872
+      },
+      "writtenOn": "2021-12-13T18:50:24Z",
+      "side": 1,
+      "message": "Shahbaz makes good points, this change is quite at odds with how we handle dirty hashes. Any bright ideas how we can keep this script runnable outside of the ANGLE repo? (i.e. in webkit?) Is this functionality still useful, considering we\u0027re trying to move all development to ANGLE open source?\n",
+      "revId": "000072bb49f7c44ff4ee0453895747273fe34e03",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "c2065851_f6790441",
@@ -31,6 +48,30 @@
       "writtenOn": "2021-12-13T17:16:34Z",
       "side": 1,
       "message": "Looks like this option doesn\u0027t update the hashes in the hashes file. If that\u0027s intended, please add a description here and specify that. In particular, it seems to me that this option is only useful during development.",
+      "range": {
+        "startLine": 226,
+        "startChar": 93,
+        "endLine": 226,
+        "endChar": 94
+      },
+      "revId": "000072bb49f7c44ff4ee0453895747273fe34e03",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "f03eecea_20bfa9c4",
+        "filename": "scripts/run_code_generation.py",
+        "patchSetId": 1
+      },
+      "lineNbr": 226,
+      "author": {
+        "id": 1500872
+      },
+      "writtenOn": "2021-12-13T18:50:24Z",
+      "side": 1,
+      "message": "That\u0027s a great point: I\u0027ve been using it in Webkit since we can\u0027t run the full generator to update hashes, but a \u0027-verify\u0027 check could be applied when running a git cl upload.",
+      "parentUuid": "c2065851_f6790441",
       "range": {
         "startLine": 226,
         "startChar": 93,
