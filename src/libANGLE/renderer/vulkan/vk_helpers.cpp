@@ -3938,7 +3938,13 @@ angle::Result BufferHelper::initSubAllocation(ContextVk *contextVk,
 {
     RendererVk *renderer = contextVk->getRenderer();
 
-    mSerial = renderer->getResourceSerialFactory().generateBufferSerial();
+    // We should reset these in case the BufferHelper object has been released and called
+    // re-initSubAllocation again.
+    mSerial             = renderer->getResourceSerialFactory().generateBufferSerial();
+    mCurrentWriteAccess = 0;
+    mCurrentReadAccess  = 0;
+    mCurrentWriteStages = 0;
+    mCurrentReadStages  = 0;
 
     if (renderer->getFeatures().padBuffersToMaxVertexAttribStride.enabled)
     {
@@ -3958,6 +3964,14 @@ angle::Result BufferHelper::initSubAllocation(ContextVk *contextVk,
     }
 
     return angle::Result::Continue;
+}
+
+angle::Result BufferHelper::initStagingBuffer(ContextVk *contextVk, size_t size, bool coherent)
+{
+    RendererVk *renderer     = contextVk->getRenderer();
+    uint32_t memoryTypeIndex = renderer->getStagingBufferMemoryTypeIndex(coherent);
+    size_t alignment         = renderer->getStagingBufferAlignment();
+    return initSubAllocation(contextVk, memoryTypeIndex, size, alignment);
 }
 
 angle::Result BufferHelper::initializeNonZeroMemory(Context *context,
