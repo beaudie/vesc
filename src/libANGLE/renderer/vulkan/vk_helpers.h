@@ -859,6 +859,8 @@ class BufferHelper : public ReadWriteResource
                                     size_t size,
                                     size_t alignment);
 
+    angle::Result initStagingBuffer(ContextVk *contextVk, size_t size, bool coherent);
+
     void destroy(RendererVk *renderer);
     void release(RendererVk *renderer);
 

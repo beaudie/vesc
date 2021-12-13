@@ -3960,6 +3960,14 @@ angle::Result BufferHelper::initSubAllocation(ContextVk *contextVk,
     return angle::Result::Continue;
 }
 
+angle::Result BufferHelper::initStagingBuffer(ContextVk *contextVk, size_t size, bool coherent)
+{
+    RendererVk *renderer     = contextVk->getRenderer();
+    uint32_t memoryTypeIndex = renderer->getStagingBufferMemoryTypeIndex(coherent);
+    size_t alignment         = renderer->getStagingBufferAlignment();
+    return initSubAllocation(contextVk, memoryTypeIndex, size, alignment);
+}
+
 angle::Result BufferHelper::initializeNonZeroMemory(Context *context,
                                                     VkBufferUsageFlags usage,
                                                     VkDeviceSize size)
