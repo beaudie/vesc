@@ -35,6 +35,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "7f76ab4e_73eb7f12",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 23
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2021-12-13T19:44:30Z",
+      "side": 1,
+      "message": "Ack. I will look into move the ddoc to md file in separate CL. The problem with ddoc and md file is that it is a bit hard to keep up with the change. Maybe once we finished all of the changes, we should do the md file.",
+      "parentUuid": "474602bd_673fd8d1",
+      "revId": "1ceacf58e78d51a7b4097f45a02a8b49d217c360",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "48ae594c_5cbdebb3",
@@ -260,6 +278,30 @@
       "side": 1,
       "message": "Stop/Continue still don\u0027t seem correct - they\u0027re used for internal errors, not success/failure if a function performed its intended task. Ping me on chat or GVC, maybe there\u0027s something I\u0027m missing?",
       "parentUuid": "f0297bf0_d6aefb42",
+      "range": {
+        "startLine": 2769,
+        "startChar": 0,
+        "endLine": 2770,
+        "endChar": 31
+      },
+      "revId": "1ceacf58e78d51a7b4097f45a02a8b49d217c360",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "f37b2e12_1c4ce115",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 23
+      },
+      "lineNbr": 2770,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2021-12-13T19:44:30Z",
+      "side": 1,
+      "message": "Per offline discussion, BufferBlock::allocate have changed to return VkResult and I am using ANGLE_VK_CHECK here.",
+      "parentUuid": "ec04830c_3dfc5f84",
       "range": {
         "startLine": 2769,
         "startChar": 0,
