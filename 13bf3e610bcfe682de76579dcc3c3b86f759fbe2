@@ -1,0 +1,113 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "3e1fce98_425b3172",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 14
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2021-12-13T22:57:25Z",
+      "side": 1,
+      "message": "Jamie, thanks for pushing on this.  I know you\u0027ve been working on it a long time.\n\nLGTM with a few nits.",
+      "revId": "13bf3e610bcfe682de76579dcc3c3b86f759fbe2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "15126eff_cf99c8a4",
+        "filename": "src/tests/restricted_traces/README.md",
+        "patchSetId": 14
+      },
+      "lineNbr": 318,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2021-12-13T22:57:25Z",
+      "side": 1,
+      "message": "will",
+      "range": {
+        "startLine": 318,
+        "startChar": 18,
+        "endLine": 318,
+        "endChar": 22
+      },
+      "revId": "13bf3e610bcfe682de76579dcc3c3b86f759fbe2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "c2a013b9_8eed571d",
+        "filename": "src/tests/restricted_traces/README.md",
+        "patchSetId": 14
+      },
+      "lineNbr": 426,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2021-12-13T22:57:25Z",
+      "side": 1,
+      "message": "Fine to do this in a follow up, just put the bug number in.",
+      "range": {
+        "startLine": 426,
+        "startChar": 0,
+        "endLine": 426,
+        "endChar": 4
+      },
+      "revId": "13bf3e610bcfe682de76579dcc3c3b86f759fbe2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "05fdb745_ecd44b64",
+        "filename": "src/tests/restricted_traces/retrace_restricted_traces.py",
+        "patchSetId": 14
+      },
+      "lineNbr": 241,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2021-12-13T22:57:25Z",
+      "side": 1,
+      "message": "I\u0027m not seeing where this gets used.",
+      "range": {
+        "startLine": 241,
+        "startChar": 12,
+        "endLine": 241,
+        "endChar": 25
+      },
+      "revId": "13bf3e610bcfe682de76579dcc3c3b86f759fbe2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b98b7e3c_882eee32",
+        "filename": "src/tests/restricted_traces/retrace_restricted_traces.py",
+        "patchSetId": 14
+      },
+      "lineNbr": 351,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2021-12-13T22:57:25Z",
+      "side": 1,
+      "message": "In a restore, I believe this would be the input path, not output.  The output would be the real trace locations.",
+      "range": {
+        "startLine": 350,
+        "startChar": 0,
+        "endLine": 351,
+        "endChar": 21
+      },
+      "revId": "13bf3e610bcfe682de76579dcc3c3b86f759fbe2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
