@@ -16,6 +16,24 @@
       "message": "Can you please deduplicate this with OpenSharedLibraryWithExtension? It\u0027s a lot of special logic that\u0027s duplicated.",
       "revId": "f7d92a32f1b2d084787aac4f2a2e525cdd5f23e4",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "7c5acf77_3dd373ec",
+        "filename": "src/common/system_utils_posix.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 159,
+      "author": {
+        "id": 1002745
+      },
+      "writtenOn": "2021-12-13T20:50:58Z",
+      "side": 1,
+      "message": "I\u0027ll just add a parameter to OpenSharedLibraryWithExtension and OpenSharedLibrary to return the full path of the file that was opened.",
+      "parentUuid": "a3cdb441_f19a3026",
+      "revId": "f7d92a32f1b2d084787aac4f2a2e525cdd5f23e4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
