@@ -34,6 +34,24 @@
       "parentUuid": "3d3033e0_0d03d607",
       "revId": "5068c040877231598b4696d5e17b468f9ebb6f2d",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "560c9035_08276e1b",
+        "filename": "src/libANGLE/renderer/metal/mtl_utils.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 114,
+      "author": {
+        "id": 1529502
+      },
+      "writtenOn": "2021-12-13T23:50:23Z",
+      "side": 0,
+      "message": "Done",
+      "parentUuid": "a31e8f2d_5ac1e92d",
+      "revId": "5068c040877231598b4696d5e17b468f9ebb6f2d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
