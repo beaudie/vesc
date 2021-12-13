@@ -476,6 +476,22 @@ angle::Result MemoryProperties::findCompatibleMemoryIndex(
     return angle::Result::Stop;
 }
 
+uint32_t MemoryProperties::getMemoryTypeIndex(
+    VkMemoryPropertyFlags requestedMemoryPropertyFlags) const
+{
+    for (uint32_t memoryTypeIndex = 0; memoryTypeIndex < mMemoryProperties.memoryTypeCount;
+         memoryTypeIndex++)
+    {
+        if (mMemoryProperties.memoryTypes[memoryTypeIndex].propertyFlags ==
+            requestedMemoryPropertyFlags)
+        {
+            return memoryTypeIndex;
+        }
+    }
+
+    return kInvalidMemoryTypeIndex;
+}
+
 // BufferMemory implementation.
 BufferMemory::BufferMemory() : mClientBuffer(nullptr), mMappedMemory(nullptr) {}
 
