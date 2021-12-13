@@ -431,6 +431,8 @@ class StagingBuffer final : angle::NonCopyable
     const Buffer &getBuffer() const { return mBuffer; }
     size_t getSize() const { return mSize; }
 
+    static uint32_t getMemoryTypeIndex(RendererVk *renderer);
+
   private:
     Buffer mBuffer;
     Allocation mAllocation;

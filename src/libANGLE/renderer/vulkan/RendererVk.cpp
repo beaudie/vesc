@@ -1470,6 +1470,9 @@ angle::Result RendererVk::initialize(DisplayVk *displayVk,
     // Create buffer memory allocator
     ANGLE_VK_TRY(displayVk, mBufferMemoryAllocator.initialize(this, preferredLargeHeapBlockSize));
 
+    // Must be called after mBufferMemoryAllocator has been initialized.
+    mStagingBufferMemoryTypeIndex = vk::StagingBuffer::getMemoryTypeIndex(this);
+
     {
         ANGLE_TRACE_EVENT0("gpu.angle,startup", "GlslangWarmup");
         sh::InitializeGlslang();

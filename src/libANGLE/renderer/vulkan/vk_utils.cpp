@@ -635,6 +635,32 @@ void StagingBuffer::release(ContextVk *contextVk)
     contextVk->addGarbage(&mAllocation);
 }
 
+uint32_t StagingBuffer::getMemoryTypeIndex(RendererVk *renderer)
+{
+    VkBufferCreateInfo createInfo    = {};
+    createInfo.sType                 = VK_STRUCTURE_TYPE_BUFFER_CREATE_INFO;
+    createInfo.flags                 = 0;
+    createInfo.size                  = 4096;
+    createInfo.usage                 = GetStagingBufferUsageFlags(StagingUsage::Both);
+    createInfo.sharingMode           = VK_SHARING_MODE_EXCLUSIVE;
+    createInfo.queueFamilyIndexCount = 0;
+    createInfo.pQueueFamilyIndices   = nullptr;
+
+    VkMemoryPropertyFlags preferredFlags = 0;
+    VkMemoryPropertyFlags requiredFlags =
+        VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT | VK_MEMORY_PROPERTY_HOST_COHERENT_BIT;
+
+    bool persistentlyMapped = true;
+
+    BufferMemoryAllocator &bufferMemoryAllocator = renderer->getBufferMemoryAllocator();
+
+    uint32_t memoryTypeIndex = kInvalidMemoryTypeIndex;
+    bufferMemoryAllocator.findMemoryTypeIndexForBufferInfo(
+        renderer, createInfo, requiredFlags, preferredFlags, persistentlyMapped, &memoryTypeIndex);
+
+    return memoryTypeIndex;
+}
+
 void StagingBuffer::collectGarbage(RendererVk *renderer, Serial serial)
 {
     GarbageList garbageList;
