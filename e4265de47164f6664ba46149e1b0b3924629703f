@@ -1,0 +1,55 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "e49552fc_9f95849c",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 3
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2021-12-13T19:51:04Z",
+      "side": 1,
+      "message": "Please make the first line fit in 80 cols and be descriptive. Suggest:\n\n\"\"\"\nMetal: add ANGLE_metal_create_context_ownership_identity.\n\nThis Metal-specific EGL extension allows a given context and the GPU resources it allocates to be associated with a particular task ID on the system, for system-level bookkeeping purposes.\n\"\"\"",
+      "revId": "e4265de47164f6664ba46149e1b0b3924629703f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "b4871ed9_fdcf0860",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2021-12-13T19:51:04Z",
+      "side": 1,
+      "message": "I\u0027ll review John\u0027s version instead.",
+      "revId": "e4265de47164f6664ba46149e1b0b3924629703f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "08d11fe0_f03d2eb8",
+        "filename": "src/libANGLE/renderer/metal/mtl_context_device.mm",
+        "patchSetId": 3
+      },
+      "lineNbr": 31,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2021-12-13T19:51:04Z",
+      "side": 1,
+      "message": "How likely are these failures, and should they be surfaced in a way that can be queried programmatically? For example as some sort of EGL error?",
+      "revId": "e4265de47164f6664ba46149e1b0b3924629703f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
