@@ -370,6 +370,8 @@ class MemoryProperties final : angle::NonCopyable
 
     uint32_t getMemoryTypeCount() const { return mMemoryProperties.memoryTypeCount; }
 
+    uint32_t getMemoryTypeIndex(VkMemoryPropertyFlags requestedMemoryPropertyFlags) const;
+
   private:
     VkPhysicalDeviceMemoryProperties mMemoryProperties;
 };

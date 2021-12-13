@@ -2704,7 +2704,12 @@ angle::Result BufferPool::allocateNewBuffer(ContextVk *contextVk, VkDeviceSize s
                                 renderer, createInfo, memoryPropertyFlags, 0,
                                 renderer->getFeatures().persistentlyMappedBuffers.enabled,
                                 &memoryTypeIndex, &buffer.get(), &allocation.get()));
-    ASSERT(memoryTypeIndex == mMemoryTypeIndex);
+    ASSERT(memoryTypeIndex != kInvalidMemoryTypeIndex);
+    if (memoryTypeIndex != mMemoryTypeIndex)
+    {
+        bufferMemoryAllocator.getMemoryTypeProperties(renderer, memoryTypeIndex,
+                                                      &memoryPropertyFlags);
+    }
 
     // Allocate bufferBlock
     std::unique_ptr<BufferBlock> block = std::make_unique<BufferBlock>();
