@@ -4,7 +4,7 @@
   "src/tests/restricted_traces/gen_restricted_traces.py":
     "241d7eb3d8322ff67f44b84f8a06a4cf",
   "src/tests/restricted_traces/restricted_traces.json":
-    "1bb099a03ad7e0d2c260c3597374cb6a",
+    "f36e982a31dade1bd923e32e0df17e97",
   "src/tests/restricted_traces/restricted_traces_autogen.cpp":
     "ca37e3d2bb64ac533086c8fc1092ef58",
   "src/tests/restricted_traces/restricted_traces_autogen.gni":
