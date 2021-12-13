@@ -22,6 +22,30 @@
       },
       "revId": "74683747068baeb282e9c79466f267a77644af9e",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "40791fb8_7e30221e",
+        "filename": "src/libANGLE/Thread.cpp",
+        "patchSetId": 19
+      },
+      "lineNbr": 55,
+      "author": {
+        "id": 1340649
+      },
+      "writtenOn": "2021-12-13T03:52:32Z",
+      "side": 1,
+      "message": "unfortunately we still leak invalid context resources. I have noted it as a todo and once that is handled we maybe able to remove this",
+      "parentUuid": "d7ff64a9_f39e67cd",
+      "range": {
+        "startLine": 46,
+        "startChar": 0,
+        "endLine": 55,
+        "endChar": 5
+      },
+      "revId": "74683747068baeb282e9c79466f267a77644af9e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
