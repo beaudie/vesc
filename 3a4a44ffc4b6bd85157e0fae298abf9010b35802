@@ -24,6 +24,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "6e6d6dfb_e251a954",
+        "filename": "src/libANGLE/renderer/vulkan/android/HardwareBufferImageSiblingVkAndroid.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 334,
+      "author": {
+        "id": 1340649
+      },
+      "writtenOn": "2021-12-13T23:15:32Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "41850861_f0315969",
+      "range": {
+        "startLine": 334,
+        "startChar": 8,
+        "endLine": 334,
+        "endChar": 34
+      },
+      "revId": "3a4a44ffc4b6bd85157e0fae298abf9010b35802",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "ca79a20a_3f17a200",
@@ -47,6 +71,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "1687b423_d6ec222b",
+        "filename": "src/libANGLE/renderer/vulkan/android/HardwareBufferImageSiblingVkAndroid.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 345,
+      "author": {
+        "id": 1340649
+      },
+      "writtenOn": "2021-12-13T23:15:32Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "ca79a20a_3f17a200",
+      "range": {
+        "startLine": 345,
+        "startChar": 8,
+        "endLine": 345,
+        "endChar": 28
+      },
+      "revId": "3a4a44ffc4b6bd85157e0fae298abf9010b35802",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "ec902767_d183b55b",
@@ -60,6 +108,30 @@
       "writtenOn": "2021-12-13T21:50:13Z",
       "side": 1,
       "message": "now that \"ImageHelper\" stores \"YcbcrConversionDesc\", this parameter is redundant",
+      "range": {
+        "startLine": 1525,
+        "startChar": 37,
+        "endLine": 1525,
+        "endChar": 83
+      },
+      "revId": "3a4a44ffc4b6bd85157e0fae298abf9010b35802",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "864d5ba1_717cb0d1",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 1525,
+      "author": {
+        "id": 1340649
+      },
+      "writtenOn": "2021-12-13T23:15:32Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "ec902767_d183b55b",
       "range": {
         "startLine": 1525,
         "startChar": 37,
