@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "dca0ef51_b84bad76",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 26
+      },
+      "lineNbr": 2751,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2021-12-13T20:00:07Z",
+      "side": 1,
+      "message": "is this now implicitly converting VkResult to bool? please make the check explicit if so.",
+      "range": {
+        "startLine": 2746,
+        "startChar": 0,
+        "endLine": 2751,
+        "endChar": 15
+      },
+      "revId": "229202c70f1b185101f39b2d53ecf1a1d14b0a3e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "77f4b026_1359d4a6",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 26
+      },
+      "lineNbr": 2758,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2021-12-13T20:00:07Z",
+      "side": 1,
+      "message": "Same here",
+      "range": {
+        "startLine": 2758,
+        "startChar": 4,
+        "endLine": 2758,
+        "endChar": 18
+      },
+      "revId": "229202c70f1b185101f39b2d53ecf1a1d14b0a3e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
