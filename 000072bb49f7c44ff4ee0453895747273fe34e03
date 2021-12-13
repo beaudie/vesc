@@ -1,6 +1,29 @@
 {
   "comments": [
     {
+      "unresolved": true,
+      "key": {
+        "uuid": "f9e8c6ac_25ace1cb",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2021-12-13T19:11:30Z",
+      "side": 1,
+      "message": "nit: unrelated to Metal.",
+      "range": {
+        "startLine": 7,
+        "startChar": 0,
+        "endLine": 7,
+        "endChar": 5
+      },
+      "revId": "000072bb49f7c44ff4ee0453895747273fe34e03",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": false,
       "key": {
         "uuid": "ecf39ec8_3494efcc",
@@ -31,6 +54,29 @@
       "writtenOn": "2021-12-13T18:50:24Z",
       "side": 1,
       "message": "Shahbaz makes good points, this change is quite at odds with how we handle dirty hashes. Any bright ideas how we can keep this script runnable outside of the ANGLE repo? (i.e. in webkit?) Is this functionality still useful, considering we\u0027re trying to move all development to ANGLE open source?\n",
+      "revId": "000072bb49f7c44ff4ee0453895747273fe34e03",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "d954e7f2_05165d4c",
+        "filename": "scripts/run_code_generation.py",
+        "patchSetId": 1
+      },
+      "lineNbr": 16,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2021-12-13T19:11:30Z",
+      "side": 1,
+      "message": "nit: sort",
+      "range": {
+        "startLine": 16,
+        "startChar": 0,
+        "endLine": 16,
+        "endChar": 15
+      },
       "revId": "000072bb49f7c44ff4ee0453895747273fe34e03",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
@@ -84,6 +130,76 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "3e1244ee_23022d72",
+        "filename": "scripts/run_code_generation.py",
+        "patchSetId": 1
+      },
+      "lineNbr": 226,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2021-12-13T19:11:30Z",
+      "side": 1,
+      "message": "It would be more useful to non-Webkit devs if it would update the hashes for the specified generators.",
+      "parentUuid": "f03eecea_20bfa9c4",
+      "range": {
+        "startLine": 226,
+        "startChar": 93,
+        "endLine": 226,
+        "endChar": 94
+      },
+      "revId": "000072bb49f7c44ff4ee0453895747273fe34e03",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "a9d94548_841253ff",
+        "filename": "scripts/run_code_generation.py",
+        "patchSetId": 1
+      },
+      "lineNbr": 226,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2021-12-13T19:11:30Z",
+      "side": 1,
+      "message": "nit: please use the camel_case style",
+      "range": {
+        "startLine": 226,
+        "startChar": 73,
+        "endLine": 226,
+        "endChar": 92
+      },
+      "revId": "000072bb49f7c44ff4ee0453895747273fe34e03",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "1f66595d_47e9c41d",
+        "filename": "scripts/run_code_generation.py",
+        "patchSetId": 1
+      },
+      "lineNbr": 235,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2021-12-13T19:11:30Z",
+      "side": 1,
+      "message": "nit: remove and replace code with args.v...",
+      "range": {
+        "startLine": 234,
+        "startChar": 0,
+        "endLine": 235,
+        "endChar": 34
+      },
+      "revId": "000072bb49f7c44ff4ee0453895747273fe34e03",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "f8fd5e8c_fc7f660d",
         "filename": "scripts/run_code_generation.py",
         "patchSetId": 1
@@ -100,6 +216,75 @@
         "startChar": 0,
         "endLine": 241,
         "endChar": 34
+      },
+      "revId": "000072bb49f7c44ff4ee0453895747273fe34e03",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "d6ecd3ab_8f1daa45",
+        "filename": "scripts/run_code_generation.py",
+        "patchSetId": 1
+      },
+      "lineNbr": 243,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2021-12-13T19:11:30Z",
+      "side": 1,
+      "message": "nit: can omit the outer (), also use camel_case style.. also you might be able to just omit the len() entirely.",
+      "range": {
+        "startLine": 243,
+        "startChar": 7,
+        "endLine": 243,
+        "endChar": 8
+      },
+      "revId": "000072bb49f7c44ff4ee0453895747273fe34e03",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "bc6a1da7_b73e2666",
+        "filename": "scripts/run_code_generation.py",
+        "patchSetId": 1
+      },
+      "lineNbr": 245,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2021-12-13T19:11:30Z",
+      "side": 1,
+      "message": "please use 1, or define EXIT_FAILURE\u003d1 and use that",
+      "range": {
+        "startLine": 245,
+        "startChar": 15,
+        "endLine": 245,
+        "endChar": 16
+      },
+      "revId": "000072bb49f7c44ff4ee0453895747273fe34e03",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "0f8fd2e1_fc8cee9b",
+        "filename": "scripts/run_code_generation.py",
+        "patchSetId": 1
+      },
+      "lineNbr": 272,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2021-12-13T19:11:30Z",
+      "side": 1,
+      "message": "missing \u0027any\u0027",
+      "range": {
+        "startLine": 272,
+        "startChar": 38,
+        "endLine": 272,
+        "endChar": 57
       },
       "revId": "000072bb49f7c44ff4ee0453895747273fe34e03",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
