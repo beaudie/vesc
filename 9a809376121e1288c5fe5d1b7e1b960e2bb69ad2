@@ -46,6 +46,30 @@
       },
       "revId": "9a809376121e1288c5fe5d1b7e1b960e2bb69ad2",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "5f8de726_f20d1d68",
+        "filename": "src/libANGLE/Display.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 1162,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2021-12-13T17:29:21Z",
+      "side": 1,
+      "message": "These changes aren\u0027t about being spec compliant though; it\u0027s also spec compliant to not call makeCurrent(dpy, null, null, null) at all before the process exits.\n\nI prefer the simpler fix, since it fixes the tests.   If we see real apps behaving this way, we can revisit your solution, but I suspect (hope) what this test is doing is unlikely to occur in the real world.",
+      "parentUuid": "ab8d8bb5_0a5e32b7",
+      "range": {
+        "startLine": 1159,
+        "startChar": 0,
+        "endLine": 1162,
+        "endChar": 1
+      },
+      "revId": "9a809376121e1288c5fe5d1b7e1b960e2bb69ad2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
