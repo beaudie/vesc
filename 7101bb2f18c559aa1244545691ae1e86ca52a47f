@@ -1,6 +1,29 @@
 {
   "comments": [
     {
+      "unresolved": true,
+      "key": {
+        "uuid": "f2e02ce2_abd9cf48",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 5
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2021-12-13T16:56:08Z",
+      "side": 1,
+      "message": "nit:\n\n    Vulkan: Fix ...",
+      "range": {
+        "startLine": 7,
+        "startChar": 0,
+        "endLine": 7,
+        "endChar": 3
+      },
+      "revId": "7101bb2f18c559aa1244545691ae1e86ca52a47f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": false,
       "key": {
         "uuid": "88a92701_ffbe2ec9",
@@ -14,6 +37,269 @@
       "writtenOn": "2021-12-10T22:24:41Z",
       "side": 1,
       "message": "Hi all,\nplease continue to review the changes, after a little fix for gpu copy the buffer.\nit can pass the cq test now.\n\nthanks\n\nhailin ",
+      "revId": "7101bb2f18c559aa1244545691ae1e86ca52a47f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "4f14370e_b927fe78",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 5
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2021-12-13T16:56:08Z",
+      "side": 1,
+      "message": "Mostly nits, thanks for the test.",
+      "revId": "7101bb2f18c559aa1244545691ae1e86ca52a47f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "9b0e2e40_bf7eb68d",
+        "filename": "src/libANGLE/renderer/vulkan/BufferVk.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 1025,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2021-12-13T16:56:08Z",
+      "side": 1,
+      "message": "Let\u0027s call this srcBufferOffset to match the other variables (note also lower-case first letter)",
+      "range": {
+        "startLine": 1025,
+        "startChar": 17,
+        "endLine": 1025,
+        "endChar": 32
+      },
+      "revId": "7101bb2f18c559aa1244545691ae1e86ca52a47f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "5a8fabb1_245517ee",
+        "filename": "src/tests/gl_tests/BufferDataTest.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 240,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2021-12-13T16:56:08Z",
+      "side": 1,
+      "message": "Please use `essl1_shaders::vs::Simple()` and `essl1_shaders::fs::UniformColor()` instead. See other tests where fs::UniformColor is used for the attribute and uniform names.",
+      "range": {
+        "startLine": 229,
+        "startChar": 0,
+        "endLine": 240,
+        "endChar": 4
+      },
+      "revId": "7101bb2f18c559aa1244545691ae1e86ca52a47f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "399e3d6d_a54f03dc",
+        "filename": "src/tests/gl_tests/BufferDataTest.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 268,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2021-12-13T16:56:08Z",
+      "side": 1,
+      "message": "I suggest removing these as well as SetUp and TearDown overrides. Using RAII types in the test itself make the code both smaller and contained within the (single) test:\n\n    GLBuffer buffer; // automatically gens and deletes\n\n    ANGLE_GL_PROGRAM(program, essl1_shaders::vs::Passthrough(), essl1_shaders::fs::UniformColor()); // automatically declares, gens and deletes the program",
+      "revId": "7101bb2f18c559aa1244545691ae1e86ca52a47f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "723070cd_6dcc5e2b",
+        "filename": "src/tests/gl_tests/BufferDataTest.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 271,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2021-12-13T16:56:08Z",
+      "side": 1,
+      "message": "Suggest:\n\n     Test that updating a small index buffer after drawing with it works.  In the Vulkan backend, the CPU may be used to perform this copy.",
+      "revId": "7101bb2f18c559aa1244545691ae1e86ca52a47f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "d04263c5_7b575e19",
+        "filename": "src/tests/gl_tests/BufferDataTest.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 272,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2021-12-13T16:56:08Z",
+      "side": 1,
+      "message": "Suggest: SmallIndexBufferUpdateAfterDraw. The fact that one configuration is testing this with a specific optimization is an implementation detail.",
+      "range": {
+        "startLine": 272,
+        "startChar": 26,
+        "endLine": 272,
+        "endChar": 55
+      },
+      "revId": "7101bb2f18c559aa1244545691ae1e86ca52a47f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "43a29066_f1e2ba04",
+        "filename": "src/tests/gl_tests/BufferDataTest.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 274,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2021-12-13T16:56:08Z",
+      "side": 1,
+      "message": "Please remove this. The test should run fine regardless of platform.",
+      "revId": "7101bb2f18c559aa1244545691ae1e86ca52a47f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "21735aef_e1f50b29",
+        "filename": "src/tests/gl_tests/BufferDataTest.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 277,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2021-12-13T16:56:08Z",
+      "side": 1,
+      "message": "Suggest: `constexpr std::array\u003cGLfloat, 4\u003e kRed \u003d ...` and `... kGreen ...`\n\nAlternatively, just inline these in `glUniform4f`.",
+      "revId": "7101bb2f18c559aa1244545691ae1e86ca52a47f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "f0ba4afa_45dcae3d",
+        "filename": "src/tests/gl_tests/BufferDataTest.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 279,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2021-12-13T16:56:08Z",
+      "side": 1,
+      "message": "Suggest: indexData.",
+      "range": {
+        "startLine": 279,
+        "startChar": 11,
+        "endLine": 279,
+        "endChar": 16
+      },
+      "revId": "7101bb2f18c559aa1244545691ae1e86ca52a47f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "7645ecc7_b0d23067",
+        "filename": "src/tests/gl_tests/BufferDataTest.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 281,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2021-12-13T16:56:08Z",
+      "side": 1,
+      "message": "Suggest: vertexData",
+      "range": {
+        "startLine": 281,
+        "startChar": 10,
+        "endLine": 281,
+        "endChar": 15
+      },
+      "revId": "7101bb2f18c559aa1244545691ae1e86ca52a47f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "3e8da18b_4ec53e91",
+        "filename": "src/tests/gl_tests/BufferDataTest.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 284,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2021-12-13T16:56:08Z",
+      "side": 1,
+      "message": "Please use RAII types:\n\n    GLBuffer indexBuffer;",
+      "range": {
+        "startLine": 283,
+        "startChar": 0,
+        "endLine": 284,
+        "endChar": 34
+      },
+      "revId": "7101bb2f18c559aa1244545691ae1e86ca52a47f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "863bf1f6_ea6f7982",
+        "filename": "src/tests/gl_tests/BufferDataTest.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 319,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2021-12-13T16:56:08Z",
+      "side": 1,
+      "message": "getWindowHeight() - 1.\n\nAlso, please test at least a point in the red triangle too.",
+      "range": {
+        "startLine": 319,
+        "startChar": 29,
+        "endLine": 319,
+        "endChar": 31
+      },
+      "revId": "7101bb2f18c559aa1244545691ae1e86ca52a47f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "df02d32c_95d535eb",
+        "filename": "util/EGLWindow.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 260,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2021-12-13T16:56:08Z",
+      "side": 1,
+      "message": "Please add the `else if (... \u003d\u003d EGL_FALSE)` case too like the other ones for consistency. We could argue if the else case is useful, but that would be a cleanup that affects all the other ifs too.",
       "revId": "7101bb2f18c559aa1244545691ae1e86ca52a47f",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
