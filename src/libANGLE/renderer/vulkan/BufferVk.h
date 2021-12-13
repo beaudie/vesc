@@ -143,8 +143,6 @@ class BufferVk : public BufferImpl
     angle::Result initializeShadowBuffer(ContextVk *contextVk,
                                          gl::BufferBinding target,
                                          size_t size);
-    void initializeHostVisibleBufferPool(ContextVk *contextVk);
-
     ANGLE_INLINE uint8_t *getShadowBuffer(size_t offset)
     {
         return (mShadowBuffer.getCurrentBuffer() + offset);
@@ -232,9 +230,9 @@ class BufferVk : public BufferImpl
     // Memory/Usage property that will be used for memory allocation.
     VkMemoryPropertyFlags mMemoryPropertyFlags;
 
-    // DynamicBuffer to aid map operations of buffers when they are not host visible.
-    vk::DynamicBuffer mHostVisibleBufferPool;
-    VkDeviceSize mHostVisibleBufferOffset;
+    // The staging buffer to aid map operations. This is used when buffers are not host visible or
+    // for performance optimization when only a smaller range of buffer is mapped.
+    std::unique_ptr<vk::BufferHelper> mStagingBuffer;
 
     // For GPU-read only buffers glMap* latency is reduced by maintaining a copy
     // of the buffer which is writeable only by the CPU. The contents are updated on all
