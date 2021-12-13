@@ -47,6 +47,54 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "a62ccf4e_57d83e9c",
+        "filename": "extensions/EGL_ANGLE_vulkan_image.txt",
+        "patchSetId": 13
+      },
+      "lineNbr": 84,
+      "author": {
+        "id": 1000050
+      },
+      "writtenOn": "2021-12-13T23:39:53Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "26812f2c_47ef5c98",
+      "range": {
+        "startLine": 84,
+        "startChar": 68,
+        "endLine": 84,
+        "endChar": 69
+      },
+      "revId": "87fa0999b6488a87666588c3c8c249f57e97ed44",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "12f65b1a_514a3506",
+        "filename": "extensions/EGL_ANGLE_vulkan_image.txt",
+        "patchSetId": 13
+      },
+      "lineNbr": 84,
+      "author": {
+        "id": 1000050
+      },
+      "writtenOn": "2021-12-13T23:39:53Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "c9c9adad_7bf4efc1",
+      "range": {
+        "startLine": 84,
+        "startChar": 41,
+        "endLine": 84,
+        "endChar": 46
+      },
+      "revId": "87fa0999b6488a87666588c3c8c249f57e97ed44",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "b1eec1b7_e75e113d",
@@ -60,6 +108,24 @@
       "writtenOn": "2021-12-13T20:44:06Z",
       "side": 1,
       "message": "Somewhere we should probably also validate that sType is correct.",
+      "revId": "87fa0999b6488a87666588c3c8c249f57e97ed44",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "16244692_e99e9cb4",
+        "filename": "src/libANGLE/validationEGL.cpp",
+        "patchSetId": 13
+      },
+      "lineNbr": 3757,
+      "author": {
+        "id": 1000050
+      },
+      "writtenOn": "2021-12-13T23:39:53Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "b1eec1b7_e75e113d",
       "revId": "87fa0999b6488a87666588c3c8c249f57e97ed44",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
