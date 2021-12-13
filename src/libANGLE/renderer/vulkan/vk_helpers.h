@@ -859,6 +859,9 @@ class BufferHelper : public ReadWriteResource
                                     size_t size,
                                     size_t alignment);
 
+    // Initialize a host visible buffer with alignment good for copyBuffer .
+    angle::Result initForCopyBuffer(ContextVk *contextVk, size_t size, bool coherent);
+
     void destroy(RendererVk *renderer);
     void release(RendererVk *renderer);
 
@@ -925,6 +928,7 @@ class BufferHelper : public ReadWriteResource
                             PipelineBarrier *barrier);
 
   private:
+    void initializeBarrierTracker(Context *context);
     angle::Result initializeNonZeroMemory(Context *context,
                                           VkBufferUsageFlags usage,
                                           VkDeviceSize size);
