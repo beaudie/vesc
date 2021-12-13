@@ -2922,6 +2922,8 @@ void PipelineHelper::addTransition(GraphicsPipelineTransitionBits bits,
 TextureDescriptorDesc::TextureDescriptorDesc() : mMaxIndex(0)
 {
     mSerials.fill({kInvalidImageOrBufferViewSubresourceSerial, kInvalidSamplerSerial});
+    clearAdditionalKey();
+    mCurrentAdditionalKeyIndex = 0;
 }
 
 TextureDescriptorDesc::~TextureDescriptorDesc()                                  = default;
@@ -2940,6 +2942,14 @@ void TextureDescriptorDesc::update(size_t index,
 
     mSerials[index].view    = viewSerial;
     mSerials[index].sampler = samplerSerial;
+    // Every time we update an element in the TexUnitSerials array, we append the first byte of this
+    // element into the additional key, if there is still space left in additional key (tracked by
+    // mCurrentAdditionalKeyIndex)
+    if (mCurrentAdditionalKeyIndex < ADDITIONAL_KEY_SIZE)
+    {
+        copyDataToAdditionalKey(mCurrentAdditionalKeyIndex, &mSerials[index]);
+        mCurrentAdditionalKeyIndex++;
+    }
 }
 
 size_t TextureDescriptorDesc::hash() const
@@ -2951,6 +2961,8 @@ void TextureDescriptorDesc::reset()
 {
     memset(mSerials.data(), 0, sizeof(mSerials[0]) * mMaxIndex);
     mMaxIndex = 0;
+    clearAdditionalKey();
+    mCurrentAdditionalKeyIndex = 0;
 }
 
 bool TextureDescriptorDesc::operator==(const TextureDescriptorDesc &other) const
@@ -2960,8 +2972,21 @@ bool TextureDescriptorDesc::operator==(const TextureDescriptorDesc &other) const
 
     if (mMaxIndex == 0)
         return true;
-
+    if (memcmp(mAdditionalKey, other.mAdditionalKey, ADDITIONAL_KEY_SIZE) != 0)
+    {
+        return false;
+    }
     return memcmp(mSerials.data(), other.mSerials.data(), sizeof(TexUnitSerials) * mMaxIndex) == 0;
+}
+
+void TextureDescriptorDesc::copyDataToAdditionalKey(uint32_t index, TexUnitSerials *srcAddr)
+{
+    memcpy(&mAdditionalKey[index], srcAddr, 1);
+}
+
+void TextureDescriptorDesc::clearAdditionalKey()
+{
+    memset(mAdditionalKey, 0, ADDITIONAL_KEY_SIZE);
 }
 
 // UniformsAndXfbDescriptorDesc implementation.

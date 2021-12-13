@@ -1112,15 +1112,23 @@ class TextureDescriptorDesc
 
   private:
     uint32_t mMaxIndex;
+    static const uint32_t ADDITIONAL_KEY_SIZE = 8;
+    char mAdditionalKey[ADDITIONAL_KEY_SIZE];
+    uint32_t mCurrentAdditionalKeyIndex;
 
     ANGLE_ENABLE_STRUCT_PADDING_WARNINGS
     struct TexUnitSerials
     {
-        ImageOrBufferViewSubresourceSerial view;
-        SamplerSerial sampler;
+        ImageOrBufferViewSubresourceSerial
+            view;  // ImageOrBufferViewSerial viewSerial --> uint32_t serial + uint32_t kInvalid |
+                   // ImageSubresourceRange subresource --> uint32_t * 6
+        SamplerSerial sampler;  // uint32_t serial + uint32_t kInvalid
     };
     gl::ActiveTextureArray<TexUnitSerials> mSerials;
     ANGLE_DISABLE_STRUCT_PADDING_WARNINGS
+
+    void copyDataToAdditionalKey(uint32_t index, TexUnitSerials *srcAddr);
+    void clearAdditionalKey();
 };
 
 class UniformsAndXfbDescriptorDesc
