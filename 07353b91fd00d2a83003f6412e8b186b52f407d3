@@ -1,6 +1,23 @@
 {
   "comments": [
     {
+      "unresolved": true,
+      "key": {
+        "uuid": "47d9d983_1e68fcfd",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2021-12-13T20:56:24Z",
+      "side": 1,
+      "message": "Could you make the first line a bit more precise, and expand upon it in the second paragraph? For example:\n\n\n\"\"\"\nMetal: add ANGLE_metal_create_context_ownership_identity.\n\nThis Metal-specific EGL extension allows a given context and the GPU resources it allocates to be associated with a particular task ID on the system, for system-level bookkeeping purposes.\n\"\"\"",
+      "revId": "07353b91fd00d2a83003f6412e8b186b52f407d3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": false,
       "key": {
         "uuid": "0bc83a23_88d7f263",
@@ -31,6 +48,57 @@
       "writtenOn": "2021-12-13T20:34:56Z",
       "side": 1,
       "message": "\u003e Patch Set 1:\n\u003e \n\u003e This change is ready for review.\n\n",
+      "revId": "07353b91fd00d2a83003f6412e8b186b52f407d3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "d0bb00d0_fa293241",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2021-12-13T20:56:24Z",
+      "side": 1,
+      "message": "Let me send this for a dry run for you.\n",
+      "revId": "07353b91fd00d2a83003f6412e8b186b52f407d3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ac07e31d_c162bf03",
+        "filename": "src/libANGLE/renderer/metal/mtl_context_device.mm",
+        "patchSetId": 1
+      },
+      "lineNbr": 31,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2021-12-13T20:56:24Z",
+      "side": 1,
+      "message": "Is it worth surfacing these errors in a programmatically queryable way, like as an EGL error?\n\nWould it be helpful to factor this initialization into a method with an error return code so callers can see the failures?",
+      "revId": "07353b91fd00d2a83003f6412e8b186b52f407d3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "72cacd68_550c45c1",
+        "filename": "src/libANGLE/renderer/metal/mtl_context_device.mm",
+        "patchSetId": 1
+      },
+      "lineNbr": 39,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2021-12-13T20:56:24Z",
+      "side": 1,
+      "message": "Similarly - worth factoring into some sort of destroy() method with a return value?",
       "revId": "07353b91fd00d2a83003f6412e8b186b52f407d3",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
