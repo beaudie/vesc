@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "0bc83a23_88d7f263",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2021-12-13T20:22:10Z",
+      "side": 1,
+      "message": "Note to self: Kyle\u0027s copy of this was https://chromium-review.googlesource.com/c/angle/angle/+/3331408 .\n",
+      "revId": "07353b91fd00d2a83003f6412e8b186b52f407d3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
