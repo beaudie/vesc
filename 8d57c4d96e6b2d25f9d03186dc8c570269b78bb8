@@ -134,6 +134,24 @@
       "parentUuid": "2794fcc1_785b35d7",
       "revId": "8d57c4d96e6b2d25f9d03186dc8c570269b78bb8",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "8fefabc7_fdd636b7",
+        "filename": "src/libANGLE/renderer/metal/ShaderMtl.mm",
+        "patchSetId": 1
+      },
+      "lineNbr": 159,
+      "author": {
+        "id": 1115588
+      },
+      "writtenOn": "2021-12-13T18:36:00Z",
+      "side": 1,
+      "message": "I wrote a test that it\u0027s getting the translated shader. Not sure I should check it in since all it can do is check it returns a non-empty string but I did verify it is currently returning the translated shader so I think this code is fine.",
+      "parentUuid": "10ed2124_fb61ab8e",
+      "revId": "8d57c4d96e6b2d25f9d03186dc8c570269b78bb8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
