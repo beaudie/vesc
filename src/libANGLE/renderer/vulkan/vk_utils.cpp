@@ -1717,19 +1717,19 @@ void BufferBlock::destroy(RendererVk *renderer)
     mAllocation.destroy(renderer->getAllocator());
 }
 
-angle::Result BufferBlock::init(ContextVk *contextVk,
-                                Buffer &buffer,
-                                vma::VirtualBlockCreateFlags flags,
-                                Allocation &allocation,
-                                VkMemoryPropertyFlags memoryPropertyFlags,
-                                VkDeviceSize size)
+VkResult BufferBlock::init(ContextVk *contextVk,
+                           Buffer &buffer,
+                           vma::VirtualBlockCreateFlags flags,
+                           Allocation &allocation,
+                           VkMemoryPropertyFlags memoryPropertyFlags,
+                           VkDeviceSize size)
 {
     RendererVk *renderer = contextVk->getRenderer();
     ASSERT(!mVirtualBlock.valid());
     ASSERT(!mBuffer.valid());
     ASSERT(!mAllocation.valid());
 
-    ANGLE_VK_TRY(contextVk, mVirtualBlock.init(renderer->getDevice(), flags, size));
+    VK_RESULT_TRY(mVirtualBlock.init(renderer->getDevice(), flags, size));
 
     mBuffer              = std::move(buffer);
     mAllocation          = std::move(allocation);
@@ -1738,7 +1738,7 @@ angle::Result BufferBlock::init(ContextVk *contextVk,
     mMappedMemory        = nullptr;
     mSerial              = renderer->getResourceSerialFactory().generateBufferSerial();
 
-    return angle::Result::Continue;
+    return VK_SUCCESS;
 }
 
 void BufferBlock::initWithoutVirtualBlock(ContextVk *contextVk,
@@ -1805,12 +1805,10 @@ bool BufferBlock::isMapped() const
     return mMappedMemory != nullptr;
 }
 
-angle::Result BufferBlock::map(ContextVk *contextVk)
+VkResult BufferBlock::map(ContextVk *contextVk)
 {
     ASSERT(mMappedMemory == nullptr);
-    ANGLE_VK_TRY(contextVk,
-                 mAllocation.map(contextVk->getRenderer()->getAllocator(), &mMappedMemory));
-    return angle::Result::Continue;
+    return mAllocation.map(contextVk->getRenderer()->getAllocator(), &mMappedMemory);
 }
 
 void BufferBlock::unmap(const Allocator &allocator)

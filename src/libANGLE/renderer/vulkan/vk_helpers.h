@@ -960,10 +960,11 @@ class BufferPool : angle::NonCopyable
                        uint32_t memoryTypeIndex,
                        VkMemoryPropertyFlags memoryProperty);
 
-    angle::Result allocateBuffer(ContextVk *contextVk,
-                                 VkDeviceSize sizeInBytes,
-                                 VkDeviceSize alignment,
-                                 BufferSubAllocation *suballocation);
+    // Returns true when successfully allocated.
+    bool allocateBuffer(ContextVk *contextVk,
+                        VkDeviceSize sizeInBytes,
+                        VkDeviceSize alignment,
+                        BufferSubAllocation *suballocation);
 
     // This frees resources immediately.
     void destroy(RendererVk *renderer);
@@ -973,7 +974,7 @@ class BufferPool : angle::NonCopyable
     bool valid() const { return mSize != 0; }
 
   private:
-    angle::Result allocateNewBuffer(ContextVk *contextVk, VkDeviceSize sizeInBytes);
+    bool allocateNewBuffer(ContextVk *contextVk, VkDeviceSize sizeInBytes);
 
     vma::VirtualBlockCreateFlags mVirtualBlockCreateFlags;
     VkBufferUsageFlags mUsage;

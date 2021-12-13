@@ -922,12 +922,12 @@ class BufferBlock final : angle::NonCopyable
     ~BufferBlock();
 
     void destroy(RendererVk *renderer);
-    angle::Result init(ContextVk *contextVk,
-                       Buffer &buffer,
-                       vma::VirtualBlockCreateFlags flags,
-                       Allocation &allocation,
-                       VkMemoryPropertyFlags memoryPropertyFlags,
-                       VkDeviceSize size);
+    VkResult init(ContextVk *contextVk,
+                  Buffer &buffer,
+                  vma::VirtualBlockCreateFlags flags,
+                  Allocation &allocation,
+                  VkMemoryPropertyFlags memoryPropertyFlags,
+                  VkDeviceSize size);
     void initWithoutVirtualBlock(ContextVk *contextVk,
                                  Buffer &buffer,
                                  Allocation &allocation,
@@ -951,7 +951,7 @@ class BufferBlock final : angle::NonCopyable
     bool isHostVisible() const;
     bool isCoherent() const;
     bool isMapped() const;
-    angle::Result map(ContextVk *contextVk);
+    VkResult map(ContextVk *contextVk);
     void unmap(const Allocator &allocator);
     uint8_t *getMappedMemory() const;
 
@@ -1305,6 +1305,16 @@ enum class RenderPassClosureReason
 };
 
 }  // namespace rx
+
+#define VK_RESULT_TRY(command)                             \
+    do                                                     \
+    {                                                      \
+        auto ANGLE_LOCAL_VAR = command;                    \
+        if (ANGLE_UNLIKELY(ANGLE_LOCAL_VAR != VK_SUCCESS)) \
+        {                                                  \
+            return ANGLE_LOCAL_VAR;                        \
+        }                                                  \
+    } while (0)
 
 #define ANGLE_VK_TRY(context, command)                                                   \
     do                                                                                   \

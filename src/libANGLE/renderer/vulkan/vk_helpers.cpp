@@ -2665,7 +2665,7 @@ void BufferPool::pruneEmptyBuffers(RendererVk *renderer)
     }
 }
 
-angle::Result BufferPool::allocateNewBuffer(ContextVk *contextVk, VkDeviceSize sizeInBytes)
+bool BufferPool::allocateNewBuffer(ContextVk *contextVk, VkDeviceSize sizeInBytes)
 {
     RendererVk *renderer                         = contextVk->getRenderer();
     BufferMemoryAllocator &bufferMemoryAllocator = renderer->getBufferMemoryAllocator();
@@ -2673,7 +2673,10 @@ angle::Result BufferPool::allocateNewBuffer(ContextVk *contextVk, VkDeviceSize s
         renderer->getMemoryProperties().getHeapSizeForMemoryType(mMemoryTypeIndex);
 
     // First ensure we are not exceeding the heapSize to avoid the validation error.
-    ANGLE_VK_CHECK(contextVk, sizeInBytes <= heapSize, VK_ERROR_OUT_OF_DEVICE_MEMORY);
+    if (sizeInBytes > heapSize)
+    {
+        return false;
+    }
 
     // Double the size until meet the requirement. This also helps reducing the fragmentation. Since
     // this is global pool, we have less worry about memory waste.
@@ -2700,32 +2703,38 @@ angle::Result BufferPool::allocateNewBuffer(ContextVk *contextVk, VkDeviceSize s
     DeviceScoped<Buffer> buffer(renderer->getDevice());
     AllocatorScoped<Allocation> allocation(renderer->getAllocator());
     uint32_t memoryTypeIndex = kInvalidMemoryTypeIndex;
-    ANGLE_VK_TRY(contextVk, bufferMemoryAllocator.createBuffer(
-                                renderer, createInfo, memoryPropertyFlags, 0,
-                                renderer->getFeatures().persistentlyMappedBuffers.enabled,
-                                &memoryTypeIndex, &buffer.get(), &allocation.get()));
+    if (bufferMemoryAllocator.createBuffer(
+            renderer, createInfo, memoryPropertyFlags, 0,
+            renderer->getFeatures().persistentlyMappedBuffers.enabled, &memoryTypeIndex,
+            &buffer.get(), &allocation.get()) != VK_SUCCESS)
+    {
+        return false;
+    }
     ASSERT(memoryTypeIndex == mMemoryTypeIndex);
 
     // Allocate bufferBlock
     std::unique_ptr<BufferBlock> block = std::make_unique<BufferBlock>();
-    ANGLE_TRY(block->init(contextVk, buffer.get(), mVirtualBlockCreateFlags, allocation.get(),
-                          memoryPropertyFlags, mSize));
-
-    if (mHostVisible)
+    if (block->init(contextVk, buffer.get(), mVirtualBlockCreateFlags, allocation.get(),
+                    memoryPropertyFlags, mSize) != VK_SUCCESS)
     {
-        ANGLE_TRY(block->map(contextVk));
+        return false;
+    }
+
+    if (mHostVisible && block->map(contextVk) != VK_SUCCESS)
+    {
+        return false;
     }
 
     // Append the bufferBlock into the pool
     mBufferBlocks.push_back(std::move(block));
 
-    return angle::Result::Continue;
+    return true;
 }
 
-angle::Result BufferPool::allocateBuffer(ContextVk *contextVk,
-                                         VkDeviceSize sizeInBytes,
-                                         VkDeviceSize alignment,
-                                         BufferSubAllocation *suballocation)
+bool BufferPool::allocateBuffer(ContextVk *contextVk,
+                                VkDeviceSize sizeInBytes,
+                                VkDeviceSize alignment,
+                                BufferSubAllocation *suballocation)
 {
     ASSERT(alignment);
     VkDeviceSize offset;
@@ -2746,7 +2755,7 @@ angle::Result BufferPool::allocateBuffer(ContextVk *contextVk,
         if (block->allocate(sizeInBytes, alignment, &offset))
         {
             suballocation->init(contextVk->getDevice(), block.get(), offset, sizeInBytes);
-            return angle::Result::Continue;
+            return true;
         }
         ++iter;
     }
@@ -2758,11 +2767,11 @@ angle::Result BufferPool::allocateBuffer(ContextVk *contextVk,
     if (block->allocate(sizeInBytes, alignment, &offset))
     {
         suballocation->init(contextVk->getDevice(), block.get(), offset, sizeInBytes);
-        return angle::Result::Continue;
+        return true;
     }
 
     // Failed to allocate from this pool
-    return angle::Result::Stop;
+    return false;
 }
 
 void BufferPool::destroy(RendererVk *renderer)
@@ -3964,7 +3973,8 @@ angle::Result BufferHelper::initSubAllocation(ContextVk *contextVk,
     }
 
     vk::BufferPool *pool = contextVk->getDefaultBufferPool(memoryTypeIndex);
-    ANGLE_TRY(pool->allocateBuffer(contextVk, size, alignment, &mSubAllocation));
+    ANGLE_VK_CHECK(contextVk, pool->allocateBuffer(contextVk, size, alignment, &mSubAllocation),
+                   VK_ERROR_OUT_OF_DEVICE_MEMORY);
 
     mCurrentQueueFamilyIndex = renderer->getQueueFamilyIndex();
 
@@ -4085,7 +4095,7 @@ angle::Result BufferHelper::map(ContextVk *contextVk, uint8_t **ptrOut)
     {
         if (!mSubAllocation.isMapped())
         {
-            ANGLE_TRY(mSubAllocation.getBlock()->map(contextVk));
+            ANGLE_VK_TRY(contextVk, mSubAllocation.getBlock()->map(contextVk));
         }
         *ptrOut = mSubAllocation.getMappedMemory();
     }
