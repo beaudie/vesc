@@ -16,6 +16,24 @@
       "message": "I think what I originally described for validation is wrong. We should allow access to this function whether it\u0027s exposed via the extension, or it\u0027s just core in ES3.1 (double check that)\n\nBut we need to validate the parameter GL_FRAMEBUFFER_FLIP_Y_MESA, which is only exposed with the extension.\n\nIn fact, this could potentially be your issue, since there need to be changes to ValidateFramebufferParameteri to allow the call through with the Flip Y parameter.",
       "revId": "6e99f295efaf8fc8e03b23cc682d613388bfe6d6",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "a154eba0_de1a0628",
+        "filename": "src/libANGLE/validationESEXT.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 2616,
+      "author": {
+        "id": 1228974
+      },
+      "writtenOn": "2021-12-13T14:51:33Z",
+      "side": 1,
+      "message": "Thanks Jonah. You\u0027re right. It\u0027s the validation problem. It works as intended now. I\u0027ll update the patch asap and send it for review.",
+      "parentUuid": "16d6a252_a1f07b40",
+      "revId": "6e99f295efaf8fc8e03b23cc682d613388bfe6d6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
