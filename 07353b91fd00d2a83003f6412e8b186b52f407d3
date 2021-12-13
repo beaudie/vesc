@@ -119,6 +119,24 @@
       "message": "Similarly - worth factoring into some sort of destroy() method with a return value?",
       "revId": "07353b91fd00d2a83003f6412e8b186b52f407d3",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "1e1656a9_3352fd53",
+        "filename": "src/libANGLE/renderer/metal/mtl_context_device.mm",
+        "patchSetId": 1
+      },
+      "lineNbr": 39,
+      "author": {
+        "id": 1529502
+      },
+      "writtenOn": "2021-12-13T21:12:17Z",
+      "side": 1,
+      "message": "Same justification as above, I\u0027m happy to add one, but I don\u0027t see much benefit to it at this point.",
+      "parentUuid": "72cacd68_550c45c1",
+      "revId": "07353b91fd00d2a83003f6412e8b186b52f407d3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
