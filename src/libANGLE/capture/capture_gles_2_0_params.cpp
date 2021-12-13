@@ -697,6 +697,7 @@ void CaptureTexImage2D_pixels(const State &glState,
     GLuint srcRowPitch = 0;
     (void)internalFormatInfo.computeRowPitch(type, width, unpack.alignment, unpack.rowLength,
                                              &srcRowPitch);
+
     GLuint srcDepthPitch = 0;
     (void)internalFormatInfo.computeDepthPitch(height, unpack.imageHeight, srcRowPitch,
                                                &srcDepthPitch);
