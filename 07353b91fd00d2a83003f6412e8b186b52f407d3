@@ -88,6 +88,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "738a09f1_a6493e7f",
+        "filename": "src/libANGLE/renderer/metal/mtl_context_device.mm",
+        "patchSetId": 1
+      },
+      "lineNbr": 31,
+      "author": {
+        "id": 1529502
+      },
+      "writtenOn": "2021-12-13T21:08:24Z",
+      "side": 1,
+      "message": "I think the possibility for error here is almost zero, I don\u0027t expect this to ever be hit. The ports are already verified before being passed off to ANGLE, and are unmodified by ANGLE.",
+      "parentUuid": "ac07e31d_c162bf03",
+      "revId": "07353b91fd00d2a83003f6412e8b186b52f407d3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "72cacd68_550c45c1",
         "filename": "src/libANGLE/renderer/metal/mtl_context_device.mm",
         "patchSetId": 1
