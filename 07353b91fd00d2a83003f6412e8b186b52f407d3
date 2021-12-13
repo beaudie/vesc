@@ -69,6 +69,23 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "5bd10868_14121507",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2021-12-13T21:27:06Z",
+      "side": 1,
+      "message": "Please see the failure logs (let me know if you have any trouble doing so) and revise the CL - you may need to gclient sync and rerun run_code_generation.py, then re-upload. Thanks.\n",
+      "revId": "07353b91fd00d2a83003f6412e8b186b52f407d3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "ac07e31d_c162bf03",
@@ -104,6 +121,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "4b7506af_6060dabd",
+        "filename": "src/libANGLE/renderer/metal/mtl_context_device.mm",
+        "patchSetId": 1
+      },
+      "lineNbr": 31,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2021-12-13T21:27:06Z",
+      "side": 1,
+      "message": "OK, that\u0027s fine.",
+      "parentUuid": "738a09f1_a6493e7f",
+      "revId": "07353b91fd00d2a83003f6412e8b186b52f407d3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "72cacd68_550c45c1",
@@ -135,6 +170,24 @@
       "side": 1,
       "message": "Same justification as above, I\u0027m happy to add one, but I don\u0027t see much benefit to it at this point.",
       "parentUuid": "72cacd68_550c45c1",
+      "revId": "07353b91fd00d2a83003f6412e8b186b52f407d3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "9bdd6dc0_9071223a",
+        "filename": "src/libANGLE/renderer/metal/mtl_context_device.mm",
+        "patchSetId": 1
+      },
+      "lineNbr": 39,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2021-12-13T21:27:06Z",
+      "side": 1,
+      "message": "That\u0027s fine, thanks for thinking about it.",
+      "parentUuid": "1e1656a9_3352fd53",
       "revId": "07353b91fd00d2a83003f6412e8b186b52f407d3",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
