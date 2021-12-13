@@ -1,0 +1,67 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "26812f2c_47ef5c98",
+        "filename": "extensions/EGL_ANGLE_vulkan_image.txt",
+        "patchSetId": 13
+      },
+      "lineNbr": 84,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2021-12-13T20:44:06Z",
+      "side": 1,
+      "message": "nit: \"a valid VkImageCreateInfo\" (adding \"valid\"). Then you can generate errors for example if sType is wrong, or if the pNext chain has invalid sTypes).",
+      "range": {
+        "startLine": 84,
+        "startChar": 68,
+        "endLine": 84,
+        "endChar": 69
+      },
+      "revId": "87fa0999b6488a87666588c3c8c249f57e97ed44",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "c9c9adad_7bf4efc1",
+        "filename": "extensions/EGL_ANGLE_vulkan_image.txt",
+        "patchSetId": 13
+      },
+      "lineNbr": 84,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2021-12-13T20:44:06Z",
+      "side": 1,
+      "message": "typo",
+      "range": {
+        "startLine": 84,
+        "startChar": 41,
+        "endLine": 84,
+        "endChar": 46
+      },
+      "revId": "87fa0999b6488a87666588c3c8c249f57e97ed44",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b1eec1b7_e75e113d",
+        "filename": "src/libANGLE/validationEGL.cpp",
+        "patchSetId": 13
+      },
+      "lineNbr": 3757,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2021-12-13T20:44:06Z",
+      "side": 1,
+      "message": "Somewhere we should probably also validate that sType is correct.",
+      "revId": "87fa0999b6488a87666588c3c8c249f57e97ed44",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
