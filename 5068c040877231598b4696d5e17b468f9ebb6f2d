@@ -16,6 +16,24 @@
       "message": "The change to this function signature\u0027s a little surprising - was it intentional? I don\u0027t see changes to the implementation.",
       "revId": "5068c040877231598b4696d5e17b468f9ebb6f2d",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "a31e8f2d_5ac1e92d",
+        "filename": "src/libANGLE/renderer/metal/mtl_utils.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 114,
+      "author": {
+        "id": 1529502
+      },
+      "writtenOn": "2021-12-13T21:06:53Z",
+      "side": 0,
+      "message": "This slipped through when reconciling the webkit changes, I\u0027ll remove these.",
+      "parentUuid": "3d3033e0_0d03d607",
+      "revId": "5068c040877231598b4696d5e17b468f9ebb6f2d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
