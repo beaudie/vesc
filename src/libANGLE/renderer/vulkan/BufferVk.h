@@ -47,6 +47,12 @@ enum class BufferUpdateType
     ContentsUpdate,
 };
 
+enum class StagingBufferType
+{
+    NonCoherent,
+    Coherent,
+};
+
 VkBufferUsageFlags GetDefaultBufferUsageFlags(RendererVk *renderer);
 size_t GetDefaultBufferAlignment(RendererVk *renderer);
 
@@ -143,8 +149,6 @@ class BufferVk : public BufferImpl
     angle::Result initializeShadowBuffer(ContextVk *contextVk,
                                          gl::BufferBinding target,
                                          size_t size);
-    void initializeHostVisibleBufferPool(ContextVk *contextVk);
-
     ANGLE_INLINE uint8_t *getShadowBuffer(size_t offset)
     {
         return (mShadowBuffer.getCurrentBuffer() + offset);
@@ -168,16 +172,11 @@ class BufferVk : public BufferImpl
                                const uint8_t *data,
                                size_t size,
                                size_t offset);
-    angle::Result allocMappedStagingBuffer(ContextVk *contextVk,
-                                           size_t size,
-                                           vk::DynamicBuffer **stagingBuffer,
-                                           VkDeviceSize *stagingBufferOffset,
-                                           uint8_t **mapPtr);
-    angle::Result flushMappedStagingBuffer(ContextVk *contextVk,
-                                           vk::DynamicBuffer *stagingBuffer,
-                                           VkDeviceSize stagingBufferOffset,
-                                           size_t size,
-                                           size_t offset);
+    angle::Result allocStagingBuffer(ContextVk *contextVk,
+                                     StagingBufferType stagingBufferType,
+                                     VkDeviceSize size,
+                                     uint8_t **mapPtr);
+    angle::Result flushStagingBuffer(ContextVk *contextVk, VkDeviceSize offset, VkDeviceSize size);
     angle::Result acquireAndUpdate(ContextVk *contextVk,
                                    const uint8_t *data,
                                    size_t updateSize,
@@ -194,9 +193,6 @@ class BufferVk : public BufferImpl
                                              VkDeviceSize offset,
                                              VkDeviceSize size,
                                              uint8_t **mapPtr);
-    angle::Result handleDeviceLocalBufferUnmap(ContextVk *contextVk,
-                                               VkDeviceSize offset,
-                                               VkDeviceSize size);
     angle::Result setDataImpl(ContextVk *contextVk,
                               const uint8_t *data,
                               size_t size,
@@ -232,9 +228,9 @@ class BufferVk : public BufferImpl
     // Memory/Usage property that will be used for memory allocation.
     VkMemoryPropertyFlags mMemoryPropertyFlags;
 
-    // DynamicBuffer to aid map operations of buffers when they are not host visible.
-    vk::DynamicBuffer mHostVisibleBufferPool;
-    VkDeviceSize mHostVisibleBufferOffset;
+    // The staging buffer to aid map operations. This is used when buffers are not host visible or
+    // for performance optimization when only a smaller range of buffer is mapped.
+    std::unique_ptr<vk::BufferHelper> mStagingBuffer;
 
     // For GPU-read only buffers glMap* latency is reduced by maintaining a copy
     // of the buffer which is writeable only by the CPU. The contents are updated on all
@@ -242,11 +238,6 @@ class BufferVk : public BufferImpl
     // operation by elimnating the need to wait on any recorded or in-flight GPU commands.
     // We use DynamicShadowBuffer class to encapsulate all the bookeeping logic.
     vk::DynamicShadowBuffer mShadowBuffer;
-
-    // A buffer pool to service GL_MAP_INVALIDATE_RANGE_BIT -style uploads.
-    vk::DynamicBuffer *mMapInvalidateRangeStagingBuffer;
-    VkDeviceSize mMapInvalidateRangeStagingBufferOffset;
-    uint8_t *mMapInvalidateRangeMappedPtr;
 
     // A cache of converted vertex data.
     std::vector<VertexConversionBuffer> mVertexConversionBuffers;
