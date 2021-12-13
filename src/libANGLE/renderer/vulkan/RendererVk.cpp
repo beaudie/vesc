@@ -1465,6 +1465,20 @@ angle::Result RendererVk::initialize(DisplayVk *displayVk,
     // Create buffer memory allocator
     ANGLE_VK_TRY(displayVk, mBufferMemoryAllocator.initialize(this, preferredLargeHeapBlockSize));
 
+    // Must be called after mBufferMemoryAllocator has been initialized.
+    mNonCoherentStagingBufferMemoryTypeIndex =
+        vk::StagingBuffer::getMemoryTypeIndex(this, VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT);
+    mCoherentStagingBufferMemoryTypeIndex = vk::StagingBuffer::getMemoryTypeIndex(
+        this, VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT | VK_MEMORY_PROPERTY_HOST_COHERENT_BIT);
+    mStagingBufferAlignment =
+        static_cast<size_t>(mPhysicalDeviceProperties.limits.minMemoryMapAlignment);
+    ASSERT(gl::isPow2(mPhysicalDeviceProperties.limits.nonCoherentAtomSize));
+    ASSERT(gl::isPow2(mPhysicalDeviceProperties.limits.optimalBufferCopyOffsetAlignment));
+    mStagingBufferAlignment = std::max(
+        mStagingBufferAlignment, mPhysicalDeviceProperties.limits.optimalBufferCopyOffsetAlignment);
+    mStagingBufferAlignment =
+        std::max(mStagingBufferAlignment, mPhysicalDeviceProperties.limits.nonCoherentAtomSize);
+
     {
         ANGLE_TRACE_EVENT0("gpu.angle,startup", "GlslangWarmup");
         sh::InitializeGlslang();
