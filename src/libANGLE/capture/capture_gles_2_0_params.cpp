@@ -691,6 +691,12 @@ void CaptureTexImage2D_pixels(const State &glState,
         return;
     }
 
+    if (type == GL_HALF_FLOAT &&
+        (format == GL_ALPHA || format == GL_LUMINANCE || format == GL_LUMINANCE_ALPHA))
+    {
+        type = GL_HALF_FLOAT_OES;
+    }
+
     const gl::InternalFormat &internalFormatInfo = gl::GetInternalFormatInfo(format, type);
     const gl::PixelUnpackState &unpack           = glState.getUnpackState();
 
