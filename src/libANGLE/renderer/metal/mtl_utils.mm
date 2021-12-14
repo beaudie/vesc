@@ -1228,10 +1228,7 @@ bool DeviceHasMaximumRenderTargetSize(id<MTLDevice> device)
 
 bool SupportsAppleGPUFamily(id<MTLDevice> device, uint8_t appleFamily)
 {
-#if (!TARGET_OS_IOS && !TARGET_OS_TV) || TARGET_OS_MACCATALYST
-    return false;
-#else
-#    if (__IPHONE_OS_VERSION_MAX_ALLOWED >= 130000) || (__TV_OS_VERSION_MAX_ALLOWED >= 130000)
+#    if (__MAC_OS_X_VERSION_MAX_ALLOWED >= 101500 || __IPHONE_OS_VERSION_MAX_ALLOWED >= 130000) || (__TV_OS_VERSION_MAX_ALLOWED >= 130000)
     // If device supports [MTLDevice supportsFamily:], then use it.
     if (ANGLE_APPLE_AVAILABLE_I(13.0))
     {
@@ -1265,6 +1262,9 @@ bool SupportsAppleGPUFamily(id<MTLDevice> device, uint8_t appleFamily)
     }  // Metal 2.2
 #    endif  // __IPHONE_OS_VERSION_MAX_ALLOWED
 
+#if (!TARGET_OS_IOS && !TARGET_OS_TV) || TARGET_OS_MACCATALYST
+    return false;
+#else
     // If device doesn't support [MTLDevice supportsFamily:], then use
     // [MTLDevice supportsFeatureSet:].
     MTLFeatureSet featureSet;
@@ -1301,6 +1301,7 @@ bool SupportsAppleGPUFamily(id<MTLDevice> device, uint8_t appleFamily)
     return [device supportsFeatureSet:featureSet];
 #endif      // TARGET_OS_IOS || TARGET_OS_TV
 }
+
 
 bool SupportsMacGPUFamily(id<MTLDevice> device, uint8_t macFamily)
 {
