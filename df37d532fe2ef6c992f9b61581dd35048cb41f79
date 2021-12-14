@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "6975f246_f6c772e0",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 5
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2021-12-14T21:04:36Z",
+      "side": 1,
+      "message": "Wow, that\u0027s a lot of code disappearing.  Tested locally with existing asphalt_9 trace which should land soon.",
+      "revId": "df37d532fe2ef6c992f9b61581dd35048cb41f79",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
