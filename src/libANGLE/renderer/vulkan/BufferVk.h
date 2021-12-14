@@ -146,20 +146,6 @@ class BufferVk : public BufferImpl
                                                 bool hostVisible);
 
   private:
-    angle::Result initializeShadowBuffer(ContextVk *contextVk,
-                                         gl::BufferBinding target,
-                                         size_t size);
-    ANGLE_INLINE uint8_t *getShadowBuffer(size_t offset)
-    {
-        return (mShadowBuffer.getCurrentBuffer() + offset);
-    }
-
-    ANGLE_INLINE const uint8_t *getShadowBuffer(size_t offset) const
-    {
-        return (mShadowBuffer.getCurrentBuffer() + offset);
-    }
-
-    void updateShadowBuffer(const uint8_t *data, size_t size, size_t offset);
     angle::Result updateBuffer(ContextVk *contextVk,
                                const uint8_t *data,
                                size_t size,
@@ -231,13 +217,6 @@ class BufferVk : public BufferImpl
     // The staging buffer to aid map operations. This is used when buffers are not host visible or
     // for performance optimization when only a smaller range of buffer is mapped.
     std::unique_ptr<vk::BufferHelper> mStagingBuffer;
-
-    // For GPU-read only buffers glMap* latency is reduced by maintaining a copy
-    // of the buffer which is writeable only by the CPU. The contents are updated on all
-    // glData/glSubData/glCopy calls. With this, a glMap* call becomes a non-blocking
-    // operation by elimnating the need to wait on any recorded or in-flight GPU commands.
-    // We use DynamicShadowBuffer class to encapsulate all the bookeeping logic.
-    vk::DynamicShadowBuffer mShadowBuffer;
 
     // A cache of converted vertex data.
     std::vector<VertexConversionBuffer> mVertexConversionBuffers;
