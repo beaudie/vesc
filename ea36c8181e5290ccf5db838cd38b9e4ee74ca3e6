@@ -18,6 +18,69 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "c97abf58_7805e641",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1326275
+      },
+      "writtenOn": "2021-12-14T16:33:32Z",
+      "side": 1,
+      "message": "Looks great, thanks!\nLet me know if you need help refactoring the validation functions.",
+      "revId": "ea36c8181e5290ccf5db838cd38b9e4ee74ca3e6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "02dd5139_cdf0a138",
+        "filename": "src/libANGLE/Framebuffer.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 366,
+      "author": {
+        "id": 1326275
+      },
+      "writtenOn": "2021-12-14T16:33:32Z",
+      "side": 1,
+      "message": "nit: GL_FALSE for clarity",
+      "range": {
+        "startLine": 366,
+        "startChar": 13,
+        "endLine": 366,
+        "endChar": 14
+      },
+      "revId": "ea36c8181e5290ccf5db838cd38b9e4ee74ca3e6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "3cecf823_dbbeb076",
+        "filename": "src/libANGLE/Framebuffer.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 389,
+      "author": {
+        "id": 1326275
+      },
+      "writtenOn": "2021-12-14T16:33:32Z",
+      "side": 1,
+      "message": "nit: GL_FALSE for clarity",
+      "range": {
+        "startLine": 389,
+        "startChar": 13,
+        "endLine": 389,
+        "endChar": 14
+      },
+      "revId": "ea36c8181e5290ccf5db838cd38b9e4ee74ca3e6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "20cec5a1_6ecc1cef",
@@ -89,6 +152,24 @@
       "side": 1,
       "message": "The test seems ok, but we definitely need way more tests:\n\n- Negative test that checks validation (issues incorrect calls and expects the appropriate failures)\n- Test drawing to y-flipped framebuffer\n  * Test both color and depth/stencil\n- Test blit with glBlitFramebuffer from and/or to y-flipped framebuffers\n  * Test float color\n  * Test integer color\n  * Test depth/stencil\n- Test *resolve* with glBlitFramebuffer similarly\n- Test glCopyTexImage from a y-flipped framebuffer\n  * Test float color\n  * Test integer color\n\nAny other GL call that deals with framebuffers?",
       "parentUuid": "d816b944_74217e49",
+      "revId": "ea36c8181e5290ccf5db838cd38b9e4ee74ca3e6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "5b5f2d60_d20cc543",
+        "filename": "src/tests/gl_tests/FramebufferTest.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 3691,
+      "author": {
+        "id": 1326275
+      },
+      "writtenOn": "2021-12-14T16:33:32Z",
+      "side": 1,
+      "message": "I believe this extension isn\u0027t available on any of ours bots. Maybe we can get some subset of these tests landed here and follow up ASAP with the rest? And instead Maksim can verify locally that all these WebGL use cases render right side up. Just to unblock ozone/SwANGLE/passthrough.",
+      "parentUuid": "55b2c1c8_ebc43d4a",
       "revId": "ea36c8181e5290ccf5db838cd38b9e4ee74ca3e6",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
