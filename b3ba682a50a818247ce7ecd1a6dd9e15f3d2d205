@@ -35,6 +35,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "fdf1a1c2_4a591442",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 2
+      },
+      "lineNbr": 9,
+      "author": {
+        "id": 1394635
+      },
+      "writtenOn": "2021-12-14T21:23:48Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "669c9c95_43d51b05",
+      "revId": "b3ba682a50a818247ce7ecd1a6dd9e15f3d2d205",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "06d8c121_a330529e",
@@ -48,6 +66,24 @@
       "writtenOn": "2021-12-14T21:13:57Z",
       "side": 1,
       "message": "Please remove blank line in footer. (Actually, the presubmit check caught this)",
+      "revId": "b3ba682a50a818247ce7ecd1a6dd9e15f3d2d205",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "df692843_27eb6aa1",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 2
+      },
+      "lineNbr": 10,
+      "author": {
+        "id": 1394635
+      },
+      "writtenOn": "2021-12-14T21:23:48Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "06d8c121_a330529e",
       "revId": "b3ba682a50a818247ce7ecd1a6dd9e15f3d2d205",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
@@ -82,6 +118,24 @@
       "writtenOn": "2021-12-14T21:13:57Z",
       "side": 1,
       "message": "Intel recently began exposing ETC and ASTC on desktop GPUs - was that only in their OpenGL driver, for example on Linux?",
+      "revId": "b3ba682a50a818247ce7ecd1a6dd9e15f3d2d205",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "ef8f0af5_4a459f53",
+        "filename": "src/tests/gl_tests/WebGLCompressedTextureAvailabilityTest.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 60,
+      "author": {
+        "id": 1394635
+      },
+      "writtenOn": "2021-12-14T21:23:48Z",
+      "side": 1,
+      "message": "It\u0027s also in Vulkan (both on Linux and Windows) but there\u0027s no ready-to-use Intel GPU model detection in end2end tests. We may add more entries to this test later if needed.\n\nIronically, the very latest Intel GPUs no longer support ASTC.",
+      "parentUuid": "4a859b52_c9d36b25",
       "revId": "b3ba682a50a818247ce7ecd1a6dd9e15f3d2d205",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
