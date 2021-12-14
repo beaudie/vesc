@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "30865260_2a7ba39d",
+        "filename": "src/libANGLE/validationEGL.cpp",
+        "patchSetId": 18
+      },
+      "lineNbr": 3762,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2021-12-14T03:19:07Z",
+      "side": 1,
+      "message": "This doesn\u0027t need to be under #ifdef.  If you move the next change inside validateImageClientBuffer, then you can avoid all the #ifdefs in this file.",
+      "range": {
+        "startLine": 3752,
+        "startChar": 0,
+        "endLine": 3762,
+        "endChar": 17
+      },
+      "revId": "ba12b76b0446dc29431936cf9f0d9aaf23723078",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
