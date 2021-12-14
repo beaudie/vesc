@@ -320,6 +320,13 @@ constexpr SkippedSyncvalMessage kSkippedSyncvalMessages[] = {
      "prior_usage: SYNC_COLOR_ATTACHMENT_OUTPUT_COLOR_ATTACHMENT_WRITE, write_barriers: 0, "
      "command: vkCmdDraw, seq_no: 7",
      "", false},
+    //   With Vulkan secondary command buffers:
+    {"SYNC-HAZARD-READ_AFTER_WRITE",
+     "Recorded access info (recorded_usage: SYNC_FRAGMENT_SHADER_SHADER_STORAGE_READ, command: "
+     "vkCmdDraw, seq_no: 1, reset_no: 1). Access info (prior_usage: "
+     "SYNC_COLOR_ATTACHMENT_OUTPUT_COLOR_ATTACHMENT_WRITE, write_barriers: 0, command: "
+     "vkCmdBeginRenderPass, seq_no: 675, reset_no: 1)",
+     "", false},
     // From: FramebufferTest_ES3.FramebufferBindToNewLevelAfterMaxIncreaseShouldntCrash/ES3_Vulkan
     {"SYNC-HAZARD-READ_AFTER_WRITE",
      "type: VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER, imageLayout: VK_IMAGE_LAYOUT_GENERAL, "
