@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "07a66e8d_461905f8",
+        "filename": "src/tests/gl_tests/VulkanImageTest.cpp",
+        "patchSetId": 22
+      },
+      "lineNbr": 210,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2021-12-14T16:00:49Z",
+      "side": 1,
+      "message": "So now that HasVulkanImageExtensions exists, this should be changed to:\n\n    ANGLE_SKIP_TEST_IF(!has the ext);\n\nSame with the tests below. The point is, this tests the extension, not the Vulkan backend, even if they (currently) mean the same thing.",
+      "range": {
+        "startLine": 204,
+        "startChar": 0,
+        "endLine": 210,
+        "endChar": 63
+      },
+      "revId": "9e5de7fbb89c7d3dbfd8f5f6f0e449ecde2045ad",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
