@@ -1,6 +1,23 @@
 {
   "comments": [
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "9805a82c_a6b472d9",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1340649
+      },
+      "writtenOn": "2021-12-14T22:03:24Z",
+      "side": 1,
+      "message": "will mark this -\u003e https://chromium-review.googlesource.com/c/angle/angle/+/3311564/ as WIP and move the RepeatedEglInitAndTerminate end2end test into this CL",
+      "revId": "9a809376121e1288c5fe5d1b7e1b960e2bb69ad2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "add33123_c07f3fca",
@@ -62,6 +79,30 @@
       "side": 1,
       "message": "These changes aren\u0027t about being spec compliant though; it\u0027s also spec compliant to not call makeCurrent(dpy, null, null, null) at all before the process exits.\n\nI prefer the simpler fix, since it fixes the tests.   If we see real apps behaving this way, we can revisit your solution, but I suspect (hope) what this test is doing is unlikely to occur in the real world.",
       "parentUuid": "ab8d8bb5_0a5e32b7",
+      "range": {
+        "startLine": 1159,
+        "startChar": 0,
+        "endLine": 1162,
+        "endChar": 1
+      },
+      "revId": "9a809376121e1288c5fe5d1b7e1b960e2bb69ad2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b9c2dfea_fe86cb15",
+        "filename": "src/libANGLE/Display.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 1162,
+      "author": {
+        "id": 1340649
+      },
+      "writtenOn": "2021-12-14T22:03:24Z",
+      "side": 1,
+      "message": "\u003e it\u0027s also spec compliant to not call makeCurrent(dpy, null, null, null)\n\npart of eglTerminate spec -\n Applications should not try to perform useful work with such resources following\n eglTerminate; only eglMakeCurrent or eglReleaseThread should be called, to\n complete deletion of these resources.\n \nMaybe i read too much into the sentence \"should be called, to complete deletion of these resources.\"\n\n\u003e I prefer the simpler fix ... but I suspect (hope) what this test is doing is unlikely to occur in the real world.\n\nfair enough",
+      "parentUuid": "5f8de726_f20d1d68",
       "range": {
         "startLine": 1159,
         "startChar": 0,
