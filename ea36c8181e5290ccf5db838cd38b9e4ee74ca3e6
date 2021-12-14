@@ -172,6 +172,24 @@
       "parentUuid": "55b2c1c8_ebc43d4a",
       "revId": "ea36c8181e5290ccf5db838cd38b9e4ee74ca3e6",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "3004427b_70470a1a",
+        "filename": "src/tests/gl_tests/FramebufferTest.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 3691,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2021-12-14T16:43:53Z",
+      "side": 1,
+      "message": "Probably there on Intel/Linux? Maksim could also run the tests locally at least, that\u0027d be fine.\n\nHonestly the tests would be just copy pastes of existing tests with the flip added.\n\n- The drawing tests are all over the place, any would do. Can use the essl1_shaders::fs::Checkered() shader to make sure flip is working.\n- The blit/resolve stuff can be found in BlitFramebufferANGLETest.cpp\n- The copy tex image stuff can be found in CopyTexImageTest.cpp\n\nMy concern in particular is that there is definitely something missing in this CL, for example in the implementation of glCopyTextureCHROMIUM which uses a shader or even the CPU to do the copy. I suspect there are similar issues with blit/resolve, for example in the calculation of region to copy or when stencil is involved. A visual check is not going to find all the issues.\n\nAnd speaking of glCopyTextureCHROMIUM, we\u0027d need tests for that too!\n\n- glCopyTextureCHROMIUM and glCopySubTextureCHROMIUM (see tests in CopyTextureTest.cpp)\n- Also to make sure sub-copy offsets are adjusted correctly, need to test glCopyTexSubImage too.",
+      "parentUuid": "5b5f2d60_d20cc543",
+      "revId": "ea36c8181e5290ccf5db838cd38b9e4ee74ca3e6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
