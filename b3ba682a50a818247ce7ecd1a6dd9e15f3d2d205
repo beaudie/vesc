@@ -1,0 +1,89 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "dda5bedd_42f5f756",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 2
+      },
+      "lineNbr": 8,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2021-12-14T21:13:57Z",
+      "side": 1,
+      "message": "Could you mention that this acts as a regression test for https://chromium-review.googlesource.com/c/angle/angle/+/3338624 and has been verified to catch the earlier error in the include guards?",
+      "revId": "b3ba682a50a818247ce7ecd1a6dd9e15f3d2d205",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "669c9c95_43d51b05",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 2
+      },
+      "lineNbr": 9,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2021-12-14T21:13:57Z",
+      "side": 1,
+      "message": "Note, you can also use multiple \"Bug: \" lines.",
+      "revId": "b3ba682a50a818247ce7ecd1a6dd9e15f3d2d205",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "06d8c121_a330529e",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 2
+      },
+      "lineNbr": 10,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2021-12-14T21:13:57Z",
+      "side": 1,
+      "message": "Please remove blank line in footer. (Actually, the presubmit check caught this)",
+      "revId": "b3ba682a50a818247ce7ecd1a6dd9e15f3d2d205",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "0065ac2b_00bcd309",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2021-12-14T21:13:57Z",
+      "side": 1,
+      "message": "lgtm overall. Thanks for putting this together.\n",
+      "revId": "b3ba682a50a818247ce7ecd1a6dd9e15f3d2d205",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "4a859b52_c9d36b25",
+        "filename": "src/tests/gl_tests/WebGLCompressedTextureAvailabilityTest.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 60,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2021-12-14T21:13:57Z",
+      "side": 1,
+      "message": "Intel recently began exposing ETC and ASTC on desktop GPUs - was that only in their OpenGL driver, for example on Linux?",
+      "revId": "b3ba682a50a818247ce7ecd1a6dd9e15f3d2d205",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
