@@ -53,6 +53,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "90a372c9_e5b886c5",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 23
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2021-12-14T00:50:20Z",
+      "side": 1,
+      "message": "SGTM\n\nThat\u0027s definitely useful information that it would be nice not to lose and would make it a lot easier to point external partners to also.",
+      "parentUuid": "7f76ab4e_73eb7f12",
+      "revId": "1ceacf58e78d51a7b4097f45a02a8b49d217c360",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "48ae594c_5cbdebb3",
