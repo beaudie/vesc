@@ -70,6 +70,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "bb003a3c_f6545483",
+        "filename": "src/libANGLE/renderer/vulkan/VkImageImageSiblingVk.h",
+        "patchSetId": 19
+      },
+      "lineNbr": 44,
+      "author": {
+        "id": 1000050
+      },
+      "writtenOn": "2021-12-14T14:52:20Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "f83d49d4_897749bb",
+      "range": {
+        "startLine": 44,
+        "startChar": 4,
+        "endLine": 44,
+        "endChar": 21
+      },
+      "revId": "493ef2febde79e5af6a1b182ae56217288339b31",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "cd67ee47_6f2db870",
@@ -93,6 +117,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "d2c50c88_b1dc1697",
+        "filename": "src/tests/gl_tests/VulkanImageTest.cpp",
+        "patchSetId": 19
+      },
+      "lineNbr": 317,
+      "author": {
+        "id": 1000050
+      },
+      "writtenOn": "2021-12-14T14:52:20Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "cd67ee47_6f2db870",
+      "range": {
+        "startLine": 317,
+        "startChar": 0,
+        "endLine": 317,
+        "endChar": 6
+      },
+      "revId": "493ef2febde79e5af6a1b182ae56217288339b31",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "24fb7864_addd7032",
@@ -106,6 +154,30 @@
       "writtenOn": "2021-12-14T13:48:22Z",
       "side": 1,
       "message": "I\u0027d suggest you skip the test if the ext isn\u0027t available instead of checking the back-end.",
+      "range": {
+        "startLine": 319,
+        "startChar": 4,
+        "endLine": 319,
+        "endChar": 36
+      },
+      "revId": "493ef2febde79e5af6a1b182ae56217288339b31",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "3f0052e0_dc7d015a",
+        "filename": "src/tests/gl_tests/VulkanImageTest.cpp",
+        "patchSetId": 19
+      },
+      "lineNbr": 319,
+      "author": {
+        "id": 1000050
+      },
+      "writtenOn": "2021-12-14T14:52:20Z",
+      "side": 1,
+      "message": "I would like to verify the extension always exists with vulkan backend. So I just check IsVulkan() in tests. Also see line 103 \u0026 104",
+      "parentUuid": "24fb7864_addd7032",
       "range": {
         "startLine": 319,
         "startChar": 4,
