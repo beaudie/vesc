@@ -39,6 +39,30 @@
       },
       "revId": "cd92992169df93d14bccd75df73d400d2cb2a291",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "e3550916_e6a3aad7",
+        "filename": "scripts/export_targets.py",
+        "patchSetId": 1
+      },
+      "lineNbr": 301,
+      "author": {
+        "id": 1001921
+      },
+      "writtenOn": "2021-12-14T23:53:16Z",
+      "side": 1,
+      "message": "Or:\nIncluded file must be listed in the GN target or it\u0027s public dependency",
+      "parentUuid": "2e88dce1_25d4f650",
+      "range": {
+        "startLine": 301,
+        "startChar": 42,
+        "endLine": 301,
+        "endChar": 85
+      },
+      "revId": "cd92992169df93d14bccd75df73d400d2cb2a291",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
