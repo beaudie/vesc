@@ -1473,6 +1473,11 @@ angle::Result RendererVk::initialize(DisplayVk *displayVk,
         mNonCoherentStagingBufferMemoryTypeIndex =
             mMemoryProperties.getMemoryTypeIndex(memoryPropertyFlags);
 
+        // Coherent staging buffer
+        memoryPropertyFlags |= VK_MEMORY_PROPERTY_HOST_COHERENT_BIT;
+        mCoherentStagingBufferMemoryTypeIndex =
+            mMemoryProperties.getMemoryTypeIndex(memoryPropertyFlags);
+
         // Alignment
         mStagingBufferAlignment =
             static_cast<size_t>(mPhysicalDeviceProperties.limits.minMemoryMapAlignment);
