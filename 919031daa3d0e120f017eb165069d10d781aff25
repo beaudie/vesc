@@ -16,6 +16,115 @@
       "message": "LGTM!",
       "revId": "919031daa3d0e120f017eb165069d10d781aff25",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "251cfd9f_a3619170",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 27
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2021-12-14T02:50:37Z",
+      "side": 1,
+      "message": "LGTM",
+      "revId": "919031daa3d0e120f017eb165069d10d781aff25",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "191f119a_f7cf59e3",
+        "filename": "src/libANGLE/renderer/vulkan/BufferVk.cpp",
+        "patchSetId": 27
+      },
+      "lineNbr": 643,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2021-12-14T02:50:37Z",
+      "side": 1,
+      "message": "nit: This looks stale",
+      "range": {
+        "startLine": 642,
+        "startChar": 76,
+        "endLine": 643,
+        "endChar": 98
+      },
+      "revId": "919031daa3d0e120f017eb165069d10d781aff25",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "7db6aea2_a0bf9001",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.cpp",
+        "patchSetId": 27
+      },
+      "lineNbr": 395,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2021-12-14T02:50:37Z",
+      "side": 1,
+      "message": "typo",
+      "range": {
+        "startLine": 395,
+        "startChar": 67,
+        "endLine": 395,
+        "endChar": 69
+      },
+      "revId": "919031daa3d0e120f017eb165069d10d781aff25",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "a1f0c4b2_84bee205",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.cpp",
+        "patchSetId": 27
+      },
+      "lineNbr": 422,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2021-12-14T02:50:37Z",
+      "side": 1,
+      "message": "If not already known, please report this. LunarG may not be aware that people are relying on this.",
+      "range": {
+        "startLine": 421,
+        "startChar": 42,
+        "endLine": 422,
+        "endChar": 50
+      },
+      "revId": "919031daa3d0e120f017eb165069d10d781aff25",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "27a44124_325877bb",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.h",
+        "patchSetId": 27
+      },
+      "lineNbr": 785,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2021-12-14T02:50:37Z",
+      "side": 1,
+      "message": "This change can be reverted?",
+      "range": {
+        "startLine": 770,
+        "startChar": 0,
+        "endLine": 785,
+        "endChar": 0
+      },
+      "revId": "919031daa3d0e120f017eb165069d10d781aff25",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
