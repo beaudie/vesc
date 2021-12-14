@@ -39,6 +39,30 @@
       },
       "revId": "df37d532fe2ef6c992f9b61581dd35048cb41f79",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "abffb4ef_32f9e97a",
+        "filename": "src/tests/restricted_traces/BUILD.gn",
+        "patchSetId": 5
+      },
+      "lineNbr": 45,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2021-12-14T22:09:17Z",
+      "side": 1,
+      "message": "Yeah the .h and .cpp I left out b/c I couldn\u0027t find a way to make it transition seamlessly. I\u0027ll include it in my next update which will require another full retrace and is non-backwards-compatible.",
+      "parentUuid": "c983e0e2_761be8d7",
+      "range": {
+        "startLine": 45,
+        "startChar": 21,
+        "endLine": 45,
+        "endChar": 55
+      },
+      "revId": "df37d532fe2ef6c992f9b61581dd35048cb41f79",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
