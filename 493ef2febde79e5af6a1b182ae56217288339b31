@@ -234,6 +234,30 @@
       },
       "revId": "493ef2febde79e5af6a1b182ae56217288339b31",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ca6cb8f1_c1173a31",
+        "filename": "src/tests/gl_tests/VulkanImageTest.cpp",
+        "patchSetId": 19
+      },
+      "lineNbr": 319,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2021-12-14T15:47:20Z",
+      "side": 1,
+      "message": "You can always add a test for that specific thing:\n\n    TEST_P(VulkanImageTest, Has....Ext)\n    {\n        ANGLE_SKIP_TEST_IF(!IsVulkan());\n        EXPECT_TRUE(has the ext);\n    }",
+      "parentUuid": "3f0052e0_dc7d015a",
+      "range": {
+        "startLine": 319,
+        "startChar": 4,
+        "endLine": 319,
+        "endChar": 36
+      },
+      "revId": "493ef2febde79e5af6a1b182ae56217288339b31",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
