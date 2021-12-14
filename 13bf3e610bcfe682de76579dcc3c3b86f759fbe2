@@ -67,6 +67,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "c87a3d9a_06fc734e",
+        "filename": "src/tests/restricted_traces/README.md",
+        "patchSetId": 14
+      },
+      "lineNbr": 279,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2021-12-14T15:43:35Z",
+      "side": 1,
+      "message": "anglebug.com/6808 It\u0027s an ugly limitation that\u0027d be good to fix.",
+      "parentUuid": "f2df8661_ba98adb5",
+      "range": {
+        "startLine": 278,
+        "startChar": 22,
+        "endLine": 279,
+        "endChar": 36
+      },
+      "revId": "13bf3e610bcfe682de76579dcc3c3b86f759fbe2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "15126eff_cf99c8a4",
         "filename": "src/tests/restricted_traces/README.md",
         "patchSetId": 14
