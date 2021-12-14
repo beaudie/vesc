@@ -24,6 +24,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "828d7e9f_afe5d788",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 6
+      },
+      "lineNbr": 11,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2021-12-14T15:51:57Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "d15d2425_a0e7a107",
+      "range": {
+        "startLine": 11,
+        "startChar": 19,
+        "endLine": 11,
+        "endChar": 24
+      },
+      "revId": "a1e50d0cd5576d404ba795df2e9151f1fec72844",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "2cd1306e_f72d649b",
@@ -37,6 +61,30 @@
       "writtenOn": "2021-12-14T15:28:54Z",
       "side": 1,
       "message": "same here",
+      "range": {
+        "startLine": 13,
+        "startChar": 41,
+        "endLine": 13,
+        "endChar": 46
+      },
+      "revId": "a1e50d0cd5576d404ba795df2e9151f1fec72844",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "93d8338b_8f5db6c7",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 6
+      },
+      "lineNbr": 13,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2021-12-14T15:51:57Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "2cd1306e_f72d649b",
       "range": {
         "startLine": 13,
         "startChar": 41,
@@ -77,6 +125,30 @@
       "writtenOn": "2021-12-14T15:28:54Z",
       "side": 1,
       "message": "Curious why bumping from 1 to 4?",
+      "range": {
+        "startLine": 642,
+        "startChar": 13,
+        "endLine": 642,
+        "endChar": 33
+      },
+      "revId": "a1e50d0cd5576d404ba795df2e9151f1fec72844",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "13ad30ad_0b183e1f",
+        "filename": "DEPS",
+        "patchSetId": 6
+      },
+      "lineNbr": 642,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2021-12-14T15:51:57Z",
+      "side": 1,
+      "message": "3 actually already exists from a failed attempt, and some traces already had 2. Instead of doing +\u003d incr I just reset everything to a single number so it\u0027ll be easier to upgrade in the future. I suggest you version your newly added traces to 4.",
+      "parentUuid": "15d9f644_13cb17d0",
       "range": {
         "startLine": 642,
         "startChar": 13,
