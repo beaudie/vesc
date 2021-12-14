@@ -170,6 +170,24 @@
       "parentUuid": "8fefabc7_fdd636b7",
       "revId": "8d57c4d96e6b2d25f9d03186dc8c570269b78bb8",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "2783a4db_6891a665",
+        "filename": "src/libANGLE/renderer/metal/ShaderMtl.mm",
+        "patchSetId": 1
+      },
+      "lineNbr": 159,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2021-12-14T03:16:27Z",
+      "side": 1,
+      "message": "What I meant to say is this:\n\n    ASSERT(!debugInfo.empty());\n    return debugInfo;\n\nBecause you are generating text, this cannot be empty.",
+      "parentUuid": "29371ddb_d9353f20",
+      "revId": "8d57c4d96e6b2d25f9d03186dc8c570269b78bb8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
