@@ -110,6 +110,30 @@
       },
       "revId": "f5b1e7cbf23096b9b7cdcd2e3054cadd53cb9c28",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "340febc9_af4d9c31",
+        "filename": "src/tests/gl_tests/BufferDataTest.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 208,
+      "author": {
+        "id": 1517514
+      },
+      "writtenOn": "2021-12-14T21:48:49Z",
+      "side": 1,
+      "message": "the test need specials configuration. not sure this change affect this?\nGTEST_ALLOW_UNINSTANTIATED_PARAMETERIZED_TEST(BufferSubDataTest);\nANGLE_INSTANTIATE_TEST_ES3_AND(BufferSubDataTest,\n                               WithVulkanPreferCPUForBufferSubData(ES3_VULKAN()));",
+      "parentUuid": "8aafa65a_5eb8558a",
+      "range": {
+        "startLine": 208,
+        "startChar": 33,
+        "endLine": 208,
+        "endChar": 76
+      },
+      "revId": "f5b1e7cbf23096b9b7cdcd2e3054cadd53cb9c28",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
