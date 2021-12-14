@@ -16,6 +16,40 @@
       "message": "lgtm",
       "revId": "afa7fac75a3e2eaf2a04c43d165938f8b47e321d",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "a49f9378_23e97f98",
+        "filename": "src/libANGLE/renderer/metal/mtl_utils.mm",
+        "patchSetId": 1
+      },
+      "lineNbr": 1233,
+      "author": {
+        "id": 1394635
+      },
+      "writtenOn": "2021-12-14T18:35:36Z",
+      "side": 1,
+      "message": "This macro works only for iOS. We used a combined one before:\n  ANGLE_APPLE_AVAILABLE_XI(10.15, 13.0)",
+      "revId": "afa7fac75a3e2eaf2a04c43d165938f8b47e321d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "4ce2fb22_7ab9bcae",
+        "filename": "src/libANGLE/renderer/metal/mtl_utils.mm",
+        "patchSetId": 1
+      },
+      "lineNbr": 1253,
+      "author": {
+        "id": 1394635
+      },
+      "writtenOn": "2021-12-14T18:35:36Z",
+      "side": 1,
+      "message": "M1 is family 7, so this should not be gated on iOS.",
+      "revId": "afa7fac75a3e2eaf2a04c43d165938f8b47e321d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
