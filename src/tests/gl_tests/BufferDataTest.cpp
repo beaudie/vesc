@@ -250,6 +250,8 @@ class BufferSubDataTest : public ANGLETestBase,
 // In the Vulkan backend, the CPU may be used to perform this copy.
 TEST_P(BufferSubDataTest, SmallIndexBufferUpdateAfterDraw)
 {
+    // TODO(crbug.com/angleproject/6810) Test failing on Linux FYI GPU TSAN Release
+    ANGLE_SKIP_TEST_IF(IsVulkan() && IsLinux() && IsTSan());
     constexpr std::array<GLfloat, 4> kRed   = {1.0f, 0.0f, 0.0f, 1.0f};
     constexpr std::array<GLfloat, 4> kGreen = {0.0f, 1.0f, 0.0f, 1.0f};
     // Index buffer data
