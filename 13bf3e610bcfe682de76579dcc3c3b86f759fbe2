@@ -43,6 +43,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "f2df8661_ba98adb5",
+        "filename": "src/tests/restricted_traces/README.md",
+        "patchSetId": 14
+      },
+      "lineNbr": 279,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2021-12-14T13:23:42Z",
+      "side": 1,
+      "message": "Would it be alright to skip this for now? I don\u0027t plan to investigate this, because it looked like it\u0027s because of bugs/limitations in X. And there\u0027s no need to task someone with this as we should have access to Windows VMs at the very least.",
+      "parentUuid": "ad7a54dd_c108e90c",
+      "range": {
+        "startLine": 278,
+        "startChar": 22,
+        "endLine": 279,
+        "endChar": 36
+      },
+      "revId": "13bf3e610bcfe682de76579dcc3c3b86f759fbe2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "15126eff_cf99c8a4",
         "filename": "src/tests/restricted_traces/README.md",
         "patchSetId": 14
@@ -54,6 +78,30 @@
       "writtenOn": "2021-12-13T22:57:25Z",
       "side": 1,
       "message": "will",
+      "range": {
+        "startLine": 318,
+        "startChar": 18,
+        "endLine": 318,
+        "endChar": 22
+      },
+      "revId": "13bf3e610bcfe682de76579dcc3c3b86f759fbe2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "6826fb6e_4e44ffdb",
+        "filename": "src/tests/restricted_traces/README.md",
+        "patchSetId": 14
+      },
+      "lineNbr": 318,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2021-12-14T13:23:42Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "15126eff_cf99c8a4",
       "range": {
         "startLine": 318,
         "startChar": 18,
@@ -89,6 +137,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "6c925fae_82dedcda",
+        "filename": "src/tests/restricted_traces/README.md",
+        "patchSetId": 14
+      },
+      "lineNbr": 343,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2021-12-14T13:23:42Z",
+      "side": 1,
+      "message": "It could happen if you need to reboot or something like that.",
+      "parentUuid": "dc2f865d_d4d4b8d0",
+      "range": {
+        "startLine": 342,
+        "startChar": 0,
+        "endLine": 343,
+        "endChar": 66
+      },
+      "revId": "13bf3e610bcfe682de76579dcc3c3b86f759fbe2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "a276bf33_40dc7f3b",
         "filename": "src/tests/restricted_traces/README.md",
         "patchSetId": 14
@@ -100,6 +172,24 @@
       "writtenOn": "2021-12-14T01:44:05Z",
       "side": 1,
       "message": "Why restore the traces?   Doesn\u0027t this upload the original traces, rather than the newly retraced files?",
+      "revId": "13bf3e610bcfe682de76579dcc3c3b86f759fbe2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "8ff99aba_37184eab",
+        "filename": "src/tests/restricted_traces/README.md",
+        "patchSetId": 14
+      },
+      "lineNbr": 400,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2021-12-14T13:23:42Z",
+      "side": 1,
+      "message": "It sources the restore from the retrace-wip directory, which updates your working directory with the new traces. Added more info.",
+      "parentUuid": "a276bf33_40dc7f3b",
       "revId": "13bf3e610bcfe682de76579dcc3c3b86f759fbe2",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
@@ -117,6 +207,30 @@
       "writtenOn": "2021-12-13T22:57:25Z",
       "side": 1,
       "message": "Fine to do this in a follow up, just put the bug number in.",
+      "range": {
+        "startLine": 426,
+        "startChar": 0,
+        "endLine": 426,
+        "endChar": 4
+      },
+      "revId": "13bf3e610bcfe682de76579dcc3c3b86f759fbe2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "cb5051a7_019bce59",
+        "filename": "src/tests/restricted_traces/README.md",
+        "patchSetId": 14
+      },
+      "lineNbr": 426,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2021-12-14T13:23:42Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "c2a013b9_8eed571d",
       "range": {
         "startLine": 426,
         "startChar": 0,

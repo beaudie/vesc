@@ -16,6 +16,24 @@
       "message": "Why was this moved, since it means duplicating it below and in load_json_metadata()?   \n\nI think it was cleaner without load_json_metadata(), since load_json_metadata() is only used in one place anyway, with 1/3 of it now duplicated.",
       "revId": "bd467ffc68b70ca8e9c367bd33c308de36e4c79f",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "18a60a41_c9d5eb38",
+        "filename": "src/tests/restricted_traces/gen_restricted_traces.py",
+        "patchSetId": 14
+      },
+      "lineNbr": 190,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2021-12-14T13:23:42Z",
+      "side": 0,
+      "message": "load_json_metadata is used in two places, so I left it in. LMK if you still think I should cut it.",
+      "parentUuid": "c4bd0045_457e158c",
+      "revId": "bd467ffc68b70ca8e9c367bd33c308de36e4c79f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
