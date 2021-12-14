@@ -20,6 +20,46 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "20cec5a1_6ecc1cef",
+        "filename": "src/libANGLE/validationES31.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 1109,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2021-12-14T15:36:03Z",
+      "side": 1,
+      "message": "The way we implement these is to refactor the relevant parts of this function in a `Base` function, like `ValidateFramebufferParameteriBase`, then have the ES3.1 version and the ext version call that, each checking for their version/ext beforehand. See for example how `ValidateGetTexParameterBase` is used.",
+      "range": {
+        "startLine": 1108,
+        "startChar": 0,
+        "endLine": 1109,
+        "endChar": 45
+      },
+      "revId": "ea36c8181e5290ccf5db838cd38b9e4ee74ca3e6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "112a844b_a73af949",
+        "filename": "src/libANGLE/validationES31.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 1207,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2021-12-14T15:36:03Z",
+      "side": 1,
+      "message": "ditto",
+      "revId": "ea36c8181e5290ccf5db838cd38b9e4ee74ca3e6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "d816b944_74217e49",
         "filename": "src/tests/gl_tests/FramebufferTest.cpp",
         "patchSetId": 4
@@ -31,6 +71,24 @@
       "writtenOn": "2021-12-14T11:12:33Z",
       "side": 1,
       "message": "I wonder if this kind of test is correct.",
+      "revId": "ea36c8181e5290ccf5db838cd38b9e4ee74ca3e6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "55b2c1c8_ebc43d4a",
+        "filename": "src/tests/gl_tests/FramebufferTest.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 3691,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2021-12-14T15:36:03Z",
+      "side": 1,
+      "message": "The test seems ok, but we definitely need way more tests:\n\n- Negative test that checks validation (issues incorrect calls and expects the appropriate failures)\n- Test drawing to y-flipped framebuffer\n  * Test both color and depth/stencil\n- Test blit with glBlitFramebuffer from and/or to y-flipped framebuffers\n  * Test float color\n  * Test integer color\n  * Test depth/stencil\n- Test *resolve* with glBlitFramebuffer similarly\n- Test glCopyTexImage from a y-flipped framebuffer\n  * Test float color\n  * Test integer color\n\nAny other GL call that deals with framebuffers?",
+      "parentUuid": "d816b944_74217e49",
       "revId": "ea36c8181e5290ccf5db838cd38b9e4ee74ca3e6",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
