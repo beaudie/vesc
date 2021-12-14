@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "6cd90d64_3bae069e",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2021-12-14T21:15:46Z",
+      "side": 1,
+      "message": "lgtm\n\nFor the record, Alexey\u0027s regression test that catches this bug:\nhttps://chromium-review.googlesource.com/c/angle/angle/+/3338748\n",
+      "revId": "19812d6c28bb5f3185280fac8aa66e6c44e30468",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
