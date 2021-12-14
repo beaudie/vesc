@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "6a042ec5_de9942d4",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2021-12-14T03:28:55Z",
+      "side": 1,
+      "message": "lgtm\n\nNice work John figuring out the upstreaming issues with this patch.\n\nPer discussion on Slack, let\u0027s file a bug on crbug.com about the issues you\u0027ve seen running ANGLE\u0027s code generation script.\n\nLet\u0027s get this in so that you can roll ANGLE forward in WebKit to pick it up, and then hook up the SPI for it.\n",
+      "revId": "efb9ed455e0ff16f66cc7a6464edf63e8456dc8e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
