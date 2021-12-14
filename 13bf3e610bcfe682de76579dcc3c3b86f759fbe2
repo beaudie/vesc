@@ -20,6 +20,29 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "ad7a54dd_c108e90c",
+        "filename": "src/tests/restricted_traces/README.md",
+        "patchSetId": 14
+      },
+      "lineNbr": 279,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2021-12-14T01:44:05Z",
+      "side": 1,
+      "message": "Do you mean the EGL window dimensions?\n\nCan you open a fix-it bug with more details about what you\u0027re seeing so we can track it and (fingers crossed) get it working one day?",
+      "range": {
+        "startLine": 278,
+        "startChar": 22,
+        "endLine": 279,
+        "endChar": 36
+      },
+      "revId": "13bf3e610bcfe682de76579dcc3c3b86f759fbe2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "15126eff_cf99c8a4",
         "filename": "src/tests/restricted_traces/README.md",
         "patchSetId": 14
@@ -37,6 +60,46 @@
         "endLine": 318,
         "endChar": 22
       },
+      "revId": "13bf3e610bcfe682de76579dcc3c3b86f759fbe2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "dc2f865d_d4d4b8d0",
+        "filename": "src/tests/restricted_traces/README.md",
+        "patchSetId": 14
+      },
+      "lineNbr": 343,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2021-12-14T01:44:05Z",
+      "side": 1,
+      "message": "This sounds like it happens enough to warrant the no-overwrite argument.   Does this still happen, and do you know why it\u0027s being interrupted?",
+      "range": {
+        "startLine": 342,
+        "startChar": 0,
+        "endLine": 343,
+        "endChar": 66
+      },
+      "revId": "13bf3e610bcfe682de76579dcc3c3b86f759fbe2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "a276bf33_40dc7f3b",
+        "filename": "src/tests/restricted_traces/README.md",
+        "patchSetId": 14
+      },
+      "lineNbr": 400,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2021-12-14T01:44:05Z",
+      "side": 1,
+      "message": "Why restore the traces?   Doesn\u0027t this upload the original traces, rather than the newly retraced files?",
       "revId": "13bf3e610bcfe682de76579dcc3c3b86f759fbe2",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
@@ -89,6 +152,23 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "dcfd0735_63b28bbb",
+        "filename": "src/tests/restricted_traces/retrace_restricted_traces.py",
+        "patchSetId": 14
+      },
+      "lineNbr": 294,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2021-12-14T01:44:05Z",
+      "side": 1,
+      "message": "Why start by restoring the old traces?",
+      "revId": "13bf3e610bcfe682de76579dcc3c3b86f759fbe2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "b98b7e3c_882eee32",
         "filename": "src/tests/restricted_traces/retrace_restricted_traces.py",
         "patchSetId": 14
@@ -105,6 +185,29 @@
         "startChar": 0,
         "endLine": 351,
         "endChar": 21
+      },
+      "revId": "13bf3e610bcfe682de76579dcc3c3b86f759fbe2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "6d2cb1e0_0d18cc97",
+        "filename": "src/tests/restricted_traces/retrace_restricted_traces.py",
+        "patchSetId": 14
+      },
+      "lineNbr": 380,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2021-12-14T01:44:05Z",
+      "side": 1,
+      "message": "What is trace trimming?",
+      "range": {
+        "startLine": 380,
+        "startChar": 45,
+        "endLine": 380,
+        "endChar": 67
       },
       "revId": "13bf3e610bcfe682de76579dcc3c3b86f759fbe2",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
