@@ -1,0 +1,90 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "d15d2425_a0e7a107",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 6
+      },
+      "lineNbr": 11,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2021-12-14T15:28:54Z",
+      "side": 1,
+      "message": "nit: should",
+      "range": {
+        "startLine": 11,
+        "startChar": 19,
+        "endLine": 11,
+        "endChar": 24
+      },
+      "revId": "a1e50d0cd5576d404ba795df2e9151f1fec72844",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "2cd1306e_f72d649b",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 6
+      },
+      "lineNbr": 13,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2021-12-14T15:28:54Z",
+      "side": 1,
+      "message": "same here",
+      "range": {
+        "startLine": 13,
+        "startChar": 41,
+        "endLine": 13,
+        "endChar": 46
+      },
+      "revId": "a1e50d0cd5576d404ba795df2e9151f1fec72844",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "d609e01b_aef6c90f",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 6
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2021-12-14T15:28:54Z",
+      "side": 1,
+      "message": "Nice!",
+      "revId": "a1e50d0cd5576d404ba795df2e9151f1fec72844",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "15d9f644_13cb17d0",
+        "filename": "DEPS",
+        "patchSetId": 6
+      },
+      "lineNbr": 642,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2021-12-14T15:28:54Z",
+      "side": 1,
+      "message": "Curious why bumping from 1 to 4?",
+      "range": {
+        "startLine": 642,
+        "startChar": 13,
+        "endLine": 642,
+        "endChar": 33
+      },
+      "revId": "a1e50d0cd5576d404ba795df2e9151f1fec72844",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
