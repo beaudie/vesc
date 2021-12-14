@@ -18,6 +18,23 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "a8814b98_ad8dfccc",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2021-12-14T18:40:27Z",
+      "side": 1,
+      "message": "Kyle, thanks for the patch and Alexey, thanks for reviewing. Kyle, could you address Alexey\u0027s comments and the presubmit check (git cl format)? Thanks in advance.\n",
+      "revId": "afa7fac75a3e2eaf2a04c43d165938f8b47e321d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "a49f9378_23e97f98",
