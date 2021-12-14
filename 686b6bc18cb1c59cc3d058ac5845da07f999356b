@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "d740167f_3ab340a9",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1001921
+      },
+      "writtenOn": "2021-12-14T21:09:11Z",
+      "side": 1,
+      "message": "Could you just rename SetUp to testSetUp, same for TearDown?\nI hope that\u0027s enough.\n\nAnd don\u0027t skip, it\u0027s already skipped via expectation file.",
+      "revId": "686b6bc18cb1c59cc3d058ac5845da07f999356b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
