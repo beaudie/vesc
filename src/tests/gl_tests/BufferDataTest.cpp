@@ -205,11 +205,10 @@ TEST_P(BufferDataTest, RepeatedDrawDynamicBug)
 
 using BufferSubDataTestParams = angle::PlatformParameters;
 
-class BufferSubDataTest : public ANGLETestBase,
-                          public ::testing::TestWithParam<BufferSubDataTestParams>
+class BufferSubDataTest : public ANGLETestWithParam<BufferSubDataTestParams>
 {
   protected:
-    BufferSubDataTest() : ANGLETestBase(GetParam())
+    BufferSubDataTest()
     {
         setWindowWidth(16);
         setWindowHeight(16);
@@ -222,27 +221,18 @@ class BufferSubDataTest : public ANGLETestBase,
         mBuffer = 0;
     }
 
-    void SetUp() override
+    void testSetUp() override
     {
-        ANGLETestBase::ANGLETestSetUp();
-
         glGenBuffers(1, &mBuffer);
-        ASSERT_NE(mBuffer, 0U);
 
         glClearColor(0, 0, 0, 0);
         glClearDepthf(0.0);
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
         glDisable(GL_DEPTH_TEST);
-
-        ASSERT_GL_NO_ERROR();
     }
 
-    void TearDown() override
-    {
-        glDeleteBuffers(1, &mBuffer);
-        ANGLETestBase::ANGLETestTearDown();
-    }
+    void testTearDown() override { glDeleteBuffers(1, &mBuffer); }
     GLuint mBuffer;
 };
 
