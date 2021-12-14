@@ -1468,8 +1468,10 @@ angle::Result RendererVk::initialize(DisplayVk *displayVk,
     // Must be called after mBufferMemoryAllocator has been initialized.
     mNonCoherentStagingBufferMemoryTypeIndex =
         vk::StagingBuffer::getMemoryTypeIndex(this, VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT);
+    ASSERT(mNonCoherentStagingBufferMemoryTypeIndex != kInvalidMemoryTypeIndex);
     mCoherentStagingBufferMemoryTypeIndex = vk::StagingBuffer::getMemoryTypeIndex(
         this, VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT | VK_MEMORY_PROPERTY_HOST_COHERENT_BIT);
+    ASSERT(mCoherentStagingBufferMemoryTypeIndex != kInvalidMemoryTypeIndex);
     mStagingBufferAlignment =
         static_cast<size_t>(mPhysicalDeviceProperties.limits.minMemoryMapAlignment);
     ASSERT(gl::isPow2(mPhysicalDeviceProperties.limits.nonCoherentAtomSize));
