@@ -52,6 +52,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "8d788ef7_6f498c4a",
+        "filename": "src/libANGLE/renderer/metal/mtl_utils.mm",
+        "patchSetId": 1
+      },
+      "lineNbr": 1233,
+      "author": {
+        "id": 1500872
+      },
+      "writtenOn": "2021-12-14T19:10:12Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "a49f9378_23e97f98",
+      "revId": "afa7fac75a3e2eaf2a04c43d165938f8b47e321d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "4ce2fb22_7ab9bcae",
@@ -65,6 +83,24 @@
       "writtenOn": "2021-12-14T18:35:36Z",
       "side": 1,
       "message": "M1 is family 7, so this should not be gated on iOS.",
+      "revId": "afa7fac75a3e2eaf2a04c43d165938f8b47e321d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "852927ec_2831d5ff",
+        "filename": "src/libANGLE/renderer/metal/mtl_utils.mm",
+        "patchSetId": 1
+      },
+      "lineNbr": 1253,
+      "author": {
+        "id": 1500872
+      },
+      "writtenOn": "2021-12-14T19:10:12Z",
+      "side": 1,
+      "message": "We do need to gate this on TV, unfortunately.",
+      "parentUuid": "4ce2fb22_7ab9bcae",
       "revId": "afa7fac75a3e2eaf2a04c43d165938f8b47e321d",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
