@@ -33,6 +33,52 @@
       "message": "Nice clean up!",
       "revId": "291ca86b601c134d99ffd056002cf986a0d42592",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "0d538856_a94ce7d1",
+        "filename": "src/libANGLE/renderer/vulkan/linux/DmaBufImageSiblingVkLinux.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 477,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2021-12-14T13:44:56Z",
+      "side": 1,
+      "message": "please remove the TODO or tag with a tracking bug for this task",
+      "range": {
+        "startLine": 477,
+        "startChar": 5,
+        "endLine": 477,
+        "endChar": 65
+      },
+      "revId": "291ca86b601c134d99ffd056002cf986a0d42592",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ee5dd602_c33d36fc",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 2013,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2021-12-14T13:44:56Z",
+      "side": 1,
+      "message": "instead of getting a mutable pointer to an internal member, I suggest making an update method that modifies the internal struct",
+      "range": {
+        "startLine": 2013,
+        "startChar": 25,
+        "endLine": 2013,
+        "endChar": 47
+      },
+      "revId": "291ca86b601c134d99ffd056002cf986a0d42592",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
