@@ -24,6 +24,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "285ce07d_1965ddac",
+        "filename": "src/libANGLE/renderer/vulkan/VkImageImageSiblingVk.cpp",
+        "patchSetId": 19
+      },
+      "lineNbr": 24,
+      "author": {
+        "id": 1000050
+      },
+      "writtenOn": "2021-12-14T15:20:55Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "94f3bd3e_e5b95439",
+      "range": {
+        "startLine": 24,
+        "startChar": 13,
+        "endLine": 24,
+        "endChar": 21
+      },
+      "revId": "493ef2febde79e5af6a1b182ae56217288339b31",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "0f2a4004_5a345d77",
@@ -37,6 +61,30 @@
       "writtenOn": "2021-12-14T13:48:22Z",
       "side": 1,
       "message": "if you validate this in validation already, use ASSERT\notherwise use ANGLE_VK_CHECK",
+      "range": {
+        "startLine": 47,
+        "startChar": 0,
+        "endLine": 50,
+        "endChar": 5
+      },
+      "revId": "493ef2febde79e5af6a1b182ae56217288339b31",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "67deb35d_bde205ec",
+        "filename": "src/libANGLE/renderer/vulkan/VkImageImageSiblingVk.cpp",
+        "patchSetId": 19
+      },
+      "lineNbr": 50,
+      "author": {
+        "id": 1000050
+      },
+      "writtenOn": "2021-12-14T15:20:55Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "0f2a4004_5a345d77",
       "range": {
         "startLine": 47,
         "startChar": 0,
