@@ -16,6 +16,29 @@
       "message": "Wow, that\u0027s a lot of code disappearing.  Tested locally with existing asphalt_9 trace which should land soon.",
       "revId": "df37d532fe2ef6c992f9b61581dd35048cb41f79",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "c983e0e2_761be8d7",
+        "filename": "src/tests/restricted_traces/BUILD.gn",
+        "patchSetId": 5
+      },
+      "lineNbr": 45,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2021-12-14T22:01:00Z",
+      "side": 1,
+      "message": "Which context file is missing?   Do you mean something like TRACE_capture_context1.h?",
+      "range": {
+        "startLine": 45,
+        "startChar": 21,
+        "endLine": 45,
+        "endChar": 55
+      },
+      "revId": "df37d532fe2ef6c992f9b61581dd35048cb41f79",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
