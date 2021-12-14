@@ -76,8 +76,8 @@ class EGLDisplayPowerPreferenceTestMultiDisplay : public EGLDisplayPowerPreferen
 
     void terminateDisplay(EGLDisplay display)
     {
-        // EXPECT_EGL_TRUE(eglTerminate(display));
-        // EXPECT_EGL_SUCCESS();
+        EXPECT_EGL_TRUE(eglTerminate(display));
+        EXPECT_EGL_SUCCESS();
     }
 
     void terminateContext(EGLDisplay display, EGLContext context)
@@ -113,6 +113,41 @@ class EGLDisplayPowerPreferenceTestMultiDisplay : public EGLDisplayPowerPreferen
         displayAttributes.push_back(deviceType);
         displayAttributes.push_back(EGL_POWER_PREFERENCE_ANGLE);
         displayAttributes.push_back(powerPreference);
+        displayAttributes.push_back(EGL_NONE);
+
+        *display = eglGetPlatformDisplayEXT(EGL_PLATFORM_ANGLE_ANGLE,
+                                            reinterpret_cast<void *>(mOSWindow->getNativeDisplay()),
+                                            displayAttributes.data());
+        ASSERT_TRUE(*display != EGL_NO_DISPLAY);
+
+        EGLint majorVersion, minorVersion;
+        ASSERT_TRUE(eglInitialize(*display, &majorVersion, &minorVersion) == EGL_TRUE);
+
+        eglBindAPI(EGL_OPENGL_ES_API);
+        ASSERT_EGL_SUCCESS();
+    }
+
+    void initializeDisplayWithDeviceId(EGLDisplay *display, long deviceId)
+    {
+        GLenum platformType = GetParam().getRenderer();
+        GLenum deviceType   = GetParam().getDeviceType();
+
+        long high = ((deviceId >> 32) & 0xFFFFFFFF);
+        long low  = (deviceId & 0xFFFFFFFF);
+
+        std::vector<EGLint> displayAttributes;
+        displayAttributes.push_back(EGL_PLATFORM_ANGLE_TYPE_ANGLE);
+        displayAttributes.push_back(platformType);
+        displayAttributes.push_back(EGL_PLATFORM_ANGLE_MAX_VERSION_MAJOR_ANGLE);
+        displayAttributes.push_back(EGL_DONT_CARE);
+        displayAttributes.push_back(EGL_PLATFORM_ANGLE_MAX_VERSION_MINOR_ANGLE);
+        displayAttributes.push_back(EGL_DONT_CARE);
+        displayAttributes.push_back(EGL_PLATFORM_ANGLE_DEVICE_TYPE_ANGLE);
+        displayAttributes.push_back(deviceType);
+        displayAttributes.push_back(EGL_PLATFORM_ANGLE_DEVICE_ID_HIGH_ANGLE);
+        displayAttributes.push_back(high);
+        displayAttributes.push_back(EGL_PLATFORM_ANGLE_DEVICE_ID_LOW_ANGLE);
+        displayAttributes.push_back(low);
         displayAttributes.push_back(EGL_NONE);
 
         *display = eglGetPlatformDisplayEXT(EGL_PLATFORM_ANGLE_ANGLE,
@@ -273,6 +308,29 @@ TEST_P(EGLDisplayPowerPreferenceTestMultiDisplay, MultiDisplayTest)
     ANGLE_SKIP_TEST_IF(!IsEGLClientExtensionEnabled("EGL_ANGLE_display_power_preference"));
 
     runMultiDisplay();
+}
+
+TEST_P(EGLDisplayPowerPreferenceTestMultiDisplay, DeviceId)
+{
+    ANGLE_SKIP_TEST_IF(!IsEGLClientExtensionEnabled("EGL_ANGLE_platform_angle_device_id"));
+
+    initializeWindow();
+
+    // Initialize the display with device id <x>
+    EGLDisplay display;
+    EGLContext context;
+    initializeDisplayWithDeviceId(&display, 4294968961);
+    initializeContextForDisplay(display, &context);
+    eglMakeCurrent(display, EGL_NO_SURFACE, EGL_NO_SURFACE, context);
+
+    ASSERT_EQ(findGPU(true), findActiveGPU());
+
+    // Terminate the displays
+    terminateContext(display, context);
+    eglMakeCurrent(display, EGL_NO_SURFACE, EGL_NO_SURFACE, EGL_NO_CONTEXT);
+    terminateDisplay(display);
+
+    terminateWindow();
 }
 
 GTEST_ALLOW_UNINSTANTIATED_PARAMETERIZED_TEST(EGLDisplayPowerPreferenceTest);
