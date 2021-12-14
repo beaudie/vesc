@@ -126,7 +126,7 @@ void GetIORegistryDevices(std::vector<GPUDeviceInfo> *devices)
             uint32_t classCode;
             GPUDeviceInfo info;
             io_registry_entry_t queryEntry = entry;
-            if (kServiceIsGraphicsAccelerator2[i])
+            // if (kServiceIsGraphicsAccelerator2[i])
             {
                 // The IOGraphicsAccelerator2 registry entry points to the system device ID used for
                 // GPU selection by ANGLE_platform_angle_device_id
