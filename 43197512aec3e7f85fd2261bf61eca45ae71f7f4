@@ -16,6 +16,24 @@
       "message": "tim, you good with the comment update?",
       "revId": "43197512aec3e7f85fd2261bf61eca45ae71f7f4",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "b80b6c3e_8156d240",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 8
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2021-12-15T18:44:10Z",
+      "side": 1,
+      "message": "LGTM",
+      "parentUuid": "c2283f7a_84d048e6",
+      "revId": "43197512aec3e7f85fd2261bf61eca45ae71f7f4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
