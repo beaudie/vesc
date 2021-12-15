@@ -334,7 +334,7 @@ angle::Result HardwareBufferImageSiblingVkAndroid::initImpl(DisplayVk *displayVk
             renderer, bufferFormatProperties.externalFormat,
             bufferFormatProperties.suggestedYcbcrModel, bufferFormatProperties.suggestedYcbcrRange,
             bufferFormatProperties.suggestedXChromaOffset,
-            bufferFormatProperties.suggestedYChromaOffset, VK_FILTER_NEAREST,
+            bufferFormatProperties.suggestedYChromaOffset, VK_FILTER_LINEAR,
             bufferFormatProperties.samplerYcbcrConversionComponents, angle::FormatID::NONE);
         mYUV = true;
     }

@@ -3410,10 +3410,10 @@ angle::Result SamplerDesc::init(ContextVk *contextVk, Sampler *sampler) const
         // VK_FORMAT_FEATURE_SAMPLED_IMAGE_YCBCR_CONVERSION_SEPARATE_RECONSTRUCTION_FILTER_BIT is
         // not supported for VkSamplerYcbcrConversionCreateInfo.format = VK_FORMAT_UNDEFINED so
         // minFilter/magFilter needs to be equal to chromaFilter.
-        // HardwareBufferImageSiblingVkAndroid() forces VK_FILTER_NEAREST, so force
-        // VK_FILTER_NEAREST here too.
-        createInfo.magFilter = VK_FILTER_NEAREST;
-        createInfo.minFilter = VK_FILTER_NEAREST;
+        // HardwareBufferImageSiblingVkAndroid() forces VK_FILTER_LINEAR, so force
+        // VK_FILTER_LINEAR here too.
+        createInfo.magFilter = VK_FILTER_LINEAR;
+        createInfo.minFilter = VK_FILTER_LINEAR;
     }
 
     VkSamplerCustomBorderColorCreateInfoEXT customBorderColorInfo = {};
