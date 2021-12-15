@@ -422,3 +422,141 @@
 6751 D3D11 : MultiDrawIndirectTest.MultiDrawElementsIndirect* = SKIP
 6751 METAL : DrawBaseVertexBaseInstanceTest.MultiDrawElementsInstancedBaseVertexBaseInstance/* = SKIP
 6751 D3D11 : DrawBaseVertexBaseInstanceTest.MultiDrawElementsInstancedBaseVertexBaseInstance/* = SKIP
+
+// Swiftshader
+4092 SWIFTSHADER : GLSLTest_ES3.GLVertexIDOffsetZeroDrawArray/* = SKIP
+4092 SWIFTSHADER : GLSLTest_ES3.GLVertexIDOffsetFiveDrawArray/* = SKIP
+
+// Bug in Nexus drivers, offset does not work. (anglebug.com/3264)
+3264 NEXUS5X GLES : GLSLTest_ES3.GLVertexIDOffsetFiveDrawArray/* = SKIP
+
+1293 OPENGL : GLSLTest_ES3.InvariantVaryingOut/* = SKIP
+
+1291 MAC AMD OPENGL : GLSLTest.MaxVaryingVec4/* = SKIP
+3894 NVIDIA GLES : GLSLTest.TwiceMaxVaryingVec2/* = SKIP
+1291 MAC AMD OPENGL : GLSLTest.TwiceMaxVaryingVec2/* = SKIP
+
+???? D3D9 : GLSLTest.MaxVaryingVec2Arrays/* = SKIP
+???? GLES : GLSLTest.MaxVaryingVec2Arrays/* = SKIP
+1291 MAC AMD OPENGL : GLSLTest.MaxVaryingVec2Arrays/* = SKIP
+
+4439 WIN AMD VULKAN : GLSLTest_ES3.MaxVaryingWithFeedbackAndGLline/* = SKIP
+4446 MAC OPENGL : GLSLTest_ES3.MaxVaryingWithFeedbackAndGLline/* = SKIP
+
+5076 D3D11 INTEL : GLSLTest.VerifyMaxVertexUniformVectorsWithSamplers/* = SKIP
+
+// https://crbug.com/1127866 - possible NVIDIA driver issue
+1127866 WIN NVIDIA VULKAN : GLSLTest.NestedPowStatements/* = SKIP
+
+// Suspecting AMD driver bug - failure seen on bots running on AMD R5 230.
+???? LINUX AMD OPENGL : GLSLTest_ES31.FindMSBAndFindLSBCornerCases/* = SKIP
+3821 WIN AMD OPENGL : GLSLTest_ES31.ArraysOfArraysBlockBasicType/* = SKIP
+
+// http://anglebug.com/5072
+5072 LINUX INTEL OPENGL : GLSLTest_ES31.ArraysOfArraysImage/* = SKIP
+// Fails on D3D due to mistranslation.
+???? WIN D3D9 : GLSLTest_ES31.ArraysOfArraysImage/* = SKIP
+???? WIN D3D11 : GLSLTest_ES31.ArraysOfArraysImage/* = SKIP
+???? ANDROID GLES : GLSLTest_ES31.ArraysOfArraysImage/* = SKIP
+
+5072 LINUX INTEL OPENGL : GLSLTest_ES31.ConsecutiveArraysOfArraysImage/* = SKIP
+???? WIN D3D9 : GLSLTest_ES31.ConsecutiveArraysOfArraysImage/* = SKIP
+???? WIN D3D11 : GLSLTest_ES31.ConsecutiveArraysOfArraysImage/* = SKIP
+
+5072 LINUX INTEL OPENGL : GLSLTest_ES31.ArraysOfArraysOfR32fImages/* = SKIP
+???? WIN GLES : GLSLTest_ES31.ArraysOfArraysOfR32fImages/* = SKIP
+???? WIN D3D11 : GLSLTest_ES31.ArraysOfArraysOfR32fImages/* = SKIP
+???? WIN D3D9 : GLSLTest_ES31.ArraysOfArraysOfR32fImages/* = SKIP
+???? ANDROID GLES : GLSLTest_ES31.ArraysOfArraysOfR32fImages/* = SKIP
+???? NVIDIA OPENGL : GLSLTest_ES31.ArraysOfArraysOfR32fImages/* = SKIP
+3832 ANDROID GLES : GLSLTest_ES31.ParameterArraysOfArraysSampler/* = SKIP
+3832 ANDROID GLES : GLSLTest_ES31.ParameterStructArrayArraySampler/* = SKIP
+3832 ANDROID GLES : GLSLTest_ES31.ParameterArrayArrayStructArrayArraySampler/* = SKIP
+3832 ANDROID GLES : GLSLTest_ES31.ParameterArrayArrayArraySampler/* = SKIP
+5546 WIN INTEL OPENGL : GLSLTest_ES31.ParameterArrayArrayArraySampler/* = SKIP
+3604 VULKAN : GLSLTest_ES31.ArraysOfArraysNameCollisionSampler/* = SKIP
+
+// This seems to be bugged on some version of Android. Might not affect the newest versions.
+// TODO(jmadill): Lift suppression when Chromium bots are upgraded.
+// Test skipped on Android because of bug with Nexus 5X.
+???? ANDROID GLES : GLSLTest_ES3.NestedSamplingOperation/* = SKIP
+2046 ANDROID GLES : WebGL2GLSLTest.InitUninitializedLocals/* = SKIP
+2046 ANDROID GLES : WebGL2GLSLTest.InitUninitializedStructContainingArrays/* = SKIP
+2046 ANDROID GLES : WebGL2GLSLTest.UninitializedNamelessStructInForInitStatement/* = SKIP
+4820 MAC OPENGL : GLSLTest.InactiveVaryingInVertexActiveInFragment/* = SKIP
+4820 IOS GLES : GLSLTest.InactiveVaryingInVertexActiveInFragment/* = SKIP
+3413 NVIDIA GLES : GLSLTest_ES3.VaryingStructNotDeclaredInVertexShader/* = SKIP
+3413 MAC NVIDIA OPENGL : WebGL2GLSLTest.VaryingStructNotInitializedInVertexShade/* = SKIP
+3413 WIN AMD : WebGL2GLSLTest.VaryingStructNotInitializedInVertexShade/* = SKIP
+3413 WIN INTEL : WebGL2GLSLTest.VaryingStructNotInitializedInVertexShade/* = SKIP
+5491 IOS GLES : WebGL2GLSLTest.VaryingStructNotInitializedInVertexShade/* = SKIP
+5491 IOS GLES : GLSLTest_ES3.VaryingStructUsedInFragmentShader/* = SKIP
+3220 ANDROID VULKAN : GLSLTest_ES3.ComplexVaryingStructsUsedInFragmentShader/* = SKIP
+5491 IOS GLES : GLSLTest_ES3.ComplexVaryingStructsUsedInFragmentShader/* = SKIP
+5491 IOS GLES : GLSLTest_ES3.VaryingStructWithInlineDefinition/* = SKIP
+
+
+// http://crbug.com/838885
+838885 WIN D3D11 : GLSLTest_ES3.NestedFloorWithLargeMultiplierInside/* = SKIP
+
+// TODO(jiawei.shao@intel.com): enable this test when shader storage buffer is supported on
+// D3D11 back-ends.
+???? WIN D3D11 : GLSLTest_ES31.ExceedCombinedShaderOutputResourcesInVSAndFS/* = SKIP
+
+4092 SWIFTSHADER : GLSLTest.PointCoordConsistency/* = SKIP
+6027 WIN D3D9 : GLSLTest.ValidIndexClampES100/* = SKIP
+
+3830 NVIDIA OPENGL : GLSLTest_ES31.MixedRowAndColumnMajorMatrices/* = SKIP
+3837 LINUX INTEL OPENGL : GLSLTest_ES31.MixedRowAndColumnMajorMatrices/* = SKIP
+3838 WIN AMD OPENGL : GLSLTest_ES31.MixedRowAndColumnMajorMatrices/* = SKIP
+3838 WIN NVIDIA GLES : GLSLTest_ES31.MixedRowAndColumnMajorMatrices/* = SKIP
+3839 ANDROID OPENGL : GLSLTest_ES31.MixedRowAndColumnMajorMatrices/* = SKIP
+3840 ANDROID VULKAN : GLSLTest_ES31.MixedRowAndColumnMajorMatrices/* = SKIP
+3841 WIN D3D11 : GLSLTest_ES31.MixedRowAndColumnMajorMatrices/* = SKIP
+3844 WIN AMD VULKAN : GLSLTest_ES31.MixedRowAndColumnMajorMatrices/* = SKIP
+4492 ARM VULKAN : GLSLTest_ES31.MixedRowAndColumnMajorMatrices/* = SKIP
+
+???? LINUX OPENGL : GLSLTest_ES3.RowMajorMatrix_NestedExpression/* = SKIP
+???? MAC OPENGL : GLSLTest_ES3.RowMajorMatrix_NestedExpression/* = SKIP
+
+3837 LINUX INTEL OPENGL : GLSLTest_ES3.MixedRowAndColumnMajorMatrices_ArrayBufferDeclaration/* = SKIP
+3838 WIN AMD OPENGL : GLSLTest_ES3.MixedRowAndColumnMajorMatrices_ArrayBufferDeclaration/* = SKIP
+3839 ANDROID OPENGL : GLSLTest_ES3.MixedRowAndColumnMajorMatrices_ArrayBufferDeclaration/* = SKIP
+3841 WIN D3D11 : GLSLTest_ES3.MixedRowAndColumnMajorMatrices_ArrayBufferDeclaration/* = SKIP
+3842 MAC INTEL OPENGL : GLSLTest_ES3.MixedRowAndColumnMajorMatrices_ArrayBufferDeclaration/* = SKIP
+3842 MAC AMD OPENGL : GLSLTest_ES3.MixedRowAndColumnMajorMatrices_ArrayBufferDeclaration/* = SKIP
+3842 MAC INTEL OPENGL : GLSLTest_ES3.MixedRowAndColumnMajorMatrices_ReadSideEffect/* = SKIP
+3842 MAC AMD OPENGL : GLSLTest_ES3.MixedRowAndColumnMajorMatrices_ReadSideEffect/* = SKIP
+3841 WIN D3D11 : GLSLTest_ES3.MixedRowAndColumnMajorMatrices_ReadSideEffect/* = SKIP
+3837 LINUX INTEL OPENGL : GLSLTest_ES3.MixedRowAndColumnMajorMatrices_ReadSideEffectOrder/* = SKIP
+3829 MAC OPENGL : GLSLTest_ES3.MixedRowAndColumnMajorMatrices_ReadSideEffectOrder/* = SKIP
+3838 LINUX INTEL OPENGL : GLSLTest_ES3.MixedRowAndColumnMajorMatrices_ReadSideEffectOrderSurroundedByLoop/* = SKIP
+3829 MAC OPENGL : GLSLTest_ES3.MixedRowAndColumnMajorMatrices_ReadSideEffectOrderSurroundedByLoop/* = SKIP
+3837 LINUX INTEL OPENGL : GLSLTest_ES3.MixedRowAndColumnMajorMatrices_ReadSideEffectOrderInALoop/* = SKIP
+3829 MAC OPENGL : GLSLTest_ES3.MixedRowAndColumnMajorMatrices_ReadSideEffectOrderInALoop/* = SKIP
+3839 ANDROID OPENGL : GLSLTest_ES3.MixedRowAndColumnMajorMatrices_ReadSideEffectShortCircuit/* = SKIP
+3829 MAC OPENGL : GLSLTest_ES3.MixedRowAndColumnMajorMatrices_ReadSideEffectShortCircuit/* = SKIP
+5072 LINUX INTEL OPENGL : GLSLTest_ES31.MixOfAllResources/* = SKIP
+5546 WIN INTEL OPENGL : GLSLTest_ES31.MixOfResourcesAsFunctionArgs/* = SKIP
+3832 ANDROID GLES : GLSLTest_ES31.MixOfResourcesAsFunctionArgs/* = SKIP
+3831 NVIDIA OPENGL : GLSLTest_ES31.MixedRowAndColumnMajorMatrices_WriteSideEffect/* = SKIP
+3838 WIN AMD OPENGL : GLSLTest_ES31.MixedRowAndColumnMajorMatrices_WriteSideEffect/* = SKIP
+5384 LINUX AMD OPENGL : GLSLTest_ES31.MixedRowAndColumnMajorMatrices_WriteSideEffect/* = SKIP
+3841 WIN D3D11 : GLSLTest_ES31.MixedRowAndColumnMajorMatrices_WriteSideEffect/* = SKIP
+
+3838 WIN AMD OPENGL : GLSLTest_ES31.MixedRowAndColumnMajorMatrices_WriteArrayOfArray/* = SKIP
+5384 LINUX AMD OPENGL : GLSLTest_ES31.MixedRowAndColumnMajorMatrices_WriteArrayOfArray/* = SKIP
+3841 WIN D3D11 : GLSLTest_ES31.MixedRowAndColumnMajorMatrices_WriteArrayOfArray/* = SKIP
+4920 ANDROID VULKAN : GLSLTest_ES31.MixedRowAndColumnMajorMatrices_WriteArrayOfArray/* = SKIP
+4492 ARM VULKAN : GLSLTest_ES31.MixedRowAndColumnMajorMatrices_WriteArrayOfArray/* = SKIP
+
+4404 WIN D3D11 : GLSLTest_ES31.VariableNameReuseAcrossStages/* = SKIP
+
+5546 WIN INTEL OPENGL : GLSLTest_ES31.ArrayOfArrayOfSamplerAsFunctionParameterIndexedWithSideEffect/* = SKIP
+3832 ANDROID GLES : GLSLTest_ES31.ArrayOfArrayOfSamplerAsFunctionParameterIndexedWithSideEffect/* = SKIP
+
+5240 WIN NVIDIA OPENGL : GLSLTest_ES31.UniformPrecisionMatchValidation/* = SKIP
+5240 WIN NVIDIA GLES : GLSLTest_ES31.UniformPrecisionMatchValidation/* = SKIP
+
+???? WIN NVIDIA OPENGL : GLSLTest.VectorAndMatrixScalarizationDoesNotAffectRendering/* = SKIP
+???? WIN NVIDIA GLES : GLSLTest.VectorAndMatrixScalarizationDoesNotAffectRendering/* = SKIP

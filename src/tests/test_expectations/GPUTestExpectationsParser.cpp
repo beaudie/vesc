@@ -58,6 +58,7 @@ enum Token
     // gpu vendor
     kConfigNVIDIA,
     kConfigAMD,
+    kConfigARM,
     kConfigIntel,
     kConfigVMWare,
     kConfigApple,
@@ -167,6 +168,7 @@ constexpr TokenInfo kTokenData[kNumberOfTokens] = {
     {"android", GPUTestConfig::kConditionAndroid},
     {"nvidia", GPUTestConfig::kConditionNVIDIA},
     {"amd", GPUTestConfig::kConditionAMD},
+    {"arm", GPUTestConfig::kConditionARM},
     {"intel", GPUTestConfig::kConditionIntel},
     {"vmware", GPUTestConfig::kConditionVMWare},
     {"apple", GPUTestConfig::kConditionApple},
@@ -495,6 +497,7 @@ bool GPUTestExpectationsParser::parseLine(const GPUTestConfig *config,
             case kConfigAndroid:
             case kConfigNVIDIA:
             case kConfigAMD:
+            case kConfigARM:
             case kConfigIntel:
             case kConfigVMWare:
             case kConfigApple:
