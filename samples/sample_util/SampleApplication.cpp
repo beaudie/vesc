@@ -112,24 +112,27 @@ SampleApplication::SampleApplication(std::string name,
     mOSWindow = OSWindow::New();
 
     // Load EGL library so we can initialize the display.
+    std::string outFilePathWithError;
     if (useNativeGL)
     {
 #if defined(ANGLE_PLATFORM_WINDOWS)
         mGLWindow = WGLWindow::New(glesMajorVersion, glesMinorVersion);
-        mEntryPointsLib.reset(angle::OpenSharedLibrary("opengl32", angle::SearchType::SystemDir));
+        mEntryPointsLib.reset(angle::OpenSharedLibrary("opengl32", angle::SearchType::SystemDir,
+                                                       &outFilePathWithError));
         mDriverType = angle::GLESDriverType::SystemWGL;
 #else
         mGLWindow = EGLWindow::New(glesMajorVersion, glesMinorVersion);
         mEntryPointsLib.reset(angle::OpenSharedLibraryWithExtension(
-            angle::GetNativeEGLLibraryNameWithExtension(), angle::SearchType::SystemDir));
+            angle::GetNativeEGLLibraryNameWithExtension(), angle::SearchType::SystemDir,
+            &outFilePathWithError));
         mDriverType = angle::GLESDriverType::SystemEGL;
 #endif  // defined(ANGLE_PLATFORM_WINDOWS)
     }
     else
     {
         mGLWindow = mEGLWindow = EGLWindow::New(glesMajorVersion, glesMinorVersion);
-        mEntryPointsLib.reset(
-            angle::OpenSharedLibrary(ANGLE_EGL_LIBRARY_NAME, angle::SearchType::ModuleDir));
+        mEntryPointsLib.reset(angle::OpenSharedLibrary(
+            ANGLE_EGL_LIBRARY_NAME, angle::SearchType::ModuleDir, &outFilePathWithError));
     }
 }
 

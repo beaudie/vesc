@@ -36,8 +36,9 @@ IcdDispatch CreateDispatch()
 
     // Try to find ANGLE's GLESv2 library in the consistent way, which might fail
     // if the current library or a link to it is not in ANGLE's binary directory
-    EntryPointsLib().reset(
-        angle::OpenSharedLibrary(ANGLE_GLESV2_LIBRARY_NAME, angle::SearchType::ModuleDir));
+    std::string outFilePathWithError;
+    EntryPointsLib().reset(angle::OpenSharedLibrary(
+        ANGLE_GLESV2_LIBRARY_NAME, angle::SearchType::ModuleDir, &outFilePathWithError));
     if (EntryPointsLib() && EntryPointsLib()->getNative() != nullptr)
     {
         EntryPointsLib()->getAs("gCLIcdDispatchTable", &clIcdDispatch);
@@ -70,8 +71,8 @@ IcdDispatch CreateDispatch()
         }
 #else
         // On posix-compatible systems this will also search in the rpath, which is the build path
-        EntryPointsLib().reset(
-            angle::OpenSharedLibrary(ANGLE_GLESV2_LIBRARY_NAME, angle::SearchType::SystemDir));
+        EntryPointsLib().reset(angle::OpenSharedLibrary(
+            ANGLE_GLESV2_LIBRARY_NAME, angle::SearchType::SystemDir, &outFilePathWithError));
         if (EntryPointsLib() && EntryPointsLib()->getNative() != nullptr)
         {
             EntryPointsLib()->getAs("gCLIcdDispatchTable", &clIcdDispatch);

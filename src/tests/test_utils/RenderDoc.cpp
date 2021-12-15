@@ -33,7 +33,9 @@ constexpr char kRenderDocModuleName[] = "librenderdoc";
 
 void RenderDoc::attach()
 {
-    mRenderDocModule = OpenSharedLibrary(kRenderDocModuleName, angle::SearchType::AlreadyLoaded);
+    std::string outFilePathWithError;
+    mRenderDocModule = OpenSharedLibrary(kRenderDocModuleName, angle::SearchType::AlreadyLoaded,
+                                         &outFilePathWithError);
     if (mRenderDocModule == nullptr || mRenderDocModule->getNative() == nullptr)
     {
         return;
