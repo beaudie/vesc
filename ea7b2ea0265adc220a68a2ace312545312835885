@@ -33,6 +33,24 @@
       "message": "I admit I have no idea why this is necessary as we build just fine on 32-bit Android. Maybe the compiler for watch OS is out of date? I\u0027d suggest putting comments in the code that this specific stuff was added for that reason.",
       "revId": "ea7b2ea0265adc220a68a2ace312545312835885",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "880d1399_3c0bd245",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1115588
+      },
+      "writtenOn": "2021-12-15T22:17:25Z",
+      "side": 1,
+      "message": "For the code in ContextMTL.mm, the issue is, on WatchOS (32bit), DirtyBits becomes a BitSetArray and there is no constructor that takes an int for BitSetArray. On 64bit DirtyBits becomes a BitSetT for which there is a constructor. Shabi suggested just use the code that doesn\u0027t use constexpr.\n\nFor the code in validationEGL.h I added a comment. The issue there is again on WatchOS where I think the assumption that on 32bit EGLint and EGLAttrib are the same was false.",
+      "parentUuid": "ade6b977_6faf081b",
+      "revId": "ea7b2ea0265adc220a68a2ace312545312835885",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
