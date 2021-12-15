@@ -16,6 +16,23 @@
       "message": "After discussion with Gregg, this is a rewrite of some of this functionality - would be best to get a second pair of eyes on it.\n",
       "revId": "ea7b2ea0265adc220a68a2ace312545312835885",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "ade6b977_6faf081b",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2021-12-15T14:50:19Z",
+      "side": 1,
+      "message": "I admit I have no idea why this is necessary as we build just fine on 32-bit Android. Maybe the compiler for watch OS is out of date? I\u0027d suggest putting comments in the code that this specific stuff was added for that reason.",
+      "revId": "ea7b2ea0265adc220a68a2ace312545312835885",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
