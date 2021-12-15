@@ -50,6 +50,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "894d959c_09d678d9",
+        "filename": "src/common/system_utils.h",
+        "patchSetId": 5
+      },
+      "lineNbr": 92,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2021-12-15T14:31:16Z",
+      "side": 1,
+      "message": "These are orthogonal. You can have 4 functions which all internally call the same helper with the appropriate parameters.",
+      "parentUuid": "cbbf7239_e2ed2510",
+      "range": {
+        "startLine": 85,
+        "startChar": 0,
+        "endLine": 92,
+        "endChar": 0
+      },
+      "revId": "9032976292d78b9a401c54d346f9315424fe4f21",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "d55ccf30_ebf1ffbb",
         "filename": "src/common/system_utils_posix.cpp",
         "patchSetId": 5
@@ -133,6 +157,30 @@
       "side": 1,
       "message": "I\u0027m assuming different platforms could put different info in here, but \"outFilePathWithError\" is meant to contain as much info as possible regarding the failure to load a library, when it happens.",
       "parentUuid": "23cdaae9_9b502286",
+      "range": {
+        "startLine": 108,
+        "startChar": 75,
+        "endLine": 108,
+        "endChar": 95
+      },
+      "revId": "9032976292d78b9a401c54d346f9315424fe4f21",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "c6cb05a0_cb502df9",
+        "filename": "src/common/system_utils_posix.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 108,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2021-12-15T14:31:16Z",
+      "side": 1,
+      "message": "Ok, then you can call it `errorOut`, because otherwise it sounds like getting the file path is supposed to be part of this.",
+      "parentUuid": "8b5fd48d_6ce01a9c",
       "range": {
         "startLine": 108,
         "startChar": 75,
