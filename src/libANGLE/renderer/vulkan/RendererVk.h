@@ -255,9 +255,18 @@ class RendererVk : angle::NonCopyable
     bool hasBufferFormatFeatureBits(angle::FormatID format,
                                     const VkFormatFeatureFlags featureBits) const;
 
+    bool isAsyncCommandQueue() const
+    {
+        // Disable async command queue when using Vulkan secondary command buffers temporarily to
+        // avoid threading hazards with ContextVk::mCommandPool.
+        // TODO: Investigate whether async command queue is useful with Vulkan secondary command
+        // buffers and enable the feature.  http://anglebug.com/6811
+        return mFeatures.asyncCommandQueue.enabled && vk::CommandBuffer::ExecutesInline();
+    }
+
     ANGLE_INLINE egl::ContextPriority getDriverPriority(egl::ContextPriority priority)
     {
-        if (mFeatures.asyncCommandQueue.enabled)
+        if (isAsyncCommandQueue())
         {
             return mCommandProcessor.getDriverPriority(priority);
         }
@@ -268,7 +277,7 @@ class RendererVk : angle::NonCopyable
     }
     ANGLE_INLINE uint32_t getDeviceQueueIndex()
     {
-        if (mFeatures.asyncCommandQueue.enabled)
+        if (isAsyncCommandQueue())
         {
             return mCommandProcessor.getDeviceQueueIndex();
         }
@@ -280,7 +289,7 @@ class RendererVk : angle::NonCopyable
 
     VkQueue getQueue(egl::ContextPriority priority)
     {
-        if (mFeatures.asyncCommandQueue.enabled)
+        if (isAsyncCommandQueue())
         {
             return mCommandProcessor.getQueue(priority);
         }
@@ -357,7 +366,7 @@ class RendererVk : angle::NonCopyable
 
     ANGLE_INLINE Serial getLastCompletedQueueSerial()
     {
-        if (mFeatures.asyncCommandQueue.enabled)
+        if (isAsyncCommandQueue())
         {
             return mCommandProcessor.getLastCompletedQueueSerial();
         }
@@ -371,7 +380,7 @@ class RendererVk : angle::NonCopyable
     ANGLE_INLINE bool isCommandQueueBusy()
     {
         std::lock_guard<std::mutex> lock(mCommandQueueMutex);
-        if (mFeatures.asyncCommandQueue.enabled)
+        if (isAsyncCommandQueue())
         {
             return mCommandProcessor.isBusy();
         }
@@ -383,7 +392,7 @@ class RendererVk : angle::NonCopyable
 
     angle::Result ensureNoPendingWork(vk::Context *context)
     {
-        if (mFeatures.asyncCommandQueue.enabled)
+        if (isAsyncCommandQueue())
         {
             return mCommandProcessor.ensureNoPendingWork(context);
         }
