@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "60814efd_e4e0933e",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1491823
+      },
+      "writtenOn": "2021-12-15T13:02:07Z",
+      "side": 1,
+      "message": "An alternative would be to drop the MS depth renderbuffer in the test before doing the swap, it could be better in the sense that we would only change a non-substantial part of the test that now passes, and would keep hitting the assertion failure when we want to read back a MS depth renderbuffer to remind us that there is some functionality missing. Any thoughts? ",
+      "revId": "bf83fffb0bc27b2c10be942561bf3636842b5b70",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
