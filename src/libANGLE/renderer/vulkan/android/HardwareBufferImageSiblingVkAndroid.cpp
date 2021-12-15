@@ -338,7 +338,7 @@ angle::Result HardwareBufferImageSiblingVkAndroid::initImpl(DisplayVk *displayVk
         yuvConversionInfo.yChromaOffset = bufferFormatProperties.suggestedYChromaOffset;
         yuvConversionInfo.ycbcrModel    = bufferFormatProperties.suggestedYcbcrModel;
         yuvConversionInfo.ycbcrRange    = bufferFormatProperties.suggestedYcbcrRange;
-        yuvConversionInfo.chromaFilter  = VK_FILTER_NEAREST;
+        yuvConversionInfo.chromaFilter  = VK_FILTER_LINEAR;
         yuvConversionInfo.components    = bufferFormatProperties.samplerYcbcrConversionComponents;
 
         yuvConversionInfoPtr = &yuvConversionInfo;
