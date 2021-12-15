@@ -117,6 +117,30 @@
       },
       "revId": "9032976292d78b9a401c54d346f9315424fe4f21",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "8b5fd48d_6ce01a9c",
+        "filename": "src/common/system_utils_posix.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 108,
+      "author": {
+        "id": 1002767
+      },
+      "writtenOn": "2021-12-15T14:28:00Z",
+      "side": 1,
+      "message": "I\u0027m assuming different platforms could put different info in here, but \"outFilePathWithError\" is meant to contain as much info as possible regarding the failure to load a library, when it happens.",
+      "parentUuid": "23cdaae9_9b502286",
+      "range": {
+        "startLine": 108,
+        "startChar": 75,
+        "endLine": 108,
+        "endChar": 95
+      },
+      "revId": "9032976292d78b9a401c54d346f9315424fe4f21",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
