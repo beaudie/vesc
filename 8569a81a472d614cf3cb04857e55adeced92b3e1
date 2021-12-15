@@ -22,6 +22,30 @@
       },
       "revId": "8569a81a472d614cf3cb04857e55adeced92b3e1",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "762903bb_d9f1756e",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 266,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2021-12-15T15:02:31Z",
+      "side": 1,
+      "message": "Done. I kept the refactor to use `isAsyncCommandQueue()`.",
+      "parentUuid": "a55d8763_e72f12dd",
+      "range": {
+        "startLine": 258,
+        "startChar": 0,
+        "endLine": 266,
+        "endChar": 0
+      },
+      "revId": "8569a81a472d614cf3cb04857e55adeced92b3e1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
