@@ -83,9 +83,12 @@ enum class SearchType
     AlreadyLoaded,
 };
 
-std::string GetSharedLibraryName(const char *libraryName, SearchType searchType);
-Library *OpenSharedLibrary(const char *libraryName, SearchType searchType);
-Library *OpenSharedLibraryWithExtension(const char *libraryName, SearchType searchType);
+Library *OpenSharedLibrary(const char *libraryName,
+                           SearchType searchType,
+                           std::string *outFilePathWithError = nullptr);
+Library *OpenSharedLibraryWithExtension(const char *libraryName,
+                                        SearchType searchType,
+                                        std::string *outFilePathWithError = nullptr);
 
 // Returns true if the process is currently being debugged.
 bool IsDebuggerAttached();
