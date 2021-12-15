@@ -16,6 +16,24 @@
       "message": "Question: could we gain benefits by hooking this up in ANGLE?",
       "revId": "b45a7b67416ff30476c6ab297396352d0d3627ad",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "49c24f37_ebbe6414",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1115588
+      },
+      "writtenOn": "2021-12-15T18:57:16Z",
+      "side": 1,
+      "message": "My understanding is the binaries are different on different devices. Not sure if that\u0027s Mac vs iOS or Intel vs AMD vs M1. IIRC Ken said Apple ships different binaries per device.",
+      "parentUuid": "bdb2d215_ec12d1fb",
+      "revId": "b45a7b67416ff30476c6ab297396352d0d3627ad",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
