@@ -69,6 +69,30 @@
       },
       "revId": "9032976292d78b9a401c54d346f9315424fe4f21",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "5067b1ed_65bb8b43",
+        "filename": "src/common/system_utils_posix.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 108,
+      "author": {
+        "id": 1002767
+      },
+      "writtenOn": "2021-12-15T14:23:30Z",
+      "side": 1,
+      "message": "I could call it \"info\", if you prefer, but I\u0027m returning more than an error, I\u0027m also added info from stat().",
+      "parentUuid": "d55ccf30_ebf1ffbb",
+      "range": {
+        "startLine": 108,
+        "startChar": 75,
+        "endLine": 108,
+        "endChar": 95
+      },
+      "revId": "9032976292d78b9a401c54d346f9315424fe4f21",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
