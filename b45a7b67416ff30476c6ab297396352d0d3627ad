@@ -52,6 +52,24 @@
       "parentUuid": "49c24f37_ebbe6414",
       "revId": "b45a7b67416ff30476c6ab297396352d0d3627ad",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "7991b343_7673edfe",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1500872
+      },
+      "writtenOn": "2021-12-15T19:35:55Z",
+      "side": 1,
+      "message": "It should be possible to do a checkin-time rebuild of a .metal file to an .metallib library, and include this in the ANGLE repository. \n\nIn terms of benefits: In safari, we were seeing a significant of performance / CPU time spent in MTLCompilerService compiling the default library from source.",
+      "parentUuid": "223d40b7_c152532f",
+      "revId": "b45a7b67416ff30476c6ab297396352d0d3627ad",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }

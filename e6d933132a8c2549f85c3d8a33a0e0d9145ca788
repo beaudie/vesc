@@ -16,6 +16,24 @@
       "message": "Not sure how to go about integrating this. git cl upload complains\n\nWarning in //src/libANGLE/renderer/metal:angle_metal_backend: src/libANGLE/renderer/metal/DisplayMtl.mm: Invalid include: b\u0027mtl_default_shaders_compiled.inc\u0027\n\nThe scripts don\u0027t seem to generate that so maybe it\u0027s just missing?\n\n",
       "revId": "e6d933132a8c2549f85c3d8a33a0e0d9145ca788",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "183f698b_2cb96c10",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1500872
+      },
+      "writtenOn": "2021-12-15T19:35:55Z",
+      "side": 1,
+      "message": "https://chromium-review.googlesource.com/c/angle/angle/+/3331206/1/src/libANGLE/renderer/metal/shaders/create_mtl_internal_shaders.py\n\nThis script should create the mtl_default_shaders_compiled.inc The script takes in a .metal shader, and should output the .inc shader. We might need to rewrite this a bit for autoscript.",
+      "parentUuid": "ab282401_1e3e4509",
+      "revId": "e6d933132a8c2549f85c3d8a33a0e0d9145ca788",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
