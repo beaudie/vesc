@@ -63,6 +63,30 @@
       },
       "revId": "cd92992169df93d14bccd75df73d400d2cb2a291",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "276667d2_c47a353e",
+        "filename": "scripts/export_targets.py",
+        "patchSetId": 1
+      },
+      "lineNbr": 301,
+      "author": {
+        "id": 1115588
+      },
+      "writtenOn": "2021-12-15T00:22:02Z",
+      "side": 1,
+      "message": "done",
+      "parentUuid": "e3550916_e6a3aad7",
+      "range": {
+        "startLine": 301,
+        "startChar": 42,
+        "endLine": 301,
+        "endChar": 85
+      },
+      "revId": "cd92992169df93d14bccd75df73d400d2cb2a291",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
