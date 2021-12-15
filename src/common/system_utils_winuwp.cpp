@@ -34,7 +34,7 @@ std::string GetEnvironmentVar(const char *variableName)
 class UwpLibrary : public Library
 {
   public:
-    UwpLibrary(const char *libraryName, SearchType searchType)
+    UwpLibrary(const char *libraryName, SearchType searchType, std::string *outFilePath)
     {
         std::wstring_convert<std::codecvt_utf8_utf16<wchar_t>> converter;
         std::wstring wideBuffer = converter.from_bytes(libraryName);
@@ -42,7 +42,8 @@ class UwpLibrary : public Library
         switch (searchType)
         {
             case SearchType::ModuleDir:
-                mModule = LoadPackagedLibrary(wideBuffer.c_str(), 0);
+                *outFilePath = wideBuffer.c_str();
+                mModule      = LoadPackagedLibrary(wideBuffer.c_str(), 0);
                 break;
             case SearchType::SystemDir:
             case SearchType::AlreadyLoaded:
@@ -91,29 +92,16 @@ class UwpLibrary : public Library
     HMODULE mModule = nullptr;
 };
 
-std::string GetSharedLibraryName(const char *libraryName, SearchType searchType)
+Library *OpenSharedLibrary(const char *libraryName,
+                           SearchType searchType,
+                           std::string *outFilePathWithError)
 {
     char buffer[MAX_PATH];
     int ret = snprintf(buffer, MAX_PATH, "%s.%s", libraryName, GetSharedLibraryExtension());
 
     if (ret > 0 && ret < MAX_PATH)
     {
-        return std::string(buffer);
-    }
-    else
-    {
-        return std::string("");
-    }
-}
-
-Library *OpenSharedLibrary(const char *libraryName, SearchType searchType)
-{
-    char buffer[MAX_PATH];
-    int ret = snprintf(buffer, MAX_PATH, "%s.%s", libraryName, GetSharedLibraryExtension());
-
-    if (ret > 0 && ret < MAX_PATH)
-    {
-        return OpenSharedLibraryWithExtension(buffer, searchType);
+        return OpenSharedLibraryWithExtension(buffer, searchType, outFilePathWithError);
     }
     else
     {
@@ -122,9 +110,11 @@ Library *OpenSharedLibrary(const char *libraryName, SearchType searchType)
     }
 }
 
-Library *OpenSharedLibraryWithExtension(const char *libraryName, SearchType searchType)
+Library *OpenSharedLibraryWithExtension(const char *libraryName,
+                                        SearchType searchType,
+                                        std::string *outFilePathWithError)
 {
-    return new UwpLibrary(libraryName, searchType);
+    return new UwpLibrary(libraryName, searchType, outFilePathWithError);
 }
 
 namespace

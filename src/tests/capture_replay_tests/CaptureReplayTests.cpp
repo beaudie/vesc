@@ -35,8 +35,9 @@ class CaptureReplayTests
     CaptureReplayTests()
     {
         // Load EGL library so we can initialize the display.
-        mEntryPointsLib.reset(
-            angle::OpenSharedLibrary(ANGLE_EGL_LIBRARY_NAME, angle::SearchType::ModuleDir));
+        std::string outFilePathWithError;
+        mEntryPointsLib.reset(angle::OpenSharedLibrary(
+            ANGLE_EGL_LIBRARY_NAME, angle::SearchType::ModuleDir, &outFilePathWithError));
 
         mOSWindow = OSWindow::New();
         mOSWindow->disableErrorMessageDialog();

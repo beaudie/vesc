@@ -103,9 +103,21 @@ std::string GetModuleDirectory()
 class PosixLibrary : public Library
 {
   public:
-    PosixLibrary(const std::string &fullPath, int extraFlags)
+    PosixLibrary(const std::string &fullPath, int extraFlags, std::string *outFilePath)
         : mModule(dlopen(fullPath.c_str(), RTLD_NOW | extraFlags))
-    {}
+    {
+        if (mModule)
+        {
+            *outFilePath = fullPath;
+        }
+        else
+        {
+            *outFilePath = "Error dlopen(";
+            *outFilePath += fullPath;
+            *outFilePath += ") failed with error: ";
+            *outFilePath += dlerror();
+        }
+    }
 
     ~PosixLibrary() override
     {
@@ -141,37 +153,18 @@ class PosixLibrary : public Library
     void *mModule = nullptr;
 };
 
-std::string GetSharedLibraryName(const char *libraryName, SearchType searchType)
+Library *OpenSharedLibrary(const char *libraryName,
+                           SearchType searchType,
+                           std::string *outFilePathWithError)
 {
     std::string libraryWithExtension = std::string(libraryName) + "." + GetSharedLibraryExtension();
-
-    std::string directory;
-    if (searchType == SearchType::ModuleDir)
-    {
-#if ANGLE_PLATFORM_IOS
-        // On iOS, shared libraries must be loaded from within the app bundle.
-        directory = GetExecutableDirectory() + "/Frameworks/";
-#else
-        directory = GetModuleDirectory();
-#endif
-    }
-
-    std::string fullPath = directory + libraryWithExtension;
-#if ANGLE_PLATFORM_IOS
-    // On iOS, dlopen needs a suffix on the framework name to work.
-    fullPath = fullPath + "/" + libraryName;
-#endif
-
-    return fullPath;
+    return OpenSharedLibraryWithExtension(libraryWithExtension.c_str(), searchType,
+                                          outFilePathWithError);
 }
 
-Library *OpenSharedLibrary(const char *libraryName, SearchType searchType)
-{
-    std::string libraryWithExtension = std::string(libraryName) + "." + GetSharedLibraryExtension();
-    return OpenSharedLibraryWithExtension(libraryWithExtension.c_str(), searchType);
-}
-
-Library *OpenSharedLibraryWithExtension(const char *libraryName, SearchType searchType)
+Library *OpenSharedLibraryWithExtension(const char *libraryName,
+                                        SearchType searchType,
+                                        std::string *outFilePathWithError)
 {
     std::string directory;
     if (searchType == SearchType::ModuleDir)
@@ -195,7 +188,8 @@ Library *OpenSharedLibraryWithExtension(const char *libraryName, SearchType sear
     // On iOS, dlopen needs a suffix on the framework name to work.
     fullPath = fullPath + "/" + libraryName;
 #endif
-    return new PosixLibrary(fullPath, extraFlags);
+
+    return new PosixLibrary(fullPath, extraFlags, outFilePathWithError);
 }
 
 bool IsDirectory(const char *filename)

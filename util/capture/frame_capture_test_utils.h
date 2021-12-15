@@ -79,7 +79,9 @@ class TraceLibrary
         traceNameStr << ".cr";
 #endif  // defined(ANGLE_PLATFORM_ANDROID) && defined(COMPONENT_BUILD)
         std::string traceName = traceNameStr.str();
-        mTraceLibrary.reset(OpenSharedLibrary(traceName.c_str(), SearchType::ModuleDir));
+        std::string outFilePathWithError;
+        mTraceLibrary.reset(
+            OpenSharedLibrary(traceName.c_str(), SearchType::ModuleDir, &outFilePathWithError));
     }
 
     bool valid() const

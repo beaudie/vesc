@@ -1541,7 +1541,9 @@ Library *ANGLETestEnvironment::GetAngleEGLLibrary()
 #if defined(ANGLE_USE_UTIL_LOADER)
     if (!gAngleEGLLibrary)
     {
-        gAngleEGLLibrary.reset(OpenSharedLibrary(ANGLE_EGL_LIBRARY_NAME, SearchType::ModuleDir));
+        std::string outFilePathWithError;
+        gAngleEGLLibrary.reset(OpenSharedLibrary(ANGLE_EGL_LIBRARY_NAME, SearchType::ModuleDir,
+                                                 &outFilePathWithError));
     }
 #endif  // defined(ANGLE_USE_UTIL_LOADER)
     return gAngleEGLLibrary.get();
@@ -1553,8 +1555,9 @@ Library *ANGLETestEnvironment::GetSystemEGLLibrary()
 #if defined(ANGLE_USE_UTIL_LOADER)
     if (!gSystemEGLLibrary)
     {
+        std::string outFilePathWithError;
         gSystemEGLLibrary.reset(OpenSharedLibraryWithExtension(
-            GetNativeEGLLibraryNameWithExtension(), SearchType::SystemDir));
+            GetNativeEGLLibraryNameWithExtension(), SearchType::SystemDir, &outFilePathWithError));
     }
 #endif  // defined(ANGLE_USE_UTIL_LOADER)
     return gSystemEGLLibrary.get();
@@ -1566,7 +1569,9 @@ Library *ANGLETestEnvironment::GetSystemWGLLibrary()
 #if defined(ANGLE_USE_UTIL_LOADER) && defined(ANGLE_PLATFORM_WINDOWS)
     if (!gSystemWGLLibrary)
     {
-        gSystemWGLLibrary.reset(OpenSharedLibrary("opengl32", SearchType::SystemDir));
+        std::string outFilePathWithError;
+        gSystemWGLLibrary.reset(
+            OpenSharedLibrary("opengl32", SearchType::SystemDir, &outFilePathWithError));
     }
 #endif  // defined(ANGLE_USE_UTIL_LOADER) && defined(ANGLE_PLATFORM_WINDOWS)
     return gSystemWGLLibrary.get();

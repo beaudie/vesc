@@ -43,8 +43,9 @@ std::unique_ptr<Library> OpenLibVulkan()
     {
         for (const char *libraryName : kLibVulkanNames)
         {
+            std::string outFilePathWithError;
             std::unique_ptr<Library> library(
-                OpenSharedLibraryWithExtension(libraryName, searchType));
+                OpenSharedLibraryWithExtension(libraryName, searchType, &outFilePathWithError));
             if (library && library->getNative())
             {
                 return library;

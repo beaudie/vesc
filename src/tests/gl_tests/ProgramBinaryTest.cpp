@@ -1330,8 +1330,9 @@ class ProgramBinariesAcrossPlatforms : public testing::TestWithParam<PlatformsWi
             FAIL() << "Failed to create OS window";
         }
 
-        mEntryPointsLib.reset(
-            angle::OpenSharedLibrary(ANGLE_EGL_LIBRARY_NAME, angle::SearchType::ModuleDir));
+        std::string outFilePathWithError;
+        mEntryPointsLib.reset(angle::OpenSharedLibrary(
+            ANGLE_EGL_LIBRARY_NAME, angle::SearchType::ModuleDir, &outFilePathWithError));
     }
 
     EGLWindow *createAndInitEGLWindow(angle::PlatformParameters &param)

@@ -651,17 +651,20 @@ ANGLERenderTest::ANGLERenderTest(const std::string &name,
     // Try to ensure we don't trigger allocation during execution.
     mTraceEventBuffer.reserve(kInitialTraceEventBufferSize);
 
+    std::string outFilePathWithError;
     switch (testParams.driver)
     {
         case GLESDriverType::AngleEGL:
             mGLWindow = EGLWindow::New(testParams.majorVersion, testParams.minorVersion);
-            mEntryPointsLib.reset(OpenSharedLibrary(ANGLE_EGL_LIBRARY_NAME, SearchType::ModuleDir));
+            mEntryPointsLib.reset(OpenSharedLibrary(ANGLE_EGL_LIBRARY_NAME, SearchType::ModuleDir,
+                                                    &outFilePathWithError));
             break;
         case GLESDriverType::SystemEGL:
 #if defined(ANGLE_USE_UTIL_LOADER) && !defined(ANGLE_PLATFORM_WINDOWS)
             mGLWindow = EGLWindow::New(testParams.majorVersion, testParams.minorVersion);
-            mEntryPointsLib.reset(OpenSharedLibraryWithExtension(
-                GetNativeEGLLibraryNameWithExtension(), SearchType::SystemDir));
+            mEntryPointsLib.reset(
+                OpenSharedLibraryWithExtension(GetNativeEGLLibraryNameWithExtension(),
+                                               SearchType::SystemDir, &outFilePathWithError));
 #else
             std::cerr << "Not implemented." << std::endl;
             mSkipTest = true;
@@ -670,7 +673,8 @@ ANGLERenderTest::ANGLERenderTest(const std::string &name,
         case GLESDriverType::SystemWGL:
 #if defined(ANGLE_USE_UTIL_LOADER) && defined(ANGLE_PLATFORM_WINDOWS)
             mGLWindow = WGLWindow::New(testParams.majorVersion, testParams.minorVersion);
-            mEntryPointsLib.reset(OpenSharedLibrary("opengl32", SearchType::SystemDir));
+            mEntryPointsLib.reset(
+                OpenSharedLibrary("opengl32", SearchType::SystemDir, &outFilePathWithError));
 #else
             std::cout << "WGL driver not available. Skipping test." << std::endl;
             mSkipTest = true;
