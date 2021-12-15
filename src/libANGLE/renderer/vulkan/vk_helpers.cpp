@@ -4507,6 +4507,24 @@ bool BufferHelper::isReleasedToExternal() const
 #endif
 }
 
+ANGLE_INLINE void BufferHelper::initBufferMemoryBarrierStruct(
+    VkPipelineStageFlags srcStageMask,
+    VkPipelineStageFlags dstStageMask,
+    VkFlags srcAccess,
+    VkFlags dstAccess,
+    VkBufferMemoryBarrier *bufferMemoryBarrier) const
+{
+    ASSERT(mSuballocation.valid());
+    bufferMemoryBarrier->sType               = VK_STRUCTURE_TYPE_BUFFER_MEMORY_BARRIER;
+    bufferMemoryBarrier->srcAccessMask       = srcAccess;
+    bufferMemoryBarrier->dstAccessMask       = dstAccess;
+    bufferMemoryBarrier->srcQueueFamilyIndex = mCurrentQueueFamilyIndex;
+    bufferMemoryBarrier->dstQueueFamilyIndex = mCurrentQueueFamilyIndex;
+    bufferMemoryBarrier->buffer              = getBuffer().getHandle();
+    bufferMemoryBarrier->offset              = getOffset();
+    bufferMemoryBarrier->size                = getSize();
+}
+
 bool BufferHelper::recordReadBarrier(VkAccessFlags readAccessType,
                                      VkPipelineStageFlags readStage,
                                      PipelineBarrier *barrier)
@@ -4517,8 +4535,10 @@ bool BufferHelper::recordReadBarrier(VkAccessFlags readAccessType,
     if (mCurrentWriteAccess != 0 && (((mCurrentReadAccess & readAccessType) != readAccessType) ||
                                      ((mCurrentReadStages & readStage) != readStage)))
     {
-        barrier->mergeMemoryBarrier(mCurrentWriteStages, readStage, mCurrentWriteAccess,
-                                    readAccessType);
+        VkBufferMemoryBarrier bufferMemoryBarrier = {};
+        initBufferMemoryBarrierStruct(mCurrentWriteStages, readStage, mCurrentWriteAccess,
+                                      readAccessType, &bufferMemoryBarrier);
+        barrier->mergeBufferBarrier(mCurrentWriteStages, readStage, bufferMemoryBarrier);
         barrierModified = true;
     }
 
@@ -4539,8 +4559,11 @@ bool BufferHelper::recordWriteBarrier(VkAccessFlags writeAccessType,
            (mCurrentReadStages && mCurrentReadAccess));
     if (mCurrentReadAccess != 0 || mCurrentWriteAccess != 0)
     {
-        VkPipelineStageFlags srcStageMask = mCurrentWriteStages | mCurrentReadStages;
-        barrier->mergeMemoryBarrier(srcStageMask, writeStage, mCurrentWriteAccess, writeAccessType);
+        VkPipelineStageFlags srcStageMask         = mCurrentWriteStages | mCurrentReadStages;
+        VkBufferMemoryBarrier bufferMemoryBarrier = {};
+        initBufferMemoryBarrierStruct(srcStageMask, writeStage, mCurrentWriteAccess,
+                                      writeAccessType, &bufferMemoryBarrier);
+        barrier->mergeBufferBarrier(srcStageMask, writeStage, bufferMemoryBarrier);
         barrierModified = true;
     }
 
@@ -4875,18 +4898,18 @@ angle::Result ImageHelper::initExternal(Context *context,
         VkFormatFeatureFlags supportedChromaSubSampleFeatureBits =
             rendererVk->getImageFormatFeatureBits(mActualFormatID, kChromaSubSampleFeatureBits);
 
-        VkChromaLocation supportedLocation = ((supportedChromaSubSampleFeatureBits &
+        VkChromaLocation supportedLocation            = ((supportedChromaSubSampleFeatureBits &
                                                VK_FORMAT_FEATURE_COSITED_CHROMA_SAMPLES_BIT) != 0)
-                                                 ? VK_CHROMA_LOCATION_COSITED_EVEN
-                                                 : VK_CHROMA_LOCATION_MIDPOINT;
+                                                            ? VK_CHROMA_LOCATION_COSITED_EVEN
+                                                            : VK_CHROMA_LOCATION_MIDPOINT;
         VkSamplerYcbcrModelConversion conversionModel = VK_SAMPLER_YCBCR_MODEL_CONVERSION_YCBCR_601;
         VkSamplerYcbcrRange colorRange                = VK_SAMPLER_YCBCR_RANGE_ITU_NARROW;
         VkFilter chromaFilter                         = VK_FILTER_NEAREST;
         VkComponentMapping components                 = {
-            VK_COMPONENT_SWIZZLE_IDENTITY,
-            VK_COMPONENT_SWIZZLE_IDENTITY,
-            VK_COMPONENT_SWIZZLE_IDENTITY,
-            VK_COMPONENT_SWIZZLE_IDENTITY,
+                            VK_COMPONENT_SWIZZLE_IDENTITY,
+                            VK_COMPONENT_SWIZZLE_IDENTITY,
+                            VK_COMPONENT_SWIZZLE_IDENTITY,
+                            VK_COMPONENT_SWIZZLE_IDENTITY,
         };
 
         // Create the VkSamplerYcbcrConversion to associate with image views and samplers
