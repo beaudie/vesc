@@ -34,6 +34,24 @@
       "parentUuid": "bdb2d215_ec12d1fb",
       "revId": "b45a7b67416ff30476c6ab297396352d0d3627ad",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "223d40b7_c152532f",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2021-12-15T19:18:30Z",
+      "side": 1,
+      "message": "Sorry for the confusion - I meant that Apple ships different WebKit/Safari binaries to different devices/OS versions. That\u0027s why they can use include guards rather than run-time OS version checks. It may not affect Metal shader binaries.",
+      "parentUuid": "49c24f37_ebbe6414",
+      "revId": "b45a7b67416ff30476c6ab297396352d0d3627ad",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
