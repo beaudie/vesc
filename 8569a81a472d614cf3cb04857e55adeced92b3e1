@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "a55d8763_e72f12dd",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 266,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2021-12-15T14:54:07Z",
+      "side": 1,
+      "message": "suggestion: instead force the feature off during init if executesinline is true",
+      "range": {
+        "startLine": 258,
+        "startChar": 0,
+        "endLine": 266,
+        "endChar": 0
+      },
+      "revId": "8569a81a472d614cf3cb04857e55adeced92b3e1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
