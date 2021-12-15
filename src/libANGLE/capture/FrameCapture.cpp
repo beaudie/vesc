@@ -6737,11 +6737,9 @@ void FrameCaptureShared::writeCppReplayIndexFiles(const gl::Context *context,
         mReplayWriter.setFilenamePattern(fnamePattern);
     }
 
-    // We write the json before the index files and header, to avoid duplicating sources with
-    // automatically defined sources in angle.gni.
-    writeJSON(context);
-
     mReplayWriter.saveIndexFilesAndHeader();
+
+    writeJSON(context);
 }
 
 void FrameCaptureShared::writeMainContextCppReplay(const gl::Context *context,
@@ -7890,6 +7888,7 @@ void ReplayWriter::addWrittenFile(const std::string &filename)
 std::vector<std::string> ReplayWriter::getAndResetWrittenFiles()
 {
     std::vector<std::string> results = std::move(mWrittenFiles);
+    std::sort(results.begin(), results.end());
     ASSERT(mWrittenFiles.empty());
     return results;
 }
