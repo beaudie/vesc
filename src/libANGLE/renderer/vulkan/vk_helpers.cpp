@@ -911,7 +911,9 @@ GLenum ConvertImageLayoutToGLImageLayout(ImageLayout layout)
         case ImageLayout::VertexShaderWrite:
         case ImageLayout::PreFragmentShadersReadOnly:
         case ImageLayout::PreFragmentShadersWrite:
+            break;
         case ImageLayout::FragmentShaderReadOnly:
+            return GL_LAYOUT_SHADER_READ_ONLY_EXT;
         case ImageLayout::FragmentShaderWrite:
         case ImageLayout::ComputeShaderReadOnly:
         case ImageLayout::ComputeShaderWrite:
