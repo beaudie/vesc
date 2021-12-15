@@ -361,6 +361,12 @@ inline bool IsAMD()
     return angle::IsAMD(GetActiveGPUVendorID());
 }
 
+// Check whether the active GPU is ARM.
+inline bool IsARM()
+{
+    return angle::IsARM(GetActiveGPUVendorID());
+}
+
 // Check whether the active GPU is Intel.
 inline bool IsIntel()
 {
@@ -535,6 +541,7 @@ GPUTestConfig::GPUTestConfig(bool isSwiftShader)
     // HW vendors are irrelevant if we are running on SW
     mConditions[kConditionNVIDIA]      = !isSwiftShader && IsNVIDIA();
     mConditions[kConditionAMD]         = !isSwiftShader && IsAMD();
+    mConditions[kConditionARM]         = !isSwiftShader && IsARM();
     mConditions[kConditionIntel]       = !isSwiftShader && IsIntel();
     mConditions[kConditionVMWare]      = !isSwiftShader && IsVMWare();
     mConditions[kConditionApple]       = !isSwiftShader && IsApple();

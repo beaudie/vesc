@@ -1135,8 +1135,6 @@ void main()
 // Draw an array of points with the first vertex offset at 0 using gl_VertexID
 TEST_P(GLSLTest_ES3, GLVertexIDOffsetZeroDrawArray)
 {
-    // http://anglebug.com/4092
-    ANGLE_SKIP_TEST_IF(isSwiftshader());
     constexpr int kStartIndex  = 0;
     constexpr int kArrayLength = 5;
     constexpr char kVS[]       = R"(#version 300 es
@@ -1526,11 +1524,6 @@ void main() {
 // Draw an array of points with the first vertex offset at 5 using gl_VertexID
 TEST_P(GLSLTest_ES3, GLVertexIDOffsetFiveDrawArray)
 {
-    // http://anglebug.com/4092
-    ANGLE_SKIP_TEST_IF(isSwiftshader());
-    // Bug in Nexus drivers, offset does not work. (anglebug.com/3264)
-    ANGLE_SKIP_TEST_IF(IsNexus5X() && IsOpenGLES());
-
     constexpr int kStartIndex  = 5;
     constexpr int kArrayLength = 5;
     constexpr char kVS[]       = R"(#version 300 es
@@ -1719,10 +1712,6 @@ TEST_P(GLSLTest, InvariantVaryingOut)
 // Verify that declaring varying as invariant only in vertex shader succeeds in ESSL 3.00.
 TEST_P(GLSLTest_ES3, InvariantVaryingOut)
 {
-    // TODO: ESSL 3.00 -> GLSL 1.20 translation should add "invariant" in fragment shader
-    // for varyings which are invariant in vertex shader (http://anglebug.com/1293)
-    ANGLE_SKIP_TEST_IF(IsDesktopOpenGL());
-
     constexpr char kFS[] =
         "#version 300 es\n"
         "precision mediump float;\n"
@@ -2163,10 +2152,6 @@ TEST_P(GLSLTest_ES3, InvariantAllOut)
 
 TEST_P(GLSLTest, MaxVaryingVec4)
 {
-    // TODO(geofflang): Find out why this doesn't compile on Apple AMD OpenGL drivers
-    // (http://anglebug.com/1291)
-    ANGLE_SKIP_TEST_IF(IsOSX() && IsAMD() && IsOpenGL());
-
     GLint maxVaryings = 0;
     glGetIntegerv(GL_MAX_VARYING_VECTORS, &maxVaryings);
 
@@ -2268,14 +2253,6 @@ TEST_P(GLSLTest, MaxVaryingVec3ArrayAndOneFloatArray)
 // Only fails on D3D9 because of packing limitations.
 TEST_P(GLSLTest, TwiceMaxVaryingVec2)
 {
-    // TODO(geofflang): Figure out why this fails on NVIDIA's GLES driver
-    // (http://anglebug.com/3849)
-    ANGLE_SKIP_TEST_IF(IsNVIDIA() && IsOpenGLES());
-
-    // TODO(geofflang): Find out why this doesn't compile on Apple AMD OpenGL drivers
-    // (http://anglebug.com/1291)
-    ANGLE_SKIP_TEST_IF(IsOSX() && IsAMD() && IsOpenGL());
-
     GLint maxVaryings = 0;
     glGetIntegerv(GL_MAX_VARYING_VECTORS, &maxVaryings);
 
@@ -2285,15 +2262,6 @@ TEST_P(GLSLTest, TwiceMaxVaryingVec2)
 // Disabled because of a failure in D3D9
 TEST_P(GLSLTest, MaxVaryingVec2Arrays)
 {
-    ANGLE_SKIP_TEST_IF(IsD3D9());
-
-    // TODO(geofflang): Figure out why this fails on NVIDIA's GLES driver
-    ANGLE_SKIP_TEST_IF(IsOpenGLES());
-
-    // TODO(geofflang): Find out why this doesn't compile on Apple AMD OpenGL drivers
-    // (http://anglebug.com/1291)
-    ANGLE_SKIP_TEST_IF(IsOSX() && IsAMD() && IsOpenGL());
-
     GLint maxVaryings = 0;
     glGetIntegerv(GL_MAX_VARYING_VECTORS, &maxVaryings);
 
@@ -2308,12 +2276,6 @@ TEST_P(GLSLTest, MaxVaryingVec2Arrays)
 // Verify max varying with feedback and gl_line enabled
 TEST_P(GLSLTest_ES3, MaxVaryingWithFeedbackAndGLline)
 {
-    // (http://anglebug.com/4439)
-    ANGLE_SKIP_TEST_IF(IsAMD() && IsWindows() && IsVulkan());
-
-    // http://anglebug.com/4446
-    ANGLE_SKIP_TEST_IF(IsOSX() && IsOpenGL());
-
     GLint maxVaryings = 0;
     glGetIntegerv(GL_MAX_VARYING_VECTORS, &maxVaryings);
 
@@ -2813,9 +2775,6 @@ TEST_P(GLSLTest, VerifyMaxVertexUniformVectors)
 TEST_P(GLSLTest, VerifyMaxVertexUniformVectorsWithSamplers)
 {
     ANGLE_SKIP_TEST_IF(IsOpenGL() || IsOpenGLES());
-
-    // Times out on D3D11 on test infra. http://anglebug.com/5076
-    ANGLE_SKIP_TEST_IF(IsD3D11() && IsIntel());
 
     int maxUniforms = 10000;
     glGetIntegerv(GL_MAX_VERTEX_UNIFORM_VECTORS, &maxUniforms);
@@ -3583,9 +3542,6 @@ TEST_P(GLSLTest, RenderTrisWithPointCoord)
 // Convers a bug with the integer pow statement workaround.
 TEST_P(GLSLTest, NestedPowStatements)
 {
-    // https://crbug.com/1127866 - possible NVIDIA driver issue
-    ANGLE_SKIP_TEST_IF(IsNVIDIA() && IsVulkan() && IsWindows());
-
     constexpr char kFS[] =
         "precision mediump float;\n"
         "float func(float v)\n"
@@ -4255,9 +4211,6 @@ TEST_P(WebGLGLSLTest, MaxVaryingVec3ArrayAndMaxPlusOneFloatArray)
 // Test that FindLSB and FindMSB return correct values in their corner cases.
 TEST_P(GLSLTest_ES31, FindMSBAndFindLSBCornerCases)
 {
-    // Suspecting AMD driver bug - failure seen on bots running on AMD R5 230.
-    ANGLE_SKIP_TEST_IF(IsAMD() && IsOpenGL() && IsLinux());
-
     // Failing on N5X Oreo http://anglebug.com/2304
     ANGLE_SKIP_TEST_IF(IsAndroid() && IsAdreno() && IsOpenGLES());
 
@@ -4532,8 +4485,6 @@ TEST_P(GLSLTest_ES31, ArraysOfArraysBasicType)
 // inside blocks.
 TEST_P(GLSLTest_ES31, ArraysOfArraysBlockBasicType)
 {
-    // anglebug.com/3821 - fails on AMD Windows
-    ANGLE_SKIP_TEST_IF(IsWindows() && IsAMD() && IsOpenGL());
     constexpr char kFS[] =
         "#version 310 es\n"
         "precision mediump float;\n"
@@ -4725,12 +4676,6 @@ TEST_P(GLSLTest_ES31, ArraysOfArraysImage)
 // Test that multiple arrays of arrays of images work as expected.
 TEST_P(GLSLTest_ES31, ConsecutiveArraysOfArraysImage)
 {
-    // http://anglebug.com/5072
-    ANGLE_SKIP_TEST_IF(IsIntel() && IsLinux() && IsOpenGL());
-
-    // Fails on D3D due to mistranslation.
-    ANGLE_SKIP_TEST_IF(IsD3D());
-
     constexpr GLsizei kImage1Layers = 3;
     constexpr GLsizei kImage1Rows   = 2;
     constexpr GLsizei kImage1Cols   = 1;
@@ -4859,18 +4804,6 @@ TEST_P(GLSLTest_ES31, ArraysOfArraysOfR32fImages)
 {
     // Skip if GL_OES_shader_image_atomic is not enabled.
     ANGLE_SKIP_TEST_IF(!IsGLExtensionEnabled("GL_OES_shader_image_atomic"));
-
-    // http://anglebug.com/5072
-    ANGLE_SKIP_TEST_IF(IsIntel() && IsLinux() && IsOpenGL());
-
-    // Fails on D3D due to mistranslation.
-    ANGLE_SKIP_TEST_IF(IsD3D());
-
-    // Fails on Android on GLES.
-    ANGLE_SKIP_TEST_IF(IsAndroid() && IsOpenGLES());
-
-    // http://anglebug.com/5353
-    ANGLE_SKIP_TEST_IF(IsNVIDIA() && IsOpenGL());
 
     GLint maxComputeImageUniforms;
     glGetIntegerv(GL_MAX_COMPUTE_IMAGE_UNIFORMS, &maxComputeImageUniforms);
@@ -5341,9 +5274,6 @@ TEST_P(GLSLTest_ES31, ArraysOfArraysStructDifferentTypesSampler)
 // Test that arrays of arrays of samplers as parameters works as expected.
 TEST_P(GLSLTest_ES31, ParameterArraysOfArraysSampler)
 {
-    // anglebug.com/3832 - no sampler array params on Android
-    ANGLE_SKIP_TEST_IF(IsAndroid() && IsOpenGLES());
-
     constexpr char kFS[] =
         "#version 310 es\n"
         "precision mediump float;\n"
@@ -5401,9 +5331,6 @@ TEST_P(GLSLTest_ES31, ParameterArraysOfArraysSampler)
 // Test that structs with arrays of arrays of samplers as parameters works as expected.
 TEST_P(GLSLTest_ES31, ParameterStructArrayArraySampler)
 {
-    // anglebug.com/3832 - no sampler array params on Android
-    ANGLE_SKIP_TEST_IF(IsAndroid() && IsOpenGLES());
-
     constexpr char kFS[] =
         "#version 310 es\n"
         "precision mediump float;\n"
@@ -5462,9 +5389,6 @@ TEST_P(GLSLTest_ES31, ParameterStructArrayArraySampler)
 // as parameters works as expected.
 TEST_P(GLSLTest_ES31, ParameterArrayArrayStructArrayArraySampler)
 {
-    // anglebug.com/3832 - no sampler array params on Android
-    ANGLE_SKIP_TEST_IF(IsAndroid() && IsOpenGLES());
-
     GLint numTextures;
     glGetIntegerv(GL_MAX_TEXTURE_IMAGE_UNITS, &numTextures);
     ANGLE_SKIP_TEST_IF(numTextures < 3 * 2 * 2 * 2);
@@ -5541,12 +5465,6 @@ TEST_P(GLSLTest_ES31, ParameterArrayArrayArraySampler)
     GLint numTextures;
     glGetIntegerv(GL_MAX_TEXTURE_IMAGE_UNITS, &numTextures);
     ANGLE_SKIP_TEST_IF(numTextures < 2 * 3 * 4 + 4);
-
-    // anglebug.com/3832 - no sampler array params on Android
-    ANGLE_SKIP_TEST_IF(IsAndroid() && IsOpenGLES());
-
-    // http://anglebug.com/5546
-    ANGLE_SKIP_TEST_IF(IsWindows() && IsIntel() && IsOpenGL());
 
     constexpr char kFS[] =
         "#version 310 es\n"
@@ -5634,7 +5552,6 @@ TEST_P(GLSLTest_ES31, ParameterArrayArrayArraySampler)
 // Test that names do not collide when translating arrays of arrays of samplers.
 TEST_P(GLSLTest_ES31, ArraysOfArraysNameCollisionSampler)
 {
-    ANGLE_SKIP_TEST_IF(IsVulkan());  // anglebug.com/3604 - rewriter can create name collisions
     GLint numTextures;
     glGetIntegerv(GL_MAX_TEXTURE_IMAGE_UNITS, &numTextures);
     ANGLE_SKIP_TEST_IF(numTextures < 2 * 2 + 3 * 3 + 4 * 4);
@@ -5704,11 +5621,6 @@ TEST_P(GLSLTest_ES31, BasicTypeArrayAndArrayOfSampler)
 // compiler DLL.
 TEST_P(GLSLTest_ES3, NestedSamplingOperation)
 {
-    // This seems to be bugged on some version of Android. Might not affect the newest versions.
-    // TODO(jmadill): Lift suppression when Chromium bots are upgraded.
-    // Test skipped on Android because of bug with Nexus 5X.
-    ANGLE_SKIP_TEST_IF(IsAndroid() && IsOpenGLES());
-
     constexpr char kVS[] =
         "#version 300 es\n"
         "out vec2 texCoord;\n"
@@ -5831,10 +5743,6 @@ TEST_P(GLSLTest_ES3, ConstantStatementAsLoopInit)
 // Test that uninitialized local variables are initialized to 0.
 TEST_P(WebGL2GLSLTest, InitUninitializedLocals)
 {
-    // Test skipped on Android GLES because local variable initialization is disabled.
-    // http://anglebug.com/2046
-    ANGLE_SKIP_TEST_IF(IsAndroid() && IsOpenGLES());
-
     constexpr char kFS[] =
         "#version 300 es\n"
         "precision mediump float;\n"
@@ -5873,10 +5781,6 @@ TEST_P(WebGL2GLSLTest, InitUninitializedLocals)
 // specifically tests with two different struct variables declared in the same block.
 TEST_P(WebGL2GLSLTest, InitUninitializedStructContainingArrays)
 {
-    // Test skipped on Android GLES because local variable initialization is disabled.
-    // http://anglebug.com/2046
-    ANGLE_SKIP_TEST_IF(IsAndroid() && IsOpenGLES());
-
     constexpr char kFS[] =
         "precision mediump float;\n"
         "struct T\n"
@@ -5957,10 +5861,6 @@ TEST_P(GLSLTest, StructureNameMatchingTest)
 // Test that an uninitialized nameless struct inside a for loop init statement works.
 TEST_P(WebGL2GLSLTest, UninitializedNamelessStructInForInitStatement)
 {
-    // Test skipped on Android GLES because local variable initialization is disabled.
-    // http://anglebug.com/2046
-    ANGLE_SKIP_TEST_IF(IsAndroid() && IsOpenGLES());
-
     constexpr char kFS[] =
         "#version 300 es\n"
         "precision highp float;\n"
@@ -6238,9 +6138,6 @@ TEST_P(GLSLTest, StructsWithSameMembersDisambiguatedByName)
 // successfully.
 TEST_P(GLSLTest, InactiveVaryingInVertexActiveInFragment)
 {
-    // http://anglebug.com/4820
-    ANGLE_SKIP_TEST_IF((IsOSX() && IsOpenGL()) || (IsIOS() && IsOpenGLES()));
-
     constexpr char kVS[] =
         "attribute vec4 inputAttribute;\n"
         "varying vec4 varColor;\n"
@@ -6515,16 +6412,6 @@ TEST_P(GLSLTest_ES3, VaryingStructNotDeclaredInFragmentShader)
 // fragment shader links successfully.
 TEST_P(GLSLTest_ES3, VaryingStructNotDeclaredInVertexShader)
 {
-    // GLSL ES allows the vertex shader to not declare a varying if the fragment shader is not
-    // going to use it.  See section 9.1 in
-    // https://www.khronos.org/registry/OpenGL/specs/es/3.2/GLSL_ES_Specification_3.20.pdf or
-    // section 4.3.5 in https://www.khronos.org/files/opengles_shading_language.pdf
-    //
-    // However, nvidia OpenGL ES drivers fail to link this program.
-    //
-    // http://anglebug.com/3413
-    ANGLE_SKIP_TEST_IF(IsOpenGLES() && IsNVIDIA());
-
     constexpr char kVS[] =
         "#version 300 es\n"
         "void main()\n"
@@ -6551,20 +6438,7 @@ TEST_P(GLSLTest_ES3, VaryingStructNotDeclaredInVertexShader)
 // Test that a varying struct that's not initialized in the vertex shader links successfully.
 TEST_P(WebGL2GLSLTest, VaryingStructNotInitializedInVertexShader)
 {
-    // GLSL ES allows the vertex shader to declare but not initialize a varying (with a
-    // specification that the varying values are undefined in the fragment stage).  See section 9.1
-    // in https://www.khronos.org/registry/OpenGL/specs/es/3.2/GLSL_ES_Specification_3.20.pdf
-    // or section 4.3.5 in https://www.khronos.org/files/opengles_shading_language.pdf
-    //
-    // However, windows and mac OpenGL drivers fail to link this program.  With a message like:
-    //
-    // > Input of fragment shader 'varStruct' not written by vertex shader
-    //
-    // http://anglebug.com/3413
     ANGLE_SKIP_TEST_IF(IsDesktopOpenGL() && (IsOSX() || (IsWindows() && !IsNVIDIA())));
-    // TODO(anglebug.com/5491): iOS thinks that the precision qualifiers don't match on the
-    // struct member. Not sure if it's being overly strict.
-    ANGLE_SKIP_TEST_IF(IsIOS() && IsOpenGLES());
 
     constexpr char kVS[] =
         "#version 300 es\n"
@@ -6596,9 +6470,6 @@ TEST_P(WebGL2GLSLTest, VaryingStructNotInitializedInVertexShader)
 // Test that a varying struct that gets used in the fragment shader works.
 TEST_P(GLSLTest_ES3, VaryingStructUsedInFragmentShader)
 {
-    // TODO(anglebug.com/5491): iOS thinks that the precision qualifiers don't match on the
-    // struct member. Not sure if it's being overly strict.
-    ANGLE_SKIP_TEST_IF(IsIOS() && IsOpenGLES());
     constexpr char kVS[] =
         "#version 300 es\n"
         "in vec4 inputAttribute;\n"
@@ -6714,16 +6585,6 @@ TEST_P(GLSLTest_ES31, SamplerPassthroughIncorrectColor)
 // Test that multiple multi-field varying structs that get used in the fragment shader work.
 TEST_P(GLSLTest_ES3, ComplexVaryingStructsUsedInFragmentShader)
 {
-    // TODO(syoussefi): fails on android with:
-    //
-    // > Internal Vulkan error: A return array was too small for the result
-    //
-    // http://anglebug.com/3220
-    ANGLE_SKIP_TEST_IF(IsVulkan() && IsAndroid());
-    // TODO(anglebug.com/5491): iOS thinks that the precision qualifiers don't match on the
-    // struct members. Not sure if it's being overly strict.
-    ANGLE_SKIP_TEST_IF(IsIOS() && IsOpenGLES());
-
     constexpr char kVS[] =
         "#version 300 es\n"
         "in vec4 inputAttribute;\n"
@@ -7801,9 +7662,6 @@ void main()
 // Test that a varying struct that's defined as a part of the declaration is handled correctly.
 TEST_P(GLSLTest_ES3, VaryingStructWithInlineDefinition)
 {
-    // TODO(anglebug.com/5491): iOS thinks that the precision qualifiers don't match on the
-    // struct member. Not sure if it's being overly strict.
-    ANGLE_SKIP_TEST_IF(IsIOS() && IsOpenGLES());
     constexpr char kVS[] = R"(#version 300 es
 in vec4 inputAttribute;
 
@@ -8552,10 +8410,6 @@ void main() {
 // Test nesting floor() calls with a large multiplier inside.
 TEST_P(GLSLTest_ES3, NestedFloorWithLargeMultiplierInside)
 {
-    // D3D11 seems to ignore the floor() calls in this particular case, so one of the corners ends
-    // up red. http://crbug.com/838885
-    ANGLE_SKIP_TEST_IF(IsD3D11());
-
     constexpr char kFS[] = R"(#version 300 es
 precision highp float;
 out vec4 my_FragColor;
@@ -8583,10 +8437,6 @@ void main()
 // GL_MAX_COMBINED_SHADER_OUTPUT_RESOURCES.
 TEST_P(GLSLTest_ES31, ExceedCombinedShaderOutputResourcesInVSAndFS)
 {
-    // TODO(jiawei.shao@intel.com): enable this test when shader storage buffer is supported on
-    // D3D11 back-ends.
-    ANGLE_SKIP_TEST_IF(IsD3D11());
-
     GLint maxVertexShaderStorageBlocks;
     GLint maxVertexImageUniforms;
     GLint maxFragmentShaderStorageBlocks;
@@ -8805,9 +8655,6 @@ void main()
 // Tests that PointCoord behaves the same betweeen a user FBO and the back buffer.
 TEST_P(GLSLTest, PointCoordConsistency)
 {
-    // http://anglebug.com/4092
-    ANGLE_SKIP_TEST_IF(isSwiftshader());
-
     constexpr char kPointCoordVS[] = R"(attribute vec2 position;
 uniform vec2 viewportSize;
 void main()
@@ -9194,9 +9041,6 @@ void main()
 // Test that clamp applied on non-literal indices is correct on es 100 shaders.
 TEST_P(GLSLTest, ValidIndexClampES100)
 {
-    // http://anglebug.com/6027
-    ANGLE_SKIP_TEST_IF(IsD3D9());
-
     constexpr char kFS[] = R"(
 precision mediump float;
 uniform int u;
@@ -9471,33 +9315,6 @@ TEST_P(GLSLTest_ES31, MixedRowAndColumnMajorMatrices)
 
     // The test uses 9 SSBOs.  Skip if not that many are supported.
     ANGLE_SKIP_TEST_IF(maxComputeShaderStorageBlocks < 9);
-
-    // Fails on Nvidia because having |Matrices| qualified as row-major in one UBO makes the other
-    // UBO also see it as row-major despite explicit column-major qualifier.
-    // http://anglebug.com/3830
-    ANGLE_SKIP_TEST_IF(IsNVIDIA() && IsOpenGL());
-
-    // Fails on mesa because in the first UBO which is qualified as column-major, |Matrices| is
-    // read column-major despite explicit row-major qualifier.  http://anglebug.com/3837
-    ANGLE_SKIP_TEST_IF(IsLinux() && IsIntel() && IsOpenGL());
-
-    // Fails on windows AMD on GL: http://anglebug.com/3838
-    ANGLE_SKIP_TEST_IF(IsWindows() && IsOpenGL() && IsAMD());
-
-    // Fails to compile the shader on Android.  http://anglebug.com/3839
-    ANGLE_SKIP_TEST_IF(IsAndroid() && IsOpenGL());
-
-    // Fails on assertion in translation to D3D.  http://anglebug.com/3841
-    ANGLE_SKIP_TEST_IF(IsD3D11());
-
-    // Fails on SSBO validation on Android/Vulkan.  http://anglebug.com/3840
-    ANGLE_SKIP_TEST_IF(IsAndroid() && IsVulkan());
-
-    // Fails input verification as well as std140 SSBO validation.  http://anglebug.com/3844
-    ANGLE_SKIP_TEST_IF(IsWindows() && IsAMD() && IsVulkan());
-
-    // Fails on ARM on Vulkan.  http://anglebug.com/4492
-    ANGLE_SKIP_TEST_IF(IsARM() && IsVulkan());
 
     constexpr char kCS[] = R"(#version 310 es
 precision highp float;
@@ -9897,9 +9714,6 @@ void main()
 
 TEST_P(GLSLTest_ES3, RowMajorMatrix_NestedExpression)
 {
-    // Many OpenGL drivers seem to fail this
-    ANGLE_SKIP_TEST_IF((IsLinux() || IsOSX()) && IsOpenGL());
-
     constexpr char kFS[] = R"(#version 300 es
 precision mediump float;
 
@@ -9977,21 +9791,6 @@ void main() {
 // Test that array UBOs are transformed correctly.
 TEST_P(GLSLTest_ES3, MixedRowAndColumnMajorMatrices_ArrayBufferDeclaration)
 {
-    // Fails to compile the shader on Android: http://anglebug.com/3839
-    ANGLE_SKIP_TEST_IF(IsAndroid() && IsOpenGL());
-
-    // http://anglebug.com/3837
-    ANGLE_SKIP_TEST_IF(IsLinux() && IsIntel() && IsOpenGL());
-
-    // Fails on Mac on Intel and AMD: http://anglebug.com/3842
-    ANGLE_SKIP_TEST_IF(IsOSX() && IsOpenGL() && (IsIntel() || IsAMD()));
-
-    // Fails on windows AMD on GL: http://anglebug.com/3838
-    ANGLE_SKIP_TEST_IF(IsWindows() && IsOpenGL() && IsAMD());
-
-    // Fails on D3D due to mistranslation: http://anglebug.com/3841
-    ANGLE_SKIP_TEST_IF(IsD3D11());
-
     constexpr char kFS[] = R"(#version 300 es
 precision highp float;
 out vec4 outColor;
@@ -10062,12 +9861,6 @@ void main()
 // Test that side effects when transforming read operations are preserved.
 TEST_P(GLSLTest_ES3, MixedRowAndColumnMajorMatrices_ReadSideEffect)
 {
-    // Fails on Mac on Intel and AMD: http://anglebug.com/3842
-    ANGLE_SKIP_TEST_IF(IsOSX() && IsOpenGL() && (IsIntel() || IsAMD()));
-
-    // Fails on D3D due to mistranslation: http://anglebug.com/3841
-    ANGLE_SKIP_TEST_IF(IsD3D11());
-
     constexpr char kFS[] = R"(#version 300 es
 precision highp float;
 out vec4 outColor;
@@ -10158,13 +9951,6 @@ void main()
 // Test that side effects respect the order of logical expression operands.
 TEST_P(GLSLTest_ES3, MixedRowAndColumnMajorMatrices_ReadSideEffectOrder)
 {
-    // http://anglebug.com/3837
-    ANGLE_SKIP_TEST_IF(IsLinux() && IsIntel() && IsOpenGL());
-
-    // IntermTraverser::insertStatementsInParentBlock that's used to move side effects does not
-    // respect the order of evaluation of logical expressions.  http://anglebug.com/3829.
-    ANGLE_SKIP_TEST_IF(IsOSX() && IsOpenGL());
-
     constexpr char kFS[] = R"(#version 300 es
 precision highp float;
 out vec4 outColor;
@@ -10219,13 +10005,6 @@ void main()
 
 TEST_P(GLSLTest_ES3, MixedRowAndColumnMajorMatrices_ReadSideEffectOrderSurroundedByLoop)
 {
-    // http://anglebug.com/3837
-    ANGLE_SKIP_TEST_IF(IsLinux() && IsIntel() && IsOpenGL());
-
-    // IntermTraverser::insertStatementsInParentBlock that's used to move side effects does not
-    // respect the order of evaluation of logical expressions.  http://anglebug.com/3829.
-    ANGLE_SKIP_TEST_IF(IsOSX() && IsOpenGL());
-
     constexpr char kFS[] = R"(#version 300 es
 precision highp float;
 out vec4 outColor;
@@ -10276,13 +10055,6 @@ void main()
 
 TEST_P(GLSLTest_ES3, MixedRowAndColumnMajorMatrices_ReadSideEffectOrderInALoop)
 {
-    // http://anglebug.com/3837
-    ANGLE_SKIP_TEST_IF(IsLinux() && IsIntel() && IsOpenGL());
-
-    // IntermTraverser::insertStatementsInParentBlock that's used to move side effects does not
-    // respect the order of evaluation of logical expressions.  http://anglebug.com/3829.
-    ANGLE_SKIP_TEST_IF(IsOSX() && IsOpenGL());
-
     constexpr char kFS[] = R"(#version 300 es
 precision highp float;
 out vec4 outColor;
@@ -10332,13 +10104,6 @@ void main()
 // Test that side effects respect short-circuit.
 TEST_P(GLSLTest_ES3, MixedRowAndColumnMajorMatrices_ReadSideEffectShortCircuit)
 {
-    // Fails on Android: http://anglebug.com/3839
-    ANGLE_SKIP_TEST_IF(IsAndroid() && IsOpenGL());
-
-    // IntermTraverser::insertStatementsInParentBlock that's used to move side effects does not
-    // respect the order of evaluation of logical expressions.  http://anglebug.com/3829.
-    ANGLE_SKIP_TEST_IF(IsOSX() && IsOpenGL());
-
     constexpr char kFS[] = R"(#version 300 es
 precision highp float;
 out vec4 outColor;
@@ -10558,9 +10323,6 @@ void main()
 // be empty in the presence of other resources.
 TEST_P(GLSLTest_ES31, MixOfAllResources)
 {
-    // http://anglebug.com/5072
-    ANGLE_SKIP_TEST_IF(IsIntel() && IsLinux() && IsOpenGL());
-
     constexpr char kComputeShader[] = R"(#version 310 es
 layout(local_size_x = 1, local_size_y = 1, local_size_z = 1) in;
 layout(binding = 1, std430) buffer Output {
@@ -10657,12 +10419,6 @@ void main(void)
 // Test that sending mixture of resources to functions works.
 TEST_P(GLSLTest_ES31, MixOfResourcesAsFunctionArgs)
 {
-    // http://anglebug.com/5546
-    ANGLE_SKIP_TEST_IF(IsWindows() && IsIntel() && IsOpenGL());
-
-    // anglebug.com/3832 - no sampler array params on Android
-    ANGLE_SKIP_TEST_IF(IsAndroid() && IsOpenGLES());
-
     constexpr char kComputeShader[] = R"(#version 310 es
 layout(local_size_x = 1, local_size_y = 1, local_size_z = 1) in;
 
@@ -10764,12 +10520,6 @@ void main(void)
 // side-effect works.
 TEST_P(GLSLTest_ES31, ArrayOfArrayOfSamplerAsFunctionParameterIndexedWithSideEffect)
 {
-    // http://anglebug.com/5546
-    ANGLE_SKIP_TEST_IF(IsWindows() && IsIntel() && IsOpenGL());
-
-    // anglebug.com/3832 - no sampler array params on Android
-    ANGLE_SKIP_TEST_IF(IsAndroid() && IsOpenGLES());
-
     // Skip if EXT_gpu_shader5 is not enabled.
     ANGLE_SKIP_TEST_IF(!IsGLExtensionEnabled("GL_EXT_gpu_shader5"));
 
@@ -11312,17 +11062,6 @@ void main(void)
 // Test that multiple nested assignments are handled correctly.
 TEST_P(GLSLTest_ES31, MixedRowAndColumnMajorMatrices_WriteSideEffect)
 {
-    // http://anglebug.com/3831
-    ANGLE_SKIP_TEST_IF(IsNVIDIA() && IsOpenGL());
-
-    // Fails on windows AMD on GL: http://anglebug.com/3838
-    ANGLE_SKIP_TEST_IF(IsWindows() && IsOpenGL() && IsAMD());
-    // http://anglebug.com/5384
-    ANGLE_SKIP_TEST_IF(IsLinux() && IsAMD() && IsDesktopOpenGL());
-
-    // Fails on D3D due to mistranslation: http://anglebug.com/3841
-    ANGLE_SKIP_TEST_IF(IsD3D11());
-
     constexpr char kCS[] = R"(#version 310 es
 precision highp float;
 layout(local_size_x=1) in;
@@ -11399,20 +11138,6 @@ void main()
 // Test that assignments to array of array of matrices are handled correctly.
 TEST_P(GLSLTest_ES31, MixedRowAndColumnMajorMatrices_WriteArrayOfArray)
 {
-    // Fails on windows AMD on GL: http://anglebug.com/3838
-    ANGLE_SKIP_TEST_IF(IsWindows() && IsOpenGL() && IsAMD());
-    // http://anglebug.com/5384
-    ANGLE_SKIP_TEST_IF(IsLinux() && IsAMD() && IsDesktopOpenGL());
-
-    // Fails on D3D due to mistranslation: http://anglebug.com/3841
-    ANGLE_SKIP_TEST_IF(IsD3D11());
-
-    // Fails compiling shader on Android/Vulkan.  http://anglebug.com/4290
-    ANGLE_SKIP_TEST_IF(IsAndroid() && IsVulkan());
-
-    // Fails on ARM on Vulkan.  http://anglebug.com/4492
-    ANGLE_SKIP_TEST_IF(IsARM() && IsVulkan());
-
     constexpr char kCS[] = R"(#version 310 es
 precision highp float;
 layout(local_size_x=1) in;
@@ -12143,10 +11868,6 @@ void main() { v_varying = a_position.x; gl_Position = a_position; })";
 // not get confused by them.
 TEST_P(GLSLTest_ES31, VariableNameReuseAcrossStages)
 {
-    // Fails to compile the fragment shader with error "undeclared identifier '_g'"
-    // http://anglebug.com/4404
-    ANGLE_SKIP_TEST_IF(IsD3D11());
-
     constexpr char kVS[] = R"(#version 310 es
 precision mediump float;
 uniform highp vec4 a;
@@ -12234,9 +11955,6 @@ void main() {
 // Verify that precision match validation of uniforms is performed only if they are statically used
 TEST_P(GLSLTest_ES31, UniformPrecisionMatchValidation)
 {
-    // Nvidia driver bug: http://anglebug.com/5240
-    ANGLE_SKIP_TEST_IF(IsOpenGL() && IsWindows() && IsNVIDIA());
-
     constexpr char kVSUnused[] = R"(#version 300 es
 precision highp float;
 uniform highp vec4 positionIn;
@@ -14208,10 +13926,9 @@ void main() {
     EXPECT_PIXEL_COLOR_EQ(0, 0, GLColor::green);
 }
 
+// Test that vector and matrix scalarization does not affect rendering.
 TEST_P(GLSLTest, VectorAndMatrixScalarizationDoesNotAffectRendering)
 {
-    ANGLE_SKIP_TEST_IF(IsWindows() && IsNVIDIA() && (IsOpenGL() || IsOpenGLES()));
-
     constexpr char kFS[] = R"(
 precision mediump float;
 

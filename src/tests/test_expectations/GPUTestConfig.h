@@ -52,6 +52,7 @@ struct GPUTestConfig
         kConditionAndroid,
         kConditionNVIDIA,
         kConditionAMD,
+        kConditionARM,
         kConditionIntel,
         kConditionVMWare,
         kConditionApple,
