@@ -1041,6 +1041,11 @@
       'angle_unit_gtests',
     ],
 
+    'android_vkscb_gtests': [
+      'angle_deqp_gles2_vulkan_gtests',
+      'angle_end2end_gtests',
+    ],
+
     'common_isolated_scripts': [
       'angle_perf_smoke_isolated_scripts',
       'angle_restricted_trace_gold_isolated_scripts',
@@ -1075,6 +1080,11 @@
       'angle_end2end_gtests',
       'angle_unit_gtests',
       'angle_white_box_gtests',
+    ],
+
+    'linux_nvidia_vkscb_gtests': [
+      'angle_deqp_gles31_vulkan_gtests',
+      'angle_end2end_gtests',
     ],
 
     'mac_amd_and_intel_gtests': [
@@ -1166,6 +1176,11 @@
       'angle_gles1_conformance_gtests',
       'angle_unit_gtests',
       'angle_white_box_gtests',
+    ],
+
+    'win10_nvidia_vkscb_gtests': [
+      'angle_deqp_gles3_vulkan_gtests',
+      'angle_end2end_gtests',
     ],
 
     'win7_amd_gtests': [

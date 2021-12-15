@@ -197,6 +197,7 @@ def angle_builder(name, cpu):
     is_asan = "-asan" in name
     is_tsan = "-tsan" in name
     is_ubsan = "-ubsan" in name
+    is_vkscb = "-vkscb" in name
     is_debug = "-dbg" in name
     is_perf = name.endswith("-perf")
     is_trace = name.endswith("-trace")
@@ -246,6 +247,8 @@ def angle_builder(name, cpu):
         short_name = "tsan"
     elif is_ubsan:
         short_name = "ubsan"
+    elif is_vkscb:
+        short_name = "vkscb"
     elif is_debug:
         short_name = "dbg"
     else:
@@ -372,11 +375,13 @@ angle_builder("android-arm-compile", cpu = "arm")
 angle_builder("android-arm-dbg-compile", cpu = "arm")
 angle_builder("android-arm64-dbg-compile", cpu = "arm64")
 angle_builder("android-arm64-test", cpu = "arm64")
+angle_builder("android-arm64-vkscb-test", cpu = "arm64")
 angle_builder("linux-asan-test", cpu = "x64")
 angle_builder("linux-tsan-test", cpu = "x64")
 angle_builder("linux-ubsan-test", cpu = "x64")
 angle_builder("linux-dbg-compile", cpu = "x64")
 angle_builder("linux-test", cpu = "x64")
+angle_builder("linux-vkscb-test", cpu = "x64")
 angle_builder("mac-dbg-compile", cpu = "x64")
 angle_builder("mac-test", cpu = "x64")
 angle_builder("win-asan-test", cpu = "x64")
@@ -386,6 +391,7 @@ angle_builder("win-msvc-dbg-compile", cpu = "x64")
 angle_builder("win-msvc-x86-compile", cpu = "x86")
 angle_builder("win-msvc-x86-dbg-compile", cpu = "x86")
 angle_builder("win-test", cpu = "x64")
+angle_builder("win-vkscb-test", cpu = "x64")
 angle_builder("win-x86-dbg-compile", cpu = "x86")
 angle_builder("win-x86-test", cpu = "x86")
 angle_builder("winuwp-compile", cpu = "x64")

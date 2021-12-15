@@ -42,6 +42,18 @@
           'isolated_scripts': 'angle_perf_isolated_scripts',
         },
       },
+      'android-arm64-pixel4-vkscb': {
+        'os_type': 'android',
+        'mixins': [
+          'android_r',
+          'flame',
+          'gpu-swarming-pool',
+        ],
+        'test_suites': {
+          'gtest_tests': 'android_vkscb_gtests',
+          'isolated_scripts': 'common_isolated_scripts',
+        },
+      },
       'linux-intel': {
         'os_type': 'linux',
         'mixins': [
@@ -78,6 +90,16 @@
         ],
         'test_suites': {
           'isolated_scripts': 'angle_perf_isolated_scripts',
+        },
+      },
+      'linux-nvidia-vkscb': {
+        'os_type': 'linux',
+        'mixins': [
+          'angle_linux_nvidia_gtx_1660_stable',
+        ],
+        'test_suites': {
+          'gtest_tests': 'linux_nvidia_vkscb_gtests',
+          'isolated_scripts': 'common_isolated_scripts',
         },
       },
       'linux-swiftshader': {
@@ -196,6 +218,16 @@
         ],
         'test_suites': {
           'isolated_scripts': 'angle_perf_isolated_scripts',
+        },
+      },
+      'win10-x64-nvidia-vkscb': {
+        'os_type': 'win',
+        'mixins': [
+          'angle_win10_nvidia_gtx_1660_stable',
+        ],
+        'test_suites': {
+          'gtest_tests': 'win10_nvidia_vkscb_gtests',
+          'isolated_scripts': 'common_isolated_scripts',
         },
       },
       'win10-x64-swiftshader': {
