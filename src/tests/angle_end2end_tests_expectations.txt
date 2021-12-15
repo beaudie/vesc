@@ -421,3 +421,12 @@
 6751 D3D11 : MultiDrawIndirectTest.MultiDrawElementsIndirect* = SKIP
 6751 METAL : DrawBaseVertexBaseInstanceTest.MultiDrawElementsInstancedBaseVertexBaseInstance/* = SKIP
 6751 D3D11 : DrawBaseVertexBaseInstanceTest.MultiDrawElementsInstancedBaseVertexBaseInstance/* = SKIP
+
+// Cubemap sampling with explicit derivatives
+3814 PIXEL4ORXL VULKAN : CubeMapTextureTest.SampleCoordinateTransformGrad/* = SKIP
+3814 PIXEL4ORXL VULKAN : CubeMapTextureTest.SampleCoordinateTransformGrad_ES3/* = SKIP
+3856 WIN D3D11 : CubeMapTextureTest.SampleCoordinateTransformGrad/* = SKIP
+3856 WIN D3D11 : CubeMapTextureTest.SampleCoordinateTransformGrad_ES3/* = SKIP
+4092 WIN D3D9 : CubeMapTextureTest.SampleCoordinateTransformGrad/* = SKIP
+6824 METAL INTEL : CubeMapTextureTest.SampleCoordinateTransformGrad/* = SKIP
+6824 METAL INTEL : CubeMapTextureTest.SampleCoordinateTransformGrad_ES3/* = SKIP
