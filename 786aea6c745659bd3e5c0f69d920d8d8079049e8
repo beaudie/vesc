@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "24807122_8ffa1a92",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 6
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2021-12-15T23:20:46Z",
+      "side": 1,
+      "message": "Some assertion failures in bitset_utils.h, e.g.\nhttps://ci.chromium.org/ui/p/angle/builders/try/mac-test/1497/overview\nhttps://chromium-swarm.appspot.com/task?id\u003d57d9143db7dfed10\n",
+      "revId": "786aea6c745659bd3e5c0f69d920d8d8079049e8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
