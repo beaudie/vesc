@@ -22,6 +22,30 @@
       },
       "revId": "70857a92c6faba3cbf9688bae153a92519000be5",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "e98edea6_ab69fc41",
+        "filename": "src/libANGLE/renderer/metal/mtl_utils.mm",
+        "patchSetId": 2
+      },
+      "lineNbr": 1254,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2021-12-15T00:55:48Z",
+      "side": 1,
+      "message": "AvailabilityMacros.h contains:\n\n...\n#define MAC_OS_X_VERSION_10_14_4    101404\n#define MAC_OS_X_VERSION_10_15      101500\n#define MAC_OS_VERSION_11_0         110000\n#define MAC_OS_VERSION_11_1         110100\n...\n\nSo plausibly this should be \"\u003e 101500\" - strictly greater than 10.15?\n\nIn Chrome\u0027s build, ANGLE is built with older SDKs and expects to be able to run on newer OSs - can a runtime check be added for this? Maybe in a follow-up?",
+      "parentUuid": "1904da63_94aa94de",
+      "range": {
+        "startLine": 1254,
+        "startChar": 77,
+        "endLine": 1254,
+        "endChar": 82
+      },
+      "revId": "70857a92c6faba3cbf9688bae153a92519000be5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
