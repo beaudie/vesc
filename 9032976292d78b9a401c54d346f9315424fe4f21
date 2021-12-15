@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "a72f61dc_147d5726",
+        "filename": "src/common/system_utils.h",
+        "patchSetId": 5
+      },
+      "lineNbr": 92,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2021-12-15T14:19:26Z",
+      "side": 1,
+      "message": "what we\u0027d ordinary recommend is adding methods with a new name rather than using default arguments. this improves clarity because you don\u0027t have overloaded names. in this case it would be\n\nOpenSharedLibraryAndGetFilePath()\nOpenSharedLibraryWithExtensionAndGetFilePath()",
+      "range": {
+        "startLine": 85,
+        "startChar": 0,
+        "endLine": 92,
+        "endChar": 0
+      },
+      "revId": "9032976292d78b9a401c54d346f9315424fe4f21",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
