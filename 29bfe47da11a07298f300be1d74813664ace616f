@@ -39,6 +39,30 @@
       },
       "revId": "29bfe47da11a07298f300be1d74813664ace616f",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "c42184c2_965dabff",
+        "filename": "src/tests/test_utils/angle_test_instantiate.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 144,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2021-12-15T02:33:51Z",
+      "side": 1,
+      "message": "It doesn\u0027t, and 3.2 support in SwS is a major effort that\u0027s likely never going to happen (if anything just because of geometry/tessellation). Any TODO here won\u0027t get addressed for years.",
+      "parentUuid": "e192050a_28debe17",
+      "range": {
+        "startLine": 142,
+        "startChar": 0,
+        "endLine": 144,
+        "endChar": 0
+      },
+      "revId": "29bfe47da11a07298f300be1d74813664ace616f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
