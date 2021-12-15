@@ -16,6 +16,46 @@
       "message": "An alternative would be to drop the MS depth renderbuffer in the test before doing the swap, it could be better in the sense that we would only change a non-substantial part of the test that now passes, and would keep hitting the assertion failure when we want to read back a MS depth renderbuffer to remind us that there is some functionality missing. Any thoughts? ",
       "revId": "bf83fffb0bc27b2c10be942561bf3636842b5b70",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "6d4c0cd9_4bfbe96f",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2021-12-15T15:11:28Z",
+      "side": 1,
+      "message": "LGTM",
+      "revId": "bf83fffb0bc27b2c10be942561bf3636842b5b70",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "aae15616_dc6e310d",
+        "filename": "src/libANGLE/capture/frame_capture_utils.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 787,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2021-12-15T15:11:28Z",
+      "side": 1,
+      "message": "please add a comment that we\u0027re skipping this because it isn\u0027t implementable in vulkan ATM.\n\nnote you could also do a blit to a temporary to resolve it - not worth it imo.",
+      "range": {
+        "startLine": 787,
+        "startChar": 18,
+        "endLine": 787,
+        "endChar": 28
+      },
+      "revId": "bf83fffb0bc27b2c10be942561bf3636842b5b70",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
