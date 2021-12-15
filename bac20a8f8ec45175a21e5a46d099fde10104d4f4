@@ -1,0 +1,44 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "7e2a18c3_81b2e28a",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 6
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2021-12-15T00:34:10Z",
+      "side": 1,
+      "message": "re-LGTM",
+      "revId": "bac20a8f8ec45175a21e5a46d099fde10104d4f4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "edb72962_edcbcddf",
+        "filename": "src/libANGLE/Display.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 1095,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2021-12-15T00:34:10Z",
+      "side": 1,
+      "message": "This comment block should be updated since we only keep contexts around now.   Most everything else (including surfaces) are destroyed in the new block being added.",
+      "range": {
+        "startLine": 1092,
+        "startChar": 0,
+        "endLine": 1095,
+        "endChar": 85
+      },
+      "revId": "bac20a8f8ec45175a21e5a46d099fde10104d4f4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
