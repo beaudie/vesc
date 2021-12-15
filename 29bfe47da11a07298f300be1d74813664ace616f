@@ -111,6 +111,30 @@
       },
       "revId": "29bfe47da11a07298f300be1d74813664ace616f",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "6d057ac5_4814862e",
+        "filename": "src/tests/test_utils/angle_test_instantiate.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 144,
+      "author": {
+        "id": 1001921
+      },
+      "writtenOn": "2021-12-15T21:56:37Z",
+      "side": 1,
+      "message": "Since we run the 3.2 tests on https://luci-milo.appspot.com/p/chromium/builders/ci/Linux%20FYI%20GPU%20TSAN%20Release at the moment, I don\u0027t want to lose this coverage.\nSo I was hoping you can add linux-nvidia-tsan bot to keep the coverage of what can\u0027t be run on SwS.",
+      "parentUuid": "a63ce7b4_18d6e161",
+      "range": {
+        "startLine": 142,
+        "startChar": 0,
+        "endLine": 144,
+        "endChar": 0
+      },
+      "revId": "29bfe47da11a07298f300be1d74813664ace616f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
