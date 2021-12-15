@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "20cffc17_81b00afe",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1001907
+      },
+      "writtenOn": "2021-12-15T00:22:02Z",
+      "side": 1,
+      "message": "The realms experiments currently have no effect (and are removed on the server side). The previous logic (which always set bbagent\u003dFalse) appears to have been a mistake. Angle builds make roughly 6% of the remaining 1.5% of builds which still use kitchen.",
+      "revId": "e8c37f2e1f1d88c3ce05355febc1398109f5abac",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
