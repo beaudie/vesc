@@ -2326,8 +2326,8 @@ angle::Result ContextMtl::fillDriverXFBUniforms(GLint drawCallFirstVertex,
 {
     gl::TransformFeedback *transformFeedback = getState().getCurrentTransformFeedback();
 
-    mDriverUniforms.xfbActiveUnpaused = getState().isTransformFeedbackActiveUnpaused();
-    if (!transformFeedback || !mDriverUniforms.xfbActiveUnpaused)
+    bool xfbActiveUnpaused = getState().isTransformFeedbackActiveUnpaused();
+    if (!transformFeedback || !xfbActiveUnpaused)
     {
         return angle::Result::Continue;
     }
