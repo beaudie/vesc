@@ -48,21 +48,33 @@ std::string GetEnvironmentVar(const char *variableName)
 class Win32Library : public Library
 {
   public:
-    Win32Library(const char *libraryName, SearchType searchType)
+    Win32Library(const char *libraryName, SearchType searchType, std::string *outFilePathWithError)
     {
         switch (searchType)
         {
             case SearchType::ModuleDir:
             {
                 std::string moduleRelativePath = ConcatenatePath(GetModuleDirectory(), libraryName);
-                mModule                        = LoadLibraryA(moduleRelativePath.c_str());
+                if (outFilePathWithError)
+                {
+                    *outFilePathWithError = moduleRelativePath;
+                }
+                mModule = LoadLibraryA(moduleRelativePath.c_str());
                 break;
             }
 
             case SearchType::SystemDir:
+                if (outFilePathWithError)
+                {
+                    *outFilePathWithError = libraryName;
+                }
                 mModule = LoadLibraryExA(libraryName, nullptr, LOAD_LIBRARY_SEARCH_SYSTEM32);
                 break;
             case SearchType::AlreadyLoaded:
+                if (outFilePathWithError)
+                {
+                    *outFilePathWithError = libraryName;
+                }
                 mModule = GetModuleHandleA(libraryName);
                 break;
         }
@@ -109,27 +121,15 @@ class Win32Library : public Library
     HMODULE mModule = nullptr;
 };
 
-std::string GetSharedLibraryName(const char *libraryName, SearchType searchType)
+Library *OpenSharedLibrary(const char *libraryName,
+                           SearchType searchType,
+                           std::string *outFilePathWithError)
 {
     char buffer[MAX_PATH];
     int ret = snprintf(buffer, MAX_PATH, "%s.%s", libraryName, GetSharedLibraryExtension());
     if (ret > 0 && ret < MAX_PATH)
     {
-        return std::string(buffer);
-    }
-    else
-    {
-        return std::string("");
-    }
-}
-
-Library *OpenSharedLibrary(const char *libraryName, SearchType searchType)
-{
-    char buffer[MAX_PATH];
-    int ret = snprintf(buffer, MAX_PATH, "%s.%s", libraryName, GetSharedLibraryExtension());
-    if (ret > 0 && ret < MAX_PATH)
-    {
-        return new Win32Library(buffer, searchType);
+        return new Win32Library(buffer, searchType, outFilePathWithError);
     }
     else
     {
@@ -138,9 +138,11 @@ Library *OpenSharedLibrary(const char *libraryName, SearchType searchType)
     }
 }
 
-Library *OpenSharedLibraryWithExtension(const char *libraryName, SearchType searchType)
+Library *OpenSharedLibraryWithExtension(const char *libraryName,
+                                        SearchType searchType,
+                                        std::string *outFilePathWithError)
 {
-    return new Win32Library(libraryName, searchType);
+    return new Win32Library(libraryName, searchType, outFilePathWithError);
 }
 
 namespace
