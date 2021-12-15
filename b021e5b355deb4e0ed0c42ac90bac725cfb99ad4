@@ -41,6 +41,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "95c34f80_0c61a074",
+        "filename": "src/common/system_utils_posix.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 361,
+      "author": {
+        "id": 1491687
+      },
+      "writtenOn": "2021-12-15T18:18:28Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "70a9f23f_1ec04a2e",
+      "range": {
+        "startLine": 357,
+        "startChar": 0,
+        "endLine": 361,
+        "endChar": 1
+      },
+      "revId": "b021e5b355deb4e0ed0c42ac90bac725cfb99ad4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "4f1116d2_290f3858",
@@ -54,6 +78,30 @@
       "writtenOn": "2021-12-15T18:09:13Z",
       "side": 1,
       "message": "are these okay?",
+      "range": {
+        "startLine": 370,
+        "startChar": 9,
+        "endLine": 373,
+        "endChar": 1
+      },
+      "revId": "b021e5b355deb4e0ed0c42ac90bac725cfb99ad4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "4720c99c_259f04df",
+        "filename": "src/common/system_utils_posix.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 373,
+      "author": {
+        "id": 1491687
+      },
+      "writtenOn": "2021-12-15T18:18:28Z",
+      "side": 1,
+      "message": "Yes, Android 12 still uses SIGSEGV as signal number, but the signal code differs from Android 11. Now being SEGV_MAPERR instead of SEGV_ACCERR.\n\nThe si_code is a finer granularity of distinction than the signal number.\n\nFrom the sigaction man page:\n\nThe si_code field inside the siginfo_t argument that is passed to\n       a SA_SIGINFO signal handler is a value (not a bit mask)\n       indicating why this signal was sent.",
+      "parentUuid": "4f1116d2_290f3858",
       "range": {
         "startLine": 370,
         "startChar": 9,
