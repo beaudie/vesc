@@ -87,6 +87,30 @@
       },
       "revId": "29bfe47da11a07298f300be1d74813664ace616f",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "a63ce7b4_18d6e161",
+        "filename": "src/tests/test_utils/angle_test_instantiate.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 144,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2021-12-15T16:16:11Z",
+      "side": 1,
+      "message": "SwS 3.2 is a larger convo - I think ANGLE might have to do some kind of compute pipeline for GS/TS on some platforms, we can maybe use that. I left the TODO out for now, given we don\u0027t have a plan ATM. Best place to take this up would be in a ddoc.",
+      "parentUuid": "bf7f5f73_7fde8929",
+      "range": {
+        "startLine": 142,
+        "startChar": 0,
+        "endLine": 144,
+        "endChar": 0
+      },
+      "revId": "29bfe47da11a07298f300be1d74813664ace616f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
