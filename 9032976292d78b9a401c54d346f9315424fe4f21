@@ -26,6 +26,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "cbbf7239_e2ed2510",
+        "filename": "src/common/system_utils.h",
+        "patchSetId": 5
+      },
+      "lineNbr": 92,
+      "author": {
+        "id": 1002767
+      },
+      "writtenOn": "2021-12-15T14:22:30Z",
+      "side": 1,
+      "message": "One of the goals of this CL was to de-duplicate code shared between GetSharedLibraryName() and OpenSharedLibrary(), which was requested by Shabi, so I assume we wouldn\u0027t want to re-duplicate it?",
+      "parentUuid": "a72f61dc_147d5726",
+      "range": {
+        "startLine": 85,
+        "startChar": 0,
+        "endLine": 92,
+        "endChar": 0
+      },
+      "revId": "9032976292d78b9a401c54d346f9315424fe4f21",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "d55ccf30_ebf1ffbb",
         "filename": "src/common/system_utils_posix.cpp",
         "patchSetId": 5
