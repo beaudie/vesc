@@ -38,6 +38,24 @@
     {
       "unresolved": false,
       "key": {
+        "uuid": "f4abc630_155379fa",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 10,
+      "author": {
+        "id": 1001907
+      },
+      "writtenOn": "2021-12-15T00:32:07Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "982f0bb7_cf373eac",
+      "revId": "e8c37f2e1f1d88c3ce05355febc1398109f5abac",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
         "uuid": "20cffc17_81b00afe",
         "filename": "/PATCHSET_LEVEL",
         "patchSetId": 1
@@ -107,6 +125,30 @@
       "side": 1,
       "message": "Yep; this indicates that bbagent is used (vs. the deprecated `kitchen` binary)",
       "parentUuid": "a493c612_00444156",
+      "range": {
+        "startLine": 24,
+        "startChar": 0,
+        "endLine": 24,
+        "endChar": 22
+      },
+      "revId": "e8c37f2e1f1d88c3ce05355febc1398109f5abac",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "531d3e91_2f1a6d39",
+        "filename": "infra/config/generated/cr-buildbucket.cfg",
+        "patchSetId": 1
+      },
+      "lineNbr": 24,
+      "author": {
+        "id": 1001907
+      },
+      "writtenOn": "2021-12-15T00:32:07Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "eb6ae03d_b239bb16",
       "range": {
         "startLine": 24,
         "startChar": 0,
