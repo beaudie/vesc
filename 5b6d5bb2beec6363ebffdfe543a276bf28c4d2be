@@ -56,6 +56,98 @@
       },
       "revId": "5b6d5bb2beec6363ebffdfe543a276bf28c4d2be",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "bdb513df_d3bb4d5d",
+        "filename": "infra/specs/angle_mb_config.pyl",
+        "patchSetId": 2
+      },
+      "lineNbr": 131,
+      "author": {
+        "id": 1001921
+      },
+      "writtenOn": "2021-12-15T21:43:03Z",
+      "side": 1,
+      "message": "Confused.\nPer https://source.chromium.org/chromium/chromium/src/+/main:third_party/angle/src/libANGLE/renderer/vulkan/BUILD.gn;l\u003d14 seems like secondary command buffers are off by default.\nSo are these bots actually no_vulkan_scb bots?",
+      "range": {
+        "startLine": 131,
+        "startChar": 57,
+        "endLine": 131,
+        "endChar": 62
+      },
+      "revId": "5b6d5bb2beec6363ebffdfe543a276bf28c4d2be",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "a5f7a470_1010a03e",
+        "filename": "infra/specs/test_suites.pyl",
+        "patchSetId": 2
+      },
+      "lineNbr": 1045,
+      "author": {
+        "id": 1001921
+      },
+      "writtenOn": "2021-12-15T21:43:03Z",
+      "side": 1,
+      "message": "You might be interested to also run KHR suites?",
+      "range": {
+        "startLine": 1045,
+        "startChar": 7,
+        "endLine": 1045,
+        "endChar": 37
+      },
+      "revId": "5b6d5bb2beec6363ebffdfe543a276bf28c4d2be",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "8543210d_36448e01",
+        "filename": "infra/specs/test_suites.pyl",
+        "patchSetId": 2
+      },
+      "lineNbr": 1046,
+      "author": {
+        "id": 1001921
+      },
+      "writtenOn": "2021-12-15T21:43:03Z",
+      "side": 1,
+      "message": "Could you add a new test suite, which will filter end2end tests to only run Vulkan?",
+      "range": {
+        "startLine": 1046,
+        "startChar": 7,
+        "endLine": 1046,
+        "endChar": 27
+      },
+      "revId": "5b6d5bb2beec6363ebffdfe543a276bf28c4d2be",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "c5612f60_a36a1a67",
+        "filename": "infra/specs/waterfalls.pyl",
+        "patchSetId": 2
+      },
+      "lineNbr": 102,
+      "author": {
+        "id": 1001921
+      },
+      "writtenOn": "2021-12-15T21:43:03Z",
+      "side": 1,
+      "message": "These are perf and trace tests.\nSince you didn\u0027t add a GN flag that builds trace tests, I assume you\u0027d want to remove this line.",
+      "range": {
+        "startLine": 102,
+        "startChar": 0,
+        "endLine": 102,
+        "endChar": 56
+      },
+      "revId": "5b6d5bb2beec6363ebffdfe543a276bf28c4d2be",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
