@@ -70,6 +70,24 @@
       "parentUuid": "223d40b7_c152532f",
       "revId": "b45a7b67416ff30476c6ab297396352d0d3627ad",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "6bd039d1_381c0ff6",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2021-12-15T19:50:00Z",
+      "side": 1,
+      "message": "OK - I suggest we land this like this and file a follow-up task to integrate the generated binaries into the canonical build / code generation. Thoughts?",
+      "parentUuid": "7991b343_7673edfe",
+      "revId": "b45a7b67416ff30476c6ab297396352d0d3627ad",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
