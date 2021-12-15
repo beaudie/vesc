@@ -51,6 +51,24 @@
       "parentUuid": "ade6b977_6faf081b",
       "revId": "ea7b2ea0265adc220a68a2ace312545312835885",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "1b3b83b9_8fc27b66",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2021-12-15T22:20:58Z",
+      "side": 1,
+      "message": "OK - preference for a solution that doesn\u0027t add ifdefs. non-constexpr sounds totally fine.",
+      "parentUuid": "880d1399_3c0bd245",
+      "revId": "ea7b2ea0265adc220a68a2ace312545312835885",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
