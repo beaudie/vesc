@@ -4130,6 +4130,24 @@ bool BufferHelper::isReleasedToExternal() const
 #endif
 }
 
+ANGLE_INLINE void BufferHelper::initBufferMemoryBarrierStruct(
+    VkPipelineStageFlags srcStageMask,
+    VkPipelineStageFlags dstStageMask,
+    VkFlags srcAccess,
+    VkFlags dstAccess,
+    VkBufferMemoryBarrier *bufferMemoryBarrier) const
+{
+    ASSERT(mSubAllocation.valid());
+    bufferMemoryBarrier->sType               = VK_STRUCTURE_TYPE_BUFFER_MEMORY_BARRIER;
+    bufferMemoryBarrier->srcAccessMask       = srcAccess;
+    bufferMemoryBarrier->dstAccessMask       = dstAccess;
+    bufferMemoryBarrier->srcQueueFamilyIndex = mCurrentQueueFamilyIndex;
+    bufferMemoryBarrier->dstQueueFamilyIndex = mCurrentQueueFamilyIndex;
+    bufferMemoryBarrier->buffer              = getBuffer().getHandle();
+    bufferMemoryBarrier->offset              = getOffset();
+    bufferMemoryBarrier->size                = getSize();
+}
+
 bool BufferHelper::recordReadBarrier(VkAccessFlags readAccessType,
                                      VkPipelineStageFlags readStage,
                                      PipelineBarrier *barrier)
@@ -4140,8 +4158,10 @@ bool BufferHelper::recordReadBarrier(VkAccessFlags readAccessType,
     if (mCurrentWriteAccess != 0 && (((mCurrentReadAccess & readAccessType) != readAccessType) ||
                                      ((mCurrentReadStages & readStage) != readStage)))
     {
-        barrier->mergeMemoryBarrier(mCurrentWriteStages, readStage, mCurrentWriteAccess,
-                                    readAccessType);
+        VkBufferMemoryBarrier bufferMemoryBarrier = {};
+        initBufferMemoryBarrierStruct(mCurrentWriteStages, readStage, mCurrentWriteAccess,
+                                      readAccessType, &bufferMemoryBarrier);
+        barrier->mergeBufferBarrier(mCurrentWriteStages, readStage, bufferMemoryBarrier);
         barrierModified = true;
     }
 
@@ -4162,8 +4182,11 @@ bool BufferHelper::recordWriteBarrier(VkAccessFlags writeAccessType,
            (mCurrentReadStages && mCurrentReadAccess));
     if (mCurrentReadAccess != 0 || mCurrentWriteAccess != 0)
     {
-        VkPipelineStageFlags srcStageMask = mCurrentWriteStages | mCurrentReadStages;
-        barrier->mergeMemoryBarrier(srcStageMask, writeStage, mCurrentWriteAccess, writeAccessType);
+        VkPipelineStageFlags srcStageMask         = mCurrentWriteStages | mCurrentReadStages;
+        VkBufferMemoryBarrier bufferMemoryBarrier = {};
+        initBufferMemoryBarrierStruct(srcStageMask, writeStage, mCurrentWriteAccess,
+                                      writeAccessType, &bufferMemoryBarrier);
+        barrier->mergeBufferBarrier(srcStageMask, writeStage, bufferMemoryBarrier);
         barrierModified = true;
     }
 
