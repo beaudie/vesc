@@ -32,6 +32,7 @@ class GPUTestConfigTest : public ANGLETest
                   config.getConditions()[GPUTestConfig::kConditionPixel2OrXL]);
         EXPECT_EQ(IsIntel(), config.getConditions()[GPUTestConfig::kConditionIntel]);
         EXPECT_EQ(IsAMD(), config.getConditions()[GPUTestConfig::kConditionAMD]);
+        EXPECT_EQ(IsARM(), config.getConditions()[GPUTestConfig::kConditionARM]);
         EXPECT_EQ(IsNVIDIA(), config.getConditions()[GPUTestConfig::kConditionNVIDIA]);
         EXPECT_EQ(IsDebug(), config.getConditions()[GPUTestConfig::kConditionDebug]);
         EXPECT_EQ(IsRelease(), config.getConditions()[GPUTestConfig::kConditionRelease]);

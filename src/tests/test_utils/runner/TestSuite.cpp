@@ -1156,6 +1156,10 @@ TestSuite::TestSuite(int *argc, char **argv)
         {
             SetEnvironmentVar(kPreferredDeviceEnvVar, "intel");
         }
+        else if (conditions[GPUTestConfig::kConditionARM])
+        {
+            SetEnvironmentVar(kPreferredDeviceEnvVar, "arm");
+        }
         else if (conditions[GPUTestConfig::kConditionApple])
         {
             SetEnvironmentVar(kPreferredDeviceEnvVar, "apple");
