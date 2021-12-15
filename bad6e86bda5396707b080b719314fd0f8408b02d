@@ -33,6 +33,23 @@
       "message": "Re-LGTM. Adding Ian as a second reviewer, we generally do two-person reviews in ANGLE.",
       "revId": "bad6e86bda5396707b080b719314fd0f8408b02d",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "6d1264ae_790302c2",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 15
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2021-12-15T20:36:16Z",
+      "side": 1,
+      "message": "Swapping reviewers since Ian is out.",
+      "revId": "bad6e86bda5396707b080b719314fd0f8408b02d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
