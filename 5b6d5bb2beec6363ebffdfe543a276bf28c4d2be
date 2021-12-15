@@ -16,6 +16,46 @@
       "message": "Something\u0027s obviously missing since I don\u0027t see the new bots.",
       "revId": "5b6d5bb2beec6363ebffdfe543a276bf28c4d2be",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "830d5344_42302f67",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2021-12-15T14:47:05Z",
+      "side": 1,
+      "message": "New bots will require a tools/build change as well.\n\nHave you considered doing what we do with frame capture and building both ANGLE versions in the checkout under different names? Then maybe you could update the test suites to load different libGLESv2 versions like we do with native GLES/ANGLE. That way you wouldn\u0027t need to add new GN configs/ bots.",
+      "revId": "5b6d5bb2beec6363ebffdfe543a276bf28c4d2be",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "c479a112_88a62cf1",
+        "filename": "infra/config/main.star",
+        "patchSetId": 2
+      },
+      "lineNbr": 312,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2021-12-15T14:47:05Z",
+      "side": 1,
+      "message": "make sure you start with new bots off the CQ.",
+      "range": {
+        "startLine": 311,
+        "startChar": 0,
+        "endLine": 312,
+        "endChar": 36
+      },
+      "revId": "5b6d5bb2beec6363ebffdfe543a276bf28c4d2be",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
