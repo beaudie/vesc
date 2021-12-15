@@ -46,6 +46,30 @@
       },
       "revId": "70857a92c6faba3cbf9688bae153a92519000be5",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "d65e5a22_a5a49913",
+        "filename": "src/libANGLE/renderer/metal/mtl_utils.mm",
+        "patchSetId": 2
+      },
+      "lineNbr": 1254,
+      "author": {
+        "id": 1500872
+      },
+      "writtenOn": "2021-12-15T01:51:29Z",
+      "side": 1,
+      "message": "I\u0027m not sure that we could add an old SDK build + new OS for this, but I don\u0027t believe we need to. Especially because the only point when apple6 becomes available on Mac is with the launch of M1 chips, and I believe the only way we compile for M1 chips is with macOS 11.0",
+      "parentUuid": "e98edea6_ab69fc41",
+      "range": {
+        "startLine": 1254,
+        "startChar": 77,
+        "endLine": 1254,
+        "endChar": 82
+      },
+      "revId": "70857a92c6faba3cbf9688bae153a92519000be5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
