@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "d53b6110_ee071b8a",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1394635
+      },
+      "writtenOn": "2021-12-16T11:02:19Z",
+      "side": 1,
+      "message": "One related test fails on Intel GPU:\n  CubeMapTextureTest.SampleCoordinateTransformGrad/ES2_Metal\n  CubeMapTextureTest.SampleCoordinateTransformGrad/ES3_Metal\n\nIt passes on AMD and M1 though.",
+      "revId": "bdeb36b644c2c30da63836e54a7b2084d9d31162",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
