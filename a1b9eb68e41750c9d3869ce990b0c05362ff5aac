@@ -45,6 +45,30 @@
       },
       "revId": "a1b9eb68e41750c9d3869ce990b0c05362ff5aac",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "6828179c_5f54b3c4",
+        "filename": "src/libANGLE/capture/FrameCapture.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 5103,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2021-12-16T14:12:07Z",
+      "side": 0,
+      "message": "Yeah I fully expect this to break MEC. Maybe something to do with Program Pipelines? Hopefully we can get the repro so we can figure out another fix.",
+      "parentUuid": "4e50fd2b_682bb47b",
+      "range": {
+        "startLine": 5103,
+        "startChar": 12,
+        "endLine": 5103,
+        "endChar": 27
+      },
+      "revId": "a1b9eb68e41750c9d3869ce990b0c05362ff5aac",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
