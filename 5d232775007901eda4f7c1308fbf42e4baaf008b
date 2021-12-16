@@ -3,6 +3,29 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "76cd311d_aad42a6c",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 3
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2021-12-16T14:08:46Z",
+      "side": 1,
+      "message": "nit: GL_HALF_FLOAT",
+      "range": {
+        "startLine": 7,
+        "startChar": 25,
+        "endLine": 7,
+        "endChar": 38
+      },
+      "revId": "5d232775007901eda4f7c1308fbf42e4baaf008b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "50568c1e_0b3b7e6f",
         "filename": "/COMMIT_MSG",
         "patchSetId": 3
@@ -37,6 +60,24 @@
       "writtenOn": "2021-12-15T22:55:54Z",
       "side": 1,
       "message": "You might be able to use InternalFormat::getReadPixelsType() instead.",
+      "revId": "5d232775007901eda4f7c1308fbf42e4baaf008b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "05798f48_b8b912e2",
+        "filename": "src/libANGLE/capture/capture_gles_2_0_params.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 694,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2021-12-16T14:08:46Z",
+      "side": 1,
+      "message": "Would be curious to know if this works as well.",
+      "parentUuid": "f1d2d9ce_cf61adcb",
       "revId": "5d232775007901eda4f7c1308fbf42e4baaf008b",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
