@@ -16,6 +16,24 @@
       "message": "When are the declarations/definitions of the variables/functions deleted?   I expected to see that here also.",
       "revId": "d8c980c304826d2d73b8a47ec703ddd302a37924",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "e8abe36e_2c9991e9",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 8
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2021-12-16T21:13:30Z",
+      "side": 1,
+      "message": "In the retrace I\u0027ll delete them. This CL is for capture only. I\u0027m going to actually squash it in with the following CL and then abandon it when I do the retrace.",
+      "parentUuid": "81eba730_f3f6881f",
+      "revId": "d8c980c304826d2d73b8a47ec703ddd302a37924",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
