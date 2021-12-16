@@ -82,7 +82,7 @@ angle::Result SemaphoreVk::wait(gl::Context *context,
             VkDeviceSize bufferOffset      = 0;
             vk::BufferHelper &bufferHelper = bufferVk->getBufferAndOffset(&bufferOffset);
 
-            vk::CommandBuffer *commandBuffer;
+            vk::OutsideRenderPassCommandBuffer *commandBuffer;
             ANGLE_TRY(contextVk->getOutsideRenderPassCommandBuffer({}, &commandBuffer));
 
             // Queue ownership transfer.
@@ -102,7 +102,7 @@ angle::Result SemaphoreVk::wait(gl::Context *context,
             vk::ImageHelper &image = textureVk->getImage();
             vk::ImageLayout layout = vk::GetImageLayoutFromGLImageLayout(textureBarrier.layout);
 
-            vk::CommandBuffer *commandBuffer;
+            vk::OutsideRenderPassCommandBuffer *commandBuffer;
             ANGLE_TRY(contextVk->getOutsideRenderPassCommandBuffer({}, &commandBuffer));
 
             // Image should not be accessed while unowned. Emulated formats may have staged updates
@@ -138,7 +138,7 @@ angle::Result SemaphoreVk::signal(gl::Context *context,
             vk::BufferHelper &bufferHelper = bufferVk->getBufferAndOffset(&bufferOffset);
 
             ANGLE_TRY(contextVk->onBufferReleaseToExternal(bufferHelper));
-            vk::CommandBuffer *commandBuffer;
+            vk::OutsideRenderPassCommandBuffer *commandBuffer;
             ANGLE_TRY(contextVk->getOutsideRenderPassCommandBuffer({}, &commandBuffer));
 
             // Queue ownership transfer.
@@ -168,7 +168,7 @@ angle::Result SemaphoreVk::signal(gl::Context *context,
             ANGLE_TRY(textureVk->ensureImageInitialized(contextVk, ImageMipLevels::EnabledLevels));
 
             ANGLE_TRY(contextVk->onImageReleaseToExternal(image));
-            vk::CommandBuffer *commandBuffer;
+            vk::OutsideRenderPassCommandBuffer *commandBuffer;
             ANGLE_TRY(contextVk->getOutsideRenderPassCommandBuffer({}, &commandBuffer));
 
             // Queue ownership transfer and layout transition.
