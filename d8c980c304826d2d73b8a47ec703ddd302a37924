@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "81eba730_f3f6881f",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 8
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2021-12-16T18:30:13Z",
+      "side": 1,
+      "message": "When are the declarations/definitions of the variables/functions deleted?   I expected to see that here also.",
+      "revId": "d8c980c304826d2d73b8a47ec703ddd302a37924",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
