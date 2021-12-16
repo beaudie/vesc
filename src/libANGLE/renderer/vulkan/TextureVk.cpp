@@ -1020,7 +1020,7 @@ angle::Result TextureVk::copySubImageImplWithTransfer(ContextVk *contextVk,
         access.onImageTransferWrite(level, 1, baseLayer, layerCount, VK_IMAGE_ASPECT_COLOR_BIT,
                                     mImage);
 
-        vk::CommandBuffer *commandBuffer;
+        vk::OutsideRenderPassCommandBuffer *commandBuffer;
         ANGLE_TRY(contextVk->getOutsideRenderPassCommandBuffer(access, &commandBuffer));
 
         VkImageSubresourceLayers destSubresource = srcSubresource;
@@ -1057,7 +1057,7 @@ angle::Result TextureVk::copySubImageImplWithTransfer(ContextVk *contextVk,
         access.onImageTransferWrite(gl::LevelIndex(0), 1, 0, layerCount, VK_IMAGE_ASPECT_COLOR_BIT,
                                     &stagingImage->get());
 
-        vk::CommandBuffer *commandBuffer;
+        vk::OutsideRenderPassCommandBuffer *commandBuffer;
         ANGLE_TRY(contextVk->getOutsideRenderPassCommandBuffer(access, &commandBuffer));
 
         VkImageSubresourceLayers destSubresource = srcSubresource;
@@ -1425,7 +1425,7 @@ angle::Result TextureVk::setEGLImageTarget(const gl::Context *context,
             newLayout = vk::ImageLayout::AllGraphicsShadersReadOnly;
         }
 
-        vk::CommandBuffer *commandBuffer;
+        vk::OutsideRenderPassCommandBuffer *commandBuffer;
         ANGLE_TRY(contextVk->getOutsideRenderPassCommandBuffer({}, &commandBuffer));
         mImage->changeLayoutAndQueue(contextVk, mImage->getAspectFlags(), newLayout,
                                      rendererQueueFamilyIndex, commandBuffer);
@@ -1774,7 +1774,7 @@ angle::Result TextureVk::copyBufferDataToImage(ContextVk *contextVk,
     access.onBufferTransferRead(srcBuffer);
     access.onImageTransferWrite(level, 1, layerIndex, layerCount, mImage->getAspectFlags(), mImage);
 
-    vk::CommandBuffer *commandBuffer;
+    vk::OutsideRenderPassCommandBuffer *commandBuffer;
     ANGLE_TRY(contextVk->getOutsideRenderPassCommandBuffer(access, &commandBuffer));
 
     commandBuffer->copyBufferToImage(srcBuffer->getBuffer().getHandle(), mImage->getImage(),
@@ -1833,7 +1833,7 @@ angle::Result TextureVk::generateMipmapsWithCompute(ContextVk *contextVk)
                                          mImage->getLayerCount(), VK_IMAGE_ASPECT_COLOR_BIT,
                                          mImage);
 
-        vk::CommandBuffer *commandBuffer;
+        vk::OutsideRenderPassCommandBuffer *commandBuffer;
         ANGLE_TRY(contextVk->getOutsideRenderPassCommandBuffer(access, &commandBuffer));
 
         // Generate mipmaps for every layer separately.
@@ -2072,7 +2072,7 @@ angle::Result TextureVk::copyAndStageImageData(ContextVk *contextVk,
                                 &stagingImage->get());
     access.onImageTransferRead(aspectFlags, srcImage);
 
-    vk::CommandBuffer *commandBuffer;
+    vk::OutsideRenderPassCommandBuffer *commandBuffer;
     ANGLE_TRY(contextVk->getOutsideRenderPassCommandBuffer(access, &commandBuffer));
 
     VkImageCopy copyRegion               = {};
