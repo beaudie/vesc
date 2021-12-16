@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "63c17bfb_45516e32",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2021-12-16T01:33:02Z",
+      "side": 1,
+      "message": "Nit: add space after \"Metal:\" just in case folks are doing parsing of these descriptions.",
+      "revId": "0aca337f0810a283b07921f0ef16e85eef88fe25",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "be015c34_d1e51ca9",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2021-12-16T01:33:02Z",
+      "side": 1,
+      "message": "Good find Gregg. I have no idea how you found that, but if this passes tests then lgtm.\n",
+      "revId": "0aca337f0810a283b07921f0ef16e85eef88fe25",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
