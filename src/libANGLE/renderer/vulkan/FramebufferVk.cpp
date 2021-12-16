@@ -2705,7 +2705,7 @@ angle::Result FramebufferVk::startNewRenderPass(ContextVk *contextVk,
         ANGLE_TRY(contextVk->getUtils().unresolve(contextVk, this, params));
 
         // The unresolve subpass has only one draw call.
-        contextVk->startNextSubpass();
+        ANGLE_TRY(contextVk->startNextSubpass());
     }
 
     if (unresolveChanged || anyUnresolve)
