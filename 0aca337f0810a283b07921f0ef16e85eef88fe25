@@ -18,6 +18,29 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": true,
+      "key": {
+        "uuid": "0df94be2_47a69be2",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 9,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2021-12-16T03:24:06Z",
+      "side": 1,
+      "message": "typo",
+      "range": {
+        "startLine": 9,
+        "startChar": 6,
+        "endLine": 9,
+        "endChar": 12
+      },
+      "revId": "0aca337f0810a283b07921f0ef16e85eef88fe25",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": false,
       "key": {
         "uuid": "be015c34_d1e51ca9",
@@ -31,6 +54,46 @@
       "writtenOn": "2021-12-16T01:33:02Z",
       "side": 1,
       "message": "Good find Gregg. I have no idea how you found that, but if this passes tests then lgtm.\n",
+      "revId": "0aca337f0810a283b07921f0ef16e85eef88fe25",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "08c56a7e_045a0893",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2021-12-16T03:24:06Z",
+      "side": 1,
+      "message": "Thanks for taking care of this.",
+      "revId": "0aca337f0810a283b07921f0ef16e85eef88fe25",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "50894612_cd90753c",
+        "filename": "src/compiler/translator/TranslatorMetalDirect.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 25,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2021-12-16T03:24:06Z",
+      "side": 1,
+      "message": "IIRC, I noticed none of these are actually used anywhere, you could remove them all.",
+      "range": {
+        "startLine": 14,
+        "startChar": 0,
+        "endLine": 25,
+        "endChar": 80
+      },
       "revId": "0aca337f0810a283b07921f0ef16e85eef88fe25",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
