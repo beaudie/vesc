@@ -69,6 +69,30 @@
       },
       "revId": "a1b9eb68e41750c9d3869ce990b0c05362ff5aac",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "8ddc1789_219c94e5",
+        "filename": "src/libANGLE/capture/FrameCapture.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 5103,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2021-12-16T18:42:31Z",
+      "side": 0,
+      "message": "C\u0026C Rivals (com.ea.gp.candcwarzones) is the only app using PPOs (that I\u0027m aware of).\n\nI think this CL should be fine, since we will be collecting the shader sources from frame 0 into FrameCaptureShared::mCachedProgramSources, which getFrameCaptureShared()-\u003egetShaderSource() then reads from later.\n\n@Gert: It would be good if you can validate com.ea.gp.candcwarzones MEC still works though.",
+      "parentUuid": "6828179c_5f54b3c4",
+      "range": {
+        "startLine": 5103,
+        "startChar": 12,
+        "endLine": 5103,
+        "endChar": 27
+      },
+      "revId": "a1b9eb68e41750c9d3869ce990b0c05362ff5aac",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
