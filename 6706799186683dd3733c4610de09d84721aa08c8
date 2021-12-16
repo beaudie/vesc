@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "7037ab3e_980ca01d",
+        "filename": "src/common/angleutils.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 80,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2021-12-16T15:49:47Z",
+      "side": 1,
+      "message": "Bad things can happen with this. What happens if you specify ANGLE_FORMAT_PRINTF(1, 0) in the header where the function is defined? All the callers have this specified, so I\u0027m hoping the compiler is able to deduce that the format string is a literal here.",
+      "range": {
+        "startLine": 78,
+        "startChar": 0,
+        "endLine": 80,
+        "endChar": 6
+      },
+      "revId": "6706799186683dd3733c4610de09d84721aa08c8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
