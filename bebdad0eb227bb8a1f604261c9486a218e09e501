@@ -1,0 +1,55 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "7e55cbda_50eacf35",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1115588
+      },
+      "writtenOn": "2021-12-16T17:48:40Z",
+      "side": 1,
+      "message": "lgtm\n\nsee comments",
+      "revId": "bebdad0eb227bb8a1f604261c9486a218e09e501",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "dddcee83_62408b65",
+        "filename": "src/tests/gl_tests/CubeMapTextureTest.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 285,
+      "author": {
+        "id": 1115588
+      },
+      "writtenOn": "2021-12-16T17:48:40Z",
+      "side": 1,
+      "message": "I\u0027ve been told we don\u0027t want to do it this way anymore. Unfortunately the 4 lines above lead to copying the old way. Instead, add \n\n6824 MAC INTEL METAL : CubeMapTextureTest.SampleCoordinateTransformGrad/* \u003d SKIP\n\nto src/tests/angle_end2end_tests_expectations.txt",
+      "revId": "bebdad0eb227bb8a1f604261c9486a218e09e501",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "08270dae_57b62f54",
+        "filename": "src/tests/gl_tests/CubeMapTextureTest.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 333,
+      "author": {
+        "id": 1115588
+      },
+      "writtenOn": "2021-12-16T17:48:40Z",
+      "side": 1,
+      "message": "Same here. Instead of copying the deprecated style\n\n3814 ANDROID VULKAN : CubeMapTextureTest.SampleCoordinateTransformGrad_ES3/* \u003d SKIP\n3856 WIN D3D11 : CubeMapTextureTest.SampleCoordinateTransformGrad_ES3/* \u003d SKIP\n6824 MAC INTEL METAL : CubeMapTextureTest.SampleCoordinateTransformGrad_ES3/* \u003d SKIP\n\nto src/test/angle_end2end_tests_expectations.txt",
+      "revId": "bebdad0eb227bb8a1f604261c9486a218e09e501",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
