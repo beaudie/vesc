@@ -643,6 +643,28 @@
       },
     },
 
+    'angle_native_trace_smoke_isolated_scripts': {
+      'angle_native_trace_tests': {
+        'args': [
+          '--log=debug',
+          '--smoke-test-mode',
+          '--gtest_filter=*native*:-*native_offscreen*:*native_vsync*',
+          '--enable-all-trace-tests',
+        ],
+        'merge': {
+          'script': '//scripts/process_angle_perf_results.py',
+          # Does not upload to the perf dashboard
+          'args': [
+            '--smoke-test-mode',
+          ],
+        },
+        'android_swarming': {
+          'shards': 4,
+        },
+        'test': 'angle_perftests',
+      },
+    },
+
     # Actually uploads results to the perf dashboard
     'angle_perf_isolated_scripts': {
       'angle_perftests': {
@@ -1059,6 +1081,7 @@
     ],
 
     'common_isolated_scripts': [
+      'angle_native_trace_smoke_isolated_scripts',
       'angle_perf_smoke_isolated_scripts',
       'angle_restricted_trace_gold_isolated_scripts',
     ],
