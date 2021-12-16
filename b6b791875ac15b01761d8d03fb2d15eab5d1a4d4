@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "f3cdf3e3_2522e684",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2021-12-16T15:58:20Z",
+      "side": 1,
+      "message": "There are small annoyances where a few functions need to be templated, but instead the code is clearer IMO. No more isRenderPass getting passed around, asserted etc.",
+      "revId": "b6b791875ac15b01761d8d03fb2d15eab5d1a4d4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
