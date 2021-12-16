@@ -16,6 +16,23 @@
       "message": "Thanks for the split!",
       "revId": "2a7a89ade2bf16ce9d1728f960f0b5dc1edd049b",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "2242032c_7b45cce1",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1228974
+      },
+      "writtenOn": "2021-12-16T15:32:19Z",
+      "side": 1,
+      "message": "Thanks for review!",
+      "revId": "2a7a89ade2bf16ce9d1728f960f0b5dc1edd049b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
