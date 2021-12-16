@@ -16,6 +16,24 @@
       "message": "One related test fails on Intel GPU:\n  CubeMapTextureTest.SampleCoordinateTransformGrad/ES2_Metal\n  CubeMapTextureTest.SampleCoordinateTransformGrad/ES3_Metal\n\nIt passes on AMD and M1 though.",
       "revId": "bdeb36b644c2c30da63836e54a7b2084d9d31162",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "3f675f29_fd6c79fa",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1394635
+      },
+      "writtenOn": "2021-12-16T14:45:08Z",
+      "side": 1,
+      "message": "Added a new CubeMapTextureTest.SampleCoordinateTransformGrad_ES3 test that uses ESSL 3 and relies on the pre-existing shader translation functions. This test also fails on Intel suggesting that it\u0027s a driver bug or limitation.\n\nAdreno failure (wrong face selection) may be the reason why these tests are skipped on some platforms.",
+      "parentUuid": "d53b6110_ee071b8a",
+      "revId": "bdeb36b644c2c30da63836e54a7b2084d9d31162",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
