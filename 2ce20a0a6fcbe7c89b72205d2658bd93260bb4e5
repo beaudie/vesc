@@ -99,6 +99,30 @@
       },
       "revId": "2ce20a0a6fcbe7c89b72205d2658bd93260bb4e5",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "e4446abc_5bcbad6d",
+        "filename": "src/libANGLE/VertexArray.h",
+        "patchSetId": 5
+      },
+      "lineNbr": 96,
+      "author": {
+        "id": 1175714
+      },
+      "writtenOn": "2021-12-16T20:19:44Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "249c21e4_132622ff",
+      "range": {
+        "startLine": 96,
+        "startChar": 2,
+        "endLine": 96,
+        "endChar": 21
+      },
+      "revId": "2ce20a0a6fcbe7c89b72205d2658bd93260bb4e5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
