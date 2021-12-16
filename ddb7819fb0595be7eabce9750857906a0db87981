@@ -34,6 +34,24 @@
       "parentUuid": "4c487a03_3fbcdfe8",
       "revId": "ddb7819fb0595be7eabce9750857906a0db87981",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "d2b3ce96_c2fff7ee",
+        "filename": "src/libANGLE/validationESEXT.cpp",
+        "patchSetId": 8
+      },
+      "lineNbr": 2617,
+      "author": {
+        "id": 1228974
+      },
+      "writtenOn": "2021-12-16T15:45:18Z",
+      "side": 1,
+      "message": "Probably, it shouldn\u0027t be possible to use this function for something else than GL_FRAMEBUFFER_FLIP_Y_MESA. The actual extension is checked at the ValidateFramebufferParameteriBase level.",
+      "parentUuid": "24a8d038_43dc28d5",
+      "revId": "ddb7819fb0595be7eabce9750857906a0db87981",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
