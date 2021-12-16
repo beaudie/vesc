@@ -18,6 +18,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "c726c3cd_bab491cd",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1115588
+      },
+      "writtenOn": "2021-12-16T08:43:21Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "63c17bfb_45516e32",
+      "revId": "0aca337f0810a283b07921f0ef16e85eef88fe25",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "0df94be2_47a69be2",
@@ -31,6 +49,30 @@
       "writtenOn": "2021-12-16T03:24:06Z",
       "side": 1,
       "message": "typo",
+      "range": {
+        "startLine": 9,
+        "startChar": 6,
+        "endLine": 9,
+        "endChar": 12
+      },
+      "revId": "0aca337f0810a283b07921f0ef16e85eef88fe25",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "ec949a28_49c32ab9",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 9,
+      "author": {
+        "id": 1115588
+      },
+      "writtenOn": "2021-12-16T08:43:21Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "0df94be2_47a69be2",
       "range": {
         "startLine": 9,
         "startChar": 6,
@@ -75,6 +117,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "26318c2b_2dd298c7",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1115588
+      },
+      "writtenOn": "2021-12-16T08:43:21Z",
+      "side": 1,
+      "message": "I can\u0027t take any credit. Shabi found it.",
+      "parentUuid": "be015c34_d1e51ca9",
+      "revId": "0aca337f0810a283b07921f0ef16e85eef88fe25",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "50894612_cd90753c",
@@ -88,6 +148,30 @@
       "writtenOn": "2021-12-16T03:24:06Z",
       "side": 1,
       "message": "IIRC, I noticed none of these are actually used anywhere, you could remove them all.",
+      "range": {
+        "startLine": 14,
+        "startChar": 0,
+        "endLine": 25,
+        "endChar": 80
+      },
+      "revId": "0aca337f0810a283b07921f0ef16e85eef88fe25",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "8df8669f_4f8093a4",
+        "filename": "src/compiler/translator/TranslatorMetalDirect.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 25,
+      "author": {
+        "id": 1115588
+      },
+      "writtenOn": "2021-12-16T08:43:21Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "50894612_cd90753c",
       "range": {
         "startLine": 14,
         "startChar": 0,
