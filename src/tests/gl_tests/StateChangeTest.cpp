@@ -7510,6 +7510,156 @@ TEST_P(VertexAttribArrayStateChangeTest, Basic)
     glBindBuffer(GL_ARRAY_BUFFER, 0);
 }
 
+class BlendFramebufferStateChangeTest : public ANGLETest
+{
+  protected:
+    static constexpr int kWidth  = 128;
+    static constexpr int kHeight = 128;
+    BlendFramebufferStateChangeTest()
+    {
+        setWindowWidth(kWidth);
+        setWindowHeight(kHeight);
+        setConfigRedBits(8);
+        setConfigGreenBits(8);
+        setConfigBlueBits(8);
+        setConfigAlphaBits(8);
+        setConfigDepthBits(24);
+    }
+
+    void testSetUp() override
+    {
+        constexpr char kVS[] = R"(precision highp float;
+attribute vec4 position;
+attribute vec4 color;
+varying vec4 colorOut;
+
+void main()
+{
+    gl_Position = position;
+    colorOut = color;
+})";
+
+        constexpr char kFS[] = R"(precision highp float;
+varying vec4 colorOut;
+
+void main()
+{
+    gl_FragColor = colorOut;
+})";
+
+        mProgram = CompileProgram(kVS, kFS);
+        ASSERT_NE(0u, mProgram);
+
+        mPosAttribLocation = glGetAttribLocation(mProgram, "position");
+        ASSERT_NE(-1, mPosAttribLocation);
+        mColorAttribLocation = glGetAttribLocation(mProgram, "color");
+        ASSERT_NE(-1, mColorAttribLocation);
+
+        glGenBuffers(1, &mVertexBuffer);
+        glBindBuffer(GL_ARRAY_BUFFER, mVertexBuffer);
+
+        const float posAttribData[] = {
+            -1.0f, -1.0f, 1.0f, -1.0f, 1.0f, 1.0f, -1.0f, -1.0f, 1.0f, 1.0f, -1.0f, 1.0f,
+        };
+        glBufferData(GL_ARRAY_BUFFER, sizeof(posAttribData), posAttribData, GL_STATIC_DRAW);
+
+        glBindBuffer(GL_ARRAY_BUFFER, 0);
+
+        glGenTextures(1, &mTexture);
+        glBindTexture(GL_TEXTURE_2D, mTexture);
+        glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, kWidth, kHeight, 0, GL_RGBA, GL_UNSIGNED_BYTE, 0);
+        glBindTexture(GL_TEXTURE_2D, 0);
+
+        glGenFramebuffers(1, &mFramebuffer);
+        glBindFramebuffer(GL_FRAMEBUFFER, mFramebuffer);
+        glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, mTexture, 0);
+        glBindFramebuffer(GL_FRAMEBUFFER, 0);
+
+        glGenRenderbuffers(1, &mDepthRenderbuffer);
+        glBindRenderbuffer(GL_RENDERBUFFER, mDepthRenderbuffer);
+        glRenderbufferStorage(GL_RENDERBUFFER, GL_DEPTH_COMPONENT16, kWidth, kHeight);
+        glBindRenderbuffer(GL_RENDERBUFFER, 0);
+
+        glGenFramebuffers(1, &mDepthFramebuffer);
+        glBindFramebuffer(GL_FRAMEBUFFER, mDepthFramebuffer);
+        glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_RENDERBUFFER,
+                                  mDepthRenderbuffer);
+        glBindFramebuffer(GL_FRAMEBUFFER, 0);
+    }
+
+    void testTearDown() override
+    {
+        if (mDepthFramebuffer != 0)
+        {
+            glDeleteFramebuffers(1, &mDepthFramebuffer);
+        }
+
+        if (mDepthRenderbuffer != 0)
+        {
+            glDeleteFramebuffers(1, &mDepthRenderbuffer);
+        }
+
+        if (mFramebuffer != 0)
+        {
+            glDeleteFramebuffers(1, &mFramebuffer);
+        }
+
+        if (mTexture != 0)
+        {
+            glDeleteTextures(1, &mTexture);
+        }
+
+        if (mVertexBuffer != 0)
+        {
+            glDeleteBuffers(1, &mVertexBuffer);
+        }
+
+        if (mProgram != 0)
+        {
+            glDeleteProgram(mProgram);
+        }
+    }
+
+    GLuint mProgram;
+    GLint mPosAttribLocation;
+    GLint mColorAttribLocation;
+    GLuint mVertexBuffer;
+    GLuint mTexture;
+    GLuint mFramebuffer;
+    GLuint mDepthRenderbuffer;
+    GLuint mDepthFramebuffer;
+};
+
+TEST_P(BlendFramebufferStateChangeTest, Basic)
+{
+    glDisable(GL_DEPTH_TEST);
+    glBindBuffer(GL_ARRAY_BUFFER, mVertexBuffer);
+    glVertexAttribPointer(mPosAttribLocation, 2, GL_FLOAT, GL_FALSE, 0, 0);
+    glEnableVertexAttribArray(mPosAttribLocation);
+    glDisableVertexAttribArray(mColorAttribLocation);
+    glVertexAttrib4f(mColorAttribLocation, 1.0f, 0.0f, 0.0f, 1.0f);
+
+    glUseProgram(mProgram);
+    glBindFramebuffer(GL_FRAMEBUFFER, mFramebuffer);
+    glEnable(GL_BLEND);
+    glBlendFuncSeparate(GL_ONE, GL_ONE, GL_ONE, GL_ONE);
+    glBlendEquationSeparate(GL_FUNC_ADD, GL_FUNC_ADD);
+    glClearColor(0.0f, 1.0f, 0.0f, 1.0f);
+    glClear(GL_COLOR_BUFFER_BIT);
+    EXPECT_PIXEL_COLOR_EQ(0, 0, GLColor::green);
+
+    glBindFramebuffer(GL_FRAMEBUFFER, mDepthFramebuffer);
+    glDrawArrays(GL_TRIANGLES, 0, 6);
+
+    glBindFramebuffer(GL_FRAMEBUFFER, mFramebuffer);
+    glDrawArrays(GL_TRIANGLES, 0, 6);
+    EXPECT_PIXEL_COLOR_EQ(0, 0, GLColor::yellow);
+
+    glBindBuffer(GL_ARRAY_BUFFER, 0);
+    glBindFramebuffer(GL_FRAMEBUFFER, 0);
+    glUseProgram(0);
+}
+
 }  // anonymous namespace
 
 ANGLE_INSTANTIATE_TEST_ES2(StateChangeTest);
@@ -7556,3 +7706,6 @@ ANGLE_INSTANTIATE_TEST_ES31(WebGLComputeValidationStateChangeTest);
 
 GTEST_ALLOW_UNINSTANTIATED_PARAMETERIZED_TEST(VertexAttribArrayStateChangeTest);
 ANGLE_INSTANTIATE_TEST_ES3(VertexAttribArrayStateChangeTest);
+
+GTEST_ALLOW_UNINSTANTIATED_PARAMETERIZED_TEST(BlendFramebufferStateChangeTest);
+ANGLE_INSTANTIATE_TEST_ES3(BlendFramebufferStateChangeTest);

@@ -3943,7 +3943,19 @@ angle::Result ContextVk::syncState(const gl::Context *context,
                 mGraphicsPipelineDesc->resetBlendFuncsAndEquations(
                     &mGraphicsPipelineTransition, mCachedDrawFramebufferColorAttachmentMask,
                     newColorAttachmentMask);
+                bool needRestoreBlend =
+                    mCachedDrawFramebufferColorAttachmentMask != newColorAttachmentMask;
                 mCachedDrawFramebufferColorAttachmentMask = newColorAttachmentMask;
+
+                if (needRestoreBlend)
+                {
+                    mGraphicsPipelineDesc->updateBlendFuncs(
+                        &mGraphicsPipelineTransition, glState.getBlendStateExt(),
+                        mDrawFramebuffer->getState().getColorAttachmentsMask());
+                    mGraphicsPipelineDesc->updateBlendEquations(
+                        &mGraphicsPipelineTransition, glState.getBlendStateExt(),
+                        mDrawFramebuffer->getState().getColorAttachmentsMask());
+                }
 
                 mGraphicsPipelineDesc->resetSubpass(&mGraphicsPipelineTransition);
                 onDrawFramebufferRenderPassDescChange(mDrawFramebuffer, nullptr);
