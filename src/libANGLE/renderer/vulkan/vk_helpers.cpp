@@ -7,12 +7,14 @@
 //   Helper utility classes that manage Vulkan resources.
 
 #include "libANGLE/renderer/vulkan/vk_helpers.h"
-#include "libANGLE/renderer/driver_utils.h"
+
+#include <memory>
 
 #include "common/utilities.h"
 #include "common/vulkan/vk_headers.h"
 #include "image_util/loadimage.h"
 #include "libANGLE/Context.h"
+#include "libANGLE/renderer/driver_utils.h"
 #include "libANGLE/renderer/renderer_utils.h"
 #include "libANGLE/renderer/vulkan/BufferVk.h"
 #include "libANGLE/renderer/vulkan/ContextVk.h"
@@ -4900,7 +4902,7 @@ angle::Result ImageHelper::initLayerImageView(Context *context,
 
     return initLayerImageViewImpl(context, textureType, aspectMask, swizzleMap, imageViewOut,
                                   baseMipLevelVk, levelCount, baseArrayLayer, layerCount,
-                                  GetVkFormatFromFormatID(actualFormat), nullptr);
+                                  GetVkFormatFromFormatID(actualFormat), nullptr, nullptr);
 }
 
 angle::Result ImageHelper::initLayerImageViewWithFormat(Context *context,
@@ -4912,11 +4914,12 @@ angle::Result ImageHelper::initLayerImageViewWithFormat(Context *context,
                                                         LevelIndex baseMipLevelVk,
                                                         uint32_t levelCount,
                                                         uint32_t baseArrayLayer,
-                                                        uint32_t layerCount) const
+                                                        uint32_t layerCount,
+                                                        const gl::SamplerState &samplerState) const
 {
     return initLayerImageViewImpl(context, textureType, aspectMask, swizzleMap, imageViewOut,
                                   baseMipLevelVk, levelCount, baseArrayLayer, layerCount,
-                                  imageFormat, nullptr);
+                                  imageFormat, nullptr, &samplerState);
 }
 
 angle::Result ImageHelper::initLayerImageViewImpl(
@@ -4930,7 +4933,8 @@ angle::Result ImageHelper::initLayerImageViewImpl(
     uint32_t baseArrayLayer,
     uint32_t layerCount,
     VkFormat imageFormat,
-    const VkImageViewUsageCreateInfo *imageViewUsageCreateInfo) const
+    const VkImageViewUsageCreateInfo *imageViewUsageCreateInfo,
+    const gl::SamplerState *samplerState) const
 {
     VkImageViewCreateInfo viewInfo = {};
     viewInfo.sType                 = VK_STRUCTURE_TYPE_IMAGE_VIEW_CREATE_INFO;
@@ -4964,6 +4968,19 @@ angle::Result ImageHelper::initLayerImageViewImpl(
     VkSamplerYcbcrConversionInfo yuvConversionInfo = {};
     if (mYcbcrConversionDesc.valid())
     {
+        // VUID-VkSamplerCreateInfo-minFilter VkCreateSampler:
+        // VK_FORMAT_FEATURE_SAMPLED_IMAGE_YCBCR_CONVERSION_SEPARATE_RECONSTRUCTION_FILTER_BIT
+        // specifies that the format can have different chroma, min, and mag filters. However,
+        // VK_FORMAT_FEATURE_SAMPLED_IMAGE_YCBCR_CONVERSION_SEPARATE_RECONSTRUCTION_FILTER_BIT is
+        // not supported for VkSamplerYcbcrConversionCreateInfo.format = VK_FORMAT_UNDEFINED so
+        // chromaFilter needs to be equal to minFilter/magFilter.
+        if (samplerState)
+        {
+            ASSERT(samplerState->getMinFilter() == samplerState->getMagFilter());
+            const_cast<YcbcrConversionDesc &>(mYcbcrConversionDesc).mChromaFilter =
+                gl_vk::GetFilter(samplerState->getMinFilter());
+        }
+
         ASSERT((context->getRenderer()->getFeatures().supportsYUVSamplerConversion.enabled));
         yuvConversionInfo.sType = VK_STRUCTURE_TYPE_SAMPLER_YCBCR_CONVERSION_INFO;
         yuvConversionInfo.pNext = nullptr;
@@ -5002,7 +5019,7 @@ angle::Result ImageHelper::initReinterpretedLayerImageView(Context *context,
     return initLayerImageViewImpl(context, textureType, aspectMask, swizzleMap, imageViewOut,
                                   baseMipLevelVk, levelCount, baseArrayLayer, layerCount,
                                   vk::GetVkFormatFromFormatID(imageViewFormat),
-                                  &imageViewUsageCreateInfo);
+                                  &imageViewUsageCreateInfo, nullptr);
 }
 
 void ImageHelper::destroy(RendererVk *renderer)
@@ -8298,7 +8315,8 @@ angle::Result ImageViewHelper::initReadViews(ContextVk *contextVk,
                                              uint32_t baseLayer,
                                              uint32_t layerCount,
                                              bool requiresSRGBViews,
-                                             VkImageUsageFlags imageUsageFlags)
+                                             VkImageUsageFlags imageUsageFlags,
+                                             const gl::SamplerState &samplerState)
 {
     ASSERT(levelCount > 0);
     if (levelCount > mPerLevelLinearReadImageViews.size())
@@ -8321,7 +8339,7 @@ angle::Result ImageViewHelper::initReadViews(ContextVk *contextVk,
 
     // Since we don't have a readImageView, we must create ImageViews for the new max level
     ANGLE_TRY(initReadViewsImpl(contextVk, viewType, image, format, formatSwizzle, readSwizzle,
-                                baseLevel, levelCount, baseLayer, layerCount));
+                                baseLevel, levelCount, baseLayer, layerCount, samplerState));
 
     if (requiresSRGBViews)
     {
@@ -8342,7 +8360,8 @@ angle::Result ImageViewHelper::initReadViewsImpl(ContextVk *contextVk,
                                                  LevelIndex baseLevel,
                                                  uint32_t levelCount,
                                                  uint32_t baseLayer,
-                                                 uint32_t layerCount)
+                                                 uint32_t layerCount,
+                                                 const gl::SamplerState &samplerState)
 {
     ASSERT(mImageViewSerial.valid());
 
@@ -8354,17 +8373,17 @@ angle::Result ImageViewHelper::initReadViewsImpl(ContextVk *contextVk,
     {
         ANGLE_TRY(image.initLayerImageViewWithFormat(
             contextVk, viewType, vkFormat, VK_IMAGE_ASPECT_DEPTH_BIT, readSwizzle,
-            &getReadImageView(), baseLevel, levelCount, baseLayer, layerCount));
+            &getReadImageView(), baseLevel, levelCount, baseLayer, layerCount, samplerState));
         ANGLE_TRY(image.initLayerImageViewWithFormat(
             contextVk, viewType, vkFormat, VK_IMAGE_ASPECT_STENCIL_BIT, readSwizzle,
             &mPerLevelStencilReadImageViews[mCurrentMaxLevel.get()], baseLevel, levelCount,
-            baseLayer, layerCount));
+            baseLayer, layerCount, samplerState));
     }
     else
     {
-        ANGLE_TRY(image.initLayerImageViewWithFormat(contextVk, viewType, vkFormat, aspectFlags,
-                                                     readSwizzle, &getReadImageView(), baseLevel,
-                                                     levelCount, baseLayer, layerCount));
+        ANGLE_TRY(image.initLayerImageViewWithFormat(
+            contextVk, viewType, vkFormat, aspectFlags, readSwizzle, &getReadImageView(), baseLevel,
+            levelCount, baseLayer, layerCount, samplerState));
     }
 
     gl::TextureType fetchType = viewType;
@@ -8374,14 +8393,14 @@ angle::Result ImageViewHelper::initReadViewsImpl(ContextVk *contextVk,
     {
         fetchType = Get2DTextureType(layerCount, image.getSamples());
 
-        ANGLE_TRY(image.initLayerImageViewWithFormat(contextVk, fetchType, vkFormat, aspectFlags,
-                                                     readSwizzle, &getFetchImageView(), baseLevel,
-                                                     levelCount, baseLayer, layerCount));
+        ANGLE_TRY(image.initLayerImageViewWithFormat(
+            contextVk, fetchType, vkFormat, aspectFlags, readSwizzle, &getFetchImageView(),
+            baseLevel, levelCount, baseLayer, layerCount, samplerState));
     }
 
     ANGLE_TRY(image.initLayerImageViewWithFormat(contextVk, fetchType, vkFormat, aspectFlags,
                                                  formatSwizzle, &getCopyImageView(), baseLevel,
-                                                 levelCount, baseLayer, layerCount));
+                                                 levelCount, baseLayer, layerCount, samplerState));
 
     return angle::Result::Continue;
 }
