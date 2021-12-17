@@ -16,6 +16,23 @@
       "message": "LGTM, good catch.",
       "revId": "b4a4404524bc3de85f8202380ede485ebcd290cf",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "2699dad3_8d3e66f6",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2021-12-17T19:41:34Z",
+      "side": 1,
+      "message": "lgtm\n\nThank you for thinking about this so deeply and fixing this critical issue!\n\nCQ\u0027ing this for you.\n",
+      "revId": "b4a4404524bc3de85f8202380ede485ebcd290cf",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
