@@ -1,0 +1,61 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "7feb51b1_92a9f967",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2021-12-17T03:05:58Z",
+      "side": 1,
+      "message": "+Shabi as the author",
+      "revId": "3d7de1dcb516d886a0daa15ecfffb2e8c6d72f1a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "7b4cb90c_308671fa",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 3951,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2021-12-17T03:05:58Z",
+      "side": 1,
+      "message": "You could almost call updateBlendFuncsAndEquations here, but it sets a different value for mCachedDrawFramebufferColorAttachmentMask.  Potentially worth a refactor to pass in the mask, if you decide to keep this approach.",
+      "revId": "3d7de1dcb516d886a0daa15ecfffb2e8c6d72f1a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "a2525705_674952d7",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 3954,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2021-12-17T03:05:58Z",
+      "side": 1,
+      "message": "nit: This and the one below can be mCachedDrawFramebufferColorAttachmentMask or newColorAttachmentMask.  Probably the former for consistency.",
+      "range": {
+        "startLine": 3954,
+        "startChar": 24,
+        "endLine": 3954,
+        "endChar": 78
+      },
+      "revId": "3d7de1dcb516d886a0daa15ecfffb2e8c6d72f1a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
