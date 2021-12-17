@@ -18,6 +18,23 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "ca2369b8_96a2fbd0",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2021-12-17T03:55:54Z",
+      "side": 1,
+      "message": "Echoing from chat for posterity:\n\nI added this optimization because ARM pointed out that setting state for 8 attachments every time is showing up as costly in the Driver Overhead 2 benchmark. Basically the goal was to:\n\n- Only update the blend state corresponding to the current attachment mask\n- When the framebuffer changes, clear away the blend state for attachments that no longer exist\n\nI get the bug, and I don\u0027t remember exactly why I added `resetBlendFuncsAndEquations`. It was likely to get the state cleaned up to avoid unnecessary program pipeline creations that are otherwise really identical (because they differ in blend state of non-existing attachments). You can try removing `resetBlendFuncsAndEquations` and if nothing fails, I guess that\u0027s fine (maybe chances are low for what I was concerned about happening).\n\nHowever, you could also instead update the blend state for for this attachment mask `newColorAttachmentMask \u0026 ~mCachedDrawFramebufferColorAttachmentMask`\n\nBasically `resetBlendFuncsAndEquations` is cleaning up attachments that are removed (by looking at `mCachedDrawFramebufferColorAttachmentMask \u0026 ~newColorAttachmentMask`, but I had missed updating attachments that were added.\n",
+      "revId": "3d7de1dcb516d886a0daa15ecfffb2e8c6d72f1a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "7b4cb90c_308671fa",
