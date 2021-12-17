@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "51a01e91_c16b2608",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 5
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1500872
+      },
+      "writtenOn": "2021-12-17T23:27:17Z",
+      "side": 1,
+      "message": "Looks good to me, +2, and nice job adding the test.",
+      "revId": "b6e73699f832e2675bc411f408f09d2b73f0beae",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "910e8683_994dab78",
+        "filename": "src/compiler/translator/TranslatorMetalDirect/ProgramPrelude.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 1895,
+      "author": {
+        "id": 1500872
+      },
+      "writtenOn": "2021-12-17T23:27:17Z",
+      "side": 1,
+      "message": "I don\u0027t suppose it would be worth using the old ANGLE_texture2DGrad_impl here instead of declaring this twice. However, this works as well.",
+      "revId": "b6e73699f832e2675bc411f408f09d2b73f0beae",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
