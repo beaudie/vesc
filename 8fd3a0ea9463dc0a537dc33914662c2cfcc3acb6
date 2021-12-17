@@ -33,6 +33,23 @@
       "message": "+2, I\u0027ll drop my review here: \nhttps://chromium-review.googlesource.com/c/angle/angle/+/3346114",
       "revId": "8fd3a0ea9463dc0a537dc33914662c2cfcc3acb6",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "cf0d1ee2_2b37b68a",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1500872
+      },
+      "writtenOn": "2021-12-17T23:30:08Z",
+      "side": 1,
+      "message": "Perhaps add Bug: angleproject:6827 before landing? ",
+      "revId": "8fd3a0ea9463dc0a537dc33914662c2cfcc3acb6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
