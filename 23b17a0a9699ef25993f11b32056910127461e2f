@@ -16,6 +16,29 @@
       "message": "Working through bugs with Vulkan SCB",
       "revId": "23b17a0a9699ef25993f11b32056910127461e2f",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ada6216e_ee01f49f",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 2002,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2021-12-17T03:14:11Z",
+      "side": 1,
+      "message": "nit: Swap these:\n    ++mCurrentSubpass;\n    ASSERT(mCurrentSubpass \u003c kMaxSubpassCount);",
+      "range": {
+        "startLine": 2001,
+        "startChar": 0,
+        "endLine": 2002,
+        "endChar": 22
+      },
+      "revId": "23b17a0a9699ef25993f11b32056910127461e2f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
