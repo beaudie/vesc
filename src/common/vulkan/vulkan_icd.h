@@ -53,6 +53,9 @@ class ScopedVkLoaderEnvironment : angle::NonCopyable
     bool mChangedICDEnv;
     Optional<std::string> mPreviousICDEnv;
     Optional<std::string> mPreviousCustomExtensionsEnv;
+#if defined(MEMORY_SANITIZER)
+    Optional<std::string> mPreviousNoDeviceSelectEnv;
+#endif  // defined(MEMORY_SANITIZER)
 };
 
 void ChoosePhysicalDevice(PFN_vkGetPhysicalDeviceProperties pGetPhysicalDeviceProperties,
