@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "b744f5c4_c5d26d83",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2021-12-17T20:49:06Z",
+      "side": 1,
+      "message": "lgtm too.\n",
+      "revId": "0c488eda506b2a207cd58e447536d52818f710c7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "3c7b7b92_482964ff",
+        "filename": "src/libANGLE/renderer/metal/mtl_state_cache.mm",
+        "patchSetId": 1
+      },
+      "lineNbr": 989,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2021-12-17T20:49:06Z",
+      "side": 1,
+      "message": "An explicit type name here would probably make the code easier to understand.",
+      "revId": "0c488eda506b2a207cd58e447536d52818f710c7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
