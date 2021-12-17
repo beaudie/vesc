@@ -37,6 +37,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "6d651ccc_5a946d79",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 1107,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2021-12-17T03:54:04Z",
+      "side": 1,
+      "message": "I went with inheritance because \"Outside/RP CB Helper\" *is* a \"CB Helper\". It makes things a bit simpler too given that it provides member functions callable on both CB helpers.\n\nIn a few cases, a pointer to CommandBufferHelperCommon is passed to functions where the logic is identical for both CB helpers.",
+      "parentUuid": "875fc83b_ca5c27f6",
+      "revId": "d747adaed72a072b1ade551ae75879a2667c0074",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "05cce23b_790eee6e",
         "filename": "src/libANGLE/renderer/vulkan/vk_helpers.h",
         "patchSetId": 3
@@ -48,6 +66,30 @@
       "writtenOn": "2021-12-17T03:04:17Z",
       "side": 1,
       "message": "If you keep inheritance:\nThese types of functions should be declared pure virtual in CommandBufferHelperCommon.",
+      "range": {
+        "startLine": 1113,
+        "startChar": 0,
+        "endLine": 1119,
+        "endChar": 57
+      },
+      "revId": "d747adaed72a072b1ade551ae75879a2667c0074",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "a6f09f77_3b2670b0",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 1119,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2021-12-17T03:54:04Z",
+      "side": 1,
+      "message": "virtual will just be extra cost. The caller always knows on which CB helper it\u0027s calling these on, so there\u0027s no need for virtual-ness.",
+      "parentUuid": "05cce23b_790eee6e",
       "range": {
         "startLine": 1113,
         "startChar": 0,
