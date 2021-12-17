@@ -61,6 +61,10 @@ constexpr char kLoaderICDFilenamesEnv[]              = "VK_ICD_FILENAMES";
 constexpr char kANGLEPreferredDeviceEnv[]            = "ANGLE_PREFERRED_DEVICE";
 constexpr char kValidationLayersCustomSTypeListEnv[] = "VK_LAYER_CUSTOM_STYPE_LIST";
 
+#if defined(MEMORY_SANITIZER)
+constexpr char kNoDeviceSelect[]                     = "NODEVICE_SELECT";
+#endif  // defined(MEMORY_SANITIZER)
+
 constexpr uint32_t kMockVendorID = 0xba5eba11;
 constexpr uint32_t kMockDeviceID = 0xf005ba11;
 constexpr char kMockDeviceName[] = "Vulkan Mock Device";
@@ -177,6 +181,11 @@ ScopedVkLoaderEnvironment::ScopedVkLoaderEnvironment(bool enableValidationLayers
         }
     }
 #endif  // !defined(ANGLE_PLATFORM_ANDROID)
+
+#if defined(MEMORY_SANITIZER)
+    mPreviousNoDeviceSelectEnv = angle::GetEnvironmentVar(kNoDeviceSelect);
+    angle::SetEnvironmentVar(kNoDeviceSelect, "1");
+#endif  // defined(MEMORY_SANITIZER)
 }
 
 ScopedVkLoaderEnvironment::~ScopedVkLoaderEnvironment()
@@ -194,6 +203,10 @@ ScopedVkLoaderEnvironment::~ScopedVkLoaderEnvironment()
     }
 
     ResetEnvironmentVar(kValidationLayersCustomSTypeListEnv, mPreviousCustomExtensionsEnv);
+
+#if defined(MEMORY_SANITIZER)
+    ResetEnvironmentVar(kNoDeviceSelect, mPreviousNoDeviceSelectEnv);
+#endif  // defined(MEMORY_SANITIZER)
 }
 
 bool ScopedVkLoaderEnvironment::setICDEnvironment(const char *icd)
