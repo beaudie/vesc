@@ -39,6 +39,30 @@
       },
       "revId": "23b17a0a9699ef25993f11b32056910127461e2f",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "c594e5c5_f5141904",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 2002,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2021-12-17T03:57:41Z",
+      "side": 1,
+      "message": "I briefly considered doing `mCurrentSubpass \u003d std::min(mCurrentSubpass + 1, kMaxSubpassCount)` (which is why I ended up asserting first), with the intention that a bug in the wild would cause visual corruption (by replacing a command buffer) instead of a memory corruption.\n\nWhat do you think of doing that instead? Or is it just too paranoid?",
+      "parentUuid": "ada6216e_ee01f49f",
+      "range": {
+        "startLine": 2001,
+        "startChar": 0,
+        "endLine": 2002,
+        "endChar": 22
+      },
+      "revId": "23b17a0a9699ef25993f11b32056910127461e2f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
