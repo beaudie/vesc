@@ -1,0 +1,61 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "df048ee6_b46bfd03",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2021-12-17T03:04:17Z",
+      "side": 1,
+      "message": "This looks like good cleanup and should make things clearer moving forward, but it\u0027s too big to review too closely so I\u0027m going to rely on the bots to catch things.",
+      "revId": "d747adaed72a072b1ade551ae75879a2667c0074",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "875fc83b_ca5c27f6",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 1107,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2021-12-17T03:04:17Z",
+      "side": 1,
+      "message": "Do we want to use inheritance here or have OutsideRenderPassCommandBufferHelper/RenderPassCommandBufferHelper have a CommandBufferHelperCommon member to hold those values.\n\nI think the general feedback is to avoid inheritance and use composition instead in these types of cases.",
+      "revId": "d747adaed72a072b1ade551ae75879a2667c0074",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "05cce23b_790eee6e",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 1119,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2021-12-17T03:04:17Z",
+      "side": 1,
+      "message": "If you keep inheritance:\nThese types of functions should be declared pure virtual in CommandBufferHelperCommon.",
+      "range": {
+        "startLine": 1113,
+        "startChar": 0,
+        "endLine": 1119,
+        "endChar": 57
+      },
+      "revId": "d747adaed72a072b1ade551ae75879a2667c0074",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
