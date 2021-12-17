@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "d6ef0051_e78b5de9",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2021-12-17T20:58:07Z",
+      "side": 1,
+      "message": "lgtm\n\nLet me +2 this directly since it is small. Other reviews welcome.\n",
+      "revId": "ab44e51deb994ccbbba0945fc4c1860118fa1c23",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
