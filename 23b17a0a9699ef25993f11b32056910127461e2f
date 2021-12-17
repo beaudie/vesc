@@ -63,6 +63,30 @@
       },
       "revId": "23b17a0a9699ef25993f11b32056910127461e2f",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "5063ddb3_d3e3288a",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 2002,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2021-12-17T04:09:56Z",
+      "side": 1,
+      "message": "That\u0027s probably too much paranoia.   There are plenty of array accesses that aren\u0027t bounds checked, so adding 1 more should be fine with the level of testing we have.",
+      "parentUuid": "c594e5c5_f5141904",
+      "range": {
+        "startLine": 2001,
+        "startChar": 0,
+        "endLine": 2002,
+        "endChar": 22
+      },
+      "revId": "23b17a0a9699ef25993f11b32056910127461e2f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
