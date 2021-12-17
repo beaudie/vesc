@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "44343e71_bbfad213",
+        "filename": "scripts/run_code_generation.py",
+        "patchSetId": 3
+      },
+      "lineNbr": 231,
+      "author": {
+        "id": 1394635
+      },
+      "writtenOn": "2021-12-17T12:09:08Z",
+      "side": 1,
+      "message": "nit: Since the arg option may be used more than once, should this be called runningSelectedGenerators?",
+      "range": {
+        "startLine": 231,
+        "startChar": 4,
+        "endLine": 231,
+        "endChar": 26
+      },
+      "revId": "9b748b41941175a6fa2a92fe069610e25ef29dad",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
