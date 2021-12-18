@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "a4cfbc9d_fd0710dd",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2021-12-18T00:11:29Z",
+      "side": 1,
+      "message": "Thanks for your reviews Kimmo and Kyle and sorry for not seeing Kyle\u0027s duplicate of this https://chromium-review.googlesource.com/c/angle/angle/+/3346114 before doing this upstreaming - wasn\u0027t caught up on email.\n\nI\u0027m going to move forward with CQ\u0027ing this since it passed the trybots already, and will clean up the bugs afterward.\n",
+      "revId": "1517d824bf14c93d4871d90d660991caf5e23ea7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
