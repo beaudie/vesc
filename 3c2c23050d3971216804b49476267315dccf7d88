@@ -67,6 +67,24 @@
       "message": "Locks are very expensive from a CPU execution standpoint.\n\nCan we make this conditional on the async feature being enabled?   Otherwise, we\u0027ll be taking a performance hit to handle the lock acquisition to handle a feature that may never be enabled.",
       "revId": "3c2c23050d3971216804b49476267315dccf7d88",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "a513eebd_f71b99ed",
+        "filename": "src/libANGLE/renderer/vulkan/vk_utils.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 1773,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2021-12-20T20:14:59Z",
+      "side": 1,
+      "message": "Yea, that is a bit unfortunate. I think an uncontested lock should not be too expensive than an if statement.",
+      "parentUuid": "822e7996_875dff84",
+      "revId": "3c2c23050d3971216804b49476267315dccf7d88",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
