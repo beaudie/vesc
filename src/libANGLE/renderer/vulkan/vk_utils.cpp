@@ -1748,11 +1748,6 @@ angle::Result BufferBlock::init(ContextVk *contextVk,
     return angle::Result::Continue;
 }
 
-VirtualBlock &BufferBlock::getVirtualBlock()
-{
-    return mVirtualBlock;
-}
-
 const Buffer &BufferBlock::getBuffer() const
 {
     return mBuffer;
@@ -1773,8 +1768,9 @@ VkDeviceSize BufferBlock::getMemorySize() const
     return mSize;
 }
 
-VkBool32 BufferBlock::isEmpty() const
+VkBool32 BufferBlock::isEmpty()
 {
+    std::lock_guard<std::mutex> lock(mVirtualBlockMutex);
     return vma::IsVirtualBlockEmpty(mVirtualBlock.getHandle());
 }
 
@@ -1805,12 +1801,14 @@ uint8_t *BufferBlock::getMappedMemory() const
 
 VkResult BufferBlock::allocate(VkDeviceSize size, VkDeviceSize alignment, VkDeviceSize *offsetOut)
 {
+    std::lock_guard<std::mutex> lock(mVirtualBlockMutex);
     mCountRemainsEmpty = 0;
     return mVirtualBlock.allocate(size, alignment, offsetOut);
 }
 
 void BufferBlock::free(VkDeviceSize offset)
 {
+    std::lock_guard<std::mutex> lock(mVirtualBlockMutex);
     mVirtualBlock.free(offset);
 }
 
