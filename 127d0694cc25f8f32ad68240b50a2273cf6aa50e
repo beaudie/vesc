@@ -1,0 +1,44 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "036b9132_ce6ed9f0",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 5
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2021-12-20T13:33:41Z",
+      "side": 1,
+      "message": "Thanks for following up.",
+      "revId": "127d0694cc25f8f32ad68240b50a2273cf6aa50e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "2371ff60_74d37651",
+        "filename": "src/common/vulkan/vulkan_icd.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 185,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2021-12-20T13:33:41Z",
+      "side": 1,
+      "message": "nit: rather than using the #ifdefs, can you define IsMSan similar to IsASan and IsTSan? And here you\u0027d make it IsMSan() || IsTSan()? Also is there an attribute tag we can use instead of MEMORY_SANITIZER?",
+      "range": {
+        "startLine": 185,
+        "startChar": 4,
+        "endLine": 185,
+        "endChar": 11
+      },
+      "revId": "127d0694cc25f8f32ad68240b50a2273cf6aa50e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
