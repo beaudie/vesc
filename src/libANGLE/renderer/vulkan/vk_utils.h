@@ -916,6 +916,32 @@ class ResourceSerialFactory final : angle::NonCopyable
     std::atomic<uint32_t> mCurrentUniqueSerial;
 };
 
+// Helper class to use a mutex with the control of boolean.
+class ConditionalMutex final : angle::NonCopyable
+{
+  public:
+    ConditionalMutex() : mUseMutex(true) {}
+    void init(bool useMutex) { mUseMutex = useMutex; }
+    void lock()
+    {
+        if (mUseMutex)
+        {
+            mMutex.lock();
+        }
+    }
+    void unlock()
+    {
+        if (mUseMutex)
+        {
+            mMutex.unlock();
+        }
+    }
+
+  private:
+    std::mutex mMutex;
+    bool mUseMutex;
+};
+
 // BufferBlock
 class BufferBlock final : angle::NonCopyable
 {
@@ -934,7 +960,6 @@ class BufferBlock final : angle::NonCopyable
 
     BufferBlock &operator=(BufferBlock &&other);
 
-    VirtualBlock &getVirtualBlock();
     const Buffer &getBuffer() const;
     const Allocation &getAllocation() const;
     BufferSerial getBufferSerial() const { return mSerial; }
@@ -944,7 +969,7 @@ class BufferBlock final : angle::NonCopyable
 
     VkResult allocate(VkDeviceSize size, VkDeviceSize alignment, VkDeviceSize *offsetOut);
     void free(VkDeviceSize offset);
-    VkBool32 isEmpty() const;
+    VkBool32 isEmpty();
 
     bool isMapped() const;
     angle::Result map(ContextVk *contextVk);
@@ -956,7 +981,11 @@ class BufferBlock final : angle::NonCopyable
     int32_t getAndIncrementEmptyCounter();
 
   private:
+    // Protect multi-thread access to mVirtualBlock, which could be possible when asyncCommandQueue
+    // is enabled.
+    ConditionalMutex mVirtualBlockMutex;
     VirtualBlock mVirtualBlock;
+
     Buffer mBuffer;
     Allocation mAllocation;
     VkMemoryPropertyFlags mMemoryPropertyFlags;
@@ -989,7 +1018,7 @@ CreateVmaBufferSubAllocation(BufferBlock *block,
 }
 ANGLE_INLINE void DestroyVmaBufferSubAllocation(VmaBufferSubAllocation vmaBufferSubAllocation)
 {
-    vmaBufferSubAllocation->mBufferBlock->getVirtualBlock().free(vmaBufferSubAllocation->mOffset);
+    vmaBufferSubAllocation->mBufferBlock->free(vmaBufferSubAllocation->mOffset);
     delete vmaBufferSubAllocation;
 }
 
