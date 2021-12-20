@@ -3,6 +3,29 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "ce80baad_8c0ee9ee",
+        "filename": "scripts/run_code_generation.py",
+        "patchSetId": 3
+      },
+      "lineNbr": 230,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2021-12-20T14:50:31Z",
+      "side": 1,
+      "message": "could you update your variable name to use camel_case style to match the reset of this file?",
+      "range": {
+        "startLine": 230,
+        "startChar": 4,
+        "endLine": 230,
+        "endChar": 18
+      },
+      "revId": "9b748b41941175a6fa2a92fe069610e25ef29dad",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "44343e71_bbfad213",
         "filename": "scripts/run_code_generation.py",
         "patchSetId": 3
@@ -19,6 +42,29 @@
         "startChar": 4,
         "endLine": 231,
         "endChar": 26
+      },
+      "revId": "9b748b41941175a6fa2a92fe069610e25ef29dad",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "36ea86d6_a1e1e3f5",
+        "filename": "scripts/run_code_generation.py",
+        "patchSetId": 3
+      },
+      "lineNbr": 236,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2021-12-20T14:50:31Z",
+      "side": 1,
+      "message": "nit: if not ran_generators:",
+      "range": {
+        "startLine": 236,
+        "startChar": 3,
+        "endLine": 236,
+        "endChar": 31
       },
       "revId": "9b748b41941175a6fa2a92fe069610e25ef29dad",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
