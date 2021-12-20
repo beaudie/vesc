@@ -18,6 +18,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "10ebf91c_51dc6372",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 6
+      },
+      "lineNbr": 26,
+      "author": {
+        "id": 1500872
+      },
+      "writtenOn": "2021-12-20T22:20:55Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "f764e181_6e878e2c",
+      "revId": "332ff0d6e2a795bb6d9d092f64c837bc391d559b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "62b762e5_16a07a2e",
@@ -55,6 +73,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "9f43541a_257a81f4",
+        "filename": "src/libANGLE/renderer/metal/ContextMtl.mm",
+        "patchSetId": 6
+      },
+      "lineNbr": 611,
+      "author": {
+        "id": 1500872
+      },
+      "writtenOn": "2021-12-20T22:20:55Z",
+      "side": 1,
+      "message": "dEQP.GLES3/functional_transform_feedback_interpolation_flat_highp_vec4_lines_separate for example, hits this path. Passing the original attributes doesn\u0027t work here.",
+      "parentUuid": "62b762e5_16a07a2e",
+      "revId": "332ff0d6e2a795bb6d9d092f64c837bc391d559b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "141ad803_719ecafe",
         "filename": "src/libANGLE/renderer/metal/shaders/rewrite_indices.metal",
         "patchSetId": 6
@@ -66,6 +102,24 @@
       "writtenOn": "2021-11-08T22:51:30Z",
       "side": 1,
       "message": "ater -\u003e later",
+      "revId": "332ff0d6e2a795bb6d9d092f64c837bc391d559b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "0fd77c67_065f9e98",
+        "filename": "src/libANGLE/renderer/metal/shaders/rewrite_indices.metal",
+        "patchSetId": 6
+      },
+      "lineNbr": 360,
+      "author": {
+        "id": 1500872
+      },
+      "writtenOn": "2021-12-20T22:20:55Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "141ad803_719ecafe",
       "revId": "332ff0d6e2a795bb6d9d092f64c837bc391d559b",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
@@ -83,6 +137,24 @@
       "writtenOn": "2021-11-08T22:51:30Z",
       "side": 1,
       "message": "Stray spaces before semicolons here.",
+      "revId": "332ff0d6e2a795bb6d9d092f64c837bc391d559b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "308a9fd1_2ae3be53",
+        "filename": "src/libANGLE/renderer/metal/shaders/rewrite_indices.metal",
+        "patchSetId": 6
+      },
+      "lineNbr": 437,
+      "author": {
+        "id": 1500872
+      },
+      "writtenOn": "2021-12-20T22:20:55Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "dd505295_de905a52",
       "revId": "332ff0d6e2a795bb6d9d092f64c837bc391d559b",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
