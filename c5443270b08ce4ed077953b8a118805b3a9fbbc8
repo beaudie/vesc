@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "74f13d2e_87ef5f4c",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 9
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2021-12-20T22:56:05Z",
+      "side": 1,
+      "message": "lgtm modulo any still open feedback from Quyen.\n",
+      "revId": "c5443270b08ce4ed077953b8a118805b3a9fbbc8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}

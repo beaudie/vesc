@@ -89,6 +89,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "595d4bc6_abd9c290",
+        "filename": "src/libANGLE/renderer/metal/ContextMtl.mm",
+        "patchSetId": 6
+      },
+      "lineNbr": 611,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2021-12-20T22:56:05Z",
+      "side": 1,
+      "message": "OK, thanks for the further investigation and clarifications.",
+      "parentUuid": "9f43541a_257a81f4",
+      "revId": "332ff0d6e2a795bb6d9d092f64c837bc391d559b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "141ad803_719ecafe",
