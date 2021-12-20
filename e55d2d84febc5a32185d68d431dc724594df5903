@@ -18,6 +18,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "f5b65fa9_c427db7e",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 11,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2021-12-20T21:41:34Z",
+      "side": 1,
+      "message": "Oops. Done.",
+      "parentUuid": "d93efb47_7efab160",
+      "revId": "e55d2d84febc5a32185d68d431dc724594df5903",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "0ab8850f_e4662160",
@@ -36,6 +54,53 @@
         "startChar": 25,
         "endLine": 4975,
         "endChar": 92
+      },
+      "revId": "e55d2d84febc5a32185d68d431dc724594df5903",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "c6f4680f_1d93e30c",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 4975,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2021-12-20T21:41:34Z",
+      "side": 1,
+      "message": "Yeah, that check needs to be done via mYcbcrConversionDesc.mIsExternalFormat (ref1).",
+      "parentUuid": "0ab8850f_e4662160",
+      "range": {
+        "startLine": 4975,
+        "startChar": 25,
+        "endLine": 4975,
+        "endChar": 92
+      },
+      "revId": "e55d2d84febc5a32185d68d431dc724594df5903",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "784f405a_4f6ee20d",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 4996,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2021-12-20T21:41:34Z",
+      "side": 1,
+      "message": "ref1",
+      "range": {
+        "startLine": 4991,
+        "startChar": 0,
+        "endLine": 4996,
+        "endChar": 9
       },
       "revId": "e55d2d84febc5a32185d68d431dc724594df5903",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"

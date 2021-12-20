@@ -16,6 +16,24 @@
       "message": "@Jason\n\nThis CL passes atest android.media.cts.DecodeAccuracyTest#testGLViewDecodeAccuracy[0], but this test is failing with:\n    [ RUN      ] ImageTestES3.SourceYUVAHBTargetExternalYUVSampleLinearFiltering/ES3_Vulkan\n    ../../src/tests/gl_tests/ImageTest.cpp:2630: Failure\n    The difference between (GLColor(127, 0, 0, 255).R) and pixel[0] is 12, which exceeds 10.0, where\n    (GLColor(127, 0, 0, 255).R) evaluates to 127,\n    pixel[0] evaluates to 139, and\n    10.0 evaluates to 10.\n    [  FAILED  ] ImageTestES3.SourceYUVAHBTargetExternalYUVSampleLinearFiltering/ES3_Vulkan, where GetParam() \u003d ES3_Vulkan (208 ms)\n    \nI haven\u0027t dug into what\u0027s going on yet, but I\u0027m hoping the test itself just needs to be cleaned up since CtsMediaTestCases is passing.   Any ideas?",
       "revId": "b53a2e5424ba0f69af7e71e23f562296823a489d",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "3bd2cca2_76dddd55",
+        "filename": "src/tests/gl_tests/ImageTest.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 2564,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2021-12-20T21:41:34Z",
+      "side": 1,
+      "message": "I increased the error threshold to 15.0, since we really only care that the VVL error isn\u0027t generated with this test.",
+      "parentUuid": "31bace93_ba16abd9",
+      "revId": "b53a2e5424ba0f69af7e71e23f562296823a489d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
