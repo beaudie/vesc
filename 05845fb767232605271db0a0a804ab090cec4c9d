@@ -56,6 +56,30 @@
       },
       "revId": "05845fb767232605271db0a0a804ab090cec4c9d",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "de552107_fd6bf6c5",
+        "filename": "src/libANGLE/renderer/vulkan/vk_utils.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 920,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2021-12-20T21:31:22Z",
+      "side": 1,
+      "message": "Done. Moved to angleutils.h",
+      "parentUuid": "714ce019_a0af08e8",
+      "range": {
+        "startLine": 920,
+        "startChar": 6,
+        "endLine": 920,
+        "endChar": 23
+      },
+      "revId": "05845fb767232605271db0a0a804ab090cec4c9d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
