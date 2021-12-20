@@ -1,0 +1,44 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "d93efb47_7efab160",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 11,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2021-12-20T14:39:45Z",
+      "side": 1,
+      "message": "nit: unnecessary include?",
+      "revId": "e55d2d84febc5a32185d68d431dc724594df5903",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "0ab8850f_e4662160",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 4975,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2021-12-20T14:39:45Z",
+      "side": 1,
+      "message": "Shouldn\u0027t this check for \"undefined format\" then?",
+      "range": {
+        "startLine": 4975,
+        "startChar": 25,
+        "endLine": 4975,
+        "endChar": 92
+      },
+      "revId": "e55d2d84febc5a32185d68d431dc724594df5903",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
