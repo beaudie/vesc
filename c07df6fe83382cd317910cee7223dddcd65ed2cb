@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "8d649436_8486082e",
+        "filename": "src/common/vulkan/vulkan_icd.cpp",
+        "patchSetId": 8
+      },
+      "lineNbr": 111,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2021-12-20T20:47:53Z",
+      "side": 1,
+      "message": "can you do a quick touch up CL here - this should be false.",
+      "range": {
+        "startLine": 111,
+        "startChar": 6,
+        "endLine": 111,
+        "endChar": 38
+      },
+      "revId": "c07df6fe83382cd317910cee7223dddcd65ed2cb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "7baf4991_6a7ce672",
+        "filename": "src/common/vulkan/vulkan_icd.cpp",
+        "patchSetId": 8
+      },
+      "lineNbr": 183,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2021-12-20T20:47:53Z",
+      "side": 1,
+      "message": "also - this should be if (IsMSan()) and inside the if you should set the mChanged variable to true. See the other if statements above this one.\n\nThis will ensure we only reset the variable if we change it in the first place.",
+      "range": {
+        "startLine": 183,
+        "startChar": 8,
+        "endLine": 183,
+        "endChar": 30
+      },
+      "revId": "c07df6fe83382cd317910cee7223dddcd65ed2cb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
