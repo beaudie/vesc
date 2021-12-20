@@ -103,6 +103,24 @@
       "parentUuid": "a513eebd_f71b99ed",
       "revId": "3c2c23050d3971216804b49476267315dccf7d88",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "d47ee151_93d0a611",
+        "filename": "src/libANGLE/renderer/vulkan/vk_utils.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 1773,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2021-12-20T21:13:19Z",
+      "side": 1,
+      "message": "Done. Added a new Mutex helper class for it.",
+      "parentUuid": "19f3704f_d55b5969",
+      "revId": "3c2c23050d3971216804b49476267315dccf7d88",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
