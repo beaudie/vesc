@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "73318dca_100e6baa",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2021-12-20T21:27:22Z",
+      "side": 1,
+      "message": "Yeap, rebasing on main makes this empty.",
+      "revId": "6b44f31a2f74119a6adbdfb72ba4a73646d6e043",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
