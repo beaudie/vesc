@@ -85,6 +85,24 @@
       "parentUuid": "822e7996_875dff84",
       "revId": "3c2c23050d3971216804b49476267315dccf7d88",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "19f3704f_d55b5969",
+        "filename": "src/libANGLE/renderer/vulkan/vk_utils.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 1773,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2021-12-20T20:27:59Z",
+      "side": 1,
+      "message": "Releasing a lock means issuing a `sync`, since all of the CPU writes need to have landed so other CPUs can see the fresh data.   That\u0027s going to be much slower than a branch that\u0027s always taken (so the branch predictor is always right).   The mechanism for taking the lock is also similarly slow.   These are the same reasons we don\u0027t take the global Context lock unless the context is shared and the overhead is absolutely necessary.\n\nWe should be better off with an \u0027if\u0027 than taking the lock.",
+      "parentUuid": "a513eebd_f71b99ed",
+      "revId": "3c2c23050d3971216804b49476267315dccf7d88",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
