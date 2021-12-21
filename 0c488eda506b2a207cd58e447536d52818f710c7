@@ -51,6 +51,24 @@
       "parentUuid": "3c7b7b92_482964ff",
       "revId": "0c488eda506b2a207cd58e447536d52818f710c7",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "0959207e_e6179a6b",
+        "filename": "src/libANGLE/renderer/metal/mtl_state_cache.mm",
+        "patchSetId": 1
+      },
+      "lineNbr": 989,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2021-12-21T21:21:16Z",
+      "side": 1,
+      "message": "Yes, thanks, that\u0027s good too.",
+      "parentUuid": "3d10f0d7_04886284",
+      "revId": "0c488eda506b2a207cd58e447536d52818f710c7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
