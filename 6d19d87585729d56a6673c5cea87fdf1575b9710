@@ -1,0 +1,55 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "fa01f44e_d576a5ee",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 11,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2021-12-21T21:19:16Z",
+      "side": 1,
+      "message": "Could you remove this stray character? Thanks.",
+      "revId": "6d19d87585729d56a6673c5cea87fdf1575b9710",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "2a54fbb6_a8d975c2",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 13,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2021-12-21T21:19:16Z",
+      "side": 1,
+      "message": "Could you remove this blank line? It\u0027ll break the presubmit checks.",
+      "revId": "6d19d87585729d56a6673c5cea87fdf1575b9710",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "70d2ebd5_a030bfa0",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2021-12-21T21:19:16Z",
+      "side": 1,
+      "message": "lgtm/+2 with a couple of small comments about the commit message.\n\n(I\u0027d fix these for you but doing so would prevent me from reviewing your change.)\n",
+      "revId": "6d19d87585729d56a6673c5cea87fdf1575b9710",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
