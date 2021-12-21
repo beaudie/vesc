@@ -621,72 +621,6 @@ class SemaphoreHelper final : angle::NonCopyable
     const Semaphore *mSemaphore;
 };
 
-// This class' responsibility is to create index buffers needed to support line loops in Vulkan.
-// In the setup phase of drawing, the createIndexBuffer method should be called with the
-// current draw call parameters. If an element array buffer is bound for an indexed draw, use
-// createIndexBufferFromElementArrayBuffer.
-//
-// If the user wants to draw a loop between [v1, v2, v3], we will create an indexed buffer with
-// these indexes: [0, 1, 2, 3, 0] to emulate the loop.
-class LineLoopHelper final : angle::NonCopyable
-{
-  public:
-    LineLoopHelper(RendererVk *renderer);
-    ~LineLoopHelper();
-
-    angle::Result getIndexBufferForDrawArrays(ContextVk *contextVk,
-                                              uint32_t clampedVertexCount,
-                                              GLint firstVertex,
-                                              BufferHelper **bufferOut,
-                                              VkDeviceSize *offsetOut);
-
-    angle::Result getIndexBufferForElementArrayBuffer(ContextVk *contextVk,
-                                                      BufferVk *elementArrayBufferVk,
-                                                      gl::DrawElementsType glIndexType,
-                                                      int indexCount,
-                                                      intptr_t elementArrayOffset,
-                                                      BufferHelper **bufferOut,
-                                                      VkDeviceSize *bufferOffsetOut,
-                                                      uint32_t *indexCountOut);
-
-    angle::Result streamIndices(ContextVk *contextVk,
-                                gl::DrawElementsType glIndexType,
-                                GLsizei indexCount,
-                                const uint8_t *srcPtr,
-                                BufferHelper **bufferOut,
-                                VkDeviceSize *bufferOffsetOut,
-                                uint32_t *indexCountOut);
-
-    angle::Result streamIndicesIndirect(ContextVk *contextVk,
-                                        gl::DrawElementsType glIndexType,
-                                        BufferHelper *indexBuffer,
-                                        VkDeviceSize indexBufferOffset,
-                                        BufferHelper *indirectBuffer,
-                                        VkDeviceSize indirectBufferOffset,
-                                        BufferHelper **indexBufferOut,
-                                        VkDeviceSize *indexBufferOffsetOut,
-                                        BufferHelper **indirectBufferOut,
-                                        VkDeviceSize *indirectBufferOffsetOut);
-
-    angle::Result streamArrayIndirect(ContextVk *contextVk,
-                                      size_t vertexCount,
-                                      BufferHelper *arrayIndirectBuffer,
-                                      VkDeviceSize arrayIndirectBufferOffset,
-                                      BufferHelper **indexBufferOut,
-                                      VkDeviceSize *indexBufferOffsetOut,
-                                      BufferHelper **indexIndirectBufferOut,
-                                      VkDeviceSize *indexIndirectBufferOffsetOut);
-
-    void release(ContextVk *contextVk);
-    void destroy(RendererVk *renderer);
-
-    static void Draw(uint32_t count, uint32_t baseVertex, CommandBuffer *commandBuffer);
-
-  private:
-    DynamicBuffer mDynamicIndexBuffer;
-    DynamicBuffer mDynamicIndirectBuffer;
-};
-
 // This defines enum for VkPipelineStageFlagBits so that we can use it to compare and index into
 // array.
 enum class PipelineStage : uint16_t
@@ -858,6 +792,7 @@ class BufferHelper : public ReadWriteResource
                                     uint32_t memoryTypeIndex,
                                     size_t size,
                                     size_t alignment);
+    angle::Result initVertexConversionBuffer(ContextVk *contextVk, size_t size, bool hostVisible);
 
     angle::Result initStagingBuffer(ContextVk *contextVk, size_t size, bool coherent);
 
@@ -2898,6 +2833,64 @@ class CommandBufferAccess : angle::NonCopyable
     WriteBuffers mWriteBuffers;
     ReadImages mReadImages;
     WriteImages mWriteImages;
+};
+
+// This class' responsibility is to create index buffers needed to support line loops in Vulkan.
+// In the setup phase of drawing, the createIndexBuffer method should be called with the
+// current draw call parameters. If an element array buffer is bound for an indexed draw, use
+// createIndexBufferFromElementArrayBuffer.
+//
+// If the user wants to draw a loop between [v1, v2, v3], we will create an indexed buffer with
+// these indexes: [0, 1, 2, 3, 0] to emulate the loop.
+class LineLoopHelper final : angle::NonCopyable
+{
+  public:
+    LineLoopHelper(RendererVk *renderer);
+    ~LineLoopHelper();
+
+    angle::Result getIndexBufferForDrawArrays(ContextVk *contextVk,
+                                              uint32_t clampedVertexCount,
+                                              GLint firstVertex,
+                                              BufferHelper **bufferOut);
+
+    angle::Result getIndexBufferForElementArrayBuffer(ContextVk *contextVk,
+                                                      BufferVk *elementArrayBufferVk,
+                                                      gl::DrawElementsType glIndexType,
+                                                      int indexCount,
+                                                      intptr_t elementArrayOffset,
+                                                      BufferHelper **bufferOut,
+                                                      uint32_t *indexCountOut);
+
+    angle::Result streamIndices(ContextVk *contextVk,
+                                gl::DrawElementsType glIndexType,
+                                GLsizei indexCount,
+                                const uint8_t *srcPtr,
+                                BufferHelper **bufferOut,
+                                uint32_t *indexCountOut);
+
+    angle::Result streamIndicesIndirect(ContextVk *contextVk,
+                                        gl::DrawElementsType glIndexType,
+                                        BufferHelper *indexBuffer,
+                                        BufferHelper *indirectBuffer,
+                                        VkDeviceSize indirectBufferOffset,
+                                        BufferHelper **indexBufferOut,
+                                        BufferHelper **indirectBufferOut);
+
+    angle::Result streamArrayIndirect(ContextVk *contextVk,
+                                      size_t vertexCount,
+                                      BufferHelper *arrayIndirectBuffer,
+                                      VkDeviceSize arrayIndirectBufferOffset,
+                                      BufferHelper **indexBufferOut,
+                                      BufferHelper **indexIndirectBufferOut);
+
+    void release(ContextVk *contextVk);
+    void destroy(RendererVk *renderer);
+
+    static void Draw(uint32_t count, uint32_t baseVertex, CommandBuffer *commandBuffer);
+
+  private:
+    BufferHelper mDynamicIndexBuffer;
+    BufferHelper mDynamicIndirectBuffer;
 };
 }  // namespace vk
 }  // namespace rx
