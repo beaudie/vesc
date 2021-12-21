@@ -16,6 +16,46 @@
       "message": "Going to use this uniform\u0027s spot for dither control (on Pixel4 where spec consts are not used)",
       "revId": "269d6ce32f79d0d9efd4f4e670e470eef238b8fd",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "71e86e03_2fa7c52c",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2021-12-21T14:41:35Z",
+      "side": 1,
+      "message": "nice",
+      "revId": "269d6ce32f79d0d9efd4f4e670e470eef238b8fd",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "140076db_aafbf92d",
+        "filename": "src/tests/angle_end2end_tests_expectations.txt",
+        "patchSetId": 4
+      },
+      "lineNbr": 27,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2021-12-21T14:41:35Z",
+      "side": 1,
+      "message": "can you clarify that this a glslang bug?",
+      "range": {
+        "startLine": 26,
+        "startChar": 0,
+        "endLine": 27,
+        "endChar": 83
+      },
+      "revId": "269d6ce32f79d0d9efd4f4e670e470eef238b8fd",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
