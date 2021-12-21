@@ -35,6 +35,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "d3877a41_69d8a81c",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2021-12-21T14:46:35Z",
+      "side": 1,
+      "message": "What do we gain from emulating dither on p4?",
+      "parentUuid": "3db52096_c9258bc3",
+      "revId": "269d6ce32f79d0d9efd4f4e670e470eef238b8fd",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "140076db_aafbf92d",
