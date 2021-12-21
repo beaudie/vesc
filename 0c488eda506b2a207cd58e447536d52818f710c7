@@ -33,6 +33,24 @@
       "message": "An explicit type name here would probably make the code easier to understand.",
       "revId": "0c488eda506b2a207cd58e447536d52818f710c7",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "3d10f0d7_04886284",
+        "filename": "src/libANGLE/renderer/metal/mtl_state_cache.mm",
+        "patchSetId": 1
+      },
+      "lineNbr": 989,
+      "author": {
+        "id": 1449558
+      },
+      "writtenOn": "2021-12-21T11:27:49Z",
+      "side": 1,
+      "message": "I renamed this ToObjC to CreateMTLRenderPipelineDescriptor, as it is really not comparable to other ToObjC uses or functions. Would this work?",
+      "parentUuid": "3c7b7b92_482964ff",
+      "revId": "0c488eda506b2a207cd58e447536d52818f710c7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
