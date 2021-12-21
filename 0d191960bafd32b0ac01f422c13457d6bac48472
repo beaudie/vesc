@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "689e7abd_527b06ca",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 15
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2021-12-21T19:50:03Z",
+      "side": 1,
+      "message": "CC\u0027ing Mohan, since he added the shadow buffer implementation.\n\nI agree that it\u0027s good cleanup to remove it now though with all of the other updates we\u0027ve made.",
+      "revId": "0d191960bafd32b0ac01f422c13457d6bac48472",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
