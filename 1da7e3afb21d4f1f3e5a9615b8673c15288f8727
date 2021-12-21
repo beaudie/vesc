@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "b75be89e_98136e21",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2021-12-21T17:59:01Z",
+      "side": 1,
+      "message": "FYI, see my suggestion here for fixing the warning: https://chromium-review.googlesource.com/c/angle/angle/+/3343174/comment/7037ab3e_980ca01d/",
+      "revId": "1da7e3afb21d4f1f3e5a9615b8673c15288f8727",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
