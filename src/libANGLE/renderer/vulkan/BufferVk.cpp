@@ -203,7 +203,6 @@ angle::Result GetMemoryTypeIndex(ContextVk *contextVk,
 
     return angle::Result::Continue;
 }
-
 }  // namespace
 
 // ConversionBuffer implementation.
@@ -212,15 +211,19 @@ ConversionBuffer::ConversionBuffer(RendererVk *renderer,
                                    size_t initialSize,
                                    size_t alignment,
                                    bool hostVisible)
-    : dirty(true), lastAllocationOffset(0)
+    : dirty(true)
+{}
+
+ConversionBuffer::~ConversionBuffer()
 {
-    data.init(renderer, usageFlags, alignment, initialSize, hostVisible,
-              vk::DynamicBufferPolicy::OneShotUse);
+    ASSERT(!data.valid());
 }
 
-ConversionBuffer::~ConversionBuffer() = default;
-
-ConversionBuffer::ConversionBuffer(ConversionBuffer &&other) = default;
+ConversionBuffer::ConversionBuffer(ConversionBuffer &&other)
+    : dirty(other.dirty), data(std::move(other.data))
+{
+    other.dirty = true;
+}
 
 // BufferVk::VertexConversionBuffer implementation.
 BufferVk::VertexConversionBuffer::VertexConversionBuffer(RendererVk *renderer,
@@ -279,6 +282,7 @@ void BufferVk::release(ContextVk *contextVk)
     {
         buffer.data.release(renderer);
     }
+    mVertexConversionBuffers.clear();
 }
 
 angle::Result BufferVk::setExternalBufferData(const gl::Context *context,
@@ -1002,6 +1006,7 @@ ConversionBuffer *BufferVk::getVertexConversionBuffer(RendererVk *renderer,
     {
         if (buffer.formatID == formatID && buffer.stride == stride && buffer.offset == offset)
         {
+            ASSERT(buffer.data.valid());
             return &buffer;
         }
     }
