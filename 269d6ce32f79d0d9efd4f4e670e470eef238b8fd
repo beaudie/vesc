@@ -71,6 +71,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "3c6416a3_2f9666ce",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2021-12-21T16:15:13Z",
+      "side": 1,
+      "message": "Sorry let me clarify. What do we gain from supporting the P4 at all?",
+      "parentUuid": "68fc7701_7185fb81",
+      "revId": "269d6ce32f79d0d9efd4f4e670e470eef238b8fd",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "140076db_aafbf92d",
@@ -108,6 +126,30 @@
       "side": 1,
       "message": "This is not a glslang bug. Glslang is being smart and removing an empty function, but the transformer relies on it being there. Previously, the empty function call was inside an if, and glslang was not smart enough to remove it.\n\nI don\u0027t think there\u0027s much point in trying to fix things for glslang here.",
       "parentUuid": "140076db_aafbf92d",
+      "range": {
+        "startLine": 26,
+        "startChar": 0,
+        "endLine": 27,
+        "endChar": 83
+      },
+      "revId": "269d6ce32f79d0d9efd4f4e670e470eef238b8fd",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ed8d5c26_9b324d69",
+        "filename": "src/tests/angle_end2end_tests_expectations.txt",
+        "patchSetId": 4
+      },
+      "lineNbr": 27,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2021-12-21T16:15:13Z",
+      "side": 1,
+      "message": "I don\u0027t quite follow I guess. It\u0027s an ANGLE bug?",
+      "parentUuid": "0643925f_0debf8ac",
       "range": {
         "startLine": 26,
         "startChar": 0,
