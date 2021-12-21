@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "81c17cb8_6d886298",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2021-12-21T14:52:07Z",
+      "side": 1,
+      "message": "Fixes A9 re-trace.",
+      "revId": "c71e62fed6f4e3cc810c63a6a2b57f2de1cc1174",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
