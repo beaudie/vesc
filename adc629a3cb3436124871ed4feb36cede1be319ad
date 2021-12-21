@@ -97,6 +97,30 @@
     {
       "unresolved": false,
       "key": {
+        "uuid": "cef19616_34d0f1a2",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 4
+      },
+      "lineNbr": 11,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2021-12-21T19:42:12Z",
+      "side": 1,
+      "message": "Sorry I was recycling the old change-id for this. Probably should not do this.",
+      "parentUuid": "a4fd4e76_033fa326",
+      "range": {
+        "startLine": 9,
+        "startChar": 0,
+        "endLine": 11,
+        "endChar": 38
+      },
+      "revId": "adc629a3cb3436124871ed4feb36cede1be319ad",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
         "uuid": "23ba43d1_1a6cc5fe",
         "filename": "/PATCHSET_LEVEL",
         "patchSetId": 4
@@ -195,6 +219,24 @@
       "side": 1,
       "message": "yea, not just 1hz is arbitrary, the swap call timing may also vary. Precision here really is not an issue. This is just making sure we periodically do the clean up. \n\nWe should not expect a hitch with this as well (if yes, we should think about ways to mitigate). \n\nThe minor reason I prefer mLastPruneTime is that it is more intuitive to debug that when I look at debugger, this is the time actually happened instead of have to do math. \n\nWe also have other stuff that needs periodically maintained. Things like compress the blob cache. Command buffer garbage collection etc. I think one direction for future improvement is to consolidate all these together.",
       "parentUuid": "16b00b4e_156391de",
+      "revId": "adc629a3cb3436124871ed4feb36cede1be319ad",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "051a8c4d_9f97b293",
+        "filename": "src/libANGLE/renderer/vulkan/DisplayVk.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 385,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2021-12-21T19:42:12Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "c1ffb275_7848104d",
       "revId": "adc629a3cb3436124871ed4feb36cede1be319ad",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
