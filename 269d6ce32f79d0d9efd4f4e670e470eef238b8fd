@@ -130,6 +130,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "4fdf597f_4fb0923d",
+        "filename": "src/compiler/translator/TranslatorVulkan.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 509,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2021-12-21T19:56:00Z",
+      "side": 1,
+      "message": "Ah yes, captureXfbBlock is a better choice (which includes the no-op call to ANGLEGetXfbOffsets so glslang wouldn\u0027t optimize it away), I hadn\u0027t realized I put in the call directly here.",
+      "parentUuid": "dbf4701e_ffd1f8af",
+      "range": {
+        "startLine": 509,
+        "startChar": 45,
+        "endLine": 509,
+        "endChar": 59
+      },
+      "revId": "269d6ce32f79d0d9efd4f4e670e470eef238b8fd",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "140076db_aafbf92d",
