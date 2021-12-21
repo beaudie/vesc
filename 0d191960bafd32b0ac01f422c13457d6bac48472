@@ -16,6 +16,23 @@
       "message": "CC\u0027ing Mohan, since he added the shadow buffer implementation.\n\nI agree that it\u0027s good cleanup to remove it now though with all of the other updates we\u0027ve made.",
       "revId": "0d191960bafd32b0ac01f422c13457d6bac48472",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "94907cf3_2ee0988a",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 15
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1340649
+      },
+      "writtenOn": "2021-12-21T21:05:20Z",
+      "side": 1,
+      "message": "there have been quite a few changes to BufferVk that we haven\u0027t caught up with, will reassess impact when we catch up to upstream",
+      "revId": "0d191960bafd32b0ac01f422c13457d6bac48472",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
