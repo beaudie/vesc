@@ -58,6 +58,28 @@ size_t GetDefaultBufferAlignment(RendererVk *renderer)
     return alignment;
 }
 
+angle::Result AllocateVertexConversionBuffer(ContextVk *contextVk,
+                                             vk::BufferHelper *bufferHelper,
+                                             size_t bufferSize)
+{
+    RendererVk *renderer = contextVk->getRenderer();
+    // TODO: try to reuse the conversion buffer if it is already valid.
+    if (bufferHelper->valid())
+    {
+        bufferHelper->release(renderer);
+    }
+    uint32_t memoryTypeIndex = renderer->getVertexConversionBufferMemoryTypeIndex();
+    // We need to use an alignment of the maximum size we're going to allocate, which is
+    // VK_INDEX_TYPE_UINT32. When we switch from a drawElement to a drawArray call, the allocations
+    // can vary in size. According to the Vulkan spec, when calling vkCmdBindIndexBuffer: 'The
+    // sum of offset and the address of the range of VkDeviceMemory object that is backing buffer,
+    // must be a multiple of the type indicated by indexType'.
+    ANGLE_TRY(bufferHelper->initSubAllocation(contextVk, memoryTypeIndex, bufferSize,
+                                              vk::kVertexBufferAlignment));
+
+    return angle::Result::Continue;
+}
+
 namespace
 {
 // Vertex attribute buffers are used as storage buffers for conversion in compute, where access to
@@ -203,7 +225,6 @@ angle::Result GetMemoryTypeIndex(ContextVk *contextVk,
 
     return angle::Result::Continue;
 }
-
 }  // namespace
 
 // ConversionBuffer implementation.
@@ -212,10 +233,9 @@ ConversionBuffer::ConversionBuffer(RendererVk *renderer,
                                    size_t initialSize,
                                    size_t alignment,
                                    bool hostVisible)
-    : dirty(true), lastAllocationOffset(0)
+    : dirty(true)
 {
-    data.init(renderer, usageFlags, alignment, initialSize, hostVisible,
-              vk::DynamicBufferPolicy::OneShotUse);
+    data = std::make_unique<vk::BufferHelper>();
 }
 
 ConversionBuffer::~ConversionBuffer() = default;
@@ -277,7 +297,8 @@ void BufferVk::release(ContextVk *contextVk)
 
     for (ConversionBuffer &buffer : mVertexConversionBuffers)
     {
-        buffer.data.release(renderer);
+        buffer.data->release(renderer);
+        buffer.data = nullptr;
     }
 }
 
