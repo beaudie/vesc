@@ -58,6 +58,23 @@ size_t GetDefaultBufferAlignment(RendererVk *renderer)
     return alignment;
 }
 
+angle::Result AllocateVertexConversionBuffer(ContextVk *contextVk,
+                                             vk::BufferHelper *bufferHelper,
+                                             size_t bufferSize,
+                                             bool hostVisible)
+{
+    RendererVk *renderer = contextVk->getRenderer();
+    // TODO: try to reuse the conversion buffer if it is already valid.
+    if (bufferHelper->valid())
+    {
+        bufferHelper->release(renderer);
+    }
+
+    ANGLE_TRY(bufferHelper->initVertexConversionBuffer(contextVk, bufferSize, hostVisible));
+
+    return angle::Result::Continue;
+}
+
 namespace
 {
 // Vertex attribute buffers are used as storage buffers for conversion in compute, where access to
@@ -203,7 +220,6 @@ angle::Result GetMemoryTypeIndex(ContextVk *contextVk,
 
     return angle::Result::Continue;
 }
-
 }  // namespace
 
 // ConversionBuffer implementation.
@@ -212,13 +228,15 @@ ConversionBuffer::ConversionBuffer(RendererVk *renderer,
                                    size_t initialSize,
                                    size_t alignment,
                                    bool hostVisible)
-    : dirty(true), lastAllocationOffset(0)
+    : dirty(true)
 {
-    data.init(renderer, usageFlags, alignment, initialSize, hostVisible,
-              vk::DynamicBufferPolicy::OneShotUse);
+    data = std::make_unique<vk::BufferHelper>();
 }
 
-ConversionBuffer::~ConversionBuffer() = default;
+ConversionBuffer::~ConversionBuffer()
+{
+    ASSERT(!data || !data->valid());
+}
 
 ConversionBuffer::ConversionBuffer(ConversionBuffer &&other) = default;
 
@@ -277,8 +295,9 @@ void BufferVk::release(ContextVk *contextVk)
 
     for (ConversionBuffer &buffer : mVertexConversionBuffers)
     {
-        buffer.data.release(renderer);
+        buffer.data->release(renderer);
     }
+    mVertexConversionBuffers.clear();
 }
 
 angle::Result BufferVk::setExternalBufferData(const gl::Context *context,
@@ -999,6 +1018,7 @@ ConversionBuffer *BufferVk::getVertexConversionBuffer(RendererVk *renderer,
     {
         if (buffer.formatID == formatID && buffer.stride == stride && buffer.offset == offset)
         {
+            ASSERT(buffer.data && buffer.data->valid());
             return &buffer;
         }
     }
