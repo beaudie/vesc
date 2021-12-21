@@ -1513,6 +1513,30 @@ angle::Result RendererVk::initialize(DisplayVk *displayVk,
         mStagingBufferAlignment =
             std::max(mStagingBufferAlignment,
                      static_cast<size_t>(mPhysicalDeviceProperties.limits.nonCoherentAtomSize));
+
+        // Device local vertex conversion buffer
+        createInfo.usage = vk::kVertexBufferUsageFlags;
+        requiredFlags    = VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT;
+        preferredFlags   = 0;
+        ANGLE_VK_TRY(displayVk,
+                     mBufferMemoryAllocator.findMemoryTypeIndexForBufferInfo(
+                         this, createInfo, requiredFlags, preferredFlags, persistentlyMapped,
+                         &mDeviceLocalVertexConversionBufferMemoryTypeIndex));
+        ASSERT(mDeviceLocalVertexConversionBufferMemoryTypeIndex != kInvalidMemoryTypeIndex);
+
+        // Host visible and non-coherent vertex conversion buffer
+        requiredFlags = VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT;
+        ANGLE_VK_TRY(displayVk,
+                     mBufferMemoryAllocator.findMemoryTypeIndexForBufferInfo(
+                         this, createInfo, requiredFlags, preferredFlags, persistentlyMapped,
+                         &mHostVisibleVertexConversionBufferMemoryTypeIndex));
+        ASSERT(mHostVisibleVertexConversionBufferMemoryTypeIndex != kInvalidMemoryTypeIndex);
+
+        // We may use compute shader to do conversion, so we must meet
+        // minStorageBufferOffsetAlignment requirement as well.
+        mVertexConversionBufferAlignment = std::max(
+            vk::kVertexBufferAlignment,
+            static_cast<size_t>(mPhysicalDeviceProperties.limits.minStorageBufferOffsetAlignment));
     }
 
     {
