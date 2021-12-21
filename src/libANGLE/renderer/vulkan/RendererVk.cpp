@@ -1512,6 +1512,15 @@ angle::Result RendererVk::initialize(DisplayVk *displayVk,
                      mPhysicalDeviceProperties.limits.optimalBufferCopyOffsetAlignment);
         mStagingBufferAlignment =
             std::max(mStagingBufferAlignment, mPhysicalDeviceProperties.limits.nonCoherentAtomSize);
+
+        // Host visible vertex buffer
+        createInfo.usage = vk::kVertexBufferUsageFlags;
+        requiredFlags    = VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT;
+        preferredFlags   = 0;
+        ANGLE_VK_TRY(displayVk, mBufferMemoryAllocator.findMemoryTypeIndexForBufferInfo(
+                                    this, createInfo, requiredFlags, preferredFlags,
+                                    persistentlyMapped, &mVertexConversionBufferMemoryTypeIndex));
+        ASSERT(mVertexConversionBufferMemoryTypeIndex != kInvalidMemoryTypeIndex);
     }
 
     {
