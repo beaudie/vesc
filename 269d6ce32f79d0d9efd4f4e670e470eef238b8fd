@@ -53,6 +53,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "68fc7701_7185fb81",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2021-12-21T16:11:10Z",
+      "side": 1,
+      "message": "Same gain from emulating dither everywhere else. Correct rendering of 565 and 11_11_10 formats.",
+      "parentUuid": "d3877a41_69d8a81c",
+      "revId": "269d6ce32f79d0d9efd4f4e670e470eef238b8fd",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "140076db_aafbf92d",
@@ -66,6 +84,30 @@
       "writtenOn": "2021-12-21T14:41:35Z",
       "side": 1,
       "message": "can you clarify that this a glslang bug?",
+      "range": {
+        "startLine": 26,
+        "startChar": 0,
+        "endLine": 27,
+        "endChar": 83
+      },
+      "revId": "269d6ce32f79d0d9efd4f4e670e470eef238b8fd",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "0643925f_0debf8ac",
+        "filename": "src/tests/angle_end2end_tests_expectations.txt",
+        "patchSetId": 4
+      },
+      "lineNbr": 27,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2021-12-21T16:11:10Z",
+      "side": 1,
+      "message": "This is not a glslang bug. Glslang is being smart and removing an empty function, but the transformer relies on it being there. Previously, the empty function call was inside an if, and glslang was not smart enough to remove it.\n\nI don\u0027t think there\u0027s much point in trying to fix things for glslang here.",
+      "parentUuid": "140076db_aafbf92d",
       "range": {
         "startLine": 26,
         "startChar": 0,
