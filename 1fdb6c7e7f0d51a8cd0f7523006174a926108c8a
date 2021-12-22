@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "57d1280c_ab3f3b6e",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1265568
+      },
+      "writtenOn": "2021-12-22T02:16:50Z",
+      "side": 1,
+      "message": "I don\u0027t have permissions to run a CQ dry run - please queue one when you get a chance. thank you!",
+      "revId": "1fdb6c7e7f0d51a8cd0f7523006174a926108c8a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
