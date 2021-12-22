@@ -1955,8 +1955,7 @@ class ImageHelper final : public Resource, public angle::Subject
                              VkImageAspectFlagBits copyAspectFlags,
                              gl::LevelIndex levelGL,
                              uint32_t layer,
-                             void *pixels,
-                             DynamicBuffer *stagingBuffer);
+                             void *pixels);
 
     angle::Result CalculateBufferInfo(ContextVk *contextVk,
                                       const gl::Extents &glExtents,
