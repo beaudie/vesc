@@ -1924,10 +1924,8 @@ class ImageHelper final : public Resource, public angle::Subject
                                         uint32_t layerCount,
                                         uint32_t baseLayer,
                                         const gl::Box &sourceArea,
-                                        BufferHelper **bufferOut,
-                                        size_t *bufferSize,
-                                        StagingBufferOffsetArray *bufferOffsetsOut,
-                                        uint8_t **outDataPtr);
+                                        BufferHelper *dstBuffer,
+                                        StagingBufferOffsetArray *bufferOffsetsOut);
 
     static angle::Result GetReadPixelsParams(ContextVk *contextVk,
                                              const gl::PixelPackState &packState,
@@ -1955,8 +1953,7 @@ class ImageHelper final : public Resource, public angle::Subject
                              VkImageAspectFlagBits copyAspectFlags,
                              gl::LevelIndex levelGL,
                              uint32_t layer,
-                             void *pixels,
-                             DynamicBuffer *stagingBuffer);
+                             void *pixels);
 
     angle::Result CalculateBufferInfo(ContextVk *contextVk,
                                       const gl::Extents &glExtents,
