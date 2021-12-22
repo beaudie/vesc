@@ -159,6 +159,24 @@ std::ostream &FmtHex(std::ostream &os, T value)
     return os;
 }
 
+template <int N, typename T>
+std::wostream &FmtHex(std::wostream &wos, T value)
+{
+    wos << L"0x";
+
+    std::ios_base::fmtflags oldFlags = wos.flags();
+    std::streamsize oldWidth         = wos.width();
+    std::ostream::char_type oldFill  = wos.fill();
+
+    wos << std::hex << std::uppercase << std::setw(N) << std::setfill(L'0') << value;
+
+    wos.flags(oldFlags);
+    wos.width(oldWidth);
+    wos.fill(oldFill);
+
+    return wos;
+}
+
 template <typename T>
 std::ostream &FmtHexAutoSized(std::ostream &os, T value)
 {
@@ -167,14 +185,21 @@ std::ostream &FmtHexAutoSized(std::ostream &os, T value)
 }
 
 template <typename T>
+std::wostream &FmtHexAutoSized(std::wostream &wos, T value)
+{
+    constexpr int N = sizeof(T) * 2;
+    return priv::FmtHex<N>(wos, value);
+}
+
+template <typename T, typename C = char>
 class FmtHexHelper
 {
   public:
-    FmtHexHelper(const char *prefix, T value) : mPrefix(prefix), mValue(value) {}
+    FmtHexHelper(const C *prefix, T value) : mPrefix(prefix), mValue(value) {}
     explicit FmtHexHelper(T value) : mPrefix(nullptr), mValue(value) {}
 
   private:
-    const char *mPrefix;
+    const C *mPrefix;
     T mValue;
 
     friend std::ostream &operator<<(std::ostream &os, const FmtHexHelper &fmt)
@@ -184,6 +209,15 @@ class FmtHexHelper
             os << fmt.mPrefix;
         }
         return FmtHexAutoSized(os, fmt.mValue);
+    }
+
+    friend std::wostream &operator<<(std::wostream &wos, const FmtHexHelper &fmt)
+    {
+        if (fmt.mPrefix)
+        {
+            wos << fmt.mPrefix;
+        }
+        return FmtHexAutoSized(wos, fmt.mValue);
     }
 };
 
