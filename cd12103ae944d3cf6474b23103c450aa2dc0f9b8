@@ -16,6 +16,29 @@
       "message": "Swap reviewer so that I can land this CL earlier.",
       "revId": "cd12103ae944d3cf6474b23103c450aa2dc0f9b8",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "786f28f9_e043fc47",
+        "filename": "src/libANGLE/renderer/vulkan/BufferVk.cpp",
+        "patchSetId": 17
+      },
+      "lineNbr": 786,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2021-12-22T19:52:02Z",
+      "side": 1,
+      "message": "nit: Can be:\n\n    return unmapImpl(contextVk);",
+      "range": {
+        "startLine": 784,
+        "startChar": 0,
+        "endLine": 786,
+        "endChar": 0
+      },
+      "revId": "cd12103ae944d3cf6474b23103c450aa2dc0f9b8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
