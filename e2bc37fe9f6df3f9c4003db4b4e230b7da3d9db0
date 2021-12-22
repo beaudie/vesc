@@ -16,6 +16,24 @@
       "message": "instead of not overriding, please modify the local one",
       "revId": "e2bc37fe9f6df3f9c4003db4b4e230b7da3d9db0",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "2fe2dca0_24182a83",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1001921
+      },
+      "writtenOn": "2021-12-22T21:09:55Z",
+      "side": 1,
+      "message": "Done, PTAL.",
+      "parentUuid": "f18b0225_3c33a32e",
+      "revId": "e2bc37fe9f6df3f9c4003db4b4e230b7da3d9db0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
