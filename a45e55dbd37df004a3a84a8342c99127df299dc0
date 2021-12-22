@@ -16,6 +16,23 @@
       "message": "Yuly, feel free to add any trybots that you think might be necessary!",
       "revId": "a45e55dbd37df004a3a84a8342c99127df299dc0",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "178944a9_93b96e1d",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1001921
+      },
+      "writtenOn": "2021-12-22T18:45:08Z",
+      "side": 1,
+      "message": "We don\u0027t have trybots for the new AMD card, so I\u0027ll watch the CI bot.",
+      "revId": "a45e55dbd37df004a3a84a8342c99127df299dc0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
