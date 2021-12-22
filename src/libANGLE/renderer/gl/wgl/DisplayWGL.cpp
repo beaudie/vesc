@@ -140,24 +140,24 @@ egl::Error DisplayWGL::initializeImpl(egl::Display *display)
     // available.
 
     // Work around compile error from not defining "UNICODE" while Chromium does
-    const LPSTR idcArrow = MAKEINTRESOURCEA(32512);
+    const LPWSTR idcArrow = MAKEINTRESOURCEW(32512);
 
     std::ostringstream stream;
     stream << "ANGLE DisplayWGL " << gl::FmtHex(display) << " Intermediate Window Class";
-    std::string className = stream.str();
+    std::wstring className = std::wstring(stream.str().begin(), stream.str().end());
 
-    WNDCLASSA intermediateClassDesc     = {};
+    WNDCLASSW intermediateClassDesc     = {};
     intermediateClassDesc.style         = CS_OWNDC;
-    intermediateClassDesc.lpfnWndProc   = DefWindowProcA;
+    intermediateClassDesc.lpfnWndProc   = DefWindowProcW;
     intermediateClassDesc.cbClsExtra    = 0;
     intermediateClassDesc.cbWndExtra    = 0;
     intermediateClassDesc.hInstance     = GetModuleHandle(nullptr);
     intermediateClassDesc.hIcon         = nullptr;
-    intermediateClassDesc.hCursor       = LoadCursorA(nullptr, idcArrow);
-    intermediateClassDesc.hbrBackground = 0;
+    intermediateClassDesc.hCursor       = LoadCursorW(nullptr, idcArrow);
+    intermediateClassDesc.hbrBackground = nullptr;
     intermediateClassDesc.lpszMenuName  = nullptr;
     intermediateClassDesc.lpszClassName = className.c_str();
-    mWindowClass                        = RegisterClassA(&intermediateClassDesc);
+    mWindowClass                        = RegisterClassW(&intermediateClassDesc);
     if (!mWindowClass)
     {
         return egl::EglNotInitialized()
@@ -166,7 +166,7 @@ egl::Error DisplayWGL::initializeImpl(egl::Display *display)
     }
 
     HWND placeholderWindow =
-        CreateWindowExA(0, reinterpret_cast<const char *>(mWindowClass), "ANGLE Placeholder Window",
+        CreateWindowExW(0, reinterpret_cast<LPCWSTR>(mWindowClass), L"ANGLE Placeholder Window",
                         WS_OVERLAPPEDWINDOW, CW_USEDEFAULT, CW_USEDEFAULT, CW_USEDEFAULT,
                         CW_USEDEFAULT, nullptr, nullptr, nullptr, nullptr);
     if (!placeholderWindow)
