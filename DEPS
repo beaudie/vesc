@@ -34,7 +34,7 @@ vars = {
   'checkout_android_native_support': 'checkout_android or checkout_chromeos',
 
   # Version of Chromium our Chromium-based DEPS are mirrored from.
-  'chromium_revision': '9ca41364d3dc6abe793b8fe33415b4c5d5c60e3b',
+  'chromium_revision': 'e3db8ada82531574f3b219df5007e3182454f5f8',
   # We never want to checkout chromium,
   # but need a dummy DEPS entry for the autoroller
   'dummy_checkout_chromium': False,
@@ -79,7 +79,7 @@ vars = {
   # Three lines of non-changing comments so that
   # the commit queue can handle CLs rolling catapult
   # and whatever else without interference from each other.
-  'catapult_revision': '97da6b1e1c9db574e28d63e89fe83b23bbb22cef',
+  'catapult_revision': '76c77ba0be42ad1bb71e001722132d2ecbc5b729',
 
   # Three lines of non-changing comments so that
   # the commit queue can handle CLs rolling luci-go
@@ -119,7 +119,7 @@ vars = {
 deps = {
 
   'build': {
-    'url': '{chromium_git}/chromium/src/build.git@4edcc0aed52773037ea29c5e1bb6973ea610c31b',
+    'url': '{chromium_git}/chromium/src/build.git@38d94903ff607eb195e8a1c1d8fbfa633b527402',
     'condition': 'not build_with_chromium',
   },
 
@@ -182,12 +182,12 @@ deps = {
   },
 
   'testing': {
-    'url': '{chromium_git}/chromium/src/testing@b92291ea680f6caac13a5d8151c90d246205a0aa',
+    'url': '{chromium_git}/chromium/src/testing@6a8a568eadad5e1bffe51d31caab3c178ca37c11',
     'condition': 'not build_with_chromium',
   },
 
   'third_party/abseil-cpp': {
-    'url': '{chromium_git}/chromium/src/third_party/abseil-cpp@4afcb13a107dc91f334f1f668346697b382984d0',
+    'url': '{chromium_git}/chromium/src/third_party/abseil-cpp@fd787098b1f24c0150cdd72b888f04ef9f3e89cf',
     'condition': 'not build_with_chromium',
   },
 
@@ -582,7 +582,7 @@ deps = {
   },
 
   'tools/perf': {
-    'url': '{chromium_git}/chromium/src/tools/perf@004f80f6e5ef5de4d19e78a150391f0b3462b008',
+    'url': '{chromium_git}/chromium/src/tools/perf@5fba75ed629e980332116ef6de1b01200e6a021f',
     'condition': 'not build_with_chromium',
   },
 
