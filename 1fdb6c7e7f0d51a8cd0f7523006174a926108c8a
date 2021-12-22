@@ -16,6 +16,23 @@
       "message": "I don\u0027t have permissions to run a CQ dry run - please queue one when you get a chance. thank you!",
       "revId": "1fdb6c7e7f0d51a8cd0f7523006174a926108c8a",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "6584b9a8_2faf0dba",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2021-12-22T03:03:57Z",
+      "side": 1,
+      "message": "Swapping reviewers. Looks like this solution isn\u0027t universal though, you might need to do make it a build option?",
+      "revId": "1fdb6c7e7f0d51a8cd0f7523006174a926108c8a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
