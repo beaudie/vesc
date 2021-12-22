@@ -67,24 +67,24 @@ def get_binary_name(binary):
         return './%s' % binary
 
 
-def _popen(*args, **kwargs):
-    assert 'creationflags' not in kwargs
-    if sys.platform == 'win32':
-        # Necessary for signal handling. See crbug.com/733612#c6.
-        kwargs['creationflags'] = subprocess.CREATE_NEW_PROCESS_GROUP
-    return subprocess.Popen(*args, **kwargs)
-
-
-def run_command_with_output(argv, stdoutfile, env=None, cwd=None, log=True):
-    assert stdoutfile
-    with io.open(stdoutfile, 'wb') as writer:
-        process = _popen(argv, env=env, cwd=cwd, stdout=writer, stderr=subprocess.STDOUT)
-        test_env.forward_signals([process])
-        while process.poll() is None:
-            # This sleep is needed for signal propagation. See the
-            # wait_with_signals() docstring.
-            time.sleep(0.1)
-        return process.returncode
+#def _popen(*args, **kwargs):
+#    assert 'creationflags' not in kwargs
+#    if sys.platform == 'win32':
+#        # Necessary for signal handling. See crbug.com/733612#c6.
+#        kwargs['creationflags'] = subprocess.CREATE_NEW_PROCESS_GROUP
+#    return subprocess.Popen(*args, **kwargs)
+#
+#
+#def run_command_with_output(argv, stdoutfile, env=None, cwd=None, log=True):
+#    assert stdoutfile
+#    with io.open(stdoutfile, 'wb') as writer:
+#        process = _popen(argv, env=env, cwd=cwd, stdout=writer, stderr=subprocess.STDOUT)
+#        test_env.forward_signals([process])
+#        while process.poll() is None:
+#            # This sleep is needed for signal propagation. See the
+#            # wait_with_signals() docstring.
+#            time.sleep(0.1)
+#        return process.returncode
 
 
 def _run_and_get_output(args, cmd, env):
@@ -94,7 +94,7 @@ def _run_and_get_output(args, cmd, env):
         if args.xvfb:
             exit_code = xvfb.run_executable(cmd, env, stdoutfile=tempfile_path)
         else:
-            exit_code = run_command_with_output(cmd, env=env, stdoutfile=tempfile_path, log=False)
+            exit_code = test_env.run_command_with_output(cmd, env=env, stdoutfile=tempfile_path)
         with open(tempfile_path) as f:
             for line in f:
                 lines.append(line.strip())
