@@ -50,6 +50,23 @@
       "message": "lgtm/+2 with a couple of small comments about the commit message.\n\n(I\u0027d fix these for you but doing so would prevent me from reviewing your change.)\n",
       "revId": "6d19d87585729d56a6673c5cea87fdf1575b9710",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "621cdc12_af649139",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1374244
+      },
+      "writtenOn": "2021-12-22T03:51:20Z",
+      "side": 1,
+      "message": "I\u0027m just curious,\nWon\u0027t creating a temp variable allocate a new memory every time?\n\nThe reason it was a member variable before was to minimize the dynamic memory allocations happening every frame. AFAIK, a STL container\u0027 `clear` (or more precisely `resize(0)`) won\u0027t deallocate memory, the allocation will be re-used in later insertions.",
+      "revId": "6d19d87585729d56a6673c5cea87fdf1575b9710",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
