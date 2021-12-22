@@ -11,7 +11,8 @@
     ],
     "SubgroupSize": [
         "Is8x4",
-        "Is8x8"
+        "Is8x8",
+        "Is4x4"
     ],
     "SubgroupOp": [
         [ "SupportsBallot", "--target-env", "vulkan1.1" ],

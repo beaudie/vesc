@@ -152,11 +152,15 @@ namespace
 #include "libANGLE/renderer/vulkan/shaders/gen/OverlayCull.comp.00000000.inc"
 #include "libANGLE/renderer/vulkan/shaders/gen/OverlayCull.comp.00000001.inc"
 #include "libANGLE/renderer/vulkan/shaders/gen/OverlayCull.comp.00000002.inc"
-#include "libANGLE/renderer/vulkan/shaders/gen/OverlayCull.comp.00000003.inc"
 #include "libANGLE/renderer/vulkan/shaders/gen/OverlayCull.comp.00000004.inc"
 #include "libANGLE/renderer/vulkan/shaders/gen/OverlayCull.comp.00000005.inc"
+#include "libANGLE/renderer/vulkan/shaders/gen/OverlayCull.comp.00000006.inc"
+#include "libANGLE/renderer/vulkan/shaders/gen/OverlayCull.comp.00000008.inc"
+#include "libANGLE/renderer/vulkan/shaders/gen/OverlayCull.comp.00000009.inc"
+#include "libANGLE/renderer/vulkan/shaders/gen/OverlayCull.comp.0000000A.inc"
 #include "libANGLE/renderer/vulkan/shaders/gen/OverlayDraw.comp.00000000.inc"
 #include "libANGLE/renderer/vulkan/shaders/gen/OverlayDraw.comp.00000001.inc"
+#include "libANGLE/renderer/vulkan/shaders/gen/OverlayDraw.comp.00000002.inc"
 
 // This is compressed SPIR-V binary blob and size
 struct CompressedShaderBlob
@@ -338,13 +342,19 @@ constexpr CompressedShaderBlob kOverlayCull_comp_shaders[] = {
     {kOverlayCull_comp_00000000, sizeof(kOverlayCull_comp_00000000)},
     {kOverlayCull_comp_00000001, sizeof(kOverlayCull_comp_00000001)},
     {kOverlayCull_comp_00000002, sizeof(kOverlayCull_comp_00000002)},
-    {kOverlayCull_comp_00000003, sizeof(kOverlayCull_comp_00000003)},
+    {nullptr, 0},  // 0x00000003
     {kOverlayCull_comp_00000004, sizeof(kOverlayCull_comp_00000004)},
     {kOverlayCull_comp_00000005, sizeof(kOverlayCull_comp_00000005)},
+    {kOverlayCull_comp_00000006, sizeof(kOverlayCull_comp_00000006)},
+    {nullptr, 0},  // 0x00000007
+    {kOverlayCull_comp_00000008, sizeof(kOverlayCull_comp_00000008)},
+    {kOverlayCull_comp_00000009, sizeof(kOverlayCull_comp_00000009)},
+    {kOverlayCull_comp_0000000A, sizeof(kOverlayCull_comp_0000000A)},
 };
 constexpr CompressedShaderBlob kOverlayDraw_comp_shaders[] = {
     {kOverlayDraw_comp_00000000, sizeof(kOverlayDraw_comp_00000000)},
     {kOverlayDraw_comp_00000001, sizeof(kOverlayDraw_comp_00000001)},
+    {kOverlayDraw_comp_00000002, sizeof(kOverlayDraw_comp_00000002)},
 };
 
 angle::Result GetShader(Context *context,

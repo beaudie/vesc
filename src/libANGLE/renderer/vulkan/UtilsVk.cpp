@@ -3381,10 +3381,26 @@ angle::Result UtilsVk::cullOverlayWidgets(ContextVk *contextVk,
 {
     ANGLE_TRY(ensureOverlayCullResourcesInitialized(contextVk));
 
-    ASSERT(params.subgroupSize[0] == 8 &&
-           (params.subgroupSize[1] == 8 || params.subgroupSize[1] == 4));
+    // #start Android subgroup size 16 hack
+    //    ASSERT(params.subgroupSize[0] == 8 &&
+    //           (params.subgroupSize[1] == 8 || params.subgroupSize[1] == 4));
+
+    ASSERT((params.subgroupSize[0] == 8 &&
+            (params.subgroupSize[1] == 8 || params.subgroupSize[1] == 4)) ||
+           (params.subgroupSize[0] == 4 && params.subgroupSize[1] == 4));
+    // #end Android subgroup size 16 hack
+
+    // #start Android subgroup size 16 hack
+    //    uint32_t flags =
+    //        params.subgroupSize[1] == 8 ? OverlayCull_comp::kIs8x8 : OverlayCull_comp::kIs8x4;
     uint32_t flags =
         params.subgroupSize[1] == 8 ? OverlayCull_comp::kIs8x8 : OverlayCull_comp::kIs8x4;
+    if (params.subgroupSize[0] == 4)
+    {
+        flags = OverlayCull_comp::kIs4x4;
+    }
+    // #end Android subgroup size 16 hack
+
     if (params.supportsSubgroupBallot)
     {
         flags |= OverlayCull_comp::kSupportsBallot;
@@ -3470,10 +3486,23 @@ angle::Result UtilsVk::drawOverlay(ContextVk *contextVk,
     shaderParams.outputSize[1] = dst->getExtents().height;
     shaderParams.rotateXY      = params.rotateXY;
 
-    ASSERT(params.subgroupSize[0] == 8 &&
-           (params.subgroupSize[1] == 8 || params.subgroupSize[1] == 4));
+    // #start Android subgroup size 16 hack
+    //    ASSERT(params.subgroupSize[0] == 8 &&
+    //           (params.subgroupSize[1] == 8 || params.subgroupSize[1] == 4));
+    ASSERT((params.subgroupSize[0] == 8 &&
+            (params.subgroupSize[1] == 8 || params.subgroupSize[1] == 4)) ||
+           (params.subgroupSize[0] == 4 && params.subgroupSize[1] == 4));
+    // #end Android subgroup size 16 hack
+
+    // #start Android subgroup size 16 hack
     uint32_t flags =
         params.subgroupSize[1] == 8 ? OverlayDraw_comp::kIs8x8 : OverlayDraw_comp::kIs8x4;
+
+    if (params.subgroupSize[0] == 4)
+    {
+        flags = OverlayDraw_comp::kIs4x4;
+    }
+    // #end Android subgroup size 16 hack
 
     VkDescriptorSet descriptorSet;
     vk::RefCountedDescriptorPoolBinding descriptorPoolBinding;

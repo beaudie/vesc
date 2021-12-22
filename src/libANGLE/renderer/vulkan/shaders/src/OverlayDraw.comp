@@ -16,15 +16,28 @@
 #elif Is8x8
 #define BLOCK_WIDTH 8
 #define BLOCK_HEIGHT 8
+// #start Android subgroup size 16 hack
+#elif Is4x4
+#define BLOCK_WIDTH 4
+#define BLOCK_HEIGHT 4
 #else
+// #end Android subgroup size 16 hack
 #error "Not all subgroup sizes are accounted for"
 #endif
 
 // Limits:
 // Note that max length and size is defined such that each buffer length is below 16KB, the minimum
 // guaranteed supported size for uniform buffers.
+// #start Android subgroup size 16 hack
+#if Is4x4
+#define MAX_TEXT_WIDGETS 16
+#define MAX_GRAPH_WIDGETS 16
+#else
+// #end Android subgroup size 16 hack
 #define MAX_TEXT_WIDGETS 32
 #define MAX_GRAPH_WIDGETS 32
+#endif
+
 #define MAX_TEXT_LENGTH 256
 #define MAX_GRAPH_SIZE 256
 
@@ -175,6 +188,7 @@ void main()
     {
         return;
     }
+
 
     vec4 blendedWidgets = vec4(0, 0, 0, 1);
 

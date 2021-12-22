@@ -23,13 +23,28 @@
 #define WORKGROUP_WIDTH 64
 #define BLOCK_WIDTH 8
 #define BLOCK_HEIGHT 8
+
+// #start Android subgroup size 16 hack
+#elif Is4x4
+#define WORKGROUP_WIDTH 16
+#define BLOCK_WIDTH 4
+#define BLOCK_HEIGHT 4
+// #end Android subgroup size 16 hack
+
 #else
 #error "Not all subgroup sizes are accounted for"
 #endif
 
 // Limits:
+// #start Android subgroup size 16 hack
+#if Is4x4
+#define MAX_TEXT_WIDGETS 16
+#define MAX_GRAPH_WIDGETS 16
+#else
+// #end Android subgroup size 16 hack
 #define MAX_TEXT_WIDGETS 32
 #define MAX_GRAPH_WIDGETS 32
+#endif
 
 layout (local_size_x = WORKGROUP_WIDTH, local_size_y = 1, local_size_z = 1) in;
 
@@ -41,6 +56,33 @@ layout (set = 0, binding = 1) uniform WidgetCoordinates
 };
 
 #if SupportsNone
+// #start Android subgroup size 16 hack
+#if Is4x4
+shared uint intersectingWidgets[16];
+
+void accumulateWidgets(const uint localId)
+{
+    if(localId < 8)
+    {
+        intersectingWidgets[localId] |= intersectingWidgets[localId + 8];
+        if(localId < 4)
+        {
+            intersectingWidgets[localId] |= intersectingWidgets[localId + 4];
+            if(localId < 2)
+            {
+                intersectingWidgets[localId] |= intersectingWidgets[localId + 2];
+                if(localId < 1)
+                {
+                    intersectingWidgets[localId] |= intersectingWidgets[localId+1];
+                }
+            }
+        }
+    }
+}
+
+#else
+// #end Android subgroup size 16 hack
+
 shared uint intersectingWidgets[32];
 
 void accumulateWidgets(const uint localId)
@@ -67,7 +109,8 @@ void accumulateWidgets(const uint localId)
         }
     }
 }
-#endif
+#endif // #if Is4x4
+#endif // #if SupportsNone
 
 uvec2 cullWidgets(const uint offset, const uvec2 blockCoordLow, const uvec2 blockCoordHigh)
 {
@@ -92,7 +135,11 @@ uvec2 cullWidgets(const uint offset, const uvec2 blockCoordLow, const uvec2 bloc
     return uvec2(subgroupOr(textWidgetBit), subgroupOr(graphWidgetBit));
 #elif Is8x4
     return uvec2(subgroupOr(uint(intersects) << localId), 0);
+// #start Android subgroup size 16 hack
+#elif Is4x4
+    return uvec2(subgroupOr(uint(intersects) << localId), 0);
 #else
+// #end Android subgroup size 16 hack
 #error "Not all subgroup sizes are accounted for"
 #endif
 
@@ -126,7 +173,16 @@ uvec2 cullWidgets(const uint offset, const uvec2 blockCoordLow, const uvec2 bloc
     {
         ballot.x = intersectingWidgets[0];
     }
+// #start Android subgroup size 16 hack
+#elif Is4x4
+    intersectingWidgets[localId] = uint(intersects) << localId;
+    accumulateWidgets(localId);
+    if (localId == 0)
+    {
+        ballot.x = intersectingWidgets[0];
+    }
 #else
+// #end Android subgroup size 16 hack
 #error "Not all subgroup sizes are accounted for"
 #endif
 
@@ -153,7 +209,12 @@ void main()
 #elif Is8x4
     culledWidgets.x = cullWidgets(0, blockCoordLow, blockCoordHigh).x;
     culledWidgets.y = cullWidgets(MAX_TEXT_WIDGETS, blockCoordLow, blockCoordHigh).x;
+// #start Android subgroup size 16 hack
+#elif Is4x4
+    culledWidgets.x = cullWidgets(0, blockCoordLow, blockCoordHigh).x;
+    culledWidgets.y = cullWidgets(MAX_TEXT_WIDGETS, blockCoordLow, blockCoordHigh).x;
 #else
+// #end Android subgroup size 16 hack
 #error "Not all subgroup sizes are accounted for"
 #endif
 
