@@ -792,9 +792,16 @@ class BufferHelper : public ReadWriteResource
                                     uint32_t memoryTypeIndex,
                                     size_t size,
                                     size_t alignment);
-    angle::Result initVertexConversionBuffer(ContextVk *contextVk, size_t size, bool hostVisible);
 
+    // Helper functions to initialize a specialized buffer
+    angle::Result initVertexConversionBuffer(ContextVk *contextVk, size_t size, bool hostVisible);
     angle::Result initStagingBuffer(ContextVk *contextVk, size_t size, bool coherent);
+    angle::Result initForCopyImage(ContextVk *contextVk,
+                                   size_t size,
+                                   bool coherent,
+                                   angle::FormatID formatId,
+                                   VkDeviceSize *offset,
+                                   uint8_t **dataPtr);
 
     void destroy(RendererVk *renderer);
     void release(RendererVk *renderer);
@@ -1927,9 +1934,7 @@ class ImageHelper final : public Resource, public angle::Subject
                                         uint32_t layerCount,
                                         uint32_t baseLayer,
                                         const gl::Box &sourceArea,
-                                        BufferHelper **bufferOut,
-                                        size_t *bufferSize,
-                                        StagingBufferOffsetArray *bufferOffsetsOut,
+                                        BufferHelper *dstBuffer,
                                         uint8_t **outDataPtr);
 
     static angle::Result GetReadPixelsParams(ContextVk *contextVk,
@@ -1958,8 +1963,7 @@ class ImageHelper final : public Resource, public angle::Subject
                              VkImageAspectFlagBits copyAspectFlags,
                              gl::LevelIndex levelGL,
                              uint32_t layer,
-                             void *pixels,
-                             DynamicBuffer *stagingBuffer);
+                             void *pixels);
 
     angle::Result CalculateBufferInfo(ContextVk *contextVk,
                                       const gl::Extents &glExtents,
