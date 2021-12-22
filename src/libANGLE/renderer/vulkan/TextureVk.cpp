@@ -877,10 +877,13 @@ angle::Result TextureVk::copySubTextureImpl(ContextVk *contextVk,
                           "Texture copied on CPU due to format restrictions");
 
     // Read back the requested region of the source texture
-    uint8_t *sourceData = nullptr;
+    vk::RendererScoped<vk::BufferHelper> bufferHelper(renderer);
+
+    vk::StagingBufferOffsetArray sourceCopyOffsets = {0, 0};
     ANGLE_TRY(source->copyImageDataToBufferAndGetData(
         contextVk, sourceLevelGL, sourceBox.depth, sourceBox,
-        RenderPassClosureReason::CopyTextureOnCPU, &sourceData));
+        RenderPassClosureReason::CopyTextureOnCPU, &bufferHelper.get(), &sourceCopyOffsets));
+    uint8_t *sourceData = bufferHelper.get().getMappedMemory() + sourceCopyOffsets[0];
 
     const angle::Format &srcTextureFormat = source->getImage().getActualFormat();
     const angle::Format &dstTextureFormat =
@@ -1687,21 +1690,19 @@ angle::Result TextureVk::redefineLevel(const gl::Context *context,
     return angle::Result::Continue;
 }
 
-angle::Result TextureVk::copyImageDataToBufferAndGetData(ContextVk *contextVk,
-                                                         gl::LevelIndex sourceLevelGL,
-                                                         uint32_t layerCount,
-                                                         const gl::Box &sourceArea,
-                                                         RenderPassClosureReason reason,
-                                                         uint8_t **outDataPtr)
+angle::Result TextureVk::copyImageDataToBufferAndGetData(
+    ContextVk *contextVk,
+    gl::LevelIndex sourceLevelGL,
+    uint32_t layerCount,
+    const gl::Box &sourceArea,
+    RenderPassClosureReason reason,
+    vk::BufferHelper *copyBuffer,
+    vk::StagingBufferOffsetArray *copyBufferOffsets)
 {
     ANGLE_TRACE_EVENT0("gpu.angle", "TextureVk::copyImageDataToBufferAndGetData");
 
     // Make sure the source is initialized and it's images are flushed.
     ANGLE_TRY(ensureImageInitialized(contextVk, ImageMipLevels::EnabledLevels));
-
-    vk::BufferHelper *copyBuffer                   = nullptr;
-    vk::StagingBufferOffsetArray sourceCopyOffsets = {0, 0};
-    size_t bufferSize                              = 0;
 
     gl::Box modifiedSourceArea = sourceArea;
 
@@ -1716,8 +1717,7 @@ angle::Result TextureVk::copyImageDataToBufferAndGetData(ContextVk *contextVk,
     }
 
     ANGLE_TRY(mImage->copyImageDataToBuffer(contextVk, sourceLevelGL, layerCount, 0,
-                                            modifiedSourceArea, &copyBuffer, &bufferSize,
-                                            &sourceCopyOffsets, outDataPtr));
+                                            modifiedSourceArea, copyBuffer, copyBufferOffsets));
 
     // Explicitly finish. If new use cases arise where we don't want to block we can change this.
     ANGLE_TRY(contextVk->finishImpl(reason));
@@ -1889,19 +1889,23 @@ angle::Result TextureVk::generateMipmapsWithCompute(ContextVk *contextVk)
 angle::Result TextureVk::generateMipmapsWithCPU(const gl::Context *context)
 {
     ContextVk *contextVk = vk::GetImpl(context);
+    RendererVk *renderer = contextVk->getRenderer();
 
     gl::LevelIndex baseLevelGL(mState.getEffectiveBaseLevel());
     vk::LevelIndex baseLevelVk         = mImage->toVkLevel(baseLevelGL);
     const gl::Extents baseLevelExtents = mImage->getLevelExtents(baseLevelVk);
     uint32_t imageLayerCount           = mImage->getLayerCount();
 
-    uint8_t *imageData = nullptr;
     gl::Box imageArea(0, 0, 0, baseLevelExtents.width, baseLevelExtents.height,
                       baseLevelExtents.depth);
 
+    vk::RendererScoped<vk::BufferHelper> bufferHelper(renderer);
+
+    vk::StagingBufferOffsetArray sourceCopyOffsets = {0, 0};
     ANGLE_TRY(copyImageDataToBufferAndGetData(contextVk, baseLevelGL, imageLayerCount, imageArea,
                                               RenderPassClosureReason::GenerateMipmapOnCPU,
-                                              &imageData));
+                                              &bufferHelper.get(), &sourceCopyOffsets));
+    uint8_t *imageData = bufferHelper.get().getMappedMemory() + sourceCopyOffsets[0];
 
     const angle::Format &angleFormat = mImage->getActualFormat();
     GLuint sourceRowPitch            = baseLevelExtents.width * angleFormat.pixelBytes;
@@ -2171,13 +2175,12 @@ angle::Result TextureVk::reinitImageAsRenderable(ContextVk *contextVk,
             gl::ImageIndex::MakeFromType(mState.getType(), levelGL.get(), 0, layerCount);
 
         // Read back the requested region of the source texture
-        uint8_t *srcData                               = nullptr;
-        vk::BufferHelper *srcBuffer                    = nullptr;
-        size_t srcBufferSize                           = 0;
-        vk::StagingBufferOffsetArray sourceCopyOffsets = {0, 0};
+        vk::RendererScoped<vk::BufferHelper> bufferHelper(renderer);
+        vk::BufferHelper *srcBuffer                   = &bufferHelper.get();
+        vk::StagingBufferOffsetArray srcBufferOffsets = {0, 0};
         ANGLE_TRY(mImage->copyImageDataToBuffer(contextVk, levelGL, layerCount, 0, sourceBox,
-                                                &srcBuffer, &srcBufferSize, &sourceCopyOffsets,
-                                                &srcData));
+                                                srcBuffer, &srcBufferOffsets));
+        uint8_t *srcData = srcBuffer->getMappedMemory() + srcBufferOffsets[0];
 
         // Explicitly finish. If new use cases arise where we don't want to block we can change
         // this.

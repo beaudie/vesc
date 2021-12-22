@@ -3928,12 +3928,11 @@ angle::Result BufferHelper::initVertexConversionBuffer(ContextVk *contextVk,
                                                        size_t size,
                                                        bool hostVisible)
 {
-    RendererVk *renderer  = contextVk->getRenderer();
-    size_t alignment      = static_cast<size_t>(renderer->getVertexConversionBufferAlignment());
-    size_t sizeToAllocate = roundUp(size, alignment);
-    return initSubAllocation(contextVk,
-                             renderer->getVertexConversionBufferMemoryTypeIndex(hostVisible),
-                             sizeToAllocate, alignment);
+    RendererVk *renderer     = contextVk->getRenderer();
+    uint32_t memoryTypeIndex = renderer->getVertexConversionBufferMemoryTypeIndex(hostVisible);
+    size_t alignment         = static_cast<size_t>(renderer->getVertexConversionBufferAlignment());
+    size_t sizeToAllocate    = roundUp(size, alignment);
+    return initSubAllocation(contextVk, memoryTypeIndex, sizeToAllocate, alignment);
 }
 
 angle::Result BufferHelper::initializeNonZeroMemory(Context *context,
@@ -7396,10 +7395,8 @@ angle::Result ImageHelper::copyImageDataToBuffer(ContextVk *contextVk,
                                                  uint32_t layerCount,
                                                  uint32_t baseLayer,
                                                  const gl::Box &sourceArea,
-                                                 BufferHelper **bufferOut,
-                                                 size_t *bufferSize,
-                                                 StagingBufferOffsetArray *bufferOffsetsOut,
-                                                 uint8_t **outDataPtr)
+                                                 BufferHelper *dstBuffer,
+                                                 StagingBufferOffsetArray *bufferOffsetsOut)
 {
     ANGLE_TRACE_EVENT0("gpu.angle", "ImageHelper::copyImageDataToBuffer");
 
@@ -7420,21 +7417,28 @@ angle::Result ImageHelper::copyImageDataToBuffer(ContextVk *contextVk,
         depthBytesPerPixel = 4;
     }
 
-    *bufferSize = sourceArea.width * sourceArea.height * sourceArea.depth * pixelBytes * layerCount;
+    size_t bufferSize =
+        sourceArea.width * sourceArea.height * sourceArea.depth * pixelBytes * layerCount;
+    // Add extra padding for possible offset alignment
+    bufferSize += pixelBytes - 1;
 
     const VkImageAspectFlags aspectFlags = getAspectFlags();
 
-    // Allocate staging buffer data from context
-    VkBuffer bufferHandle;
-    ANGLE_TRY(mStagingBuffer.allocate(contextVk, *bufferSize, outDataPtr, &bufferHandle,
-                                      &(*bufferOffsetsOut)[0], nullptr));
-    *bufferOut = mStagingBuffer.getCurrentBuffer();
+    // Allocate coherent staging buffer
+    ASSERT(dstBuffer != nullptr && !dstBuffer->valid());
+    ANGLE_TRY(dstBuffer->initStagingBuffer(contextVk, bufferSize, true));
+    VkBuffer bufferHandle = dstBuffer->getBuffer().getHandle();
+    // Make CopyImageToBuffer's offset a multiple of pixelBytes. VMA can only handle power of two
+    // alignment. Here we are requesting non power of two alignment, we must handle it ourselves.
+    (*bufferOffsetsOut)[0] =
+        roundUp<VkDeviceSize>(dstBuffer->getOffset(), pixelBytes) - dstBuffer->getOffset();
 
     LevelIndex sourceLevelVk = toVkLevel(sourceLevelGL);
 
     VkBufferImageCopy regions[2] = {};
+    uint32_t regionCount         = 1;
     // Default to non-combined DS case
-    regions[0].bufferOffset                    = (*bufferOffsetsOut)[0];
+    regions[0].bufferOffset                    = dstBuffer->getOffset() + (*bufferOffsetsOut)[0];
     regions[0].bufferRowLength                 = 0;
     regions[0].bufferImageHeight               = 0;
     regions[0].imageExtent.width               = sourceArea.width;
@@ -7459,25 +7463,28 @@ angle::Result ImageHelper::copyImageDataToBuffer(ContextVk *contextVk,
                                        sourceArea.depth * layerCount;
 
         // Double-check that we allocated enough buffer space (always 1 byte per stencil)
-        ASSERT(*bufferSize >= (depthSize + (sourceArea.width * sourceArea.height *
-                                            sourceArea.depth * layerCount)));
+        ASSERT(bufferSize >= (depthSize + (sourceArea.width * sourceArea.height * sourceArea.depth *
+                                           layerCount)));
 
         // Copy stencil data into buffer immediately following the depth data
-        const VkDeviceSize stencilOffset       = (*bufferOffsetsOut)[0] + depthSize;
-        (*bufferOffsetsOut)[1]                 = stencilOffset;
+        const VkDeviceSize stencilOffset = (*bufferOffsetsOut)[0] + depthSize;
+        (*bufferOffsetsOut)[1] =
+            roundUp<VkDeviceSize>(stencilOffset, pixelBytes) - dstBuffer->getOffset();
         regions[1]                             = regions[0];
-        regions[1].bufferOffset                = stencilOffset;
+        regions[1].bufferOffset                = dstBuffer->getOffset() + (*bufferOffsetsOut)[1];
         regions[1].imageSubresource.aspectMask = VK_IMAGE_ASPECT_STENCIL_BIT;
+        regionCount++;
     }
 
     CommandBufferAccess access;
-    access.onBufferTransferWrite(*bufferOut);
+    access.onBufferTransferWrite(dstBuffer);
     access.onImageTransferRead(aspectFlags, this);
 
     CommandBuffer *commandBuffer;
     ANGLE_TRY(contextVk->getOutsideRenderPassCommandBuffer(access, &commandBuffer));
 
-    commandBuffer->copyImageToBuffer(mImage, getCurrentLayout(), bufferHandle, 1, regions);
+    commandBuffer->copyImageToBuffer(mImage, getCurrentLayout(), bufferHandle, regionCount,
+                                     regions);
 
     return angle::Result::Continue;
 }
@@ -7559,11 +7566,6 @@ angle::Result ImageHelper::readPixelsForGetImage(ContextVk *contextVk,
     ANGLE_TRY(GetReadPixelsParams(contextVk, packState, packBuffer, format, type, area, area,
                                   &params, &outputSkipBytes));
 
-    // Use a temporary staging buffer. Could be optimized.
-    RendererScoped<DynamicBuffer> stagingBuffer(contextVk->getRenderer());
-    stagingBuffer.get().init(contextVk->getRenderer(), VK_BUFFER_USAGE_TRANSFER_DST_BIT, 1,
-                             kStagingBufferSize, true, DynamicBufferPolicy::OneShotUse);
-
     if (mExtents.depth > 1 || layerCount > 1)
     {
         ASSERT(layer == 0);
@@ -7575,8 +7577,7 @@ angle::Result ImageHelper::readPixelsForGetImage(ContextVk *contextVk,
         for (uint32_t mipLayer = 0; mipLayer < lastLayer; mipLayer++)
         {
             ANGLE_TRY(readPixels(contextVk, area, params, aspectFlags, levelGL, mipLayer,
-                                 static_cast<uint8_t *>(pixels) + outputSkipBytes,
-                                 &stagingBuffer.get()));
+                                 static_cast<uint8_t *>(pixels) + outputSkipBytes));
 
             outputSkipBytes += mipExtents.width * mipExtents.height *
                                gl::GetInternalFormatInfo(format, type).pixelBytes;
@@ -7585,8 +7586,7 @@ angle::Result ImageHelper::readPixelsForGetImage(ContextVk *contextVk,
     else
     {
         ANGLE_TRY(readPixels(contextVk, area, params, aspectFlags, levelGL, layer,
-                             static_cast<uint8_t *>(pixels) + outputSkipBytes,
-                             &stagingBuffer.get()));
+                             static_cast<uint8_t *>(pixels) + outputSkipBytes));
     }
 
     return angle::Result::Continue;
@@ -7619,11 +7619,9 @@ angle::Result ImageHelper::readPixels(ContextVk *contextVk,
                                       VkImageAspectFlagBits copyAspectFlags,
                                       gl::LevelIndex levelGL,
                                       uint32_t layer,
-                                      void *pixels,
-                                      DynamicBuffer *stagingBuffer)
+                                      void *pixels)
 {
     ANGLE_TRACE_EVENT0("gpu.angle", "ImageHelper::readPixels");
-
     RendererVk *renderer = contextVk->getRenderer();
 
     // If the source image is multisampled, we need to resolve it into a temporary image before
@@ -7742,13 +7740,20 @@ angle::Result ImageHelper::readPixels(ContextVk *contextVk,
         return angle::Result::Continue;
     }
 
-    VkBuffer bufferHandle      = VK_NULL_HANDLE;
-    uint8_t *readPixelBuffer   = nullptr;
-    VkDeviceSize stagingOffset = 0;
-    size_t allocationSize      = readFormat->pixelBytes * area.width * area.height;
+    RendererScoped<vk::BufferHelper> readBuffer(renderer);
+    vk::BufferHelper *stagingBuffer = &readBuffer.get();
+    size_t allocationSize           = readFormat->pixelBytes * area.width * area.height;
+    // Add extra padding for possible offset alignment
+    allocationSize += readFormat->pixelBytes - 1;
 
-    ANGLE_TRY(stagingBuffer->allocate(contextVk, allocationSize, &readPixelBuffer, &bufferHandle,
-                                      &stagingOffset, nullptr));
+    ANGLE_TRY(stagingBuffer->initStagingBuffer(contextVk, allocationSize, true));
+    VkBuffer bufferHandle = stagingBuffer->getBuffer().getHandle();
+    // Make CopyImageToBuffer's offset a multiple of pixelBytes. VMA can only handle power of two
+    // alignment. Here we are requesting non power of two alignment, we must handle it ourselves.
+    VkDeviceSize stagingOffset =
+        roundUp<VkDeviceSize>(stagingBuffer->getOffset(), readFormat->pixelBytes);
+    uint8_t *readPixelBuffer =
+        stagingBuffer->getMappedMemory() + stagingOffset - stagingBuffer->getOffset();
 
     VkBufferImageCopy region = {};
     region.bufferImageHeight = srcExtent.height;
@@ -7759,7 +7764,7 @@ angle::Result ImageHelper::readPixels(ContextVk *contextVk,
     region.imageSubresource  = srcSubresource;
 
     CommandBufferAccess readbackAccess;
-    readbackAccess.onBufferTransferWrite(stagingBuffer->getCurrentBuffer());
+    readbackAccess.onBufferTransferWrite(stagingBuffer);
 
     CommandBuffer *readbackCommandBuffer;
     ANGLE_TRY(contextVk->getOutsideRenderPassCommandBuffer(readbackAccess, &readbackCommandBuffer));
@@ -7772,10 +7777,6 @@ angle::Result ImageHelper::readPixels(ContextVk *contextVk,
     // Triggers a full finish.
     // TODO(jmadill): Don't block on asynchronous readback.
     ANGLE_TRY(contextVk->finishImpl(RenderPassClosureReason::GLReadPixels));
-
-    // The buffer we copied to needs to be invalidated before we read from it because its not been
-    // created with the host coherent bit.
-    ANGLE_TRY(stagingBuffer->invalidate(contextVk));
 
     if (packPixelsParams.packBuffer)
     {
