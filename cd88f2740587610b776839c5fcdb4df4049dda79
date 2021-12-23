@@ -52,6 +52,46 @@
       "parentUuid": "9163b5c3_da7d76a7",
       "revId": "cd88f2740587610b776839c5fcdb4df4049dda79",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "4a3bf14d_03b29eb2",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2021-12-23T18:22:45Z",
+      "side": 1,
+      "message": "LGTM.  This fixes multiple P0 games.  Thanks!",
+      "revId": "cd88f2740587610b776839c5fcdb4df4049dda79",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "710a7d68_f3405aed",
+        "filename": "src/tests/gl_tests/TextureTest.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 8775,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2021-12-23T18:22:45Z",
+      "side": 1,
+      "message": "nit: This doesn\u0027t appear to be used.",
+      "range": {
+        "startLine": 8775,
+        "startChar": 22,
+        "endLine": 8775,
+        "endChar": 26
+      },
+      "revId": "cd88f2740587610b776839c5fcdb4df4049dda79",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
