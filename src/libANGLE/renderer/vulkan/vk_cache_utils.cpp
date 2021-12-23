@@ -4006,6 +4006,8 @@ void DescriptorSetCache<Key, CacheType>::destroy(RendererVk *rendererVk)
 {
     this->accumulateCacheStats(rendererVk);
     mPayload.clear();
+    this->mCacheStats.updateCacheSize(mPayload.size());
+    clearActiveCache();
 }
 
 // RendererVk's methods are not accessible in vk_cache_utils.h

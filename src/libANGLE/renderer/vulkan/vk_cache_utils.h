@@ -1455,7 +1455,12 @@ enum class VulkanCacheType
 class CacheStats final : angle::NonCopyable
 {
   public:
-    CacheStats() { reset(); }
+    CacheStats()
+    {
+        reset();
+        mCacheSize        = 0;
+        mActiveCacheCount = 0;
+    }
     ~CacheStats() {}
 
     ANGLE_INLINE void hit() { mHitCount++; }
@@ -1481,6 +1486,27 @@ class CacheStats final : angle::NonCopyable
         }
     }
 
+    ANGLE_INLINE void updateCacheSize(const uint64_t cacheSize) { mCacheSize = cacheSize; }
+
+    ANGLE_INLINE uint64_t getCacheSize() const { return mCacheSize; }
+
+    ANGLE_INLINE void updateActiveCacheCount(const uint64_t activeCacheCount)
+    {
+        mActiveCacheCount = activeCacheCount;
+    }
+    ANGLE_INLINE uint64_t getActiveCacheCount() const { return mActiveCacheCount; }
+    ANGLE_INLINE double getActiveCacheRatio() const
+    {
+        if (mCacheSize == 0)
+        {
+            return 0;
+        }
+        else
+        {
+            return static_cast<double>(mActiveCacheCount) / mCacheSize;
+        }
+    }
+
     void reset()
     {
         mHitCount  = 0;
@@ -1490,6 +1516,8 @@ class CacheStats final : angle::NonCopyable
   private:
     uint64_t mHitCount;
     uint64_t mMissCount;
+    uint64_t mCacheSize;
+    uint64_t mActiveCacheCount;
 };
 
 template <VulkanCacheType CacheType>
@@ -1502,6 +1530,12 @@ class HasCacheStats : angle::NonCopyable
         accum->accumulateCacheStats(CacheType, mCacheStats);
         mCacheStats.reset();
     }
+
+    ANGLE_INLINE uint64_t getCacheCount() { return mCacheStats.getCacheSize(); }
+
+    ANGLE_INLINE double getActiveCacheRatio() { return mCacheStats.getActiveCacheRatio(); }
+
+    ANGLE_INLINE double getActiveCacheCount() { return mCacheStats.getActiveCacheCount(); }
 
   protected:
     HasCacheStats()          = default;
@@ -1754,13 +1788,28 @@ class DescriptorSetCache final : public HasCacheStats<CacheType>
         return false;
     }
 
+    ANGLE_INLINE void updateActiveCache(const Key &desc, VkDescriptorSet descriptorSet)
+    {
+        mActivePayload.try_emplace(desc, descriptorSet);
+        this->mCacheStats.updateActiveCacheCount(mActivePayload.size());
+    }
+
+    ANGLE_INLINE void clearActiveCache()
+    {
+        mActivePayload.clear();
+        this->mCacheStats.updateActiveCacheCount(mActivePayload.size());
+    }
+
     ANGLE_INLINE void insert(const Key &desc, VkDescriptorSet descriptorSet)
     {
         mPayload.emplace(desc, descriptorSet);
+        this->mCacheStats.updateCacheSize(mPayload.size());
+        updateActiveCache(desc, descriptorSet);
     }
 
   private:
     angle::HashMap<Key, VkDescriptorSet> mPayload;
+    angle::HashMap<Key, VkDescriptorSet> mActivePayload;
 };
 
 // Only 1 driver uniform binding is used.

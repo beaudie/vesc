@@ -2171,6 +2171,8 @@ void ContextVk::syncObjectPerfCounters()
     mPerfCounters.descriptorSetAllocations              = 0;
     mPerfCounters.shaderBuffersDescriptorSetCacheHits   = 0;
     mPerfCounters.shaderBuffersDescriptorSetCacheMisses = 0;
+    mPerfCounters.textureDescriptorSetCacheSizes        = 0;
+    mPerfCounters.textureDescriptorSetActiveCacheSizes  = 0;
 
     // ContextVk's descriptor set allocations
     ContextVkPerfCounters contextCounters = getAndResetObjectPerfCounters();
@@ -2206,6 +2208,10 @@ void ContextVk::syncObjectPerfCounters()
             progPerfCounters.descriptorSetCacheHits[DescriptorSetIndex::ShaderResource];
         mPerfCounters.shaderBuffersDescriptorSetCacheMisses +=
             progPerfCounters.descriptorSetCacheMisses[DescriptorSetIndex::ShaderResource];
+        mPerfCounters.textureDescriptorSetCacheSizes +=
+            progPerfCounters.descriptorSetCacheSizes[DescriptorSetIndex::Texture];
+        mPerfCounters.textureDescriptorSetActiveCacheSizes +=
+            progPerfCounters.descriptorSetActiveCache[DescriptorSetIndex::Texture];
     }
 }
 
@@ -2260,6 +2266,28 @@ void ContextVk::updateOverlayOnPresent()
         gl::RunningGraphWidget *dynamicBufferAllocations =
             overlay->getRunningGraphWidget(gl::WidgetId::VulkanDynamicBufferAllocations);
         dynamicBufferAllocations->next();
+    }
+
+    {
+        gl::RunningGraphWidget *textureDescriptorCacheSize =
+            overlay->getRunningGraphWidget(gl::WidgetId::VulkanTextureDescriptorCacheSize);
+        textureDescriptorCacheSize->add(mPerfCounters.textureDescriptorSetCacheSizes);
+        textureDescriptorCacheSize->next();
+    }
+
+    {
+        gl::RunningGraphWidget *textureDescriptorActiveCacheSize =
+            overlay->getRunningGraphWidget(gl::WidgetId::VulkanTextureDescriptorActiveCacheRatio);
+        size_t totalTextureDescriptorCacheSize = mPerfCounters.textureDescriptorSetCacheSizes;
+        if (totalTextureDescriptorCacheSize > 0)
+        {
+            float activeCacheRateFloat =
+                static_cast<float>(mPerfCounters.textureDescriptorSetActiveCacheSizes) /
+                static_cast<float>(totalTextureDescriptorCacheSize);
+            size_t activeCacheRate = static_cast<size_t>(activeCacheRateFloat * 100.0f);
+            textureDescriptorActiveCacheSize->add(activeCacheRate);
+            textureDescriptorActiveCacheSize->next();
+        }
     }
 }
 

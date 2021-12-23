@@ -8,6 +8,7 @@
 
 #include "libANGLE/renderer/vulkan/ProgramExecutableVk.h"
 
+#include "common/system_utils.h"
 #include "libANGLE/renderer/glslang_wrapper_utils.h"
 #include "libANGLE/renderer/vulkan/BufferVk.h"
 #include "libANGLE/renderer/vulkan/DisplayVk.h"
@@ -254,7 +255,8 @@ ProgramExecutableVk::ProgramExecutableVk()
       mProgram(nullptr),
       mProgramPipeline(nullptr),
       mPerfCounters{},
-      mCumulativePerfCounters{}
+      mCumulativePerfCounters{},
+      mLastActiveCacheClearTime(angle::GetCurrentSystemTime())
 {}
 
 ProgramExecutableVk::~ProgramExecutableVk()
@@ -1732,6 +1734,8 @@ angle::Result ProgramExecutableVk::updateTexturesDescriptorSet(
         // time the descriptor set is used in a new command.
         mDescriptorPoolBindings[DescriptorSetIndex::Texture].get().retain(
             &contextVk->getResourceUseList());
+
+        mTextureDescriptorsCache.updateActiveCache(texturesDesc, descriptorSet);
         return angle::Result::Continue;
     }
 
@@ -1870,7 +1874,6 @@ angle::Result ProgramExecutableVk::updateTexturesDescriptorSet(
             }
         }
     }
-
     return angle::Result::Continue;
 }
 
@@ -2011,6 +2014,16 @@ ProgramExecutablePerfCounters ProgramExecutableVk::getAndResetObjectPerfCounters
     mPerfCounters.descriptorSetAllocations = {};
     mPerfCounters.descriptorSetCacheHits   = {};
     mPerfCounters.descriptorSetCacheMisses = {};
+    mPerfCounters.descriptorSetCacheSizes  = {};
+    mPerfCounters.descriptorSetActiveCache = {};
+
+    if (angle::GetCurrentSystemTime() - mLastActiveCacheClearTime > 30.0f)
+    {
+        // printTextureDescSetCacheStats();
+        clearActiveTextureDescSetCache();
+        mLastActiveCacheClearTime = angle::GetCurrentSystemTime();
+    }
+
     return counters;
 }
 
@@ -2023,5 +2036,24 @@ void ProgramExecutableVk::accumulateCacheStats(VulkanCacheType cacheType,
         static_cast<uint32_t>(cacheStats.getHitCount());
     mPerfCounters.descriptorSetCacheMisses[dsIndex] +=
         static_cast<uint32_t>(cacheStats.getMissCount());
+    mPerfCounters.descriptorSetCacheSizes[dsIndex] =
+        static_cast<uint32_t>(cacheStats.getCacheSize());
+    mPerfCounters.descriptorSetActiveCache[dsIndex] =
+        static_cast<uint32_t>(cacheStats.getActiveCacheCount());
+}
+
+void ProgramExecutableVk::printTextureDescSetCacheStats()
+{
+    INFO() << "Yuxin Debug: ProgramExecutableVk cache stats: " << this
+           << " active cache ratio: " << mTextureDescriptorsCache.getActiveCacheRatio()
+           << " cache size: " << mTextureDescriptorsCache.getCacheCount()
+           << " active cache size: " << mTextureDescriptorsCache.getActiveCacheCount()
+           << " cache miss count: "
+           << mCumulativePerfCounters.descriptorSetCacheMisses[DescriptorSetIndex::Texture];
+}
+
+void ProgramExecutableVk::clearActiveTextureDescSetCache()
+{
+    mTextureDescriptorsCache.clearActiveCache();
 }
 }  // namespace rx

@@ -110,6 +110,8 @@ struct ProgramExecutablePerfCounters
     DescriptorSetCountList descriptorSetAllocations;
     DescriptorSetCountList descriptorSetCacheHits;
     DescriptorSetCountList descriptorSetCacheMisses;
+    DescriptorSetCountList descriptorSetCacheSizes;
+    DescriptorSetCountList descriptorSetActiveCache;
 };
 
 class ProgramExecutableVk
@@ -271,6 +273,10 @@ class ProgramExecutableVk
 
     void outputCumulativePerfCounters();
 
+    void printTextureDescSetCacheStats();
+
+    void clearActiveTextureDescSetCache();
+
     // Descriptor sets for uniform blocks and textures for this program.
     vk::DescriptorSetArray<VkDescriptorSet> mDescriptorSets;
     vk::DescriptorSetArray<VkDescriptorSet> mEmptyDescriptorSets;
@@ -321,6 +327,8 @@ class ProgramExecutableVk
 
     ProgramExecutablePerfCounters mPerfCounters;
     ProgramExecutablePerfCounters mCumulativePerfCounters;
+
+    double mLastActiveCacheClearTime;
 };
 
 }  // namespace rx
