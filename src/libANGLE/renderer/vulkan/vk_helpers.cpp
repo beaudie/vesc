@@ -6019,8 +6019,7 @@ angle::Result ImageHelper::stageSubresourceUpdateImpl(ContextVk *contextVk,
         }
     }
 
-    std::unique_ptr<RefCounted<BufferHelper>> stagingBuffer =
-        std::make_unique<RefCounted<BufferHelper>>();
+    RendererScopedPtr<RefCounted<BufferHelper>> stagingBuffer(contextVk->getRenderer());
     BufferHelper *currentBuffer = &stagingBuffer->get();
 
     ANGLE_TRY(currentBuffer->initStagingBuffer(contextVk, allocationSize, false));
@@ -6187,8 +6186,7 @@ angle::Result ImageHelper::reformatStagedBufferUpdates(ContextVk *contextVk,
                 uint8_t *srcData            = srcBuffer->getMappedMemory() + copy.bufferOffset;
 
                 // Allocate memory with dstFormat
-                std::unique_ptr<RefCounted<BufferHelper>> stagingBuffer =
-                    std::make_unique<RefCounted<BufferHelper>>();
+                RendererScopedPtr<RefCounted<BufferHelper>> stagingBuffer(renderer);
                 BufferHelper *dstBuffer = &stagingBuffer->get();
 
                 GLuint dstBufferSize = dstDataDepthPitch * copy.imageExtent.depth;
@@ -6407,8 +6405,7 @@ angle::Result ImageHelper::stageSubresourceUpdateAndGetData(ContextVk *contextVk
                                                             uint8_t **destData,
                                                             angle::FormatID formatID)
 {
-    std::unique_ptr<RefCounted<BufferHelper>> stagingBuffer =
-        std::make_unique<RefCounted<BufferHelper>>();
+    RendererScopedPtr<RefCounted<BufferHelper>> stagingBuffer(contextVk->getRenderer());
     BufferHelper *currentBuffer = &stagingBuffer->get();
 
     ANGLE_TRY(currentBuffer->initStagingBuffer(contextVk, allocationSize, false));
@@ -6476,8 +6473,7 @@ angle::Result ImageHelper::stageSubresourceUpdateFromFramebuffer(
     size_t outputRowPitch   = storageFormat.pixelBytes * clippedRectangle.width;
     size_t outputDepthPitch = outputRowPitch * clippedRectangle.height;
 
-    std::unique_ptr<RefCounted<BufferHelper>> stagingBuffer =
-        std::make_unique<RefCounted<BufferHelper>>();
+    RendererScopedPtr<RefCounted<BufferHelper>> stagingBuffer(renderer);
     BufferHelper *currentBuffer = &stagingBuffer->get();
 
     // The destination is only one layer deep.
@@ -6646,8 +6642,7 @@ angle::Result ImageHelper::stageRobustResourceClearWithFormat(ContextVk *context
         ANGLE_VK_CHECK_MATH(contextVk,
                             formatInfo.computeCompressedImageSize(glExtents, &totalSize));
 
-        std::unique_ptr<RefCounted<BufferHelper>> stagingBuffer =
-            std::make_unique<RefCounted<BufferHelper>>();
+        RendererScopedPtr<RefCounted<BufferHelper>> stagingBuffer(contextVk->getRenderer());
         BufferHelper *currentBuffer = &stagingBuffer->get();
 
         ANGLE_TRY(currentBuffer->initStagingBuffer(contextVk, totalSize, false));
