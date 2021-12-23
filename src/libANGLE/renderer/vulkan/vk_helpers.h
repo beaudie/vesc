@@ -792,8 +792,8 @@ class BufferHelper : public ReadWriteResource
                                     uint32_t memoryTypeIndex,
                                     size_t size,
                                     size_t alignment);
-    angle::Result initVertexConversionBuffer(ContextVk *contextVk, size_t size, bool hostVisible);
 
+    angle::Result initVertexConversionBuffer(ContextVk *contextVk, size_t size, bool hostVisible);
     angle::Result initStagingBuffer(ContextVk *contextVk, size_t size, bool coherent);
 
     void destroy(RendererVk *renderer);
@@ -1446,11 +1446,6 @@ class ImageHelper final : public Resource, public angle::Subject
     ImageHelper(ImageHelper &&other);
     ~ImageHelper() override;
 
-    void initStagingBuffer(RendererVk *renderer,
-                           size_t imageCopyBufferAlignment,
-                           VkBufferUsageFlags usageFlags,
-                           size_t initialSize);
-
     angle::Result init(Context *context,
                        gl::TextureType textureType,
                        const VkExtent3D &extents,
@@ -1745,7 +1740,6 @@ class ImageHelper final : public Resource, public angle::Subject
                                              const gl::Offset &offset,
                                              const gl::InternalFormat &formatInfo,
                                              const gl::PixelUnpackState &unpack,
-                                             DynamicBuffer *stagingBufferOverride,
                                              GLenum type,
                                              const uint8_t *pixels,
                                              const Format &vkFormat,
@@ -1760,7 +1754,6 @@ class ImageHelper final : public Resource, public angle::Subject
                                          const gl::Offset &offset,
                                          const gl::InternalFormat &formatInfo,
                                          const gl::PixelUnpackState &unpack,
-                                         DynamicBuffer *stagingBufferOverride,
                                          GLenum type,
                                          const uint8_t *pixels,
                                          const Format &vkFormat,
@@ -1772,7 +1765,6 @@ class ImageHelper final : public Resource, public angle::Subject
                                                    const gl::Extents &glExtents,
                                                    const gl::Offset &offset,
                                                    uint8_t **destData,
-                                                   DynamicBuffer *stagingBufferOverride,
                                                    angle::FormatID formatID);
 
     angle::Result stageSubresourceUpdateFromFramebuffer(const gl::Context *context,
@@ -1782,8 +1774,7 @@ class ImageHelper final : public Resource, public angle::Subject
                                                         const gl::Extents &dstExtent,
                                                         const gl::InternalFormat &formatInfo,
                                                         ImageAccess access,
-                                                        FramebufferVk *framebufferVk,
-                                                        DynamicBuffer *stagingBufferOverride);
+                                                        FramebufferVk *framebufferVk);
 
     void stageSubresourceUpdateFromImage(RefCounted<ImageHelper> *image,
                                          const gl::ImageIndex &index,
@@ -2072,7 +2063,8 @@ class ImageHelper final : public Resource, public angle::Subject
     {
         SubresourceUpdate();
         ~SubresourceUpdate();
-        SubresourceUpdate(BufferHelper *bufferHelperIn,
+        SubresourceUpdate(RefCounted<BufferHelper> *refCountedBufferIn,
+                          BufferHelper *bufferHelperIn,
                           const VkBufferImageCopy &copyRegion,
                           angle::FormatID formatID);
         SubresourceUpdate(RefCounted<ImageHelper> *imageIn,
@@ -2103,7 +2095,11 @@ class ImageHelper final : public Resource, public angle::Subject
             BufferUpdate buffer;
             ImageUpdate image;
         } data;
-        RefCounted<ImageHelper> *image;
+        union
+        {
+            RefCounted<ImageHelper> *image;
+            RefCounted<BufferHelper> *buffer;
+        } refCountedObject;
     };
 
     void deriveExternalImageTiling(const void *createInfoChain);
@@ -2174,10 +2170,12 @@ class ImageHelper final : public Resource, public angle::Subject
     // Whether there are any updates in [start, end).
     bool hasStagedUpdatesInLevels(gl::LevelIndex levelStart, gl::LevelIndex levelEnd) const;
 
-    // Used only for assertions, these functions verify that SubresourceUpdate::image references
-    // have the correct ref count.  This is to prevent accidental leaks.
+    // Used only for assertions, these functions verify that
+    // SubresourceUpdate::refcountedObject::image or buffer references have the correct ref count.
+    // This is to prevent accidental leaks.
     bool validateSubresourceUpdateImageRefConsistent(RefCounted<ImageHelper> *image) const;
-    bool validateSubresourceUpdateImageRefsConsistent() const;
+    bool validateSubresourceUpdateBufferRefConsistent(RefCounted<BufferHelper> *buffer) const;
+    bool validateSubresourceUpdateRefcountsConsistent() const;
 
     void resetCachedProperties();
     void setEntireContentDefined();
@@ -2265,8 +2263,6 @@ class ImageHelper final : public Resource, public angle::Subject
     uint32_t mLayerCount;
     uint32_t mLevelCount;
 
-    // Staging buffer
-    DynamicBuffer mStagingBuffer;
     std::vector<std::vector<SubresourceUpdate>> mSubresourceUpdates;
 
     // Optimization for repeated clear with the same value. If this pointer is not null, the entire
