@@ -570,6 +570,30 @@ class RendererScoped final : angle::NonCopyable
     T mVar;
 };
 
+template <typename T>
+class RendererScopedPtr final : angle::NonCopyable
+{
+  public:
+    RendererScopedPtr(RendererVk *renderer) : mRenderer(renderer) { mVar = std::make_unique<T>(); }
+    ~RendererScopedPtr()
+    {
+        if (mVar)
+        {
+            mVar->release(mRenderer);
+        }
+    }
+
+    T *operator->() { return mVar.get(); }
+    const T &get() const { return mVar; }
+    T &get() { return mVar; }
+
+    T *release() { return mVar.release(); }
+
+  private:
+    RendererVk *mRenderer;
+    std::unique_ptr<T> mVar;
+};
+
 // This is a very simple RefCount class that has no autoreleasing. Used in the descriptor set and
 // pipeline layout caches.
 template <typename T>
@@ -606,6 +630,15 @@ class RefCounted : angle::NonCopyable
     }
 
     bool isReferenced() const { return mRefCount != 0; }
+
+    void release(RendererVk *renderer)
+    {
+        releaseRef();
+        if (!isReferenced())
+        {
+            mObject.release(renderer);
+        }
+    }
 
     T &get() { return mObject; }
     const T &get() const { return mObject; }
