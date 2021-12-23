@@ -124,9 +124,6 @@ angle::Result IOSurfaceSurfaceVkMac::initializeImpl(DisplayVk *displayVk)
                                           mState.isRobustResourceInitEnabled(),
                                           mState.hasProtectedContent()));
 
-    mColorAttachment.image.initStagingBuffer(
-        renderer, renderer->getMinImportedHostPointerAlignment(), vk::kStagingBufferFlags,
-        IOSurfaceGetBytesPerRowOfPlane(mIOSurface, mPlane) * mHeight);
     mColorRenderTarget.init(&mColorAttachment.image, &mColorAttachment.imageViews, nullptr, nullptr,
                             gl::LevelIndex(0), 0, 1, RenderTargetTransience::Default);
 
