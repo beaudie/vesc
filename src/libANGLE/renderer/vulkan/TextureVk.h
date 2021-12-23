@@ -244,10 +244,7 @@ class TextureVk : public TextureImpl, public angle::ObserverInterface
         const gl::SamplerState &samplerState) const;
     vk::ImageOrBufferViewSubresourceSerial getBufferViewSerial() const;
 
-    void overrideStagingBufferSizeForTesting(size_t initialSizeForTesting)
-    {
-        mStagingBufferInitialSize = initialSizeForTesting;
-    }
+    void overrideStagingBufferSizeForTesting(size_t initialSizeForTesting) {}
 
     GLenum getColorReadFormat(const gl::Context *context) override;
     GLenum getColorReadType(const gl::Context *context) override;
@@ -354,7 +351,7 @@ class TextureVk : public TextureImpl, public angle::ObserverInterface
                                                   const gl::Box &sourceArea,
                                                   RenderPassClosureReason reason,
                                                   vk::BufferHelper *copyBuffer,
-                                                  vk::StagingBufferOffsetArray *copyBufferOffsets);
+                                                  uint8_t **outDataPtr);
 
     angle::Result copyBufferDataToImage(ContextVk *contextVk,
                                         vk::BufferHelper *srcBuffer,
@@ -554,9 +551,6 @@ class TextureVk : public TextureImpl, public angle::ObserverInterface
     // |mSampler| contains the relevant Vulkan sampler states representing the OpenGL Texture
     // sampling states for the Texture.
     vk::SamplerBinding mSampler;
-
-    // Overridden in some tests.
-    size_t mStagingBufferInitialSize;
 
     // The created vkImage usage flag.
     VkImageUsageFlags mImageUsageFlags;
