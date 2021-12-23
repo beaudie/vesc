@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "33c0c297_24bda2c4",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1265568
+      },
+      "writtenOn": "2021-12-23T02:49:28Z",
+      "side": 1,
+      "message": "Latest patchset fixes the test failures - please re-queue CQ. Thank you!",
+      "revId": "4208a56961ef870f41f86d11c4087a37f07d2608",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
