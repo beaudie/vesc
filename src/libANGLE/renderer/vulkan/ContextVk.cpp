@@ -3153,6 +3153,11 @@ void ContextVk::optimizeRenderPassForPresent(VkFramebuffer framebufferHandle)
         return;
     }
 
+    // Make sure mDrawFramebuffer is not stale
+    const gl::State &glState         = getState();
+    gl::Framebuffer *drawFramebuffer = glState.getDrawFramebuffer();
+    mDrawFramebuffer                 = vk::GetImpl(drawFramebuffer);
+
     RenderTargetVk *color0RenderTarget = mDrawFramebuffer->getColorDrawRenderTarget(0);
     if (!color0RenderTarget)
     {

@@ -9146,12 +9146,6 @@ egl::Error Context::unsetDefaultFramebuffer()
         mDrawFramebufferObserverBinding.bind(nullptr);
     }
 
-    if (defaultFramebuffer)
-    {
-        defaultFramebuffer->onDestroy(this);
-        delete defaultFramebuffer;
-    }
-
     mState.mFramebufferManager->setDefaultFramebuffer(nullptr);
 
     // Always unset the current surface, even if setIsCurrent fails.
