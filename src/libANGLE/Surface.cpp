@@ -97,7 +97,8 @@ Surface::Surface(EGLint surfaceType,
       mLockBufferPtr(nullptr),
       mLockBufferPitch(0),
       mInitState(gl::InitState::Initialized),
-      mImplObserverBinding(this, kSurfaceImplSubjectIndex)
+      mImplObserverBinding(this, kSurfaceImplSubjectIndex),
+      mDefaultFramebufferCache()
 {
     mPostSubBufferRequested =
         (attributes.get(EGL_POST_SUB_BUFFER_SUPPORTED_NV, EGL_FALSE) == EGL_TRUE);
@@ -155,6 +156,14 @@ rx::FramebufferAttachmentObjectImpl *Surface::getAttachmentImpl() const
 
 Error Surface::destroyImpl(const Display *display)
 {
+    for (auto &pair : mDefaultFramebufferCache)
+    {
+        pair.second->onDestroy(pair.first);
+        delete pair.second;
+        pair.first->release();
+    }
+    mDefaultFramebufferCache.clear();
+
     if (mImplementation)
     {
         mImplementation->destroy(display);
@@ -618,10 +627,23 @@ Error Surface::getBufferAge(const gl::Context *context, EGLint *age) const
     return mImplementation->getBufferAge(context, age);
 }
 
-gl::Framebuffer *Surface::createDefaultFramebuffer(const gl::Context *context,
-                                                   egl::Surface *readSurface)
+gl::Framebuffer *Surface::createDefaultFramebuffer(gl::Context *context, egl::Surface *readSurface)
 {
-    return new gl::Framebuffer(context, this, readSurface);
+    gl::Framebuffer *defaultFramebuffer = nullptr;
+
+    if (mDefaultFramebufferCache.contains(context))
+    {
+        defaultFramebuffer = mDefaultFramebufferCache[context];
+        defaultFramebuffer->setReadSurface(context, readSurface);
+    }
+    else
+    {
+        defaultFramebuffer                = new gl::Framebuffer(context, this, readSurface);
+        mDefaultFramebufferCache[context] = defaultFramebuffer;
+        context->addRef();
+    }
+
+    return defaultFramebuffer;
 }
 
 gl::InitState Surface::initState(const gl::ImageIndex & /*imageIndex*/) const
