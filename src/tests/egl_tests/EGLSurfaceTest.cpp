@@ -211,23 +211,24 @@ class EGLSurfaceTest : public ANGLETest
 
     EGLConfig chooseDefaultConfig(bool requireWindowSurface) const
     {
-        const EGLint configAttributes[] = {EGL_RED_SIZE,
-                                           EGL_DONT_CARE,
-                                           EGL_GREEN_SIZE,
-                                           EGL_DONT_CARE,
-                                           EGL_BLUE_SIZE,
-                                           EGL_DONT_CARE,
-                                           EGL_ALPHA_SIZE,
-                                           EGL_DONT_CARE,
-                                           EGL_DEPTH_SIZE,
-                                           EGL_DONT_CARE,
-                                           EGL_STENCIL_SIZE,
-                                           EGL_DONT_CARE,
-                                           EGL_SAMPLE_BUFFERS,
-                                           0,
-                                           EGL_SURFACE_TYPE,
-                                           requireWindowSurface ? EGL_WINDOW_BIT : EGL_DONT_CARE,
-                                           EGL_NONE};
+        const EGLint configAttributes[] = {
+            EGL_RED_SIZE,
+            EGL_DONT_CARE,
+            EGL_GREEN_SIZE,
+            EGL_DONT_CARE,
+            EGL_BLUE_SIZE,
+            EGL_DONT_CARE,
+            EGL_ALPHA_SIZE,
+            EGL_DONT_CARE,
+            EGL_DEPTH_SIZE,
+            EGL_DONT_CARE,
+            EGL_STENCIL_SIZE,
+            EGL_DONT_CARE,
+            EGL_SAMPLE_BUFFERS,
+            0,
+            EGL_SURFACE_TYPE,
+            requireWindowSurface ? EGL_WINDOW_BIT : (EGL_WINDOW_BIT | EGL_PBUFFER_BIT),
+            EGL_NONE};
 
         EGLint configCount;
         EGLConfig config;
@@ -471,6 +472,38 @@ TEST_P(EGLSurfaceTest, MakeCurrentTwice)
 
     // Simple operation to test the FBO is set appropriately
     glClear(GL_COLOR_BUFFER_BIT);
+}
+
+// Test for a bug where switching active surfaces would crash in eglSwapBuffers
+TEST_P(EGLSurfaceTest, SwitchCurrentSurfaces)
+{
+    initializeDisplay();
+    initializeSurfaceWithDefaultConfig(false);
+
+    eglMakeCurrent(mDisplay, mWindowSurface, mWindowSurface, mContext);
+    ASSERT_EGL_SUCCESS();
+
+    // Drawing with a shader should also update the same subrect only without explicit viewport.
+    GLuint program = createProgram();  // Red
+    ASSERT_NE(0u, program);
+    GLint positionLocation = glGetAttribLocation(program, angle::essl1_shaders::PositionAttrib());
+    glUseProgram(program);
+    const GLfloat vertices[] = {
+        -1.0f, 1.0f, 0.5f, -1.0f, -1.0f, 0.5f, 1.0f, -1.0f, 0.5f,
+        -1.0f, 1.0f, 0.5f, 1.0f,  -1.0f, 0.5f, 1.0f, 1.0f,  0.5f,
+    };
+    glVertexAttribPointer(positionLocation, 3, GL_FLOAT, GL_FALSE, 0, vertices);
+    glEnableVertexAttribArray(positionLocation);
+    glDrawArrays(GL_TRIANGLES, 0, 6);
+    glDisableVertexAttribArray(positionLocation);
+    glVertexAttribPointer(positionLocation, 4, GL_FLOAT, GL_FALSE, 0, nullptr);
+
+    eglMakeCurrent(mDisplay, mPbufferSurface, mPbufferSurface, mContext);
+    ASSERT_EGL_SUCCESS();
+
+    eglMakeCurrent(mDisplay, mWindowSurface, mWindowSurface, mContext);
+    ASSERT_EGL_SUCCESS();
+    eglSwapBuffers(mDisplay, mWindowSurface);
 }
 
 // Test that the window surface is correctly resized after calling swapBuffers
