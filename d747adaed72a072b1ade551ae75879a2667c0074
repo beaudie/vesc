@@ -140,6 +140,30 @@
       },
       "revId": "d747adaed72a072b1ade551ae75879a2667c0074",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "829c25e8_e3411885",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 1119,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2021-12-24T03:22:47Z",
+      "side": 1,
+      "message": "/nod\n\nThere are many things at play that make it inefficient, the compiler cannot inline the functions, the CPU can mispredict the jump target, the call itself is prefixed with a load of the function address from the object\u0027s vtable etc.\n\nOne of the things I have in the back of my mind for things to try to squeeze a bit more performance out (when we run out of things to optimize) is for example to turn some of the ANGLE \"features\" into constexpr constants in the final build; for example asyncCommandQueue can be a constant which eliminates some ifs, and most importantly allows LTO to devirtualize the command-processor class (or we\u0027d have to do it manually). Another is to change the way the files are built so we can have single-backend builds build the front-end and back-end objects together, both allowing the backend to be devirtualized and function calls in it inlined.\n\nBut again, that\u0027d be a job for when really having nothing left to optimize!",
+      "parentUuid": "2a847f72_b16eae11",
+      "range": {
+        "startLine": 1113,
+        "startChar": 0,
+        "endLine": 1119,
+        "endChar": 57
+      },
+      "revId": "d747adaed72a072b1ade551ae75879a2667c0074",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
