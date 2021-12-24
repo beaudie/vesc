@@ -103,8 +103,7 @@ class Surface : public LabeledObject, public gl::FramebufferAttachmentObject
     void setFixedWidth(EGLint width);
     void setFixedHeight(EGLint height);
 
-    gl::Framebuffer *createDefaultFramebuffer(const gl::Context *context,
-                                              egl::Surface *readSurface);
+    gl::Framebuffer *createDefaultFramebuffer(gl::Context *context, egl::Surface *readSurface);
 
     const Config *getConfig() const;
 
@@ -279,6 +278,9 @@ class Surface : public LabeledObject, public gl::FramebufferAttachmentObject
 
     gl::InitState mInitState;
     angle::ObserverBinding mImplObserverBinding;
+
+    // Cache default framebuffer when surface is made current in a context.
+    angle::HashMap<gl::Context *, gl::Framebuffer *> mDefaultFramebufferCache;
 };
 
 class WindowSurface final : public Surface
