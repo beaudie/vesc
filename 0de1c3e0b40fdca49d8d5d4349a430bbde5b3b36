@@ -20,6 +20,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "5fd99e26_4ace8f50",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1340649
+      },
+      "writtenOn": "2021-12-25T18:36:41Z",
+      "side": 1,
+      "message": "\u003e but we shouldn\u0027t get there unless the RP\u0027s framebuffer object is the same as the swapchains\n\nit looks like the default framebuffer object is being destroyed everytime a surface is made uncurrent here -\u003e https://chromium.googlesource.com/angle/angle/+/refs/heads/main/src/libANGLE/Context.cpp#9156\n\nis that intentional? i would imagine we want to do that only on surface destroy?",
+      "parentUuid": "bd99417d_2327e45e",
+      "revId": "0de1c3e0b40fdca49d8d5d4349a430bbde5b3b36",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "9176566a_b6019612",
         "filename": "src/tests/egl_tests/EGLSurfaceTest.cpp",
         "patchSetId": 1
@@ -31,6 +49,24 @@
       "writtenOn": "2021-12-25T16:38:52Z",
       "side": 1,
       "message": "Looks like you want this?\n\n    requireWindowSurface ? EGL_WINDOW_BIT | EGL_PBUFFER_BIT : EGL_DONT_CARE\n\nand then specify that you require a window surface. Otherwise you are asking for a window either way!",
+      "revId": "0de1c3e0b40fdca49d8d5d4349a430bbde5b3b36",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ce583133_5a79389b",
+        "filename": "src/tests/egl_tests/EGLSurfaceTest.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 230,
+      "author": {
+        "id": 1340649
+      },
+      "writtenOn": "2021-12-25T18:36:41Z",
+      "side": 1,
+      "message": "Ack, i interpreted \"requireWindowSurface\" as \"requireWindowSurface\"-only but i see what you mean",
+      "parentUuid": "9176566a_b6019612",
       "revId": "0de1c3e0b40fdca49d8d5d4349a430bbde5b3b36",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
