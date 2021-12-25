@@ -3946,7 +3946,9 @@ angle::Result BufferHelper::initReadPixelBuffer(ContextVk *contextVk, size_t siz
     uint32_t memoryTypeIndex = renderer->getStagingBufferMemoryTypeIndex(true);
     size_t alignment         = kReadPixelsBufferAlignment;
     size_t sizeToAllocate    = roundUp(size, alignment);
-    return initSubAllocation(contextVk, memoryTypeIndex, sizeToAllocate, alignment);
+    ANGLE_TRY(initSubAllocation(contextVk, memoryTypeIndex, sizeToAllocate, alignment));
+    ASSERT(getOffset() % alignment == 0);
+    return angle::Result::Continue;
 }
 
 angle::Result BufferHelper::initializeNonZeroMemory(Context *context,
@@ -7739,6 +7741,7 @@ angle::Result ImageHelper::readPixels(ContextVk *contextVk,
         region.imageExtent      = srcExtent;
         region.imageOffset      = srcOffset;
         region.imageSubresource = srcSubresource;
+        ASSERT(region.bufferOffset % readFormat->pixelBytes == 0);
 
         copyCommandBuffer->copyImageToBuffer(src->getImage(), src->getCurrentLayout(),
                                              packBuffer.getBuffer().getHandle(), 1, &region);
