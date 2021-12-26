@@ -3924,6 +3924,29 @@ angle::Result BufferHelper::initStagingBuffer(ContextVk *contextVk, size_t size,
     return initSubAllocation(contextVk, memoryTypeIndex, size, alignment);
 }
 
+angle::Result BufferHelper::initForCopyImage(ContextVk *contextVk,
+                                             size_t size,
+                                             bool coherent,
+                                             angle::FormatID formatId,
+                                             VkDeviceSize *offset,
+                                             uint8_t **dataPtr)
+{
+    // When a buffer is used in copyImage, the offset must be multiple of pixel bytes. This may
+    // result in non-power of two alignment. VMA's virtual allocator can not handle non-power of two
+    // alignment. We have to adjust offset manually.
+    uint32_t memoryTypeIndex = contextVk->getRenderer()->getStagingBufferMemoryTypeIndex(coherent);
+    VkDeviceSize imageCopyAlignment = GetImageCopyBufferAlignment(formatId);
+
+    // Add extra padding for potential offset alignment
+    size_t allocationSize = size + imageCopyAlignment - 1;
+    ANGLE_TRY(initSubAllocation(contextVk, memoryTypeIndex, allocationSize, imageCopyAlignment));
+
+    *offset  = roundUp(getOffset(), imageCopyAlignment);
+    *dataPtr = getMappedMemory() + (*offset) - getOffset();
+
+    return angle::Result::Continue;
+}
+
 angle::Result BufferHelper::initVertexConversionBuffer(ContextVk *contextVk,
                                                        size_t size,
                                                        bool hostVisible)
@@ -6009,9 +6032,10 @@ angle::Result ImageHelper::stageSubresourceUpdateImpl(ContextVk *contextVk,
         std::make_unique<RefCounted<BufferHelper>>();
     BufferHelper *currentBuffer = &stagingBuffer->get();
 
-    ANGLE_TRY(currentBuffer->initStagingBuffer(contextVk, allocationSize, false));
-    uint8_t *stagingPointer    = currentBuffer->getMappedMemory();
-    VkDeviceSize stagingOffset = currentBuffer->getOffset();
+    uint8_t *stagingPointer;
+    VkDeviceSize stagingOffset;
+    ANGLE_TRY(currentBuffer->initForCopyImage(contextVk, allocationSize, false, storageFormat.id,
+                                              &stagingOffset, &stagingPointer));
 
     const uint8_t *source = pixels + static_cast<ptrdiff_t>(inputSkipBytes);
 
@@ -6170,17 +6194,19 @@ angle::Result ImageHelper::reformatStagedBufferUpdates(ContextVk *contextVk,
 
                 // Retrieve source buffer
                 vk::BufferHelper *srcBuffer = update.data.buffer.bufferHelper;
-                uint8_t *srcData            = srcBuffer->getMappedMemory() + copy.bufferOffset;
+                uint8_t *srcData =
+                    srcBuffer->getBufferBlock()->getMappedMemory() + copy.bufferOffset;
 
                 // Allocate memory with dstFormat
                 std::unique_ptr<RefCounted<BufferHelper>> stagingBuffer =
                     std::make_unique<RefCounted<BufferHelper>>();
                 BufferHelper *dstBuffer = &stagingBuffer->get();
 
-                GLuint dstBufferSize = dstDataDepthPitch * copy.imageExtent.depth;
-                ANGLE_TRY(dstBuffer->initStagingBuffer(contextVk, dstBufferSize, false));
-                uint8_t *dstData             = dstBuffer->getMappedMemory();
-                VkDeviceSize dstBufferOffset = dstBuffer->getOffset();
+                uint8_t *dstData;
+                VkDeviceSize dstBufferOffset;
+                size_t dstBufferSize = dstDataDepthPitch * copy.imageExtent.depth;
+                ANGLE_TRY(dstBuffer->initForCopyImage(contextVk, dstBufferSize, false, dstFormatID,
+                                                      &dstBufferOffset, &dstData));
 
                 rx::PixelReadFunction pixelReadFunction   = srcFormat.pixelReadFunction;
                 rx::PixelWriteFunction pixelWriteFunction = dstFormat.pixelWriteFunction;
@@ -6390,16 +6416,16 @@ angle::Result ImageHelper::stageSubresourceUpdateAndGetData(ContextVk *contextVk
                                                             const gl::ImageIndex &imageIndex,
                                                             const gl::Extents &glExtents,
                                                             const gl::Offset &offset,
-                                                            uint8_t **destData,
+                                                            uint8_t **dstData,
                                                             angle::FormatID formatID)
 {
     std::unique_ptr<RefCounted<BufferHelper>> stagingBuffer =
         std::make_unique<RefCounted<BufferHelper>>();
     BufferHelper *currentBuffer = &stagingBuffer->get();
 
-    ANGLE_TRY(currentBuffer->initStagingBuffer(contextVk, allocationSize, false));
-    *destData                  = currentBuffer->getMappedMemory();
-    VkDeviceSize stagingOffset = currentBuffer->getOffset();
+    VkDeviceSize stagingOffset;
+    ANGLE_TRY(currentBuffer->initForCopyImage(contextVk, allocationSize, false, formatID,
+                                              &stagingOffset, dstData));
 
     gl::LevelIndex updateLevelGL(imageIndex.getLevelIndex());
 
@@ -6466,11 +6492,13 @@ angle::Result ImageHelper::stageSubresourceUpdateFromFramebuffer(
         std::make_unique<RefCounted<BufferHelper>>();
     BufferHelper *currentBuffer = &stagingBuffer->get();
 
+    uint8_t *stagingPointer;
+    VkDeviceSize stagingOffset;
+
     // The destination is only one layer deep.
     size_t allocationSize = outputDepthPitch;
-    ANGLE_TRY(currentBuffer->initStagingBuffer(contextVk, allocationSize, false));
-    uint8_t *stagingPointer    = currentBuffer->getMappedMemory();
-    VkDeviceSize stagingOffset = currentBuffer->getOffset();
+    ANGLE_TRY(currentBuffer->initForCopyImage(contextVk, allocationSize, false, storageFormat.id,
+                                              &stagingOffset, &stagingPointer));
 
     const angle::Format &copyFormat =
         GetFormatFromFormatType(formatInfo.internalFormat, formatInfo.type);
@@ -6636,11 +6664,14 @@ angle::Result ImageHelper::stageRobustResourceClearWithFormat(ContextVk *context
             std::make_unique<RefCounted<BufferHelper>>();
         BufferHelper *currentBuffer = &stagingBuffer->get();
 
-        ANGLE_TRY(currentBuffer->initStagingBuffer(contextVk, totalSize, false));
-        uint8_t *stagingPointer = currentBuffer->getMappedMemory();
+        uint8_t *stagingPointer;
+        VkDeviceSize stagingOffset;
+        ANGLE_TRY(currentBuffer->initForCopyImage(contextVk, totalSize, false, imageFormat.id,
+                                                  &stagingOffset, &stagingPointer));
         memset(stagingPointer, 0, totalSize);
 
         VkBufferImageCopy copyRegion               = {};
+        copyRegion.bufferOffset                    = stagingOffset;
         copyRegion.imageExtent.width               = glExtents.width;
         copyRegion.imageExtent.height              = glExtents.height;
         copyRegion.imageExtent.depth               = glExtents.depth;
@@ -7431,7 +7462,7 @@ angle::Result ImageHelper::copyImageDataToBuffer(ContextVk *contextVk,
                                                  uint32_t baseLayer,
                                                  const gl::Box &sourceArea,
                                                  BufferHelper *dstBuffer,
-                                                 StagingBufferOffsetArray *bufferOffsetsOut)
+                                                 uint8_t **outDataPtr)
 {
     ANGLE_TRACE_EVENT0("gpu.angle", "ImageHelper::copyImageDataToBuffer");
 
@@ -7454,26 +7485,22 @@ angle::Result ImageHelper::copyImageDataToBuffer(ContextVk *contextVk,
 
     size_t bufferSize =
         sourceArea.width * sourceArea.height * sourceArea.depth * pixelBytes * layerCount;
-    // Add extra padding for possible offset alignment
-    bufferSize += pixelBytes - 1;
 
     const VkImageAspectFlags aspectFlags = getAspectFlags();
 
     // Allocate coherent staging buffer
     ASSERT(dstBuffer != nullptr && !dstBuffer->valid());
-    ANGLE_TRY(dstBuffer->initStagingBuffer(contextVk, bufferSize, true));
+    VkDeviceSize dstOffset;
+    ANGLE_TRY(dstBuffer->initForCopyImage(contextVk, bufferSize, true, imageFormat.id, &dstOffset,
+                                          outDataPtr));
     VkBuffer bufferHandle = dstBuffer->getBuffer().getHandle();
-    // Make CopyImageToBuffer's offset a multiple of pixelBytes. VMA can only handle power of two
-    // alignment. Here we are requesting non power of two alignment, we must handle it ourselves.
-    (*bufferOffsetsOut)[0] =
-        roundUp<VkDeviceSize>(dstBuffer->getOffset(), pixelBytes) - dstBuffer->getOffset();
 
     LevelIndex sourceLevelVk = toVkLevel(sourceLevelGL);
 
     VkBufferImageCopy regions[2] = {};
     uint32_t regionCount         = 1;
     // Default to non-combined DS case
-    regions[0].bufferOffset                    = dstBuffer->getOffset() + (*bufferOffsetsOut)[0];
+    regions[0].bufferOffset                    = dstOffset;
     regions[0].bufferRowLength                 = 0;
     regions[0].bufferImageHeight               = 0;
     regions[0].imageExtent.width               = sourceArea.width;
@@ -7502,11 +7529,9 @@ angle::Result ImageHelper::copyImageDataToBuffer(ContextVk *contextVk,
                                            layerCount)));
 
         // Copy stencil data into buffer immediately following the depth data
-        const VkDeviceSize stencilOffset = (*bufferOffsetsOut)[0] + depthSize;
-        (*bufferOffsetsOut)[1] =
-            roundUp<VkDeviceSize>(stencilOffset, pixelBytes) - dstBuffer->getOffset();
+        const VkDeviceSize stencilOffset       = dstOffset + depthSize;
         regions[1]                             = regions[0];
-        regions[1].bufferOffset                = dstBuffer->getOffset() + (*bufferOffsetsOut)[1];
+        regions[1].bufferOffset                = stencilOffset;
         regions[1].imageSubresource.aspectMask = VK_IMAGE_ASPECT_STENCIL_BIT;
         regionCount++;
     }
@@ -7777,18 +7802,13 @@ angle::Result ImageHelper::readPixels(ContextVk *contextVk,
 
     RendererScoped<vk::BufferHelper> readBuffer(renderer);
     vk::BufferHelper *stagingBuffer = &readBuffer.get();
-    size_t allocationSize           = readFormat->pixelBytes * area.width * area.height;
-    // Add extra padding for possible offset alignment
-    allocationSize += readFormat->pixelBytes - 1;
 
-    ANGLE_TRY(stagingBuffer->initStagingBuffer(contextVk, allocationSize, true));
+    uint8_t *readPixelBuffer;
+    VkDeviceSize stagingOffset;
+    size_t allocationSize = readFormat->pixelBytes * area.width * area.height;
+    ANGLE_TRY(stagingBuffer->initForCopyImage(contextVk, allocationSize, true, mActualFormatID,
+                                              &stagingOffset, &readPixelBuffer));
     VkBuffer bufferHandle = stagingBuffer->getBuffer().getHandle();
-    // Make CopyImageToBuffer's offset a multiple of pixelBytes. VMA can only handle power of two
-    // alignment. Here we are requesting non power of two alignment, we must handle it ourselves.
-    VkDeviceSize stagingOffset =
-        roundUp<VkDeviceSize>(stagingBuffer->getOffset(), readFormat->pixelBytes);
-    uint8_t *readPixelBuffer =
-        stagingBuffer->getMappedMemory() + stagingOffset - stagingBuffer->getOffset();
 
     VkBufferImageCopy region = {};
     region.bufferImageHeight = srcExtent.height;

@@ -796,6 +796,12 @@ class BufferHelper : public ReadWriteResource
     // Helper functions to initialize a specialized buffer
     angle::Result initVertexConversionBuffer(ContextVk *contextVk, size_t size, bool hostVisible);
     angle::Result initStagingBuffer(ContextVk *contextVk, size_t size, bool coherent);
+    angle::Result initForCopyImage(ContextVk *contextVk,
+                                   size_t size,
+                                   bool coherent,
+                                   angle::FormatID formatId,
+                                   VkDeviceSize *offset,
+                                   uint8_t **dataPtr);
 
     void destroy(RendererVk *renderer);
     void release(RendererVk *renderer);
@@ -1920,7 +1926,7 @@ class ImageHelper final : public Resource, public angle::Subject
                                         uint32_t baseLayer,
                                         const gl::Box &sourceArea,
                                         BufferHelper *dstBuffer,
-                                        StagingBufferOffsetArray *bufferOffsetsOut);
+                                        uint8_t **outDataPtr);
 
     static angle::Result GetReadPixelsParams(ContextVk *contextVk,
                                              const gl::PixelPackState &packState,

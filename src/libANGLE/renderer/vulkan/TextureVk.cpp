@@ -870,11 +870,10 @@ angle::Result TextureVk::copySubTextureImpl(ContextVk *contextVk,
     // Read back the requested region of the source texture
     vk::RendererScoped<vk::BufferHelper> bufferHelper(renderer);
 
-    vk::StagingBufferOffsetArray sourceCopyOffsets = {0, 0};
+    uint8_t *sourceData;
     ANGLE_TRY(source->copyImageDataToBufferAndGetData(
         contextVk, sourceLevelGL, sourceBox.depth, sourceBox,
-        RenderPassClosureReason::CopyTextureOnCPU, &bufferHelper.get(), &sourceCopyOffsets));
-    uint8_t *sourceData = bufferHelper.get().getMappedMemory() + sourceCopyOffsets[0];
+        RenderPassClosureReason::CopyTextureOnCPU, &bufferHelper.get(), &sourceData));
 
     const angle::Format &srcTextureFormat = source->getImage().getActualFormat();
     const angle::Format &dstTextureFormat =
@@ -1668,14 +1667,13 @@ angle::Result TextureVk::redefineLevel(const gl::Context *context,
     return angle::Result::Continue;
 }
 
-angle::Result TextureVk::copyImageDataToBufferAndGetData(
-    ContextVk *contextVk,
-    gl::LevelIndex sourceLevelGL,
-    uint32_t layerCount,
-    const gl::Box &sourceArea,
-    RenderPassClosureReason reason,
-    vk::BufferHelper *copyBuffer,
-    vk::StagingBufferOffsetArray *copyBufferOffsets)
+angle::Result TextureVk::copyImageDataToBufferAndGetData(ContextVk *contextVk,
+                                                         gl::LevelIndex sourceLevelGL,
+                                                         uint32_t layerCount,
+                                                         const gl::Box &sourceArea,
+                                                         RenderPassClosureReason reason,
+                                                         vk::BufferHelper *copyBuffer,
+                                                         uint8_t **outDataPtr)
 {
     ANGLE_TRACE_EVENT0("gpu.angle", "TextureVk::copyImageDataToBufferAndGetData");
 
@@ -1695,7 +1693,7 @@ angle::Result TextureVk::copyImageDataToBufferAndGetData(
     }
 
     ANGLE_TRY(mImage->copyImageDataToBuffer(contextVk, sourceLevelGL, layerCount, 0,
-                                            modifiedSourceArea, copyBuffer, copyBufferOffsets));
+                                            modifiedSourceArea, copyBuffer, outDataPtr));
 
     // Explicitly finish. If new use cases arise where we don't want to block we can change this.
     ANGLE_TRY(contextVk->finishImpl(reason));
@@ -1879,11 +1877,10 @@ angle::Result TextureVk::generateMipmapsWithCPU(const gl::Context *context)
 
     vk::RendererScoped<vk::BufferHelper> bufferHelper(renderer);
 
-    vk::StagingBufferOffsetArray sourceCopyOffsets = {0, 0};
+    uint8_t *imageData;
     ANGLE_TRY(copyImageDataToBufferAndGetData(contextVk, baseLevelGL, imageLayerCount, imageArea,
                                               RenderPassClosureReason::GenerateMipmapOnCPU,
-                                              &bufferHelper.get(), &sourceCopyOffsets));
-    uint8_t *imageData = bufferHelper.get().getMappedMemory() + sourceCopyOffsets[0];
+                                              &bufferHelper.get(), &imageData));
 
     const angle::Format &angleFormat = mImage->getActualFormat();
     GLuint sourceRowPitch            = baseLevelExtents.width * angleFormat.pixelBytes;
@@ -2154,11 +2151,10 @@ angle::Result TextureVk::reinitImageAsRenderable(ContextVk *contextVk,
 
         // Read back the requested region of the source texture
         vk::RendererScoped<vk::BufferHelper> bufferHelper(renderer);
-        vk::BufferHelper *srcBuffer                   = &bufferHelper.get();
-        vk::StagingBufferOffsetArray srcBufferOffsets = {0, 0};
+        vk::BufferHelper *srcBuffer = &bufferHelper.get();
+        uint8_t *srcData;
         ANGLE_TRY(mImage->copyImageDataToBuffer(contextVk, levelGL, layerCount, 0, sourceBox,
-                                                srcBuffer, &srcBufferOffsets));
-        uint8_t *srcData = srcBuffer->getMappedMemory() + srcBufferOffsets[0];
+                                                srcBuffer, &srcData));
 
         // Explicitly finish. If new use cases arise where we don't want to block we can change
         // this.

@@ -351,7 +351,7 @@ class TextureVk : public TextureImpl, public angle::ObserverInterface
                                                   const gl::Box &sourceArea,
                                                   RenderPassClosureReason reason,
                                                   vk::BufferHelper *copyBuffer,
-                                                  vk::StagingBufferOffsetArray *copyBufferOffsets);
+                                                  uint8_t **outDataPtr);
 
     angle::Result copyBufferDataToImage(ContextVk *contextVk,
                                         vk::BufferHelper *srcBuffer,
