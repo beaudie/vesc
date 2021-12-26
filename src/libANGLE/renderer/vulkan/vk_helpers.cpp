@@ -6009,9 +6009,12 @@ angle::Result ImageHelper::stageSubresourceUpdateImpl(ContextVk *contextVk,
         std::make_unique<RefCounted<BufferHelper>>();
     BufferHelper *currentBuffer = &stagingBuffer->get();
 
+    size_t imageCopyAlignment = GetImageCopyBufferAlignment(storageFormat.id);
+    allocationSize            = roundUp(allocationSize, imageCopyAlignment);
     ANGLE_TRY(currentBuffer->initStagingBuffer(contextVk, allocationSize, false));
-    uint8_t *stagingPointer    = currentBuffer->getMappedMemory();
-    VkDeviceSize stagingOffset = currentBuffer->getOffset();
+    VkDeviceSize stagingOffset = roundUp(currentBuffer->getOffset(), imageCopyAlignment);
+    uint8_t *stagingPointer =
+        currentBuffer->getMappedMemory() + stagingOffset - currentBuffer->getOffset();
 
     const uint8_t *source = pixels + static_cast<ptrdiff_t>(inputSkipBytes);
 
@@ -6147,6 +6150,7 @@ angle::Result ImageHelper::reformatStagedBufferUpdates(ContextVk *contextVk,
     const angle::Format &dstFormat = angle::Format::Get(dstFormatID);
     const gl::InternalFormat &dstFormatInfo =
         gl::GetSizedInternalFormatInfo(dstFormat.glInternalFormat);
+    size_t imageCopyAlignment = GetImageCopyBufferAlignment(dstFormatID);
 
     for (std::vector<SubresourceUpdate> &levelUpdates : mSubresourceUpdates)
     {
@@ -6170,17 +6174,20 @@ angle::Result ImageHelper::reformatStagedBufferUpdates(ContextVk *contextVk,
 
                 // Retrieve source buffer
                 vk::BufferHelper *srcBuffer = update.data.buffer.bufferHelper;
-                uint8_t *srcData            = srcBuffer->getMappedMemory() + copy.bufferOffset;
+                uint8_t *srcData =
+                    srcBuffer->getBufferBlock()->getMappedMemory() + copy.bufferOffset;
 
                 // Allocate memory with dstFormat
                 std::unique_ptr<RefCounted<BufferHelper>> stagingBuffer =
                     std::make_unique<RefCounted<BufferHelper>>();
                 BufferHelper *dstBuffer = &stagingBuffer->get();
 
-                GLuint dstBufferSize = dstDataDepthPitch * copy.imageExtent.depth;
+                size_t dstBufferSize = dstDataDepthPitch * copy.imageExtent.depth;
+                dstBufferSize        = roundUp(dstBufferSize, imageCopyAlignment);
                 ANGLE_TRY(dstBuffer->initStagingBuffer(contextVk, dstBufferSize, false));
-                uint8_t *dstData             = dstBuffer->getMappedMemory();
-                VkDeviceSize dstBufferOffset = dstBuffer->getOffset();
+                VkDeviceSize dstBufferOffset = roundUp(dstBuffer->getOffset(), imageCopyAlignment);
+                uint8_t *dstData =
+                    dstBuffer->getMappedMemory() + dstBufferOffset - dstBuffer->getOffset();
 
                 rx::PixelReadFunction pixelReadFunction   = srcFormat.pixelReadFunction;
                 rx::PixelWriteFunction pixelWriteFunction = dstFormat.pixelWriteFunction;
@@ -6390,16 +6397,18 @@ angle::Result ImageHelper::stageSubresourceUpdateAndGetData(ContextVk *contextVk
                                                             const gl::ImageIndex &imageIndex,
                                                             const gl::Extents &glExtents,
                                                             const gl::Offset &offset,
-                                                            uint8_t **destData,
+                                                            uint8_t **dstData,
                                                             angle::FormatID formatID)
 {
     std::unique_ptr<RefCounted<BufferHelper>> stagingBuffer =
         std::make_unique<RefCounted<BufferHelper>>();
     BufferHelper *currentBuffer = &stagingBuffer->get();
 
+    size_t imageCopyAlignment = GetImageCopyBufferAlignment(formatID);
+    allocationSize            = roundUp(allocationSize, imageCopyAlignment);
     ANGLE_TRY(currentBuffer->initStagingBuffer(contextVk, allocationSize, false));
-    *destData                  = currentBuffer->getMappedMemory();
-    VkDeviceSize stagingOffset = currentBuffer->getOffset();
+    VkDeviceSize stagingOffset = roundUp(currentBuffer->getOffset(), imageCopyAlignment);
+    *dstData = currentBuffer->getMappedMemory() + stagingOffset - currentBuffer->getOffset();
 
     gl::LevelIndex updateLevelGL(imageIndex.getLevelIndex());
 
@@ -6467,10 +6476,12 @@ angle::Result ImageHelper::stageSubresourceUpdateFromFramebuffer(
     BufferHelper *currentBuffer = &stagingBuffer->get();
 
     // The destination is only one layer deep.
-    size_t allocationSize = outputDepthPitch;
+    size_t imageCopyAlignment = GetImageCopyBufferAlignment(storageFormat.id);
+    size_t allocationSize     = roundUp(outputDepthPitch, imageCopyAlignment);
     ANGLE_TRY(currentBuffer->initStagingBuffer(contextVk, allocationSize, false));
-    uint8_t *stagingPointer    = currentBuffer->getMappedMemory();
-    VkDeviceSize stagingOffset = currentBuffer->getOffset();
+    VkDeviceSize stagingOffset = roundUp(currentBuffer->getOffset(), imageCopyAlignment);
+    uint8_t *stagingPointer =
+        currentBuffer->getMappedMemory() + stagingOffset - currentBuffer->getOffset();
 
     const angle::Format &copyFormat =
         GetFormatFromFormatType(formatInfo.internalFormat, formatInfo.type);
