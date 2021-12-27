@@ -12,8 +12,8 @@
 #
 #    - /opt/google/chrome-unstable on Linux
 #    - the most recent Canary installation folder on Windows.
+#    - /Applications/Google\ Chrome\ Canary.app on macOS
 #
-# Only works on Linux and Windows.
 
 import glob, sys, os, shutil
 
@@ -24,11 +24,17 @@ os.chdir(os.path.join(script_dir, ".."))
 source_paths = glob.glob('out/*')
 
 is_windows = sys.platform == 'cygwin' or sys.platform.startswith('win')
+is_macos = sys.platform == 'darwin'
 
 if is_windows:
     # Default Canary installation path.
     chrome_folder = os.path.join(os.environ['LOCALAPPDATA'], 'Google', 'Chrome SxS', 'Application')
     libs_to_copy = ['libGLESv2.dll', 'libEGL.dll']
+    optional_libs_to_copy = []
+
+elif is_macos:
+    chrome_folder = '/Applications/Google Chrome Canary.app/Contents/Frameworks/Google Chrome Framework.framework/Libraries'
+    libs_to_copy = ['libGLESv2.dylib', 'libEGL.dylib']
     optional_libs_to_copy = []
 
 else:
@@ -74,6 +80,9 @@ print('Copying binaries from ' + source_folder + ' to ' + dest_folder + '.')
 
 def copy_file(src, dst):
     print(' - ' + src + '   -->   ' + dst)
+    if is_macos:
+        # For the codesign to work, the original file must be removed
+        os.remove(dst)
     shutil.copyfile(src, dst)
 
 
@@ -96,3 +105,9 @@ for filename in libs_to_copy:
     do_copy(filename, False)
 for filename in optional_libs_to_copy:
     do_copy(filename, True)
+
+if is_macos:
+    # Clear all attributes, codesign doesn't work otherwise
+    os.system('xattr -cr /Applications/Google\ Chrome\ Canary.app')
+    # Re-sign the bundle
+    os.system('codesign --force --sign - --deep /Applications/Google\ Chrome\ Canary.app')
