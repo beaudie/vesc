@@ -80,6 +80,30 @@
       },
       "revId": "bf83fffb0bc27b2c10be942561bf3636842b5b70",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "d33a6bc9_70c94d7a",
+        "filename": "src/libANGLE/capture/frame_capture_utils.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 787,
+      "author": {
+        "id": 1491823
+      },
+      "writtenOn": "2021-12-27T16:06:21Z",
+      "side": 1,
+      "message": "@jamie Comment added \n\n@Shahbez I\u0027m aware of this, but like Jamie wrote, it\u0027s probably not worth it.",
+      "parentUuid": "18768e94_08bc7023",
+      "range": {
+        "startLine": 787,
+        "startChar": 18,
+        "endLine": 787,
+        "endChar": 28
+      },
+      "revId": "bf83fffb0bc27b2c10be942561bf3636842b5b70",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
