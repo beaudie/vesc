@@ -16,6 +16,23 @@
       "message": "Trying again now that CQ is happy, since it seems QC doesn\u0027t have the necessary support (anglebug.com/6843).   ARM and SwS look good though.",
       "revId": "0118d3350364e4b76ad58a5fdd13764aa6c9f992",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "8026d21d_8924f988",
+        "filename": "src/libANGLE/renderer/vulkan/TextureVk.cpp",
+        "patchSetId": 10
+      },
+      "lineNbr": 2723,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2021-12-27T14:30:47Z",
+      "side": 1,
+      "message": "Should be placed after the two ifs below?",
+      "revId": "0118d3350364e4b76ad58a5fdd13764aa6c9f992",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
