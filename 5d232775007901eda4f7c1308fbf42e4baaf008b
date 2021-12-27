@@ -49,6 +49,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "f297dfc2_69a9fc7d",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 3
+      },
+      "lineNbr": 11,
+      "author": {
+        "id": 1491823
+      },
+      "writtenOn": "2021-12-27T15:54:13Z",
+      "side": 1,
+      "message": "Added a  direction to the table.",
+      "parentUuid": "50568c1e_0b3b7e6f",
+      "range": {
+        "startLine": 8,
+        "startChar": 0,
+        "endLine": 11,
+        "endChar": 39
+      },
+      "revId": "5d232775007901eda4f7c1308fbf42e4baaf008b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "f1d2d9ce_cf61adcb",
         "filename": "src/libANGLE/capture/capture_gles_2_0_params.cpp",
         "patchSetId": 3
@@ -78,6 +102,24 @@
       "side": 1,
       "message": "Would be curious to know if this works as well.",
       "parentUuid": "f1d2d9ce_cf61adcb",
+      "revId": "5d232775007901eda4f7c1308fbf42e4baaf008b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "1baafd99_2eea18e4",
+        "filename": "src/libANGLE/capture/capture_gles_2_0_params.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 694,
+      "author": {
+        "id": 1491823
+      },
+      "writtenOn": "2021-12-27T15:54:13Z",
+      "side": 1,
+      "message": "I don\u0027t think so. The whole thing is a bit tricky here: The table created in BuildInternalFormatInfoMap() can\u0027t have entries of the same format for GL_HALF_FLOAT and GL_ALPHA_FLOAT_OES, and formats like R16F use GL_HALF_FLOAT, but legacy formats like ALPHA16F use GL_HALF_FLOAT_OES, so overriding GL_HALF_FLOAT only based on the GLES version, like it is done in getReadPixelsType, will not work, we also have to check the format when doing so.\n\nBetter would be to actually use the (sized) internal format to do the lookup, but this doesn\u0027t work when calling this from CaptureTexSubImage2D_pixels, because there the internal format is not known.",
+      "parentUuid": "05798f48_b8b912e2",
       "revId": "5d232775007901eda4f7c1308fbf42e4baaf008b",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
