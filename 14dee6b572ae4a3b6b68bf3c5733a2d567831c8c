@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "dc68c93a_af46a602",
+        "filename": "src/libANGLE/Surface.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 643,
+      "author": {
+        "id": 1340649
+      },
+      "writtenOn": "2021-12-28T03:26:33Z",
+      "side": 1,
+      "message": "this seems to be messing with stuff. cache a weak_ptr version maybe?",
+      "range": {
+        "startLine": 643,
+        "startChar": 8,
+        "endLine": 643,
+        "endChar": 26
+      },
+      "revId": "14dee6b572ae4a3b6b68bf3c5733a2d567831c8c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
