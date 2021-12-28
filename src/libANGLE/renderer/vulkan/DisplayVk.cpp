@@ -27,6 +27,7 @@ namespace rx
 {
 // Time interval in seconds that we should try to prune default buffer pools.
 constexpr double kTimeElapsedForPruneDefaultBufferPool = 1;
+constexpr size_t kDriverUniformsInitialSize            = 4 * 1024;
 
 DisplayVk::DisplayVk(const egl::DisplayState &state)
     : DisplayImpl(state),
@@ -387,7 +388,8 @@ void DisplayVk::populateFeatureList(angle::FeatureList *features)
 
 ShareGroupVk::ShareGroupVk()
 {
-    mLastPruneTime = angle::GetCurrentSystemTime();
+    mLastPruneTime           = angle::GetCurrentSystemTime();
+    mDriverUniformBufferPool = nullptr;
 }
 
 void ShareGroupVk::onDestroy(const egl::Display *display)
@@ -446,5 +448,25 @@ bool ShareGroupVk::isDueForBufferPoolPrune()
 {
     double timeElapsed = angle::GetCurrentSystemTime() - mLastPruneTime;
     return timeElapsed > kTimeElapsedForPruneDefaultBufferPool;
+}
+
+vk::BufferPool *ShareGroupVk::getDriverUniformBufferPool(RendererVk *renderer)
+{
+    if (mDriverUniformBufferPool == nullptr)
+    {
+        uint32_t memoryTypeIndex = renderer->getUniformBufferMemoryTypeIndex();
+
+        VkMemoryPropertyFlags memoryPropertyFlags;
+        renderer->getBufferMemoryAllocator().getMemoryTypeProperties(renderer, memoryTypeIndex,
+                                                                     &memoryPropertyFlags);
+
+        std::unique_ptr<vk::BufferPool> pool = std::make_unique<vk::BufferPool>();
+        pool->initWithFlags(renderer, vma::VirtualBlockCreateFlagBits::GENERAL,
+                            VK_BUFFER_USAGE_UNIFORM_BUFFER_BIT, kDriverUniformsInitialSize,
+                            memoryTypeIndex, memoryPropertyFlags);
+        mDriverUniformBufferPool = pool.release();
+    }
+
+    return mDriverUniformBufferPool;
 }
 }  // namespace rx
