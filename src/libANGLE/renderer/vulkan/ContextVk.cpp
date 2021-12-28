@@ -138,7 +138,6 @@ constexpr gl::ShaderMap<vk::ImageLayout> kShaderWriteImageLayouts = {
 constexpr VkBufferUsageFlags kVertexBufferUsage = VK_BUFFER_USAGE_VERTEX_BUFFER_BIT;
 constexpr size_t kDefaultValueSize              = sizeof(gl::VertexAttribCurrentValueData::Values);
 constexpr size_t kDefaultBufferSize             = kDefaultValueSize * 16;
-constexpr size_t kDriverUniformsAllocatorPageSize = 4 * 1024;
 
 bool CanMultiDrawIndirectUseCmd(ContextVk *contextVk,
                                 VertexArrayVk *vertexArray,
@@ -656,18 +655,14 @@ ANGLE_INLINE void ContextVk::onRenderPassFinished(RenderPassClosureReason reason
 }
 
 ContextVk::DriverUniformsDescriptorSet::DriverUniformsDescriptorSet()
-    : descriptorSet(VK_NULL_HANDLE), dynamicOffset(0)
+    : descriptorSet(VK_NULL_HANDLE)
 {}
 
 ContextVk::DriverUniformsDescriptorSet::~DriverUniformsDescriptorSet() = default;
 
 void ContextVk::DriverUniformsDescriptorSet::init(RendererVk *rendererVk)
 {
-    size_t minAlignment = static_cast<size_t>(
-        rendererVk->getPhysicalDeviceProperties().limits.minUniformBufferOffsetAlignment);
-    dynamicBuffer.init(rendererVk, VK_BUFFER_USAGE_UNIFORM_BUFFER_BIT, minAlignment,
-                       kDriverUniformsAllocatorPageSize, true,
-                       vk::DynamicBufferPolicy::FrequentSmallAllocations);
+    bufferBlockSerial = rendererVk->getResourceSerialFactory().generateBufferSerial();
     descriptorSetCache.clear();
 }
 
@@ -675,7 +670,7 @@ void ContextVk::DriverUniformsDescriptorSet::destroy(RendererVk *renderer)
 {
     descriptorSetLayout.reset();
     descriptorPoolBinding.reset();
-    dynamicBuffer.destroy(renderer);
+    bufferHelper.destroy(renderer);
     descriptorSetCache.clear();
     descriptorSetCache.destroy(renderer);
 }
@@ -742,20 +737,19 @@ ContextVk::ContextVk(const gl::State &state, gl::ErrorSet *errorSet, RendererVk 
     // Note that currently these dirty bits are set every time a new render pass command buffer is
     // begun.  However, using ANGLE's SecondaryCommandBuffer, the Vulkan command buffer (which is
     // the primary command buffer) is not ended, so technically we don't need to rebind these.
-    mNewGraphicsCommandBufferDirtyBits =
-        DirtyBits{DIRTY_BIT_RENDER_PASS,     DIRTY_BIT_PIPELINE_BINDING,
-                  DIRTY_BIT_TEXTURES,        DIRTY_BIT_VERTEX_BUFFERS,
-                  DIRTY_BIT_INDEX_BUFFER,    DIRTY_BIT_SHADER_RESOURCES,
-                  DIRTY_BIT_DESCRIPTOR_SETS, DIRTY_BIT_DRIVER_UNIFORMS_BINDING,
-                  DIRTY_BIT_VIEWPORT,        DIRTY_BIT_SCISSOR};
+    mNewGraphicsCommandBufferDirtyBits = DirtyBits{
+        DIRTY_BIT_RENDER_PASS,     DIRTY_BIT_PIPELINE_BINDING, DIRTY_BIT_TEXTURES,
+        DIRTY_BIT_VERTEX_BUFFERS,  DIRTY_BIT_INDEX_BUFFER,     DIRTY_BIT_SHADER_RESOURCES,
+        DIRTY_BIT_DESCRIPTOR_SETS, DIRTY_BIT_DRIVER_UNIFORMS,  DIRTY_BIT_DRIVER_UNIFORMS_BINDING,
+        DIRTY_BIT_VIEWPORT,        DIRTY_BIT_SCISSOR};
     if (getFeatures().supportsTransformFeedbackExtension.enabled)
     {
         mNewGraphicsCommandBufferDirtyBits.set(DIRTY_BIT_TRANSFORM_FEEDBACK_BUFFERS);
     }
 
-    mNewComputeCommandBufferDirtyBits =
-        DirtyBits{DIRTY_BIT_PIPELINE_BINDING, DIRTY_BIT_TEXTURES, DIRTY_BIT_SHADER_RESOURCES,
-                  DIRTY_BIT_DESCRIPTOR_SETS, DIRTY_BIT_DRIVER_UNIFORMS_BINDING};
+    mNewComputeCommandBufferDirtyBits = DirtyBits{
+        DIRTY_BIT_PIPELINE_BINDING, DIRTY_BIT_TEXTURES,        DIRTY_BIT_SHADER_RESOURCES,
+        DIRTY_BIT_DESCRIPTOR_SETS,  DIRTY_BIT_DRIVER_UNIFORMS, DIRTY_BIT_DRIVER_UNIFORMS_BINDING};
 
     mGraphicsDirtyBitHandlers[DIRTY_BIT_MEMORY_BARRIER] =
         &ContextVk::handleDirtyGraphicsMemoryBarrier;
@@ -5233,9 +5227,10 @@ void ContextVk::handleDirtyDriverUniformsBindingImpl(CommandBufferT *commandBuff
     }
 
     ProgramExecutableVk *executableVk = getExecutable();
-    commandBuffer->bindDescriptorSets(
-        executableVk->getPipelineLayout(), bindPoint, DescriptorSetIndex::Internal, 1,
-        &driverUniforms->descriptorSet, 1, &driverUniforms->dynamicOffset);
+    uint32_t dynamicOffset = static_cast<uint32_t>(driverUniforms->bufferHelper.getOffset());
+    commandBuffer->bindDescriptorSets(executableVk->getPipelineLayout(), bindPoint,
+                                      DescriptorSetIndex::Internal, 1,
+                                      &driverUniforms->descriptorSet, 1, &dynamicOffset);
 }
 
 angle::Result ContextVk::handleDirtyGraphicsDriverUniformsBinding(
@@ -5262,15 +5257,14 @@ angle::Result ContextVk::allocateDriverUniforms(size_t driverUniformsSize,
                                                 uint8_t **ptrOut,
                                                 bool *newBufferOut)
 {
-    // Allocate a new region in the dynamic buffer. The allocate call may put buffer into dynamic
-    // buffer's mInflightBuffers. During command submission time, these in-flight buffers are added
-    // into context's mResourceUseList which will ensure they get tagged with queue serial number
-    // before moving them into the free list.
-    VkDeviceSize offset;
-    ANGLE_TRY(driverUniforms->dynamicBuffer.allocate(this, driverUniformsSize, ptrOut, nullptr,
-                                                     &offset, newBufferOut));
+    vk::BufferHelper &uniformBuffer = driverUniforms->bufferHelper;
 
-    driverUniforms->dynamicOffset = static_cast<uint32_t>(offset);
+    ANGLE_TRY(uniformBuffer.initForProgramUniform(this, driverUniformsSize));
+
+    *ptrOut = uniformBuffer.getMappedMemory();
+    *newBufferOut =
+        driverUniforms->bufferBlockSerial != uniformBuffer.getBufferBlock()->getBufferSerial();
+    driverUniforms->bufferBlockSerial = uniformBuffer.getBufferBlock()->getBufferSerial();
 
     return angle::Result::Continue;
 }
@@ -5281,15 +5275,14 @@ angle::Result ContextVk::updateDriverUniformsDescriptorSet(bool newBuffer,
 {
     DriverUniformsDescriptorSet &driverUniforms = mDriverUniforms[pipelineType];
 
-    ANGLE_TRY(driverUniforms.dynamicBuffer.flush(this));
+    ANGLE_TRY(driverUniforms.bufferHelper.flush(mRenderer));
 
     if (!newBuffer)
     {
         return angle::Result::Continue;
     }
 
-    const vk::BufferHelper *buffer = driverUniforms.dynamicBuffer.getCurrentBuffer();
-    vk::BufferSerial bufferSerial  = buffer->getBufferSerial();
+    vk::BufferSerial bufferSerial = driverUniforms.bufferHelper.getBufferBlock()->getBufferSerial();
     // Look up in the cache first
     if (driverUniforms.descriptorSetCache.get(bufferSerial.getValue(),
                                               &driverUniforms.descriptorSet))
@@ -5315,7 +5308,7 @@ angle::Result ContextVk::updateDriverUniformsDescriptorSet(bool newBuffer,
 
     // Update the driver uniform descriptor set.
     VkDescriptorBufferInfo &bufferInfo = allocDescriptorBufferInfo();
-    bufferInfo.buffer                  = buffer->getBuffer().getHandle();
+    bufferInfo.buffer                  = driverUniforms.bufferHelper.getBuffer().getHandle();
     bufferInfo.offset                  = 0;
     bufferInfo.range                   = driverUniformsSize;
 
@@ -5641,15 +5634,10 @@ angle::Result ContextVk::flushAndGetSerial(const vk::Semaphore *signalSemaphore,
     }
     ANGLE_TRY(flushOutsideRenderPassCommands());
 
-    // We must add the per context dynamic buffers into mResourceUseList before submission so that
-    // they get retained properly until GPU completes. We do not add current buffer into
-    // mResourceUseList since they never get reused or freed until context gets destroyed, at which
-    // time we always wait for GPU to finish before destroying the dynamic buffers.
     for (DriverUniformsDescriptorSet &driverUniform : mDriverUniforms)
     {
-        driverUniform.dynamicBuffer.releaseInFlightBuffersToResourceUseList(this);
+        driverUniform.bufferHelper.release(this);
     }
-
     // We must add the collected suballocation garbages into mResourceUseList before submission so
     // that they get retained properly until GPU completes. This is optimization to use one
     // SharedResourceUse to track multiple suballocations.

@@ -4269,6 +4269,14 @@ void BufferHelper::release(RendererVk *renderer)
     mReadWriteUse.init();
 }
 
+void BufferHelper::release(ContextVk *contextVk)
+{
+    if (valid())
+    {
+        contextVk->releaseToGarbageList(std::move(mSubAllocation));
+    }
+}
+
 angle::Result BufferHelper::copyFromBuffer(ContextVk *contextVk,
                                            BufferHelper *srcBuffer,
                                            uint32_t regionCount,

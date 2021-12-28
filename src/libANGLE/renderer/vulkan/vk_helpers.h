@@ -759,6 +759,7 @@ class BufferHelper : public ReadWriteResource
 
     void destroy(RendererVk *renderer);
     void release(RendererVk *renderer);
+    void release(ContextVk *contextVk);
 
     BufferSerial getBufferSerial() const { return mSerial; }
     bool valid() const { return mSubAllocation.valid(); }
