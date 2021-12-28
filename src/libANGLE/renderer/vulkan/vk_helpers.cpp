@@ -3978,6 +3978,19 @@ angle::Result BufferHelper::initForCopyImage(ContextVk *contextVk,
     return angle::Result::Continue;
 }
 
+angle::Result BufferHelper::initForDriverUniform(ContextVk *contextVk, size_t size)
+{
+    RendererVk *renderer = contextVk->getRenderer();
+    vk::BufferPool *pool = contextVk->getDriverUniformBufferPool();
+
+    size_t alignment = renderer->getUniformBufferAlignment();
+    ANGLE_TRY(pool->allocateBuffer(contextVk, size, alignment, &mSubAllocation));
+
+    initializeBarrierTracker(contextVk);
+
+    return angle::Result::Continue;
+}
+
 ANGLE_INLINE void BufferHelper::initializeBarrierTracker(Context *context)
 {
     RendererVk *renderer     = context->getRenderer();
