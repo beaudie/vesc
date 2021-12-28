@@ -5759,7 +5759,8 @@ angle::Result ContextVk::updateDefaultAttribute(size_t attribIndex)
         defaultBuffer.release(mRenderer);
     }
 
-    ANGLE_TRY(defaultBuffer.initForVertexConversion(this, kDefaultValueSize, true));
+    ANGLE_TRY(defaultBuffer.initForVertexConversion(this, kDefaultValueSize,
+                                                    vk::MemoryHostVisibility::Visible));
     uint8_t *ptr          = defaultBuffer.getMappedMemory();
     VkBuffer bufferHandle = defaultBuffer.getBuffer().getHandle();
     VkDeviceSize offset   = defaultBuffer.getOffset();
