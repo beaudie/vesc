@@ -630,6 +630,9 @@ EGLBoolean SurfaceAttrib(Thread *thread,
 
 EGLBoolean SwapBuffers(Thread *thread, Display *display, Surface *eglSurface)
 {
+
+    auto &mutex = egl::GetGlobalMutex();
+    mutex.unlock();
     ANGLE_EGL_TRY_RETURN(thread, display->prepareForCall(), "eglSwapBuffers",
                          GetDisplayIfValid(display), EGL_FALSE);
 
@@ -637,6 +640,7 @@ EGLBoolean SwapBuffers(Thread *thread, Display *display, Surface *eglSurface)
                          GetSurfaceIfValid(display, eglSurface), EGL_FALSE);
 
     thread->setSuccess();
+    mutex.lock();
     return EGL_TRUE;
 }
 
