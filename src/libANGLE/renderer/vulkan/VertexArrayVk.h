@@ -137,7 +137,7 @@ class VertexArrayVk : public VertexArrayImpl
     gl::AttributesMask mCurrentArrayBufferCompressed;
     vk::BufferHelper *mCurrentElementArrayBuffer;
 
-    vk::BufferHelperPointerVector mDynamicVertexData;
+    angle::FixedVector<vk::BufferHelper *, gl::MAX_VERTEX_ATTRIBS> mDynamicVertexData;
     vk::BufferHelper mDynamicIndexData;
     vk::BufferHelper mTranslatedByteIndexData;
     vk::BufferHelper mTranslatedByteIndirectData;
