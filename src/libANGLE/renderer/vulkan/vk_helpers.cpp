@@ -3928,11 +3928,14 @@ angle::Result BufferHelper::initForVertexConversion(ContextVk *contextVk,
 
     if (valid())
     {
+        // If size is big enough and it is idle, then just reuse the existing buffer. For device
+        // local buffer, we can reuse the buffer even if it is still GPU busy. The memory barrier
+        // should take care of this.
         if (size <= getSize() &&
             (hostVisibility == MemoryHostVisibility::Visible) == isHostVisible() &&
-            !isCurrentlyInUse(contextVk->getLastCompletedQueueSerial()))
+            (hostVisibility == MemoryHostVisibility::NonVisible ||
+             !isCurrentlyInUse(contextVk->getLastCompletedQueueSerial())))
         {
-            // If size is big enough and it is idle, then just reuse the existing buffer
             return angle::Result::Continue;
         }
 
