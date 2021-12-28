@@ -1543,6 +1543,17 @@ angle::Result RendererVk::initialize(DisplayVk *displayVk,
             vk::kVertexBufferAlignment,
             static_cast<size_t>(mPhysicalDeviceProperties.limits.minStorageBufferOffsetAlignment));
         ASSERT(gl::isPow2(mVertexConversionBufferAlignment));
+
+        // Host visible and non-coherent uniform buffer
+        createInfo.usage = kUsageFlags;
+        requiredFlags    = VK_BUFFER_USAGE_UNIFORM_BUFFER_BIT;
+        preferredFlags   = 0;
+        ANGLE_VK_TRY(displayVk,
+                     mBufferMemoryAllocator.findMemoryTypeIndexForBufferInfo(
+                         this, createInfo, requiredFlags, preferredFlags, persistentlyMapped,
+                         &mHostVisibleVertexConversionBufferMemoryTypeIndex));
+        ASSERT(mHostVisibleVertexConversionBufferMemoryTypeIndex != kInvalidMemoryTypeIndex);
+        ASSERT(gl::isPow2(getUniformBufferAlignment()));
     }
 
     {

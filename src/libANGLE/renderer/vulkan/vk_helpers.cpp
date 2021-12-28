@@ -3913,7 +3913,7 @@ angle::Result BufferHelper::initForVertexConversion(ContextVk *contextVk,
 {
     RendererVk *renderer     = contextVk->getRenderer();
     uint32_t memoryTypeIndex = renderer->getVertexConversionBufferMemoryTypeIndex(hostVisible);
-    size_t alignment         = static_cast<size_t>(renderer->getVertexConversionBufferAlignment());
+    size_t alignment         = renderer->getVertexConversionBufferAlignment();
     size_t sizeToAllocate    = roundUp(size, alignment);
     return initSubAllocation(contextVk, memoryTypeIndex, sizeToAllocate, alignment);
 }
@@ -3939,6 +3939,14 @@ angle::Result BufferHelper::initForCopyImage(ContextVk *contextVk,
     *dataPtr = getMappedMemory() + (*offset) - getOffset();
 
     return angle::Result::Continue;
+}
+
+angle::Result BufferHelper::initForDriverUniform(ContextVk *contextVk, size_t size)
+{
+    RendererVk *renderer     = contextVk->getRenderer();
+    uint32_t memoryTypeIndex = renderer->getUniformBufferMemoryTypeIndex();
+    size_t alignment         = renderer->getUniformBufferAlignment();
+    return initSubAllocation(contextVk, memoryTypeIndex, size, alignment);
 }
 
 ANGLE_INLINE void BufferHelper::initializeBarrierTracker(Context *context)

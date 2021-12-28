@@ -730,9 +730,9 @@ class ContextVk : public ContextImpl, public vk::Context, public MultisampleText
 
     struct DriverUniformsDescriptorSet
     {
-        vk::DynamicBuffer dynamicBuffer;
+        vk::BufferHelper bufferHelper;
+        vk::BufferSerial bufferBlockSerial;
         VkDescriptorSet descriptorSet;
-        uint32_t dynamicOffset;
         vk::BindingPointer<vk::DescriptorSetLayout> descriptorSetLayout;
         vk::RefCountedDescriptorPoolBinding descriptorPoolBinding;
         DriverUniformsDescriptorSetCache descriptorSetCache;
@@ -928,10 +928,6 @@ class ContextVk : public ContextImpl, public vk::Context, public MultisampleText
                                                 PipelineType pipelineType);
     void handleDirtyGraphicsScissorImpl(bool isPrimitivesGeneratedQueryActive);
 
-    angle::Result allocateDriverUniforms(size_t driverUniformsSize,
-                                         DriverUniformsDescriptorSet *driverUniforms,
-                                         uint8_t **ptrOut,
-                                         bool *newBufferOut);
     angle::Result updateDriverUniformsDescriptorSet(bool newBuffer,
                                                     size_t driverUniformsSize,
                                                     PipelineType pipelineType);
