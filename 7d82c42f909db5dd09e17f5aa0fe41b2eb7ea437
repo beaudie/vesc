@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "02d8c596_9190457a",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2021-12-28T19:08:42Z",
+      "side": 1,
+      "message": "LGTM.  We should probably formalize this at some point and create the equivalent of gl::limits, but just for capture portability.",
+      "revId": "7d82c42f909db5dd09e17f5aa0fe41b2eb7ea437",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
