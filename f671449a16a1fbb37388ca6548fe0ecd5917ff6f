@@ -34,6 +34,24 @@
       "parentUuid": "fa6f5faf_1e36fcb1",
       "revId": "f671449a16a1fbb37388ca6548fe0ecd5917ff6f",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "93ab2ce5_fcea86f9",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 5
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2021-12-28T20:47:51Z",
+      "side": 1,
+      "message": "I checked the trace and there aren\u0027t very many frames of the permission prompt (maybe just one).  There are lots of identical frames though (500+) showing a loading screen, apparently waiting for network things to happen.\n\nI think generally this isn\u0027t a great trace for measuring launch time, but I\u0027m okay landing it now as a starting point.",
+      "parentUuid": "4bd26830_481e6c45",
+      "revId": "f671449a16a1fbb37388ca6548fe0ecd5917ff6f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
