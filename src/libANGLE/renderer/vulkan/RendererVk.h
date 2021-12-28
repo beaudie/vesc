@@ -522,6 +522,13 @@ class RendererVk : angle::NonCopyable
     }
     size_t getVertexConversionBufferAlignment() const { return mVertexConversionBufferAlignment; }
 
+    uint32_t getUniformBufferMemoryTypeIndex() const { return mUniformBufferMemoryTypeIndex; }
+    size_t getUniformBufferAlignment() const
+    {
+        return static_cast<size_t>(
+            mPhysicalDeviceProperties.limits.minUniformBufferOffsetAlignment);
+    }
+
   private:
     angle::Result initializeDevice(DisplayVk *displayVk, uint32_t queueFamilyIndex);
     void ensureCapsInitialized() const;
@@ -619,6 +626,8 @@ class RendererVk : angle::NonCopyable
     uint32_t mHostVisibleVertexConversionBufferMemoryTypeIndex;
     uint32_t mDeviceLocalVertexConversionBufferMemoryTypeIndex;
     size_t mVertexConversionBufferAlignment;
+
+    uint32_t mUniformBufferMemoryTypeIndex;
 
     // All access to the pipeline cache is done through EGL objects so it is thread safe to not use
     // a lock.
