@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "fa6f5faf_1e36fcb1",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 5
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2021-12-28T19:11:48Z",
+      "side": 1,
+      "message": "Tim, it looks like this launch trace includes a permissions prompt?  Would it make sense to collect one that didn\u0027t have that, and would get straight to loading assets?",
+      "revId": "f671449a16a1fbb37388ca6548fe0ecd5917ff6f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
