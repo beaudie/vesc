@@ -92,6 +92,30 @@
       },
       "revId": "cd88f2740587610b776839c5fcdb4df4049dda79",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "59295bcc_621e0917",
+        "filename": "src/tests/gl_tests/TextureTest.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 8775,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2021-12-28T17:40:03Z",
+      "side": 1,
+      "message": "Missed this before submitting.   Fixed here:\nhttps://chromium-review.googlesource.com/c/angle/angle/+/3359777",
+      "parentUuid": "710a7d68_f3405aed",
+      "range": {
+        "startLine": 8775,
+        "startChar": 22,
+        "endLine": 8775,
+        "endChar": 26
+      },
+      "revId": "cd88f2740587610b776839c5fcdb4df4049dda79",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
