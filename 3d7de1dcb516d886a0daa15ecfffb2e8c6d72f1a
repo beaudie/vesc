@@ -35,6 +35,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "ec2722c9_dc3eabc2",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1175714
+      },
+      "writtenOn": "2021-12-28T16:54:01Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "ca2369b8_96a2fbd0",
+      "revId": "3d7de1dcb516d886a0daa15ecfffb2e8c6d72f1a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "7b4cb90c_308671fa",
@@ -48,6 +66,24 @@
       "writtenOn": "2021-12-17T03:05:58Z",
       "side": 1,
       "message": "You could almost call updateBlendFuncsAndEquations here, but it sets a different value for mCachedDrawFramebufferColorAttachmentMask.  Potentially worth a refactor to pass in the mask, if you decide to keep this approach.",
+      "revId": "3d7de1dcb516d886a0daa15ecfffb2e8c6d72f1a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "8910e589_de650332",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 3951,
+      "author": {
+        "id": 1175714
+      },
+      "writtenOn": "2021-12-28T16:54:01Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "7b4cb90c_308671fa",
       "revId": "3d7de1dcb516d886a0daa15ecfffb2e8c6d72f1a",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
@@ -75,6 +111,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "81d5aea6_3e060bab",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 3954,
+      "author": {
+        "id": 1175714
+      },
+      "writtenOn": "2021-12-28T16:54:01Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "a2525705_674952d7",
+      "range": {
+        "startLine": 3954,
+        "startChar": 24,
+        "endLine": 3954,
+        "endChar": 78
+      },
+      "revId": "3d7de1dcb516d886a0daa15ecfffb2e8c6d72f1a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "d365319e_9f8e09d4",
@@ -88,6 +148,30 @@
       "writtenOn": "2021-12-20T13:36:37Z",
       "side": 1,
       "message": "rather than defining a new test type, just use SimpleStateChangeTestES3 and put all the setup inline in the test using RAII. This will let you use RAII safely.",
+      "range": {
+        "startLine": 7513,
+        "startChar": 6,
+        "endLine": 7513,
+        "endChar": 38
+      },
+      "revId": "3d7de1dcb516d886a0daa15ecfffb2e8c6d72f1a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "b758f8bd_f9f248ae",
+        "filename": "src/tests/gl_tests/StateChangeTest.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 7513,
+      "author": {
+        "id": 1175714
+      },
+      "writtenOn": "2021-12-28T16:54:01Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "d365319e_9f8e09d4",
       "range": {
         "startLine": 7513,
         "startChar": 6,
