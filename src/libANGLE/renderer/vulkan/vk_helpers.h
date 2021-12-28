@@ -748,6 +748,8 @@ class BufferHelper : public ReadWriteResource
                                    angle::FormatID formatId,
                                    VkDeviceSize *offset,
                                    uint8_t **dataPtr);
+    // Initialize a host visible buffer with alignment good for driver uniform.
+    angle::Result initForDriverUniform(ContextVk *contextVk, size_t size);
 
     void destroy(RendererVk *renderer);
     void release(RendererVk *renderer);
@@ -855,6 +857,11 @@ class BufferPool : angle::NonCopyable
                                  VkDeviceSize sizeInBytes,
                                  VkDeviceSize alignment,
                                  BufferSubAllocation *suballocation);
+
+    // Only use for buffer pool that created with Linear algorithm
+    bool allocateFromCurrentBuffer(size_t sizeInBytes,
+                                   VkDeviceSize alignment,
+                                   BufferSubAllocation *suballocation);
 
     // This frees resources immediately.
     void destroy(RendererVk *renderer);

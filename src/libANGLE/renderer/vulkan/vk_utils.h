@@ -1027,6 +1027,7 @@ class BufferSubAllocation final : public WrappedObject<BufferSubAllocation, VmaB
                                   Allocation &allocation,
                                   VkMemoryPropertyFlags memoryPropertyFlags,
                                   VkDeviceSize size);
+    void updateOffsetSize(VkDeviceSize offset, VkDeviceSize size);
 
     BufferBlock *getBlock() const;
     const Buffer &getBuffer() const;
