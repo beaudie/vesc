@@ -16,6 +16,24 @@
       "message": "Tim, it looks like this launch trace includes a permissions prompt?  Would it make sense to collect one that didn\u0027t have that, and would get straight to loading assets?",
       "revId": "f671449a16a1fbb37388ca6548fe0ecd5917ff6f",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "4bd26830_481e6c45",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 5
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2021-12-28T19:29:18Z",
+      "side": 1,
+      "message": "I\u0027m clearing the package cache so it builds everything from scratch (adb shell pm clear $PACKAGE_NAME), which also requires granting permissions each time.",
+      "parentUuid": "fa6f5faf_1e36fcb1",
+      "revId": "f671449a16a1fbb37388ca6548fe0ecd5917ff6f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
