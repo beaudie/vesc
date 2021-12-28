@@ -1548,6 +1548,16 @@ angle::Result RendererVk::initialize(DisplayVk *displayVk,
         static_cast<size_t>(mPhysicalDeviceProperties.limits.minStorageBufferOffsetAlignment));
     ASSERT(gl::isPow2(mVertexConversionBufferAlignment));
 
+    // Host visible and non-coherent uniform buffer
+    createInfo.usage = VK_BUFFER_USAGE_UNIFORM_BUFFER_BIT;
+    requiredFlags    = VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT;
+    preferredFlags   = 0;
+    ANGLE_VK_TRY(displayVk, mBufferMemoryAllocator.findMemoryTypeIndexForBufferInfo(
+                                this, createInfo, requiredFlags, preferredFlags, persistentlyMapped,
+                                &mUniformBufferMemoryTypeIndex));
+    ASSERT(mUniformBufferMemoryTypeIndex != kInvalidMemoryTypeIndex);
+    ASSERT(gl::isPow2(getUniformBufferAlignment()));
+
     {
         ANGLE_TRACE_EVENT0("gpu.angle,startup", "GlslangWarmup");
         sh::InitializeGlslang();
