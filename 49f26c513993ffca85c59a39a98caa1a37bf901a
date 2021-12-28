@@ -1,0 +1,67 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ca159f8d_d52fb677",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 20
+      },
+      "lineNbr": 3935,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2021-12-28T18:47:14Z",
+      "side": 1,
+      "message": "Why is adjusting the size here necessary also?",
+      "revId": "49f26c513993ffca85c59a39a98caa1a37bf901a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "184992f9_97f6cf5a",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 20
+      },
+      "lineNbr": 3939,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2021-12-28T18:47:14Z",
+      "side": 1,
+      "message": "Why is all of this necessary?   Why doesn\u0027t initSubAllocation() handle including imageCopyAlignment in the offset?",
+      "range": {
+        "startLine": 3938,
+        "startChar": 0,
+        "endLine": 3939,
+        "endChar": 59
+      },
+      "revId": "49f26c513993ffca85c59a39a98caa1a37bf901a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "797678c2_8a2ad197",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 20
+      },
+      "lineNbr": 7497,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2021-12-28T18:47:14Z",
+      "side": 1,
+      "message": "Is this a bug fix?   Is there a test that can be enabled/added?",
+      "range": {
+        "startLine": 7497,
+        "startChar": 79,
+        "endLine": 7497,
+        "endChar": 90
+      },
+      "revId": "49f26c513993ffca85c59a39a98caa1a37bf901a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
