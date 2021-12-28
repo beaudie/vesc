@@ -680,6 +680,10 @@ class ContextVk : public ContextImpl, public vk::Context, public MultisampleText
     {
         return mShareGroupVk->getDefaultBufferPool(mRenderer, memoryTypeIndex);
     }
+    vk::BufferPool *getDriverUniformBufferPool()
+    {
+        return mShareGroupVk->getDriverUniformBufferPool(mRenderer);
+    }
 
   private:
     // Dirty bits.
@@ -728,9 +732,11 @@ class ContextVk : public ContextImpl, public vk::Context, public MultisampleText
 
     struct DriverUniformsDescriptorSet
     {
-        vk::DynamicBuffer dynamicBuffer;
+        vk::BufferHelper bufferHelper;
+        vk::BufferSerial bufferBlockSerial;
+        vk::SuballocationRecycler suballocationRecycler;
+
         VkDescriptorSet descriptorSet;
-        uint32_t dynamicOffset;
         vk::BindingPointer<vk::DescriptorSetLayout> descriptorSetLayout;
         vk::RefCountedDescriptorPoolBinding descriptorPoolBinding;
         DriverUniformsDescriptorSetCache descriptorSetCache;

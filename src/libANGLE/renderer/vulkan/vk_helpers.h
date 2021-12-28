@@ -757,6 +757,10 @@ class BufferHelper : public ReadWriteResource
     angle::Result initForDefaultAttribute(ContextVk *contextVk,
                                           SuballocationRecycler *recycler,
                                           size_t size);
+    // Initialize a host visible buffer with alignment good for driver uniform.
+    angle::Result initForDriverUniform(ContextVk *contextVk,
+                                       SuballocationRecycler *recycler,
+                                       size_t size);
 
     void destroy(RendererVk *renderer);
     void release(RendererVk *renderer);
