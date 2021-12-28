@@ -20,6 +20,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "3e800176_0c5883c0",
+        "filename": "src/libANGLE/renderer/vulkan/BufferVk.h",
+        "patchSetId": 20
+      },
+      "lineNbr": 38,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2021-12-28T20:08:57Z",
+      "side": 1,
+      "message": "Right now it is. The reason is that conversion is added into std::vector, which requires unline objects supports move operation which BufferHelper does not support. We can add move operation support for BufferHelper object, and then the question is move operation for BufferHelper object will be more expensive then std::unique_ptr which just move the pointer. For conversion buffers, the performance cost likely does not matter much. But meantime, I am also not convinced that use BufferHelper is better, at least from cost wise it is not. So I am neural on this and slightly tilt toward using std::unique_ptr.",
+      "parentUuid": "3169851f_304847bf",
+      "revId": "6124525a5ecfe87c800cb95165713fbbb8f73ecf",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "e6c8ea05_2bde25dc",
         "filename": "src/libANGLE/renderer/vulkan/VertexArrayVk.cpp",
         "patchSetId": 20
@@ -43,6 +61,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "1f86aab2_a96c7b7e",
+        "filename": "src/libANGLE/renderer/vulkan/VertexArrayVk.cpp",
+        "patchSetId": 20
+      },
+      "lineNbr": 170,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2021-12-28T20:08:57Z",
+      "side": 1,
+      "message": "I don\u0027t think they need to. It is just what it is currently using and I am try not to change the memory property of the buffer in this CL for the risk mitigation. I  do plan to address this in a follow up CL. I am leaving this comment open until I create the follow up CL.",
+      "parentUuid": "e6c8ea05_2bde25dc",
+      "range": {
+        "startLine": 170,
+        "startChar": 77,
+        "endLine": 170,
+        "endChar": 81
+      },
+      "revId": "6124525a5ecfe87c800cb95165713fbbb8f73ecf",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "ba2b4e49_2415bc6e",
         "filename": "src/libANGLE/renderer/vulkan/VertexArrayVk.cpp",
         "patchSetId": 20
@@ -54,6 +96,24 @@
       "writtenOn": "2021-12-28T18:25:19Z",
       "side": 1,
       "message": "Are these function calls necessary, or can we revert them to avoid the (albeit minor) CPU overhead of making them?",
+      "revId": "6124525a5ecfe87c800cb95165713fbbb8f73ecf",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "0aa4ff57_31fc05cd",
+        "filename": "src/libANGLE/renderer/vulkan/VertexArrayVk.cpp",
+        "patchSetId": 20
+      },
+      "lineNbr": 639,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2021-12-28T20:08:57Z",
+      "side": 1,
+      "message": "No. Mostly try to be consistent and future proof in case someone change the empty buffer to sub-allocation.",
+      "parentUuid": "ba2b4e49_2415bc6e",
       "revId": "6124525a5ecfe87c800cb95165713fbbb8f73ecf",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
@@ -111,6 +171,24 @@
       "writtenOn": "2021-12-28T18:25:19Z",
       "side": 1,
       "message": "Why is this necessary?",
+      "revId": "6124525a5ecfe87c800cb95165713fbbb8f73ecf",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "8faf51aa_7568d35f",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 20
+      },
+      "lineNbr": 3916,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2021-12-28T20:08:57Z",
+      "side": 1,
+      "message": "Yes. There is bot test failure without this. The return value of getSize() is used in descriptor set and if this returns too small value (for example, 2 bytes),  driver does not like it and will fail. Note that regardless if I align it here or not, the VMA allocation code will do this anyway, so we are not using more space here.",
+      "parentUuid": "9f250bf1_6b7f7a69",
       "revId": "6124525a5ecfe87c800cb95165713fbbb8f73ecf",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
