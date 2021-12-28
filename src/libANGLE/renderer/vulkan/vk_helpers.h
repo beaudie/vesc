@@ -757,7 +757,16 @@ class BufferHelper : public ReadWriteResource
     angle::Result initForDefaultAttribute(ContextVk *contextVk,
                                           SuballocationRecycler *recycler,
                                           size_t size);
+    // Initialize a host visible buffer with alignment good for uniforms.
     angle::Result initForDefaultUniform(ContextVk *contextVk, size_t size);
+    angle::Result initForDriverUniform(ContextVk *contextVk, size_t size)
+    {
+        return initForDefaultUniform(contextVk, size);
+    }
+    void stashSuballocation(vk::LifeTimeTrackedSuballocations *stashedSuballocationList)
+    {
+        stashedSuballocationList->stash(std::move(mSubAllocation));
+    }
 
     void destroy(RendererVk *renderer);
     void release(RendererVk *renderer);
