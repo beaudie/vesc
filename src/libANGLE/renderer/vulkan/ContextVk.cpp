@@ -135,9 +135,7 @@ constexpr gl::ShaderMap<vk::ImageLayout> kShaderWriteImageLayouts = {
     {gl::ShaderType::Fragment, vk::ImageLayout::FragmentShaderWrite},
     {gl::ShaderType::Compute, vk::ImageLayout::ComputeShaderWrite}};
 
-constexpr VkBufferUsageFlags kVertexBufferUsage = VK_BUFFER_USAGE_VERTEX_BUFFER_BIT;
-constexpr size_t kDefaultValueSize              = sizeof(gl::VertexAttribCurrentValueData::Values);
-constexpr size_t kDefaultBufferSize             = kDefaultValueSize * 16;
+constexpr size_t kDefaultValueSize = sizeof(gl::VertexAttribCurrentValueData::Values);
 constexpr size_t kDriverUniformsAllocatorPageSize = 4 * 1024;
 
 bool CanMultiDrawIndirectUseCmd(ContextVk *contextVk,
@@ -883,10 +881,11 @@ void ContextVk::onDestroy(const gl::Context *context)
     mDefaultUniformStorage.release(mRenderer);
     mEmptyBuffer.release(mRenderer);
 
-    for (vk::DynamicBuffer &defaultBuffer : mDefaultAttribBuffers)
+    for (vk::BufferHelper &defaultBuffer : mDefaultAttribBuffers)
     {
         defaultBuffer.destroy(mRenderer);
     }
+    mDefaultAttribRecycler.destroy(mRenderer);
 
     for (vk::DynamicQueryPool &queryPool : mQueryPools)
     {
@@ -1011,13 +1010,6 @@ angle::Result ContextVk::initialize()
 
     mGraphicsPipelineDesc.reset(new vk::GraphicsPipelineDesc());
     mGraphicsPipelineDesc->initDefaults(this);
-
-    // Initialize current value/default attribute buffers.
-    for (vk::DynamicBuffer &buffer : mDefaultAttribBuffers)
-    {
-        buffer.init(mRenderer, kVertexBufferUsage, 1, kDefaultBufferSize, true,
-                    vk::DynamicBufferPolicy::FrequentSmallAllocations);
-    }
 
 #if ANGLE_ENABLE_VULKAN_GPU_TRACE_EVENTS
     angle::PlatformMethods *platform = ANGLEPlatformCurrent();
@@ -5636,6 +5628,7 @@ angle::Result ContextVk::flushAndGetSerial(const vk::Semaphore *signalSemaphore,
     // they get retained properly until GPU completes. We do not add current buffer into
     // mResourceUseList since they never get reused or freed until context gets destroyed, at which
     // time we always wait for GPU to finish before destroying the dynamic buffers.
+    mDefaultAttribRecycler.retainStashedAndMoveToInFlightList(&mResourceUseList);
     for (DriverUniformsDescriptorSet &driverUniform : mDriverUniforms)
     {
         driverUniform.dynamicBuffer.releaseInFlightBuffersToResourceUseList(this);
@@ -5830,26 +5823,23 @@ void ContextVk::invalidateDefaultAttributes(const gl::AttributesMask &dirtyMask)
 
 angle::Result ContextVk::updateDefaultAttribute(size_t attribIndex)
 {
-    vk::DynamicBuffer &defaultBuffer = mDefaultAttribBuffers[attribIndex];
+    vk::BufferHelper &defaultBuffer = mDefaultAttribBuffers[attribIndex];
 
-    defaultBuffer.releaseInFlightBuffers(this);
-
-    uint8_t *ptr;
-    VkBuffer bufferHandle = VK_NULL_HANDLE;
-    VkDeviceSize offset   = 0;
     ANGLE_TRY(
-        defaultBuffer.allocate(this, kDefaultValueSize, &ptr, &bufferHandle, &offset, nullptr));
+        defaultBuffer.initForDefaultAttribute(this, &mDefaultAttribRecycler, kDefaultValueSize));
+
+    uint8_t *ptr          = defaultBuffer.getMappedMemory();
+    VkBuffer bufferHandle = defaultBuffer.getBuffer().getHandle();
+    VkDeviceSize offset   = defaultBuffer.getOffset();
 
     const gl::State &glState = mState;
     const gl::VertexAttribCurrentValueData &defaultValue =
         glState.getVertexAttribCurrentValues()[attribIndex];
     memcpy(ptr, &defaultValue.Values, kDefaultValueSize);
-    ASSERT(!defaultBuffer.isCoherent());
-    ANGLE_TRY(defaultBuffer.flush(this));
+    ANGLE_TRY(defaultBuffer.flush(mRenderer));
 
     VertexArrayVk *vertexArrayVk = getVertexArray();
-    return vertexArrayVk->updateDefaultAttrib(this, attribIndex, bufferHandle,
-                                              defaultBuffer.getCurrentBuffer(),
+    return vertexArrayVk->updateDefaultAttrib(this, attribIndex, bufferHandle, &defaultBuffer,
                                               static_cast<uint32_t>(offset));
 }
 
