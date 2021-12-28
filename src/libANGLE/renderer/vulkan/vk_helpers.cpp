@@ -4168,7 +4168,7 @@ angle::Result BufferHelper::initForDefaultUniform(ContextVk *contextVk, size_t s
 
     if (valid())
     {
-        contextVk->stashCurrentUniformBuffer(mSubAllocation);
+        contextVk->getStashedSuballocationList()->stash(std::move(mSubAllocation));
     }
 
     vk::BufferPool *pool = contextVk->getUniformBufferPool();
