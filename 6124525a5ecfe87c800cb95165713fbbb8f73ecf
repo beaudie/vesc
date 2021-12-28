@@ -1,0 +1,141 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "3169851f_304847bf",
+        "filename": "src/libANGLE/renderer/vulkan/BufferVk.h",
+        "patchSetId": 20
+      },
+      "lineNbr": 38,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2021-12-28T18:25:19Z",
+      "side": 1,
+      "message": "Is using a std::unique_ptr necessary?   It looks like this can just be a vk::BufferHelper, since the ctor immediately allocates one anyway.",
+      "revId": "6124525a5ecfe87c800cb95165713fbbb8f73ecf",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "e6c8ea05_2bde25dc",
+        "filename": "src/libANGLE/renderer/vulkan/VertexArrayVk.cpp",
+        "patchSetId": 20
+      },
+      "lineNbr": 170,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2021-12-28T18:25:19Z",
+      "side": 1,
+      "message": "Why do the buffers here and in convertIndexBufferIndirectGPU() that are being converted by the GPU need to be host visible?",
+      "range": {
+        "startLine": 170,
+        "startChar": 77,
+        "endLine": 170,
+        "endChar": 81
+      },
+      "revId": "6124525a5ecfe87c800cb95165713fbbb8f73ecf",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ba2b4e49_2415bc6e",
+        "filename": "src/libANGLE/renderer/vulkan/VertexArrayVk.cpp",
+        "patchSetId": 20
+      },
+      "lineNbr": 639,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2021-12-28T18:25:19Z",
+      "side": 1,
+      "message": "Are these function calls necessary, or can we revert them to avoid the (albeit minor) CPU overhead of making them?",
+      "revId": "6124525a5ecfe87c800cb95165713fbbb8f73ecf",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "0708846f_af6f2005",
+        "filename": "src/libANGLE/renderer/vulkan/VertexArrayVk.cpp",
+        "patchSetId": 20
+      },
+      "lineNbr": 756,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2021-12-28T18:25:19Z",
+      "side": 1,
+      "message": "Similar to above, mDynamicVertexData doesn\u0027t seem to need to hold pointers, but can instead hold the objects directly.   This can be updated to:\n\n    mDynamicVertexData.emplace_back(BufferHelper());\n    vk::BufferHelper \u0026vertexDataBuffer \u003d mDynamicVertexData.back();",
+      "revId": "6124525a5ecfe87c800cb95165713fbbb8f73ecf",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "8da1f769_5dc6fac0",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 20
+      },
+      "lineNbr": 3570,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2021-12-28T18:25:19Z",
+      "side": 1,
+      "message": "Can be \u00272\u0027?",
+      "range": {
+        "startLine": 3570,
+        "startChar": 37,
+        "endLine": 3570,
+        "endChar": 38
+      },
+      "revId": "6124525a5ecfe87c800cb95165713fbbb8f73ecf",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "9f250bf1_6b7f7a69",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 20
+      },
+      "lineNbr": 3916,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2021-12-28T18:25:19Z",
+      "side": 1,
+      "message": "Why is this necessary?",
+      "revId": "6124525a5ecfe87c800cb95165713fbbb8f73ecf",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "eafa0678_2cc40517",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.h",
+        "patchSetId": 20
+      },
+      "lineNbr": 2896,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2021-12-28T18:25:19Z",
+      "side": 1,
+      "message": "The names for these should have the \"Dynamic\" part removed, since they aren\u0027t DynamicBuffers anymore.   Adding \"Helper\" might be good too:\n\n    BufferHelper mIndexBufferHelper;\n    BufferHelper mIndirectBufferHelper;",
+      "range": {
+        "startLine": 2895,
+        "startChar": 0,
+        "endLine": 2896,
+        "endChar": 40
+      },
+      "revId": "6124525a5ecfe87c800cb95165713fbbb8f73ecf",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
