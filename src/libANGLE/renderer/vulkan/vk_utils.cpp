@@ -1887,6 +1887,13 @@ VkResult BufferSubAllocation::initWithEntireBuffer(ContextVk *contextVk,
     return VK_SUCCESS;
 }
 
+void BufferSubAllocation::updateOffsetSize(VkDeviceSize offset, VkDeviceSize size)
+{
+    ASSERT(valid());
+    mHandle->mOffset = offset;
+    mHandle->mSize   = size;
+}
+
 BufferBlock *BufferSubAllocation::getBlock() const
 {
     return mHandle->mBufferBlock;
