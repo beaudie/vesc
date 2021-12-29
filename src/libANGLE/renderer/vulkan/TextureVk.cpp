@@ -472,8 +472,17 @@ angle::Result TextureVk::setSubImageImpl(const gl::Context *context,
                                          const uint8_t *pixels,
                                          const vk::Format &vkFormat)
 {
-    ContextVk *contextVk = vk::GetImpl(context);
-
+    ContextVk *contextVk           = vk::GetImpl(context);
+    const gl::ImageDesc &levelDesc = mState.getImageDesc(index);
+    if (index != 0)
+    {
+        mImage->setSingleLevelUpdate(false);
+    }
+    else if (levelDesc.size.width == area.width && levelDesc.size.height == area.height &&
+             levelDesc.size.depth == area.depth)
+    {
+        mImage->setFullUpdate(true);
+    }
     // Use context's staging buffer for immutable textures and flush out updates
     // immediately.
     vk::DynamicBuffer *stagingBuffer = nullptr;
@@ -564,6 +573,7 @@ angle::Result TextureVk::setSubImageImpl(const gl::Context *context,
         ANGLE_TRY(ensureImageInitialized(contextVk, ImageMipLevels::EnabledLevels));
     }
 
+    mImage->setFullUpdate(false);
     return angle::Result::Continue;
 }
 
@@ -2404,13 +2414,27 @@ angle::Result TextureVk::getAttachmentRenderTarget(const gl::Context *context,
 
 angle::Result TextureVk::ensureImageInitialized(ContextVk *contextVk, ImageMipLevels mipLevels)
 {
-    if (mImage->valid() && !mImage->hasStagedUpdatesInAllocatedLevels())
+    gl::Buffer *unpackBuffer =
+        contextVk->getState().getTargetBuffer(gl::BufferBinding::PixelUnpack);
+    if (mImage->valid() && !mImage->hasStagedUpdatesInAllocatedLevels() && !unpackBuffer)
     {
         return angle::Result::Continue;
     }
 
-    if (!mImage->valid())
+    if (!mImage->valid() ||
+        (mOwnsImage && mImage->isSingleLevelUpdate() && mImage->isFullUpdate() &&
+         mImage->usedInRunningCommands(contextVk->getLastCompletedQueueSerial()) &&
+         !mState.hasBeenBoundAsAttachment() &&
+         mImage->getCurrentImageLayout() == vk::ImageLayout::FragmentShaderReadOnly))
     {
+        // Create a new image if the old image is being read by fragment shader.
+        if (mImage->valid())
+        {
+            releaseImage(contextVk);
+            // Flag image to not in use remove fragment-transfer dependency.
+            mImage->setImageNotInUse(true);
+        }
+
         ASSERT(!mRedefinedLevels.any());
 
         const vk::Format &format = getBaseLevelFormat(contextVk->getRenderer());
