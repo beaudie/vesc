@@ -124,6 +124,7 @@ EGLContext CreateContext(Thread *thread,
                          gl::Context *sharedGLContext,
                          const AttributeMap &attributes)
 {
+    std::unique_lock<angle::GlobalMutex> lock(egl::GetGlobalSharedContextMutex());
     ANGLE_EGL_TRY_RETURN(thread, display->prepareForCall(), "eglCreateContext",
                          GetDisplayIfValid(display), EGL_NO_CONTEXT);
     gl::Context *context = nullptr;
@@ -276,6 +277,7 @@ EGLSurface CreateWindowSurface(Thread *thread,
 
 EGLBoolean DestroyContext(Thread *thread, Display *display, gl::Context *context)
 {
+    std::unique_lock<angle::GlobalMutex> lock(egl::GetGlobalSharedContextMutex());
     ANGLE_EGL_TRY_RETURN(thread, display->prepareForCall(), "eglDestroyContext",
                          GetDisplayIfValid(display), EGL_FALSE);
 
@@ -465,6 +467,7 @@ EGLBoolean MakeCurrent(Thread *thread,
 {
     ANGLE_EGL_TRY_RETURN(thread, display->prepareForCall(), "eglMakeCurrent",
                          GetDisplayIfValid(display), EGL_FALSE);
+    std::unique_lock<angle::GlobalMutex> lock(egl::GetGlobalSharedContextMutex());
     ScopedSyncCurrentContextFromThread scopedSyncCurrent(thread);
 
     Surface *previousDraw        = thread->getCurrentDrawSurface();

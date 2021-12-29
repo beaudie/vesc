@@ -101,6 +101,7 @@ extern thread_local Thread *gCurrentThread;
 #endif
 
 angle::GlobalMutex &GetGlobalMutex();
+angle::GlobalMutex &GetGlobalSharedContextMutex();
 gl::Context *GetGlobalLastContext();
 void SetGlobalLastContext(gl::Context *context);
 Thread *GetCurrentThread();
@@ -191,8 +192,9 @@ ANGLE_INLINE std::unique_lock<angle::GlobalMutex> GetContextLock(Context *contex
     DirtyContextIfNeeded(context);
     return lock;
 #else
-    return context->isShared() ? std::unique_lock<angle::GlobalMutex>(egl::GetGlobalMutex())
-                               : std::unique_lock<angle::GlobalMutex>();
+    return context->isShared()
+               ? std::unique_lock<angle::GlobalMutex>(egl::GetGlobalSharedContextMutex())
+               : std::unique_lock<angle::GlobalMutex>();
 #endif
 }
 
