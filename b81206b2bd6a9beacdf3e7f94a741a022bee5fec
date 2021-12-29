@@ -51,6 +51,47 @@
       "parentUuid": "65e70198_1a7552ac",
       "revId": "b81206b2bd6a9beacdf3e7f94a741a022bee5fec",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "0e98cf30_5a3e75c7",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2021-12-29T16:08:39Z",
+      "side": 1,
+      "message": "Running these traces just to catch general errors on native would be good to have.\n\nOne thing I\u0027ve noticed when creating new traces is the first frame after Reset() will have artifacts, usually shadow related, but they are cleared up quickly in the next few frames.  Comparing the first frame overall with the frame after Reset() would be a good test.  Or maybe serialize state right after Setup(), then again right after Reset().\n\nWe know we have gaps in Reset(), so it probably won\u0027t be clean right away, but it can help guide development of Reset(), much like retracing has helped improve MEC.",
+      "parentUuid": "4779d82a_86d3bc66",
+      "revId": "b81206b2bd6a9beacdf3e7f94a741a022bee5fec",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "5e2bc079_c257634c",
+        "filename": "infra/specs/angle.json",
+        "patchSetId": 2
+      },
+      "lineNbr": 489,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2021-12-29T16:08:39Z",
+      "side": 1,
+      "message": "I believe this would be the first time we\u0027ve had any testing of offscreen (native or vulkan).  We haven\u0027t really spent a lot of time ensuring those results are high quality.\n\nI don\u0027t know that running vsync would add much additional coverage.  We do want to enhance it at some point, to add more refresh rates.  It would be good to test those, but that\u0027s more about testing the harness itself, ensuring we are rendering at the expected rate.",
+      "range": {
+        "startLine": 489,
+        "startChar": 37,
+        "endLine": 489,
+        "endChar": 69
+      },
+      "revId": "b81206b2bd6a9beacdf3e7f94a741a022bee5fec",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
