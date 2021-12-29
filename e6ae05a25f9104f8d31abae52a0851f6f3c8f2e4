@@ -20,6 +20,24 @@
     {
       "unresolved": false,
       "key": {
+        "uuid": "49ba5802_eaa06edc",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2021-12-29T15:45:08Z",
+      "side": 1,
+      "message": "That\u0027s OK with me - did you take action here? Can/should we abandon this version of the CL?",
+      "parentUuid": "f5ae8482_b293c220",
+      "revId": "e6ae05a25f9104f8d31abae52a0851f6f3c8f2e4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
         "uuid": "9e812be8_822b2968",
         "filename": "src/libANGLE/renderer/vulkan/SurfaceVk.cpp",
         "patchSetId": 1
