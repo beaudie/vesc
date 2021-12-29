@@ -18,6 +18,23 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "362e4645_06f2a237",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 10
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2021-12-29T15:26:16Z",
+      "side": 1,
+      "message": "LGTM but not familiar with the issue.",
+      "revId": "0118d3350364e4b76ad58a5fdd13764aa6c9f992",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "8026d21d_8924f988",
@@ -31,6 +48,29 @@
       "writtenOn": "2021-12-27T14:30:47Z",
       "side": 1,
       "message": "Should be placed after the two ifs below?",
+      "revId": "0118d3350364e4b76ad58a5fdd13764aa6c9f992",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "80368e2a_88844011",
+        "filename": "src/tests/gl_tests/ImageTest.cpp",
+        "patchSetId": 10
+      },
+      "lineNbr": 2564,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2021-12-29T15:26:16Z",
+      "side": 1,
+      "message": "nit: comment before the test.",
+      "range": {
+        "startLine": 2564,
+        "startChar": 0,
+        "endLine": 2564,
+        "endChar": 6
+      },
       "revId": "0118d3350364e4b76ad58a5fdd13764aa6c9f992",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
