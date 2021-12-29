@@ -1,0 +1,44 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "c7436740_ea98645e",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2021-12-29T21:30:36Z",
+      "side": 1,
+      "message": "Good stuff, thanks for updating these!",
+      "revId": "51935aea0d4404028767e59c8f2bcc3c47229ef5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "6f414f78_c64ae91e",
+        "filename": "src/libANGLE/gen_extensions.py",
+        "patchSetId": 3
+      },
+      "lineNbr": 349,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2021-12-29T21:30:36Z",
+      "side": 1,
+      "message": "I know this is just a style choice, but I find the previous checkmark easier to eyeball.  All the icons looks the same to me now, hard to spot the X\u0027s.  It might make sense to drop the CROSS altogether, or make it smaller than the checkmark, especially for colorblind people.  No big deal either way, just thought I\u0027d share.",
+      "range": {
+        "startLine": 349,
+        "startChar": 23,
+        "endLine": 349,
+        "endChar": 28
+      },
+      "revId": "51935aea0d4404028767e59c8f2bcc3c47229ef5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
