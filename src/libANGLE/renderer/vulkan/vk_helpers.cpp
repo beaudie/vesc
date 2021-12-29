@@ -5601,6 +5601,14 @@ void ImageHelper::barrierImpl(Context *context,
         mCurrentShaderReadStageMask  = 0;
         mLastNonShaderReadOnlyLayout = ImageLayout::Undefined;
     }
+
+    if (mUseImageGhosting)
+    {
+        imageMemoryBarrier.srcAccessMask = 0;
+        srcStageMask                     = VK_PIPELINE_STAGE_TOP_OF_PIPE_BIT;
+        mUseImageGhosting                = false;
+    }
+
     commandBuffer->imageBarrier(srcStageMask, GetImageLayoutDstStageMask(context, transitionTo),
                                 imageMemoryBarrier);
 

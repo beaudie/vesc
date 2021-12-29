@@ -482,6 +482,18 @@ angle::Result TextureVk::setSubImageImpl(const gl::Context *context,
         shouldFlush = true;
     }
 
+    bool fullTextureUpdate         = false;
+    const gl::ImageDesc &levelDesc = mState.getImageDesc(index);
+    if (index.getLevelIndex() != 0)
+    {
+        mImage->setSingleLevelUpdate(false);
+    }
+    else if (levelDesc.size.width == area.width && levelDesc.size.height == area.height &&
+             levelDesc.size.depth == area.depth)
+    {
+        fullTextureUpdate = true;
+    }
+
     if (unpackBuffer)
     {
         BufferVk *unpackBufferVk       = vk::GetImpl(unpackBuffer);
@@ -520,6 +532,18 @@ angle::Result TextureVk::setSubImageImpl(const gl::Context *context,
 
             GLuint rowLengthPixels   = inputRowPitch / pixelSize * blockWidth;
             GLuint imageHeightPixels = inputDepthPitch / inputRowPitch * blockHeight;
+
+            if (mImage->valid() && mOwnsImage &&
+                mImage->usedInRunningCommands(contextVk->getLastCompletedQueueSerial()) &&
+                mImage->isSingleLevelUpdate() && fullTextureUpdate &&
+                !mState.hasBeenBoundAsAttachment() &&
+                mImage->getCurrentImageLayout() == vk::ImageLayout::FragmentShaderReadOnly)
+            {
+                // When do full single level texture update with pbo, recreate image if it is being
+                // read by fs.
+                releaseImage(contextVk);
+                mImage->useImageGhosting(true);
+            }
 
             ANGLE_TRY(copyBufferDataToImage(contextVk, &bufferHelper, index, rowLengthPixels,
                                             imageHeightPixels, area, offsetBytes, aspectFlags));
@@ -681,6 +705,11 @@ angle::Result TextureVk::copyTextureSubData(const gl::Context *context,
 {
     ContextVk *contextVk = vk::GetImpl(context);
     TextureVk *sourceVk  = vk::GetImpl(srcTexture);
+
+    if (dstLevel != 0)
+    {
+        mImage->setSingleLevelUpdate(false);
+    }
 
     // Make sure the source/destination targets are initialized and all staged updates are flushed.
     ANGLE_TRY(sourceVk->ensureImageInitialized(contextVk, ImageMipLevels::EnabledLevels));
