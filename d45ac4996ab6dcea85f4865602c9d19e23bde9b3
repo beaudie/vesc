@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "aeea777c_421fc86d",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.h",
+        "patchSetId": 21
+      },
+      "lineNbr": 802,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2021-12-29T15:24:05Z",
+      "side": 1,
+      "message": "I\u0027d suggest we rename these to suballocateForCopyImage,etc, but defer to you guys on preference.",
+      "range": {
+        "startLine": 802,
+        "startChar": 0,
+        "endLine": 802,
+        "endChar": 26
+      },
+      "revId": "d45ac4996ab6dcea85f4865602c9d19e23bde9b3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
