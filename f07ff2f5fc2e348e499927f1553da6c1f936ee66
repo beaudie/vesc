@@ -16,6 +16,47 @@
       "message": "LGTM! Yuly FYI, looks like we have developers that rely on dynamic ANGLE on all platforms (except Android).",
       "revId": "f07ff2f5fc2e348e499927f1553da6c1f936ee66",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "b4a82f68_b956d5a1",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1001921
+      },
+      "writtenOn": "2021-12-29T20:38:09Z",
+      "side": 1,
+      "message": "Except Android, ChromeOS, Fuchsia and iOS, to be precise.\nAnyways, my suggestion is to allow dynamic ANGLE behind a flag, so this workflow would still be possible. The only difference per my suggestion would be to pass --use-dynamic-angle flag to Chromium.\nI don\u0027t know if codesign would still work if we don\u0027t ship dynamic ANGLE with Chromium, though. I.e. does adding libraries work instead of replacing them?\nMaybe we could even have --use-dynamic-angle\u003d\u003cfull path to ANGLE\u0027s libEGL.so\u003e, this would eliminate the need to copy (if dlopen of an arbitrary path is allowed on MacOS).",
+      "parentUuid": "cddd1c1b_20442f93",
+      "revId": "f07ff2f5fc2e348e499927f1553da6c1f936ee66",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "938fb5b4_c00490fd",
+        "filename": "scripts/update_chrome_angle.py",
+        "patchSetId": 1
+      },
+      "lineNbr": 8,
+      "author": {
+        "id": 1001921
+      },
+      "writtenOn": "2021-12-29T20:38:09Z",
+      "side": 1,
+      "message": "and Mac",
+      "range": {
+        "startLine": 8,
+        "startChar": 75,
+        "endLine": 8,
+        "endChar": 82
+      },
+      "revId": "f07ff2f5fc2e348e499927f1553da6c1f936ee66",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
