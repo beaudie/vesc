@@ -1,0 +1,73 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "02be6883_0754fc43",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.cpp",
+        "patchSetId": 21
+      },
+      "lineNbr": 1475,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2021-12-29T15:11:18Z",
+      "side": 1,
+      "message": "what happens if this is zero? is that a fatal error? should this instead be a CHECK?",
+      "range": {
+        "startLine": 1473,
+        "startChar": 8,
+        "endLine": 1475,
+        "endChar": 5
+      },
+      "revId": "8dd125148d32ef753ee7515c0b830348c73a6a23",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b71c2e01_e29afec5",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.h",
+        "patchSetId": 21
+      },
+      "lineNbr": 611,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2021-12-29T15:11:18Z",
+      "side": 1,
+      "message": "nit: ensure zero-init.",
+      "range": {
+        "startLine": 607,
+        "startChar": 0,
+        "endLine": 611,
+        "endChar": 0
+      },
+      "revId": "8dd125148d32ef753ee7515c0b830348c73a6a23",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "72434ca9_6549c61a",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 21
+      },
+      "lineNbr": 3809,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2021-12-29T15:11:18Z",
+      "side": 1,
+      "message": "nit: please keep zero-init here even if it\u0027s a dupe - it\u0027s fairly inexpensive and it will be a safety thing to have the variables always initialized to valid mem.",
+      "range": {
+        "startLine": 3809,
+        "startChar": 14,
+        "endLine": 3809,
+        "endChar": 26
+      },
+      "revId": "8dd125148d32ef753ee7515c0b830348c73a6a23",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
