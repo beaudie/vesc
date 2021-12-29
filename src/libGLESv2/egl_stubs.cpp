@@ -465,6 +465,7 @@ EGLBoolean MakeCurrent(Thread *thread,
 {
     ANGLE_EGL_TRY_RETURN(thread, display->prepareForCall(), "eglMakeCurrent",
                          GetDisplayIfValid(display), EGL_FALSE);
+    std::unique_lock<angle::GlobalMutex> lock(egl::GetGlobalSharedContextMutex());
     ScopedSyncCurrentContextFromThread scopedSyncCurrent(thread);
 
     Surface *previousDraw        = thread->getCurrentDrawSurface();
