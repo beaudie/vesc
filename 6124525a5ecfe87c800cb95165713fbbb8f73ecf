@@ -251,6 +251,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "02ca6f79_11d82bf8",
+        "filename": "src/libANGLE/renderer/vulkan/VertexArrayVk.cpp",
+        "patchSetId": 20
+      },
+      "lineNbr": 639,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2021-12-29T17:54:58Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "0aa4ff57_31fc05cd",
+      "revId": "6124525a5ecfe87c800cb95165713fbbb8f73ecf",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "0708846f_af6f2005",
