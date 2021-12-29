@@ -52,6 +52,29 @@
       "parentUuid": "4bd26830_481e6c45",
       "revId": "f671449a16a1fbb37388ca6548fe0ecd5917ff6f",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "a0e55a2b_443e5ec7",
+        "filename": "src/tests/restricted_traces/restricted_traces.json",
+        "patchSetId": 5
+      },
+      "lineNbr": 14,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2021-12-29T18:08:47Z",
+      "side": 1,
+      "message": "6? did you already hit 1/2/3/4/5?",
+      "range": {
+        "startLine": 14,
+        "startChar": 2,
+        "endLine": 14,
+        "endChar": 29
+      },
+      "revId": "f671449a16a1fbb37388ca6548fe0ecd5917ff6f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
