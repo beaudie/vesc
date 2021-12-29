@@ -482,6 +482,17 @@ angle::Result TextureVk::setSubImageImpl(const gl::Context *context,
         shouldFlush = true;
     }
 
+    const gl::ImageDesc &levelDesc = mState.getImageDesc(index);
+    if (index.getLevelIndex() != 0)
+    {
+        mImage->setSingleLevelUpdate(false);
+    }
+    else if (levelDesc.size.width == area.width && levelDesc.size.height == area.height &&
+             levelDesc.size.depth == area.depth)
+    {
+        mImage->setFullUpdate(true);
+    }
+
     if (unpackBuffer)
     {
         BufferVk *unpackBufferVk       = vk::GetImpl(unpackBuffer);
@@ -561,6 +572,7 @@ angle::Result TextureVk::setSubImageImpl(const gl::Context *context,
         ANGLE_TRY(ensureImageInitialized(contextVk, ImageMipLevels::EnabledLevels));
     }
 
+    mImage->setFullUpdate(false);
     return angle::Result::Continue;
 }
 
@@ -2364,13 +2376,26 @@ angle::Result TextureVk::getAttachmentRenderTarget(const gl::Context *context,
 
 angle::Result TextureVk::ensureImageInitialized(ContextVk *contextVk, ImageMipLevels mipLevels)
 {
-    if (mImage->valid() && !mImage->hasStagedUpdatesInAllocatedLevels())
+    gl::Buffer *unpackBuffer =
+        contextVk->getState().getTargetBuffer(gl::BufferBinding::PixelUnpack);
+    if (mImage->valid() && !mImage->hasStagedUpdatesInAllocatedLevels() && !unpackBuffer)
     {
         return angle::Result::Continue;
     }
 
-    if (!mImage->valid())
+    if (!mImage->valid() ||
+        (mOwnsImage && mImage->isSingleLevelUpdate() && mImage->isFullUpdate() &&
+         mImage->usedInRunningCommands(contextVk->getLastCompletedQueueSerial()) &&
+         !mState.hasBeenBoundAsAttachment()))
     {
+        // When do full texture update,create a new vkImage if old image is in use by GPU.
+        if (mImage->valid())
+        {
+            releaseImage(contextVk);
+            // Flag to do the texture update immediately on this new vkImage.
+            mImage->setImageNotInUse(true);
+        }
+
         ASSERT(!mRedefinedLevels.any());
 
         const vk::Format &format = getBaseLevelFormat(contextVk->getRenderer());
