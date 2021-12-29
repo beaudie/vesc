@@ -61,7 +61,7 @@ EGLBoolean EGLAPIENTRY EGL_GetCompositorTimingSupportedANDROID(EGLDisplay dpy,
                                                                EGLSurface surface,
                                                                EGLint name)
 {
-    ANGLE_SCOPED_GLOBAL_LOCK();
+    ANGLE_SCOPED_GLOBAL_SURFACE_LOCK();
     EGL_EVENT(GetCompositorTimingSupportedANDROID,
               "dpy = 0x%016" PRIxPTR ", surface = 0x%016" PRIxPTR ", name = %d", (uintptr_t)dpy,
               (uintptr_t)surface, name);
@@ -84,7 +84,7 @@ EGLBoolean EGLAPIENTRY EGL_GetCompositorTimingANDROID(EGLDisplay dpy,
                                                       const EGLint *names,
                                                       EGLnsecsANDROID *values)
 {
-    ANGLE_SCOPED_GLOBAL_LOCK();
+    ANGLE_SCOPED_GLOBAL_SURFACE_LOCK();
     EGL_EVENT(GetCompositorTimingANDROID,
               "dpy = 0x%016" PRIxPTR ", surface = 0x%016" PRIxPTR
               ", numTimestamps = %d, names = 0x%016" PRIxPTR ", values = 0x%016" PRIxPTR "",
@@ -107,7 +107,7 @@ EGLBoolean EGLAPIENTRY EGL_GetNextFrameIdANDROID(EGLDisplay dpy,
                                                  EGLSurface surface,
                                                  EGLuint64KHR *frameId)
 {
-    ANGLE_SCOPED_GLOBAL_LOCK();
+    ANGLE_SCOPED_GLOBAL_SURFACE_LOCK();
     EGL_EVENT(GetNextFrameIdANDROID,
               "dpy = 0x%016" PRIxPTR ", surface = 0x%016" PRIxPTR ", frameId = 0x%016" PRIxPTR "",
               (uintptr_t)dpy, (uintptr_t)surface, (uintptr_t)frameId);
@@ -127,7 +127,7 @@ EGLBoolean EGLAPIENTRY EGL_GetFrameTimestampSupportedANDROID(EGLDisplay dpy,
                                                              EGLSurface surface,
                                                              EGLint timestamp)
 {
-    ANGLE_SCOPED_GLOBAL_LOCK();
+    ANGLE_SCOPED_GLOBAL_SURFACE_LOCK();
     EGL_EVENT(GetFrameTimestampSupportedANDROID,
               "dpy = 0x%016" PRIxPTR ", surface = 0x%016" PRIxPTR ", timestamp = %d",
               (uintptr_t)dpy, (uintptr_t)surface, timestamp);
@@ -151,7 +151,7 @@ EGLBoolean EGLAPIENTRY EGL_GetFrameTimestampsANDROID(EGLDisplay dpy,
                                                      const EGLint *timestamps,
                                                      EGLnsecsANDROID *values)
 {
-    ANGLE_SCOPED_GLOBAL_LOCK();
+    ANGLE_SCOPED_GLOBAL_SURFACE_LOCK();
     EGL_EVENT(GetFrameTimestampsANDROID,
               "dpy = 0x%016" PRIxPTR ", surface = 0x%016" PRIxPTR
               ", frameId = %llu, numTimestamps = %d, timestamps = 0x%016" PRIxPTR
@@ -207,7 +207,7 @@ EGLBoolean EGLAPIENTRY EGL_PresentationTimeANDROID(EGLDisplay dpy,
                                                    EGLSurface surface,
                                                    EGLnsecsANDROID time)
 {
-    ANGLE_SCOPED_GLOBAL_LOCK();
+    ANGLE_SCOPED_GLOBAL_SURFACE_LOCK();
     EGL_EVENT(PresentationTimeANDROID,
               "dpy = 0x%016" PRIxPTR ", surface = 0x%016" PRIxPTR ", time = %llu", (uintptr_t)dpy,
               (uintptr_t)surface, static_cast<unsigned long long>(time));
@@ -427,7 +427,7 @@ EGLBoolean EGLAPIENTRY EGL_QuerySurfacePointerANGLE(EGLDisplay dpy,
                                                     EGLint attribute,
                                                     void **value)
 {
-    ANGLE_SCOPED_GLOBAL_LOCK();
+    ANGLE_SCOPED_GLOBAL_SURFACE_LOCK();
     EGL_EVENT(QuerySurfacePointerANGLE,
               "dpy = 0x%016" PRIxPTR ", surface = 0x%016" PRIxPTR
               ", attribute = %d, value = 0x%016" PRIxPTR "",
@@ -495,7 +495,7 @@ EGLBoolean EGLAPIENTRY EGL_SwapBuffersWithFrameTokenANGLE(EGLDisplay dpy,
                                                           EGLSurface surface,
                                                           EGLFrameTokenANGLE frametoken)
 {
-    ANGLE_SCOPED_GLOBAL_LOCK();
+    ANGLE_SCOPED_GLOBAL_SURFACE_LOCK();
     EGL_EVENT(SwapBuffersWithFrameTokenANGLE,
               "dpy = 0x%016" PRIxPTR ", surface = 0x%016" PRIxPTR ", frametoken = 0x%llX",
               (uintptr_t)dpy, (uintptr_t)surface, static_cast<unsigned long long>(frametoken));
@@ -517,7 +517,7 @@ EGLBoolean EGLAPIENTRY EGL_GetMscRateANGLE(EGLDisplay dpy,
                                            EGLint *numerator,
                                            EGLint *denominator)
 {
-    ANGLE_SCOPED_GLOBAL_LOCK();
+    ANGLE_SCOPED_GLOBAL_SURFACE_LOCK();
     EGL_EVENT(GetMscRateANGLE,
               "dpy = 0x%016" PRIxPTR ", surface = 0x%016" PRIxPTR ", numerator = 0x%016" PRIxPTR
               ", denominator = 0x%016" PRIxPTR "",
@@ -565,7 +565,7 @@ EGLBoolean EGLAPIENTRY EGL_GetSyncValuesCHROMIUM(EGLDisplay dpy,
                                                  EGLuint64KHR *msc,
                                                  EGLuint64KHR *sbc)
 {
-    ANGLE_SCOPED_GLOBAL_LOCK();
+    ANGLE_SCOPED_GLOBAL_SURFACE_LOCK();
     EGL_EVENT(GetSyncValuesCHROMIUM,
               "dpy = 0x%016" PRIxPTR ", surface = 0x%016" PRIxPTR ", ust = 0x%016" PRIxPTR
               ", msc = 0x%016" PRIxPTR ", sbc = 0x%016" PRIxPTR "",
@@ -883,7 +883,7 @@ EGLBoolean EGLAPIENTRY EGL_LockSurfaceKHR(EGLDisplay dpy,
                                           EGLSurface surface,
                                           const EGLint *attrib_list)
 {
-    ANGLE_SCOPED_GLOBAL_LOCK();
+    ANGLE_SCOPED_GLOBAL_SURFACE_LOCK();
     EGL_EVENT(LockSurfaceKHR,
               "dpy = 0x%016" PRIxPTR ", surface = 0x%016" PRIxPTR ", attrib_list = 0x%016" PRIxPTR
               "",
@@ -906,7 +906,7 @@ EGLBoolean EGLAPIENTRY EGL_QuerySurface64KHR(EGLDisplay dpy,
                                              EGLint attribute,
                                              EGLAttribKHR *value)
 {
-    ANGLE_SCOPED_GLOBAL_LOCK();
+    ANGLE_SCOPED_GLOBAL_SURFACE_LOCK();
     EGL_EVENT(QuerySurface64KHR,
               "dpy = 0x%016" PRIxPTR ", surface = 0x%016" PRIxPTR
               ", attribute = %d, value = 0x%016" PRIxPTR "",
@@ -925,7 +925,7 @@ EGLBoolean EGLAPIENTRY EGL_QuerySurface64KHR(EGLDisplay dpy,
 
 EGLBoolean EGLAPIENTRY EGL_UnlockSurfaceKHR(EGLDisplay dpy, EGLSurface surface)
 {
-    ANGLE_SCOPED_GLOBAL_LOCK();
+    ANGLE_SCOPED_GLOBAL_SURFACE_LOCK();
     EGL_EVENT(UnlockSurfaceKHR, "dpy = 0x%016" PRIxPTR ", surface = 0x%016" PRIxPTR "",
               (uintptr_t)dpy, (uintptr_t)surface);
 
@@ -1125,7 +1125,7 @@ EGLBoolean EGLAPIENTRY EGL_SwapBuffersWithDamageKHR(EGLDisplay dpy,
                                                     const EGLint *rects,
                                                     EGLint n_rects)
 {
-    ANGLE_SCOPED_GLOBAL_LOCK();
+    ANGLE_SCOPED_GLOBAL_SURFACE_LOCK();
     EGL_EVENT(SwapBuffersWithDamageKHR,
               "dpy = 0x%016" PRIxPTR ", surface = 0x%016" PRIxPTR ", rects = 0x%016" PRIxPTR
               ", n_rects = %d",
@@ -1168,7 +1168,7 @@ EGLBoolean EGLAPIENTRY EGL_PostSubBufferNV(EGLDisplay dpy,
                                            EGLint width,
                                            EGLint height)
 {
-    ANGLE_SCOPED_GLOBAL_LOCK();
+    ANGLE_SCOPED_GLOBAL_SURFACE_LOCK();
     EGL_EVENT(PostSubBufferNV,
               "dpy = 0x%016" PRIxPTR ", surface = 0x%016" PRIxPTR
               ", x = %d, y = %d, width = %d, height = %d",
