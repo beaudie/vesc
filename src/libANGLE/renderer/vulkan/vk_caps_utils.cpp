@@ -1112,6 +1112,15 @@ void RendererVk::ensureCapsInitialized() const
 
     // GL_ANGLE_texture_usage
     mNativeExtensions.textureUsageANGLE = true;
+
+    // GL_KHR_parallel_shader_compile
+#if defined(ANGLE_BUILD_WITH_CHROMIUM)
+    // Enabled when bulit into Chromium for further analysis.
+    mNativeExtensions.parallelShaderCompileKHR = true;
+#else
+    // Disabled for standalone Vulkan backend builds, since it's slower.
+    mNativeExtensions.parallelShaderCompileKHR = false;
+#endif
 }
 
 namespace vk
