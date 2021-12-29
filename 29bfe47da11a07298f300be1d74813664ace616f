@@ -135,6 +135,30 @@
       },
       "revId": "29bfe47da11a07298f300be1d74813664ace616f",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "79e9ef60_28c475a8",
+        "filename": "src/tests/test_utils/angle_test_instantiate.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 144,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2021-12-29T15:41:57Z",
+      "side": 1,
+      "message": "I\u0027d prefer if we find a solution to using SW rendering and 3.2 in the long term. In the short term I\u0027m not so worried about the temporary gaps in 3.2 TSAN coverage as there isn\u0027t anything unique with 3.2 and threading in ANGLE.",
+      "parentUuid": "6d057ac5_4814862e",
+      "range": {
+        "startLine": 142,
+        "startChar": 0,
+        "endLine": 144,
+        "endChar": 0
+      },
+      "revId": "29bfe47da11a07298f300be1d74813664ace616f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
