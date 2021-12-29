@@ -107,6 +107,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "3415d9bd_7f2c2f8b",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1001921
+      },
+      "writtenOn": "2021-12-29T22:35:06Z",
+      "side": 1,
+      "message": "I think this might be because all our tests share com.android.angle.test package and com.android.angle.test.AngleUnitTestActivity activity? So different tests override each other data?\nIt\u0027s also possible that the devices are being cleaned up periodically (or after test suite end, or before installing a new test suite), so that they have space to install a new APK.\nIf you look at the 20 shards of angle_perftests in https://ci.chromium.org/ui/p/angle/builders/ci/android-arm64-test/473/overview, they all have lines like:\nPushing 2873 files via .zip of size 5378873891\nThe sizes differ a bit, but it\u0027s always 2873 files.",
+      "parentUuid": "267f445b_719223e8",
+      "revId": "b81206b2bd6a9beacdf3e7f94a741a022bee5fec",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "5e2bc079_c257634c",
