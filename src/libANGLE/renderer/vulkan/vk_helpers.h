@@ -1679,6 +1679,9 @@ class ImageHelper final : public Resource, public angle::Subject
     void resetImageWeakReference();
 
     const Image &getImage() const { return mImage; }
+    bool imageNotInUse() const { return mImageNotInUse; }
+    bool isFullUpdate() const { return mFullUpdate; }
+    bool isSingleLevelUpdate() const { return mSingleLevelUpdate; }
     const DeviceMemory &getDeviceMemory() const { return mDeviceMemory; }
 
     const VkImageCreateInfo &getVkImageCreateInfo() const { return mVkImageCreateInfo; }
@@ -1743,6 +1746,9 @@ class ImageHelper final : public Resource, public angle::Subject
         }
         mCurrentLayout = newLayout;
     }
+    void setFullUpdate(bool fullUpdate) { mFullUpdate = fullUpdate; }
+    void setSingleLevelUpdate(bool singleLevelUpdate) { mSingleLevelUpdate = singleLevelUpdate; }
+    void setImageNotInUse(bool imageNotInUse) { mImageNotInUse = imageNotInUse; }
     ImageLayout getCurrentImageLayout() const { return mCurrentLayout; }
     VkImageLayout getCurrentLayout() const;
 
@@ -2345,6 +2351,10 @@ class ImageHelper final : public Resource, public angle::Subject
     // above which the contents are considered unconditionally defined.
     gl::TexLevelArray<LevelContentDefinedMask> mContentDefined;
     gl::TexLevelArray<LevelContentDefinedMask> mStencilContentDefined;
+
+    bool mFullUpdate        = false;
+    bool mSingleLevelUpdate = true;
+    bool mImageNotInUse     = false;
 };
 
 // A vector of image views, such as one per level or one per layer.
