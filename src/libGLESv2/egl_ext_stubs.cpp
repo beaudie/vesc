@@ -25,6 +25,7 @@ EGLint ClientWaitSyncKHR(Thread *thread,
                          EGLint flags,
                          EGLTimeKHR timeout)
 {
+    std::unique_lock<angle::GlobalMutex> lock(egl::GetGlobalSharedContextMutex());
     ANGLE_EGL_TRY_RETURN(thread, display->prepareForCall(), "eglClientWaitSync",
                          GetDisplayIfValid(display), EGL_FALSE);
     gl::Context *currentContext = thread->getContext();
@@ -44,6 +45,7 @@ EGLImageKHR CreateImageKHR(Thread *thread,
                            EGLClientBuffer buffer,
                            const AttributeMap &attributes)
 {
+    std::unique_lock<angle::GlobalMutex> lock(egl::GetGlobalSharedContextMutex());
     ANGLE_EGL_TRY_RETURN(thread, display->prepareForCall(), "eglCreateImageKHR",
                          GetDisplayIfValid(display), EGL_NO_IMAGE);
     Image *image = nullptr;
@@ -93,6 +95,7 @@ EGLSurface CreatePlatformWindowSurfaceEXT(Thread *thread,
 
 EGLStreamKHR CreateStreamKHR(Thread *thread, Display *display, const AttributeMap &attributes)
 {
+    std::unique_lock<angle::GlobalMutex> lock(egl::GetGlobalSharedContextMutex());
     ANGLE_EGL_TRY_RETURN(thread, display->prepareForCall(), "eglCreateStreamKHR",
                          GetDisplayIfValid(display), EGL_NO_STREAM_KHR);
     Stream *stream;
@@ -108,6 +111,7 @@ EGLSyncKHR CreateSyncKHR(Thread *thread,
                          EGLenum type,
                          const AttributeMap &attributes)
 {
+    std::unique_lock<angle::GlobalMutex> lock(egl::GetGlobalSharedContextMutex());
     ANGLE_EGL_TRY_RETURN(thread, display->prepareForCall(), "eglCreateSyncKHR",
                          GetDisplayIfValid(display), EGL_NO_SYNC);
     egl::Sync *syncObject = nullptr;
@@ -132,6 +136,7 @@ EGLint DebugMessageControlKHR(Thread *thread,
 
 EGLBoolean DestroyImageKHR(Thread *thread, Display *display, Image *img)
 {
+    std::unique_lock<angle::GlobalMutex> lock(egl::GetGlobalSharedContextMutex());
     ANGLE_EGL_TRY_RETURN(thread, display->prepareForCall(), "eglDestroyImageKHR",
                          GetDisplayIfValid(display), EGL_FALSE);
     display->destroyImage(img);
@@ -142,6 +147,7 @@ EGLBoolean DestroyImageKHR(Thread *thread, Display *display, Image *img)
 
 EGLBoolean DestroyStreamKHR(Thread *thread, Display *display, Stream *streamObject)
 {
+    std::unique_lock<angle::GlobalMutex> lock(egl::GetGlobalSharedContextMutex());
     ANGLE_EGL_TRY_RETURN(thread, display->prepareForCall(), "eglDestroyStreamKHR",
                          GetDisplayIfValid(display), EGL_FALSE);
     display->destroyStream(streamObject);
@@ -152,6 +158,7 @@ EGLBoolean DestroyStreamKHR(Thread *thread, Display *display, Stream *streamObje
 
 EGLBoolean DestroySyncKHR(Thread *thread, Display *display, Sync *syncObject)
 {
+    std::unique_lock<angle::GlobalMutex> lock(egl::GetGlobalSharedContextMutex());
     ANGLE_EGL_TRY_RETURN(thread, display->prepareForCall(), "eglDestroySync",
                          GetDisplayIfValid(display), EGL_FALSE);
     display->destroySync(syncObject);
@@ -484,6 +491,7 @@ void SetBlobCacheFuncsANDROID(Thread *thread,
 
 EGLBoolean SignalSyncKHR(Thread *thread, Display *display, Sync *syncObject, EGLenum mode)
 {
+    std::unique_lock<angle::GlobalMutex> lock(egl::GetGlobalSharedContextMutex());
     gl::Context *currentContext = thread->getContext();
     ANGLE_EGL_TRY_RETURN(thread, syncObject->signal(display, currentContext, mode),
                          "eglSignalSyncKHR", GetSyncIfValid(display, syncObject), EGL_FALSE);
@@ -589,6 +597,7 @@ EGLBoolean SwapBuffersWithDamageKHR(Thread *thread,
 
 EGLint WaitSyncKHR(Thread *thread, Display *display, Sync *syncObject, EGLint flags)
 {
+    std::unique_lock<angle::GlobalMutex> lock(egl::GetGlobalSharedContextMutex());
     ANGLE_EGL_TRY_RETURN(thread, display->prepareForCall(), "eglWaitSync",
                          GetDisplayIfValid(display), EGL_FALSE);
     gl::Context *currentContext = thread->getContext();

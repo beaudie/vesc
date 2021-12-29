@@ -57,6 +57,7 @@ EGLBoolean BindAPI(Thread *thread, EGLenum api)
 
 EGLBoolean BindTexImage(Thread *thread, Display *display, Surface *eglSurface, EGLint buffer)
 {
+    std::unique_lock<angle::GlobalMutex> lock(egl::GetGlobalSharedContextMutex());
     ANGLE_EGL_TRY_RETURN(thread, display->prepareForCall(), "eglBindTexImage",
                          GetDisplayIfValid(display), EGL_FALSE);
 
@@ -93,6 +94,7 @@ EGLint ClientWaitSync(Thread *thread,
                       EGLint flags,
                       EGLTime timeout)
 {
+    std::unique_lock<angle::GlobalMutex> lock(egl::GetGlobalSharedContextMutex());
     ANGLE_EGL_TRY_RETURN(thread, display->prepareForCall(), "eglClientWaitSync",
                          GetDisplayIfValid(display), EGL_FALSE);
     gl::Context *currentContext = thread->getContext();
@@ -124,6 +126,7 @@ EGLContext CreateContext(Thread *thread,
                          gl::Context *sharedGLContext,
                          const AttributeMap &attributes)
 {
+    std::unique_lock<angle::GlobalMutex> lock(egl::GetGlobalSharedContextMutex());
     ANGLE_EGL_TRY_RETURN(thread, display->prepareForCall(), "eglCreateContext",
                          GetDisplayIfValid(display), EGL_NO_CONTEXT);
     gl::Context *context = nullptr;
@@ -143,6 +146,7 @@ EGLImage CreateImage(Thread *thread,
                      EGLClientBuffer buffer,
                      const AttributeMap &attributes)
 {
+    std::unique_lock<angle::GlobalMutex> lock(egl::GetGlobalSharedContextMutex());
     ANGLE_EGL_TRY_RETURN(thread, display->prepareForCall(), "eglCreateImage",
                          GetDisplayIfValid(display), EGL_FALSE);
 
@@ -245,6 +249,7 @@ EGLSurface CreatePlatformWindowSurface(Thread *thread,
 
 EGLSync CreateSync(Thread *thread, Display *display, EGLenum type, const AttributeMap &attributes)
 {
+    std::unique_lock<angle::GlobalMutex> lock(egl::GetGlobalSharedContextMutex());
     gl::Context *currentContext = thread->getContext();
 
     ANGLE_EGL_TRY_RETURN(thread, display->prepareForCall(), "eglCreateSync",
@@ -276,6 +281,7 @@ EGLSurface CreateWindowSurface(Thread *thread,
 
 EGLBoolean DestroyContext(Thread *thread, Display *display, gl::Context *context)
 {
+    std::unique_lock<angle::GlobalMutex> lock(egl::GetGlobalSharedContextMutex());
     ANGLE_EGL_TRY_RETURN(thread, display->prepareForCall(), "eglDestroyContext",
                          GetDisplayIfValid(display), EGL_FALSE);
 
@@ -289,6 +295,7 @@ EGLBoolean DestroyContext(Thread *thread, Display *display, gl::Context *context
 
 EGLBoolean DestroyImage(Thread *thread, Display *display, Image *img)
 {
+    std::unique_lock<angle::GlobalMutex> lock(egl::GetGlobalSharedContextMutex());
     ANGLE_EGL_TRY_RETURN(thread, display->prepareForCall(), "eglDestroyImage",
                          GetDisplayIfValid(display), EGL_FALSE);
     display->destroyImage(img);
@@ -310,6 +317,7 @@ EGLBoolean DestroySurface(Thread *thread, Display *display, Surface *eglSurface)
 
 EGLBoolean DestroySync(Thread *thread, Display *display, Sync *syncObject)
 {
+    std::unique_lock<angle::GlobalMutex> lock(egl::GetGlobalSharedContextMutex());
     ANGLE_EGL_TRY_RETURN(thread, display->prepareForCall(), "eglDestroySync",
                          GetDisplayIfValid(display), EGL_FALSE);
     display->destroySync(syncObject);
@@ -344,6 +352,7 @@ EGLBoolean GetConfigs(Thread *thread,
 
 EGLContext GetCurrentContext(Thread *thread)
 {
+    std::unique_lock<angle::GlobalMutex> lock(egl::GetGlobalSharedContextMutex());
     gl::Context *context = thread->getContext();
 
     thread->setSuccess();
@@ -434,6 +443,7 @@ EGLBoolean GetSyncAttrib(Thread *thread,
                          EGLint attribute,
                          EGLAttrib *value)
 {
+    std::unique_lock<angle::GlobalMutex> lock(egl::GetGlobalSharedContextMutex());
     EGLint valueExt;
     ANGLE_EGL_TRY_RETURN(thread, GetSyncAttrib(display, syncObject, attribute, &valueExt),
                          "eglGetSyncAttrib", GetSyncIfValid(display, syncObject), EGL_FALSE);
@@ -465,6 +475,7 @@ EGLBoolean MakeCurrent(Thread *thread,
 {
     ANGLE_EGL_TRY_RETURN(thread, display->prepareForCall(), "eglMakeCurrent",
                          GetDisplayIfValid(display), EGL_FALSE);
+    std::unique_lock<angle::GlobalMutex> lock(egl::GetGlobalSharedContextMutex());
     ScopedSyncCurrentContextFromThread scopedSyncCurrent(thread);
 
     Surface *previousDraw        = thread->getCurrentDrawSurface();
@@ -567,6 +578,7 @@ EGLBoolean QuerySurface(Thread *thread,
 
 EGLBoolean ReleaseTexImage(Thread *thread, Display *display, Surface *eglSurface, EGLint buffer)
 {
+    std::unique_lock<angle::GlobalMutex> lock(egl::GetGlobalSharedContextMutex());
     ANGLE_EGL_TRY_RETURN(thread, display->prepareForCall(), "eglReleaseTexImage",
                          GetDisplayIfValid(display), EGL_FALSE);
     gl::Texture *texture = eglSurface->getBoundTexture();
