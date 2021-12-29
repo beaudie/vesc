@@ -33,6 +33,24 @@
       "message": "Couple of questions:\n1. Seems like angle_native_trace_tests also runs non-trace perftests, so I think we should remove angle_perftests suite where they run?\n2. Why is this so slow on Android? But, at the same time, why is it so much faster than angle_perftests? Does dividing into 20 shards makes the suite to run 4 times slower than 4 shards?",
       "revId": "b81206b2bd6a9beacdf3e7f94a741a022bee5fec",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "4779d82a_86d3bc66",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2021-12-29T15:43:38Z",
+      "side": 1,
+      "message": "1. it does not ATM\n2. the relative speed difference is just because this new test config runs way fewer tests\n\nhowever I\u0027m not sure this provides the necessary test coverage we need because the prior regression only happened after a full iteration with the Reset() call. it probably doesn\u0027t hurt (and may help slightly) to land these tests, but we\u0027ll have to think harder about how to test Reset() functionality.",
+      "parentUuid": "65e70198_1a7552ac",
+      "revId": "b81206b2bd6a9beacdf3e7f94a741a022bee5fec",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
