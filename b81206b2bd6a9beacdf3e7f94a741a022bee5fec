@@ -71,6 +71,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "cc13962c_bed9d8a1",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1001921
+      },
+      "writtenOn": "2021-12-29T20:52:18Z",
+      "side": 1,
+      "message": "1. If it doesn\u0027t, why do I see for example BindingsBenchmark.Run/gles_null_100_objects_allocated_at_initialization both in https://chromium-swarm.appspot.com/task?id\u003d57dcb4f651edf510 and in https://chromium-swarm.appspot.com/task?id\u003d57dcb50666c4e210?\n2. Looks like angle_native_trace_tests runs 4*118\u003d472 tests and angle_perftests runs 20*24\u003d480 tests, so doesn\u0027t look like a significant difference to me. But in the meanwhile, I\u0027ve figured an answer to this question by myself in the context of crbug.com/1279512. Copying 6GB test APK to the phone takes ~10 minutes. So with 20 shards we waste ~10*20 minutes out of the total 236 minutes just for the copy. And with 4 shards we only waste 40 out of 78 minutes. In both cases it takes 36-38 minutes for the actual test run. Looks like 4 shards is a much more efficient way.",
+      "parentUuid": "0e98cf30_5a3e75c7",
+      "revId": "b81206b2bd6a9beacdf3e7f94a741a022bee5fec",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "5e2bc079_c257634c",
