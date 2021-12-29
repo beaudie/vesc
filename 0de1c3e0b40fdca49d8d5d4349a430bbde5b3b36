@@ -38,6 +38,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "12f819ca_e5ca74e1",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2021-12-29T15:05:44Z",
+      "side": 1,
+      "message": "This is deliberate and just how we did things given that the \"default\" FBO is really just a pointer to the surface. Is the test accurately reproducing your issue? I think there will probably be an alternative solution.",
+      "parentUuid": "5fd99e26_4ace8f50",
+      "revId": "0de1c3e0b40fdca49d8d5d4349a430bbde5b3b36",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "9176566a_b6019612",
         "filename": "src/tests/egl_tests/EGLSurfaceTest.cpp",
         "patchSetId": 1
