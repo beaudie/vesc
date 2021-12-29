@@ -1,0 +1,159 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "3b702d81_9b7308e0",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2021-12-29T15:37:28Z",
+      "side": 1,
+      "message": "LGTM - would be good to get rid of some of those template functions.",
+      "revId": "0d1003e2d35c7f5cfe15adc4bb7bdb4ce5714d37",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "4563f954_825f5cb4",
+        "filename": "src/libANGLE/renderer/vulkan/CommandProcessor.h",
+        "patchSetId": 4
+      },
+      "lineNbr": 137,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2021-12-29T15:37:28Z",
+      "side": 1,
+      "message": "nit: I\u0027d call this a release action, so releaseCommandBuffers.. etc as then it clarifies that it mutates the return value.",
+      "range": {
+        "startLine": 137,
+        "startChar": 33,
+        "endLine": 137,
+        "endChar": 57
+      },
+      "revId": "0d1003e2d35c7f5cfe15adc4bb7bdb4ce5714d37",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "f56b0359_2151abf3",
+        "filename": "src/libANGLE/renderer/vulkan/ProgramExecutableVk.h",
+        "patchSetId": 4
+      },
+      "lineNbr": 179,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2021-12-29T15:37:28Z",
+      "side": 1,
+      "message": "what would happen if you just accepted the base class command buffer here?",
+      "range": {
+        "startLine": 176,
+        "startChar": 0,
+        "endLine": 179,
+        "endChar": 66
+      },
+      "revId": "0d1003e2d35c7f5cfe15adc4bb7bdb4ce5714d37",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "07407f4d_4ea4b967",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.h",
+        "patchSetId": 4
+      },
+      "lineNbr": 550,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2021-12-29T15:37:28Z",
+      "side": 1,
+      "message": "same questions here",
+      "range": {
+        "startLine": 545,
+        "startChar": 0,
+        "endLine": 550,
+        "endChar": 75
+      },
+      "revId": "0d1003e2d35c7f5cfe15adc4bb7bdb4ce5714d37",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "87f872e3_ed6f1bcf",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.h",
+        "patchSetId": 4
+      },
+      "lineNbr": 1075,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2021-12-29T15:37:28Z",
+      "side": 1,
+      "message": "nit: make these protected (or at least the constructor) to ensure we don\u0027t init them outside the children",
+      "range": {
+        "startLine": 1074,
+        "startChar": 0,
+        "endLine": 1075,
+        "endChar": 33
+      },
+      "revId": "0d1003e2d35c7f5cfe15adc4bb7bdb4ce5714d37",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "126023c8_af43339f",
+        "filename": "src/libANGLE/renderer/vulkan/vk_utils.h",
+        "patchSetId": 4
+      },
+      "lineNbr": 212,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2021-12-29T15:37:28Z",
+      "side": 1,
+      "message": "small nit: it\u0027s not a list, it\u0027s a pair of vectors. In this case I\u0027d just call it\n\nSecondaryCommandBufferVectors\n\nto communicate the storage type to the reader.",
+      "range": {
+        "startLine": 212,
+        "startChar": 7,
+        "endLine": 212,
+        "endChar": 33
+      },
+      "revId": "0d1003e2d35c7f5cfe15adc4bb7bdb4ce5714d37",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "06c92325_8e834e7e",
+        "filename": "src/libANGLE/renderer/vulkan/vk_utils.h",
+        "patchSetId": 4
+      },
+      "lineNbr": 218,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2021-12-29T15:37:28Z",
+      "side": 1,
+      "message": "nit: I\u0027d also pluralize this for the same reason.",
+      "range": {
+        "startLine": 218,
+        "startChar": 7,
+        "endLine": 218,
+        "endChar": 27
+      },
+      "revId": "0d1003e2d35c7f5cfe15adc4bb7bdb4ce5714d37",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
