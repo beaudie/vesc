@@ -3,6 +3,29 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "03085daa_eeef8c38",
+        "filename": "src/libANGLE/renderer/vulkan/BufferVk.h",
+        "patchSetId": 21
+      },
+      "lineNbr": 218,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2021-12-29T15:46:31Z",
+      "side": 1,
+      "message": "typo: has",
+      "range": {
+        "startLine": 218,
+        "startChar": 37,
+        "endLine": 218,
+        "endChar": 39
+      },
+      "revId": "8dd125148d32ef753ee7515c0b830348c73a6a23",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "02be6883_0754fc43",
         "filename": "src/libANGLE/renderer/vulkan/RendererVk.cpp",
         "patchSetId": 21
@@ -20,6 +43,23 @@
         "endLine": 1475,
         "endChar": 5
       },
+      "revId": "8dd125148d32ef753ee7515c0b830348c73a6a23",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "d2a97b8c_1bc4909b",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.cpp",
+        "patchSetId": 21
+      },
+      "lineNbr": 1503,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2021-12-29T15:46:31Z",
+      "side": 1,
+      "message": "What if mCoherentStagingBufferMemoryTypeIndex \u003d\u003d mNonCoherentStagingBufferMemoryTypeIndex? Wouldn\u0027t it be more (memory-)efficient to have only one staging buffer?\n\nI\u0027m asking because IIRC that\u0027s the case on Android (and presumably Fuchsia) which is where we are more memory constrained.",
       "revId": "8dd125148d32ef753ee7515c0b830348c73a6a23",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
@@ -65,6 +105,29 @@
         "startChar": 14,
         "endLine": 3809,
         "endChar": 26
+      },
+      "revId": "8dd125148d32ef753ee7515c0b830348c73a6a23",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "2981e056_7a0abda0",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 21
+      },
+      "lineNbr": 3931,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2021-12-29T15:46:31Z",
+      "side": 1,
+      "message": "nit: redundant with \"again\"",
+      "range": {
+        "startLine": 3931,
+        "startChar": 7,
+        "endLine": 3931,
+        "endChar": 10
       },
       "revId": "8dd125148d32ef753ee7515c0b830348c73a6a23",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
