@@ -38,6 +38,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "acfb0648_dfaa9dd1",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 20
+      },
+      "lineNbr": 3935,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2021-12-29T18:12:59Z",
+      "side": 1,
+      "message": "Ok, so the issue is if VMA wants 4B aligned, but we need 3B aligned, we need to reqest size+imageCopyAlignment since we need to move imageCopyAlignment bytes to get to the necessary alignment:\n\n    0    4    8    12   16  \n    |----|----|----|----|\n         |\u003c--size+iCA--\u003e|\n            ^\n            Actually need to start using allocation here.\n            \nThat part makes sense.   Why \"-1\" though?   The offset is adjusted by the full imageCopyAlignment value at the end (offset +3B).",
+      "parentUuid": "f69b2ef9_44b99aa5",
+      "revId": "49f26c513993ffca85c59a39a98caa1a37bf901a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "184992f9_97f6cf5a",
         "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
         "patchSetId": 20
@@ -73,6 +91,30 @@
       "side": 1,
       "message": "See the comment above at line 3928",
       "parentUuid": "184992f9_97f6cf5a",
+      "range": {
+        "startLine": 3938,
+        "startChar": 0,
+        "endLine": 3939,
+        "endChar": 59
+      },
+      "revId": "49f26c513993ffca85c59a39a98caa1a37bf901a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "839d666c_5c94c09f",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 20
+      },
+      "lineNbr": 3939,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2021-12-29T18:12:59Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "1e7c8b88_3be3c91c",
       "range": {
         "startLine": 3938,
         "startChar": 0,
@@ -120,6 +162,30 @@
       "side": 1,
       "message": "I think this is an obvious bug. I can leave it unfixed and create a bug for anyone to grab if this end up being more than this simple diff.",
       "parentUuid": "797678c2_8a2ad197",
+      "range": {
+        "startLine": 7497,
+        "startChar": 79,
+        "endLine": 7497,
+        "endChar": 90
+      },
+      "revId": "49f26c513993ffca85c59a39a98caa1a37bf901a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "8f2bcda3_8b3582a7",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 20
+      },
+      "lineNbr": 7497,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2021-12-29T18:12:59Z",
+      "side": 1,
+      "message": "\u003e I think this is an obvious bug.\n\nI agree it\u0027s worth cleaning up.\n\n\u003e I can leave it unfixed and create a bug for anyone to grab if this end up being more than this simple diff.\n\nI was wondering if you\u0027d looked around at any failing tests or had one you could put together to make sure this stays fixed.   Otherwise, this appears to be untested/dead code since no one has complained so far.   Opening a starter/fix-it bug describing the test would be good too.",
+      "parentUuid": "99dca3e4_9af65725",
       "range": {
         "startLine": 7497,
         "startChar": 79,
