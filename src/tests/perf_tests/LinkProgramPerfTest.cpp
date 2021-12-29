@@ -104,7 +104,10 @@ class LinkProgramBenchmark : public ANGLERenderTest,
     GLuint mVertexBuffer = 0;
 };
 
-LinkProgramBenchmark::LinkProgramBenchmark() : ANGLERenderTest("LinkProgram", GetParam()) {}
+LinkProgramBenchmark::LinkProgramBenchmark() : ANGLERenderTest("LinkProgram", GetParam())
+{
+    addExtensionPrerequisite("GL_KHR_parallel_shader_compile");
+}
 
 void LinkProgramBenchmark::initializeBenchmark()
 {
