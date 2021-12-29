@@ -1605,6 +1605,7 @@ class ImageHelper final : public Resource, public angle::Subject
     // EXT_external_objects and ANGLE_external_objects_flags.
     static constexpr uint32_t kImageListFormatCount = 2;
     using ImageListFormats                          = std::array<VkFormat, kImageListFormatCount>;
+    uint8_t mUpdatedLevelBits;
     static const void *DeriveCreateInfoPNext(
         Context *context,
         angle::FormatID actualFormatID,
