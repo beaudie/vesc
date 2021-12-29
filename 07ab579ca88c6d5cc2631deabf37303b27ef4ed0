@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "331eb618_b68d2585",
+        "filename": "src/libANGLE/capture/FrameCapture.h",
+        "patchSetId": 8
+      },
+      "lineNbr": 484,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2021-12-29T15:40:12Z",
+      "side": 1,
+      "message": "nit: maybe an enum for clarity?",
+      "range": {
+        "startLine": 484,
+        "startChar": 26,
+        "endLine": 484,
+        "endChar": 63
+      },
+      "revId": "07ab579ca88c6d5cc2631deabf37303b27ef4ed0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
