@@ -3,6 +3,75 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "e87d0122_4f830e8c",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 20
+      },
+      "lineNbr": 14,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2021-12-29T15:22:25Z",
+      "side": 1,
+      "message": "just to confirm - the offset still exists, but because it\u0027s stored in BH, we don\u0027t need to pass it around?",
+      "range": {
+        "startLine": 12,
+        "startChar": 0,
+        "endLine": 14,
+        "endChar": 0
+      },
+      "revId": "6124525a5ecfe87c800cb95165713fbbb8f73ecf",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "2b16208c_edfc6a89",
+        "filename": "src/libANGLE/renderer/vulkan/BufferVk.cpp",
+        "patchSetId": 20
+      },
+      "lineNbr": 61,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2021-12-29T15:22:25Z",
+      "side": 1,
+      "message": "nit: make this a member of RendererVk or ContextVk. what led to making it a static func?\n\nalso I\u0027d call this AllocateOrReuse",
+      "range": {
+        "startLine": 61,
+        "startChar": 14,
+        "endLine": 61,
+        "endChar": 44
+      },
+      "revId": "6124525a5ecfe87c800cb95165713fbbb8f73ecf",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "8314d368_6a72b9a5",
+        "filename": "src/libANGLE/renderer/vulkan/BufferVk.cpp",
+        "patchSetId": 20
+      },
+      "lineNbr": 64,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2021-12-29T15:22:25Z",
+      "side": 1,
+      "message": "same comment as below. it\u0027s hard to interpret true/false, but BufferVisibility::Host or BufferVisibility::Unspecified or whatever you choose should be clear in the calling context.",
+      "range": {
+        "startLine": 64,
+        "startChar": 45,
+        "endLine": 64,
+        "endChar": 61
+      },
+      "revId": "6124525a5ecfe87c800cb95165713fbbb8f73ecf",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "3169851f_304847bf",
         "filename": "src/libANGLE/renderer/vulkan/BufferVk.h",
         "patchSetId": 20
@@ -32,6 +101,70 @@
       "side": 1,
       "message": "Right now it is. The reason is that conversion is added into std::vector, which requires unline objects supports move operation which BufferHelper does not support. We can add move operation support for BufferHelper object, and then the question is move operation for BufferHelper object will be more expensive then std::unique_ptr which just move the pointer. For conversion buffers, the performance cost likely does not matter much. But meantime, I am also not convinced that use BufferHelper is better, at least from cost wise it is not. So I am neural on this and slightly tilt toward using std::unique_ptr.",
       "parentUuid": "3169851f_304847bf",
+      "revId": "6124525a5ecfe87c800cb95165713fbbb8f73ecf",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "e08ee322_e4a93096",
+        "filename": "src/libANGLE/renderer/vulkan/BufferVk.h",
+        "patchSetId": 20
+      },
+      "lineNbr": 38,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2021-12-29T15:22:25Z",
+      "side": 1,
+      "message": "Re-adding move to BufferHelper should be good - it\u0027s also consistent we how we do the other operations in the Vulkan back-end. Strong vote for putting move back in in the absence of clear data.",
+      "parentUuid": "3e800176_0c5883c0",
+      "revId": "6124525a5ecfe87c800cb95165713fbbb8f73ecf",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "841a67c3_327cd330",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.h",
+        "patchSetId": 20
+      },
+      "lineNbr": 518,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2021-12-29T15:22:25Z",
+      "side": 1,
+      "message": "nit: suggest we make it a policy to replace bool parameters with class enums.",
+      "range": {
+        "startLine": 518,
+        "startChar": 54,
+        "endLine": 518,
+        "endChar": 70
+      },
+      "revId": "6124525a5ecfe87c800cb95165713fbbb8f73ecf",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "3394760c_a92c2183",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.h",
+        "patchSetId": 20
+      },
+      "lineNbr": 621,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2021-12-29T15:22:25Z",
+      "side": 1,
+      "message": "nit: ensure zero-init",
+      "range": {
+        "startLine": 618,
+        "startChar": 0,
+        "endLine": 621,
+        "endChar": 44
+      },
       "revId": "6124525a5ecfe87c800cb95165713fbbb8f73ecf",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
@@ -160,6 +293,52 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "222301ba_2b7ff242",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 20
+      },
+      "lineNbr": 3608,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2021-12-29T15:22:25Z",
+      "side": 1,
+      "message": "you seem to be using vertex conversion buffers for index data here - maybe just call them conversion buffers instead of vertex conversion.",
+      "range": {
+        "startLine": 3608,
+        "startChar": 14,
+        "endLine": 3608,
+        "endChar": 44
+      },
+      "revId": "6124525a5ecfe87c800cb95165713fbbb8f73ecf",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "bf837e54_06cdb97c",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 20
+      },
+      "lineNbr": 3705,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2021-12-29T15:22:25Z",
+      "side": 1,
+      "message": "also for indirect buffers here",
+      "range": {
+        "startLine": 3705,
+        "startChar": 14,
+        "endLine": 3705,
+        "endChar": 44
+      },
+      "revId": "6124525a5ecfe87c800cb95165713fbbb8f73ecf",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "9f250bf1_6b7f7a69",
         "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
         "patchSetId": 20
@@ -189,6 +368,24 @@
       "side": 1,
       "message": "Yes. There is bot test failure without this. The return value of getSize() is used in descriptor set and if this returns too small value (for example, 2 bytes),  driver does not like it and will fail. Note that regardless if I align it here or not, the VMA allocation code will do this anyway, so we are not using more space here.",
       "parentUuid": "9f250bf1_6b7f7a69",
+      "revId": "6124525a5ecfe87c800cb95165713fbbb8f73ecf",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "a096559e_e3b2de1c",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 20
+      },
+      "lineNbr": 3916,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2021-12-29T15:22:25Z",
+      "side": 1,
+      "message": "add comment here please. also the naming is a bit confusing - it sounds like you\u0027re initializing the buffer but you\u0027re doing a memory suballocation. how about suballocateForConversion\n\nvery minor nit: note that \"suballocate\" is one word, not two, and \"SubAllocation\" implies two words.",
+      "parentUuid": "8faf51aa_7568d35f",
       "revId": "6124525a5ecfe87c800cb95165713fbbb8f73ecf",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
