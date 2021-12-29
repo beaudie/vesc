@@ -56,6 +56,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "48310d39_095024c7",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1340649
+      },
+      "writtenOn": "2021-12-29T17:51:34Z",
+      "side": 1,
+      "message": "\u003e given that the \"default\" FBO is really just a pointer to the surface\n\ndidnt look like just a pointer, it caches RT images and uses that in clear / swap code paths. Anyways, seems real inefficient to construct and destruct an object when it doesnt have to be\n\n\u003e Is the test accurately reproducing your issue?\n\nyes\n\n\u003e I think there will probably be an alternative solution\n\ncan you elaborate a bit on what that might look like?",
+      "parentUuid": "12f819ca_e5ca74e1",
+      "revId": "0de1c3e0b40fdca49d8d5d4349a430bbde5b3b36",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "9176566a_b6019612",
         "filename": "src/tests/egl_tests/EGLSurfaceTest.cpp",
         "patchSetId": 1
