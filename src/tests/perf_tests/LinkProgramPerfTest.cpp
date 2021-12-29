@@ -108,7 +108,8 @@ LinkProgramBenchmark::LinkProgramBenchmark() : ANGLERenderTest("LinkProgram", Ge
 
 void LinkProgramBenchmark::initializeBenchmark()
 {
-    if (GetParam().threadOption == ThreadOption::SingleThread)
+    if (IsGLExtensionEnabled("GL_KHR_parallel_shader_compile") &&
+        GetParam().threadOption == ThreadOption::SingleThread)
     {
         glMaxShaderCompilerThreadsKHR(0);
     }
@@ -197,6 +198,9 @@ LinkProgramParams LinkProgramVulkanParams(TaskOption taskOption, ThreadOption th
 
 TEST_P(LinkProgramBenchmark, Run)
 {
+    ANGLE_SKIP_TEST_IF(GetParam().threadOption != ThreadOption::SingleThread &&
+                       !IsGLExtensionEnabled("GL_KHR_parallel_shader_compile"));
+
     run();
 }
 
