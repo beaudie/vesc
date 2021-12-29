@@ -251,9 +251,9 @@ run [`scripts/run_code_generation.py`][CodeGen] to refresh generated files.
 """
 
 _MD_GLES_GPU_CONFIGS = [
-    'NVIDIA P400 Win10',
+    'NVIDIA 1660 Win10',
     'Intel 630 Win10',
-    'NVIDIA P400 Linux',
+    'NVIDIA 1660 Linux',
     'Intel 630 Linux',
     'SwiftShader Win10',
     'Pixel 4 Android 11',
@@ -344,7 +344,7 @@ def sort_by_ext_name(ext_infos):
 def get_ext_support(ext_name, gpu_data):
 
     def s(ext, support):
-        CHECKMARK = '&#10004;'
+        CHECKMARK = '&#x2705;'
         CROSS = '&#10060;'
         return CHECKMARK if ext in support['Extensions'] else CROSS
 
