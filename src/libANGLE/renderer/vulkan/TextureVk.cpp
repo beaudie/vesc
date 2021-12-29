@@ -2404,13 +2404,26 @@ angle::Result TextureVk::getAttachmentRenderTarget(const gl::Context *context,
 
 angle::Result TextureVk::ensureImageInitialized(ContextVk *contextVk, ImageMipLevels mipLevels)
 {
-    if (mImage->valid() && !mImage->hasStagedUpdatesInAllocatedLevels())
+    gl::Buffer *unpackBuffer =
+        contextVk->getState().getTargetBuffer(gl::BufferBinding::PixelUnpack);
+    if (mImage->valid() && !mImage->hasStagedUpdatesInAllocatedLevels() && !unpackBuffer)
     {
         return angle::Result::Continue;
     }
 
-    if (!mImage->valid())
+    if (!mImage->valid() ||
+        (mOwnsImage && mImage->usedInRunningCommands(contextVk->getLastCompletedQueueSerial()) &&
+         !mState.hasBeenBoundAsAttachment() &&
+         mImage->getCurrentImageLayout() == vk::ImageLayout::FragmentShaderReadOnly))
     {
+        // Create new image if old image is used as read-only.
+        if (mImage->valid())
+        {
+            releaseImage(contextVk);
+            // Flag image to not in use to remove dependency.
+            mImage->setImageNotInUse(true);
+        }
+
         ASSERT(!mRedefinedLevels.any());
 
         const vk::Format &format = getBaseLevelFormat(contextVk->getRenderer());
