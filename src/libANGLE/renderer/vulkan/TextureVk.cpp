@@ -2404,13 +2404,24 @@ angle::Result TextureVk::getAttachmentRenderTarget(const gl::Context *context,
 
 angle::Result TextureVk::ensureImageInitialized(ContextVk *contextVk, ImageMipLevels mipLevels)
 {
-    if (mImage->valid() && !mImage->hasStagedUpdatesInAllocatedLevels())
+    gl::Buffer *unpackBuffer =
+        contextVk->getState().getTargetBuffer(gl::BufferBinding::PixelUnpack);
+    if (mImage->valid() && !mImage->hasStagedUpdatesInAllocatedLevels() && !unpackBuffer)
     {
         return angle::Result::Continue;
     }
 
-    if (!mImage->valid())
+    if (!mImage->valid() ||
+        (mOwnsImage && mImage->usedInRunningCommands(contextVk->getLastCompletedQueueSerial()) &&
+         !mState.hasBeenBoundAsAttachment() &&
+         mImage->getCurrentImageLayout() == vk::ImageLayout::FragmentShaderReadOnly))
     {
+        // Create new image if old image is used as read-only.
+        if (mImage->valid())
+        {
+            releaseImage(contextVk);
+        }
+
         ASSERT(!mRedefinedLevels.any());
 
         const vk::Format &format = getBaseLevelFormat(contextVk->getRenderer());
@@ -2425,6 +2436,8 @@ angle::Result TextureVk::ensureImageInitialized(ContextVk *contextVk, ImageMipLe
                                         gl::LevelIndex(mState.getEffectiveBaseLevel() + 1),
                                         gl::LevelIndex(mState.getMipmapMaxLevel()));
         }
+        // Flag image to not in use to remove image barrier.
+        mImage->setImageNotInUse(true);
     }
 
     return flushImageStagedUpdates(contextVk);

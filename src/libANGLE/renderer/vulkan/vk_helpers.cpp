@@ -5415,8 +5415,18 @@ void ImageHelper::barrierImpl(Context *context,
         mCurrentShaderReadStageMask  = 0;
         mLastNonShaderReadOnlyLayout = ImageLayout::Undefined;
     }
-    commandBuffer->imageBarrier(srcStageMask, GetImageLayoutDstStageMask(context, transitionTo),
-                                imageMemoryBarrier);
+
+    if (mImageNotInUse == false)
+    {
+        commandBuffer->imageBarrier(srcStageMask, GetImageLayoutDstStageMask(context, transitionTo),
+                                    imageMemoryBarrier);
+    }
+    else
+    {
+        commandBuffer->imageBarrier(VK_PIPELINE_STAGE_TOP_OF_PIPE_BIT,
+                                    VK_PIPELINE_STAGE_TOP_OF_PIPE_BIT, imageMemoryBarrier);
+        mImageNotInUse = false;
+    }
 
     mCurrentLayout           = newLayout;
     mCurrentQueueFamilyIndex = newQueueFamilyIndex;
