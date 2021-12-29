@@ -223,7 +223,7 @@ adb pull /sdcard/Android/data/$PACKAGE_NAME/angle_capture/. $LABEL/
 The list of traces is tracked in [restricted_traces.json](restricted_traces.json). Manually add your
 new trace to this list. Use version "1" for the trace version.
 
-You can also use a tool called `jq` to update the list. This ensures we get them in
+On Linux, you can also use a tool called `jq` to update the list. This ensures we get them in
 alphabetical order with no duplicates. It can also be done by hand if you are unable to install it,
 for some reason.
 ```
@@ -243,10 +243,7 @@ code generation run the following from the angle root folder:
 ```
 python ./scripts/run_code_generation.py
 ```
-After this you should be able to `git diff` and see your new trace added to the harness files:
-```
-TODO: Redo this. http://anglebug.com/5133
-```
+After this you should be able to `git diff` and see changes in ANGLE's `DEPS` file.
 Note the absence of the traces themselves listed above.  They are automatically .gitignored since
 they won't be checked in directly to the repo.
 
@@ -426,4 +423,50 @@ trace upgrade!
 
 # Diagnosing and fixing tracer errors
 
-TODO: http://anglebug.com/5133
+## Debugging a crash or GLES error
+
+Ensure you're building ANGLE in Debug. Then, find the exact command line and
+environment variables in the retrace script output to reproduce the issue and
+use a debugger or other standard debugging processes.
+
+## Debugging a serialization difference
+
+First look in the trace output to see where ANGLE saved the serialization
+files, and inspect them in a text editor to find the lines which differ. If
+you still can't determine what code might be causing the state difference, we
+can insert finer-grained serialization checkpoints to "bisect" where the
+coding mismatch is happening.
+
+It is not possible to force checkpoints after every GLES call, because
+serialization and validation is so prohibitively expensive. As a solution
+to "bisecting" the serialization mismatch, we have a boolean expression
+feature in the tracer that allows us to precisely control where the tracer
+inserts and validates the checkpoints.
+
+The retrace script command `--validation-expr` allows us to specify a C-like
+expression that determines when to add serialization checkpoints. For
+instance, this expression:
+
+```
+((frame == 2) && (call < 1189) && (call > 1100) && ((call % 5) == 0))
+```
+
+will insert a serialization checkpoint in the second frame, when the captured
+call count is between 1101 and 1188, on every 5th captured call. The `call`
+keyword denotes the call counter, which starts at 1 every frame, and `frame`
+denotes the frame counter, which starts at 1 every run of the application.
+
+By finding a starting and ending frame range, and narrowing this range through
+multiple experiments, you can eventually find the exact call which is
+trigggering the serialization mismatch.
+
+See also: [`http://crrev.com/c/3136094`](http://crrev.com/c/3136094)
+
+## Debugging a pixel test failure without a serialization mismatch
+
+Sometimes you can get all the way to uploading and testing the traces before
+we find a pixel difference in some configurations. This can be hard to
+diagnose and for a variety of reasons. For instance, undefined pixels that
+are well-defined on all but one GLES implementation. It can also be because
+we did not implement serialization for the mismatched GLES state, so also
+check the state serialization logic.
