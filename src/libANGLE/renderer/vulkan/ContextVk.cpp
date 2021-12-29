@@ -4973,6 +4973,12 @@ angle::Result ContextVk::handleDirtyGraphicsDriverUniforms(DirtyBits::Iterator *
     }
 
     vk::BufferHelper &uniformBuffer = mDriverUniforms[PipelineType::Graphics].bufferHelper;
+
+    if (uniformBuffer.valid())
+    {
+        uniformBuffer.retainReadOnly(&mResourceUseList);
+        uniformBuffer.release(mRenderer);
+    }
     ANGLE_TRY(uniformBuffer.initForDriverUniform(this, driverUniformSize));
 
     vk::BufferSerial previousBufferBlockSerial =
@@ -5084,7 +5090,13 @@ angle::Result ContextVk::handleDirtyGraphicsDriverUniforms(DirtyBits::Iterator *
 angle::Result ContextVk::handleDirtyComputeDriverUniforms()
 {
     vk::BufferHelper &uniformBuffer = mDriverUniforms[PipelineType::Compute].bufferHelper;
+
     // Allocate a new region in the dynamic buffer.
+    if (uniformBuffer.valid())
+    {
+        uniformBuffer.retainReadOnly(&mResourceUseList);
+        uniformBuffer.release(mRenderer);
+    }
     ANGLE_TRY(uniformBuffer.initForDriverUniform(this, sizeof(ComputeDriverUniforms)));
 
     vk::BufferSerial previousBufferBlockSerial =
