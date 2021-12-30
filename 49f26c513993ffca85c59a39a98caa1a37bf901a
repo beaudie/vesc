@@ -54,6 +54,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "4c78e86d_725cc100",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 20
+      },
+      "lineNbr": 3935,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2021-12-30T20:31:43Z",
+      "side": 1,
+      "message": "The alignment can only add \"alignment-1\" at most. But I do agree that +alignment is better so that the size is not odd number. Done.",
+      "parentUuid": "acfb0648_dfaa9dd1",
+      "revId": "49f26c513993ffca85c59a39a98caa1a37bf901a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "184992f9_97f6cf5a",
@@ -186,6 +204,30 @@
       "side": 1,
       "message": "\u003e I think this is an obvious bug.\n\nI agree it\u0027s worth cleaning up.\n\n\u003e I can leave it unfixed and create a bug for anyone to grab if this end up being more than this simple diff.\n\nI was wondering if you\u0027d looked around at any failing tests or had one you could put together to make sure this stays fixed.   Otherwise, this appears to be untested/dead code since no one has complained so far.   Opening a starter/fix-it bug describing the test would be good too.",
       "parentUuid": "99dca3e4_9af65725",
+      "range": {
+        "startLine": 7497,
+        "startChar": 79,
+        "endLine": 7497,
+        "endChar": 90
+      },
+      "revId": "49f26c513993ffca85c59a39a98caa1a37bf901a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "28252cb6_d0448c97",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 20
+      },
+      "lineNbr": 7497,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2021-12-30T20:31:43Z",
+      "side": 1,
+      "message": "https://bugs.chromium.org/p/angleproject/issues/detail?id\u003d6856",
+      "parentUuid": "8f2bcda3_8b3582a7",
       "range": {
         "startLine": 7497,
         "startChar": 79,
