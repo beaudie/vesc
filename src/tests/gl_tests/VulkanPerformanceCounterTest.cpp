@@ -3189,6 +3189,49 @@ TEST_P(VulkanPerformanceCounterTest, BufferSubDataShouldNotTriggerSyncState)
     EXPECT_EQ(hackANGLE().vertexArraySyncStateCalls, 1u);
 }
 
+// Verifies that we share Texture descriptor sets between programs.
+TEST_P(VulkanPerformanceCounterTest, TextureDescriptorsAreShared)
+{
+    ANGLE_GL_PROGRAM(testProgram1, essl1_shaders::vs::Texture2D(), essl1_shaders::fs::Texture2D());
+    ANGLE_GL_PROGRAM(testProgram2, essl1_shaders::vs::Texture2D(), essl1_shaders::fs::Texture2D());
+
+    GLTexture texture1;
+    glBindTexture(GL_TEXTURE_2D, texture1);
+    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, 1, 1, 0, GL_RGBA, GL_UNSIGNED_BYTE, &GLColor::red);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+
+    GLTexture texture2;
+    glBindTexture(GL_TEXTURE_2D, texture1);
+    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, 1, 1, 0, GL_RGBA, GL_UNSIGNED_BYTE, &GLColor::red);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+
+    setupQuadVertexBuffer(0.5f, 1.0f);
+
+    glBindTexture(GL_TEXTURE_2D, texture1);
+
+    glUseProgram(testProgram1);
+    glDrawArrays(GL_TRIANGLES, 0, 6);
+    glUseProgram(testProgram2);
+    glDrawArrays(GL_TRIANGLES, 0, 6);
+
+    GLuint expectedDescriptors = hackANGLE().descriptorSetAllocations;
+
+    glBindTexture(GL_TEXTURE_2D, texture2);
+
+    glUseProgram(testProgram1);
+    glDrawArrays(GL_TRIANGLES, 0, 6);
+    glUseProgram(testProgram2);
+    glDrawArrays(GL_TRIANGLES, 0, 6);
+
+    GLuint actualDescriptors = hackANGLE().descriptorSetAllocations;
+
+    ASSERT_GL_NO_ERROR();
+
+    EXPECT_EQ(expectedDescriptors, actualDescriptors);
+}
+
 ANGLE_INSTANTIATE_TEST(VulkanPerformanceCounterTest, ES3_VULKAN());
 ANGLE_INSTANTIATE_TEST(VulkanPerformanceCounterTest_ES31, ES31_VULKAN());
 

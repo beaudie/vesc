@@ -342,8 +342,7 @@ class ProgramExecutableVk
 
     DescriptorSetCache<vk::UniformsAndXfbDescriptorDesc, VulkanCacheType::UniformsAndXfbDescriptors>
         mUniformsAndXfbDescriptorsCache;
-    DescriptorSetCache<vk::TextureDescriptorDesc, VulkanCacheType::TextureDescriptors>
-        mTextureDescriptorsCache;
+    TextureDescriptorSetCachePointer mTextureDescriptorsCache;
     DescriptorSetCache<vk::ShaderBuffersDescriptorDesc, VulkanCacheType::ShaderBuffersDescriptors>
         mShaderBufferDescriptorsCache;
 

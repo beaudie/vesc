@@ -301,8 +301,9 @@ void ProgramExecutableVk::reset(ContextVk *contextVk)
         descriptorPool.reset();
     }
 
+    mTextureDescriptorsCache.reset();
+
     RendererVk *rendererVk = contextVk->getRenderer();
-    mTextureDescriptorsCache.destroy(rendererVk);
     mUniformsAndXfbDescriptorsCache.destroy(rendererVk);
     mShaderBufferDescriptorsCache.destroy(rendererVk);
 
@@ -1089,6 +1090,8 @@ angle::Result ProgramExecutableVk::createPipelineLayout(
     ANGLE_TRY(contextVk->getDynamicDescriptorPool(
         driverUniformsSetDesc, 1, &mDynamicDescriptorPools[DescriptorSetIndex::Internal]));
 
+    contextVk->getTextureDescriptorCache(texturesSetDesc, &mTextureDescriptorsCache);
+
     mDynamicUniformDescriptorOffsets.clear();
     mDynamicUniformDescriptorOffsets.resize(glExecutable.getLinkedShaderStageCount(), 0);
 
@@ -1682,7 +1685,8 @@ angle::Result ProgramExecutableVk::updateTexturesDescriptorSet(
     }
 
     VkDescriptorSet descriptorSet = VK_NULL_HANDLE;
-    if (mTextureDescriptorsCache.get(texturesDesc, &descriptorSet))
+    if (mDescriptorPoolBindings[DescriptorSetIndex::Texture].valid() &&
+        mTextureDescriptorsCache.get().get(texturesDesc, &descriptorSet))
     {
         mDescriptorSets[DescriptorSetIndex::Texture] = descriptorSet;
         // The descriptor pool that this descriptor set was allocated from needs to be retained each
@@ -1731,11 +1735,11 @@ angle::Result ProgramExecutableVk::updateTexturesDescriptorSet(
                 // Clear descriptor set cache. It may no longer be valid.
                 if (newPoolAllocated)
                 {
-                    mTextureDescriptorsCache.destroy(contextVk->getRenderer());
+                    mTextureDescriptorsCache.get().destroy(contextVk->getRenderer());
                 }
 
                 descriptorSet = mDescriptorSets[DescriptorSetIndex::Texture];
-                mTextureDescriptorsCache.insert(texturesDesc, descriptorSet);
+                mTextureDescriptorsCache.get().insert(texturesDesc, descriptorSet);
             }
             ASSERT(descriptorSet != VK_NULL_HANDLE);
 
@@ -1964,7 +1968,6 @@ void ProgramExecutableVk::outputCumulativePerfCounters()
 ProgramExecutablePerfCounters ProgramExecutableVk::getAndResetObjectPerfCounters()
 {
     mUniformsAndXfbDescriptorsCache.accumulateCacheStats(this);
-    mTextureDescriptorsCache.accumulateCacheStats(this);
     mShaderBufferDescriptorsCache.accumulateCacheStats(this);
 
     mCumulativePerfCounters.descriptorSetAllocations += mPerfCounters.descriptorSetAllocations;

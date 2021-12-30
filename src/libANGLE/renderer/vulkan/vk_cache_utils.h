@@ -1461,6 +1461,7 @@ enum class VulkanCacheType
     ShaderBuffersDescriptors,
     Framebuffer,
     DynamicDescriptorPool,
+    TextureDescriptorsMetaCache,
     EnumCount
 };
 
@@ -1748,6 +1749,17 @@ class DescriptorSetCache final : public HasCacheStats<CacheType>
     DescriptorSetCache() = default;
     ~DescriptorSetCache() override { ASSERT(mPayload.empty()); }
 
+    DescriptorSetCache(DescriptorSetCache &&other) : DescriptorSetCache()
+    {
+        *this = std::move(other);
+    }
+
+    DescriptorSetCache &operator=(DescriptorSetCache &&other)
+    {
+        std::swap(mPayload, other.mPayload);
+        return *this;
+    }
+
     void destroy(RendererVk *rendererVk);
 
     ANGLE_INLINE bool get(const Key &desc, VkDescriptorSet *descriptorSet)
@@ -1768,8 +1780,33 @@ class DescriptorSetCache final : public HasCacheStats<CacheType>
         mPayload.emplace(desc, descriptorSet);
     }
 
+    bool valid() const { return !mDestroyed; }
+
   private:
     angle::HashMap<Key, VkDescriptorSet> mPayload;
+    bool mDestroyed = false;
+};
+
+using TextureDescriptorSetCache =
+    DescriptorSetCache<vk::TextureDescriptorDesc, VulkanCacheType::TextureDescriptors>;
+using RefCountedTextureDescriptorSetCache = vk::RefCounted<TextureDescriptorSetCache>;
+using TextureDescriptorSetCachePointer    = vk::BindingPointer<TextureDescriptorSetCache>;
+
+// Caches multiple TextureDescriptorSetCaches.
+class TextureDescriptorsMetaCache final
+    : public HasCacheStats<VulkanCacheType::TextureDescriptorsMetaCache>
+{
+  public:
+    TextureDescriptorsMetaCache();
+    ~TextureDescriptorsMetaCache() override;
+
+    void destroy(RendererVk *rendererVk);
+
+    bool get(const vk::DescriptorSetLayoutDesc &descriptorSetLayoutDesc,
+             TextureDescriptorSetCachePointer *textureDescriptorSetCacheOut);
+
+  private:
+    std::unordered_map<vk::DescriptorSetLayoutDesc, RefCountedTextureDescriptorSetCache> mPayload;
 };
 
 class DynamicDescriptorPoolCache : public HasCacheStats<VulkanCacheType::DynamicDescriptorPool>

@@ -38,6 +38,10 @@ class ShareGroupVk : public ShareGroupImpl
     {
         return mDynamicDescriptorPoolCache;
     }
+    TextureDescriptorsMetaCache &getTextureDescriptorMetaCache()
+    {
+        return mTextureDescriptorMetaCache;
+    }
     ContextVkSet *getContexts() { return &mContexts; }
 
     std::vector<vk::ResourceUseList> &&releaseResourceUseLists()
@@ -55,6 +59,9 @@ class ShareGroupVk : public ShareGroupImpl
     void pruneDefaultBufferPools(RendererVk *renderer);
     bool isDueForBufferPoolPrune();
 
+    void accumulateCacheStats();
+    void accumulateCacheStats(VulkanCacheType cacheType, const CacheStats &cacheStats);
+
   private:
     // ANGLE uses a PipelineLayout cache to store compatible pipeline layouts.
     PipelineLayoutCache mPipelineLayoutCache;
@@ -64,6 +71,9 @@ class ShareGroupVk : public ShareGroupImpl
 
     // Dynamic descriptor pools are shared between contexts.
     DynamicDescriptorPoolCache mDynamicDescriptorPoolCache;
+
+    // Cache of texture descriptors used in the share group.
+    TextureDescriptorsMetaCache mTextureDescriptorMetaCache;
 
     // The list of contexts within the share group
     ContextVkSet mContexts;
