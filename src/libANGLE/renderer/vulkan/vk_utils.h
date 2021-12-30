@@ -1284,6 +1284,7 @@ enum class RenderPassClosureReason
     XfbWriteThenComputeRead,
     XfbWriteThenIndirectDispatchBuffer,
     ImageAttachmentThenComputeRead,
+    ImageReadThenComputeWrite,
     GetQueryResult,
     BeginNonRenderPassQuery,
     EndNonRenderPassQuery,
