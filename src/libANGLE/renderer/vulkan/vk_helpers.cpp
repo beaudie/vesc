@@ -1376,11 +1376,13 @@ void CommandBufferHelperCommon::executeBarriers(const angle::FeaturesVk &feature
 void CommandBufferHelperCommon::imageReadImpl(ContextVk *contextVk,
                                               VkImageAspectFlags aspectFlags,
                                               ImageLayout imageLayout,
-                                              ImageHelper *image)
+                                              ImageHelper *image,
+                                              bool *needLayoutTransition)
 {
     if (image->isReadBarrierNecessary(imageLayout))
     {
         updateImageLayoutAndBarrier(contextVk, image, aspectFlags, imageLayout);
+        *needLayoutTransition = true;
     }
 }
 
@@ -1457,7 +1459,8 @@ void OutsideRenderPassCommandBufferHelper::imageRead(ContextVk *contextVk,
                                                      ImageLayout imageLayout,
                                                      ImageHelper *image)
 {
-    imageReadImpl(contextVk, aspectFlags, imageLayout, image);
+    bool needLayoutTransition = false;
+    imageReadImpl(contextVk, aspectFlags, imageLayout, image, &needLayoutTransition);
     image->retain(&mResourceUseList);
 }
 
@@ -1557,6 +1560,7 @@ angle::Result RenderPassCommandBufferHelper::reset(Context *context)
     mColorAttachmentsCount             = PackedAttachmentCount(0);
     mDepthStencilAttachmentIndex       = kAttachmentIndexInvalid;
     mRenderPassUsedImages.clear();
+    mRenderPassImagesWithLayoutTransition.clear();
     mImageOptimizeForPresent = nullptr;
 
     // Reset and re-initialize the command buffers
@@ -1574,7 +1578,12 @@ void RenderPassCommandBufferHelper::imageRead(ContextVk *contextVk,
                                               ImageLayout imageLayout,
                                               ImageHelper *image)
 {
-    imageReadImpl(contextVk, aspectFlags, imageLayout, image);
+    bool needLayoutTransition = false;
+    imageReadImpl(contextVk, aspectFlags, imageLayout, image, &needLayoutTransition);
+    if (needLayoutTransition)
+    {
+        mRenderPassImagesWithLayoutTransition.insert(image->getImageSerial());
+    }
 
     // As noted in the header we don't support multiple read layouts for Images.
     // We allow duplicate uses in the RP to accommodate for normal GL sampler usage.
@@ -1596,6 +1605,8 @@ void RenderPassCommandBufferHelper::imageWrite(ContextVk *contextVk,
 {
     imageWriteImpl(contextVk, level, layerStart, layerCount, aspectFlags, imageLayout, aliasingMode,
                    image);
+
+    mRenderPassImagesWithLayoutTransition.insert(image->getImageSerial());
 
     // When used as a storage image we allow for aliased writes.
     if (aliasingMode == AliasingMode::Disallowed)
@@ -4875,18 +4886,18 @@ angle::Result ImageHelper::initExternal(Context *context,
         VkFormatFeatureFlags supportedChromaSubSampleFeatureBits =
             rendererVk->getImageFormatFeatureBits(mActualFormatID, kChromaSubSampleFeatureBits);
 
-        VkChromaLocation supportedLocation = ((supportedChromaSubSampleFeatureBits &
+        VkChromaLocation supportedLocation            = ((supportedChromaSubSampleFeatureBits &
                                                VK_FORMAT_FEATURE_COSITED_CHROMA_SAMPLES_BIT) != 0)
-                                                 ? VK_CHROMA_LOCATION_COSITED_EVEN
-                                                 : VK_CHROMA_LOCATION_MIDPOINT;
+                                                            ? VK_CHROMA_LOCATION_COSITED_EVEN
+                                                            : VK_CHROMA_LOCATION_MIDPOINT;
         VkSamplerYcbcrModelConversion conversionModel = VK_SAMPLER_YCBCR_MODEL_CONVERSION_YCBCR_601;
         VkSamplerYcbcrRange colorRange                = VK_SAMPLER_YCBCR_RANGE_ITU_NARROW;
         VkFilter chromaFilter                         = VK_FILTER_NEAREST;
         VkComponentMapping components                 = {
-            VK_COMPONENT_SWIZZLE_IDENTITY,
-            VK_COMPONENT_SWIZZLE_IDENTITY,
-            VK_COMPONENT_SWIZZLE_IDENTITY,
-            VK_COMPONENT_SWIZZLE_IDENTITY,
+                            VK_COMPONENT_SWIZZLE_IDENTITY,
+                            VK_COMPONENT_SWIZZLE_IDENTITY,
+                            VK_COMPONENT_SWIZZLE_IDENTITY,
+                            VK_COMPONENT_SWIZZLE_IDENTITY,
         };
 
         // Create the VkSamplerYcbcrConversion to associate with image views and samplers
