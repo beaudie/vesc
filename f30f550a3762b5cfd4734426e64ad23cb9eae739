@@ -24,6 +24,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "c77d6c3a_c50e6e27",
+        "filename": "src/tests/restricted_traces/README.md",
+        "patchSetId": 2
+      },
+      "lineNbr": 429,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2021-12-30T14:26:36Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "cf9a7eb5_ebf7e172",
+      "range": {
+        "startLine": 429,
+        "startChar": 12,
+        "endLine": 429,
+        "endChar": 56
+      },
+      "revId": "f30f550a3762b5cfd4734426e64ad23cb9eae739",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "b6e3feb2_42167fac",
@@ -47,6 +71,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "2a82b2a2_a6522e9b",
+        "filename": "src/tests/restricted_traces/README.md",
+        "patchSetId": 2
+      },
+      "lineNbr": 441,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2021-12-30T14:26:36Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "b6e3feb2_42167fac",
+      "range": {
+        "startLine": 441,
+        "startChar": 51,
+        "endLine": 441,
+        "endChar": 59
+      },
+      "revId": "f30f550a3762b5cfd4734426e64ad23cb9eae739",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "d02ea2f3_a8940a0f",
@@ -60,6 +108,30 @@
       "writtenOn": "2021-12-29T21:15:13Z",
       "side": 1,
       "message": "an example of how to force one would be helpful here",
+      "range": {
+        "startLine": 442,
+        "startChar": 43,
+        "endLine": 442,
+        "endChar": 49
+      },
+      "revId": "f30f550a3762b5cfd4734426e64ad23cb9eae739",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "21fa5ec7_5252eef0",
+        "filename": "src/tests/restricted_traces/README.md",
+        "patchSetId": 2
+      },
+      "lineNbr": 442,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2021-12-30T14:26:36Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "d02ea2f3_a8940a0f",
       "range": {
         "startLine": 442,
         "startChar": 43,
