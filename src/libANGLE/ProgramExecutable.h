@@ -330,6 +330,16 @@ class ProgramExecutable final : public angle::Subject
     ComponentTypeMask getFragmentOutputsTypeMask() const { return mDrawBufferTypeMask; }
     DrawBufferMask getActiveOutputVariablesMask() const { return mActiveOutputVariablesMask; }
 
+    bool linkUniforms(const Caps &caps,
+                      const Version &version,
+                      InfoLog &infoLog,
+                      const ProgramAliasedBindings &uniformLocationBindings,
+                      GLuint *combinedImageUniformsCount,
+                      std::vector<UnusedUniform> *unusedUniforms,
+                      std::vector<VariableLocation> *uniformLocationsOutOrNull);
+
+    void addShaderUniforms(ShaderType shaderType, const std::vector<sh::ShaderVariable> &uniforms);
+
   private:
     // TODO(timvp): http://anglebug.com/3570: Investigate removing these friend
     // class declarations and accessing the necessary members with getters/setters.
@@ -374,6 +384,9 @@ class ProgramExecutable final : public angle::Subject
                                      int fragmentShaderVersion,
                                      const ProgramAliasedBindings &fragmentOutputLocations,
                                      const ProgramAliasedBindings &fragmentOutputIndices);
+
+    void linkSamplerAndImageBindings(GLuint *combinedImageUniformsCount);
+    bool linkAtomicCounterBuffers();
 
     InfoLog mInfoLog;
 
@@ -431,6 +444,10 @@ class ProgramExecutable final : public angle::Subject
     RangeUI mImageUniformRange;
     RangeUI mAtomicCounterUniformRange;
     std::vector<InterfaceBlock> mUniformBlocks;
+
+    // A cache of shader uniforms that can be used in the uniform linking code.
+    // TODO: De-duplicate with the linked uniforms. http://anglebug.com/3570
+    ShaderMap<std::vector<sh::ShaderVariable>> mShaderUniforms;
 
     // For faster iteration on the blocks currently being bound.
     UniformBlockBindingMask mActiveUniformBlockBindings;

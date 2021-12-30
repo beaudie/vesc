@@ -48,11 +48,13 @@ struct UnusedUniform;
 struct VariableLocation;
 
 using AtomicCounterBuffer = ShaderVariableBuffer;
+using ShaderUniform       = std::pair<ShaderType, const sh::ShaderVariable *>;
 
 class UniformLinker final : angle::NonCopyable
 {
   public:
-    UniformLinker(const ProgramState &state);
+    UniformLinker(const ShaderBitSet &linkedShaderStages,
+                  const ShaderMap<std::vector<sh::ShaderVariable>> &shaderUniforms);
     ~UniformLinker();
 
     bool link(const Caps &caps,
@@ -61,12 +63,15 @@ class UniformLinker final : angle::NonCopyable
 
     void getResults(std::vector<LinkedUniform> *uniforms,
                     std::vector<UnusedUniform> *unusedUniforms,
-                    std::vector<VariableLocation> *uniformLocations);
+                    std::vector<VariableLocation> *uniformLocationsOutOrNull);
 
   private:
     bool validateGraphicsUniforms(InfoLog &infoLog) const;
-
-    bool flattenUniformsAndCheckCapsForShader(Shader *shader,
+    bool validateGraphicsUniformsPerShader(ShaderType shaderToLink,
+                                           bool extendLinkedUniforms,
+                                           std::map<std::string, ShaderUniform> *linkedUniforms,
+                                           InfoLog &infoLog) const;
+    bool flattenUniformsAndCheckCapsForShader(ShaderType shaderType,
                                               const Caps &caps,
                                               std::vector<LinkedUniform> &samplerUniforms,
                                               std::vector<LinkedUniform> &imageUniforms,
@@ -86,7 +91,8 @@ class UniformLinker final : angle::NonCopyable
         int *maxUniformLocation);
     void pruneUnusedUniforms();
 
-    const ProgramState &mState;
+    ShaderBitSet mLinkedShaderStages;
+    const ShaderMap<std::vector<sh::ShaderVariable>> &mShaderUniforms;
     std::vector<LinkedUniform> mUniforms;
     std::vector<UnusedUniform> mUnusedUniforms;
     std::vector<VariableLocation> mUniformLocations;
