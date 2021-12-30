@@ -697,7 +697,14 @@ void ProgramPipeline::onSubjectStateChange(angle::SubjectIndex index, angle::Sub
             onStateChange(angle::SubjectMessage::ProgramRelinked);
             break;
         case angle::SubjectMessage::SamplerUniformsUpdated:
-            mState.mExecutable->resetCachedValidateSamplersResult();
+            mState.mExecutable->clearSamplerBindings();
+            for (ShaderType shaderType : mState.mExecutable->getLinkedShaderStages())
+            {
+                const ProgramState &programState = mState.mPrograms[shaderType]->getState();
+                mState.mExecutable->copySamplerBindingsFromProgram(programState);
+            }
+            mState.mExecutable->mActiveSamplerRefCounts.fill(0);
+            mState.updateExecutableTextures();
             break;
         default:
             UNREACHABLE();
