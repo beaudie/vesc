@@ -125,6 +125,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "75d239b6_ce2bc9d7",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2021-12-30T14:07:41Z",
+      "side": 1,
+      "message": "The real fix for the \"push everything\" problem is to replace the Chromium Android test runner (or upgrade it) so that we can use one that only pushes one batch of traces at a time.\n\nNow that the code generation is gone and we\u0027re reading all the trace info in via JSON, it shouldn\u0027t be too hard to fix. It\u0027ll require some Android expertise and some time to figure out if we should rewrite the whole thing if there\u0027s some way we can extend the script to handle this kind of \"lazy\" upload.\n\nCody can we upload and read trace data outside the APK? Anyway we should probably figure out the design outside of this code review because it\u0027ll just get lost.",
+      "parentUuid": "3415d9bd_7f2c2f8b",
+      "revId": "b81206b2bd6a9beacdf3e7f94a741a022bee5fec",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "5e2bc079_c257634c",
