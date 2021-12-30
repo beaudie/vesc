@@ -4031,6 +4031,7 @@ void DescriptorSetCache<Key, CacheType>::destroy(RendererVk *rendererVk)
 {
     this->accumulateCacheStats(rendererVk);
     mPayload.clear();
+    mDestroyed = true;
 }
 
 // RendererVk's methods are not accessible in vk_cache_utils.h
@@ -4152,5 +4153,50 @@ angle::Result DynamicDescriptorPoolCache::initDynamicDescriptorPool(
     }
 
     return angle::Result::Continue;
+}
+
+// TextureDescriptorsMetaCache implementation.
+TextureDescriptorsMetaCache::TextureDescriptorsMetaCache() = default;
+
+TextureDescriptorsMetaCache::~TextureDescriptorsMetaCache()
+{
+    ASSERT(mPayload.empty());
+}
+
+void TextureDescriptorsMetaCache::destroy(RendererVk *rendererVk)
+{
+    rendererVk->accumulateCacheStats(VulkanCacheType::TextureDescriptorsMetaCache, mCacheStats);
+
+    for (auto &iter : mPayload)
+    {
+        RefCountedTextureDescriptorSetCache &cache = iter.second;
+        ASSERT(!cache.isReferenced());
+        cache.get().destroy(rendererVk);
+    }
+
+    mPayload.clear();
+}
+
+bool TextureDescriptorsMetaCache::get(
+    const vk::DescriptorSetLayoutDesc &descriptorSetLayoutDesc,
+    TextureDescriptorSetCachePointer *textureDescriptorSetCacheOut)
+{
+    auto cacheIter = mPayload.find(descriptorSetLayoutDesc);
+    if (cacheIter == mPayload.end())
+    {
+        mCacheStats.miss();
+        TextureDescriptorSetCache newCache;
+        auto insertIter = mPayload.emplace(descriptorSetLayoutDesc, std::move(newCache));
+        RefCountedTextureDescriptorSetCache &cache = insertIter.first->second;
+        textureDescriptorSetCacheOut->set(&cache);
+        return false;
+    }
+    else
+    {
+        mCacheStats.hit();
+        RefCountedTextureDescriptorSetCache &cache = cacheIter->second;
+        textureDescriptorSetCacheOut->set(&cache);
+        return true;
+    }
 }
 }  // namespace rx

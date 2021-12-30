@@ -413,6 +413,7 @@ void ShareGroupVk::onDestroy(const egl::Display *display)
     mPipelineLayoutCache.destroy(renderer);
     mDescriptorSetLayoutCache.destroy(renderer);
     mDynamicDescriptorPoolCache.destroy(renderer);
+    mTextureDescriptorMetaCache.destroy(renderer);
 
     ASSERT(mResourceUseLists.empty());
 }
@@ -479,4 +480,8 @@ bool ShareGroupVk::isDueForBufferPoolPrune()
     double timeElapsed = angle::GetCurrentSystemTime() - mLastPruneTime;
     return timeElapsed > kTimeElapsedForPruneDefaultBufferPool;
 }
+
+void ShareGroupVk::accumulateCacheStats() {}
+
+void ShareGroupVk::accumulateCacheStats(VulkanCacheType cacheType, const CacheStats &cacheStats) {}
 }  // namespace rx

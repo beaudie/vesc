@@ -227,6 +227,10 @@ class ContextVk : public ContextImpl, public vk::Context, public MultisampleText
         uint32_t descriptorCountMultiplier,
         vk::DynamicDescriptorPoolPointer *descriptorPoolOut);
 
+    void getTextureDescriptorCache(
+        const vk::DescriptorSetLayoutDesc &descriptorSetLayoutDesc,
+        TextureDescriptorSetCachePointer *texureDescriptorSetCachePointer);
+
     // Device loss
     gl::GraphicsResetStatus getResetStatus() override;
 

@@ -6722,4 +6722,12 @@ angle::Result ContextVk::getDynamicDescriptorPool(
         this, descriptorSetLayoutDesc, descriptorCountMultiplier,
         &mShareGroupVk->getDescriptorSetLayoutCache(), descriptorPoolOut);
 }
+
+void ContextVk::getTextureDescriptorCache(
+    const vk::DescriptorSetLayoutDesc &descriptorSetLayoutDesc,
+    TextureDescriptorSetCachePointer *texureDescriptorSetCachePointer)
+{
+    mShareGroupVk->getTextureDescriptorMetaCache().get(descriptorSetLayoutDesc,
+                                                       texureDescriptorSetCachePointer);
+}
 }  // namespace rx
