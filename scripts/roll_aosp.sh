@@ -179,6 +179,9 @@ for removal_file in "${extra_removal_files[@]}"; do
    rm -f "$removal_file"
 done
 
+# Remove all remaining git projects
+find third_party/ -type d -name .git -exec dirname -z {} + | xargs --null rm -rf
+
 # Add all changes to third_party/ so we delete everything not explicitly allowed.
 git add -f "third_party/*"
 
