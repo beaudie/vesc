@@ -215,6 +215,13 @@ bool IsRenderPassStartedAndUsesImage(const vk::RenderPassCommandBufferHelper &re
     return renderPassCommands.started() && renderPassCommands.usesImage(image);
 }
 
+bool IsRenderPassStartedAndTransitionsImageLayout(
+    const vk::RenderPassCommandBufferHelper &renderPassCommands,
+    vk::ImageHelper &image)
+{
+    return renderPassCommands.started() && renderPassCommands.isImageWithLayoutTransition(image);
+}
+
 // When an Android surface is rotated differently than the device's native orientation, ANGLE must
 // rotate gl_Position in the last pre-rasterization shader and gl_FragCoord in the fragment shader.
 // Rotation of gl_Position is done in SPIR-V.  The following are the rotation matrices for the
@@ -422,7 +429,7 @@ vk::ImageLayout GetImageReadLayout(TextureVk *textureVk,
 {
     vk::ImageHelper &image = textureVk->getImage();
 
-    if (textureVk->hasBeenBoundAsImage())
+    if (textureVk->hasBeenBoundAsImage() && executable->hasImages())
     {
         return pipelineType == PipelineType::Compute ? vk::ImageLayout::ComputeShaderWrite
                                                      : vk::ImageLayout::AllGraphicsShadersWrite;
@@ -5060,13 +5067,11 @@ angle::Result ContextVk::invalidateCurrentTextures(const gl::Context *context, g
 
         ANGLE_TRY(updateActiveTextures(context, command));
 
-        // Take care of read-after-write hazards that require implicit synchronization.
         if (command == gl::Command::Dispatch)
         {
-            ANGLE_TRY(endRenderPassIfComputeReadAfterAttachmentWrite());
+            ANGLE_TRY(endRenderPassIfComputeAccessAfterGraphicsImageAccess());
         }
     }
-
     return angle::Result::Continue;
 }
 
@@ -5090,6 +5095,12 @@ angle::Result ContextVk::invalidateCurrentShaderResources(gl::Command command)
     if (hasUniformBuffers && command == gl::Command::Dispatch)
     {
         ANGLE_TRY(endRenderPassIfComputeReadAfterTransformFeedbackWrite());
+    }
+
+    // Take care of implict layout transition by compute program access-after-read.
+    if (hasImages && command == gl::Command::Dispatch)
+    {
+        ANGLE_TRY(endRenderPassIfComputeAccessAfterGraphicsImageAccess());
     }
 
     // If memory barrier has been issued but the command buffers haven't been flushed, make sure
@@ -7192,14 +7203,38 @@ angle::Result ContextVk::endRenderPassIfComputeReadAfterTransformFeedbackWrite()
     return angle::Result::Continue;
 }
 
-angle::Result ContextVk::endRenderPassIfComputeReadAfterAttachmentWrite()
+angle::Result ContextVk::endRenderPassIfComputeAccessAfterGraphicsImageAccess()
 {
-    // Similar to flushCommandBuffersIfNecessary(), but using textures currently bound and used by
-    // the current (compute) program.  This is to handle read-after-write hazards where the write
-    // originates from a framebuffer attachment.
+    // When textures/images bound/used by current compute program and have been accessed
+    // as sampled texture in current renderpass, need to take care the implicit layout
+    // transition of these textures/images in the render pass.
     const gl::ProgramExecutable *executable = mState.getProgramExecutable();
-    ASSERT(executable && executable->hasLinkedShaderStage(gl::ShaderType::Compute) &&
-           executable->hasTextures());
+    ASSERT(executable && executable->hasLinkedShaderStage(gl::ShaderType::Compute));
+
+    for (size_t imageUnitIndex : executable->getActiveImagesMask())
+    {
+        const gl::Texture *texture = mState.getImageUnit(imageUnitIndex).texture.get();
+        if (texture == nullptr)
+        {
+            continue;
+        }
+
+        TextureVk *textureVk = vk::GetImpl(texture);
+
+        if (texture->getType() == gl::TextureType::Buffer)
+        {
+            continue;
+        }
+        else
+        {
+            vk::ImageHelper &image = textureVk->getImage();
+            if (IsRenderPassStartedAndTransitionsImageLayout(*mRenderPassCommands, image))
+            {
+                return flushCommandsAndEndRenderPass(
+                    RenderPassClosureReason::GraphicsTextureImageAccessThenComputeAccess);
+            }
+        }
+    }
 
     const gl::ActiveTexturesCache &textures        = mState.getActiveTexturesCache();
     const gl::ActiveTextureTypeArray &textureTypes = executable->getActiveSamplerTypes();
@@ -7218,10 +7253,21 @@ angle::Result ContextVk::endRenderPassIfComputeReadAfterAttachmentWrite()
         ASSERT(textureVk != nullptr);
         vk::ImageHelper &image = textureVk->getImage();
 
-        if (IsRenderPassStartedAndUsesImage(*mRenderPassCommands, image))
+        // Similar to flushCommandBuffersIfNecessary(), but using textures currently bound and used
+        // by the current (compute) program.  This is to handle read-after-write hazards where the
+        // write originates from a framebuffer attachment.
+        if (image.hasRenderPassUsageFlag(vk::RenderPassUsage::RenderTargetAttachment) &&
+            IsRenderPassStartedAndUsesImage(*mRenderPassCommands, image))
         {
             return flushCommandsAndEndRenderPass(
                 RenderPassClosureReason::ImageAttachmentThenComputeRead);
+        }
+
+        // Take care of the read image layout transition require implicit synchronization.
+        if (IsRenderPassStartedAndTransitionsImageLayout(*mRenderPassCommands, image))
+        {
+            return flushCommandsAndEndRenderPass(
+                RenderPassClosureReason::GraphicsTextureImageAccessThenComputeAccess);
         }
     }
 
