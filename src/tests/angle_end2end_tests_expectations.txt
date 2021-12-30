@@ -61,6 +61,7 @@
 4092 WIN OPENGL : BufferDataOverflowTest.VertexBufferIntegerOverflow/* = SKIP
 4092 WIN GLES : BufferDataOverflowTest.VertexBufferIntegerOverflow/* = SKIP
 6064 WIN D3D11 : SimpleStateChangeTestES31.DrawThenChangeFBOThenDrawThenFlushInAnotherThreadThenDrawIndexed/* = SKIP
+4404 WIN D3D11 : ComputeShaderTest.FSReadImageThenCSSample/* = SKIP
 6101 WIN OPENGL INTEL : BlitFramebufferTest.OOBWrite/* = SKIP
 6123 WIN AMD VULKAN : GLSLTestLoops.DoWhileContinueInSwitch/* = SKIP
 1229184 WIN NVIDIA VULKAN : SimpleStateChangeTest.RedefineFramebufferTexture/* = SKIP
@@ -86,6 +87,7 @@
 1252169 LINUX AMD OPENGL : ComputeShaderTest.ImageBufferMapWrite/* = SKIP
 1252169 LINUX AMD OPENGL : ComputeShaderTest.BufferImageBufferMapWrite/* = SKIP
 6585 LINUX AMD VULKAN : EXTBlendFuncExtendedDrawTest.FragData/* = SKIP
+7300 LINUX INTEL OPENGL : ComputeShaderTest.DrawDispatchImageReadDraw/* = SKIP
 
 // Nvidia
 6115 NVIDIA OPENGL : GLSLTestLoops.DoWhileContinue/* = SKIP
@@ -385,6 +387,7 @@
 5981 PIXEL4ORXL GLES : VulkanExternalImageTest.TextureFormatCompatChromiumFd/* = SKIP
 7142 PIXEL4ORXL GLES : GLSLTest.AliasingFunctionOutParamAndGlobal/* = SKIP
 7213 PIXEL4ORXL GLES : BufferDataTestES3.BufferDataWithNullFollowedByMap/* = SKIP
+5981 PIXEL4ORXL GLES : ComputeShaderTest.DrawDispatchImageReadDraw/* = SKIP
 
 5946 PIXEL4ORXL VULKAN : TransformFeedbackTestES32.PrimitivesWrittenAndGenerated/* = SKIP
 5947 PIXEL4ORXL VULKAN : FramebufferFetchES31.DrawFetchBlitDrawFetch_NonCoherent/* = SKIP
