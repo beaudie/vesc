@@ -150,6 +150,23 @@ bool IsOutputSecondaryForLink(const ProgramAliasedBindings &fragmentOutputIndexe
     return false;
 }
 
+RangeUI AddUniforms(const ShaderMap<Program *> &programs,
+                    ShaderBitSet activeShaders,
+                    std::vector<LinkedUniform> &outputUniforms,
+                    const std::function<RangeUI(const ProgramState &)> &getRange)
+{
+    unsigned int startRange = static_cast<unsigned int>(outputUniforms.size());
+    for (ShaderType shaderType : activeShaders)
+    {
+        const ProgramState &programState                  = programs[shaderType]->getState();
+        const std::vector<LinkedUniform> &programUniforms = programState.getUniforms();
+        const RangeUI uniformRange                        = getRange(programState);
+
+        outputUniforms.insert(outputUniforms.end(), programUniforms.begin() + uniformRange.low(),
+                              programUniforms.begin() + uniformRange.high());
+    }
+    return RangeUI(startRange, static_cast<unsigned int>(outputUniforms.size()));
+}
 }  // anonymous namespace
 
 ProgramExecutable::ProgramExecutable()
@@ -783,6 +800,12 @@ GLuint ProgramExecutable::getUniformIndexFromImageIndex(GLuint imageIndex) const
     return imageIndex + mImageUniformRange.low();
 }
 
+GLuint ProgramExecutable::getUniformIndexFromSamplerIndex(GLuint samplerIndex) const
+{
+    ASSERT(samplerIndex < mSamplerUniformRange.length());
+    return samplerIndex + mSamplerUniformRange.low();
+}
+
 void ProgramExecutable::updateActiveSamplers(const ProgramState &programState)
 {
     const std::vector<SamplerBinding> &samplerBindings = programState.getSamplerBindings();
@@ -1143,6 +1166,11 @@ void ProgramExecutable::gatherTransformFeedbackVaryings(
 
 void ProgramExecutable::updateTransformFeedbackStrides()
 {
+    if (mLinkedTransformFeedbackVaryings.empty())
+    {
+        return;
+    }
+
     if (mTransformFeedbackBufferMode == GL_INTERLEAVED_ATTRIBS)
     {
         mTransformFeedbackStrides.resize(1);
@@ -1637,4 +1665,38 @@ void ProgramExecutable::copyShaderBuffersFromProgram(const ProgramState &program
     const std::vector<AtomicCounterBuffer> &atomics = programState.getAtomicCounterBuffers();
     mAtomicCounterBuffers.insert(mAtomicCounterBuffers.end(), atomics.begin(), atomics.end());
 }
+
+void ProgramExecutable::clearSamplerBindings()
+{
+    mSamplerBindings.clear();
+}
+
+void ProgramExecutable::copySamplerBindingsFromProgram(const ProgramState &programState)
+{
+    const std::vector<SamplerBinding> &bindings = programState.getSamplerBindings();
+    mSamplerBindings.insert(mSamplerBindings.end(), bindings.begin(), bindings.end());
+}
+
+void ProgramExecutable::copyUniformsFromProgramMap(const ShaderMap<Program *> &programs)
+{
+    // Merge default uniforms.
+    auto getDefaultRange = [](const ProgramState &state) { return state.getDefaultUniformRange(); };
+    mDefaultUniformRange = AddUniforms(programs, mLinkedShaderStages, mUniforms, getDefaultRange);
+
+    // Merge sampler uniforms.
+    auto getSamplerRange = [](const ProgramState &state) { return state.getSamplerUniformRange(); };
+    mSamplerUniformRange = AddUniforms(programs, mLinkedShaderStages, mUniforms, getSamplerRange);
+
+    // Merge image uniforms.
+    auto getImageRange = [](const ProgramState &state) { return state.getImageUniformRange(); };
+    mImageUniformRange = AddUniforms(programs, mLinkedShaderStages, mUniforms, getImageRange);
+
+    // Merge atomic counter uniforms.
+    auto getAtomicRange = [](const ProgramState &state) {
+        return state.getAtomicCounterUniformRange();
+    };
+    mAtomicCounterUniformRange =
+        AddUniforms(programs, mLinkedShaderStages, mUniforms, getAtomicRange);
+}
+
 }  // namespace gl
