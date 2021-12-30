@@ -372,7 +372,7 @@ vk::ImageLayout GetImageReadLayout(TextureVk *textureVk,
 {
     vk::ImageHelper &image = textureVk->getImage();
 
-    if (textureVk->hasBeenBoundAsImage())
+    if (textureVk->hasBeenBoundAsImage() && executable->hasImages())
     {
         return pipelineType == PipelineType::Compute ? vk::ImageLayout::ComputeShaderWrite
                                                      : vk::ImageLayout::AllGraphicsShadersWrite;
@@ -1351,7 +1351,7 @@ angle::Result ContextVk::setupDispatch(const gl::Context *context)
     // Note: numerous tests miss a glMemoryBarrier call between the initial texture data upload and
     // the dispatch call.  Flush the outside render pass command buffer as a workaround.
     // TODO: Remove this and fix tests.  http://anglebug.com/5070
-    ANGLE_TRY(flushOutsideRenderPassCommands());
+    ANGLE_TRY(flushCommandsAndEndRenderPass(RenderPassClosureReason::NewRenderPass));
 
     if (mProgram && mProgram->hasDirtyUniforms())
     {
