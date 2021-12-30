@@ -152,9 +152,7 @@ git add Android.bp
 
 # Delete the .git files in each dep so that it can be added to this repo. Some deps like jsoncpp
 # have multiple layers of deps so delete everything before adding them.
-for dep in "${third_party_deps[@]}"; do
-   rm -rf "$dep"/.git
-done
+find third_party/ -type d -name .git -print0 | xargs --null rm -rf
 
 extra_removal_files=(
    # Some third_party deps have OWNERS files which contains users that have not logged into
