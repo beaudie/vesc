@@ -966,7 +966,8 @@ class CommandBufferHelperCommon : angle::NonCopyable
     void imageReadImpl(ContextVk *contextVk,
                        VkImageAspectFlags aspectFlags,
                        ImageLayout imageLayout,
-                       ImageHelper *image);
+                       ImageHelper *image,
+                       bool *needBarrier);
     void imageWriteImpl(ContextVk *contextVk,
                         gl::LevelIndex level,
                         uint32_t layerStart,
@@ -1103,6 +1104,7 @@ class RenderPassCommandBufferHelper final : public CommandBufferHelperCommon
                                 ImageHelper *resolveImage);
 
     bool usesImage(const ImageHelper &image) const;
+    bool readImageUsesBarrier(const ImageHelper &image) const;
 
     angle::Result flushToPrimary(Context *context,
                                  PrimaryCommandBuffer *primary,
@@ -1289,6 +1291,10 @@ class RenderPassCommandBufferHelper final : public CommandBufferHelperCommon
     // Images have unique layouts unlike buffers therefore we can't support simultaneous reads with
     // different layout.
     angle::FastIntegerSet mRenderPassUsedImages;
+
+    // This can be used to track implicit image layout transition.
+    // Tracks the read images involved with barrier.
+    angle::FastIntegerSet mRenderPassReadImagesUsedBarrier;
 
     ImageHelper *mDepthStencilImage;
     ImageHelper *mDepthStencilResolveImage;
@@ -2301,6 +2307,12 @@ class ImageHelper final : public Resource, public angle::Subject
 ANGLE_INLINE bool RenderPassCommandBufferHelper::usesImage(const ImageHelper &image) const
 {
     return mRenderPassUsedImages.contains(image.getImageSerial().getValue());
+}
+
+ANGLE_INLINE bool RenderPassCommandBufferHelper::readImageUsesBarrier(
+    const ImageHelper &image) const
+{
+    return mRenderPassReadImagesUsedBarrier.contains(image.getImageSerial().getValue());
 }
 
 // A vector of image views, such as one per level or one per layer.

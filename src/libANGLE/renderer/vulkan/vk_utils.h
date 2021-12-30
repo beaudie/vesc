@@ -1467,6 +1467,7 @@ enum class RenderPassClosureReason
     XfbWriteThenComputeRead,
     XfbWriteThenIndirectDispatchBuffer,
     ImageAttachmentThenComputeRead,
+    TextureSampleThenComputeAccess,
     GetQueryResult,
     BeginNonRenderPassQuery,
     EndNonRenderPassQuery,
