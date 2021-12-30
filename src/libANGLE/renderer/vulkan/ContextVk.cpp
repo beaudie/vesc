@@ -215,6 +215,31 @@ bool IsRenderPassStartedAndUsesImage(const vk::RenderPassCommandBufferHelper &re
     return renderPassCommands.started() && renderPassCommands.usesImage(image);
 }
 
+bool IsRenderPassStartedAndTransitionsImageLayout(
+    const vk::RenderPassCommandBufferHelper &renderPassCommands,
+    vk::ImageHelper &image)
+{
+    // consider the images in uses refer to write image or read image need do the layout transition.
+    bool imageHasRenderPassUsageFlag =
+        image.hasRenderPassUsageFlag(vk::RenderPassUsage::ReadOperation);
+    bool IsReadImageWithLayoutTransition = renderPassCommands.readImageWithLayoutTransition(image);
+    bool result = renderPassCommands.started() && imageHasRenderPassUsageFlag
+                      ? IsReadImageWithLayoutTransition
+                      : renderPassCommands.usesImage(image);
+
+    if (result)
+    {
+        if (imageHasRenderPassUsageFlag && IsReadImageWithLayoutTransition)
+        {
+            // if the renderpass need to be closed due to the image read layout transition,
+            // clear the read flag here.
+            image.clearRenderPassUsageFlag(vk::RenderPassUsage::ReadOperation);
+        }
+    }
+
+    return result;
+}
+
 // When an Android surface is rotated differently than the device's native orientation, ANGLE must
 // rotate gl_Position in the last pre-rasterization shader and gl_FragCoord in the fragment shader.
 // Rotation of gl_Position is done in SPIR-V.  The following are the rotation matrices for the
@@ -370,7 +395,7 @@ vk::ImageLayout GetImageReadLayout(TextureVk *textureVk,
 {
     vk::ImageHelper &image = textureVk->getImage();
 
-    if (textureVk->hasBeenBoundAsImage())
+    if (textureVk->hasBeenBoundAsImage() && executable->hasImages())
     {
         return pipelineType == PipelineType::Compute ? vk::ImageLayout::ComputeShaderWrite
                                                      : vk::ImageLayout::AllGraphicsShadersWrite;
@@ -4591,13 +4616,12 @@ angle::Result ContextVk::invalidateCurrentTextures(const gl::Context *context, g
 
         ANGLE_TRY(updateActiveTextures(context, command));
 
-        // Take care of read-after-write hazards that require implicit synchronization.
         if (command == gl::Command::Dispatch)
         {
-            ANGLE_TRY(endRenderPassIfComputeReadAfterAttachmentWrite());
+            // Take care of the implicit synchronization after read
+            ANGLE_TRY(endRenderPassIfComputeAccessAfterGraphicsTextureImageAccess());
         }
     }
-
     return angle::Result::Continue;
 }
 
@@ -4621,6 +4645,12 @@ angle::Result ContextVk::invalidateCurrentShaderResources(gl::Command command)
     if (hasUniformBuffers && command == gl::Command::Dispatch)
     {
         ANGLE_TRY(endRenderPassIfComputeReadAfterTransformFeedbackWrite());
+    }
+
+    // Take care of implict layout transition by compute program access-after-read.
+    if (hasImages && command == gl::Command::Dispatch)
+    {
+        ANGLE_TRY(endRenderPassIfComputeAccessAfterGraphicsTextureImageAccess());
     }
 
     // If memory barrier has been issued but the command buffers haven't been flushed, make sure
@@ -6800,6 +6830,66 @@ angle::Result ContextVk::endRenderPassIfComputeReadAfterAttachmentWrite()
         {
             return flushCommandsAndEndRenderPass(
                 RenderPassClosureReason::ImageAttachmentThenComputeRead);
+        }
+    }
+
+    return angle::Result::Continue;
+}
+
+angle::Result ContextVk::endRenderPassIfComputeAccessAfterGraphicsTextureImageAccess()
+{
+    // When textures/images bound/used by current compute program and have be used as
+    // texture sample in current renderpass, the implicit layout transition need to
+    // close the render pass.
+    const gl::ProgramExecutable *executable = mState.getProgramExecutable();
+    ASSERT(executable && executable->hasLinkedShaderStage(gl::ShaderType::Compute));
+
+    for (size_t imageUnitIndex : executable->getActiveImagesMask())
+    {
+        const gl::Texture *texture = mState.getImageUnit(imageUnitIndex).texture.get();
+        if (texture == nullptr)
+        {
+            continue;
+        }
+
+        TextureVk *textureVk = vk::GetImpl(texture);
+
+        if (texture->getType() == gl::TextureType::Buffer)
+        {
+            continue;
+        }
+        else
+        {
+            vk::ImageHelper &image = textureVk->getImage();
+            if (IsRenderPassStartedAndTransitionsImageLayout(*mRenderPassCommands, image))
+            {
+                return flushCommandsAndEndRenderPass(
+                    RenderPassClosureReason::GraphicsTextureImageAccessThenComputeAccess);
+            }
+        }
+    }
+
+    const gl::ActiveTexturesCache &textures        = mState.getActiveTexturesCache();
+    const gl::ActiveTextureTypeArray &textureTypes = executable->getActiveSamplerTypes();
+
+    for (size_t textureUnit : executable->getActiveSamplersMask())
+    {
+        gl::Texture *texture        = textures[textureUnit];
+        gl::TextureType textureType = textureTypes[textureUnit];
+
+        if (texture == nullptr || textureType == gl::TextureType::Buffer)
+        {
+            continue;
+        }
+
+        TextureVk *textureVk = vk::GetImpl(texture);
+        ASSERT(textureVk != nullptr);
+        vk::ImageHelper &image = textureVk->getImage();
+
+        if (IsRenderPassStartedAndTransitionsImageLayout(*mRenderPassCommands, image))
+        {
+            return flushCommandsAndEndRenderPass(
+                RenderPassClosureReason::GraphicsTextureImageAccessThenComputeAccess);
         }
     }
 

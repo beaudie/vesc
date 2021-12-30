@@ -999,6 +999,7 @@ class ContextVk : public ContextImpl, public vk::Context, public MultisampleText
     angle::Result endRenderPassIfTransformFeedbackBuffer(const vk::BufferHelper *buffer);
     angle::Result endRenderPassIfComputeReadAfterTransformFeedbackWrite();
     angle::Result endRenderPassIfComputeReadAfterAttachmentWrite();
+    angle::Result endRenderPassIfComputeAccessAfterGraphicsTextureImageAccess();
 
     void populateTransformFeedbackBufferSet(
         size_t bufferCount,
