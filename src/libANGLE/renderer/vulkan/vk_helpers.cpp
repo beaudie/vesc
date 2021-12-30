@@ -1150,11 +1150,13 @@ void CommandBufferHelperCommon::executeBarriers(const angle::FeaturesVk &feature
 void CommandBufferHelperCommon::imageReadImpl(ContextVk *contextVk,
                                               VkImageAspectFlags aspectFlags,
                                               ImageLayout imageLayout,
-                                              ImageHelper *image)
+                                              ImageHelper *image,
+                                              bool *needBarrier)
 {
     if (image->isReadBarrierNecessary(imageLayout))
     {
         updateImageLayoutAndBarrier(contextVk, image, aspectFlags, imageLayout);
+        *needBarrier = true;
     }
 }
 
@@ -1231,7 +1233,8 @@ void OutsideRenderPassCommandBufferHelper::imageRead(ContextVk *contextVk,
                                                      ImageLayout imageLayout,
                                                      ImageHelper *image)
 {
-    imageReadImpl(contextVk, aspectFlags, imageLayout, image);
+    bool needBarrier = false;
+    imageReadImpl(contextVk, aspectFlags, imageLayout, image, &needBarrier);
     image->retain(&contextVk->getResourceUseList());
 }
 
@@ -1337,6 +1340,7 @@ angle::Result RenderPassCommandBufferHelper::reset(Context *context)
     mDepthInvalidateArea               = gl::Rectangle();
     mStencilInvalidateArea             = gl::Rectangle();
     mRenderPassUsedImages.clear();
+    mRenderPassReadImagesUsedBarrier.clear();
     mDepthStencilImage        = nullptr;
     mDepthStencilResolveImage = nullptr;
     mColorImages.reset();
@@ -1358,7 +1362,12 @@ void RenderPassCommandBufferHelper::imageRead(ContextVk *contextVk,
                                               ImageLayout imageLayout,
                                               ImageHelper *image)
 {
-    imageReadImpl(contextVk, aspectFlags, imageLayout, image);
+    bool needBarrier = false;
+    imageReadImpl(contextVk, aspectFlags, imageLayout, image, &needBarrier);
+    if (needBarrier)
+    {
+        mRenderPassReadImagesUsedBarrier.insert(image->getImageSerial().getValue());
+    }
 
     // As noted in the header we don't support multiple read layouts for Images.
     // We allow duplicate uses in the RP to accommodate for normal GL sampler usage.
@@ -1366,6 +1375,8 @@ void RenderPassCommandBufferHelper::imageRead(ContextVk *contextVk,
     {
         mRenderPassUsedImages.insert(image->getImageSerial().getValue());
         image->retain(&contextVk->getResourceUseList());
+        // track the image's read operation in renderpass
+        image->setRenderPassUsageFlag(vk::RenderPassUsage::ReadOperation);
     }
 }
 
@@ -1389,6 +1400,7 @@ void RenderPassCommandBufferHelper::imageWrite(ContextVk *contextVk,
     if (!usesImage(*image))
     {
         mRenderPassUsedImages.insert(image->getImageSerial().getValue());
+        image->clearRenderPassUsageFlag(vk::RenderPassUsage::ReadOperation);
     }
 }
 
