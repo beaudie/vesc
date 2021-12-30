@@ -123,12 +123,14 @@ class EGLContextSharingTestNoFixture : public EGLContextSharingTest
         return result;
     }
 
-    bool createContext(EGLConfig config, EGLContext *context)
+    bool createContext(EGLConfig config,
+                       EGLContext *context,
+                       EGLContext share_context = EGL_NO_CONTEXT)
     {
         bool result      = false;
         EGLint attribs[] = {EGL_CONTEXT_MAJOR_VERSION, mMajorVersion, EGL_NONE};
 
-        *context = eglCreateContext(mDisplay, config, nullptr, attribs);
+        *context = eglCreateContext(mDisplay, config, share_context, attribs);
         result   = (*context != EGL_NO_CONTEXT);
         EXPECT_TRUE(result);
         return result;
@@ -961,6 +963,187 @@ TEST_P(EGLContextSharingTestNoFixture, EglTerminateMultipleTimes)
     eglTerminate(mDisplay);
     EXPECT_EGL_SUCCESS();
     mDisplay = EGL_NO_DISPLAY;
+}
+
+// Test that we can eglSwapBuffers in one thread while another thread renders to a texture.
+TEST_P(EGLContextSharingTestNoFixture, SwapBuffersShared)
+{
+    EGLint dispattrs[] = {EGL_PLATFORM_ANGLE_TYPE_ANGLE, GetParam().getRenderer(), EGL_NONE};
+    mDisplay           = eglGetPlatformDisplayEXT(EGL_PLATFORM_ANGLE_ANGLE,
+                                        reinterpret_cast<void *>(EGL_DEFAULT_DISPLAY), dispattrs);
+    EXPECT_TRUE(mDisplay != EGL_NO_DISPLAY);
+    EXPECT_EGL_TRUE(eglInitialize(mDisplay, nullptr, nullptr));
+
+    EGLConfig config = EGL_NO_CONFIG_KHR;
+    EXPECT_TRUE(chooseConfig(&config));
+
+    mOsWindow->initialize("EGLContextSharingTestNoFixture", kWidth, kHeight);
+    EXPECT_TRUE(createWindowSurface(config, mOsWindow->getNativeWindow(), &mSurface));
+    ASSERT_EGL_SUCCESS() << "eglCreateWindowSurface failed.";
+
+    EGLSurface pbufferSurface;
+    EXPECT_TRUE(createPbufferSurface(mDisplay, config, kWidth, kHeight, &pbufferSurface));
+
+    // Create the two contextss
+    EXPECT_TRUE(createContext(config, &mContexts[0]));
+    EXPECT_TRUE(createContext(config, &mContexts[1], mContexts[0]));
+
+    // Synchronization tools to ensure the two threads are interleaved as designed by this test.
+    std::mutex mutex;
+    std::condition_variable condVar;
+
+    enum class Step
+    {
+        Start,
+        TextureInitialized,
+        Finish,
+        Abort,
+    };
+
+    Step currentStep = Step::Start;
+
+    std::thread swapThread = std::thread([&]() {
+        ThreadSynchronization<Step> threadSynchronization(&currentStep, &mutex, &condVar);
+        ASSERT_TRUE(threadSynchronization.waitForStep(Step::Start));
+        eglMakeCurrent(mDisplay, mSurface, mSurface, mContexts[0]);
+
+        glGenTextures(1, &mTexture);
+        glBindTexture(GL_TEXTURE_2D, mTexture);
+        glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, kWidth, kHeight, 0, GL_RGBA, GL_UNSIGNED_BYTE,
+                     nullptr);
+
+        threadSynchronization.nextStep(Step::TextureInitialized);
+
+        // The swap thread will sample the texture and swap.
+        ANGLE_GL_PROGRAM(program, essl1_shaders::vs::Texture2D(), essl1_shaders::fs::Texture2D());
+        glUseProgram(program);
+
+        for (int i = 0; i < 100; ++i)
+        {
+            glClear(GL_COLOR_BUFFER_BIT);
+            drawQuad(program, essl1_shaders::PositionAttrib(), 0.5f);
+            EXPECT_GL_NO_ERROR();
+            eglSwapBuffers(mDisplay, mSurface);
+        }
+    });
+
+    std::thread renderThread = std::thread([&]() {
+        ThreadSynchronization<Step> threadSynchronization(&currentStep, &mutex, &condVar);
+        eglMakeCurrent(mDisplay, pbufferSurface, pbufferSurface, mContexts[1]);
+
+        GLFramebuffer fbo;
+        glBindFramebuffer(GL_FRAMEBUFFER, fbo);
+        // The render thread will draw to the texture.
+        ASSERT_TRUE(threadSynchronization.waitForStep(Step::TextureInitialized));
+        glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, mTexture, 0);
+        glClearColor(1.0, 0.0, 0.0, 1.0);
+        glDisable(GL_DEPTH_TEST);
+
+        for (int i = 0; i < 1000; ++i)
+        {
+            glClear(GL_COLOR_BUFFER_BIT);
+        }
+    });
+
+    swapThread.join();
+    renderThread.join();
+
+    eglDestroySurface(mDisplay, pbufferSurface);
+    ASSERT_EGL_SUCCESS();
+
+    // Synchronization tools to ensure the two threads are interleaved as designed by this test.
+    // std::mutex mutex;
+    // std::condition_variable condVar;
+
+    // enum class Step
+    // {
+    //     Start,
+    //     Thread0Clear,
+    //     Thread1Terminate,
+    //     Thread0MakeCurrentContext1,
+    //     Finish,
+    //     Abort,
+    // };
+    // Step currentStep = Step::Start;
+
+    // std::thread thread0 = std::thread([&]() {
+    //     ThreadSynchronization<Step> threadSynchronization(&currentStep, &mutex, &condVar);
+
+    //     ASSERT_TRUE(threadSynchronization.waitForStep(Step::Start));
+
+    //     EXPECT_EGL_TRUE(eglMakeCurrent(mDisplay, mSurface, mSurface, mContexts[0]));
+
+    //     for (int i = 0; i < 100; ++i) {
+    //
+
+    //     }
+    //     // Clear and read back to make sure thread 0 uses context 0.
+    //     glClearColor(1.0, 0.0, 0.0, 1.0);
+    //     glClear(GL_COLOR_BUFFER_BIT);
+    //     EXPECT_PIXEL_EQ(0, 0, 255, 0, 0, 255);
+
+    //     // Wait for thread 1 to clear.
+    //     threadSynchronization.nextStep(Step::Thread0Clear);
+    //     ASSERT_TRUE(threadSynchronization.waitForStep(Step::Thread1Terminate));
+
+    //     // First Display was terminated, so we need to create a new one to create a new Context.
+    //     mDisplay = eglGetPlatformDisplayEXT(
+    //         EGL_PLATFORM_ANGLE_ANGLE, reinterpret_cast<void *>(EGL_DEFAULT_DISPLAY), dispattrs);
+    //     EXPECT_TRUE(mDisplay != EGL_NO_DISPLAY);
+    //     EXPECT_EGL_TRUE(eglInitialize(mDisplay, nullptr, nullptr));
+    //     config = EGL_NO_CONFIG_KHR;
+    //     EXPECT_TRUE(chooseConfig(&config));
+    //     EXPECT_TRUE(createContext(config, &mContexts[1]));
+
+    //     // Thread1's terminate call will make mSurface an invalid handle, recreate a new surface
+    //     EXPECT_TRUE(createPbufferSurface(mDisplay, config, 1280, 720, &mSurface));
+    //     ASSERT_EGL_SUCCESS() << "eglCreatePbufferSurface failed.";
+
+    //     EXPECT_EGL_TRUE(eglMakeCurrent(mDisplay, mSurface, mSurface, mContexts[1]));
+
+    //     // Clear and read back to make sure thread 0 uses context 1.
+    //     glClearColor(1.0, 1.0, 0.0, 1.0);
+    //     glClear(GL_COLOR_BUFFER_BIT);
+    //     EXPECT_PIXEL_EQ(0, 0, 255, 255, 0, 255);
+
+    //     // Cleanup
+    //     EXPECT_TRUE(eglMakeCurrent(mDisplay, EGL_NO_SURFACE, EGL_NO_SURFACE, EGL_NO_CONTEXT));
+    //     EXPECT_TRUE(SafeDestroyContext(mDisplay, mContexts[1]));
+    //     eglDestroySurface(mDisplay, mSurface);
+    //     mSurface = EGL_NO_SURFACE;
+    //     eglTerminate(mDisplay);
+    //     mDisplay = EGL_NO_DISPLAY;
+    //     EXPECT_EGL_SUCCESS();
+
+    //     threadSynchronization.nextStep(Step::Thread0MakeCurrentContext1);
+    //     ASSERT_TRUE(threadSynchronization.waitForStep(Step::Finish));
+    // });
+
+    // std::thread thread1 = std::thread([&]() {
+    //     ThreadSynchronization<Step> threadSynchronization(&currentStep, &mutex, &condVar);
+
+    //     // Wait for thread 0 to clear.
+    //     ASSERT_TRUE(threadSynchronization.waitForStep(Step::Thread0Clear));
+
+    //     // Destroy context 0 while thread1 has it current.
+    //     EXPECT_EGL_TRUE(eglMakeCurrent(mDisplay, EGL_NO_SURFACE, EGL_NO_SURFACE,
+    //     EGL_NO_CONTEXT)); EXPECT_TRUE(SafeDestroyContext(mDisplay, mContexts[0]));
+    //     EXPECT_EGL_SUCCESS();
+    //     eglTerminate(mDisplay);
+    //     mDisplay = EGL_NO_DISPLAY;
+    //     EXPECT_EGL_SUCCESS();
+
+    //     // Wait for the thread 0 to make a new context and glClear().
+    //     threadSynchronization.nextStep(Step::Thread1Terminate);
+    //     ASSERT_TRUE(threadSynchronization.waitForStep(Step::Thread0MakeCurrentContext1));
+
+    //     threadSynchronization.nextStep(Step::Finish);
+    // });
+
+    // thread0.join();
+    // thread1.join();
+
+    // ASSERT_NE(currentStep, Step::Abort);
 }
 }  // anonymous namespace
 
