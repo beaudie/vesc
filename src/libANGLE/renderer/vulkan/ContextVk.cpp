@@ -1635,6 +1635,7 @@ ANGLE_INLINE angle::Result ContextVk::handleDirtyTexturesImpl(
     const gl::ProgramExecutable *executable = mState.getProgramExecutable();
     ASSERT(executable);
     const gl::ActiveTextureMask &activeTextures = executable->getActiveSamplersMask();
+    const bool hasImages                        = executable->hasImages();
 
     for (size_t textureUnit : activeTextures)
     {
@@ -1674,14 +1675,18 @@ ANGLE_INLINE angle::Result ContextVk::handleDirtyTexturesImpl(
 
         // Select the appropriate vk::ImageLayout depending on whether the texture is also bound as
         // a GL image, and whether the program is a compute or graphics shader.
-        vk::ImageLayout textureLayout;
-        if (textureVk->hasBeenBoundAsImage())
+        vk::ImageLayout textureLayout = vk::ImageLayout::AllGraphicsShadersReadOnly;
+        bool hasBeenBoundAsImage      = textureVk->hasBeenBoundAsImage();
+        if (hasBeenBoundAsImage)
         {
             textureLayout = pipelineType == PipelineType::Compute
                                 ? vk::ImageLayout::ComputeShaderWrite
                                 : vk::ImageLayout::AllGraphicsShadersWrite;
         }
-        else
+
+        // texture imageLayout select for sheer texture or been bound as GL image before, but not
+        // used as image uniform in current draw, keep the imageLayout as SHADER_READ_ONLY_OPTIMAL.
+        if (!hasBeenBoundAsImage || (hasBeenBoundAsImage && !hasImages))
         {
             gl::ShaderBitSet remainingShaderBits =
                 executable->getSamplerShaderBitsForTextureUnitIndex(textureUnit);
