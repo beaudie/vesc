@@ -91,6 +91,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "5bca7483_14477353",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 5
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2021-12-30T18:08:19Z",
+      "side": 1,
+      "message": "Can you help, it would be something that you might find easy. Build with ASAN, then run the tests both in normal and native over several iterations. Ensure there\u0027s no memory/object growth (not sure the best way to do this, maybe manual prints) or ASAN errors. Basically ensure the Reset function is resetting all the objects.\n\nLooking in the Reset function, we don\u0027t handle many object types including Renderbuffers, Framebuffers, VAOs, etc, so I can almost guarantee the trace is behaving badly.",
+      "parentUuid": "d4672ff6_5debf457",
+      "revId": "f671449a16a1fbb37388ca6548fe0ecd5917ff6f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "a0e55a2b_443e5ec7",
         "filename": "src/tests/restricted_traces/restricted_traces.json",
         "patchSetId": 5
