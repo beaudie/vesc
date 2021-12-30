@@ -409,6 +409,7 @@ Context::Context(egl::Display *display,
       mSaveAndRestoreState(GetSaveAndRestoreState(attribs)),
       mIsDestroyed(false)
 {
+    printf("Context::%s this %p\n", __func__, this);
     for (angle::SubjectIndex uboIndex = kUniformBuffer0SubjectIndex;
          uboIndex < kUniformBufferMaxSubjectIndex; ++uboIndex)
     {
@@ -765,10 +766,12 @@ egl::Error Context::makeCurrent(egl::Display *display,
                                 egl::Surface *drawSurface,
                                 egl::Surface *readSurface)
 {
+    printf("%s: call\n", __func__);
     mDisplay = display;
 
     if (!mHasBeenCurrent)
     {
+        printf("%s: call (hasn't been current)\n", __func__);
         initializeDefaultResources();
         initRendererString();
         initVersionStrings();
@@ -786,6 +789,10 @@ egl::Error Context::makeCurrent(egl::Display *display,
         mState.setScissorParams(0, 0, width, height);
 
         mHasBeenCurrent = true;
+    }
+    else
+    {
+        printf("%s: call (already been current)\n", __func__);
     }
 
     ANGLE_TRY(unsetDefaultFramebuffer());
@@ -3624,7 +3631,9 @@ Extensions Context::generateSupportedExtensions() const
 
 void Context::initCaps()
 {
+    printf("Context::%s: call\n", __func__);
     mState.mCaps = mImplementation->getNativeCaps();
+    printf("Context::%s: call. max draw buffers %u\n", __func__, mState.mCaps.maxDrawBuffers);
 
     // TODO (http://anglebug.com/6010): mSupportedExtensions should not be modified here
     mSupportedExtensions = generateSupportedExtensions();

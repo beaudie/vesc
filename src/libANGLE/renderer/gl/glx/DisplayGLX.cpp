@@ -397,6 +397,8 @@ egl::Error DisplayGLX::makeCurrent(egl::Display *display,
                                    egl::Surface *readSurface,
                                    gl::Context *context)
 {
+    printf("%s: call\n", __func__);
+
     glx::Drawable newDrawable =
         (drawSurface ? GetImplAs<SurfaceGLX>(drawSurface)->getDrawable() : mInitPbuffer);
     glx::Context newContext = mContext;
@@ -412,6 +414,7 @@ egl::Error DisplayGLX::makeCurrent(egl::Display *display,
     {
         if (mGLX.makeCurrent(newDrawable, newContext) != True)
         {
+            printf("%s: call Failed\n", __func__);
             return egl::EglContextLost() << "Failed to make the GLX context current";
         }
         mCurrentNativeContexts[std::this_thread::get_id()] = newContext;

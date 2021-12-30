@@ -390,6 +390,8 @@ FramebufferState::FramebufferState(const Caps &caps, FramebufferID id, rx::Seria
       mSrgbWriteControlMode(SrgbWriteControlMode::Default)
 {
     ASSERT(mId != Framebuffer::kDefaultDrawFramebufferHandle);
+    printf("%s: db stats size %zu caps max draw buffers %u\n", __func__, mDrawBufferStates.size(),
+           caps.maxDrawBuffers);
     ASSERT(mDrawBufferStates.size() > 0);
     mDrawBufferStates[0] = GL_COLOR_ATTACHMENT0_EXT;
 }
