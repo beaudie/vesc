@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "a6c5cac7_cda03b1d",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 5
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2021-12-30T13:43:19Z",
+      "side": 1,
+      "message": "I don\u0027t know if you\u0027ll be able to implement the global lock this way. The crashing tests on Windows are most likely because of a race condition.",
+      "revId": "3b028f3b72c064600e5ffe0457f411d92de11a50",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
