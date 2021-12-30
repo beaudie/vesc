@@ -24,6 +24,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "04d1c327_57da7bb3",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 20
+      },
+      "lineNbr": 14,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2021-12-30T20:25:41Z",
+      "side": 1,
+      "message": "Correct.",
+      "parentUuid": "e87d0122_4f830e8c",
+      "range": {
+        "startLine": 12,
+        "startChar": 0,
+        "endLine": 14,
+        "endChar": 0
+      },
+      "revId": "6124525a5ecfe87c800cb95165713fbbb8f73ecf",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "2b16208c_edfc6a89",
@@ -47,6 +71,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "d7c81e88_b83196b8",
+        "filename": "src/libANGLE/renderer/vulkan/BufferVk.cpp",
+        "patchSetId": 20
+      },
+      "lineNbr": 61,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2021-12-30T20:25:41Z",
+      "side": 1,
+      "message": "I have removed this API and moved the code into initForVertexConversion() function.",
+      "parentUuid": "2b16208c_edfc6a89",
+      "range": {
+        "startLine": 61,
+        "startChar": 14,
+        "endLine": 61,
+        "endChar": 44
+      },
+      "revId": "6124525a5ecfe87c800cb95165713fbbb8f73ecf",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "8314d368_6a72b9a5",
@@ -60,6 +108,30 @@
       "writtenOn": "2021-12-29T15:22:25Z",
       "side": 1,
       "message": "same comment as below. it\u0027s hard to interpret true/false, but BufferVisibility::Host or BufferVisibility::Unspecified or whatever you choose should be clear in the calling context.",
+      "range": {
+        "startLine": 64,
+        "startChar": 45,
+        "endLine": 64,
+        "endChar": 61
+      },
+      "revId": "6124525a5ecfe87c800cb95165713fbbb8f73ecf",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "59587bdb_4d3c35de",
+        "filename": "src/libANGLE/renderer/vulkan/BufferVk.cpp",
+        "patchSetId": 20
+      },
+      "lineNbr": 64,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2021-12-30T20:25:41Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "8314d368_6a72b9a5",
       "range": {
         "startLine": 64,
         "startChar": 45,
@@ -125,6 +197,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "35cee6c1_448b4b4d",
+        "filename": "src/libANGLE/renderer/vulkan/BufferVk.h",
+        "patchSetId": 20
+      },
+      "lineNbr": 38,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2021-12-30T20:25:41Z",
+      "side": 1,
+      "message": "I did not remove the move capability. I think it is always like that. I think this is the same reason that DynamicBuffer class is using std::unique_ptr as well to keep array of free buffers and inflight buffers and mBuffer.\nhttps://source.chromium.org/chromium/chromium/src/+/main:third_party/angle/src/libANGLE/renderer/vulkan/vk_helpers.h;l\u003d183",
+      "parentUuid": "e08ee322_e4a93096",
+      "revId": "6124525a5ecfe87c800cb95165713fbbb8f73ecf",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "841a67c3_327cd330",
         "filename": "src/libANGLE/renderer/vulkan/RendererVk.h",
         "patchSetId": 20
@@ -136,6 +226,30 @@
       "writtenOn": "2021-12-29T15:22:25Z",
       "side": 1,
       "message": "nit: suggest we make it a policy to replace bool parameters with class enums.",
+      "range": {
+        "startLine": 518,
+        "startChar": 54,
+        "endLine": 518,
+        "endChar": 70
+      },
+      "revId": "6124525a5ecfe87c800cb95165713fbbb8f73ecf",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "0e5f7f5c_bfb6412b",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.h",
+        "patchSetId": 20
+      },
+      "lineNbr": 518,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2021-12-30T20:25:41Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "841a67c3_327cd330",
       "range": {
         "startLine": 518,
         "startChar": 54,
@@ -159,6 +273,30 @@
       "writtenOn": "2021-12-29T15:22:25Z",
       "side": 1,
       "message": "nit: ensure zero-init",
+      "range": {
+        "startLine": 618,
+        "startChar": 0,
+        "endLine": 621,
+        "endChar": 44
+      },
+      "revId": "6124525a5ecfe87c800cb95165713fbbb8f73ecf",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "df8c5712_e97af456",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.h",
+        "patchSetId": 20
+      },
+      "lineNbr": 621,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2021-12-30T20:25:41Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "3394760c_a92c2183",
       "range": {
         "startLine": 618,
         "startChar": 0,
@@ -206,6 +344,30 @@
       "side": 1,
       "message": "I don\u0027t think they need to. It is just what it is currently using and I am try not to change the memory property of the buffer in this CL for the risk mitigation. I  do plan to address this in a follow up CL. I am leaving this comment open until I create the follow up CL.",
       "parentUuid": "e6c8ea05_2bde25dc",
+      "range": {
+        "startLine": 170,
+        "startChar": 77,
+        "endLine": 170,
+        "endChar": 81
+      },
+      "revId": "6124525a5ecfe87c800cb95165713fbbb8f73ecf",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "d95a8010_0cad6376",
+        "filename": "src/libANGLE/renderer/vulkan/VertexArrayVk.cpp",
+        "patchSetId": 20
+      },
+      "lineNbr": 170,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2021-12-30T20:25:41Z",
+      "side": 1,
+      "message": "https://chromium-review.googlesource.com/c/angle/angle/+/3340553/8",
+      "parentUuid": "1f86aab2_a96c7b7e",
       "range": {
         "startLine": 170,
         "startChar": 77,
@@ -286,6 +448,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "419e2309_3f9c564b",
+        "filename": "src/libANGLE/renderer/vulkan/VertexArrayVk.cpp",
+        "patchSetId": 20
+      },
+      "lineNbr": 756,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2021-12-30T20:25:41Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "0708846f_af6f2005",
+      "revId": "6124525a5ecfe87c800cb95165713fbbb8f73ecf",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "8da1f769_5dc6fac0",
@@ -299,6 +479,30 @@
       "writtenOn": "2021-12-28T18:25:19Z",
       "side": 1,
       "message": "Can be \u00272\u0027?",
+      "range": {
+        "startLine": 3570,
+        "startChar": 37,
+        "endLine": 3570,
+        "endChar": 38
+      },
+      "revId": "6124525a5ecfe87c800cb95165713fbbb8f73ecf",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "d5009290_75787436",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 20
+      },
+      "lineNbr": 3570,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2021-12-30T20:25:41Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "8da1f769_5dc6fac0",
       "range": {
         "startLine": 3570,
         "startChar": 37,
@@ -332,6 +536,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "def47b00_a944e963",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 20
+      },
+      "lineNbr": 3608,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2021-12-30T20:25:41Z",
+      "side": 1,
+      "message": "This function is now removed.",
+      "parentUuid": "222301ba_2b7ff242",
+      "range": {
+        "startLine": 3608,
+        "startChar": 14,
+        "endLine": 3608,
+        "endChar": 44
+      },
+      "revId": "6124525a5ecfe87c800cb95165713fbbb8f73ecf",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "bf837e54_06cdb97c",
@@ -345,6 +573,30 @@
       "writtenOn": "2021-12-29T15:22:25Z",
       "side": 1,
       "message": "also for indirect buffers here",
+      "range": {
+        "startLine": 3705,
+        "startChar": 14,
+        "endLine": 3705,
+        "endChar": 44
+      },
+      "revId": "6124525a5ecfe87c800cb95165713fbbb8f73ecf",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "fb7f1a10_ede63430",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 20
+      },
+      "lineNbr": 3705,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2021-12-30T20:25:41Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "bf837e54_06cdb97c",
       "range": {
         "startLine": 3705,
         "startChar": 14,
@@ -408,6 +660,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "98a40514_ebe28209",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 20
+      },
+      "lineNbr": 3916,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2021-12-30T20:25:41Z",
+      "side": 1,
+      "message": "There was BufferHelper::init() already doing exact this - allocating the mBuffer object for BufferHelper. I am just expanding this for more APIs so that they all looks consistent.\n\nComment added.",
+      "parentUuid": "a096559e_e3b2de1c",
+      "revId": "6124525a5ecfe87c800cb95165713fbbb8f73ecf",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "eafa0678_2cc40517",
@@ -421,6 +691,30 @@
       "writtenOn": "2021-12-28T18:25:19Z",
       "side": 1,
       "message": "The names for these should have the \"Dynamic\" part removed, since they aren\u0027t DynamicBuffers anymore.   Adding \"Helper\" might be good too:\n\n    BufferHelper mIndexBufferHelper;\n    BufferHelper mIndirectBufferHelper;",
+      "range": {
+        "startLine": 2895,
+        "startChar": 0,
+        "endLine": 2896,
+        "endChar": 40
+      },
+      "revId": "6124525a5ecfe87c800cb95165713fbbb8f73ecf",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "c1e7fabd_63db2672",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.h",
+        "patchSetId": 20
+      },
+      "lineNbr": 2896,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2021-12-30T20:25:41Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "eafa0678_2cc40517",
       "range": {
         "startLine": 2895,
         "startChar": 0,
