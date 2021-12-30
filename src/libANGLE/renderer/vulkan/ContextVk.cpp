@@ -372,7 +372,7 @@ vk::ImageLayout GetImageReadLayout(TextureVk *textureVk,
 {
     vk::ImageHelper &image = textureVk->getImage();
 
-    if (textureVk->hasBeenBoundAsImage())
+    if (textureVk->hasBeenBoundAsImage() && executable->hasImages())
     {
         return pipelineType == PipelineType::Compute ? vk::ImageLayout::ComputeShaderWrite
                                                      : vk::ImageLayout::AllGraphicsShadersWrite;
@@ -4495,6 +4495,14 @@ angle::Result ContextVk::invalidateCurrentShaderResources(gl::Command command)
     if (hasUniformBuffers && command == gl::Command::Dispatch)
     {
         ANGLE_TRY(endRenderPassIfComputeReadAfterTransformFeedbackWrite());
+    }
+
+    // Take care of image write-after-read situation that require layout transition,
+    // by checking whether the images in compute program are used in the renderpass.
+    if (hasImages && command == gl::Command::Dispatch && renderPassUsesStorageResources())
+    {
+        ANGLE_TRY(
+            flushCommandsAndEndRenderPass(RenderPassClosureReason::ImageReadThenComputeWrite));
     }
 
     // If memory barrier has been issued but the command buffers haven't been flushed, make sure
