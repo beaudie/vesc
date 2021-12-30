@@ -1635,6 +1635,7 @@ ANGLE_INLINE angle::Result ContextVk::handleDirtyTexturesImpl(
     const gl::ProgramExecutable *executable = mState.getProgramExecutable();
     ASSERT(executable);
     const gl::ActiveTextureMask &activeTextures = executable->getActiveSamplersMask();
+    const bool executableHasImages              = executable->hasImages();
 
     for (size_t textureUnit : activeTextures)
     {
@@ -1674,8 +1675,10 @@ ANGLE_INLINE angle::Result ContextVk::handleDirtyTexturesImpl(
 
         // Select the appropriate vk::ImageLayout depending on whether the texture is also bound as
         // a GL image, and whether the program is a compute or graphics shader.
+        // We only assign the vkImage layout as writable when running GL executables
+        // that have Image Textures
         vk::ImageLayout textureLayout;
-        if (textureVk->hasBeenBoundAsImage())
+        if (textureVk->hasBeenBoundAsImage() && executable->hasImages())
         {
             textureLayout = pipelineType == PipelineType::Compute
                                 ? vk::ImageLayout::ComputeShaderWrite
