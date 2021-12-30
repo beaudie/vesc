@@ -41,6 +41,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "a415b875_55983cc7",
+        "filename": "src/libANGLE/renderer/vulkan/BufferVk.h",
+        "patchSetId": 21
+      },
+      "lineNbr": 218,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2021-12-30T20:23:50Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "03085daa_eeef8c38",
+      "range": {
+        "startLine": 218,
+        "startChar": 37,
+        "endLine": 218,
+        "endChar": 39
+      },
+      "revId": "8dd125148d32ef753ee7515c0b830348c73a6a23",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "02be6883_0754fc43",
@@ -54,6 +78,30 @@
       "writtenOn": "2021-12-29T15:11:18Z",
       "side": 1,
       "message": "what happens if this is zero? is that a fatal error? should this instead be a CHECK?",
+      "range": {
+        "startLine": 1473,
+        "startChar": 8,
+        "endLine": 1475,
+        "endChar": 5
+      },
+      "revId": "8dd125148d32ef753ee7515c0b830348c73a6a23",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "21b8f5aa_81b0df88",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.cpp",
+        "patchSetId": 21
+      },
+      "lineNbr": 1475,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2021-12-30T20:23:50Z",
+      "side": 1,
+      "message": "This really wont happen. I added this solely for the reason of making this whole code block nicely indented. Changed it to VK_CHECK.",
+      "parentUuid": "02be6883_0754fc43",
       "range": {
         "startLine": 1473,
         "startChar": 8,
@@ -83,6 +131,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "1586cece_4223df0c",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.cpp",
+        "patchSetId": 21
+      },
+      "lineNbr": 1503,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2021-12-30T20:23:50Z",
+      "side": 1,
+      "message": "There are benefit to use coherent or non-coherent for different usage patterns. See https://developer.arm.com/documentation/101897/0200/cpu-overheads/vulkan-cpu-memory-mapping for ARM\u0027s summary.",
+      "parentUuid": "d2a97b8c_1bc4909b",
+      "revId": "8dd125148d32ef753ee7515c0b830348c73a6a23",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "b71c2e01_e29afec5",
         "filename": "src/libANGLE/renderer/vulkan/RendererVk.h",
         "patchSetId": 21
@@ -94,6 +160,30 @@
       "writtenOn": "2021-12-29T15:11:18Z",
       "side": 1,
       "message": "nit: ensure zero-init.",
+      "range": {
+        "startLine": 607,
+        "startChar": 0,
+        "endLine": 611,
+        "endChar": 0
+      },
+      "revId": "8dd125148d32ef753ee7515c0b830348c73a6a23",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "233167d3_93b1a51c",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.h",
+        "patchSetId": 21
+      },
+      "lineNbr": 611,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2021-12-30T20:23:50Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "b71c2e01_e29afec5",
       "range": {
         "startLine": 607,
         "startChar": 0,
@@ -127,6 +217,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "06064b61_c0daa359",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 21
+      },
+      "lineNbr": 3809,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2021-12-30T20:23:50Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "72434ca9_6549c61a",
+      "range": {
+        "startLine": 3809,
+        "startChar": 14,
+        "endLine": 3809,
+        "endChar": 26
+      },
+      "revId": "8dd125148d32ef753ee7515c0b830348c73a6a23",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "2981e056_7a0abda0",
@@ -140,6 +254,30 @@
       "writtenOn": "2021-12-29T15:46:31Z",
       "side": 1,
       "message": "nit: redundant with \"again\"",
+      "range": {
+        "startLine": 3931,
+        "startChar": 7,
+        "endLine": 3931,
+        "endChar": 10
+      },
+      "revId": "8dd125148d32ef753ee7515c0b830348c73a6a23",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "da84f98c_4533f64b",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 21
+      },
+      "lineNbr": 3931,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2021-12-30T20:23:50Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "2981e056_7a0abda0",
       "range": {
         "startLine": 3931,
         "startChar": 7,
