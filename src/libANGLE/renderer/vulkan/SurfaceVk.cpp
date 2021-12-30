@@ -1391,6 +1391,28 @@ FramebufferImpl *WindowSurfaceVk::createDefaultFramebuffer(const gl::Context *co
     return FramebufferVk::CreateDefaultFBO(renderer, state, this);
 }
 
+egl::Error WindowSurfaceVk::prepareSwap(const gl::Context *context)
+{
+    DisplayVk *displayVk = vk::GetImpl(context->getDisplay());
+    angle::Result result = prepareSwapImpl(context);
+    return angle::ToEGL(result, displayVk, EGL_BAD_SURFACE);
+}
+
+angle::Result WindowSurfaceVk::prepareSwapImpl(const gl::Context *context)
+{
+    ANGLE_TRACE_EVENT0("gpu.angle", "WindowSurfaceVk::prepareSwap");
+    ContextVk *contextVk = vk::GetImpl(context);
+    if (mNeedToAcquireNextSwapchainImage)
+    {
+        // Acquire the next image (previously deferred). The image may not have been already
+        // acquired if there was no rendering done at all to the default framebuffer in this frame,
+        // for example if all rendering was done to FBOs.
+        ANGLE_VK_TRACE_EVENT_AND_MARKER(contextVk, "Acquire Swap Image Before Swap");
+        ANGLE_TRY(doDeferredAcquireNextImage(context, false));
+    }
+    return angle::Result::Continue;
+}
+
 egl::Error WindowSurfaceVk::swapWithDamage(const gl::Context *context,
                                            const EGLint *rects,
                                            EGLint n_rects)
@@ -1600,15 +1622,6 @@ angle::Result WindowSurfaceVk::swapImpl(const gl::Context *context,
     ANGLE_TRACE_EVENT0("gpu.angle", "WindowSurfaceVk::swapImpl");
 
     ContextVk *contextVk = vk::GetImpl(context);
-
-    if (mNeedToAcquireNextSwapchainImage)
-    {
-        // Acquire the next image (previously deferred). The image may not have been already
-        // acquired if there was no rendering done at all to the default framebuffer in this frame,
-        // for example if all rendering was done to FBOs.
-        ANGLE_VK_TRACE_EVENT_AND_MARKER(contextVk, "Acquire Swap Image Before Swap");
-        ANGLE_TRY(doDeferredAcquireNextImage(context, false));
-    }
 
     bool presentOutOfDate = false;
     ANGLE_TRY(present(contextVk, rects, n_rects, pNextChain, &presentOutOfDate));
