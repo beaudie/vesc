@@ -554,11 +554,13 @@ angle::Result ProgramPipeline::link(const Context *context)
         }
     }
 
-    // Merge UBOs, SSBOs, and atomic counters into the pipeline.
+    // Merge UBOs, SSBOs, and atomic counters into the pipeline. Also refresh sampler bindings.
+    mState.mExecutable->clearSamplerBindings();
     for (ShaderType shaderType : mState.mExecutable->getLinkedShaderStages())
     {
         const ProgramState &programState = mState.mPrograms[shaderType]->getState();
         mState.mExecutable->copyShaderBuffersFromProgram(programState);
+        mState.mExecutable->copySamplerBindingsFromProgram(programState);
     }
 
     if (mState.mExecutable->hasLinkedShaderStage(gl::ShaderType::Vertex) ||
@@ -697,7 +699,14 @@ void ProgramPipeline::onSubjectStateChange(angle::SubjectIndex index, angle::Sub
             onStateChange(angle::SubjectMessage::ProgramRelinked);
             break;
         case angle::SubjectMessage::SamplerUniformsUpdated:
-            mState.mExecutable->resetCachedValidateSamplersResult();
+            mState.mExecutable->clearSamplerBindings();
+            for (ShaderType shaderType : mState.mExecutable->getLinkedShaderStages())
+            {
+                const ProgramState &programState = mState.mPrograms[shaderType]->getState();
+                mState.mExecutable->copySamplerBindingsFromProgram(programState);
+            }
+            mState.mExecutable->mActiveSamplerRefCounts.fill(0);
+            mState.updateExecutableTextures();
             break;
         default:
             UNREACHABLE();
