@@ -1426,55 +1426,44 @@ bool ContextVk::renderPassUsesStorageResources() const
         }
     }
 
-    gl::ShaderMap<const gl::ProgramState *> programStates;
-    mExecutable->fillProgramStateMap(this, &programStates);
-
-    for (const gl::ShaderType shaderType : executable->getLinkedShaderStages())
+    // Storage buffers:
+    const std::vector<gl::InterfaceBlock> &blocks = executable->getShaderStorageBlocks();
+    for (uint32_t bufferIndex = 0; bufferIndex < blocks.size(); ++bufferIndex)
     {
-        const gl::ProgramState *programState = programStates[shaderType];
-        ASSERT(programState);
+        uint32_t binding = blocks[bufferIndex].binding;
+        const gl::OffsetBindingPointer<gl::Buffer> &bufferBinding =
+            mState.getIndexedShaderStorageBuffer(binding);
 
-        // Storage buffers:
-        const std::vector<gl::InterfaceBlock> &blocks = programState->getShaderStorageBlocks();
-
-        for (uint32_t bufferIndex = 0; bufferIndex < blocks.size(); ++bufferIndex)
+        if (bufferBinding.get() == nullptr)
         {
-            const gl::InterfaceBlock &block = blocks[bufferIndex];
-            const gl::OffsetBindingPointer<gl::Buffer> &bufferBinding =
-                mState.getIndexedShaderStorageBuffer(block.binding);
-
-            if (!block.isActive(shaderType) || bufferBinding.get() == nullptr)
-            {
-                continue;
-            }
-
-            vk::BufferHelper &buffer = vk::GetImpl(bufferBinding.get())->getBuffer();
-            if (mRenderPassCommands->usesBuffer(buffer))
-            {
-                return true;
-            }
+            continue;
         }
 
-        // Atomic counters:
-        const std::vector<gl::AtomicCounterBuffer> &atomicCounterBuffers =
-            programState->getAtomicCounterBuffers();
-
-        for (uint32_t bufferIndex = 0; bufferIndex < atomicCounterBuffers.size(); ++bufferIndex)
+        vk::BufferHelper &buffer = vk::GetImpl(bufferBinding.get())->getBuffer();
+        if (mRenderPassCommands->usesBuffer(buffer))
         {
-            uint32_t binding = atomicCounterBuffers[bufferIndex].binding;
-            const gl::OffsetBindingPointer<gl::Buffer> &bufferBinding =
-                mState.getIndexedAtomicCounterBuffer(binding);
+            return true;
+        }
+    }
 
-            if (bufferBinding.get() == nullptr)
-            {
-                continue;
-            }
+    // Atomic counters:
+    const std::vector<gl::AtomicCounterBuffer> &atomicCounterBuffers =
+        executable->getAtomicCounterBuffers();
+    for (uint32_t bufferIndex = 0; bufferIndex < atomicCounterBuffers.size(); ++bufferIndex)
+    {
+        uint32_t binding = atomicCounterBuffers[bufferIndex].binding;
+        const gl::OffsetBindingPointer<gl::Buffer> &bufferBinding =
+            mState.getIndexedAtomicCounterBuffer(binding);
 
-            vk::BufferHelper &buffer = vk::GetImpl(bufferBinding.get())->getBuffer();
-            if (mRenderPassCommands->usesBuffer(buffer))
-            {
-                return true;
-            }
+        if (bufferBinding.get() == nullptr)
+        {
+            continue;
+        }
+
+        vk::BufferHelper &buffer = vk::GetImpl(bufferBinding.get())->getBuffer();
+        if (mRenderPassCommands->usesBuffer(buffer))
+        {
+            return true;
         }
     }
 
@@ -1920,12 +1909,9 @@ void ContextVk::handleDirtyShaderBufferResourcesImpl(
     ASSERT(executable);
 
     // Process buffer barriers.
-    gl::ShaderMap<const gl::ProgramState *> programStates;
-    mExecutable->fillProgramStateMap(this, &programStates);
     for (const gl::ShaderType shaderType : executable->getLinkedShaderStages())
     {
-        const gl::ProgramState &programState        = *programStates[shaderType];
-        const std::vector<gl::InterfaceBlock> &ubos = programState.getUniformBlocks();
+        const std::vector<gl::InterfaceBlock> &ubos = executable->getUniformBlocks();
 
         for (const gl::InterfaceBlock &ubo : ubos)
         {
@@ -1949,7 +1935,7 @@ void ContextVk::handleDirtyShaderBufferResourcesImpl(
                                             vk::GetPipelineStage(shaderType), &bufferHelper);
         }
 
-        const std::vector<gl::InterfaceBlock> &ssbos = programState.getShaderStorageBlocks();
+        const std::vector<gl::InterfaceBlock> &ssbos = executable->getShaderStorageBlocks();
         for (const gl::InterfaceBlock &ssbo : ssbos)
         {
             const gl::OffsetBindingPointer<gl::Buffer> &bufferBinding =
@@ -1974,7 +1960,7 @@ void ContextVk::handleDirtyShaderBufferResourcesImpl(
                                              vk::AliasingMode::Allowed, &bufferHelper);
         }
 
-        const std::vector<gl::AtomicCounterBuffer> &acbs = programState.getAtomicCounterBuffers();
+        const std::vector<gl::AtomicCounterBuffer> &acbs = executable->getAtomicCounterBuffers();
         for (const gl::AtomicCounterBuffer &atomicCounterBuffer : acbs)
         {
             uint32_t binding = atomicCounterBuffer.binding;
@@ -6597,34 +6583,24 @@ angle::Result ContextVk::endRenderPassIfComputeReadAfterTransformFeedbackWrite()
     const gl::ProgramExecutable *executable = mState.getProgramExecutable();
     ASSERT(executable && executable->hasLinkedShaderStage(gl::ShaderType::Compute));
 
-    gl::ShaderMap<const gl::ProgramState *> programStates;
-    mExecutable->fillProgramStateMap(this, &programStates);
+    // Uniform buffers:
+    const std::vector<gl::InterfaceBlock> &blocks = executable->getUniformBlocks();
 
-    for (const gl::ShaderType shaderType : executable->getLinkedShaderStages())
+    for (uint32_t bufferIndex = 0; bufferIndex < blocks.size(); ++bufferIndex)
     {
-        const gl::ProgramState *programState = programStates[shaderType];
-        ASSERT(programState);
+        const gl::InterfaceBlock &block = blocks[bufferIndex];
+        const gl::OffsetBindingPointer<gl::Buffer> &bufferBinding =
+            mState.getIndexedUniformBuffer(block.binding);
 
-        // Uniform buffers:
-        const std::vector<gl::InterfaceBlock> &blocks = programState->getUniformBlocks();
-
-        for (uint32_t bufferIndex = 0; bufferIndex < blocks.size(); ++bufferIndex)
+        if (bufferBinding.get() == nullptr)
         {
-            const gl::InterfaceBlock &block = blocks[bufferIndex];
-            const gl::OffsetBindingPointer<gl::Buffer> &bufferBinding =
-                mState.getIndexedUniformBuffer(block.binding);
+            continue;
+        }
 
-            if (!block.isActive(shaderType) || bufferBinding.get() == nullptr)
-            {
-                continue;
-            }
-
-            vk::BufferHelper &buffer = vk::GetImpl(bufferBinding.get())->getBuffer();
-            if (mCurrentTransformFeedbackBuffers.contains(&buffer))
-            {
-                return flushCommandsAndEndRenderPass(
-                    RenderPassClosureReason::XfbWriteThenComputeRead);
-            }
+        vk::BufferHelper &buffer = vk::GetImpl(bufferBinding.get())->getBuffer();
+        if (mCurrentTransformFeedbackBuffers.contains(&buffer))
+        {
+            return flushCommandsAndEndRenderPass(RenderPassClosureReason::XfbWriteThenComputeRead);
         }
     }
 

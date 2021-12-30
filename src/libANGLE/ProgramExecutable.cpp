@@ -783,6 +783,12 @@ GLuint ProgramExecutable::getUniformIndexFromImageIndex(GLuint imageIndex) const
     return imageIndex + mImageUniformRange.low();
 }
 
+GLuint ProgramExecutable::getUniformIndexFromSamplerIndex(GLuint samplerIndex) const
+{
+    ASSERT(samplerIndex < mSamplerUniformRange.length());
+    return samplerIndex + mSamplerUniformRange.low();
+}
+
 void ProgramExecutable::updateActiveSamplers(const ProgramState &programState)
 {
     const std::vector<SamplerBinding> &samplerBindings = programState.getSamplerBindings();
@@ -1143,6 +1149,11 @@ void ProgramExecutable::gatherTransformFeedbackVaryings(
 
 void ProgramExecutable::updateTransformFeedbackStrides()
 {
+    if (mLinkedTransformFeedbackVaryings.empty())
+    {
+        return;
+    }
+
     if (mTransformFeedbackBufferMode == GL_INTERLEAVED_ATTRIBS)
     {
         mTransformFeedbackStrides.resize(1);
@@ -1636,5 +1647,16 @@ void ProgramExecutable::copyShaderBuffersFromProgram(const ProgramState &program
 
     const std::vector<AtomicCounterBuffer> &atomics = programState.getAtomicCounterBuffers();
     mAtomicCounterBuffers.insert(mAtomicCounterBuffers.end(), atomics.begin(), atomics.end());
+}
+
+void ProgramExecutable::clearSamplerBindings()
+{
+    mSamplerBindings.clear();
+}
+
+void ProgramExecutable::copySamplerBindingsFromProgram(const ProgramState &programState)
+{
+    const std::vector<SamplerBinding> &bindings = programState.getSamplerBindings();
+    mSamplerBindings.insert(mSamplerBindings.end(), bindings.begin(), bindings.end());
 }
 }  // namespace gl
