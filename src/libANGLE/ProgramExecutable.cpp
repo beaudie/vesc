@@ -783,6 +783,12 @@ GLuint ProgramExecutable::getUniformIndexFromImageIndex(GLuint imageIndex) const
     return imageIndex + mImageUniformRange.low();
 }
 
+GLuint ProgramExecutable::getUniformIndexFromSamplerIndex(GLuint samplerIndex) const
+{
+    ASSERT(samplerIndex < mSamplerUniformRange.length());
+    return samplerIndex + mSamplerUniformRange.low();
+}
+
 void ProgramExecutable::updateActiveSamplers(const ProgramState &programState)
 {
     const std::vector<SamplerBinding> &samplerBindings = programState.getSamplerBindings();
