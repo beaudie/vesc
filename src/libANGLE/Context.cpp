@@ -787,6 +787,8 @@ egl::Error Context::makeCurrent(egl::Display *display,
 
         mHasBeenCurrent = true;
     }
+    else
+    {}
 
     ANGLE_TRY(unsetDefaultFramebuffer());
 
