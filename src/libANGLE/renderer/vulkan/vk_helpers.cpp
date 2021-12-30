@@ -1131,11 +1131,13 @@ void CommandBufferHelperCommon::executeBarriers(const angle::FeaturesVk &feature
 void CommandBufferHelperCommon::imageReadImpl(ContextVk *contextVk,
                                               VkImageAspectFlags aspectFlags,
                                               ImageLayout imageLayout,
-                                              ImageHelper *image)
+                                              ImageHelper *image,
+                                              bool *needLayoutTransition)
 {
     if (image->isReadBarrierNecessary(imageLayout))
     {
         updateImageLayoutAndBarrier(contextVk, image, aspectFlags, imageLayout);
+        *needLayoutTransition = true;
     }
 }
 
@@ -1212,7 +1214,8 @@ void OutsideRenderPassCommandBufferHelper::imageRead(ContextVk *contextVk,
                                                      ImageLayout imageLayout,
                                                      ImageHelper *image)
 {
-    imageReadImpl(contextVk, aspectFlags, imageLayout, image);
+    bool needBarrier = false;
+    imageReadImpl(contextVk, aspectFlags, imageLayout, image, &needBarrier);
     image->retain(&contextVk->getResourceUseList());
 }
 
@@ -1319,6 +1322,7 @@ angle::Result RenderPassCommandBufferHelper::reset(Context *context)
     mDepthInvalidateArea               = gl::Rectangle();
     mStencilInvalidateArea             = gl::Rectangle();
     mRenderPassUsedImages.clear();
+    mRenderPassReadImagesWithLayoutTransition.clear();
     mDepthStencilImage        = nullptr;
     mDepthStencilResolveImage = nullptr;
     mColorImages.reset();
@@ -1340,7 +1344,14 @@ void RenderPassCommandBufferHelper::imageRead(ContextVk *contextVk,
                                               ImageLayout imageLayout,
                                               ImageHelper *image)
 {
-    imageReadImpl(contextVk, aspectFlags, imageLayout, image);
+    bool needLayoutTransition = false;
+    imageReadImpl(contextVk, aspectFlags, imageLayout, image, &needLayoutTransition);
+    if (needLayoutTransition)
+    {
+        mRenderPassReadImagesWithLayoutTransition.insert(image->getImageSerial().getValue());
+    }
+    // track the image's read operation in renderpass
+    image->setRenderPassUsageFlag(vk::RenderPassUsage::ReadOperation);
 
     // As noted in the header we don't support multiple read layouts for Images.
     // We allow duplicate uses in the RP to accommodate for normal GL sampler usage.
@@ -1370,8 +1381,9 @@ void RenderPassCommandBufferHelper::imageWrite(ContextVk *contextVk,
     }
     if (!usesImage(*image))
     {
-        mRenderPassUsedImages.insert(image->getImageSerial());
+        mRenderPassUsedImages.insert(image->getImageSerial().getValue());
     }
+    image->clearRenderPassUsageFlag(vk::RenderPassUsage::ReadOperation);
 }
 
 void RenderPassCommandBufferHelper::colorImagesDraw(ResourceUseList *resourceUseList,
@@ -3676,7 +3688,7 @@ angle::Result LineLoopHelper::streamIndicesIndirect(ContextVk *contextVk,
         // If primitive restart, new index buffer is 135% the size of the original index buffer. The
         // smallest lineloop with primitive restart is 3 indices (point 1, point 2 and restart
         // value) when converted to linelist becomes 4 vertices. Expansion of 4/3. Any larger
-        // lineloops would have less overhead and require less extra space. Any incomplete
+        // lineloops would have less ovehead and require less extra space. Any incomplete
         // primitives can be dropped or left incomplete and thus not increase the size of the
         // destination index buffer. Since we don't know the number of indices being used we'll use
         // the size of the index buffer as allocated as the index count.
