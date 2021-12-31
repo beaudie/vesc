@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "824a2f79_d03ca2f9",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 6573,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2021-12-31T21:06:08Z",
+      "side": 1,
+      "message": "nit: cache in local var",
+      "range": {
+        "startLine": 6573,
+        "startChar": 8,
+        "endLine": 6573,
+        "endChar": 64
+      },
+      "revId": "b725245a8502089fb5b3a8c8d3063008a65e96e9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
