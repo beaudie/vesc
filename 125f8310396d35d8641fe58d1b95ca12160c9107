@@ -16,6 +16,23 @@
       "message": "LGTM - we should switch white box tests to use expectations so you don\u0027t need a second review.",
       "revId": "125f8310396d35d8641fe58d1b95ca12160c9107",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "7b1363de_6417f332",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1001921
+      },
+      "writtenOn": "2022-01-02T22:49:44Z",
+      "side": 1,
+      "message": "Yeah.\nThanks!",
+      "revId": "125f8310396d35d8641fe58d1b95ca12160c9107",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
