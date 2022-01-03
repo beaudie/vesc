@@ -501,6 +501,65 @@ TEST_P(BlitFramebufferANGLETest, BlitColorWithFlip)
     EXPECT_PIXEL_COLOR_EQ(3 * getWindowWidth() / 4, 3 * getWindowHeight() / 4, GLColor::yellow);
 }
 
+// Blit color to/from default framebuffer with GL_MESA_framebuffer_flip_y.
+TEST_P(BlitFramebufferANGLETest, BlitColorWithMesaYFlip)
+{
+    // OpenGL ES 3.0 / GL_NV_framebuffer_blit required for flip.
+    ANGLE_SKIP_TEST_IF(
+        (getClientMajorVersion() < 3 && !IsGLExtensionEnabled("GL_NV_framebuffer_blit")) ||
+        !IsGLExtensionEnabled("GL_MESA_framebuffer_flip_y"));
+
+    glBindFramebuffer(GL_FRAMEBUFFER, mUserFBO);
+
+    glFramebufferParameteriMESA(GL_FRAMEBUFFER, GL_FRAMEBUFFER_FLIP_Y_MESA, 1);
+
+    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);
+
+    drawQuad(mCheckerProgram, essl1_shaders::PositionAttrib(), 0.8f);
+
+    EXPECT_GL_NO_ERROR();
+
+    // Blit to default from y-flipped.
+    glBindFramebuffer(GL_READ_FRAMEBUFFER_ANGLE, mUserFBO);
+    glBindFramebuffer(GL_DRAW_FRAMEBUFFER_ANGLE, mOriginalFBO);
+
+    glBlitFramebuffer(0, 0, getWindowWidth(), getWindowHeight(), 0, 0, getWindowWidth(),
+                      getWindowHeight(), GL_COLOR_BUFFER_BIT, GL_NEAREST);
+
+    EXPECT_GL_NO_ERROR();
+
+    EXPECT_PIXEL_COLOR_EQ(getWindowWidth() / 4, getWindowHeight() / 4, GLColor::red);
+    EXPECT_PIXEL_COLOR_EQ(getWindowWidth() / 4, 3 * getWindowHeight() / 4, GLColor::green);
+    EXPECT_PIXEL_COLOR_EQ(3 * getWindowWidth() / 4, getWindowHeight() / 4, GLColor::blue);
+    EXPECT_PIXEL_COLOR_EQ(3 * getWindowWidth() / 4, 3 * getWindowHeight() / 4, GLColor::yellow);
+
+    glBindFramebuffer(GL_FRAMEBUFFER, mOriginalFBO);
+
+    // Blit from y-flipped to default.
+    glBindFramebuffer(GL_READ_FRAMEBUFFER_ANGLE, mOriginalFBO);
+    glBindFramebuffer(GL_DRAW_FRAMEBUFFER_ANGLE, mUserFBO);
+
+    // Set y-flip flag so that y-flipped frame buffer blit to the original fbo in reverse. This
+    // should result in flipping y back.
+    glFramebufferParameteriMESA(GL_DRAW_FRAMEBUFFER_ANGLE, GL_FRAMEBUFFER_FLIP_Y_MESA, 1);
+
+    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);
+    glBlitFramebuffer(0, 0, getWindowWidth(), getWindowHeight(), 0, 0, getWindowWidth(),
+                      getWindowHeight(), GL_COLOR_BUFFER_BIT, GL_NEAREST);
+
+    // And explicitly disable y-flip so that read does not implicitly use this flag.
+    glFramebufferParameteriMESA(GL_DRAW_FRAMEBUFFER_ANGLE, GL_FRAMEBUFFER_FLIP_Y_MESA, 0);
+
+    EXPECT_GL_NO_ERROR();
+
+    glBindFramebuffer(GL_FRAMEBUFFER, mUserFBO);
+
+    EXPECT_PIXEL_COLOR_EQ(getWindowWidth() / 4, getWindowHeight() / 4, GLColor::green);
+    EXPECT_PIXEL_COLOR_EQ(getWindowWidth() / 4, 3 * getWindowHeight() / 4, GLColor::red);
+    EXPECT_PIXEL_COLOR_EQ(3 * getWindowWidth() / 4, getWindowHeight() / 4, GLColor::yellow);
+    EXPECT_PIXEL_COLOR_EQ(3 * getWindowWidth() / 4, 3 * getWindowHeight() / 4, GLColor::blue);
+}
+
 // Draw to system framebuffer, blit whole-buffer color to user-created framebuffer.
 TEST_P(BlitFramebufferANGLETest, ReverseColorBlit)
 {
@@ -928,6 +987,73 @@ TEST_P(BlitFramebufferANGLETest, BlitStencil)
     ANGLE_SKIP_TEST_IF(IsAMD() && IsD3D9());
 
     glBindFramebuffer(GL_FRAMEBUFFER, mUserFBO);
+
+    glClearColor(0.0, 1.0, 0.0, 1.0);
+    glClearStencil(0x0);
+    glClear(GL_COLOR_BUFFER_BIT | GL_STENCIL_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+
+    // Scissor half the screen so we fill the stencil only halfway
+    glScissor(0, 0, getWindowWidth(), getWindowHeight() / 2);
+    glEnable(GL_SCISSOR_TEST);
+
+    // fill the stencil buffer with 0x1
+    glStencilFunc(GL_ALWAYS, 0x1, 0xFF);
+    glStencilOp(GL_REPLACE, GL_REPLACE, GL_REPLACE);
+    glEnable(GL_STENCIL_TEST);
+    drawQuad(mRedProgram, essl1_shaders::PositionAttrib(), 0.3f);
+
+    glDisable(GL_SCISSOR_TEST);
+
+    glBindFramebuffer(GL_DRAW_FRAMEBUFFER_ANGLE, mOriginalFBO);
+    glBindFramebuffer(GL_READ_FRAMEBUFFER_ANGLE, mUserFBO);
+
+    // These clears are not useful in theory because we're copying over them, but its
+    // helpful in debugging if we see white in any result.
+    glClearColor(1.0, 1.0, 1.0, 1.0);
+    glClearStencil(0x0);
+    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);
+
+    // depth blit request should be silently ignored, because the read FBO has no depth attachment
+    glBlitFramebufferANGLE(0, 0, getWindowWidth(), getWindowHeight(), 0, 0, getWindowWidth(),
+                           getWindowHeight(), GL_COLOR_BUFFER_BIT | GL_STENCIL_BUFFER_BIT,
+                           GL_NEAREST);
+
+    EXPECT_GL_NO_ERROR();
+
+    glBindFramebuffer(GL_FRAMEBUFFER, mOriginalFBO);
+
+    EXPECT_PIXEL_COLOR_EQ(getWindowWidth() / 4, getWindowHeight() / 4, GLColor::red);
+    EXPECT_PIXEL_COLOR_EQ(getWindowWidth() / 4, 3 * getWindowHeight() / 4, GLColor::green);
+    EXPECT_PIXEL_COLOR_EQ(3 * getWindowWidth() / 4, getWindowHeight() / 4, GLColor::red);
+    EXPECT_PIXEL_COLOR_EQ(3 * getWindowWidth() / 4, 3 * getWindowHeight() / 4, GLColor::green);
+
+    glStencilFunc(GL_EQUAL, 0x1, 0xFF);  // only pass if stencil buffer at pixel reads 0x1
+
+    drawQuad(mBlueProgram, essl1_shaders::PositionAttrib(),
+             0.8f);  // blue quad will draw if stencil buffer was copied
+
+    glDisable(GL_STENCIL_TEST);
+
+    EXPECT_PIXEL_COLOR_EQ(getWindowWidth() / 4, getWindowHeight() / 4, GLColor::blue);
+    EXPECT_PIXEL_COLOR_EQ(getWindowWidth() / 4, 3 * getWindowHeight() / 4, GLColor::green);
+    EXPECT_PIXEL_COLOR_EQ(3 * getWindowWidth() / 4, getWindowHeight() / 4, GLColor::blue);
+    EXPECT_PIXEL_COLOR_EQ(3 * getWindowWidth() / 4, 3 * getWindowHeight() / 4, GLColor::green);
+}
+
+TEST_P(BlitFramebufferANGLETest, BlitStencilWithMesaYFlip)
+{
+    ANGLE_SKIP_TEST_IF(!IsGLExtensionEnabled("GL_ANGLE_framebuffer_blit") ||
+                       !IsGLExtensionEnabled("GL_MESA_framebuffer_flip_y"));
+
+    // http://anglebug.com/2205
+    ANGLE_SKIP_TEST_IF(IsIntel() && IsD3D9());
+
+    // http://anglebug.com/5396
+    ANGLE_SKIP_TEST_IF(IsAMD() && IsD3D9());
+
+    glBindFramebuffer(GL_FRAMEBUFFER, mUserFBO);
+
+    glFramebufferParameteriMESA(GL_FRAMEBUFFER, GL_FRAMEBUFFER_FLIP_Y_MESA, 1);
 
     glClearColor(0.0, 1.0, 0.0, 1.0);
     glClearStencil(0x0);
@@ -2560,6 +2686,60 @@ TEST_P(BlitFramebufferTest, BlitDepthStencilPixelByPixel)
     GLFramebuffer srcFramebuffer;
     GLRenderbuffer srcRenderbuffer;
     glBindFramebuffer(GL_FRAMEBUFFER, srcFramebuffer);
+    glBindRenderbuffer(GL_RENDERBUFFER, srcRenderbuffer);
+    glRenderbufferStorage(GL_RENDERBUFFER, GL_DEPTH24_STENCIL8, 128, 1);
+    glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_DEPTH_STENCIL_ATTACHMENT, GL_RENDERBUFFER,
+                              srcRenderbuffer);
+    glClearDepthf(1.0f);
+    glClear(GL_DEPTH_BUFFER_BIT);
+
+    drawQuad(drawRed, essl1_shaders::PositionAttrib(), 0.0f, 0.5f);
+    glViewport(0, 0, 256, 2);
+
+    GLFramebuffer dstFramebuffer;
+    GLRenderbuffer dstRenderbuffer;
+    glBindFramebuffer(GL_DRAW_FRAMEBUFFER, dstFramebuffer);
+    glBindRenderbuffer(GL_RENDERBUFFER, dstRenderbuffer);
+    glRenderbufferStorage(GL_RENDERBUFFER, GL_DEPTH24_STENCIL8, 256, 2);
+    glFramebufferRenderbuffer(GL_DRAW_FRAMEBUFFER, GL_DEPTH_STENCIL_ATTACHMENT, GL_RENDERBUFFER,
+                              dstRenderbuffer);
+
+    GLTexture dstColor;
+    glBindTexture(GL_TEXTURE_2D, dstColor);
+    glTexStorage2D(GL_TEXTURE_2D, 1, GL_RGBA8, 256, 2);
+    glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, dstColor, 0);
+
+    glBindFramebuffer(GL_READ_FRAMEBUFFER, srcFramebuffer);
+    glBlitFramebuffer(0, 0, 128, 1, 0, 0, 256, 2, GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT,
+                      GL_NEAREST);
+
+    glBindFramebuffer(GL_FRAMEBUFFER, dstFramebuffer);
+    glClearColor(0.0f, 1.0f, 0.0f, 1.0f);
+    glClear(GL_COLOR_BUFFER_BIT);
+    glDepthMask(false);
+    glDepthFunc(GL_LESS);
+    drawQuad(drawRed, essl1_shaders::PositionAttrib(), -0.01f, 0.5f);
+    EXPECT_PIXEL_RECT_EQ(64, 0, 128, 1, GLColor::red);
+
+    ANGLE_GL_PROGRAM(drawBlue, essl3_shaders::vs::Simple(), essl3_shaders::fs::Blue());
+    glEnable(GL_DEPTH_TEST);
+    glDepthMask(false);
+    glDepthFunc(GL_GREATER);
+    drawQuad(drawBlue, essl1_shaders::PositionAttrib(), 0.01f, 0.5f);
+    EXPECT_PIXEL_RECT_EQ(64, 0, 128, 1, GLColor::blue);
+}
+
+TEST_P(BlitFramebufferTest, BlitDepthStencilPixelByPixelMesaYFlip)
+{
+    ANGLE_GL_PROGRAM(drawRed, essl3_shaders::vs::Simple(), essl3_shaders::fs::Red());
+
+    glViewport(0, 0, 128, 1);
+    glEnable(GL_DEPTH_TEST);
+
+    GLFramebuffer srcFramebuffer;
+    GLRenderbuffer srcRenderbuffer;
+    glBindFramebuffer(GL_FRAMEBUFFER, srcFramebuffer);
+    glFramebufferParameteriMESA(GL_FRAMEBUFFER, GL_FRAMEBUFFER_FLIP_Y_MESA, 1);
     glBindRenderbuffer(GL_RENDERBUFFER, srcRenderbuffer);
     glRenderbufferStorage(GL_RENDERBUFFER, GL_DEPTH24_STENCIL8, 128, 1);
     glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_DEPTH_STENCIL_ATTACHMENT, GL_RENDERBUFFER,

@@ -223,6 +223,57 @@ TEST_P(CopyTexImageTest, RGBAToRGB)
     runCopyTexImageTest(GL_RGB, expected);
 }
 
+TEST_P(CopyTexImageTest, CopyTexImageMesaYFlip)
+{
+    ANGLE_SKIP_TEST_IF(!IsGLExtensionEnabled("GL_MESA_framebuffer_flip_y"));
+
+    initializeResources(GL_RGBA, GL_UNSIGNED_BYTE);
+
+    glViewport(0, 0, kFboSizes[0], kFboSizes[0]);
+    glBindFramebuffer(GL_FRAMEBUFFER, mFbos[0]);
+
+    glFramebufferParameteriMESA(GL_FRAMEBUFFER, GL_FRAMEBUFFER_FLIP_Y_MESA, 1);
+
+    ANGLE_GL_PROGRAM(checkerProgram, essl1_shaders::vs::Passthrough(),
+                     essl1_shaders::fs::Checkered());
+    drawQuad(checkerProgram.get(), essl1_shaders::PositionAttrib(), 0.5f);
+    EXPECT_GL_NO_ERROR();
+
+    // Verify the fbo.
+    EXPECT_PIXEL_COLOR_EQ(0, 0, GLColor::red);
+    EXPECT_PIXEL_COLOR_EQ(0, kFboSizes[0] - 1, GLColor::green);
+    EXPECT_PIXEL_COLOR_EQ(kFboSizes[0] - 1, 0, GLColor::blue);
+    EXPECT_PIXEL_COLOR_EQ(kFboSizes[0] - 1, kFboSizes[0] - 1, GLColor::yellow);
+
+    GLTexture tex;
+    glBindTexture(GL_TEXTURE_2D, tex);
+
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+
+    glBindFramebuffer(GL_FRAMEBUFFER, mFbos[0]);
+    // Disable y-flip so that glCopyTexImage2D doesn't implicitly use that. We expect colors to be
+    // y-flipped.
+    glFramebufferParameteriMESA(GL_FRAMEBUFFER, GL_FRAMEBUFFER_FLIP_Y_MESA, 0);
+    glCopyTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, 0, 0, kFboSizes[0], kFboSizes[0], 0);
+    ASSERT_GL_NO_ERROR();
+
+    glBindFramebuffer(GL_FRAMEBUFFER, 0);
+
+    // Draw a quad with the target texture
+    glUseProgram(mTextureProgram);
+    glBindTexture(GL_TEXTURE_2D, tex);
+    glUniform1i(mTextureUniformLocation, 0);
+
+    drawQuad(mTextureProgram, essl1_shaders::PositionAttrib(), 0.5f);
+
+    // Expect that the rendered quad has the same colors as the source texture.
+    EXPECT_PIXEL_COLOR_EQ(0, 0, GLColor::green);
+    EXPECT_PIXEL_COLOR_EQ(0, kFboSizes[0] - 1, GLColor::red);
+    EXPECT_PIXEL_COLOR_EQ(kFboSizes[0] - 1, 0, GLColor::yellow);
+    EXPECT_PIXEL_COLOR_EQ(kFboSizes[0] - 1, kFboSizes[0] - 1, GLColor::blue);
+}
+
 TEST_P(CopyTexImageTest, RGBAToL)
 {
     GLubyte expected[3][4] = {
