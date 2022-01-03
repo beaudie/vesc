@@ -16,6 +16,91 @@
       "message": "Shahbaz Youssefi, you mentioned we need the following tests -\n\nThe drawing tests are all over the place, any would do. Can use the essl1_shaders::fs::Checkered() shader to make sure flip is working.\nThe blit/resolve stuff can be found in BlitFramebufferANGLETest.cpp\nThe copy tex image stuff can be found in CopyTexImageTest.cpp",
       "revId": "5cab72f2f1ea5a850cee63b926b8e201cb34ea98",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "5f16e541_5976efa6",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-01-03T20:19:19Z",
+      "side": 1,
+      "message": "Thanks for adding tests, I know I\u0027m asking for many, but they are much needed and very much appreciated :)",
+      "revId": "5cab72f2f1ea5a850cee63b926b8e201cb34ea98",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "78bc7130_f10f6b83",
+        "filename": "src/tests/gl_tests/BlitFramebufferANGLETest.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 523,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-01-03T20:19:19Z",
+      "side": 1,
+      "message": "See comment in FramebufferTest.cpp. If you make a standalone basic flipped-draw test, this section of the test becomes unnecessary (since it\u0027s not testing flipped blits)",
+      "revId": "5cab72f2f1ea5a850cee63b926b8e201cb34ea98",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "355ad583_2a328919",
+        "filename": "src/tests/gl_tests/BlitFramebufferANGLETest.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 552,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-01-03T20:19:19Z",
+      "side": 1,
+      "message": "Suggestions:\n\n- Please add three variants; src is flipped, dst is flipped and both are flipped,\n- Make the fbos have different sizes,\n- And do partial blits (see comment in FramebufferTest.cpp)",
+      "revId": "5cab72f2f1ea5a850cee63b926b8e201cb34ea98",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b6fdf123_2a0f51b3",
+        "filename": "src/tests/gl_tests/FramebufferTest.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 1935,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-01-03T20:19:19Z",
+      "side": 1,
+      "message": "I suggest making a test just up to this part; i.e. basic test drawing to flipped fbo.",
+      "revId": "5cab72f2f1ea5a850cee63b926b8e201cb34ea98",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "6b068e28_1bf4fdc3",
+        "filename": "src/tests/gl_tests/FramebufferTest.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 1948,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-01-03T20:19:19Z",
+      "side": 1,
+      "message": "For this test, I suggest four variants:\n\n- Draw flipped, resolve with read fbo flipped\n- Draw non-flipped, resolve with read fbo flipped\n- Draw non-flipped, resolve with draw fbo flipped\n- Draw non-flipped, resolve with both read and draw fbos flipped\n\nThe first one could exercise a resolve-through-subpass optimization in Vulkan (so it\u0027s a special and different test from the others). The others make sure resolve works with either src or dst flipped.\n\n---\n\nAlso, could you please make sure the blits are not full-size? That makes sure any CPU-side math handles the y-flip correctly when calculating the y offsets.",
+      "revId": "5cab72f2f1ea5a850cee63b926b8e201cb34ea98",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }

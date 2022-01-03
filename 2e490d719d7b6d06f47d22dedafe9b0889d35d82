@@ -16,6 +16,24 @@
       "message": "Shahbaz Youssefi, you mentioned we need the following tests (copying these requirements from https://chromium-review.googlesource.com/c/angle/angle/+/3329603/4..11/src/tests/gl_tests/FramebufferTest.cpp#b3691 -\n\n  - The drawing tests are all over the place, any would do. Can use the essl1_shaders::fs::Checkered() shader to make sure flip is working.\n  - The blit/resolve stuff can be found in BlitFramebufferANGLETest.cpp\n  - The copy tex image stuff can be found in CopyTexImageTest.cpp\n  - glCopyTextureCHROMIUM and glCopySubTextureCHROMIUM (see tests in CopyTextureTest.cpp)\n  - Also to make sure sub-copy offsets are adjusted correctly, need to test glCopyTexSubImage too.\n\nIn this CL, I added tests to BlitFramebufferANGLETest that exercise blit with y-flip flag set. Also, I added one test to FramebufferTest_ES31 to test drawing with further multisampling and y-flip flag (I hope this suits into the requirement for drawing test).\n\nBut I have doubts about other tests in with glCopyTexImage, glCopyTexSubImage, glCopyTextureCHROMIUM, and glCopySubTextureCHROMIUM. Can you suggest any particular tests that I can reuse? For example, I tried to reuse the CopyTexImageTest.RGBAToRGB (see RGBAToRGBWithMesaFlipY in this CL) test and kept the same expected result as the original test, but applied the y-flip flag.... And the test passed. I thought it should fail when the result is verified.",
       "revId": "2e490d719d7b6d06f47d22dedafe9b0889d35d82",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "4fe525bb_fd982e9d",
+        "filename": "src/tests/gl_tests/BlitFramebufferANGLETest.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 505,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-01-03T20:19:19Z",
+      "side": 1,
+      "message": "For the copy tests, you are on the right track. Unfortunately the tests are terrible in that they have the fbos cleared to uniform colors so flipped or not the copy result is the same.\n\nYou\u0027d need to add a checkered draw after initializeResources (and add helpers that check for those colors instead of the existing helpers).\n\n---\n\nAnd for blit, please don\u0027t forget about integer and depth/stencil too, they are often neglected and end up being buggy.",
+      "parentUuid": "21e16a82_61546f35",
+      "revId": "2e490d719d7b6d06f47d22dedafe9b0889d35d82",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
