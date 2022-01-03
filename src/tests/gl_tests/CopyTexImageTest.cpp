@@ -90,7 +90,7 @@ class CopyTexImageTest : public ANGLETest
         EXPECT_PIXEL_NEAR((xs + xe) / 2, (ys + ye) / 2, data[0], data[1], data[2], data[3], 1.0);
     }
 
-    void runCopyTexImageTest(GLenum format, GLubyte expected[3][4])
+    void runCopyTexImageTest(GLenum format, GLubyte expected[3][4], bool mesa_flip_y = false)
     {
         GLTexture tex;
         glBindTexture(GL_TEXTURE_2D, tex);
@@ -109,8 +109,14 @@ class CopyTexImageTest : public ANGLETest
         {
             glBindFramebuffer(GL_FRAMEBUFFER, mFbos[i]);
 
+            if (mesa_flip_y)
+                glFramebufferParameteriMESA(GL_FRAMEBUFFER, GL_FRAMEBUFFER_FLIP_Y_MESA, 1);
+
             glCopyTexImage2D(GL_TEXTURE_2D, 0, format, 0, 0, kFboSizes[i], kFboSizes[i], 0);
             ASSERT_GL_NO_ERROR();
+
+            if (mesa_flip_y)
+                glFramebufferParameteriMESA(GL_FRAMEBUFFER, GL_FRAMEBUFFER_FLIP_Y_MESA, 0);
 
             verifyResults(tex, expected[i], kFboSizes[i], 0, 0, kFboSizes[i], kFboSizes[i]);
         }
@@ -221,6 +227,20 @@ TEST_P(CopyTexImageTest, RGBAToRGB)
 
     initializeResources(GL_RGBA, GL_UNSIGNED_BYTE);
     runCopyTexImageTest(GL_RGB, expected);
+}
+
+TEST_P(CopyTexImageTest, RGBAToRGBWithMesaFlipY)
+{
+    ANGLE_SKIP_TEST_IF(!IsGLExtensionEnabled("GL_MESA_framebuffer_flip_y"));
+
+    GLubyte expected[3][4] = {
+        {64, 255, 191, 255},
+        {255, 191, 127, 255},
+        {127, 64, 255, 255},
+    };
+
+    initializeResources(GL_RGBA, GL_UNSIGNED_BYTE);
+    runCopyTexImageTest(GL_RGB, expected, true);
 }
 
 TEST_P(CopyTexImageTest, RGBAToL)
