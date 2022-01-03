@@ -149,6 +149,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "0a7f784c_25ef6620",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.cpp",
+        "patchSetId": 21
+      },
+      "lineNbr": 1503,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-01-03T16:11:16Z",
+      "side": 1,
+      "message": "From what I understand from that document, it\u0027s cached vs non-cached (not coherent vs non-coherent) that makes the significant difference. On newer hardware, ARM seems to recommend coherent always:\n\n\u003e Cached, coherent memory is preferred over the Cached, incoherent memory type when available.\n\nShouldn\u0027t these pools be \"non-cached + coherent\" and \"cached + preferably coherent if possible\" instead?",
+      "parentUuid": "1586cece_4223df0c",
+      "revId": "8dd125148d32ef753ee7515c0b830348c73a6a23",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "b71c2e01_e29afec5",
         "filename": "src/libANGLE/renderer/vulkan/RendererVk.h",
         "patchSetId": 21
