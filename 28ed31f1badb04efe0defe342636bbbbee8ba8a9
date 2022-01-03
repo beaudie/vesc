@@ -1,0 +1,96 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "27fbdecc_a930b5c5",
+        "filename": "src/libANGLE/renderer/d3d/d3d11/renderer11_utils.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 1675,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-01-03T17:24:20Z",
+      "side": 1,
+      "message": "true",
+      "range": {
+        "startLine": 1675,
+        "startChar": 43,
+        "endLine": 1675,
+        "endChar": 48
+      },
+      "revId": "28ed31f1badb04efe0defe342636bbbbee8ba8a9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "f57832f2_940658b1",
+        "filename": "src/libANGLE/renderer/d3d/d3d9/renderer9_utils.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 686,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-01-03T17:24:20Z",
+      "side": 1,
+      "message": "true",
+      "range": {
+        "startLine": 686,
+        "startChar": 43,
+        "endLine": 686,
+        "endChar": 48
+      },
+      "revId": "28ed31f1badb04efe0defe342636bbbbee8ba8a9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "76bac4af_918216dc",
+        "filename": "src/libANGLE/renderer/gl/renderergl_utils.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 1804,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-01-03T17:24:20Z",
+      "side": 1,
+      "message": "Maybe true for now?\n\n@kbr @geofflang to be tested. I suspect it\u0027s better to turn this off in the GL backend, given that the GL driver could do threaded compilation too if it\u0027s worth it, but you never know.",
+      "range": {
+        "startLine": 1804,
+        "startChar": 43,
+        "endLine": 1804,
+        "endChar": 48
+      },
+      "revId": "28ed31f1badb04efe0defe342636bbbbee8ba8a9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "33b1e98d_68732c67",
+        "filename": "src/libANGLE/renderer/metal/DisplayMtl.mm",
+        "patchSetId": 3
+      },
+      "lineNbr": 482,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-01-03T17:24:20Z",
+      "side": 1,
+      "message": "true\n\n@kbr @gman to be tested. Since metal is generating text, it likely suffers from the same slow downs as the d3d backend",
+      "range": {
+        "startLine": 482,
+        "startChar": 49,
+        "endLine": 482,
+        "endChar": 54
+      },
+      "revId": "28ed31f1badb04efe0defe342636bbbbee8ba8a9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
