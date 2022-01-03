@@ -18,6 +18,23 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "f981673f_49f991ac",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 21
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-01-03T16:35:01Z",
+      "side": 1,
+      "message": "It\u0027d be great if you could do a presentation and go over all the changes + how we use VMA now!\n\nI have a question regarding that. Is the VMA algorithm used here the kind that fills in holes, or is it the one similar to DynamicBuffer? Because if it\u0027s the latter, allocation all conversion buffers from the same pool could lead to a lot of wasted memory.",
+      "revId": "c3676e305031aa2a00222ab4515139c26fbec878",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "d14dc8af_85e3678a",
