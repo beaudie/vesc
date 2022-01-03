@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "31297a64_7dc34d28",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1228974
+      },
+      "writtenOn": "2022-01-03T13:05:29Z",
+      "side": 1,
+      "message": "Shahbaz Youssefi, you mentioned we need the following tests -\n\nThe drawing tests are all over the place, any would do. Can use the essl1_shaders::fs::Checkered() shader to make sure flip is working.\nThe blit/resolve stuff can be found in BlitFramebufferANGLETest.cpp\nThe copy tex image stuff can be found in CopyTexImageTest.cpp",
+      "revId": "5cab72f2f1ea5a850cee63b926b8e201cb34ea98",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
