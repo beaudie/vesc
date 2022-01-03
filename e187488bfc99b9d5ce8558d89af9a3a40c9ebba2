@@ -1,0 +1,96 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "d5c31003_1bb473ba",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 20
+      },
+      "lineNbr": 4667,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-01-03T16:59:06Z",
+      "side": 1,
+      "message": "This name is no longer representative (because mStagingBuffer is removed).\n\nActually what\u0027s the point of this function removing only staged buffer updates but not others? I think this should just be turned into `releaseStagedUpdates` and remove all updates.\n\nCurrent code is probably a relic from the time we only had buffer updates. In many places, this is called right after releasing the image, so a good clean up would also be to just make it called automatically from `releaseImage()` and `releaseImageFromShareContexts()`",
+      "range": {
+        "startLine": 4667,
+        "startChar": 18,
+        "endLine": 4667,
+        "endChar": 38
+      },
+      "revId": "e187488bfc99b9d5ce8558d89af9a3a40c9ebba2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "f09c801a_4df8a461",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.h",
+        "patchSetId": 20
+      },
+      "lineNbr": 2092,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-01-03T16:59:06Z",
+      "side": 1,
+      "message": "nit: redundant with the type (removing this would also be consistent with the image variant of this).",
+      "range": {
+        "startLine": 2092,
+        "startChar": 52,
+        "endLine": 2092,
+        "endChar": 62
+      },
+      "revId": "e187488bfc99b9d5ce8558d89af9a3a40c9ebba2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "a5bf68d2_dbb5c48c",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.h",
+        "patchSetId": 20
+      },
+      "lineNbr": 2128,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-01-03T16:59:06Z",
+      "side": 1,
+      "message": "nit: You could call this: `refCounted` which then reads like `update.refCounted.buffer`\n\nOr just drop it and use `update.image` and `update.buffer`.",
+      "range": {
+        "startLine": 2128,
+        "startChar": 10,
+        "endLine": 2128,
+        "endChar": 26
+      },
+      "revId": "e187488bfc99b9d5ce8558d89af9a3a40c9ebba2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "11711a36_f2d68c43",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.h",
+        "patchSetId": 20
+      },
+      "lineNbr": 2204,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-01-03T16:59:06Z",
+      "side": 1,
+      "message": "super nit: C",
+      "range": {
+        "startLine": 2204,
+        "startChar": 37,
+        "endLine": 2204,
+        "endChar": 38
+      },
+      "revId": "e187488bfc99b9d5ce8558d89af9a3a40c9ebba2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
