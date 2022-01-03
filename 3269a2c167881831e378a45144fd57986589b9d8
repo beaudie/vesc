@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "6ad2ed8f_1a89bde5",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 7
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-01-03T17:26:50Z",
+      "side": 1,
+      "message": "Same question as the vertex conversion change, are the holes left from this filled by VMA?",
+      "revId": "3269a2c167881831e378a45144fd57986589b9d8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
