@@ -16,6 +16,29 @@
       "message": "Nice",
       "revId": "7f8d5de627d01157ef1e0a0bbddacd8eaf02c10c",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "76b01f9b_6df350a2",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 13
+      },
+      "lineNbr": 3945,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2022-01-04T19:31:42Z",
+      "side": 1,
+      "message": "Do we want to wait for the previous operation to finish?   Or can we gain some parallelism by allocating a new buffer?",
+      "range": {
+        "startLine": 3940,
+        "startChar": 0,
+        "endLine": 3945,
+        "endChar": 13
+      },
+      "revId": "7f8d5de627d01157ef1e0a0bbddacd8eaf02c10c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
