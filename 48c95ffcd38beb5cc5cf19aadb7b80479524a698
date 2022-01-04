@@ -20,6 +20,23 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "fb43e745_b3794c85",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 3820,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-01-04T19:54:56Z",
+      "side": 1,
+      "message": "Missing a call to the move assignment of the parent class (*Resource)",
+      "revId": "48c95ffcd38beb5cc5cf19aadb7b80479524a698",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "c2e99340_204965f9",
         "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
         "patchSetId": 1
