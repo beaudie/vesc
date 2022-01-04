@@ -65,6 +65,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "f1d08702_c992e1f7",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 20
+      },
+      "lineNbr": 4667,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2022-01-04T22:44:54Z",
+      "side": 1,
+      "message": "https://chromium-review.googlesource.com/c/angle/angle/+/3367078.\n\nThe thing I worried is some edge cases that when a texture gets redefined, is it okay to lose staged update? But lets deal with that in the separate CL (see the above link).",
+      "parentUuid": "4d929b1b_768cdcb4",
+      "range": {
+        "startLine": 4667,
+        "startChar": 18,
+        "endLine": 4667,
+        "endChar": 38
+      },
+      "revId": "e187488bfc99b9d5ce8558d89af9a3a40c9ebba2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "f09c801a_4df8a461",
