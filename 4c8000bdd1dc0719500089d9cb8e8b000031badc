@@ -163,6 +163,23 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "186db55c_e4c09454",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2022-01-04T21:40:57Z",
+      "side": 1,
+      "message": "I think the better fix is to change \"hasBeenBoundAsImage\" to \"isBoundAsImage\". My reading is that right now a texture is marked as hasBeenBoundAsImage once it been used as image and will stay true forever. If you change mHasBeenBoundAsImage from boolean to int32_t and increment when it is used as image and decrement when it unbound, (you can do all this in the State::setImageUnit function), then  hasBeenBoundAsImage() will return true only when it is currently bound to any image unit, and you can rename it to isBoundAsImage to reflect exact what it is tracking.",
+      "revId": "4c8000bdd1dc0719500089d9cb8e8b000031badc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "eb9c607e_9492cdf4",
         "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
         "patchSetId": 4
