@@ -3,6 +3,29 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "e7ea4233_33672eda",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 4
+      },
+      "lineNbr": 10,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-01-04T18:31:37Z",
+      "side": 1,
+      "message": "typo: no",
+      "range": {
+        "startLine": 10,
+        "startChar": 33,
+        "endLine": 10,
+        "endChar": 36
+      },
+      "revId": "4c8000bdd1dc0719500089d9cb8e8b000031badc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "13b234a0_c12818cf",
         "filename": "/COMMIT_MSG",
         "patchSetId": 4
@@ -121,6 +144,23 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "70ab2c67_262def2c",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-01-04T18:31:37Z",
+      "side": 1,
+      "message": "Nice and easy fix, but looks like there\u0027s a bug when switching between compute and graphics (see bot failures) that needs to be sorted out first.",
+      "revId": "4c8000bdd1dc0719500089d9cb8e8b000031badc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "eb9c607e_9492cdf4",
@@ -139,6 +179,52 @@
         "startChar": 15,
         "endLine": 1638,
         "endChar": 48
+      },
+      "revId": "4c8000bdd1dc0719500089d9cb8e8b000031badc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "1bc60b66_cb6e7a50",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 1678,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-01-04T18:31:37Z",
+      "side": 1,
+      "message": "This should be unnecessary. If it _is_, then there\u0027s a bug because compute is not taken into account.",
+      "range": {
+        "startLine": 1678,
+        "startChar": 40,
+        "endLine": 1678,
+        "endChar": 83
+      },
+      "revId": "4c8000bdd1dc0719500089d9cb8e8b000031badc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "0235f448_30dc4240",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 1689,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-01-04T18:31:37Z",
+      "side": 1,
+      "message": "You can simplify the logic here as such:\n\n    if (hasBeenBoundAsImage \u0026\u0026 hasImages)\n    {\n        ... ShaderWrite ...\n    }\n    else\n    {\n        ...\n    }",
+      "range": {
+        "startLine": 1680,
+        "startChar": 0,
+        "endLine": 1689,
+        "endChar": 72
       },
       "revId": "4c8000bdd1dc0719500089d9cb8e8b000031badc",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
