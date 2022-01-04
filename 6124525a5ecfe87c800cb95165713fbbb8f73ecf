@@ -215,6 +215,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "89f95b33_2a743f1b",
+        "filename": "src/libANGLE/renderer/vulkan/BufferVk.h",
+        "patchSetId": 20
+      },
+      "lineNbr": 38,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2022-01-04T15:04:48Z",
+      "side": 1,
+      "message": "Well, the cost of std::move should be pretty minimal (a small memcpy), it removes an indirection, it\u0027s cleaner code (no need for the template class, it matches the prior code, and it matches more of the rest of ANGLE. The other instance of unique_ptr was great because it matched the code better.",
+      "parentUuid": "35cee6c1_448b4b4d",
+      "revId": "6124525a5ecfe87c800cb95165713fbbb8f73ecf",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "841a67c3_327cd330",
         "filename": "src/libANGLE/renderer/vulkan/RendererVk.h",
         "patchSetId": 20
