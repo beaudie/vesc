@@ -1,0 +1,44 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "272fcbc5_56454df9",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2022-01-04T19:33:06Z",
+      "side": 1,
+      "message": "LGTM ty",
+      "revId": "48c95ffcd38beb5cc5cf19aadb7b80479524a698",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "c2e99340_204965f9",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 3836,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2022-01-04T19:33:06Z",
+      "side": 1,
+      "message": "nit: you could make a helper for this and use it in the constructor.",
+      "range": {
+        "startLine": 3830,
+        "startChar": 0,
+        "endLine": 3836,
+        "endChar": 52
+      },
+      "revId": "48c95ffcd38beb5cc5cf19aadb7b80479524a698",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
