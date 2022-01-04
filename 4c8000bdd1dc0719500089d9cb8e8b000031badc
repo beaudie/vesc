@@ -1,6 +1,75 @@
 {
   "comments": [
     {
+      "unresolved": true,
+      "key": {
+        "uuid": "13b234a0_c12818cf",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 4
+      },
+      "lineNbr": 11,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2022-01-04T15:17:44Z",
+      "side": 1,
+      "message": "nit: vertex/tess/geom for clarity",
+      "range": {
+        "startLine": 11,
+        "startChar": 63,
+        "endLine": 11,
+        "endChar": 68
+      },
+      "revId": "4c8000bdd1dc0719500089d9cb8e8b000031badc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "9901615e_dd31e15e",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 4
+      },
+      "lineNbr": 11,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2022-01-04T15:17:44Z",
+      "side": 1,
+      "message": "nit: fragment",
+      "range": {
+        "startLine": 11,
+        "startChar": 0,
+        "endLine": 11,
+        "endChar": 10
+      },
+      "revId": "4c8000bdd1dc0719500089d9cb8e8b000031badc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "21703422_12bca57e",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 4
+      },
+      "lineNbr": 13,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2022-01-04T15:17:44Z",
+      "side": 1,
+      "message": "wording suggestion: If we only assign the vkImage layout as writable when running GL executables that have Image Textures, we can specify more precise read-only barriers when running read-only GL executables.",
+      "range": {
+        "startLine": 12,
+        "startChar": 0,
+        "endLine": 13,
+        "endChar": 52
+      },
+      "revId": "4c8000bdd1dc0719500089d9cb8e8b000031badc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": false,
       "key": {
         "uuid": "58c69a4d_15afc3db",
@@ -14,6 +83,46 @@
       "writtenOn": "2022-01-04T09:10:36Z",
       "side": 1,
       "message": "Hi Shahbaz,\nI have a new commit to be under review, but I can\u0027t find any button to do DRY RUN before it. Do you know the reason? thanks.",
+      "revId": "4c8000bdd1dc0719500089d9cb8e8b000031badc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "03693711_098d2b7a",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2022-01-04T15:17:44Z",
+      "side": 1,
+      "message": "Nice fix, thanks for the contribution. Shabi or Charlie want to give the second review?",
+      "revId": "4c8000bdd1dc0719500089d9cb8e8b000031badc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "eb9c607e_9492cdf4",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 1638,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2022-01-04T15:17:44Z",
+      "side": 1,
+      "message": "nit: executableHasImages for clarity",
+      "range": {
+        "startLine": 1638,
+        "startChar": 15,
+        "endLine": 1638,
+        "endChar": 48
+      },
       "revId": "4c8000bdd1dc0719500089d9cb8e8b000031badc",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
