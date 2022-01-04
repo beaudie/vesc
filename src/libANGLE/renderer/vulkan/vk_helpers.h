@@ -847,6 +847,8 @@ class BufferHelper : public ReadWriteResource
     BufferHelper();
     ~BufferHelper() override;
 
+    BufferHelper &operator=(BufferHelper &&other);
+
     angle::Result init(ContextVk *contextVk,
                        const VkBufferCreateInfo &createInfo,
                        VkMemoryPropertyFlags memoryPropertyFlags);
@@ -928,6 +930,7 @@ class BufferHelper : public ReadWriteResource
     angle::Result initializeNonZeroMemory(Context *context,
                                           VkBufferUsageFlags usage,
                                           VkDeviceSize size);
+    void resetBarrierTracker();
 
     // For external memory only
     BufferMemory mMemory;

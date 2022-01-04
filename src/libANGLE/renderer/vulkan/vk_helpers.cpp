@@ -3807,15 +3807,39 @@ void PipelineBarrier::addDiagnosticsString(std::ostringstream &out) const
 
 // BufferHelper implementation.
 BufferHelper::BufferHelper()
-    : mCurrentQueueFamilyIndex(std::numeric_limits<uint32_t>::max()),
-      mCurrentWriteAccess(0),
-      mCurrentReadAccess(0),
-      mCurrentWriteStages(0),
-      mCurrentReadStages(0),
-      mSerial()
-{}
+{
+    resetBarrierTracker();
+}
 
 BufferHelper::~BufferHelper() = default;
+
+ANGLE_INLINE void BufferHelper::resetBarrierTracker()
+{
+    mCurrentQueueFamilyIndex = std::numeric_limits<uint32_t>::max();
+    mCurrentWriteAccess      = 0;
+    mCurrentReadAccess       = 0;
+    mCurrentWriteStages      = 0;
+    mCurrentReadStages       = 0;
+    mSerial                  = BufferSerial();
+}
+
+BufferHelper &BufferHelper::operator=(BufferHelper &&other)
+{
+    ReadWriteResource::operator=(std::move(other));
+
+    mMemory                  = std::move(other.mMemory);
+    mSubAllocation           = std::move(other.mSubAllocation);
+    mCurrentQueueFamilyIndex = other.mCurrentQueueFamilyIndex;
+    mCurrentWriteAccess      = other.mCurrentWriteAccess;
+    mCurrentReadAccess       = other.mCurrentReadAccess;
+    mCurrentWriteStages      = other.mCurrentWriteStages;
+    mCurrentReadStages       = other.mCurrentReadStages;
+    mSerial                  = other.mSerial;
+
+    other.resetBarrierTracker();
+
+    return *this;
+}
 
 angle::Result BufferHelper::init(ContextVk *contextVk,
                                  const VkBufferCreateInfo &requestedCreateInfo,
