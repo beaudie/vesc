@@ -104,6 +104,23 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "0f013fed_663264b9",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2022-01-04T15:32:17Z",
+      "side": 1,
+      "message": "Looks like we have a bug:\n\n[ RUN      ] ComputeShaderTest.DispatchDrawDrawDispatch/ES3_1_Vulkan_SwiftShader\n../../src/tests/test_utils/ANGLETest.cpp:64: Failure\nRendererVk.cpp:649 (DebugUtilsMessenger): [ VUID-VkImageMemoryBarrier-oldLayout-01197 ] Validation Error: [ VUID-VkImageMemoryBarrier-oldLayout-01197 ] Object 0: handle \u003d 0x564e4d1d0310, type \u003d VK_OBJECT_TYPE_COMMAND_BUFFER; | MessageID \u003d 0x124ffb34 | vkCmdPipelineBarrier(): .pImageMemoryBarriers[0] VkImage 0x3120000000312[] cannot transition the layout of aspect\u003d1 level\u003d0 layer\u003d0 from VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL when the previous known layout is VK_IMAGE_LAYOUT_GENERAL. The Vulkan spec states: If srcQueueFamilyIndex and dstQueueFamilyIndex define a queue family ownership transfer or oldLayout and newLayout define an image layout transition, oldLayout must be VK_IMAGE_LAYOUT_UNDEFINED or the current layout of the image subresources affected by the barrier (https://www.khronos.org/registry/vulkan/specs/1.2-extensions/html/vkspec.html#VUID-VkImageMemoryBarrier-oldLayout-01197)\n                            Object: 0x564e4d1d0310 (type \u003d Command Buffer(6))\n",
+      "revId": "4c8000bdd1dc0719500089d9cb8e8b000031badc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "eb9c607e_9492cdf4",
