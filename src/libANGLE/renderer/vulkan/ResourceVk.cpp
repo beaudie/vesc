@@ -93,14 +93,22 @@ ReadWriteResource::ReadWriteResource()
 
 ReadWriteResource::ReadWriteResource(ReadWriteResource &&other) : ReadWriteResource()
 {
-    mReadOnlyUse  = std::move(other.mReadOnlyUse);
-    mReadWriteUse = std::move(other.mReadWriteUse);
+    *this = std::move(other);
 }
 
 ReadWriteResource::~ReadWriteResource()
 {
     mReadOnlyUse.release();
     mReadWriteUse.release();
+}
+
+ReadWriteResource &ReadWriteResource::operator=(ReadWriteResource &&other)
+{
+    mReadOnlyUse  = std::move(other.mReadOnlyUse);
+    mReadWriteUse = std::move(other.mReadWriteUse);
+    other.mReadOnlyUse.init();
+    other.mReadWriteUse.init();
+    return *this;
 }
 
 angle::Result ReadWriteResource::finishRunningCommands(ContextVk *contextVk)

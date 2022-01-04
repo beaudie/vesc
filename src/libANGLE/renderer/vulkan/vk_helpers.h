@@ -847,6 +847,8 @@ class BufferHelper : public ReadWriteResource
     BufferHelper();
     ~BufferHelper() override;
 
+    BufferHelper &operator=(BufferHelper &&other);
+
     angle::Result init(ContextVk *contextVk,
                        const VkBufferCreateInfo &createInfo,
                        VkMemoryPropertyFlags memoryPropertyFlags);

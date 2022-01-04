@@ -3817,6 +3817,23 @@ BufferHelper::BufferHelper()
 
 BufferHelper::~BufferHelper() = default;
 
+BufferHelper &BufferHelper::operator=(BufferHelper &&other)
+{
+    ReadWriteResource::operator=(std::move(other));
+
+    mMemory        = std::move(other.mMemory);
+    mSubAllocation = std::move(other.mSubAllocation);
+
+    mCurrentQueueFamilyIndex = other.mCurrentQueueFamilyIndex;
+    mCurrentWriteAccess      = other.mCurrentWriteAccess;
+    mCurrentReadAccess       = other.mCurrentReadAccess;
+    mCurrentWriteStages      = other.mCurrentWriteStages;
+    mCurrentReadStages       = other.mCurrentReadStages;
+    mSerial                  = other.mSerial;
+
+    return *this;
+}
+
 angle::Result BufferHelper::init(ContextVk *contextVk,
                                  const VkBufferCreateInfo &requestedCreateInfo,
                                  VkMemoryPropertyFlags memoryPropertyFlags)
