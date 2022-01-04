@@ -35,6 +35,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "e8ad9780_f6323107",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 21
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2022-01-04T21:48:13Z",
+      "side": 1,
+      "message": "No, right now it is using the \"General\" allocation algorithm, which does fill in  holes. Once all the work is done, I could expand the documentation to have more details or a presentation if needed.",
+      "parentUuid": "f981673f_49f991ac",
+      "revId": "c3676e305031aa2a00222ab4515139c26fbec878",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "d14dc8af_85e3678a",
