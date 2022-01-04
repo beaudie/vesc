@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "3aa60a6d_2fcc6178",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2022-01-04T17:42:36Z",
+      "side": 1,
+      "message": "Looking for a stamp. Tested compile manually. See fix in diff b/w ps1/2.",
+      "revId": "a6db792d336be18c25a894cc55e40fe6c48e607c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
