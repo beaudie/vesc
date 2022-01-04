@@ -1548,6 +1548,13 @@ angle::Result Framebuffer::invalidate(const Context *context,
     // can be no-ops, so we should probably do that to ensure consistency.
     // TODO(jmadill): WebGL behaviour, and robust resource init behaviour without WebGL.
 
+    for (size_t i = 0; i < count; ++i)
+    {
+        const FramebufferAttachment *attachment = getAttachment(context, attachments[i]);
+        if (attachment)
+            attachment->setInitState(InitState::Initialized);
+    }
+
     return mImpl->invalidate(context, count, attachments);
 }
 
