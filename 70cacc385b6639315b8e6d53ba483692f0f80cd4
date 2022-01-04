@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "cc431128_d0647c7d",
+        "filename": "scripts/roll_aosp.sh",
+        "patchSetId": 1
+      },
+      "lineNbr": 155,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2022-01-04T15:58:24Z",
+      "side": 1,
+      "message": "Can you still loop over third_party_deps and do the find on those directories?  We only want embed those submodules.",
+      "range": {
+        "startLine": 155,
+        "startChar": 0,
+        "endLine": 155,
+        "endChar": 66
+      },
+      "revId": "70cacc385b6639315b8e6d53ba483692f0f80cd4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "965bc49d_5a079ff3",
+        "filename": "scripts/roll_aosp.sh",
+        "patchSetId": 1
+      },
+      "lineNbr": 181,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2022-01-04T15:58:24Z",
+      "side": 1,
+      "message": "The real issue is that git add will add submodules (they\u0027re somehow different than checkouts?) and there doesn\u0027t appear to be a flag to remove that. It\u0027s adding all the third party deps we meant to skip.\n\nI\u0027m worried we have to do something like find all remaining submodules (.git files?) in third_party and delete the parent directories before the git add.",
+      "range": {
+        "startLine": 181,
+        "startChar": 0,
+        "endLine": 181,
+        "endChar": 26
+      },
+      "revId": "70cacc385b6639315b8e6d53ba483692f0f80cd4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
