@@ -18,6 +18,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "495c71cc_5b57504d",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-01-04T20:48:20Z",
+      "side": 1,
+      "message": "The templates are necessary for this: https://chromium-review.googlesource.com/c/angle/angle/+/3346341",
+      "parentUuid": "3b702d81_9b7308e0",
+      "revId": "0d1003e2d35c7f5cfe15adc4bb7bdb4ce5714d37",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "4563f954_825f5cb4",
@@ -31,6 +49,30 @@
       "writtenOn": "2021-12-29T15:37:28Z",
       "side": 1,
       "message": "nit: I\u0027d call this a release action, so releaseCommandBuffers.. etc as then it clarifies that it mutates the return value.",
+      "range": {
+        "startLine": 137,
+        "startChar": 33,
+        "endLine": 137,
+        "endChar": 57
+      },
+      "revId": "0d1003e2d35c7f5cfe15adc4bb7bdb4ce5714d37",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "d9c246ac_f96e24d1",
+        "filename": "src/libANGLE/renderer/vulkan/CommandProcessor.h",
+        "patchSetId": 4
+      },
+      "lineNbr": 137,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-01-04T20:48:20Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "4563f954_825f5cb4",
       "range": {
         "startLine": 137,
         "startChar": 33,
@@ -64,6 +106,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "11bfc1c7_43a4952a",
+        "filename": "src/libANGLE/renderer/vulkan/ProgramExecutableVk.h",
+        "patchSetId": 4
+      },
+      "lineNbr": 179,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-01-04T20:48:20Z",
+      "side": 1,
+      "message": "https://chromium-review.googlesource.com/c/angle/angle/+/3346341\n\nAlso, what \"base class\"? See Ref.",
+      "parentUuid": "f56b0359_2151abf3",
+      "range": {
+        "startLine": 176,
+        "startChar": 0,
+        "endLine": 179,
+        "endChar": 66
+      },
+      "revId": "0d1003e2d35c7f5cfe15adc4bb7bdb4ce5714d37",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "07407f4d_4ea4b967",
@@ -77,6 +143,30 @@
       "writtenOn": "2021-12-29T15:37:28Z",
       "side": 1,
       "message": "same questions here",
+      "range": {
+        "startLine": 545,
+        "startChar": 0,
+        "endLine": 550,
+        "endChar": 75
+      },
+      "revId": "0d1003e2d35c7f5cfe15adc4bb7bdb4ce5714d37",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "2ee9ef22_b47b8b72",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.h",
+        "patchSetId": 4
+      },
+      "lineNbr": 550,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-01-04T20:48:20Z",
+      "side": 1,
+      "message": "same answer",
+      "parentUuid": "07407f4d_4ea4b967",
       "range": {
         "startLine": 545,
         "startChar": 0,
@@ -110,6 +200,53 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "e4cf8f72_5dc45215",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.h",
+        "patchSetId": 4
+      },
+      "lineNbr": 1075,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-01-04T20:48:20Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "87f872e3_ed6f1bcf",
+      "range": {
+        "startLine": 1074,
+        "startChar": 0,
+        "endLine": 1075,
+        "endChar": 33
+      },
+      "revId": "0d1003e2d35c7f5cfe15adc4bb7bdb4ce5714d37",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "be9ff792_c8846ad0",
+        "filename": "src/libANGLE/renderer/vulkan/vk_utils.h",
+        "patchSetId": 4
+      },
+      "lineNbr": 209,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-01-04T20:48:20Z",
+      "side": 1,
+      "message": "Ref. I could add a generic `vk::CommandBuffer` back here and remove the templates, but the follow up change would remove it and revert back to templates. Worth it?",
+      "range": {
+        "startLine": 205,
+        "startChar": 0,
+        "endLine": 209,
+        "endChar": 76
+      },
+      "revId": "0d1003e2d35c7f5cfe15adc4bb7bdb4ce5714d37",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "126023c8_af43339f",
@@ -135,6 +272,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "a77bb7ef_768ce1d1",
+        "filename": "src/libANGLE/renderer/vulkan/vk_utils.h",
+        "patchSetId": 4
+      },
+      "lineNbr": 212,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-01-04T20:48:20Z",
+      "side": 1,
+      "message": "What does the implementation detail (storage type) matter to the reader? It\u0027s a list of command buffers to release. Whether they are stored in one or two vectors, a std::list, a crazy tree or any other form is irrelevant to the reader IMO.\n\nAlso, prior examples of std::vectors being called lists:\n\n    typedef std::vector\u003cGLuint\u003e HandleList\n    std::vector\u003cHandleRange\u003e mUnallocatedList\n    std::vector\u003cGLuint\u003e mReleasedList\n    std::vector\u003cVariableLocation\u003e \u0026locationList\n    std::vector\u003cLinkedUniform\u003e *uniformList\n    std::vector\u003cEGLint\u003e mConfigAttribList\n    std::vector\u003cvk::ResourceUseList\u003e mResourceUseLists\n    std::vector\u003cCommandBufferHelperT *\u003e *freeList\n    std::vector\u003cCommandBufferHelperT *\u003e mCommandBufferHelperFreeList\n    std::vector\u003cT\u003e mObjectFreeList",
+      "parentUuid": "126023c8_af43339f",
+      "range": {
+        "startLine": 212,
+        "startChar": 7,
+        "endLine": 212,
+        "endChar": 33
+      },
+      "revId": "0d1003e2d35c7f5cfe15adc4bb7bdb4ce5714d37",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "06c92325_8e834e7e",
         "filename": "src/libANGLE/renderer/vulkan/vk_utils.h",
         "patchSetId": 4
@@ -146,6 +307,30 @@
       "writtenOn": "2021-12-29T15:37:28Z",
       "side": 1,
       "message": "nit: I\u0027d also pluralize this for the same reason.",
+      "range": {
+        "startLine": 218,
+        "startChar": 7,
+        "endLine": 218,
+        "endChar": 27
+      },
+      "revId": "0d1003e2d35c7f5cfe15adc4bb7bdb4ce5714d37",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "d744615c_48130908",
+        "filename": "src/libANGLE/renderer/vulkan/vk_utils.h",
+        "patchSetId": 4
+      },
+      "lineNbr": 218,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-01-04T20:48:20Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "06c92325_8e834e7e",
       "range": {
         "startLine": 218,
         "startChar": 7,
