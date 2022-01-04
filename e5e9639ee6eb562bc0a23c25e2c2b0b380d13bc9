@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "bd5fdd80_67845f11",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 8
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2022-01-04T18:33:43Z",
+      "side": 1,
+      "message": "I\u0027m going to swap myself with Geoff, since he\u0027s much more of an expert in this area than I am.",
+      "revId": "e5e9639ee6eb562bc0a23c25e2c2b0b380d13bc9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
