@@ -63,6 +63,30 @@
       },
       "revId": "7f8d5de627d01157ef1e0a0bbddacd8eaf02c10c",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "f650e24b_ce73c5cd",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 13
+      },
+      "lineNbr": 3945,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2022-01-04T21:56:22Z",
+      "side": 1,
+      "message": "\u003e If you meant parallelism on the GPU because then we don\u0027t need a barrier; I\u0027d say \"don\u0027t in the absence of evidence it helps\".\n\nYeah, GPU parallelism is what I was referring to.\n\n\u003e I\u0027d say \"don\u0027t in the absence of evidence it helps\".\n\nAck.",
+      "parentUuid": "95136284_ecd59f1f",
+      "range": {
+        "startLine": 3940,
+        "startChar": 0,
+        "endLine": 3945,
+        "endChar": 13
+      },
+      "revId": "7f8d5de627d01157ef1e0a0bbddacd8eaf02c10c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
