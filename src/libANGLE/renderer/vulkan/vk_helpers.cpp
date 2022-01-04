@@ -3817,6 +3817,16 @@ BufferHelper::BufferHelper()
 
 BufferHelper::~BufferHelper() = default;
 
+BufferHelper &BufferHelper::operator=(BufferHelper &&other)
+{
+    ReadWriteResource::operator=(std::move(other));
+
+    mMemory        = std::move(other.mMemory);
+    mSubAllocation = std::move(other.mSubAllocation);
+
+    return *this;
+}
+
 angle::Result BufferHelper::init(ContextVk *contextVk,
                                  const VkBufferCreateInfo &requestedCreateInfo,
                                  VkMemoryPropertyFlags memoryPropertyFlags)
