@@ -103,6 +103,13 @@ ReadWriteResource::~ReadWriteResource()
     mReadWriteUse.release();
 }
 
+ReadWriteResource &ReadWriteResource::operator=(ReadWriteResource &&other)
+{
+    std::swap(mReadOnlyUse, other.mReadOnlyUse);
+    std::swap(mReadWriteUse, other.mReadWriteUse);
+    return *this;
+}
+
 angle::Result ReadWriteResource::finishRunningCommands(ContextVk *contextVk)
 {
     ASSERT(!mReadOnlyUse.usedInRecordedCommands());
