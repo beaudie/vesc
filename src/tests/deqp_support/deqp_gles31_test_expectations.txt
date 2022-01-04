@@ -17,6 +17,9 @@
 // Times out shader compilation because it uses so many resources.
 3445 : dEQP-GLES31.functional.ssbo.layout.random.all_shared_buffer.48 = SKIP
 
+// Slow tests.
+6021 : dEQP-GLES31.functional.ssbo.layout.random.all_shared_buffer.36 = TIMEOUT
+
 // D3D11 Failing Tests
 // Below cases are failed due to binding multi-UAVs to a single buffer is not supported in D3D backend.
 // http://anglebug.com/3032
@@ -85,7 +88,10 @@
 4234 D3D11 : dEQP-GLES31.functional.debug.negative_coverage.callbacks.compute.program_not_active = SKIP
 4234 OPENGL : dEQP-GLES31.functional.debug.negative_coverage.callbacks.compute.program_not_active = SKIP
 
-// OPENGL Failing Tests
+// OpenGL Passing tests.
+3584 OPENGL : dEQP-GLES31.functional.shaders.opaque_type_indexing.sampler.*samplercubearray* = PASS
+
+// OpenGL Failing Tests
 1442 NVIDIA OPENGL : dEQP-GLES31.functional.fbo.no_attachments.maximums.all = FAIL
 1442 OPENGL : dEQP-GLES31.functional.program_interface_query.atomic_counter_buffer.referenced_by* = FAIL
 1442 OPENGL : dEQP-GLES31.functional.program_interface_query.buffer_limited_query.resource_query = FAIL
@@ -106,6 +112,7 @@
 5197 LINUX OPENGL : dEQP-GLES31.functional.compute.indirect_dispatch.gen_in_compute.large_offset_multiple_invocations = TIMEOUT
 
 // OpenGL/D3D11 Failing Tests
+1951 D3D11 : dEQP-GLES31.functional.shaders.opaque_type_indexing.ssbo.* = SKIP
 1442 OPENGL : dEQP-GLES31.functional.shaders.opaque_type_indexing.* = FAIL
 1442 D3D11 : dEQP-GLES31.functional.shaders.opaque_type_indexing.* = FAIL
 1442 OPENGL : dEQP-GLES31.functional.separate_shader.* = SKIP
@@ -115,8 +122,6 @@
 1442 OPENGL : dEQP-GLES31.functional.state_query.program_pipeline.* = SKIP
 1442 D3D11 : dEQP-GLES31.functional.state_query.program_pipeline.* = SKIP
 
-3584 OPENGL : dEQP-GLES31.functional.shaders.opaque_type_indexing.sampler.*samplercubearray* = PASS
-
 // These tests are failing because of compile errors with SSBOs in compute shaders.
 
 1442 D3D11 : dEQP-GLES31.functional.stencil_texturing.* = SKIP
@@ -125,7 +130,6 @@
 
 1729 D3D11 : dEQP-GLES31.functional.atomic_counter.* = SKIP
 1951 D3D11 : dEQP-GLES31.functional.layout_binding.ssbo.* = SKIP
-1951 D3D11 : dEQP-GLES31.functional.shaders.opaque_type_indexing.ssbo.* = SKIP
 4330 D3D11 : dEQP-GLES31.functional.program_interface_query.buffer_variable.referenced_by.separable_vertex.* = SKIP
 4329 D3D11 : dEQP-GLES31.functional.program_interface_query.buffer_variable.referenced_by.separable_fragment.* = SKIP
 4329 D3D11 : dEQP-GLES31.functional.program_interface_query.buffer_variable.random.* = SKIP
@@ -138,10 +142,6 @@
 1442 D3D11 : dEQP-GLES31.functional.layout_binding.image.* = SKIP
 // This case is skipped since it uses atomic counter builtin functions which haven't been implemented.
 1729 D3D11 : dEQP-GLES31.functional.state_query.program.active_atomic_counter_buffers_get_programiv = SKIP
-
-// The D3D backend does not expect missing shader stages
-1588 D3D11 : dEQP-GLES31.functional.separate_shader.validation.es31.varying.* = SKIP
-
 
 ////
 //// Failures blocking an official GLES 3.1 conformance run on SwiftShader
@@ -201,16 +201,6 @@
 4371 VULKAN ANDROID : dEQP-GLES31.functional.shaders.implicit_conversions.es31.arithmetic.input_before_literal.add.int_to_vec3_vertex = FAIL
 4371 VULKAN ANDROID : dEQP-GLES31.functional.shaders.implicit_conversions.es31.arithmetic.input_before_literal.add.int_to_uvec3_vertex = FAIL
 4371 SWIFTSHADER : dEQP-GLES31.functional.shaders.implicit_conversions.* = FAIL
-
-// Swiftshader fails to create a correct source/destination srgb8_alpha8_astc image before copy, however 5x4 is correct
-5275 SWIFTSHADER NOSAN : dEQP-GLES31.functional.copy_image.*rgba*srgb8_alpha8_astc_*_khr.*_to_texture2d* = FAIL
-5275 SWIFTSHADER NOSAN : dEQP-GLES31.functional.copy_image.*rgba*srgb8_alpha8_astc_*_khr.*_to_cubemap* = FAIL
-5275 SWIFTSHADER NOSAN : dEQP-GLES31.functional.copy_image.*srgb8_alpha8_astc_*_khr_rgba*.*cubemap_to* = FAIL
-5275 SWIFTSHADER NOSAN : dEQP-GLES31.functional.copy_image.*srgb8_alpha8_astc_*_khr_rgba*.*texture2d*_to* = FAIL
-5275 SWIFTSHADER NOSAN : dEQP-GLES31.functional.copy_image.*srgb8_alpha8_astc_5x4_khr.*texture2d*_to_texture2d* = PASS
-5275 SWIFTSHADER NOSAN : dEQP-GLES31.functional.copy_image.*srgb8_alpha8_astc_5x4_khr.*texture2d*_to_cubemap = PASS
-5275 SWIFTSHADER NOSAN : dEQP-GLES31.functional.copy_image.*srgb8_alpha8_astc_5x4_khr.*cubemap*_to_texture2d* = PASS
-5275 SWIFTSHADER NOSAN : dEQP-GLES31.functional.copy_image.*srgb8_alpha8_astc_5x4_khr.*cubemap_to_cubemap = PASS
 
 // Desktop cards without native etc support, angle emulated format fails
 5276 AMD VULKAN : dEQP-GLES31.functional.copy_image.compressed.viewclass_eac* = FAIL
@@ -1380,9 +1370,6 @@
 
 // Fails when the expression being interpolated as an indexed varying array.
 6194 PIXEL4ORXL VULKAN : dEQP-GLES31.functional.shaders.multisample_interpolation.interpolate_at_offset.array_element.* = FAIL
-
-// Slow tests.
-6021 : dEQP-GLES31.functional.ssbo.layout.random.all_shared_buffer.36 = TIMEOUT
 
 // ASAN Test bugs
 6678 ASAN : dEQP-GLES31.functional.ssbo.array_length.* = SKIP
