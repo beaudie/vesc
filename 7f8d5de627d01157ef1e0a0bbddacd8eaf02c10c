@@ -39,6 +39,30 @@
       },
       "revId": "7f8d5de627d01157ef1e0a0bbddacd8eaf02c10c",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "95136284_ecd59f1f",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 13
+      },
+      "lineNbr": 3945,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-01-04T19:53:21Z",
+      "side": 1,
+      "message": "The usage of the buffer is naturally sequenced on the GPU (with barriers if any). No waiting on the CPU is necessary. If you meant parallelism on the GPU because then we don\u0027t need a barrier; I\u0027d say \"don\u0027t in the absence of evidence it helps\".",
+      "parentUuid": "76b01f9b_6df350a2",
+      "range": {
+        "startLine": 3940,
+        "startChar": 0,
+        "endLine": 3945,
+        "endChar": 13
+      },
+      "revId": "7f8d5de627d01157ef1e0a0bbddacd8eaf02c10c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
