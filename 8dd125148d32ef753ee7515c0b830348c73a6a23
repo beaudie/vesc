@@ -167,6 +167,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "a99fa405_9d50660b",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.cpp",
+        "patchSetId": 21
+      },
+      "lineNbr": 1503,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2022-01-04T18:34:38Z",
+      "side": 1,
+      "message": "This CL intentionally does not change the type of memory we allocate. Feel free to open a new bug to continue performance investigation on the choice of memory we made. I believe the memory type we picked right now mostly based on Mohan\u0027s contribution, so likely not tuned for ARM.",
+      "parentUuid": "0a7f784c_25ef6620",
+      "revId": "8dd125148d32ef753ee7515c0b830348c73a6a23",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "b71c2e01_e29afec5",
         "filename": "src/libANGLE/renderer/vulkan/RendererVk.h",
         "patchSetId": 21
