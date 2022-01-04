@@ -4590,6 +4590,8 @@ void ImageHelper::deriveExternalImageTiling(const void *createInfoChain)
 
 void ImageHelper::releaseImage(RendererVk *renderer)
 {
+    releaseStagedUpdate(renderer);
+
     renderer->collectGarbageAndReinit(&mUse, &mImage, &mDeviceMemory);
     mImageSerial = kInvalidImageSerial;
 
@@ -4610,7 +4612,7 @@ void ImageHelper::releaseImageFromShareContexts(RendererVk *renderer, ContextVk 
     releaseImage(renderer);
 }
 
-void ImageHelper::releaseStagingBuffer(RendererVk *renderer)
+void ImageHelper::releaseStagedUpdate(RendererVk *renderer)
 {
     ASSERT(validateSubresourceUpdateRefCountsConsistent());
 
