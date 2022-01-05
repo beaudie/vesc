@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "65a6626d_65be9f32",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 5
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1348395
+      },
+      "writtenOn": "2022-01-05T16:49:00Z",
+      "side": 1,
+      "message": "Hi Shahbaz - I believe this workaround is no longer necessary.",
+      "revId": "9641006e8e840baecec3773697476b6c5207e24f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
