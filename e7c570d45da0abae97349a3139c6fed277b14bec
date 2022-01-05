@@ -16,6 +16,24 @@
       "message": "Oookaaay\n\nWas there a problem?",
       "revId": "e7c570d45da0abae97349a3139c6fed277b14bec",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "495433d9_b64dfc55",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000050
+      },
+      "writtenOn": "2022-01-05T15:31:27Z",
+      "side": 1,
+      "message": "Based on loader code [1]. It will cause problem, if the version \u003e\u003d 1.2.0\n\n[1] https://github.com/KhronosGroup/Vulkan-Loader/blob/master/loader/trampoline.c#L80",
+      "parentUuid": "f23c2ce0_4ce311ea",
+      "revId": "e7c570d45da0abae97349a3139c6fed277b14bec",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
