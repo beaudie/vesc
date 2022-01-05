@@ -1,0 +1,113 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "3969c0d8_b57c8a26",
+        "filename": "src/libANGLE/Program.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 1564,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2022-01-05T00:36:13Z",
+      "side": 1,
+      "message": "This change needs to be reverted, since we shouldn\u0027t indicate that the shader stages are linked until all of the linking steps have completed successfully.\n\nOtherwise, if any of the subsequent linking steps fail, the program will still indicate each of the stages are successfully linked.",
+      "revId": "31d08343c1f690527a9289a67e210b793999ae58",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "21facf54_54ff1c14",
+        "filename": "src/libANGLE/Program.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 3545,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2022-01-05T00:36:13Z",
+      "side": 1,
+      "message": "Nit: Remove the \"OrNull\", since it\u0027s unnecessary.",
+      "range": {
+        "startLine": 3545,
+        "startChar": 72,
+        "endLine": 3545,
+        "endChar": 78
+      },
+      "revId": "31d08343c1f690527a9289a67e210b793999ae58",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "3ed81d8e_9e9d1f93",
+        "filename": "src/libANGLE/ProgramExecutable.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 1473,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2022-01-05T00:36:13Z",
+      "side": 1,
+      "message": "There aren\u0027t any shader stages linked yet - we\u0027re still in the middle of linking them.   This should be the shaders attached to the program instead.",
+      "range": {
+        "startLine": 1473,
+        "startChar": 25,
+        "endLine": 1473,
+        "endChar": 44
+      },
+      "revId": "31d08343c1f690527a9289a67e210b793999ae58",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "63152a6e_c1c63f11",
+        "filename": "src/libANGLE/ProgramLinkedResources.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 56,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2022-01-05T00:36:13Z",
+      "side": 1,
+      "message": "Similar to the above comment.   These shader stages aren\u0027t linked yet, but are in the process of being linked.   Instead, something like \u0027attachedShaderStages\u0027 would be more accurate.",
+      "range": {
+        "startLine": 56,
+        "startChar": 38,
+        "endLine": 56,
+        "endChar": 56
+      },
+      "revId": "31d08343c1f690527a9289a67e210b793999ae58",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "52f30129_d70e041e",
+        "filename": "src/libANGLE/ProgramLinkedResources.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 66,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2022-01-05T00:36:13Z",
+      "side": 1,
+      "message": "nit: Ditto. Remove the \"OrNull\". No other nullable pointers in ANGLE follow this naming pattern.",
+      "range": {
+        "startLine": 65,
+        "startChar": 0,
+        "endLine": 66,
+        "endChar": 78
+      },
+      "revId": "31d08343c1f690527a9289a67e210b793999ae58",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
