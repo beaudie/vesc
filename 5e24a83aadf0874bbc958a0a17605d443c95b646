@@ -122,6 +122,24 @@
       "parentUuid": "ec3c2356_89319041",
       "revId": "5e24a83aadf0874bbc958a0a17605d443c95b646",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "e2f0f88f_d962f614",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 3826,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2022-01-05T18:37:49Z",
+      "side": 1,
+      "message": "My bad. I accidentally removed copying other to this as well. I was only intended to remove other.resetBarrierTracker(). Thanks for catching this.\n\nLets leave  other.resetBarrierTracker() for future if such need comes up (I can\u0027t think out any without you call init again).",
+      "parentUuid": "ca6be92d_b0650145",
+      "revId": "5e24a83aadf0874bbc958a0a17605d443c95b646",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
