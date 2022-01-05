@@ -70,6 +70,54 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "39456a43_c7946373",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 4
+      },
+      "lineNbr": 11,
+      "author": {
+        "id": 1524687
+      },
+      "writtenOn": "2022-01-05T03:10:15Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "9901615e_dd31e15e",
+      "range": {
+        "startLine": 11,
+        "startChar": 0,
+        "endLine": 11,
+        "endChar": 10
+      },
+      "revId": "4c8000bdd1dc0719500089d9cb8e8b000031badc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "27d75e42_eeb36301",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 4
+      },
+      "lineNbr": 11,
+      "author": {
+        "id": 1524687
+      },
+      "writtenOn": "2022-01-05T03:10:15Z",
+      "side": 1,
+      "message": "Done.",
+      "parentUuid": "13b234a0_c12818cf",
+      "range": {
+        "startLine": 11,
+        "startChar": 63,
+        "endLine": 11,
+        "endChar": 68
+      },
+      "revId": "4c8000bdd1dc0719500089d9cb8e8b000031badc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "21703422_12bca57e",
@@ -83,6 +131,30 @@
       "writtenOn": "2022-01-04T15:17:44Z",
       "side": 1,
       "message": "wording suggestion: If we only assign the vkImage layout as writable when running GL executables that have Image Textures, we can specify more precise read-only barriers when running read-only GL executables.",
+      "range": {
+        "startLine": 12,
+        "startChar": 0,
+        "endLine": 13,
+        "endChar": 52
+      },
+      "revId": "4c8000bdd1dc0719500089d9cb8e8b000031badc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "f3d461bf_1cde6e31",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 4
+      },
+      "lineNbr": 13,
+      "author": {
+        "id": 1524687
+      },
+      "writtenOn": "2022-01-05T03:10:15Z",
+      "side": 1,
+      "message": "Thanks,Jamie. Done.",
+      "parentUuid": "21703422_12bca57e",
       "range": {
         "startLine": 12,
         "startChar": 0,
@@ -209,6 +281,30 @@
       "writtenOn": "2022-01-04T15:17:44Z",
       "side": 1,
       "message": "nit: executableHasImages for clarity",
+      "range": {
+        "startLine": 1638,
+        "startChar": 15,
+        "endLine": 1638,
+        "endChar": 48
+      },
+      "revId": "4c8000bdd1dc0719500089d9cb8e8b000031badc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "b5617821_bd8da18b",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 1638,
+      "author": {
+        "id": 1524687
+      },
+      "writtenOn": "2022-01-05T03:10:15Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "eb9c607e_9492cdf4",
       "range": {
         "startLine": 1638,
         "startChar": 15,
