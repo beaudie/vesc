@@ -3981,6 +3981,9 @@ angle::Result BufferHelper::initializeNonZeroMemory(Context *context,
                                                     VkBufferUsageFlags usage,
                                                     VkDeviceSize size)
 {
+    // TIMTIM
+    UNREACHABLE();
+
     RendererVk *renderer = context->getRenderer();
 
     // This memory can't be mapped, so the buffer must be marked as a transfer destination so we
