@@ -50,6 +50,24 @@
       "message": "Why did you remove this from the earlier patch?\n\n    mCurrentQueueFamilyIndex \u003d other.mCurrentQueueFamilyIndex;\n    mCurrentWriteAccess      \u003d other.mCurrentWriteAccess;\n    mCurrentReadAccess       \u003d other.mCurrentReadAccess;\n    mCurrentWriteStages      \u003d other.mCurrentWriteStages;\n    mCurrentReadStages       \u003d other.mCurrentReadStages;\n    mSerial                  \u003d other.mSerial;\n\n    other.resetBarrierTracker();",
       "revId": "5e24a83aadf0874bbc958a0a17605d443c95b646",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ec3c2356_89319041",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 3826,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2022-01-05T17:30:14Z",
+      "side": 1,
+      "message": "I removed because these are unnecessary. After the move operation, the other object is invalid. Move essentially is similar to release call on the \"other\" object. We don\u0027t reset these barrier trackers in release call, because there is no need. After the move, most likely the next call is destructor, or if someone want to reuse it, it can call init to re-initialize it. You can\u0027t use it for anything until it becomes valid again.",
+      "parentUuid": "fbb9a28e_84c0a005",
+      "revId": "5e24a83aadf0874bbc958a0a17605d443c95b646",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
