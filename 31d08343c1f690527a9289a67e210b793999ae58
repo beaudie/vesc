@@ -20,6 +20,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "30419f0b_404bcb3d",
+        "filename": "src/libANGLE/Program.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 1564,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2022-01-05T15:33:58Z",
+      "side": 1,
+      "message": "If you were to write a test that expects the executable to be intact after a failed link, you can see from looking at the code here that there\u0027s multiple other places (lists of uniforms, blocks, etc) that damage consistent operation. The full fix is detailed in https://bugs.chromium.org/p/angleproject/issues/detail?id\u003d6358#c16 , if you want I can add a TODO with reference to that bug.\n\nBecause no tests fail with this change, and any new test you write could still be broken even I were to revert this change, I suggest we move forward like it is now, and fix it \"for real\" in anglebug.com/6358 .",
+      "parentUuid": "3969c0d8_b57c8a26",
+      "revId": "31d08343c1f690527a9289a67e210b793999ae58",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "21facf54_54ff1c14",
         "filename": "src/libANGLE/Program.cpp",
         "patchSetId": 3
@@ -66,6 +84,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "3aa257c4_368116aa",
+        "filename": "src/libANGLE/ProgramExecutable.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 1473,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2022-01-05T15:33:58Z",
+      "side": 1,
+      "message": "Attached isn\u0027t correct either because this could refer to ProgramPipelines. Rather than bikeshed too much (availableProgramStages? nonNullProgramStages?) how about we keep it as-is. LMKWYT",
+      "parentUuid": "3ed81d8e_9e9d1f93",
+      "range": {
+        "startLine": 1473,
+        "startChar": 25,
+        "endLine": 1473,
+        "endChar": 44
+      },
+      "revId": "31d08343c1f690527a9289a67e210b793999ae58",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "63152a6e_c1c63f11",
         "filename": "src/libANGLE/ProgramLinkedResources.h",
         "patchSetId": 3
@@ -100,6 +142,30 @@
       "writtenOn": "2022-01-05T00:36:13Z",
       "side": 1,
       "message": "nit: Ditto. Remove the \"OrNull\". No other nullable pointers in ANGLE follow this naming pattern.",
+      "range": {
+        "startLine": 65,
+        "startChar": 0,
+        "endLine": 66,
+        "endChar": 78
+      },
+      "revId": "31d08343c1f690527a9289a67e210b793999ae58",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "f6e30afc_5216eb04",
+        "filename": "src/libANGLE/ProgramLinkedResources.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 66,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2022-01-05T15:33:58Z",
+      "side": 1,
+      "message": "We use this pattern in a few places, because it helps readability. If you\u0027re fine with that I\u0027ll keep it.\n\ne.g. https://source.chromium.org/search?q\u003d%22indexTypeOrInvalid%22%20angle\u0026ss\u003dchromium",
+      "parentUuid": "52f30129_d70e041e",
       "range": {
         "startLine": 65,
         "startChar": 0,
