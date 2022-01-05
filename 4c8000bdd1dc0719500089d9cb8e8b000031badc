@@ -180,6 +180,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "ac4dc281_bb815da2",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-01-05T03:05:18Z",
+      "side": 1,
+      "message": "I thought the texture _is_ actually currently bound as an image unit, just that the program doesn\u0027t use it that way.",
+      "parentUuid": "186db55c_e4c09454",
+      "revId": "4c8000bdd1dc0719500089d9cb8e8b000031badc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "eb9c607e_9492cdf4",
         "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
         "patchSetId": 4
