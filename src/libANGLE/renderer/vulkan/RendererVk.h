@@ -530,6 +530,7 @@ class RendererVk : angle::NonCopyable
     egl::Display *mDisplay;
 
     std::unique_ptr<angle::Library> mLibVulkanLibrary;
+    std::unique_ptr<angle::vk::ScopedVkLoaderEnvironment> mScopedEnvironment;
 
     mutable bool mCapsInitialized;
     mutable gl::Caps mNativeCaps;
