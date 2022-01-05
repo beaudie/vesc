@@ -233,6 +233,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "15ff54f8_aca50c12",
+        "filename": "src/libANGLE/renderer/vulkan/BufferVk.h",
+        "patchSetId": 20
+      },
+      "lineNbr": 38,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2022-01-05T17:21:54Z",
+      "side": 1,
+      "message": "Are you going to land your other CL then rebase this? LGTM if so.",
+      "parentUuid": "89f95b33_2a743f1b",
+      "revId": "6124525a5ecfe87c800cb95165713fbbb8f73ecf",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "841a67c3_327cd330",
         "filename": "src/libANGLE/renderer/vulkan/RendererVk.h",
         "patchSetId": 20
