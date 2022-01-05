@@ -4051,6 +4051,11 @@ angle::Result BufferHelper::initializeNonZeroMemory(Context *context,
         }
     }
 
+    // TIMTIM
+    UNREACHABLE();
+    int *crash = nullptr;
+    WARN() << "TIMTIM >> *crash = " << *crash;
+
     return angle::Result::Continue;
 }
 
