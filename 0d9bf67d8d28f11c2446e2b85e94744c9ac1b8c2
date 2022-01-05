@@ -16,6 +16,46 @@
       "message": "See the test failure. I suggest just rename it.",
       "revId": "0d9bf67d8d28f11c2446e2b85e94744c9ac1b8c2",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "26a64908_92ef45f7",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 4593,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-01-05T02:57:44Z",
+      "side": 1,
+      "message": "Ok you\u0027re right, we can\u0027t make this call here automatically",
+      "revId": "0d9bf67d8d28f11c2446e2b85e94744c9ac1b8c2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b83f2820_ca91947b",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 4615,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-01-05T02:57:44Z",
+      "side": 1,
+      "message": "nit: `s` at the end (updates)",
+      "range": {
+        "startLine": 4615,
+        "startChar": 0,
+        "endLine": 4615,
+        "endChar": 4
+      },
+      "revId": "0d9bf67d8d28f11c2446e2b85e94744c9ac1b8c2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
