@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "6cf3d28b_4869aaf1",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2022-01-05T16:14:26Z",
+      "side": 1,
+      "message": "Unfortunately bot_update failed when trying to test with ios simulator. What\u0027s the status on ANGLE\u0027s standalone iOS testing? PTAL.",
+      "revId": "1e5b8a9b59700ebc8c416236b23e2d64c9805907",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
