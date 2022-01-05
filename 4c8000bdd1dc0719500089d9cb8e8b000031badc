@@ -360,6 +360,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "bee55d87_95feff4b",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2022-01-05T17:42:38Z",
+      "side": 1,
+      "message": "Then maybe there are two optimization opportunity here:\n1) A texture used as image in previous renderpass, hasBeenBoundAsImage() should be isBoundAsImage() and should return false here.\n2) A texture is currently bound as image but shader is not actually using it, which is this CL appears try to fix.",
+      "parentUuid": "ac4dc281_bb815da2",
+      "revId": "4c8000bdd1dc0719500089d9cb8e8b000031badc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "eb9c607e_9492cdf4",
         "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
         "patchSetId": 4
