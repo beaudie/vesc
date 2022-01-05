@@ -318,6 +318,8 @@ libangle_headers = [
   "src/libANGLE/renderer/SamplerImpl.h",
   "src/libANGLE/renderer/SemaphoreImpl.h",
   "src/libANGLE/renderer/ShaderImpl.h",
+  "src/libANGLE/renderer/ShaderInterfaceVariableInfoMap.h",
+  "src/libANGLE/renderer/ShaderInterfaceVariableInfoMap.cpp",
   "src/libANGLE/renderer/StreamProducerImpl.h",
   "src/libANGLE/renderer/SurfaceImpl.h",
   "src/libANGLE/renderer/SyncImpl.h",
