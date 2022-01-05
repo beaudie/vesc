@@ -1675,7 +1675,7 @@ ANGLE_INLINE angle::Result ContextVk::handleDirtyTexturesImpl(
         // Select the appropriate vk::ImageLayout depending on whether the texture is also bound as
         // a GL image, and whether the program is a compute or graphics shader.
         vk::ImageLayout textureLayout;
-        if (textureVk->hasBeenBoundAsImage())
+        if (textureVk->hasBeenBoundAsImage() && executable->hasImages())
         {
             textureLayout = pipelineType == PipelineType::Compute
                                 ? vk::ImageLayout::ComputeShaderWrite
