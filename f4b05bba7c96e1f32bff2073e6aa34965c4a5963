@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "af51d274_9e04ad0d",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 6
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2022-01-05T22:08:11Z",
+      "side": 1,
+      "message": "Suppressing the ASAN flake seen here in:\nhttps://chromium-review.googlesource.com/c/angle/angle/+/3364967\n",
+      "revId": "f4b05bba7c96e1f32bff2073e6aa34965c4a5963",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
