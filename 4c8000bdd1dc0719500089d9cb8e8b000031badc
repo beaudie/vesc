@@ -24,6 +24,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "dde20912_8dbabef5",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 4
+      },
+      "lineNbr": 10,
+      "author": {
+        "id": 1524687
+      },
+      "writtenOn": "2022-01-05T04:49:46Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "e7ea4233_33672eda",
+      "range": {
+        "startLine": 10,
+        "startChar": 33,
+        "endLine": 10,
+        "endChar": 36
+      },
+      "revId": "4c8000bdd1dc0719500089d9cb8e8b000031badc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "13b234a0_c12818cf",
@@ -118,6 +142,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "9741f781_00db02bd",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 4
+      },
+      "lineNbr": 11,
+      "author": {
+        "id": 1524687
+      },
+      "writtenOn": "2022-01-05T04:49:46Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "27d75e42_eeb36301",
+      "range": {
+        "startLine": 11,
+        "startChar": 63,
+        "endLine": 11,
+        "endChar": 68
+      },
+      "revId": "4c8000bdd1dc0719500089d9cb8e8b000031badc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "21703422_12bca57e",
@@ -155,6 +203,30 @@
       "side": 1,
       "message": "Thanks,Jamie. Done.",
       "parentUuid": "21703422_12bca57e",
+      "range": {
+        "startLine": 12,
+        "startChar": 0,
+        "endLine": 13,
+        "endChar": 52
+      },
+      "revId": "4c8000bdd1dc0719500089d9cb8e8b000031badc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "3fff4474_79aa4913",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 4
+      },
+      "lineNbr": 13,
+      "author": {
+        "id": 1524687
+      },
+      "writtenOn": "2022-01-05T04:49:46Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "f3d461bf_1cde6e31",
       "range": {
         "startLine": 12,
         "startChar": 0,
@@ -328,6 +400,30 @@
       "writtenOn": "2022-01-04T18:31:37Z",
       "side": 1,
       "message": "This should be unnecessary. If it _is_, then there\u0027s a bug because compute is not taken into account.",
+      "range": {
+        "startLine": 1678,
+        "startChar": 40,
+        "endLine": 1678,
+        "endChar": 83
+      },
+      "revId": "4c8000bdd1dc0719500089d9cb8e8b000031badc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "5f1a7166_36c3784b",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 1678,
+      "author": {
+        "id": 1524687
+      },
+      "writtenOn": "2022-01-05T04:49:46Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "1bc60b66_cb6e7a50",
       "range": {
         "startLine": 1678,
         "startChar": 40,
