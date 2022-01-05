@@ -19,7 +19,6 @@
 #include "common/system_utils.h"
 #include "common/vulkan/libvulkan_loader.h"
 #include "common/vulkan/vk_google_filtering_precision.h"
-#include "common/vulkan/vulkan_icd.h"
 #include "gpu_info_util/SystemInfo.h"
 #include "libANGLE/Context.h"
 #include "libANGLE/Display.h"
@@ -1147,10 +1146,10 @@ angle::Result RendererVk::initialize(DisplayVk *displayVk,
 
     mDisplay                         = display;
     const egl::AttributeMap &attribs = mDisplay->getAttributeMap();
-    angle::vk::ScopedVkLoaderEnvironment scopedEnvironment(ShouldUseValidationLayers(attribs),
-                                                           ChooseICDFromAttribs(attribs));
-    mEnableValidationLayers = scopedEnvironment.canEnableValidationLayers();
-    mEnabledICD             = scopedEnvironment.getEnabledICD();
+    mScopedEnvironment               = std::make_unique<angle::vk::ScopedVkLoaderEnvironment>(
+        ShouldUseValidationLayers(attribs), ChooseICDFromAttribs(attribs));
+    mEnableValidationLayers = mScopedEnvironment->canEnableValidationLayers();
+    mEnabledICD             = mScopedEnvironment->getEnabledICD();
 
     // Gather global layer properties.
     uint32_t instanceLayerCount = 0;
