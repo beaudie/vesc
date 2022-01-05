@@ -1,0 +1,55 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "4f381270_05473a75",
+        "filename": "src/libANGLE/renderer/vulkan/TextureVk.cpp",
+        "patchSetId": 21
+      },
+      "lineNbr": 1586,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2022-01-05T19:36:31Z",
+      "side": 1,
+      "message": "Remove.",
+      "revId": "7e46990e70488279139859ef965f4a74789c8883",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "2a87b9aa_a6004c6b",
+        "filename": "src/libANGLE/renderer/vulkan/TextureVk.h",
+        "patchSetId": 21
+      },
+      "lineNbr": 247,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2022-01-05T19:36:31Z",
+      "side": 1,
+      "message": "It looks like this can be removed, along with the call to it in src/tests/gl_tests/VulkanUniformUpdatesTest.cpp.",
+      "revId": "7e46990e70488279139859ef965f4a74789c8883",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "2df53d33_fbf300d7",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 21
+      },
+      "lineNbr": 8024,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2022-01-05T19:36:31Z",
+      "side": 1,
+      "message": "Comment needs updating/removal.",
+      "revId": "7e46990e70488279139859ef965f4a74789c8883",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
