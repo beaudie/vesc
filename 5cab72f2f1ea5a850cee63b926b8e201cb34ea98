@@ -35,6 +35,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "1734a7ea_54416bc4",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1228974
+      },
+      "writtenOn": "2022-01-05T11:00:41Z",
+      "side": 1,
+      "message": "Thank you. I understand the need of these tests. I\u0027ll let you know once the tests are complete.",
+      "parentUuid": "5f16e541_5976efa6",
+      "revId": "5cab72f2f1ea5a850cee63b926b8e201cb34ea98",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "78bc7130_f10f6b83",
