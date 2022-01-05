@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "8346f2fa_353a8b8b",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1001921
+      },
+      "writtenOn": "2022-01-05T20:10:08Z",
+      "side": 1,
+      "message": "PTAL, recipe side in crrev.com/c/3368401",
+      "revId": "21b3105f99cdac270d0717bd70fc01811ffd852d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
