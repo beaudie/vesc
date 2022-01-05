@@ -104,6 +104,24 @@
       "parentUuid": "fbb9a28e_84c0a005",
       "revId": "5e24a83aadf0874bbc958a0a17605d443c95b646",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ca6be92d_b0650145",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 3826,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-01-05T18:23:34Z",
+      "side": 1,
+      "message": "You might consider the other.resetBarrierTracker() unnecessary, but you should most definitely copy over the barrier data from other to *this.\n\nThat said, I\u0027d still do other.resetBarrierTracker(), because that\u0027s what the semantics of the move assignment is, you never know how it\u0027s going to be used in the future.",
+      "parentUuid": "ec3c2356_89319041",
+      "revId": "5e24a83aadf0874bbc958a0a17605d443c95b646",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
