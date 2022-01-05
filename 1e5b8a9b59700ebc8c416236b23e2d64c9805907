@@ -39,6 +39,30 @@
       },
       "revId": "1e5b8a9b59700ebc8c416236b23e2d64c9805907",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "11073048_7c44b630",
+        "filename": "src/tests/capture_replay_tests/BUILD.gn",
+        "patchSetId": 1
+      },
+      "lineNbr": 49,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2022-01-05T17:01:10Z",
+      "side": 1,
+      "message": "We run the GN headers check on every standalone build. I also made a custom build that explicitly disables capture replay locally, and ran the build and headers check and couldn\u0027t repro. I suspect this is an artifact of the customized iOS build.",
+      "parentUuid": "3ddcbee2_951f8e48",
+      "range": {
+        "startLine": 49,
+        "startChar": 27,
+        "endLine": 49,
+        "endChar": 33
+      },
+      "revId": "1e5b8a9b59700ebc8c416236b23e2d64c9805907",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
