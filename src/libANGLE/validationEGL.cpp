@@ -5058,10 +5058,8 @@ bool ValidateCreatePlatformWindowSurfaceEXT(const ValidationContext *val,
         return false;
     }
 
-    ANGLE_VALIDATION_TRY(ValidateConfig(val, display, configuration));
-
-    val->setError(EGL_BAD_DISPLAY, "ValidateCreatePlatformWindowSurfaceEXT unimplemented.");
-    return false;
+    return ValidateCreatePlatformWindowSurface(val, display, configuration, nativeWindow,
+                                               attributes);
 }
 
 bool ValidateCreatePlatformPixmapSurfaceEXT(const ValidationContext *val,

@@ -88,9 +88,13 @@ EGLSurface CreatePlatformWindowSurfaceEXT(Thread *thread,
 {
     ANGLE_EGL_TRY_RETURN(thread, display->prepareForCall(), "eglCreatePlatformWindowSurfaceEXT",
                          GetDisplayIfValid(display), EGL_NO_SURFACE);
-    thread->setError(EGL_BAD_DISPLAY, "eglCreatePlatformWindowSurfaceEXT",
-                     GetDisplayIfValid(display), "CreatePlatformWindowSurfaceEXT unimplemented.");
-    return EGL_NO_SURFACE;
+    Surface *surface                 = nullptr;
+    EGLNativeWindowType nativeWindow = reinterpret_cast<EGLNativeWindowType>(native_window);
+    ANGLE_EGL_TRY_RETURN(
+        thread, display->createWindowSurface(configPacked, nativeWindow, attributes, &surface),
+        "eglPlatformCreateWindowSurfaceEXT", GetDisplayIfValid(display), EGL_NO_SURFACE);
+
+    return static_cast<EGLSurface>(surface);
 }
 
 EGLStreamKHR CreateStreamKHR(Thread *thread, Display *display, const AttributeMap &attributes)
