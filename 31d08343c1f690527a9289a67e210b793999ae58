@@ -38,6 +38,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "93d15607_1b0edd67",
+        "filename": "src/libANGLE/Program.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 1564,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2022-01-05T22:31:45Z",
+      "side": 1,
+      "message": "Ack\n\nI don\u0027t agree that breaking it even more is the right thing to do, since it\u0027s only being done as a workaround to give the desired stages to ProgramExecutable::linkUniforms(), rather than just passing them around.   In the interest of making progress though, marking this with the TODO to make sure it\u0027s cleaned up part of that bug is fine to me.",
+      "parentUuid": "30419f0b_404bcb3d",
+      "revId": "31d08343c1f690527a9289a67e210b793999ae58",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "21facf54_54ff1c14",
         "filename": "src/libANGLE/Program.cpp",
         "patchSetId": 3
@@ -108,6 +126,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "41f2aa66_ae3e4c0b",
+        "filename": "src/libANGLE/ProgramExecutable.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 1473,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2022-01-05T22:31:45Z",
+      "side": 1,
+      "message": "\"Linked\" is wrong, so I\u0027d like to get that update to prevent misleading someone in the future.   It would be better to update these to \u0027linking\u0027, \u0027active\u0027, \u0027available\u0027, or something else that more accurately indicates these stages aren\u0027t linked yet.",
+      "parentUuid": "3aa257c4_368116aa",
+      "range": {
+        "startLine": 1473,
+        "startChar": 25,
+        "endLine": 1473,
+        "endChar": 44
+      },
+      "revId": "31d08343c1f690527a9289a67e210b793999ae58",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "63152a6e_c1c63f11",
         "filename": "src/libANGLE/ProgramLinkedResources.h",
         "patchSetId": 3
@@ -166,6 +208,30 @@
       "side": 1,
       "message": "We use this pattern in a few places, because it helps readability. If you\u0027re fine with that I\u0027ll keep it.\n\ne.g. https://source.chromium.org/search?q\u003d%22indexTypeOrInvalid%22%20angle\u0026ss\u003dchromium",
       "parentUuid": "52f30129_d70e041e",
+      "range": {
+        "startLine": 65,
+        "startChar": 0,
+        "endLine": 66,
+        "endChar": 78
+      },
+      "revId": "31d08343c1f690527a9289a67e210b793999ae58",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "29f0d76f_44739c90",
+        "filename": "src/libANGLE/ProgramLinkedResources.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 66,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2022-01-05T22:31:45Z",
+      "side": 1,
+      "message": "My vote is still to remove the \"OrNull\", since that\u0027s already implied by virtue of it being a pointer in the first place.",
+      "parentUuid": "f6e30afc_5216eb04",
       "range": {
         "startLine": 65,
         "startChar": 0,
