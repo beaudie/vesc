@@ -155,6 +155,19 @@ typename std::remove_reference<PackedT>::type PackParam(FromT attribs)
         }                                                                                  \
     } while (0)
 
+#define ANGLE_EGL_VALIDATE_WITH_CLEANUP(THREAD, EP, OBJ, RETURN_TYPE, CLEANUP, ...)        \
+    do                                                                                     \
+    {                                                                                      \
+        const char *epname = "egl" #EP;                                                    \
+        ValidationContext vctx(THREAD, epname, OBJ);                                       \
+        auto ANGLE_LOCAL_VAR = (Validate##EP(&vctx, ##__VA_ARGS__));                       \
+        if (!ANGLE_LOCAL_VAR)                                                              \
+        {                                                                                  \
+            (CLEANUP);                                                                     \
+            return GetDefaultReturnValue<angle::EntryPoint::EGL##EP, RETURN_TYPE>(THREAD); \
+        }                                                                                  \
+    } while (0)
+
 #define ANGLE_EGL_VALIDATE_VOID(THREAD, EP, OBJ, ...)                \
     do                                                               \
     {                                                                \
@@ -184,6 +197,28 @@ typename std::remove_reference<PackedT>::type PackParam(FromT attribs)
             THREAD->setError(ANGLE_LOCAL_VAR, FUNCNAME, LABELOBJECT);     \
             return RETVAL;                                                \
         }                                                                 \
+    } while (0)
+
+#define ANGLE_EGL_TRY_RETURN_WITH_CLEANUP(THREAD, EXPR, FUNCNAME, LABELOBJECT, RETVAL, CLEANUP) \
+    do                                                                                          \
+    {                                                                                           \
+        auto ANGLE_LOCAL_VAR = (EXPR);                                                          \
+        if (ANGLE_LOCAL_VAR.isError())                                                          \
+        {                                                                                       \
+            THREAD->setError(ANGLE_LOCAL_VAR, FUNCNAME, LABELOBJECT);                           \
+            (CLEANUP);                                                                          \
+            return RETVAL;                                                                      \
+        }                                                                                       \
+    } while (0)
+
+#define ANGLE_EGLBOOLEAN_TRY(EXPR)           \
+    do                                       \
+    {                                        \
+        EGLBoolean ANGLE_LOCAL_VAR = (EXPR); \
+        if (ANGLE_LOCAL_VAR != EGL_TRUE)     \
+        {                                    \
+            return ANGLE_LOCAL_VAR;          \
+        }                                    \
     } while (0)
 
 #endif  // LIBANGLE_VALIDATIONEGL_H_
