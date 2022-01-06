@@ -109,6 +109,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "bd1f09c9_e60e1bf6",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 5
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2022-01-06T17:40:22Z",
+      "side": 1,
+      "message": "One thing that can easily detect if we aren\u0027t handling reset of an object type is if the value of returned handles from the underlying driver grow unbounded.  If we delete them properly, the number range will be stable.\n\nGetting Reset right for all the object types is a big task.  We can add that to our plan for 2022.  I don\u0027t think we should hold up all new traces in the meantime though, they provide too much value.  Maybe there are select traces to hold back if we suspect Reset is a problem?",
+      "parentUuid": "5bca7483_14477353",
+      "revId": "f671449a16a1fbb37388ca6548fe0ecd5917ff6f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "a0e55a2b_443e5ec7",
         "filename": "src/tests/restricted_traces/restricted_traces.json",
         "patchSetId": 5
