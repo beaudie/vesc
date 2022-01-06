@@ -606,6 +606,14 @@ struct FeaturesVk : FeatureSetBase
     Feature supportsShaderFramebufferFetchNonCoherent = {
         "supportsShaderFramebufferFetchNonCoherent", FeatureCategory::VulkanFeatures,
         "Whether the Vulkan backend supports non-coherent framebuffer fetch", &members};
+
+    // When mutable_render_buffer goes into SINGLE_BUFFER mode, need to call swapbuffers at
+    // flush and finish so that the image is updated and presented to the display.
+    Feature swapbuffersOnFlushOrFinishWithSingleBuffer = {
+        "swapbuffersOnFlushOrFinishWithSingleBuffer", FeatureCategory::VulkanFeatures,
+        "Bypass deferredFlush with calling swapbuffers on flush or finish when in Shared Present "
+        "mode",
+        &members, "http://anglebug.com/6878"};
 };
 
 inline FeaturesVk::FeaturesVk()  = default;

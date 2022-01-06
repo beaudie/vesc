@@ -1008,7 +1008,6 @@ angle::Result WindowSurfaceVk::recreateSwapchain(ContextVk *contextVk, const gl:
         ASSERT(mPreTransform == VK_SURFACE_TRANSFORM_IDENTITY_BIT_KHR);
         std::swap(swapchainExtents.width, swapchainExtents.height);
     }
-
     angle::Result result = createSwapChain(contextVk, swapchainExtents, lastSwapchain);
 
     // Notify the parent classes of the surface's new state.
@@ -1660,6 +1659,11 @@ angle::Result WindowSurfaceVk::swapImpl(const gl::Context *context,
     return angle::Result::Continue;
 }
 
+angle::Result WindowSurfaceVk::onSharedPresentContextFlush(const gl::Context *context)
+{
+    return swapImpl(context, nullptr, 0, nullptr);
+}
+
 void WindowSurfaceVk::deferAcquireNextImage(const gl::Context *context)
 {
     mNeedToAcquireNextSwapchainImage = true;
@@ -1688,7 +1692,6 @@ angle::Result WindowSurfaceVk::doDeferredAcquireNextImage(const gl::Context *con
         // or not.
         ANGLE_TRY(computePresentOutOfDate(contextVk, result, &presentOutOfDate));
     }
-
     ANGLE_TRY(checkForOutOfDateSwapchain(contextVk, presentOutOfDate));
 
     {
@@ -1733,12 +1736,14 @@ VkResult WindowSurfaceVk::acquireNextSwapchainImage(vk::Context *context)
 
     if (mSwapchainPresentMode == VK_PRESENT_MODE_SHARED_DEMAND_REFRESH_KHR)
     {
+        WARN() << "ANI mode is SHARED";
         ASSERT(mSwapchainImages.size());
         SwapchainImage &image = mSwapchainImages[0];
         if (image.image.valid() &&
             (image.image.getCurrentImageLayout() == vk::ImageLayout::SharedPresent))
         {  // This will check for OUT_OF_DATE when in single image mode. and prevent
            // re-AcquireNextImage.
+            WARN() << "ANI mode is SHARED, layout is SharedPresent, calling getSwapchainStatus";
             return vkGetSwapchainStatusKHR(device, mSwapchain);
         }
     }
