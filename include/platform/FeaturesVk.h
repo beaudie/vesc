@@ -594,6 +594,14 @@ struct FeaturesVk : FeatureSetBase
     Feature supportsSharedPresentableImageExtension = {
         "supportsSharedPresentableImageExtension", FeatureCategory::VulkanFeatures,
         "VkSurface supports the VK_KHR_shared_presentable_images extension", &members};
+
+    // When mutable_render_buffer goes into SINGLE_BUFFER mode, need to call swapbuffers at
+    // flush and finish so that the image is updated and presented to the display.
+    Feature swapbuffersOnFlushOrFinishWithSingleBuffer = {
+        "swapbuffersOnFlushOrFinishWithSingleBuffer", FeatureCategory::VulkanFeatures,
+        "Bypass deferredFlush with calling swapbuffers on flush or finish when in Shared Present "
+        "mode",
+        &members, "http://anglebug.com/6878"};
 };
 
 inline FeaturesVk::FeaturesVk()  = default;

@@ -1629,6 +1629,11 @@ angle::Result WindowSurfaceVk::swapImpl(const gl::Context *context,
     return angle::Result::Continue;
 }
 
+angle::Result WindowSurfaceVk::onSharedPresentContextFlush(const gl::Context *context)
+{
+    return swapImpl(context, nullptr, 0, nullptr);
+}
+
 void WindowSurfaceVk::deferAcquireNextImage(const gl::Context *context)
 {
     mNeedToAcquireNextSwapchainImage = true;

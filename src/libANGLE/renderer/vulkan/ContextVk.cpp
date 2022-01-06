@@ -921,13 +921,15 @@ angle::Result ContextVk::initialize()
 
 angle::Result ContextVk::flush(const gl::Context *context)
 {
-    const bool isSingleBuffer =
-        (mCurrentWindowSurface != nullptr) && mCurrentWindowSurface->isSharedPresentMode();
+    if (mRenderer->getFeatures().swapbuffersOnFlushOrFinishWithSingleBuffer.enabled &&
+        (mCurrentWindowSurface != nullptr) && mCurrentWindowSurface->isSharedPresentMode())
+    {
+        return mCurrentWindowSurface->onSharedPresentContextFlush(context);
+    }
 
     // Don't defer flushes in single-buffer mode.  In this mode, the application is not required to
     // call eglSwapBuffers(), and glFlush() is expected to ensure that work is submitted.
-    if (mRenderer->getFeatures().deferFlushUntilEndRenderPass.enabled && hasStartedRenderPass() &&
-        !isSingleBuffer)
+    if (mRenderer->getFeatures().deferFlushUntilEndRenderPass.enabled && hasStartedRenderPass())
     {
         mHasDeferredFlush = true;
         return angle::Result::Continue;
@@ -938,6 +940,12 @@ angle::Result ContextVk::flush(const gl::Context *context)
 
 angle::Result ContextVk::finish(const gl::Context *context)
 {
+    if (mRenderer->getFeatures().swapbuffersOnFlushOrFinishWithSingleBuffer.enabled &&
+        (mCurrentWindowSurface != nullptr) && mCurrentWindowSurface->isSharedPresentMode())
+    {
+        return mCurrentWindowSurface->onSharedPresentContextFlush(context);
+    }
+
     return finishImpl(RenderPassClosureReason::GLFinish);
 }
 
