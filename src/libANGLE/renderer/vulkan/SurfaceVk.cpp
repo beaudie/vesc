@@ -1468,6 +1468,11 @@ angle::Result WindowSurfaceVk::present(ContextVk *contextVk,
     ANGLE_TRACE_EVENT0("gpu.angle", "WindowSurfaceVk::present");
     RendererVk *renderer = contextVk->getRenderer();
 
+    if (isSharedPresentMode())
+    {
+        mNeedToAcquireNextSwapchainImage = false;
+    }
+
     // Throttle the submissions to avoid getting too far ahead of the GPU.
     Serial *swapSerial = &mSwapHistory.front();
     mSwapHistory.next();
@@ -1644,6 +1649,11 @@ angle::Result WindowSurfaceVk::swapImpl(const gl::Context *context,
     ANGLE_TRY(renderer->syncPipelineCacheVk(displayVk, context));
 
     return angle::Result::Continue;
+}
+
+angle::Result WindowSurfaceVk::onSharedPresentContextFlush(const gl::Context *context)
+{
+    return swapImpl(context, nullptr, 0, nullptr);
 }
 
 void WindowSurfaceVk::deferAcquireNextImage(const gl::Context *context)
