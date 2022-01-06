@@ -85,9 +85,7 @@ void UpdateUniformLocation(GLuint program, const char *name, GLint location, GLi
     }
     for (GLint arrayIndex = 0; arrayIndex < count; ++arrayIndex)
     {
-        GLuint mappedProgramID = gShaderProgramMap[program];
-        programLocations[location + arrayIndex] =
-            glGetUniformLocation(mappedProgramID, name) + arrayIndex;
+        programLocations[location + arrayIndex] = glGetUniformLocation(program, name) + arrayIndex;
     }
     gUniformLocations[program] = programLocations.data();
 }
