@@ -1072,6 +1072,7 @@ angle::Result WindowSurfaceVk::createSwapChain(vk::Context *context,
                                                VkSwapchainKHR lastSwapchain)
 {
     ANGLE_TRACE_EVENT0("gpu.angle", "WindowSurfaceVk::createSwapchain");
+    INFO() << "createSwapchain";
 
     ASSERT(mSwapchain == VK_NULL_HANDLE);
 
@@ -1140,6 +1141,7 @@ angle::Result WindowSurfaceVk::createSwapChain(vk::Context *context,
 
     if (mDesiredSwapchainPresentMode == VK_PRESENT_MODE_SHARED_DEMAND_REFRESH_KHR)
     {
+        INFO() << "createSwapchain - desired more SHARED - image count 1";
         swapchainInfo.minImageCount = 1;
     }
 
@@ -1267,6 +1269,9 @@ angle::Result WindowSurfaceVk::checkForOutOfDateSwapchain(ContextVk *contextVk,
 {
     bool swapIntervalChanged = mSwapchainPresentMode != mDesiredSwapchainPresentMode;
     presentOutOfDate         = presentOutOfDate || swapIntervalChanged;
+
+    INFO() << "checkForOutOfDateSwapchain: "
+           << (mSwapchainPresentMode != mDesiredSwapchainPresentMode);
 
     // If there's no change, early out.
     if (!contextVk->getRenderer()->getFeatures().perFrameWindowSizeQuery.enabled &&
@@ -1646,6 +1651,11 @@ angle::Result WindowSurfaceVk::swapImpl(const gl::Context *context,
     return angle::Result::Continue;
 }
 
+angle::Result WindowSurfaceVk::onSharedPresentContextFlush(const gl::Context *context)
+{
+    return swapImpl(context, nullptr, 0, nullptr);
+}
+
 void WindowSurfaceVk::deferAcquireNextImage(const gl::Context *context)
 {
     mNeedToAcquireNextSwapchainImage = true;
@@ -1716,21 +1726,25 @@ angle::Result WindowSurfaceVk::doDeferredAcquireNextImage(const gl::Context *con
 VkResult WindowSurfaceVk::acquireNextSwapchainImage(vk::Context *context)
 {
     VkDevice device = context->getDevice();
+    INFO() << "ANI";
 
     if (mSwapchainPresentMode == VK_PRESENT_MODE_SHARED_DEMAND_REFRESH_KHR)
     {
+        INFO() << "ANI mode is SHARED";
         ASSERT(mSwapchainImages.size());
         SwapchainImage &image = mSwapchainImages[0];
         if (image.image.valid() &&
             (image.image.getCurrentImageLayout() == vk::ImageLayout::SharedPresent))
         {  // This will check for OUT_OF_DATE when in single image mode. and prevent
            // re-AcquireNextImage.
+            INFO() << "ANI mode is SHARED, layout is SharedPresent, calling getSwapchainStatus";
             return vkGetSwapchainStatusKHR(device, mSwapchain);
         }
     }
 
     const vk::Semaphore *acquireImageSemaphore = &mAcquireImageSemaphores.front();
 
+    INFO() << "ANI vkAcquireNextImage";
     VkResult result =
         vkAcquireNextImageKHR(device, mSwapchain, UINT64_MAX, acquireImageSemaphore->getHandle(),
                               VK_NULL_HANDLE, &mCurrentSwapchainImageIndex);
@@ -1749,6 +1763,8 @@ VkResult WindowSurfaceVk::acquireNextSwapchainImage(vk::Context *context)
     if ((mSwapchainPresentMode == VK_PRESENT_MODE_SHARED_DEMAND_REFRESH_KHR) &&
         (image.image.getCurrentImageLayout() != vk::ImageLayout::SharedPresent))
     {
+        INFO() << "ANI mode is SHARED, layout is NOT SharedPresent, transition layout";
+
         rx::RendererVk *rendererVk = context->getRenderer();
         rx::vk::PrimaryCommandBuffer primaryCommandBuffer;
         if (rendererVk->getCommandBufferOneOff(context, mState.hasProtectedContent(),
@@ -2168,10 +2184,13 @@ egl::Error WindowSurfaceVk::setRenderBuffer(EGLint renderBuffer)
 
     if (renderBuffer == EGL_SINGLE_BUFFER)
     {
+        INFO() << "setRendBuf SINGLE_BUFFER - desired present mode set SHARED";
+
         mDesiredSwapchainPresentMode = VK_PRESENT_MODE_SHARED_DEMAND_REFRESH_KHR;
     }
     else  // EGL_BACK_BUFFER
     {
+        INFO() << "setRendBuf BACK_BUFFER - desired present mode set FIFO";
         mDesiredSwapchainPresentMode = VK_PRESENT_MODE_FIFO_KHR;
     }
     return egl::NoError();

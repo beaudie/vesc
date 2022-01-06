@@ -248,6 +248,8 @@ class WindowSurfaceVk : public SurfaceVk
         return (mSwapchainPresentMode == VK_PRESENT_MODE_SHARED_DEMAND_REFRESH_KHR);
     }
 
+    angle::Result onSharedPresentContextFlush(const gl::Context *context);
+
   protected:
     angle::Result prepareSwapImpl(const gl::Context *context);
     angle::Result swapImpl(const gl::Context *context,
