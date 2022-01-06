@@ -70,8 +70,11 @@ angle::Result TextureImageSiblingMtl::initImpl(DisplayMtl *displayMtl)
 
     angle::FormatID angleFormatId =
         mtl::Format::MetalToAngleFormatID(mNativeTexture->pixelFormat());
-    mFormat = displayMtl->getPixelFormat(angleFormatId);
-
+    mFormat             = displayMtl->getPixelFormat(angleFormatId);
+    size_t resourceSize = EstimateTextureSizeInBytes(
+        mFormat, mNativeTexture->widthAt0(), mNativeTexture->heightAt0(),
+        mNativeTexture->depthAt0(), mNativeTexture->samples(), mNativeTexture->mipmapLevels());
+    mNativeTexture->setEstimatedBytes(resourceSize);
     mGLFormat = gl::Format(mFormat.intendedAngleFormat().glInternalFormat);
 
     mRenderable = mFormat.getCaps().depthRenderable || mFormat.getCaps().colorRenderable;

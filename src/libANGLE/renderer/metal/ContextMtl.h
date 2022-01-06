@@ -334,7 +334,6 @@ class ContextMtl : public ContextImpl, public mtl::Context
     void endRenderEncoding(mtl::RenderCommandEncoder *encoder);
     // Ends any active command encoder
     void endEncoding(bool forceSaveRenderPassContent);
-
     void flushCommandBuffer(mtl::CommandBufferFinishOperation operation);
     void present(const gl::Context *context, id<CAMetalDrawable> presentationDrawable);
     angle::Result finishCommandBuffer();
@@ -450,7 +449,7 @@ class ContextMtl : public ContextImpl, public mtl::Context
                                    gl::DrawElementsType type,
                                    const void *indices,
                                    GLsizei instanceCount);
-
+    void flushCommandBufferIfNeeded();
     void updateExtendedState(const gl::State &glState);
 
     void updateViewport(FramebufferMtl *framebufferMtl,
