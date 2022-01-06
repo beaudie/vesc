@@ -224,14 +224,17 @@ TEMPLATE_GLES_ENTRY_POINT_WITH_RETURN = """\
 TEMPLATE_EGL_ENTRY_POINT_NO_RETURN = """\
 void EGLAPIENTRY EGL_{name}({params})
 {{
-    ANGLE_SCOPED_GLOBAL_LOCK();
+    {entry_point_lock_domain}
     EGL_EVENT({name}, "{format_params}"{comma_if_needed}{pass_params});
 
     Thread *thread = egl::GetCurrentThread();
 
     {packed_gl_enum_conversions}
 
-    ANGLE_EGL_VALIDATE_VOID(thread, {name}, {labeled_object}, {internal_params});
+    {{
+        {validation_lock_domain}
+        ANGLE_EGL_VALIDATE_VOID(thread, {name}, {labeled_object}, {internal_params});
+    }}
 
     {name}(thread{comma_if_needed}{internal_params});
 }}
@@ -240,14 +243,17 @@ void EGLAPIENTRY EGL_{name}({params})
 TEMPLATE_EGL_ENTRY_POINT_WITH_RETURN = """\
 {return_type} EGLAPIENTRY EGL_{name}({params})
 {{
-    ANGLE_SCOPED_GLOBAL_LOCK();
+    {entry_point_lock_domain}
     EGL_EVENT({name}, "{format_params}"{comma_if_needed}{pass_params});
 
     Thread *thread = egl::GetCurrentThread();
 
     {packed_gl_enum_conversions}
 
-    ANGLE_EGL_VALIDATE(thread, {name}, {labeled_object}, {return_type}{comma_if_needed}{internal_params});
+    {{
+        {validation_lock_domain}
+        ANGLE_EGL_VALIDATE(thread, {name}, {labeled_object}, {return_type}{comma_if_needed}{internal_params});
+    }}
 
     return {name}(thread{comma_if_needed}{internal_params});
 }}
@@ -1516,8 +1522,10 @@ def format_entry_point_def(api, command_node, cmd_name, proto, params, cmd_packe
     else:
         has_errcode_ret = False
     packed_gl_enum_conversions = []
+
     for param in params:
         name = just_the_name(param)
+
         if name in packed_enums:
             internal_name = name + "Packed"
             internal_type = packed_enums[name]
@@ -1533,6 +1541,8 @@ def format_entry_point_def(api, command_node, cmd_name, proto, params, cmd_packe
     event_comment = TEMPLATE_EVENT_COMMENT if cmd_name in NO_EVENT_MARKER_EXCEPTIONS_LIST else ""
     name_lower_no_suffix = strip_suffix(api, cmd_name[2:3].lower() + cmd_name[3:])
     entry_point_name = "angle::EntryPoint::GL" + strip_api_prefix(cmd_name)
+
+    lock_domains = get_lock_domains(api, cmd_name, params)
 
     format_params = {
         "name":
@@ -1568,7 +1578,11 @@ def format_entry_point_def(api, command_node, cmd_name, proto, params, cmd_packe
         "event_comment":
             event_comment,
         "labeled_object":
-            get_egl_entry_point_labeled_object(ep_to_object, cmd_name, params, packed_enums)
+            get_egl_entry_point_labeled_object(ep_to_object, cmd_name, params, packed_enums),
+        "entry_point_lock_domain":
+            lock_domains.entry_point_lock_domain,
+        "validation_lock_domain":
+            lock_domains.validation_lock_domain
     }
 
     template = get_def_template(api, return_type, has_errcode_ret)
@@ -2487,6 +2501,38 @@ def get_egl_entry_point_labeled_object(ep_to_object, cmd_stripped, params, packe
 
     # We then handle the general case which handles the rest of the type categories.
     return "Get%sIfValid(%s, %s)" % (category, display_param, found_param)
+
+
+class LockDomains(object):
+
+    def __init__(self, entry_point, validation):
+        self.entry_point_lock_domain = entry_point
+        self.validation_lock_domain = validation
+
+
+def get_lock_domains(api, cmd_name, params):
+    lock_domain_global = "ANGLE_SCOPED_GLOBAL_LOCK();"
+    lock_domain_surface = "ANGLE_SCOPED_GLOBAL_SURFACE_LOCK();"
+
+    if api != apis.EGL:
+        return LockDomains(lock_domain_global, "")
+
+    validation_only_locks = ["eglSwapBuffers", "eglSwapBuffersWithDamageKHR"]
+
+    if cmd_name in validation_only_locks:
+        return LockDomains("", lock_domain_global)
+
+    has_surface = False
+
+    for param in params:
+        param_type = just_the_type(param)
+        if param_type == "EGLSurface":
+            has_surface = True
+
+    if has_surface:
+        return LockDomains(lock_domain_global + lock_domain_surface, "")
+
+    return LockDomains(lock_domain_global, "")
 
 
 def write_stubs_header(api, annotation, title, data_source, out_file, all_commands, commands,
