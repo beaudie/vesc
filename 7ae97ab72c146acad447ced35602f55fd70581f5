@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "028d4608_8fdd3441",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000050
+      },
+      "writtenOn": "2022-01-06T14:38:54Z",
+      "side": 1,
+      "message": "Hi Jamie \u0026 Shahbaz, I am considering not reset env variables after initialization. WDYT?",
+      "revId": "7ae97ab72c146acad447ced35602f55fd70581f5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
