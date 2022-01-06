@@ -1008,7 +1008,7 @@ angle::Result WindowSurfaceVk::recreateSwapchain(ContextVk *contextVk, const gl:
         ASSERT(mPreTransform == VK_SURFACE_TRANSFORM_IDENTITY_BIT_KHR);
         std::swap(swapchainExtents.width, swapchainExtents.height);
     }
-
+    WARN() << "5 recreateSwapchain call createSwapchain";
     angle::Result result = createSwapChain(contextVk, swapchainExtents, lastSwapchain);
 
     // Notify the parent classes of the surface's new state.
@@ -1079,6 +1079,7 @@ angle::Result WindowSurfaceVk::createSwapChain(vk::Context *context,
                                                VkSwapchainKHR lastSwapchain)
 {
     ANGLE_TRACE_EVENT0("gpu.angle", "WindowSurfaceVk::createSwapchain");
+    WARN() << "6. createSwapchain";
 
     ASSERT(mSwapchain == VK_NULL_HANDLE);
 
@@ -1154,6 +1155,7 @@ angle::Result WindowSurfaceVk::createSwapChain(vk::Context *context,
 
     if (mDesiredSwapchainPresentMode == VK_PRESENT_MODE_SHARED_DEMAND_REFRESH_KHR)
     {
+        WARN() << "createSwapchain - desired mode SHARED/set - image count 1";
         swapchainInfo.minImageCount = 1;
     }
 
@@ -1281,6 +1283,10 @@ angle::Result WindowSurfaceVk::checkForOutOfDateSwapchain(ContextVk *contextVk,
 {
     bool swapIntervalChanged = mSwapchainPresentMode != mDesiredSwapchainPresentMode;
     presentOutOfDate         = presentOutOfDate || swapIntervalChanged;
+
+    WARN() << "4. checkForOutOFDate";
+    WARN() << "checkForOutOfDateSwapchain: "
+           << (mSwapchainPresentMode != mDesiredSwapchainPresentMode);
 
     // If there's no change, early out.
     if (!contextVk->getRenderer()->getFeatures().perFrameWindowSizeQuery.enabled &&
@@ -1620,6 +1626,8 @@ angle::Result WindowSurfaceVk::present(ContextVk *contextVk,
 
     VkResult result = renderer->queuePresent(contextVk, contextVk->getPriority(), presentInfo);
 
+    WARN() << "present result: " << result;
+
     // Set FrameNumber for the presented image.
     mSwapchainImages[mCurrentSwapchainImageIndex].mFrameNumber = mFrameCount++;
 
@@ -1637,9 +1645,12 @@ angle::Result WindowSurfaceVk::swapImpl(const gl::Context *context,
 
     ContextVk *contextVk = vk::GetImpl(context);
 
+    WARN() << "2 swapImpl call present";
+
     bool presentOutOfDate = false;
     ANGLE_TRY(present(contextVk, rects, n_rects, pNextChain, &presentOutOfDate));
 
+    WARN() << "swapImpl present return presentOutOfDate: " << presentOutOfDate;
     if (!presentOutOfDate)
     {
         // Defer acquiring the next swapchain image since the swapchain is not out-of-date.
@@ -1658,6 +1669,11 @@ angle::Result WindowSurfaceVk::swapImpl(const gl::Context *context,
     ANGLE_TRY(renderer->syncPipelineCacheVk(displayVk, context));
 
     return angle::Result::Continue;
+}
+
+angle::Result WindowSurfaceVk::onSharedPresentContextFlush(const gl::Context *context)
+{
+    return swapImpl(context, nullptr, 0, nullptr);
 }
 
 void WindowSurfaceVk::deferAcquireNextImage(const gl::Context *context)
@@ -1688,7 +1704,7 @@ angle::Result WindowSurfaceVk::doDeferredAcquireNextImage(const gl::Context *con
         // or not.
         ANGLE_TRY(computePresentOutOfDate(contextVk, result, &presentOutOfDate));
     }
-
+    WARN() << "3 doDeferredANI, call checkForOutOfDate";
     ANGLE_TRY(checkForOutOfDateSwapchain(contextVk, presentOutOfDate));
 
     {
@@ -1730,39 +1746,53 @@ angle::Result WindowSurfaceVk::doDeferredAcquireNextImage(const gl::Context *con
 VkResult WindowSurfaceVk::acquireNextSwapchainImage(vk::Context *context)
 {
     VkDevice device = context->getDevice();
+    WARN() << "ANI";
 
     if (mSwapchainPresentMode == VK_PRESENT_MODE_SHARED_DEMAND_REFRESH_KHR)
     {
+        WARN() << "ANI mode is SHARED";
         ASSERT(mSwapchainImages.size());
         SwapchainImage &image = mSwapchainImages[0];
         if (image.image.valid() &&
             (image.image.getCurrentImageLayout() == vk::ImageLayout::SharedPresent))
         {  // This will check for OUT_OF_DATE when in single image mode. and prevent
            // re-AcquireNextImage.
+            WARN() << "ANI mode is SHARED, layout is SharedPresent, calling getSwapchainStatus";
             return vkGetSwapchainStatusKHR(device, mSwapchain);
         }
     }
 
     const vk::Semaphore *acquireImageSemaphore = &mAcquireImageSemaphores.front();
 
+    WARN() << "ANI vkAcquireNextImage";
     VkResult result =
         vkAcquireNextImageKHR(device, mSwapchain, UINT64_MAX, acquireImageSemaphore->getHandle(),
                               VK_NULL_HANDLE, &mCurrentSwapchainImageIndex);
+    WARN() << "vkAcquireNextImage result: " << result;
 
-    acquireImageSemaphore->valid();
+    //    acquireImageSemaphore->valid();
+    if (!acquireImageSemaphore->valid())
+    {
+        WARN() << "acquireImageSemaphore->valid(): false";
+    }
 
     // VK_SUBOPTIMAL_KHR is ok since we still have an Image that can be presented successfully
     if (ANGLE_UNLIKELY(result != VK_SUCCESS && result != VK_SUBOPTIMAL_KHR))
     {
+        WARN() << "ANI vkAcquireNextImage fail";
         return result;
     }
 
     SwapchainImage &image = mSwapchainImages[mCurrentSwapchainImageIndex];
 
+    WARN() << "next image valid: " << image.image.valid();
+
     // Single Image Mode
     if ((mSwapchainPresentMode == VK_PRESENT_MODE_SHARED_DEMAND_REFRESH_KHR) &&
         (image.image.getCurrentImageLayout() != vk::ImageLayout::SharedPresent))
     {
+        WARN() << "ANI mode is SHARED, layout is NOT SharedPresent, transition layout";
+
         rx::RendererVk *rendererVk = context->getRenderer();
         rx::vk::PrimaryCommandBuffer primaryCommandBuffer;
         if (rendererVk->getCommandBufferOneOff(context, mState.hasProtectedContent(),
@@ -2182,10 +2212,13 @@ egl::Error WindowSurfaceVk::setRenderBuffer(EGLint renderBuffer)
 
     if (renderBuffer == EGL_SINGLE_BUFFER)
     {
+        WARN() << "1 setRendBuf SINGLE_BUFFER - desired present mode set SHARED";
+
         mDesiredSwapchainPresentMode = VK_PRESENT_MODE_SHARED_DEMAND_REFRESH_KHR;
     }
     else  // EGL_BACK_BUFFER
     {
+        WARN() << "setRendBuf BACK_BUFFER - desired present mode set FIFO";
         mDesiredSwapchainPresentMode = VK_PRESENT_MODE_FIFO_KHR;
     }
     return egl::NoError();
