@@ -20,6 +20,29 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "096df8af_248c6c06",
+        "filename": "src/libANGLE/renderer/vulkan/SurfaceVk.cpp",
+        "patchSetId": 12
+      },
+      "lineNbr": 1411,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2022-01-06T19:31:35Z",
+      "side": 1,
+      "message": "With this patch, you will call doDeferredAcquireNextImage without the global lock. doDeferredAcquireNextImage() end up calling\n     ANGLE_TRY(renderer-\u003esyncPipelineCacheVk(displayVk, context));\nWhich will touch pipeline cache that rendering thread may use. I think this is unsafe. Maybe you want to refactor this function so that it do the minimum work and move the syncPipelineCacheVk call out of doDeferredAcquireNextImage.\n\nOr wouldn\u0027t it be better that instead of ANGLE_SCOPED_GLOBAL_SURFACE_LOCK, you just wrap swapchain and related state into data structure and use a lock to protect swap chain? And you make sure prepareSwapImpl only touches this swapchain data structure (most of renderer access is for feature bit which you can safely cache it in sawpchain at creation time).",
+      "range": {
+        "startLine": 1411,
+        "startChar": 18,
+        "endLine": 1411,
+        "endChar": 44
+      },
+      "revId": "5cdd30dabd95e87aac709dd4adb6bc484c6deda3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "0fa0a60b_e0d4a57a",
         "filename": "src/libGLESv2/entry_points_egl_ext_autogen.cpp",
         "patchSetId": 12
