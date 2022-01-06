@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "c59a687e_3ee9e39b",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2022-01-06T17:17:48Z",
+      "side": 1,
+      "message": "Actually no issues. SOmehow the commit email shows this diff in RendererVk.cpp:\n\nauto enumerateInstanceVersion \u003d reinterpret_cast\u003cPFN_vkEnumerateInstanceVersion\u003e(\n-        vkGetInstanceProcAddr(mInstance, \"vkEnumerateInstanceVersion\"));\n+        vkGetInstanceProcAddr(nullptr, \"vkEnumerateInstanceVersion\"));\n\nBut actually inspection shows there is no such diff in my CL. Reland the CL now. Sorry for confusion.",
+      "revId": "5cc9948df3456b4a437caed6930b6c7332a963eb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
