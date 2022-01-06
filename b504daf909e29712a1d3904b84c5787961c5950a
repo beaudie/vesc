@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "ba14cbe9_bf1f8911",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 15
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2022-01-06T23:20:01Z",
+      "side": 1,
+      "message": "LGTM. Given only one context can bind to the particular surface, and that context can only be current on one thread. This should be safe, I think.",
+      "revId": "b504daf909e29712a1d3904b84c5787961c5950a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
