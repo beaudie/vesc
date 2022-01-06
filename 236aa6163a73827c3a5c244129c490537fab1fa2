@@ -1,0 +1,89 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ca62aeda_23415a3b",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2022-01-06T00:14:19Z",
+      "side": 1,
+      "message": "Consider calling this \"Metal: refactor to build without SPIR-V\" to fit within the 80 column limit.",
+      "revId": "236aa6163a73827c3a5c244129c490537fab1fa2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "5f7fc61d_b8edb80f",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 9,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2022-01-06T00:14:19Z",
+      "side": 1,
+      "message": "thier -\u003e their",
+      "revId": "236aa6163a73827c3a5c244129c490537fab1fa2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "1554597a_88002ad0",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2022-01-06T00:14:19Z",
+      "side": 1,
+      "message": "lgtm with a few small comments.\n",
+      "revId": "236aa6163a73827c3a5c244129c490537fab1fa2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "6748e02f_0f8a2752",
+        "filename": "src/libANGLE/renderer/ShaderInterfaceVariableInfoMap.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2022-01-06T00:14:19Z",
+      "side": 1,
+      "message": "At this point you could call this the \"Direct-to-Metal and Metal-SPIRV backends\" since the direct-to-Metal backend is used preferentially now.",
+      "revId": "236aa6163a73827c3a5c244129c490537fab1fa2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "4da71ea3_6d124f4b",
+        "filename": "src/libANGLE/renderer/metal/ProgramMtl.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 21,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2022-01-06T00:14:19Z",
+      "side": 1,
+      "message": "Stray blank line.",
+      "revId": "236aa6163a73827c3a5c244129c490537fab1fa2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
