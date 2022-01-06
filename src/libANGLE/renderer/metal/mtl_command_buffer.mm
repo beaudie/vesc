@@ -603,6 +603,19 @@ void CommandBuffer::present(id<CAMetalDrawable> presentationDrawable)
     [get() presentDrawable:presentationDrawable];
 }
 
+void CommandBuffer::setResourceUsedByCommandBuffer(const ResourceRef &resource)
+{
+    if (resource)
+    {
+        auto result = mResourceList.insert(resource);
+        // If we were able to add a unique resource to the list
+        if (result.second)
+        {
+            mWorkingResourceSize += resource->estimatedByteSize();
+        }
+    }
+}
+
 void CommandBuffer::setWriteDependency(const ResourceRef &resource)
 {
     if (!resource)
@@ -618,11 +631,13 @@ void CommandBuffer::setWriteDependency(const ResourceRef &resource)
     }
 
     resource->setUsedByCommandBufferWithQueueSerial(mQueueSerial, true);
+    setResourceUsedByCommandBuffer(resource);
 }
 
 void CommandBuffer::setReadDependency(const ResourceRef &resource)
 {
     setReadDependency(resource.get());
+    setResourceUsedByCommandBuffer(resource);
 }
 
 void CommandBuffer::setReadDependency(Resource *resource)
@@ -642,6 +657,11 @@ void CommandBuffer::setReadDependency(Resource *resource)
     resource->setUsedByCommandBufferWithQueueSerial(mQueueSerial, false);
 }
 
+bool CommandBuffer::needsFlushForDrawCallLimits() const
+{
+    return mWorkingResourceSize > kMaximumResidentMemorySizeInBytes;
+}
+
 void CommandBuffer::restart()
 {
     uint64_t serial                                  = 0;
@@ -657,7 +677,8 @@ void CommandBuffer::restart()
     {
         pushDebugGroupImpl(marker);
     }
-
+    mWorkingResourceSize = 0;
+    mResourceList.clear();
     ASSERT(metalCmdBuffer);
 }
 
@@ -797,6 +818,9 @@ bool CommandBuffer::commitImpl()
 
     // Do the actual commit
     [get() commit];
+    // Reset the working resource set.
+    mWorkingResourceSize = 0;
+    mResourceList.clear();
     mCommitted = true;
     return true;
 }
