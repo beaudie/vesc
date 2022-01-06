@@ -3147,21 +3147,21 @@ void ContextVk::optimizeRenderPassForPresent(VkFramebuffer framebufferHandle)
         return;
     }
 
-    // EGL1.5 spec: The contents of ancillary buffers are always undefined after calling
-    // eglSwapBuffers
-    RenderTargetVk *depthStencilRenderTarget = mDrawFramebuffer->getDepthStencilRenderTarget();
-    if (depthStencilRenderTarget)
-    {
-        // Change depth/stencil attachment storeOp to DONT_CARE
-        const gl::DepthStencilState &dsState = mState.getDepthStencilState();
-        mRenderPassCommands->invalidateRenderPassStencilAttachment(
-            dsState, mRenderPassCommands->getRenderArea());
-        mRenderPassCommands->invalidateRenderPassDepthAttachment(
-            dsState, mRenderPassCommands->getRenderArea());
-        // Mark content as invalid so that we will not load them in next renderpass
-        depthStencilRenderTarget->invalidateEntireContent(this);
-        depthStencilRenderTarget->invalidateEntireStencilContent(this);
-    }
+    //    // EGL1.5 spec: The contents of ancillary buffers are always undefined after calling
+    //    // eglSwapBuffers
+    //    RenderTargetVk *depthStencilRenderTarget =
+    //    mDrawFramebuffer->getDepthStencilRenderTarget(); if (depthStencilRenderTarget)
+    //    {
+    //        // Change depth/stencil attachment storeOp to DONT_CARE
+    //        const gl::DepthStencilState &dsState = mState.getDepthStencilState();
+    //        mRenderPassCommands->invalidateRenderPassStencilAttachment(
+    //            dsState, mRenderPassCommands->getRenderArea());
+    //        mRenderPassCommands->invalidateRenderPassDepthAttachment(
+    //            dsState, mRenderPassCommands->getRenderArea());
+    //        // Mark content as invalid so that we will not load them in next renderpass
+    //        depthStencilRenderTarget->invalidateEntireContent(this);
+    //        depthStencilRenderTarget->invalidateEntireStencilContent(this);
+    //    }
 
     // Use finalLayout instead of extra barrier for layout change to present
     vk::ImageHelper &image = color0RenderTarget->getImageForWrite();
