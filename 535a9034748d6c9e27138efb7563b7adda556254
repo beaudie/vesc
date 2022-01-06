@@ -1,0 +1,44 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "5c2da160_816b5803",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2022-01-06T20:59:26Z",
+      "side": 1,
+      "message": "Please also remove the extra code I added in capture_replay_utils/build.gn",
+      "revId": "535a9034748d6c9e27138efb7563b7adda556254",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "1746b447_94ff0815",
+        "filename": "gni/angle.gni",
+        "patchSetId": 2
+      },
+      "lineNbr": 322,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2022-01-06T20:59:26Z",
+      "side": 1,
+      "message": "I\u0027d remove this comment, it isn\u0027t helpful to maintain a list of specific targets here.",
+      "range": {
+        "startLine": 321,
+        "startChar": 5,
+        "endLine": 322,
+        "endChar": 75
+      },
+      "revId": "535a9034748d6c9e27138efb7563b7adda556254",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
