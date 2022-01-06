@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "2ca7071f_3931521d",
+        "filename": "src/tests/egl_tests/EGLContextSharingTest.cpp",
+        "patchSetId": 9
+      },
+      "lineNbr": 1036,
+      "author": {
+        "id": 1175714
+      },
+      "writtenOn": "2022-01-06T01:02:51Z",
+      "side": 1,
+      "message": "this crashes in the gl backend (it looks like glx\u0027s make current fails there)",
+      "range": {
+        "startLine": 1036,
+        "startChar": 0,
+        "endLine": 1036,
+        "endChar": 47
+      },
+      "revId": "5426c0863ed46c71f2c94607f6cffb772b13ee3a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
