@@ -35,6 +35,29 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": true,
+      "key": {
+        "uuid": "95272425_1a31dcde",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 11,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-01-06T04:36:24Z",
+      "side": 1,
+      "message": "I must have missed something, how is the class you moved using SPIR-V headers?\n\n(I don\u0027t object the change)",
+      "range": {
+        "startLine": 10,
+        "startChar": 36,
+        "endLine": 11,
+        "endChar": 13
+      },
+      "revId": "236aa6163a73827c3a5c244129c490537fab1fa2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": false,
       "key": {
         "uuid": "1554597a_88002ad0",
@@ -65,6 +88,47 @@
       "writtenOn": "2022-01-06T00:14:19Z",
       "side": 1,
       "message": "At this point you could call this the \"Direct-to-Metal and Metal-SPIRV backends\" since the direct-to-Metal backend is used preferentially now.",
+      "revId": "236aa6163a73827c3a5c244129c490537fab1fa2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "84cc618e_6b0b4955",
+        "filename": "src/libANGLE/renderer/ShaderInterfaceVariableInfoMap.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-01-06T04:36:24Z",
+      "side": 1,
+      "message": "I think this really meant to say by both the Vulkan and Metal backends. This was done for the Vulkan backend to begin with!",
+      "parentUuid": "6748e02f_0f8a2752",
+      "revId": "236aa6163a73827c3a5c244129c490537fab1fa2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "53666029_8bd25906",
+        "filename": "src/libANGLE/renderer/ShaderInterfaceVariableInfoMap.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 9,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-01-06T04:36:24Z",
+      "side": 1,
+      "message": "Nit: not how we name our guards.",
+      "range": {
+        "startLine": 9,
+        "startChar": 8,
+        "endLine": 9,
+        "endChar": 42
+      },
       "revId": "236aa6163a73827c3a5c244129c490537fab1fa2",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
