@@ -153,6 +153,11 @@ angle::Result IOSurfaceSurfaceMtl::ensureColorTextureCreated(const gl::Context *
         mColorTexture =
             mtl::Texture::MakeFromMetal(contextMtl->getMetalDevice().newTextureWithDescriptor(
                 texDesc, mIOSurface, mIOSurfacePlane));
+
+        size_t resourceSize = EstimateTextureSizeInBytes(
+            mColorFormat, mColorTexture->widthAt0(), mColorTexture->heightAt0(),
+            mColorTexture->depthAt0(), mColorTexture->samples(), mColorTexture->mipmapLevels());
+        mColorTexture->setEstimatedBytes(resourceSize);
     }
 
     mColorRenderTarget.set(mColorTexture, mtl::kZeroNativeMipLevel, 0, mColorFormat);

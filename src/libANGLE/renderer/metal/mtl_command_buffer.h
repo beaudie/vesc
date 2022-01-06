@@ -131,6 +131,8 @@ class CommandBuffer final : public WrappedObject<id<MTLCommandBuffer>>, angle::N
     void setActiveCommandEncoder(CommandEncoder *encoder);
     void invalidateActiveCommandEncoder(CommandEncoder *encoder);
 
+    bool needsFlushForDrawCallLimits() const;
+
   private:
     void set(id<MTLCommandBuffer> metalBuffer);
     void cleanup();
@@ -146,6 +148,8 @@ class CommandBuffer final : public WrappedObject<id<MTLCommandBuffer>>, angle::N
     void pushDebugGroupImpl(const std::string &marker);
     void popDebugGroupImpl();
 
+    void setResourceUsedByCommandBuffer(const ResourceRef &resource);
+
     using ParentClass = WrappedObject<id<MTLCommandBuffer>>;
 
     CommandQueue &mCmdQueue;
@@ -158,10 +162,11 @@ class CommandBuffer final : public WrappedObject<id<MTLCommandBuffer>>, angle::N
 
     std::vector<std::string> mPendingDebugSigns;
     std::vector<std::pair<mtl::SharedEventRef, uint64_t>> mPendingSignalEvents;
-
     std::vector<std::string> mDebugGroups;
 
-    bool mCommitted = false;
+    std::unordered_set<mtl::ResourceRef> mResourceList;
+    size_t mWorkingResourceSize = 0;
+    bool mCommitted             = false;
 };
 
 class CommandEncoder : public WrappedObject<id<MTLCommandEncoder>>, angle::NonCopyable
