@@ -16,6 +16,57 @@
       "message": "I played around in the registry more and found that there are IOGraphicsAccelerator2 entries that match the MTLDevice ID, which are the child of the IOPCIDevice that contains the info used by SystemInfo",
       "revId": "03d739f94ce8ebaeed131df3fb07ab014aea8f8c",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "9f15f7f9_26b2a7c2",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2022-01-06T22:15:05Z",
+      "side": 1,
+      "message": "Fantastic work finding a way to do this enumeration without calling into Metal!\n\nIt looks good overall, just a couple of small nits.\n",
+      "revId": "03d739f94ce8ebaeed131df3fb07ab014aea8f8c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b12912e4_d3aaa3ac",
+        "filename": "src/gpu_info_util/SystemInfo_macos.mm",
+        "patchSetId": 2
+      },
+      "lineNbr": 163,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2022-01-06T22:15:05Z",
+      "side": 1,
+      "message": "This path\u0027s missing IOObjectRelease(queryEntry).",
+      "revId": "03d739f94ce8ebaeed131df3fb07ab014aea8f8c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "5bb4e322_54e929d0",
+        "filename": "src/gpu_info_util/SystemInfo_macos.mm",
+        "patchSetId": 2
+      },
+      "lineNbr": 167,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2022-01-06T22:15:05Z",
+      "side": 1,
+      "message": "Same here.",
+      "revId": "03d739f94ce8ebaeed131df3fb07ab014aea8f8c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
