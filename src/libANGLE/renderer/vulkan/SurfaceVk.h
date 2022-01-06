@@ -267,6 +267,8 @@ class WindowSurfaceVk : public SurfaceVk
     egl::Error unlockSurface(const egl::Display *display, bool preservePixels) override;
     EGLint origin() const override;
 
+    angle::Result onSharedPresentContextFlush(const gl::Context *context);
+
   protected:
     angle::Result prepareSwapImpl(const gl::Context *context);
     angle::Result swapImpl(const gl::Context *context,
@@ -298,6 +300,7 @@ class WindowSurfaceVk : public SurfaceVk
     // when the swapchain is initially created and when present() finds the swapchain out of date.
     // Otherwise, it is scheduled to be called later by deferAcquireNextImage().
     VkResult acquireNextSwapchainImage(vk::Context *context);
+    VkResult acquireNextSwapchainImageImpl(vk::Context *context);
     // This method is called when a swapchain image is presented.  It schedules
     // acquireNextSwapchainImage() to be called later.
     void deferAcquireNextImage(const gl::Context *context);

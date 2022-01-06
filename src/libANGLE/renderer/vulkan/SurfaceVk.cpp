@@ -1377,6 +1377,11 @@ angle::Result WindowSurfaceVk::createSwapChain(vk::Context *context,
         // We will need to pass depth/stencil image views to the RenderTargetVk in the future.
     }
 
+    if (mSwapchainPresentMode == VK_PRESENT_MODE_SHARED_DEMAND_REFRESH_KHR)
+    {
+        ANGLE_VK_TRY(context, acquireNextSwapchainImageImpl(context));
+    }
+
     return angle::Result::Continue;
 }
 
@@ -1792,6 +1797,11 @@ angle::Result WindowSurfaceVk::swapImpl(const gl::Context *context,
     return angle::Result::Continue;
 }
 
+angle::Result WindowSurfaceVk::onSharedPresentContextFlush(const gl::Context *context)
+{
+    return swapImpl(context, nullptr, 0, nullptr);
+}
+
 void WindowSurfaceVk::deferAcquireNextImage(const gl::Context *context)
 {
     mNeedToAcquireNextSwapchainImage = true;
@@ -1859,29 +1869,15 @@ angle::Result WindowSurfaceVk::doDeferredAcquireNextImage(const gl::Context *con
 
 // This method will either return VK_SUCCESS or VK_ERROR_*.  Thus, it is appropriate to ASSERT that
 // the return value won't be VK_SUBOPTIMAL_KHR.
-VkResult WindowSurfaceVk::acquireNextSwapchainImage(vk::Context *context)
+VkResult WindowSurfaceVk::acquireNextSwapchainImageImpl(vk::Context *context)
 {
     VkDevice device = context->getDevice();
-
-    if (mSwapchainPresentMode == VK_PRESENT_MODE_SHARED_DEMAND_REFRESH_KHR)
-    {
-        ASSERT(mSwapchainImages.size());
-        SwapchainImage &image = mSwapchainImages[0];
-        if (image.image.valid() &&
-            (image.image.getCurrentImageLayout() == vk::ImageLayout::SharedPresent))
-        {  // This will check for OUT_OF_DATE when in single image mode. and prevent
-           // re-AcquireNextImage.
-            return vkGetSwapchainStatusKHR(device, mSwapchain);
-        }
-    }
 
     const vk::Semaphore *acquireImageSemaphore = &mAcquireImageSemaphores.front();
 
     VkResult result =
         vkAcquireNextImageKHR(device, mSwapchain, UINT64_MAX, acquireImageSemaphore->getHandle(),
                               VK_NULL_HANDLE, &mCurrentSwapchainImageIndex);
-
-    acquireImageSemaphore->valid();
 
     // VK_SUBOPTIMAL_KHR is ok since we still have an Image that can be presented successfully
     if (ANGLE_UNLIKELY(result != VK_SUCCESS && result != VK_SUBOPTIMAL_KHR))
@@ -1943,6 +1939,25 @@ VkResult WindowSurfaceVk::acquireNextSwapchainImage(vk::Context *context)
     mNeedToAcquireNextSwapchainImage = false;
 
     return VK_SUCCESS;
+}
+
+VkResult WindowSurfaceVk::acquireNextSwapchainImage(vk::Context *context)
+{
+    VkDevice device = context->getDevice();
+
+    if (mSwapchainPresentMode == VK_PRESENT_MODE_SHARED_DEMAND_REFRESH_KHR)
+    {
+        ASSERT(mSwapchainImages.size());
+        SwapchainImage &image = mSwapchainImages[0];
+        if (image.image.valid() &&
+            (image.image.getCurrentImageLayout() == vk::ImageLayout::SharedPresent))
+        {  // This will check for OUT_OF_DATE when in single image mode. and prevent
+           // re-AcquireNextImage.
+            return vkGetSwapchainStatusKHR(device, mSwapchain);
+        }
+    }
+
+    return acquireNextSwapchainImageImpl(context);
 }
 
 egl::Error WindowSurfaceVk::postSubBuffer(const gl::Context *context,
