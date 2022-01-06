@@ -13,8 +13,10 @@
 #include "libANGLE/EGLSync.h"
 #include "libANGLE/Surface.h"
 #include "libANGLE/Thread.h"
+#include "libANGLE/entry_points_utils.h"
 #include "libANGLE/queryutils.h"
 #include "libANGLE/validationEGL.h"
+#include "libANGLE/validationEGL_autogen.h"
 #include "libGLESv2/global_state.h"
 
 namespace egl
@@ -584,6 +586,42 @@ EGLBoolean SwapBuffersWithDamageKHR(Thread *thread,
                          EGL_FALSE);
 
     thread->setSuccess();
+    return EGL_TRUE;
+}
+
+EGLBoolean PrepareSwapBuffersANGLE(EGLDisplay dpy, EGLSurface surface)
+
+{
+    ANGLE_SCOPED_GLOBAL_SURFACE_LOCK();
+    ANGLE_SCOPED_GLOBAL_LOCK();
+
+    auto &globalMutex = egl::GetGlobalMutex();
+    globalMutex.lock();
+
+    egl::Display *dpyPacked = PackParam<egl::Display *>(dpy);
+    Surface *surfacePacked  = PackParam<Surface *>(surface);
+
+    EGL_EVENT(PrepareSwapBuffersANGLE, "dpy = 0x%016" PRIxPTR ", surface = 0x%016" PRIxPTR "",
+              (uintptr_t)dpy, (uintptr_t)surface);
+
+    Thread *thread = egl::GetCurrentThread();
+
+    ANGLE_EGL_VALIDATE_WITH_CLEANUP(thread, PrepareSwapBuffersANGLE, GetDisplayIfValid(dpyPacked),
+                                    EGLBoolean, globalMutex.unlock(), dpyPacked, surfacePacked);
+
+    ANGLE_EGL_TRY_RETURN_WITH_CLEANUP(thread, dpyPacked->prepareForCall(),
+                                      "eglPrepareSwapBuffersANGLE", GetDisplayIfValid(dpyPacked),
+                                      EGL_FALSE, globalMutex.unlock());
+
+    globalMutex.unlock();
+
+    ANGLE_EGL_TRY_RETURN(thread, surfacePacked->prepareSwap(thread->getContext()), "prepareSwap",
+                         GetSurfaceIfValid(dpyPacked, surfacePacked), EGL_FALSE);
+
+    globalMutex.lock();
+
+    thread->setSuccess();
+    globalMutex.unlock();
     return EGL_TRUE;
 }
 
