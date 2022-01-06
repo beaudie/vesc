@@ -69,7 +69,8 @@ constexpr uint32_t kMaxTriFanLineLoopBuffersPerFrame = 10;
             invalidateRenderPipeline();                                                          \
             DRAW_PROC(false);                                                                    \
         }                                                                                        \
-    }
+    }                                                                                            \
+
 
 angle::Result AllocateTriangleFanBufferFromPool(ContextMtl *context,
                                                 GLsizei vertexCount,
@@ -1591,6 +1592,14 @@ void ContextMtl::flushCommandBuffer(mtl::CommandBufferFinishOperation operation)
     mCmdBuffer.commit(operation);
 }
 
+void ContextMtl::flushCommandBufferIfNeeded()
+{
+    if (mCmdBuffer.needsFlushForDrawCallLimits())
+    {
+        flushCommandBuffer(mtl::NoWait);
+    }
+}
+
 void ContextMtl::present(const gl::Context *context, id<CAMetalDrawable> presentationDrawable)
 {
     ensureCommandBufferReady();
@@ -1742,7 +1751,6 @@ mtl::ComputeCommandEncoder *ContextMtl::getComputeCommandEncoder()
     }
 
     endEncoding(true);
-
     ensureCommandBufferReady();
 
     return &mComputeEncoder.restart();
@@ -1755,6 +1763,7 @@ mtl::ComputeCommandEncoder *ContextMtl::getIndexPreprocessingCommandEncoder()
 
 void ContextMtl::ensureCommandBufferReady()
 {
+    flushCommandBufferIfNeeded();
     mProvokingVertexHelper.ensureCommandBufferReady();
     if (!mCmdBuffer.ready())
     {
