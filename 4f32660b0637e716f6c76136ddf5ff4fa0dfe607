@@ -16,6 +16,23 @@
       "message": "PTAL, going to test this on ios-simulator before landing",
       "revId": "4f32660b0637e716f6c76136ddf5ff4fa0dfe607",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "6533daf7_df3ee9cd",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1001921
+      },
+      "writtenOn": "2022-01-06T19:48:05Z",
+      "side": 1,
+      "message": "Passed ios-simulator compile in crrev.com/c/3370785.\nhttps://ci.chromium.org/ui/p/chromium/builders/try/ios-simulator/1047543/overview",
+      "revId": "4f32660b0637e716f6c76136ddf5ff4fa0dfe607",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
