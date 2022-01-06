@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "60ef148c_5c20456b",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1001921
+      },
+      "writtenOn": "2022-01-06T19:24:32Z",
+      "side": 1,
+      "message": "PTAL, going to test this on ios-simulator before landing",
+      "revId": "4f32660b0637e716f6c76136ddf5ff4fa0dfe607",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
