@@ -1585,6 +1585,14 @@ void ContextMtl::flushCommandBuffer(mtl::CommandBufferFinishOperation operation)
     mCmdBuffer.commit(operation);
 }
 
+void ContextMtl::flushCommandBufferIfNeeded()
+{
+    if (mCmdBuffer.needsFlushForDrawCallLimits())
+    {
+        flushCommandBuffer(mtl::NoWait);
+    }
+}
+
 void ContextMtl::present(const gl::Context *context, id<CAMetalDrawable> presentationDrawable)
 {
     ensureCommandBufferReady();
@@ -1597,6 +1605,7 @@ void ContextMtl::present(const gl::Context *context, id<CAMetalDrawable> present
     }
 
     endEncoding(false);
+
     mCmdBuffer.present(presentationDrawable);
     mCmdBuffer.commit(mtl::NoWait);
 }
@@ -1632,7 +1641,6 @@ mtl::RenderCommandEncoder *ContextMtl::getRenderPassCommandEncoder(const mtl::Re
     }
 
     endEncoding(false);
-
     ensureCommandBufferReady();
 
     // Need to re-apply everything on next draw call.
@@ -1722,7 +1730,6 @@ mtl::BlitCommandEncoder *ContextMtl::getBlitCommandEncoder()
     }
 
     endEncoding(true);
-
     ensureCommandBufferReady();
 
     return &mBlitEncoder.restart();
@@ -1736,7 +1743,6 @@ mtl::ComputeCommandEncoder *ContextMtl::getComputeCommandEncoder()
     }
 
     endEncoding(true);
-
     ensureCommandBufferReady();
 
     return &mComputeEncoder.restart();
@@ -1749,6 +1755,7 @@ mtl::ComputeCommandEncoder *ContextMtl::getIndexPreprocessingCommandEncoder()
 
 void ContextMtl::ensureCommandBufferReady()
 {
+    flushCommandBufferIfNeeded();
     mProvokingVertexHelper.ensureCommandBufferReady();
     if (!mCmdBuffer.ready())
     {
