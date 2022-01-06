@@ -1,0 +1,44 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "8e061470_034f477a",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 12
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2022-01-06T15:23:53Z",
+      "side": 1,
+      "message": "This approach looks safe to me. I like this iteration as a targeted optimization.",
+      "revId": "5cdd30dabd95e87aac709dd4adb6bc484c6deda3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "0fa0a60b_e0d4a57a",
+        "filename": "src/libGLESv2/entry_points_egl_ext_autogen.cpp",
+        "patchSetId": 12
+      },
+      "lineNbr": 1136,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2022-01-06T15:23:53Z",
+      "side": 1,
+      "message": "You could refactor this function with SwapBuffers. It should at least call the new prepareSwap.",
+      "range": {
+        "startLine": 1136,
+        "startChar": 23,
+        "endLine": 1136,
+        "endChar": 51
+      },
+      "revId": "5cdd30dabd95e87aac709dd4adb6bc484c6deda3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
