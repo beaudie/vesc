@@ -22,6 +22,30 @@
       },
       "revId": "5426c0863ed46c71f2c94607f6cffb772b13ee3a",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "4e9829e5_5de940b1",
+        "filename": "src/tests/egl_tests/EGLContextSharingTest.cpp",
+        "patchSetId": 9
+      },
+      "lineNbr": 1036,
+      "author": {
+        "id": 1175714
+      },
+      "writtenOn": "2022-01-06T21:41:05Z",
+      "side": 1,
+      "message": "This needs the platform to be multithreaded",
+      "parentUuid": "2ca7071f_3931521d",
+      "range": {
+        "startLine": 1036,
+        "startChar": 0,
+        "endLine": 1036,
+        "endChar": 47
+      },
+      "revId": "5426c0863ed46c71f2c94607f6cffb772b13ee3a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
