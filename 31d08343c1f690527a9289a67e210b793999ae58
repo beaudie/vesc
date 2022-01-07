@@ -95,6 +95,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "41a5307d_68d38aee",
+        "filename": "src/libANGLE/Program.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 3545,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2022-01-07T16:24:53Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "21facf54_54ff1c14",
+      "range": {
+        "startLine": 3545,
+        "startChar": 72,
+        "endLine": 3545,
+        "endChar": 78
+      },
+      "revId": "31d08343c1f690527a9289a67e210b793999ae58",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "3ed81d8e_9e9d1f93",
@@ -203,6 +227,30 @@
       "writtenOn": "2022-01-05T00:36:13Z",
       "side": 1,
       "message": "Similar to the above comment.   These shader stages aren\u0027t linked yet, but are in the process of being linked.   Instead, something like \u0027attachedShaderStages\u0027 would be more accurate.",
+      "range": {
+        "startLine": 56,
+        "startChar": 38,
+        "endLine": 56,
+        "endChar": 56
+      },
+      "revId": "31d08343c1f690527a9289a67e210b793999ae58",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "74149235_5f6af426",
+        "filename": "src/libANGLE/ProgramLinkedResources.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 56,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2022-01-07T16:24:53Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "63152a6e_c1c63f11",
       "range": {
         "startLine": 56,
         "startChar": 38,
