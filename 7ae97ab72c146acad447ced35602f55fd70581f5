@@ -1,6 +1,29 @@
 {
   "comments": [
     {
+      "unresolved": true,
+      "key": {
+        "uuid": "7df463bd_d9c3e5e0",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-01-07T22:00:10Z",
+      "side": 1,
+      "message": "nit:\n\n    Vulkan: Don\u0027t reset ...",
+      "range": {
+        "startLine": 7,
+        "startChar": 0,
+        "endLine": 7,
+        "endChar": 3
+      },
+      "revId": "7ae97ab72c146acad447ced35602f55fd70581f5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": false,
       "key": {
         "uuid": "028d4608_8fdd3441",
@@ -67,6 +90,23 @@
       "side": 1,
       "message": "Instead of using the scoped vk loader, we just set the necessary env variables and don\u0027t bother with the scoped class.",
       "parentUuid": "d44f35a3_9b633ea6",
+      "revId": "7ae97ab72c146acad447ced35602f55fd70581f5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "bb24b261_214146d3",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 1149,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-01-07T22:00:10Z",
+      "side": 1,
+      "message": "Please add the commit message comment here.\n\nI don\u0027t understand though, how does making it a unique_ptr help here? Why not just have `mScopedEnvironment` be a `angle::vk::ScopedVkLoaderEnvironment`?",
       "revId": "7ae97ab72c146acad447ced35602f55fd70581f5",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
