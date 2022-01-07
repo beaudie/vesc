@@ -2428,6 +2428,42 @@ angle::Result ContextVk::submitFrame(const vk::Semaphore *signalSemaphore, Seria
     return angle::Result::Continue;
 }
 
+angle::Result ContextVk::submitFrameOutsideCommandBufferOnly(Serial *submitSerialOut)
+{
+    ANGLE_TRACE_EVENT0("gpu.angle", "ContextVk::submitFrameOutsideCommandBufferOnly");
+    if (mCurrentWindowSurface)
+    {
+        const vk::Semaphore *waitSemaphore =
+            mCurrentWindowSurface->getAndResetAcquireImageSemaphore();
+        if (waitSemaphore != nullptr)
+        {
+            addWaitSemaphore(waitSemaphore->getHandle(),
+                             VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT);
+        }
+    }
+
+    if (vk::CommandBufferHelperCommon::kEnableCommandStreamDiagnostics)
+    {
+        dumpCommandStreamDiagnostics();
+    }
+
+    getShareGroupVk()->copyResourceUseList(mResourceUseList);
+
+    ANGLE_TRY(mRenderer->submitFrame(
+        this, hasProtectedContent(), mContextPriority, std::move(mWaitSemaphores),
+        std::move(mWaitSemaphoreStageMasks), nullptr, getShareGroupVk()->releaseResourceUseLists(),
+        std::move(mCurrentGarbage), &mCommandPools, submitSerialOut));
+
+    mComputeDirtyBits |= mNewComputeCommandBufferDirtyBits;
+
+    if (mGpuEventsEnabled)
+    {
+        ANGLE_TRY(checkCompletedGpuEvents());
+    }
+
+    return angle::Result::Continue;
+}
+
 angle::Result ContextVk::synchronizeCpuGpuTime()
 {
     ASSERT(mGpuEventsEnabled);
@@ -6278,6 +6314,15 @@ bool ContextVk::shouldConvertUint8VkIndexType(gl::DrawElementsType glIndexType) 
             !mRenderer->getFeatures().supportsIndexTypeUint8.enabled);
 }
 
+angle::Result ContextVk::submitOutsideRenderPassCommandsHelper()
+{
+    ANGLE_TRACE_EVENT0("gpu.angle", "ContextVk::submitOutsideRenderPassCommandsHelper");
+    ANGLE_TRY(flushOutsideRenderPassCommands());
+    Serial unusedSerial;
+    ANGLE_TRY(submitFrameOutsideCommandBufferOnly(&unusedSerial));
+    return angle::Result::Continue;
+}
+
 angle::Result ContextVk::flushOutsideRenderPassCommands()
 {
     if (mOutsideRenderPassCommands->empty())
@@ -6301,6 +6346,12 @@ angle::Result ContextVk::flushOutsideRenderPassCommands()
     mComputeDirtyBits |= mNewComputeCommandBufferDirtyBits;
 
     mPerfCounters.flushedOutsideRenderPassCommandBuffers++;
+
+    // Make sure the command buffer tracker for copy commands has been reset.
+    vk::OutsideRenderPassCommandBuffer &commandBuffer =
+        mOutsideRenderPassCommands->getCommandBuffer();
+    ASSERT(commandBuffer.getCommandBufferTracker()->getCopySize() == 0);
+
     return angle::Result::Continue;
 }
 
