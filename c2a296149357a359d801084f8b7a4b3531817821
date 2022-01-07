@@ -16,6 +16,24 @@
       "message": "Does nothing need locking here until SwapBuffers?\n\nHow about this (see also comment in SwapBuffers):\n\n    EGL_SwapBuffers:\n        - Get global lock\n        - Do everything else here\n        - Call PrepareSwapBuffer:\n          * Takes surface lock first before unlocking the global lock (IMPORTANT so nothing else sneaks in the middle)\n\n        - Get global lock again\n        - Do everything else here *again* (because another thread may have done something in the middle, unless you can prove nothing can be changed)\n        - Call SwapBuffers again",
       "revId": "c2a296149357a359d801084f8b7a4b3531817821",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "65faa653_27fd623d",
+        "filename": "src/libGLESv2/entry_points_egl_autogen.cpp",
+        "patchSetId": 16
+      },
+      "lineNbr": 399,
+      "author": {
+        "id": 1175714
+      },
+      "writtenOn": "2022-01-07T22:46:49Z",
+      "side": 0,
+      "message": "\u003e Takes surface lock first before unlocking the global lock (IMPORTANT so nothing else sneaks in the middle)\n\nI thought of that earlier but that still doesn\u0027t protect against a non-surface lock egl call doing something in the middle, and it also breaks locking order which might lead to deadlocks.",
+      "parentUuid": "b8cfcb0e_e70c9e42",
+      "revId": "c2a296149357a359d801084f8b7a4b3531817821",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }

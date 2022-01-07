@@ -68,6 +68,24 @@
       "message": "Another thread can sneak in here and basically issue a whole EGL call in the middle. How can we be sure that\u0027s safe?",
       "revId": "40c5cb255c0a07bdab574aa076ee603e7d791ab3",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "0492a2c3_abb26a3f",
+        "filename": "src/libGLESv2/egl_stubs.cpp",
+        "patchSetId": 16
+      },
+      "lineNbr": 640,
+      "author": {
+        "id": 1175714
+      },
+      "writtenOn": "2022-01-07T22:46:49Z",
+      "side": 1,
+      "message": "For SurfaceVk (the only place where prepareSwap isn\u0027t a no-op), the other EGL calls are either going to run into the same lock or touch different state. We still query if the surface is valid.",
+      "parentUuid": "602ee4f0_dc20c10d",
+      "revId": "40c5cb255c0a07bdab574aa076ee603e7d791ab3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
