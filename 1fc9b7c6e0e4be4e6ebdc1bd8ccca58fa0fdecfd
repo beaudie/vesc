@@ -22,6 +22,30 @@
       },
       "revId": "1fc9b7c6e0e4be4e6ebdc1bd8ccca58fa0fdecfd",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "87dd1cf2_a070af25",
+        "filename": "src/libANGLE/renderer/vulkan/shaders/src/OverlayCull.comp",
+        "patchSetId": 2
+      },
+      "lineNbr": 16,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-01-07T02:21:29Z",
+      "side": 0,
+      "message": "I asked Yuxin to get rid of the subgroup paths and just use the fallback path. For one, Overlay cull is run only once (actually every time the widgets change, which is currently never). These were really my playing-around-with-subgroup-ops-exercise, and having to make sure all paths are correct is just a burden now.",
+      "parentUuid": "99f3f287_e1fab9a5",
+      "range": {
+        "startLine": 12,
+        "startChar": 0,
+        "endLine": 16,
+        "endChar": 6
+      },
+      "revId": "1fc9b7c6e0e4be4e6ebdc1bd8ccca58fa0fdecfd",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
