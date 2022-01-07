@@ -1837,6 +1837,10 @@ class ImageHelper final : public Resource, public angle::Subject
     // as with renderbuffers or surface images.
     angle::Result flushAllStagedUpdates(ContextVk *contextVk);
 
+    angle::Result checkCopyCommandTrackerForOutsideCommandBuffer(
+        ContextVk *contextVk,
+        OutsideRenderPassCommandBuffer *commandBuffer);
+
     bool hasStagedUpdatesForSubresource(gl::LevelIndex levelGL,
                                         uint32_t layer,
                                         uint32_t layerCount) const;
@@ -2218,6 +2222,10 @@ class ImageHelper final : public Resource, public angle::Subject
     // hash map can be used to track such subresources.
     static constexpr uint32_t kMaxContentDefinedLayerCount = 8;
     using LevelContentDefinedMask = angle::BitSet8<kMaxContentDefinedLayerCount>;
+
+    // If the total size of copy-to-image commands in the outside command buffer reaches the
+    // threshold below, the latter is flushed.
+    static constexpr uint32_t kMaxCopySize = 1 << 26;
 
     // Use the following functions to access m*ContentDefined to make sure the correct level index
     // is used (i.e. vk::LevelIndex and not gl::LevelIndex).
