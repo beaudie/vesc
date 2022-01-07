@@ -1436,14 +1436,8 @@ bool ValidateCreateContextAttribute(const ValidationContext *val,
             }
             break;
 
-        case EGL_CONTEXT_OPENGL_RESET_NOTIFICATION_STRATEGY_KHR:
-            val->setError(EGL_BAD_ATTRIBUTE,
-                          "EGL_CONTEXT_OPENGL_RESET_NOTIFICATION_STRATEGY_KHR is not"
-                          " valid for GLES with EGL 1.4 and KHR_create_context. Use"
-                          " EXT_create_context_robustness.");
-            return false;
-
         case EGL_CONTEXT_OPENGL_RESET_NOTIFICATION_STRATEGY_EXT:
+        case EGL_CONTEXT_OPENGL_RESET_NOTIFICATION_STRATEGY_KHR:
             if (!display->getExtensions().createContextRobustness)
             {
                 val->setError(EGL_BAD_ATTRIBUTE);
@@ -1676,6 +1670,7 @@ bool ValidateCreateContextAttributeValue(const ValidationContext *val,
             break;
 
         case EGL_CONTEXT_OPENGL_RESET_NOTIFICATION_STRATEGY_EXT:
+        case EGL_CONTEXT_OPENGL_RESET_NOTIFICATION_STRATEGY:
             if (value != EGL_LOSE_CONTEXT_ON_RESET_EXT && value != EGL_NO_RESET_NOTIFICATION_EXT)
             {
                 val->setError(EGL_BAD_ATTRIBUTE);
