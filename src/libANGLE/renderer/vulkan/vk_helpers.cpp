@@ -7237,11 +7237,16 @@ angle::Result ImageHelper::flushStagedUpdates(ContextVk *contextVk,
                 ANGLE_TRY(
                     contextVk->getOutsideRenderPassCommandBuffer(bufferAccess, &commandBuffer));
 
+                VkBufferImageCopy *copyRegion = &update.data.buffer.copyRegion;
                 commandBuffer->copyBufferToImage(currentBuffer->getBuffer().getHandle(), mImage,
-                                                 getCurrentLayout(), 1,
-                                                 &update.data.buffer.copyRegion);
+                                                 getCurrentLayout(), 1, copyRegion);
+                uint32_t textureSize = copyRegion->bufferRowLength * copyRegion->bufferImageHeight *
+                                       copyRegion->imageSubresource.layerCount;
+                contextVk->onCopy(textureSize);
                 onWrite(updateMipLevelGL, 1, updateBaseLayer, updateLayerCount,
-                        update.data.buffer.copyRegion.imageSubresource.aspectMask);
+                        copyRegion->imageSubresource.aspectMask);
+
+                ANGLE_TRY(checkCopySizeForOutsideCommandBuffer(contextVk));
             }
             else
             {
@@ -7251,11 +7256,20 @@ angle::Result ImageHelper::flushStagedUpdates(ContextVk *contextVk,
                 ANGLE_TRY(
                     contextVk->getOutsideRenderPassCommandBuffer(imageAccess, &commandBuffer));
 
+                VkImageCopy *copyRegion = &update.data.image.copyRegion;
                 commandBuffer->copyImage(update.refCounted.image->get().getImage(),
                                          update.refCounted.image->get().getCurrentLayout(), mImage,
-                                         getCurrentLayout(), 1, &update.data.image.copyRegion);
+                                         getCurrentLayout(), 1, copyRegion);
+                const angle::Format &imageFormat = getActualFormat();
+                uint32_t textureSize = copyRegion->extent.width * copyRegion->extent.height *
+                                       copyRegion->extent.depth *
+                                       copyRegion->dstSubresource.layerCount *
+                                       imageFormat.pixelBytes;
+                contextVk->onCopy(textureSize);
                 onWrite(updateMipLevelGL, 1, updateBaseLayer, updateLayerCount,
-                        update.data.image.copyRegion.dstSubresource.aspectMask);
+                        copyRegion->dstSubresource.aspectMask);
+
+                ANGLE_TRY(checkCopySizeForOutsideCommandBuffer(contextVk));
             }
 
             update.release(contextVk->getRenderer());
@@ -7284,6 +7298,18 @@ angle::Result ImageHelper::flushStagedUpdates(ContextVk *contextVk,
         onStateChange(angle::SubjectMessage::InitializationComplete);
     }
 
+    return angle::Result::Continue;
+}
+
+ANGLE_INLINE angle::Result ImageHelper::checkCopySizeForOutsideCommandBuffer(ContextVk *contextVk)
+{
+    ANGLE_TRACE_EVENT0("gpu.angle", "ImageHelper::checkCopySizeForOutsideCommandBuffer");
+    // If the copy size exceeds the maximum allowed, submit the outside command buffer.
+    uint32_t copySize = contextVk->getCopySize();
+    if (copySize >= kMaxCopySize)
+    {
+        ANGLE_TRY(contextVk->submitOutsideRenderPassCommandsHelper());
+    }
     return angle::Result::Continue;
 }
 
