@@ -87,30 +87,27 @@ Thread *AllocateCurrentThread()
     return thread;
 }
 
-void AllocateMutex()
+static void AllocateGlobalMutex(std::atomic<angle::GlobalMutex *> &mutex)
 {
-    if (g_Mutex == nullptr)
+    if (mutex == nullptr)
     {
         std::unique_ptr<angle::GlobalMutex> newMutex(new angle::GlobalMutex());
         angle::GlobalMutex *expected = nullptr;
-        if (g_Mutex.compare_exchange_strong(expected, newMutex.get()))
+        if (mutex.compare_exchange_strong(expected, newMutex.get()))
         {
             newMutex.release();
         }
     }
 }
 
+void AllocateMutex()
+{
+    AllocateGlobalMutex(g_Mutex);
+}
+
 void AllocateSurfaceMutex()
 {
-    if (g_SurfaceMutex == nullptr)
-    {
-        std::unique_ptr<angle::GlobalMutex> newMutex(new angle::GlobalMutex());
-        angle::GlobalMutex *expected = nullptr;
-        if (g_SurfaceMutex.compare_exchange_strong(expected, newMutex.get()))
-        {
-            newMutex.release();
-        }
-    }
+    AllocateGlobalMutex(g_SurfaceMutex);
 }
 
 }  // anonymous namespace
@@ -243,26 +240,26 @@ void DeallocateCurrentThread()
     SafeDelete(gCurrentThread);
 }
 
+static void DeallocateGlobalMutex(std::atomic<angle::GlobalMutex> &mutex)
+{
+    angle::GlobalMutex *toDelete = mutex.exchange(nullptr);
+    if (!mutex)
+        return;
+    {
+        // Wait for toDelete to become released by other threads before deleting.
+        std::lock_guard<angle::GlobalMutex> lock(*toDelete);
+    }
+    SafeDelete(toDelete);
+}
+
 void DeallocateMutex()
 {
-    angle::GlobalMutex *mutex = g_Mutex.exchange(nullptr);
-    {
-        // Wait for the mutex to become released by other threads before deleting.
-        std::lock_guard<angle::GlobalMutex> lock(*mutex);
-    }
-    SafeDelete(mutex);
+    DeallocateGlobalMutex(g_Mutex);
 }
 
 void DeallocateSurfaceMutex()
 {
-    angle::GlobalMutex *mutex = g_SurfaceMutex.exchange(nullptr);
-    if (!mutex)
-        return;
-    {
-        // Wait for the mutex to become released by other threads before deleting.
-        std::lock_guard<angle::GlobalMutex> lock(*mutex);
-    }
-    SafeDelete(mutex);
+    DeallocateGlobalMutex(g_SurfaceMutex);
 }
 
 bool InitializeProcess()
