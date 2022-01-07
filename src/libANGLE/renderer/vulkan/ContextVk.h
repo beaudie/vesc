@@ -60,6 +60,12 @@ enum class QueueSubmitType
     SkipQueueSubmit,
 };
 
+enum class SubmitFrameType
+{
+    OutsideAndRPCommands,
+    OutsideRPCommandsOnly,
+};
+
 class ContextVk : public ContextImpl, public vk::Context, public MultisampleTextureInitializer
 {
   public:
@@ -603,6 +609,7 @@ class ContextVk : public ContextImpl, public vk::Context, public MultisampleText
     angle::Result startNextSubpass();
     angle::Result flushCommandsAndEndRenderPass(RenderPassClosureReason reason);
     angle::Result flushCommandsAndEndRenderPassWithoutQueueSubmit(RenderPassClosureReason reason);
+    angle::Result submitOutsideRenderPassCommandsImpl();
 
     angle::Result syncExternalMemory();
 
@@ -654,6 +661,11 @@ class ContextVk : public ContextImpl, public vk::Context, public MultisampleText
 
     const angle::VulkanPerfCounters &getPerfCounters() const { return mPerfCounters; }
     angle::VulkanPerfCounters &getPerfCounters() { return mPerfCounters; }
+
+    // Keeping track of the buffer copy size. Used to determine when to submit the outside command
+    // buffer.
+    void onCopy(VkDeviceSize size) { mCopySize += size; }
+    VkDeviceSize getCopySize() const { return mCopySize; }
 
     // Implementation of MultisampleTextureInitializer
     angle::Result initializeMultisampleTextureToBlack(const gl::Context *context,
@@ -954,6 +966,10 @@ class ContextVk : public ContextImpl, public vk::Context, public MultisampleText
     void writeAtomicCounterBufferDriverUniformOffsets(uint32_t *offsetsOut, size_t offsetsSize);
 
     angle::Result submitFrame(const vk::Semaphore *signalSemaphore, Serial *submitSerialOut);
+    angle::Result submitFrameOutsideCommandBufferOnly(Serial *submitSerialOut);
+    angle::Result submitFrameImpl(const vk::Semaphore *signalSemaphore,
+                                  Serial *submitSerialOut,
+                                  SubmitFrameType submitFrameType);
 
     angle::Result synchronizeCpuGpuTime();
     angle::Result traceGpuEventImpl(vk::OutsideRenderPassCommandBuffer *commandBuffer,
@@ -1198,6 +1214,10 @@ class ContextVk : public ContextImpl, public vk::Context, public MultisampleText
 
     // GL_EXT_shader_framebuffer_fetch_non_coherent
     bool mLastProgramUsesFramebufferFetch;
+
+    // The size of copy commands issued between buffers and images. Used to submit the command
+    // buffer for the outside render pass.
+    VkDeviceSize mCopySize = 0;
 
     // Semaphores that must be waited on in the next submission.
     std::vector<VkSemaphore> mWaitSemaphores;
