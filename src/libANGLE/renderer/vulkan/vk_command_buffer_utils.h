@@ -19,9 +19,12 @@ namespace vk
 class CommandBufferCommandTracker
 {
   public:
+    void onCopy(uint32_t size) { mCopySize += size; }
     void onDraw() { ++mRenderPassWriteCommandCount; }
     void onClearAttachments() { ++mRenderPassWriteCommandCount; }
+    uint32_t getCopySize() const { return mCopySize; }
     uint32_t getRenderPassWriteCommandCount() const { return mRenderPassWriteCommandCount; }
+    void resetCopySize() { mCopySize = 0; }
 
     void reset() { *this = CommandBufferCommandTracker{}; }
 
@@ -30,6 +33,10 @@ class CommandBufferCommandTracker
     // vkCmdClearAttachment and vkCmdDraw*.  Used to know if a command might have written to an
     // attachment after it was invalidated.
     uint32_t mRenderPassWriteCommandCount = 0;
+
+    // The size of copy commands used from buffers and images to images. Used to submit the command
+    // buffer for the outside render pass.
+    uint32_t mCopySize = 0;
 };
 
 }  // namespace vk
