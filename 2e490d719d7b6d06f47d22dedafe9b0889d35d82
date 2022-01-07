@@ -34,6 +34,24 @@
       "parentUuid": "21e16a82_61546f35",
       "revId": "2e490d719d7b6d06f47d22dedafe9b0889d35d82",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "5915396c_66562179",
+        "filename": "src/tests/gl_tests/BlitFramebufferANGLETest.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 505,
+      "author": {
+        "id": 1228974
+      },
+      "writtenOn": "2022-01-07T14:29:46Z",
+      "side": 1,
+      "message": "\u003e And for blit, please don\u0027t forget about integer and depth/stencil too, they are often neglected and end up being buggy.\n\nI added depth/stencil tests too. Though, I don\u0027t understand what you mean by the \"integer\" test. Is that BlitFramebufferSizeOverflow2 one?\n\n\u003e The copy tex image stuff can be found in CopyTexImageTest.cpp\n\nAdded glCopyTextImage test too. Though, glCopyTextureCHROMIUM, glCopySubTextureCHROMIUM and glCopyTexSubImage are still missing. Nevertheless, can you please review the rest and tell me if I\u0027m on the right track? Thanks!",
+      "parentUuid": "4fe525bb_fd982e9d",
+      "revId": "2e490d719d7b6d06f47d22dedafe9b0889d35d82",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
