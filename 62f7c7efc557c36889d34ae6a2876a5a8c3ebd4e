@@ -41,6 +41,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "7284b5c9_be714f8c",
+        "filename": "src/libANGLE/Context.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 1752,
+      "author": {
+        "id": 1340649
+      },
+      "writtenOn": "2022-01-07T22:43:25Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "e2cf9a0b_b134afed",
+      "range": {
+        "startLine": 1749,
+        "startChar": 0,
+        "endLine": 1752,
+        "endChar": 89
+      },
+      "revId": "62f7c7efc557c36889d34ae6a2876a5a8c3ebd4e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "d7e1b555_53ed6122",
@@ -64,6 +88,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "ca4d75d7_46d76302",
+        "filename": "src/libANGLE/validationEGL.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 1440,
+      "author": {
+        "id": 1340649
+      },
+      "writtenOn": "2022-01-07T22:43:25Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "d7e1b555_53ed6122",
+      "range": {
+        "startLine": 1440,
+        "startChar": 59,
+        "endLine": 1440,
+        "endChar": 63
+      },
+      "revId": "62f7c7efc557c36889d34ae6a2876a5a8c3ebd4e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "d5d8c286_46623d90",
@@ -77,6 +125,24 @@
       "writtenOn": "2022-01-07T22:10:29Z",
       "side": 1,
       "message": "Doesn\u0027t look like you can merge these two cases. The EXT version needs EXT_create_context_robustness and the second either EGL1.5 or KHR_create_context so they need different logic.",
+      "revId": "62f7c7efc557c36889d34ae6a2876a5a8c3ebd4e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "43d71112_66868e66",
+        "filename": "src/libANGLE/validationEGL.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 1441,
+      "author": {
+        "id": 1340649
+      },
+      "writtenOn": "2022-01-07T22:43:25Z",
+      "side": 1,
+      "message": "\"createContextRobustness\" is enabled if ICD supports robustness and we are just reusing that bool here to make sure HW support exists.\n\nI guess the real question is if we need to downgrade EGL to 1.4 for ICDs that dont support robustness?",
+      "parentUuid": "d5d8c286_46623d90",
       "revId": "62f7c7efc557c36889d34ae6a2876a5a8c3ebd4e",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
