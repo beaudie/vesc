@@ -933,6 +933,11 @@ void RendererVk::ensureCapsInitialized() const
             mNativeCaps.maxDrawBuffers >= gl::IMPLEMENTATION_MAX_DRAW_BUFFERS;
     }
 
+    // Per http://anglebug.com/6872
+    // On ARM hardware, framebuffer-fetch-like behavior on Vulkan is already coherent, so we can
+    // expose the coherent version of the GL extension despite unofficial Vulkan support.
+    mNativeExtensions.shaderFramebufferFetchEXT = IsARM(mPhysicalDeviceProperties.vendorID);
+
     // Enable Program Binary extension.
     mNativeExtensions.getProgramBinaryOES = true;
     mNativeCaps.programBinaryFormats.push_back(GL_PROGRAM_BINARY_ANGLE);
