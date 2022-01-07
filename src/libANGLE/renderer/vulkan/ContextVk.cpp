@@ -2396,6 +2396,19 @@ void ContextVk::addOverlayUsedBuffersCount(vk::CommandBufferHelperCommon *comman
 
 angle::Result ContextVk::submitFrame(const vk::Semaphore *signalSemaphore, Serial *submitSerialOut)
 {
+    return submitFrameHelper(signalSemaphore, submitSerialOut, RenderPassUpdate::EndRenderPass);
+}
+
+angle::Result ContextVk::submitFrameOutsideCommandBufferOnly(Serial *submitSerialOut)
+{
+    ANGLE_TRACE_EVENT0("gpu.angle", "ContextVk::submitFrameOutsideCommandBufferOnly");
+    return submitFrameHelper(nullptr, submitSerialOut, RenderPassUpdate::DoNotUpdateRenderPass);
+}
+
+angle::Result ContextVk::submitFrameHelper(const vk::Semaphore *signalSemaphore,
+                                           Serial *submitSerialOut,
+                                           RenderPassUpdate renderPassUpdate)
+{
     if (mCurrentWindowSurface)
     {
         const vk::Semaphore *waitSemaphore =
@@ -2412,24 +2425,40 @@ angle::Result ContextVk::submitFrame(const vk::Semaphore *signalSemaphore, Seria
         dumpCommandStreamDiagnostics();
     }
 
-    getShareGroupVk()->acquireResourceUseList(std::move(mResourceUseList));
+    if (renderPassUpdate == RenderPassUpdate::EndRenderPass)
+    {
+        getShareGroupVk()->acquireResourceUseList(std::move(mResourceUseList));
+    }
+    else
+    {
+        getShareGroupVk()->copyResourceUseList(mResourceUseList);
+    }
+
     ANGLE_TRY(mRenderer->submitFrame(this, hasProtectedContent(), mContextPriority,
                                      std::move(mWaitSemaphores),
                                      std::move(mWaitSemaphoreStageMasks), signalSemaphore,
                                      std::move(mCurrentGarbage), &mCommandPools, submitSerialOut));
 
-    getShareGroupVk()->releaseResourceUseLists(*submitSerialOut);
-    // Now that we have processed resourceUseList, some of pending garbage may no longer pending
-    // and should be moved to garbage list.
-    mRenderer->cleanupPendingSubmissionGarbage();
+    if (renderPassUpdate == RenderPassUpdate::EndRenderPass)
+    {
+        getShareGroupVk()->releaseResourceUseLists(*submitSerialOut);
+        // Now that we have processed resourceUseList, some of pending garbage may no longer pending
+        // and should be moved to garbage list.
+        mRenderer->cleanupPendingSubmissionGarbage();
+        onRenderPassFinished(RenderPassClosureReason::AlreadySpecifiedElsewhere);
+    }
 
-    onRenderPassFinished(RenderPassClosureReason::AlreadySpecifiedElsewhere);
     mComputeDirtyBits |= mNewComputeCommandBufferDirtyBits;
 
     if (mGpuEventsEnabled)
     {
         ANGLE_TRY(checkCompletedGpuEvents());
     }
+
+    mPerfCounters.submitFrames++;
+
+    // Reset the copy size tracker.
+    mCopySize = 0;
 
     return angle::Result::Continue;
 }
@@ -6284,6 +6313,15 @@ bool ContextVk::shouldConvertUint8VkIndexType(gl::DrawElementsType glIndexType) 
             !mRenderer->getFeatures().supportsIndexTypeUint8.enabled);
 }
 
+angle::Result ContextVk::submitOutsideRenderPassCommandsHelper()
+{
+    ANGLE_TRACE_EVENT0("gpu.angle", "ContextVk::submitOutsideRenderPassCommandsHelper");
+    ANGLE_TRY(flushOutsideRenderPassCommands());
+    Serial unusedSerial;
+    ANGLE_TRY(submitFrameOutsideCommandBufferOnly(&unusedSerial));
+    return angle::Result::Continue;
+}
+
 angle::Result ContextVk::flushOutsideRenderPassCommands()
 {
     if (mOutsideRenderPassCommands->empty())
@@ -6307,6 +6345,7 @@ angle::Result ContextVk::flushOutsideRenderPassCommands()
     mComputeDirtyBits |= mNewComputeCommandBufferDirtyBits;
 
     mPerfCounters.flushedOutsideRenderPassCommandBuffers++;
+
     return angle::Result::Continue;
 }
 
