@@ -18,6 +18,23 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "620ae1ec_8e16b4a0",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2022-01-07T21:04:14Z",
+      "side": 1,
+      "message": "Also LGTM with the format function refactored.",
+      "revId": "0513cdd972b7e8f609288929d69ae27094d805d6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "3578406d_6757e6a9",
@@ -31,6 +48,30 @@
       "writtenOn": "2022-01-07T18:18:47Z",
       "side": 1,
       "message": "Up to Jamie and Geoff but the type of this first parameter can also be templated to either be std::wostream or std::ostream. That should avoid code duplication.\n\n(Same goes for the other methods added to the CL)",
+      "range": {
+        "startLine": 163,
+        "startChar": 22,
+        "endLine": 163,
+        "endChar": 35
+      },
+      "revId": "0513cdd972b7e8f609288929d69ae27094d805d6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "7d7eb4fc_933fdc7a",
+        "filename": "src/common/debug.h",
+        "patchSetId": 4
+      },
+      "lineNbr": 163,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2022-01-07T21:04:14Z",
+      "side": 1,
+      "message": "Yea, refactoring this would be nice.",
+      "parentUuid": "3578406d_6757e6a9",
       "range": {
         "startLine": 163,
         "startChar": 22,
