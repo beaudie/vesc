@@ -1809,6 +1809,14 @@ bool ValidateFramebufferRenderbufferBase(const Context *context,
             context->validationError(entryPoint, GL_INVALID_OPERATION, kInvalidRenderbufferTarget);
             return false;
         }
+
+        if ((context->getClientVersion() >= ES_3_2 ||
+             context->getExtensions().textureBufferAny()) &&
+            tex->getType() == TextureType::Buffer)
+        {
+            context->validationError(GL_INVALID_OPERATION, kInvalidTextureTarget);
+            return true;
+        }
     }
 
     return true;
@@ -4412,12 +4420,12 @@ bool ValidateGetUniformBase(const Context *context,
     return true;
 }
 
-static bool ValidateSizedGetUniform(const Context *context,
-                                    angle::EntryPoint entryPoint,
-                                    ShaderProgramID program,
-                                    UniformLocation location,
-                                    GLsizei bufSize,
-                                    GLsizei *length)
+bool ValidateSizedGetUniform(const Context *context,
+                             angle::EntryPoint entryPoint,
+                             ShaderProgramID program,
+                             UniformLocation location,
+                             GLsizei bufSize,
+                             GLsizei *length)
 {
     if (length)
     {
@@ -4431,7 +4439,7 @@ static bool ValidateSizedGetUniform(const Context *context,
 
     if (bufSize < 0)
     {
-        context->validationError(entryPoint, GL_INVALID_VALUE, kNegativeBufferSize);
+        context->validationError(entryPoint, GL_INVALID_OPERATION, kNegativeBufferSize);
         return false;
     }
 
