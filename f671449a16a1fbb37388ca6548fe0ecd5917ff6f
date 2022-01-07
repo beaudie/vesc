@@ -127,6 +127,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "a2df48c9_e3bba495",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 5
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2022-01-07T02:10:33Z",
+      "side": 1,
+      "message": "Here\u0027s the CL to reset FBOs, RBOs, and VAOs:\n3371881: Capture/Replay: Reset FBOs, RBOs, VAOs | https://chromium-review.googlesource.com/c/angle/angle/+/3371881\n\nThese are the glGen calls made by Angry Birds 2 and PUBG Mobile:\n    glGenVertexArrays(1, reinterpret_cast\u003cGLuint *\u003e(gReadBuffer));\n    glGenBuffers(1, reinterpret_cast\u003cGLuint *\u003e(gReadBuffer));\n    glGenTextures(1, reinterpret_cast\u003cGLuint *\u003e(gReadBuffer));\n    glGenRenderbuffers(1, reinterpret_cast\u003cGLuint *\u003e(gReadBuffer));\n    glGenFramebuffers(1, reinterpret_cast\u003cGLuint *\u003e(gReadBuffer));\n    \nSo those additions should cover everything now.",
+      "parentUuid": "bd1f09c9_e60e1bf6",
+      "revId": "f671449a16a1fbb37388ca6548fe0ecd5917ff6f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "a0e55a2b_443e5ec7",
         "filename": "src/tests/restricted_traces/restricted_traces.json",
         "patchSetId": 5
