@@ -18,6 +18,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "74b37de8_b47ca44d",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 2
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1520902
+      },
+      "writtenOn": "2022-01-07T23:58:13Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "3331ff7a_a5cc6d78",
+      "revId": "b1c03aec1756aa62d8a27c8d604a0fe561c7ea8b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "4013de7e_f7415205",
@@ -31,6 +49,24 @@
       "writtenOn": "2022-01-07T01:37:10Z",
       "side": 1,
       "message": "Does this CL support the overlay on desktop still?",
+      "revId": "b1c03aec1756aa62d8a27c8d604a0fe561c7ea8b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "1853ae94_5f1cad67",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1520902
+      },
+      "writtenOn": "2022-01-07T23:58:13Z",
+      "side": 1,
+      "message": "Yes, I tested on Linux Desktop with NVIDIA card, the overlay works as before on the desktop when running app traces.",
+      "parentUuid": "4013de7e_f7415205",
       "revId": "b1c03aec1756aa62d8a27c8d604a0fe561c7ea8b",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
@@ -52,6 +88,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "1bdb750b_bb0235ab",
+        "filename": "src/libANGLE/renderer/vulkan/OverlayVk.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 42,
+      "author": {
+        "id": 1520902
+      },
+      "writtenOn": "2022-01-07T23:58:13Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "ec7f2278_2e24f749",
+      "revId": "b1c03aec1756aa62d8a27c8d604a0fe561c7ea8b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "38e76947_0fb328ef",
@@ -65,6 +119,30 @@
       "writtenOn": "2022-01-07T01:37:10Z",
       "side": 1,
       "message": "This looks like the same as the Is8x4 block just above it.   Can they be merged?",
+      "range": {
+        "startLine": 147,
+        "startChar": 0,
+        "endLine": 152,
+        "endChar": 5
+      },
+      "revId": "b1c03aec1756aa62d8a27c8d604a0fe561c7ea8b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "efd6cac9_88e2d1bb",
+        "filename": "src/libANGLE/renderer/vulkan/shaders/src/OverlayCull.comp",
+        "patchSetId": 2
+      },
+      "lineNbr": 152,
+      "author": {
+        "id": 1520902
+      },
+      "writtenOn": "2022-01-07T23:58:13Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "38e76947_0fb328ef",
       "range": {
         "startLine": 147,
         "startChar": 0,
@@ -98,6 +176,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "c50a0ea9_db97851b",
+        "filename": "src/libANGLE/renderer/vulkan/shaders/src/OverlayCull.comp",
+        "patchSetId": 2
+      },
+      "lineNbr": 180,
+      "author": {
+        "id": 1520902
+      },
+      "writtenOn": "2022-01-07T23:58:13Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "1218a22c_603a3dac",
+      "range": {
+        "startLine": 179,
+        "startChar": 0,
+        "endLine": 180,
+        "endChar": 85
+      },
+      "revId": "b1c03aec1756aa62d8a27c8d604a0fe561c7ea8b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "9b2dc016_f6b840f3",
@@ -111,6 +213,24 @@
       "writtenOn": "2022-01-07T01:37:10Z",
       "side": 1,
       "message": "nit: Remove extra whitespace.",
+      "revId": "b1c03aec1756aa62d8a27c8d604a0fe561c7ea8b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "c76a82f4_f6575346",
+        "filename": "src/libANGLE/renderer/vulkan/shaders/src/OverlayDraw.comp",
+        "patchSetId": 2
+      },
+      "lineNbr": 192,
+      "author": {
+        "id": 1520902
+      },
+      "writtenOn": "2022-01-07T23:58:13Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "9b2dc016_f6b840f3",
       "revId": "b1c03aec1756aa62d8a27c8d604a0fe561c7ea8b",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
