@@ -43,6 +43,12 @@ class SharedResourceUse final : angle::NonCopyable
         return *this;
     }
 
+    void copy(SharedResourceUse &src)
+    {
+        mUse = src.mUse;
+        mUse->counter++;
+    }
+
     ANGLE_INLINE bool valid() const { return mUse != nullptr; }
 
     void init()
@@ -141,6 +147,7 @@ class ResourceUseList final : angle::NonCopyable
     ResourceUseList &operator=(ResourceUseList &&rhs);
 
     void add(const SharedResourceUse &resourceUse);
+    void copy(ResourceUseList &srcResourceUse);
 
     void releaseResourceUses();
     void releaseResourceUsesAndUpdateSerials(Serial serial);

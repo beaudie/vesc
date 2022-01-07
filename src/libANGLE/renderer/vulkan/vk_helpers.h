@@ -2227,6 +2227,7 @@ class ImageHelper final : public Resource, public angle::Subject
     // If there arises a need to optimize an application that invalidates layer >= 8, an additional
     // hash map can be used to track such subresources.
     static constexpr uint32_t kMaxContentDefinedLayerCount = 8;
+    static constexpr uint32_t kMaxCopyCommandCount         = 64;
     using LevelContentDefinedMask = angle::BitSet8<kMaxContentDefinedLayerCount>;
 
     // Use the following functions to access m*ContentDefined to make sure the correct level index

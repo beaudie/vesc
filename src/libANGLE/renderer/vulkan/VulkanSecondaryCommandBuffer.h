@@ -320,6 +320,7 @@ ANGLE_INLINE void VulkanSecondaryCommandBuffer::copyBufferToImage(VkBuffer srcBu
                                                                   const VkBufferImageCopy *regions)
 {
     onRecordCommand();
+    mCommandTracker.onCopy();
     CommandBuffer::copyBufferToImage(srcBuffer, dstImage, dstImageLayout, regionCount, regions);
 }
 
@@ -341,6 +342,7 @@ ANGLE_INLINE void VulkanSecondaryCommandBuffer::copyImage(const Image &srcImage,
                                                           const VkImageCopy *regions)
 {
     onRecordCommand();
+    mCommandTracker.onCopy();
     CommandBuffer::copyImage(srcImage, srcImageLayout, dstImage, dstImageLayout, regionCount,
                              regions);
 }

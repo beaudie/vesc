@@ -7366,6 +7366,12 @@ angle::Result ImageHelper::flushStagedUpdates(ContextVk *contextVk,
         onStateChange(angle::SubjectMessage::InitializationComplete);
     }
 
+    // Check the copy count tracker and submit the outside render pass command buffers.
+    uint32_t copyCount = commandBuffer->getCommandBufferTracker()->getCopyCommandCount();
+    if (copyCount >= kMaxCopyCommandCount)
+    {
+        ANGLE_TRY(contextVk->submitOutsideRenderPassCommandsHelper());
+    }
     return angle::Result::Continue;
 }
 
