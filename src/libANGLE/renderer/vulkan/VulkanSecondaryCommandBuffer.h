@@ -228,6 +228,8 @@ class VulkanSecondaryCommandBuffer : public priv::CommandBuffer
     }
     std::string dumpCommands(const char *separator) const { return ""; }
 
+    CommandBufferCommandTracker *getCommandBufferTracker() { return &mCommandTracker; }
+
   private:
     void onRecordCommand() { mAnyCommand = true; }
 
