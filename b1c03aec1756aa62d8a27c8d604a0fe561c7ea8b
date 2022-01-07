@@ -1,0 +1,118 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "3331ff7a_a5cc6d78",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 2
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2022-01-07T01:37:10Z",
+      "side": 1,
+      "message": "Rather than calling this a hack, just state that this is adding support for Android to the overlay.",
+      "revId": "b1c03aec1756aa62d8a27c8d604a0fe561c7ea8b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "4013de7e_f7415205",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2022-01-07T01:37:10Z",
+      "side": 1,
+      "message": "Does this CL support the overlay on desktop still?",
+      "revId": "b1c03aec1756aa62d8a27c8d604a0fe561c7ea8b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ec7f2278_2e24f749",
+        "filename": "src/libANGLE/renderer/vulkan/OverlayVk.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 42,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2022-01-07T01:37:10Z",
+      "side": 1,
+      "message": "Ditto.   Remove the comments calling this all a hack, and just state that subgroup size 16 is to support Android, while 32/64 are for desktop.",
+      "revId": "b1c03aec1756aa62d8a27c8d604a0fe561c7ea8b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "38e76947_0fb328ef",
+        "filename": "src/libANGLE/renderer/vulkan/shaders/src/OverlayCull.comp",
+        "patchSetId": 2
+      },
+      "lineNbr": 152,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2022-01-07T01:37:10Z",
+      "side": 1,
+      "message": "This looks like the same as the Is8x4 block just above it.   Can they be merged?",
+      "range": {
+        "startLine": 147,
+        "startChar": 0,
+        "endLine": 152,
+        "endChar": 5
+      },
+      "revId": "b1c03aec1756aa62d8a27c8d604a0fe561c7ea8b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "1218a22c_603a3dac",
+        "filename": "src/libANGLE/renderer/vulkan/shaders/src/OverlayCull.comp",
+        "patchSetId": 2
+      },
+      "lineNbr": 180,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2022-01-07T01:37:10Z",
+      "side": 1,
+      "message": "Same. Merge with Is8x4?",
+      "range": {
+        "startLine": 179,
+        "startChar": 0,
+        "endLine": 180,
+        "endChar": 85
+      },
+      "revId": "b1c03aec1756aa62d8a27c8d604a0fe561c7ea8b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "9b2dc016_f6b840f3",
+        "filename": "src/libANGLE/renderer/vulkan/shaders/src/OverlayDraw.comp",
+        "patchSetId": 2
+      },
+      "lineNbr": 192,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2022-01-07T01:37:10Z",
+      "side": 1,
+      "message": "nit: Remove extra whitespace.",
+      "revId": "b1c03aec1756aa62d8a27c8d604a0fe561c7ea8b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}

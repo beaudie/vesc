@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "99f3f287_e1fab9a5",
+        "filename": "src/libANGLE/renderer/vulkan/shaders/src/OverlayCull.comp",
+        "patchSetId": 2
+      },
+      "lineNbr": 16,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2022-01-07T01:37:10Z",
+      "side": 0,
+      "message": "Why do these need to be removed?\n\nCan they be surrounded by !Is4x4 if it breaks Android?",
+      "range": {
+        "startLine": 12,
+        "startChar": 0,
+        "endLine": 16,
+        "endChar": 6
+      },
+      "revId": "1fc9b7c6e0e4be4e6ebdc1bd8ccca58fa0fdecfd",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
