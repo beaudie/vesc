@@ -1,0 +1,67 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "4d19a38c_d9441793",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2022-01-07T18:06:47Z",
+      "side": 1,
+      "message": "Thanks Frank.",
+      "revId": "c93df57df2dfc14526f6eb1dfdbe44ce6723e605",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "508213a9_af680243",
+        "filename": "src/libGLESv2/global_state.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 101,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2022-01-07T18:06:47Z",
+      "side": 1,
+      "message": "nit: instead of using \u0027static\u0027 you can place in the anonymous block just above this",
+      "range": {
+        "startLine": 90,
+        "startChar": 0,
+        "endLine": 101,
+        "endChar": 1
+      },
+      "revId": "c93df57df2dfc14526f6eb1dfdbe44ce6723e605",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "2b92f349_d48ea228",
+        "filename": "src/libGLESv2/global_state.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 254,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2022-01-07T18:06:47Z",
+      "side": 1,
+      "message": "nit: instead of using \u0027static\u0027 you can place in the anonymous block just above this",
+      "range": {
+        "startLine": 243,
+        "startChar": 0,
+        "endLine": 254,
+        "endChar": 0
+      },
+      "revId": "c93df57df2dfc14526f6eb1dfdbe44ce6723e605",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
