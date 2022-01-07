@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "176cbe1d_03d63a7c",
+        "filename": "src/libANGLE/renderer/metal/mtl_format_map.json",
+        "patchSetId": 1
+      },
+      "lineNbr": 77,
+      "author": {
+        "id": 1394635
+      },
+      "writtenOn": "2022-01-07T09:57:13Z",
+      "side": 0,
+      "message": "Why is this removed? Metal Feature Set Tables suggest that this format is defined for all GPU families.",
+      "revId": "2ebdd23b6040c122b8e700458b8a21f53496b8cf",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
