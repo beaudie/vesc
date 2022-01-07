@@ -1568,6 +1568,10 @@ class ImageHelper final : public Resource, public angle::Subject
                                                           const ImageHelper &resolveImage,
                                                           bool isRobustResourceInitEnabled);
 
+    // If the total size of copy-to-image commands in the outside command buffer reaches the
+    // threshold below, the latter is flushed.
+    static constexpr uint32_t kMaxCopySize = 1 << 26;
+
     // Helper for initExternal and users to automatically derive the appropriate VkImageCreateInfo
     // pNext chain based on the given parameters, and adjust create flags.  In some cases, these
     // shouldn't be automatically derived, for example when importing images through
@@ -1832,6 +1836,8 @@ class ImageHelper final : public Resource, public angle::Subject
     // initialization of resources that we don't expect to accumulate further staged updates, such
     // as with renderbuffers or surface images.
     angle::Result flushAllStagedUpdates(ContextVk *contextVk);
+
+    angle::Result checkCopySizeForOutsideCommandBuffer(ContextVk *contextVk);
 
     bool hasStagedUpdatesForSubresource(gl::LevelIndex levelGL,
                                         uint32_t layer,

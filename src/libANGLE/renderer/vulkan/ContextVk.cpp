@@ -2396,6 +2396,19 @@ void ContextVk::addOverlayUsedBuffersCount(vk::CommandBufferHelperCommon *comman
 
 angle::Result ContextVk::submitFrame(const vk::Semaphore *signalSemaphore, Serial *submitSerialOut)
 {
+    return submitFrameHelper(signalSemaphore, submitSerialOut, true);
+}
+
+angle::Result ContextVk::submitFrameOutsideCommandBufferOnly(Serial *submitSerialOut)
+{
+    ANGLE_TRACE_EVENT0("gpu.angle", "ContextVk::submitFrameOutsideCommandBufferOnly");
+    return submitFrameHelper(nullptr, submitSerialOut, false);
+}
+
+angle::Result ContextVk::submitFrameHelper(const vk::Semaphore *signalSemaphore,
+                                           Serial *submitSerialOut,
+                                           const bool finishRenderPass)
+{
     if (mCurrentWindowSurface)
     {
         const vk::Semaphore *waitSemaphore =
@@ -2412,14 +2425,26 @@ angle::Result ContextVk::submitFrame(const vk::Semaphore *signalSemaphore, Seria
         dumpCommandStreamDiagnostics();
     }
 
-    getShareGroupVk()->acquireResourceUseList(std::move(mResourceUseList));
+    if (finishRenderPass)
+    {
+        getShareGroupVk()->acquireResourceUseList(std::move(mResourceUseList));
+    }
+    else
+    {
+        getShareGroupVk()->copyResourceUseList(mResourceUseList);
+    }
+
     ANGLE_TRY(mRenderer->submitFrame(this, hasProtectedContent(), mContextPriority,
                                      std::move(mWaitSemaphores),
                                      std::move(mWaitSemaphoreStageMasks), signalSemaphore,
                                      getShareGroupVk()->releaseResourceUseLists(),
                                      std::move(mCurrentGarbage), &mCommandPools, submitSerialOut));
 
-    onRenderPassFinished(RenderPassClosureReason::AlreadySpecifiedElsewhere);
+    if (finishRenderPass)
+    {
+        onRenderPassFinished(RenderPassClosureReason::AlreadySpecifiedElsewhere);
+    }
+
     mComputeDirtyBits |= mNewComputeCommandBufferDirtyBits;
 
     if (mGpuEventsEnabled)
@@ -6280,6 +6305,15 @@ bool ContextVk::shouldConvertUint8VkIndexType(gl::DrawElementsType glIndexType) 
             !mRenderer->getFeatures().supportsIndexTypeUint8.enabled);
 }
 
+angle::Result ContextVk::submitOutsideRenderPassCommandsHelper()
+{
+    ANGLE_TRACE_EVENT0("gpu.angle", "ContextVk::submitOutsideRenderPassCommandsHelper");
+    ANGLE_TRY(flushOutsideRenderPassCommands());
+    Serial unusedSerial;
+    ANGLE_TRY(submitFrameOutsideCommandBufferOnly(&unusedSerial));
+    return angle::Result::Continue;
+}
+
 angle::Result ContextVk::flushOutsideRenderPassCommands()
 {
     if (mOutsideRenderPassCommands->empty())
@@ -6303,6 +6337,10 @@ angle::Result ContextVk::flushOutsideRenderPassCommands()
     mComputeDirtyBits |= mNewComputeCommandBufferDirtyBits;
 
     mPerfCounters.flushedOutsideRenderPassCommandBuffers++;
+
+    // Make sure the copy size has been reset.
+    mCopySize = 0;
+
     return angle::Result::Continue;
 }
 
