@@ -34,6 +34,23 @@
       "parentUuid": "3d7a2352_cbf0c3e8",
       "revId": "5866c2786f336c522c1d74b69ceb1531c92bd3e7",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "fb04a4ec_01f069ba",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2022-01-07T17:52:44Z",
+      "side": 1,
+      "message": "Nice work Tim!  I\u0027m a little worried that the new ASSERTs will trip up MEC of other apps, but we\u0027ll work through them if so.",
+      "revId": "5866c2786f336c522c1d74b69ceb1531c92bd3e7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
