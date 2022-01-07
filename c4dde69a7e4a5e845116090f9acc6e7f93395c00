@@ -67,6 +67,24 @@
       "message": "Hmm, I hope this doesn\u0027t. accidentally skip any new tests though",
       "revId": "c4dde69a7e4a5e845116090f9acc6e7f93395c00",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "b4b20fb2_bf29faf0",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2022-01-07T15:01:05Z",
+      "side": 1,
+      "message": "It did catch a bunch of duplicated test expectations.",
+      "parentUuid": "9cf0d8ed_4cd98379",
+      "revId": "c4dde69a7e4a5e845116090f9acc6e7f93395c00",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
