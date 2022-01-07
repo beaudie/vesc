@@ -54,6 +54,23 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "87f7905d_c9397075",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1326275
+      },
+      "writtenOn": "2022-01-07T15:00:55Z",
+      "side": 1,
+      "message": "Also: forgot to ask. I named the extension ANGLE_platform_angle_device_id, and used \"device ID\" to denote the 64 bit identifier. But there\u0027s also the \"device ID\" from the PCI entry. \nHere I differentiated by using systemDeviceId. But can you think of a better name for the overall concept?",
+      "revId": "03d739f94ce8ebaeed131df3fb07ab014aea8f8c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "b12912e4_d3aaa3ac",
         "filename": "src/gpu_info_util/SystemInfo_macos.mm",
         "patchSetId": 2
