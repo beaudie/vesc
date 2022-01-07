@@ -58,6 +58,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": true,
+      "key": {
+        "uuid": "967a57d5_c9939301",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 11,
+      "author": {
+        "id": 1500872
+      },
+      "writtenOn": "2022-01-07T21:24:12Z",
+      "side": 1,
+      "message": "Specifically, building glslang_wrapper_utils.cpp required SpirV Headers. This change moves classes used in other parts of the codebase out.",
+      "parentUuid": "95272425_1a31dcde",
+      "range": {
+        "startLine": 10,
+        "startChar": 36,
+        "endLine": 11,
+        "endChar": 13
+      },
+      "revId": "236aa6163a73827c3a5c244129c490537fab1fa2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": false,
       "key": {
         "uuid": "1554597a_88002ad0",
