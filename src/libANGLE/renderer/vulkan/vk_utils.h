@@ -1250,6 +1250,7 @@ struct PerfCounters
 {
     uint32_t primaryBuffers;
     uint32_t renderPasses;
+    uint32_t submittedFrames;
     uint32_t writeDescriptorSets;
     uint32_t flushedOutsideRenderPassCommandBuffers;
     uint32_t resolveImageCommands;
