@@ -247,6 +247,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "b20b56b8_2978c5cd",
+        "filename": "src/libANGLE/renderer/vulkan/vk_utils.h",
+        "patchSetId": 4
+      },
+      "lineNbr": 209,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2022-01-07T15:09:44Z",
+      "side": 1,
+      "message": "Nah, probably just keep what you have now.",
+      "parentUuid": "be9ff792_c8846ad0",
+      "range": {
+        "startLine": 205,
+        "startChar": 0,
+        "endLine": 209,
+        "endChar": 76
+      },
+      "revId": "0d1003e2d35c7f5cfe15adc4bb7bdb4ce5714d37",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "126023c8_af43339f",
@@ -284,6 +308,30 @@
       "side": 1,
       "message": "What does the implementation detail (storage type) matter to the reader? It\u0027s a list of command buffers to release. Whether they are stored in one or two vectors, a std::list, a crazy tree or any other form is irrelevant to the reader IMO.\n\nAlso, prior examples of std::vectors being called lists:\n\n    typedef std::vector\u003cGLuint\u003e HandleList\n    std::vector\u003cHandleRange\u003e mUnallocatedList\n    std::vector\u003cGLuint\u003e mReleasedList\n    std::vector\u003cVariableLocation\u003e \u0026locationList\n    std::vector\u003cLinkedUniform\u003e *uniformList\n    std::vector\u003cEGLint\u003e mConfigAttribList\n    std::vector\u003cvk::ResourceUseList\u003e mResourceUseLists\n    std::vector\u003cCommandBufferHelperT *\u003e *freeList\n    std::vector\u003cCommandBufferHelperT *\u003e mCommandBufferHelperFreeList\n    std::vector\u003cT\u003e mObjectFreeList",
       "parentUuid": "126023c8_af43339f",
+      "range": {
+        "startLine": 212,
+        "startChar": 7,
+        "endLine": 212,
+        "endChar": 33
+      },
+      "revId": "0d1003e2d35c7f5cfe15adc4bb7bdb4ce5714d37",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "8714e3e7_598a0fb5",
+        "filename": "src/libANGLE/renderer/vulkan/vk_utils.h",
+        "patchSetId": 4
+      },
+      "lineNbr": 212,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2022-01-07T15:09:44Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "a77bb7ef_768ce1d1",
       "range": {
         "startLine": 212,
         "startChar": 7,
