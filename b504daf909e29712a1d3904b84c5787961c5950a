@@ -41,6 +41,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "5a14efdf_58aff540",
+        "filename": "src/libGLESv2/global_state.cpp",
+        "patchSetId": 15
+      },
+      "lineNbr": 114,
+      "author": {
+        "id": 1175714
+      },
+      "writtenOn": "2022-01-07T17:39:35Z",
+      "side": 1,
+      "message": "Done, see  https://chromium-review.googlesource.com/c/angle/angle/+/3373137",
+      "parentUuid": "c532867e_98bd5058",
+      "range": {
+        "startLine": 89,
+        "startChar": 0,
+        "endLine": 114,
+        "endChar": 1
+      },
+      "revId": "b504daf909e29712a1d3904b84c5787961c5950a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "5242ad97_fc98904c",
@@ -54,6 +78,30 @@
       "writtenOn": "2022-01-07T17:08:44Z",
       "side": 1,
       "message": "same",
+      "range": {
+        "startLine": 248,
+        "startChar": 0,
+        "endLine": 267,
+        "endChar": 0
+      },
+      "revId": "b504daf909e29712a1d3904b84c5787961c5950a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "436cd3cf_60a216b3",
+        "filename": "src/libGLESv2/global_state.cpp",
+        "patchSetId": 15
+      },
+      "lineNbr": 267,
+      "author": {
+        "id": 1175714
+      },
+      "writtenOn": "2022-01-07T17:39:35Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "5242ad97_fc98904c",
       "range": {
         "startLine": 248,
         "startChar": 0,
