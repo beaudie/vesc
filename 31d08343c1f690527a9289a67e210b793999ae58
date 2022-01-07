@@ -54,6 +54,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "ead9f933_a52b0fd8",
+        "filename": "src/libANGLE/Program.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 1564,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2022-01-07T15:41:08Z",
+      "side": 1,
+      "message": "Done - this change will not increase the difficulty of the fix. So this is acceptable b/c it\u0027s not increasing technical debt.",
+      "parentUuid": "93d15607_1b0edd67",
+      "revId": "31d08343c1f690527a9289a67e210b793999ae58",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "21facf54_54ff1c14",
@@ -148,6 +166,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "6c1a1c06_3e44bc74",
+        "filename": "src/libANGLE/ProgramExecutable.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 1473,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2022-01-07T15:41:08Z",
+      "side": 1,
+      "message": "Done, for UniformLinker. I didn\u0027t want to rename PE\u0027s member variables/external API in this CL.",
+      "parentUuid": "41f2aa66_ae3e4c0b",
+      "range": {
+        "startLine": 1473,
+        "startChar": 25,
+        "endLine": 1473,
+        "endChar": 44
+      },
+      "revId": "31d08343c1f690527a9289a67e210b793999ae58",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "63152a6e_c1c63f11",
@@ -232,6 +274,30 @@
       "side": 1,
       "message": "My vote is still to remove the \"OrNull\", since that\u0027s already implied by virtue of it being a pointer in the first place.",
       "parentUuid": "f6e30afc_5216eb04",
+      "range": {
+        "startLine": 65,
+        "startChar": 0,
+        "endLine": 66,
+        "endChar": 78
+      },
+      "revId": "31d08343c1f690527a9289a67e210b793999ae58",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "d5fac775_7127991e",
+        "filename": "src/libANGLE/ProgramLinkedResources.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 66,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2022-01-07T15:41:08Z",
+      "side": 1,
+      "message": "Ack - some pointers are assumed non-null in ANGLE (e.g. most Context pointers), so the OrNull provides some additional info to the reader.\n\nWe could go and change every non-nullable pointer into a reference at some point.",
+      "parentUuid": "29f0d76f_44739c90",
       "range": {
         "startLine": 65,
         "startChar": 0,
