@@ -34,6 +34,40 @@
       "parentUuid": "6fec2a35_5529e9ba",
       "revId": "40c5cb255c0a07bdab574aa076ee603e7d791ab3",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "c48cb566_b7808701",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 16
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-01-07T22:34:19Z",
+      "side": 1,
+      "message": "Sorry I didn\u0027t get around to review this earlier",
+      "revId": "40c5cb255c0a07bdab574aa076ee603e7d791ab3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "602ee4f0_dc20c10d",
+        "filename": "src/libGLESv2/egl_stubs.cpp",
+        "patchSetId": 16
+      },
+      "lineNbr": 640,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-01-07T22:34:19Z",
+      "side": 1,
+      "message": "Another thread can sneak in here and basically issue a whole EGL call in the middle. How can we be sure that\u0027s safe?",
+      "revId": "40c5cb255c0a07bdab574aa076ee603e7d791ab3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
