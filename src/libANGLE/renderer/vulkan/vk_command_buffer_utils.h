@@ -19,9 +19,12 @@ namespace vk
 class CommandBufferCommandTracker
 {
   public:
+    void onBufferCopy() { ++mOutsideCommandBufferCopyCount; }
     void onDraw() { ++mRenderPassWriteCommandCount; }
     void onClearAttachments() { ++mRenderPassWriteCommandCount; }
+    uint32_t getOutsideCommandBufferCopyCount() const { return mOutsideCommandBufferCopyCount; }
     uint32_t getRenderPassWriteCommandCount() const { return mRenderPassWriteCommandCount; }
+    void resetOutsideCommandBufferCopyCount() { mOutsideCommandBufferCopyCount = 0; }
 
     void reset() { *this = CommandBufferCommandTracker{}; }
 
@@ -29,7 +32,8 @@ class CommandBufferCommandTracker
     // The number of commands recorded that can modify a render pass attachment, i.e.
     // vkCmdClearAttachment and vkCmdDraw*.  Used to know if a command might have written to an
     // attachment after it was invalidated.
-    uint32_t mRenderPassWriteCommandCount = 0;
+    uint32_t mRenderPassWriteCommandCount   = 0;
+    uint32_t mOutsideCommandBufferCopyCount = 0;  // Name should be improved
 };
 
 }  // namespace vk

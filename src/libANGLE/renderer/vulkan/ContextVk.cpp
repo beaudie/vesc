@@ -6138,6 +6138,11 @@ bool ContextVk::shouldConvertUint8VkIndexType(gl::DrawElementsType glIndexType) 
             !mRenderer->getFeatures().supportsIndexTypeUint8.enabled);
 }
 
+angle::Result ContextVk::flushOutsideRenderPassCommandsHelper()
+{
+    return flushOutsideRenderPassCommands();
+}
+
 angle::Result ContextVk::flushOutsideRenderPassCommands()
 {
     if (mOutsideRenderPassCommands->empty())
@@ -6161,6 +6166,12 @@ angle::Result ContextVk::flushOutsideRenderPassCommands()
     mComputeDirtyBits |= mNewComputeCommandBufferDirtyBits;
 
     mPerfCounters.flushedOutsideRenderPassCommandBuffers++;
+
+    // Reset mOutsideCommandBufferCopyCount (command buffer tracker) here?
+    vk::OutsideRenderPassCommandBuffer &commandBuffer =
+        mOutsideRenderPassCommands->getCommandBuffer();
+    commandBuffer.getCommandBufferTracker()->resetOutsideCommandBufferCopyCount();
+
     return angle::Result::Continue;
 }
 

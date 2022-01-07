@@ -7233,7 +7233,7 @@ angle::Result ImageHelper::flushStagedUpdates(ContextVk *contextVk,
                 // that layout.
                 ANGLE_TRY(contextVk->getOutsideRenderPassCommandBuffer(access, &commandBuffer));
             }
-            else if (update.updateSource == UpdateSource::Buffer)
+            else if (update.updateSource == UpdateSource::Buffer)  // Interesting
             {
                 BufferUpdate &bufferUpdate = update.data.buffer;
 
@@ -7254,7 +7254,7 @@ angle::Result ImageHelper::flushStagedUpdates(ContextVk *contextVk,
             }
             else
             {
-                ASSERT(update.updateSource == UpdateSource::Image);
+                ASSERT(update.updateSource == UpdateSource::Image);  // Interesting
                 CommandBufferAccess imageAccess;
                 imageAccess.onImageTransferRead(aspectFlags, &update.refCounted.image->get());
                 ANGLE_TRY(
@@ -7293,6 +7293,15 @@ angle::Result ImageHelper::flushStagedUpdates(ContextVk *contextVk,
         onStateChange(angle::SubjectMessage::InitializationComplete);
     }
 
+    // This is where we might check the tracker and flush the outside render pass command buffers.
+    uint32_t copyCount =
+        commandBuffer->getCommandBufferTracker()->getOutsideCommandBufferCopyCount();
+    if (copyCount >= kMaxCopyBufferCount)
+    {
+        // Assert is here to avoid unused variable error! Replace with actual command later.
+        ANGLE_TRY(contextVk->flushOutsideRenderPassCommandsHelper());
+        ASSERT(copyCount >= 0);
+    }
     return angle::Result::Continue;
 }
 

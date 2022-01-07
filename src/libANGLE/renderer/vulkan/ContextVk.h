@@ -608,6 +608,7 @@ class ContextVk : public ContextImpl, public vk::Context, public MultisampleText
     void startNextSubpass();
     angle::Result flushCommandsAndEndRenderPass(RenderPassClosureReason reason);
     angle::Result flushCommandsAndEndRenderPassWithoutQueueSubmit(RenderPassClosureReason reason);
+    angle::Result flushOutsideRenderPassCommandsHelper();
 
     angle::Result syncExternalMemory();
 
