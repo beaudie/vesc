@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "9c800a9b_b0863087",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 7
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2022-01-07T18:21:13Z",
+      "side": 1,
+      "message": "Green run here:\n\nhttps://ci.chromium.org/ui/p/angle/builders/try/linux-tsan-test/15/overview\n\nOne failure on CI, being reverted now:\n\nhttps://chromium-review.googlesource.com/c/angle/angle/+/3373165\n\nFeel free to stamp +2 to get this landed quickly.",
+      "revId": "bb6f5b81e22056eefe6063cb51a62582841b7976",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
