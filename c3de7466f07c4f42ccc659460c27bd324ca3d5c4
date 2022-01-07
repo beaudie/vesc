@@ -1,0 +1,181 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "d3462443_c82635ff",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-01-07T21:41:00Z",
+      "side": 1,
+      "message": "Infinite gratitude 🙏",
+      "revId": "c3de7466f07c4f42ccc659460c27bd324ca3d5c4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "c14e7d97_d11502a1",
+        "filename": "src/tests/gl_tests/BlitFramebufferANGLETest.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 527,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-01-07T21:41:00Z",
+      "side": 1,
+      "message": "Again, I suggest non-equal and non-complete blits to exercise the maths more.\n\nFor example, in some tests you can copy to a smaller portion of the destination (like `width / 6, height / 6, width / 2, height / 2`) while clearing the draw fbo before and check that outside the blit area the clear color remains intact.\n\nIn some tests you could do the opposite, like copy from a portion of the _source_ and make sure it looks fine in the destination.",
+      "range": {
+        "startLine": 526,
+        "startChar": 0,
+        "endLine": 527,
+        "endChar": 74
+      },
+      "revId": "c3de7466f07c4f42ccc659460c27bd324ca3d5c4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "985ad599_350f8a72",
+        "filename": "src/tests/gl_tests/BlitFramebufferANGLETest.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 537,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-01-07T21:41:00Z",
+      "side": 1,
+      "message": "I suggest splitting the test here into another test. Basically the same as above except the direction of the blit is changed (and another variation that has both flipped)\n\nThen if a test fails, we don\u0027t have to deal with the other non-failing half.",
+      "revId": "c3de7466f07c4f42ccc659460c27bd324ca3d5c4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "fd38c7a9_697aa261",
+        "filename": "src/tests/gl_tests/BlitFramebufferANGLETest.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 1043,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-01-07T21:41:00Z",
+      "side": 1,
+      "message": "Great, also one with depth?\n\nAlso, re-nit: comment before tests",
+      "revId": "c3de7466f07c4f42ccc659460c27bd324ca3d5c4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "f0524be6_b2b50797",
+        "filename": "src/tests/gl_tests/BlitFramebufferANGLETest.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 1083,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-01-07T21:41:00Z",
+      "side": 1,
+      "message": "nit: unnecessary comment is unnecessary",
+      "revId": "c3de7466f07c4f42ccc659460c27bd324ca3d5c4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "527419c5_790abc5d",
+        "filename": "src/tests/gl_tests/CopyTexImageTest.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 246,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-01-07T21:41:00Z",
+      "side": 1,
+      "message": "nit: Can omit given the basic test does the same",
+      "range": {
+        "startLine": 242,
+        "startChar": 0,
+        "endLine": 246,
+        "endChar": 79
+      },
+      "revId": "c3de7466f07c4f42ccc659460c27bd324ca3d5c4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "02cb2ffc_3c7608b6",
+        "filename": "src/tests/gl_tests/CopyTexImageTest.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 257,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-01-07T21:41:00Z",
+      "side": 1,
+      "message": "While this test is useful in that we can make sure the copy is non-flipped, we already know from other tests that flipped draw works.\n\nKeeping this test is good, but I think a more interesting test here would be to draw non-flipped, but copy flipped and make sure the flip does work in combination with copy!",
+      "range": {
+        "startLine": 255,
+        "startChar": 0,
+        "endLine": 257,
+        "endChar": 79
+      },
+      "revId": "c3de7466f07c4f42ccc659460c27bd324ca3d5c4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "3a04e8f4_23514345",
+        "filename": "src/tests/gl_tests/FramebufferTest.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 1866,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-01-07T21:41:00Z",
+      "side": 1,
+      "message": "Basic draw tests already exists, I meant a basic _flipped_ draw test 😊 You could remove this (though no harm done keeping it either)",
+      "range": {
+        "startLine": 1866,
+        "startChar": 29,
+        "endLine": 1866,
+        "endChar": 43
+      },
+      "revId": "c3de7466f07c4f42ccc659460c27bd324ca3d5c4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "69894d21_fb38d355",
+        "filename": "src/tests/gl_tests/FramebufferTest.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 1894,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-01-07T21:41:00Z",
+      "side": 1,
+      "message": "nit: We require a comment before every test",
+      "revId": "c3de7466f07c4f42ccc659460c27bd324ca3d5c4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}

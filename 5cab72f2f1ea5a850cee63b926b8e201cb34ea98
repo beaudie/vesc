@@ -88,6 +88,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "a18f3f0c_f122befe",
+        "filename": "src/tests/gl_tests/BlitFramebufferANGLETest.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 523,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-01-07T21:41:00Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "41c01e93_af4c4f1f",
+      "revId": "5cab72f2f1ea5a850cee63b926b8e201cb34ea98",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "355ad583_2a328919",
@@ -119,6 +137,24 @@
       "side": 1,
       "message": "I think I have added those based on your comments in FrameBufferTest. If not, please tell me which one are still missing :) thanks.",
       "parentUuid": "355ad583_2a328919",
+      "revId": "5cab72f2f1ea5a850cee63b926b8e201cb34ea98",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "1fa1968b_1ad2e12d",
+        "filename": "src/tests/gl_tests/BlitFramebufferANGLETest.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 552,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-01-07T21:41:00Z",
+      "side": 1,
+      "message": "The tests in FramebufferTest are good, but they _resolve_. It\u0027s glBlitFramebuffer, but that function does two things based on whether source is MSAA or not!\n\nThe tests here would instead _blit_ which may take a different path in the implementation. Feel free to also move the resolve tests to this file.",
+      "parentUuid": "a72fa4b5_251f783f",
       "revId": "5cab72f2f1ea5a850cee63b926b8e201cb34ea98",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
@@ -189,6 +225,24 @@
       "side": 1,
       "message": "I added new tests.\n\n\u003e Also, could you please make sure the blits are not full-size? That makes sure any CPU-side math handles the y-flip correctly when calculating the y offsets.\n\nI tried to do that. Though, I\u0027m not sure how to calculate pixel expectations in this case. I used the values I got after running the tests with not-full-size blits. Can you please check? Thanks!\n\n\u003e The first one could exercise a resolve-through-subpass optimization in Vulkan (so it\u0027s a special and different test from the others).\n\nI\u0027m not sure I understand this. What\u0027s required for that? The basic test is called BasicDrawToFBOFlipped now. Is that what you meant? Sorry for stupid questions.",
       "parentUuid": "6b068e28_1bf4fdc3",
+      "revId": "5cab72f2f1ea5a850cee63b926b8e201cb34ea98",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "f521e5b9_012c3573",
+        "filename": "src/tests/gl_tests/FramebufferTest.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 1948,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-01-07T21:41:00Z",
+      "side": 1,
+      "message": "Re: pixel values. Really doesn\u0027t matter as long as they are more or less what\u0027s expected (based on your knowledge of what\u0027s flipped and not). The error threshold should make sure we don\u0027t have to find the exact value.\n\n\u003e \u003e The first one could exercise a resolve-through-subpass optimization in Vulkan (so it\u0027s a special and different test from the others).\n\n\u003e I\u0027m not sure I understand this. What\u0027s required for that? The basic test is called BasicDrawToFBOFlipped now. Is that what you meant? Sorry for stupid questions.\n\nI was maybe being overly explicative. I was trying to make it clear that the first case `Draw flipped, resolve with read fbo flipped` is importantly different from the second (`Draw non-flipped, resolve with read fbo flipped`) even if the main part (resolve) seems to be the same 😊",
+      "parentUuid": "c8e6f167_b0b54b65",
       "revId": "5cab72f2f1ea5a850cee63b926b8e201cb34ea98",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }

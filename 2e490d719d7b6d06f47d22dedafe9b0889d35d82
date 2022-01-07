@@ -52,6 +52,24 @@
       "parentUuid": "4fe525bb_fd982e9d",
       "revId": "2e490d719d7b6d06f47d22dedafe9b0889d35d82",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "4ab8be12_27964b7b",
+        "filename": "src/tests/gl_tests/BlitFramebufferANGLETest.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 505,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-01-07T21:41:00Z",
+      "side": 1,
+      "message": "Thanks. By integer I meant using an integer format instead of unorm. Is integer blit/resolve not allowed in GL?",
+      "parentUuid": "5915396c_66562179",
+      "revId": "2e490d719d7b6d06f47d22dedafe9b0889d35d82",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
