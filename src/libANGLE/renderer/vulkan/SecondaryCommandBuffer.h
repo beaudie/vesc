@@ -753,6 +753,8 @@ class SecondaryCommandBuffer final : angle::NonCopyable
         return mCommandTracker.getRenderPassWriteCommandCount();
     }
 
+    CommandBufferCommandTracker *getCommandBufferTracker() { return &mCommandTracker; }
+
   private:
     void commonDebugUtilsLabel(CommandID cmd, const VkDebugUtilsLabelEXT &label);
     template <class StructType>
@@ -1104,6 +1106,8 @@ ANGLE_INLINE void SecondaryCommandBuffer::copyBufferToImage(VkBuffer srcBuffer,
     paramStruct->dstImage       = dstImage.getHandle();
     paramStruct->dstImageLayout = dstImageLayout;
     paramStruct->region         = regions[0];
+
+    mCommandTracker.onCopy(regions->bufferRowLength * regions->bufferImageHeight);
 }
 
 ANGLE_INLINE void SecondaryCommandBuffer::copyImage(const Image &srcImage,
@@ -1120,6 +1124,8 @@ ANGLE_INLINE void SecondaryCommandBuffer::copyImage(const Image &srcImage,
     paramStruct->dstImage        = dstImage.getHandle();
     paramStruct->dstImageLayout  = dstImageLayout;
     paramStruct->region          = regions[0];
+
+    mCommandTracker.onCopy(regions->extent.width * regions->extent.height);
 }
 
 ANGLE_INLINE void SecondaryCommandBuffer::copyImageToBuffer(const Image &srcImage,

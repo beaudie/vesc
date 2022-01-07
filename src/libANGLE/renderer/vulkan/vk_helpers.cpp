@@ -7392,6 +7392,8 @@ angle::Result ImageHelper::flushStagedUpdates(ContextVk *contextVk,
                                                  &update.data.buffer.copyRegion);
                 onWrite(updateMipLevelGL, 1, updateBaseLayer, updateLayerCount,
                         update.data.buffer.copyRegion.imageSubresource.aspectMask);
+
+                ANGLE_TRY(checkCopyCommandTrackerForOutsideCommandBuffer(contextVk, commandBuffer));
             }
             else
             {
@@ -7406,6 +7408,8 @@ angle::Result ImageHelper::flushStagedUpdates(ContextVk *contextVk,
                                          getCurrentLayout(), 1, &update.data.image.copyRegion);
                 onWrite(updateMipLevelGL, 1, updateBaseLayer, updateLayerCount,
                         update.data.image.copyRegion.dstSubresource.aspectMask);
+
+                ANGLE_TRY(checkCopyCommandTrackerForOutsideCommandBuffer(contextVk, commandBuffer));
             }
 
             update.release(contextVk->getRenderer());
@@ -7434,6 +7438,21 @@ angle::Result ImageHelper::flushStagedUpdates(ContextVk *contextVk,
         onStateChange(angle::SubjectMessage::InitializationComplete);
     }
 
+    return angle::Result::Continue;
+}
+
+ANGLE_INLINE angle::Result ImageHelper::checkCopyCommandTrackerForOutsideCommandBuffer(
+    ContextVk *contextVk,
+    OutsideRenderPassCommandBuffer *commandBuffer)
+{
+    ANGLE_TRACE_EVENT0("gpu.angle", "ImageHelper::checkCopyCommandTrackerForOutsideCommandBuffer");
+    // If the copy command count exceeds the maximum allowed, submit the outside command buffer.
+    uint32_t copyCount = commandBuffer->getCommandBufferTracker()->getCopyCommandCount();
+    uint32_t copySize  = commandBuffer->getCommandBufferTracker()->getCopySize();
+    if (copyCount >= kMaxCopyCommandCount || copySize >= kMaxCopySize)
+    {
+        ANGLE_TRY(contextVk->submitOutsideRenderPassCommandsHelper());
+    }
     return angle::Result::Continue;
 }
 

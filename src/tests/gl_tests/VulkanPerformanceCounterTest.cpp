@@ -2680,6 +2680,9 @@ TEST_P(VulkanPerformanceCounterTest, ClearAfterClearDoesNotBreakRenderPass)
     EXPECT_PIXEL_COLOR_EQ(kSize / 2, kSize / 2, GLColor::green);
 }
 
+// Add test to make sure the render pass doesn't break when the outside command buffer is submitted.
+TEST_P(VulkanPerformanceCounterTest, OutsideRenderPassSubmitNotBreakRenderPass) {}
+
 // Ensures that changing the scissor size doesn't break the render pass.
 TEST_P(VulkanPerformanceCounterTest, ScissorDoesNotBreakRenderPass)
 {

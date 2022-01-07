@@ -228,6 +228,8 @@ class VulkanSecondaryCommandBuffer : public priv::CommandBuffer
     }
     std::string dumpCommands(const char *separator) const { return ""; }
 
+    CommandBufferCommandTracker *getCommandBufferTracker() { return &mCommandTracker; }
+
   private:
     void onRecordCommand() { mAnyCommand = true; }
 
@@ -320,6 +322,7 @@ ANGLE_INLINE void VulkanSecondaryCommandBuffer::copyBufferToImage(VkBuffer srcBu
                                                                   const VkBufferImageCopy *regions)
 {
     onRecordCommand();
+    mCommandTracker.onCopy(regions->bufferRowLength * regions->bufferImageHeight);
     CommandBuffer::copyBufferToImage(srcBuffer, dstImage, dstImageLayout, regionCount, regions);
 }
 
@@ -341,6 +344,7 @@ ANGLE_INLINE void VulkanSecondaryCommandBuffer::copyImage(const Image &srcImage,
                                                           const VkImageCopy *regions)
 {
     onRecordCommand();
+    mCommandTracker.onCopy(regions->extent.width * regions->extent.height);
     CommandBuffer::copyImage(srcImage, srcImageLayout, dstImage, dstImageLayout, regionCount,
                              regions);
 }
