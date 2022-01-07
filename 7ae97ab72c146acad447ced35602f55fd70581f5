@@ -16,6 +16,23 @@
       "message": "Hi Jamie \u0026 Shahbaz, I am considering not reset env variables after initialization. WDYT?",
       "revId": "7ae97ab72c146acad447ced35602f55fd70581f5",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "4c401f65_8a18efa1",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2022-01-07T15:11:43Z",
+      "side": 1,
+      "message": "Maybe instead we can just do away with the scoped loader environment. It seems like we\u0027re no longer scoping these sets.",
+      "revId": "7ae97ab72c146acad447ced35602f55fd70581f5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
