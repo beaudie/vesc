@@ -71,6 +71,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "8c7e8b05_a06328b5",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2022-01-07T20:33:13Z",
+      "side": 1,
+      "message": "SystemDeviceID / systemDeviceId seem fine. I\u0027d suggest RegistryDeviceID / registryDeviceId but it\u0027s a Mac-specific name.\n\nIn the future we could consider renaming deviceId to pciDeviceId if that\u0027s accurate among all platforms, but it could be unnecessary code churn. Maybe comments in the GPUDeviceInfo struct would be enough to describe the semantics of the fields.",
+      "parentUuid": "87f7905d_c9397075",
+      "revId": "03d739f94ce8ebaeed131df3fb07ab014aea8f8c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "b12912e4_d3aaa3ac",
         "filename": "src/gpu_info_util/SystemInfo_macos.mm",
         "patchSetId": 2
