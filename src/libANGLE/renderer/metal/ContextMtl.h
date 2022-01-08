@@ -587,6 +587,7 @@ class ContextMtl : public ContextImpl, public mtl::Context
     IncompleteTextureSet mIncompleteTextures;
     bool mIncompleteTexturesInitialized = false;
     ProvokingVertexHelper mProvokingVertexHelper;
+    bool mPreviousRasterizerDiscardEnabledState = false;
 
     mtl::ContextDevice mContextDevice;
 };
