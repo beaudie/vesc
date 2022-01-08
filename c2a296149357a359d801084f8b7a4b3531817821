@@ -34,6 +34,24 @@
       "parentUuid": "b8cfcb0e_e70c9e42",
       "revId": "c2a296149357a359d801084f8b7a4b3531817821",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "7dea89c5_bafe1932",
+        "filename": "src/libGLESv2/entry_points_egl_autogen.cpp",
+        "patchSetId": 16
+      },
+      "lineNbr": 399,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-01-08T02:31:04Z",
+      "side": 0,
+      "message": "The point is that non-surface lock egl calls don\u0027t touch the surface right? So that shouldn\u0027t matter, or rather if it matters they should take the surface lock too.\n\nI don\u0027t believe the above can deadlock. Any specific sequence you have in mind?\n\nAnd the most important point was to reacquire the global lock and do everything this function is currently doing again, as if these were really two separate egl calls (eglPrepareSwapBuffers followed by eglSwapBuffers). Because then we can reason about it the same way we reason about different egl calls getting interleaved.",
+      "parentUuid": "65faa653_27fd623d",
+      "revId": "c2a296149357a359d801084f8b7a4b3531817821",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
