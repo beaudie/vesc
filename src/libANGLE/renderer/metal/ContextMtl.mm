@@ -55,8 +55,13 @@ constexpr uint32_t kMaxTriFanLineLoopBuffersPerFrame = 10;
     else                                                                                    \
     {                                                                                       \
         /* First pass: write to XFB buffers in vertex shader, fragment shader inactive */   \
+        if (!mPreviousRasterizerDiscardEnabledState)                                        \
+        {                                                                                   \
+            invalidateRenderPipeline();                                                     \
+        }                                                                                   \
         DRAW_PROC(true);                                                                    \
-        if (!mState.isRasterizerDiscardEnabled())                                           \
+        mPreviousRasterizerDiscardEnabledState = mState.isRasterizerDiscardEnabled();       \
+        if (!mPreviousRasterizerDiscardEnabledState)                                        \
         {                                                                                   \
             /* Second pass: full rasterization: vertex shader + fragment shader are active. \
                Vertex shader writes to stage output but won't write to XFB buffers */       \
