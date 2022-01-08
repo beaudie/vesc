@@ -16,6 +16,24 @@
       "message": "Can the second invalidateRenderPipeline be done after this DRAW_PROC?\n\nI don\u0027t fully understand which incorrect pipeline is bound, but would hope we can avoid pushing down all the render state before every transform feedback call.",
       "revId": "c840f60a6565cb1db30aa664e659fdd5b501e561",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "ed46d9c3_baacaab3",
+        "filename": "src/libANGLE/renderer/metal/ContextMtl.mm",
+        "patchSetId": 2
+      },
+      "lineNbr": 65,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2022-01-08T01:24:13Z",
+      "side": 1,
+      "message": "Never mind - based on your latest patch set I understand now. Thanks.",
+      "parentUuid": "45ee26ed_4eec3cdc",
+      "revId": "c840f60a6565cb1db30aa664e659fdd5b501e561",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
