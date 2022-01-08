@@ -365,6 +365,17 @@ class CommandBuffer : public WrappedObject<CommandBuffer, VkCommandBuffer>
     void beginDebugUtilsLabelEXT(const VkDebugUtilsLabelEXT &labelInfo);
     void endDebugUtilsLabelEXT();
     void insertDebugUtilsLabelEXT(const VkDebugUtilsLabelEXT &labelInfo);
+
+    void setCommandPool(vk::CommandPool *commandPool)
+    {
+        ASSERT(!mCommandPool);
+        ASSERT(commandPool);
+        mCommandPool = commandPool;
+    }
+    vk::CommandPool *getCommandPool() { return mCommandPool; }
+
+  private:
+    vk::CommandPool *mCommandPool = nullptr;
 };
 }  // namespace priv
 
