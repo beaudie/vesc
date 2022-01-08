@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "26d8d1b0_72d55ece",
+        "filename": "src/libANGLE/renderer/vulkan/vk_caps_utils.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 939,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-01-08T02:55:31Z",
+      "side": 1,
+      "message": "Post-review comment; please turn this into an ANGLE feature enabled on ARM. That\u0027d make it easier to experiment with (like enabling/disabling it through a feature override), make it nicer to review \"what hacks are in place on the current platform\" and allow it to be better extended like if it turns IMG is also ok with this.\n\nThe above \"disable FBF_non_coherent on ARM/QC\" should have also been a feature.",
+      "revId": "ae1a56b6790c2b7ab376f93c20fa3c973ace07cc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
