@@ -18,6 +18,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "78ae0992_4b47127e",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1500872
+      },
+      "writtenOn": "2022-01-08T01:42:17Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "ca62aeda_23415a3b",
+      "revId": "236aa6163a73827c3a5c244129c490537fab1fa2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "5f7fc61d_b8edb80f",
@@ -31,6 +49,24 @@
       "writtenOn": "2022-01-06T00:14:19Z",
       "side": 1,
       "message": "thier -\u003e their",
+      "revId": "236aa6163a73827c3a5c244129c490537fab1fa2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "f911ffcc_894ae4a3",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 9,
+      "author": {
+        "id": 1500872
+      },
+      "writtenOn": "2022-01-08T01:42:17Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "5f7fc61d_b8edb80f",
       "revId": "236aa6163a73827c3a5c244129c490537fab1fa2",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
@@ -72,6 +108,30 @@
       "side": 1,
       "message": "Specifically, building glslang_wrapper_utils.cpp required SpirV Headers. This change moves classes used in other parts of the codebase out.",
       "parentUuid": "95272425_1a31dcde",
+      "range": {
+        "startLine": 10,
+        "startChar": 36,
+        "endLine": 11,
+        "endChar": 13
+      },
+      "revId": "236aa6163a73827c3a5c244129c490537fab1fa2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "64688988_94c038cd",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 11,
+      "author": {
+        "id": 1500872
+      },
+      "writtenOn": "2022-01-08T01:42:17Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "967a57d5_c9939301",
       "range": {
         "startLine": 10,
         "startChar": 36,
@@ -134,6 +194,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "ca6f4c29_4ab0a588",
+        "filename": "src/libANGLE/renderer/ShaderInterfaceVariableInfoMap.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1500872
+      },
+      "writtenOn": "2022-01-08T01:42:17Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "84cc618e_6b0b4955",
+      "revId": "236aa6163a73827c3a5c244129c490537fab1fa2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "53666029_8bd25906",
@@ -157,6 +235,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "fabae514_2f46999d",
+        "filename": "src/libANGLE/renderer/ShaderInterfaceVariableInfoMap.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 9,
+      "author": {
+        "id": 1500872
+      },
+      "writtenOn": "2022-01-08T01:42:17Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "53666029_8bd25906",
+      "range": {
+        "startLine": 9,
+        "startChar": 8,
+        "endLine": 9,
+        "endChar": 42
+      },
+      "revId": "236aa6163a73827c3a5c244129c490537fab1fa2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "4da71ea3_6d124f4b",
@@ -170,6 +272,24 @@
       "writtenOn": "2022-01-06T00:14:19Z",
       "side": 1,
       "message": "Stray blank line.",
+      "revId": "236aa6163a73827c3a5c244129c490537fab1fa2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "7439cbd4_1973c094",
+        "filename": "src/libANGLE/renderer/metal/ProgramMtl.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 21,
+      "author": {
+        "id": 1500872
+      },
+      "writtenOn": "2022-01-08T01:42:17Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "4da71ea3_6d124f4b",
       "revId": "236aa6163a73827c3a5c244129c490537fab1fa2",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
