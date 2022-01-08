@@ -55,6 +55,7 @@ constexpr uint32_t kMaxTriFanLineLoopBuffersPerFrame = 10;
     else                                                                                    \
     {                                                                                       \
         /* First pass: write to XFB buffers in vertex shader, fragment shader inactive */   \
+        invalidateRenderPipeline();                                                         \
         DRAW_PROC(true);                                                                    \
         if (!mState.isRasterizerDiscardEnabled())                                           \
         {                                                                                   \
