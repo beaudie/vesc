@@ -22,6 +22,9 @@ enum class DescriptorSetIndex : uint32_t;
 
 namespace vk
 {
+
+class PersistentCommandPool;
+
 // Helper macros that apply to all the wrapped object types.
 // Unimplemented handle types:
 // Instance
@@ -365,6 +368,17 @@ class CommandBuffer : public WrappedObject<CommandBuffer, VkCommandBuffer>
     void beginDebugUtilsLabelEXT(const VkDebugUtilsLabelEXT &labelInfo);
     void endDebugUtilsLabelEXT();
     void insertDebugUtilsLabelEXT(const VkDebugUtilsLabelEXT &labelInfo);
+
+    void setCommandPool(vk::PersistentCommandPool *commandPool)
+    {
+        ASSERT(!mCommandPool);
+        ASSERT(commandPool);
+        mCommandPool = commandPool;
+    }
+    vk::PersistentCommandPool *getCommandPool() { return mCommandPool; }
+
+  private:
+    vk::PersistentCommandPool *mCommandPool = nullptr;
 };
 }  // namespace priv
 

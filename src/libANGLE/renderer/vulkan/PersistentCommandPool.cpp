@@ -15,11 +15,11 @@ namespace rx
 namespace vk
 {
 
-PersistentCommandPool::PersistentCommandPool() {}
+PersistentCommandPool::PersistentCommandPool() : mNumBuffersInFlight(0) {}
 
 PersistentCommandPool::~PersistentCommandPool()
 {
-    ASSERT(!mCommandPool.valid() && mFreeBuffers.empty());
+    ASSERT(!mCommandPool.valid() && mFreeBuffers.empty() && mCompletedBuffers.empty());
 }
 
 angle::Result PersistentCommandPool::init(vk::Context *context,
@@ -31,10 +31,7 @@ angle::Result PersistentCommandPool::init(vk::Context *context,
     // Initialize the command pool now that we know the queue family index.
     VkCommandPoolCreateInfo commandPoolInfo = {};
     commandPoolInfo.sType                   = VK_STRUCTURE_TYPE_COMMAND_POOL_CREATE_INFO;
-    // TODO (https://issuetracker.google.com/issues/166793850) We currently reset individual
-    //  command buffers from this pool. Alternatively we could reset the entire command pool.
-    commandPoolInfo.flags =
-        VK_COMMAND_POOL_CREATE_RESET_COMMAND_BUFFER_BIT | VK_COMMAND_POOL_CREATE_TRANSIENT_BIT;
+    commandPoolInfo.flags                   = VK_COMMAND_POOL_CREATE_TRANSIENT_BIT;
     if (hasProtectedContent)
     {
         commandPoolInfo.flags |= VK_COMMAND_POOL_CREATE_PROTECTED_BIT;
@@ -63,6 +60,11 @@ void PersistentCommandPool::destroy(VkDevice device)
         cmdBuf.destroy(device, mCommandPool);
     }
     mFreeBuffers.clear();
+    for (vk::PrimaryCommandBuffer &cmdBuf : mCompletedBuffers)
+    {
+        cmdBuf.destroy(device, mCommandPool);
+    }
+    mCompletedBuffers.clear();
 
     mCommandPool.destroy(device);
 }
@@ -78,6 +80,7 @@ angle::Result PersistentCommandPool::allocate(vk::Context *context,
 
     *commandBufferOut = std::move(mFreeBuffers.back());
     mFreeBuffers.pop_back();
+    ++mNumBuffersInFlight;
 
     return angle::Result::Continue;
 }
@@ -85,11 +88,19 @@ angle::Result PersistentCommandPool::allocate(vk::Context *context,
 angle::Result PersistentCommandPool::collect(vk::Context *context,
                                              vk::PrimaryCommandBuffer &&buffer)
 {
-    // VK_COMMAND_BUFFER_RESET_RELEASE_RESOURCES_BIT NOT set, The CommandBuffer
-    // can still hold the memory resource
-    ANGLE_VK_TRY(context, buffer.reset());
+    mCompletedBuffers.emplace_back(std::move(buffer));
+    --mNumBuffersInFlight;
 
-    mFreeBuffers.emplace_back(std::move(buffer));
+    if (mCompletedBuffers.size() == kMaxPoolSize)
+    {
+        ASSERT(mFreeBuffers.empty());
+        ASSERT(mNumBuffersInFlight == 0);
+        ANGLE_VK_TRY(context, mCommandPool.reset(context->getDevice(),
+                                                 VK_COMMAND_POOL_RESET_RELEASE_RESOURCES_BIT));
+        mFreeBuffers = std::move(mCompletedBuffers);
+        mCompletedBuffers.clear();
+    }
+
     return angle::Result::Continue;
 }
 
@@ -105,8 +116,10 @@ angle::Result PersistentCommandPool::allocateCommandBuffer(vk::Context *context)
         commandBufferInfo.commandBufferCount = 1;
 
         ANGLE_VK_TRY(context, commandBuffer.init(context->getDevice(), commandBufferInfo));
+        commandBuffer.setCommandPool(this);
     }
 
+    ASSERT(commandBuffer.valid());
     mFreeBuffers.emplace_back(std::move(commandBuffer));
 
     return angle::Result::Continue;
