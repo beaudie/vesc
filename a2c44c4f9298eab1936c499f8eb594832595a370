@@ -1,0 +1,72 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "84664c19_30eace91",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 2
+      },
+      "lineNbr": 14,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2022-01-08T01:30:18Z",
+      "side": 1,
+      "message": "Ideally reflow commit description to 80 cols so it prints better.",
+      "revId": "a2c44c4f9298eab1936c499f8eb594832595a370",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "7a64ccd1_9baa1de3",
+        "filename": "src/libANGLE/renderer/metal/mtl_command_buffer.mm",
+        "patchSetId": 2
+      },
+      "lineNbr": 662,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2022-01-08T01:30:18Z",
+      "side": 1,
+      "message": "This constant being buried down here is worrisome - any concerns about this being portable among different classes of hardware, etc.?",
+      "revId": "a2c44c4f9298eab1936c499f8eb594832595a370",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "c2c28daa_56316b0f",
+        "filename": "src/libANGLE/renderer/metal/mtl_resources.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 74,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2022-01-08T01:30:18Z",
+      "side": 1,
+      "message": "Per below, suggest estimatedByteSize().",
+      "revId": "a2c44c4f9298eab1936c499f8eb594832595a370",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "555c84e4_1d0a2447",
+        "filename": "src/libANGLE/renderer/metal/mtl_resources.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 274,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2022-01-08T01:30:18Z",
+      "side": 1,
+      "message": "Can consistent names be used throughout? For example:\n\nsetEstimatedByteSize\nestimatedByteSize()\nmEstimatedByteSize",
+      "revId": "a2c44c4f9298eab1936c499f8eb594832595a370",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
