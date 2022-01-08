@@ -322,7 +322,7 @@ CommandProcessorTask &CommandProcessorTask::operator=(CommandProcessorTask &&rhs
 }
 
 // CommandBatch implementation.
-CommandBatch::CommandBatch() : commandPools(nullptr), hasProtectedContent(false) {}
+CommandBatch::CommandBatch() : primaryCommandPool(VK_NULL_HANDLE), hasProtectedContent(false) {}
 
 CommandBatch::~CommandBatch() = default;
 
@@ -334,7 +334,8 @@ CommandBatch::CommandBatch(CommandBatch &&other) : CommandBatch()
 CommandBatch &CommandBatch::operator=(CommandBatch &&other)
 {
     std::swap(primaryCommands, other.primaryCommands);
-    std::swap(commandPools, other.commandPools);
+    std::swap(primaryCommandPool, other.primaryCommandPool);
+    std::swap(secondaryCommandPools, other.secondaryCommandPools);
     std::swap(commandBuffersToReset, other.commandBuffersToReset);
     std::swap(fence, other.fence);
     std::swap(serial, other.serial);
@@ -351,9 +352,9 @@ void CommandBatch::destroy(VkDevice device)
 
 void CommandBatch::resetSecondaryCommandBuffers(VkDevice device)
 {
-    ResetSecondaryCommandBuffers(device, &commandPools->outsideRenderPassPool,
+    ResetSecondaryCommandBuffers(device, &secondaryCommandPools->outsideRenderPassPool,
                                  &commandBuffersToReset.outsideRenderPassCommandBuffers);
-    ResetSecondaryCommandBuffers(device, &commandPools->renderPassPool,
+    ResetSecondaryCommandBuffers(device, &secondaryCommandPools->renderPassPool,
                                  &commandBuffersToReset.renderPassCommandBuffers);
 }
 
@@ -849,7 +850,12 @@ void CommandQueue::destroy(Context *context)
     (void)clearAllGarbage(renderer);
 
     mPrimaryCommands.destroy(renderer->getDevice());
-    mPrimaryCommandPool.destroy(renderer->getDevice());
+    for (PersistentCommandPool *pool : mPrimaryCommandPools)
+    {
+        pool->destroy(renderer->getDevice());
+        delete pool;
+    }
+    mPrimaryCommandPools.clear();
 
     if (mProtectedPrimaryCommandPool.valid())
     {
@@ -865,7 +871,9 @@ void CommandQueue::destroy(Context *context)
 angle::Result CommandQueue::init(Context *context, const vk::DeviceQueueMap &queueMap)
 {
     // Initialize the command pool now that we know the queue family index.
-    ANGLE_TRY(mPrimaryCommandPool.init(context, false, queueMap.getIndex()));
+    mPrimaryCommandPools.emplace_back(new PersistentCommandPool());
+    PersistentCommandPool *primaryCommandPool = mPrimaryCommandPools.back();
+    ANGLE_TRY(primaryCommandPool->init(context, false, queueMap.getIndex()));
     mQueueMap = queueMap;
 
     if (queueMap.isProtected())
@@ -918,8 +926,10 @@ angle::Result CommandQueue::retireFinishedCommands(Context *context, size_t fini
         mFenceRecycler.resetSharedFence(&batch.fence);
         ANGLE_TRACE_EVENT0("gpu.angle", "command buffer recycling");
         batch.resetSecondaryCommandBuffers(device);
-        PersistentCommandPool &commandPool = getCommandPool(batch.hasProtectedContent);
-        ANGLE_TRY(commandPool.collect(context, std::move(batch.primaryCommands)));
+        PersistentCommandPool *commandPool =
+            getCommandPoolFromHandle(batch.primaryCommandPool->getHandle());
+        ASSERT(commandPool);
+        ANGLE_TRY(commandPool->collect(context, std::move(batch.primaryCommands)));
     }
 
     if (finishedCount > 0)
@@ -956,14 +966,16 @@ angle::Result CommandQueue::retireFinishedCommands(Context *context, size_t fini
 
 void CommandQueue::releaseToCommandBatch(bool hasProtectedContent,
                                          PrimaryCommandBuffer &&commandBuffer,
-                                         SecondaryCommandPools *commandPools,
+                                         vk::CommandPool *primaryCommandPool,
+                                         SecondaryCommandPools *secondaryCommandPools,
                                          CommandBatch *batch)
 {
     ANGLE_TRACE_EVENT0("gpu.angle", "CommandQueue::releaseToCommandBatch");
 
-    batch->primaryCommands     = std::move(commandBuffer);
-    batch->commandPools        = commandPools;
-    batch->hasProtectedContent = hasProtectedContent;
+    batch->primaryCommands       = std::move(commandBuffer);
+    batch->primaryCommandPool    = primaryCommandPool;
+    batch->secondaryCommandPools = secondaryCommandPools;
+    batch->hasProtectedContent   = hasProtectedContent;
 }
 
 void CommandQueue::clearAllGarbage(RendererVk *renderer)
@@ -1004,6 +1016,46 @@ void CommandQueue::handleDeviceLost(RendererVk *renderer)
 bool CommandQueue::allInFlightCommandsAreAfterSerial(Serial serial)
 {
     return mInFlightCommands.empty() || mInFlightCommands[0].serial > serial;
+}
+
+angle::Result CommandQueue::getCommandPool(Context *context,
+                                           bool hasProtectedContent,
+                                           PersistentCommandPool **persistentCommandPoolOut)
+{
+    if (hasProtectedContent)
+    {
+        *persistentCommandPoolOut = &mProtectedPrimaryCommandPool;
+        return angle::Result::Continue;
+    }
+
+    for (PersistentCommandPool *pool : mPrimaryCommandPools)
+    {
+        if (pool->hasFreeCommandBuffers())
+        {
+            *persistentCommandPoolOut = pool;
+            return angle::Result::Continue;
+        }
+    }
+
+    // No empty command pools left, so create a new one.
+    mPrimaryCommandPools.emplace_back(new PersistentCommandPool());
+    *persistentCommandPoolOut = mPrimaryCommandPools.back();
+    ANGLE_TRY((*persistentCommandPoolOut)->init(context, false, mQueueMap.getIndex()));
+
+    return angle::Result::Continue;
+}
+
+PersistentCommandPool *CommandQueue::getCommandPoolFromHandle(VkCommandPool commandPool)
+{
+    for (PersistentCommandPool *pool : mPrimaryCommandPools)
+    {
+        if (pool->getHandle() == commandPool)
+        {
+            return pool;
+        }
+    }
+
+    return nullptr;
 }
 
 angle::Result CommandQueue::finishToSerial(Context *context, Serial finishSerial, uint64_t timeout)
@@ -1112,12 +1164,12 @@ angle::Result CommandQueue::submitFrame(
     if (hasProtectedContent)
     {
         releaseToCommandBatch(hasProtectedContent, std::move(mProtectedPrimaryCommands),
-                              commandPools, &batch);
+                              mProtectedPrimaryCommands.getCommandPool(), commandPools, &batch);
     }
     else
     {
-        releaseToCommandBatch(hasProtectedContent, std::move(mPrimaryCommands), commandPools,
-                              &batch);
+        releaseToCommandBatch(hasProtectedContent, std::move(mPrimaryCommands),
+                              mPrimaryCommands.getCommandPool(), commandPools, &batch);
     }
     mInFlightCommands.emplace_back(scopedBatch.release());
 
@@ -1186,7 +1238,9 @@ angle::Result CommandQueue::waitForSerialWithUserTimeout(vk::Context *context,
 angle::Result CommandQueue::ensurePrimaryCommandBufferValid(Context *context,
                                                             bool hasProtectedContent)
 {
-    PersistentCommandPool &commandPool  = getCommandPool(hasProtectedContent);
+    PersistentCommandPool *commandPool = nullptr;
+    ANGLE_TRY(getCommandPool(context, hasProtectedContent, &commandPool));
+    ASSERT(commandPool);
     PrimaryCommandBuffer &commandBuffer = getCommandBuffer(hasProtectedContent);
 
     if (commandBuffer.valid())
@@ -1194,7 +1248,7 @@ angle::Result CommandQueue::ensurePrimaryCommandBufferValid(Context *context,
         return angle::Result::Continue;
     }
 
-    ANGLE_TRY(commandPool.allocate(context, &commandBuffer));
+    ANGLE_TRY(commandPool->allocate(context, &commandBuffer));
     VkCommandBufferBeginInfo beginInfo = {};
     beginInfo.sType                    = VK_STRUCTURE_TYPE_COMMAND_BUFFER_BEGIN_INFO;
     beginInfo.flags                    = VK_COMMAND_BUFFER_USAGE_ONE_TIME_SUBMIT_BIT;
