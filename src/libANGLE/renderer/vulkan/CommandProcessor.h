@@ -209,8 +209,10 @@ struct CommandBatch final : angle::NonCopyable
     void resetSecondaryCommandBuffers(VkDevice device);
 
     PrimaryCommandBuffer primaryCommands;
-    // commandPools is for secondary CommandBuffer allocation
-    SecondaryCommandPools *commandPools;
+    // primaryCommandPool is for secondary CommandBuffer allocation
+    VkCommandPool primaryCommandPool;
+    // secondaryCommandPools is for secondary CommandBuffer allocation
+    SecondaryCommandPools *secondaryCommandPools;
     SecondaryCommandBufferList commandBuffersToReset;
     Shared<Fence> fence;
     Serial serial;
@@ -428,7 +430,8 @@ class CommandQueue final : public CommandQueueInterface
   private:
     void releaseToCommandBatch(bool hasProtectedContent,
                                PrimaryCommandBuffer &&commandBuffer,
-                               SecondaryCommandPools *commandPools,
+                               VkCommandPool primaryCommandPool,
+                               SecondaryCommandPools *secondaryCommandPools,
                                CommandBatch *batch);
     angle::Result retireFinishedCommands(Context *context, size_t finishedCount);
     angle::Result ensurePrimaryCommandBufferValid(Context *context, bool hasProtectedContent);
@@ -447,17 +450,10 @@ class CommandQueue final : public CommandQueueInterface
         }
     }
 
-    PersistentCommandPool &getCommandPool(bool hasProtectedContent)
-    {
-        if (hasProtectedContent)
-        {
-            return mProtectedPrimaryCommandPool;
-        }
-        else
-        {
-            return mPrimaryCommandPool;
-        }
-    }
+    angle::Result getCommandPool(Context *context,
+                                 bool hasProtectedContent,
+                                 PersistentCommandPool **persistentCommandPoolOut);
+    PersistentCommandPool *getCommandPoolFromHandle(VkCommandPool commandPool);
 
     GarbageQueue mGarbageQueue;
 
@@ -465,7 +461,7 @@ class CommandQueue final : public CommandQueueInterface
 
     // Keeps a free list of reusable primary command buffers.
     PrimaryCommandBuffer mPrimaryCommands;
-    PersistentCommandPool mPrimaryCommandPool;
+    std::vector<PersistentCommandPool *> mPrimaryCommandPools;
     PrimaryCommandBuffer mProtectedPrimaryCommands;
     PersistentCommandPool mProtectedPrimaryCommandPool;
 
