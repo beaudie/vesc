@@ -15,11 +15,11 @@ namespace rx
 namespace vk
 {
 
-PersistentCommandPool::PersistentCommandPool() {}
+PersistentCommandPool::PersistentCommandPool() : mNumBuffersInFlight(0) {}
 
 PersistentCommandPool::~PersistentCommandPool()
 {
-    ASSERT(!mCommandPool.valid() && mFreeBuffers.empty());
+    ASSERT(!mCommandPool.valid() && mFreeBuffers.empty() && mInvalidBuffers.empty());
 }
 
 angle::Result PersistentCommandPool::init(vk::Context *context,
@@ -63,6 +63,11 @@ void PersistentCommandPool::destroy(VkDevice device)
         cmdBuf.destroy(device, mCommandPool);
     }
     mFreeBuffers.clear();
+    for (vk::PrimaryCommandBuffer &cmdBuf : mInvalidBuffers)
+    {
+        cmdBuf.destroy(device, mCommandPool);
+    }
+    mInvalidBuffers.clear();
 
     mCommandPool.destroy(device);
 }
@@ -77,7 +82,9 @@ angle::Result PersistentCommandPool::allocate(vk::Context *context,
     }
 
     *commandBufferOut = std::move(mFreeBuffers.back());
+    commandBufferOut->setCommandPool(mCommandPool.getHandle());
     mFreeBuffers.pop_back();
+    ++mNumBuffersInFlight;
 
     return angle::Result::Continue;
 }
@@ -85,11 +92,22 @@ angle::Result PersistentCommandPool::allocate(vk::Context *context,
 angle::Result PersistentCommandPool::collect(vk::Context *context,
                                              vk::PrimaryCommandBuffer &&buffer)
 {
-    // VK_COMMAND_BUFFER_RESET_RELEASE_RESOURCES_BIT NOT set, The CommandBuffer
-    // can still hold the memory resource
-    ANGLE_VK_TRY(context, buffer.reset());
+    mInvalidBuffers.emplace_back(std::move(buffer));
+    --mNumBuffersInFlight;
 
-    mFreeBuffers.emplace_back(std::move(buffer));
+    if (mInvalidBuffers.size() == kMaxPoolSize)
+    {
+        ASSERT(mFreeBuffers.empty());
+        ASSERT(mNumBuffersInFlight == 0);
+        ANGLE_VK_TRY(context, mCommandPool.reset(context->getDevice(),
+                                                 VK_COMMAND_POOL_RESET_RELEASE_RESOURCES_BIT));
+        for (vk::PrimaryCommandBuffer &mInvalidBuffer : mInvalidBuffers)
+        {
+            mFreeBuffers.emplace_back(std::move(mInvalidBuffer));
+        }
+        mInvalidBuffers.clear();
+    }
+
     return angle::Result::Continue;
 }
 

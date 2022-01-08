@@ -34,15 +34,24 @@ class PersistentCommandPool final
     angle::Result collect(vk::Context *context, vk::PrimaryCommandBuffer &&buffer);
 
     bool valid() const { return mCommandPool.valid(); }
+    VkCommandPool getHandle() const { return mCommandPool.getHandle(); }
+
+    bool hasFreeCommandBuffers()
+    {
+        return (mInvalidBuffers.size() + mNumBuffersInFlight) < kMaxPoolSize;
+    }
 
   private:
     angle::Result allocateCommandBuffer(vk::Context *context);
 
     std::vector<vk::PrimaryCommandBuffer> mFreeBuffers;
+    std::vector<vk::PrimaryCommandBuffer> mInvalidBuffers;
+    size_t mNumBuffersInFlight;
 
     vk::CommandPool mCommandPool;
 
     static const int kInitBufferNum = 2;
+    static const int kMaxPoolSize   = 100;
 };
 
 }  // namespace vk
