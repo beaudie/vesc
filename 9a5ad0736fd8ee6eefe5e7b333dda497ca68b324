@@ -16,6 +16,92 @@
       "message": "LGTM, though there seems to be a minor issue with ANI (vkAcquireNextImage) not having been called",
       "revId": "9a5ad0736fd8ee6eefe5e7b333dda497ca68b324",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "8db504ec_f79c4f50",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1359249
+      },
+      "writtenOn": "2022-01-09T02:10:35Z",
+      "side": 1,
+      "message": "Is there a issue with ANI? or any open issue?",
+      "revId": "9a5ad0736fd8ee6eefe5e7b333dda497ca68b324",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "8a96858f_e90f2b50",
+        "filename": "src/libANGLE/renderer/vulkan/SurfaceVk.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 1721,
+      "author": {
+        "id": 1359249
+      },
+      "writtenOn": "2022-01-09T02:10:35Z",
+      "side": 1,
+      "message": "This was added previously.",
+      "range": {
+        "startLine": 1711,
+        "startChar": 1,
+        "endLine": 1721,
+        "endChar": 5
+      },
+      "revId": "9a5ad0736fd8ee6eefe5e7b333dda497ca68b324",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "f08fdbaa_e77e895d",
+        "filename": "src/libANGLE/renderer/vulkan/SurfaceVk.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 1768,
+      "author": {
+        "id": 1359249
+      },
+      "writtenOn": "2022-01-09T02:10:35Z",
+      "side": 1,
+      "message": "This was added previously.",
+      "range": {
+        "startLine": 1737,
+        "startChar": 0,
+        "endLine": 1768,
+        "endChar": 0
+      },
+      "revId": "9a5ad0736fd8ee6eefe5e7b333dda497ca68b324",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "83a88912_85bc9df2",
+        "filename": "src/libANGLE/renderer/vulkan/SurfaceVk.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 1772,
+      "author": {
+        "id": 1359249
+      },
+      "writtenOn": "2022-01-09T02:10:35Z",
+      "side": 1,
+      "message": "This is different than what we tested.\nAlthough I\u0027m not sure it matters.",
+      "range": {
+        "startLine": 1769,
+        "startChar": 0,
+        "endLine": 1772,
+        "endChar": 0
+      },
+      "revId": "9a5ad0736fd8ee6eefe5e7b333dda497ca68b324",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
