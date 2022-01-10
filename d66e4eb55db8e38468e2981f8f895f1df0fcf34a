@@ -16,6 +16,74 @@
       "message": "I\u0027m new to both ANGLE and EGL, so let me know if this approach needs to be reworked at all.\n\nI\u0027ve tested it on a gLinux box when forcing eglGetDisplay() to fail.",
       "revId": "d66e4eb55db8e38468e2981f8f895f1df0fcf34a",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "60941990_2d09feef",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2022-01-10T23:28:58Z",
+      "side": 1,
+      "message": "Great work James implementing this fallback! A few relatively minor comments.\n",
+      "revId": "d66e4eb55db8e38468e2981f8f895f1df0fcf34a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "97e4ab12_5b2c2ed1",
+        "filename": "src/libANGLE/renderer/gl/egl/FunctionsEGL.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 201,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2022-01-10T23:28:58Z",
+      "side": 1,
+      "message": "Perhaps \"...first available native device object\u0027s display\"?",
+      "revId": "d66e4eb55db8e38468e2981f8f895f1df0fcf34a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "5d035cc2_4e237e04",
+        "filename": "src/libANGLE/renderer/gl/egl/FunctionsEGL.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 202,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2022-01-10T23:28:58Z",
+      "side": 1,
+      "message": "Please reference EGL_EXT_device_enumeration in the comments here.",
+      "revId": "d66e4eb55db8e38468e2981f8f895f1df0fcf34a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "11df0380_ebdec06d",
+        "filename": "src/libANGLE/renderer/gl/egl/FunctionsEGL.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 205,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2022-01-10T23:28:58Z",
+      "side": 1,
+      "message": "It\u0027s necessary to test for EGL_EXT_device_enumeration in the EGL client extension list, not just test whether the function pointers are non-null. At least in OpenGL and OpenGL ES, it\u0027s common for drivers to provide no-op stubs for entry points even if the driver doesn\u0027t actually support the extension.",
+      "revId": "d66e4eb55db8e38468e2981f8f895f1df0fcf34a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
