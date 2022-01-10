@@ -34,6 +34,24 @@
       "parentUuid": "26d8d1b0_72d55ece",
       "revId": "ae1a56b6790c2b7ab376f93c20fa3c973ace07cc",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "e2a19984_6c16cc14",
+        "filename": "src/libANGLE/renderer/vulkan/vk_caps_utils.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 939,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2022-01-10T15:21:30Z",
+      "side": 1,
+      "message": "Will do, I like the goal of centralizing special handling per platform.",
+      "parentUuid": "a459efbc_2086115f",
+      "revId": "ae1a56b6790c2b7ab376f93c20fa3c973ace07cc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
