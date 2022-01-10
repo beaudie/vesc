@@ -86,6 +86,30 @@
       },
       "revId": "75358ad8cbcb0ea87069616f1957912cbcbbd2de",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "352b5bab_775005eb",
+        "filename": "src/tests/perf_tests/TracePerfTest.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 1166,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2022-01-10T14:32:56Z",
+      "side": 1,
+      "message": "Can you try turning this on now that you added some reset fixes? IIRC you weren\u0027t able to repro locally?",
+      "parentUuid": "93c65d46_742322d5",
+      "range": {
+        "startLine": 1159,
+        "startChar": 0,
+        "endLine": 1166,
+        "endChar": 5
+      },
+      "revId": "75358ad8cbcb0ea87069616f1957912cbcbbd2de",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
