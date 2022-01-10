@@ -33,6 +33,24 @@
       "message": "LGTM, defer to Shabi for ongoing review.\n\nFrank I can\u0027t see what changed in the re-land, so I haven\u0027t done any review. In the future please use this process for relanding:\n\nhttps://chromium.googlesource.com/angle/angle/+/main/doc/ContributingCode.md#relanding-a-reverted-cl",
       "revId": "9484a9aecc8e9dbdb80bb39543ecfeb2a8f40384",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "c94d6678_90a08653",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1175714
+      },
+      "writtenOn": "2022-01-10T23:22:24Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "abc496ef_8b11a276",
+      "revId": "9484a9aecc8e9dbdb80bb39543ecfeb2a8f40384",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
