@@ -50,6 +50,24 @@
       "message": "Please either turn on tests in the test expectations of add some regression tests to angle_end2nd_tests (e.g. in UniformTest)",
       "revId": "e50f01c072cacf17fe3ef2a3a9c63ed4cba28943",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "88dc4dcb_ca010ca4",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1340649
+      },
+      "writtenOn": "2022-01-10T16:50:38Z",
+      "side": 1,
+      "message": "enabled for one, the other code is covered by \"KHR-NoContext.es32.robustness.getnuniform\" which is not captured in expectations file.\nIf you have an alternate mechanism to enable NoContext tests please let me know otherwise will land",
+      "parentUuid": "21f72980_47337d01",
+      "revId": "e50f01c072cacf17fe3ef2a3a9c63ed4cba28943",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
