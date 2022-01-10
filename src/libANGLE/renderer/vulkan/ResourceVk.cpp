@@ -208,5 +208,43 @@ void ResourceUseList::releaseResourceUsesAndUpdateSerials(Serial serial)
 
     mResourceUses.clear();
 }
+
+// LifeTimeTrackedObjectRecycler implementation
+template <typename T>
+bool LifeTimeTrackedObjectRecycler<T>::releaseInFlightListIfCompleted(Serial completedSerial)
+{
+    bool released = false;
+    while (!mInFlightList.empty() && !mInFlightList.front().isCurrentlyInUse(completedSerial))
+    {
+        mFreeList.emplace_back(std::move(mInFlightList.front()));
+        mInFlightList.pop_front();
+        released = true;
+    }
+    return released;
+}
+
+template <typename T>
+void LifeTimeTrackedObjectRecycler<T>::destroy(RendererVk *renderer)
+{
+    if (!mStashedList.empty())
+    {
+        mStashedList.destroy(renderer);
+    }
+
+    for (auto iter = mInFlightList.begin(); iter != mInFlightList.end(); ++iter)
+    {
+        iter->destroy(renderer);
+    }
+    mInFlightList.clear();
+
+    for (auto iter = mFreeList.begin(); iter != mFreeList.end(); ++iter)
+    {
+        iter->destroy(renderer);
+    }
+    mFreeList.clear();
+}
+
+template class LifeTimeTrackedObjectRecycler<BufferSubAllocation>;
+
 }  // namespace vk
 }  // namespace rx
