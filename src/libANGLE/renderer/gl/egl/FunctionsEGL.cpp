@@ -197,6 +197,32 @@ egl::Error FunctionsEGL::initialize(EGLNativeDisplayType nativeDisplay)
     mEGLDisplay = mFnPtrs->getDisplayPtr(nativeDisplay);
     if (mEGLDisplay == EGL_NO_DISPLAY)
     {
+        // If no display was available, try to fallback to the first available
+        // native device object.
+        PFNEGLQUERYDEVICESEXTPROC queryDevices;
+        PFNEGLGETPLATFORMDISPLAYEXTPROC getPlatformDisplay;
+        if (SetPtr(&queryDevices, getProcAddress("eglQueryDevicesEXT")) &&
+            SetPtr(&getPlatformDisplay, getProcAddress("eglGetPlatformDisplayEXT")))
+        {
+            const EGLint kMaxDevices = 32;
+            EGLDeviceEXT eglDevices[kMaxDevices];
+            EGLint numDevices = 0;
+            if (queryDevices(kMaxDevices, eglDevices, &numDevices))
+            {
+                for (EGLint i = 0; i < numDevices; i++)
+                {
+                    mEGLDisplay =
+                        getPlatformDisplay(EGL_PLATFORM_DEVICE_EXT, eglDevices[i], nullptr);
+                    if (mFnPtrs->getErrorPtr() == EGL_SUCCESS && mEGLDisplay != EGL_NO_DISPLAY)
+                    {
+                        break;
+                    }
+                }
+            }
+        }
+    }
+    if (mEGLDisplay == EGL_NO_DISPLAY)
+    {
         return egl::EglNotInitialized() << "Failed to get system egl display";
     }
     if (mFnPtrs->initializePtr(mEGLDisplay, &majorVersion, &minorVersion) != EGL_TRUE)
