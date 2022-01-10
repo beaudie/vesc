@@ -75,6 +75,29 @@
       },
       "revId": "14dee6b572ae4a3b6b68bf3c5733a2d567831c8c",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "355c4cfb_1b6a8a8f",
+        "filename": "src/tests/egl_tests/EGLSurfaceTest.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 230,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2022-01-10T22:09:32Z",
+      "side": 1,
+      "message": "seems bogus to allow a pbuffer surface when you\u0027re requiring a window surface. Wouldn\u0027t it be easier just to pasds in DONT_CARE (e.g. requireWindowSurface \u003d\u003d false)?",
+      "range": {
+        "startLine": 230,
+        "startChar": 12,
+        "endLine": 230,
+        "endChar": 67
+      },
+      "revId": "14dee6b572ae4a3b6b68bf3c5733a2d567831c8c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
