@@ -163,6 +163,30 @@
       },
       "revId": "14dee6b572ae4a3b6b68bf3c5733a2d567831c8c",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "2d51439b_8ce64324",
+        "filename": "src/tests/egl_tests/EGLSurfaceTest.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 230,
+      "author": {
+        "id": 1340649
+      },
+      "writtenOn": "2022-01-10T22:26:55Z",
+      "side": 1,
+      "message": "not talking about mechanism, which can definitely be changed, but about why we cant just say \"DONT_CARE\"",
+      "parentUuid": "d291c24b_99097c69",
+      "range": {
+        "startLine": 230,
+        "startChar": 12,
+        "endLine": 230,
+        "endChar": 67
+      },
+      "revId": "14dee6b572ae4a3b6b68bf3c5733a2d567831c8c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
