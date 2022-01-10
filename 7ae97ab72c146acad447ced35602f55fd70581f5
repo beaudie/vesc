@@ -94,6 +94,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "feeed7a2_32caf684",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000050
+      },
+      "writtenOn": "2022-01-10T14:14:25Z",
+      "side": 1,
+      "message": "Change ScopedVkLoaderEnvironment class to a method to just set the env variables",
+      "parentUuid": "e905f29a_85d9227f",
+      "revId": "7ae97ab72c146acad447ced35602f55fd70581f5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "bb24b261_214146d3",
@@ -107,6 +125,24 @@
       "writtenOn": "2022-01-07T22:00:10Z",
       "side": 1,
       "message": "Please add the commit message comment here.\n\nI don\u0027t understand though, how does making it a unique_ptr help here? Why not just have `mScopedEnvironment` be a `angle::vk::ScopedVkLoaderEnvironment`?",
+      "revId": "7ae97ab72c146acad447ced35602f55fd70581f5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "6f9ab103_3d8d7c53",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 1149,
+      "author": {
+        "id": 1000050
+      },
+      "writtenOn": "2022-01-10T14:14:25Z",
+      "side": 1,
+      "message": "Because it is created in initialize() instead of ctor().",
+      "parentUuid": "bb24b261_214146d3",
       "revId": "7ae97ab72c146acad447ced35602f55fd70581f5",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
