@@ -110,6 +110,30 @@
       },
       "revId": "75358ad8cbcb0ea87069616f1957912cbcbbd2de",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "1234c5b7_eaa847e2",
+        "filename": "src/tests/perf_tests/TracePerfTest.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 1166,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2022-01-10T17:12:49Z",
+      "side": 1,
+      "message": "\u003e Can you try turning this on now that you added some reset fixes?\n\nI did that with PS4 and it\u0027s still failing:\nhttps://chromium-review.googlesource.com/c/angle/angle/+/3355556/4\n\n\u003e IIRC you weren\u0027t able to repro locally?\n\nCorrect.   I can\u0027t hit this failure, so it seems to be specific to the GLES driver on the bots.",
+      "parentUuid": "352b5bab_775005eb",
+      "range": {
+        "startLine": 1159,
+        "startChar": 0,
+        "endLine": 1166,
+        "endChar": 5
+      },
+      "revId": "75358ad8cbcb0ea87069616f1957912cbcbbd2de",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
