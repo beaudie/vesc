@@ -10,6 +10,8 @@
 #ifndef LIBANGLE_RENDERER_VULKAN_RESOURCEVK_H_
 #define LIBANGLE_RENDERER_VULKAN_RESOURCEVK_H_
 
+#include <deque>
+
 #include "libANGLE/renderer/vulkan/vk_utils.h"
 
 namespace rx
@@ -123,6 +125,7 @@ class SharedGarbage
     SharedGarbage &operator=(SharedGarbage &&rhs);
 
     bool destroyIfComplete(RendererVk *renderer, Serial completedSerial);
+    bool isCurrentlyInUse(Serial completedSerial);
 
   private:
     SharedResourceUse mLifetime;
@@ -269,6 +272,154 @@ ANGLE_INLINE void ReadWriteResource::retainReadWrite(ResourceUseList *resourceUs
     // Store reference in resource list.
     resourceUseList->add(mReadOnlyUse);
     resourceUseList->add(mReadWriteUse);
+}
+
+// This utility class uses one SharedResourceUse to track a vector of objects.
+template <typename T>
+class LifeTimeTrackedObjects
+{
+  public:
+    LifeTimeTrackedObjects();
+    ~LifeTimeTrackedObjects();
+
+    LifeTimeTrackedObjects(LifeTimeTrackedObjects &&other)
+        : mLifetime(std::move(other.mLifetime)), mList(std::move(other.mList))
+    {}
+
+    void init();
+    void stash(T &&object);
+    void fetch(T *objectOut);
+
+    bool empty() const;
+    void destroy(RendererVk *renderer);
+    bool isCurrentlyInUse(Serial lastCompletedSerial) const;
+    void addToResourceUseList(ResourceUseList *resourceUseList);
+
+  private:
+    SharedResourceUse mLifetime;
+    std::vector<T> mList;
+};
+
+template <typename T>
+LifeTimeTrackedObjects<T>::LifeTimeTrackedObjects()
+{
+    init();
+}
+
+template <typename T>
+LifeTimeTrackedObjects<T>::~LifeTimeTrackedObjects()
+{
+    if (mLifetime.valid())
+    {
+        mLifetime.release();
+    }
+}
+
+template <typename T>
+ANGLE_INLINE void LifeTimeTrackedObjects<T>::init()
+{
+    ASSERT(mList.empty());
+    mLifetime.init();
+}
+
+template <typename T>
+ANGLE_INLINE void LifeTimeTrackedObjects<T>::stash(T &&object)
+{
+    mList.emplace_back(std::move(object));
+}
+
+template <typename T>
+ANGLE_INLINE void LifeTimeTrackedObjects<T>::fetch(T *objectOut)
+{
+    ASSERT(!mList.empty());
+    *objectOut = std::move(mList.back());
+    mList.pop_back();
+}
+
+template <typename T>
+ANGLE_INLINE bool LifeTimeTrackedObjects<T>::empty() const
+{
+    return mList.empty();
+}
+
+template <typename T>
+ANGLE_INLINE bool LifeTimeTrackedObjects<T>::isCurrentlyInUse(Serial lastCompletedSerial) const
+{
+    return mLifetime.isCurrentlyInUse(lastCompletedSerial);
+}
+
+template <typename T>
+ANGLE_INLINE void LifeTimeTrackedObjects<T>::addToResourceUseList(ResourceUseList *resourceUseList)
+{
+    resourceUseList->add(mLifetime);
+}
+
+template <typename T>
+ANGLE_INLINE void LifeTimeTrackedObjects<T>::destroy(RendererVk *renderer)
+{
+    for (T &object : mList)
+    {
+        object.destroy(renderer);
+    }
+    mList.clear();
+}
+
+// This class defines a GPU progress tracked object recycler. To reduce the CPU cost of tracking, a
+// vector of objects is tracked by one SharedResourceUse. The stashed list holds objects used by
+// recorded commands. The stashed list is tracked by one mLifeTime tracker. At submission time the
+// stashed list is moved to mInFlightList. Once GPU work is completed, it is moved from
+// mInFlightList to mFreeList.
+template <typename T>
+class LifeTimeTrackedRecycler : angle::NonCopyable
+{
+  public:
+    LifeTimeTrackedRecycler()  = default;
+    ~LifeTimeTrackedRecycler() = default;
+
+    LifeTimeTrackedRecycler(LifeTimeTrackedRecycler &&other);
+
+    void stash(T &&object);
+    void fetch(T *objectOut);
+    void moveStashedToInFlightList(ResourceUseList *resourceUseList);
+    bool releaseInFlightListIfCompleted(Serial completedSerial);
+
+    bool empty() const { return mFreeList.empty(); }
+    void destroy(RendererVk *renderer);
+
+  private:
+    LifeTimeTrackedObjects<T> mStashedList;
+    std::deque<LifeTimeTrackedObjects<T>> mInFlightList;
+    std::vector<LifeTimeTrackedObjects<T>> mFreeList;
+};
+
+using SuballocationRecycler = LifeTimeTrackedRecycler<BufferSubAllocation>;
+
+template <typename T>
+ANGLE_INLINE void LifeTimeTrackedRecycler<T>::stash(T &&object)
+{
+    mStashedList.stash(std::move(object));
+}
+
+template <typename T>
+ANGLE_INLINE void LifeTimeTrackedRecycler<T>::fetch(T *objectOut)
+{
+    mFreeList.back().fetch(objectOut);
+    if (mFreeList.back().empty())
+    {
+        mFreeList.pop_back();
+    }
+}
+
+template <typename T>
+ANGLE_INLINE void LifeTimeTrackedRecycler<T>::moveStashedToInFlightList(
+    ResourceUseList *resourceUseList)
+{
+    if (!mStashedList.empty())
+    {
+        mStashedList.addToResourceUseList(resourceUseList);
+        mInFlightList.emplace_back(std::move(mStashedList));
+        mStashedList.init();
+    }
 }
 
 }  // namespace vk
