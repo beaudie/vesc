@@ -16,6 +16,23 @@
       "message": "FYI, some discussion going on here: https://chromium-review.googlesource.com/c/angle/angle/+/3361249/comment/b8cfcb0e_e70c9e42/",
       "revId": "9484a9aecc8e9dbdb80bb39543ecfeb2a8f40384",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "abc496ef_8b11a276",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2022-01-10T14:23:18Z",
+      "side": 1,
+      "message": "LGTM, defer to Shabi for ongoing review.\n\nFrank I can\u0027t see what changed in the re-land, so I haven\u0027t done any review. In the future please use this process for relanding:\n\nhttps://chromium.googlesource.com/angle/angle/+/main/doc/ContributingCode.md#relanding-a-reverted-cl",
+      "revId": "9484a9aecc8e9dbdb80bb39543ecfeb2a8f40384",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
