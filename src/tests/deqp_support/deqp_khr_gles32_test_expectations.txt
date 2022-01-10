@@ -96,15 +96,15 @@
 // Validation error from EXT_gpu_shader5
 5361 VULKAN : KHR-GLES32.core.gpu_shader5.precise_qualifier = FAIL
 
-// Validation error from EXT_copy_image
-5363 VULKAN : KHR-GLES32.core.copy_image.r32i_texture = FAIL
-5363 VULKAN : KHR-GLES32.core.copy_image.r32ui_texture = FAIL
-
 // No known implementation supports STORAGE_TEXEL_BUFFER support for RGB32 formats
 3573 VULKAN : KHR-GLES32.core.texture_buffer.texture_buffer_texture_buffer_range = SKIP
 
 // Incorrect dependency to VK_EXT_shader_atomic_float
 5342 VULKAN : KHR-GLES32.core.texture_buffer.texture_buffer_atomic_functions = FAIL
+
+// Nvidia driver having issues with EXT_copy_image
+5363 NVIDIA VULKAN : KHR-GLES32.core.copy_image.r32i_texture = FAIL
+5363 NVIDIA VULKAN : KHR-GLES32.core.copy_image.r32ui_texture = FAIL
 
 // Desktop cards without native etc support
 5276 AMD VULKAN : KHR-GLES32.core.texture_cube_map_array.etc2_texture = FAIL
@@ -153,3 +153,7 @@
 
 // Pixel 4 expectations.
 5990 PIXEL4ORXL VULKAN : KHR-GLES32.core.draw_buffers_indexed.color_masks = SKIP
+
+// Pixel4 has issues with EXT_copy_image
+5363 PIXEL4ORXL VULKAN : KHR-GLES32.core.copy_image.r32i_texture = FAIL
+5363 PIXEL4ORXL VULKAN : KHR-GLES32.core.copy_image.r32ui_texture = FAIL
