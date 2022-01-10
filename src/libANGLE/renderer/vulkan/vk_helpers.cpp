@@ -3946,6 +3946,37 @@ angle::Result BufferHelper::initForCopyImage(ContextVk *contextVk,
     return angle::Result::Continue;
 }
 
+angle::Result BufferHelper::initForDefaultAttribute(ContextVk *contextVk,
+                                                    SuballocationRecycler *recycler,
+                                                    size_t size)
+{
+    RendererVk *renderer = contextVk->getRenderer();
+
+    if (valid())
+    {
+        if (!isCurrentlyInUse(contextVk->getLastCompletedQueueSerial()))
+        {
+            return angle::Result::Continue;
+        }
+        else
+        {
+            recycler->stash(std::move(mSubAllocation));
+        }
+    }
+
+    if (!recycler->empty() ||
+        recycler->releaseInFlightListIfCompleted(contextVk->getLastCompletedQueueSerial()))
+    {
+        recycler->fetch(&mSubAllocation);
+        return angle::Result::Continue;
+    }
+
+    uint32_t memoryTypeIndex =
+        renderer->getVertexConversionBufferMemoryTypeIndex(MemoryHostVisibility::Visible);
+    size_t alignment = static_cast<size_t>(renderer->getVertexConversionBufferAlignment());
+    return initSubAllocation(contextVk, memoryTypeIndex, size, alignment);
+}
+
 ANGLE_INLINE void BufferHelper::initializeBarrierTracker(Context *context)
 {
     RendererVk *renderer     = context->getRenderer();

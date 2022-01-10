@@ -5559,6 +5559,7 @@ angle::Result ContextVk::flushAndGetSerial(const vk::Semaphore *signalSemaphore,
     // they get retained properly until GPU completes. We do not add current buffer into
     // mResourceUseList since they never get reused or freed until context gets destroyed, at which
     // time we always wait for GPU to finish before destroying the dynamic buffers.
+    mDefaultAttribSubAllocationRecycler.moveStashedToInFlightList(&mResourceUseList);
     for (DriverUniformsDescriptorSet &driverUniform : mDriverUniforms)
     {
         driverUniform.dynamicBuffer.releaseInFlightBuffersToResourceUseList(this);
@@ -5760,13 +5761,9 @@ angle::Result ContextVk::updateDefaultAttribute(size_t attribIndex)
 {
     vk::BufferHelper &defaultBuffer = mDefaultAttribBuffers[attribIndex];
 
-    if (defaultBuffer.valid())
-    {
-        defaultBuffer.release(mRenderer);
-    }
+    ANGLE_TRY(defaultBuffer.initForDefaultAttribute(this, &mDefaultAttribSubAllocationRecycler,
+                                                    kDefaultValueSize));
 
-    ANGLE_TRY(defaultBuffer.initForVertexConversion(this, kDefaultValueSize,
-                                                    vk::MemoryHostVisibility::Visible));
     uint8_t *ptr          = defaultBuffer.getMappedMemory();
     VkBuffer bufferHandle = defaultBuffer.getBuffer().getHandle();
     VkDeviceSize offset   = defaultBuffer.getOffset();

@@ -776,7 +776,7 @@ class Shared final : angle::NonCopyable
 };
 
 template <typename T>
-class Recycler final : angle::NonCopyable
+class Recycler : angle::NonCopyable
 {
   public:
     Recycler() = default;
