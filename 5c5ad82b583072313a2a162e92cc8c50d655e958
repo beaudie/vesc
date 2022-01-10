@@ -1,0 +1,44 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "3c27aaf3_143093fc",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 7
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-01-10T19:25:21Z",
+      "side": 1,
+      "message": "Hurray!",
+      "revId": "5c5ad82b583072313a2a162e92cc8c50d655e958",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "50ce7d78_8f0ac0ee",
+        "filename": "src/libANGLE/renderer/vulkan/vk_caps_utils.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 1123,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-01-10T19:25:21Z",
+      "side": 1,
+      "message": "minor nit: Perhaps you can split this change into another CL, so this change sets `parallelShaderCompileKHR \u003d true`, making the CL a no-op, and the follow up would be extremely trivial, just flipping this based on the config. Might make things easier blame/revert-wise.",
+      "range": {
+        "startLine": 1116,
+        "startChar": 0,
+        "endLine": 1123,
+        "endChar": 6
+      },
+      "revId": "5c5ad82b583072313a2a162e92cc8c50d655e958",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
