@@ -52,6 +52,24 @@
       "parentUuid": "65faa653_27fd623d",
       "revId": "c2a296149357a359d801084f8b7a4b3531817821",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "53b8d770_27a1e90f",
+        "filename": "src/libGLESv2/entry_points_egl_autogen.cpp",
+        "patchSetId": 16
+      },
+      "lineNbr": 399,
+      "author": {
+        "id": 1175714
+      },
+      "writtenOn": "2022-01-10T15:53:05Z",
+      "side": 0,
+      "message": "I think I understand your point about doing more things twice in one hold of the global lock (such as ANGLE_EGL_VALIDATE), but the problem is the whole EGL_XXX entry point thing isn\u0027t standardized for this. What would your recommendation be on how to adjust the codegen?",
+      "parentUuid": "7dea89c5_bafe1932",
+      "revId": "c2a296149357a359d801084f8b7a4b3531817821",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
