@@ -163,6 +163,24 @@
       "parentUuid": "43d71112_66868e66",
       "revId": "62f7c7efc557c36889d34ae6a2876a5a8c3ebd4e",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "bc13fcc5_ee80143e",
+        "filename": "src/libANGLE/validationEGL.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 1441,
+      "author": {
+        "id": 1340649
+      },
+      "writtenOn": "2022-01-10T19:17:29Z",
+      "side": 1,
+      "message": "\u003e there may be assumptions now that ANGLE is EGL 1.4 in Android somewhere\n\ndid you mean \"now that ANGLE is EGL 1.5\"?\n\n\u003e We should be splitting this into EXT and KHR exts it looks like.\n\n\"EGL_CONTEXT_OPENGL_RESET_NOTIFICATION_STRATEGY_EXT\" was introduced by \"EGL_EXT_create_context_robustness\" but supported \n for \"EGL_CONTEXT_OPENGL_RESET_NOTIFICATION_STRATEGY_KHR\" was added by \"EGL_KHR_create_context\" and EGL 1.5 added support for \"EGL_CONTEXT_OPENGL_RESET_NOTIFICATION_STRATEGY\" which has the same enum value as \"EGL_CONTEXT_OPENGL_RESET_NOTIFICATION_STRATEGY_KHR\"\n \n how do you propose we handle this?",
+      "parentUuid": "a6ea3e7e_99e838f5",
+      "revId": "62f7c7efc557c36889d34ae6a2876a5a8c3ebd4e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
