@@ -60,6 +60,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "fcc2f4ca_688bec11",
+        "filename": "src/libANGLE/Context.h",
+        "patchSetId": 7
+      },
+      "lineNbr": 595,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2022-01-10T21:00:26Z",
+      "side": 1,
+      "message": "We still want to be able to use a multithreaded pool for things like compressing the pipeline cache when enableCompressingPipelineCacheInThreadPool is enabled (RendererVk::syncPipelineCacheVk).",
+      "parentUuid": "48def12d_d4f20617",
+      "range": {
+        "startLine": 582,
+        "startChar": 0,
+        "endLine": 595,
+        "endChar": 5
+      },
+      "revId": "5c5ad82b583072313a2a162e92cc8c50d655e958",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "50ce7d78_8f0ac0ee",
         "filename": "src/libANGLE/renderer/vulkan/vk_caps_utils.cpp",
         "patchSetId": 7
@@ -107,6 +131,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "47987559_f6a81a6e",
+        "filename": "src/libANGLE/renderer/vulkan/vk_caps_utils.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 1123,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2022-01-10T21:00:26Z",
+      "side": 1,
+      "message": "\u003e Perhaps you can split this change into another CL,\n\nDone.\n\n\u003e take all this define \"build with chromium\" stuff out and just set this bool to false for now.\n\nDone.\n\nI agree this is simpler, especially since Shabi has found that it doesn\u0027t make much difference in Chromium anyway.",
+      "parentUuid": "cbeff19b_2cd9ab5f",
+      "range": {
+        "startLine": 1116,
+        "startChar": 0,
+        "endLine": 1123,
+        "endChar": 6
+      },
+      "revId": "5c5ad82b583072313a2a162e92cc8c50d655e958",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "17ea0a28_a0904d03",
         "filename": "src/tests/perf_tests/LinkProgramPerfTest.cpp",
         "patchSetId": 7
@@ -118,6 +166,30 @@
       "writtenOn": "2022-01-10T19:49:40Z",
       "side": 1,
       "message": "we\u0027d still like to use this benchmark with Vulkan. Instead, skip the test if !SingleThreaded \u0026\u0026 !ExtensionAvailable",
+      "range": {
+        "startLine": 109,
+        "startChar": 3,
+        "endLine": 109,
+        "endChar": 63
+      },
+      "revId": "5c5ad82b583072313a2a162e92cc8c50d655e958",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "0f1ee5fb_28b00969",
+        "filename": "src/tests/perf_tests/LinkProgramPerfTest.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 109,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2022-01-10T21:00:26Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "17ea0a28_a0904d03",
       "range": {
         "startLine": 109,
         "startChar": 3,
@@ -141,6 +213,30 @@
       "writtenOn": "2022-01-10T19:49:40Z",
       "side": 1,
       "message": "down here",
+      "range": {
+        "startLine": 114,
+        "startChar": 0,
+        "endLine": 118,
+        "endChar": 0
+      },
+      "revId": "5c5ad82b583072313a2a162e92cc8c50d655e958",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "d84d1fc1_10501c78",
+        "filename": "src/tests/perf_tests/LinkProgramPerfTest.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 118,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2022-01-10T21:00:26Z",
+      "side": 1,
+      "message": "Returning here is too late, since we still attempt to run the tests whether they were initialized or not.\n\nI\u0027ve added a check for the extension here (since the function glMaxShaderCompilerThreadsKHR() isn\u0027t exposed otherwise) while adding the ANGLE_SKIP_TEST_IF() to LinkProgramBenchmark.Run below so it\u0027s clear that we are only running these tests on Vulkan for the single-threaded tests.\n\nLet me know what you think.",
+      "parentUuid": "c44db1e7_b6def20d",
       "range": {
         "startLine": 114,
         "startChar": 0,
