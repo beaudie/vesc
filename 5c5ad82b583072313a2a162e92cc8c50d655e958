@@ -84,6 +84,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "e59730be_0ac6adc5",
+        "filename": "src/libANGLE/Context.h",
+        "patchSetId": 7
+      },
+      "lineNbr": 595,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2022-01-10T22:16:22Z",
+      "side": 1,
+      "message": "Ah okay, maybe commenting below in this header where we set up both pools that we have dual use cases might be appropriate.",
+      "parentUuid": "fcc2f4ca_688bec11",
+      "range": {
+        "startLine": 582,
+        "startChar": 0,
+        "endLine": 595,
+        "endChar": 5
+      },
+      "revId": "5c5ad82b583072313a2a162e92cc8c50d655e958",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "50ce7d78_8f0ac0ee",
         "filename": "src/libANGLE/renderer/vulkan/vk_caps_utils.cpp",
         "patchSetId": 7
@@ -237,6 +261,30 @@
       "side": 1,
       "message": "Returning here is too late, since we still attempt to run the tests whether they were initialized or not.\n\nI\u0027ve added a check for the extension here (since the function glMaxShaderCompilerThreadsKHR() isn\u0027t exposed otherwise) while adding the ANGLE_SKIP_TEST_IF() to LinkProgramBenchmark.Run below so it\u0027s clear that we are only running these tests on Vulkan for the single-threaded tests.\n\nLet me know what you think.",
       "parentUuid": "c44db1e7_b6def20d",
+      "range": {
+        "startLine": 114,
+        "startChar": 0,
+        "endLine": 118,
+        "endChar": 0
+      },
+      "revId": "5c5ad82b583072313a2a162e92cc8c50d655e958",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "a5e5c0fe_1bb1221c",
+        "filename": "src/tests/perf_tests/LinkProgramPerfTest.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 118,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2022-01-10T22:16:22Z",
+      "side": 1,
+      "message": "We skip in initializeBenchmark in other tests, so I\u0027d be surprised if it doesn\u0027t work as expected. Set mSkipTest\u003dtrue and return. What happens in that case?",
+      "parentUuid": "d84d1fc1_10501c78",
       "range": {
         "startLine": 114,
         "startChar": 0,
