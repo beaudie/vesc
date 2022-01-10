@@ -86,6 +86,24 @@
       "parentUuid": "602ee4f0_dc20c10d",
       "revId": "40c5cb255c0a07bdab574aa076ee603e7d791ab3",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "0b8ae143_5f10476a",
+        "filename": "src/libGLESv2/egl_stubs.cpp",
+        "patchSetId": 16
+      },
+      "lineNbr": 640,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2022-01-10T16:45:47Z",
+      "side": 1,
+      "message": "you can take the surface lock at entry of SwapBuffer. I think the real fix here is that you call prepareSwap without global lock, right?",
+      "parentUuid": "0492a2c3_abb26a3f",
+      "revId": "40c5cb255c0a07bdab574aa076ee603e7d791ab3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
