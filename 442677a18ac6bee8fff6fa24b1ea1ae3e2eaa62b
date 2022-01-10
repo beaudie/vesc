@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "44c37433_5d41d81a",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1340649
+      },
+      "writtenOn": "2022-01-10T16:53:29Z",
+      "side": 1,
+      "message": "there seems to have been a change that already fixed framebuffer related failure without updating expectations file, will do that in a split CL since it is unrelated to this CL",
+      "revId": "442677a18ac6bee8fff6fa24b1ea1ae3e2eaa62b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
