@@ -70,6 +70,24 @@
       "parentUuid": "7dea89c5_bafe1932",
       "revId": "c2a296149357a359d801084f8b7a4b3531817821",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "3eaa2fd4_64cbc938",
+        "filename": "src/libGLESv2/entry_points_egl_autogen.cpp",
+        "patchSetId": 16
+      },
+      "lineNbr": 399,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-01-10T15:58:08Z",
+      "side": 0,
+      "message": "Jamie might have strong preferences here, but I would probably make the autogen script not autogen EGL_SwapBuffers and implement that manually. Either that or add enough specialization about it in the python code to the same effect.",
+      "parentUuid": "53b8d770_27a1e90f",
+      "revId": "c2a296149357a359d801084f8b7a4b3531817821",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
