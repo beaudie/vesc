@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "21530b14_5e3569ef",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1492552
+      },
+      "writtenOn": "2022-01-10T23:21:07Z",
+      "side": 1,
+      "message": "I\u0027m new to both ANGLE and EGL, so let me know if this approach needs to be reworked at all.\n\nI\u0027ve tested it on a gLinux box when forcing eglGetDisplay() to fail.",
+      "revId": "d66e4eb55db8e38468e2981f8f895f1df0fcf34a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
