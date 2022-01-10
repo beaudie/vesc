@@ -86,6 +86,24 @@
       "parentUuid": "88dc4dcb_ca010ca4",
       "revId": "e50f01c072cacf17fe3ef2a3a9c63ed4cba28943",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "9280ca62_58b020b4",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1340649
+      },
+      "writtenOn": "2022-01-10T19:05:24Z",
+      "side": 1,
+      "message": "thanks\n\nMoved other expectations file update to this change -\u003e https://chromium-review.googlesource.com/c/angle/angle/+/3377763",
+      "parentUuid": "f58c37a2_97c6c7fa",
+      "revId": "e50f01c072cacf17fe3ef2a3a9c63ed4cba28943",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
