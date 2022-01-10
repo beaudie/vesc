@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "eaa01a6f_f8ccdc57",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2022-01-10T23:49:51Z",
+      "side": 1,
+      "message": "Nice work refactoring these tables to build everywhere.\n\nlgtm\n",
+      "revId": "d91ff1531cb7ada0f10bab41abe773be6bb97b5e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
