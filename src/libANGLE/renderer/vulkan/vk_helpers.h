@@ -751,6 +751,9 @@ class BufferHelper : public ReadWriteResource
                                    angle::FormatID formatId,
                                    VkDeviceSize *offset,
                                    uint8_t **dataPtr);
+    angle::Result initForDefaultAttribute(ContextVk *contextVk,
+                                          SuballocationRecycler *recycler,
+                                          size_t size);
 
     void destroy(RendererVk *renderer);
     void release(RendererVk *renderer);
