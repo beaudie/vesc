@@ -70,6 +70,24 @@
       "parentUuid": "5915396c_66562179",
       "revId": "2e490d719d7b6d06f47d22dedafe9b0889d35d82",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "19bc678b_1d6b8ab4",
+        "filename": "src/tests/gl_tests/BlitFramebufferANGLETest.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 505,
+      "author": {
+        "id": 1228974
+      },
+      "writtenOn": "2022-01-10T15:19:28Z",
+      "side": 1,
+      "message": "Ok, following https://www.khronos.org/opengl/wiki/Image_Format#Color_formats , I used GL_RGBA8I buffer format with GL_RGBA_INTEGER used an internal buffer format. Please see the BlitFramebufferANGLETest.BlitColorWithMesaYFlipInteger test.",
+      "parentUuid": "4ab8be12_27964b7b",
+      "revId": "2e490d719d7b6d06f47d22dedafe9b0889d35d82",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
