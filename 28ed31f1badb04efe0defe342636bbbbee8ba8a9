@@ -142,6 +142,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "741e3635_c858d926",
+        "filename": "src/libANGLE/renderer/gl/renderergl_utils.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 1804,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2022-01-10T22:35:21Z",
+      "side": 1,
+      "message": "Sounds fine - resolving.",
+      "parentUuid": "a57ef124_81fb853f",
+      "range": {
+        "startLine": 1804,
+        "startChar": 43,
+        "endLine": 1804,
+        "endChar": 48
+      },
+      "revId": "28ed31f1badb04efe0defe342636bbbbee8ba8a9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "33b1e98d_68732c67",
@@ -179,6 +203,30 @@
       "side": 1,
       "message": "Done",
       "parentUuid": "33b1e98d_68732c67",
+      "range": {
+        "startLine": 482,
+        "startChar": 49,
+        "endLine": 482,
+        "endChar": 54
+      },
+      "revId": "28ed31f1badb04efe0defe342636bbbbee8ba8a9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "b1a270e5_4f5c3e8e",
+        "filename": "src/libANGLE/renderer/metal/DisplayMtl.mm",
+        "patchSetId": 3
+      },
+      "lineNbr": 482,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2022-01-10T22:35:21Z",
+      "side": 1,
+      "message": "Let\u0027s assume we want this for now. The Metal backend\u0027s compilation performance seems very good relative to the OpenGL backend - see crbug.com/1285080 - and I think we should aim to expose as much parallelism as possible.",
+      "parentUuid": "a2d9bd50_db8c717a",
       "range": {
         "startLine": 482,
         "startChar": 49,
