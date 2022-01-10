@@ -16,6 +16,46 @@
       "message": "thanks for your review.",
       "revId": "e496a245210a3fb7d72373fc6ffdf5036237393b",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "802200b9_581179b8",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-01-10T19:48:26Z",
+      "side": 1,
+      "message": "Very nice! Let me know if I could help you more with copy-related tests.",
+      "revId": "e496a245210a3fb7d72373fc6ffdf5036237393b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "cd579da3_29cff069",
+        "filename": "src/tests/gl_tests/CopyTexImageTest.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 249,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-01-10T19:48:26Z",
+      "side": 1,
+      "message": "To re-iterate, non-symmetric non-complete copies would exercise y-flip-related bugs with offset calculations, so I highly recommend that.",
+      "range": {
+        "startLine": 249,
+        "startChar": 48,
+        "endLine": 249,
+        "endChar": 80
+      },
+      "revId": "e496a245210a3fb7d72373fc6ffdf5036237393b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }

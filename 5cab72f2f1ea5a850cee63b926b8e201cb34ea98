@@ -281,6 +281,24 @@
       "parentUuid": "f521e5b9_012c3573",
       "revId": "5cab72f2f1ea5a850cee63b926b8e201cb34ea98",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "4732b1b4_90cfc5fc",
+        "filename": "src/tests/gl_tests/FramebufferTest.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 1948,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-01-10T19:48:26Z",
+      "side": 1,
+      "message": "The test were most definitely useful. Blit with MSAA is an entirely different thing from Blit without MSAA (even if they both use glBlitFramebuffer). I\u0027d only suggest moving them to BlitFramebufferANGLETest.cpp, but yes please restore them.",
+      "parentUuid": "81b7757c_044c3093",
+      "revId": "5cab72f2f1ea5a850cee63b926b8e201cb34ea98",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }

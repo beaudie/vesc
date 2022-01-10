@@ -67,6 +67,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "9930f378_accf6350",
+        "filename": "src/tests/gl_tests/BlitFramebufferANGLETest.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 527,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-01-10T19:48:26Z",
+      "side": 1,
+      "message": "The reason this ties in with y-flip is that y-flip affects the calculation of the flip offset (in other backends than GL, or even in GL if blit is emulated due to format restrictions etc).\n\nFor example, if the dest FBO is 10x12 and flipped, and the test blits into 0x0,10x12, then y-flip may be entirely disregarded when adjusting the offsets and the test still passes.  However, if the dest blit area is say 3x4,10x12, then the blit code would have to turn that into 0x0,7x8 otherwise it\u0027s blitting to the wrong portion of the destination image.\n\nTo that end, it\u0027d be enough in these test to use a non-zero offset (and/or non-max width/height) for the flipped framebuffer when making the glBlitFramebuffer calls. To make the tests super complete, you can then verify that color _outside_ the blit area is not affected by the blit.",
+      "parentUuid": "15de9511_6c6ff93e",
+      "range": {
+        "startLine": 526,
+        "startChar": 0,
+        "endLine": 527,
+        "endChar": 74
+      },
+      "revId": "c3de7466f07c4f42ccc659460c27bd324ca3d5c4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "985ad599_350f8a72",
         "filename": "src/tests/gl_tests/BlitFramebufferANGLETest.cpp",
         "patchSetId": 3
@@ -96,6 +120,24 @@
       "side": 1,
       "message": "Done. Please see BlitColorWithMesaYFlipSrc, BlitColorWithMesaYFlipDst, BlitColorWithMesaYFlipSrcDst.",
       "parentUuid": "985ad599_350f8a72",
+      "revId": "c3de7466f07c4f42ccc659460c27bd324ca3d5c4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "96c1ae54_3ebcec90",
+        "filename": "src/tests/gl_tests/BlitFramebufferANGLETest.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 537,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-01-10T19:48:26Z",
+      "side": 1,
+      "message": "Thanks!",
+      "parentUuid": "7d15be43_d11255ca",
       "revId": "c3de7466f07c4f42ccc659460c27bd324ca3d5c4",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
@@ -131,6 +173,24 @@
       "side": 1,
       "message": "Does BlitDepthStencilPixelByPixelMesaYFlip meet the requirements? :)",
       "parentUuid": "fd38c7a9_697aa261",
+      "revId": "c3de7466f07c4f42ccc659460c27bd324ca3d5c4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "f8db455a_d213c085",
+        "filename": "src/tests/gl_tests/BlitFramebufferANGLETest.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 1043,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-01-10T19:48:26Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "2a3f5d5d_35dc2c50",
       "revId": "c3de7466f07c4f42ccc659460c27bd324ca3d5c4",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
