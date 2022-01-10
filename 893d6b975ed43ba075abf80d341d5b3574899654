@@ -1,0 +1,142 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "1540799d_72235a6d",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 5
+      },
+      "lineNbr": 9,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-01-10T15:10:22Z",
+      "side": 1,
+      "message": "typo: create",
+      "range": {
+        "startLine": 9,
+        "startChar": 23,
+        "endLine": 9,
+        "endChar": 31
+      },
+      "revId": "893d6b975ed43ba075abf80d341d5b3574899654",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "6aa91060_75128701",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 5
+      },
+      "lineNbr": 10,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-01-10T15:10:22Z",
+      "side": 1,
+      "message": "typo: a",
+      "range": {
+        "startLine": 10,
+        "startChar": 31,
+        "endLine": 10,
+        "endChar": 33
+      },
+      "revId": "893d6b975ed43ba075abf80d341d5b3574899654",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "13c2db46_fd0a9b44",
+        "filename": "src/libANGLE/renderer/vulkan/TextureVk.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 2415,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-01-10T15:10:22Z",
+      "side": 1,
+      "message": "Should be isCurrentlyInUse, or maybe isCurrentlyInUse \u0026\u0026 !usedInRecordedCommands? What\u0027s the exact logic of the ghosting here?",
+      "range": {
+        "startLine": 2415,
+        "startChar": 31,
+        "endLine": 2415,
+        "endChar": 52
+      },
+      "revId": "893d6b975ed43ba075abf80d341d5b3574899654",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "1579df51_0574f293",
+        "filename": "src/libANGLE/renderer/vulkan/TextureVk.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 2416,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-01-10T15:10:22Z",
+      "side": 1,
+      "message": "This seems to be due to a missing notification problem. See how ghosting is implemented in BufferVk.cpp, and the notification sent there when the buffer is ghosted.",
+      "range": {
+        "startLine": 2416,
+        "startChar": 9,
+        "endLine": 2416,
+        "endChar": 43
+      },
+      "revId": "893d6b975ed43ba075abf80d341d5b3574899654",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "7d3ab6b4_4a1fb541",
+        "filename": "src/libANGLE/renderer/vulkan/TextureVk.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 2417,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-01-10T15:10:22Z",
+      "side": 1,
+      "message": "Should be unnecessary?",
+      "range": {
+        "startLine": 2417,
+        "startChar": 9,
+        "endLine": 2417,
+        "endChar": 83
+      },
+      "revId": "893d6b975ed43ba075abf80d341d5b3574899654",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "47547214_de0957cd",
+        "filename": "src/libANGLE/renderer/vulkan/TextureVk.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 2425,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-01-10T15:10:22Z",
+      "side": 1,
+      "message": "This will recreate the image every time, not just when an update overwrites it entirely. The logic for when to release the image likely needs to reside in `TextureVk::copySubImageImpl` instead, likely needing a separate path for mutable and immutable textures too.\n\nAlso need to make sure mipped updates are handled (or multi-mip textures are explicitly ignored)",
+      "range": {
+        "startLine": 2419,
+        "startChar": 0,
+        "endLine": 2425,
+        "endChar": 9
+      },
+      "revId": "893d6b975ed43ba075abf80d341d5b3574899654",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
