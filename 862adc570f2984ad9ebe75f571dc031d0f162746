@@ -33,6 +33,24 @@
       "message": "Are there any lifetime concerns with the resources contained in this set?",
       "revId": "862adc570f2984ad9ebe75f571dc031d0f162746",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "48aa307b_cf213026",
+        "filename": "src/libANGLE/renderer/metal/mtl_command_buffer.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 167,
+      "author": {
+        "id": 1500872
+      },
+      "writtenOn": "2022-01-10T23:26:58Z",
+      "side": 1,
+      "message": "There shouldn\u0027t be any resource issues, these resources are held by the command buffer and are released by the resource list at the same time as they\u0027re committed for render.",
+      "parentUuid": "63721a80_5d744376",
+      "revId": "862adc570f2984ad9ebe75f571dc031d0f162746",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }

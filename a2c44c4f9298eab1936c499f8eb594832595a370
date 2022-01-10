@@ -18,6 +18,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "775f23fc_c4598685",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 2
+      },
+      "lineNbr": 14,
+      "author": {
+        "id": 1500872
+      },
+      "writtenOn": "2022-01-10T23:26:58Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "84664c19_30eace91",
+      "revId": "a2c44c4f9298eab1936c499f8eb594832595a370",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "7a64ccd1_9baa1de3",
@@ -31,6 +49,24 @@
       "writtenOn": "2022-01-08T01:30:18Z",
       "side": 1,
       "message": "This constant being buried down here is worrisome - any concerns about this being portable among different classes of hardware, etc.?",
+      "revId": "a2c44c4f9298eab1936c499f8eb594832595a370",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "440dbb70_774fc6d4",
+        "filename": "src/libANGLE/renderer/metal/mtl_command_buffer.mm",
+        "patchSetId": 2
+      },
+      "lineNbr": 662,
+      "author": {
+        "id": 1500872
+      },
+      "writtenOn": "2022-01-10T23:26:58Z",
+      "side": 1,
+      "message": "Not many concerns about different classes of hardware, but I suppose there\u0027s a better place to put this.",
+      "parentUuid": "7a64ccd1_9baa1de3",
       "revId": "a2c44c4f9298eab1936c499f8eb594832595a370",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
@@ -52,6 +88,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "cbf7532c_c64d2ed1",
+        "filename": "src/libANGLE/renderer/metal/mtl_resources.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 74,
+      "author": {
+        "id": 1500872
+      },
+      "writtenOn": "2022-01-10T23:26:58Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "c2c28daa_56316b0f",
+      "revId": "a2c44c4f9298eab1936c499f8eb594832595a370",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "555c84e4_1d0a2447",
@@ -65,6 +119,24 @@
       "writtenOn": "2022-01-08T01:30:18Z",
       "side": 1,
       "message": "Can consistent names be used throughout? For example:\n\nsetEstimatedByteSize\nestimatedByteSize()\nmEstimatedByteSize",
+      "revId": "a2c44c4f9298eab1936c499f8eb594832595a370",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "228f4631_73dca7c4",
+        "filename": "src/libANGLE/renderer/metal/mtl_resources.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 274,
+      "author": {
+        "id": 1500872
+      },
+      "writtenOn": "2022-01-10T23:26:58Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "555c84e4_1d0a2447",
       "revId": "a2c44c4f9298eab1936c499f8eb594832595a370",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
