@@ -16,6 +16,23 @@
       "message": "Hi Jamie \u0026 Shahbaz, PTAL. Thanks",
       "revId": "e376e98a2491d94f8a4a535b7ec7a89f3757c1da",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "db276d19_d2333a05",
+        "filename": "src/libANGLE/renderer/vulkan/DeviceVk.cpp",
+        "patchSetId": 9
+      },
+      "lineNbr": 59,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-01-11T19:28:23Z",
+      "side": 1,
+      "message": "Kind of hard to follow the logic here, could you add comments? Also, why not instead of all these, call vkGetInstanceProcAddr with the special names once right away and cache them, and avoid all the wrappers and scoped env set/reset?",
+      "revId": "e376e98a2491d94f8a4a535b7ec7a89f3757c1da",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
