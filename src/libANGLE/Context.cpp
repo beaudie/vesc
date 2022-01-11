@@ -3193,8 +3193,12 @@ void Context::initRendererString()
     frontendRendererString << vendorString;
     frontendRendererString << ", ";
     frontendRendererString << rendererString;
-    frontendRendererString << ", ";
-    frontendRendererString << versionString;
+    // Avoid exposing driver versions in WebGL mode
+    if (!isWebGL())
+    {
+        frontendRendererString << ", ";
+        frontendRendererString << versionString;
+    }
     frontendRendererString << ")";
 
     mRendererString = MakeStaticString(frontendRendererString.str());
