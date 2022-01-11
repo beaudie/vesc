@@ -556,12 +556,14 @@ class Context : public ErrorHandler
 {
   public:
     Context(DisplayMtl *displayMtl);
+    ~Context() override;
     mtl::CommandQueue &cmdQueue();
 
     DisplayMtl *getDisplay() const { return mDisplay; }
 
   protected:
     DisplayMtl *mDisplay;
+    mtl::CommandQueue *mCmdQueue;
 };
 
 #define ANGLE_MTL_CHECK(context, test, error)                                \

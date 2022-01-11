@@ -204,11 +204,11 @@ ContextMtl::ContextMtl(const gl::State &state,
                        DisplayMtl *display)
     : ContextImpl(state, errorSet),
       mtl::Context(display),
-      mCmdBuffer(&display->cmdQueue()),
+      mCmdBuffer(&cmdQueue()),
       mRenderEncoder(&mCmdBuffer, mOcclusionQueryPool),
       mBlitEncoder(&mCmdBuffer),
       mComputeEncoder(&mCmdBuffer),
-      mProvokingVertexHelper(this, &display->cmdQueue(), display),
+      mProvokingVertexHelper(this, &cmdQueue(), display),
       mContextDevice(GetOwnershipIdentity(attribs))
 {}
 

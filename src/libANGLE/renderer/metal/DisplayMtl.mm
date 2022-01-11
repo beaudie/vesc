@@ -150,8 +150,6 @@ angle::Result DisplayMtl::initializeImpl(egl::Display *display)
 
         mMetalDeviceVendorId = mtl::GetDeviceVendorId(mMetalDevice);
 
-        mCmdQueue.set([[mMetalDevice newCommandQueue] ANGLE_MTL_AUTORELEASE]);
-
         mCapsInitialized = false;
 #if ANGLE_ENABLE_METAL_SPIRV
         ANGLE_TRACE_EVENT0("gpu.angle,startup", "GlslangWarmup");
@@ -173,7 +171,6 @@ angle::Result DisplayMtl::initializeImpl(egl::Display *display)
 void DisplayMtl::terminate()
 {
     mUtils.onDestroy();
-    mCmdQueue.reset();
     mDefaultShadersAsyncInfo = nullptr;
     mMetalDevice             = nil;
 #if ANGLE_MTL_EVENT_AVAILABLE

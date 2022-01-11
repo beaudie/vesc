@@ -80,11 +80,24 @@ ImageNativeIndexIterator ImageNativeIndex::getLayerIterator(GLint layerCount) co
 }
 
 // Context implementation
-Context::Context(DisplayMtl *display) : mDisplay(display) {}
+Context::Context(DisplayMtl *display) : mDisplay(display) {
+    ANGLE_MTL_OBJC_SCOPE
+    {
+        mCmdQueue = new mtl::CommandQueue();
+        mCmdQueue->set([[display->getMetalDevice() newCommandQueue] ANGLE_MTL_AUTORELEASE]);
+    }
+}
+
+Context::~Context()
+{
+    mCmdQueue->reset();
+    delete mCmdQueue;
+    mCmdQueue = nullptr;
+}
 
 mtl::CommandQueue &Context::cmdQueue()
 {
-    return mDisplay->cmdQueue();
+    return (*mCmdQueue);
 }
 
 }  // namespace mtl
