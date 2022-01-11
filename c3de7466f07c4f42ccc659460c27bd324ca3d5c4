@@ -89,6 +89,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "e92a9cd9_d2b1ecce",
+        "filename": "src/tests/gl_tests/BlitFramebufferANGLETest.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 527,
+      "author": {
+        "id": 1228974
+      },
+      "writtenOn": "2022-01-11T10:25:02Z",
+      "side": 1,
+      "message": "BlitColorWithMesaYFlipSrcDst and BlitColorWithMesaYFlipDst do that. The tests blit into a non-max width/height with non-zero offset and checks one part of the fbo remains untouched (with EXPECT_PIXEL_RECT_EQ) and other parts are inverted correctly.\n\nBasically, the final rect looks in BlitColorWithMesaYFlipSrcDst (BlitColorWithMesaYFlipDst looks almost the same except that it\u0027s y-flipped) the following way - https://drive.google.com/file/d/1wZz1DeYsEy8lde0D8_FJzbkDMCWcYrFW/view?usp\u003dsharing",
+      "parentUuid": "9930f378_accf6350",
+      "range": {
+        "startLine": 526,
+        "startChar": 0,
+        "endLine": 527,
+        "endChar": 74
+      },
+      "revId": "c3de7466f07c4f42ccc659460c27bd324ca3d5c4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "985ad599_350f8a72",
