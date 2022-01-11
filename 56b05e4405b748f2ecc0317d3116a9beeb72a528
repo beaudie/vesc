@@ -102,6 +102,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "20595751_fbce8730",
+        "filename": "src/libGLESv2/egl_ext_stubs.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 609,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-01-11T19:39:17Z",
+      "side": 1,
+      "message": "You can remove the helper macros this change adds now :)",
+      "parentUuid": "b4654825_354c0eac",
+      "revId": "56b05e4405b748f2ecc0317d3116a9beeb72a528",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "3bb4650b_365c1d0a",
         "filename": "src/libGLESv2/egl_ext_stubs.cpp",
         "patchSetId": 7
