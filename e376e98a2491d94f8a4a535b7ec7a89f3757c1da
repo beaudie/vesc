@@ -41,6 +41,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "2a1c1e0b_792e33b8",
+        "filename": "src/libANGLE/renderer/vulkan/DeviceVk.cpp",
+        "patchSetId": 9
+      },
+      "lineNbr": 32,
+      "author": {
+        "id": 1000050
+      },
+      "writtenOn": "2022-01-11T22:00:04Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "2172270c_f1eb2d0e",
+      "range": {
+        "startLine": 32,
+        "startChar": 41,
+        "endLine": 32,
+        "endChar": 51
+      },
+      "revId": "e376e98a2491d94f8a4a535b7ec7a89f3757c1da",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "db276d19_d2333a05",
@@ -96,6 +120,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "669aa716_7e59ba50",
+        "filename": "src/libANGLE/renderer/vulkan/DeviceVk.cpp",
+        "patchSetId": 9
+      },
+      "lineNbr": 59,
+      "author": {
+        "id": 1000050
+      },
+      "writtenOn": "2022-01-11T22:00:04Z",
+      "side": 1,
+      "message": "Those global methods don\u0027t take any vulkan objects as arguments (VkInstance, VkDevice, etc). So I cannot figure out a good way to not use global variables. I considered to use a pointer of DeviceVk  or RendererVk, but I thought it may cause problem when those object is destroyed. So to avoid those problem, I just add those two global variables.",
+      "parentUuid": "488f4939_1fdeda34",
+      "revId": "e376e98a2491d94f8a4a535b7ec7a89f3757c1da",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "68ebc9b7_051118e6",
         "filename": "src/libANGLE/renderer/vulkan/DeviceVk.cpp",
         "patchSetId": 9
@@ -130,6 +172,30 @@
       "writtenOn": "2022-01-11T21:34:18Z",
       "side": 1,
       "message": "nit: suggest you make an explicit type and use that here",
+      "range": {
+        "startLine": 91,
+        "startChar": 15,
+        "endLine": 91,
+        "endChar": 20
+      },
+      "revId": "e376e98a2491d94f8a4a535b7ec7a89f3757c1da",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "e5e6cd5f_6a9a299d",
+        "filename": "src/libANGLE/renderer/vulkan/DeviceVk.cpp",
+        "patchSetId": 9
+      },
+      "lineNbr": 91,
+      "author": {
+        "id": 1000050
+      },
+      "writtenOn": "2022-01-11T22:00:04Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "9b87db36_65547643",
       "range": {
         "startLine": 91,
         "startChar": 15,
