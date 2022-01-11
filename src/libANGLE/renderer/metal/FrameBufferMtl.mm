@@ -809,9 +809,7 @@ void FramebufferMtl::setLoadStoreActionOnRenderPassFirstStart(
 
     mtl::RenderPassAttachmentDesc &attachment = *attachmentOut;
 
-    if (!forceDepthStencilMultisampleLoad &&
-        (attachment.storeAction == MTLStoreActionDontCare ||
-         attachment.storeAction == MTLStoreActionMultisampleResolve))
+    if (!forceDepthStencilMultisampleLoad && (attachment.storeAction == MTLStoreActionDontCare))
     {
         // If we previously discarded attachment's content, then don't need to load it.
         attachment.loadAction = MTLLoadActionDontCare;
