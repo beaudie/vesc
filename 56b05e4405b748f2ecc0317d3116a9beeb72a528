@@ -118,6 +118,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "12cf8153_b661dbd4",
+        "filename": "src/libGLESv2/egl_ext_stubs.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 609,
+      "author": {
+        "id": 1175714
+      },
+      "writtenOn": "2022-01-11T19:43:06Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "20595751_fbce8730",
+      "revId": "56b05e4405b748f2ecc0317d3116a9beeb72a528",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "3bb4650b_365c1d0a",
