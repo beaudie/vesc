@@ -20,6 +20,29 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "2172270c_f1eb2d0e",
+        "filename": "src/libANGLE/renderer/vulkan/DeviceVk.cpp",
+        "patchSetId": 9
+      },
+      "lineNbr": 32,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2022-01-11T21:34:18Z",
+      "side": 1,
+      "message": "nit: ANGLE naming style",
+      "range": {
+        "startLine": 32,
+        "startChar": 41,
+        "endLine": 32,
+        "endChar": 51
+      },
+      "revId": "e376e98a2491d94f8a4a535b7ec7a89f3757c1da",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "db276d19_d2333a05",
         "filename": "src/libANGLE/renderer/vulkan/DeviceVk.cpp",
         "patchSetId": 9
@@ -31,6 +54,70 @@
       "writtenOn": "2022-01-11T19:28:23Z",
       "side": 1,
       "message": "Kind of hard to follow the logic here, could you add comments? Also, why not instead of all these, call vkGetInstanceProcAddr with the special names once right away and cache them, and avoid all the wrappers and scoped env set/reset?",
+      "revId": "e376e98a2491d94f8a4a535b7ec7a89f3757c1da",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "1fe20cb0_fdd82537",
+        "filename": "src/libANGLE/renderer/vulkan/DeviceVk.cpp",
+        "patchSetId": 9
+      },
+      "lineNbr": 59,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2022-01-11T21:34:18Z",
+      "side": 1,
+      "message": "This is a pretty cool solution to your issue Peng, I like it, very creative. I\u0027m not sure I follow the caching suggestion. The one issue I have with this solution is the use of the global variables. It would be cool if somehow the VkInstance pointer could retrieve the ANGLE DeviceVk. Anyway for globals, I suggest for now you just store the DeviceVk pointer at time of the Get call and then make the functions member functions of DeviceVk so you don\u0027t need to store gEnable stuff, and you can make the function pointer table a non-static member of DeviceVk.",
+      "parentUuid": "db276d19_d2333a05",
+      "revId": "e376e98a2491d94f8a4a535b7ec7a89f3757c1da",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "68ebc9b7_051118e6",
+        "filename": "src/libANGLE/renderer/vulkan/DeviceVk.cpp",
+        "patchSetId": 9
+      },
+      "lineNbr": 81,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2022-01-11T21:34:18Z",
+      "side": 1,
+      "message": "nit: for style reasons, I suggest you split the type from the data def, especially if you store this as a member var",
+      "range": {
+        "startLine": 76,
+        "startChar": 5,
+        "endLine": 81,
+        "endChar": 10
+      },
+      "revId": "e376e98a2491d94f8a4a535b7ec7a89f3757c1da",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "9b87db36_65547643",
+        "filename": "src/libANGLE/renderer/vulkan/DeviceVk.cpp",
+        "patchSetId": 9
+      },
+      "lineNbr": 91,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2022-01-11T21:34:18Z",
+      "side": 1,
+      "message": "nit: suggest you make an explicit type and use that here",
+      "range": {
+        "startLine": 91,
+        "startChar": 15,
+        "endLine": 91,
+        "endChar": 20
+      },
       "revId": "e376e98a2491d94f8a4a535b7ec7a89f3757c1da",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
