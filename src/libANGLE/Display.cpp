@@ -2064,7 +2064,7 @@ void Display::initVendorString()
 
 void Display::initVersionString()
 {
-    mVersionString = mImplementation->getVersionString();
+    mVersionString = mImplementation->getVersionString(true);
 }
 
 void Display::initializeFrontendFeatures()
@@ -2115,9 +2115,9 @@ std::string Display::getBackendVendorString() const
     return mImplementation->getVendorString();
 }
 
-std::string Display::getBackendVersionString() const
+std::string Display::getBackendVersionString(bool includeFullVersion) const
 {
-    return mImplementation->getVersionString();
+    return mImplementation->getVersionString(includeFullVersion);
 }
 
 Device *Display::getDevice() const
