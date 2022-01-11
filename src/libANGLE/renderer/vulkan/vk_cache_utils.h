@@ -1113,11 +1113,14 @@ class TextureDescriptorDesc
                 SamplerSerial samplerSerial);
     size_t hash() const;
     void reset();
+    void clearCompareCount();
 
     bool operator==(const TextureDescriptorDesc &other) const;
 
     // Note: this is an exclusive index. If there is one index it will return "1".
     uint32_t getMaxIndex() const { return mMaxIndex; }
+
+    static uint32_t mCompareCount;
 
   private:
     uint32_t mMaxIndex;
@@ -1464,11 +1467,16 @@ enum class VulkanCacheType
 class CacheStats final : angle::NonCopyable
 {
   public:
-    CacheStats() { reset(); }
+    CacheStats()
+    {
+        reset();
+        mCacheSize = 0;
+    }
     ~CacheStats() {}
 
     ANGLE_INLINE void hit() { mHitCount++; }
     ANGLE_INLINE void miss() { mMissCount++; }
+    ANGLE_INLINE void query() { mQueryCount++; }
     ANGLE_INLINE void accumulate(const CacheStats &stats)
     {
         mHitCount += stats.mHitCount;
@@ -1477,6 +1485,7 @@ class CacheStats final : angle::NonCopyable
 
     uint64_t getHitCount() const { return mHitCount; }
     uint64_t getMissCount() const { return mMissCount; }
+    uint64_t getQueryCount() const { return mQueryCount; }
 
     ANGLE_INLINE double getHitRatio() const
     {
@@ -1490,15 +1499,23 @@ class CacheStats final : angle::NonCopyable
         }
     }
 
+    ANGLE_INLINE void updateCacheSize(const uint64_t cacheSize) { mCacheSize = cacheSize; }
+
+    ANGLE_INLINE uint64_t getCacheSize() const { return mCacheSize; }
+
+    // This is called by HasCacheStats.accumlateCacheStats()
     void reset()
     {
-        mHitCount  = 0;
-        mMissCount = 0;
+        mHitCount   = 0;
+        mMissCount  = 0;
+        mQueryCount = 0;
     }
 
   private:
     uint64_t mHitCount;
     uint64_t mMissCount;
+    uint64_t mCacheSize;
+    uint64_t mQueryCount;
 };
 
 template <VulkanCacheType CacheType>
@@ -1511,6 +1528,8 @@ class HasCacheStats : angle::NonCopyable
         accum->accumulateCacheStats(CacheType, mCacheStats);
         mCacheStats.reset();
     }
+
+    ANGLE_INLINE uint64_t getCacheCount() { return mCacheStats.getCacheSize(); }
 
   protected:
     HasCacheStats()          = default;
@@ -1748,11 +1767,13 @@ class DescriptorSetCache final : public HasCacheStats<CacheType>
 
     ANGLE_INLINE bool get(const Key &desc, VkDescriptorSet *descriptorSet)
     {
+
         auto iter = mPayload.find(desc);
         if (iter != mPayload.end())
         {
             *descriptorSet = iter->second;
             this->mCacheStats.hit();
+            this->mCacheStats.query();
             return true;
         }
         this->mCacheStats.miss();
@@ -1762,6 +1783,8 @@ class DescriptorSetCache final : public HasCacheStats<CacheType>
     ANGLE_INLINE void insert(const Key &desc, VkDescriptorSet descriptorSet)
     {
         mPayload.emplace(desc, descriptorSet);
+        this->mCacheStats.updateCacheSize(mPayload.size());
+        this->mCacheStats.query();
     }
 
   private:

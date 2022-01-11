@@ -1110,6 +1110,9 @@ struct PerfCounters
     uint32_t shaderBuffersDescriptorSetCacheMisses;
     uint32_t buffersGhosted;
     uint32_t vertexArraySyncStateCalls;
+    uint32_t textureDescriptorSetCacheSizes;
+    uint32_t textureDescriptorSetCacheQueryCount;
+    uint32_t textureDescriptorSetKeyHashCompareCount;
 };
 
 // A Vulkan image level index.

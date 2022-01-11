@@ -2196,9 +2196,12 @@ angle::Result ContextVk::handleDirtyDescriptorSetsImpl(CommandBufferT *commandBu
 
 void ContextVk::syncObjectPerfCounters()
 {
-    mPerfCounters.descriptorSetAllocations              = 0;
-    mPerfCounters.shaderBuffersDescriptorSetCacheHits   = 0;
-    mPerfCounters.shaderBuffersDescriptorSetCacheMisses = 0;
+    mPerfCounters.descriptorSetAllocations                = 0;
+    mPerfCounters.shaderBuffersDescriptorSetCacheHits     = 0;
+    mPerfCounters.shaderBuffersDescriptorSetCacheMisses   = 0;
+    mPerfCounters.textureDescriptorSetCacheSizes          = 0;
+    mPerfCounters.textureDescriptorSetCacheQueryCount     = 0;
+    mPerfCounters.textureDescriptorSetKeyHashCompareCount = 0;
 
     // ContextVk's descriptor set allocations
     ContextVkPerfCounters contextCounters = getAndResetObjectPerfCounters();
@@ -2234,7 +2237,16 @@ void ContextVk::syncObjectPerfCounters()
             progPerfCounters.descriptorSetCacheHits[DescriptorSetIndex::ShaderResource];
         mPerfCounters.shaderBuffersDescriptorSetCacheMisses +=
             progPerfCounters.descriptorSetCacheMisses[DescriptorSetIndex::ShaderResource];
+        mPerfCounters.textureDescriptorSetCacheSizes +=
+            progPerfCounters.descriptorSetCacheSizes[DescriptorSetIndex::Texture];
+        mPerfCounters.textureDescriptorSetCacheQueryCount +=
+            progPerfCounters.descriptorSetQueryCounts[DescriptorSetIndex::Texture];
     }
+
+    // Texture Descriptor Cache Key Hash Comparison Count
+    mPerfCounters.textureDescriptorSetKeyHashCompareCount +=
+        vk::TextureDescriptorDesc::mCompareCount;
+    vk::TextureDescriptorDesc::mCompareCount = 0;
 }
 
 void ContextVk::updateOverlayOnPresent()
@@ -2288,6 +2300,33 @@ void ContextVk::updateOverlayOnPresent()
         gl::RunningGraphWidget *dynamicBufferAllocations =
             overlay->getRunningGraphWidget(gl::WidgetId::VulkanDynamicBufferAllocations);
         dynamicBufferAllocations->next();
+    }
+
+    {
+        gl::RunningGraphWidget *textureDescriptorCacheSize =
+            overlay->getRunningGraphWidget(gl::WidgetId::VulkanTextureDescriptorCacheSize);
+        textureDescriptorCacheSize->add(mPerfCounters.textureDescriptorSetCacheSizes);
+        textureDescriptorCacheSize->next();
+    }
+
+    {
+        gl::RunningGraphWidget *textureDescriptorCacheHashKeyCollisionRate =
+            overlay->getRunningGraphWidget(
+                gl::WidgetId::VulkanTextureDescriptorCacheHashKeyCollisionRate);
+
+        // Debug Code Hash Collision Rate
+        uint32_t totalTextureDescriptorSetCacheQueryCount =
+            mPerfCounters.textureDescriptorSetCacheQueryCount;
+        if (totalTextureDescriptorSetCacheQueryCount > 0)
+        {
+            float hashCollisionRateFloat =
+                static_cast<float>(mPerfCounters.textureDescriptorSetKeyHashCompareCount -
+                                   totalTextureDescriptorSetCacheQueryCount) /
+                static_cast<float>(totalTextureDescriptorSetCacheQueryCount);
+            size_t hashCollisionRate = static_cast<size_t>(hashCollisionRateFloat * 100.0f);
+            textureDescriptorCacheHashKeyCollisionRate->add(hashCollisionRate);
+            textureDescriptorCacheHashKeyCollisionRate->next();
+        }
     }
 }
 
