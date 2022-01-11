@@ -16,6 +16,23 @@
       "message": "PTAL",
       "revId": "467208e0e6bbd3057ed316b6195d05c342d78a10",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "cc4b7059_540ac896",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-01-11T02:38:27Z",
+      "side": 1,
+      "message": "I have no particular opinion about this as long as the bots are green",
+      "revId": "467208e0e6bbd3057ed316b6195d05c342d78a10",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
