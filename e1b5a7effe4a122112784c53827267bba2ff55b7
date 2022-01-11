@@ -52,6 +52,23 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "4166c4e1_25b033b0",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 14
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1359249
+      },
+      "writtenOn": "2022-01-11T18:38:56Z",
+      "side": 1,
+      "message": "Note below, haven\u0027t found fix for vlDeviceWaitIdle(). I don\u0027t have bandwidth to work this, any help would be appreciated.",
+      "revId": "e1b5a7effe4a122112784c53827267bba2ff55b7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "f850756d_43c42698",
@@ -65,6 +82,30 @@
       "writtenOn": "2021-12-09T13:26:12Z",
       "side": 1,
       "message": "again, make this pipe through to something in vk::CommandQueue. We want to keep device access centralized at least in RendererVk. Also you\u0027ll need to handle possible errors. You\u0027re still discarding it here.",
+      "range": {
+        "startLine": 278,
+        "startChar": 8,
+        "endLine": 278,
+        "endChar": 24
+      },
+      "revId": "e1b5a7effe4a122112784c53827267bba2ff55b7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "01641244_c580aadb",
+        "filename": "src/libANGLE/renderer/vulkan/SurfaceVk.cpp",
+        "patchSetId": 14
+      },
+      "lineNbr": 278,
+      "author": {
+        "id": 1359249
+      },
+      "writtenOn": "2022-01-11T18:38:56Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "f850756d_43c42698",
       "range": {
         "startLine": 278,
         "startChar": 8,

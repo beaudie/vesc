@@ -307,6 +307,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "125791c2_f4a9df90",
+        "filename": "src/libANGLE/renderer/vulkan/SurfaceVk.cpp",
+        "patchSetId": 13
+      },
+      "lineNbr": 260,
+      "author": {
+        "id": 1359249
+      },
+      "writtenOn": "2022-01-11T18:38:56Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "57332514_e2027994",
+      "range": {
+        "startLine": 260,
+        "startChar": 64,
+        "endLine": 260,
+        "endChar": 80
+      },
+      "revId": "aef20218aea74f76979fb04164d8fc516eb7bd3c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "f1e03d5b_8a78140b",
@@ -535,6 +559,30 @@
       "side": 1,
       "message": "The one-off submission already inserts a fence, to which a serial is assigned. RendererVk::finish() simply waits for the last serial (i.e. fence), which is why it doesn\u0027t look like `vkDeviceWaitIdle`.\n\nYou can debug this by adding some logs: log the serial that the one-off submission is generating, and log the serial that `RendererVk::finish` is trying to wait on (by replacing vkDeviceWaitIdle here with that). If `finish` is waiting for a serial smaller than the one-off submission, that\u0027s a problem we\u0027d need to fix separately.",
       "parentUuid": "3655d24c_531b4fad",
+      "range": {
+        "startLine": 348,
+        "startChar": 8,
+        "endLine": 348,
+        "endChar": 24
+      },
+      "revId": "aef20218aea74f76979fb04164d8fc516eb7bd3c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "4cfb8d20_0cb1bffe",
+        "filename": "src/libANGLE/renderer/vulkan/SurfaceVk.cpp",
+        "patchSetId": 13
+      },
+      "lineNbr": 348,
+      "author": {
+        "id": 1359249
+      },
+      "writtenOn": "2022-01-11T18:38:56Z",
+      "side": 1,
+      "message": "So I replaced vkDeviceWaitIdle with\n ANGLE_TRY(displayVk-\u003egetRenderer()-\u003efinish(displayVk, false));\n\nfinishToSerial exists most the time from no \"inFlightCommands\".\nThen the test completes and destroys Surface and Buffer causing a VU error of deleting buffer while in use.\n\nI haven\u0027t found an alternative. I am out of bandwidth for this so any help would be appreciated in landing this/complete.",
+      "parentUuid": "364aa8de_3d415c28",
       "range": {
         "startLine": 348,
         "startChar": 8,
