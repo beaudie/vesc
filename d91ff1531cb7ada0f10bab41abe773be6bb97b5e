@@ -16,6 +16,46 @@
       "message": "Nice work refactoring these tables to build everywhere.\n\nlgtm\n",
       "revId": "d91ff1531cb7ada0f10bab41abe773be6bb97b5e",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "2d21c8a9_9aed4981",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1394635
+      },
+      "writtenOn": "2022-01-11T12:19:10Z",
+      "side": 1,
+      "message": "I took a look at the generated file and compared the formats included with each ifdef section with the MTLPixelFormat headers from the iOS and tvOS SDKs (15.2). Strangely enough, Metal headers are not available for watchOS.\n\nHere are the issues I found:\n* Packed 16-bit formats are defined both for iOS and tvOS simulators but the unpacked fallback is used instead.\n* PVRTC1 enums are defined for both simulators but they are omitted from the generated file.\n* R8_sRGB and RG8_sRGB enums are defined for both simulators but they are omitted from the generated file.\n* ASTC HDR enums are not defined for tvOS and tvOS simulator yet they are used in the affected sections.",
+      "revId": "d91ff1531cb7ada0f10bab41abe773be6bb97b5e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "de05dee9_2954b0ff",
+        "filename": "src/libANGLE/renderer/metal/mtl_format_map.json",
+        "patchSetId": 2
+      },
+      "lineNbr": 252,
+      "author": {
+        "id": 1394635
+      },
+      "writtenOn": "2022-01-11T12:19:10Z",
+      "side": 1,
+      "message": "Why is this necessary? I don\u0027t see this symbol being used anywhere.",
+      "range": {
+        "startLine": 251,
+        "startChar": 0,
+        "endLine": 252,
+        "endChar": 10
+      },
+      "revId": "d91ff1531cb7ada0f10bab41abe773be6bb97b5e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
