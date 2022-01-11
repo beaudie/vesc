@@ -3180,7 +3180,7 @@ void Context::initRendererString()
     std::ostringstream frontendRendererString;
     std::string vendorString(mDisplay->getBackendVendorString());
     std::string rendererString(mDisplay->getBackendRendererDescription());
-    std::string versionString(mDisplay->getBackendVersionString());
+    std::string versionString(mDisplay->getBackendVersionString(!isWebGL()));
     // Commas are used as a separator in ANGLE's renderer string, so remove commas from each
     // element.
     vendorString.erase(std::remove(vendorString.begin(), vendorString.end(), ','),
@@ -3193,8 +3193,12 @@ void Context::initRendererString()
     frontendRendererString << vendorString;
     frontendRendererString << ", ";
     frontendRendererString << rendererString;
-    frontendRendererString << ", ";
-    frontendRendererString << versionString;
+    // Avoid exposing driver versions in WebGL mode
+    if (!isWebGL())
+    {
+        frontendRendererString << ", ";
+        frontendRendererString << versionString;
+    }
     frontendRendererString << ")";
 
     mRendererString = MakeStaticString(frontendRendererString.str());

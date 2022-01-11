@@ -53,17 +53,43 @@ std::string SanitizeRendererString(std::string rendererString)
 
 // OpenGL ES requires a prefix of "OpenGL ES" for the GL_VERSION string.
 // We can also add the prefix to desktop OpenGL for consistency.
-std::string SanitizeVersionString(std::string versionString, bool isES)
+std::string SanitizeVersionString(std::string versionString, bool isES, bool includeFullVersion)
 {
-    if (versionString.find("OpenGL") == std::string::npos)
+    const std::string GLString = "OpenGL ";
+    const std::string ESString = "ES ";
+    size_t openGLPos = versionString.find(GLString);
+    if (openGLPos == std::string::npos)
     {
-        std::string prefix = "OpenGL ";
+        if (!includeFullVersion)
+        {
+            size_t postVersionSpace = versionString.find(" ");
+            if (postVersionSpace != std::string::npos)
+            {
+                versionString.resize(postVersionSpace);
+            }
+        }
+
+        std::string prefix = GLString;
         if (isES)
         {
-            prefix += "ES ";
+            prefix += ESString;
         }
         versionString = prefix + versionString;
     }
+    else if (!includeFullVersion)
+    {
+        size_t findPos = openGLPos + GLString.size();
+        if (isES)
+        {
+            findPos += ESString.size();
+        }
+        size_t postVersionSpace = versionString.find(" ", findPos);
+        if (postVersionSpace != std::string::npos)
+        {
+            versionString.resize(postVersionSpace);
+        }
+    }
+
     return versionString;
 }
 
@@ -171,11 +197,12 @@ std::string DisplayGL::getVendorString()
     return GetVendorString(getRenderer()->getFunctions());
 }
 
-std::string DisplayGL::getVersionString()
+std::string DisplayGL::getVersionString(bool includeFullVersion)
 {
     std::string versionString = GetVersionString(getRenderer()->getFunctions());
     return SanitizeVersionString(versionString,
-                                 getRenderer()->getFunctions()->standard == STANDARD_GL_ES);
+                                 getRenderer()->getFunctions()->standard == STANDARD_GL_ES,
+                                 includeFullVersion);
 }
 
 }  // namespace rx
