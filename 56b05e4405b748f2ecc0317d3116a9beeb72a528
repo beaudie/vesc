@@ -41,6 +41,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "f048334b_1920fccd",
+        "filename": "src/libGLESv2/egl_ext_stubs.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 600,
+      "author": {
+        "id": 1175714
+      },
+      "writtenOn": "2022-01-11T19:34:13Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "ce5c3740_bb2d8b8b",
+      "range": {
+        "startLine": 596,
+        "startChar": 0,
+        "endLine": 600,
+        "endChar": 0
+      },
+      "revId": "56b05e4405b748f2ecc0317d3116a9beeb72a528",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "7f5a197e_97021a03",
@@ -58,6 +82,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "b4654825_354c0eac",
+        "filename": "src/libGLESv2/egl_ext_stubs.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 609,
+      "author": {
+        "id": 1175714
+      },
+      "writtenOn": "2022-01-11T19:34:13Z",
+      "side": 1,
+      "message": "We still need to access the thread, display and surface. It seems though that we can access packed display/surface params and the thread safely without the global lock.",
+      "parentUuid": "7f5a197e_97021a03",
+      "revId": "56b05e4405b748f2ecc0317d3116a9beeb72a528",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "3bb4650b_365c1d0a",
@@ -71,6 +113,30 @@
       "writtenOn": "2022-01-11T17:12:38Z",
       "side": 1,
       "message": "Does this really need locking? Isn\u0027t it setting a thread-local value? (Or rather, setting something in the Thread object, which only this thread has access to)",
+      "range": {
+        "startLine": 621,
+        "startChar": 0,
+        "endLine": 624,
+        "endChar": 25
+      },
+      "revId": "56b05e4405b748f2ecc0317d3116a9beeb72a528",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "1402bfc0_c1fb25cf",
+        "filename": "src/libGLESv2/egl_ext_stubs.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 624,
+      "author": {
+        "id": 1175714
+      },
+      "writtenOn": "2022-01-11T19:34:13Z",
+      "side": 1,
+      "message": "Yeah GetCurrentThread seems to use tls or a thread_local.",
+      "parentUuid": "3bb4650b_365c1d0a",
       "range": {
         "startLine": 621,
         "startChar": 0,
