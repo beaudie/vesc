@@ -2465,7 +2465,7 @@ std::string RendererVk::getRendererDescription() const
     return strstr.str();
 }
 
-std::string RendererVk::getVersionString() const
+std::string RendererVk::getVersionString(bool includeFullVersion) const
 {
     std::stringstream strstr;
 
@@ -2481,26 +2481,29 @@ std::string RendererVk::getVersionString() const
         strstr << GetVendorString(mPhysicalDeviceProperties.vendorID);
     }
 
-    strstr << "-";
+    if (includeFullVersion)
+    {
+        strstr << "-";
 
-    if (mPhysicalDeviceProperties.vendorID == VENDOR_ID_NVIDIA)
-    {
-        strstr << ANGLE_VK_VERSION_MAJOR_NVIDIA(driverVersion) << ".";
-        strstr << ANGLE_VK_VERSION_MINOR_NVIDIA(driverVersion) << ".";
-        strstr << ANGLE_VK_VERSION_SUB_MINOR_NVIDIA(driverVersion) << ".";
-        strstr << ANGLE_VK_VERSION_PATCH_NVIDIA(driverVersion);
-    }
-    else if (mPhysicalDeviceProperties.vendorID == VENDOR_ID_INTEL && IsWindows())
-    {
-        strstr << ANGLE_VK_VERSION_MAJOR_WIN_INTEL(driverVersion) << ".";
-        strstr << ANGLE_VK_VERSION_MAJOR_WIN_INTEL(driverVersion) << ".";
-    }
-    // All other drivers use the Vulkan standard
-    else
-    {
-        strstr << VK_VERSION_MAJOR(driverVersion) << ".";
-        strstr << VK_VERSION_MINOR(driverVersion) << ".";
-        strstr << VK_VERSION_PATCH(driverVersion);
+        if (mPhysicalDeviceProperties.vendorID == VENDOR_ID_NVIDIA)
+        {
+            strstr << ANGLE_VK_VERSION_MAJOR_NVIDIA(driverVersion) << ".";
+            strstr << ANGLE_VK_VERSION_MINOR_NVIDIA(driverVersion) << ".";
+            strstr << ANGLE_VK_VERSION_SUB_MINOR_NVIDIA(driverVersion) << ".";
+            strstr << ANGLE_VK_VERSION_PATCH_NVIDIA(driverVersion);
+        }
+        else if (mPhysicalDeviceProperties.vendorID == VENDOR_ID_INTEL && IsWindows())
+        {
+            strstr << ANGLE_VK_VERSION_MAJOR_WIN_INTEL(driverVersion) << ".";
+            strstr << ANGLE_VK_VERSION_MAJOR_WIN_INTEL(driverVersion) << ".";
+        }
+        // All other drivers use the Vulkan standard
+        else
+        {
+            strstr << VK_VERSION_MAJOR(driverVersion) << ".";
+            strstr << VK_VERSION_MINOR(driverVersion) << ".";
+            strstr << VK_VERSION_PATCH(driverVersion);
+        }
     }
 
     return strstr.str();
