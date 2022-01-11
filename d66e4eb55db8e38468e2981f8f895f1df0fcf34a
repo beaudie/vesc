@@ -84,6 +84,24 @@
       "message": "It\u0027s necessary to test for EGL_EXT_device_enumeration in the EGL client extension list, not just test whether the function pointers are non-null. At least in OpenGL and OpenGL ES, it\u0027s common for drivers to provide no-op stubs for entry points even if the driver doesn\u0027t actually support the extension.",
       "revId": "d66e4eb55db8e38468e2981f8f895f1df0fcf34a",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "425beccb_a4994b4d",
+        "filename": "src/libANGLE/renderer/gl/egl/FunctionsEGL.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 205,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2022-01-11T15:15:18Z",
+      "side": 1,
+      "message": "Agreed. We should do the extension checks for:\n\nEGL_EXT_platform_device for using EGL_PLATFORM_DEVICE_EXT. This also implies EGL_EXT_platform_base/EGL 1.5 for eglGetPlatformDisplayEXT which could also be an explicit check to load eglGetPlatformDisplayEXT.\n\nEGL_EXT_device_enumeration for eglQueryDevicesEXT.",
+      "parentUuid": "11df0380_ebdec06d",
+      "revId": "d66e4eb55db8e38468e2981f8f895f1df0fcf34a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
