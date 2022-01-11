@@ -16,6 +16,23 @@
       "message": "PTAL",
       "revId": "bcdcf08bd49f68b05f648af7957be6f600220ea7",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "857ea829_9c6a3218",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2022-01-11T21:40:28Z",
+      "side": 1,
+      "message": "LGTM - it would be good to work on a long-term way to encode these preferences in the Vulkan API so ANGLE and other apps don\u0027t have to pre-determine this info. e.g. other Vulkan apps will need to discover that aggregating barriers is a better win than splitting them.",
+      "revId": "bcdcf08bd49f68b05f648af7957be6f600220ea7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
