@@ -68,6 +68,24 @@
       "message": "thanks, landing this",
       "revId": "bcdcf08bd49f68b05f648af7957be6f600220ea7",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "b957aee1_ef24acb3",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2022-01-11T21:50:42Z",
+      "side": 1,
+      "message": "It depends what you mean by workarounds. If the app has to go IsARM() or IsAMD() \u0026\u0026 IsDeviceID \u003d\u003d 0xDFDF, that code would also need to be replicated in every app that invokes the same API calls/GPU workloads. And encoding the buffer stride padding or what have you as a Vulkan feature or capability would make it accessible.",
+      "parentUuid": "5e22dfd5_b228ebef",
+      "revId": "bcdcf08bd49f68b05f648af7957be6f600220ea7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
