@@ -24,6 +24,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "a4fff235_d1662292",
+        "filename": "src/libANGLE/Texture.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 2155,
+      "author": {
+        "id": 1340649
+      },
+      "writtenOn": "2022-01-11T22:07:35Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "3b9e15da_a870fa4e",
+      "range": {
+        "startLine": 2155,
+        "startChar": 14,
+        "endLine": 2155,
+        "endChar": 43
+      },
+      "revId": "726ce98492a45f3795337326ef624be171d173ea",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "f6ea431a_1162b1a7",
@@ -37,6 +61,30 @@
       "writtenOn": "2022-01-11T21:37:34Z",
       "side": 1,
       "message": "nit: use explicit type, auto just makes it harder to read here",
+      "range": {
+        "startLine": 2156,
+        "startChar": 0,
+        "endLine": 2159,
+        "endChar": 51
+      },
+      "revId": "726ce98492a45f3795337326ef624be171d173ea",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "d78baf64_f5e99c32",
+        "filename": "src/libANGLE/Texture.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 2159,
+      "author": {
+        "id": 1340649
+      },
+      "writtenOn": "2022-01-11T22:07:35Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "f6ea431a_1162b1a7",
       "range": {
         "startLine": 2156,
         "startChar": 0,
