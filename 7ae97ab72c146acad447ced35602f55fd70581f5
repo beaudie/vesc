@@ -130,6 +130,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "f1430b10_cd897b7d",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000050
+      },
+      "writtenOn": "2022-01-11T18:24:42Z",
+      "side": 1,
+      "message": "Sorry. I haven\u0027t fixed the problem. I just forgot to remove the draft reply when I was replying to shahbaz\u0027s comment.\n\nAnd I created a new CL to use a different approach to address the problem.",
+      "parentUuid": "146a724c_33865e7f",
+      "revId": "7ae97ab72c146acad447ced35602f55fd70581f5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "bb24b261_214146d3",
