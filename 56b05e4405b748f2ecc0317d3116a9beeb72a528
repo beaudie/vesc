@@ -1,0 +1,84 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "8c95a849_38e1f747",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 7
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-01-11T17:12:38Z",
+      "side": 1,
+      "message": "Nice!",
+      "revId": "56b05e4405b748f2ecc0317d3116a9beeb72a528",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ce5c3740_bb2d8b8b",
+        "filename": "src/libGLESv2/egl_ext_stubs.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 600,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-01-11T17:12:38Z",
+      "side": 1,
+      "message": "Double lock?",
+      "range": {
+        "startLine": 596,
+        "startChar": 0,
+        "endLine": 600,
+        "endChar": 0
+      },
+      "revId": "56b05e4405b748f2ecc0317d3116a9beeb72a528",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "7f5a197e_97021a03",
+        "filename": "src/libGLESv2/egl_ext_stubs.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 609,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-01-11T17:12:38Z",
+      "side": 1,
+      "message": "Instead of this, I suggest scoping the scoped global lock appropriately and let it clean up automatically:\n\n    ANGLE_SCOPED_GLOBAL_SURFACE_LOCK();\n    {\n        ANGLE_SCOPED_GLOBAL_LOCK();\n\n        egl::Display *dpyPacked \u003d PackParam\u003cegl::Display *\u003e(dpy);\n        Surface *surfacePacked  \u003d PackParam\u003cSurface *\u003e(surface);\n\n        EGL_EVENT(PrepareSwapBuffersANGLE, \"dpy \u003d 0x%016\" PRIxPTR \", surface \u003d 0x%016\" PRIxPTR \"\",\n              (uintptr_t)dpy, (uintptr_t)surface);\n\n        Thread *thread \u003d egl::GetCurrentThread();\n\n        ANGLE_EGL_VALIDATE(thread, PrepareSwapBuffersANGLE, GetDisplayIfValid(dpyPacked),\n                        EGLBoolean, dpyPacked, surfacePacked);\n\n        ANGLE_EGL_TRY_RETURN(thread, dpyPacked-\u003eprepareForCall(),\n                          \"eglPrepareSwapBuffersANGLE\", GetDisplayIfValid(dpyPacked),\n                          EGL_FALSE);\n    }\n\n    ANGLE_EGL_TRY_RETURN(thread, surfacePacked-\u003eprepareSwap(thread-\u003egetContext()), \"prepareSwap\",\n                         GetSurfaceIfValid(dpyPacked, surfacePacked), EGL_FALSE);\n\n    ...",
+      "revId": "56b05e4405b748f2ecc0317d3116a9beeb72a528",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "3bb4650b_365c1d0a",
+        "filename": "src/libGLESv2/egl_ext_stubs.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 624,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-01-11T17:12:38Z",
+      "side": 1,
+      "message": "Does this really need locking? Isn\u0027t it setting a thread-local value? (Or rather, setting something in the Thread object, which only this thread has access to)",
+      "range": {
+        "startLine": 621,
+        "startChar": 0,
+        "endLine": 624,
+        "endChar": 25
+      },
+      "revId": "56b05e4405b748f2ecc0317d3116a9beeb72a528",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
