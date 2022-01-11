@@ -135,7 +135,6 @@ ShaderInterfaceVariableInfo *AddLocationInfo(ShaderInterfaceVariableInfoMap *inf
 
     ASSERT(info.descriptorSet == ShaderInterfaceVariableInfo::kInvalid);
     ASSERT(info.binding == ShaderInterfaceVariableInfo::kInvalid);
-    ASSERT(info.location == ShaderInterfaceVariableInfo::kInvalid);
     ASSERT(info.component == ShaderInterfaceVariableInfo::kInvalid);
 
     info.location  = location;
