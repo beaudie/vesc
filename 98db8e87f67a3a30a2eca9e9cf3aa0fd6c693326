@@ -35,6 +35,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "53553418_31948e70",
+        "filename": "src/libANGLE/renderer/metal/mtl_resources.h",
+        "patchSetId": 4
+      },
+      "lineNbr": 74,
+      "author": {
+        "id": 1500872
+      },
+      "writtenOn": "2022-01-11T01:18:55Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "0c226280_0f740a6f",
+      "revId": "98db8e87f67a3a30a2eca9e9cf3aa0fd6c693326",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "ba423cce_c9b7cc51",
@@ -48,6 +66,24 @@
       "writtenOn": "2022-01-10T23:56:08Z",
       "side": 1,
       "message": "Still suggest setEstimatedByteSize just for clarity - looking back in the future the name could be confusing.\n\nAlso suggest a newline before this method so it\u0027s not confused as part of explicitly syncing content between CPU/GPU.",
+      "revId": "98db8e87f67a3a30a2eca9e9cf3aa0fd6c693326",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "ddd9d87b_e1fe007b",
+        "filename": "src/libANGLE/renderer/metal/mtl_resources.h",
+        "patchSetId": 4
+      },
+      "lineNbr": 274,
+      "author": {
+        "id": 1500872
+      },
+      "writtenOn": "2022-01-11T01:18:55Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "ba423cce_c9b7cc51",
       "revId": "98db8e87f67a3a30a2eca9e9cf3aa0fd6c693326",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
