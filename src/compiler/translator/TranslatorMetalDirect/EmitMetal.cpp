@@ -1057,7 +1057,8 @@ void GenMetalTraverser::emitFieldDeclaration(const TField &field,
             break;
 
         case TQualifier::EvqFragDepth:
-            mOut << " [[depth(any)]]";
+            mOut << " [[depth(any), function_constant(" << sh::mtl::kDepthWriteEnabledConstName
+                 << ")]]";
             break;
 
         case TQualifier::EvqSampleMask:
