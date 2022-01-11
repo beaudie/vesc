@@ -78,6 +78,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "488f4939_1fdeda34",
+        "filename": "src/libANGLE/renderer/vulkan/DeviceVk.cpp",
+        "patchSetId": 9
+      },
+      "lineNbr": 59,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2022-01-11T21:35:30Z",
+      "side": 1,
+      "message": "To be clearer: you still need static functions. The static functions can call into DeviceVk member functions to access the necessary enables/tables/etc.",
+      "parentUuid": "1fe20cb0_fdd82537",
+      "revId": "e376e98a2491d94f8a4a535b7ec7a89f3757c1da",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "68ebc9b7_051118e6",
         "filename": "src/libANGLE/renderer/vulkan/DeviceVk.cpp",
         "patchSetId": 9
