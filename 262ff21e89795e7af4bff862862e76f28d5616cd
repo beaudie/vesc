@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "53425b11_cf70e7df",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-01-11T18:39:09Z",
+      "side": 1,
+      "message": "It doesn\u0027t seem to be a driver bug. I ran this on Nvidia and I get this in TestResults.qpa:\n\n    Failure. Expected no error, got: GL_INVALID_OPERATION. Texture internal format: GL_R32I\n    Result: Fail\n\nIt looks like a validation bug. Maybe it has something to do with whether some extension is exposed or not?\n",
+      "revId": "262ff21e89795e7af4bff862862e76f28d5616cd",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
