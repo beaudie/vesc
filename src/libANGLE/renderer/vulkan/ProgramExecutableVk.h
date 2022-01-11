@@ -110,6 +110,8 @@ struct ProgramExecutablePerfCounters
     DescriptorSetCountList descriptorSetAllocations;
     DescriptorSetCountList descriptorSetCacheHits;
     DescriptorSetCountList descriptorSetCacheMisses;
+    DescriptorSetCountList descriptorSetCacheSizes;
+    DescriptorSetCountList descriptorSetQueryCounts;
 };
 
 class ProgramExecutableVk

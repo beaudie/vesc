@@ -1010,6 +1010,8 @@ class ContextVk : public ContextImpl, public vk::Context, public MultisampleText
 
     void outputCumulativePerfCounters();
 
+    void outputTextureCacheHashKeyCollisionStats();
+
     void updateSampleShadingWithRasterizationSamples(const uint32_t rasterizationSamples);
     void updateRasterizationSamples(const uint32_t rasterizationSamples);
     void updateRasterizerDiscardEnabled(bool isPrimitivesGeneratedQueryActive);
@@ -1198,6 +1200,17 @@ class ContextVk : public ContextImpl, public vk::Context, public MultisampleText
     vk::PerfCounters mPerfCounters;
     ContextVkPerfCounters mContextPerfCounters;
     ContextVkPerfCounters mCumulativeContextPerfCounters;
+
+    // an array to store hash collision stats
+    struct hashKeyCollisionStats
+    {
+        uint32_t cacheSize;
+        size_t collisionRate;
+
+        hashKeyCollisionStats(uint32_t size, size_t rate) : cacheSize(size), collisionRate(rate) {}
+    };
+    std::vector<hashKeyCollisionStats> mHashKeyCollisionStatsResult;
+    double mLastCacheSaveTime;
 
     gl::State::DirtyBits mPipelineDirtyBitsMask;
 

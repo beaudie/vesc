@@ -8,6 +8,7 @@
 
 #include "libANGLE/renderer/vulkan/ProgramExecutableVk.h"
 
+#include "common/system_utils.h"
 #include "libANGLE/renderer/glslang_wrapper_utils.h"
 #include "libANGLE/renderer/vulkan/BufferVk.h"
 #include "libANGLE/renderer/vulkan/DisplayVk.h"
@@ -1879,7 +1880,6 @@ angle::Result ProgramExecutableVk::updateTexturesDescriptorSet(
             }
         }
     }
-
     return angle::Result::Continue;
 }
 
@@ -2030,6 +2030,9 @@ ProgramExecutablePerfCounters ProgramExecutableVk::getAndResetObjectPerfCounters
     mPerfCounters.descriptorSetAllocations = {};
     mPerfCounters.descriptorSetCacheHits   = {};
     mPerfCounters.descriptorSetCacheMisses = {};
+    mPerfCounters.descriptorSetCacheSizes  = {};
+    mPerfCounters.descriptorSetQueryCounts = {};
+
     return counters;
 }
 
@@ -2042,5 +2045,11 @@ void ProgramExecutableVk::accumulateCacheStats(VulkanCacheType cacheType,
         static_cast<uint32_t>(cacheStats.getHitCount());
     mPerfCounters.descriptorSetCacheMisses[dsIndex] +=
         static_cast<uint32_t>(cacheStats.getMissCount());
+
+    mPerfCounters.descriptorSetCacheSizes[dsIndex] =
+        static_cast<uint32_t>(cacheStats.getCacheSize());
+    mPerfCounters.descriptorSetQueryCounts[dsIndex] +=
+        static_cast<uint32_t>(cacheStats.getQueryCount());
 }
+
 }  // namespace rx

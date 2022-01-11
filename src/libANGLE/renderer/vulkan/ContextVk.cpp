@@ -11,6 +11,7 @@
 
 #include "common/bitset_utils.h"
 #include "common/debug.h"
+#include "common/system_utils.h"
 #include "common/utilities.h"
 #include "libANGLE/Context.h"
 #include "libANGLE/Display.h"
@@ -722,6 +723,7 @@ ContextVk::ContextVk(const gl::State &state, gl::ErrorSet *errorSet, RendererVk 
       mPerfCounters{},
       mContextPerfCounters{},
       mCumulativeContextPerfCounters{},
+      mLastCacheSaveTime(angle::GetCurrentSystemTime()),
       mContextPriority(renderer->getDriverPriority(GetContextPriority(state))),
       mShareGroupVk(vk::GetImpl(state.getShareGroup()))
 {
@@ -2196,9 +2198,12 @@ angle::Result ContextVk::handleDirtyDescriptorSetsImpl(CommandBufferT *commandBu
 
 void ContextVk::syncObjectPerfCounters()
 {
-    mPerfCounters.descriptorSetAllocations              = 0;
-    mPerfCounters.shaderBuffersDescriptorSetCacheHits   = 0;
-    mPerfCounters.shaderBuffersDescriptorSetCacheMisses = 0;
+    mPerfCounters.descriptorSetAllocations                = 0;
+    mPerfCounters.shaderBuffersDescriptorSetCacheHits     = 0;
+    mPerfCounters.shaderBuffersDescriptorSetCacheMisses   = 0;
+    mPerfCounters.textureDescriptorSetCacheSizes          = 0;
+    mPerfCounters.textureDescriptorSetCacheQueryCount     = 0;
+    mPerfCounters.textureDescriptorSetKeyHashCompareCount = 0;
 
     // ContextVk's descriptor set allocations
     ContextVkPerfCounters contextCounters = getAndResetObjectPerfCounters();
@@ -2234,7 +2239,37 @@ void ContextVk::syncObjectPerfCounters()
             progPerfCounters.descriptorSetCacheHits[DescriptorSetIndex::ShaderResource];
         mPerfCounters.shaderBuffersDescriptorSetCacheMisses +=
             progPerfCounters.descriptorSetCacheMisses[DescriptorSetIndex::ShaderResource];
+        mPerfCounters.textureDescriptorSetCacheSizes +=
+            progPerfCounters.descriptorSetCacheSizes[DescriptorSetIndex::Texture];
+        mPerfCounters.textureDescriptorSetCacheQueryCount +=
+            progPerfCounters.descriptorSetQueryCounts[DescriptorSetIndex::Texture];
     }
+
+    // Texture Descriptor Cache Key Hash Comparison Count
+    mPerfCounters.textureDescriptorSetKeyHashCompareCount +=
+        vk::TextureDescriptorDesc::mCompareCount;
+    vk::TextureDescriptorDesc::mCompareCount = 0;
+
+    // If we destroy the cache table, we should clear the success and failuer count to restart, too.
+    bool cacheIsCleared = false;
+    if (mPerfCounters.textureDescriptorSetCacheSizes == 0)
+    {
+        cacheIsCleared = true;
+    }
+    if (mPerfCounters.textureDescriptorSetCacheSizes <
+        mPerfCounters.textureDescriptorSetCacheSizesLastFrame)
+    {
+        cacheIsCleared = true;
+    }
+    if (cacheIsCleared)
+    {
+        vk::TextureDescriptorDesc::mCompareSuccessCount = 0;
+        vk::TextureDescriptorDesc::mCompareFailureCount = 0;
+    }
+    mPerfCounters.textureDescriptorSetKeyHashCompareSuccessCount =
+        vk::TextureDescriptorDesc::mCompareSuccessCount;
+    mPerfCounters.textureDescriptorSetKeyHashCompareFailureCount =
+        vk::TextureDescriptorDesc::mCompareFailureCount;
 }
 
 void ContextVk::updateOverlayOnPresent()
@@ -2288,6 +2323,58 @@ void ContextVk::updateOverlayOnPresent()
         gl::RunningGraphWidget *dynamicBufferAllocations =
             overlay->getRunningGraphWidget(gl::WidgetId::VulkanDynamicBufferAllocations);
         dynamicBufferAllocations->next();
+    }
+
+    {
+        gl::RunningGraphWidget *textureDescriptorCacheSize =
+            overlay->getRunningGraphWidget(gl::WidgetId::VulkanTextureDescriptorCacheSize);
+        textureDescriptorCacheSize->add(mPerfCounters.textureDescriptorSetCacheSizes);
+        textureDescriptorCacheSize->next();
+    }
+
+    {
+        gl::RunningGraphWidget *textureDescriptorCacheHashKeyCollisionRate =
+            overlay->getRunningGraphWidget(
+                gl::WidgetId::VulkanTextureDescriptorCacheHashKeyCollisionRate);
+        // Charlie's method:
+        size_t hashCollisionRate = 0;
+        if (mPerfCounters.textureDescriptorSetKeyHashCompareSuccessCount > 0)
+        {
+            float hashCollisionRateFloat =
+                static_cast<float>(mPerfCounters.textureDescriptorSetKeyHashCompareFailureCount) /
+                static_cast<float>(mPerfCounters.textureDescriptorSetKeyHashCompareSuccessCount);
+            hashCollisionRate = static_cast<size_t>(hashCollisionRateFloat * 100.0f);
+            textureDescriptorCacheHashKeyCollisionRate->add(hashCollisionRate);
+            textureDescriptorCacheHashKeyCollisionRate->next();
+        }
+        bool outputCacheData = false;
+        if (hashCollisionRate != mPerfCounters.textureDescriptorSetKeyHashCollisionRateLastFrame)
+        {
+            outputCacheData = true;
+        }
+        if (mPerfCounters.textureDescriptorSetCacheSizes !=
+            mPerfCounters.textureDescriptorSetCacheSizesLastFrame)
+        {
+            outputCacheData = true;
+        }
+
+        if (outputCacheData)
+        {
+            mHashKeyCollisionStatsResult.push_back(hashKeyCollisionStats(
+                mPerfCounters.textureDescriptorSetCacheSizes, hashCollisionRate));
+        }
+        mPerfCounters.textureDescriptorSetKeyHashCollisionRateLastFrame = hashCollisionRate;
+        mPerfCounters.textureDescriptorSetCacheSizesLastFrame =
+            mPerfCounters.textureDescriptorSetCacheSizes;
+
+        double currentTime = angle::GetCurrentSystemTime();
+        double timeElapsed = currentTime - mLastCacheSaveTime;
+        // output the cache stats to csv file every minute
+        if (timeElapsed > 60)
+        {
+            outputTextureCacheHashKeyCollisionStats();
+            mLastCacheSaveTime = currentTime;
+        }
     }
 }
 
@@ -6688,6 +6775,18 @@ void ContextVk::outputCumulativePerfCounters()
             INFO() << "    PipelineType " << ToUnderlying(pipelineType) << ": " << count;
         }
     }
+}
+
+void ContextVk::outputTextureCacheHashKeyCollisionStats()
+{
+    angle::SaveFileHelper saveCSV(
+        "/sdcard/Android/data/texturecachestats/TextureDescCacheHashCollision.csv");
+    for (hashKeyCollisionStats stat : mHashKeyCollisionStatsResult)
+    {
+        saveCSV << stat.cacheSize << ", " << stat.collisionRate << "%"
+                << "\n";
+    }
+    return;
 }
 
 ContextVkPerfCounters ContextVk::getAndResetObjectPerfCounters()

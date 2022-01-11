@@ -11,6 +11,7 @@
 #include "libANGLE/renderer/vulkan/vk_cache_utils.h"
 
 #include "common/aligned_memory.h"
+#include "common/system_utils.h"
 #include "common/vulkan/vk_google_filtering_precision.h"
 #include "libANGLE/BlobCache.h"
 #include "libANGLE/VertexAttribute.h"
@@ -2928,6 +2929,10 @@ void PipelineHelper::addTransition(GraphicsPipelineTransitionBits bits,
     mTransitions.emplace_back(bits, desc, pipeline);
 }
 
+uint32_t TextureDescriptorDesc::mCompareCount        = 0;
+uint64_t TextureDescriptorDesc::mCompareSuccessCount = 0;
+uint64_t TextureDescriptorDesc::mCompareFailureCount = 0;
+
 TextureDescriptorDesc::TextureDescriptorDesc() : mMaxIndex(0)
 {
     mSerials.fill({kInvalidImageOrBufferViewSubresourceSerial, kInvalidSamplerSerial});
@@ -2964,13 +2969,24 @@ void TextureDescriptorDesc::reset()
 
 bool TextureDescriptorDesc::operator==(const TextureDescriptorDesc &other) const
 {
+    mCompareCount++;
     if (mMaxIndex != other.mMaxIndex)
         return false;
-
     if (mMaxIndex == 0)
         return true;
-
-    return memcmp(mSerials.data(), other.mSerials.data(), sizeof(TexUnitSerials) * mMaxIndex) == 0;
+    // return memcmp(mSerials.data(), other.mSerials.data(), sizeof(TexUnitSerials) * mMaxIndex) ==
+    // 0;
+    bool match =
+        (memcmp(mSerials.data(), other.mSerials.data(), sizeof(TexUnitSerials) * mMaxIndex) == 0);
+    if (match)
+    {
+        mCompareSuccessCount++;
+    }
+    else
+    {
+        mCompareFailureCount++;
+    }
+    return match;
 }
 
 // UniformsAndXfbDescriptorDesc implementation.
@@ -4031,6 +4047,7 @@ void DescriptorSetCache<Key, CacheType>::destroy(RendererVk *rendererVk)
 {
     this->accumulateCacheStats(rendererVk);
     mPayload.clear();
+    this->mCacheStats.updateCacheSize(mPayload.size());
 }
 
 // RendererVk's methods are not accessible in vk_cache_utils.h
