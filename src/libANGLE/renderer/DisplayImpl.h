@@ -96,7 +96,7 @@ class DisplayImpl : public EGLImplFactory, public angle::Subject
 
     virtual std::string getRendererDescription() = 0;
     virtual std::string getVendorString()        = 0;
-    virtual std::string getVersionString()       = 0;
+    virtual std::string getVersionString(bool includeFullVersion)       = 0;
 
     virtual DeviceImpl *createDevice();
 
