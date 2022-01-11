@@ -12,12 +12,91 @@
 #include <stdint.h>
 
 #include "common/debug.h"
+#include "common/vulkan/vulkan_icd.h"
 #include "libANGLE/Display.h"
 #include "libANGLE/renderer/vulkan/DisplayVk.h"
 #include "libANGLE/renderer/vulkan/RendererVk.h"
 
 namespace rx
 {
+namespace
+{
+
+bool gEnableValidationLayers = false;
+angle::vk::ICD gEnabledICD   = angle::vk::ICD::Default;
+
+VKAPI_ATTR VkResult VKAPI_CALL WrappedCreateInstance(const VkInstanceCreateInfo *pCreateInfo,
+                                                     const VkAllocationCallbacks *pAllocator,
+                                                     VkInstance *pInstance)
+{
+    angle::vk::ScopedVkLoaderEnvironment scoped_env(gEnableValidationLayers, gEnabledICD);
+    return vkCreateInstance(pCreateInfo, pAllocator, pInstance);
+}
+
+VKAPI_ATTR VkResult VKAPI_CALL
+WrappedEnumerateInstanceExtensionProperties(const char *pLayerName,
+                                            uint32_t *pPropertyCount,
+                                            VkExtensionProperties *pProperties)
+{
+    angle::vk::ScopedVkLoaderEnvironment scoped_env(gEnableValidationLayers, gEnabledICD);
+    return vkEnumerateInstanceExtensionProperties(pLayerName, pPropertyCount, pProperties);
+}
+
+VKAPI_ATTR VkResult VKAPI_CALL
+WrappedEnumerateInstanceLayerProperties(uint32_t *pPropertyCount, VkLayerProperties *pProperties)
+{
+    angle::vk::ScopedVkLoaderEnvironment scoped_env(gEnableValidationLayers, gEnabledICD);
+    return vkEnumerateInstanceLayerProperties(pPropertyCount, pProperties);
+}
+
+VKAPI_ATTR VkResult VKAPI_CALL WrappedEnumerateInstanceVersion(uint32_t *pApiVersion)
+{
+    angle::vk::ScopedVkLoaderEnvironment scoped_env(gEnableValidationLayers, gEnabledICD);
+    return vkEnumerateInstanceVersion(pApiVersion);
+}
+
+VKAPI_ATTR PFN_vkVoidFunction VKAPI_CALL WrappedGetInstanceProcAddr(VkInstance instance,
+                                                                    const char *pName)
+{
+    if (instance != VK_NULL_HANDLE)
+    {
+        return vkGetInstanceProcAddr(instance, pName);
+    }
+
+#if defined(VK_NO_PROTOTYPES)
+    if (strcmp(pName, "vkEnumerateInstanceVersion") == 0 && !vkEnumerateInstanceVersion)
+    {
+        return nullptr;
+    }
+#endif
+
+    static struct
+    {
+        const char *name;
+        const PFN_vkVoidFunction pfn;
+    } wrappedFunctions[] = {
+        {"vkCreateInstance", reinterpret_cast<PFN_vkVoidFunction>(WrappedCreateInstance)},
+        {"vkGetInstanceProcAddr", reinterpret_cast<PFN_vkVoidFunction>(WrappedGetInstanceProcAddr)},
+        {"vkEnumerateInstanceExtensionProperties",
+         reinterpret_cast<PFN_vkVoidFunction>(WrappedEnumerateInstanceExtensionProperties)},
+        {"vkEnumerateInstanceLayerProperties",
+         reinterpret_cast<PFN_vkVoidFunction>(WrappedEnumerateInstanceLayerProperties)},
+        {"vkEnumerateInstanceVersion",
+         reinterpret_cast<PFN_vkVoidFunction>(WrappedEnumerateInstanceVersion)},
+    };
+
+    for (const auto &fun : wrappedFunctions)
+    {
+        if (strcmp(pName, fun.name) == 0)
+        {
+            return fun.pfn;
+        }
+    }
+
+    return vkGetInstanceProcAddr(instance, pName);
+}
+
+}  // namespace
 
 DeviceVk::DeviceVk() = default;
 
@@ -88,7 +167,10 @@ egl::Error DeviceVk::getAttribute(const egl::Display *display, EGLint attribute,
         }
         case EGL_VULKAN_GET_INSTANCE_PROC_ADDR:
         {
-            *outValue = reinterpret_cast<void *>(vkGetInstanceProcAddr);
+            *outValue = reinterpret_cast<void *>(WrappedGetInstanceProcAddr);
+            // Set below global variables which will be used by wrapped vulkan methods.
+            gEnableValidationLayers = renderer->getEnableValidationLayers();
+            gEnabledICD             = renderer->getEnabledICD();
             return egl::NoError();
         }
         default:
