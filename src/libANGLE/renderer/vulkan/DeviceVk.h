@@ -15,6 +15,8 @@
 namespace rx
 {
 
+class RendererVk;
+
 class DeviceVk : public DeviceImpl
 {
   public:
@@ -27,6 +29,10 @@ class DeviceVk : public DeviceImpl
                             void **outValue) override;
     EGLint getType() override;
     void generateExtensions(egl::DeviceExtensions *outExtensions) const override;
+    RendererVk *getRenderer() const { return mRenderer; }
+
+  private:
+    RendererVk *mRenderer = nullptr;
 };
 
 }  // namespace rx
