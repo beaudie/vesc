@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "bb5c7872_bea0b6ec",
+        "filename": "src/libANGLE/OverlayWidgets.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 43,
+      "author": {
+        "id": 1520902
+      },
+      "writtenOn": "2022-01-11T01:37:28Z",
+      "side": 1,
+      "message": "This is a problematic as not all android devices come with subgroupSize of 16. As we can\u0027t get subgroupSize at compile time, the right approach should be let all subgroupSize use 32 max text and graph widgets, and in OverlayDraw.comp and OverlayCull.comp compute shaders, tweak the subgroupSize of 16 to run the job twice to process all 32 text or graph widgets. \n\nI will fix it in a subsequent commit.",
+      "revId": "5aed16ab8f88f4a8be42d61c3f41defff0fbf1d1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}

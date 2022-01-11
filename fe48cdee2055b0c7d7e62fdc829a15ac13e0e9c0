@@ -50,6 +50,24 @@
       "message": "nit: I would remove the comments about \"desktop this, Android that\". I tested these in Qualcomm before, and they worked, so subgroup size 16 !\u003d Android.\n\nIn truth, it\u0027s irrelevant which platform has what subgroup size.",
       "revId": "fe48cdee2055b0c7d7e62fdc829a15ac13e0e9c0",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "30c0fb10_1f80a3d9",
+        "filename": "src/libANGLE/renderer/vulkan/UtilsVk.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 3384,
+      "author": {
+        "id": 1520902
+      },
+      "writtenOn": "2022-01-11T01:37:28Z",
+      "side": 1,
+      "message": "Got it. I have changed the comments.",
+      "parentUuid": "11b140cb_3ca3a4b2",
+      "revId": "fe48cdee2055b0c7d7e62fdc829a15ac13e0e9c0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
