@@ -203,6 +203,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "fb652cbe_2d5cae87",
+        "filename": "src/libANGLE/renderer/vulkan/vk_caps_utils.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 1123,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-01-11T02:13:17Z",
+      "side": 1,
+      "message": "Rather, I found single threaded is an improvement in Chromium too",
+      "parentUuid": "47987559_f6a81a6e",
+      "range": {
+        "startLine": 1116,
+        "startChar": 0,
+        "endLine": 1123,
+        "endChar": 6
+      },
+      "revId": "5c5ad82b583072313a2a162e92cc8c50d655e958",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "17ea0a28_a0904d03",
         "filename": "src/tests/perf_tests/LinkProgramPerfTest.cpp",
         "patchSetId": 7
