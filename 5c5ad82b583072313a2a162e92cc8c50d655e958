@@ -106,6 +106,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "51e40325_e9268d44",
+        "filename": "src/libANGLE/Context.h",
+        "patchSetId": 7
+      },
+      "lineNbr": 595,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2022-01-11T01:14:47Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "e59730be_0ac6adc5",
+      "range": {
+        "startLine": 582,
+        "startChar": 0,
+        "endLine": 595,
+        "endChar": 5
+      },
+      "revId": "5c5ad82b583072313a2a162e92cc8c50d655e958",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "50ce7d78_8f0ac0ee",
@@ -285,6 +309,30 @@
       "side": 1,
       "message": "We skip in initializeBenchmark in other tests, so I\u0027d be surprised if it doesn\u0027t work as expected. Set mSkipTest\u003dtrue and return. What happens in that case?",
       "parentUuid": "d84d1fc1_10501c78",
+      "range": {
+        "startLine": 114,
+        "startChar": 0,
+        "endLine": 118,
+        "endChar": 0
+      },
+      "revId": "5c5ad82b583072313a2a162e92cc8c50d655e958",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "50b86c64_4f1f2dca",
+        "filename": "src/tests/perf_tests/LinkProgramPerfTest.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 118,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2022-01-11T01:14:47Z",
+      "side": 1,
+      "message": "I fixed ANGLERenderTest::SetUp() to check mSkipTest after initializeBenchmark() is called, so we can skip the test in LinkProgramBenchmark::initializeBenchmark() rather than LinkProgramBenchmark::Run().",
+      "parentUuid": "a5e5c0fe_1bb1221c",
       "range": {
         "startLine": 114,
         "startChar": 0,

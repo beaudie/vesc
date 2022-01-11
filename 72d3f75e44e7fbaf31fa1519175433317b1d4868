@@ -58,6 +58,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "3997ba41_3556f69c",
+        "filename": "src/libANGLE/Context.cpp",
+        "patchSetId": 8
+      },
+      "lineNbr": 405,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2022-01-11T01:14:47Z",
+      "side": 1,
+      "message": "mSingleThreadPool may not always be enabled, so initializing it to nullptr will help ensure we crash if someone does try to use it.\n\nmMultiThreadPool will always be initialized, but I\u0027d prefer to keep it initialized here with nullptr for the safety/symmetry.",
+      "parentUuid": "e1b7ca59_5771f978",
+      "range": {
+        "startLine": 404,
+        "startChar": 0,
+        "endLine": 405,
+        "endChar": 32
+      },
+      "revId": "72d3f75e44e7fbaf31fa1519175433317b1d4868",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "94657296_22ad4cce",
@@ -71,6 +95,30 @@
       "writtenOn": "2022-01-10T22:16:22Z",
       "side": 1,
       "message": "Ah... we use a different mechanism for skipping perf tests. Search in the folder for mSkipTest.",
+      "range": {
+        "startLine": 201,
+        "startChar": 4,
+        "endLine": 201,
+        "endChar": 22
+      },
+      "revId": "72d3f75e44e7fbaf31fa1519175433317b1d4868",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "c52e8055_564a79e7",
+        "filename": "src/tests/perf_tests/LinkProgramPerfTest.cpp",
+        "patchSetId": 8
+      },
+      "lineNbr": 201,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2022-01-11T01:14:47Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "94657296_22ad4cce",
       "range": {
         "startLine": 201,
         "startChar": 4,
