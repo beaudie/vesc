@@ -16,6 +16,40 @@
       "message": "Seems to fail dEQP.EGL/functional_mutable_render_buffer_basic",
       "revId": "702d3c624f83fb225cfa440a860cf8bdc3d08940",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "79830dad_b651ed12",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1359249
+      },
+      "writtenOn": "2022-01-12T16:01:30Z",
+      "side": 1,
+      "message": "I don\u0027t know why its failing. I have the exact same changes in our branch and it passes. I copied those here. These are the last differences.\nWhy ANI is not called? IDK.",
+      "revId": "702d3c624f83fb225cfa440a860cf8bdc3d08940",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "7e8b4529_95d6dc57",
+        "filename": "src/libANGLE/renderer/vulkan/SurfaceVk.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 1471,
+      "author": {
+        "id": 1359249
+      },
+      "writtenOn": "2022-01-12T16:01:30Z",
+      "side": 1,
+      "message": "I don\u0027t think this is needed. doesn\u0027t change the out come. It was left over testing code. But the only difference between what we tested and Google tip.\n\nI will rremove",
+      "revId": "702d3c624f83fb225cfa440a860cf8bdc3d08940",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
