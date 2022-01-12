@@ -16,6 +16,23 @@
       "message": "PTAL",
       "revId": "cc6b8cd1e4e48a8fc6530a7134ea593adeef7e0a",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "467a0126_c89233e1",
+        "filename": "src/compiler/translator/IntermNode.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 1966,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-01-12T02:16:08Z",
+      "side": 1,
+      "message": "Thanks for catching that. The section on precision doesn\u0027t mention that assignment is an exception to the rule specified there 😞",
+      "revId": "cc6b8cd1e4e48a8fc6530a7134ea593adeef7e0a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
