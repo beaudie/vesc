@@ -882,7 +882,15 @@ void ContextVk::onDestroy(const gl::Context *context)
         dynamicDescriptorPool.destroy(device);
     }
 
-    mDefaultUniformStorage.release(mRenderer);
+    mCurrentUniformBuffer.destroy(mRenderer);
+    mStashedUniformBuffers.destroy(mRenderer);
+    while (!mInFlighUniformBuffers.empty())
+    {
+        mInFlighUniformBuffers.front().destroy(mRenderer);
+        mInFlighUniformBuffers.pop();
+    }
+    mUniformBufferPool.destroy(mRenderer);
+
     mEmptyBuffer.release(mRenderer);
 
     for (vk::BufferHelper &defaultBuffer : mDefaultAttribBuffers)
@@ -1036,11 +1044,15 @@ angle::Result ContextVk::initialize()
                                 TRACE_EVENT_PHASE_BEGIN, eventName));
     }
 
-    size_t minAlignment = static_cast<size_t>(
-        mRenderer->getPhysicalDeviceProperties().limits.minUniformBufferOffsetAlignment);
-    mDefaultUniformStorage.init(mRenderer, VK_BUFFER_USAGE_UNIFORM_BUFFER_BIT, minAlignment,
-                                mRenderer->getDefaultUniformBufferSize(), true,
-                                vk::DynamicBufferPolicy::FrequentSmallAllocations);
+    uint32_t memoryTypeIndex = mRenderer->getUniformBufferMemoryTypeIndex();
+    VkMemoryPropertyFlags memoryPropertyFlags;
+    mRenderer->getBufferMemoryAllocator().getMemoryTypeProperties(mRenderer, memoryTypeIndex,
+                                                                  &memoryPropertyFlags);
+    mUniformBufferPool.initWithFlags(
+        mRenderer, vma::VirtualBlockCreateFlagBits::LINEAR, VK_BUFFER_USAGE_UNIFORM_BUFFER_BIT,
+        mRenderer->getDefaultUniformBufferSize(), memoryTypeIndex, memoryPropertyFlags);
+    // Start with allocation so that mCurrentUniformBuffer will always valid to make logic simpler
+    ANGLE_TRY(mCurrentUniformBuffer.initForDefaultUniform(this, sizeof(GraphicsDriverUniforms)));
 
     // Initialize an "empty" buffer for use with default uniform blocks where there are no uniforms,
     // or atomic counter buffer array indices that are unused.
@@ -2031,11 +2043,10 @@ angle::Result ContextVk::handleDirtyGraphicsTransformFeedbackBuffersEmulation(
     }
 
     // TODO(http://anglebug.com/3570): Need to update to handle Program Pipelines
-    vk::BufferHelper *uniformBuffer = mDefaultUniformStorage.getCurrentBuffer();
+    vk::BufferHelper *uniformBuffer = getCurrentUniformBuffer();
     vk::UniformsAndXfbDescriptorDesc xfbBufferDesc =
         transformFeedbackVk->getTransformFeedbackDesc();
-    xfbBufferDesc.updateDefaultUniformBuffer(uniformBuffer ? uniformBuffer->getBufferSerial()
-                                                           : vk::kInvalidBufferSerial);
+    xfbBufferDesc.updateDefaultUniformBuffer(getCurrentUniformBufferSerial());
 
     return mProgram->getExecutable().updateTransformFeedbackDescriptorSet(
         mProgram->getState(), mProgram->getDefaultUniformBlocks(), uniformBuffer, this,
@@ -5588,11 +5599,16 @@ angle::Result ContextVk::flushAndGetSerial(const vk::Semaphore *signalSemaphore,
     // mResourceUseList since they never get reused or freed until context gets destroyed, at which
     // time we always wait for GPU to finish before destroying the dynamic buffers.
     mDefaultAttribRecycler.moveStashedToInFlightList(&mResourceUseList);
+    if (!mStashedUniformBuffers.empty())
+    {
+        mStashedUniformBuffers.addToResourceUseList(&mResourceUseList);
+        mInFlighUniformBuffers.emplace(std::move(mStashedUniformBuffers));
+        mStashedUniformBuffers.init();
+    }
     for (DriverUniformsDescriptorSet &driverUniform : mDriverUniforms)
     {
         driverUniform.dynamicBuffer.releaseInFlightBuffersToResourceUseList(this);
     }
-    mDefaultUniformStorage.releaseInFlightBuffersToResourceUseList(this);
 
     ANGLE_TRY(submitFrame(signalSemaphore, submitSerialOut));
 
@@ -5621,6 +5637,13 @@ angle::Result ContextVk::flushAndGetSerial(const vk::Semaphore *signalSemaphore,
         mShareGroupVk->isDueForBufferPoolPrune())
     {
         mShareGroupVk->pruneDefaultBufferPools(mRenderer);
+    }
+
+    while (!mInFlighUniformBuffers.empty() && !mInFlighUniformBuffers.front().isCurrentlyInUse(
+                                                  mRenderer->getLastCompletedQueueSerial()))
+    {
+        mInFlighUniformBuffers.front().destroy(mRenderer);
+        mInFlighUniformBuffers.pop();
     }
 
     return angle::Result::Continue;
@@ -6361,10 +6384,7 @@ VkWriteDescriptorSet *ContextVk::allocWriteDescriptorSets(size_t count)
     return &mWriteDescriptorSets[oldSize];
 }
 
-void ContextVk::setDefaultUniformBlocksMinSizeForTesting(size_t minSize)
-{
-    mDefaultUniformStorage.setMinimumSizeForTesting(minSize);
-}
+void ContextVk::setDefaultUniformBlocksMinSizeForTesting(size_t minSize) {}
 
 angle::Result ContextVk::initializeMultisampleTextureToBlack(const gl::Context *context,
                                                              gl::Texture *glTexture)
