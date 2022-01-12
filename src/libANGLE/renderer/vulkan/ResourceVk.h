@@ -298,6 +298,7 @@ class LifeTimeTrackedObjects
     SharedResourceUse mLifetime;
     std::vector<T> mList;
 };
+using LifeTimeTrackedSuballocations = LifeTimeTrackedObjects<BufferSubAllocation>;
 
 template <typename T>
 LifeTimeTrackedObjects<T>::LifeTimeTrackedObjects()
