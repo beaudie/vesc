@@ -35,6 +35,41 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "36f57dc1_5c565324",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1500872
+      },
+      "writtenOn": "2022-01-12T20:18:03Z",
+      "side": 1,
+      "message": "From https://developer.apple.com/documentation/metal/developing_metal_apps_that_run_in_simulator?language\u003dobjc:\n\nWe\u0027ve got the following recommendations / limitations:\n\nDon\u0027t use the following pixel formats: MTLPixelFormatR8Unorm_sRGB, MTLPixelFormatB5G6R5Unorm, MTLPixelFormatA1BGR5Unorm, MTLPixelFormatABGR4Unorm, MTLPixelFormatBGR5A1Unorm, or any XR10 or YUV formats.",
+      "parentUuid": "2d21c8a9_9aed4981",
+      "revId": "d91ff1531cb7ada0f10bab41abe773be6bb97b5e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "453b1414_91d27c3a",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1500872
+      },
+      "writtenOn": "2022-01-12T20:18:03Z",
+      "side": 1,
+      "message": "Full list of limitations for simulator:\n\nDon\u0027t use the following pixel formats: MTLPixelFormatR8Unorm_sRGB, MTLPixelFormatB5G6R5Unorm, MTLPixelFormatA1BGR5Unorm, MTLPixelFormatABGR4Unorm, MTLPixelFormatBGR5A1Unorm, or any XR10 or YUV formats.\n\nDon\u0027t render to textures with a MTLPixelFormatRGB9E5Float format.\n\nYou can\u0027t write to sRGB textures in Simulator.\n",
+      "revId": "d91ff1531cb7ada0f10bab41abe773be6bb97b5e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "de05dee9_2954b0ff",
