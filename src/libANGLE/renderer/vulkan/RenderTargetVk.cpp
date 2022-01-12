@@ -93,12 +93,27 @@ vk::ImageOrBufferViewSubresourceSerial RenderTargetVk::getResolveSubresourceSeri
 
 void RenderTargetVk::onColorDraw(ContextVk *contextVk,
                                  uint32_t framebufferLayerCount,
-                                 vk::PackedAttachmentIndex packedAttachmentIndex)
+                                 vk::PackedAttachmentIndex packedAttachmentIndex,
+                                 DrawBufferState drawBufferState)
 {
     ASSERT(!mImage->getActualFormat().hasDepthOrStencilBits());
     ASSERT(framebufferLayerCount <= mLayerCount);
 
     contextVk->onColorDraw(mImage, mResolveImage, packedAttachmentIndex);
+
+    if (drawBufferState == DrawBufferState::Enabled)
+    {
+        onColorWrite(framebufferLayerCount);
+    }
+
+    retainImageViews(contextVk);
+}
+
+void RenderTargetVk::onColorWrite(uint32_t framebufferLayerCount)
+{
+    ASSERT(!mImage->getActualFormat().hasDepthOrStencilBits());
+    ASSERT(framebufferLayerCount <= mLayerCount);
+
     mImage->onWrite(mLevelIndexGL, 1, mLayerIndex, framebufferLayerCount,
                     VK_IMAGE_ASPECT_COLOR_BIT);
     if (mResolveImage)
@@ -108,7 +123,6 @@ void RenderTargetVk::onColorDraw(ContextVk *contextVk,
         mResolveImage->onWrite(mLevelIndexGL, 1, mLayerIndex, framebufferLayerCount,
                                VK_IMAGE_ASPECT_COLOR_BIT);
     }
-    retainImageViews(contextVk);
 }
 
 void RenderTargetVk::onColorResolve(ContextVk *contextVk, uint32_t framebufferLayerCount)
