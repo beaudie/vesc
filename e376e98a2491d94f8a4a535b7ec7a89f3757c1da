@@ -138,6 +138,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "30c6f91b_ea18e4c7",
+        "filename": "src/libANGLE/renderer/vulkan/DeviceVk.cpp",
+        "patchSetId": 9
+      },
+      "lineNbr": 59,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2022-01-12T15:43:41Z",
+      "side": 1,
+      "message": "I see. I suggest you use a global DeviceVk, set it to null in the destructor, and check for null in the statics. That way you can encapsulate ownership of the list.",
+      "parentUuid": "669aa716_7e59ba50",
+      "revId": "e376e98a2491d94f8a4a535b7ec7a89f3757c1da",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "68ebc9b7_051118e6",
         "filename": "src/libANGLE/renderer/vulkan/DeviceVk.cpp",
         "patchSetId": 9
