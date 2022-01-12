@@ -561,6 +561,45 @@ TEST_P(RobustBufferAccessBehaviorTest, DynamicBuffer)
     }
 }
 
+TEST_P(RobustBufferAccessBehaviorTest, IndexOutOfBounds)
+{
+    // ANGLE_SKIP_TEST_IF(!initExtension());
+
+    constexpr char kVS[] = R"(precision highp float;
+attribute vec4 a_position;
+void main(void) {
+   gl_Position = a_position;
+})";
+
+    constexpr char kFS[] = R"(precision highp float;
+uniform sampler2D oTexture;
+uniform float oColor[3];
+void main(void) {
+   gl_FragData[0] = texture2DProj(oTexture, vec3(0.1,0.1,0.1));
+})";
+
+    GLfloat singleFloat = 1.0f;
+    GLsizei dataSize    = 4;  // TypeStride(GL_FLOAT);
+
+    GLBuffer buf;
+    glBindBuffer(GL_ARRAY_BUFFER, buf);
+    glBufferData(GL_ARRAY_BUFFER, dataSize, &singleFloat, GL_STATIC_DRAW);
+
+    ANGLE_GL_PROGRAM(program, kVS, kFS);
+    glBindAttribLocation(program, 0, "a_position");
+    glLinkProgram(program);
+    ASSERT_TRUE(CheckLinkStatusAndReturnProgram(program, true));
+
+    glEnableVertexAttribArray(0);
+    glVertexAttribDivisor(0, 0x1000);
+    glVertexAttribPointer(0, 1, GL_UNSIGNED_BYTE, false, 8, reinterpret_cast<void *>(0x50000000));
+
+    glUseProgram(program);
+
+    glDrawArrays(GL_TRIANGLES, 0, 32);
+    EXPECT_GL_NO_ERROR();
+}
+
 ANGLE_INSTANTIATE_TEST_ES2_AND_ES3_AND_ES31(RobustBufferAccessBehaviorTest);
 
 }  // namespace
