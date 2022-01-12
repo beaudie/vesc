@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "2291fded_2b76d0e5",
+        "filename": "src/libANGLE/renderer/vulkan/TextureVk.cpp",
+        "patchSetId": 10
+      },
+      "lineNbr": 2390,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2022-01-12T19:17:49Z",
+      "side": 1,
+      "message": "I am thinking the easier way might just do it in ImageHelper class. You basically add a new method (lets say ImageHelper::isUpdatingEntireContent()), and then  TextureVk::flushImageStagedUpdates(), you do this:\n\nif(mImage-\u003eisUpdatingEntireContent(){\n releaseImage();\n initImage();\n}\n\nThat way you do not need do any of extra state tracking to figure out if this is full texture update or not. You should be able to figure out from inspecting all the staged updates and make that decision, I think.",
+      "range": {
+        "startLine": 2387,
+        "startChar": 9,
+        "endLine": 2390,
+        "endChar": 85
+      },
+      "revId": "2e49233b3affeb4f1f438d536bf735087ea05a70",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
