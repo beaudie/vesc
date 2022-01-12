@@ -24,6 +24,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "3922d2e2_4bf39671",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 5
+      },
+      "lineNbr": 9,
+      "author": {
+        "id": 1446209
+      },
+      "writtenOn": "2022-01-12T05:15:33Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "1540799d_72235a6d",
+      "range": {
+        "startLine": 9,
+        "startChar": 23,
+        "endLine": 9,
+        "endChar": 31
+      },
+      "revId": "893d6b975ed43ba075abf80d341d5b3574899654",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "6aa91060_75128701",
@@ -37,6 +61,30 @@
       "writtenOn": "2022-01-10T15:10:22Z",
       "side": 1,
       "message": "typo: a",
+      "range": {
+        "startLine": 10,
+        "startChar": 31,
+        "endLine": 10,
+        "endChar": 33
+      },
+      "revId": "893d6b975ed43ba075abf80d341d5b3574899654",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "71b84d8b_9329350f",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 5
+      },
+      "lineNbr": 10,
+      "author": {
+        "id": 1446209
+      },
+      "writtenOn": "2022-01-12T05:15:33Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "6aa91060_75128701",
       "range": {
         "startLine": 10,
         "startChar": 31,
@@ -72,6 +120,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "21db21ce_99ecc5d1",
+        "filename": "src/libANGLE/renderer/vulkan/TextureVk.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 2415,
+      "author": {
+        "id": 1446209
+      },
+      "writtenOn": "2022-01-12T05:15:33Z",
+      "side": 1,
+      "message": "Except for single-mip and full texture update,adding \u0027usedInRunningCommands and mImage-\u003egetCurrentImageLayout() \u003d\u003d vk::ImageLayout::FragmentShaderReadOnly\u0027 condition to recreate image only when old image is being read by fragment shader to avoid creating redundant images.\neg:\nglTexStorage2D(texture1)\nglSubTexImage2D(texture1)-\u003enot create new image,since not being read by fs\nglDraw()\nSubmitQueue\nglSubTexImage2D(texture1)-\u003ecreate new image\nglDraw()\nSubmitQueue",
+      "parentUuid": "13c2db46_fd0a9b44",
+      "range": {
+        "startLine": 2415,
+        "startChar": 31,
+        "endLine": 2415,
+        "endChar": 52
+      },
+      "revId": "893d6b975ed43ba075abf80d341d5b3574899654",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "1579df51_0574f293",
         "filename": "src/libANGLE/renderer/vulkan/TextureVk.cpp",
         "patchSetId": 5
@@ -83,6 +155,30 @@
       "writtenOn": "2022-01-10T15:10:22Z",
       "side": 1,
       "message": "This seems to be due to a missing notification problem. See how ghosting is implemented in BufferVk.cpp, and the notification sent there when the buffer is ghosted.",
+      "range": {
+        "startLine": 2416,
+        "startChar": 9,
+        "endLine": 2416,
+        "endChar": 43
+      },
+      "revId": "893d6b975ed43ba075abf80d341d5b3574899654",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b49d39c5_b348783c",
+        "filename": "src/libANGLE/renderer/vulkan/TextureVk.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 2416,
+      "author": {
+        "id": 1446209
+      },
+      "writtenOn": "2022-01-12T05:15:33Z",
+      "side": 1,
+      "message": "Not very clear about this notification problem,but hasBeenBoundAsAttachment() could reflect if a image has been bound as attachment,couldn\u0027t it?",
+      "parentUuid": "1579df51_0574f293",
       "range": {
         "startLine": 2416,
         "startChar": 9,
@@ -116,6 +212,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "da4cd0fb_f46cc795",
+        "filename": "src/libANGLE/renderer/vulkan/TextureVk.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 2417,
+      "author": {
+        "id": 1446209
+      },
+      "writtenOn": "2022-01-12T05:15:33Z",
+      "side": 1,
+      "message": "If the image is being used as other purpose not shader read-only,will not triger this image recreation.",
+      "parentUuid": "7d3ab6b4_4a1fb541",
+      "range": {
+        "startLine": 2417,
+        "startChar": 9,
+        "endLine": 2417,
+        "endChar": 83
+      },
+      "revId": "893d6b975ed43ba075abf80d341d5b3574899654",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "47547214_de0957cd",
@@ -129,6 +249,30 @@
       "writtenOn": "2022-01-10T15:10:22Z",
       "side": 1,
       "message": "This will recreate the image every time, not just when an update overwrites it entirely. The logic for when to release the image likely needs to reside in `TextureVk::copySubImageImpl` instead, likely needing a separate path for mutable and immutable textures too.\n\nAlso need to make sure mipped updates are handled (or multi-mip textures are explicitly ignored)",
+      "range": {
+        "startLine": 2419,
+        "startChar": 0,
+        "endLine": 2425,
+        "endChar": 9
+      },
+      "revId": "893d6b975ed43ba075abf80d341d5b3574899654",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "c12b1cf3_86720e5b",
+        "filename": "src/libANGLE/renderer/vulkan/TextureVk.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 2425,
+      "author": {
+        "id": 1446209
+      },
+      "writtenOn": "2022-01-12T05:15:33Z",
+      "side": 1,
+      "message": "New patch adds the condition of recreating the image: single-mip and full texture update",
+      "parentUuid": "47547214_de0957cd",
       "range": {
         "startLine": 2419,
         "startChar": 0,
