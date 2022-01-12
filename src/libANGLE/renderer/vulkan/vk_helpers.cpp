@@ -4162,6 +4162,24 @@ angle::Result BufferHelper::initForDefaultAttribute(ContextVk *contextVk,
     return initSubAllocation(contextVk, memoryTypeIndex, size, alignment);
 }
 
+angle::Result BufferHelper::initForProgramUniform(ContextVk *contextVk, size_t size)
+{
+    RendererVk *renderer = contextVk->getRenderer();
+
+    if (valid())
+    {
+        contextVk->getStashedSuballocationList()->stash(std::move(mSubAllocation));
+    }
+
+    vk::BufferPool *pool = contextVk->getUniformBufferPool();
+    size_t alignment     = renderer->getUniformBufferAlignment();
+    ANGLE_TRY(pool->allocateBuffer(contextVk, size, alignment, &mSubAllocation));
+
+    initializeBarrierTracker(contextVk);
+
+    return angle::Result::Continue;
+}
+
 ANGLE_INLINE void BufferHelper::initializeBarrierTracker(Context *context)
 {
     RendererVk *renderer     = context->getRenderer();

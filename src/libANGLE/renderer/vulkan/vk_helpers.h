@@ -757,6 +757,8 @@ class BufferHelper : public ReadWriteResource
     angle::Result initForDefaultAttribute(ContextVk *contextVk,
                                           SuballocationRecycler *recycler,
                                           size_t size);
+    // Initialize a host visible buffer with alignment good for program's default uniforms.
+    angle::Result initForProgramUniform(ContextVk *contextVk, size_t size);
 
     void destroy(RendererVk *renderer);
     void release(RendererVk *renderer);

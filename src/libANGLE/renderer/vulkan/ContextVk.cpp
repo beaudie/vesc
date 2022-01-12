@@ -882,7 +882,15 @@ void ContextVk::onDestroy(const gl::Context *context)
         dynamicDescriptorPool.destroy(device);
     }
 
-    mDefaultUniformStorage.release(mRenderer);
+    mCurrentUniformBuffer.destroy(mRenderer);
+    mStashedSuballocations.destroy(mRenderer);
+    while (!mInFlighSuballocations.empty())
+    {
+        mInFlighSuballocations.front().destroy(mRenderer);
+        mInFlighSuballocations.pop();
+    }
+    mUniformBufferPool.destroy(mRenderer);
+
     mEmptyBuffer.release(mRenderer);
 
     for (vk::BufferHelper &defaultBuffer : mDefaultAttribBuffers)
@@ -1036,11 +1044,13 @@ angle::Result ContextVk::initialize()
                                 TRACE_EVENT_PHASE_BEGIN, eventName));
     }
 
-    size_t minAlignment = static_cast<size_t>(
-        mRenderer->getPhysicalDeviceProperties().limits.minUniformBufferOffsetAlignment);
-    mDefaultUniformStorage.init(mRenderer, VK_BUFFER_USAGE_UNIFORM_BUFFER_BIT, minAlignment,
-                                mRenderer->getDefaultUniformBufferSize(), true,
-                                vk::DynamicBufferPolicy::FrequentSmallAllocations);
+    uint32_t memoryTypeIndex = mRenderer->getUniformBufferMemoryTypeIndex();
+    VkMemoryPropertyFlags memoryPropertyFlags;
+    mRenderer->getBufferMemoryAllocator().getMemoryTypeProperties(mRenderer, memoryTypeIndex,
+                                                                  &memoryPropertyFlags);
+    mUniformBufferPool.initWithFlags(
+        mRenderer, vma::VirtualBlockCreateFlagBits::LINEAR, VK_BUFFER_USAGE_UNIFORM_BUFFER_BIT,
+        mRenderer->getDefaultUniformBufferSize(), memoryTypeIndex, memoryPropertyFlags);
 
     // Initialize an "empty" buffer for use with default uniform blocks where there are no uniforms,
     // or atomic counter buffer array indices that are unused.
@@ -2031,11 +2041,11 @@ angle::Result ContextVk::handleDirtyGraphicsTransformFeedbackBuffersEmulation(
     }
 
     // TODO(http://anglebug.com/3570): Need to update to handle Program Pipelines
-    vk::BufferHelper *uniformBuffer = mDefaultUniformStorage.getCurrentBuffer();
+    vk::BufferHelper *uniformBuffer = getCurrentUniformBuffer();
     vk::UniformsAndXfbDescriptorDesc xfbBufferDesc =
         transformFeedbackVk->getTransformFeedbackDesc();
-    xfbBufferDesc.updateDefaultUniformBuffer(uniformBuffer ? uniformBuffer->getBufferSerial()
-                                                           : vk::kInvalidBufferSerial);
+    xfbBufferDesc.updateDefaultUniformBuffer(
+        uniformBuffer->valid() ? getCurrentUniformBufferSerial() : vk::kInvalidBufferSerial);
 
     return mProgram->getExecutable().updateTransformFeedbackDescriptorSet(
         mProgram->getState(), mProgram->getDefaultUniformBlocks(), uniformBuffer, this,
@@ -5580,16 +5590,18 @@ angle::Result ContextVk::flushAndGetSerial(const vk::Semaphore *signalSemaphore,
     }
     ANGLE_TRY(flushOutsideRenderPassCommands());
 
-    // We must add the per context dynamic buffers into mResourceUseList before submission so that
-    // they get retained properly until GPU completes. We do not add current buffer into
-    // mResourceUseList since they never get reused or freed until context gets destroyed, at which
-    // time we always wait for GPU to finish before destroying the dynamic buffers.
+    // We must add the stashed suballocations into mResourceUseList before submission so that
+    // they get retained properly until GPU completes.
     mDefaultAttribRecycler.retainStashedAndMoveToInFlightList(&mResourceUseList);
+    mStashedSuballocations.retainAndMoveToList(&mResourceUseList, mInFlighSuballocations);
+
+    // We do not add current buffer into mResourceUseList since they never get reused or freed until
+    // context gets destroyed, at which time we always wait for GPU to finish before destroying the
+    // dynamic buffers.
     for (DriverUniformsDescriptorSet &driverUniform : mDriverUniforms)
     {
         driverUniform.dynamicBuffer.releaseInFlightBuffersToResourceUseList(this);
     }
-    mDefaultUniformStorage.releaseInFlightBuffersToResourceUseList(this);
 
     ANGLE_TRY(submitFrame(signalSemaphore, submitSerialOut));
 
@@ -5619,6 +5631,20 @@ angle::Result ContextVk::flushAndGetSerial(const vk::Semaphore *signalSemaphore,
     {
         mShareGroupVk->pruneDefaultBufferPools(mRenderer);
     }
+
+    while (!mInFlighSuballocations.empty() && !mInFlighSuballocations.front().isCurrentlyInUse(
+                                                  mRenderer->getLastCompletedQueueSerial()))
+    {
+        mInFlighSuballocations.front().destroy(mRenderer);
+        mInFlighSuballocations.pop();
+    }
+    // Program uniforms may span two different suballocations. Due to nature of linear allocation,
+    // we only keep the most recent suballocation. This means once submit and release
+    // mInFlighSuballocations, one of the uniform suballocation might gets freed. Thus we must force
+    // update uniforms for all shader stages. The cost should be minimum given that most of time
+    // people will bind to a different program after submissions and all uniforms will gets updated
+    // anyway.
+    invalidateProgramBindingHelper(getState());
 
     return angle::Result::Continue;
 }
@@ -6358,10 +6384,7 @@ VkWriteDescriptorSet *ContextVk::allocWriteDescriptorSets(size_t count)
     return &mWriteDescriptorSets[oldSize];
 }
 
-void ContextVk::setDefaultUniformBlocksMinSizeForTesting(size_t minSize)
-{
-    mDefaultUniformStorage.setMinimumSizeForTesting(minSize);
-}
+void ContextVk::setDefaultUniformBlocksMinSizeForTesting(size_t minSize) {}
 
 angle::Result ContextVk::initializeMultisampleTextureToBlack(const gl::Context *context,
                                                              gl::Texture *glTexture)
