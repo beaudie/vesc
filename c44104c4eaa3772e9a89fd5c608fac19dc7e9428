@@ -1,0 +1,44 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "9bf7d079_fd9d1e0b",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2022-01-12T15:52:03Z",
+      "side": 1,
+      "message": "Without any data on performance it doesn\u0027t seem like this is a convincing win. LGTM in any case.",
+      "revId": "c44104c4eaa3772e9a89fd5c608fac19dc7e9428",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "857590f9_9e60c652",
+        "filename": "src/libANGLE/renderer/vulkan/PersistentCommandPool.h",
+        "patchSetId": 4
+      },
+      "lineNbr": 48,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2022-01-12T15:52:03Z",
+      "side": 1,
+      "message": "this makes it sound like there\u0027s something broken with the buffers. Suggest a different name. Maybe mFinishedBuffers?",
+      "range": {
+        "startLine": 48,
+        "startChar": 42,
+        "endLine": 48,
+        "endChar": 57
+      },
+      "revId": "c44104c4eaa3772e9a89fd5c608fac19dc7e9428",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
