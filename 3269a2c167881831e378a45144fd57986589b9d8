@@ -16,6 +16,24 @@
       "message": "Same question as the vertex conversion change, are the holes left from this filled by VMA?",
       "revId": "3269a2c167881831e378a45144fd57986589b9d8",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "d04e4965_75722ea6",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 7
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2022-01-12T19:26:05Z",
+      "side": 1,
+      "message": "Right, it is using generic algorithm that fills the hole.",
+      "parentUuid": "6ad2ed8f_1a89bde5",
+      "revId": "3269a2c167881831e378a45144fd57986589b9d8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
