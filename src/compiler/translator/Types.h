@@ -171,7 +171,7 @@ class TType
     TMemoryQualifier getMemoryQualifier() const { return memoryQualifier; }
     void setMemoryQualifier(const TMemoryQualifier &mq) { memoryQualifier = mq; }
 
-    TLayoutQualifier getLayoutQualifier() const { return layoutQualifier; }
+    const TLayoutQualifier &getLayoutQualifier() const { return layoutQualifier; }
     void setLayoutQualifier(TLayoutQualifier lq) { layoutQualifier = lq; }
 
     int getNominalSize() const { return primarySize; }

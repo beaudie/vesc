@@ -113,7 +113,14 @@ void TOutputVulkanGLSL::writeLayoutQualifier(TIntermSymbol *symbol)
     if (needsLocation)
     {
         uint32_t location = 0;
-        if (layoutQualifier.index <= 0)
+
+        // Fragment shader outputs already have a location.  Use that directly purely for easier
+        // debugging of per-output generated code.
+        if (type.getQualifier() == EvqFragmentOut)
+        {
+            location = layoutQualifier.locationsSpecified ? layoutQualifier.location : 0;
+        }
+        else if (layoutQualifier.index <= 0)
         {
             // Note: for index == 1 (dual source blending), don't count locations as they are
             // expected to alias the color output locations.  Only one dual-source output is
