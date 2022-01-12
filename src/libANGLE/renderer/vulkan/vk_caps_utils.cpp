@@ -629,6 +629,21 @@ void RendererVk::ensureCapsInitialized() const
     mNativeCaps.fragmentMediumpInt.setTwosComplementInt(32);
     mNativeCaps.fragmentLowpInt.setTwosComplementInt(32);
 
+    if (IsAMD(mPhysicalDeviceProperties.vendorID) || IsSamsung(mPhysicalDeviceProperties.vendorID))
+    {
+        // For variable with relaxed precision, the min precision is listed in spirv-spec here:
+        // https://www.khronos.org/registry/SPIR-V/specs/1.0/SPIRV.html#_a_id_relaxedprecisionsection_a_relaxed_precision
+        mNativeCaps.vertexMediumpFloat.setIEEEHalfFloat();
+        mNativeCaps.vertexLowpFloat.setIEEEHalfFloat();
+        mNativeCaps.fragmentMediumpFloat.setIEEEHalfFloat();
+        mNativeCaps.fragmentLowpFloat.setIEEEHalfFloat();
+
+        mNativeCaps.vertexLowpInt.setTwosComplementInt(16);
+        mNativeCaps.vertexMediumpInt.setTwosComplementInt(16);
+        mNativeCaps.fragmentLowpInt.setTwosComplementInt(16);
+        mNativeCaps.fragmentMediumpInt.setTwosComplementInt(16);
+    }
+
     // Compute shader limits.
     mNativeCaps.maxComputeWorkGroupCount[0] = LimitToInt(limitsVk.maxComputeWorkGroupCount[0]);
     mNativeCaps.maxComputeWorkGroupCount[1] = LimitToInt(limitsVk.maxComputeWorkGroupCount[1]);
