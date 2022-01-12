@@ -754,6 +754,8 @@ class BufferHelper : public ReadWriteResource
                                    angle::FormatID formatId,
                                    VkDeviceSize *offset,
                                    uint8_t **dataPtr);
+    // Initialize a host visible buffer with alignment good for program's default uniforms.
+    angle::Result initForProgramUniform(ContextVk *contextVk, size_t size);
 
     void destroy(RendererVk *renderer);
     void release(RendererVk *renderer);

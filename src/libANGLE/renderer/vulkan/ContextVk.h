@@ -643,9 +643,16 @@ class ContextVk : public ContextImpl, public vk::Context, public MultisampleText
     VkDescriptorImageInfo &allocDescriptorImageInfo() { return *allocDescriptorImageInfos(1); }
     VkWriteDescriptorSet &allocWriteDescriptorSet() { return *allocWriteDescriptorSets(1); }
 
-    vk::DynamicBuffer *getDefaultUniformStorage() { return &mDefaultUniformStorage; }
-    // For testing only.
-    void setDefaultUniformBlocksMinSizeForTesting(size_t minSize);
+    vk::BufferHelper *getDefaultUniformBuffer() { return &mDefaultUniformBuffer; }
+    vk::BufferSerial getDefaultUniformBufferBlockSerial()
+    {
+        return mDefaultUniformBuffer.getBufferBlock()->getBufferSerial();
+    }
+    vk::LifeTimeTrackedSuballocations *getStashedSuballocationList()
+    {
+        return &mStashedSuballocations;
+    }
+    vk::BufferPool *getUniformBufferPool() { return &mUniformBufferPool; }
 
     vk::BufferHelper &getEmptyBuffer() { return mEmptyBuffer; }
 
@@ -1207,8 +1214,21 @@ class ContextVk : public ContextImpl, public vk::Context, public MultisampleText
     // allow binding a null vertex buffer.
     vk::BufferHelper mEmptyBuffer;
 
-    // Storage for default uniforms of ProgramVks and ProgramPipelineVks.
-    vk::DynamicBuffer mDefaultUniformStorage;
+    // For default uniform of ProgramVks and ProgramPipelineVks, you can only have one program in
+    // use at one time, whose uniforms are stored in mDefaultUniformBuffer. When uniform data
+    // changes, or a different program is bound, mDefaultUniformBuffer will be reallocated and
+    // previous suballocation is stashed to mStashedSuballocations. mStashedSuballocations is
+    // tracking all suballocations that are used but not yet submitted. mInFlighSuballocations
+    // tracks all suballocations that are submitted but not yet GPU finished.
+    // LifeTimeTrackedSuballocations is used to minimize the tracking of GPU completion to one
+    // tracking per submission. Once GPU finishes execution, the inflight suballocations are freed.
+    // Since all suballocations are used in FIFO order, we use linear algorithm to achieve faster
+    // alloc/free speed.
+    vk::BufferHelper mDefaultUniformBuffer;
+    vk::LifeTimeTrackedSuballocations mStashedSuballocations;
+    std::queue<vk::LifeTimeTrackedSuballocations> mInFlighSuballocations;
+    // The linearly sub-allocated dedicated pool for uniforms.
+    vk::BufferPool mUniformBufferPool;
 
     std::vector<std::string> mCommandBufferDiagnostics;
 

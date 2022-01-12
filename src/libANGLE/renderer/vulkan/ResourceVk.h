@@ -10,6 +10,9 @@
 #ifndef LIBANGLE_RENDERER_VULKAN_RESOURCEVK_H_
 #define LIBANGLE_RENDERER_VULKAN_RESOURCEVK_H_
 
+#include <queue>
+#include <stack>
+
 #include "libANGLE/renderer/vulkan/vk_utils.h"
 
 namespace rx
@@ -269,6 +272,102 @@ ANGLE_INLINE void ReadWriteResource::retainReadWrite(ResourceUseList *resourceUs
     // Store reference in resource list.
     resourceUseList->add(mReadOnlyUse);
     resourceUseList->add(mReadWriteUse);
+}
+
+// This utility class uses one SharedResourceUse to track a vector of objects.
+template <typename T>
+class LifeTimeTrackedObjects
+{
+  public:
+    LifeTimeTrackedObjects();
+    ~LifeTimeTrackedObjects();
+
+    LifeTimeTrackedObjects(LifeTimeTrackedObjects &&other)
+        : mLifetime(std::move(other.mLifetime)), mList(std::move(other.mList))
+    {}
+
+    void init();
+    void stash(T &&object);
+
+    bool empty() const;
+    void destroy(RendererVk *renderer);
+    bool isCurrentlyInUse(Serial lastCompletedSerial) const;
+    void retain(ResourceUseList *resourceUseList) const;
+    void retainAndMoveToList(ResourceUseList *resourceUseList,
+                             std::queue<LifeTimeTrackedObjects<T>> &dstList);
+
+  private:
+    SharedResourceUse mLifetime;
+    std::vector<T> mList;
+};
+using LifeTimeTrackedSuballocations = LifeTimeTrackedObjects<BufferSubAllocation>;
+
+template <typename T>
+LifeTimeTrackedObjects<T>::LifeTimeTrackedObjects()
+{
+    init();
+}
+
+template <typename T>
+LifeTimeTrackedObjects<T>::~LifeTimeTrackedObjects()
+{
+    if (mLifetime.valid())
+    {
+        mLifetime.release();
+    }
+}
+
+template <typename T>
+ANGLE_INLINE void LifeTimeTrackedObjects<T>::init()
+{
+    ASSERT(mList.empty());
+    mLifetime.init();
+}
+
+template <typename T>
+ANGLE_INLINE void LifeTimeTrackedObjects<T>::stash(T &&object)
+{
+    mList.emplace_back(std::move(object));
+}
+
+template <typename T>
+ANGLE_INLINE bool LifeTimeTrackedObjects<T>::empty() const
+{
+    return mList.empty();
+}
+
+template <typename T>
+ANGLE_INLINE bool LifeTimeTrackedObjects<T>::isCurrentlyInUse(Serial lastCompletedSerial) const
+{
+    return mLifetime.isCurrentlyInUse(lastCompletedSerial);
+}
+
+template <typename T>
+ANGLE_INLINE void LifeTimeTrackedObjects<T>::retain(ResourceUseList *resourceUseList) const
+{
+    resourceUseList->add(mLifetime);
+}
+
+template <typename T>
+void LifeTimeTrackedObjects<T>::retainAndMoveToList(ResourceUseList *resourceUseList,
+                                                    std::queue<LifeTimeTrackedObjects<T>> &dstList)
+{
+    if (!mList.empty())
+    {
+        resourceUseList->add(mLifetime);
+        dstList.emplace(std::move(*this));
+        init();
+    }
+}
+
+template <typename T>
+ANGLE_INLINE void LifeTimeTrackedObjects<T>::destroy(RendererVk *renderer)
+{
+    for (T &object : mList)
+    {
+        object.destroy(renderer);
+    }
+    mList.clear();
 }
 
 }  // namespace vk
