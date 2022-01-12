@@ -52,6 +52,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "265ab01e_8847eeaf",
+        "filename": "src/libANGLE/renderer/gl/egl/FunctionsEGL.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 201,
+      "author": {
+        "id": 1492552
+      },
+      "writtenOn": "2022-01-12T19:22:11Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "97e4ab12_5b2c2ed1",
+      "revId": "d66e4eb55db8e38468e2981f8f895f1df0fcf34a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "5d035cc2_4e237e04",
@@ -65,6 +83,24 @@
       "writtenOn": "2022-01-10T23:28:58Z",
       "side": 1,
       "message": "Please reference EGL_EXT_device_enumeration in the comments here.",
+      "revId": "d66e4eb55db8e38468e2981f8f895f1df0fcf34a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "8590d663_d6f0a6b8",
+        "filename": "src/libANGLE/renderer/gl/egl/FunctionsEGL.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 202,
+      "author": {
+        "id": 1492552
+      },
+      "writtenOn": "2022-01-12T19:22:11Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "5d035cc2_4e237e04",
       "revId": "d66e4eb55db8e38468e2981f8f895f1df0fcf34a",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
@@ -100,6 +136,24 @@
       "side": 1,
       "message": "Agreed. We should do the extension checks for:\n\nEGL_EXT_platform_device for using EGL_PLATFORM_DEVICE_EXT. This also implies EGL_EXT_platform_base/EGL 1.5 for eglGetPlatformDisplayEXT which could also be an explicit check to load eglGetPlatformDisplayEXT.\n\nEGL_EXT_device_enumeration for eglQueryDevicesEXT.",
       "parentUuid": "11df0380_ebdec06d",
+      "revId": "d66e4eb55db8e38468e2981f8f895f1df0fcf34a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "89be4388_98bffdff",
+        "filename": "src/libANGLE/renderer/gl/egl/FunctionsEGL.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 205,
+      "author": {
+        "id": 1492552
+      },
+      "writtenOn": "2022-01-12T19:22:11Z",
+      "side": 1,
+      "message": "I\u0027ve added checks for all of these extensions. This involved moving the code to obtain the list of extensions to earlier in this function.",
+      "parentUuid": "425beccb_a4994b4d",
       "revId": "d66e4eb55db8e38468e2981f8f895f1df0fcf34a",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
