@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "cdafff3a_d7798fff",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2022-01-12T01:02:31Z",
+      "side": 1,
+      "message": "This is great work John!\n\nIt looks good overall, but before we can commit it we really need a test for it. Could you add something to angle_end2end_tests that exposes the problem?\n\nIdeally we\u0027ll also add a new test to the WebGL conformance suite at https://github.com/KhronosGroup/WebGL , but we can start with an angle_end2end_test for it.\n\nThanks.\n",
+      "revId": "3278c8aa8a1f46dcf9d5ee3921a44088695f9a59",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
