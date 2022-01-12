@@ -4189,6 +4189,24 @@ angle::Result BufferHelper::initForDriverUniform(ContextVk *contextVk,
     return angle::Result::Continue;
 }
 
+angle::Result BufferHelper::initForDefaultUniform(ContextVk *contextVk, size_t size)
+{
+    RendererVk *renderer = contextVk->getRenderer();
+
+    if (valid())
+    {
+        contextVk->stashCurrentUniformBuffer(mSubAllocation);
+    }
+
+    vk::BufferPool *pool = contextVk->getUniformBufferPool();
+    size_t alignment     = renderer->getUniformBufferAlignment();
+    ANGLE_TRY(pool->allocateBuffer(contextVk, size, alignment, &mSubAllocation));
+
+    initializeBarrierTracker(contextVk);
+
+    return angle::Result::Continue;
+}
+
 ANGLE_INLINE void BufferHelper::initializeBarrierTracker(Context *context)
 {
     RendererVk *renderer     = context->getRenderer();
