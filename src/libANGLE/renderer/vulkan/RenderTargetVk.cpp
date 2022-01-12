@@ -93,21 +93,27 @@ vk::ImageOrBufferViewSubresourceSerial RenderTargetVk::getResolveSubresourceSeri
 
 void RenderTargetVk::onColorDraw(ContextVk *contextVk,
                                  uint32_t framebufferLayerCount,
-                                 vk::PackedAttachmentIndex packedAttachmentIndex)
+                                 vk::PackedAttachmentIndex packedAttachmentIndex,
+                                 DrawBufferState drawBufferState)
 {
     ASSERT(!mImage->getActualFormat().hasDepthOrStencilBits());
     ASSERT(framebufferLayerCount <= mLayerCount);
 
     contextVk->onColorDraw(mImage, mResolveImage, packedAttachmentIndex);
-    mImage->onWrite(mLevelIndexGL, 1, mLayerIndex, framebufferLayerCount,
-                    VK_IMAGE_ASPECT_COLOR_BIT);
-    if (mResolveImage)
+
+    if (drawBufferState == DrawBufferState::Enabled)
     {
-        // Multisampled render to texture framebuffers cannot be layered.
-        ASSERT(framebufferLayerCount == 1);
-        mResolveImage->onWrite(mLevelIndexGL, 1, mLayerIndex, framebufferLayerCount,
-                               VK_IMAGE_ASPECT_COLOR_BIT);
+        mImage->onWrite(mLevelIndexGL, 1, mLayerIndex, framebufferLayerCount,
+                        VK_IMAGE_ASPECT_COLOR_BIT);
+        if (mResolveImage)
+        {
+            // Multisampled render to texture framebuffers cannot be layered.
+            ASSERT(framebufferLayerCount == 1);
+            mResolveImage->onWrite(mLevelIndexGL, 1, mLayerIndex, framebufferLayerCount,
+                                   VK_IMAGE_ASPECT_COLOR_BIT);
+        }
     }
+
     retainImageViews(contextVk);
 }
 
