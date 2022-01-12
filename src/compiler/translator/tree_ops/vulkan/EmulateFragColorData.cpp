@@ -71,12 +71,13 @@ class EmulateFragColorDataTraverser : public TIntermTraverser
 
         TType *outputType = new TType(type);
         outputType->setQualifier(EvqFragmentOut);
+        TLayoutQualifier layoutQualifier = outputType->getLayoutQualifier();
+        layoutQualifier.location         = 0;
         if (index > 0)
         {
-            TLayoutQualifier layoutQualifier = outputType->getLayoutQualifier();
-            layoutQualifier.index            = index;
-            outputType->setLayoutQualifier(layoutQualifier);
+            layoutQualifier.index = index;
         }
+        outputType->setLayoutQualifier(layoutQualifier);
 
         TVariable *replacementVar = new TVariable(mSymbolTable, ImmutableString(name), outputType,
                                                   SymbolType::AngleInternal);

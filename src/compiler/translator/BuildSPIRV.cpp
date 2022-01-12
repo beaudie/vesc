@@ -1753,11 +1753,21 @@ void SPIRVBuilder::writeInterfaceVariableDecorations(const TType &type, spirv::I
 
     if (needsLocation)
     {
-        const unsigned int locationCount =
-            CalculateVaryingLocationCount(type, gl::ToGLenum(mShaderType));
-        const uint32_t location = IsShaderIn(type.getQualifier())
-                                      ? nextUnusedInputLocation(locationCount)
-                                      : nextUnusedOutputLocation(locationCount);
+        // Fragment shader outputs already have a location.  Use that directly purely for easier
+        // debugging of per-output generated code.
+        uint32_t location = 0;
+        if (type.getQualifier() == EvqFragmentOut)
+        {
+            location = type.getLayoutQualifier().location;
+            ASSERT(location >= 0);
+        }
+        else
+        {
+            const unsigned int locationCount =
+                CalculateVaryingLocationCount(type, gl::ToGLenum(mShaderType));
+            location = IsShaderIn(type.getQualifier()) ? nextUnusedInputLocation(locationCount)
+                                                       : nextUnusedOutputLocation(locationCount);
+        }
 
         spirv::WriteDecorate(&mSpirvDecorations, variableId, spv::DecorationLocation,
                              {spirv::LiteralInteger(location)});
