@@ -72,6 +72,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "22cc8888_ed68598b",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1394635
+      },
+      "writtenOn": "2022-01-12T20:50:26Z",
+      "side": 1,
+      "message": "Thanks!\n\n- Could this link be added as a comment to the Python script for better discoverability?\n\n- Would it be possible to check if RG8_sRGB is affected by the simulator limitations? It\u0027s not listed here but this format should be similar to R8_sRGB.",
+      "parentUuid": "36f57dc1_5c565324",
+      "revId": "d91ff1531cb7ada0f10bab41abe773be6bb97b5e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "de05dee9_2954b0ff",
         "filename": "src/libANGLE/renderer/metal/mtl_format_map.json",
         "patchSetId": 2
@@ -83,6 +101,30 @@
       "writtenOn": "2022-01-11T12:19:10Z",
       "side": 1,
       "message": "Why is this necessary? I don\u0027t see this symbol being used anywhere.",
+      "range": {
+        "startLine": 251,
+        "startChar": 0,
+        "endLine": 252,
+        "endChar": 10
+      },
+      "revId": "d91ff1531cb7ada0f10bab41abe773be6bb97b5e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "1c377690_b0d6e90f",
+        "filename": "src/libANGLE/renderer/metal/mtl_format_map.json",
+        "patchSetId": 2
+      },
+      "lineNbr": 252,
+      "author": {
+        "id": 1394635
+      },
+      "writtenOn": "2022-01-12T20:50:26Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "de05dee9_2954b0ff",
       "range": {
         "startLine": 251,
         "startChar": 0,

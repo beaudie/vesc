@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "a6deaf87_221a0e8b",
+        "filename": "src/libANGLE/renderer/metal/mtl_format_map.json",
+        "patchSetId": 3
+      },
+      "lineNbr": 124,
+      "author": {
+        "id": 1394635
+      },
+      "writtenOn": "2022-01-12T20:50:26Z",
+      "side": 1,
+      "message": "Given the simulator limitations, why was this line added?",
+      "revId": "85f905d94e5bd6a6c85008f45ed58dc4ea803840",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
