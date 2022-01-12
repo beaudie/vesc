@@ -16,6 +16,23 @@
       "message": "Jamie - PTAL",
       "revId": "4b9abd152f383535a389d80b24d06760d647e775",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "1960bf0f_b71c3722",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2022-01-12T15:52:36Z",
+      "side": 1,
+      "message": "LGTM - I thought you did this in the other CL?",
+      "revId": "4b9abd152f383535a389d80b24d06760d647e775",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
