@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "64ded40a_fbded88b",
+        "filename": "src/libANGLE/renderer/gl/renderergl_utils.cpp",
+        "patchSetId": 11
+      },
+      "lineNbr": 1804,
+      "author": {
+        "id": 1228974
+      },
+      "writtenOn": "2022-01-12T10:57:21Z",
+      "side": 1,
+      "message": "Had to revisit this. Otherwise, some tests failed on targets that had gl 4.3 or gles 3.1, but didn\u0027t have the extension. The spec says that it\u0027s possible to use non-mesa function to set the property after these versions. And doesn\u0027t say it\u0027s guaranteed the extension is available.",
+      "revId": "729e7da07950612beee6e598dbf0e7c3105ba2e6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
