@@ -2689,7 +2689,8 @@ BufferPool::BufferPool()
       mUsage(0),
       mHostVisible(false),
       mSize(0),
-      mMemoryTypeIndex(0)
+      mMemoryTypeIndex(0),
+      mForcedSizeForTesting(0)
 {}
 
 BufferPool::BufferPool(BufferPool &&other)
@@ -2765,14 +2766,24 @@ angle::Result BufferPool::allocateNewBuffer(ContextVk *contextVk, VkDeviceSize s
     // First ensure we are not exceeding the heapSize to avoid the validation error.
     ANGLE_VK_CHECK(contextVk, sizeInBytes <= heapSize, VK_ERROR_OUT_OF_DEVICE_MEMORY);
 
-    // Double the size until meet the requirement. This also helps reducing the fragmentation. Since
-    // this is global pool, we have less worry about memory waste.
-    VkDeviceSize newSize = mSize;
-    while (newSize < sizeInBytes)
+    if (mForcedSizeForTesting != 0)
     {
-        newSize <<= 1;
+        // SOme white box tests set mForcedSizeForTesting to trigger the new buffer allocation. If
+        // this is set, we use it but make sure it is at least big enough to satisfy the current
+        // allocation request.
+        mSize = std::max(mForcedSizeForTesting, sizeInBytes);
     }
-    mSize = std::min(newSize, heapSize);
+    else
+    {
+        // Double the size until meet the requirement. This also helps to reduce the fragmentation.
+        // Since this is global pool, we have less worry about memory waste.
+        VkDeviceSize newSize = mSize;
+        while (newSize < sizeInBytes)
+        {
+            newSize <<= 1;
+        }
+        mSize = std::min(newSize, heapSize);
+    }
 
     // Allocate buffer
     VkBufferCreateInfo createInfo    = {};
@@ -2843,6 +2854,16 @@ angle::Result BufferPool::allocateBuffer(ContextVk *contextVk,
             suballocation->init(contextVk->getDevice(), block.get(), offset, sizeInBytes);
             return angle::Result::Continue;
         }
+        else if (mVirtualBlockCreateFlags == vma::VirtualBlockCreateFlagBits::LINEAR)
+        {
+            // For linear allocations which is used for dynamic uniform buffers, there is desire to
+            // keep the buffer count smaller so that there is less descriptorSet switch. To achieve
+            // this, when we fail to suballocate from the last buffer, we skip other buffers and go
+            // straight to allocate a new buffer which will double the size. The old buffers will be
+            // deallocated once age out.
+            mSize <<= 1;
+            break;
+        }
         ++iter;
     }
 
@@ -2855,6 +2876,22 @@ angle::Result BufferPool::allocateBuffer(ContextVk *contextVk,
     suballocation->init(contextVk->getDevice(), block.get(), offset, sizeInBytes);
 
     return angle::Result::Continue;
+}
+
+void BufferPool::setMinimumSizeForTesting(size_t minSize)
+{
+    // This will really only have an effect next time we call allocate.
+    mForcedSizeForTesting = minSize;
+}
+
+VkDeviceSize BufferPool::getTotalBufferSize() const
+{
+    VkDeviceSize totalSize = 0;
+    for (const std::unique_ptr<BufferBlock> &block : mBufferBlocks)
+    {
+        totalSize += block->getMemorySize();
+    }
+    return totalSize;
 }
 
 void BufferPool::destroy(RendererVk *renderer)
@@ -4127,6 +4164,24 @@ angle::Result BufferHelper::initForCopyImage(ContextVk *contextVk,
 
     *offset  = roundUp(getOffset(), static_cast<VkDeviceSize>(imageCopyAlignment));
     *dataPtr = getMappedMemory() + (*offset) - getOffset();
+
+    return angle::Result::Continue;
+}
+
+angle::Result BufferHelper::initForProgramUniform(ContextVk *contextVk, size_t size)
+{
+    RendererVk *renderer = contextVk->getRenderer();
+
+    if (valid())
+    {
+        contextVk->releaseToGarbageList(std::move(mSubAllocation));
+    }
+
+    vk::BufferPool *pool = contextVk->getUniformBufferPool();
+    size_t alignment     = renderer->getMinUniformBufferOffsetAlignment();
+    ANGLE_TRY(pool->allocateBuffer(contextVk, size, alignment, &mSubAllocation));
+
+    initializeBarrierTracker(contextVk);
 
     return angle::Result::Continue;
 }
