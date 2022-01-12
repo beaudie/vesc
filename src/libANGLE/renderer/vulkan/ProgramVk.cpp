@@ -717,26 +717,19 @@ angle::Result ProgramVk::updateUniforms(ContextVk *contextVk)
 {
     ASSERT(hasDirtyUniforms());
 
-    bool anyNewBufferAllocated                = false;
-    uint8_t *bufferData                       = nullptr;
-    VkDeviceSize bufferOffset                 = 0;
-    uint32_t offsetIndex                      = 0;
     const gl::ProgramExecutable &glExecutable = mState.getExecutable();
     gl::ShaderMap<VkDeviceSize> offsets;  // offset to the beginning of bufferData
-    size_t requiredSpace;
 
     // We usually only update uniform data for shader stages that are actually dirty. But when the
     // buffer for uniform data have switched, because all shader stages are using the same buffer,
     // we then must update uniform data for all shader stages to keep all shader stages' uniform
     // data in the same buffer.
-    requiredSpace = calcUniformUpdateRequiredSpace(contextVk, glExecutable, offsets);
+    size_t requiredSpace = calcUniformUpdateRequiredSpace(contextVk, glExecutable, offsets);
     ASSERT(requiredSpace > 0);
-
-    // Allocate space from dynamicBuffer. Always try to allocate from the current buffer first.
-    // If that failed, we deal with fall out and try again.
-    vk::DynamicBuffer *defaultUniformStorage = contextVk->getDefaultUniformStorage();
-    if (!defaultUniformStorage->allocateFromCurrentBuffer(requiredSpace, &bufferData,
-                                                          &bufferOffset))
+    vk::BufferHelper *defaultUniformBuffer = contextVk->getDefaultUniformBuffer();
+    ANGLE_TRY(defaultUniformBuffer->initForProgramUniform(contextVk, requiredSpace));
+    vk::BufferSerial uniformBufferSerial = contextVk->getDefaultUniformBufferBlockSerial();
+    if (mExecutable.getCurrentDefaultUniformBufferSerial() != uniformBufferSerial)
     {
         for (const gl::ShaderType shaderType : glExecutable.getLinkedShaderStages())
         {
@@ -746,12 +739,18 @@ angle::Result ProgramVk::updateUniforms(ContextVk *contextVk)
             }
         }
 
-        requiredSpace = calcUniformUpdateRequiredSpace(contextVk, glExecutable, offsets);
-        ANGLE_TRY(defaultUniformStorage->allocate(contextVk, requiredSpace, &bufferData, nullptr,
-                                                  &bufferOffset, &anyNewBufferAllocated));
+        size_t extraRequiredSpace =
+            calcUniformUpdateRequiredSpace(contextVk, glExecutable, offsets);
+        if (extraRequiredSpace != requiredSpace)
+        {
+            ANGLE_TRY(defaultUniformBuffer->initForProgramUniform(contextVk, extraRequiredSpace));
+            uniformBufferSerial = contextVk->getDefaultUniformBufferBlockSerial();
+        }
     }
 
-    // Update buffer memory by immediate mapping. This immediate update only works once.
+    uint8_t *bufferData       = defaultUniformBuffer->getMappedMemory();
+    VkDeviceSize bufferOffset = defaultUniformBuffer->getOffset();
+    uint32_t offsetIndex      = 0;
     for (const gl::ShaderType shaderType : glExecutable.getLinkedShaderStages())
     {
         if (mDefaultUniformBlocksDirty[shaderType])
@@ -764,11 +763,9 @@ angle::Result ProgramVk::updateUniforms(ContextVk *contextVk)
         }
         ++offsetIndex;
     }
-    ANGLE_TRY(defaultUniformStorage->flush(contextVk));
+    ANGLE_TRY(defaultUniformBuffer->flush(contextVk->getRenderer()));
 
-    vk::BufferHelper *defaultUniformBuffer = defaultUniformStorage->getCurrentBuffer();
-    if (mExecutable.getCurrentDefaultUniformBufferSerial() !=
-        defaultUniformBuffer->getBufferSerial())
+    if (mExecutable.getCurrentDefaultUniformBufferSerial() != uniformBufferSerial)
     {
         // We need to reinitialize the descriptor sets if we newly allocated buffers since we can't
         // modify the descriptor sets once initialized.
@@ -781,12 +778,11 @@ angle::Result ProgramVk::updateUniforms(ContextVk *contextVk)
             TransformFeedbackVk *transformFeedbackVk =
                 vk::GetImpl(glState.getCurrentTransformFeedback());
             uniformsAndXfbBufferDesc = &transformFeedbackVk->getTransformFeedbackDesc();
-            uniformsAndXfbBufferDesc->updateDefaultUniformBuffer(
-                defaultUniformBuffer->getBufferSerial());
+            uniformsAndXfbBufferDesc->updateDefaultUniformBuffer(uniformBufferSerial);
         }
         else
         {
-            defaultUniformsDesc.updateDefaultUniformBuffer(defaultUniformBuffer->getBufferSerial());
+            defaultUniformsDesc.updateDefaultUniformBuffer(uniformBufferSerial);
             uniformsAndXfbBufferDesc = &defaultUniformsDesc;
         }
 

@@ -108,10 +108,6 @@ void main()
 
     limitMaxSets();
 
-    // Set a really small min size so that uniform updates often allocates a new buffer.
-    rx::ContextVk *contextVk = hackANGLE();
-    contextVk->setDefaultUniformBlocksMinSizeForTesting(128);
-
     GLint posUniformLocation = glGetUniformLocation(program, "uniPosModifier");
     ASSERT_NE(posUniformLocation, -1);
     GLint colorUniformLocation = glGetUniformLocation(program, "uniColor");
@@ -350,10 +346,6 @@ void main()
     limitMaxSets();
     limitMaxSets();
 
-    // Set a really small min size so that uniform updates often allocates a new buffer.
-    rx::ContextVk *contextVk = hackANGLE();
-    contextVk->setDefaultUniformBlocksMinSizeForTesting(128);
-
     // Get uniform locations.
     GLint colorMaskLoc1 = glGetUniformLocation(program1, "colorMask");
     ASSERT_NE(-1, colorMaskLoc1);
@@ -492,10 +484,6 @@ void main()
 
     limitMaxSets();
 
-    // Set a really small min size so that every uniform update actually allocates a new buffer.
-    rx::ContextVk *contextVk = hackANGLE();
-    contextVk->setDefaultUniformBlocksMinSizeForTesting(128);
-
     GLint uniformVSLocation = glGetUniformLocation(program, "uniformVS");
     ASSERT_NE(uniformVSLocation, -1);
     GLint uniformFSLocation = glGetUniformLocation(program, "uniformFS");
@@ -591,9 +579,6 @@ void main()
 
     glUseProgram(program);
     limitMaxSets();
-    // Set a really small min size so that every uniform update actually allocates a new buffer.
-    rx::ContextVk *contextVk = hackANGLE();
-    contextVk->setDefaultUniformBlocksMinSizeForTesting(128);
 
     // Setup vertices
     std::array<Vector3, 6> quadVertices = ANGLETestBase::GetQuadVertices();
