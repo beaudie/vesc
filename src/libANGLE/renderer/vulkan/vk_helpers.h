@@ -1179,7 +1179,7 @@ class RenderPassCommandBufferHelper final : public CommandBufferHelperCommon
                    cmdCountInvalidated;
     }
 
-    void updateRenderPassColorClear(PackedAttachmentIndex colorIndex,
+    void updateRenderPassColorClear(PackedAttachmentIndex colorIndexVk,
                                     const VkClearValue &colorClearValue);
     void updateRenderPassDepthStencilClear(VkImageAspectFlags aspectFlags,
                                            const VkClearValue &clearValue);
