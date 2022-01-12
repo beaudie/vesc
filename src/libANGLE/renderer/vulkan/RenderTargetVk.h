@@ -69,6 +69,7 @@ class RenderTargetVk final : public FramebufferAttachmentRenderTarget
     void onColorDraw(ContextVk *contextVk,
                      uint32_t framebufferLayerCount,
                      vk::PackedAttachmentIndex index);
+    void onColorWrite(uint32_t framebufferLayerCount);
     void onColorResolve(ContextVk *contextVk, uint32_t framebufferLayerCount);
     void onDepthStencilDraw(ContextVk *contextVk, uint32_t framebufferLayerCount);
 
