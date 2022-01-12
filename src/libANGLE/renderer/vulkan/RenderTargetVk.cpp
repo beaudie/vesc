@@ -99,6 +99,17 @@ void RenderTargetVk::onColorDraw(ContextVk *contextVk,
     ASSERT(framebufferLayerCount <= mLayerCount);
 
     contextVk->onColorDraw(mImage, mResolveImage, packedAttachmentIndex);
+
+    onColorWrite(framebufferLayerCount);
+
+    retainImageViews(contextVk);
+}
+
+void RenderTargetVk::onColorWrite(uint32_t framebufferLayerCount)
+{
+    ASSERT(!mImage->getActualFormat().hasDepthOrStencilBits());
+    ASSERT(framebufferLayerCount <= mLayerCount);
+
     mImage->onWrite(mLevelIndexGL, 1, mLayerIndex, framebufferLayerCount,
                     VK_IMAGE_ASPECT_COLOR_BIT);
     if (mResolveImage)
@@ -108,7 +119,6 @@ void RenderTargetVk::onColorDraw(ContextVk *contextVk,
         mResolveImage->onWrite(mLevelIndexGL, 1, mLayerIndex, framebufferLayerCount,
                                VK_IMAGE_ASPECT_COLOR_BIT);
     }
-    retainImageViews(contextVk);
 }
 
 void RenderTargetVk::onColorResolve(ContextVk *contextVk, uint32_t framebufferLayerCount)
