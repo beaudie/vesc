@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "1d62a335_0c3368db",
+        "filename": "src/libANGLE/renderer/serial_utils.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 94,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2022-01-12T15:44:58Z",
+      "side": 1,
+      "message": "nit: for consistency with the rest of ANGLE code I suggest we don\u0027t include this \"reason\" for the assert pattern. If you want the explanation how about a comment instead of the \u0026\u0026 ?",
+      "range": {
+        "startLine": 94,
+        "startChar": 32,
+        "endLine": 94,
+        "endChar": 46
+      },
+      "revId": "fab3823ca2eccd21155c436373ff1171a00ef7d1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
