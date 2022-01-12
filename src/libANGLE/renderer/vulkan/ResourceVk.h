@@ -11,6 +11,7 @@
 #define LIBANGLE_RENDERER_VULKAN_RESOURCEVK_H_
 
 #include <queue>
+#include <stack>
 
 #include "libANGLE/renderer/vulkan/vk_utils.h"
 
@@ -298,6 +299,7 @@ class LifeTimeTrackedObjects
     SharedResourceUse mLifetime;
     std::vector<T> mList;
 };
+using LifeTimeTrackedSuballocations = LifeTimeTrackedObjects<BufferSubAllocation>;
 
 template <typename T>
 LifeTimeTrackedObjects<T>::LifeTimeTrackedObjects()
