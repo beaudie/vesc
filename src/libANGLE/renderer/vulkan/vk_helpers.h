@@ -754,6 +754,8 @@ class BufferHelper : public ReadWriteResource
                                    angle::FormatID formatId,
                                    VkDeviceSize *offset,
                                    uint8_t **dataPtr);
+    // Initialize a host visible buffer with alignment good for program's default uniforms.
+    angle::Result initForProgramUniform(ContextVk *contextVk, size_t size);
 
     void destroy(RendererVk *renderer);
     void release(RendererVk *renderer);
@@ -868,6 +870,9 @@ class BufferPool : angle::NonCopyable
     void pruneEmptyBuffers(RendererVk *renderer);
 
     bool valid() const { return mSize != 0; }
+    size_t getBufferCount() const { return mBufferBlocks.size(); }
+    VkDeviceSize getTotalBufferSize() const;
+    void setMinimumSizeForTesting(size_t minSize);
 
   private:
     angle::Result allocateNewBuffer(ContextVk *contextVk, VkDeviceSize sizeInBytes);
@@ -883,6 +888,8 @@ class BufferPool : angle::NonCopyable
     // it. That way we avoid the situation that a buffer just becomes empty and gets freed right
     // after and then we have to allocate a new one next frame.
     static constexpr int32_t kMaxCountRemainsEmpty = 4;
+    // For tests only
+    VkDeviceSize mForcedSizeForTesting;
 };
 using BufferPoolPointerArray = std::array<std::unique_ptr<BufferPool>, VK_MAX_MEMORY_TYPES>;
 
