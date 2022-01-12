@@ -557,6 +557,24 @@ angle::Result FramebufferVk::clearImpl(const gl::Context *context,
             // clearWithCommand will operate on deferred clears.
             ANGLE_TRY(clearWithCommand(contextVk, &contextVk->getStartedRenderPassCommands(),
                                        scissoredRenderArea));
+
+            // clearWithCommand() will remove deferred clears for all attachments that have defined
+            // content. Any deferred clears that are left can be performed with a renderpass loadOp.
+            if (mDeferredClears.any())
+            {
+                for (size_t colorIndexGL : mDeferredClears.getColorMask())
+                {
+                    ASSERT(mState.getEnabledDrawBuffers().test(colorIndexGL));
+                    ASSERT(!getColorDrawRenderTarget(colorIndexGL)->hasDefinedContent());
+
+                    // Update the RP loadOp to clear the attachment.
+                    vk::PackedAttachmentIndex colorIndexVk(static_cast<uint32_t>(colorIndexGL));
+                    contextVk->getStartedRenderPassCommands().updateRenderPassColorClear(
+                        colorIndexVk, mDeferredClears[colorIndexGL]);
+
+                    mDeferredClears.reset(colorIndexGL);
+                }
+            }
         }
         else
         {
@@ -588,7 +606,6 @@ angle::Result FramebufferVk::clearImpl(const gl::Context *context,
         // If nothing left to clear, early out.
         if (!clearAnyWithDraw)
         {
-            ASSERT(mDeferredClears.empty());
             return angle::Result::Continue;
         }
     }
@@ -2344,7 +2361,11 @@ angle::Result FramebufferVk::clearWithCommand(ContextVk *contextVk,
     for (size_t colorIndexGL : mDeferredClears.getColorMask())
     {
         ASSERT(mState.getEnabledDrawBuffers().test(colorIndexGL));
-        ASSERT(getColorDrawRenderTarget(colorIndexGL)->hasDefinedContent());
+        if (!getColorDrawRenderTarget(colorIndexGL)->hasDefinedContent())
+        {
+            // Skip this attachment, so we can use a renderpass loadOp to clear it instead.
+            continue;
+        }
 
         attachments.emplace_back(VkClearAttachment{VK_IMAGE_ASPECT_COLOR_BIT,
                                                    static_cast<uint32_t>(colorIndexGL),
@@ -2661,13 +2682,14 @@ angle::Result FramebufferVk::startNewRenderPass(ContextVk *contextVk,
         *framebuffer, renderArea, mRenderPassDesc, renderPassAttachmentOps, colorIndexVk,
         depthStencilAttachmentIndex, packedClearValues, commandBufferOut));
 
-    // Add the images to the renderpass tracking list  (through onColorDraw).
+    // Add the images to the renderpass tracking list (through onColorDraw).
     vk::PackedAttachmentIndex colorAttachmentIndex(0);
     for (size_t colorIndexGL : mState.getColorAttachmentsMask())
     {
+        bool isDrawBufferEnabled          = mState.getEnabledDrawBuffers().test(colorIndexGL);
         RenderTargetVk *colorRenderTarget = colorRenderTargets[colorIndexGL];
         colorRenderTarget->onColorDraw(contextVk, mCurrentFramebufferDesc.getLayerCount(),
-                                       colorAttachmentIndex);
+                                       colorAttachmentIndex, isDrawBufferEnabled);
         ++colorAttachmentIndex;
     }
 
