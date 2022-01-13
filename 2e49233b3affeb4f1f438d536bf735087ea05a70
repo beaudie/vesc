@@ -70,6 +70,30 @@
       },
       "revId": "2e49233b3affeb4f1f438d536bf735087ea05a70",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "7cbeafb5_186b8b88",
+        "filename": "src/libANGLE/renderer/vulkan/TextureVk.cpp",
+        "patchSetId": 10
+      },
+      "lineNbr": 2390,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2022-01-13T21:52:47Z",
+      "side": 1,
+      "message": "Thanks Cheryl for explantation. I am still worried that the tracking of \"eligibility\" for ghosting here is too fragile here. For example, mSingleLevelUpdate is set to true when ImageHelper is constructed and later on it may set to false from TextureVk::setSubImageImpl() if level is not 0. This means if no one calls glTexSubImage on level other than 0, it will always think it is single level update. Now consider this example, \nTexStorage2D(numLevels\u003d2);\nrender to level 1\ntexture sample from fragment shader from level 1\nTexSubImage2D on level 0;\n\nYou will still think this is single level update, because \"if (index.getLevelIndex() !\u003d 0)\" is false. And you will end up ghosting VkImage, now you lost level 1 content.\n\nSimilar situation with write to level 1 with compute shader, or glCopyImageSubImage2D etc. You can try to write a test to verify my theory.\n\nIf you verified there is a hole here and want to fix this, I think we will need a bitfield in ImageHelper object to track whether VkImage object\u0027s given level has the most recent data or not, including the already encoded VkCmd* calls. And then every place we could imageWrite, or render to, or CopyBufferToImage, or CopyImageToImage, we set the level bit. Every time we stage a full update to a level, or texture gets redefined, we remove the bit. Then you can use that bitfield to tell if this is a single level update or not.",
+      "parentUuid": "e173ba9d_8a9f83a1",
+      "range": {
+        "startLine": 2387,
+        "startChar": 9,
+        "endLine": 2390,
+        "endChar": 85
+      },
+      "revId": "2e49233b3affeb4f1f438d536bf735087ea05a70",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
