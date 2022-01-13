@@ -80,6 +80,30 @@
       },
       "revId": "0a0d6cee7bf3c21cf9e94b425afa85d577538e3e",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ef2b4f6e_280d48df",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 916,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2022-01-13T17:19:14Z",
+      "side": 1,
+      "message": "Then my suggestion will be only use Safe version on program. There is no reason to take another branch for nothing, especially this will be on the draw path.",
+      "parentUuid": "9a05015c_3d8c645f",
+      "range": {
+        "startLine": 916,
+        "startChar": 15,
+        "endLine": 916,
+        "endChar": 26
+      },
+      "revId": "0a0d6cee7bf3c21cf9e94b425afa85d577538e3e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
