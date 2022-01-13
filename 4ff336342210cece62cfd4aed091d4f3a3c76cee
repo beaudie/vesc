@@ -22,6 +22,30 @@
       },
       "revId": "4ff336342210cece62cfd4aed091d4f3a3c76cee",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "34b6c002_8e7a0e7e",
+        "filename": "src/tests/gl_tests/CubeMapTextureTest.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 49,
+      "author": {
+        "id": 1394635
+      },
+      "writtenOn": "2022-01-13T15:56:46Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "e823c757_80ed09db",
+      "range": {
+        "startLine": 49,
+        "startChar": 62,
+        "endLine": 49,
+        "endChar": 87
+      },
+      "revId": "4ff336342210cece62cfd4aed091d4f3a3c76cee",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
