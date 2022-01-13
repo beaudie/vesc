@@ -33,6 +33,24 @@
       "message": "Why look for EGL_EXT_device_base? It seems that EGL_EXT_device_enumeration is the extension that this code should require.\n\nReformatting this would make it easier to read.",
       "revId": "55cfb21dab447b339056d627b312a9a0894084f7",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "db70cb54_21dac7dc",
+        "filename": "src/libANGLE/renderer/gl/egl/FunctionsEGL.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 317,
+      "author": {
+        "id": 1492552
+      },
+      "writtenOn": "2022-01-13T17:40:12Z",
+      "side": 1,
+      "message": "EGL_EXT_device_base contains all of the functionality of EGL_EXT_device_enumeration. The internal Google platform that we\u0027re working with supports the EGL_EXT_device_base extension but *not* the EGL_EXT_device_enumeration extension. I believe the inverse is also possible, so we have to check for either one of the two.\n\nI\u0027ve pulled the checks out to separate statements to hopefully make it more readable.",
+      "parentUuid": "032f80c2_42c4fd23",
+      "revId": "55cfb21dab447b339056d627b312a9a0894084f7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
