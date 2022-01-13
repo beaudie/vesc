@@ -35,6 +35,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "14e67fa9_0cd79964",
+        "filename": "src/gpu_info_util/SystemInfo_macos.mm",
+        "patchSetId": 1
+      },
+      "lineNbr": 128,
+      "author": {
+        "id": 1326275
+      },
+      "writtenOn": "2022-01-13T23:27:55Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "e64d3865_932e2ceb",
+      "revId": "345f11a37a0493e69ab2c3eafdcdd2a6030349d1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "02c9a303_3c255835",
@@ -48,6 +66,24 @@
       "writtenOn": "2022-01-13T23:05:25Z",
       "side": 1,
       "message": "is a -\u003e is an",
+      "revId": "345f11a37a0493e69ab2c3eafdcdd2a6030349d1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "c63400d0_52e11aaf",
+        "filename": "src/gpu_info_util/SystemInfo_macos.mm",
+        "patchSetId": 1
+      },
+      "lineNbr": 139,
+      "author": {
+        "id": 1326275
+      },
+      "writtenOn": "2022-01-13T23:27:55Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "02c9a303_3c255835",
       "revId": "345f11a37a0493e69ab2c3eafdcdd2a6030349d1",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
