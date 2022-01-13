@@ -54,6 +54,41 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "00e7f2e7_8e6d4e37",
+        "filename": "src/compiler/translator/TranslatorMetalDirect/GuardFragDepthWrite.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 34,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-01-13T06:06:59Z",
+      "side": 1,
+      "message": "FYI, you can check that the type has qualifier `EvqFragDepth`. If gl_FragDepth is rewritten by a previous transformation for whatever reason, it won\u0027t have the same pointer as the built-in.",
+      "parentUuid": "073e996c_fcc94fb3",
+      "revId": "06cf55424c65b172ad98fc2f9c0e05c6b3cbac74",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "abd4b779_7f8936aa",
+        "filename": "src/compiler/translator/TranslatorMetalDirect/GuardFragDepthWrite.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 37,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-01-13T06:06:59Z",
+      "side": 1,
+      "message": "nit: Metal should really be updated to properly add spec consts as AST variables. We support that.",
+      "revId": "06cf55424c65b172ad98fc2f9c0e05c6b3cbac74",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "c87395e5_0c1bd49a",
         "filename": "src/tests/gl_tests/FragDepthTest.cpp",
         "patchSetId": 3
@@ -88,6 +123,74 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "85d981cf_da4846b9",
+        "filename": "src/tests/gl_tests/FragDepthTest.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 54,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-01-13T06:06:59Z",
+      "side": 1,
+      "message": "The test body doesn\u0027t belong in the set up. Please refactor to a helper that\u0027s called by the tests as needed.",
+      "revId": "06cf55424c65b172ad98fc2f9c0e05c6b3cbac74",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "3c2f4d44_20ff8946",
+        "filename": "src/tests/gl_tests/FragDepthTest.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 66,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-01-13T06:06:59Z",
+      "side": 1,
+      "message": "Please use this instead:\n\n    EXPECT_GL_FRAMEBUFFER_COMPLETE(GL_FRAMEBUFFER)",
+      "revId": "06cf55424c65b172ad98fc2f9c0e05c6b3cbac74",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "e6f75a6e_0e6e5567",
+        "filename": "src/tests/gl_tests/FragDepthTest.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 71,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-01-13T06:06:59Z",
+      "side": 1,
+      "message": "Ditto",
+      "revId": "06cf55424c65b172ad98fc2f9c0e05c6b3cbac74",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "a1da7806_df6a129a",
+        "filename": "src/tests/gl_tests/FragDepthTest.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 79,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-01-13T06:06:59Z",
+      "side": 1,
+      "message": "To avoid so many ifs, you can:\n\n- make the glClearDepthf call here unconditional. There\u0027s no harm in setting it\n- make the glDepthFunc below also unconditional, and move the glEnable to the if block at the top.",
+      "revId": "06cf55424c65b172ad98fc2f9c0e05c6b3cbac74",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "5e322fa2_5e109a0a",
         "filename": "src/tests/gl_tests/FragDepthTest.cpp",
         "patchSetId": 3
@@ -99,6 +202,24 @@
       "writtenOn": "2022-01-13T01:30:02Z",
       "side": 1,
       "message": "How about Vulkan? Not sure all of the backends that should be added here.",
+      "revId": "06cf55424c65b172ad98fc2f9c0e05c6b3cbac74",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ec908a01_a855e4c8",
+        "filename": "src/tests/gl_tests/FragDepthTest.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 122,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-01-13T06:06:59Z",
+      "side": 1,
+      "message": "Please use `ANGLE_INSTANTIATE_TEST_ES3`",
+      "parentUuid": "5e322fa2_5e109a0a",
       "revId": "06cf55424c65b172ad98fc2f9c0e05c6b3cbac74",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
