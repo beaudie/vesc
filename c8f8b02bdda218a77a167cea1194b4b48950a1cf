@@ -16,6 +16,46 @@
       "message": "Alexey, a fix for a test you authored a few months ago.",
       "revId": "c8f8b02bdda218a77a167cea1194b4b48950a1cf",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "97fa615e_fd928001",
+        "filename": "src/tests/angle_end2end_tests_expectations.txt",
+        "patchSetId": 3
+      },
+      "lineNbr": 10,
+      "author": {
+        "id": 1394635
+      },
+      "writtenOn": "2022-01-13T15:29:59Z",
+      "side": 1,
+      "message": "Should this change be a part of this CL? The commit message does not mention it.",
+      "revId": "c8f8b02bdda218a77a167cea1194b4b48950a1cf",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "715780d2_e8424931",
+        "filename": "src/tests/angle_end2end_tests_expectations.txt",
+        "patchSetId": 3
+      },
+      "lineNbr": 147,
+      "author": {
+        "id": 1394635
+      },
+      "writtenOn": "2022-01-13T15:29:59Z",
+      "side": 1,
+      "message": "Should these lines be updated?",
+      "range": {
+        "startLine": 146,
+        "startChar": 0,
+        "endLine": 147,
+        "endChar": 95
+      },
+      "revId": "c8f8b02bdda218a77a167cea1194b4b48950a1cf",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
