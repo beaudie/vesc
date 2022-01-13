@@ -1,0 +1,55 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "de764e3c_fb91c4d2",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2022-01-13T23:05:25Z",
+      "side": 1,
+      "message": "lgtm\n\nSmall change, tested completely, so +2\u0027ing directly.\n",
+      "revId": "345f11a37a0493e69ab2c3eafdcdd2a6030349d1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "e64d3865_932e2ceb",
+        "filename": "src/gpu_info_util/SystemInfo_macos.mm",
+        "patchSetId": 1
+      },
+      "lineNbr": 128,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2022-01-13T23:05:25Z",
+      "side": 1,
+      "message": "If this is true for both IOGraphicsAccelerator2 and AGXAccelerator type entries, please call them out explicitly in the comment.",
+      "revId": "345f11a37a0493e69ab2c3eafdcdd2a6030349d1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "02c9a303_3c255835",
+        "filename": "src/gpu_info_util/SystemInfo_macos.mm",
+        "patchSetId": 1
+      },
+      "lineNbr": 139,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2022-01-13T23:05:25Z",
+      "side": 1,
+      "message": "is a -\u003e is an",
+      "revId": "345f11a37a0493e69ab2c3eafdcdd2a6030349d1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
