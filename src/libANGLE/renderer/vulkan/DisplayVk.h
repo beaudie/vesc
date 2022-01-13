@@ -49,8 +49,6 @@ class ShareGroupVk : public ShareGroupImpl
     void pruneDefaultBufferPools(RendererVk *renderer);
     bool isDueForBufferPoolPrune();
 
-    vk::BufferPool *getDriverUniformBufferPool(RendererVk *renderer);
-
   private:
     // ANGLE uses a PipelineLayout cache to store compatible pipeline layouts.
     PipelineLayoutCache mPipelineLayoutCache;
@@ -69,10 +67,6 @@ class ShareGroupVk : public ShareGroupImpl
     vk::BufferPoolPointerArray mDefaultBufferPools;
     // The system time when last pruneEmptyBuffer gets called.
     double mLastPruneTime;
-
-    // The dedicate pool for driver uniforms so that we can further minimize the number of
-    // descriptor set used.
-    std::unique_ptr<vk::BufferPool> mDriverUniformBufferPool;
 };
 
 class DisplayVk : public DisplayImpl, public vk::Context

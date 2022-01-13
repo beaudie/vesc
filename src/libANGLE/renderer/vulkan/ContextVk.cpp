@@ -669,7 +669,6 @@ void ContextVk::DriverUniformsDescriptorSet::destroy(RendererVk *renderer)
     descriptorSetLayout.reset();
     descriptorPoolBinding.reset();
     bufferHelper.destroy(renderer);
-    suballocationRecycler.destroy(renderer);
     descriptorSetCache.clear();
     descriptorSetCache.destroy(renderer);
 }
@@ -740,20 +739,19 @@ ContextVk::ContextVk(const gl::State &state, gl::ErrorSet *errorSet, RendererVk 
     // Note that currently these dirty bits are set every time a new render pass command buffer is
     // begun.  However, using ANGLE's SecondaryCommandBuffer, the Vulkan command buffer (which is
     // the primary command buffer) is not ended, so technically we don't need to rebind these.
-    mNewGraphicsCommandBufferDirtyBits =
-        DirtyBits{DIRTY_BIT_RENDER_PASS,     DIRTY_BIT_PIPELINE_BINDING,
-                  DIRTY_BIT_TEXTURES,        DIRTY_BIT_VERTEX_BUFFERS,
-                  DIRTY_BIT_INDEX_BUFFER,    DIRTY_BIT_SHADER_RESOURCES,
-                  DIRTY_BIT_DESCRIPTOR_SETS, DIRTY_BIT_DRIVER_UNIFORMS_BINDING,
-                  DIRTY_BIT_VIEWPORT,        DIRTY_BIT_SCISSOR};
+    mNewGraphicsCommandBufferDirtyBits = DirtyBits{
+        DIRTY_BIT_RENDER_PASS,     DIRTY_BIT_PIPELINE_BINDING, DIRTY_BIT_TEXTURES,
+        DIRTY_BIT_VERTEX_BUFFERS,  DIRTY_BIT_INDEX_BUFFER,     DIRTY_BIT_SHADER_RESOURCES,
+        DIRTY_BIT_DESCRIPTOR_SETS, DIRTY_BIT_DRIVER_UNIFORMS,  DIRTY_BIT_DRIVER_UNIFORMS_BINDING,
+        DIRTY_BIT_VIEWPORT,        DIRTY_BIT_SCISSOR};
     if (getFeatures().supportsTransformFeedbackExtension.enabled)
     {
         mNewGraphicsCommandBufferDirtyBits.set(DIRTY_BIT_TRANSFORM_FEEDBACK_BUFFERS);
     }
 
-    mNewComputeCommandBufferDirtyBits =
-        DirtyBits{DIRTY_BIT_PIPELINE_BINDING, DIRTY_BIT_TEXTURES, DIRTY_BIT_SHADER_RESOURCES,
-                  DIRTY_BIT_DESCRIPTOR_SETS, DIRTY_BIT_DRIVER_UNIFORMS_BINDING};
+    mNewComputeCommandBufferDirtyBits = DirtyBits{
+        DIRTY_BIT_PIPELINE_BINDING, DIRTY_BIT_TEXTURES,        DIRTY_BIT_SHADER_RESOURCES,
+        DIRTY_BIT_DESCRIPTOR_SETS,  DIRTY_BIT_DRIVER_UNIFORMS, DIRTY_BIT_DRIVER_UNIFORMS_BINDING};
 
     mGraphicsDirtyBitHandlers[DIRTY_BIT_MEMORY_BARRIER] =
         &ContextVk::handleDirtyGraphicsMemoryBarrier;
@@ -5220,8 +5218,7 @@ angle::Result ContextVk::allocateDriverUniforms(size_t driverUniformsSize,
 {
     vk::BufferHelper &uniformBuffer = driverUniforms->bufferHelper;
 
-    ANGLE_TRY(uniformBuffer.initForDriverUniform(this, &driverUniforms->suballocationRecycler,
-                                                 driverUniformsSize));
+    ANGLE_TRY(uniformBuffer.initForDriverUniform(this, driverUniformsSize));
 
     *ptrOut = uniformBuffer.getMappedMemory();
     *newBufferOut =
@@ -5597,10 +5594,6 @@ angle::Result ContextVk::flushAndGetSerial(const vk::Semaphore *signalSemaphore,
         mStashedUniformBuffers.addToResourceUseList(&mResourceUseList);
         mInFlighUniformBuffers.emplace(std::move(mStashedUniformBuffers));
         mStashedUniformBuffers.init();
-    }
-    for (DriverUniformsDescriptorSet &driverUniform : mDriverUniforms)
-    {
-        driverUniform.suballocationRecycler.moveStashedToInFlightList(&mResourceUseList);
     }
 
     ANGLE_TRY(submitFrame(signalSemaphore, submitSerialOut));
