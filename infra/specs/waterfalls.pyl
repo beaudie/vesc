@@ -42,6 +42,17 @@
           'isolated_scripts': 'angle_perf_isolated_scripts',
         },
       },
+      'android-arm64-pixel6': {
+        'os_type': 'android',
+        'mixins': [
+          'android_s',
+          'oriole',
+          'gpu-swarming-pool',
+        ],
+        'test_suites': {
+          'gtest_tests': 'android_gtests',
+        },
+      },
       'linux-intel': {
         'os_type': 'linux',
         'mixins': [
