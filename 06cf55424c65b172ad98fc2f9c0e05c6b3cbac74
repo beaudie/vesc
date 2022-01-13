@@ -16,6 +16,91 @@
       "message": "Thanks John and Kyle! Let\u0027s see how the new test does on the bots.\n",
       "revId": "06cf55424c65b172ad98fc2f9c0e05c6b3cbac74",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "cecea8b9_2112e36a",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2022-01-13T01:30:02Z",
+      "side": 1,
+      "message": "Nice work again putting this together, as well as the test!\n\nThis lgtm with a few comments about comments - but please get a review from either syoussefi@ or geofflang@ as well. CC\u0027ing a couple other people too.",
+      "revId": "06cf55424c65b172ad98fc2f9c0e05c6b3cbac74",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "073e996c_fcc94fb3",
+        "filename": "src/compiler/translator/TranslatorMetalDirect/GuardFragDepthWrite.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 34,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2022-01-13T01:30:02Z",
+      "side": 1,
+      "message": "Are these two if-statements sufficient to pattern match and correctly rewrite all assignments of gl_FragDepth that might be encountered in a shader?",
+      "revId": "06cf55424c65b172ad98fc2f9c0e05c6b3cbac74",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "c87395e5_0c1bd49a",
+        "filename": "src/tests/gl_tests/FragDepthTest.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 20,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2022-01-13T01:30:02Z",
+      "side": 1,
+      "message": "typo: depth",
+      "revId": "06cf55424c65b172ad98fc2f9c0e05c6b3cbac74",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "23e75b56_083d12cf",
+        "filename": "src/tests/gl_tests/FragDepthTest.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 21,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2022-01-13T01:30:02Z",
+      "side": 1,
+      "message": "Better to reference section 3.9.2.3 \"Shader Outputs\" of the OpenGL ES 3.0.6 specification since ANGLE (generally) implements the OpenGL ES specs, not the desktop OpenGL ones.",
+      "revId": "06cf55424c65b172ad98fc2f9c0e05c6b3cbac74",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "5e322fa2_5e109a0a",
+        "filename": "src/tests/gl_tests/FragDepthTest.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 122,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2022-01-13T01:30:02Z",
+      "side": 1,
+      "message": "How about Vulkan? Not sure all of the backends that should be added here.",
+      "revId": "06cf55424c65b172ad98fc2f9c0e05c6b3cbac74",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
