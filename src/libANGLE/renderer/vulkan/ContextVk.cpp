@@ -1040,8 +1040,7 @@ angle::Result ContextVk::initialize()
 
     uint32_t memoryTypeIndex = mRenderer->getUniformBufferMemoryTypeIndex();
     VkMemoryPropertyFlags memoryPropertyFlags;
-    mRenderer->getBufferMemoryAllocator().getMemoryTypeProperties(mRenderer, memoryTypeIndex,
-                                                                  &memoryPropertyFlags);
+    mRenderer->getAllocator().getMemoryTypeProperties(memoryTypeIndex, &memoryPropertyFlags);
     mUniformBufferPool.initWithFlags(
         mRenderer, vma::VirtualBlockCreateFlagBits::LINEAR, VK_BUFFER_USAGE_UNIFORM_BUFFER_BIT,
         mRenderer->getDefaultUniformBufferSize(), memoryTypeIndex, memoryPropertyFlags);
