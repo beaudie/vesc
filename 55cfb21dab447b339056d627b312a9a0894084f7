@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "bca3f8e7_6eae612a",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2022-01-13T05:25:43Z",
+      "side": 1,
+      "message": "lgtm in general - nice work - one comment.\n",
+      "revId": "55cfb21dab447b339056d627b312a9a0894084f7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "032f80c2_42c4fd23",
+        "filename": "src/libANGLE/renderer/gl/egl/FunctionsEGL.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 317,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2022-01-13T05:25:43Z",
+      "side": 1,
+      "message": "Why look for EGL_EXT_device_base? It seems that EGL_EXT_device_enumeration is the extension that this code should require.\n\nReformatting this would make it easier to read.",
+      "revId": "55cfb21dab447b339056d627b312a9a0894084f7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
