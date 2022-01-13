@@ -1,0 +1,170 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "51194ea6_4d156b10",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 5596,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2022-01-13T23:06:05Z",
+      "side": 1,
+      "message": "remove",
+      "range": {
+        "startLine": 5596,
+        "startChar": 35,
+        "endLine": 5596,
+        "endChar": 42
+      },
+      "revId": "6ff585ca34d520ad7fe676eeea02c8fef7254060",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "d8d67e15_c8ffa68d",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 6386,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2022-01-13T23:06:05Z",
+      "side": 1,
+      "message": "remove",
+      "revId": "6ff585ca34d520ad7fe676eeea02c8fef7254060",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "e03671fe_8b450a3b",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.h",
+        "patchSetId": 6
+      },
+      "lineNbr": 1241,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2022-01-13T23:06:05Z",
+      "side": 1,
+      "message": "nit: The \"Current\" part can be removed.",
+      "range": {
+        "startLine": 1241,
+        "startChar": 21,
+        "endLine": 1241,
+        "endChar": 42
+      },
+      "revId": "6ff585ca34d520ad7fe676eeea02c8fef7254060",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "97a69dac_90c8460f",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.h",
+        "patchSetId": 6
+      },
+      "lineNbr": 1242,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2022-01-13T23:06:05Z",
+      "side": 1,
+      "message": "nit: The name \"stashed\" is vague and doesn\u0027t indicate what these buffers actually are.   Changing to \"InUse\" or \"InRecordedCommands\" or something like that would be better.",
+      "range": {
+        "startLine": 1242,
+        "startChar": 38,
+        "endLine": 1242,
+        "endChar": 60
+      },
+      "revId": "6ff585ca34d520ad7fe676eeea02c8fef7254060",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "e6de43f2_962a232c",
+        "filename": "src/libANGLE/renderer/vulkan/ProgramPipelineVk.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 149,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2022-01-13T23:06:05Z",
+      "side": 1,
+      "message": "update",
+      "range": {
+        "startLine": 149,
+        "startChar": 27,
+        "endLine": 149,
+        "endChar": 40
+      },
+      "revId": "6ff585ca34d520ad7fe676eeea02c8fef7254060",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "7d454f3c_22025d57",
+        "filename": "src/libANGLE/renderer/vulkan/ProgramVk.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 730,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2022-01-13T23:06:05Z",
+      "side": 1,
+      "message": "update",
+      "range": {
+        "startLine": 730,
+        "startChar": 27,
+        "endLine": 730,
+        "endChar": 40
+      },
+      "revId": "6ff585ca34d520ad7fe676eeea02c8fef7254060",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "129725f0_9d7ccc94",
+        "filename": "src/libANGLE/renderer/vulkan/ProgramVk.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 747,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2022-01-13T23:06:05Z",
+      "side": 1,
+      "message": "ref1",
+      "revId": "6ff585ca34d520ad7fe676eeea02c8fef7254060",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "f7b157d8_c87c6807",
+        "filename": "src/libANGLE/renderer/vulkan/ProgramVk.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 767,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2022-01-13T23:06:05Z",
+      "side": 1,
+      "message": "Is it possible for this to be true since ref1 already set them equal?\n\nInstead, a new bool needs to track if the prior conditional was executed and then checked here.",
+      "revId": "6ff585ca34d520ad7fe676eeea02c8fef7254060",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
