@@ -1,0 +1,239 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "3987fccb_0476d9a6",
+        "filename": "src/libANGLE/renderer/vulkan/ResourceVk.h",
+        "patchSetId": 8
+      },
+      "lineNbr": 279,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2022-01-13T19:23:46Z",
+      "side": 1,
+      "message": "nit: I think this would be better named something like \u0027ResourceList\u0027.",
+      "range": {
+        "startLine": 279,
+        "startChar": 6,
+        "endLine": 279,
+        "endChar": 28
+      },
+      "revId": "07379e47280379fdced3e2ac59ff20ff3e1c61a3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "9d04a598_cfb75517",
+        "filename": "src/libANGLE/renderer/vulkan/ResourceVk.h",
+        "patchSetId": 8
+      },
+      "lineNbr": 290,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2022-01-13T19:23:46Z",
+      "side": 1,
+      "message": "nit: retain() to match SharedResourceUse.",
+      "range": {
+        "startLine": 290,
+        "startChar": 9,
+        "endLine": 290,
+        "endChar": 14
+      },
+      "revId": "07379e47280379fdced3e2ac59ff20ff3e1c61a3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "989b2ab2_9ffe705b",
+        "filename": "src/libANGLE/renderer/vulkan/ResourceVk.h",
+        "patchSetId": 8
+      },
+      "lineNbr": 291,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2022-01-13T19:23:46Z",
+      "side": 1,
+      "message": "nit: maybe getResource() or getLastResource()",
+      "range": {
+        "startLine": 291,
+        "startChar": 9,
+        "endLine": 291,
+        "endChar": 14
+      },
+      "revId": "07379e47280379fdced3e2ac59ff20ff3e1c61a3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "5040f0e9_64154295",
+        "filename": "src/libANGLE/renderer/vulkan/ResourceVk.h",
+        "patchSetId": 8
+      },
+      "lineNbr": 299,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2022-01-13T19:23:46Z",
+      "side": 1,
+      "message": "nit: mSharedResourceUse",
+      "range": {
+        "startLine": 299,
+        "startChar": 22,
+        "endLine": 299,
+        "endChar": 31
+      },
+      "revId": "07379e47280379fdced3e2ac59ff20ff3e1c61a3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "181449b0_f19fa953",
+        "filename": "src/libANGLE/renderer/vulkan/ResourceVk.h",
+        "patchSetId": 8
+      },
+      "lineNbr": 302,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2022-01-13T19:23:46Z",
+      "side": 1,
+      "message": "I think this should be moved to vk_utils.h where BufferSubAllocation is declared.",
+      "revId": "07379e47280379fdced3e2ac59ff20ff3e1c61a3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "58fb3529_80d62deb",
+        "filename": "src/libANGLE/renderer/vulkan/ResourceVk.h",
+        "patchSetId": 8
+      },
+      "lineNbr": 333,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2022-01-13T19:23:46Z",
+      "side": 1,
+      "message": "Doesn\u0027t this need a retain() call to indicate that an object in the list is now currently in use?",
+      "revId": "07379e47280379fdced3e2ac59ff20ff3e1c61a3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "9fc032b5_d4cda636",
+        "filename": "src/libANGLE/renderer/vulkan/ResourceVk.h",
+        "patchSetId": 8
+      },
+      "lineNbr": 375,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2022-01-13T19:23:46Z",
+      "side": 1,
+      "message": "nit: Similar to above - something like \u0027ResourceRecycler\u0027",
+      "range": {
+        "startLine": 375,
+        "startChar": 6,
+        "endLine": 375,
+        "endChar": 35
+      },
+      "revId": "07379e47280379fdced3e2ac59ff20ff3e1c61a3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "2c302515_1914149c",
+        "filename": "src/libANGLE/renderer/vulkan/ResourceVk.h",
+        "patchSetId": 8
+      },
+      "lineNbr": 381,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2022-01-13T19:23:46Z",
+      "side": 1,
+      "message": "nit: retain()",
+      "range": {
+        "startLine": 381,
+        "startChar": 9,
+        "endLine": 381,
+        "endChar": 14
+      },
+      "revId": "07379e47280379fdced3e2ac59ff20ff3e1c61a3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "39c756f9_3090d75a",
+        "filename": "src/libANGLE/renderer/vulkan/ResourceVk.h",
+        "patchSetId": 8
+      },
+      "lineNbr": 382,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2022-01-13T19:23:46Z",
+      "side": 1,
+      "message": "nit: getResource()",
+      "range": {
+        "startLine": 382,
+        "startChar": 9,
+        "endLine": 382,
+        "endChar": 14
+      },
+      "revId": "07379e47280379fdced3e2ac59ff20ff3e1c61a3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "67fec705_6acf41a8",
+        "filename": "src/libANGLE/renderer/vulkan/ResourceVk.h",
+        "patchSetId": 8
+      },
+      "lineNbr": 390,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2022-01-13T19:23:46Z",
+      "side": 1,
+      "message": "nit: mInUseList",
+      "range": {
+        "startLine": 390,
+        "startChar": 30,
+        "endLine": 390,
+        "endChar": 42
+      },
+      "revId": "07379e47280379fdced3e2ac59ff20ff3e1c61a3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "18c2d62f_c866df06",
+        "filename": "src/libANGLE/renderer/vulkan/ResourceVk.h",
+        "patchSetId": 8
+      },
+      "lineNbr": 395,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2022-01-13T19:23:46Z",
+      "side": 1,
+      "message": "Ditto. Move to vk_utils.h.",
+      "revId": "07379e47280379fdced3e2ac59ff20ff3e1c61a3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
