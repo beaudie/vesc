@@ -16,6 +16,23 @@
       "message": "There\u0027s an assertion failure while running some of these tests that looks potentially related to this patch:\n\nhttps://ci.chromium.org/ui/p/chromium/builders/try/mac-angle-chromium-try/b8825290570591322177/test-results?q\u003dExactID%3Aninja%3A%2F%2Fchrome%2Ftest%3Atelemetry_gpu_integration_test%2Fgpu_tests.webgl_conformance_integration_test.WebGLConformanceIntegrationTest.conformance2%2Ftextures%2Fmisc%2Fcopy-texture-image.html+VHash%3A645cd8ba42fa540a\n",
       "revId": "07723d7fcc55f1db7c439bbd34b64aee6f646fd9",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "a9a12153_ef1f53e0",
+        "filename": "src/libANGLE/renderer/metal/mtl_resources.mm",
+        "patchSetId": 9
+      },
+      "lineNbr": 303,
+      "author": {
+        "id": 1500872
+      },
+      "writtenOn": "2022-01-13T21:02:39Z",
+      "side": 1,
+      "message": "This ternary is flipped, and needs to be reversed.",
+      "revId": "07723d7fcc55f1db7c439bbd34b64aee6f646fd9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
