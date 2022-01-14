@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "b682c0ba_3c0977a3",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-01-14T18:48:28Z",
+      "side": 1,
+      "message": "I removed CQ+2. Can we skip the test instead? The failing test seems to be a tessellation one, and we\u0027re obviously exposing some feature we shouldn\u0027t be (because the non-conformant build setting is set, or maybe we missed something).\n\nIt\u0027s best IMO to skip the test than the VVL message.",
+      "revId": "45aba23732292dae8c149c8ef72f0aeb96be57b4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
