@@ -16,6 +16,24 @@
       "message": "I do have one more concern on this estimation in the case of an aliased MTLBuffer. A large buffer would only be counted once, for whichever estimation was originally given. Is this a big enough concern / incorrect behavior to block this patch?",
       "revId": "d4ea45d5931bb35ff39d9b60e52be65748d07415",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "afea59ab_7b54d623",
+        "filename": "src/libANGLE/renderer/metal/mtl_command_buffer.mm",
+        "patchSetId": 10
+      },
+      "lineNbr": 622,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2022-01-14T00:49:14Z",
+      "side": 1,
+      "message": "Personally I\u0027m not overly concerned about this - it seems like a corner case - but if you are, we can try to rethink the bookkeeping scheme.",
+      "parentUuid": "36162b09_047ac2ab",
+      "revId": "d4ea45d5931bb35ff39d9b60e52be65748d07415",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
