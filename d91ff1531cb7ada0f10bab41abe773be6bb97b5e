@@ -88,6 +88,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "bcba3972_0509e23e",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1500872
+      },
+      "writtenOn": "2022-01-14T01:32:47Z",
+      "side": 1,
+      "message": "Certainly, it seems RG8_sRGB is also affected by sim limitations. I\u0027ll file a task to get this page updated.",
+      "parentUuid": "22cc8888_ed68598b",
+      "revId": "d91ff1531cb7ada0f10bab41abe773be6bb97b5e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "de05dee9_2954b0ff",
@@ -124,6 +142,30 @@
       "writtenOn": "2022-01-12T20:50:26Z",
       "side": 1,
       "message": "Ack",
+      "parentUuid": "de05dee9_2954b0ff",
+      "range": {
+        "startLine": 251,
+        "startChar": 0,
+        "endLine": 252,
+        "endChar": 10
+      },
+      "revId": "d91ff1531cb7ada0f10bab41abe773be6bb97b5e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "6bb4b529_44975a50",
+        "filename": "src/libANGLE/renderer/metal/mtl_format_map.json",
+        "patchSetId": 2
+      },
+      "lineNbr": 252,
+      "author": {
+        "id": 1500872
+      },
+      "writtenOn": "2022-01-14T01:32:47Z",
+      "side": 1,
+      "message": "Done",
       "parentUuid": "de05dee9_2954b0ff",
       "range": {
         "startLine": 251,

@@ -16,6 +16,24 @@
       "message": "Given the simulator limitations, why was this line added?",
       "revId": "85f905d94e5bd6a6c85008f45ed58dc4ea803840",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "9ed44b50_afa480eb",
+        "filename": "src/libANGLE/renderer/metal/mtl_format_map.json",
+        "patchSetId": 3
+      },
+      "lineNbr": 124,
+      "author": {
+        "id": 1500872
+      },
+      "writtenOn": "2022-01-14T01:32:47Z",
+      "side": 1,
+      "message": "Right, removing.",
+      "parentUuid": "a6deaf87_221a0e8b",
+      "revId": "85f905d94e5bd6a6c85008f45ed58dc4ea803840",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
