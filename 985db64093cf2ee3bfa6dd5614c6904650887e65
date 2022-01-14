@@ -34,6 +34,24 @@
       "parentUuid": "a85e10a5_bc74cf2c",
       "revId": "985db64093cf2ee3bfa6dd5614c6904650887e65",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "50bb8b5d_aaa485ea",
+        "filename": "src/libANGLE/renderer/vulkan/SyncVk.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 324,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-01-14T19:05:41Z",
+      "side": 0,
+      "message": "The flush of ContextB also flushes whatever ContextA has queued up (at least the way currently ANGLE is set up).\n\nThat said, I agree the flush is not necessary on a second look. When syncA is created, we already add a flush on ContextA (and that was a recent addition, which is what makes this flush no longer necessary).",
+      "parentUuid": "2d4452c4_f3c95ee7",
+      "revId": "985db64093cf2ee3bfa6dd5614c6904650887e65",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
