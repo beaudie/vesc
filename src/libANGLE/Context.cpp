@@ -3912,6 +3912,12 @@ void Context::initCaps()
                << maxAtomicCounterBufferBindings;
         ANGLE_LIMIT_CAP(mState.mCaps.maxAtomicCounterBufferBindings,
                         maxAtomicCounterBufferBindings);
+        for (int i = 0; i < static_cast<int>(gl::ShaderType::EnumCount); ++i)
+        {
+            ANGLE_LIMIT_CAP(
+                mState.mCaps.maxShaderAtomicCounterBuffers[static_cast<gl::ShaderType>(i)],
+                maxAtomicCounterBufferBindings);
+        }
 
         // SwiftShader only supports 12 shader storage buffer bindings.
         constexpr GLint maxShaderStorageBufferBindings = 12;
