@@ -34,6 +34,23 @@
       "parentUuid": "4ed928cf_b9d20cf8",
       "revId": "1359ada73cfb5cf6c1cedc4d2dd6c934a9c0ad07",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "fbbfccca_e4e1c4b6",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-01-14T19:20:42Z",
+      "side": 1,
+      "message": "Eyeballing it, looks like about a dozen traces are affected. I\u0027ll check them first thing next week to see if there are any performance degradations.\n\nAlso looks like some dEQP tests are not resilient enough? I\u0027ll have to investigate. Again, the code itself is good for review IMO.",
+      "revId": "1359ada73cfb5cf6c1cedc4d2dd6c934a9c0ad07",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
