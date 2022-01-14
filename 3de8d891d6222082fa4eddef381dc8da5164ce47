@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "7d58b0a8_1fdc8e7b",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2022-01-14T22:49:28Z",
+      "side": 1,
+      "message": "This clears up the first of two VVL errors coming from the genshin_impact trace on ARM.",
+      "revId": "3de8d891d6222082fa4eddef381dc8da5164ce47",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
