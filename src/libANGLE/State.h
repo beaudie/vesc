@@ -689,6 +689,9 @@ class State : angle::NonCopyable
         EXTENDED_DIRTY_BIT_CLIP_DISTANCES,          // clip distances
         EXTENDED_DIRTY_BIT_MIPMAP_GENERATION_HINT,  // mipmap generation hint
         EXTENDED_DIRTY_BIT_SHADER_DERIVATIVE_HINT,  // shader derivative hint
+        // TODO: Remove this once bug in D3D11 backend is fixed. http://anglebug.com/6959
+        EXTENDED_DIRTY_BIT_TEXTURE_SAMPLER_REBIND_OPTIMIZATION,  // optimization for rebinding same
+                                                                 // texture or sampler
         EXTENDED_DIRTY_BIT_INVALID,
         EXTENDED_DIRTY_BIT_MAX = EXTENDED_DIRTY_BIT_INVALID,
     };
@@ -751,6 +754,12 @@ class State : angle::NonCopyable
     {
         mDirtyObjects.set(DIRTY_OBJECT_DRAW_FRAMEBUFFER);
         mDirtyObjects.set(DIRTY_OBJECT_DRAW_ATTACHMENTS);
+    }
+
+    ANGLE_INLINE void setTextureSamplerRebindOptimizationDirtyBit()
+    {
+        mDirtyBits.set(DIRTY_BIT_EXTENDED);
+        mExtendedDirtyBits.set(EXTENDED_DIRTY_BIT_TEXTURE_SAMPLER_REBIND_OPTIMIZATION);
     }
 
     // This actually clears the current value dirty bits.
