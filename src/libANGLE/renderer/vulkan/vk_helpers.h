@@ -1094,7 +1094,8 @@ class RenderPassCommandBufferHelper final : public CommandBufferHelperCommon
                          ImageHelper *image,
                          ImageHelper *resolveImage,
                          PackedAttachmentIndex packedAttachmentIndex);
-    void depthStencilImagesDraw(ResourceUseList *resourceUseList,
+    void depthStencilImagesDraw(ContextVk *contextVk,
+                                ResourceUseList *resourceUseList,
                                 gl::LevelIndex level,
                                 uint32_t layerStart,
                                 uint32_t layerCount,
@@ -1135,9 +1136,9 @@ class RenderPassCommandBufferHelper final : public CommandBufferHelperCommon
     void endTransformFeedback();
 
     void invalidateRenderPassColorAttachment(PackedAttachmentIndex attachmentIndex);
-    void invalidateRenderPassDepthAttachment(const gl::DepthStencilState &dsState,
+    void invalidateRenderPassDepthAttachment(ContextVk *contextVk,
                                              const gl::Rectangle &invalidateArea);
-    void invalidateRenderPassStencilAttachment(const gl::DepthStencilState &dsState,
+    void invalidateRenderPassStencilAttachment(ContextVk *contextVk,
                                                const gl::Rectangle &invalidateArea);
 
     bool hasWriteAfterInvalidate(uint32_t cmdCountInvalidated, uint32_t cmdCountDisabled)
@@ -2035,6 +2036,17 @@ class ImageHelper final : public Resource, public angle::Subject
                                                    gl::LevelIndex levelEnd,
                                                    angle::FormatID formatID) const;
 
+    void setContentUndefined(LevelIndex levelStart,
+                             uint32_t levelCount,
+                             uint32_t layerStart,
+                             uint32_t layerCount,
+                             VkImageAspectFlags aspectFlags);
+    void setContentDefined(LevelIndex levelStart,
+                           uint32_t levelCount,
+                           uint32_t layerStart,
+                           uint32_t layerCount,
+                           VkImageAspectFlags aspectFlags);
+
   private:
     enum class UpdateSource
     {
@@ -2201,11 +2213,6 @@ class ImageHelper final : public Resource, public angle::Subject
     void resetCachedProperties();
     void setEntireContentDefined();
     void setEntireContentUndefined();
-    void setContentDefined(LevelIndex levelStart,
-                           uint32_t levelCount,
-                           uint32_t layerStart,
-                           uint32_t layerCount,
-                           VkImageAspectFlags aspectFlags);
 
     // Up to 8 layers are tracked per level for whether contents are defined, above which the
     // contents are considered unconditionally defined.  This handles the more likely scenarios of:
