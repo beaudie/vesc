@@ -1974,6 +1974,57 @@ TEST_P(ClearTest, InceptionScissorClears)
     EXPECT_EQ(expectedColors, actualColors);
 }
 
+// Clears many small concentric rectangles using scissor regions.
+TEST_P(ClearTest, DrawThenInceptionScissorClears)
+{
+    angle::RNG rng;
+
+    constexpr GLuint kSize = 16;
+
+    // Create a square user FBO so we have more control over the dimensions.
+    GLFramebuffer fbo;
+    glBindFramebuffer(GL_FRAMEBUFFER, fbo);
+
+    GLRenderbuffer rbo;
+    glBindRenderbuffer(GL_RENDERBUFFER, rbo);
+    glRenderbufferStorage(GL_RENDERBUFFER, GL_RGBA8, kSize, kSize);
+
+    glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_RENDERBUFFER, rbo);
+    ASSERT_GL_FRAMEBUFFER_COMPLETE(GL_FRAMEBUFFER);
+
+    glViewport(0, 0, kSize, kSize);
+
+    ANGLE_GL_PROGRAM(redProgram, essl1_shaders::vs::Simple(), essl1_shaders::fs::Red());
+    drawQuad(redProgram, essl1_shaders::PositionAttrib(), 0.5f);
+    EXPECT_PIXEL_COLOR_EQ(0, 0, GLColor::red);
+
+    // Draw small concentric squares using scissor.
+    std::vector<GLColor> expectedColors;
+    for (GLuint index = 0; index < (kSize - 1) / 2; index++)
+    {
+        // Do the first clear without the scissor.
+        if (index > 0)
+        {
+            glEnable(GL_SCISSOR_TEST);
+            glScissor(index, index, kSize - (index * 2), kSize - (index * 2));
+        }
+
+        GLColor color = RandomColor(&rng);
+        expectedColors.push_back(color);
+        Vector4 floatColor = color.toNormalizedVector();
+        glClearColor(floatColor[0], floatColor[1], floatColor[2], floatColor[3]);
+        glClear(GL_COLOR_BUFFER_BIT);
+    }
+
+    ASSERT_GL_NO_ERROR();
+
+    std::vector<GLColor> actualColors(expectedColors.size());
+    glReadPixels(0, kSize / 2, actualColors.size(), 1, GL_RGBA, GL_UNSIGNED_BYTE,
+                 actualColors.data());
+
+    EXPECT_EQ(expectedColors, actualColors);
+}
+
 // Test that clearBuffer with disabled non-zero drawbuffer or disabled read source doesn't cause an
 // assert.
 TEST_P(ClearTestES3, ClearDisabledNonZeroAttachmentNoAssert)
@@ -2541,6 +2592,53 @@ TEST_P(ClearTest, ClearThenScissoredMaskedClear)
     // Verify that the left half is yellow, and the right half is red.
     EXPECT_PIXEL_RECT_EQ(0, 0, kSize / 2, kSize, GLColor::yellow);
     EXPECT_PIXEL_RECT_EQ(kSize / 2, 0, kSize / 2, kSize, GLColor::red);
+}
+
+// Test that a scissored stencil clear followed by a full clear works.
+TEST_P(ClearTestES3, StencilScissoredClearThenFullClear)
+{
+    constexpr GLsizei kSize = 128;
+
+    GLint stencilBits = 0;
+    glGetIntegerv(GL_STENCIL_BITS, &stencilBits);
+    EXPECT_EQ(stencilBits, 8);
+
+    // Clear stencil value must be masked to 0x42
+    glClearBufferfi(GL_DEPTH_STENCIL, 0, 0.5f, 0x142);
+
+    glClearColor(255, 0, 0, 1);
+    glClear(GL_COLOR_BUFFER_BIT);
+    EXPECT_PIXEL_COLOR_EQ(0, 0, GLColor::red);
+
+    // Shrink the render area.
+    glScissor(kSize / 2, 0, kSize / 2, kSize);
+    glEnable(GL_SCISSOR_TEST);
+
+    // Clear stencil.
+    glClearBufferfi(GL_DEPTH_STENCIL, 0, 0.5f, 0x64);
+
+    // Grow the render area.
+    glScissor(0, 0, kSize, kSize);
+    glEnable(GL_SCISSOR_TEST);
+
+    // Check that the stencil test works as expected
+    glEnable(GL_STENCIL_TEST);
+
+    // Scissored region is green.
+    glStencilFunc(GL_EQUAL, 0x64, 0xFF);
+    ANGLE_GL_PROGRAM(drawGreen, essl3_shaders::vs::Simple(), essl3_shaders::fs::Green());
+    glUseProgram(drawGreen);
+    drawQuad(drawGreen, essl3_shaders::PositionAttrib(), 0.5f);
+    EXPECT_PIXEL_COLOR_EQ(kSize / 2, 0, GLColor::green);
+
+    // Outside scissored region is blue.
+    glStencilFunc(GL_EQUAL, 0x42, 0xFF);
+    ANGLE_GL_PROGRAM(drawBlue, essl3_shaders::vs::Simple(), essl3_shaders::fs::Blue());
+    glUseProgram(drawBlue);
+    drawQuad(drawBlue, essl3_shaders::PositionAttrib(), 0.5f);
+    EXPECT_PIXEL_COLOR_EQ(0, 0, GLColor::blue);
+
+    ASSERT_GL_NO_ERROR();
 }
 
 // This is a test that must be verified visually.

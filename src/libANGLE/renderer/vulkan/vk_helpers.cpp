@@ -1443,6 +1443,8 @@ void RenderPassCommandBufferHelper::depthStencilImagesDraw(ResourceUseList *reso
     mDepthStencilLayerIndex = layerStart;
     mDepthStencilLayerCount = layerCount;
     image->setRenderPassUsageFlag(RenderPassUsage::RenderTargetAttachment);
+    image->setContentDefined(image->toVkLevel(level), 1, layerStart, layerCount,
+                             image->getAspectFlags());
 
     if (resolveImage)
     {
@@ -1453,6 +1455,8 @@ void RenderPassCommandBufferHelper::depthStencilImagesDraw(ResourceUseList *reso
         mRenderPassUsedImages.insert(resolveImage->getImageSerial().getValue());
         mDepthStencilResolveImage = resolveImage;
         resolveImage->setRenderPassUsageFlag(RenderPassUsage::RenderTargetAttachment);
+        resolveImage->setContentDefined(resolveImage->toVkLevel(level), 1, layerStart, layerCount,
+                                        image->getAspectFlags());
     }
 }
 

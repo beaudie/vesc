@@ -2035,6 +2035,12 @@ class ImageHelper final : public Resource, public angle::Subject
                                                    gl::LevelIndex levelEnd,
                                                    angle::FormatID formatID) const;
 
+    void setContentDefined(LevelIndex levelStart,
+                           uint32_t levelCount,
+                           uint32_t layerStart,
+                           uint32_t layerCount,
+                           VkImageAspectFlags aspectFlags);
+
   private:
     enum class UpdateSource
     {
@@ -2201,11 +2207,6 @@ class ImageHelper final : public Resource, public angle::Subject
     void resetCachedProperties();
     void setEntireContentDefined();
     void setEntireContentUndefined();
-    void setContentDefined(LevelIndex levelStart,
-                           uint32_t levelCount,
-                           uint32_t layerStart,
-                           uint32_t layerCount,
-                           VkImageAspectFlags aspectFlags);
 
     // Up to 8 layers are tracked per level for whether contents are defined, above which the
     // contents are considered unconditionally defined.  This handles the more likely scenarios of:
