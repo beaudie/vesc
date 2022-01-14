@@ -54,6 +54,41 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "0f2a7095_8381734c",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 11
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-01-14T19:38:28Z",
+      "side": 1,
+      "message": "Super!",
+      "revId": "729e7da07950612beee6e598dbf0e7c3105ba2e6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "c6920c60_979f2c36",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 11
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-01-14T19:38:28Z",
+      "side": 1,
+      "message": "No worries, ping never hurts",
+      "parentUuid": "ad1f4d80_0dfdf7c4",
+      "revId": "729e7da07950612beee6e598dbf0e7c3105ba2e6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "64ded40a_fbded88b",
@@ -67,6 +102,70 @@
       "writtenOn": "2022-01-12T10:57:21Z",
       "side": 1,
       "message": "Had to revisit this. Otherwise, some tests failed on targets that had gl 4.3 or gles 3.1, but didn\u0027t have the extension. The spec says that it\u0027s possible to use non-mesa function to set the property after these versions. And doesn\u0027t say it\u0027s guaranteed the extension is available.",
+      "revId": "729e7da07950612beee6e598dbf0e7c3105ba2e6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "288d5753_de825a30",
+        "filename": "src/libANGLE/renderer/gl/renderergl_utils.cpp",
+        "patchSetId": 11
+      },
+      "lineNbr": 1804,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-01-14T19:38:28Z",
+      "side": 1,
+      "message": "Yeap, my understand is that the extension is not promoted, just that once they are available, you can use the non-ext functions that the extension was bringing forward from later ES versions.",
+      "parentUuid": "64ded40a_fbded88b",
+      "revId": "729e7da07950612beee6e598dbf0e7c3105ba2e6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "103ef6fd_9eb60b6e",
+        "filename": "src/tests/gl_tests/CopyTexImageTest.cpp",
+        "patchSetId": 11
+      },
+      "lineNbr": 153,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-01-14T19:38:28Z",
+      "side": 1,
+      "message": "nit: ANGLE uses camelCase",
+      "range": {
+        "startLine": 153,
+        "startChar": 52,
+        "endLine": 153,
+        "endChar": 66
+      },
+      "revId": "729e7da07950612beee6e598dbf0e7c3105ba2e6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "9ec1c54d_a99ee5bb",
+        "filename": "src/tests/gl_tests/CopyTextureTest.cpp",
+        "patchSetId": 11
+      },
+      "lineNbr": 430,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-01-14T19:38:28Z",
+      "side": 1,
+      "message": "Same nit",
+      "range": {
+        "startLine": 430,
+        "startChar": 31,
+        "endLine": 430,
+        "endChar": 48
+      },
       "revId": "729e7da07950612beee6e598dbf0e7c3105ba2e6",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
