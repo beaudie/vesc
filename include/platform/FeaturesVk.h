@@ -490,6 +490,14 @@ struct FeaturesVk : FeatureSetBase
         "of render pass due to bugs",
         &members, "https://issuetracker.google.com/166809097"};
 
+    // Tile-Based Renderers (TBRs) perform better with draw vs. vkCmdClearAttachments for scissored
+    // clears.
+    Feature scissoredClearUseDrawClearOverVkCmdClearAttachments = {
+        "preferDrawClearOverVkCmdClearAttachments", FeatureCategory::VulkanWorkarounds,
+        "On tile-based renderers, clear using a draw call instead of vkCmdClearAttachments"
+        "for better performance.",
+        &members, "http://anglebug.com/5194"};
+
     // Whether prerotation is being emulated for testing.  90 degree rotation.
     Feature emulatedPrerotation90 = {"emulatedPrerotation90", FeatureCategory::VulkanFeatures,
                                      "Emulate 90-degree prerotation.", &members,

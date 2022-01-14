@@ -2736,6 +2736,7 @@ void RendererVk::initFeatures(DisplayVk *displayVk,
     bool isSamsung  = IsSamsung(mPhysicalDeviceProperties.vendorID);
     bool isSwiftShader =
         IsSwiftshader(mPhysicalDeviceProperties.vendorID, mPhysicalDeviceProperties.deviceID);
+    bool isTileBasedRenderer = isARM || isPowerVR || isQualcomm;
 
     bool supportsNegativeViewport =
         ExtensionFound(VK_KHR_MAINTENANCE1_EXTENSION_NAME, deviceExtensionNames) ||
@@ -3081,6 +3082,9 @@ void RendererVk::initFeatures(DisplayVk *displayVk,
     ANGLE_FEATURE_CONDITION(
         &mFeatures, preferDrawClearOverVkCmdClearAttachments,
         IsPixel2(mPhysicalDeviceProperties.vendorID, mPhysicalDeviceProperties.deviceID));
+
+    ANGLE_FEATURE_CONDITION(&mFeatures, scissoredClearUseDrawClearOverVkCmdClearAttachments,
+                            isTileBasedRenderer);
 
     // r32f image emulation is done unconditionally so VK_FORMAT_FEATURE_STORAGE_*_ATOMIC_BIT is not
     // required.

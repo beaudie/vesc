@@ -1300,6 +1300,7 @@ struct PerfCounters
     uint32_t shaderBuffersDescriptorSetCacheMisses;
     uint32_t buffersGhosted;
     uint32_t vertexArraySyncStateCalls;
+    uint32_t vkCmdClearAttachments;
 };
 
 // A Vulkan image level index.
@@ -1502,6 +1503,7 @@ enum class RenderPassClosureReason
     CopyTextureOnCPU,
     TextureReformatToRenderable,
     DeviceLocalBufferMap,
+    RenderAreaChangedWithPendingLoadOpClear,
 
     // UtilsVk
     PrepareForBlit,
