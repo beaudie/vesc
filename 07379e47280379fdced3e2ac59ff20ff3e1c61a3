@@ -26,6 +26,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "586f5546_fe7e2ae5",
+        "filename": "src/libANGLE/renderer/vulkan/ResourceVk.h",
+        "patchSetId": 8
+      },
+      "lineNbr": 279,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2022-01-14T01:35:07Z",
+      "side": 1,
+      "message": "ResourceList is already taken though, we have ContextVk::mResourceList.",
+      "parentUuid": "3987fccb_0476d9a6",
+      "range": {
+        "startLine": 279,
+        "startChar": 6,
+        "endLine": 279,
+        "endChar": 28
+      },
+      "revId": "07379e47280379fdced3e2ac59ff20ff3e1c61a3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "9d04a598_cfb75517",
         "filename": "src/libANGLE/renderer/vulkan/ResourceVk.h",
         "patchSetId": 8
@@ -37,6 +61,30 @@
       "writtenOn": "2022-01-13T19:23:46Z",
       "side": 1,
       "message": "nit: retain() to match SharedResourceUse.",
+      "range": {
+        "startLine": 290,
+        "startChar": 9,
+        "endLine": 290,
+        "endChar": 14
+      },
+      "revId": "07379e47280379fdced3e2ac59ff20ff3e1c61a3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "de7b2cb9_03af0420",
+        "filename": "src/libANGLE/renderer/vulkan/ResourceVk.h",
+        "patchSetId": 8
+      },
+      "lineNbr": 290,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2022-01-14T01:35:07Z",
+      "side": 1,
+      "message": "This is different from SharedResourceUse. What this is doing is sort of combination of vk::SharedGarbage and vk::Recycler. \nSharedResourceUse::retain() adds mLifetime to ResopurceList\nWhat this stash() call does is move this object to internal stash list so that later on we can call `retain`.",
+      "parentUuid": "9d04a598_cfb75517",
       "range": {
         "startLine": 290,
         "startChar": 9,
@@ -72,6 +120,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "ff95071c_1f890d9e",
+        "filename": "src/libANGLE/renderer/vulkan/ResourceVk.h",
+        "patchSetId": 8
+      },
+      "lineNbr": 291,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2022-01-14T01:35:07Z",
+      "side": 1,
+      "message": "This is try to match Recycler class. fetch will move the object out. get usually will just return the pointer.",
+      "parentUuid": "989b2ab2_9ffe705b",
+      "range": {
+        "startLine": 291,
+        "startChar": 9,
+        "endLine": 291,
+        "endChar": 14
+      },
+      "revId": "07379e47280379fdced3e2ac59ff20ff3e1c61a3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "5040f0e9_64154295",
         "filename": "src/libANGLE/renderer/vulkan/ResourceVk.h",
         "patchSetId": 8
@@ -83,6 +155,30 @@
       "writtenOn": "2022-01-13T19:23:46Z",
       "side": 1,
       "message": "nit: mSharedResourceUse",
+      "range": {
+        "startLine": 299,
+        "startChar": 22,
+        "endLine": 299,
+        "endChar": 31
+      },
+      "revId": "07379e47280379fdced3e2ac59ff20ff3e1c61a3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "bed1d582_f20f0cc3",
+        "filename": "src/libANGLE/renderer/vulkan/ResourceVk.h",
+        "patchSetId": 8
+      },
+      "lineNbr": 299,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2022-01-14T01:35:07Z",
+      "side": 1,
+      "message": "This is try to match SharedGarbage. But I am also okay with mSharedResourceUse if people like it better (or just mSharedUse).",
+      "parentUuid": "5040f0e9_64154295",
       "range": {
         "startLine": 299,
         "startChar": 22,
@@ -112,6 +208,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "6a298fd3_4d7f0fca",
+        "filename": "src/libANGLE/renderer/vulkan/ResourceVk.h",
+        "patchSetId": 8
+      },
+      "lineNbr": 302,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2022-01-14T01:35:07Z",
+      "side": 1,
+      "message": "The problem is inclusion order. ResourceVk.h includes vk_utils.h, not the other way around.",
+      "parentUuid": "181449b0_f19fa953",
+      "revId": "07379e47280379fdced3e2ac59ff20ff3e1c61a3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "58fb3529_80d62deb",
         "filename": "src/libANGLE/renderer/vulkan/ResourceVk.h",
         "patchSetId": 8
@@ -129,6 +243,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "94cd5e64_e7efef80",
+        "filename": "src/libANGLE/renderer/vulkan/ResourceVk.h",
+        "patchSetId": 8
+      },
+      "lineNbr": 333,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2022-01-14T01:35:07Z",
+      "side": 1,
+      "message": "No. The whole point here is to a vector of objects will share with one ResourceSharedUse. The retain call is done separately at submission time.",
+      "parentUuid": "58fb3529_80d62deb",
+      "revId": "07379e47280379fdced3e2ac59ff20ff3e1c61a3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "9fc032b5_d4cda636",
         "filename": "src/libANGLE/renderer/vulkan/ResourceVk.h",
         "patchSetId": 8
@@ -140,6 +272,30 @@
       "writtenOn": "2022-01-13T19:23:46Z",
       "side": 1,
       "message": "nit: Similar to above - something like \u0027ResourceRecycler\u0027",
+      "range": {
+        "startLine": 375,
+        "startChar": 6,
+        "endLine": 375,
+        "endChar": 35
+      },
+      "revId": "07379e47280379fdced3e2ac59ff20ff3e1c61a3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "71c6da32_b6b8ff9a",
+        "filename": "src/libANGLE/renderer/vulkan/ResourceVk.h",
+        "patchSetId": 8
+      },
+      "lineNbr": 375,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2022-01-14T01:35:07Z",
+      "side": 1,
+      "message": "We already have a Recycler class in vk_util.h. The main difference here is this tracks GPU progress. Just name it ResourceRecycler does not tell difference from Recycler class.",
+      "parentUuid": "9fc032b5_d4cda636",
       "range": {
         "startLine": 375,
         "startChar": 6,
