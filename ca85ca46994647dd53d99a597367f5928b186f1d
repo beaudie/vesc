@@ -18,6 +18,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "20701e59_9f65e758",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 10
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2022-01-14T18:09:38Z",
+      "side": 1,
+      "message": "The motivation is to reduce CPU overhead with default attributes. call_break_offline_card_game trace is change default attribute for almost every draw call. This means we are sub-allocating constantly, and adding each of it into resourcer use list and update queueSerial etc. Since it is in draw call path, I am trying to minimize the CPU overhead here by recycling these default attribute suballocations and batch them up with one SharedResourceUse tracking. I did verify with printf that previously I am seeing dozens of initForDefaultAtribute() calls every submission and zero after this. I can get some data shortly.",
+      "parentUuid": "5bacc1e8_dffc48e1",
+      "revId": "ca85ca46994647dd53d99a597367f5928b186f1d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "6b30c904_8fb5ccbb",
@@ -31,6 +49,30 @@
       "writtenOn": "2022-01-14T14:45:15Z",
       "side": 1,
       "message": "I\u0027m not seeing where the size is taken into consideration when using the recycler? Do you clear the whole recycler when the size changes?",
+      "range": {
+        "startLine": 4155,
+        "startChar": 25,
+        "endLine": 4155,
+        "endChar": 39
+      },
+      "revId": "ca85ca46994647dd53d99a597367f5928b186f1d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "c51c998f_a0f53d38",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 10
+      },
+      "lineNbr": 4155,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2022-01-14T18:09:38Z",
+      "side": 1,
+      "message": "That is because it is only used for default attributes which is fixed size.",
+      "parentUuid": "6b30c904_8fb5ccbb",
       "range": {
         "startLine": 4155,
         "startChar": 25,
