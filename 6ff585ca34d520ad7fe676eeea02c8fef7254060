@@ -165,6 +165,24 @@
       "message": "Is it possible for this to be true since ref1 already set them equal?\n\nInstead, a new bool needs to track if the prior conditional was executed and then checked here.",
       "revId": "6ff585ca34d520ad7fe676eeea02c8fef7254060",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ca1bb38f_3eba233d",
+        "filename": "src/libANGLE/renderer/vulkan/ProgramVk.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 767,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2022-01-14T01:39:08Z",
+      "side": 1,
+      "message": "Ref1 is setting uniformBufferSerial, this is comparing to last used serial on the program. they are different.",
+      "parentUuid": "f7b157d8_c87c6807",
+      "revId": "6ff585ca34d520ad7fe676eeea02c8fef7254060",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
