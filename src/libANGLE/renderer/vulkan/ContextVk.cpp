@@ -4100,6 +4100,9 @@ angle::Result ContextVk::syncState(const gl::Context *context,
                         case gl::State::ExtendedDirtyBitType::
                             EXTENDED_DIRTY_BIT_SHADER_DERIVATIVE_HINT:
                             break;
+                        case gl::State::ExtendedDirtyBitType::
+                            EXTENDED_DIRTY_BIT_TEXTURE_SAMPLER_REBIND_OPTIMIZATION:
+                            break;
                         default:
                             UNREACHABLE();
                     }
