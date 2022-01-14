@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "6566e05d_f65598bb",
+        "filename": "src/libANGLE/renderer/metal/gen_mtl_format_table.py",
+        "patchSetId": 5
+      },
+      "lineNbr": 475,
+      "author": {
+        "id": 1394635
+      },
+      "writtenOn": "2022-01-14T10:41:15Z",
+      "side": 1,
+      "message": "The extra backslash caused the missing line break in the generated file.",
+      "range": {
+        "startLine": 475,
+        "startChar": 57,
+        "endLine": 475,
+        "endChar": 58
+      },
+      "revId": "b137fe6ad5f6895a3ec8b4e8e91d60135c97994d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "2a9e3cda_c3fab686",
+        "filename": "src/libANGLE/renderer/metal/mtl_format_table_autogen.mm",
+        "patchSetId": 5
+      },
+      "lineNbr": 1895,
+      "author": {
+        "id": 1394635
+      },
+      "writtenOn": "2022-01-14T10:41:15Z",
+      "side": 1,
+      "message": "Looks like the line break is missing here.",
+      "range": {
+        "startLine": 1895,
+        "startChar": 41,
+        "endLine": 1895,
+        "endChar": 43
+      },
+      "revId": "b137fe6ad5f6895a3ec8b4e8e91d60135c97994d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
