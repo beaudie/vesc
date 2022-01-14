@@ -22,6 +22,30 @@
       },
       "revId": "02517acb811ee63ff37d0f134f692c57bdb4d103",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "06d2b0c9_7b4ccae5",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 21
+      },
+      "lineNbr": 5800,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2022-01-14T17:57:45Z",
+      "side": 1,
+      "message": "Yea. Or I am thinking to implement our own cache flush function which is less overhead and you don\u0027t need any argument (let\u0027s discuss this in chat).",
+      "parentUuid": "291c18e5_b67831c5",
+      "range": {
+        "startLine": 5800,
+        "startChar": 34,
+        "endLine": 5800,
+        "endChar": 43
+      },
+      "revId": "02517acb811ee63ff37d0f134f692c57bdb4d103",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
