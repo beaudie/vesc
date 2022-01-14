@@ -16,6 +16,23 @@
       "message": "Correct fix for the issue. Feel free to land P6 bots first and we\u0027ll run this over that.",
       "revId": "c4670e29e19864701283cfdce8a13182721b4541",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "6a67c658_7433276e",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1001921
+      },
+      "writtenOn": "2022-01-14T19:23:13Z",
+      "side": 1,
+      "message": "Yes, would be good to test on Pixel 6 before landing.\nI\u0027ll add the trybot here when it\u0027s ready.",
+      "revId": "c4670e29e19864701283cfdce8a13182721b4541",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
