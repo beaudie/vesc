@@ -483,7 +483,7 @@ class ContextVk : public ContextImpl, public vk::Context, public MultisampleText
 
     vk::DescriptorSetLayoutDesc getDriverUniformsDescriptorSetDesc() const;
 
-    void updateScissor(const gl::State &glState);
+    angle::Result updateScissor(const gl::State &glState);
 
     void updateDepthStencil(const gl::State &glState);
 
