@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "291c18e5_b67831c5",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 21
+      },
+      "lineNbr": 5800,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2022-01-14T14:39:46Z",
+      "side": 1,
+      "message": "I suggest you use vk::Context instead of passing RendererVk for consistency with the rest of the code, and it seems you don\u0027t need to generate potential errors here, so you can make these return void.",
+      "range": {
+        "startLine": 5800,
+        "startChar": 34,
+        "endLine": 5800,
+        "endChar": 43
+      },
+      "revId": "02517acb811ee63ff37d0f134f692c57bdb4d103",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
