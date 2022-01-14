@@ -3260,11 +3260,10 @@ void ContextVk::optimizeRenderPassForPresent(VkFramebuffer framebufferHandle,
     if (depthStencilRenderTarget != nullptr)
     {
         // Change depth/stencil attachment storeOp to DONT_CARE
-        const gl::DepthStencilState &dsState = mState.getDepthStencilState();
         mRenderPassCommands->invalidateRenderPassDepthAttachment(
-            dsState, mRenderPassCommands->getRenderArea());
+            getState(), mRenderPassCommands->getRenderArea());
         mRenderPassCommands->invalidateRenderPassStencilAttachment(
-            dsState, mRenderPassCommands->getRenderArea());
+            getState(), mRenderPassCommands->getRenderArea());
     }
 
     // Use finalLayout instead of extra barrier for layout change to present
@@ -3631,7 +3630,7 @@ void ContextVk::updateDepthRange(float nearPlane, float farPlane)
     mGraphicsDirtyBits.set(DIRTY_BIT_VIEWPORT);
 }
 
-void ContextVk::updateScissor(const gl::State &glState)
+angle::Result ContextVk::updateScissor(const gl::State &glState)
 {
     FramebufferVk *framebufferVk = vk::GetImpl(glState.getDrawFramebuffer());
     gl::Rectangle renderArea     = framebufferVk->getNonRotatedCompleteRenderArea();
@@ -3658,8 +3657,26 @@ void ContextVk::updateScissor(const gl::State &glState)
         !mRenderPassCommands->getRenderArea().encloses(rotatedScissoredArea))
     {
         ASSERT(mRenderPassCommands->started());
+
+        if (mRenderPassCommands->isAnyLoadOpClear(framebufferVk))
+        {
+            // Close the render pass if any attachments are being cleared with a loadOp, since
+            // the render area is about to grow and the clear will overwrite any previous
+            // contents.
+            onRenderPassFinished(RenderPassClosureReason::RenderAreaChangedWithPendingLoadOpClear);
+#if 0  // TIMTIM
+            return startRenderPass(rotatedScissoredArea, nullptr, nullptr);
+#else
+            // Let DIRTY_BIT_RENDER_PASS (set by onRenderPassFinished) start the
+            // next render pass.
+            return angle::Result::Continue;
+#endif
+        }
+
         mRenderPassCommands->growRenderArea(this, rotatedScissoredArea);
     }
+
+    return angle::Result::Continue;
 }
 
 void ContextVk::updateDepthStencil(const gl::State &glState)
@@ -3890,7 +3907,7 @@ angle::Result ContextVk::syncState(const gl::Context *context,
         {
             case gl::State::DIRTY_BIT_SCISSOR_TEST_ENABLED:
             case gl::State::DIRTY_BIT_SCISSOR:
-                updateScissor(glState);
+                ANGLE_TRY(updateScissor(glState));
                 break;
             case gl::State::DIRTY_BIT_VIEWPORT:
             {
@@ -3898,7 +3915,7 @@ angle::Result ContextVk::syncState(const gl::Context *context,
                 updateViewport(framebufferVk, glState.getViewport(), glState.getNearPlane(),
                                glState.getFarPlane());
                 // Update the scissor, which will be constrained to the viewport
-                updateScissor(glState);
+                ANGLE_TRY(updateScissor(glState));
                 break;
             }
             case gl::State::DIRTY_BIT_DEPTH_RANGE:
@@ -4097,7 +4114,7 @@ angle::Result ContextVk::syncState(const gl::Context *context,
                 mGraphicsPipelineDesc->updateFrontFace(&mGraphicsPipelineTransition,
                                                        glState.getRasterizerState(),
                                                        isYFlipEnabledForDrawFBO());
-                updateScissor(glState);
+                ANGLE_TRY(updateScissor(glState));
                 updateDepthStencil(glState);
                 updateDither();
 
@@ -4231,7 +4248,7 @@ angle::Result ContextVk::syncState(const gl::Context *context,
                             mGraphicsPipelineDesc->updateFrontFace(&mGraphicsPipelineTransition,
                                                                    glState.getRasterizerState(),
                                                                    isYFlipEnabledForDrawFBO());
-                            updateScissor(glState);
+                            ANGLE_TRY(updateScissor(glState));
 
                             // If VK_EXT_depth_clip_control is not enabled, there's nothing needed
                             // for depth correction for EXT_clip_control.
@@ -4708,7 +4725,7 @@ angle::Result ContextVk::onFramebufferChange(FramebufferVk *framebufferVk, gl::C
     }
 
     // Update scissor.
-    updateScissor(mState);
+    ANGLE_TRY(updateScissor(mState));
 
     // Update depth and stencil.
     updateDepthStencil(mState);
