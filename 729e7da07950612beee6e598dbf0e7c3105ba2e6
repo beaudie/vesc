@@ -89,6 +89,23 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "e7423608_4990eab1",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 11
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1326275
+      },
+      "writtenOn": "2022-01-14T20:11:45Z",
+      "side": 1,
+      "message": "LGTM. Up to you if you want to make these helper functions for the tests.",
+      "revId": "729e7da07950612beee6e598dbf0e7c3105ba2e6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "64ded40a_fbded88b",
@@ -120,6 +137,46 @@
       "side": 1,
       "message": "Yeap, my understand is that the extension is not promoted, just that once they are available, you can use the non-ext functions that the extension was bringing forward from later ES versions.",
       "parentUuid": "64ded40a_fbded88b",
+      "revId": "729e7da07950612beee6e598dbf0e7c3105ba2e6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "289e4fa5_93d81e1d",
+        "filename": "src/tests/gl_tests/BlitFramebufferANGLETest.cpp",
+        "patchSetId": 11
+      },
+      "lineNbr": 1246,
+      "author": {
+        "id": 1326275
+      },
+      "writtenOn": "2022-01-14T20:11:45Z",
+      "side": 1,
+      "message": "nit: You could use a helper function with a bool parameter to control GL_FRAMEBUFFER_FLIP_Y_MESA and dedupe a bunch of code here.",
+      "range": {
+        "startLine": 1246,
+        "startChar": 33,
+        "endLine": 1246,
+        "endChar": 57
+      },
+      "revId": "729e7da07950612beee6e598dbf0e7c3105ba2e6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "05e9fee4_41d3674c",
+        "filename": "src/tests/gl_tests/BlitFramebufferANGLETest.cpp",
+        "patchSetId": 11
+      },
+      "lineNbr": 2935,
+      "author": {
+        "id": 1326275
+      },
+      "writtenOn": "2022-01-14T20:11:45Z",
+      "side": 1,
+      "message": "Same nit as above",
       "revId": "729e7da07950612beee6e598dbf0e7c3105ba2e6",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
@@ -165,6 +222,29 @@
         "startChar": 31,
         "endLine": 430,
         "endChar": 48
+      },
+      "revId": "729e7da07950612beee6e598dbf0e7c3105ba2e6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "223e3787_92b08b0d",
+        "filename": "src/tests/gl_tests/CopyTextureTest.cpp",
+        "patchSetId": 11
+      },
+      "lineNbr": 1793,
+      "author": {
+        "id": 1326275
+      },
+      "writtenOn": "2022-01-14T20:11:45Z",
+      "side": 1,
+      "message": "Same nit as above",
+      "range": {
+        "startLine": 1793,
+        "startChar": 28,
+        "endLine": 1793,
+        "endChar": 57
       },
       "revId": "729e7da07950612beee6e598dbf0e7c3105ba2e6",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
