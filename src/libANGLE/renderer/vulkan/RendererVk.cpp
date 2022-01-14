@@ -3129,6 +3129,12 @@ void RendererVk::initFeatures(DisplayVk *displayVk,
         &mFeatures, preferDrawClearOverVkCmdClearAttachments,
         IsPixel2(mPhysicalDeviceProperties.vendorID, mPhysicalDeviceProperties.deviceID));
 
+    // On tile-based renderers, vkCmdClearAttachments uses less CPU but more GPU. Since most games
+    // will be GPU-bound, disable vkCmdClearAttachments() to reduce the GPU workload.
+    // NOTE: This feature fails on Qualcomm devices.
+    ANGLE_FEATURE_CONDITION(&mFeatures, midRenderPassClearUseDrawClearOverVkCmdClearAttachments,
+                            isARM);
+
     // r32f image emulation is done unconditionally so VK_FORMAT_FEATURE_STORAGE_*_ATOMIC_BIT is not
     // required.
     ANGLE_FEATURE_CONDITION(&mFeatures, emulateR32fImageAtomicExchange, true);

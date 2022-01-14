@@ -530,8 +530,8 @@ class ContextVk : public ContextImpl, public vk::Context, public MultisampleText
                             vk::ImageHelper *resolveImage)
     {
         ASSERT(mRenderPassCommands->started());
-        mRenderPassCommands->depthStencilImagesDraw(&mResourceUseList, level, layerStart,
-                                                    layerCount, image, resolveImage);
+        mRenderPassCommands->depthStencilImagesDraw(getState(), &mResourceUseList, level,
+                                                    layerStart, layerCount, image, resolveImage);
     }
 
     void finalizeImageLayout(const vk::ImageHelper *image)
