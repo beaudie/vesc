@@ -1091,7 +1091,8 @@ class RenderPassCommandBufferHelper final : public CommandBufferHelperCommon
                          ImageHelper *image,
                          ImageHelper *resolveImage,
                          PackedAttachmentIndex packedAttachmentIndex);
-    void depthStencilImagesDraw(ResourceUseList *resourceUseList,
+    void depthStencilImagesDraw(const gl::State &glState,
+                                ResourceUseList *resourceUseList,
                                 gl::LevelIndex level,
                                 uint32_t layerStart,
                                 uint32_t layerCount,
@@ -1132,9 +1133,9 @@ class RenderPassCommandBufferHelper final : public CommandBufferHelperCommon
     void endTransformFeedback();
 
     void invalidateRenderPassColorAttachment(PackedAttachmentIndex attachmentIndex);
-    void invalidateRenderPassDepthAttachment(const gl::DepthStencilState &dsState,
+    void invalidateRenderPassDepthAttachment(const gl::State &glState,
                                              const gl::Rectangle &invalidateArea);
-    void invalidateRenderPassStencilAttachment(const gl::DepthStencilState &dsState,
+    void invalidateRenderPassStencilAttachment(const gl::State &glState,
                                                const gl::Rectangle &invalidateArea);
 
     bool hasWriteAfterInvalidate(uint32_t cmdCountInvalidated, uint32_t cmdCountDisabled)
@@ -1203,6 +1204,8 @@ class RenderPassCommandBufferHelper final : public CommandBufferHelperCommon
         }
     }
     void addCommandDiagnostics(ContextVk *contextVk);
+
+    bool isAnyLoadOpClear(const FramebufferVk *framebufferVk);
 
   private:
     angle::Result initializeCommandBuffer(Context *context);
