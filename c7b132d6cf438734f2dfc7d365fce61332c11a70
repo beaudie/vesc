@@ -26,6 +26,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "898879ee_0ae00c6c",
+        "filename": "src/libANGLE/renderer/vulkan/DeviceVk.cpp",
+        "patchSetId": 12
+      },
+      "lineNbr": 108,
+      "author": {
+        "id": 1000050
+      },
+      "writtenOn": "2022-01-14T15:03:10Z",
+      "side": 1,
+      "message": "I can move it to DeviceVK, but why non static? since kWrappedFunctons just stores const values.",
+      "parentUuid": "195214fa_58c37c6f",
+      "range": {
+        "startLine": 66,
+        "startChar": 0,
+        "endLine": 108,
+        "endChar": 18
+      },
+      "revId": "c7b132d6cf438734f2dfc7d365fce61332c11a70",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "ff15055a_c695eaa3",
         "filename": "src/libANGLE/renderer/vulkan/DeviceVk.h",
         "patchSetId": 12
@@ -37,6 +61,30 @@
       "writtenOn": "2022-01-14T14:54:16Z",
       "side": 1,
       "message": "If you add a DeviceState helper (similar to DisplayState/etc) and make it available in const \u0026 DeviceImpl::mState, you don\u0027t need to store the mRenderer pointer here because you already have access to Display *Device::mOwningDisplay;. I don\u0027t want to delay the CL any longer - it\u0027d be appreciated if you could help improve the code this way in a follow-up.",
+      "range": {
+        "startLine": 32,
+        "startChar": 0,
+        "endLine": 36,
+        "endChar": 2
+      },
+      "revId": "c7b132d6cf438734f2dfc7d365fce61332c11a70",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "4631da0e_f3a2004a",
+        "filename": "src/libANGLE/renderer/vulkan/DeviceVk.h",
+        "patchSetId": 12
+      },
+      "lineNbr": 36,
+      "author": {
+        "id": 1000050
+      },
+      "writtenOn": "2022-01-14T15:03:10Z",
+      "side": 1,
+      "message": "Sure. I will do it in follow-up.",
+      "parentUuid": "ff15055a_c695eaa3",
       "range": {
         "startLine": 32,
         "startChar": 0,
