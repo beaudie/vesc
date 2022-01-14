@@ -69,6 +69,24 @@
       "parentUuid": "0e71316d_757cc666",
       "revId": "45aba23732292dae8c149c8ef72f0aeb96be57b4",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "d82383a8_5c28a3f2",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-01-14T18:59:41Z",
+      "side": 1,
+      "message": "We currently even have suppressions like this:\n\n    5557 VULKAN ANDROID : KHR-GLES32.core.tessellation_shader.* \u003d SKIP\n\nSo don\u0027t feel too bad about it :)",
+      "parentUuid": "6540f61f_17c22daf",
+      "revId": "45aba23732292dae8c149c8ef72f0aeb96be57b4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
