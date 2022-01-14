@@ -20,6 +20,7 @@
 #include "libANGLE/angletypes.h"
 #include "libANGLE/renderer/vulkan/ContextVk.h"
 #include "test_utils/gl_raii.h"
+#include "util/random_utils.h"
 
 using namespace angle;
 
@@ -3252,6 +3253,102 @@ void main()
     EXPECT_EQ(hackANGLE().colorClears, 1u);
     // Color attachment 0+1 storeOp = STORE
     EXPECT_EQ(hackANGLE().colorStores, 2u);
+}
+
+// Copy of ClearTest.InceptionScissorClears.
+// Clears many small concentric rectangles using scissor regions. Verifies vkCmdClearAttachments()
+// is used for the scissored clears, rather than vkCmdDraw().
+TEST_P(VulkanPerformanceCounterTest, InceptionScissorClears)
+{
+    // https://issuetracker.google.com/166809097
+    ANGLE_SKIP_TEST_IF(IsQualcomm() && IsVulkan());
+
+    angle::RNG rng;
+
+    constexpr GLuint kSize = 16;
+
+    // Create a square user FBO so we have more control over the dimensions.
+    GLFramebuffer fbo;
+    glBindFramebuffer(GL_FRAMEBUFFER, fbo);
+
+    GLRenderbuffer rbo;
+    glBindRenderbuffer(GL_RENDERBUFFER, rbo);
+    glRenderbufferStorage(GL_RENDERBUFFER, GL_RGBA8, kSize, kSize);
+
+    glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_RENDERBUFFER, rbo);
+    ASSERT_GL_FRAMEBUFFER_COMPLETE(GL_FRAMEBUFFER);
+
+    glViewport(0, 0, kSize, kSize);
+
+    // Draw small concentric squares using scissor.
+    std::vector<GLColor> expectedColors;
+    uint32_t numScissoredClears = 0;
+    for (GLuint index = 0; index < (kSize - 1) / 2; index++)
+    {
+        // Do the first clear without the scissor.
+        if (index > 0)
+        {
+            glEnable(GL_SCISSOR_TEST);
+            glScissor(index, index, kSize - (index * 2), kSize - (index * 2));
+            ++numScissoredClears;
+        }
+
+        GLColor color = RandomColor(&rng);
+        expectedColors.push_back(color);
+        Vector4 floatColor = color.toNormalizedVector();
+        glClearColor(floatColor[0], floatColor[1], floatColor[2], floatColor[3]);
+        glClear(GL_COLOR_BUFFER_BIT);
+    }
+
+    ASSERT_GL_NO_ERROR();
+
+    // Make sure all of the scissored clears used vkCmdClearAttachments().
+    EXPECT_EQ(hackANGLE().vkCmdClearAttachments, numScissoredClears);
+    // Make sure everything was done in a single renderpass.
+    EXPECT_EQ(hackANGLE().renderPasses, 1u);
+
+    std::vector<GLColor> actualColors(expectedColors.size());
+    glReadPixels(0, kSize / 2, actualColors.size(), 1, GL_RGBA, GL_UNSIGNED_BYTE,
+                 actualColors.data());
+
+    EXPECT_EQ(expectedColors, actualColors);
+}
+
+// Copy of ClearTest.Depth16Scissored.
+// Clears many small concentric rectangles using scissor regions. Verifies vkCmdClearAttachments()
+// is used for the scissored clears, rather than vkCmdDraw().
+TEST_P(VulkanPerformanceCounterTest, Depth16Scissored)
+{
+    GLRenderbuffer renderbuffer;
+    glBindRenderbuffer(GL_RENDERBUFFER, renderbuffer);
+    constexpr int kRenderbufferSize = 64;
+    glRenderbufferStorage(GL_RENDERBUFFER, GL_DEPTH_COMPONENT16, kRenderbufferSize,
+                          kRenderbufferSize);
+
+    GLFramebuffer fbo;
+    glBindFramebuffer(GL_FRAMEBUFFER, fbo);
+    glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_RENDERBUFFER, renderbuffer);
+
+    glClearDepthf(0.0f);
+    glClear(GL_DEPTH_BUFFER_BIT);
+
+    glEnable(GL_SCISSOR_TEST);
+    constexpr int kNumSteps     = 13;
+    uint32_t numScissoredClears = 0;
+    for (int ndx = 1; ndx < kNumSteps; ndx++)
+    {
+        float perc = static_cast<float>(ndx) / static_cast<float>(kNumSteps);
+        glScissor(0, 0, static_cast<int>(kRenderbufferSize * perc),
+                  static_cast<int>(kRenderbufferSize * perc));
+        glClearDepthf(perc);
+        glClear(GL_DEPTH_BUFFER_BIT);
+        ++numScissoredClears;
+    }
+
+    // Make sure all of the scissored clears used vkCmdClearAttachments().
+    EXPECT_EQ(hackANGLE().vkCmdClearAttachments, numScissoredClears);
+    // Make sure everything was done in a single renderpass.
+    EXPECT_EQ(hackANGLE().renderPasses, 1u);
 }
 
 ANGLE_INSTANTIATE_TEST(VulkanPerformanceCounterTest, ES3_VULKAN());
