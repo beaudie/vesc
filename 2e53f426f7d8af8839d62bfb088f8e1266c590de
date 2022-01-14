@@ -33,6 +33,24 @@
       "message": "LGTM, although it doesn\u0027t match the pattern used in MultisampleTest.cpp, which is the only other gl_test that uses NoFixture.",
       "revId": "2e53f426f7d8af8839d62bfb088f8e1266c590de",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "f5916d42_f7493ed9",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2022-01-14T20:01:48Z",
+      "side": 1,
+      "message": "How so?",
+      "parentUuid": "867f8a0d_00bb81a0",
+      "revId": "2e53f426f7d8af8839d62bfb088f8e1266c590de",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
