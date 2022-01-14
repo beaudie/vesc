@@ -16,6 +16,24 @@
       "message": "The test output looks pretty decent! I\u0027ve kept the feature enabled currently just to see what happens on the bots (and see which traces are affected). I have yet to measure the perf impact of this, but the code is nevertheless good for review.\n\nRandom data point: The test output running on Nvidia/OpenGL actually shows banding, so Nvidia doesn\u0027t dither it seems, or the OpenGL backend has a bug.\n\n@Mohan, feel free to give this a try with the affected app.",
       "revId": "1359ada73cfb5cf6c1cedc4d2dd6c934a9c0ad07",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "d2867ccc_a86e5c88",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1340649
+      },
+      "writtenOn": "2022-01-14T18:55:07Z",
+      "side": 1,
+      "message": "\u003e feel free to give this a try with the affected app.\n\nI have notified the owner of the diskusage app issue, will update when i hear back from him",
+      "parentUuid": "4ed928cf_b9d20cf8",
+      "revId": "1359ada73cfb5cf6c1cedc4d2dd6c934a9c0ad07",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
