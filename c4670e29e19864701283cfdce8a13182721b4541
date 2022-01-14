@@ -68,6 +68,24 @@
       "parentUuid": "a6b169b5_922e9a24",
       "revId": "c4670e29e19864701283cfdce8a13182721b4541",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "59eb2915_da6d396a",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-01-14T20:06:44Z",
+      "side": 1,
+      "message": "By the way, did the test for which you suppressed VVL even pass after that change? The Vulkan functionality wasn\u0027t there, so suppressing VVL shouldn\u0027t have turned it green anyway. I suspect you would need this change landed regardless, but I\u0027d defer that until you have it confirmed.",
+      "parentUuid": "11969de8_a1b8545e",
+      "revId": "c4670e29e19864701283cfdce8a13182721b4541",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
