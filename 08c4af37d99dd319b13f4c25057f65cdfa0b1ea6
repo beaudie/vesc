@@ -63,6 +63,30 @@
       },
       "revId": "08c4af37d99dd319b13f4c25057f65cdfa0b1ea6",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "c3d1e8f0_910b9128",
+        "filename": "src/libANGLE/renderer/vulkan/DeviceVk.cpp",
+        "patchSetId": 13
+      },
+      "lineNbr": 195,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2022-01-14T20:27:57Z",
+      "side": 1,
+      "message": "Ah, sorry, to be clear, I was suggesting you have two methods:\n\nVKAPI_ATTR PFN_vkVoidFunction VKAPI_CALL WrappedGetInstanceProcAddr\n{\n   if (gDevice)\n   {\n     return gDevice-\u003egetInstanceProcAddr(instance, pName);\n   }\n}\n\nPFN_vkVoidFunction DeviceVk::getInstanceProcAddr()\n{\n   // checks\n   return func from mWrappedVkFunctions;\n}\n\nInit of the table could happen in the constructor or lazily the first time we call getInstanceProcAddr.\n\nAnyway we\u0027ve been back and forth a lot on this so I don\u0027t want to delay you much more. Ideally we could get rid of the static initializer which is still present here.",
+      "parentUuid": "3d14f7ac_bce1b260",
+      "range": {
+        "startLine": 195,
+        "startChar": 26,
+        "endLine": 195,
+        "endChar": 43
+      },
+      "revId": "08c4af37d99dd319b13f4c25057f65cdfa0b1ea6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
