@@ -31,8 +31,7 @@ struct ClearParams final : public RenderTestParams
         iterationsPerStep = kIterationsPerStep;
         trackGpuTime      = true;
 
-        fboSize     = 2048;
-        textureSize = 16;
+        fboSize = 2048;
 
         internalFormat = GL_RGBA8;
 
@@ -140,8 +139,6 @@ void ClearBenchmark::drawBenchmark()
 {
     const auto &params = GetParam();
 
-    std::vector<float> textureData(params.textureSize * params.textureSize * 4, 0.5);
-
     GLRenderbuffer colorRbo;
     glBindRenderbuffer(GL_RENDERBUFFER, colorRbo);
     glRenderbufferStorage(GL_RENDERBUFFER, params.internalFormat, params.fboSize, params.fboSize);
@@ -160,8 +157,8 @@ void ClearBenchmark::drawBenchmark()
     if (params.scissoredClear)
     {
         angle::RNG rng;
-        const GLuint width  = getWindow()->getWidth();
-        const GLuint height = getWindow()->getHeight();
+        const GLuint width  = params.fboSize;
+        const GLuint height = params.fboSize;
         for (GLuint index = 0; index < (width - 1) / 2; index++)
         {
             // Do the first clear without the scissor.

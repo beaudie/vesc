@@ -489,6 +489,16 @@ struct FeaturesVk : FeatureSetBase
         "of render pass due to bugs",
         &members, "https://issuetracker.google.com/166809097"};
 
+    // For debug purposes, prefer using a draw to clear, rather than vkCmdClearAttachments.
+    // NOTE: Known to generate test failures on Qualcomm devices.
+    // TODO(http://anglebug.com/5194): Remove when no longer necessary.
+    Feature midRenderPassClearUseDrawClearOverVkCmdClearAttachments = {
+        "midRenderPassClearUseDrawClearOverVkCmdClearAttachments",
+        FeatureCategory::VulkanWorkarounds,
+        "For mid-render pass clears, prefer using a draw call instead of vkCmdClearAttachments."
+        " Used for debug purposes only. NOTE: Known to generate test failures on Qualcomm devices.",
+        &members, "http://anglebug.com/5194"};
+
     // Whether prerotation is being emulated for testing.  90 degree rotation.
     Feature emulatedPrerotation90 = {"emulatedPrerotation90", FeatureCategory::VulkanFeatures,
                                      "Emulate 90-degree prerotation.", &members,
