@@ -7973,6 +7973,60 @@ angle::Result ImageHelper::readPixelsForGetImage(ContextVk *contextVk,
     return angle::Result::Continue;
 }
 
+angle::Result ImageHelper::readPixelsForCompressedGetImage(ContextVk *contextVk,
+                                                           const gl::PixelPackState &packState,
+                                                           gl::Buffer *packBuffer,
+                                                           gl::LevelIndex levelGL,
+                                                           uint32_t layer,
+                                                           uint32_t layerCount,
+                                                           void *pixels)
+{
+    PackPixelsParams params;
+    GLuint outputSkipBytes = 0;
+
+    const LevelIndex levelVk = toVkLevel(levelGL);
+    gl::Extents mipExtents   = getLevelExtents(levelVk);
+    gl::Rectangle area(0, 0, mipExtents.width, mipExtents.height);
+
+    VkImageAspectFlagBits aspectFlags = VK_IMAGE_ASPECT_COLOR_BIT;
+
+    const angle::Format *readFormat = &getActualFormat();
+    ASSERT(readFormat->isBlock);
+
+    if (mExtents.depth > 1 || layerCount > 1)
+    {
+        ASSERT(layer == 0);
+        ASSERT(layerCount == 1 || mipExtents.depth == 1);
+
+        uint32_t lastLayer = std::max(static_cast<uint32_t>(mipExtents.depth), layerCount);
+
+        const vk::Format &vkFormat = contextVk->getRenderer()->getFormat(readFormat->id);
+        const gl::InternalFormat &storageFormatInfo =
+            vkFormat.getInternalFormatInfo(readFormat->componentType);
+
+        // Calculate size for one layer
+        mipExtents.depth = 1;
+        GLuint layerSize;
+        ANGLE_VK_CHECK_MATH(contextVk,
+                            storageFormatInfo.computeCompressedImageSize(mipExtents, &layerSize));
+
+        // Depth > 1 means this is a 3D texture and we need to copy all layers
+        for (uint32_t mipLayer = 0; mipLayer < lastLayer; mipLayer++)
+        {
+            ANGLE_TRY(readPixels(contextVk, area, params, aspectFlags, levelGL, mipLayer,
+                                 static_cast<uint8_t *>(pixels) + outputSkipBytes));
+            outputSkipBytes += layerSize;
+        }
+    }
+    else
+    {
+        ANGLE_TRY(readPixels(contextVk, area, params, aspectFlags, levelGL, layer,
+                             static_cast<uint8_t *>(pixels) + outputSkipBytes));
+    }
+
+    return angle::Result::Continue;
+}
+
 bool ImageHelper::canCopyWithTransformForReadPixels(const PackPixelsParams &packPixelsParams,
                                                     const angle::Format *readFormat)
 {
@@ -8038,6 +8092,16 @@ angle::Result ImageHelper::readPixels(ContextVk *contextVk,
     ANGLE_TRY(contextVk->getOutsideRenderPassCommandBuffer(access, &commandBuffer));
 
     const angle::Format *readFormat = &getActualFormat();
+
+    // Ensure storage format is compressed when read format is.
+    const vk::Format &vkFormat = contextVk->getRenderer()->getFormat(readFormat->id);
+    const gl::InternalFormat &storageFormatInfo =
+        vkFormat.getInternalFormatInfo(readFormat->componentType);
+    if (readFormat->isBlock && !storageFormatInfo.compressed)
+    {
+        WARN() << "Format is emulated.";
+        return angle::Result::Stop;
+    }
 
     if (copyAspectFlags != VK_IMAGE_ASPECT_COLOR_BIT)
     {
@@ -8156,7 +8220,19 @@ angle::Result ImageHelper::readPixels(ContextVk *contextVk,
     // TODO(jmadill): Don't block on asynchronous readback.
     ANGLE_TRY(contextVk->finishImpl(RenderPassClosureReason::GLReadPixels));
 
-    if (packPixelsParams.packBuffer)
+    if (readFormat->isBlock)
+    {
+        const LevelIndex levelVk = toVkLevel(levelGL);
+        gl::Extents levelExtents = getLevelExtents(levelVk);
+
+        // Calculate size of one layer
+        levelExtents.depth = 1;
+        GLuint layerSize;
+        ANGLE_VK_CHECK_MATH(contextVk,
+                            storageFormatInfo.computeCompressedImageSize(levelExtents, &layerSize));
+        memcpy(pixels, readPixelBuffer, layerSize);
+    }
+    else if (packPixelsParams.packBuffer)
     {
         // Must map the PBO in order to read its contents (and then unmap it later)
         BufferVk *packBufferVk = GetImpl(packPixelsParams.packBuffer);
