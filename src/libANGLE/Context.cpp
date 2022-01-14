@@ -1211,6 +1211,12 @@ GLboolean Context::isSampler(SamplerID samplerName) const
 
 void Context::bindTexture(TextureType target, TextureID handle)
 {
+    // Early return if rebinding the same texture
+    if (handle == mState.getSamplerTextureId(mState.getActiveSampler(), target))
+    {
+        return;
+    }
+
     Texture *texture = nullptr;
 
     if (handle.value == 0)
@@ -1269,6 +1275,13 @@ void Context::bindSampler(GLuint textureUnit, SamplerID samplerHandle)
     ASSERT(textureUnit < static_cast<GLuint>(mState.mCaps.maxCombinedTextureImageUnits));
     Sampler *sampler =
         mState.mSamplerManager->checkSamplerAllocation(mImplementation.get(), samplerHandle);
+
+    // Early return if rebinding the same sampler
+    if (sampler == mState.getSampler(textureUnit))
+    {
+        return;
+    }
+
     mState.setSamplerBinding(this, textureUnit, sampler);
     mSamplerObserverBindings[textureUnit].bind(sampler);
     mStateCache.onActiveTextureChange(this);
