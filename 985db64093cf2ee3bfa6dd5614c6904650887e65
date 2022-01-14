@@ -16,6 +16,24 @@
       "message": "I think the point of the flush was to make this next semaphore work correctly. With the flush removed, the GPU wait is effectively moved back to before whatever has been previously recorded and not yet flushed.\n\nThat\u0027s in the very least more likely to introduce a GPU bubble, but worse, it may introduce a race condition. What if the recorded-but-not-submitted commands have something in them that the serverWait was supposed to barrier against?",
       "revId": "985db64093cf2ee3bfa6dd5614c6904650887e65",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "2d4452c4_f3c95ee7",
+        "filename": "src/libANGLE/renderer/vulkan/SyncVk.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 324,
+      "author": {
+        "id": 1340649
+      },
+      "writtenOn": "2022-01-14T18:49:04Z",
+      "side": 0,
+      "message": "\u003e the GPU wait is effectively moved back to before whatever has been previously recorded and not yet flushed\n\u003e That\u0027s in the very least more likely to introduce a GPU bubble, but worse, it may introduce a race condition. What if the recorded-but-not-submitted commands have something in them that the serverWait was supposed to barrier against?\n\nNack\n\nThe idea behind server wait is this -\n1. ContextA generates some workload in threadA\n2. syncA is created with ContextA current\n3. ContextB is current on threadB\n4. app calls serverWait(syncA) on threadB\n\na flush of ContextB serves no purpose",
+      "parentUuid": "a85e10a5_bc74cf2c",
+      "revId": "985db64093cf2ee3bfa6dd5614c6904650887e65",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
