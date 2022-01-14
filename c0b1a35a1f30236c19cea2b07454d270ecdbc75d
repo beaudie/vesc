@@ -33,6 +33,23 @@
       "message": "LGTM",
       "revId": "c0b1a35a1f30236c19cea2b07454d270ecdbc75d",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ec24f5a6_938fabe7",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 16
+      },
+      "lineNbr": 1354,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-01-14T20:16:15Z",
+      "side": 1,
+      "message": "Unfortunately this is not the right approach, and will cause performance regressions. We shouldn\u0027t close the render pass unless we have to. IIRC Manhattan 3.1 at least issues an unrelated dispatch call mid-rendering that ANGLE reorders before the render pass. This change will regress that.\n\nThis problem can likely be fixed by appropriately setting dirty bits. For example, when switching from a !hasImage() to hasImage() program or vice versa, we should probably set `DIRTY_BIT_TEXTURES` and that should take care of things.",
+      "revId": "c0b1a35a1f30236c19cea2b07454d270ecdbc75d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
