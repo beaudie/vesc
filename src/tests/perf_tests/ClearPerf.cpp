@@ -160,8 +160,8 @@ void ClearBenchmark::drawBenchmark()
     if (params.scissoredClear)
     {
         angle::RNG rng;
-        const GLuint width  = getWindow()->getWidth();
-        const GLuint height = getWindow()->getHeight();
+        const GLuint width  = params.fboSize;
+        const GLuint height = params.fboSize;
         for (GLuint index = 0; index < (width - 1) / 2; index++)
         {
             // Do the first clear without the scissor.
