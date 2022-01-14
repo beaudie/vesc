@@ -131,6 +131,9 @@
 3711 : dEQP-EGL.functional.robustness.reset_context.shaders.out_of_bounds.reset_status.reads.* = FAIL
 3711 : dEQP-EGL.functional.robustness.reset_context.shaders.out_of_bounds.reset_status.writes.* = FAIL
 
+6906 WIN VULKAN : dEQP-EGL.functional.robustness.reset_context.shaders.out_of_bounds.reset_status.writes.* = SKIP
+6906 LINUX VULKAN : dEQP-EGL.functional.robustness.reset_context.shaders.out_of_bounds.reset_status.writes.* = SKIP
+
 // ES 1 tests
 2306 WIN : dEQP-EGL.functional.color_clears.single_context.gles1* = FAIL
 2306 WIN : dEQP-EGL.functional.color_clears.multi_context.gles1* = FAIL
