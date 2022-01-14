@@ -938,6 +938,8 @@ TEST_P(CopyTexImageTestES3, CopyTexSubImageToNonZeroBase)
 {
     // http://anglebug.com/5000
     ANGLE_SKIP_TEST_IF(IsOpenGL() && IsIntel() && IsWindows());
+    // http://anglebug.com/6952
+    ANGLE_SKIP_TEST_IF(IsD3D11());
 
     constexpr GLsizei kTexSize = 4;
     std::vector<GLColor> green(kTexSize * kTexSize, GLColor::green);
