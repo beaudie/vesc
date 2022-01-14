@@ -33,6 +33,24 @@
       "message": "As the bug says, this happens in thousands of dEQP tests.\nI didn\u0027t examine all the shards, but just in https://chromium-swarm.appspot.com/task?id\u003d586e2c5eb28cd310 there are 117 instances of this message.\n(probably due to retries, as only 36 tests failed in that shard)\n",
       "revId": "45aba23732292dae8c149c8ef72f0aeb96be57b4",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "0e71316d_757cc666",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1001921
+      },
+      "writtenOn": "2022-01-14T18:54:42Z",
+      "side": 1,
+      "message": "Also not sure if all of these tests use tesselation.\nAt least, it not obvious from\ndEQP.GLES31/functional_shaders_builtin_constants_core_max_vertex_atomic_counter_buffers\ntest name.",
+      "parentUuid": "90db5e98_a5b9a5d3",
+      "revId": "45aba23732292dae8c149c8ef72f0aeb96be57b4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
