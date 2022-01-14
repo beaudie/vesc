@@ -483,7 +483,7 @@ class ContextVk : public ContextImpl, public vk::Context, public MultisampleText
 
     vk::DescriptorSetLayoutDesc getDriverUniformsDescriptorSetDesc() const;
 
-    void updateScissor(const gl::State &glState);
+    angle::Result updateScissor(const gl::State &glState);
 
     void updateDepthStencil(const gl::State &glState);
 
@@ -532,7 +532,7 @@ class ContextVk : public ContextImpl, public vk::Context, public MultisampleText
                             vk::ImageHelper *resolveImage)
     {
         ASSERT(mRenderPassCommands->started());
-        mRenderPassCommands->depthStencilImagesDraw(&mResourceUseList, level, layerStart,
+        mRenderPassCommands->depthStencilImagesDraw(this, &mResourceUseList, level, layerStart,
                                                     layerCount, image, resolveImage);
     }
 
@@ -1038,6 +1038,8 @@ class ContextVk : public ContextImpl, public vk::Context, public MultisampleText
     void updateShaderResourcesDescriptorDesc(PipelineType pipelineType);
 
     ContextVkPerfCounters getAndResetObjectPerfCounters();
+
+    bool isAnyLoadOpClear(const FramebufferVk *framebufferVk);
 
     std::array<GraphicsDirtyBitHandler, DIRTY_BIT_MAX> mGraphicsDirtyBitHandlers;
     std::array<ComputeDirtyBitHandler, DIRTY_BIT_MAX> mComputeDirtyBitHandlers;
