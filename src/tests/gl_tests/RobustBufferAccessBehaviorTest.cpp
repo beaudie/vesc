@@ -10,6 +10,7 @@
 #include "test_utils/ANGLETest.h"
 #include "test_utils/gl_raii.h"
 #include "util/EGLWindow.h"
+#include "util/OSWindow.h"
 
 #include <array>
 
@@ -21,30 +22,66 @@ namespace
 class RobustBufferAccessBehaviorTest : public ANGLETest
 {
   protected:
-    RobustBufferAccessBehaviorTest() : mProgram(0), mTestAttrib(-1)
+    RobustBufferAccessBehaviorTest()
     {
         setWindowWidth(128);
         setWindowHeight(128);
-        setConfigRedBits(8);
-        setConfigGreenBits(8);
-        setConfigBlueBits(8);
-        setConfigAlphaBits(8);
-
-        // Test flakiness was noticed when reusing displays.
-        forceNewDisplay();
     }
 
-    void testTearDown() override { glDeleteProgram(mProgram); }
+    void testTearDown() override
+    {
+        glDeleteProgram(mProgram);
+        EGLWindow::Delete(&mEGLWindow);
+        OSWindow::Delete(&mOSWindow);
+    }
 
     bool initExtension()
     {
-        EGLWindow *window  = getEGLWindow();
-        EGLDisplay display = window->getDisplay();
+        mOSWindow = OSWindow::New();
+        if (!mOSWindow->initialize("RobustBufferAccessBehaviorTest", getWindowWidth(),
+                                   getWindowHeight()))
+        {
+            return false;
+        }
+
+        Library *driverLib = ANGLETestEnvironment::GetDriverLibrary(GLESDriverType::AngleEGL);
+
+        mEGLWindow = EGLWindow::New(GetParam().majorVersion, GetParam().minorVersion);
+        if (!mEGLWindow->initializeDisplay(mOSWindow, driverLib, GLESDriverType::AngleEGL,
+                                           GetParam().eglParameters))
+        {
+            return false;
+        }
+
+        EGLDisplay display = mEGLWindow->getDisplay();
         if (!IsEGLDisplayExtensionEnabled(display, "EGL_EXT_create_context_robustness"))
         {
             return false;
         }
-        setRobustAccess(true);
+
+        ConfigParameters configParams;
+        configParams.redBits      = 8;
+        configParams.greenBits    = 8;
+        configParams.blueBits     = 8;
+        configParams.alphaBits    = 8;
+        configParams.robustAccess = true;
+
+        if (mEGLWindow->initializeSurface(mOSWindow, driverLib, configParams) !=
+            GLWindowResult::NoError)
+        {
+            return false;
+        }
+
+        if (!mEGLWindow->initializeContext())
+        {
+            return false;
+        }
+
+        if (!mEGLWindow->makeCurrent())
+        {
+            return false;
+        }
+
         if (!IsGLExtensionEnabled("GL_KHR_robust_buffer_access_behavior"))
         {
             return false;
@@ -138,8 +175,10 @@ class RobustBufferAccessBehaviorTest : public ANGLETest
         }
     }
 
-    GLuint mProgram;
-    GLint mTestAttrib;
+    OSWindow *mOSWindow   = nullptr;
+    EGLWindow *mEGLWindow = nullptr;
+    GLuint mProgram       = 0;
+    GLint mTestAttrib     = 0;
 };
 
 // Test that static draw with out-of-bounds reads will not read outside of the data store of the
@@ -561,6 +600,11 @@ TEST_P(RobustBufferAccessBehaviorTest, DynamicBuffer)
     }
 }
 
-ANGLE_INSTANTIATE_TEST_ES2_AND_ES3_AND_ES31(RobustBufferAccessBehaviorTest);
+ANGLE_INSTANTIATE_TEST(RobustBufferAccessBehaviorTest,
+                       WithNoFixture(ES3_VULKAN()),
+                       WithNoFixture(ES3_OPENGL()),
+                       WithNoFixture(ES3_OPENGLES()),
+                       WithNoFixture(ES3_D3D11()),
+                       WithNoFixture(ES3_METAL()));
 
 }  // namespace
