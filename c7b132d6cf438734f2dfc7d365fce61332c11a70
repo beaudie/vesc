@@ -74,6 +74,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "6e83f710_7867edcf",
+        "filename": "src/libANGLE/renderer/vulkan/DeviceVk.cpp",
+        "patchSetId": 12
+      },
+      "lineNbr": 108,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2022-01-14T15:33:10Z",
+      "side": 1,
+      "message": "Well, we\u0027re in the Vulkan back-end, so we are allowed to put Vulkan headers in DeviceVk.h. We should have full isolation from the front-end via DisplayVk_api.h.\n\nAvoiding non-constexpr global statics is a good general coding practice as it avoids unexpected initialization. It won\u0027t have any performance drawbacks that I can think of. Because you\u0027re using function pointers, I don\u0027t believe you can use constexpr here. Feel free to file an issue for a style guideline clarification if you\u0027d like further discussion.",
+      "parentUuid": "ad3ebfff_92e24359",
+      "range": {
+        "startLine": 66,
+        "startChar": 0,
+        "endLine": 108,
+        "endChar": 18
+      },
+      "revId": "c7b132d6cf438734f2dfc7d365fce61332c11a70",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "ff15055a_c695eaa3",
         "filename": "src/libANGLE/renderer/vulkan/DeviceVk.h",
         "patchSetId": 12
