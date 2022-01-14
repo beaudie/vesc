@@ -39,6 +39,30 @@
       },
       "revId": "08c4af37d99dd319b13f4c25057f65cdfa0b1ea6",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "3d14f7ac_bce1b260",
+        "filename": "src/libANGLE/renderer/vulkan/DeviceVk.cpp",
+        "patchSetId": 13
+      },
+      "lineNbr": 195,
+      "author": {
+        "id": 1000050
+      },
+      "writtenOn": "2022-01-14T16:30:34Z",
+      "side": 1,
+      "message": "This method is static. If make it a member, it has to be a static member as well. So I have to left it as a local variable.",
+      "parentUuid": "83b9aec5_1a248d80",
+      "range": {
+        "startLine": 195,
+        "startChar": 26,
+        "endLine": 195,
+        "endChar": 43
+      },
+      "revId": "08c4af37d99dd319b13f4c25057f65cdfa0b1ea6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
