@@ -182,6 +182,11 @@ class BufferVk : public BufferImpl
                                       size_t sizeInBytes,
                                       BufferUpdateType updateType);
 
+    bool isExternalBuffer() const { return mClientBuffer != nullptr; }
+    angle::Result mapBuffer(ContextVk *contextVk, uint8_t **ptrOut);
+    angle::Result mapBufferWithOffset(ContextVk *contextVk, uint8_t **ptrOut, size_t offset);
+    void unmapBuffer(RendererVk *rendererVk);
+
     struct VertexConversionBuffer : public ConversionBuffer
     {
         VertexConversionBuffer(RendererVk *renderer,
@@ -200,6 +205,9 @@ class BufferVk : public BufferImpl
     };
 
     vk::BufferHelper mBuffer;
+
+    // If not null, this is the external memory pointer passed from client API.
+    void *mClientBuffer;
 
     uint32_t mMemoryTypeIndex;
     // Memory/Usage property that will be used for memory allocation.
