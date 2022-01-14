@@ -3260,11 +3260,10 @@ void ContextVk::optimizeRenderPassForPresent(VkFramebuffer framebufferHandle,
     if (depthStencilRenderTarget != nullptr)
     {
         // Change depth/stencil attachment storeOp to DONT_CARE
-        const gl::DepthStencilState &dsState = mState.getDepthStencilState();
         mRenderPassCommands->invalidateRenderPassDepthAttachment(
-            dsState, mRenderPassCommands->getRenderArea());
+            getState(), mRenderPassCommands->getRenderArea());
         mRenderPassCommands->invalidateRenderPassStencilAttachment(
-            dsState, mRenderPassCommands->getRenderArea());
+            getState(), mRenderPassCommands->getRenderArea());
     }
 
     // Use finalLayout instead of extra barrier for layout change to present
@@ -3658,7 +3657,19 @@ void ContextVk::updateScissor(const gl::State &glState)
         !mRenderPassCommands->getRenderArea().encloses(rotatedScissoredArea))
     {
         ASSERT(mRenderPassCommands->started());
-        mRenderPassCommands->growRenderArea(this, rotatedScissoredArea);
+
+        if (mRenderPassCommands->isAnyLoadOpClear(framebufferVk))
+        {
+            // Close the render pass if any attachments are being cleared with a loadOp, since
+            // the render area is about to grow and the clear will overwrite any previous
+            // contents.
+            // Let DIRTY_BIT_RENDER_PASS (set by onRenderPassFinished) start the next render pass.
+            onRenderPassFinished(RenderPassClosureReason::RenderAreaChangedWithPendingLoadOpClear);
+        }
+        else
+        {
+            mRenderPassCommands->growRenderArea(this, rotatedScissoredArea);
+        }
     }
 }
 
