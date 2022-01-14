@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "4ed928cf_b9d20cf8",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-01-14T17:03:06Z",
+      "side": 1,
+      "message": "The test output looks pretty decent! I\u0027ve kept the feature enabled currently just to see what happens on the bots (and see which traces are affected). I have yet to measure the perf impact of this, but the code is nevertheless good for review.\n\nRandom data point: The test output running on Nvidia/OpenGL actually shows banding, so Nvidia doesn\u0027t dither it seems, or the OpenGL backend has a bug.\n\n@Mohan, feel free to give this a try with the affected app.",
+      "revId": "1359ada73cfb5cf6c1cedc4d2dd6c934a9c0ad07",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
