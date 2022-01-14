@@ -51,6 +51,24 @@
       "parentUuid": "90db5e98_a5b9a5d3",
       "revId": "45aba23732292dae8c149c8ef72f0aeb96be57b4",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "6540f61f_17c22daf",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-01-14T18:58:05Z",
+      "side": 1,
+      "message": "I would still rather see all of *tess* suppressed on P6 than a VVL message that affects everything. In truth, we should neither be exposing tessellation nor ES3.2 on ARM (or anywhere really), because we are not yet conformant and all bets are off.\n\nSince the goal is to quickly set up P6s, I wouldn\u0027t worry about suppressing geomtry/tessellation tests wholesale.",
+      "parentUuid": "0e71316d_757cc666",
+      "revId": "45aba23732292dae8c149c8ef72f0aeb96be57b4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
