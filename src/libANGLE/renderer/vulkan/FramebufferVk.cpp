@@ -476,11 +476,10 @@ angle::Result FramebufferVk::clearImpl(const gl::Context *context,
                                                     mActiveColorComponentMasksForClear;
     const bool maskedClearStencil = clearStencil && stencilMask != 0xFF;
 
-    bool clearColorWithDraw   = clearColor && (maskedClearColor || scissoredClear);
-    bool clearDepthWithDraw   = clearDepth && scissoredClear;
-    bool clearStencilWithDraw = clearStencil && (maskedClearStencil || scissoredClear);
+    bool clearColorWithDraw   = clearColor && maskedClearColor;
+    bool clearStencilWithDraw = clearStencil && maskedClearStencil;
 
-    const bool isMidRenderPassClear = contextVk->hasStartedRenderPassWithCommands();
+    bool isMidRenderPassClear = contextVk->hasStartedRenderPassWithCommands();
 
     if (isMidRenderPassClear)
     {
@@ -519,7 +518,6 @@ angle::Result FramebufferVk::clearImpl(const gl::Context *context,
         ASSERT(!mDeferredClears.any());
 
         clearColorWithDraw   = clearColor;
-        clearDepthWithDraw   = clearDepth;
         clearStencilWithDraw = clearStencil;
     }
     else
@@ -530,7 +528,14 @@ angle::Result FramebufferVk::clearImpl(const gl::Context *context,
             clearColorDrawBuffersMask = clearColorBuffers;
         }
 
-        mergeClearsWithDeferredClears(clearColorDrawBuffersMask, clearDepth && !clearDepthWithDraw,
+        if (scissoredClear && !isMidRenderPassClear && !preferDrawOverClearAttachments)
+        {
+            // Start the renderpass, so we can use vkCmdClearAttachments rather than drawing.
+            ANGLE_TRY(contextVk->startRenderPass(scissoredRenderArea, nullptr, nullptr));
+            isMidRenderPassClear = true;
+        }
+
+        mergeClearsWithDeferredClears(clearColorDrawBuffersMask, clearDepth,
                                       clearStencil && !clearStencilWithDraw, clearColorValue,
                                       clearDepthStencilValue);
     }
@@ -539,20 +544,22 @@ angle::Result FramebufferVk::clearImpl(const gl::Context *context,
     // flush them if necessary.
     if (mDeferredClears.any())
     {
-        const bool clearAnyWithDraw =
-            clearColorWithDraw || clearDepthWithDraw || clearStencilWithDraw;
+        const bool clearAnyWithDraw = clearColorWithDraw || clearStencilWithDraw;
 
         // If we are in an active renderpass that has recorded commands and the framebuffer hasn't
         // changed, inline the clear.
         if (isMidRenderPassClear)
         {
-            ANGLE_VK_PERF_WARNING(
-                contextVk, GL_DEBUG_SEVERITY_LOW,
-                "Clear effectively discarding previous draw call results. Suggest earlier Clear "
-                "followed by masked color or depth/stencil draw calls instead, or "
-                "glInvalidateFramebuffer to discard data instead");
-
             ASSERT(!preferDrawOverClearAttachments);
+            if (!scissoredClear)
+            {
+                ANGLE_VK_PERF_WARNING(
+                    contextVk, GL_DEBUG_SEVERITY_LOW,
+                    "Clear effectively discarding previous draw call results. Suggest earlier "
+                    "Clear "
+                    "followed by masked color or depth/stencil draw calls instead, or "
+                    "glInvalidateFramebuffer to discard data instead");
+            }
 
             // clearWithCommand will operate on deferred clears.
             ANGLE_TRY(clearWithCommand(contextVk, &contextVk->getStartedRenderPassCommands(),
@@ -582,7 +589,7 @@ angle::Result FramebufferVk::clearImpl(const gl::Context *context,
                 mRenderTargetCache, mState.getColorAttachmentsMask(),
                 mCurrentFramebufferDesc.getLayerCount());
 
-            if (clearAnyWithDraw || isAnyAttachment3DWithoutAllLayers)
+            if (clearAnyWithDraw || isAnyAttachment3DWithoutAllLayers || scissoredClear)
             {
                 ANGLE_TRY(flushDeferredClears(contextVk));
             }
@@ -607,7 +614,7 @@ angle::Result FramebufferVk::clearImpl(const gl::Context *context,
 
     // The most costly clear mode is when we need to mask out specific color channels or stencil
     // bits. This can only be done with a draw call.
-    return clearWithDraw(contextVk, scissoredRenderArea, clearColorBuffers, clearDepthWithDraw,
+    return clearWithDraw(contextVk, scissoredRenderArea, clearColorBuffers, false,
                          clearStencilWithDraw, colorMasks, stencilMask, clearColorValue,
                          clearDepthStencilValue);
 }
@@ -2393,6 +2400,8 @@ angle::Result FramebufferVk::clearWithCommand(ContextVk *contextVk,
     }
 
     VkClearRect rect                                     = {};
+    rect.rect.offset.x                                   = scissoredRenderArea.x;
+    rect.rect.offset.y                                   = scissoredRenderArea.y;
     rect.rect.extent.width                               = scissoredRenderArea.width;
     rect.rect.extent.height                              = scissoredRenderArea.height;
     rect.layerCount                                      = mCurrentFramebufferDesc.getLayerCount();
@@ -2401,6 +2410,7 @@ angle::Result FramebufferVk::clearWithCommand(ContextVk *contextVk,
     ASSERT(!attachments.empty());
     renderPassCommandBuffer->clearAttachments(static_cast<uint32_t>(attachments.size()),
                                               attachments.data(), 1, &rect);
+    ++contextVk->getPerfCounters().vkCmdClearAttachments;
     return angle::Result::Continue;
 }
 
