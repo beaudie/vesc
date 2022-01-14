@@ -52,6 +52,24 @@
       "parentUuid": "2d4452c4_f3c95ee7",
       "revId": "985db64093cf2ee3bfa6dd5614c6904650887e65",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "5c211530_b6220258",
+        "filename": "src/libANGLE/renderer/vulkan/SyncVk.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 324,
+      "author": {
+        "id": 1340649
+      },
+      "writtenOn": "2022-01-14T19:12:07Z",
+      "side": 0,
+      "message": "\u003e When syncA is created, we already add a flush on ContextA\n\n+1\n\n\u003e and that was a recent addition\n\ni think it was already there in jeff\u0027s original change -\u003e https://chromium-review.googlesource.com/c/angle/angle/+/2026177/22/src/libANGLE/renderer/vulkan/SyncVk.cpp#185\n\n\u003e which is what makes this flush no longer necessary\n\n+1",
+      "parentUuid": "50bb8b5d_aaa485ea",
+      "revId": "985db64093cf2ee3bfa6dd5614c6904650887e65",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
