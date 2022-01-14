@@ -1423,7 +1423,8 @@ void RenderPassCommandBufferHelper::colorImagesDraw(ResourceUseList *resourceUse
     }
 }
 
-void RenderPassCommandBufferHelper::depthStencilImagesDraw(ResourceUseList *resourceUseList,
+void RenderPassCommandBufferHelper::depthStencilImagesDraw(ContextVk *contextVk,
+                                                           ResourceUseList *resourceUseList,
                                                            gl::LevelIndex level,
                                                            uint32_t layerStart,
                                                            uint32_t layerCount,
@@ -1432,6 +1433,8 @@ void RenderPassCommandBufferHelper::depthStencilImagesDraw(ResourceUseList *reso
 {
     ASSERT(!usesImage(*image));
     ASSERT(!resolveImage || !usesImage(*resolveImage));
+    bool isDepthWriteEnabled   = contextVk->getState().isDepthWriteEnabled();
+    bool isStencilWriteEnabled = contextVk->getState().isStencilWriteEnabled();
 
     // Because depthStencil buffer's read/write property can change while we build renderpass, we
     // defer the image layout changes until endRenderPass time or when images going away so that we
@@ -1443,6 +1446,11 @@ void RenderPassCommandBufferHelper::depthStencilImagesDraw(ResourceUseList *reso
     mDepthStencilLayerIndex = layerStart;
     mDepthStencilLayerCount = layerCount;
     image->setRenderPassUsageFlag(RenderPassUsage::RenderTargetAttachment);
+    if (isDepthWriteEnabled || isStencilWriteEnabled)
+    {
+        image->setContentDefined(image->toVkLevel(level), 1, layerStart, layerCount,
+                                 image->getAspectFlags());
+    }
 
     if (resolveImage)
     {
@@ -1453,6 +1461,11 @@ void RenderPassCommandBufferHelper::depthStencilImagesDraw(ResourceUseList *reso
         mRenderPassUsedImages.insert(resolveImage->getImageSerial().getValue());
         mDepthStencilResolveImage = resolveImage;
         resolveImage->setRenderPassUsageFlag(RenderPassUsage::RenderTargetAttachment);
+        if (isDepthWriteEnabled || isStencilWriteEnabled)
+        {
+            resolveImage->setContentDefined(resolveImage->toVkLevel(level), 1, layerStart,
+                                            layerCount, image->getAspectFlags());
+        }
     }
 }
 
@@ -1460,6 +1473,12 @@ void RenderPassCommandBufferHelper::onDepthAccess(ResourceAccess access)
 {
     // Update the access for optimizing this render pass's loadOp
     UpdateAccess(&mDepthAccess, access);
+
+    if (mDepthStencilImage && access == ResourceAccess::Write)
+    {
+        mDepthStencilImage->onWrite(mDepthStencilLevelIndex, 1, mDepthStencilLayerIndex,
+                                    mDepthStencilLayerCount, VK_IMAGE_ASPECT_DEPTH_BIT);
+    }
 
     // Update the invalidate state for optimizing this render pass's storeOp
     if (onDepthStencilAccess(access, &mDepthCmdCountInvalidated, &mDepthCmdCountDisabled))
@@ -1473,6 +1492,12 @@ void RenderPassCommandBufferHelper::onStencilAccess(ResourceAccess access)
 {
     // Update the access for optimizing this render pass's loadOp
     UpdateAccess(&mStencilAccess, access);
+
+    if (mDepthStencilImage && access == ResourceAccess::Write)
+    {
+        mDepthStencilImage->onWrite(mDepthStencilLevelIndex, 1, mDepthStencilLayerIndex,
+                                    mDepthStencilLayerCount, VK_IMAGE_ASPECT_STENCIL_BIT);
+    }
 
     // Update the invalidate state for optimizing this render pass's stencilStoreOp
     if (onDepthStencilAccess(access, &mStencilCmdCountInvalidated, &mStencilCmdCountDisabled))
@@ -2010,23 +2035,23 @@ void RenderPassCommandBufferHelper::invalidateRenderPassColorAttachment(
 }
 
 void RenderPassCommandBufferHelper::invalidateRenderPassDepthAttachment(
-    const gl::DepthStencilState &dsState,
+    ContextVk *contextVk,
     const gl::Rectangle &invalidateArea)
 {
     // Keep track of the size of commands in the command buffer.  If the size grows in the
-    // future, that implies that drawing occured since invalidated.
+    // future, that implies that drawing occurred since invalidated.
     mDepthCmdCountInvalidated = getRenderPassWriteCommandCount();
 
     // Also track the size if the attachment is currently disabled.
-    const bool isDepthWriteEnabled = dsState.depthTest && dsState.depthMask;
-    mDepthCmdCountDisabled = isDepthWriteEnabled ? kInfiniteCmdCount : mDepthCmdCountInvalidated;
+    mDepthCmdCountDisabled =
+        contextVk->getState().isDepthWriteEnabled() ? kInfiniteCmdCount : mDepthCmdCountInvalidated;
 
     // Set/extend the invalidate area.
     ExtendRenderPassInvalidateArea(invalidateArea, &mDepthInvalidateArea);
 }
 
 void RenderPassCommandBufferHelper::invalidateRenderPassStencilAttachment(
-    const gl::DepthStencilState &dsState,
+    ContextVk *contextVk,
     const gl::Rectangle &invalidateArea)
 {
     // Keep track of the size of commands in the command buffer.  If the size grows in the
@@ -2034,10 +2059,9 @@ void RenderPassCommandBufferHelper::invalidateRenderPassStencilAttachment(
     mStencilCmdCountInvalidated = getRenderPassWriteCommandCount();
 
     // Also track the size if the attachment is currently disabled.
-    const bool isStencilWriteEnabled =
-        dsState.stencilTest && (!dsState.isStencilNoOp() || !dsState.isStencilBackNoOp());
-    mStencilCmdCountDisabled =
-        isStencilWriteEnabled ? kInfiniteCmdCount : mStencilCmdCountInvalidated;
+    mStencilCmdCountDisabled = contextVk->getState().isStencilWriteEnabled()
+                                   ? kInfiniteCmdCount
+                                   : mStencilCmdCountInvalidated;
 
     // Set/extend the invalidate area.
     ExtendRenderPassInvalidateArea(invalidateArea, &mStencilInvalidateArea);
@@ -4483,6 +4507,37 @@ void ImageHelper::setEntireContentUndefined()
     for (LevelContentDefinedMask &levelContentDefined : mStencilContentDefined)
     {
         levelContentDefined.reset();
+    }
+}
+
+void ImageHelper::setContentUndefined(LevelIndex levelStart,
+                                      uint32_t levelCount,
+                                      uint32_t layerStart,
+                                      uint32_t layerCount,
+                                      VkImageAspectFlags aspectFlags)
+{
+    // Mark the range as defined.  Layers above 8 are discarded, and are always assumed to have
+    // defined contents.
+    if (layerStart >= kMaxContentDefinedLayerCount)
+    {
+        return;
+    }
+
+    uint8_t layerRangeBits =
+        GetContentDefinedLayerRangeBits(layerStart, layerCount, kMaxContentDefinedLayerCount);
+
+    for (uint32_t levelOffset = 0; levelOffset < levelCount; ++levelOffset)
+    {
+        LevelIndex level = levelStart + levelOffset;
+
+        if ((aspectFlags & ~VK_IMAGE_ASPECT_STENCIL_BIT) != 0)
+        {
+            getLevelContentDefined(level) &= ~layerRangeBits;
+        }
+        if ((aspectFlags & VK_IMAGE_ASPECT_STENCIL_BIT) != 0)
+        {
+            getLevelStencilContentDefined(level) &= ~layerRangeBits;
+        }
     }
 }
 
