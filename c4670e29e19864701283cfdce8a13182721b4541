@@ -50,6 +50,24 @@
       "message": "Do you know if this would also fix VUID-vkCmdPipelineBarrier-srcAccessMask-02815 message in *tess* tests, like https://chromium-swarm.appspot.com/task?id\u003d5872b69f6dd2fc10\n\nlike\nI   94.239s run_tests_on_device(17261FDF6000T3)  RendererVk.cpp:669 (DebugUtilsMessenger): [ VUID-vkCmdPipelineBarrier-srcAccessMask-02815 ] Validation Error: [ VUID-vkCmdPipelineBarrier-srcAccessMask-02815 ] Object 0: handle \u003d 0x78a2a55210, type \u003d VK_OBJECT_TYPE_COMMAND_BUFFER; | MessageID \u003d 0x24d88c2b | vkCmdPipelineBarrier(): .pMemoryBarriers[0].srcAccessMask bit VK_ACCESS_SHADER_WRITE_BIT is not supported by stage mask (VK_PIPELINE_STAGE_TOP_OF_PIPE_BIT). The Vulkan spec states: The srcAccessMask member of each element of pMemoryBarriers must only include access flags that are supported by one or more of the pipeline stages in srcStageMask, as specified in the table of supported access types (https://www.khronos.org/registry/vulkan/specs/1.2-extensions/html/vkspec.html#VUID-vkCmdPipelineBarrier-srcAccessMask-02815)\nI   94.240s run_tests_on_device(17261FDF6000T3)                              \u003cCommand Buffer Label Hierarchy:\u003e\nI   94.240s run_tests_on_device(17261FDF6000T3)                               First Swap Image Use\nI   94.240s run_tests_on_device(17261FDF6000T3)                                Object: 0x78a2a55210 (type \u003d Command Buffer(6))\nI   94.240s run_tests_on_device(17261FDF6000T3)  \nI   94.240s run_tests_on_device(17261FDF6000T3)  [  FAILED  ] dEQP.GLES31/functional_shaders_opaque_type_indexing_atomic_counter_uniform_tessellation_control, where GetParam() \u003d 3801 (28 ms)\n\nIf yes, I\u0027d rather land this than suppress another warning.",
       "revId": "c4670e29e19864701283cfdce8a13182721b4541",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "11969de8_a1b8545e",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-01-14T19:33:01Z",
+      "side": 1,
+      "message": "It should. You can always rebase your change on top of mine, then run the bots to be sure.",
+      "parentUuid": "a6b169b5_922e9a24",
+      "revId": "c4670e29e19864701283cfdce8a13182721b4541",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
