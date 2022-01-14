@@ -16,6 +16,46 @@
       "message": "PTAL, thanks!",
       "revId": "dc469f6fe5e9839bfc37cc444f653da1aa0f9256",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "1fd44651_e7852b04",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2022-01-14T16:01:52Z",
+      "side": 1,
+      "message": "Tim, do you have the cycles to verify this generates a reasonable roll?\n\nOtherwise we can land it and verify with the autoroller.",
+      "revId": "dc469f6fe5e9839bfc37cc444f653da1aa0f9256",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "0205c7bd_8527f2fe",
+        "filename": "scripts/roll_aosp.sh",
+        "patchSetId": 2
+      },
+      "lineNbr": 156,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2022-01-14T16:01:52Z",
+      "side": 1,
+      "message": "This one should remain as it was. Our rolling goes kinda like this:\n\n1) For deps we want to keep, delete the .git folder so the later \u0027git add\u0027 adds them directly to our Android repo\n2) Delete all other dependencies that aren\u0027t allowlisted in \u0027third_party_deps\u0027",
+      "range": {
+        "startLine": 156,
+        "startChar": 3,
+        "endLine": 156,
+        "endChar": 53
+      },
+      "revId": "dc469f6fe5e9839bfc37cc444f653da1aa0f9256",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
