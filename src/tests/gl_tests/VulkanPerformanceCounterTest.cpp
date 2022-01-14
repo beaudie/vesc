@@ -20,6 +20,7 @@
 #include "libANGLE/angletypes.h"
 #include "libANGLE/renderer/vulkan/ContextVk.h"
 #include "test_utils/gl_raii.h"
+#include "util/random_utils.h"
 
 using namespace angle;
 
@@ -857,15 +858,15 @@ TEST_P(VulkanPerformanceCounterTest, InvalidateDrawDisable)
     // Ensure that the render pass wasn't broken
     EXPECT_EQ(expected.renderPasses, counters.renderPasses);
 
-    // Use swapBuffers and then check how many loads and stores were actually done
-    swapBuffers();
+    // Break the render pass and then check how many loads and stores were actually done
+    EXPECT_PIXEL_COLOR_EQ(0, 0, GLColor::red);
     compareDepthStencilCountersForInvalidateTest(counters, expected);
 
     // Start and end another render pass, to check that the load ops are as expected
     setAndIncrementLoadCountersForInvalidateTest(counters, 1, 1, &expected);
     drawQuad(program, essl1_shaders::PositionAttrib(), 0.5f);
     ASSERT_GL_NO_ERROR();
-    swapBuffers();
+    EXPECT_PIXEL_COLOR_EQ(0, 0, GLColor::red);
     compareLoadCountersForInvalidateTest(counters, expected);
 }
 
@@ -966,14 +967,14 @@ TEST_P(VulkanPerformanceCounterTest, InvalidateDisableDrawEnableDraw)
     EXPECT_EQ(expected.renderPasses, counters.renderPasses);
 
     // Use swapBuffers and then check how many loads and stores were actually done
-    swapBuffers();
+    EXPECT_PIXEL_COLOR_EQ(0, 0, GLColor::red);
     compareDepthStencilCountersForInvalidateTest(counters, expected);
 
     // Start and end another render pass, to check that the load ops are as expected
     setAndIncrementLoadCountersForInvalidateTest(counters, 1, 1, &expected);
     drawQuad(program, essl1_shaders::PositionAttrib(), 0.5f);
     ASSERT_GL_NO_ERROR();
-    swapBuffers();
+    EXPECT_PIXEL_COLOR_EQ(0, 0, GLColor::red);
     compareLoadCountersForInvalidateTest(counters, expected);
 }
 
@@ -1021,15 +1022,15 @@ TEST_P(VulkanPerformanceCounterTest, InvalidateDrawDisableEnable)
     // Ensure that the render pass wasn't broken
     EXPECT_EQ(expected.renderPasses, counters.renderPasses);
 
-    // Use swapBuffers and then check how many loads and stores were actually done
-    swapBuffers();
+    // Break the render pass and then check how many loads and stores were actually done
+    EXPECT_PIXEL_COLOR_EQ(0, 0, GLColor::red);
     compareDepthStencilCountersForInvalidateTest(counters, expected);
 
     // Start and end another render pass, to check that the load ops are as expected
     setAndIncrementLoadCountersForInvalidateTest(counters, 1, 1, &expected);
     drawQuad(program, essl1_shaders::PositionAttrib(), 0.5f);
     ASSERT_GL_NO_ERROR();
-    swapBuffers();
+    EXPECT_PIXEL_COLOR_EQ(0, 0, GLColor::red);
     compareLoadCountersForInvalidateTest(counters, expected);
 }
 
@@ -2518,7 +2519,7 @@ TEST_P(VulkanPerformanceCounterTest, RenderPassAfterRenderPassWithoutDepthStenci
     drawQuad(program, essl1_shaders::PositionAttrib(), 1.0f);
 
     // Break the render pass and ensure no depth/stencil load/store was done.
-    swapBuffers();
+    EXPECT_PIXEL_COLOR_EQ(0, 0, GLColor::red);
     compareDepthStencilCountersForInvalidateTest(counters, expected);
 
     // Expect rpCount+1, depth(Clears+0, Loads+0, Stores+0), stencil(Clears+0, Load+0, Stores+0)
@@ -2529,7 +2530,7 @@ TEST_P(VulkanPerformanceCounterTest, RenderPassAfterRenderPassWithoutDepthStenci
     drawQuad(program, essl1_shaders::PositionAttrib(), 1.0f);
 
     // Break the render pass and ensure no depth/stencil load/store was done.
-    swapBuffers();
+    EXPECT_PIXEL_COLOR_EQ(0, 0, GLColor::green);
     compareDepthStencilCountersForInvalidateTest(counters, expected);
 
     EXPECT_PIXEL_COLOR_EQ(0, 0, GLColor::green);
@@ -2811,6 +2812,10 @@ TEST_P(VulkanPerformanceCounterTest, ScissorDoesNotBreakRenderPass)
     glUniform4f(colorUniformLocation, 0.0f, 1.0f, 0.0f, 1.0f);
     drawQuad(drawColor, essl1_shaders::PositionAttrib(), 0);
     ASSERT_GL_NO_ERROR();
+
+    // Growing the render area with a pending clear will break the render pass so the proper area is
+    // cleared.
+    ++expectedRenderPassCount;
 
     // Masked blue-channel clear of center column
     glColorMask(GL_FALSE, GL_FALSE, GL_TRUE, GL_FALSE);
@@ -3273,6 +3278,158 @@ void main()
     EXPECT_EQ(hackANGLE().colorLoads, 1u);
     // storeOp = STORE (2 from before)
     EXPECT_EQ(hackANGLE().colorStores, 3u);
+}
+
+// Copy of ClearTest.InceptionScissorClears.
+// Clears many small concentric rectangles using scissor regions. Verifies vkCmdClearAttachments()
+// is used for the scissored clears, rather than vkCmdDraw().
+TEST_P(VulkanPerformanceCounterTest, InceptionScissorClears)
+{
+    // https://issuetracker.google.com/166809097
+    ANGLE_SKIP_TEST_IF(IsQualcomm() && IsVulkan());
+
+    angle::RNG rng;
+
+    constexpr GLuint kSize = 16;
+
+    // Create a square user FBO so we have more control over the dimensions.
+    GLFramebuffer fbo;
+    glBindFramebuffer(GL_FRAMEBUFFER, fbo);
+
+    GLRenderbuffer rbo;
+    glBindRenderbuffer(GL_RENDERBUFFER, rbo);
+    glRenderbufferStorage(GL_RENDERBUFFER, GL_RGBA8, kSize, kSize);
+
+    glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_RENDERBUFFER, rbo);
+    ASSERT_GL_FRAMEBUFFER_COMPLETE(GL_FRAMEBUFFER);
+
+    glViewport(0, 0, kSize, kSize);
+
+    // Draw small concentric squares using scissor.
+    std::vector<GLColor> expectedColors;
+    uint32_t numScissoredClears = 0;
+    for (GLuint index = 0; index < (kSize - 1) / 2; index++)
+    {
+        // Do the first clear without the scissor.
+        if (index > 0)
+        {
+            glEnable(GL_SCISSOR_TEST);
+            glScissor(index, index, kSize - (index * 2), kSize - (index * 2));
+            ++numScissoredClears;
+        }
+
+        GLColor color = RandomColor(&rng);
+        expectedColors.push_back(color);
+        Vector4 floatColor = color.toNormalizedVector();
+        glClearColor(floatColor[0], floatColor[1], floatColor[2], floatColor[3]);
+        glClear(GL_COLOR_BUFFER_BIT);
+    }
+
+    ASSERT_GL_NO_ERROR();
+
+    // Make sure everything was done in a single renderpass.
+    EXPECT_EQ(hackANGLE().renderPasses, 1u);
+
+    std::vector<GLColor> actualColors(expectedColors.size());
+    glReadPixels(0, kSize / 2, actualColors.size(), 1, GL_RGBA, GL_UNSIGNED_BYTE,
+                 actualColors.data());
+
+    EXPECT_EQ(expectedColors, actualColors);
+}
+
+// Copy of ClearTest.Depth16Scissored.
+// Clears many small concentric rectangles using scissor regions. Verifies vkCmdClearAttachments()
+// is used for the scissored clears, rather than vkCmdDraw().
+TEST_P(VulkanPerformanceCounterTest, Depth16Scissored)
+{
+    GLRenderbuffer renderbuffer;
+    glBindRenderbuffer(GL_RENDERBUFFER, renderbuffer);
+    constexpr int kRenderbufferSize = 64;
+    glRenderbufferStorage(GL_RENDERBUFFER, GL_DEPTH_COMPONENT16, kRenderbufferSize,
+                          kRenderbufferSize);
+
+    GLFramebuffer fbo;
+    glBindFramebuffer(GL_FRAMEBUFFER, fbo);
+    glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_RENDERBUFFER, renderbuffer);
+
+    glClearDepthf(0.0f);
+    glClear(GL_DEPTH_BUFFER_BIT);
+
+    glEnable(GL_SCISSOR_TEST);
+    constexpr int kNumSteps     = 13;
+    uint32_t numScissoredClears = 0;
+    for (int ndx = 1; ndx < kNumSteps; ndx++)
+    {
+        float perc = static_cast<float>(ndx) / static_cast<float>(kNumSteps);
+        glScissor(0, 0, static_cast<int>(kRenderbufferSize * perc),
+                  static_cast<int>(kRenderbufferSize * perc));
+        glClearDepthf(perc);
+        glClear(GL_DEPTH_BUFFER_BIT);
+        ++numScissoredClears;
+    }
+
+    // Make sure everything was done in a single renderpass.
+    EXPECT_EQ(hackANGLE().renderPasses, 1u);
+}
+
+// Copy of ClearTest.InceptionScissorClears.
+// Clears many small concentric rectangles using scissor regions. Verifies vkCmdClearAttachments()
+// is used for the scissored clears, rather than vkCmdDraw().
+TEST_P(VulkanPerformanceCounterTest, DrawThenInceptionScissorClears)
+{
+    // https://issuetracker.google.com/166809097
+    ANGLE_SKIP_TEST_IF(IsQualcomm() && IsVulkan());
+
+    angle::RNG rng;
+    std::vector<GLColor> expectedColors;
+    constexpr GLuint kSize = 16;
+
+    // Create a square user FBO so we have more control over the dimensions.
+    GLFramebuffer fbo;
+    glBindFramebuffer(GL_FRAMEBUFFER, fbo);
+
+    GLRenderbuffer rbo;
+    glBindRenderbuffer(GL_RENDERBUFFER, rbo);
+    glRenderbufferStorage(GL_RENDERBUFFER, GL_RGBA8, kSize, kSize);
+
+    glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_RENDERBUFFER, rbo);
+    ASSERT_GL_FRAMEBUFFER_COMPLETE(GL_FRAMEBUFFER);
+
+    glViewport(0, 0, kSize, kSize);
+
+    ANGLE_GL_PROGRAM(redProgram, essl1_shaders::vs::Simple(), essl1_shaders::fs::Red());
+    drawQuad(redProgram, essl1_shaders::PositionAttrib(), 0.5f);
+    EXPECT_PIXEL_COLOR_EQ(0, 0, GLColor::red);
+    expectedColors.push_back(GLColor::red);
+
+    // Draw small concentric squares using scissor.
+    uint32_t numScissoredClears = 0;
+    // All clears are to a scissored render area.
+    for (GLuint index = 1; index < (kSize - 1) / 2; index++)
+    {
+        glEnable(GL_SCISSOR_TEST);
+        glScissor(index, index, kSize - (index * 2), kSize - (index * 2));
+        ++numScissoredClears;
+
+        GLColor color = RandomColor(&rng);
+        expectedColors.push_back(color);
+        Vector4 floatColor = color.toNormalizedVector();
+        glClearColor(floatColor[0], floatColor[1], floatColor[2], floatColor[3]);
+        glClear(GL_COLOR_BUFFER_BIT);
+    }
+
+    ASSERT_GL_NO_ERROR();
+
+    // Close the render pass to update the performance counters.
+    std::vector<GLColor> actualColors(expectedColors.size());
+    glReadPixels(0, kSize / 2, actualColors.size(), 1, GL_RGBA, GL_UNSIGNED_BYTE,
+                 actualColors.data());
+    EXPECT_EQ(expectedColors, actualColors);
+
+    // The first scissored clear should use loadOp = CLEAR.
+    EXPECT_EQ(hackANGLE().colorClears, 1u);
+    // There are 2 glReadPixels() calls, so 2 storeOp = STORE.
+    EXPECT_EQ(hackANGLE().colorStores, 2u);
 }
 
 ANGLE_INSTANTIATE_TEST(VulkanPerformanceCounterTest, ES3_VULKAN());

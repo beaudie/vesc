@@ -1474,6 +1474,7 @@ enum class RenderPassClosureReason
     CopyTextureOnCPU,
     TextureReformatToRenderable,
     DeviceLocalBufferMap,
+    RenderAreaChangedWithPendingLoadOpClear,
 
     // UtilsVk
     PrepareForBlit,
