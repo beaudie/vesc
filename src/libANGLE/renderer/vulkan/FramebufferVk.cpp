@@ -476,11 +476,11 @@ angle::Result FramebufferVk::clearImpl(const gl::Context *context,
                                                     mActiveColorComponentMasksForClear;
     const bool maskedClearStencil = clearStencil && stencilMask != 0xFF;
 
-    bool clearColorWithDraw   = clearColor && (maskedClearColor || scissoredClear);
+    bool clearColorWithDraw   = clearColor && maskedClearColor;
     bool clearDepthWithDraw   = clearDepth && scissoredClear;
     bool clearStencilWithDraw = clearStencil && (maskedClearStencil || scissoredClear);
 
-    const bool isMidRenderPassClear = contextVk->hasStartedRenderPassWithCommands();
+    bool isMidRenderPassClear = contextVk->hasStartedRenderPassWithCommands();
 
     if (isMidRenderPassClear)
     {
@@ -530,6 +530,14 @@ angle::Result FramebufferVk::clearImpl(const gl::Context *context,
             clearColorDrawBuffersMask = clearColorBuffers;
         }
 
+        if (scissoredClear && !isMidRenderPassClear && !preferDrawOverClearAttachments)
+        {
+            // Start the renderpass, so we can use vkCmdClearAttachments rather than drawing.
+            ANGLE_TRY(contextVk->startRenderPass(getRotatedCompleteRenderArea(contextVk), nullptr,
+                                                 nullptr));
+            isMidRenderPassClear = true;
+        }
+
         mergeClearsWithDeferredClears(clearColorDrawBuffersMask, clearDepth && !clearDepthWithDraw,
                                       clearStencil && !clearStencilWithDraw, clearColorValue,
                                       clearDepthStencilValue);
@@ -546,13 +554,16 @@ angle::Result FramebufferVk::clearImpl(const gl::Context *context,
         // changed, inline the clear.
         if (isMidRenderPassClear)
         {
-            ANGLE_VK_PERF_WARNING(
-                contextVk, GL_DEBUG_SEVERITY_LOW,
-                "Clear effectively discarding previous draw call results. Suggest earlier Clear "
-                "followed by masked color or depth/stencil draw calls instead, or "
-                "glInvalidateFramebuffer to discard data instead");
-
             ASSERT(!preferDrawOverClearAttachments);
+            if (!scissoredClear)
+            {
+                ANGLE_VK_PERF_WARNING(
+                    contextVk, GL_DEBUG_SEVERITY_LOW,
+                    "Clear effectively discarding previous draw call results. Suggest earlier "
+                    "Clear "
+                    "followed by masked color or depth/stencil draw calls instead, or "
+                    "glInvalidateFramebuffer to discard data instead");
+            }
 
             // clearWithCommand will operate on deferred clears.
             ANGLE_TRY(clearWithCommand(contextVk, &contextVk->getStartedRenderPassCommands(),
@@ -582,7 +593,7 @@ angle::Result FramebufferVk::clearImpl(const gl::Context *context,
                 mRenderTargetCache, mState.getColorAttachmentsMask(),
                 mCurrentFramebufferDesc.getLayerCount());
 
-            if (clearAnyWithDraw || isAnyAttachment3DWithoutAllLayers)
+            if (clearAnyWithDraw || isAnyAttachment3DWithoutAllLayers || scissoredClear)
             {
                 ANGLE_TRY(flushDeferredClears(contextVk));
             }
@@ -2393,6 +2404,8 @@ angle::Result FramebufferVk::clearWithCommand(ContextVk *contextVk,
     }
 
     VkClearRect rect                                     = {};
+    rect.rect.offset.x                                   = scissoredRenderArea.x;
+    rect.rect.offset.y                                   = scissoredRenderArea.y;
     rect.rect.extent.width                               = scissoredRenderArea.width;
     rect.rect.extent.height                              = scissoredRenderArea.height;
     rect.layerCount                                      = mCurrentFramebufferDesc.getLayerCount();
@@ -2401,6 +2414,7 @@ angle::Result FramebufferVk::clearWithCommand(ContextVk *contextVk,
     ASSERT(!attachments.empty());
     renderPassCommandBuffer->clearAttachments(static_cast<uint32_t>(attachments.size()),
                                               attachments.data(), 1, &rect);
+    ++contextVk->getPerfCounters().vkCmdClearAttachments;
     return angle::Result::Continue;
 }
 
