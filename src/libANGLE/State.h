@@ -171,6 +171,11 @@ class State : angle::NonCopyable
     // Depth test state manipulation
     bool isDepthTestEnabled() const { return mDepthStencil.depthTest; }
     bool isDepthWriteEnabled() const { return mDepthStencil.depthTest && mDepthStencil.depthMask; }
+    bool isStencilWriteEnabled() const
+    {
+        return mDepthStencil.stencilTest &&
+               (!mDepthStencil.isStencilNoOp() || !mDepthStencil.isStencilBackNoOp());
+    }
     void setDepthTest(bool enabled);
     void setDepthFunc(GLenum depthFunc);
     void setDepthRange(float zNear, float zFar);
