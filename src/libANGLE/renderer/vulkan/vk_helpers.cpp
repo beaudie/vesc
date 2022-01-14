@@ -3495,7 +3495,6 @@ BufferHelper &BufferHelper::operator=(BufferHelper &&other)
 {
     ReadWriteResource::operator=(std::move(other));
 
-    mMemory        = std::move(other.mMemory);
     mSubAllocation = std::move(other.mSubAllocation);
 
     mCurrentQueueFamilyIndex = other.mCurrentQueueFamilyIndex;
@@ -3597,15 +3596,14 @@ angle::Result BufferHelper::initExternal(ContextVk *contextVk,
     ANGLE_VK_TRY(contextVk, buffer.get().init(renderer->getDevice(), modifiedCreateInfo));
 
     VkMemoryPropertyFlags memoryPropertyFlagsOut;
+    DeviceMemory externalDeviceMemory;
+    Allocation dummyAllocation;
     ANGLE_TRY(InitAndroidExternalMemory(contextVk, clientBuffer, memoryProperties, &buffer.get(),
-                                        &memoryPropertyFlagsOut,
-                                        mMemory.getExternalMemoryObject()));
-
-    ANGLE_TRY(mMemory.initExternal(clientBuffer));
+                                        &memoryPropertyFlagsOut, &externalDeviceMemory));
 
     ANGLE_VK_TRY(contextVk, mSubAllocation.initWithEntireBuffer(
-                                contextVk, buffer.get(), *mMemory.getMemoryObject(),
-                                memoryPropertyFlagsOut, requestedCreateInfo.size));
+                                contextVk, buffer.get(), dummyAllocation, memoryPropertyFlagsOut,
+                                requestedCreateInfo.size));
 
     if (isHostVisible())
     {
@@ -3842,15 +3840,13 @@ void BufferHelper::destroy(RendererVk *renderer)
     unmap(renderer);
 
     mSubAllocation.destroy(renderer);
-    mMemory.destroy(renderer);
 }
 
 void BufferHelper::release(RendererVk *renderer)
 {
     unmap(renderer);
 
-    renderer->collectGarbageAndReinit(&mReadOnlyUse, &mSubAllocation,
-                                      mMemory.getExternalMemoryObject(), mMemory.getMemoryObject());
+    renderer->collectGarbageAndReinit(&mReadOnlyUse, &mSubAllocation);
 
     mReadWriteUse.release();
     mReadWriteUse.init();
@@ -3883,18 +3879,11 @@ angle::Result BufferHelper::copyFromBuffer(ContextVk *contextVk,
 
 angle::Result BufferHelper::map(ContextVk *contextVk, uint8_t **ptrOut)
 {
-    if (isExternalBuffer())
+    if (!mSubAllocation.isMapped())
     {
-        ANGLE_TRY(mMemory.map(contextVk, getSize(), ptrOut));
+        ANGLE_TRY(mSubAllocation.getBlock()->map(contextVk));
     }
-    else
-    {
-        if (!mSubAllocation.isMapped())
-        {
-            ANGLE_TRY(mSubAllocation.getBlock()->map(contextVk));
-        }
-        *ptrOut = mSubAllocation.getMappedMemory();
-    }
+    *ptrOut = mSubAllocation.getMappedMemory();
     return angle::Result::Continue;
 }
 
@@ -3906,27 +3895,11 @@ angle::Result BufferHelper::mapWithOffset(ContextVk *contextVk, uint8_t **ptrOut
     return angle::Result::Continue;
 }
 
-void BufferHelper::unmap(RendererVk *renderer)
-{
-    if (isExternalBuffer())
-    {
-        mMemory.unmap(renderer);
-    }
-}
+void BufferHelper::unmap(RendererVk *renderer) {}
 
 angle::Result BufferHelper::flush(RendererVk *renderer, VkDeviceSize offset, VkDeviceSize size)
 {
-    if (isExternalBuffer())
-    {
-        if (!isCoherent())
-        {
-            mMemory.flush(renderer, offset, size);
-        }
-    }
-    else
-    {
-        mSubAllocation.flush(renderer->getAllocator());
-    }
+    mSubAllocation.flush(renderer->getAllocator());
     return angle::Result::Continue;
 }
 angle::Result BufferHelper::flush(RendererVk *renderer)
@@ -3936,17 +3909,7 @@ angle::Result BufferHelper::flush(RendererVk *renderer)
 
 angle::Result BufferHelper::invalidate(RendererVk *renderer, VkDeviceSize offset, VkDeviceSize size)
 {
-    if (isExternalBuffer())
-    {
-        if (!isCoherent())
-        {
-            mMemory.invalidate(renderer, getMemoryPropertyFlags(), offset, size);
-        }
-    }
-    else
-    {
-        mSubAllocation.invalidate(renderer->getAllocator());
-    }
+    mSubAllocation.invalidate(renderer->getAllocator());
     return angle::Result::Continue;
 }
 angle::Result BufferHelper::invalidate(RendererVk *renderer)

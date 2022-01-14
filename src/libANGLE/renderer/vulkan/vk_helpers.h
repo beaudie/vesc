@@ -645,13 +645,12 @@ class BufferHelper : public ReadWriteResource
     uint8_t *getMappedMemory() const
     {
         ASSERT(isMapped());
-        return isExternalBuffer() ? mMemory.getMappedMemory() : mSubAllocation.getMappedMemory();
+        return mSubAllocation.getMappedMemory();
     }
     bool isHostVisible() const { return mSubAllocation.isHostVisible(); }
     bool isCoherent() const { return mSubAllocation.isCoherent(); }
 
-    bool isMapped() const { return isExternalBuffer() ? true : mSubAllocation.isMapped(); }
-    bool isExternalBuffer() const { return mMemory.isExternalBuffer(); }
+    bool isMapped() const { return mSubAllocation.isMapped(); }
 
     // Also implicitly sets up the correct barriers.
     angle::Result copyFromBuffer(ContextVk *contextVk,
@@ -699,9 +698,6 @@ class BufferHelper : public ReadWriteResource
     angle::Result initializeNonZeroMemory(Context *context,
                                           VkBufferUsageFlags usage,
                                           VkDeviceSize size);
-
-    // For external memory only
-    BufferMemory mMemory;
 
     // SubAllocation object.
     BufferSubAllocation mSubAllocation;
