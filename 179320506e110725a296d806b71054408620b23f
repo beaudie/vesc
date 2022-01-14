@@ -16,6 +16,29 @@
       "message": "Already found a fix. ",
       "revId": "179320506e110725a296d806b71054408620b23f",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "dab6b348_b4b2becf",
+        "filename": "src/libANGLE/Context.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 3915,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2022-01-14T15:34:12Z",
+      "side": 1,
+      "message": "use for (ShaderType shaderType : gl::AllShaderTypes())",
+      "range": {
+        "startLine": 3915,
+        "startChar": 8,
+        "endLine": 3915,
+        "endChar": 77
+      },
+      "revId": "179320506e110725a296d806b71054408620b23f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
