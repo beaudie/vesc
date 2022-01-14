@@ -1405,7 +1405,8 @@ void RenderPassCommandBufferHelper::colorImagesDraw(ResourceUseList *resourceUse
     }
 }
 
-void RenderPassCommandBufferHelper::depthStencilImagesDraw(ResourceUseList *resourceUseList,
+void RenderPassCommandBufferHelper::depthStencilImagesDraw(const gl::State &glState,
+                                                           ResourceUseList *resourceUseList,
                                                            gl::LevelIndex level,
                                                            uint32_t layerStart,
                                                            uint32_t layerCount,
@@ -1414,6 +1415,8 @@ void RenderPassCommandBufferHelper::depthStencilImagesDraw(ResourceUseList *reso
 {
     ASSERT(!usesImage(*image));
     ASSERT(!resolveImage || !usesImage(*resolveImage));
+    bool isDepthWriteEnabled   = glState.isDepthWriteEnabled();
+    bool isStencilWriteEnabled = glState.isStencilWriteEnabled();
 
     // Because depthStencil buffer's read/write property can change while we build renderpass, we
     // defer the image layout changes until endRenderPass time or when images going away so that we
@@ -1425,6 +1428,14 @@ void RenderPassCommandBufferHelper::depthStencilImagesDraw(ResourceUseList *reso
     mDepthStencilLayerIndex = layerStart;
     mDepthStencilLayerCount = layerCount;
     image->setRenderPassUsageFlag(RenderPassUsage::RenderTargetAttachment);
+    bool depthStencilImageWrite =
+        (isDepthWriteEnabled || isStencilWriteEnabled) &&
+        (image->getAspectFlags() & (VK_IMAGE_ASPECT_DEPTH_BIT | VK_IMAGE_ASPECT_STENCIL_BIT)) != 0;
+    if (depthStencilImageWrite)
+    {
+        image->onWrite(mDepthStencilLevelIndex, 1, mDepthStencilLayerIndex, mDepthStencilLayerCount,
+                       image->getAspectFlags());
+    }
 
     if (resolveImage)
     {
@@ -1435,6 +1446,11 @@ void RenderPassCommandBufferHelper::depthStencilImagesDraw(ResourceUseList *reso
         mRenderPassUsedImages.insert(resolveImage->getImageSerial());
         mDepthStencilResolveImage = resolveImage;
         resolveImage->setRenderPassUsageFlag(RenderPassUsage::RenderTargetAttachment);
+        if (depthStencilImageWrite)
+        {
+            resolveImage->onWrite(mDepthStencilLevelIndex, 1, mDepthStencilLayerIndex,
+                                  mDepthStencilLayerCount, resolveImage->getAspectFlags());
+        }
     }
 }
 
@@ -1442,6 +1458,12 @@ void RenderPassCommandBufferHelper::onDepthAccess(ResourceAccess access)
 {
     // Update the access for optimizing this render pass's loadOp
     UpdateAccess(&mDepthAccess, access);
+
+    if (mDepthStencilImage && access == ResourceAccess::Write)
+    {
+        mDepthStencilImage->onWrite(mDepthStencilLevelIndex, 1, mDepthStencilLayerIndex,
+                                    mDepthStencilLayerCount, VK_IMAGE_ASPECT_DEPTH_BIT);
+    }
 
     // Update the invalidate state for optimizing this render pass's storeOp
     if (onDepthStencilAccess(access, &mDepthCmdCountInvalidated, &mDepthCmdCountDisabled))
@@ -1455,6 +1477,12 @@ void RenderPassCommandBufferHelper::onStencilAccess(ResourceAccess access)
 {
     // Update the access for optimizing this render pass's loadOp
     UpdateAccess(&mStencilAccess, access);
+
+    if (mDepthStencilImage && access == ResourceAccess::Write)
+    {
+        mDepthStencilImage->onWrite(mDepthStencilLevelIndex, 1, mDepthStencilLayerIndex,
+                                    mDepthStencilLayerCount, VK_IMAGE_ASPECT_STENCIL_BIT);
+    }
 
     // Update the invalidate state for optimizing this render pass's stencilStoreOp
     if (onDepthStencilAccess(access, &mStencilCmdCountInvalidated, &mStencilCmdCountDisabled))
@@ -1994,23 +2022,23 @@ void RenderPassCommandBufferHelper::invalidateRenderPassColorAttachment(
 }
 
 void RenderPassCommandBufferHelper::invalidateRenderPassDepthAttachment(
-    const gl::DepthStencilState &dsState,
+    const gl::State &glState,
     const gl::Rectangle &invalidateArea)
 {
     // Keep track of the size of commands in the command buffer.  If the size grows in the
-    // future, that implies that drawing occured since invalidated.
+    // future, that implies that drawing occurred since invalidated.
     mDepthCmdCountInvalidated = getRenderPassWriteCommandCount();
 
     // Also track the size if the attachment is currently disabled.
-    const bool isDepthWriteEnabled = dsState.depthTest && dsState.depthMask;
-    mDepthCmdCountDisabled = isDepthWriteEnabled ? kInfiniteCmdCount : mDepthCmdCountInvalidated;
+    mDepthCmdCountDisabled =
+        glState.isDepthWriteEnabled() ? kInfiniteCmdCount : mDepthCmdCountInvalidated;
 
     // Set/extend the invalidate area.
     ExtendRenderPassInvalidateArea(invalidateArea, &mDepthInvalidateArea);
 }
 
 void RenderPassCommandBufferHelper::invalidateRenderPassStencilAttachment(
-    const gl::DepthStencilState &dsState,
+    const gl::State &glState,
     const gl::Rectangle &invalidateArea)
 {
     // Keep track of the size of commands in the command buffer.  If the size grows in the
@@ -2018,10 +2046,8 @@ void RenderPassCommandBufferHelper::invalidateRenderPassStencilAttachment(
     mStencilCmdCountInvalidated = getRenderPassWriteCommandCount();
 
     // Also track the size if the attachment is currently disabled.
-    const bool isStencilWriteEnabled =
-        dsState.stencilTest && (!dsState.isStencilNoOp() || !dsState.isStencilBackNoOp());
     mStencilCmdCountDisabled =
-        isStencilWriteEnabled ? kInfiniteCmdCount : mStencilCmdCountInvalidated;
+        glState.isStencilWriteEnabled() ? kInfiniteCmdCount : mStencilCmdCountInvalidated;
 
     // Set/extend the invalidate area.
     ExtendRenderPassInvalidateArea(invalidateArea, &mStencilInvalidateArea);
@@ -2219,6 +2245,33 @@ void RenderPassCommandBufferHelper::addCommandDiagnostics(ContextVk *contextVk)
         out << mCommandBuffers[subpass].dumpCommands("\\l");
     }
     contextVk->addCommandBufferDiagnostics(out.str());
+}
+
+bool RenderPassCommandBufferHelper::isAnyLoadOpClear(const FramebufferVk *framebufferVk)
+{
+    vk::PackedAttachmentIndex colorIndexVk(0);
+    for (ANGLE_MAYBE_UNUSED size_t colorIndex : framebufferVk->getState().getColorAttachmentsMask())
+    {
+        if (mAttachmentOps[colorIndexVk].loadOp == VK_ATTACHMENT_LOAD_OP_CLEAR)
+        {
+            return true;
+        }
+
+        ++colorIndexVk;
+    }
+    if (mRenderPassDesc.hasDepthStencilAttachment())
+    {
+        if (mAttachmentOps[colorIndexVk].loadOp == VK_ATTACHMENT_LOAD_OP_CLEAR)
+        {
+            return true;
+        }
+        if (mAttachmentOps[colorIndexVk].stencilLoadOp == VK_ATTACHMENT_LOAD_OP_CLEAR)
+        {
+            return true;
+        }
+    }
+
+    return false;
 }
 
 // CommandBufferRecycler implementation.
