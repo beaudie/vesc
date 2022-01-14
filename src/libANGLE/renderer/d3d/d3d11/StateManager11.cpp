@@ -1226,6 +1226,9 @@ void StateManager11::syncState(const gl::Context *context,
                         case gl::State::EXTENDED_DIRTY_BIT_CLIP_CONTROL:
                             checkPresentPath(context);
                             break;
+                        case gl::State::EXTENDED_DIRTY_BIT_TEXTURE_SAMPLER_REBIND_OPTIMIZATION:
+                            mInternalDirtyBits.set(DIRTY_BIT_TEXTURE_AND_SAMPLER_STATE);
+                            break;
                     }
                 }
                 break;
