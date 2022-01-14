@@ -50,6 +50,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "ad3ebfff_92e24359",
+        "filename": "src/libANGLE/renderer/vulkan/DeviceVk.cpp",
+        "patchSetId": 12
+      },
+      "lineNbr": 108,
+      "author": {
+        "id": 1000050
+      },
+      "writtenOn": "2022-01-14T15:07:51Z",
+      "side": 1,
+      "message": "And I also feel it is better to not make make all those wrappers member methods, since those wrapper defines use many vulkan types and macros, to do that, we need add vulkan related headers in DeviceVk.h.",
+      "parentUuid": "898879ee_0ae00c6c",
+      "range": {
+        "startLine": 66,
+        "startChar": 0,
+        "endLine": 108,
+        "endChar": 18
+      },
+      "revId": "c7b132d6cf438734f2dfc7d365fce61332c11a70",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "ff15055a_c695eaa3",
         "filename": "src/libANGLE/renderer/vulkan/DeviceVk.h",
         "patchSetId": 12
