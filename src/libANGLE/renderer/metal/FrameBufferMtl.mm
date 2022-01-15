@@ -135,7 +135,7 @@ angle::Result FramebufferMtl::clear(const gl::Context *context, GLbitfield mask)
         clearOpts.clearStencil = contextMtl->getClearStencilValue();
     }
 
-    return clearImpl(context, clearColorBuffers, &clearOpts);
+    return clearImpl(context, clearColorBuffers, clearOpts);
 }
 
 angle::Result FramebufferMtl::clearBufferfv(const gl::Context *context,
@@ -156,7 +156,7 @@ angle::Result FramebufferMtl::clearBufferfv(const gl::Context *context,
         clearOpts.clearColor = mtl::ClearColorValue(values[0], values[1], values[2], values[3]);
     }
 
-    return clearImpl(context, clearColorBuffers, &clearOpts);
+    return clearImpl(context, clearColorBuffers, clearOpts);
 }
 angle::Result FramebufferMtl::clearBufferuiv(const gl::Context *context,
                                              GLenum buffer,
@@ -169,7 +169,7 @@ angle::Result FramebufferMtl::clearBufferuiv(const gl::Context *context,
     mtl::ClearRectParams clearOpts;
     clearOpts.clearColor = mtl::ClearColorValue(values[0], values[1], values[2], values[3]);
 
-    return clearImpl(context, clearColorBuffers, &clearOpts);
+    return clearImpl(context, clearColorBuffers, clearOpts);
 }
 angle::Result FramebufferMtl::clearBufferiv(const gl::Context *context,
                                             GLenum buffer,
@@ -189,7 +189,7 @@ angle::Result FramebufferMtl::clearBufferiv(const gl::Context *context,
         clearOpts.clearColor = mtl::ClearColorValue(values[0], values[1], values[2], values[3]);
     }
 
-    return clearImpl(context, clearColorBuffers, &clearOpts);
+    return clearImpl(context, clearColorBuffers, clearOpts);
 }
 angle::Result FramebufferMtl::clearBufferfi(const gl::Context *context,
                                             GLenum buffer,
@@ -201,7 +201,7 @@ angle::Result FramebufferMtl::clearBufferfi(const gl::Context *context,
     clearOpts.clearDepth   = depth;
     clearOpts.clearStencil = stencil & mtl::kStencilMaskAll;
 
-    return clearImpl(context, gl::DrawBufferMask(), &clearOpts);
+    return clearImpl(context, gl::DrawBufferMask(), clearOpts);
 }
 
 const gl::InternalFormat &FramebufferMtl::getImplementationColorReadFormat(
@@ -809,9 +809,7 @@ void FramebufferMtl::setLoadStoreActionOnRenderPassFirstStart(
 
     mtl::RenderPassAttachmentDesc &attachment = *attachmentOut;
 
-    if (!forceDepthStencilMultisampleLoad &&
-        (attachment.storeAction == MTLStoreActionDontCare ||
-         attachment.storeAction == MTLStoreActionMultisampleResolve))
+    if (!forceDepthStencilMultisampleLoad && attachment.storeAction == MTLStoreActionDontCare)
     {
         // If we previously discarded attachment's content, then don't need to load it.
         attachment.loadAction = MTLLoadActionDontCare;
@@ -1136,6 +1134,19 @@ angle::Result FramebufferMtl::clearWithLoadOpRenderPassNotStarted(
             OverrideMTLClearColor(texture, clearOpts.clearColor.value(),
                                   &colorAttachment.clearColor);
         }
+        else
+        {
+            colorAttachment.loadAction = MTLLoadActionLoad;
+        }
+
+        if (colorAttachment.hasImplicitMSTexture())
+        {
+            colorAttachment.storeAction = MTLStoreActionStoreAndMultisampleResolve;
+        }
+        else
+        {
+            colorAttachment.storeAction = MTLStoreActionStore;
+        }
     }
 
     if (clearOpts.clearDepth.valid())
@@ -1143,11 +1154,37 @@ angle::Result FramebufferMtl::clearWithLoadOpRenderPassNotStarted(
         tempDesc.depthAttachment.loadAction = MTLLoadActionClear;
         tempDesc.depthAttachment.clearDepth = clearOpts.clearDepth.value();
     }
+    else
+    {
+        tempDesc.depthAttachment.loadAction = MTLLoadActionLoad;
+    }
+
+    if (tempDesc.depthAttachment.hasImplicitMSTexture())
+    {
+        tempDesc.depthAttachment.storeAction = MTLStoreActionStoreAndMultisampleResolve;
+    }
+    else
+    {
+        tempDesc.depthAttachment.storeAction = MTLStoreActionStore;
+    }
 
     if (clearOpts.clearStencil.valid())
     {
         tempDesc.stencilAttachment.loadAction   = MTLLoadActionClear;
         tempDesc.stencilAttachment.clearStencil = clearOpts.clearStencil.value();
+    }
+    else
+    {
+        tempDesc.stencilAttachment.loadAction = MTLLoadActionLoad;
+    }
+
+    if (tempDesc.stencilAttachment.hasImplicitMSTexture())
+    {
+        tempDesc.stencilAttachment.storeAction = MTLStoreActionStoreAndMultisampleResolve;
+    }
+    else
+    {
+        tempDesc.stencilAttachment.storeAction = MTLStoreActionStore;
     }
 
     // Start new render encoder with loadOp=Clear
@@ -1259,9 +1296,8 @@ angle::Result FramebufferMtl::clearWithDraw(const gl::Context *context,
 
 angle::Result FramebufferMtl::clearImpl(const gl::Context *context,
                                         gl::DrawBufferMask clearColorBuffers,
-                                        mtl::ClearRectParams *pClearOpts)
+                                        mtl::ClearRectParams &clearOpts)
 {
-    auto &clearOpts = *pClearOpts;
 
     if (!clearOpts.clearColor.valid() && !clearOpts.clearDepth.valid() &&
         !clearOpts.clearStencil.valid())
@@ -1624,5 +1660,4 @@ angle::Result FramebufferMtl::readPixelsToBuffer(const gl::Context *context,
 
     return angle::Result::Continue;
 }
-
 }
