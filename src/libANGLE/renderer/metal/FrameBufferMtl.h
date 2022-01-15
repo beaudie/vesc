@@ -135,7 +135,7 @@ class FramebufferMtl : public FramebufferImpl
                                const mtl::BlitParams &baseParams);
     angle::Result clearImpl(const gl::Context *context,
                             gl::DrawBufferMask clearColorBuffers,
-                            mtl::ClearRectParams *clearOpts);
+                            mtl::ClearRectParams &clearOpts);
 
     angle::Result clearWithLoadOp(const gl::Context *context,
                                   gl::DrawBufferMask clearColorBuffers,
