@@ -309,6 +309,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "20732272_9402bda8",
+        "filename": "src/libANGLE/renderer/vulkan/ResourceVk.h",
+        "patchSetId": 8
+      },
+      "lineNbr": 333,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2022-01-15T02:30:26Z",
+      "side": 1,
+      "message": "The retain() call can\u0027t wait until submission.   It needs to be done when the object is fetched/recycled, since the ResourceSharedUse tracks resources that are both:\n* in recorded commands\n* in submitted commands.\n\nWaiting until submissions misses the \u0027in recorded commands\u0027 portion, causing usedInRecordedCommands() to incorrectly return false for every resource in the vector.   This could potentially lead to destroying objects that are in use.",
+      "parentUuid": "94cd5e64_e7efef80",
+      "revId": "07379e47280379fdced3e2ac59ff20ff3e1c61a3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "9fc032b5_d4cda636",
         "filename": "src/libANGLE/renderer/vulkan/ResourceVk.h",
         "patchSetId": 8
