@@ -122,6 +122,24 @@
       "parentUuid": "4efaef5e_79f5df85",
       "revId": "c4670e29e19864701283cfdce8a13182721b4541",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "16600484_2cdcaa7d",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1001921
+      },
+      "writtenOn": "2022-01-15T03:34:50Z",
+      "side": 1,
+      "message": "Your CL wins, 2053 failures.\nhttps://luci-milo.appspot.com/raw/build/logs.chromium.org/angle/led/ynovikov_google.com/423cdbfd9563f92f5877b4ad8116dc7a22fccd878549fafaee76e161910f9c13/+/build.proto",
+      "parentUuid": "5dc2fcc9_78ec3b1c",
+      "revId": "c4670e29e19864701283cfdce8a13182721b4541",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
