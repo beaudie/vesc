@@ -87,6 +87,30 @@
       },
       "revId": "08c4af37d99dd319b13f4c25057f65cdfa0b1ea6",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "c4f62b90_e3195d5d",
+        "filename": "src/libANGLE/renderer/vulkan/DeviceVk.cpp",
+        "patchSetId": 13
+      },
+      "lineNbr": 195,
+      "author": {
+        "id": 1000050
+      },
+      "writtenOn": "2022-01-15T01:16:12Z",
+      "side": 1,
+      "message": "I see and will do it in the next patchset.\n\nAnd BTW, actually, I removed the `static` keyword in this patchset. there is no static initializer anymore. I think the compiler should put the table in some readonly data section instead of stack.",
+      "parentUuid": "c3d1e8f0_910b9128",
+      "range": {
+        "startLine": 195,
+        "startChar": 26,
+        "endLine": 195,
+        "endChar": 43
+      },
+      "revId": "08c4af37d99dd319b13f4c25057f65cdfa0b1ea6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
