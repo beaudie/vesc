@@ -681,6 +681,11 @@ class ContextVk : public ContextImpl, public vk::Context, public MultisampleText
         return mShareGroupVk->getDefaultBufferPool(mRenderer, memoryTypeIndex);
     }
 
+    vk::LifeTimeTrackedSuballocations *getStashedSuballocationList()
+    {
+        return &mStashedDefaultAttributeSuballocations;
+    }
+
   private:
     // Dirty bits.
     enum DirtyBitType : size_t
@@ -1133,6 +1138,8 @@ class ContextVk : public ContextImpl, public vk::Context, public MultisampleText
     gl::AttributesMask mDirtyDefaultAttribsMask;
     gl::AttribArray<vk::BufferHelper> mDefaultAttribBuffers;
     gl::AttribArray<vk::BufferPool> mDefaultAttribBufferPools;
+    vk::LifeTimeTrackedSuballocations mStashedDefaultAttributeSuballocations;
+    std::queue<vk::LifeTimeTrackedSuballocations> mInFlighDefaultAttributeSuballocations;
 
     // We use a single pool for recording commands. We also keep a free list for pool recycling.
     vk::SecondaryCommandPools mCommandPools;

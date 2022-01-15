@@ -4139,13 +4139,7 @@ angle::Result BufferHelper::initForDefaultAttribute(ContextVk *contextVk,
 
     if (valid())
     {
-        if (!isCurrentlyInUse(contextVk->getLastCompletedQueueSerial()))
-        {
-            initializeBarrierTracker(contextVk);
-            return angle::Result::Continue;
-        }
-
-        release(renderer);
+        contextVk->getStashedSuballocationList()->stash(std::move(mSubAllocation));
     }
 
     size_t alignment = static_cast<size_t>(renderer->getVertexConversionBufferAlignment());

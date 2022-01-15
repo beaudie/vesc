@@ -137,7 +137,7 @@ constexpr gl::ShaderMap<vk::ImageLayout> kShaderWriteImageLayouts = {
 
 constexpr VkBufferUsageFlags kVertexBufferUsage = VK_BUFFER_USAGE_VERTEX_BUFFER_BIT;
 constexpr size_t kDefaultValueSize              = sizeof(gl::VertexAttribCurrentValueData::Values);
-constexpr size_t kDefaultBufferSize             = kDefaultValueSize * 16;
+constexpr size_t kDefaultBufferSize             = kDefaultValueSize * 1024;
 constexpr size_t kDriverUniformsAllocatorPageSize = 4 * 1024;
 
 bool CanMultiDrawIndirectUseCmd(ContextVk *contextVk,
@@ -894,6 +894,12 @@ void ContextVk::onDestroy(const gl::Context *context)
     for (vk::BufferPool &pool : mDefaultAttribBufferPools)
     {
         pool.destroy(mRenderer);
+    }
+    mStashedDefaultAttributeSuballocations.destroy(mRenderer);
+    while (!mInFlighDefaultAttributeSuballocations.empty())
+    {
+        mInFlighDefaultAttributeSuballocations.front().destroy(mRenderer);
+        mInFlighDefaultAttributeSuballocations.pop();
     }
 
     for (vk::DynamicQueryPool &queryPool : mQueryPools)
@@ -5602,6 +5608,13 @@ angle::Result ContextVk::flushAndGetSerial(const vk::Semaphore *signalSemaphore,
     // they get retained properly until GPU completes. We do not add current buffer into
     // mResourceUseList since they never get reused or freed until context gets destroyed, at which
     // time we always wait for GPU to finish before destroying the dynamic buffers.
+    if (!mStashedDefaultAttributeSuballocations.empty())
+    {
+        mStashedDefaultAttributeSuballocations.addToResourceUseList(&mResourceUseList);
+        mInFlighDefaultAttributeSuballocations.emplace(
+            std::move(mStashedDefaultAttributeSuballocations));
+        mStashedDefaultAttributeSuballocations.init();
+    }
     for (DriverUniformsDescriptorSet &driverUniform : mDriverUniforms)
     {
         driverUniform.dynamicBuffer.releaseInFlightBuffersToResourceUseList(this);
@@ -5635,6 +5648,13 @@ angle::Result ContextVk::flushAndGetSerial(const vk::Semaphore *signalSemaphore,
         mShareGroupVk->isDueForBufferPoolPrune())
     {
         mShareGroupVk->pruneDefaultBufferPools(mRenderer);
+    }
+    while (!mInFlighDefaultAttributeSuballocations.empty() &&
+           !mInFlighDefaultAttributeSuballocations.front().isCurrentlyInUse(
+               mRenderer->getLastCompletedQueueSerial()))
+    {
+        mInFlighDefaultAttributeSuballocations.front().destroy(mRenderer);
+        mInFlighDefaultAttributeSuballocations.pop();
     }
 
     return angle::Result::Continue;
