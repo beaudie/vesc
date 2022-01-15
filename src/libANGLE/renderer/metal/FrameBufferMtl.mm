@@ -1138,7 +1138,7 @@ angle::Result FramebufferMtl::clearWithLoadOpRenderPassNotStarted(
         {
             colorAttachment.loadAction = MTLLoadActionLoad;
         }
-        if(colorAttachment.hasImplicitMSTexture())
+        if (colorAttachment.hasImplicitMSTexture())
         {
             colorAttachment.storeAction = MTLStoreActionStoreAndMultisampleResolve;
         }
@@ -1156,7 +1156,7 @@ angle::Result FramebufferMtl::clearWithLoadOpRenderPassNotStarted(
     else
     {
         tempDesc.depthAttachment.loadAction = MTLLoadActionLoad;
-        if(tempDesc.depthAttachment.hasImplicitMSTexture())
+        if (tempDesc.depthAttachment.hasImplicitMSTexture())
         {
             tempDesc.depthAttachment.storeAction = MTLStoreActionStoreAndMultisampleResolve;
         }
@@ -1165,7 +1165,7 @@ angle::Result FramebufferMtl::clearWithLoadOpRenderPassNotStarted(
             tempDesc.depthAttachment.storeAction = MTLStoreActionStore;
         }
     }
-    if(tempDesc.depthAttachment.hasImplicitMSTexture())
+    if (tempDesc.depthAttachment.hasImplicitMSTexture())
     {
         tempDesc.depthAttachment.storeAction = MTLStoreActionStoreAndMultisampleResolve;
     }
@@ -1182,7 +1182,7 @@ angle::Result FramebufferMtl::clearWithLoadOpRenderPassNotStarted(
     {
         tempDesc.depthAttachment.loadAction = MTLLoadActionLoad;
     }
-    if(tempDesc.stencilAttachment.hasImplicitMSTexture())
+    if (tempDesc.stencilAttachment.hasImplicitMSTexture())
     {
         tempDesc.stencilAttachment.storeAction = MTLStoreActionStoreAndMultisampleResolve;
     }
@@ -1299,7 +1299,7 @@ angle::Result FramebufferMtl::clearWithDraw(const gl::Context *context,
 
 angle::Result FramebufferMtl::clearImpl(const gl::Context *context,
                                         gl::DrawBufferMask clearColorBuffers,
-                                        mtl::ClearRectParams & clearOpts)
+                                        mtl::ClearRectParams &clearOpts)
 {
 
     if (!clearOpts.clearColor.valid() && !clearOpts.clearDepth.valid() &&
