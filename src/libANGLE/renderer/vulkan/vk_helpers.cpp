@@ -4131,6 +4131,31 @@ angle::Result BufferHelper::initForCopyImage(ContextVk *contextVk,
     return angle::Result::Continue;
 }
 
+angle::Result BufferHelper::initForDefaultAttribute(ContextVk *contextVk,
+                                                    BufferPool *pool,
+                                                    size_t size)
+{
+    RendererVk *renderer = contextVk->getRenderer();
+
+    if (valid())
+    {
+        if (!isCurrentlyInUse(contextVk->getLastCompletedQueueSerial()))
+        {
+            initializeBarrierTracker(contextVk);
+            return angle::Result::Continue;
+        }
+
+        release(renderer);
+    }
+
+    size_t alignment = static_cast<size_t>(renderer->getVertexConversionBufferAlignment());
+    ANGLE_TRY(pool->allocateBuffer(contextVk, size, alignment, &mSubAllocation));
+
+    initializeBarrierTracker(contextVk);
+
+    return angle::Result::Continue;
+}
+
 ANGLE_INLINE void BufferHelper::initializeBarrierTracker(Context *context)
 {
     RendererVk *renderer     = context->getRenderer();

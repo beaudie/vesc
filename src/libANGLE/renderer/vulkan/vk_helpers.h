@@ -706,6 +706,7 @@ class PipelineBarrier : angle::NonCopyable
 using PipelineBarrierArray = angle::PackedEnumMap<PipelineStage, PipelineBarrier>;
 
 class FramebufferHelper;
+class BufferPool;
 
 enum class MemoryCoherency
 {
@@ -754,6 +755,7 @@ class BufferHelper : public ReadWriteResource
                                    angle::FormatID formatId,
                                    VkDeviceSize *offset,
                                    uint8_t **dataPtr);
+    angle::Result initForDefaultAttribute(ContextVk *contextVk, BufferPool *pool, size_t size);
 
     void destroy(RendererVk *renderer);
     void release(RendererVk *renderer);

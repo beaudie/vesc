@@ -135,7 +135,9 @@ constexpr gl::ShaderMap<vk::ImageLayout> kShaderWriteImageLayouts = {
     {gl::ShaderType::Fragment, vk::ImageLayout::FragmentShaderWrite},
     {gl::ShaderType::Compute, vk::ImageLayout::ComputeShaderWrite}};
 
-constexpr size_t kDefaultValueSize = sizeof(gl::VertexAttribCurrentValueData::Values);
+constexpr VkBufferUsageFlags kVertexBufferUsage = VK_BUFFER_USAGE_VERTEX_BUFFER_BIT;
+constexpr size_t kDefaultValueSize              = sizeof(gl::VertexAttribCurrentValueData::Values);
+constexpr size_t kDefaultBufferSize             = kDefaultValueSize * 16;
 constexpr size_t kDriverUniformsAllocatorPageSize = 4 * 1024;
 
 bool CanMultiDrawIndirectUseCmd(ContextVk *contextVk,
@@ -889,6 +891,10 @@ void ContextVk::onDestroy(const gl::Context *context)
     {
         defaultBuffer.destroy(mRenderer);
     }
+    for (vk::BufferPool &pool : mDefaultAttribBufferPools)
+    {
+        pool.destroy(mRenderer);
+    }
 
     for (vk::DynamicQueryPool &queryPool : mQueryPools)
     {
@@ -993,6 +999,19 @@ angle::Result ContextVk::initialize()
 
     mGraphicsPipelineDesc.reset(new vk::GraphicsPipelineDesc());
     mGraphicsPipelineDesc->initDefaults(this);
+
+    // Initialize current value/default attribute buffers.
+    uint32_t defaultAttributeMemoryTypeIndex =
+        mRenderer->getVertexConversionBufferMemoryTypeIndex(vk::MemoryHostVisibility::Visible);
+    VkMemoryPropertyFlags defaultAttributeMemoryPropertyFlags;
+    mRenderer->getBufferMemoryAllocator().getMemoryTypeProperties(
+        mRenderer, defaultAttributeMemoryTypeIndex, &defaultAttributeMemoryPropertyFlags);
+    for (vk::BufferPool &pool : mDefaultAttribBufferPools)
+    {
+        pool.initWithFlags(mRenderer, vma::VirtualBlockCreateFlagBits::LINEAR, kVertexBufferUsage,
+                           kDefaultBufferSize, defaultAttributeMemoryTypeIndex,
+                           defaultAttributeMemoryPropertyFlags);
+    }
 
 #if ANGLE_ENABLE_VULKAN_GPU_TRACE_EVENTS
     angle::PlatformMethods *platform = ANGLEPlatformCurrent();
@@ -5779,13 +5798,8 @@ angle::Result ContextVk::updateDefaultAttribute(size_t attribIndex)
 {
     vk::BufferHelper &defaultBuffer = mDefaultAttribBuffers[attribIndex];
 
-    if (defaultBuffer.valid())
-    {
-        defaultBuffer.release(mRenderer);
-    }
-
-    ANGLE_TRY(defaultBuffer.initForVertexConversion(this, kDefaultValueSize,
-                                                    vk::MemoryHostVisibility::Visible));
+    ANGLE_TRY(defaultBuffer.initForDefaultAttribute(this, &mDefaultAttribBufferPools[attribIndex],
+                                                    kDefaultValueSize));
     uint8_t *ptr          = defaultBuffer.getMappedMemory();
     VkBuffer bufferHandle = defaultBuffer.getBuffer().getHandle();
     VkDeviceSize offset   = defaultBuffer.getOffset();

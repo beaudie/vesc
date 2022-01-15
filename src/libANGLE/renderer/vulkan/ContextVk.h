@@ -1132,6 +1132,7 @@ class ContextVk : public ContextImpl, public vk::Context, public MultisampleText
     // "Current Value" aka default vertex attribute state.
     gl::AttributesMask mDirtyDefaultAttribsMask;
     gl::AttribArray<vk::BufferHelper> mDefaultAttribBuffers;
+    gl::AttribArray<vk::BufferPool> mDefaultAttribBufferPools;
 
     // We use a single pool for recording commands. We also keep a free list for pool recycling.
     vk::SecondaryCommandPools mCommandPools;
