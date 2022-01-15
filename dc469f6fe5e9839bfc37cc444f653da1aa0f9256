@@ -37,6 +37,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "2da3c7c2_a7e3b759",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2022-01-15T03:28:32Z",
+      "side": 1,
+      "message": "The first issue with this CL is that generate_android_bp.py needs to be updated to remove all of the third_party/vulkan-deps entries from the `license_text` block.\n\nWith that fixed, here is the error output when building locally with a merge and both CLs:\nhttps://paste.googleplex.com/5354384989880320\n\nI haven\u0027t dug into whether this or the AOSP CL are causing issues, but we at least can\u0027t land this one, so I\u0027m going to -1 for now until we can build with both.",
+      "parentUuid": "1fd44651_e7852b04",
+      "revId": "dc469f6fe5e9839bfc37cc444f653da1aa0f9256",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "0205c7bd_8527f2fe",
         "filename": "scripts/roll_aosp.sh",
         "patchSetId": 2
