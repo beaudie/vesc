@@ -1,0 +1,113 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "03054a9a_dfe338ff",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 9
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-01-17T16:57:29Z",
+      "side": 1,
+      "message": "Just some editorial comments",
+      "revId": "8bd4af29b14e8e883315d1a4ae0b6aaf8ca51340",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "7f02f973_16b7405a",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 9
+      },
+      "lineNbr": 5643,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-01-17T16:57:29Z",
+      "side": 1,
+      "message": "typos: one of ... suballoctions ... get ...",
+      "range": {
+        "startLine": 5643,
+        "startChar": 31,
+        "endLine": 5643,
+        "endChar": 74
+      },
+      "revId": "8bd4af29b14e8e883315d1a4ae0b6aaf8ca51340",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "aa721251_a55c93b8",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 9
+      },
+      "lineNbr": 5645,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-01-17T16:57:29Z",
+      "side": 1,
+      "message": "typo: get",
+      "range": {
+        "startLine": 5645,
+        "startChar": 87,
+        "endLine": 5645,
+        "endChar": 91
+      },
+      "revId": "8bd4af29b14e8e883315d1a4ae0b6aaf8ca51340",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "a9ddd5c2_084fed93",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.h",
+        "patchSetId": 9
+      },
+      "lineNbr": 1233,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-01-17T16:57:29Z",
+      "side": 1,
+      "message": "nit: \"whose uniforms are stored in\"",
+      "range": {
+        "startLine": 1233,
+        "startChar": 24,
+        "endLine": 1233,
+        "endChar": 32
+      },
+      "revId": "8bd4af29b14e8e883315d1a4ae0b6aaf8ca51340",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "3688bd49_3e95217f",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.h",
+        "patchSetId": 9
+      },
+      "lineNbr": 1244,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-01-17T16:57:29Z",
+      "side": 1,
+      "message": "typo: dedicated",
+      "range": {
+        "startLine": 1244,
+        "startChar": 34,
+        "endLine": 1244,
+        "endChar": 42
+      },
+      "revId": "8bd4af29b14e8e883315d1a4ae0b6aaf8ca51340",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
