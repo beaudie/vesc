@@ -16,6 +16,75 @@
       "message": "I\u0027m not sure if we care about this but it\u0027s something I noticed.",
       "revId": "494ad6d1e530aa3c10bf24e22ca86c75490c8a10",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "9045bf48_23da9159",
+        "filename": "src/gpu_info_util/SystemInfo.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 50,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2022-01-17T20:08:26Z",
+      "side": 1,
+      "message": "nit: same",
+      "range": {
+        "startLine": 50,
+        "startChar": 13,
+        "endLine": 50,
+        "endChar": 32
+      },
+      "revId": "494ad6d1e530aa3c10bf24e22ca86c75490c8a10",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "d6c8510e_0d602d63",
+        "filename": "src/gpu_info_util/SystemInfo.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 107,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2022-01-17T20:08:26Z",
+      "side": 1,
+      "message": "nit: can you sort this list?",
+      "range": {
+        "startLine": 107,
+        "startChar": 18,
+        "endLine": 107,
+        "endChar": 19
+      },
+      "revId": "494ad6d1e530aa3c10bf24e22ca86c75490c8a10",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "6650a44a_97af7996",
+        "filename": "src/gpu_info_util/SystemInfo.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 134,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2022-01-17T20:08:26Z",
+      "side": 1,
+      "message": "nit: same",
+      "range": {
+        "startLine": 134,
+        "startChar": 5,
+        "endLine": 134,
+        "endChar": 16
+      },
+      "revId": "494ad6d1e530aa3c10bf24e22ca86c75490c8a10",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
