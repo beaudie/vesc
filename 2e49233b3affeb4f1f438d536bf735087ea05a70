@@ -94,6 +94,30 @@
       },
       "revId": "2e49233b3affeb4f1f438d536bf735087ea05a70",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "08698099_ccb11af1",
+        "filename": "src/libANGLE/renderer/vulkan/TextureVk.cpp",
+        "patchSetId": 10
+      },
+      "lineNbr": 2390,
+      "author": {
+        "id": 1446209
+      },
+      "writtenOn": "2022-01-17T07:59:13Z",
+      "side": 1,
+      "message": "Thanks Charlie for your comment,you\u0027re right,when using glCopyImageSubImage2D to write to level 1 then using glTexSubImage2D to full update level 0,level 1 content will be lost.I updated 3 test cases to verify what you mentioned in above comment.\nVery simplistically, I used a bool value mSingleLevelUpdate to indicate if texture update is single level update or not,in TextureVk::copyTextureSubData and TextureVk::setSubImageImpl,I will check and update this value.\nIn another two cases,\u0027!mState.hasBeenBoundAsAttachment() \u0026\u0026 mImage-\u003egetCurrentImageLayout() \u003d\u003d vk::ImageLayout::FragmentShaderReadOnly\u0027 will exclude them and ensure no image recreation.",
+      "parentUuid": "7cbeafb5_186b8b88",
+      "range": {
+        "startLine": 2387,
+        "startChar": 9,
+        "endLine": 2390,
+        "endChar": 85
+      },
+      "revId": "2e49233b3affeb4f1f438d536bf735087ea05a70",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
