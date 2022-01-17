@@ -2525,6 +2525,7 @@ void TextureVk::prepareForGenerateMipmap(ContextVk *contextVk)
     // different.
     static_assert(gl::IMPLEMENTATION_MAX_TEXTURE_LEVELS < 32,
                   "levels mask assumes 32-bits is enough");
+<<<<<<< HEAD   (06187c [M96] Vulkan: Fix the UAF issue with BufferData)
     gl::TexLevelMask::value_type levelsMask = angle::BitMask<uint32_t>(maxLevel + 1 - baseLevel);
 
     gl::LevelIndex imageAllocatedLevel = mImage->getFirstAllocatedLevel();
@@ -2538,6 +2539,16 @@ void TextureVk::prepareForGenerateMipmap(ContextVk *contextVk)
     }
 
     mRedefinedLevels &= gl::TexLevelMask(~levelsMask);
+=======
+    // Generate bitmask for (baseLevel, maxLevel]. `+1` because bitMask takes `the number of bits`
+    // but levels start counting from 0
+    gl::TexLevelMask levelsMask(angle::BitMask<uint32_t>(maxLevel.get() + 1));
+    levelsMask &= static_cast<uint32_t>(~angle::BitMask<uint32_t>(firstGeneratedLevel.get()));
+    // Remove (baseLevel, maxLevel] from mRedefinedLevels. These levels are no longer incompatibly
+    // defined if they previously were.  The corresponding bits in mRedefinedLevels should be
+    // cleared.
+    mRedefinedLevels &= ~levelsMask;
+>>>>>>> CHANGE (a254f5 M97: Vulkan: Fix incorrect bit test when mipmapping)
 
     // If generating mipmap and base level is incompatibly redefined, the image is going to be
     // recreated.  Don't try to preserve the other mips.
