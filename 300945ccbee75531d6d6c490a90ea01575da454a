@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ffa3ffdb_a425f2bb",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 3044,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2022-01-17T13:53:13Z",
+      "side": 1,
+      "message": "Now that we have a feature, you don\u0027t need this specialized override, we can already set feature overrides with the environment or Android system properties.\n\nANGLE_FEATURE_OVERRIDES_ENABLED\u003dfeature name\n\nmaps to debug.angle.feature_overrides_enabled",
+      "range": {
+        "startLine": 3038,
+        "startChar": 0,
+        "endLine": 3044,
+        "endChar": 70
+      },
+      "revId": "300945ccbee75531d6d6c490a90ea01575da454a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
