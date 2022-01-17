@@ -1,0 +1,153 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "8ad3852e_9790b2b1",
+        "filename": "src/libANGLE/renderer/vulkan/FramebufferVk.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 564,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-01-17T18:38:41Z",
+      "side": 1,
+      "message": "nit: You could remove the if, the loop condition is doing the same (maybe one or two instructions more)",
+      "range": {
+        "startLine": 563,
+        "startChar": 0,
+        "endLine": 564,
+        "endChar": 13
+      },
+      "revId": "618de2a72f5ff7f1924d5e8c836b37f3b579124a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "41d079df_6beff92b",
+        "filename": "src/libANGLE/renderer/vulkan/FramebufferVk.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 571,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-01-17T18:38:41Z",
+      "side": 1,
+      "message": "Something seems wrong here, why is `colorIndexVk` being set to `colorIndexGL` directly?\n\nCould you please add a mid-RP clear test with gaps in attachments? That would be similar to `DrawBuffersTest.ClearWithGaps`",
+      "range": {
+        "startLine": 571,
+        "startChar": 46,
+        "endLine": 571,
+        "endChar": 94
+      },
+      "revId": "618de2a72f5ff7f1924d5e8c836b37f3b579124a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "e1eff563_e955a4c1",
+        "filename": "src/libANGLE/renderer/vulkan/FramebufferVk.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 576,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-01-17T18:38:41Z",
+      "side": 1,
+      "message": "This function (clearImpl) is already big and unwieldy, please refactor this to a helper",
+      "range": {
+        "startLine": 565,
+        "startChar": 0,
+        "endLine": 576,
+        "endChar": 17
+      },
+      "revId": "618de2a72f5ff7f1924d5e8c836b37f3b579124a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "9455a213_007aa2f6",
+        "filename": "src/libANGLE/renderer/vulkan/RenderTargetVk.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 104,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-01-17T18:38:41Z",
+      "side": 1,
+      "message": "There seems to be a bug here where this part is not run once the color attachment is enabled (because onColorDraw is only called once). You can test it with this:\n\n- Two attachments, only 1 is enabled\n- Draw\n- Enable attachment 1\n- Draw\n\nIn that case, `onImageWrite` for attachment 1 should be missing. storeOp\u003dDONT_CARE will also be used for it.\n\nWe should split this function such that the second part is run (once) as soon as the attachment is enabled.",
+      "revId": "618de2a72f5ff7f1924d5e8c836b37f3b579124a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "4ec549b1_b10499fc",
+        "filename": "src/libANGLE/renderer/vulkan/vk_cache_utils.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 929,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-01-17T18:38:41Z",
+      "side": 1,
+      "message": "This is actually multiplying the color ops by subpass count.\n\nYou\u0027d need to split the color op counting into another function that\u0027s called above the for loop. You can tell by the way the loop doesn\u0027t use the `subpass` :)",
+      "range": {
+        "startLine": 928,
+        "startChar": 0,
+        "endLine": 929,
+        "endChar": 76
+      },
+      "revId": "618de2a72f5ff7f1924d5e8c836b37f3b579124a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "c0ae94f6_4b46e702",
+        "filename": "src/tests/gl_tests/VulkanPerformanceCounterTest.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 3193,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-01-17T18:38:41Z",
+      "side": 1,
+      "message": "super nit: Render Pass is two words (we have a fix-it issue to fix renderpass elsewhere too)",
+      "range": {
+        "startLine": 3193,
+        "startChar": 40,
+        "endLine": 3193,
+        "endChar": 50
+      },
+      "revId": "618de2a72f5ff7f1924d5e8c836b37f3b579124a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "4344f2f7_77d7a026",
+        "filename": "src/tests/gl_tests/VulkanPerformanceCounterTest.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 3235,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-01-17T18:38:41Z",
+      "side": 1,
+      "message": "Please verify colorStores here too",
+      "revId": "618de2a72f5ff7f1924d5e8c836b37f3b579124a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
