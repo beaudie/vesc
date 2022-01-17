@@ -199,6 +199,24 @@
       "parentUuid": "bc13fcc5_ee80143e",
       "revId": "62f7c7efc557c36889d34ae6a2876a5a8c3ebd4e",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "894c5a8b_91bbab66",
+        "filename": "src/libANGLE/validationEGL.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 1441,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-01-17T16:38:00Z",
+      "side": 1,
+      "message": "\u003e how do you propose we handle this?\n\nBasically something like this (untested pseudo-code):\n\n        case EGL_CONTEXT_OPENGL_RESET_NOTIFICATION_STRATEGY_EXT:\n            if (!...createContextRobustness)\n            {\n                val-\u003esetError(EGL_BAD_ATTRIBUTE);\n                return false;\n            }\n            break;\n\n        case EGL_CONTEXT_OPENGL_RESET_NOTIFICATION_STRATEGY:\n            if (!is_egl_1.5() \u0026\u0026 !...createContext)\n            {\n                val-\u003esetError(EGL_BAD_ATTRIBUTE);\n                return false;\n            }\n            break;\n\nMakes sense? Basically check the condition under which the symbol is valid (which is different for the two symbols and is exactly how you described it yourself)",
+      "parentUuid": "dd8bd275_30e1f9c7",
+      "revId": "62f7c7efc557c36889d34ae6a2876a5a8c3ebd4e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
