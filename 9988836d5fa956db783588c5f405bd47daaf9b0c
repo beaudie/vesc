@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "051a7b0d_e58a2044",
+        "filename": "scripts/perf_test_runner.py",
+        "patchSetId": 1
+      },
+      "lineNbr": 23,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-01-17T21:45:23Z",
+      "side": 1,
+      "message": "nit: Comment no longer applies",
+      "revId": "9988836d5fa956db783588c5f405bd47daaf9b0c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
