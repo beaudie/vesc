@@ -16,6 +16,24 @@
       "message": "Is this fixing something? Any tests to unsuppress?",
       "revId": "612c58ef573a9664016f6ab4681740555617b6b8",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "18bc75ec_99f08b51",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-01-17T17:52:59Z",
+      "side": 1,
+      "message": "Never mind, I see the next CL.",
+      "parentUuid": "00739496_6d2ac6f1",
+      "revId": "612c58ef573a9664016f6ab4681740555617b6b8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
