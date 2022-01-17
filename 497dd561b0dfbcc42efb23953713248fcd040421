@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "9ce0d024_c27af07b",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2022-01-17T20:07:45Z",
+      "side": 1,
+      "message": "LGTM - what was this extension doing if it wasn\u0027t available on on D3D11 before this CL?",
+      "revId": "497dd561b0dfbcc42efb23953713248fcd040421",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
