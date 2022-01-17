@@ -16,6 +16,24 @@
       "message": "LGTM - what was this extension doing if it wasn\u0027t available on on D3D11 before this CL?",
       "revId": "497dd561b0dfbcc42efb23953713248fcd040421",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "32608290_5ab019ef",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1326275
+      },
+      "writtenOn": "2022-01-17T20:10:56Z",
+      "side": 1,
+      "message": "zmo and I are working on this extension as a way to select GPU per-display. The goal is to enable multiple displays at the same time in Chrome so we can use the high-power for task A, low-power for task B, etc.\nThe extension is already setup for Metal",
+      "parentUuid": "9ce0d024_c27af07b",
+      "revId": "497dd561b0dfbcc42efb23953713248fcd040421",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
