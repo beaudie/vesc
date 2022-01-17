@@ -106,6 +106,24 @@
       "parentUuid": "bbac6318_24fb0dfd",
       "revId": "985db64093cf2ee3bfa6dd5614c6904650887e65",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "9ccd0470_164e24a2",
+        "filename": "src/libANGLE/renderer/vulkan/SyncVk.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 324,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-01-17T17:55:39Z",
+      "side": 0,
+      "message": "Ah right. Nevertheless, I see `SyncHelperNativeFence::initializeWithFd` also has a flush, so all\u0027s good.",
+      "parentUuid": "4bb9ce89_c05afed0",
+      "revId": "985db64093cf2ee3bfa6dd5614c6904650887e65",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
