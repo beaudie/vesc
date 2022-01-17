@@ -140,6 +140,30 @@
       },
       "revId": "a304be3a443cef1493d82f6d886a5c9a88a04e9f",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "10ac6d8b_d15f82ec",
+        "filename": "src/libANGLE/renderer/vulkan/RenderTargetVk.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 104,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2022-01-17T14:08:16Z",
+      "side": 1,
+      "message": "I was thinking about how when we are missing shader outputs, SwiftShader would rewrite the color attachments with garbage data. I think I added a solution for that though.\n\nMight be just paranoia, I\u0027d say go with your code for now and only worry about it if something actually pops up.",
+      "parentUuid": "987eb4a6_b0b47659",
+      "range": {
+        "startLine": 104,
+        "startChar": 8,
+        "endLine": 104,
+        "endChar": 27
+      },
+      "revId": "a304be3a443cef1493d82f6d886a5c9a88a04e9f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
