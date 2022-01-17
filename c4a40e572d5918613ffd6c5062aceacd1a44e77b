@@ -16,6 +16,52 @@
       "message": "PTAL",
       "revId": "c4a40e572d5918613ffd6c5062aceacd1a44e77b",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "0275ff6f_79a5e6e9",
+        "filename": "include/GLSLANG/ShaderLang.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 29,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-01-17T17:47:49Z",
+      "side": 1,
+      "message": "nit: please increment this",
+      "range": {
+        "startLine": 29,
+        "startChar": 25,
+        "endLine": 29,
+        "endChar": 28
+      },
+      "revId": "c4a40e572d5918613ffd6c5062aceacd1a44e77b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "06e9cd54_cd8b13b0",
+        "filename": "src/libANGLE/Context.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 3502,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-01-17T17:47:49Z",
+      "side": 1,
+      "message": "nit: Captical S (as in ES31a) seems more appropriate here",
+      "range": {
+        "startLine": 3502,
+        "startChar": 41,
+        "endLine": 3502,
+        "endChar": 43
+      },
+      "revId": "c4a40e572d5918613ffd6c5062aceacd1a44e77b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
