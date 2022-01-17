@@ -1,6 +1,29 @@
 {
   "comments": [
     {
+      "unresolved": true,
+      "key": {
+        "uuid": "abb44123_f02e5357",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 11,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2022-01-17T20:24:46Z",
+      "side": 1,
+      "message": "please mention which extension is only available on D3D11, the d3d luid or display id - for some reason I read this as the display id was only available on windows.",
+      "range": {
+        "startLine": 9,
+        "startChar": 59,
+        "endLine": 11,
+        "endChar": 0
+      },
+      "revId": "497dd561b0dfbcc42efb23953713248fcd040421",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": false,
       "key": {
         "uuid": "9ce0d024_c27af07b",
