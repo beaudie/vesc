@@ -50,6 +50,30 @@
     {
       "unresolved": false,
       "key": {
+        "uuid": "343defc5_172dc6b3",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 4
+      },
+      "lineNbr": 13,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2022-01-17T16:51:15Z",
+      "side": 1,
+      "message": "I forgot to mention, data isn\u0027t really needed because if we ever have time to remove the pImpl design, then this caching would be totally obsolete.\n\nI did the experiment on my personal machine, as it seems it\u0027s impossible to get stable measurements on gWindows.\n\nwith my CL (lower is better):\n\nDrawCallPerf*vulkan: truncated mean: 81.32, variation: 0.79%\nDrawCallPerf*vulkan_attrib_change: truncated mean: 1245.42, variation: 0.54%\nDrawCallPerf*vulkan_vbo_change: truncated mean: 455.65, variation: 0.43%\n\nwithout my CL (lower is better):\n\nDrawCallPerf*vulkan: truncated mean: 80.89, variation: 1.31%\nDrawCallPerf*vulkan_attrib_change: 1243.50, variation: 0.45%\nDrawCallPerf*vulkan_vbo_change: 457.50, variation: 0.31%\n\nSo everything seems to be within noise for these tests. I could do a \"null\" device test to see if the submit is blocking the small cpu overhead, but as I said above all this discussion won\u0027t be relevant if we can just squash the front and back-end objects together to avoid an extra indirection.",
+      "parentUuid": "afff7c93_0cb37779",
+      "range": {
+        "startLine": 12,
+        "startChar": 57,
+        "endLine": 13,
+        "endChar": 6
+      },
+      "revId": "8ab59682132260c7a1d966cd30a0001cbdafc9c9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
         "uuid": "52c459d4_7f1a253c",
         "filename": "/PATCHSET_LEVEL",
         "patchSetId": 4
