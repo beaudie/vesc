@@ -16,6 +16,40 @@
       "message": "Thanks for the review.",
       "revId": "c7436af49fcd19e435f2b155c0f63682b023431c",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "36bead65_6b8a5896",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-01-17T18:54:09Z",
+      "side": 1,
+      "message": "Thanks for the fix!",
+      "revId": "c7436af49fcd19e435f2b155c0f63682b023431c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "698e2db0_328fa680",
+        "filename": "src/tests/gl_tests/MipmapTest.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 2032,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-01-17T18:54:09Z",
+      "side": 1,
+      "message": "Thanks for the test, but this is not verifying anything (other than perhaps crashes). Would you be able to add some code that verifies the texture now contains what\u0027s expected?",
+      "revId": "c7436af49fcd19e435f2b155c0f63682b023431c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
