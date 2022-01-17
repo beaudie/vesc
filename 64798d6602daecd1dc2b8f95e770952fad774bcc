@@ -51,6 +51,24 @@
       "parentUuid": "8d8aa037_3ca38706",
       "revId": "64798d6602daecd1dc2b8f95e770952fad774bcc",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "6fb800c4_5e1aee57",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1531247
+      },
+      "writtenOn": "2022-01-17T22:24:02Z",
+      "side": 1,
+      "message": "Ah, turns out we can\u0027t have overlapping entries.. so is changing to SKIP on all platforms the way to go then or do I need to break those into non-overlapping groups somehow?",
+      "parentUuid": "b5dcb177_37e60ed4",
+      "revId": "64798d6602daecd1dc2b8f95e770952fad774bcc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
