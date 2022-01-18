@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "8aee7ef8_96fb51f4",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2022-01-18T21:00:39Z",
+      "side": 1,
+      "message": "PTAL. A partial fix for multithreading cross-share group stuff.\n\nEGL images still need more thought.",
+      "revId": "b390ff07cd1ea0a92656b4fd4bcbfff083a51121",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
