@@ -15,9 +15,7 @@
     'angle_deqp_egl_d3d11_gtests': {
       'angle_deqp_egl_d3d11_tests': {
         'args': [
-          'angle_deqp_egl_tests',
           '--use-angle=d3d11',
-          '--bot-mode',
         ],
         'merge': {
           'script': '//scripts/angle_deqp_test_merge.py',
@@ -30,9 +28,7 @@
     'angle_deqp_egl_gl_gtests': {
       'angle_deqp_egl_gl_tests': {
         'args': [
-          'angle_deqp_egl_tests',
           '--use-angle=gl',
-          '--bot-mode',
           # Flaky when run with multiple processes.
           '--max-processes=1',
         ],
@@ -47,7 +43,6 @@
     'angle_deqp_egl_gles_gtests': {
       'angle_deqp_egl_gles_tests': {
         'args': [
-          'angle_deqp_egl_tests',
           '--use-angle=gles',
         ],
         'android_args': [
@@ -68,9 +63,7 @@
     'angle_deqp_egl_metal_gtests': {
       'angle_deqp_egl_metal_tests': {
         'args': [
-          'angle_deqp_egl_tests',
           '--use-angle=metal',
-          '--bot-mode',
         ],
         'merge': {
           'script': '//scripts/angle_deqp_test_merge.py',
@@ -83,7 +76,6 @@
     'angle_deqp_egl_vulkan_gtests': {
       'angle_deqp_egl_vulkan_tests': {
         'args': [
-          'angle_deqp_egl_tests',
           '--use-angle=vulkan',
         ],
         'android_args': [
@@ -93,9 +85,6 @@
         'android_swarming': {
           'shards': 4,
         },
-        'desktop_args': [
-          '--bot-mode',
-        ],
         'merge': {
           'script': '//scripts/angle_deqp_test_merge.py',
         },
@@ -110,9 +99,7 @@
     'angle_deqp_gles2_d3d11_gtests': {
       'angle_deqp_gles2_d3d11_tests': {
         'args': [
-          'angle_deqp_gles2_tests',
           '--use-angle=d3d11',
-          '--bot-mode',
         ],
         'merge': {
           'script': '//scripts/angle_deqp_test_merge.py',
@@ -125,9 +112,7 @@
     'angle_deqp_gles2_gl_gtests': {
       'angle_deqp_gles2_gl_tests': {
         'args': [
-          'angle_deqp_gles2_tests',
           '--use-angle=gl',
-          '--bot-mode',
         ],
         'merge': {
           'script': '//scripts/angle_deqp_test_merge.py',
@@ -140,7 +125,6 @@
     'angle_deqp_gles2_gles_gtests': {
       'angle_deqp_gles2_gles_tests': {
         'args': [
-          'angle_deqp_gles2_tests',
           '--use-angle=gles',
         ],
         'android_args': [
@@ -161,11 +145,7 @@
     'angle_deqp_gles2_metal_gtests': {
       'angle_deqp_gles2_metal_tests': {
         'args': [
-          'angle_deqp_gles2_tests',
           '--use-angle=metal',
-        ],
-        'desktop_args': [
-          '--bot-mode',
         ],
         'merge': {
           'script': '//scripts/angle_deqp_test_merge.py',
@@ -178,7 +158,6 @@
     'angle_deqp_gles2_vulkan_gtests': {
       'angle_deqp_gles2_vulkan_tests': {
         'args': [
-          'angle_deqp_gles2_tests',
           '--use-angle=vulkan',
         ],
         'android_args': [
@@ -188,9 +167,6 @@
         'android_swarming': {
           'shards': 4,
         },
-        'desktop_args': [
-          '--bot-mode',
-        ],
         'merge': {
           'script': '//scripts/angle_deqp_test_merge.py',
         },
@@ -202,9 +178,7 @@
     'angle_deqp_gles31_d3d11_gtests': {
       'angle_deqp_gles31_d3d11_tests': {
         'args': [
-          'angle_deqp_gles31_tests',
           '--use-angle=d3d11',
-          '--bot-mode',
         ],
         'merge': {
           'script': '//scripts/angle_deqp_test_merge.py',
@@ -220,9 +194,7 @@
     'angle_deqp_gles31_gl_gtests': {
       'angle_deqp_gles31_gl_tests': {
         'args': [
-          'angle_deqp_gles31_tests',
           '--use-angle=gl',
-          '--bot-mode',
         ],
         'merge': {
           'script': '//scripts/angle_deqp_test_merge.py',
@@ -238,7 +210,6 @@
     'angle_deqp_gles31_vulkan_gtests': {
       'angle_deqp_gles31_vulkan_tests': {
         'args': [
-          'angle_deqp_gles31_tests',
           '--use-angle=vulkan',
         ],
         'android_args': [
@@ -248,9 +219,6 @@
         'android_swarming': {
           'shards': 20,
         },
-        'desktop_args': [
-          '--bot-mode',
-        ],
         'merge': {
           'script': '//scripts/angle_deqp_test_merge.py',
         },
@@ -265,11 +233,7 @@
     'angle_deqp_gles31_vulkan_rotate180_gtests': {
       'angle_deqp_gles31_vulkan_rotate180_tests': {
         'args': [
-          'angle_deqp_gles31_rotate180_tests',
           '--use-angle=vulkan',
-        ],
-        'desktop_args': [
-          '--bot-mode',
         ],
         'merge': {
           'script': '//scripts/angle_deqp_test_merge.py',
@@ -285,11 +249,7 @@
     'angle_deqp_gles31_vulkan_rotate270_gtests': {
       'angle_deqp_gles31_vulkan_rotate270_tests': {
         'args': [
-          'angle_deqp_gles31_rotate270_tests',
           '--use-angle=vulkan',
-        ],
-        'desktop_args': [
-          '--bot-mode',
         ],
         'merge': {
           'script': '//scripts/angle_deqp_test_merge.py',
@@ -305,11 +265,7 @@
     'angle_deqp_gles31_vulkan_rotate90_gtests': {
       'angle_deqp_gles31_vulkan_rotate90_tests': {
         'args': [
-          'angle_deqp_gles31_rotate90_tests',
           '--use-angle=vulkan',
-        ],
-        'desktop_args': [
-          '--bot-mode',
         ],
         'merge': {
           'script': '//scripts/angle_deqp_test_merge.py',
@@ -325,9 +281,7 @@
     'angle_deqp_gles3_d3d11_gtests': {
       'angle_deqp_gles3_d3d11_tests': {
         'args': [
-          'angle_deqp_gles3_tests',
           '--use-angle=d3d11',
-          '--bot-mode',
         ],
         'merge': {
           'script': '//scripts/angle_deqp_test_merge.py',
@@ -343,9 +297,7 @@
     'angle_deqp_gles3_gl_gtests': {
       'angle_deqp_gles3_gl_tests': {
         'args': [
-          'angle_deqp_gles3_tests',
           '--use-angle=gl',
-          '--bot-mode',
         ],
         'merge': {
           'script': '//scripts/angle_deqp_test_merge.py',
@@ -361,7 +313,6 @@
     'angle_deqp_gles3_gles_gtests': {
       'angle_deqp_gles3_gles_tests': {
         'args': [
-          'angle_deqp_gles3_tests',
           '--use-angle=gles',
         ],
         'android_args': [
@@ -382,13 +333,9 @@
     'angle_deqp_gles3_metal_gtests': {
       'angle_deqp_gles3_metal_tests': {
         'args': [
-          'angle_deqp_gles3_tests',
           '--use-angle=metal',
           # Flakiness on multiple configs. http://anglebug.com/6019
           '--flaky-retries=2',
-        ],
-        'desktop_args': [
-          '--bot-mode',
         ],
         'merge': {
           'script': '//scripts/angle_deqp_test_merge.py',
@@ -404,7 +351,6 @@
     'angle_deqp_gles3_vulkan_gtests': {
       'angle_deqp_gles3_vulkan_tests': {
         'args': [
-          'angle_deqp_gles3_tests',
           '--use-angle=vulkan',
         ],
         'android_args': [
@@ -414,9 +360,6 @@
         'android_swarming': {
           'shards': 12,
         },
-        'desktop_args': [
-          '--bot-mode',
-        ],
         'merge': {
           'script': '//scripts/angle_deqp_test_merge.py',
         },
@@ -431,11 +374,7 @@
     'angle_deqp_gles3_vulkan_rotate180_gtests': {
       'angle_deqp_gles3_vulkan_rotate180_tests': {
         'args': [
-          'angle_deqp_gles3_rotate180_tests',
           '--use-angle=vulkan',
-        ],
-        'desktop_args': [
-          '--bot-mode',
         ],
         'merge': {
           'script': '//scripts/angle_deqp_test_merge.py',
@@ -451,11 +390,7 @@
     'angle_deqp_gles3_vulkan_rotate270_gtests': {
       'angle_deqp_gles3_vulkan_rotate270_tests': {
         'args': [
-          'angle_deqp_gles3_rotate270_tests',
           '--use-angle=vulkan',
-        ],
-        'desktop_args': [
-          '--bot-mode',
         ],
         'merge': {
           'script': '//scripts/angle_deqp_test_merge.py',
@@ -471,11 +406,7 @@
     'angle_deqp_gles3_vulkan_rotate90_gtests': {
       'angle_deqp_gles3_vulkan_rotate90_tests': {
         'args': [
-          'angle_deqp_gles3_rotate90_tests',
           '--use-angle=vulkan',
-        ],
-        'desktop_args': [
-          '--bot-mode',
         ],
         'merge': {
           'script': '//scripts/angle_deqp_test_merge.py',
@@ -491,7 +422,6 @@
     'angle_deqp_khr_gles2_vulkan_gtests': {
       'angle_deqp_khr_gles2_vulkan_tests': {
         'args': [
-          'angle_deqp_khr_gles2_tests',
           '--use-angle=vulkan',
         ],
         'android_args': [
@@ -501,9 +431,6 @@
         'merge': {
           'script': '//scripts/angle_deqp_test_merge.py',
         },
-        'desktop_args': [
-          '--bot-mode',
-        ],
         'test': 'angle_deqp_khr_gles2_tests',
         'use_isolated_scripts_api': True,
       },
@@ -512,7 +439,6 @@
     'angle_deqp_khr_gles31_vulkan_gtests': {
       'angle_deqp_khr_gles31_vulkan_tests': {
         'args': [
-          'angle_deqp_khr_gles31_tests',
           '--use-angle=vulkan',
         ],
         'android_args': [
@@ -522,9 +448,6 @@
         'android_swarming': {
           'shards': 2,
         },
-        'desktop_args': [
-          '--bot-mode',
-        ],
         'merge': {
           'script': '//scripts/angle_deqp_test_merge.py',
         },
@@ -536,15 +459,11 @@
     'angle_deqp_khr_gles32_vulkan_gtests': {
       'angle_deqp_khr_gles32_vulkan_tests': {
         'args': [
-          'angle_deqp_khr_gles32_tests',
           '--use-angle=vulkan',
         ],
         'android_args': [
           '-v',
           '--shard-timeout=500',
-        ],
-        'desktop_args': [
-          '--bot-mode',
         ],
         'merge': {
           'script': '//scripts/angle_deqp_test_merge.py',
@@ -557,7 +476,6 @@
     'angle_deqp_khr_gles3_vulkan_gtests': {
       'angle_deqp_khr_gles3_vulkan_tests': {
         'args': [
-          'angle_deqp_khr_gles3_tests',
           '--use-angle=vulkan',
         ],
         'android_args': [
@@ -567,9 +485,6 @@
         'android_swarming': {
           'shards': 2,
         },
-        'desktop_args': [
-          '--bot-mode',
-        ],
         'merge': {
           'script': '//scripts/angle_deqp_test_merge.py',
         },
@@ -590,15 +505,12 @@
           'shards': 4,
         },
         'args': [
-          'angle_end2end_tests',
           '--gtest_filter=-*Vulkan_SwiftShader*',
-        ],
-        'desktop_args': [
-          '--bot-mode',
         ],
         # Linux has issues with creating too many windows at once.
         'linux_args': [
           '--max-processes=4',
+          '--no-xvfb',
         ],
         'swarming': {
           'shards': 2,
@@ -610,9 +522,7 @@
     'angle_end2end_with_retry_gtests': {
       'angle_end2end_tests': {
         'args': [
-          'angle_end2end_tests',
           '--gtest_filter=-*Vulkan_SwiftShader*',
-          '--bot-mode',
           '--flaky-retries=2',
         ],
         # Linux has issues with creating too many windows at once.
@@ -633,11 +543,7 @@
           '-v',
         ],
         'args': [
-          'angle_gles1_conformance_tests',
           '--test-timeout=300',
-        ],
-        'desktop_args': [
-          '--bot-mode',
         ],
         'use_isolated_scripts_api': True,
       },
@@ -706,9 +612,6 @@
 
     'angle_unit_gtests': {
       'angle_unittests': {
-        'args': [
-          'angle_unittests',
-        ],
         'android_args': [
           '-v',
         ],
@@ -722,54 +625,33 @@
           '--shard-timeout=180',
           '-v',
         ],
-        'args': [
-          'angle_white_box_tests',
-        ],
-        'desktop_args': [
-          '--bot-mode',
-        ],
         'use_isolated_scripts_api': True,
       },
     },
 
     'swangle_deqp_egl_slow_tests': {
-      'angle_deqp_egl_tests': {
+      'angle_deqp_egl_tests_with_xvfb': {
         'args': [
-          'angle_deqp_egl_tests',
           '--use-angle=swiftshader',
-          '--bot-mode',
           '--batch-timeout=600',
-        ],
-        'linux_args': [
-          '--xvfb',
         ],
         'use_isolated_scripts_api': True,
       },
     },
 
     'swangle_deqp_egl_tests': {
-      'angle_deqp_egl_tests': {
+      'angle_deqp_egl_tests_with_xvfb': {
         'args': [
-          'angle_deqp_egl_tests',
           '--use-angle=swiftshader',
-          '--bot-mode',
-        ],
-        'linux_args': [
-          '--xvfb',
         ],
         'use_isolated_scripts_api': True,
       },
     },
 
     'swangle_deqp_gles2_slow_tests': {
-      'angle_deqp_gles2_tests': {
+      'angle_deqp_gles2_tests_with_xvfb': {
         'args': [
-          'angle_deqp_gles2_tests',
           '--use-angle=swiftshader',
-          '--bot-mode',
-        ],
-        'linux_args': [
-          '--xvfb',
         ],
         'use_isolated_scripts_api': True,
         'swarming': {
@@ -779,71 +661,46 @@
     },
 
     'swangle_deqp_gles2_tests': {
-      'angle_deqp_gles2_tests': {
+      'angle_deqp_gles2_tests_with_xvfb': {
         'args': [
-          'angle_deqp_gles2_tests',
           '--use-angle=swiftshader',
-          '--bot-mode',
-        ],
-        'linux_args': [
-          '--xvfb',
         ],
         'use_isolated_scripts_api': True,
       },
     },
 
     'swangle_deqp_gles31_rotate180_tests': {
-      'angle_deqp_gles31_rotate180_tests': {
+      'angle_deqp_gles31_rotate180_tests_with_xvfb': {
         'args': [
-          'angle_deqp_gles31_rotate180_tests',
           '--use-angle=swiftshader',
-          '--bot-mode',
-        ],
-        'linux_args': [
-          '--xvfb',
         ],
         'use_isolated_scripts_api': True,
       },
     },
 
     'swangle_deqp_gles31_rotate270_tests': {
-      'angle_deqp_gles31_rotate270_tests': {
+      'angle_deqp_gles31_rotate270_tests_with_xvfb': {
         'args': [
-          'angle_deqp_gles31_rotate270_tests',
           '--use-angle=swiftshader',
-          '--bot-mode',
-        ],
-        'linux_args': [
-          '--xvfb',
         ],
         'use_isolated_scripts_api': True,
       },
     },
 
     'swangle_deqp_gles31_rotate90_tests': {
-      'angle_deqp_gles31_rotate90_tests': {
+      'angle_deqp_gles31_rotate90_tests_with_xvfb': {
         'args': [
-          'angle_deqp_gles31_rotate90_tests',
           '--use-angle=swiftshader',
-          '--bot-mode',
-        ],
-        'linux_args': [
-          '--xvfb',
         ],
         'use_isolated_scripts_api': True,
       },
     },
 
     'swangle_deqp_gles31_slow_tests': {
-      'angle_deqp_gles31_tests': {
+      'angle_deqp_gles31_tests_with_xvfb': {
         'args': [
-          'angle_deqp_gles31_tests',
           '--use-angle=swiftshader',
-          '--bot-mode',
           '--batch-timeout=600',
-        ],
-        'linux_args': [
-          '--xvfb',
         ],
         'swarming': {
           'shards': 30,
@@ -853,14 +710,9 @@
     },
 
     'swangle_deqp_gles31_tests': {
-      'angle_deqp_gles31_tests': {
+      'angle_deqp_gles31_tests_with_xvfb': {
         'args': [
-          'angle_deqp_gles31_tests',
           '--use-angle=swiftshader',
-          '--bot-mode',
-        ],
-        'linux_args': [
-          '--xvfb',
         ],
         'swarming': {
           'shards': 10,
@@ -870,56 +722,36 @@
     },
 
     'swangle_deqp_gles3_rotate180_tests': {
-      'angle_deqp_gles3_rotate180_tests': {
+      'angle_deqp_gles3_rotate180_tests_with_xvfb': {
         'args': [
-          'angle_deqp_gles3_rotate180_tests',
           '--use-angle=swiftshader',
-          '--bot-mode',
-        ],
-        'linux_args': [
-          '--xvfb',
         ],
         'use_isolated_scripts_api': True,
       },
     },
 
     'swangle_deqp_gles3_rotate270_tests': {
-      'angle_deqp_gles3_rotate270_tests': {
+      'angle_deqp_gles3_rotate270_tests_with_xvfb': {
         'args': [
-          'angle_deqp_gles3_rotate270_tests',
           '--use-angle=swiftshader',
-          '--bot-mode',
-        ],
-        'linux_args': [
-          '--xvfb',
         ],
         'use_isolated_scripts_api': True,
       },
     },
 
     'swangle_deqp_gles3_rotate90_tests': {
-      'angle_deqp_gles3_rotate90_tests': {
+      'angle_deqp_gles3_rotate90_tests_with_xvfb': {
         'args': [
-          'angle_deqp_gles3_rotate90_tests',
           '--use-angle=swiftshader',
-          '--bot-mode',
-        ],
-        'linux_args': [
-          '--xvfb',
         ],
         'use_isolated_scripts_api': True,
       },
     },
 
     'swangle_deqp_gles3_slow_tests': {
-      'angle_deqp_gles3_tests': {
+      'angle_deqp_gles3_tests_with_xvfb': {
         'args': [
-          'angle_deqp_gles3_tests',
           '--use-angle=swiftshader',
-          '--bot-mode',
-        ],
-        'linux_args': [
-          '--xvfb',
         ],
         'swarming': {
           'shards': 8,
@@ -929,14 +761,9 @@
     },
 
     'swangle_deqp_gles3_tests': {
-      'angle_deqp_gles3_tests': {
+      'angle_deqp_gles3_tests_with_xvfb': {
         'args': [
-          'angle_deqp_gles3_tests',
           '--use-angle=swiftshader',
-          '--bot-mode',
-        ],
-        'linux_args': [
-          '--xvfb',
         ],
         'swarming': {
           'shards': 4,
@@ -946,56 +773,36 @@
     },
 
     'swangle_deqp_khr_gles2_tests': {
-      'angle_deqp_khr_gles2_tests': {
+      'angle_deqp_khr_gles2_tests_with_xvfb': {
         'args': [
-          'angle_deqp_khr_gles2_tests',
           '--use-angle=swiftshader',
-          '--bot-mode',
-        ],
-        'linux_args': [
-          '--xvfb',
         ],
         'use_isolated_scripts_api': True,
       },
     },
 
     'swangle_deqp_khr_gles31_tests': {
-      'angle_deqp_khr_gles31_tests': {
+      'angle_deqp_khr_gles31_tests_with_xvfb': {
         'args': [
-          'angle_deqp_khr_gles31_tests',
           '--use-angle=swiftshader',
-          '--bot-mode',
-        ],
-        'linux_args': [
-          '--xvfb',
         ],
         'use_isolated_scripts_api': True,
       },
     },
 
     'swangle_deqp_khr_gles3_tests': {
-      'angle_deqp_khr_gles3_tests': {
+      'angle_deqp_khr_gles3_tests_with_xvfb': {
         'args': [
-          'angle_deqp_khr_gles3_tests',
           '--use-angle=swiftshader',
-          '--bot-mode',
-        ],
-        'linux_args': [
-          '--xvfb',
         ],
         'use_isolated_scripts_api': True,
       },
     },
 
     'swangle_end2end_slow_tests': {
-      'angle_end2end_tests': {
+      'angle_end2end_tests_with_xvfb': {
         'args': [
-          'angle_end2end_tests',
-          '--bot-mode',
           '--gtest_filter=*Vulkan_SwiftShader*',
-        ],
-        'linux_args': [
-          '--xvfb',
         ],
         'use_isolated_scripts_api': True,
         'swarming': {
@@ -1005,14 +812,9 @@
     },
 
     'swangle_end2end_tests': {
-      'angle_end2end_tests': {
+      'angle_end2end_tests_with_xvfb': {
         'args': [
-          'angle_end2end_tests',
-          '--bot-mode',
           '--gtest_filter=*Vulkan_SwiftShader*',
-        ],
-        'linux_args': [
-          '--xvfb',
         ],
         'use_isolated_scripts_api': True,
       },

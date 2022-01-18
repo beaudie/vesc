@@ -414,18 +414,37 @@ template("angle_static_library") {
 }
 
 if (angle_standalone || build_with_chromium) {
-  template("angle_test") {
+  template("angle_test_with_xvfb") {
     test(target_name) {
+      forward_variables_from(invoker, "*", [ "configs" ])
+      configs += invoker.configs
+      configs -= invoker.suppressed_configs
+      use_xvfb = false
+      if (is_android) {
+        public_configs += [ "$angle_root:build_id_config" ]
+        configs -= [ "//build/config/android:hide_all_but_jni" ]
+      }
+    }
+
+    test(target_name + "_with_xvfb") {
+      forward_variables_from(invoker, "*", [ "configs" ])
+      configs += invoker.configs
+      configs -= invoker.suppressed_configs
+      if (is_android) {
+        public_configs += [ "$angle_root:build_id_config" ]
+        configs -= [ "//build/config/android:hide_all_but_jni" ]
+      }
+    }
+  }
+
+  template("angle_test") {
+    angle_test_with_xvfb(target_name) {
       forward_variables_from(invoker,
                              "*",
                              [
-                               "configs",
                                "data",
                                "public_deps",
                              ])
-
-      configs += invoker.configs
-      configs -= invoker.suppressed_configs
 
       if (is_ios) {
         # shared libraries are hidden inside ios_framework_bundle, but we include headers from them
@@ -482,8 +501,6 @@ if (angle_standalone || build_with_chromium) {
       }
 
       if (is_android) {
-        public_configs += [ "$angle_root:build_id_config" ]
-        configs -= [ "//build/config/android:hide_all_but_jni" ]
         use_default_launcher = false
         generate_final_jni = false
         android_manifest_template = "$angle_root/src/tests/test_utils/runner/android/java/AndroidManifest.xml.jinja2"
