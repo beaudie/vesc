@@ -1983,6 +1983,7 @@ EGLint WindowSurfaceVk::getSwapBehavior() const
 }
 
 angle::Result WindowSurfaceVk::getCurrentFramebuffer(ContextVk *contextVk,
+                                                     bool framebufferFetchMode,
                                                      const vk::RenderPass &compatibleRenderPass,
                                                      vk::Framebuffer **framebufferOut)
 {
@@ -1993,11 +1994,16 @@ angle::Result WindowSurfaceVk::getCurrentFramebuffer(ContextVk *contextVk,
         isMultiSampled() ? mFramebufferMS
                          : mSwapchainImages[mCurrentSwapchainImageIndex].framebuffer;
 
-    if (currentFramebuffer.valid())
+    // The fetch mode for default FBO will almost never change.  But if it does, we need to replace
+    // all the framebuffers attached to the swapchain images.  Don't use the existing cache.
+    if (framebufferFetchMode == mFrameBufferFetchMode)
     {
-        // Validation layers should detect if the render pass is really compatible.
-        *framebufferOut = &currentFramebuffer;
-        return angle::Result::Continue;
+        if (currentFramebuffer.valid())
+        {
+            // Validation layers should detect if the render pass is really compatible.
+            *framebufferOut = &currentFramebuffer;
+            return angle::Result::Continue;
+        }
     }
 
     VkFramebufferCreateInfo framebufferInfo = {};
@@ -2039,10 +2045,20 @@ angle::Result WindowSurfaceVk::getCurrentFramebuffer(ContextVk *contextVk,
                 gl::SrgbWriteControlMode::Default, &imageView));
 
             imageViews[0] = imageView->getHandle();
+
+            // If we have a new framebuffer fetch mode, we need to replace each framebuffer object
+            if (mFrameBufferFetchMode != framebufferFetchMode)
+            {
+                contextVk->addGarbage(&swapchainImage.framebuffer);
+            }
+
             ANGLE_VK_TRY(contextVk,
                          swapchainImage.framebuffer.init(contextVk->getDevice(), framebufferInfo));
         }
     }
+
+    // Track the new fetch mode
+    mFrameBufferFetchMode = framebufferFetchMode;
 
     ASSERT(currentFramebuffer.valid());
     *framebufferOut = &currentFramebuffer;

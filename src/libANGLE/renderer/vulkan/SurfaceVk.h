@@ -225,6 +225,7 @@ class WindowSurfaceVk : public SurfaceVk
                                      const gl::ImageIndex &imageIndex) override;
 
     angle::Result getCurrentFramebuffer(ContextVk *context,
+                                        bool framebufferFetchMode,
                                         const vk::RenderPass &compatibleRenderPass,
                                         vk::Framebuffer **framebufferOut);
 
@@ -376,6 +377,8 @@ class WindowSurfaceVk : public SurfaceVk
 
     // EGL_EXT_buffer_age: Track frame count.
     uint64_t mFrameCount;
+
+    bool mFrameBufferFetchMode = false;
 };
 
 }  // namespace rx
