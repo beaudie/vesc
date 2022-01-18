@@ -681,6 +681,7 @@ SwapchainImage::SwapchainImage(SwapchainImage &&other)
     : image(std::move(other.image)),
       imageViews(std::move(other.imageViews)),
       framebuffer(std::move(other.framebuffer)),
+      framebufferFetch(std::move(other.framebufferFetch)),
       presentHistory(std::move(other.presentHistory))
 {}
 }  // namespace impl
@@ -1483,6 +1484,10 @@ void WindowSurfaceVk::releaseSwapchainImages(ContextVk *contextVk)
 
         swapchainImage.imageViews.release(renderer);
         contextVk->addGarbage(&swapchainImage.framebuffer);
+        if (swapchainImage.framebufferFetch.valid())
+        {
+            contextVk->addGarbage(&swapchainImage.framebufferFetch);
+        }
 
         // present history must have already been taken care of.
         for (ImagePresentHistory &presentHistory : swapchainImage.presentHistory)
@@ -1513,6 +1518,10 @@ void WindowSurfaceVk::destroySwapChainImages(DisplayVk *displayVk)
         swapchainImage.image.destroy(renderer);
         swapchainImage.imageViews.destroy(device);
         swapchainImage.framebuffer.destroy(device);
+        if (swapchainImage.framebufferFetch.valid())
+        {
+            swapchainImage.framebufferFetch.destroy(device);
+        }
 
         for (ImagePresentHistory &presentHistory : swapchainImage.presentHistory)
         {
@@ -1623,8 +1632,10 @@ angle::Result WindowSurfaceVk::present(ContextVk *contextVk,
         ANGLE_TRY(renderer->finishToSerial(contextVk, *swapSerial));
     }
 
-    SwapchainImage &image               = mSwapchainImages[mCurrentSwapchainImageIndex];
-    vk::Framebuffer &currentFramebuffer = mSwapchainImages[mCurrentSwapchainImageIndex].framebuffer;
+    SwapchainImage &image = mSwapchainImages[mCurrentSwapchainImageIndex];
+    vk::Framebuffer &currentFramebuffer =
+        mFrameBufferFetchMode ? mSwapchainImages[mCurrentSwapchainImageIndex].framebufferFetch
+                              : mSwapchainImages[mCurrentSwapchainImageIndex].framebuffer;
     updateOverlay(contextVk);
     bool overlayHasWidget = overlayHasEnabledWidget(contextVk);
 
@@ -2119,6 +2130,7 @@ EGLint WindowSurfaceVk::getSwapBehavior() const
 }
 
 angle::Result WindowSurfaceVk::getCurrentFramebuffer(ContextVk *contextVk,
+                                                     bool framebufferFetchMode,
                                                      const vk::RenderPass &compatibleRenderPass,
                                                      vk::Framebuffer **framebufferOut)
 {
@@ -2126,8 +2138,13 @@ angle::Result WindowSurfaceVk::getCurrentFramebuffer(ContextVk *contextVk,
     ASSERT(!mNeedToAcquireNextSwapchainImage);
 
     vk::Framebuffer &currentFramebuffer =
-        isMultiSampled() ? mFramebufferMS
-                         : mSwapchainImages[mCurrentSwapchainImageIndex].framebuffer;
+        isMultiSampled()
+            ? mFramebufferMS
+            : framebufferFetchMode ? mSwapchainImages[mCurrentSwapchainImageIndex].framebufferFetch
+                                   : mSwapchainImages[mCurrentSwapchainImageIndex].framebuffer;
+
+    // Track the new fetch mode
+    mFrameBufferFetchMode = framebufferFetchMode;
 
     if (currentFramebuffer.valid())
     {
@@ -2175,8 +2192,17 @@ angle::Result WindowSurfaceVk::getCurrentFramebuffer(ContextVk *contextVk,
                 gl::SrgbWriteControlMode::Default, &imageView));
 
             imageViews[0] = imageView->getHandle();
-            ANGLE_VK_TRY(contextVk,
-                         swapchainImage.framebuffer.init(contextVk->getDevice(), framebufferInfo));
+
+            if (framebufferFetchMode)
+            {
+                ANGLE_VK_TRY(contextVk, swapchainImage.framebufferFetch.init(contextVk->getDevice(),
+                                                                             framebufferInfo));
+            }
+            else
+            {
+                ANGLE_VK_TRY(contextVk, swapchainImage.framebuffer.init(contextVk->getDevice(),
+                                                                        framebufferInfo));
+            }
         }
     }
 
