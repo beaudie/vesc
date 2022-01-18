@@ -1432,7 +1432,7 @@ Error Display::createContext(const Config *configuration,
         return error;
     }
 
-    if (shareContext != nullptr)
+    if (shareContext != nullptr || usingDisplayTextureShareGroup || usingDisplaySemaphoreShareGroup)
     {
         shareContext->setShared();
     }
