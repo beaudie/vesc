@@ -33,6 +33,24 @@
       "message": "Per our discussion, you should either:\n\n1. Expose the extension based on INPUT_ATTACHMENT support:\n  - Check that at least one swapchain format supports INPUT before exposing the extension\n  - If ext is exposed, don\u0027t expose WINDOW and PBUFFER support for formats that don\u0027t support INPUT\n2. Don\u0027t expose the extension on !Android\n3. Ignore the INPUT_ATTACHMENT warning missing (only on !Android) because we secretly know it doesn\u0027t matter.\n\nMy personal preference is 2, because the extension doesn\u0027t add any benefit outside TBRs to begin with.",
       "revId": "3de8d891d6222082fa4eddef381dc8da5164ce47",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "5c847c8c_8dd8247d",
+        "filename": "src/libANGLE/renderer/vulkan/SurfaceVk.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 1119,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2022-01-18T19:21:09Z",
+      "side": 1,
+      "message": "I updated both features to only be enabled for Android, regardless of vendor.",
+      "parentUuid": "d6801430_2d433a38",
+      "revId": "3de8d891d6222082fa4eddef381dc8da5164ce47",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
