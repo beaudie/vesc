@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "03255a89_2d25e992",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 12
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2022-01-18T19:49:21Z",
+      "side": 1,
+      "message": "Some comments since Shabi asked me to take a look also.",
+      "revId": "cbf54aa5da7e64ef8abd9294fcdc1c3495ba31d3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "d4020282_da5e4e10",
+        "filename": "src/libANGLE/renderer/vulkan/TextureVk.cpp",
+        "patchSetId": 12
+      },
+      "lineNbr": 575,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2022-01-18T19:49:21Z",
+      "side": 1,
+      "message": "This looks fragile, since it won\u0027t be done if we return at any point in the function before getting here.   Instad, I think ensureImageInitialized() should take the singleLevelUpdate and fullUpdate values as parameters (preferably as enum values, rather than bools for readability).   This increases the size of the CL, but should also make it easier to maintain in the future.",
+      "revId": "cbf54aa5da7e64ef8abd9294fcdc1c3495ba31d3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}

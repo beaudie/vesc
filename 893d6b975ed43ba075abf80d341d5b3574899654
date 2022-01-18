@@ -191,6 +191,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "2600943a_6eb2465a",
+        "filename": "src/libANGLE/renderer/vulkan/TextureVk.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 2416,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2022-01-18T19:49:21Z",
+      "side": 1,
+      "message": "The buffer ghosting notification was required to allow the descriptor sets that pointed to the old buffer to be updated to point to the new buffer.\n\nThere may be something else I\u0027m missing, but this doesn\u0027t seem to suffer from that same requirement, since we are recreating the image before the descriptor set updates occur.   Although, maybe the mState.hasBeenBoundAsAttachment() check is what\u0027s preventing that notification from being required?\n\nCharlie\u0027s comment about moving these checks to ImageHelper may make this unnecessary, but if it stays here I think this would be clearer if these checks were pulled out to before the `!mImage-\u003evalid()` check:\n\n    if (mImage-\u003evalid() \u0026\u0026 mOwnsImage \u0026\u0026 mImage-\u003eisSingleLevelUpdate() \u0026\u0026\n        mImage-\u003eisFullUpdate() \u0026\u0026\n        mImage-\u003eusedInRunningCommands(contextVk-\u003egetLastCompletedQueueSerial()) \u0026\u0026\n        !mState.hasBeenBoundAsAttachment() \u0026\u0026\n        mImage-\u003egetCurrentImageLayout() \u003d\u003d vk::ImageLayout::FragmentShaderReadOnly)\n    {\n        releaseImage(contextVk);\n        // Flag to do the texture update immediately on this new vkImage.\n        mImage-\u003esetImageNotInUse(true);\n    }\n    \n    if (!mImage-\u003evalid())\n    {\n    ...",
+      "parentUuid": "b49d39c5_b348783c",
+      "range": {
+        "startLine": 2416,
+        "startChar": 9,
+        "endLine": 2416,
+        "endChar": 43
+      },
+      "revId": "893d6b975ed43ba075abf80d341d5b3574899654",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "7d3ab6b4_4a1fb541",
         "filename": "src/libANGLE/renderer/vulkan/TextureVk.cpp",
         "patchSetId": 5
