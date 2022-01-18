@@ -39,6 +39,30 @@
       },
       "revId": "91de16fa5b2c65ba6150ffe9ea884b8a5e4b2e77",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b23a2fb3_fde081fa",
+        "filename": "src/libANGLE/renderer/vulkan/vk_caps_utils.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 372,
+      "author": {
+        "id": 1531247
+      },
+      "writtenOn": "2022-01-18T16:02:00Z",
+      "side": 1,
+      "message": "Should I open a bug? What hotlist would that go into?",
+      "parentUuid": "3d43e5f5_f49b53c5",
+      "range": {
+        "startLine": 372,
+        "startChar": 54,
+        "endLine": 372,
+        "endChar": 96
+      },
+      "revId": "91de16fa5b2c65ba6150ffe9ea884b8a5e4b2e77",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
