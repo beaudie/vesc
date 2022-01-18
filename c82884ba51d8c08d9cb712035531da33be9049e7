@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "e8827bd7_47d20975",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1001921
+      },
+      "writtenOn": "2022-01-18T19:54:20Z",
+      "side": 1,
+      "message": "If I recall correctly, we\u0027ve discussed that this can be simplified after run_gtest_angle_test.py removal.\nSince TestSuite will always use shard args from env and not command line after that.\nI don\u0027t recall the exact details now, though.",
+      "revId": "c82884ba51d8c08d9cb712035531da33be9049e7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
