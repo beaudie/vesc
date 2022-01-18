@@ -13,6 +13,8 @@
 #include "libANGLE/validationES.h"
 #include "libANGLE/validationES2_autogen.h"
 
+#include <sstream>
+
 namespace gl
 {
 ANGLE_INLINE bool ValidateDrawArrays(const Context *context,
@@ -158,7 +160,9 @@ ANGLE_INLINE bool ValidateBindTexture(const Context *context,
     Texture *textureObject = context->getTexture(texture);
     if (textureObject && textureObject->getType() != target)
     {
-        context->validationError(entryPoint, GL_INVALID_OPERATION, err::kTextureTargetMismatch);
+        std::stringstream ss;
+        ss << err::kTextureTargetMismatch << " label:" << textureObject->getLabel();
+        context->validationError(entryPoint, GL_INVALID_OPERATION, ss.str().c_str());
         return false;
     }
 
