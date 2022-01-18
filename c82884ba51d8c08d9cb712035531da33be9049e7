@@ -34,6 +34,24 @@
       "parentUuid": "e8827bd7_47d20975",
       "revId": "c82884ba51d8c08d9cb712035531da33be9049e7",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "b7a2b275_f188e44e",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1001921
+      },
+      "writtenOn": "2022-01-18T20:12:19Z",
+      "side": 1,
+      "message": "Yes, this CL fixes testSet[0] being empty due to sharding being applied twice.\nhttps://chromium-review.googlesource.com/c/angle/angle/+/3046764 actually fixes merging results.\nWe can land it as is after this lands.",
+      "parentUuid": "ad6f5f37_f3063e51",
+      "revId": "c82884ba51d8c08d9cb712035531da33be9049e7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
