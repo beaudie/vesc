@@ -22,6 +22,30 @@
       },
       "revId": "76c61d8f03b8f4ff51227f763423fac7f54a29ba",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "41dd9d57_39b16ccc",
+        "filename": "src/tests/deqp_support/deqp_egl_test_expectations.txt",
+        "patchSetId": 4
+      },
+      "lineNbr": 131,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2022-01-18T16:06:16Z",
+      "side": 1,
+      "message": "6906**",
+      "parentUuid": "512f610e_2f325f38",
+      "range": {
+        "startLine": 131,
+        "startChar": 0,
+        "endLine": 131,
+        "endChar": 5
+      },
+      "revId": "76c61d8f03b8f4ff51227f763423fac7f54a29ba",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
