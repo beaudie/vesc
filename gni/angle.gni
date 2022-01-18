@@ -414,18 +414,29 @@ template("angle_static_library") {
 }
 
 if (angle_standalone || build_with_chromium) {
-  template("angle_test") {
+  template("angle_test_with_xvfb") {
     test(target_name) {
+      forward_variables_from(invoker, "*", [ "configs" ])
+      configs += invoker.configs
+      configs -= invoker.suppressed_configs
+      use_xvfb = false
+    }
+
+    test(target_name + "_with_xvfb") {
+      forward_variables_from(invoker, "*", [ "configs" ])
+      configs += invoker.configs
+      configs -= invoker.suppressed_configs
+    }
+  }
+
+  template("angle_test") {
+    angle_test_with_xvfb(target_name) {
       forward_variables_from(invoker,
                              "*",
                              [
-                               "configs",
                                "data",
                                "public_deps",
                              ])
-
-      configs += invoker.configs
-      configs -= invoker.suppressed_configs
 
       if (is_ios) {
         # shared libraries are hidden inside ios_framework_bundle, but we include headers from them
