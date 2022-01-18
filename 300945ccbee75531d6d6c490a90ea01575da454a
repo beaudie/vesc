@@ -39,6 +39,30 @@
       },
       "revId": "300945ccbee75531d6d6c490a90ea01575da454a",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "a2318ae3_8c31d0d0",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 3044,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2022-01-18T18:17:23Z",
+      "side": 1,
+      "message": "Good point!  Removed and updated the CL message with the new way.",
+      "parentUuid": "ffa3ffdb_a425f2bb",
+      "range": {
+        "startLine": 3038,
+        "startChar": 0,
+        "endLine": 3044,
+        "endChar": 70
+      },
+      "revId": "300945ccbee75531d6d6c490a90ea01575da454a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
