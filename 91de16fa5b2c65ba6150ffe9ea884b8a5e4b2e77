@@ -16,6 +16,29 @@
       "message": "Potential fix:\nhttps://swiftshader-review.googlesource.com/c/SwiftShader/+/61448",
       "revId": "91de16fa5b2c65ba6150ffe9ea884b8a5e4b2e77",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "3d43e5f5_f49b53c5",
+        "filename": "src/libANGLE/renderer/vulkan/vk_caps_utils.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 372,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-01-18T02:32:59Z",
+      "side": 1,
+      "message": "Unrelated follow up: we should turn this into a feature and also exclude Imagination.",
+      "range": {
+        "startLine": 372,
+        "startChar": 54,
+        "endLine": 372,
+        "endChar": 96
+      },
+      "revId": "91de16fa5b2c65ba6150ffe9ea884b8a5e4b2e77",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
