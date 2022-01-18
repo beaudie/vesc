@@ -158,6 +158,7 @@ struct SwapchainImage : angle::NonCopyable
     vk::ImageHelper image;
     vk::ImageViewHelper imageViews;
     vk::Framebuffer framebuffer;
+    vk::Framebuffer framebufferFetch;
 
     // A circular array of semaphores used for presenting this image.
     static constexpr size_t kPresentHistorySize = kSwapHistorySize + 1;
@@ -225,6 +226,7 @@ class WindowSurfaceVk : public SurfaceVk
                                      const gl::ImageIndex &imageIndex) override;
 
     angle::Result getCurrentFramebuffer(ContextVk *context,
+                                        bool framebufferFetchMode,
                                         const vk::RenderPass &compatibleRenderPass,
                                         vk::Framebuffer **framebufferOut);
 
@@ -376,6 +378,8 @@ class WindowSurfaceVk : public SurfaceVk
 
     // EGL_EXT_buffer_age: Track frame count.
     uint64_t mFrameCount;
+
+    bool mFrameBufferFetchMode = false;
 };
 
 }  // namespace rx
