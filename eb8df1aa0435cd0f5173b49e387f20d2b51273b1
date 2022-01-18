@@ -58,6 +58,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "9e7732cb_8869ca48",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.h",
+        "patchSetId": 10
+      },
+      "lineNbr": 1229,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2022-01-18T22:28:26Z",
+      "side": 1,
+      "message": "Done. Switched to the garabge list.",
+      "parentUuid": "7fa5232e_c30a1e0c",
+      "range": {
+        "startLine": 1229,
+        "startChar": 0,
+        "endLine": 1229,
+        "endChar": 73
+      },
+      "revId": "eb8df1aa0435cd0f5173b49e387f20d2b51273b1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "1fe21dd1_35023a66",
@@ -71,6 +95,30 @@
       "writtenOn": "2022-01-18T21:13:22Z",
       "side": 1,
       "message": "Going back to an earlier conversation:\n\nI\u0027d suggest we rename all uses of the \"init\" terminology to use \"allocate\" or \"subAllocate\" or similar terms. The work these methods do is entirely allocation.",
+      "range": {
+        "startLine": 730,
+        "startChar": 36,
+        "endLine": 730,
+        "endChar": 57
+      },
+      "revId": "eb8df1aa0435cd0f5173b49e387f20d2b51273b1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "a3955e7c_3592a23a",
+        "filename": "src/libANGLE/renderer/vulkan/ProgramVk.cpp",
+        "patchSetId": 10
+      },
+      "lineNbr": 730,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2022-01-18T22:28:26Z",
+      "side": 1,
+      "message": "Your feedback is heard. Lets deal with that later with one follow up non-functional CL. I promise will not forgot:-)",
+      "parentUuid": "1fe21dd1_35023a66",
       "range": {
         "startLine": 730,
         "startChar": 36,
@@ -104,6 +152,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "efff9ee8_ccea100d",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.h",
+        "patchSetId": 10
+      },
+      "lineNbr": 544,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2022-01-18T22:28:26Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "cf23ad27_1dca52ef",
+      "range": {
+        "startLine": 544,
+        "startChar": 11,
+        "endLine": 544,
+        "endChar": 36
+      },
+      "revId": "eb8df1aa0435cd0f5173b49e387f20d2b51273b1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "47d1e1af_33605421",
@@ -117,6 +189,30 @@
       "writtenOn": "2022-01-18T21:13:22Z",
       "side": 1,
       "message": "nit: remove",
+      "range": {
+        "startLine": 13,
+        "startChar": 4,
+        "endLine": 15,
+        "endChar": 0
+      },
+      "revId": "eb8df1aa0435cd0f5173b49e387f20d2b51273b1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "e6158003_69911f32",
+        "filename": "src/libANGLE/renderer/vulkan/ResourceVk.h",
+        "patchSetId": 10
+      },
+      "lineNbr": 15,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2022-01-18T22:28:26Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "47d1e1af_33605421",
       "range": {
         "startLine": 13,
         "startChar": 4,
@@ -150,6 +246,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "4f3711e6_5aa192cc",
+        "filename": "src/libANGLE/renderer/vulkan/ResourceVk.h",
+        "patchSetId": 10
+      },
+      "lineNbr": 302,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2022-01-18T22:28:26Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "23ab5209_2474def3",
+      "range": {
+        "startLine": 278,
+        "startChar": 0,
+        "endLine": 302,
+        "endChar": 2
+      },
+      "revId": "eb8df1aa0435cd0f5173b49e387f20d2b51273b1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "c53a8200_aa97a7c2",
@@ -163,6 +283,30 @@
       "writtenOn": "2022-01-18T21:13:22Z",
       "side": 1,
       "message": "there\u0027s a layering violation here, BufferHelper is modifying ContextVk\u0027s internal classes. I\u0027d suggest a redesign, or at the very least, passing in the stashed suballoc list instead of allowing external classes to mutate the internal list in ContextVk.",
+      "range": {
+        "startLine": 4138,
+        "startChar": 0,
+        "endLine": 4142,
+        "endChar": 0
+      },
+      "revId": "eb8df1aa0435cd0f5173b49e387f20d2b51273b1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "87716dff_dbb7bacf",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 10
+      },
+      "lineNbr": 4142,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2022-01-18T22:28:26Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "c53a8200_aa97a7c2",
       "range": {
         "startLine": 4138,
         "startChar": 0,
