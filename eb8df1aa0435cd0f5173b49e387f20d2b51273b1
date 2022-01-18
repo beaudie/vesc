@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "584cb09e_ebc0c065",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 10
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2022-01-18T21:04:49Z",
+      "side": 1,
+      "message": "PTAL, I have moved this out of the dependency chain of default attributes.",
+      "revId": "eb8df1aa0435cd0f5173b49e387f20d2b51273b1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
