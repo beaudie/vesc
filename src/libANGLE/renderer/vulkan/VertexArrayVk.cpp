@@ -72,20 +72,68 @@ angle::Result StreamVertexData(ContextVk *contextVk,
                                size_t bytesToAllocate,
                                size_t destOffset,
                                size_t vertexCount,
+<<<<<<< HEAD   (b790af M98: Vulkan: Fix vkCmdResolveImage offsets)
                                size_t sourceStride,
                                size_t destStride,
                                VertexCopyFunction vertexLoadFunction,
                                vk::BufferHelper **bufferOut,
                                VkDeviceSize *bufferOffsetOut,
                                uint32_t replicateCount)
+=======
+                               size_t srcStride,
+                               VertexCopyFunction vertexLoadFunction)
+>>>>>>> CHANGE (5f0bad Vulkan: Prevent out of bounds read in divisor emulation path)
 {
+<<<<<<< HEAD   (b790af M98: Vulkan: Fix vkCmdResolveImage offsets)
     uint8_t *dst = nullptr;
     ANGLE_TRY(dynamicBuffer->allocate(contextVk, bytesToAllocate, &dst, nullptr, bufferOffsetOut,
                                       nullptr));
     *bufferOut = dynamicBuffer->getCurrentBuffer();
     dst += destOffset;
     if (replicateCount == 1)
+=======
+    RendererVk *renderer = contextVk->getRenderer();
+
+    // Allocate buffer for results
+    ANGLE_TRY(dstBufferHelper->allocateForVertexConversion(contextVk, bytesToAllocate,
+                                                           vk::MemoryHostVisibility::Visible));
+    uint8_t *dst = dstBufferHelper->getMappedMemory() + dstOffset;
+
+    vertexLoadFunction(srcData, srcStride, vertexCount, dst);
+
+    ANGLE_TRY(dstBufferHelper->flush(renderer));
+
+    return angle::Result::Continue;
+}
+
+angle::Result StreamVertexDataWithDivisor(ContextVk *contextVk,
+                                          vk::BufferHelper *dstBufferHelper,
+                                          const uint8_t *srcData,
+                                          size_t bytesToAllocate,
+                                          size_t srcStride,
+                                          size_t dstStride,
+                                          VertexCopyFunction vertexLoadFunction,
+                                          uint32_t divisor,
+                                          size_t numSrcVertices)
+{
+    RendererVk *renderer = contextVk->getRenderer();
+
+    // Allocate buffer for results
+    ANGLE_TRY(dstBufferHelper->allocateForVertexConversion(contextVk, bytesToAllocate,
+                                                           vk::MemoryHostVisibility::Visible));
+    uint8_t *dst = dstBufferHelper->getMappedMemory();
+
+    // Each source vertex is used `divisor` times before advancing. Clamp to avoid OOB reads.
+    size_t clampedSize = std::min(numSrcVertices * dstStride * divisor, bytesToAllocate);
+
+    ASSERT(clampedSize % dstStride == 0);
+    ASSERT(divisor > 0);
+
+    uint32_t srcVertexUseCount = 0;
+    for (size_t dataCopied = 0; dataCopied < clampedSize; dataCopied += dstStride, dst += dstStride)
+>>>>>>> CHANGE (5f0bad Vulkan: Prevent out of bounds read in divisor emulation path)
     {
+<<<<<<< HEAD   (b790af M98: Vulkan: Fix vkCmdResolveImage offsets)
         vertexLoadFunction(sourceData, sourceStride, vertexCount, dst);
     }
     else
@@ -94,15 +142,39 @@ angle::Result StreamVertexData(ContextVk *contextVk,
         uint32_t sourceRemainingCount = replicateCount - 1;
         for (size_t dataCopied = 0; dataCopied < bytesToAllocate;
              dataCopied += destStride, dst += destStride, sourceRemainingCount--)
+=======
+        vertexLoadFunction(srcData, srcStride, 1, dst);
+        srcVertexUseCount++;
+        if (srcVertexUseCount == divisor)
+>>>>>>> CHANGE (5f0bad Vulkan: Prevent out of bounds read in divisor emulation path)
         {
+<<<<<<< HEAD   (b790af M98: Vulkan: Fix vkCmdResolveImage offsets)
             vertexLoadFunction(sourceData, sourceStride, 1, dst);
             if (sourceRemainingCount == 0)
             {
                 sourceData += sourceStride;
                 sourceRemainingCount = replicateCount;
             }
+=======
+            srcData += srcStride;
+            srcVertexUseCount = 0;
+>>>>>>> CHANGE (5f0bad Vulkan: Prevent out of bounds read in divisor emulation path)
         }
     }
+<<<<<<< HEAD   (b790af M98: Vulkan: Fix vkCmdResolveImage offsets)
+=======
+
+    // Satisfy robustness constraints (only if extension enabled)
+    if (contextVk->getExtensions().robustnessEXT)
+    {
+        if (clampedSize < bytesToAllocate)
+        {
+            memset(dst + clampedSize, 0, bytesToAllocate - clampedSize);
+        }
+    }
+
+    ANGLE_TRY(dstBufferHelper->flush(renderer));
+>>>>>>> CHANGE (5f0bad Vulkan: Prevent out of bounds read in divisor emulation path)
 
     ANGLE_TRY(dynamicBuffer->flush(contextVk));
     return angle::Result::Continue;
@@ -116,6 +188,7 @@ size_t GetVertexCount(BufferVk *srcBuffer, const gl::VertexBinding &binding, uin
         return 0;
 
     // Count the last vertex.  It may occupy less than a full stride.
+    // This is also correct if stride happens to be less than srcFormatSize.
     size_t numVertices = 1;
     bytes -= srcFormatSize;
 
@@ -442,10 +515,18 @@ angle::Result VertexArrayVk::convertVertexBufferCPU(ContextVk *contextVk,
     const uint8_t *srcBytes = reinterpret_cast<const uint8_t *>(src);
     srcBytes += binding.getOffset() + relativeOffset;
     ASSERT(vertexFormat.getVertexInputAlignment(compressed) <= vk::kVertexBufferAlignment);
+<<<<<<< HEAD   (b790af M98: Vulkan: Fix vkCmdResolveImage offsets)
     ANGLE_TRY(StreamVertexData(
         contextVk, &conversion->data, srcBytes, numVertices * dstFormatSize, 0, numVertices,
         binding.getStride(), srcFormatSize, vertexFormat.getVertexLoadFunction(compressed),
         &mCurrentArrayBuffers[attribIndex], &conversion->lastAllocationOffset, 1));
+=======
+
+    vk::BufferHelper *dstBufferHelper = conversion->data.get();
+    ANGLE_TRY(StreamVertexData(contextVk, dstBufferHelper, srcBytes, numVertices * dstFormatSize, 0,
+                               numVertices, binding.getStride(),
+                               vertexFormat.getVertexLoadFunction(compressed)));
+>>>>>>> CHANGE (5f0bad Vulkan: Prevent out of bounds read in divisor emulation path)
     ANGLE_TRY(srcBuffer->unmapImpl(contextVk));
 
     ASSERT(conversion->dirty);
@@ -800,15 +881,17 @@ angle::Result VertexArrayVk::updateStreamedAttribs(const gl::Context *context,
             // Instanced attrib
             if (divisor > renderer->getMaxVertexAttribDivisor())
             {
-                // Emulated attrib
-                BufferVk *bufferVk = nullptr;
+                // Divisor will be set to 1 & so update buffer to have 1 attrib per instance
+                size_t bytesToAllocate = instanceCount * stride;
+
                 if (binding.getBuffer().get() != nullptr)
                 {
                     // Map buffer to expand attribs for divisor emulation
-                    bufferVk      = vk::GetImpl(binding.getBuffer().get());
-                    void *buffSrc = nullptr;
+                    BufferVk *bufferVk = vk::GetImpl(binding.getBuffer().get());
+                    void *buffSrc      = nullptr;
                     ANGLE_TRY(bufferVk->mapImpl(contextVk, GL_MAP_READ_BIT, &buffSrc));
                     src = reinterpret_cast<const uint8_t *>(buffSrc) + binding.getOffset();
+<<<<<<< HEAD   (b790af M98: Vulkan: Fix vkCmdResolveImage offsets)
                 }
                 // Divisor will be set to 1 & so update buffer to have 1 attrib per instance
                 size_t bytesToAllocate = instanceCount * stride;
@@ -820,7 +903,28 @@ angle::Result VertexArrayVk::updateStreamedAttribs(const gl::Context *context,
                                            &mCurrentArrayBufferOffsets[attribIndex], divisor));
                 if (bufferVk)
                 {
+=======
+
+                    uint32_t srcAttributeSize =
+                        static_cast<uint32_t>(ComputeVertexAttributeTypeSize(attrib));
+
+                    size_t numVertices = GetVertexCount(bufferVk, binding, srcAttributeSize);
+
+                    ANGLE_TRY(StreamVertexDataWithDivisor(
+                        contextVk, vertexDataBuffer, src, bytesToAllocate, binding.getStride(),
+                        stride, vertexFormat.getVertexLoadFunction(compressed), divisor,
+                        numVertices));
+
+>>>>>>> CHANGE (5f0bad Vulkan: Prevent out of bounds read in divisor emulation path)
                     ANGLE_TRY(bufferVk->unmapImpl(contextVk));
+                }
+                else
+                {
+                    size_t numVertices = instanceCount;
+                    ANGLE_TRY(StreamVertexDataWithDivisor(
+                        contextVk, vertexDataBuffer, src, bytesToAllocate, binding.getStride(),
+                        stride, vertexFormat.getVertexLoadFunction(compressed), divisor,
+                        numVertices));
                 }
             }
             else
@@ -828,12 +932,18 @@ angle::Result VertexArrayVk::updateStreamedAttribs(const gl::Context *context,
                 ASSERT(binding.getBuffer().get() == nullptr);
                 size_t count           = UnsignedCeilDivide(instanceCount, divisor);
                 size_t bytesToAllocate = count * stride;
+<<<<<<< HEAD   (b790af M98: Vulkan: Fix vkCmdResolveImage offsets)
 
                 ANGLE_TRY(StreamVertexData(contextVk, &mDynamicVertexData, src, bytesToAllocate, 0,
                                            count, binding.getStride(), stride,
                                            vertexFormat.getVertexLoadFunction(compressed),
                                            &mCurrentArrayBuffers[attribIndex],
                                            &mCurrentArrayBufferOffsets[attribIndex], 1));
+=======
+                ANGLE_TRY(StreamVertexData(contextVk, vertexDataBuffer, src, bytesToAllocate, 0,
+                                           count, binding.getStride(),
+                                           vertexFormat.getVertexLoadFunction(compressed)));
+>>>>>>> CHANGE (5f0bad Vulkan: Prevent out of bounds read in divisor emulation path)
             }
         }
         else
@@ -843,6 +953,7 @@ angle::Result VertexArrayVk::updateStreamedAttribs(const gl::Context *context,
             // start at zero all the indices will be off.
             // Only vertexCount vertices will be used by the upcoming draw so that is all we copy.
             size_t bytesToAllocate = (startVertex + vertexCount) * stride;
+<<<<<<< HEAD   (b790af M98: Vulkan: Fix vkCmdResolveImage offsets)
             src += startVertex * binding.getStride();
             size_t destOffset = startVertex * stride;
 
@@ -850,6 +961,11 @@ angle::Result VertexArrayVk::updateStreamedAttribs(const gl::Context *context,
                 contextVk, &mDynamicVertexData, src, bytesToAllocate, destOffset, vertexCount,
                 binding.getStride(), stride, vertexFormat.getVertexLoadFunction(compressed),
                 &mCurrentArrayBuffers[attribIndex], &mCurrentArrayBufferOffsets[attribIndex], 1));
+=======
+            ANGLE_TRY(StreamVertexData(contextVk, vertexDataBuffer, src, bytesToAllocate,
+                                       destOffset, vertexCount, binding.getStride(),
+                                       vertexFormat.getVertexLoadFunction(compressed)));
+>>>>>>> CHANGE (5f0bad Vulkan: Prevent out of bounds read in divisor emulation path)
         }
 
         mCurrentArrayBufferHandles[attribIndex] =
