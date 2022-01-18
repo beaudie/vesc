@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "1e92781b_55309169",
+        "filename": "src/tests/deqp_support/deqp_egl_test_expectations.txt",
+        "patchSetId": 3
+      },
+      "lineNbr": 132,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2022-01-18T14:05:16Z",
+      "side": 0,
+      "message": "instead of changing this entry, use this pattern:\n\n6906 SWIFTSHADER : dEQP-EGL.functional.robustness.reset_context.shaders.out_of_bounds.reset_status.writes.*.compute \u003d SKIP",
+      "range": {
+        "startLine": 132,
+        "startChar": 0,
+        "endLine": 132,
+        "endChar": 102
+      },
+      "revId": "c4c73e827b2c212ccf0e8f109ec0f1aa3fc540a5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
