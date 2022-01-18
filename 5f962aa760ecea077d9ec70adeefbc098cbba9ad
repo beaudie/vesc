@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "5f02f18e_7c4ab784",
+        "filename": "infra/specs/test_suites.pyl",
+        "patchSetId": 5
+      },
+      "lineNbr": 20,
+      "author": {
+        "id": 1001921
+      },
+      "writtenOn": "2022-01-18T18:23:17Z",
+      "side": 0,
+      "message": "I think we\u0027d still want bot-mode, no?\nIt makes tests much faster as I recall.\n\nI see now that there are some suites which don\u0027t use it, looks wrong?",
+      "range": {
+        "startLine": 20,
+        "startChar": 0,
+        "endLine": 20,
+        "endChar": 23
+      },
+      "revId": "5f962aa760ecea077d9ec70adeefbc098cbba9ad",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}

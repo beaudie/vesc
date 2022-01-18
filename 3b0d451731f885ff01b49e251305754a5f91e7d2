@@ -1,0 +1,44 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "a5d38d2e_3342db4f",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 5
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1001921
+      },
+      "writtenOn": "2022-01-18T18:23:17Z",
+      "side": 1,
+      "message": "Last time I\u0027ve tried this, I got a problem here on Android, since it didn\u0027t get the shard indexes on the device.\nhttps://chromium.googlesource.com/angle/angle/+/9012c1288e22d3f0faeea66bb5a0e11d0026c2ab/src/tests/test_utils/runner/TestSuite.cpp#1275\n\nNote that this still fails with your CL, as all the shards have TestArtifactsFakeTest results with the same name\nhttps://ci.chromium.org/ui/p/angle/builders/try/android-arm64-test/2159/overview\nhttps://logs.chromium.org/logs/angle/buildbucket/cr-buildbucket/8824685063991043441/+/u/angle_deqp_gles2_vulkan_tests_on_Android_device_Pixel_4/Merge_script_log\nresults_merger.MergeException: MergeFailure for tests\n:TestArtifactsFakeTest:expected: u\u0027PASS\u0027 not mergable, curr_node: {u\u0027expected\u0027: u\u0027PASS\u0027, u\u0027actual\u0027: u\u0027PASS\u0027}\nLooks like there is a bug in angle recipe which doesn\u0027t report merge results error as build error.\n\nMy solution to this was these 2 CLs:\nhttps://chromium-review.googlesource.com/c/angle/angle/+/3169692\nhttps://chromium-review.googlesource.com/c/angle/angle/+/3046764\nThey still need some massaging to be able to land them",
+      "revId": "3b0d451731f885ff01b49e251305754a5f91e7d2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "f252988e_d6328d65",
+        "filename": "src/tests/test_utils/runner/TestSuite.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 1370,
+      "author": {
+        "id": 1001921
+      },
+      "writtenOn": "2022-01-18T18:23:17Z",
+      "side": 1,
+      "message": "I don\u0027t see where this is used, is this CL a part of a chain?",
+      "range": {
+        "startLine": 1370,
+        "startChar": 23,
+        "endLine": 1370,
+        "endChar": 47
+      },
+      "revId": "3b0d451731f885ff01b49e251305754a5f91e7d2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
