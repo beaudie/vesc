@@ -39,6 +39,30 @@
       },
       "revId": "fa332223b26312863029fc27453eedd417363b27",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "e0445d90_7b0bc6bb",
+        "filename": "src/tests/egl_tests/EGLDisplayPowerPreferenceTest.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 53,
+      "author": {
+        "id": 1326275
+      },
+      "writtenOn": "2022-01-18T17:08:52Z",
+      "side": 1,
+      "message": "Oops I was testing things and left that it. Doesn\u0027t seem to matter which one I use but I\u0027ll keep it as renderer.",
+      "parentUuid": "d0115743_fd820093",
+      "range": {
+        "startLine": 53,
+        "startChar": 45,
+        "endLine": 53,
+        "endChar": 54
+      },
+      "revId": "fa332223b26312863029fc27453eedd417363b27",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
