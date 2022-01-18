@@ -169,6 +169,7 @@ struct SwapchainImage : angle::NonCopyable
     vk::ImageHelper image;
     vk::ImageViewHelper imageViews;
     vk::Framebuffer framebuffer;
+    vk::Framebuffer fetchFramebuffer;
 
     // A circular array of semaphores used for presenting this image.
     static constexpr size_t kPresentHistorySize = kSwapHistorySize + 1;
@@ -176,6 +177,12 @@ struct SwapchainImage : angle::NonCopyable
     uint64_t mFrameNumber = 0;
 };
 }  // namespace impl
+
+enum class FramebufferFetchMode
+{
+    Disabled,
+    Enabled,
+};
 
 class WindowSurfaceVk : public SurfaceVk
 {
@@ -236,6 +243,7 @@ class WindowSurfaceVk : public SurfaceVk
                                      const gl::ImageIndex &imageIndex) override;
 
     angle::Result getCurrentFramebuffer(ContextVk *context,
+                                        FramebufferFetchMode fetchMode,
                                         const vk::RenderPass &compatibleRenderPass,
                                         vk::Framebuffer **framebufferOut);
 
@@ -400,6 +408,9 @@ class WindowSurfaceVk : public SurfaceVk
 
     // EGL_KHR_lock_surface3
     vk::BufferHelper mLockBufferHelper;
+
+    // GL_EXT_shader_framebuffer_fetch
+    FramebufferFetchMode mFramebufferFetchMode = FramebufferFetchMode::Disabled;
 };
 
 }  // namespace rx

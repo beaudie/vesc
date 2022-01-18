@@ -681,6 +681,7 @@ SwapchainImage::SwapchainImage(SwapchainImage &&other)
     : image(std::move(other.image)),
       imageViews(std::move(other.imageViews)),
       framebuffer(std::move(other.framebuffer)),
+      fetchFramebuffer(std::move(other.fetchFramebuffer)),
       presentHistory(std::move(other.presentHistory))
 {}
 }  // namespace impl
@@ -1483,6 +1484,10 @@ void WindowSurfaceVk::releaseSwapchainImages(ContextVk *contextVk)
 
         swapchainImage.imageViews.release(renderer);
         contextVk->addGarbage(&swapchainImage.framebuffer);
+        if (swapchainImage.fetchFramebuffer.valid())
+        {
+            contextVk->addGarbage(&swapchainImage.fetchFramebuffer);
+        }
 
         // present history must have already been taken care of.
         for (ImagePresentHistory &presentHistory : swapchainImage.presentHistory)
@@ -1513,6 +1518,10 @@ void WindowSurfaceVk::destroySwapChainImages(DisplayVk *displayVk)
         swapchainImage.image.destroy(renderer);
         swapchainImage.imageViews.destroy(device);
         swapchainImage.framebuffer.destroy(device);
+        if (swapchainImage.fetchFramebuffer.valid())
+        {
+            swapchainImage.fetchFramebuffer.destroy(device);
+        }
 
         for (ImagePresentHistory &presentHistory : swapchainImage.presentHistory)
         {
@@ -1623,8 +1632,11 @@ angle::Result WindowSurfaceVk::present(ContextVk *contextVk,
         ANGLE_TRY(renderer->finishToSerial(contextVk, *swapSerial));
     }
 
-    SwapchainImage &image               = mSwapchainImages[mCurrentSwapchainImageIndex];
-    vk::Framebuffer &currentFramebuffer = mSwapchainImages[mCurrentSwapchainImageIndex].framebuffer;
+    SwapchainImage &image = mSwapchainImages[mCurrentSwapchainImageIndex];
+    vk::Framebuffer &currentFramebuffer =
+        mFramebufferFetchMode == FramebufferFetchMode::Enabled
+            ? mSwapchainImages[mCurrentSwapchainImageIndex].fetchFramebuffer
+            : mSwapchainImages[mCurrentSwapchainImageIndex].framebuffer;
     updateOverlay(contextVk);
     bool overlayHasWidget = overlayHasEnabledWidget(contextVk);
 
@@ -2119,20 +2131,31 @@ EGLint WindowSurfaceVk::getSwapBehavior() const
 }
 
 angle::Result WindowSurfaceVk::getCurrentFramebuffer(ContextVk *contextVk,
+                                                     FramebufferFetchMode fetchMode,
                                                      const vk::RenderPass &compatibleRenderPass,
                                                      vk::Framebuffer **framebufferOut)
 {
     // FramebufferVk dirty-bit processing should ensure that a new image was acquired.
     ASSERT(!mNeedToAcquireNextSwapchainImage);
 
-    vk::Framebuffer &currentFramebuffer =
-        isMultiSampled() ? mFramebufferMS
-                         : mSwapchainImages[mCurrentSwapchainImageIndex].framebuffer;
+    vk::Framebuffer *currentFramebuffer =
+        isMultiSampled() ? &mFramebufferMS
+                         : &mSwapchainImages[mCurrentSwapchainImageIndex].framebuffer;
 
-    if (currentFramebuffer.valid())
+    if (fetchMode == FramebufferFetchMode::Enabled)
+    {
+        currentFramebuffer = &mSwapchainImages[mCurrentSwapchainImageIndex].fetchFramebuffer;
+    }
+
+    ASSERT(currentFramebuffer);
+
+    // Track the new fetch mode
+    mFramebufferFetchMode = fetchMode;
+
+    if (currentFramebuffer->valid())
     {
         // Validation layers should detect if the render pass is really compatible.
-        *framebufferOut = &currentFramebuffer;
+        *framebufferOut = currentFramebuffer;
         return angle::Result::Continue;
     }
 
@@ -2175,13 +2198,22 @@ angle::Result WindowSurfaceVk::getCurrentFramebuffer(ContextVk *contextVk,
                 gl::SrgbWriteControlMode::Default, &imageView));
 
             imageViews[0] = imageView->getHandle();
-            ANGLE_VK_TRY(contextVk,
-                         swapchainImage.framebuffer.init(contextVk->getDevice(), framebufferInfo));
+
+            if (fetchMode == FramebufferFetchMode::Enabled)
+            {
+                ANGLE_VK_TRY(contextVk, swapchainImage.fetchFramebuffer.init(contextVk->getDevice(),
+                                                                             framebufferInfo));
+            }
+            else
+            {
+                ANGLE_VK_TRY(contextVk, swapchainImage.framebuffer.init(contextVk->getDevice(),
+                                                                        framebufferInfo));
+            }
         }
     }
 
-    ASSERT(currentFramebuffer.valid());
-    *framebufferOut = &currentFramebuffer;
+    ASSERT(currentFramebuffer->valid());
+    *framebufferOut = currentFramebuffer;
     return angle::Result::Continue;
 }
 
