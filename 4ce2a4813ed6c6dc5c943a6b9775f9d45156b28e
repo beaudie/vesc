@@ -16,6 +16,23 @@
       "message": "PTAL\n\nRetraced with the reset updates.",
       "revId": "4ce2a4813ed6c6dc5c943a6b9775f9d45156b28e",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "f22181a4_4da3d3c7",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 6
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2022-01-18T18:13:32Z",
+      "side": 1,
+      "message": "LGTM, although I\u0027m not thrilled with tracking an empty framebuffer as the golden image. Would like to update our script to support tracking the last frame for traces that include \"launch\" in the name.  This can be a follow up.",
+      "revId": "4ce2a4813ed6c6dc5c943a6b9775f9d45156b28e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
