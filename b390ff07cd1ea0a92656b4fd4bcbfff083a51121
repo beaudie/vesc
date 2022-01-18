@@ -1,6 +1,29 @@
 {
   "comments": [
     {
+      "unresolved": true,
+      "key": {
+        "uuid": "fbdf2488_06552bba",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 2
+      },
+      "lineNbr": 11,
+      "author": {
+        "id": 1267026
+      },
+      "writtenOn": "2022-01-18T21:21:44Z",
+      "side": 1,
+      "message": "I think there might be some perf penalty due to it.\nlgtm for now.I will run some benchmarks later for drdc with and w/o passthrough to see if perf is impacted.\n \nLonger term i believe we plan to map gpu main and drdc context to a different angle context which are not part of the same shared group ? in that case we dont share any resources and shouldnt need to lock i suppose.",
+      "range": {
+        "startLine": 10,
+        "startChar": 22,
+        "endLine": 11,
+        "endChar": 51
+      },
+      "revId": "b390ff07cd1ea0a92656b4fd4bcbfff083a51121",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": false,
       "key": {
         "uuid": "8aee7ef8_96fb51f4",
@@ -14,6 +37,23 @@
       "writtenOn": "2022-01-18T21:00:39Z",
       "side": 1,
       "message": "PTAL. A partial fix for multithreading cross-share group stuff.\n\nEGL images still need more thought.",
+      "revId": "b390ff07cd1ea0a92656b4fd4bcbfff083a51121",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "0e808d23_96384a10",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1267026
+      },
+      "writtenOn": "2022-01-18T21:21:44Z",
+      "side": 1,
+      "message": "LGTM % comment.\nhavent verified this fix locally yet. will get back in sometime to report if the fix works locally.",
       "revId": "b390ff07cd1ea0a92656b4fd4bcbfff083a51121",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
