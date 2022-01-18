@@ -90,7 +90,7 @@
       'gn_args': 'target_cpu="arm64"',
     },
     'asan': {
-      'gn_args': 'is_asan=true',
+      'gn_args': 'is_asan=true is_lsan=true',
     },
     'debug': {
       'gn_args': 'is_debug=true',
