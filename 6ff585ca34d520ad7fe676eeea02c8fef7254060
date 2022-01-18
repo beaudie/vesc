@@ -24,6 +24,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "d95d9bfd_d2f122a5",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 5596,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2022-01-18T19:08:45Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "51194ea6_4d156b10",
+      "range": {
+        "startLine": 5596,
+        "startChar": 35,
+        "endLine": 5596,
+        "endChar": 42
+      },
+      "revId": "6ff585ca34d520ad7fe676eeea02c8fef7254060",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "d8d67e15_c8ffa68d",
@@ -41,6 +65,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "fa82e7a0_8891e81f",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 6386,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2022-01-18T19:08:45Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "d8d67e15_c8ffa68d",
+      "revId": "6ff585ca34d520ad7fe676eeea02c8fef7254060",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "e03671fe_8b450a3b",
@@ -54,6 +96,30 @@
       "writtenOn": "2022-01-13T23:06:05Z",
       "side": 1,
       "message": "nit: The \"Current\" part can be removed.",
+      "range": {
+        "startLine": 1241,
+        "startChar": 21,
+        "endLine": 1241,
+        "endChar": 42
+      },
+      "revId": "6ff585ca34d520ad7fe676eeea02c8fef7254060",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "e113e4da_bbe21a61",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.h",
+        "patchSetId": 6
+      },
+      "lineNbr": 1241,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2022-01-18T19:08:45Z",
+      "side": 1,
+      "message": "How about mDefaultUniformBuffer?",
+      "parentUuid": "e03671fe_8b450a3b",
       "range": {
         "startLine": 1241,
         "startChar": 21,
@@ -89,6 +155,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "1eef8cc0_9ebf9e4f",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.h",
+        "patchSetId": 6
+      },
+      "lineNbr": 1242,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2022-01-18T19:08:45Z",
+      "side": 1,
+      "message": "The thing is that these two terms are already taken. Today, \"InRecordedCommands\" means mUse\u0027s refCount has been incremented but not yet subbmited (queueSerial not yet updated). \"InUse\" means either InRecordedCommands or GPU has not finished. I am adding a new state which I am calling it \"Stashed\", it means this has been added to the list for the retain call. This is what stash means in git. It is in an staging area waiting for commit. Feel free to suggest other names, but I have not seen a better name than stashed.",
+      "parentUuid": "97a69dac_90c8460f",
+      "range": {
+        "startLine": 1242,
+        "startChar": 38,
+        "endLine": 1242,
+        "endChar": 60
+      },
+      "revId": "6ff585ca34d520ad7fe676eeea02c8fef7254060",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "e6de43f2_962a232c",
         "filename": "src/libANGLE/renderer/vulkan/ProgramPipelineVk.cpp",
         "patchSetId": 6
@@ -100,6 +190,30 @@
       "writtenOn": "2022-01-13T23:06:05Z",
       "side": 1,
       "message": "update",
+      "range": {
+        "startLine": 149,
+        "startChar": 27,
+        "endLine": 149,
+        "endChar": 40
+      },
+      "revId": "6ff585ca34d520ad7fe676eeea02c8fef7254060",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "53bed376_95d2c2fc",
+        "filename": "src/libANGLE/renderer/vulkan/ProgramPipelineVk.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 149,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2022-01-18T19:08:45Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "e6de43f2_962a232c",
       "range": {
         "startLine": 149,
         "startChar": 27,
@@ -123,6 +237,30 @@
       "writtenOn": "2022-01-13T23:06:05Z",
       "side": 1,
       "message": "update",
+      "range": {
+        "startLine": 730,
+        "startChar": 27,
+        "endLine": 730,
+        "endChar": 40
+      },
+      "revId": "6ff585ca34d520ad7fe676eeea02c8fef7254060",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "a5b07607_43e4575f",
+        "filename": "src/libANGLE/renderer/vulkan/ProgramVk.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 730,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2022-01-18T19:08:45Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "7d454f3c_22025d57",
       "range": {
         "startLine": 730,
         "startChar": 27,
