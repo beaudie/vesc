@@ -63,6 +63,30 @@
       },
       "revId": "91de16fa5b2c65ba6150ffe9ea884b8a5e4b2e77",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "6b822bc9_86dc8608",
+        "filename": "src/libANGLE/renderer/vulkan/vk_caps_utils.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 372,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2022-01-18T16:16:35Z",
+      "side": 1,
+      "message": "You can open a bug or use the existing ANGLE bug if you plan on doing it soon.\n\nSetting the \"renderer\" tag in the bug to vulkan is enough. You can potentially add the \"Hotlist-Polish\" label too.",
+      "parentUuid": "b23a2fb3_fde081fa",
+      "range": {
+        "startLine": 372,
+        "startChar": 54,
+        "endLine": 372,
+        "endChar": 96
+      },
+      "revId": "91de16fa5b2c65ba6150ffe9ea884b8a5e4b2e77",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }

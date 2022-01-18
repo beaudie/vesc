@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "2bd29b2b_d5b31098",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 5
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2022-01-18T16:16:35Z",
+      "side": 1,
+      "message": "LGTM too with the test expectation update.",
+      "revId": "dae5ccdcc35d4dc5656ed7ec8931db5bdd81506c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
