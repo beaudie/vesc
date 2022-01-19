@@ -24,6 +24,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "21a2d427_51868617",
+        "filename": "src/libANGLE/renderer/vulkan/CommandProcessor.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 930,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2022-01-19T17:34:50Z",
+      "side": 1,
+      "message": "Good idea.",
+      "parentUuid": "2aeb6e51_a526a58e",
+      "range": {
+        "startLine": 930,
+        "startChar": 12,
+        "endLine": 930,
+        "endChar": 36
+      },
+      "revId": "451b9f877acf78a2fde2d7a56b5be7f0071ffe7f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "58097b4a_dc5772bf",
@@ -37,6 +61,30 @@
       "writtenOn": "2022-01-14T20:01:06Z",
       "side": 1,
       "message": "The last piece of the puzzle is to actually remove this flag, otherwise the memory allocator is still paying all the costs that the best practices quote is hinting it ;)",
+      "range": {
+        "startLine": 37,
+        "startChar": 8,
+        "endLine": 37,
+        "endChar": 55
+      },
+      "revId": "451b9f877acf78a2fde2d7a56b5be7f0071ffe7f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "e5b04f15_afce467a",
+        "filename": "src/libANGLE/renderer/vulkan/PersistentCommandPool.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 37,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2022-01-19T17:34:50Z",
+      "side": 1,
+      "message": "Ah, yup, good catch.   Removed.",
+      "parentUuid": "58097b4a_dc5772bf",
       "range": {
         "startLine": 37,
         "startChar": 8,
