@@ -16,6 +16,23 @@
       "message": "Hi Geoff, PTAL. Thanks",
       "revId": "91ee125aff3cc475567cd7ee735b73905e63112e",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "cfb2a3f5_32ff64c7",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2022-01-19T15:22:44Z",
+      "side": 1,
+      "message": "Also adding Jamie. Do we want to start generating dynamic strings for our errors again?\n\nMain thing I\u0027m worried about is that these errors make it all the way to the javascript console for WebGL.",
+      "revId": "91ee125aff3cc475567cd7ee735b73905e63112e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
