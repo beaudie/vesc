@@ -278,10 +278,10 @@ EGLAttrib GetPlatformTypeFromEnvironment()
 {
 #if defined(ANGLE_USE_OZONE)
     return 0;
-#elif defined(ANGLE_USE_X11)
-    return EGL_PLATFORM_X11_EXT;
 #elif defined(ANGLE_USE_WAYLAND)
     return EGL_PLATFORM_WAYLAND_EXT;
+#elif defined(ANGLE_USE_X11)
+    return EGL_PLATFORM_X11_EXT;
 #elif defined(ANGLE_USE_VULKAN_DISPLAY) && defined(ANGLE_VULKAN_DISPLAY_MODE_SIMPLE)
     return EGL_PLATFORM_VULKAN_DISPLAY_MODE_SIMPLE_ANGLE;
 #elif defined(ANGLE_USE_VULKAN_DISPLAY) && defined(ANGLE_VULKAN_DISPLAY_MODE_HEADLESS)
