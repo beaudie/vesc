@@ -80,6 +80,30 @@
       },
       "revId": "0513cdd972b7e8f609288929d69ae27094d805d6",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "840249f2_be4146ff",
+        "filename": "src/common/debug.h",
+        "patchSetId": 4
+      },
+      "lineNbr": 163,
+      "author": {
+        "id": 1265568
+      },
+      "writtenOn": "2022-01-19T03:33:14Z",
+      "side": 1,
+      "message": "This was difficult to do with the difference between \"0x\"/\u00270\u0027 and L\"0x\"/L\u00270\u0027. I made everything templated, with \u0027char\u0027 as the default type since most places that uses this are using char\u0027s. Please let me know if there\u0027s any feedback for it to be cleaner.",
+      "parentUuid": "7d7eb4fc_933fdc7a",
+      "range": {
+        "startLine": 163,
+        "startChar": 22,
+        "endLine": 163,
+        "endChar": 35
+      },
+      "revId": "0513cdd972b7e8f609288929d69ae27094d805d6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
