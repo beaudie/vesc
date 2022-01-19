@@ -46,6 +46,30 @@
       },
       "revId": "a1858b024a6d601717669e95ab21ca3e32c755a4",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "05553b2e_4abccfc3",
+        "filename": "src/tests/gl_tests/VulkanUniformUpdatesTest.cpp",
+        "patchSetId": 10
+      },
+      "lineNbr": 113,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2022-01-19T14:36:17Z",
+      "side": 0,
+      "message": "Potentially. Is it prone to the same kinds of errors? FYI right now there\u0027s no need for these tests to be in white box as they no longer call hackANGLE().",
+      "parentUuid": "e0f909ef_24d63697",
+      "range": {
+        "startLine": 108,
+        "startChar": 0,
+        "endLine": 113,
+        "endChar": 61
+      },
+      "revId": "a1858b024a6d601717669e95ab21ca3e32c755a4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
