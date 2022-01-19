@@ -1,0 +1,55 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "a40a0f2a_04c86fc1",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 19
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1359249
+      },
+      "writtenOn": "2022-01-19T22:58:28Z",
+      "side": 1,
+      "message": "Update. ",
+      "revId": "6b24a5320f352f59588854242b92517657b54c21",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "d44e4d7c_4264ab66",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 19
+      },
+      "lineNbr": 7877,
+      "author": {
+        "id": 1359249
+      },
+      "writtenOn": "2022-01-19T22:58:28Z",
+      "side": 1,
+      "message": "removed vkDeviceWaitIdle and added a fence to queueSubmitOneOff, and added a wait.",
+      "revId": "6b24a5320f352f59588854242b92517657b54c21",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "f9918125_6b10d224",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 19
+      },
+      "lineNbr": 7927,
+      "author": {
+        "id": 1359249
+      },
+      "writtenOn": "2022-01-19T22:58:28Z",
+      "side": 1,
+      "message": "removed vkDeviceWaitIdle and added a fence to queueSubmitOneOff, and added a wait.",
+      "revId": "6b24a5320f352f59588854242b92517657b54c21",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}

@@ -593,6 +593,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "3cca7a2d_8af7bcb6",
+        "filename": "src/libANGLE/renderer/vulkan/SurfaceVk.cpp",
+        "patchSetId": 13
+      },
+      "lineNbr": 348,
+      "author": {
+        "id": 1359249
+      },
+      "writtenOn": "2022-01-19T22:58:28Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "4cfb8d20_0cb1bffe",
+      "range": {
+        "startLine": 348,
+        "startChar": 8,
+        "endLine": 348,
+        "endChar": 24
+      },
+      "revId": "aef20218aea74f76979fb04164d8fc516eb7bd3c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "4122eaf1_3370942d",
@@ -1076,6 +1100,30 @@
       "writtenOn": "2021-11-23T14:05:09Z",
       "side": 1,
       "message": "same",
+      "range": {
+        "startLine": 160,
+        "startChar": 23,
+        "endLine": 160,
+        "endChar": 29
+      },
+      "revId": "aef20218aea74f76979fb04164d8fc516eb7bd3c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "4db37a9c_855597ee",
+        "filename": "src/tests/egl_tests/EGLLockSurface3Test.cpp",
+        "patchSetId": 13
+      },
+      "lineNbr": 160,
+      "author": {
+        "id": 1359249
+      },
+      "writtenOn": "2022-01-19T22:58:28Z",
+      "side": 1,
+      "message": "Context to comment lost.",
+      "parentUuid": "ab8ca826_161b0782",
       "range": {
         "startLine": 160,
         "startChar": 23,
