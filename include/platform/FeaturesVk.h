@@ -611,6 +611,14 @@ struct FeaturesVk : FeatureSetBase
     Feature supportsLockSurfaceExtension = {
         "supportsLockSurfaceExtension", FeatureCategory::VulkanFeatures,
         "Surface supports the EGL_KHR_lock_surface3 extension", &members};
+
+    // Android bug workaround which assumes VkPresentRegionsKHR to have a bottom-left origin
+    // instead of top-left as specified by VK_KHR_incremental_present
+    Feature bottomLeftOriginPresentRegionRectangles = {
+        "bottomLeftOriginPresentRegionRectangles", FeatureCategory::VulkanWorkarounds,
+        "One some platforms present region rectangles are expected to have a bottom-left origin, "
+        "instead of top-left origin as from spec",
+        &members};
 };
 
 inline FeaturesVk::FeaturesVk()  = default;
