@@ -3051,6 +3051,11 @@ void RendererVk::initFeatures(DisplayVk *displayVk,
     // Android needs swapbuffers to update image and present to display.
     ANGLE_FEATURE_CONDITION(&mFeatures, swapbuffersOnFlushOrFinishWithSingleBuffer, IsAndroid());
 
+    // http://anglebug.com/6933
+    // Android expects VkPresentRegionsKHR rectangles with a bottom-left origin, while spec
+    // states they should have a top-left origin.
+    ANGLE_FEATURE_CONDITION(&mFeatures, bottomLeftOriginPresentRegionRectangles, IsAndroid());
+
     angle::PlatformMethods *platform = ANGLEPlatformCurrent();
     platform->overrideFeaturesVk(platform, &mFeatures);
 
