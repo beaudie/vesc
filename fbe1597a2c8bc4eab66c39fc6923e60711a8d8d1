@@ -1,0 +1,44 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "66bd962a_f5e770b8",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1290487
+      },
+      "writtenOn": "2022-01-19T00:57:49Z",
+      "side": 1,
+      "message": "Thanks for this change Cody!  I have a question/suggestion, but am okay with dealing with that after this CL lands.",
+      "revId": "fbe1597a2c8bc4eab66c39fc6923e60711a8d8d1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "4015f9d6_8fe564f7",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 3030,
+      "author": {
+        "id": 1290487
+      },
+      "writtenOn": "2022-01-19T00:57:49Z",
+      "side": 1,
+      "message": "I\u0027m not sure what to suggest, but we may want to change this after asking Samsung (who did the non-coherent extension).  For example, do they want to support Linux?\n\nI first put this feature in as a short-term work-around to crashes on Pixel 4/6.  We know more now (e.g. the non-coherent extension is useful for a non-tiler like Samsung).  I didn\u0027t know (and still don\u0027t) about IMG, Broadcom, etc. GPUs.",
+      "range": {
+        "startLine": 3030,
+        "startChar": 45,
+        "endLine": 3030,
+        "endChar": 64
+      },
+      "revId": "fbe1597a2c8bc4eab66c39fc6923e60711a8d8d1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
