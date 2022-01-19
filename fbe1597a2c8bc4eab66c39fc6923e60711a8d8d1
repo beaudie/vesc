@@ -39,6 +39,30 @@
       },
       "revId": "fbe1597a2c8bc4eab66c39fc6923e60711a8d8d1",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "44afc3aa_ff32207d",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 3030,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2022-01-19T18:03:38Z",
+      "side": 1,
+      "message": "Ack, thanks Ian.  These tests do pass on Linux, so it is tempting to keep them running.  I\u0027ll file a bug to follow up.  We still have some basic use cases that don\u0027t pass anywhere yet.",
+      "parentUuid": "4015f9d6_8fe564f7",
+      "range": {
+        "startLine": 3030,
+        "startChar": 45,
+        "endLine": 3030,
+        "endChar": 64
+      },
+      "revId": "fbe1597a2c8bc4eab66c39fc6923e60711a8d8d1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
