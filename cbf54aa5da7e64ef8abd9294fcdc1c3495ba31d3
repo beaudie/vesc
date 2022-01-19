@@ -33,6 +33,24 @@
       "message": "This looks fragile, since it won\u0027t be done if we return at any point in the function before getting here.   Instad, I think ensureImageInitialized() should take the singleLevelUpdate and fullUpdate values as parameters (preferably as enum values, rather than bools for readability).   This increases the size of the CL, but should also make it easier to maintain in the future.",
       "revId": "cbf54aa5da7e64ef8abd9294fcdc1c3495ba31d3",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ea228085_ba912976",
+        "filename": "src/libANGLE/renderer/vulkan/TextureVk.cpp",
+        "patchSetId": 12
+      },
+      "lineNbr": 575,
+      "author": {
+        "id": 1446209
+      },
+      "writtenOn": "2022-01-19T10:52:22Z",
+      "side": 1,
+      "message": "Tim,thanks four your useful advice!To be simplistic,I narrow the field of recreating image,only do it when single level full texture update with PBO.This patch could work for MH31 and not introduce much noise.",
+      "parentUuid": "d4020282_da5e4e10",
+      "revId": "cbf54aa5da7e64ef8abd9294fcdc1c3495ba31d3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }

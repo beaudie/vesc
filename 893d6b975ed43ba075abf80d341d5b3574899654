@@ -215,6 +215,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "d9817964_394a1efb",
+        "filename": "src/libANGLE/renderer/vulkan/TextureVk.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 2416,
+      "author": {
+        "id": 1446209
+      },
+      "writtenOn": "2022-01-19T10:52:22Z",
+      "side": 1,
+      "message": "Yes,you\u0027re right,we needn\u0027t do any notification about descriptor set update. In addition,I use \u0027!mState.hasBeenBoundAsAttachment()\u0027 to avoid recreating new image when it is used as attachment,just as Charlie\u0027s concern:\n\nrender to level 1\nupdate level 0\n\nThis will cause level 1 data lost.\nBut \u0027!mState.hasBeenBoundAsAttachment()\u0027 will exclude this case.",
+      "parentUuid": "2600943a_6eb2465a",
+      "range": {
+        "startLine": 2416,
+        "startChar": 9,
+        "endLine": 2416,
+        "endChar": 43
+      },
+      "revId": "893d6b975ed43ba075abf80d341d5b3574899654",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "7d3ab6b4_4a1fb541",
         "filename": "src/libANGLE/renderer/vulkan/TextureVk.cpp",
         "patchSetId": 5
