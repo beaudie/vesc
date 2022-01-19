@@ -22,6 +22,29 @@
       },
       "revId": "453cd955adb2f24b738c080b6281ed040c34c73d",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "17a6addc_e4f9d6f8",
+        "filename": "src/libANGLE/renderer/d3d/d3d11/Renderer11.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 722,
+      "author": {
+        "id": 1130144
+      },
+      "writtenOn": "2022-01-19T03:15:38Z",
+      "side": 1,
+      "message": "On PCs, it\u0027s possible for a user to have two GPUs with the same device id, and even vendor id. Assuming the previous comment is fixed to use the real device id, you\u0027re going to end up picking the first adapter in the list with a match. Device and vendor ids are not unique on the system. \n\nIf you\u0027re going to use this CL to do power preference, a better approach would be to use EnumAdapterByGpuPreference instead of EnumAdapters.",
+      "range": {
+        "startLine": 721,
+        "startChar": 0,
+        "endLine": 722,
+        "endChar": 52
+      },
+      "revId": "453cd955adb2f24b738c080b6281ed040c34c73d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
