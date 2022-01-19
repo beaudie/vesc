@@ -16,6 +16,24 @@
       "message": "Why is this removed? If there are any deferred clears left here, that\u0027s a bug because the clear will be lost.",
       "revId": "c4c73e827b2c212ccf0e8f109ec0f1aa3fc540a5",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "2c2200b5_35aa2ba7",
+        "filename": "src/libANGLE/renderer/vulkan/FramebufferVk.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 591,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2022-01-19T03:54:11Z",
+      "side": 0,
+      "message": "I was hitting issues during development, but CQ seems happy with it back in.",
+      "parentUuid": "b554ca90_adafe9c8",
+      "revId": "c4c73e827b2c212ccf0e8f109ec0f1aa3fc540a5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }

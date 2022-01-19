@@ -26,6 +26,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "d19a5346_9003c0b9",
+        "filename": "src/libANGLE/renderer/vulkan/FramebufferVk.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 564,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2022-01-19T03:54:11Z",
+      "side": 1,
+      "message": "With the refactor change to move the loop into a helper, I\u0027m also going to keep this conditional.   LMKWYT.",
+      "parentUuid": "8ad3852e_9790b2b1",
+      "range": {
+        "startLine": 563,
+        "startChar": 0,
+        "endLine": 564,
+        "endChar": 13
+      },
+      "revId": "618de2a72f5ff7f1924d5e8c836b37f3b579124a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "41d079df_6beff92b",
         "filename": "src/libANGLE/renderer/vulkan/FramebufferVk.cpp",
         "patchSetId": 5
@@ -37,6 +61,30 @@
       "writtenOn": "2022-01-17T18:38:41Z",
       "side": 1,
       "message": "Something seems wrong here, why is `colorIndexVk` being set to `colorIndexGL` directly?\n\nCould you please add a mid-RP clear test with gaps in attachments? That would be similar to `DrawBuffersTest.ClearWithGaps`",
+      "range": {
+        "startLine": 571,
+        "startChar": 46,
+        "endLine": 571,
+        "endChar": 94
+      },
+      "revId": "618de2a72f5ff7f1924d5e8c836b37f3b579124a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "d29987a1_254bcc50",
+        "filename": "src/libANGLE/renderer/vulkan/FramebufferVk.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 571,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2022-01-19T03:54:11Z",
+      "side": 1,
+      "message": "This is taken from FramebufferVk::clearWithCommand() - ref1.\n\nI added the test DrawBuffersTest.MidRenderPassClearWithGaps which does what you\u0027ve described and it passes.   It also correctly uses vkCmdClearAttachments() for the mid-RP clear.   Here are the commands captured by renderdoc:\n\n     EID  | Event                                                                                                   | Action #\n    --------------------------------------------------------------------------------------------------------------------------\n    6     | - \u003d\u003e vkQueueSubmit(1)[0]: vkBeginCommandBuffer(Baked Command Buffer 489)                                | 1     \n    7-25  | - Colour Pass #1 (1-2 Targets)                                                                          | 1-5   \n    8     |  \\- vkCmdBeginRenderPass(Don\u0027t Care)                                                                    | 1     \n    14    |   - vkCmdDraw(6, 1)                                                                                     | 1     \n    15    |   - Clear effectively discarding previous draw call results. Suggest earlier Clear followed by masked c |       \n    16    |   - vkCmdClearAttachments({ 0, 3 })                                                                     | 2     \n    20    |   - vkCmdDraw(6, 1)                                                                                     | 3     \n    21    |   - Render pass closed due to framebuffer change                                                        |       \n    22    |   - vkCmdEndRenderPass(Store)                                                                           | 4     \n    24    |   - vkCmdCopyImageToBuffer(2D Color Attachment 430, Buffer 440)                                         | 4     \n    25    |   - GPU stall due to ReadPixels                                                                         |       \n    26-44 | - Copy/Clear Pass #1                                                                                    | 5-6   \n    27    |  \\- \u003d\u003e vkQueueSubmit(1)[0]: vkEndCommandBuffer(Baked Command Buffer 489)                                | 5     \n    32    |   - \u003d\u003e vkQueueSubmit(1)[0]: vkBeginCommandBuffer(Baked Command Buffer 490)                              | 5     \n    34    |   - vkCmdCopyImageToBuffer(2D Color Attachment 435, Buffer 440)                                         | 5     \n    35    |   - GPU stall due to ReadPixels                                                                         |       \n    37    |   - \u003d\u003e vkQueueSubmit(1)[0]: vkEndCommandBuffer(Baked Command Buffer 490)                                | 6     \n    41    |   - \u003d\u003e vkQueueSubmit(1)[0]: vkBeginCommandBuffer(Baked Command Buffer 491)                              | 6     \n    42    |   - Acquire Swap Image Before Swap                                                                      |       \n    44    |   - \u003d\u003e vkQueueSubmit(1)[0]: vkEndCommandBuffer(Baked Command Buffer 491)                                | 6     \n    46    | - vkQueuePresentKHR(Swapchain Image 379)                                                                | 6",
+      "parentUuid": "41d079df_6beff92b",
       "range": {
         "startLine": 571,
         "startChar": 46,
@@ -70,6 +118,47 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "04cba85a_96778b39",
+        "filename": "src/libANGLE/renderer/vulkan/FramebufferVk.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 576,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2022-01-19T03:54:11Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "e1eff563_e955a4c1",
+      "range": {
+        "startLine": 565,
+        "startChar": 0,
+        "endLine": 576,
+        "endChar": 17
+      },
+      "revId": "618de2a72f5ff7f1924d5e8c836b37f3b579124a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ac2d79fa_f8e6dc4b",
+        "filename": "src/libANGLE/renderer/vulkan/FramebufferVk.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 2371,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2022-01-19T03:54:11Z",
+      "side": 1,
+      "message": "ref1",
+      "revId": "618de2a72f5ff7f1924d5e8c836b37f3b579124a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "9455a213_007aa2f6",
@@ -89,6 +178,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "0101c1da_5a53811c",
+        "filename": "src/libANGLE/renderer/vulkan/RenderTargetVk.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 104,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2022-01-19T03:54:11Z",
+      "side": 1,
+      "message": "I\u0027ve updated VulkanPerformanceCounterTest.MidRenderPassClear to do this, and it works without the change you\u0027re describing.   Both color attachments have storeOp\u003dSTORE (EXPECT_EQ passes) and the performance counters are correct (indicating the loadOp\u003dCLEAR is being done correctly).   I\u0027ve also verified everything looks good with RenderDoc.\n\nLet me know if there\u0027s something else you\u0027d like to look at here.",
+      "parentUuid": "9455a213_007aa2f6",
+      "revId": "618de2a72f5ff7f1924d5e8c836b37f3b579124a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "4ec549b1_b10499fc",
         "filename": "src/libANGLE/renderer/vulkan/vk_cache_utils.cpp",
         "patchSetId": 5
@@ -100,6 +207,30 @@
       "writtenOn": "2022-01-17T18:38:41Z",
       "side": 1,
       "message": "This is actually multiplying the color ops by subpass count.\n\nYou\u0027d need to split the color op counting into another function that\u0027s called above the for loop. You can tell by the way the loop doesn\u0027t use the `subpass` :)",
+      "range": {
+        "startLine": 928,
+        "startChar": 0,
+        "endLine": 929,
+        "endChar": 76
+      },
+      "revId": "618de2a72f5ff7f1924d5e8c836b37f3b579124a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "23af7360_7a9155e0",
+        "filename": "src/libANGLE/renderer/vulkan/vk_cache_utils.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 929,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2022-01-19T03:54:11Z",
+      "side": 1,
+      "message": "Good catch.\n\nDone",
+      "parentUuid": "4ec549b1_b10499fc",
       "range": {
         "startLine": 928,
         "startChar": 0,
@@ -133,6 +264,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "4f929643_7bfecbfb",
+        "filename": "src/tests/gl_tests/VulkanPerformanceCounterTest.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 3193,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2022-01-19T03:54:11Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "c0ae94f6_4b46e702",
+      "range": {
+        "startLine": 3193,
+        "startChar": 40,
+        "endLine": 3193,
+        "endChar": 50
+      },
+      "revId": "618de2a72f5ff7f1924d5e8c836b37f3b579124a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "4344f2f7_77d7a026",
@@ -146,6 +301,24 @@
       "writtenOn": "2022-01-17T18:38:41Z",
       "side": 1,
       "message": "Please verify colorStores here too",
+      "revId": "618de2a72f5ff7f1924d5e8c836b37f3b579124a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "9d228fb6_24884be0",
+        "filename": "src/tests/gl_tests/VulkanPerformanceCounterTest.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 3235,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2022-01-19T03:54:11Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "4344f2f7_77d7a026",
       "revId": "618de2a72f5ff7f1924d5e8c836b37f3b579124a",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
