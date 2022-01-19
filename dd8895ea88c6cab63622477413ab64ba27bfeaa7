@@ -72,6 +72,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "84691dc2_c38a7299",
+        "filename": "src/libANGLE/Context.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 2784,
+      "author": {
+        "id": 1000050
+      },
+      "writtenOn": "2022-01-19T16:58:21Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "66f2b6b8_2dff0160",
+      "range": {
+        "startLine": 2784,
+        "startChar": 17,
+        "endLine": 2784,
+        "endChar": 20
+      },
+      "revId": "dd8895ea88c6cab63622477413ab64ba27bfeaa7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "1fe73c2c_c7d9cfb8",
@@ -85,6 +109,30 @@
       "writtenOn": "2022-01-19T16:23:10Z",
       "side": 1,
       "message": "nit: I\u0027d suggest just for clarity you define a new error message with the parameterized format string embedded (e.g. something specific for this error) rather than using another error message as a format parameter",
+      "range": {
+        "startLine": 162,
+        "startChar": 39,
+        "endLine": 162,
+        "endChar": 61
+      },
+      "revId": "dd8895ea88c6cab63622477413ab64ba27bfeaa7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "59b22726_32149aac",
+        "filename": "src/libANGLE/validationES2.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 162,
+      "author": {
+        "id": 1000050
+      },
+      "writtenOn": "2022-01-19T16:58:21Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "1fe73c2c_c7d9cfb8",
       "range": {
         "startLine": 162,
         "startChar": 39,
