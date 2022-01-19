@@ -18,6 +18,23 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "7361db7a_29a965eb",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 5
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1001921
+      },
+      "writtenOn": "2022-01-19T19:09:55Z",
+      "side": 1,
+      "message": "So now that results merge is fixed, the only question I\u0027ve left here is bot-mode related changes.\nIf you split bot-mode changes into a separate CL, we can land the run_gtest_angle_test part.\nThe changes in https://chromium-review.googlesource.com/c/chromium/src/+/3035587 were enough to get the iOS bot going, so I don\u0027t think bot-mode stuff here is related.\nIn fact, we still need that CL, as you change ANGLE\u0027s usage and my CL changes usage in Chrome. So let me rebase and try landing my CL anyways.",
+      "revId": "3b0d451731f885ff01b49e251305754a5f91e7d2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "f252988e_d6328d65",
