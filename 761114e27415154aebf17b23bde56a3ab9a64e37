@@ -1,0 +1,136 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "fa2d6a79_1fa3d6bb",
+        "filename": "src/libANGLE/renderer/vulkan/VertexArrayVk.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 88,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2022-01-19T21:38:22Z",
+      "side": 1,
+      "message": "I suspect the code would shake out cleaner if you didn\u0027t modify Stream, and instead called \"memset\" in the code that invokes it. Instead you can modify the parameters to Stream so the code here won\u0027t overflow the source buffer.",
+      "range": {
+        "startLine": 88,
+        "startChar": 14,
+        "endLine": 88,
+        "endChar": 45
+      },
+      "revId": "761114e27415154aebf17b23bde56a3ab9a64e37",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "043adf12_f3e8a16f",
+        "filename": "src/tests/gl_tests/RobustBufferAccessBehaviorTest.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 589,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2022-01-19T21:38:22Z",
+      "side": 1,
+      "message": "nit: please comment before each newly added test",
+      "range": {
+        "startLine": 589,
+        "startChar": 0,
+        "endLine": 589,
+        "endChar": 6
+      },
+      "revId": "761114e27415154aebf17b23bde56a3ab9a64e37",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b177a140_7def8466",
+        "filename": "src/tests/gl_tests/RobustBufferAccessBehaviorTest.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 620,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2022-01-19T21:38:22Z",
+      "side": 1,
+      "message": "same as below",
+      "range": {
+        "startLine": 620,
+        "startChar": 4,
+        "endLine": 620,
+        "endChar": 10
+      },
+      "revId": "761114e27415154aebf17b23bde56a3ab9a64e37",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "293767e0_040753ab",
+        "filename": "src/tests/gl_tests/RobustBufferAccessBehaviorTest.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 629,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2022-01-19T21:38:22Z",
+      "side": 1,
+      "message": "GL error is a valid test result. See the extension doc for robust buffer access - there\u0027s several valid outcomes.",
+      "revId": "761114e27415154aebf17b23bde56a3ab9a64e37",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "9781014e_e022990f",
+        "filename": "src/tests/gl_tests/RobustBufferAccessBehaviorTest.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 662,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2022-01-19T21:38:22Z",
+      "side": 1,
+      "message": "nit: can be constexpr GLuint kDivisor \u003d 4096;",
+      "range": {
+        "startLine": 662,
+        "startChar": 4,
+        "endLine": 662,
+        "endChar": 10
+      },
+      "revId": "761114e27415154aebf17b23bde56a3ab9a64e37",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "a796ae8b_ce50f9d6",
+        "filename": "src/tests/gl_tests/RobustBufferAccessBehaviorTest.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 673,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2022-01-19T21:38:22Z",
+      "side": 1,
+      "message": "same comment here",
+      "range": {
+        "startLine": 673,
+        "startChar": 4,
+        "endLine": 673,
+        "endChar": 22
+      },
+      "revId": "761114e27415154aebf17b23bde56a3ab9a64e37",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
