@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "6dfe9d66_74a34b36",
+        "filename": "src/libANGLE/renderer/d3d/d3d11/Renderer11.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 722,
+      "author": {
+        "id": 1130144
+      },
+      "writtenOn": "2022-01-19T02:32:17Z",
+      "side": 1,
+      "message": "I don\u0027t understand how this extension works.  \n\nDeviceId !\u003d LUID. \n\nIf you use the device id extension and put in the device id for Intel (0x8086), you\u0027re not going to get an Intel GPU if you read what\u0027s in desc.AdapterLuid.",
+      "range": {
+        "startLine": 721,
+        "startChar": 16,
+        "endLine": 722,
+        "endChar": 52
+      },
+      "revId": "453cd955adb2f24b738c080b6281ed040c34c73d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
