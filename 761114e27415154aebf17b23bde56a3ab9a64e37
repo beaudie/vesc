@@ -26,6 +26,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "df1b30ca_755563b5",
+        "filename": "src/libANGLE/renderer/vulkan/VertexArrayVk.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 88,
+      "author": {
+        "id": 1531247
+      },
+      "writtenOn": "2022-01-19T22:26:14Z",
+      "side": 1,
+      "message": "I considered that but note that this function also allocates the buffer.\nBefore this change: buffer size matches the loop termination condition, both are `bytesToAllocate`.\nAfter this change: this is no longer true as now we have `bytesToAllocate` buffer and `clampedSize` in the loop.\nHence I can\u0027t do this without modifications to Stream.\n\nWDYT?",
+      "parentUuid": "fa2d6a79_1fa3d6bb",
+      "range": {
+        "startLine": 88,
+        "startChar": 14,
+        "endLine": 88,
+        "endChar": 45
+      },
+      "revId": "761114e27415154aebf17b23bde56a3ab9a64e37",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "043adf12_f3e8a16f",
         "filename": "src/tests/gl_tests/RobustBufferAccessBehaviorTest.cpp",
         "patchSetId": 2
@@ -37,6 +61,30 @@
       "writtenOn": "2022-01-19T21:38:22Z",
       "side": 1,
       "message": "nit: please comment before each newly added test",
+      "range": {
+        "startLine": 589,
+        "startChar": 0,
+        "endLine": 589,
+        "endChar": 6
+      },
+      "revId": "761114e27415154aebf17b23bde56a3ab9a64e37",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "1c4f667d_0a93945c",
+        "filename": "src/tests/gl_tests/RobustBufferAccessBehaviorTest.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 589,
+      "author": {
+        "id": 1531247
+      },
+      "writtenOn": "2022-01-19T22:26:14Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "043adf12_f3e8a16f",
       "range": {
         "startLine": 589,
         "startChar": 0,
@@ -70,6 +118,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "bf94ab51_b38662c7",
+        "filename": "src/tests/gl_tests/RobustBufferAccessBehaviorTest.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 620,
+      "author": {
+        "id": 1531247
+      },
+      "writtenOn": "2022-01-19T22:26:14Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "b177a140_7def8466",
+      "range": {
+        "startLine": 620,
+        "startChar": 4,
+        "endLine": 620,
+        "endChar": 10
+      },
+      "revId": "761114e27415154aebf17b23bde56a3ab9a64e37",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "293767e0_040753ab",
@@ -89,6 +161,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "f07e7e56_77c6abb2",
+        "filename": "src/tests/gl_tests/RobustBufferAccessBehaviorTest.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 629,
+      "author": {
+        "id": 1531247
+      },
+      "writtenOn": "2022-01-19T22:26:14Z",
+      "side": 1,
+      "message": "Right, you mentioned this earlier and I forgot, sorry. Let me see what I can find.",
+      "parentUuid": "293767e0_040753ab",
+      "revId": "761114e27415154aebf17b23bde56a3ab9a64e37",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "9781014e_e022990f",
         "filename": "src/tests/gl_tests/RobustBufferAccessBehaviorTest.cpp",
         "patchSetId": 2
@@ -100,6 +190,30 @@
       "writtenOn": "2022-01-19T21:38:22Z",
       "side": 1,
       "message": "nit: can be constexpr GLuint kDivisor \u003d 4096;",
+      "range": {
+        "startLine": 662,
+        "startChar": 4,
+        "endLine": 662,
+        "endChar": 10
+      },
+      "revId": "761114e27415154aebf17b23bde56a3ab9a64e37",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "5afe4173_be88be0e",
+        "filename": "src/tests/gl_tests/RobustBufferAccessBehaviorTest.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 662,
+      "author": {
+        "id": 1531247
+      },
+      "writtenOn": "2022-01-19T22:26:14Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "9781014e_e022990f",
       "range": {
         "startLine": 662,
         "startChar": 4,
