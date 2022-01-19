@@ -51,6 +51,126 @@
       "message": "Eyeballing it, looks like about a dozen traces are affected. I\u0027ll check them first thing next week to see if there are any performance degradations.\n\nAlso looks like some dEQP tests are not resilient enough? I\u0027ll have to investigate. Again, the code itself is good for review IMO.",
       "revId": "1359ada73cfb5cf6c1cedc4d2dd6c934a9c0ad07",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "94829326_2c30c6cb",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2022-01-19T03:47:57Z",
+      "side": 1,
+      "message": "LGTM\n\nThere is definitely dithering being applied when looking at the zoomed in images.   Most are difficult to tell there\u0027s anything going on, but there are some that look much better, like the road in subway_princess_runner.\n\nIt would be good to see what the performance hit before landing this though.",
+      "revId": "1359ada73cfb5cf6c1cedc4d2dd6c934a9c0ad07",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "bc50346c_42ff22cc",
+        "filename": "src/compiler/translator/ValidateAST.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 433,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2022-01-19T03:47:57Z",
+      "side": 1,
+      "message": "Return here so we don\u0027t get multiple error messages for the same thing?",
+      "revId": "1359ada73cfb5cf6c1cedc4d2dd6c934a9c0ad07",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "3b8bb5ce_66410350",
+        "filename": "src/compiler/translator/tree_ops/vulkan/EmulateDithering.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 2,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2022-01-19T03:47:57Z",
+      "side": 1,
+      "message": "nit: 2022",
+      "range": {
+        "startLine": 2,
+        "startChar": 13,
+        "endLine": 2,
+        "endChar": 17
+      },
+      "revId": "1359ada73cfb5cf6c1cedc4d2dd6c934a9c0ad07",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "3d3e7162_0b33b2fc",
+        "filename": "src/compiler/translator/tree_ops/vulkan/EmulateDithering.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2022-01-19T03:47:57Z",
+      "side": 1,
+      "message": "nit: It would be nice if the descriptions here and in the .h match:\n\n    // EmulateDithering: Adds code guarded by a specialization constant that emulate dithering on\n    // fragment shader outputs.",
+      "range": {
+        "startLine": 6,
+        "startChar": 0,
+        "endLine": 7,
+        "endChar": 26
+      },
+      "revId": "1359ada73cfb5cf6c1cedc4d2dd6c934a9c0ad07",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "9ce8b042_ea21d5a4",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 3016,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2022-01-19T03:47:57Z",
+      "side": 1,
+      "message": "My vote would be to leave it on everywhere, since it\u0027s only being done for specific formats.",
+      "range": {
+        "startLine": 3015,
+        "startChar": 0,
+        "endLine": 3016,
+        "endChar": 65
+      },
+      "revId": "1359ada73cfb5cf6c1cedc4d2dd6c934a9c0ad07",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "17038edc_2e941d8c",
+        "filename": "src/libANGLE/renderer/vulkan/vk_utils.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 826,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2022-01-19T03:47:57Z",
+      "side": 1,
+      "message": "nit: It would be good to indicate only 16 bits are actually used.\n    uint32_t dither; // Only uses 16 bits",
+      "revId": "1359ada73cfb5cf6c1cedc4d2dd6c934a9c0ad07",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
