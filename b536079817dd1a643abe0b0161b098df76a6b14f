@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "e7b5bce3_84b10142",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 3023,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2022-01-19T20:39:45Z",
+      "side": 1,
+      "message": "is this necessary? seems like it would be good to allow running on ARM Linux or other Linux based platforms.",
+      "range": {
+        "startLine": 3023,
+        "startChar": 72,
+        "endLine": 3023,
+        "endChar": 81
+      },
+      "revId": "b536079817dd1a643abe0b0161b098df76a6b14f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "df5e4b72_d06b4918",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 3030,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2022-01-19T20:39:45Z",
+      "side": 1,
+      "message": "same here",
+      "range": {
+        "startLine": 3030,
+        "startChar": 28,
+        "endLine": 3030,
+        "endChar": 37
+      },
+      "revId": "b536079817dd1a643abe0b0161b098df76a6b14f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
