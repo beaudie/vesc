@@ -88,6 +88,230 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "4838cb1b_dd681966",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 5
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1001921
+      },
+      "writtenOn": "2022-01-19T21:58:05Z",
+      "side": 1,
+      "message": "Chrome has this magic substitutions thing\nhttps://source.chromium.org/chromium/chromium/src/+/main:testing/buildbot/buildbot_json_magic_substitutions.py\nI wonder if it\u0027s possible to use it to automatically control xvfb/no-xvfb as needed.",
+      "revId": "3b0d451731f885ff01b49e251305754a5f91e7d2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "0753a530_a04ab7ab",
+        "filename": "infra/specs/test_suites.pyl",
+        "patchSetId": 5
+      },
+      "lineNbr": 63,
+      "author": {
+        "id": 1001921
+      },
+      "writtenOn": "2022-01-19T21:58:05Z",
+      "side": 1,
+      "message": "nit: not sure about GLES on Linux. Maybe ChromeOS is considered Linux? Anyway, I don\u0027t think we run these on Linux for now.",
+      "range": {
+        "startLine": 61,
+        "startChar": 0,
+        "endLine": 63,
+        "endChar": 10
+      },
+      "revId": "3b0d451731f885ff01b49e251305754a5f91e7d2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "d8183791_7c55e2f2",
+        "filename": "infra/specs/test_suites.pyl",
+        "patchSetId": 5
+      },
+      "lineNbr": 79,
+      "author": {
+        "id": 1001921
+      },
+      "writtenOn": "2022-01-19T21:58:05Z",
+      "side": 1,
+      "message": "nit: no Metal on Linux",
+      "range": {
+        "startLine": 77,
+        "startChar": 0,
+        "endLine": 79,
+        "endChar": 10
+      },
+      "revId": "3b0d451731f885ff01b49e251305754a5f91e7d2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "7937a09b_f5e88c1f",
+        "filename": "infra/specs/test_suites.pyl",
+        "patchSetId": 5
+      },
+      "lineNbr": 121,
+      "author": {
+        "id": 1001921
+      },
+      "writtenOn": "2022-01-19T21:58:05Z",
+      "side": 1,
+      "message": "nit: no d3d11 on Linux",
+      "range": {
+        "startLine": 119,
+        "startChar": 0,
+        "endLine": 121,
+        "endChar": 10
+      },
+      "revId": "3b0d451731f885ff01b49e251305754a5f91e7d2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ab4ec8d3_f1a202ca",
+        "filename": "infra/specs/test_suites.pyl",
+        "patchSetId": 5
+      },
+      "lineNbr": 160,
+      "author": {
+        "id": 1001921
+      },
+      "writtenOn": "2022-01-19T21:58:05Z",
+      "side": 1,
+      "message": "ditto",
+      "range": {
+        "startLine": 158,
+        "startChar": 0,
+        "endLine": 160,
+        "endChar": 10
+      },
+      "revId": "3b0d451731f885ff01b49e251305754a5f91e7d2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "1e4905cc_26fd10a4",
+        "filename": "infra/specs/test_suites.pyl",
+        "patchSetId": 5
+      },
+      "lineNbr": 176,
+      "author": {
+        "id": 1001921
+      },
+      "writtenOn": "2022-01-19T21:58:05Z",
+      "side": 1,
+      "message": "ditto",
+      "range": {
+        "startLine": 174,
+        "startChar": 0,
+        "endLine": 176,
+        "endChar": 10
+      },
+      "revId": "3b0d451731f885ff01b49e251305754a5f91e7d2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "0345f9f4_e7127350",
+        "filename": "infra/specs/test_suites.pyl",
+        "patchSetId": 5
+      },
+      "lineNbr": 215,
+      "author": {
+        "id": 1001921
+      },
+      "writtenOn": "2022-01-19T21:58:05Z",
+      "side": 1,
+      "message": "ditto",
+      "range": {
+        "startLine": 213,
+        "startChar": 0,
+        "endLine": 215,
+        "endChar": 10
+      },
+      "revId": "3b0d451731f885ff01b49e251305754a5f91e7d2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "cedf1f42_c380c892",
+        "filename": "infra/specs/test_suites.pyl",
+        "patchSetId": 5
+      },
+      "lineNbr": 336,
+      "author": {
+        "id": 1001921
+      },
+      "writtenOn": "2022-01-19T21:58:05Z",
+      "side": 1,
+      "message": "ditto",
+      "range": {
+        "startLine": 334,
+        "startChar": 0,
+        "endLine": 336,
+        "endChar": 10
+      },
+      "revId": "3b0d451731f885ff01b49e251305754a5f91e7d2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "f7c729d0_93df3bd0",
+        "filename": "infra/specs/test_suites.pyl",
+        "patchSetId": 5
+      },
+      "lineNbr": 381,
+      "author": {
+        "id": 1001921
+      },
+      "writtenOn": "2022-01-19T21:58:05Z",
+      "side": 1,
+      "message": "ditto",
+      "range": {
+        "startLine": 379,
+        "startChar": 0,
+        "endLine": 381,
+        "endChar": 10
+      },
+      "revId": "3b0d451731f885ff01b49e251305754a5f91e7d2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b5eb008f_2e8edbe9",
+        "filename": "infra/specs/test_suites.pyl",
+        "patchSetId": 5
+      },
+      "lineNbr": 399,
+      "author": {
+        "id": 1001921
+      },
+      "writtenOn": "2022-01-19T21:58:05Z",
+      "side": 1,
+      "message": "ditto",
+      "range": {
+        "startLine": 397,
+        "startChar": 0,
+        "endLine": 399,
+        "endChar": 10
+      },
+      "revId": "3b0d451731f885ff01b49e251305754a5f91e7d2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "f252988e_d6328d65",
