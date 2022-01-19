@@ -1,6 +1,23 @@
 {
   "comments": [
     {
+      "unresolved": true,
+      "key": {
+        "uuid": "8861c2bb_534d992b",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 5
+      },
+      "lineNbr": 11,
+      "author": {
+        "id": 1001921
+      },
+      "writtenOn": "2022-01-19T19:28:07Z",
+      "side": 1,
+      "message": "Also switch from passing --bot-mode to run_gtest_angle_test,\nto using --test-launcher-bot-mode, which is added to the default test runner args by mb.py.",
+      "revId": "3b0d451731f885ff01b49e251305754a5f91e7d2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": false,
       "key": {
         "uuid": "a5d38d2e_3342db4f",
@@ -53,6 +70,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "2718c805_a8f3db00",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 5
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1001921
+      },
+      "writtenOn": "2022-01-19T19:28:07Z",
+      "side": 1,
+      "message": "Rebasing my Chromium-side CL.\nBut I\u0027ll take care of rolling result merge fixes into Chromium first.",
+      "parentUuid": "31636864_83e2c914",
+      "revId": "3b0d451731f885ff01b49e251305754a5f91e7d2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "f252988e_d6328d65",
@@ -90,6 +125,30 @@
       "side": 1,
       "message": "This is now implicitly added by the run wrapper scripts.",
       "parentUuid": "f252988e_d6328d65",
+      "range": {
+        "startLine": 1370,
+        "startChar": 23,
+        "endLine": 1370,
+        "endChar": 47
+      },
+      "revId": "3b0d451731f885ff01b49e251305754a5f91e7d2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "13190887_819b6ce9",
+        "filename": "src/tests/test_utils/runner/TestSuite.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 1370,
+      "author": {
+        "id": 1001921
+      },
+      "writtenOn": "2022-01-19T19:28:07Z",
+      "side": 1,
+      "message": "Ah, I see.\nIn https://chromium.googlesource.com/chromium/src/+/a612c9daf9b041e5162eec5f9dafb9fbc32cb50e/tools/mb/mb.py#1795\nThanks, this makes sense to me now.",
+      "parentUuid": "5a3890bf_15deb12b",
       "range": {
         "startLine": 1370,
         "startChar": 23,
