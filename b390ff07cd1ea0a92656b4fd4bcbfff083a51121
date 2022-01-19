@@ -26,6 +26,30 @@
     {
       "unresolved": false,
       "key": {
+        "uuid": "84c81c23_6a2b6d59",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 2
+      },
+      "lineNbr": 11,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2022-01-19T15:18:39Z",
+      "side": 1,
+      "message": "This is only a partial solve for the real issue (EGL images are not thread safe when used cross-share group) but will let us verify that the issue is related to missing synchronization. \n\nEventually I\u0027d like to get to the point where chrome stops using the display level texture sharing and ANGLE has proper EGL image locking.",
+      "parentUuid": "fbdf2488_06552bba",
+      "range": {
+        "startLine": 10,
+        "startChar": 22,
+        "endLine": 11,
+        "endChar": 51
+      },
+      "revId": "b390ff07cd1ea0a92656b4fd4bcbfff083a51121",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
         "uuid": "8aee7ef8_96fb51f4",
         "filename": "/PATCHSET_LEVEL",
         "patchSetId": 2
@@ -54,6 +78,24 @@
       "writtenOn": "2022-01-18T21:21:44Z",
       "side": 1,
       "message": "LGTM % comment.\nhavent verified this fix locally yet. will get back in sometime to report if the fix works locally.",
+      "revId": "b390ff07cd1ea0a92656b4fd4bcbfff083a51121",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "daa3492e_d6956c5f",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2022-01-19T15:18:39Z",
+      "side": 1,
+      "message": "Given that we haven\u0027t reproduced any of the crashes locally, I think it\u0027s fine to land this as is and watch the crash reports.",
+      "parentUuid": "0e808d23_96384a10",
       "revId": "b390ff07cd1ea0a92656b4fd4bcbfff083a51121",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
