@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "d53b3d01_ef1371eb",
+        "filename": "src/libANGLE/ErrorStrings.h",
+        "patchSetId": 4
+      },
+      "lineNbr": 524,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2022-01-19T19:46:37Z",
+      "side": 1,
+      "message": "nit: label",
+      "range": {
+        "startLine": 524,
+        "startChar": 85,
+        "endLine": 524,
+        "endChar": 90
+      },
+      "revId": "673f3315358138e105060918cb8e72c1db02a888",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
