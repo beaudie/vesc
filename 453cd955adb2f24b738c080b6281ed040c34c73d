@@ -45,6 +45,30 @@
       },
       "revId": "453cd955adb2f24b738c080b6281ed040c34c73d",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "18f09b36_05d19ab4",
+        "filename": "src/libANGLE/renderer/d3d/d3d11/Renderer11.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 722,
+      "author": {
+        "id": 1326275
+      },
+      "writtenOn": "2022-01-19T15:17:44Z",
+      "side": 1,
+      "message": "I was worried about the naming causing confusion. See https://chromium-review.googlesource.com/c/angle/angle/+/3370661/comments/87f7905d_c9397075\n\nThis refers to a \"system device Id\" that we define as part of the spec of EGL_ANGLE_platform_angle_display_id. On windows that\u0027s just set to the LUID. (On mac it\u0027s the registry Id)\nThe idea is to move the spec toward a platform-independent GPU specifier.\n\nThis doesn\u0027t refer to the PCI device Id.",
+      "parentUuid": "6dfe9d66_74a34b36",
+      "range": {
+        "startLine": 721,
+        "startChar": 16,
+        "endLine": 722,
+        "endChar": 52
+      },
+      "revId": "453cd955adb2f24b738c080b6281ed040c34c73d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
