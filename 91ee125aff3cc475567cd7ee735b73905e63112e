@@ -33,6 +33,23 @@
       "message": "Also adding Jamie. Do we want to start generating dynamic strings for our errors again?\n\nMain thing I\u0027m worried about is that these errors make it all the way to the javascript console for WebGL.",
       "revId": "91ee125aff3cc475567cd7ee735b73905e63112e",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "a8b5ebaa_93314d3b",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2022-01-19T15:41:53Z",
+      "side": 1,
+      "message": "Instead of using streams, could you instead update our error functions and message to accept \"printf\" style varargs formatting?",
+      "revId": "91ee125aff3cc475567cd7ee735b73905e63112e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
