@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "4f0ca598_b857cc48",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1001921
+      },
+      "writtenOn": "2022-01-19T23:34:59Z",
+      "side": 1,
+      "message": "https://ci.chromium.org/ui/p/chromium/builders/try/android-binary-size/1009860/overview isn\u0027t happy about 33905 bytes this adds to Chrome APK size.\n\nIs there something we could do to reduce it?",
+      "revId": "28f223acb4a1b1edb8b179675098e3012746af17",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
