@@ -897,6 +897,8 @@ void MaybeResetResources(ResourceIDType resourceIDType,
             ResourceCalls &bufferRegenCalls   = trackedBuffers.getResourceRegenCalls();
             ResourceCalls &bufferRestoreCalls = trackedBuffers.getResourceRestoreCalls();
 
+            ResourceSet &startingBuffers = trackedBuffers.getStartingResources();
+
             BufferCalls &bufferMapCalls   = resourceTracker->getBufferMapCalls();
             BufferCalls &bufferUnmapCalls = resourceTracker->getBufferUnmapCalls();
 
@@ -907,6 +909,7 @@ void MaybeResetResources(ResourceIDType resourceIDType,
                 ResourceSet::iterator bufferIter = newBuffers.begin();
                 for (size_t i = 0; bufferIter != newBuffers.end(); ++i, ++bufferIter)
                 {
+                    ASSERT(startingBuffers.find(*bufferIter) == startingBuffers.end());
                     if (i > 0)
                     {
                         out << ", ";
@@ -963,7 +966,6 @@ void MaybeResetResources(ResourceIDType resourceIDType,
             }
 
             // Update the map/unmap of buffers to match the starting state
-            ResourceSet startingBuffers = trackedBuffers.getStartingResources();
             for (GLuint id : startingBuffers)
             {
                 // If the buffer was mapped at the start, but is not mapped now, we need to map
@@ -1007,7 +1009,9 @@ void MaybeResetResources(ResourceIDType resourceIDType,
         {
             ResourceSet &newFramebuffers =
                 resourceTracker->getTrackedResource(ResourceIDType::Framebuffer).getNewResources();
-
+            const ResourceSet &startingFramebuffers =
+                resourceTracker->getTrackedResource(ResourceIDType::Framebuffer)
+                    .getStartingResources();
             // If we have any new framebuffers generated and not deleted during the run, delete them
             // now
             if (!newFramebuffers.empty())
@@ -1016,6 +1020,9 @@ void MaybeResetResources(ResourceIDType resourceIDType,
                 ResourceSet::iterator framebufferIter = newFramebuffers.begin();
                 for (size_t i = 0; framebufferIter != newFramebuffers.end(); ++i, ++framebufferIter)
                 {
+                    ASSERT(startingFramebuffers.find(*framebufferIter) ==
+                           startingFramebuffers.end());
+
                     if (i > 0)
                     {
                         out << ", ";
@@ -1042,7 +1049,9 @@ void MaybeResetResources(ResourceIDType resourceIDType,
         {
             ResourceSet &newRenderbuffers =
                 resourceTracker->getTrackedResource(ResourceIDType::Renderbuffer).getNewResources();
-
+            const ResourceSet &startingRenderbuffers =
+                resourceTracker->getTrackedResource(ResourceIDType::Renderbuffer)
+                    .getStartingResources();
             // If we have any new renderbuffers generated and not deleted during the run, delete
             // them now
             if (!newRenderbuffers.empty())
@@ -1052,6 +1061,9 @@ void MaybeResetResources(ResourceIDType resourceIDType,
                 for (size_t i = 0; renderbufferIter != newRenderbuffers.end();
                      ++i, ++renderbufferIter)
                 {
+                    ASSERT(startingRenderbuffers.find(*renderbufferIter) ==
+                           startingRenderbuffers.end());
+
                     if (i > 0)
                     {
                         out << ", ";
@@ -1101,6 +1113,9 @@ void MaybeResetResources(ResourceIDType resourceIDType,
             ResourceCalls &textureRegenCalls   = trackedTextures.getResourceRegenCalls();
             ResourceCalls &textureRestoreCalls = trackedTextures.getResourceRestoreCalls();
 
+            const ResourceSet &startingTextures =
+                resourceTracker->getTrackedResource(ResourceIDType::Texture).getStartingResources();
+
             // If we have any new textures generated and not deleted during the run, delete them now
             if (!newTextures.empty())
             {
@@ -1108,6 +1123,7 @@ void MaybeResetResources(ResourceIDType resourceIDType,
                 ResourceSet::iterator textureIter = newTextures.begin();
                 for (size_t i = 0; textureIter != newTextures.end(); ++i, ++textureIter)
                 {
+                    ASSERT(startingTextures.find(*textureIter) == startingTextures.end());
                     if (i > 0)
                     {
                         out << ", ";
@@ -1153,7 +1169,9 @@ void MaybeResetResources(ResourceIDType resourceIDType,
         {
             ResourceSet &newVertextArrays =
                 resourceTracker->getTrackedResource(ResourceIDType::VertexArray).getNewResources();
-
+            const ResourceSet &startingVertextArrays =
+                resourceTracker->getTrackedResource(ResourceIDType::VertexArray)
+                    .getStartingResources();
             // If we have any new vertex arrays generated and not deleted during the run, delete
             // them now
             if (!newVertextArrays.empty())
@@ -1163,6 +1181,9 @@ void MaybeResetResources(ResourceIDType resourceIDType,
                 for (size_t i = 0; vertexArrayIter != newVertextArrays.end();
                      ++i, ++vertexArrayIter)
                 {
+                    ASSERT(startingVertextArrays.find(*vertexArrayIter) ==
+                           startingVertextArrays.end());
+
                     if (i > 0)
                     {
                         out << ", ";
