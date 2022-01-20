@@ -118,6 +118,30 @@
       },
       "revId": "2e49233b3affeb4f1f438d536bf735087ea05a70",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "175d0ab6_fb31487b",
+        "filename": "src/libANGLE/renderer/vulkan/TextureVk.cpp",
+        "patchSetId": 10
+      },
+      "lineNbr": 2390,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2022-01-20T18:32:39Z",
+      "side": 1,
+      "message": "I think the above concern are addressed with you new patch. Thanks for that. I think the remaining concern really is how this tracking is implemented. My preference is that we should do a more general per level data valid tracking, that is more systematic and not just for this optimization. Then you do not have to limit this optimization to only for a single level update. But that is not correctness issue, more of cleanness. So I am giving +1 here and let you address other folks\u0027 concerns.",
+      "parentUuid": "08698099_ccb11af1",
+      "range": {
+        "startLine": 2387,
+        "startChar": 9,
+        "endLine": 2390,
+        "endChar": 85
+      },
+      "revId": "2e49233b3affeb4f1f438d536bf735087ea05a70",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
