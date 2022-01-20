@@ -104,6 +104,24 @@
       "parentUuid": "847a8b83_4c5bbaa7",
       "revId": "c0b1a35a1f30236c19cea2b07454d270ecdbc75d",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "d6da6e64_96b127dc",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 16
+      },
+      "lineNbr": 1354,
+      "author": {
+        "id": 1524687
+      },
+      "writtenOn": "2022-01-20T09:09:58Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "9fc90dc9_e68a4402",
+      "revId": "c0b1a35a1f30236c19cea2b07454d270ecdbc75d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
