@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "68152f8b_80d01117",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1491687
+      },
+      "writtenOn": "2022-01-20T17:31:16Z",
+      "side": 1,
+      "message": "I used these assertions to debug that `mNewResources` do not contain any `mStartingResources` in `MaybeResetResources`. Not sure if this worth keeping. ",
+      "revId": "f310c7b6752d7e24a1579dc7fa5681eeeadf59fa",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
