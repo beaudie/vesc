@@ -467,7 +467,7 @@ constexpr SkippedSyncvalMessage kSkippedSyncvalMessages[] = {
     },
     {
         "SYNC-HAZARD-WRITE_AFTER_READ",
-        "vkCmdDraw: Hazard WRITE_AFTER_READ for VkBuffer",
+        "vkCmdDraw: Hazard WRITE_AFTER_READ for",
         "Access info (usage: SYNC_VERTEX_SHADER_SHADER_STORAGE_WRITE, prior_usage: "
         "SYNC_VERTEX_ATTRIBUTE_INPUT_VERTEX_ATTRIBUTE_READ",
     },
