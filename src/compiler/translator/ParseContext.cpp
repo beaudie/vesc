@@ -2818,10 +2818,11 @@ void TParseContext::checkGeometryShaderInputAndSetArraySize(const TSourceLoc &lo
                 // [GLSL ES 3.2 SPEC Chapter 4.4.1.2]
                 // An input can be declared without an array size if there is a previous layout
                 // which specifies the size.
-                error(location,
-                      "Missing a valid input primitive declaration before declaring an unsized "
-                      "array input",
-                      token);
+                warning(location,
+                        "Missing a valid input primitive declaration before declaring an unsized "
+                        "array input",
+                        "Deferred");
+                mGeometryDeferredArrayTypesToSize.push_back(type);
             }
         }
         else if (type->isArray())
@@ -3430,6 +3431,13 @@ bool TParseContext::parseGeometryShaderInputLayoutQualifier(const TTypeQualifier
     // Set mGeometryInputPrimitiveType if exists
     if (layoutQualifier.primitiveType != EptUndefined)
     {
+        // Size any implicitly sized arrays that have already been declared.
+        for (TType *type : mGeometryDeferredArrayTypesToSize)
+        {
+            type->sizeOutermostUnsizedArray(
+                symbolTable.getGlInVariableWithArraySize()->getType().getOutermostArraySize());
+        }
+
         if (!checkPrimitiveTypeMatchesTypeQualifier(typeQualifier))
         {
             error(typeQualifier.line, "invalid primitive type for 'in' layout", "layout");
