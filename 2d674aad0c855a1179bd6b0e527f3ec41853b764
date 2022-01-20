@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "d4e8aed5_da756e65",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 17
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1524687
+      },
+      "writtenOn": "2022-01-20T09:07:22Z",
+      "side": 1,
+      "message": "Update handling image layout transition validation fail issue.\n\nList again of the failed case api sequence:\ndispatch write image  (layout: TRANSFER-\u003eGENERAL)\ngraphics read texture (layout: GENERAL-\u003eSHADER_READONLY)\ndispatch write image  (layout: SHADER_READONLY-\u003eGENERAL)\ngraphics read texture (layout: GENERAL-\u003eSHADER_READONLY)\nSeems there are at least two opportunities to endRP:\n1) when switching program from hasImage() to !hasImage(), in the handleDirtyTextureImpl, close the RP after issued the image read barrier. This is the frontest opportunity to endRP.\n2) Or we can defer the closure operation on RP, till the next outsiderRP command is requested. The trigger of outsiderRP commands seems include two types. one is the compute commands, and the other cases which have already handled by flushCommandBuffersIfNecessary().\nFor compute command case, when image used as shader resource, the write operation needs a layout transition (dst layout as GENERAL). We can do the closure RP here by checking if necessary, as this commit code shows, handle in ContextVk::invalidateCurrentShaderResources, and add new RPclosureReason: ImageReadThenComputeWrite.\n\nFurthermore, if the compute read image based read-after-write, the api sequence as:\ndispatch read texture (layout: TRANSFER-\u003eSHADER_READONLY)\ngraphics write image  (layout: SHADER_READONLY-\u003eGENERAL)\ndispatch read texture (layout: GENERAL-\u003eSHADER_READONLY)\ngraphics write image  (layout: SHADER_READONLY-\u003eGENERAL)\nBefore do the second dispatch read texture, an endRP is also needed, and this has been already handled in ContextVk::invalidateCurrentTextures.\n\n\n\n",
+      "revId": "2d674aad0c855a1179bd6b0e527f3ec41853b764",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}

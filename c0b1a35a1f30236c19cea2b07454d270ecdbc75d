@@ -86,6 +86,24 @@
       "parentUuid": "afd5c205_c507ffd2",
       "revId": "c0b1a35a1f30236c19cea2b07454d270ecdbc75d",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "9fc90dc9_e68a4402",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 16
+      },
+      "lineNbr": 1354,
+      "author": {
+        "id": 1524687
+      },
+      "writtenOn": "2022-01-20T09:07:22Z",
+      "side": 1,
+      "message": "DONE. Revert it.",
+      "parentUuid": "847a8b83_4c5bbaa7",
+      "revId": "c0b1a35a1f30236c19cea2b07454d270ecdbc75d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
