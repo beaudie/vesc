@@ -946,19 +946,20 @@ class BufferBlock final : angle::NonCopyable
     angle::Result init(ContextVk *contextVk,
                        Buffer &buffer,
                        vma::VirtualBlockCreateFlags flags,
-                       Allocation &allocation,
+                       DeviceMemory &deviceMemory,
                        VkMemoryPropertyFlags memoryPropertyFlags,
                        VkDeviceSize size);
     void initWithoutVirtualBlock(ContextVk *contextVk,
                                  Buffer &buffer,
-                                 Allocation &allocation,
+                                 DeviceMemory &deviceMemory,
                                  VkMemoryPropertyFlags memoryPropertyFlags,
                                  VkDeviceSize size);
 
     BufferBlock &operator=(BufferBlock &&other);
 
     Buffer *getBuffer();
-    const Allocation &getAllocation() const;
+    const DeviceMemory &getDeviceMemory() const;
+    DeviceMemory *getDeviceMemory() { return &mDeviceMemory; }
     BufferSerial getBufferSerial() const { return mSerial; }
 
     VkMemoryPropertyFlags getMemoryPropertyFlags() const;
@@ -972,8 +973,8 @@ class BufferBlock final : angle::NonCopyable
     bool isHostVisible() const;
     bool isCoherent() const;
     bool isMapped() const;
-    angle::Result map(ContextVk *contextVk);
-    void unmap(const Allocator &allocator);
+    VkResult map(const VkDevice device);
+    void unmap(const VkDevice device);
     uint8_t *getMappedMemory() const;
 
     // This should be called whenever this found to be empty. The total number of count of empty is
@@ -987,7 +988,7 @@ class BufferBlock final : angle::NonCopyable
     VirtualBlock mVirtualBlock;
 
     Buffer mBuffer;
-    Allocation mAllocation;
+    DeviceMemory mDeviceMemory;
     VkMemoryPropertyFlags mMemoryPropertyFlags;
     VkDeviceSize mSize;
     uint8_t *mMappedMemory;
@@ -1045,21 +1046,21 @@ class BufferSubAllocation final : public WrappedObject<BufferSubAllocation, VmaB
     VkResult init(VkDevice device, BufferBlock *block, VkDeviceSize offset, VkDeviceSize size);
     VkResult initWithEntireBuffer(ContextVk *contextVk,
                                   Buffer &buffer,
-                                  Allocation &allocation,
+                                  DeviceMemory &deviceMemory,
                                   VkMemoryPropertyFlags memoryPropertyFlags,
                                   VkDeviceSize size);
 
     BufferBlock *getBlock() const;
     const Buffer &getBuffer() const;
     VkDeviceSize getSize() const;
-    const Allocation &getAllocation() const;
+    const DeviceMemory &getDeviceMemory() const;
     VkMemoryMapFlags getMemoryPropertyFlags() const;
     bool isHostVisible() const;
     bool isCoherent() const;
     bool isMapped() const;
     uint8_t *getMappedMemory() const;
-    void flush(const Allocator &allocator) const;
-    void invalidate(const Allocator &allocator) const;
+    void flush(const VkDevice &device);
+    void invalidate(const VkDevice &device);
     VkDeviceSize getOffset() const;
 };
 
