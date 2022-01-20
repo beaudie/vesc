@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b89f7182_9cb5131a",
+        "filename": "src/common/debug.h",
+        "patchSetId": 5
+      },
+      "lineNbr": 144,
+      "author": {
+        "id": 1130144
+      },
+      "writtenOn": "2022-01-20T22:40:56Z",
+      "side": 1,
+      "message": "Now that we have 4 single letter template arguments instead of just two, understanding which one is what is no longer straightforward without careful study of the code.\n\nSuggest you add a multi-line comment that, for each one, describes what it is and provides suggested choices.",
+      "range": {
+        "startLine": 144,
+        "startChar": 10,
+        "endLine": 144,
+        "endChar": 51
+      },
+      "revId": "319e62afcad2340e9d7978eccb1e19bcf2e991ba",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
