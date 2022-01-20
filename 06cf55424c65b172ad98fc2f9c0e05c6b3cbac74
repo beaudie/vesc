@@ -89,6 +89,24 @@
     {
       "unresolved": false,
       "key": {
+        "uuid": "c96f6a9c_39b4a36a",
+        "filename": "src/compiler/translator/TranslatorMetalDirect/GuardFragDepthWrite.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 34,
+      "author": {
+        "id": 1529502
+      },
+      "writtenOn": "2022-01-20T23:01:31Z",
+      "side": 1,
+      "message": "Thanks, done",
+      "parentUuid": "00e7f2e7_8e6d4e37",
+      "revId": "06cf55424c65b172ad98fc2f9c0e05c6b3cbac74",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
         "uuid": "abd4b779_7f8936aa",
         "filename": "src/compiler/translator/TranslatorMetalDirect/GuardFragDepthWrite.cpp",
         "patchSetId": 3
@@ -100,6 +118,24 @@
       "writtenOn": "2022-01-13T06:06:59Z",
       "side": 1,
       "message": "nit: Metal should really be updated to properly add spec consts as AST variables. We support that.",
+      "revId": "06cf55424c65b172ad98fc2f9c0e05c6b3cbac74",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "39543fba_a06ef680",
+        "filename": "src/compiler/translator/TranslatorMetalDirect/GuardFragDepthWrite.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 37,
+      "author": {
+        "id": 1529502
+      },
+      "writtenOn": "2022-01-20T23:01:31Z",
+      "side": 1,
+      "message": "I agree, I\u0027ve added a comment. That change is more involved and should be done separately.",
+      "parentUuid": "abd4b779_7f8936aa",
       "revId": "06cf55424c65b172ad98fc2f9c0e05c6b3cbac74",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
