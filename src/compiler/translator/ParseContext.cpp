@@ -1237,23 +1237,6 @@ void TParseContext::checkCanBeDeclaredWithoutInitializer(const TSourceLoc &line,
             error(line, "variables with qualifier 'const' must be initialized", identifier);
         }
     }
-
-    // Implicitly declared arrays are disallowed for shaders other than tessellation shaders.
-    if (mShaderType != GL_TESS_CONTROL_SHADER && mShaderType != GL_TESS_EVALUATION_SHADER &&
-        type->isArray())
-    {
-        const TSpan<const unsigned int> &arraySizes = type->getArraySizes();
-        for (unsigned int size : arraySizes)
-        {
-            if (size == 0)
-            {
-                error(line,
-                      "implicitly sized arrays disallowed for shaders that are not tessellation "
-                      "shaders",
-                      identifier);
-            }
-        }
-    }
 }
 
 // Do some simple checks that are shared between all variable declarations,
@@ -2818,10 +2801,11 @@ void TParseContext::checkGeometryShaderInputAndSetArraySize(const TSourceLoc &lo
                 // [GLSL ES 3.2 SPEC Chapter 4.4.1.2]
                 // An input can be declared without an array size if there is a previous layout
                 // which specifies the size.
-                error(location,
-                      "Missing a valid input primitive declaration before declaring an unsized "
-                      "array input",
-                      token);
+                warning(location,
+                        "Missing a valid input primitive declaration before declaring an unsized "
+                        "array input",
+                        "Deferred");
+                mGeometryDeferredArrayTypesToSize.push_back(type);
             }
         }
         else if (type->isArray())
@@ -3448,6 +3432,13 @@ bool TParseContext::parseGeometryShaderInputLayoutQualifier(const TTypeQualifier
             error(typeQualifier.line, "primitive doesn't match earlier input primitive declaration",
                   "layout");
             return false;
+        }
+
+        // Size any implicitly sized arrays that have already been declared.
+        for (TType *type : mGeometryDeferredArrayTypesToSize)
+        {
+            type->sizeOutermostUnsizedArray(
+                symbolTable.getGlInVariableWithArraySize()->getType().getOutermostArraySize());
         }
     }
 

@@ -739,6 +739,7 @@ class TParseContext : angle::NonCopyable
     // List of array declarations without an explicit size that have come before layout(vertices=N).
     // Once the vertex count is specified, these arrays are sized.
     TVector<TType *> mTessControlDeferredArrayTypesToSize;
+    TVector<TType *> mGeometryDeferredArrayTypesToSize;
     // Whether the |precise| keyword has been seen in the shader.
     bool mHasAnyPreciseType;
 
