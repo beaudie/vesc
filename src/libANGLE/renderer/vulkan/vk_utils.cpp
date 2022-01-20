@@ -1682,7 +1682,7 @@ BufferBlock::BufferBlock() : mMemoryPropertyFlags(0), mSize(0), mMappedMemory(nu
 BufferBlock::BufferBlock(BufferBlock &&other)
     : mVirtualBlock(std::move(other.mVirtualBlock)),
       mBuffer(std::move(other.mBuffer)),
-      mAllocation(std::move(other.mAllocation)),
+      mDeviceMemory(std::move(other.mDeviceMemory)),
       mMemoryPropertyFlags(other.mMemoryPropertyFlags),
       mSize(other.mSize),
       mMappedMemory(other.mMappedMemory),
@@ -1694,7 +1694,7 @@ BufferBlock &BufferBlock::operator=(BufferBlock &&other)
 {
     std::swap(mVirtualBlock, other.mVirtualBlock);
     std::swap(mBuffer, other.mBuffer);
-    std::swap(mAllocation, other.mAllocation);
+    std::swap(mDeviceMemory, other.mDeviceMemory);
     std::swap(mMemoryPropertyFlags, other.mMemoryPropertyFlags);
     std::swap(mSize, other.mSize);
     std::swap(mMappedMemory, other.mMappedMemory);
@@ -1707,7 +1707,7 @@ BufferBlock::~BufferBlock()
 {
     ASSERT(!mVirtualBlock.valid());
     ASSERT(!mBuffer.valid());
-    ASSERT(!mAllocation.valid());
+    ASSERT(!mDeviceMemory.valid());
 }
 
 void BufferBlock::destroy(RendererVk *renderer)
@@ -1716,31 +1716,31 @@ void BufferBlock::destroy(RendererVk *renderer)
 
     if (mMappedMemory)
     {
-        unmap(renderer->getAllocator());
+        unmap(device);
     }
 
     mVirtualBlock.destroy(device);
     mBuffer.destroy(device);
-    mAllocation.destroy(renderer->getAllocator());
+    mDeviceMemory.destroy(device);
 }
 
 angle::Result BufferBlock::init(ContextVk *contextVk,
                                 Buffer &buffer,
                                 vma::VirtualBlockCreateFlags flags,
-                                Allocation &allocation,
+                                DeviceMemory &deviceMemory,
                                 VkMemoryPropertyFlags memoryPropertyFlags,
                                 VkDeviceSize size)
 {
     RendererVk *renderer = contextVk->getRenderer();
     ASSERT(!mVirtualBlock.valid());
     ASSERT(!mBuffer.valid());
-    ASSERT(!mAllocation.valid());
+    ASSERT(!mDeviceMemory.valid());
 
     mVirtualBlockMutex.init(renderer->isAsyncCommandQueueEnabled());
     ANGLE_VK_TRY(contextVk, mVirtualBlock.init(renderer->getDevice(), flags, size));
 
     mBuffer              = std::move(buffer);
-    mAllocation          = std::move(allocation);
+    mDeviceMemory        = std::move(deviceMemory);
     mMemoryPropertyFlags = memoryPropertyFlags;
     mSize                = size;
     mMappedMemory        = nullptr;
@@ -1751,34 +1751,32 @@ angle::Result BufferBlock::init(ContextVk *contextVk,
 
 void BufferBlock::initWithoutVirtualBlock(ContextVk *contextVk,
                                           Buffer &buffer,
-                                          Allocation &allocation,
+                                          DeviceMemory &deviceMemory,
                                           VkMemoryPropertyFlags memoryPropertyFlags,
                                           VkDeviceSize size)
 {
     RendererVk *renderer = contextVk->getRenderer();
     ASSERT(!mVirtualBlock.valid());
     ASSERT(!mBuffer.valid());
-    ASSERT(!mAllocation.valid());
+    ASSERT(!mDeviceMemory.valid());
 
     mBuffer              = std::move(buffer);
-    mAllocation          = std::move(allocation);
+    mDeviceMemory        = std::move(deviceMemory);
     mMemoryPropertyFlags = memoryPropertyFlags;
     mSize                = size;
     mMappedMemory        = nullptr;
     mSerial              = renderer->getResourceSerialFactory().generateBufferSerial();
 }
 
-angle::Result BufferBlock::map(ContextVk *contextVk)
+VkResult BufferBlock::map(const VkDevice device)
 {
     ASSERT(mMappedMemory == nullptr);
-    ANGLE_VK_TRY(contextVk,
-                 mAllocation.map(contextVk->getRenderer()->getAllocator(), &mMappedMemory));
-    return angle::Result::Continue;
+    return mDeviceMemory.map(device, 0, mSize, 0, &mMappedMemory);
 }
 
-void BufferBlock::unmap(const Allocator &allocator)
+void BufferBlock::unmap(const VkDevice device)
 {
-    mAllocation.unmap(allocator);
+    mDeviceMemory.unmap(device);
     mMappedMemory = nullptr;
 }
 
