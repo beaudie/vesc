@@ -121,6 +121,30 @@
       },
       "revId": "08e0f86aa0c748f26abe8b91e414402212c35a50",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "170fa7cf_18eb6190",
+        "filename": "src/libANGLE/renderer/glslang_wrapper_utils.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 1320,
+      "author": {
+        "id": 1359667
+      },
+      "writtenOn": "2022-01-20T01:54:56Z",
+      "side": 1,
+      "message": "You were correct, I stepped through writeOutputPrologue() and it doesn\u0027t do anything related to gl_Position for TCS. Done.",
+      "parentUuid": "7ac43c8c_034ca607",
+      "range": {
+        "startLine": 1319,
+        "startChar": 89,
+        "endLine": 1320,
+        "endChar": 38
+      },
+      "revId": "08e0f86aa0c748f26abe8b91e414402212c35a50",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
