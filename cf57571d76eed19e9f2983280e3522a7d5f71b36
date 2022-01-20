@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "17de0361_166c16db",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2022-01-20T20:49:38Z",
+      "side": 1,
+      "message": "LGTM. \"allocate\" is also OK because suballocation is implied.",
+      "revId": "cf57571d76eed19e9f2983280e3522a7d5f71b36",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
