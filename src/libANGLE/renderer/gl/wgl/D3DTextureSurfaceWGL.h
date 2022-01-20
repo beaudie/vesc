@@ -37,7 +37,8 @@ class D3DTextureSurfaceWGL : public SurfaceWGL
 
     static egl::Error ValidateD3DTextureClientBuffer(EGLenum buftype,
                                                      EGLClientBuffer clientBuffer,
-                                                     ID3D11Device *d3d11Device);
+                                                     ID3D11Device *d3d11Device,
+                                                     ID3D11Device1 *d3d11Device1);
 
     egl::Error initialize(const egl::Display *display) override;
     egl::Error makeCurrent(const gl::Context *context) override;
@@ -74,6 +75,7 @@ class D3DTextureSurfaceWGL : public SurfaceWGL
     EGLClientBuffer mClientBuffer;
 
     ID3D11Device *mDisplayD3D11Device;
+    ID3D11Device1 *mDisplayD3D11Device1;
 
     DisplayWGL *mDisplay;
     StateManagerGL *mStateManager;
