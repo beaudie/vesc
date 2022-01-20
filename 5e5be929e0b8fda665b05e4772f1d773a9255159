@@ -16,6 +16,29 @@
       "message": "When capturing dead_by_daylight I found a regression introduced by 462cdb08e395edbf5bace1408715e35239a0b1fa that deleted all resources created in `SetupReplay` in `ResetReplay`.\nI found several inconsistencies in `mStartingResources` and `mNewResources` tracking that prevented that patch to work correctly with MEC.\nThis patch fixes capture for `dead_by_daylight`. I did not test other apps yet.",
       "revId": "5e5be929e0b8fda665b05e4772f1d773a9255159",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "96589dea_54a54878",
+        "filename": "src/libANGLE/capture/FrameCapture.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 3499,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2022-01-20T17:40:45Z",
+      "side": 1,
+      "message": "Following the pattern you applied to the other resources, should this line come before the resourceTracker update?",
+      "range": {
+        "startLine": 3499,
+        "startChar": 0,
+        "endLine": 3499,
+        "endChar": 73
+      },
+      "revId": "5e5be929e0b8fda665b05e4772f1d773a9255159",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
