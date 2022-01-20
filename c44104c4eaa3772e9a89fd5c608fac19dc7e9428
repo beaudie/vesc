@@ -36,6 +36,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "805a5eaa_33794a1a",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-01-20T21:48:35Z",
+      "side": 1,
+      "message": "\u003e It\u0027s within noise\n\nI would have expected to see red and green mixed together in that case, but it seems like the CL is introducing 2~5% regression in most apps. Is that with VK_COMMAND_POOL_CREATE_RESET_COMMAND_BUFFER_BIT removed? Maybe we need a few more runs to be sure it\u0027s noise? Are those runs with minimized GPU work?\n\nOtherwise it may be that the cost ARM docs are talking about are actually not that much, and ANGLE\u0027s tracking of CB usage is actually slower than that.",
+      "parentUuid": "022194c3_1fe3cbee",
+      "revId": "c44104c4eaa3772e9a89fd5c608fac19dc7e9428",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "857590f9_9e60c652",
