@@ -477,8 +477,7 @@ angle::Result FramebufferVk::clearImpl(const gl::Context *context,
     const bool maskedClearStencil = clearStencil && stencilMask != 0xFF;
 
     bool clearColorWithDraw   = clearColor && maskedClearColor;
-    bool clearDepthWithDraw   = clearDepth && scissoredClear;
-    bool clearStencilWithDraw = clearStencil && (maskedClearStencil || scissoredClear);
+    bool clearStencilWithDraw = clearStencil && maskedClearStencil;
 
     bool isMidRenderPassClear = contextVk->hasStartedRenderPassWithCommands();
 
@@ -519,7 +518,6 @@ angle::Result FramebufferVk::clearImpl(const gl::Context *context,
         ASSERT(!mDeferredClears.any());
 
         clearColorWithDraw   = clearColor;
-        clearDepthWithDraw   = clearDepth;
         clearStencilWithDraw = clearStencil;
     }
     else
@@ -538,7 +536,7 @@ angle::Result FramebufferVk::clearImpl(const gl::Context *context,
             isMidRenderPassClear = true;
         }
 
-        mergeClearsWithDeferredClears(clearColorDrawBuffersMask, clearDepth && !clearDepthWithDraw,
+        mergeClearsWithDeferredClears(clearColorDrawBuffersMask, clearDepth,
                                       clearStencil && !clearStencilWithDraw, clearColorValue,
                                       clearDepthStencilValue);
     }
@@ -547,8 +545,7 @@ angle::Result FramebufferVk::clearImpl(const gl::Context *context,
     // flush them if necessary.
     if (mDeferredClears.any())
     {
-        const bool clearAnyWithDraw =
-            clearColorWithDraw || clearDepthWithDraw || clearStencilWithDraw;
+        const bool clearAnyWithDraw = clearColorWithDraw || clearStencilWithDraw;
 
         // If we are in an active renderpass that has recorded commands and the framebuffer hasn't
         // changed, inline the clear.
@@ -618,7 +615,7 @@ angle::Result FramebufferVk::clearImpl(const gl::Context *context,
 
     // The most costly clear mode is when we need to mask out specific color channels or stencil
     // bits. This can only be done with a draw call.
-    return clearWithDraw(contextVk, scissoredRenderArea, clearColorBuffers, clearDepthWithDraw,
+    return clearWithDraw(contextVk, scissoredRenderArea, clearColorBuffers, false,
                          clearStencilWithDraw, colorMasks, stencilMask, clearColorValue,
                          clearDepthStencilValue);
 }
