@@ -215,6 +215,20 @@ EGLint SwapChain11::resetOffscreenColorBuffer(DisplayD3D *displayD3D,
             ID3D11Resource *tempResource11;
             HRESULT result = device->OpenSharedResource(mShareHandle, __uuidof(ID3D11Resource),
                                                         (void **)&tempResource11);
+
+            if (FAILED(result) && mRenderer->getDeviceContext1IfSupported() != nullptr)
+            {
+                ID3D11Device1 *device1;
+                HRESULT queryResult = device->QueryInterface(__uuidof(ID3D11Device1),
+                                                             reinterpret_cast<void **>(&device1));
+                if (SUCCEEDED(queryResult))
+                {
+                    result = device1->OpenSharedResource1(mShareHandle, __uuidof(ID3D11Resource),
+                                                          (void **)&tempResource11);
+                    SafeRelease(device1);
+                }
+            }
+
             if (FAILED(result))
             {
                 ERR() << "Could not open shared handle. " << gl::FmtHR(result);
