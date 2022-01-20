@@ -213,6 +213,19 @@ egl::Error GetD3DTextureInfo(EGLenum buftype,
         ID3D11Texture2D *texture11 = nullptr;
         HRESULT result = d3d11Device->OpenSharedResource(shareHandle, __uuidof(ID3D11Texture2D),
                                                          reinterpret_cast<void **>(&texture11));
+
+        if (FAILED(result))
+        {
+            ID3D11Device1 *d3d11Device1;
+            HRESULT queryResult = d3d11Device->QueryInterface(
+                __uuidof(ID3D11Device1), reinterpret_cast<void **>(&d3d11Device1));
+            if (SUCCEEDED(queryResult))
+            {
+                result = d3d11Device1->OpenSharedResource1(shareHandle, __uuidof(ID3D11Texture2D),
+                                                           (void **)&texture11);
+            }
+        }
+
         if (FAILED(result))
         {
             return egl::EglBadParameter() << "Failed to open share handle, " << gl::FmtHR(result);

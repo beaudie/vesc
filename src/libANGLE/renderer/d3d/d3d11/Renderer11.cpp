@@ -1642,6 +1642,19 @@ egl::Error Renderer11::validateShareHandle(const egl::Config *config,
     ID3D11Resource *tempResource11 = nullptr;
     HRESULT result = mDevice->OpenSharedResource(shareHandle, __uuidof(ID3D11Resource),
                                                  (void **)&tempResource11);
+
+    if (FAILED(result) && mDeviceContext1 != nullptr)
+    {
+        ID3D11Device1 *device1;
+        HRESULT queryResult =
+            mDevice->QueryInterface(__uuidof(ID3D11Device1), reinterpret_cast<void **>(&device1));
+        if (SUCCEEDED(queryResult))
+        {
+            result = device1->OpenSharedResource1(shareHandle, __uuidof(ID3D11Resource),
+                                                  (void **)&tempResource11);
+        }
+    }
+
     if (FAILED(result))
     {
         return egl::EglBadParameter() << "Failed to open share handle, " << gl::FmtHR(result);
