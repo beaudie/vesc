@@ -1215,9 +1215,21 @@ angle::Result ContextVk::setupIndexedDraw(const gl::Context *context,
     const gl::Buffer *elementArrayBuffer = vertexArrayVk->getState().getElementArrayBuffer();
     if (!elementArrayBuffer)
     {
-        mGraphicsDirtyBits.set(DIRTY_BIT_INDEX_BUFFER);
+        vk::BufferSerial bufferSerial;
+        if (vertexArrayVk->getCurrentElementArrayBuffer() != nullptr)
+        {
+            bufferSerial = vertexArrayVk->getCurrentElementArrayBuffer()->getBufferSerial();
+        }
+
         ANGLE_TRY(vertexArrayVk->convertIndexBufferCPU(this, indexType, indexCount, indices));
-        mCurrentIndexBufferOffset = 0;
+
+        // We only set dirty bit when the bound buffer actually changed.
+        if (!bufferSerial.valid() ||
+            bufferSerial != vertexArrayVk->getCurrentElementArrayBuffer()->getBufferSerial())
+        {
+            mGraphicsDirtyBits.set(DIRTY_BIT_INDEX_BUFFER);
+            mCurrentIndexBufferOffset = 0;
+        }
     }
     else
     {
