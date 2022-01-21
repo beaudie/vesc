@@ -33,6 +33,24 @@
       "message": "I don\u0027t think Chrome requires ANGLE to support GLES 3.2 (or 3.1).\nPerhaps it is possible to produce a stripped version of ANGLE when we bundle it in Chrome, having only up to GLES 3.0 support?",
       "revId": "28f223acb4a1b1edb8b179675098e3012746af17",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "70c30ce2_4a2ac5bc",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-01-21T05:40:31Z",
+      "side": 1,
+      "message": "We do have desktop GL and GLES builds of this file, so adding a GLES3-only build wouldn\u0027t be too difficult. It\u0027s hacky though.\n\nWDYT Jamie?",
+      "parentUuid": "ff5240ed_ee2591e0",
+      "revId": "28f223acb4a1b1edb8b179675098e3012746af17",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
