@@ -2061,6 +2061,11 @@ TEST_P(Texture2DTestWithDrawScale, MipmapsTwice)
                  pixelsBlue.data());
     glGenerateMipmap(GL_TEXTURE_2D);
 
+    drawQuad(mProgram, "position", 0.5f);
+
+    EXPECT_GL_NO_ERROR();
+    EXPECT_PIXEL_COLOR_EQ(px, py, GLColor::blue);
+
     std::vector<GLColor> pixelsGreen(16u * 16u, GLColor::green);
 
     glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, 16, 16, 0, GL_RGBA, GL_UNSIGNED_BYTE,
