@@ -87,6 +87,24 @@
       "parentUuid": "1afbe939_10e7be16",
       "revId": "28f223acb4a1b1edb8b179675098e3012746af17",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "c96785ea_b4cd98b9",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1001921
+      },
+      "writtenOn": "2022-01-21T19:33:42Z",
+      "side": 1,
+      "message": "\u003e What would be the fallout from just accepting the regression?\nFor now the bot complained, but remained green and let the roll land.\nI\u0027m not sure when it\u0027s going to be enforced, just wanted to be a good citizen and help Clank get their APK size smaller.\nWe have an option to use\nBinary-Size: \"some explanation\"\ntag to force-land the rolls, but I couldn\u0027t think of a satisfying explanation for this particular CL.",
+      "parentUuid": "ac9afbd6_b5537b7d",
+      "revId": "28f223acb4a1b1edb8b179675098e3012746af17",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
