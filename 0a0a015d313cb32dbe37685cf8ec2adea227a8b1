@@ -38,6 +38,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "9ac271a6_14d5efd1",
+        "filename": "src/libANGLE/renderer/vulkan/TextureVk.cpp",
+        "patchSetId": 13
+      },
+      "lineNbr": 489,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2022-01-21T17:41:42Z",
+      "side": 1,
+      "message": "Here is the modified version of test: Replace the call sequence shabi posted above:\n    \"Write to level 0 with red, level 1 with green\"\nTo\n    \"Write to level 0 with red, generateMipmap (now level 1 also have red)\"\nFrom what I read, the level 1\u0027s red will get lost once you texsubimage level0 with blue.",
+      "parentUuid": "738813a4_a40ecdea",
+      "revId": "0a0a015d313cb32dbe37685cf8ec2adea227a8b1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "63aa8bed_9d5be67a",
         "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
         "patchSetId": 13
