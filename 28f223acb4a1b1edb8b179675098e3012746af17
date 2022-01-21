@@ -69,6 +69,24 @@
       "parentUuid": "70c30ce2_4a2ac5bc",
       "revId": "28f223acb4a1b1edb8b179675098e3012746af17",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "ac9afbd6_b5537b7d",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-01-21T18:31:18Z",
+      "side": 1,
+      "message": "But the ANGLE build for standalone doesn\u0027t have build_with_chromium set, does it?",
+      "parentUuid": "1afbe939_10e7be16",
+      "revId": "28f223acb4a1b1edb8b179675098e3012746af17",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
