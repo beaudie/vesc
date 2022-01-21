@@ -52,6 +52,57 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "74c5a87e_82f61d0f",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 20
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1359249
+      },
+      "writtenOn": "2022-01-21T18:29:51Z",
+      "side": 1,
+      "message": "2 comments I can fix. Please review and comment.",
+      "revId": "2878d3b081d2d257db753047484d89b99a92d218",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "91331089_75060d24",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 20
+      },
+      "lineNbr": 2604,
+      "author": {
+        "id": 1359249
+      },
+      "writtenOn": "2022-01-21T18:29:51Z",
+      "side": 1,
+      "message": "I think this might be a carry over from a conflict resolution. Not something I added.\nAny confirmation?",
+      "revId": "2878d3b081d2d257db753047484d89b99a92d218",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ef44954a_631ce51d",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 20
+      },
+      "lineNbr": 4415,
+      "author": {
+        "id": 1359249
+      },
+      "writtenOn": "2022-01-21T18:29:51Z",
+      "side": 1,
+      "message": "I changed this to 64 bit, but 32bit should be fine.",
+      "revId": "2878d3b081d2d257db753047484d89b99a92d218",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "1a67e3b9_2e978e2e",
