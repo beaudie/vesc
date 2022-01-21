@@ -63,6 +63,30 @@
       },
       "revId": "a2204139b5046e007e6b5a5772e4a96722ea7e5b",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "f46291c5_792c53a7",
+        "filename": "src/libANGLE/capture/FrameCapture.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 2772,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2022-01-21T16:31:16Z",
+      "side": 1,
+      "message": "Ah, you\u0027re right, sorry, crossed coherent and persistent there.  isCoherentlyMapped() doesn\u0027t exist.",
+      "parentUuid": "5253ea8d_b0086df4",
+      "range": {
+        "startLine": 2772,
+        "startChar": 25,
+        "endLine": 2772,
+        "endChar": 48
+      },
+      "revId": "a2204139b5046e007e6b5a5772e4a96722ea7e5b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
