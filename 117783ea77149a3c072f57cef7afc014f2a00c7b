@@ -176,6 +176,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "1cc153fd_9b1afe4b",
+        "filename": "src/libANGLE/renderer/vulkan/SurfaceVk.cpp",
+        "patchSetId": 12
+      },
+      "lineNbr": 320,
+      "author": {
+        "id": 1359249
+      },
+      "writtenOn": "2022-01-21T00:22:51Z",
+      "side": 1,
+      "message": "Added VK_MEMORY_PROPERTY_HOST_COHERENT_BIT",
+      "parentUuid": "25d72a95_dbaf8ec3",
+      "revId": "117783ea77149a3c072f57cef7afc014f2a00c7b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "97858d25_46b9c9ab",
@@ -189,6 +207,24 @@
       "writtenOn": "2021-11-22T02:16:15Z",
       "side": 1,
       "message": "Also here, a call to vkFlushMappedMemoryRanges is missing before the copy.",
+      "revId": "117783ea77149a3c072f57cef7afc014f2a00c7b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "6e45926a_5649606d",
+        "filename": "src/libANGLE/renderer/vulkan/SurfaceVk.cpp",
+        "patchSetId": 12
+      },
+      "lineNbr": 337,
+      "author": {
+        "id": 1359249
+      },
+      "writtenOn": "2022-01-21T00:22:51Z",
+      "side": 1,
+      "message": "Added VK_MEMORY_PROPERTY_HOST_COHERENT_BIT",
+      "parentUuid": "97858d25_46b9c9ab",
       "revId": "117783ea77149a3c072f57cef7afc014f2a00c7b",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
