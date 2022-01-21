@@ -39,6 +39,30 @@
       },
       "revId": "a2204139b5046e007e6b5a5772e4a96722ea7e5b",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "5253ea8d_b0086df4",
+        "filename": "src/libANGLE/capture/FrameCapture.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 2772,
+      "author": {
+        "id": 1491687
+      },
+      "writtenOn": "2022-01-21T16:26:31Z",
+      "side": 1,
+      "message": "That would be easier to read indeed, but I need to distinguish between buffers that have only `GL_MAP_PERSISTENT_BIT_EXT` set and ones that have both `GL_MAP_PERSISTENT_BIT_EXT | GL_MAP_COHERENT_BIT_EXT` set. `GL_MAP_COHERENT_BIT_EXT` implies `GL_MAP_PERSISTENT_BIT_EXT`, but not the other way round. I have not seen a case where only `GL_MAP_PERSISTENT_BIT_EXT` is set though, but there might be one and I suppose the tracker should not receive the buffer in that case.",
+      "parentUuid": "c2da869f_77de0680",
+      "range": {
+        "startLine": 2772,
+        "startChar": 25,
+        "endLine": 2772,
+        "endChar": 48
+      },
+      "revId": "a2204139b5046e007e6b5a5772e4a96722ea7e5b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
