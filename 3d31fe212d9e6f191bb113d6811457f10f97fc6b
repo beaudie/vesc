@@ -68,6 +68,23 @@
       "parentUuid": "48447457_39bc7014",
       "revId": "3d31fe212d9e6f191bb113d6811457f10f97fc6b",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "d6a6339e_c2141f8b",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2022-01-21T05:28:59Z",
+      "side": 1,
+      "message": "The reporting of VENDOR_ID_SAMSUNG, VENDOR_ID_VMWARE and VENDOR_ID_VIVANTE still hasn\u0027t landed.\n",
+      "revId": "3d31fe212d9e6f191bb113d6811457f10f97fc6b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
