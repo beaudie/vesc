@@ -74,6 +74,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "6f1b3e26_131d7b74",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-01-21T16:50:17Z",
+      "side": 1,
+      "message": "Maybe it\u0027s a labeling issue, but the set on the left has the columns swapped, and it seems that `Overall Difference \u003d 0.974422` is actually the inverse of the right set and shows main/CL which is in agreement with the right set that the CL is making things slightly slower.\n\nNot sure if I\u0027m being clear; the sheet reads to me like:\n\n    LEFT SET        RIGHT SET\n    main/CL \u003c 1     CL/main \u003e 1\n\nI was hoping more runs would make it clearer, but if they consistently show a small regression, we probably should hold off on landing this.\n\nARM\u0027s recommendation is valid, but probably applies more to Vulkan applications that \"know what they are doing\", rather than ANGLE that\u0027s reacting to application\u0027s logic on the fly.",
+      "parentUuid": "5ba26f03_f0dcd614",
+      "revId": "c44104c4eaa3772e9a89fd5c608fac19dc7e9428",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "857590f9_9e60c652",
         "filename": "src/libANGLE/renderer/vulkan/PersistentCommandPool.h",
         "patchSetId": 4
