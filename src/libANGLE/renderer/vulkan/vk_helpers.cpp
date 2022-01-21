@@ -3899,7 +3899,6 @@ BufferHelper &BufferHelper::operator=(BufferHelper &&other)
 {
     ReadWriteResource::operator=(std::move(other));
 
-    mMemory        = std::move(other.mMemory);
     mSuballocation = std::move(other.mSuballocation);
 
     mCurrentQueueFamilyIndex = other.mCurrentQueueFamilyIndex;
@@ -4002,16 +4001,14 @@ angle::Result BufferHelper::initExternal(ContextVk *contextVk,
     DeviceScoped<Buffer> buffer(renderer->getDevice());
     ANGLE_VK_TRY(contextVk, buffer.get().init(renderer->getDevice(), modifiedCreateInfo));
 
+    DeviceScoped<DeviceMemory> deviceMemory(renderer->getDevice());
     VkMemoryPropertyFlags memoryPropertyFlagsOut;
     ANGLE_TRY(InitAndroidExternalMemory(contextVk, clientBuffer, memoryProperties, &buffer.get(),
-                                        &memoryPropertyFlagsOut,
-                                        mMemory.getExternalMemoryObject()));
-
-    ANGLE_TRY(mMemory.initExternal(clientBuffer));
+                                        &memoryPropertyFlagsOut, &deviceMemory.get()));
 
     ANGLE_VK_TRY(contextVk, mSuballocation.initWithEntireBuffer(
-                                contextVk, buffer.get(), *mMemory.getExternalMemoryObject(),
-                                memoryPropertyFlagsOut, requestedCreateInfo.size));
+                                contextVk, buffer.get(), deviceMemory.get(), memoryPropertyFlagsOut,
+                                requestedCreateInfo.size));
 
     if (isHostVisible())
     {
@@ -4198,15 +4195,13 @@ void BufferHelper::destroy(RendererVk *renderer)
     unmap(renderer);
 
     mSuballocation.destroy(renderer);
-    mMemory.destroy(renderer);
 }
 
 void BufferHelper::release(RendererVk *renderer)
 {
     unmap(renderer);
 
-    renderer->collectGarbageAndReinit(&mReadOnlyUse, &mSuballocation,
-                                      mMemory.getExternalMemoryObject(), mMemory.getMemoryObject());
+    renderer->collectGarbageAndReinit(&mReadOnlyUse, &mSuballocation);
 
     mReadWriteUse.release();
     mReadWriteUse.init();
@@ -4239,18 +4234,11 @@ angle::Result BufferHelper::copyFromBuffer(ContextVk *contextVk,
 
 angle::Result BufferHelper::map(ContextVk *contextVk, uint8_t **ptrOut)
 {
-    if (isExternalBuffer())
+    if (!mSuballocation.isMapped())
     {
-        ANGLE_TRY(mMemory.map(contextVk, getSize(), ptrOut));
+        ANGLE_VK_TRY(contextVk, mSuballocation.getBlock()->map(contextVk->getDevice()));
     }
-    else
-    {
-        if (!mSuballocation.isMapped())
-        {
-            ANGLE_VK_TRY(contextVk, mSuballocation.getBlock()->map(contextVk->getDevice()));
-        }
-        *ptrOut = mSuballocation.getMappedMemory();
-    }
+    *ptrOut = mSuballocation.getMappedMemory();
     return angle::Result::Continue;
 }
 
@@ -4262,27 +4250,9 @@ angle::Result BufferHelper::mapWithOffset(ContextVk *contextVk, uint8_t **ptrOut
     return angle::Result::Continue;
 }
 
-void BufferHelper::unmap(RendererVk *renderer)
-{
-    if (isExternalBuffer())
-    {
-        mMemory.unmap(renderer);
-    }
-}
-
 angle::Result BufferHelper::flush(RendererVk *renderer, VkDeviceSize offset, VkDeviceSize size)
 {
-    if (isExternalBuffer())
-    {
-        if (!isCoherent())
-        {
-            mMemory.flush(renderer, offset, size);
-        }
-    }
-    else
-    {
-        mSuballocation.flush(renderer->getDevice());
-    }
+    mSuballocation.flush(renderer->getDevice());
     return angle::Result::Continue;
 }
 angle::Result BufferHelper::flush(RendererVk *renderer)
@@ -4292,17 +4262,7 @@ angle::Result BufferHelper::flush(RendererVk *renderer)
 
 angle::Result BufferHelper::invalidate(RendererVk *renderer, VkDeviceSize offset, VkDeviceSize size)
 {
-    if (isExternalBuffer())
-    {
-        if (!isCoherent())
-        {
-            mMemory.invalidate(renderer, getMemoryPropertyFlags(), offset, size);
-        }
-    }
-    else
-    {
-        mSuballocation.invalidate(renderer->getDevice());
-    }
+    mSuballocation.invalidate(renderer->getDevice());
     return angle::Result::Continue;
 }
 angle::Result BufferHelper::invalidate(RendererVk *renderer)
