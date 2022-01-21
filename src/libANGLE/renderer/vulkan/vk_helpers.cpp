@@ -3916,25 +3916,11 @@ BufferHelper &BufferHelper::operator=(BufferHelper &&other)
 }
 
 angle::Result BufferHelper::init(ContextVk *contextVk,
-                                 const VkBufferCreateInfo &requestedCreateInfo,
+                                 const VkBufferCreateInfo &createInfo,
                                  VkMemoryPropertyFlags memoryPropertyFlags)
 {
     RendererVk *renderer       = contextVk->getRenderer();
     const Allocator &allocator = renderer->getAllocator();
-
-    initializeBarrierTracker(contextVk);
-
-    VkBufferCreateInfo modifiedCreateInfo;
-    const VkBufferCreateInfo *createInfo = &requestedCreateInfo;
-
-    if (renderer->getFeatures().padBuffersToMaxVertexAttribStride.enabled)
-    {
-        const VkDeviceSize maxVertexAttribStride = renderer->getMaxVertexAttribStride();
-        ASSERT(maxVertexAttribStride);
-        modifiedCreateInfo = requestedCreateInfo;
-        modifiedCreateInfo.size += maxVertexAttribStride;
-        createInfo = &modifiedCreateInfo;
-    }
 
     VkMemoryPropertyFlags requiredFlags =
         (memoryPropertyFlags & VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT);
@@ -3946,39 +3932,18 @@ angle::Result BufferHelper::init(ContextVk *contextVk,
     // Check that the allocation is not too large.
     uint32_t memoryTypeIndex = kInvalidMemoryTypeIndex;
     ANGLE_VK_TRY(contextVk, allocator.findMemoryTypeIndexForBufferInfo(
-                                *createInfo, requiredFlags, preferredFlags, persistentlyMapped,
+                                createInfo, requiredFlags, preferredFlags, persistentlyMapped,
                                 &memoryTypeIndex));
 
     VkDeviceSize heapSize =
         renderer->getMemoryProperties().getHeapSizeForMemoryType(memoryTypeIndex);
 
-    ANGLE_VK_CHECK(contextVk, createInfo->size <= heapSize, VK_ERROR_OUT_OF_DEVICE_MEMORY);
+    ANGLE_VK_CHECK(contextVk, createInfo.size <= heapSize, VK_ERROR_OUT_OF_DEVICE_MEMORY);
 
-    // Allocate buffer object
-    DeviceScoped<Buffer> buffer(renderer->getDevice());
-    AllocatorScoped<Allocation> allocation(renderer->getAllocator());
-    ANGLE_VK_TRY(contextVk, allocator.createBuffer(*createInfo, requiredFlags, preferredFlags,
-                                                   persistentlyMapped, &memoryTypeIndex,
-                                                   &buffer.get(), &allocation.get()));
-    VkMemoryPropertyFlags memoryPropertyFlagsOut;
-    allocator.getMemoryTypeProperties(memoryTypeIndex, &memoryPropertyFlagsOut);
+    size_t alignment = GetDefaultBufferAlignment(renderer);
 
-    ANGLE_VK_TRY(contextVk, mSuballocation.initWithEntireBuffer(
-                                contextVk, buffer.get(), allocation.get(), memoryPropertyFlagsOut,
-                                requestedCreateInfo.size));
-
-    if (isHostVisible())
-    {
-        uint8_t *ptrOut;
-        ANGLE_TRY(map(contextVk, &ptrOut));
-    }
-
-    if (renderer->getFeatures().allocateNonZeroMemory.enabled)
-    {
-        ANGLE_TRY(initializeNonZeroMemory(contextVk, createInfo->usage, createInfo->size));
-    }
-
-    return angle::Result::Continue;
+    return initSuballocation(contextVk, memoryTypeIndex, static_cast<size_t>(createInfo.size),
+                             alignment);
 }
 
 angle::Result BufferHelper::initExternal(ContextVk *contextVk,
