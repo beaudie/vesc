@@ -186,7 +186,7 @@ class TextureD3D : public TextureImpl, public angle::ObserverInterface
                                const gl::ImageIndex &index,
                                const gl::Box &region);
 
-    angle::Result releaseTexStorage(const gl::Context *context);
+    angle::Result releaseTexStorage(const gl::Context *context, bool copyStorageToImages);
 
     GLuint getBaseLevel() const { return mBaseLevel; }
 
