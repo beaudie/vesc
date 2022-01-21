@@ -36,6 +36,7 @@ class ShareGroupVk;
 
 static constexpr uint32_t kMaxGpuEventNameLen = 32;
 using EventName                               = std::array<char, kMaxGpuEventNameLen>;
+static constexpr int kMaxCachedElementArrays  = 6;
 
 using ContextVkDescriptorSetList = angle::PackedEnumMap<PipelineType, uint32_t>;
 
@@ -1206,6 +1207,9 @@ class ContextVk : public ContextImpl, public vk::Context, public MultisampleText
     // atomic counter buffer array, or places where there is no vertex buffer since Vulkan does not
     // allow binding a null vertex buffer.
     vk::BufferHelper mEmptyBuffer;
+
+    // Cached element array buffers for improving performance.
+    vk::BufferHelper mCachedElementArrayBuffers[kMaxCachedElementArrays];
 
     // Storage for default uniforms of ProgramVks and ProgramPipelineVks.
     vk::DynamicBuffer mDefaultUniformStorage;

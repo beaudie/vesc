@@ -49,6 +49,10 @@ namespace rx
 
 namespace
 {
+constexpr GLushort kCachedElementArrayData[kMaxCachedElementArrays][6] = {
+    {0, 1, 2, 2, 3, 0}, {0, 1, 2, 2, 1, 3}, {0, 1, 2, 1, 2, 3},
+    {0, 1, 2, 0, 2, 3}, {0, 1, 2, 3, 2, 1}, {2, 1, 0, 2, 3, 1}};
+
 // For DesciptorSetUpdates
 constexpr size_t kDescriptorBufferInfosInitialSize = 8;
 constexpr size_t kDescriptorImageInfosInitialSize  = 4;
@@ -882,6 +886,10 @@ void ContextVk::onDestroy(const gl::Context *context)
 
     mDefaultUniformStorage.release(mRenderer);
     mEmptyBuffer.release(mRenderer);
+    for (vk::BufferHelper &buffer : mCachedElementArrayBuffers)
+    {
+        buffer.release(mRenderer);
+    }
 
     for (vk::DynamicBuffer &defaultBuffer : mDefaultAttribBuffers)
     {
@@ -1082,6 +1090,19 @@ angle::Result ContextVk::initialize()
     constexpr VkMemoryPropertyFlags kMemoryType = VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT;
     ANGLE_TRY(mEmptyBuffer.init(this, emptyBufferInfo, kMemoryType));
 
+    // Initialize mCachedElementArrayBuffer with most common data
+    for (int i = 0; i < kMaxCachedElementArrays; i++)
+    {
+        ANGLE_TRY(mCachedElementArrayBuffers[i].initSuballocation(
+            this,
+            mRenderer->getVertexConversionBufferMemoryTypeIndex(vk::MemoryHostVisibility::Visible),
+            sizeof(kCachedElementArrayData), mRenderer->getVertexConversionBufferAlignment()));
+        GLushort *dstPtr =
+            reinterpret_cast<GLushort *>(mCachedElementArrayBuffers[i].getMappedMemory());
+        memcpy(dstPtr, kCachedElementArrayData[i], sizeof(kCachedElementArrayData[i]));
+        ANGLE_TRY(mCachedElementArrayBuffers[i].flush(mRenderer));
+    }
+
     // Add context into the share group
     mShareGroupVk->getContexts()->insert(this);
 
@@ -1213,9 +1234,40 @@ angle::Result ContextVk::setupIndexedDraw(const gl::Context *context,
     const gl::Buffer *elementArrayBuffer = vertexArrayVk->getState().getElementArrayBuffer();
     if (!elementArrayBuffer)
     {
-        mGraphicsDirtyBits.set(DIRTY_BIT_INDEX_BUFFER);
-        ANGLE_TRY(vertexArrayVk->convertIndexBufferCPU(this, indexType, indexCount, indices));
-        mCurrentIndexBufferOffset = 0;
+        // Applications often time draw a quad with two triangles. This is try to catch all the
+        // common used element array buffer with pre-created BufferHelper objects to improve
+        // performance.
+        bool foundInCache = false;
+        if (indexCount == 6 && indexType == gl::DrawElementsType::UnsignedShort)
+        {
+            int cacheIndex;
+            for (cacheIndex = 0; cacheIndex < kMaxCachedElementArrays; cacheIndex++)
+            {
+                if (memcmp(indices, &(kCachedElementArrayData[cacheIndex][0]),
+                           sizeof(GLushort) * indexCount) == 0)
+                {
+                    foundInCache = true;
+                    break;
+                }
+            }
+            if (foundInCache)
+            {
+                if (vertexArrayVk->getCurrentElementArrayBuffer() !=
+                    &mCachedElementArrayBuffers[cacheIndex])
+                {
+                    mGraphicsDirtyBits.set(DIRTY_BIT_INDEX_BUFFER);
+                    vertexArrayVk->bindElementArrayBuffer(&mCachedElementArrayBuffers[cacheIndex]);
+                    mCurrentIndexBufferOffset = 0;
+                }
+            }
+        }
+
+        if (!foundInCache)
+        {
+            mGraphicsDirtyBits.set(DIRTY_BIT_INDEX_BUFFER);
+            ANGLE_TRY(vertexArrayVk->convertIndexBufferCPU(this, indexType, indexCount, indices));
+            mCurrentIndexBufferOffset = 0;
+        }
     }
     else
     {
