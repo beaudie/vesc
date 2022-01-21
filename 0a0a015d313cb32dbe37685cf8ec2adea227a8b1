@@ -20,6 +20,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "738813a4_a40ecdea",
+        "filename": "src/libANGLE/renderer/vulkan/TextureVk.cpp",
+        "patchSetId": 13
+      },
+      "lineNbr": 489,
+      "author": {
+        "id": 1446209
+      },
+      "writtenOn": "2022-01-21T09:18:47Z",
+      "side": 1,
+      "message": "Thanks your useful comments.\nBut state tracking seems cannot be avoidable,it\u0027s not how many levels image has but how many levels have been updated that matters.We have to track multiple levels update,only single level update can triger image recreation.\nTest CopyImageSubDataThenFullUpdate in my newest patch is just for the case you mentioned above,and I have added the level tracking logic to copyTextureSubData,like:  \n    if (dstLevel !\u003d 0)\n    {\n        mImage-\u003esetSingleLevelUpdate(false);\n    }",
+      "parentUuid": "85eff80a_5528bc67",
+      "revId": "0a0a015d313cb32dbe37685cf8ec2adea227a8b1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "63aa8bed_9d5be67a",
         "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
         "patchSetId": 13
@@ -31,6 +49,30 @@
       "writtenOn": "2022-01-21T06:55:00Z",
       "side": 1,
       "message": "Please remove this. Instead, make ImageHelper::releaseImage correctly set the image layout back to Undefined.",
+      "range": {
+        "startLine": 5605,
+        "startChar": 0,
+        "endLine": 5610,
+        "endChar": 5
+      },
+      "revId": "0a0a015d313cb32dbe37685cf8ec2adea227a8b1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "9efb2bc5_429b3c8a",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 13
+      },
+      "lineNbr": 5610,
+      "author": {
+        "id": 1446209
+      },
+      "writtenOn": "2022-01-21T09:18:47Z",
+      "side": 1,
+      "message": "Will do in next patch.",
+      "parentUuid": "63aa8bed_9d5be67a",
       "range": {
         "startLine": 5605,
         "startChar": 0,
@@ -64,6 +106,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "7d48919c_da9ee4c3",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.h",
+        "patchSetId": 13
+      },
+      "lineNbr": 1709,
+      "author": {
+        "id": 1446209
+      },
+      "writtenOn": "2022-01-21T09:18:47Z",
+      "side": 1,
+      "message": "Will do in next patch.",
+      "parentUuid": "0e6aefce_c4d5a3d1",
+      "range": {
+        "startLine": 1709,
+        "startChar": 9,
+        "endLine": 1709,
+        "endChar": 25
+      },
+      "revId": "0a0a015d313cb32dbe37685cf8ec2adea227a8b1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "efcac6ed_6434072e",
@@ -77,6 +143,24 @@
       "writtenOn": "2022-01-21T06:55:00Z",
       "side": 1,
       "message": "Extension check is unnecessary?",
+      "revId": "0a0a015d313cb32dbe37685cf8ec2adea227a8b1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "637d74cb_ce26c1ce",
+        "filename": "src/tests/gl_tests/ComputeShaderTest.cpp",
+        "patchSetId": 13
+      },
+      "lineNbr": 859,
+      "author": {
+        "id": 1446209
+      },
+      "writtenOn": "2022-01-21T09:18:47Z",
+      "side": 1,
+      "message": "Will do in next patch.",
+      "parentUuid": "efcac6ed_6434072e",
       "revId": "0a0a015d313cb32dbe37685cf8ec2adea227a8b1",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
@@ -104,6 +188,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "9163ce6e_69b84549",
+        "filename": "src/tests/gl_tests/TextureTest.cpp",
+        "patchSetId": 13
+      },
+      "lineNbr": 6018,
+      "author": {
+        "id": 1446209
+      },
+      "writtenOn": "2022-01-21T09:18:47Z",
+      "side": 1,
+      "message": "Will do in next patch.",
+      "parentUuid": "cdf17bf4_873d284b",
+      "range": {
+        "startLine": 6018,
+        "startChar": 4,
+        "endLine": 6018,
+        "endChar": 26
+      },
+      "revId": "0a0a015d313cb32dbe37685cf8ec2adea227a8b1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "da7728d0_3f4d0cc3",
@@ -117,6 +225,24 @@
       "writtenOn": "2022-01-21T06:55:00Z",
       "side": 1,
       "message": "Again, comments as to what\u0027s going on would be helpful. Since a PBO is used to upload data to the texture, I suggest also changing the test name to: RenderToTextureThenFullUpdateWithPBO.",
+      "revId": "0a0a015d313cb32dbe37685cf8ec2adea227a8b1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "c4ae8d4e_dd5396ef",
+        "filename": "src/tests/gl_tests/TextureTest.cpp",
+        "patchSetId": 13
+      },
+      "lineNbr": 6031,
+      "author": {
+        "id": 1446209
+      },
+      "writtenOn": "2022-01-21T09:18:47Z",
+      "side": 1,
+      "message": "Will do in next patch.",
+      "parentUuid": "da7728d0_3f4d0cc3",
       "revId": "0a0a015d313cb32dbe37685cf8ec2adea227a8b1",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }

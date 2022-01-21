@@ -261,6 +261,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "78710032_b2362756",
+        "filename": "src/libANGLE/renderer/vulkan/TextureVk.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 2416,
+      "author": {
+        "id": 1446209
+      },
+      "writtenOn": "2022-01-21T09:18:47Z",
+      "side": 1,
+      "message": "I have excluded the case when image was used by attachment,so this notification isn\u0027t needed,doesn\u0027t it?",
+      "parentUuid": "1e80414d_ef806354",
+      "range": {
+        "startLine": 2416,
+        "startChar": 9,
+        "endLine": 2416,
+        "endChar": 43
+      },
+      "revId": "893d6b975ed43ba075abf80d341d5b3574899654",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "7d3ab6b4_4a1fb541",
