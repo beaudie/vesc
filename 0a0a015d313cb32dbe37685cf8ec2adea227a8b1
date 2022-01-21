@@ -1,0 +1,124 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "85eff80a_5528bc67",
+        "filename": "src/libANGLE/renderer/vulkan/TextureVk.cpp",
+        "patchSetId": 13
+      },
+      "lineNbr": 489,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-01-21T06:55:00Z",
+      "side": 1,
+      "message": "This state tracking is _very_ error prone. For example, copyTextureSubData below has got it wrong (it should have had a similar logic as here). This logic is also missing the fact that the image may have multiple levels, and it shouldn\u0027t be ghosted if level 0 is being fully respecified. Please add a test for this:\n\n- Create a 2-level texture with mipmapping enabled\n- Write to level 0 with red, level 1 with green\n- Sample from both levels in a draw call or two\n- glTexSubImage2d into level 0 with blue, completely overwriting it\n- Sample from both levels in a draw call again\n\nYou should expect to see `blue and green` in the final draw call, but if ghosting happens you\u0027d see `blue and garbage (probably black)`.\n\nPlease add a similar test for a texture with 2 layers, because that check is also missing.\n\n---\n\nMy suggestion to do this better instead is to dispense with any tracking in ImageHelper and make the decision on the spot right here. So when `setSubImageImpl` is called (also `copyTextureSubData`, so please put the relevant code in a helper), you\u0027d check all the conditions (full update, owns image, is in use, !attachment etc, including the missing image-\u003egetLevelCount() \u003d\u003d 1 \u0026\u0026 image-\u003egetLayerCount() \u003d\u003d 1), and recreate the image right away.\n\nAs a bonus, the optimization is not constricted to PBO uploads.",
+      "revId": "0a0a015d313cb32dbe37685cf8ec2adea227a8b1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "63aa8bed_9d5be67a",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 13
+      },
+      "lineNbr": 5610,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-01-21T06:55:00Z",
+      "side": 1,
+      "message": "Please remove this. Instead, make ImageHelper::releaseImage correctly set the image layout back to Undefined.",
+      "range": {
+        "startLine": 5605,
+        "startChar": 0,
+        "endLine": 5610,
+        "endChar": 5
+      },
+      "revId": "0a0a015d313cb32dbe37685cf8ec2adea227a8b1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "0e6aefce_c4d5a3d1",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.h",
+        "patchSetId": 13
+      },
+      "lineNbr": 1709,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-01-21T06:55:00Z",
+      "side": 1,
+      "message": "nit: setUseImageGhosting to avoid the overload",
+      "range": {
+        "startLine": 1709,
+        "startChar": 9,
+        "endLine": 1709,
+        "endChar": 25
+      },
+      "revId": "0a0a015d313cb32dbe37685cf8ec2adea227a8b1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "efcac6ed_6434072e",
+        "filename": "src/tests/gl_tests/ComputeShaderTest.cpp",
+        "patchSetId": 13
+      },
+      "lineNbr": 859,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-01-21T06:55:00Z",
+      "side": 1,
+      "message": "Extension check is unnecessary?",
+      "revId": "0a0a015d313cb32dbe37685cf8ec2adea227a8b1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "cdf17bf4_873d284b",
+        "filename": "src/tests/gl_tests/TextureTest.cpp",
+        "patchSetId": 13
+      },
+      "lineNbr": 6018,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-01-21T06:55:00Z",
+      "side": 1,
+      "message": "nit: Use `swapBuffers()`.\n\nAlso, why swap buffers? Are you trying to incur a flush? It would be good to document the reason in a comment.\n\nIf you are trying to break the render pass without necessarily flushing, you can also do something like `glCopyTexImage2D` into a temp texture.",
+      "range": {
+        "startLine": 6018,
+        "startChar": 4,
+        "endLine": 6018,
+        "endChar": 26
+      },
+      "revId": "0a0a015d313cb32dbe37685cf8ec2adea227a8b1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "da7728d0_3f4d0cc3",
+        "filename": "src/tests/gl_tests/TextureTest.cpp",
+        "patchSetId": 13
+      },
+      "lineNbr": 6031,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-01-21T06:55:00Z",
+      "side": 1,
+      "message": "Again, comments as to what\u0027s going on would be helpful. Since a PBO is used to upload data to the texture, I suggest also changing the test name to: RenderToTextureThenFullUpdateWithPBO.",
+      "revId": "0a0a015d313cb32dbe37685cf8ec2adea227a8b1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}

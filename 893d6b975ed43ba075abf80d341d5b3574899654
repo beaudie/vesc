@@ -237,6 +237,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "1e80414d_ef806354",
+        "filename": "src/libANGLE/renderer/vulkan/TextureVk.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 2416,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-01-21T06:55:00Z",
+      "side": 1,
+      "message": "The reason I mentioned there\u0027s missing notification is because once the image is ghosted we should make any attached framebuffer notified so they can syncState. That said, I see now that releaseImage already notifies the observers, so the notification is actually already in place.\n\nLGTM however with this condition in.",
+      "parentUuid": "d9817964_394a1efb",
+      "range": {
+        "startLine": 2416,
+        "startChar": 9,
+        "endLine": 2416,
+        "endChar": 43
+      },
+      "revId": "893d6b975ed43ba075abf80d341d5b3574899654",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "7d3ab6b4_4a1fb541",
