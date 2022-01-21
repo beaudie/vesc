@@ -56,6 +56,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "5ba26f03_f0dcd614",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2022-01-21T00:37:23Z",
+      "side": 1,
+      "message": "\u003e I would have expected to see red and green mixed together in that case, but it seems like the CL is introducing 2~5% regression in most apps.\n\nThere are 2 runs in the sheet, with the first column compared to the second column and reported in the \"Relative Performance\" column.   At the very end of the data is an \"Overall Difference\" value, which averages all of the \"Relative Performance\" values.   \n\nI swap the run order in both runs to show run-to-run variance, but mostly just look at the \"Overall Difference\" value to see how a CL behaves.   In this case we have:\n\nCompare CL to main:\n  Overall Difference \u003d 0.974422\nCompare main to CL:\n  Overall Difference \u003d 1.035983\n  \nMore runs are likely to land within this range, and ultimately tell us nothing new.\n\n\u003e Is that with VK_COMMAND_POOL_CREATE_RESET_COMMAND_BUFFER_BIT removed? \nYes.\n\n\u003e Are those runs with minimized GPU work?\nYes, with the power denoising, locked GPU clocks, etc.\n\n\u003e Otherwise it may be that the cost ARM docs are talking about are actually not that much, and ANGLE\u0027s tracking of CB usage is actually slower than that.\n\nARM doesn\u0027t claim much of an improvement.   Their tutorial goes from 21.7ms to 21.4ms per frame when resetting command pools:\nhttps://github.com/ARM-software/vulkan_best_practice_for_mobile_developers/blob/master/samples/performance/command_buffer_usage/command_buffer_usage_tutorial.md#Recycling-strategies\n\nI still think we should do what they recommend and iterate on it, but we can abandon this if you guys think it\u0027s not worth it.",
+      "parentUuid": "805a5eaa_33794a1a",
+      "revId": "c44104c4eaa3772e9a89fd5c608fac19dc7e9428",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "857590f9_9e60c652",
         "filename": "src/libANGLE/renderer/vulkan/PersistentCommandPool.h",
         "patchSetId": 4
