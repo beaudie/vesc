@@ -16,6 +16,23 @@
       "message": "So I reduced this to doing nothing but printing WARN(). Nothing amiss there.\n\nThe test however expects Red and get Green. Or just fails test between ANI and SwapBuffers. I\u0027m not seeing anything to cause failures.",
       "revId": "ede13902c19f0d22ca0b89ae16bc3368bb27e708",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "0d6d58a0_13c20143",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 7
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1359249
+      },
+      "writtenOn": "2022-01-21T23:15:34Z",
+      "side": 1,
+      "message": "Setting marker at patch 7. The code does nothing, but we get errors with swiftshader, almost entirely.\nAdding back some code next to see how it changes.",
+      "revId": "ede13902c19f0d22ca0b89ae16bc3368bb27e708",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
