@@ -99,6 +99,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "c34f6a4e_cb49385e",
+        "filename": "src/libANGLE/renderer/vulkan/VertexArrayVk.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 106,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-01-21T21:02:48Z",
+      "side": 1,
+      "message": "Ack if that\u0027s the case. Could be good to ASSERT just in case.",
+      "parentUuid": "1b455d01_f639150b",
+      "revId": "8897940f1fb1d45e2cf9aae7e1d867eed4b42da6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "3cc6a662_171a9e51",
