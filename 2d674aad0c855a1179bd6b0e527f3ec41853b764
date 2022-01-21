@@ -52,6 +52,24 @@
       "parentUuid": "1fa83aec_bd6a9bbe",
       "revId": "2d674aad0c855a1179bd6b0e527f3ec41853b764",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "fdfebdb8_e0b7b670",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 17
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-01-21T17:17:47Z",
+      "side": 1,
+      "message": "You could, but note that when `invalidateProgramExecutableHelper` is called, we also set `DIRTY_BIT_TEXTURE_BINDINGS`, which means `invalidateCurrentTextures` will be called after that. It should be ok then to put the call to `endRenderPassIfComputeAccessAfterTextureSample()` somewhere close to `endRenderPassIfComputeReadAfterAttachmentWrite()`. I suspect you also need to make that call inside `invalidateCurrentShaderResources` as well if the executable has images.\n\nTo make sure we cover all bases, can you please make sure the tests cover all these cases?\n\n- FS texture sample followed by CS texture sample, followed by FS texture sample\n- FS texture sample followed by CS storage image read, followed by FS texture sample\n- FS texture sample followed by CS storage image write, followed by FS texture sample",
+      "parentUuid": "73942de8_5a0e204e",
+      "revId": "2d674aad0c855a1179bd6b0e527f3ec41853b764",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
