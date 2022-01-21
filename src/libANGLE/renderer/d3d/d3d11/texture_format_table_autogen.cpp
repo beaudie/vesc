@@ -319,7 +319,7 @@ const Format &Format::Get(GLenum internalFormat, const Renderer11DeviceCaps &dev
                                          DXGI_FORMAT_UNKNOWN,
                                          DXGI_FORMAT_R8G8B8A8_UNORM,
                                          GL_RGBA8,
-                                         Initialize4ComponentData<GLubyte, 0x00, 0x00, 0x00, 0xFF>);
+                                         nullptr);
             return info;
         }
         case GL_COMPRESSED_RGB8_PUNCHTHROUGH_ALPHA1_LOSSY_DECODE_ETC2_ANGLE:

@@ -149,7 +149,7 @@ def gl_format_channels(internal_format):
         if (internal_format.find('ALPHA') >= 0):
             return 'la'
         return 'l'
-    if channels_string == 'SRGB':
+    if channels_string == 'SRGB' or channels_string == 'RGB':
         if (internal_format.find('ALPHA') >= 0):
             return 'rgba'
         return 'rgb'

@@ -888,10 +888,8 @@ void Format::initialize(RendererVk *renderer, const angle::Format &angleFormat)
             mIntendedGLFormat = GL_COMPRESSED_RGB8_PUNCHTHROUGH_ALPHA1_ETC2;
             {
                 static constexpr ImageFormatInitInfo kInfo[] = {
-                    {angle::FormatID::ETC2_R8G8B8A1_UNORM_BLOCK,
-                     Initialize4ComponentData<GLubyte, 0x00, 0x00, 0x00, 0xFF>},
-                    {angle::FormatID::R8G8B8A8_UNORM,
-                     Initialize4ComponentData<GLubyte, 0x00, 0x00, 0x00, 0xFF>}};
+                    {angle::FormatID::ETC2_R8G8B8A1_UNORM_BLOCK, nullptr},
+                    {angle::FormatID::R8G8B8A8_UNORM, nullptr}};
                 initImageFallback(renderer, kInfo, ArraySize(kInfo));
             }
             mActualBufferFormatID         = angle::FormatID::ETC2_R8G8B8A1_UNORM_BLOCK;
