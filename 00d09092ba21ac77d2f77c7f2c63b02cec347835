@@ -16,6 +16,24 @@
       "message": "I added \"WARN() \u003c\u003c \"message\";\" to debug a bit.\nI see that mutable_render_buffer.basic is passing - I commented-out code in ContextVk::flush() - only thing different.\n\nI see in other tests WARN() indicates that swapImpl is hitting a OUT_OF_DATE\n\nLog (same in all test failures): The number 6 and 2 are part of expected sequence 1-6 for mutable_render_buffer test. Here ANI must be failing, so present fails.\n\n[ RUN      ] GLSLTest.FragData/ES3_Vulkan_SwiftShader_AsyncQueue\nWarning: SurfaceVk.cpp:1083 (createSwapChain): 6. createSwapchain\nWARN: SurfaceVk.cpp:1083 (createSwapChain): 6. createSwapchain\nWarning: SurfaceVk.cpp:1747 (acquireNextSwapchainImage): ANI\nWARN: SurfaceVk.cpp:1747 (acquireNextSwapchainImage): ANI\nWarning: SurfaceVk.cpp:1765 (acquireNextSwapchainImage): ANI vkAcquireNextImage\nWARN: SurfaceVk.cpp:1765 (acquireNextSwapchainImage): ANI vkAcquireNextImage\n../../src/tests/test_utils/ANGLETest.cpp(77): error: Failed\nSurfaceVk.cpp:1647 (swapImpl): 2 swapImpl -\u003e present, get out of date\nWARN: SurfaceVk.cpp:1647 (swapImpl): 2 swapImpl -\u003e present, get out of date\n[  FAILED  ] GLSLTest.FragData/ES3_Vulkan_SwiftShader_AsyncQueue, where GetParam() \u003d ES3_Vulkan_SwiftShader_AsyncQueue (801 ms)\n\n",
       "revId": "00d09092ba21ac77d2f77c7f2c63b02cec347835",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "ec423da1_862954ea",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 6
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-01-21T16:31:17Z",
+      "side": 1,
+      "message": "Interesting, so we still need to at least do the checks to see if the swapchain is still valid and whether it should be recreated.\n\nIs the issue resolved now with the code from present() removed?",
+      "parentUuid": "14e4d6bf_3cb84ee9",
+      "revId": "00d09092ba21ac77d2f77c7f2c63b02cec347835",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
