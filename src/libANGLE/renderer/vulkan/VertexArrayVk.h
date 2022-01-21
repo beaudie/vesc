@@ -101,6 +101,11 @@ class VertexArrayVk : public VertexArrayImpl
         return mStreamingVertexAttribsMask;
     }
 
+    void bindElementArrayBuffer(vk::BufferHelper *indexBuffer)
+    {
+        mCurrentElementArrayBuffer = indexBuffer;
+    }
+
   private:
     angle::Result setDefaultPackedInput(ContextVk *contextVk, size_t attribIndex);
 
