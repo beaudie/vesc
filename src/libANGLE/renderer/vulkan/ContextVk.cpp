@@ -54,6 +54,7 @@ constexpr size_t kDescriptorBufferInfosInitialSize = 8;
 constexpr size_t kDescriptorImageInfosInitialSize  = 4;
 constexpr size_t kDescriptorWriteInfosInitialSize =
     kDescriptorBufferInfosInitialSize + kDescriptorImageInfosInitialSize;
+static constexpr int kMaxCachedStreamIndexBuffers = 4;
 
 // For shader uniforms such as gl_DepthRange and the viewport size.
 struct GraphicsDriverUniforms
@@ -883,6 +884,11 @@ void ContextVk::onDestroy(const gl::Context *context)
     mDefaultUniformStorage.release(mRenderer);
     mEmptyBuffer.release(mRenderer);
 
+    for (std::unique_ptr<vk::BufferHelper> &buffer : mCachedStreamIndexBuffers)
+    {
+        buffer->destroy(mRenderer);
+    }
+
     for (vk::DynamicBuffer &defaultBuffer : mDefaultAttribBuffers)
     {
         defaultBuffer.destroy(mRenderer);
@@ -1202,9 +1208,57 @@ angle::Result ContextVk::setupIndexedDraw(const gl::Context *context,
     const gl::Buffer *elementArrayBuffer = vertexArrayVk->getState().getElementArrayBuffer();
     if (!elementArrayBuffer)
     {
-        mGraphicsDirtyBits.set(DIRTY_BIT_INDEX_BUFFER);
-        ANGLE_TRY(vertexArrayVk->convertIndexBufferCPU(this, indexType, indexCount, indices));
-        mCurrentIndexBufferOffset = 0;
+        // Applications often time draw a quad with two triangles. This is try to catch all the
+        // common used element array buffer with pre-created BufferHelper objects to improve
+        // performance.
+        vk::BufferHelper *cachedIndexBuffer = nullptr;
+        if (indexCount == 6 && indexType == gl::DrawElementsType::UnsignedShort)
+        {
+            int dataSize = sizeof(GLushort) * 6;
+            for (std::unique_ptr<vk::BufferHelper> &buffer : mCachedStreamIndexBuffers)
+            {
+                void *ptr = buffer->getMappedMemory();
+                if (memcmp(indices, ptr, dataSize) == 0)
+                {
+                    cachedIndexBuffer = buffer.get();
+                    break;
+                }
+            }
+
+            if (!cachedIndexBuffer &&
+                mCachedStreamIndexBuffers.size() < kMaxCachedStreamIndexBuffers)
+            {
+                std::unique_ptr<vk::BufferHelper> buffer = std::make_unique<vk::BufferHelper>();
+                ANGLE_TRY(buffer->initSuballocation(
+                    this,
+                    mRenderer->getVertexConversionBufferMemoryTypeIndex(
+                        vk::MemoryHostVisibility::Visible),
+                    dataSize, mRenderer->getVertexConversionBufferAlignment()));
+                GLushort *dstPtr = reinterpret_cast<GLushort *>(buffer->getMappedMemory());
+                memcpy(dstPtr, indices, dataSize);
+                ANGLE_TRY(buffer->flush(mRenderer));
+
+                mCachedStreamIndexBuffers.push_back(std::move(buffer));
+                cachedIndexBuffer = mCachedStreamIndexBuffers.back().get();
+            }
+
+            if (cachedIndexBuffer != nullptr)
+            {
+                if (vertexArrayVk->getCurrentElementArrayBuffer() != cachedIndexBuffer)
+                {
+                    mGraphicsDirtyBits.set(DIRTY_BIT_INDEX_BUFFER);
+                    vertexArrayVk->bindElementArrayBuffer(cachedIndexBuffer);
+                    mCurrentIndexBufferOffset = 0;
+                }
+            }
+        }
+
+        if (cachedIndexBuffer == nullptr)
+        {
+            mGraphicsDirtyBits.set(DIRTY_BIT_INDEX_BUFFER);
+            ANGLE_TRY(vertexArrayVk->convertIndexBufferCPU(this, indexType, indexCount, indices));
+            mCurrentIndexBufferOffset = 0;
+        }
     }
     else
     {

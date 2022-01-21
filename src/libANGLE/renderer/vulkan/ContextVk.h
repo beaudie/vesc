@@ -1206,6 +1206,9 @@ class ContextVk : public ContextImpl, public vk::Context, public MultisampleText
     // allow binding a null vertex buffer.
     vk::BufferHelper mEmptyBuffer;
 
+    // Cached element array buffers for improving performance.
+    vk::BufferHelperPointerVector mCachedStreamIndexBuffers;
+
     // Storage for default uniforms of ProgramVks and ProgramPipelineVks.
     vk::DynamicBuffer mDefaultUniformStorage;
 
