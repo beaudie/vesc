@@ -50,6 +50,52 @@
       "message": "Re-LGTM, thanks",
       "revId": "2878d3b081d2d257db753047484d89b99a92d218",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "1a67e3b9_2e978e2e",
+        "filename": "src/tests/egl_tests/EGLLockSurface3Test.cpp",
+        "patchSetId": 20
+      },
+      "lineNbr": 265,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2022-01-21T16:50:50Z",
+      "side": 1,
+      "message": "nit: replace with EXPECT_NE",
+      "range": {
+        "startLine": 265,
+        "startChar": 4,
+        "endLine": 265,
+        "endChar": 15
+      },
+      "revId": "2878d3b081d2d257db753047484d89b99a92d218",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "7dae96bf_11ba1366",
+        "filename": "src/tests/egl_tests/EGLLockSurface3Test.cpp",
+        "patchSetId": 20
+      },
+      "lineNbr": 289,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2022-01-21T16:50:50Z",
+      "side": 1,
+      "message": "nit: replace EXPECT_TRUE(a \u003d\u003d b) with EXPECT_EQ(a, b)",
+      "range": {
+        "startLine": 289,
+        "startChar": 4,
+        "endLine": 289,
+        "endChar": 15
+      },
+      "revId": "2878d3b081d2d257db753047484d89b99a92d218",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
