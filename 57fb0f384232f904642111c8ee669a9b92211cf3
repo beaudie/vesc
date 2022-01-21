@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "284d8af9_d2233b3c",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1491687
+      },
+      "writtenOn": "2022-01-21T16:22:08Z",
+      "side": 1,
+      "message": "Not sure if this is worth merging, but I modified the example so it recreated the coherent buffer storage every second, so I could test the regeneration in FrameCapture. I now also need to call `glVertexAttribPointer` before every draw, since FrameCaputre does not pick it up for reset calls and I am not sure the complexity of determining this in FrameCapture is worth it without having an app that does the same.",
+      "revId": "57fb0f384232f904642111c8ee669a9b92211cf3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
