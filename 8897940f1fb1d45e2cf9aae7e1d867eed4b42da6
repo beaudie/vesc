@@ -119,6 +119,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "269b5934_cd0929b0",
+        "filename": "src/libANGLE/renderer/vulkan/VertexArrayVk.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 106,
+      "author": {
+        "id": 1531247
+      },
+      "writtenOn": "2022-01-21T21:32:20Z",
+      "side": 1,
+      "message": "So clampedSize is what prevents out of bounds reads. `src` isn\u0027t advanced until it has been read `divisor` times. Could you elaborate what kind of assert would make sense here, I\u0027m guessing not inside the loop?.. but then what would I assert on?",
+      "parentUuid": "c34f6a4e_cb49385e",
+      "revId": "8897940f1fb1d45e2cf9aae7e1d867eed4b42da6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "3cc6a662_171a9e51",
         "filename": "src/libANGLE/renderer/vulkan/VertexArrayVk.cpp",
         "patchSetId": 3
@@ -130,6 +148,30 @@
       "writtenOn": "2022-01-21T20:36:46Z",
       "side": 1,
       "message": "nit: what made you rename this to \"sameSrcRemainingCount\" instead of just using \"srcRemainingCount\"?",
+      "range": {
+        "startLine": 109,
+        "startChar": 13,
+        "endLine": 109,
+        "endChar": 35
+      },
+      "revId": "8897940f1fb1d45e2cf9aae7e1d867eed4b42da6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "3b1f482b_cd4fbfe9",
+        "filename": "src/libANGLE/renderer/vulkan/VertexArrayVk.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 109,
+      "author": {
+        "id": 1531247
+      },
+      "writtenOn": "2022-01-21T21:32:20Z",
+      "side": 1,
+      "message": "I don\u0027t really have a good name for this variable.\nThe meaning is \"how many times more should we read the same src pointer before advancing it further\". Hence the \"same\" prefix: we\u0027re reading the _same_ src pointer Count more times, not just the _src_ pointer Count more times.. uhh.. am I making sense?",
+      "parentUuid": "3cc6a662_171a9e51",
       "range": {
         "startLine": 109,
         "startChar": 13,
