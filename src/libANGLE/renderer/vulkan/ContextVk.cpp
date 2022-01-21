@@ -1202,9 +1202,28 @@ angle::Result ContextVk::setupIndexedDraw(const gl::Context *context,
     const gl::Buffer *elementArrayBuffer = vertexArrayVk->getState().getElementArrayBuffer();
     if (!elementArrayBuffer)
     {
-        mGraphicsDirtyBits.set(DIRTY_BIT_INDEX_BUFFER);
-        ANGLE_TRY(vertexArrayVk->convertIndexBufferCPU(this, indexType, indexCount, indices));
-        mCurrentIndexBufferOffset = 0;
+        // Applications often time draw a quad with two triangles. This is try to catch all the
+        // common used element array buffer with pre-created BufferHelper objects to improve
+        // performance.
+        bool cachedIndexBufferUsed = false;
+        if (indexCount == 6 && indexType == gl::DrawElementsType::UnsignedShort)
+        {
+            vk::BufferHelper *currentIndexBuffer = vertexArrayVk->getCurrentElementArrayBuffer();
+            ANGLE_TRY(
+                vertexArrayVk->useCachedStreamIndexBuffer(this, indices, &cachedIndexBufferUsed));
+            if (currentIndexBuffer != vertexArrayVk->getCurrentElementArrayBuffer())
+            {
+                mGraphicsDirtyBits.set(DIRTY_BIT_INDEX_BUFFER);
+                mCurrentIndexBufferOffset = 0;
+            }
+        }
+
+        if (!cachedIndexBufferUsed)
+        {
+            mGraphicsDirtyBits.set(DIRTY_BIT_INDEX_BUFFER);
+            ANGLE_TRY(vertexArrayVk->convertIndexBufferCPU(this, indexType, indexCount, indices));
+            mCurrentIndexBufferOffset = 0;
+        }
     }
     else
     {

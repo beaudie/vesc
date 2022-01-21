@@ -24,6 +24,8 @@ namespace rx
 {
 namespace
 {
+constexpr int kMaxCachedStreamIndexBuffers = 4;
+
 ANGLE_INLINE bool BindingIsAligned(const gl::VertexBinding &binding,
                                    const angle::Format &angleFormat,
                                    unsigned int attribSize,
@@ -179,6 +181,11 @@ void VertexArrayVk::destroy(const gl::Context *context)
     ContextVk *contextVk = vk::GetImpl(context);
 
     RendererVk *renderer = contextVk->getRenderer();
+
+    for (std::unique_ptr<vk::BufferHelper> &buffer : mCachedStreamIndexBuffers)
+    {
+        buffer->release(renderer);
+    }
 
     for (vk::BufferHelper &bufferHelper : mStreamedVertexData)
     {
@@ -924,6 +931,47 @@ angle::Result VertexArrayVk::updateDefaultAttrib(ContextVk *contextVk,
         mCurrentArrayBuffers[attribIndex]       = buffer;
 
         ANGLE_TRY(setDefaultPackedInput(contextVk, attribIndex));
+    }
+
+    return angle::Result::Continue;
+}
+
+angle::Result VertexArrayVk::useCachedStreamIndexBuffer(ContextVk *contextVk,
+                                                        const void *indices,
+                                                        bool *cacheUsed)
+{
+    vk::BufferHelper *cachedIndexBuffer = nullptr;
+
+    int dataSize = sizeof(GLushort) * 6;
+    for (std::unique_ptr<vk::BufferHelper> &buffer : mCachedStreamIndexBuffers)
+    {
+        void *ptr = buffer->getMappedMemory();
+        if (memcmp(indices, ptr, dataSize) == 0)
+        {
+            cachedIndexBuffer = buffer.get();
+            break;
+        }
+    }
+
+    if (!cachedIndexBuffer && mCachedStreamIndexBuffers.size() < kMaxCachedStreamIndexBuffers)
+    {
+        RendererVk *renderer                     = contextVk->getRenderer();
+        std::unique_ptr<vk::BufferHelper> buffer = std::make_unique<vk::BufferHelper>();
+        ANGLE_TRY(buffer->initSuballocation(
+            contextVk,
+            renderer->getVertexConversionBufferMemoryTypeIndex(vk::MemoryHostVisibility::Visible),
+            dataSize, renderer->getVertexConversionBufferAlignment()));
+        memcpy(buffer->getMappedMemory(), indices, dataSize);
+        ANGLE_TRY(buffer->flush(renderer));
+
+        mCachedStreamIndexBuffers.push_back(std::move(buffer));
+        cachedIndexBuffer = mCachedStreamIndexBuffers.back().get();
+    }
+
+    *cacheUsed = cachedIndexBuffer != nullptr;
+    if (*cacheUsed)
+    {
+        mCurrentElementArrayBuffer = cachedIndexBuffer;
     }
 
     return angle::Result::Continue;

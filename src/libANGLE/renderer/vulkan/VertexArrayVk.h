@@ -101,6 +101,10 @@ class VertexArrayVk : public VertexArrayImpl
         return mStreamingVertexAttribsMask;
     }
 
+    angle::Result useCachedStreamIndexBuffer(ContextVk *contextVk,
+                                             const void *indices,
+                                             bool *cacheUsed);
+
   private:
     angle::Result setDefaultPackedInput(ContextVk *contextVk, size_t attribIndex);
 
@@ -136,6 +140,9 @@ class VertexArrayVk : public VertexArrayImpl
     gl::AttribArray<GLuint> mCurrentArrayBufferStrides;
     gl::AttributesMask mCurrentArrayBufferCompressed;
     vk::BufferHelper *mCurrentElementArrayBuffer;
+
+    // Cached element array buffers for improving performance.
+    vk::BufferHelperPointerVector mCachedStreamIndexBuffers;
 
     gl::AttribArray<vk::BufferHelper> mStreamedVertexData;
     vk::BufferHelper mStreamedIndexData;
