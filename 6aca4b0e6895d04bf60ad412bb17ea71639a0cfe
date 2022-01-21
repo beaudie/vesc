@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b7d073d5_8d2e4dd5",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 8
+      },
+      "lineNbr": 9,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2022-01-21T21:52:06Z",
+      "side": 1,
+      "message": "Thanks for tracking this down! Please generalize the commit description, perhaps:\n\n\"\"\"\nFix compressed texture initialization and add DXT1 test.\n\nThere was a divergence between WebKit and upstream ANGLE in\nInitializeTextureContents\u0027 handling of compressed textures.\n\nAlign upstream ANGLE with WebKit, fix a problem with emulated\ncompressed texture formats like ETC2, and add a new test:\n  DXT1CompressedTextureTestWebGL2.InitializeTextureContents\n\nBug: chromium:1289428\n\"\"\"",
+      "revId": "6aca4b0e6895d04bf60ad412bb17ea71639a0cfe",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "cc8ec549_7a773023",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 8
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2022-01-21T21:52:06Z",
+      "side": 1,
+      "message": "lgtm with a request on the commit message.\n",
+      "revId": "6aca4b0e6895d04bf60ad412bb17ea71639a0cfe",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
