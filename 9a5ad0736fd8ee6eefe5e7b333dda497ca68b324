@@ -52,6 +52,42 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "b754d974_182f06fb",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1359249
+      },
+      "writtenOn": "2022-01-21T18:45:01Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "65271d3b_6112ba7d",
+      "revId": "9a5ad0736fd8ee6eefe5e7b333dda497ca68b324",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "059e1e57_bb723645",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1359249
+      },
+      "writtenOn": "2022-01-21T18:45:01Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "8db504ec_f79c4f50",
+      "revId": "9a5ad0736fd8ee6eefe5e7b333dda497ca68b324",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "8a96858f_e90f2b50",
@@ -65,6 +101,30 @@
       "writtenOn": "2022-01-09T02:10:35Z",
       "side": 1,
       "message": "This was added previously.",
+      "range": {
+        "startLine": 1711,
+        "startChar": 1,
+        "endLine": 1721,
+        "endChar": 5
+      },
+      "revId": "9a5ad0736fd8ee6eefe5e7b333dda497ca68b324",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "bd278122_6bddb64c",
+        "filename": "src/libANGLE/renderer/vulkan/SurfaceVk.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 1721,
+      "author": {
+        "id": 1359249
+      },
+      "writtenOn": "2022-01-21T18:45:01Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "8a96858f_e90f2b50",
       "range": {
         "startLine": 1711,
         "startChar": 1,

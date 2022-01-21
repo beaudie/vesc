@@ -67,6 +67,24 @@
       "message": "I don\u0027t think this is needed. doesn\u0027t change the out come. It was left over testing code. But the only difference between what we tested and Google tip.\n\nI will rremove",
       "revId": "702d3c624f83fb225cfa440a860cf8bdc3d08940",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "cd021b35_87664e68",
+        "filename": "src/libANGLE/renderer/vulkan/SurfaceVk.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 1471,
+      "author": {
+        "id": 1359249
+      },
+      "writtenOn": "2022-01-21T18:45:01Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "7e8b4529_95d6dc57",
+      "revId": "702d3c624f83fb225cfa440a860cf8bdc3d08940",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
