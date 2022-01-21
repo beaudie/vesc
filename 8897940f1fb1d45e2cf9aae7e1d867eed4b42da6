@@ -1,6 +1,29 @@
 {
   "comments": [
     {
+      "unresolved": true,
+      "key": {
+        "uuid": "3bd74970_81804176",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 3
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-01-21T18:54:32Z",
+      "side": 1,
+      "message": "nit: prefix with `Vulkan: `\n\n    Vulkan: Prevent ...",
+      "range": {
+        "startLine": 7,
+        "startChar": 0,
+        "endLine": 7,
+        "endChar": 7
+      },
+      "revId": "8897940f1fb1d45e2cf9aae7e1d867eed4b42da6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": false,
       "key": {
         "uuid": "ce700b3d_62a514aa",
@@ -14,6 +37,23 @@
       "writtenOn": "2022-01-20T20:53:41Z",
       "side": 1,
       "message": "LGTM. Shabi want to do the second review?",
+      "revId": "8897940f1fb1d45e2cf9aae7e1d867eed4b42da6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "9a55f939_b549aa63",
+        "filename": "src/libANGLE/renderer/vulkan/VertexArrayVk.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 106,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-01-21T18:54:32Z",
+      "side": 1,
+      "message": "This code is kind of hard to understand. Could you please give better names to the variables (like what is sameSrcRemainingCount?) and add a comment as to what exactly is going on?\n\nAlso, could you please check to see what happens if `dstStride` is say 128, and `srcStride` is say 32 and bytesToAllocate is 128k+32 (or if that\u0027s even possible)? Are `k` vertices copied and the last 32 bytes are set to 0, or k+1 vertices are copied?\n\nI\u0027m asking because we had issues before where an incomplete last stride (yet complete enough to include vertex data in that last incomplete stride) would read 0 in Vulkan on AMD but not in GL, and we had to extend the buffer size to make the stride complete. Just want to be sure we don\u0027t reintroduce that issue.",
       "revId": "8897940f1fb1d45e2cf9aae7e1d867eed4b42da6",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
