@@ -374,8 +374,15 @@ angle::Result InitializeTextureContents(const gl::Context *context,
     // Intiialize the content to black
     GLint layer, startDepth;
     GetSliceAndDepth(index, &layer, &startDepth);
-    if (texture->isCPUAccessible() && index.getType() != gl::TextureType::_2DMultisample &&
-        index.getType() != gl::TextureType::_2DMultisampleArray && !forceGPUInitialization)
+
+    // When emulated, opaque ETC2 formats may have uncompressed actual ANGLE format.
+    if (intendedInternalFormat.compressed && textureObjFormat.actualAngleFormat().isBlock)
+    {
+        return InitializeCompressedTextureContents(context, texture, textureObjFormat, index, layer,
+                                                   startDepth);
+    }
+    else if (texture->isCPUAccessible() && index.getType() != gl::TextureType::_2DMultisample &&
+             index.getType() != gl::TextureType::_2DMultisampleArray && !forceGPUInitialization)
     {
         const angle::Format &dstFormat = angle::Format::Get(textureObjFormat.actualFormatId);
         const size_t dstRowPitch       = dstFormat.pixelBytes * size.width;
@@ -417,11 +424,6 @@ angle::Result InitializeTextureContents(const gl::Context *context,
                                          conversionRow.data(), dstRowPitch);
             }
         }
-    }
-    else if (intendedInternalFormat.compressed)
-    {
-        return InitializeCompressedTextureContents(context, texture, textureObjFormat, index, layer,
-                                                   startDepth);
     }
     else
     {
