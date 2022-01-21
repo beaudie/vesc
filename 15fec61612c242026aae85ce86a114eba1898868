@@ -16,6 +16,29 @@
       "message": "shabi - can we land this?",
       "revId": "15fec61612c242026aae85ce86a114eba1898868",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "66264213_9fcfae2b",
+        "filename": "src/libANGLE/validationEGL.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 1479,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-01-21T05:36:26Z",
+      "side": 1,
+      "message": "Thanks, technically this should be `kEglMajorVersion \u003c kRequiredMajorVersion || (kEglMajorVersion \u003d\u003d kRequiredMajorVersion \u0026\u0026 kEglMinorVersion \u003c kRequiredMinorVersion)`, because what if we implement EGL 2.0? 😄\n\nNo big deal though, that\u0027s never gonna happen.",
+      "range": {
+        "startLine": 1479,
+        "startChar": 17,
+        "endLine": 1479,
+        "endChar": 57
+      },
+      "revId": "15fec61612c242026aae85ce86a114eba1898868",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
