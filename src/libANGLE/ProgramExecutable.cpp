@@ -1671,5 +1671,4 @@ void ProgramExecutable::copyUniformsFromProgramMap(const ShaderMap<Program *> &p
     mAtomicCounterUniformRange =
         AddUniforms(programs, mLinkedShaderStages, mUniforms, getAtomicRange);
 }
-
 }  // namespace gl
