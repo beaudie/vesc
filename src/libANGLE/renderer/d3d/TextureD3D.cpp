@@ -520,6 +520,10 @@ angle::Result TextureD3D::generateMipmapUsingImages(const gl::Context *context,
     // CPU-side mipmap generation, or something else.
     bool renderableStorage = (mTexStorage && mTexStorage->isRenderTarget() &&
                               !(mRenderer->getFeatures().zeroMaxLodWorkaround.enabled));
+    if (renderableStorage)
+    {
+        ANGLE_TRY(updateStorage(context));
+    }
 
     for (GLint layer = 0; layer < layerCount; ++layer)
     {
@@ -717,6 +721,20 @@ angle::Result TextureD3D::releaseTexStorage(const gl::Context *context)
     if (!mTexStorage)
     {
         return angle::Result::Continue;
+    }
+
+    if (mTexStorage->isRenderTarget())
+    {
+        gl::ImageIndexIterator iterator = imageIterator();
+        while (iterator.hasNext())
+        {
+            const gl::ImageIndex index = iterator.next();
+            ImageD3D *image            = getImage(index);
+            if (image && isImageComplete(index))
+            {
+                ANGLE_TRY(image->copyFromTexStorage(context, index, mTexStorage));
+            }
+        }
     }
 
     onStateChange(angle::SubjectMessage::StorageReleased);
@@ -1410,6 +1428,10 @@ angle::Result TextureD3D_2D::initMipmapImages(const gl::Context *context)
 
         ANGLE_TRY(redefineImage(context, level, getBaseLevelInternalFormat(), levelSize, false));
     }
+
+    // We're should be mip-complete now so generate the storage.
+    ANGLE_TRY(initializeStorage(context, true));
+
     return angle::Result::Continue;
 }
 
@@ -1612,9 +1634,6 @@ angle::Result TextureD3D_2D::redefineImage(const gl::Context *context,
     const int storageHeight    = std::max(1, getLevelZeroHeight() >> level);
     const GLenum storageFormat = getBaseLevelInternalFormat();
 
-    mImageArray[level]->redefine(gl::TextureType::_2D, internalformat, size, forceRelease);
-    mDirtyImages = mDirtyImages || mImageArray[level]->isDirty();
-
     if (mTexStorage)
     {
         const size_t storageLevels = mTexStorage->getLevelCount();
@@ -1635,6 +1654,9 @@ angle::Result TextureD3D_2D::redefineImage(const gl::Context *context,
             markAllImagesDirty();
         }
     }
+
+    mImageArray[level]->redefine(gl::TextureType::_2D, internalformat, size, forceRelease);
+    mDirtyImages = mDirtyImages || mImageArray[level]->isDirty();
 
     // Can't be an EGL image target after being redefined
     mEGLImageTarget = false;
@@ -2125,6 +2147,10 @@ angle::Result TextureD3D_Cube::initMipmapImages(const gl::Context *context)
                                     gl::Extents(faceLevelSize, faceLevelSize, 1), false));
         }
     }
+
+    // We're should be mip-complete now so generate the storage.
+    ANGLE_TRY(initializeStorage(context, true));
+
     return angle::Result::Continue;
 }
 
@@ -2809,6 +2835,9 @@ angle::Result TextureD3D_3D::initMipmapImages(const gl::Context *context)
                               std::max(getLevelZeroDepth() >> level, 1));
         ANGLE_TRY(redefineImage(context, level, getBaseLevelInternalFormat(), levelSize, false));
     }
+
+    // We're should be mip-complete now so generate the storage.
+    ANGLE_TRY(initializeStorage(context, true));
 
     return angle::Result::Continue;
 }
@@ -3546,6 +3575,9 @@ angle::Result TextureD3D_2DArray::initMipmapImages(const gl::Context *context)
                                    std::max(baseHeight >> level, 1), baseDepth);
         ANGLE_TRY(redefineImage(context, level, baseFormat, levelLayerSize, false));
     }
+
+    // We're should be mip-complete now so generate the storage.
+    ANGLE_TRY(initializeStorage(context, true));
 
     return angle::Result::Continue;
 }
