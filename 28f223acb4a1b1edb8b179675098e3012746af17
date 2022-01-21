@@ -123,6 +123,24 @@
       "parentUuid": "c96785ea_b4cd98b9",
       "revId": "28f223acb4a1b1edb8b179675098e3012746af17",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "a05a9a64_3149670c",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-01-21T20:57:59Z",
+      "side": 1,
+      "message": "anglebug.com/6935",
+      "parentUuid": "14c05235_b2040527",
+      "revId": "28f223acb4a1b1edb8b179675098e3012746af17",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
