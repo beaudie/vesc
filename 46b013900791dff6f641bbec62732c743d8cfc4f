@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "115b117a_fe9b5e79",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1491687
+      },
+      "writtenOn": "2022-01-21T16:19:35Z",
+      "side": 1,
+      "message": "This creates working reset functions for Dota Underlords and War Planet Online. \nThe buffer data is updated in the bufferMapCalls for immutable buffers, since the buffer is not yet mapped when the bufferRestoreCalls are executed. Should I change this behavior so the naming of the call sets are more fitting?",
+      "revId": "46b013900791dff6f641bbec62732c743d8cfc4f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
