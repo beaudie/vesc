@@ -16,6 +16,23 @@
       "message": "OK, I have all the suppressions in place and the tests pass now.\nhttps://luci-milo.appspot.com/raw/build/logs.chromium.org/angle/led/ynovikov_google.com/e5cb4fcb280defa8be5ffb8c058a85882da1cc8ba87c61030b25db655e559de5/+/build.proto",
       "revId": "3dc3b61fba4ac33cad98744951b2dcb4f55046d6",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "6b4fff17_3fdb8884",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 8
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2022-01-21T14:26:53Z",
+      "side": 1,
+      "message": "LGTM! Nice work.",
+      "revId": "3dc3b61fba4ac33cad98744951b2dcb4f55046d6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
