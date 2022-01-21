@@ -51,6 +51,47 @@
       "message": "The reason for the change is we think VkCmdClearAttachments is faster than a draw call, right? The result sheet is evaluating app traces. Do you know which app trace actually run into it? Or better, I think you can do the perf measurement on the test you wrote with a loop, which will be more telling, I think. ",
       "revId": "0f1efa854182b186dfeea8c8571f5d9baf1e5718",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "461017b2_ee9f94c7",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 11
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-01-21T19:26:43Z",
+      "side": 1,
+      "message": "Now _this_ looks like noise. I agree with Charlie that it\u0027d be useful to find out if any trace actually hits this, and investigate the performance of that more closely, or write a micro-benchmark.",
+      "parentUuid": "064dbfe1_4a05476f",
+      "revId": "0f1efa854182b186dfeea8c8571f5d9baf1e5718",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "69f97edd_cfc48d6c",
+        "filename": "src/libANGLE/renderer/vulkan/FramebufferVk.cpp",
+        "patchSetId": 11
+      },
+      "lineNbr": 536,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-01-21T19:26:43Z",
+      "side": 1,
+      "message": "Is this really better than using the draw? At least the scissored clear with the draw only opens a render pass with the scissored size. What does this do?\n\nIn fact, while we don\u0027t do this now, the UtilsVk clear can be made to use loadOp\u003dCLEAR when starting the render pass (and if clear is not masked etc) and not issue a draw at all, but this would use loadOp\u003dLOAD just to clear afterwards.",
+      "range": {
+        "startLine": 533,
+        "startChar": 0,
+        "endLine": 536,
+        "endChar": 40
+      },
+      "revId": "0f1efa854182b186dfeea8c8571f5d9baf1e5718",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
