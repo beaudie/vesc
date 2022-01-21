@@ -34,6 +34,24 @@
       "parentUuid": "d4e8aed5_da756e65",
       "revId": "2d674aad0c855a1179bd6b0e527f3ec41853b764",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "73942de8_5a0e204e",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 17
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1524687
+      },
+      "writtenOn": "2022-01-21T06:25:59Z",
+      "side": 1,
+      "message": "Shahbaz, thanks for comment. One more question is that when the switch between hasImages() and !hasImages() happens, can we trigger  `endRenderPassIfComputeAccessAfterTextureSample` directly in ContextVk::invalidateProgramExecutableHelper when current program has linked compute shader?",
+      "parentUuid": "1fa83aec_bd6a9bbe",
+      "revId": "2d674aad0c855a1179bd6b0e527f3ec41853b764",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
