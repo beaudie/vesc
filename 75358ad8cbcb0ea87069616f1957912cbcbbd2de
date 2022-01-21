@@ -134,6 +134,30 @@
       },
       "revId": "75358ad8cbcb0ea87069616f1957912cbcbbd2de",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "756a7d85_d8054bf3",
+        "filename": "src/tests/perf_tests/TracePerfTest.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 1166,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2022-01-21T16:33:28Z",
+      "side": 1,
+      "message": "Pretty sure it\u0027s an old driver bug. Driver upgrade tracked here: http://anglebug.com/6850 . The other possibility is it\u0027s an ANGLE bug related to certain driver properties. In any case seems OK to assume it\u0027s an NV bug for now.",
+      "parentUuid": "1234c5b7_eaa847e2",
+      "range": {
+        "startLine": 1159,
+        "startChar": 0,
+        "endLine": 1166,
+        "endChar": 5
+      },
+      "revId": "75358ad8cbcb0ea87069616f1957912cbcbbd2de",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
