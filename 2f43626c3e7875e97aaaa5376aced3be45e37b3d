@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "f4f0629e_3e63e10a",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-01-22T03:27:58Z",
+      "side": 1,
+      "message": "Thanks for the fix. A regression test would be welcome to make sure we don\u0027t break this in the future.",
+      "revId": "2f43626c3e7875e97aaaa5376aced3be45e37b3d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
