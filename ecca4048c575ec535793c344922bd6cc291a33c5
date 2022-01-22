@@ -33,6 +33,24 @@
       "message": "Why are these cast to uint32_t?",
       "revId": "ecca4048c575ec535793c344922bd6cc291a33c5",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "9b570321_986da507",
+        "filename": "src/compiler/translator/InfoSink.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 86,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-01-22T02:42:31Z",
+      "side": 1,
+      "message": "Because `ostream::operator \u003c\u003c` sees `uint8_t` as a `char` and outputs a character instead of a number.\n\nThey have tried, oh so many have tried, but no one could ever beat printf formatting 😊",
+      "parentUuid": "707f7f3c_becc3e94",
+      "revId": "ecca4048c575ec535793c344922bd6cc291a33c5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
