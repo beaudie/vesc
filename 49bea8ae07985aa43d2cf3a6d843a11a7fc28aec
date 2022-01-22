@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "ea870c88_0efdfd3d",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1394635
+      },
+      "writtenOn": "2022-01-22T19:06:44Z",
+      "side": 1,
+      "message": "After checking the ETC2 spec and adding tests, it turned out that the issue was the opposite: lack of the init function for another punchthrough format. On top of that, the codegen was erroneously adding the init function when the formats are not emulated. Also discovered a Vulkan bug in that area.",
+      "revId": "49bea8ae07985aa43d2cf3a6d843a11a7fc28aec",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
