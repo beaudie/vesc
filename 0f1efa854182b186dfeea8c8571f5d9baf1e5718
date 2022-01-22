@@ -73,6 +73,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "718bc25e_d3e924cf",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 11
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2022-01-22T02:34:23Z",
+      "side": 1,
+      "message": "I created a CL with a new test to measure this CL:\n3408457: Vulkan: Add ClearBenchmark.Run/vulkan_scissoredClear | https://chromium-review.googlesource.com/c/angle/angle/+/3408457\n\nThis gives the following results on Pixel 6:\nBefore:\n    [ RUN      ] ClearBenchmark.Run/vulkan_scissoredClear\n    *RESULT Clear_vulkan.cpu_time: scissoredClear\u003d 1473.1687851453 ns\n    *RESULT Clear_vulkan.wall_time: scissoredClear\u003d 1205.4494506141 ns\n    *RESULT Clear_vulkan.gpu_time: scissoredClear\u003d 893.3167845498 ns\n    [       OK ] ClearBenchmark.Run/vulkan_scissoredClear (9160 ms)\n    \nAfter:\n    [ RUN      ] ClearBenchmark.Run/vulkan_scissoredClear\n    Clear_vulkan.cpu_time: scissoredClear\u003d 1327.6442658209 ns\n    Clear_vulkan.wall_time: scissoredClear\u003d 1114.3499904306 ns\n    Clear_vulkan.gpu_time: scissoredClear\u003d 822.3592952574 ns\n    [       OK ] ClearBenchmark.Run/vulkan_scissoredClear (9281 ms)\n    \nThis looks like a clear win to me with the RP render area size fixed.",
+      "parentUuid": "461017b2_ee9f94c7",
+      "revId": "0f1efa854182b186dfeea8c8571f5d9baf1e5718",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "69f97edd_cfc48d6c",
         "filename": "src/libANGLE/renderer/vulkan/FramebufferVk.cpp",
         "patchSetId": 11
@@ -84,6 +102,30 @@
       "writtenOn": "2022-01-21T19:26:43Z",
       "side": 1,
       "message": "Is this really better than using the draw? At least the scissored clear with the draw only opens a render pass with the scissored size. What does this do?\n\nIn fact, while we don\u0027t do this now, the UtilsVk clear can be made to use loadOp\u003dCLEAR when starting the render pass (and if clear is not masked etc) and not issue a draw at all, but this would use loadOp\u003dLOAD just to clear afterwards.",
+      "range": {
+        "startLine": 533,
+        "startChar": 0,
+        "endLine": 536,
+        "endChar": 40
+      },
+      "revId": "0f1efa854182b186dfeea8c8571f5d9baf1e5718",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "523e3b09_029105e5",
+        "filename": "src/libANGLE/renderer/vulkan/FramebufferVk.cpp",
+        "patchSetId": 11
+      },
+      "lineNbr": 536,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2022-01-22T02:34:23Z",
+      "side": 1,
+      "message": "\u003e Is this really better than using the draw? At least the scissored clear with the draw only opens a render pass with the scissored size. What does this do?\n\nGood catch.   Reducing this to `scissoredRenderArea` allows this CL to improve performance with the new benchmark test.\n\n\u003e In fact, while we don\u0027t do this now, the UtilsVk clear can be made to use loadOp\u003dCLEAR when starting the render pass (and if clear is not masked etc) and not issue a draw at all, but this would use loadOp\u003dLOAD just to clear afterwards.\n\nI\u0027ve opened anglebug.com/6939 to look into this.",
+      "parentUuid": "69f97edd_cfc48d6c",
       "range": {
         "startLine": 533,
         "startChar": 0,
