@@ -16,6 +16,46 @@
       "message": "PTAL",
       "revId": "119bcbccd4d9d04d4e39d65580187e0ba1da7692",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "e5929523_e939ca42",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 21
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-01-22T03:32:46Z",
+      "side": 1,
+      "message": "LGTM. One clean up and we can land this. Thanks for working through all the issues.",
+      "revId": "119bcbccd4d9d04d4e39d65580187e0ba1da7692",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "2aa366e5_af2f5af9",
+        "filename": "src/libANGLE/renderer/vulkan/DisplayVk.cpp",
+        "patchSetId": 21
+      },
+      "lineNbr": 331,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-01-22T03:32:46Z",
+      "side": 1,
+      "message": "One cleanup suggestion. Could you please add a FeaturesVk feature (like `supportsSharedPresentableImageExtension`) and initialize it with `IsAndroid()`?\n\nThat would let us test the feature more easily on other platforms and situations, and allow it to be dynamically switched on and off.",
+      "range": {
+        "startLine": 328,
+        "startChar": 0,
+        "endLine": 331,
+        "endChar": 0
+      },
+      "revId": "119bcbccd4d9d04d4e39d65580187e0ba1da7692",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
