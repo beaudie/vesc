@@ -132,7 +132,7 @@ angle::Result ShaderInfo::initShaders(const gl::ShaderBitSet &linkedShaderStages
                                       const gl::ShaderMap<const angle::spirv::Blob *> &spirvBlobs,
                                       const ShaderInterfaceVariableInfoMap &variableInfoMap)
 {
-    ASSERT(!valid());
+    clear();
 
     for (const gl::ShaderType shaderType : gl::AllShaderTypes())
     {
@@ -149,7 +149,14 @@ angle::Result ShaderInfo::initShaders(const gl::ShaderBitSet &linkedShaderStages
     return angle::Result::Continue;
 }
 
-void ShaderInfo::release(ContextVk *contextVk)
+void ShaderInfo::initShaderFromProgram(gl::ShaderType shaderType,
+                                       const ShaderInfo &programShaderInfo)
+{
+    mSpirvBlobs[shaderType] = programShaderInfo.mSpirvBlobs[shaderType];
+    mIsInitialized          = true;
+}
+
+void ShaderInfo::clear()
 {
     for (angle::spirv::Blob &spirvBlob : mSpirvBlobs)
     {
@@ -252,8 +259,6 @@ ProgramExecutableVk::ProgramExecutableVk()
       mImmutableSamplersMaxDescriptorCount(1),
       mUniformBufferDescriptorType(VK_DESCRIPTOR_TYPE_MAX_ENUM),
       mDynamicUniformDescriptorOffsets{},
-      mProgram(nullptr),
-      mProgramPipeline(nullptr),
       mPerfCounters{},
       mCumulativePerfCounters{}
 {
@@ -346,6 +351,8 @@ std::unique_ptr<rx::LinkEvent> ProgramExecutableVk::load(gl::BinaryInputStream *
         }
     }
 
+    mOriginalShaderInfo.load(stream);
+
     return std::make_unique<LinkEventDone>(angle::Result::Continue);
 }
 
@@ -381,40 +388,13 @@ void ProgramExecutableVk::save(gl::BinaryOutputStream *stream)
             stream->writeBool(info.isDuplicate);
         }
     }
+
+    mOriginalShaderInfo.save(stream);
 }
 
 void ProgramExecutableVk::clearVariableInfoMap()
 {
     mVariableInfoMap.clear();
-}
-
-ProgramVk *ProgramExecutableVk::getShaderProgram(const gl::State &glState,
-                                                 gl::ShaderType shaderType) const
-{
-    if (mProgram)
-    {
-        const gl::ProgramExecutable &glExecutable = mProgram->getState().getExecutable();
-        if (glExecutable.hasLinkedShaderStage(shaderType))
-        {
-            return mProgram;
-        }
-    }
-    else if (mProgramPipeline)
-    {
-        return mProgramPipeline->getShaderProgram(shaderType);
-    }
-
-    return nullptr;
-}
-
-const gl::ProgramExecutable &ProgramExecutableVk::getGlExecutable()
-{
-    ASSERT(mProgram || mProgramPipeline);
-    if (mProgram)
-    {
-        return mProgram->getState().getExecutable();
-    }
-    return mProgramPipeline->getState().getExecutable();
 }
 
 uint32_t GetInterfaceBlockArraySize(const std::vector<gl::InterfaceBlock> &blocks,
@@ -826,15 +806,16 @@ void WriteBufferDescriptorSetBinding(const vk::BufferHelper &buffer,
     ASSERT(writeInfoOut->pBufferInfo[0].buffer != VK_NULL_HANDLE);
 }
 
-void ProgramExecutableVk::updateEarlyFragmentTestsOptimization(ContextVk *contextVk)
+void ProgramExecutableVk::updateEarlyFragmentTestsOptimization(
+    ContextVk *contextVk,
+    const gl::ProgramExecutable &glExecutable)
 {
     const gl::State &glState = contextVk->getState();
 
     mTransformOptions.removeEarlyFragmentTestsOptimization = false;
     if (!glState.canEnableEarlyFragmentTestsOptimization())
     {
-        ProgramVk *programVk = getShaderProgram(glState, gl::ShaderType::Fragment);
-        if (programVk && programVk->getState().hasEarlyFragmentTestsOptimization())
+        if (glExecutable.usesEarlyFragmentTestsOptimization())
         {
             mTransformOptions.removeEarlyFragmentTestsOptimization = true;
         }
@@ -865,15 +846,14 @@ angle::Result ProgramExecutableVk::getGraphicsPipeline(ContextVk *contextVk,
     const gl::ShaderBitSet linkedShaderStages = glExecutable->getLinkedShaderStages();
     const gl::ShaderType lastPreFragmentStage = gl::GetLastPreFragmentStage(linkedShaderStages);
 
+    const bool isTransformFeedbackProgram =
+        !glExecutable->getLinkedTransformFeedbackVaryings().empty();
+
     for (const gl::ShaderType shaderType : linkedShaderStages)
     {
-        ProgramVk *programVk = getShaderProgram(glState, shaderType);
-        if (programVk)
-        {
-            ANGLE_TRY(programVk->initGraphicsShaderProgram(
-                contextVk, shaderType, shaderType == lastPreFragmentStage, mTransformOptions,
-                &programInfo, mVariableInfoMap));
-        }
+        ANGLE_TRY(initGraphicsShaderProgram(
+            contextVk, shaderType, shaderType == lastPreFragmentStage, isTransformFeedbackProgram,
+            mTransformOptions, &programInfo, mVariableInfoMap));
     }
 
     vk::ShaderProgramHelper *shaderProgram = programInfo.getShaderProgram();
@@ -913,12 +893,9 @@ angle::Result ProgramExecutableVk::getComputePipeline(ContextVk *contextVk,
     const gl::ProgramExecutable *glExecutable = glState.getProgramExecutable();
     ASSERT(glExecutable && glExecutable->hasLinkedShaderStage(gl::ShaderType::Compute));
 
-    ProgramVk *programVk = getShaderProgram(glState, gl::ShaderType::Compute);
-    ASSERT(programVk);
-    ProgramInfo &programInfo = getComputeProgramInfo();
-    ANGLE_TRY(programVk->initComputeProgram(contextVk, &programInfo, mVariableInfoMap));
+    ANGLE_TRY(initComputeProgram(contextVk, &mComputeProgramInfo, mVariableInfoMap));
 
-    vk::ShaderProgramHelper *shaderProgram = programInfo.getShaderProgram();
+    vk::ShaderProgramHelper *shaderProgram = mComputeProgramInfo.getShaderProgram();
     ASSERT(shaderProgram);
     return shaderProgram->getComputePipeline(contextVk, getPipelineLayout(), pipelineOut);
 }
