@@ -1,0 +1,61 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "90903d74_5f179cd0",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 12
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2022-01-22T01:10:47Z",
+      "side": 1,
+      "message": "I\u0027m not sure I agree with all of the extra copies sticking around for the life of the Program/App.   fillProgramStateMap() was only filling in a map of pointers, while now the data is being permanently copied into the ProgramExecutable.   For monolithic programs (the vast majority of programs), this means we are doubling the memory consumption for the life of the program (which seems to essentially be the life of the app).\n\nHow do we clean up the memory and remove the duplication?   Does it need to be in the ProgramState in the first place, or can we fill it into the ProgramExecutable directly?",
+      "revId": "739d05152ba0811b512c483d0153d79a5beddfd0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "277e8729_5f6003c8",
+        "filename": "src/libANGLE/ProgramExecutable.cpp",
+        "patchSetId": 12
+      },
+      "lineNbr": 154,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2022-01-22T01:10:47Z",
+      "side": 1,
+      "message": "\u0027activeShaders\u0027 should be unnecessary, since the ShaderMap should only contain valid Program pointers for the active shaders.",
+      "revId": "739d05152ba0811b512c483d0153d79a5beddfd0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b8178455_977f05d7",
+        "filename": "src/libANGLE/ProgramExecutable.cpp",
+        "patchSetId": 12
+      },
+      "lineNbr": 1576,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2022-01-22T01:10:47Z",
+      "side": 1,
+      "message": "What prevents mImageBindings from growing indefinitely whenever the Program is linked with new shaders?",
+      "range": {
+        "startLine": 1575,
+        "startChar": 0,
+        "endLine": 1576,
+        "endChar": 84
+      },
+      "revId": "739d05152ba0811b512c483d0153d79a5beddfd0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}

@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ac582f71_d7ed25c3",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 12
+      },
+      "lineNbr": 1480,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2022-01-22T01:10:47Z",
+      "side": 0,
+      "message": "Why was this check removed?   Is it unnecessary?",
+      "range": {
+        "startLine": 1480,
+        "startChar": 16,
+        "endLine": 1480,
+        "endChar": 43
+      },
+      "revId": "a64d52fd23d1c0ca1514baeeec01bf08a73cf00e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "45b52a27_31396e77",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 12
+      },
+      "lineNbr": 6666,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2022-01-22T01:10:47Z",
+      "side": 0,
+      "message": "ditto",
+      "range": {
+        "startLine": 6666,
+        "startChar": 16,
+        "endLine": 6666,
+        "endChar": 43
+      },
+      "revId": "a64d52fd23d1c0ca1514baeeec01bf08a73cf00e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
