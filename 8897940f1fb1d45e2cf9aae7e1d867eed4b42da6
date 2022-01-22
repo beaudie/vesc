@@ -137,6 +137,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "b1e4bed8_12e11eec",
+        "filename": "src/libANGLE/renderer/vulkan/VertexArrayVk.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 106,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-01-22T03:24:27Z",
+      "side": 1,
+      "message": "ASSERT(bytesToAllocate % dstStride \u003d\u003d 0) to ensure Jamie\u0027s assertion (that \"bytesToAllocate is a multiple of stride\") is not broken in the future.",
+      "parentUuid": "269b5934_cd0929b0",
+      "revId": "8897940f1fb1d45e2cf9aae7e1d867eed4b42da6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "3cc6a662_171a9e51",
         "filename": "src/libANGLE/renderer/vulkan/VertexArrayVk.cpp",
         "patchSetId": 3
