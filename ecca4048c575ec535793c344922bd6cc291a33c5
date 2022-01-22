@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "90f3c18a_e4cbb105",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2022-01-22T01:25:20Z",
+      "side": 1,
+      "message": "LGTM with the mac builds fixed.",
+      "revId": "ecca4048c575ec535793c344922bd6cc291a33c5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "707f7f3c_becc3e94",
+        "filename": "src/compiler/translator/InfoSink.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 86,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2022-01-22T01:25:20Z",
+      "side": 1,
+      "message": "Why are these cast to uint32_t?",
+      "revId": "ecca4048c575ec535793c344922bd6cc291a33c5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
