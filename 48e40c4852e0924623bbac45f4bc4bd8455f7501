@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "0b57ba95_e7907e67",
+        "filename": "src/libANGLE/Program.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 2361,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2022-01-22T01:33:44Z",
+      "side": 1,
+      "message": "setUniformGeneric\u003cGLint, 1, \u0026rx::ProgramImpl::setUniform1iv\u003e(location, count, v);",
+      "range": {
+        "startLine": 2352,
+        "startChar": 0,
+        "endLine": 2361,
+        "endChar": 61
+      },
+      "revId": "48e40c4852e0924623bbac45f4bc4bd8455f7501",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
