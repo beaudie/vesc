@@ -32,6 +32,7 @@ class ShaderInfo final : angle::NonCopyable
     angle::Result initShaders(const gl::ShaderBitSet &linkedShaderStages,
                               const gl::ShaderMap<const angle::spirv::Blob *> &spirvBlobs,
                               const ShaderInterfaceVariableInfoMap &variableInfoMap);
+    void initShaderFromProgram(gl::ShaderType shaderType, const ShaderInfo &programShaderInfo);
     void release(ContextVk *contextVk);
 
     ANGLE_INLINE bool valid() const { return mIsInitialized; }
@@ -127,8 +128,6 @@ class ProgramExecutableVk
 
     void clearVariableInfoMap();
 
-    const gl::ProgramExecutable &getGlExecutable();
-
     ProgramInfo &getGraphicsDefaultProgramInfo() { return mGraphicsProgramInfos[0]; }
     ProgramInfo &getGraphicsProgramInfo(ProgramTransformOptions option)
     {
@@ -175,18 +174,8 @@ class ProgramExecutableVk
                                        CommandBufferT *commandBuffer,
                                        PipelineType pipelineType);
 
-    void updateEarlyFragmentTestsOptimization(ContextVk *contextVk);
-
-    void setProgram(ProgramVk *program)
-    {
-        ASSERT(!mProgram && !mProgramPipeline);
-        mProgram = program;
-    }
-    void setProgramPipeline(ProgramPipelineVk *pipeline)
-    {
-        ASSERT(!mProgram && !mProgramPipeline);
-        mProgramPipeline = pipeline;
-    }
+    void updateEarlyFragmentTestsOptimization(ContextVk *contextVk,
+                                              const gl::ProgramExecutable &glExecutable);
 
     bool usesDynamicUniformBufferDescriptors() const
     {
@@ -228,8 +217,6 @@ class ProgramExecutableVk
   private:
     friend class ProgramVk;
     friend class ProgramPipelineVk;
-
-    ProgramVk *getShaderProgram(const gl::State &glState, gl::ShaderType shaderType) const;
 
     angle::Result allocUniformAndXfbDescriptorSet(
         ContextVk *contextVk,
@@ -297,6 +284,52 @@ class ProgramExecutableVk
                                           const gl::ProgramExecutable &glExecutable,
                                           gl::ShaderMap<VkDeviceSize> *uniformOffsets) const;
 
+    ANGLE_INLINE angle::Result initProgram(ContextVk *contextVk,
+                                           const gl::ShaderType shaderType,
+                                           bool isLastPreFragmentStage,
+                                           bool isTransformFeedbackProgram,
+                                           ProgramTransformOptions optionBits,
+                                           ProgramInfo *programInfo,
+                                           const ShaderInterfaceVariableInfoMap &variableInfoMap)
+    {
+        ASSERT(mOriginalShaderInfo.valid());
+
+        // Create the program pipeline.  This is done lazily and once per combination of
+        // specialization constants.
+        if (!programInfo->valid(shaderType))
+        {
+            ANGLE_TRY(programInfo->initProgram(contextVk, shaderType, isLastPreFragmentStage,
+                                               isTransformFeedbackProgram, mOriginalShaderInfo,
+                                               optionBits, variableInfoMap));
+        }
+        ASSERT(programInfo->valid(shaderType));
+
+        return angle::Result::Continue;
+    }
+
+    ANGLE_INLINE angle::Result initGraphicsShaderProgram(
+        ContextVk *contextVk,
+        const gl::ShaderType shaderType,
+        bool isLastPreFragmentStage,
+        bool isTransformFeedbackProgram,
+        ProgramTransformOptions optionBits,
+        ProgramInfo *programInfo,
+        const ShaderInterfaceVariableInfoMap &variableInfoMap)
+    {
+        return initProgram(contextVk, shaderType, isLastPreFragmentStage,
+                           isTransformFeedbackProgram, optionBits, programInfo, variableInfoMap);
+    }
+
+    ANGLE_INLINE angle::Result initComputeProgram(
+        ContextVk *contextVk,
+        ProgramInfo *programInfo,
+        const ShaderInterfaceVariableInfoMap &variableInfoMap)
+    {
+        ProgramTransformOptions optionBits = {};
+        return initProgram(contextVk, gl::ShaderType::Compute, false, false, optionBits,
+                           programInfo, variableInfoMap);
+    }
+
     // Descriptor sets for uniform blocks and textures for this program.
     vk::DescriptorSetArray<VkDescriptorSet> mDescriptorSets;
     vk::DescriptorSetArray<VkDescriptorSet> mEmptyDescriptorSets;
@@ -342,11 +375,10 @@ class ProgramExecutableVk
 
     ProgramTransformOptions mTransformOptions;
 
-    ProgramVk *mProgram;
-    ProgramPipelineVk *mProgramPipeline;
-
     DefaultUniformBlockMap mDefaultUniformBlocks;
     gl::ShaderBitSet mDefaultUniformBlocksDirty;
+
+    ShaderInfo mOriginalShaderInfo;
 
     ProgramExecutablePerfCounters mPerfCounters;
     ProgramExecutablePerfCounters mCumulativePerfCounters;

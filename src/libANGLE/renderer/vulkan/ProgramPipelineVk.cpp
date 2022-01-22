@@ -17,9 +17,7 @@ namespace rx
 
 ProgramPipelineVk::ProgramPipelineVk(const gl::ProgramPipelineState &state)
     : ProgramPipelineImpl(state)
-{
-    mExecutable.setProgramPipeline(this);
-}
+{}
 
 ProgramPipelineVk::~ProgramPipelineVk() {}
 
@@ -93,6 +91,9 @@ angle::Result ProgramPipelineVk::link(const gl::Context *glContext,
             ProgramExecutableVk &programExecutableVk = programVk->getExecutable();
             mExecutable.mDefaultUniformBlocks[shaderType] =
                 programExecutableVk.getSharedDefaultUniformBlock(shaderType);
+
+            mExecutable.mOriginalShaderInfo.initShaderFromProgram(
+                shaderType, programExecutableVk.mOriginalShaderInfo);
         }
     }
 

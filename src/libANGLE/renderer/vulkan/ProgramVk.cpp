@@ -141,7 +141,6 @@ class Std140BlockLayoutEncoderFactory : public gl::CustomBlockLayoutEncoderFacto
 ProgramVk::ProgramVk(const gl::ProgramState &state) : ProgramImpl(state)
 {
     GlslangWrapperVk::ResetGlslangProgramInterfaceInfo(&mGlslangProgramInterfaceInfo);
-    mExecutable.setProgram(this);
 }
 
 ProgramVk::~ProgramVk() = default;
@@ -154,8 +153,6 @@ void ProgramVk::destroy(const gl::Context *context)
 
 void ProgramVk::reset(ContextVk *contextVk)
 {
-    mOriginalShaderInfo.release(contextVk);
-
     GlslangWrapperVk::ResetGlslangProgramInterfaceInfo(&mGlslangProgramInterfaceInfo);
 
     mExecutable.reset(contextVk);
@@ -171,7 +168,6 @@ std::unique_ptr<rx::LinkEvent> ProgramVk::load(const gl::Context *context,
 
     reset(contextVk);
 
-    mOriginalShaderInfo.load(stream);
     mExecutable.load(stream);
 
     // Deserializes the uniformLayout data of mDefaultUniformBlocks
@@ -205,7 +201,6 @@ std::unique_ptr<rx::LinkEvent> ProgramVk::load(const gl::Context *context,
 
 void ProgramVk::save(const gl::Context *context, gl::BinaryOutputStream *stream)
 {
-    mOriginalShaderInfo.save(stream);
     mExecutable.save(stream);
 
     // Serializes the uniformLayout data of mDefaultUniformBlocks
@@ -261,7 +256,7 @@ std::unique_ptr<LinkEvent> ProgramVk::link(const gl::Context *context,
                                     &mExecutable.mVariableInfoMap);
 
     // Compile the shaders.
-    angle::Result status = mOriginalShaderInfo.initShaders(
+    angle::Result status = mExecutable.mOriginalShaderInfo.initShaders(
         mState.getExecutable().getLinkedShaderStages(), spirvBlobs, mExecutable.mVariableInfoMap);
     if (status != angle::Result::Continue)
     {
