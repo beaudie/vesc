@@ -1,0 +1,159 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "631c420b_0dcab217",
+        "filename": "DEPS",
+        "patchSetId": 4
+      },
+      "lineNbr": 529,
+      "author": {
+        "id": 1340649
+      },
+      "writtenOn": "2022-01-24T18:19:10Z",
+      "side": 1,
+      "message": "for my own understanding, are you sync\u0027ing to a specific wayland protocol version instead of a hash?",
+      "range": {
+        "startLine": 529,
+        "startChar": 89,
+        "endLine": 529,
+        "endChar": 95
+      },
+      "revId": "16d032d17fa69a192e216ff8e9ca69a47cc5b73e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "32329b51_0f077caf",
+        "filename": "src/libANGLE/renderer/vulkan/linux/wayland/DisplayVkWayland.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 106,
+      "author": {
+        "id": 1340649
+      },
+      "writtenOn": "2022-01-24T18:19:10Z",
+      "side": 1,
+      "message": "the doc for this says -\n Block until all pending request are processed by the server\n \ndoes wayland support any sort of \"native rendering\" other than through EGL / GLES contexts?",
+      "range": {
+        "startLine": 106,
+        "startChar": 17,
+        "endLine": 106,
+        "endChar": 37
+      },
+      "revId": "16d032d17fa69a192e216ff8e9ca69a47cc5b73e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "69455bfa_fec01bbd",
+        "filename": "src/libANGLE/renderer/vulkan/linux/wayland/DisplayVkWayland.h",
+        "patchSetId": 4
+      },
+      "lineNbr": 15,
+      "author": {
+        "id": 1340649
+      },
+      "writtenOn": "2022-01-24T18:19:10Z",
+      "side": 1,
+      "message": "does this have to be forward-declared outside the rx namespace?",
+      "range": {
+        "startLine": 15,
+        "startChar": 0,
+        "endLine": 15,
+        "endChar": 18
+      },
+      "revId": "16d032d17fa69a192e216ff8e9ca69a47cc5b73e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "c4d740f2_f6e0a9a6",
+        "filename": "src/libANGLE/renderer/vulkan/linux/wayland/WindowSurfaceVkWayland.h",
+        "patchSetId": 4
+      },
+      "lineNbr": 16,
+      "author": {
+        "id": 1340649
+      },
+      "writtenOn": "2022-01-24T18:19:10Z",
+      "side": 1,
+      "message": "does this have to be forward-declared outside the rx namespace?",
+      "range": {
+        "startLine": 15,
+        "startChar": 0,
+        "endLine": 16,
+        "endChar": 21
+      },
+      "revId": "16d032d17fa69a192e216ff8e9ca69a47cc5b73e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "e10f8291_07b6400d",
+        "filename": "src/tests/egl_tests/EGLWaylandTest.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 102,
+      "author": {
+        "id": 1340649
+      },
+      "writtenOn": "2022-01-24T18:19:10Z",
+      "side": 1,
+      "message": "one line description / comment for the test",
+      "revId": "16d032d17fa69a192e216ff8e9ca69a47cc5b73e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "52c3447a_e77e7351",
+        "filename": "src/tests/egl_tests/EGLWaylandTest.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 127,
+      "author": {
+        "id": 1340649
+      },
+      "writtenOn": "2022-01-24T18:19:10Z",
+      "side": 1,
+      "message": "repeated code, maybe move to -\n void testSetUp() override",
+      "range": {
+        "startLine": 105,
+        "startChar": 0,
+        "endLine": 127,
+        "endChar": 42
+      },
+      "revId": "16d032d17fa69a192e216ff8e9ca69a47cc5b73e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "1444d2b3_e13f26d4",
+        "filename": "src/tests/egl_tests/EGLWaylandTest.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 169,
+      "author": {
+        "id": 1340649
+      },
+      "writtenOn": "2022-01-24T18:19:10Z",
+      "side": 1,
+      "message": "repeated code, maybe move to -\n void testTearDown() override",
+      "range": {
+        "startLine": 166,
+        "startChar": 0,
+        "endLine": 169,
+        "endChar": 26
+      },
+      "revId": "16d032d17fa69a192e216ff8e9ca69a47cc5b73e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
