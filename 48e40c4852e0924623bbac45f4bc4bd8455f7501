@@ -70,6 +70,30 @@
       },
       "revId": "48e40c4852e0924623bbac45f4bc4bd8455f7501",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "1b277a0b_15b116a3",
+        "filename": "src/libANGLE/Program.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 2361,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2022-01-24T17:43:35Z",
+      "side": 1,
+      "message": "Oh, I see, `onStateChange(angle::SubjectMessage::ProgramUniformUpdated)` was added to setUniformGeneric().",
+      "parentUuid": "90570a82_ff40d439",
+      "range": {
+        "startLine": 2352,
+        "startChar": 0,
+        "endLine": 2361,
+        "endChar": 61
+      },
+      "revId": "48e40c4852e0924623bbac45f4bc4bd8455f7501",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
