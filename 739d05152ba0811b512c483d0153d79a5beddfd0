@@ -36,6 +36,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "fc95e3be_be7039f8",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 12
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2022-01-24T17:36:29Z",
+      "side": 1,
+      "message": "Ah, yup, I thought I saw something new there for monolithic programs, but everything was already in the ProgramExecutable for them already anyway.",
+      "parentUuid": "ab3eef0d_b30c236a",
+      "revId": "739d05152ba0811b512c483d0153d79a5beddfd0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "277e8729_5f6003c8",
@@ -67,6 +85,24 @@
       "side": 1,
       "message": "It\u0027s a nice convenience. In exchange for passing an extra argument I can use a range-for and omit the checks for nullptr Program.",
       "parentUuid": "277e8729_5f6003c8",
+      "revId": "739d05152ba0811b512c483d0153d79a5beddfd0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "a719ee2a_902393d0",
+        "filename": "src/libANGLE/ProgramExecutable.cpp",
+        "patchSetId": 12
+      },
+      "lineNbr": 154,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2022-01-24T17:36:29Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "c0e36ac0_ff0629ca",
       "revId": "739d05152ba0811b512c483d0153d79a5beddfd0",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
@@ -131,6 +167,30 @@
       "side": 1,
       "message": "They\u0027re reset above. Note this is not new code, just copied.",
       "parentUuid": "b8178455_977f05d7",
+      "range": {
+        "startLine": 1575,
+        "startChar": 0,
+        "endLine": 1576,
+        "endChar": 84
+      },
+      "revId": "739d05152ba0811b512c483d0153d79a5beddfd0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "eca1af31_3d3411ef",
+        "filename": "src/libANGLE/ProgramExecutable.cpp",
+        "patchSetId": 12
+      },
+      "lineNbr": 1576,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2022-01-24T17:36:29Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "da7d3811_f972848d",
       "range": {
         "startLine": 1575,
         "startChar": 0,
