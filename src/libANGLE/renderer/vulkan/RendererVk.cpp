@@ -3383,30 +3383,50 @@ bool RendererVk::haveSameFormatFeatureBits(angle::FormatID formatID1,
            hasImageFormatFeatureBits(formatID2, fmt1OptimalFeatureBits);
 }
 
+// Destroy completed garbages in FIFO order until hitting pending garbage.
 angle::Result RendererVk::cleanupGarbage(Serial lastCompletedQueueSerial)
 {
     std::lock_guard<std::mutex> lock(mGarbageMutex);
-
-    for (auto garbageIter = mSharedGarbage.begin(); garbageIter != mSharedGarbage.end();)
+    while (!mSharedGarbage.empty())
     {
-        // Possibly 'counter' should be always zero when we add the object to garbage.
-        vk::SharedGarbage &garbage = *garbageIter;
+        vk::SharedGarbage &garbage = mSharedGarbage.front();
         if (garbage.destroyIfComplete(this, lastCompletedQueueSerial))
         {
-            garbageIter = mSharedGarbage.erase(garbageIter);
+            mSharedGarbage.pop();
         }
         else
         {
-            garbageIter++;
+            break;
         }
     }
 
     return angle::Result::Continue;
 }
 
+// Destroy all completed garbages, skip the pending garbage from other contexts.
 void RendererVk::cleanupCompletedCommandsGarbage()
 {
-    (void)cleanupGarbage(getLastCompletedQueueSerial());
+    // Retrieve the completed queueSerial before taking the lock to avoid deadlock.
+    Serial lastCompletedQueueSerial = getLastCompletedQueueSerial();
+
+    // Destroy all completed garbages and put pending garbages into remainingSharedGarbage
+    std::lock_guard<std::mutex> lock(mGarbageMutex);
+    vk::SharedGarbageList remainingSharedGarbage;
+    while (!mSharedGarbage.empty())
+    {
+        vk::SharedGarbage &garbage = mSharedGarbage.front();
+        if (!garbage.destroyIfComplete(this, lastCompletedQueueSerial))
+        {
+            remainingSharedGarbage.push(std::move(garbage));
+        }
+        mSharedGarbage.pop();
+    }
+
+    // Move remainingSharedGarbage back to mSharedGarbage
+    if (!remainingSharedGarbage.empty())
+    {
+        mSharedGarbage = std::move(remainingSharedGarbage);
+    }
 }
 
 void RendererVk::onNewValidationMessage(const std::string &message)
