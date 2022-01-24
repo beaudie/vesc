@@ -3,6 +3,23 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "8d7bf782_0531fe1f",
+        "filename": "src/common/android_util.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 424,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2022-01-24T16:44:13Z",
+      "side": 1,
+      "message": "This function should be removed.   We already have GetExecutableName():\n\n2352625: Vulkan: Query application name from the system | https://chromium-review.googlesource.com/c/angle/angle/+/2352625\n\nIf the functions are returning different values, we should fix GetExecutableName() rather than duplicating it.",
+      "revId": "3d2a0641b6a26cbdca517e80eb09193a2ece6c24",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "44de7980_a4d42c72",
         "filename": "src/common/android_util.cpp",
         "patchSetId": 1
@@ -89,6 +106,40 @@
         "endLine": 999,
         "endChar": 6
       },
+      "revId": "3d2a0641b6a26cbdca517e80eb09193a2ece6c24",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "cf40a888_91ad6470",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 1001,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2022-01-24T16:44:13Z",
+      "side": 1,
+      "message": "Call GetExecutableName() instead.",
+      "revId": "3d2a0641b6a26cbdca517e80eb09193a2ece6c24",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "c9476dc8_58cedad1",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 2898,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2022-01-24T16:44:13Z",
+      "side": 1,
+      "message": "Hard-coding the list in ANGLE means it can\u0027t be updated until the next release of ANGLE, even if the app does make an update.   It would be nicer to have an updatable mechanism outside of the ANGLE libraries instead.\n\nThough, as Jamie/Shabi pointed out - it\u0027s probably better to enable the spoofing workaround instead to prevent disabling precision qualifiers entirely.",
       "revId": "3d2a0641b6a26cbdca517e80eb09193a2ece6c24",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
