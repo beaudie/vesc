@@ -46,6 +46,30 @@
       },
       "revId": "48e40c4852e0924623bbac45f4bc4bd8455f7501",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "90570a82_ff40d439",
+        "filename": "src/libANGLE/Program.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 2361,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2022-01-24T17:40:31Z",
+      "side": 1,
+      "message": "I don\u0027t understand.   The setUniformGeneric() work will still be done in the future CL too, it\u0027s just the if/else case after that work has completed that is changing.\n\nWhy can\u0027t setUniformGeneric() be used here also?",
+      "parentUuid": "b29634f6_5d1ad38b",
+      "range": {
+        "startLine": 2352,
+        "startChar": 0,
+        "endLine": 2361,
+        "endChar": 61
+      },
+      "revId": "48e40c4852e0924623bbac45f4bc4bd8455f7501",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
