@@ -203,6 +203,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "97436202_b550d66a",
+        "filename": "src/tests/gl_tests/RobustBufferAccessBehaviorTest.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 629,
+      "author": {
+        "id": 1531247
+      },
+      "writtenOn": "2022-01-24T19:34:04Z",
+      "side": 1,
+      "message": "So the OpenGL ES section about OOB says that \"When such an attempt is detected, a GL error is generated\", but it also says that not all operations are required to do that.\n\nCould you recommend what would be a reasonable assertion here? I saw that some other examples validate output pixels which sounds like it could be an option here as well but it wouldn\u0027t be easy for me to do because I don\u0027t understand this setup and shaders well enough.",
+      "parentUuid": "f07e7e56_77c6abb2",
+      "revId": "761114e27415154aebf17b23bde56a3ab9a64e37",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "9781014e_e022990f",
         "filename": "src/tests/gl_tests/RobustBufferAccessBehaviorTest.cpp",
         "patchSetId": 2
