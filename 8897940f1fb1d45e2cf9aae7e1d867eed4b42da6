@@ -26,6 +26,30 @@
     {
       "unresolved": false,
       "key": {
+        "uuid": "8b089086_ccbb171a",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 3
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1531247
+      },
+      "writtenOn": "2022-01-24T19:18:31Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "3bd74970_81804176",
+      "range": {
+        "startLine": 7,
+        "startChar": 0,
+        "endLine": 7,
+        "endChar": 7
+      },
+      "revId": "8897940f1fb1d45e2cf9aae7e1d867eed4b42da6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
         "uuid": "ce700b3d_62a514aa",
         "filename": "/PATCHSET_LEVEL",
         "patchSetId": 3
@@ -54,6 +78,30 @@
       "writtenOn": "2022-01-21T20:36:46Z",
       "side": 1,
       "message": "one request - can you be consistent in calling the replication parameter either \"divisor\" or \"replicateCount\"?\n\ni.e. either call this StreamVertexDataWithDivisor with uint32_t divisor, or StreamVertexDataWithReplication with uint32_t replicateCount",
+      "range": {
+        "startLine": 88,
+        "startChar": 14,
+        "endLine": 88,
+        "endChar": 45
+      },
+      "revId": "8897940f1fb1d45e2cf9aae7e1d867eed4b42da6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "8bd043c2_66e33fa4",
+        "filename": "src/libANGLE/renderer/vulkan/VertexArrayVk.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 88,
+      "author": {
+        "id": 1531247
+      },
+      "writtenOn": "2022-01-24T19:18:31Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "b3707dc5_b1ec033d",
       "range": {
         "startLine": 88,
         "startChar": 14,
@@ -153,6 +201,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "fd7c1f03_aae0674a",
+        "filename": "src/libANGLE/renderer/vulkan/VertexArrayVk.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 106,
+      "author": {
+        "id": 1531247
+      },
+      "writtenOn": "2022-01-24T19:18:31Z",
+      "side": 1,
+      "message": "Ah got it, thanks. Added ASSERT(clampedSize % dstStride \u003d\u003d 0)",
+      "parentUuid": "b1e4bed8_12e11eec",
+      "revId": "8897940f1fb1d45e2cf9aae7e1d867eed4b42da6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "3cc6a662_171a9e51",
@@ -200,6 +266,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "2a13604e_73d0d9d7",
+        "filename": "src/libANGLE/renderer/vulkan/VertexArrayVk.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 109,
+      "author": {
+        "id": 1531247
+      },
+      "writtenOn": "2022-01-24T19:18:31Z",
+      "side": 1,
+      "message": "Changed to positive count and comparison with `divisor` which I think makes naming easier - srcVertexUseCount, lmk if that is still not clear enough.",
+      "parentUuid": "3b1f482b_cd4fbfe9",
+      "range": {
+        "startLine": 109,
+        "startChar": 13,
+        "endLine": 109,
+        "endChar": 35
+      },
+      "revId": "8897940f1fb1d45e2cf9aae7e1d867eed4b42da6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "411e15ce_7c752eb7",
@@ -213,6 +303,30 @@
       "writtenOn": "2022-01-21T20:36:46Z",
       "side": 1,
       "message": "You could consider doing this only if robustness is enabled. at the least a comment might be a good idea to indicate this code is to satisfy robustness constraints, and isn\u0027t necessary if the ext is unavailable.",
+      "range": {
+        "startLine": 121,
+        "startChar": 5,
+        "endLine": 121,
+        "endChar": 38
+      },
+      "revId": "8897940f1fb1d45e2cf9aae7e1d867eed4b42da6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "1bc65819_b9e5b5f5",
+        "filename": "src/libANGLE/renderer/vulkan/VertexArrayVk.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 121,
+      "author": {
+        "id": 1531247
+      },
+      "writtenOn": "2022-01-24T19:18:31Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "411e15ce_7c752eb7",
       "range": {
         "startLine": 121,
         "startChar": 5,
