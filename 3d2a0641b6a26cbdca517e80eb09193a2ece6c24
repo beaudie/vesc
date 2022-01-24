@@ -146,6 +146,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "c9bdb2a9_1630186e",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 2898,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2022-01-24T18:30:15Z",
+      "side": 1,
+      "message": "+1 to maintain the app list outside angle. And with version as well so that if app fixes it in future version, we can turn off the workaround and this workaround will only apply to older version of apps that do not have the fix. That is why I think the phenotype stuff seems the right fix?",
+      "parentUuid": "c9476dc8_58cedad1",
+      "revId": "3d2a0641b6a26cbdca517e80eb09193a2ece6c24",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "6608ab9d_21bfd0ce",
         "filename": "src/libANGLE/renderer/vulkan/RendererVk.cpp",
         "patchSetId": 1
@@ -181,6 +199,30 @@
       "side": 1,
       "message": "+1 to spoofing as the best and most widely applicable solution.",
       "parentUuid": "6608ab9d_21bfd0ce",
+      "range": {
+        "startLine": 2909,
+        "startChar": 13,
+        "endLine": 2909,
+        "endChar": 38
+      },
+      "revId": "3d2a0641b6a26cbdca517e80eb09193a2ece6c24",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "d16bdcd9_ebe10ac5",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 2909,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2022-01-24T18:30:15Z",
+      "side": 1,
+      "message": "+1",
+      "parentUuid": "e48c959d_7c1658d0",
       "range": {
         "startLine": 2909,
         "startChar": 13,
