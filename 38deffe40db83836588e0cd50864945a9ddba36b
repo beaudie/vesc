@@ -34,6 +34,24 @@
       "parentUuid": "decac3ff_0eb6a9ea",
       "revId": "38deffe40db83836588e0cd50864945a9ddba36b",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "9105c05f_52af26cb",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 15
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1001921
+      },
+      "writtenOn": "2022-01-24T23:18:05Z",
+      "side": 1,
+      "message": "But would it be better than reverting the regression?",
+      "parentUuid": "98e5c3a0_d975dce0",
+      "revId": "38deffe40db83836588e0cd50864945a9ddba36b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
