@@ -3386,27 +3386,41 @@ bool RendererVk::haveSameFormatFeatureBits(angle::FormatID formatID1,
 angle::Result RendererVk::cleanupGarbage(Serial lastCompletedQueueSerial)
 {
     std::lock_guard<std::mutex> lock(mGarbageMutex);
-
-    for (auto garbageIter = mSharedGarbage.begin(); garbageIter != mSharedGarbage.end();)
+    while (!mSharedGarbage.empty())
     {
-        // Possibly 'counter' should be always zero when we add the object to garbage.
-        vk::SharedGarbage &garbage = *garbageIter;
+        vk::SharedGarbage &garbage = mSharedGarbage.front();
         if (garbage.destroyIfComplete(this, lastCompletedQueueSerial))
         {
-            garbageIter = mSharedGarbage.erase(garbageIter);
+            mSharedGarbage.pop();
         }
         else
         {
-            garbageIter++;
+            break;
         }
     }
 
     return angle::Result::Continue;
 }
 
+// Destroy all completed garbages, skip the pending garbage.
 void RendererVk::cleanupCompletedCommandsGarbage()
 {
-    (void)cleanupGarbage(getLastCompletedQueueSerial());
+    std::lock_guard<std::mutex> lock(mGarbageMutex);
+    vk::SharedGarbageList remainingSharedGarbage;
+    while (!mSharedGarbage.empty())
+    {
+        vk::SharedGarbage &garbage = mSharedGarbage.front();
+        if (!garbage.destroyIfComplete(this, getLastCompletedQueueSerial()))
+        {
+            remainingSharedGarbage.push(std::move(garbage));
+        }
+        mSharedGarbage.pop();
+    }
+
+    if (!remainingSharedGarbage.empty())
+    {
+        mSharedGarbage = std::move(remainingSharedGarbage);
+    }
 }
 
 void RendererVk::onNewValidationMessage(const std::string &message)
