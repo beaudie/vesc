@@ -237,6 +237,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "e9cb52e1_6f18aef8",
+        "filename": "src/tests/gl_tests/RobustBufferAccessBehaviorTest.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 629,
+      "author": {
+        "id": 1531247
+      },
+      "writtenOn": "2022-01-24T19:56:16Z",
+      "side": 1,
+      "message": "Ah, that\u0027s what you were referring to as \"outcomes\". Yeah that\u0027s quite a bit of checking. I dropped the asserts and just added comments that no crash is expected.",
+      "parentUuid": "3a413194_ba9197f7",
+      "revId": "761114e27415154aebf17b23bde56a3ab9a64e37",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "9781014e_e022990f",
@@ -297,6 +315,30 @@
       "writtenOn": "2022-01-19T21:38:22Z",
       "side": 1,
       "message": "same comment here",
+      "range": {
+        "startLine": 673,
+        "startChar": 4,
+        "endLine": 673,
+        "endChar": 22
+      },
+      "revId": "761114e27415154aebf17b23bde56a3ab9a64e37",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "d219a98b_388c92e6",
+        "filename": "src/tests/gl_tests/RobustBufferAccessBehaviorTest.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 673,
+      "author": {
+        "id": 1531247
+      },
+      "writtenOn": "2022-01-24T19:56:16Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "a796ae8b_ce50f9d6",
       "range": {
         "startLine": 673,
         "startChar": 4,
