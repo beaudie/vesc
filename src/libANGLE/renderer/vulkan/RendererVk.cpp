@@ -994,6 +994,22 @@ angle::Result GetAndDecompressPipelineCacheVk(VkPhysicalDeviceProperties physica
 // Environment variable (and associated Android property) to enable Vulkan debug-utils markers
 constexpr char kEnableDebugMarkersVarName[]      = "ANGLE_ENABLE_DEBUG_MARKERS";
 constexpr char kEnableDebugMarkersPropertyName[] = "debug.angle.markers";
+
+#ifdef ANGLE_PLATFORM_ANDROID
+bool isCurrentPackageInList(const std::vector<const char *> &packageList)
+{
+    std::string packageName = angle::android::GetRunningPackageName();
+    for (const auto &appName : packageList)
+    {
+        if (packageName == appName)
+        {
+            return true;
+        }
+    }
+    return false;
+}
+
+#endif
 }  // namespace
 
 // RendererVk implementation.
@@ -2876,12 +2892,21 @@ void RendererVk::initFeatures(DisplayVk *displayVk,
     ANGLE_FEATURE_CONDITION(&mFeatures, enablePreRotateSurfaces,
                             IsAndroid() && supportsNegativeViewport);
 
+    bool appUsesLowpWhenItShouldnt = false;
+#ifdef ANGLE_PLATFORM_ANDROID
+    const std::vector<const char *> kAppsThatUseLowpWhenTheyShouldnt = {
+        "com.mojang.minecraftpe",
+    };
+    appUsesLowpWhenItShouldnt = isCurrentPackageInList(kAppsThatUseLowpWhenTheyShouldnt);
+#endif
+
     // http://anglebug.com/3078
     ANGLE_FEATURE_CONDITION(
         &mFeatures, enablePrecisionQualifiers,
         !(IsPixel2(mPhysicalDeviceProperties.vendorID, mPhysicalDeviceProperties.deviceID) &&
           (mPhysicalDeviceProperties.driverVersion < kPixel2DriverWithRelaxedPrecision)) &&
-            !IsPixel4(mPhysicalDeviceProperties.vendorID, mPhysicalDeviceProperties.deviceID));
+            !IsPixel4(mPhysicalDeviceProperties.vendorID, mPhysicalDeviceProperties.deviceID) &&
+            !appUsesLowpWhenItShouldnt);
 
     // The following platforms are less sensitive to the src/dst stage masks in barriers, and behave
     // more efficiently when all barriers are aggregated, rather than individually and precisely

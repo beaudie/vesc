@@ -10,6 +10,7 @@
 #include "common/debug.h"
 
 #include <cstdint>
+#include <fstream>
 
 #if defined(ANGLE_PLATFORM_ANDROID) && __ANDROID_API__ >= 26
 #    define ANGLE_AHARDWARE_BUFFER_SUPPORT
@@ -419,5 +420,23 @@ AHardwareBuffer *ClientBufferToAHardwareBuffer(EGLClientBuffer clientBuffer)
     return offsetPointer<AHardwareBuffer>(clientBuffer,
                                           -kAHardwareBufferToANativeWindowBufferOffset);
 }
+
+std::string GetRunningPackageName()
+{
+    std::ifstream file("/proc/self/cmdline");
+    std::string res;
+    std::getline(file, res);
+    // It's going to contain a bunch of junk, get rid of it
+    for (unsigned int i = 0; i < res.size(); ++i)
+    {
+        if (res[i] == '\n' || res[i] == '\r' || res[i] == '\t' || res[i] == '\0' || res[i] == ' ')
+        {
+            res.resize(i);
+            break;
+        }
+    }
+    return res;
+}
+
 }  // namespace android
 }  // namespace angle

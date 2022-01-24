@@ -14,6 +14,7 @@
 
 #include <stdint.h>
 #include <array>
+#include <string>
 
 #include "angle_gl.h"
 
@@ -52,6 +53,8 @@ bool NativePixelFormatIsYUV(int pixelFormat);
 AHardwareBuffer *ANativeWindowBufferToAHardwareBuffer(ANativeWindowBuffer *windowBuffer);
 
 uint64_t GetAHBUsage(int eglNativeBufferUsage);
+
+std::string GetRunningPackageName();
 
 }  // namespace android
 }  // namespace angle
