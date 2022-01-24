@@ -16,6 +16,24 @@
       "message": "I think this breaks Pixel 6.\nhttps://ci.chromium.org/ui/p/angle/builders/ci/android-arm64-exp-test/12/overview\nhttps://chromium-swarm.appspot.com/task?id\u003d58a6c1a6ccf56011\nI  673.954s run_tests_on_device(17261FDF6000UU)  [ RUN      ] FramebufferFetchES31.ProgramPipeline_Coherent/ES3_1_Vulkan_AsyncQueue\nI  673.954s run_tests_on_device(17261FDF6000UU)  ../../src/tests/test_utils/ANGLETest.cpp:64: Failure\nI  673.954s run_tests_on_device(17261FDF6000UU)  RendererVk.cpp:667 (DebugUtilsMessenger): [ VUID-VkGraphicsPipelineCreateInfo-layout-00756 ] Validation Error: [ VUID-VkGraphicsPipelineCreateInfo-layout-00756 ] Object 0: handle \u003d 0x7491833eb0, type \u003d VK_OBJECT_TYPE_DEVICE; | MessageID \u003d 0x45717876 | Shader uses descriptor slot 3.0 (expected `VK_DESCRIPTOR_TYPE_INPUT_ATTACHMENT`) but not declared in pipeline layout The Vulkan spec states: layout must be consistent with all shaders specified in pStages (https://www.khronos.org/registry/vulkan/specs/1.2-extensions/html/vkspec.html#VUID-VkGraphicsPipelineCreateInfo-layout-00756)\nI  673.954s run_tests_on_device(17261FDF6000UU)                              Object: 0x7491833eb0 (type \u003d Device(3))\nI  673.955s run_tests_on_device(17261FDF6000UU)  \nI  673.955s run_tests_on_device(17261FDF6000UU)  [ CRASHED      ]\n\nUsually I\u0027d revert this, but thought to ask before.\nMaybe I should suppress the tests or the VUID instead?",
       "revId": "38deffe40db83836588e0cd50864945a9ddba36b",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "98e5c3a0_d975dce0",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 15
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2022-01-24T23:15:09Z",
+      "side": 1,
+      "message": "Suppressing the test would be better than suppressing the VUID.",
+      "parentUuid": "decac3ff_0eb6a9ea",
+      "revId": "38deffe40db83836588e0cd50864945a9ddba36b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
