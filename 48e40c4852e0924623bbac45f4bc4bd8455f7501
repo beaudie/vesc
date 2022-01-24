@@ -94,6 +94,30 @@
       },
       "revId": "48e40c4852e0924623bbac45f4bc4bd8455f7501",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "26a903f1_16bece4e",
+        "filename": "src/libANGLE/Program.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 2361,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2022-01-24T17:44:48Z",
+      "side": 1,
+      "message": "I add a call to onStateChange() to setUniformGeneric. In this method, I call onStateChange with different parameters depending on isSamplerUniformIndex().",
+      "parentUuid": "1b277a0b_15b116a3",
+      "range": {
+        "startLine": 2352,
+        "startChar": 0,
+        "endLine": 2361,
+        "endChar": 61
+      },
+      "revId": "48e40c4852e0924623bbac45f4bc4bd8455f7501",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
