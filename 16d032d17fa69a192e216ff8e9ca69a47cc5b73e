@@ -26,6 +26,23 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "cab0a1b0_d63a913a",
+        "filename": "gni/angle.gni",
+        "patchSetId": 4
+      },
+      "lineNbr": 138,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-01-24T21:43:33Z",
+      "side": 1,
+      "message": "Still no good. Ozone on Fuchsia for example should not enable GL. Same with !linux. The final override `\u0026\u0026 !is_fuchsia \u0026\u0026 !angle_is_winuwp \u0026\u0026 !is_ggp \u0026\u0026 !is_win_arm64` is really a _final_ override. Like on GGP you don\u0027t have GL, no matter what.",
+      "revId": "16d032d17fa69a192e216ff8e9ca69a47cc5b73e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "32329b51_0f077caf",
         "filename": "src/libANGLE/renderer/vulkan/linux/wayland/DisplayVkWayland.cpp",
         "patchSetId": 4

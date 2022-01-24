@@ -635,6 +635,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "c74f59ed_9ec8f137",
+        "filename": "src/tests/egl_tests/EGLWaylandTest.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 108,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-01-24T21:43:33Z",
+      "side": 1,
+      "message": "🎉",
+      "parentUuid": "a3aa87cb_f30154e0",
+      "revId": "cacb1a9c3ac43042a171fd40b35fcf897ec30fc1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "e815f8b2_f01dee28",
@@ -672,6 +690,30 @@
       "side": 1,
       "message": "Yes. I moved both x11 and wayland sources under a linux folder, and introduced a LinuxWindow.cpp which implements OsWindow::New(). According to the availability, either a Wayland window or an X11 window is created. We prefer a wayland window if available, is that ok?",
       "parentUuid": "e815f8b2_f01dee28",
+      "range": {
+        "startLine": 721,
+        "startChar": 0,
+        "endLine": 724,
+        "endChar": 1
+      },
+      "revId": "cacb1a9c3ac43042a171fd40b35fcf897ec30fc1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "087630c9_bcec18bd",
+        "filename": "util/x11/X11Window.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 724,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-01-24T21:43:33Z",
+      "side": 1,
+      "message": "SGTM. Thanks!",
+      "parentUuid": "7d0aecb1_768b0cc0",
       "range": {
         "startLine": 721,
         "startChar": 0,
