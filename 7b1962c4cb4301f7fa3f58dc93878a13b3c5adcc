@@ -53,6 +53,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "3cd805ea_c71c6c7d",
+        "filename": "src/libANGLE/renderer/vulkan/ProgramPipelineVk.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 99,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2022-01-24T22:36:08Z",
+      "side": 1,
+      "message": "I see, and in that case we get here via ProgramPipeline::useProgramStages() which calls link().\n\nA unit test would be good if you can.",
+      "parentUuid": "d1441bf0_6dc3c243",
+      "revId": "7b1962c4cb4301f7fa3f58dc93878a13b3c5adcc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "a29704a9_c5a5f808",
