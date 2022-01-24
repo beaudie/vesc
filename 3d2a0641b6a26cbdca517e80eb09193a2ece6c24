@@ -26,6 +26,52 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "9621b98b_259bb5ae",
+        "filename": "src/common/android_util.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 430,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2022-01-24T16:33:26Z",
+      "side": 1,
+      "message": "nit: size_t?",
+      "range": {
+        "startLine": 430,
+        "startChar": 9,
+        "endLine": 430,
+        "endChar": 21
+      },
+      "revId": "3d2a0641b6a26cbdca517e80eb09193a2ece6c24",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "afde549e_2e13f033",
+        "filename": "src/common/android_util.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 436,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2022-01-24T16:33:26Z",
+      "side": 1,
+      "message": "you could alternatively use SplitStringAlongWhitespace[0]",
+      "range": {
+        "startLine": 432,
+        "startChar": 3,
+        "endLine": 436,
+        "endChar": 9
+      },
+      "revId": "3d2a0641b6a26cbdca517e80eb09193a2ece6c24",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "3f946866_6f921b7c",
         "filename": "src/libANGLE/renderer/vulkan/RendererVk.cpp",
         "patchSetId": 1
@@ -60,6 +106,30 @@
       "writtenOn": "2022-01-24T16:27:33Z",
       "side": 1,
       "message": "This will make the application perform worse than native. We probably need to instead spoof the renderer string to pretend to be the corresponding GL driver from the same vendor as the Vulkan driver.\n\nAlthough then the application could make even more assumptions about what extensions are available, but we could give it a try at least and hope for the best.",
+      "range": {
+        "startLine": 2909,
+        "startChar": 13,
+        "endLine": 2909,
+        "endChar": 38
+      },
+      "revId": "3d2a0641b6a26cbdca517e80eb09193a2ece6c24",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "e48c959d_7c1658d0",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 2909,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2022-01-24T16:33:26Z",
+      "side": 1,
+      "message": "+1 to spoofing as the best and most widely applicable solution.",
+      "parentUuid": "6608ab9d_21bfd0ce",
       "range": {
         "startLine": 2909,
         "startChar": 13,
