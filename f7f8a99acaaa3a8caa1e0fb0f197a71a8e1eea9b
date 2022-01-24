@@ -16,6 +16,24 @@
       "message": "PTAL Shabi",
       "revId": "f7f8a99acaaa3a8caa1e0fb0f197a71a8e1eea9b",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "545edb98_d1ab2930",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-01-24T21:30:28Z",
+      "side": 1,
+      "message": "Is good",
+      "parentUuid": "5d046204_52f7a783",
+      "revId": "f7f8a99acaaa3a8caa1e0fb0f197a71a8e1eea9b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
