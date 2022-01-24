@@ -97,6 +97,30 @@
       },
       "revId": "119bcbccd4d9d04d4e39d65580187e0ba1da7692",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "c6ad8de3_044ccd0f",
+        "filename": "src/libANGLE/renderer/vulkan/DisplayVk.cpp",
+        "patchSetId": 21
+      },
+      "lineNbr": 331,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-01-24T15:29:48Z",
+      "side": 1,
+      "message": "Sorry, bad naming suggestion on my part. It could be called `supportsLockSurface`. The point is to turn the ifdef into a dynamically switchable feature.",
+      "parentUuid": "d00ed359_54356876",
+      "range": {
+        "startLine": 328,
+        "startChar": 0,
+        "endLine": 331,
+        "endChar": 0
+      },
+      "revId": "119bcbccd4d9d04d4e39d65580187e0ba1da7692",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
