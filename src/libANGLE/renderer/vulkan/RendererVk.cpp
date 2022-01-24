@@ -3383,27 +3383,30 @@ bool RendererVk::haveSameFormatFeatureBits(angle::FormatID formatID1,
            hasImageFormatFeatureBits(formatID2, fmt1OptimalFeatureBits);
 }
 
+// Destroy completed garbages in FIFO order until hitting pending garbage.
 angle::Result RendererVk::cleanupGarbage(Serial lastCompletedQueueSerial)
 {
+    vk::SharedGarbageList remainingGarbage;
     std::lock_guard<std::mutex> lock(mGarbageMutex);
-
-    for (auto garbageIter = mSharedGarbage.begin(); garbageIter != mSharedGarbage.end();)
+    while (!mSharedGarbage.empty())
     {
-        // Possibly 'counter' should be always zero when we add the object to garbage.
-        vk::SharedGarbage &garbage = *garbageIter;
-        if (garbage.destroyIfComplete(this, lastCompletedQueueSerial))
+        vk::SharedGarbage &garbage = mSharedGarbage.front();
+        if (!garbage.destroyIfComplete(this, lastCompletedQueueSerial))
         {
-            garbageIter = mSharedGarbage.erase(garbageIter);
+            remainingGarbage.push(std::move(garbage));
         }
-        else
-        {
-            garbageIter++;
-        }
+        mSharedGarbage.pop();
+    }
+
+    if (!remainingGarbage.empty())
+    {
+        mSharedGarbage = std::move(remainingGarbage);
     }
 
     return angle::Result::Continue;
 }
 
+// Destroy all completed garbages, skip the pending garbage from other contexts.
 void RendererVk::cleanupCompletedCommandsGarbage()
 {
     (void)cleanupGarbage(getLastCompletedQueueSerial());
