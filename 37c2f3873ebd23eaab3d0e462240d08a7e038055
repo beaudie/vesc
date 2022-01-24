@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "27fee71e_2969c8c1",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 8
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1359249
+      },
+      "writtenOn": "2022-01-24T14:58:34Z",
+      "side": 1,
+      "message": "Comment. Something to follow up on.",
+      "revId": "37c2f3873ebd23eaab3d0e462240d08a7e038055",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "54fe885c_683beb63",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 8
+      },
+      "lineNbr": 1102,
+      "author": {
+        "id": 1359249
+      },
+      "writtenOn": "2022-01-24T14:58:34Z",
+      "side": 1,
+      "message": "I suspect that the swapBuffersOnFlush and this defeerrFlushUntilRenderpass are interfering for pixel4. It also has some swiftshader failures that I can not explain.",
+      "revId": "37c2f3873ebd23eaab3d0e462240d08a7e038055",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
