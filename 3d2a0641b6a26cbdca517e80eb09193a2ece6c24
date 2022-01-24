@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "44de7980_a4d42c72",
+        "filename": "src/common/android_util.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 429,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-01-24T16:24:57Z",
+      "side": 1,
+      "message": "What junk? Trying it out on Linux, it seems that the args (including argv[0]) are NUL-separated, so you should be able to resize to the first \u0027\\0\u0027, and that would be accurate. Whitespace seems irrelevant.",
+      "range": {
+        "startLine": 429,
+        "startChar": 4,
+        "endLine": 429,
+        "endChar": 59
+      },
+      "revId": "3d2a0641b6a26cbdca517e80eb09193a2ece6c24",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "3f946866_6f921b7c",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 999,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-01-24T16:24:57Z",
+      "side": 1,
+      "message": "nit: capital I",
+      "range": {
+        "startLine": 999,
+        "startChar": 5,
+        "endLine": 999,
+        "endChar": 6
+      },
+      "revId": "3d2a0641b6a26cbdca517e80eb09193a2ece6c24",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
