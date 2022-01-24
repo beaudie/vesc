@@ -3386,18 +3386,16 @@ bool RendererVk::haveSameFormatFeatureBits(angle::FormatID formatID1,
 angle::Result RendererVk::cleanupGarbage(Serial lastCompletedQueueSerial)
 {
     std::lock_guard<std::mutex> lock(mGarbageMutex);
-
-    for (auto garbageIter = mSharedGarbage.begin(); garbageIter != mSharedGarbage.end();)
+    while (!mSharedGarbage.empty())
     {
-        // Possibly 'counter' should be always zero when we add the object to garbage.
-        vk::SharedGarbage &garbage = *garbageIter;
+        vk::SharedGarbage &garbage = mSharedGarbage.front();
         if (garbage.destroyIfComplete(this, lastCompletedQueueSerial))
         {
-            garbageIter = mSharedGarbage.erase(garbageIter);
+            mSharedGarbage.pop();
         }
         else
         {
-            garbageIter++;
+            break;
         }
     }
 
