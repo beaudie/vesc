@@ -19,7 +19,8 @@ To build ANGLE with capture and replay enabled update your GN args:
 angle_with_capture_by_default = true
 ```
 
-Once built ANGLE will capture the OpenGL ES calls to CPP replay files. By default the replay will be
+Once built ANGLE will capture the OpenGL ES calls to CPP replay files if you set
+`ANGLE_CAPTURE_FRAME_START` to `1` or greater. By default the replay will be
 stored in the current working directory. The capture files will be named according to the pattern
 `angle_capture_context{id}_frame{n}.cpp`. Each GL Context currently has its own replay sources.
 ANGLE will write out data binary blobs for large Texture or Buffer contents to
@@ -223,5 +224,3 @@ All command line arguments can be found at the top of the [python script][link_t
 [angle_folder]: ../
 [capture_replay_test_folder]: ../src/tests/capture_replay_tests/
 [link_to_python_script]: ../src/tests/capture_replay_tests.py
-
-
