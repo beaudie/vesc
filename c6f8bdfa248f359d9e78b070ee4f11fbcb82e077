@@ -16,6 +16,29 @@
       "message": "The docs as they are seem to suggest that if you do nothing it will capture so adding this hopefully makes it clearer that\u0027s not the case. ",
       "revId": "c6f8bdfa248f359d9e78b070ee4f11fbcb82e077",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "c551d040_1095d985",
+        "filename": "doc/CaptureAndReplay.md",
+        "patchSetId": 2
+      },
+      "lineNbr": 23,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2022-01-24T18:14:37Z",
+      "side": 1,
+      "message": "I\u0027d suggest this wording:\n\nOnce built with capture enabled by default, ANGLE supports capturing OpenGL ES calls to CPP replay files. To enable capture, set the `ANGLE_CAPTURE_FRAME_START` and `ANGLE_CAPTURE_FRAME_END` environment variables to define a capture frame range, or use the [capture trigger property][CaptureTrigger] on Android.\n\nThen below define:\n\n[CaptureTrigger]: ../src/tests/restricted_traces/README.md#trigger-the-capture",
+      "range": {
+        "startLine": 22,
+        "startChar": 0,
+        "endLine": 23,
+        "endChar": 47
+      },
+      "revId": "c6f8bdfa248f359d9e78b070ee4f11fbcb82e077",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
