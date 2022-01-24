@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "0962feaf_37df44ff",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1115588
+      },
+      "writtenOn": "2022-01-24T18:00:43Z",
+      "side": 1,
+      "message": "The docs as they are seem to suggest that if you do nothing it will capture so adding this hopefully makes it clearer that\u0027s not the case. ",
+      "revId": "c6f8bdfa248f359d9e78b070ee4f11fbcb82e077",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
