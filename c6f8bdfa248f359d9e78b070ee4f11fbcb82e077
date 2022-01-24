@@ -39,6 +39,30 @@
       },
       "revId": "c6f8bdfa248f359d9e78b070ee4f11fbcb82e077",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "3f04b88f_8852bc46",
+        "filename": "doc/CaptureAndReplay.md",
+        "patchSetId": 2
+      },
+      "lineNbr": 23,
+      "author": {
+        "id": 1115588
+      },
+      "writtenOn": "2022-01-24T19:19:49Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "c551d040_1095d985",
+      "range": {
+        "startLine": 22,
+        "startChar": 0,
+        "endLine": 23,
+        "endChar": 47
+      },
+      "revId": "c6f8bdfa248f359d9e78b070ee4f11fbcb82e077",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
