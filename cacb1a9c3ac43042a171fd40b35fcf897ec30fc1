@@ -16,6 +16,23 @@
       "message": "Add Jeff and Mohan from Samsung ACL",
       "revId": "cacb1a9c3ac43042a171fd40b35fcf897ec30fc1",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "c4d7b13d_fa0f40b0",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1528827
+      },
+      "writtenOn": "2022-01-24T10:07:47Z",
+      "side": 1,
+      "message": "Hello everyone,\n\nThis is my first draft for adding the first bits towards Wayland support in ANGLE.\nWith this changes you could run simple wayland applications. More complex ones such as weston would not run for some missing extensions. I am going to submit soon another CL adding support for those extensions.\n\nFor the moment, I would like your review on certain areas of this CL as I am not sure whether the approach I choose is good for you:\n\n1. gn changes\n2. DisplayVkWayland::generateConfigs()\n3. OSWindow::New\n\nThis third point in particular requires a unique definition for that function, meaning it requires building ANGLE in a mutually exclusive fashion, either enabling X11 or enabling wayland. Enabling both would trigger a redefinition error.\n\n\nKind regards,\n\nAntonio Caggiano",
+      "revId": "cacb1a9c3ac43042a171fd40b35fcf897ec30fc1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
