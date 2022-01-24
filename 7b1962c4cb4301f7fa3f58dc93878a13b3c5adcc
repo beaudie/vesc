@@ -16,6 +16,57 @@
       "message": "PTAL",
       "revId": "7b1962c4cb4301f7fa3f58dc93878a13b3c5adcc",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "bbbc878b_809ca472",
+        "filename": "src/libANGLE/renderer/vulkan/ProgramPipelineVk.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 99,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2022-01-24T18:19:07Z",
+      "side": 1,
+      "message": "Why does this need to be done here, when it was already done as part of onProgramBind()?",
+      "revId": "7b1962c4cb4301f7fa3f58dc93878a13b3c5adcc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "a29704a9_c5a5f808",
+        "filename": "src/libANGLE/renderer/vulkan/ProgramPipelineVk.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 109,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2022-01-24T18:19:07Z",
+      "side": 1,
+      "message": "It looks like this function can be removed, since only the ProgramExecutableVk version is called now.",
+      "revId": "7b1962c4cb4301f7fa3f58dc93878a13b3c5adcc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "3f62bc65_2f725f2e",
+        "filename": "src/libANGLE/renderer/vulkan/ProgramVk.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 688,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2022-01-24T18:19:07Z",
+      "side": 1,
+      "message": "It looks like this function can be removed, since only the ProgramExecutableVk version is called now.",
+      "revId": "7b1962c4cb4301f7fa3f58dc93878a13b3c5adcc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
