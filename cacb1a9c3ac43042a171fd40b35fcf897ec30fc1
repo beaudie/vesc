@@ -130,6 +130,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "a0f37a91_efb0f323",
+        "filename": "BUILD.gn",
+        "patchSetId": 2
+      },
+      "lineNbr": 153,
+      "author": {
+        "id": 1528827
+      },
+      "writtenOn": "2022-01-24T17:20:56Z",
+      "side": 1,
+      "message": "With my latest changes to OsWindow::New these two if are now split again, as wayland and x11 are not mutually exclusive.",
+      "parentUuid": "f54aab1d_989c0b8d",
+      "range": {
+        "startLine": 146,
+        "startChar": 0,
+        "endLine": 153,
+        "endChar": 5
+      },
+      "revId": "cacb1a9c3ac43042a171fd40b35fcf897ec30fc1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "dbf334f0_741eeafb",
@@ -247,6 +271,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "ec4babf6_0729d7fe",
+        "filename": "gni/angle.gni",
+        "patchSetId": 2
+      },
+      "lineNbr": 138,
+      "author": {
+        "id": 1528827
+      },
+      "writtenOn": "2022-01-24T17:20:56Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "e21a4050_74189172",
+      "range": {
+        "startLine": 137,
+        "startChar": 20,
+        "endLine": 138,
+        "endChar": 46
+      },
+      "revId": "cacb1a9c3ac43042a171fd40b35fcf897ec30fc1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "bfc7bc5c_c01b0e1b",
@@ -260,6 +308,24 @@
       "writtenOn": "2022-01-24T15:52:48Z",
       "side": 1,
       "message": "Maybe log the error?",
+      "revId": "cacb1a9c3ac43042a171fd40b35fcf897ec30fc1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "72f3eb75_e9deda21",
+        "filename": "src/libANGLE/renderer/vulkan/linux/wayland/DisplayVkWayland.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 48,
+      "author": {
+        "id": 1528827
+      },
+      "writtenOn": "2022-01-24T17:20:56Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "bfc7bc5c_c01b0e1b",
       "revId": "cacb1a9c3ac43042a171fd40b35fcf897ec30fc1",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
@@ -289,6 +355,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "8d1dd7c8_e42c3b09",
+        "filename": "src/libANGLE/renderer/vulkan/linux/wayland/DisplayVkWayland.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 86,
+      "author": {
+        "id": 1528827
+      },
+      "writtenOn": "2022-01-24T17:20:56Z",
+      "side": 1,
+      "message": "I introduced a change here and to DisplayVkXcb.cpp. The idea is that if we are able to connect to the relative display, then that would be available. I guess it makes sense.",
+      "parentUuid": "1e5fda16_5655c5d1",
+      "range": {
+        "startLine": 86,
+        "startChar": 11,
+        "endLine": 86,
+        "endChar": 15
+      },
+      "revId": "cacb1a9c3ac43042a171fd40b35fcf897ec30fc1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "00501598_d1bcb152",
         "filename": "src/libANGLE/renderer/vulkan/linux/wayland/DisplayVkWayland.cpp",
         "patchSetId": 2
@@ -300,6 +390,24 @@
       "writtenOn": "2022-01-24T15:52:48Z",
       "side": 1,
       "message": "Why ASSERT? Why not fail like usual?",
+      "revId": "cacb1a9c3ac43042a171fd40b35fcf897ec30fc1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "a61eeed0_e7e6e5b2",
+        "filename": "src/libANGLE/renderer/vulkan/linux/wayland/DisplayVkWayland.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 97,
+      "author": {
+        "id": 1528827
+      },
+      "writtenOn": "2022-01-24T17:20:56Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "00501598_d1bcb152",
       "revId": "cacb1a9c3ac43042a171fd40b35fcf897ec30fc1",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
@@ -327,6 +435,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "6a68a62c_b5b3ccfa",
+        "filename": "src/libANGLE/renderer/vulkan/linux/wayland/WindowSurfaceVkWayland.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 21,
+      "author": {
+        "id": 1528827
+      },
+      "writtenOn": "2022-01-24T17:20:56Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "a9aeaf4e_f5b3e9bf",
+      "range": {
+        "startLine": 21,
+        "startChar": 28,
+        "endLine": 21,
+        "endChar": 42
+      },
+      "revId": "cacb1a9c3ac43042a171fd40b35fcf897ec30fc1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "36d03d6d_ba007e41",
@@ -340,6 +472,30 @@
       "writtenOn": "2022-01-24T15:52:48Z",
       "side": 1,
       "message": "ditto",
+      "range": {
+        "startLine": 32,
+        "startChar": 19,
+        "endLine": 32,
+        "endChar": 29
+      },
+      "revId": "cacb1a9c3ac43042a171fd40b35fcf897ec30fc1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "42526b6e_3264b823",
+        "filename": "src/libANGLE/renderer/vulkan/linux/wayland/WindowSurfaceVkWayland.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 32,
+      "author": {
+        "id": 1528827
+      },
+      "writtenOn": "2022-01-24T17:20:56Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "36d03d6d_ba007e41",
       "range": {
         "startLine": 32,
         "startChar": 19,
@@ -463,6 +619,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "a3aa87cb_f30154e0",
+        "filename": "src/tests/egl_tests/EGLWaylandTest.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 108,
+      "author": {
+        "id": 1528827
+      },
+      "writtenOn": "2022-01-24T17:20:56Z",
+      "side": 1,
+      "message": "Great suggestion! I was able to detect a bug in the test where the test was using a different wayland display than the one in the WaylandWindow instance. Not it is fixed and the test is passing.",
+      "parentUuid": "88530615_39c1b660",
+      "revId": "cacb1a9c3ac43042a171fd40b35fcf897ec30fc1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "e815f8b2_f01dee28",
         "filename": "util/x11/X11Window.cpp",
         "patchSetId": 2
@@ -474,6 +648,30 @@
       "writtenOn": "2022-01-24T15:52:48Z",
       "side": 1,
       "message": "Not a big deal since this is for test, but since the ANGLE build can support X11 and Wayland simultaneously, it\u0027d be nice if the tests could as well. Could the `OSWindow::New()` implementation automatically choose one or the other based on the running window system?",
+      "range": {
+        "startLine": 721,
+        "startChar": 0,
+        "endLine": 724,
+        "endChar": 1
+      },
+      "revId": "cacb1a9c3ac43042a171fd40b35fcf897ec30fc1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "7d0aecb1_768b0cc0",
+        "filename": "util/x11/X11Window.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 724,
+      "author": {
+        "id": 1528827
+      },
+      "writtenOn": "2022-01-24T17:20:56Z",
+      "side": 1,
+      "message": "Yes. I moved both x11 and wayland sources under a linux folder, and introduced a LinuxWindow.cpp which implements OsWindow::New(). According to the availability, either a Wayland window or an X11 window is created. We prefer a wayland window if available, is that ok?",
+      "parentUuid": "e815f8b2_f01dee28",
       "range": {
         "startLine": 721,
         "startChar": 0,
