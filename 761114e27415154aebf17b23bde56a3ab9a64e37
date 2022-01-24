@@ -221,6 +221,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "3a413194_ba9197f7",
+        "filename": "src/tests/gl_tests/RobustBufferAccessBehaviorTest.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 629,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2022-01-24T19:49:56Z",
+      "side": 1,
+      "message": "I\u0027d just remove these error lines. The full fix would be either you get an error, or the draw completes successfully and the buffer values are:\n\n      * Values from anywhere within the buffer object.\n      * Zero values, or (0,0,0,x) vectors for vector reads where x is a\n        valid value represented in the type of the vector components and may\n        be any of\n\n        + 0, 1, or the maximum representable positive integer value, for\n          signed or unsigned integer components\n        + 0.0 or 1.0, for floating-point components",
+      "parentUuid": "97436202_b550d66a",
+      "revId": "761114e27415154aebf17b23bde56a3ab9a64e37",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "9781014e_e022990f",
         "filename": "src/tests/gl_tests/RobustBufferAccessBehaviorTest.cpp",
         "patchSetId": 2
