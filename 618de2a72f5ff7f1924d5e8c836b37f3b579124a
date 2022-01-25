@@ -48,6 +48,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "14d135f2_55b94afc",
+        "filename": "src/libANGLE/renderer/vulkan/FramebufferVk.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 564,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-01-25T03:16:57Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "d19a5346_9003c0b9",
+      "range": {
+        "startLine": 563,
+        "startChar": 0,
+        "endLine": 564,
+        "endChar": 13
+      },
+      "revId": "618de2a72f5ff7f1924d5e8c836b37f3b579124a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "41d079df_6beff92b",
@@ -85,6 +109,30 @@
       "side": 1,
       "message": "This is taken from FramebufferVk::clearWithCommand() - ref1.\n\nI added the test DrawBuffersTest.MidRenderPassClearWithGaps which does what you\u0027ve described and it passes.   It also correctly uses vkCmdClearAttachments() for the mid-RP clear.   Here are the commands captured by renderdoc:\n\n     EID  | Event                                                                                                   | Action #\n    --------------------------------------------------------------------------------------------------------------------------\n    6     | - \u003d\u003e vkQueueSubmit(1)[0]: vkBeginCommandBuffer(Baked Command Buffer 489)                                | 1     \n    7-25  | - Colour Pass #1 (1-2 Targets)                                                                          | 1-5   \n    8     |  \\- vkCmdBeginRenderPass(Don\u0027t Care)                                                                    | 1     \n    14    |   - vkCmdDraw(6, 1)                                                                                     | 1     \n    15    |   - Clear effectively discarding previous draw call results. Suggest earlier Clear followed by masked c |       \n    16    |   - vkCmdClearAttachments({ 0, 3 })                                                                     | 2     \n    20    |   - vkCmdDraw(6, 1)                                                                                     | 3     \n    21    |   - Render pass closed due to framebuffer change                                                        |       \n    22    |   - vkCmdEndRenderPass(Store)                                                                           | 4     \n    24    |   - vkCmdCopyImageToBuffer(2D Color Attachment 430, Buffer 440)                                         | 4     \n    25    |   - GPU stall due to ReadPixels                                                                         |       \n    26-44 | - Copy/Clear Pass #1                                                                                    | 5-6   \n    27    |  \\- \u003d\u003e vkQueueSubmit(1)[0]: vkEndCommandBuffer(Baked Command Buffer 489)                                | 5     \n    32    |   - \u003d\u003e vkQueueSubmit(1)[0]: vkBeginCommandBuffer(Baked Command Buffer 490)                              | 5     \n    34    |   - vkCmdCopyImageToBuffer(2D Color Attachment 435, Buffer 440)                                         | 5     \n    35    |   - GPU stall due to ReadPixels                                                                         |       \n    37    |   - \u003d\u003e vkQueueSubmit(1)[0]: vkEndCommandBuffer(Baked Command Buffer 490)                                | 6     \n    41    |   - \u003d\u003e vkQueueSubmit(1)[0]: vkBeginCommandBuffer(Baked Command Buffer 491)                              | 6     \n    42    |   - Acquire Swap Image Before Swap                                                                      |       \n    44    |   - \u003d\u003e vkQueueSubmit(1)[0]: vkEndCommandBuffer(Baked Command Buffer 491)                                | 6     \n    46    | - vkQueuePresentKHR(Swapchain Image 379)                                                                | 6",
       "parentUuid": "41d079df_6beff92b",
+      "range": {
+        "startLine": 571,
+        "startChar": 46,
+        "endLine": 571,
+        "endChar": 94
+      },
+      "revId": "618de2a72f5ff7f1924d5e8c836b37f3b579124a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "52d3de6d_96870c1a",
+        "filename": "src/libANGLE/renderer/vulkan/FramebufferVk.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 571,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-01-25T03:16:57Z",
+      "side": 1,
+      "message": "Ack regarding correctness, it\u0027s using the GL index because it\u0027s addressing the subpass index (which \u003d\u003d GL index), not the render pass index (which is what we call VK index... arguably I should have chosen better suffixes).\n\nThe test is good as it exercises the clear attachments path, but could you please add a similar one that exercises this path too? It would be very similar, except the first draw call would have one attachment masked (say attachment 3 in that test) which is then enabled before clear. Then the clear of attachment 3 can be moved to loadOp (while clear of attachment 0 remains with vkCmdClearAttachments)",
+      "parentUuid": "d29987a1_254bcc50",
       "range": {
         "startLine": 571,
         "startChar": 46,
