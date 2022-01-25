@@ -158,6 +158,30 @@
       },
       "revId": "0f1efa854182b186dfeea8c8571f5d9baf1e5718",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "d439387d_ae45fa2f",
+        "filename": "src/libANGLE/renderer/vulkan/FramebufferVk.cpp",
+        "patchSetId": 11
+      },
+      "lineNbr": 536,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-01-25T03:39:46Z",
+      "side": 1,
+      "message": "On further look, startRenderPass is clearing mDeferredClears, which was supposed to affect the whole frame, but it\u0027s given a scissored region! The test should still fail (but for this other reason).\n\nHow about refactoring things to look like this:\n\n    // line 502\n    if (scissored \u0026\u0026 mDeferredClears.empty() \u0026\u0026 !midRP)\n    {\n        // Start a render pass with the scissor region\n        // and loadOp\u003dCLEAR where appropriate.  No need for vkCmdClearAttachments.\n        return startScissoredClearRenderPass(...);\n    }\n\n    // the usual logic otherwise\n\n    // After the mDeferredClears.any() loop, right before clearWithDraw(), check for scissored unmasked clears and use vkCmdClearAttachments. Call clearWithDraw() only for left-overs if any.\n\nIn fact the above can be split in two changes; one is that you clear scissored clears before clearWithDraw() with vkCmdClearAttachments. Keep everything else as-is.\n\nThen follow up change could try to optimize a !midRP scissored clear by starting a render pass right away.\n\nHow does that sound?",
+      "parentUuid": "a4df69fe_52b97856",
+      "range": {
+        "startLine": 533,
+        "startChar": 0,
+        "endLine": 536,
+        "endChar": 40
+      },
+      "revId": "0f1efa854182b186dfeea8c8571f5d9baf1e5718",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
