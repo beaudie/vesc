@@ -50,6 +50,46 @@
       "message": "Swapping reviewers B/C Shabi knows the translator code pretty well.",
       "revId": "8584c0a64bee4413a0b96205aecbe0c5c88937c7",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "5103f6e8_f39a5a9a",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-01-25T19:25:52Z",
+      "side": 1,
+      "message": "LGTM",
+      "revId": "8584c0a64bee4413a0b96205aecbe0c5c88937c7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "283720a6_8f8c3aa2",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 3020,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-01-25T19:25:52Z",
+      "side": 1,
+      "message": "Is it known that SwiftShader is implicitly coherent? Or we\u0027re just hoping to catch P6 issues by proxy?",
+      "range": {
+        "startLine": 3020,
+        "startChar": 54,
+        "endLine": 3020,
+        "endChar": 67
+      },
+      "revId": "8584c0a64bee4413a0b96205aecbe0c5c88937c7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
