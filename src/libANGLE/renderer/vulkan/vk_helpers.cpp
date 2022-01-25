@@ -2794,8 +2794,8 @@ angle::Result BufferPool::allocateNewBuffer(ContextVk *contextVk, VkDeviceSize s
     DeviceScoped<DeviceMemory> deviceMemory(renderer->getDevice());
     VkMemoryPropertyFlags memoryPropertyFlagsOut;
     VkDeviceSize sizeOut;
-    ANGLE_TRY(AllocateBufferMemory(contextVk, memoryPropertyFlags, &memoryPropertyFlagsOut, nullptr,
-                                   &buffer.get(), &deviceMemory.get(), &sizeOut));
+    ANGLE_TRY(AllocateBufferMemory(contextVk, memoryPropertyFlags, 0, &memoryPropertyFlagsOut,
+                                   nullptr, &buffer.get(), &deviceMemory.get(), &sizeOut));
     ASSERT(sizeOut >= mSize);
 
     // Allocate bufferBlock
@@ -3957,8 +3957,9 @@ angle::Result BufferHelper::init(ContextVk *contextVk,
     DeviceScoped<DeviceMemory> deviceMemory(renderer->getDevice());
     VkMemoryPropertyFlags memoryPropertyFlagsOut;
     VkDeviceSize sizeOut;
-    ANGLE_TRY(AllocateBufferMemory(contextVk, requiredFlags, &memoryPropertyFlagsOut, nullptr,
-                                   &buffer.get(), &deviceMemory.get(), &sizeOut));
+    ANGLE_TRY(AllocateBufferMemory(contextVk, requiredFlags, preferredFlags,
+                                   &memoryPropertyFlagsOut, nullptr, &buffer.get(),
+                                   &deviceMemory.get(), &sizeOut));
     ASSERT(sizeOut >= createInfo->size);
 
     ANGLE_VK_TRY(contextVk, mSuballocation.initWithEntireBuffer(
