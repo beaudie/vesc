@@ -907,6 +907,9 @@ void ContextVk::onDestroy(const gl::Context *context)
     mCommandPools.outsideRenderPassPool.destroy(device);
     mCommandPools.renderPassPool.destroy(device);
 
+    ASSERT(mReleasedSuballocationList.empty());
+    mReleasedSuballocationList.destroy(mRenderer);
+
     ASSERT(mCurrentGarbage.empty());
     ASSERT(mResourceUseList.empty());
 }
@@ -2372,6 +2375,8 @@ angle::Result ContextVk::submitFrame(const vk::Semaphore *signalSemaphore, Seria
         dumpCommandStreamDiagnostics();
     }
 
+    addGarbage(&mReleasedSuballocationList);
+
     getShareGroupVk()->acquireResourceUseList(std::move(mResourceUseList));
     ANGLE_TRY(mRenderer->submitFrame(this, hasProtectedContent(), mContextPriority,
                                      std::move(mWaitSemaphores),
@@ -2381,6 +2386,7 @@ angle::Result ContextVk::submitFrame(const vk::Semaphore *signalSemaphore, Seria
 
     onRenderPassFinished(RenderPassClosureReason::AlreadySpecifiedElsewhere);
     mComputeDirtyBits |= mNewComputeCommandBufferDirtyBits;
+    mReleasedSuballocationList.init();
 
     if (mGpuEventsEnabled)
     {
@@ -2712,6 +2718,8 @@ void ContextVk::clearAllGarbage()
     // to avoid hitting that assertion.
     mRenderer->cleanupCompletedCommandsGarbage();
 
+    addGarbage(&mReleasedSuballocationList);
+    mReleasedSuballocationList.init();
     for (vk::GarbageObject &garbage : mCurrentGarbage)
     {
         garbage.destroy(mRenderer);
