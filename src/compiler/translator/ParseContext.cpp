@@ -4263,7 +4263,11 @@ TIntermDeclaration *TParseContext::addInterfaceBlock(
     const TVector<unsigned int> *arraySizes,
     const TSourceLoc &arraySizesLine)
 {
-    checkIsNotReserved(nameLine, blockName);
+    // gl_PerVertex is allowed to be redefined and therefore not reserved
+    if (blockName != "gl_PerVertex")
+    {
+        checkIsNotReserved(nameLine, blockName);
+    }
 
     TTypeQualifier typeQualifier = typeQualifierBuilder.getVariableTypeQualifier(mDiagnostics);
 
@@ -4569,8 +4573,13 @@ TIntermDeclaration *TParseContext::addInterfaceBlock(
         }
     }
 
-    TInterfaceBlock *interfaceBlock = new TInterfaceBlock(
-        &symbolTable, blockName, fieldList, blockLayoutQualifier, SymbolType::UserDefined);
+    SymbolType instanceSymbolType = SymbolType::UserDefined;
+    if (blockName == "gl_PerVertex")
+    {
+        instanceSymbolType = SymbolType::BuiltIn;
+    }
+    TInterfaceBlock *interfaceBlock = new TInterfaceBlock(&symbolTable, blockName, fieldList,
+                                                          blockLayoutQualifier, instanceSymbolType);
     if (!symbolTable.declare(interfaceBlock))
     {
         error(nameLine, "redefinition of an interface block name", blockName);
@@ -4607,8 +4616,14 @@ TIntermDeclaration *TParseContext::addInterfaceBlock(
 
             fieldType->setQualifier(typeQualifier.qualifier);
 
+            SymbolType symbolType = SymbolType::UserDefined;
+            if (field->name() == "gl_Position" || field->name() == "gl_PointSize" ||
+                field->name() == "gl_ClipDistance" || field->name() == "gl_CullDistance")
+            {
+                symbolType = SymbolType::BuiltIn;
+            }
             TVariable *fieldVariable =
-                new TVariable(&symbolTable, field->name(), fieldType, SymbolType::UserDefined);
+                new TVariable(&symbolTable, field->name(), fieldType, symbolType);
             if (!symbolTable.declare(fieldVariable))
             {
                 error(field->line(), "redefinition of an interface block member name",
@@ -5629,7 +5644,10 @@ TLayoutQualifier TParseContext::joinLayoutQualifiers(TLayoutQualifier leftQualif
 TDeclarator *TParseContext::parseStructDeclarator(const ImmutableString &identifier,
                                                   const TSourceLoc &loc)
 {
-    checkIsNotReserved(loc, identifier);
+    if (identifier != "gl_Position" && identifier != "gl_PointSize")
+    {
+        checkIsNotReserved(loc, identifier);
+    }
     return new TDeclarator(identifier, loc);
 }
 
@@ -5637,7 +5655,10 @@ TDeclarator *TParseContext::parseStructArrayDeclarator(const ImmutableString &id
                                                        const TSourceLoc &loc,
                                                        const TVector<unsigned int> *arraySizes)
 {
-    checkIsNotReserved(loc, identifier);
+    if (identifier != "gl_ClipDistance" && identifier != "gl_CullDistance")
+    {
+        checkIsNotReserved(loc, identifier);
+    }
     return new TDeclarator(identifier, arraySizes, loc);
 }
 
