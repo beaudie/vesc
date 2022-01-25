@@ -70,6 +70,24 @@
       "parentUuid": "9105c05f_52af26cb",
       "revId": "38deffe40db83836588e0cd50864945a9ddba36b",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "509d873d_1dd44b8c",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 15
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1001921
+      },
+      "writtenOn": "2022-01-25T00:48:46Z",
+      "side": 1,
+      "message": "https://ci.chromium.org/ui/p/angle/builders/ci/android-arm64-exp-test/13/overview has the same failures, so not a flake.\nRevert SGTM.\nIf Jamie doesn\u0027t have a P6, this would be a good reason to expense one 😊",
+      "parentUuid": "1f425435_18368c9e",
+      "revId": "38deffe40db83836588e0cd50864945a9ddba36b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
