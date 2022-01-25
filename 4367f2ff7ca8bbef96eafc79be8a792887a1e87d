@@ -34,6 +34,24 @@
       "parentUuid": "0ec59d4b_3e9b86ef",
       "revId": "4367f2ff7ca8bbef96eafc79be8a792887a1e87d",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "4a163c47_740cec43",
+        "filename": "src/tests/gl_tests/DrawBuffersTest.cpp",
+        "patchSetId": 9
+      },
+      "lineNbr": 381,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-01-25T19:58:30Z",
+      "side": 1,
+      "message": "Yes I was wondering if you added it for that (I used to do too).\n\nI believe I once tried removing --renderdoc too and things didn\u0027t work. I didn\u0027t look into it at the time, but I was also under the impression that it was supposed to work.",
+      "parentUuid": "91d4a92c_73f855f0",
+      "revId": "4367f2ff7ca8bbef96eafc79be8a792887a1e87d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
