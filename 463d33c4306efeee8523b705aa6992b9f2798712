@@ -1,0 +1,61 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "6abf0f5c_ad8e10a5",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-01-25T02:55:49Z",
+      "side": 1,
+      "message": "_Much_ nicer 😊",
+      "revId": "463d33c4306efeee8523b705aa6992b9f2798712",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "54f762f2_98c3d555",
+        "filename": "src/compiler/translator/ParseContext.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 4267,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-01-25T02:55:49Z",
+      "side": 1,
+      "message": "Nit: cache `const bool isGLPerVertex \u003d blockName \u003d\u003d \"gl_PerVertex\"` for use here and below",
+      "range": {
+        "startLine": 4267,
+        "startChar": 7,
+        "endLine": 4267,
+        "endChar": 36
+      },
+      "revId": "463d33c4306efeee8523b705aa6992b9f2798712",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "fa7c9bc5_9d6274f1",
+        "filename": "src/compiler/translator/ParseContext.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 5647,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-01-25T02:55:49Z",
+      "side": 1,
+      "message": "This is missing a check for the struct being gl_PerVertex. Otherwise it seems like now you are allowing `gl_Position` to be used inside any arbitrary struct. It\u0027s also missing the opposite check, that if the struct is gl_PerVertex, you shouldn\u0027t allow anything other than these two.\n\nSame with Clip/Cull below.",
+      "revId": "463d33c4306efeee8523b705aa6992b9f2798712",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
