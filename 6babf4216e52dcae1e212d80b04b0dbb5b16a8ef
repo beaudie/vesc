@@ -1,0 +1,72 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "88ccc52d_522b038a",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 22
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1359249
+      },
+      "writtenOn": "2022-01-25T00:18:51Z",
+      "side": 1,
+      "message": "Feature added.\nPTAL",
+      "revId": "6babf4216e52dcae1e212d80b04b0dbb5b16a8ef",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "081eaabc_ebe4ef7a",
+        "filename": "include/platform/FeaturesVk.h",
+        "patchSetId": 22
+      },
+      "lineNbr": 609,
+      "author": {
+        "id": 1359249
+      },
+      "writtenOn": "2022-01-25T00:18:51Z",
+      "side": 1,
+      "message": "Added",
+      "revId": "6babf4216e52dcae1e212d80b04b0dbb5b16a8ef",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "6376592c_86070fdd",
+        "filename": "src/libANGLE/renderer/vulkan/DisplayVk.cpp",
+        "patchSetId": 22
+      },
+      "lineNbr": 328,
+      "author": {
+        "id": 1359249
+      },
+      "writtenOn": "2022-01-25T00:18:51Z",
+      "side": 1,
+      "message": "Added",
+      "revId": "6babf4216e52dcae1e212d80b04b0dbb5b16a8ef",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "839ff2d0_05718cf6",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.cpp",
+        "patchSetId": 22
+      },
+      "lineNbr": 3028,
+      "author": {
+        "id": 1359249
+      },
+      "writtenOn": "2022-01-25T00:18:51Z",
+      "side": 1,
+      "message": "enabled for Android",
+      "revId": "6babf4216e52dcae1e212d80b04b0dbb5b16a8ef",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
