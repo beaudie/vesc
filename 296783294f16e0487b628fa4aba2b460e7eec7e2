@@ -16,6 +16,23 @@
       "message": "fyi - wanted to confirm that this change combined with https://gerrit.khronos.org/c/vk-gl-cts/+/8455 fixes failures we were seeing",
       "revId": "296783294f16e0487b628fa4aba2b460e7eec7e2",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "b71cd33f_a6cdaa72",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1175714
+      },
+      "writtenOn": "2022-01-25T01:19:04Z",
+      "side": 1,
+      "message": "This also fixes corrupt rendering in Minecraft PE, which actually adjusts precision used in the shader using results from glGetShaderPrecisionFormat.",
+      "revId": "296783294f16e0487b628fa4aba2b460e7eec7e2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
