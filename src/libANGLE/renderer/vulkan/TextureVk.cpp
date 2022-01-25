@@ -1585,12 +1585,10 @@ angle::Result TextureVk::redefineLevel(const gl::Context *context,
 
     if (mImage != nullptr)
     {
-        // If there is any staged changes for this index, we can remove them since we're going to
+        // If there are any staged changes for this index, we can remove them since we're going to
         // override them with this call.
         gl::LevelIndex levelIndexGL(index.getLevelIndex());
-        uint32_t layerIndex = index.hasLayer() ? index.getLayerIndex() : 0;
-        mImage->removeSingleSubresourceStagedUpdates(contextVk, levelIndexGL, layerIndex,
-                                                     index.getLayerCount());
+        mImage->removeStagedUpdates(contextVk, levelIndexGL, levelIndexGL);
 
         if (mImage->valid())
         {
