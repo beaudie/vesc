@@ -2803,7 +2803,7 @@ void CaptureShareGroupMidExecutionSetup(const gl::Context *context,
                 static_cast<GLsizeiptr>(buffer->getMapOffset()),
                 static_cast<GLsizeiptr>(buffer->getMapLength()),
                 (buffer->getAccessFlags() & GL_MAP_WRITE_BIT) != 0,
-                (buffer->getStorageExtUsageFlags() & GL_MAP_COHERENT_BIT_EXT) != 0);
+                (buffer->getStorageExtUsageFlags() & GL_MAP_COHERENT_BIT_EXT) != 0, true);
         }
         else
         {
@@ -5191,7 +5191,8 @@ void FrameCaptureShared::trackBufferMapping(CallCapture *call,
                                             GLintptr offset,
                                             GLsizeiptr length,
                                             bool writable,
-                                            bool coherent)
+                                            bool coherent,
+                                            bool overrideActive)
 {
     // Track that the buffer was mapped
     mResourceTracker.setBufferMapped(id.value);
@@ -5210,7 +5211,10 @@ void FrameCaptureShared::trackBufferMapping(CallCapture *call,
         call->params.setMappedBufferID(id);
 
         // Track coherent buffer
-        if (coherent)
+        // Check if capture is active to not initialize the coherent buffer tracker on the
+        // first coherent glMapBufferRange call.
+        // overrideActive will be set to true during MEC, since capture is only set active after.
+        if (coherent && (isCaptureActive() || overrideActive))
         {
             mCoherentBufferTracker.enable();
             uintptr_t data = reinterpret_cast<uintptr_t>(buffer->getMapPointer());
@@ -5864,7 +5868,7 @@ void FrameCaptureShared::maybeCapturePreCallUpdates(
             FrameCaptureShared *frameCaptureShared =
                 context->getShareGroup()->getFrameCaptureShared();
             frameCaptureShared->trackBufferMapping(&call, buffer->id(), buffer, offset, length,
-                                                   writable, false);
+                                                   writable, false, false);
             break;
         }
 
@@ -5893,7 +5897,7 @@ void FrameCaptureShared::maybeCapturePreCallUpdates(
                 context->getShareGroup()->getFrameCaptureShared();
             frameCaptureShared->trackBufferMapping(&call, buffer->id(), buffer, offset, length,
                                                    access & GL_MAP_WRITE_BIT,
-                                                   access & GL_MAP_COHERENT_BIT_EXT);
+                                                   access & GL_MAP_COHERENT_BIT_EXT, false);
             break;
         }
 
