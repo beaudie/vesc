@@ -4087,7 +4087,7 @@ angle::Result BufferHelper::allocateForVertexConversion(ContextVk *contextVk,
             }
         }
 
-        release(renderer);
+        contextVk->releaseSuballocation(mSuballocation);
     }
 
     uint32_t memoryTypeIndex = renderer->getVertexConversionBufferMemoryTypeIndex(hostVisibility);
