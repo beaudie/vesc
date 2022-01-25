@@ -50,6 +50,24 @@
       "message": "This works for us. Any objections?\n\n    const std::array\u003cGLenum, 5\u003e kColorFormats \u003d {GL_BGRA8, GL_RGB565, GL_RGB5_A1, GL_RGB10_A2, GL_RGBA16F};",
       "revId": "6fb3f1ca7489372b9b7b639db9215d9e96693fd6",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "27462a15_4ee900c6",
+        "filename": "src/libANGLE/renderer/vulkan/linux/wayland/DisplayVkWayland.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 64,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-01-25T19:20:00Z",
+      "side": 1,
+      "message": "How about we land this as-is, then follow up with the above modification? So if any issues pop up, the revert/blame would be trivial.",
+      "parentUuid": "0eca7594_8ea6033d",
+      "revId": "6fb3f1ca7489372b9b7b639db9215d9e96693fd6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
