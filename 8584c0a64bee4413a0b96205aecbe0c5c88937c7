@@ -16,6 +16,23 @@
       "message": "PTAL",
       "revId": "8584c0a64bee4413a0b96205aecbe0c5c88937c7",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "79e5c86d_31979fa3",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2022-01-25T19:03:04Z",
+      "side": 1,
+      "message": "Swapping reviewers B/C Shabi knows the translator code pretty well.",
+      "revId": "8584c0a64bee4413a0b96205aecbe0c5c88937c7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
