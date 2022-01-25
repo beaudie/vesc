@@ -4104,6 +4104,7 @@ angle::Result ContextVk::syncState(const gl::Context *context,
             case gl::State::DIRTY_BIT_PROGRAM_EXECUTABLE:
             {
                 ASSERT(programExecutable);
+                invalidateProgramBindingHelper();
                 invalidateCurrentDefaultUniforms();
                 static_assert(
                     gl::State::DIRTY_BIT_TEXTURE_BINDINGS > gl::State::DIRTY_BIT_PROGRAM_EXECUTABLE,
