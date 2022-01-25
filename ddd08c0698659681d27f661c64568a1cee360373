@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "4e6ea9e4_932f4f95",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1001921
+      },
+      "writtenOn": "2022-01-25T23:38:10Z",
+      "side": 1,
+      "message": "Tests passed in https://chromium-swarm.appspot.com/task?id\u003d58ac68c8dffdcc10",
+      "revId": "ddd08c0698659681d27f661c64568a1cee360373",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
