@@ -20,6 +20,24 @@
     {
       "unresolved": false,
       "key": {
+        "uuid": "a455092c_27623154",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 2
+      },
+      "lineNbr": 10,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2022-01-25T21:29:48Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "8c35bab7_a98cc374",
+      "revId": "8584c0a64bee4413a0b96205aecbe0c5c88937c7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
         "uuid": "fe628483_67acbead",
         "filename": "/PATCHSET_LEVEL",
         "patchSetId": 2
@@ -82,6 +100,30 @@
       "writtenOn": "2022-01-25T19:25:52Z",
       "side": 1,
       "message": "Is it known that SwiftShader is implicitly coherent? Or we\u0027re just hoping to catch P6 issues by proxy?",
+      "range": {
+        "startLine": 3020,
+        "startChar": 54,
+        "endLine": 3020,
+        "endChar": 67
+      },
+      "revId": "8584c0a64bee4413a0b96205aecbe0c5c88937c7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "a9590a95_b4669aff",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 3020,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2022-01-25T21:29:48Z",
+      "side": 1,
+      "message": "Yeah Nicolas confirmed it\u0027s known to be coherent. \n\nFor more info see comments in https://gitlab.khronos.org/vulkan/vulkan-operations/-/issues/138",
+      "parentUuid": "283720a6_8f8c3aa2",
       "range": {
         "startLine": 3020,
         "startChar": 54,
