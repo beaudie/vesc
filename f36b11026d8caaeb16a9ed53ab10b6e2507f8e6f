@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "3cf48b16_36138807",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-01-25T15:07:44Z",
+      "side": 1,
+      "message": "This regression was introduced after M96 (as you can see with the merge conflict). Were you able to reproduce the issue on M96? If so, the fix will look different.",
+      "revId": "f36b11026d8caaeb16a9ed53ab10b6e2507f8e6f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
