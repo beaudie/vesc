@@ -16,6 +16,24 @@
       "message": "Some tests I have yet to add, plus Tim\u0027s feedback.\n\nIn the meantime, here are some perf numbers: https://docs.google.com/spreadsheets/d/1B2hi17aT5VHigpNvSfHGR4h6OmcSvtDrxq8DtHOGkaA\n\nIn most cases the change doesn\u0027t seem to affect perf much. subway_princess_runner is particularly affected however, both getting a boost in visual quality and a drop in perf.\n\nLet me know if you still prefer this enabled everywhere. Given that Nvidia\u0027s OpenGL driver doesn\u0027t actually dither, we probably don\u0027t care so much about this on !Android anyway (i.e. without 565 swapchains).",
       "revId": "a042c14fbd58b15bad67d1e49a330ce3f4072952",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "ff2c92fa_26b4f4b7",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 9
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1340649
+      },
+      "writtenOn": "2022-01-25T19:30:28Z",
+      "side": 1,
+      "message": "dithering code is enabled only for rgb565 / rgba4444 / rgba5551 formats right? are all these apps listed in the spreadsheet using one of those formats?",
+      "parentUuid": "bf93eee5_afc84f52",
+      "revId": "a042c14fbd58b15bad67d1e49a330ce3f4072952",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
