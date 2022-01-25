@@ -134,6 +134,30 @@
       },
       "revId": "0f1efa854182b186dfeea8c8571f5d9baf1e5718",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "a4df69fe_52b97856",
+        "filename": "src/libANGLE/renderer/vulkan/FramebufferVk.cpp",
+        "patchSetId": 11
+      },
+      "lineNbr": 536,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-01-25T03:29:12Z",
+      "side": 1,
+      "message": "That\u0027s nice, but this seems like an incomplete solution. Why start an RP just to use vkCmdClearAttachments right away? Why not use loadOp\u003dCLEAR right away and forgo the clear command/draw altogether?\n\nBut this change makes me feel queasy for more reasons. For example, the mergeClearsWithDeferredClears below assumes any clears given to it are whole-frame clears; because they may end up getting re-deferred. Mixing in scissored clears means scissored clears can accidentally end up being stored as deferred clears. I guess setting isMidRenderPassClear makes it work, but it breaks my mental model at least (because in this duration there are clears in mDeferredClears that are actually scissored).\n\nWhat if there is a full-frame deferred clear and then a scissored clear? Wouldn\u0027t mergeClearsWithDeferredClears override the full-frame deferred clear with the scissored one and cause trouble? You can try that in a test by clearing an attachment, then clear the middle with a scissor and see how your change performs.\n\n---\n\nI\u0027m ok with what you are trying to achieve here nevertheless (even if it\u0027s a bit arguable, because if you start the RP with a scissor and loadOp\u003dLOAD, then you have to break it if the scissor sizes increases, but who\u0027s gonna do _that_!).",
+      "parentUuid": "523e3b09_029105e5",
+      "range": {
+        "startLine": 533,
+        "startChar": 0,
+        "endLine": 536,
+        "endChar": 40
+      },
+      "revId": "0f1efa854182b186dfeea8c8571f5d9baf1e5718",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
