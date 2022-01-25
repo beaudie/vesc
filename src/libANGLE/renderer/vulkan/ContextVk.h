@@ -450,6 +450,13 @@ class ContextVk : public ContextImpl, public vk::Context, public MultisampleText
         }
     }
 
+    void releaseSuballocation(vk::BufferSuballocation &suballocation)
+    {
+        if (suballocation.valid())
+        {
+            mReleasedSuballocationList.emplace(suballocation);
+        }
+    }
     // It would be nice if we didn't have to expose this for QueryVk::getResult.
     angle::Result checkCompletedCommands();
 
@@ -1125,6 +1132,7 @@ class ContextVk : public ContextImpl, public vk::Context, public MultisampleText
     vk::SecondaryCommandPools mCommandPools;
 
     vk::GarbageList mCurrentGarbage;
+    vk::BufferSuballocationList mReleasedSuballocationList;
 
     RenderPassCache mRenderPassCache;
 
