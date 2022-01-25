@@ -16,6 +16,24 @@
       "message": "Drive-by (LGTM): is it worth mentioning the performance diff in the CL comment?",
       "revId": "ddf3a7a098961772c9fad4f281018ba36255aae9",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "b0611069_b0b359ce",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1290487
+      },
+      "writtenOn": "2022-01-25T23:59:30Z",
+      "side": 1,
+      "message": "Never mind--I see that in the follow-up CL",
+      "parentUuid": "be2102ba_1aa6fa8b",
+      "revId": "ddf3a7a098961772c9fad4f281018ba36255aae9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
