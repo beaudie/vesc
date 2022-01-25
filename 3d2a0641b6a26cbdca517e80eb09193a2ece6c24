@@ -1,6 +1,23 @@
 {
   "comments": [
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "080ee6f3_c556464d",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2022-01-25T21:10:40Z",
+      "side": 1,
+      "message": "Looks like we can close this one - seems to be fixed by Shabi\u0027s precision range CL IIUC.",
+      "revId": "3d2a0641b6a26cbdca517e80eb09193a2ece6c24",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "8d7bf782_0531fe1f",
