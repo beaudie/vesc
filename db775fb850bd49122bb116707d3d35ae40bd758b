@@ -16,6 +16,29 @@
       "message": "PTAL. Last one that I had planned for now.",
       "revId": "db775fb850bd49122bb116707d3d35ae40bd758b",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "0a97d517_95721225",
+        "filename": "src/libANGLE/renderer/vulkan/ProgramPipelineVk.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 98,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2022-01-25T02:17:02Z",
+      "side": 1,
+      "message": "This is duplicating the SPIR-V binary for PPOs, where we previously reused the Programs SPIR-V blob in ProgramExecutableVk::getGraphicsPipeline() via the getShaderProgram() call.   We should avoid introducing this memory regression.\n\nI think it would be better for ProgramVk to continue owning mOriginalShaderInfo, since the SPIR-V is necessarily tied to a particular Program, and then ProgramExecutableVk can be updated to hold a pointer to the ShaderInfo for each shader stage.   That would allow this line to just update a pointer, rather than doing a memcpy() and getGraphicsPipeline() can get pointers to a ShaderInfo per stage, rather than a ProgramVk via getShaderProgram() which needs a ProgramVk and PPOVk pointer.",
+      "range": {
+        "startLine": 97,
+        "startChar": 0,
+        "endLine": 98,
+        "endChar": 69
+      },
+      "revId": "db775fb850bd49122bb116707d3d35ae40bd758b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
