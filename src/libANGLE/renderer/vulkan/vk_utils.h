@@ -1064,6 +1064,39 @@ class BufferSuballocation final : public WrappedObject<BufferSuballocation, VmaB
     VkDeviceSize getOffset() const;
 };
 
+struct VmaBufferSuballocationList_T
+{
+    std::vector<BufferSuballocation> mList;
+};
+VK_DEFINE_HANDLE(VmaBufferSuballocationList)
+class BufferSuballocationList final
+    : public WrappedObject<BufferSuballocationList, VmaBufferSuballocationList>
+{
+  public:
+    BufferSuballocationList() { init(); }
+    void init();
+    bool empty() const { return mHandle->mList.empty(); }
+    void emplace(BufferSuballocation &suballocation);
+    void destroy(RendererVk *renderer);
+};
+
+ANGLE_INLINE void CreateVmaBufferSuballocationList(
+    VmaBufferSuballocationList *vmaBufferSuballocationListOut)
+{
+    *vmaBufferSuballocationListOut = new VmaBufferSuballocationList_T;
+}
+ANGLE_INLINE
+void DestroyVmaBufferSuballocationList(RendererVk *renderer,
+                                       VmaBufferSuballocationList suballocationList)
+{
+    for (BufferSuballocation &suballocation : suballocationList->mList)
+    {
+        suballocation.destroy(renderer);
+    }
+    suballocationList->mList.clear();
+    delete suballocationList;
+}
+
 // BufferBlock implementation.
 ANGLE_INLINE Buffer *BufferBlock::getBuffer()
 {
@@ -1223,6 +1256,33 @@ ANGLE_INLINE void BufferSuballocation::invalidate(const Allocator &allocator) co
 ANGLE_INLINE VkDeviceSize BufferSuballocation::getOffset() const
 {
     return mHandle->mOffset;
+}
+
+// SuballocationList implementation.
+ANGLE_INLINE void BufferSuballocationList::init()
+{
+    if (mHandle == nullptr)
+    {
+        CreateVmaBufferSuballocationList(&mHandle);
+    }
+    else
+    {
+        ASSERT(mHandle->mList.empty());
+    }
+}
+
+ANGLE_INLINE void BufferSuballocationList::emplace(BufferSuballocation &suballocation)
+{
+    mHandle->mList.emplace_back(std::move(suballocation));
+}
+
+ANGLE_INLINE void BufferSuballocationList::destroy(RendererVk *renderer)
+{
+    if (valid())
+    {
+        DestroyVmaBufferSuballocationList(renderer, mHandle);
+        mHandle = VK_NULL_HANDLE;
+    }
 }
 
 #if defined(ANGLE_ENABLE_PERF_COUNTER_OUTPUT)
