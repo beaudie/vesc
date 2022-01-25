@@ -88,6 +88,24 @@
       "parentUuid": "1f425435_18368c9e",
       "revId": "38deffe40db83836588e0cd50864945a9ddba36b",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "c6b7da28_0857e3f9",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 15
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2022-01-25T15:52:00Z",
+      "side": 1,
+      "message": "Thanks for the revert. It looks like we don\u0027t have any pre-commit testing for framebuffer fetch. I\u0027m enabling fetch on SwiftShader in http://anglebug.com/6947 so anyone even without a P6 can verify their change locally. I do have on on hand if necessary.",
+      "parentUuid": "509d873d_1dd44b8c",
+      "revId": "38deffe40db83836588e0cd50864945a9ddba36b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
