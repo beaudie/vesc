@@ -26,6 +26,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "006c0014_fb8d74d5",
+        "filename": "DEPS",
+        "patchSetId": 4
+      },
+      "lineNbr": 529,
+      "author": {
+        "id": 1528827
+      },
+      "writtenOn": "2022-01-25T11:57:34Z",
+      "side": 1,
+      "message": "Mmh, I think so. But a tag can be modified to point to a different commit. Do you prefer using a specific commit hash?",
+      "parentUuid": "631c420b_0dcab217",
+      "range": {
+        "startLine": 529,
+        "startChar": 89,
+        "endLine": 529,
+        "endChar": 95
+      },
+      "revId": "16d032d17fa69a192e216ff8e9ca69a47cc5b73e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "cab0a1b0_d63a913a",
         "filename": "gni/angle.gni",
         "patchSetId": 4
@@ -37,6 +61,24 @@
       "writtenOn": "2022-01-24T21:43:33Z",
       "side": 1,
       "message": "Still no good. Ozone on Fuchsia for example should not enable GL. Same with !linux. The final override `\u0026\u0026 !is_fuchsia \u0026\u0026 !angle_is_winuwp \u0026\u0026 !is_ggp \u0026\u0026 !is_win_arm64` is really a _final_ override. Like on GGP you don\u0027t have GL, no matter what.",
+      "revId": "16d032d17fa69a192e216ff8e9ca69a47cc5b73e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "e27f5b91_55cabd25",
+        "filename": "gni/angle.gni",
+        "patchSetId": 4
+      },
+      "lineNbr": 138,
+      "author": {
+        "id": 1528827
+      },
+      "writtenOn": "2022-01-25T11:57:34Z",
+      "side": 1,
+      "message": "Sorry, it should be ok now.",
+      "parentUuid": "cab0a1b0_d63a913a",
       "revId": "16d032d17fa69a192e216ff8e9ca69a47cc5b73e",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
@@ -90,6 +132,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "a79657d1_c79b6444",
+        "filename": "src/libANGLE/renderer/vulkan/linux/wayland/DisplayVkWayland.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 106,
+      "author": {
+        "id": 1528827
+      },
+      "writtenOn": "2022-01-25T11:57:34Z",
+      "side": 1,
+      "message": "There is no rendering in the wayland protocol. Apps do all the rendering and provide complete buffers to the compositor for presentation.",
+      "parentUuid": "32329b51_0f077caf",
+      "range": {
+        "startLine": 106,
+        "startChar": 17,
+        "endLine": 106,
+        "endChar": 37
+      },
+      "revId": "16d032d17fa69a192e216ff8e9ca69a47cc5b73e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "69455bfa_fec01bbd",
         "filename": "src/libANGLE/renderer/vulkan/linux/wayland/DisplayVkWayland.h",
         "patchSetId": 4
@@ -101,6 +167,30 @@
       "writtenOn": "2022-01-24T18:19:10Z",
       "side": 1,
       "message": "does this have to be forward-declared outside the rx namespace?",
+      "range": {
+        "startLine": 15,
+        "startChar": 0,
+        "endLine": 15,
+        "endChar": 18
+      },
+      "revId": "16d032d17fa69a192e216ff8e9ca69a47cc5b73e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b8e8bc87_da12dc2e",
+        "filename": "src/libANGLE/renderer/vulkan/linux/wayland/DisplayVkWayland.h",
+        "patchSetId": 4
+      },
+      "lineNbr": 15,
+      "author": {
+        "id": 1528827
+      },
+      "writtenOn": "2022-01-25T11:57:34Z",
+      "side": 1,
+      "message": "Yes, this is declared in a c header (wayland-client.h) included within DisplayVkWayland.cpp.\nDo you prefer including wayland-client.h from DiplayVkWayland.h?",
+      "parentUuid": "69455bfa_fec01bbd",
       "range": {
         "startLine": 15,
         "startChar": 0,
@@ -136,6 +226,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "eec8094d_db92b903",
+        "filename": "src/libANGLE/renderer/vulkan/linux/wayland/WindowSurfaceVkWayland.h",
+        "patchSetId": 4
+      },
+      "lineNbr": 16,
+      "author": {
+        "id": 1528827
+      },
+      "writtenOn": "2022-01-25T11:57:34Z",
+      "side": 1,
+      "message": "ditto",
+      "parentUuid": "c4d740f2_f6e0a9a6",
+      "range": {
+        "startLine": 15,
+        "startChar": 0,
+        "endLine": 16,
+        "endChar": 21
+      },
+      "revId": "16d032d17fa69a192e216ff8e9ca69a47cc5b73e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "e10f8291_07b6400d",
         "filename": "src/tests/egl_tests/EGLWaylandTest.cpp",
         "patchSetId": 4
@@ -147,6 +261,24 @@
       "writtenOn": "2022-01-24T18:19:10Z",
       "side": 1,
       "message": "one line description / comment for the test",
+      "revId": "16d032d17fa69a192e216ff8e9ca69a47cc5b73e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "64fcdd38_50e73989",
+        "filename": "src/tests/egl_tests/EGLWaylandTest.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 102,
+      "author": {
+        "id": 1528827
+      },
+      "writtenOn": "2022-01-25T11:57:34Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "e10f8291_07b6400d",
       "revId": "16d032d17fa69a192e216ff8e9ca69a47cc5b73e",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
@@ -174,6 +306,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "a92088f5_472f8172",
+        "filename": "src/tests/egl_tests/EGLWaylandTest.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 127,
+      "author": {
+        "id": 1528827
+      },
+      "writtenOn": "2022-01-25T11:57:34Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "52c3447a_e77e7351",
+      "range": {
+        "startLine": 105,
+        "startChar": 0,
+        "endLine": 127,
+        "endChar": 42
+      },
+      "revId": "16d032d17fa69a192e216ff8e9ca69a47cc5b73e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "1444d2b3_e13f26d4",
@@ -187,6 +343,30 @@
       "writtenOn": "2022-01-24T18:19:10Z",
       "side": 1,
       "message": "repeated code, maybe move to -\n void testTearDown() override",
+      "range": {
+        "startLine": 166,
+        "startChar": 0,
+        "endLine": 169,
+        "endChar": 26
+      },
+      "revId": "16d032d17fa69a192e216ff8e9ca69a47cc5b73e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "9a4061b0_b66f8182",
+        "filename": "src/tests/egl_tests/EGLWaylandTest.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 169,
+      "author": {
+        "id": 1528827
+      },
+      "writtenOn": "2022-01-25T11:57:34Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "1444d2b3_e13f26d4",
       "range": {
         "startLine": 166,
         "startChar": 0,
