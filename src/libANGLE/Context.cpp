@@ -1304,6 +1304,7 @@ void Context::useProgramStages(ProgramPipelineID pipeline,
 
     ASSERT(programPipeline);
     ANGLE_CONTEXT_TRY(programPipeline->useProgramStages(this, stages, shaderProgram));
+    mState.mDirtyBits.set(State::DirtyBitType::DIRTY_BIT_PROGRAM_BINDING);
 }
 
 void Context::bindTransformFeedback(GLenum target, TransformFeedbackID transformFeedbackHandle)
