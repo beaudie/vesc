@@ -16,6 +16,24 @@
       "message": "nit: you can get rid of the swapBuffers() here and at the end",
       "revId": "4367f2ff7ca8bbef96eafc79be8a792887a1e87d",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "91d4a92c_73f855f0",
+        "filename": "src/tests/gl_tests/DrawBuffersTest.cpp",
+        "patchSetId": 9
+      },
+      "lineNbr": 381,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2022-01-25T19:41:12Z",
+      "side": 1,
+      "message": "Oops. Done.\n\nPlaying around it seems `--renderdoc` what I need, though I thought I fixed it so that\u0027s always enabled for debug builds.   I\u0027ll need to look into why that\u0027s not working.",
+      "parentUuid": "0ec59d4b_3e9b86ef",
+      "revId": "4367f2ff7ca8bbef96eafc79be8a792887a1e87d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }

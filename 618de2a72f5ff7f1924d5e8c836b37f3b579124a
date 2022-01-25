@@ -145,6 +145,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "6e537899_547f7e58",
+        "filename": "src/libANGLE/renderer/vulkan/FramebufferVk.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 571,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2022-01-25T19:41:12Z",
+      "side": 1,
+      "message": "I\u0027ve added DrawBuffersTest.MaskedDrawMidRPClearWithGaps.\n\nGood catch on this scenario, which showed the issue with `colorIndexVk` where `RenderPassCommandBufferHelper::mAttachmentOps` was being set with the index `colorIndexGL` (3), but then `InitializeRenderPassFromDesc()` was indexing into the `AttachmentOpsArray` with `attachmentCount\u003d1` and getting the wrong result.\n\nI\u0027ve updated `FramebufferVk::clearWithLoadOp()` to correctly loop through the color attachments and increment `colorIndexVk` so the new test passes.",
+      "parentUuid": "52d3de6d_96870c1a",
+      "range": {
+        "startLine": 571,
+        "startChar": 46,
+        "endLine": 571,
+        "endChar": 94
+      },
+      "revId": "618de2a72f5ff7f1924d5e8c836b37f3b579124a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "e1eff563_e955a4c1",
         "filename": "src/libANGLE/renderer/vulkan/FramebufferVk.cpp",
         "patchSetId": 5
@@ -203,6 +227,24 @@
       "writtenOn": "2022-01-19T03:54:11Z",
       "side": 1,
       "message": "ref1",
+      "revId": "618de2a72f5ff7f1924d5e8c836b37f3b579124a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "2e27e274_d894cdb3",
+        "filename": "src/libANGLE/renderer/vulkan/FramebufferVk.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 2371,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2022-01-25T19:41:12Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "ac2d79fa_f8e6dc4b",
       "revId": "618de2a72f5ff7f1924d5e8c836b37f3b579124a",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
