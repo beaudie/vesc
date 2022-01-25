@@ -378,7 +378,8 @@ class MemoryProperties final : angle::NonCopyable
     bool hasLazilyAllocatedMemory() const;
     angle::Result findCompatibleMemoryIndex(Context *context,
                                             const VkMemoryRequirements &memoryRequirements,
-                                            VkMemoryPropertyFlags requestedMemoryPropertyFlags,
+                                            VkMemoryPropertyFlags requiredMemoryPropertyFlags,
+                                            VkMemoryPropertyFlags preferredMemoryPropertyFlags,
                                             bool isExternalMemory,
                                             VkMemoryPropertyFlags *memoryPropertyFlagsOut,
                                             uint32_t *indexOut) const;
@@ -391,6 +392,10 @@ class MemoryProperties final : angle::NonCopyable
     }
 
     uint32_t getMemoryTypeCount() const { return mMemoryProperties.memoryTypeCount; }
+    const VkPhysicalDeviceMemoryProperties &getPhysicalDeviceMemoryProperties() const
+    {
+        return mMemoryProperties;
+    }
 
   private:
     VkPhysicalDeviceMemoryProperties mMemoryProperties;
@@ -431,7 +436,8 @@ angle::Result InitMappableDeviceMemory(Context *context,
                                        VkMemoryPropertyFlags memoryPropertyFlags);
 
 angle::Result AllocateBufferMemory(Context *context,
-                                   VkMemoryPropertyFlags requestedMemoryPropertyFlags,
+                                   VkMemoryPropertyFlags requiredMemoryPropertyFlags,
+                                   VkMemoryPropertyFlags preferredMemoryPropertyFlags,
                                    VkMemoryPropertyFlags *memoryPropertyFlagsOut,
                                    const void *extraAllocationInfo,
                                    Buffer *buffer,
