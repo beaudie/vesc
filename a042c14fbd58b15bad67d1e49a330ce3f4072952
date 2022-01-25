@@ -34,6 +34,24 @@
       "parentUuid": "bf93eee5_afc84f52",
       "revId": "a042c14fbd58b15bad67d1e49a330ce3f4072952",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "99b13752_5437d632",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 9
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-01-25T19:55:55Z",
+      "side": 1,
+      "message": "Only the ones specifically marked in the \"Actually Affected\" column (with blue). I put in the data for all the apps as reference for noisiness of measurements.",
+      "parentUuid": "ff2c92fa_26b4f4b7",
+      "revId": "a042c14fbd58b15bad67d1e49a330ce3f4072952",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
