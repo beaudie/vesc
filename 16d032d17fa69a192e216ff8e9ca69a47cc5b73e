@@ -48,6 +48,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "0efb47c5_b2b57137",
+        "filename": "DEPS",
+        "patchSetId": 4
+      },
+      "lineNbr": 529,
+      "author": {
+        "id": 1340649
+      },
+      "writtenOn": "2022-01-25T18:06:42Z",
+      "side": 1,
+      "message": "not really, just wanted to understand the deviation from other repos where angle seems to sync to a hash. im fine either way",
+      "parentUuid": "006c0014_fb8d74d5",
+      "range": {
+        "startLine": 529,
+        "startChar": 89,
+        "endLine": 529,
+        "endChar": 95
+      },
+      "revId": "16d032d17fa69a192e216ff8e9ca69a47cc5b73e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "cab0a1b0_d63a913a",
@@ -156,6 +180,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "b2ffb4b1_1d6f2c5f",
+        "filename": "src/libANGLE/renderer/vulkan/linux/wayland/DisplayVkWayland.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 106,
+      "author": {
+        "id": 1340649
+      },
+      "writtenOn": "2022-01-25T18:06:42Z",
+      "side": 1,
+      "message": "eglWaitNative says -\n Description\n Native rendering calls made prior to eglWaitNative are guaranteed to be executed\n before GL rendering calls made after eglWaitNative.\n \nif wayland doesn\u0027t support any native rendering, cant this method just be a noop and immediately return?",
+      "parentUuid": "a79657d1_c79b6444",
+      "range": {
+        "startLine": 106,
+        "startChar": 17,
+        "endLine": 106,
+        "endChar": 37
+      },
+      "revId": "16d032d17fa69a192e216ff8e9ca69a47cc5b73e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "69455bfa_fec01bbd",
         "filename": "src/libANGLE/renderer/vulkan/linux/wayland/DisplayVkWayland.h",
         "patchSetId": 4
@@ -191,6 +239,30 @@
       "side": 1,
       "message": "Yes, this is declared in a c header (wayland-client.h) included within DisplayVkWayland.cpp.\nDo you prefer including wayland-client.h from DiplayVkWayland.h?",
       "parentUuid": "69455bfa_fec01bbd",
+      "range": {
+        "startLine": 15,
+        "startChar": 0,
+        "endLine": 15,
+        "endChar": 18
+      },
+      "revId": "16d032d17fa69a192e216ff8e9ca69a47cc5b73e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "0c95870a_0c2f5a48",
+        "filename": "src/libANGLE/renderer/vulkan/linux/wayland/DisplayVkWayland.h",
+        "patchSetId": 4
+      },
+      "lineNbr": 15,
+      "author": {
+        "id": 1340649
+      },
+      "writtenOn": "2022-01-25T18:06:42Z",
+      "side": 1,
+      "message": "\u003e this is declared in a c header (wayland-client.h)\n\nah, ok. fine as-is",
+      "parentUuid": "b8e8bc87_da12dc2e",
       "range": {
         "startLine": 15,
         "startChar": 0,
@@ -238,6 +310,30 @@
       "side": 1,
       "message": "ditto",
       "parentUuid": "c4d740f2_f6e0a9a6",
+      "range": {
+        "startLine": 15,
+        "startChar": 0,
+        "endLine": 16,
+        "endChar": 21
+      },
+      "revId": "16d032d17fa69a192e216ff8e9ca69a47cc5b73e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "1ac615a7_d2a8be3e",
+        "filename": "src/libANGLE/renderer/vulkan/linux/wayland/WindowSurfaceVkWayland.h",
+        "patchSetId": 4
+      },
+      "lineNbr": 16,
+      "author": {
+        "id": 1340649
+      },
+      "writtenOn": "2022-01-25T18:06:42Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "eec8094d_db92b903",
       "range": {
         "startLine": 15,
         "startChar": 0,
