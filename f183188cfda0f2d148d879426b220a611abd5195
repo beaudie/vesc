@@ -188,6 +188,24 @@
       "parentUuid": "30b10ea8_b8bed050",
       "revId": "f183188cfda0f2d148d879426b220a611abd5195",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "05162213_4f5fc8c3",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1531247
+      },
+      "writtenOn": "2022-01-26T23:14:45Z",
+      "side": 1,
+      "message": "Alright, that cl landed and I included that in the description as well.",
+      "parentUuid": "73a9ed4e_3769abe1",
+      "revId": "f183188cfda0f2d148d879426b220a611abd5195",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
