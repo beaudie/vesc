@@ -107,6 +107,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "860f7a32_ea2319fa",
+        "filename": "gni/angle.gni",
+        "patchSetId": 4
+      },
+      "lineNbr": 138,
+      "author": {
+        "id": 1528827
+      },
+      "writtenOn": "2022-01-26T11:04:23Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "e27f5b91_55cabd25",
+      "revId": "16d032d17fa69a192e216ff8e9ca69a47cc5b73e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "32329b51_0f077caf",
@@ -192,6 +210,30 @@
       "side": 1,
       "message": "eglWaitNative says -\n Description\n Native rendering calls made prior to eglWaitNative are guaranteed to be executed\n before GL rendering calls made after eglWaitNative.\n \nif wayland doesn\u0027t support any native rendering, cant this method just be a noop and immediately return?",
       "parentUuid": "a79657d1_c79b6444",
+      "range": {
+        "startLine": 106,
+        "startChar": 17,
+        "endLine": 106,
+        "endChar": 37
+      },
+      "revId": "16d032d17fa69a192e216ff8e9ca69a47cc5b73e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "611487fc_8269fddf",
+        "filename": "src/libANGLE/renderer/vulkan/linux/wayland/DisplayVkWayland.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 106,
+      "author": {
+        "id": 1528827
+      },
+      "writtenOn": "2022-01-26T11:04:23Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "b2ffb4b1_1d6f2c5f",
       "range": {
         "startLine": 106,
         "startChar": 17,

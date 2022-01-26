@@ -377,6 +377,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "fd7ead11_d60f10bc",
+        "filename": "src/libANGLE/renderer/vulkan/linux/wayland/DisplayVkWayland.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 86,
+      "author": {
+        "id": 1528827
+      },
+      "writtenOn": "2022-01-26T11:04:23Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "8d1dd7c8_e42c3b09",
+      "range": {
+        "startLine": 86,
+        "startChar": 11,
+        "endLine": 86,
+        "endChar": 15
+      },
+      "revId": "cacb1a9c3ac43042a171fd40b35fcf897ec30fc1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "00501598_d1bcb152",
