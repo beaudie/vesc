@@ -394,6 +394,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "762ea5bb_c4415dbd",
+        "filename": "BUILD.gn",
+        "patchSetId": 2
+      },
+      "lineNbr": 1026,
+      "author": {
+        "id": 1125810
+      },
+      "writtenOn": "2022-01-26T15:38:29Z",
+      "side": 1,
+      "message": "Sounds good. I\u0027m very out of practice with gn and exo, but please do feel free to mail me or CC me on any changes and I\u0027ll see if I can help any.",
+      "parentUuid": "9a06b0c3_24136f1c",
+      "range": {
+        "startLine": 1023,
+        "startChar": 0,
+        "endLine": 1026,
+        "endChar": 3
+      },
+      "revId": "cacb1a9c3ac43042a171fd40b35fcf897ec30fc1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "e21a4050_74189172",
         "filename": "gni/angle.gni",
         "patchSetId": 2
