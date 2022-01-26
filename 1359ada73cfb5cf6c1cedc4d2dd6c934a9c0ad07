@@ -87,6 +87,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "b409e6c5_3f7ad19f",
+        "filename": "src/compiler/translator/ValidateAST.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 433,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-01-26T21:45:28Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "bc50346c_42ff22cc",
+      "revId": "1359ada73cfb5cf6c1cedc4d2dd6c934a9c0ad07",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "3b8bb5ce_66410350",
@@ -100,6 +118,30 @@
       "writtenOn": "2022-01-19T03:47:57Z",
       "side": 1,
       "message": "nit: 2022",
+      "range": {
+        "startLine": 2,
+        "startChar": 13,
+        "endLine": 2,
+        "endChar": 17
+      },
+      "revId": "1359ada73cfb5cf6c1cedc4d2dd6c934a9c0ad07",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "dccce6ed_63ca586c",
+        "filename": "src/compiler/translator/tree_ops/vulkan/EmulateDithering.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 2,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-01-26T21:45:28Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "3b8bb5ce_66410350",
       "range": {
         "startLine": 2,
         "startChar": 13,
@@ -133,6 +175,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "55951f63_c03677dd",
+        "filename": "src/compiler/translator/tree_ops/vulkan/EmulateDithering.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-01-26T21:45:28Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "3d3e7162_0b33b2fc",
+      "range": {
+        "startLine": 6,
+        "startChar": 0,
+        "endLine": 7,
+        "endChar": 26
+      },
+      "revId": "1359ada73cfb5cf6c1cedc4d2dd6c934a9c0ad07",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "9ce8b042_ea21d5a4",
@@ -156,6 +222,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "a1b2de5c_fd7c5c8f",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 3016,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-01-26T21:45:28Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "9ce8b042_ea21d5a4",
+      "range": {
+        "startLine": 3015,
+        "startChar": 0,
+        "endLine": 3016,
+        "endChar": 65
+      },
+      "revId": "1359ada73cfb5cf6c1cedc4d2dd6c934a9c0ad07",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "17038edc_2e941d8c",
@@ -169,6 +259,24 @@
       "writtenOn": "2022-01-19T03:47:57Z",
       "side": 1,
       "message": "nit: It would be good to indicate only 16 bits are actually used.\n    uint32_t dither; // Only uses 16 bits",
+      "revId": "1359ada73cfb5cf6c1cedc4d2dd6c934a9c0ad07",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "8c5a5e15_7477a960",
+        "filename": "src/libANGLE/renderer/vulkan/vk_utils.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 826,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-01-26T21:45:28Z",
+      "side": 1,
+      "message": "Ack, but I didn\u0027t bother. Some of the other constants also only use a few bits (without a comment), and there is no concern for reducing the bit size of the constants. (i.e. it doesn\u0027t matter that this uses 16 bits)",
+      "parentUuid": "17038edc_2e941d8c",
       "revId": "1359ada73cfb5cf6c1cedc4d2dd6c934a9c0ad07",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
