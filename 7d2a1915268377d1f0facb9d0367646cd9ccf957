@@ -39,6 +39,24 @@
       "message": "Not sure if the overrideActive parameter is the best solution to tell the trackBufferMapping function that we are in MEC, but we are not storing any state that distinguishes that MEC being initiated and capture being still inactive.\n\nsetCaptureActive is just set after MEC is done.\n\nThis fixes capture of War Planet Online after changes to the Vk Renderer in 8589c456a2fb1a4041a6935f0524a0fb74ddcd64.\nWith this patch coherent buffer storages are also not protected prematurely before capture starts, which was a bug.",
       "revId": "7d2a1915268377d1f0facb9d0367646cd9ccf957",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "39f0735a_f5588f54",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2022-01-26T17:29:31Z",
+      "side": 1,
+      "message": "\u003e but we are not storing any state that distinguishes that MEC being initiated and capture being still inactive.\n\nIs usesMidExecutionCapture() what you need?",
+      "parentUuid": "390a4d98_a6e7c260",
+      "revId": "7d2a1915268377d1f0facb9d0367646cd9ccf957",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
