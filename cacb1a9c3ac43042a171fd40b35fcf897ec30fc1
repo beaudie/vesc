@@ -370,6 +370,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "9a06b0c3_24136f1c",
+        "filename": "BUILD.gn",
+        "patchSetId": 2
+      },
+      "lineNbr": 1026,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2022-01-26T15:36:29Z",
+      "side": 1,
+      "message": "That makes sense.\n\nIt still remains that we probably don\u0027t want to duplicate link if we statically link ANGLE in Chrome at any point. I\u0027m fine with revisiting this later.",
+      "parentUuid": "8ff73a59_c9027b0e",
+      "range": {
+        "startLine": 1023,
+        "startChar": 0,
+        "endLine": 1026,
+        "endChar": 3
+      },
+      "revId": "cacb1a9c3ac43042a171fd40b35fcf897ec30fc1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "e21a4050_74189172",
         "filename": "gni/angle.gni",
         "patchSetId": 2
