@@ -298,6 +298,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "457f3056_2e19f944",
+        "filename": "BUILD.gn",
+        "patchSetId": 2
+      },
+      "lineNbr": 1026,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-01-26T14:54:20Z",
+      "side": 1,
+      "message": "Ideally we shouldn\u0027t even have wayland as third_party, same way we don\u0027t have x11. It\u0027s ok as a stop-gap measure IMO until wayland libs are properly installed on the bots.",
+      "parentUuid": "4254b01f_9a9d065f",
+      "range": {
+        "startLine": 1023,
+        "startChar": 0,
+        "endLine": 1026,
+        "endChar": 3
+      },
+      "revId": "cacb1a9c3ac43042a171fd40b35fcf897ec30fc1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "e21a4050_74189172",
         "filename": "gni/angle.gni",
         "patchSetId": 2
