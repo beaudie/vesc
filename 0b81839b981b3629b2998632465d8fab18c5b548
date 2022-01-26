@@ -1,0 +1,44 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "cd8a2778_0082fa6c",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2022-01-26T00:37:43Z",
+      "side": 1,
+      "message": "The more I read about this stuff, the less I think this CL is necessary and would actually cause additional problems by checking in all of the undesired `third_party/` content.\n\nWe already remove the `.git` directories for the `third_party/` libraries that ANGLE requires in AOSP (ref1).   We are doing this so those libraries are checked in as part of ANGLE, rather than as git submodules, when the `git add` command is performed later.   With the `.git` files present in the remaining `third_party/` libraries still present, git will ignore those directories which prevents them from being checked in.\n\nThe AOSP CL that removed the git submodules (aosp/1927617) deleted the full directories, which included removing the `.git` files.   Since `roll_aosp.sh` is not removing the unused directories, they were re-added as part of the next ANGLE roll.   However, since the `.git` files were present when the Skia bot executed the `git add` command, the contents of the directories were ignored, so the libraries were not actually re-introduced.\n\nReading the documentation for Git Submodules (https://git-scm.com/book/en/v2/Git-Tools-Submodules), the only way for them to be reintroduced is by explicitly running the `git submodule` command.   We don\u0027t currently use submodules anyway, so it should be easy to continue avoiding them.\n\nThoughts?",
+      "revId": "0b81839b981b3629b2998632465d8fab18c5b548",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "271acd23_3a936e19",
+        "filename": "scripts/roll_aosp.sh",
+        "patchSetId": 3
+      },
+      "lineNbr": 157,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2022-01-26T00:37:43Z",
+      "side": 1,
+      "message": "ref1",
+      "range": {
+        "startLine": 153,
+        "startChar": 0,
+        "endLine": 157,
+        "endChar": 4
+      },
+      "revId": "0b81839b981b3629b2998632465d8fab18c5b548",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
