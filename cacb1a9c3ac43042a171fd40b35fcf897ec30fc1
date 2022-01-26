@@ -322,6 +322,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "6cef47a8_692582be",
+        "filename": "BUILD.gn",
+        "patchSetId": 2
+      },
+      "lineNbr": 1026,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2022-01-26T15:31:20Z",
+      "side": 1,
+      "message": "The Wayland build files are here:\n\nhttps://source.chromium.org/chromium/chromium/src/+/main:third_party/wayland/BUILD.gn\n\nIt looks like they have some modifications in the Chromium Wayland repo:\n\n Modifications:\n - Added wayland_scanner_wrapper.py to generate protocol code automatically.\n - Added \"include/\" include_dirs for the wayland_server target\n\nI guess we don\u0027t actually build \u0026 test with wayland in the current ANGLE CI? It\u0027s not clear to me that the ideal solution is to avoid third_party and use system libs. There\u0027s advantages and disadvantages to hermetic \u0026 using the system. I\u0027m fine with landing this for now, and re-visiting using third_party build if we need either to converge with Chromium (e.g. if ANGLE is built with wayland and linked statically in Chrome, we don\u0027t want to include the wayland libraries twice!) or if we are still shared link and need features in the modified directory.",
+      "parentUuid": "457f3056_2e19f944",
+      "range": {
+        "startLine": 1023,
+        "startChar": 0,
+        "endLine": 1026,
+        "endChar": 3
+      },
+      "revId": "cacb1a9c3ac43042a171fd40b35fcf897ec30fc1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "e21a4050_74189172",
         "filename": "gni/angle.gni",
         "patchSetId": 2
