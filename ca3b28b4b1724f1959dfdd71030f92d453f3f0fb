@@ -16,6 +16,24 @@
       "message": "Why can\u0027t cleanupGarbage() still be used?  Given the new implementation of cleanupGarbage(), it looks like the result would be the same.",
       "revId": "ca3b28b4b1724f1959dfdd71030f92d453f3f0fb",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "337459f4_cff11a79",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 3409,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2022-01-26T01:16:52Z",
+      "side": 0,
+      "message": "The reason is that this may called from ContextVk::onDestroy() where we have assertions to ensure all suballocations of this context are all freed. With this CL, the cleanupGarbage call will stop as soon as it hit an unfinished object. In multiuple context scenario, there maybe a garbage object inserted by other contexts that aren\u0027t finished which causes this context hitting assertion.",
+      "parentUuid": "2da00905_e70394b6",
+      "revId": "ca3b28b4b1724f1959dfdd71030f92d453f3f0fb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
