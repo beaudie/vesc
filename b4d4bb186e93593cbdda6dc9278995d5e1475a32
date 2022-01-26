@@ -87,6 +87,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "c5d495fd_bbdf5e3d",
+        "filename": "src/compiler/translator/HashNames.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 73,
+      "author": {
+        "id": 1359667
+      },
+      "writtenOn": "2022-01-26T22:03:34Z",
+      "side": 1,
+      "message": "Removed.",
+      "parentUuid": "a5d28ec7_c2a40c69",
+      "revId": "b4d4bb186e93593cbdda6dc9278995d5e1475a32",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "4490040d_b94104bf",
@@ -124,6 +142,30 @@
       "side": 1,
       "message": "Same q.",
       "parentUuid": "4490040d_b94104bf",
+      "range": {
+        "startLine": 5577,
+        "startChar": 64,
+        "endLine": 5577,
+        "endChar": 75
+      },
+      "revId": "b4d4bb186e93593cbdda6dc9278995d5e1475a32",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "7b666033_f9602da8",
+        "filename": "src/compiler/translator/ParseContext.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 5577,
+      "author": {
+        "id": 1359667
+      },
+      "writtenOn": "2022-01-26T22:03:34Z",
+      "side": 1,
+      "message": "Removed.",
+      "parentUuid": "b49ab7d9_bfebb069",
       "range": {
         "startLine": 5577,
         "startChar": 64,
