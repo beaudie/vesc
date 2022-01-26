@@ -39,6 +39,30 @@
       },
       "revId": "db775fb850bd49122bb116707d3d35ae40bd758b",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "99dd2c85_9d0f955e",
+        "filename": "src/libANGLE/renderer/vulkan/ProgramPipelineVk.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 98,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2022-01-26T15:11:55Z",
+      "side": 1,
+      "message": "Hey Tim,\n\nI studied the memory usage of this change on my local machine with a CL to measure peak and median memory in the perf tests: http://crrev.com/c/3191194\n\nMy results for C\u0026C rivals were:\n\n               |  before   |  after\n median memory | 984644 kb | 986656 kb\n peak memory   | 984660 kb | 986672 kb\n \nThe net difference was in the ballpark of 10kb (there was some variance between runs).\n\nMy plan is to get to a place where we no longer need to modify the SPIR-V after the LinkProgram call. That would mean we don\u0027t need to even store the SPIR-V and this discussion becomes obsolete. This change has some nice cleanup benefits in removing the back-pointers, making the Executable encapulated, and is likely necessary for supporting failed re-links. Could we eat this small regression on C\u0026C rivals for now?",
+      "parentUuid": "0a97d517_95721225",
+      "range": {
+        "startLine": 97,
+        "startChar": 0,
+        "endLine": 98,
+        "endChar": 69
+      },
+      "revId": "db775fb850bd49122bb116707d3d35ae40bd758b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
