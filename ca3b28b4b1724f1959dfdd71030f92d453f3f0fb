@@ -34,6 +34,24 @@
       "parentUuid": "2da00905_e70394b6",
       "revId": "ca3b28b4b1724f1959dfdd71030f92d453f3f0fb",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "900b15da_ab185688",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 3409,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2022-01-26T01:41:48Z",
+      "side": 0,
+      "message": "Thinking about this a bit more, I think we must walk the entire list even in the cleanupGarbage() as well. Otherwise, if you create a shared context and release a buffer that still in recorded command and now this is going to prevent the other contexts from releasing any garbages.\n\nLonger term, I think we should never insert a garbage that will never finish into the garbage list. But for now, I am going to change it back to walk the entire list but still do it in O(N).\n\nThanks for the good question.",
+      "parentUuid": "337459f4_cff11a79",
+      "revId": "ca3b28b4b1724f1959dfdd71030f92d453f3f0fb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
