@@ -346,6 +346,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "8ff73a59_c9027b0e",
+        "filename": "BUILD.gn",
+        "patchSetId": 2
+      },
+      "lineNbr": 1026,
+      "author": {
+        "id": 1125810
+      },
+      "writtenOn": "2022-01-26T15:33:31Z",
+      "side": 1,
+      "message": "[Sorry, I keep forgetting to post drafts in Gerrit!]\n\nWe should be able to do the same thing as minigbm/BUILD.gn, which just references the pkg-config file rather than duplicating the entire build system (this is new in gn since the last time I looked, which was admittedly a few years ago!).\n\nChromium needs the wayland_server targets because Exosphere _is_ a Wayland server. As ANGLE isn\u0027t implementing a Wayland server, it doesn\u0027t need all this fancy legwork to generate protocol support code from XML files. It just needs to link to the wayland-client and wayland-egl libs, which come straight from pkg-config.",
+      "parentUuid": "4254b01f_9a9d065f",
+      "range": {
+        "startLine": 1023,
+        "startChar": 0,
+        "endLine": 1026,
+        "endChar": 3
+      },
+      "revId": "cacb1a9c3ac43042a171fd40b35fcf897ec30fc1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "e21a4050_74189172",
         "filename": "gni/angle.gni",
         "patchSetId": 2
