@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "6abd149b_576620fb",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 7
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2022-01-26T00:57:13Z",
+      "side": 1,
+      "message": "Still lgtm, pretty sure Shabi will be happy with this last iteration too. One tiny suggestion on the test refactoring.\n",
+      "revId": "23ac89c25fd3f85da7b9e7165d5ad74dfeece7de",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "927fc2d4_6ad83a2b",
+        "filename": "src/tests/gl_tests/FragDepthTest.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 64,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2022-01-26T00:57:13Z",
+      "side": 1,
+      "message": "Tiny nit: it somewhat looks like all the helpers in src/tests/gl_tests/ use lowercase to start, while the tests themselves start with uppercase, so checkDepthWritten rather than CheckDepthWritten?",
+      "revId": "23ac89c25fd3f85da7b9e7165d5ad74dfeece7de",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
