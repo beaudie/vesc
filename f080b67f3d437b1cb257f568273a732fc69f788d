@@ -1,0 +1,44 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "fd5972fa_a1321dbd",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 3395,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-01-26T02:52:42Z",
+      "side": 1,
+      "message": "I thought you wanted to stop on first !complete?",
+      "revId": "f080b67f3d437b1cb257f568273a732fc69f788d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "f1d8ae5f_ff017e26",
+        "filename": "src/libANGLE/renderer/vulkan/ResourceVk.h",
+        "patchSetId": 6
+      },
+      "lineNbr": 134,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-01-26T02:52:42Z",
+      "side": 1,
+      "message": "Can you give std::deque a very quick try to see if it\u0027s faster than std::queue?",
+      "range": {
+        "startLine": 134,
+        "startChar": 31,
+        "endLine": 134,
+        "endChar": 36
+      },
+      "revId": "f080b67f3d437b1cb257f568273a732fc69f788d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
