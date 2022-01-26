@@ -1,6 +1,29 @@
 {
   "comments": [
     {
+      "unresolved": true,
+      "key": {
+        "uuid": "324dbe49_6e12445f",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 4
+      },
+      "lineNbr": 9,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-01-26T22:05:47Z",
+      "side": 1,
+      "message": "This bug is unrelated. If you can create a new bug with some context that would be appreciated (for example which app does this to a point that justifies the extra if).\n\nAlso nice would be adding some data as to how much this change improves CPU perf.",
+      "range": {
+        "startLine": 9,
+        "startChar": 18,
+        "endLine": 9,
+        "endChar": 22
+      },
+      "revId": "c3cf40ab77f0c11d37c121b95bee3a8a0ebebbf3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": false,
       "key": {
         "uuid": "c90cfc81_b34d67a8",
@@ -31,6 +54,40 @@
       "writtenOn": "2022-01-26T21:28:09Z",
       "side": 1,
       "message": "looks like d3d backend has some issues with webgl conformance (gpu_tests.webgl_conformance_integration_test.WebGLConformanceIntegrationTest.conformance/textures/misc/video-rotation.html) which might be related to the bug in end2end test that i skipped",
+      "revId": "c3cf40ab77f0c11d37c121b95bee3a8a0ebebbf3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "2fb80eac_d11006e9",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-01-26T22:05:47Z",
+      "side": 1,
+      "message": "The change LGTM, but maybe someone needs to sort out the d3d bug before it can land.",
+      "revId": "c3cf40ab77f0c11d37c121b95bee3a8a0ebebbf3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "198c1cea_eb991bf8",
+        "filename": "src/tests/gl_tests/CopyTexImageTest.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 942,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-01-26T22:05:47Z",
+      "side": 1,
+      "message": "nit: we use angle_end2end_tests_expectations.txt now\n\n(Isn\u0027t it strange that this test is not actually rebinding the same thing?)",
       "revId": "c3cf40ab77f0c11d37c121b95bee3a8a0ebebbf3",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
