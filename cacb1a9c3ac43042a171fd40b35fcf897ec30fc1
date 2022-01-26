@@ -250,6 +250,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "f5766f00_28b741ee",
+        "filename": "BUILD.gn",
+        "patchSetId": 2
+      },
+      "lineNbr": 1026,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2022-01-26T13:39:01Z",
+      "side": 1,
+      "message": "When you say not trivial, what do you mean exactly? It seems like you can just use DEPS to include the already-established build products in //third_party/wayland/BUILD.gn. Naively it seems to me that you should be able to just change this from \"libs\" to deps \u003d [ \"//third_party/wayland\" ]",
+      "parentUuid": "b3fbe436_ec5ede36",
+      "range": {
+        "startLine": 1023,
+        "startChar": 0,
+        "endLine": 1026,
+        "endChar": 3
+      },
+      "revId": "cacb1a9c3ac43042a171fd40b35fcf897ec30fc1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "e21a4050_74189172",
         "filename": "gni/angle.gni",
         "patchSetId": 2
