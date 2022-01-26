@@ -85,6 +85,29 @@
       },
       "revId": "22ee8fdde390924789cd0c443b22adc5c15d3715",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b35c7cb7_d4b0d96c",
+        "filename": "src/tests/gl_tests/TextureTest.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 6009,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-01-26T18:51:33Z",
+      "side": 1,
+      "message": "nit: we also have this macro:\n\n    EXPECT_PIXEL_COLOR_EQ(4, 4, GLColor::green)",
+      "range": {
+        "startLine": 6009,
+        "startChar": 4,
+        "endLine": 6009,
+        "endChar": 19
+      },
+      "revId": "22ee8fdde390924789cd0c443b22adc5c15d3715",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
