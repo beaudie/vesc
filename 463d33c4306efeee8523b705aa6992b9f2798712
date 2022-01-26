@@ -41,6 +41,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "c1eef0fd_18d3539e",
+        "filename": "src/compiler/translator/ParseContext.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 4267,
+      "author": {
+        "id": 1359667
+      },
+      "writtenOn": "2022-01-26T01:47:02Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "54f762f2_98c3d555",
+      "range": {
+        "startLine": 4267,
+        "startChar": 7,
+        "endLine": 4267,
+        "endChar": 36
+      },
+      "revId": "463d33c4306efeee8523b705aa6992b9f2798712",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "fa7c9bc5_9d6274f1",
@@ -54,6 +78,24 @@
       "writtenOn": "2022-01-25T02:55:49Z",
       "side": 1,
       "message": "This is missing a check for the struct being gl_PerVertex. Otherwise it seems like now you are allowing `gl_Position` to be used inside any arbitrary struct. It\u0027s also missing the opposite check, that if the struct is gl_PerVertex, you shouldn\u0027t allow anything other than these two.\n\nSame with Clip/Cull below.",
+      "revId": "463d33c4306efeee8523b705aa6992b9f2798712",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "7975750f_ba85b8d9",
+        "filename": "src/compiler/translator/ParseContext.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 5647,
+      "author": {
+        "id": 1359667
+      },
+      "writtenOn": "2022-01-26T01:47:02Z",
+      "side": 1,
+      "message": "Looks like these checks are redundant and can be removed. I\u0027ve adding a couple end2end tests to verify this.",
+      "parentUuid": "fa7c9bc5_9d6274f1",
       "revId": "463d33c4306efeee8523b705aa6992b9f2798712",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
