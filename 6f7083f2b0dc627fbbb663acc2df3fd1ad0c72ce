@@ -35,6 +35,23 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "36248066_17767ae9",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 10
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1359249
+      },
+      "writtenOn": "2022-01-26T20:49:02Z",
+      "side": 1,
+      "message": "Just an added comment",
+      "revId": "6f7083f2b0dc627fbbb663acc2df3fd1ad0c72ce",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "72472008_418e8d65",
@@ -48,6 +65,24 @@
       "writtenOn": "2022-01-26T16:57:52Z",
       "side": 1,
       "message": "@shahbaz - does this make sense?\n\nSo here is the spot. I suspected that with pixel4, that image is valid and the mode is set, but image shouldn\u0027t be valid because the image has not been acquired for the first/only time - in SINGLE_BUFFER mode. It needs to pass through this acquireNextSwapchainImage the first time after createSwapchain.\n\nSo adding \"!mNeedToAcquireNextSwapchain\" made sure we dropped through at least the first time with new Swapchain. Now its passing.\n\nI think this replaces what was removed on this branch (but still on our customer branch - which is why we passed and pixel4 did not):\n\n\n angle::Result WindowSurfaceVk::swapImpl(const gl::Context *context,\n                                        const EGLint *rects,\n                                        EGLint n_rects,\n                                        const void *pNextChain)\n{\n    ANGLE_TRACE_EVENT0(\"gpu.angle\", \"WindowSurfaceVk::swapImpl\");\n    ContextVk *contextVk \u003d vk::GetImpl(context);\n    if (mNeedToAcquireNextSwapchainImage)\n    {\n        // Acquire the next image (previously deferred).  The image may not have been already\n        // acquired if there was no rendering done at all to the default framebuffer in this frame,\n        // for example if all rendering was done to FBOs.\n        ANGLE_TRY(doDeferredAcquireNextImage(context, false));\n    }\n    ...\n}\n\n\nSO, do you recommend to keep the change I have above, or restore the if clause to swapImpl()?",
+      "revId": "6f7083f2b0dc627fbbb663acc2df3fd1ad0c72ce",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "9248a38d_d9111581",
+        "filename": "src/libANGLE/renderer/vulkan/SurfaceVk.cpp",
+        "patchSetId": 10
+      },
+      "lineNbr": 1872,
+      "author": {
+        "id": 1359249
+      },
+      "writtenOn": "2022-01-26T20:49:02Z",
+      "side": 1,
+      "message": "Seems like restoring swapImpl looks more correct. Both places would be a fail safe.",
+      "parentUuid": "72472008_418e8d65",
       "revId": "6f7083f2b0dc627fbbb663acc2df3fd1ad0c72ce",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
