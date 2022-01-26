@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "2da00905_e70394b6",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 3409,
+      "author": {
+        "id": 1290487
+      },
+      "writtenOn": "2022-01-26T00:17:49Z",
+      "side": 0,
+      "message": "Why can\u0027t cleanupGarbage() still be used?  Given the new implementation of cleanupGarbage(), it looks like the result would be the same.",
+      "revId": "ca3b28b4b1724f1959dfdd71030f92d453f3f0fb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
