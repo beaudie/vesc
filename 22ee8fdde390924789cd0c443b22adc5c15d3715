@@ -1,0 +1,73 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "251adede_6aecd0c0",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 9,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2022-01-26T13:27:42Z",
+      "side": 1,
+      "message": "nit: http://anglebug.com/6926 to be conventional",
+      "range": {
+        "startLine": 9,
+        "startChar": 31,
+        "endLine": 9,
+        "endChar": 53
+      },
+      "revId": "22ee8fdde390924789cd0c443b22adc5c15d3715",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "2ee35cb0_0838d20d",
+        "filename": "src/tests/gl_tests/TextureTest.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 5984,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2022-01-26T13:27:42Z",
+      "side": 1,
+      "message": "nit: use angle_end2end_test_expectations.txt, and only skip on \"VULKAN\". The test passes on other back-ends presumably.",
+      "range": {
+        "startLine": 5983,
+        "startChar": 0,
+        "endLine": 5984,
+        "endChar": 29
+      },
+      "revId": "22ee8fdde390924789cd0c443b22adc5c15d3715",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "08cb61ab_e18385d7",
+        "filename": "src/tests/gl_tests/TextureTest.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 6002,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2022-01-26T13:27:42Z",
+      "side": 1,
+      "message": "nit: you can make all the EXPECT errors into ASSERT_GL_NO_ERROR",
+      "range": {
+        "startLine": 6002,
+        "startChar": 4,
+        "endLine": 6002,
+        "endChar": 22
+      },
+      "revId": "22ee8fdde390924789cd0c443b22adc5c15d3715",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
