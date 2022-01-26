@@ -1082,6 +1082,166 @@ TEST_P(EGLContextSharingTestNoFixture, SwapBuffersShared)
     eglDestroySurface(mDisplay, pbufferSurface);
     ASSERT_EGL_SUCCESS();
 }
+
+class EGLContextSharingTestHelloNeighbor : public EGLContextSharingTest
+{
+  public:
+    GLuint mProgram;
+    void setUpProgram()
+    {
+        const char *vertexShaderSource   = essl1_shaders::vs::Texture2D();
+        const char *fragmentShaderSource = essl1_shaders::fs::Texture2D();
+
+        mProgram = CompileProgram(vertexShaderSource, fragmentShaderSource);
+        ASSERT_NE(0u, mProgram);
+        ASSERT_GL_NO_ERROR();
+    }
+
+    void testSetUp() override {}
+
+    void testTearDown() override
+    {
+        glBindFramebuffer(GL_FRAMEBUFFER, 0);
+        glDeleteProgram(mProgram);
+    }
+};
+
+// Test that an application that does not synchronize when using textures across shared contexts can
+// still see texture updates. This behavior is not required by the GLES specification, but is
+// exhibited by Hello Neighbor. That application will malfunction if our implementation does not
+// handle this in the way it expects.
+TEST_P(EGLContextSharingTestHelloNeighbor, NoSync)
+{
+    // Only the vulkan backend supports the treshold logic needed for this test
+    ANGLE_SKIP_TEST_IF(!IsVulkan());
+
+    EGLDisplay display = getEGLWindow()->getDisplay();
+    EGLConfig config   = getEGLWindow()->getConfig();
+    EGLSurface surface = getEGLWindow()->getSurface();
+
+    const EGLint inShareGroupContextAttribs[] = {EGL_CONTEXT_CLIENT_VERSION, 2, EGL_NONE};
+
+    mContexts[0] = eglCreateContext(display, config, nullptr, inShareGroupContextAttribs);
+    mContexts[1] = eglCreateContext(display, config, mContexts[0], inShareGroupContextAttribs);
+    ASSERT_EGL_SUCCESS();
+
+    ASSERT_NE(EGL_NO_CONTEXT, mContexts[0]);
+    ASSERT_NE(EGL_NO_CONTEXT, mContexts[1]);
+
+    GLTexture textureFromCtx0;
+    constexpr size_t kTextureCount = 10;
+    GLTexture textures[kTextureCount];
+
+    // Synchronization tools to ensure the two threads are interleaved as designed by this test.
+    std::mutex mutex;
+    std::condition_variable condVar;
+    enum class Step
+    {
+        Start,
+        Ctx0Current,
+        Ctx1Current,
+        TexturesDone,
+        Finish,
+        Abort,
+    };
+    Step currentStep = Step::Start;
+
+    std::thread creatingThread = std::thread([&]() {
+        ThreadSynchronization<Step> threadSynchronization(&currentStep, &mutex, &condVar);
+
+        ASSERT_TRUE(threadSynchronization.waitForStep(Step::Start));
+        ASSERT_EGL_TRUE(eglMakeCurrent(display, surface, surface, mContexts[0]));
+        ASSERT_EGL_SUCCESS();
+        threadSynchronization.nextStep(Step::Ctx0Current);
+
+        ASSERT_TRUE(threadSynchronization.waitForStep(Step::Ctx1Current));
+
+        // Create the shared textures that will be accessed by the other context
+        glBindTexture(GL_TEXTURE_2D, textureFromCtx0);
+        glTexStorage2D(GL_TEXTURE_2D, 1, GL_RGBA8, 1, 1);
+        glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
+
+        ASSERT_GL_TRUE(glIsTexture(textureFromCtx0));
+
+        glTexSubImage2D(GL_TEXTURE_2D, 0, 0, 0, 1, 1, GL_RGBA, GL_UNSIGNED_BYTE, &GLColor::red);
+        glFinish();
+
+        glTexSubImage2D(GL_TEXTURE_2D, 0, 0, 0, 1, 1, GL_RGBA, GL_UNSIGNED_BYTE, &GLColor::blue);
+        // Do not glFinish
+
+        // We set 6 to be the threshold to flush texture updates.
+        // We create redundant textures here to ensure that we trigger that threshold.
+        for (size_t i = 0; i < kTextureCount; i++)
+        {
+            glBindTexture(GL_TEXTURE_2D, textures[i]);
+            glTexStorage2D(GL_TEXTURE_2D, 1, GL_RGBA8, 1, 1);
+            glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
+
+            ASSERT_GL_TRUE(glIsTexture(textures[i]));
+
+            glTexSubImage2D(GL_TEXTURE_2D, 0, 0, 0, 1, 1, GL_RGBA, GL_UNSIGNED_BYTE,
+                            &GLColor::blue);
+        }
+
+        ASSERT_GL_NO_ERROR();
+
+        threadSynchronization.nextStep(Step::TexturesDone);
+        ASSERT_TRUE(threadSynchronization.waitForStep(Step::Finish));
+    });
+
+    std::thread samplingThread = std::thread([&]() {
+        ThreadSynchronization<Step> threadSynchronization(&currentStep, &mutex, &condVar);
+
+        ASSERT_TRUE(threadSynchronization.waitForStep(Step::Ctx0Current));
+        ASSERT_EGL_TRUE(eglMakeCurrent(display, surface, surface, mContexts[1]));
+        ASSERT_EGL_SUCCESS();
+        threadSynchronization.nextStep(Step::Ctx1Current);
+
+        ASSERT_TRUE(threadSynchronization.waitForStep(Step::TexturesDone));
+
+        ASSERT_GL_TRUE(glIsTexture(textureFromCtx0));
+        ASSERT_GL_NO_ERROR();
+
+        // Draw using ctx0 texture as sampler
+        setUpProgram();
+        GLubyte blackPixel[4] = {1, 1, 1, 0xFF};
+        GLTexture ctx1tex;
+        glBindTexture(GL_TEXTURE_2D, ctx1tex);
+        glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, 1, 1, 0, GL_RGBA, GL_UNSIGNED_BYTE, &blackPixel[0]);
+        ASSERT_GL_NO_ERROR();
+
+        GLFramebuffer fbo;
+        glBindFramebuffer(GL_FRAMEBUFFER, fbo);
+        glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, ctx1tex, 0);
+        ASSERT_GL_NO_ERROR();
+
+        GLuint sampler;
+        glGenSamplers(1, &sampler);
+
+        ASSERT_GL_NO_ERROR();
+
+        glUseProgram(mProgram);
+        glActiveTexture(GL_TEXTURE0);
+        glBindTexture(GL_TEXTURE_2D, textureFromCtx0);
+        glBindSampler(0, sampler);
+        glUniform1i(glGetUniformLocation(mProgram, essl1_shaders::PositionAttrib()), 0);
+        ASSERT_GL_NO_ERROR();
+
+        drawQuad(mProgram, essl1_shaders::PositionAttrib(), 0.5);
+        ASSERT_GL_NO_ERROR();
+
+        EXPECT_PIXEL_COLOR_EQ(0, 0, GLColor::blue);
+
+        threadSynchronization.nextStep(Step::Finish);
+    });
+
+    creatingThread.join();
+    samplingThread.join();
+
+    ASSERT_NE(currentStep, Step::Abort);
+    ASSERT_EGL_SUCCESS();
+}
+
 }  // anonymous namespace
 
 GTEST_ALLOW_UNINSTANTIATED_PARAMETERIZED_TEST(EGLContextSharingTest);
@@ -1102,3 +1262,14 @@ ANGLE_INSTANTIATE_TEST(EGLContextSharingTestNoFixture,
                        WithNoFixture(ES3_OPENGL()),
                        WithNoFixture(ES2_VULKAN()),
                        WithNoFixture(ES3_VULKAN()));
+
+ANGLE_INSTANTIATE_TEST(EGLContextSharingTestHelloNeighbor,
+                       ES2_D3D9(),
+                       ES2_D3D11(),
+                       ES3_D3D11(),
+                       ES2_METAL(),
+                       ES2_OPENGL(),
+                       ES3_OPENGL(),
+                       ES2_VULKAN(),
+                       ES3_VULKAN(),
+                       ES3_VULKAN_SWIFTSHADER());

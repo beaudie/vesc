@@ -553,6 +553,25 @@ class ContextVk : public ContextImpl, public vk::Context, public MultisampleText
         return angle::Result::Continue;
     }
 
+    angle::Result flushStagedTextureUpdatesIfNeeded()
+    {
+        // Chosen arbitrarily. 6 ensures that a cubemap always triggers a flush.
+        // Too few and we would flush too much, causing performance degradation.
+        // Too many, though, and poorly-behaved apps may not see texture updates in time.
+        constexpr uint32_t kStagedTextureUpdateCountThreshold = 6;
+
+        if (getShareGroupVk()->getContexts()->size() > 1)
+        {
+            if (++mStagedTextureUpdateCount > kStagedTextureUpdateCountThreshold)
+            {
+                ANGLE_TRY(flushOutsideRenderPassCommands());
+                mStagedTextureUpdateCount = 0;
+            }
+        }
+
+        return angle::Result::Continue;
+    }
+
     angle::Result beginNewRenderPass(const vk::Framebuffer &framebuffer,
                                      const gl::Rectangle &renderArea,
                                      const vk::RenderPassDesc &renderPassDesc,
@@ -1214,6 +1233,8 @@ class ContextVk : public ContextImpl, public vk::Context, public MultisampleText
 
     // Record GL API calls for debuggers
     std::vector<std::string> mEventLog;
+
+    uint8_t mStagedTextureUpdateCount;
 
     // Viewport and scissor are handled as dynamic state.
     VkViewport mViewport;
