@@ -134,6 +134,24 @@
       "parentUuid": "59564e87_eedc80c9",
       "revId": "f183188cfda0f2d148d879426b220a611abd5195",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "59ee40d1_2790d6c1",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1531247
+      },
+      "writtenOn": "2022-01-26T15:51:16Z",
+      "side": 1,
+      "message": "Could you elaborate? The updated description mentions both dEQP (swiftshader) and blink_web_tests (webgl-oversized-printing.html) failure cases so I can\u0027t tell if there is something else you\u0027re referring to or you missed the second case.",
+      "parentUuid": "7fea58a2_d5cccd82",
+      "revId": "f183188cfda0f2d148d879426b220a611abd5195",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
