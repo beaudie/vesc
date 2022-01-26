@@ -141,6 +141,24 @@
       "parentUuid": "c8f83867_40f7c37f",
       "revId": "1b6341b22c24c0e0d53747b77cf6691c15f9f1db",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "9b35bffa_b5b0a881",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 7
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-01-26T02:47:31Z",
+      "side": 1,
+      "message": "Hi! I already applied this change as part of https://chromium-review.googlesource.com/c/angle/angle/+/3407737\n\nThis change is empty now :)",
+      "parentUuid": "ef1cc4ca_2ea24cb4",
+      "revId": "1b6341b22c24c0e0d53747b77cf6691c15f9f1db",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
