@@ -16,6 +16,29 @@
       "message": "LGTM",
       "revId": "9812b20e045ac0d80d19733c1d038f395d7d0d20",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "dbaf55db_1580086a",
+        "filename": "src/libANGLE/renderer/vulkan/TextureVk.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 1594,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2022-01-26T01:52:26Z",
+      "side": 1,
+      "message": "Based on the description, it sounds like this should be: `if (index.isLayered())`\n\nIf not, it can be:\n    if (IsArrayTextureType(index.getType()))",
+      "range": {
+        "startLine": 1592,
+        "startChar": 0,
+        "endLine": 1594,
+        "endChar": 61
+      },
+      "revId": "9812b20e045ac0d80d19733c1d038f395d7d0d20",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
