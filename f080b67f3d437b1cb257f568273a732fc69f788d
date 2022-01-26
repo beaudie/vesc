@@ -1,6 +1,23 @@
 {
   "comments": [
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "947b875b_fe8881f7",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 6
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2022-01-26T13:29:35Z",
+      "side": 1,
+      "message": "LGTM\n\nNow I see why the shared garbage list is so slow, because there is no ordering.",
+      "revId": "f080b67f3d437b1cb257f568273a732fc69f788d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "fd5972fa_a1321dbd",
