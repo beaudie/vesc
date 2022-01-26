@@ -63,6 +63,30 @@
       },
       "revId": "db775fb850bd49122bb116707d3d35ae40bd758b",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "d6ba8738_77d3c04d",
+        "filename": "src/libANGLE/renderer/vulkan/ProgramPipelineVk.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 98,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2022-01-26T17:19:19Z",
+      "side": 1,
+      "message": "Thanks for collecting some data on this.   Yeah, 10KB seems worth taking the hit for the cleanup.",
+      "parentUuid": "99dd2c85_9d0f955e",
+      "range": {
+        "startLine": 97,
+        "startChar": 0,
+        "endLine": 98,
+        "endChar": 69
+      },
+      "revId": "db775fb850bd49122bb116707d3d35ae40bd758b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
