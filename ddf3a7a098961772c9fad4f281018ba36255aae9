@@ -70,6 +70,24 @@
       "parentUuid": "c2c93fdb_fb49de1e",
       "revId": "ddf3a7a098961772c9fad4f281018ba36255aae9",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "79ce06c2_f9c6d738",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2022-01-26T17:20:20Z",
+      "side": 1,
+      "message": "No, I do not have metrics for this CL. I did CL mostly because based on the finding on the prior CL, this erase call also have similar drawbacks that has to move the remaining elements forward. With queue, that move never happen, it just change the head/tail pointer (or index). Given there is only one erase call per submission here, I think the saving likely is small. (But there could still be a dozen to move when GPU is lag behind or frame has a dozen renderpasses, but wont be as bad as mSharedGarbageList for sure). But like I said, there is no reason not to use queue and queue should be faster.",
+      "parentUuid": "4c5af47f_c15d3564",
+      "revId": "ddf3a7a098961772c9fad4f281018ba36255aae9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
