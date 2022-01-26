@@ -46,6 +46,30 @@
       },
       "revId": "c5498b957e83c4d2b27810c7e227b1115e29a729",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "f47b4ffd_8353502f",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 3029,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-01-26T15:22:37Z",
+      "side": 0,
+      "message": "I had the same question, but that change had taken waaaay too long to land. We can always just enable it. Presumably this feature is not really used outside Android or something",
+      "parentUuid": "292e6b54_b16143ef",
+      "range": {
+        "startLine": 3027,
+        "startChar": 0,
+        "endLine": 3029,
+        "endChar": 83
+      },
+      "revId": "c5498b957e83c4d2b27810c7e227b1115e29a729",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
