@@ -536,6 +536,31 @@ std::string BuildBigInitialStackShader(int length)
     return result;
 }
 
+TEST_P(GLSLTest, ComplexExpression)
+{
+    constexpr char kFS[] =
+        R"(
+        #ifdef GL_ES
+        precision mediump float;
+        #endif
+        void main() {
+            vec2 v = vec2(1,5);
+            // at the end of next statement, values in
+            // v.x = 12, v.y = 12
+            v.xy += v.yx += v.xy;
+            // v1 and v2, both are initialized with 12
+            vec2 v1 = v, v2 = v;
+            v1.xy += v2.yx += ++(v.xy);  // v1 = 37, v2 = 25 each
+            v1.xy += v2.yx += (v.xy)++;  // v1 = 75, v2 = 38 each
+            gl_FragColor = vec4(v1,v2)/255.;  // 75, 75, 38, 38
+        })";
+
+    ANGLE_GL_PROGRAM(program, essl1_shaders::vs::Simple(), kFS);
+    drawQuad(program, essl1_shaders::PositionAttrib(), 0.5f);
+    ASSERT_GL_NO_ERROR();
+    EXPECT_PIXEL_COLOR_EQ(0, 0, GLColor(75, 75, 38, 38));
+}
+
 TEST_P(GLSLTest, NamelessScopedStructs)
 {
     constexpr char kFS[] = R"(precision mediump float;
@@ -14792,6 +14817,70 @@ void main()
     GLint compileResult;
     glGetShaderiv(shader, GL_COMPILE_STATUS, &compileResult);
     EXPECT_NE(compileResult, 0);
+}
+
+TEST_P(GLSLTest_ES3, OutFunctionWithSwizzle)
+{
+    constexpr char kFS[] = R"(#version 300 es
+
+precision mediump float;
+
+layout(location=0) out vec4 color;
+
+void outFunction(out vec2 swizzle)
+{
+    swizzle.xy = vec2(1,0);
+}
+
+void main()
+{
+    vec2 v;
+    outFunction(v.yx);
+    color = vec4(v,0,1);
+})";
+
+    ANGLE_GL_PROGRAM(testProgram, essl3_shaders::vs::Simple(), kFS);
+    drawQuad(testProgram, essl3_shaders::PositionAttrib(), 0.5f, 1.0f, true);
+    EXPECT_PIXEL_COLOR_EQ(0, 0, GLColor::green);
+    ASSERT_GL_NO_ERROR();
+}
+
+TEST_P(GLSLTest_ES3, CompoundExpressionWithVector)
+{
+    constexpr char kFS[] = R"(#version 300 es
+
+precision mediump float;
+
+layout(location=0) out vec4 color;
+void main()
+{
+    vec2 v;
+    color = vec4(v.yx += vec2(0.5,0),0,1);
+})";
+
+    ANGLE_GL_PROGRAM(testProgram, essl3_shaders::vs::Simple(), kFS);
+    drawQuad(testProgram, essl3_shaders::PositionAttrib(), 0.5f, 1.0f, true);
+    EXPECT_PIXEL_COLOR_EQ(0, 0, GLColor::green);
+    ASSERT_GL_NO_ERROR();
+}
+
+TEST_P(GLSLTest_ES3, CompoundExpressionWithArray)
+{
+    constexpr char kFS[] = R"(#version 300 es
+
+precision mediump float;
+
+layout(location=0) out vec4 color;
+
+void main()
+{
+    float array[2];
+    color = vec4(array[0], array[1]1,0,1);
+})";
+    ANGLE_GL_PROGRAM(testProgram, essl3_shaders::vs::Simple(), kFS);
+    drawQuad(testProgram, essl3_shaders::PositionAttrib(), 0.5f, 1.0f, true);
+    EXPECT_PIXEL_COLOR_EQ(0, 0, GLColor::green);
+    ASSERT_GL_NO_ERROR();
 }
 
 // Regression test for a bug in SPIR-V output where a transformation creates float(constant) without
