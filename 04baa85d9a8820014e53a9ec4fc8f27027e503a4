@@ -67,6 +67,24 @@
       "message": "I looked the change over again with Amirali, and it does complicate things. In particular, the fact that this change flushes outside RP commands to the primary CB without making a vkQueueSubmit contradicts Amirali\u0027s optimization that does the same but also makes a vkQueueSubmit call.\n\nThe change itself is also very fragile. Like it flushes outside RP every 6 updates, what if the buggy unsynchonizing app does fewer updates than that then expect them to show up? What if the next app update adds one 2D texture upload before the cube map uploads, and now the counter is not in sync with complete-cube-map uploads?\n\nI feel like this level of hackery to make bad apps work just goes too far. Have you tried contacting the developer of the app and point out their bugs to them? I\u0027m sure they\u0027d be compelled to fix it if they hear \"your app will be broken on Samsung phones\".",
       "revId": "04baa85d9a8820014e53a9ec4fc8f27027e503a4",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "f5b50407_bf69c5bc",
+        "filename": "src/tests/egl_tests/EGLContextSharingTest.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 1112,
+      "author": {
+        "id": 1340649
+      },
+      "writtenOn": "2022-01-27T22:50:31Z",
+      "side": 1,
+      "message": "\u003e this change flushes outside RP commands to the primary CB without making a vkQueueSubmit contradicts Amirali\u0027s optimization that does the same but also makes a vkQueueSubmit call\n\nim not sure i see a contradiction. I see it as a \"deeper\" flush vs. a more \"shallow\" flush of just the outsideRP commands. More importantly, in this app the context making the updates never renders a frame, it is another non-shared context that consumes the updated textures and does the rendering.\n\n\u003e Like it flushes outside RP every 6 updates, what if the buggy unsynchonizing app does fewer updates than that then expect them to show up? What if the next app update adds one 2D texture upload before the cube map uploads, and now the counter is not in sync with complete-cube-map uploads?\n\nindeed, the number will need to be tweaked with lowest common denominator of bad apps. For now, 6 works without noticeable perf impact\n\n\u003e Have you tried contacting the developer of the app and point out their bugs to them?\n\nnot sure that is something we plan to pursue at this point in time, we could featurize this and enable it only for samsung if you want",
+      "parentUuid": "39d6d61c_3cfac922",
+      "revId": "04baa85d9a8820014e53a9ec4fc8f27027e503a4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
