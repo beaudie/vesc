@@ -258,7 +258,6 @@ void ProgramInfo::release(ContextVk *contextVk)
 ProgramExecutableVk::ProgramExecutableVk()
     : mEmptyDescriptorSets{},
       mNumDefaultUniformDescriptors(0),
-      mImmutableSamplersMaxDescriptorCount(1),
       mUniformBufferDescriptorType(VK_DESCRIPTOR_TYPE_MAX_ENUM),
       mDynamicUniformDescriptorOffsets{},
       mPerfCounters{},
@@ -281,7 +280,6 @@ void ProgramExecutableVk::reset(ContextVk *contextVk)
     {
         descriptorSetLayout.reset();
     }
-    mImmutableSamplersMaxDescriptorCount = 1;
     mImmutableSamplerIndexMap.clear();
     mPipelineLayout.reset();
 
@@ -696,7 +694,7 @@ void ProgramExecutableVk::addInputAttachmentDescriptorSetDesc(
     }
 }
 
-void ProgramExecutableVk::addTextureDescriptorSetDesc(
+angle::Result ProgramExecutableVk::addTextureDescriptorSetDesc(
     ContextVk *contextVk,
     const gl::ProgramExecutable &executable,
     const gl::ActiveTextureArray<vk::TextureUnit> *activeTextures,
@@ -756,41 +754,35 @@ void ProgramExecutableVk::addTextureDescriptorSetDesc(
                 // externalFormat
                 const TextureVk *textureVk          = (*activeTextures)[textureUnit].texture;
                 const vk::Sampler &immutableSampler = textureVk->getSampler().get();
-                descOut->update(info.binding, VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER, arraySize,
-                                activeStages, &immutableSampler);
-                mImmutableSamplerIndexMap[*textureVk->getImage().getYcbcrConversionDesc()] =
-                    textureIndex;
+                const vk::ImageHelper &image        = textureVk->getImage();
+                mImmutableSamplerIndexMap[image.getYcbcrConversionDesc()] = textureIndex;
                 // The Vulkan spec has the following note -
                 // All descriptors in a binding use the same maximum
                 // combinedImageSamplerDescriptorCount descriptors to allow implementations to use a
                 // uniform stride for dynamic indexing of the descriptors in the binding.
-                uint64_t externalFormat        = textureVk->getImage().getExternalFormat();
-                VkFormat vkFormat              = textureVk->getImage().getActualVkFormat();
+                uint64_t externalFormat        = image.getExternalFormat();
                 uint32_t formatDescriptorCount = 0;
-                angle::Result result           = angle::Result::Stop;
+
+                RendererVk *renderer = contextVk->getRenderer();
 
                 if (externalFormat != 0)
                 {
-                    result = contextVk->getRenderer()->getFormatDescriptorCountForExternalFormat(
-                        contextVk, externalFormat, &formatDescriptorCount);
+                    ANGLE_TRY(renderer->getFormatDescriptorCountForExternalFormat(
+                        contextVk, externalFormat, &formatDescriptorCount));
                 }
                 else
                 {
+                    VkFormat vkFormat = image.getActualVkFormat();
                     ASSERT(vkFormat != 0);
-                    result = contextVk->getRenderer()->getFormatDescriptorCountForVkFormat(
-                        contextVk, vkFormat, &formatDescriptorCount);
-                }
-
-                if (result != angle::Result::Continue)
-                {
-                    // There was an error querying the descriptor count for this format, treat it as
-                    // a non-fatal error and move on.
-                    formatDescriptorCount = 1;
+                    ANGLE_TRY(renderer->getFormatDescriptorCountForVkFormat(
+                        contextVk, vkFormat, &formatDescriptorCount));
                 }
 
                 ASSERT(formatDescriptorCount > 0);
-                mImmutableSamplersMaxDescriptorCount =
-                    std::max(mImmutableSamplersMaxDescriptorCount, formatDescriptorCount);
+                uint32_t descriptorCount = arraySize * formatDescriptorCount;
+
+                descOut->update(info.binding, VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER,
+                                descriptorCount, activeStages, &immutableSampler);
             }
             else
             {
@@ -802,6 +794,8 @@ void ProgramExecutableVk::addTextureDescriptorSetDesc(
             }
         }
     }
+
+    return angle::Result::Continue;
 }
 
 void WriteBufferDescriptorSetBinding(const vk::BufferHelper &buffer,
@@ -969,8 +963,7 @@ angle::Result ProgramExecutableVk::initDynamicDescriptorPools(
         {
             VkDescriptorPoolSize poolSize = {};
             poolSize.type                 = binding.descriptorType;
-            poolSize.descriptorCount =
-                binding.descriptorCount * mImmutableSamplersMaxDescriptorCount;
+            poolSize.descriptorCount      = binding.descriptorCount;
             descriptorPoolSizes.emplace_back(poolSize);
         }
     }
@@ -983,7 +976,7 @@ angle::Result ProgramExecutableVk::initDynamicDescriptorPools(
         // index, so make sure their pools are initialized.
         VkDescriptorPoolSize poolSize = {};
         // The type doesn't matter, since it's not actually used for anything.
-        poolSize.type            = mUniformBufferDescriptorType;
+        poolSize.type            = VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER;
         poolSize.descriptorCount = 1;
         descriptorPoolSizes.emplace_back(poolSize);
     }
@@ -1102,7 +1095,8 @@ angle::Result ProgramExecutableVk::createPipelineLayout(
 
     // Textures:
     vk::DescriptorSetLayoutDesc texturesSetDesc;
-    addTextureDescriptorSetDesc(contextVk, glExecutable, activeTextures, &texturesSetDesc);
+    ANGLE_TRY(
+        addTextureDescriptorSetDesc(contextVk, glExecutable, activeTextures, &texturesSetDesc));
 
     ANGLE_TRY(contextVk->getDescriptorSetLayoutCache().getDescriptorSetLayout(
         contextVk, texturesSetDesc, &mDescriptorSetLayouts[DescriptorSetIndex::Texture]));

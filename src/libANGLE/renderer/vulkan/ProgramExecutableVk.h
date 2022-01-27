@@ -243,10 +243,11 @@ class ProgramExecutableVk
     void addInputAttachmentDescriptorSetDesc(const gl::ProgramExecutable &executable,
                                              const gl::ShaderType shaderType,
                                              vk::DescriptorSetLayoutDesc *descOut);
-    void addTextureDescriptorSetDesc(ContextVk *contextVk,
-                                     const gl::ProgramExecutable &executable,
-                                     const gl::ActiveTextureArray<vk::TextureUnit> *activeTextures,
-                                     vk::DescriptorSetLayoutDesc *descOut);
+    angle::Result addTextureDescriptorSetDesc(
+        ContextVk *contextVk,
+        const gl::ProgramExecutable &executable,
+        const gl::ActiveTextureArray<vk::TextureUnit> *activeTextures,
+        vk::DescriptorSetLayoutDesc *descOut);
 
     void resolvePrecisionMismatch(const gl::ProgramMergedVaryings &mergedVaryings);
     void updateDefaultUniformsDescriptorSet(const gl::ShaderType shaderType,
@@ -351,7 +352,6 @@ class ProgramExecutableVk
 
     // We keep a reference to the pipeline and descriptor set layouts. This ensures they don't get
     // deleted while this program is in use.
-    uint32_t mImmutableSamplersMaxDescriptorCount;
     ImmutableSamplerIndexMap mImmutableSamplerIndexMap;
     vk::BindingPointer<vk::PipelineLayout> mPipelineLayout;
     vk::DescriptorSetLayoutPointerArray mDescriptorSetLayouts;
