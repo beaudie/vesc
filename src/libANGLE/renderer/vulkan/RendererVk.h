@@ -318,6 +318,16 @@ class RendererVk : angle::NonCopyable
         }
     }
 
+    void collectGarbage(vk::SharedResourceUse &&use, vk::BufferSuballocation &&suballocation)
+    {
+        vk::SuballocationGarbage garbage(std::move(use), std::move(suballocation));
+        if (!garbage.destroyIfComplete(this, getLastCompletedQueueSerial()))
+        {
+            std::lock_guard<std::mutex> lock(mGarbageMutex);
+            mSuballocationGarbage.push(std::move(garbage));
+        }
+    }
+
     angle::Result getPipelineCache(vk::PipelineCache **pipelineCache);
     void onNewGraphicsPipeline()
     {
@@ -592,6 +602,7 @@ class RendererVk : angle::NonCopyable
 
     std::mutex mGarbageMutex;
     vk::SharedGarbageList mSharedGarbage;
+    vk::SuballocationGarbageList mSuballocationGarbage;
 
     vk::MemoryProperties mMemoryProperties;
     vk::FormatTable mFormatTable;
