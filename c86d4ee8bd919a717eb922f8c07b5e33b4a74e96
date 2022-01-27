@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "773df9b5_61459460",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 6
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2022-01-27T13:25:58Z",
+      "side": 1,
+      "message": "Thank Roman. Re-landing. Yuly FYI",
+      "revId": "c86d4ee8bd919a717eb922f8c07b5e33b4a74e96",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
