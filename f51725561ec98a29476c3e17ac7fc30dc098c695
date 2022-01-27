@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "8fcc7193_414ea4da",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-01-27T21:32:17Z",
+      "side": 1,
+      "message": "You could also simplify your life and over-parenthesize, you never know what other arcane situation you are missing parentheses for.",
+      "revId": "f51725561ec98a29476c3e17ac7fc30dc098c695",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
