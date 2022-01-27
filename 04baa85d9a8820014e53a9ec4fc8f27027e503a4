@@ -16,6 +16,40 @@
       "message": "Amirali has work in progress that overlaps with this. We\u0027ll need to make sure this app workaround and that optimization are compatible.\n\n(i.e. expect some delays!)",
       "revId": "04baa85d9a8820014e53a9ec4fc8f27027e503a4",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "29cb89f6_f0ad1112",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-01-27T21:15:08Z",
+      "side": 1,
+      "message": "I think efforts are better spent getting the developer to fix the app than add this hack.",
+      "revId": "04baa85d9a8820014e53a9ec4fc8f27027e503a4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "39d6d61c_3cfac922",
+        "filename": "src/tests/egl_tests/EGLContextSharingTest.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 1112,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-01-27T21:15:08Z",
+      "side": 1,
+      "message": "I looked the change over again with Amirali, and it does complicate things. In particular, the fact that this change flushes outside RP commands to the primary CB without making a vkQueueSubmit contradicts Amirali\u0027s optimization that does the same but also makes a vkQueueSubmit call.\n\nThe change itself is also very fragile. Like it flushes outside RP every 6 updates, what if the buggy unsynchonizing app does fewer updates than that then expect them to show up? What if the next app update adds one 2D texture upload before the cube map uploads, and now the counter is not in sync with complete-cube-map uploads?\n\nI feel like this level of hackery to make bad apps work just goes too far. Have you tried contacting the developer of the app and point out their bugs to them? I\u0027m sure they\u0027d be compelled to fix it if they hear \"your app will be broken on Samsung phones\".",
+      "revId": "04baa85d9a8820014e53a9ec4fc8f27027e503a4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
