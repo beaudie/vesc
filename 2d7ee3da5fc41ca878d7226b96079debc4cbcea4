@@ -1,0 +1,44 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "80f25b8a_d2485656",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2022-01-27T15:59:49Z",
+      "side": 1,
+      "message": "Thanks for the patch, this will be a useful feature. Just one request to refactor a bit.",
+      "revId": "2d7ee3da5fc41ca878d7226b96079debc4cbcea4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "91e01ab0_a2104a01",
+        "filename": "src/libANGLE/renderer/d3d/d3d11/Renderer11.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 1650,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2022-01-27T15:59:49Z",
+      "side": 1,
+      "message": "Since we\u0027re querying  ID3D11Device1 a couple times, it\u0027d be great to put it as a member of Renderer11, probably right next to mDevice. You can query for it at the end of Renderer11::initializeD3DDevice and release it in Renderer11::release.\n\nI don\u0027t think there is any drawback to always preferring to open the shared resource on ID3D11Device1 so we could do a pattern like:\n\n    if (mDevice1)\n    {\n        result \u003d mDevice1-\u003eOpenSharedResource1(...)\n    }\n    else\n    {\n        result \u003d mDevice-\u003eOpenSharedResource(...)\n    }",
+      "range": {
+        "startLine": 1648,
+        "startChar": 8,
+        "endLine": 1650,
+        "endChar": 98
+      },
+      "revId": "2d7ee3da5fc41ca878d7226b96079debc4cbcea4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
