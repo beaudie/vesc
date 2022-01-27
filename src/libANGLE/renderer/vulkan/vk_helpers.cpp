@@ -4207,11 +4207,28 @@ void BufferHelper::release(RendererVk *renderer)
 {
     unmap(renderer);
 
-    renderer->collectGarbageAndReinit(&mReadOnlyUse, &mSuballocation,
-                                      mMemory.getExternalMemoryObject(), mMemory.getMemoryObject());
-
-    mReadWriteUse.release();
-    mReadWriteUse.init();
+    if (isExternalBuffer())
+    {
+        renderer->collectGarbageAndReinit(&mReadOnlyUse, &mSuballocation,
+                                          mMemory.getExternalMemoryObject(),
+                                          mMemory.getMemoryObject());
+        mReadWriteUse.release();
+        mReadWriteUse.init();
+    }
+    else if (mSuballocation.valid())
+    {
+        if (mReadOnlyUse.isCurrentlyInUse(renderer->getLastCompletedQueueSerial()))
+        {
+            renderer->collectGarbage(std::move(mReadOnlyUse), std::move(mSuballocation));
+            mReadOnlyUse.init();
+        }
+        else
+        {
+            mSuballocation.destroy(renderer);
+            mReadOnlyUse.reset();
+        }
+        mReadWriteUse.reset();
+    }
 }
 
 angle::Result BufferHelper::copyFromBuffer(ContextVk *contextVk,
