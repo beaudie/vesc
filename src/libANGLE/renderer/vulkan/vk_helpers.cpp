@@ -4207,8 +4207,16 @@ void BufferHelper::release(RendererVk *renderer)
 {
     unmap(renderer);
 
-    renderer->collectGarbageAndReinit(&mReadOnlyUse, &mSuballocation,
-                                      mMemory.getExternalMemoryObject(), mMemory.getMemoryObject());
+    if (isExternalBuffer())
+    {
+        renderer->collectGarbageAndReinit(&mReadOnlyUse, &mSuballocation,
+                                          mMemory.getExternalMemoryObject(),
+                                          mMemory.getMemoryObject());
+    }
+    else
+    {
+        renderer->collectGarbage(std::move(mReadOnlyUse), std::move(mSuballocation));
+    }
 
     mReadWriteUse.release();
     mReadWriteUse.init();

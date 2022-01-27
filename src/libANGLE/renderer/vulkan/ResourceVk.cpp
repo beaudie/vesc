@@ -128,6 +128,36 @@ angle::Result ReadWriteResource::waitForIdle(ContextVk *contextVk,
     return WaitForIdle(contextVk, this, debugMessage, reason);
 }
 
+// SuballocationGarbage implementation.
+SuballocationGarbage::SuballocationGarbage(SuballocationGarbage &&other)
+{
+    *this = std::move(other);
+}
+
+SuballocationGarbage::SuballocationGarbage(SharedResourceUse &&use, BufferSuballocation &&garbage)
+    : mLifetime(std::move(use)), mGarbage(std::move(garbage))
+{}
+
+SuballocationGarbage &SuballocationGarbage::operator=(SuballocationGarbage &&rhs)
+{
+    std::swap(mLifetime, rhs.mLifetime);
+    std::swap(mGarbage, rhs.mGarbage);
+    return *this;
+}
+
+bool SuballocationGarbage::destroyIfComplete(RendererVk *renderer, Serial completedSerial)
+{
+    if (mLifetime.isCurrentlyInUse(completedSerial))
+    {
+        return false;
+    }
+
+    mGarbage.destroy(renderer);
+    mLifetime.release();
+
+    return true;
+}
+
 // SharedGarbage implementation.
 SharedGarbage::SharedGarbage() = default;
 
