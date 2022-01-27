@@ -120,6 +120,24 @@
       "parentUuid": "9248a38d_d9111581",
       "revId": "6f7083f2b0dc627fbbb663acc2df3fd1ad0c72ce",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "fa396064_7becbc98",
+        "filename": "src/libANGLE/renderer/vulkan/SurfaceVk.cpp",
+        "patchSetId": 10
+      },
+      "lineNbr": 1872,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-01-27T18:06:39Z",
+      "side": 1,
+      "message": "This does make sense at a first glance. However, aren\u0027t we setting `mNeedToAcquireNextSwapchainImage` to tree after every swap? Wouldn\u0027t this be true every time then?\n\nIt sounds to me like what you would want is to call ANI _once_ right after swapchain creation in single-buffer mode, then never call it again.\n\nHow about something like this:\n\n- Refactor whatever is after this `if` into some `acquireNextSwapchainImageImpl` function\n- This function becomes `if (shared) don\u0027t acquire; else `acquireNextSwapchainImageImpl()`\n- Then in the function that creates the swapchain, you would say: `create swapchain; if (shared) acquireNextSwapchainImageImpl()`\n\nThis way you don\u0027t need to deal with mNeedToAcquireNextSwapchainImage in shared mode at all.",
+      "parentUuid": "27655050_7730a1c3",
+      "revId": "6f7083f2b0dc627fbbb663acc2df3fd1ad0c72ce",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
