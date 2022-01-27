@@ -753,9 +753,39 @@ static bool Parenthesize(TIntermNode &node)
     return true;
 }
 
+// Is this an assignment operation contained in another binary operation?
+// eg x + y = z
+
+static bool IsInternalAssignment(TIntermNode &node, TIntermNode *parent)
+{
+    TIntermBinary *parentNode = (parent ? parent->getAsBinaryNode() : nullptr);
+    if (parentNode)
+    {
+        if (TIntermBinary *binaryNode = node.getAsBinaryNode())
+        {
+            const TOperator op       = binaryNode->getOp();
+            const TOperator parentOp = parentNode->getOp();
+            switch (op)
+            {
+                case TOperator::EOpAssign:
+                case TOperator::EOpInitialize:
+                {
+                    const TType &resultType = parentNode->getType();
+                    const TType &leftType   = parentNode->getLeft()->getType();
+                    const TType &rightType  = parentNode->getRight()->getType();
+                    return IsSymbolicOperator(parentOp, resultType, &leftType, &rightType);
+                }
+                default:
+                    return false;
+            }
+        }
+    }
+    return false;
+}
+
 void GenMetalTraverser::groupedTraverse(TIntermNode &node)
 {
-    const bool emitParens = Parenthesize(node);
+    const bool emitParens = Parenthesize(node) || IsInternalAssignment(node, getParentNode());
 
     if (emitParens)
     {
