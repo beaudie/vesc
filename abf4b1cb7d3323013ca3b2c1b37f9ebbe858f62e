@@ -16,6 +16,23 @@
       "message": "PTAL",
       "revId": "abf4b1cb7d3323013ca3b2c1b37f9ebbe858f62e",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "f6f24ab0_5038e77b",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-01-27T21:04:52Z",
+      "side": 1,
+      "message": "+Ken. Is this something that WebGL explicitly disallows?\n\nRegardless, Brandon you can at least for now make this an error on WebGL and warning otherwise",
+      "revId": "abf4b1cb7d3323013ca3b2c1b37f9ebbe858f62e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
