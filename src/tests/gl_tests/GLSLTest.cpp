@@ -536,6 +536,31 @@ std::string BuildBigInitialStackShader(int length)
     return result;
 }
 
+TEST_P(GLSLTest, ComplexExpression)
+{
+    constexpr char kFS[] =
+        R"(
+        #ifdef GL_ES
+        precision mediump float;
+        #endif
+        void main() {
+            vec2 v = vec2(1,5);
+            // at the end of next statement, values in
+            // v.x = 12, v.y = 12
+            v.xy += v.yx += v.xy;
+            // v1 and v2, both are initialized with 12
+            vec2 v1 = v, v2 = v;
+            v1.xy += v2.yx += ++(v.xy);  // v1 = 37, v2 = 25 each
+            v1.xy += v2.yx += (v.xy)++;  // v1 = 75, v2 = 38 each
+            gl_FragColor = vec4(v1,v2)/255.;  // 75, 75, 38, 38
+        })";
+
+    ANGLE_GL_PROGRAM(program, essl1_shaders::vs::Simple(), kFS);
+    drawQuad(program, essl1_shaders::PositionAttrib(), 0.5f);
+    ASSERT_GL_NO_ERROR();
+    EXPECT_PIXEL_COLOR_EQ(0, 0, GLColor(75, 75, 38, 38));
+}
+
 TEST_P(GLSLTest, NamelessScopedStructs)
 {
     constexpr char kFS[] = R"(precision mediump float;
