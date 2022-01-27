@@ -3799,7 +3799,7 @@ angle::Result RendererVk::getFormatDescriptorCountForVkFormat(ContextVk *context
                                                               VkFormat format,
                                                               uint32_t *descriptorCountOut)
 {
-    if (mVkFormatDescriptorCountMap.count(format) == 0)
+    if (!mVkFormatDescriptorCountMap.contains(format))
     {
         // Query device for descriptor count with basic values for most of
         // VkPhysicalDeviceImageFormatInfo2 members.
@@ -3837,19 +3837,17 @@ angle::Result RendererVk::getFormatDescriptorCountForExternalFormat(ContextVk *c
                                                                     uint64_t format,
                                                                     uint32_t *descriptorCountOut)
 {
-    // TODO: need to query for external formats as well once spec is fixed. http://anglebug.com/6141
-    if (getFeatures().useMultipleDescriptorsForExternalFormats.enabled)
-    {
-        // Vulkan spec has a gap in that there is no mechanism available to query the immutable
-        // sampler descriptor count of an external format. For now, return a default value.
-        constexpr uint32_t kExternalFormatDefaultDescriptorCount = 4;
-        ASSERT(descriptorCountOut);
-        *descriptorCountOut = kExternalFormatDefaultDescriptorCount;
-        return angle::Result::Continue;
-    }
+    ASSERT(descriptorCountOut);
 
-    ANGLE_VK_UNREACHABLE(contextVk);
-    return angle::Result::Stop;
+    // TODO: need to query for external formats as well once spec is fixed. http://anglebug.com/6141
+    ANGLE_VK_CHECK(contextVk, getFeatures().useMultipleDescriptorsForExternalFormats.enabled,
+                   VK_ERROR_INCOMPATIBLE_DRIVER);
+
+    // Vulkan spec has a gap in that there is no mechanism available to query the immutable
+    // sampler descriptor count of an external format. For now, return a default value.
+    constexpr uint32_t kExternalFormatDefaultDescriptorCount = 4;
+    *descriptorCountOut = kExternalFormatDefaultDescriptorCount;
+    return angle::Result::Continue;
 }
 
 void RendererVk::onAllocateHandle(vk::HandleType handleType)
