@@ -16,6 +16,29 @@
       "message": "PTAL",
       "revId": "835b34a5a56c10d6591726a238aa88f4a3b19ee0",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "3bbe300c_4c68aa2e",
+        "filename": "src/compiler/translator/TranslatorVulkan.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 1135,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-01-27T21:28:05Z",
+      "side": 1,
+      "message": "The appropriate way to do it would be:\n\n```\nsymbolTable.findBuiltIn(ImmutableString(\"gl_SamplePosition\"), getShaderVersion()))\n```",
+      "range": {
+        "startLine": 1132,
+        "startChar": 0,
+        "endLine": 1135,
+        "endChar": 87
+      },
+      "revId": "835b34a5a56c10d6591726a238aa88f4a3b19ee0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
