@@ -1129,9 +1129,12 @@ bool TranslatorVulkan::translateImpl(TInfoSinkBase &sink,
                         fragRotation = driverUniforms->getFragRotationMatrixRef();
                     }
                 }
+
+                const TVariable *glSamplePositionBuiltin =
+                    (getShaderVersion() >= 320 ? BuiltInVariable::gl_SamplePositionES3_2()
+                                               : BuiltInVariable::gl_SamplePosition());
                 if (!RotateAndFlipBuiltinVariable(this, root, GetMainSequence(root), flipXY,
-                                                  &getSymbolTable(),
-                                                  BuiltInVariable::gl_SamplePosition(),
+                                                  &getSymbolTable(), glSamplePositionBuiltin,
                                                   kFlippedPointCoordName, pivot, fragRotation))
                 {
                     return false;
