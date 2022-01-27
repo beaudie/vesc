@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "bbbd20a2_14fdd729",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-01-27T02:28:50Z",
+      "side": 1,
+      "message": "LGTM. The change can be reverted in Chromium branches as many times as necessary as long as we get to keep it in ToT ANGLE!",
+      "revId": "3b5a41f41727ef44a73643a033dd7fcafd93ea62",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
