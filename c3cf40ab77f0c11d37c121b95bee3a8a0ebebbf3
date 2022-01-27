@@ -101,6 +101,29 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "1fad4558_7eb57558",
+        "filename": "src/libANGLE/Context.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 1218,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2022-01-27T13:29:42Z",
+      "side": 1,
+      "message": "this one you do before checking the texture allocation and the other two you do after - seems like they should be consistent.",
+      "range": {
+        "startLine": 1214,
+        "startChar": 0,
+        "endLine": 1218,
+        "endChar": 5
+      },
+      "revId": "c3cf40ab77f0c11d37c121b95bee3a8a0ebebbf3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "198c1cea_eb991bf8",
         "filename": "src/tests/gl_tests/CopyTexImageTest.cpp",
         "patchSetId": 4
@@ -130,6 +153,24 @@
       "side": 1,
       "message": "it is using different levels of the texture, curious if d3d backend treats them differently",
       "parentUuid": "198c1cea_eb991bf8",
+      "revId": "c3cf40ab77f0c11d37c121b95bee3a8a0ebebbf3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "5ab79534_a7ccd136",
+        "filename": "src/tests/gl_tests/CopyTexImageTest.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 942,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2022-01-27T13:29:42Z",
+      "side": 1,
+      "message": "We don\u0027t want to introduce bugs with a CL in shipping code, so we\u0027ll likely need to fix this before landing.",
+      "parentUuid": "ac820324_881838a3",
       "revId": "c3cf40ab77f0c11d37c121b95bee3a8a0ebebbf3",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
