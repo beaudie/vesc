@@ -115,6 +115,26 @@ class SharedResourceUse final : angle::NonCopyable
     ResourceUse *mUse;
 };
 
+class SuballocationGarbage
+{
+  public:
+    SuballocationGarbage() = default;
+    SuballocationGarbage(SuballocationGarbage &&other)
+        : mLifetime(std::move(other.mLifetime)), mGarbage(std::move(other.mGarbage))
+    {}
+    SuballocationGarbage(SharedResourceUse &&use, BufferSuballocation &&garbage)
+        : mLifetime(std::move(use)), mGarbage(std::move(garbage))
+    {}
+    ~SuballocationGarbage() = default;
+
+    bool destroyIfComplete(RendererVk *renderer, Serial completedSerial);
+
+  private:
+    SharedResourceUse mLifetime;
+    BufferSuballocation mGarbage;
+};
+using SuballocationGarbageList = std::queue<SuballocationGarbage>;
+
 class SharedGarbage
 {
   public:
