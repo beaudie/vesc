@@ -65,6 +65,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "136dced5_604c2142",
+        "filename": "src/gpu_info_util/SystemInfo_vulkan.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 102,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-01-27T18:42:21Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "dc2bb8d6_8cb9a64f",
+      "range": {
+        "startLine": 102,
+        "startChar": 4,
+        "endLine": 102,
+        "endChar": 10
+      },
+      "revId": "8ed2f5002f9e0cf6dc5ed27d75d64d2d7a65fc59",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "74e81b1e_a5aa0161",
@@ -125,6 +149,30 @@
       "side": 1,
       "message": "To avoid problems with RAII / constructors / destructors in this case.",
       "parentUuid": "5713eedd_b586a2ec",
+      "range": {
+        "startLine": 26,
+        "startChar": 0,
+        "endLine": 26,
+        "endChar": 6
+      },
+      "revId": "8ed2f5002f9e0cf6dc5ed27d75d64d2d7a65fc59",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "c965048b_42db5fc9",
+        "filename": "src/libEGL/libEGL_autogen.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 26,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-01-27T18:42:21Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "a7ec383f_75298b29",
       "range": {
         "startLine": 26,
         "startChar": 0,
