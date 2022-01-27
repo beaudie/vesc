@@ -206,6 +206,30 @@
       },
       "revId": "0f1efa854182b186dfeea8c8571f5d9baf1e5718",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "dda57e98_9ac844fa",
+        "filename": "src/libANGLE/renderer/vulkan/FramebufferVk.cpp",
+        "patchSetId": 11
+      },
+      "lineNbr": 536,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-01-27T02:48:58Z",
+      "side": 1,
+      "message": "The test is not hitting the bug I described because the first clear is not scissored. So the RP is opened with the full area instead of a scissored area.\n\nHere\u0027s a test that would be interesting:\n\n1. Initialize a framebuffer with red (however you want), readback to make sure all updates are flushed\n2. Clear the whole framebuffer with green\n3. Clear a scissored region with blue\n4. Readback and verify that inside the scissor is blue and outside is green.\n\nStep 1 is to avoid reading uninitialized values\nStep 2 creates a deferred clear\nStep 3 opens a render pass with the scissored area, using loadOp\u003dCLEAR green, but that only affects inside the scissor, and then overrides it with blue\nStep 4 would read red outside the scissor instead of green.\n\nI still maintain that it\u0027s best to split this particular optimization and land the other part (using vkCmdClearAttachments for scissored clears) separately. Doing that, the change becomes _much_ simpler, basically everything is kept as is, except right before clearWithDraw you check for scissored but unmasked clears and apply those with vkCmdClearAttachments before moving on to clearWithDraw.",
+      "parentUuid": "8fcbd9a7_5dd47520",
+      "range": {
+        "startLine": 533,
+        "startChar": 0,
+        "endLine": 536,
+        "endChar": 40
+      },
+      "revId": "0f1efa854182b186dfeea8c8571f5d9baf1e5718",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
