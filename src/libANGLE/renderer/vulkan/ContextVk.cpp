@@ -3715,6 +3715,22 @@ void ContextVk::invalidateProgramBindingHelper(const gl::State &glState)
     }
 }
 
+angle::Result ContextVk::checkAndUpdateFramebufferFetchStatus(
+    const gl::ProgramExecutable *executable)
+{
+    FramebufferVk *drawFramebufferVk = getDrawFramebuffer();
+    ASSERT(drawFramebufferVk);
+
+    if (drawFramebufferVk->getRenderPassDesc().getFramebufferFetchMode() !=
+        executable->usesFramebufferFetch())
+    {
+        drawFramebufferVk->onSwitchProgramFramebufferFetch(this,
+                                                           executable->usesFramebufferFetch());
+    }
+
+    return angle::Result::Continue;
+}
+
 angle::Result ContextVk::invalidateProgramExecutableHelper(const gl::Context *context)
 {
     const gl::State &glState                = context->getState();
@@ -3748,10 +3764,7 @@ angle::Result ContextVk::invalidateProgramExecutableHelper(const gl::Context *co
             ANGLE_TRY(
                 flushCommandsAndEndRenderPass(RenderPassClosureReason::FramebufferFetchEmulation));
 
-            FramebufferVk *drawFramebufferVk = getDrawFramebuffer();
-            ASSERT(drawFramebufferVk);
-            drawFramebufferVk->onSwitchProgramFramebufferFetch(this,
-                                                               executable->usesFramebufferFetch());
+            ANGLE_TRY(checkAndUpdateFramebufferFetchStatus(executable));
         }
     }
 
@@ -4001,6 +4014,10 @@ angle::Result ContextVk::syncState(const gl::Context *context,
 
                 mGraphicsPipelineDesc->resetSubpass(&mGraphicsPipelineTransition);
                 onDrawFramebufferRenderPassDescChange(drawFramebufferVk, nullptr);
+
+                // We may need to update the framebuffer's use of fetch to match the in-use program
+                ANGLE_TRY(checkAndUpdateFramebufferFetchStatus(glState.getProgramExecutable()));
+
                 break;
             }
             case gl::State::DIRTY_BIT_RENDERBUFFER_BINDING:
