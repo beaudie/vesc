@@ -1,6 +1,29 @@
 {
   "comments": [
     {
+      "unresolved": true,
+      "key": {
+        "uuid": "3500f8c6_1fbca510",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 3
+      },
+      "lineNbr": 9,
+      "author": {
+        "id": 1001921
+      },
+      "writtenOn": "2022-01-27T22:52:27Z",
+      "side": 1,
+      "message": "Could you please clarify that the leak was of an angle::Library object and the solution is to not wrap the native handle in angle::Library?\nTook some time reading this CL for me to figure this out.\n\nMaybe it would have been simpler to add release() method to angle::Library, so that the native handle will not be closed when deleting the Library?\nAnd then let the Library be destroyed, leaking just the handle, as the current code does?",
+      "range": {
+        "startLine": 9,
+        "startChar": 0,
+        "endLine": 9,
+        "endChar": 40
+      },
+      "revId": "8ed2f5002f9e0cf6dc5ed27d75d64d2d7a65fc59",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": false,
       "key": {
         "uuid": "b41615d2_6ef4a8c3",
@@ -14,6 +37,29 @@
       "writtenOn": "2022-01-27T15:14:52Z",
       "side": 1,
       "message": "PTAL Yuly. Fixes a leak in libEGL. I could do more here to remove the old set of library APIs.",
+      "revId": "8ed2f5002f9e0cf6dc5ed27d75d64d2d7a65fc59",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "574a4305_cce20d0d",
+        "filename": "src/common/system_utils.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 102,
+      "author": {
+        "id": 1001921
+      },
+      "writtenOn": "2022-01-27T22:52:27Z",
+      "side": 1,
+      "message": "nit: need to close mLibraryHandle if it was previously opened.\nOr assert that the open* methods are only called once.",
+      "range": {
+        "startLine": 102,
+        "startChar": 0,
+        "endLine": 102,
+        "endChar": 68
+      },
       "revId": "8ed2f5002f9e0cf6dc5ed27d75d64d2d7a65fc59",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
@@ -84,6 +130,29 @@
         "startChar": 4,
         "endLine": 102,
         "endChar": 10
+      },
+      "revId": "8ed2f5002f9e0cf6dc5ed27d75d64d2d7a65fc59",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "c8e51121_5fda1bd0",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 1048,
+      "author": {
+        "id": 1001921
+      },
+      "writtenOn": "2022-01-27T22:52:27Z",
+      "side": 1,
+      "message": "nit: CloseSystemLibrary already checks this",
+      "range": {
+        "startLine": 1048,
+        "startChar": 0,
+        "endLine": 1048,
+        "endChar": 26
       },
       "revId": "8ed2f5002f9e0cf6dc5ed27d75d64d2d7a65fc59",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
