@@ -54,6 +54,8 @@ class SharedResourceUse final : angle::NonCopyable
         mUse->counter++;
     }
 
+    void reset() { mUse->counter = 1; }
+
     // Specifically for use with command buffers that are used as one-offs.
     void updateSerialOneOff(Serial serial) { mUse->serial = serial; }
 
@@ -114,6 +116,26 @@ class SharedResourceUse final : angle::NonCopyable
   private:
     ResourceUse *mUse;
 };
+
+class SuballocationGarbage
+{
+  public:
+    SuballocationGarbage() = default;
+    SuballocationGarbage(SuballocationGarbage &&other)
+        : mLifetime(std::move(other.mLifetime)), mGarbage(std::move(other.mGarbage))
+    {}
+    SuballocationGarbage(SharedResourceUse &&use, BufferSuballocation &&garbage)
+        : mLifetime(std::move(use)), mGarbage(std::move(garbage))
+    {}
+    ~SuballocationGarbage() = default;
+
+    bool destroyIfComplete(RendererVk *renderer, Serial completedSerial);
+
+  private:
+    SharedResourceUse mLifetime;
+    BufferSuballocation mGarbage;
+};
+using SuballocationGarbageList = std::queue<SuballocationGarbage>;
 
 class SharedGarbage
 {

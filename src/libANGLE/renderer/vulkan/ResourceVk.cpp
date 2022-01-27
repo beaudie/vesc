@@ -128,6 +128,19 @@ angle::Result ReadWriteResource::waitForIdle(ContextVk *contextVk,
     return WaitForIdle(contextVk, this, debugMessage, reason);
 }
 
+// SuballocationGarbage implementation.
+bool SuballocationGarbage::destroyIfComplete(RendererVk *renderer, Serial completedSerial)
+{
+    if (mLifetime.isCurrentlyInUse(completedSerial))
+    {
+        return false;
+    }
+
+    mGarbage.destroy(renderer);
+    mLifetime.release();
+    return true;
+}
+
 // SharedGarbage implementation.
 SharedGarbage::SharedGarbage() = default;
 
