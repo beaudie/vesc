@@ -52,15 +52,6 @@ bool IsVectorAccess(TIntermBinary &binary)
     return true;
 }
 
-bool IsVectorAccess(TIntermNode &node)
-{
-    if (auto *bin = node.getAsBinaryNode())
-    {
-        return IsVectorAccess(*bin);
-    }
-    return false;
-}
-
 // Differs from IsAssignment in that it does not include (++) or (--).
 bool IsAssignEqualsSign(TOperator op)
 {
@@ -68,32 +59,6 @@ bool IsAssignEqualsSign(TOperator op)
     {
         case TOperator::EOpAssign:
         case TOperator::EOpInitialize:
-        case TOperator::EOpAddAssign:
-        case TOperator::EOpSubAssign:
-        case TOperator::EOpMulAssign:
-        case TOperator::EOpVectorTimesMatrixAssign:
-        case TOperator::EOpVectorTimesScalarAssign:
-        case TOperator::EOpMatrixTimesScalarAssign:
-        case TOperator::EOpMatrixTimesMatrixAssign:
-        case TOperator::EOpDivAssign:
-        case TOperator::EOpIModAssign:
-        case TOperator::EOpBitShiftLeftAssign:
-        case TOperator::EOpBitShiftRightAssign:
-        case TOperator::EOpBitwiseAndAssign:
-        case TOperator::EOpBitwiseXorAssign:
-        case TOperator::EOpBitwiseOrAssign:
-            return true;
-
-        default:
-            return false;
-    }
-}
-
-// Only includes ($=) style assigns, where ($) is a binary op.
-bool IsCompoundAssign(TOperator op)
-{
-    switch (op)
-    {
         case TOperator::EOpAddAssign:
         case TOperator::EOpSubAssign:
         case TOperator::EOpMulAssign:
@@ -153,92 +118,7 @@ bool ReturnsReference(TOperator op)
     }
 }
 
-TIntermTyped &DecomposeCompoundAssignment(TIntermBinary &node)
-{
-    TOperator op = node.getOp();
-    switch (op)
-    {
-        case TOperator::EOpAddAssign:
-            op = TOperator::EOpAdd;
-            break;
-        case TOperator::EOpSubAssign:
-            op = TOperator::EOpSub;
-            break;
-        case TOperator::EOpMulAssign:
-            op = TOperator::EOpMul;
-            break;
-        case TOperator::EOpVectorTimesMatrixAssign:
-            op = TOperator::EOpVectorTimesMatrix;
-            break;
-        case TOperator::EOpVectorTimesScalarAssign:
-            op = TOperator::EOpVectorTimesScalar;
-            break;
-        case TOperator::EOpMatrixTimesScalarAssign:
-            op = TOperator::EOpMatrixTimesScalar;
-            break;
-        case TOperator::EOpMatrixTimesMatrixAssign:
-            op = TOperator::EOpMatrixTimesMatrix;
-            break;
-        case TOperator::EOpDivAssign:
-            op = TOperator::EOpDiv;
-            break;
-        case TOperator::EOpIModAssign:
-            op = TOperator::EOpIMod;
-            break;
-        case TOperator::EOpBitShiftLeftAssign:
-            op = TOperator::EOpBitShiftLeft;
-            break;
-        case TOperator::EOpBitShiftRightAssign:
-            op = TOperator::EOpBitShiftRight;
-            break;
-        case TOperator::EOpBitwiseAndAssign:
-            op = TOperator::EOpBitwiseAnd;
-            break;
-        case TOperator::EOpBitwiseXorAssign:
-            op = TOperator::EOpBitwiseXor;
-            break;
-        case TOperator::EOpBitwiseOrAssign:
-            op = TOperator::EOpBitwiseOr;
-            break;
-        default:
-            UNREACHABLE();
-    }
-
-    // This assumes SeparateCompoundExpressions has already been called.
-    // This assumption allows this code to not need to introduce temporaries.
-    //
-    // e.g. dont have to worry about:
-    //      vec[hasSideEffect()] *= 4
-    // becoming
-    //      vec[hasSideEffect()] = vec[hasSideEffect()] * 4
-
-    TIntermTyped *left  = node.getLeft();
-    TIntermTyped *right = node.getRight();
-    return *new TIntermBinary(TOperator::EOpAssign, left->deepCopy(),
-                              new TIntermBinary(op, left, right));
-}
-
-class Rewriter1 : public TIntermRebuild
-{
-  public:
-    Rewriter1(TCompiler &compiler) : TIntermRebuild(compiler, false, true) {}
-
-    PostResult visitBinaryPost(TIntermBinary &binaryNode) override
-    {
-        const TOperator op = binaryNode.getOp();
-        if (IsCompoundAssign(op))
-        {
-            TIntermTyped &left = *binaryNode.getLeft();
-            if (left.getAsSwizzleNode() || IsVectorAccess(left))
-            {
-                return DecomposeCompoundAssignment(binaryNode);
-            }
-        }
-        return binaryNode;
-    }
-};
-
-class Rewriter2 : public TIntermRebuild
+class Rewriter : public TIntermRebuild
 {
     std::vector<bool> mRequiresAddressingStack;
     SymbolEnv &mSymbolEnv;
@@ -254,9 +134,9 @@ class Rewriter2 : public TIntermRebuild
     }
 
   public:
-    ~Rewriter2() override { ASSERT(mRequiresAddressingStack.empty()); }
+    ~Rewriter() override { ASSERT(mRequiresAddressingStack.empty()); }
 
-    Rewriter2(TCompiler &compiler, SymbolEnv &symbolEnv)
+    Rewriter(TCompiler &compiler, SymbolEnv &symbolEnv)
         : TIntermRebuild(compiler, true, true), mSymbolEnv(symbolEnv)
     {}
 
@@ -363,11 +243,7 @@ bool sh::RewriteUnaddressableReferences(TCompiler &compiler,
                                         TIntermBlock &root,
                                         SymbolEnv &symbolEnv)
 {
-    if (!Rewriter1(compiler).rebuildRoot(root))
-    {
-        return false;
-    }
-    if (!Rewriter2(compiler, symbolEnv).rebuildRoot(root))
+    if (!Rewriter(compiler, symbolEnv).rebuildRoot(root))
     {
         return false;
     }
