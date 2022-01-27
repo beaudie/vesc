@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "b41615d2_6ef4a8c3",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2022-01-27T15:14:52Z",
+      "side": 1,
+      "message": "PTAL Yuly. Fixes a leak in libEGL. I could do more here to remove the old set of library APIs.",
+      "revId": "8ed2f5002f9e0cf6dc5ed27d75d64d2d7a65fc59",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
