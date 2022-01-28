@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "feaf7f46_79dadb5e",
+        "filename": "src/tests/compiler_tests/MSLOutput_test.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 649,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2022-01-28T00:22:30Z",
+      "side": 1,
+      "message": "This test doesn\u0027t do much aside from ensuring the shader compiles. It\u0027s fine to add it, but I wonder whether an EXPECT_TRUE or EXPECT_FALSE about foundInCode could be added, similarly to HLSLOutput_test.cpp.",
+      "revId": "1b7688f596b6c46b608fe75425b548b5f2444989",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "423000c0_719d5262",
+        "filename": "src/tests/gl_tests/GLSLTest.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 558,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2022-01-28T00:22:30Z",
+      "side": 1,
+      "message": "This test doesn\u0027t make any assertions about how the shader executes.\n\nCan the shader be run - even if only a single pixel is drawn - and an assertion be made about the color of that rendered pixel, even if only within a certain tolerance?",
+      "revId": "1b7688f596b6c46b608fe75425b548b5f2444989",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
