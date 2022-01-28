@@ -33,6 +33,24 @@
       "message": "Hey Charlie, what are the pros/cons of using a generic signature for any index buffer \u003c\u003d 6 elements?",
       "revId": "0f4146b050200d6590cc29dbd063866744eb38f0",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "ce3daf38_0d33b25d",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2022-01-28T17:42:59Z",
+      "side": 1,
+      "message": "In the traces we have, I am not seeing any usage less than 6, so I am not seeing much value to optimize count\u003c6 usage case. if we find any usage case for that, we can easily expand this mechanism, I think. I guess the answer really is that I am trying to target caching known commonly used patterns here to keep cache size minimum, (right now its maximum 4 entries). Also I have changed the implementation from original patchset that it no longer relying on specific data, just cache the first 4 sets of data with count of 6 instead of pre-create with known data set.",
+      "parentUuid": "6b614e3a_d8ca53cf",
+      "revId": "0f4146b050200d6590cc29dbd063866744eb38f0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
