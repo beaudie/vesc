@@ -16,6 +16,23 @@
       "message": "PTAL. Patch 10 and 12 are the same.",
       "revId": "942c39a8f8186204bdfdd152815e4e284471c2c9",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "6a3142fe_f8c032a2",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 12
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-01-28T22:14:21Z",
+      "side": 1,
+      "message": "Thanks, let\u0027s land it!",
+      "revId": "942c39a8f8186204bdfdd152815e4e284471c2c9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
