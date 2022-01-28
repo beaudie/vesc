@@ -94,6 +94,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "98c6c7cc_6c3e6c1f",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 57,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2022-01-28T21:32:05Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "8c4c0402_24216963",
+      "range": {
+        "startLine": 57,
+        "startChar": 0,
+        "endLine": 57,
+        "endChar": 6
+      },
+      "revId": "0f4146b050200d6590cc29dbd063866744eb38f0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "9d4cc5d2_1cc512c2",
@@ -117,6 +141,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "cf5c51f6_21941444",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 1237,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2022-01-28T21:32:05Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "9d4cc5d2_1cc512c2",
+      "range": {
+        "startLine": 1237,
+        "startChar": 35,
+        "endLine": 1237,
+        "endChar": 51
+      },
+      "revId": "0f4146b050200d6590cc29dbd063866744eb38f0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "876cfd3d_d40255d3",
@@ -130,6 +178,30 @@
       "writtenOn": "2022-01-28T19:32:20Z",
       "side": 1,
       "message": "nit: Please put in a helper",
+      "range": {
+        "startLine": 1217,
+        "startChar": 0,
+        "endLine": 1243,
+        "endChar": 13
+      },
+      "revId": "0f4146b050200d6590cc29dbd063866744eb38f0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "3d7c94e0_0e252c57",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 1243,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2022-01-28T21:32:05Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "876cfd3d_d40255d3",
       "range": {
         "startLine": 1217,
         "startChar": 0,
@@ -177,6 +249,30 @@
       "side": 1,
       "message": "And the optimization could also live the front-end",
       "parentUuid": "5bcd4b32_068e7765",
+      "range": {
+        "startLine": 1250,
+        "startChar": 20,
+        "endLine": 1250,
+        "endChar": 77
+      },
+      "revId": "0f4146b050200d6590cc29dbd063866744eb38f0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "2397c10a_4f210932",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 1250,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2022-01-28T21:32:05Z",
+      "side": 1,
+      "message": "Moved to VertexArrayVk. \n\nSince the call comes from backend, there is a bit challenge to make this a front end optimization. I am keeping it in vulkan backend for now, but I do agree that this could be a front end optimization as well. Anyone feel free to further improve/move it.",
+      "parentUuid": "e174e5fe_ecc32b51",
       "range": {
         "startLine": 1250,
         "startChar": 20,
