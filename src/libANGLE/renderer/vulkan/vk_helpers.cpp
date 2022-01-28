@@ -876,6 +876,56 @@ ANGLE_MAYBE_UNUSED void ResetSecondaryCommandBuffer(
 {
     resetList->push_back(std::move(commandBuffer));
 }
+
+angle::Result InitDynamicDescriptorPool(Context *context,
+                                        const DescriptorSetLayoutDesc &descriptorSetLayoutDesc,
+                                        VkDescriptorSetLayout descriptorSetLayout,
+                                        uint32_t descriptorCountMultiplier,
+                                        DynamicDescriptorPool *poolToInit)
+{
+    std::vector<VkDescriptorPoolSize> descriptorPoolSizes;
+    DescriptorSetLayoutBindingVector bindingVector;
+    std::vector<VkSampler> immutableSamplers;
+
+    descriptorSetLayoutDesc.unpackBindings(&bindingVector, &immutableSamplers);
+
+    for (const VkDescriptorSetLayoutBinding &binding : bindingVector)
+    {
+        if (binding.descriptorCount > 0)
+        {
+            VkDescriptorPoolSize poolSize = {};
+            poolSize.type                 = binding.descriptorType;
+            poolSize.descriptorCount      = binding.descriptorCount;
+            descriptorPoolSizes.emplace_back(poolSize);
+        }
+    }
+
+    if (descriptorPoolSizes.empty())
+    {
+        if (context->getRenderer()->getFeatures().bindEmptyForUnusedDescriptorSets.enabled)
+        {
+            // For this workaround, we have to create an empty descriptor set for each descriptor
+            // set index, so make sure their pools are initialized.
+            VkDescriptorPoolSize poolSize = {};
+            // The type doesn't matter, since it's not actually used for anything.
+            poolSize.type            = VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER;
+            poolSize.descriptorCount = 1;
+            descriptorPoolSizes.emplace_back(poolSize);
+        }
+        else
+        {
+            return angle::Result::Continue;
+        }
+    }
+
+    if (!descriptorPoolSizes.empty())
+    {
+        ANGLE_TRY(poolToInit->init(context, descriptorPoolSizes.data(), descriptorPoolSizes.size(),
+                                   descriptorSetLayout));
+    }
+
+    return angle::Result::Continue;
+}
 }  // anonymous namespace
 
 // This is an arbitrary max. We can change this later if necessary.
@@ -2951,6 +3001,21 @@ DynamicDescriptorPool::DynamicDescriptorPool()
 
 DynamicDescriptorPool::~DynamicDescriptorPool() = default;
 
+DynamicDescriptorPool::DynamicDescriptorPool(DynamicDescriptorPool &&other)
+    : DynamicDescriptorPool()
+{
+    *this = std::move(other);
+}
+
+DynamicDescriptorPool &DynamicDescriptorPool::operator=(DynamicDescriptorPool &&other)
+{
+    std::swap(mCurrentPoolIndex, other.mCurrentPoolIndex);
+    std::swap(mDescriptorPools, other.mDescriptorPools);
+    std::swap(mPoolSizes, other.mPoolSizes);
+    std::swap(mCachedDescriptorSetLayout, other.mCachedDescriptorSetLayout);
+    return *this;
+}
+
 angle::Result DynamicDescriptorPool::init(Context *context,
                                           const VkDescriptorPoolSize *setSizes,
                                           size_t setSizeCount,
@@ -3000,13 +3065,14 @@ void DynamicDescriptorPool::release(ContextVk *contextVk)
     mCachedDescriptorSetLayout = VK_NULL_HANDLE;
 }
 
-angle::Result DynamicDescriptorPool::allocateSetsAndGetInfo(
+angle::Result DynamicDescriptorPool::allocateSetsWithCallback(
     ContextVk *contextVk,
     const VkDescriptorSetLayout *descriptorSetLayout,
     uint32_t descriptorSetCount,
     RefCountedDescriptorPoolBinding *bindingOut,
     VkDescriptorSet *descriptorSetsOut,
-    bool *newPoolAllocatedOut)
+    bool *newPoolAllocatedOut,
+    DescriptorPoolCacheCallback *callback)
 {
     ASSERT(!mDescriptorPools.empty());
     ASSERT(*descriptorSetLayout == mCachedDescriptorSetLayout);
@@ -3017,7 +3083,7 @@ angle::Result DynamicDescriptorPool::allocateSetsAndGetInfo(
     {
         if (!mDescriptorPools[mCurrentPoolIndex]->get().hasCapacity(descriptorSetCount))
         {
-            ANGLE_TRY(allocateNewPool(contextVk));
+            ANGLE_TRY(allocateNewPool(contextVk, callback));
             *newPoolAllocatedOut = true;
         }
 
@@ -3028,7 +3094,8 @@ angle::Result DynamicDescriptorPool::allocateSetsAndGetInfo(
                                           descriptorSetsOut);
 }
 
-angle::Result DynamicDescriptorPool::allocateNewPool(ContextVk *contextVk)
+angle::Result DynamicDescriptorPool::allocateNewPool(ContextVk *contextVk,
+                                                     DescriptorPoolCacheCallback *callback)
 {
     bool found = false;
 
@@ -3040,6 +3107,7 @@ angle::Result DynamicDescriptorPool::allocateNewPool(ContextVk *contextVk)
         {
             mCurrentPoolIndex = poolIndex;
             found             = true;
+            callback->onResetDescriptorPool(poolIndex, mDescriptorPools[poolIndex]);
             break;
         }
     }
@@ -3051,6 +3119,8 @@ angle::Result DynamicDescriptorPool::allocateNewPool(ContextVk *contextVk)
 
         static constexpr size_t kMaxPools = 99999;
         ANGLE_VK_CHECK(contextVk, mDescriptorPools.size() < kMaxPools, VK_ERROR_TOO_MANY_OBJECTS);
+
+        callback->onNewDescriptorPool(mCurrentPoolIndex, mDescriptorPools[mCurrentPoolIndex]);
     }
 
     // This pool is getting hot, so grow its max size to try and prevent allocating another pool in
@@ -3061,6 +3131,14 @@ angle::Result DynamicDescriptorPool::allocateNewPool(ContextVk *contextVk)
     }
 
     return mDescriptorPools[mCurrentPoolIndex]->get().init(contextVk, mPoolSizes, mMaxSetsPerPool);
+}
+
+// Called by CachedDescriptorPool.
+void DynamicDescriptorPool::bindDescriptorPool(size_t poolIndex,
+                                               RefCountedDescriptorPoolBinding *bindingOut)
+{
+    ASSERT(poolIndex < mDescriptorPools.size());
+    bindingOut->set(mDescriptorPools[poolIndex]);
 }
 
 // For testing only!
@@ -9384,5 +9462,196 @@ void CommandBufferAccess::onImageWrite(gl::LevelIndex levelStart,
                               levelCount, layerStart, layerCount);
 }
 
+// CachedDescriptorPool implementation.
+template <typename DescriptorDescT, VulkanCacheType CacheType>
+CachedDescriptorPool<DescriptorDescT, CacheType>::CachedDescriptorPool() : mCurrentCacheIndex(0)
+{}
+
+template <typename DescriptorDescT, VulkanCacheType CacheType>
+CachedDescriptorPool<DescriptorDescT, CacheType>::CachedDescriptorPool(DynamicDescriptorPool &&pool)
+    : mDescriptorPool(std::move(pool)), mCurrentCacheIndex(0)
+{
+    mDescriptorSetCache.emplace_back(std::move(DescriptorInnerCache()));
+}
+
+template <typename DescriptorDescT, VulkanCacheType CacheType>
+CachedDescriptorPool<DescriptorDescT, CacheType>::~CachedDescriptorPool() = default;
+
+template <typename DescriptorDescT, VulkanCacheType CacheType>
+CachedDescriptorPool<DescriptorDescT, CacheType>::CachedDescriptorPool(CachedDescriptorPool &&other)
+    : CachedDescriptorPool()
+{
+    *this = std::move(other);
+}
+
+template <typename DescriptorDescT, VulkanCacheType CacheType>
+CachedDescriptorPool<DescriptorDescT, CacheType>
+    &CachedDescriptorPool<DescriptorDescT, CacheType>::operator=(CachedDescriptorPool &&other)
+{
+    std::swap(mDescriptorPool, other.mDescriptorPool);
+    std::swap(mDescriptorSetCache, other.mDescriptorSetCache);
+    std::swap(mCurrentCacheIndex, other.mCurrentCacheIndex);
+    return *this;
+}
+
+template <typename DescriptorDescT, VulkanCacheType CacheType>
+void CachedDescriptorPool<DescriptorDescT, CacheType>::destroy(RendererVk *renderer)
+{
+    mDescriptorPool.destroy(renderer->getDevice());
+    for (DescriptorInnerCache &innerCache : mDescriptorSetCache)
+    {
+        innerCache.destroy(renderer);
+    }
+    mDescriptorSetCache.clear();
+}
+
+template <typename DescriptorDescT, VulkanCacheType CacheType>
+void CachedDescriptorPool<DescriptorDescT, CacheType>::release(ContextVk *contextVk)
+{
+    mDescriptorPool.release(contextVk);
+    for (DescriptorInnerCache &innerCache : mDescriptorSetCache)
+    {
+        innerCache.destroy(contextVk->getRenderer());
+    }
+    mDescriptorSetCache.clear();
+}
+
+template <typename DescriptorDescT, VulkanCacheType CacheType>
+void CachedDescriptorPool<DescriptorDescT, CacheType>::onNewDescriptorPool(
+    size_t poolIndex,
+    RefCountedDescriptorPoolHelper *newPool)
+{
+    ASSERT(mDescriptorSetCache.size() == poolIndex);
+    mDescriptorSetCache.emplace_back(std::move(DescriptorInnerCache()));
+    mCurrentCacheIndex = poolIndex;
+}
+
+template <typename DescriptorDescT, VulkanCacheType CacheType>
+void CachedDescriptorPool<DescriptorDescT, CacheType>::onResetDescriptorPool(
+    size_t poolIndex,
+    RefCountedDescriptorPoolHelper *resetPool)
+{
+    ASSERT(poolIndex < mDescriptorSetCache.size());
+    mDescriptorSetCache[poolIndex].clear();
+    mCurrentCacheIndex = poolIndex;
+}
+
+template <typename DescriptorDescT, VulkanCacheType CacheType>
+angle::Result CachedDescriptorPool<DescriptorDescT, CacheType>::getOrAllocateDescriptorSet(
+    ContextVk *contextVk,
+    const DescriptorDescT &desc,
+    const DescriptorSetLayout &descriptorSetLayout,
+    RefCountedDescriptorPoolBinding *descriptorPoolBinding,
+    VkDescriptorSet *descriptorSetOut,
+    DescriptorCacheResult *cacheResultOut)
+{
+    for (size_t poolIndex = 0; poolIndex < mDescriptorSetCache.size(); ++poolIndex)
+    {
+        DescriptorInnerCache &innerCache = mDescriptorSetCache[poolIndex];
+        if (innerCache.getDescriptorSet(desc, descriptorSetOut))
+        {
+            *cacheResultOut = DescriptorCacheResult::CacheHit;
+            mDescriptorPool.bindDescriptorPool(poolIndex, descriptorPoolBinding);
+            this->mCacheStats.hit();
+            return angle::Result::Continue;
+        }
+    }
+
+    *cacheResultOut = DescriptorCacheResult::NewAllocation;
+    bool newPoolAllocatedIgnore;
+    ANGLE_TRY(mDescriptorPool.allocateSetsWithCallback(contextVk, descriptorSetLayout.ptr(), 1,
+                                                       descriptorPoolBinding, descriptorSetOut,
+                                                       &newPoolAllocatedIgnore, this));
+    mDescriptorSetCache[mCurrentCacheIndex].insertDescriptorSet(desc, *descriptorSetOut);
+    this->mCacheStats.miss();
+    return angle::Result::Continue;
+}
+
+template <typename DescriptorDescT, VulkanCacheType CacheType>
+angle::Result CachedDescriptorPool<DescriptorDescT, CacheType>::allocateDescriptorSet(
+    ContextVk *contextVk,
+    const DescriptorSetLayout &descriptorSetLayout,
+    RefCountedDescriptorPoolBinding *descriptorPoolBinding,
+    VkDescriptorSet *descriptorSetOut)
+{
+    return mDescriptorPool.allocateSets(contextVk, descriptorSetLayout.ptr(), 1,
+                                        descriptorPoolBinding, descriptorSetOut);
+}
+
+template class CachedDescriptorPool<UniformsAndXfbDescriptorDesc,
+                                    VulkanCacheType::UniformsAndXfbDescriptors>;
+template class CachedDescriptorPool<TextureDescriptorDesc, VulkanCacheType::TextureDescriptors>;
+template class CachedDescriptorPool<ShaderBuffersDescriptorDesc,
+                                    VulkanCacheType::ShaderBuffersDescriptors>;
+
+// DescriptorMetaCache implementation.
+template <typename DescriptorDescT, VulkanCacheType CacheType>
+DescriptorMetaCache<DescriptorDescT, CacheType>::DescriptorMetaCache() = default;
+
+template <typename DescriptorDescT, VulkanCacheType CacheType>
+DescriptorMetaCache<DescriptorDescT, CacheType>::~DescriptorMetaCache()
+{
+    ASSERT(mPayload.empty());
+}
+
+template <typename DescriptorDescT, VulkanCacheType CacheType>
+void DescriptorMetaCache<DescriptorDescT, CacheType>::destroy(RendererVk *rendererVk)
+{
+    rendererVk->accumulateCacheStats(CacheType, this->mCacheStats);
+
+    for (auto &iter : mPayload)
+    {
+        RefCountedPool &refCountedPool = iter.second;
+        ASSERT(!refCountedPool.isReferenced());
+        refCountedPool.get().destroy(rendererVk);
+    }
+
+    mPayload.clear();
+}
+
+template <typename DescriptorDescT, VulkanCacheType CacheType>
+angle::Result DescriptorMetaCache<DescriptorDescT, CacheType>::bindCachedDescriptorPool(
+    Context *context,
+    const DescriptorSetLayoutDesc &descriptorSetLayoutDesc,
+    uint32_t descriptorCountMultiplier,
+    DescriptorSetLayoutCache *descriptorSetLayoutCache,
+    PoolPointer *descriptorPoolOut)
+{
+    auto cacheIter = mPayload.find(descriptorSetLayoutDesc);
+    if (cacheIter != mPayload.end())
+    {
+        RefCountedPool &descriptorPool = cacheIter->second;
+        descriptorPoolOut->set(&descriptorPool);
+        this->mCacheStats.hit();
+        return angle::Result::Continue;
+    }
+
+    this->mCacheStats.miss();
+
+    BindingPointer<DescriptorSetLayout> descriptorSetLayout;
+    ANGLE_TRY(descriptorSetLayoutCache->getDescriptorSetLayout(context, descriptorSetLayoutDesc,
+                                                               &descriptorSetLayout));
+
+    DynamicDescriptorPool newDescriptorPool;
+    ANGLE_TRY(InitDynamicDescriptorPool(context, descriptorSetLayoutDesc,
+                                        descriptorSetLayout.get().getHandle(),
+                                        descriptorCountMultiplier, &newDescriptorPool));
+
+    CachedPool newCachedPool(std::move(newDescriptorPool));
+
+    auto insertIter =
+        mPayload.emplace(descriptorSetLayoutDesc, RefCountedPool(std::move(newCachedPool)));
+
+    RefCountedPool &descriptorPool = insertIter.first->second;
+    descriptorPoolOut->set(&descriptorPool);
+
+    return angle::Result::Continue;
+}
+
+template class DescriptorMetaCache<UniformsAndXfbDescriptorDesc,
+                                   VulkanCacheType::UniformsAndXfbDescriptors>;
+template class DescriptorMetaCache<TextureDescriptorDesc, VulkanCacheType::TextureDescriptors>;
+template class DescriptorMetaCache<ShaderBuffersDescriptorDesc,
+                                   VulkanCacheType::ShaderBuffersDescriptors>;
 }  // namespace vk
 }  // namespace rx

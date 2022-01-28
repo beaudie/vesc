@@ -2228,45 +2228,45 @@ angle::Result ContextVk::handleDirtyDescriptorSetsImpl(CommandBufferT *commandBu
 
 void ContextVk::syncObjectPerfCounters()
 {
-    mPerfCounters.descriptorSetAllocations              = 0;
-    mPerfCounters.shaderBuffersDescriptorSetCacheHits   = 0;
-    mPerfCounters.shaderBuffersDescriptorSetCacheMisses = 0;
+    mPerfCounters.descriptorSetAllocations = 0;
 
     // ContextVk's descriptor set allocations
     ContextVkPerfCounters contextCounters = getAndResetObjectPerfCounters();
-    for (uint32_t count : contextCounters.descriptorSetsAllocated)
+    for (uint32_t count : contextCounters.driverUniformDescriptorSetsAllocated)
     {
         mPerfCounters.descriptorSetAllocations += count;
     }
     // UtilsVk's descriptor set allocations
     mPerfCounters.descriptorSetAllocations +=
         mUtils.getAndResetObjectPerfCounters().descriptorSetsAllocated;
-    // ProgramExecutableVk's descriptor set allocations
-    const gl::State &state                             = getState();
-    const gl::ShaderProgramManager &shadersAndPrograms = state.getShaderProgramManagerForCapture();
-    const gl::ResourceMap<gl::Program, gl::ShaderProgramID> &programs =
-        shadersAndPrograms.getProgramsForCaptureAndPerf();
-    for (const std::pair<GLuint, gl::Program *> &resource : programs)
-    {
-        gl::Program *program = resource.second;
-        if (program->hasLinkingState())
-        {
-            continue;
-        }
-        ProgramVk *programVk = vk::GetImpl(resource.second);
-        ProgramExecutablePerfCounters progPerfCounters =
-            programVk->getExecutable().getAndResetObjectPerfCounters();
 
-        for (uint32_t count : progPerfCounters.descriptorSetAllocations)
-        {
-            mPerfCounters.descriptorSetAllocations += count;
-        }
+    // Share group descriptor set allocations and caching stats.
+    CacheStats uniformDescriptorCacheStats;
+    CacheStats textureDescriptorCacheStats;
+    CacheStats shaderBufferDescriptorCacheStats;
 
-        mPerfCounters.shaderBuffersDescriptorSetCacheHits +=
-            progPerfCounters.descriptorSetCacheHits[DescriptorSetIndex::ShaderResource];
-        mPerfCounters.shaderBuffersDescriptorSetCacheMisses +=
-            progPerfCounters.descriptorSetCacheMisses[DescriptorSetIndex::ShaderResource];
-    }
+    mShareGroupVk->getUniformsAndXfbDescriptorCache().getDescriptorSetCacheStats(
+        &uniformDescriptorCacheStats);
+    mShareGroupVk->getTextureDescriptorCache().getDescriptorSetCacheStats(
+        &textureDescriptorCacheStats);
+    mShareGroupVk->getShaderBuffersDescriptorCache().getDescriptorSetCacheStats(
+        &shaderBufferDescriptorCacheStats);
+
+    mPerfCounters.descriptorSetAllocations += uniformDescriptorCacheStats.getMissCount();
+    mPerfCounters.descriptorSetAllocations += textureDescriptorCacheStats.getMissCount();
+    mPerfCounters.descriptorSetAllocations += shaderBufferDescriptorCacheStats.getMissCount();
+
+    mPerfCounters.uniformsAndXfbDescriptorSetCacheHits = uniformDescriptorCacheStats.getHitCount();
+    mPerfCounters.uniformsAndXfbDescriptorSetCacheMisses =
+        uniformDescriptorCacheStats.getMissCount();
+
+    mPerfCounters.textureDescriptorSetCacheHits   = textureDescriptorCacheStats.getHitCount();
+    mPerfCounters.textureDescriptorSetCacheMisses = textureDescriptorCacheStats.getMissCount();
+
+    mPerfCounters.shaderBuffersDescriptorSetCacheHits =
+        shaderBufferDescriptorCacheStats.getHitCount();
+    mPerfCounters.shaderBuffersDescriptorSetCacheMisses =
+        shaderBufferDescriptorCacheStats.getMissCount();
 }
 
 void ContextVk::updateOverlayOnPresent()
@@ -4597,6 +4597,8 @@ angle::Result ContextVk::invalidateCurrentShaderResources(gl::Command command)
         AppendBufferVectorToDesc(&mShaderBuffersDescriptorDesc, atomicCounterBuffers,
                                  mState.getAtomicCounterBuffersMask(), isDynamicDescriptor,
                                  appendOffset);
+
+        // Storage images.
     }
 
     return angle::Result::Continue;
@@ -5349,7 +5351,7 @@ angle::Result ContextVk::updateDriverUniformsDescriptorSet(bool newBuffer,
     ANGLE_TRY(mDriverUniformsDescriptorPools[pipelineType].allocateSetsAndGetInfo(
         this, driverUniforms.descriptorSetLayout.get().ptr(), 1,
         &driverUniforms.descriptorPoolBinding, &driverUniforms.descriptorSet, &newPoolAllocated));
-    mContextPerfCounters.descriptorSetsAllocated[pipelineType]++;
+    mContextPerfCounters.driverUniformDescriptorSetsAllocated[pipelineType]++;
 
     // Clear descriptor set cache. It may no longer be valid.
     if (newPoolAllocated)
@@ -6758,7 +6760,8 @@ void ContextVk::outputCumulativePerfCounters()
 
     for (PipelineType pipelineType : angle::AllEnums<PipelineType>())
     {
-        uint32_t count = mCumulativeContextPerfCounters.descriptorSetsAllocated[pipelineType];
+        uint32_t count =
+            mCumulativeContextPerfCounters.driverUniformDescriptorSetsAllocated[pipelineType];
         if (count > 0)
         {
             INFO() << "    PipelineType " << ToUnderlying(pipelineType) << ": " << count;
@@ -6768,11 +6771,11 @@ void ContextVk::outputCumulativePerfCounters()
 
 ContextVkPerfCounters ContextVk::getAndResetObjectPerfCounters()
 {
-    mCumulativeContextPerfCounters.descriptorSetsAllocated +=
-        mContextPerfCounters.descriptorSetsAllocated;
+    mCumulativeContextPerfCounters.driverUniformDescriptorSetsAllocated +=
+        mContextPerfCounters.driverUniformDescriptorSetsAllocated;
 
-    ContextVkPerfCounters counters               = mContextPerfCounters;
-    mContextPerfCounters.descriptorSetsAllocated = {};
+    ContextVkPerfCounters counters                            = mContextPerfCounters;
+    mContextPerfCounters.driverUniformDescriptorSetsAllocated = {};
     return counters;
 }
 
@@ -6795,5 +6798,33 @@ ProgramExecutableVk *ContextVk::getExecutable() const
         }
     }
     return nullptr;
+}
+
+angle::Result ContextVk::bindUniformsAndXfbDescriptorCache(
+    const vk::DescriptorSetLayoutDesc &descriptorSetLayoutDesc,
+    vk::UniformsAndXfbDescriptorCachePointer *cachePointerOut)
+{
+    return mShareGroupVk->getUniformsAndXfbDescriptorCache().bindCachedDescriptorPool(
+        this, descriptorSetLayoutDesc, 1, &mShareGroupVk->getDescriptorSetLayoutCache(),
+        cachePointerOut);
+}
+
+angle::Result ContextVk::bindTextureDescriptorCache(
+    const vk::DescriptorSetLayoutDesc &descriptorSetLayoutDesc,
+    uint32_t descriptorCountMultiplier,
+    vk::TextureDescriptorCachePointer *cachePointerOut)
+{
+    return mShareGroupVk->getTextureDescriptorCache().bindCachedDescriptorPool(
+        this, descriptorSetLayoutDesc, descriptorCountMultiplier,
+        &mShareGroupVk->getDescriptorSetLayoutCache(), cachePointerOut);
+}
+
+angle::Result ContextVk::bindShaderResourcesDescriptorCache(
+    const vk::DescriptorSetLayoutDesc &descriptorSetLayoutDesc,
+    vk::ShaderBuffersDescriptorCachePointer *cachePointerOut)
+{
+    return mShareGroupVk->getShaderBuffersDescriptorCache().bindCachedDescriptorPool(
+        this, descriptorSetLayoutDesc, 1, &mShareGroupVk->getDescriptorSetLayoutCache(),
+        cachePointerOut);
 }
 }  // namespace rx

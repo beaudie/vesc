@@ -220,7 +220,7 @@ class alignas(4) RenderPassDesc final
     uint8_t mSamples;
     uint8_t mColorAttachmentRange;
 
-    // Multivew
+    // Multiview
     uint8_t mViewCount;
 
     // sRGB
@@ -770,6 +770,8 @@ class DescriptorSetLayoutDesc final
 
     void unpackBindings(DescriptorSetLayoutBindingVector *bindings,
                         std::vector<VkSampler> *immutableSamplers) const;
+
+    bool empty() const { return *this == DescriptorSetLayoutDesc(); }
 
   private:
     // There is a small risk of an issue if the sampler cache is evicted but not the descriptor
@@ -1469,6 +1471,7 @@ enum class VulkanCacheType
     UniformsAndXfbDescriptors,
     ShaderBuffersDescriptors,
     Framebuffer,
+    DescriptorMetaCache,
     EnumCount
 };
 
@@ -1487,8 +1490,8 @@ class CacheStats final : angle::NonCopyable
         mMissCount += stats.mMissCount;
     }
 
-    uint64_t getHitCount() const { return mHitCount; }
-    uint64_t getMissCount() const { return mMissCount; }
+    uint32_t getHitCount() const { return mHitCount; }
+    uint32_t getMissCount() const { return mMissCount; }
 
     ANGLE_INLINE double getHitRatio() const
     {
@@ -1509,8 +1512,8 @@ class CacheStats final : angle::NonCopyable
     }
 
   private:
-    uint64_t mHitCount;
-    uint64_t mMissCount;
+    uint32_t mHitCount;
+    uint32_t mMissCount;
 };
 
 template <VulkanCacheType CacheType>
@@ -1523,6 +1526,8 @@ class HasCacheStats : angle::NonCopyable
         accum->accumulateCacheStats(CacheType, mCacheStats);
         mCacheStats.reset();
     }
+
+    void getCacheStats(CacheStats *accum) const { accum->accumulate(mCacheStats); }
 
   protected:
     HasCacheStats()          = default;
@@ -1756,9 +1761,22 @@ class DescriptorSetCache final : public HasCacheStats<CacheType>
     DescriptorSetCache() = default;
     ~DescriptorSetCache() override { ASSERT(mPayload.empty()); }
 
+    DescriptorSetCache(DescriptorSetCache &&other) : DescriptorSetCache()
+    {
+        *this = std::move(other);
+    }
+
+    DescriptorSetCache &operator=(DescriptorSetCache &&other)
+    {
+        std::swap(mPayload, other.mPayload);
+        return *this;
+    }
+
     void destroy(RendererVk *rendererVk);
 
-    ANGLE_INLINE bool get(const Key &desc, VkDescriptorSet *descriptorSet)
+    void clear() { mPayload.clear(); }
+
+    ANGLE_INLINE bool getDescriptorSet(const Key &desc, VkDescriptorSet *descriptorSet)
     {
         auto iter = mPayload.find(desc);
         if (iter != mPayload.end())
@@ -1771,7 +1789,7 @@ class DescriptorSetCache final : public HasCacheStats<CacheType>
         return false;
     }
 
-    ANGLE_INLINE void insert(const Key &desc, VkDescriptorSet descriptorSet)
+    ANGLE_INLINE void insertDescriptorSet(const Key &desc, VkDescriptorSet descriptorSet)
     {
         mPayload.emplace(desc, descriptorSet);
     }
@@ -1782,7 +1800,7 @@ class DescriptorSetCache final : public HasCacheStats<CacheType>
 
 // Only 1 driver uniform binding is used.
 constexpr uint32_t kReservedDriverUniformBindingCount = 1;
-// There is 1 default uniform binding used per stage.  Currently, a maxium of three stages are
+// There is 1 default uniform binding used per stage.  Currently, a maximum of three stages are
 // supported.
 constexpr uint32_t kReservedPerStageDefaultUniformBindingCount = 1;
 constexpr uint32_t kReservedDefaultUniformBindingCount         = 3;

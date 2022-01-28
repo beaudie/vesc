@@ -37,11 +37,11 @@ class ShareGroupVk;
 static constexpr uint32_t kMaxGpuEventNameLen = 32;
 using EventName                               = std::array<char, kMaxGpuEventNameLen>;
 
-using ContextVkDescriptorSetList = angle::PackedEnumMap<PipelineType, uint32_t>;
+using CounterPipelineTypeMap = angle::PackedEnumMap<PipelineType, uint32_t>;
 
 struct ContextVkPerfCounters
 {
-    ContextVkDescriptorSetList descriptorSetsAllocated;
+    CounterPipelineTypeMap driverUniformDescriptorSetsAllocated;
 };
 
 enum class GraphicsEventCmdBuf
@@ -669,6 +669,17 @@ class ContextVk : public ContextImpl, public vk::Context, public MultisampleText
     {
         return mShareGroupVk->getDefaultBufferPool(mRenderer, size, memoryTypeIndex);
     }
+
+    angle::Result bindUniformsAndXfbDescriptorCache(
+        const vk::DescriptorSetLayoutDesc &descriptorSetLayoutDesc,
+        vk::UniformsAndXfbDescriptorCachePointer *cachePointerOut);
+    angle::Result bindTextureDescriptorCache(
+        const vk::DescriptorSetLayoutDesc &descriptorSetLayoutDesc,
+        uint32_t descriptorCountMultiplier,
+        vk::TextureDescriptorCachePointer *cachePointerOut);
+    angle::Result bindShaderResourcesDescriptorCache(
+        const vk::DescriptorSetLayoutDesc &descriptorSetLayoutDesc,
+        vk::ShaderBuffersDescriptorCachePointer *cachePointerOut);
 
   private:
     // Dirty bits.
