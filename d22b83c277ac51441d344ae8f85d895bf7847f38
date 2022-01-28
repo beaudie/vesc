@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "e10dc687_5d8b1076",
+        "filename": "src/libANGLE/capture/FrameCapture.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 779,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2022-01-28T17:22:19Z",
+      "side": 1,
+      "message": "Can you add to the initializer list below?",
+      "range": {
+        "startLine": 779,
+        "startChar": 9,
+        "endLine": 779,
+        "endChar": 35
+      },
+      "revId": "d22b83c277ac51441d344ae8f85d895bf7847f38",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
