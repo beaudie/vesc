@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "5b355ff6_5a68590b",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1533402
+      },
+      "writtenOn": "2022-01-28T23:05:52Z",
+      "side": 1,
+      "message": "Hi Kyle,\n\nThis CL seems to work nicely with the Android emulator. Would there be any concern if I merge it to our ANGLE clone in the emulator?",
+      "revId": "511b80832c14062d8c934890cd4e23d1828808ee",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
