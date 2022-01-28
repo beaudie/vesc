@@ -26,7 +26,7 @@
 
 // Version number for shader translation API.
 // It is incremented every time the API changes.
-#define ANGLE_SH_VERSION 269
+#define ANGLE_SH_VERSION 270
 
 enum ShShaderSpec
 {
@@ -415,6 +415,7 @@ struct ShBuiltInResources
     int OES_sample_variables;
     int EXT_clip_cull_distance;
     int EXT_primitive_bounding_box;
+    int OES_primitive_bounding_box;
     int ANGLE_base_vertex_base_instance_shader_builtin;
     int ANDROID_extension_pack_es31a;
 
