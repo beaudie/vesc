@@ -2969,7 +2969,8 @@ bool ValidateStateQuery(const Context *context,
         break;
 
         case GL_PRIMITIVE_BOUNDING_BOX:
-            if (!context->getExtensions().primitiveBoundingBoxEXT)
+            if (!context->getExtensions().primitiveBoundingBoxEXT &&
+                !context->getExtensions().primitiveBoundingBoxOES)
             {
                 context->validationError(entryPoint, GL_INVALID_ENUM, kExtensionNotEnabled);
                 return false;
