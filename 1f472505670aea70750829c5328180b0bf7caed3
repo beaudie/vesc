@@ -39,6 +39,63 @@
       "message": "Here are the testing result with \nout/ReleaseWithSymbols/angle_perftests --gtest_filter\u003dTracePerfTest.Run/vulkan_offscreen_gardenscapes --enable-all-trace-tests --single-process-tests --verbose --verbose-logging --local-output  --minimize-gpu-work --max-steps-performed 10000  --num-retries 0\n\nAfter:\n* 60867ffbf (HEAD -\u003e suballocationGarbageList) (2022-01-27) cclao@google.com Vulkan: Add a dedicated suballocation garbage list\nI   59.284s run_tests_on_device(0C211FDF600050)  Mean result time: 2.1589 ms.\nI   60.741s run_tests_on_device(0C211FDF600050)  Mean result time: 2.2255 ms.\nI   60.035s run_tests_on_device(0C211FDF600050)  Mean result time: 2.2593 ms.\nI   60.536s run_tests_on_device(0C211FDF600050)  Mean result time: 2.2261 ms.\nI   59.014s run_tests_on_device(0C211FDF600050)  Mean result time: 2.1113 ms.\n(average 2.20 ms)\n\nBefore:\n* 706e44b06 (origin/main, origin/HEAD) (2022-01-27) timvp@google.com Tests: Add PUBG Mobile launch trace\nI   63.264s run_tests_on_device(0C211FDF600050)  Mean result time: 2.4995 ms.\nI   63.771s run_tests_on_device(0C211FDF600050)  Mean result time: 2.4954 ms.\nI   63.252s run_tests_on_device(0C211FDF600050)  Mean result time: 2.6893 ms.\nI   63.857s run_tests_on_device(0C211FDF600050)  Mean result time: 2.5713 ms.\nI   61.656s run_tests_on_device(0C211FDF600050)  Mean result time: 2.5042 ms.\n(average 2.55 ms)\n",
       "revId": "1f472505670aea70750829c5328180b0bf7caed3",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "002f9419_365a866c",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.h",
+        "patchSetId": 11
+      },
+      "lineNbr": 324,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2022-01-28T01:40:48Z",
+      "side": 1,
+      "message": "Is it worth doing the same `garbage.destroyIfComplete()` check here too?",
+      "revId": "1f472505670aea70750829c5328180b0bf7caed3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "06d3a411_6c870af2",
+        "filename": "src/libANGLE/renderer/vulkan/ResourceVk.h",
+        "patchSetId": 11
+      },
+      "lineNbr": 57,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2022-01-28T01:40:48Z",
+      "side": 1,
+      "message": "This looks unused.",
+      "revId": "1f472505670aea70750829c5328180b0bf7caed3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "a234a56a_b573825f",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 11
+      },
+      "lineNbr": 4231,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2022-01-28T01:40:48Z",
+      "side": 1,
+      "message": "I don\u0027t understand this comment since `mSuballocation` can be written to.   How is the lifetime only tracked by `mReadOnlyUse`?\n\nAlso, if it\u0027s lifetime is only tracked by `mReadOnlyUse`, why would `mReadWriteUse` need to be reset here?",
+      "range": {
+        "startLine": 4230,
+        "startChar": 0,
+        "endLine": 4231,
+        "endChar": 38
+      },
+      "revId": "1f472505670aea70750829c5328180b0bf7caed3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
