@@ -269,7 +269,7 @@ ImageState::ImageState(EGLenum target, ImageSibling *buffer, const AttributeMap 
 ImageState::~ImageState() {}
 
 Image::Image(rx::EGLImplFactory *factory,
-             const gl::Context *context,
+             gl::Context *context,
              EGLenum target,
              ImageSibling *buffer,
              const AttributeMap &attribs)
@@ -281,6 +281,13 @@ Image::Image(rx::EGLImplFactory *factory,
     ASSERT(buffer != nullptr);
 
     mState.source->addImageSource(this);
+
+    if (context)
+    {
+        // If the source comes from a context, make sure it's marked as shared because its resources
+        // can now be used by contects outside of its share group.
+        context->setShared();
+    }
 }
 
 void Image::onDestroy(const Display *display)

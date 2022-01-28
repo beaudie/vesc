@@ -147,7 +147,7 @@ class Image final : public RefCountObject, public LabeledObject
 {
   public:
     Image(rx::EGLImplFactory *factory,
-          const gl::Context *context,
+          gl::Context *context,
           EGLenum target,
           ImageSibling *buffer,
           const AttributeMap &attribs);
