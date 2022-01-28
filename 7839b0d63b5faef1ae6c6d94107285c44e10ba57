@@ -16,6 +16,92 @@
       "message": "Hi,\n\nHere is my attempt at fixing this: https://bugs.chromium.org/p/angleproject/issues/detail?id\u003d6933\n\nAs suggested, I introduced a feature (true on Android), and a function for converting EGL rectangles to VK rectangles. I am not sure how to handle other cases for currentTransform !\u003d identity, so please, let me know your opinion.\n\nCheers,\nAntonio",
       "revId": "7839b0d63b5faef1ae6c6d94107285c44e10ba57",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "34bf3644_690f0d29",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-01-28T19:04:48Z",
+      "side": 1,
+      "message": "LGTM with some nits",
+      "revId": "7839b0d63b5faef1ae6c6d94107285c44e10ba57",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "690cc1d4_318d4752",
+        "filename": "include/platform/FeaturesVk.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 619,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-01-28T19:04:48Z",
+      "side": 1,
+      "message": "For public facing texts, we try to avoid name calling, so this could be:\n\n    On some platforms present region rectangles are expected to be y-inverted contrary to the spec",
+      "range": {
+        "startLine": 619,
+        "startChar": 9,
+        "endLine": 619,
+        "endChar": 25
+      },
+      "revId": "7839b0d63b5faef1ae6c6d94107285c44e10ba57",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ffb0c1f2_8694264b",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 3032,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-01-28T19:04:48Z",
+      "side": 1,
+      "message": "And in the comment you can be specific, so I suggest s/Platform/Android",
+      "range": {
+        "startLine": 3032,
+        "startChar": 7,
+        "endLine": 3032,
+        "endChar": 15
+      },
+      "revId": "7839b0d63b5faef1ae6c6d94107285c44e10ba57",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "2099d042_03c15520",
+        "filename": "src/libANGLE/renderer/vulkan/SurfaceVk.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 359,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-01-28T19:04:48Z",
+      "side": 1,
+      "message": "While technically true, this is hard to understand without context (because `invertY` says don\u0027t invert y). You can at least add a comment that says EGL rectangles should be y-inverted for Vulkan, and that invertY is double-inverting it to work around a platform bug.",
+      "range": {
+        "startLine": 357,
+        "startChar": 0,
+        "endLine": 359,
+        "endChar": 50
+      },
+      "revId": "7839b0d63b5faef1ae6c6d94107285c44e10ba57",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
