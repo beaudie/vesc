@@ -259,14 +259,14 @@ void KHRONOS_APIENTRY DrawElementsMinimizedProc(GLenum mode,
                                                 GLenum type,
                                                 const void *indices)
 {
-    glDrawElements(GL_POINTS, 1, type, indices);
+    glDrawElements(GL_POINTS, count, type, indices);
 }
 
 void KHRONOS_APIENTRY DrawElementsIndirectMinimizedProc(GLenum mode,
                                                         GLenum type,
                                                         const void *indirect)
 {
-    glDrawElementsInstancedBaseVertex(GL_POINTS, 1, type, 0, 1, 0);
+    glDrawElementsIndirect(GL_POINTS, type, indirect);
 }
 
 void KHRONOS_APIENTRY DrawElementsInstancedMinimizedProc(GLenum mode,
@@ -275,7 +275,7 @@ void KHRONOS_APIENTRY DrawElementsInstancedMinimizedProc(GLenum mode,
                                                          const void *indices,
                                                          GLsizei instancecount)
 {
-    glDrawElementsInstanced(GL_POINTS, 1, type, indices, 1);
+    glDrawElementsInstanced(GL_POINTS, count, type, indices, instancecount);
 }
 
 void KHRONOS_APIENTRY DrawElementsBaseVertexMinimizedProc(GLenum mode,
@@ -284,7 +284,7 @@ void KHRONOS_APIENTRY DrawElementsBaseVertexMinimizedProc(GLenum mode,
                                                           const void *indices,
                                                           GLint basevertex)
 {
-    glDrawElementsBaseVertex(GL_POINTS, 1, type, indices, basevertex);
+    glDrawElementsBaseVertex(GL_POINTS, count, type, indices, basevertex);
 }
 
 void KHRONOS_APIENTRY DrawElementsInstancedBaseVertexMinimizedProc(GLenum mode,
@@ -294,7 +294,7 @@ void KHRONOS_APIENTRY DrawElementsInstancedBaseVertexMinimizedProc(GLenum mode,
                                                                    GLsizei instancecount,
                                                                    GLint basevertex)
 {
-    glDrawElementsInstancedBaseVertex(GL_POINTS, 1, type, indices, 1, basevertex);
+    glDrawElementsInstancedBaseVertex(GL_POINTS, count, type, indices, instancecount, basevertex);
 }
 
 void KHRONOS_APIENTRY DrawRangeElementsMinimizedProc(GLenum mode,
@@ -304,12 +304,12 @@ void KHRONOS_APIENTRY DrawRangeElementsMinimizedProc(GLenum mode,
                                                      GLenum type,
                                                      const void *indices)
 {
-    glDrawRangeElements(GL_POINTS, start, end, 1, type, indices);
+    glDrawRangeElements(GL_POINTS, start, end, count, type, indices);
 }
 
 void KHRONOS_APIENTRY DrawArraysMinimizedProc(GLenum mode, GLint first, GLsizei count)
 {
-    glDrawArrays(GL_POINTS, first, 1);
+    glDrawArrays(GL_POINTS, first, count);
 }
 
 void KHRONOS_APIENTRY DrawArraysInstancedMinimizedProc(GLenum mode,
@@ -317,12 +317,12 @@ void KHRONOS_APIENTRY DrawArraysInstancedMinimizedProc(GLenum mode,
                                                        GLsizei count,
                                                        GLsizei instancecount)
 {
-    glDrawArraysInstanced(GL_POINTS, first, 1, 1);
+    glDrawArraysInstanced(GL_POINTS, first, count, instancecount);
 }
 
 void KHRONOS_APIENTRY DrawArraysIndirectMinimizedProc(GLenum mode, const void *indirect)
 {
-    glDrawArraysInstanced(GL_POINTS, 0, 1, 1);
+    glDrawArraysIndirect(GL_POINTS, indirect);
 }
 
 void KHRONOS_APIENTRY DispatchComputeMinimizedProc(GLuint num_groups_x,
