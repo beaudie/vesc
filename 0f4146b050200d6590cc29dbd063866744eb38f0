@@ -51,6 +51,52 @@
       "parentUuid": "6b614e3a_d8ca53cf",
       "revId": "0f4146b050200d6590cc29dbd063866744eb38f0",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "8c4c0402_24216963",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 57,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-01-28T19:32:20Z",
+      "side": 1,
+      "message": "nit: no need for static",
+      "range": {
+        "startLine": 57,
+        "startChar": 0,
+        "endLine": 57,
+        "endChar": 6
+      },
+      "revId": "0f4146b050200d6590cc29dbd063866744eb38f0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "876cfd3d_d40255d3",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 1243,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-01-28T19:32:20Z",
+      "side": 1,
+      "message": "nit: Please put in a helper",
+      "range": {
+        "startLine": 1217,
+        "startChar": 0,
+        "endLine": 1243,
+        "endChar": 13
+      },
+      "revId": "0f4146b050200d6590cc29dbd063866744eb38f0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
