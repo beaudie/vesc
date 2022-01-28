@@ -16,6 +16,24 @@
       "message": "lgtm to unblock this CL. Shabi might have follow-up requests.\n\nIs there any possibility or reason to suppress both the old and new phrasing of the error message?\n",
       "revId": "5672fa2db26eab544278703042d0eb5734168969",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "7245187f_94369695",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1001921
+      },
+      "writtenOn": "2022-01-28T23:04:43Z",
+      "side": 1,
+      "message": "It\u0027s possible. The way it\u0027s now, it might fail the bots. In this case I\u0027ll add both variants, roll VVL and then remove the _KHR.",
+      "parentUuid": "e7953b80_050e3496",
+      "revId": "5672fa2db26eab544278703042d0eb5734168969",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
