@@ -34,6 +34,16 @@ class ShareGroupVk : public ShareGroupImpl
     // synchronous update to the caches.
     PipelineLayoutCache &getPipelineLayoutCache() { return mPipelineLayoutCache; }
     DescriptorSetLayoutCache &getDescriptorSetLayoutCache() { return mDescriptorSetLayoutCache; }
+    vk::DescriptorMetaCache &getUniformsAndXfbDescriptorCache()
+    {
+        return mUniformsAndXfbDescriptorCache;
+    }
+    vk::DescriptorMetaCache &getTextureDescriptorCache() { return mTextureDescriptorCache; }
+    vk::DescriptorMetaCache &getShaderBuffersDescriptorCache()
+    {
+        return mShaderBuffersDescriptorCache;
+    }
+
     ContextVkSet *getContexts() { return &mContexts; }
 
     void releaseResourceUseLists(const Serial &submitSerial);
@@ -54,6 +64,11 @@ class ShareGroupVk : public ShareGroupImpl
 
     // DescriptorSetLayouts are also managed in a cache.
     DescriptorSetLayoutCache mDescriptorSetLayoutCache;
+
+    // Descriptor set caches
+    vk::DescriptorMetaCache mUniformsAndXfbDescriptorCache;
+    vk::DescriptorMetaCache mTextureDescriptorCache;
+    vk::DescriptorMetaCache mShaderBuffersDescriptorCache;
 
     // The list of contexts within the share group
     ContextVkSet mContexts;
