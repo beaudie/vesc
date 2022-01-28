@@ -20,6 +20,7 @@
 #include "libANGLE/angletypes.h"
 #include "libANGLE/renderer/vulkan/ContextVk.h"
 #include "test_utils/gl_raii.h"
+#include "util/random_utils.h"
 
 using namespace angle;
 
@@ -3005,7 +3006,7 @@ void main()
 
     GLsizei offset = 0;
 
-    uint32_t descriptorSetAllocationsBefore = 0;
+    uint32_t expectedShaderBufferCacheMisses = 0;
 
     for (int iteration = 0; iteration < kIterations; ++iteration)
     {
@@ -3025,14 +3026,12 @@ void main()
         // Capture the allocations counter after the first run.
         if (iteration == 0)
         {
-            descriptorSetAllocationsBefore = hackANGLE().descriptorSetAllocations;
+            expectedShaderBufferCacheMisses = hackANGLE().shaderBuffersDescriptorSetCacheMisses;
         }
     }
 
-    // TODO(syoussefi): Validate.
-    ANGLE_UNUSED_VARIABLE(descriptorSetAllocationsBefore);
-
     ASSERT_GL_NO_ERROR();
+    EXPECT_GT(expectedShaderBufferCacheMisses, 0u);
 
     // Verify correctness first.
     std::vector<GLColor> expectedData(kIterations * 2, GLColor::green);
@@ -3047,8 +3046,8 @@ void main()
     EXPECT_EQ(expectedData, actualData);
 
     // Check for unnecessary descriptor set allocations.
-    uint32_t descriptorSetAllocationsAfter = hackANGLE().descriptorSetAllocations;
-    EXPECT_EQ(descriptorSetAllocationsAfter, 0u);
+    uint32_t actualShaderBufferCacheMisses = hackANGLE().shaderBuffersDescriptorSetCacheMisses;
+    EXPECT_EQ(expectedShaderBufferCacheMisses, actualShaderBufferCacheMisses);
 }
 
 // Test that mapping a buffer that the GPU is using as read-only ghosts the buffer, rather than
@@ -3187,6 +3186,110 @@ TEST_P(VulkanPerformanceCounterTest, BufferSubDataShouldNotTriggerSyncState)
     EXPECT_PIXEL_COLOR_EQ(0, 0, GLColor::green);
 
     EXPECT_EQ(hackANGLE().vertexArraySyncStateCalls, 1u);
+}
+
+// Tests that uniform updates eventually stop updating descriptor sets.
+TEST_P(VulkanPerformanceCounterTest, UniformUpdatesHitDescriptorSetCache)
+{
+    ANGLE_GL_PROGRAM(testProgram, essl1_shaders::vs::Simple(), essl1_shaders::fs::UniformColor());
+    glUseProgram(testProgram);
+    GLint posLoc = glGetAttribLocation(testProgram, essl1_shaders::PositionAttrib());
+    GLint uniLoc = glGetUniformLocation(testProgram, essl1_shaders::ColorUniform());
+
+    std::array<Vector3, 6> quadVerts = GetQuadVertices();
+
+    GLBuffer vbo;
+    glBindBuffer(GL_ARRAY_BUFFER, vbo);
+    glBufferData(GL_ARRAY_BUFFER, quadVerts.size() * sizeof(quadVerts[0]), quadVerts.data(),
+                 GL_STATIC_DRAW);
+
+    glVertexAttribPointer(posLoc, 3, GL_FLOAT, GL_FALSE, 0, nullptr);
+    glEnableVertexAttribArray(posLoc);
+
+    ASSERT_GL_NO_ERROR();
+
+    constexpr int kIterations = 1000;
+
+    RNG rng;
+
+    for (int iteration = 0; iteration < kIterations; ++iteration)
+    {
+        Vector3 randomVec3 = RandomVec3(rng.randomInt(), 0.0f, 1.0f);
+
+        glUniform4f(uniLoc, randomVec3.x(), randomVec3.y(), randomVec3.z(), 1.0f);
+        glDrawArrays(GL_TRIANGLES, 0, 6);
+
+        GLColor expectedColor = GLColor(randomVec3);
+        EXPECT_PIXEL_COLOR_NEAR(0, 0, expectedColor, 5);
+    }
+
+    ASSERT_GL_NO_ERROR();
+
+    uint32_t expectedCacheMisses = hackANGLE().uniformsAndXfbDescriptorSetCacheMisses;
+    EXPECT_GT(expectedCacheMisses, 0u);
+
+    for (int iteration = 0; iteration < kIterations; ++iteration)
+    {
+        Vector3 randomVec3 = RandomVec3(rng.randomInt(), 0.0f, 1.0f);
+
+        glUniform4f(uniLoc, randomVec3.x(), randomVec3.y(), randomVec3.z(), 1.0f);
+        glDrawArrays(GL_TRIANGLES, 0, 6);
+
+        GLColor expectedColor = GLColor(randomVec3);
+        EXPECT_PIXEL_COLOR_NEAR(0, 0, expectedColor, 5);
+    }
+
+    ASSERT_GL_NO_ERROR();
+
+    uint32_t actualCacheMisses = hackANGLE().uniformsAndXfbDescriptorSetCacheMisses;
+    EXPECT_EQ(expectedCacheMisses, actualCacheMisses);
+}
+
+// Verifies that we share Texture descriptor sets between programs.
+TEST_P(VulkanPerformanceCounterTest, TextureDescriptorsAreShared)
+{
+    ANGLE_GL_PROGRAM(testProgram1, essl1_shaders::vs::Texture2D(), essl1_shaders::fs::Texture2D());
+    ANGLE_GL_PROGRAM(testProgram2, essl1_shaders::vs::Texture2D(), essl1_shaders::fs::Texture2D());
+
+    GLTexture texture1;
+    glBindTexture(GL_TEXTURE_2D, texture1);
+    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, 1, 1, 0, GL_RGBA, GL_UNSIGNED_BYTE, &GLColor::red);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+
+    GLTexture texture2;
+    glBindTexture(GL_TEXTURE_2D, texture1);
+    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, 1, 1, 0, GL_RGBA, GL_UNSIGNED_BYTE, &GLColor::red);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+
+    setupQuadVertexBuffer(0.5f, 1.0f);
+
+    glUseProgram(testProgram1);
+
+    ASSERT_GL_NO_ERROR();
+
+    glBindTexture(GL_TEXTURE_2D, texture1);
+    glDrawArrays(GL_TRIANGLES, 0, 6);
+    glBindTexture(GL_TEXTURE_2D, texture2);
+    glDrawArrays(GL_TRIANGLES, 0, 6);
+
+    ASSERT_GL_NO_ERROR();
+
+    GLuint expectedCacheMisses = hackANGLE().textureDescriptorSetCacheMisses;
+    EXPECT_GT(expectedCacheMisses, 0u);
+
+    glUseProgram(testProgram2);
+
+    glBindTexture(GL_TEXTURE_2D, texture1);
+    glDrawArrays(GL_TRIANGLES, 0, 6);
+    glBindTexture(GL_TEXTURE_2D, texture2);
+    glDrawArrays(GL_TRIANGLES, 0, 6);
+
+    ASSERT_GL_NO_ERROR();
+
+    GLuint actualCacheMisses = hackANGLE().textureDescriptorSetCacheMisses;
+    EXPECT_EQ(expectedCacheMisses, actualCacheMisses);
 }
 
 ANGLE_INSTANTIATE_TEST(VulkanPerformanceCounterTest, ES3_VULKAN());
