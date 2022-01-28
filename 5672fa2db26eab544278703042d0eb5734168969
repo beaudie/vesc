@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "e7953b80_050e3496",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2022-01-28T22:59:23Z",
+      "side": 1,
+      "message": "lgtm to unblock this CL. Shabi might have follow-up requests.\n\nIs there any possibility or reason to suppress both the old and new phrasing of the error message?\n",
+      "revId": "5672fa2db26eab544278703042d0eb5734168969",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
