@@ -37,11 +37,11 @@ class ShareGroupVk;
 static constexpr uint32_t kMaxGpuEventNameLen = 32;
 using EventName                               = std::array<char, kMaxGpuEventNameLen>;
 
-using ContextVkDescriptorSetList = angle::PackedEnumMap<PipelineType, uint32_t>;
+using CounterPipelineTypeMap = angle::PackedEnumMap<PipelineType, uint32_t>;
 
 struct ContextVkPerfCounters
 {
-    ContextVkDescriptorSetList descriptorSetsAllocated;
+    CounterPipelineTypeMap driverUniformDescriptorSetsAllocated;
 };
 
 enum class GraphicsEventCmdBuf
@@ -684,6 +684,17 @@ class ContextVk : public ContextImpl, public vk::Context, public MultisampleText
         return angle::Result::Continue;
     }
 
+    angle::Result bindUniformsAndXfbDescriptorCache(
+        const vk::DescriptorSetLayoutDesc &descriptorSetLayoutDesc,
+        vk::DescriptorPoolPointer *cachePointerOut);
+    angle::Result bindTextureDescriptorCache(
+        const vk::DescriptorSetLayoutDesc &descriptorSetLayoutDesc,
+        uint32_t descriptorCountMultiplier,
+        vk::DescriptorPoolPointer *cachePointerOut);
+    angle::Result bindShaderResourcesDescriptorCache(
+        const vk::DescriptorSetLayoutDesc &descriptorSetLayoutDesc,
+        vk::DescriptorPoolPointer *cachePointerOut);
+
   private:
     // Dirty bits.
     enum DirtyBitType : size_t
@@ -731,18 +742,17 @@ class ContextVk : public ContextImpl, public vk::Context, public MultisampleText
 
     struct DriverUniformsDescriptorSet
     {
-        vk::DynamicBuffer dynamicBuffer;
-        VkDescriptorSet descriptorSet;
-        vk::BufferHelper *currentBuffer;
-        vk::BindingPointer<vk::DescriptorSetLayout> descriptorSetLayout;
-        vk::RefCountedDescriptorPoolBinding descriptorPoolBinding;
-        DriverUniformsDescriptorSetCache descriptorSetCache;
-
         DriverUniformsDescriptorSet();
         ~DriverUniformsDescriptorSet();
 
         void init(RendererVk *rendererVk);
         void destroy(RendererVk *rendererVk);
+
+        vk::DynamicBuffer dynamicBuffer;
+        VkDescriptorSet descriptorSet;
+        vk::BufferHelper *currentBuffer;
+        vk::BindingPointer<vk::DescriptorSetLayout> descriptorSetLayout;
+        vk::RefCountedDescriptorPoolBinding descriptorPoolBinding;
     };
 
     // The GpuEventQuery struct holds together a timestamp query and enough data to create a

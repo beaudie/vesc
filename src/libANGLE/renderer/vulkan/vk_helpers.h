@@ -150,13 +150,19 @@ class DynamicBuffer : angle::NonCopyable
     BufferHelperPointerVector mBufferFreeList;
 };
 
+enum class DescriptorCacheResult
+{
+    CacheHit,
+    NewAllocation,
+};
+
 // Uses DescriptorPool to allocate descriptor sets as needed. If a descriptor pool becomes full, we
 // allocate new pools internally as needed. RendererVk takes care of the lifetime of the discarded
 // pools. Note that we used a fixed layout for descriptor pools in ANGLE.
 
 // Shared handle to a descriptor pool. Each helper is allocated from the dynamic descriptor pool.
 // Can be used to share descriptor pools between multiple ProgramVks and the ContextVk.
-class DescriptorPoolHelper : public Resource
+class DescriptorPoolHelper final : public Resource
 {
   public:
     DescriptorPoolHelper();
@@ -168,17 +174,26 @@ class DescriptorPoolHelper : public Resource
     angle::Result init(Context *context,
                        const std::vector<VkDescriptorPoolSize> &poolSizesIn,
                        uint32_t maxSets);
-    void destroy(VkDevice device);
-    void release(ContextVk *contextVk);
+    void destroy(RendererVk *renderer, VulkanCacheType cacheType);
+    void release(ContextVk *contextVk, VulkanCacheType cacheType);
 
     angle::Result allocateDescriptorSets(ContextVk *contextVk,
                                          const DescriptorSetLayout &descriptorSetLayout,
                                          uint32_t descriptorSetCount,
                                          VkDescriptorSet *descriptorSetsOut);
 
+    angle::Result getOrAllocateDescriptorSet(ContextVk *contextVk,
+                                             const DescriptorSetDesc &desc,
+                                             const DescriptorSetLayout &descriptorSetLayout,
+                                             VkDescriptorSet *descriptorSetOut,
+                                             DescriptorCacheResult *cacheResultOut);
+
+    void resetCache();
+
   private:
     uint32_t mFreeDescriptorSets;
     DescriptorPool mDescriptorPool;
+    DescriptorSetCache mDescriptorSetCache;
 };
 
 using RefCountedDescriptorPoolHelper  = RefCounted<DescriptorPoolHelper>;
@@ -190,6 +205,9 @@ class DynamicDescriptorPool final : angle::NonCopyable
     DynamicDescriptorPool();
     ~DynamicDescriptorPool();
 
+    DynamicDescriptorPool(DynamicDescriptorPool &&other);
+    DynamicDescriptorPool &operator=(DynamicDescriptorPool &&other);
+
     // The DynamicDescriptorPool only handles one pool size at this time.
     // Note that setSizes[i].descriptorCount is expected to be the number of descriptors in
     // an individual set.  The pool size will be calculated accordingly.
@@ -197,31 +215,25 @@ class DynamicDescriptorPool final : angle::NonCopyable
                        const VkDescriptorPoolSize *setSizes,
                        size_t setSizeCount,
                        VkDescriptorSetLayout descriptorSetLayout);
-    void destroy(VkDevice device);
-    void release(ContextVk *contextVk);
+    void destroy(RendererVk *renderer, VulkanCacheType cacheType);
+    void release(ContextVk *contextVk, VulkanCacheType cacheType);
+
+    bool valid() const { return !mDescriptorPools.empty(); }
 
     // We use the descriptor type to help count the number of free sets.
     // By convention, sets are indexed according to the constants in vk_cache_utils.h.
-    ANGLE_INLINE angle::Result allocateDescriptorSets(
-        ContextVk *contextVk,
-        const DescriptorSetLayout &descriptorSetLayout,
-        uint32_t descriptorSetCount,
-        RefCountedDescriptorPoolBinding *bindingOut,
-        VkDescriptorSet *descriptorSetsOut)
-    {
-        bool ignoreNewPoolAllocated;
-        return allocateSetsAndGetInfo(contextVk, descriptorSetLayout, descriptorSetCount,
-                                      bindingOut, descriptorSetsOut, &ignoreNewPoolAllocated);
-    }
-
-    // We use the descriptor type to help count the number of free sets.
-    // By convention, sets are indexed according to the constants in vk_cache_utils.h.
-    angle::Result allocateSetsAndGetInfo(ContextVk *contextVk,
+    angle::Result allocateDescriptorSets(ContextVk *contextVk,
                                          const DescriptorSetLayout &descriptorSetLayout,
                                          uint32_t descriptorSetCount,
                                          RefCountedDescriptorPoolBinding *bindingOut,
-                                         VkDescriptorSet *descriptorSetsOut,
-                                         bool *newPoolAllocatedOut);
+                                         VkDescriptorSet *descriptorSetsOut);
+
+    angle::Result getOrAllocateDescriptorSet(ContextVk *contextVk,
+                                             const DescriptorSetDesc &desc,
+                                             const DescriptorSetLayout &descriptorSetLayout,
+                                             RefCountedDescriptorPoolBinding *bindingOut,
+                                             VkDescriptorSet *descriptorSetOut,
+                                             DescriptorCacheResult *cacheResultOut);
 
     // For testing only!
     static uint32_t GetMaxSetsPerPoolForTesting();
@@ -242,6 +254,42 @@ class DynamicDescriptorPool final : angle::NonCopyable
     // from the pool matches the layout that the pool was created for, to ensure that the free
     // descriptor count is accurate and new pools are created appropriately.
     VkDescriptorSetLayout mCachedDescriptorSetLayout;
+};
+
+struct DescriptorSetAndPoolIndex
+{
+    VkDescriptorSet descriptorSet;
+    size_t poolIndex;
+};
+
+using RefCountedDescriptorPool = RefCounted<DynamicDescriptorPool>;
+using DescriptorPoolPointer    = BindingPointer<DynamicDescriptorPool>;
+
+class DescriptorMetaCache final : angle::NonCopyable
+{
+  public:
+    DescriptorMetaCache();
+    ~DescriptorMetaCache();
+
+    void destroy(RendererVk *rendererVk, VulkanCacheType cacheType);
+
+    angle::Result bindCachedDescriptorPool(Context *context,
+                                           const DescriptorSetLayoutDesc &descriptorSetLayoutDesc,
+                                           uint32_t descriptorCountMultiplier,
+                                           DescriptorSetLayoutCache *descriptorSetLayoutCache,
+                                           DescriptorPoolPointer *descriptorPoolOut);
+
+    void getDescriptorSetCacheStats(CacheStats *accum) const
+    {
+        // for (const auto &iter : mPayload)
+        //{
+        //    const RefCountedCachedDescriptorPool &pool = iter.second;
+        //    pool.get().getCacheStats(accum);
+        //}
+    }
+
+  private:
+    std::unordered_map<DescriptorSetLayoutDesc, RefCountedDescriptorPool> mPayload;
 };
 
 template <typename Pool>
