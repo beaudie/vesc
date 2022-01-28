@@ -60,6 +60,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "a1b91075_6806ed7e",
+        "filename": "include/platform/FeaturesVk.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 619,
+      "author": {
+        "id": 1125810
+      },
+      "writtenOn": "2022-01-28T23:17:36Z",
+      "side": 1,
+      "message": "strongly suggest being explicit: rather than ‘y-inverted’, talk about top-left origin vs. bottom-left origin",
+      "parentUuid": "690cc1d4_318d4752",
+      "range": {
+        "startLine": 619,
+        "startChar": 9,
+        "endLine": 619,
+        "endChar": 25
+      },
+      "revId": "7839b0d63b5faef1ae6c6d94107285c44e10ba57",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "ffb0c1f2_8694264b",
         "filename": "src/libANGLE/renderer/vulkan/RendererVk.cpp",
         "patchSetId": 1
