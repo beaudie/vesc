@@ -16,6 +16,23 @@
       "message": "LGTM.",
       "revId": "2661658b9284c9357b1ef9b83472950ef35c5b1e",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "e20b0797_d39d2886",
+        "filename": "src/libANGLE/renderer/vulkan/TextureVk.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 2729,
+      "author": {
+        "id": 1520902
+      },
+      "writtenOn": "2022-01-28T23:02:13Z",
+      "side": 1,
+      "message": "Hi Jamie, this is just a question for learning purpose, I am wondering why you don\u0027t get a compiling error with this extra \u0026. When I add it in code, the compiler is complaining: \"cannot take the address of an rvalue of type \u0027const rx::vk::YcbcrConversionDesc*\u0027\"",
+      "revId": "2661658b9284c9357b1ef9b83472950ef35c5b1e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
