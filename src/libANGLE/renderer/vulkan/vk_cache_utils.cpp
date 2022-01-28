@@ -3572,7 +3572,7 @@ angle::Result RenderPassCache::getRenderPassWithOpsImpl(ContextVk *contextVk,
         outerIt            = emplaceResult.first;
     }
 
-    mRenderPassWithOpsCacheStats.miss();
+    mRenderPassWithOpsCacheStats.missAndIncrementSize();
     vk::RenderPassHelper newRenderPass;
     ANGLE_TRY(vk::InitializeRenderPassFromDesc(contextVk, desc, attachmentOps, &newRenderPass));
 
@@ -3702,7 +3702,7 @@ angle::Result DescriptorSetLayoutCache::getDescriptorSetLayout(
         return angle::Result::Continue;
     }
 
-    mCacheStats.miss();
+    mCacheStats.missAndIncrementSize();
     // We must unpack the descriptor set layout description.
     vk::DescriptorSetLayoutBindingVector bindingVector;
     std::vector<VkSampler> immutableSamplers;
@@ -3763,7 +3763,7 @@ angle::Result PipelineLayoutCache::getPipelineLayout(
         return angle::Result::Continue;
     }
 
-    mCacheStats.miss();
+    mCacheStats.missAndIncrementSize();
     // Note this does not handle gaps in descriptor set layouts gracefully.
     angle::FixedVector<VkDescriptorSetLayout, vk::kMaxDescriptorSetLayouts> setLayoutHandles;
     for (const vk::BindingPointer<vk::DescriptorSetLayout> &layoutPtr : descriptorSetLayouts)
@@ -3859,7 +3859,7 @@ angle::Result SamplerYcbcrConversionCache::getSamplerYcbcrConversion(
         return angle::Result::Continue;
     }
 
-    mCacheStats.miss();
+    mCacheStats.missAndIncrementSize();
 
     // Create the VkSamplerYcbcrConversion
     VkSamplerYcbcrConversionCreateInfo samplerYcbcrConversionInfo = {};
@@ -3949,7 +3949,7 @@ angle::Result SamplerCache::getSampler(ContextVk *contextVk,
         return angle::Result::Continue;
     }
 
-    mCacheStats.miss();
+    mCacheStats.missAndIncrementSize();
     vk::SamplerHelper samplerHelper(contextVk);
     ANGLE_TRY(desc.init(contextVk, &samplerHelper.get()));
 
@@ -3961,13 +3961,6 @@ angle::Result SamplerCache::getSampler(ContextVk *contextVk,
     contextVk->getRenderer()->onAllocateHandle(vk::HandleType::Sampler);
 
     return angle::Result::Continue;
-}
-
-// DriverUniformsDescriptorSetCache implementation.
-void DriverUniformsDescriptorSetCache::destroy(RendererVk *rendererVk)
-{
-    accumulateCacheStats(rendererVk);
-    mPayload.clear();
 }
 
 // DescriptorSetCache implementation.
