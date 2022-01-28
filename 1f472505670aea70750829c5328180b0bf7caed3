@@ -26,6 +26,30 @@
     {
       "unresolved": false,
       "key": {
+        "uuid": "dd3012f8_2e906e8e",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 11
+      },
+      "lineNbr": 16,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2022-01-28T17:59:04Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "ce264fe9_acb3a179",
+      "range": {
+        "startLine": 16,
+        "startChar": 59,
+        "endLine": 16,
+        "endChar": 63
+      },
+      "revId": "1f472505670aea70750829c5328180b0bf7caed3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
         "uuid": "88859381_3306696b",
         "filename": "/PATCHSET_LEVEL",
         "patchSetId": 11
@@ -60,6 +84,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "3e21f321_01fc5e2c",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.h",
+        "patchSetId": 11
+      },
+      "lineNbr": 324,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2022-01-28T17:59:04Z",
+      "side": 1,
+      "message": "Because the caller already checked. The main motivation is that if is is completed, we can avoid freeing mUse and alloc a new mUse and free it immediately after. (see BufferHelper::release).",
+      "parentUuid": "002f9419_365a866c",
+      "revId": "1f472505670aea70750829c5328180b0bf7caed3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "06d3a411_6c870af2",
         "filename": "src/libANGLE/renderer/vulkan/ResourceVk.h",
         "patchSetId": 11
@@ -71,6 +113,24 @@
       "writtenOn": "2022-01-28T01:40:48Z",
       "side": 1,
       "message": "This looks unused.",
+      "revId": "1f472505670aea70750829c5328180b0bf7caed3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "9ab38486_c0b5b81e",
+        "filename": "src/libANGLE/renderer/vulkan/ResourceVk.h",
+        "patchSetId": 11
+      },
+      "lineNbr": 57,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2022-01-28T17:59:04Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "06d3a411_6c870af2",
       "revId": "1f472505670aea70750829c5328180b0bf7caed3",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
@@ -88,6 +148,30 @@
       "writtenOn": "2022-01-28T01:40:48Z",
       "side": 1,
       "message": "I don\u0027t understand this comment since `mSuballocation` can be written to.   How is the lifetime only tracked by `mReadOnlyUse`?\n\nAlso, if it\u0027s lifetime is only tracked by `mReadOnlyUse`, why would `mReadWriteUse` need to be reset here?",
+      "range": {
+        "startLine": 4230,
+        "startChar": 0,
+        "endLine": 4231,
+        "endChar": 38
+      },
+      "revId": "1f472505670aea70750829c5328180b0bf7caed3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "e618bd30_eab1c72c",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 11
+      },
+      "lineNbr": 4231,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2022-01-28T17:59:04Z",
+      "side": 1,
+      "message": "That is why I think mReadOnlyUse is poorly named. It really not trakcing read only access but also write access, so really is mAnyUse. But anyway, I did not change the real funcitonality here, the lifetime of mSuballocation is tracked by mReadOnlyUse before this CL. If this comment made it more confusing, I can remove it.\n\nmReadWriteUse needs to be reset here is because after this call, if BufferHelper object gets reused (for example by allocateForVertexConversion), we do not accidentally get into slow path because write access is not complete.",
+      "parentUuid": "a234a56a_b573825f",
       "range": {
         "startLine": 4230,
         "startChar": 0,
