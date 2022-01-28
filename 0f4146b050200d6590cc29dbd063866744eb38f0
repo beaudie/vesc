@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "ac888c5a_9e7b1bdd",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2022-01-28T01:00:16Z",
+      "side": 1,
+      "message": "Here is the testing data on Pixel6: \n1) Apply https://chromium-review.googlesource.com/c/angle/angle/+/3421377\n2) Run: \nout/ReleaseWithSymbols/angle_perftests --gtest_filter\u003dTracePerfTest.Run/vulkan_offscreen_gardenscapes --enable-all-trace-tests --single-process-tests --verbose --verbose-logging --local-output  --minimize-gpu-work --max-steps-performed 10000  --num-retries 0\n\nAfter:\n* e285344e9 (HEAD -\u003e minimizeGPUWork_drawElementsKeepCount6) (2022-01-27) cclao@google.com Vulkan: Cache commonly used 6 ushorts stream index array data\nI   61.648s run_tests_on_device(0C211FDF600050)  Mean result time: 2.4867 ms.\nI   61.992s run_tests_on_device(0C211FDF600050)  Mean result time: 2.3863 ms.\nI   63.240s run_tests_on_device(0C211FDF600050)  Mean result time: 2.4216 ms.\nI   60.919s run_tests_on_device(0C211FDF600050)  Mean result time: 2.2854 ms.\nI   60.953s run_tests_on_device(0C211FDF600050)  Mean result time: 2.2840 ms.\n(average 2.37 ms)\n\nBefore:\n* adf894866 (2022-01-27) cclao@google.com Debug: Modify minimize-gpu-work to keep drawElements(count\u003d\u003d6)\nI   62.809s run_tests_on_device(0C211FDF600050)  Mean result time: 2.4880 ms.\nI   65.307s run_tests_on_device(0C211FDF600050)  Mean result time: 2.6395 ms.\nI   62.525s run_tests_on_device(0C211FDF600050)  Mean result time: 2.5751 ms.\nI   65.020s run_tests_on_device(0C211FDF600050)  Mean result time: 2.5217 ms.\nI   62.518s run_tests_on_device(0C211FDF600050)  Mean result time: 2.4806 ms.\n(average 2.54 ms)\t",
+      "revId": "0f4146b050200d6590cc29dbd063866744eb38f0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
