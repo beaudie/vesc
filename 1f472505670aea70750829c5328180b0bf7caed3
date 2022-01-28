@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "88859381_3306696b",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 11
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2022-01-28T00:22:36Z",
+      "side": 1,
+      "message": "Here are the testing result with \nout/ReleaseWithSymbols/angle_perftests --gtest_filter\u003dTracePerfTest.Run/vulkan_offscreen_gardenscapes --enable-all-trace-tests --single-process-tests --verbose --verbose-logging --local-output  --minimize-gpu-work --max-steps-performed 10000  --num-retries 0\n\nAfter:\n* 60867ffbf (HEAD -\u003e suballocationGarbageList) (2022-01-27) cclao@google.com Vulkan: Add a dedicated suballocation garbage list\nI   59.284s run_tests_on_device(0C211FDF600050)  Mean result time: 2.1589 ms.\nI   60.741s run_tests_on_device(0C211FDF600050)  Mean result time: 2.2255 ms.\nI   60.035s run_tests_on_device(0C211FDF600050)  Mean result time: 2.2593 ms.\nI   60.536s run_tests_on_device(0C211FDF600050)  Mean result time: 2.2261 ms.\nI   59.014s run_tests_on_device(0C211FDF600050)  Mean result time: 2.1113 ms.\n(average 2.20 ms)\n\nBefore:\n* 706e44b06 (origin/main, origin/HEAD) (2022-01-27) timvp@google.com Tests: Add PUBG Mobile launch trace\nI   63.264s run_tests_on_device(0C211FDF600050)  Mean result time: 2.4995 ms.\nI   63.771s run_tests_on_device(0C211FDF600050)  Mean result time: 2.4954 ms.\nI   63.252s run_tests_on_device(0C211FDF600050)  Mean result time: 2.6893 ms.\nI   63.857s run_tests_on_device(0C211FDF600050)  Mean result time: 2.5713 ms.\nI   61.656s run_tests_on_device(0C211FDF600050)  Mean result time: 2.5042 ms.\n(average 2.55 ms)\n",
+      "revId": "1f472505670aea70750829c5328180b0bf7caed3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
