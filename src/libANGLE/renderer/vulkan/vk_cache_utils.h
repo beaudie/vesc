@@ -220,7 +220,7 @@ class alignas(4) RenderPassDesc final
     uint8_t mSamples;
     uint8_t mColorAttachmentRange;
 
-    // Multivew
+    // Multiview
     uint8_t mViewCount;
 
     // sRGB
@@ -771,6 +771,8 @@ class DescriptorSetLayoutDesc final
     void unpackBindings(DescriptorSetLayoutBindingVector *bindings,
                         std::vector<VkSampler> *immutableSamplers) const;
 
+    bool empty() const { return *this == DescriptorSetLayoutDesc(); }
+
   private:
     // There is a small risk of an issue if the sampler cache is evicted but not the descriptor
     // cache we would have an invalid handle here. Thus propose follow-up work:
@@ -1136,13 +1138,21 @@ class DescriptorSetDesc
 
     // Specific helpers for uniforms/xfb descriptors.
     static constexpr size_t kDefaultUniformBufferWordOffset = 0;
-    static constexpr size_t kXfbBufferSerialWordOffset      = 1;
-    static constexpr size_t kXfbBufferOffsetWordOffset      = 2;
-    static constexpr size_t kXfbWordStride                  = 2;
+    static constexpr size_t kDefaultUniformSizeOffset       = 1;
+    static constexpr size_t kXfbBufferSerialWordOffset =
+        kDefaultUniformSizeOffset + static_cast<size_t>(gl::ShaderType::EnumCount);
+    static constexpr size_t kXfbBufferOffsetWordOffset = kXfbBufferSerialWordOffset + 1;
+    static constexpr size_t kXfbWordStride             = 2;
 
     void updateDefaultUniformBuffer(BufferSerial bufferSerial)
     {
         setBufferSerial(kDefaultUniformBufferWordOffset, 1, 0, bufferSerial);
+    }
+
+    void updateDefaultUniformBufferSize(gl::ShaderType shaderType, VkDeviceSize dataSize)
+    {
+        setClamped64BitValue(kDefaultUniformSizeOffset, 1, static_cast<size_t>(shaderType),
+                             dataSize);
     }
 
     void updateTransformFeedbackBuffer(size_t xfbIndex,
@@ -1489,6 +1499,7 @@ enum class VulkanCacheType
     UniformsAndXfbDescriptors,
     ShaderBuffersDescriptors,
     Framebuffer,
+    DescriptorMetaCache,
     EnumCount
 };
 
@@ -1507,8 +1518,8 @@ class CacheStats final : angle::NonCopyable
         mMissCount += stats.mMissCount;
     }
 
-    uint64_t getHitCount() const { return mHitCount; }
-    uint64_t getMissCount() const { return mMissCount; }
+    uint32_t getHitCount() const { return mHitCount; }
+    uint32_t getMissCount() const { return mMissCount; }
 
     ANGLE_INLINE double getHitRatio() const
     {
@@ -1529,8 +1540,8 @@ class CacheStats final : angle::NonCopyable
     }
 
   private:
-    uint64_t mHitCount;
-    uint64_t mMissCount;
+    uint32_t mHitCount;
+    uint32_t mMissCount;
 };
 
 template <VulkanCacheType CacheType>
@@ -1543,6 +1554,8 @@ class HasCacheStats : angle::NonCopyable
         accum->accumulateCacheStats(CacheType, mCacheStats);
         mCacheStats.reset();
     }
+
+    void getCacheStats(CacheStats *accum) const { accum->accumulate(mCacheStats); }
 
   protected:
     HasCacheStats()          = default;
@@ -1777,7 +1790,21 @@ class DescriptorSetCache final : angle::NonCopyable
 
     void destroy(RendererVk *rendererVk, VulkanCacheType cacheType);
 
-    ANGLE_INLINE bool get(const vk::DescriptorSetDesc &desc, VkDescriptorSet *descriptorSet)
+    DescriptorSetCache(DescriptorSetCache &&other) : DescriptorSetCache()
+    {
+        *this = std::move(other);
+    }
+
+    DescriptorSetCache &operator=(DescriptorSetCache &&other)
+    {
+        std::swap(mPayload, other.mPayload);
+        return *this;
+    }
+
+    void clear() { mPayload.clear(); }
+
+    ANGLE_INLINE bool getDescriptorSet(const vk::DescriptorSetDesc &desc,
+                                       VkDescriptorSet *descriptorSet)
     {
         auto iter = mPayload.find(desc);
         if (iter != mPayload.end())
@@ -1790,7 +1817,8 @@ class DescriptorSetCache final : angle::NonCopyable
         return false;
     }
 
-    ANGLE_INLINE void insert(const vk::DescriptorSetDesc &desc, VkDescriptorSet descriptorSet)
+    ANGLE_INLINE void insertDescriptorSet(const vk::DescriptorSetDesc &desc,
+                                          VkDescriptorSet descriptorSet)
     {
         mPayload.emplace(desc, descriptorSet);
     }
