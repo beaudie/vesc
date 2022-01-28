@@ -6700,4 +6700,14 @@ ProgramExecutableVk *ContextVk::getExecutable() const
     }
     return nullptr;
 }
+
+angle::Result ContextVk::getDynamicDescriptorPool(
+    const vk::DescriptorSetLayoutDesc &descriptorSetLayoutDesc,
+    uint32_t descriptorCountMultiplier,
+    vk::DynamicDescriptorPoolPointer *descriptorPoolOut)
+{
+    return mShareGroupVk->getDynamicDescriptorPoolCache().getDynamicDescriptorPool(
+        this, descriptorSetLayoutDesc, descriptorCountMultiplier,
+        &mShareGroupVk->getDescriptorSetLayoutCache(), descriptorPoolOut);
+}
 }  // namespace rx

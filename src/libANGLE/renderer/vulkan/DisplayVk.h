@@ -34,6 +34,10 @@ class ShareGroupVk : public ShareGroupImpl
     // synchronous update to the caches.
     PipelineLayoutCache &getPipelineLayoutCache() { return mPipelineLayoutCache; }
     DescriptorSetLayoutCache &getDescriptorSetLayoutCache() { return mDescriptorSetLayoutCache; }
+    DynamicDescriptorPoolCache &getDynamicDescriptorPoolCache()
+    {
+        return mDynamicDescriptorPoolCache;
+    }
     ContextVkSet *getContexts() { return &mContexts; }
 
     std::vector<vk::ResourceUseList> &&releaseResourceUseLists()
@@ -55,6 +59,9 @@ class ShareGroupVk : public ShareGroupImpl
 
     // DescriptorSetLayouts are also managed in a cache.
     DescriptorSetLayoutCache mDescriptorSetLayoutCache;
+
+    // Dynamic descriptor pools are shared between contexts.
+    DynamicDescriptorPoolCache mDynamicDescriptorPoolCache;
 
     // The list of contexts within the share group
     ContextVkSet mContexts;

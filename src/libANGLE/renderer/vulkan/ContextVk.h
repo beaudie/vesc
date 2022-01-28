@@ -222,6 +222,11 @@ class ContextVk : public ContextImpl, public vk::Context, public MultisampleText
         return mShareGroupVk->getDescriptorSetLayoutCache();
     }
 
+    angle::Result getDynamicDescriptorPool(
+        const vk::DescriptorSetLayoutDesc &descriptorSetLayoutDesc,
+        uint32_t descriptorCountMultiplier,
+        vk::DynamicDescriptorPoolPointer *descriptorPoolOut);
+
     // Device loss
     gl::GraphicsResetStatus getResetStatus() override;
 

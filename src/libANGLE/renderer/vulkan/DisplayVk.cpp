@@ -407,6 +407,7 @@ void ShareGroupVk::onDestroy(const egl::Display *display)
 
     mPipelineLayoutCache.destroy(renderer);
     mDescriptorSetLayoutCache.destroy(renderer);
+    mDynamicDescriptorPoolCache.destroy(renderer);
 
     ASSERT(mResourceUseLists.empty());
 }
