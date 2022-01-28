@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "a377be95_b3d4ba2a",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1528827
+      },
+      "writtenOn": "2022-01-28T16:17:27Z",
+      "side": 1,
+      "message": "Hi,\n\nHere is my attempt at fixing this: https://bugs.chromium.org/p/angleproject/issues/detail?id\u003d6933\n\nAs suggested, I introduced a feature (true on Android), and a function for converting EGL rectangles to VK rectangles. I am not sure how to handle other cases for currentTransform !\u003d identity, so please, let me know your opinion.\n\nCheers,\nAntonio",
+      "revId": "7839b0d63b5faef1ae6c6d94107285c44e10ba57",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
