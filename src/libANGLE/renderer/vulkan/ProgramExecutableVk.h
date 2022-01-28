@@ -220,16 +220,12 @@ class ProgramExecutableVk
     friend class ProgramVk;
     friend class ProgramPipelineVk;
 
-    angle::Result allocUniformAndXfbDescriptorSet(ContextVk *contextVk,
-                                                  vk::BufferHelper *defaultUniformBuffer,
-                                                  const vk::DescriptorSetDesc &xfbBufferDesc,
-                                                  bool *newDescriptorSetAllocated);
+    angle::Result getOrAllocateUniformsAndXfbDescriptorSet(
+        ContextVk *contextVk,
+        vk::BufferHelper *defaultUniformBuffer,
+        const vk::DescriptorSetDesc &uniformsAndXfbDesc,
+        vk::DescriptorCacheResult *cacheResult);
 
-    angle::Result allocateDescriptorSet(ContextVk *contextVk,
-                                        DescriptorSetIndex descriptorSetIndex);
-    angle::Result allocateDescriptorSetAndGetInfo(ContextVk *contextVk,
-                                                  DescriptorSetIndex descriptorSetIndex,
-                                                  bool *newPoolAllocatedOut);
     void addInterfaceBlockDescriptorSetDesc(const std::vector<gl::InterfaceBlock> &blocks,
                                             const gl::ShaderType shaderType,
                                             VkDescriptorType descType,
@@ -258,31 +254,24 @@ class ProgramExecutableVk
                                                   const gl::ProgramExecutable &executable);
     angle::Result getOrAllocateShaderResourcesDescriptorSet(
         ContextVk *contextVk,
-        const vk::DescriptorSetDesc *shaderBuffersDesc,
-        VkDescriptorSet *descriptorSetOut);
+        const vk::DescriptorSetDesc *shaderBuffersDescOrNull,
+        vk::DescriptorCacheResult *cacheResultOut);
     angle::Result updateBuffersDescriptorSet(ContextVk *contextVk,
                                              const gl::ShaderType shaderType,
                                              const vk::DescriptorSetDesc &shaderBuffersDesc,
                                              const std::vector<gl::InterfaceBlock> &blocks,
                                              VkDescriptorType descriptorType,
                                              VkDeviceSize maxBoundBufferRange,
-                                             bool cacheHit);
+                                             vk::DescriptorCacheResult cacheResult);
     angle::Result updateAtomicCounterBuffersDescriptorSet(
         ContextVk *contextVk,
         const gl::ProgramExecutable &executable,
         const gl::ShaderType shaderType,
         const vk::DescriptorSetDesc &shaderBuffersDesc,
-        bool cacheHit);
+        vk::DescriptorCacheResult cacheResult);
     angle::Result updateImagesDescriptorSet(ContextVk *contextVk,
                                             const gl::ProgramExecutable &executable,
                                             const gl::ShaderType shaderType);
-
-    static angle::Result InitDynamicDescriptorPool(
-        vk::Context *context,
-        vk::DescriptorSetLayoutDesc &descriptorSetLayoutDesc,
-        VkDescriptorSetLayout descriptorSetLayout,
-        uint32_t descriptorCountMultiplier,
-        vk::DynamicDescriptorPool *dynamicDescriptorPool);
 
     void outputCumulativePerfCounters();
 
@@ -346,9 +335,9 @@ class ProgramExecutableVk
     uint32_t mNumDefaultUniformDescriptors;
     vk::BufferSerial mCurrentDefaultUniformBufferSerial;
 
-    DescriptorSetCache mUniformsAndXfbDescriptorsCache;
-    DescriptorSetCache mTextureDescriptorsCache;
-    DescriptorSetCache mShaderBufferDescriptorsCache;
+    vk::DescriptorPoolPointer mUniformsAndXfbDescriptorsCache;
+    vk::DescriptorPoolPointer mTextureDescriptorsCache;
+    vk::DescriptorPoolPointer mShaderBufferDescriptorsCache;
 
     // We keep a reference to the pipeline and descriptor set layouts. This ensures they don't get
     // deleted while this program is in use.
@@ -360,11 +349,6 @@ class ProgramExecutableVk
     // Keep bindings to the descriptor pools. This ensures the pools stay valid while the Program
     // is in use.
     vk::DescriptorSetArray<vk::RefCountedDescriptorPoolBinding> mDescriptorPoolBindings;
-
-    // Store descriptor pools here. We store the descriptors in the Program to facilitate descriptor
-    // cache management. It can also allow fewer descriptors for shaders which use fewer
-    // textures/buffers.
-    vk::DescriptorSetArray<vk::DynamicDescriptorPool> mDynamicDescriptorPools;
 
     // A set of dynamic offsets used with vkCmdBindDescriptorSets for the default uniform buffers.
     VkDescriptorType mUniformBufferDescriptorType;
