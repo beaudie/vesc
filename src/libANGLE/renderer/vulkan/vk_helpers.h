@@ -218,11 +218,26 @@ class DescriptorPoolHelper : public Resource
 using RefCountedDescriptorPoolHelper  = RefCounted<DescriptorPoolHelper>;
 using RefCountedDescriptorPoolBinding = BindingPointer<DescriptorPoolHelper>;
 
+// The CachedDescriptorPool template class implements this interface. We need to make the cache a
+// template because descriptor caches use a different descriptor key for each type of descriptor. An
+// interface callback class lets us keep DynamicDescriptorPool as simple as possible.
+class DescriptorPoolCacheCallback : angle::NonCopyable
+{
+  public:
+    virtual ~DescriptorPoolCacheCallback() {}
+    virtual void onNewDescriptorPool(size_t poolIndex, RefCountedDescriptorPoolHelper *newPool) = 0;
+    virtual void onResetDescriptorPool(size_t poolIndex,
+                                       RefCountedDescriptorPoolHelper *resetPool)               = 0;
+};
+
 class DynamicDescriptorPool final : angle::NonCopyable
 {
   public:
     DynamicDescriptorPool();
     ~DynamicDescriptorPool();
+
+    DynamicDescriptorPool(DynamicDescriptorPool &&other);
+    DynamicDescriptorPool &operator=(DynamicDescriptorPool &&other);
 
     // The DynamicDescriptorPool only handles one pool size at this time.
     // Note that setSizes[i].descriptorCount is expected to be the number of descriptors in
@@ -233,6 +248,8 @@ class DynamicDescriptorPool final : angle::NonCopyable
                        VkDescriptorSetLayout descriptorSetLayout);
     void destroy(VkDevice device);
     void release(ContextVk *contextVk);
+
+    bool valid() const { return !mDescriptorPools.empty(); }
 
     // We use the descriptor type to help count the number of free sets.
     // By convention, sets are indexed according to the constants in vk_cache_utils.h.
@@ -254,7 +271,22 @@ class DynamicDescriptorPool final : angle::NonCopyable
                                          uint32_t descriptorSetCount,
                                          RefCountedDescriptorPoolBinding *bindingOut,
                                          VkDescriptorSet *descriptorSetsOut,
-                                         bool *newPoolAllocatedOut);
+                                         bool *newPoolAllocatedOut)
+    {
+        return allocateSetsWithCallback(contextVk, descriptorSetLayout, descriptorSetCount,
+                                        bindingOut, descriptorSetsOut, newPoolAllocatedOut,
+                                        nullptr);
+    }
+
+    angle::Result allocateSetsWithCallback(ContextVk *contextVk,
+                                           const VkDescriptorSetLayout *descriptorSetLayout,
+                                           uint32_t descriptorSetCount,
+                                           RefCountedDescriptorPoolBinding *bindingOut,
+                                           VkDescriptorSet *descriptorSetsOut,
+                                           bool *newPoolAllocatedOut,
+                                           DescriptorPoolCacheCallback *callback);
+
+    void bindDescriptorPool(size_t poolIndex, RefCountedDescriptorPoolBinding *bindingOut);
 
     // For testing only!
     static uint32_t GetMaxSetsPerPoolForTesting();
@@ -263,7 +295,7 @@ class DynamicDescriptorPool final : angle::NonCopyable
     static void SetMaxSetsPerPoolMultiplierForTesting(uint32_t maxSetsPerPool);
 
   private:
-    angle::Result allocateNewPool(ContextVk *contextVk);
+    angle::Result allocateNewPool(ContextVk *contextVk, DescriptorPoolCacheCallback *callback);
 
     static constexpr uint32_t kMaxSetsPerPoolMax = 512;
     static uint32_t mMaxSetsPerPool;
@@ -276,6 +308,118 @@ class DynamicDescriptorPool final : angle::NonCopyable
     // descriptor count is accurate and new pools are created appropriately.
     VkDescriptorSetLayout mCachedDescriptorSetLayout;
 };
+
+struct DescriptorSetAndPoolIndex
+{
+    VkDescriptorSet descriptorSet;
+    size_t poolIndex;
+};
+
+enum class DescriptorCacheResult
+{
+    CacheHit,
+    NewAllocation,
+};
+
+template <typename DescriptorDescT, VulkanCacheType CacheType>
+class CachedDescriptorPool final : public DescriptorPoolCacheCallback,
+                                   public HasCacheStats<CacheType>
+{
+  public:
+    CachedDescriptorPool();
+    CachedDescriptorPool(DynamicDescriptorPool &&pool);
+    ~CachedDescriptorPool() override;
+
+    CachedDescriptorPool(CachedDescriptorPool &&other);
+    CachedDescriptorPool &operator=(CachedDescriptorPool &&other);
+
+    void destroy(RendererVk *renderer);
+    void release(ContextVk *contextVk);
+
+    void onNewDescriptorPool(size_t poolIndex, RefCountedDescriptorPoolHelper *newPool) override;
+    void onResetDescriptorPool(size_t poolIndex,
+                               RefCountedDescriptorPoolHelper *resetPool) override;
+
+    angle::Result getOrAllocateDescriptorSet(ContextVk *contextVk,
+                                             const DescriptorDescT &desc,
+                                             const DescriptorSetLayout &descriptorSetLayout,
+                                             RefCountedDescriptorPoolBinding *descriptorPoolBinding,
+                                             VkDescriptorSet *descriptorSetOut,
+                                             DescriptorCacheResult *cacheResultOut);
+
+    angle::Result allocateDescriptorSet(ContextVk *contextVk,
+                                        const DescriptorSetLayout &descriptorSetLayout,
+                                        RefCountedDescriptorPoolBinding *descriptorPoolBinding,
+                                        VkDescriptorSet *descriptorSetOut);
+
+    bool valid() const { return mDescriptorPool.valid(); }
+
+  private:
+    using DescriptorInnerCache = DescriptorSetCache<DescriptorDescT, CacheType>;
+
+    DynamicDescriptorPool mDescriptorPool;
+
+    // This vector is indexed by the pool index of the dynamic descriptor pool. Because it caches
+    // the descriptor sets in each pool, we must reset the caches when the DynamicDescriptorPool
+    // reuses a specific pool index. We do this using the DescriptorPoolCacheCallback calls.
+    std::vector<DescriptorInnerCache> mDescriptorSetCache;
+    size_t mCurrentCacheIndex;
+};
+
+template <typename DescriptorDescT, VulkanCacheType CacheType>
+using RefCountedCachedDescriptorPool = RefCounted<CachedDescriptorPool<DescriptorDescT, CacheType>>;
+
+template <typename DescriptorDescT, VulkanCacheType CacheType>
+using CachedDescriptorPoolPointer =
+    BindingPointer<CachedDescriptorPool<DescriptorDescT, CacheType>>;
+
+template <typename DescriptorDescT, VulkanCacheType CacheType>
+class DescriptorMetaCache final : public HasCacheStats<VulkanCacheType::DescriptorMetaCache>
+{
+  public:
+    using CachedPool     = CachedDescriptorPool<DescriptorDescT, CacheType>;
+    using RefCountedPool = RefCountedCachedDescriptorPool<DescriptorDescT, CacheType>;
+    using PoolPointer    = CachedDescriptorPoolPointer<DescriptorDescT, CacheType>;
+
+    DescriptorMetaCache();
+    ~DescriptorMetaCache() override;
+
+    void destroy(RendererVk *rendererVk);
+
+    angle::Result bindCachedDescriptorPool(Context *context,
+                                           const DescriptorSetLayoutDesc &descriptorSetLayoutDesc,
+                                           uint32_t descriptorCountMultiplier,
+                                           DescriptorSetLayoutCache *descriptorSetLayoutCache,
+                                           PoolPointer *descriptorPoolOut);
+
+    void getDescriptorSetCacheStats(CacheStats *accum) const
+    {
+        for (const auto &iter : mPayload)
+        {
+            const RefCountedPool &pool = iter.second;
+            pool.get().getCacheStats(accum);
+        }
+    }
+
+  private:
+    std::unordered_map<DescriptorSetLayoutDesc, RefCountedPool> mPayload;
+};
+
+using UniformsAndXfbDescriptorCache =
+    DescriptorMetaCache<UniformsAndXfbDescriptorDesc, VulkanCacheType::UniformsAndXfbDescriptors>;
+using TextureDescriptorCache =
+    DescriptorMetaCache<TextureDescriptorDesc, VulkanCacheType::TextureDescriptors>;
+using ShaderBuffersDescriptorCache =
+    DescriptorMetaCache<ShaderBuffersDescriptorDesc, VulkanCacheType::ShaderBuffersDescriptors>;
+
+using UniformsAndXfbDescriptorCachePointer =
+    CachedDescriptorPoolPointer<UniformsAndXfbDescriptorDesc,
+                                VulkanCacheType::UniformsAndXfbDescriptors>;
+using TextureDescriptorCachePointer =
+    CachedDescriptorPoolPointer<TextureDescriptorDesc, VulkanCacheType::TextureDescriptors>;
+using ShaderBuffersDescriptorCachePointer =
+    CachedDescriptorPoolPointer<ShaderBuffersDescriptorDesc,
+                                VulkanCacheType::ShaderBuffersDescriptors>;
 
 template <typename Pool>
 class DynamicallyGrowingPool : angle::NonCopyable
