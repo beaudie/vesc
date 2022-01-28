@@ -908,6 +908,10 @@ void ContextVk::onDestroy(const gl::Context *context)
     mCommandPools.outsideRenderPassPool.destroy(device);
     mCommandPools.renderPassPool.destroy(device);
 
+    mUniformsAndXfbDescriptorCache.destroy(mRenderer);
+    mTextureDescriptorCache.destroy(mRenderer);
+    mShaderBuffersDescriptorCache.destroy(mRenderer);
+
     ASSERT(mCurrentGarbage.empty());
     ASSERT(mResourceUseList.empty());
 }
@@ -4588,6 +4592,8 @@ angle::Result ContextVk::invalidateCurrentShaderResources(gl::Command command)
         AppendBufferVectorToDesc(&mShaderBuffersDescriptorDesc, atomicCounterBuffers,
                                  mState.getAtomicCounterBuffersMask(), isDynamicDescriptor,
                                  appendOffset);
+
+        // Storage images.
     }
 
     return angle::Result::Continue;
@@ -6786,5 +6792,33 @@ ProgramExecutableVk *ContextVk::getExecutable() const
         }
     }
     return nullptr;
+}
+
+angle::Result ContextVk::bindUniformsAndXfbDescriptorCache(
+    const vk::DescriptorSetLayoutDesc &descriptorSetLayoutDesc,
+    vk::UniformsAndXfbDescriptorCachePointer *cachePointerOut)
+{
+    return mUniformsAndXfbDescriptorCache.bindCachedDescriptorPool(
+        this, descriptorSetLayoutDesc, 1, &mShareGroupVk->getDescriptorSetLayoutCache(),
+        cachePointerOut);
+}
+
+angle::Result ContextVk::bindTextureDescriptorCache(
+    const vk::DescriptorSetLayoutDesc &descriptorSetLayoutDesc,
+    uint32_t descriptorCountMultiplier,
+    vk::TextureDescriptorCachePointer *cachePointerOut)
+{
+    return mTextureDescriptorCache.bindCachedDescriptorPool(
+        this, descriptorSetLayoutDesc, descriptorCountMultiplier,
+        &mShareGroupVk->getDescriptorSetLayoutCache(), cachePointerOut);
+}
+
+angle::Result ContextVk::bindShaderResourcesDescriptorCache(
+    const vk::DescriptorSetLayoutDesc &descriptorSetLayoutDesc,
+    vk::ShaderBuffersDescriptorCachePointer *cachePointerOut)
+{
+    return mShaderBuffersDescriptorCache.bindCachedDescriptorPool(
+        this, descriptorSetLayoutDesc, 1, &mShareGroupVk->getDescriptorSetLayoutCache(),
+        cachePointerOut);
 }
 }  // namespace rx
