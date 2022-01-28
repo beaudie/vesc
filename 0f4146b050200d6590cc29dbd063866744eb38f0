@@ -161,6 +161,30 @@
       },
       "revId": "0f4146b050200d6590cc29dbd063866744eb38f0",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "e174e5fe_ecc32b51",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 1250,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-01-28T20:17:15Z",
+      "side": 1,
+      "message": "And the optimization could also live the front-end",
+      "parentUuid": "5bcd4b32_068e7765",
+      "range": {
+        "startLine": 1250,
+        "startChar": 20,
+        "endLine": 1250,
+        "endChar": 77
+      },
+      "revId": "0f4146b050200d6590cc29dbd063866744eb38f0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
