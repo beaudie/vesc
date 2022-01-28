@@ -259,7 +259,14 @@ void KHRONOS_APIENTRY DrawElementsMinimizedProc(GLenum mode,
                                                 GLenum type,
                                                 const void *indices)
 {
-    glDrawElements(GL_POINTS, 1, type, indices);
+    if (count == 6 && type == GL_UNSIGNED_SHORT)
+    {
+        glDrawElements(GL_POINTS, count, type, indices);
+    }
+    else
+    {
+        glDrawElements(GL_POINTS, 1, type, indices);
+    }
 }
 
 void KHRONOS_APIENTRY DrawElementsIndirectMinimizedProc(GLenum mode,
