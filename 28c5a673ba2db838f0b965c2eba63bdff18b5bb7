@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "662ae0be_fd5fc9d8",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 11
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1359249
+      },
+      "writtenOn": "2022-01-28T16:38:50Z",
+      "side": 1,
+      "message": "Hmm, failure. There must be another path, maybe calling Swap, that isn\u0027t SINGLE_BUFFER? and isn\u0027t calling ANI, or actually existing early from ANI.\nmNeedToAcquireNextSwapchainImage seems to be in the picture again.",
+      "revId": "28c5a673ba2db838f0b965c2eba63bdff18b5bb7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
