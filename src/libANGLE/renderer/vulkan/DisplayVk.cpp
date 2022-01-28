@@ -412,6 +412,9 @@ void ShareGroupVk::onDestroy(const egl::Display *display)
 
     mPipelineLayoutCache.destroy(renderer);
     mDescriptorSetLayoutCache.destroy(renderer);
+    mUniformsAndXfbDescriptorCache.destroy(renderer);
+    mTextureDescriptorCache.destroy(renderer);
+    mShaderBuffersDescriptorCache.destroy(renderer);
 
     ASSERT(mResourceUseLists.empty());
 }
