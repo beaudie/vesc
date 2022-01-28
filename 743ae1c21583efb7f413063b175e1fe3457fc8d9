@@ -16,6 +16,24 @@
       "message": "LGTM if nothing breaks!",
       "revId": "743ae1c21583efb7f413063b175e1fe3457fc8d9",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "65ede656_4c288a4b",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1002745
+      },
+      "writtenOn": "2022-01-28T20:20:28Z",
+      "side": 1,
+      "message": "Validated it in Chromium here and all ChromeOS bots passed:\nhttps://chromium-review.googlesource.com/c/chromium/src/+/3424817",
+      "parentUuid": "019c6d21_5f964fc7",
+      "revId": "743ae1c21583efb7f413063b175e1fe3457fc8d9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
