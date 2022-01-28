@@ -53,6 +53,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "485a2c63_502cb679",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2022-01-28T19:59:46Z",
+      "side": 1,
+      "message": "Ah, I hadn\u0027t looked at your new code. The difference between my suggestion and your implementation is that I would have implemented an unlimited cache, and would have used size \u003c\u003d 6 because that would also cover potential other less frequent usage patterns.",
+      "parentUuid": "ce3daf38_0d33b25d",
+      "revId": "0f4146b050200d6590cc29dbd063866744eb38f0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "8c4c0402_24216963",
@@ -78,6 +96,29 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "9d4cc5d2_1cc512c2",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 1237,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2022-01-28T19:59:46Z",
+      "side": 1,
+      "message": "nit: not necessary to reinterpret_cast",
+      "range": {
+        "startLine": 1237,
+        "startChar": 35,
+        "endLine": 1237,
+        "endChar": 51
+      },
+      "revId": "0f4146b050200d6590cc29dbd063866744eb38f0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "876cfd3d_d40255d3",
         "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
         "patchSetId": 4
@@ -94,6 +135,29 @@
         "startChar": 0,
         "endLine": 1243,
         "endChar": 13
+      },
+      "revId": "0f4146b050200d6590cc29dbd063866744eb38f0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "5bcd4b32_068e7765",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 1250,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2022-01-28T19:59:46Z",
+      "side": 1,
+      "message": "this is a bit suspect. How about we refactor our logic to store the cache inside the vertex array instead, so the VAO can manage the ownership of the element array buffer handle. there should be no duplication possible b/c client pointers are not valid with user VAOs.",
+      "range": {
+        "startLine": 1250,
+        "startChar": 20,
+        "endLine": 1250,
+        "endChar": 77
       },
       "revId": "0f4146b050200d6590cc29dbd063866744eb38f0",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
