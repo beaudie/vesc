@@ -51,6 +51,24 @@
       "parentUuid": "329cd938_1ebdb01b",
       "revId": "325721029749f0f28f5c7fdb7ca790d7b903f3fd",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "22f76638_284f11d9",
+        "filename": "src/libANGLE/Context.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 3200,
+      "author": {
+        "id": 1340059
+      },
+      "writtenOn": "2022-01-28T04:39:33Z",
+      "side": 1,
+      "message": "Since this is the version string exposed to webGL, it\u0027s not what chromium parses to determine the driver version. I don\u0027t think the parsers will see this version string.",
+      "parentUuid": "866c076f_12d5456f",
+      "revId": "325721029749f0f28f5c7fdb7ca790d7b903f3fd",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
