@@ -16,6 +16,24 @@
       "message": "Hmm, failure. There must be another path, maybe calling Swap, that isn\u0027t SINGLE_BUFFER? and isn\u0027t calling ANI, or actually existing early from ANI.\nmNeedToAcquireNextSwapchainImage seems to be in the picture again.",
       "revId": "28c5a673ba2db838f0b965c2eba63bdff18b5bb7",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "f0346143_e23cbe7c",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 11
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-01-28T19:21:23Z",
+      "side": 1,
+      "message": "Ok I have a theory as to what\u0027s going on. Since you are calling vkQueuePresent as a workaround, VVL is considering the image given back to the swapchain, hence expecting an ANI.\n\nYou should be able to fix this by adding:\n\n    if (mSwapchainPresentMode \u003d\u003d VK_PRESENT_MODE_SHARED_DEMAND_REFRESH_KHR)\n    {\n        ANGLE_VK_TRY(context, acquireNextSwapchainImageImpl(context));\n    }\n\nAt the end of present()?\n\nOr just go back to PS10, that seems more appropriate now that we know ANI needs to be called every frame.",
+      "parentUuid": "662ae0be_fd5fc9d8",
+      "revId": "28c5a673ba2db838f0b965c2eba63bdff18b5bb7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
