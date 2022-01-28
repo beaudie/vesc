@@ -278,13 +278,6 @@ class ProgramExecutableVk
                                             const gl::ProgramExecutable &executable,
                                             const gl::ShaderType shaderType);
 
-    static angle::Result InitDynamicDescriptorPool(
-        vk::Context *context,
-        vk::DescriptorSetLayoutDesc &descriptorSetLayoutDesc,
-        VkDescriptorSetLayout descriptorSetLayout,
-        uint32_t descriptorCountMultiplier,
-        vk::DynamicDescriptorPool *dynamicDescriptorPool);
-
     void outputCumulativePerfCounters();
 
     size_t calcUniformUpdateRequiredSpace(ContextVk *contextVk,
@@ -368,7 +361,7 @@ class ProgramExecutableVk
     // Store descriptor pools here. We store the descriptors in the Program to facilitate descriptor
     // cache management. It can also allow fewer descriptors for shaders which use fewer
     // textures/buffers.
-    vk::DescriptorSetArray<vk::DynamicDescriptorPool> mDynamicDescriptorPools;
+    vk::DescriptorSetArray<vk::DynamicDescriptorPoolPointer> mDynamicDescriptorPools;
 
     // A set of dynamic offsets used with vkCmdBindDescriptorSets for the default uniform buffers.
     VkDescriptorType mUniformBufferDescriptorType;
