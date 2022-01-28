@@ -670,6 +670,17 @@ class ContextVk : public ContextImpl, public vk::Context, public MultisampleText
         return mShareGroupVk->getDefaultBufferPool(mRenderer, size, memoryTypeIndex);
     }
 
+    angle::Result bindUniformsAndXfbDescriptorCache(
+        const vk::DescriptorSetLayoutDesc &descriptorSetLayoutDesc,
+        vk::UniformsAndXfbDescriptorCachePointer *cachePointerOut);
+    angle::Result bindTextureDescriptorCache(
+        const vk::DescriptorSetLayoutDesc &descriptorSetLayoutDesc,
+        uint32_t descriptorCountMultiplier,
+        vk::TextureDescriptorCachePointer *cachePointerOut);
+    angle::Result bindShaderResourcesDescriptorCache(
+        const vk::DescriptorSetLayoutDesc &descriptorSetLayoutDesc,
+        vk::ShaderBuffersDescriptorCachePointer *cachePointerOut);
+
   private:
     // Dirty bits.
     enum DirtyBitType : size_t

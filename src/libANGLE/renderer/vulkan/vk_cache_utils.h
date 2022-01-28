@@ -220,7 +220,7 @@ class alignas(4) RenderPassDesc final
     uint8_t mSamples;
     uint8_t mColorAttachmentRange;
 
-    // Multivew
+    // Multiview
     uint8_t mViewCount;
 
     // sRGB
@@ -770,6 +770,8 @@ class DescriptorSetLayoutDesc final
 
     void unpackBindings(DescriptorSetLayoutBindingVector *bindings,
                         std::vector<VkSampler> *immutableSamplers) const;
+
+    bool empty() const { return *this == DescriptorSetLayoutDesc(); }
 
   private:
     // There is a small risk of an issue if the sampler cache is evicted but not the descriptor
@@ -1469,6 +1471,7 @@ enum class VulkanCacheType
     UniformsAndXfbDescriptors,
     ShaderBuffersDescriptors,
     Framebuffer,
+    DynamicDescriptorPool,
     EnumCount
 };
 
@@ -1756,7 +1759,20 @@ class DescriptorSetCache final : public HasCacheStats<CacheType>
     DescriptorSetCache() = default;
     ~DescriptorSetCache() override { ASSERT(mPayload.empty()); }
 
+    DescriptorSetCache(DescriptorSetCache &&other) : DescriptorSetCache()
+    {
+        *this = std::move(other);
+    }
+
+    DescriptorSetCache &operator=(DescriptorSetCache &&other)
+    {
+        std::swap(mPayload, other.mPayload);
+        return *this;
+    }
+
     void destroy(RendererVk *rendererVk);
+
+    void clear() { mPayload.clear(); }
 
     ANGLE_INLINE bool get(const Key &desc, VkDescriptorSet *descriptorSet)
     {
@@ -1782,7 +1798,7 @@ class DescriptorSetCache final : public HasCacheStats<CacheType>
 
 // Only 1 driver uniform binding is used.
 constexpr uint32_t kReservedDriverUniformBindingCount = 1;
-// There is 1 default uniform binding used per stage.  Currently, a maxium of three stages are
+// There is 1 default uniform binding used per stage.  Currently, a maximum of three stages are
 // supported.
 constexpr uint32_t kReservedPerStageDefaultUniformBindingCount = 1;
 constexpr uint32_t kReservedDefaultUniformBindingCount         = 3;
