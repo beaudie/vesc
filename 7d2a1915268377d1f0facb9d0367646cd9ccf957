@@ -99,6 +99,24 @@
       "parentUuid": "39f0735a_f5588f54",
       "revId": "7d2a1915268377d1f0facb9d0367646cd9ccf957",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "9ea15e71_e3d12748",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1491687
+      },
+      "writtenOn": "2022-01-28T17:14:21Z",
+      "side": 1,
+      "message": "I now solved this by storing `mMidExecutionCaptureActive`, which is `true` if MEC is currently executed and `false` otherwise.",
+      "parentUuid": "501941f0_32157400",
+      "revId": "7d2a1915268377d1f0facb9d0367646cd9ccf957",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
