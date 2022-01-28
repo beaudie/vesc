@@ -224,6 +224,9 @@ class DynamicDescriptorPool final : angle::NonCopyable
     DynamicDescriptorPool();
     ~DynamicDescriptorPool();
 
+    DynamicDescriptorPool(DynamicDescriptorPool &&other);
+    DynamicDescriptorPool &operator=(DynamicDescriptorPool &&other);
+
     // The DynamicDescriptorPool only handles one pool size at this time.
     // Note that setSizes[i].descriptorCount is expected to be the number of descriptors in
     // an individual set.  The pool size will be calculated accordingly.
@@ -233,6 +236,8 @@ class DynamicDescriptorPool final : angle::NonCopyable
                        VkDescriptorSetLayout descriptorSetLayout);
     void destroy(VkDevice device);
     void release(ContextVk *contextVk);
+
+    bool valid() const { return !mDescriptorPools.empty(); }
 
     // We use the descriptor type to help count the number of free sets.
     // By convention, sets are indexed according to the constants in vk_cache_utils.h.

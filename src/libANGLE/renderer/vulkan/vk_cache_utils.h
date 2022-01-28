@@ -57,6 +57,9 @@ using RefCountedDescriptorSetLayout    = RefCounted<DescriptorSetLayout>;
 using RefCountedPipelineLayout         = RefCounted<PipelineLayout>;
 using RefCountedSamplerYcbcrConversion = RefCounted<SamplerYcbcrConversion>;
 
+using RefCountedDynamicDescriptorPool = RefCounted<DynamicDescriptorPool>;
+using DynamicDescriptorPoolPointer    = BindingPointer<DynamicDescriptorPool>;
+
 // Helper macro that casts to a bitfield type then verifies no bits were dropped.
 #define SetBitField(lhs, rhs)                                                         \
     do                                                                                \
@@ -1457,6 +1460,7 @@ enum class VulkanCacheType
     UniformsAndXfbDescriptors,
     ShaderBuffersDescriptors,
     Framebuffer,
+    DynamicDescriptorPool,
     EnumCount
 };
 
@@ -1768,9 +1772,35 @@ class DescriptorSetCache final : public HasCacheStats<CacheType>
     angle::HashMap<Key, VkDescriptorSet> mPayload;
 };
 
+class DynamicDescriptorPoolCache : public HasCacheStats<VulkanCacheType::DynamicDescriptorPool>
+{
+  public:
+    DynamicDescriptorPoolCache();
+    ~DynamicDescriptorPoolCache() override;
+
+    void destroy(RendererVk *rendererVk);
+
+    angle::Result getDynamicDescriptorPool(
+        vk::Context *context,
+        const vk::DescriptorSetLayoutDesc &descriptorSetLayoutDesc,
+        uint32_t descriptorCountMultiplier,
+        DescriptorSetLayoutCache *descriptorSetLayoutCache,
+        vk::DynamicDescriptorPoolPointer *descriptorPoolOut);
+
+  private:
+    angle::Result initDynamicDescriptorPool(
+        vk::Context *context,
+        const vk::DescriptorSetLayoutDesc &descriptorSetLayoutDesc,
+        VkDescriptorSetLayout descriptorSetLayout,
+        uint32_t descriptorCountMultiplier,
+        vk::DynamicDescriptorPool *poolToInit);
+
+    std::unordered_map<vk::DescriptorSetLayoutDesc, vk::RefCountedDynamicDescriptorPool> mPayload;
+};
+
 // Only 1 driver uniform binding is used.
 constexpr uint32_t kReservedDriverUniformBindingCount = 1;
-// There is 1 default uniform binding used per stage.  Currently, a maxium of three stages are
+// There is 1 default uniform binding used per stage.  Currently, a maximum of three stages are
 // supported.
 constexpr uint32_t kReservedPerStageDefaultUniformBindingCount = 1;
 constexpr uint32_t kReservedDefaultUniformBindingCount         = 3;
