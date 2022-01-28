@@ -1325,7 +1325,7 @@ Error Display::createPixmapSurface(const Config *configuration,
     return NoError();
 }
 
-Error Display::createImage(const gl::Context *context,
+Error Display::createImage(gl::Context *context,
                            EGLenum target,
                            EGLClientBuffer buffer,
                            const AttributeMap &attribs,
@@ -1369,6 +1369,13 @@ Error Display::createImage(const gl::Context *context,
     // Add this image to the list of all images and hold a ref to it.
     image->addRef();
     mImageSet.insert(image);
+
+    if (context)
+    {
+        // If the source comes from a context, make sure it's marked as shared because its resources
+        // can now be used by contects outside of its share group.
+        context->setShared();
+    }
 
     return NoError();
 }
