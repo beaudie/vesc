@@ -8909,6 +8909,8 @@ void Context::importSemaphoreZirconHandle(SemaphoreID semaphore,
 
 void Context::eGLImageTargetTexStorage(GLenum target, GLeglImageOES image, const GLint *attrib_list)
 {
+    setShared();
+
     Texture *texture        = getTextureByType(FromGLenum<TextureType>(target));
     egl::Image *imageObject = static_cast<egl::Image *>(image);
     ANGLE_CONTEXT_TRY(texture->setStorageEGLImageTarget(this, FromGLenum<TextureType>(target),
@@ -8919,11 +8921,15 @@ void Context::eGLImageTargetTextureStorage(GLuint texture,
                                            GLeglImageOES image,
                                            const GLint *attrib_list)
 {
+    setShared();
+
     return;
 }
 
 void Context::eGLImageTargetTexture2D(TextureType target, GLeglImageOES image)
 {
+    setShared();
+
     Texture *texture        = getTextureByType(target);
     egl::Image *imageObject = static_cast<egl::Image *>(image);
     ANGLE_CONTEXT_TRY(texture->setEGLImageTarget(this, target, imageObject));
@@ -8931,6 +8937,8 @@ void Context::eGLImageTargetTexture2D(TextureType target, GLeglImageOES image)
 
 void Context::eGLImageTargetRenderbufferStorage(GLenum target, GLeglImageOES image)
 {
+    setShared();
+
     Renderbuffer *renderbuffer = mState.getCurrentRenderbuffer();
     egl::Image *imageObject    = static_cast<egl::Image *>(image);
     ANGLE_CONTEXT_TRY(renderbuffer->setStorageEGLImageTarget(this, imageObject));
