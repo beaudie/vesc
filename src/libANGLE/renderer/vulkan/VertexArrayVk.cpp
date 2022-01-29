@@ -185,7 +185,7 @@ void VertexArrayVk::destroy(const gl::Context *context)
 
     for (std::unique_ptr<vk::BufferHelper> &buffer : mCachedStreamIndexBuffers)
     {
-        buffer->release(renderer);
+        buffer->destroy(renderer);
     }
 
     for (vk::BufferHelper &bufferHelper : mStreamedVertexData)
