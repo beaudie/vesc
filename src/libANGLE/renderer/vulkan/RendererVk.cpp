@@ -42,6 +42,10 @@ namespace
 {
 constexpr VkFormatFeatureFlags kInvalidFormatFeatureFlags = static_cast<VkFormatFeatureFlags>(-1);
 
+// Time interval in seconds that we should try to prune default buffer pools.
+constexpr double kTimeElapsedForPruneDefaultBufferPool = 1;
+constexpr VkDeviceSize kMaxSizeToUseSmallBufferPool    = 256;
+
 #if defined(ANGLE_EXPOSE_NON_CONFORMANT_EXTENSIONS_AND_VERSIONS)
 constexpr bool kExposeNonConformantExtensionsAndVersions = true;
 #else
@@ -1157,6 +1161,18 @@ void RendererVk::releaseSharedResources(vk::ResourceUseList *resourceList)
 
 void RendererVk::onDestroy(vk::Context *context)
 {
+    for (std::unique_ptr<vk::BufferPool> &pool : mDefaultBufferPools)
+    {
+        if (pool)
+        {
+            pool->destroy(this);
+        }
+    }
+    if (mSmallBufferPool)
+    {
+        mSmallBufferPool->destroy(this);
+    }
+
     {
         std::lock_guard<std::mutex> lock(mCommandQueueMutex);
         if (isAsyncCommandQueueEnabled())
@@ -1590,6 +1606,9 @@ angle::Result RendererVk::initialize(DisplayVk *displayVk,
 
     ANGLE_VK_CHECK(displayVk, mMemoryProperties.getMemoryTypeCount() > 0,
                    VK_ERROR_INITIALIZATION_FAILED);
+
+    mLastPruneTime = angle::GetCurrentSystemTime();
+
     // Initialize staging buffer memory type index and alignment.
     // These buffers will only be used as transfer sources or transfer targets.
     constexpr VkImageUsageFlags kUsageFlags =
@@ -4018,7 +4037,7 @@ VkDeviceSize RendererVk::getPreferedBufferBlockSize(uint32_t memoryTypeIndex) co
     }
     else
     {
-        preferredBlockSize = 32ull * 1024 * 1024;
+        preferredBlockSize = 256ull * 1024 * 1024;
     }
 #else
     preferredBlockSize = 4 * 1024 * 1024;
@@ -4028,6 +4047,72 @@ VkDeviceSize RendererVk::getPreferedBufferBlockSize(uint32_t memoryTypeIndex) co
     preferredBlockSize          = std::min(heapSize / 64, preferredBlockSize);
 
     return preferredBlockSize;
+}
+
+vk::BufferPool *RendererVk::getDefaultBufferPool(VkDeviceSize size, uint32_t memoryTypeIndex)
+{
+    std::lock_guard<std::mutex> lock(mBufferPoolsMutex);
+
+    if (size <= kMaxSizeToUseSmallBufferPool &&
+        memoryTypeIndex ==
+            getVertexConversionBufferMemoryTypeIndex(vk::MemoryHostVisibility::Visible))
+    {
+        if (!mSmallBufferPool)
+        {
+            VkBufferUsageFlags usageFlags = GetDefaultBufferUsageFlags(this);
+
+            VkMemoryPropertyFlags memoryPropertyFlags;
+            mAllocator.getMemoryTypeProperties(memoryTypeIndex, &memoryPropertyFlags);
+
+            std::unique_ptr<vk::BufferPool> pool = std::make_unique<vk::BufferPool>();
+            pool->initWithFlags(this, vma::VirtualBlockCreateFlagBits::BUDDY, usageFlags, 0,
+                                memoryTypeIndex, memoryPropertyFlags);
+            mSmallBufferPool = std::move(pool);
+        }
+        return mSmallBufferPool.get();
+    }
+    else if (!mDefaultBufferPools[memoryTypeIndex])
+    {
+        VkBufferUsageFlags usageFlags = GetDefaultBufferUsageFlags(this);
+
+        VkMemoryPropertyFlags memoryPropertyFlags;
+        mAllocator.getMemoryTypeProperties(memoryTypeIndex, &memoryPropertyFlags);
+
+        std::unique_ptr<vk::BufferPool> pool = std::make_unique<vk::BufferPool>();
+        pool->initWithFlags(this, vma::VirtualBlockCreateFlagBits::GENERAL, usageFlags, 0,
+                            memoryTypeIndex, memoryPropertyFlags);
+        mDefaultBufferPools[memoryTypeIndex] = std::move(pool);
+    }
+
+    return mDefaultBufferPools[memoryTypeIndex].get();
+}
+
+void RendererVk::pruneDefaultBufferPools()
+{
+    std::lock_guard<std::mutex> lock(mBufferPoolsMutex);
+    if (!isDueForBufferPoolPrune())
+    {
+        return;
+    }
+
+    mLastPruneTime = angle::GetCurrentSystemTime();
+    for (std::unique_ptr<vk::BufferPool> &pool : mDefaultBufferPools)
+    {
+        if (pool)
+        {
+            pool->pruneEmptyBuffers(this);
+        }
+    }
+    if (mSmallBufferPool)
+    {
+        mSmallBufferPool->pruneEmptyBuffers(this);
+    }
+}
+
+bool RendererVk::isDueForBufferPoolPrune()
+{
+    double timeElapsed = angle::GetCurrentSystemTime() - mLastPruneTime;
+    return timeElapsed > kTimeElapsedForPruneDefaultBufferPool;
 }
 
 namespace vk

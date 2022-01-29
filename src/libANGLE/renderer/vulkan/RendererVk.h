@@ -517,6 +517,10 @@ class RendererVk : angle::NonCopyable
     }
     size_t getVertexConversionBufferAlignment() const { return mVertexConversionBufferAlignment; }
 
+    vk::BufferPool *getDefaultBufferPool(VkDeviceSize size, uint32_t memoryTypeIndex);
+    void pruneDefaultBufferPools();
+    bool isDueForBufferPoolPrune();
+
   private:
     angle::Result initializeDevice(DisplayVk *displayVk, uint32_t queueFamilyIndex);
     void ensureCapsInitialized() const;
@@ -685,6 +689,14 @@ class RendererVk : angle::NonCopyable
     using VulkanCacheStats = angle::PackedEnumMap<VulkanCacheType, CacheStats>;
     VulkanCacheStats mVulkanCacheStats;
     mutable std::mutex mCacheStatsMutex;
+
+    // The global buffer pools that all buffers should sub-allocate from.
+    vk::BufferPoolPointerArray mDefaultBufferPools;
+    // The pool dedicated for small allocations that uses faster buddy algorithm
+    std::unique_ptr<vk::BufferPool> mSmallBufferPool;
+    // The system time when last pruneEmptyBuffer gets called.
+    double mLastPruneTime;
+    std::mutex mBufferPoolsMutex;
 
     // A mask to filter out Vulkan pipeline stages that are not supported, applied in situations
     // where multiple stages are prespecified (for example with image layout transitions):
