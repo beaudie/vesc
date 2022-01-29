@@ -89,7 +89,7 @@ angle::Result FindAndAllocateCompatibleMemory(vk::Context *context,
 {
     VkDevice device = context->getDevice();
 
-    uint32_t memoryTypeIndex = 0;
+    uint32_t memoryTypeIndex = kInvalidMemoryTypeIndex;
     ANGLE_TRY(memoryProperties.findCompatibleMemoryIndex(
         context, memoryRequirements, requestedMemoryPropertyFlags, (extraAllocationInfo != nullptr),
         memoryPropertyFlagsOut, &memoryTypeIndex));
