@@ -51,6 +51,24 @@
       "parentUuid": "b0ec6446_2f625396",
       "revId": "b1896f378bc1bfa5a9d39423152c79bdf4b1baba",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "6bbaf7b2_58dd2dff",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 6
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1340649
+      },
+      "writtenOn": "2022-01-29T16:40:30Z",
+      "side": 1,
+      "message": "\u003e Could you please open a bug so someone can fix the D3D backend properly and remove the bit?\n\nDone -\u003e http://anglebug.com/6959\nTagged the code with a todo as well",
+      "parentUuid": "1dc43e6e_b1e886fa",
+      "revId": "b1896f378bc1bfa5a9d39423152c79bdf4b1baba",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
