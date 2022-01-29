@@ -24,6 +24,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "0e78b99c_a1dabad5",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 1209,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2022-01-29T00:35:48Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "29c8063e_31374473",
+      "range": {
+        "startLine": 1209,
+        "startChar": 26,
+        "endLine": 1209,
+        "endChar": 28
+      },
+      "revId": "34035d0b177c6826ceeed1040d64ed64b85521b9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "236b36cf_25112979",
@@ -37,6 +61,30 @@
       "writtenOn": "2022-01-28T22:06:45Z",
       "side": 1,
       "message": "I\u0027d suggest merging this all with convertIndexBufferCPU. You could rename it to convertOrCacheUserIndexBuffer() and use the output variable to determine if we need to reset the dirty bit and offset.\n\nalso very minor suggestion - try to avoid boolean args, preferring instead typed enums. \n\nhttps://understandlegacycode.com/blog/what-is-wrong-with-boolean-parameters/",
+      "range": {
+        "startLine": 1208,
+        "startChar": 0,
+        "endLine": 1219,
+        "endChar": 9
+      },
+      "revId": "34035d0b177c6826ceeed1040d64ed64b85521b9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "527d2a9e_1b01acfb",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 1219,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2022-01-29T00:35:48Z",
+      "side": 1,
+      "message": "Moved to convertIndexBufferCPU indeed a good idea. We don\u0027t need to change the name of function since this is implementation detail of convertIndexBufferCPU (that it did some optimization underneath).",
+      "parentUuid": "236b36cf_25112979",
       "range": {
         "startLine": 1208,
         "startChar": 0,
