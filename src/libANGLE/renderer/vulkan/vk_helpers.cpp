@@ -2645,6 +2645,7 @@ BufferPool::~BufferPool()
 
 void BufferPool::pruneEmptyBuffers(RendererVk *renderer)
 {
+    std::lock_guard<std::mutex> lock(mMutex);
     for (auto iter = mBufferBlocks.begin(); iter != mBufferBlocks.end();)
     {
         if (!(*iter)->isEmpty())
@@ -2736,6 +2737,8 @@ angle::Result BufferPool::allocateBuffer(ContextVk *contextVk,
 {
     ASSERT(alignment);
     VkDeviceSize offset;
+
+    std::lock_guard<std::mutex> lock(mMutex);
     // We always allocate from reverse order so that older buffers have a chance to age out. The
     // assumption is that to allocate from new buffers first may have a better chance to leave the
     // older buffers completely empty and we may able to free it.
@@ -2771,6 +2774,7 @@ angle::Result BufferPool::allocateBuffer(ContextVk *contextVk,
 
 void BufferPool::destroy(RendererVk *renderer)
 {
+    std::lock_guard<std::mutex> lock(mMutex);
     for (std::unique_ptr<BufferBlock> &block : mBufferBlocks)
     {
         ASSERT(block->isEmpty());
@@ -3954,7 +3958,7 @@ angle::Result BufferHelper::initSuballocation(ContextVk *contextVk,
         size += maxVertexAttribStride;
     }
 
-    vk::BufferPool *pool = contextVk->getDefaultBufferPool(size, memoryTypeIndex);
+    vk::BufferPool *pool = renderer->getDefaultBufferPool(size, memoryTypeIndex);
     ANGLE_TRY(pool->allocateBuffer(contextVk, size, alignment, &mSuballocation));
 
     if (renderer->getFeatures().allocateNonZeroMemory.enabled)

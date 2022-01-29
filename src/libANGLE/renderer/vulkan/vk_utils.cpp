@@ -129,7 +129,7 @@ angle::Result FindAndAllocateCompatibleMemory(vk::Context *context,
     VkResult result                      = VK_ERROR_OUT_OF_DEVICE_MEMORY;
     do
     {
-        uint32_t memoryTypeIndex = 0;
+        uint32_t memoryTypeIndex = kInvalidMemoryTypeIndex;
         if (memoryProperties.findCompatibleMemoryIndex(
                 context, memoryRequirements, requiredMemoryPropertyFlags, preferredFlags,
                 (extraAllocationInfo != nullptr), memoryPropertyFlagsOut,
