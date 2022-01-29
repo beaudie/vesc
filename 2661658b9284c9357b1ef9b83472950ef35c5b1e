@@ -33,6 +33,29 @@
       "message": "Hi Jamie, this is just a question for learning purpose, I am wondering why you don\u0027t get a compiling error with this extra \u0026. When I add it in code, the compiler is complaining: \"cannot take the address of an rvalue of type \u0027const rx::vk::YcbcrConversionDesc*\u0027\"",
       "revId": "2661658b9284c9357b1ef9b83472950ef35c5b1e",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "50d8e081_671d8f23",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 2027,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-01-29T02:59:26Z",
+      "side": 1,
+      "message": "@Yuxin, because the return type of getYcbcrConversionDesc() has changed here",
+      "range": {
+        "startLine": 2027,
+        "startChar": 30,
+        "endLine": 2027,
+        "endChar": 31
+      },
+      "revId": "2661658b9284c9357b1ef9b83472950ef35c5b1e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
