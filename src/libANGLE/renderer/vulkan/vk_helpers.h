@@ -846,6 +846,7 @@ class BufferPool : angle::NonCopyable
     VkDeviceSize mSize;
     uint32_t mMemoryTypeIndex;
     BufferBlockPointerVector mBufferBlocks;
+    std::mutex mMutex;
     // When pruneDefaultBufferPools gets called, we do not immediately free all empty buffers. Only
     // buffers that we found are empty for this number of times consecutively, we will actually free
     // it. That way we avoid the situation that a buffer just becomes empty and gets freed right

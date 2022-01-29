@@ -348,14 +348,7 @@ TEST_P(EGLMultiContextTest, RepeatedEglInitAndTerminate)
     EGLContext ctx;
     EGLint dispattrs[] = {EGL_PLATFORM_ANGLE_TYPE_ANGLE, GetParam().getRenderer(), EGL_NONE};
 
-    // Note: Because we use per shared group buffer pool and each buffer suballocated from it, we
-    // use more memory than it actually needed. This test fails when we failed to allocate device
-    // memory. We could fix this by making BufferPool per renderer instead of per shared group. But
-    // it comes with cost of taking extra mutex lock just try to fix this specific test case that no
-    // real world app will run into. So for now, we change the number of contexts created to a
-    // smaller number until we know there is legitimate reason to believe real world app may run
-    // into.
-    for (int i = 0; i < 64; i++)
+    for (int i = 0; i < 100; i++)
     {
         std::thread thread = std::thread([&]() {
             dpy = eglGetPlatformDisplayEXT(
