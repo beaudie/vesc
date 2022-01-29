@@ -185,17 +185,17 @@ void VertexArrayVk::destroy(const gl::Context *context)
 
     for (std::unique_ptr<vk::BufferHelper> &buffer : mCachedStreamIndexBuffers)
     {
-        buffer->release(renderer);
+        buffer->destroy(renderer);
     }
 
     for (vk::BufferHelper &bufferHelper : mStreamedVertexData)
     {
-        bufferHelper.release(renderer);
+        bufferHelper.destroy(renderer);
     }
-    mStreamedIndexData.release(renderer);
-    mTranslatedByteIndexData.release(renderer);
-    mTranslatedByteIndirectData.release(renderer);
-    mLineLoopHelper.release(contextVk);
+    mStreamedIndexData.destroy(renderer);
+    mTranslatedByteIndexData.destroy(renderer);
+    mTranslatedByteIndirectData.destroy(renderer);
+    mLineLoopHelper.destroy(renderer);
 }
 
 angle::Result VertexArrayVk::convertIndexBufferGPU(ContextVk *contextVk,
