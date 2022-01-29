@@ -39,6 +39,30 @@
       },
       "revId": "2d7ee3da5fc41ca878d7226b96079debc4cbcea4",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "b015f38d_9d06ae6d",
+        "filename": "src/libANGLE/renderer/d3d/d3d11/Renderer11.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 1650,
+      "author": {
+        "id": 1532442
+      },
+      "writtenOn": "2022-01-29T14:26:46Z",
+      "side": 1,
+      "message": "Thanks for your review, I agree with that.",
+      "parentUuid": "91e01ab0_a2104a01",
+      "range": {
+        "startLine": 1648,
+        "startChar": 8,
+        "endLine": 1650,
+        "endChar": 98
+      },
+      "revId": "2d7ee3da5fc41ca878d7226b96079debc4cbcea4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
