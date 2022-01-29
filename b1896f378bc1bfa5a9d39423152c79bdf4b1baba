@@ -33,6 +33,24 @@
       "message": "anything else here, jamie, shabi?",
       "revId": "b1896f378bc1bfa5a9d39423152c79bdf4b1baba",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "1dc43e6e_b1e886fa",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 6
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-01-29T03:09:07Z",
+      "side": 1,
+      "message": "The new dirty bit feels very dirty ;) but fine with me. Could you please open a bug so someone can fix the D3D backend properly and remove the bit?",
+      "parentUuid": "b0ec6446_2f625396",
+      "revId": "b1896f378bc1bfa5a9d39423152c79bdf4b1baba",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
