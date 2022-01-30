@@ -305,9 +305,8 @@ void ProgramExecutableVk::reset(ContextVk *contextVk)
     mUniformsAndXfbDescriptorsCache.destroy(rendererVk);
     mShaderBufferDescriptorsCache.destroy(rendererVk);
 
-    // Initialize with a unique BufferSerial
-    vk::ResourceSerialFactory &factory = rendererVk->getResourceSerialFactory();
-    mCurrentDefaultUniformBufferSerial = factory.generateBufferSerial();
+    // Initialize with an invalid BufferSerial
+    mCurrentDefaultUniformBufferSerial = vk::BufferSerial();
 
     for (ProgramInfo &programInfo : mGraphicsProgramInfos)
     {
@@ -2115,7 +2114,8 @@ angle::Result ProgramExecutableVk::updateUniforms(ContextVk *contextVk,
     // there is a buffer switch or not. We need to retrieve from the descriptor set cache or
     // allocate a new descriptor set whenever there is uniform buffer switch.
     vk::BufferHelper *defaultUniformBuffer = defaultUniformStorage->getCurrentBuffer();
-    if (mCurrentDefaultUniformBufferSerial != defaultUniformBuffer->getBufferSerial())
+    if (!mCurrentDefaultUniformBufferSerial.valid() ||
+        mCurrentDefaultUniformBufferSerial != defaultUniformBuffer->getBufferSerial())
     {
         // We need to reinitialize the descriptor sets if we newly allocated buffers since we can't
         // modify the descriptor sets once initialized.
