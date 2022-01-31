@@ -16,6 +16,23 @@
       "message": "I had forgot about your change, so ended up reproducing the same built-in decl fix, lol!\n\nAnyway, the diff with your change is all that is in ReplaceForShaderFramebufferFetch.cpp (and removing the expectations file update)",
       "revId": "702dcc6d56f70ef43423d7d8de8ca615012efb50",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "72ef65b7_752760bd",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2022-01-31T21:03:03Z",
+      "side": 1,
+      "message": "Thanks... some of the test failures are for other bugs, you\u0027ll have to clean those up before landing. Also you might want to test with Chrome tests that failed originally.",
+      "revId": "702dcc6d56f70ef43423d7d8de8ca615012efb50",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
