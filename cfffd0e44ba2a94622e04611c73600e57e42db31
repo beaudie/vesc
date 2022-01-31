@@ -33,6 +33,23 @@
       "message": "LGTM as temp workaround",
       "revId": "cfffd0e44ba2a94622e04611c73600e57e42db31",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "866af010_6d42522f",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1001921
+      },
+      "writtenOn": "2022-01-31T18:32:50Z",
+      "side": 1,
+      "message": "I don\u0027t mind trying this, but I don\u0027t think this is going to work for 2 reasons:\n1. This value is divided by 10 in here https://source.chromium.org/chromium/chromium/src/+/main:build/android/pylib/local/device/local_device_gtest_run.py;l\u003d511, so I think you need something like 20 instead of 2.\n2. When we encounter shard timeouts, they happen after 30 minutes of trying to upload test data. This happens when 3 tries of 10 minutes timeout. Now, I\u0027m not sure about this, but I think the harness doesn\u0027t try to upload the same files after it fails. I.e. I think in the 2nd try it only tries to upload traces that it wasn\u0027t able to upload in the 1st try. In other words, it takes more than 30 minutes to upload the 6GB. So, I think for the workaround you need to increase the 30 minutes with something like\nhttps://source.chromium.org/chromium/chromium/src/+/main:third_party/angle/infra/specs/angle.json;l\u003d635\nhttps://source.chromium.org/chromium/chromium/src/+/main:third_party/angle/infra/specs/mixins.pyl;l\u003d33",
+      "revId": "cfffd0e44ba2a94622e04611c73600e57e42db31",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
