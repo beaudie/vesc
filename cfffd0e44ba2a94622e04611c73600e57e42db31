@@ -67,6 +67,24 @@
       "message": "Actually, re-reading hypan@\u0027s explanation in crbug.com/1279512, I take back what I\u0027ve said in 2). Since if it tries to upload a zip file and fails, looks like it would try to upload the same zip file again.\n\nSo, using 20 instead of 2 LGTM.",
       "revId": "cfffd0e44ba2a94622e04611c73600e57e42db31",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "5d96c280_d6f81f0d",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2022-01-31T21:07:51Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "91b980cc_146abc3a",
+      "revId": "cfffd0e44ba2a94622e04611c73600e57e42db31",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
