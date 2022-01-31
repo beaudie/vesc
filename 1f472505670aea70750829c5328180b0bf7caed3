@@ -204,6 +204,30 @@
       },
       "revId": "1f472505670aea70750829c5328180b0bf7caed3",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "f47b6e9e_a4ce431f",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 11
+      },
+      "lineNbr": 4231,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2022-01-31T22:22:25Z",
+      "side": 1,
+      "message": "mReadOnlyUse is a super set of mReadWriteUse. If mReadOnlyUse check returns complete, then mReadWriteUse must also complete. Line 4220 to 4227 take cares of mReadOnlyUse. Line 4232 to line 4236 is trying to optimize the case where if mReadWriteUse is already complete, then there is no need to call release followed by init (because there is no need to do so. release/init will end up new and delete mUse object). Its minor optimization, but still a valid optimization.",
+      "parentUuid": "ef8c23de_34678a23",
+      "range": {
+        "startLine": 4230,
+        "startChar": 0,
+        "endLine": 4231,
+        "endChar": 38
+      },
+      "revId": "1f472505670aea70750829c5328180b0bf7caed3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
