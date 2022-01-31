@@ -175,6 +175,10 @@ void Surface::postSwap(const gl::Context *context)
         mInitState = gl::InitState::MayNeedInit;
         onStateChange(angle::SubjectMessage::SubjectChanged);
     }
+
+    mBufferAgeQueriedSinceLastSwap = false;
+
+    mIsDamageRegionSet = false;
 }
 
 Error Surface::initialize(const Display *display)
@@ -624,6 +628,16 @@ Error Surface::getBufferAge(const gl::Context *context, EGLint *age) const
     return mImplementation->getBufferAge(context, age);
 }
 
+Error Surface::queryBufferAge(const gl::Context *context, EGLint *age)
+{
+    Error err = getBufferAge(context, age);
+    if (!err.isError())
+    {
+        mBufferAgeQueriedSinceLastSwap = true;
+    }
+    return err;
+}
+
 gl::Framebuffer *Surface::createDefaultFramebuffer(const gl::Context *context,
                                                    egl::Surface *readSurface)
 {
@@ -819,6 +833,11 @@ WindowSurface::WindowSurface(rx::EGLImplFactory *implFactory,
     : Surface(EGL_WINDOW_BIT, config, attribs, robustResourceInit)
 {
     mImplementation = implFactory->createWindowSurface(mState, window, attribs);
+}
+
+void Surface::setDamageRegion(const EGLint *rects, EGLint n_rects)
+{
+    mIsDamageRegionSet = true;
 }
 
 WindowSurface::~WindowSurface() {}

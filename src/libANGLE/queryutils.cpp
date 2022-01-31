@@ -4233,7 +4233,7 @@ void QueryContextAttrib(const gl::Context *context, EGLint attribute, EGLint *va
 
 egl::Error QuerySurfaceAttrib(const Display *display,
                               const gl::Context *context,
-                              const Surface *surface,
+                              Surface *surface,
                               EGLint attribute,
                               EGLint *value)
 {
@@ -4329,7 +4329,7 @@ egl::Error QuerySurfaceAttrib(const Display *display,
             *value = surface->isTimestampsEnabled();
             break;
         case EGL_BUFFER_AGE_EXT:
-            ANGLE_TRY(surface->getBufferAge(context, value));
+            ANGLE_TRY(surface->queryBufferAge(context, value));
             break;
         case EGL_BITMAP_PITCH_KHR:
             *value = surface->getBitmapPitch();
