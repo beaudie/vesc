@@ -56,6 +56,30 @@
       },
       "revId": "2661658b9284c9357b1ef9b83472950ef35c5b1e",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "5b0d23ba_b49a6ee1",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 2027,
+      "author": {
+        "id": 1520902
+      },
+      "writtenOn": "2022-01-31T21:29:05Z",
+      "side": 1,
+      "message": "Ah I see, sorry I missed this earlier.",
+      "parentUuid": "50d8e081_671d8f23",
+      "range": {
+        "startLine": 2027,
+        "startChar": 30,
+        "endLine": 2027,
+        "endChar": 31
+      },
+      "revId": "2661658b9284c9357b1ef9b83472950ef35c5b1e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
