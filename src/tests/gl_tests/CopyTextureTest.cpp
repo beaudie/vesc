@@ -712,6 +712,12 @@ TEST_P(CopyTextureTest, InternalFormat)
         destFormats.push_back(GL_BGRA_EXT);
     }
 
+    if (IsGLExtensionEnabled("GL_ANGLE_rgbx_internal_format"))
+    {
+        sourceFormats.push_back(GL_RGBX8_ANGLE);
+        destFormats.push_back(GL_RGBX8_ANGLE);
+    }
+
     // Test with glCopyTexture
     for (GLint sourceFormat : sourceFormats)
     {
