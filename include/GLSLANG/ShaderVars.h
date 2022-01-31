@@ -219,7 +219,7 @@ struct ShaderVariable
     bool readonly;
     bool writeonly;
 
-    // From EXT_shader_framebuffer_fetch
+    // From EXT_shader_framebuffer_fetch / KHR_blend_equation_advanced
     bool isFragmentInOut;
 
     // OutputVariable
@@ -326,6 +326,59 @@ struct WorkGroupSize
 
 inline constexpr WorkGroupSize::WorkGroupSize(int initialSize)
     : localSizeQualifiers{initialSize, initialSize, initialSize}
+{}
+
+enum class TLayoutBlendEquation : uint16_t
+{
+    Multiply      = 0,
+    Screen        = 1,
+    Overlay       = 2,
+    Darken        = 3,
+    Lighten       = 4,
+    Colordodge    = 5,
+    Colorburn     = 6,
+    Hardlight     = 7,
+    Softlight     = 8,
+    Difference    = 9,
+    Exclusion     = 10,
+    HslHue        = 11,
+    HslSaturation = 12,
+    HslColor      = 13,
+    HslLuminosity = 14,
+
+    InvalidEnum = 15,
+    EnumCount   = InvalidEnum
+};
+static_assert(sizeof(TLayoutBlendEquation) == sizeof(uint16_t), "Unexpected sized");
+using BlendEquationBitSetType = std::underlying_type<TLayoutBlendEquation>::type;
+
+// BitSet Implementation Reference: common/bitset_utils.h
+struct AdvancedBlendEquation
+{
+    static const size_t kBlendEquationBitSetSize;
+    static const BlendEquationBitSetType kBlendEquationBitMask;
+
+    // Must have a trivial default constructor since it is used in YYSTYPE.
+    inline AdvancedBlendEquation() = default;
+    inline explicit constexpr AdvancedBlendEquation(int initialState);
+
+    bool isAnyBlendEquation() const;
+    bool isAnyHslBlendEquation() const;
+    bool isEnabled(TLayoutBlendEquation blendEquation) const;
+
+    void reset();
+    void setAll();
+
+    void set(TLayoutBlendEquation blendEquation);
+    void unset(TLayoutBlendEquation blendequation);
+
+    AdvancedBlendEquation operator|=(AdvancedBlendEquation value);
+
+    BlendEquationBitSetType enabledBlendEquation;
+};
+
+inline constexpr AdvancedBlendEquation::AdvancedBlendEquation(int initialState)
+    : enabledBlendEquation(static_cast<BlendEquationBitSetType>(initialState))
 {}
 
 }  // namespace sh

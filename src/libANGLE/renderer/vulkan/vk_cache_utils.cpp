@@ -1334,6 +1334,11 @@ void InitializeSpecializationInfo(
                     offsetof(vk::SpecializationConstants, dither);
                 (*specializationEntriesOut)[id].size = sizeof(specConsts.dither);
                 break;
+            case sh::vk::SpecializationConstantId::BlendEquation:
+                (*specializationEntriesOut)[id].offset =
+                    offsetof(vk::SpecializationConstants, blendEquation);
+                (*specializationEntriesOut)[id].size = sizeof(specConsts.blendEquation);
+                break;
             default:
                 UNREACHABLE();
                 break;

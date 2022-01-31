@@ -244,6 +244,7 @@ TParseContext::TParseContext(TSymbolTable &symt,
       mTessEvaluationShaderInputOrderingType(EtetUndefined),
       mTessEvaluationShaderInputPointType(EtetUndefined),
       mHasAnyPreciseType(false),
+      mBlendEquation(0),
       mFunctionBodyNewScope(false),
       mOutputType(outputType)
 {}
@@ -1836,9 +1837,10 @@ void TParseContext::checkBindingIsValid(const TSourceLoc &identifierLocation, co
 
 void TParseContext::checkCanUseLayoutQualifier(const TSourceLoc &location)
 {
-    constexpr std::array<TExtension, 2u> extensions{
+    constexpr std::array<TExtension, 3u> extensions{
         {TExtension::EXT_shader_framebuffer_fetch,
-         TExtension::EXT_shader_framebuffer_fetch_non_coherent}};
+         TExtension::EXT_shader_framebuffer_fetch_non_coherent,
+         TExtension::KHR_blend_equation_advanced}};
     if (getShaderVersion() < 300 && !checkCanUseOneOfExtensions(location, extensions))
     {
         error(location, "qualifier supported in GLSL ES 3.00 and above only", "layout");
@@ -2117,6 +2119,19 @@ void TParseContext::checkInvariantVariableQualifier(bool invariant,
         {
             error(invariantLocation, "Cannot be qualified as invariant.", "invariant");
         }
+    }
+}
+
+void TParseContext::checkBlendEquationIsNotSpecified(const TSourceLoc &location,
+                                                     const AdvancedBlendEquation &blendEquation,
+                                                     const TQualifier &qualifier)
+{
+    if (blendEquation.isAnyBlendEquation() && qualifier != EvqFragmentOut)
+    {
+        error(location,
+              "invalid layout qualifier: blending equation qualifiers are only permitted on the "
+              "fragment 'out' qualifier ",
+              "blend_support_qualifier");
     }
 }
 
@@ -3626,6 +3641,9 @@ void TParseContext::parseGlobalLayoutQualifier(const TTypeQualifierBuilder &type
     checkStd430IsForShaderStorageBlock(typeQualifier.line, layoutQualifier.blockStorage,
                                        typeQualifier.qualifier);
 
+    checkBlendEquationIsNotSpecified(typeQualifier.line, layoutQualifier.blendEquation,
+                                     typeQualifier.qualifier);
+
     if (typeQualifier.qualifier != EvqFragmentIn)
     {
         checkEarlyFragmentTestsIsNotSpecified(typeQualifier.line,
@@ -3756,6 +3774,28 @@ void TParseContext::parseGlobalLayoutQualifier(const TTypeQualifierBuilder &type
         }
 
         mEarlyFragmentTestsSpecified = true;
+    }
+    else if (typeQualifier.qualifier == EvqFragmentOut)
+    {
+        if (mShaderVersion < 320 && !isExtensionEnabled(TExtension::KHR_blend_equation_advanced))
+        {
+            error(typeQualifier.line,
+                  "OUT type qualifier without variable declaration is supported in GLSL ES 3.20 "
+                  "and after, or supported if GL_KHR_blend_equation_advanced is defined",
+                  "layout");
+            return;
+        }
+
+        if (!layoutQualifier.blendEquation.isAnyBlendEquation())
+        {
+            error(typeQualifier.line,
+                  "only blend equations are allowed as layout qualifier when not declaring a "
+                  "variable",
+                  "layout");
+            return;
+        }
+
+        mBlendEquation |= layoutQualifier.blendEquation;
     }
     else if (typeQualifier.qualifier == EvqTessControlOut)
     {
@@ -5281,15 +5321,90 @@ TLayoutQualifier TParseContext::parseLayoutQualifier(const ImmutableString &qual
             error(qualifierTypeLine, "invalid layout qualifier", qualifierType);
         }
     }
-    else if (qualifierType == "noncoherent" && mShaderType == GL_FRAGMENT_SHADER)
+    else if (mShaderType == GL_FRAGMENT_SHADER)
     {
-        if (checkCanUseOneOfExtensions(
+        if (qualifierType == "noncoherent" &&
+            checkCanUseOneOfExtensions(
                 qualifierTypeLine, std::array<TExtension, 2u>{
                                        {TExtension::EXT_shader_framebuffer_fetch,
                                         TExtension::EXT_shader_framebuffer_fetch_non_coherent}}))
         {
             checkLayoutQualifierSupported(qualifierTypeLine, qualifierType, 100);
             qualifier.noncoherent = true;
+        }
+        else if (qualifierType == "blend_support_multiply")
+        {
+            qualifier.blendEquation.set(TLayoutBlendEquation::Multiply);
+        }
+        else if (qualifierType == "blend_support_screen")
+        {
+            qualifier.blendEquation.set(TLayoutBlendEquation::Screen);
+        }
+        else if (qualifierType == "blend_support_overlay")
+        {
+            qualifier.blendEquation.set(TLayoutBlendEquation::Overlay);
+        }
+        else if (qualifierType == "blend_support_darken")
+        {
+            qualifier.blendEquation.set(TLayoutBlendEquation::Darken);
+        }
+        else if (qualifierType == "blend_support_lighten")
+        {
+            qualifier.blendEquation.set(TLayoutBlendEquation::Lighten);
+        }
+        else if (qualifierType == "blend_support_colordodge")
+        {
+            qualifier.blendEquation.set(TLayoutBlendEquation::Colordodge);
+        }
+        else if (qualifierType == "blend_support_colorburn")
+        {
+            qualifier.blendEquation.set(TLayoutBlendEquation::Colorburn);
+        }
+        else if (qualifierType == "blend_support_hardlight")
+        {
+            qualifier.blendEquation.set(TLayoutBlendEquation::Hardlight);
+        }
+        else if (qualifierType == "blend_support_softlight")
+        {
+            qualifier.blendEquation.set(TLayoutBlendEquation::Softlight);
+        }
+        else if (qualifierType == "blend_support_difference")
+        {
+            qualifier.blendEquation.set(TLayoutBlendEquation::Difference);
+        }
+        else if (qualifierType == "blend_support_exclusion")
+        {
+            qualifier.blendEquation.set(TLayoutBlendEquation::Exclusion);
+        }
+        else if (qualifierType == "blend_support_hsl_hue")
+        {
+            qualifier.blendEquation.set(TLayoutBlendEquation::HslHue);
+        }
+        else if (qualifierType == "blend_support_hsl_saturation")
+        {
+            qualifier.blendEquation.set(TLayoutBlendEquation::HslSaturation);
+        }
+        else if (qualifierType == "blend_support_hsl_color")
+        {
+            qualifier.blendEquation.set(TLayoutBlendEquation::HslColor);
+        }
+        else if (qualifierType == "blend_support_hsl_luminosity")
+        {
+            qualifier.blendEquation.set(TLayoutBlendEquation::HslLuminosity);
+        }
+        else if (qualifierType == "blend_support_all_equations")
+        {
+            qualifier.blendEquation.setAll();
+        }
+        else
+        {
+            error(qualifierTypeLine, "invalid layout qualifier", qualifierType);
+        }
+
+        if (qualifier.blendEquation.isAnyBlendEquation() && mShaderVersion < 320 &&
+            !checkCanUseExtension(qualifierTypeLine, TExtension::KHR_blend_equation_advanced))
+        {
+            error(qualifierTypeLine, "invalid layout qualifier", qualifierType);
         }
     }
     else

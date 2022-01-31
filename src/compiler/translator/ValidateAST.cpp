@@ -855,18 +855,6 @@ bool ValidateAST::visitAggregate(Visit visit, TIntermAggregate *node)
         visitFunctionCall(node);
     }
 
-    if (visit == PreVisit && mOptions.validateNoRawFunctionCalls)
-    {
-        if (node->getOp() == EOpCallInternalRawFunction)
-        {
-            mDiagnostics->error(node->getLine(),
-                                "Found node calling a raw function (deprecated) "
-                                "<validateNoRawFunctionCalls>",
-                                node->getFunction()->name().data());
-            mNoRawFunctionCallsFailed = true;
-        }
-    }
-
     return true;
 }
 
