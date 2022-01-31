@@ -705,7 +705,6 @@ ANGLE_NO_DISCARD bool ReplaceInOutVariables(TCompiler *compiler,
     {
         return false;
     }
-
     std::map<unsigned int, const TVariable *> toBeReplaced;
     std::map<unsigned int, const TVariable *> newOutVarArray;
     for (auto originInOutVarIter : declaredInOutVarMap)
@@ -719,8 +718,17 @@ ANGLE_NO_DISCARD bool ReplaceInOutVariables(TCompiler *compiler,
         // the qualifier itself. The qualifier will be changed from inout to out.
         newOutVarType->setQualifier(EvqFragmentOut);
 
-        TVariable *newOutVar = new TVariable(symbolTable, originInOutVar->getName(), newOutVarType,
-                                             SymbolType::UserDefined);
+        // Additionally, if the symbol name is gl_LastFragData, replace it with a temporary one as
+        // it no longer represents a built-in.
+        ImmutableString varName  = originInOutVar->getName();
+        SymbolType varSymbolType = originInOutVar->variable().symbolType();
+        if (varName == "gl_LastFragData")
+        {
+            varName       = ImmutableString("");
+            varSymbolType = SymbolType::Empty;
+        }
+
+        TVariable *newOutVar = new TVariable(symbolTable, varName, newOutVarType, varSymbolType);
         newOutVarArray[inputAttachmentIndex] = newOutVar;
         replaceSubpassInputUtils.declareVariablesForFetch(inputAttachmentIndex,
                                                           newOutVarArray[inputAttachmentIndex]);
@@ -746,12 +754,7 @@ ANGLE_NO_DISCARD bool ReplaceInOutVariables(TCompiler *compiler,
     // 4) Replace previous 'inout' variable with newly created 'inout' variable
     ReplaceVariableTraverser replaceTraverser(replacementMap);
     root->traverse(&replaceTraverser);
-    if (!replaceTraverser.updateTree(compiler, root))
-    {
-        return false;
-    }
-
-    return true;
+    return replaceTraverser.updateTree(compiler, root);
 }
 
 }  // namespace sh
