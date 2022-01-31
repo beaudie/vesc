@@ -33,6 +33,29 @@
       "message": "@Jamie, ICYMI",
       "revId": "7b5abca0abf030be964a3d0994cd4eda4837d2af",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "7db308ea_7586d3c3",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.cpp",
+        "patchSetId": 14
+      },
+      "lineNbr": 3033,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2022-01-31T16:07:49Z",
+      "side": 1,
+      "message": "might be good - that will let us debug this easily and helps us test-what-we-ship.",
+      "range": {
+        "startLine": 3033,
+        "startChar": 22,
+        "endLine": 3033,
+        "endChar": 94
+      },
+      "revId": "7b5abca0abf030be964a3d0994cd4eda4837d2af",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
