@@ -26,6 +26,30 @@
     {
       "unresolved": false,
       "key": {
+        "uuid": "594dd1af_7e285d0c",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 3
+      },
+      "lineNbr": 9,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2022-01-31T15:04:37Z",
+      "side": 1,
+      "message": "Done\n\nCan\u0027t call release when we have no non-exit-time destructor.",
+      "parentUuid": "3500f8c6_1fbca510",
+      "range": {
+        "startLine": 9,
+        "startChar": 0,
+        "endLine": 9,
+        "endChar": 40
+      },
+      "revId": "8ed2f5002f9e0cf6dc5ed27d75d64d2d7a65fc59",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
         "uuid": "b41615d2_6ef4a8c3",
         "filename": "/PATCHSET_LEVEL",
         "patchSetId": 3
@@ -54,6 +78,30 @@
       "writtenOn": "2022-01-27T22:52:27Z",
       "side": 1,
       "message": "nit: need to close mLibraryHandle if it was previously opened.\nOr assert that the open* methods are only called once.",
+      "range": {
+        "startLine": 102,
+        "startChar": 0,
+        "endLine": 102,
+        "endChar": 68
+      },
+      "revId": "8ed2f5002f9e0cf6dc5ed27d75d64d2d7a65fc59",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "54af4225_318c9c21",
+        "filename": "src/common/system_utils.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 102,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2022-01-31T15:04:37Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "574a4305_cce20d0d",
       "range": {
         "startLine": 102,
         "startChar": 0,
@@ -148,6 +196,30 @@
       "writtenOn": "2022-01-27T22:52:27Z",
       "side": 1,
       "message": "nit: CloseSystemLibrary already checks this",
+      "range": {
+        "startLine": 1048,
+        "startChar": 0,
+        "endLine": 1048,
+        "endChar": 26
+      },
+      "revId": "8ed2f5002f9e0cf6dc5ed27d75d64d2d7a65fc59",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "29a433de_1872bdf3",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 1048,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2022-01-31T15:04:37Z",
+      "side": 1,
+      "message": "Ack, I left it in just because it doesn\u0027t hurt and someone could change the implementation of CloseSystemLibrary.",
+      "parentUuid": "c8e51121_5fda1bd0",
       "range": {
         "startLine": 1048,
         "startChar": 0,
