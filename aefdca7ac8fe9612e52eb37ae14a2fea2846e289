@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "22786789_5c5806ef",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-01-31T11:23:19Z",
+      "side": 1,
+      "message": "Thanks. A basic test would be appreciated. You can copy one from CopyTextureTest.cpp",
+      "revId": "aefdca7ac8fe9612e52eb37ae14a2fea2846e289",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
