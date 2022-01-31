@@ -82,6 +82,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "a87a3f6f_8a30010e",
+        "filename": "include/platform/FeaturesVk.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 619,
+      "author": {
+        "id": 1528827
+      },
+      "writtenOn": "2022-01-31T14:00:54Z",
+      "side": 1,
+      "message": "Changed both description and feature name to more explicitly refer to bottom-left origin.",
+      "parentUuid": "a1b91075_6806ed7e",
+      "range": {
+        "startLine": 619,
+        "startChar": 9,
+        "endLine": 619,
+        "endChar": 25
+      },
+      "revId": "7839b0d63b5faef1ae6c6d94107285c44e10ba57",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "ffb0c1f2_8694264b",
@@ -95,6 +119,30 @@
       "writtenOn": "2022-01-28T19:04:48Z",
       "side": 1,
       "message": "And in the comment you can be specific, so I suggest s/Platform/Android",
+      "range": {
+        "startLine": 3032,
+        "startChar": 7,
+        "endLine": 3032,
+        "endChar": 15
+      },
+      "revId": "7839b0d63b5faef1ae6c6d94107285c44e10ba57",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "3fe4137d_c2d617ed",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 3032,
+      "author": {
+        "id": 1528827
+      },
+      "writtenOn": "2022-01-31T14:00:54Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "ffb0c1f2_8694264b",
       "range": {
         "startLine": 3032,
         "startChar": 7,
@@ -128,6 +176,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "3099f90d_06239eed",
+        "filename": "src/libANGLE/renderer/vulkan/SurfaceVk.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 348,
+      "author": {
+        "id": 1528827
+      },
+      "writtenOn": "2022-01-31T14:00:54Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "81846002_3468ed06",
+      "range": {
+        "startLine": 348,
+        "startChar": 15,
+        "endLine": 348,
+        "endChar": 16
+      },
+      "revId": "7839b0d63b5faef1ae6c6d94107285c44e10ba57",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "2099d042_03c15520",
@@ -141,6 +213,30 @@
       "writtenOn": "2022-01-28T19:04:48Z",
       "side": 1,
       "message": "While technically true, this is hard to understand without context (because `invertY` says don\u0027t invert y). You can at least add a comment that says EGL rectangles should be y-inverted for Vulkan, and that invertY is double-inverting it to work around a platform bug.",
+      "range": {
+        "startLine": 357,
+        "startChar": 0,
+        "endLine": 359,
+        "endChar": 50
+      },
+      "revId": "7839b0d63b5faef1ae6c6d94107285c44e10ba57",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "381fd60e_8e999436",
+        "filename": "src/libANGLE/renderer/vulkan/SurfaceVk.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 359,
+      "author": {
+        "id": 1528827
+      },
+      "writtenOn": "2022-01-31T14:00:54Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "2099d042_03c15520",
       "range": {
         "startLine": 357,
         "startChar": 0,
