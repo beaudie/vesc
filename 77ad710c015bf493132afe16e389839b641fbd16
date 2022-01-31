@@ -52,6 +52,24 @@
       "parentUuid": "02c46530_ab623873",
       "revId": "77ad710c015bf493132afe16e389839b641fbd16",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "6c6a5a74_79d528d9",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2022-01-31T19:50:53Z",
+      "side": 1,
+      "message": "I think I originally wrote the serial code. At least, I have a recollection of wanting to not let invalid accidentally slip into the code and have two invalid object return a cache hit. It\u0027s a very defensive coding style.\n\nI was thinking I could make a new method like \"isEqualOrInvalid\" specifically for cases where you do want to allow invalid, and that lets you keep the safety around other checks.",
+      "parentUuid": "96e2619f_b95725a1",
+      "revId": "77ad710c015bf493132afe16e389839b641fbd16",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
