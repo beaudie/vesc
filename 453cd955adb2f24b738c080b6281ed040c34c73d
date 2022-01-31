@@ -69,6 +69,30 @@
       },
       "revId": "453cd955adb2f24b738c080b6281ed040c34c73d",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "569f2190_e83f53fb",
+        "filename": "src/libANGLE/renderer/d3d/d3d11/Renderer11.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 722,
+      "author": {
+        "id": 1130144
+      },
+      "writtenOn": "2022-01-31T18:35:20Z",
+      "side": 1,
+      "message": "@Jonah, thank you for the clarification. I agree the change is functionally correct.\n\nReading through the extension document, would be nice if it had examples of how \"device id\" gets mapped to the platform specific counterparts. Had I not known any better, I would have still gotten the impression it was talking about PCI device id.\n\nPerhaps a better name might be \"adapter_unique_id\" or something similar??",
+      "parentUuid": "18f09b36_05d19ab4",
+      "range": {
+        "startLine": 721,
+        "startChar": 16,
+        "endLine": 722,
+        "endChar": 52
+      },
+      "revId": "453cd955adb2f24b738c080b6281ed040c34c73d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
