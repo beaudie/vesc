@@ -5625,6 +5625,16 @@ TStorageQualifierWrapper *TParseContext::parseOutQualifier(const TSourceLoc &loc
 
 TStorageQualifierWrapper *TParseContext::parseInOutQualifier(const TSourceLoc &loc)
 {
+    if (mShaderVersion < 300 && !IsDesktopGLSpec(mShaderSpec))
+    {
+        error(loc, "storage qualifier supported in GLSL ES 3.00 and above only", "inout");
+    }
+
+    if (getShaderType() != GL_FRAGMENT_SHADER)
+    {
+        error(loc, "storage qualifier isn't supported in non-fragment shaders", "inout");
+    }
+
     if (!declaringFunction())
     {
         if (isExtensionEnabled(TExtension::EXT_shader_framebuffer_fetch) ||
