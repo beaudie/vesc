@@ -180,6 +180,30 @@
       },
       "revId": "1f472505670aea70750829c5328180b0bf7caed3",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ef8c23de_34678a23",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 11
+      },
+      "lineNbr": 4231,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2022-01-31T21:58:43Z",
+      "side": 1,
+      "message": "If a buffer is being written to, then `mReadWriteUse` should be used also.   Otherwise, isCurrentlyInUseForWrite() will be incorrect.\n\nWhy is a suballocation not doing that?",
+      "parentUuid": "e618bd30_eab1c72c",
+      "range": {
+        "startLine": 4230,
+        "startChar": 0,
+        "endLine": 4231,
+        "endChar": 38
+      },
+      "revId": "1f472505670aea70750829c5328180b0bf7caed3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
