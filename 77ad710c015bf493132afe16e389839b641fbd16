@@ -16,6 +16,24 @@
       "message": "Nice fix. We don\u0027t have to wait until it show up as hotspot, likely it won\u0027t since the cost is not big enough. But little things do add up and I am not seeing any value to keep invalid value. Can we make BufferSerial\u0027s comparison to accept invalid value (i.e, rename invalid value to initial value)? This invalid value is artificial obstacle for no good reason (it make sense for QueSerial, but not much for other serials that only purpose is to know f they are different or not) and I have ran into this a few times in the past already.",
       "revId": "77ad710c015bf493132afe16e389839b641fbd16",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "02c46530_ab623873",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2022-01-31T19:37:01Z",
+      "side": 1,
+      "message": "The special handling is to eliminate the case where invalid is compared with invalid. Feel free to propose a follow up patch to this. Any objections to landing this trivial little patch? I don\u0027t think it\u0027ll be possible to measure a regression.",
+      "parentUuid": "51a916a2_a9d37057",
+      "revId": "77ad710c015bf493132afe16e389839b641fbd16",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
