@@ -9,6 +9,7 @@
 
 #include <GLSLANG/ShaderLang.h>
 
+#include "common/bitset_utils.h"
 #include "common/debug.h"
 #include "common/utilities.h"
 
@@ -612,6 +613,63 @@ int WorkGroupSize::operator[](size_t index) const
 size_t WorkGroupSize::size() const
 {
     return 3u;
+}
+
+const size_t AdvancedBlendEquation::kBlendEquationBitSetSize =
+    static_cast<size_t>(TLayoutBlendEquation::EnumCount);
+const BlendEquationBitSetType AdvancedBlendEquation::kBlendEquationBitMask =
+    ((angle::Bit<BlendEquationBitSetType>(kBlendEquationBitSetSize - 1) - 1) << 1) + 1;
+
+bool AdvancedBlendEquation::isAnyBlendEquation() const
+{
+    ASSERT(enabledBlendEquation == (enabledBlendEquation & kBlendEquationBitMask));
+    return (enabledBlendEquation != 0);
+}
+
+bool AdvancedBlendEquation::isAnyHslBlendEquation() const
+{
+    ASSERT(enabledBlendEquation == (enabledBlendEquation & kBlendEquationBitMask));
+    return isEnabled(TLayoutBlendEquation::HslHue) ||
+           isEnabled(TLayoutBlendEquation::HslSaturation) ||
+           isEnabled(TLayoutBlendEquation::HslColor) ||
+           isEnabled(TLayoutBlendEquation::HslLuminosity);
+}
+
+bool AdvancedBlendEquation::isEnabled(TLayoutBlendEquation blendEquation) const
+{
+    return (enabledBlendEquation & angle::Bit<BlendEquationBitSetType>(
+                                       static_cast<BlendEquationBitSetType>(blendEquation))) != 0;
+}
+
+void AdvancedBlendEquation::reset()
+{
+    enabledBlendEquation = 0;
+}
+
+void AdvancedBlendEquation::setAll()
+{
+    enabledBlendEquation = kBlendEquationBitMask;
+}
+
+void AdvancedBlendEquation::set(TLayoutBlendEquation blendEquation)
+{
+    ASSERT(enabledBlendEquation == (enabledBlendEquation & kBlendEquationBitMask));
+    enabledBlendEquation |=
+        angle::Bit<BlendEquationBitSetType>(static_cast<BlendEquationBitSetType>(blendEquation)) &
+        kBlendEquationBitMask;
+}
+
+void AdvancedBlendEquation::unset(TLayoutBlendEquation blendEquation)
+{
+    ASSERT(enabledBlendEquation == (enabledBlendEquation & kBlendEquationBitMask));
+    enabledBlendEquation &=
+        ~angle::Bit<BlendEquationBitSetType>(static_cast<BlendEquationBitSetType>(blendEquation));
+}
+
+AdvancedBlendEquation AdvancedBlendEquation::operator|=(AdvancedBlendEquation value)
+{
+    enabledBlendEquation |= value.enabledBlendEquation & kBlendEquationBitMask;
+    return *this;
 }
 
 }  // namespace sh

@@ -184,6 +184,8 @@ class TCompiler : public TShHandleBase
 
     bool hasAnyPreciseType() const { return mHasAnyPreciseType; }
 
+    AdvancedBlendEquation getBlendEquation() const { return mBlendEquation; }
+
     unsigned int getSharedMemorySize() const;
 
     sh::GLenum getShaderType() const { return mShaderType; }
@@ -338,6 +340,9 @@ class TCompiler : public TShHandleBase
     TLayoutTessEvaluationType mTessEvaluationShaderInputPointType;
 
     bool mHasAnyPreciseType;
+
+    // advanced blend equation parameters
+    AdvancedBlendEquation mBlendEquation;
 
     // name hashing.
     NameMap mNameMap;

@@ -716,6 +716,9 @@ ANGLE_NO_DISCARD bool ReplaceInOutVariables(TCompiler *compiler,
 
         // We just want to use the original variable, but without an out qualifier instead of inout.
         ASSERT(originInOutVar->getName() != "gl_LastFragData");
+        sh::TLayoutQualifier modifiedLayoutQualifier = newOutVarType->getLayoutQualifier();
+        modifiedLayoutQualifier.noncoherent          = false;
+        newOutVarType->setLayoutQualifier(modifiedLayoutQualifier);
         newOutVarType->setQualifier(EvqFragmentOut);
 
         TVariable *newOutVar = new TVariable(symbolTable, originInOutVar->getName(), newOutVarType,

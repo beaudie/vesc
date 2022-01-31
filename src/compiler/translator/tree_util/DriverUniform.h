@@ -61,6 +61,7 @@ class DriverUniform
     virtual TIntermTyped *getHalfRenderAreaRef() const { return nullptr; }
     virtual TIntermTyped *getNegFlipYRef() const { return nullptr; }
     virtual TIntermTyped *getDitherRef() const { return nullptr; }
+    virtual TIntermTyped *getBlendEquationRef() const { return nullptr; }
 
     const TVariable *getDriverUniformsVariable() const { return mDriverUniforms; }
 
@@ -87,6 +88,7 @@ class DriverUniformExtended : public DriverUniform
     TIntermTyped *getHalfRenderAreaRef() const override;
     TIntermTyped *getNegFlipYRef() const override;
     TIntermTyped *getDitherRef() const override;
+    TIntermTyped *getBlendEquationRef() const override;
 
   protected:
     virtual TFieldList *createUniformFields(TSymbolTable *symbolTable) override;

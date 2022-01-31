@@ -27,7 +27,6 @@ constexpr ImmutableString kEmulatedDepthRangeParams = ImmutableString("ANGLEDept
 constexpr const char kViewport[]               = "viewport";
 constexpr const char kClipDistancesEnabled[]   = "clipDistancesEnabled";
 constexpr const char kUnused[]                 = "_unused";
-constexpr const char kUnused2[]                = "_unused2";
 constexpr const char kXfbVerticesPerInstance[] = "xfbVerticesPerInstance";
 constexpr const char kXfbBufferOffsets[]       = "xfbBufferOffsets";
 constexpr const char kAcbBufferOffsets[]       = "acbBufferOffsets";
@@ -39,7 +38,7 @@ constexpr const char kNegFlipXY[]              = "negFlipXY";
 constexpr const char kPreRotation[]            = "preRotation";
 constexpr const char kFragRotation[]           = "fragRotation";
 constexpr const char kDither[]                 = "dither";
-
+constexpr const char kBlendEquation[]          = "blendEquation";
 }  // anonymous namespace
 
 // Class DriverUniform
@@ -265,8 +264,8 @@ TFieldList *DriverUniformExtended::createUniformFields(TSymbolTable *symbolTable
 
     constexpr size_t kNumGraphicsDriverUniformsExt = 7;
     constexpr std::array<const char *, kNumGraphicsDriverUniformsExt>
-        kGraphicsDriverUniformNamesExt = {
-            {kHalfRenderArea, kFlipXY, kNegFlipXY, kDither, kUnused2, kFragRotation, kPreRotation}};
+        kGraphicsDriverUniformNamesExt = {{kHalfRenderArea, kFlipXY, kNegFlipXY, kDither,
+                                           kBlendEquation, kFragRotation, kPreRotation}};
 
     const std::array<TType *, kNumGraphicsDriverUniformsExt> kDriverUniformTypesExt = {{
         new TType(EbtFloat, EbpHigh, EvqGlobal, 2),
@@ -327,6 +326,11 @@ TIntermTyped *DriverUniformExtended::getHalfRenderAreaRef() const
 TIntermTyped *DriverUniformExtended::getDitherRef() const
 {
     return createDriverUniformRef(kDither);
+}
+
+TIntermTyped *DriverUniformExtended::getBlendEquationRef() const
+{
+    return createDriverUniformRef(kBlendEquation);
 }
 
 }  // namespace sh

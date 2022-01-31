@@ -789,6 +789,7 @@ struct SpecializationConstants final
     float drawableWidth;
     float drawableHeight;
     uint32_t dither;
+    uint32_t blendEquation;
 };
 ANGLE_DISABLE_STRUCT_PADDING_WARNINGS
 
