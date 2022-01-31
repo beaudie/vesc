@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "47c7bf9d_c9fe5d42",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-01-31T20:55:00Z",
+      "side": 1,
+      "message": "I had forgot about your change, so ended up reproducing the same built-in decl fix, lol!\n\nAnyway, the diff with your change is all that is in ReplaceForShaderFramebufferFetch.cpp (and removing the expectations file update)",
+      "revId": "702dcc6d56f70ef43423d7d8de8ca615012efb50",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
