@@ -434,11 +434,20 @@ class PipelineFunctionEnv
             }
             else if (isMain && mPipeline.type == Pipeline::Type::InstanceId)
             {
-                Name name = mPipeline.getStructInstanceName(Pipeline::Variant::Modified);
-                auto *var = new TVariable(&mSymbolTable, name.rawName(),
-                                          new TType(TBasicType::EbtUInt), name.symbolType());
-                newFunc   = &CloneFunctionAndPrependParam(mSymbolTable, nullptr, func, *var);
-                mPipelineMainLocalVar.external = var;
+                Name nameInstanceId = mPipeline.getStructInstanceName(Pipeline::Variant::Modified);
+                auto *varInstanceId =
+                    new TVariable(&mSymbolTable, nameInstanceId.rawName(),
+                                  new TType(TBasicType::EbtUInt), nameInstanceId.symbolType());
+
+                Name nameBaseInstance = Name("baseInstance");
+                auto *varBaseInstance =
+                    new TVariable(&mSymbolTable, nameBaseInstance.rawName(),
+                                  new TType(TBasicType::EbtUInt), nameBaseInstance.symbolType());
+
+                newFunc = &CloneFunctionAndPrependTwoParams(mSymbolTable, nullptr, func,
+                                                            *varInstanceId, *varBaseInstance);
+                mPipelineMainLocalVar.external      = varInstanceId;
+                mPipelineMainLocalVar.externalExtra = varBaseInstance;
             }
             else if (isMain && mPipeline.alwaysRequiresLocalVariableDeclarationInMain())
             {
@@ -811,11 +820,15 @@ class UpdatePipelineFunctions : private TIntermRebuild
             }
             else if (mPipeline.type == Pipeline::Type::InstanceId)
             {
+                auto varInstanceId   = new TIntermSymbol(mPipelineMainLocalVar.external);
+                auto varBaseInstance = new TIntermSymbol(mPipelineMainLocalVar.externalExtra);
+
                 newBody->appendStatement(new TIntermBinary(
                     TOperator::EOpAssign,
                     &AccessFieldByIndex(*new TIntermSymbol(&getInternalPipelineVariable(func)), 0),
-                    &AsType(mSymbolEnv, *new TType(TBasicType::EbtInt),
-                            *new TIntermSymbol(&getExternalPipelineVariable(func)))));
+                    &AsType(
+                        mSymbolEnv, *new TType(TBasicType::EbtInt),
+                        *new TIntermBinary(TOperator::EOpSub, varInstanceId, varBaseInstance))));
             }
             else if (!mPipelineMainLocalVar.isUniform())
             {
