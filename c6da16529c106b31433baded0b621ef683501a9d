@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "26357fa8_2d6443e9",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2022-02-01T01:58:57Z",
+      "side": 1,
+      "message": "Gregg, Kyle: please review.\n\nOthers: any comments welcome.\n\nIt was challenging to reproduce all of the behaviors we thought would occur as a side-effect of this bug. However, the one test here (which is run in both WebGL compatibility mode, and not) definitely reproduces the original problem when run on Intel Macs with Metal\u0027s validation layers enabled, and load/store action validation.\n\nThe changes we discussed in our meetings, about switching to MTLLoadActionClear rather than MTLLoadActionDontCare for WebGL contexts, were not testable (after several attempts), so I did not make them.\n",
+      "revId": "c6da16529c106b31433baded0b621ef683501a9d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
