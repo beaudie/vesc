@@ -16,6 +16,24 @@
       "message": "Jamie, Shabi any more comments?",
       "revId": "3a8c0759c4717b150d092bb853c2660e6a5b17b2",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "f6620429_ac8debc2",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-02-01T08:44:05Z",
+      "side": 1,
+      "message": "Good with me!",
+      "parentUuid": "6a739a32_c3dc498d",
+      "revId": "3a8c0759c4717b150d092bb853c2660e6a5b17b2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
