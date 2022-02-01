@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "db74031d_dcb3f8fb",
+        "filename": "src/libANGLE/validationES.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 1972,
+      "author": {
+        "id": 1340649
+      },
+      "writtenOn": "2022-02-01T22:37:47Z",
+      "side": 1,
+      "message": "Texture",
+      "range": {
+        "startLine": 1972,
+        "startChar": 55,
+        "endLine": 1972,
+        "endChar": 60
+      },
+      "revId": "336bdc0af547e7569db607c3d2995525b3281fa9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
