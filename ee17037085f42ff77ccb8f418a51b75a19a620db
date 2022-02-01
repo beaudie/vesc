@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "f5836cb5_68b39d92",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 6
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2022-02-01T21:05:15Z",
+      "side": 1,
+      "message": "We can squash these two CLs, but wanted to (at first) separate out which tests covered each fix.",
+      "revId": "ee17037085f42ff77ccb8f418a51b75a19a620db",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
