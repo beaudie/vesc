@@ -3007,6 +3007,49 @@ void TextureVk::releaseImage(ContextVk *contextVk)
 {
     RendererVk *renderer = contextVk->getRenderer();
 
+    // code to check if we can get a valid mUse from ImageHelper object for ImageViewHelper garbage
+    // collection
+    vk::ImageViewHelper &defaultImageViews =
+        mMultisampledImageViews[gl::RenderToTextureImageIndex::Default];
+    std::vector<vk::GarbageObject> defaultImageViewsGarbageObjects;
+    defaultImageViews.garbageCollectOnly(&defaultImageViewsGarbageObjects);
+    if (mImage == nullptr)
+    {
+        ASSERT(defaultImageViewsGarbageObjects.size() == 0);
+    }
+    else
+    {
+        ASSERT(mImage->getSharedResourceUse().getSerial() >=
+               defaultImageViews.getSharedResourceUse().getSerial());
+        ASSERT(mImage->getSharedResourceUse().getCounter() >=
+               defaultImageViews.getSharedResourceUse().getCounter());
+        defaultImageViews.releaseImageViewNoGarbageCollect(renderer,
+                                                           &defaultImageViewsGarbageObjects);
+    }
+
+    for (int i = static_cast<int>(gl::RenderToTextureImageIndex::IntermediateImage2xMultisampled);
+         i < static_cast<int>(gl::RenderToTextureImageIndex::EnumCount); i++)
+    {
+        gl::RenderToTextureImageIndex index = static_cast<gl::RenderToTextureImageIndex>(i);
+        vk::ImageHelper &image              = mMultisampledImages[index];
+        vk::ImageViewHelper &imageViews     = mMultisampledImageViews[index];
+        std::vector<vk::GarbageObject> imageViewGarbageObjects;
+        imageViews.garbageCollectOnly(&imageViewGarbageObjects);
+        if (!image.valid())
+        {
+            ASSERT(imageViewGarbageObjects.size() == 0);
+        }
+        else
+        {
+            ASSERT(image.getSharedResourceUse().getSerial() >=
+                   imageViews.getSharedResourceUse().getSerial());
+            ASSERT(image.getSharedResourceUse().getCounter() >=
+                   imageViews.getSharedResourceUse().getCounter());
+            image.releaseImageFromShareContexts(renderer, contextVk);
+            imageViews.releaseImageViewNoGarbageCollect(renderer, &imageViewGarbageObjects);
+        }
+    }
+
     if (mImage)
     {
         if (mOwnsImage)
@@ -3020,18 +3063,18 @@ void TextureVk::releaseImage(ContextVk *contextVk)
         }
     }
 
-    for (vk::ImageHelper &image : mMultisampledImages)
-    {
-        if (image.valid())
-        {
-            image.releaseImageFromShareContexts(renderer, contextVk);
-        }
-    }
-
-    for (vk::ImageViewHelper &imageViews : mMultisampledImageViews)
-    {
-        imageViews.release(renderer);
-    }
+    //    for (vk::ImageHelper &image : mMultisampledImages)
+    //    {
+    //        if (image.valid())
+    //        {
+    //            image.releaseImageFromShareContexts(renderer, contextVk);
+    //        }
+    //    }
+    //
+    //    for (vk::ImageViewHelper &imageViews : mMultisampledImageViews)
+    //    {
+    //        imageViews.release(renderer);
+    //    }
 
     for (auto &renderTargets : mSingleLayerRenderTargets)
     {
@@ -3278,7 +3321,31 @@ uint32_t TextureVk::getImageViewLayerCount() const
 
 angle::Result TextureVk::refreshImageViews(ContextVk *contextVk)
 {
-    getImageViews().release(contextVk->getRenderer());
+    // Code to verify we have a valid ImageHelper::mUse when we need to send ImageViewHelper for
+    // garbage collection
+    RendererVk *renderer                  = contextVk->getRenderer();
+    vk::ImageViewHelper &defaultImageView = getImageViews();
+    std::vector<vk::GarbageObject> defaultImageViewGarbage;
+
+    defaultImageView.garbageCollectOnly(&defaultImageViewGarbage);
+    // vk::ImageHelper &defaultImage = mMultisampledImages[gl::RenderToTextureImageIndex::Default];
+
+    if (mImage == nullptr || !mImage->valid())
+    {
+        ASSERT(defaultImageViewGarbage.size() == 0);
+    }
+    else
+    {
+        ASSERT(mImage->getSharedResourceUse().getSerial() >=
+               defaultImageView.getSharedResourceUse().getSerial());
+        ASSERT(mImage->getSharedResourceUse().getCounter() >=
+               defaultImageView.getSharedResourceUse().getCounter());
+    }
+
+    defaultImageView.releaseImageViewNoGarbageCollect(renderer, &defaultImageViewGarbage);
+
+    // getImageViews().release(contextVk->getRenderer());
+
     const gl::ImageDesc &baseLevelDesc = mState.getBaseLevelDesc();
 
     ANGLE_TRY(initImageViews(contextVk, mImage->getActualFormat(), baseLevelDesc.format.info->sized,
