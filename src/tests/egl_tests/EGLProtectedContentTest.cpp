@@ -13,6 +13,7 @@
 #include <iostream>
 #include <thread>
 #include "test_utils/ANGLETest.h"
+#include "test_utils/gl_raii.h"
 #include "util/EGLWindow.h"
 #include "util/OSWindow.h"
 
@@ -847,6 +848,31 @@ TEST_P(EGLProtectedContentTest, QueryContext)
     ASSERT_EGL_SUCCESS() << "eglQueryContext failed.";
 
     EXPECT_EQ(value, 1);
+}
+
+// Attach protected texture to a Framebuffer of an unprotected Context - Negative test
+TEST_P(EGLProtectedContentTest, FramebufferAttachment)
+{
+    ANGLE_SKIP_TEST_IF(!IsEGLDisplayExtensionEnabled(mDisplay, "EGL_EXT_protected_content"));
+
+    EGLConfig config = EGL_NO_CONFIG_KHR;
+    EXPECT_TRUE(chooseConfig(&config));
+    ANGLE_SKIP_TEST_IF(config == EGL_NO_CONFIG_KHR);
+
+    bool isProtectedContext = false;
+    EGLContext context      = EGL_NO_CONTEXT;
+    EXPECT_TRUE(createContext(isProtectedContext, config, &context));
+    ASSERT_EGL_SUCCESS() << "eglCreateContext failed.";
+
+    bool isProtectedTexture = true;
+    GLuint texture          = 0;
+    EXPECT_TRUE(createTexture(isProtectedTexture, &texture));
+
+    GLFramebuffer fbo;
+    glBindFramebuffer(GL_FRAMEBUFFER, fbo);
+
+    glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT1, GL_TEXTURE_2D, texture, 0);
+    EXPECT_FALSE(glCheckFramebufferStatus(GL_FRAMEBUFFER) == GL_FRAMEBUFFER_COMPLETE);
 }
 
 ANGLE_INSTANTIATE_TEST(EGLProtectedContentTest,
