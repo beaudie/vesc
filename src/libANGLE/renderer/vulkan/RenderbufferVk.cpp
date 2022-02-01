@@ -275,6 +275,19 @@ void RenderbufferVk::releaseImage(ContextVk *contextVk)
 {
     RendererVk *renderer = contextVk->getRenderer();
 
+    std::vector<vk::GarbageObject> garbage;
+    mImageViews.garbageCollectOnly(&garbage);
+    //    if(mImage && mOwnsImage)
+    //    {
+    //        mImageViews.garbageCollectOnly(&garbage);
+    //        mImageViews.releaseImageViewNoGarbageCollect(renderer);
+    //        mImage->garbageCollectOnly(renderer ,&garbage);
+    //        mImage->releaseImageFromShareContextNoGarbageCollect(renderer, contextVk);
+    //
+    //        //Use mImage->mUse for both mImage and mImageViews
+    //        mImage->resetmUse(renderer, &garbage);
+    //    }
+
     if (mImage && mOwnsImage)
     {
         mImage->releaseImageFromShareContexts(renderer, contextVk);
@@ -282,15 +295,23 @@ void RenderbufferVk::releaseImage(ContextVk *contextVk)
     }
     else
     {
+        ASSERT(garbage.size() == 0);
+
         mImage = nullptr;
         mImageObserverBinding.bind(nullptr);
     }
 
     mImageViews.release(renderer);
 
+    garbage.clear();
+    mMultisampledImageViews.garbageCollectOnly(&garbage);
     if (mMultisampledImage.valid())
     {
         mMultisampledImage.releaseImageFromShareContexts(renderer, contextVk);
+    }
+    else
+    {
+        ASSERT(garbage.size() == 0);
     }
     mMultisampledImageViews.release(renderer);
 }

@@ -2045,6 +2045,12 @@ class ImageHelper final : public Resource, public angle::Subject
                                                    gl::LevelIndex levelEnd,
                                                    angle::FormatID formatID) const;
 
+    void garbageCollectOnly(RendererVk *renderer, std::vector<GarbageObject> *garbage);
+
+    void releaseImageFromShareContextNoGarbageCollect(RendererVk *renderer, ContextVk *contextVk);
+
+    void resetmUse(RendererVk *renderer, std::vector<GarbageObject> *garbage);
+
   private:
     enum class UpdateSource
     {
@@ -2493,6 +2499,10 @@ class ImageViewHelper final : public Resource
         LayerMode layerMode,
         SrgbDecodeMode srgbDecodeMode,
         gl::SrgbOverride srgbOverrideMode) const;
+
+    void garbageCollectOnly(std::vector<GarbageObject> *garbage);
+
+    void releaseImageViewNoGarbageCollect(RendererVk *renderer);
 
   private:
     ImageView &getReadImageView()
