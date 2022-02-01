@@ -16,6 +16,24 @@
       "message": "Jamie, Shabi any more comments?",
       "revId": "642b131e5f2a6d3317fae0ba2c1a2f87d525a905",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "8f050cda_e5dc21f6",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-02-01T08:43:37Z",
+      "side": 1,
+      "message": "Still LGTM",
+      "parentUuid": "cb9e028c_247fedff",
+      "revId": "642b131e5f2a6d3317fae0ba2c1a2f87d525a905",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
