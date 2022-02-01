@@ -41,6 +41,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "ab9e6d2b_ca20ae0b",
+        "filename": "src/libANGLE/renderer/vulkan/SurfaceVk.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 2145,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2022-02-01T23:13:29Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "f147c17a_dc1a2991",
+      "range": {
+        "startLine": 2141,
+        "startChar": 0,
+        "endLine": 2145,
+        "endChar": 0
+      },
+      "revId": "ee17037085f42ff77ccb8f418a51b75a19a620db",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "52795719_42bc31a8",
@@ -64,6 +88,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "e5f2dce2_e932f2a8",
+        "filename": "src/libANGLE/renderer/vulkan/SurfaceVk.h",
+        "patchSetId": 6
+      },
+      "lineNbr": 172,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2022-02-01T23:13:29Z",
+      "side": 1,
+      "message": "SGTM, done.",
+      "parentUuid": "52795719_42bc31a8",
+      "range": {
+        "startLine": 172,
+        "startChar": 20,
+        "endLine": 172,
+        "endChar": 36
+      },
+      "revId": "ee17037085f42ff77ccb8f418a51b75a19a620db",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "8043f23c_ea1eb2b5",
@@ -77,6 +125,30 @@
       "writtenOn": "2022-02-01T21:13:37Z",
       "side": 1,
       "message": "nit: explicit enum, init in cpp",
+      "range": {
+        "startLine": 407,
+        "startChar": 4,
+        "endLine": 407,
+        "endChar": 8
+      },
+      "revId": "ee17037085f42ff77ccb8f418a51b75a19a620db",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "baea406d_353e2a44",
+        "filename": "src/libANGLE/renderer/vulkan/SurfaceVk.h",
+        "patchSetId": 6
+      },
+      "lineNbr": 407,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2022-02-01T23:13:29Z",
+      "side": 1,
+      "message": "Ah, right.  I meant to update that before submitting, just kept it simple for starters.  Done.",
+      "parentUuid": "8043f23c_ea1eb2b5",
       "range": {
         "startLine": 407,
         "startChar": 4,
