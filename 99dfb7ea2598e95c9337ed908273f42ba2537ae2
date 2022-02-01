@@ -24,6 +24,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "f3939a5f_34af07b9",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 1232,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2022-02-01T19:07:05Z",
+      "side": 1,
+      "message": "I was trying to avoid that since that makes API ugly. But anyway, I have added a BufferBindingDirty enum class and have it returned from  convertIndexBufferCPU() call.",
+      "parentUuid": "8476205e_f29cb36c",
+      "range": {
+        "startLine": 1218,
+        "startChar": 0,
+        "endLine": 1232,
+        "endChar": 9
+      },
+      "revId": "99dfb7ea2598e95c9337ed908273f42ba2537ae2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "33be7f5b_a449f987",
@@ -37,6 +61,30 @@
       "writtenOn": "2022-02-01T17:34:20Z",
       "side": 1,
       "message": "nit: I\u0027d suggest you immediately set the mCurrentElementArrayBuffer and return here, you can eliminate some later checks and blocks",
+      "range": {
+        "startLine": 332,
+        "startChar": 0,
+        "endLine": 333,
+        "endChar": 22
+      },
+      "revId": "99dfb7ea2598e95c9337ed908273f42ba2537ae2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "6e6ee8e1_318d285a",
+        "filename": "src/libANGLE/renderer/vulkan/VertexArrayVk.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 333,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2022-02-01T19:07:05Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "33be7f5b_a449f987",
       "range": {
         "startLine": 332,
         "startChar": 0,
@@ -70,6 +118,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "144ca69e_2990c581",
+        "filename": "src/libANGLE/renderer/vulkan/VertexArrayVk.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 337,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2022-02-01T19:07:05Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "cebd11a8_d0927743",
+      "range": {
+        "startLine": 337,
+        "startChar": 13,
+        "endLine": 337,
+        "endChar": 31
+      },
+      "revId": "99dfb7ea2598e95c9337ed908273f42ba2537ae2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "2e85b1d6_3e1c3d48",
@@ -83,6 +155,30 @@
       "writtenOn": "2022-02-01T17:34:20Z",
       "side": 1,
       "message": "and this can be inside the and \"if\"",
+      "range": {
+        "startLine": 352,
+        "startChar": 0,
+        "endLine": 357,
+        "endChar": 9
+      },
+      "revId": "99dfb7ea2598e95c9337ed908273f42ba2537ae2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "14f0548a_64b6a2d7",
+        "filename": "src/libANGLE/renderer/vulkan/VertexArrayVk.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 357,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2022-02-01T19:07:05Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "2e85b1d6_3e1c3d48",
       "range": {
         "startLine": 352,
         "startChar": 0,
