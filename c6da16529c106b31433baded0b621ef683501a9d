@@ -33,6 +33,80 @@
       "message": "Unfortunately the mac-test failure is a known flake, https://bugs.chromium.org/p/angleproject/issues/detail?id\u003d6570 .\n",
       "revId": "c6da16529c106b31433baded0b621ef683501a9d",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "8a9fb1b9_7194a4c3",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-02-01T08:52:36Z",
+      "side": 1,
+      "message": "Drive by!",
+      "revId": "c6da16529c106b31433baded0b621ef683501a9d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b911b72f_2765bdb1",
+        "filename": "src/tests/gl_tests/FramebufferInvalidateTest.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 89,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-02-01T08:52:36Z",
+      "side": 1,
+      "message": "EXPECT_PIXEL_RECT_EQ does the same, and more efficiently",
+      "range": {
+        "startLine": 83,
+        "startChar": 0,
+        "endLine": 89,
+        "endChar": 9
+      },
+      "revId": "c6da16529c106b31433baded0b621ef683501a9d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "d1d9b4ae_c04eede6",
+        "filename": "src/tests/gl_tests/FramebufferInvalidateTest.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 118,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-02-01T08:52:36Z",
+      "side": 1,
+      "message": "Thanks for the test. I suggest moving it to StateChangeTest.cpp, which is where these sort of this-then-than tests are added. There are already a number of XThenInvalidateThenY tests there.",
+      "revId": "c6da16529c106b31433baded0b621ef683501a9d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "e334c29b_41641bac",
+        "filename": "src/tests/gl_tests/FramebufferInvalidateTest.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 129,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-02-01T08:52:36Z",
+      "side": 1,
+      "message": "nit: Please use the ASSERT_GL_FRAMEBUFFER_COMPLETE macro:\n\n    ASSERT_GL_FRAMEBUFFER_COMPLETE(GL_FRAMEBUFFER);\n\nSame below",
+      "revId": "c6da16529c106b31433baded0b621ef683501a9d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
