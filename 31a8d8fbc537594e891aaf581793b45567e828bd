@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "6c105dc5_fd15b3f1",
+        "filename": "src/libANGLE/renderer/metal/ContextMtl.mm",
+        "patchSetId": 1
+      },
+      "lineNbr": 324,
+      "author": {
+        "id": 1500872
+      },
+      "writtenOn": "2022-02-01T19:26:05Z",
+      "side": 1,
+      "message": "If possible, I\u0027d like to see the ability to draw with just BaseVertex without specifying baseIndex as well. As you\u0027ve mentioned, not all HW supports baseInstance drawing.",
+      "revId": "31a8d8fbc537594e891aaf581793b45567e828bd",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
