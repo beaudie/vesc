@@ -434,6 +434,11 @@ class RenderCommandEncoder final : public CommandEncoder
                                         uint32_t vertexStart,
                                         uint32_t vertexCount,
                                         uint32_t instances);
+    RenderCommandEncoder &drawInstancedBaseInstance(MTLPrimitiveType primitiveType,
+                                                    uint32_t vertexStart,
+                                                    uint32_t vertexCount,
+                                                    uint32_t instances,
+                                                    uint32_t baseInstance);
     RenderCommandEncoder &drawIndexed(MTLPrimitiveType primitiveType,
                                       uint32_t indexCount,
                                       MTLIndexType indexType,
@@ -445,13 +450,14 @@ class RenderCommandEncoder final : public CommandEncoder
                                                const BufferRef &indexBuffer,
                                                size_t bufferOffset,
                                                uint32_t instances);
-    RenderCommandEncoder &drawIndexedInstancedBaseVertex(MTLPrimitiveType primitiveType,
-                                                         uint32_t indexCount,
-                                                         MTLIndexType indexType,
-                                                         const BufferRef &indexBuffer,
-                                                         size_t bufferOffset,
-                                                         uint32_t instances,
-                                                         uint32_t baseVertex);
+    RenderCommandEncoder &drawIndexedInstancedBaseVertexBaseInstance(MTLPrimitiveType primitiveType,
+                                                                     uint32_t indexCount,
+                                                                     MTLIndexType indexType,
+                                                                     const BufferRef &indexBuffer,
+                                                                     size_t bufferOffset,
+                                                                     uint32_t instances,
+                                                                     uint32_t baseVertex,
+                                                                     uint32_t baseInstance);
 
     RenderCommandEncoder &setVisibilityResultMode(MTLVisibilityResultMode mode, size_t offset);
 

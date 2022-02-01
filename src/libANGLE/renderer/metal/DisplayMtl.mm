@@ -977,6 +977,11 @@ void DisplayMtl::initializeExtensions() const
 
     // GL_KHR_parallel_shader_compile
     mNativeExtensions.parallelShaderCompileKHR = true;
+
+    // Enable ANGLE_base_vertex_base_instance
+    // mNativeExtensions.baseVertexBaseInstanceANGLE = mFeatures.hasBaseVertexInstancedDraw.enabled;
+    // mNativeExtensions.baseVertexBaseInstanceShaderBuiltinANGLE =
+    // mFeatures.hasBaseVertexInstancedDraw.enabled;
 }
 
 void DisplayMtl::initializeTextureCaps() const
