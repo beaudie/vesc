@@ -18,6 +18,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "b921df9b_3b846461",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1533513
+      },
+      "writtenOn": "2022-02-01T15:59:19Z",
+      "side": 1,
+      "message": "Thanks, I will keep in mind",
+      "parentUuid": "32b79b29_9ff0df37",
+      "revId": "d3121d95bb42101861bf3e74da747d75f1dfdb49",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "9ad50a7b_111412c8",
@@ -31,6 +49,24 @@
       "writtenOn": "2022-02-01T15:44:19Z",
       "side": 1,
       "message": "This change seems unnecessary.",
+      "revId": "d3121d95bb42101861bf3e74da747d75f1dfdb49",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "8b5897f4_b0345baf",
+        "filename": "src/libANGLE/renderer/SurfaceImpl.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 125,
+      "author": {
+        "id": 1533513
+      },
+      "writtenOn": "2022-02-01T15:59:19Z",
+      "side": 1,
+      "message": "EGL_KHR_partial_update adds EGL_BUFFER_AGE_KHR surface attribute that user can query. This change is necessary for implementing that.",
+      "parentUuid": "9ad50a7b_111412c8",
       "revId": "d3121d95bb42101861bf3e74da747d75f1dfdb49",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
