@@ -275,6 +275,8 @@ void RenderbufferVk::releaseImage(ContextVk *contextVk)
 {
     RendererVk *renderer = contextVk->getRenderer();
 
+    ASSERT(mImage);
+
     if (mImage && mOwnsImage)
     {
         mImage->releaseImageFromShareContexts(renderer, contextVk);

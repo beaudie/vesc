@@ -3007,6 +3007,7 @@ void TextureVk::releaseImage(ContextVk *contextVk)
 {
     RendererVk *renderer = contextVk->getRenderer();
 
+    ASSERT(mImage);
     if (mImage)
     {
         if (mOwnsImage)
