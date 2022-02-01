@@ -275,6 +275,40 @@ void RenderbufferVk::releaseImage(ContextVk *contextVk)
 {
     RendererVk *renderer = contextVk->getRenderer();
 
+    std::vector<vk::GarbageObject> garbage;
+    mImageViews.garbageCollectOnly(&garbage);
+
+    if (mImage == nullptr || !mImage->valid())
+    {
+        ASSERT(garbage.size() == 0);
+    }
+    else
+    {
+        ASSERT(mImage->getSharedResourceUse().getSerial() >=
+               mImageViews.getSharedResourceUse().getSerial());
+    }
+
+    mImageViews.releaseImageViewNoGarbageCollect(renderer, &garbage);
+
+    garbage.clear();
+    mMultisampledImageViews.garbageCollectOnly(&garbage);
+    if (mImage == nullptr || !mImage->valid())
+    {
+        ASSERT(garbage.size() == 0);
+    }
+    else
+    {
+        ASSERT(mImage->getSharedResourceUse().getSerial() >=
+               mMultisampledImageViews.getSharedResourceUse().getSerial());
+    }
+
+    mMultisampledImageViews.releaseImageViewNoGarbageCollect(renderer, &garbage);
+
+    if (mMultisampledImage.valid())
+    {
+        mMultisampledImage.releaseImageFromShareContexts(renderer, contextVk);
+    }
+
     if (mImage && mOwnsImage)
     {
         mImage->releaseImageFromShareContexts(renderer, contextVk);
@@ -285,14 +319,6 @@ void RenderbufferVk::releaseImage(ContextVk *contextVk)
         mImage = nullptr;
         mImageObserverBinding.bind(nullptr);
     }
-
-    mImageViews.release(renderer);
-
-    if (mMultisampledImage.valid())
-    {
-        mMultisampledImage.releaseImageFromShareContexts(renderer, contextVk);
-    }
-    mMultisampledImageViews.release(renderer);
 }
 
 const gl::InternalFormat &RenderbufferVk::getImplementationSizedFormat() const
