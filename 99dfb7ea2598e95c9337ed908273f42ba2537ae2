@@ -1,0 +1,96 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "8476205e_f29cb36c",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 1232,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2022-02-01T17:34:20Z",
+      "side": 1,
+      "message": "nit: instead of checking pre-post serials, can you make vertexArrayVk return an out variable indicating the result of the convert call?",
+      "range": {
+        "startLine": 1218,
+        "startChar": 0,
+        "endLine": 1232,
+        "endChar": 9
+      },
+      "revId": "99dfb7ea2598e95c9337ed908273f42ba2537ae2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "33be7f5b_a449f987",
+        "filename": "src/libANGLE/renderer/vulkan/VertexArrayVk.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 333,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2022-02-01T17:34:20Z",
+      "side": 1,
+      "message": "nit: I\u0027d suggest you immediately set the mCurrentElementArrayBuffer and return here, you can eliminate some later checks and blocks",
+      "range": {
+        "startLine": 332,
+        "startChar": 0,
+        "endLine": 333,
+        "endChar": 22
+      },
+      "revId": "99dfb7ea2598e95c9337ed908273f42ba2537ae2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "cebd11a8_d0927743",
+        "filename": "src/libANGLE/renderer/vulkan/VertexArrayVk.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 337,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2022-02-01T17:34:20Z",
+      "side": 1,
+      "message": "then you don\u0027t need to check this anymore",
+      "range": {
+        "startLine": 337,
+        "startChar": 13,
+        "endLine": 337,
+        "endChar": 31
+      },
+      "revId": "99dfb7ea2598e95c9337ed908273f42ba2537ae2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "2e85b1d6_3e1c3d48",
+        "filename": "src/libANGLE/renderer/vulkan/VertexArrayVk.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 357,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2022-02-01T17:34:20Z",
+      "side": 1,
+      "message": "and this can be inside the and \"if\"",
+      "range": {
+        "startLine": 352,
+        "startChar": 0,
+        "endLine": 357,
+        "endChar": 9
+      },
+      "revId": "99dfb7ea2598e95c9337ed908273f42ba2537ae2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
