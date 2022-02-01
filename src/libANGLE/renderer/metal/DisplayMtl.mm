@@ -977,6 +977,12 @@ void DisplayMtl::initializeExtensions() const
 
     // GL_KHR_parallel_shader_compile
     mNativeExtensions.parallelShaderCompileKHR = true;
+
+    // TODO(anglebug.com/6963) Enabling GL_ANGLE_base_vertex_base_instance requires MSL translator
+    // update for gl_InstanceID implementation.
+    // mNativeExtensions.baseVertexBaseInstanceANGLE = mFeatures.hasBaseVertexInstancedDraw.enabled;
+    // mNativeExtensions.baseVertexBaseInstanceShaderBuiltinANGLE =
+    // mFeatures.hasBaseVertexInstancedDraw.enabled;
 }
 
 void DisplayMtl::initializeTextureCaps() const
