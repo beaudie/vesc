@@ -3278,7 +3278,24 @@ uint32_t TextureVk::getImageViewLayerCount() const
 
 angle::Result TextureVk::refreshImageViews(ContextVk *contextVk)
 {
-    getImageViews().release(contextVk->getRenderer());
+    // Code to verify we have a valid ImageHelper::mUse when we need to send ImageViewHelper for
+    // garbage collection
+    RendererVk *renderer                  = contextVk->getRenderer();
+    vk::ImageViewHelper &defaultImageView = getImageViews();
+    std::vector<vk::GarbageObject> defaultImageViewGarbage;
+
+    defaultImageView.garbageCollectOnly(&defaultImageViewGarbage);
+    vk::ImageHelper &defaultImage = mMultisampledImages[gl::RenderToTextureImageIndex::Default];
+
+    if (!defaultImage.valid())
+    {
+        ASSERT(defaultImageViewGarbage.size() == 0);
+    }
+
+    defaultImageView.releaseImageViewNoGarbageCollect(renderer, &defaultImageViewGarbage);
+
+    // getImageViews().release(contextVk->getRenderer());
+
     const gl::ImageDesc &baseLevelDesc = mState.getBaseLevelDesc();
 
     ANGLE_TRY(initImageViews(contextVk, mImage->getActualFormat(), baseLevelDesc.format.info->sized,
