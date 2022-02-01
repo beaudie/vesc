@@ -34,6 +34,29 @@
       "parentUuid": "cb9e028c_247fedff",
       "revId": "642b131e5f2a6d3317fae0ba2c1a2f87d525a905",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "564f30f3_af5a8ec8",
+        "filename": "src/compiler/translator/ParseContext.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 773,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2022-02-01T14:10:47Z",
+      "side": 1,
+      "message": "nit: flip condition to avoid the negative",
+      "range": {
+        "startLine": 771,
+        "startChar": 44,
+        "endLine": 773,
+        "endChar": 4
+      },
+      "revId": "642b131e5f2a6d3317fae0ba2c1a2f87d525a905",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
