@@ -22,6 +22,30 @@
       },
       "revId": "8a1f8af4d24ccd6d294910b3fcefb2ee5cf6f217",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "0c15a3ab_0c0eec30",
+        "filename": "src/tests/deqp_support/deqp_gles31_rotate_test_expectations.txt",
+        "patchSetId": 2
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1359667
+      },
+      "writtenOn": "2022-02-01T18:00:38Z",
+      "side": 0,
+      "message": "Done",
+      "parentUuid": "6cf2c1fe_edde9f1b",
+      "range": {
+        "startLine": 6,
+        "startChar": 0,
+        "endLine": 7,
+        "endChar": 34
+      },
+      "revId": "8a1f8af4d24ccd6d294910b3fcefb2ee5cf6f217",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
