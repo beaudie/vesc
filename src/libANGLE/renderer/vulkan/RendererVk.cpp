@@ -3631,17 +3631,22 @@ angle::Result RendererVk::waitForSerialWithUserTimeout(vk::Context *context,
     return angle::Result::Continue;
 }
 
-angle::Result RendererVk::finish(vk::Context *context, bool hasProtectedContent)
+angle::Result RendererVk::finish(vk::Context *context)
+{
+    return finishWithUserTimeout(context, getMaxFenceWaitTimeNs());
+}
+
+angle::Result RendererVk::finishWithUserTimeout(vk::Context *context, uint64_t timeout)
 {
     std::lock_guard<std::mutex> lock(mCommandQueueMutex);
 
     if (isAsyncCommandQueueEnabled())
     {
-        ANGLE_TRY(mCommandProcessor.waitIdle(context, getMaxFenceWaitTimeNs()));
+        ANGLE_TRY(mCommandProcessor.waitIdle(context, timeout));
     }
     else
     {
-        ANGLE_TRY(mCommandQueue.waitIdle(context, getMaxFenceWaitTimeNs()));
+        ANGLE_TRY(mCommandQueue.waitIdle(context, timeout));
     }
 
     return angle::Result::Continue;

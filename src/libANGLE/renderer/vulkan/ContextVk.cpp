@@ -5679,7 +5679,12 @@ angle::Result ContextVk::finishImpl(RenderPassClosureReason renderPassClosureRea
     ANGLE_TRACE_EVENT0("gpu.angle", "ContextVk::finishImpl");
 
     ANGLE_TRY(flushImpl(nullptr, renderPassClosureReason));
-    ANGLE_TRY(mRenderer->finish(this, hasProtectedContent()));
+
+    constexpr uint64_t kContextDestructionFenceWaitTimeNs = std::numeric_limits<uint64_t>::max();
+    uint64_t timeout = renderPassClosureReason == RenderPassClosureReason::ContextDestruction
+                           ? kContextDestructionFenceWaitTimeNs
+                           : mRenderer->getMaxFenceWaitTimeNs();
+    ANGLE_TRY(mRenderer->finishWithUserTimeout(this, timeout));
 
     clearAllGarbage();
 

@@ -414,7 +414,8 @@ class RendererVk : angle::NonCopyable
                                                Serial serial,
                                                uint64_t timeout,
                                                VkResult *result);
-    angle::Result finish(vk::Context *context, bool hasProtectedContent);
+    angle::Result finish(vk::Context *context);
+    angle::Result finishWithUserTimeout(vk::Context *context, uint64_t timeout);
     angle::Result checkCompletedCommands(vk::Context *context);
 
     angle::Result flushRenderPassCommands(vk::Context *context,

@@ -603,7 +603,7 @@ void WindowSurfaceVk::destroy(const egl::Display *display)
     VkInstance instance  = renderer->getInstance();
 
     // flush the pipe.
-    (void)renderer->finish(displayVk, mState.hasProtectedContent());
+    (void)renderer->finish(displayVk);
 
     destroySwapChainImages(displayVk);
 
@@ -982,8 +982,7 @@ angle::Result WindowSurfaceVk::recreateSwapchain(ContextVk *contextVk, const gl:
         static constexpr size_t kMaxOldSwapchains = 5;
         if (mOldSwapchains.size() > kMaxOldSwapchains)
         {
-            ANGLE_TRY(
-                contextVk->getRenderer()->finish(contextVk, contextVk->hasProtectedContent()));
+            ANGLE_TRY(contextVk->getRenderer()->finish(contextVk));
             for (SwapchainCleanupData &oldSwapchain : mOldSwapchains)
             {
                 oldSwapchain.destroy(contextVk->getDevice(), &mPresentSemaphoreRecycler);
@@ -1161,7 +1160,7 @@ angle::Result WindowSurfaceVk::createSwapChain(vk::Context *context,
     // that case as a workaround.
     if (lastSwapchain && renderer->getFeatures().waitIdleBeforeSwapchainRecreation.enabled)
     {
-        ANGLE_TRY(renderer->finish(context, mState.hasProtectedContent()));
+        ANGLE_TRY(renderer->finish(context));
     }
 
     // TODO(syoussefi): Once EGL_SWAP_BEHAVIOR_PRESERVED_BIT is supported, the contents of the old
