@@ -627,6 +627,18 @@ void ReleaseImageViews(ImageViewVector *imageViewVector, std::vector<GarbageObje
     imageViewVector->clear();
 }
 
+void ReleaseImageViewsWithoutClear(ImageViewVector *imageViewVector,
+                                   std::vector<GarbageObject> *garbage)
+{
+    for (ImageView &imageView : *imageViewVector)
+    {
+        if (imageView.valid())
+        {
+            garbage->emplace_back(GetGarbage(&imageView));
+        }
+    }
+}
+
 void DestroyImageViews(ImageViewVector *imageViewVector, VkDevice device)
 {
     for (ImageView &imageView : *imageViewVector)
@@ -8055,6 +8067,43 @@ angle::Result ImageHelper::readPixels(ContextVk *contextVk,
     return angle::Result::Continue;
 }
 
+void ImageHelper::garbageCollectOnly(RendererVk *renderer, std::vector<GarbageObject> *garbage)
+{
+    rx::CollectGarbage(garbage, &mImage, &mDeviceMemory);
+}
+
+void ImageHelper::releaseImageFromShareContextNoGarbageCollect(RendererVk *renderer,
+                                                               ContextVk *contextVk)
+{
+    // Retrieved from ImageHelper::releaseImageFromShareContext()
+    if (contextVk && mImageSerial.valid())
+    {
+        ContextVkSet &shareContextSet = *contextVk->getShareGroupVk()->getContexts();
+        for (ContextVk *ctx : shareContextSet)
+        {
+            ctx->finalizeImageLayout(this);
+        }
+    }
+
+    // Retrieved from ImageHelper::releaseImage()
+    // Question: what to do with renderer->collectGarbageAndReinit(&mUse, &mImage, &mDeviceMemory);.
+    mImageSerial = kInvalidImageSerial;
+    setEntireContentUndefined();
+}
+
+void ImageHelper::resetmUse(RendererVk *renderer, std::vector<GarbageObject> *garbage)
+{
+    if (!garbage->empty())
+    {
+        renderer->collectGarbage(std::move(mUse), std::move(*garbage));
+    }
+    else
+    {
+        mUse.release();
+    }
+    mUse.init();
+}
+
 // ImageHelper::SubresourceUpdate implementation
 ImageHelper::SubresourceUpdate::SubresourceUpdate() : updateSource(UpdateSource::Buffer)
 {
@@ -8868,6 +8917,68 @@ ImageOrBufferViewSubresourceSerial ImageViewHelper::getSubresourceSerial(
     serial.subresource = MakeImageSubresourceReadRange(levelGL, levelCount, layer, layerMode,
                                                        srgbDecodeMode, srgbOverrideMode);
     return serial;
+}
+
+void ImageViewHelper::garbageCollectOnly(std::vector<GarbageObject> *garbage)
+{
+    ReleaseImageViewsWithoutClear(&mPerLevelLinearReadImageViews, garbage);
+    ReleaseImageViewsWithoutClear(&mPerLevelSRGBReadImageViews, garbage);
+    ReleaseImageViewsWithoutClear(&mPerLevelLinearFetchImageViews, garbage);
+    ReleaseImageViewsWithoutClear(&mPerLevelSRGBFetchImageViews, garbage);
+    ReleaseImageViewsWithoutClear(&mPerLevelLinearCopyImageViews, garbage);
+    ReleaseImageViewsWithoutClear(&mPerLevelSRGBCopyImageViews, garbage);
+    ReleaseImageViewsWithoutClear(&mPerLevelStencilReadImageViews, garbage);
+
+    for (ImageViewVector &layerViews : mLayerLevelDrawImageViews)
+    {
+        for (ImageView &imageView : layerViews)
+        {
+            if (imageView.valid())
+            {
+                garbage->emplace_back(GetGarbage(&imageView));
+            }
+        }
+    }
+    // mLayerLevelDrawImageViews.clear();
+    for (ImageViewVector &layerViews : mLayerLevelDrawImageViewsLinear)
+    {
+        for (ImageView &imageView : layerViews)
+        {
+            if (imageView.valid())
+            {
+                garbage->emplace_back(GetGarbage(&imageView));
+            }
+        }
+    }
+    // mLayerLevelDrawImageViewsLinear.clear();
+    for (auto &iter : mSubresourceDrawImageViews)
+    {
+        std::unique_ptr<ImageView> &imageView = iter.second;
+        if (imageView->valid())
+        {
+            garbage->emplace_back(GetGarbage(imageView.get()));
+        }
+    }
+    // mSubresourceDrawImageViews.clear();
+    // Release the storage views
+    ReleaseImageViews(&mLevelStorageImageViews, garbage);
+    for (ImageViewVector &layerViews : mLayerLevelStorageImageViews)
+    {
+        for (ImageView &imageView : layerViews)
+        {
+            if (imageView.valid())
+            {
+                garbage->emplace_back(GetGarbage(&imageView));
+            }
+        }
+    }
+    // mLayerLevelStorageImageViews.clear();
+}
+
+void ImageViewHelper::releaseImageViewNoGarbageCollect(RendererVk *renderer)
+{
+    // Update image view serial.
+    mImageViewSerial = renderer->getResourceSerialFactory().generateImageOrBufferViewSerial();
 }
 
 ImageSubresourceRange MakeImageSubresourceReadRange(gl::LevelIndex level,
