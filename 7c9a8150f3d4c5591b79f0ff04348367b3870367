@@ -1,0 +1,90 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "13f6c69d_c497ec2a",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 13
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2022-02-01T17:37:40Z",
+      "side": 1,
+      "message": "I suspect we can further improve the design here. Seems reasonable to land for now.",
+      "revId": "7c9a8150f3d4c5591b79f0ff04348367b3870367",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "d2ccf3f7_a7946d7f",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.h",
+        "patchSetId": 13
+      },
+      "lineNbr": 321,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2022-02-01T17:37:40Z",
+      "side": 1,
+      "message": "nit: avoid overloading, use an explicit name",
+      "range": {
+        "startLine": 321,
+        "startChar": 9,
+        "endLine": 321,
+        "endChar": 23
+      },
+      "revId": "7c9a8150f3d4c5591b79f0ff04348367b3870367",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "9f194f30_055d6c27",
+        "filename": "src/libANGLE/renderer/vulkan/ResourceVk.h",
+        "patchSetId": 13
+      },
+      "lineNbr": 118,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2022-02-01T17:37:40Z",
+      "side": 1,
+      "message": "nit: name suggestion is SharedBufferSuballocationGarbage",
+      "range": {
+        "startLine": 118,
+        "startChar": 6,
+        "endLine": 118,
+        "endChar": 26
+      },
+      "revId": "7c9a8150f3d4c5591b79f0ff04348367b3870367",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b1ff8fe6_b2ed5343",
+        "filename": "src/libANGLE/renderer/vulkan/ResourceVk.h",
+        "patchSetId": 13
+      },
+      "lineNbr": 136,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2022-02-01T17:37:40Z",
+      "side": 1,
+      "message": "nit: BufferSuballocationGarbageList",
+      "range": {
+        "startLine": 136,
+        "startChar": 6,
+        "endLine": 136,
+        "endChar": 31
+      },
+      "revId": "7c9a8150f3d4c5591b79f0ff04348367b3870367",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
