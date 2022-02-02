@@ -39,6 +39,30 @@
       },
       "revId": "daa6f6604f285e4ec7795bbe886f7420c58ecf18",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "d5bde777_4abb6869",
+        "filename": "src/libANGLE/renderer/vulkan/SurfaceVk.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 1639,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2022-02-02T16:24:53Z",
+      "side": 1,
+      "message": "Done.  I went with `chooseFramebuffer` as a helper.",
+      "parentUuid": "4e8e23ce_8896a1d2",
+      "range": {
+        "startLine": 1637,
+        "startChar": 8,
+        "endLine": 1639,
+        "endChar": 72
+      },
+      "revId": "daa6f6604f285e4ec7795bbe886f7420c58ecf18",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
