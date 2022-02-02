@@ -206,3 +206,21 @@
 6941 : Texture2DTestES3RobustInit.TextureCOMPRESSEDSRGB8A1ETC2/* = NOT_RUN
 
 6875 : TransformFeedbackTest.SpanMultipleRenderPasses/* = NOT_RUN
+
+# Skip crashing tests after enabling ANGLE_texture_multisample
+3565 : TextureMultisampleTest.GetTexLevelParameter/* = CRASH
+3565 : TextureMultisampleTest.MaxColorTextureSamples/* = CRASH
+3565 : TextureMultisampleTest.MaxDepthTextureSamples/* = CRASH
+3565 : TextureMultisampleTest.MaxIntegerSamples/* = CRASH
+3565 : TextureMultisampleTest.MultisampleTargetFramebufferTexture2D/* = CRASH
+3565 : TextureMultisampleTest.MultisampleTargetGetInternalFormativBase/* = CRASH
+3565 : TextureMultisampleTest.ResolveToDefaultFramebuffer/* = CRASH
+3565 : TextureMultisampleTest.SampleMaski/* = CRASH
+3565 : TextureMultisampleTest.SimpleTexelFetch/* = CRASH
+3565 : TextureMultisampleTest.ValidateTextureStorageMultisampleParameters/* = CRASH
+3565 : TextureRectangleTestES3.CopyTexImage/* = CRASH
+3565 : TextureRectangleTestES3.CopyTexSubImage/* = CRASH
+3565 : TextureRectangleTestES3.SamplingFromRectangleESSL3/* = CRASH
+3565 : TextureSizeTextureArrayTest.BaseLevelVariesInTextureArray/* = CRASH
+3565 : TextureUploadFormatTest.All/* = CRASH
+3565 : TimerQueriesTest.ProcAddresses/* = CRASH
