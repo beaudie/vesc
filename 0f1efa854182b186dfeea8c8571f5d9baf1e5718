@@ -272,6 +272,30 @@
       },
       "revId": "0f1efa854182b186dfeea8c8571f5d9baf1e5718",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "4d64ef98_b23487fc",
+        "filename": "src/libANGLE/renderer/vulkan/FramebufferVk.cpp",
+        "patchSetId": 11
+      },
+      "lineNbr": 536,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-02-02T15:02:32Z",
+      "side": 1,
+      "message": "\u003e As you can see, this makes things quite a bit more complicated, as well as introduces a RP break when the scissor grows when there\u0027s a clear pending.\n\nYes, and that\u0027s why I\u0027m hoping we can split this in another change that can be evaluated on its own. You don\u0027t need any of these for the original issue of using vkCmdClearAttachments for mid-RP scissored clears. This is a separate optimization.",
+      "parentUuid": "0bf31442_bdb768d2",
+      "range": {
+        "startLine": 533,
+        "startChar": 0,
+        "endLine": 536,
+        "endChar": 40
+      },
+      "revId": "0f1efa854182b186dfeea8c8571f5d9baf1e5718",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
