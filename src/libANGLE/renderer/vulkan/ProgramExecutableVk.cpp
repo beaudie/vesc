@@ -1302,15 +1302,7 @@ angle::Result ProgramExecutableVk::updateBuffersDescriptorSet(
         uint32_t binding      = info.binding;
         uint32_t arrayElement = block.isArray ? block.arrayElement : 0;
 
-        VkDeviceSize size;
-        if (!isStorageBuffer)
-        {
-            size = block.dataSize;
-        }
-        else
-        {
-            size = gl::GetBoundBufferAvailableSize(bufferBinding);
-        }
+        VkDeviceSize size = gl::GetBoundBufferAvailableSize(bufferBinding);
 
         // Make sure there's no possible under/overflow with binding size.
         static_assert(sizeof(VkDeviceSize) >= sizeof(bufferBinding.getSize()),
