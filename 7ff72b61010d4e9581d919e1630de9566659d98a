@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "6038c8f5_7c5cde3e",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2022-02-02T16:35:33Z",
+      "side": 1,
+      "message": "PTAL. This is one possible solution to some of the ASAN issues we\u0027ve seen for infinite loop shaders in SwiftShader.\n\nThis simply hangs ANGLE on context destruction if stuck in an infinite loop. The watchdog will kill the process. This seems better than the current state of blindly destroying resources that Vulkan is using.",
+      "revId": "7ff72b61010d4e9581d919e1630de9566659d98a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
