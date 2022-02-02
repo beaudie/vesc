@@ -20,6 +20,41 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "e27f87af_96045c4d",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1359249
+      },
+      "writtenOn": "2022-02-02T21:31:14Z",
+      "side": 1,
+      "message": "Note that the protected_texture extension spec does not specify error case - for any case, except using sparse texture with protected. So, adding a test case will be ANGLE specific.",
+      "parentUuid": "36fbbd87_ed991e6f",
+      "revId": "336bdc0af547e7569db607c3d2995525b3281fa9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "010342b9_bc670b4c",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1359249
+      },
+      "writtenOn": "2022-02-02T21:31:14Z",
+      "side": 1,
+      "message": "2 Notes before I upload.",
+      "revId": "336bdc0af547e7569db607c3d2995525b3281fa9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "db74031d_dcb3f8fb",
         "filename": "src/libANGLE/validationES.cpp",
         "patchSetId": 1
@@ -79,6 +114,30 @@
       "side": 1,
       "message": "technically \"color attachment\" or \"Texture Images\" but just a nit",
       "parentUuid": "2a094723_382dbf14",
+      "range": {
+        "startLine": 1972,
+        "startChar": 55,
+        "endLine": 1972,
+        "endChar": 60
+      },
+      "revId": "336bdc0af547e7569db607c3d2995525b3281fa9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b33a7aa4_1fc1a8b0",
+        "filename": "src/libANGLE/validationES.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 1972,
+      "author": {
+        "id": 1359249
+      },
+      "writtenOn": "2022-02-02T21:31:14Z",
+      "side": 1,
+      "message": "I\u0027ll change \"Image\" to \"Texture\" here since its the attachment.",
+      "parentUuid": "735aec67_9c9f0051",
       "range": {
         "startLine": 1972,
         "startChar": 55,
