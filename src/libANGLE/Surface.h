@@ -203,9 +203,14 @@ class Surface : public LabeledObject, public gl::FramebufferAttachmentObject
     // otherwise.
     const gl::Offset &getTextureOffset() const { return mTextureOffset; }
 
+    Error queryBufferAge(const gl::Context *context, EGLint *age);
     Error getBufferAge(const gl::Context *context, EGLint *age) const;
 
     Error setRenderBuffer(EGLint renderBuffer);
+
+    bool bufferAgeQueriedSinceLastSwap() const { return mBufferAgeQueriedSinceLastSwap; }
+    void setDamageRegion(const EGLint *rects, EGLint n_rects);
+    bool isDamageRegionSet() const { return mIsDamageRegionSet; }
 
   protected:
     Surface(EGLint surfaceType,
@@ -268,6 +273,9 @@ class Surface : public LabeledObject, public gl::FramebufferAttachmentObject
     bool mIsCurrentOnAnyContext;  // The surface is current to a context/client API
     uint8_t *mLockBufferPtr;      // Memory owned by backend.
     EGLint mLockBufferPitch;
+
+    bool mBufferAgeQueriedSinceLastSwap;
+    bool mIsDamageRegionSet;
 
   private:
     Error destroyImpl(const Display *display);
