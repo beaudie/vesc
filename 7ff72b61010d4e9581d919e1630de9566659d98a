@@ -35,6 +35,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "5495965a_a41c207c",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-02-02T18:41:56Z",
+      "side": 1,
+      "message": "What happens really on TDR? Wouldn\u0027t the wait already return with device loss even if the timeout hasn\u0027t expired?",
+      "parentUuid": "dd8c3652_2f06a377",
+      "revId": "7ff72b61010d4e9581d919e1630de9566659d98a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "01131a16_cbb241b0",
