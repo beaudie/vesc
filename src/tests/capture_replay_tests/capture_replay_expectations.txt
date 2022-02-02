@@ -206,3 +206,21 @@
 6941 : Texture2DTestES3RobustInit.TextureCOMPRESSEDSRGB8A1ETC2/* = NOT_RUN
 
 6875 : TransformFeedbackTest.SpanMultipleRenderPasses/* = NOT_RUN
+
+# Skip crashing tests after enabling ANGLE_texture_multisample
+3565 : TextureMultisampleTest.GetTexLevelParameter/* = FLAKY
+3565 : TextureMultisampleTest.MaxColorTextureSamples/* = FLAKY
+3565 : TextureMultisampleTest.MaxDepthTextureSamples/* = FLAKY
+3565 : TextureMultisampleTest.MaxIntegerSamples/* = FLAKY
+3565 : TextureMultisampleTest.MultisampleTargetFramebufferTexture2D/* = FLAKY
+3565 : TextureMultisampleTest.MultisampleTargetGetInternalFormativBase/* = FLAKY
+3565 : TextureMultisampleTest.ResolveToDefaultFramebuffer/* = FLAKY
+3565 : TextureMultisampleTest.SampleMaski/* = FLAKY
+3565 : TextureMultisampleTest.SimpleTexelFetch/* = FLAKY
+3565 : TextureMultisampleTest.ValidateTextureStorageMultisampleParameters/* = FLAKY
+3565 : TextureRectangleTestES3.CopyTexImage/* = FLAKY
+3565 : TextureRectangleTestES3.CopyTexSubImage/* = FLAKY
+3565 : TextureRectangleTestES3.SamplingFromRectangleESSL3/* = FLAKY
+3565 : TextureSizeTextureArrayTest.BaseLevelVariesInTextureArray/* = FLAKY
+3565 : TextureUploadFormatTest.All/* = FLAKY
+3565 : TimerQueriesTest.ProcAddresses/* = FLAKY
