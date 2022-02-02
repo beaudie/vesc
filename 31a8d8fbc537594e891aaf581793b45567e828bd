@@ -1,6 +1,23 @@
 {
   "comments": [
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "ab444cb6_910d971b",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1500872
+      },
+      "writtenOn": "2022-02-02T01:42:41Z",
+      "side": 1,
+      "message": "Concerns responded to, +1 for me.",
+      "revId": "31a8d8fbc537594e891aaf581793b45567e828bd",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "6c105dc5_fd15b3f1",
@@ -32,6 +49,24 @@
       "side": 1,
       "message": "When the device does not support base vertex / base instance drawing, drawTriFanArraysLegacy is used.\n\nThe Metal draw command that supports base vertex is also the same that supports base instance. The ANGLE function name was imprecise so it was renamed.",
       "parentUuid": "6c105dc5_fd15b3f1",
+      "revId": "31a8d8fbc537594e891aaf581793b45567e828bd",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "b0a7c0ec_8305c874",
+        "filename": "src/libANGLE/renderer/metal/ContextMtl.mm",
+        "patchSetId": 1
+      },
+      "lineNbr": 324,
+      "author": {
+        "id": 1500872
+      },
+      "writtenOn": "2022-02-02T01:42:41Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "0a2db944_19c5cb64",
       "revId": "31a8d8fbc537594e891aaf581793b45567e828bd",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
