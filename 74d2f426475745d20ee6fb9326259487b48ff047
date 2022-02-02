@@ -16,6 +16,24 @@
       "message": "Can I ask why we don\u0027t want to use the existing RandomVec4() and apply the randVec.w to alpha channel?",
       "revId": "74d2f426475745d20ee6fb9326259487b48ff047",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "7d3c26f6_2deb338d",
+        "filename": "src/tests/gl_tests/VulkanUniformUpdatesTest.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 598,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2022-02-02T20:19:36Z",
+      "side": 1,
+      "message": "The w confounds the test, I had to use this to solve the test failure.",
+      "parentUuid": "174d4bd0_9001d3bc",
+      "revId": "74d2f426475745d20ee6fb9326259487b48ff047",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
