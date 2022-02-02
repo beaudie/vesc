@@ -34,6 +34,24 @@
       "parentUuid": "174d4bd0_9001d3bc",
       "revId": "74d2f426475745d20ee6fb9326259487b48ff047",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "aa9aa271_306426a9",
+        "filename": "src/tests/gl_tests/VulkanUniformUpdatesTest.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 598,
+      "author": {
+        "id": 1520902
+      },
+      "writtenOn": "2022-02-02T22:23:29Z",
+      "side": 1,
+      "message": "Got it, thank you!",
+      "parentUuid": "7d3c26f6_2deb338d",
+      "revId": "74d2f426475745d20ee6fb9326259487b48ff047",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
