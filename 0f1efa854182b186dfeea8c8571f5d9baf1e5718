@@ -248,6 +248,30 @@
       },
       "revId": "0f1efa854182b186dfeea8c8571f5d9baf1e5718",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "0bf31442_bdb768d2",
+        "filename": "src/libANGLE/renderer/vulkan/FramebufferVk.cpp",
+        "patchSetId": 11
+      },
+      "lineNbr": 536,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2022-02-02T04:06:50Z",
+      "side": 1,
+      "message": "I\u0027ve added the test `VulkanPerformanceCounterTest.DrawThenInceptionScissorClears` to show the issue you described.   The CL is also now updated to handle it correctly by using a loadOp for the scissored clear with the RP area matching the scissored area.\n\nAs you can see, this makes things quite a bit more complicated, as well as introduces a RP break when the scissor grows when there\u0027s a clear pending.   We may be able to avoid that by re-deferring the clear and restoring the loadOp to LOAD/DONT_CARE (based on if it has defined content or not), but I haven\u0027t tried that yet.\n\nLet me know what you think.",
+      "parentUuid": "dda57e98_9ac844fa",
+      "range": {
+        "startLine": 533,
+        "startChar": 0,
+        "endLine": 536,
+        "endChar": 40
+      },
+      "revId": "0f1efa854182b186dfeea8c8571f5d9baf1e5718",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
