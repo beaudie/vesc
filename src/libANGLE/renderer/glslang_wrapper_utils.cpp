@@ -783,6 +783,8 @@ void AssignInterfaceBlockBindings(const GlslangSourceOptions &options,
                                   UniformBindingIndexMap *uniformBindingIndexMapOut,
                                   ShaderInterfaceVariableInfoMap *variableInfoMapOut)
 {
+    uint32_t initialBindingIndex = programInterfaceInfo->currentShaderResourceBindingIndex;
+
     for (const gl::InterfaceBlock &block : blocks)
     {
         if (!block.isArray || block.arrayElement == 0)
@@ -796,6 +798,16 @@ void AssignInterfaceBlockBindings(const GlslangSourceOptions &options,
                                          programInterfaceInfo->shaderResourceDescriptorSetIndex,
                                          uniformBindingIndexMapOut, variableInfoMapOut);
             }
+        }
+    }
+
+    uint32_t lastBindingIndex = programInterfaceInfo->currentShaderResourceBindingIndex;
+
+    for (const gl::InterfaceBlock &block : blocks)
+    {
+        if (!block.isArray || block.arrayElement == 0)
+        {
+            ASSERT(block.binding >= initialBindingIndex && block.binding < lastBindingIndex);
         }
     }
 }
