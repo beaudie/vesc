@@ -75,6 +75,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "d0fa729a_d0405dd2",
+        "filename": "src/tests/gl_tests/FramebufferInvalidateTest.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 89,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2022-02-02T18:13:49Z",
+      "side": 1,
+      "message": "Thanks, used in the new StateChangeTestWebGL2 per your other suggestion.",
+      "parentUuid": "b911b72f_2765bdb1",
+      "range": {
+        "startLine": 83,
+        "startChar": 0,
+        "endLine": 89,
+        "endChar": 9
+      },
+      "revId": "c6da16529c106b31433baded0b621ef683501a9d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "d1d9b4ae_c04eede6",
@@ -92,6 +116,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "c2473c1a_6f1080bb",
+        "filename": "src/tests/gl_tests/FramebufferInvalidateTest.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 118,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2022-02-02T18:13:49Z",
+      "side": 1,
+      "message": "Thanks - done, into StateChangeTestWebGL2.",
+      "parentUuid": "d1d9b4ae_c04eede6",
+      "revId": "c6da16529c106b31433baded0b621ef683501a9d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "e334c29b_41641bac",
@@ -105,6 +147,24 @@
       "writtenOn": "2022-02-01T08:52:36Z",
       "side": 1,
       "message": "nit: Please use the ASSERT_GL_FRAMEBUFFER_COMPLETE macro:\n\n    ASSERT_GL_FRAMEBUFFER_COMPLETE(GL_FRAMEBUFFER);\n\nSame below",
+      "revId": "c6da16529c106b31433baded0b621ef683501a9d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "a355aa21_0ddb725f",
+        "filename": "src/tests/gl_tests/FramebufferInvalidateTest.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 129,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2022-02-02T18:13:49Z",
+      "side": 1,
+      "message": "Thanks, done with EXPECT_GL_FRAMEBUFFER_COMPLETE.",
+      "parentUuid": "e334c29b_41641bac",
       "revId": "c6da16529c106b31433baded0b621ef683501a9d",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
