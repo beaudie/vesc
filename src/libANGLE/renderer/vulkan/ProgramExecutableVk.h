@@ -214,7 +214,8 @@ class ProgramExecutableVk
     void setAllDefaultUniformsDirty(const gl::ProgramExecutable &executable);
     angle::Result updateUniforms(ContextVk *contextVk,
                                  const gl::ProgramExecutable &glExecutable,
-                                 vk::DynamicBuffer *defaultUniformStorage);
+                                 vk::DynamicBuffer *defaultUniformStorage,
+                                 vk::BufferHelper **defaultUniformBufferOut);
     void onProgramBind(const gl::ProgramExecutable &glExecutable);
 
   private:

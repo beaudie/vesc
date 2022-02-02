@@ -1064,6 +1064,8 @@ class BufferSuballocation final : public WrappedObject<BufferSuballocation, VmaB
     void flush(const Allocator &allocator) const;
     void invalidate(const Allocator &allocator) const;
     VkDeviceSize getOffset() const;
+    // Only used by DynamicBuffer where DynamicBuffer does the suballocation
+    void setOffsetSize(VkDeviceSize offset, VkDeviceSize size);
 };
 
 // BufferBlock implementation.
@@ -1227,6 +1229,11 @@ ANGLE_INLINE VkDeviceSize BufferSuballocation::getOffset() const
     return mHandle->mOffset;
 }
 
+ANGLE_INLINE void BufferSuballocation::setOffsetSize(VkDeviceSize offset, VkDeviceSize size)
+{
+    mHandle->mOffset = offset;
+    mHandle->mSize   = size;
+}
 #if defined(ANGLE_ENABLE_PERF_COUNTER_OUTPUT)
 constexpr bool kOutputCumulativePerfCounters = ANGLE_ENABLE_PERF_COUNTER_OUTPUT;
 #else
