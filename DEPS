@@ -34,7 +34,7 @@ vars = {
   'checkout_android_native_support': 'checkout_android or checkout_chromeos',
 
   # Version of Chromium our Chromium-based DEPS are mirrored from.
-  'chromium_revision': 'a210f891a4506bf5f32ce1477a81420877fb63b7',
+  'chromium_revision': 'd8c356292d29cf1afcf8bb89e5aa104efb623e6c',
   # We never want to checkout chromium,
   # but need a dummy DEPS entry for the autoroller
   'dummy_checkout_chromium': False,
@@ -79,7 +79,7 @@ vars = {
   # Three lines of non-changing comments so that
   # the commit queue can handle CLs rolling catapult
   # and whatever else without interference from each other.
-  'catapult_revision': '1c33cd6890c82766fd66632c26c1844bab3a9bc9',
+  'catapult_revision': '1e084a5277c17a56a07e7df0d8df438982a4cda8',
 
   # Three lines of non-changing comments so that
   # the commit queue can handle CLs rolling luci-go
@@ -119,7 +119,7 @@ vars = {
 deps = {
 
   'build': {
-    'url': '{chromium_git}/chromium/src/build.git@6b20164497b7adf69746437a0925ad11805d3524',
+    'url': '{chromium_git}/chromium/src/build.git@9e5113ae7ad4f4723ae5f0ef269877ea66f3284b',
     'condition': 'not build_with_chromium',
   },
 
@@ -161,7 +161,7 @@ deps = {
   },
 
   'buildtools/third_party/libc++abi/trunk': {
-    'url': '{chromium_git}/external/github.com/llvm/llvm-project/libcxxabi.git@df43e1b0396fbd3a0e511b804eeec54f3b62e3f0',
+    'url': '{chromium_git}/external/github.com/llvm/llvm-project/libcxxabi.git@5b0a8cf88eddfb448ca5903128d3328db76e4001',
     'condition': 'not build_with_chromium',
   },
 
@@ -182,7 +182,7 @@ deps = {
   },
 
   'testing': {
-    'url': '{chromium_git}/chromium/src/testing@b17e15aa1a9d2c9dfa31f456e7a32a732c9bdd5d',
+    'url': '{chromium_git}/chromium/src/testing@3661d7e53bd4bc19bc9e9669b4fcd64d79e701a3',
     'condition': 'not build_with_chromium',
   },
 
@@ -332,7 +332,7 @@ deps = {
   },
 
   'third_party/depot_tools': {
-    'url': '{chromium_git}/chromium/tools/depot_tools.git@98cf932814ca64260b9c1d36d9ae20b4286256ec',
+    'url': '{chromium_git}/chromium/tools/depot_tools.git@60206c40077637a03cae6e6edbc641f702cf5ec9',
     'condition': 'not build_with_chromium',
   },
 
@@ -567,7 +567,7 @@ deps = {
   },
 
   'tools/mb': {
-    'url': '{chromium_git}/chromium/src/tools/mb@619214929f93d25fc2a0cff9ea69923b6d138bb0',
+    'url': '{chromium_git}/chromium/src/tools/mb@bc4d8dd1022d40663bbcb282c8efb4f53644b1bb',
     'condition': 'not build_with_chromium',
   },
 
@@ -582,7 +582,7 @@ deps = {
   },
 
   'tools/perf': {
-    'url': '{chromium_git}/chromium/src/tools/perf@0182d6f78cf83082038764325f1a5ee313008ee5',
+    'url': '{chromium_git}/chromium/src/tools/perf@3153430abf2083bd3446df2c79b5daaf11a21f55',
     'condition': 'not build_with_chromium',
   },
 
@@ -600,7 +600,7 @@ deps = {
       'packages': [
         {
           'package': 'skia/tools/goldctl/linux-amd64',
-          'version': 'EOs8AExsqXFWldVpuKUhohthnzRRSh8f1iOAv5ZTMaMC',
+          'version': 'LgeCXIY3gi1Rfj7pynL3hYsQs5y8tNdlFMIszyRTLZEC',
         },
       ],
       'dep_type': 'cipd',
@@ -611,7 +611,7 @@ deps = {
       'packages': [
         {
           'package': 'skia/tools/goldctl/windows-amd64',
-          'version': 'YNpvcNJRmWf1tWoS-tcsyhjqBG_mHDeGeur5IZYx0hEC',
+          'version': 'nhTKac3KbxoylERKghU9jdu1eGQS6PbB9eyujt39ZrEC',
         },
       ],
       'dep_type': 'cipd',
@@ -622,7 +622,7 @@ deps = {
       'packages': [
         {
           'package': 'skia/tools/goldctl/mac-amd64',
-          'version': 'eq2tMMf-q6AOpCv5MS-RFvueRyU6T_uvZrMA_EsM_cAC',
+          'version': 'b-tLSYN9b31qZ1zBD9eXJEh8J0yogVLXg2EFmGUmOiMC',
         },
       ],
       'dep_type': 'cipd',
@@ -633,7 +633,7 @@ deps = {
       'packages': [
         {
           'package': 'skia/tools/goldctl/mac-arm64',
-          'version': '-AnHHiBmUZNDkYjj6DIHVHg8N2LuttcBm9gUQx5Yrt8C',
+          'version': 'JmAZJuBerZSzNig9T_OyBs4oVmJQ1cjqgC3F_CA37yYC',
         },
       ],
       'dep_type': 'cipd',
@@ -641,7 +641,7 @@ deps = {
   },
 
   'tools/valgrind': {
-    'url': '{chromium_git}/chromium/src/tools/valgrind@92807057e16a7fa9db688eadf0d4b3d08b817661',
+    'url': '{chromium_git}/chromium/src/tools/valgrind@bcc910d636f047f2301472841c67595ae1186f8c',
     'condition': 'not build_with_chromium',
   },
 
