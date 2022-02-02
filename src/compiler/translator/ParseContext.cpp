@@ -5627,6 +5627,19 @@ TStorageQualifierWrapper *TParseContext::parseInOutQualifier(const TSourceLoc &l
 {
     if (!declaringFunction())
     {
+        if (mShaderType != GL_FRAGMENT_SHADER)
+        {
+            error(loc,
+                  "Except in the fragment stage, there is not an inout storage qualifier at "
+                  "global scope for declaring a single variable name as both input and output.",
+                  "inout");
+        }
+
+        if (mShaderVersion < 300)
+        {
+            error(loc, "The inout storage qualifier requires OpenGL ES 3.0 or later.", "inout");
+        }
+
         if (isExtensionEnabled(TExtension::EXT_shader_framebuffer_fetch) ||
             isExtensionEnabled(TExtension::EXT_shader_framebuffer_fetch_non_coherent))
         {
