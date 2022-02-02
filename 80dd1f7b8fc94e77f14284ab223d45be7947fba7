@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "e4bc1c30_400715db",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2022-02-02T23:00:00Z",
+      "side": 1,
+      "message": "First pass at uploading the Android script we\u0027ve been using for restricted_traces.",
+      "revId": "80dd1f7b8fc94e77f14284ab223d45be7947fba7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
