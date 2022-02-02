@@ -33,6 +33,23 @@
       "message": "Not familiar with Objective-C, but if this passes the bots, LGTM.\nAre you sure you don\u0027t need this line?\n  [MSCrashes applicationDidReportException:exception];",
       "revId": "8499d7d6a18770a8d5537420271b034152251e7e",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "327e0ccb_f2f54d0f",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1001921
+      },
+      "writtenOn": "2022-02-02T23:08:29Z",
+      "side": 1,
+      "message": "I guess by \"+2\" you\u0027ve meant \"CQ+2\" (since \"review and CR+2\" would be redundant)?",
+      "revId": "8499d7d6a18770a8d5537420271b034152251e7e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
