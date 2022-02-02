@@ -49,6 +49,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "cbd91e93_ca444ce8",
+        "filename": "src/libANGLE/renderer/vulkan/SurfaceVk.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 347,
+      "author": {
+        "id": 1125810
+      },
+      "writtenOn": "2022-02-02T07:32:58Z",
+      "side": 1,
+      "message": "Wayland does support rotation, however it is client-retained state: a surface does not have an ‘intrinsic’ or retained rotation. Hence currentRotation will always be identity.",
+      "parentUuid": "46d0af21_c4a8949b",
+      "range": {
+        "startLine": 347,
+        "startChar": 3,
+        "endLine": 347,
+        "endChar": 85
+      },
+      "revId": "3c01dd6b4c521b095fbef3cc254067f03956177f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "9d352f2f_b1b3a18c",
         "filename": "src/libANGLE/renderer/vulkan/SurfaceVk.cpp",
         "patchSetId": 4
