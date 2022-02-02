@@ -2454,6 +2454,13 @@ class ImageViewHelper final : public Resource
         }
     }
 
+    bool isBaseLevelCompatible(LevelIndex newBaseLevel) const
+    {
+        // If newBaseLevel is different than the cached value in mCurrentBaseLevel, all cached
+        // imageviews need to be considered stale
+        return newBaseLevel == mCurrentBaseLevel;
+    }
+
     // For applications that frequently switch a texture's max level, and make no other changes to
     // the texture, change the currently-used max level, and potentially create new "read views"
     // for the new max-level
@@ -2581,9 +2588,10 @@ class ImageViewHelper final : public Resource
                                         uint32_t layerCount,
                                         VkImageUsageFlags imageUsageFlags);
 
-    // For applications that frequently switch a texture's max level, and make no other changes to
-    // the texture, keep track of the currently-used max level, and keep one "read view" per
-    // max-level
+    // For applications that frequently switch a texture's base and max level, and make no other
+    // changes to the texture, keep track of the currently-used base and max level, and keep one
+    // "read view" per max-level
+    LevelIndex mCurrentBaseLevel;
     LevelIndex mCurrentMaxLevel;
 
     // Read views (one per max-level)

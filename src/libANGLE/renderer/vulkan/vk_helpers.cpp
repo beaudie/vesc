@@ -8580,7 +8580,9 @@ LayerMode GetLayerMode(const vk::ImageHelper &image, uint32_t layerCount)
 }
 
 // ImageViewHelper implementation.
-ImageViewHelper::ImageViewHelper() : mCurrentMaxLevel(0), mLinearColorspace(true) {}
+ImageViewHelper::ImageViewHelper()
+    : mCurrentBaseLevel(0), mCurrentMaxLevel(0), mLinearColorspace(true)
+{}
 
 ImageViewHelper::ImageViewHelper(ImageViewHelper &&other) : Resource(std::move(other))
 {
@@ -8769,8 +8771,11 @@ angle::Result ImageViewHelper::initReadViews(ContextVk *contextVk,
     // Determine if we already have ImageViews for the new max level
     if (getReadImageView().valid())
     {
+        ASSERT(mCurrentBaseLevel == baseLevel);
         return angle::Result::Continue;
     }
+
+    mCurrentBaseLevel = baseLevel;
 
     // Since we don't have a readImageView, we must create ImageViews for the new max level
     ANGLE_TRY(initReadViewsImpl(contextVk, viewType, image, format, formatSwizzle, readSwizzle,
