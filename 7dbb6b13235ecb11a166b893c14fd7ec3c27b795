@@ -16,6 +16,23 @@
       "message": "Thanks Shabi for your review! Please take another look.\n",
       "revId": "7dbb6b13235ecb11a166b893c14fd7ec3c27b795",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "2f2ff5d5_f7ec5b06",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-02-02T18:48:04Z",
+      "side": 1,
+      "message": "Tests LGTM",
+      "revId": "7dbb6b13235ecb11a166b893c14fd7ec3c27b795",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
