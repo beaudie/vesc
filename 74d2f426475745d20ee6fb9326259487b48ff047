@@ -16,6 +16,24 @@
       "message": "Can I ask why we do not need to check isStorageBuffer anymore?",
       "revId": "74d2f426475745d20ee6fb9326259487b48ff047",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "bc1d7884_9453dafa",
+        "filename": "src/libANGLE/renderer/vulkan/ProgramExecutableVk.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 1306,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2022-02-02T19:27:51Z",
+      "side": 0,
+      "message": "It doesn\u0027t seem necessary for correct behaviour. Shabi added this here:\n\nhttps://chromium-review.googlesource.com/c/angle/angle/+/1704635/11/src/libANGLE/renderer/vulkan/ProgramVk.cpp#1204\n\nI think it may just be an oversight. Shabi do you recall the details?",
+      "parentUuid": "7af2ab1d_ae7192ea",
+      "revId": "74d2f426475745d20ee6fb9326259487b48ff047",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
