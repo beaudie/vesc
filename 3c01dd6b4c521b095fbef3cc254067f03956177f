@@ -1,0 +1,73 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "d99c511a_821f6e20",
+        "filename": "include/platform/FeaturesVk.h",
+        "patchSetId": 4
+      },
+      "lineNbr": 631,
+      "author": {
+        "id": 1290487
+      },
+      "writtenOn": "2022-02-02T02:15:51Z",
+      "side": 1,
+      "message": "Typo: \"On\"",
+      "range": {
+        "startLine": 631,
+        "startChar": 9,
+        "endLine": 631,
+        "endChar": 12
+      },
+      "revId": "3c01dd6b4c521b095fbef3cc254067f03956177f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "46d0af21_c4a8949b",
+        "filename": "src/libANGLE/renderer/vulkan/SurfaceVk.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 347,
+      "author": {
+        "id": 1290487
+      },
+      "writtenOn": "2022-02-02T02:15:51Z",
+      "side": 1,
+      "message": "Please remove this sentence.  The intention of the current spec is that this is not true, though it looks like we didn\u0027t update the spec properly.  See VUID-VkRectLayerKHR-offset-04864.  After we discovered that the lower-level Android applied the transform, the SI TSG discussed this, and since no other platform was identified as supporting both VK_KHR_incremental_present and rotation, we tried to update the spec so that VkRectLayerKHR \"not take currentTransform into account.\"\n\nBTW, does Wayland support rotation?",
+      "range": {
+        "startLine": 347,
+        "startChar": 3,
+        "endLine": 347,
+        "endChar": 85
+      },
+      "revId": "3c01dd6b4c521b095fbef3cc254067f03956177f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "9d352f2f_b1b3a18c",
+        "filename": "src/libANGLE/renderer/vulkan/SurfaceVk.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 353,
+      "author": {
+        "id": 1290487
+      },
+      "writtenOn": "2022-02-02T02:15:51Z",
+      "side": 1,
+      "message": "Please remove this parameter, and it\u0027s use",
+      "range": {
+        "startLine": 353,
+        "startChar": 29,
+        "endLine": 353,
+        "endChar": 76
+      },
+      "revId": "3c01dd6b4c521b095fbef3cc254067f03956177f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}

@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "5209517a_66f4ed4a",
+        "filename": "src/libANGLE/renderer/vulkan/SurfaceVk.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 1739,
+      "author": {
+        "id": 1290487
+      },
+      "writtenOn": "2022-02-02T02:15:51Z",
+      "side": 0,
+      "message": "Please keep this comment (perhaps replace the line above the function that I asked be removed).",
+      "range": {
+        "startLine": 1739,
+        "startChar": 11,
+        "endLine": 1739,
+        "endChar": 82
+      },
+      "revId": "d1b1ef9afc9fa1d46a79cfe0cf7bfeaa3614a3db",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
