@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "4010c7e6_9935f89c",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 8
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1001921
+      },
+      "writtenOn": "2022-02-02T19:14:26Z",
+      "side": 1,
+      "message": "https://ci.chromium.org/ui/p/angle/builders/ci/android-arm64-exp-test/74/overview fails GLSLTest.FramebufferFetchWithLastFragData/ES2_Vulkan_Glslang after this.",
+      "revId": "72529c1971038d79951bd67109374c38bb407adc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
