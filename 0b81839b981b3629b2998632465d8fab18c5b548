@@ -20,6 +20,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "ede742c3_b492f2e8",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2022-02-02T16:30:44Z",
+      "side": 1,
+      "message": "Yea, something is off here. I wouldn\u0027t expect that the submodules should be added back without explicit commands.\n\nThe only next step I can think of is to do some manual debugging of the roll script to see what state these directories are in and see if we can make sure they\u0027re treated properly. Possibly by making sure they\u0027re deleted in one commit and re-added in a following roll.",
+      "parentUuid": "cd8a2778_0082fa6c",
+      "revId": "0b81839b981b3629b2998632465d8fab18c5b548",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "271acd23_3a936e19",
         "filename": "scripts/roll_aosp.sh",
         "patchSetId": 3
