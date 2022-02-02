@@ -55,6 +55,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "aacc20c3_cde00d45",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1359249
+      },
+      "writtenOn": "2022-02-02T23:19:16Z",
+      "side": 1,
+      "message": "OK. We never get to this check. If we try to create a Texture (protected) or texture from Image (protected), and the Context is unprotected, we will get an error. So it never gets to the point where we can attach a protected Texture to an unprotected Context.  glTexParameteri or glEGLImageTargetTexture2DOES is going to fail with our current error checks.",
+      "parentUuid": "e27f87af_96045c4d",
+      "revId": "336bdc0af547e7569db607c3d2995525b3281fa9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "db74031d_dcb3f8fb",
         "filename": "src/libANGLE/validationES.cpp",
         "patchSetId": 1
