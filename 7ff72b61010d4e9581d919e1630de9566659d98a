@@ -16,6 +16,29 @@
       "message": "PTAL. This is one possible solution to some of the ASAN issues we\u0027ve seen for infinite loop shaders in SwiftShader.\n\nThis simply hangs ANGLE on context destruction if stuck in an infinite loop. The watchdog will kill the process. This seems better than the current state of blindly destroying resources that Vulkan is using.",
       "revId": "7ff72b61010d4e9581d919e1630de9566659d98a",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "01131a16_cbb241b0",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 5686,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-02-02T17:44:28Z",
+      "side": 1,
+      "message": "Looking at the callers, there are no circumstances where returning earlier than GPU-is-done is really valid (with various degrees of repercussion).\n\nHaving a small limit to avoid infinite-wait might have simply been defensive. Since probably the only user that does care about responsiveness (i.e. Chrome) is already going for infinite-wait, I think you might as well just make `RendererVk::finish()` actually finish with `std::numeric_limits\u003cuint64_t\u003e::max()` and not have the timeout be customizable.\n\nTL;DR my suggestion is to dispense with all this and just make `getMaxFenceWaitTimeNs()` return `std::numeric_limits\u003cuint64_t\u003e::max()`.\n\nEither way, nit: `renderPassClosureReason` is a debug thing, so this is as-is using it in an unintended way.",
+      "range": {
+        "startLine": 5684,
+        "startChar": 0,
+        "endLine": 5686,
+        "endChar": 64
+      },
+      "revId": "7ff72b61010d4e9581d919e1630de9566659d98a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
