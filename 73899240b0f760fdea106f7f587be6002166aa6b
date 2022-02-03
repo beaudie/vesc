@@ -33,6 +33,57 @@
       "message": "will skip tests for GL backend",
       "revId": "73899240b0f760fdea106f7f587be6002166aa6b",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "26148e75_e788c1a2",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-02-03T17:48:54Z",
+      "side": 1,
+      "message": "I\u0027m a little surprised that changing base level doesn\u0027t work, there are a number of tests I had added for that (take this for example Texture2DBaseMaxTestES3::testPingPongBaseLevel), so I\u0027m very curious to understand what\u0027s happening here.\n\nTextureVk::syncState should have released and reinitialized the views in your test. Could you please take a look there to see what\u0027s going on? `TextureVk::maybeUpdateBaseMaxLevels` should be called, is it not? If not why, and if so why isn\u0027t it recreating the views?",
+      "revId": "73899240b0f760fdea106f7f587be6002166aa6b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "26fedadf_f61b719b",
+        "filename": "src/libANGLE/renderer/vulkan/TextureVk.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 3020,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-02-03T17:48:54Z",
+      "side": 1,
+      "message": "This seems out of place. We have `TextureVk::maybeUpdateBaseMaxLevels` dealing with this, why is that not recreating the views when the base level changes?",
+      "revId": "73899240b0f760fdea106f7f587be6002166aa6b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "7b3ba15e_ff2adf1c",
+        "filename": "src/tests/gl_tests/MipmapTest.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 2229,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-02-03T17:48:54Z",
+      "side": 1,
+      "message": "nit: please use EXPECT_GL_FRAMEBUFFER_COMPLETE",
+      "revId": "73899240b0f760fdea106f7f587be6002166aa6b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
