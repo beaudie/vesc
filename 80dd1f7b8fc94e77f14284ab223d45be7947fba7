@@ -33,6 +33,24 @@
       "message": "Given that this has been already used for a while should it be committed without refactoring to have a reference point, then iterate on it? One thing I wonder if there should be \"android\" somewhere in the path given that the scripts are Android-specific but maybe that\u0027s unnecessary idk.",
       "revId": "80dd1f7b8fc94e77f14284ab223d45be7947fba7",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b7e0905d_40c9108b",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2022-02-03T01:16:43Z",
+      "side": 1,
+      "message": "Yep, can certainly move it or rename it.  I just uploaded it in the already supported state, which runs from restriced_traces dir.  Maybe in scripts, or scripts/android?",
+      "parentUuid": "8a8973be_e5e5d4c7",
+      "revId": "80dd1f7b8fc94e77f14284ab223d45be7947fba7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
