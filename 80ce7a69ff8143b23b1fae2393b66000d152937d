@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "3fb75807_db6c5636",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2022-02-03T17:34:29Z",
+      "side": 1,
+      "message": "Updated the skip list based on local testing.  I\u0027ll also post the process I used to anglebug.com/6542",
+      "revId": "80ce7a69ff8143b23b1fae2393b66000d152937d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
