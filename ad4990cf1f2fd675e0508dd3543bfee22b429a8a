@@ -1,0 +1,72 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "68440a43_2982c22b",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 3
+      },
+      "lineNbr": 29,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-02-03T22:05:33Z",
+      "side": 1,
+      "message": "Sounds like the change could have also been split in a few smaller ones",
+      "revId": "ad4990cf1f2fd675e0508dd3543bfee22b429a8a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "07171f74_d3f2991e",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-02-03T22:05:33Z",
+      "side": 1,
+      "message": "LGTM",
+      "revId": "ad4990cf1f2fd675e0508dd3543bfee22b429a8a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "41d6038d_ca6a5616",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 141,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-02-03T22:05:33Z",
+      "side": 1,
+      "message": "Before they come knocking, can you please use a smaller value on Fuchsia? Say 16KB?",
+      "revId": "ad4990cf1f2fd675e0508dd3543bfee22b429a8a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "056b1235_ef3362d2",
+        "filename": "src/libANGLE/renderer/vulkan/vk_utils.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 1074,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-02-03T22:05:33Z",
+      "side": 1,
+      "message": "Maybe just add an `initWith...` and dispense with `friend`?",
+      "revId": "ad4990cf1f2fd675e0508dd3543bfee22b429a8a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
