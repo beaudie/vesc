@@ -105,6 +105,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "f3e06cc4_d42e4325",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 141,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2022-02-03T23:01:36Z",
+      "side": 1,
+      "message": "Give these are per context pool, we could adopt the same prune logic as the BufferPool and at every 1 second interval, we check how many bytes are actually used and use that as the new buffer size, that way we can pretty much keep the DynamicBuffer only have one buffer most of time. Will file a separate bug for future improvement.",
+      "parentUuid": "bd3e909a_5330e843",
+      "revId": "ad4990cf1f2fd675e0508dd3543bfee22b429a8a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "056b1235_ef3362d2",
@@ -136,6 +154,24 @@
       "side": 1,
       "message": "+1",
       "parentUuid": "056b1235_ef3362d2",
+      "revId": "ad4990cf1f2fd675e0508dd3543bfee22b429a8a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "fd071208_75feea14",
+        "filename": "src/libANGLE/renderer/vulkan/vk_utils.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 1074,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2022-02-03T23:01:36Z",
+      "side": 1,
+      "message": "The reason I did this is to ensure it does not gets misused. No one should change offset value except VMA allocator, except dynamic buffer where The dynamic buffer itself is doing the allocation logic. Using \"friend\" I am able to limit this SPI just to DynamicBuffer.",
+      "parentUuid": "bba76c00_99058e14",
       "revId": "ad4990cf1f2fd675e0508dd3543bfee22b429a8a",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
