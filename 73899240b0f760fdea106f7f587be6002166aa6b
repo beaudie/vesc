@@ -71,6 +71,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "88431dc5_ce1291e4",
+        "filename": "src/libANGLE/renderer/vulkan/TextureVk.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 3020,
+      "author": {
+        "id": 1340649
+      },
+      "writtenOn": "2022-02-03T21:18:29Z",
+      "side": 1,
+      "message": "maybeUpdateBaseMaxLevels is, in fact, attempting to re-initialize its views.\n\nImageViewHelper::initReadViews will skip recreating views if it already has valid views, which it does in this case. ImageViewHelpers have a vector of views to cache common max-levels, but base levels are ignored for this. Thus, if the application creates a texture and then updates its base level without changing its max level, this results in the ImageViewHelper fetching a stale imageview instead of creating a new one.",
+      "parentUuid": "26fedadf_f61b719b",
+      "revId": "73899240b0f760fdea106f7f587be6002166aa6b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "7b3ba15e_ff2adf1c",
         "filename": "src/tests/gl_tests/MipmapTest.cpp",
         "patchSetId": 3
