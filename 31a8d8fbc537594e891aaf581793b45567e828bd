@@ -103,6 +103,24 @@
       "message": "Please add a TODO referencing a bug so we know this needs to be revisited.",
       "revId": "31a8d8fbc537594e891aaf581793b45567e828bd",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "0897b626_1f338ba2",
+        "filename": "src/libANGLE/renderer/metal/DisplayMtl.mm",
+        "patchSetId": 1
+      },
+      "lineNbr": 981,
+      "author": {
+        "id": 1394635
+      },
+      "writtenOn": "2022-02-03T18:53:13Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "e97f83cc_fa8c4fe3",
+      "revId": "31a8d8fbc537594e891aaf581793b45567e828bd",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
