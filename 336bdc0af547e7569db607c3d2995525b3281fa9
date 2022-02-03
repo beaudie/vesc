@@ -89,6 +89,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "fe354fab_a15781cf",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-02-03T02:43:48Z",
+      "side": 1,
+      "message": "Ok, I guess I don\u0027t really understand what this change is fixing if the condition is not reachable",
+      "parentUuid": "2f309059_22d077b1",
+      "revId": "336bdc0af547e7569db607c3d2995525b3281fa9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "db74031d_dcb3f8fb",
