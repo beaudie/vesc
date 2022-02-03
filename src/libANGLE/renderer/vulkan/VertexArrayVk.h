@@ -19,6 +19,8 @@ namespace rx
 class BufferVk;
 struct ConversionBuffer;
 
+constexpr int kMaxCachedStreamIndexBuffers = 4;
+
 enum class BufferBindingDirty
 {
     No,
@@ -145,7 +147,8 @@ class VertexArrayVk : public VertexArrayImpl
     vk::BufferHelper *mCurrentElementArrayBuffer;
 
     // Cached element array buffers for improving performance.
-    vk::BufferHelperPointerVector mCachedStreamIndexBuffers;
+    angle::FixedVector<std::unique_ptr<vk::BufferHelper>, kMaxCachedStreamIndexBuffers>
+        mCachedStreamIndexBuffers;
 
     vk::BufferHelper mStreamedIndexData;
     vk::BufferHelper mTranslatedByteIndexData;

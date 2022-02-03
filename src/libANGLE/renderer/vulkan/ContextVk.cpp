@@ -2587,7 +2587,7 @@ angle::Result ContextVk::traceGpuEventImpl(vk::OutsideRenderPassCommandBuffer *c
 
     gpuEvent.queryHelper.writeTimestamp(this, commandBuffer);
 
-    mInFlightGpuEventQueries.push_back(std::move(gpuEvent));
+    mInFlightGpuEventQueries.push(std::move(gpuEvent));
     return angle::Result::Continue;
 }
 
@@ -2598,12 +2598,12 @@ angle::Result ContextVk::checkCompletedGpuEvents()
     angle::PlatformMethods *platform = ANGLEPlatformCurrent();
     ASSERT(platform);
 
-    int finishedCount = 0;
-
     Serial lastCompletedSerial = getLastCompletedQueueSerial();
 
-    for (GpuEventQuery &eventQuery : mInFlightGpuEventQueries)
+    while (!mInFlightGpuEventQueries.empty())
     {
+        GpuEventQuery &eventQuery = mInFlightGpuEventQueries.front();
+
         // Only check the timestamp query if the submission has finished.
         if (eventQuery.queryHelper.usedInRunningCommands(lastCompletedSerial))
         {
@@ -2630,11 +2630,8 @@ angle::Result ContextVk::checkCompletedGpuEvents()
 
         mGpuEvents.emplace_back(gpuEvent);
 
-        ++finishedCount;
+        mInFlightGpuEventQueries.pop();
     }
-
-    mInFlightGpuEventQueries.erase(mInFlightGpuEventQueries.begin(),
-                                   mInFlightGpuEventQueries.begin() + finishedCount);
 
     return angle::Result::Continue;
 }
@@ -5736,7 +5733,7 @@ angle::Result ContextVk::finishImpl(RenderPassClosureReason renderPassClosureRea
     if (mGpuEventsEnabled)
     {
         // This loop should in practice execute once since the queue is already idle.
-        while (mInFlightGpuEventQueries.size() > 0)
+        while (!mInFlightGpuEventQueries.empty())
         {
             ANGLE_TRY(checkCompletedGpuEvents());
         }

@@ -1175,7 +1175,7 @@ class ContextVk : public ContextImpl, public vk::Context, public MultisampleText
     vk::DynamicQueryPool mGpuEventQueryPool;
     // A list of queries that have yet to be turned into an event (their result is not yet
     // available).
-    std::vector<GpuEventQuery> mInFlightGpuEventQueries;
+    std::queue<GpuEventQuery> mInFlightGpuEventQueries;
     // A list of gpu events since the last clock sync.
     std::vector<GpuEvent> mGpuEvents;
 

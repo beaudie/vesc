@@ -25,7 +25,6 @@ namespace rx
 namespace
 {
 constexpr int kStreamIndexBufferCachedIndexCount = 6;
-constexpr int kMaxCachedStreamIndexBuffers       = 4;
 
 ANGLE_INLINE bool BindingIsAligned(const gl::VertexBinding &binding,
                                    const angle::Format &angleFormat,

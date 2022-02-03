@@ -829,7 +829,7 @@ angle::Result BufferVk::directUpdate(ContextVk *contextVk,
 
     // If the buffer has dynamic usage then the intent is frequent client side updates to the
     // buffer. Don't CPU unmap the buffer, we will take care of unmapping when releasing the buffer
-    // to either the renderer or mBufferFreeList.
+    // to either the renderer or mFreeBuffersQueue.
     if (!IsUsageDynamic(mState.getUsage()))
     {
         mBuffer.unmap(contextVk->getRenderer());
