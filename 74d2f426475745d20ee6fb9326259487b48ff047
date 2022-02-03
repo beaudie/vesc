@@ -52,6 +52,24 @@
       "parentUuid": "bc1d7884_9453dafa",
       "revId": "74d2f426475745d20ee6fb9326259487b48ff047",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "77901de9_599d9c05",
+        "filename": "src/libANGLE/renderer/vulkan/ProgramExecutableVk.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 1306,
+      "author": {
+        "id": 1520902
+      },
+      "writtenOn": "2022-02-03T19:53:17Z",
+      "side": 0,
+      "message": "Thank you Shabi!",
+      "parentUuid": "c97e90eb_42407c65",
+      "revId": "74d2f426475745d20ee6fb9326259487b48ff047",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
