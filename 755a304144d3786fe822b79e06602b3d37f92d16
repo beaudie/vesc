@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "daf122b8_b9669de0",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 4568,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-02-03T17:55:50Z",
+      "side": 1,
+      "message": "pipelineType is unused. Do you need it for later?",
+      "range": {
+        "startLine": 4568,
+        "startChar": 65,
+        "endLine": 4568,
+        "endChar": 77
+      },
+      "revId": "755a304144d3786fe822b79e06602b3d37f92d16",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
