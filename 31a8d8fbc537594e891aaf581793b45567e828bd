@@ -18,6 +18,23 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "c67f7559_edde3c84",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2022-02-03T18:42:34Z",
+      "side": 1,
+      "message": "lgtm\n\nOn the whole I\u0027d prefer if the shader translator changes could be implemented in the same CL so that tests can be enabled - but if that\u0027s infeasible then let\u0027s incorporate these changes and follow up.\n",
+      "revId": "31a8d8fbc537594e891aaf581793b45567e828bd",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "6c105dc5_fd15b3f1",
@@ -67,6 +84,23 @@
       "side": 1,
       "message": "Ack",
       "parentUuid": "0a2db944_19c5cb64",
+      "revId": "31a8d8fbc537594e891aaf581793b45567e828bd",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "e97f83cc_fa8c4fe3",
+        "filename": "src/libANGLE/renderer/metal/DisplayMtl.mm",
+        "patchSetId": 1
+      },
+      "lineNbr": 981,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2022-02-03T18:42:34Z",
+      "side": 1,
+      "message": "Please add a TODO referencing a bug so we know this needs to be revisited.",
       "revId": "31a8d8fbc537594e891aaf581793b45567e828bd",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
