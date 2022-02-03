@@ -52,6 +52,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "12f90fa9_233fd2f6",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2022-02-03T22:46:41Z",
+      "side": 1,
+      "message": "No, all the changes made in last week all helps. Its just won\u0027t get to the same CPU overhead level as dynamic buffer. ut it will still help all other suballocation garbages that we generated from BufferVk, from staging buffer etc. Its just for linear usage we essentially switched back to DynamicBuffers. The main problem with VMA is that every suballocation has to be freed, which comes with overhead of allocating and freeing suballocation object as well as doing allocation itself and go through process of garbage collection. All these little things adds up, end up with 6% extra (3.80ms versus 3.565ms). The remaining DynamicBufer usages are all per context usages, and they are all linear allocation by nature, so I think DynamicBuffer is a good fit for this usage scenario. We can talk to VMA to have them implement a new linear algorithm that does not need to free all suballocation offsets (i.e, we accumulate and only free once per submission), then we can still switch to VMA\u0027s linear allocation and it can be as perform as Dynamicbuffer. But given we already have DynamicBuffer and it is doing exact what we want for linear allocation, I don\u0027t see much motivation to do that.",
+      "parentUuid": "0f95ba2d_96eaa517",
+      "revId": "ad4990cf1f2fd675e0508dd3543bfee22b429a8a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "41d6038d_ca6a5616",
