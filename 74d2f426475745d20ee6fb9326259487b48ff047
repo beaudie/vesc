@@ -34,6 +34,24 @@
       "parentUuid": "7af2ab1d_ae7192ea",
       "revId": "74d2f426475745d20ee6fb9326259487b48ff047",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "c97e90eb_42407c65",
+        "filename": "src/libANGLE/renderer/vulkan/ProgramExecutableVk.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 1306,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-02-03T02:53:35Z",
+      "side": 0,
+      "message": "Yes I remember. UBO size has a generally small limit (like 64KB), while SSBO size is generally unbounded (like 4GB). If you use a buffer that\u0027s huge, and bind a small part of it as UBO, that\u0027s expected to work. I recall binding the whole buffer failed something, since it was surpassing the Vulkan limit.\n\nWhat Jamie\u0027s change is doing is taking the min of the buffer size with `maxBoundBufferRange` which is the Vulkan limit for UBOs and SSBOs based on the call site, so the Vulkan requirement is satisfied.\n\nIn other words, `isStorageBuffer` is necessary, but it\u0027s implied by the caller\u0027s choice of `maxBoundBufferRange` :)",
+      "parentUuid": "bc1d7884_9453dafa",
+      "revId": "74d2f426475745d20ee6fb9326259487b48ff047",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
