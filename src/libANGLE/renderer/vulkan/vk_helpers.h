@@ -14,6 +14,7 @@
 #include "libANGLE/renderer/vulkan/vk_format_utils.h"
 
 #include <functional>
+#include <queue>
 
 namespace gl
 {
@@ -61,7 +62,7 @@ struct TextureUnit final
 // currently active VkBuffer we keep it until it is no longer in use. We then mark it available
 // for future allocations in a free list.
 class BufferHelper;
-using BufferHelperPointerVector = std::vector<std::unique_ptr<BufferHelper>>;
+using BufferHelperPointerQueue = std::queue<std::unique_ptr<BufferHelper>>;
 
 enum class DynamicBufferPolicy
 {
@@ -146,8 +147,8 @@ class DynamicBuffer : angle::NonCopyable
     size_t mAlignment;
     VkMemoryPropertyFlags mMemoryPropertyFlags;
 
-    BufferHelperPointerVector mInFlightBuffers;
-    BufferHelperPointerVector mBufferFreeList;
+    BufferHelperPointerQueue mInFlightBuffersQueue;
+    BufferHelperPointerQueue mFreeBuffersQueue;
 };
 
 // Uses DescriptorPool to allocate descriptor sets as needed. If a descriptor pool becomes full, we
