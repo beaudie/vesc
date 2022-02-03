@@ -29,6 +29,12 @@ angle_trace_fixture("angle_restricted_trace_fixture") {
 
 angle_trace_library("angle_restricted_trace") {
   json_path = "restricted_traces.json"
+  if (restricted_trace_list != []) {
+    trace_list = restricted_trace_list
+  } else {
+    _trace_json = read_file(json_path, "json")
+    trace_list = _trace_json.traces
+  }
   trace_fixture = ":angle_restricted_trace_fixture"
 }
 
