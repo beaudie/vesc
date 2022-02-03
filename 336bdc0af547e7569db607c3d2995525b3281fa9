@@ -107,6 +107,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "8b19793b_5dccec07",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1359249
+      },
+      "writtenOn": "2022-02-03T16:13:45Z",
+      "side": 1,
+      "message": "It was a patch from other team. We have been trying to rectify that branch with yours. There is a fix here, but we thought there was a failure path here, that turns out to not be reachable. So I don\u0027t see a test case, and will need to remove the added one. thx",
+      "parentUuid": "fe354fab_a15781cf",
+      "revId": "336bdc0af547e7569db607c3d2995525b3281fa9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "db74031d_dcb3f8fb",
