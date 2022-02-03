@@ -125,6 +125,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "2142ee31_005bb2eb",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1340649
+      },
+      "writtenOn": "2022-02-03T17:15:39Z",
+      "side": 1,
+      "message": "original condition -\n if (imageObject-\u003ehasProtectedContent() !\u003d context-\u003egetState().hasProtectedContent())\n \nupdated condition -\n if (imageObject-\u003ehasProtectedContent() \u0026\u0026 !context-\u003egetState().hasProtectedContent())\n \nit is valid for protected context to sample from non-protected texture which would have been disallowed by original condition",
+      "parentUuid": "8b19793b_5dccec07",
+      "revId": "336bdc0af547e7569db607c3d2995525b3281fa9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "db74031d_dcb3f8fb",
