@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "0d3d8620_1e164b14",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2022-02-03T00:27:30Z",
+      "side": 1,
+      "message": "A note that this fix is still needed. Please feel free to reference anglebug.com/6972 .\n",
+      "revId": "3ac345e183a45da3269c13ecf2169be366d3899f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
