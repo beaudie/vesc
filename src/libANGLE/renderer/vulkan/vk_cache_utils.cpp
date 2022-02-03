@@ -3035,33 +3035,10 @@ bool UniformsAndXfbDescriptorDesc::operator==(const UniformsAndXfbDescriptorDesc
                   sizeof(mXfbBufferOffsets[0]) * (mBufferCount - kDefaultUniformBufferCount)) == 0;
 }
 
-// ShaderBuffersDescriptorDesc implementation.
-ShaderBuffersDescriptorDesc::ShaderBuffersDescriptorDesc()
-{
-    reset();
-}
-
-ShaderBuffersDescriptorDesc::~ShaderBuffersDescriptorDesc() = default;
-
-ShaderBuffersDescriptorDesc::ShaderBuffersDescriptorDesc(const ShaderBuffersDescriptorDesc &other) =
-    default;
-
-ShaderBuffersDescriptorDesc &ShaderBuffersDescriptorDesc::operator=(
-    const ShaderBuffersDescriptorDesc &other) = default;
-
-size_t ShaderBuffersDescriptorDesc::hash() const
+// DescriptorSetDesc implementation.
+size_t DescriptorSetDesc::hash() const
 {
     return angle::ComputeGenericHash(mPayload.data(), sizeof(mPayload[0]) * mPayload.size());
-}
-
-void ShaderBuffersDescriptorDesc::reset()
-{
-    mPayload.clear();
-}
-
-bool ShaderBuffersDescriptorDesc::operator==(const ShaderBuffersDescriptorDesc &other) const
-{
-    return mPayload == other.mPayload;
 }
 
 // FramebufferDesc implementation.
@@ -4058,6 +4035,5 @@ template class DescriptorSetCache<vk::TextureDescriptorDesc, VulkanCacheType::Te
 template class DescriptorSetCache<vk::UniformsAndXfbDescriptorDesc,
                                   VulkanCacheType::UniformsAndXfbDescriptors>;
 
-template class DescriptorSetCache<vk::ShaderBuffersDescriptorDesc,
-                                  VulkanCacheType::ShaderBuffersDescriptors>;
+template class DescriptorSetCache<vk::DescriptorSetDesc, VulkanCacheType::ShaderBuffersDescriptors>;
 }  // namespace rx

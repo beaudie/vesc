@@ -1187,25 +1187,95 @@ class UniformsAndXfbDescriptorDesc
     std::array<uint32_t, gl::IMPLEMENTATION_MAX_TRANSFORM_FEEDBACK_BUFFERS> mXfbBufferOffsets;
 };
 
-class ShaderBuffersDescriptorDesc
+class DescriptorSetDesc
 {
   public:
-    ShaderBuffersDescriptorDesc();
-    ~ShaderBuffersDescriptorDesc();
+    DescriptorSetDesc()  = default;
+    ~DescriptorSetDesc() = default;
 
-    ShaderBuffersDescriptorDesc(const ShaderBuffersDescriptorDesc &other);
-    ShaderBuffersDescriptorDesc &operator=(const ShaderBuffersDescriptorDesc &other);
+    DescriptorSetDesc(const DescriptorSetDesc &other) : mPayload(other.mPayload) {}
+
+    DescriptorSetDesc &operator=(const DescriptorSetDesc &other)
+    {
+        mPayload = other.mPayload;
+        return *this;
+    }
 
     size_t hash() const;
-    void reset();
 
-    bool operator==(const ShaderBuffersDescriptorDesc &other) const;
+    void reset() { mPayload.clear(); }
 
-    ANGLE_INLINE void appendBufferSerial(BufferSerial bufferSerial)
+    bool operator==(const DescriptorSetDesc &other) const
     {
-        mPayload.push_back(bufferSerial.getValue());
+        return (mPayload.size() == other.mPayload.size()) &&
+               (memcmp(mPayload.data(), other.mPayload.data(),
+                       mPayload.size() * sizeof(mPayload[0])) == 0);
     }
-    ANGLE_INLINE void append32BitValue(uint32_t value) { mPayload.push_back(value); }
+
+    void appendBufferSerial(BufferSerial bufferSerial)
+    {
+        append32BitValue(bufferSerial.getValue());
+    }
+
+    void append32BitValue(uint32_t value) { mPayload.push_back(value); }
+
+    void appendClamped64BitValue(uint64_t value)
+    {
+        ASSERT(value <= static_cast<uint64_t>(std::numeric_limits<uint32_t>::max()));
+        append32BitValue(static_cast<uint32_t>(value));
+    }
+
+    void setBufferSerial(size_t wordOffset,
+                         size_t wordStride,
+                         size_t elementIndex,
+                         BufferSerial bufferSerial)
+    {
+        set32BitValue(wordOffset, wordStride, elementIndex, bufferSerial.getValue());
+    }
+
+    void setImageOrBufferViewSerial(size_t wordOffset,
+                                    size_t wordStride,
+                                    size_t elementIndex,
+                                    ImageOrBufferViewSerial imageOrBufferViewSerial)
+    {
+        set32BitValue(wordOffset, wordStride, elementIndex, imageOrBufferViewSerial.getValue());
+    }
+
+    void setSubresourceRange(size_t wordOffset,
+                             size_t wordStride,
+                             size_t elementIndex,
+                             ImageSubresourceRange subresourceRange)
+    {
+        static_assert(sizeof(ImageSubresourceRange) == sizeof(uint32_t));
+
+        uint32_t value32bits;
+        memcpy(&value32bits, &subresourceRange, sizeof(uint32_t));
+        set32BitValue(wordOffset, wordStride, elementIndex, value32bits);
+    }
+
+    void set32BitValue(size_t wordOffset, size_t wordStride, size_t elementIndex, uint32_t value)
+    {
+        size_t wordIndex = wordOffset + wordStride * elementIndex;
+        ensureCapacity(wordIndex + 1);
+        mPayload[wordIndex] = value;
+    }
+
+    void setClamped64BitValue(size_t wordOffset,
+                              size_t wordStride,
+                              size_t elementIndex,
+                              uint32_t value)
+    {
+        ASSERT(value <= static_cast<uint64_t>(std::numeric_limits<uint32_t>::max()));
+        set32BitValue(wordOffset, wordStride, elementIndex, static_cast<uint32_t>(value));
+    }
+
+    void ensureCapacity(size_t capacity)
+    {
+        if (mPayload.size() < capacity)
+        {
+            mPayload.resize(capacity);
+        }
+    }
 
   private:
     // After a preliminary minimum size, use heap memory.
@@ -1413,9 +1483,9 @@ struct hash<rx::vk::UniformsAndXfbDescriptorDesc>
 };
 
 template <>
-struct hash<rx::vk::ShaderBuffersDescriptorDesc>
+struct hash<rx::vk::DescriptorSetDesc>
 {
-    size_t operator()(const rx::vk::ShaderBuffersDescriptorDesc &key) const { return key.hash(); }
+    size_t operator()(const rx::vk::DescriptorSetDesc &key) const { return key.hash(); }
 };
 
 template <>

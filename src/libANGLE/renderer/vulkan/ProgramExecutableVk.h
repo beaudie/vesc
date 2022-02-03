@@ -161,7 +161,7 @@ class ProgramExecutableVk
     angle::Result updateShaderResourcesDescriptorSet(
         ContextVk *contextVk,
         FramebufferVk *framebufferVk,
-        const vk::ShaderBuffersDescriptorDesc &shaderBuffersDesc);
+        const vk::DescriptorSetDesc &shaderBuffersDesc);
     angle::Result updateTransformFeedbackDescriptorSet(
         ContextVk *contextVk,
         const gl::ProgramExecutable &executable,
@@ -260,21 +260,20 @@ class ProgramExecutableVk
                                                   const gl::ProgramExecutable &executable);
     angle::Result getOrAllocateShaderResourcesDescriptorSet(
         ContextVk *contextVk,
-        const vk::ShaderBuffersDescriptorDesc *shaderBuffersDesc,
+        const vk::DescriptorSetDesc *shaderBuffersDesc,
         VkDescriptorSet *descriptorSetOut);
-    angle::Result updateBuffersDescriptorSet(
-        ContextVk *contextVk,
-        const gl::ShaderType shaderType,
-        const vk::ShaderBuffersDescriptorDesc &shaderBuffersDesc,
-        const std::vector<gl::InterfaceBlock> &blocks,
-        VkDescriptorType descriptorType,
-        VkDeviceSize maxBoundBufferRange,
-        bool cacheHit);
+    angle::Result updateBuffersDescriptorSet(ContextVk *contextVk,
+                                             const gl::ShaderType shaderType,
+                                             const vk::DescriptorSetDesc &shaderBuffersDesc,
+                                             const std::vector<gl::InterfaceBlock> &blocks,
+                                             VkDescriptorType descriptorType,
+                                             VkDeviceSize maxBoundBufferRange,
+                                             bool cacheHit);
     angle::Result updateAtomicCounterBuffersDescriptorSet(
         ContextVk *contextVk,
         const gl::ProgramExecutable &executable,
         const gl::ShaderType shaderType,
-        const vk::ShaderBuffersDescriptorDesc &shaderBuffersDesc,
+        const vk::DescriptorSetDesc &shaderBuffersDesc,
         bool cacheHit);
     angle::Result updateImagesDescriptorSet(ContextVk *contextVk,
                                             const gl::ProgramExecutable &executable,
@@ -353,7 +352,7 @@ class ProgramExecutableVk
         mUniformsAndXfbDescriptorsCache;
     DescriptorSetCache<vk::TextureDescriptorDesc, VulkanCacheType::TextureDescriptors>
         mTextureDescriptorsCache;
-    DescriptorSetCache<vk::ShaderBuffersDescriptorDesc, VulkanCacheType::ShaderBuffersDescriptors>
+    DescriptorSetCache<vk::DescriptorSetDesc, VulkanCacheType::ShaderBuffersDescriptors>
         mShaderBufferDescriptorsCache;
 
     // We keep a reference to the pipeline and descriptor set layouts. This ensures they don't get

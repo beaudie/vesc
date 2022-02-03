@@ -1231,7 +1231,7 @@ void ProgramExecutableVk::updateDefaultUniformsDescriptorSet(
 // Lazily allocate the descriptor set. We may not need one if all of the buffers are inactive.
 angle::Result ProgramExecutableVk::getOrAllocateShaderResourcesDescriptorSet(
     ContextVk *contextVk,
-    const vk::ShaderBuffersDescriptorDesc *shaderBuffersDesc,
+    const vk::DescriptorSetDesc *shaderBuffersDesc,
     VkDescriptorSet *descriptorSetOut)
 {
     if (mDescriptorSets[DescriptorSetIndex::ShaderResource] == VK_NULL_HANDLE)
@@ -1260,7 +1260,7 @@ angle::Result ProgramExecutableVk::getOrAllocateShaderResourcesDescriptorSet(
 angle::Result ProgramExecutableVk::updateBuffersDescriptorSet(
     ContextVk *contextVk,
     const gl::ShaderType shaderType,
-    const vk::ShaderBuffersDescriptorDesc &shaderBuffersDesc,
+    const vk::DescriptorSetDesc &shaderBuffersDesc,
     const std::vector<gl::InterfaceBlock> &blocks,
     VkDescriptorType descriptorType,
     VkDeviceSize maxBoundBufferRange,
@@ -1345,7 +1345,7 @@ angle::Result ProgramExecutableVk::updateAtomicCounterBuffersDescriptorSet(
     ContextVk *contextVk,
     const gl::ProgramExecutable &executable,
     const gl::ShaderType shaderType,
-    const vk::ShaderBuffersDescriptorDesc &shaderBuffersDesc,
+    const vk::DescriptorSetDesc &shaderBuffersDesc,
     bool cacheHit)
 {
     const gl::State &glState = contextVk->getState();
@@ -1564,7 +1564,7 @@ angle::Result ProgramExecutableVk::updateImagesDescriptorSet(
 angle::Result ProgramExecutableVk::updateShaderResourcesDescriptorSet(
     ContextVk *contextVk,
     FramebufferVk *framebufferVk,
-    const vk::ShaderBuffersDescriptorDesc &shaderBuffersDesc)
+    const vk::DescriptorSetDesc &shaderBuffersDesc)
 {
     const gl::ProgramExecutable *executable = contextVk->getState().getProgramExecutable();
     ASSERT(executable);

@@ -199,8 +199,8 @@ void ApplySampleCoverage(const gl::State &glState,
 
     uint32_t maskBitOffset = maskNumber * 32;
     uint32_t coverageMask  = coverageSampleCount >= (maskBitOffset + 32)
-                                 ? std::numeric_limits<uint32_t>::max()
-                                 : (1u << (coverageSampleCount - maskBitOffset)) - 1;
+                                ? std::numeric_limits<uint32_t>::max()
+                                : (1u << (coverageSampleCount - maskBitOffset)) - 1;
 
     if (glState.getSampleCoverageInvert())
     {
@@ -309,7 +309,7 @@ egl::ContextPriority GetContextPriority(const gl::State &state)
 }
 
 template <typename MaskT>
-void AppendBufferVectorToDesc(vk::ShaderBuffersDescriptorDesc *desc,
+void AppendBufferVectorToDesc(vk::DescriptorSetDesc *desc,
                               const gl::BufferVector &buffers,
                               const MaskT &buffersMask,
                               bool isDynamicDescriptor,
