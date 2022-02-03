@@ -71,6 +71,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "2f309059_22d077b1",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1359249
+      },
+      "writtenOn": "2022-02-03T00:58:36Z",
+      "side": 1,
+      "message": "Yes createTexture fails in test before getting to glFramebufferTexture.\nSo this test case won\u0027t get to the point of verification",
+      "parentUuid": "aacc20c3_cde00d45",
+      "revId": "336bdc0af547e7569db607c3d2995525b3281fa9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "db74031d_dcb3f8fb",
@@ -156,6 +174,30 @@
       "side": 1,
       "message": "I\u0027ll change \"Image\" to \"Texture\" here since its the attachment.",
       "parentUuid": "735aec67_9c9f0051",
+      "range": {
+        "startLine": 1972,
+        "startChar": 55,
+        "endLine": 1972,
+        "endChar": 60
+      },
+      "revId": "336bdc0af547e7569db607c3d2995525b3281fa9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "463f1fe5_a76510ab",
+        "filename": "src/libANGLE/validationES.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 1972,
+      "author": {
+        "id": 1359249
+      },
+      "writtenOn": "2022-02-03T00:58:36Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "b33a7aa4_1fc1a8b0",
       "range": {
         "startLine": 1972,
         "startChar": 55,
