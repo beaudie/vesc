@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "0b71ce20_2773b62d",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000050
+      },
+      "writtenOn": "2022-02-04T01:47:48Z",
+      "side": 1,
+      "message": "Hi Shahbaz, PTAL. Thanks",
+      "revId": "e8b857b9c9fc23a1dd0b2506eca11cfd744794e1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
