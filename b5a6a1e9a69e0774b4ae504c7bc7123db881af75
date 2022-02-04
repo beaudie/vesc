@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "e3687107_39547827",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1001921
+      },
+      "writtenOn": "2022-02-04T13:48:26Z",
+      "side": 1,
+      "message": "I can no longer do 1+1\u003d2 trick 😭\nNote that I\u0027ve tested this on ChromeOS in https://chromium-review.googlesource.com/c/chromium/src/+/3430679.",
+      "revId": "b5a6a1e9a69e0774b4ae504c7bc7123db881af75",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
