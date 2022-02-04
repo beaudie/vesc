@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "f8d2f40a_7baa1974",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2022-02-04T22:46:12Z",
+      "side": 1,
+      "message": "lgtm, taking the liberty of +2\u0027ing this as it\u0027s urgent\n",
+      "revId": "3e1a0bad5eca014e61a92cdf520884f9987927e7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "491fcd06_127f811b",
+        "filename": "src/libANGLE/renderer/metal/ContextMtl.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 543,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2022-02-04T22:46:12Z",
+      "side": 1,
+      "message": "I\u0027d have fixed the grammar to say \"should be\" but it\u0027s not a big deal.",
+      "revId": "3e1a0bad5eca014e61a92cdf520884f9987927e7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
