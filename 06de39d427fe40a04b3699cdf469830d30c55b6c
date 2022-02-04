@@ -16,6 +16,24 @@
       "message": "PTAL\nAdded new test case for the check we correct with Protected Context and unprotected Texture",
       "revId": "06de39d427fe40a04b3699cdf469830d30c55b6c",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "6080cac1_be3e2bbf",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-02-04T15:39:56Z",
+      "side": 1,
+      "message": "Thanks!",
+      "parentUuid": "514087b1_41b65003",
+      "revId": "06de39d427fe40a04b3699cdf469830d30c55b6c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
