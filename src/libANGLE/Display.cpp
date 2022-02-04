@@ -104,17 +104,24 @@ struct ANGLEPlatformDisplay
     ANGLEPlatformDisplay() = default;
 
     ANGLEPlatformDisplay(EGLNativeDisplayType nativeDisplayType)
-        : nativeDisplayType(nativeDisplayType), powerPreference(EGL_LOW_POWER_ANGLE)
+        : nativeDisplayType(nativeDisplayType),
+          powerPreference(EGL_LOW_POWER_ANGLE),
+          platformANGLEType(EGL_PLATFORM_ANGLE_TYPE_DEFAULT_ANGLE)
     {}
 
-    ANGLEPlatformDisplay(EGLNativeDisplayType nativeDisplayType, EGLAttrib powerPreference)
-        : nativeDisplayType(nativeDisplayType), powerPreference(powerPreference)
+    ANGLEPlatformDisplay(EGLNativeDisplayType nativeDisplayType,
+                         EGLAttrib powerPreference,
+                         EGLAttrib platformANGLEType)
+        : nativeDisplayType(nativeDisplayType),
+          powerPreference(powerPreference),
+          platformANGLEType(platformANGLEType)
     {}
 
     auto tie() const { return std::tie(nativeDisplayType, powerPreference); }
 
     EGLNativeDisplayType nativeDisplayType;
     EGLAttrib powerPreference;
+    EGLAttrib platformANGLEType;
 };
 
 inline bool operator<(const ANGLEPlatformDisplay &a, const ANGLEPlatformDisplay &b)
@@ -645,8 +652,11 @@ Display *Display::GetDisplayFromNativeDisplay(EGLNativeDisplayType nativeDisplay
     Display *display = nullptr;
 
     EGLAttrib powerPreference = attribMap.get(EGL_POWER_PREFERENCE_ANGLE, EGL_LOW_POWER_ANGLE);
+    EGLAttrib platformANGLEType =
+        attribMap.get(EGL_PLATFORM_ANGLE_TYPE_ANGLE, EGL_PLATFORM_ANGLE_TYPE_DEFAULT_ANGLE);
     ANGLEPlatformDisplayMap *displays = GetANGLEPlatformDisplayMap();
-    const auto &iter = displays->find(ANGLEPlatformDisplay(nativeDisplay, powerPreference));
+    const auto &iter =
+        displays->find(ANGLEPlatformDisplay(nativeDisplay, powerPreference, platformANGLEType));
     if (iter != displays->end())
     {
         display = iter->second;
@@ -661,8 +671,8 @@ Display *Display::GetDisplayFromNativeDisplay(EGLNativeDisplayType nativeDisplay
         }
 
         display = new Display(EGL_PLATFORM_ANGLE_ANGLE, nativeDisplay, nullptr);
-        displays->insert(
-            std::make_pair(ANGLEPlatformDisplay(nativeDisplay, powerPreference), display));
+        displays->insert(std::make_pair(
+            ANGLEPlatformDisplay(nativeDisplay, powerPreference, platformANGLEType), display));
     }
     // Apply new attributes if the display is not initialized yet.
     if (!display->isInitialized())
@@ -814,7 +824,9 @@ Display::~Display()
     {
         ANGLEPlatformDisplayMap *displays      = GetANGLEPlatformDisplayMap();
         ANGLEPlatformDisplayMap::iterator iter = displays->find(ANGLEPlatformDisplay(
-            mState.displayId, mAttributeMap.get(EGL_POWER_PREFERENCE_ANGLE, EGL_LOW_POWER_ANGLE)));
+            mState.displayId, mAttributeMap.get(EGL_POWER_PREFERENCE_ANGLE, EGL_LOW_POWER_ANGLE),
+            mAttributeMap.get(EGL_PLATFORM_ANGLE_TYPE_ANGLE,
+                              EGL_PLATFORM_ANGLE_TYPE_DEFAULT_ANGLE)));
         if (iter != displays->end())
         {
             displays->erase(iter);
