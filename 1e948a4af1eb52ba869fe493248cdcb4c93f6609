@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "1356702b_c9b42c2d",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2022-02-04T18:20:14Z",
+      "side": 1,
+      "message": "Some test failures. Is the test valid?\n\nI thought we trashed the cache when the base level changes.",
+      "revId": "1e948a4af1eb52ba869fe493248cdcb4c93f6609",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
