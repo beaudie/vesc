@@ -2085,13 +2085,12 @@ angle::Result ProgramExecutableVk::updateUniforms(ContextVk *contextVk,
 
     // Allocate space from dynamicBuffer. Always try to allocate from the current buffer first.
     // If that failed, we deal with fall out and try again.
-    if (!defaultUniformStorage->allocateFromCurrentBuffer(requiredSpace, &defaultUniformBuffer))
+    ANGLE_TRY(defaultUniformStorage->allocate(contextVk, requiredSpace, &defaultUniformBuffer,
+                                              &anyNewBufferAllocated));
+
+    if (anyNewBufferAllocated)
     {
         setAllDefaultUniformsDirty(glExecutable);
-
-        requiredSpace = calcUniformUpdateRequiredSpace(contextVk, glExecutable, &offsets);
-        ANGLE_TRY(defaultUniformStorage->allocate(contextVk, requiredSpace, &defaultUniformBuffer,
-                                                  &anyNewBufferAllocated));
     }
 
     uint8_t *bufferData       = defaultUniformBuffer->getMappedMemory();

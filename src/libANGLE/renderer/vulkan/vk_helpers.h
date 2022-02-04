@@ -90,11 +90,6 @@ class DynamicBuffer : angle::NonCopyable
               bool hostVisible,
               DynamicBufferPolicy policy);
 
-    // This call will allocate a new region at the end of the current buffer. If it can't find
-    // enough space in the current buffer, it returns false. This gives caller a chance to deal with
-    // buffer switch that may occur with allocate call.
-    bool allocateFromCurrentBuffer(size_t sizeInBytes, BufferHelper **bufferHelperOut);
-
     // This call will allocate a new region at the end of the buffer with default alignment. It
     // internally may trigger a new buffer to be created (which is returned in the optional
     // parameter `newBufferAllocatedOut`). The new region will be in the returned buffer at given
