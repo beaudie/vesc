@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "fef6d85e_2dbff81c",
+        "filename": "src/libANGLE/Context.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 3197,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-02-04T16:37:23Z",
+      "side": 1,
+      "message": "The if should be removed now I believe",
+      "revId": "6a4606112fa85e85e85c8ef69e5e1e4189e85bbe",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
