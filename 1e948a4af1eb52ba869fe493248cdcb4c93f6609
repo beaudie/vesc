@@ -16,6 +16,23 @@
       "message": "Some test failures. Is the test valid?\n\nI thought we trashed the cache when the base level changes.",
       "revId": "1e948a4af1eb52ba869fe493248cdcb4c93f6609",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "8be5396e_59df446f",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1340649
+      },
+      "writtenOn": "2022-02-04T18:31:11Z",
+      "side": 1,
+      "message": "as mentioned in the original change, the test needs to be skipped for GL backend. For some reason the framebuffer claims to have an incomplete attachment",
+      "revId": "1e948a4af1eb52ba869fe493248cdcb4c93f6609",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
