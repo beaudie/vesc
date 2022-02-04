@@ -68,6 +68,24 @@
       "parentUuid": "4b3d78a3_0151602e",
       "revId": "1e948a4af1eb52ba869fe493248cdcb4c93f6609",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "5798f2ea_cb72f08f",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2022-02-04T19:07:44Z",
+      "side": 1,
+      "message": "Is that spec? Maybe we\u0027re missing validation here.",
+      "parentUuid": "a6753f4c_bd013485",
+      "revId": "1e948a4af1eb52ba869fe493248cdcb4c93f6609",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
