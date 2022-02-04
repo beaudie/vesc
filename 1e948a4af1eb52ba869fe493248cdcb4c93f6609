@@ -104,6 +104,24 @@
       "parentUuid": "5798f2ea_cb72f08f",
       "revId": "1e948a4af1eb52ba869fe493248cdcb4c93f6609",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "4b5b48e9_4dd481b4",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2022-02-04T19:09:08Z",
+      "side": 1,
+      "message": "• If image is a non-immutable format texture, the selected level number is in\nthe range [levelbase, q], where levelbase and q are as defined in section 8.13.3.\n\nMax level changing may be okay, base level is not. ANGLE may be missing validation??",
+      "parentUuid": "c83ad683_1ce7c43d",
+      "revId": "1e948a4af1eb52ba869fe493248cdcb4c93f6609",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
