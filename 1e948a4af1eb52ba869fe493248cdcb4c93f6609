@@ -50,6 +50,24 @@
       "message": "Shabi: can you check the test? I think it has a bug.",
       "revId": "1e948a4af1eb52ba869fe493248cdcb4c93f6609",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "a6753f4c_bd013485",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-02-04T19:04:43Z",
+      "side": 1,
+      "message": "I have a feeling of Deja Vu about this. Nvidia doesn\u0027t let the framebuffer attachment be outside the texture base/max levels I think. Anyway, it\u0027s GL, and I have no time to look into that further.",
+      "parentUuid": "4b3d78a3_0151602e",
+      "revId": "1e948a4af1eb52ba869fe493248cdcb4c93f6609",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
