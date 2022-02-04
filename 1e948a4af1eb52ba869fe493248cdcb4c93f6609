@@ -122,6 +122,24 @@
       "parentUuid": "c83ad683_1ce7c43d",
       "revId": "1e948a4af1eb52ba869fe493248cdcb4c93f6609",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "595b3ffb_85d16237",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-02-04T19:11:53Z",
+      "side": 1,
+      "message": "The texture is immutable, which is what makes it work.",
+      "parentUuid": "4b5b48e9_4dd481b4",
+      "revId": "1e948a4af1eb52ba869fe493248cdcb4c93f6609",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
