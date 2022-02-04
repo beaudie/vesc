@@ -796,20 +796,16 @@ void DestroyBufferList(RendererVk *renderer, BufferHelperPointerVector *buffers)
 }
 
 bool ShouldReleaseFreeBuffer(const vk::BufferHelper &buffer,
-                             size_t dynamicBufferSize,
                              DynamicBufferPolicy policy,
                              size_t freeListSize)
 {
     constexpr size_t kLimitedFreeListMaxSize = 1;
 
-    // If the dynamic buffer was resized we cannot reuse the retained buffer.  Additionally,
-    // only reuse the buffer if specifically requested.
-    const bool sizeMismatch    = buffer.getSize() != dynamicBufferSize;
     const bool releaseByPolicy = policy == DynamicBufferPolicy::OneShotUse ||
                                  (policy == DynamicBufferPolicy::SporadicTextureUpload &&
                                   freeListSize >= kLimitedFreeListMaxSize);
 
-    return sizeMismatch || releaseByPolicy;
+    return releaseByPolicy;
 }
 
 // Helper functions used below
@@ -2401,28 +2397,6 @@ angle::Result DynamicBuffer::allocateNewBuffer(ContextVk *contextVk)
     return mBuffer->init(contextVk, createInfo, mMemoryPropertyFlags);
 }
 
-bool DynamicBuffer::allocateFromCurrentBuffer(size_t sizeInBytes, BufferHelper **bufferHelperOut)
-{
-    ASSERT(bufferHelperOut);
-    size_t sizeToAllocate                                      = roundUp(sizeInBytes, mAlignment);
-    angle::base::CheckedNumeric<size_t> checkedNextWriteOffset = mNextAllocationOffset;
-    checkedNextWriteOffset += sizeToAllocate;
-
-    if (!checkedNextWriteOffset.IsValid() || checkedNextWriteOffset.ValueOrDie() > mSize)
-    {
-        return false;
-    }
-
-    ASSERT(mBuffer != nullptr);
-    ASSERT(mHostVisible);
-    ASSERT(mBuffer->getMappedMemory());
-    mBuffer->getSuballocation().setOffsetSize(mNextAllocationOffset, sizeToAllocate);
-    *bufferHelperOut = mBuffer.get();
-
-    mNextAllocationOffset += static_cast<uint32_t>(sizeToAllocate);
-    return true;
-}
-
 angle::Result DynamicBuffer::allocate(ContextVk *contextVk,
                                       size_t sizeInBytes,
                                       BufferHelper **bufferHelperOut,
@@ -2455,18 +2429,24 @@ angle::Result DynamicBuffer::allocate(ContextVk *contextVk,
 
         // The front of the free list should be the oldest. Thus if it is in use the rest of the
         // free list should be in use as well.
-        if (mBufferFreeList.empty() ||
-            mBufferFreeList.front()->isCurrentlyInUse(contextVk->getLastCompletedQueueSerial()))
-        {
-            ANGLE_TRY(allocateNewBuffer(contextVk));
-        }
-        else
+        while (!mBuffer && !mBufferFreeList.empty() &&
+               !mBufferFreeList.front()->isCurrentlyInUse(contextVk->getLastCompletedQueueSerial()))
         {
             mBuffer = std::move(mBufferFreeList.front());
             mBufferFreeList.erase(mBufferFreeList.begin());
+
+            // Aggressively release free buffers with mismatched size.
+            if (mBuffer->getSize() != sizeToAllocate)
+            {
+                mBuffer->release(contextVk->getRenderer());
+                mBuffer.reset(nullptr);
+            }
         }
 
-        ASSERT(mBuffer->getSize() == mSize);
+        if (!mBuffer)
+        {
+            ANGLE_TRY(allocateNewBuffer(contextVk));
+        }
 
         mNextAllocationOffset = 0;
 
@@ -2512,7 +2492,7 @@ void DynamicBuffer::releaseInFlightBuffersToResourceUseList(ContextVk *contextVk
         // unfortunately.
         bufferHelper->retainReadOnly(resourceUseList);
 
-        if (ShouldReleaseFreeBuffer(*bufferHelper, mSize, mPolicy, mBufferFreeList.size()))
+        if (ShouldReleaseFreeBuffer(*bufferHelper, mPolicy, mBufferFreeList.size()))
         {
             bufferHelper->release(contextVk->getRenderer());
         }
