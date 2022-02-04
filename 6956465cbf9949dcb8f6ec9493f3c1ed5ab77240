@@ -16,6 +16,40 @@
       "message": "PTAL",
       "revId": "6956465cbf9949dcb8f6ec9493f3c1ed5ab77240",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "03f8fcf5_5a8b2f6b",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2022-02-04T23:27:40Z",
+      "side": 1,
+      "message": "Great work on the fix; one question. Not to supersede Geoff\u0027s review of course.\n",
+      "revId": "6956465cbf9949dcb8f6ec9493f3c1ed5ab77240",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "41201e72_08de68da",
+        "filename": "src/libANGLE/Display.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 120,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2022-02-04T23:27:40Z",
+      "side": 1,
+      "message": "Doesn\u0027t this need to be updated to include the platformANGLEType? Or is it the case that it mustn\u0027t because the \"default\" display type wouldn\u0027t match any of the actual ones?",
+      "revId": "6956465cbf9949dcb8f6ec9493f3c1ed5ab77240",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
