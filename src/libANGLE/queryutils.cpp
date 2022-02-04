@@ -4187,6 +4187,24 @@ void QueryConfigAttrib(const Config *config, EGLint attribute, EGLint *value)
         case EGL_MATCH_FORMAT_KHR:
             *value = config->matchFormat;
             break;
+        case EGL_YUV_ORDER_EXT:
+            *value = config->yuvPlaneOrder;
+            break;
+        case EGL_YUV_NUMBER_OF_PLANES_EXT:
+            *value = config->yuvPlanes;
+            break;
+        case EGL_YUV_SUBSAMPLE_EXT:
+            *value = config->yuvSubsample;
+            break;
+        case EGL_YUV_DEPTH_RANGE_EXT:
+            *value = config->yuvDepthRange;
+            break;
+        case EGL_YUV_CSC_STANDARD_EXT:
+            *value = config->yuvCSCStandard;
+            break;
+        case EGL_YUV_PLANE_BPP_EXT:
+            *value = config->yuvPlaneBpp;
+            break;
         default:
             UNREACHABLE();
             break;

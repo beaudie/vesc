@@ -78,6 +78,12 @@ struct Config
                            // determine if y-inverted texture coordinates need to be used when
                            // texturing from this drawable when it is bound to a texture target.
     EGLint matchFormat;    // LockSurface match format.
+    EGLint yuvPlaneOrder;  // YUV plane order
+    EGLint yuvPlanes;      // YUV Plane count
+    EGLint yuvSubsample;   // YUV Subsample
+    EGLint yuvDepthRange;  // YUV Depth range
+    EGLint yuvCSCStandard;  // YUV CSC format standard
+    EGLint yuvPlaneBpp;     // YUV Plane bits per pixel
 };
 
 class ConfigSet

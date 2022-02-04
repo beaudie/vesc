@@ -1246,6 +1246,15 @@ egl::Config GenerateDefaultConfig(DisplayVk *display,
     {
         config.surfaceType |= EGL_LOCK_SURFACE_BIT_KHR;
     }
+    if (gl::IsYuvFormat(colorFormat.internalFormat))
+    {
+        config.yuvPlaneOrder  = gl::GetPlaneOrder(colorFormat.internalFormat);
+        config.yuvPlanes      = gl::GetPlaneCount(colorFormat.internalFormat);
+        config.yuvSubsample   = gl::GetSubsample(colorFormat.internalFormat);
+        config.yuvDepthRange  = gl::GetDepthRange(colorFormat.internalFormat);
+        config.yuvCSCStandard = gl::GetCSCStandard(colorFormat.internalFormat);
+        config.yuvPlaneBpp    = gl::GetYPlaneBpp(colorFormat.internalFormat);
+    }
 
     // Vulkan always supports off-screen rendering.  Check the config with display to see if it can
     // also have window support.  If not, the following call should automatically remove

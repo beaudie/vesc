@@ -63,7 +63,13 @@ Config::Config()
       colorComponentType(EGL_COLOR_COMPONENT_TYPE_FIXED_EXT),
       recordable(EGL_FALSE),
       framebufferTarget(EGL_FALSE),  // TODO: http://anglebug.com/4208
-      yInverted(EGL_FALSE)
+      yInverted(EGL_FALSE),
+      yuvPlaneOrder(EGL_YUV_ORDER_YUV_EXT),
+      yuvPlanes(0),
+      yuvSubsample(EGL_YUV_SUBSAMPLE_4_2_0_EXT),
+      yuvDepthRange(EGL_YUV_DEPTH_RANGE_LIMITED_EXT),
+      yuvCSCStandard(EGL_YUV_CSC_STANDARD_601_EXT),
+      yuvPlaneBpp(EGL_YUV_PLANE_BPP_0_EXT)
 {}
 
 Config::~Config() {}

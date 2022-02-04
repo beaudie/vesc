@@ -266,6 +266,19 @@ bool ValidateConfigAttribute(const ValidationContext *val,
             }
             break;
 
+        case EGL_YUV_ORDER_EXT:
+        case EGL_YUV_NUMBER_OF_PLANES_EXT:
+        case EGL_YUV_SUBSAMPLE_EXT:
+        case EGL_YUV_DEPTH_RANGE_EXT:
+        case EGL_YUV_CSC_STANDARD_EXT:
+        case EGL_YUV_PLANE_BPP_EXT:
+            if (!display->getExtensions().yuvSurfaceEXT)
+            {
+                val->setError(EGL_BAD_ATTRIBUTE, "EGL_EXT_yyuv_surface is not enabled.");
+                return false;
+            }
+            break;
+
         default:
             val->setError(EGL_BAD_ATTRIBUTE, "Unknown attribute: 0x%04" PRIxPTR "X", attribute);
             return false;
@@ -302,6 +315,7 @@ bool ValidateConfigAttributeValue(const ValidationContext *val,
             {
                 case EGL_RGB_BUFFER:
                 case EGL_LUMINANCE_BUFFER:
+                case EGL_YUV_BUFFER_EXT:
                 // EGL_DONT_CARE doesn't match the spec, but does match dEQP usage
                 case EGL_DONT_CARE:
                     break;
@@ -384,6 +398,94 @@ bool ValidateConfigAttributeValue(const ValidationContext *val,
                 default:
                     val->setError(EGL_BAD_ATTRIBUTE,
                                   "EGL_KHR_lock_surface3 invalid attribute: 0x%X",
+                                  static_cast<uint32_t>(value));
+                    return false;
+            }
+            break;
+
+        case EGL_YUV_ORDER_EXT:
+            switch (value)
+            {
+                case EGL_YUV_ORDER_YUV_EXT:
+                case EGL_YUV_ORDER_YVU_EXT:
+                case EGL_YUV_ORDER_YUYV_EXT:
+                case EGL_YUV_ORDER_UYVY_EXT:
+                case EGL_YUV_ORDER_YVYU_EXT:
+                case EGL_YUV_ORDER_VYUY_EXT:
+                case EGL_YUV_ORDER_AYUV_EXT:
+                    break;
+                default:
+                    val->setError(EGL_BAD_ATTRIBUTE,
+                                  "EGL_EXT_yuv_surface invalid attribute value: 0x%X",
+                                  static_cast<uint32_t>(value));
+                    return false;
+            }
+            break;
+
+        case EGL_YUV_NUMBER_OF_PLANES_EXT:
+            if ((value < 1) || (value > 3))
+            {
+                val->setError(EGL_BAD_ATTRIBUTE,
+                              "EGL_EXT_yuv_surface invalid attribute value: 0x%X",
+                              static_cast<uint32_t>(value));
+                return false;
+            }
+            break;
+
+        case EGL_YUV_SUBSAMPLE_EXT:
+            switch (value)
+            {
+                case EGL_YUV_SUBSAMPLE_4_2_0_EXT:
+                case EGL_YUV_SUBSAMPLE_4_2_2_EXT:
+                case EGL_YUV_SUBSAMPLE_4_4_4_EXT:
+                    break;
+                default:
+                    val->setError(EGL_BAD_ATTRIBUTE,
+                                  "EGL_EXT_yuv_surface invalid attribute value: 0x%X",
+                                  static_cast<uint32_t>(value));
+                    return false;
+            }
+            break;
+
+        case EGL_YUV_DEPTH_RANGE_EXT:
+            switch (value)
+            {
+                case EGL_YUV_DEPTH_RANGE_LIMITED_EXT:
+                case EGL_YUV_DEPTH_RANGE_FULL_EXT:
+                    break;
+                default:
+                    val->setError(EGL_BAD_ATTRIBUTE,
+                                  "EGL_EXT_yuv_surface invalid attribute value: 0x%X",
+                                  static_cast<uint32_t>(value));
+                    return false;
+            }
+            break;
+
+        case EGL_YUV_CSC_STANDARD_EXT:
+            switch (value)
+            {
+                case EGL_YUV_CSC_STANDARD_601_EXT:
+                case EGL_YUV_CSC_STANDARD_709_EXT:
+                case EGL_YUV_CSC_STANDARD_2020_EXT:
+                    break;
+                default:
+                    val->setError(EGL_BAD_ATTRIBUTE,
+                                  "EGL_EXT_yuv_surface invalid attribute value: 0x%X",
+                                  static_cast<uint32_t>(value));
+                    return false;
+            }
+            break;
+
+        case EGL_YUV_PLANE_BPP_EXT:
+            switch (value)
+            {
+                case EGL_YUV_PLANE_BPP_0_EXT:
+                case EGL_YUV_PLANE_BPP_8_EXT:
+                case EGL_YUV_PLANE_BPP_10_EXT:
+                    break;
+                default:
+                    val->setError(EGL_BAD_ATTRIBUTE,
+                                  "EGL_EXT_yuv_surface invalid attribute value: 0x%X",
                                   static_cast<uint32_t>(value));
                     return false;
             }

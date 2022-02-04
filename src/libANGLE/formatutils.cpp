@@ -756,6 +756,82 @@ void GetSubSampleFactor(GLenum format, int *horizontalSubsampleFactor, int *vert
     }
 }
 
+EGLint GetPlaneOrder(GLenum format)
+{
+    switch (format)
+    {
+        case GL_G8_B8R8_2PLANE_420_UNORM_ANGLE:
+        case GL_G8_B8_R8_3PLANE_420_UNORM_ANGLE:
+        case GL_G10X6_B10X6R10X6_2PLANE_420_UNORM_3PACK16_ANGLE:
+        case GL_G10X6_B10X6_R10X6_3PLANE_420_UNORM_3PACK16_ANGLE:
+        case GL_G12X4_B12X4R12X4_2PLANE_420_UNORM_3PACK16_ANGLE:
+        case GL_G12X4_B12X4_R12X4_3PLANE_420_UNORM_3PACK16_ANGLE:
+        case GL_G16_B16R16_2PLANE_420_UNORM_ANGLE:
+        case GL_G16_B16_R16_3PLANE_420_UNORM_ANGLE:
+            return 0;  // WIP
+        default:
+            UNREACHABLE();
+            return 0;
+    }
+}
+
+EGLint GetSubsample(GLenum format)
+{
+    switch (format)
+    {
+        case GL_G8_B8R8_2PLANE_420_UNORM_ANGLE:
+        case GL_G8_B8_R8_3PLANE_420_UNORM_ANGLE:
+        case GL_G10X6_B10X6R10X6_2PLANE_420_UNORM_3PACK16_ANGLE:
+        case GL_G10X6_B10X6_R10X6_3PLANE_420_UNORM_3PACK16_ANGLE:
+        case GL_G12X4_B12X4R12X4_2PLANE_420_UNORM_3PACK16_ANGLE:
+        case GL_G12X4_B12X4_R12X4_3PLANE_420_UNORM_3PACK16_ANGLE:
+        case GL_G16_B16R16_2PLANE_420_UNORM_ANGLE:
+        case GL_G16_B16_R16_3PLANE_420_UNORM_ANGLE:
+            return 0;  // WIP
+        default:
+            UNREACHABLE();
+            return 0;
+    }
+}
+
+EGLint GetDepthRange(GLenum format)
+{
+    switch (format)
+    {
+        case GL_G8_B8R8_2PLANE_420_UNORM_ANGLE:
+        case GL_G8_B8_R8_3PLANE_420_UNORM_ANGLE:
+        case GL_G10X6_B10X6R10X6_2PLANE_420_UNORM_3PACK16_ANGLE:
+        case GL_G10X6_B10X6_R10X6_3PLANE_420_UNORM_3PACK16_ANGLE:
+        case GL_G12X4_B12X4R12X4_2PLANE_420_UNORM_3PACK16_ANGLE:
+        case GL_G12X4_B12X4_R12X4_3PLANE_420_UNORM_3PACK16_ANGLE:
+        case GL_G16_B16R16_2PLANE_420_UNORM_ANGLE:
+        case GL_G16_B16_R16_3PLANE_420_UNORM_ANGLE:
+            return 0;  // WIP
+        default:
+            UNREACHABLE();
+            return 0;
+    }
+}
+
+EGLint GetCSCStandard(GLenum format)
+{
+    switch (format)
+    {
+        case GL_G8_B8R8_2PLANE_420_UNORM_ANGLE:
+        case GL_G8_B8_R8_3PLANE_420_UNORM_ANGLE:
+        case GL_G10X6_B10X6R10X6_2PLANE_420_UNORM_3PACK16_ANGLE:
+        case GL_G10X6_B10X6_R10X6_3PLANE_420_UNORM_3PACK16_ANGLE:
+        case GL_G12X4_B12X4R12X4_2PLANE_420_UNORM_3PACK16_ANGLE:
+        case GL_G12X4_B12X4_R12X4_3PLANE_420_UNORM_3PACK16_ANGLE:
+        case GL_G16_B16R16_2PLANE_420_UNORM_ANGLE:
+        case GL_G16_B16_R16_3PLANE_420_UNORM_ANGLE:
+            return 0;  // WIP
+        default:
+            UNREACHABLE();
+            return 0;
+    }
+}
+
 struct FormatBits
 {
     constexpr GLuint pixelBytes() const

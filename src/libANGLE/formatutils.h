@@ -564,6 +564,10 @@ uint32_t GetChromaPlaneBpp(GLenum format);
 void GetSubSampleFactor(GLenum format,
                         int *horizontalSubsampleFactor,
                         int *verticalSubsampleFactor);
+EGLint GetPlaneOrder(GLenum format);
+EGLint GetSubsample(GLenum format);
+EGLint GetDepthRange(GLenum format);
+EGLint GetCSCStandard(GLenum format);
 }  // namespace gl
 
 #endif  // LIBANGLE_FORMATUTILS_H_
