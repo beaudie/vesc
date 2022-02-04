@@ -2401,28 +2401,6 @@ angle::Result DynamicBuffer::allocateNewBuffer(ContextVk *contextVk)
     return mBuffer->init(contextVk, createInfo, mMemoryPropertyFlags);
 }
 
-bool DynamicBuffer::allocateFromCurrentBuffer(size_t sizeInBytes, BufferHelper **bufferHelperOut)
-{
-    ASSERT(bufferHelperOut);
-    size_t sizeToAllocate                                      = roundUp(sizeInBytes, mAlignment);
-    angle::base::CheckedNumeric<size_t> checkedNextWriteOffset = mNextAllocationOffset;
-    checkedNextWriteOffset += sizeToAllocate;
-
-    if (!checkedNextWriteOffset.IsValid() || checkedNextWriteOffset.ValueOrDie() > mSize)
-    {
-        return false;
-    }
-
-    ASSERT(mBuffer != nullptr);
-    ASSERT(mHostVisible);
-    ASSERT(mBuffer->getMappedMemory());
-    mBuffer->setSuballocationOffsetAndSize(mNextAllocationOffset, sizeToAllocate);
-    *bufferHelperOut = mBuffer.get();
-
-    mNextAllocationOffset += static_cast<uint32_t>(sizeToAllocate);
-    return true;
-}
-
 angle::Result DynamicBuffer::allocate(ContextVk *contextVk,
                                       size_t sizeInBytes,
                                       BufferHelper **bufferHelperOut,
