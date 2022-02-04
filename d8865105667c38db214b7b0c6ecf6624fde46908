@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "f1db7abb_3b000afc",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 4590,
+      "author": {
+        "id": 1520902
+      },
+      "writtenOn": "2022-02-04T22:04:20Z",
+      "side": 1,
+      "message": "It looks like we are not using the pipelineType param in this function, is that the intention?",
+      "revId": "d8865105667c38db214b7b0c6ecf6624fde46908",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "780fcbdb_e306f4f0",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 4606,
+      "author": {
+        "id": 1520902
+      },
+      "writtenOn": "2022-02-04T22:04:20Z",
+      "side": 1,
+      "message": "Is it possible that getExecutable() will return a nullptr? https://source.chromium.org/chromium/chromium/src/+/main:third_party/angle/src/libANGLE/renderer/vulkan/ContextVk.cpp;l\u003d6803.\n\nShould we add an assert here: ASSERT(executableVk)?",
+      "revId": "d8865105667c38db214b7b0c6ecf6624fde46908",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
