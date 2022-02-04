@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "6088d5d6_1fc67578",
+        "filename": "src/libANGLE/renderer/vulkan/ProgramExecutableVk.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 1217,
+      "author": {
+        "id": 1520902
+      },
+      "writtenOn": "2022-02-04T20:32:31Z",
+      "side": 1,
+      "message": "not important: Do we want to change the comment to mention that it is the \"aligned\" size of the uniform data in the current shader stage?",
+      "revId": "c23a13bc5850367c457093716686f2706d94642d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
