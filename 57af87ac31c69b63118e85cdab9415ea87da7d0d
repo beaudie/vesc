@@ -16,6 +16,24 @@
       "message": "LGTM when green!",
       "revId": "57af87ac31c69b63118e85cdab9415ea87da7d0d",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "2505d1a9_c221f6dd",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 5
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-02-04T18:07:46Z",
+      "side": 1,
+      "message": "Should be, last run was all green but some UBSAN expectation syntax error",
+      "parentUuid": "d608a85c_fa04f1d2",
+      "revId": "57af87ac31c69b63118e85cdab9415ea87da7d0d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
