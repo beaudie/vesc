@@ -68,6 +68,24 @@
       "message": "1+1\u003d2\n\nI\u0027ll follow up with any feedback with you Tim, if any",
       "revId": "f15e3758cfe0be307cfecbdb88bbaa505b7e8027",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "415f0122_d590a8b6",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1340649
+      },
+      "writtenOn": "2022-02-05T16:43:07Z",
+      "side": 1,
+      "message": "given how sparse the vector will be on average, any reason to not have it as a hashmap instead?",
+      "parentUuid": "5080e8bb_4624835d",
+      "revId": "f15e3758cfe0be307cfecbdb88bbaa505b7e8027",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
