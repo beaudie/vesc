@@ -1,0 +1,78 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "20adf91f_09701698",
+        "filename": "doc/DebuggingTips.md",
+        "patchSetId": 1
+      },
+      "lineNbr": 254,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-02-05T03:36:48Z",
+      "side": 1,
+      "message": "nit: #### Linux for consistency",
+      "revId": "0c1246ca35d7646fcce2271585f68b65cc180687",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ff66d184_62a8235f",
+        "filename": "doc/DebuggingTips.md",
+        "patchSetId": 1
+      },
+      "lineNbr": 314,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-02-05T03:36:48Z",
+      "side": 1,
+      "message": "I suggest specifying first that you can just download RenderDoc and everything should just work. Isn\u0027t that correct? These instructions only seem useful for debugging RenderDoc itself.\n\nActually now that I say it, I should try to see if the packaged RenderDoc \"just works\" on Linux too (for Android), so a similar note could be added above.",
+      "revId": "0c1246ca35d7646fcce2271585f68b65cc180687",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "689422da_11eacb76",
+        "filename": "doc/DebuggingTips.md",
+        "patchSetId": 1
+      },
+      "lineNbr": 318,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-02-05T03:36:48Z",
+      "side": 1,
+      "message": "Please clean up whitespace at end of line!",
+      "revId": "0c1246ca35d7646fcce2271585f68b65cc180687",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "36193fac_e226dca6",
+        "filename": "doc/DebuggingTips.md",
+        "patchSetId": 1
+      },
+      "lineNbr": 425,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-02-05T03:36:48Z",
+      "side": 1,
+      "message": "Duplicate instructions",
+      "range": {
+        "startLine": 415,
+        "startChar": 0,
+        "endLine": 425,
+        "endChar": 6
+      },
+      "revId": "0c1246ca35d7646fcce2271585f68b65cc180687",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
