@@ -1,0 +1,90 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "ac858f94_77cf3e82",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-02-06T02:11:00Z",
+      "side": 1,
+      "message": "Thanks for incorporating the feedback. I hope we can agree that this being under a feature is for the best 😊",
+      "revId": "39ed68894bd2c1bc73e9b3c47188917184711d3f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "05bc2d33_da8bce0e",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 559,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-02-06T02:11:00Z",
+      "side": 1,
+      "message": "This is moving the commands from secondary CB to primary CB, but otherwise not submitting any work to the GPU. The performance degradation is likely only measurable in CPU and is only affecting a single app. Perhaps we could simply and make this unconditionally `flushOutsideRenderPassCommands()` and dispense with all the tracking?\n\nThat is unless of course you\u0027ve measured and the app performance becomes horrible otherwise or something.",
+      "range": {
+        "startLine": 559,
+        "startChar": 11,
+        "endLine": 559,
+        "endChar": 80
+      },
+      "revId": "39ed68894bd2c1bc73e9b3c47188917184711d3f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "9965ce56_d4652d27",
+        "filename": "src/tests/egl_tests/EGLContextSharingTest.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 1091,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-02-06T02:11:00Z",
+      "side": 1,
+      "message": "nit: You could also consider avoiding public shaming 😄 and just say \"some apps\"\n\nYou could then name the suit like `EGLContextSharingTestNoSyncTextureUploads` or something more generic.",
+      "range": {
+        "startLine": 1091,
+        "startChar": 16,
+        "endLine": 1091,
+        "endChar": 30
+      },
+      "revId": "39ed68894bd2c1bc73e9b3c47188917184711d3f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "c440d5d0_7bf065ca",
+        "filename": "src/tests/egl_tests/EGLContextSharingTest.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 1092,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-02-06T02:11:00Z",
+      "side": 1,
+      "message": "typo",
+      "range": {
+        "startLine": 1092,
+        "startChar": 70,
+        "endLine": 1092,
+        "endChar": 80
+      },
+      "revId": "39ed68894bd2c1bc73e9b3c47188917184711d3f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
