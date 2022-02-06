@@ -43,6 +43,30 @@
     {
       "unresolved": false,
       "key": {
+        "uuid": "6ef1f4ae_71dc640e",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 559,
+      "author": {
+        "id": 1340649
+      },
+      "writtenOn": "2022-02-06T18:54:35Z",
+      "side": 1,
+      "message": "\u003e Perhaps we could simply and make this unconditionally  `flushOutsideRenderPassCommands()`\n\nyeah, thought about it but wanted to do some perf testing before i made the change. I am fine with making the change now and having a follow up change incase we do have a perf regression",
+      "parentUuid": "05bc2d33_da8bce0e",
+      "range": {
+        "startLine": 559,
+        "startChar": 11,
+        "endLine": 559,
+        "endChar": 80
+      },
+      "revId": "39ed68894bd2c1bc73e9b3c47188917184711d3f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
         "uuid": "9965ce56_d4652d27",
         "filename": "src/tests/egl_tests/EGLContextSharingTest.cpp",
         "patchSetId": 3
@@ -54,6 +78,30 @@
       "writtenOn": "2022-02-06T02:11:00Z",
       "side": 1,
       "message": "nit: You could also consider avoiding public shaming 😄 and just say \"some apps\"\n\nYou could then name the suit like `EGLContextSharingTestNoSyncTextureUploads` or something more generic.",
+      "range": {
+        "startLine": 1091,
+        "startChar": 16,
+        "endLine": 1091,
+        "endChar": 30
+      },
+      "revId": "39ed68894bd2c1bc73e9b3c47188917184711d3f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "97426723_cd289955",
+        "filename": "src/tests/egl_tests/EGLContextSharingTest.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 1091,
+      "author": {
+        "id": 1340649
+      },
+      "writtenOn": "2022-02-06T18:54:35Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "9965ce56_d4652d27",
       "range": {
         "startLine": 1091,
         "startChar": 16,
@@ -77,6 +125,30 @@
       "writtenOn": "2022-02-06T02:11:00Z",
       "side": 1,
       "message": "typo",
+      "range": {
+        "startLine": 1092,
+        "startChar": 70,
+        "endLine": 1092,
+        "endChar": 80
+      },
+      "revId": "39ed68894bd2c1bc73e9b3c47188917184711d3f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "bb2c6e86_9f46ebd1",
+        "filename": "src/tests/egl_tests/EGLContextSharingTest.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 1092,
+      "author": {
+        "id": 1340649
+      },
+      "writtenOn": "2022-02-06T18:54:35Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "c440d5d0_7bf065ca",
       "range": {
         "startLine": 1092,
         "startChar": 70,
