@@ -86,6 +86,24 @@
       "parentUuid": "5080e8bb_4624835d",
       "revId": "f15e3758cfe0be307cfecbdb88bbaa505b7e8027",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "f43a7a97_25a90bd5",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-02-06T02:01:33Z",
+      "side": 1,
+      "message": "Avoiding the hash cost. That said, the majority of textures will have base \u003d\u003d 0, which means this solution is not taking any more space than we previously were taking, nor is it adding \"sparseness\".\n\nSure a full-mip texture could use a vector of say size 11 and only have a valid view in the last element, but is that a big deal?",
+      "parentUuid": "415f0122_d590a8b6",
+      "revId": "f15e3758cfe0be307cfecbdb88bbaa505b7e8027",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
