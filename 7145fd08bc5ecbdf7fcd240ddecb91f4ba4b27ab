@@ -16,6 +16,23 @@
       "message": "PTAL",
       "revId": "7145fd08bc5ecbdf7fcd240ddecb91f4ba4b27ab",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "488a852e_47d1d6fb",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2022-02-07T15:07:32Z",
+      "side": 1,
+      "message": "What happens if you use the PROGRAM_EXECUTABLE dirty bit instead? If that fails, maybe try putting invalidateProgramBindingHelper() in case DIRTY_BIT_PROGRAM_EXECUTABLE.",
+      "revId": "7145fd08bc5ecbdf7fcd240ddecb91f4ba4b27ab",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
