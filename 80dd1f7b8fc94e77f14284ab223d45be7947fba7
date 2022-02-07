@@ -69,6 +69,24 @@
       "parentUuid": "b7e0905d_40c9108b",
       "revId": "80dd1f7b8fc94e77f14284ab223d45be7947fba7",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "633d80db_b98a060d",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2022-02-07T15:04:23Z",
+      "side": 1,
+      "message": "It would make sense to include Android in the script path as it is Android-specific. As this script is likely going to be merged into run_perf_tests, or a script specifically for running trace tests cross-platform, I\u0027m not too particular.\n\nSorry for the slow response.",
+      "parentUuid": "39440f81_5d06b57d",
+      "revId": "80dd1f7b8fc94e77f14284ab223d45be7947fba7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
