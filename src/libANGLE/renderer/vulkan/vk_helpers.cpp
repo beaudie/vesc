@@ -796,20 +796,18 @@ void DestroyBufferList(RendererVk *renderer, BufferHelperPointerVector *buffers)
 }
 
 bool ShouldReleaseFreeBuffer(const vk::BufferHelper &buffer,
-                             size_t dynamicBufferSize,
                              DynamicBufferPolicy policy,
                              size_t freeListSize)
 {
     constexpr size_t kLimitedFreeListMaxSize = 1;
 
-    // If the dynamic buffer was resized we cannot reuse the retained buffer.  Additionally,
-    // only reuse the buffer if specifically requested.
-    const bool sizeMismatch    = buffer.getSize() != dynamicBufferSize;
+    // We only reuse the buffer if specifically requested. The dynamic buffer explicitly releases
+    // the free list on a resize, so we don't need to validate the buffer size.
     const bool releaseByPolicy = policy == DynamicBufferPolicy::OneShotUse ||
                                  (policy == DynamicBufferPolicy::SporadicTextureUpload &&
                                   freeListSize >= kLimitedFreeListMaxSize);
 
-    return sizeMismatch || releaseByPolicy;
+    return releaseByPolicy;
 }
 
 // Helper functions used below
@@ -2466,8 +2464,6 @@ angle::Result DynamicBuffer::allocate(ContextVk *contextVk,
             mBufferFreeList.erase(mBufferFreeList.begin());
         }
 
-        ASSERT(mBuffer->getSize() == mSize);
-
         mNextAllocationOffset = 0;
 
         if (newBufferAllocatedOut != nullptr)
@@ -2512,7 +2508,7 @@ void DynamicBuffer::releaseInFlightBuffersToResourceUseList(ContextVk *contextVk
         // unfortunately.
         bufferHelper->retainReadOnly(resourceUseList);
 
-        if (ShouldReleaseFreeBuffer(*bufferHelper, mSize, mPolicy, mBufferFreeList.size()))
+        if (ShouldReleaseFreeBuffer(*bufferHelper, mPolicy, mBufferFreeList.size()))
         {
             bufferHelper->release(contextVk->getRenderer());
         }
