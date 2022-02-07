@@ -33,6 +33,24 @@
       "message": "What happens if you use the PROGRAM_EXECUTABLE dirty bit instead? If that fails, maybe try putting invalidateProgramBindingHelper() in case DIRTY_BIT_PROGRAM_EXECUTABLE.",
       "revId": "7145fd08bc5ecbdf7fcd240ddecb91f4ba4b27ab",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "d6e0ea94_48ddf263",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2022-02-07T15:08:36Z",
+      "side": 1,
+      "message": "Reasoning: the binding bit represents the glUseProgram binding, while the executable bit represents the installed executable. The UseProgramStages change is an executable change.",
+      "parentUuid": "488a852e_47d1d6fb",
+      "revId": "7145fd08bc5ecbdf7fcd240ddecb91f4ba4b27ab",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
