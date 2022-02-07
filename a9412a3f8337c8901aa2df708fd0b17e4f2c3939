@@ -16,6 +16,24 @@
       "message": "Jamie, we are cherry-picking this to the M96 LTS branch, could you review it?\nAlso, the tryjobs don\u0027t work for this branch, what I did was to compile and run the unit tests locally, would this be enough to validate the change?",
       "revId": "a9412a3f8337c8901aa2df708fd0b17e4f2c3939",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "8fdf08d0_f01038ed",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2022-02-07T15:46:59Z",
+      "side": 1,
+      "message": "\"angle_end2end_tests --gtest_filter\u003d*Vulkan_SwiftShader --bot-mode\" would be a good local test. \n\nApproved, let me know when you\u0027d like to land it.",
+      "parentUuid": "6541ea0f_ab5b0b14",
+      "revId": "a9412a3f8337c8901aa2df708fd0b17e4f2c3939",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
