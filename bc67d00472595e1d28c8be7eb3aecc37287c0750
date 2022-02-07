@@ -33,6 +33,23 @@
       "message": "Oops good catch Charlie",
       "revId": "bc67d00472595e1d28c8be7eb3aecc37287c0750",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "dd550331_dfbb8034",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1531247
+      },
+      "writtenOn": "2022-02-07T23:58:27Z",
+      "side": 1,
+      "message": "Does anything special need to be done for the security bug where this issue was introduced as I was fixing it? https://crbug.com/1285885\nIf that fix rolls into chrome as a security fix, this cl also should also be included somehow?",
+      "revId": "bc67d00472595e1d28c8be7eb3aecc37287c0750",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
