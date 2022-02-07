@@ -796,20 +796,18 @@ void DestroyBufferList(RendererVk *renderer, BufferHelperPointerVector *buffers)
 }
 
 bool ShouldReleaseFreeBuffer(const vk::BufferHelper &buffer,
-                             size_t dynamicBufferSize,
                              DynamicBufferPolicy policy,
                              size_t freeListSize)
 {
     constexpr size_t kLimitedFreeListMaxSize = 1;
 
-    // If the dynamic buffer was resized we cannot reuse the retained buffer.  Additionally,
-    // only reuse the buffer if specifically requested.
-    const bool sizeMismatch    = buffer.getSize() != dynamicBufferSize;
+    // We only reuse the buffer if specifically requested. The dynamic buffer explicitly releases
+    // the free list on a resize, so we don't need to validate the buffer size.
     const bool releaseByPolicy = policy == DynamicBufferPolicy::OneShotUse ||
                                  (policy == DynamicBufferPolicy::SporadicTextureUpload &&
                                   freeListSize >= kLimitedFreeListMaxSize);
 
-    return sizeMismatch || releaseByPolicy;
+    return releaseByPolicy;
 }
 
 // Helper functions used below
@@ -2332,7 +2330,7 @@ DynamicBuffer::DynamicBuffer(DynamicBuffer &&other)
       mAlignment(other.mAlignment),
       mMemoryPropertyFlags(other.mMemoryPropertyFlags),
       mInFlightBuffers(std::move(other.mInFlightBuffers)),
-      mBufferFreeList(std::move(other.mBufferFreeList))
+      mBufferFreeLists(std::move(other.mBufferFreeLists))
 {}
 
 void DynamicBuffer::init(RendererVk *renderer,
@@ -2348,7 +2346,7 @@ void DynamicBuffer::init(RendererVk *renderer,
         (hostVisible) ? VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT : VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT;
     mPolicy = policy;
 
-    // Check that we haven't overriden the initial size of the buffer in setMinimumSizeForTesting.
+    // Check that we haven't overridden the initial size of the buffer in setMinimumSizeForTesting.
     if (mInitialSize == 0)
     {
         mInitialSize = initialSize;
@@ -2369,7 +2367,7 @@ DynamicBuffer::~DynamicBuffer()
 {
     ASSERT(mBuffer == nullptr);
     ASSERT(mInFlightBuffers.empty());
-    ASSERT(mBufferFreeList.empty());
+    ASSERT(mBufferFreeLists.empty());
 }
 
 angle::Result DynamicBuffer::allocateNewBuffer(ContextVk *contextVk)
@@ -2397,6 +2395,16 @@ angle::Result DynamicBuffer::allocateNewBuffer(ContextVk *contextVk)
     createInfo.pQueueFamilyIndices   = nullptr;
 
     return mBuffer->init(contextVk, createInfo, mMemoryPropertyFlags);
+}
+
+void DynamicBuffer::releaseFreeLists(RendererVk *renderer)
+{
+    for (auto &freeListIter : mBufferFreeLists)
+    {
+        BufferHelperPointerVector &freeList = freeListIter.second;
+        ReleaseBufferListToRenderer(renderer, &freeList);
+    }
+    mBufferFreeLists.clear();
 }
 
 bool DynamicBuffer::allocateFromCurrentBuffer(size_t sizeInBytes, BufferHelper **bufferHelperOut)
@@ -2441,12 +2449,12 @@ angle::Result DynamicBuffer::allocate(ContextVk *contextVk,
     }
 
     size_t sizeToAllocate = roundUp(sizeInBytes, mAlignment);
-
     if (mBuffer)
     {
         // Make sure the buffer is not released externally.
         ASSERT(mBuffer->valid());
-        mInFlightBuffers.push_back(std::move(mBuffer));
+        BufferAndSize bufferAndSize = {std::move(mBuffer), mSize};
+        mInFlightBuffers.push_back(std::move(bufferAndSize));
         ASSERT(!mBuffer);
     }
 
@@ -2455,27 +2463,24 @@ angle::Result DynamicBuffer::allocate(ContextVk *contextVk,
     {
         mSize = sizeIgnoringHistory;
         // Clear the free list since the free buffers are now either too small or too big.
-        ReleaseBufferListToRenderer(contextVk->getRenderer(), &mBufferFreeList);
+        releaseFreeLists(contextVk->getRenderer());
     }
 
     // The front of the free list should be the oldest. Thus if it is in use the rest of the
     // free list should be in use as well.
-    if (mBufferFreeList.empty() ||
-        mBufferFreeList.front()->isCurrentlyInUse(contextVk->getLastCompletedQueueSerial()))
+    BufferHelperPointerVector &freeList = mBufferFreeLists[mSize];
+    if (freeList.empty() ||
+        freeList.front()->isCurrentlyInUse(contextVk->getLastCompletedQueueSerial()))
     {
         ANGLE_TRY(allocateNewBuffer(contextVk));
     }
     else
     {
-        mBuffer = std::move(mBufferFreeList.front());
-        mBufferFreeList.erase(mBufferFreeList.begin());
+        mBuffer = std::move(freeList.front());
+        freeList.erase(freeList.begin());
     }
 
-    ASSERT(mBuffer->getSize() == mSize);
-
     mNextAllocationOffset = 0;
-
-    ASSERT(mBuffer != nullptr);
     mBuffer->setSuballocationOffsetAndSize(mNextAllocationOffset, sizeToAllocate);
     *bufferHelperOut = mBuffer.get();
 
@@ -2487,8 +2492,13 @@ void DynamicBuffer::release(RendererVk *renderer)
 {
     reset();
 
-    ReleaseBufferListToRenderer(renderer, &mInFlightBuffers);
-    ReleaseBufferListToRenderer(renderer, &mBufferFreeList);
+    for (BufferAndSize &bufferAndSize : mInFlightBuffers)
+    {
+        bufferAndSize.buffer->release(renderer);
+    }
+    mInFlightBuffers.clear();
+
+    releaseFreeLists(renderer);
 
     if (mBuffer)
     {
@@ -2500,20 +2510,21 @@ void DynamicBuffer::release(RendererVk *renderer)
 void DynamicBuffer::releaseInFlightBuffersToResourceUseList(ContextVk *contextVk)
 {
     ResourceUseList *resourceUseList = &contextVk->getResourceUseList();
-    for (std::unique_ptr<BufferHelper> &bufferHelper : mInFlightBuffers)
+    for (BufferAndSize &bufferAndSize : mInFlightBuffers)
     {
         // This function is used only for internal buffers, and they are all read-only.
         // It's possible this may change in the future, but there isn't a good way to detect that,
         // unfortunately.
-        bufferHelper->retainReadOnly(resourceUseList);
+        bufferAndSize.buffer->retainReadOnly(resourceUseList);
 
-        if (ShouldReleaseFreeBuffer(*bufferHelper, mSize, mPolicy, mBufferFreeList.size()))
+        BufferHelperPointerVector &freeList = mBufferFreeLists[bufferAndSize.size];
+        if (ShouldReleaseFreeBuffer(*bufferAndSize.buffer, mPolicy, freeList.size()))
         {
-            bufferHelper->release(contextVk->getRenderer());
+            bufferAndSize.buffer->release(contextVk->getRenderer());
         }
         else
         {
-            mBufferFreeList.push_back(std::move(bufferHelper));
+            freeList.push_back(std::move(bufferAndSize.buffer));
         }
     }
     mInFlightBuffers.clear();
@@ -2523,8 +2534,18 @@ void DynamicBuffer::destroy(RendererVk *renderer)
 {
     reset();
 
-    DestroyBufferList(renderer, &mInFlightBuffers);
-    DestroyBufferList(renderer, &mBufferFreeList);
+    for (BufferAndSize &bufferAndSize : mInFlightBuffers)
+    {
+        bufferAndSize.buffer->destroy(renderer);
+    }
+    mInFlightBuffers.clear();
+
+    for (auto &freeListIter : mBufferFreeLists)
+    {
+        BufferHelperPointerVector &freeList = freeListIter.second;
+        DestroyBufferList(renderer, &freeList);
+    }
+    mBufferFreeLists.clear();
 
     if (mBuffer)
     {
@@ -4610,10 +4631,10 @@ angle::Result ImageHelper::initExternal(Context *context,
         VkFormatFeatureFlags supportedChromaSubSampleFeatureBits =
             rendererVk->getImageFormatFeatureBits(mActualFormatID, kChromaSubSampleFeatureBits);
 
-        VkChromaLocation supportedLocation            = ((supportedChromaSubSampleFeatureBits &
+        VkChromaLocation supportedLocation = ((supportedChromaSubSampleFeatureBits &
                                                VK_FORMAT_FEATURE_COSITED_CHROMA_SAMPLES_BIT) != 0)
-                                                            ? VK_CHROMA_LOCATION_COSITED_EVEN
-                                                            : VK_CHROMA_LOCATION_MIDPOINT;
+                                                 ? VK_CHROMA_LOCATION_COSITED_EVEN
+                                                 : VK_CHROMA_LOCATION_MIDPOINT;
         VkSamplerYcbcrModelConversion conversionModel = VK_SAMPLER_YCBCR_MODEL_CONVERSION_YCBCR_601;
         VkSamplerYcbcrRange colorRange                = VK_SAMPLER_YCBCR_RANGE_ITU_NARROW;
         VkFilter chromaFilter                         = VK_FILTER_NEAREST;
