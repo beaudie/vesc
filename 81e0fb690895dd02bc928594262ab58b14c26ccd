@@ -16,6 +16,24 @@
       "message": "this needs to be -\n mViewportAndDepthStencilStateInfo.enable.viewportNegativeOneToOne \u003d contextVk-\u003egetFeatures().supportsDepthClipControl.enabled\n \nso that ICDs that support -1, 1 depth range dont need shader code modification in all usecases",
       "revId": "81e0fb690895dd02bc928594262ab58b14c26ccd",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "ba3e3af0_17a6f249",
+        "filename": "src/libANGLE/renderer/vulkan/vk_cache_utils.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 1636,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-02-07T19:06:53Z",
+      "side": 1,
+      "message": "Done, thanks for catching that!",
+      "parentUuid": "1b60098c_a1cddd82",
+      "revId": "81e0fb690895dd02bc928594262ab58b14c26ccd",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
