@@ -34,6 +34,24 @@
       "parentUuid": "6541ea0f_ab5b0b14",
       "revId": "a9412a3f8337c8901aa2df708fd0b17e4f2c3939",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "18de1d7e_8399f246",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1516057
+      },
+      "writtenOn": "2022-02-07T15:58:35Z",
+      "side": 1,
+      "message": "Thanks for checking, there\u0027s one issue with the tests (but also happens without the patch):\n\nTests completed in 42.701335 seconds\n1 test failed:\n    SimpleStateChangeTestES3.TextureTypeConflictAfterDraw/ES3_Vulkan_SwiftShader (../../src/tests/gl_tests/StateChangeTest.cpp:7070) (CRASH)",
+      "parentUuid": "8fdf08d0_f01038ed",
+      "revId": "a9412a3f8337c8901aa2df708fd0b17e4f2c3939",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
