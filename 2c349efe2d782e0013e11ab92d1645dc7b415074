@@ -1,0 +1,147 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "0792b815_1c860f0b",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 21
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-02-07T16:13:28Z",
+      "side": 1,
+      "message": "Some clean up suggestions, otherwise the approach SGTM",
+      "revId": "2c349efe2d782e0013e11ab92d1645dc7b415074",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "47bc68c6_130f7314",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 21
+      },
+      "lineNbr": 3632,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-02-07T16:13:28Z",
+      "side": 1,
+      "message": "Please add a helper like `isAnyLoadOpClear()` and `if` that, then `startRenderPass`\n\nAlso, this is missing stencil. Regression test would be:\n\n- Initialize stencil with X + make sure it\u0027s flushed (like draw with and read back)\n- Scissored clear stencil with Y, should start a scissored RP with stencilLoadOp\u003dCLEAR\n- Increase scissor and draw. Outside scissor should still have X, but I believe right now will get Y.",
+      "range": {
+        "startLine": 3604,
+        "startChar": 0,
+        "endLine": 3632,
+        "endChar": 9
+      },
+      "revId": "2c349efe2d782e0013e11ab92d1645dc7b415074",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b150cd5d_54c6fc9e",
+        "filename": "src/libANGLE/renderer/vulkan/FramebufferVk.cpp",
+        "patchSetId": 21
+      },
+      "lineNbr": 533,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-02-07T16:13:28Z",
+      "side": 1,
+      "message": "Shouldn\u0027t need this. We\u0027re either using loadOp (so the workaround doesn\u0027t apply), or whenever clear attachment is decided, we automatically fall back.\n\nRight?",
+      "range": {
+        "startLine": 533,
+        "startChar": 51,
+        "endLine": 533,
+        "endChar": 86
+      },
+      "revId": "2c349efe2d782e0013e11ab92d1645dc7b415074",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "a34a3032_b344f1f2",
+        "filename": "src/libANGLE/renderer/vulkan/FramebufferVk.cpp",
+        "patchSetId": 21
+      },
+      "lineNbr": 633,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-02-07T16:13:28Z",
+      "side": 1,
+      "message": "As a follow up, please do a clean up where this flag is removed along with all the `depthClamp` feature checking etc all the way through removing the flag from ImageClear.frag.json and removing half the ImageClear compiled shaders.",
+      "range": {
+        "startLine": 633,
+        "startChar": 76,
+        "endLine": 633,
+        "endChar": 81
+      },
+      "revId": "2c349efe2d782e0013e11ab92d1645dc7b415074",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "0dc642c1_3b83a8ea",
+        "filename": "src/libANGLE/renderer/vulkan/FramebufferVk.cpp",
+        "patchSetId": 21
+      },
+      "lineNbr": 2384,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-02-07T16:13:28Z",
+      "side": 1,
+      "message": "I suggest hoisting the logic of whether depth or stencil need to be cleared with loadOp or command also here, so all those decisions are made here. Then you can call clearWithLoadOp and clearWithCommand unconditionally and let them jump over whatever is 0/false.",
+      "revId": "2c349efe2d782e0013e11ab92d1645dc7b415074",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "059efe1c_dc181e7e",
+        "filename": "src/libANGLE/renderer/vulkan/FramebufferVk.cpp",
+        "patchSetId": 21
+      },
+      "lineNbr": 2411,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-02-07T16:13:28Z",
+      "side": 1,
+      "message": "nit: Comment is stale",
+      "revId": "2c349efe2d782e0013e11ab92d1645dc7b415074",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "fc89ba96_fad412e0",
+        "filename": "src/libANGLE/renderer/vulkan/FramebufferVk.cpp",
+        "patchSetId": 21
+      },
+      "lineNbr": 2525,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-02-07T16:13:28Z",
+      "side": 1,
+      "message": "Please refactor and deduplicate with the identical logic in clearWithCommand.\n\nAlso, why is updateRenderPassReadOnlyDepthMode used in clearWithCommand but not here?",
+      "range": {
+        "startLine": 2501,
+        "startChar": 0,
+        "endLine": 2525,
+        "endChar": 5
+      },
+      "revId": "2c349efe2d782e0013e11ab92d1645dc7b415074",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
