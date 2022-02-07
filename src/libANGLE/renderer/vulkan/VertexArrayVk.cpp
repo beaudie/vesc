@@ -79,12 +79,48 @@ angle::Result StreamVertexData(ContextVk *contextVk,
                                VkDeviceSize *bufferOffsetOut,
                                uint32_t replicateCount)
 {
+<<<<<<< HEAD   (b790af M98: Vulkan: Fix vkCmdResolveImage offsets)
     uint8_t *dst = nullptr;
     ANGLE_TRY(dynamicBuffer->allocate(contextVk, bytesToAllocate, &dst, nullptr, bufferOffsetOut,
                                       nullptr));
     *bufferOut = dynamicBuffer->getCurrentBuffer();
     dst += destOffset;
     if (replicateCount == 1)
+=======
+    RendererVk *renderer = contextVk->getRenderer();
+
+    uint8_t *dst = dstBufferHelper->getMappedMemory() + dstOffset;
+
+    vertexLoadFunction(srcData, srcStride, vertexCount, dst);
+
+    ANGLE_TRY(dstBufferHelper->flush(renderer));
+
+    return angle::Result::Continue;
+}
+
+angle::Result StreamVertexDataWithDivisor(ContextVk *contextVk,
+                                          vk::BufferHelper *dstBufferHelper,
+                                          const uint8_t *srcData,
+                                          size_t bytesToAllocate,
+                                          size_t srcStride,
+                                          size_t dstStride,
+                                          VertexCopyFunction vertexLoadFunction,
+                                          uint32_t divisor,
+                                          size_t numSrcVertices)
+{
+    RendererVk *renderer = contextVk->getRenderer();
+
+    uint8_t *dst = dstBufferHelper->getMappedMemory();
+
+    // Each source vertex is used `divisor` times before advancing. Clamp to avoid OOB reads.
+    size_t clampedSize = std::min(numSrcVertices * dstStride * divisor, bytesToAllocate);
+
+    ASSERT(clampedSize % dstStride == 0);
+    ASSERT(divisor > 0);
+
+    uint32_t srcVertexUseCount = 0;
+    for (size_t dataCopied = 0; dataCopied < clampedSize; dataCopied += dstStride)
+>>>>>>> CHANGE (520458 Vulkan: StreamVertexDataWithDivisor write beyond buffer boun)
     {
         vertexLoadFunction(sourceData, sourceStride, vertexCount, dst);
     }
@@ -102,9 +138,24 @@ angle::Result StreamVertexData(ContextVk *contextVk,
                 sourceRemainingCount = replicateCount;
             }
         }
+        dst += dstStride;
     }
 
+<<<<<<< HEAD   (b790af M98: Vulkan: Fix vkCmdResolveImage offsets)
     ANGLE_TRY(dynamicBuffer->flush(contextVk));
+=======
+    // Satisfy robustness constraints (only if extension enabled)
+    if (contextVk->getExtensions().robustnessEXT)
+    {
+        if (clampedSize < bytesToAllocate)
+        {
+            memset(dst, 0, bytesToAllocate - clampedSize);
+        }
+    }
+
+    ANGLE_TRY(dstBufferHelper->flush(renderer));
+
+>>>>>>> CHANGE (520458 Vulkan: StreamVertexDataWithDivisor write beyond buffer boun)
     return angle::Result::Continue;
 }
 
