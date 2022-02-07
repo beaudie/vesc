@@ -38,6 +38,24 @@
     {
       "unresolved": false,
       "key": {
+        "uuid": "91fc2974_bb71dcf8",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 4590,
+      "author": {
+        "id": 1520902
+      },
+      "writtenOn": "2022-02-07T21:58:59Z",
+      "side": 1,
+      "message": "Got it, thanks!",
+      "parentUuid": "72ccf002_2dc94283",
+      "revId": "d8865105667c38db214b7b0c6ecf6624fde46908",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
         "uuid": "ebf805d7_fb3a14b3",
         "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
         "patchSetId": 6
@@ -90,6 +108,24 @@
       "side": 1,
       "message": "We already ASSERT there\u0027s a GLES executable above, so it would seem redundant to ASSERT the GLES has a corresponding Vk exe.",
       "parentUuid": "780fcbdb_e306f4f0",
+      "revId": "d8865105667c38db214b7b0c6ecf6624fde46908",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "929df0eb_57e44526",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 4606,
+      "author": {
+        "id": 1520902
+      },
+      "writtenOn": "2022-02-07T21:58:59Z",
+      "side": 1,
+      "message": "I see, thanks!",
+      "parentUuid": "7bdcb4dd_770f92b0",
       "revId": "d8865105667c38db214b7b0c6ecf6624fde46908",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
