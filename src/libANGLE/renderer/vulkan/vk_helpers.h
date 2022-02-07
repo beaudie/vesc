@@ -107,7 +107,7 @@ class DynamicBuffer : angle::NonCopyable
     // This releases resources when they might currently be in use.
     void release(RendererVk *renderer);
 
-    // This adds inflight buffers to the context's mResourceUseList and then releases them
+    // This adds in-flight buffers to the context's mResourceUseList and then releases them
     void releaseInFlightBuffersToResourceUseList(ContextVk *contextVk);
 
     // This frees resources immediately.
@@ -135,6 +135,7 @@ class DynamicBuffer : angle::NonCopyable
   private:
     void reset();
     angle::Result allocateNewBuffer(ContextVk *contextVk);
+    void releaseFreeLists(RendererVk *renderer);
 
     VkBufferUsageFlags mUsage;
     bool mHostVisible;
@@ -146,8 +147,16 @@ class DynamicBuffer : angle::NonCopyable
     size_t mAlignment;
     VkMemoryPropertyFlags mMemoryPropertyFlags;
 
-    BufferHelperPointerVector mInFlightBuffers;
-    BufferHelperPointerVector mBufferFreeList;
+    struct BufferAndSize
+    {
+        std::unique_ptr<BufferHelper> buffer;
+        VkDeviceSize size;
+    };
+
+    std::vector<BufferAndSize> mInFlightBuffers;
+
+    // Keyed by the size of the dynamic buffer at time of allocation.
+    angle::HashMap<VkDeviceSize, BufferHelperPointerVector> mBufferFreeLists;
 };
 
 // Uses DescriptorPool to allocate descriptor sets as needed. If a descriptor pool becomes full, we
