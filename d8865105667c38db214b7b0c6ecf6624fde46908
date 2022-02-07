@@ -20,6 +20,47 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "72ccf002_2dc94283",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 4590,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2022-02-07T15:00:59Z",
+      "side": 1,
+      "message": "Shabi pointed this out as well. It\u0027s used in a future patch, and leaving it in this patch would save me some minutes of editing and uploading time.",
+      "parentUuid": "f1db7abb_3b000afc",
+      "revId": "d8865105667c38db214b7b0c6ecf6624fde46908",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "ebf805d7_fb3a14b3",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 4593,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2022-02-07T15:00:59Z",
+      "side": 1,
+      "message": "reference.",
+      "range": {
+        "startLine": 4593,
+        "startChar": 11,
+        "endLine": 4593,
+        "endChar": 21
+      },
+      "revId": "d8865105667c38db214b7b0c6ecf6624fde46908",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "780fcbdb_e306f4f0",
         "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
         "patchSetId": 6
@@ -31,6 +72,24 @@
       "writtenOn": "2022-02-04T22:04:20Z",
       "side": 1,
       "message": "Is it possible that getExecutable() will return a nullptr? https://source.chromium.org/chromium/chromium/src/+/main:third_party/angle/src/libANGLE/renderer/vulkan/ContextVk.cpp;l\u003d6803.\n\nShould we add an assert here: ASSERT(executableVk)?",
+      "revId": "d8865105667c38db214b7b0c6ecf6624fde46908",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "7bdcb4dd_770f92b0",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 4606,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2022-02-07T15:00:59Z",
+      "side": 1,
+      "message": "We already ASSERT there\u0027s a GLES executable above, so it would seem redundant to ASSERT the GLES has a corresponding Vk exe.",
+      "parentUuid": "780fcbdb_e306f4f0",
       "revId": "d8865105667c38db214b7b0c6ecf6624fde46908",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
