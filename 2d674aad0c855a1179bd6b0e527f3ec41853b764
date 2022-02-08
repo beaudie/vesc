@@ -70,6 +70,24 @@
       "parentUuid": "73942de8_5a0e204e",
       "revId": "2d674aad0c855a1179bd6b0e527f3ec41853b764",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b83af448_db9587c4",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 17
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1524687
+      },
+      "writtenOn": "2022-02-08T04:16:18Z",
+      "side": 1,
+      "message": "Hi Shahbaz,\nSorry for delayed responding for holiday.\n\n\u0027endRenderPassIfComputeAccessAfterTextureSample\u0027 seems include two parts content: one is for texture, refer to the first case you mentioned; another is for image, refers to the next two cases.\n\nFor the case \u0027FS texture sample followed by CS texture sample, followed by FS texture sample\u0027, if each program !hasImages, then the current logic is fine; if the graphics program hasImages (like VS has store image write, FS texture sample it?), then do the \u0027endRenderPassIfComputeAccessAfterTextureSample\u0027 (for texture) in invalidateCurrentTextures before dispatch, and seems angle_end2end test not covers this scenario.\n\nFurther, seems ANGLE use \u0027mRenderPassUsedImages\u0027 to tracing the image usage in renderpass for both write and read. So the implementation of \u0027endRenderPassIfComputeAccessAfterTextureSample\u0027 for texture is almost the same with \u0027endRenderPassIfComputeReadAfterAttachmentWrite\u0027? Although the latter is originated from the image write. Maybe we can distinguish the mRenderPassUsedImages more detailed, like mRenderPassUsedReadImages/mRenderPassUsedWriteImages?\n\nFor the next two cases, no matter the CS use storage image write or read, the cs program hasImages and no texture, when program switch from Graphics-\u003eCompute (!hasImage -\u003ehasImages), endRP can be trigger by endRenderPassIfComputeAccessAfterTextureSample (for image) at invalidateCurrentShaderResources before dispatch. But for the following Compute-\u003eGraphics (hasImages -\u003e !hasImages), if no glMemoryBarrier be called after dispatch, seems we needs to call \u0027flushOutsideRenderPassCommands\u0027 in invalidateCurrentTextures; if glMemoryBarrier has been called before, nothing to do.",
+      "parentUuid": "fdfebdb8_e0b7b670",
+      "revId": "2d674aad0c855a1179bd6b0e527f3ec41853b764",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
