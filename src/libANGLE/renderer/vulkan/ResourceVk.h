@@ -109,6 +109,12 @@ class SharedResourceUse final : angle::NonCopyable
         return mUse->serial;
     }
 
+    ANGLE_INLINE uint32_t getCounter() const
+    {
+        ASSERT(valid());
+        return mUse->counter;
+    }
+
   private:
     ResourceUse *mUse;
 };
@@ -190,6 +196,8 @@ class Resource : angle::NonCopyable
 
     // Adds the resource to a resource use list.
     void retain(ResourceUseList *resourceUseList) const;
+
+    const SharedResourceUse &getSharedResourceUse() const { return mUse; }
 
   protected:
     Resource();
