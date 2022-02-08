@@ -51,7 +51,7 @@ angle::Result WaitForIdle(ContextVk *contextVk,
 }  // namespace
 
 // Resource implementation.
-Resource::Resource()
+Resource::Resource() : mIsImage(false), mIsImageView(false)
 {
     mUse.init();
 }

@@ -424,6 +424,8 @@ class TextureVk : public TextureImpl, public angle::ObserverInterface
                             angle::FormatID actualImageFormatID,
                             ImageMipLevels mipLevels);
     void releaseImage(ContextVk *contextVk);
+    void releaseImageViews(ContextVk *contextVk);
+    void releaseImageOnly(ContextVk *contextVk);
     void releaseStagedUpdates(ContextVk *contextVk);
     uint32_t getMipLevelCount(ImageMipLevels mipLevels) const;
     uint32_t getMaxLevelCount() const;
