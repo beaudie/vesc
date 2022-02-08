@@ -97,7 +97,8 @@ void TransformFeedbackVk::initializeXFBBuffersDesc(ContextVk *contextVk, size_t 
 angle::Result TransformFeedbackVk::begin(const gl::Context *context,
                                          gl::PrimitiveMode primitiveMode)
 {
-    ContextVk *contextVk = vk::GetImpl(context);
+    ContextVk *contextVk   = vk::GetImpl(context);
+    RendererVk *rendererVk = contextVk->getRenderer();
 
     const gl::ProgramExecutable *executable = contextVk->getState().getProgramExecutable();
     ASSERT(executable);
@@ -112,17 +113,13 @@ angle::Result TransformFeedbackVk::begin(const gl::Context *context,
         {
             if (mCounterBufferHandles[bufferIndex] == VK_NULL_HANDLE)
             {
-                VkBufferCreateInfo createInfo = {};
-                createInfo.sType              = VK_STRUCTURE_TYPE_BUFFER_CREATE_INFO;
-                createInfo.size               = 16;
-                createInfo.usage       = VK_BUFFER_USAGE_TRANSFORM_FEEDBACK_COUNTER_BUFFER_BIT_EXT;
-                createInfo.sharingMode = VK_SHARING_MODE_EXCLUSIVE;
-
                 vk::BufferHelper &bufferHelper = mCounterBufferHelpers[bufferIndex];
-                ANGLE_TRY(
-                    bufferHelper.init(contextVk, createInfo, VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT));
+                ANGLE_TRY(bufferHelper.initSuballocation(
+                    contextVk, rendererVk->getDeviceLocalMemoryTypeIndex(), 16,
+                    GetDefaultBufferAlignment(rendererVk)));
 
-                mCounterBufferHandles[bufferIndex] = bufferHelper.getBuffer().getHandle();
+                mCounterBufferHandles[bufferIndex] =
+                    mCounterBufferHelpers[bufferIndex].getBuffer().getHandle();
             }
         }
     }
