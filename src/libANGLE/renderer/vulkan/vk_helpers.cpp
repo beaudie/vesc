@@ -2416,7 +2416,7 @@ bool DynamicBuffer::allocateFromCurrentBuffer(size_t sizeInBytes, BufferHelper *
     ASSERT(mBuffer != nullptr);
     ASSERT(mHostVisible);
     ASSERT(mBuffer->getMappedMemory());
-    mBuffer->getSuballocation().setOffsetSize(mNextAllocationOffset, sizeToAllocate);
+    mBuffer->setSuballocationOffsetAndSize(mNextAllocationOffset, sizeToAllocate);
     *bufferHelperOut = mBuffer.get();
 
     mNextAllocationOffset += static_cast<uint32_t>(sizeToAllocate);
@@ -2481,7 +2481,7 @@ angle::Result DynamicBuffer::allocate(ContextVk *contextVk,
     }
 
     ASSERT(mBuffer != nullptr);
-    mBuffer->getSuballocation().setOffsetSize(mNextAllocationOffset, sizeToAllocate);
+    mBuffer->setSuballocationOffsetAndSize(mNextAllocationOffset, sizeToAllocate);
     *bufferHelperOut = mBuffer.get();
 
     mNextAllocationOffset += static_cast<uint32_t>(sizeToAllocate);
@@ -3881,9 +3881,8 @@ angle::Result BufferHelper::init(vk::Context *context,
     VkMemoryPropertyFlags memoryPropertyFlagsOut;
     allocator.getMemoryTypeProperties(memoryTypeIndex, &memoryPropertyFlagsOut);
 
-    ANGLE_VK_TRY(context, mSuballocation.initWithEntireBuffer(
-                              context, buffer.get(), allocation.get(), memoryPropertyFlagsOut,
-                              requestedCreateInfo.size));
+    mSuballocation.initWithEntireBuffer(context, buffer.get(), allocation.get(),
+                                        memoryPropertyFlagsOut, requestedCreateInfo.size);
 
     if (isHostVisible())
     {
@@ -3928,9 +3927,8 @@ angle::Result BufferHelper::initExternal(ContextVk *contextVk,
 
     ANGLE_TRY(mMemory.initExternal(clientBuffer));
 
-    ANGLE_VK_TRY(contextVk, mSuballocation.initWithEntireBuffer(
-                                contextVk, buffer.get(), *mMemory.getMemoryObject(),
-                                memoryPropertyFlagsOut, requestedCreateInfo.size));
+    mSuballocation.initWithEntireBuffer(contextVk, buffer.get(), *mMemory.getMemoryObject(),
+                                        memoryPropertyFlagsOut, requestedCreateInfo.size);
 
     if (isHostVisible())
     {
@@ -4127,8 +4125,8 @@ void BufferHelper::release(RendererVk *renderer)
 
     if (isExternalBuffer())
     {
-        renderer->collectGarbageAndReinit(&mReadOnlyUse, &mSuballocation,
-                                          mMemory.getExternalMemoryObject(),
+        ASSERT(!mSuballocation.hasAllocationVirtualBlock());
+        renderer->collectGarbageAndReinit(&mReadOnlyUse, mMemory.getExternalMemoryObject(),
                                           mMemory.getMemoryObject());
         mReadWriteUse.release();
         mReadWriteUse.init();
@@ -4189,7 +4187,7 @@ angle::Result BufferHelper::map(Context *context, uint8_t **ptrOut)
     {
         if (!mSuballocation.isMapped())
         {
-            ANGLE_TRY(mSuballocation.getBlock()->map(context));
+            ANGLE_TRY(mSuballocation.map(context));
         }
         *ptrOut = mSuballocation.getMappedMemory();
     }
@@ -6378,8 +6376,8 @@ angle::Result ImageHelper::reformatStagedBufferUpdates(ContextVk *contextVk,
 
                 // Retrieve source buffer
                 vk::BufferHelper *srcBuffer = update.data.buffer.bufferHelper;
-                uint8_t *srcData =
-                    srcBuffer->getBufferBlock()->getMappedMemory() + copy.bufferOffset;
+                ASSERT(srcBuffer->isMapped() && !srcBuffer->isExternalBuffer());
+                uint8_t *srcData = srcBuffer->getMappedMemory();
 
                 // Allocate memory with dstFormat
                 std::unique_ptr<RefCounted<BufferHelper>> stagingBuffer =
