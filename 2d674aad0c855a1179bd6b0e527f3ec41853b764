@@ -123,6 +123,24 @@
       "parentUuid": "b83af448_db9587c4",
       "revId": "2d674aad0c855a1179bd6b0e527f3ec41853b764",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "a99afb6e_0c738f9e",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 17
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1524687
+      },
+      "writtenOn": "2022-02-08T10:58:09Z",
+      "side": 1,
+      "message": "hi Shahbaz,\nThanks for so detailed explanation! I think something becomes more clearly:)\n\nFor the new test you mentioned (FS image read-\u003eCS texture read), yes, we need to do the closure of renderpass in invalidateCurrentTexture.\n\nFor the test (sampleFS-\u003ewriteCS-\u003esampleFS), I find some test only call glMemoryBarrier *after* CS, which makes the endRP *before* CS being necessary? Although this scenario also can be handled by close it at invalidateCurrentShaderResources.\n\nFor the \u0027mRenderPassUsedImages\u0027，maybe I have a confusion firstly. I guess the \u0027Image\u0027 here refers to the vulkan\u0027s image and corresponding to GL_texture and GL_image based on the texture unit and image unit respectively? For GL_texture, it is imageRead, and for GL_image or fbo texture write, it is imageWrite. For the write case, the implicit read-after-write hazards needs to close the RP (like endRenderPassIfComputeReadAfterAttachmentWrite); and for some imageRead case caused layout transition needs close RP too, as the sample faulty test. Seems currently mRenderPassUsedImages include all of the types?\n\nThe pseudocode of endRenderPassIfComputeAccessAfterTextureSample I consider as:\nendRenderPassIfComputeAccessAfterTextureSample ()\n{\n   foreach textureUnit\n   {\n      get vk::ImageHelper image from textureUnit; \n      if (IsRenderPassStartedAndUsesImage(*mRenderPassCommands, image))\n      {\n         flushCommandsAndEndRenderPass(ComputeAccessAfterTextureSample)\n      }\n    }\n \n   foreach imageUnit\n   {\n      get vk::ImageHelper image from imageUnit; \n      if (IsRenderPassStartedAndUsesImage(*mRenderPassCommands, image))\n      {\n         flushCommandsAndEndRenderPass(ComputeAccessAfterTextureSample)\n      }\n   }\n}",
+      "parentUuid": "84b02a2e_d6c2d334",
+      "revId": "2d674aad0c855a1179bd6b0e527f3ec41853b764",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
