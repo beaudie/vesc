@@ -7494,10 +7494,22 @@ TEST_P(SimpleStateChangeTestES3, RespecifyBufferAfterBeginTransformFeedback)
                                         GL_INTERLEAVED_ATTRIBS);
 
     glUseProgram(testProgram);
+
+    // Try to demonstrate a bug by allocating paddingBuffer first and then allocate another buffer
+    // and then deallocate paddingBuffer and then allocate buffer again. This new buffer will be
+    // allocated in the space where paddingBuffer was allocated which causing XFB generate VVL
+    // error.
+    GLuint paddingBuffer;
+    glGenBuffers(1, &paddingBuffer);
+    glBindBuffer(GL_TRANSFORM_FEEDBACK_BUFFER, paddingBuffer);
+    glBufferData(GL_TRANSFORM_FEEDBACK_BUFFER, 256, nullptr, GL_STREAM_DRAW);
+
     GLBuffer buffer;
     glBindBuffer(GL_TRANSFORM_FEEDBACK_BUFFER, buffer);
     glBufferData(GL_TRANSFORM_FEEDBACK_BUFFER, sizeof(float) * 3 * 2 * 7, nullptr, GL_STREAM_DRAW);
     glBindBufferBase(GL_TRANSFORM_FEEDBACK_BUFFER, 0, buffer);
+
+    glDeleteBuffers(1, &paddingBuffer);
     glBeginTransformFeedback(GL_TRIANGLES);
     glBufferData(GL_TRANSFORM_FEEDBACK_BUFFER, sizeof(float) * 3 * 4 * 6, nullptr, GL_STREAM_DRAW);
     glDrawArrays(GL_TRIANGLES, 0, 6);
