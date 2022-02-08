@@ -721,16 +721,19 @@ class BufferHelper : public ReadWriteResource
                                        size_t size,
                                        MemoryCoherency coherency,
                                        angle::FormatID formatId,
-                                       VkDeviceSize *offset,
-                                       uint8_t **dataPtr);
+                                       VkDeviceSize *bufferSubOffsetOut);
 
     void destroy(RendererVk *renderer);
     void release(RendererVk *renderer);
 
     BufferSerial getBufferSerial() const { return mSerial; }
+    BufferSerial getBlockSerial() const
+    {
+        ASSERT(mSuballocation.valid());
+        return mSuballocation.getBlockSerial();
+    }
     bool valid() const { return mSuballocation.valid(); }
     const Buffer &getBuffer() const { return mSuballocation.getBuffer(); }
-    const BufferBlock *getBufferBlock() const { return mSuballocation.getBlock(); }
     VkDeviceSize getOffset() const { return mSuballocation.getOffset(); }
     VkDeviceSize getSize() const { return mSuballocation.getSize(); }
     VkMemoryMapFlags getMemoryPropertyFlags() const
@@ -790,13 +793,18 @@ class BufferHelper : public ReadWriteResource
     void fillWithColor(const angle::Color<uint8_t> &color,
                        const gl::InternalFormat &internalFormat);
 
-    BufferSuballocation &getSuballocation() { return mSuballocation; }
-
   private:
     void initializeBarrierTracker(Context *context);
     angle::Result initializeNonZeroMemory(Context *context,
                                           VkBufferUsageFlags usage,
                                           VkDeviceSize size);
+
+    // Only called by DynamicBuffer.
+    friend class DynamicBuffer;
+    void setSuballocationOffsetAndSize(VkDeviceSize offset, VkDeviceSize size)
+    {
+        mSuballocation.setOffsetAndSize(offset, size);
+    }
 
     // Suballocation object.
     BufferSuballocation mSuballocation;
@@ -2071,6 +2079,7 @@ class ImageHelper final : public Resource, public angle::Subject
     {
         BufferHelper *bufferHelper;
         VkBufferImageCopy copyRegion;
+        uint32_t bufferSubOffset;
         angle::FormatID formatID;
     };
     struct ImageUpdate
@@ -2086,6 +2095,7 @@ class ImageHelper final : public Resource, public angle::Subject
         SubresourceUpdate(RefCounted<BufferHelper> *bufferIn,
                           BufferHelper *bufferHelperIn,
                           const VkBufferImageCopy &copyRegion,
+                          VkDeviceSize bufferSubOffsetIn,
                           angle::FormatID formatID);
         SubresourceUpdate(RefCounted<ImageHelper> *imageIn,
                           const VkImageCopy &copyRegion,
