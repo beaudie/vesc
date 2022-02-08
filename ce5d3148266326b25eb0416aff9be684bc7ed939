@@ -1,0 +1,159 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "3f6044e8_b2f7225d",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2022-02-08T21:21:48Z",
+      "side": 1,
+      "message": "Some nits, but seems like a good addition overall.",
+      "revId": "ce5d3148266326b25eb0416aff9be684bc7ed939",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "fadc6f39_4c81d935",
+        "filename": "doc/DebuggingTips.md",
+        "patchSetId": 4
+      },
+      "lineNbr": 254,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2022-02-08T21:21:48Z",
+      "side": 1,
+      "message": "This needs a space before the word to render correctly in markdown.",
+      "range": {
+        "startLine": 254,
+        "startChar": 0,
+        "endLine": 254,
+        "endChar": 9
+      },
+      "revId": "ce5d3148266326b25eb0416aff9be684bc7ed939",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "0a8ea11b_1a8519ec",
+        "filename": "doc/DebuggingTips.md",
+        "patchSetId": 4
+      },
+      "lineNbr": 338,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2022-02-08T21:21:48Z",
+      "side": 1,
+      "message": "Does version belong on the end of this path?",
+      "range": {
+        "startLine": 338,
+        "startChar": 81,
+        "endLine": 338,
+        "endChar": 89
+      },
+      "revId": "ce5d3148266326b25eb0416aff9be684bc7ed939",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ec522125_6cfb1933",
+        "filename": "doc/DebuggingTips.md",
+        "patchSetId": 4
+      },
+      "lineNbr": 362,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2022-02-08T21:21:48Z",
+      "side": 1,
+      "message": "nit: APK here and below (all caps)",
+      "range": {
+        "startLine": 362,
+        "startChar": 30,
+        "endLine": 362,
+        "endChar": 33
+      },
+      "revId": "ce5d3148266326b25eb0416aff9be684bc7ed939",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "987cee35_0e3d8a4a",
+        "filename": "doc/DebuggingTips.md",
+        "patchSetId": 4
+      },
+      "lineNbr": 419,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2022-02-08T21:21:48Z",
+      "side": 1,
+      "message": "This would read better if you just called it \"Steps to use the RenderDoc you just built\".",
+      "range": {
+        "startLine": 419,
+        "startChar": 0,
+        "endLine": 419,
+        "endChar": 61
+      },
+      "revId": "ce5d3148266326b25eb0416aff9be684bc7ed939",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "74664b9f_0d55b313",
+        "filename": "doc/DebuggingTips.md",
+        "patchSetId": 4
+      },
+      "lineNbr": 423,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2022-02-08T21:21:48Z",
+      "side": 1,
+      "message": "This step is only needed if you\u0027ve already installed/used RenderDoc once before.  Worth a sentence explaining why it is necessary.  IIRC, RenderDoc checks the version of ANGLE before uninstalling it, so local modifications would not get picked up.  ANGLE\u0027s version is dictated by the git hash it was built from.",
+      "range": {
+        "startLine": 423,
+        "startChar": 0,
+        "endLine": 423,
+        "endChar": 35
+      },
+      "revId": "ce5d3148266326b25eb0416aff9be684bc7ed939",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "36e9a5bc_d498d501",
+        "filename": "doc/DebuggingTips.md",
+        "patchSetId": 4
+      },
+      "lineNbr": 428,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2022-02-08T21:21:48Z",
+      "side": 1,
+      "message": "nit: clicking",
+      "range": {
+        "startLine": 428,
+        "startChar": 41,
+        "endLine": 428,
+        "endChar": 46
+      },
+      "revId": "ce5d3148266326b25eb0416aff9be684bc7ed939",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
