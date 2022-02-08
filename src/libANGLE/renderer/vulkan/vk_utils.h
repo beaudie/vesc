@@ -1501,6 +1501,7 @@ enum class RenderPassClosureReason
     PrepareForImageCopy,
     TemporaryForImageClear,
     TemporaryForImageCopy,
+    TemporaryForOverlayDraw,
 
     // Misc
     OverlayFontCreation,
