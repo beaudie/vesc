@@ -4723,7 +4723,8 @@ angle::Result ImageHelper::initExternal(Context *context,
     imageInfo.pQueueFamilyIndices   = nullptr;
     imageInfo.initialLayout         = ConvertImageLayoutToVkImageLayout(initialLayout);
 
-    mCurrentLayout = initialLayout;
+    mCurrentLayout              = initialLayout;
+    mCurrentShaderReadStageMask = 0;
 
     ANGLE_VK_TRY(context, mImage.init(context->getDevice(), imageInfo));
 

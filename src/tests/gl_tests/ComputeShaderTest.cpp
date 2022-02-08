@@ -853,6 +853,64 @@ void main()
     }
 }
 
+// Test write to image level 1 with compute shader, then full update level 0.
+TEST_P(ComputeShaderTest, WriteToTextureThenFullUpdateWithPBO)
+{
+    GLTexture tex2D;
+    GLFramebuffer mFramebuffer;
+    constexpr char kCS[] = R"(#version 310 es
+layout(local_size_x=1, local_size_y=1, local_size_z=1) in;
+layout(r32ui, binding = 0) writeonly uniform highp uimage2D uImage;
+void main()
+{
+    imageStore(uImage, ivec2(gl_WorkGroupID.x, gl_WorkGroupID.y), uvec4(100, 0, 0, 0));
+})";
+
+    ANGLE_GL_COMPUTE_PROGRAM(program, kCS);
+    glUseProgram(program.get());
+    int width = 2, height = 2;
+    GLuint inputValues1[] = {200, 200, 200, 200};
+
+    glBindTexture(GL_TEXTURE_2D, tex2D);
+    glTexStorage2D(GL_TEXTURE_2D, 2, GL_R32UI, width, height);
+    glTexSubImage2D(GL_TEXTURE_2D, 0, 0, 0, width, height, GL_RED_INTEGER, GL_UNSIGNED_INT,
+                    inputValues1);
+    EXPECT_GL_NO_ERROR();
+
+    glBindImageTexture(0, tex2D, 1, GL_FALSE, 0, GL_WRITE_ONLY, GL_R32UI);
+    EXPECT_GL_NO_ERROR();
+
+    glDispatchCompute(1, 1, 1);
+    EXPECT_GL_NO_ERROR();
+
+    glMemoryBarrier(GL_FRAMEBUFFER_BARRIER_BIT);
+    EXPECT_GL_NO_ERROR();
+
+    GLuint outputValues;
+    GLuint expectedValue = 100;
+
+    glBindFramebuffer(GL_READ_FRAMEBUFFER, mFramebuffer);
+    glFramebufferTexture2D(GL_READ_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, tex2D, 1);
+    EXPECT_GL_NO_ERROR();
+
+    // Flush to let tex2D be in use.
+    swapBuffers();
+    EXPECT_GL_NO_ERROR();
+
+    GLuint inputValues2[] = {400, 400, 400, 400};
+    GLBuffer pbo;
+    glBindBuffer(GL_PIXEL_UNPACK_BUFFER, pbo);
+    glBufferData(GL_PIXEL_UNPACK_BUFFER, 4 * width * height, inputValues2, GL_STATIC_DRAW);
+    glTexSubImage2D(GL_TEXTURE_2D, 0, 0, 0, width, height, GL_RED_INTEGER, GL_UNSIGNED_INT,
+                    nullptr);
+    EXPECT_GL_NO_ERROR();
+
+    glReadPixels(0, 0, 1, 1, GL_RED_INTEGER, GL_UNSIGNED_INT, &outputValues);
+    EXPECT_GL_NO_ERROR();
+    EXPECT_EQ(expectedValue, outputValues);
+    glUseProgram(0);
+}
+
 // Use image uniform to write texture in compute shader, and verify the content is expected.
 TEST_P(ComputeShaderTest, BindImageTexture)
 {
