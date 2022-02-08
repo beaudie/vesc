@@ -88,6 +88,41 @@
       "parentUuid": "fdfebdb8_e0b7b670",
       "revId": "2d674aad0c855a1179bd6b0e527f3ec41853b764",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "69c78818_e4b748d2",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 17
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-02-08T08:57:14Z",
+      "side": 1,
+      "message": "Thanks for the discussion! These interactions can get very tricky, but we can have a much better confidence in correctness with the right tests in place. Thanks for driving this work 😊",
+      "revId": "2d674aad0c855a1179bd6b0e527f3ec41853b764",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "84b02a2e_d6c2d334",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 17
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-02-08T08:57:14Z",
+      "side": 1,
+      "message": "Hi,\n\n\u003e For the case \u0027FS texture sample followed by CS texture sample, followed by FS texture sample\u0027, if each program !hasImages, then the current logic is fine; if the graphics program hasImages (like VS has store image write, FS texture sample it?), then do the \u0027endRenderPassIfComputeAccessAfterTextureSample\u0027 (for texture) in invalidateCurrentTextures before dispatch, and seems angle_end2end test not covers this scenario.\n\nFirst off, \"VS writes to image, then FS reads it\" is not valid GL. That\u0027s a race condition by nature and no `glMemoryBarrier` is possible to resolve it. But ok, you are right that the scenario should be a little more complicated. Since this change is about `textureVk-\u003ehasBeenBoundAsImage()` being true, you can make sure that\u0027s the case (which is unnecessary), and have the CS for example include an unrelated image. That should hit the if in ContextVk.cpp:375.\n\nYou could also add an opposite test where in sampleFS-\u003esampleCS-\u003esampleFS, both FS calls have an unrelated image but not the CS.\n\n\u003e Further, seems ANGLE use \u0027mRenderPassUsedImages\u0027 to tracing the image usage in renderpass for both write and read. So the implementation of \u0027endRenderPassIfComputeAccessAfterTextureSample\u0027 for texture is almost the same with \u0027endRenderPassIfComputeReadAfterAttachmentWrite\u0027? Although the latter is originated from the image write.\n\nThey may indeed look similar in structure. However, `endRenderPassIfComputeReadAfterAttachmentWrite` is *not* originated from image writes, but rather framebuffer attachment writes. They are very different scenarios because the former requires a glMemoryBarrier while the latter is implicitly synchronized.\n\n\u003e Maybe we can distinguish the mRenderPassUsedImages more detailed, like mRenderPassUsedReadImages/mRenderPassUsedWriteImages?\n\nThe purpose of `mRenderPassUsedImages` is really to track \"write\" images, because it\u0027s used to implement `glMemoryBarrier`. \"Read\" images don\u0027t really need to be there, but were placed for simplicity. If `endRenderPassIfComputeAccessAfterTextureSample` needs tracking image usage, sure you can make it more detailed, but I suspect you don\u0027t actually need it. If you look at `endRenderPassIfComputeReadAfterAttachmentWrite`, it\u0027s iterating over the textures of the current program and checks if they are used in the render pass, you don\u0027t need to know anything about the _images_ in the render pass, but rather textures.\n\n\u003e For the next two cases, no matter the CS use storage image write or read, the cs program hasImages and no texture, when program switch from Graphics-\u003eCompute (!hasImage -\u003ehasImages), endRP can be trigger by endRenderPassIfComputeAccessAfterTextureSample (for image) at invalidateCurrentShaderResources before dispatch. But for the following Compute-\u003eGraphics (hasImages -\u003e !hasImages), if no glMemoryBarrier be called after dispatch, seems we needs to call \u0027flushOutsideRenderPassCommands\u0027 in invalidateCurrentTextures; if glMemoryBarrier has been called before, nothing to do.\n\nFor the last test (sampleFS-\u003ewriteCS-\u003esampleFS) we actually need a `glMemoryBarrier` both before and after the CS, so looking back, that test is not going add anything new here. You can ignore it.\n\nFor the second test (sampleFS-\u003ereadCS-\u003esampleFS), no `glMemoryBarrier` is needed, so we need `endRenderPassIfComputeAccessAfterTextureSample` to close the render pass. And you are right, `invalidateCurrentShaderResources` is enough for that. However, we still need that call in `invalidateCurrentTextures` I believe in the following scenario:\n\n* FS image read followed by CS texture sample",
+      "parentUuid": "b83af448_db9587c4",
+      "revId": "2d674aad0c855a1179bd6b0e527f3ec41853b764",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
