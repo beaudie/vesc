@@ -720,17 +720,18 @@ class BufferHelper : public ReadWriteResource
     angle::Result allocateForCopyImage(ContextVk *contextVk,
                                        size_t size,
                                        MemoryCoherency coherency,
-                                       angle::FormatID formatId,
-                                       VkDeviceSize *offset,
-                                       uint8_t **dataPtr);
+                                       angle::FormatID formatId);
 
     void destroy(RendererVk *renderer);
     void release(RendererVk *renderer);
 
     BufferSerial getBufferSerial() const { return mSerial; }
+    BufferSerial getBufferOrBlockSerial() const
+    {
+        return mSuballocation.valid() ? mSuballocation.getBlockSerial() : mSerial;
+    }
     bool valid() const { return mSuballocation.valid(); }
     const Buffer &getBuffer() const { return mSuballocation.getBuffer(); }
-    const BufferBlock *getBufferBlock() const { return mSuballocation.getBlock(); }
     VkDeviceSize getOffset() const { return mSuballocation.getOffset(); }
     VkDeviceSize getSize() const { return mSuballocation.getSize(); }
     VkMemoryMapFlags getMemoryPropertyFlags() const
@@ -790,7 +791,10 @@ class BufferHelper : public ReadWriteResource
     void fillWithColor(const angle::Color<uint8_t> &color,
                        const gl::InternalFormat &internalFormat);
 
-    BufferSuballocation &getSuballocation() { return mSuballocation; }
+    void setSuballocationOffsetAndSize(VkDeviceSize offset, VkDeviceSize size)
+    {
+        mSuballocation.setOffsetAndSize(offset, size);
+    }
 
   private:
     void initializeBarrierTracker(Context *context);
