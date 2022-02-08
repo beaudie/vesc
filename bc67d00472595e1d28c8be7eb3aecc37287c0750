@@ -157,6 +157,24 @@
       "parentUuid": "f70b159c_b7ffe1c0",
       "revId": "bc67d00472595e1d28c8be7eb3aecc37287c0750",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "04dd6c96_92b68901",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2022-02-08T19:32:04Z",
+      "side": 1,
+      "message": "It is a fix for regression, but the above test did fail in this CL https://chromium-review.googlesource.com/c/angle/angle/+/3402740 without this fix (because I get rid of VMA\u0027s memory suballocator)",
+      "parentUuid": "49347248_846455a6",
+      "revId": "bc67d00472595e1d28c8be7eb3aecc37287c0750",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
