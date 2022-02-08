@@ -83,6 +83,12 @@ struct FrontendFeatures : angle::FeatureSetBase
         "enableProgramBinaryForCapture", angle::FeatureCategory::FrontendFeatures,
         "Even if FrameCapture is enabled, enable GL_OES_get_program_binary", &members,
         "http://anglebug.com/5658"};
+
+    // Whether we ignore invalid texture type errors when KHR_create_context_no_error is enabled.
+    angle::Feature ignoreInvalidTextureType = {
+        "ignoreInvalidTextureType", angle::FeatureCategory::AppWorkarounds,
+        "Ignore invalid texture type errors when KHR_create_context_no_error is enabled", &members,
+        "http://anglebug.com/6995"};
 };
 
 inline FrontendFeatures::FrontendFeatures()  = default;

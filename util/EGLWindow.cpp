@@ -338,6 +338,11 @@ bool EGLWindow::initializeDisplay(OSWindow *osWindow,
         enabledFeatureOverrides.push_back("forceSubmitImmutableTextureUpdates");
     }
 
+    if (params.ignoreInvalidTextureType == EGL_TRUE)
+    {
+        enabledFeatureOverrides.push_back("ignoreInvalidTextureType");
+    }
+
     const bool hasFeatureControlANGLE =
         strstr(extensionString, "EGL_ANGLE_feature_control") != nullptr;
 

@@ -349,6 +349,13 @@ inline PlatformParameters WithForceSubmitImmutableTextureUpdates(const PlatformP
         EGL_TRUE;
     return withForceSubmitImmutableTextureUpdates;
 }
+
+inline PlatformParameters WithIgnoreInvalidTextureType(const PlatformParameters &paramsIn)
+{
+    PlatformParameters withIgnoreInvalidTextureType                     = paramsIn;
+    withIgnoreInvalidTextureType.eglParameters.ignoreInvalidTextureType = EGL_TRUE;
+    return withIgnoreInvalidTextureType;
+}
 }  // namespace angle
 
 #endif  // ANGLE_TEST_CONFIGS_H_

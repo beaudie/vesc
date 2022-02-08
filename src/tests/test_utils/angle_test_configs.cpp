@@ -331,6 +331,11 @@ std::ostream &operator<<(std::ostream &stream, const PlatformParameters &pp)
         stream << "_VulkanForceSubmitImmutableTextureUpdates";
     }
 
+    if (pp.eglParameters.ignoreInvalidTextureType == EGL_TRUE)
+    {
+        stream << "_IgnoreInvalidTextureType";
+    }
+
     return stream;
 }
 
