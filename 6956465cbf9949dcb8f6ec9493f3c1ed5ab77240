@@ -85,6 +85,24 @@
       "parentUuid": "41201e72_08de68da",
       "revId": "6956465cbf9949dcb8f6ec9493f3c1ed5ab77240",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "d4889590_fce667d0",
+        "filename": "src/libANGLE/Display.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 120,
+      "author": {
+        "id": 1326275
+      },
+      "writtenOn": "2022-02-08T20:43:59Z",
+      "side": 1,
+      "message": "After conversation with Geoff I fixed it to track whether the default display has been created before and cache accordingly.",
+      "parentUuid": "e499bec5_10a4a6b9",
+      "revId": "6956465cbf9949dcb8f6ec9493f3c1ed5ab77240",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
