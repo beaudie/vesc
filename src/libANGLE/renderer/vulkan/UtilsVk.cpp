@@ -2530,9 +2530,10 @@ angle::Result UtilsVk::stencilBlitResolveNoShaderExport(ContextVk *contextVk,
                                                         const vk::ImageView *srcStencilView,
                                                         const BlitResolveParameters &params)
 {
+    RendererVk *renderer = contextVk->getRenderer();
+
     // When VK_EXT_shader_stencil_export is not available, stencil is blitted/resolved into a
     // temporary buffer which is then copied into the stencil aspect of the image.
-
     ANGLE_TRY(ensureBlitResolveStencilNoExportResourcesInitialized(contextVk));
 
     bool isResolve = src->getSamples() > 1;
@@ -2543,7 +2544,7 @@ angle::Result UtilsVk::stencilBlitResolveNoShaderExport(ContextVk *contextVk,
                                     &descriptorPoolBinding, &descriptorSet));
 
     // Create a temporary buffer to blit/resolve stencil into.
-    vk::RendererScoped<vk::BufferHelper> blitBuffer(contextVk->getRenderer());
+    vk::RendererScoped<vk::BufferHelper> blitBuffer(renderer);
 
     uint32_t bufferRowLengthInUints = UnsignedCeilDivide(params.blitArea.width, sizeof(uint32_t));
     VkDeviceSize bufferSize = bufferRowLengthInUints * sizeof(uint32_t) * params.blitArea.height;
@@ -2557,8 +2558,9 @@ angle::Result UtilsVk::stencilBlitResolveNoShaderExport(ContextVk *contextVk,
     blitBufferInfo.queueFamilyIndexCount = 0;
     blitBufferInfo.pQueueFamilyIndices   = nullptr;
 
-    ANGLE_TRY(
-        blitBuffer.get().init(contextVk, blitBufferInfo, VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT));
+    ANGLE_TRY(blitBuffer.get().initSuballocation(
+        contextVk, renderer->getDeviceLocalMemoryTypeIndex(), bufferSize,
+        vk::GetImageCopyBufferAlignment(src->getActualFormatID())));
     blitBuffer.get().retainReadWrite(&contextVk->getResourceUseList());
 
     BlitResolveStencilNoExportShaderParams shaderParams;
@@ -2920,6 +2922,8 @@ angle::Result UtilsVk::copyImageBits(ContextVk *contextVk,
                                      vk::ImageHelper *src,
                                      const CopyImageBitsParameters &params)
 {
+    RendererVk *renderer = contextVk->getRenderer();
+
     // This function is used to copy the bit representation of an image to another, and is used to
     // support EXT_copy_image when a format is emulated.  Currently, only RGB->RGBA emulation is
     // possible, and so this function is tailored to this specific kind of emulation.
@@ -2951,8 +2955,8 @@ angle::Result UtilsVk::copyImageBits(ContextVk *contextVk,
     const angle::Format &dstImageFormat = dst->getActualFormat();
 
     // Create temporary buffers.
-    vk::RendererScoped<vk::BufferHelper> srcBuffer(contextVk->getRenderer());
-    vk::RendererScoped<vk::BufferHelper> dstBuffer(contextVk->getRenderer());
+    vk::RendererScoped<vk::BufferHelper> srcBuffer(renderer);
+    vk::RendererScoped<vk::BufferHelper> dstBuffer(renderer);
 
     const uint32_t srcPixelBytes = srcImageFormat.pixelBytes;
     const uint32_t dstPixelBytes = dstImageFormat.pixelBytes;
@@ -2966,21 +2970,12 @@ angle::Result UtilsVk::copyImageBits(ContextVk *contextVk,
     const VkDeviceSize dstBufferSize =
         roundUpPow2<uint32_t>(dstPixelBytes * totalPixelCount, sizeof(uint32_t));
 
-    VkBufferCreateInfo bufferInfo = {};
-    bufferInfo.sType              = VK_STRUCTURE_TYPE_BUFFER_CREATE_INFO;
-    bufferInfo.flags              = 0;
-    bufferInfo.size               = srcBufferSize;
-    bufferInfo.usage       = VK_BUFFER_USAGE_STORAGE_BUFFER_BIT | VK_BUFFER_USAGE_TRANSFER_DST_BIT;
-    bufferInfo.sharingMode = VK_SHARING_MODE_EXCLUSIVE;
-    bufferInfo.queueFamilyIndexCount = 0;
-    bufferInfo.pQueueFamilyIndices   = nullptr;
-
-    ANGLE_TRY(srcBuffer.get().init(contextVk, bufferInfo, VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT));
-
-    bufferInfo.size  = dstBufferSize;
-    bufferInfo.usage = VK_BUFFER_USAGE_STORAGE_BUFFER_BIT | VK_BUFFER_USAGE_TRANSFER_SRC_BIT;
-
-    ANGLE_TRY(dstBuffer.get().init(contextVk, bufferInfo, VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT));
+    ANGLE_TRY(srcBuffer.get().initSuballocation(
+        contextVk, renderer->getDeviceLocalMemoryTypeIndex(), srcBufferSize,
+        vk::GetImageCopyBufferAlignment(dstImageFormat.id)));
+    ANGLE_TRY(dstBuffer.get().initSuballocation(
+        contextVk, renderer->getDeviceLocalMemoryTypeIndex(), dstBufferSize,
+        vk::GetImageCopyBufferAlignment(dstImageFormat.id)));
 
     srcBuffer.get().retainReadOnly(&contextVk->getResourceUseList());
     dstBuffer.get().retainReadWrite(&contextVk->getResourceUseList());
