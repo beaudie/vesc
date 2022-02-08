@@ -18,6 +18,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "fc30f42f_f8efcdc5",
+        "filename": "doc/DebuggingTips.md",
+        "patchSetId": 1
+      },
+      "lineNbr": 254,
+      "author": {
+        "id": 1520902
+      },
+      "writtenOn": "2022-02-08T19:56:29Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "20adf91f_09701698",
+      "revId": "0c1246ca35d7646fcce2271585f68b65cc180687",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "ff66d184_62a8235f",
@@ -53,6 +71,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "da4b2922_c0f97d85",
+        "filename": "doc/DebuggingTips.md",
+        "patchSetId": 1
+      },
+      "lineNbr": 314,
+      "author": {
+        "id": 1520902
+      },
+      "writtenOn": "2022-02-08T19:56:29Z",
+      "side": 1,
+      "message": "I tried on Windows, and the downloaded RenderDoc build on Windows works fine. However, the downloaded RenderDoc build on Linux can\u0027t detect the phone device for unknown reasons. I am only adding the notes under the Windows section for now.",
+      "parentUuid": "d47727e5_b9328206",
+      "revId": "0c1246ca35d7646fcce2271585f68b65cc180687",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "689422da_11eacb76",
@@ -66,6 +102,24 @@
       "writtenOn": "2022-02-05T03:36:48Z",
       "side": 1,
       "message": "Please clean up whitespace at end of line!",
+      "revId": "0c1246ca35d7646fcce2271585f68b65cc180687",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "45c17f52_5e87f9fb",
+        "filename": "doc/DebuggingTips.md",
+        "patchSetId": 1
+      },
+      "lineNbr": 318,
+      "author": {
+        "id": 1520902
+      },
+      "writtenOn": "2022-02-08T19:56:29Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "689422da_11eacb76",
       "revId": "0c1246ca35d7646fcce2271585f68b65cc180687",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
@@ -87,6 +141,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "034929bb_4414fcda",
+        "filename": "doc/DebuggingTips.md",
+        "patchSetId": 1
+      },
+      "lineNbr": 319,
+      "author": {
+        "id": 1520902
+      },
+      "writtenOn": "2022-02-08T19:56:29Z",
+      "side": 1,
+      "message": "Thanks for pointing it out! Sure I have changed the link to point to a public Android SDK installation page.",
+      "parentUuid": "206fd683_48fb51a1",
+      "revId": "0c1246ca35d7646fcce2271585f68b65cc180687",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "36193fac_e226dca6",
@@ -100,6 +172,30 @@
       "writtenOn": "2022-02-05T03:36:48Z",
       "side": 1,
       "message": "Duplicate instructions",
+      "range": {
+        "startLine": 415,
+        "startChar": 0,
+        "endLine": 425,
+        "endChar": 6
+      },
+      "revId": "0c1246ca35d7646fcce2271585f68b65cc180687",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "6bbb30fc_dec955e5",
+        "filename": "doc/DebuggingTips.md",
+        "patchSetId": 1
+      },
+      "lineNbr": 425,
+      "author": {
+        "id": 1520902
+      },
+      "writtenOn": "2022-02-08T19:56:29Z",
+      "side": 1,
+      "message": "Thanks! I removed the instructions and add a link pointing to the previous section with the same instructions.",
+      "parentUuid": "36193fac_e226dca6",
       "range": {
         "startLine": 415,
         "startChar": 0,
