@@ -121,7 +121,24 @@
       "parentUuid": "4288d00a_55eb5fd8",
       "revId": "bc67d00472595e1d28c8be7eb3aecc37287c0750",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "49347248_846455a6",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2022-02-08T18:12:22Z",
+      "side": 1,
+      "message": "Oh - I thought this was a fix for a regression? This is a fix for an upcoming CL?",
+      "parentUuid": "ed64ebd8_585f50fd",
+      "revId": "bc67d00472595e1d28c8be7eb3aecc37287c0750",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
-  ],
-  "submitRequirementResults": []
+  ]
 }
