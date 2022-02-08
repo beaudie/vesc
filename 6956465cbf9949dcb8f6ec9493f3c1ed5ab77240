@@ -67,6 +67,24 @@
       "message": "Doesn\u0027t this need to be updated to include the platformANGLEType? Or is it the case that it mustn\u0027t because the \"default\" display type wouldn\u0027t match any of the actual ones?",
       "revId": "6956465cbf9949dcb8f6ec9493f3c1ed5ab77240",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "e499bec5_10a4a6b9",
+        "filename": "src/libANGLE/Display.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 120,
+      "author": {
+        "id": 1326275
+      },
+      "writtenOn": "2022-02-08T15:38:57Z",
+      "side": 1,
+      "message": "Oops, that was a mistake. I fixed the test to catch this being missing. I guess the way I wrote the test wasn\u0027t hitting the display cache anyway.\nI don\u0027t think we need to worry about the semantics of which display is default per platform. We can cache it as if it was separate even if that technically means there could be 2 displays with the same backend. I think that specifying default for one display and specifying a backend for a second display is an edge use-case.",
+      "parentUuid": "41201e72_08de68da",
+      "revId": "6956465cbf9949dcb8f6ec9493f3c1ed5ab77240",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
