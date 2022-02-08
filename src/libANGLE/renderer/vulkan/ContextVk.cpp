@@ -1069,19 +1069,8 @@ angle::Result ContextVk::initialize()
 
     // Initialize an "empty" buffer for use with default uniform blocks where there are no uniforms,
     // or atomic counter buffer array indices that are unused.
-    constexpr VkBufferUsageFlags kEmptyBufferUsage = VK_BUFFER_USAGE_UNIFORM_BUFFER_BIT |
-                                                     VK_BUFFER_USAGE_STORAGE_BUFFER_BIT |
-                                                     VK_BUFFER_USAGE_VERTEX_BUFFER_BIT;
-    VkBufferCreateInfo emptyBufferInfo          = {};
-    emptyBufferInfo.sType                       = VK_STRUCTURE_TYPE_BUFFER_CREATE_INFO;
-    emptyBufferInfo.flags                       = 0;
-    emptyBufferInfo.size                        = 16;
-    emptyBufferInfo.usage                       = kEmptyBufferUsage;
-    emptyBufferInfo.sharingMode                 = VK_SHARING_MODE_EXCLUSIVE;
-    emptyBufferInfo.queueFamilyIndexCount       = 0;
-    emptyBufferInfo.pQueueFamilyIndices         = nullptr;
-    constexpr VkMemoryPropertyFlags kMemoryType = VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT;
-    ANGLE_TRY(mEmptyBuffer.init(this, emptyBufferInfo, kMemoryType));
+    ANGLE_TRY(mEmptyBuffer.initSuballocation(this, mRenderer->getDeviceLocalMemoryTypeIndex(), 16,
+                                             GetDefaultBufferAlignment(mRenderer)));
 
     // Add context into the share group
     mShareGroupVk->getContexts()->insert(this);
@@ -2148,11 +2137,13 @@ angle::Result ContextVk::handleDirtyGraphicsTransformFeedbackBuffersExtension(
     // We should have same number of counter buffers as xfb buffers have
     const gl::TransformFeedbackBuffersArray<VkBuffer> &counterBufferHandles =
         transformFeedbackVk->getCounterBufferHandles();
+    const gl::TransformFeedbackBuffersArray<VkDeviceSize> &counterBufferOffsets =
+        transformFeedbackVk->getCounterBufferOffsets();
 
     bool rebindBuffers = transformFeedbackVk->getAndResetBufferRebindState();
 
     mRenderPassCommands->beginTransformFeedback(bufferCount, counterBufferHandles.data(),
-                                                rebindBuffers);
+                                                counterBufferOffsets.data(), rebindBuffers);
 
     return angle::Result::Continue;
 }

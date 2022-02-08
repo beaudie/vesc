@@ -97,6 +97,11 @@ class TransformFeedbackVk : public TransformFeedbackImpl, public angle::Observer
         return mCounterBufferHandles;
     }
 
+    const gl::TransformFeedbackBuffersArray<VkDeviceSize> &getCounterBufferOffsets() const
+    {
+        return mCounterBufferOffsets;
+    }
+
     vk::UniformsAndXfbDescriptorDesc &getTransformFeedbackDesc() { return mXFBBuffersDesc; }
 
     void onSubjectStateChange(angle::SubjectIndex index, angle::SubjectMessage message) override;
@@ -126,6 +131,7 @@ class TransformFeedbackVk : public TransformFeedbackImpl, public angle::Observer
     // Counter buffer used for pause and resume.
     gl::TransformFeedbackBuffersArray<vk::BufferHelper> mCounterBufferHelpers;
     gl::TransformFeedbackBuffersArray<VkBuffer> mCounterBufferHandles;
+    gl::TransformFeedbackBuffersArray<VkDeviceSize> mCounterBufferOffsets;
 
     // Keys to look up in the descriptor set cache
     vk::UniformsAndXfbDescriptorDesc mXFBBuffersDesc;

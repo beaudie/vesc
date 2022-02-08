@@ -1280,6 +1280,7 @@ RenderPassCommandBufferHelper::RenderPassCommandBufferHelper()
       mClearValues{},
       mRenderPassStarted(false),
       mTransformFeedbackCounterBuffers{},
+      mTransformFeedbackCounterBufferOffsets{},
       mValidTransformFeedbackBufferCount(0),
       mRebindTransformFeedbackBuffers(false),
       mIsTransformFeedbackActiveUnpaused(false),
@@ -1985,6 +1986,7 @@ angle::Result RenderPassCommandBufferHelper::nextSubpass(ContextVk *contextVk,
 
 void RenderPassCommandBufferHelper::beginTransformFeedback(size_t validBufferCount,
                                                            const VkBuffer *counterBuffers,
+                                                           const VkDeviceSize *counterBufferOffsets,
                                                            bool rebindBuffers)
 {
     mValidTransformFeedbackBufferCount = static_cast<uint32_t>(validBufferCount);
@@ -1992,7 +1994,8 @@ void RenderPassCommandBufferHelper::beginTransformFeedback(size_t validBufferCou
 
     for (size_t index = 0; index < validBufferCount; index++)
     {
-        mTransformFeedbackCounterBuffers[index] = counterBuffers[index];
+        mTransformFeedbackCounterBuffers[index]       = counterBuffers[index];
+        mTransformFeedbackCounterBufferOffsets[index] = counterBufferOffsets[index];
     }
 }
 
@@ -2106,7 +2109,8 @@ void RenderPassCommandBufferHelper::resumeTransformFeedback()
     mIsTransformFeedbackActiveUnpaused = true;
 
     getCommandBuffer().beginTransformFeedback(0, numCounterBuffers,
-                                              mTransformFeedbackCounterBuffers.data(), nullptr);
+                                              mTransformFeedbackCounterBuffers.data(),
+                                              mTransformFeedbackCounterBufferOffsets.data());
 }
 
 void RenderPassCommandBufferHelper::pauseTransformFeedback()
@@ -2114,7 +2118,8 @@ void RenderPassCommandBufferHelper::pauseTransformFeedback()
     ASSERT(isTransformFeedbackStarted() && isTransformFeedbackActiveUnpaused());
     mIsTransformFeedbackActiveUnpaused = false;
     getCommandBuffer().endTransformFeedback(0, mValidTransformFeedbackBufferCount,
-                                            mTransformFeedbackCounterBuffers.data(), nullptr);
+                                            mTransformFeedbackCounterBuffers.data(),
+                                            mTransformFeedbackCounterBufferOffsets.data());
 }
 
 void RenderPassCommandBufferHelper::updateRenderPassColorClear(PackedAttachmentIndex colorIndexVk,
@@ -4083,6 +4088,8 @@ angle::Result BufferHelper::initializeNonZeroMemory(Context *context,
         copyRegion.size         = size;
 
         commandBuffer.copyBuffer(stagingBuffer.getBuffer(), getBuffer(), 1, &copyRegion);
+
+        ANGLE_VK_TRY(context, commandBuffer.end());
 
         Serial serial;
         ANGLE_TRY(renderer->queueSubmitOneOff(context, std::move(commandBuffer), false,
