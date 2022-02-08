@@ -36,12 +36,18 @@ struct ResourceUse
 class SharedResourceUse final : angle::NonCopyable
 {
   public:
-    SharedResourceUse() : mUse(nullptr) {}
+    SharedResourceUse() : mUse(nullptr), mIsImage(false), mIsImageView(false) {}
     ~SharedResourceUse() { ASSERT(!valid()); }
-    SharedResourceUse(SharedResourceUse &&rhs) : mUse(rhs.mUse) { rhs.mUse = nullptr; }
+    SharedResourceUse(SharedResourceUse &&rhs)
+        : mUse(rhs.mUse), mIsImage(rhs.mIsImage), mIsImageView(rhs.mIsImageView)
+    {
+        rhs.mUse = nullptr;
+    }
     SharedResourceUse &operator=(SharedResourceUse &&rhs)
     {
         std::swap(mUse, rhs.mUse);
+        mIsImage     = rhs.mIsImage;
+        mIsImageView = rhs.mIsImageView;
         return *this;
     }
 
@@ -84,6 +90,8 @@ class SharedResourceUse final : angle::NonCopyable
         ASSERT(rhs.mUse->counter < std::numeric_limits<uint32_t>::max());
         mUse = rhs.mUse;
         mUse->counter++;
+        mIsImage     = rhs.mIsImage;
+        mIsImageView = rhs.mIsImageView;
     }
 
     // The base counter value for a live resource is "1". Any value greater than one indicates
@@ -111,8 +119,24 @@ class SharedResourceUse final : angle::NonCopyable
         return mUse->serial;
     }
 
+    ANGLE_INLINE uint32_t getCounter() const
+    {
+        ASSERT(valid());
+        return mUse->counter;
+    }
+
+    ANGLE_INLINE void setmIsImage(bool isImage) { mIsImage = isImage; }
+
+    ANGLE_INLINE bool getmIsImage() const { return mIsImage; }
+
+    ANGLE_INLINE void setmIsImageView(bool isImageView) { mIsImageView = isImageView; }
+
+    ANGLE_INLINE bool getmIsImageView() const { return mIsImageView; }
+
   private:
     ResourceUse *mUse;
+    bool mIsImage;
+    bool mIsImageView;
 };
 
 class SharedBufferSuballocationGarbage
@@ -213,6 +237,8 @@ class Resource : angle::NonCopyable
     // Adds the resource to a resource use list.
     void retain(ResourceUseList *resourceUseList) const;
 
+    const SharedResourceUse &getSharedResourceUse() const { return mUse; }
+
   protected:
     Resource();
     Resource(Resource &&other);
@@ -220,6 +246,9 @@ class Resource : angle::NonCopyable
 
     // Current resource lifetime.
     SharedResourceUse mUse;
+
+    bool mIsImage;
+    bool mIsImageView;
 };
 
 ANGLE_INLINE void Resource::retain(ResourceUseList *resourceUseList) const

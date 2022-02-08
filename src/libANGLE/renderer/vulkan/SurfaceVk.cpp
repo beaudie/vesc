@@ -451,6 +451,10 @@ void OffscreenSurfaceVk::AttachmentImage::destroy(const egl::Display *display)
     DisplayVk *displayVk = vk::GetImpl(display);
     RendererVk *renderer = displayVk->getRenderer();
     // Front end must ensure all usage has been submitted.
+    ASSERT(image.getSharedResourceUse().getSerial() >=
+           imageViews.getSharedResourceUse().getSerial());
+    //    ASSERT(image.getSharedResourceUse().getCounter() >=
+    //           imageViews.getSharedResourceUse().getCounter());
     image.releaseImage(renderer);
     image.releaseStagedUpdates(renderer);
     imageViews.release(renderer);
@@ -1493,6 +1497,10 @@ void WindowSurfaceVk::releaseSwapchainImages(ContextVk *contextVk)
 
     if (mDepthStencilImage.valid())
     {
+        ASSERT(mDepthStencilImage.getSharedResourceUse().getSerial() >=
+               mDepthStencilImage.getSharedResourceUse().getSerial());
+        //        ASSERT(mDepthStencilImage.getSharedResourceUse().getCounter() >=
+        //               mDepthStencilImage.getSharedResourceUse().getCounter());
         mDepthStencilImage.releaseImageFromShareContexts(renderer, contextVk);
         mDepthStencilImage.releaseStagedUpdates(renderer);
         mDepthStencilImageViews.release(renderer);
@@ -1500,6 +1508,10 @@ void WindowSurfaceVk::releaseSwapchainImages(ContextVk *contextVk)
 
     if (mColorImageMS.valid())
     {
+        ASSERT(mColorImageMS.getSharedResourceUse().getSerial() >=
+               mColorImageMS.getSharedResourceUse().getSerial());
+        //        ASSERT(mColorImageMS.getSharedResourceUse().getCounter() >=
+        //               mColorImageMS.getSharedResourceUse().getCounter());
         mColorImageMS.releaseImageFromShareContexts(renderer, contextVk);
         mColorImageMS.releaseStagedUpdates(renderer);
         mColorImageMSViews.release(renderer);
@@ -1510,6 +1522,11 @@ void WindowSurfaceVk::releaseSwapchainImages(ContextVk *contextVk)
 
     for (SwapchainImage &swapchainImage : mSwapchainImages)
     {
+        ASSERT(swapchainImage.image.getSharedResourceUse().getSerial() >=
+               swapchainImage.imageViews.getSharedResourceUse().getSerial());
+        //        ASSERT(swapchainImage.image.getSharedResourceUse().getCounter() >=
+        //               swapchainImage.imageViews.getSharedResourceUse().getCounter());
+
         // We don't own the swapchain image handles, so we just remove our reference to it.
         swapchainImage.image.resetImageWeakReference();
         swapchainImage.image.destroy(renderer);
