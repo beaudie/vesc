@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "c41646ed_5704bdf6",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1178124
+      },
+      "writtenOn": "2022-02-08T10:59:08Z",
+      "side": 1,
+      "message": "Hi Jamie. This CL is effectively a no-op at the moment, but allows me to make use_cfv2 opt-out rather than opt-in in Chromium\u0027s testing/test.gni (by flipping the default from false to true). Feel free to send to the CQ if you approve. Thanks.",
+      "revId": "03518b6a29363b1f4a07db46845f797d0ddc66f2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
