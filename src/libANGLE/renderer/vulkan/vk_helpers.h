@@ -1615,6 +1615,8 @@ class ImageHelper final : public Resource, public angle::Subject
 
     const VkImageCreateInfo &getVkImageCreateInfo() const { return mVkImageCreateInfo; }
     void setTilingMode(VkImageTiling tilingMode) { mTilingMode = tilingMode; }
+    void setCanGhostImage(bool canGhostImage) { mCanGhostImage = canGhostImage; }
+    bool getCanGhostImage() { return mCanGhostImage; }
     VkImageTiling getTilingMode() const { return mTilingMode; }
     VkImageCreateFlags getCreateFlags() const { return mCreateFlags; }
     VkImageUsageFlags getUsage() const { return mUsage; }
@@ -2294,6 +2296,10 @@ class ImageHelper final : public Resource, public angle::Subject
     // above which the contents are considered unconditionally defined.
     gl::TexLevelArray<LevelContentDefinedMask> mContentDefined;
     gl::TexLevelArray<LevelContentDefinedMask> mStencilContentDefined;
+
+    // Track the specific usage that TexSubImage call will be followed by GenerateMipmap call,
+    // use this flag to determine if can choose ghosting image.
+    bool mCanGhostImage;
 };
 
 ANGLE_INLINE bool RenderPassCommandBufferHelper::usesImage(const ImageHelper &image) const

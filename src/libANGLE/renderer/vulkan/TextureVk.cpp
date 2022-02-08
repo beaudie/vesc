@@ -484,6 +484,58 @@ angle::Result TextureVk::setSubImageImpl(const gl::Context *context,
         shouldFlush = true;
     }
 
+    if (mImage->getCanGhostImage() &&
+        index.getLevelIndex() == (GLint)mState.getEffectiveBaseLevel())
+    {
+        mImage->setCanGhostImage(false);
+    }
+    bool isOverWriteToAllDefinedLevel = true;
+    const gl::ImageDesc &levelDesc    = mState.getImageDesc(index);
+    // Compare to tell if this is a full level update, if yes, we can choose to use ghosting image.
+    if (mImage->valid() && mOwnsImage && levelDesc.size.width == area.width &&
+        levelDesc.size.height == area.height && levelDesc.size.depth == area.depth)
+    {
+        GLuint layerIndex = 0;
+        if (gl::IsArrayTextureType(index.getType()))
+        {
+            layerIndex = area.z;
+        }
+        else if (index.getType() == gl::TextureType::CubeMap)
+        {
+            // Copy to the correct cube map face.
+            layerIndex = index.getLayerIndex();
+        }
+        // Compare to tell if this is an overwrite to all defined contents, if not, stage the
+        // update.
+        for (GLuint levelIndex = mState.getEffectiveBaseLevel();
+             levelIndex <= mImage->getLevelCount(); levelIndex++)
+        {
+            if ((GLint)levelIndex != index.getLevelIndex() &&
+                mImage->hasSubresourceDefinedContent(gl::LevelIndex(levelIndex), layerIndex,
+                                                     index.getLayerCount()))
+            {
+                // This isn't an overwrite to all defined contents, we need to stage the update
+                // and add a flag to determine if using ghosting image in next GenerateMipmap call.
+                isOverWriteToAllDefinedLevel = false;
+                shouldFlush                  = false;
+                mImage->setCanGhostImage(true);
+                break;
+            }
+        }
+        // This is a full level update and is an overwrite to all defined contents, we can directly
+        // use ghosting image to do vkCmdCopyBufferToImage immediately instead of waiting for the
+        // barrier between Fragment sream and Transfer stream.
+        if (isOverWriteToAllDefinedLevel)
+        {
+            if (mImage->usedInRunningCommands(contextVk->getLastCompletedQueueSerial()) &&
+                !mState.hasBeenBoundAsAttachment() &&
+                mImage->getCurrentImageLayout() == vk::ImageLayout::FragmentShaderReadOnly)
+            {
+                releaseImage(contextVk);
+            }
+        }
+    }
+
     if (unpackBuffer)
     {
         BufferVk *unpackBufferVk       = vk::GetImpl(unpackBuffer);
@@ -507,7 +559,7 @@ angle::Result TextureVk::setSubImageImpl(const gl::Context *context,
 
         if (!shouldUpdateBeStaged(gl::LevelIndex(index.getLevelIndex()),
                                   vkFormat.getActualImageFormatID(getRequiredImageAccess())) &&
-            isFastUnpackPossible(vkFormat, offsetBytes))
+            isFastUnpackPossible(vkFormat, offsetBytes) && isOverWriteToAllDefinedLevel)
         {
             GLuint pixelSize   = formatInfo.pixelBytes;
             GLuint blockWidth  = formatInfo.compressedBlockWidth;
@@ -689,6 +741,11 @@ angle::Result TextureVk::copyTextureSubData(const gl::Context *context,
 {
     ContextVk *contextVk = vk::GetImpl(context);
     TextureVk *sourceVk  = vk::GetImpl(srcTexture);
+
+    if (mImage->getCanGhostImage() && dstLevel == (GLint)mState.getEffectiveBaseLevel())
+    {
+        mImage->setCanGhostImage(false);
+    }
 
     // Make sure the source/destination targets are initialized and all staged updates are flushed.
     ANGLE_TRY(sourceVk->ensureImageInitialized(contextVk, ImageMipLevels::EnabledLevels));
@@ -2662,6 +2719,14 @@ angle::Result TextureVk::syncState(const gl::Context *context,
             mImage->getLevelCount() < getMipLevelCount(ImageMipLevels::EnabledLevels);
     }
 
+    if (isGenerateMipmap && mImage && mImage->valid() &&
+        mImage->usedInRunningCommands(contextVk->getLastCompletedQueueSerial()) &&
+        mImage->getCanGhostImage() && !mState.hasBeenBoundAsAttachment())
+    {
+        // Choose to use ghosting image in this GenerateMipmap call.
+        releaseImage(contextVk);
+    }
+
     // If generating mipmaps and the image needs to be recreated (not full-mip already, or changed
     // usage flags), make sure it's recreated.
     if (isGenerateMipmap && mImage && mImage->valid() &&
@@ -3037,6 +3102,7 @@ void TextureVk::releaseImage(ContextVk *contextVk)
 
     if (mImage)
     {
+        mImage->setCanGhostImage(false);
         if (mOwnsImage)
         {
             mImage->releaseImageFromShareContexts(renderer, contextVk);

@@ -6141,6 +6141,174 @@ TEST_P(Texture2DTestES3, TextureRGBUpdateWithPBO)
     EXPECT_PIXEL_COLOR_EQ(4, 4, GLColor::green);
 }
 
+// Test render to image level 1, then full update level 0.
+TEST_P(Texture2DTestES3, RenderToTextureThenFullUpdateWithPBO)
+{
+    ANGLE_GL_PROGRAM(program, essl1_shaders::vs::Texture2D(), essl1_shaders::fs::Texture2D());
+
+    glViewport(0, 0, 16, 16);
+
+    GLSampler sampler;
+    GLTexture tex1;
+    GLTexture tex2;
+    std::vector<GLColor> texDataBlue(16u * 16u, GLColor::blue);
+    std::vector<GLColor> texDataGreen(16u * 16u, GLColor::green);
+
+    glBindTexture(GL_TEXTURE_2D, tex1);
+    glTexStorage2D(GL_TEXTURE_2D, 2, GL_RGBA8, 16, 16);
+    glTexSubImage2D(GL_TEXTURE_2D, 0, 0, 0, 16, 16, GL_RGBA, GL_UNSIGNED_BYTE, texDataGreen.data());
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+    EXPECT_GL_NO_ERROR();
+
+    glBindTexture(GL_TEXTURE_2D, tex2);
+    glTexStorage2D(GL_TEXTURE_2D, 2, GL_RGBA8, 16, 16);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+    EXPECT_GL_NO_ERROR();
+
+    GLFramebuffer fb;
+    glBindFramebuffer(GL_FRAMEBUFFER, fb);
+    glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, tex2, 1);
+    EXPECT_GL_FRAMEBUFFER_COMPLETE(GL_FRAMEBUFFER);
+
+    glBindSampler(0, sampler);
+    glSamplerParameteri(sampler, GL_TEXTURE_MIN_LOD, 0);
+    glSamplerParameteri(sampler, GL_TEXTURE_MAX_LOD, 0);
+    glBindTexture(GL_TEXTURE_2D, tex1);
+    drawQuad(program, essl1_shaders::PositionAttrib(), 0.0f);
+    EXPECT_GL_NO_ERROR();
+
+    // Render to tex2.
+    swapBuffers();
+    EXPECT_GL_NO_ERROR();
+
+    glBindTexture(GL_TEXTURE_2D, tex2);
+    glSamplerParameteri(sampler, GL_TEXTURE_MIN_LOD, 1);
+    glSamplerParameteri(sampler, GL_TEXTURE_MAX_LOD, 1);
+    glBindFramebuffer(GL_FRAMEBUFFER, 0);
+    drawQuad(program, essl1_shaders::PositionAttrib(), 0.0f);
+    EXPECT_GL_NO_ERROR();
+
+    // Flush to let tex2 be in use.
+    swapBuffers();
+    EXPECT_GL_NO_ERROR();
+
+    GLBuffer pbo;
+    glBindBuffer(GL_PIXEL_UNPACK_BUFFER, pbo);
+    glBufferData(GL_PIXEL_UNPACK_BUFFER, 4 * 16 * 16, texDataBlue.data(), GL_STATIC_DRAW);
+    glTexSubImage2D(GL_TEXTURE_2D, 0, 0, 0, 16, 16, GL_RGBA, GL_UNSIGNED_BYTE, nullptr);
+    EXPECT_GL_NO_ERROR();
+
+    drawQuad(program, essl1_shaders::PositionAttrib(), 0.0f);
+    EXPECT_GL_NO_ERROR();
+
+    glBindFramebuffer(GL_FRAMEBUFFER, fb);
+    EXPECT_PIXEL_COLOR_EQ(4, 4, GLColor::green);
+    glBindFramebuffer(GL_FRAMEBUFFER, 0);
+    glBindTexture(GL_TEXTURE_2D, 0);
+}
+
+// Test copy to image level 1, then full update level 0.
+TEST_P(Texture2DTestES3, CopyImageSubDataThenFullUpdateWithPBO)
+{
+    ANGLE_SKIP_TEST_IF(!IsGLExtensionEnabled("GL_EXT_copy_image"));
+
+    ANGLE_GL_PROGRAM(program, essl1_shaders::vs::Texture2D(), essl1_shaders::fs::Texture2D());
+
+    glViewport(0, 0, 16, 16);
+
+    GLTexture srcTexture;
+    GLTexture destTexture;
+    std::vector<GLColor> texDataRed(16u * 16u, GLColor::red);
+    std::vector<GLColor> texDataGreen(16u * 16u, GLColor::green);
+    GLSampler sampler;
+    glBindSampler(0, sampler);
+    glSamplerParameteri(sampler, GL_TEXTURE_MIN_LOD, 1);
+    glSamplerParameteri(sampler, GL_TEXTURE_MAX_LOD, 1);
+    EXPECT_GL_NO_ERROR();
+
+    glBindTexture(GL_TEXTURE_2D, srcTexture);
+    glTexStorage2D(GL_TEXTURE_2D, 2, GL_RGB8, 16, 16);
+    glTexSubImage2D(GL_TEXTURE_2D, 1, 0, 0, 8, 8, GL_RGB, GL_UNSIGNED_BYTE, texDataGreen.data());
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+    EXPECT_GL_NO_ERROR();
+
+    glBindTexture(GL_TEXTURE_2D, destTexture);
+    glTexStorage2D(GL_TEXTURE_2D, 2, GL_RGB8, 16, 16);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+    EXPECT_GL_NO_ERROR();
+
+    glCopyImageSubDataEXT(srcTexture, GL_TEXTURE_2D, 1, 0, 0, 0, destTexture, GL_TEXTURE_2D, 1, 0,
+                          0, 0, 8, 8, 1);
+    EXPECT_GL_NO_ERROR();
+
+    drawQuad(program, essl1_shaders::PositionAttrib(), 0.0f);
+    EXPECT_GL_NO_ERROR();
+
+    // Flush to let destTexture be in use.
+    swapBuffers();
+    EXPECT_GL_NO_ERROR();
+
+    GLBuffer pbo;
+    glBindBuffer(GL_PIXEL_UNPACK_BUFFER, pbo);
+    glBufferData(GL_PIXEL_UNPACK_BUFFER, 4 * 16 * 16, texDataRed.data(), GL_STATIC_DRAW);
+    glTexSubImage2D(GL_TEXTURE_2D, 0, 0, 0, 16, 16, GL_RGB, GL_UNSIGNED_BYTE, nullptr);
+    EXPECT_GL_NO_ERROR();
+
+    drawQuad(program, essl1_shaders::PositionAttrib(), 0.0f);
+    EXPECT_GL_NO_ERROR();
+
+    glBindTexture(GL_TEXTURE_2D, 0);
+    glBindBuffer(GL_PIXEL_UNPACK_BUFFER, 0);
+    EXPECT_PIXEL_EQ(4, 4, 0, 255, 0, 255);
+}
+
+// Test write to all levels with generateMipMap, then full update one level.
+TEST_P(Texture2DTestES3, GenerateMipmapThenFullUpdateWithPBO)
+{
+    ANGLE_GL_PROGRAM(program, essl1_shaders::vs::Texture2D(), essl1_shaders::fs::Texture2D());
+
+    glViewport(0, 0, 16, 16);
+
+    GLTexture tex2D;
+    std::vector<GLColor> texDataRed(16u * 16u, GLColor::red);
+    std::vector<GLColor> texDataGreen(16u * 16u, GLColor::green);
+    GLSampler sampler;
+    glBindSampler(0, sampler);
+    glSamplerParameteri(sampler, GL_TEXTURE_MIN_LOD, 1);
+    glSamplerParameteri(sampler, GL_TEXTURE_MAX_LOD, 1);
+    EXPECT_GL_NO_ERROR();
+
+    glBindTexture(GL_TEXTURE_2D, tex2D);
+    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, 16, 16, 0, GL_RGBA, GL_UNSIGNED_BYTE,
+                 texDataRed.data());
+    glGenerateMipmap(GL_TEXTURE_2D);
+    EXPECT_GL_NO_ERROR();
+
+    drawQuad(program, essl1_shaders::PositionAttrib(), 0.0f);
+    EXPECT_GL_NO_ERROR();
+
+    // Flush to let tex2D be in use.
+    swapBuffers();
+    EXPECT_GL_NO_ERROR();
+
+    GLBuffer pbo;
+    glBindBuffer(GL_PIXEL_UNPACK_BUFFER, pbo);
+    glBufferData(GL_PIXEL_UNPACK_BUFFER, 4 * 16 * 16, texDataGreen.data(), GL_STATIC_DRAW);
+    glTexSubImage2D(GL_TEXTURE_2D, 0, 0, 0, 16, 16, GL_RGBA, GL_UNSIGNED_BYTE, nullptr);
+    EXPECT_GL_NO_ERROR();
+
+    drawQuad(program, essl1_shaders::PositionAttrib(), 0.0f);
+    EXPECT_GL_NO_ERROR();
+
+    glBindTexture(GL_TEXTURE_2D, 0);
+    glBindBuffer(GL_PIXEL_UNPACK_BUFFER, 0);
+    EXPECT_PIXEL_EQ(4, 4, 255, 0, 0, 255);
+}
+
 // Copied from Texture2DTest::TexStorage
 // Test that glTexSubImage2D works properly when glTexStorage2DEXT has initialized the image with a
 // default color.
