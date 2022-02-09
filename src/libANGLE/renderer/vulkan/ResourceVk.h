@@ -29,6 +29,8 @@ struct ResourceUse
     // The number of times a resource is retained by ANGLE.
     uint32_t counter = 0;
 
+    uint32_t garbageCounter = 0;
+
     // The most recent time of use in a VkQueue.
     Serial serial;
 };
@@ -52,6 +54,7 @@ class SharedResourceUse final : angle::NonCopyable
         ASSERT(!mUse);
         mUse = new ResourceUse;
         mUse->counter++;
+        mUse->garbageCounter++;
     }
 
     // Specifically for use with command buffers that are used as one-offs.
@@ -84,6 +87,16 @@ class SharedResourceUse final : angle::NonCopyable
         ASSERT(rhs.mUse->counter < std::numeric_limits<uint32_t>::max());
         mUse = rhs.mUse;
         mUse->counter++;
+        mUse->garbageCounter++;
+    }
+
+    ANGLE_INLINE void transfer(const SharedResourceUse &rhs)
+    {
+        ASSERT(rhs.valid());
+        ASSERT(!valid());
+        ASSERT(rhs.mUse->counter < std::numeric_limits<uint32_t>::max());
+        mUse = rhs.mUse;
+        mUse->garbageCounter++;
     }
 
     // The base counter value for a live resource is "1". Any value greater than one indicates
@@ -109,6 +122,12 @@ class SharedResourceUse final : angle::NonCopyable
     {
         ASSERT(valid());
         return mUse->serial;
+    }
+
+    ANGLE_INLINE uint32_t getCounter() const
+    {
+        ASSERT(valid());
+        return mUse->counter;
     }
 
   private:
@@ -212,6 +231,8 @@ class Resource : angle::NonCopyable
 
     // Adds the resource to a resource use list.
     void retain(ResourceUseList *resourceUseList) const;
+
+    const SharedResourceUse &getSharedResourceUse() const { return mUse; }
 
   protected:
     Resource();
