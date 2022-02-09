@@ -34,6 +34,24 @@
       "parentUuid": "cc9e7021_7e1f02a8",
       "revId": "8ab99fcc97f9d0217f4608bc75923195d7d1b8d1",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "8de4d588_c0596370",
+        "filename": "src/tests/egl_tests/EGLMultiContextTest.cpp",
+        "patchSetId": 9
+      },
+      "lineNbr": 357,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2022-02-09T19:31:55Z",
+      "side": 1,
+      "message": "Looks like removing the bug workaround for QCom actually fixes this test failure. That bug workaround end up causing us allocating much bigger blocks which means waste a lot of memory for this test. And that big workaround was added when we switch to VMA\u0027s memory suballocator. With this CL, we no longer using VMA memory suballocator and the original failing tests is passing now, thus no more need for that workaround. Extra bonus.",
+      "parentUuid": "63f9ef97_5d766b51",
+      "revId": "8ab99fcc97f9d0217f4608bc75923195d7d1b8d1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
