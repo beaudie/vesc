@@ -1942,7 +1942,6 @@ angle::Result TextureVk::generateMipmap(const gl::Context *context)
         ASSERT((mImageUsageFlags & VK_IMAGE_USAGE_STORAGE_BIT) != 0);
 
         mImage->retain(&contextVk->getResourceUseList());
-        getImageViews().retain(&contextVk->getResourceUseList());
 
         return generateMipmapsWithCompute(contextVk);
     }
@@ -2260,17 +2259,29 @@ angle::Result TextureVk::respecifyImageStorage(ContextVk *contextVk)
         if (mImage->getActualFormatID() != format.getActualImageFormatID(getRequiredImageAccess()))
         {
             ANGLE_TRY(reinitImageAsRenderable(contextVk, format, mRedefinedLevels));
+            // Release the current image so that it will be recreated with the correct number of mip
+            // levels, base level, and max level.
+            releaseImage(contextVk);
         }
         else
         {
+            // If we are calling stageSelfAsSubresourceUpdates(), we split the
+            // releaseImage(contextVk) into two steps:
+            // 1. releaseImageViews(); 2. releaseImageOnly().
+            // Step 1 is to collect the garbage from image views first. We would like to track the
+            // garbage list from image views with current image.mUse, and the current image.mUse
+            // will be swapped to prevImage in stageSelfAsSubresourceUpdates(), so we call
+            // releaseImageViews() first to collect the image views garbage list and pass it to the
+            // prevImage in stageSelfAsSubresourceUpdates().
+            releaseImageViews(contextVk);
             // Make the image stage itself as updates to its levels.
             mImage->stageSelfAsSubresourceUpdates(contextVk, mImage->getLevelCount(),
                                                   mRedefinedLevels);
-        }
 
-        // Release the current image so that it will be recreated with the correct number of mip
-        // levels, base level, and max level.
-        releaseImage(contextVk);
+            // Step 2: Release the mImage without collecting garbage from image views.
+            releaseImage(contextVk);
+            // releaseImageOnly(contextVk);
+        }
     }
 
     mImage->retain(&contextVk->getResourceUseList());
@@ -2677,10 +2688,22 @@ angle::Result TextureVk::syncState(const gl::Context *context,
         // the levels have already been discarded through the |removeStagedUpdates| call above.
         ANGLE_TRY(flushImageStagedUpdates(contextVk));
 
+        // Release views and render targets created for the old image.
+        // If we are calling stageSelfAsSubresourceUpdates(), we split the releaseImage(contextVk)
+        // into two steps:
+        // 1. releaseImageViews(); 2. releaseImageOnly().
+        // Step 1 is to collect the garbage from image views first. We would like to track the
+        // garbage list from image views with current image.mUse, and the current image.mUse will be
+        // swapped to prevImage in stageSelfAsSubresourceUpdates(), so we call releaseImageViews()
+        // first to collect the image views garbage list and pass it to the prevImage in
+        // stageSelfAsSubresourceUpdates().
+        releaseImageViews(contextVk);
+
         mImage->stageSelfAsSubresourceUpdates(contextVk, 1, {});
 
-        // Release views and render targets created for the old image.
+        // Step 2: Release the mImage without collecting garbage from image views.
         releaseImage(contextVk);
+        // releaseImageOnly(contextVk);
     }
 
     // Respecify the image if it's changed in usage, or if any of its levels are redefined and no
@@ -2807,7 +2830,6 @@ const vk::ImageView &TextureVk::getReadImageViewAndRecordUse(ContextVk *contextV
     ASSERT(mImage->valid());
 
     const vk::ImageViewHelper &imageViews = getImageViews();
-    imageViews.retain(&contextVk->getResourceUseList());
 
     if (mState.isStencilMode() && imageViews.hasStencilReadImageView())
     {
@@ -2831,7 +2853,6 @@ const vk::ImageView &TextureVk::getFetchImageViewAndRecordUse(ContextVk *context
     ASSERT(mImage->valid());
 
     const vk::ImageViewHelper &imageViews = getImageViews();
-    imageViews.retain(&contextVk->getResourceUseList());
 
     // We don't currently support fetch for depth/stencil cube map textures.
     ASSERT(!imageViews.hasStencilReadImageView() || !imageViews.hasFetchImageView());
@@ -2851,7 +2872,6 @@ const vk::ImageView &TextureVk::getCopyImageViewAndRecordUse(ContextVk *contextV
     ASSERT(mImage->valid());
 
     const vk::ImageViewHelper &imageViews = getImageViews();
-    imageViews.retain(&contextVk->getResourceUseList());
 
     const angle::Format &angleFormat = mImage->getActualFormat();
     ASSERT(angleFormat.isSRGB ==
@@ -3034,8 +3054,11 @@ void TextureVk::releaseImage(ContextVk *contextVk)
 {
     RendererVk *renderer = contextVk->getRenderer();
 
+    releaseImageViews(contextVk);
+
     if (mImage)
     {
+
         if (mOwnsImage)
         {
             mImage->releaseImageFromShareContexts(renderer, contextVk);
@@ -3055,9 +3078,64 @@ void TextureVk::releaseImage(ContextVk *contextVk)
         }
     }
 
-    for (vk::ImageViewHelper &imageViews : mMultisampledImageViews)
+    for (auto &renderTargets : mSingleLayerRenderTargets)
     {
-        imageViews.release(renderer);
+        for (RenderTargetVector &renderTargetLevels : renderTargets)
+        {
+            // Clear the layers tracked for each level
+            renderTargetLevels.clear();
+        }
+        // Then clear the levels
+        renderTargets.clear();
+    }
+    mMultiLayerRenderTargets.clear();
+
+    onStateChange(angle::SubjectMessage::SubjectChanged);
+    mRedefinedLevels.reset();
+}
+
+void TextureVk::releaseImageViews(ContextVk *contextVk)
+{
+    RendererVk *renderer = contextVk->getRenderer();
+
+    if (mImage == nullptr)
+    {
+        for (vk::ImageViewHelper &imageViewHelper : mMultisampledImageViews)
+        {
+            ASSERT(imageViewHelper.isImageViewGarbageEmpty());
+        }
+        return;
+    }
+
+    for (vk::ImageViewHelper &imageViewHelper : mMultisampledImageViews)
+    {
+        mImage->collectViewGarbage(renderer, &imageViewHelper);
+    }
+}
+
+void TextureVk::releaseImageOnly(ContextVk *contextVk)
+{
+    RendererVk *renderer = contextVk->getRenderer();
+
+    if (mImage)
+    {
+        if (mOwnsImage)
+        {
+            mImage->releaseImageFromShareContexts(renderer, contextVk);
+        }
+        else
+        {
+            mImageObserverBinding.bind(nullptr);
+            mImage = nullptr;
+        }
+    }
+
+    for (vk::ImageHelper &image : mMultisampledImages)
+    {
+        if (image.valid())
+        {
+            image.releaseImageFromShareContexts(renderer, contextVk);
+        }
     }
 
     for (auto &renderTargets : mSingleLayerRenderTargets)
@@ -3305,7 +3383,17 @@ uint32_t TextureVk::getImageViewLayerCount() const
 
 angle::Result TextureVk::refreshImageViews(ContextVk *contextVk)
 {
-    getImageViews().release(contextVk->getRenderer());
+    vk::ImageViewHelper &defaultImageView = getImageViews();
+    if (mImage == nullptr)
+    {
+        ASSERT(defaultImageView.isImageViewGarbageEmpty());
+    }
+    else
+    {
+        RendererVk *renderer = contextVk->getRenderer();
+        mImage->collectViewGarbage(renderer, &defaultImageView);
+    }
+
     const gl::ImageDesc &baseLevelDesc = mState.getBaseLevelDesc();
 
     ANGLE_TRY(initImageViews(contextVk, mImage->getActualFormat(), baseLevelDesc.format.info->sized,

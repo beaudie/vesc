@@ -195,11 +195,6 @@ class TextureVk : public TextureImpl, public angle::ObserverInterface
         return *mImage;
     }
 
-    void retainImageViews(vk::ResourceUseList *resourceUseList)
-    {
-        getImageViews().retain(resourceUseList);
-    }
-
     void retainBufferViews(vk::ResourceUseList *resourceUseList)
     {
         mBufferViews.retain(resourceUseList);
@@ -424,6 +419,8 @@ class TextureVk : public TextureImpl, public angle::ObserverInterface
                             angle::FormatID actualImageFormatID,
                             ImageMipLevels mipLevels);
     void releaseImage(ContextVk *contextVk);
+    void releaseImageViews(ContextVk *contextVk);
+    void releaseImageOnly(ContextVk *contextVk);
     void releaseStagedUpdates(ContextVk *contextVk);
     uint32_t getMipLevelCount(ImageMipLevels mipLevels) const;
     uint32_t getMaxLevelCount() const;
