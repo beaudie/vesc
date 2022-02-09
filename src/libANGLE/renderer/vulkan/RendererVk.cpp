@@ -4008,6 +4008,7 @@ void RendererVk::onDeallocateHandle(vk::HandleType handleType)
 VkDeviceSize RendererVk::getPreferedBufferBlockSize(uint32_t memoryTypeIndex) const
 {
     VkDeviceSize preferredBlockSize;
+#if 0
     if (mFeatures.preferredLargeHeapBlockSize4MB.enabled)
     {
         // This number matches Chromium and was picked by looking at memory usage of
@@ -4019,7 +4020,9 @@ VkDeviceSize RendererVk::getPreferedBufferBlockSize(uint32_t memoryTypeIndex) co
     {
         preferredBlockSize = 32ull * 1024 * 1024;
     }
-
+#else
+    preferredBlockSize = 4 * 1024 * 1024;
+#endif
     // Try not to exceed 1/64 of heap size to begin with.
     const VkDeviceSize heapSize = getMemoryProperties().getHeapSizeForMemoryType(memoryTypeIndex);
     preferredBlockSize          = std::min(heapSize / 64, preferredBlockSize);

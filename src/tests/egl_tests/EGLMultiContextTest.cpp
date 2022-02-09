@@ -355,7 +355,7 @@ TEST_P(EGLMultiContextTest, RepeatedEglInitAndTerminate)
     // real world app will run into. So for now, we change the number of contexts created to a
     // smaller number until we know there is legitimate reason to believe real world app may run
     // into.
-    for (int i = 0; i < 64; i++)
+    for (int i = 0; i < 100; i++)
     {
         std::thread thread = std::thread([&]() {
             dpy = eglGetPlatformDisplayEXT(
