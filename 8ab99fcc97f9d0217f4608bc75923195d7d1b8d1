@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "cc9e7021_7e1f02a8",
+        "filename": "src/tests/egl_tests/EGLMultiContextTest.cpp",
+        "patchSetId": 9
+      },
+      "lineNbr": 357,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-02-09T16:02:38Z",
+      "side": 1,
+      "message": "Just how much memory are we talking about here? If 100 contexts is causing OOM, it makes me think that each context is keeping at least ~10MB? That alone will cause OOMs on Fuchsia.\n\nCould we make the buffer pool\u0027s initial allocation smaller or something instead?",
+      "revId": "8ab99fcc97f9d0217f4608bc75923195d7d1b8d1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
