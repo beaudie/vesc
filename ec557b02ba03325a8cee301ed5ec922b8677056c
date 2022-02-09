@@ -18,6 +18,23 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "330a1e2e_01310e35",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2022-02-09T14:19:21Z",
+      "side": 1,
+      "message": "So many apps behave badly with no_error. I\u0027m fine with ",
+      "revId": "ec557b02ba03325a8cee301ed5ec922b8677056c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "517c67ab_9b64be1f",
@@ -31,6 +48,24 @@
       "writtenOn": "2022-02-09T02:53:03Z",
       "side": 1,
       "message": "You\u0027re gonna hate me, but ... this is so simple you don\u0027t really need a feature for it. The feature being disabled is not saving ANGLE anything.\n\nPlease don\u0027t hate me 😄\n\nAs for testing, you might have noticed we have other similar ones that we just expect bad input not to crash, and they have similar no-op paths implemented without a feature. For example see this:\n\n    // Tests that an incorrect enum to GetInteger does not cause an application crash.\n    TEST_P(ContextNoErrorTest, InvalidGetIntegerDoesNotCrash)",
+      "revId": "ec557b02ba03325a8cee301ed5ec922b8677056c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "cd522ed2_5d0b6f4d",
+        "filename": "src/libANGLE/Context.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 1219,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2022-02-09T14:19:21Z",
+      "side": 1,
+      "message": "I think it\u0027s also fine to do the extra check here unconditionally. Many apps do very undefined things with no_error. We also could add the option of adding a feature to disable no_error, and we could consider just disabling no error everywhere since (it seems) every user of no_error fails to stick to defined behaviour.",
+      "parentUuid": "517c67ab_9b64be1f",
       "revId": "ec557b02ba03325a8cee301ed5ec922b8677056c",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
