@@ -8048,6 +8048,17 @@ bool ImageHelper::canCopyWithTransformForReadPixels(const PackPixelsParams &pack
            isPitchMultipleOfTexelSize;
 }
 
+uint32_t GetNextMultiple(uint32_t value, uint32_t multiplier)
+{
+    ASSERT(multiplier > 0);
+
+    uint32_t remainder = value % multiplier;
+    if (remainder == 0)
+        return value;
+
+    return value + multiplier - remainder;
+}
+
 angle::Result ImageHelper::readPixels(ContextVk *contextVk,
                                       const gl::Rectangle &area,
                                       const PackPixelsParams &packPixelsParams,
@@ -8204,6 +8215,16 @@ angle::Result ImageHelper::readPixels(ContextVk *contextVk,
     region.imageExtent       = srcExtent;
     region.imageOffset       = srcOffset;
     region.imageSubresource  = srcSubresource;
+
+    // For compressed textures, vkCmdCopyImageToBuffer requires
+    // a region that is a multiple of the block size.
+    if (readFormat->isBlock)
+    {
+        region.bufferRowLength =
+            GetNextMultiple(region.bufferRowLength, storageFormatInfo.compressedBlockWidth);
+        region.bufferImageHeight =
+            GetNextMultiple(region.bufferImageHeight, storageFormatInfo.compressedBlockHeight);
+    }
 
     CommandBufferAccess readbackAccess;
     readbackAccess.onBufferTransferWrite(stagingBuffer);
