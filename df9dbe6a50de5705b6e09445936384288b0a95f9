@@ -16,6 +16,23 @@
       "message": "If you go this route I\u0027d suggest avoiding the term GPU as ANGLE can run perfectly well on a CPU implementation. The name Device is much more appropriate. I guess I don\u0027t agree with the need for this change, although feel free to find another reviewer.",
       "revId": "df9dbe6a50de5705b6e09445936384288b0a95f9",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "bbe42a77_0fa8d665",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2022-02-09T20:37:27Z",
+      "side": 1,
+      "message": "Perhaps we can consider a CPU implementation of the APIs a \"virtual GPU\".\n\nI don\u0027t have a strong feeling about this but lgtm if Microsoft does.\n",
+      "revId": "df9dbe6a50de5705b6e09445936384288b0a95f9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
