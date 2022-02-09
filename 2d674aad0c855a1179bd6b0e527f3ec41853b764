@@ -141,6 +141,24 @@
       "parentUuid": "84b02a2e_d6c2d334",
       "revId": "2d674aad0c855a1179bd6b0e527f3ec41853b764",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "d28fe47f_934f4183",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 17
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-02-09T15:55:21Z",
+      "side": 1,
+      "message": "\u003e For the test (sampleFS-\u003ewriteCS-\u003esampleFS), I find some test only call glMemoryBarrier *after* CS, which makes the endRP *before* CS being necessary?\n\nThat sounds like a test bug to be honest. In the above scenario, you\u0027d need glMemoryBarrier(GL_SHADER_IMAGE_ACCESS_BARRIER_BIT) before the CS and glMemoryBarrier(GL_TEXTURE_FETCH_BARRIER_BIT) after it.\n\n\u003e For the \u0027mRenderPassUsedImages\u0027，maybe I have a confusion firstly. I guess the \u0027Image\u0027 here refers to the vulkan\u0027s image\n\nYes!\n\n\u003e and for some imageRead case caused layout transition needs close RP too, as the sample faulty test.\n\nYes and that\u0027s what makes it annoyingly more complicated (because it doesn\u0027t require a glMemoryBarrier).\n\n\u003e The pseudocode of endRenderPassIfComputeAccessAfterTextureSample I consider as:\n\nThat looks reasonable. Of course, if you call flushComandsAndEndRenderPass you would want to return immediately (no point in checking the rest).\n\n---\n\nLuckily we also have Vulkan Validation Layer\u0027s syncval enabled, so once you have the tests mentioned throughout this thread, we can be doubly sure things are working correctly 😊",
+      "parentUuid": "a99afb6e_0c738f9e",
+      "revId": "2d674aad0c855a1179bd6b0e527f3ec41853b764",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
