@@ -16,6 +16,29 @@
       "message": "PTAL",
       "revId": "a431e8b3ee77ba9883b14eb1e813ff39433244f1",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "17495967_81aa3115",
+        "filename": "src/tests/gl_tests/VertexAttributeTest.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 1772,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-02-09T18:27:24Z",
+      "side": 1,
+      "message": "Isn\u0027t this pointer now unaligned? How come the write here is not causing SIGBUS, but the read later is?",
+      "range": {
+        "startLine": 1772,
+        "startChar": 25,
+        "endLine": 1772,
+        "endChar": 62
+      },
+      "revId": "a431e8b3ee77ba9883b14eb1e813ff39433244f1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
