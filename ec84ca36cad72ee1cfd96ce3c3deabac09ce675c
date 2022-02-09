@@ -16,6 +16,23 @@
       "message": "ptal jamie",
       "revId": "ec84ca36cad72ee1cfd96ce3c3deabac09ce675c",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "b7ceca06_a67c795c",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 5
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2022-02-09T21:17:30Z",
+      "side": 1,
+      "message": "LGTM, thanks Mohan.",
+      "revId": "ec84ca36cad72ee1cfd96ce3c3deabac09ce675c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
