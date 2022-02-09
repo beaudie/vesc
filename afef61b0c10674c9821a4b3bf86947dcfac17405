@@ -18,6 +18,23 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "e887e2e2_bd0852f7",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2022-02-09T16:19:31Z",
+      "side": 1,
+      "message": "LGTM too. I don\u0027t feel super strongly about the ptr vs ref but it does seem like a risky design to partially initialize the struct over two functions before the clear.",
+      "revId": "afef61b0c10674c9821a4b3bf86947dcfac17405",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "0b21bdaf_c6c59bd6",
