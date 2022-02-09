@@ -43,6 +43,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "070b0afe_8ca9fd09",
+        "filename": "src/libANGLE/Context.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 1218,
+      "author": {
+        "id": 1340649
+      },
+      "writtenOn": "2022-02-09T21:03:40Z",
+      "side": 1,
+      "message": "negative ack, without \"mSkipValidation\" we fail internal negative tests that are specifically passing bad values to these APIs and expecting an error. The addition of \"mSkipValidation\" is intentional and necessary",
+      "parentUuid": "eeb129e1_f61cc344",
+      "range": {
+        "startLine": 1218,
+        "startChar": 8,
+        "endLine": 1218,
+        "endChar": 24
+      },
+      "revId": "95880ffd420baaf1f9175d1b940abcc864d8486a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "0bc92d25_e0a01841",
         "filename": "src/libANGLE/Context.cpp",
         "patchSetId": 2
@@ -54,6 +78,30 @@
       "writtenOn": "2022-02-09T20:14:20Z",
       "side": 1,
       "message": "I\u0027d get rid of this, it can inflate code size due to the way we implement WARN(). Not good on a hot path that may be inlined.",
+      "range": {
+        "startLine": 1220,
+        "startChar": 8,
+        "endLine": 1220,
+        "endChar": 12
+      },
+      "revId": "95880ffd420baaf1f9175d1b940abcc864d8486a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "4ee13882_939c77c4",
+        "filename": "src/libANGLE/Context.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 1220,
+      "author": {
+        "id": 1340649
+      },
+      "writtenOn": "2022-02-09T21:03:40Z",
+      "side": 1,
+      "message": "Done, wanted to mirror what was done in ac3820398f but im fine without emitting warning",
+      "parentUuid": "0bc92d25_e0a01841",
       "range": {
         "startLine": 1220,
         "startChar": 8,
@@ -77,6 +125,30 @@
       "writtenOn": "2022-02-09T20:14:20Z",
       "side": 1,
       "message": "same comments here",
+      "range": {
+        "startLine": 2497,
+        "startChar": 0,
+        "endLine": 2501,
+        "endChar": 5
+      },
+      "revId": "95880ffd420baaf1f9175d1b940abcc864d8486a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "09cf8b4a_071bea1e",
+        "filename": "src/libANGLE/Context.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 2501,
+      "author": {
+        "id": 1340649
+      },
+      "writtenOn": "2022-02-09T21:03:40Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "cf5bc349_3fb81fe7",
       "range": {
         "startLine": 2497,
         "startChar": 0,
@@ -124,6 +196,30 @@
       "side": 1,
       "message": "This is similar to other tests in this file that do the same. The goal is not so much testing the undefined behavior as it\u0027s testing \"XDoesNotCrash\".",
       "parentUuid": "94c58434_8c92cf42",
+      "range": {
+        "startLine": 175,
+        "startChar": 0,
+        "endLine": 189,
+        "endChar": 1
+      },
+      "revId": "95880ffd420baaf1f9175d1b940abcc864d8486a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "f22ce5db_517438ab",
+        "filename": "src/tests/gl_tests/ContextNoErrorTest.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 189,
+      "author": {
+        "id": 1340649
+      },
+      "writtenOn": "2022-02-09T21:03:40Z",
+      "side": 1,
+      "message": "+1 for shabi\u0027s comment",
+      "parentUuid": "c0324f57_7e42f5d9",
       "range": {
         "startLine": 175,
         "startChar": 0,
