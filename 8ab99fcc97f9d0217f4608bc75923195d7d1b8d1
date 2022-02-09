@@ -16,6 +16,24 @@
       "message": "Just how much memory are we talking about here? If 100 contexts is causing OOM, it makes me think that each context is keeping at least ~10MB? That alone will cause OOMs on Fuchsia.\n\nCould we make the buffer pool\u0027s initial allocation smaller or something instead?",
       "revId": "8ab99fcc97f9d0217f4608bc75923195d7d1b8d1",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "63f9ef97_5d766b51",
+        "filename": "src/tests/egl_tests/EGLMultiContextTest.cpp",
+        "patchSetId": 9
+      },
+      "lineNbr": 357,
+      "author": {
+        "id": 1340649
+      },
+      "writtenOn": "2022-02-09T17:01:30Z",
+      "side": 1,
+      "message": "this bandaid is no good since this test is actually mirroring an android CTS test which actually creates 1000 contexts instead of the 100 i added here. if 100 contexts causes OOM then angle will be broken for Android CTS runs. I see 2 paths -\n1. muck with pool size as shabi mentioned\n2. there was an open task left here -\u003e https://bugs.chromium.org/p/angleproject/issues/detail?id\u003d6798\n there is 1 todo left -\n // TODO (http://www.anglebug.com/6798): Invalidate context handles as well.\n \n i do not have the cycles right now to work on that, unassigning so others, if\n interested, can pick it up\n \nCleaning up context handles as well would fix the issue in the right way",
+      "parentUuid": "cc9e7021_7e1f02a8",
+      "revId": "8ab99fcc97f9d0217f4608bc75923195d7d1b8d1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
