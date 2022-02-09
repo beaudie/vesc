@@ -1132,6 +1132,10 @@ angle::Result ContextVk::setupDraw(const gl::Context *context,
                                    const void *indices,
                                    DirtyBits dirtyBitMask)
 {
+    // TODO: should be done less often, good opportunity to be done when renderpass is dirty
+    SurfaceVk *drawSurfaceVk = GetImplAs<SurfaceVk>(context->getCurrentDrawSurface());
+    drawSurfaceVk->maybeInvalidate(context);
+
     // Set any dirty bits that depend on draw call parameters or other objects.
     if (mode != mCurrentDrawMode)
     {
