@@ -1,6 +1,29 @@
 {
   "comments": [
     {
+      "unresolved": true,
+      "key": {
+        "uuid": "f3dbde0d_d97adfff",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 11
+      },
+      "lineNbr": 19,
+      "author": {
+        "id": 1340649
+      },
+      "writtenOn": "2022-02-09T21:31:25Z",
+      "side": 1,
+      "message": "FYI - i had an upcoming task to upload a change that switches vkImages to use VMA but given charlie\u0027s change it might be the opposite direction of what we chose, though i have no data to assess which provides better perf. So im going to drop that task from my todos",
+      "range": {
+        "startLine": 17,
+        "startChar": 42,
+        "endLine": 19,
+        "endChar": 48
+      },
+      "revId": "c383f942a673273091a245b9642735ab027378d8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": false,
       "key": {
         "uuid": "c7f92e73_b36be717",
