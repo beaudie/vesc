@@ -81,6 +81,30 @@
       },
       "revId": "93717f2faa68223909a961132b3004b870e048fc",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "9391a82b_e1c3b427",
+        "filename": "src/tests/gl_tests/StateChangeTest.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 7514,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2022-02-09T21:49:32Z",
+      "side": 1,
+      "message": "Just noticed there is a test bug in the original test, that the GLBuffer gets deleted while transform feedback is still active, and triggers GL_INVALID_OPERATION error. Also fixed in this CL.",
+      "parentUuid": "f00e6995_46fd06ec",
+      "range": {
+        "startLine": 7501,
+        "startChar": 0,
+        "endLine": 7514,
+        "endChar": 42
+      },
+      "revId": "93717f2faa68223909a961132b3004b870e048fc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
