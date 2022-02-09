@@ -1213,6 +1213,14 @@ void Context::bindTexture(TextureType target, TextureID handle)
 {
     Texture *texture = nullptr;
 
+    // Some apps enable KHR_create_context_no_error but pass in an invalid texture type.
+    // Workaround this by silently returning in such situations.
+    if (mSkipValidation && (target == TextureType::InvalidEnum))
+    {
+        WARN() << "Application passed in an invalid texture type.";
+        return;
+    }
+
     if (handle.value == 0)
     {
         texture = mZeroTextures[target].get();
@@ -2484,6 +2492,14 @@ void Context::texParameterfvRobust(TextureType target,
 
 void Context::texParameteri(TextureType target, GLenum pname, GLint param)
 {
+    // Some apps enable KHR_create_context_no_error but pass in an invalid texture type.
+    // Workaround this by silently returning in such situations.
+    if (mSkipValidation && (target == TextureType::InvalidEnum))
+    {
+        WARN() << "Application passed in an invalid texture type.";
+        return;
+    }
+
     Texture *const texture = getTextureByType(target);
     SetTexParameteri(this, texture, pname, param);
 }
