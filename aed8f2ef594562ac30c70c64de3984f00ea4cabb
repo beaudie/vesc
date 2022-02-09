@@ -16,6 +16,23 @@
       "message": "Thanks!",
       "revId": "aed8f2ef594562ac30c70c64de3984f00ea4cabb",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "c7be2ef9_7850bde5",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 6
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1532442
+      },
+      "writtenOn": "2022-02-09T05:52:49Z",
+      "side": 1,
+      "message": "2 angle_end2end_tests failed, and I read the documentation for ID3D11Device1::OpenSharedResource1, the resource must be created with D3D11_RESOURCE_MISC_SHARED_NTHANDLE flag, so we still need to try ID3D11Device::OpenSharedResource first, right?\n\nhttps://docs.microsoft.com/en-us/windows/win32/api/d3d11_1/nf-d3d11_1-id3d11device1-opensharedresource1",
+      "revId": "aed8f2ef594562ac30c70c64de3984f00ea4cabb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
