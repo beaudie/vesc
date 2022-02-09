@@ -52,6 +52,24 @@
       "parentUuid": "d1da8821_7f79695a",
       "revId": "a5dd17f7af4fc44bf09b3ce1a230598f1c283c98",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "fba86fde_bca94f6f",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1116023
+      },
+      "writtenOn": "2022-02-09T17:15:22Z",
+      "side": 1,
+      "message": "ANGLE is always compiled with Null vulkan duspla on Fuchsia.  Currently many tests use headless ozone platform. It uses GLSurfaceEglReadback , see https://source.chromium.org/chromium/chromium/src/+/main:ui/ozone/platform/headless/headless_surface_factory.cc;drc\u003d91318efd060e4164810264f47cd31b3fc7159d68;l\u003d107 . It depends in pbuffers. Pbuffers require that we can initialize EGL display, but that wasn\u0027t possible with DisplayVkNull",
+      "parentUuid": "1523e264_fd637e8c",
+      "revId": "a5dd17f7af4fc44bf09b3ce1a230598f1c283c98",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
