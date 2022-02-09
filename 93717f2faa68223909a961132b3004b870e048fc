@@ -16,6 +16,24 @@
       "message": "Nice! I was wrong, this does get updated only once per RP, LGTM.",
       "revId": "93717f2faa68223909a961132b3004b870e048fc",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "88589216_094985a1",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2022-02-09T19:35:54Z",
+      "side": 1,
+      "message": "And, looking at all XFB usages in the app traces, there is only one draw call within begin/end anyway.",
+      "parentUuid": "c1890137_0dcb3555",
+      "revId": "93717f2faa68223909a961132b3004b870e048fc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
