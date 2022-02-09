@@ -24,6 +24,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": true,
+      "key": {
+        "uuid": "25bbe56b_011a2b27",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 11
+      },
+      "lineNbr": 19,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2022-02-09T21:58:20Z",
+      "side": 1,
+      "message": "Hi Mohan, your planed change is not opposite direction of this change. They are two orthogonal issues. This CL is mainly because ANGLE itself has its own pooling mechanism for buffers, so we do not have a need for VMA to do another level of allocation which end up just call into vulkan anyway. That does not means we should not use VMA for VkImage\u0027s allocation. You can still perfectly use VMA for VkImage\u0027s allocation (even though whether that is desired or not is a different question subject to discussion, mainly images usually are pretty big and allocation is not as frequent, but I want to emphasize that they are not in conflict). In some way this CL might help clear one obstables for you. VMA has logic to detect if buffer and image are allocating from the same pool or not, and if yes, it will apply bufferImageGranularity  which is much bigger (usually at page boundary). So with this CL, now buffer is not using VMA and if VkImage uses VMA, then you are ensured bufferImageGranularity wont apply.",
+      "parentUuid": "f3dbde0d_d97adfff",
+      "range": {
+        "startLine": 17,
+        "startChar": 42,
+        "endLine": 19,
+        "endChar": 48
+      },
+      "revId": "c383f942a673273091a245b9642735ab027378d8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": false,
       "key": {
         "uuid": "c7f92e73_b36be717",
