@@ -451,9 +451,21 @@ void OffscreenSurfaceVk::AttachmentImage::destroy(const egl::Display *display)
     DisplayVk *displayVk = vk::GetImpl(display);
     RendererVk *renderer = displayVk->getRenderer();
     // Front end must ensure all usage has been submitted.
+    ASSERT(image.getSharedResourceUse().getSerial() >=
+           imageViews.getSharedResourceUse().getSerial());
+    std::vector<vk::GarbageObject> imageViewsGarbage;
+    imageViews.garbageCollectOnly(&imageViewsGarbage);
+    if (!imageViewsGarbage.empty())
+    {
+        vk::SharedResourceUse imagemUse;
+        imagemUse.transfer(image.getSharedResourceUse());
+        imageViews.sendGarbageWithmUse(std::move(imagemUse), renderer, &imageViewsGarbage);
+        imageViews.updateImageViewSerial(renderer);
+    }
+
     image.releaseImage(renderer);
     image.releaseStagedUpdates(renderer);
-    imageViews.release(renderer);
+    // imageViews.release(renderer);
 }
 
 OffscreenSurfaceVk::OffscreenSurfaceVk(const egl::SurfaceState &surfaceState, RendererVk *renderer)
@@ -1493,16 +1505,40 @@ void WindowSurfaceVk::releaseSwapchainImages(ContextVk *contextVk)
 
     if (mDepthStencilImage.valid())
     {
+        ASSERT(mDepthStencilImage.getSharedResourceUse().getSerial() >=
+               mDepthStencilImage.getSharedResourceUse().getSerial());
+        std::vector<vk::GarbageObject> depthStencilImageViewsGarbage;
+        mDepthStencilImageViews.garbageCollectOnly(&depthStencilImageViewsGarbage);
+        if (!depthStencilImageViewsGarbage.empty())
+        {
+            vk::SharedResourceUse imagemUse;
+            imagemUse.transfer(mDepthStencilImage.getSharedResourceUse());
+            mDepthStencilImageViews.sendGarbageWithmUse(std::move(imagemUse), renderer,
+                                                        &depthStencilImageViewsGarbage);
+            mDepthStencilImageViews.updateImageViewSerial(renderer);
+        }
         mDepthStencilImage.releaseImageFromShareContexts(renderer, contextVk);
         mDepthStencilImage.releaseStagedUpdates(renderer);
-        mDepthStencilImageViews.release(renderer);
+        // mDepthStencilImageViews.release(renderer);
     }
 
     if (mColorImageMS.valid())
     {
+        ASSERT(mColorImageMS.getSharedResourceUse().getSerial() >=
+               mColorImageMS.getSharedResourceUse().getSerial());
+        std::vector<vk::GarbageObject> colorImageMSViewsGarbage;
+        mColorImageMSViews.garbageCollectOnly(&colorImageMSViewsGarbage);
+        if (!colorImageMSViewsGarbage.empty())
+        {
+            vk::SharedResourceUse imagemUse;
+            imagemUse.transfer(mColorImageMS.getSharedResourceUse());
+            mColorImageMSViews.sendGarbageWithmUse(std::move(imagemUse), renderer,
+                                                   &colorImageMSViewsGarbage);
+            mColorImageMSViews.updateImageViewSerial(renderer);
+        }
         mColorImageMS.releaseImageFromShareContexts(renderer, contextVk);
         mColorImageMS.releaseStagedUpdates(renderer);
-        mColorImageMSViews.release(renderer);
+        // mColorImageMSViews.release(renderer);
         contextVk->addGarbage(&mFramebufferMS);
     }
 
@@ -1510,11 +1546,23 @@ void WindowSurfaceVk::releaseSwapchainImages(ContextVk *contextVk)
 
     for (SwapchainImage &swapchainImage : mSwapchainImages)
     {
+        ASSERT(swapchainImage.image.getSharedResourceUse().getSerial() >=
+               swapchainImage.imageViews.getSharedResourceUse().getSerial());
+        std::vector<vk::GarbageObject> swapchainImageViewGarbage;
+        swapchainImage.imageViews.garbageCollectOnly(&swapchainImageViewGarbage);
+        if (!swapchainImageViewGarbage.empty())
+        {
+            vk::SharedResourceUse imagemUse;
+            imagemUse.transfer(swapchainImage.image.getSharedResourceUse());
+            swapchainImage.imageViews.sendGarbageWithmUse(std::move(imagemUse), renderer,
+                                                          &swapchainImageViewGarbage);
+            swapchainImage.imageViews.updateImageViewSerial(renderer);
+        }
         // We don't own the swapchain image handles, so we just remove our reference to it.
         swapchainImage.image.resetImageWeakReference();
         swapchainImage.image.destroy(renderer);
 
-        swapchainImage.imageViews.release(renderer);
+        // swapchainImage.imageViews.release(renderer);
         contextVk->addGarbage(&swapchainImage.framebuffer);
         if (swapchainImage.fetchFramebuffer.valid())
         {

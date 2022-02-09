@@ -1592,6 +1592,7 @@ class ImageHelper final : public Resource, public angle::Subject
     // Similar to releaseImage, but also notify all contexts in the same share group to stop
     // accessing to it.
     void releaseImageFromShareContexts(RendererVk *renderer, ContextVk *contextVk);
+    void releaseImageFromShareContexts2(RendererVk *renderer, ContextVk *contextVk);
     void releaseStagedUpdates(RendererVk *renderer);
 
     bool valid() const { return mImage.valid(); }
@@ -2035,6 +2036,9 @@ class ImageHelper final : public Resource, public angle::Subject
     bool hasStagedImageUpdatesWithMismatchedFormat(gl::LevelIndex levelStart,
                                                    gl::LevelIndex levelEnd,
                                                    angle::FormatID formatID) const;
+    void garbageCollectOnly(RendererVk *renderer, std::vector<GarbageObject> *garbage);
+    void releaseImageNoGarbageCollect();
+    void sendGarbageWithmUse(RendererVk *renderer, std::vector<GarbageObject> *garbage);
 
   private:
     enum class UpdateSource
@@ -2488,6 +2492,15 @@ class ImageViewHelper final : public Resource
         LayerMode layerMode,
         SrgbDecodeMode srgbDecodeMode,
         gl::SrgbOverride srgbOverrideMode) const;
+
+    void garbageCollectOnly(std::vector<GarbageObject> *garbage);
+
+    void releaseImageViewNoGarbageCollect(RendererVk *renderer,
+                                          std::vector<vk::GarbageObject> *garbage);
+    void updateImageViewSerial(RendererVk *renderer);
+    void sendGarbageWithmUse(vk::SharedResourceUse &&imagemUse,
+                             RendererVk *renderer,
+                             std::vector<vk::GarbageObject> *garbage);
 
   private:
     ImageView &getReadImageView()

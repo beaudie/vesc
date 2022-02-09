@@ -275,6 +275,43 @@ void RenderbufferVk::releaseImage(ContextVk *contextVk)
 {
     RendererVk *renderer = contextVk->getRenderer();
 
+    std::vector<vk::GarbageObject> garbage;
+    mImageViews.garbageCollectOnly(&garbage);
+
+    if (mImage == nullptr)
+    {
+        ASSERT(garbage.size() == 0);
+    }
+    else if (!garbage.empty())
+    {
+        ASSERT(mImage->getSharedResourceUse().getSerial() >=
+               mImageViews.getSharedResourceUse().getSerial());
+        vk::SharedResourceUse imagemUse;
+        imagemUse.transfer(mImage->getSharedResourceUse());
+        mImageViews.sendGarbageWithmUse(std::move(imagemUse), renderer, &garbage);
+        mImageViews.updateImageViewSerial(renderer);
+    }
+
+    // mImageViews.releaseImageViewNoGarbageCollect(renderer, &garbage);
+
+    garbage.clear();
+    mMultisampledImageViews.garbageCollectOnly(&garbage);
+    if (mImage == nullptr)
+    {
+        ASSERT(garbage.size() == 0);
+    }
+    else if (!garbage.empty())
+    {
+        ASSERT(mImage->getSharedResourceUse().getSerial() >=
+               mMultisampledImageViews.getSharedResourceUse().getSerial());
+        vk::SharedResourceUse imagemUse;
+        imagemUse.transfer(mImage->getSharedResourceUse());
+        mMultisampledImageViews.sendGarbageWithmUse(std::move(imagemUse), renderer, &garbage);
+        mMultisampledImageViews.updateImageViewSerial(renderer);
+    }
+
+    // mMultisampledImageViews.releaseImageViewNoGarbageCollect(renderer, &garbage);
+
     if (mImage && mOwnsImage)
     {
         mImage->releaseImageFromShareContexts(renderer, contextVk);
@@ -286,13 +323,13 @@ void RenderbufferVk::releaseImage(ContextVk *contextVk)
         mImageObserverBinding.bind(nullptr);
     }
 
-    mImageViews.release(renderer);
+    // mImageViews.release(renderer);
 
     if (mMultisampledImage.valid())
     {
         mMultisampledImage.releaseImageFromShareContexts(renderer, contextVk);
     }
-    mMultisampledImageViews.release(renderer);
+    // mMultisampledImageViews.release(renderer);
 }
 
 const gl::InternalFormat &RenderbufferVk::getImplementationSizedFormat() const

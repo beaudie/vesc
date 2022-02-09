@@ -108,7 +108,7 @@ void RenderTargetVk::onColorDraw(ContextVk *contextVk,
         mResolveImage->onWrite(mLevelIndexGL, 1, mLayerIndex, framebufferLayerCount,
                                VK_IMAGE_ASPECT_COLOR_BIT);
     }
-    retainImageViews(contextVk);
+    // retainImageViews(contextVk);
 }
 
 void RenderTargetVk::onColorResolve(ContextVk *contextVk, uint32_t framebufferLayerCount)
@@ -120,7 +120,7 @@ void RenderTargetVk::onColorResolve(ContextVk *contextVk, uint32_t framebufferLa
     contextVk->onImageRenderPassWrite(mLevelIndexGL, mLayerIndex, framebufferLayerCount,
                                       VK_IMAGE_ASPECT_COLOR_BIT, vk::ImageLayout::ColorAttachment,
                                       mImage);
-    retainImageViews(contextVk);
+    // retainImageViews(contextVk);
 }
 
 void RenderTargetVk::onDepthStencilDraw(ContextVk *contextVk, uint32_t framebufferLayerCount)
@@ -131,7 +131,7 @@ void RenderTargetVk::onDepthStencilDraw(ContextVk *contextVk, uint32_t framebuff
 
     contextVk->onDepthStencilDraw(mLevelIndexGL, mLayerIndex, framebufferLayerCount, mImage,
                                   mResolveImage);
-    retainImageViews(contextVk);
+    // retainImageViews(contextVk);
 }
 
 vk::ImageHelper &RenderTargetVk::getImageForRenderPass()
@@ -217,7 +217,7 @@ vk::ImageHelper *RenderTargetVk::getOwnerOfData() const
 angle::Result RenderTargetVk::getAndRetainCopyImageView(ContextVk *contextVk,
                                                         const vk::ImageView **imageViewOut) const
 {
-    retainImageViews(contextVk);
+    // retainImageViews(contextVk);
 
     const vk::ImageViewHelper *imageViews =
         isResolveImageOwnerOfData() ? mResolveImageViews : mImageViews;
@@ -342,14 +342,14 @@ angle::Result RenderTargetVk::flushStagedUpdates(ContextVk *contextVk,
                                                       deferredClearIndex);
 }
 
-void RenderTargetVk::retainImageViews(ContextVk *contextVk) const
-{
-    mImageViews->retain(&contextVk->getResourceUseList());
-    if (mResolveImageViews)
-    {
-        mResolveImageViews->retain(&contextVk->getResourceUseList());
-    }
-}
+// void RenderTargetVk::retainImageViews(ContextVk *contextVk) const
+//{
+//    mImageViews->retain(&contextVk->getResourceUseList());
+//    if (mResolveImageViews)
+//    {
+//        mResolveImageViews->retain(&contextVk->getResourceUseList());
+//    }
+//}
 
 bool RenderTargetVk::hasDefinedContent() const
 {
