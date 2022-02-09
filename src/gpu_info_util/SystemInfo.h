@@ -16,10 +16,10 @@
 namespace angle
 {
 
-using VendorID       = uint32_t;
-using DeviceID       = uint32_t;
-using RevisionID     = uint32_t;
-using SystemDeviceID = uint64_t;
+using VendorID    = uint32_t;
+using DeviceID    = uint32_t;
+using RevisionID  = uint32_t;
+using GpuUniqueID = uint64_t;
 
 struct VersionInfo
 {
@@ -36,10 +36,10 @@ struct GPUDeviceInfo
 
     GPUDeviceInfo(const GPUDeviceInfo &other);
 
-    VendorID vendorId             = 0;
-    DeviceID deviceId             = 0;
-    RevisionID revisionId         = 0;
-    SystemDeviceID systemDeviceId = 0;
+    VendorID vendorId       = 0;
+    DeviceID deviceId       = 0;
+    RevisionID revisionId   = 0;
+    GpuUniqueID gpuUniqueId = 0;
 
     std::string driverVendor;
     std::string driverVersion;
@@ -157,9 +157,9 @@ uint64_t GetGpuIDFromOpenGLDisplayMask(uint32_t displayMask);
 VendorID GetVendorIDFromMetalDeviceRegistryID(uint64_t registryID);
 #endif
 
-uint64_t GetSystemDeviceIdFromParts(uint32_t highPart, uint32_t lowPart);
-uint32_t GetSystemDeviceIdHighPart(uint64_t systemDeviceId);
-uint32_t GetSystemDeviceIdLowPart(uint64_t systemDeviceId);
+uint64_t GetGpuUniqueIdFromParts(uint32_t highPart, uint32_t lowPart);
+uint32_t GetGpuUniqueIdHighPart(uint64_t gpuUniqueId);
+uint32_t GetGpuUniqueIdLowPart(uint64_t gpuUniqueId);
 
 }  // namespace angle
 

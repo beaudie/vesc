@@ -127,7 +127,7 @@ void GetIORegistryDevices(std::vector<GPUDeviceInfo> *devices)
             GPUDeviceInfo info;
             // The registry ID of an IOGraphicsAccelerator2 or AGXAccelerator matches the ID used
             // for GPU selection by ANGLE_platform_angle_device_id
-            if (IORegistryEntryGetRegistryEntryID(entry, &info.systemDeviceId) != kIOReturnSuccess)
+            if (IORegistryEntryGetRegistryEntryID(entry, &info.gpuUniqueId) != kIOReturnSuccess)
             {
                 IOObjectRelease(entry);
                 continue;

@@ -5,7 +5,7 @@
 //
 // EGLDisplaySelectionTest.cpp:
 //   Checks display selection and caching with EGL extensions EGL_ANGLE_display_power_preference,
-//   EGL_ANGLE_platform_angle, and EGL_ANGLE_device_id
+//   EGL_ANGLE_platform_angle, and EGL_ANGLE_gpu_selection
 //
 
 #include <gtest/gtest.h>
@@ -527,9 +527,9 @@ class EGLDisplaySelectionTestDeviceId : public EGLDisplaySelectionTestNoFixture
         displayAttributes.push_back(EGL_DONT_CARE);
         displayAttributes.push_back(EGL_PLATFORM_ANGLE_DEVICE_TYPE_ANGLE);
         displayAttributes.push_back(deviceType);
-        displayAttributes.push_back(EGL_PLATFORM_ANGLE_DEVICE_ID_HIGH_ANGLE);
+        displayAttributes.push_back(EGL_PLATFORM_ANGLE_GPU_UNIQUE_ID_HIGH_ANGLE);
         displayAttributes.push_back(high);
-        displayAttributes.push_back(EGL_PLATFORM_ANGLE_DEVICE_ID_LOW_ANGLE);
+        displayAttributes.push_back(EGL_PLATFORM_ANGLE_GPU_UNIQUE_ID_LOW_ANGLE);
         displayAttributes.push_back(low);
         displayAttributes.push_back(EGL_NONE);
 
@@ -548,7 +548,7 @@ class EGLDisplaySelectionTestDeviceId : public EGLDisplaySelectionTestNoFixture
 
 TEST_P(EGLDisplaySelectionTestDeviceId, DeviceId)
 {
-    ANGLE_SKIP_TEST_IF(!IsEGLClientExtensionEnabled("EGL_ANGLE_platform_angle_device_id"));
+    ANGLE_SKIP_TEST_IF(!IsEGLClientExtensionEnabled("EGL_ANGLE_platform_angle_gpu_selection"));
 
     initializeWindow();
 
@@ -557,7 +557,7 @@ TEST_P(EGLDisplaySelectionTestDeviceId, DeviceId)
         // Initialize the display with device id for each GPU
         EGLDisplay display;
         EGLContext context;
-        initializeDisplayWithDeviceId(&display, mSystemInfo.gpus[i].systemDeviceId);
+        initializeDisplayWithDeviceId(&display, mSystemInfo.gpus[i].gpuUniqueId);
         initializeContextForDisplay(display, &context);
         eglMakeCurrent(display, EGL_NO_SURFACE, EGL_NO_SURFACE, context);
 

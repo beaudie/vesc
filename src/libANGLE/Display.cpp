@@ -1876,7 +1876,7 @@ static ClientExtensions GenerateClientExtensions()
 #    else
     extensions.platformANGLED3D11ON12 = IsWindows10OrGreater();
 #    endif
-    extensions.platformANGLEDeviceId = true;
+    extensions.platformANGLEGpuSelection = true;
 #endif
 
 #if defined(ANGLE_ENABLE_OPENGL)
@@ -1902,8 +1902,8 @@ static ClientExtensions GenerateClientExtensions()
 #endif
 
 #if defined(ANGLE_ENABLE_METAL)
-    extensions.platformANGLEMetal    = true;
-    extensions.platformANGLEDeviceId = true;
+    extensions.platformANGLEMetal        = true;
+    extensions.platformANGLEGpuSelection = true;
 #endif
 
 #if defined(ANGLE_USE_X11)
