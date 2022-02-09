@@ -51,6 +51,24 @@
       "parentUuid": "c54c589c_918b456c",
       "revId": "e08528c161daf2b723019bac8647e683347f19f6",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "79374f38_1c80f8ac",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1518892
+      },
+      "writtenOn": "2022-02-09T20:53:45Z",
+      "side": 1,
+      "message": "Hm, that looks like a much more involved change due to the API difference between the two options. e.g. insertion and searching differ quite a lot.\n\nOf the variables I\u0027ve changed (in this and the next patch), which containers are expected to have the most keys (i.e. where a linear search is going to be more expensive than a hashed lookup)?",
+      "parentUuid": "87749c4e_26d2665f",
+      "revId": "e08528c161daf2b723019bac8647e683347f19f6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
