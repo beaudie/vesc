@@ -4,7 +4,7 @@
 # Use of this source code is governed by a BSD-style license that can be
 # found in the LICENSE file.
 #
-# main.star: lucicfg configuration for ANGLE's standalone builers.
+# main.star: lucicfg configuration for ANGLE's standalone builders.
 
 lucicfg.config(
     fail_on_warnings = True,
@@ -15,17 +15,8 @@ lucicfg.config(
     ],
 )
 
-# Enable LUCI Realms support.
-lucicfg.enable_experiment("crbug.com/1085650")
-# Launch 0% of Swarming tasks for builds in "realms-aware mode"
-# TODO(https://crbug.com/1204972): ramp up to 100%.
-# luci.builder.defaults.experiments.set({"luci.use_realms": 0})
-
-# Enable LUCI Realms support.
-lucicfg.enable_experiment("crbug.com/1085650")
-
-# Launch all builds and tasks in Angle in realms mode.
-luci.builder.defaults.experiments.set({"luci.use_realms": 100})
+# Use LUCI Scheduler BBv2 names and add Scheduler realms configs.
+lucicfg.enable_experiment("crbug.com/1182002")
 
 luci.project(
     name = "angle",
