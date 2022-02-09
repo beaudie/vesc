@@ -445,9 +445,9 @@ void OffscreenSurfaceVk::AttachmentImage::destroy(const egl::Display *display)
     DisplayVk *displayVk = vk::GetImpl(display);
     RendererVk *renderer = displayVk->getRenderer();
     // Front end must ensure all usage has been submitted.
+    imageViews.release(renderer, image.getImageAndImageViewGarbage());
     image.releaseImage(renderer);
     image.releaseStagedUpdates(renderer);
-    imageViews.release(renderer);
 }
 
 OffscreenSurfaceVk::OffscreenSurfaceVk(const egl::SurfaceState &surfaceState, RendererVk *renderer)
@@ -1476,16 +1476,16 @@ void WindowSurfaceVk::releaseSwapchainImages(ContextVk *contextVk)
 
     if (mDepthStencilImage.valid())
     {
+        mDepthStencilImageViews.release(renderer, mDepthStencilImage.getImageAndImageViewGarbage());
         mDepthStencilImage.releaseImageFromShareContexts(renderer, contextVk);
         mDepthStencilImage.releaseStagedUpdates(renderer);
-        mDepthStencilImageViews.release(renderer);
     }
 
     if (mColorImageMS.valid())
     {
+        mColorImageMSViews.release(renderer, mColorImageMS.getImageAndImageViewGarbage());
         mColorImageMS.releaseImageFromShareContexts(renderer, contextVk);
         mColorImageMS.releaseStagedUpdates(renderer);
-        mColorImageMSViews.release(renderer);
         contextVk->addGarbage(&mFramebufferMS);
     }
 
@@ -1493,11 +1493,12 @@ void WindowSurfaceVk::releaseSwapchainImages(ContextVk *contextVk)
 
     for (SwapchainImage &swapchainImage : mSwapchainImages)
     {
+        swapchainImage.imageViews.release(renderer,
+                                          swapchainImage.image.getImageAndImageViewGarbage());
         // We don't own the swapchain image handles, so we just remove our reference to it.
         swapchainImage.image.resetImageWeakReference();
         swapchainImage.image.destroy(renderer);
 
-        swapchainImage.imageViews.release(renderer);
         contextVk->addGarbage(&swapchainImage.framebuffer);
         if (swapchainImage.fetchFramebuffer.valid())
         {
