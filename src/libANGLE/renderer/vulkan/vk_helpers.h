@@ -2489,6 +2489,15 @@ class ImageViewHelper final : public Resource
         SrgbDecodeMode srgbDecodeMode,
         gl::SrgbOverride srgbOverrideMode) const;
 
+    void garbageCollectOnly(std::vector<GarbageObject> *garbage);
+
+    void releaseImageViewNoGarbageCollect(RendererVk *renderer,
+                                          std::vector<vk::GarbageObject> *garbage);
+    void updateImageViewSerial(RendererVk *renderer);
+    void sendGarbageWithmUse(vk::SharedResourceUse &&imagemUse,
+                             RendererVk *renderer,
+                             std::vector<vk::GarbageObject> *garbage);
+
   private:
     ImageView &getReadImageView()
     {
