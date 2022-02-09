@@ -1585,6 +1585,7 @@ class ImageHelper final : public Resource, public angle::Subject
 
     // Release the underlining VkImage object for garbage collection.
     void releaseImage(RendererVk *renderer);
+    void releaseImageViews(RendererVk *renderer);
     // Similar to releaseImage, but also notify all contexts in the same share group to stop
     // accessing to it.
     void releaseImageFromShareContexts(RendererVk *renderer, ContextVk *contextVk);
@@ -2032,6 +2033,11 @@ class ImageHelper final : public Resource, public angle::Subject
                                                    gl::LevelIndex levelEnd,
                                                    angle::FormatID formatID) const;
 
+    std::vector<vk::GarbageObject> &getImageAndImageViewGarbage()
+    {
+        return mImageandimageviewGarbage;
+    }
+
   private:
     enum class UpdateSource
     {
@@ -2292,6 +2298,8 @@ class ImageHelper final : public Resource, public angle::Subject
     // above which the contents are considered unconditionally defined.
     gl::TexLevelArray<LevelContentDefinedMask> mContentDefined;
     gl::TexLevelArray<LevelContentDefinedMask> mStencilContentDefined;
+
+    std::vector<vk::GarbageObject> mImageandimageviewGarbage;
 };
 
 ANGLE_INLINE bool RenderPassCommandBufferHelper::usesImage(const ImageHelper &image) const
@@ -2335,7 +2343,7 @@ class ImageViewHelper final : public Resource
     ~ImageViewHelper() override;
 
     void init(RendererVk *renderer);
-    void release(RendererVk *renderer);
+    void release(RendererVk *renderer, std::vector<vk::GarbageObject> &garbage);
     void destroy(VkDevice device);
 
     const ImageView &getLinearReadImageView() const
@@ -2484,6 +2492,12 @@ class ImageViewHelper final : public Resource
         LayerMode layerMode,
         SrgbDecodeMode srgbDecodeMode,
         gl::SrgbOverride srgbOverrideMode) const;
+
+    void garbageCollectOnly(std::vector<GarbageObject> *garbage);
+    void sendGarbageWithmUse(vk::SharedResourceUse &&imagemUse,
+                             RendererVk *renderer,
+                             std::vector<vk::GarbageObject> *garbage);
+    void updateImageViewSerial(RendererVk *renderer);
 
   private:
     ImageView &getReadImageView()
