@@ -33,6 +33,24 @@
       "message": "There are a couple of duplicated checks that would be good to refactor a little. \n\nYou can pass in the `gl::Version` from `getRenderer()-\u003egetFunctions()-\u003eversion` and then something like:\n\n```\nstd::ostringstream result;\nresult \u003c\u003c GLString;\nif (isES)\n{\n    result \u003c\u003c ESString;\n}\nresult \u003c\u003c version.major \u003c\u003c ....\n\nif (includeFullVersion)\n{\n    (your logic to find postVersionSpace)\n    result \u003c\u003c versionString.substr(postVersionSpace);\n}\n```",
       "revId": "26fa472b352ba453935fc99e02207a74de695f5a",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "95692092_3492f7cb",
+        "filename": "src/libANGLE/renderer/gl/DisplayGL.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 56,
+      "author": {
+        "id": 1340059
+      },
+      "writtenOn": "2022-02-09T19:01:29Z",
+      "side": 1,
+      "message": "One problem with building the sanitized string from gl::Version is that some version strings have a third field (e.g. \"OpenGL ES 4.6.0 NVIDIA 419.67\"). I\u0027ve opted to continue using versionString, but minimizing the nested ifs.",
+      "parentUuid": "560c2c35_e0786f0b",
+      "revId": "26fa472b352ba453935fc99e02207a74de695f5a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
