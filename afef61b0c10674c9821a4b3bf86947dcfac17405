@@ -35,6 +35,23 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "2cd3c0e8_86fa75ca",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2022-02-09T23:46:28Z",
+      "side": 1,
+      "message": "Thanks for your reviews. Agreed on clearImpl mutating its arguments, but let\u0027s do further restructuring in a follow-on patch to keep this targeted.\n",
+      "revId": "afef61b0c10674c9821a4b3bf86947dcfac17405",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "0b21bdaf_c6c59bd6",
@@ -48,6 +65,30 @@
       "writtenOn": "2022-02-09T12:19:57Z",
       "side": 1,
       "message": "nit: ANGLE\u0027s convention is using pointer instead of reference to indicate that the parameters would be modified by a function afaik.",
+      "range": {
+        "startLine": 138,
+        "startChar": 49,
+        "endLine": 138,
+        "endChar": 50
+      },
+      "revId": "afef61b0c10674c9821a4b3bf86947dcfac17405",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "b8e9511e_b755caed",
+        "filename": "src/libANGLE/renderer/metal/FrameBufferMtl.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 138,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2022-02-09T23:46:28Z",
+      "side": 1,
+      "message": "Fair point. Google\u0027s C++ coding guide was changed recently to allow (for the first time) mutable references to be passed, but this change isn\u0027t strictly necessary so I\u0027ve undone it.",
+      "parentUuid": "0b21bdaf_c6c59bd6",
       "range": {
         "startLine": 138,
         "startChar": 49,
