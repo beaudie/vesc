@@ -16,6 +16,24 @@
       "message": "nit: Comment no longer applies",
       "revId": "9988836d5fa956db783588c5f405bd47daaf9b0c",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "4f726714_931e5b31",
+        "filename": "scripts/perf_test_runner.py",
+        "patchSetId": 1
+      },
+      "lineNbr": 23,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2022-02-09T16:07:34Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "051a7b0d_e58a2044",
+      "revId": "9988836d5fa956db783588c5f405bd47daaf9b0c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
