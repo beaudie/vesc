@@ -119,7 +119,7 @@ class RenderTargetVk final : public FramebufferAttachmentRenderTarget
                                      uint32_t deferredClearIndex,
                                      uint32_t framebufferLayerCount);
 
-    void retainImageViews(ContextVk *contextVk) const;
+    // void retainImageViews(ContextVk *contextVk) const;
 
     bool hasDefinedContent() const;
     bool hasDefinedStencilContent() const;
