@@ -16,6 +16,23 @@
       "message": "ran into something similar with async command processor code path. Was already on my plate to make this change but thanks for taking care of it",
       "revId": "e08528c161daf2b723019bac8647e683347f19f6",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "c54c589c_918b456c",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2022-02-09T20:31:48Z",
+      "side": 1,
+      "message": "Steven: what about just using angle::HashMap?",
+      "revId": "e08528c161daf2b723019bac8647e683347f19f6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
