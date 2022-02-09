@@ -33,6 +33,41 @@
       "message": "Perhaps we can consider a CPU implementation of the APIs a \"virtual GPU\".\n\nI don\u0027t have a strong feeling about this but lgtm if Microsoft does.\n",
       "revId": "df9dbe6a50de5705b6e09445936384288b0a95f9",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "cbc03150_596c6a0a",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2022-02-09T20:42:42Z",
+      "side": 1,
+      "message": "Adding Rafael here too for opinions",
+      "revId": "df9dbe6a50de5705b6e09445936384288b0a95f9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "6f4a8695_6bc53dce",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2022-02-09T20:42:42Z",
+      "side": 1,
+      "message": "I\u0027m in the same boat, device is a very generic term and doesn\u0027t imply PCI device IMO. EGL also has a concept of \"devices\".",
+      "parentUuid": "adb341dc_e0aef8dc",
+      "revId": "df9dbe6a50de5705b6e09445936384288b0a95f9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
