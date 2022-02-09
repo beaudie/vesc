@@ -68,6 +68,24 @@
       "parentUuid": "517c67ab_9b64be1f",
       "revId": "ec557b02ba03325a8cee301ed5ec922b8677056c",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "b56dae99_7e39f9a1",
+        "filename": "src/libANGLE/Context.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 1219,
+      "author": {
+        "id": 1340649
+      },
+      "writtenOn": "2022-02-09T18:08:35Z",
+      "side": 1,
+      "message": "\u003e Please don\u0027t hate me 😄\n\nlol, i want my 30 mins back 😊\n\n\u003e we could consider just disabling no error everywhere\n\nunfortunately for perf reasons we need it enabled and end up having to workaround bad app behavior",
+      "parentUuid": "cd522ed2_5d0b6f4d",
+      "revId": "ec557b02ba03325a8cee301ed5ec922b8677056c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
