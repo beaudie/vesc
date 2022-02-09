@@ -67,6 +67,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "785dda9c_238596ef",
+        "filename": "src/libANGLE/Context.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 1218,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2022-02-09T21:11:30Z",
+      "side": 1,
+      "message": "I don\u0027t see how any possible test that disables validation could expect an error. And if validation is enabled, you won\u0027t reach this line. More details are needed here.",
+      "parentUuid": "070b0afe_8ca9fd09",
+      "range": {
+        "startLine": 1218,
+        "startChar": 8,
+        "endLine": 1218,
+        "endChar": 24
+      },
+      "revId": "95880ffd420baaf1f9175d1b940abcc864d8486a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "0bc92d25_e0a01841",
         "filename": "src/libANGLE/Context.cpp",
         "patchSetId": 2
