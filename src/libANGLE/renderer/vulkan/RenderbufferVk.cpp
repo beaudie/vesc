@@ -274,6 +274,22 @@ void RenderbufferVk::releaseAndDeleteImage(ContextVk *contextVk)
 void RenderbufferVk::releaseImage(ContextVk *contextVk)
 {
     RendererVk *renderer = contextVk->getRenderer();
+    std::vector<vk::GarbageObject> imageViewsGarbageObjects;
+    mImageViews.release(renderer, imageViewsGarbageObjects);
+    mMultisampledImageViews.release(renderer, imageViewsGarbageObjects);
+
+    if (mImage != nullptr)
+    {
+        std::vector<vk::GarbageObject> &garbageInImage = mImage->getImageAndImageViewGarbage();
+        for (vk::GarbageObject &garbage : imageViewsGarbageObjects)
+        {
+            garbageInImage.emplace_back(std::move(garbage));
+        }
+    }
+    else
+    {
+        ASSERT(imageViewsGarbageObjects.empty());
+    }
 
     if (mImage && mOwnsImage)
     {
@@ -286,13 +302,10 @@ void RenderbufferVk::releaseImage(ContextVk *contextVk)
         mImageObserverBinding.bind(nullptr);
     }
 
-    mImageViews.release(renderer);
-
     if (mMultisampledImage.valid())
     {
         mMultisampledImage.releaseImageFromShareContexts(renderer, contextVk);
     }
-    mMultisampledImageViews.release(renderer);
 }
 
 const gl::InternalFormat &RenderbufferVk::getImplementationSizedFormat() const
