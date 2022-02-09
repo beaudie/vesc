@@ -108,6 +108,30 @@
       },
       "revId": "95880ffd420baaf1f9175d1b940abcc864d8486a",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "c0324f57_7e42f5d9",
+        "filename": "src/tests/gl_tests/ContextNoErrorTest.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 189,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-02-09T20:19:25Z",
+      "side": 1,
+      "message": "This is similar to other tests in this file that do the same. The goal is not so much testing the undefined behavior as it\u0027s testing \"XDoesNotCrash\".",
+      "parentUuid": "94c58434_8c92cf42",
+      "range": {
+        "startLine": 175,
+        "startChar": 0,
+        "endLine": 189,
+        "endChar": 1
+      },
+      "revId": "95880ffd420baaf1f9175d1b940abcc864d8486a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
