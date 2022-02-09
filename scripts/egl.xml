@@ -2151,6 +2151,7 @@
             <enum name="EGL_OPENGL_BIT"/>
             <enum name="EGL_SWAP_BEHAVIOR_PRESERVED_BIT"/>
             <command name="eglGetCurrentContext"/>
+            <require comment="EGL_KHR_partial_update"/>
         </require>
     </feature>
     <feature api="egl" name="EGL_VERSION_1_5" number="1.5">
