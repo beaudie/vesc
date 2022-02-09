@@ -9,6 +9,38 @@
 namespace rx
 {
 
+// Returns an aligned buffer to read the input from
+template <typename T, size_t inputComponentCount>
+inline const T *GetAlignedOffsetInput(const T *offsetInput, T *alignedElement)
+{
+    if (reinterpret_cast<uintptr_t>(offsetInput) % sizeof(T) != 0)
+    {
+        // On certain architectures, unaligned reads can produce a SIGBUS error, but the
+        // application may pass us arbitrary unaligned data to be read here.
+        //
+        // If the application provides us unaligned data in this manner, we crash on armeabi-v7a
+        // devices. Arm64 devices and x86-64 devices do not appear to have any problem with
+        // these unaligned reads.
+        //
+        // This workaround detects if our input data is unaligned, and if so, copies the
+        // unaligned data byte-by-byte into an aligned buffer which we can read from without
+        // issues on platforms with restrictive alignment requirements.
+        //
+        // Using memcpy on those platforms still results in a SIGBUS error, which is why we copy
+        // byte-by-byte manually
+        uint8_t *alignedBytes = reinterpret_cast<uint8_t *>(&alignedElement[0]);
+        for (size_t b = 0; b < sizeof(T) * inputComponentCount; b++)
+        {
+            alignedBytes[b] = reinterpret_cast<const uint8_t *>(&offsetInput[0])[b];
+        }
+        return alignedElement;
+    }
+    else
+    {
+        return offsetInput;
+    }
+}
+
 template <typename T,
           size_t inputComponentCount,
           size_t outputComponentCount,
@@ -28,7 +60,11 @@ inline void CopyNativeVertexData(const uint8_t *input, size_t stride, size_t cou
         for (size_t i = 0; i < count; i++)
         {
             const T *offsetInput = reinterpret_cast<const T *>(input + (i * stride));
-            T *offsetOutput      = reinterpret_cast<T *>(output) + i * outputComponentCount;
+            T offsetInputAligned[inputComponentCount];
+            offsetInput =
+                GetAlignedOffsetInput<T, inputComponentCount>(offsetInput, &offsetInputAligned[0]);
+
+            T *offsetOutput = reinterpret_cast<T *>(output) + i * outputComponentCount;
 
             memcpy(offsetOutput, offsetInput, attribSize);
         }
@@ -41,7 +77,12 @@ inline void CopyNativeVertexData(const uint8_t *input, size_t stride, size_t cou
     for (size_t i = 0; i < count; i++)
     {
         const T *offsetInput = reinterpret_cast<const T *>(input + (i * stride));
-        T *offsetOutput      = reinterpret_cast<T *>(output) + i * outputComponentCount;
+        T offsetInputAligned[inputComponentCount];
+        ASSERT(sizeof(offsetInputAligned) == attribSize);
+        offsetInput =
+            GetAlignedOffsetInput<T, inputComponentCount>(offsetInput, &offsetInputAligned[0]);
+
+        T *offsetOutput = reinterpret_cast<T *>(output) + i * outputComponentCount;
 
         memcpy(offsetOutput, offsetInput, attribSize);
 
@@ -195,6 +236,10 @@ inline void CopyToFloatVertexData(const uint8_t *input,
         const T *offsetInput = reinterpret_cast<const T *>(input + (stride * i));
         outputType *offsetOutput =
             reinterpret_cast<outputType *>(output) + i * outputComponentCount;
+
+        T offsetInputAligned[inputComponentCount];
+        offsetInput =
+            GetAlignedOffsetInput<T, inputComponentCount>(offsetInput, &offsetInputAligned[0]);
 
         for (size_t j = 0; j < inputComponentCount; j++)
         {
