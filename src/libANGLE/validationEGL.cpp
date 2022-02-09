@@ -564,7 +564,7 @@ bool ValidateGetPlatformDisplayCommon(const ValidationContext *val,
         bool enableD3D11on12         = false;
         bool presentPathSpecified    = false;
         bool luidSpecified           = false;
-        bool deviceIdSpecified       = false;
+        bool gpuUniqueIdSpecified    = false;
 
         Optional<EGLAttrib> majorVersion;
         Optional<EGLAttrib> minorVersion;
@@ -760,15 +760,15 @@ bool ValidateGetPlatformDisplayCommon(const ValidationContext *val,
                             return false;
                     }
                     break;
-                case EGL_PLATFORM_ANGLE_DEVICE_ID_HIGH_ANGLE:
-                case EGL_PLATFORM_ANGLE_DEVICE_ID_LOW_ANGLE:
-                    if (!clientExtensions.platformANGLEDeviceId)
+                case EGL_PLATFORM_ANGLE_GPU_UNIQUE_ID_HIGH_ANGLE:
+                case EGL_PLATFORM_ANGLE_GPU_UNIQUE_ID_LOW_ANGLE:
+                    if (!clientExtensions.platformANGLEGpuSelection)
                     {
                         val->setError(EGL_BAD_ATTRIBUTE,
-                                      "EGL_ANGLE_platform_angle_device_id is not supported");
+                                      "EGL_ANGLE_platform_gpu_selection is not supported");
                         return false;
                     }
-                    deviceIdSpecified = true;
+                    gpuUniqueIdSpecified = true;
                     break;
                 default:
                     break;
@@ -853,14 +853,14 @@ bool ValidateGetPlatformDisplayCommon(const ValidationContext *val,
             }
         }
 
-        if (deviceIdSpecified)
+        if (gpuUniqueIdSpecified)
         {
-            if (attribMap.get(EGL_PLATFORM_ANGLE_DEVICE_ID_HIGH_ANGLE, 0) == 0 &&
-                attribMap.get(EGL_PLATFORM_ANGLE_DEVICE_ID_LOW_ANGLE, 0) == 0)
+            if (attribMap.get(EGL_PLATFORM_ANGLE_GPU_UNIQUE_ID_HIGH_ANGLE, 0) == 0 &&
+                attribMap.get(EGL_PLATFORM_ANGLE_GPU_UNIQUE_ID_LOW_ANGLE, 0) == 0)
             {
                 val->setError(EGL_BAD_ATTRIBUTE,
-                              "If either EGL_PLATFORM_ANGLE_DEVICE_ID_HIGH_ANGLE "
-                              "and/or EGL_PLATFORM_ANGLE_DEVICE_ID_LOW_ANGLE are "
+                              "If either EGL_PLATFORM_ANGLE_GPU_UNIQUE_ID_HIGH_ANGLE "
+                              "and/or EGL_PLATFORM_ANGLE_GPU_UNIQUE_ID_LOW_ANGLE are "
                               "specified, at least one must non-zero.");
                 return false;
             }

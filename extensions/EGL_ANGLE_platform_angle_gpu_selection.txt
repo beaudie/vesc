@@ -1,10 +1,9 @@
 Name
 
-    ANGLE_platform_angle_device_id
-
+    ANGLE_platform_angle_gpu_selection
 Name Strings
 
-    EGL_ANGLE_platform_angle_device_id
+    ANGLE_platform_angle_gpu_selection
 
 Contributors
 
@@ -36,8 +35,7 @@ Dependencies
 
 Overview
 
-    This extension enables the selection of a graphics device to back
-    an ANGLE EGLDisplay.
+    This extension enables the selection of a GPU to back an ANGLE EGLDisplay.
 
 New Types
 
@@ -52,8 +50,8 @@ New Tokens
     Accepted as an attribute name in the <attrib_list> argument of
     eglGetPlatformDisplayEXT:
 
-        EGL_PLATFORM_ANGLE_DEVICE_ID_HIGH_ANGLE          0x34D6
-        EGL_PLATFORM_ANGLE_DEVICE_ID_LOW_ANGLE           0x34D7
+        EGL_PLATFORM_ANGLE_GPU_UNIQUE_ID_HIGH_ANGLE          0x34D6
+        EGL_PLATFORM_ANGLE_GPU_UNIQUE_ID_LOW_ANGLE           0x34D7
 
 Additions to the EGL Specification
 
@@ -61,18 +59,18 @@ Additions to the EGL Specification
 
 New Behavior
 
-    To request a display that is backed by a specific graphics device,
-    EGL_PLATFORM_ANGLE_DEVICE_ID_HIGH_ANGLE and/or
-    EGL_PLATFORM_ANGLE_DEVICE_ID_LOW_ANGLE should be set to the high part and
-    low part of the device's ID. If only one attribute is specified, the other
-    is assumed to be zero. The device's ID is specific to the platform that
+    To request a display that is backed by a specific GPU,
+    EGL_PLATFORM_ANGLE_GPU_UNIQUE_ID_HIGH_ANGLE and/or
+    EGL_PLATFORM_ANGLE_GPU_UNIQUE_ID_LOW_ANGLE should be set to the high part
+    and low part of the GPU's ID. If only one attribute is specified, the
+    other is assumed to be zero. The GPU's ID is specific to the platform that
     ANGLE is running on, but should fit into one 64-bit value.
 
     If the high part and low part combined is zero, an EGL_BAD_ATTRIBUTE error
     is generated and EGL_NO_DISPLAY is returned.
 
-    If the ID specified doesn't match any devices on the system, the default
-    device is used.
+    If the ID specified doesn't match any GPUs on the system, the default
+    GPU is used.
 
 Issues
 

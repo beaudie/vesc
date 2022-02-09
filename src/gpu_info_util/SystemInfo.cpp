@@ -306,8 +306,8 @@ void PrintSystemInfo(const SystemInfo &info)
 
         std::cout << "  " << i << " - " << VendorName(gpu.vendorId) << " device id: 0x" << std::hex
                   << std::uppercase << gpu.deviceId << std::dec << ", revision id: 0x" << std::hex
-                  << std::uppercase << gpu.revisionId << std::dec << ", system device id: 0x"
-                  << std::hex << std::uppercase << gpu.systemDeviceId << std::dec << "\n";
+                  << std::uppercase << gpu.revisionId << std::dec << ", gpu unique id: 0x"
+                  << std::hex << std::uppercase << gpu.gpuUniqueId << std::dec << "\n";
         if (!gpu.driverVendor.empty())
         {
             std::cout << "       Driver Vendor: " << gpu.driverVendor << "\n";
@@ -325,7 +325,7 @@ void PrintSystemInfo(const SystemInfo &info)
         {
             std::cout << "       Detailed Driver Version:\n"
                       << "           major: " << gpu.detailedDriverVersion.major
-                      << "           minor: " << gpu.detailedDriverVersion.minor
+                      << "           mifsnor: " << gpu.detailedDriverVersion.minor
                       << "           subMinor: " << gpu.detailedDriverVersion.subMinor
                       << "           patch: " << gpu.detailedDriverVersion.patch << "\n";
         }
@@ -370,19 +370,19 @@ VersionInfo ParseNvidiaDriverVersion(uint32_t version)
     };
 }
 
-uint64_t GetSystemDeviceIdFromParts(uint32_t highPart, uint32_t lowPart)
+uint64_t GetGpuUniqueIdFromParts(uint32_t highPart, uint32_t lowPart)
 {
     return (static_cast<uint64_t>(highPart) << 32) | lowPart;
 }
 
-uint32_t GetSystemDeviceIdHighPart(uint64_t systemDeviceId)
+uint32_t GetGpuUniqueIdHighPart(uint64_t gpuUniqueId)
 {
-    return (systemDeviceId >> 32) & 0xffffffff;
+    return (gpuUniqueId >> 32) & 0xffffffff;
 }
 
-uint32_t GetSystemDeviceIdLowPart(uint64_t systemDeviceId)
+uint32_t GetGpuUniqueIdLowPart(uint64_t gpuUniqueId)
 {
-    return systemDeviceId & 0xffffffff;
+    return gpuUniqueId & 0xffffffff;
 }
 
 }  // namespace angle
