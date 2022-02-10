@@ -350,6 +350,8 @@ class ContextVk : public ContextImpl, public vk::Context, public MultisampleText
                                   const gl::TextureBarrierVector &textureBarriers) override;
     angle::Result releaseTextures(const gl::Context *context,
                                   gl::TextureBarrierVector *textureBarriers) override;
+    // KHR_blend_equation_advanced
+    void blendBarrier() override;
 
     VkDevice getDevice() const;
     egl::ContextPriority getPriority() const { return mContextPriority; }
@@ -1193,9 +1195,6 @@ class ContextVk : public ContextImpl, public vk::Context, public MultisampleText
     gl::DrawBufferMask mCachedDrawFramebufferColorAttachmentMask;
 
     bool mHasDeferredFlush;
-
-    // GL_EXT_shader_framebuffer_fetch_non_coherent
-    bool mLastProgramUsesFramebufferFetch;
 
     // Semaphores that must be waited on in the next submission.
     std::vector<VkSemaphore> mWaitSemaphores;

@@ -169,6 +169,9 @@
 // Framebuffer fetch implementation bug
 6909 VULKAN : dEQP-GLES31.functional.shaders.framebuffer_fetch.basic.framebuffer_texture_layer = SKIP
 
+// Blend equations:
+3586 VULKAN : dEQP-GLES31.functional.blend_equation_advanced.msaa.* = SKIP
+
 ////
 //// AMD Vulkan expectations
 ////

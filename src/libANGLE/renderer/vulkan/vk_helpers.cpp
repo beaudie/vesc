@@ -9253,6 +9253,9 @@ void ShaderProgramHelper::setSpecializationConstant(sh::vk::SpecializationConsta
         case sh::vk::SpecializationConstantId::Dither:
             mSpecializationConstants.dither = value;
             break;
+        case sh::vk::SpecializationConstantId::BlendEquation:
+            mSpecializationConstants.blendEquation = value;
+            break;
         default:
             UNREACHABLE();
             break;

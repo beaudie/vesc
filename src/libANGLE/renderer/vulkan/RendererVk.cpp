@@ -3189,6 +3189,11 @@ void RendererVk::initFeatures(DisplayVk *displayVk,
     // states they should have a top-left origin.
     ANGLE_FEATURE_CONDITION(&mFeatures, bottomLeftOriginPresentRegionRectangles, IsAndroid());
 
+    // If the backend driver doesn't support an input attachment usage for the surface, advanced
+    // blend is disabled.
+    ANGLE_FEATURE_CONDITION(&mFeatures, ignoreInputAttachmentUsageForSurface,
+                            isSwiftShader || isIntel);
+
     angle::PlatformMethods *platform = ANGLEPlatformCurrent();
     platform->overrideFeaturesVk(platform, &mFeatures);
 

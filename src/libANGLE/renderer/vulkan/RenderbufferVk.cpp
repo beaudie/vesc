@@ -92,7 +92,9 @@ angle::Result RenderbufferVk::setStorageImpl(const gl::Context *context,
         VK_IMAGE_USAGE_SAMPLED_BIT |
         (isDepthStencilFormat ? VK_IMAGE_USAGE_DEPTH_STENCIL_ATTACHMENT_BIT
                               : VK_IMAGE_USAGE_COLOR_ATTACHMENT_BIT) |
-        (isRenderToTexture && !hasRenderToTextureEXT ? VK_IMAGE_USAGE_INPUT_ATTACHMENT_BIT : 0);
+        ((isRenderToTexture && !hasRenderToTextureEXT) || !isDepthStencilFormat
+             ? VK_IMAGE_USAGE_INPUT_ATTACHMENT_BIT
+             : 0);
 
     const uint32_t imageSamples = isRenderToTexture ? 1 : samples;
 

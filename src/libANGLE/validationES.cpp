@@ -616,6 +616,63 @@ ANGLE_INLINE const char *ValidateProgramDrawStates(const Context *context,
         }
     }
 
+    // Enabled blend equation validation
+    if (extensions.blendEquationAdvancedKHR)
+    {
+        const sh::AdvancedBlendEquation &supportedBlendEquation =
+            program->getState().getBlendEquation();
+        const DrawBufferMask &enabledDrawBufferMask = state.getBlendStateExt().mEnabledMask;
+        for (auto blendEnabledBufferIndex = enabledDrawBufferMask.begin();
+             blendEnabledBufferIndex != enabledDrawBufferMask.end();
+             blendEnabledBufferIndex.operator++())
+        {
+            const gl::BlendEquationType &enabledBlendEquation =
+                gl::FromGLenum<gl::BlendEquationType>(
+                    state.getBlendStateExt().getEquationColorIndexed(*blendEnabledBufferIndex));
+
+            if (enabledBlendEquation >= gl::BlendEquationType::Multiply &&
+                enabledBlendEquation <= gl::BlendEquationType::HslLuminosity)
+            {
+                if (!supportedBlendEquation.isAnyBlendEquation())
+                {
+                    return gl::err::kAnyBlendEquationNotSupported;
+                }
+
+                sh::TLayoutBlendEquation blendEquationPos = sh::TLayoutBlendEquation::InvalidEnum;
+                if (enabledBlendEquation >= gl::BlendEquationType::Multiply &&
+                    enabledBlendEquation <= gl::BlendEquationType::Softlight)
+                {
+                    blendEquationPos = static_cast<sh::TLayoutBlendEquation>(
+                        static_cast<uint32_t>(enabledBlendEquation) -
+                        static_cast<uint32_t>(gl::BlendEquationType::Multiply));
+                }
+                else if (enabledBlendEquation == gl::BlendEquationType::Difference)
+                {
+                    blendEquationPos = static_cast<sh::TLayoutBlendEquation>(
+                        static_cast<uint32_t>(enabledBlendEquation) -
+                        static_cast<uint32_t>(gl::BlendEquationType::Multiply) - 1);
+                }
+                else if (enabledBlendEquation == gl::BlendEquationType::Exclusion)
+                {
+                    blendEquationPos = static_cast<sh::TLayoutBlendEquation>(
+                        static_cast<uint32_t>(enabledBlendEquation) -
+                        static_cast<uint32_t>(gl::BlendEquationType::Multiply) - 2);
+                }
+                else if (enabledBlendEquation >= gl::BlendEquationType::HslHue &&
+                         enabledBlendEquation <= gl::BlendEquationType::HslLuminosity)
+                {
+                    blendEquationPos = static_cast<sh::TLayoutBlendEquation>(
+                        static_cast<uint32_t>(enabledBlendEquation) - 8);
+                }
+
+                if (!supportedBlendEquation.isEnabled(blendEquationPos))
+                {
+                    return gl::err::kBlendEquationNotEnabled;
+                }
+            }
+        }
+    }
+
     return nullptr;
 }
 }  // anonymous namespace
@@ -4102,6 +4159,29 @@ const char *ValidateDrawStates(const Context *context)
         {
             // It is an error to render into an external texture that is not YUV.
             return kExternalTextureAttachmentNotYUV;
+        }
+    }
+
+    // Advanced blend equation only can be enabled if the number of the draw buffers is zero.
+    const size_t drawBufferCounts = framebuffer->getDrawbufferStateCount();
+    if (extensions.blendEquationAdvancedKHR && drawBufferCounts > 1)
+    {
+        const BlendStateExt &blendState      = state.getBlendStateExt();
+        bool onlyOneAdvancedBlendUsedWithMRT = false;
+
+        for (size_t drawBufferIndex = 0; drawBufferIndex < drawBufferCounts; drawBufferIndex++)
+        {
+            if (framebuffer->getDrawBufferState(drawBufferIndex) != GL_NONE &&
+                blendState.mEnabledMask.test(drawBufferIndex) &&
+                blendState.isAdvancedBlendEquationUsed(drawBufferIndex))
+            {
+                if (onlyOneAdvancedBlendUsedWithMRT)
+                {
+                    return kBlendEquationWithMRT;
+                }
+
+                onlyOneAdvancedBlendUsedWithMRT = true;
+            }
         }
     }
 

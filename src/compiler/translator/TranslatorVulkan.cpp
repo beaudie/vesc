@@ -1412,6 +1412,8 @@ bool TranslatorVulkan::translate(TIntermBlock *root,
         }
     }
 
+    compileOptions |= SH_GENERATE_SPIRV_THROUGH_GLSLANG;
+
 #if defined(ANGLE_ENABLE_SPIRV_GENERATION_THROUGH_GLSLANG)
     if ((compileOptions & SH_GENERATE_SPIRV_THROUGH_GLSLANG) != 0)
     {

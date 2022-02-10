@@ -99,6 +99,8 @@ constexpr VkImageUsageFlags kSurfaceVkImageUsageFlags =
     VK_IMAGE_USAGE_TRANSFER_DST_BIT | VK_IMAGE_USAGE_TRANSFER_SRC_BIT | VK_IMAGE_USAGE_SAMPLED_BIT;
 constexpr VkImageUsageFlags kSurfaceVkColorImageUsageFlags =
     kSurfaceVkImageUsageFlags | VK_IMAGE_USAGE_COLOR_ATTACHMENT_BIT;
+constexpr VkImageUsageFlags kSurfaceVkInputAttachmentImageUsageFlags =
+    kSurfaceVkColorImageUsageFlags | VK_IMAGE_USAGE_INPUT_ATTACHMENT_BIT;
 constexpr VkImageUsageFlags kSurfaceVkDepthStencilImageUsageFlags =
     kSurfaceVkImageUsageFlags | VK_IMAGE_USAGE_DEPTH_STENCIL_ATTACHMENT_BIT;
 
@@ -127,7 +129,7 @@ angle::Result InitImageHelper(DisplayVk *displayVk,
     const angle::Format &textureFormat = vkFormat.getActualRenderableImageFormat();
     bool isDepthOrStencilFormat = textureFormat.depthBits > 0 || textureFormat.stencilBits > 0;
     VkImageUsageFlags usage     = isDepthOrStencilFormat ? kSurfaceVkDepthStencilImageUsageFlags
-                                                     : kSurfaceVkColorImageUsageFlags;
+                                                     : kSurfaceVkInputAttachmentImageUsageFlags;
 
     RendererVk *rendererVk = displayVk->getRenderer();
     // If shaders may be fetching from this, we need this image to be an input
@@ -731,7 +733,9 @@ WindowSurfaceVk::WindowSurfaceVk(const egl::SurfaceState &surfaceState, EGLNativ
       mDepthStencilImageBinding(this, kAnySurfaceImageSubjectIndex),
       mColorImageMSBinding(this, kAnySurfaceImageSubjectIndex),
       mNeedToAcquireNextSwapchainImage(false),
-      mFrameCount(1)
+      mFrameCount(1),
+      mCurrentRenderPassHandle(VK_NULL_HANDLE),
+      mImageUsageFlagsForSurface(0)
 {
     // Initialize the color render target with the multisampled targets.  If not multisampled, the
     // render target will be updated to refer to a swapchain image on every acquire.
@@ -875,10 +879,19 @@ angle::Result WindowSurfaceVk::initializeImpl(DisplayVk *displayVk)
     uint32_t width  = mSurfaceCaps.currentExtent.width;
     uint32_t height = mSurfaceCaps.currentExtent.height;
 
+    mImageUsageFlagsForSurface = kSurfaceVkInputAttachmentImageUsageFlags;
+    if (renderer->getFeatures().ignoreInputAttachmentUsageForSurface.enabled)
+    {
+        // For advanced blending, an input attachment usage is needed for a surface. So, if the
+        // input attachment usage is not supported, the surface is created without the input
+        // attachment usage and advanced blending extension is disabled.
+        mImageUsageFlagsForSurface = kSurfaceVkColorImageUsageFlags;
+    }
+
     // TODO(jmadill): Support devices which don't support copy. We use this for ReadPixels.
     ANGLE_VK_CHECK(displayVk,
-                   (mSurfaceCaps.supportedUsageFlags & kSurfaceVkColorImageUsageFlags) ==
-                       kSurfaceVkColorImageUsageFlags,
+                   (mSurfaceCaps.supportedUsageFlags & mImageUsageFlagsForSurface) ==
+                       mImageUsageFlagsForSurface,
                    VK_ERROR_INITIALIZATION_FAILED);
 
     EGLAttrib attribWidth  = mState.attributes.get(EGL_WIDTH, 0);
@@ -1269,7 +1282,7 @@ angle::Result WindowSurfaceVk::createSwapChain(vk::Context *context,
     }
 
     // We need transfer src for reading back from the backbuffer.
-    VkImageUsageFlags imageUsageFlags = kSurfaceVkColorImageUsageFlags;
+    VkImageUsageFlags imageUsageFlags = mImageUsageFlagsForSurface;
 
     // If shaders may be fetching from this, we need this image to be an input
     if (renderer->getFeatures().supportsShaderFramebufferFetch.enabled ||
@@ -1339,7 +1352,7 @@ angle::Result WindowSurfaceVk::createSwapChain(vk::Context *context,
 
     if (samples > 1)
     {
-        const VkImageUsageFlags usage = kSurfaceVkColorImageUsageFlags;
+        const VkImageUsageFlags usage = mImageUsageFlagsForSurface;
 
         // Create a multisampled image that will be rendered to, and then resolved to a swapchain
         // image.  The actual VkImage is created with rotated coordinates to make it easier to do
@@ -2163,7 +2176,7 @@ angle::Result WindowSurfaceVk::getCurrentFramebuffer(ContextVk *contextVk,
 
     vk::Framebuffer &currentFramebuffer = chooseFramebuffer();
 
-    if (currentFramebuffer.valid())
+    if (currentFramebuffer.valid() && mCurrentRenderPassHandle == compatibleRenderPass.getHandle())
     {
         // Validation layers should detect if the render pass is really compatible.
         *framebufferOut = &currentFramebuffer;
@@ -2197,6 +2210,11 @@ angle::Result WindowSurfaceVk::getCurrentFramebuffer(ContextVk *contextVk,
         const vk::ImageView *imageView = nullptr;
         ANGLE_TRY(mColorRenderTarget.getImageView(contextVk, &imageView));
         imageViews[0] = imageView->getHandle();
+
+        if (mFramebufferMS.valid())
+        {
+            contextVk->addGarbage(&mFramebufferMS);
+        }
         ANGLE_VK_TRY(contextVk, mFramebufferMS.init(contextVk->getDevice(), framebufferInfo));
     }
     else
@@ -2210,8 +2228,17 @@ angle::Result WindowSurfaceVk::getCurrentFramebuffer(ContextVk *contextVk,
 
             imageViews[0] = imageView->getHandle();
 
+            if (swapchainImage.framebuffer.valid())
+            {
+                contextVk->addGarbage(&swapchainImage.framebuffer);
+            }
+
             if (fetchMode == FramebufferFetchMode::Enabled)
             {
+                if (swapchainImage.fetchFramebuffer.valid())
+                {
+                    contextVk->addGarbage(&swapchainImage.fetchFramebuffer);
+                }
                 ANGLE_VK_TRY(contextVk, swapchainImage.fetchFramebuffer.init(contextVk->getDevice(),
                                                                              framebufferInfo));
             }
@@ -2225,6 +2252,8 @@ angle::Result WindowSurfaceVk::getCurrentFramebuffer(ContextVk *contextVk,
 
     ASSERT(currentFramebuffer.valid());
     *framebufferOut = &currentFramebuffer;
+
+    mCurrentRenderPassHandle = compatibleRenderPass.getHandle();
     return angle::Result::Continue;
 }
 
