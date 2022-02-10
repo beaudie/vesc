@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "29638222_f34c1bfa",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 7
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2022-02-10T17:02:17Z",
+      "side": 1,
+      "message": "Hey Mohan, what\u0027s the status of this CL?",
+      "revId": "ea7adbe3fc64038eef61842ea1453ec0c7d1048c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
