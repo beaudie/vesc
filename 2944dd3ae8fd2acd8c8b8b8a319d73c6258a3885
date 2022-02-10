@@ -74,6 +74,30 @@
       },
       "revId": "2944dd3ae8fd2acd8c8b8b8a319d73c6258a3885",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "af861323_c5f1047a",
+        "filename": "src/libANGLE/renderer/vulkan/vk_cache_utils.h",
+        "patchSetId": 4
+      },
+      "lineNbr": 435,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-02-10T19:28:45Z",
+      "side": 1,
+      "message": "It\u0027s the depth-in-viewport thing.\n\nCleaned it up nevertheless, it\u0027s just a `sed`.",
+      "parentUuid": "2f1fe947_1d6a6ce1",
+      "range": {
+        "startLine": 435,
+        "startChar": 7,
+        "endLine": 435,
+        "endChar": 42
+      },
+      "revId": "2944dd3ae8fd2acd8c8b8b8a319d73c6258a3885",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
