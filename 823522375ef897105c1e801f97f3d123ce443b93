@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "86c62d70_181a2c7a",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 6
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1001921
+      },
+      "writtenOn": "2022-02-10T01:25:04Z",
+      "side": 1,
+      "message": "Not 100% sure, but maybe this broke Pixel 6.\nhttps://ci.chromium.org/ui/p/angle/builders/ci/android-arm64-exp-test/122/overview\nError is weird\nI 2060.076s run_tests_on_device(17261FDF6000T3)  [ RUN      ] EGLPreRotationInterpolateAtOffsetTest.InterpolateAtOffsetWithDefaultFBO/ES3_1_Vulkan_NoFixture__PreRotationEnabled\nI 2060.076s run_tests_on_device(17261FDF6000T3)  ../../src/tests/egl_tests/EGLPreRotationTest.cpp:181: Failure\nI 2060.076s run_tests_on_device(17261FDF6000T3)  Expected equality of these values:\nI 2060.076s run_tests_on_device(17261FDF6000T3)    (0x3000)\nI 2060.076s run_tests_on_device(17261FDF6000T3)      Which is: 12288\nI 2060.076s run_tests_on_device(17261FDF6000T3)    l_eglGetError()\nI 2060.076s run_tests_on_device(17261FDF6000T3)      Which is: 12301\nI 2060.076s run_tests_on_device(17261FDF6000T3)  ../../buildtools/third_party/libc++/trunk/include/string:2729: _LIBCPP_ASSERT \u0027__s !\u003d nullptr\u0027 failed. string::append received nullptr\nI 2060.076s run_tests_on_device(17261FDF6000T3)  [ CRASHED      ]\n\nSince this fails in libc++, maybe this is some kind of buffer overflow, which could be related to offsets changing in this CL?",
+      "revId": "823522375ef897105c1e801f97f3d123ce443b93",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
