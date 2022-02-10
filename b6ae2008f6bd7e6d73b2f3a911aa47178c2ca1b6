@@ -16,6 +16,57 @@
       "message": "There we go. I tried it on swiftshader too, as well as emulated pre-rotation. I\u0027ll give it a try on Android tomorrow to be sure, but should be fine.",
       "revId": "b6ae2008f6bd7e6d73b2f3a911aa47178c2ca1b6",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b90d123c_47c35b28",
+        "filename": "src/libANGLE/renderer/vulkan/UtilsVk.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 3480,
+      "author": {
+        "id": 1520902
+      },
+      "writtenOn": "2022-02-10T20:26:00Z",
+      "side": 1,
+      "message": "nit: this comment looks wrong. This should be \"Draw all the graph widgets\", and the below one should be \"Draw all the text widgets\"?",
+      "revId": "b6ae2008f6bd7e6d73b2f3a911aa47178c2ca1b6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "70c1174b_f7f29b7b",
+        "filename": "src/libANGLE/renderer/vulkan/shaders/src/OverlayDraw.frag",
+        "patchSetId": 3
+      },
+      "lineNbr": 24,
+      "author": {
+        "id": 1520902
+      },
+      "writtenOn": "2022-02-10T20:26:00Z",
+      "side": 1,
+      "message": "Can we assume the fontGlyphWidth is guaranteed to be bigger than 0?",
+      "revId": "b6ae2008f6bd7e6d73b2f3a911aa47178c2ca1b6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "67675ecb_d11f2122",
+        "filename": "src/libANGLE/renderer/vulkan/shaders/src/OverlayDraw.frag",
+        "patchSetId": 3
+      },
+      "lineNbr": 131,
+      "author": {
+        "id": 1520902
+      },
+      "writtenOn": "2022-02-10T20:26:00Z",
+      "side": 1,
+      "message": "This vec4 color doesn\u0027t seem to be used anywhere, is that the intention?",
+      "revId": "b6ae2008f6bd7e6d73b2f3a911aa47178c2ca1b6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
