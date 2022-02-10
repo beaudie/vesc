@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "5cf5c612_6da17b90",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2022-02-10T00:03:45Z",
+      "side": 1,
+      "message": "Filed anglebug.com/7002 about the MultithreadingTest.MultiContextDrawWithSwapBuffers/ES3_Vulkan_SwiftShader flake.\n",
+      "revId": "4752227ecbf23ac5e96cde83bc7f4cdd3cdb091b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
