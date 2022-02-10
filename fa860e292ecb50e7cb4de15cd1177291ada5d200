@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "3db22a67_a6e871ea",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1528827
+      },
+      "writtenOn": "2022-02-10T12:23:24Z",
+      "side": 1,
+      "message": "There are some dEQP tests for eglCreatePlatformWindowSurfaceEXT, so I run them and manage to find an edge case for X11, which native_window should be `Window*` for eglCreatePlatformWindowSurfaceEXT, while it is `Window` for eglCreatePlatformWindowSurface..\n\nI also submitted a CL for the tests, you can find it in the \"relation chain\".\n\nCheers,\nAntonio",
+      "revId": "fa860e292ecb50e7cb4de15cd1177291ada5d200",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
