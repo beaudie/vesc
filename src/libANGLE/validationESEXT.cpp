@@ -304,8 +304,42 @@ bool ValidateGetCompressedTexImageANGLE(const Context *context,
         return false;
     }
 
-    // TODO: Validate all the things. http://anglebug.com/6177
-    return false;
+    if (!ValidTexture2DDestinationTarget(context, target) &&
+        !ValidTexture3DDestinationTarget(context, target))
+    {
+        context->validationError(entryPoint, GL_INVALID_ENUM, kInvalidTextureTarget);
+        return false;
+    }
+
+    if (level < 0)
+    {
+        context->validationError(entryPoint, GL_INVALID_VALUE, kNegativeLevel);
+        return false;
+    }
+
+    TextureType textureType = TextureTargetToType(target);
+    if (!ValidMipLevel(context, textureType, level))
+    {
+        context->validationError(entryPoint, GL_INVALID_VALUE, kInvalidMipLevel);
+        return false;
+    }
+
+    Texture *texture = context->getTextureByTarget(target);
+    if (!texture->getFormat(target, level).info->compressed)
+    {
+        context->validationError(entryPoint, GL_INVALID_OPERATION, kGetImageNotCompressed);
+        return false;
+    }
+
+    // Check if format is emulated
+    GLenum implFormat = texture->getImplementationColorReadFormat(context);
+    if (implFormat == GL_RGBA || implFormat == GL_RG || implFormat == GL_RED)
+    {
+        context->validationError(entryPoint, GL_INVALID_OPERATION, kInvalidEmulatedFormat);
+        return false;
+    }
+
+    return true;
 }
 
 bool ValidateGetRenderbufferImageANGLE(const Context *context,
