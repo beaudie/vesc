@@ -104,6 +104,24 @@
       "message": "Is that a flake or a deterministic failure?",
       "revId": "e08528c161daf2b723019bac8647e683347f19f6",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "69a9838b_1d4373a4",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1518892
+      },
+      "writtenOn": "2022-02-10T17:24:19Z",
+      "side": 1,
+      "message": "I\u0027m thinking flake?\n\nRelevant log:\n```\n[ RUN      ] dEQP.GLES3_ROTATE90/info_renderer\ndEQP-GLES3.info.renderer\n../../src/tests/deqp_support/angle_deqp_gtest.cpp:51: Failure\nFailed\nRendererVk.cpp:757 (DebugUtilsMessenger): [ Loader Message ] terminator_CreateDevice: Failed in ICD libGLX_nvidia.so.0 vkCreateDevice call\n                            Object: 0x5644f8e506b0 (type \u003d Instance(1))\n\nERR: RendererVk.cpp:757 (DebugUtilsMessenger): [ Loader Message ] terminator_CreateDevice: Failed in ICD libGLX_nvidia.so.0 vkCreateDevice call\n                            Object: 0x5644f8e506b0 (type \u003d Instance(1))\n\n../../src/tests/deqp_support/angle_deqp_gtest.cpp:51: Failure\nFailed\nRendererVk.cpp:757 (DebugUtilsMessenger): [ Loader Message ] vkCreateDevice:  Failed to create device chain.\n                            Object: 0x5644f8e506b0 (type \u003d Instance(1))\n\nERR: RendererVk.cpp:757 (DebugUtilsMessenger): [ Loader Message ] vkCreateDevice:  Failed to create device chain.\n                            Object: 0x5644f8e506b0 (type \u003d Instance(1))\n\n../../src/tests/deqp_support/angle_deqp_gtest.cpp:51: Failure\nFailed\nDisplay.cpp:961 (initialize): ANGLE Display::initialize error 0: Internal Vulkan error (-3): Initialization of an object could not be completed for implementation-specific reasons, in ../../src/libANGLE/renderer/vulkan/RendererVk.cpp, initializeDevice:2402.\nERR: Display.cpp:961 (initialize): ANGLE Display::initialize error 0: Internal Vulkan error (-3): Initialization of an object could not be completed for implementation-specific reasons, in ../../src/libANGLE/renderer/vulkan/RendererVk.cpp, initializeDevice:2402.\nException running test: Got EGL_NOT_INITIALIZED: initialize(m_eglDisplay, \u0026major, \u0026minor) at egluGLContextFactory.cpp:331\n../../src/tests/deqp_support/angle_deqp_gtest.cpp:435: Failure\n```",
+      "parentUuid": "2848d51c_20c59427",
+      "revId": "e08528c161daf2b723019bac8647e683347f19f6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
