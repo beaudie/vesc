@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "0547b3d2_499d26a2",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2022-02-10T17:12:35Z",
+      "side": 1,
+      "message": "Vadim: please update the commit as described in the presubmit check",
+      "revId": "6cf60e169ae051bd408bf6537943ed78f337c580",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
