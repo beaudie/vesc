@@ -33,6 +33,24 @@
       "message": "Deferring review to Shabi and Charlie. Please let me know if you need my input.",
       "revId": "fe694840cb94d61ddea26ad844ea6f9f885e7f4d",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "a64c80ff_5ed64da3",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 20
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-02-10T21:11:24Z",
+      "side": 1,
+      "message": "Hi,\n\nWhat if instead we _don\u0027t_ distinguish `endRenderPassIfComputeReadAfterAttachmentWrite` and instead make it more generic (to include textures in addition to images)? Then it would cover some of the cases that glMemoryBarrier would do too, but what\u0027s the harm in that? So for images it would continue to use `usesImage`, and for textures it would use the new `usesReadImagesWithBarrier`.\n\nAt this point, it\u0027s important to get the tests we talked about implemented to verify your changes. Another interesting test here would be to add this in VulkanPerformanceCounterTest.cpp:\n\n- FS texture sample, then CS texture sample, then FS texture sample\n\nand expect that only one render pass is used (i.e. the CS is reordered before the render pass).",
+      "parentUuid": "aacfce51_399d6a88",
+      "revId": "fe694840cb94d61ddea26ad844ea6f9f885e7f4d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
