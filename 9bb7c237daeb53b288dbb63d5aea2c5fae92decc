@@ -50,6 +50,24 @@
       "message": "LGTM, please add a regression test if you can.",
       "revId": "9bb7c237daeb53b288dbb63d5aea2c5fae92decc",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "50d519e0_916f32d9",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1340649
+      },
+      "writtenOn": "2022-02-10T17:36:42Z",
+      "side": 1,
+      "message": "this change is covering the case when `clipDistanceAPPLE` is disabled but `clipCullDistanceEXT` is enabled which is not true for angle in general but is true for us. The actual validation code itself is fine, there is no new code path / negative test that were missed",
+      "parentUuid": "f9411190_03eea1a1",
+      "revId": "9bb7c237daeb53b288dbb63d5aea2c5fae92decc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
