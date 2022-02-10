@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "63456319_6f41247d",
+        "filename": "src/libANGLE/validationESEXT.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 339,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2022-02-10T17:10:43Z",
+      "side": 1,
+      "message": "what code can we share with the non-compressed validation function? please refactor as you see fit.",
+      "range": {
+        "startLine": 307,
+        "startChar": 0,
+        "endLine": 339,
+        "endChar": 21
+      },
+      "revId": "b7135c3a4d92465d320021018d86df01cce5391f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
