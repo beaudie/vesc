@@ -70,6 +70,30 @@
       },
       "revId": "71d06198c62b4aecd40197d55f5dd17ab60e7695",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "fef1f218_3824745c",
+        "filename": "src/libANGLE/renderer/vulkan/SurfaceVk.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 383,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-02-10T21:48:31Z",
+      "side": 0,
+      "message": "Let me do that as a follow up, in case of reversions and such.",
+      "parentUuid": "d059f479_e56cae17",
+      "range": {
+        "startLine": 379,
+        "startChar": 0,
+        "endLine": 383,
+        "endChar": 6
+      },
+      "revId": "71d06198c62b4aecd40197d55f5dd17ab60e7695",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
