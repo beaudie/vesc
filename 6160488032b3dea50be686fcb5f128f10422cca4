@@ -16,6 +16,24 @@
       "message": "Hey Trevor, what\u0027s the status of this CL?",
       "revId": "6160488032b3dea50be686fcb5f128f10422cca4",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "3899e8bf_073a8077",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 6
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1452687
+      },
+      "writtenOn": "2022-02-10T18:16:40Z",
+      "side": 1,
+      "message": "WIP\n\nThis CL is blocked from landing by the proposed VK extension that allow for querying support for a specific pixel format w/o having a surface.\n\nbt709 swapchain is supported on android, but fails on all other platforms as we need the surface to query if the other platforms support bt709.\n\nThis CL was created to unblock b/200000478 but everything is blocked by the proposed extension",
+      "parentUuid": "68a6478a_0285f3cf",
+      "revId": "6160488032b3dea50be686fcb5f128f10422cca4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
