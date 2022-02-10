@@ -296,6 +296,30 @@
       },
       "revId": "0f1efa854182b186dfeea8c8571f5d9baf1e5718",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "50a8645a_aebf5140",
+        "filename": "src/libANGLE/renderer/vulkan/FramebufferVk.cpp",
+        "patchSetId": 11
+      },
+      "lineNbr": 536,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2022-02-10T06:25:05Z",
+      "side": 1,
+      "message": "We chatted offline.   This fix (mostly) isn\u0027t adding any additional render passes, since drawing to clear requires a render pass anyway.   \n\nThis change *does* add a new render pass for the following case:\n1.) Scissor the render area.\n2.) Clear attachments with loadOp\u003dCLEAR (attachments with undefined content).\n3.) Grow the render area.\n\nThis will break the render pass since the loadOp\u003dCLEAR (currently) can\u0027t be converted to a vkCmdClearAttachments() in the correct place of the command stream, so we need to end the current RP and start a new one with the larger render area.   It\u0027s expected that this is a relatively rare occurrence though.",
+      "parentUuid": "4d64ef98_b23487fc",
+      "range": {
+        "startLine": 533,
+        "startChar": 0,
+        "endLine": 536,
+        "endChar": 40
+      },
+      "revId": "0f1efa854182b186dfeea8c8571f5d9baf1e5718",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
