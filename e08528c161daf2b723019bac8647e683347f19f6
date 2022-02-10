@@ -69,6 +69,24 @@
       "parentUuid": "87749c4e_26d2665f",
       "revId": "e08528c161daf2b723019bac8647e683347f19f6",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "96a61b98_a66e597e",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2022-02-10T16:55:31Z",
+      "side": 1,
+      "message": "It\u0027s a good question. I don\u0027t think it will be totally obvious without some testing. I\u0027m fine with landing this simple change immediately as this code will likely be reworked in the near future.",
+      "parentUuid": "79374f38_1c80f8ac",
+      "revId": "e08528c161daf2b723019bac8647e683347f19f6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
