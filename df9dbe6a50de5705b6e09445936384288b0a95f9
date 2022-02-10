@@ -85,6 +85,29 @@
       "message": "WebGPU also has the abstract concepts of adapter and device without device implying PCI devices specifically.\n\nThinking about this more I\u0027m not sure about the need for the renaming so am removing my +1 vote for now.\n",
       "revId": "df9dbe6a50de5705b6e09445936384288b0a95f9",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "04235b1e_c029d8e3",
+        "filename": "extensions/EGL_ANGLE_platform_angle_gpu_selection.txt",
+        "patchSetId": 2
+      },
+      "lineNbr": 67,
+      "author": {
+        "id": 1130144
+      },
+      "writtenOn": "2022-02-10T02:33:44Z",
+      "side": 1,
+      "message": "My main misgiving with the previous naming is that it wasn\u0027t clear to me that \"device id\" !\u003d PCI device id. The use of the word \"device\" is fine but when paired with the word \"id\", there needs to be clarification about what is what.\n\nIf people feel strongly that we should use the term device id then the spec should make clear:\n1) ANGLE device id !\u003d PCI device id \n2) Clarify that the id assignment does not persist across reboots.\n3) Give examples of how device id maps to platform concepts, including Swiftshader. \nSaves readers the trouble of rummaging through the code to figure this out.",
+      "range": {
+        "startLine": 66,
+        "startChar": 33,
+        "endLine": 67,
+        "endChar": 23
+      },
+      "revId": "df9dbe6a50de5705b6e09445936384288b0a95f9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
