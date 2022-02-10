@@ -749,6 +749,49 @@ TEST_P(GetImageTest, CompressedTexImage)
     EXPECT_EQ(kExpectedData, actualData);
 }
 
+// Test validation for the compressed extension function.
+TEST_P(GetImageTest, CompressedTexImageNegativeAPI)
+{
+    ASSERT_TRUE(IsGLExtensionEnabled(kExtensionName));
+
+    // Verify the extension is enabled.
+    ANGLE_SKIP_TEST_IF(!IsGLExtensionEnabled("GL_OES_compressed_ETC1_RGB8_texture"));
+
+    constexpr GLsizei kRes       = 4;
+    constexpr GLsizei kImageSize = 8;
+
+    // This arbitrary 'compressed' data just has to be read back exactly as specified below.
+    constexpr std::array<uint8_t, kImageSize> kExpectedData = {1, 2, 3, 4, 5, 6, 7, 8};
+
+    GLTexture tex;
+    glBindTexture(GL_TEXTURE_2D, tex);
+    glCompressedTexImage2D(GL_TEXTURE_2D, 0, GL_ETC1_RGB8_OES, kRes, kRes, 0, kImageSize,
+                           kExpectedData.data());
+
+    std::array<uint8_t, kImageSize> actualData = {};
+    glGetCompressedTexImageANGLE(GL_TEXTURE_2D, 0, actualData.data());
+
+    // Verify GetTexImage works with correct parameters or fails if format is emulated.
+    if (IsFormatEmulated(GL_TEXTURE_2D))
+    {
+        EXPECT_GL_ERROR(GL_INVALID_OPERATION);
+    }
+    else
+    {
+        EXPECT_GL_NO_ERROR();
+    }
+
+    // Test invalid texture target.
+    glGetCompressedTexImageANGLE(GL_TEXTURE_CUBE_MAP, 0, actualData.data());
+    EXPECT_GL_ERROR(GL_INVALID_ENUM);
+
+    // Test invalid texture level.
+    glGetCompressedTexImageANGLE(GL_TEXTURE_2D, -1, actualData.data());
+    EXPECT_GL_ERROR(GL_INVALID_VALUE);
+    glGetCompressedTexImageANGLE(GL_TEXTURE_2D, 2000, actualData.data());
+    EXPECT_GL_ERROR(GL_INVALID_VALUE);
+}
+
 using TestFormatFunction =
     std::function<void(const CompressionExtension &, const CompressedFormat &)>;
 
