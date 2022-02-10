@@ -35,6 +35,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "b77f6d00_72bd400b",
+        "filename": "src/libANGLE/renderer/vulkan/UtilsVk.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 3480,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-02-10T21:21:11Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "b90d123c_47c35b28",
+      "revId": "b6ae2008f6bd7e6d73b2f3a911aa47178c2ca1b6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "70c1174b_f7f29b7b",
@@ -52,6 +70,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "5fa1d3ca_98926052",
+        "filename": "src/libANGLE/renderer/vulkan/shaders/src/OverlayDraw.frag",
+        "patchSetId": 3
+      },
+      "lineNbr": 24,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-02-10T21:21:11Z",
+      "side": 1,
+      "message": "Yes, otherwise the font image would have width\u003d0 which is both invalid (and useless for rendering!)",
+      "parentUuid": "70c1174b_f7f29b7b",
+      "revId": "b6ae2008f6bd7e6d73b2f3a911aa47178c2ca1b6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "67675ecb_d11f2122",
@@ -65,6 +101,24 @@
       "writtenOn": "2022-02-10T20:26:00Z",
       "side": 1,
       "message": "This vec4 color doesn\u0027t seem to be used anywhere, is that the intention?",
+      "revId": "b6ae2008f6bd7e6d73b2f3a911aa47178c2ca1b6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "a901dcfa_f63c79d7",
+        "filename": "src/libANGLE/renderer/vulkan/shaders/src/OverlayDraw.frag",
+        "patchSetId": 3
+      },
+      "lineNbr": 131,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-02-10T21:21:11Z",
+      "side": 1,
+      "message": "Removed (copy paste left over)",
+      "parentUuid": "67675ecb_d11f2122",
       "revId": "b6ae2008f6bd7e6d73b2f3a911aa47178c2ca1b6",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
