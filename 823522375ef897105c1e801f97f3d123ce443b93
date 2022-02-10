@@ -52,6 +52,24 @@
       "parentUuid": "cf0c8479_5fabd2c5",
       "revId": "823522375ef897105c1e801f97f3d123ce443b93",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "19aaef6d_f85e26af",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 6
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1001921
+      },
+      "writtenOn": "2022-02-10T21:10:37Z",
+      "side": 1,
+      "message": "Looks like it was a flake, the next build was fine.\nhttps://ci.chromium.org/ui/p/angle/builders/ci/android-arm64-exp-test/123/overview\nSorry if I\u0027ve wasted your time.",
+      "parentUuid": "c99a8f8d_ad4ae5e4",
+      "revId": "823522375ef897105c1e801f97f3d123ce443b93",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
