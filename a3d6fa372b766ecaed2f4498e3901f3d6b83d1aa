@@ -1,0 +1,44 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "b90525ea_af8f32ab",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2022-02-10T17:09:49Z",
+      "side": 1,
+      "message": "LGTM! I\u0027d suggest in the future to merge the CLs a bit more. Aim for maximum separation while keeping the new cod \u0026 tests for the new code in the same CL. Not necessary to go back and change these CLs.",
+      "revId": "a3d6fa372b766ecaed2f4498e3901f3d6b83d1aa",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "feaf9389_dcf62952",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 8105,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2022-02-10T17:09:49Z",
+      "side": 1,
+      "message": "nit: please use ANGLE_VK_CHECK",
+      "range": {
+        "startLine": 8099,
+        "startChar": 0,
+        "endLine": 8105,
+        "endChar": 0
+      },
+      "revId": "a3d6fa372b766ecaed2f4498e3901f3d6b83d1aa",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
