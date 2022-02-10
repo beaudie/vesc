@@ -24,6 +24,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "98f93020_dfc3302d",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 28
+      },
+      "lineNbr": 1454,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2022-02-10T21:49:41Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "da2151ae_8f0471c5",
+      "range": {
+        "startLine": 1450,
+        "startChar": 0,
+        "endLine": 1454,
+        "endChar": 5
+      },
+      "revId": "dd7bd326c72ae014abdfb19bf064dcc676fa33ba",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "8738f6cc_89d205eb",
@@ -37,6 +61,24 @@
       "writtenOn": "2022-02-10T19:03:02Z",
       "side": 1,
       "message": "Something is fishy here, why were these missing before but are needed now?",
+      "revId": "dd7bd326c72ae014abdfb19bf064dcc676fa33ba",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "0165e0cd_a81f47b7",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 28
+      },
+      "lineNbr": 1481,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2022-02-10T21:49:41Z",
+      "side": 1,
+      "message": "Chatted offline.\n\nThe issue is that we used to indicate that the content was defined due to a clear when we cleared with a draw. Now, we are only clearing with loadOp/cmd, which also requires indicating that the content is defined for follow-on clears, so we don\u0027t lose that initial clear data.",
+      "parentUuid": "8738f6cc_89d205eb",
       "revId": "dd7bd326c72ae014abdfb19bf064dcc676fa33ba",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
