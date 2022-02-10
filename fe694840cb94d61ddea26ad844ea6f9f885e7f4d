@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "aacfce51_399d6a88",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 20
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1524687
+      },
+      "writtenOn": "2022-02-10T07:23:50Z",
+      "side": 1,
+      "message": "hi Shahbaz,\nI\u0027ve updated the code based on the discussion above, and do little refine on the read texture sample check. Add a new interface \u0027IsRenderPassStartedAndReadImageUsesBarrier\u0027 attached with a new field \u0027mRenderPassReadImagesUsedBarrier\u0027 in RenderPassCommandBufferHelper, to track the read image with barrier in render pass. This seems be more precise than using mRenderPassUsedImages directly, and also can make a distinguish with the scenario of \u0027endRenderPassIfComputeReadAfterAttachmentWrite\u0027.",
+      "revId": "fe694840cb94d61ddea26ad844ea6f9f885e7f4d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
