@@ -1,0 +1,44 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "da2151ae_8f0471c5",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 28
+      },
+      "lineNbr": 1454,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-02-10T19:03:02Z",
+      "side": 1,
+      "message": "Please split this, so content is marked defined only for the aspect that\u0027s written.\n\nAlso, shouldn\u0027t this use `image-\u003eonWrite()` instead of making `setContentDefined` public?",
+      "range": {
+        "startLine": 1450,
+        "startChar": 0,
+        "endLine": 1454,
+        "endChar": 5
+      },
+      "revId": "dd7bd326c72ae014abdfb19bf064dcc676fa33ba",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "8738f6cc_89d205eb",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 28
+      },
+      "lineNbr": 1481,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-02-10T19:03:02Z",
+      "side": 1,
+      "message": "Something is fishy here, why were these missing before but are needed now?",
+      "revId": "dd7bd326c72ae014abdfb19bf064dcc676fa33ba",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
