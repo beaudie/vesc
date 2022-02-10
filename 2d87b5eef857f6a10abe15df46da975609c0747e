@@ -33,6 +33,24 @@
       "message": "could you please add a perf test for this just so we can quantify the perf hit?",
       "revId": "2d87b5eef857f6a10abe15df46da975609c0747e",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "7b0e327e_1ffe02e0",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2022-02-10T15:35:12Z",
+      "side": 1,
+      "message": "A perf test of this specifically would not give very useful data. It\u0027s very proportional to the number of GL calls made and the relative cpu/gpu cost.\n\nThe best estimate of the perf cost would be running all our traces with `Context::mShared` forced true. Even then, few/none of these applications were using AHardwareBuffer in the wild and wouldn\u0027t incur this cost.",
+      "parentUuid": "64d8b38a_c56ca8ad",
+      "revId": "2d87b5eef857f6a10abe15df46da975609c0747e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
