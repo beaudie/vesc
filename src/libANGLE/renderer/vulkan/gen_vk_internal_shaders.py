@@ -525,6 +525,7 @@ def compile_variation(glslang_path, compile_queue, shader_file, shader_basename,
         glslang_args += ['-Os']  # Optimize by default.
         glslang_args += ['-g0']  # Strip debug info to save on binary size.
         glslang_args += variation_extra_args  # Add other flags, or override -Os or -g0
+        glslang_args += ['--target-env', 'vulkan1.1']
         glslang_args += ['-o', output_path]  # Output file
         glslang_args.append(shader_file)  # Input GLSL shader
 
