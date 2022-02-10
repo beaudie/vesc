@@ -108,6 +108,30 @@
       },
       "revId": "df9dbe6a50de5705b6e09445936384288b0a95f9",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "7331c51e_b96ae907",
+        "filename": "extensions/EGL_ANGLE_platform_angle_gpu_selection.txt",
+        "patchSetId": 2
+      },
+      "lineNbr": 67,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2022-02-10T02:36:41Z",
+      "side": 1,
+      "message": "Thanks for your input Rafael.\n\nJonah, would you feel comfortable making these changes in a different CL? If that is approved then we can abandon this one.",
+      "parentUuid": "04235b1e_c029d8e3",
+      "range": {
+        "startLine": 66,
+        "startChar": 33,
+        "endLine": 67,
+        "endChar": 23
+      },
+      "revId": "df9dbe6a50de5705b6e09445936384288b0a95f9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
