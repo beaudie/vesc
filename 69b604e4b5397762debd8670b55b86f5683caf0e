@@ -16,6 +16,24 @@
       "message": "What\u0027s the status of this CL Tim?",
       "revId": "69b604e4b5397762debd8670b55b86f5683caf0e",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "522b72a4_152137db",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 13
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2022-02-10T17:39:10Z",
+      "side": 1,
+      "message": "Just waiting on Shabi\u0027s +2.\n\nIf you\u0027re interested, it\u0027s being built on fairly heavily with the final CL in the chain which is taking most of his energy:\n3388635: Vulkan: Use vkCmdClearAttachments for scissored clears | https://chromium-review.googlesource.com/c/angle/angle/+/3388635",
+      "parentUuid": "5e1ffdd4_a0b89c9b",
+      "revId": "69b604e4b5397762debd8670b55b86f5683caf0e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
