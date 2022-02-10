@@ -34,6 +34,24 @@
       "parentUuid": "86c62d70_181a2c7a",
       "revId": "823522375ef897105c1e801f97f3d123ce443b93",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "c99a8f8d_ad4ae5e4",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 6
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2022-02-10T18:15:14Z",
+      "side": 1,
+      "message": "Speaking it too fast, I take it back. This CL still looks correct to me. But I will try to reproduce the failure locally to see if I can reproduce the regression bot is seeing.",
+      "parentUuid": "cf0c8479_5fabd2c5",
+      "revId": "823522375ef897105c1e801f97f3d123ce443b93",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
