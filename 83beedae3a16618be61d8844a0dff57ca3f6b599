@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "2f7d835e_f220f726",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-02-10T20:47:57Z",
+      "side": 1,
+      "message": "Drive by",
+      "revId": "83beedae3a16618be61d8844a0dff57ca3f6b599",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "cb5e90b9_76127050",
+        "filename": "src/common/system_utils_win.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 220,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-02-10T20:47:57Z",
+      "side": 1,
+      "message": "The uwp code was using `std::wstring_convert\u003cstd::codecvt_utf8_utf16\u003cwchar_t\u003e\u003e`, is that not usable?",
+      "revId": "83beedae3a16618be61d8844a0dff57ca3f6b599",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
