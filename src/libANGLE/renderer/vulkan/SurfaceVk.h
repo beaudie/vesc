@@ -413,6 +413,12 @@ class WindowSurfaceVk : public SurfaceVk
 
     // GL_EXT_shader_framebuffer_fetch
     FramebufferFetchMode mFramebufferFetchMode = FramebufferFetchMode::Disabled;
+
+    // Check if the render pass is changed using this handle
+    VkRenderPass mCurrentRenderPassHandle;
+
+    // Store the surface's supported usage flags
+    VkImageUsageFlags mImageUsageFlagsForSurface;
 };
 
 }  // namespace rx

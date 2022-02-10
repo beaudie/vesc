@@ -1343,6 +1343,7 @@ angle::Result Program::linkImpl(const Context *context)
 
             mState.mExecutable->mUsesEarlyFragmentTestsOptimization =
                 fragmentShader->hasEarlyFragmentTestsOptimization();
+            mState.mBlendEquation = fragmentShader->getBlendEquation();
             mState.mSpecConstUsageBits |= fragmentShader->getSpecConstUsageBits();
         }
 
@@ -1540,6 +1541,7 @@ void Program::unlink()
     mState.mCachedBaseVertex              = 0;
     mState.mCachedBaseInstance            = 0;
     mState.mEarlyFramentTestsOptimization = false;
+    mState.mBlendEquation.reset();
     mState.mSpecConstUsageBits.reset();
 
     mValidated = false;
@@ -3616,6 +3618,7 @@ angle::Result Program::serialize(const Context *context, angle::MemoryBuffer *bi
 
     stream.writeInt(mState.mNumViews);
     stream.writeBool(mState.mEarlyFramentTestsOptimization);
+    stream.writeInt(mState.mBlendEquation.enabledBlendEquation);
     stream.writeInt(mState.mSpecConstUsageBits.bits());
 
     stream.writeInt(mState.getUniformLocations().size());
@@ -3708,7 +3711,11 @@ angle::Result Program::deserialize(const Context *context,
 
     mState.mNumViews                      = stream.readInt<int>();
     mState.mEarlyFramentTestsOptimization = stream.readBool();
-    mState.mSpecConstUsageBits            = rx::SpecConstUsageBits(stream.readInt<uint32_t>());
+
+    static_assert(sizeof(mState.mBlendEquation.enabledBlendEquation) == sizeof(uint16_t));
+    mState.mBlendEquation.enabledBlendEquation = stream.readInt<uint16_t>();
+
+    mState.mSpecConstUsageBits = rx::SpecConstUsageBits(stream.readInt<uint32_t>());
 
     const size_t uniformIndexCount = stream.readInt<size_t>();
     ASSERT(mState.mUniformLocations.empty());

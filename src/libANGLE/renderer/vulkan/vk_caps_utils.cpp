@@ -530,6 +530,13 @@ void RendererVk::ensureCapsInitialized() const
     // Enable NV_pack_subimage
     mNativeExtensions.packSubimageNV = true;
 
+    // Enable KHR_blend_equation_advanced
+    // KHR_blend_equation_advanced needs the MSAA supporting
+    // For advanced blending, an input attachment usage is needed for a surface. So, if the usage is
+    // not supported, advanced blending extension is disabled.
+    mNativeExtensions.blendEquationAdvancedKHR =
+        supportSampleRateShading && !mFeatures.ignoreInputAttachmentUsageForSurface.enabled;
+
     mNativeCaps.minInterpolationOffset          = limitsVk.minInterpolationOffset;
     mNativeCaps.maxInterpolationOffset          = limitsVk.maxInterpolationOffset;
     mNativeCaps.subPixelInterpolationOffsetBits = limitsVk.subPixelInterpolationOffsetBits;

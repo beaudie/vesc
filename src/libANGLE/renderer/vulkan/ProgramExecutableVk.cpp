@@ -933,6 +933,11 @@ angle::Result ProgramExecutableVk::getGraphicsPipeline(ContextVk *contextVk,
     gl::DrawBufferMask framebufferMask      = glState.getDrawFramebuffer()->getDrawBufferMask();
     gl::DrawBufferMask missingOutputsMask   = ~shaderOutMask & framebufferMask;
 
+    const uint32_t blendEquationIndex = static_cast<uint32_t>(gl::FromGLenum<gl::BlendEquationType>(
+        glState.getBlendStateExt().getEquationColorIndexed(0)));
+    shaderProgram->setSpecializationConstant(sh::vk::SpecializationConstantId::BlendEquation,
+                                             blendEquationIndex);
+
     ANGLE_TRY(renderer->getPipelineCache(&pipelineCache));
     return shaderProgram->getGraphicsPipeline(
         contextVk, &contextVk->getRenderPassCache(), *pipelineCache, getPipelineLayout(), desc,

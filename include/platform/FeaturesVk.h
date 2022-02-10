@@ -640,6 +640,12 @@ struct FeaturesVk : FeatureSetBase
     Feature retainSpirvDebugInfo = {"retainSpirvDebugInfo", FeatureCategory::VulkanFeatures,
                                     "Retain debug info in SPIR-V blob.", &members,
                                     "http://anglebug.com/5901"};
+
+    // If a surface doesn't support VK_IMAGE_USAGE_INPUT_ATTACHMENT_BIT usage, surface will be
+    // created without the input attachment usage.
+    Feature ignoreInputAttachmentUsageForSurface = {
+        "ignoreInputAttachmentUsageForSurface", FeatureCategory::VulkanWorkarounds,
+        "Ignore an input attachment usage for a surface", &members};
 };
 
 inline FeaturesVk::FeaturesVk()  = default;
