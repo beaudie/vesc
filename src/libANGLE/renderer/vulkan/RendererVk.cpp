@@ -3003,13 +3003,17 @@ void RendererVk::initFeatures(DisplayVk *displayVk,
                             isQualcomm && mPhysicalDeviceProperties.driverVersion <
                                               kPixel4DriverWithWorkingSpecConstSupport);
 
-    // The compute shader used to generate mipmaps uses a 256-wide workgroup.  This path is only
-    // enabled on devices that meet this minimum requirement.  Furthermore,
-    // VK_IMAGE_USAGE_STORAGE_BIT is detrimental to performance on many platforms, on which this
-    // path is not enabled.  Platforms that are known to have better performance with this path are:
+    // The compute shader used to generate mipmaps needs -
+    // 1. subgroup features which requires Vulkan API version 1.1 or later.
+    // 2. 256-wide workgroup.
     //
-    // - Nvidia
+    // Furthermore, VK_IMAGE_USAGE_STORAGE_BIT is detrimental to performance on many platforms, on
+    // which this path is not enabled.  Platforms that are known to have better performance with
+    // this path are:
+    //
     // - AMD
+    // - Nvidia
+    // - Samsung
     //
     // Additionally, this path is disabled on buggy drivers:
     //
@@ -3017,8 +3021,9 @@ void RendererVk::initFeatures(DisplayVk *displayVk,
     const uint32_t maxComputeWorkGroupInvocations =
         mPhysicalDeviceProperties.limits.maxComputeWorkGroupInvocations;
     ANGLE_FEATURE_CONDITION(&mFeatures, allowGenerateMipmapWithCompute,
-                            maxComputeWorkGroupInvocations >= 256 &&
-                                (isNvidia || ((isAMD || isSamsung) && !IsWindows())));
+                            mApiVersion >= VK_API_VERSION_1_1 &&
+                                maxComputeWorkGroupInvocations >= 256 &&
+                                ((isAMD && !IsWindows()) || isNvidia || isSamsung));
 
     bool isAdreno540 = mPhysicalDeviceProperties.deviceID == angle::kDeviceID_Adreno540;
     ANGLE_FEATURE_CONDITION(&mFeatures, forceMaxUniformBufferSize16KB, isQualcomm && isAdreno540);
