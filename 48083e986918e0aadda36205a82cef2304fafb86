@@ -16,6 +16,24 @@
       "message": "Thanks Yuly. BTW, I am able to reliably reproduce the bot failure on my local pixel 6, so it is not flake.",
       "revId": "48083e986918e0aadda36205a82cef2304fafb86",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "66f5c07f_7565c39e",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2022-02-11T00:22:10Z",
+      "side": 1,
+      "message": "I am a bit worried that if there is memory corruption in this test, it may not limited to pixel6, but in theory should affect other GPUs as well. But since no one has complained about this, so we will leave it enabled on other GPUs for now.",
+      "parentUuid": "c6c5184a_55abe849",
+      "revId": "48083e986918e0aadda36205a82cef2304fafb86",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
