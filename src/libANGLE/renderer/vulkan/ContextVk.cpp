@@ -1132,6 +1132,17 @@ angle::Result ContextVk::setupDraw(const gl::Context *context,
                                    const void *indices,
                                    DirtyBits dirtyBitMask)
 {
+    // We really only need to invalidate the surface before the first draw
+    // since the last swap for this surface. The cost of calling maybeInvalidate
+    // for every draw is mitigated by gating the call behind render pass dirty
+    // bit, which conveniently happens to be set for such draws, and unset for
+    // most others.
+    if (mGraphicsDirtyBits[DIRTY_BIT_RENDER_PASS])
+    {
+        SurfaceVk *drawSurfaceVk = GetImplAs<SurfaceVk>(context->getCurrentDrawSurface());
+        drawSurfaceVk->maybeInvalidate(context);
+    }
+
     // Set any dirty bits that depend on draw call parameters or other objects.
     if (mode != mCurrentDrawMode)
     {
