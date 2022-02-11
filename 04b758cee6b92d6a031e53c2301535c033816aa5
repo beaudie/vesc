@@ -63,6 +63,30 @@
       },
       "revId": "04b758cee6b92d6a031e53c2301535c033816aa5",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b6c984f6_2bfc528a",
+        "filename": "src/libANGLE/renderer/vulkan/SecondaryCommandBuffer.h",
+        "patchSetId": 13
+      },
+      "lineNbr": 910,
+      "author": {
+        "id": 1290487
+      },
+      "writtenOn": "2022-02-11T22:10:59Z",
+      "side": 1,
+      "message": "This looks like what I see in SecondaryCommandBuffer::bindTransformFeedbackBuffers().  Perhaps I\u0027m missing what you\u0027re referring to Jamie.",
+      "parentUuid": "f78d8f62_f27884d1",
+      "range": {
+        "startLine": 908,
+        "startChar": 0,
+        "endLine": 910,
+        "endChar": 1
+      },
+      "revId": "04b758cee6b92d6a031e53c2301535c033816aa5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
