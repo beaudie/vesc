@@ -154,6 +154,9 @@ declare_args() {
 
   # Enables the OpenCL pass-through back end
   angle_enable_cl_passthrough = angle_enable_cl
+
+  # Enable overlay by default when validation layers are enabled
+  angle_enable_overlay = angle_debug_layers_enabled
 }
 
 # OpenCL is not supported on Windows UWP, because the CL headers include DX9, which is not
@@ -198,9 +201,6 @@ declare_args() {
   # provided to ANGLE. Disable them for non-standalone ANGLE builds. crbug.com/1176118
   angle_enable_d3d11_compositor_native_window =
       angle_enable_d3d11 && angle_standalone
-
-  # Disable overlay by default
-  angle_enable_overlay = false
 
   # Disable performance counter output by default
   angle_enable_perf_counter_output = false
