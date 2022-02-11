@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "6b1e02b5_209a6456",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 8
+      },
+      "lineNbr": 1136,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2022-02-11T15:34:29Z",
+      "side": 1,
+      "message": "what kind of problem is this solving? As it stands you\u0027re running this on every draw call to GLES, which is wasteful if we can find another solution.",
+      "range": {
+        "startLine": 1135,
+        "startChar": 0,
+        "endLine": 1136,
+        "endChar": 44
+      },
+      "revId": "359ace2b165cae2242dad3f520b476fad674c260",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
