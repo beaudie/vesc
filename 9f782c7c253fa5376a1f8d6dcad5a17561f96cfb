@@ -87,6 +87,24 @@
       "parentUuid": "379710dc_f5144266",
       "revId": "9f782c7c253fa5376a1f8d6dcad5a17561f96cfb",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "0ef7149b_6ea9efc8",
+        "filename": "src/libANGLE/renderer/vulkan/SurfaceVk.cpp",
+        "patchSetId": 11
+      },
+      "lineNbr": 1908,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-02-11T17:52:38Z",
+      "side": 1,
+      "message": "Yes that\u0027s right, it shouldn\u0027t have been invalidated if !EGL_BUFFER_DESTROYED\n\n(and that makes me realize that today we can expose behavior other than DESTROYED for MSAA swapchains without any additional effort)",
+      "parentUuid": "563ebc5b_0305fa09",
+      "revId": "9f782c7c253fa5376a1f8d6dcad5a17561f96cfb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
