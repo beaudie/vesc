@@ -39,6 +39,30 @@
       },
       "revId": "a3d6fa372b766ecaed2f4498e3901f3d6b83d1aa",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "15642010_b8d5179a",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 8105,
+      "author": {
+        "id": 1491687
+      },
+      "writtenOn": "2022-02-11T11:50:11Z",
+      "side": 1,
+      "message": "I noticed that this check didn\u0027t do what it should in `readPixels` anymore. Fixed it by moving it to `readPixelsForCompressedGetImage` using `ANGLE_VK_CHECK` and emitting `VK_ERROR_FORMAT_NOT_SUPPORTED` for emulated formats and uncompressed texture targets. Added a TODO for encoding of emulated formats as well.",
+      "parentUuid": "feaf9389_dcf62952",
+      "range": {
+        "startLine": 8099,
+        "startChar": 0,
+        "endLine": 8105,
+        "endChar": 0
+      },
+      "revId": "a3d6fa372b766ecaed2f4498e3901f3d6b83d1aa",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
