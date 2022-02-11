@@ -70,6 +70,24 @@
       "parentUuid": "26922be0_d1ffc754",
       "revId": "9603addf9ed11738e37e5b7e5f9757c164f9349e",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "6781691e_d4f88d63",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 1075,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2022-02-11T20:06:52Z",
+      "side": 1,
+      "message": "Reverted this part of diff now.",
+      "parentUuid": "942a81b9_456d133d",
+      "revId": "9603addf9ed11738e37e5b7e5f9757c164f9349e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
