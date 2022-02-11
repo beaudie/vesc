@@ -199,9 +199,6 @@ declare_args() {
   angle_enable_d3d11_compositor_native_window =
       angle_enable_d3d11 && angle_standalone
 
-  # Disable overlay by default
-  angle_enable_overlay = false
-
   # Disable performance counter output by default
   angle_enable_perf_counter_output = false
 
@@ -231,6 +228,9 @@ declare_args() {
       (angle_enable_glsl || angle_enable_metal || use_fuzzing_engine)
 
   angle_has_histograms = angle_has_build
+
+  # Enable overlay by default when validation layers are enabled
+  angle_enable_overlay = angle_enable_vulkan_validation_layers
 }
 
 if (!defined(angle_zlib_compression_utils_dir)) {
