@@ -22,6 +22,30 @@
       },
       "revId": "b7135c3a4d92465d320021018d86df01cce5391f",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "0a50711e_036ed181",
+        "filename": "src/libANGLE/validationESEXT.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 339,
+      "author": {
+        "id": 1491687
+      },
+      "writtenOn": "2022-02-11T11:52:45Z",
+      "side": 1,
+      "message": "Added a `ValidateGetTexImage` function where common checks for regular/compressed happen.",
+      "parentUuid": "63456319_6f41247d",
+      "range": {
+        "startLine": 307,
+        "startChar": 0,
+        "endLine": 339,
+        "endChar": 21
+      },
+      "revId": "b7135c3a4d92465d320021018d86df01cce5391f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
