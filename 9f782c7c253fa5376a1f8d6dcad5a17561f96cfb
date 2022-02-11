@@ -16,6 +16,23 @@
       "message": "LGTM! Please take a look at the prior patch, I think it had some errors.",
       "revId": "9f782c7c253fa5376a1f8d6dcad5a17561f96cfb",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "97b278ea_633d4be3",
+        "filename": "src/libANGLE/renderer/vulkan/SurfaceVk.cpp",
+        "patchSetId": 11
+      },
+      "lineNbr": 1908,
+      "author": {
+        "id": 1533513
+      },
+      "writtenOn": "2022-02-11T16:57:27Z",
+      "side": 1,
+      "message": "Note: I\u0027m not sure whether we can invalidate MS color and DS images unconditionally, so I\u0027ll leave figuring this out to someone that understands this invalidation speed hack better.",
+      "revId": "9f782c7c253fa5376a1f8d6dcad5a17561f96cfb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
