@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b448c664_6fcc67fd",
+        "filename": "scripts/egl.xml",
+        "patchSetId": 1
+      },
+      "lineNbr": 2154,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2022-02-11T15:18:31Z",
+      "side": 1,
+      "message": "What happens if you revert this change? I notice it\u0027s not upstream: https://github.com/KhronosGroup/EGL-Registry/blob/main/api/egl.xml",
+      "range": {
+        "startLine": 2154,
+        "startChar": 12,
+        "endLine": 2154,
+        "endChar": 55
+      },
+      "revId": "c1d709db1220a58d9ef7b5100ddd95551025d846",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
