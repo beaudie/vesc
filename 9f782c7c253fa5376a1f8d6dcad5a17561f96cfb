@@ -51,6 +51,24 @@
       "parentUuid": "97b278ea_633d4be3",
       "revId": "9f782c7c253fa5376a1f8d6dcad5a17561f96cfb",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "379710dc_f5144266",
+        "filename": "src/libANGLE/renderer/vulkan/SurfaceVk.cpp",
+        "patchSetId": 11
+      },
+      "lineNbr": 1908,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-02-11T17:36:55Z",
+      "side": 1,
+      "message": "My understanding is that you should invalidate depth/stencil unconditionally, but colorMS should be done at the same time as color. The buffer age spec says (emphasis mine):\n\n\u003e Querying EGL_BUFFER_AGE_EXT returns the age of the **color** contents of the current back-buffer as the number of frames elapsed since it was most recently defined.\n\nSo it returns the age of the _color_ contents. The spec says nothing about depth/stencil. Regarding colorMS, it\u0027s an implementation detail that an MS swapchain is emulated as such. As far as the application is concerned, the swapchain\u0027s color image is the multisampled one (when multisampled).",
+      "parentUuid": "70be9162_5037c017",
+      "revId": "9f782c7c253fa5376a1f8d6dcad5a17561f96cfb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
