@@ -16,6 +16,24 @@
       "message": "Hailin: is there a test that can reproduce the bug you\u0027re running into? Having a workaround in ANGLE to work around our own bug means we\u0027d like to clear this up at some point.",
       "revId": "49d26e826accde25433654a50f766e6fd1a76c72",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "742680b2_03378840",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1190898
+      },
+      "writtenOn": "2022-02-11T18:39:04Z",
+      "side": 1,
+      "message": "This CL just introduces a feature flag -- similar to https://crrev.com/c/3418138. Flipping this on (which we intend to do in our branch) is a workaround for an app bug",
+      "parentUuid": "b24b1a1f_eb414cc7",
+      "revId": "49d26e826accde25433654a50f766e6fd1a76c72",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
