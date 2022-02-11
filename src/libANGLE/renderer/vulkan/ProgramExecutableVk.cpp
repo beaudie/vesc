@@ -2048,6 +2048,8 @@ void ProgramExecutableVk::accumulateCacheStats(VulkanCacheType cacheType,
         static_cast<uint32_t>(cacheStats.getHitCount());
     mPerfCounters.descriptorSetCacheMisses[dsIndex] +=
         static_cast<uint32_t>(cacheStats.getMissCount());
+    mPerfCounters.descriptorSetCacheSizes[dsIndex] =
+        static_cast<uint32_t>(cacheStats.getCacheSize());
 }
 
 void ProgramExecutableVk::setAllDefaultUniformsDirty(const gl::ProgramExecutable &executable)

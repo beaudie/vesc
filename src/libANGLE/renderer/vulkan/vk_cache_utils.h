@@ -1506,7 +1506,11 @@ enum class VulkanCacheType
 class CacheStats final : angle::NonCopyable
 {
   public:
-    CacheStats() { reset(); }
+    CacheStats()
+    {
+        reset();
+        mCacheSize = 0;
+    }
     ~CacheStats() {}
 
     ANGLE_INLINE void hit() { mHitCount++; }
@@ -1532,6 +1536,10 @@ class CacheStats final : angle::NonCopyable
         }
     }
 
+    ANGLE_INLINE void updateCacheSize(const uint64_t cacheSize) { mCacheSize = cacheSize; }
+
+    ANGLE_INLINE uint64_t getCacheSize() const { return mCacheSize; }
+
     void reset()
     {
         mHitCount  = 0;
@@ -1541,6 +1549,7 @@ class CacheStats final : angle::NonCopyable
   private:
     uint64_t mHitCount;
     uint64_t mMissCount;
+    uint64_t mCacheSize;
 };
 
 template <VulkanCacheType CacheType>
@@ -1803,6 +1812,7 @@ class DescriptorSetCache final : angle::NonCopyable
     ANGLE_INLINE void insert(const vk::DescriptorSetDesc &desc, VkDescriptorSet descriptorSet)
     {
         mPayload.emplace(desc, descriptorSet);
+        mCacheStats.updateCacheSize(mPayload.size());
     }
 
     template <typename Accumulator>
