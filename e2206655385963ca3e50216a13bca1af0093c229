@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "7e7eaca2_30b9a44c",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 5
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1359249
+      },
+      "writtenOn": "2022-02-11T23:13:31Z",
+      "side": 1,
+      "message": "There is still a couple places where the extensions were being added to device extension list. Removed.",
+      "revId": "e2206655385963ca3e50216a13bca1af0093c229",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
