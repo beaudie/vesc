@@ -1,0 +1,159 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "030cecd1_3ff98224",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 7
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2022-02-11T21:54:40Z",
+      "side": 1,
+      "message": "Lubosz, great stuff!  The expansive tests give very high confidence in the implementation.  Just a few questions/nits/suggestions.  +2\u0027ing for global time zone friendly reviews.",
+      "revId": "1285de2fb0fcc20f7fbe3a365e7aaca6b1f8cead",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "3f70e46a_b5e066e0",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 7947,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2022-02-11T21:54:40Z",
+      "side": 1,
+      "message": "Decent amount of duplication with readPixelsForGetImage below, but different enough (and simpler) to leave alone perhaps.",
+      "range": {
+        "startLine": 7947,
+        "startChar": 0,
+        "endLine": 7947,
+        "endChar": 45
+      },
+      "revId": "1285de2fb0fcc20f7fbe3a365e7aaca6b1f8cead",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "4d387ec9_9c162723",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 8048,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2022-02-11T21:54:40Z",
+      "side": 1,
+      "message": "Can this go within the new if block below, or is the information lost at that point?",
+      "range": {
+        "startLine": 8046,
+        "startChar": 0,
+        "endLine": 8048,
+        "endChar": 66
+      },
+      "revId": "1285de2fb0fcc20f7fbe3a365e7aaca6b1f8cead",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "dd89acb0_8daf6e90",
+        "filename": "src/tests/gl_tests/GetImageTest.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 710,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2022-02-11T21:54:40Z",
+      "side": 1,
+      "message": "Wouldn\u0027t it be better to check whether the internal format matches the read format, rather than checking for these values explicitly?  These seem like an ANGLE implementation detail.",
+      "range": {
+        "startLine": 710,
+        "startChar": 0,
+        "endLine": 710,
+        "endChar": 80
+      },
+      "revId": "1285de2fb0fcc20f7fbe3a365e7aaca6b1f8cead",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "89ccc973_211e413e",
+        "filename": "src/tests/gl_tests/GetImageTest.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 733,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2022-02-11T21:54:40Z",
+      "side": 1,
+      "message": "This (and the other early returns below) could use a quick cout describing the skip, unless it is too verbose.",
+      "range": {
+        "startLine": 733,
+        "startChar": 8,
+        "endLine": 733,
+        "endChar": 14
+      },
+      "revId": "1285de2fb0fcc20f7fbe3a365e7aaca6b1f8cead",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "29b28e50_a755207f",
+        "filename": "src/tests/gl_tests/GetImageTest.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 745,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2022-02-11T21:54:40Z",
+      "side": 1,
+      "message": "super nit: slight preference for `func` here and below.",
+      "range": {
+        "startLine": 745,
+        "startChar": 49,
+        "endLine": 745,
+        "endChar": 52
+      },
+      "revId": "1285de2fb0fcc20f7fbe3a365e7aaca6b1f8cead",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "0ba954ce_435612e6",
+        "filename": "src/tests/gl_tests/GetImageTest.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 769,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2022-02-11T21:54:40Z",
+      "side": 1,
+      "message": "Can you convert these to constexprs with descriptive names?",
+      "range": {
+        "startLine": 769,
+        "startChar": 34,
+        "endLine": 769,
+        "endChar": 40
+      },
+      "revId": "1285de2fb0fcc20f7fbe3a365e7aaca6b1f8cead",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
