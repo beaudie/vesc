@@ -16,6 +16,24 @@
       "message": "We are surprised this was not seen before. I know I added test cases to SyncTest, and I see that they check for the EGL extension, set by the feature.",
       "revId": "867a2d6b1cf8cf43ae108f00769a5943f44ab171",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "5801a309_e3b67280",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-02-11T22:17:23Z",
+      "side": 1,
+      "message": "I believe ANGLE never exposed the EGL extension, because the feature was always disabled (it was looking at the extension inside the device extension list instead of instance), so the test was simply getting skipped",
+      "parentUuid": "1d4feb69_c3c30204",
+      "revId": "867a2d6b1cf8cf43ae108f00769a5943f44ab171",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
