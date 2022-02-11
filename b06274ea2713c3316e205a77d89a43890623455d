@@ -26,6 +26,29 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "d40a5ba4_a7062857",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 30
+      },
+      "lineNbr": 3651,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2022-02-11T00:47:11Z",
+      "side": 1,
+      "message": "Have you checked if any of our app trace hitting this? Maybe add an assert here and run through all app traces to see if ever hit this? Also sounds like this is fixing an existing bug, not sure how we handle this before your CL: when you grow rendering area and already have a clear loadOP in the RP, are we overwriting first clear?",
+      "range": {
+        "startLine": 3644,
+        "startChar": 12,
+        "endLine": 3651,
+        "endChar": 9
+      },
+      "revId": "b06274ea2713c3316e205a77d89a43890623455d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "494c323a_fc5a4bd9",
         "filename": "src/libANGLE/renderer/vulkan/FramebufferVk.cpp",
         "patchSetId": 30
