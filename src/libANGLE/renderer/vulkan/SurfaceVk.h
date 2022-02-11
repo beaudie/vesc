@@ -29,6 +29,8 @@ class SurfaceVk : public SurfaceImpl, public angle::ObserverInterface
                                             GLsizei samples,
                                             FramebufferAttachmentRenderTarget **rtOut) override;
 
+    virtual void maybeInvalidate(const gl::Context *context);
+
   protected:
     SurfaceVk(const egl::SurfaceState &surfaceState);
     ~SurfaceVk() override;
@@ -279,6 +281,8 @@ class WindowSurfaceVk : public SurfaceVk
 
     angle::Result onSharedPresentContextFlush(const gl::Context *context);
 
+    void maybeInvalidate(const gl::Context *context) override;
+
   protected:
     angle::Result prepareSwapImpl(const gl::Context *context);
     angle::Result swapImpl(const gl::Context *context,
@@ -410,6 +414,10 @@ class WindowSurfaceVk : public SurfaceVk
 
     // EGL_KHR_lock_surface3
     vk::BufferHelper mLockBufferHelper;
+
+    // EGL_KHR_partial_update
+    uint64_t mBufferAgeQueryFrameNumber;
+    bool mInvalidatedSinceLastSwap;
 
     // GL_EXT_shader_framebuffer_fetch
     FramebufferFetchMode mFramebufferFetchMode = FramebufferFetchMode::Disabled;
