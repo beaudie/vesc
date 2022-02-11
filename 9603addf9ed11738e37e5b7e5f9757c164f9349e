@@ -52,6 +52,24 @@
       "parentUuid": "48518c34_3bbbf0ca",
       "revId": "9603addf9ed11738e37e5b7e5f9757c164f9349e",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "942a81b9_456d133d",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 1075,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-02-11T19:48:26Z",
+      "side": 1,
+      "message": "Yeah, I think it\u0027s best if we split this change from the bug fixes. Using suballocation may not be bad after all, at least to workaround syncval issues with reusing the same empty buffer (by reallocating it), but best isolate that.",
+      "parentUuid": "26922be0_d1ffc754",
+      "revId": "9603addf9ed11738e37e5b7e5f9757c164f9349e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
