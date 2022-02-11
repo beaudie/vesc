@@ -16,6 +16,24 @@
       "message": "We never free this, isn\u0027t this going to lock the underlying buffer block forever? What\u0027s the benefit of making this single global allocation use suballocation?",
       "revId": "9603addf9ed11738e37e5b7e5f9757c164f9349e",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "48518c34_3bbbf0ca",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 1075,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2022-02-11T19:32:54Z",
+      "side": 1,
+      "message": "I guess it depends. without suballocation, this likely end up with one page memory. If app does uses device local memory it will use the block memory. I am okay with keep this empty buffer not using suballocation (I was a bit hestated in the first place anyway). But this CL does exposed a few other bugs that I try to fix in this CL. How about I revert this empty buffer to non-suballocation and take the rest of change?",
+      "parentUuid": "3ac9fe04_ee24ebbf",
+      "revId": "9603addf9ed11738e37e5b7e5f9757c164f9349e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
