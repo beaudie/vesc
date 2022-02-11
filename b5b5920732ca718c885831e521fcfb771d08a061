@@ -16,6 +16,23 @@
       "message": "have not featurized it yet, looking for how i can know vulkan 1.1 inside the python script",
       "revId": "b5b5920732ca718c885831e521fcfb771d08a061",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "0eb39625_f7865b1e",
+        "filename": "src/libANGLE/renderer/vulkan/gen_vk_internal_shaders.py",
+        "patchSetId": 1
+      },
+      "lineNbr": 528,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-02-11T15:30:58Z",
+      "side": 1,
+      "message": "Please make this conditional to GenerateMipmap. You can do that by removing this code and instead changing `GenerateMipmap.comp.json` as such for example:\n\n    \"MaxSupportedDest\": [\n        [ \"DestSize4\", \"--target-env\", \"vulkan1.1\" ],\n        [ \"DestSize6\", \"--target-env\", \"vulkan1.1\" ]\n    ],\n\nThis script is able to pick up extra flags like that for the particular variation that needs it (which in this case is all variations)",
+      "revId": "b5b5920732ca718c885831e521fcfb771d08a061",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
