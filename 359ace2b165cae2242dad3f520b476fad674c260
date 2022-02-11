@@ -24,6 +24,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "3c5d4a07_736046ef",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 8
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1533513
+      },
+      "writtenOn": "2022-02-11T15:59:21Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "fe31416a_64e6fd52",
+      "range": {
+        "startLine": 7,
+        "startChar": 0,
+        "endLine": 7,
+        "endChar": 10
+      },
+      "revId": "359ace2b165cae2242dad3f520b476fad674c260",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "6b1e02b5_209a6456",
@@ -61,6 +85,30 @@
       "side": 1,
       "message": "maybeInvalidate must be called before the very first draw for a particular surface, since its last swap buffers. In these cases, render pass dirty bit is also set, so this call could be gated behind it. If that doesn\u0027t sound like a terrible idea, let\u0027s do just that?",
       "parentUuid": "6b1e02b5_209a6456",
+      "range": {
+        "startLine": 1135,
+        "startChar": 0,
+        "endLine": 1136,
+        "endChar": 44
+      },
+      "revId": "359ace2b165cae2242dad3f520b476fad674c260",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "88a90993_559b4b8d",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 8
+      },
+      "lineNbr": 1136,
+      "author": {
+        "id": 1533513
+      },
+      "writtenOn": "2022-02-11T15:59:21Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "bca94450_e1e486fb",
       "range": {
         "startLine": 1135,
         "startChar": 0,
