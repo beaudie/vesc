@@ -34,6 +34,41 @@
       "parentUuid": "b24b1a1f_eb414cc7",
       "revId": "49d26e826accde25433654a50f766e6fd1a76c72",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "754ac2ce_828e093f",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2022-02-11T18:51:51Z",
+      "side": 1,
+      "message": "I\u0027d be curious to follow up with this. Generally if it works on a driver, ANGLE will have to subsume this functionality. e.g. ANGLE has to emulate the behaviour of the existing driver, including making undefined defined. So I think this workaround would extend to any app that has this call pattern.\n\nI wonder if it\u0027s a specific case where we invalidate pixels that are cleared, and never read in a shader.\n\nAnyway it\u0027ll be good to follow up with this even if you land a temporary iteration. I\u0027d also recommend you extend the behaviour to the invalidateSub call below for consistency.",
+      "parentUuid": "742680b2_03378840",
+      "revId": "49d26e826accde25433654a50f766e6fd1a76c72",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "48d60ae3_55364c36",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2022-02-11T18:51:51Z",
+      "side": 1,
+      "message": "d",
+      "revId": "49d26e826accde25433654a50f766e6fd1a76c72",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
