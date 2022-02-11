@@ -123,6 +123,41 @@
       "parentUuid": "86d3686e_1e1ab36a",
       "revId": "49d26e826accde25433654a50f766e6fd1a76c72",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "c3aad12e_d156ee24",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-02-11T19:20:55Z",
+      "side": 1,
+      "message": "\u003e This app works on for example Intel desktop GPUs, but not NV.\n\nGiven that the game is known to be broken elsewhere too, I don\u0027t think it\u0027s worth trying to make this pattern work in general and potentially hurt other apps. So I\u0027d say a feature is necessary. Narrowing it further would still be good to make the app potentially more performant.",
+      "parentUuid": "6e27406f_130f6446",
+      "revId": "49d26e826accde25433654a50f766e6fd1a76c72",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "ba5102fd_e649f4f9",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-02-11T19:20:55Z",
+      "side": 1,
+      "message": "Drive by",
+      "revId": "49d26e826accde25433654a50f766e6fd1a76c72",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
