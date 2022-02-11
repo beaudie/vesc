@@ -69,6 +69,24 @@
       "message": "d",
       "revId": "49d26e826accde25433654a50f766e6fd1a76c72",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "9f1b1829_cf959ef1",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1190898
+      },
+      "writtenOn": "2022-02-11T18:56:59Z",
+      "side": 1,
+      "message": "What does ANGLE do in cases where drivers disagree? In this specific case, some drivers seem to immediately discard the depth buffer on calls to glInvalidateFramebuffer, while others do not. This app works on for example Intel desktop GPUs, but not NV.",
+      "parentUuid": "754ac2ce_828e093f",
+      "revId": "49d26e826accde25433654a50f766e6fd1a76c72",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
