@@ -586,8 +586,6 @@ class RendererVk : angle::NonCopyable
     VkPhysicalDeviceProtectedMemoryFeatures mProtectedMemoryFeatures;
     VkPhysicalDeviceProtectedMemoryProperties mProtectedMemoryProperties;
     VkPhysicalDeviceHostQueryResetFeaturesEXT mHostQueryResetFeatures;
-    VkExternalFenceProperties mExternalFenceProperties;
-    VkExternalSemaphoreProperties mExternalSemaphoreProperties;
     VkPhysicalDeviceSamplerYcbcrConversionFeatures mSamplerYcbcrConversionFeatures;
     std::vector<VkQueueFamilyProperties> mQueueFamilyProperties;
     uint32_t mMaxVertexAttribDivisor;
