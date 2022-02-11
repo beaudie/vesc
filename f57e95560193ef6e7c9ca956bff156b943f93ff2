@@ -16,6 +16,24 @@
       "message": "Mmh, I did not expect to see `\u0027wayland-egl-backend.h\u0027 file not found`, as I though this change would fix it (meaning to look for wayland in current ANGLE directory).\n```\n# Directory where to find wayland source files\nangle_wayland_dir \u003d \"third_party/wayland\"\n```\n\nSecond error is expected, we need wayland symbols: https://bugs.chromium.org/p/chromium/issues/detail?id\u003d1291937",
       "revId": "f57e95560193ef6e7c9ca956bff156b943f93ff2",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "db7ee3f2_ac5383f4",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 12
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1528827
+      },
+      "writtenOn": "2022-02-11T10:51:38Z",
+      "side": 1,
+      "message": "Submitted a chromium CL here:\nhttps://chromium-review.googlesource.com/c/chromium/src/+/3455146",
+      "parentUuid": "2dd233be_ead98fef",
+      "revId": "f57e95560193ef6e7c9ca956bff156b943f93ff2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
