@@ -87,6 +87,24 @@
       "parentUuid": "39440f81_5d06b57d",
       "revId": "80dd1f7b8fc94e77f14284ab223d45be7947fba7",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "97cde2eb_c08103f3",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2022-02-11T16:16:08Z",
+      "side": 1,
+      "message": "Chatted with Roman.  Since multiple groups are using the script in its existing location, best to land it as is, then iterate from there.",
+      "parentUuid": "633d80db_b98a060d",
+      "revId": "80dd1f7b8fc94e77f14284ab223d45be7947fba7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
