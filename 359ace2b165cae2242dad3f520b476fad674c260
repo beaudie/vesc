@@ -141,6 +141,30 @@
       },
       "revId": "359ace2b165cae2242dad3f520b476fad674c260",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "32f091b5_2457088f",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 8
+      },
+      "lineNbr": 1136,
+      "author": {
+        "id": 1533513
+      },
+      "writtenOn": "2022-02-11T16:48:37Z",
+      "side": 1,
+      "message": "After thinking a bit it seems we can diverge from the old solution much less, just need to avoid invalidating if the age was queried.",
+      "parentUuid": "d6d7756c_63196820",
+      "range": {
+        "startLine": 1135,
+        "startChar": 0,
+        "endLine": 1136,
+        "endChar": 44
+      },
+      "revId": "359ace2b165cae2242dad3f520b476fad674c260",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
