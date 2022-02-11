@@ -33,6 +33,24 @@
       "message": "The uwp code was using `std::wstring_convert\u003cstd::codecvt_utf8_utf16\u003cwchar_t\u003e\u003e`, is that not usable?",
       "revId": "83beedae3a16618be61d8844a0dff57ca3f6b599",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "e40f00d0_4dee1c73",
+        "filename": "src/common/system_utils_win.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 220,
+      "author": {
+        "id": 1534547
+      },
+      "writtenOn": "2022-02-11T13:05:30Z",
+      "side": 1,
+      "message": "codecvt_utf8_utf16 is deprecated in C++17. moreover it doesn\u0027t work without this fix https://github.com/llvm/llvm-project/commit/f53fafbacbc22bacd38fd1bdd52359156e6bfcba",
+      "parentUuid": "cb5e90b9_76127050",
+      "revId": "83beedae3a16618be61d8844a0dff57ca3f6b599",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
