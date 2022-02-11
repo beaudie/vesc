@@ -360,9 +360,12 @@ angle::Result FramebufferVk::invalidate(const gl::Context *context,
                                         const GLenum *attachments)
 {
     ContextVk *contextVk = vk::GetImpl(context);
-
-    ANGLE_TRY(invalidateImpl(contextVk, count, attachments, false,
-                             getRotatedCompleteRenderArea(contextVk)));
+    // game patch b/218331424
+    if (!contextVk->getRenderer()->getFeatures().skipInvalidateFramebuffer.enabled)
+    {
+        ANGLE_TRY(invalidateImpl(contextVk, count, attachments, false,
+                                 getRotatedCompleteRenderArea(contextVk)));
+    }
     return angle::Result::Continue;
 }
 

@@ -635,6 +635,11 @@ struct FeaturesVk : FeatureSetBase
     Feature forceSubmitImmutableTextureUpdates = {
         "forceSubmitImmutableTextureUpdates", FeatureCategory::AppWorkarounds,
         "Force submit updates to immutable textures", &members, "http://anglebug.com/6929"};
+
+    // Whether we skip invalidate framebuffer.
+    Feature skipInvalidateFramebuffer = {
+        "skipInvalidateFramebuffer", FeatureCategory::AppWorkarounds,
+        "Skip invalidate framebuffer operation", &members, "b/218331424"};
 };
 
 inline FeaturesVk::FeaturesVk()  = default;
