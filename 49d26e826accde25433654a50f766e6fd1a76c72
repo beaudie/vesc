@@ -105,6 +105,24 @@
       "parentUuid": "9f1b1829_cf959ef1",
       "revId": "49d26e826accde25433654a50f766e6fd1a76c72",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "6e27406f_130f6446",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1517514
+      },
+      "writtenOn": "2022-02-11T19:09:15Z",
+      "side": 1,
+      "message": "for arknights the depth test is enabled at some draw call with (less equal ) comparison. I think it is ok if we only skip the invalidate of depth buffer.",
+      "parentUuid": "86d3686e_1e1ab36a",
+      "revId": "49d26e826accde25433654a50f766e6fd1a76c72",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
