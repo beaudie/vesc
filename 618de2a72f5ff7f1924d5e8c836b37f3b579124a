@@ -286,6 +286,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "257891c2_977b2e36",
+        "filename": "src/libANGLE/renderer/vulkan/RenderTargetVk.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 104,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-02-11T15:46:13Z",
+      "side": 1,
+      "message": "I can confirm this bug is real, attachment 1\u0027s content is never marked as defined. The reason the test passes is because when the RP starts, we always choose storeOp\u003dSTORE for the color attachment (except for MSRTT):\n\n    const vk::RenderPassStoreOp storeOp \u003d colorRenderTarget-\u003eisImageTransient()\n                                              ? vk::RenderPassStoreOp::DontCare\n                                              : vk::RenderPassStoreOp::Store;\n\nWe currently don\u0027t attempt to optimize the color attachments\u0027 storeOp at the end of the pass, but if we did, the test would have failed.\n\nYou can make the test fail by appending this code to the test:\n\n```\n    GLFramebuffer fbo2;\n    glBindFramebuffer(GL_FRAMEBUFFER, fbo2);\n    glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, textures[1], 0);\n\n    glEnable(GL_BLEND);\n    glBlendFunc(GL_ONE, GL_ONE);\n\n    // Blend red\n    drawQuad(redProgram, essl3_shaders::PositionAttrib(), 0.5f);\n    ASSERT_GL_NO_ERROR();\n\n    // Verify purple\n    glReadBuffer(GL_COLOR_ATTACHMENT0);\n    EXPECT_PIXEL_EQ(0, 0, 255, 0, 255, 255);\n    ASSERT_GL_NO_ERROR();\n\n    // loadOp \u003d LOAD\n    EXPECT_EQ(hackANGLE().colorLoads, 1u);\n    // storeOp \u003d STORE (2 from before)\n    EXPECT_EQ(hackANGLE().colorStores, 3u);\n```\n\nAnd you can see that loadOp\u003dDONT_CARE is used for textures[1] instead of loadOp\u003dLOAD because the content is never marked defined.",
+      "parentUuid": "0101c1da_5a53811c",
+      "revId": "618de2a72f5ff7f1924d5e8c836b37f3b579124a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "4ec549b1_b10499fc",
         "filename": "src/libANGLE/renderer/vulkan/vk_cache_utils.cpp",
         "patchSetId": 5
