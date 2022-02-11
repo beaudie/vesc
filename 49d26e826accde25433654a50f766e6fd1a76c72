@@ -87,6 +87,24 @@
       "parentUuid": "754ac2ce_828e093f",
       "revId": "49d26e826accde25433654a50f766e6fd1a76c72",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "86d3686e_1e1ab36a",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2022-02-11T19:03:06Z",
+      "side": 1,
+      "message": "If the Android app expects it to work, we must make it work. e.g. by what you\u0027re doing here. I\u0027m suggesting we narrow this workaround and make it apply to the sequence of calls rather than the app now. That way we can figure out a way to keep good performance. e.g. by only ignoring invalidates of unread depth buffers. And then it\u0027ll work for any app. I\u0027d need to check to see if we track if depth buffers are read or not, I recall we do this kind of tracking in the rp somewhere.",
+      "parentUuid": "9f1b1829_cf959ef1",
+      "revId": "49d26e826accde25433654a50f766e6fd1a76c72",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
