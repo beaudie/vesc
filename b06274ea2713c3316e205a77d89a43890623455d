@@ -1,0 +1,96 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "c26a01a3_21ccd1ba",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 30
+      },
+      "lineNbr": 3614,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2022-02-11T00:42:27Z",
+      "side": 1,
+      "message": "I think it will be cleaner if you can make this a mRenderPassCommands method.\n\nSomething like this:\n    for (PackedAttachmentIndex index \u003d kAttachmentIndexZero; index \u003c mColorImagesCount; ++index)\n    {\n        if (mAttachmentOps[index].loadOp\u003d\u003dVK_ATTACHMENT_LOAD_OP_CLEAR)\n        {\n            return true;\n        }\n    }\n    ...",
+      "range": {
+        "startLine": 3587,
+        "startChar": 1,
+        "endLine": 3614,
+        "endChar": 1
+      },
+      "revId": "b06274ea2713c3316e205a77d89a43890623455d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "494c323a_fc5a4bd9",
+        "filename": "src/libANGLE/renderer/vulkan/FramebufferVk.cpp",
+        "patchSetId": 30
+      },
+      "lineNbr": 2405,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2022-02-11T00:42:27Z",
+      "side": 1,
+      "message": "Rather than pass in startedRenderPassForClear from another function, couldn\u0027t you just check if loadOp\u003d\u003dClear? Basically if loaOP is already clear and you try to do another clear (which means different scissor area), then you do with command. That decision is per attachment instead of per render pass.",
+      "range": {
+        "startLine": 2405,
+        "startChar": 42,
+        "endLine": 2405,
+        "endChar": 67
+      },
+      "revId": "b06274ea2713c3316e205a77d89a43890623455d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "c4f73a17_e0b3b29f",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 30
+      },
+      "lineNbr": 1504,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2022-02-11T00:42:27Z",
+      "side": 1,
+      "message": "Why is this needed here? They are called at RenderPassCommandBufferHelper::finalizeDepthStencilLoadStore() time. Is there an existing bug here that your CL exposed or required for your change?\n\nSame thing for the above diffs in onDepthAccess() and depthStencilImagesDraw().",
+      "range": {
+        "startLine": 1500,
+        "startChar": 5,
+        "endLine": 1504,
+        "endChar": 5
+      },
+      "revId": "b06274ea2713c3316e205a77d89a43890623455d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "1a89faae_58564e3a",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 30
+      },
+      "lineNbr": 2058,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2022-02-11T00:42:27Z",
+      "side": 1,
+      "message": "In invalidateRenderPassStencilAttachment() and invalidateRenderPassDepthAttachment() and depthStencilImagesDraw: instead of passing contextVk, IMO, it is better to pass \"const gl::State *state\" so that it has less chance to miss-use since it is \"const\". But I am aware often time people have very different opinion on this, so check with other as well.\n\nAnd these also appears not directly related to this CL, might split into separate CL to make diff smaller here. My suggestion, your choice.",
+      "range": {
+        "startLine": 2058,
+        "startChar": 4,
+        "endLine": 2058,
+        "endChar": 25
+      },
+      "revId": "b06274ea2713c3316e205a77d89a43890623455d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
