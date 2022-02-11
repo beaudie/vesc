@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "9dc664ab_63fde585",
+        "filename": "src/libANGLE/renderer/glslang_wrapper_utils.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 138,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-02-11T19:40:19Z",
+      "side": 0,
+      "message": "This is going to lead to bugs. The tests are getting lucky because location ends up being identical for both interface variables.\n\nWe _really_ should stop using strings as keys, and there are ways to work around this bug with the code as-is (like making location and component an array of 2, then reuse `varyingIsInput` and `varyingIsOutput` to choose the right one). However, maybe it\u0027s not worth all the trouble right now (and it would be unnecessary when we stop using strings anyway).\n\nCould you please add something like this?\n\n    if (info.location !\u003d ShaderInterfaceVariableInfo::kInvalid)\n    {\n        // TODO: Correctly support in and out interface variables with identical name.\n        // anglebug.com/4524\n        ASSERT(info.location \u003d\u003d location);\n        ASSERT(info.component \u003d\u003d component);\n    }",
+      "revId": "57933493dd3bc21214ba351ad4e44b60efffe711",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
