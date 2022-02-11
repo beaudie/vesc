@@ -105,6 +105,24 @@
       "parentUuid": "563ebc5b_0305fa09",
       "revId": "9f782c7c253fa5376a1f8d6dcad5a17561f96cfb",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "194cdff9_ed69a4aa",
+        "filename": "src/libANGLE/renderer/vulkan/SurfaceVk.cpp",
+        "patchSetId": 11
+      },
+      "lineNbr": 1908,
+      "author": {
+        "id": 1533513
+      },
+      "writtenOn": "2022-02-11T18:29:20Z",
+      "side": 1,
+      "message": "I changed it so that MS color image is invalid iff color image is.",
+      "parentUuid": "0ef7149b_6ea9efc8",
+      "revId": "9f782c7c253fa5376a1f8d6dcad5a17561f96cfb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
