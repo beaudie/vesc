@@ -22,6 +22,30 @@
       },
       "revId": "c1d709db1220a58d9ef7b5100ddd95551025d846",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "8dd7fbfb_f699b8b8",
+        "filename": "scripts/egl.xml",
+        "patchSetId": 1
+      },
+      "lineNbr": 2154,
+      "author": {
+        "id": 1533513
+      },
+      "writtenOn": "2022-02-11T15:31:52Z",
+      "side": 1,
+      "message": "Turns out this change isn\u0027t necessary, I removed it. It\u0027s not upstream, because I added this line by looking at some other change, which added entry points for some other extension, I think.",
+      "parentUuid": "b448c664_6fcc67fd",
+      "range": {
+        "startLine": 2154,
+        "startChar": 12,
+        "endLine": 2154,
+        "endChar": 55
+      },
+      "revId": "c1d709db1220a58d9ef7b5100ddd95551025d846",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
