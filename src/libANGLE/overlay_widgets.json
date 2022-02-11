@@ -164,6 +164,22 @@
                 "font": "small",
                 "length": 40
             }
+        },
+        {
+            "name": "VulkanTextureDescriptorCacheSize",
+            "comment": "size of mTextureDescriptorsCache of all ProgramExecutableVk",
+            "type": "RunningGraph(60)",
+            "color": [0, 200, 75, 200],
+            "coords": [10, 360],
+            "bar_width": 5,
+            "height": 100,
+            "description": {
+                "color": [0, 200, 75, 255],
+                "coords": ["VulkanTextureDescriptorCacheSize.left.align",
+                           "VulkanTextureDescriptorCacheSize.top.adjacent"],
+                "font": "small",
+                "length": 90
+            }
         }
     ]
 }
