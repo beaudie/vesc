@@ -24,6 +24,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "2539835b_a5cee6db",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 30
+      },
+      "lineNbr": 3614,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2022-02-12T23:46:25Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "c26a01a3_21ccd1ba",
+      "range": {
+        "startLine": 3587,
+        "startChar": 1,
+        "endLine": 3614,
+        "endChar": 1
+      },
+      "revId": "b06274ea2713c3316e205a77d89a43890623455d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "d40a5ba4_a7062857",
@@ -37,6 +61,30 @@
       "writtenOn": "2022-02-11T00:47:11Z",
       "side": 1,
       "message": "Have you checked if any of our app trace hitting this? Maybe add an assert here and run through all app traces to see if ever hit this? Also sounds like this is fixing an existing bug, not sure how we handle this before your CL: when you grow rendering area and already have a clear loadOP in the RP, are we overwriting first clear?",
+      "range": {
+        "startLine": 3644,
+        "startChar": 12,
+        "endLine": 3651,
+        "endChar": 9
+      },
+      "revId": "b06274ea2713c3316e205a77d89a43890623455d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ce023c38_d87d773e",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 30
+      },
+      "lineNbr": 3651,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2022-02-12T23:46:25Z",
+      "side": 1,
+      "message": "\u003e Have you checked if any of our app trace hitting this? Maybe add an assert here and run through all app traces to see if ever hit this?\n\nThe only trace that hits this path is `messenger_lite`.\n\n\u003e Also sounds like this is fixing an existing bug, not sure how we handle this before your CL: when you grow rendering area and already have a clear loadOP in the RP, are we overwriting first clear?\n\nToday, scissored clears are always performed immediately with a draw command.   We never attempt to convert them to loadOp\u003dCLEAR if the scissored area covers the render area.   This CL uses loadOp\u003dCLEAR whenever possible now, so we need to break the render pass if the area grows.",
+      "parentUuid": "d40a5ba4_a7062857",
       "range": {
         "startLine": 3644,
         "startChar": 12,
@@ -95,6 +143,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "307dbe27_702b6113",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 30
+      },
+      "lineNbr": 1504,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2022-02-12T23:46:25Z",
+      "side": 1,
+      "message": "Shabi asked the same thing in a different comment:\nhttps://chromium-review.googlesource.com/c/angle/angle/+/3388635/comment/8738f6cc_89d205eb/\n\nThe issue is that we used to indicate that the content was defined due to a clear when we cleared with a draw. Now, we are only clearing with loadOp/cmd, which also requires indicating that the content is defined for follow-on clears, so we don\u0027t lose that initial clear data.\n\nIn practice, it should just be loadOp\u003dCLEAR that\u0027s the issue, since the cmd clear would be overwritten anyway by following full render area clears.\n\n\u003e They are called at RenderPassCommandBufferHelper::finalizeDepthStencilLoadStore() time.\n\nThat\u0027s too late, since that\u0027s called as part of `endRenderPass()`, which isn\u0027t necessary when doing things like a full clear followed by multiple scissored clears.   See the test ClearTest.InceptionScissorClears for an example.\n\n\u003e Is there an existing bug here that your CL exposed or required for your change?\n\nYes, sort of, since we weren\u0027t tracking that a cleared attachment (by loadOp\u003dCLEAR) now has defined data.   However, we weren\u0027t being very opportunistic and using loadOp\u003dCLEAR as much as we could before, so it wasn\u0027t an issue.",
+      "parentUuid": "c4f73a17_e0b3b29f",
+      "range": {
+        "startLine": 1500,
+        "startChar": 5,
+        "endLine": 1504,
+        "endChar": 5
+      },
+      "revId": "b06274ea2713c3316e205a77d89a43890623455d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "1a89faae_58564e3a",
         "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
         "patchSetId": 30
@@ -106,6 +178,30 @@
       "writtenOn": "2022-02-11T00:42:27Z",
       "side": 1,
       "message": "In invalidateRenderPassStencilAttachment() and invalidateRenderPassDepthAttachment() and depthStencilImagesDraw: instead of passing contextVk, IMO, it is better to pass \"const gl::State *state\" so that it has less chance to miss-use since it is \"const\". But I am aware often time people have very different opinion on this, so check with other as well.\n\nAnd these also appears not directly related to this CL, might split into separate CL to make diff smaller here. My suggestion, your choice.",
+      "range": {
+        "startLine": 2058,
+        "startChar": 4,
+        "endLine": 2058,
+        "endChar": 25
+      },
+      "revId": "b06274ea2713c3316e205a77d89a43890623455d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "6c7eba22_e4991e13",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 30
+      },
+      "lineNbr": 2058,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2022-02-12T23:46:25Z",
+      "side": 1,
+      "message": "\u003e IMO, it is better to pass \"const gl::State *state\" so that it has less chance to miss-use since it is \"const\".\n\nDone, since I was considering that approach to begin with.\n\n\u003e And these also appears not directly related to this CL, might split into separate CL to make diff smaller here. My suggestion, your choice.\n\nThe functions `isDepthWriteEnabled()` and `isStencilWriteEnabled()` are being used in `depthStencilImagesDraw()` now, so these cleanup changes are related to this CL in that sense.   I\u0027d prefer to keep them here and avoid the overhead of pulling them out into a preceding CL, since they\u0027re pretty small.",
+      "parentUuid": "1a89faae_58564e3a",
       "range": {
         "startLine": 2058,
         "startChar": 4,
