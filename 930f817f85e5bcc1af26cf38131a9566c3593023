@@ -16,6 +16,47 @@
       "message": "shabi, how do you usually handle gold image comparison failure?",
       "revId": "930f817f85e5bcc1af26cf38131a9566c3593023",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "75ca0f5b_8c3810c8",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 5
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-02-12T02:33:55Z",
+      "side": 1,
+      "message": "For GOLD failures, I (or someone) would have to approve the new image. Normally that\u0027s trivial, but actually Manhattan looks suspiciously different. The background after your change seems a bit shifted and less blurry. Isn\u0027t that odd? Are you able to see the GOLD failures? Does this link work? https://angle-gold.skia.org/detail?test\u003dmanhattan_10\u0026digest\u003d327a82e7276bf6190001c94c0d26798b\u0026changelist_id\u003d3453288\u0026crs\u003dgerrit\n\nLooks like the shader with or without subgroups is not producing identical results, and I don\u0027t really know which one is correct! I\u0027ll make a point of looking at this on Monday and see if I can figure out what\u0027s changing here.\n\nDid you have a GOLD failure in the earlier patchsets? I\u0027m wondering if the check for mSubgroupExtendedTypesFeatures.shaderSubgroupExtendedTypes is making Nvidia/Linux not use compute anymore (because it\u0027s on an old driver). If you didn\u0027t see GOLD failures before, removing that check will probably make the failure go away.",
+      "parentUuid": "2656a179_3540217a",
+      "revId": "930f817f85e5bcc1af26cf38131a9566c3593023",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "947575be_9d3d3c77",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 3068,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-02-12T02:33:55Z",
+      "side": 1,
+      "message": "Is the shader really using subgroup ops on anything other than 32-bit types? You should have got a VVL error about the feature not being present. Since you didn\u0027t presumably, I\u0027m guessing this is not necessary.\n\nAlso, check for COMPUTE is unnecessary (because it\u0027s mandatory):\n\n\u003e supportedStages will have the VK_SHADER_STAGE_COMPUTE_BIT bit set if any of the physical device’s queues support VK_QUEUE_COMPUTE_BIT.",
+      "range": {
+        "startLine": 3068,
+        "startChar": 32,
+        "endLine": 3068,
+        "endChar": 90
+      },
+      "revId": "930f817f85e5bcc1af26cf38131a9566c3593023",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
