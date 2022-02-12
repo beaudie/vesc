@@ -50,6 +50,24 @@
       "message": "Looking at the shader again, I think we technically need to check for some bits in mSubgroupProperties.supportedOperations, like VK_SUBGROUP_FEATURE_QUAD_BIT (and maybe others I haven\u0027t noticed?). I think that would imply Vulkan 1.1, and automatically excludes 1.1 drivers that don\u0027t support quad swap intrinsics.",
       "revId": "a0c470dc2e738515852e3e3a1bf35599517258d7",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "cb5b5d0b_bb5d537e",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 3043,
+      "author": {
+        "id": 1340649
+      },
+      "writtenOn": "2022-02-12T00:01:42Z",
+      "side": 1,
+      "message": "A little more involved but done",
+      "parentUuid": "d02f0ab2_29e80e7d",
+      "revId": "a0c470dc2e738515852e3e3a1bf35599517258d7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
