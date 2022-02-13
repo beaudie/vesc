@@ -58,6 +58,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "0b82da11_aedc9e86",
+        "filename": "doc/DebuggingTips.md",
+        "patchSetId": 4
+      },
+      "lineNbr": 254,
+      "author": {
+        "id": 1520902
+      },
+      "writtenOn": "2022-02-13T23:58:25Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "fadc6f39_4c81d935",
+      "range": {
+        "startLine": 254,
+        "startChar": 0,
+        "endLine": 254,
+        "endChar": 9
+      },
+      "revId": "ce5d3148266326b25eb0416aff9be684bc7ed939",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "0a8ea11b_1a8519ec",
@@ -71,6 +95,30 @@
       "writtenOn": "2022-02-08T21:21:48Z",
       "side": 1,
       "message": "Does version belong on the end of this path?",
+      "range": {
+        "startLine": 338,
+        "startChar": 81,
+        "endLine": 338,
+        "endChar": 89
+      },
+      "revId": "ce5d3148266326b25eb0416aff9be684bc7ed939",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "1f1a9809_bb0667e2",
+        "filename": "doc/DebuggingTips.md",
+        "patchSetId": 4
+      },
+      "lineNbr": 338,
+      "author": {
+        "id": 1520902
+      },
+      "writtenOn": "2022-02-13T23:58:25Z",
+      "side": 1,
+      "message": "In my ndk installation path there is a version number there (not the word \"version\"). I changed it to the actual version number to avoid confusion.",
+      "parentUuid": "0a8ea11b_1a8519ec",
       "range": {
         "startLine": 338,
         "startChar": 81,
@@ -104,6 +152,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "add7d382_36fc6407",
+        "filename": "doc/DebuggingTips.md",
+        "patchSetId": 4
+      },
+      "lineNbr": 362,
+      "author": {
+        "id": 1520902
+      },
+      "writtenOn": "2022-02-13T23:58:25Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "ec522125_6cfb1933",
+      "range": {
+        "startLine": 362,
+        "startChar": 30,
+        "endLine": 362,
+        "endChar": 33
+      },
+      "revId": "ce5d3148266326b25eb0416aff9be684bc7ed939",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "987cee35_0e3d8a4a",
@@ -117,6 +189,30 @@
       "writtenOn": "2022-02-08T21:21:48Z",
       "side": 1,
       "message": "This would read better if you just called it \"Steps to use the RenderDoc you just built\".",
+      "range": {
+        "startLine": 419,
+        "startChar": 0,
+        "endLine": 419,
+        "endChar": 61
+      },
+      "revId": "ce5d3148266326b25eb0416aff9be684bc7ed939",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "5b43929f_207f774c",
+        "filename": "doc/DebuggingTips.md",
+        "patchSetId": 4
+      },
+      "lineNbr": 419,
+      "author": {
+        "id": 1520902
+      },
+      "writtenOn": "2022-02-13T23:58:25Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "987cee35_0e3d8a4a",
       "range": {
         "startLine": 419,
         "startChar": 0,
@@ -152,6 +248,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "daf41a81_be126be8",
+        "filename": "doc/DebuggingTips.md",
+        "patchSetId": 4
+      },
+      "lineNbr": 423,
+      "author": {
+        "id": 1520902
+      },
+      "writtenOn": "2022-02-13T23:58:25Z",
+      "side": 1,
+      "message": "Thank you Cody. Did you mean the version of \"RenderDoc\"?",
+      "parentUuid": "74664b9f_0d55b313",
+      "range": {
+        "startLine": 423,
+        "startChar": 0,
+        "endLine": 423,
+        "endChar": 35
+      },
+      "revId": "ce5d3148266326b25eb0416aff9be684bc7ed939",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "36e9a5bc_d498d501",
         "filename": "doc/DebuggingTips.md",
         "patchSetId": 4
@@ -163,6 +283,30 @@
       "writtenOn": "2022-02-08T21:21:48Z",
       "side": 1,
       "message": "nit: clicking",
+      "range": {
+        "startLine": 428,
+        "startChar": 41,
+        "endLine": 428,
+        "endChar": 46
+      },
+      "revId": "ce5d3148266326b25eb0416aff9be684bc7ed939",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "0295bca4_965b63c4",
+        "filename": "doc/DebuggingTips.md",
+        "patchSetId": 4
+      },
+      "lineNbr": 428,
+      "author": {
+        "id": 1520902
+      },
+      "writtenOn": "2022-02-13T23:58:25Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "36e9a5bc_d498d501",
       "range": {
         "startLine": 428,
         "startChar": 41,
