@@ -41,6 +41,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "c8f556f4_8efee7e8",
+        "filename": "src/libANGLE/renderer/vulkan/vk_cache_utils.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 1512,
+      "author": {
+        "id": 1520902
+      },
+      "writtenOn": "2022-02-14T22:56:57Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "10b938ba_9ce7ab23",
+      "range": {
+        "startLine": 1512,
+        "startChar": 8,
+        "endLine": 1512,
+        "endChar": 18
+      },
+      "revId": "fdfdb96d7062b112b7866e73091773d67f63f4af",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "dc824783_7a9ca901",
@@ -54,6 +78,30 @@
       "writtenOn": "2022-02-14T15:08:33Z",
       "side": 1,
       "message": "nit: getSize() since cache is redundant",
+      "range": {
+        "startLine": 1541,
+        "startChar": 26,
+        "endLine": 1541,
+        "endChar": 38
+      },
+      "revId": "fdfdb96d7062b112b7866e73091773d67f63f4af",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "17b8ab4c_07c8ac9e",
+        "filename": "src/libANGLE/renderer/vulkan/vk_cache_utils.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 1541,
+      "author": {
+        "id": 1520902
+      },
+      "writtenOn": "2022-02-14T22:56:57Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "dc824783_7a9ca901",
       "range": {
         "startLine": 1541,
         "startChar": 26,
@@ -87,6 +135,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "95fdfe2e_cfaa11a1",
+        "filename": "src/libANGLE/renderer/vulkan/vk_cache_utils.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 1552,
+      "author": {
+        "id": 1520902
+      },
+      "writtenOn": "2022-02-14T22:56:57Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "32505d7b_5a80a946",
+      "range": {
+        "startLine": 1552,
+        "startChar": 13,
+        "endLine": 1552,
+        "endChar": 23
+      },
+      "revId": "fdfdb96d7062b112b7866e73091773d67f63f4af",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "1ccd800b_62acf22b",
@@ -110,6 +182,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "3ad0a862_da0fc07b",
+        "filename": "src/libANGLE/renderer/vulkan/vk_cache_utils.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 1815,
+      "author": {
+        "id": 1520902
+      },
+      "writtenOn": "2022-02-14T22:56:57Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "1ccd800b_62acf22b",
+      "range": {
+        "startLine": 1815,
+        "startChar": 20,
+        "endLine": 1815,
+        "endChar": 35
+      },
+      "revId": "fdfdb96d7062b112b7866e73091773d67f63f4af",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "0df30117_d30f6904",
@@ -123,6 +219,30 @@
       "writtenOn": "2022-02-14T15:08:33Z",
       "side": 1,
       "message": "nit: textureDescriptorCacheSize or textureDescriptorCacheTotalSize",
+      "range": {
+        "startLine": 1268,
+        "startChar": 13,
+        "endLine": 1268,
+        "endChar": 43
+      },
+      "revId": "fdfdb96d7062b112b7866e73091773d67f63f4af",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "f0107791_d197a513",
+        "filename": "src/libANGLE/renderer/vulkan/vk_utils.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 1268,
+      "author": {
+        "id": 1520902
+      },
+      "writtenOn": "2022-02-14T22:56:57Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "0df30117_d30f6904",
       "range": {
         "startLine": 1268,
         "startChar": 13,
