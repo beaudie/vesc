@@ -87,6 +87,30 @@
       },
       "revId": "04b758cee6b92d6a031e53c2301535c033816aa5",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "52539422_d9d196f8",
+        "filename": "src/libANGLE/renderer/vulkan/SecondaryCommandBuffer.h",
+        "patchSetId": 13
+      },
+      "lineNbr": 910,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2022-02-14T16:51:36Z",
+      "side": 1,
+      "message": "Ack, this was my own misunderstanding.",
+      "parentUuid": "b6c984f6_2bfc528a",
+      "range": {
+        "startLine": 908,
+        "startChar": 0,
+        "endLine": 910,
+        "endChar": 1
+      },
+      "revId": "04b758cee6b92d6a031e53c2301535c033816aa5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
