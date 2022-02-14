@@ -51,6 +51,24 @@
       "parentUuid": "aacfce51_399d6a88",
       "revId": "fe694840cb94d61ddea26ad844ea6f9f885e7f4d",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "81ac8c2d_2c5be5da",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 20
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1524687
+      },
+      "writtenOn": "2022-02-14T10:52:14Z",
+      "side": 1,
+      "message": "Hi Shahbaz,\nI\u0027ve add two tests to verify our discussion.\n\nFor test \u0027ComputeShaderTest.DrawDispatchImageReadDraw\u0027, refer to:\n\u003e FS texture sample, then CS image read, then FS texture sample\nThe change can hold this test well as we wish when it is the image scenario.\n\n\nFor test \u0027VulkanPerformanceCounterTest_ES31.TextureSampleByDrawDispatchDraw\u0027,refer to:\n\u003e FS texture sample, then CS texture sample, then FS texture sample\nThings seems not happen as we wish. The expect render pass is only one; but actual get two. When FS texture sample to CS texture sample, the ImageLayout in ANGLE switch from FRAGMENT_SHADER_READ to COMPUTE_SHADER_READ, and ANGLE considers it is a different read layout, so a read barrier is recorded. And the render pass be closed before do the CS dispatch. But anyway, if we acknowledge this different shader stage read layout (although the vkImageLayout is VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL for both), the endRP here is needed.\n\nBut this test has extra validation fail, need to dig it out further:\n[ SYNC-HAZARD-READ_AFTER_WRITE ] Validation Error: [ SYNC-HAZARD-READ_AFTER_WRITE ] Object 0: handle \u003d 0x2f000000002f, type \u003d VK_OBJECT_TYPE_IMAGE_VIEW; | MessageID \u003d 0x4cb75b2d | vkCmdDispatch: Hazard READ_AFTER_WRITE for VkImageView 0x2f000000002f[], in VkCommandBuffer 0x560d7016c018[], and VkPipeline 0x6b000000006b[], VkDescriptorSet 0x6c000000006c[], type: VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER, imageLayout: VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL, binding #0, index 0. Access info (usage: SYNC_COMPUTE_SHADER_SHADER_STORAGE_READ, prior_usage: SYNC_IMAGE_LAYOUT_TRANSITION, write_barriers: SYNC_FRAGMENT_SHADER_SHADER_SAMPLED_READ|SYNC_FRAGMENT_SHADER_SHADER_STORAGE_READ|SYNC_FRAGMENT_SHADER_UNIFORM_READ, command: vkCmdPipelineBarrier, seq_no: 3, reset_no: 1). Object: 0x2f000000002f (type \u003d Image View(14))\n\nBased on this test, come back to the endRP issue in invalidateCurrentTextures. When CS texture sample, actually this scenario will hit endRenderPassIfComputeReadAfterAttachmentWrite\u0027s endRP, caused by the read image will be recorded to mRenderPassUsedImages too (in RenderPassCommandBufferHelper::imageRead). \nIf we limit the *usesImage* to write operation, seems things be more clearly:\n\u003e when call RenderPassCommandBufferHelper::imageRead, not add the image to mRenderPassUsedImages list; and use the usesReadImagesWithBarrier to trace if we need the barrier;\n\u003e in the invalidateCurrentTextures, the XXXAfterAttachmentWrite handle the fbo texture write and the XXXAfterTextureSample handle the previous FS texture read.",
+      "parentUuid": "a64c80ff_5ed64da3",
+      "revId": "fe694840cb94d61ddea26ad844ea6f9f885e7f4d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
