@@ -52,6 +52,24 @@
       "parentUuid": "5f1eeb4e_b7e0b8bc",
       "revId": "33e7c95c349e099779879871448cafb483d651ab",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "89629cff_afec67f3",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-02-14T16:05:53Z",
+      "side": 1,
+      "message": "I don\u0027t believe it works on mac/SwS. It\u0027s crashing in init, and there is nothing there that is backend specific except for `mImplementation-\u003einit` which is a no-op on non-Vulkan backends. Whatever is making it crash, it\u0027s not specific to metal.",
+      "parentUuid": "c5621f16_7dd2e932",
+      "revId": "33e7c95c349e099779879871448cafb483d651ab",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
