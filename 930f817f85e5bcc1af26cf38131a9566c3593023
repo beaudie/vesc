@@ -54,6 +54,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "af03ded8_bddf350e",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 5
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-02-14T16:20:57Z",
+      "side": 1,
+      "message": "Ok I took a look, and I\u0027ll accept the GOLD images. A rerun should be green.\n\nWhat I found is that, yes indeed it seems that now the Linux bots are not taking the compute path anymore (very likely due to old drivers). Looking through RenderDoc, I see that the blit-path somewhat smears the image to the left in the mips, while the compute path is actually producing much better mips! So the issue is really the blit path and your change is fine.",
+      "parentUuid": "72715ebe_ae5009d4",
+      "revId": "930f817f85e5bcc1af26cf38131a9566c3593023",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "947575be_9d3d3c77",
@@ -91,6 +109,30 @@
       "side": 1,
       "message": "\u003e Is the shader really using subgroup ops on anything other than 32-bit types?\n\nI did get a VVL error without it -\n\n [ RUN      ] dEQP.GLES2/functional_texture_mipmap_2d_generate_a8_fastest\n dEQP-GLES2.functional.texture.mipmap.2d.generate.a8_fastest\n ../../src/tests/deqp_support/angle_deqp_gtest.cpp(51): error: Failed\n RendererVk.cpp:757 (DebugUtilsMessenger): [ VUID-RuntimeSpirv-None-06275 ] Validation Error: [ VUID-RuntimeSpirv-None-06275 ] Object 0: handle \u003d 0x17aa8a67f68, type \u003d VK_OBJECT_TYPE_DEVICE; | MessageID \u003d 0x1c10ef47 | Shader requires VkPhysicalDeviceShaderSubgroupExtendedTypesFeatures::shaderSubgroupExtendedTypes but is not enabled on the device The Vulkan spec states: shaderSubgroupExtendedTypes must be enabled for group operations to use 8-bit integer, 16-bit integer, 64-bit integer, 16-bit floating-point, and vectors of these types (https://www.khronos.org/registry/vulkan/specs/1.3-extensions/html/vkspec.html#VUID-RuntimeSpirv-None-06275)\n \n\u003e if any of the physical device’s queues support VK_QUEUE_COMPUTE_BIT\n\nis it possible for this condition to not be true on some vendor? Also, we are interested in the intersection of `VK_SUBGROUP_FEATURE_QUAD_BIT` and `VK_SHADER_STAGE_COMPUTE_BIT`",
       "parentUuid": "947575be_9d3d3c77",
+      "range": {
+        "startLine": 3068,
+        "startChar": 32,
+        "endLine": 3068,
+        "endChar": 90
+      },
+      "revId": "930f817f85e5bcc1af26cf38131a9566c3593023",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "db3016c2_1046f5a1",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 3068,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-02-14T16:20:57Z",
+      "side": 1,
+      "message": "Ack regarding the needed feature.\n\n\u003e if \"NVIDIA GeForce GTX 1660\" is the bot GPU then, vkinfo says it supports \"VK_KHR_shader_subgroup_extended_types\" -\u003e https://vulkan.gpuinfo.org/displayreport.php?id\u003d14015#device\n\nI don\u0027t believe we have up-to-date drivers, even if the GPU is capable.\n\n\u003e is it possible for this condition to not be true on some vendor? Also, we are interested in the intersection of `VK_SUBGROUP_FEATURE_QUAD_BIT` and `VK_SHADER_STAGE_COMPUTE_BIT`\n\nSince the spec requires it, it should be. IOW, `mSubgroupProperties.supportedStages \u0026 VK_SHADER_STAGE_COMPUTE_BIT` is always true if the device supports compute. _Technically_ ANGLE should be able to support old devices that don\u0027t support compute, so let\u0027s just keep this here. That support is most likely very broken nevertheless.",
+      "parentUuid": "5aadb4bd_2ac44d69",
       "range": {
         "startLine": 3068,
         "startChar": 32,
