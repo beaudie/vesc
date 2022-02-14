@@ -26,6 +26,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "90828d3e_7af07862",
+        "filename": "src/libANGLE/renderer/vulkan/ResourceVk.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 32,
+      "author": {
+        "id": 1520902
+      },
+      "writtenOn": "2022-02-14T23:38:45Z",
+      "side": 1,
+      "message": "Yes. I explained it in the doc go/vangle-remove-imageviewhelper-from-resourceuselist. In short, the reason is that current implementation add the same ImageHelper.mUse multiple times in the RendererVk::mSharedGarbage: 1 time for ImageViewHelper garbage objects, 1 time for ImageHelper garbage objects. We could delete the mUse from the heap when processing either one of them in the RendererVk::mSharedGarbage while it is still referenced by the other garbage objects. I can\u0027t simply increment the counter, as we use if(counter \u003e 1) to determine if the resource is still in use by command buffer. Therefore I am using another counter to keep track of how many more times we reference mUse in the RendererVk::mSharedGarbage.",
+      "parentUuid": "7022a80f_41d1652b",
+      "range": {
+        "startLine": 32,
+        "startChar": 13,
+        "endLine": 32,
+        "endChar": 27
+      },
+      "revId": "ad4ca5d3148ed17cdd6bf0439ebd93f11caccf54",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "3d3ff1e1_804b7c85",
         "filename": "src/libANGLE/renderer/vulkan/vk_helpers.h",
         "patchSetId": 2
@@ -49,6 +73,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "58c79598_1627c443",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 2334,
+      "author": {
+        "id": 1520902
+      },
+      "writtenOn": "2022-02-14T23:38:45Z",
+      "side": 1,
+      "message": "Got it, yes I will remove the inheritance from Resource class.",
+      "parentUuid": "3d3ff1e1_804b7c85",
+      "range": {
+        "startLine": 2334,
+        "startChar": 0,
+        "endLine": 2334,
+        "endChar": 45
+      },
+      "revId": "ad4ca5d3148ed17cdd6bf0439ebd93f11caccf54",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "2354b15b_792ef25a",
         "filename": "src/libANGLE/renderer/vulkan/vk_helpers.h",
         "patchSetId": 2
@@ -60,6 +108,30 @@
       "writtenOn": "2022-02-14T21:46:12Z",
       "side": 1,
       "message": "I am thinking not adding any of these, but to change release() call to \n\n    void release(RendererVk *renderer, std::vector\u003cGarbageObject\u003e *garbage);\n    \nAnd let caller collect into garbage and call renderer-\u003ecollectGarbage().\n\nAnd same thing for ImageHelper as well. Basically caller will do something like this:\nstd::vector\u003cGarbageObject\u003e garbage; \nmImage-\u003erelease(renderer, \u0026garbage);\nmImageViews-\u003erelease(renderer, \u0026garbage);\nrenderer-\u003ecollectGarbage(garbage);",
+      "range": {
+        "startLine": 2492,
+        "startChar": 4,
+        "endLine": 2499,
+        "endChar": 70
+      },
+      "revId": "ad4ca5d3148ed17cdd6bf0439ebd93f11caccf54",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "185658bd_c1dd99c5",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 2499,
+      "author": {
+        "id": 1520902
+      },
+      "writtenOn": "2022-02-14T23:38:45Z",
+      "side": 1,
+      "message": "Thank you Charlie. I will change the implementation to the one you suggested. It might incur more code changes as we need to modify all the places that call release() on both ImageHelper and ImageViewHelpers, comparing to now only ImageViewHelpers are affected. But I will have both implementations ready and compare.",
+      "parentUuid": "2354b15b_792ef25a",
       "range": {
         "startLine": 2492,
         "startChar": 4,
