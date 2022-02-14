@@ -532,6 +532,10 @@ void CommandQueue::onCommandBufferCommitted(id<MTLCommandBuffer> buf, uint64_t s
 {
     std::lock_guard<std::mutex> lg(mLock);
 
+    // Command buffers are enqueued on creation so they must submitted in order
+    ASSERT(serial == mLastCommittedSerial + 1);
+    mLastCommittedSerial = serial;
+
     ANGLE_MTL_LOG("Committed MTLCommandBuffer %llu:%p", serial, buf);
 
     mCommittedBufferSerial.store(

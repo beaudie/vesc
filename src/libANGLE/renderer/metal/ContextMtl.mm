@@ -1249,6 +1249,7 @@ angle::Result ContextMtl::onMakeCurrent(const gl::Context *context)
 angle::Result ContextMtl::onUnMakeCurrent(const gl::Context *context)
 {
     flushCommandBuffer(mtl::WaitUntilScheduled);
+    flushCommandBuffer(mtl::WaitUntilScheduled);
     return angle::Result::Continue;
 }
 
