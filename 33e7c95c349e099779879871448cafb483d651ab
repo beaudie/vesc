@@ -16,6 +16,24 @@
       "message": "Looks like this define tripped up mac somehow.",
       "revId": "33e7c95c349e099779879871448cafb483d651ab",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "5f1eeb4e_b7e0b8bc",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-02-14T15:54:42Z",
+      "side": 1,
+      "message": "Huh, I wonder why we don\u0027t have symbols on the mac build.\n\nAnyway, I\u0027ll add a !mac to the condition, we can debug if we ever use it on SwS on mac for some reason.",
+      "parentUuid": "3e36c6e6_e29c3c72",
+      "revId": "33e7c95c349e099779879871448cafb483d651ab",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
