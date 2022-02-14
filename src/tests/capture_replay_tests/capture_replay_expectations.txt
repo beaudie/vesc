@@ -168,6 +168,9 @@
 6631 WIN : MultithreadingTestES3.MultithreadFenceTexImage/* = CRASH
 6631 : MultithreadingTest.MultiContextDrawWithSwapBuffers/* = CRASH
 
+# Marking this as crash because we don't want it to run as it uses multiple contexts
+6752 : OcclusionQueriesNoSurfaceTestES3.SwitchingContextsWithQuery/* = CRASH
+
 # ES3_1
 6180 : ProgramPipelineTest31.VerifyPpoLinkErrorSignalledCorrectly/* = FAIL
 
