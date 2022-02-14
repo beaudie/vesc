@@ -34,6 +34,24 @@
       "parentUuid": "3e36c6e6_e29c3c72",
       "revId": "33e7c95c349e099779879871448cafb483d651ab",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "c5621f16_7dd2e932",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2022-02-14T16:01:25Z",
+      "side": 1,
+      "message": "Can you instead \"featurize\" the overlay so we don\u0027t try to initialize it on Metal? It may very well work on Mac Vulkan (SwS).",
+      "parentUuid": "5f1eeb4e_b7e0b8bc",
+      "revId": "33e7c95c349e099779879871448cafb483d651ab",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
