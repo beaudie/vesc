@@ -94,6 +94,7 @@ class CommandQueue final : public WrappedObject<id<MTLCommandQueue>>, angle::Non
     uint64_t mQueueSerialCounter = 1;
     std::atomic<uint64_t> mCommittedBufferSerial{0};
     std::atomic<uint64_t> mCompletedBufferSerial{0};
+    uint64_t mLastCommittedSerial = 0;
 
     mutable std::mutex mLock;
 };
