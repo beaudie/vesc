@@ -72,6 +72,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "015a0911_39566b33",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 5
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1340649
+      },
+      "writtenOn": "2022-02-14T16:49:52Z",
+      "side": 1,
+      "message": "\u003e yes indeed it seems that now the Linux bots are not taking the compute path anymore (very likely due to old drivers)\n\nthat sucks, you should be able to request a driver upgrade to the bots, right?\n\n\u003e while the compute path is actually producing much better mips! So the issue is really the blit path and your change is fine.\n\nnice!",
+      "parentUuid": "af03ded8_bddf350e",
+      "revId": "930f817f85e5bcc1af26cf38131a9566c3593023",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "947575be_9d3d3c77",
@@ -133,6 +151,30 @@
       "side": 1,
       "message": "Ack regarding the needed feature.\n\n\u003e if \"NVIDIA GeForce GTX 1660\" is the bot GPU then, vkinfo says it supports \"VK_KHR_shader_subgroup_extended_types\" -\u003e https://vulkan.gpuinfo.org/displayreport.php?id\u003d14015#device\n\nI don\u0027t believe we have up-to-date drivers, even if the GPU is capable.\n\n\u003e is it possible for this condition to not be true on some vendor? Also, we are interested in the intersection of `VK_SUBGROUP_FEATURE_QUAD_BIT` and `VK_SHADER_STAGE_COMPUTE_BIT`\n\nSince the spec requires it, it should be. IOW, `mSubgroupProperties.supportedStages \u0026 VK_SHADER_STAGE_COMPUTE_BIT` is always true if the device supports compute. _Technically_ ANGLE should be able to support old devices that don\u0027t support compute, so let\u0027s just keep this here. That support is most likely very broken nevertheless.",
       "parentUuid": "5aadb4bd_2ac44d69",
+      "range": {
+        "startLine": 3068,
+        "startChar": 32,
+        "endLine": 3068,
+        "endChar": 90
+      },
+      "revId": "930f817f85e5bcc1af26cf38131a9566c3593023",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "f2b27966_9d1cacc5",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 3068,
+      "author": {
+        "id": 1340649
+      },
+      "writtenOn": "2022-02-14T16:49:52Z",
+      "side": 1,
+      "message": "thanks shabi, will land if bots are happy",
+      "parentUuid": "db3016c2_1046f5a1",
       "range": {
         "startLine": 3068,
         "startChar": 32,
