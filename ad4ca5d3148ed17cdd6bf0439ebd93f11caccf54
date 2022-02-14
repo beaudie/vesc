@@ -1,0 +1,73 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "7022a80f_41d1652b",
+        "filename": "src/libANGLE/renderer/vulkan/ResourceVk.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 32,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2022-02-14T21:46:12Z",
+      "side": 1,
+      "message": "Do you know why you need to track this? I was expecting adding any new data to ResourceUse.",
+      "range": {
+        "startLine": 32,
+        "startChar": 13,
+        "endLine": 32,
+        "endChar": 27
+      },
+      "revId": "ad4ca5d3148ed17cdd6bf0439ebd93f11caccf54",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "3d3ff1e1_804b7c85",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 2334,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2022-02-14T21:46:12Z",
+      "side": 1,
+      "message": "I am thinking change this to \nclass ImageViewHelper final: angle::NonCopyable\n\nwhich means ImageViewHelper class will not have access to mUse.",
+      "range": {
+        "startLine": 2334,
+        "startChar": 0,
+        "endLine": 2334,
+        "endChar": 45
+      },
+      "revId": "ad4ca5d3148ed17cdd6bf0439ebd93f11caccf54",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "2354b15b_792ef25a",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 2499,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2022-02-14T21:46:12Z",
+      "side": 1,
+      "message": "I am thinking not adding any of these, but to change release() call to \n\n    void release(RendererVk *renderer, std::vector\u003cGarbageObject\u003e *garbage);\n    \nAnd let caller collect into garbage and call renderer-\u003ecollectGarbage().\n\nAnd same thing for ImageHelper as well. Basically caller will do something like this:\nstd::vector\u003cGarbageObject\u003e garbage; \nmImage-\u003erelease(renderer, \u0026garbage);\nmImageViews-\u003erelease(renderer, \u0026garbage);\nrenderer-\u003ecollectGarbage(garbage);",
+      "range": {
+        "startLine": 2492,
+        "startChar": 4,
+        "endLine": 2499,
+        "endChar": 70
+      },
+      "revId": "ad4ca5d3148ed17cdd6bf0439ebd93f11caccf54",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
