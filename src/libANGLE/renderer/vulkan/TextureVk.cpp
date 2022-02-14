@@ -1724,7 +1724,8 @@ angle::Result TextureVk::copyBufferDataToImage(ContextVk *contextVk,
 
     gl::LevelIndex level = gl::LevelIndex(index.getLevelIndex());
     GLuint layerCount    = index.getLayerCount();
-    GLuint layerIndex    = 0;
+    GLuint layerIndex =
+        (index.getType() == gl::TextureType::CubeMap) ? index.cubeMapFaceIndex() : 0;
 
     ASSERT((aspectFlags & kDepthStencilAspects) != kDepthStencilAspects);
 
