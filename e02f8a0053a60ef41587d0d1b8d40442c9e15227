@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "c26c3ea4_9f9b008b",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 5
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1500872
+      },
+      "writtenOn": "2022-02-14T22:24:51Z",
+      "side": 1,
+      "message": "This looks like the proper fix. I\u0027d like to run some tests on Safari to make sure we\u0027re not regressing anything, but this should ensure that all work is committed in the proper order.",
+      "revId": "e02f8a0053a60ef41587d0d1b8d40442c9e15227",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
