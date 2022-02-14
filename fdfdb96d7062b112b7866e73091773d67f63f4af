@@ -1,6 +1,23 @@
 {
   "comments": [
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "4beff9ef_37bcc650",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-02-14T15:39:16Z",
+      "side": 1,
+      "message": "LGTM with Jamie\u0027s comments addressed",
+      "revId": "fdfdb96d7062b112b7866e73091773d67f63f4af",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "10b938ba_9ce7ab23",
