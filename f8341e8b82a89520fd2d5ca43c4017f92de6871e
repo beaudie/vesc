@@ -16,6 +16,24 @@
       "message": "I will try to make sense of dEQP failures soon, but what strikes me as really odd is that *SwiftShader tests, which I understand are insensitive to GPU, OS, etc differences are failing, and I\u0027m unable to reproduce these failures locally. Are there any suggestions as to what could be worth looking into first?",
       "revId": "f8341e8b82a89520fd2d5ca43c4017f92de6871e",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "b99c5e50_a1f75f61",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 17
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2022-02-15T20:18:54Z",
+      "side": 1,
+      "message": "Which tests in particular are you looking at?\n\nI see some Android failures that look potentially related. The others may be transient flakes or easily addressed.",
+      "parentUuid": "f5fdefe0_c3eefc0c",
+      "revId": "f8341e8b82a89520fd2d5ca43c4017f92de6871e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
