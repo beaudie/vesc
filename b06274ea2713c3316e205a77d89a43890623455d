@@ -95,6 +95,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "4e5accae_c0c37413",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 30
+      },
+      "lineNbr": 3651,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2022-02-15T23:21:50Z",
+      "side": 1,
+      "message": "Thanks. I also verified that before this CL, that clear is a standalone draw with its own renderpass. There is no extra renderpass break because of this.",
+      "parentUuid": "ce023c38_d87d773e",
+      "range": {
+        "startLine": 3644,
+        "startChar": 12,
+        "endLine": 3651,
+        "endChar": 9
+      },
+      "revId": "b06274ea2713c3316e205a77d89a43890623455d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "494c323a_fc5a4bd9",
@@ -165,6 +189,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "7eb27c5e_50063c6b",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 30
+      },
+      "lineNbr": 1504,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2022-02-15T23:21:50Z",
+      "side": 1,
+      "message": "Yea, the tracking of content defined seems a bit flaky. We probbaly should take a second look later to see if there is still holes there. But looks good to me with this CL.",
+      "parentUuid": "307dbe27_702b6113",
+      "range": {
+        "startLine": 1500,
+        "startChar": 5,
+        "endLine": 1504,
+        "endChar": 5
+      },
+      "revId": "b06274ea2713c3316e205a77d89a43890623455d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "1a89faae_58564e3a",
@@ -202,6 +250,30 @@
       "side": 1,
       "message": "\u003e IMO, it is better to pass \"const gl::State *state\" so that it has less chance to miss-use since it is \"const\".\n\nDone, since I was considering that approach to begin with.\n\n\u003e And these also appears not directly related to this CL, might split into separate CL to make diff smaller here. My suggestion, your choice.\n\nThe functions `isDepthWriteEnabled()` and `isStencilWriteEnabled()` are being used in `depthStencilImagesDraw()` now, so these cleanup changes are related to this CL in that sense.   I\u0027d prefer to keep them here and avoid the overhead of pulling them out into a preceding CL, since they\u0027re pretty small.",
       "parentUuid": "1a89faae_58564e3a",
+      "range": {
+        "startLine": 2058,
+        "startChar": 4,
+        "endLine": 2058,
+        "endChar": 25
+      },
+      "revId": "b06274ea2713c3316e205a77d89a43890623455d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "dd521cd9_83c414df",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 30
+      },
+      "lineNbr": 2058,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2022-02-15T23:21:50Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "6c7eba22_e4991e13",
       "range": {
         "startLine": 2058,
         "startChar": 4,
