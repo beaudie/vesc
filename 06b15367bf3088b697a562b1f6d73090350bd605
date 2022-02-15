@@ -16,6 +16,29 @@
       "message": "PTAL.",
       "revId": "06b15367bf3088b697a562b1f6d73090350bd605",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "acd35a82_2e412868",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.h",
+        "patchSetId": 11
+      },
+      "lineNbr": 159,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2022-02-15T21:58:06Z",
+      "side": 1,
+      "message": "I think this is a bit overly complicated. Now the dynamic buffer is only used by per context usages, and mostly for small allocations anyway, I think you no longer really need to rely on the size to decide if a free buffer should be reused or freed etc. I think we should simplify this logic rather than make it more complicated. What I was thinking is the releaseByPolicy should all removed and use the same mechanism that we prune the default buffer pool to free the buffers that aren\u0027t been used in the past 1 second. But again, these buffers are pretty small, so the gain here is quite small as well, which means lower priority.\n\nAlso, you can get size from the the buffer itself, I don\u0027t think you need to save it here(unless your refactor CL has changed it).",
+      "range": {
+        "startLine": 150,
+        "startChar": 4,
+        "endLine": 159,
+        "endChar": 77
+      },
+      "revId": "06b15367bf3088b697a562b1f6d73090350bd605",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
