@@ -157,6 +157,30 @@
       },
       "revId": "eb5226d4bee93d97ce22a899eac5ae2246c88e0d",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "1c4f9330_b3f71af2",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 8175,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2022-02-15T22:22:36Z",
+      "side": 1,
+      "message": "Cody/Shabi, PTAL, what do you guys think? I\u0027m trying to refactor the code to prevent this kind of problem from being so obtuse to debug. Charlie has a different take.",
+      "parentUuid": "f7b970e8_f4e336a0",
+      "range": {
+        "startLine": 8175,
+        "startChar": 0,
+        "endLine": 8175,
+        "endChar": 64
+      },
+      "revId": "eb5226d4bee93d97ce22a899eac5ae2246c88e0d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
