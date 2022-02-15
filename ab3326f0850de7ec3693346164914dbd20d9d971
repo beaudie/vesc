@@ -298,6 +298,24 @@
       "parentUuid": "a36fd078_f33609c4",
       "revId": "ab3326f0850de7ec3693346164914dbd20d9d971",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "7677021c_428f5858",
+        "filename": "src/tests/gl_tests/GLSLTest.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 561,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2022-02-15T20:24:45Z",
+      "side": 1,
+      "message": "Hmm, that is strange. I wonder whether this would behave any differently if WebGL compatibility were enabled on the context? Maybe different flags are passed to ANGLE\u0027s shader translator.\n\nAnyway - let\u0027s not let this block you - feel free to use ANGLE_SKIP_TEST_IF(IsNvidiai()) with a TODO if that\u0027ll let you land.",
+      "parentUuid": "1d6c704f_ad5c4979",
+      "revId": "ab3326f0850de7ec3693346164914dbd20d9d971",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
