@@ -551,6 +551,13 @@ bool ValidateGetPlatformDisplayCommon(const ValidationContext *val,
                 return false;
             }
             break;
+        case EGL_PLATFORM_GBM_KHR:
+            if (!clientExtensions.platformGbmKHR)
+            {
+                val->setError(EGL_BAD_PARAMETER, "Platform GBM extension is not active");
+                return false;
+            }
+            break;
         default:
             val->setError(EGL_BAD_CONFIG, "Bad platform type.");
             return false;
@@ -561,6 +568,7 @@ bool ValidateGetPlatformDisplayCommon(const ValidationContext *val,
     switch (platform)
     {
         case EGL_PLATFORM_ANGLE_ANGLE:
+        case EGL_PLATFORM_GBM_KHR:
         {
             EGLAttrib platformType       = EGL_PLATFORM_ANGLE_TYPE_DEFAULT_ANGLE;
             bool enableAutoTrimSpecified = false;
