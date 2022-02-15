@@ -39,6 +39,30 @@
       },
       "revId": "06b15367bf3088b697a562b1f6d73090350bd605",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "41d2183e_5e6ed7d1",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.h",
+        "patchSetId": 11
+      },
+      "lineNbr": 159,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2022-02-15T22:04:48Z",
+      "side": 1,
+      "message": "Charlie, seeing as this is a pretty good improvement, what about using the design as it stands now to save time. We can revisit a preferable design as a post-process.",
+      "parentUuid": "acd35a82_2e412868",
+      "range": {
+        "startLine": 150,
+        "startChar": 4,
+        "endLine": 159,
+        "endChar": 77
+      },
+      "revId": "06b15367bf3088b697a562b1f6d73090350bd605",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
