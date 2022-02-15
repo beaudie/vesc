@@ -316,6 +316,24 @@
       "parentUuid": "1d6c704f_ad5c4979",
       "revId": "ab3326f0850de7ec3693346164914dbd20d9d971",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "a66d4eb4_a0d015e8",
+        "filename": "src/tests/gl_tests/GLSLTest.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 561,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-02-15T21:07:02Z",
+      "side": 1,
+      "message": "That was my first instinct too, but Chrome isn\u0027t adding any flags on passthrough, and the flags being enabled for WebGL seem to be unrelated.\n\nAnyway, just dropped by to say please use angle_end2end_tests_expectations.txt for skipping tests.",
+      "parentUuid": "7677021c_428f5858",
+      "revId": "ab3326f0850de7ec3693346164914dbd20d9d971",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
