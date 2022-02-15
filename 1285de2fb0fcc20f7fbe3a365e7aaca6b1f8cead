@@ -41,6 +41,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "f4da178a_976739e8",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 7947,
+      "author": {
+        "id": 1491687
+      },
+      "writtenOn": "2022-02-15T13:47:17Z",
+      "side": 1,
+      "message": "I also looked into de-duplicating these, but since the arguments are different as they contain the respective extension function signatures I would leave them as separate.",
+      "parentUuid": "3f70e46a_b5e066e0",
+      "range": {
+        "startLine": 7947,
+        "startChar": 0,
+        "endLine": 7947,
+        "endChar": 45
+      },
+      "revId": "1285de2fb0fcc20f7fbe3a365e7aaca6b1f8cead",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "4d387ec9_9c162723",
@@ -54,6 +78,30 @@
       "writtenOn": "2022-02-11T21:54:40Z",
       "side": 1,
       "message": "Can this go within the new if block below, or is the information lost at that point?",
+      "range": {
+        "startLine": 8046,
+        "startChar": 0,
+        "endLine": 8048,
+        "endChar": 66
+      },
+      "revId": "1285de2fb0fcc20f7fbe3a365e7aaca6b1f8cead",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "8b110273_8e1c7e37",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 8048,
+      "author": {
+        "id": 1491687
+      },
+      "writtenOn": "2022-02-15T13:47:17Z",
+      "side": 1,
+      "message": "With this commit isolated it would make sense to move it into the compressed case\u0027s scope, but in the next commit the `storageFormatInfo` is required as well, so it needs to be on top of both `if (readFormat-\u003eisBlock)` cases.\n\nIn addition the `readFormat` is written to a few lines later at `readFormat \u003d \u0026GetDepthStencilImageToBufferFormat(*readFormat, copyAspectFlags);`, which could have an effect on the resulting `storageFormatInfo` I did not test.",
+      "parentUuid": "4d387ec9_9c162723",
       "range": {
         "startLine": 8046,
         "startChar": 0,
@@ -89,6 +137,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "a5033159_ddf36c09",
+        "filename": "src/tests/gl_tests/GetImageTest.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 710,
+      "author": {
+        "id": 1491687
+      },
+      "writtenOn": "2022-02-15T13:47:17Z",
+      "side": 1,
+      "message": "I actually have tried this, but unfortunately it\u0027s not the same in all cases.\nIn the case of an `GL_ETC1_RGB8_OES` internal format the resulting read format will be `GL_COMPRESSED_RGB8_ETC2`. This is for implementations where ETC1 is not emulated. Tested on ARM and SwiftShader.\n\nAn alternative would be extending the `ANGLE_get_image` extension specification to provide a new texture parameter like `GL_IMPLEMENTATION_FORMAT_IS_EMULATED` which could internally access `hasEmulatedImageFormat()` from `vk_helpers.h`.",
+      "parentUuid": "dd89acb0_8daf6e90",
+      "range": {
+        "startLine": 710,
+        "startChar": 0,
+        "endLine": 710,
+        "endChar": 80
+      },
+      "revId": "1285de2fb0fcc20f7fbe3a365e7aaca6b1f8cead",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "89ccc973_211e413e",
         "filename": "src/tests/gl_tests/GetImageTest.cpp",
         "patchSetId": 7
@@ -100,6 +172,30 @@
       "writtenOn": "2022-02-11T21:54:40Z",
       "side": 1,
       "message": "This (and the other early returns below) could use a quick cout describing the skip, unless it is too verbose.",
+      "range": {
+        "startLine": 733,
+        "startChar": 8,
+        "endLine": 733,
+        "endChar": 14
+      },
+      "revId": "1285de2fb0fcc20f7fbe3a365e7aaca6b1f8cead",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "2f34ee7a_10729dc6",
+        "filename": "src/tests/gl_tests/GetImageTest.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 733,
+      "author": {
+        "id": 1491687
+      },
+      "writtenOn": "2022-02-15T13:47:17Z",
+      "side": 1,
+      "message": "I actually already had this on my debug branch and removed it before publishing. Ported it back to the current CL.",
+      "parentUuid": "89ccc973_211e413e",
       "range": {
         "startLine": 733,
         "startChar": 8,
@@ -133,6 +229,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "189e92a5_0014f077",
+        "filename": "src/tests/gl_tests/GetImageTest.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 745,
+      "author": {
+        "id": 1491687
+      },
+      "writtenOn": "2022-02-15T13:47:17Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "29b28e50_a755207f",
+      "range": {
+        "startLine": 745,
+        "startChar": 49,
+        "endLine": 745,
+        "endChar": 52
+      },
+      "revId": "1285de2fb0fcc20f7fbe3a365e7aaca6b1f8cead",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "0ba954ce_435612e6",
@@ -146,6 +266,30 @@
       "writtenOn": "2022-02-11T21:54:40Z",
       "side": 1,
       "message": "Can you convert these to constexprs with descriptive names?",
+      "range": {
+        "startLine": 769,
+        "startChar": 34,
+        "endLine": 769,
+        "endChar": 40
+      },
+      "revId": "1285de2fb0fcc20f7fbe3a365e7aaca6b1f8cead",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "0a932fb1_9cadbb41",
+        "filename": "src/tests/gl_tests/GetImageTest.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 769,
+      "author": {
+        "id": 1491687
+      },
+      "writtenOn": "2022-02-15T13:47:17Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "0ba954ce_435612e6",
       "range": {
         "startLine": 769,
         "startChar": 34,
