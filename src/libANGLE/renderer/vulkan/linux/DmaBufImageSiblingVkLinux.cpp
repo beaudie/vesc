@@ -13,6 +13,8 @@
 #include "libANGLE/renderer/vulkan/DisplayVk.h"
 #include "libANGLE/renderer/vulkan/RendererVk.h"
 
+#include <fcntl.h>
+
 namespace rx
 {
 namespace
@@ -298,8 +300,15 @@ uint32_t GetAllocateInfo(const egl::AttributeMap &attribs,
         infoOut->allocateInfo[plane].image = image;
 
         infoOut->importFdInfo[plane].sType      = VK_STRUCTURE_TYPE_IMPORT_MEMORY_FD_INFO_KHR;
-        infoOut->importFdInfo[plane].handleType = VK_EXTERNAL_MEMORY_HANDLE_TYPE_OPAQUE_FD_BIT;
-        infoOut->importFdInfo[plane].fd         = attribs.getAsInt(kFds[plane]);
+        infoOut->importFdInfo[plane].handleType = VK_EXTERNAL_MEMORY_HANDLE_TYPE_DMA_BUF_BIT_EXT;
+
+        // Vulkan takes ownership of the FD, closed on vkFreeMemory.
+        int dfd = fcntl(attribs.getAsInt(kFds[plane]), F_DUPFD_CLOEXEC, 0);
+        if (dfd < 0)
+        {
+            ERR() << "failed to duplicate fd for dma_buf import" << std::endl;
+        }
+        infoOut->importFdInfo[plane].fd = dfd;
 
         infoOut->allocateInfoPtr[plane] = &infoOut->allocateInfo[plane];
     }
