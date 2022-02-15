@@ -69,6 +69,24 @@
       "parentUuid": "a64c80ff_5ed64da3",
       "revId": "fe694840cb94d61ddea26ad844ea6f9f885e7f4d",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "efa46962_28e5ad3a",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 20
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-02-15T16:11:21Z",
+      "side": 1,
+      "message": "Thanks for the tests. Could you please also add this test?\n\n- FS image read followed by CS texture sample\n\n\u003e \u003e FS texture sample, then CS image read, then FS texture sample\n\u003e \n\u003e The change can hold this test well as we wish when it is the image scenario.\n\nExcellent\n\n\u003e \u003e FS texture sample, then CS texture sample, then FS texture sample\n\u003e \n\u003e Things seems not happen as we wish\n\nOk I see. The sync hazard might have to do with this bug: anglebug.com/6663 but not sure\n\nAlso, understood that currently we unnecessarily break the render pass. I think what\u0027s best right now is:\n\n1. Open a bug about optimizing this\n2. Make the test expect 2 render passes, with a note and reference to the bug\n3. Open a bug about the syncval error\n4. Suppress the syncval error here: https://source.chromium.org/chromium/chromium/src/+/main:third_party/angle/src/libANGLE/renderer/vulkan/RendererVk.cpp;l\u003d201\n\nAnd then follow up with your suggested work to actually do the optimization in a separate change.",
+      "parentUuid": "81ac8c2d_2c5be5da",
+      "revId": "fe694840cb94d61ddea26ad844ea6f9f885e7f4d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
