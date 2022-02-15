@@ -164,6 +164,30 @@
       },
       "revId": "ad4ca5d3148ed17cdd6bf0439ebd93f11caccf54",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "25f09727_5233998d",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 2499,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2022-02-15T17:41:48Z",
+      "side": 1,
+      "message": "Maybe add \"std::vector\u003cGarbageObject\u003e mViewGarbage;\" to the class ImageHelper. Basically you always collect the view\u0027s garbage and stashed inside ImageHelper object. Then at ImageHelper::release() time, you actually collect both image and view with one SharedGarbage object. That should have very smaller diff and should work for all usage cases as well.",
+      "parentUuid": "185658bd_c1dd99c5",
+      "range": {
+        "startLine": 2492,
+        "startChar": 4,
+        "endLine": 2499,
+        "endChar": 70
+      },
+      "revId": "ad4ca5d3148ed17cdd6bf0439ebd93f11caccf54",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
