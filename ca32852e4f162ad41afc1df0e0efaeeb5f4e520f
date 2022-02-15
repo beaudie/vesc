@@ -22,6 +22,30 @@
       },
       "revId": "ca32852e4f162ad41afc1df0e0efaeeb5f4e520f",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "804186d4_350fc207",
+        "filename": "src/libANGLE/renderer/vulkan/VertexArrayVk.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 102,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2022-02-15T01:09:05Z",
+      "side": 1,
+      "message": "Have a fix at https://chromium-review.googlesource.com/c/angle/angle/+/3461554",
+      "parentUuid": "753b9e5a_a71eb3b8",
+      "range": {
+        "startLine": 101,
+        "startChar": 2,
+        "endLine": 102,
+        "endChar": 95
+      },
+      "revId": "ca32852e4f162ad41afc1df0e0efaeeb5f4e520f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
