@@ -46,6 +46,30 @@
       },
       "revId": "e6505ec90835aaf4f36f7c6122861453a10cce45",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "452e473b_2ebe2e6f",
+        "filename": "src/libANGLE/validationESEXT.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 328,
+      "author": {
+        "id": 1491687
+      },
+      "writtenOn": "2022-02-15T13:55:43Z",
+      "side": 1,
+      "message": "The formats here were determined empirically by testing all supported compressions when running on Mesa/radv.",
+      "parentUuid": "67dcbf53_185d6265",
+      "range": {
+        "startLine": 328,
+        "startChar": 4,
+        "endLine": 328,
+        "endChar": 77
+      },
+      "revId": "e6505ec90835aaf4f36f7c6122861453a10cce45",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
