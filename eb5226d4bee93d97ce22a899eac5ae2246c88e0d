@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "c470fd87_a6849366",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 7
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2022-02-15T20:17:13Z",
+      "side": 1,
+      "message": "PTAL Charlie and Yuxin.",
+      "revId": "eb5226d4bee93d97ce22a899eac5ae2246c88e0d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
