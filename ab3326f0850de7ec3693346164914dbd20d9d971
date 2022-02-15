@@ -88,6 +88,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "876dfe43_e42c9f3b",
+        "filename": "src/tests/gl_tests/GLSLTest.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 551,
+      "author": {
+        "id": 1500872
+      },
+      "writtenOn": "2022-02-15T18:34:54Z",
+      "side": 1,
+      "message": "Correct.",
+      "parentUuid": "373bd9b1_aaf56899",
+      "revId": "ab3326f0850de7ec3693346164914dbd20d9d971",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "930a8229_e8f5953c",
         "filename": "src/tests/gl_tests/GLSLTest.cpp",
         "patchSetId": 6
@@ -111,6 +129,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "b3c28563_e09e5a0a",
+        "filename": "src/tests/gl_tests/GLSLTest.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 554,
+      "author": {
+        "id": 1500872
+      },
+      "writtenOn": "2022-02-15T18:34:54Z",
+      "side": 1,
+      "message": "They are, it\u0027s a pretty weird test.",
+      "parentUuid": "930a8229_e8f5953c",
+      "range": {
+        "startLine": 553,
+        "startChar": 0,
+        "endLine": 554,
+        "endChar": 65
+      },
+      "revId": "ab3326f0850de7ec3693346164914dbd20d9d971",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "08b8915c_a6fe1a0a",
         "filename": "src/tests/gl_tests/GLSLTest.cpp",
         "patchSetId": 6
@@ -122,6 +164,24 @@
       "writtenOn": "2022-02-15T02:54:00Z",
       "side": 1,
       "message": "I haven\u0027t checked all of the bots\u0027 results but would an EXPECT_PIXEL_COLOR_NEAR resolve most of the failures without negating the value of the test?",
+      "revId": "ab3326f0850de7ec3693346164914dbd20d9d971",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "a36fd078_f33609c4",
+        "filename": "src/tests/gl_tests/GLSLTest.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 561,
+      "author": {
+        "id": 1500872
+      },
+      "writtenOn": "2022-02-15T18:34:54Z",
+      "side": 1,
+      "message": "Sure! I\u0027ll try EXPECT_PIXEL_COLOR_NEAR. I\u0027ll also double check to see if there\u0027s any expected failures for these platforms. This test is a port of an ogles/build test.",
+      "parentUuid": "08b8915c_a6fe1a0a",
       "revId": "ab3326f0850de7ec3693346164914dbd20d9d971",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }

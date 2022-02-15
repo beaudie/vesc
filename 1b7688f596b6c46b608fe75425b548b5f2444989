@@ -18,6 +18,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "fbdb9426_dbfd3d42",
+        "filename": "src/tests/compiler_tests/MSLOutput_test.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 649,
+      "author": {
+        "id": 1500872
+      },
+      "writtenOn": "2022-02-15T18:34:54Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "feaf7f46_79dadb5e",
+      "revId": "1b7688f596b6c46b608fe75425b548b5f2444989",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "423000c0_719d5262",
@@ -48,6 +66,24 @@
       "writtenOn": "2022-02-15T02:54:00Z",
       "side": 1,
       "message": "Thanks for revising the test; looks good. It looks pretty stressful - looks like it\u0027s failing on a bunch of platforms. Let\u0027s discuss where suppressions are needed. At least on Mac NVIDIA, please go ahead and skip this test.",
+      "parentUuid": "423000c0_719d5262",
+      "revId": "1b7688f596b6c46b608fe75425b548b5f2444989",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "ed500fe6_f94a4b6a",
+        "filename": "src/tests/gl_tests/GLSLTest.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 558,
+      "author": {
+        "id": 1500872
+      },
+      "writtenOn": "2022-02-15T18:34:54Z",
+      "side": 1,
+      "message": "Done",
       "parentUuid": "423000c0_719d5262",
       "revId": "1b7688f596b6c46b608fe75425b548b5f2444989",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
