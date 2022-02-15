@@ -16,6 +16,46 @@
       "message": "PTAL",
       "revId": "210dd6f6215a1473c4397142c6aa201fa8906fe2",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "28a7715f_fb3a454f",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-02-15T07:24:34Z",
+      "side": 1,
+      "message": "It\u0027s begging for a regression test!\n\nAlso, it looks like the same bug should be there for 2D arrays (so adding a test for that (2D array upload with non-zero layer) would also be appreciated)",
+      "revId": "210dd6f6215a1473c4397142c6aa201fa8906fe2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "2cc69858_0250542a",
+        "filename": "src/libANGLE/renderer/vulkan/TextureVk.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 1728,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-02-15T07:24:34Z",
+      "side": 1,
+      "message": "Probably should be this, like elsewhere:\n\n    index.hasLayer() ? index.getLayerIndex() : 0",
+      "range": {
+        "startLine": 1728,
+        "startChar": 8,
+        "endLine": 1728,
+        "endChar": 84
+      },
+      "revId": "210dd6f6215a1473c4397142c6aa201fa8906fe2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
