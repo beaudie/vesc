@@ -154,6 +154,10 @@ class FramebufferMtl : public FramebufferImpl
                                 gl::DrawBufferMask clearColorBuffers,
                                 const mtl::ClearRectParams &clearOpts);
 
+    angle::Result ensureStoreOpsSetForClears(const gl::Context *context,
+                                             gl::DrawBufferMask clearColorBuffers,
+                                             const mtl::ClearRectParams &clearOpts);
+
     // Initialize load store options for a render pass's first start (i.e. not render pass resuming
     // from interruptions such as those caused by a conversion compute pass)
     void setLoadStoreActionOnRenderPassFirstStart(mtl::RenderPassAttachmentDesc *attachmentOut,

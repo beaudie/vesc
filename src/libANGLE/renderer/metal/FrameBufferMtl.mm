@@ -1153,6 +1153,10 @@ angle::Result FramebufferMtl::clearWithLoadOpRenderPassNotStarted(
     {
         tempDesc.depthAttachment.loadAction = MTLLoadActionClear;
         tempDesc.depthAttachment.clearDepth = clearOpts.clearDepth.value();
+        tempDesc.depthAttachment.storeAction =
+            mRenderPassDesc.depthAttachment.hasImplicitMSTexture()
+                ? MTLStoreActionStoreAndMultisampleResolve
+                : MTLStoreActionStore;
     }
     else
     {
@@ -1294,6 +1298,79 @@ angle::Result FramebufferMtl::clearWithDraw(const gl::Context *context,
     return angle::Result::Continue;
 }
 
+gl::DrawBufferMask getDrawBuffersWithClearAndNoStore(gl::DrawBufferMask clearColorBuffers,
+                                                     const mtl::RenderPassDesc &desc)
+{
+
+    gl::DrawBufferMask mask;
+    for (uint32_t colorIndexGL = 0; colorIndexGL < desc.numColorAttachments; ++colorIndexGL)
+    {
+        ASSERT(colorIndexGL < mtl::kMaxRenderTargets);
+
+        const mtl::RenderPassColorAttachmentDesc &colorAttachment =
+            desc.colorAttachments[colorIndexGL];
+        mask.set(colorIndexGL, clearColorBuffers.test(colorIndexGL) &&
+                                   colorAttachment.storeAction == MTLStoreActionDontCare);
+    }
+    return mask;
+}
+angle::Result FramebufferMtl::ensureStoreOpsSetForClears(const gl::Context *context,
+                                                         gl::DrawBufferMask clearColorBuffers,
+                                                         const mtl::ClearRectParams &clearOpts)
+{
+    gl::DrawBufferMask clearAndNoStoreBuffers =
+        getDrawBuffersWithClearAndNoStore(clearColorBuffers, mRenderPassDesc);
+
+    bool needsEndEncoding = clearAndNoStoreBuffers.any();
+
+    if (clearOpts.clearDepth.valid() && mDepthRenderTarget)
+    {
+        needsEndEncoding |= mRenderPassDesc.depthAttachment.storeAction == MTLStoreActionDontCare;
+    }
+
+    if (clearOpts.clearStencil.valid() && mStencilRenderTarget)
+    {
+        needsEndEncoding |= mRenderPassDesc.stencilAttachment.storeAction == MTLStoreActionDontCare;
+    }
+    if (needsEndEncoding)
+    {
+        ContextMtl *contextMtl = mtl::GetImpl(context);
+        contextMtl->endEncoding(true);
+
+        // Reset store actions.
+        for (uint32_t colorIndexGL = 0; colorIndexGL < mRenderPassDesc.numColorAttachments;
+             ++colorIndexGL)
+        {
+            ASSERT(colorIndexGL < mtl::kMaxRenderTargets);
+
+            mtl::RenderPassColorAttachmentDesc &colorAttachment =
+                mRenderPassDesc.colorAttachments[colorIndexGL];
+            if (clearColorBuffers.test(colorIndexGL))
+            {
+                colorAttachment.storeAction = colorAttachment.hasImplicitMSTexture()
+                                                  ? MTLStoreActionStoreAndMultisampleResolve
+                                                  : MTLStoreActionStore;
+            }
+        }
+
+        if (clearOpts.clearDepth.valid() && mDepthRenderTarget)
+        {
+            mRenderPassDesc.depthAttachment.storeAction =
+                mRenderPassDesc.depthAttachment.hasImplicitMSTexture()
+                    ? MTLStoreActionStoreAndMultisampleResolve
+                    : MTLStoreActionStore;
+        }
+
+        if (clearOpts.clearStencil.valid() && mStencilRenderTarget)
+        {
+            mRenderPassDesc.stencilAttachment.storeAction =
+                mRenderPassDesc.stencilAttachment.hasImplicitMSTexture()
+                    ? MTLStoreActionStoreAndMultisampleResolve
+                    : MTLStoreActionStore;
+        }
+    }
+    return angle::Result::Continue;
+}
 angle::Result FramebufferMtl::clearImpl(const gl::Context *context,
                                         gl::DrawBufferMask clearColorBuffers,
                                         mtl::ClearRectParams *pClearOpts)
@@ -1308,6 +1385,7 @@ angle::Result FramebufferMtl::clearImpl(const gl::Context *context,
     }
 
     ContextMtl *contextMtl = mtl::GetImpl(context);
+    // Ensure that any buffer that's being cleared has the correct store action.
     const gl::Rectangle renderArea(0, 0, mState.getDimensions().width,
                                    mState.getDimensions().height);
 
@@ -1342,6 +1420,8 @@ angle::Result FramebufferMtl::clearImpl(const gl::Context *context,
             break;
         }
     }
+
+    ANGLE_TRY(ensureStoreOpsSetForClears(context, clearColorBuffers, clearOpts));
 
     if (clearOpts.clearArea == renderArea &&
         (!clearOpts.clearColor.valid() || allBuffersUnmasked) &&
