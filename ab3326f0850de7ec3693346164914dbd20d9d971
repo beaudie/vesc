@@ -37,6 +37,40 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "afed16b6_56a6760a",
+        "filename": "src/tests/gl_tests/GLSLTest.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 539,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-02-15T16:51:01Z",
+      "side": 1,
+      "message": "nit: Please add a comment before the test. Also a better test name would be nice, half the tests in this file relate to complex expressions.",
+      "revId": "ab3326f0850de7ec3693346164914dbd20d9d971",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "46825d14_67e262ed",
+        "filename": "src/tests/gl_tests/GLSLTest.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 543,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-02-15T16:51:01Z",
+      "side": 1,
+      "message": "nit: You can assume GL_ES at this point 😊",
+      "revId": "ab3326f0850de7ec3693346164914dbd20d9d971",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "373bd9b1_aaf56899",
         "filename": "src/tests/gl_tests/GLSLTest.cpp",
         "patchSetId": 6
@@ -48,6 +82,29 @@
       "writtenOn": "2022-02-15T02:54:00Z",
       "side": 1,
       "message": "...with (12, 12)?",
+      "revId": "ab3326f0850de7ec3693346164914dbd20d9d971",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "930a8229_e8f5953c",
+        "filename": "src/tests/gl_tests/GLSLTest.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 554,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-02-15T16:51:01Z",
+      "side": 1,
+      "message": "Are these legal in GLSL? They wouldn\u0027t be in C, but I\u0027m not sure about GLSL rules here",
+      "range": {
+        "startLine": 553,
+        "startChar": 0,
+        "endLine": 554,
+        "endChar": 65
+      },
       "revId": "ab3326f0850de7ec3693346164914dbd20d9d971",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
