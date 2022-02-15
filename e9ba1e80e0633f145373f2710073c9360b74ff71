@@ -48,6 +48,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": true,
+      "key": {
+        "uuid": "86c2c03d_edc939f6",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 11,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2022-02-15T18:18:55Z",
+      "side": 1,
+      "message": "Ack.. what about a regression test? Also might want to mention the need for the patch in the commit message (existing code had a bug) and what situation could trigger this.",
+      "parentUuid": "63b0896a_004e2504",
+      "range": {
+        "startLine": 9,
+        "startChar": 0,
+        "endLine": 11,
+        "endChar": 0
+      },
+      "revId": "e9ba1e80e0633f145373f2710073c9360b74ff71",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": false,
       "key": {
         "uuid": "e2979e45_11fadc4f",
