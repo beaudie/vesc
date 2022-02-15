@@ -181,6 +181,30 @@
       },
       "revId": "eb5226d4bee93d97ce22a899eac5ae2246c88e0d",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "af81d044_4ebeda60",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 8175,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2022-02-15T22:37:38Z",
+      "side": 1,
+      "message": "Maybe you can split out the no controversial part (that removes the inheritance from Wrapper, which is really nice change) out as separate CL. I will be happy to +1 on that.",
+      "parentUuid": "1c4f9330_b3f71af2",
+      "range": {
+        "startLine": 8175,
+        "startChar": 0,
+        "endLine": 8175,
+        "endChar": 64
+      },
+      "revId": "eb5226d4bee93d97ce22a899eac5ae2246c88e0d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
