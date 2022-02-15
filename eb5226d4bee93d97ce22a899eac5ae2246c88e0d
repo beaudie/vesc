@@ -41,6 +41,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "351c6a8c_436b3ef4",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 4042,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2022-02-15T21:57:30Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "53cbfa77_54a93cbf",
+      "range": {
+        "startLine": 4040,
+        "startChar": 4,
+        "endLine": 4042,
+        "endChar": 78
+      },
+      "revId": "eb5226d4bee93d97ce22a899eac5ae2246c88e0d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "d6f014e6_c568d83b",
@@ -54,6 +78,30 @@
       "writtenOn": "2022-02-15T21:39:14Z",
       "side": 1,
       "message": "I am curious if the change to record the offset adjustment in the data.buffer.bufferSubOffset and bunch other related diff that now returns that offset adjustment, is it to fix some bug? Otherwise, this is doing more work here. Before this CL, the adjusted offset is returned and used and then never need to touch it. After this CL, the adjusted offset is calculated and then the delta is calculated and the the delta is passed around and adjusted offset is calculated again. I think original code is cleaner, IMHO.",
+      "range": {
+        "startLine": 8175,
+        "startChar": 0,
+        "endLine": 8175,
+        "endChar": 64
+      },
+      "revId": "eb5226d4bee93d97ce22a899eac5ae2246c88e0d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "6c2d5e3a_1ff035fd",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 8175,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2022-02-15T21:57:30Z",
+      "side": 1,
+      "message": "Yep, because the \u0027getMappedMemory\u0027 call implicitly adds the offset. So I\u0027d have to do some kind of subtraction to reconstruct the offset. The code was a friction point so I redid it so it explicitly stores the offset in the buffer updates. That way we can\u0027t use the Vulkan structure to store some information implicitly and introduce hard to fix errors when the code changes.",
+      "parentUuid": "d6f014e6_c568d83b",
       "range": {
         "startLine": 8175,
         "startChar": 0,
