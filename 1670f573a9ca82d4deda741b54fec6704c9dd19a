@@ -16,6 +16,24 @@
       "message": "I had to look this up but it\u0027s \"parenthesization\" 😄",
       "revId": "1670f573a9ca82d4deda741b54fec6704c9dd19a",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "a61c02de_65d848d4",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 9
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1500872
+      },
+      "writtenOn": "2022-02-15T22:17:37Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "e2134cbb_1aee1262",
+      "revId": "1670f573a9ca82d4deda741b54fec6704c9dd19a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
