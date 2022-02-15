@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "753b9e5a_a71eb3b8",
+        "filename": "src/libANGLE/renderer/vulkan/VertexArrayVk.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 102,
+      "author": {
+        "id": 1116023
+      },
+      "writtenOn": "2022-02-15T00:48:36Z",
+      "side": 1,
+      "message": "this fails to compile, see https://logs.chromium.org/logs/chromium-m99/buildbucket/cr-buildbucket/8822208762529582769/+/u/compile__with_patch_/stdout",
+      "range": {
+        "startLine": 101,
+        "startChar": 2,
+        "endLine": 102,
+        "endChar": 95
+      },
+      "revId": "ca32852e4f162ad41afc1df0e0efaeeb5f4e520f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
