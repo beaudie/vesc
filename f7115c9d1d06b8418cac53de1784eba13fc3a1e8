@@ -176,6 +176,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "d66486c9_47593a7a",
+        "filename": "src/libANGLE/renderer/vulkan/vk_utils.h",
+        "patchSetId": 5
+      },
+      "lineNbr": 920,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2022-02-15T21:39:14Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "dbd2c174_1f951452",
+      "range": {
+        "startLine": 920,
+        "startChar": 4,
+        "endLine": 920,
+        "endChar": 36
+      },
+      "revId": "f7115c9d1d06b8418cac53de1784eba13fc3a1e8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "2bf946fe_d5174e9a",
