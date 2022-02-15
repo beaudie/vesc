@@ -34,6 +34,24 @@
       "parentUuid": "f5fdefe0_c3eefc0c",
       "revId": "f8341e8b82a89520fd2d5ca43c4017f92de6871e",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "e601aade_4e669bdd",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 17
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1533513
+      },
+      "writtenOn": "2022-02-15T20:28:33Z",
+      "side": 1,
+      "message": "I was looking into win-trace (https://ci.chromium.org/ui/p/angle/builders/try/win-trace/803/overview). I tried to run these *SwiftShader tests locally with ubsan, the tests that failed on CI do pass locally, though running with ubsan uncovered a blow up in some other, unrelated test (GLSLTest.DefinedInMacroWithUndef/ES3_Vulkan_SwiftShader) somewhere in translator.",
+      "parentUuid": "b99c5e50_a1f75f61",
+      "revId": "f8341e8b82a89520fd2d5ca43c4017f92de6871e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
