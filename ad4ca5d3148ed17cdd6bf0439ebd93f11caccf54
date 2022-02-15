@@ -48,6 +48,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "07e5e9b6_f7de5825",
+        "filename": "src/libANGLE/renderer/vulkan/ResourceVk.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 32,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2022-02-15T01:39:12Z",
+      "side": 1,
+      "message": "I see. I was originally thinking duplicate mUse for release call of views, that is why I was surprised to see new counters. Per chat discussion, I think we should ensure we only release views when mImages are released to deal with the complicated situations that mImage\u0027s usage may pending submisison in one of shared context. If we move to that model, then you will be using only one mUse and no new counter needs to add as well.",
+      "parentUuid": "90828d3e_7af07862",
+      "range": {
+        "startLine": 32,
+        "startChar": 13,
+        "endLine": 32,
+        "endChar": 27
+      },
+      "revId": "ad4ca5d3148ed17cdd6bf0439ebd93f11caccf54",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "3d3ff1e1_804b7c85",
