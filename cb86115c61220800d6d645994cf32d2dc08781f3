@@ -16,6 +16,29 @@
       "message": "My workstation got opted-in to the early roll out of python2 deprecation.",
       "revId": "cb86115c61220800d6d645994cf32d2dc08781f3",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "d3642a58_10e5e789",
+        "filename": "src/libANGLE/renderer/vulkan/vk_mandatory_format_support_table_autogen.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 270,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2022-02-15T18:17:58Z",
+      "side": 1,
+      "message": "can you update this script to give a stable sort?",
+      "range": {
+        "startLine": 270,
+        "startChar": 5,
+        "endLine": 270,
+        "endChar": 13
+      },
+      "revId": "cb86115c61220800d6d645994cf32d2dc08781f3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
