@@ -74,3 +74,11 @@ The command line arguments implementations are located in [`ANGLEPerfTestArgs.cp
 * [`TracePerfTest`](TracePerfTest.cpp): Runs replays of restricted traces, not available publicly. To enable, read more in [`RestrictedTraceTests`](../restricted_traces/README.md)
 
 Many other tests can be found that have documentation in their classes.
+
+## Understanding the Metrics
+
+* `cpu_time`: Amount of CPU time consumed by an iteration of the test. This is backed by `GetProcessTimes` on Windows, `getrusage` on Linux/Android, and `zx_object_get_info` on Fuchsia.
+  * This value may sometimes be larger than `wall_time`. That is because we are summing up the time on all CPU threads for the test.
+* `wall_time`: Time taken to run a single iteration, which is usually rendering one frame.
+* `gpu_time`: Time as measured by inserting queries into the GPU command buffer using `GL_TIMESTAMP_EXT`, then diffing the result.
+  * For trace tests, this metric is only enabled in `vsync` mode.
