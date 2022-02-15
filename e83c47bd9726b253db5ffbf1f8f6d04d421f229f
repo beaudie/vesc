@@ -33,6 +33,24 @@
       "message": "These data structures have utility for small key sizes, so I\u0027d like to keep them around for now. Any strong objection?",
       "revId": "e83c47bd9726b253db5ffbf1f8f6d04d421f229f",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "4e44e687_7de154b7",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1518892
+      },
+      "writtenOn": "2022-02-15T20:23:36Z",
+      "side": 1,
+      "message": "No objection. I\u0027m just concerned someone will look at them and not realize the limitations around key ranges. It\u0027s kind of a foot-gun.",
+      "parentUuid": "6423694e_d922c333",
+      "revId": "e83c47bd9726b253db5ffbf1f8f6d04d421f229f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
