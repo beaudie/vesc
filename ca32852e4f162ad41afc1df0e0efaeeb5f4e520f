@@ -1,6 +1,23 @@
 {
   "comments": [
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "becd8616_2b3029b0",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1531247
+      },
+      "writtenOn": "2022-02-15T11:11:41Z",
+      "side": 1,
+      "message": "Not sure if I\u0027ll need to ",
+      "revId": "ca32852e4f162ad41afc1df0e0efaeeb5f4e520f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "753b9e5a_a71eb3b8",
@@ -38,6 +55,30 @@
       "side": 1,
       "message": "Have a fix at https://chromium-review.googlesource.com/c/angle/angle/+/3461554",
       "parentUuid": "753b9e5a_a71eb3b8",
+      "range": {
+        "startLine": 101,
+        "startChar": 2,
+        "endLine": 102,
+        "endChar": 95
+      },
+      "revId": "ca32852e4f162ad41afc1df0e0efaeeb5f4e520f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "a22bc770_9acb6fde",
+        "filename": "src/libANGLE/renderer/vulkan/VertexArrayVk.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 102,
+      "author": {
+        "id": 1531247
+      },
+      "writtenOn": "2022-02-15T11:11:41Z",
+      "side": 1,
+      "message": "Ooops. Lots of thanks for the fix Geoff. I tried submitting to CQ and that didn\u0027t seem to do anything so I submitted via the dots menu. Was there a better way? Would CQ Try have worked? I thought submit would\u0027ve done some basic checks or notified me shortly after but none of this happened.",
+      "parentUuid": "804186d4_350fc207",
       "range": {
         "startLine": 101,
         "startChar": 2,
