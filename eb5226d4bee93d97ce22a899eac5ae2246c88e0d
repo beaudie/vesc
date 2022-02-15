@@ -67,6 +67,29 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "f3916505_eaf67cc3",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 6341,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2022-02-15T22:17:26Z",
+      "side": 1,
+      "message": "I guess this is where your friction point comes from?",
+      "range": {
+        "startLine": 6341,
+        "startChar": 20,
+        "endLine": 6341,
+        "endChar": 86
+      },
+      "revId": "eb5226d4bee93d97ce22a899eac5ae2246c88e0d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "d6f014e6_c568d83b",
         "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
         "patchSetId": 7
@@ -102,6 +125,30 @@
       "side": 1,
       "message": "Yep, because the \u0027getMappedMemory\u0027 call implicitly adds the offset. So I\u0027d have to do some kind of subtraction to reconstruct the offset. The code was a friction point so I redid it so it explicitly stores the offset in the buffer updates. That way we can\u0027t use the Vulkan structure to store some information implicitly and introduce hard to fix errors when the code changes.",
       "parentUuid": "d6f014e6_c568d83b",
+      "range": {
+        "startLine": 8175,
+        "startChar": 0,
+        "endLine": 8175,
+        "endChar": 64
+      },
+      "revId": "eb5226d4bee93d97ce22a899eac5ae2246c88e0d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "f7b970e8_f4e336a0",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 8175,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2022-02-15T22:17:26Z",
+      "side": 1,
+      "message": "But still, we shouldn\u0027t eat penalty and complexity here. I think it is reasonable to assume buffer-\u003egetMappedMemory() returns the pointer of buffer, not the pointer of the block it suballocated from. And this \"bufferSubOffset\" adds more confusion than clarification regarding what exactly this is tracking, since this buffer is suballocated from a main buffer and the offset itself is also a suballocation offset, and this bufferSubOffset is adjustment to that suballocation offset... My suggestion is simply add comment in the friction point of code (See the other comment, where I think your friction comes from) and possibly an assert as well? Also I am sure if you make mistake, one of the tests in the bots will fail for sure. All of these diffs just for that friction seems overdone.",
+      "parentUuid": "6c2d5e3a_1ff035fd",
       "range": {
         "startLine": 8175,
         "startChar": 0,
