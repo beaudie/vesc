@@ -603,7 +603,7 @@ TEST_P(OcclusionQueriesTest, MultiContext)
 
     // draw a quad at depth 0.5
     glEnable(GL_DEPTH_TEST);
-    drawQuad(mProgram, essl1_shaders::PositionAttrib(), 0.5f);
+    drawQuad(mProgram, essl1_shaders::PositionAttrib(), 0.50f);
 
     EGLWindow *window = getEGLWindow();
 
