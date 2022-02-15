@@ -63,6 +63,30 @@
       },
       "revId": "06b15367bf3088b697a562b1f6d73090350bd605",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "4cd1dee5_583767b5",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.h",
+        "patchSetId": 11
+      },
+      "lineNbr": 159,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2022-02-15T22:09:40Z",
+      "side": 1,
+      "message": "Just to give you a bit of additional info you may be missing:\n\nthe size of the original buffer is lost by \"setOffsetAndSize\". So we have no idea what was the size of the original buffer. Hence the need for the map based on size. Before your work to share a single dynamic buffer, we used a separate dynamic buffer per-Buffer, and so we could be sure we wouldn\u0027t be sharing different sizes.\n\nIn any case, I\u0027d suggest we go with this quite simple design for now, and do more risky redesigns in future improvements.",
+      "parentUuid": "41d2183e_5e6ed7d1",
+      "range": {
+        "startLine": 150,
+        "startChar": 4,
+        "endLine": 159,
+        "endChar": 77
+      },
+      "revId": "06b15367bf3088b697a562b1f6d73090350bd605",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
