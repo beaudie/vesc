@@ -19,6 +19,8 @@
 #include "libGLESv2/global_state.h"
 #include "libGLESv2/proc_table_egl.h"
 
+struct gbm_device;
+
 namespace egl
 {
 namespace
@@ -400,6 +402,7 @@ EGLDisplay GetPlatformDisplay(Thread *thread,
     switch (platform)
     {
         case EGL_PLATFORM_ANGLE_ANGLE:
+        case EGL_PLATFORM_GBM_KHR:
         {
             return Display::GetDisplayFromNativeDisplay(
                 gl::bitCast<EGLNativeDisplayType>(native_display), attribMap, platform);
