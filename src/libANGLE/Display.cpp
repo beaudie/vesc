@@ -425,6 +425,13 @@ rx::DisplayImpl *CreateDisplayFromAttribs(EGLAttrib displayType,
             }
             break;
 #    elif defined(ANGLE_PLATFORM_LINUX)
+#        if defined(ANGLE_USE_GBM)
+            if (platformType == EGL_PLATFORM_GBM_KHR)
+            {
+                impl = rx::CreateVulkanGbmDisplay(state);
+                break;
+            }
+#        endif
 #        if defined(ANGLE_USE_X11)
             if (platformType == EGL_PLATFORM_X11_EXT && rx::IsVulkanXcbDisplayAvailable())
             {
@@ -865,31 +872,39 @@ Display::Display(EGLenum platform, EGLNativeDisplayType displayId, Device *eglDe
 
 Display::~Display()
 {
-    if (mPlatform == EGL_PLATFORM_ANGLE_ANGLE)
+    switch (mPlatform)
     {
-        ANGLEPlatformDisplayMap *displays      = GetANGLEPlatformDisplayMap();
-        ANGLEPlatformDisplayMap::iterator iter = displays->find(ANGLEPlatformDisplay(
-            mState.displayId, mAttributeMap.get(EGL_POWER_PREFERENCE_ANGLE, EGL_LOW_POWER_ANGLE),
-            mAttributeMap.get(EGL_PLATFORM_ANGLE_TYPE_ANGLE, EGL_PLATFORM_ANGLE_TYPE_DEFAULT_ANGLE),
-            mAttributeMap.get(EGL_PLATFORM_ANGLE_DEVICE_ID_HIGH_ANGLE, 0),
-            mAttributeMap.get(EGL_PLATFORM_ANGLE_DEVICE_ID_LOW_ANGLE, 0)));
-        if (iter != displays->end())
+        case EGL_PLATFORM_ANGLE_ANGLE:
+        case EGL_PLATFORM_GBM_KHR:
         {
-            displays->erase(iter);
+            ANGLEPlatformDisplayMap *displays      = GetANGLEPlatformDisplayMap();
+            ANGLEPlatformDisplayMap::iterator iter = displays->find(ANGLEPlatformDisplay(
+                mState.displayId,
+                mAttributeMap.get(EGL_POWER_PREFERENCE_ANGLE, EGL_LOW_POWER_ANGLE),
+                mAttributeMap.get(EGL_PLATFORM_ANGLE_TYPE_ANGLE,
+                                  EGL_PLATFORM_ANGLE_TYPE_DEFAULT_ANGLE),
+                mAttributeMap.get(EGL_PLATFORM_ANGLE_DEVICE_ID_HIGH_ANGLE, 0),
+                mAttributeMap.get(EGL_PLATFORM_ANGLE_DEVICE_ID_LOW_ANGLE, 0)));
+            if (iter != displays->end())
+            {
+                displays->erase(iter);
+            }
+            break;
         }
-    }
-    else if (mPlatform == EGL_PLATFORM_DEVICE_EXT)
-    {
-        DevicePlatformDisplayMap *displays      = GetDevicePlatformDisplayMap();
-        DevicePlatformDisplayMap::iterator iter = displays->find(mDevice);
-        if (iter != displays->end())
+        case EGL_PLATFORM_DEVICE_EXT:
         {
-            displays->erase(iter);
+            DevicePlatformDisplayMap *displays      = GetDevicePlatformDisplayMap();
+            DevicePlatformDisplayMap::iterator iter = displays->find(mDevice);
+            if (iter != displays->end())
+            {
+                displays->erase(iter);
+            }
+            break;
         }
-    }
-    else
-    {
-        UNREACHABLE();
+        default:
+        {
+            UNREACHABLE();
+        }
     }
 
     SafeDelete(mDevice);
@@ -1902,6 +1917,10 @@ static ClientExtensions GenerateClientExtensions()
 #if defined(ANGLE_ENABLE_D3D9) || defined(ANGLE_ENABLE_D3D11)
     extensions.platformANGLED3D = true;
     extensions.platformDevice   = true;
+#endif
+
+#if defined(ANGLE_USE_GBM)
+    extensions.platformGbm = true;
 #endif
 
 #if defined(ANGLE_ENABLE_D3D11)

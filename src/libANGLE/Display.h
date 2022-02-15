@@ -29,6 +29,8 @@
 #include "platform/Feature.h"
 #include "platform/FrontendFeatures.h"
 
+struct gbm_device;
+
 namespace angle
 {
 class FrameCaptureShared;
