@@ -1,6 +1,23 @@
 {
   "comments": [
     {
+      "unresolved": true,
+      "key": {
+        "uuid": "52a89aaa_597aefdd",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 5
+      },
+      "lineNbr": 18,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2022-02-15T00:08:28Z",
+      "side": 1,
+      "message": "Please capitalize \"Bug\" - I don\u0027t think the system is recognizing this as lowercase (otherwise the angleproject bug link would be working).",
+      "revId": "e02f8a0053a60ef41587d0d1b8d40442c9e15227",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": false,
       "key": {
         "uuid": "c26c3ea4_9f9b008b",
@@ -14,6 +31,40 @@
       "writtenOn": "2022-02-14T22:24:51Z",
       "side": 1,
       "message": "This looks like the proper fix. I\u0027d like to run some tests on Safari to make sure we\u0027re not regressing anything, but this should ensure that all work is committed in the proper order.",
+      "revId": "e02f8a0053a60ef41587d0d1b8d40442c9e15227",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "04c18ceb_b5619b43",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 5
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2022-02-15T00:08:28Z",
+      "side": 1,
+      "message": "lgtm\n\nFantastic work Gregg both fixing this and creating a superb minimized test for it! Noting that ProvokingVertexHelper::commitPreconditionCommandBuffer is always called before committing the current command buffer in ContextMtl, I also think that this will correctly preserve the command buffers\u0027 ordering.",
+      "revId": "e02f8a0053a60ef41587d0d1b8d40442c9e15227",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "46c69cd1_0a5bc265",
+        "filename": "src/tests/gl_tests/OcclusionQueriesTest.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 798,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2022-02-15T00:08:28Z",
+      "side": 1,
+      "message": "Could you add a comment here that the order of fields is important because they\u0027re cleaned up in reverse order, and in particular the EGLContext must be first?",
       "revId": "e02f8a0053a60ef41587d0d1b8d40442c9e15227",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
