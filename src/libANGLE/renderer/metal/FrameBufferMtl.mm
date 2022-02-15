@@ -1153,6 +1153,10 @@ angle::Result FramebufferMtl::clearWithLoadOpRenderPassNotStarted(
     {
         tempDesc.depthAttachment.loadAction = MTLLoadActionClear;
         tempDesc.depthAttachment.clearDepth = clearOpts.clearDepth.value();
+        tempDesc.depthAttachment.storeAction =
+            mRenderPassDesc.depthAttachment.hasImplicitMSTexture()
+                ? MTLStoreActionStoreAndMultisampleResolve
+                : MTLStoreActionStore;
     }
     else
     {
@@ -1172,6 +1176,10 @@ angle::Result FramebufferMtl::clearWithLoadOpRenderPassNotStarted(
     {
         tempDesc.stencilAttachment.loadAction   = MTLLoadActionClear;
         tempDesc.stencilAttachment.clearStencil = clearOpts.clearStencil.value();
+        tempDesc.stencilAttachment.storeAction =
+            mRenderPassDesc.stencilAttachment.hasImplicitMSTexture()
+                ? MTLStoreActionStoreAndMultisampleResolve
+                : MTLStoreActionStore;
     }
     else
     {
@@ -1214,7 +1222,6 @@ angle::Result FramebufferMtl::clearWithLoadOpRenderPassStarted(
         {
             MTLClearColor clearVal;
             OverrideMTLClearColor(texture, clearOpts.clearColor.value(), &clearVal);
-
             encoder->setColorLoadAction(MTLLoadActionClear, clearVal, colorIndexGL);
         }
     }
@@ -1294,6 +1301,72 @@ angle::Result FramebufferMtl::clearWithDraw(const gl::Context *context,
     return angle::Result::Continue;
 }
 
+angle::Result FramebufferMtl::endEncodingIfStoreOpsWrong(const gl::Context *context,
+                                                         gl::DrawBufferMask clearColorBuffers,
+                                                         const mtl::ClearRectParams &clearOpts)
+{
+    bool needsEndEncoding = false;
+    for (uint32_t colorIndexGL = 0; colorIndexGL < mRenderPassDesc.numColorAttachments;
+         ++colorIndexGL)
+    {
+        ASSERT(colorIndexGL < mtl::kMaxRenderTargets);
+
+        mtl::RenderPassColorAttachmentDesc &colorAttachment =
+            mRenderPassDesc.colorAttachments[colorIndexGL];
+        if (clearColorBuffers.test(colorIndexGL))
+        {
+            needsEndEncoding |= colorAttachment.storeAction == MTLStoreActionDontCare;
+        }
+    }
+
+    if (clearOpts.clearDepth.valid() && mDepthRenderTarget)
+    {
+        needsEndEncoding |= mRenderPassDesc.depthAttachment.storeAction == MTLStoreActionDontCare;
+    }
+
+    if (clearOpts.clearStencil.valid() && mStencilRenderTarget)
+    {
+        needsEndEncoding |= mRenderPassDesc.stencilAttachment.storeAction == MTLStoreActionDontCare;
+    }
+    if (needsEndEncoding)
+    {
+        ContextMtl *contextMtl = mtl::GetImpl(context);
+        contextMtl->endEncoding(true);
+
+        // Reset store actions.
+        for (uint32_t colorIndexGL = 0; colorIndexGL < mRenderPassDesc.numColorAttachments;
+             ++colorIndexGL)
+        {
+            ASSERT(colorIndexGL < mtl::kMaxRenderTargets);
+
+            mtl::RenderPassColorAttachmentDesc &colorAttachment =
+                mRenderPassDesc.colorAttachments[colorIndexGL];
+            if (clearColorBuffers.test(colorIndexGL))
+            {
+                colorAttachment.storeAction = colorAttachment.hasImplicitMSTexture()
+                                                  ? MTLStoreActionStoreAndMultisampleResolve
+                                                  : MTLStoreActionStore;
+            }
+        }
+
+        if (clearOpts.clearDepth.valid() && mDepthRenderTarget)
+        {
+            mRenderPassDesc.depthAttachment.storeAction =
+                mRenderPassDesc.depthAttachment.hasImplicitMSTexture()
+                    ? MTLStoreActionStoreAndMultisampleResolve
+                    : MTLStoreActionStore;
+        }
+
+        if (clearOpts.clearStencil.valid() && mStencilRenderTarget)
+        {
+            mRenderPassDesc.stencilAttachment.storeAction =
+                mRenderPassDesc.stencilAttachment.hasImplicitMSTexture()
+                    ? MTLStoreActionStoreAndMultisampleResolve
+                    : MTLStoreActionStore;
+        }
+    }
+    return angle::Result::Continue;
+}
 angle::Result FramebufferMtl::clearImpl(const gl::Context *context,
                                         gl::DrawBufferMask clearColorBuffers,
                                         mtl::ClearRectParams *pClearOpts)
@@ -1308,6 +1381,7 @@ angle::Result FramebufferMtl::clearImpl(const gl::Context *context,
     }
 
     ContextMtl *contextMtl = mtl::GetImpl(context);
+    // Ensure that any buffer that's being cleared has the correct store action.
     const gl::Rectangle renderArea(0, 0, mState.getDimensions().width,
                                    mState.getDimensions().height);
 
@@ -1342,6 +1416,8 @@ angle::Result FramebufferMtl::clearImpl(const gl::Context *context,
             break;
         }
     }
+
+    ANGLE_TRY(endEncodingIfStoreOpsWrong(context, clearColorBuffers, clearOpts));
 
     if (clearOpts.clearArea == renderArea &&
         (!clearOpts.clearColor.valid() || allBuffersUnmasked) &&
