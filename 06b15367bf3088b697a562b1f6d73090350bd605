@@ -87,6 +87,30 @@
       },
       "revId": "06b15367bf3088b697a562b1f6d73090350bd605",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "08b8f6a8_851c3ea3",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.h",
+        "patchSetId": 11
+      },
+      "lineNbr": 159,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2022-02-15T22:32:35Z",
+      "side": 1,
+      "message": "You can still get size by buffer-\u003egetBufferBlock()-\u003egetMemorySize(). I think in your previous CL, you removed getBufferBlock(), that is why you lost the access to memory size.\n\nI just think use hashMap here is overdone. When I was trying to change the vector to queue for mBufferFreeLists, I actually looked at a few app traces and stop in the middle of run and inspect the dynamic buffer. The free list usually only have one or two entries, so I concluded there is no point to improve it. I think the original code should be no worse than hashmap. (I am defending for Jamie here since I believe you wrote the original code :0).",
+      "parentUuid": "4cd1dee5_583767b5",
+      "range": {
+        "startLine": 150,
+        "startChar": 4,
+        "endLine": 159,
+        "endChar": 77
+      },
+      "revId": "06b15367bf3088b697a562b1f6d73090350bd605",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
