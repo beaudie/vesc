@@ -69,6 +69,23 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "9b2d75ba_fd3a3c59",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1340649
+      },
+      "writtenOn": "2022-02-16T19:01:45Z",
+      "side": 1,
+      "message": "i added a regression test and it never regressed without this change and then on debug found tim had beat me to it. going to abandon this change",
+      "revId": "210dd6f6215a1473c4397142c6aa201fa8906fe2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "2cc69858_0250542a",
