@@ -111,6 +111,30 @@
       },
       "revId": "06b15367bf3088b697a562b1f6d73090350bd605",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "683cc58f_3378b212",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.h",
+        "patchSetId": 11
+      },
+      "lineNbr": 159,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2022-02-16T15:55:12Z",
+      "side": 1,
+      "message": "You may be under the impression the original code was correct? I had to make this change because we were re-using blocks with different sizes. I prefer the hashmap design because it allows us to treat the free lists like a queue instead of having to scan through to find an element at the middle of the list. Going to also add Shabi and Cody to this CL. Shabi/Cody, can you advise which design you prefer? I\u0027ll adopt that one. Either scan the free list (which is no longer a queue) or use several queues arranged by size. I would say the performance characteristics to both should be nearly identical, and this is a code style issue.",
+      "parentUuid": "08b8f6a8_851c3ea3",
+      "range": {
+        "startLine": 150,
+        "startChar": 4,
+        "endLine": 159,
+        "endChar": 77
+      },
+      "revId": "06b15367bf3088b697a562b1f6d73090350bd605",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
