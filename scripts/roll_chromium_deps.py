@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+#!/usr/bin/env python3
 # Copyright 2019 The ANGLE project authors. All Rights Reserved.
 #
 # Use of this source code is governed by a BSD-style license
@@ -21,7 +21,7 @@ import platform
 import re
 import subprocess
 import sys
-import urllib2
+import urllib.request
 
 
 def FindSrcDirPath():
@@ -237,7 +237,7 @@ def _ReadGitilesContent(url):
     # https://code.google.com/p/gitiles/issues/detail?id=7 is fixed.
     logging.debug('Reading gitiles URL %s' % url)
     base64_content = ReadUrlContent(url + '?format=TEXT')
-    return base64.b64decode(base64_content[0])
+    return base64.b64decode(base64_content[0]).decode('utf-8')
 
 
 def ReadRemoteCrFile(path_below_src, revision):
@@ -257,7 +257,7 @@ def ReadRemoteClangFile(path_below_src, revision):
 
 def ReadUrlContent(url):
     """Connect to a remote host and read the contents. Returns a list of lines."""
-    conn = urllib2.urlopen(url)
+    conn = urllib.request.urlopen(url)
     try:
         return conn.readlines()
     except IOError as e:
@@ -280,7 +280,7 @@ def GetMatchingDepsEntries(depsentry_dict, dir_path):
     A list of DepsEntry objects.
   """
     result = []
-    for path, depsentry in depsentry_dict.iteritems():
+    for path, depsentry in depsentry_dict.items():
         if path == dir_path:
             result.append(depsentry)
         else:
@@ -295,7 +295,7 @@ def BuildDepsentryDict(deps_dict):
     result = {}
 
     def AddDepsEntries(deps_subdict):
-        for path, dep in deps_subdict.iteritems():
+        for path, dep in deps_subdict.items():
             if path in result:
                 continue
             if not isinstance(dep, dict):
@@ -361,7 +361,7 @@ def CalculateChangedDeps(angle_deps, new_cr_deps):
     result = []
     angle_entries = BuildDepsentryDict(angle_deps)
     new_cr_entries = BuildDepsentryDict(new_cr_deps)
-    for path, angle_deps_entry in angle_entries.iteritems():
+    for path, angle_deps_entry in angle_entries.items():
         if path not in ANGLE_CHROMIUM_DEPS:
             continue
 
