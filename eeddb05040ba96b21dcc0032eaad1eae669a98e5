@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "f3ee89fa_ffa6cc5b",
+        "filename": "src/tests/angle_end2end_tests_expectations.txt",
+        "patchSetId": 14
+      },
+      "lineNbr": 518,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-02-16T21:07:57Z",
+      "side": 1,
+      "message": "This is skipping the test on Vulkan too. Could you please change it to two entries, NVIDIA OPENGL and NVIDIA GLES?",
+      "revId": "eeddb05040ba96b21dcc0032eaad1eae669a98e5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
