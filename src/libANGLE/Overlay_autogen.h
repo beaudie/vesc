@@ -34,6 +34,10 @@ enum class WidgetId
     VulkanDynamicBufferAllocations,
     // Total size of all descriptor set caches
     VulkanDescriptorCacheSize,
+    // Total number of texture updates (test)
+    VulkanTextureNumberOfUpdates,
+    // Total size of texture updates (B)
+    VulkanTextureTotalUpdateSize,
     // Number of cached Texture descriptor sets
     VulkanTextureDescriptorCacheSize,
     // Number of cached default uniform descriptor sets
@@ -58,6 +62,8 @@ enum class WidgetId
     PROC(VulkanShaderBufferDSHitRate)           \
     PROC(VulkanDynamicBufferAllocations)        \
     PROC(VulkanDescriptorCacheSize)             \
+    PROC(VulkanTextureNumberOfUpdates)          \
+    PROC(VulkanTextureTotalUpdateSize)          \
     PROC(VulkanTextureDescriptorCacheSize)      \
     PROC(VulkanUniformDescriptorCacheSize)      \
     PROC(VulkanDescriptorCacheKeySize)

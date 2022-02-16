@@ -168,6 +168,8 @@ struct PerfMonitorTriplet
     FN(textureDescriptorSetCacheHits)             \
     FN(textureDescriptorSetCacheMisses)           \
     FN(textureDescriptorSetCacheTotalSize)        \
+    FN(textureNumberOfUpdates)                    \
+    FN(textureTotalUpdateSize)                    \
     FN(shaderBuffersDescriptorSetCacheHits)       \
     FN(shaderBuffersDescriptorSetCacheMisses)     \
     FN(shaderBuffersDescriptorSetCacheTotalSize)  \

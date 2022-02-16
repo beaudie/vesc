@@ -7571,6 +7571,7 @@ angle::Result ImageHelper::flushStagedUpdates(ContextVk *contextVk,
                 commandBuffer->copyBufferToImage(currentBuffer->getBuffer().getHandle(), mImage,
                                                  getCurrentLayout(), 1, copyRegion);
                 ANGLE_TRY(contextVk->onCopyUpdate(currentBuffer->getSize()));
+
                 onWrite(updateMipLevelGL, 1, updateBaseLayer, updateLayerCount,
                         copyRegion->imageSubresource.aspectMask);
             }

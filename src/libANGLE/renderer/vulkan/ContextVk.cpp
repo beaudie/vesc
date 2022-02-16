@@ -2560,6 +2560,20 @@ void ContextVk::updateOverlayOnPresent()
     }
 
     {
+        gl::RunningGraphWidget *textureNumberOfUpdates =
+            overlay->getRunningGraphWidget(gl::WidgetId::VulkanTextureNumberOfUpdates);
+        textureNumberOfUpdates->add(mPerfCounters.textureNumberOfUpdates);
+        textureNumberOfUpdates->next();
+    }
+
+    {
+        gl::RunningGraphWidget *textureTotalUpdateSize =
+            overlay->getRunningGraphWidget(gl::WidgetId::VulkanTextureTotalUpdateSize);
+        textureTotalUpdateSize->add(mPerfCounters.textureTotalUpdateSize);
+        textureTotalUpdateSize->next();
+    }
+
+    {
         gl::RunningGraphWidget *shaderBufferHitRate =
             overlay->getRunningGraphWidget(gl::WidgetId::VulkanShaderBufferDSHitRate);
         size_t numCacheAccesses = mPerfCounters.shaderBuffersDescriptorSetCacheHits +
@@ -2705,6 +2719,9 @@ angle::Result ContextVk::onCopyUpdate(VkDeviceSize size)
 {
     mTotalBufferToImageCopySize += size;
     ANGLE_TRACE_EVENT0("gpu.angle", "ContextVk::onCopyUpdate");
+    getPerfCounters().textureNumberOfUpdates++;
+    getPerfCounters().textureTotalUpdateSize = static_cast<uint32_t>(mTotalBufferToImageCopySize);
+
     // If the copy size exceeds the specified threshold, submit the outside command buffer.
     VkDeviceSize copySize = getTotalBufferToImageCopySize();
     if (copySize >= kMaxBufferToImageCopySize)

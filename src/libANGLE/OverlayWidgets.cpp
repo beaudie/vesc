@@ -493,6 +493,49 @@ void AppendWidgetDataHelper::AppendVulkanTextureDescriptorCacheSize(
     AppendRunningGraphCommon(widget, imageExtent, textWidget, graphWidget, widgetCounts, format);
 }
 
+void AppendWidgetDataHelper::AppendVulkanTextureNumberOfUpdates(const overlay::Widget *widget,
+                                                                const gl::Extents &imageExtent,
+                                                                TextWidgetData *textWidget,
+                                                                GraphWidgetData *graphWidget,
+                                                                OverlayWidgetCounts *widgetCounts)
+{
+    auto format = [](size_t curVal) {
+        std::ostringstream text;
+        text << "Total number of texture updates: " << curVal;
+        return text.str();
+    };
+
+    AppendRunningGraphCommon(widget, imageExtent, textWidget, graphWidget, widgetCounts, format);
+}
+
+void AppendWidgetDataHelper::AppendVulkanTextureTotalUpdateSize(const overlay::Widget *widget,
+                                                                const gl::Extents &imageExtent,
+                                                                TextWidgetData *textWidget,
+                                                                GraphWidgetData *graphWidget,
+                                                                OverlayWidgetCounts *widgetCounts)
+{
+    auto format = [](size_t curVal) {
+        std::ostringstream text;
+        std::string unit = "B";
+        float fCurVal    = (float)curVal;
+        if (fCurVal >= (1 << 10))
+        {
+            fCurVal /= (1 << 10);
+            unit = "KB";
+        }
+        if (fCurVal >= (1 << 10))
+        {
+            fCurVal /= (1 << 10);
+            unit = "MB";
+        }
+        text << "Total size of texture updates in buffer: " << fCurVal << " " << unit << "\n("
+             << curVal << ")";
+        return text.str();
+    };
+
+    AppendRunningGraphCommon(widget, imageExtent, textWidget, graphWidget, widgetCounts, format);
+}
+
 void AppendWidgetDataHelper::AppendVulkanUniformDescriptorCacheSize(
     const overlay::Widget *widget,
     const gl::Extents &imageExtent,
