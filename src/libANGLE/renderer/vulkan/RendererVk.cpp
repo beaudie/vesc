@@ -3157,7 +3157,8 @@ void RendererVk::initFeatures(DisplayVk *displayVk,
     // http://anglebug.com/6872
     // On ARM hardware, framebuffer-fetch-like behavior on Vulkan is already coherent, so we can
     // expose the coherent version of the GL extension despite unofficial Vulkan support.
-    ANGLE_FEATURE_CONDITION(&mFeatures, supportsShaderFramebufferFetch, IsAndroid() && isARM);
+    ANGLE_FEATURE_CONDITION(&mFeatures, supportsShaderFramebufferFetch,
+                            IsAndroid() && (isARM || isQualcomm));
 
     // Important games are not checking supported extensions properly, and are confusing the
     // GL_EXT_shader_framebuffer_fetch_non_coherent as the GL_EXT_shader_framebuffer_fetch
