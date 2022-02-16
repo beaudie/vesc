@@ -16,6 +16,23 @@
       "message": "Charlie: can you rebase this once https://chromium-review.googlesource.com/c/angle/angle/+/3469227 lands ? And update the CL description? I\u0027d be happy to land this quickly after.",
       "revId": "baa77b3c0fd20af4eec62b8371377ed4a23dea6e",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "0b07dfb3_ce104116",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2022-02-16T21:42:11Z",
+      "side": 1,
+      "message": "Yea, thanks, will do.",
+      "revId": "baa77b3c0fd20af4eec62b8371377ed4a23dea6e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
