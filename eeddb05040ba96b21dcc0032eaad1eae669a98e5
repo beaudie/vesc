@@ -34,6 +34,24 @@
       "parentUuid": "f3ee89fa_ffa6cc5b",
       "revId": "eeddb05040ba96b21dcc0032eaad1eae669a98e5",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "c8c12044_6180824f",
+        "filename": "src/tests/angle_end2end_tests_expectations.txt",
+        "patchSetId": 14
+      },
+      "lineNbr": 518,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2022-02-16T21:47:35Z",
+      "side": 1,
+      "message": "Handling in https://chromium-review.googlesource.com/c/angle/angle/+/3469723 .",
+      "parentUuid": "8aee233c_22cb3a91",
+      "revId": "eeddb05040ba96b21dcc0032eaad1eae669a98e5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
