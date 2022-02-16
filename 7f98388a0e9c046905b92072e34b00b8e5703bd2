@@ -16,6 +16,92 @@
       "message": "Took a pass at explaining what these mean.  Jamie, let me know what you think.\n+Frank who just added the cpu_time metric.",
       "revId": "7f98388a0e9c046905b92072e34b00b8e5703bd2",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "69c6ab1d_5180c1a8",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2022-02-16T16:03:18Z",
+      "side": 1,
+      "message": "Thanks for handling this Cody.",
+      "revId": "7f98388a0e9c046905b92072e34b00b8e5703bd2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "686eda6b_34c2df68",
+        "filename": "src/tests/perf_tests/README.md",
+        "patchSetId": 1
+      },
+      "lineNbr": 78,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2022-02-16T16:03:18Z",
+      "side": 1,
+      "message": "nit: please wrap to 100 or 80 chars",
+      "range": {
+        "startLine": 78,
+        "startChar": 17,
+        "endLine": 78,
+        "endChar": 21
+      },
+      "revId": "7f98388a0e9c046905b92072e34b00b8e5703bd2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "003d5901_88d5ec28",
+        "filename": "src/tests/perf_tests/README.md",
+        "patchSetId": 1
+      },
+      "lineNbr": 82,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2022-02-16T16:03:18Z",
+      "side": 1,
+      "message": "I\u0027d phrase this as total wall clock time elapsed during test execution divided by the number of test iterations. Iterations are not always rendering one frame so I\u0027d quality with \u0027for trace tests, each rendered frame is one iteration.\u0027",
+      "range": {
+        "startLine": 82,
+        "startChar": 15,
+        "endLine": 82,
+        "endChar": 90
+      },
+      "revId": "7f98388a0e9c046905b92072e34b00b8e5703bd2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "52d55652_c391d026",
+        "filename": "src/tests/perf_tests/README.md",
+        "patchSetId": 1
+      },
+      "lineNbr": 83,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2022-02-16T16:03:18Z",
+      "side": 1,
+      "message": "Suggested wording:\n\nEstimated GPU elapsed time per test iteration. We compute the estimate using GLES \ntimestamp queries (with Markdown link to spec) at the beginning and ending of each test loop.",
+      "range": {
+        "startLine": 83,
+        "startChar": 14,
+        "endLine": 83,
+        "endChar": 130
+      },
+      "revId": "7f98388a0e9c046905b92072e34b00b8e5703bd2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
