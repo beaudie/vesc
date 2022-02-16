@@ -1261,12 +1261,13 @@ struct PerfCounters
     uint32_t stencilAttachmentResolves;
     uint32_t readOnlyDepthStencilRenderPasses;
     uint32_t descriptorSetAllocations;
+    uint32_t descriptorSetCacheTotalSize;
     uint32_t uniformsAndXfbDescriptorSetCacheHits;
     uint32_t uniformsAndXfbDescriptorSetCacheMisses;
     uint32_t uniformsAndXfbDescriptorSetCacheTotalSize;
     uint32_t textureDescriptorSetCacheHits;
     uint32_t textureDescriptorSetCacheMisses;
-    uint32_t textureDescriptorCacheTotalSize;
+    uint32_t textureDescriptorSetCacheTotalSize;
     uint32_t shaderBuffersDescriptorSetCacheHits;
     uint32_t shaderBuffersDescriptorSetCacheMisses;
     uint32_t shaderBuffersDescriptorSetCacheTotalSize;
