@@ -35,7 +35,7 @@ if is_windows:
 elif is_macos:
     chrome_folder = '/Applications/Google Chrome Canary.app/Contents/Frameworks/Google Chrome Framework.framework/Libraries'
     libs_to_copy = ['libGLESv2.dylib', 'libEGL.dylib']
-    optional_libs_to_copy = []
+    optional_libs_to_copy = ['libchrome_zlib.dylib', 'libabsl.dylib', 'libc++.dylib']
 
 else:
     # Must be Linux
@@ -80,7 +80,7 @@ print('Copying binaries from ' + source_folder + ' to ' + dest_folder + '.')
 
 def copy_file(src, dst):
     print(' - ' + src + '   -->   ' + dst)
-    if is_macos:
+    if is_macos and os.path.isfile(dst):
         # For the codesign to work, the original file must be removed
         os.remove(dst)
     shutil.copyfile(src, dst)
