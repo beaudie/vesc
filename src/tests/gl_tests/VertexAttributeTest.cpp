@@ -2972,6 +2972,74 @@ void main()
     }
 }
 
+// Tests that repeatedly updating a disabled vertex attribute without submission works as expected.
+// This covers an security bug where default attribute buffer is allocated but not vertex array's
+// state not updated and still popint to a inflight buffer that may gets freed.
+// http://crbug.com/1296467
+TEST_P(VertexAttributeTest, DisabledRepeatedAttribUpdates)
+{
+    ANGLE_SKIP_TEST_IF(IsD3D9());
+    ANGLE_SKIP_TEST_IF(IsOSX() && IsOpenGL());
+
+    constexpr char kVertexShader[] = R"(attribute vec2 position;
+attribute float actualValue;
+uniform float expectedValue;
+varying float result;
+void main()
+{
+    result = (actualValue == expectedValue) ? 1.0 : 0.0;
+    gl_Position = vec4(position, 0, 1);
+})";
+
+    constexpr char kFragmentShader[] = R"(varying mediump float result;
+void main()
+{
+    gl_FragColor = result > 0.0 ? vec4(0, 1, 0, 1) : vec4(1, 0, 0, 1);
+})";
+
+    ANGLE_GL_PROGRAM(program, kVertexShader, kFragmentShader);
+
+    glUseProgram(program);
+    GLint attribLoc = glGetAttribLocation(program, "actualValue");
+    ASSERT_NE(-1, attribLoc);
+
+    GLint uniLoc = glGetUniformLocation(program, "expectedValue");
+    ASSERT_NE(-1, uniLoc);
+
+    glVertexAttribPointer(attribLoc, 1, GL_FLOAT, GL_FALSE, 0, nullptr);
+
+    GLint positionLocation = glGetAttribLocation(program, "position");
+    ASSERT_NE(-1, positionLocation);
+    setupQuadVertexBuffer(0.5f, 1.0f);
+    glVertexAttribPointer(positionLocation, 3, GL_FLOAT, GL_FALSE, 0, 0);
+    glEnableVertexAttribArray(positionLocation);
+
+    std::array<GLfloat, 16> testValues = {{1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16}};
+    glUniform1f(uniLoc, testValues[0]);
+    glVertexAttrib1f(attribLoc, testValues[0]);
+    glDrawArrays(GL_TRIANGLES, 0, 6);
+    ASSERT_GL_NO_ERROR();
+    EXPECT_PIXEL_COLOR_EQ(0, 0, GLColor::green);
+
+    glVertexAttribPointer(attribLoc, 1, GL_FLOAT, GL_FALSE, 0, &(testValues[3]));
+    glEnableVertexAttribArray(attribLoc);
+    for (int i = 0; i < 1000; i++)
+    {
+        glUniform1f(uniLoc, testValues[1]);
+        glVertexAttrib1f(attribLoc, testValues[1]);
+        glDrawArrays(GL_TRIANGLES, 0, 6);
+    }
+    ASSERT_GL_NO_ERROR();
+    EXPECT_PIXEL_COLOR_EQ(0, 0, GLColor::red);
+
+    glDisableVertexAttribArray(attribLoc);
+    glUniform1f(uniLoc, testValues[2]);
+    glVertexAttrib1f(attribLoc, testValues[2]);
+    glDrawArrays(GL_TRIANGLES, 0, 6);
+    ASSERT_GL_NO_ERROR();
+    EXPECT_PIXEL_COLOR_EQ(0, 0, GLColor::green);
+}
+
 // Test that even inactive attributes are taken into account when checking for aliasing in case the
 // shader version is >= 3.00. GLSL ES 3.00.6 section 12.46.
 TEST_P(VertexAttributeTestES3, InactiveAttributeAliasing)
