@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "33196312_bf8debfb",
+        "filename": "src/libANGLE/renderer/vulkan/linux/DmaBufImageSiblingVkLinux.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 309,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-02-16T19:21:59Z",
+      "side": 1,
+      "message": "You can make the function return its return value in an argument, then make it return angle::Result so this can correctly fail.",
+      "revId": "ec4dacf4f3893281d015fc858bf85919e8f003ce",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
