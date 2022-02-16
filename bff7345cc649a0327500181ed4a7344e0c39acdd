@@ -16,6 +16,228 @@
       "message": "Update a new patch according to Charlie\u0027s suggestion in http://anglebug.com/6863 (Very confused about these two failed running jobs,job results show no error,but there are tests failed.But I don\u0027t think thery are caused by my patch.)",
       "revId": "bff7345cc649a0327500181ed4a7344e0c39acdd",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "02948ef1_7a25e818",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 21
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-02-16T18:37:55Z",
+      "side": 1,
+      "message": "Some initial feedback. This optimization is so specific, that it\u0027s severely undertested. I\u0027ve identified a number of potential bugs, but I suspect there would be more.",
+      "revId": "bff7345cc649a0327500181ed4a7344e0c39acdd",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "0b422a95_6a4ab211",
+        "filename": "src/libANGLE/renderer/vulkan/TextureVk.cpp",
+        "patchSetId": 21
+      },
+      "lineNbr": 507,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-02-16T18:37:55Z",
+      "side": 1,
+      "message": "What if the update is to all layers? Shouldn\u0027t the if in line 495 check for index.getLayerCount() \u003d\u003d mImage-\u003egetLayerCount()? That would need an exception for CubeMap textures of course.\n\nThis change is likely buggy with 2D array and 3D textures. Could you please duplicate your tests to make sure 2D array, 3D and cube map textures are also tested?",
+      "range": {
+        "startLine": 498,
+        "startChar": 0,
+        "endLine": 507,
+        "endChar": 9
+      },
+      "revId": "bff7345cc649a0327500181ed4a7344e0c39acdd",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "c396acea_08618712",
+        "filename": "src/libANGLE/renderer/vulkan/TextureVk.cpp",
+        "patchSetId": 21
+      },
+      "lineNbr": 511,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-02-16T18:37:55Z",
+      "side": 1,
+      "message": "This is a bug. Please duplicate or change your tests such that a non-zero base level is used.\n\nThe bug is that mState.getEffectiveBaseLevel() is returning a GL level index, but mImage-\u003egetLevelCount() has the Vulkan level count. They can\u0027t be compared like that (and what\u0027s with \u003c\u003d instead of \u003c ?)\n\nPlease use gl::LevelIndex and vk::LevelIndex appropriately to avoid such bugs.",
+      "range": {
+        "startLine": 510,
+        "startChar": 0,
+        "endLine": 511,
+        "endChar": 65
+      },
+      "revId": "bff7345cc649a0327500181ed4a7344e0c39acdd",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "63b79b13_6fcd5bf8",
+        "filename": "src/libANGLE/renderer/vulkan/TextureVk.cpp",
+        "patchSetId": 21
+      },
+      "lineNbr": 515,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-02-16T18:37:55Z",
+      "side": 1,
+      "message": "There seem to be 2 bugs here for cubemap / array textures:\n\n1. When updating some layers, it doesn\u0027t check if the other layers of the same level have defined contents or not\n2. When updating some layers, it only checks those layers in the other levels, not _all_ layers.\n\nYou should be able to write tests for both these scenarios:\n\n1. Update to layer 1, but have defined contents in layer 0 in same level (that would be missed)\n2. Update to layer 1, but have defined contents only in layer 0 of another level (which would also be missed)",
+      "revId": "bff7345cc649a0327500181ed4a7344e0c39acdd",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "d6c0198f_a3010237",
+        "filename": "src/libANGLE/renderer/vulkan/TextureVk.cpp",
+        "patchSetId": 21
+      },
+      "lineNbr": 521,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-02-16T18:37:55Z",
+      "side": 1,
+      "message": "I\u0027m having a hard time following the logic here. If there is another level with defined contents, how is ghosting allowed?!\n\nIt seems to me that a scenario like this could trigger a bug (please add a test):\n\n- Create a texture with 2 levels, level 0: 2x2 and level 1: 1x1, and initialize it\n- Sample from it in a draw call.\n- glTexSubImage2D(level 1)\n  * This should hit this path, because level 0 has defined contents\n- glGenerateMipmap\n  * This should result in releaseImage in line 2727 below\n  * As a result, the contents of level 0 are lost and generate mipmap would produce garbage",
+      "revId": "bff7345cc649a0327500181ed4a7344e0c39acdd",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "6e4e4585_7e7cc7d3",
+        "filename": "src/libANGLE/renderer/vulkan/TextureVk.cpp",
+        "patchSetId": 21
+      },
+      "lineNbr": 532,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-02-16T18:37:55Z",
+      "side": 1,
+      "message": "Should this condition be applied to the whole logic added here? Is there a value to doing all the above logic if releaseImage() is not going to be called anyway?",
+      "revId": "bff7345cc649a0327500181ed4a7344e0c39acdd",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "92809f4f_40132564",
+        "filename": "src/libANGLE/renderer/vulkan/TextureVk.cpp",
+        "patchSetId": 21
+      },
+      "lineNbr": 562,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-02-16T18:37:55Z",
+      "side": 1,
+      "message": "Should this instead be `mImage-\u003evalid()` or something? What if the `if` in line 530 is false, so the image is not released, why shouldn\u0027t this path be taken?",
+      "range": {
+        "startLine": 562,
+        "startChar": 59,
+        "endLine": 562,
+        "endChar": 87
+      },
+      "revId": "bff7345cc649a0327500181ed4a7344e0c39acdd",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "d4c396f2_08a2c8f1",
+        "filename": "src/libANGLE/renderer/vulkan/TextureVk.cpp",
+        "patchSetId": 21
+      },
+      "lineNbr": 586,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-02-16T18:37:55Z",
+      "side": 1,
+      "message": "Warning should be conditional to \"if (not ghosting)\"",
+      "revId": "bff7345cc649a0327500181ed4a7344e0c39acdd",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "8a1802bd_908a07da",
+        "filename": "src/libANGLE/renderer/vulkan/TextureVk.cpp",
+        "patchSetId": 21
+      },
+      "lineNbr": 748,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-02-16T18:37:55Z",
+      "side": 1,
+      "message": "Either this, or the logic in setSubImageImpl(), should also apply to copySubTextureImpl().\n\nAlso, what does this do? I assume you are trying to disable your optimization path for non-glTexSubImage* paths. Then why is this only done for dstLevel \u003d\u003d (GLint)mState.getEffectiveBaseLevel()?",
+      "revId": "bff7345cc649a0327500181ed4a7344e0c39acdd",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ae297858_bce0f902",
+        "filename": "src/libANGLE/renderer/vulkan/TextureVk.cpp",
+        "patchSetId": 21
+      },
+      "lineNbr": 2727,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-02-16T18:37:55Z",
+      "side": 1,
+      "message": "Is this actually being hit in apps? Or just tests?",
+      "revId": "bff7345cc649a0327500181ed4a7344e0c39acdd",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "88868d50_3144d442",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.h",
+        "patchSetId": 21
+      },
+      "lineNbr": 2302,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-02-16T18:37:55Z",
+      "side": 1,
+      "message": "This doesn\u0027t belong here. If we cannot eliminate it, it should at least live in the TextureVk class.",
+      "revId": "bff7345cc649a0327500181ed4a7344e0c39acdd",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "9e79b80a_9036e552",
+        "filename": "src/tests/gl_tests/TextureTest.cpp",
+        "patchSetId": 21
+      },
+      "lineNbr": 6193,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-02-16T18:37:55Z",
+      "side": 1,
+      "message": "The texture is very small, and the draw call is cheap. Granted, we don\u0027t currently re-check the fences when looking at whether the buffer is in use, but we might have facilities for this in the future.\n\nHow about making the texture buffer and use an artificial shader that\u0027s expensive? See kCostlyFS in TimerQueriesTest.cpp for example.",
+      "revId": "bff7345cc649a0327500181ed4a7344e0c39acdd",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
