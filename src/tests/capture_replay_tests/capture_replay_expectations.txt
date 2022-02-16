@@ -220,3 +220,5 @@
 3565 : TextureMultisampleTest.MultisampleTargetFramebufferTexture2D/* = CRASH
 3565 : TextureMultisampleTest.SimpleTexelFetch/* = CRASH
 3565 : TextureMultisampleTest.ValidateTextureStorageMultisampleParameters/* = CRASH
+
+7035 : VertexAttributeTest.DisabledRepeatedAttribUpdates/* = FAIL
