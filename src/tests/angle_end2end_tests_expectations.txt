@@ -342,9 +342,6 @@
 5981 PIXEL4ORXL GLES : VulkanExternalImageTest.TextureFormatCompatChromiumFd/* = SKIP
 
 5946 PIXEL4ORXL VULKAN : TransformFeedbackTestES32.PrimitivesWrittenAndGenerated/* = SKIP
-5947 PIXEL4ORXL VULKAN : FramebufferFetchES31.DrawFetchBlitDrawFetch_NonCoherent/* = SKIP
-5947 PIXEL4ORXL VULKAN : FramebufferFetchES31.DrawNonFetchDrawFetchWithDifferentAttachments_NonCoherent/* = SKIP
-5947 PIXEL4ORXL VULKAN : FramebufferFetchES31.DrawNonFetchDrawFetchWithDifferentPrograms_NonCoherent/* = SKIP
 5981 PIXEL4ORXL VULKAN : BlitFramebufferANGLETest.BlitWithDepthDefaultToUser/* = SKIP
 5981 PIXEL4ORXL VULKAN : BlitFramebufferANGLETest.BlitWithDepthUserToDefault/* = SKIP
 5981 PIXEL4ORXL VULKAN : ClearTestES3.MaskedClearHeterogeneousAttachments/* = SKIP
@@ -522,3 +519,12 @@
 // NVidia fails new SwizzledChainedAssignIncrement test on GL and GLES.
 7029 NVIDIA OPENGL : GLSLTest.SwizzledChainedAssignIncrement/* = SKIP
 7029 NVIDIA GLES : GLSLTest.SwizzledChainedAssignIncrement/* = SKIP
+
+// Framebuffer Fetch failures on Qualcomm
+5947 PIXEL4ORXL VULKAN : FramebufferFetchES31.MultipleDraw_Coherent/* = SKIP
+5947 PIXEL4ORXL VULKAN : FramebufferFetchES31.DrawFetchBlitDrawFetch_Coherent/* = SKIP
+5947 PIXEL4ORXL VULKAN : FramebufferFetchES31.DrawFetchBlitDrawFetch_NonCoherent/* = SKIP
+5947 PIXEL4ORXL VULKAN : FramebufferFetchES31.DrawNonFetchDrawFetchWithDifferentAttachments_Coherent/* = SKIP
+5947 PIXEL4ORXL VULKAN : FramebufferFetchES31.DrawNonFetchDrawFetchWithDifferentAttachments_NonCoherent/* = SKIP
+5947 PIXEL4ORXL VULKAN : FramebufferFetchES31.DrawNonFetchDrawFetchWithDifferentPrograms_Coherent/* = SKIP
+5947 PIXEL4ORXL VULKAN : FramebufferFetchES31.DrawNonFetchDrawFetchWithDifferentPrograms_NonCoherent/* = SKIP
