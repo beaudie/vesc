@@ -54,6 +54,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "ddf32e27_960330f4",
+        "filename": "src/libANGLE/renderer/vulkan/TextureVk.cpp",
+        "patchSetId": 13
+      },
+      "lineNbr": 489,
+      "author": {
+        "id": 1446209
+      },
+      "writtenOn": "2022-02-16T09:26:36Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "9ac271a6_14d5efd1",
+      "revId": "0a0a015d313cb32dbe37685cf8ec2adea227a8b1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "63aa8bed_9d5be67a",
@@ -179,6 +197,24 @@
       "side": 1,
       "message": "Will do in next patch.",
       "parentUuid": "efcac6ed_6434072e",
+      "revId": "0a0a015d313cb32dbe37685cf8ec2adea227a8b1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "9d44f34b_c063484c",
+        "filename": "src/tests/gl_tests/ComputeShaderTest.cpp",
+        "patchSetId": 13
+      },
+      "lineNbr": 859,
+      "author": {
+        "id": 1446209
+      },
+      "writtenOn": "2022-02-16T09:26:36Z",
+      "side": 1,
+      "message": "This is a necessary check for some vendor like NV doesn\u0027t support this extension.",
+      "parentUuid": "637d74cb_ce26c1ce",
       "revId": "0a0a015d313cb32dbe37685cf8ec2adea227a8b1",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
