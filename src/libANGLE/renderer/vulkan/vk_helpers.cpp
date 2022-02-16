@@ -795,21 +795,9 @@ void DestroyBufferList(RendererVk *renderer, BufferHelperPointerVector *buffers)
     buffers->clear();
 }
 
-bool ShouldReleaseFreeBuffer(const vk::BufferHelper &buffer,
-                             size_t dynamicBufferSize,
-                             DynamicBufferPolicy policy,
-                             size_t freeListSize)
+bool ShouldReleaseFreeBuffer(const vk::BufferHelper &buffer, size_t dynamicBufferSize)
 {
-    constexpr size_t kLimitedFreeListMaxSize = 1;
-
-    // If the dynamic buffer was resized we cannot reuse the retained buffer.  Additionally,
-    // only reuse the buffer if specifically requested.
-    const bool sizeMismatch    = buffer.getSize() != dynamicBufferSize;
-    const bool releaseByPolicy = policy == DynamicBufferPolicy::OneShotUse ||
-                                 (policy == DynamicBufferPolicy::SporadicTextureUpload &&
-                                  freeListSize >= kLimitedFreeListMaxSize);
-
-    return sizeMismatch || releaseByPolicy;
+    return buffer.getBufferBlock()->getMemorySize() != dynamicBufferSize;
 }
 
 // Helper functions used below
@@ -2318,7 +2306,6 @@ void CommandBufferRecycler<CommandBufferT, CommandBufferHelperT>::resetCommandBu
 DynamicBuffer::DynamicBuffer()
     : mUsage(0),
       mHostVisible(false),
-      mPolicy(DynamicBufferPolicy::OneShotUse),
       mInitialSize(0),
       mNextAllocationOffset(0),
       mSize(0),
@@ -2329,7 +2316,6 @@ DynamicBuffer::DynamicBuffer()
 DynamicBuffer::DynamicBuffer(DynamicBuffer &&other)
     : mUsage(other.mUsage),
       mHostVisible(other.mHostVisible),
-      mPolicy(other.mPolicy),
       mInitialSize(other.mInitialSize),
       mBuffer(std::move(other.mBuffer)),
       mNextAllocationOffset(other.mNextAllocationOffset),
@@ -2344,14 +2330,12 @@ void DynamicBuffer::init(RendererVk *renderer,
                          VkBufferUsageFlags usage,
                          size_t alignment,
                          size_t initialSize,
-                         bool hostVisible,
-                         DynamicBufferPolicy policy)
+                         bool hostVisible)
 {
     mUsage       = usage;
     mHostVisible = hostVisible;
     mMemoryPropertyFlags =
         (hostVisible) ? VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT : VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT;
-    mPolicy = policy;
 
     // Check that we haven't overriden the initial size of the buffer in setMinimumSizeForTesting.
     if (mInitialSize == 0)
@@ -2469,7 +2453,7 @@ angle::Result DynamicBuffer::allocate(ContextVk *contextVk,
             mBufferFreeList.erase(mBufferFreeList.begin());
         }
 
-        ASSERT(mBuffer->getSize() == mSize);
+        ASSERT(mBuffer->getBufferBlock()->getMemorySize() == mSize);
 
         mNextAllocationOffset = 0;
 
@@ -2515,7 +2499,7 @@ void DynamicBuffer::releaseInFlightBuffersToResourceUseList(ContextVk *contextVk
         // unfortunately.
         bufferHelper->retainReadOnly(resourceUseList);
 
-        if (ShouldReleaseFreeBuffer(*bufferHelper, mSize, mPolicy, mBufferFreeList.size()))
+        if (ShouldReleaseFreeBuffer(*bufferHelper, mSize))
         {
             bufferHelper->release(contextVk->getRenderer());
         }

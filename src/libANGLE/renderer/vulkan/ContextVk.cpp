@@ -669,8 +669,7 @@ void ContextVk::DriverUniformsDescriptorSet::init(RendererVk *rendererVk)
     size_t minAlignment = static_cast<size_t>(
         rendererVk->getPhysicalDeviceProperties().limits.minUniformBufferOffsetAlignment);
     dynamicBuffer.init(rendererVk, VK_BUFFER_USAGE_UNIFORM_BUFFER_BIT, minAlignment,
-                       kDriverUniformsAllocatorPageSize, true,
-                       vk::DynamicBufferPolicy::FrequentSmallAllocations);
+                       kDriverUniformsAllocatorPageSize, true);
     descriptorSetCache.clear();
 }
 
@@ -1018,8 +1017,7 @@ angle::Result ContextVk::initialize()
     // Initialize current value/default attribute buffers.
     for (vk::DynamicBuffer &buffer : mStreamedVertexBuffers)
     {
-        buffer.init(mRenderer, kVertexBufferUsage, 1, kDynamicVertexDataSize, true,
-                    vk::DynamicBufferPolicy::FrequentSmallAllocations);
+        buffer.init(mRenderer, kVertexBufferUsage, 1, kDynamicVertexDataSize, true);
     }
 
 #if ANGLE_ENABLE_VULKAN_GPU_TRACE_EVENTS
@@ -1066,8 +1064,7 @@ angle::Result ContextVk::initialize()
     size_t minAlignment = static_cast<size_t>(
         mRenderer->getPhysicalDeviceProperties().limits.minUniformBufferOffsetAlignment);
     mDefaultUniformStorage.init(mRenderer, VK_BUFFER_USAGE_UNIFORM_BUFFER_BIT, minAlignment,
-                                mRenderer->getDefaultUniformBufferSize(), true,
-                                vk::DynamicBufferPolicy::FrequentSmallAllocations);
+                                mRenderer->getDefaultUniformBufferSize(), true);
 
     // Initialize an "empty" buffer for use with default uniform blocks where there are no uniforms,
     // or atomic counter buffer array indices that are unused.
@@ -2234,10 +2231,16 @@ angle::Result ContextVk::handleDirtyDescriptorSetsImpl(CommandBufferT *commandBu
 
 void ContextVk::syncObjectPerfCounters()
 {
-    mPerfCounters.descriptorSetAllocations              = 0;
-    mPerfCounters.shaderBuffersDescriptorSetCacheHits   = 0;
-    mPerfCounters.shaderBuffersDescriptorSetCacheMisses = 0;
-    mPerfCounters.textureDescriptorCacheTotalSize       = 0;
+    mPerfCounters.descriptorSetAllocations                  = 0;
+    mPerfCounters.uniformsAndXfbDescriptorSetCacheHits      = 0;
+    mPerfCounters.uniformsAndXfbDescriptorSetCacheMisses    = 0;
+    mPerfCounters.uniformsAndXfbDescriptorSetCacheTotalSize = 0;
+    mPerfCounters.textureDescriptorSetCacheHits             = 0;
+    mPerfCounters.textureDescriptorSetCacheMisses           = 0;
+    mPerfCounters.textureDescriptorCacheTotalSize           = 0;
+    mPerfCounters.shaderBuffersDescriptorSetCacheHits       = 0;
+    mPerfCounters.shaderBuffersDescriptorSetCacheMisses     = 0;
+    mPerfCounters.shaderBuffersDescriptorSetCacheTotalSize  = 0;
 
     // ContextVk's descriptor set allocations
     ContextVkPerfCounters contextCounters = getAndResetObjectPerfCounters();
@@ -2269,12 +2272,24 @@ void ContextVk::syncObjectPerfCounters()
             mPerfCounters.descriptorSetAllocations += count;
         }
 
+        mPerfCounters.uniformsAndXfbDescriptorSetCacheHits +=
+            progPerfCounters.descriptorSetCacheHits[DescriptorSetIndex::UniformsAndXfb];
+        mPerfCounters.uniformsAndXfbDescriptorSetCacheMisses +=
+            progPerfCounters.descriptorSetCacheMisses[DescriptorSetIndex::UniformsAndXfb];
+        mPerfCounters.uniformsAndXfbDescriptorSetCacheTotalSize +=
+            progPerfCounters.descriptorSetCacheSizes[DescriptorSetIndex::UniformsAndXfb];
+        mPerfCounters.textureDescriptorSetCacheHits +=
+            progPerfCounters.descriptorSetCacheHits[DescriptorSetIndex::Texture];
+        mPerfCounters.textureDescriptorSetCacheMisses +=
+            progPerfCounters.descriptorSetCacheMisses[DescriptorSetIndex::Texture];
+        mPerfCounters.textureDescriptorCacheTotalSize +=
+            progPerfCounters.descriptorSetCacheSizes[DescriptorSetIndex::Texture];
         mPerfCounters.shaderBuffersDescriptorSetCacheHits +=
             progPerfCounters.descriptorSetCacheHits[DescriptorSetIndex::ShaderResource];
         mPerfCounters.shaderBuffersDescriptorSetCacheMisses +=
             progPerfCounters.descriptorSetCacheMisses[DescriptorSetIndex::ShaderResource];
-        mPerfCounters.textureDescriptorCacheTotalSize +=
-            progPerfCounters.descriptorSetCacheSizes[DescriptorSetIndex::Texture];
+        mPerfCounters.shaderBuffersDescriptorSetCacheTotalSize +=
+            progPerfCounters.descriptorSetCacheSizes[DescriptorSetIndex::ShaderResource];
     }
 }
 
