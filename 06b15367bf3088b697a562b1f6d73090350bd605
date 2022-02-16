@@ -67,6 +67,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "205d1ae6_42426b68",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 11
+      },
+      "lineNbr": 810,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-02-16T20:14:53Z",
+      "side": 1,
+      "message": "+1 to Charlie\u0027s change. The policies are actually no longer used at all, so can be deleted.\n\nUnless proven necessary, ISGTM to release buffers on size change (provided the size change check is fixed).",
+      "parentUuid": "71ec546a_3debaa0b",
+      "range": {
+        "startLine": 802,
+        "startChar": 1,
+        "endLine": 810,
+        "endChar": 27
+      },
+      "revId": "06b15367bf3088b697a562b1f6d73090350bd605",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "acd35a82_2e412868",
         "filename": "src/libANGLE/renderer/vulkan/vk_helpers.h",
         "patchSetId": 11
