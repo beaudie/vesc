@@ -20,6 +20,24 @@
     {
       "unresolved": false,
       "key": {
+        "uuid": "ee0d7952_d91c8476",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 2
+      },
+      "lineNbr": 12,
+      "author": {
+        "id": 1001921
+      },
+      "writtenOn": "2022-02-16T20:02:05Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "8a41ea34_a4997dcd",
+      "revId": "0775dbd07f11879c669453b45f2249495e5f0f2f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
         "uuid": "06d2eb02_792511f5",
         "filename": "/PATCHSET_LEVEL",
         "patchSetId": 2
@@ -72,6 +90,30 @@
       "side": 1,
       "message": "+1",
       "parentUuid": "566fb5e8_1165f7c2",
+      "range": {
+        "startLine": 44,
+        "startChar": 0,
+        "endLine": 45,
+        "endChar": 60
+      },
+      "revId": "0775dbd07f11879c669453b45f2249495e5f0f2f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "033e9bff_ff4cfb0b",
+        "filename": "scripts/update_chrome_angle.py",
+        "patchSetId": 2
+      },
+      "lineNbr": 45,
+      "author": {
+        "id": 1001921
+      },
+      "writtenOn": "2022-02-16T20:02:05Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "4d300e3b_71ae6ed0",
       "range": {
         "startLine": 44,
         "startChar": 0,

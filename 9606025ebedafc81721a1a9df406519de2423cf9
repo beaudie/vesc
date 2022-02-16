@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "945b002f_b99504ef",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1001921
+      },
+      "writtenOn": "2022-02-16T20:02:05Z",
+      "side": 1,
+      "message": "OK, since I have Shabi\u0027s +2, I can address the comments myself.\nThanks for the contribution and for confirming this works for you, Kyle.",
+      "revId": "9606025ebedafc81721a1a9df406519de2423cf9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
