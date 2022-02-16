@@ -20,6 +20,29 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "d87c7e3b_0ab232ea",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 11
+      },
+      "lineNbr": 810,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2022-02-16T17:46:01Z",
+      "side": 1,
+      "message": "The simple fix I am thinking is with this one line change \n\nbool ShouldReleaseFreeBuffer(const vk::BufferHelper \u0026buffer)\n{\n    return buffer.getBufferBlock()-\u003egetMemorySize() !\u003d dynamicBufferSize;\n}\n\n(Other than your test and fix the assert at line 2479, and then remove all other unused policy related code). You can add a getBufferBlockMemorySize() to BufferHelpef class if you want to remove getBufferBlock() function in BufferHelper class. I just tested locally and your test did pass. \n\nThe whole policy thing was added most because there are many different usages of DynamicBuffer and since it is per object, we care about a lot more to shrink it as fast as we can. But now the dynamic buffer is only used for uniforms and attributes and client vertex streaming. These are all very simple use and they are per context. So the policy really isn\u0027t doing us much. This basically will only keep buffers that has same size. The diff is mostly going to delete the code that no longer used.",
+      "range": {
+        "startLine": 802,
+        "startChar": 1,
+        "endLine": 810,
+        "endChar": 27
+      },
+      "revId": "06b15367bf3088b697a562b1f6d73090350bd605",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "acd35a82_2e412868",
         "filename": "src/libANGLE/renderer/vulkan/vk_helpers.h",
         "patchSetId": 11
@@ -127,6 +150,30 @@
       "side": 1,
       "message": "You may be under the impression the original code was correct? I had to make this change because we were re-using blocks with different sizes. I prefer the hashmap design because it allows us to treat the free lists like a queue instead of having to scan through to find an element at the middle of the list. Going to also add Shabi and Cody to this CL. Shabi/Cody, can you advise which design you prefer? I\u0027ll adopt that one. Either scan the free list (which is no longer a queue) or use several queues arranged by size. I would say the performance characteristics to both should be nearly identical, and this is a code style issue.",
       "parentUuid": "08b8f6a8_851c3ea3",
+      "range": {
+        "startLine": 150,
+        "startChar": 4,
+        "endLine": 159,
+        "endChar": 77
+      },
+      "revId": "06b15367bf3088b697a562b1f6d73090350bd605",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "374d7d95_1430ada7",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.h",
+        "patchSetId": 11
+      },
+      "lineNbr": 159,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2022-02-16T17:46:01Z",
+      "side": 1,
+      "message": "Understood. The fix I am proposing is only keep the free buffer that matches the size. See the other comment I added bellow. Like I said, the free list is most time 0 and occasionaly 1 or 2. Even if you want to scan it, simply walk the vector will have better performance than hashMap.",
+      "parentUuid": "683cc58f_3378b212",
       "range": {
         "startLine": 150,
         "startChar": 4,
