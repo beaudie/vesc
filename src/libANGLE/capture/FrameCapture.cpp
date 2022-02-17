@@ -2210,11 +2210,20 @@ void CaptureVertexArrayState(std::vector<CallCapture> *setupCalls,
                 }
                 else
                 {
-                    Capture(setupCalls,
-                            CaptureVertexAttribPointer(
-                                *replayState, true, attribIndex, attrib.format->channelCount,
-                                attrib.format->vertexAttribType, attrib.format->isNorm(),
-                                attrib.vertexAttribArrayStride, attrib.pointer));
+                    // When the attrib pointer is not null, a non-null buffer must be bound,
+                    // Empty array buffers will resolve into a 0 binding, as they are skipped.
+                    // [OpenGL ES 3.0.2] Section 2.8 page 24:
+                    // An INVALID_OPERATION error is generated when a non-zero vertex array object
+                    // is bound, zero is bound to the ARRAY_BUFFER buffer object binding point,
+                    // and the pointer argument is not NULL.
+                    if ((buffer && buffer->getSize() != 0) || attrib.pointer == nullptr)
+                    {
+                        Capture(setupCalls,
+                                CaptureVertexAttribPointer(
+                                    *replayState, true, attribIndex, attrib.format->channelCount,
+                                    attrib.format->vertexAttribType, attrib.format->isNorm(),
+                                    attrib.vertexAttribArrayStride, attrib.pointer));
+                    }
                 }
 
                 if (binding.getDivisor() != 0)
