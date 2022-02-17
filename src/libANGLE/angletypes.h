@@ -901,6 +901,9 @@ using BarrierVector = angle::FastVector<T, kBarrierVectorDefaultSize>;
 
 using BufferBarrierVector = BarrierVector<Buffer *>;
 
+using SamplerBindingVector = std::vector<BindingPointer<Sampler>>;
+using BufferVector         = std::vector<OffsetBindingPointer<Buffer>>;
+
 struct TextureAndLayout
 {
     Texture *texture;
