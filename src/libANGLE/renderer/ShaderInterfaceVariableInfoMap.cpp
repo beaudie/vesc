@@ -76,4 +76,47 @@ ShaderInterfaceVariableInfoMap::Iterator ShaderInterfaceVariableInfoMap::getIter
     return Iterator(mData[shaderType].begin(), mData[shaderType].end());
 }
 
+uint32_t ShaderInterfaceVariableInfoMap::getDefaultUniformBinding(gl::ShaderType shaderType) const
+{
+    const char *uniformName                 = kDefaultUniformNames[shaderType];
+    const ShaderInterfaceVariableInfo &info = get(shaderType, uniformName);
+    return info.binding;
+}
+
+uint32_t ShaderInterfaceVariableInfoMap::getXfbBufferBinding(uint32_t xfbBufferIndex) const
+{
+    const std::string bufferName            = GetXfbBufferName(xfbBufferIndex);
+    const ShaderInterfaceVariableInfo &info = get(gl::ShaderType::Vertex, bufferName);
+    return info.binding;
+}
+
+bool ShaderInterfaceVariableInfoMap::hasAtomicCounterBufferBinding(gl::ShaderType shaderType) const
+{
+    std::string blockName(sh::vk::kAtomicCountersBlockName);
+
+    if (!contains(shaderType, blockName))
+    {
+        return false;
+    }
+
+    const ShaderInterfaceVariableInfo &info = get(shaderType, blockName);
+    if (info.isDuplicate || !info.activeStages[shaderType])
+    {
+        return false;
+    }
+
+    return true;
+}
+
+uint32_t ShaderInterfaceVariableInfoMap::getAtomicCounterBufferBinding(
+    gl::ShaderType shaderType,
+    uint32_t atomicCounterBufferIndex) const
+{
+    ASSERT(hasAtomicCounterBufferBinding(shaderType));
+
+    std::string blockName(sh::vk::kAtomicCountersBlockName);
+    const ShaderInterfaceVariableInfo &info = get(shaderType, blockName);
+
+    return info.binding + atomicCounterBufferIndex;
+}
 }  // namespace rx

@@ -1066,7 +1066,7 @@ uint32_t UtilsVk::GetGenerateMipmapMaxLevels(ContextVk *contextVk)
                : kGenerateMipmapMaxLevels;
 }
 
-UtilsVk::UtilsVk() : mPerfCounters{}, mCumulativePerfCounters{} {}
+UtilsVk::UtilsVk() : mCumulativePerfCounters{} {}
 
 UtilsVk::~UtilsVk() = default;
 
@@ -3539,8 +3539,6 @@ angle::Result UtilsVk::allocateDescriptorSet(ContextVk *contextVk,
         mDescriptorSetLayouts[function][DescriptorSetIndex::Internal].get(), 1, bindingOut,
         descriptorSetOut));
 
-    mPerfCounters.descriptorSetsAllocated++;
-
     return angle::Result::Continue;
 }
 
@@ -3570,10 +3568,14 @@ void UtilsVk::outputCumulativePerfCounters()
 
 InternalShaderPerfCounters UtilsVk::getAndResetObjectPerfCounters()
 {
-    mCumulativePerfCounters.descriptorSetsAllocated += mPerfCounters.descriptorSetsAllocated;
+    InternalShaderPerfCounters counters = {};
+    for (vk::DynamicDescriptorPool &pool : mDescriptorPools)
+    {
+        counters.descriptorSetsAllocated += pool.getAndResetDescriptorSetAllocationCount();
+    }
 
-    InternalShaderPerfCounters counters   = mPerfCounters;
-    mPerfCounters.descriptorSetsAllocated = 0;
+    mCumulativePerfCounters.descriptorSetsAllocated += counters.descriptorSetsAllocated;
+
     return counters;
 }
 }  // namespace rx
