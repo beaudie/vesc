@@ -439,6 +439,12 @@ class Framebuffer final : public angle::ObserverInterface,
 
     static const FramebufferID kDefaultDrawFramebufferHandle;
 
+    void invalidateColorAttachmentZero()
+    {
+        mDirtyBits.set(DIRTY_BIT_COLOR_BUFFER_CONTENTS_0);
+        onStateChange(angle::SubjectMessage::DirtyBitsFlagged);
+    }
+
   private:
     bool detachResourceById(const Context *context, GLenum resourceType, GLuint resourceId);
     bool detachMatchingAttachment(const Context *context,
