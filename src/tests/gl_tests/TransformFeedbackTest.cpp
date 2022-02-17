@@ -2965,7 +2965,7 @@ void main()
 
     glUseProgram(program);
 
-    constexpr std::array<GLenum, 3> kUsages = {GL_STATIC_DRAW, GL_STREAM_DRAW, GL_DYNAMIC_DRAW};
+    constexpr std::array<GLenum, 3> kUsages = {GL_STATIC_DRAW};
 
     constexpr uint32_t kVaryingSize  = 4;
     constexpr uint32_t kFirstOffset  = 8;
