@@ -1,0 +1,55 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "e32ed95a_0ff9a3b9",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1520902
+      },
+      "writtenOn": "2022-02-17T00:14:04Z",
+      "side": 1,
+      "message": "Thank you Jamie for adding the new counters. Apologize that I promised I would do it but haven\u0027t got time yet. The change looks good to me except for the 2 variable name in ContextVk.cpp. Thanks for doing the work again.",
+      "revId": "404368526eaeee3f619babc9a0cde9c92b43791e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "f72538b2_a1169e82",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 2390,
+      "author": {
+        "id": 1520902
+      },
+      "writtenOn": "2022-02-17T00:14:04Z",
+      "side": 1,
+      "message": "Maybe it is better to rename the this gl::RunningGraphWidget to uniformDescriptorCacheSize.",
+      "revId": "404368526eaeee3f619babc9a0cde9c92b43791e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "1b2a80a6_dffe3b9a",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 2397,
+      "author": {
+        "id": 1520902
+      },
+      "writtenOn": "2022-02-17T00:14:04Z",
+      "side": 1,
+      "message": "Same as the above, it might be better to change the variable name to be consistent with the WidgetId: gl::RunningGraphWidget *descriptorCacheSize \u003d overlay -\u003e getRunningGraphWidget(gl::WidgetId::VulkanDescriptorCacheSize);",
+      "revId": "404368526eaeee3f619babc9a0cde9c92b43791e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
