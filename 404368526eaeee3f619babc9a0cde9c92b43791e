@@ -35,6 +35,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "de86481b_363b582d",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 2390,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2022-02-17T16:21:06Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "f72538b2_a1169e82",
+      "revId": "404368526eaeee3f619babc9a0cde9c92b43791e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "1b2a80a6_dffe3b9a",
@@ -48,6 +66,24 @@
       "writtenOn": "2022-02-17T00:14:04Z",
       "side": 1,
       "message": "Same as the above, it might be better to change the variable name to be consistent with the WidgetId: gl::RunningGraphWidget *descriptorCacheSize \u003d overlay -\u003e getRunningGraphWidget(gl::WidgetId::VulkanDescriptorCacheSize);",
+      "revId": "404368526eaeee3f619babc9a0cde9c92b43791e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "0d0712b8_4f3cc501",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 2397,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2022-02-17T16:21:06Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "1b2a80a6_dffe3b9a",
       "revId": "404368526eaeee3f619babc9a0cde9c92b43791e",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
