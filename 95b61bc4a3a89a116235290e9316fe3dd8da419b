@@ -1,6 +1,29 @@
 {
   "comments": [
     {
+      "unresolved": true,
+      "key": {
+        "uuid": "fceeecff_69511eaa",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 17,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2022-02-17T15:40:36Z",
+      "side": 1,
+      "message": "I remember looking at this and being confused. I think the comment is saying \"We\u0027re not going to eliminate these, even though they have the same value. Either one will work\".",
+      "range": {
+        "startLine": 17,
+        "startChar": 26,
+        "endLine": 17,
+        "endChar": 61
+      },
+      "revId": "95b61bc4a3a89a116235290e9316fe3dd8da419b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": false,
       "key": {
         "uuid": "12a742d9_f8a66041",
@@ -14,6 +37,23 @@
       "writtenOn": "2022-02-17T15:16:48Z",
       "side": 1,
       "message": "Besides \"Real Racing 3\" also \"Final Fantasy Brave Exvius\" seems to be affected by this.\nI will make the commit message a bit shorter an more meaningful if this turns out to be the right approach of fixing this.",
+      "revId": "95b61bc4a3a89a116235290e9316fe3dd8da419b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "c3050113_7bd4ee8e",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2022-02-17T15:40:36Z",
+      "side": 1,
+      "message": "Wow, that turned into a nice simple fix.",
       "revId": "95b61bc4a3a89a116235290e9316fe3dd8da419b",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
