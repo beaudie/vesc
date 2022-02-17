@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "ec66483e_581d172c",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1491687
+      },
+      "writtenOn": "2022-02-17T15:17:37Z",
+      "side": 1,
+      "message": "This commit can be merged with the following one, I left it separate for review reasons and to keep the next one\u0027s commit message shorter.",
+      "revId": "c59102982f82f87f1b117e8bcbd4d6c6c6bda471",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
