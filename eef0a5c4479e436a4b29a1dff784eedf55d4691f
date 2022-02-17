@@ -16,6 +16,92 @@
       "message": "Not sure how to handle the description of how to run the test using MEC to reproduce the faulty behavior. I Could move the instructions form the comment to the CL\u0027s commit message.",
       "revId": "eef0a5c4479e436a4b29a1dff784eedf55d4691f",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "b889325c_07cf3b83",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2022-02-17T16:37:07Z",
+      "side": 1,
+      "message": "Great find, Lubosz.  That error is affecting a number of apps right now.",
+      "revId": "eef0a5c4479e436a4b29a1dff784eedf55d4691f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "bcdd579a_45dbee0d",
+        "filename": "src/libANGLE/capture/FrameCapture.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 2219,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2022-02-17T16:37:07Z",
+      "side": 1,
+      "message": "I think you can move this check up to cover CaptureVertexAttribIPointer as well.",
+      "range": {
+        "startLine": 2219,
+        "startChar": 0,
+        "endLine": 2219,
+        "endChar": 88
+      },
+      "revId": "eef0a5c4479e436a4b29a1dff784eedf55d4691f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "6ef03738_1eab063b",
+        "filename": "src/tests/gl_tests/VertexAttributeTest.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 3945,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2022-02-17T16:37:07Z",
+      "side": 1,
+      "message": "Jamie, curious what you think about landing tests like this.  I know we\u0027ve discussed automated ways to invoke MEC with the end2end tests.",
+      "range": {
+        "startLine": 3945,
+        "startChar": 0,
+        "endLine": 3945,
+        "endChar": 37
+      },
+      "revId": "eef0a5c4479e436a4b29a1dff784eedf55d4691f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "9efd6d27_e74e97bc",
+        "filename": "src/tests/gl_tests/VertexAttributeTest.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 3975,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2022-02-17T16:37:07Z",
+      "side": 1,
+      "message": "Interesting approach to landing MEC tests.  For bot speed in the general case, I would drop this to the lowest required to recreate the issue.",
+      "range": {
+        "startLine": 3975,
+        "startChar": 0,
+        "endLine": 3975,
+        "endChar": 31
+      },
+      "revId": "eef0a5c4479e436a4b29a1dff784eedf55d4691f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
