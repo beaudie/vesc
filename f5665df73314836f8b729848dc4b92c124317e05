@@ -16,6 +16,52 @@
       "message": "I need to remove this line. This was from an earlier attempt.",
       "revId": "f5665df73314836f8b729848dc4b92c124317e05",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "7f6f2676_9f02143e",
+        "filename": "src/libANGLE/renderer/metal/FrameBufferMtl.mm",
+        "patchSetId": 1
+      },
+      "lineNbr": 1304,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2022-02-17T18:28:39Z",
+      "side": 1,
+      "message": "what about `ensureStoreOpsSetForClears`?",
+      "range": {
+        "startLine": 1304,
+        "startChar": 30,
+        "endLine": 1304,
+        "endChar": 56
+      },
+      "revId": "f5665df73314836f8b729848dc4b92c124317e05",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "e48325dc_aeb2a2f6",
+        "filename": "src/libANGLE/renderer/metal/FrameBufferMtl.mm",
+        "patchSetId": 1
+      },
+      "lineNbr": 1320,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2022-02-17T18:28:39Z",
+      "side": 1,
+      "message": "Can this be refactored into a function like:\n\n```gl::DrawBufferMask getDrawBuffersWithClearAndNoStore(...)```\n\nThis can then be tested here with `.any()` and iterated quickly later when updating.\n\nYou could possibly refactor the depth and stencil checks too to reduce code duplication but it\u0027s a bit less impactful.",
+      "range": {
+        "startLine": 1309,
+        "startChar": 0,
+        "endLine": 1320,
+        "endChar": 5
+      },
+      "revId": "f5665df73314836f8b729848dc4b92c124317e05",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
