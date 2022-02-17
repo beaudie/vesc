@@ -15,6 +15,7 @@
 #include "libANGLE/renderer/vulkan/DisplayVk.h"
 #include "libANGLE/renderer/vulkan/RendererVk.h"
 #include "libANGLE/renderer/vulkan/ResourceVk.h"
+#include "libANGLE/renderer/vulkan/TextureVk.h"
 #include "libANGLE/renderer/vulkan/android/vk_android_utils.h"
 #include "libANGLE/renderer/vulkan/vk_mem_alloc_wrapper.h"
 
@@ -361,6 +362,17 @@ bool GetAvailableValidationLayers(const std::vector<VkLayerProperties> &layerPro
 
 namespace vk
 {
+namespace
+{
+constexpr gl::ShaderMap<ImageLayout> kShaderReadOnlyImageLayouts = {
+    {gl::ShaderType::Vertex, ImageLayout::VertexShaderReadOnly},
+    {gl::ShaderType::TessControl, ImageLayout::PreFragmentShadersReadOnly},
+    {gl::ShaderType::TessEvaluation, ImageLayout::PreFragmentShadersReadOnly},
+    {gl::ShaderType::Geometry, ImageLayout::PreFragmentShadersReadOnly},
+    {gl::ShaderType::Fragment, ImageLayout::FragmentShaderReadOnly},
+    {gl::ShaderType::Compute, ImageLayout::ComputeShaderReadOnly}};
+}  // anonymous namespace
+
 const char *gLoaderLayersPathEnv   = "VK_LAYER_PATH";
 const char *gLoaderICDFilenamesEnv = "VK_ICD_FILENAMES";
 const char *gANGLEPreferredDevice  = "ANGLE_PREFERRED_DEVICE";
@@ -879,6 +891,82 @@ void ClampViewport(VkViewport *viewport)
     }
 }
 
+ImageLayout GetImageReadLayout(TextureVk *textureVk,
+                               const gl::ProgramExecutable &executable,
+                               size_t textureUnit,
+                               PipelineType pipelineType)
+{
+    ImageHelper &image = textureVk->getImage();
+
+    if (textureVk->hasBeenBoundAsImage())
+    {
+        return pipelineType == PipelineType::Compute ? ImageLayout::ComputeShaderWrite
+                                                     : ImageLayout::AllGraphicsShadersWrite;
+    }
+
+    gl::ShaderBitSet remainingShaderBits =
+        executable.getSamplerShaderBitsForTextureUnitIndex(textureUnit);
+    ASSERT(remainingShaderBits.any());
+    gl::ShaderType firstShader = remainingShaderBits.first();
+    gl::ShaderType lastShader  = remainingShaderBits.last();
+    remainingShaderBits.reset(firstShader);
+    remainingShaderBits.reset(lastShader);
+
+    if (image.hasRenderPassUsageFlag(RenderPassUsage::RenderTargetAttachment))
+    {
+        // Right now we set this flag only when RenderTargetAttachment is set since we do
+        // not track all textures in the renderpass.
+        image.setRenderPassUsageFlag(RenderPassUsage::TextureSampler);
+
+        if (image.isDepthOrStencil())
+        {
+            if (image.hasRenderPassUsageFlag(RenderPassUsage::ReadOnlyAttachment))
+            {
+                if (firstShader == gl::ShaderType::Fragment)
+                {
+                    ASSERT(remainingShaderBits.none() && lastShader == firstShader);
+                    return ImageLayout::DSAttachmentReadAndFragmentShaderRead;
+                }
+                return ImageLayout::DSAttachmentReadAndAllShadersRead;
+            }
+
+            return firstShader == gl::ShaderType::Fragment
+                       ? ImageLayout::DSAttachmentWriteAndFragmentShaderRead
+                       : ImageLayout::DSAttachmentWriteAndAllShadersRead;
+        }
+
+        return firstShader == gl::ShaderType::Fragment
+                   ? ImageLayout::ColorAttachmentAndFragmentShaderRead
+                   : ImageLayout::ColorAttachmentAndAllShadersRead;
+    }
+
+    if (image.isDepthOrStencil())
+    {
+        // We always use a depth-stencil read-only layout for any depth Textures to simplify
+        // our implementation's handling of depth-stencil read-only mode. We don't have to
+        // split a RenderPass to transition a depth texture from shader-read to read-only.
+        // This improves performance in Manhattan. Future optimizations are likely possible
+        // here including using specialized barriers without breaking the RenderPass.
+        if (firstShader == gl::ShaderType::Fragment)
+        {
+            ASSERT(remainingShaderBits.none() && lastShader == firstShader);
+            return ImageLayout::DSAttachmentReadAndFragmentShaderRead;
+        }
+        return ImageLayout::DSAttachmentReadAndAllShadersRead;
+    }
+
+    // We barrier against either:
+    // - Vertex only
+    // - Fragment only
+    // - Pre-fragment only (vertex, geometry and tessellation together)
+    if (remainingShaderBits.any() || firstShader != lastShader)
+    {
+        return lastShader == gl::ShaderType::Fragment ? ImageLayout::AllGraphicsShadersReadOnly
+                                                      : ImageLayout::PreFragmentShadersReadOnly;
+    }
+
+    return kShaderReadOnlyImageLayouts[firstShader];
+}
 }  // namespace vk
 
 #if !defined(ANGLE_SHARED_LIBVULKAN)

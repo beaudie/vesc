@@ -56,6 +56,7 @@ class ShareGroup;
 namespace gl
 {
 class MockOverlay;
+class ProgramExecutable;
 struct RasterizerState;
 struct SwizzleState;
 struct VertexAttribute;
@@ -1287,6 +1288,91 @@ using LevelIndex = gl::LevelIndexWrapper<uint32_t>;
 // Ensure viewport is within Vulkan requirements
 void ClampViewport(VkViewport *viewport);
 
+constexpr bool IsDynamicDescriptor(VkDescriptorType descriptorType)
+{
+    switch (descriptorType)
+    {
+        case VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER_DYNAMIC:
+        case VK_DESCRIPTOR_TYPE_STORAGE_BUFFER_DYNAMIC:
+            return true;
+        default:
+            return false;
+    }
+}
+
+// Imagine an image going through a few layout transitions:
+//
+//           srcStage 1    dstStage 2          srcStage 2     dstStage 3
+//  Layout 1 ------Transition 1-----> Layout 2 ------Transition 2------> Layout 3
+//           srcAccess 1  dstAccess 2          srcAccess 2   dstAccess 3
+//   \_________________  ___________________/
+//                     \/
+//               A transition
+//
+// Every transition requires 6 pieces of information: from/to layouts, src/dst stage masks and
+// src/dst access masks.  At the moment we decide to transition the image to Layout 2 (i.e.
+// Transition 1), we need to have Layout 1, srcStage 1 and srcAccess 1 stored as history of the
+// image.  To perform the transition, we need to know Layout 2, dstStage 2 and dstAccess 2.
+// Additionally, we need to know srcStage 2 and srcAccess 2 to retain them for the next transition.
+//
+// That is, with the history kept, on every new transition we need 5 pieces of new information:
+// layout/dstStage/dstAccess to transition into the layout, and srcStage/srcAccess for the future
+// transition out from it.  Given the small number of possible combinations of these values, an
+// enum is used were each value encapsulates these 5 pieces of information:
+//
+//                       +--------------------------------+
+//           srcStage 1  | dstStage 2          srcStage 2 |   dstStage 3
+//  Layout 1 ------Transition 1-----> Layout 2 ------Transition 2------> Layout 3
+//           srcAccess 1 |dstAccess 2          srcAccess 2|  dstAccess 3
+//                       +---------------  ---------------+
+//                                       \/
+//                                 One enum value
+//
+// Note that, while generally dstStage for the to-transition and srcStage for the from-transition
+// are the same, they may occasionally be BOTTOM_OF_PIPE and TOP_OF_PIPE respectively.
+enum class ImageLayout
+{
+    Undefined = 0,
+    // Framebuffer attachment layouts are placed first, so they can fit in fewer bits in
+    // PackedAttachmentOpsDesc.
+    ColorAttachment,
+    ColorAttachmentAndFragmentShaderRead,
+    ColorAttachmentAndAllShadersRead,
+    DSAttachmentWriteAndFragmentShaderRead,
+    DSAttachmentWriteAndAllShadersRead,
+    DSAttachmentReadAndFragmentShaderRead,
+    DSAttachmentReadAndAllShadersRead,
+    DepthStencilAttachmentReadOnly,
+    DepthStencilAttachment,
+    DepthStencilResolveAttachment,
+    Present,
+    SharedPresent,
+    // The rest of the layouts.
+    ExternalPreInitialized,
+    ExternalShadersReadOnly,
+    ExternalShadersWrite,
+    TransferSrc,
+    TransferDst,
+    VertexShaderReadOnly,
+    VertexShaderWrite,
+    // PreFragment == Vertex, Tessellation and Geometry stages
+    PreFragmentShadersReadOnly,
+    PreFragmentShadersWrite,
+    FragmentShaderReadOnly,
+    FragmentShaderWrite,
+    ComputeShaderReadOnly,
+    ComputeShaderWrite,
+    AllGraphicsShadersReadOnly,
+    AllGraphicsShadersWrite,
+
+    InvalidEnum,
+    EnumCount = InvalidEnum,
+};
+
+ImageLayout GetImageReadLayout(TextureVk *textureVk,
+                               const gl::ProgramExecutable &executable,
+                               size_t textureUnit,
+                               PipelineType pipelineType);
 }  // namespace vk
 
 #if !defined(ANGLE_SHARED_LIBVULKAN)
