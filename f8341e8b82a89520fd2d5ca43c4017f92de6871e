@@ -106,6 +106,24 @@
       "parentUuid": "2706edfe_2e4f7e21",
       "revId": "f8341e8b82a89520fd2d5ca43c4017f92de6871e",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "3dac0b9a_852f147e",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 17
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2022-02-17T16:07:48Z",
+      "side": 1,
+      "message": "Not easily on Android. On desktop you can access the .qpa files from each test shard (e.g. https://cas-viewer.appspot.com/projects/chromium-swarm/instances/default_instance/blobs/f361ba8632059f034df3690efcb2ca47e8f301ae883ae75d6899417075a2a65b/4488/tree). I was planning on writing a merge script to put all the test results in a single artifact we could download: http://anglebug.com/5236 . We haven\u0027t yet had time to prioritize that work, or to make the artifact upload work on Android.\n\nDo you have access to an Android device to test with?",
+      "parentUuid": "f4504dee_8f0778a9",
+      "revId": "f8341e8b82a89520fd2d5ca43c4017f92de6871e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
