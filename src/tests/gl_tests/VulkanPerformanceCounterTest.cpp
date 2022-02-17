@@ -20,6 +20,7 @@
 #include "libANGLE/angletypes.h"
 #include "libANGLE/renderer/vulkan/ContextVk.h"
 #include "test_utils/gl_raii.h"
+#include "util/OSWindow.h"
 #include "util/random_utils.h"
 
 using namespace angle;
@@ -185,6 +186,114 @@ class VulkanPerformanceCounterTest_MSAA : public VulkanPerformanceCounterTest
         setSamples(4);
         setMultisampleEnabled(true);
     }
+    void testSetUp() override
+    {
+        // Get display.
+        EGLAttrib dispattrs[] = {EGL_PLATFORM_ANGLE_TYPE_ANGLE, GetParam().getRenderer(), EGL_NONE};
+        mDisplay              = eglGetPlatformDisplay(EGL_PLATFORM_ANGLE_ANGLE,
+                                         reinterpret_cast<void *>(EGL_DEFAULT_DISPLAY), dispattrs);
+        ASSERT_TRUE(mDisplay != EGL_NO_DISPLAY);
+
+        ASSERT_TRUE(eglInitialize(mDisplay, nullptr, nullptr) == EGL_TRUE);
+
+        // Nexus 5X and 6P fail to eglMakeCurrent with a config they advertise they support.
+        // http://anglebug.com/3464
+        ANGLE_SKIP_TEST_IF(IsNexus5X());
+
+        // Find a config that uses RGBA8 and allows 4x multisampling.
+        const EGLint configAttributes[] = {EGL_SURFACE_TYPE,
+                                           EGL_WINDOW_BIT,
+                                           EGL_RED_SIZE,
+                                           8,
+                                           EGL_GREEN_SIZE,
+                                           8,
+                                           EGL_BLUE_SIZE,
+                                           8,
+                                           EGL_ALPHA_SIZE,
+                                           8,
+                                           EGL_DEPTH_SIZE,
+                                           24,
+                                           EGL_STENCIL_SIZE,
+                                           8,
+                                           EGL_SAMPLE_BUFFERS,
+                                           1,
+                                           EGL_SAMPLES,
+                                           4,
+                                           EGL_NONE};
+
+        EGLint configCount;
+        EGLConfig multisampledConfig;
+        EGLint ret =
+            eglChooseConfig(mDisplay, configAttributes, &multisampledConfig, 1, &configCount);
+        mMultisampledConfigExists = ret && configCount > 0;
+
+        if (!mMultisampledConfigExists)
+        {
+            return;
+        }
+
+        // Create a window, context and surface if multisampling is possible.
+        mOSWindow = OSWindow::New();
+        mOSWindow->initialize("VulkanPerformanceCounterTest_MSAA", kWindowWidth, kWindowHeight);
+        setWindowVisible(mOSWindow, true);
+
+        EGLint contextAttributes[] = {
+            EGL_CONTEXT_MAJOR_VERSION_KHR,
+            GetParam().majorVersion,
+            EGL_CONTEXT_MINOR_VERSION_KHR,
+            GetParam().minorVersion,
+            EGL_NONE,
+        };
+
+        mContext =
+            eglCreateContext(mDisplay, multisampledConfig, EGL_NO_CONTEXT, contextAttributes);
+        ASSERT_TRUE(mContext != EGL_NO_CONTEXT);
+
+        mSurface = eglCreateWindowSurface(mDisplay, multisampledConfig,
+                                          mOSWindow->getNativeWindow(), nullptr);
+        ASSERT_EGL_SUCCESS();
+
+        eglMakeCurrent(mDisplay, mSurface, mSurface, mContext);
+        ASSERT_EGL_SUCCESS();
+    }
+    void testTearDown() override
+    {
+        if (mSurface)
+        {
+            eglSwapBuffers(mDisplay, mSurface);
+        }
+
+        eglMakeCurrent(mDisplay, EGL_NO_SURFACE, EGL_NO_SURFACE, EGL_NO_CONTEXT);
+
+        if (mSurface)
+        {
+            eglDestroySurface(mDisplay, mSurface);
+            ASSERT_EGL_SUCCESS();
+        }
+
+        if (mContext != EGL_NO_CONTEXT)
+        {
+            eglDestroyContext(mDisplay, mContext);
+            ASSERT_EGL_SUCCESS();
+        }
+
+        if (mOSWindow)
+        {
+            OSWindow::Delete(&mOSWindow);
+        }
+
+        eglTerminate(mDisplay);
+    }
+
+  protected:
+    static constexpr int kWindowWidth  = 64;
+    static constexpr int kWindowHeight = 64;
+
+    OSWindow *mOSWindow            = nullptr;
+    EGLDisplay mDisplay            = EGL_NO_DISPLAY;
+    EGLContext mContext            = EGL_NO_CONTEXT;
+    EGLSurface mSurface            = EGL_NO_SURFACE;
+    bool mMultisampledConfigExists = false;
 };
 
 // Tests that texture updates to unused textures don't break the RP.
@@ -3259,6 +3368,42 @@ TEST_P(VulkanPerformanceCounterTest_MSAA, SwapShouldInvalidateDepthStencil)
     compareDepthStencilCountersForInvalidateTest(counters, expected);
 }
 
+TEST_P(VulkanPerformanceCounterTest_MSAA, NoResolveCmdsInSwap)
+{
+    const rx::vk::PerfCounters &counters = hackANGLE();
+
+    constexpr GLsizei kSize = 16;
+    // Create a framebuffer to clear.
+    GLTexture color;
+    glBindTexture(GL_TEXTURE_2D, color);
+    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, kSize, kSize, 0, GL_RGBA, GL_UNSIGNED_BYTE, nullptr);
+
+    GLFramebuffer fbo;
+    glBindFramebuffer(GL_FRAMEBUFFER, fbo);
+    glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, color, 0);
+    ASSERT_GL_NO_ERROR();
+
+    // Clear color.
+    glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
+    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+    glClearColor(1.0f, 1.0f, 1.0f, 1.0f);
+
+    // Set up program
+    ANGLE_GL_PROGRAM(drawColor, essl1_shaders::vs::Simple(), essl1_shaders::fs::UniformColor());
+    glUseProgram(drawColor);
+    GLint colorUniformLocation =
+        glGetUniformLocation(drawColor, angle::essl1_shaders::ColorUniform());
+    ASSERT_NE(colorUniformLocation, -1);
+
+    // Draw green
+    glUniform4f(colorUniformLocation, 0.0f, 1.0f, 0.0f, 1.0f);
+    drawQuad(drawColor, essl1_shaders::PositionAttrib(), 0.95f);
+    ASSERT_GL_NO_ERROR();
+
+    swapBuffers();
+
+    EXPECT_EQ(counters.resolveImageCommands, 0u);
+}
 // Tests that uniform updates eventually stop updating descriptor sets.
 TEST_P(VulkanPerformanceCounterTest, UniformUpdatesHitDescriptorSetCache)
 {

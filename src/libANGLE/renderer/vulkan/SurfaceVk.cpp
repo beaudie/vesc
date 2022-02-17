@@ -1707,6 +1707,8 @@ angle::Result WindowSurfaceVk::present(ContextVk *contextVk,
         resolveRegion.extent                        = image.image.getRotatedExtents();
 
         mColorImageMS.resolve(&image.image, resolveRegion, commandBuffer);
+        vk::PerfCounters &perfCounters = contextVk->getPerfCounters();
+        perfCounters.resolveImageCommands++;
     }
 
     if (overlayHasEnabledWidget(contextVk))
