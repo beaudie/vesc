@@ -60,6 +60,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "0dd79334_ffbc1fb9",
+        "filename": "src/libANGLE/renderer/vulkan/TextureVk.cpp",
+        "patchSetId": 21
+      },
+      "lineNbr": 507,
+      "author": {
+        "id": 1446209
+      },
+      "writtenOn": "2022-02-17T08:16:52Z",
+      "side": 1,
+      "message": "Hi Shahbaz,sorry for bringing you so many noise,I will narrow down my patch to targeting 2D texture,adding a condition index.getType() \u003d\u003d gl::TextureType::_2D,i think this is the esiest way for these problems.",
+      "parentUuid": "0b422a95_6a4ab211",
+      "range": {
+        "startLine": 498,
+        "startChar": 0,
+        "endLine": 507,
+        "endChar": 9
+      },
+      "revId": "bff7345cc649a0327500181ed4a7344e0c39acdd",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "c396acea_08618712",
         "filename": "src/libANGLE/renderer/vulkan/TextureVk.cpp",
         "patchSetId": 21
@@ -153,6 +177,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "55272ffb_aa3af5ba",
+        "filename": "src/libANGLE/renderer/vulkan/TextureVk.cpp",
+        "patchSetId": 21
+      },
+      "lineNbr": 521,
+      "author": {
+        "id": 1446209
+      },
+      "writtenOn": "2022-02-17T08:16:52Z",
+      "side": 1,
+      "message": "Sorry I misunderstand your meaning,this problem you mentioned does exist.I will try to consider if there\u0027re other solutions about this case.",
+      "parentUuid": "1c8c57f5_9b06f215",
+      "revId": "bff7345cc649a0327500181ed4a7344e0c39acdd",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "6e4e4585_7e7cc7d3",
         "filename": "src/libANGLE/renderer/vulkan/TextureVk.cpp",
         "patchSetId": 21
@@ -211,6 +253,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "b02fffa8_067936d0",
+        "filename": "src/libANGLE/renderer/vulkan/TextureVk.cpp",
+        "patchSetId": 21
+      },
+      "lineNbr": 562,
+      "author": {
+        "id": 1446209
+      },
+      "writtenOn": "2022-02-17T08:16:52Z",
+      "side": 1,
+      "message": "Going to line 530 means isOverWriteToAllDefinedLevel\u003dtrue,that is an overwrite to all defined contents,then we can feel free to release image or not.Adding isOverWriteToAllDefinedLevel condition here is to avoid immediate flush in the case of not all level overwrite when updating texture with PBO.Because immediate flush will cause data lost,see this case:\nglStorage2D\nglTexSubImage2D（level 0）\nglGenerateMipmap\nbegin to reading this texture;\nglTexSubImage2D（level 0）",
+      "parentUuid": "92809f4f_40132564",
+      "range": {
+        "startLine": 562,
+        "startChar": 59,
+        "endLine": 562,
+        "endChar": 87
+      },
+      "revId": "bff7345cc649a0327500181ed4a7344e0c39acdd",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "d4c396f2_08a2c8f1",
         "filename": "src/libANGLE/renderer/vulkan/TextureVk.cpp",
         "patchSetId": 21
@@ -239,6 +305,24 @@
       "writtenOn": "2022-02-16T18:37:55Z",
       "side": 1,
       "message": "Either this, or the logic in setSubImageImpl(), should also apply to copySubTextureImpl().\n\nAlso, what does this do? I assume you are trying to disable your optimization path for non-glTexSubImage* paths. Then why is this only done for dstLevel \u003d\u003d (GLint)mState.getEffectiveBaseLevel()?",
+      "revId": "bff7345cc649a0327500181ed4a7344e0c39acdd",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "9d6a7838_e08116c8",
+        "filename": "src/libANGLE/renderer/vulkan/TextureVk.cpp",
+        "patchSetId": 21
+      },
+      "lineNbr": 748,
+      "author": {
+        "id": 1446209
+      },
+      "writtenOn": "2022-02-17T08:16:52Z",
+      "side": 1,
+      "message": "Yes,you\u0027re right,and shouldn\u0027t only done for dstLevel \u003d\u003d (GLint)mState.getEffectiveBaseLevel().",
+      "parentUuid": "8a1802bd_908a07da",
       "revId": "bff7345cc649a0327500181ed4a7344e0c39acdd",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
