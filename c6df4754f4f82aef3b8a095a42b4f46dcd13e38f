@@ -16,6 +16,23 @@
       "message": "Please don\u0027t start CI yet -- I have no reason to think this fixes the Android failures, this fixes something else (EGLBufferAgeTest.QueryBufferAge/ES2_Vulkan_NoFixture complaining about jumpy buffer age behavior).",
       "revId": "c6df4754f4f82aef3b8a095a42b4f46dcd13e38f",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "5dc305fb_617b9c0e",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 18
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1533513
+      },
+      "writtenOn": "2022-02-17T21:13:51Z",
+      "side": 1,
+      "message": "No changes wrt reproducing failures locally, but I modified ANGLE to print about uses of color attachments with undefined contents and clear them to bright pink, and that also didn\u0027t gain me any prints nor failures in the tests that fail on the Android device on CI. For reassurance, if I do intentionally wrongfully invalidate a color image and it\u0027s then used as attachment, I do get my print and test failure. Would you happen to have any suggestions about how to proceed about this?",
+      "revId": "c6df4754f4f82aef3b8a095a42b4f46dcd13e38f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
