@@ -2238,6 +2238,9 @@ void ContextVk::syncObjectPerfCounters()
     mPerfCounters.shaderBuffersDescriptorSetCacheHits       = 0;
     mPerfCounters.shaderBuffersDescriptorSetCacheMisses     = 0;
     mPerfCounters.shaderBuffersDescriptorSetCacheTotalSize  = 0;
+    // If a subpass resolve operation had been used in the swapchain,
+    // this counter would be set to 1.
+    mPerfCounters.swapchainResolveInSubpass = 0;
 
     // ContextVk's descriptor set allocations
     ContextVkPerfCounters contextCounters = getAndResetObjectPerfCounters();
