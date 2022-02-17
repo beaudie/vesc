@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "d9d03a36_4103d6aa",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1491687
+      },
+      "writtenOn": "2022-02-17T15:18:42Z",
+      "side": 1,
+      "message": "Not sure how to handle the description of how to run the test using MEC to reproduce the faulty behavior. I Could move the instructions form the comment to the CL\u0027s commit message.",
+      "revId": "eef0a5c4479e436a4b29a1dff784eedf55d4691f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
