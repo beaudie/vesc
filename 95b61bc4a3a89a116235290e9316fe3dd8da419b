@@ -26,6 +26,30 @@
     {
       "unresolved": false,
       "key": {
+        "uuid": "bb3fc195_eb138947",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 17,
+      "author": {
+        "id": 1491687
+      },
+      "writtenOn": "2022-02-17T17:10:18Z",
+      "side": 1,
+      "message": "After offline discussion with Jamie we decided to drop `GL_BLEND_EQUATION_EXT` from the GetPName list completely, so the diff with the upstream GL XML does not escalate. This means that until a rework of the enum generation and resync with the  upstream list, captures of `glGet` calls for `GL_BLEND_EQUATION` will result in a hex value for now.",
+      "parentUuid": "fceeecff_69511eaa",
+      "range": {
+        "startLine": 17,
+        "startChar": 26,
+        "endLine": 17,
+        "endChar": 61
+      },
+      "revId": "95b61bc4a3a89a116235290e9316fe3dd8da419b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
         "uuid": "12a742d9_f8a66041",
         "filename": "/PATCHSET_LEVEL",
         "patchSetId": 1
