@@ -16,6 +16,23 @@
       "message": "Not sure if the failure on capture bot is caused by test. So do keep eye on it to see if test has a bug or not.",
       "revId": "0bbde50bd98422cdec38bd5534b0271f6087ecd2",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "20eecdcb_5612cf50",
+        "filename": "src/tests/gl_tests/VertexAttributeTest.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 2977,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-02-17T19:29:08Z",
+      "side": 1,
+      "message": "editorial:\n\n   ... a security ... but the vertex ... point ... get freed.",
+      "revId": "0bbde50bd98422cdec38bd5534b0271f6087ecd2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
