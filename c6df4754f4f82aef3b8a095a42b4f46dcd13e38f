@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "667c065d_70bd8367",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 18
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1533513
+      },
+      "writtenOn": "2022-02-17T18:13:40Z",
+      "side": 1,
+      "message": "Please don\u0027t start CI yet -- I have no reason to think this fixes the Android failures, this fixes something else (EGLBufferAgeTest.QueryBufferAge/ES2_Vulkan_NoFixture complaining about jumpy buffer age behavior).",
+      "revId": "c6df4754f4f82aef3b8a095a42b4f46dcd13e38f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
