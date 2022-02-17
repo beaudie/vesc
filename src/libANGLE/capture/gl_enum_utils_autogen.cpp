@@ -750,7 +750,7 @@ const char *GLenumToString(GLenumGroup enumGroup, unsigned int value)
                 case 0x8008:
                     return "GL_MAX";
                 case 0x8009:
-                    return "GL_BLEND_EQUATION";
+                    return "GL_BLEND_EQUATION_RGB";
                 case 0x803C:
                     return "GL_ALPHA8_EXT";
                 case 0x8040:
@@ -2436,7 +2436,7 @@ const char *GLenumToString(GLenumGroup enumGroup, unsigned int value)
                 case 0x2A00:
                     return "GL_POLYGON_OFFSET_UNITS";
                 case 0x8009:
-                    return "GL_BLEND_EQUATION_EXT";
+                    return "GL_BLEND_EQUATION";
                 case 0x8037:
                     return "GL_POLYGON_OFFSET_FILL";
                 case 0x8038:
