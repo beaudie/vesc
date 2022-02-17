@@ -5773,7 +5773,7 @@ angle::Result ContextVk::flushAndGetSerial(const vk::Semaphore *signalSemaphore,
     mPerfCounters.renderPasses                           = 0;
     mPerfCounters.writeDescriptorSets                    = 0;
     mPerfCounters.flushedOutsideRenderPassCommandBuffers = 0;
-    mPerfCounters.resolveImageCommands                   = 0;
+    // mPerfCounters.resolveImageCommands                   = 0;
 
     ASSERT(mWaitSemaphores.empty());
     ASSERT(mWaitSemaphoreStageMasks.empty());

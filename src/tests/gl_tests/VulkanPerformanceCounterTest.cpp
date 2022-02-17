@@ -20,6 +20,7 @@
 #include "libANGLE/angletypes.h"
 #include "libANGLE/renderer/vulkan/ContextVk.h"
 #include "test_utils/gl_raii.h"
+#include "util/OSWindow.h"
 #include "util/random_utils.h"
 
 using namespace angle;
@@ -177,14 +178,93 @@ class VulkanPerformanceCounterTest : public ANGLETest
 class VulkanPerformanceCounterTest_ES31 : public VulkanPerformanceCounterTest
 {};
 
-class VulkanPerformanceCounterTest_MSAA : public VulkanPerformanceCounterTest
+class VulkanPerformanceCounterTest_MSAA : public ANGLETest
 {
   protected:
-    VulkanPerformanceCounterTest_MSAA() : VulkanPerformanceCounterTest()
+    const rx::vk::PerfCounters &hackANGLE() const
     {
-        setSamples(4);
-        setMultisampleEnabled(true);
+        // Hack the angle!
+        const gl::Context *context = static_cast<const gl::Context *>(mEGLWindow->getContext());
+        rx::ContextVk *contextVk   = rx::GetImplAs<rx::ContextVk>(context);
+        // This will be implicitly called when using the extension.
+        contextVk->syncObjectPerfCounters();
+        return contextVk->getPerfCounters();
     }
+
+    void testSetUp() override
+    {
+        // Create a window, context and surface if multisampling is possible.
+        mOSWindow = OSWindow::New();
+        mOSWindow->initialize("VulkanPerformanceCounterTest_MSAA", kWindowWidth, kWindowHeight);
+        setWindowVisible(mOSWindow, true);
+
+        Library *driverLib = ANGLETestEnvironment::GetDriverLibrary(GLESDriverType::AngleEGL);
+
+        mEGLWindow = EGLWindow::New(GetParam().majorVersion, GetParam().minorVersion);
+        mEGLWindow->initializeDisplay(mOSWindow, driverLib, GLESDriverType::AngleEGL,
+                                      GetParam().eglParameters);
+
+        ConfigParameters configParams;
+        configParams.redBits     = 8;
+        configParams.greenBits   = 8;
+        configParams.blueBits    = 8;
+        configParams.alphaBits   = 8;
+        configParams.depthBits   = 24;
+        configParams.stencilBits = 8;
+        configParams.samples     = 4;
+        configParams.multisample = true;
+
+        mEGLWindow->initializeSurface(mOSWindow, driverLib, configParams);
+        ASSERT_EGL_SUCCESS();
+        mEGLWindow->initializeContext();
+        ASSERT_EGL_SUCCESS();
+        mEGLWindow->makeCurrent();
+        ASSERT_EGL_SUCCESS();
+    }
+    void testTearDown() override
+    {
+        EGLWindow::Delete(&mEGLWindow);
+        OSWindow::Delete(&mOSWindow);
+    }
+    void setExpectedCountersForInvalidateTest(const rx::vk::PerfCounters &counters,
+                                              uint32_t incrementalRenderPasses,
+                                              uint32_t incrementalDepthClears,
+                                              uint32_t incrementalDepthLoads,
+                                              uint32_t incrementalDepthStores,
+                                              uint32_t incrementalStencilClears,
+                                              uint32_t incrementalStencilLoads,
+                                              uint32_t incrementalStencilStores,
+                                              uint32_t incrementalResolveImageCmds,
+                                              rx::vk::PerfCounters *expected)
+    {
+        expected->renderPasses  = counters.renderPasses + incrementalRenderPasses;
+        expected->depthClears   = counters.depthClears + incrementalDepthClears;
+        expected->depthLoads    = counters.depthLoads + incrementalDepthLoads;
+        expected->depthStores   = counters.depthStores + incrementalDepthStores;
+        expected->stencilClears = counters.stencilClears + incrementalStencilClears;
+        expected->stencilLoads  = counters.stencilLoads + incrementalStencilLoads;
+        expected->stencilStores = counters.stencilStores + incrementalStencilStores;
+        expected->resolveImageCommands =
+            counters.resolveImageCommands + incrementalResolveImageCmds;
+    }
+    void compareDepthStencilCountersForInvalidateTest(const rx::vk::PerfCounters &counters,
+                                                      const rx::vk::PerfCounters &expected)
+    {
+        EXPECT_EQ(expected.depthClears, counters.depthClears);
+        EXPECT_EQ(expected.depthLoads, counters.depthLoads);
+        EXPECT_EQ(expected.depthStores, counters.depthStores);
+        EXPECT_EQ(expected.stencilClears, counters.stencilClears);
+        EXPECT_EQ(expected.stencilLoads, counters.stencilLoads);
+        EXPECT_EQ(expected.stencilStores, counters.stencilStores);
+        EXPECT_EQ(expected.resolveImageCommands, counters.resolveImageCommands);
+    }
+
+  protected:
+    static constexpr int kWindowWidth  = 64;
+    static constexpr int kWindowHeight = 64;
+
+    OSWindow *mOSWindow   = nullptr;
+    EGLWindow *mEGLWindow = nullptr;
 };
 
 // Tests that texture updates to unused textures don't break the RP.
@@ -3233,11 +3313,14 @@ TEST_P(VulkanPerformanceCounterTest, SwapShouldInvalidateDepthStencil)
 // Verifies that rendering to MSAA backbuffer discards depth/stencil.
 TEST_P(VulkanPerformanceCounterTest_MSAA, SwapShouldInvalidateDepthStencil)
 {
+    // TODO: http://anglebug.com/6762
+    ANGLE_SKIP_TEST_IF(IsVulkan());
     const rx::vk::PerfCounters &counters = hackANGLE();
     rx::vk::PerfCounters expected;
 
-    // Expect rpCount+1, depth(Clears+1, Loads+0, Stores+0), stencil(Clears+1, Load+0, Stores+0)
-    setExpectedCountersForInvalidateTest(counters, 1, 1, 0, 0, 1, 0, 0, &expected);
+    // Expect rpCount+1, depth(Clears+1, Loads+0, Stores+0), stencil(Clears+1, Load+0, Stores+0,
+    // ResolveImageCommands+0)
+    setExpectedCountersForInvalidateTest(counters, 1, 1, 0, 0, 1, 0, 0, 0, &expected);
 
     // Clear to verify that _some_ counters did change (as opposed to for example all being reset on
     // swap)
@@ -3255,7 +3338,7 @@ TEST_P(VulkanPerformanceCounterTest_MSAA, SwapShouldInvalidateDepthStencil)
     ASSERT_GL_NO_ERROR();
 
     // Swap buffers to implicitely resolve
-    swapBuffers();
+    mEGLWindow->swap();
     compareDepthStencilCountersForInvalidateTest(counters, expected);
 }
 
@@ -3321,6 +3404,6 @@ TEST_P(VulkanPerformanceCounterTest, UniformUpdatesHitDescriptorSetCache)
 
 ANGLE_INSTANTIATE_TEST(VulkanPerformanceCounterTest, ES3_VULKAN());
 ANGLE_INSTANTIATE_TEST(VulkanPerformanceCounterTest_ES31, ES31_VULKAN());
-ANGLE_INSTANTIATE_TEST(VulkanPerformanceCounterTest_MSAA, ES3_VULKAN());
+ANGLE_INSTANTIATE_TEST(VulkanPerformanceCounterTest_MSAA, WithNoFixture(ES3_VULKAN()));
 
 }  // anonymous namespace
