@@ -147,15 +147,15 @@ class ProgramExecutableVk
     const vk::PipelineLayout &getPipelineLayout() const { return mPipelineLayout.get(); }
     angle::Result createPipelineLayout(ContextVk *contextVk,
                                        const gl::ProgramExecutable &glExecutable,
-                                       gl::ActiveTextureArray<vk::TextureUnit> *activeTextures);
+                                       gl::ActiveTextureArray<TextureVk *> *activeTextures);
 
     angle::Result updateTexturesDescriptorSet(
         vk::Context *context,
         UpdateDescriptorSetsBuilder *updateBuilder,
         vk::ResourceUseList *resourceUseList,
         const gl::ProgramExecutable &executable,
-        const gl::ActiveTextureArray<vk::TextureUnit> &activeTextures,
-        const vk::DescriptorSetDesc &texturesDesc,
+        const gl::ActiveTextureArray<TextureVk *> &activeTextures,
+        const vk::DescriptorSetDescBuilder &texturesDesc,
         bool emulateSeamfulCubeMapSampling);
     angle::Result updateShaderResourcesDescriptorSet(
         ContextVk *contextVk,
@@ -164,28 +164,23 @@ class ProgramExecutableVk
         vk::BufferHelper *emptyBuffer,
         vk::ResourceUseList *resourceUseList,
         FramebufferVk *framebufferVk,
-        const vk::DescriptorSetDesc &shaderBuffersDesc);
-    angle::Result updateUniformsAndXfbDescriptorSet(vk::Context *context,
-                                                    UpdateDescriptorSetsBuilder *updateBuilder,
-                                                    vk::ResourceUseList *resourceUseList,
-                                                    vk::BufferHelper *emptyBuffer,
-                                                    const gl::ProgramExecutable &executable,
-                                                    vk::BufferHelper *defaultUniformBuffer,
-                                                    const vk::DescriptorSetDesc &uniformsAndXfbDesc,
-                                                    bool isTransformFeedbackActiveUnpaused,
-                                                    TransformFeedbackVk *transformFeedbackVk);
-    angle::Result updateInputAttachmentDescriptorSet(vk::Context *context,
-                                                     vk::ResourceUseList *resourceUseList,
-                                                     UpdateDescriptorSetsBuilder *updateBuilder,
-                                                     const gl::ProgramExecutable &executable,
-                                                     gl::ShaderType shaderType,
-                                                     FramebufferVk *framebufferVk);
+        const vk::DescriptorSetDescBuilder &shaderBuffersDesc);
+    angle::Result updateUniformsAndXfbDescriptorSet(
+        vk::Context *context,
+        UpdateDescriptorSetsBuilder *updateBuilder,
+        vk::ResourceUseList *resourceUseList,
+        vk::BufferHelper *emptyBuffer,
+        const gl::ProgramExecutable &executable,
+        vk::BufferHelper *defaultUniformBuffer,
+        const vk::DescriptorSetDescBuilder &uniformsAndXfbDesc,
+        bool isTransformFeedbackActiveUnpaused,
+        TransformFeedbackVk *transformFeedbackVk);
 
     template <typename CommandBufferT>
-    angle::Result updateDescriptorSets(vk::Context *context,
-                                       vk::ResourceUseList *resourceUseList,
-                                       CommandBufferT *commandBuffer,
-                                       PipelineType pipelineType);
+    angle::Result bindDescriptorSets(vk::Context *context,
+                                     vk::ResourceUseList *resourceUseList,
+                                     CommandBufferT *commandBuffer,
+                                     PipelineType pipelineType);
 
     void updateEarlyFragmentTestsOptimization(ContextVk *contextVk,
                                               const gl::ProgramExecutable &glExecutable);
@@ -194,7 +189,12 @@ class ProgramExecutableVk
     {
         return mUniformBufferDescriptorType == VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER_DYNAMIC;
     }
+    VkDescriptorType getUniformBufferDescriptorType() const { return mUniformBufferDescriptorType; }
     bool usesDynamicShaderStorageBufferDescriptors() const { return false; }
+    VkDescriptorType getStorageBufferDescriptorType() const
+    {
+        return VK_DESCRIPTOR_TYPE_STORAGE_BUFFER;
+    }
     bool usesDynamicAtomicCounterBufferDescriptors() const { return false; }
 
     bool areImmutableSamplersCompatible(
@@ -229,6 +229,8 @@ class ProgramExecutableVk
                                  TransformFeedbackVk *transformFeedbackVk);
     void onProgramBind(const gl::ProgramExecutable &glExecutable);
 
+    const ShaderInterfaceVariableInfoMap &getVariableInfoMap() const { return mVariableInfoMap; }
+
   private:
     friend class ProgramVk;
     friend class ProgramPipelineVk;
@@ -256,7 +258,7 @@ class ProgramExecutableVk
     angle::Result addTextureDescriptorSetDesc(
         ContextVk *contextVk,
         const gl::ProgramExecutable &executable,
-        const gl::ActiveTextureArray<vk::TextureUnit> *activeTextures,
+        const gl::ActiveTextureArray<TextureVk *> *activeTextures,
         vk::DescriptorSetLayoutDesc *descOut);
 
     void resolvePrecisionMismatch(const gl::ProgramMergedVaryings &mergedVaryings);
@@ -267,45 +269,11 @@ class ProgramExecutableVk
                                             gl::ShaderType shaderType,
                                             const DefaultUniformBlock &defaultUniformBlock,
                                             vk::BufferHelper *defaultUniformBuffer);
-    void updateTransformFeedbackDescriptorSetImpl(vk::Context *context,
-                                                  UpdateDescriptorSetsBuilder *updateBuilder,
-                                                  vk::BufferHelper *emptyBuffer,
-                                                  const gl::ProgramExecutable &executable,
-                                                  bool isTransformFeedbackActiveUnpaused,
-                                                  TransformFeedbackVk *transformFeedbackVk);
     angle::Result getOrAllocateShaderResourcesDescriptorSet(
         vk::Context *context,
         vk::ResourceUseList *resourceUseList,
-        const vk::DescriptorSetDesc *shaderBuffersDescOrNull,
+        const vk::DescriptorSetDescBuilder &shaderResourcesDesc,
         vk::DescriptorCacheResult *cacheResultOut);
-    angle::Result updateBuffersDescriptorSet(vk::Context *context,
-                                             UpdateDescriptorSetsBuilder *updateBuilder,
-                                             vk::BufferHelper *emptyBuffer,
-                                             vk::ResourceUseList *resourceUseList,
-                                             gl::ShaderType shaderType,
-                                             const vk::DescriptorSetDesc &shaderBuffersDesc,
-                                             const gl::BufferVector &buffers,
-                                             const std::vector<gl::InterfaceBlock> &blocks,
-                                             VkDescriptorType descriptorType,
-                                             VkDeviceSize maxBoundBufferRange,
-                                             vk::DescriptorCacheResult cacheResult);
-    angle::Result updateAtomicCounterBuffersDescriptorSet(
-        vk::Context *context,
-        UpdateDescriptorSetsBuilder *updateBuilder,
-        vk::BufferHelper *emptyBuffer,
-        vk::ResourceUseList *resourceUseList,
-        const gl::BufferVector &atomicCounterBufferBindings,
-        const gl::ProgramExecutable &executable,
-        gl::ShaderType shaderType,
-        const vk::DescriptorSetDesc &shaderBuffersDesc,
-        vk::DescriptorCacheResult cacheResult);
-    angle::Result updateImagesDescriptorSet(vk::Context *context,
-                                            vk::ResourceUseList *resourceUseList,
-                                            UpdateDescriptorSetsBuilder *updateBuilder,
-                                            const gl::ActiveTextureArray<TextureVk *> &activeImages,
-                                            const std::vector<gl::ImageUnit> &imageUnits,
-                                            const gl::ProgramExecutable &executable,
-                                            gl::ShaderType shaderType);
 
     size_t calcUniformUpdateRequiredSpace(vk::Context *context,
                                           const gl::ProgramExecutable &glExecutable,
