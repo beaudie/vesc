@@ -579,7 +579,6 @@ class UtilsVk : angle::NonCopyable
     vk::Sampler mPointSampler;
     vk::Sampler mLinearSampler;
 
-    InternalShaderPerfCounters mPerfCounters;
     InternalShaderPerfCounters mCumulativePerfCounters;
 };
 
