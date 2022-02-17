@@ -51,6 +51,23 @@
       "message": "jamie, any updates here?",
       "revId": "1c0961055944a34109b547f486aa14e9fc96b7b3",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "8ce5ce26_57d4d4dc",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 8
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1535153
+      },
+      "writtenOn": "2022-02-17T11:54:24Z",
+      "side": 1,
+      "message": "3029049: Early return when rebinding the same buffer, sampler or texture | https://chromium-review.googlesource.com/c/angle/angle/+/3029049",
+      "revId": "1c0961055944a34109b547f486aa14e9fc96b7b3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
