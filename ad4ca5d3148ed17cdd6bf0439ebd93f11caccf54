@@ -119,6 +119,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "2c3eed7a_0bced217",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 2334,
+      "author": {
+        "id": 1520902
+      },
+      "writtenOn": "2022-02-17T06:19:57Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "58c79598_1627c443",
+      "range": {
+        "startLine": 2334,
+        "startChar": 0,
+        "endLine": 2334,
+        "endChar": 45
+      },
+      "revId": "ad4ca5d3148ed17cdd6bf0439ebd93f11caccf54",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "2354b15b_792ef25a",
@@ -180,6 +204,30 @@
       "side": 1,
       "message": "Maybe add \"std::vector\u003cGarbageObject\u003e mViewGarbage;\" to the class ImageHelper. Basically you always collect the view\u0027s garbage and stashed inside ImageHelper object. Then at ImageHelper::release() time, you actually collect both image and view with one SharedGarbage object. That should have very smaller diff and should work for all usage cases as well.",
       "parentUuid": "185658bd_c1dd99c5",
+      "range": {
+        "startLine": 2492,
+        "startChar": 4,
+        "endLine": 2499,
+        "endChar": 70
+      },
+      "revId": "ad4ca5d3148ed17cdd6bf0439ebd93f11caccf54",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "7a3760e9_476e11b7",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 2499,
+      "author": {
+        "id": 1520902
+      },
+      "writtenOn": "2022-02-17T06:19:57Z",
+      "side": 1,
+      "message": "Thank you Charlie, I have added a vector\u003cvk::GarbageObject\u003e mImageandimageviewGarbage as the member of ImageHelper, it will store the garbage objects from both ImageHelper and ImageViewHelper, and will be sent to RendererVk for garbage collection with the same mUse that belongs to the ImageHelper.",
+      "parentUuid": "25f09727_5233998d",
       "range": {
         "startLine": 2492,
         "startChar": 4,
