@@ -2240,6 +2240,7 @@ void ContextVk::syncObjectPerfCounters()
     mPerfCounters.shaderBuffersDescriptorSetCacheHits       = 0;
     mPerfCounters.shaderBuffersDescriptorSetCacheMisses     = 0;
     mPerfCounters.shaderBuffersDescriptorSetCacheTotalSize  = 0;
+    mPerfCounters.swapchainResolveInSubpass                 = 1;
 
     // ContextVk's descriptor set allocations
     ContextVkPerfCounters contextCounters = getAndResetObjectPerfCounters();
