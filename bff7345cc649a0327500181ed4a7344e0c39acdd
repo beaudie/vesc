@@ -100,6 +100,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "cbc5dfdf_59df8bea",
+        "filename": "src/libANGLE/renderer/vulkan/TextureVk.cpp",
+        "patchSetId": 21
+      },
+      "lineNbr": 515,
+      "author": {
+        "id": 1446209
+      },
+      "writtenOn": "2022-02-17T02:46:02Z",
+      "side": 1,
+      "message": "Thanks for the remind about cubemap/array textures,I forget to take it into consideration,will do further refinement.",
+      "parentUuid": "63b79b13_6fcd5bf8",
+      "revId": "bff7345cc649a0327500181ed4a7344e0c39acdd",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "d6c0198f_a3010237",
         "filename": "src/libANGLE/renderer/vulkan/TextureVk.cpp",
         "patchSetId": 21
@@ -117,6 +135,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "1c8c57f5_9b06f215",
+        "filename": "src/libANGLE/renderer/vulkan/TextureVk.cpp",
+        "patchSetId": 21
+      },
+      "lineNbr": 521,
+      "author": {
+        "id": 1446209
+      },
+      "writtenOn": "2022-02-17T02:46:02Z",
+      "side": 1,
+      "message": "case2:\nglTexSubImage2D(level 0);\nglTexSubImage2D(level 1);\nbegin to reading this texture;\nglTexSubImage2D(level 0):\nWill enter this if,set isOverWriteToAllDefinedLevel \u003d false,shouldFlush \u003d false to do staged flush,setCanGhostImage(true) to tell we can use new image in next GenerateMipmap call.\nglGenerateMipmap:\nEnter line 2727 below,release image,create image2,flush level 0 based on image2,and generate other level data,this will not produce any garbage.If no glGenerateMipmap call,will still use old image to do flush and generate mipmap.",
+      "parentUuid": "d6c0198f_a3010237",
+      "revId": "bff7345cc649a0327500181ed4a7344e0c39acdd",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "6e4e4585_7e7cc7d3",
         "filename": "src/libANGLE/renderer/vulkan/TextureVk.cpp",
         "patchSetId": 21
@@ -128,6 +164,24 @@
       "writtenOn": "2022-02-16T18:37:55Z",
       "side": 1,
       "message": "Should this condition be applied to the whole logic added here? Is there a value to doing all the above logic if releaseImage() is not going to be called anyway?",
+      "revId": "bff7345cc649a0327500181ed4a7344e0c39acdd",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "f9390afa_80e7c3d2",
+        "filename": "src/libANGLE/renderer/vulkan/TextureVk.cpp",
+        "patchSetId": 21
+      },
+      "lineNbr": 532,
+      "author": {
+        "id": 1446209
+      },
+      "writtenOn": "2022-02-17T02:46:02Z",
+      "side": 1,
+      "message": "My optimization can work(use ghosting image)in these two cases:\ncase1,this is a simple case:\nglTexSubImage2D(level 0);\nglTexSubImage2D(level 0);\nbegin to reading this texture;\nglTexSubImage2D(level 0):\nWill enter this if,release image to use new image.\n\ncase2:see line 521",
+      "parentUuid": "6e4e4585_7e7cc7d3",
       "revId": "bff7345cc649a0327500181ed4a7344e0c39acdd",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
