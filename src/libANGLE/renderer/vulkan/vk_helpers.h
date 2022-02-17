@@ -187,6 +187,11 @@ class DescriptorPoolHelper final : public Resource
         mDescriptorSetCache.accumulateCacheStats(cacheType, accum);
     }
 
+    size_t getTotalCacheKeySizeBytes() const
+    {
+        return mDescriptorSetCache.getTotalCacheKeySizeBytes();
+    }
+
   private:
     uint32_t mFreeDescriptorSets;
     DescriptorPool mDescriptorPool;
@@ -248,6 +253,18 @@ class DynamicDescriptorPool final : angle::NonCopyable
         return count;
     }
 
+    size_t getTotalCacheKeySizeBytes() const
+    {
+        size_t totalSize = 0;
+
+        for (RefCountedDescriptorPoolHelper *pool : mDescriptorPools)
+        {
+            totalSize += pool->get().getTotalCacheKeySizeBytes();
+        }
+
+        return totalSize;
+    }
+
     // For testing only!
     static uint32_t GetMaxSetsPerPoolForTesting();
     static void SetMaxSetsPerPoolForTesting(uint32_t maxSetsPerPool);
@@ -306,6 +323,19 @@ class DescriptorMetaCache final : angle::NonCopyable
 
     size_t getDescriptorSetAllocationCount() const;
     size_t getAndResetDescriptorSetAllocationCount();
+
+    size_t getTotalCacheKeySizeBytes() const
+    {
+        size_t totalSize = 0;
+
+        for (const auto &iter : mPayload)
+        {
+            const RefCountedDescriptorPool &pool = iter.second;
+            totalSize += pool.get().getTotalCacheKeySizeBytes();
+        }
+
+        return totalSize;
+    }
 
   private:
     std::unordered_map<DescriptorSetLayoutDesc, RefCountedDescriptorPool> mPayload;
