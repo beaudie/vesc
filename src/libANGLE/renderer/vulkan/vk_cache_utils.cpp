@@ -18,6 +18,7 @@
 #include "libANGLE/renderer/vulkan/FramebufferVk.h"
 #include "libANGLE/renderer/vulkan/ProgramVk.h"
 #include "libANGLE/renderer/vulkan/RendererVk.h"
+#include "libANGLE/renderer/vulkan/TextureVk.h"
 #include "libANGLE/renderer/vulkan/VertexArrayVk.h"
 #include "libANGLE/renderer/vulkan/vk_format_utils.h"
 #include "libANGLE/renderer/vulkan/vk_helpers.h"
@@ -2987,7 +2988,11 @@ void PipelineHelper::addTransition(GraphicsPipelineTransitionBits bits,
 // DescriptorSetDesc implementation.
 size_t DescriptorSetDesc::hash() const
 {
-    return angle::ComputeGenericHash(mPayload.data(), sizeof(mPayload[0]) * mPayload.size());
+    ASSERT(mWriteDescriptors.size() > 0 && mDescriptorInfos.size() > 0);
+    return angle::ComputeGenericHash(mWriteDescriptors.data(),
+                                     sizeof(mWriteDescriptors[0]) * mWriteDescriptors.size()) ^
+           angle::ComputeGenericHash(mDescriptorInfos.data(),
+                                     sizeof(mDescriptorInfos[0]) * mDescriptorInfos.size());
 }
 
 // FramebufferDesc implementation.
@@ -3457,6 +3462,522 @@ const RenderPassPerfCounters &RenderPassHelper::getPerfCounters() const
 RenderPassPerfCounters &RenderPassHelper::getPerfCounters()
 {
     return mPerfCounters;
+}
+
+// DescriptorSetDesc implementation.
+uint32_t DescriptorSetDesc::updateWriteDesc(const WriteDescriptorDesc &writeDesc)
+{
+    uint32_t binding = writeDesc.binding;
+    // Verify we write descriptors sequentially. We can update only if the descriptor count
+    // remains the same.
+    ASSERT(
+        (!hasWriteDescAtIndex(binding) && ((binding == 0) || hasWriteDescAtIndex(binding - 1))) ||
+        mWriteDescriptors[binding].descriptorCount == writeDesc.descriptorCount);
+
+    // Ensure we set the info index in this function only.
+    ASSERT(writeDesc.descriptorInfoIndex == 0);
+
+    // Basic validation check.
+    ASSERT(writeDesc.descriptorCount > 0);
+
+    mWriteDescriptors[binding]                     = writeDesc;
+    mWriteDescriptors[binding].descriptorInfoIndex = getInfoDescIndex(binding);
+    return mWriteDescriptors[binding].descriptorInfoIndex;
+}
+
+void DescriptorSetDesc::updateDescriptorSet(UpdateDescriptorSetsBuilder *updateBuilder,
+                                            const DescriptorDescHandles *handles,
+                                            VkDescriptorSet descriptorSet) const
+{
+    VkWriteDescriptorSet *writeSets =
+        updateBuilder->allocWriteDescriptorSets(mWriteDescriptors.size());
+
+    for (uint32_t writeIndex = 0; writeIndex < static_cast<uint32_t>(mWriteDescriptors.size());
+         ++writeIndex)
+    {
+        const WriteDescriptorDesc &writeDesc = mWriteDescriptors[writeIndex];
+        VkWriteDescriptorSet &writeSet       = writeSets[writeIndex];
+
+        writeSet.descriptorCount  = writeDesc.descriptorCount;
+        writeSet.descriptorType   = static_cast<VkDescriptorType>(writeDesc.descriptorType);
+        writeSet.dstArrayElement  = 0;
+        writeSet.dstBinding       = writeIndex;
+        writeSet.dstSet           = descriptorSet;
+        writeSet.pBufferInfo      = nullptr;
+        writeSet.pImageInfo       = nullptr;
+        writeSet.pNext            = nullptr;
+        writeSet.pTexelBufferView = nullptr;
+        writeSet.sType            = VK_STRUCTURE_TYPE_WRITE_DESCRIPTOR_SET;
+
+        uint32_t infoDescIndex = getInfoDescIndex(writeIndex);
+
+        switch (writeSet.descriptorType)
+        {
+            case VK_DESCRIPTOR_TYPE_UNIFORM_TEXEL_BUFFER:
+            {
+                ASSERT(writeDesc.descriptorCount == 1);
+                writeSet.pTexelBufferView = &handles[infoDescIndex].bufferView;
+                break;
+            }
+            case VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER:
+            case VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER_DYNAMIC:
+            case VK_DESCRIPTOR_TYPE_STORAGE_BUFFER:
+            case VK_DESCRIPTOR_TYPE_STORAGE_BUFFER_DYNAMIC:
+            {
+                VkDescriptorBufferInfo *writeBuffers =
+                    updateBuilder->allocDescriptorBufferInfos(writeSet.descriptorCount);
+                for (uint32_t arrayElement = 0; arrayElement < writeSet.descriptorCount;
+                     ++arrayElement)
+                {
+                    const DescriptorInfoDesc &infoDesc =
+                        mDescriptorInfos[infoDescIndex + arrayElement];
+                    VkDescriptorBufferInfo &bufferInfo = writeBuffers[arrayElement];
+                    bufferInfo.buffer = handles[infoDescIndex + arrayElement].buffer;
+                    bufferInfo.offset = infoDesc.imageViewSerialOrOffset;
+                    bufferInfo.range  = infoDesc.imageLayoutOrRange;
+                }
+                writeSet.pBufferInfo = writeBuffers;
+                break;
+            }
+            case VK_DESCRIPTOR_TYPE_STORAGE_IMAGE:
+            case VK_DESCRIPTOR_TYPE_SAMPLED_IMAGE:
+            case VK_DESCRIPTOR_TYPE_INPUT_ATTACHMENT:
+            {
+                VkDescriptorImageInfo *writeImages =
+                    updateBuilder->allocDescriptorImageInfos(writeSet.descriptorCount);
+                for (uint32_t arrayElement = 0; arrayElement < writeSet.descriptorCount;
+                     ++arrayElement)
+                {
+                    const DescriptorInfoDesc &infoDesc =
+                        mDescriptorInfos[infoDescIndex + arrayElement];
+                    VkDescriptorImageInfo &imageInfo = writeImages[arrayElement];
+                    imageInfo.imageLayout = static_cast<VkImageLayout>(infoDesc.imageLayoutOrRange);
+                    imageInfo.imageView   = handles[infoDescIndex + arrayElement].imageView;
+                    imageInfo.sampler     = handles[infoDescIndex + arrayElement].sampler;
+                }
+                writeSet.pImageInfo = writeImages;
+                break;
+            }
+
+            default:
+                UNREACHABLE();
+                break;
+        }
+    }
+}
+
+// DescriptorSetDescBuilder implementation.
+DescriptorSetDescBuilder::DescriptorSetDescBuilder() = default;
+
+DescriptorSetDescBuilder::~DescriptorSetDescBuilder() = default;
+
+DescriptorSetDescBuilder::DescriptorSetDescBuilder(const DescriptorSetDescBuilder &other)
+    : mDesc(other.mDesc), mHandles(other.mHandles), mDynamicOffsets(other.mDynamicOffsets)
+{}
+
+DescriptorSetDescBuilder &DescriptorSetDescBuilder::operator=(const DescriptorSetDescBuilder &other)
+{
+    mDesc           = other.mDesc;
+    mHandles        = other.mHandles;
+    mDynamicOffsets = other.mDynamicOffsets;
+    return *this;
+}
+
+void DescriptorSetDescBuilder::reset()
+{
+    mDesc.reset();
+    mHandles.clear();
+}
+
+void DescriptorSetDescBuilder::updateUniformWrite(uint32_t shaderStageCount)
+{
+    WriteDescriptorDesc writeDesc = {};
+    writeDesc.binding             = 0;
+    writeDesc.descriptorInfoIndex = 0;
+    writeDesc.descriptorCount     = shaderStageCount;
+    writeDesc.descriptorType      = VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER_DYNAMIC;
+
+    mDesc.updateWriteDesc(writeDesc);
+}
+
+void DescriptorSetDescBuilder::updateUniformBuffer(uint32_t shaderIndex,
+                                                   const BufferHelper &bufferHelper,
+                                                   VkDeviceSize bufferRange)
+{
+    DescriptorInfoDesc infoDesc = {};
+    SetBitField(infoDesc.imageLayoutOrRange, bufferRange);
+    infoDesc.samplerOrBufferSerial = bufferHelper.getBufferSerial().getValue();
+
+    mDesc.updateInfoDesc(shaderIndex, infoDesc);
+    mHandles[shaderIndex].buffer = bufferHelper.getBuffer().getHandle();
+}
+
+void DescriptorSetDescBuilder::updateTransformFeedbackWrite(
+    const ShaderInterfaceVariableInfoMap &variableInfoMap,
+    uint32_t xfbBufferCount)
+{
+    WriteDescriptorDesc writeDesc = {};
+    writeDesc.binding             = variableInfoMap.getXfbBufferBinding(0);
+    writeDesc.descriptorCount     = xfbBufferCount;
+    writeDesc.descriptorType      = VK_DESCRIPTOR_TYPE_STORAGE_BUFFER;
+
+    mDesc.updateWriteDesc(writeDesc);
+}
+
+void DescriptorSetDescBuilder::updateTransformFeedbackBuffer(
+    const ShaderInterfaceVariableInfoMap &variableInfoMap,
+    uint32_t xfbBufferIndex,
+    const BufferHelper &bufferHelper,
+    VkDeviceSize bufferOffset,
+    VkDeviceSize bufferRange)
+{
+    uint32_t baseBinding = variableInfoMap.getXfbBufferBinding(0);
+
+    DescriptorInfoDesc infoDesc = {};
+    SetBitField(infoDesc.imageLayoutOrRange, bufferRange);
+    SetBitField(infoDesc.imageViewSerialOrOffset, bufferOffset);
+    infoDesc.samplerOrBufferSerial = bufferHelper.getBufferSerial().getValue();
+
+    uint32_t baseInfoIndex = mDesc.getInfoDescIndex(baseBinding);
+
+    mDesc.updateInfoDesc(baseInfoIndex + xfbBufferIndex, infoDesc);
+    mHandles[baseInfoIndex].buffer = bufferHelper.getBuffer().getHandle();
+}
+
+angle::Result DescriptorSetDescBuilder::updateExecutableActiveTextures(
+    Context *context,
+    ResourceUseList *resourceUseList,
+    const ShaderInterfaceVariableInfoMap &variableInfoMap,
+    const gl::ProgramExecutable &executable,
+    const gl::ActiveTextureArray<TextureVk *> &textures,
+    const gl::SamplerBindingVector &samplers,
+    bool emulateSeamfulCubeMapSampling)
+{
+    reset();
+    for (gl::ShaderType shaderType : executable.getLinkedShaderStages())
+    {
+        ANGLE_TRY(updateExecutableActiveTexturesForShader(context, resourceUseList, shaderType,
+                                                          variableInfoMap, executable, textures,
+                                                          samplers, emulateSeamfulCubeMapSampling));
+    }
+
+    return angle::Result::Continue;
+}
+
+angle::Result DescriptorSetDescBuilder::updateExecutableActiveTexturesForShader(
+    Context *context,
+    ResourceUseList *resourceUseList,
+    gl::ShaderType shaderType,
+    const ShaderInterfaceVariableInfoMap &variableInfoMap,
+    const gl::ProgramExecutable &executable,
+    const gl::ActiveTextureArray<TextureVk *> &textures,
+    const gl::SamplerBindingVector &samplers,
+    bool emulateSeamfulCubeMapSampling)
+{
+    const std::vector<gl::SamplerBinding> &samplerBindings = executable.getSamplerBindings();
+    const std::vector<gl::LinkedUniform> &uniforms         = executable.getUniforms();
+    const gl::ActiveTextureTypeArray &textureTypes         = executable.getActiveSamplerTypes();
+
+    // First pass: initialize write descs.
+    for (uint32_t textureIndex = 0; textureIndex < samplerBindings.size(); ++textureIndex)
+    {
+        const gl::SamplerBinding &samplerBinding = samplerBindings[textureIndex];
+        uint32_t uniformIndex = executable.getUniformIndexFromSamplerIndex(textureIndex);
+        const gl::LinkedUniform &samplerUniform = uniforms[uniformIndex];
+        std::string mappedSamplerName           = GlslangGetMappedSamplerName(samplerUniform.name);
+
+        if (!samplerUniform.isActive(shaderType))
+        {
+            continue;
+        }
+
+        const std::string samplerName = GlslangGetMappedSamplerName(samplerUniform.name);
+
+        const ShaderInterfaceVariableInfo &info = variableInfoMap.get(shaderType, samplerName);
+        if (info.isDuplicate)
+        {
+            continue;
+        }
+
+        uint32_t arraySize = static_cast<uint32_t>(samplerBinding.boundTextureUnits.size());
+
+        WriteDescriptorDesc writeDesc = {};
+        writeDesc.binding             = info.binding;
+        writeDesc.descriptorCount     = arraySize;
+
+        if (samplerBinding.textureType == gl::TextureType::Buffer)
+        {
+            writeDesc.descriptorType = VK_DESCRIPTOR_TYPE_UNIFORM_TEXEL_BUFFER;
+        }
+        else
+        {
+            writeDesc.descriptorType = VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER;
+        }
+
+        mDesc.updateWriteDesc(writeDesc);
+    }
+
+    // Second pass: initialize descriptor info descs.
+    for (uint32_t textureIndex = 0; textureIndex < samplerBindings.size(); ++textureIndex)
+    {
+        const gl::SamplerBinding &samplerBinding = samplerBindings[textureIndex];
+        uint32_t uniformIndex = executable.getUniformIndexFromSamplerIndex(textureIndex);
+        const gl::LinkedUniform &samplerUniform = uniforms[uniformIndex];
+        std::string mappedSamplerName           = GlslangGetMappedSamplerName(samplerUniform.name);
+
+        if (!samplerUniform.isActive(shaderType))
+        {
+            continue;
+        }
+
+        const std::string samplerName = GlslangGetMappedSamplerName(samplerUniform.name);
+
+        const ShaderInterfaceVariableInfo &info = variableInfoMap.get(shaderType, samplerName);
+        if (info.isDuplicate)
+        {
+            continue;
+        }
+
+        uint32_t arraySize = static_cast<uint32_t>(samplerBinding.boundTextureUnits.size());
+
+        for (uint32_t arrayElement = 0; arrayElement < arraySize; ++arrayElement)
+        {
+            GLuint textureUnit   = samplerBinding.boundTextureUnits[arrayElement];
+            TextureVk *textureVk = textures[textureUnit];
+
+            gl::Sampler *sampler       = samplers[textureUnit].get();
+            const SamplerVk *samplerVk = sampler ? vk::GetImpl(sampler) : nullptr;
+
+            const ImageHelper &imageHelper = textureVk->getImage();
+            const SamplerHelper &samplerHelper =
+                samplerVk ? samplerVk->getSampler() : textureVk->getSampler();
+            const gl::SamplerState &samplerState =
+                sampler ? sampler->getSamplerState() : textureVk->getState().getSamplerState();
+
+            ImageOrBufferViewSubresourceSerial imageViewSerial =
+                textureVk->getImageViewSubresourceSerial(samplerState);
+
+            DescriptorInfoDesc infoDesc      = {};
+            infoDesc.imageLayoutOrRange      = imageHelper.getCurrentLayout();
+            infoDesc.imageViewSerialOrOffset = imageViewSerial.viewSerial.getValue();
+            infoDesc.samplerOrBufferSerial   = samplerHelper.getSamplerSerial().getValue();
+            memcpy(&infoDesc.imageSubresourceRange, &imageViewSerial.subresource, sizeof(uint32_t));
+
+            uint32_t infoIndex = mDesc.getInfoDescIndex(info.binding) + arrayElement;
+            mDesc.updateInfoDesc(infoIndex, infoDesc);
+
+            mHandles[infoIndex].sampler = samplerHelper.get().getHandle();
+
+            if (textureTypes[textureUnit] == gl::TextureType::Buffer)
+            {
+                const BufferView *view = nullptr;
+                ANGLE_TRY(textureVk->getBufferViewAndRecordUse(context, nullptr, false, &view));
+                mHandles[infoIndex].bufferView = view->getHandle();
+            }
+            else if (emulateSeamfulCubeMapSampling)
+            {
+                // If emulating seamful cube mapping, use the fetch image view.  This is
+                // basically the same image view as read, except it's a 2DArray view for
+                // cube maps.
+                const ImageView &imageView = textureVk->getFetchImageViewAndRecordUse(
+                    context, resourceUseList, samplerState.getSRGBDecode(),
+                    samplerUniform.texelFetchStaticUse);
+                mHandles[infoIndex].imageView = imageView.getHandle();
+            }
+            else
+            {
+                const ImageView &imageView = textureVk->getReadImageViewAndRecordUse(
+                    context, resourceUseList, samplerState.getSRGBDecode(),
+                    samplerUniform.texelFetchStaticUse);
+                mHandles[infoIndex].imageView = imageView.getHandle();
+            }
+        }
+    }
+
+    return angle::Result::Continue;
+}
+
+void DescriptorSetDescBuilder::updateShaderBuffers(
+    gl::ShaderType shaderType,
+    const ShaderInterfaceVariableInfoMap &variableInfoMap,
+    const gl::BufferVector &buffers,
+    const std::vector<gl::InterfaceBlock> &blocks,
+    VkDescriptorType descriptorType,
+    VkDeviceSize maxBoundBufferRange,
+    const BufferHelper &emptyBuffer)
+{
+    // Initialize the descriptor writes in a first pass. This ensures we can pack the structures
+    // corresponding to array elements tightly.
+    for (uint32_t bufferIndex = 0; bufferIndex < blocks.size();)
+    {
+        const gl::InterfaceBlock &block = blocks[bufferIndex];
+
+        if (!block.isActive(shaderType))
+        {
+            continue;
+        }
+
+        const ShaderInterfaceVariableInfo &info = variableInfoMap.get(shaderType, block.mappedName);
+        if (info.isDuplicate)
+        {
+            continue;
+        }
+
+        if (block.isArray && block.arrayElement > 0)
+        {
+            mDesc.incrementDescriptorCount(info.binding);
+        }
+        else
+        {
+            WriteDescriptorDesc writeDesc = {};
+            writeDesc.binding             = info.binding;
+            writeDesc.descriptorCount     = 1;
+            SetBitField(writeDesc.descriptorType, descriptorType);
+            mDesc.updateWriteDesc(writeDesc);
+        }
+    }
+
+    // Now that we have the proper array elements counts, initialize the info structures.
+    for (uint32_t bufferIndex = 0; bufferIndex < blocks.size(); ++bufferIndex)
+    {
+        const gl::InterfaceBlock &block                           = blocks[bufferIndex];
+        const gl::OffsetBindingPointer<gl::Buffer> &bufferBinding = buffers[block.binding];
+
+        if (!block.isActive(shaderType))
+        {
+            continue;
+        }
+
+        const ShaderInterfaceVariableInfo &info = variableInfoMap.get(shaderType, block.mappedName);
+        if (info.isDuplicate)
+        {
+            continue;
+        }
+
+        uint32_t binding       = info.binding;
+        uint32_t arrayElement  = block.isArray ? block.arrayElement : 0;
+        uint32_t infoDescIndex = mDesc.getInfoDescIndex(binding) + arrayElement;
+
+        if (bufferBinding.get() == nullptr)
+        {
+            DescriptorInfoDesc emptyDesc = {};
+            SetBitField(emptyDesc.imageLayoutOrRange, emptyBuffer.getSize());
+            emptyDesc.imageViewSerialOrOffset = 0;
+            emptyDesc.samplerOrBufferSerial   = emptyBuffer.getBufferSerial().getValue();
+
+            mDesc.updateInfoDesc(infoDescIndex, emptyDesc);
+
+            mHandles[infoDescIndex].buffer = emptyBuffer.getBuffer().getHandle();
+
+            if (IsDynamicDescriptor(descriptorType))
+            {
+                mDynamicOffsets[infoDescIndex] = 0;
+            }
+        }
+
+        // Limit bound buffer size to maximum resource binding size.
+        GLsizeiptr boundBufferSize = gl::GetBoundBufferAvailableSize(bufferBinding);
+        VkDeviceSize size          = std::min<VkDeviceSize>(boundBufferSize, maxBoundBufferRange);
+
+        // Make sure there's no possible under/overflow with binding size.
+        static_assert(sizeof(VkDeviceSize) >= sizeof(bufferBinding.getSize()),
+                      "VkDeviceSize too small");
+        ASSERT(bufferBinding.getSize() >= 0);
+
+        BufferVk *bufferVk         = vk::GetImpl(bufferBinding.get());
+        BufferHelper &bufferHelper = bufferVk->getBuffer();
+
+        DescriptorInfoDesc infoDesc = {};
+        SetBitField(infoDesc.imageLayoutOrRange, size);
+        infoDesc.samplerOrBufferSerial = bufferHelper.getBufferSerial().getValue();
+
+        VkDeviceSize offset = bufferBinding.getOffset() + bufferHelper.getOffset();
+
+        if (IsDynamicDescriptor(descriptorType))
+        {
+            mDynamicOffsets[binding] = offset;
+        }
+        else
+        {
+            SetBitField(infoDesc.imageViewSerialOrOffset, offset);
+        }
+
+        mDesc.updateInfoDesc(infoDescIndex, infoDesc);
+
+        mHandles[infoDescIndex].buffer = bufferHelper.getBuffer().getHandle();
+    }
+}
+
+void DescriptorSetDescBuilder::updateAtomicCounters(
+    gl::ShaderType shaderType,
+    const ShaderInterfaceVariableInfoMap &variableInfoMap,
+    const gl::BufferVector &buffers,
+    const std::vector<gl::AtomicCounterBuffer> &atomicCounterBuffers,
+    const VkDeviceSize requiredOffsetAlignment,
+    vk::BufferHelper *emptyBuffer)
+{
+    if (atomicCounterBuffers.empty() || !variableInfoMap.hasAtomicCounterBufferBinding(shaderType))
+    {
+        return;
+    }
+
+    static_assert(!IsDynamicDescriptor(kStorageBufferDescriptorType),
+                  "This method needs an update to handle dynamic descriptors");
+
+    uint32_t binding = variableInfoMap.getAtomicCounterBufferBinding(shaderType, 0);
+
+    WriteDescriptorDesc writeDesc = {};
+    writeDesc.binding             = binding;
+    writeDesc.descriptorCount     = atomicCounterBuffers.size();
+    writeDesc.descriptorType      = kStorageBufferDescriptorType;
+
+    mDesc.updateWriteDesc(writeDesc);
+
+    for (const gl::AtomicCounterBuffer &atomicCounterBuffer : atomicCounterBuffers)
+    {
+        int arrayElement                                          = atomicCounterBuffer.binding;
+        const gl::OffsetBindingPointer<gl::Buffer> &bufferBinding = buffers[arrayElement];
+
+        uint32_t infoIndex = mDesc.getInfoDescIndex(binding) + arrayElement;
+
+        if (bufferBinding.get() == nullptr)
+        {
+            DescriptorInfoDesc emptyDesc = {};
+            SetBitField(emptyDesc.imageLayoutOrRange, emptyBuffer->getSize());
+            emptyDesc.imageViewSerialOrOffset = 0;
+            emptyDesc.samplerOrBufferSerial   = emptyBuffer->getBufferSerial().getValue();
+
+            mDesc.updateInfoDesc(infoIndex, emptyDesc);
+            mHandles[infoIndex].buffer = emptyBuffer->getBuffer().getHandle();
+            continue;
+        }
+
+        BufferVk *bufferVk             = vk::GetImpl(bufferBinding.get());
+        vk::BufferHelper &bufferHelper = bufferVk->getBuffer();
+
+        VkDeviceSize offset = bufferBinding.getOffset() + bufferHelper.getOffset();
+
+        VkDeviceSize alignedOffset = (offset / requiredOffsetAlignment) * requiredOffsetAlignment;
+        VkDeviceSize offsetDiff    = offset - alignedOffset;
+
+        offset = alignedOffset;
+
+        VkDeviceSize range = gl::GetBoundBufferAvailableSize(bufferBinding) + offsetDiff;
+
+        DescriptorInfoDesc infoDesc = {};
+        SetBitField(infoDesc.imageLayoutOrRange, range);
+        SetBitField(infoDesc.imageViewSerialOrOffset, offset);
+        infoDesc.samplerOrBufferSerial = bufferHelper.getBufferSerial().getValue();
+
+        mDesc.updateInfoDesc(infoIndex, infoDesc);
+        mHandles[infoIndex].buffer = bufferHelper.getBuffer().getHandle();
+    }
+}
+
+void DescriptorSetDescBuilder::updateDescriptorSet(UpdateDescriptorSetsBuilder *updateBuilder,
+                                                   VkDescriptorSet descriptorSet) const
+{
+    mDesc.updateDescriptorSet(updateBuilder, mHandles.data(), descriptorSet);
 }
 }  // namespace vk
 
