@@ -58,6 +58,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "26a9134a_42d2f90c",
+        "filename": "src/libANGLE/capture/FrameCapture.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 2219,
+      "author": {
+        "id": 1491687
+      },
+      "writtenOn": "2022-02-17T17:15:05Z",
+      "side": 1,
+      "message": "After discussion with Jamie I changed the approach to solve these issues by actually capturing empty buffers, which replicates app behavior better.",
+      "parentUuid": "bcdd579a_45dbee0d",
+      "range": {
+        "startLine": 2219,
+        "startChar": 0,
+        "endLine": 2219,
+        "endChar": 88
+      },
+      "revId": "eef0a5c4479e436a4b29a1dff784eedf55d4691f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "6ef03738_1eab063b",
@@ -94,6 +118,30 @@
       "writtenOn": "2022-02-17T16:37:07Z",
       "side": 1,
       "message": "Interesting approach to landing MEC tests.  For bot speed in the general case, I would drop this to the lowest required to recreate the issue.",
+      "range": {
+        "startLine": 3975,
+        "startChar": 0,
+        "endLine": 3975,
+        "endChar": 31
+      },
+      "revId": "eef0a5c4479e436a4b29a1dff784eedf55d4691f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "0d614a77_2eabaf25",
+        "filename": "src/tests/gl_tests/VertexAttributeTest.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 3975,
+      "author": {
+        "id": 1491687
+      },
+      "writtenOn": "2022-02-17T17:15:05Z",
+      "side": 1,
+      "message": "When capturing the end2end test using MEC with the current method at least one swap buffers was required in my tries. I can also drop it all together as the bots won\u0027t run this currently. Leaving the test will hopefully result in future MEC tests that will run it.",
+      "parentUuid": "9efd6d27_e74e97bc",
       "range": {
         "startLine": 3975,
         "startChar": 0,
