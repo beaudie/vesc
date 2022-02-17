@@ -24,6 +24,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "1e9ef1fd_26d41efd",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1491687
+      },
+      "writtenOn": "2022-02-17T17:11:31Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "d2944f4b_bca72eed",
+      "range": {
+        "startLine": 7,
+        "startChar": 25,
+        "endLine": 7,
+        "endChar": 35
+      },
+      "revId": "c59102982f82f87f1b117e8bcbd4d6c6c6bda471",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "8668ae1d_be998a4e",
@@ -37,6 +61,30 @@
       "writtenOn": "2022-02-17T16:33:51Z",
       "side": 1,
       "message": "Can you add a similar comment to the CL?  This can probably be squashed into the next commit.",
+      "range": {
+        "startLine": 11,
+        "startChar": 0,
+        "endLine": 11,
+        "endChar": 70
+      },
+      "revId": "c59102982f82f87f1b117e8bcbd4d6c6c6bda471",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "f5afa5d0_f5d52dcc",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 11,
+      "author": {
+        "id": 1491687
+      },
+      "writtenOn": "2022-02-17T17:11:31Z",
+      "side": 1,
+      "message": "This patch is not required anymore and was superseded with one where we now allow capturing empty buffers, which will respect the app behavior more.",
+      "parentUuid": "8668ae1d_be998a4e",
       "range": {
         "startLine": 11,
         "startChar": 0,
