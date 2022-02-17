@@ -2294,6 +2294,19 @@ void ContextVk::syncObjectPerfCounters()
         mShareGroupVk->getTextureDescriptorCache().getAndResetDescriptorSetAllocationCount();
     mPerfCounters.descriptorSetAllocations +=
         mShareGroupVk->getShaderBuffersDescriptorCache().getAndResetDescriptorSetAllocationCount();
+
+    mPerfCounters.descriptorSetCacheKeySizeBytes = 0;
+    mPerfCounters.descriptorSetCacheKeySizeBytes +=
+        mShareGroupVk->getUniformsAndXfbDescriptorCache().getTotalCacheKeySizeBytes();
+    mPerfCounters.descriptorSetCacheKeySizeBytes +=
+        mShareGroupVk->getTextureDescriptorCache().getTotalCacheKeySizeBytes();
+    mPerfCounters.descriptorSetCacheKeySizeBytes +=
+        mShareGroupVk->getShaderBuffersDescriptorCache().getTotalCacheKeySizeBytes();
+
+    for (const vk::DynamicDescriptorPool &pool : mDriverUniformsDescriptorPools)
+    {
+        mPerfCounters.descriptorSetCacheKeySizeBytes += pool.getTotalCacheKeySizeBytes();
+    }
 }
 
 void ContextVk::updateOverlayOnPresent()
@@ -2347,6 +2360,13 @@ void ContextVk::updateOverlayOnPresent()
         gl::RunningGraphWidget *dynamicBufferAllocations =
             overlay->getRunningGraphWidget(gl::WidgetId::VulkanDynamicBufferAllocations);
         dynamicBufferAllocations->next();
+    }
+
+    {
+        gl::CountWidget *cacheKeySize =
+            overlay->getCountWidget(gl::WidgetId::VulkanDescriptorCacheKeySize);
+        cacheKeySize->reset();
+        cacheKeySize->add(mPerfCounters.descriptorSetCacheKeySizeBytes);
     }
 }
 
