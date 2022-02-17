@@ -37,6 +37,12 @@ class ShaderInterfaceVariableInfoMap final : angle::NonCopyable
                                           const std::string &variableName);
     size_t variableCount(gl::ShaderType shaderType) const { return mData[shaderType].size(); }
 
+    uint32_t getDefaultUniformBinding(gl::ShaderType shaderType) const;
+    uint32_t getXfbBufferBinding(uint32_t xfbBufferIndex) const;
+    bool hasAtomicCounterBufferBinding(gl::ShaderType shaderType) const;
+    uint32_t getAtomicCounterBufferBinding(gl::ShaderType shaderType,
+                                           uint32_t atomicCounterBufferIndex) const;
+
     using VariableNameToInfoMap = angle::HashMap<std::string, ShaderInterfaceVariableInfo>;
 
     class Iterator final
