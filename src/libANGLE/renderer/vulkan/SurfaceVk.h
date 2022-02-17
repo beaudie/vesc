@@ -279,6 +279,11 @@ class WindowSurfaceVk : public SurfaceVk
 
     angle::Result onSharedPresentContextFlush(const gl::Context *context);
 
+    // ***DEBUG PURPOSE ONLY***
+    // This is used at the "angle_white_box_tests", to check whether acquiring swapchain image is
+    // deferred or not.
+    bool getDeferredStatusForSwapchainImage() const { return mNeedToAcquireNextSwapchainImage; }
+
   protected:
     angle::Result prepareSwapImpl(const gl::Context *context);
     angle::Result swapImpl(const gl::Context *context,
@@ -332,6 +337,9 @@ class WindowSurfaceVk : public SurfaceVk
     angle::Result newPresentSemaphore(vk::Context *context, vk::Semaphore *semaphoreOut);
 
     bool isMultiSampled() const;
+
+    angle::Result setDummyRenderTarget(const gl::Context *context);
+    angle::Result createDummyImage(vk::Context *context);
 
     std::vector<VkPresentModeKHR> mPresentModes;
 
@@ -413,6 +421,13 @@ class WindowSurfaceVk : public SurfaceVk
 
     // GL_EXT_shader_framebuffer_fetch
     FramebufferFetchMode mFramebufferFetchMode = FramebufferFetchMode::Disabled;
+
+    // Dummy image for GL_RASTERIZER_DISCARD case
+    bool mNeedToCreateDummyImage;
+    bool mNeedToUseDummyImageFramebuffer;
+    vk::ImageHelper mDummyImage;
+    vk::ImageViewHelper mDummyImageViews;
+    vk::Framebuffer mDummyImageFramebuffer;
 };
 
 }  // namespace rx

@@ -731,7 +731,9 @@ WindowSurfaceVk::WindowSurfaceVk(const egl::SurfaceState &surfaceState, EGLNativ
       mDepthStencilImageBinding(this, kAnySurfaceImageSubjectIndex),
       mColorImageMSBinding(this, kAnySurfaceImageSubjectIndex),
       mNeedToAcquireNextSwapchainImage(false),
-      mFrameCount(1)
+      mFrameCount(1),
+      mNeedToCreateDummyImage(false),
+      mNeedToUseDummyImageFramebuffer(false)
 {
     // Initialize the color render target with the multisampled targets.  If not multisampled, the
     // render target will be updated to refer to a swapchain image on every acquire.
@@ -1070,10 +1072,26 @@ angle::Result WindowSurfaceVk::getAttachmentRenderTarget(const gl::Context *cont
 {
     if (mNeedToAcquireNextSwapchainImage)
     {
-        // Acquire the next image (previously deferred) before it is drawn to or read from.
-        ContextVk *contextVk = vk::GetImpl(context);
-        ANGLE_VK_TRACE_EVENT_AND_MARKER(contextVk, "First Swap Image Use");
-        ANGLE_TRY(doDeferredAcquireNextImage(context, false));
+        const gl::State &glState   = context->getState();
+        ContextVk *contextVk       = vk::GetImpl(context);
+        const RendererVk *renderer = contextVk->getRenderer();
+        mNeedToUseDummyImageFramebuffer =
+            renderer->getFeatures().useDummyImageForDefaultFramebuffer.enabled &&
+            glState.isRasterizerDiscardEnabled();
+
+        if (mNeedToUseDummyImageFramebuffer)
+        {
+            // Not acquire the next image, and use dummy image because GL_RASTERIZER_DISCARD is
+            // enabled.
+            ANGLE_VK_TRACE_EVENT_AND_MARKER(contextVk, "Dummy Image Use");
+            ANGLE_TRY(setDummyRenderTarget(context));
+        }
+        else
+        {
+            // Acquire the next image (previously deferred) before it is drawn to or read from.
+            ANGLE_VK_TRACE_EVENT_AND_MARKER(contextVk, "First Swap Image Use");
+            ANGLE_TRY(doDeferredAcquireNextImage(context, false));
+        }
     }
     return SurfaceVk::getAttachmentRenderTarget(context, binding, imageIndex, samples, rtOut);
 }
@@ -1393,6 +1411,12 @@ angle::Result WindowSurfaceVk::createSwapChain(vk::Context *context,
         // We will need to pass depth/stencil image views to the RenderTargetVk in the future.
     }
 
+    if (renderer->getFeatures().useDummyImageForDefaultFramebuffer.enabled)
+    {
+        // Creating a dummy image is deferred until it is really needed.
+        mNeedToCreateDummyImage = true;
+    }
+
     return angle::Result::Continue;
 }
 
@@ -1513,6 +1537,13 @@ void WindowSurfaceVk::releaseSwapchainImages(ContextVk *contextVk)
     }
 
     mSwapchainImages.clear();
+
+    if (mDummyImage.valid())
+    {
+        mDummyImage.releaseImageFromShareContexts(renderer, contextVk);
+        mDummyImageViews.release(renderer);
+        contextVk->addGarbage(&mDummyImageFramebuffer);
+    }
 }
 
 void WindowSurfaceVk::destroySwapChainImages(DisplayVk *displayVk)
@@ -1552,6 +1583,10 @@ void WindowSurfaceVk::destroySwapChainImages(DisplayVk *displayVk)
     }
 
     mSwapchainImages.clear();
+
+    mDummyImage.destroy(renderer);
+    mDummyImageViews.destroy(device);
+    mDummyImageFramebuffer.destroy(device);
 }
 
 FramebufferImpl *WindowSurfaceVk::createDefaultFramebuffer(const gl::Context *context,
@@ -1631,7 +1666,11 @@ angle::Result WindowSurfaceVk::computePresentOutOfDate(vk::Context *context,
 
 vk::Framebuffer &WindowSurfaceVk::chooseFramebuffer()
 {
-    if (isMultiSampled())
+    if (mNeedToAcquireNextSwapchainImage && mNeedToUseDummyImageFramebuffer)
+    {
+        return mDummyImageFramebuffer;
+    }
+    else if (isMultiSampled())
     {
         return mFramebufferMS;
     }
@@ -1890,6 +1929,45 @@ angle::Result WindowSurfaceVk::doDeferredAcquireNextImage(const gl::Context *con
     mColorImageMS.invalidateSubresourceContent(contextVk, gl::LevelIndex(0), 0, 1);
     mDepthStencilImage.invalidateSubresourceContent(contextVk, gl::LevelIndex(0), 0, 1);
     mDepthStencilImage.invalidateSubresourceStencilContent(contextVk, gl::LevelIndex(0), 0, 1);
+
+    return angle::Result::Continue;
+}
+
+angle::Result WindowSurfaceVk::setDummyRenderTarget(const gl::Context *context)
+{
+    const RendererVk *renderer = vk::GetImpl(context)->getRenderer();
+    if (renderer->getFeatures().useDummyImageForDefaultFramebuffer.enabled)
+    {
+        if (mNeedToCreateDummyImage)
+        {
+            ANGLE_TRY(createDummyImage(vk::GetImpl(context)));
+        }
+        mColorRenderTarget.updateSwapchainImage(&mDummyImage, &mDummyImageViews, nullptr, nullptr);
+    }
+
+    return angle::Result::Continue;
+}
+
+angle::Result WindowSurfaceVk::createDummyImage(vk::Context *context)
+{
+    ANGLE_TRACE_EVENT0("gpu.angle", "WindowSurfaceVk::createDummyImage");
+
+    RendererVk *renderer          = context->getRenderer();
+    const vk::Format &format      = renderer->getFormat(mState.config->renderTargetFormat);
+    const bool robustInit         = mState.isRobustResourceInitEnabled();
+    const VkImageUsageFlags usage = mColorImageMS.getUsage();
+    const VkExtent3D extents      = mColorImageMS.getRotatedExtents();
+
+    // The reason for using "initMSAASwapchain" is that
+    ANGLE_TRY(mDummyImage.initMSAASwapchain(
+        context, gl::TextureType::_2D, extents, Is90DegreeRotation(getPreTransform()), format, 1,
+        usage, gl::LevelIndex(0), 1, 1, robustInit, mState.hasProtectedContent()));
+    ANGLE_TRY(mDummyImage.initMemory(context, mState.hasProtectedContent(),
+                                     renderer->getMemoryProperties(),
+                                     VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT));
+    mDummyImageViews.init(renderer);
+
+    mNeedToCreateDummyImage = false;
 
     return angle::Result::Continue;
 }
@@ -2156,7 +2234,8 @@ angle::Result WindowSurfaceVk::getCurrentFramebuffer(ContextVk *contextVk,
                                                      vk::Framebuffer **framebufferOut)
 {
     // FramebufferVk dirty-bit processing should ensure that a new image was acquired.
-    ASSERT(!mNeedToAcquireNextSwapchainImage);
+    ASSERT((mNeedToAcquireNextSwapchainImage && mNeedToUseDummyImageFramebuffer) ||
+           (!mNeedToAcquireNextSwapchainImage && !mNeedToUseDummyImageFramebuffer));
 
     // Track the new fetch mode
     mFramebufferFetchMode = fetchMode;
@@ -2221,6 +2300,23 @@ angle::Result WindowSurfaceVk::getCurrentFramebuffer(ContextVk *contextVk,
                                                                         framebufferInfo));
             }
         }
+    }
+
+    if (mNeedToAcquireNextSwapchainImage && mNeedToUseDummyImageFramebuffer)
+    {
+        ASSERT(!mNeedToCreateDummyImage);
+
+        const vk::ImageView *imageView = nullptr;
+        ANGLE_TRY(mDummyImageViews.getLevelLayerDrawImageView(
+            contextVk, mDummyImage, vk::LevelIndex(0), 0, gl::SrgbWriteControlMode::Default,
+            &imageView));
+        imageViews[0] = imageView->getHandle();
+        if (mDummyImageFramebuffer.valid())
+        {
+            contextVk->addGarbage(&mDummyImageFramebuffer);
+        }
+        ANGLE_VK_TRY(contextVk,
+                     mDummyImageFramebuffer.init(contextVk->getDevice(), framebufferInfo));
     }
 
     ASSERT(currentFramebuffer.valid());

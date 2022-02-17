@@ -25,3 +25,6 @@ angle_white_box_tests_vulkan_sources = [
   "gl_tests/VulkanPerformanceCounterTest.cpp",
   "gl_tests/VulkanUniformUpdatesTest.cpp",
 ]
+
+angle_white_box_tests_vulkan_sources +=
+    [ "gl_tests/VulkanRasterizerDiscardTest.cpp" ]

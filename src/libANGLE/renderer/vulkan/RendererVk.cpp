@@ -3189,6 +3189,11 @@ void RendererVk::initFeatures(DisplayVk *displayVk,
     // states they should have a top-left origin.
     ANGLE_FEATURE_CONDITION(&mFeatures, bottomLeftOriginPresentRegionRectangles, IsAndroid());
 
+    // Use a dummy image for the default framebuffer when GL_RASTERIZER_DISCARD is enabled, for not
+    // acquiring the next swapchain image. By this feature, the unnecessary request for acquiring
+    // the next swapchain image which isn't needed because of GL_RASTERIZER_DISCARD, doesn't occur.
+    ANGLE_FEATURE_CONDITION(&mFeatures, useDummyImageForDefaultFramebuffer, isSamsung);
+
     angle::PlatformMethods *platform = ANGLEPlatformCurrent();
     platform->overrideFeaturesVk(platform, &mFeatures);
 

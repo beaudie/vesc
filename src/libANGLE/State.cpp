@@ -818,6 +818,11 @@ void State::setRasterizerDiscard(bool enabled)
     {
         mRasterizer.rasterizerDiscard = enabled;
         mDirtyBits.set(DIRTY_BIT_RASTERIZER_DISCARD_ENABLED);
+
+        if (mDrawFramebuffer && mDrawFramebuffer->isDefault())
+        {
+            mDrawFramebuffer->invalidateColorAttachmentZero();
+        }
     }
 }
 
@@ -1810,6 +1815,13 @@ void State::setDrawFramebufferBinding(Framebuffer *framebuffer)
     {
         mDrawFramebuffer->setWriteControlMode(getFramebufferSRGB() ? SrgbWriteControlMode::Default
                                                                    : SrgbWriteControlMode::Linear);
+
+        // This is needed for the case that the color attachment for a default framebuffer is not
+        // updated even though the status of GL_RASTERIZER_DISCARD is changed.
+        if (mDrawFramebuffer->isDefault())
+        {
+            mDrawFramebuffer->invalidateColorAttachmentZero();
+        }
 
         if (mDrawFramebuffer->hasAnyDirtyBit())
         {
