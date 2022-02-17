@@ -87,6 +87,24 @@
       "parentUuid": "81ac8c2d_2c5be5da",
       "revId": "fe694840cb94d61ddea26ad844ea6f9f885e7f4d",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "33d49618_81a0295c",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 20
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1524687
+      },
+      "writtenOn": "2022-02-17T10:22:38Z",
+      "side": 1,
+      "message": "Done.\n1, issued a new bug: anglebug.com/7030 to trace the optimizing of the unnecessary renderpass break;\n2, the syncval error I met is similar with the issue 6663, I issued anglebug.com/7031 for it, and add it to \u0027kSkippedSyncvalMessages\u0027, the test noted can run now.",
+      "parentUuid": "efa46962_28e5ad3a",
+      "revId": "fe694840cb94d61ddea26ad844ea6f9f885e7f4d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }

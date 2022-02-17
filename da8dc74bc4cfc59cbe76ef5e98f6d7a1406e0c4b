@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b05cf25b_4f73bf3f",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 23
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1524687
+      },
+      "writtenOn": "2022-02-17T10:22:38Z",
+      "side": 1,
+      "message": "Hi Shahbaz,\nIn the latest patch, I\u0027ve add the test case \u0027FS image read and CS texture sample\u0027, named as ComputeShaderTest/FSReadImageThenCSSample. And it can run correctly as we wish.\n\nIn this patch, I\u0027ve refined code to handle the four scenarios more generally, list the scenarios for a brief check:\n\u003eFS image read, then CS image access\n\u003eFS texture sample, then CS image access\n\u003eFS image read, then CS texture sample\n\u003eFS texture sample, then CS texture sample\n\n1, rename the endRenderPassIfComputeAccessAfterTextureSample to endRenderPassIfComputeAccessAfterGraphicsTextureImageAccess. This function can handles all of the Vkimage operation (GL_image write/read, texture attchement write,  texture sample) in renderpass (abbr. as Graphics). Because currently ANGLE considers the GL_image read and write both as a *write* vkImage operation, so the new function overrides endRenderPassIfComputeReadAfterAttachmentWrite functionally.\n\n2, For better distinguish the read Vkimage (texture sample) scenario, add a new RenderPassUsageFlag to indentify the read images in the global usesImage list.\n\n3, define the *use* Vkimage in renderpass as two scenarios: one is the write operation on image (GL_image write/read, texture attachment write) (though the usesImage list); the other is the texture sample needed layout transition (though the mRenderPassReadImagesUsedBarrier list), as showed in the interface IsRenderPassStartedAndUsesImage.\n\nBased on this, we can only close renderpass under these two scenarios, and avoid to do redundant close renderpass on texture sample without layout-transition.\n",
+      "revId": "da8dc74bc4cfc59cbe76ef5e98f6d7a1406e0c4b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
