@@ -63,12 +63,15 @@ struct MetalLayoutOfConfig
     bool disablePacking             = false;
     bool maskArray                  = false;
     bool treatSamplersAsTextureEnv  = false;
+    bool fieldMarkedAsPacked        = false;
     bool assumeStructsAreTailPadded = false;  // Pad to multiple of 16
 };
 
 // Returns the layout of a type if it were to be represented in a Metal program.
 // This deliberately ignores the TLayoutBlockStorage and TLayoutMatrixPacking of any type.
-ANGLE_NO_DISCARD Layout MetalLayoutOf(const TType &type, MetalLayoutOfConfig config = {});
+ANGLE_NO_DISCARD Layout MetalLayoutOf(const TType &type,
+                                      MetalLayoutOfConfig config         = {},
+                                      const SymbolEnv *symbolEnvironment = nullptr);
 
 // Returns the layout of a type if it were to be represented in a GLSL program.
 ANGLE_NO_DISCARD Layout

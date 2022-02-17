@@ -99,20 +99,21 @@ static Layout ScalarLayoutOf(const TType &type, Language language)
 static const size_t innerScalesPacked[]   = {0, 1, 2, 3, 4};
 static const size_t innerScalesUnpacked[] = {0, 1, 2, 4, 4};
 
-Layout sh::MetalLayoutOf(const TType &type, MetalLayoutOfConfig config)
+Layout sh::MetalLayoutOf(const TType &type, MetalLayoutOfConfig config, const SymbolEnv *symbolEnv)
 {
     ASSERT(type.getNominalSize() <= 4);
     ASSERT(type.getSecondarySize() <= 4);
 
     const TLayoutBlockStorage storage = type.getLayoutQualifier().blockStorage;
 
-    const bool isPacked = !config.disablePacking && (storage == TLayoutBlockStorage::EbsPacked ||
-                                                     storage == TLayoutBlockStorage::EbsShared);
+    const bool isPacked =
+        config.fieldMarkedAsPacked && !config.disablePacking &&
+        (storage == TLayoutBlockStorage::EbsPacked || storage == TLayoutBlockStorage::EbsShared);
 
     if (type.isArray() && !config.maskArray)
     {
         config.maskArray    = true;
-        const Layout layout = MetalLayoutOf(type, config);
+        const Layout layout = MetalLayoutOf(type, config, symbolEnv);
         config.maskArray    = false;
         const size_t vol    = type.getArraySizeProduct();
         return layout * vol;
@@ -128,7 +129,11 @@ Layout sh::MetalLayoutOf(const TType &type, MetalLayoutOfConfig config)
         const TFieldList &fields = structure->fields();
         for (const TField *field : fields)
         {
-            layout += MetalLayoutOf(*field->type(), config2);
+            if (symbolEnv)
+            {
+                config2.fieldMarkedAsPacked = symbolEnv->isPacked(field);
+            }
+            layout += MetalLayoutOf(*field->type(), config2, symbolEnv);
         }
         if (config.assumeStructsAreTailPadded)
         {

@@ -44,7 +44,8 @@ class ModifyStructConfig
         // If original dim >= return value, the field remains untouched.
         using Func = uint8_t (*)(const TField &);
         static uint8_t DontSaturate(const TField &) { return 0; }
-        static uint8_t FullySaturate(const TField &) { return 4; }
+        // We return three here, as vec3s are actually vec4s in disguise in Metal.
+        static uint8_t FullySaturate(const TField &) { return 3; }
     };
 
   public:

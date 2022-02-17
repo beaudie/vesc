@@ -1238,7 +1238,7 @@ void GenMetalTraverser::emitStructDeclaration(const TType &type)
     {
         MetalLayoutOfConfig layoutConfig;
         layoutConfig.treatSamplersAsTextureEnv = true;
-        Layout layout                          = MetalLayoutOf(type, layoutConfig);
+        Layout layout                          = MetalLayoutOf(type, layoutConfig, mSymbolEnv);
         size_t pad = (kDefaultStructAlignmentSize - layout.sizeOf) % kDefaultStructAlignmentSize;
         if (pad != 0)
         {

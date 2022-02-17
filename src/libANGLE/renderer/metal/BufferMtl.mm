@@ -503,7 +503,7 @@ angle::Result BufferMtl::setDataImpl(const gl::Context *context,
     // in MSL.
     if (target == gl::BufferBinding::Uniform)
     {
-        adjustedSize = roundUpPow2(adjustedSize, (size_t)16);
+        // adjustedSize = roundUpPow2(adjustedSize, (size_t)16);
     }
 
     size_t maxBuffers;
