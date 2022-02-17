@@ -2177,7 +2177,7 @@ void CaptureVertexArrayState(std::vector<CallCapture> *setupCalls,
                 replayState->setBufferBinding(context, gl::BufferBinding::Array, buffer);
 
                 gl::BufferID bufferID = {0};
-                if (buffer)
+                if (buffer && buffer->getSize() != 0)
                 {
                     bufferID = buffer->id();
                 }
