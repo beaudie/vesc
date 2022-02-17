@@ -475,7 +475,9 @@ class TextureVk : public TextureImpl, public angle::ObserverInterface
     }
 
     angle::Result refreshImageViews(ContextVk *contextVk);
-    bool shouldDecodeSRGB(vk::Context *context, GLenum srgbDecode, bool texelFetchStaticUse) const;
+    bool shouldDecodeSRGB(vk::Context *contextVk,
+                          GLenum srgbDecode,
+                          bool texelFetchStaticUse) const;
     void initImageUsageFlags(ContextVk *contextVk, angle::FormatID actualFormatID);
     void handleImmutableSamplerTransition(const vk::ImageHelper *previousImage,
                                           const vk::ImageHelper *nextImage);
@@ -492,11 +494,12 @@ class TextureVk : public TextureImpl, public angle::ObserverInterface
 
     gl::TextureType mImageNativeType;
 
-    // The layer offset to apply when converting from a frontend texture layer to a texture layer in
-    // mImage. Used when this texture sources a cube map face or 3D texture layer from an EGL image.
+    // The layer offset to apply when converting from a front-end texture layer to a texture layer
+    // in mImage. Used when this texture sources a cube map face or 3D texture layer from an EGL
+    // image.
     uint32_t mImageLayerOffset;
 
-    // The level offset to apply when converting from a frontend texture level to texture level in
+    // The level offset to apply when converting from a front-end texture level to texture level in
     // mImage.
     uint32_t mImageLevelOffset;
 
