@@ -107,6 +107,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "852bbbfa_91af8e80",
+        "filename": "src/tests/gl_tests/VertexAttributeTest.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 3945,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2022-02-17T17:16:55Z",
+      "side": 1,
+      "message": "Seems okay to land as a helper utility.",
+      "parentUuid": "6ef03738_1eab063b",
+      "range": {
+        "startLine": 3945,
+        "startChar": 0,
+        "endLine": 3945,
+        "endChar": 37
+      },
+      "revId": "eef0a5c4479e436a4b29a1dff784eedf55d4691f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "9efd6d27_e74e97bc",
         "filename": "src/tests/gl_tests/VertexAttributeTest.cpp",
         "patchSetId": 1
@@ -142,6 +166,30 @@
       "side": 1,
       "message": "When capturing the end2end test using MEC with the current method at least one swap buffers was required in my tries. I can also drop it all together as the bots won\u0027t run this currently. Leaving the test will hopefully result in future MEC tests that will run it.",
       "parentUuid": "9efd6d27_e74e97bc",
+      "range": {
+        "startLine": 3975,
+        "startChar": 0,
+        "endLine": 3975,
+        "endChar": 31
+      },
+      "revId": "eef0a5c4479e436a4b29a1dff784eedf55d4691f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "c675f1be_0244b6d0",
+        "filename": "src/tests/gl_tests/VertexAttributeTest.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 3975,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2022-02-17T17:16:55Z",
+      "side": 1,
+      "message": "If it\u0027s slow we could leave this test as DISABLED_",
+      "parentUuid": "0d614a77_2eabaf25",
       "range": {
         "startLine": 3975,
         "startChar": 0,
