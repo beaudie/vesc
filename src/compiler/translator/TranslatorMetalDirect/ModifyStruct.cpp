@@ -428,7 +428,7 @@ class ConvertStructState : angle::NonCopyable
 
             if (updateLayout)
             {
-                metalLayoutTotal += MetalLayoutOf(*padType);
+                metalLayoutTotal += MetalLayoutOf(*padType, {}, &symbolEnv);
             }
 
             const Name name = idGen.createNewName("pad");
@@ -545,7 +545,7 @@ class ConvertStructState : angle::NonCopyable
             const TType &type = *field->type();
 
             const Layout glslLayout  = GlslLayoutOf(type);
-            const Layout metalLayout = MetalLayoutOf(type, layoutConfig);
+            const Layout metalLayout = MetalLayoutOf(type, layoutConfig, &symbolEnv);
 
             size_t prePadAmount = 0;
             if (glslLayout.alignOf > metalLayout.alignOf && field != first)
