@@ -141,7 +141,6 @@ bool GetImageNameWithoutIndices(std::string *name);
 
 // Get the mapped sampler name.
 std::string GlslangGetMappedSamplerName(const std::string &originalName);
-std::string GetXfbBufferName(const uint32_t bufferIndex);
 
 void GlslangAssignLocations(const GlslangSourceOptions &options,
                             const gl::ProgramState &programState,

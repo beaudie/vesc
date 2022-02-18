@@ -212,6 +212,11 @@ ShaderInterfaceVariableInfo *SetXfbInfo(ShaderInterfaceVariableInfoMap *infoMap,
     return &info;
 }
 
+std::string GetXfbBufferName(const uint32_t bufferIndex)
+{
+    return sh::vk::kXfbEmulationBufferBlockName + Str(bufferIndex);
+}
+
 void AssignTransformFeedbackEmulationBindings(gl::ShaderType shaderType,
                                               const gl::ProgramState &programState,
                                               bool isTransformFeedbackStage,
@@ -4764,11 +4769,6 @@ std::string GlslangGetMappedSamplerName(const std::string &originalName)
     }
 
     return samplerName;
-}
-
-std::string GetXfbBufferName(const uint32_t bufferIndex)
-{
-    return sh::vk::kXfbEmulationBufferBlockName + Str(bufferIndex);
 }
 
 void GlslangAssignLocations(const GlslangSourceOptions &options,
