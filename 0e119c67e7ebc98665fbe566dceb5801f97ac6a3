@@ -16,6 +16,23 @@
       "message": "I am trying to write a test for this, but wondering if we can land this first to see if it helps the crash bug other folks are seeing. Basically in EGL case, I can see how the suballocation might gets accessed from two threads without mutex protection since they may not from the same shared group.",
       "revId": "0e119c67e7ebc98665fbe566dceb5801f97ac6a3",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "d545e6b0_9c810d0d",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-02-18T01:57:19Z",
+      "side": 1,
+      "message": "Ok with me to land first and follow up with test",
+      "revId": "0e119c67e7ebc98665fbe566dceb5801f97ac6a3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
