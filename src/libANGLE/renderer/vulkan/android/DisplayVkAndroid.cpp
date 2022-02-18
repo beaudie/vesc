@@ -20,6 +20,13 @@
 #include "libANGLE/renderer/vulkan/android/WindowSurfaceVkAndroid.h"
 #include "libANGLE/renderer/vulkan/vk_caps_utils.h"
 
+#ifdef OLD_CODE
+#else  // OLD_CODE
+#    include <unistd.h>
+#    undef INFO
+#    define INFO(...) __android_log_print(ANDROID_LOG_INFO, "ANGLE", __VA_ARGS__)
+#endif  // OLD_CODE
+
 namespace rx
 {
 
@@ -50,11 +57,94 @@ SurfaceImpl *DisplayVkAndroid::createWindowSurfaceVk(const egl::SurfaceState &st
 
 egl::ConfigSet DisplayVkAndroid::generateConfigs()
 {
-    // The list of supported swapchain formats is available at:
-    // https://cs.android.com/android/platform/superproject/+/master:frameworks/native/vulkan/libvulkan/swapchain.cpp;l=465-486?q=GetNativePixelFormat
-    // TODO (Issue 4062): Add conditional support for GL_RGB10_A2 and GL_RGBA16F when the
-    // Android Vulkan loader adds conditional support for them.
-    const std::array<GLenum, 3> kColorFormats = {GL_RGBA8, GL_RGB8, GL_RGB565};
+    // ANGLE's Vulkan back-end on Android traditionally supports EGLConfig's with GL_RGBA8,
+    // GL_RGB8, and GL_RGB565.  The Android Vulkan loader used to support all three of these
+    // (e.g. Android 7), but this has changed as Android now supports Vulkan devices that do not
+    // support all of those formats.  The loader always supports GL_RGBA8.  Other formats are
+    // optionally supported, depending on the underlying driver support.  This includes GL_RGB10_A2
+    // and GL_RGBA16F, which ANGLE also desires to support EGLConfig's with.
+    //
+    // The problem for ANGLE is that Vulkan requires a VkSurfaceKHR in order to query available
+    // formats from the loader, but ANGLE must determine which EGLConfig's to expose before it has
+    // a VkSurfaceKHR.  The VK_GOOGLE_surfaceless_query extension allows ANGLE to query formats
+    // without having a VkSurfaceKHR.  The old path is still kept until this extension becomes
+    // universally available.
+    //
+    // TODO: Use non-emulated support for Android for GL_RGB8, when that format is available.
+    //
+    // TODO: Evaluable support for the GL_R8, which was recently added to the Vulkan loader.
+
+    // Assume GL_RGB8 and GL_RGBA8 is always available.
+    std::vector<GLenum> kColorFormats = {GL_RGBA8, GL_RGB8};
+    if (!getRenderer()->getFeatures().supportsSurfacelessQueryExtension.enabled)
+    {
+        // Old path: Assume GL_RGB565 is available, as it is generally available on the devices
+        // that support Vulkan.
+        kColorFormats.push_back(GL_RGB565);
+    }
+    else
+    {
+        // Use the VK_GOOGLE_surfaceless_query extension to query the available formats and
+        // colorspaces by using a VK_NULL_HANDLE for the VkSurfaceKHR handle.
+        VkPhysicalDevice physicalDevice              = mRenderer->getPhysicalDevice();
+        VkPhysicalDeviceSurfaceInfo2KHR surfaceInfo2 = {};
+        surfaceInfo2.sType          = VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_SURFACE_INFO_2_KHR;
+        surfaceInfo2.surface        = VK_NULL_HANDLE;
+        uint32_t surfaceFormatCount = 0;
+
+        // FIXME/TODO(ianelliott): Do this properly, given this method's return type
+        VkResult /*Hack*/ result = vkGetPhysicalDeviceSurfaceFormats2KHR(
+            physicalDevice, &surfaceInfo2, &surfaceFormatCount, nullptr);
+        INFO("%s(): surfaceFormatCount = %u", __FUNCTION__, surfaceFormatCount);
+        if (result != VK_SUCCESS)
+        {
+            return egl::ConfigSet();
+        }
+        std::vector<VkSurfaceFormat2KHR> surfaceFormats2(surfaceFormatCount);
+        for (VkSurfaceFormat2KHR &surfaceFormat2 : surfaceFormats2)
+        {
+            surfaceFormat2.sType = VK_STRUCTURE_TYPE_SURFACE_FORMAT_2_KHR;
+        }
+        /*Hack*/ result = vkGetPhysicalDeviceSurfaceFormats2KHR(
+            physicalDevice, &surfaceInfo2, &surfaceFormatCount, surfaceFormats2.data());
+        if (result != VK_SUCCESS)
+        {
+            return egl::ConfigSet();
+        }
+
+        for (VkSurfaceFormat2KHR &surfaceFormat2 : surfaceFormats2)
+        {
+            // Need to convert each Vulkan VkFormat into its GLES equivalent and compare with
+            // kColorFormats.
+            angle::FormatID angleFormatID =
+                vk::GetFormatIDFromVkFormat(surfaceFormat2.surfaceFormat.format);
+            const angle::Format &angleFormat = angle::Format::Get(angleFormatID);
+            GLenum glFormat                  = angleFormat.glInternalFormat;
+
+            INFO("%s(): GLformat = 0x%04x RGBA(%u, %u, %u, %u); DS(%u, %u)", __FUNCTION__, glFormat,
+                 angleFormat.redBits, angleFormat.greenBits, angleFormat.blueBits,
+                 angleFormat.alphaBits, angleFormat.depthBits, angleFormat.stencilBits);
+
+            if (glFormat == GL_SRGB8_ALPHA8_EXT ||
+                (angleFormat.greenBits == 0 && angleFormat.blueBits == 0))
+            {
+                // We don't use GL_SRGB8_ALPHA8_EXT or GL_RED for an EGLConfig, which the Android
+                // Vulkan loader returns.
+                INFO("%s(): \t Skipping this format!", __FUNCTION__);
+                continue;
+            }
+            if (std::find(kColorFormats.begin(), kColorFormats.end(), glFormat) ==
+                kColorFormats.end())
+            {
+                INFO("%s(): \t Adding this format!", __FUNCTION__);
+                kColorFormats.push_back(glFormat);
+                continue;
+            }
+
+            // TODO(ianelliott): Look at surfaceFormat2.surfaceFormat.colorSpace too
+            INFO("%s(): \t Did not take a path above", __FUNCTION__);
+        }
+    }
 
     std::vector<GLenum> depthStencilFormats(
         egl_vk::kConfigDepthStencilFormats,
