@@ -877,7 +877,7 @@ void RendererVk::ensureCapsInitialized() const
     //
     // Note that this exception for gl_Position does not apply to MAX_VERTEX_OUTPUT_COMPONENTS and
     // similar limits.
-    const GLint reservedVaryingVectorCount = reservedVaryingComponentCount / 4 + 1;
+    const GLint reservedVaryingVectorCount = reservedVaryingComponentCount / 4 + 2;
 
     const GLint maxVaryingCount =
         std::min(limitsVk.maxVertexOutputComponents, limitsVk.maxFragmentInputComponents);
