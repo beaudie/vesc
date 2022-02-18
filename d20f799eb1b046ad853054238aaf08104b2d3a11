@@ -50,6 +50,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "972f8f9c_bbdc36b4",
+        "filename": "src/libANGLE/renderer/vulkan/RenderbufferVk.cpp",
+        "patchSetId": 9
+      },
+      "lineNbr": 287,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2022-02-18T22:37:50Z",
+      "side": 1,
+      "message": "\u003e What if there are garbage in imageviews but mImage is nullptr? \nI think you can assert that if mImge is null, all views must be empty. You can add a new empty method\n\nbool ImageViewHelper::empty()\n{\n  return mPerLevelRangeLinearReadImageViews.empty() \u0026\u0026 \n         mPerLevelRangeSRGBReadImageViews.empty() \u0026\u0026 \n         mPerLevelRangeLinearFetchImageViews.empty() \u0026\u0026\n         ...;\n}\n\nAnd then ASSERT(mMultisampledImageViews.empty());",
+      "parentUuid": "0a4f54dc_e903b705",
+      "range": {
+        "startLine": 283,
+        "startChar": 8,
+        "endLine": 287,
+        "endChar": 9
+      },
+      "revId": "d20f799eb1b046ad853054238aaf08104b2d3a11",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "3751f638_928a4af0",
         "filename": "src/libANGLE/renderer/vulkan/ResourceVk.h",
         "patchSetId": 9
@@ -132,6 +156,30 @@
       "side": 1,
       "message": "I think calling releaseImageViews() the second time after stageSelfAsSubresourceUpdates() should be fine, except that \"mImageViewSerial \u003d renderer-\u003egetResourceSerialFactory().generateImageOrBufferViewSerial();\" will be called twice on each ImageViewHelpers. I did a quick check in code and I think we only use the mImageViewSerial for validation purpose: e.g. if (serial.viewSerial.valid()). So I guess as long as mImageViewSerial is not 0, it should be fine. Do you happen to know if there are any side effects of updating the mImageViewSerial twice?",
       "parentUuid": "68d4f51c_0adb0a22",
+      "range": {
+        "startLine": 3051,
+        "startChar": 5,
+        "endLine": 3051,
+        "endChar": 50
+      },
+      "revId": "d20f799eb1b046ad853054238aaf08104b2d3a11",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b84fa730_da22d381",
+        "filename": "src/libANGLE/renderer/vulkan/TextureVk.cpp",
+        "patchSetId": 9
+      },
+      "lineNbr": 3051,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2022-02-18T22:37:50Z",
+      "side": 1,
+      "message": "It is also used in ImageViewHelper::getSubresourceSerial(). I don\u0027t think it will hurt if it get called twice. Its just a number to indicate this is different from previous number, I think.",
+      "parentUuid": "f0cea49b_4e25b581",
       "range": {
         "startLine": 3051,
         "startChar": 5,
