@@ -9892,7 +9892,8 @@ TEST_P(GLSLTest, FragData)
 {
     // Ensures that we don't regress and emit Vulkan layer warnings.
     // TODO(jonahr): http://anglebug.com/3900 - Remove check once warnings are cleaned up
-    if (IsVulkan())
+    // Also, shader caching does not work with ASan, which causes this test to fail on that warning.
+    if (IsVulkan() && !IsASan())
     {
         treatPlatformWarningsAsErrors();
     }
