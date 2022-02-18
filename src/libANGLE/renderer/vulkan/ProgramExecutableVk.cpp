@@ -879,10 +879,23 @@ angle::Result ProgramExecutableVk::getGraphicsPipeline(ContextVk *contextVk,
                                                        const vk::GraphicsPipelineDesc **descPtrOut,
                                                        vk::PipelineHelper **pipelineOut)
 {
-    const gl::State &glState                  = contextVk->getState();
-    RendererVk *renderer                      = contextVk->getRenderer();
-    vk::PipelineCache *pipelineCache          = nullptr;
-    const gl::ProgramExecutable *glExecutable = glState.getProgramExecutable();
+    return getGraphicsPipelineForProgram(contextVk, mode, desc,
+                                         contextVk->getState().getProgramExecutable(), descPtrOut,
+                                         pipelineOut);
+}
+
+angle::Result ProgramExecutableVk::getGraphicsPipelineForProgram(
+    ContextVk *contextVk,
+    gl::PrimitiveMode mode,
+    const vk::GraphicsPipelineDesc &desc,
+    const gl::ProgramExecutable *glExecutable,
+    const vk::GraphicsPipelineDesc **descPtrOut,
+    vk::PipelineHelper **pipelineOut)
+{
+    const gl::State &glState         = contextVk->getState();
+    RendererVk *renderer             = contextVk->getRenderer();
+    vk::PipelineCache *pipelineCache = nullptr;
+
     ASSERT(glExecutable && glExecutable->hasLinkedShaderStage(gl::ShaderType::Vertex));
 
     mTransformOptions.enableLineRasterEmulation = contextVk->isBresenhamEmulationEnabled(mode);
@@ -924,7 +937,7 @@ angle::Result ProgramExecutableVk::getGraphicsPipeline(ContextVk *contextVk,
                                              desc.getEmulatedDitherControl());
 
     // Compare the fragment output interface with the framebuffer interface.
-    const gl::ProgramExecutable &executable = *glState.getProgramExecutable();
+    const gl::ProgramExecutable &executable = *glExecutable;
 
     const gl::AttributesMask &activeAttribLocations = executable.getNonBuiltinAttribLocationsMask();
 
