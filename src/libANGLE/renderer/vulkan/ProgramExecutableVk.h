@@ -144,11 +144,12 @@ class ProgramExecutableVk
         return mCurrentDefaultUniformBufferSerial;
     }
 
-    angle::Result getGraphicsPipeline(ContextVk *contextVk,
-                                      gl::PrimitiveMode mode,
-                                      const vk::GraphicsPipelineDesc &desc,
-                                      const vk::GraphicsPipelineDesc **descPtrOut,
-                                      vk::PipelineHelper **pipelineOut);
+    angle::Result getGraphicsPipelineForProgram(ContextVk *contextVk,
+                                                gl::PrimitiveMode mode,
+                                                const vk::GraphicsPipelineDesc &desc,
+                                                const gl::ProgramExecutable *glExecutable,
+                                                const vk::GraphicsPipelineDesc **descPtrOut,
+                                                vk::PipelineHelper **pipelineOut);
 
     angle::Result getComputePipeline(ContextVk *contextVk, vk::PipelineHelper **pipelineOut);
 
