@@ -16,6 +16,69 @@
       "message": "Still haven\u0027t dealt with colorspaces, but have a working version of this code, with an implementation of the extension in the Android Vulkan loader.",
       "revId": "101197676b70dc1ee3ca93af39406581d2293c91",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "f687144d_efc3f205",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 5
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-02-18T22:07:30Z",
+      "side": 1,
+      "message": "Looks reasonable",
+      "revId": "101197676b70dc1ee3ca93af39406581d2293c91",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "c81ea79c_fc6328a0",
+        "filename": "include/platform/FeaturesVk.h",
+        "patchSetId": 5
+      },
+      "lineNbr": 584,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-02-18T22:07:30Z",
+      "side": 1,
+      "message": "It\u0027s GOOGLE :)",
+      "range": {
+        "startLine": 584,
+        "startChar": 36,
+        "endLine": 584,
+        "endChar": 39
+      },
+      "revId": "101197676b70dc1ee3ca93af39406581d2293c91",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "61940481_eeaed387",
+        "filename": "src/libANGLE/renderer/vulkan/android/DisplayVkAndroid.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 122,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-02-18T22:07:30Z",
+      "side": 1,
+      "message": "Do we have to exclude it? What happens if we let it be exposed?",
+      "range": {
+        "startLine": 116,
+        "startChar": 0,
+        "endLine": 122,
+        "endChar": 13
+      },
+      "revId": "101197676b70dc1ee3ca93af39406581d2293c91",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
