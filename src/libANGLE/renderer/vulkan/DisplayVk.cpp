@@ -411,6 +411,9 @@ egl::Error DisplayVk::getEGLError(EGLint errorCode)
 void DisplayVk::initializeFrontendFeatures(angle::FrontendFeatures *features) const
 {
     mRenderer->initializeFrontendFeatures(features);
+
+    // Enable shader caching only on vulkan when EGL_android_blob_cache is available.
+    ANGLE_FEATURE_CONDITION(features, cacheCompiledShader, getExtensions().blobCache);
 }
 
 void DisplayVk::populateFeatureList(angle::FeatureList *features)

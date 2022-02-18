@@ -119,6 +119,22 @@ void BlobCache::put(const BlobCache::Key &key, angle::MemoryBuffer &&value)
     }
 }
 
+bool BlobCache::compressAndPut(const BlobCache::Key &key,
+                               angle::MemoryBuffer &&uncompressedValue,
+                               size_t *compressedSize)
+{
+    angle::MemoryBuffer compressedValue;
+    if (!CompressBlobCacheData(uncompressedValue.size(), uncompressedValue.data(),
+                               &compressedValue))
+    {
+        return false;
+    }
+    if (compressedSize != nullptr)
+        *compressedSize = compressedValue.size();
+    put(key, std::move(compressedValue));
+    return true;
+}
+
 void BlobCache::putApplication(const BlobCache::Key &key, const angle::MemoryBuffer &value)
 {
     std::lock_guard<std::mutex> lock(mBlobCacheMutex);
@@ -202,6 +218,28 @@ bool BlobCache::getAt(size_t index, const BlobCache::Key **keyOut, BlobCache::Va
         *valueOut = BlobCache::Value(valueBuf->first.data(), valueBuf->first.size());
     }
     return result;
+}
+
+BlobCache::GetAndDecompressResult BlobCache::getAndDecompress(
+    angle::ScratchBuffer *scratchBuffer,
+    const BlobCache::Key &key,
+    angle::MemoryBuffer *uncompressedValueOut)
+{
+    ASSERT(uncompressedValueOut);
+
+    Value compressedValue;
+    size_t compressedSize;
+    if (!get(scratchBuffer, key, &compressedValue, &compressedSize))
+    {
+        return GetAndDecompressResult::NotFound;
+    }
+
+    if (!DecompressBlobCacheData(compressedValue.data(), compressedSize, uncompressedValueOut))
+    {
+        return GetAndDecompressResult::DecompressFailure;
+    }
+
+    return GetAndDecompressResult::GetSuccess;
 }
 
 void BlobCache::remove(const BlobCache::Key &key)
