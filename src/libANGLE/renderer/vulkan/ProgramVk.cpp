@@ -135,6 +135,25 @@ class Std140BlockLayoutEncoderFactory : public gl::CustomBlockLayoutEncoderFacto
   public:
     sh::BlockLayoutEncoder *makeEncoder() override { return new sh::Std140BlockEncoder(); }
 };
+
+void SetupDefaultPipelineState(const ContextVk *context,
+                               const gl::ProgramExecutable *executable,
+                               vk::GraphicsPipelineDesc *graphicsPipelineDescOut)
+{
+    graphicsPipelineDescOut->initDefaults(context);
+
+    vk::RenderPassDesc &renderPassDesc =
+        const_cast<vk::RenderPassDesc &>(graphicsPipelineDescOut->getRenderPassDesc());
+    // Set RP sample count to 1
+    renderPassDesc.setSamples(1);
+
+    size_t outputCount                       = executable->getOutputVariables().size();
+    constexpr angle::FormatID kDefaultFormat = angle::FormatID::R8G8B8A8_UNORM;
+    for (uint32_t i = 0; i < outputCount; i++)
+    {
+        renderPassDesc.packColorAttachment(i, kDefaultFormat);
+    }
+}
 }  // anonymous namespace
 
 // ProgramVk implementation.
@@ -206,8 +225,9 @@ std::unique_ptr<LinkEvent> ProgramVk::link(const gl::Context *context,
                                     &mExecutable.mVariableInfoMap);
 
     // Compile the shaders.
-    angle::Result status = mExecutable.mOriginalShaderInfo.initShaders(
-        mState.getExecutable().getLinkedShaderStages(), spirvBlobs, mExecutable.mVariableInfoMap);
+    const gl::ProgramExecutable &programExecutable = mState.getExecutable();
+    angle::Result status                           = mExecutable.mOriginalShaderInfo.initShaders(
+        programExecutable.getLinkedShaderStages(), spirvBlobs, mExecutable.mVariableInfoMap);
     if (status != angle::Result::Continue)
     {
         return std::make_unique<LinkEventDone>(status);
@@ -226,8 +246,41 @@ std::unique_ptr<LinkEvent> ProgramVk::link(const gl::Context *context,
 
     // TODO(jie.a.chen@intel.com): Parallelize linking.
     // http://crbug.com/849576
-    status = mExecutable.createPipelineLayout(contextVk, mState.getExecutable(), nullptr);
+    status = mExecutable.createPipelineLayout(contextVk, programExecutable, nullptr);
+
+    // Compile the shaders with default pipeline states if -
+    // 1. Program is not separable
+    // 2. compileShadersDuringProgramLink feature is enabled
+    // 3. Program doesn't have a compute shader
+    // 4. program has 3 or fewer RT
+    if ((status == angle::Result::Continue) && !mState.isSeparable() &&
+        contextVk->getFeatures().compileShadersDuringProgramLink.enabled &&
+        !programExecutable.hasLinkedShaderStage(gl::ShaderType::Compute) &&
+        programExecutable.getOutputVariables().size() <= 3)
+    {
+        angle::Result ignoreReturn = compileShadersWithDefaultPipelineState(context);
+        ANGLE_UNUSED_VARIABLE(ignoreReturn);
+    }
+
     return std::make_unique<LinkEventDone>(status);
+}
+
+angle::Result ProgramVk::compileShadersWithDefaultPipelineState(const gl::Context *context)
+{
+    ContextVk *contextVk                      = vk::GetImpl(context);
+    const gl::ProgramExecutable *glExecutable = &mState.getExecutable();
+    const vk::GraphicsPipelineDesc *descPtr   = nullptr;
+    vk::PipelineHelper *pipeline              = nullptr;
+    vk::GraphicsPipelineDesc graphicsPipelineDesc;
+
+    // It is only at drawcall time that we will have complete information required to build the
+    // graphics pipeline descriptor. Use the most "commonly seen" state values and create the
+    // pipeline. This attempts to improve shader binary cache hits in the underlying ICD since it is
+    // common for the same shader to be used across different pipelines.
+    SetupDefaultPipelineState(contextVk, glExecutable, &graphicsPipelineDesc);
+    return mExecutable.getGraphicsPipelineForProgram(contextVk, gl::PrimitiveMode::TriangleStrip,
+                                                     graphicsPipelineDesc, glExecutable, &descPtr,
+                                                     &pipeline);
 }
 
 void ProgramVk::linkResources(const gl::ProgramLinkedResources &resources)
