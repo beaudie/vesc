@@ -859,6 +859,7 @@ Display::Display(EGLenum platform, EGLNativeDisplayType displayId, Device *eglDe
       mSemaphoreManager(nullptr),
       mBlobCache(gl::kDefaultMaxProgramCacheMemoryBytes),
       mMemoryProgramCache(mBlobCache),
+      mMemoryShaderCache(mBlobCache),
       mGlobalTextureShareGroupUsers(0),
       mGlobalSemaphoreShareGroupUsers(0),
       mTerminatedByApi(false),
@@ -1173,6 +1174,7 @@ Error Display::terminate(Thread *thread, TerminateReason terminateReason)
     }
 
     mMemoryProgramCache.clear();
+    mMemoryShaderCache.clear();
     mBlobCache.setBlobCacheFuncs(nullptr, nullptr);
 
     // The global texture and semaphore managers should be deleted with the last context that uses
@@ -1477,8 +1479,8 @@ Error Display::createContext(const Config *configuration,
         shareSemaphores = mSemaphoreManager;
     }
 
-    gl::MemoryProgramCache *cachePointer = &mMemoryProgramCache;
-
+    gl::MemoryShaderCache *shaderCachePointer   = &mMemoryShaderCache;
+    gl::MemoryProgramCache *programCachePointer = &mMemoryProgramCache;
     // Check context creation attributes to see if we are using EGL_ANGLE_program_cache_control.
     // If not, keep caching enabled for EGL_ANDROID_blob_cache, which can have its callbacks set
     // at any time.
@@ -1492,14 +1494,14 @@ Error Display::createContext(const Config *configuration,
         // A program cache size of zero indicates it should be disabled.
         if (!programCacheControlEnabled || mMemoryProgramCache.maxSize() == 0)
         {
-            cachePointer = nullptr;
+            programCachePointer = nullptr;
         }
     }
 
-    gl::Context *context = new gl::Context(this, configuration, shareContext, shareTextures,
-                                           shareSemaphores, cachePointer, clientType, attribs,
-                                           mDisplayExtensions, GetClientExtensions());
-    Error error          = context->initialize();
+    gl::Context *context = new gl::Context(
+        this, configuration, shareContext, shareTextures, shareSemaphores, programCachePointer,
+        shaderCachePointer, clientType, attribs, mDisplayExtensions, GetClientExtensions());
+    Error error = context->initialize();
     if (error.isError())
     {
         delete context;
