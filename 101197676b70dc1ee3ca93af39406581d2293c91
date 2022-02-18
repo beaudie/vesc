@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "6fd14951_a783d048",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 5
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1290487
+      },
+      "writtenOn": "2022-02-18T21:52:07Z",
+      "side": 1,
+      "message": "Still haven\u0027t dealt with colorspaces, but have a working version of this code, with an implementation of the extension in the Android Vulkan loader.",
+      "revId": "101197676b70dc1ee3ca93af39406581d2293c91",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
