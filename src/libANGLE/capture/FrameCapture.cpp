@@ -2197,30 +2197,40 @@ void CaptureVertexArrayState(std::vector<CallCapture> *setupCalls,
                      VertexBindingMatchesAttribStride(attrib, binding) &&
                      (!buffer || binding.getOffset() == reinterpret_cast<GLintptr>(attrib.pointer)))
             {
-                // Check if we can use strictly ES2 semantics, and track indexes that do.
-                vertexPointerBindings.set(attribIndex);
-
-                if (attrib.format->isPureInt())
+                // Don't capture CaptureVertexAttribPointer calls when the array buffer is null
+                // and a non-null attrib pointer is used.
+                if (buffer || attrib.pointer == nullptr)
                 {
-                    Capture(setupCalls, CaptureVertexAttribIPointer(*replayState, true, attribIndex,
-                                                                    attrib.format->channelCount,
-                                                                    attrib.format->vertexAttribType,
-                                                                    attrib.vertexAttribArrayStride,
-                                                                    attrib.pointer));
+                    // Check if we can use strictly ES2 semantics, and track indexes that do.
+                    vertexPointerBindings.set(attribIndex);
+                    if (attrib.format->isPureInt())
+                    {
+                        Capture(setupCalls,
+                                CaptureVertexAttribIPointer(
+                                    *replayState, true, attribIndex, attrib.format->channelCount,
+                                    attrib.format->vertexAttribType, attrib.vertexAttribArrayStride,
+                                    attrib.pointer));
+                    }
+                    else
+                    {
+                        Capture(setupCalls,
+                                CaptureVertexAttribPointer(
+                                    *replayState, true, attribIndex, attrib.format->channelCount,
+                                    attrib.format->vertexAttribType, attrib.format->isNorm(),
+                                    attrib.vertexAttribArrayStride, attrib.pointer));
+                    }
+
+                    if (binding.getDivisor() != 0)
+                    {
+                        Capture(setupCalls,
+                                CaptureVertexAttribDivisor(*replayState, true, attribIndex,
+                                                           binding.getDivisor()));
+                    }
                 }
                 else
                 {
-                    Capture(setupCalls,
-                            CaptureVertexAttribPointer(
-                                *replayState, true, attribIndex, attrib.format->channelCount,
-                                attrib.format->vertexAttribType, attrib.format->isNorm(),
-                                attrib.vertexAttribArrayStride, attrib.pointer));
-                }
-
-                if (binding.getDivisor() != 0)
-                {
-                    Capture(setupCalls, CaptureVertexAttribDivisor(*replayState, true, attribIndex,
-                                                                   binding.getDivisor()));
+                    WARN() << "Skipping invalid VertexAttribPointer call in mid execution capture "
+                              "vertex array initialization.";
                 }
             }
             else
