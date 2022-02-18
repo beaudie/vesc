@@ -1,0 +1,165 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "e22d0396_57cdcc1e",
+        "filename": "src/libANGLE/renderer/vulkan/RenderbufferVk.cpp",
+        "patchSetId": 9
+      },
+      "lineNbr": 287,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2022-02-18T17:43:36Z",
+      "side": 1,
+      "message": "Rather than getImageAndImageViewGarbage() and then get modified outside mImage, better API might be add collectViewGarbage() API to ImageHelper class:\nmImage-\u003ecollectViewGarbage(\u0026mImageViews);\nmImage-\u003ecollectViewGarbage(\u0026mMultisampledImageViews);\n\nAnd then \nImageHelper::collectViewGarbage(ImageViewHelper *imageView)\n{\n   imageView-\u003erelease(renderer, mImageAndViewGarbage);\n}",
+      "range": {
+        "startLine": 283,
+        "startChar": 8,
+        "endLine": 287,
+        "endChar": 9
+      },
+      "revId": "d20f799eb1b046ad853054238aaf08104b2d3a11",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "3751f638_928a4af0",
+        "filename": "src/libANGLE/renderer/vulkan/ResourceVk.h",
+        "patchSetId": 9
+      },
+      "lineNbr": 216,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2022-02-18T17:43:36Z",
+      "side": 1,
+      "message": "This appears not been used.",
+      "range": {
+        "startLine": 216,
+        "startChar": 5,
+        "endLine": 216,
+        "endChar": 74
+      },
+      "revId": "d20f799eb1b046ad853054238aaf08104b2d3a11",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "68d4f51c_0adb0a22",
+        "filename": "src/libANGLE/renderer/vulkan/TextureVk.cpp",
+        "patchSetId": 9
+      },
+      "lineNbr": 3051,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2022-02-18T17:43:36Z",
+      "side": 1,
+      "message": "You can de-duplicate code here, by change this function to \nTexture::releaseImage()\n{\n   releaseImageViews();\n   releaseImageOnly();\n}\n\nOr, I am wondering if it worth it to have releaseImageOnly function at all. I think what you try to save is to avoid walk through all views try to collect them again and only to find they are all empty. There is a little bit saving here, i think not too much though, and it only get called when stageSelfAsSubresourceUpdates() is called, which should not happen that often. So I am okay to make it simple.",
+      "range": {
+        "startLine": 3051,
+        "startChar": 5,
+        "endLine": 3051,
+        "endChar": 50
+      },
+      "revId": "d20f799eb1b046ad853054238aaf08104b2d3a11",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "a81fff7c_7edfe9a8",
+        "filename": "src/libANGLE/renderer/vulkan/TextureVk.cpp",
+        "patchSetId": 9
+      },
+      "lineNbr": 3122,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2022-02-18T17:43:36Z",
+      "side": 1,
+      "message": "See the old code on left, line 3058 to 3061. I think they are doing the same thing, right? Then all you need in this whole function is (with my proposed API change)\n\n    for (vk::ImageViewHelper \u0026imageViews : mMultisampledImageViews)\n    {\n        mImage-\u003ecollectViewGarbage(\u0026imageViews);\n    }",
+      "range": {
+        "startLine": 3116,
+        "startChar": 4,
+        "endLine": 3122,
+        "endChar": 5
+      },
+      "revId": "d20f799eb1b046ad853054238aaf08104b2d3a11",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "2063c908_cec5094d",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 9
+      },
+      "lineNbr": 5145,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2022-02-18T17:43:36Z",
+      "side": 1,
+      "message": "this seems checked twice. Maybe just remove releasePendingGarbage() function and do it here, since it is only been called here.",
+      "range": {
+        "startLine": 5145,
+        "startChar": 4,
+        "endLine": 5145,
+        "endChar": 43
+      },
+      "revId": "d20f799eb1b046ad853054238aaf08104b2d3a11",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "f96551a1_dae879f6",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 9
+      },
+      "lineNbr": 6986,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2022-02-18T17:43:36Z",
+      "side": 1,
+      "message": "will std::move achieve the same thing here, just so be consistent with line 6972?",
+      "range": {
+        "startLine": 6986,
+        "startChar": 4,
+        "endLine": 6986,
+        "endChar": 13
+      },
+      "revId": "d20f799eb1b046ad853054238aaf08104b2d3a11",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "c92ba1bf_7779b7bc",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.h",
+        "patchSetId": 9
+      },
+      "lineNbr": 2302,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2022-02-18T17:43:36Z",
+      "side": 1,
+      "message": "mImageAndViewGarbage?",
+      "range": {
+        "startLine": 2302,
+        "startChar": 35,
+        "endLine": 2302,
+        "endChar": 60
+      },
+      "revId": "d20f799eb1b046ad853054238aaf08104b2d3a11",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
