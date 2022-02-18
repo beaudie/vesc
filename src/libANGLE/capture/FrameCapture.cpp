@@ -2184,9 +2184,14 @@ void CaptureVertexArrayState(std::vector<CallCapture> *setupCalls,
             }
         }
 
-        if (attrib.format != defaultAttrib.format || attrib.pointer != defaultAttrib.pointer ||
-            binding.getStride() != defaultBinding.getStride() ||
-            binding.getBuffer().get() != nullptr)
+        // Don't capture CaptureVertexAttribPointer calls when the array buffer is null
+        // and a non-null attrib pointer is used.
+        bool skipInvalidAttrib = binding.getBuffer().get() == nullptr && attrib.pointer != nullptr;
+
+        if (!skipInvalidAttrib &&
+            (attrib.format != defaultAttrib.format || attrib.pointer != defaultAttrib.pointer ||
+             binding.getStride() != defaultBinding.getStride() ||
+             binding.getBuffer().get() != nullptr))
         {
             // Each attribute can pull from a separate buffer, so check the binding
             gl::Buffer *buffer = binding.getBuffer().get();
