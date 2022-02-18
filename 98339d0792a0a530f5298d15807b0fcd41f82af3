@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "b15800cf_6ffab487",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1491687
+      },
+      "writtenOn": "2022-02-18T18:34:13Z",
+      "side": 1,
+      "message": "Turns out yesterday\u0027s patch to capture empty buffers was not enough to fix this issue in `shadowgun_legends`. When running MEC we end up with a `nullptr` buffer from a binding. This is due to the engine (Unity) reusing a VAO, which had a buffer at attrib array binding point 6 once, but not at the time of MEC. The offset can be still retrieved, but the buffer cannot.\nI did not write a minimal test for this case, since it was not that obvious, but I was able to capture the app from the beginning, which can be used to replicate the behavior.\nI assume this check should be in place anyway, even if the root cause of the missing buffer could be prevented, but maybe it can\u0027t.\nIn contrast to yesterday\u0027s attempt to this patch now also the `CaptureVertexAttribIPointer` case is handled, and a warning is given. The warning will not be very verbose, since it can only happen once for every attrib array, when MEC is triggered.",
+      "revId": "98339d0792a0a530f5298d15807b0fcd41f82af3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
