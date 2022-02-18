@@ -26,6 +26,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "0a4f54dc_e903b705",
+        "filename": "src/libANGLE/renderer/vulkan/RenderbufferVk.cpp",
+        "patchSetId": 9
+      },
+      "lineNbr": 287,
+      "author": {
+        "id": 1520902
+      },
+      "writtenOn": "2022-02-18T20:50:30Z",
+      "side": 1,
+      "message": "Thank you Charlie! One tricky thing with the method you proposed here is: if mImage is nullptr, then we will not call \"mImage-\u003ecollectViewGarbage(\u0026mImageViews)\" and\n\"mImage-\u003ecollectViewGarbage(\u0026mMultisampledImageViews)\" to collect garbage from imageviews. What if there are garbage in imageviews but mImage is nullptr? Is there a way we can catch this case with an assert, if we do not get the garbage list from the imageviews and save it in a temp vector first, before accessing the mImage?",
+      "parentUuid": "e22d0396_57cdcc1e",
+      "range": {
+        "startLine": 283,
+        "startChar": 8,
+        "endLine": 287,
+        "endChar": 9
+      },
+      "revId": "d20f799eb1b046ad853054238aaf08104b2d3a11",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "3751f638_928a4af0",
         "filename": "src/libANGLE/renderer/vulkan/ResourceVk.h",
         "patchSetId": 9
@@ -37,6 +61,30 @@
       "writtenOn": "2022-02-18T17:43:36Z",
       "side": 1,
       "message": "This appears not been used.",
+      "range": {
+        "startLine": 216,
+        "startChar": 5,
+        "endLine": 216,
+        "endChar": 74
+      },
+      "revId": "d20f799eb1b046ad853054238aaf08104b2d3a11",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "0146a3a7_35773304",
+        "filename": "src/libANGLE/renderer/vulkan/ResourceVk.h",
+        "patchSetId": 9
+      },
+      "lineNbr": 216,
+      "author": {
+        "id": 1520902
+      },
+      "writtenOn": "2022-02-18T20:50:30Z",
+      "side": 1,
+      "message": "Thank you for catching this! I forget to remove it.",
+      "parentUuid": "3751f638_928a4af0",
       "range": {
         "startLine": 216,
         "startChar": 5,
@@ -72,6 +120,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "f0cea49b_4e25b581",
+        "filename": "src/libANGLE/renderer/vulkan/TextureVk.cpp",
+        "patchSetId": 9
+      },
+      "lineNbr": 3051,
+      "author": {
+        "id": 1520902
+      },
+      "writtenOn": "2022-02-18T20:50:30Z",
+      "side": 1,
+      "message": "I think calling releaseImageViews() the second time after stageSelfAsSubresourceUpdates() should be fine, except that \"mImageViewSerial \u003d renderer-\u003egetResourceSerialFactory().generateImageOrBufferViewSerial();\" will be called twice on each ImageViewHelpers. I did a quick check in code and I think we only use the mImageViewSerial for validation purpose: e.g. if (serial.viewSerial.valid()). So I guess as long as mImageViewSerial is not 0, it should be fine. Do you happen to know if there are any side effects of updating the mImageViewSerial twice?",
+      "parentUuid": "68d4f51c_0adb0a22",
+      "range": {
+        "startLine": 3051,
+        "startChar": 5,
+        "endLine": 3051,
+        "endChar": 50
+      },
+      "revId": "d20f799eb1b046ad853054238aaf08104b2d3a11",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "a81fff7c_7edfe9a8",
         "filename": "src/libANGLE/renderer/vulkan/TextureVk.cpp",
         "patchSetId": 9
@@ -83,6 +155,30 @@
       "writtenOn": "2022-02-18T17:43:36Z",
       "side": 1,
       "message": "See the old code on left, line 3058 to 3061. I think they are doing the same thing, right? Then all you need in this whole function is (with my proposed API change)\n\n    for (vk::ImageViewHelper \u0026imageViews : mMultisampledImageViews)\n    {\n        mImage-\u003ecollectViewGarbage(\u0026imageViews);\n    }",
+      "range": {
+        "startLine": 3116,
+        "startChar": 4,
+        "endLine": 3122,
+        "endChar": 5
+      },
+      "revId": "d20f799eb1b046ad853054238aaf08104b2d3a11",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "897aaaa1_dbd1ce2e",
+        "filename": "src/libANGLE/renderer/vulkan/TextureVk.cpp",
+        "patchSetId": 9
+      },
+      "lineNbr": 3122,
+      "author": {
+        "id": 1520902
+      },
+      "writtenOn": "2022-02-18T20:50:30Z",
+      "side": 1,
+      "message": "I see, yes the complication here to cast Enum is unnecessary, thank you! I will proceed with the change you proposed after I resolve the question about \"checking the garbage list in imageviews when mImage is nullptr\": https://chromium-review.googlesource.com/c/angle/angle/+/3449450/comment/e22d0396_57cdcc1e/",
+      "parentUuid": "a81fff7c_7edfe9a8",
       "range": {
         "startLine": 3116,
         "startChar": 4,
@@ -116,6 +212,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "7fad774b_0105e28a",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 9
+      },
+      "lineNbr": 5145,
+      "author": {
+        "id": 1520902
+      },
+      "writtenOn": "2022-02-18T20:50:30Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "2063c908_cec5094d",
+      "range": {
+        "startLine": 5145,
+        "startChar": 4,
+        "endLine": 5145,
+        "endChar": 43
+      },
+      "revId": "d20f799eb1b046ad853054238aaf08104b2d3a11",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "f96551a1_dae879f6",
@@ -139,6 +259,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "dc7662a6_bfe681ff",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 9
+      },
+      "lineNbr": 6986,
+      "author": {
+        "id": 1520902
+      },
+      "writtenOn": "2022-02-18T20:50:30Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "f96551a1_dae879f6",
+      "range": {
+        "startLine": 6986,
+        "startChar": 4,
+        "endLine": 6986,
+        "endChar": 13
+      },
+      "revId": "d20f799eb1b046ad853054238aaf08104b2d3a11",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "c92ba1bf_7779b7bc",
@@ -152,6 +296,30 @@
       "writtenOn": "2022-02-18T17:43:36Z",
       "side": 1,
       "message": "mImageAndViewGarbage?",
+      "range": {
+        "startLine": 2302,
+        "startChar": 35,
+        "endLine": 2302,
+        "endChar": 60
+      },
+      "revId": "d20f799eb1b046ad853054238aaf08104b2d3a11",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "d467e78d_8f806854",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.h",
+        "patchSetId": 9
+      },
+      "lineNbr": 2302,
+      "author": {
+        "id": 1520902
+      },
+      "writtenOn": "2022-02-18T20:50:30Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "c92ba1bf_7779b7bc",
       "range": {
         "startLine": 2302,
         "startChar": 35,
