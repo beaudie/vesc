@@ -227,13 +227,8 @@ void TransformFeedbackVk::updateDescriptorSetLayout(
 
     for (uint32_t bufferIndex = 0; bufferIndex < xfbBufferCount; ++bufferIndex)
     {
-        const std::string bufferName = GetXfbBufferName(bufferIndex);
-        const ShaderInterfaceVariableInfo &info =
-            variableInfoMap.get(gl::ShaderType::Vertex, bufferName);
-
-        ASSERT(info.binding != std::numeric_limits<uint32_t>::max());
-
-        descSetLayoutOut->update(info.binding, VK_DESCRIPTOR_TYPE_STORAGE_BUFFER, 1,
+        uint32_t binding = variableInfoMap.getXfbBufferBinding(bufferIndex);
+        descSetLayoutOut->update(binding, VK_DESCRIPTOR_TYPE_STORAGE_BUFFER, 1,
                                  VK_SHADER_STAGE_VERTEX_BIT, nullptr);
     }
 }
@@ -375,14 +370,10 @@ void TransformFeedbackVk::writeDescriptorSet(ContextVk *contextVk,
 {
     ASSERT(contextVk->getFeatures().emulateTransformFeedback.enabled);
 
-    const std::string bufferName = GetXfbBufferName(0);
-    const ShaderInterfaceVariableInfo &info =
-        variableInfoMap.get(gl::ShaderType::Vertex, bufferName);
-
     VkWriteDescriptorSet &writeDescriptorInfo = contextVk->allocWriteDescriptorSet();
     writeDescriptorInfo.sType                 = VK_STRUCTURE_TYPE_WRITE_DESCRIPTOR_SET;
     writeDescriptorInfo.dstSet                = descSet;
-    writeDescriptorInfo.dstBinding            = info.binding;
+    writeDescriptorInfo.dstBinding            = variableInfoMap.getXfbBufferBinding(0);
     writeDescriptorInfo.dstArrayElement       = 0;
     writeDescriptorInfo.descriptorCount       = static_cast<uint32_t>(xfbBufferCount);
     writeDescriptorInfo.descriptorType        = VK_DESCRIPTOR_TYPE_STORAGE_BUFFER;
@@ -390,5 +381,4 @@ void TransformFeedbackVk::writeDescriptorSet(ContextVk *contextVk,
     writeDescriptorInfo.pBufferInfo           = bufferInfo;
     writeDescriptorInfo.pTexelBufferView      = nullptr;
 }
-
 }  // namespace rx

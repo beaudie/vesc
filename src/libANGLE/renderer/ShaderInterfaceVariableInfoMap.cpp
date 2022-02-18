@@ -75,5 +75,20 @@ ShaderInterfaceVariableInfoMap::Iterator ShaderInterfaceVariableInfoMap::getIter
 {
     return Iterator(mData[shaderType].begin(), mData[shaderType].end());
 }
+uint32_t ShaderInterfaceVariableInfoMap::getActiveShaderCount() const
+{
+    uint32_t count = 0;
+    for (const VariableNameToInfoMap &infoMap : mData)
+    {
+        count += infoMap.empty() ? 0 : 1;
+    }
+    return count;
+}
 
+uint32_t ShaderInterfaceVariableInfoMap::getXfbBufferBinding(uint32_t xfbBufferIndex) const
+{
+    // The XFB descriptors are after the uniform data in each shader.
+    uint32_t uniformBufferCount = getActiveShaderCount();
+    return uniformBufferCount + xfbBufferIndex;
+}
 }  // namespace rx
