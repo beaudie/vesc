@@ -1790,7 +1790,7 @@ class DriverUniformsDescriptorSetCache final
 
   private:
     static constexpr uint32_t kFastMapSize = 16;
-    angle::FastUnorderedMap<uint32_t, VkDescriptorSet, kFastMapSize> mPayload;
+    angle::FlatUnorderedMap<uint32_t, VkDescriptorSet, kFastMapSize> mPayload;
 };
 
 // Templated Descriptors Cache
