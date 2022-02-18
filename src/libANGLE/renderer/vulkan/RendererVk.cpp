@@ -3189,6 +3189,11 @@ void RendererVk::initFeatures(DisplayVk *displayVk,
     // states they should have a top-left origin.
     ANGLE_FEATURE_CONDITION(&mFeatures, bottomLeftOriginPresentRegionRectangles, IsAndroid());
 
+    ANGLE_FEATURE_CONDITION(&mFeatures, compileShadersDuringProgramLink, true);
+
+    ANGLE_FEATURE_CONDITION(&mFeatures, forceDriverUniformOverSpecConst,
+                            mFeatures.compileShadersDuringProgramLink.enabled);
+
     // Retain debug info in SPIR-V blob.
     ANGLE_FEATURE_CONDITION(&mFeatures, retainSpirvDebugInfo, getEnableValidationLayers());
 
