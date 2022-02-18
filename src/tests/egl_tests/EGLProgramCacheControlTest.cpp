@@ -197,7 +197,8 @@ TEST_P(EGLProgramCacheControlTest, SaveAndReload)
 
     EGLDisplay display = getEGLWindow()->getDisplay();
     EGLint cacheSize   = eglProgramCacheGetAttribANGLE(display, EGL_PROGRAM_CACHE_SIZE_ANGLE);
-    EXPECT_EQ(1, cacheSize);
+    // Expecting a cache entry for each shader and the linked program.
+    EXPECT_EQ(3, cacheSize);
 
     EGLint keySize    = 0;
     EGLint binarySize = 0;
