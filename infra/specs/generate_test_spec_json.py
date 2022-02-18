@@ -94,7 +94,7 @@ def main():
     seen_mixins = set()
     for waterfall in angle_generator.waterfalls:
         seen_mixins = seen_mixins.union(waterfall.get('mixins', set()))
-        for bot_name, tester in waterfall['machines'].iteritems():
+        for bot_name, tester in waterfall['machines'].items():
             seen_mixins = seen_mixins.union(tester.get('mixins', set()))
     for suite in angle_generator.test_suites.values():
         if isinstance(suite, list):
