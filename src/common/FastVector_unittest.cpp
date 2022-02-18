@@ -258,9 +258,9 @@ TEST(FastVector, NonCopyable)
 }
 
 // Basic functionality for FastUnorderedMap
-TEST(FastUnorderedMap, BasicUsage)
+TEST(FlatUnorderedMap, BasicUsage)
 {
-    FastUnorderedMap<int, bool, 3> testMap;
+    FlatUnorderedMap<int, bool, 3> testMap;
     EXPECT_TRUE(testMap.empty());
     EXPECT_EQ(testMap.size(), 0u);
 
@@ -295,9 +295,9 @@ TEST(FastUnorderedMap, BasicUsage)
 }
 
 // Basic functionality for FastUnorderedSet
-TEST(FastUnorderedSet, BasicUsage)
+TEST(FlatUnorderedSet, BasicUsage)
 {
-    FastUnorderedSet<int, 3> testMap;
+    FlatUnorderedSet<int, 3> testMap;
     EXPECT_TRUE(testMap.empty());
 
     testMap.insert(5);
