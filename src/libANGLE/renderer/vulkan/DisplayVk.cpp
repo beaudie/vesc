@@ -407,6 +407,11 @@ void DisplayVk::populateFeatureList(angle::FeatureList *features)
     mRenderer->getFeatures().populateFeatureList(features);
 }
 
+void DisplayVk::initializeFrontendFeatures(angle::FrontendFeatures *features) const
+{
+    ANGLE_FEATURE_CONDITION(features, cacheCompiledShader, true);
+}
+
 ShareGroupVk::ShareGroupVk()
 {
     mLastPruneTime = angle::GetCurrentSystemTime();

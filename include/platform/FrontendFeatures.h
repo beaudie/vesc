@@ -83,6 +83,10 @@ struct FrontendFeatures : angle::FeatureSetBase
         "enableProgramBinaryForCapture", angle::FeatureCategory::FrontendFeatures,
         "Even if FrameCapture is enabled, enable GL_OES_get_program_binary", &members,
         "http://anglebug.com/5658"};
+
+    angle::Feature cacheCompiledShader = {"cacheCompiledShader",
+                                          angle::FeatureCategory::FrontendFeatures,
+                                          "Enable to cache the compiled shader", &members};
 };
 
 inline FrontendFeatures::FrontendFeatures()  = default;
