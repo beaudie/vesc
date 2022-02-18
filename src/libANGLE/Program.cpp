@@ -1435,7 +1435,8 @@ void Program::resolveLinkImpl(const Context *context)
         {
             // Don't fail linking if putting the program binary into the cache fails, the program is
             // still usable.
-            WARN() << "Failed to save linked program to memory program cache.";
+            ANGLE_PERF_WARNING(context->getState().getDebug(), GL_DEBUG_SEVERITY_LOW,
+                               "Failed to save linked program to memory program cache.");
         }
     }
 }

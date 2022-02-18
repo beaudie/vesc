@@ -20,8 +20,10 @@
 #include <GLSLANG/ShaderLang.h>
 #include "angle_gl.h"
 
+#include "common/MemoryBuffer.h"
 #include "common/Optional.h"
 #include "common/angleutils.h"
+#include "libANGLE/BinaryStream.h"
 #include "libANGLE/Caps.h"
 #include "libANGLE/Compiler.h"
 #include "libANGLE/Debug.h"
@@ -47,6 +49,9 @@ class CompileTask;
 class Context;
 class ShaderProgramManager;
 class State;
+class BinaryInputStream;
+class BinaryOutputStream;
+class MemoryShaderCache;
 
 // We defer the compile until link time, or until properties are queried.
 enum class CompileStatus
@@ -249,7 +254,13 @@ class Shader final : angle::NonCopyable, public LabeledObject
     unsigned int getMaxComputeSharedMemory() const { return mMaxComputeSharedMemory; }
     bool hasBeenDeleted() const { return mDeleteStatus; }
 
+    // Block until compiling is finished and resolve it.
     void resolveCompile();
+
+    // Writes a shader's binary to the output memory buffer.
+    angle::Result serialize(const Context *context, angle::MemoryBuffer *binaryOut) const;
+    angle::Result deserialize(const Context *context, BinaryInputStream &stream);
+    angle::Result loadBinary(const Context *context, const void *binary, GLsizei length);
 
   private:
     struct CompilingState;
@@ -278,6 +289,7 @@ class Shader final : angle::NonCopyable, public LabeledObject
 
     GLuint mCurrentMaxComputeWorkGroupInvocations;
     unsigned int mMaxComputeSharedMemory;
+    MemoryShaderCache *mMemoryShaderCache;
 };
 
 bool CompareShaderVar(const sh::ShaderVariable &x, const sh::ShaderVariable &y);
