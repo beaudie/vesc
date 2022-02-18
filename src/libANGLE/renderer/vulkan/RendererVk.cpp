@@ -3187,6 +3187,8 @@ void RendererVk::initFeatures(DisplayVk *displayVk,
     // Retain debug info in SPIR-V blob.
     ANGLE_FEATURE_CONDITION(&mFeatures, retainSpirvDebugInfo, getEnableValidationLayers());
 
+    ANGLE_FEATURE_CONDITION(&mFeatures, compileShadersDuringProgramLink, true);
+
     angle::PlatformMethods *platform = ANGLEPlatformCurrent();
     platform->overrideFeaturesVk(platform, &mFeatures);
 
