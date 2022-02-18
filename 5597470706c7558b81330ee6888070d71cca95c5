@@ -22,6 +22,30 @@
       },
       "revId": "5597470706c7558b81330ee6888070d71cca95c5",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "22ee38dc_e007fc66",
+        "filename": "src/compiler/translator/TranslatorVulkan.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 1415,
+      "author": {
+        "id": 1359667
+      },
+      "writtenOn": "2022-02-18T01:03:08Z",
+      "side": 1,
+      "message": "it looks like the PreciseTest failures are due to this change leading me to believe glslang path with PreciseTest doesn\u0027t work.",
+      "parentUuid": "b9912d5c_76623d9b",
+      "range": {
+        "startLine": 1415,
+        "startChar": 4,
+        "endLine": 1415,
+        "endChar": 56
+      },
+      "revId": "5597470706c7558b81330ee6888070d71cca95c5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
