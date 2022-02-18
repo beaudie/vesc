@@ -58,6 +58,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "e745626b_bcaa9a9f",
+        "filename": "include/platform/FeaturesVk.h",
+        "patchSetId": 5
+      },
+      "lineNbr": 584,
+      "author": {
+        "id": 1290487
+      },
+      "writtenOn": "2022-02-18T22:14:28Z",
+      "side": 1,
+      "message": "Copy-and-paste bug.  Thanks!  Fixed.",
+      "parentUuid": "c81ea79c_fc6328a0",
+      "range": {
+        "startLine": 584,
+        "startChar": 36,
+        "endLine": 584,
+        "endChar": 39
+      },
+      "revId": "101197676b70dc1ee3ca93af39406581d2293c91",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "61940481_eeaed387",
@@ -71,6 +95,30 @@
       "writtenOn": "2022-02-18T22:07:30Z",
       "side": 1,
       "message": "Do we have to exclude it? What happens if we let it be exposed?",
+      "range": {
+        "startLine": 116,
+        "startChar": 0,
+        "endLine": 122,
+        "endChar": 13
+      },
+      "revId": "101197676b70dc1ee3ca93af39406581d2293c91",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "04abdb57_62e27507",
+        "filename": "src/libANGLE/renderer/vulkan/android/DisplayVkAndroid.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 122,
+      "author": {
+        "id": 1290487
+      },
+      "writtenOn": "2022-02-18T22:14:28Z",
+      "side": 1,
+      "message": "Good question.  My recollection is vague.  I\u0027ll look.",
+      "parentUuid": "61940481_eeaed387",
       "range": {
         "startLine": 116,
         "startChar": 0,
