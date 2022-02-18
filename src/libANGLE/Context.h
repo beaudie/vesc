@@ -69,6 +69,7 @@ class FenceNV;
 class Framebuffer;
 class GLES1Renderer;
 class MemoryProgramCache;
+class MemoryShaderCache;
 class MemoryObject;
 class Program;
 class ProgramPipeline;
@@ -372,6 +373,7 @@ class Context final : public egl::LabeledObject, angle::NonCopyable, public angl
             TextureManager *shareTextures,
             SemaphoreManager *shareSemaphores,
             MemoryProgramCache *memoryProgramCache,
+            MemoryShaderCache *memoryShaderCache,
             const EGLenum clientType,
             const egl::AttributeMap &attribs,
             const egl::DisplayExtensions &displayExtensions,
@@ -522,7 +524,10 @@ class Context final : public egl::LabeledObject, angle::NonCopyable, public angl
     angle::Result prepareForInvalidate(GLenum target);
 
     MemoryProgramCache *getMemoryProgramCache() const { return mMemoryProgramCache; }
+    MemoryShaderCache *getMemoryShaderCache() const { return mMemoryShaderCache; }
+
     std::mutex &getProgramCacheMutex() const;
+    std::mutex &getShaderCacheMutex() const;
 
     bool hasBeenCurrent() const { return mHasBeenCurrent; }
     egl::Display *getDisplay() const { return mDisplay; }
@@ -797,6 +802,7 @@ class Context final : public egl::LabeledObject, angle::NonCopyable, public angl
     bool mBufferAccessValidationEnabled;
     const bool mExtensionsEnabled;
     MemoryProgramCache *mMemoryProgramCache;
+    MemoryShaderCache *mMemoryShaderCache;
 
     State::DirtyObjects mDrawDirtyObjects;
 
