@@ -168,6 +168,8 @@ class DisplayVk : public DisplayImpl, public vk::Context
 
     ShareGroupImpl *createShareGroup() override;
 
+    void initializeFrontendFeatures(angle::FrontendFeatures *features) const override;
+
   protected:
     void generateExtensions(egl::DisplayExtensions *outExtensions) const override;
 
