@@ -634,6 +634,8 @@ class GraphicsPipelineDesc final
     void setRenderPassDesc(const RenderPassDesc &renderPassDesc);
     void updateRenderPassDesc(GraphicsPipelineTransitionBits *transition,
                               const RenderPassDesc &renderPassDesc);
+    void setRenderPassDescSampleCount(GLint samples);
+    void setRenderPassDescColorAttachmentFormat(size_t colorIndexGL, angle::FormatID formatID);
 
     // Blend states
     void setSingleBlend(uint32_t colorIndexGL,
