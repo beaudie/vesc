@@ -46,6 +46,30 @@
       },
       "revId": "5597470706c7558b81330ee6888070d71cca95c5",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "fae9c5d7_b9f202d5",
+        "filename": "src/compiler/translator/TranslatorVulkan.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 1415,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-02-18T02:24:09Z",
+      "side": 1,
+      "message": "Yes, I found a couple of glslang bugs with `precise` when I was writing those tests.\n\nI would rather not land this change while it only works with glslang. Thank you for sharing it, but we would have to fix it up to avoid generating text and instead generate AST nodes.\n\nIn the meeting today, I offered to help up with this. Let me know how far you can / intend to driver that work, and I can pick it up from there.",
+      "parentUuid": "22ee38dc_e007fc66",
+      "range": {
+        "startLine": 1415,
+        "startChar": 4,
+        "endLine": 1415,
+        "endChar": 56
+      },
+      "revId": "5597470706c7558b81330ee6888070d71cca95c5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
