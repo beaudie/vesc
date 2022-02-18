@@ -331,6 +331,11 @@ std::ostream &operator<<(std::ostream &stream, const PlatformParameters &pp)
         stream << "_VulkanForceSubmitImmutableTextureUpdates";
     }
 
+    if (pp.eglParameters.compileShadersDuringProgramLink == EGL_TRUE)
+    {
+        stream << "_CompileShadersDuringProgramLink";
+    }
+
     return stream;
 }
 

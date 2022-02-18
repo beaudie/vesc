@@ -349,6 +349,13 @@ inline PlatformParameters WithForceSubmitImmutableTextureUpdates(const PlatformP
         EGL_TRUE;
     return withForceSubmitImmutableTextureUpdates;
 }
+
+inline PlatformParameters WithCompileShadersDuringProgramLink(const PlatformParameters &params)
+{
+    PlatformParameters withCompileShadersDuringProgramLink                            = params;
+    withCompileShadersDuringProgramLink.eglParameters.compileShadersDuringProgramLink = EGL_TRUE;
+    return withCompileShadersDuringProgramLink;
+}
 }  // namespace angle
 
 #endif  // ANGLE_TEST_CONFIGS_H_
