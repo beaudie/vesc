@@ -281,4 +281,62 @@ void main() {
     }
 }
 
+// Checks that the shader cache, which is used when this extension is available, is working
+// properly.
+TEST_P(EGLBlobCacheTest, ShaderCacheFunctional)
+{
+    ANGLE_SKIP_TEST_IF(!(IsVulkan() && IsAndroid()));
+
+    EGLDisplay display = getEGLWindow()->getDisplay();
+
+    EXPECT_TRUE(mHasBlobCache);
+    eglSetBlobCacheFuncsANDROID(display, SetBlob, GetBlob);
+    ASSERT_EGL_SUCCESS();
+
+    constexpr char kVertexShaderSrc[] = R"(attribute vec4 aTest;
+attribute vec2 aPosition;
+varying vec4 vTest;
+void main()
+{
+    vTest        = aTest;
+    gl_Position  = vec4(aPosition, 0.0, 1.0);
+    gl_PointSize = 1.0;
+})";
+
+    constexpr char kFragmentShaderSrc[] = R"(precision mediump float;
+varying vec4 vTest;
+void main()
+{
+    gl_FragColor = vTest;
+})";
+
+    // Compile a shader so it puts something in the cache
+    GLuint shaderID = CompileShader(GL_VERTEX_SHADER, kVertexShaderSrc);
+    ASSERT_TRUE(shaderID != 0);
+    EXPECT_EQ(CacheOpResult::SetSuccess, gLastCacheOpResult);
+    gLastCacheOpResult = CacheOpResult::ValueNotSet;
+    glDeleteShader(shaderID);
+
+    // Compile the same shader again, so it would try to retrieve it from the cache
+    shaderID = CompileShader(GL_VERTEX_SHADER, kVertexShaderSrc);
+    ASSERT_TRUE(shaderID != 0);
+    EXPECT_EQ(CacheOpResult::GetSuccess, gLastCacheOpResult);
+    gLastCacheOpResult = CacheOpResult::ValueNotSet;
+    glDeleteShader(shaderID);
+
+    // Compile another shader, which should create a new entry
+    shaderID = CompileShader(GL_FRAGMENT_SHADER, kFragmentShaderSrc);
+    ASSERT_TRUE(shaderID != 0);
+    EXPECT_EQ(CacheOpResult::SetSuccess, gLastCacheOpResult);
+    gLastCacheOpResult = CacheOpResult::ValueNotSet;
+    glDeleteShader(shaderID);
+
+    // Compile the first shader again, which should still reside in the cache
+    shaderID = CompileShader(GL_VERTEX_SHADER, kVertexShaderSrc);
+    ASSERT_TRUE(shaderID != 0);
+    EXPECT_EQ(CacheOpResult::GetSuccess, gLastCacheOpResult);
+    gLastCacheOpResult = CacheOpResult::ValueNotSet;
+    glDeleteShader(shaderID);
+}
+
 ANGLE_INSTANTIATE_TEST_ES2_AND_ES3(EGLBlobCacheTest);
