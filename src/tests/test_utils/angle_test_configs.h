@@ -349,6 +349,13 @@ inline PlatformParameters WithForceSubmitImmutableTextureUpdates(const PlatformP
         EGL_TRUE;
     return withForceSubmitImmutableTextureUpdates;
 }
+
+inline PlatformParameters WithCreatePipelineDuringLink(const PlatformParameters &params)
+{
+    PlatformParameters withCreatePipelineDuringLink                     = params;
+    withCreatePipelineDuringLink.eglParameters.createPipelineDuringLink = EGL_TRUE;
+    return withCreatePipelineDuringLink;
+}
 }  // namespace angle
 
 #endif  // ANGLE_TEST_CONFIGS_H_
