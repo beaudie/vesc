@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "5e6679e6_8ad50f93",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 22
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1446209
+      },
+      "writtenOn": "2022-02-21T11:39:51Z",
+      "side": 1,
+      "message": "Hi Shahbaz,\nI upload a new patch,in this patch,image recreation will only happen in glGenerateMipmap call.\n\nIn glTexSubImage2D,if one texture update isn\u0027t an overwrite to all defined contents,stage it.\nIn glGenerateMipmap,add isOverWriteToBaseLevel() func to check if that staged update still exists and if is a full update,if yes,feel free to create new image,then flush it and generate mip levels based on the new image.\n\nDoing like this,shouldn\u0027t produce any garbage.",
+      "revId": "693b0a826c5808fbf679e9009ebc72fe06c388e2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
