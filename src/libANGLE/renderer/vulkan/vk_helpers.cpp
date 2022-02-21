@@ -4715,7 +4715,10 @@ void ImageHelper::deriveExternalImageTiling(const void *createInfoChain)
 void ImageHelper::releaseImage(RendererVk *renderer)
 {
     renderer->collectGarbageAndReinit(&mUse, &mImage, &mDeviceMemory);
-    mImageSerial = kInvalidImageSerial;
+    // Reset information for current (invalid) image.
+    mImageSerial                 = kInvalidImageSerial;
+    mLastNonShaderReadOnlyLayout = ImageLayout::Undefined;
+    mCurrentShaderReadStageMask  = 0;
 
     setEntireContentUndefined();
 }
@@ -8470,6 +8473,46 @@ VkColorComponentFlags ImageHelper::getEmulatedChannelsMask() const
            (textureFmt.redBits != 0));
 
     return emulatedChannelsMask;
+}
+
+bool ImageHelper::is2DImageBaseLevelPendingFullUpdate()
+{
+    std::vector<SubresourceUpdate> *levelUpdates = getLevelUpdates(mFirstAllocatedLevel);
+    if (levelUpdates != nullptr)
+    {
+        for (SubresourceUpdate &update : *levelUpdates)
+        {
+            // This function currently only supports 2D images.
+            uint32_t updateBaseLayer, updateLayerCount;
+            update.getDestSubresource(mLayerCount, &updateBaseLayer, &updateLayerCount);
+            ASSERT(updateBaseLayer == 0 && updateLayerCount == 1);
+
+            VkExtent3D extent;
+            if (update.updateSource == UpdateSource::Clear ||
+                update.updateSource == UpdateSource::ClearEmulatedChannelsOnly)
+            {
+                // Clear update is always assumed to be a full update.
+                return true;
+            }
+            else if (update.updateSource == UpdateSource::Buffer)
+            {
+                extent = update.data.buffer.copyRegion.imageExtent;
+            }
+            else
+            {
+                ASSERT(update.updateSource == UpdateSource::Image);
+                extent = update.data.image.copyRegion.extent;
+            }
+            if (extent.width == mExtents.width && extent.height == mExtents.height &&
+                extent.depth == mExtents.depth)
+            {
+                return true;
+            }
+            continue;
+        }
+    }
+
+    return false;
 }
 
 // FramebufferHelper implementation.

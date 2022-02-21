@@ -273,6 +273,7 @@ class TextureVk : public TextureImpl, public angle::ObserverInterface
 
     angle::Result ensureMutable(ContextVk *contextVk);
     angle::Result ensureRenderable(ContextVk *contextVk);
+    bool is2DTextureFullUpdateToAllDefinedLevel(const gl::ImageIndex &index, const gl::Box &area);
 
     bool getAndResetImmutableSamplerDirtyState()
     {

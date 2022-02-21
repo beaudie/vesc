@@ -484,6 +484,14 @@ angle::Result TextureVk::setSubImageImpl(const gl::Context *context,
         shouldFlush = true;
     }
 
+    // For 2D texture, compare to tell if this is a full update to all defined contents, if not,
+    // should stage the update for ghosting image.
+    bool isOverWriteToAllDefinedLevel = true;
+    if (index.getType() == gl::TextureType::_2D)
+    {
+        isOverWriteToAllDefinedLevel = is2DTextureFullUpdateToAllDefinedLevel(index, area);
+    }
+
     if (unpackBuffer)
     {
         BufferVk *unpackBufferVk       = vk::GetImpl(unpackBuffer);
@@ -507,7 +515,9 @@ angle::Result TextureVk::setSubImageImpl(const gl::Context *context,
 
         if (!shouldUpdateBeStaged(gl::LevelIndex(index.getLevelIndex()),
                                   vkFormat.getActualImageFormatID(getRequiredImageAccess())) &&
-            isFastUnpackPossible(vkFormat, offsetBytes))
+            isFastUnpackPossible(vkFormat, offsetBytes) &&
+            (isOverWriteToAllDefinedLevel ||
+             bufferHelper.isCurrentlyInUseForWrite(contextVk->getLastCompletedQueueSerial())))
         {
             GLuint pixelSize   = formatInfo.pixelBytes;
             GLuint blockWidth  = formatInfo.compressedBlockWidth;
@@ -530,8 +540,8 @@ angle::Result TextureVk::setSubImageImpl(const gl::Context *context,
         {
             ANGLE_VK_PERF_WARNING(
                 contextVk, GL_DEBUG_SEVERITY_HIGH,
-                "TexSubImage with unpack buffer copied on CPU due to store, format "
-                "or offset restrictions");
+                "TexSubImage with unpack buffer copied on CPU due to store, format, "
+                "offset or ghosting image restrictions");
 
             void *mapPtr = nullptr;
 
@@ -558,7 +568,7 @@ angle::Result TextureVk::setSubImageImpl(const gl::Context *context,
     }
 
     // If we used context's staging buffer, flush out the updates
-    if (shouldFlush)
+    if (shouldFlush && isOverWriteToAllDefinedLevel)
     {
         ANGLE_TRY(ensureImageInitialized(contextVk, ImageMipLevels::EnabledLevels));
 
@@ -2663,25 +2673,47 @@ angle::Result TextureVk::syncState(const gl::Context *context,
     }
 
     // If generating mipmaps and the image needs to be recreated (not full-mip already, or changed
-    // usage flags), make sure it's recreated.
-    if (isGenerateMipmap && mImage && mImage->valid() &&
-        (oldUsageFlags != mImageUsageFlags ||
-         (!mState.getImmutableFormat() &&
-          mImage->getLevelCount() != getMipLevelCount(ImageMipLevels::FullMipChain))))
+    // usage flags), make sure it's recreated. In addition, if full update texture on base level,can
+    // also recreate image to do texture update immediately on the new image to avoid barriers.
+    if (isGenerateMipmap && mImage && mImage->valid())
     {
-        ASSERT(mOwnsImage);
-        // Immutable texture is not expected to reach here. The usage flag change should have
-        // been handled earlier and level count change should not need to reallocate
-        ASSERT(!mState.getImmutableFormat());
+        bool isBaseLevelPendingFullUpdate = false;
+        // For 2D texture, check if is a full update on base level, if yes, flag to recreate image.
+        if (mState.getType() == gl::TextureType::_2D &&
+            gl::LevelIndex(mState.getEffectiveBaseLevel()) == mImage->getFirstAllocatedLevel())
+        {
+            isBaseLevelPendingFullUpdate = mImage->is2DImageBaseLevelPendingFullUpdate();
+        }
+        const bool imageNeedsRecreation =
+            (oldUsageFlags != mImageUsageFlags ||
+             (!mState.getImmutableFormat() &&
+              mImage->getLevelCount() != getMipLevelCount(ImageMipLevels::FullMipChain)));
+        if (imageNeedsRecreation)
+        {
+            ASSERT(mOwnsImage);
+            // Immutable texture is not expected to reach here. The usage flag change should have
+            // been handled earlier and level count change should not need to reallocate
+            ASSERT(!mState.getImmutableFormat());
 
-        // Flush staged updates to the base level of the image.  Note that updates to the rest of
-        // the levels have already been discarded through the |removeStagedUpdates| call above.
-        ANGLE_TRY(flushImageStagedUpdates(contextVk));
+            // If the base level is entirely being redefined, discard the previous image entirely.
+            if (!isBaseLevelPendingFullUpdate)
+            {
+                // Flush staged updates to the base level of the image. Note that updates to the
+                // rest of the levels have already been discarded through the |removeStagedUpdates|
+                // call above.
+                ANGLE_TRY(flushImageStagedUpdates(contextVk));
 
-        mImage->stageSelfAsSubresourceUpdates(contextVk, 1, {});
+                mImage->stageSelfAsSubresourceUpdates(contextVk, 1, {});
+            }
+        }
 
-        // Release views and render targets created for the old image.
-        releaseImage(contextVk);
+        if (imageNeedsRecreation ||
+            (isBaseLevelPendingFullUpdate &&
+             mImage->usedInRunningCommands(contextVk->getLastCompletedQueueSerial())))
+        {
+            // Release views and render targets created for the old image.
+            releaseImage(contextVk);
+        }
     }
 
     // Respecify the image if it's changed in usage, or if any of its levels are redefined and no
@@ -3448,6 +3480,35 @@ angle::Result TextureVk::ensureRenderable(ContextVk *contextVk)
 bool TextureVk::imageHasActualImageFormat(angle::FormatID actualFormatID) const
 {
     return mImage && (mImage->getActualFormatID() != actualFormatID);
+}
+
+bool TextureVk::is2DTextureFullUpdateToAllDefinedLevel(const gl::ImageIndex &index,
+                                                       const gl::Box &area)
+{
+    // Currently, this function only supports 2D texture.
+    ASSERT(index.getType() == gl::TextureType::_2D);
+
+    const gl::ImageDesc &levelDesc = mState.getImageDesc(index);
+    if (mImage->valid() && mOwnsImage)
+    {
+        if (levelDesc.size.width == area.width && levelDesc.size.height == area.height &&
+            levelDesc.size.depth == area.depth)
+        {
+            gl::LevelIndex firstLevelGL = mImage->getFirstAllocatedLevel();
+            for (gl::LevelIndex levelIndex = firstLevelGL;
+                 levelIndex < gl::LevelIndex(mImage->getLevelCount()); ++levelIndex)
+            {
+                if (levelIndex != gl::LevelIndex(index.getLevelIndex()) &&
+                    mImage->hasSubresourceDefinedContent(gl::LevelIndex(levelIndex), 0, 1))
+                {
+                    return false;
+                }
+                continue;
+            }
+        }
+    }
+
+    return true;
 }
 
 }  // namespace rx
