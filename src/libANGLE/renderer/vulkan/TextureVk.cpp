@@ -484,6 +484,32 @@ angle::Result TextureVk::setSubImageImpl(const gl::Context *context,
         shouldFlush = true;
     }
 
+    bool isOverWriteToAllDefinedLevel = true;
+    const gl::ImageDesc &levelDesc    = mState.getImageDesc(index);
+    // For 2D texture, compare to tell if this is a full level update.
+    if (index.getType() == gl::TextureType::_2D && mImage->valid() && mOwnsImage &&
+        levelDesc.size.width == area.width && levelDesc.size.height == area.height &&
+        levelDesc.size.depth == area.depth)
+    {
+        GLuint layerIndex = 0;
+        // Compare to tell if this is an overwrite to all defined contents, if not, stage the
+        // update.
+        gl::LevelIndex firstLevelGL = getNativeImageLevel(mImage->getFirstAllocatedLevel());
+        for (gl::LevelIndex levelIndex = firstLevelGL;
+             levelIndex < gl::LevelIndex(mImage->getLevelCount()); ++levelIndex)
+        {
+            if (levelIndex != gl::LevelIndex(index.getLevelIndex()) &&
+                mImage->hasSubresourceDefinedContent(gl::LevelIndex(levelIndex), layerIndex,
+                                                     index.getLayerCount()))
+            {
+                // This isn't an overwrite to all defined contents, we need to stage the update.
+                // Based on this, we can do image recreation in following GenerateMipmap call.
+                isOverWriteToAllDefinedLevel = false;
+                shouldFlush                  = false;
+                break;
+            }
+        }
+    }
     if (unpackBuffer)
     {
         BufferVk *unpackBufferVk       = vk::GetImpl(unpackBuffer);
@@ -507,7 +533,7 @@ angle::Result TextureVk::setSubImageImpl(const gl::Context *context,
 
         if (!shouldUpdateBeStaged(gl::LevelIndex(index.getLevelIndex()),
                                   vkFormat.getActualImageFormatID(getRequiredImageAccess())) &&
-            isFastUnpackPossible(vkFormat, offsetBytes))
+            isFastUnpackPossible(vkFormat, offsetBytes) && isOverWriteToAllDefinedLevel)
         {
             GLuint pixelSize   = formatInfo.pixelBytes;
             GLuint blockWidth  = formatInfo.compressedBlockWidth;
@@ -530,8 +556,8 @@ angle::Result TextureVk::setSubImageImpl(const gl::Context *context,
         {
             ANGLE_VK_PERF_WARNING(
                 contextVk, GL_DEBUG_SEVERITY_HIGH,
-                "TexSubImage with unpack buffer copied on CPU due to store, format "
-                "or offset restrictions");
+                "TexSubImage with unpack buffer copied on CPU due to store, format, "
+                "offset or ghosting image restrictions");
 
             void *mapPtr = nullptr;
 
@@ -2693,6 +2719,22 @@ angle::Result TextureVk::syncState(const gl::Context *context,
         mRedefinedLevels.any() || isMipmapEnabledByMinFilter)
     {
         ANGLE_TRY(respecifyImageStorage(contextVk));
+    }
+
+    // For usage that glTexSubImage call was followed by glGenerateMipmap call, if the former is a
+    // full texture update, defer it and recreate image in the following glGenerateMipmap to do the
+    // texture update immediately on this new image instead of waiting for FS-TS barrier.
+    if (isGenerateMipmap && mImage && mImage->valid())
+    {
+        gl::LevelIndex firstLevelGL = getNativeImageLevel(mImage->getFirstAllocatedLevel());
+        const gl::ImageIndex index =
+            gl::ImageIndex::MakeFromType(mState.getType(), firstLevelGL.get());
+        if (gl::LevelIndex(mState.getEffectiveBaseLevel()) == firstLevelGL &&
+            mImage->isOverWriteToSpecificLevel(firstLevelGL, mState.getImageDesc(index).size) &&
+            mImage->usedInRunningCommands(contextVk->getLastCompletedQueueSerial()))
+        {
+            releaseImage(contextVk);
+        }
     }
 
     // Initialize the image storage and flush the pixel buffer.
