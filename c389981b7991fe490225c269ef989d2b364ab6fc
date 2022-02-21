@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "a7848462_484d3594",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1340324
+      },
+      "writtenOn": "2022-02-21T10:23:48Z",
+      "side": 1,
+      "message": "Currently, it is skipping on Vulkan. You can check the result of SwapShouldInvalidateDepthStencil, its PerfCounter.resolveImageCommands is not ZERO. The one is added in the WindowSurface::present. \nIt is a common issue for MSAA egl config. \n",
+      "revId": "c389981b7991fe490225c269ef989d2b364ab6fc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
