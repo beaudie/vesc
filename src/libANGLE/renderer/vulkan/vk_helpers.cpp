@@ -4663,7 +4663,8 @@ angle::Result ImageHelper::initExternal(Context *context,
     imageInfo.pQueueFamilyIndices   = nullptr;
     imageInfo.initialLayout         = ConvertImageLayoutToVkImageLayout(initialLayout);
 
-    mCurrentLayout = initialLayout;
+    mCurrentLayout              = initialLayout;
+    mCurrentShaderReadStageMask = 0;
 
     ANGLE_VK_TRY(context, mImage.init(context->getDevice(), imageInfo));
 
@@ -8411,6 +8412,31 @@ VkColorComponentFlags ImageHelper::getEmulatedChannelsMask() const
            (textureFmt.redBits != 0));
 
     return emulatedChannelsMask;
+}
+
+bool ImageHelper::isOverWriteToBaseLevel(gl::ImageIndex index, gl::Extents size)
+{
+    std::vector<SubresourceUpdate> *levelUpdates =
+        getLevelUpdates(gl::LevelIndex(index.getLevelIndex()));
+    if (levelUpdates != nullptr && !levelUpdates->empty())
+    {
+        size_t count = 0;
+        for (SubresourceUpdate &update : *levelUpdates)
+        {
+            VkExtent3D extent = update.data.buffer.copyRegion.imageExtent;
+            VkImageSubresourceLayers imageSubresource =
+                update.data.buffer.copyRegion.imageSubresource;
+            if (imageSubresource.baseArrayLayer == 0 && imageSubresource.layerCount == 1 &&
+                size.width == (int)extent.width && size.height == (int)extent.height &&
+                size.depth == (int)extent.depth)
+            {
+                count++;
+                continue;
+            }
+        }
+        return count == levelUpdates->size();
+    }
+    return false;
 }
 
 // FramebufferHelper implementation.
