@@ -151,6 +151,30 @@
       },
       "revId": "101197676b70dc1ee3ca93af39406581d2293c91",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "9c77f3a8_3af3bdf8",
+        "filename": "src/libANGLE/renderer/vulkan/android/DisplayVkAndroid.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 122,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-02-21T17:14:01Z",
+      "side": 1,
+      "message": "Yes sure. I don\u0027t think we particularly need to care for R8, though sRGB does sound reasonable?\n\nAnyway, a comment as to why the exception would be good.",
+      "parentUuid": "7297e97b_dd016332",
+      "range": {
+        "startLine": 116,
+        "startChar": 0,
+        "endLine": 122,
+        "endChar": 13
+      },
+      "revId": "101197676b70dc1ee3ca93af39406581d2293c91",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
