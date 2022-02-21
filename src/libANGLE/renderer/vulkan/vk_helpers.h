@@ -2038,6 +2038,7 @@ class ImageHelper final : public Resource, public angle::Subject
     bool hasStagedImageUpdatesWithMismatchedFormat(gl::LevelIndex levelStart,
                                                    gl::LevelIndex levelEnd,
                                                    angle::FormatID formatID) const;
+    bool is2DImageBaseLevelPendingFullUpdate();
 
   private:
     enum class UpdateSource
