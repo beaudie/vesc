@@ -127,6 +127,30 @@
       },
       "revId": "101197676b70dc1ee3ca93af39406581d2293c91",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "7297e97b_dd016332",
+        "filename": "src/libANGLE/renderer/vulkan/android/DisplayVkAndroid.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 122,
+      "author": {
+        "id": 1290487
+      },
+      "writtenOn": "2022-02-21T16:32:03Z",
+      "side": 1,
+      "message": "We get the following message:\n\n\u003e ANGLE   : WARN: android_util.cpp:393 (GLInternalFormatToNativePixelFormat): Unknown internalFormat: 35907. Treating as 0\n\nThis format has been in the Android Vulkan loader for quite a while, and ANGLE uses the non-SRGB GL_RGBA8 format.  Given the fundamental goal for this extension (e.g. add RGB10_A2 and RGBA16F), I\u0027m inclined to separate this question from this CL.  Okay with you?",
+      "parentUuid": "04abdb57_62e27507",
+      "range": {
+        "startLine": 116,
+        "startChar": 0,
+        "endLine": 122,
+        "endChar": 13
+      },
+      "revId": "101197676b70dc1ee3ca93af39406581d2293c91",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
