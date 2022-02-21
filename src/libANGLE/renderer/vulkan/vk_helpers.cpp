@@ -4739,7 +4739,10 @@ void ImageHelper::deriveExternalImageTiling(const void *createInfoChain)
 void ImageHelper::releaseImage(RendererVk *renderer)
 {
     renderer->collectGarbageAndReinit(&mUse, &mImage, &mDeviceMemory);
-    mImageSerial = kInvalidImageSerial;
+    // Reset information for current (invalid) image.
+    mImageSerial                 = kInvalidImageSerial;
+    mLastNonShaderReadOnlyLayout = ImageLayout::Undefined;
+    mCurrentShaderReadStageMask  = 0;
 
     setEntireContentUndefined();
 }
@@ -8411,6 +8414,30 @@ VkColorComponentFlags ImageHelper::getEmulatedChannelsMask() const
            (textureFmt.redBits != 0));
 
     return emulatedChannelsMask;
+}
+
+bool ImageHelper::isOverWriteToSpecificLevel(gl::LevelIndex level, gl::Extents size)
+{
+    std::vector<SubresourceUpdate> *levelUpdates = getLevelUpdates(level);
+    if (levelUpdates != nullptr && !levelUpdates->empty())
+    {
+        size_t count = 0;
+        for (SubresourceUpdate &update : *levelUpdates)
+        {
+            VkExtent3D extent = update.data.buffer.copyRegion.imageExtent;
+            VkImageSubresourceLayers imageSubresource =
+                update.data.buffer.copyRegion.imageSubresource;
+            if (imageSubresource.baseArrayLayer == 0 && imageSubresource.layerCount == 1 &&
+                size.width == (int)extent.width && size.height == (int)extent.height &&
+                size.depth == (int)extent.depth)
+            {
+                count++;
+                continue;
+            }
+        }
+        return count == levelUpdates->size();
+    }
+    return false;
 }
 
 // FramebufferHelper implementation.

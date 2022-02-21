@@ -2033,6 +2033,8 @@ class ImageHelper final : public Resource, public angle::Subject
     bool hasStagedImageUpdatesWithMismatchedFormat(gl::LevelIndex levelStart,
                                                    gl::LevelIndex levelEnd,
                                                    angle::FormatID formatID) const;
+    // Check if that staged update still exists and if is a full update.
+    bool isOverWriteToSpecificLevel(gl::LevelIndex level, gl::Extents size);
 
   private:
     enum class UpdateSource
