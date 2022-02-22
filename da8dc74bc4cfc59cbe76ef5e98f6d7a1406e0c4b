@@ -90,6 +90,24 @@
       "message": "What if we generalize `TextureSampler` to be `TextureSamplerOrImageRead`? Currently we use this to detect feedback loop with render-to- and sample-from-texture, but it could as well also include render-to- and read-from-image.\n\n@cclao, what do you think?",
       "revId": "da8dc74bc4cfc59cbe76ef5e98f6d7a1406e0c4b",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "eb8353d4_cb457471",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.h",
+        "patchSetId": 23
+      },
+      "lineNbr": 1431,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2022-02-22T17:15:56Z",
+      "side": 1,
+      "message": "VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL -\u003e ImageShaderReadOnly\n\nI think that is basically what I suggested before we used the term Sampler, to align with the spec. Seems like a good opportunity to align now rather than introducing extra clauses.\n\nOne question - you say SamplerOrImageRead, then you mention reader-to- and read-from-image... seems like this layout flag is not used for rendering-to, so what are you referring to?",
+      "parentUuid": "ec266be8_36cb9506",
+      "revId": "da8dc74bc4cfc59cbe76ef5e98f6d7a1406e0c4b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
