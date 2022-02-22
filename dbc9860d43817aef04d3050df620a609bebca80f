@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "d7cfa0b5_86b6cc7d",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-02-22T15:49:34Z",
+      "side": 1,
+      "message": "Thanks for putting this up. A couple points:\n\n- Please add tests similarly to those in ProgramInterfaceTest.cpp.  Basically the test would create a shader, destroy it, and recreate it.\n- I realize this is a big deal with the glslang path, but could you please give SPIR-V gen a try and see how much this affects application load times (or whatever other metric you are using to evaluate this)? I do agree that having a cache is good, just wanted to know what the numbers look like.",
+      "revId": "dbc9860d43817aef04d3050df620a609bebca80f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
