@@ -72,6 +72,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "385bbb90_cff40a14",
+        "filename": "src/libANGLE/renderer/vulkan/RenderbufferVk.cpp",
+        "patchSetId": 9
+      },
+      "lineNbr": 287,
+      "author": {
+        "id": 1520902
+      },
+      "writtenOn": "2022-02-22T06:56:36Z",
+      "side": 1,
+      "message": "I see, thank you Charlie!",
+      "parentUuid": "972f8f9c_bbdc36b4",
+      "range": {
+        "startLine": 283,
+        "startChar": 8,
+        "endLine": 287,
+        "endChar": 9
+      },
+      "revId": "d20f799eb1b046ad853054238aaf08104b2d3a11",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "3751f638_928a4af0",
@@ -190,6 +214,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "4f79d43b_79affedd",
+        "filename": "src/libANGLE/renderer/vulkan/TextureVk.cpp",
+        "patchSetId": 9
+      },
+      "lineNbr": 3051,
+      "author": {
+        "id": 1520902
+      },
+      "writtenOn": "2022-02-22T06:56:36Z",
+      "side": 1,
+      "message": "Got it, thank you Charlie.",
+      "parentUuid": "b84fa730_da22d381",
+      "range": {
+        "startLine": 3051,
+        "startChar": 5,
+        "endLine": 3051,
+        "endChar": 50
+      },
+      "revId": "d20f799eb1b046ad853054238aaf08104b2d3a11",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "a81fff7c_7edfe9a8",
@@ -227,6 +275,30 @@
       "side": 1,
       "message": "I see, yes the complication here to cast Enum is unnecessary, thank you! I will proceed with the change you proposed after I resolve the question about \"checking the garbage list in imageviews when mImage is nullptr\": https://chromium-review.googlesource.com/c/angle/angle/+/3449450/comment/e22d0396_57cdcc1e/",
       "parentUuid": "a81fff7c_7edfe9a8",
+      "range": {
+        "startLine": 3116,
+        "startChar": 4,
+        "endLine": 3122,
+        "endChar": 5
+      },
+      "revId": "d20f799eb1b046ad853054238aaf08104b2d3a11",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "e58765ad_885110b3",
+        "filename": "src/libANGLE/renderer/vulkan/TextureVk.cpp",
+        "patchSetId": 9
+      },
+      "lineNbr": 3122,
+      "author": {
+        "id": 1520902
+      },
+      "writtenOn": "2022-02-22T06:56:36Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "897aaaa1_dbd1ce2e",
       "range": {
         "startLine": 3116,
         "startChar": 4,
