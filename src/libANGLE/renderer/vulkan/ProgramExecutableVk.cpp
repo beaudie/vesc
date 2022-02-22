@@ -1292,11 +1292,6 @@ angle::Result ProgramExecutableVk::updateBuffersDescriptorSet(
             continue;
         }
 
-        if (bufferBinding.get() == nullptr)
-        {
-            continue;
-        }
-
         const ShaderInterfaceVariableInfo &info =
             mVariableInfoMap.get(shaderType, block.mappedName);
         if (info.isDuplicate)
@@ -1304,8 +1299,30 @@ angle::Result ProgramExecutableVk::updateBuffersDescriptorSet(
             continue;
         }
 
-        uint32_t binding      = info.binding;
-        uint32_t arrayElement = block.isArray ? block.arrayElement : 0;
+        uint32_t binding               = info.binding;
+        VkDescriptorSet &descriptorSet = mDescriptorSets[DescriptorSetIndex::ShaderResource];
+        uint32_t arrayElement          = block.isArray ? block.arrayElement : 0;
+
+        if (bufferBinding.get() == nullptr)
+        {
+            if (!cacheHit)
+            {
+                VkDescriptorBufferInfo &bufferInfo = contextVk->allocDescriptorBufferInfo();
+                VkWriteDescriptorSet &writeInfo    = contextVk->allocWriteDescriptorSet();
+
+                vk::BufferHelper &emptyBuffer = contextVk->getEmptyBuffer();
+                emptyBuffer.retainReadOnly(&contextVk->getResourceUseList());
+                WriteBufferDescriptorSetBinding(emptyBuffer, 0, emptyBuffer.getSize(),
+                                                descriptorSet, descriptorType, binding,
+                                                arrayElement, 0, &bufferInfo, &writeInfo);
+                if (IsDynamicDescriptor(descriptorType))
+                {
+                    mDynamicShaderBufferDescriptorOffsets.push_back(
+                        static_cast<uint32_t>(emptyBuffer.getOffset()));
+                }
+            }
+            continue;
+        }
 
         // Limit bound buffer size to maximum resource binding size.
         GLsizeiptr boundBufferSize = gl::GetBoundBufferAvailableSize(bufferBinding);
@@ -1324,7 +1341,6 @@ angle::Result ProgramExecutableVk::updateBuffersDescriptorSet(
             VkDescriptorBufferInfo &bufferInfo = contextVk->allocDescriptorBufferInfo();
             VkWriteDescriptorSet &writeInfo    = contextVk->allocWriteDescriptorSet();
 
-            VkDescriptorSet descriptorSet;
             ANGLE_TRY(getOrAllocateShaderResourcesDescriptorSet(contextVk, &shaderBuffersDesc,
                                                                 &descriptorSet));
             VkDeviceSize offset =
