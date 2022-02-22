@@ -92,7 +92,7 @@ angle::Result RenderbufferMtl::setStorageImpl(const gl::Context *context,
                 ANGLE_TRY(mtl::Texture::Make2DMSTexture(
                     contextMtl, mFormat, static_cast<uint32_t>(width),
                     static_cast<uint32_t>(height), actualSamples,
-                    /* renderTargetOnly */ true,
+                    /* renderTargetOnly */ false,
                     /* allowFormatView */ mFormat.hasDepthAndStencilBits(), &mImplicitMSTexture));
             }
         }
