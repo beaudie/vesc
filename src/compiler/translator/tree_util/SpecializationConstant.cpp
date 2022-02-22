@@ -7,7 +7,6 @@
 //
 
 #include "compiler/translator/tree_util/SpecializationConstant.h"
-#include "common/PackedEnums.h"
 #include "common/angleutils.h"
 #include "compiler/translator/StaticType.h"
 #include "compiler/translator/SymbolTable.h"

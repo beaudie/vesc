@@ -12,7 +12,6 @@
 #include "compiler/translator/TranslatorVulkan.h"
 
 #include "angle_gl.h"
-#include "common/PackedEnums.h"
 #include "common/utilities.h"
 #include "compiler/translator/BuiltinsWorkaroundGLSL.h"
 #include "compiler/translator/ImmutableStringBuilder.h"

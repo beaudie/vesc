@@ -9,7 +9,6 @@
 
 #include "compiler/translator/tree_util/RewriteSampleMaskVariable.h"
 
-#include "common/bitset_utils.h"
 #include "common/debug.h"
 #include "common/utilities.h"
 #include "compiler/translator/Compiler.h"

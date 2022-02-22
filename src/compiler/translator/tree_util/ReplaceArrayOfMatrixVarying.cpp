@@ -11,7 +11,6 @@
 
 #include <vector>
 
-#include "common/bitset_utils.h"
 #include "common/debug.h"
 #include "common/utilities.h"
 #include "compiler/translator/Compiler.h"

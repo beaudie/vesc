@@ -16,7 +16,6 @@
 
 #include <GLSLANG/ShaderVars.h>
 
-#include "common/PackedEnums.h"
 #include "compiler/translator/BuiltInFunctionEmulator.h"
 #include "compiler/translator/CallDAG.h"
 #include "compiler/translator/Diagnostics.h"
@@ -184,6 +183,8 @@ class TCompiler : public TShHandleBase
 
     bool hasAnyPreciseType() const { return mHasAnyPreciseType; }
 
+    AdvancedBlendEquation getBlendEquation() const { return mBlendEquation; }
+
     unsigned int getSharedMemorySize() const;
 
     sh::GLenum getShaderType() const { return mShaderType; }
@@ -338,6 +339,9 @@ class TCompiler : public TShHandleBase
     TLayoutTessEvaluationType mTessEvaluationShaderInputPointType;
 
     bool mHasAnyPreciseType;
+
+    // advanced blend equation parameters
+    AdvancedBlendEquation mBlendEquation;
 
     // name hashing.
     NameMap mNameMap;
