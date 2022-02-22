@@ -10,6 +10,7 @@
 
 #include "test_utils/gl_raii.h"
 #include "util/OSWindow.h"
+#include "util/gles_loader_autogen.h"
 #include "util/shader_utils.h"
 
 using namespace angle;
@@ -486,6 +487,120 @@ TEST_P(MultisampleTestES3, ResolveToFBO)
     EXPECT_PIXEL_COLOR_NEAR(kWindowWidth / 2, kWindowHeight / 2, kResult, 1);
 }
 
+class MultisampleBasicTest : public ANGLETestBase,
+                             public ::testing::TestWithParam<angle::PlatformParameters>
+{
+  protected:
+    MultisampleBasicTest() : ANGLETestBase(GetParam()) {}
+    void SetUp() override { ANGLETestBase::ANGLETestSetUp(); }
+    void TearDown() override { ANGLETestBase::ANGLETestTearDown(); }
+
+    void testResolveToFBO(GLenum format, const GLColor &expected_color)
+    {
+        constexpr int kWidth  = 119;
+        constexpr int kHeight = 131;
+
+        constexpr char kVS[] = R"(#version 300 es
+        layout(location = 0) in vec4 position;
+        void main() {
+           gl_Position = position;
+        }
+        )";
+
+        constexpr char kFS[] = R"(#version 300 es
+        precision highp float;
+        out vec4 color;
+        void main() {
+           color = vec4(0.5, 0.6, 0.7, 0.8);
+        }
+        )";
+
+        ANGLE_GL_PROGRAM(program, kVS, kFS);
+
+        // Make an RG8 samples = 4 multi-sample framebuffer.
+        GLFramebuffer fb0;
+        glBindFramebuffer(GL_FRAMEBUFFER, fb0);
+
+        GLRenderbuffer rb0;
+        glBindRenderbuffer(GL_RENDERBUFFER, rb0);
+        glRenderbufferStorageMultisample(GL_RENDERBUFFER, 4, format, kWidth, kHeight);
+        glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_RENDERBUFFER, rb0);
+        ASSERT_GL_NO_ERROR();
+        EXPECT_GL_FRAMEBUFFER_COMPLETE(GL_FRAMEBUFFER);
+
+        // Make an RG8 samples = 0 multi-sample framebuffer.
+        GLFramebuffer fb1;
+        glBindFramebuffer(GL_FRAMEBUFFER, fb1);
+
+        GLRenderbuffer rb1;
+        glBindRenderbuffer(GL_RENDERBUFFER, rb1);
+        glRenderbufferStorageMultisample(GL_RENDERBUFFER, 0, format, kWidth, kHeight);
+        glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_RENDERBUFFER, rb1);
+        glCheckFramebufferStatus(GL_FRAMEBUFFER);
+        ASSERT_GL_NO_ERROR();
+        EXPECT_GL_FRAMEBUFFER_COMPLETE(GL_FRAMEBUFFER);
+
+        // Draw quad to fb0.
+        glViewport(0, 0, kWidth, kHeight);
+        glBindFramebuffer(GL_FRAMEBUFFER, fb0);
+        glUseProgram(program);
+        GLBuffer buf;
+        glBindBuffer(GL_ARRAY_BUFFER, buf);
+
+        constexpr float vertices[] = {
+            -1.0f, -1.0f, 1.0f, -1.0f, -1.0f, 1.0f, -1.0f, 1.0f, 1.0f, -1.0f, 1.0f, 1.0f,
+        };
+        glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW);
+        glEnableVertexAttribArray(0);
+        glVertexAttribPointer(0, 2, GL_FLOAT, GL_FALSE, 0, nullptr);
+        glDrawArrays(GL_TRIANGLES, 0, 6);
+        ASSERT_GL_NO_ERROR();
+
+        // Blit fb0 to fb1.
+        glBindFramebuffer(GL_READ_FRAMEBUFFER, fb0);
+        glBindFramebuffer(GL_DRAW_FRAMEBUFFER, fb1);
+        glBlitFramebuffer(0, 0, kWidth, kHeight, 0, 0, kWidth, kHeight, GL_COLOR_BUFFER_BIT,
+                          GL_NEAREST);
+        ASSERT_GL_NO_ERROR();
+
+        GLFramebuffer fb2;
+        glBindFramebuffer(GL_FRAMEBUFFER, fb2);
+
+        // Make an RGBA8 NON-multi-sample framebuffer.
+        GLRenderbuffer rb2;
+        glBindRenderbuffer(GL_RENDERBUFFER, rb2);
+        glRenderbufferStorage(GL_RENDERBUFFER, GL_RGBA8, kWidth, kHeight);
+        glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_RENDERBUFFER, rb2);
+        ASSERT_GL_NO_ERROR();
+        EXPECT_GL_FRAMEBUFFER_COMPLETE(GL_FRAMEBUFFER);
+
+        // Blit fb1 to fb2,
+        glBindFramebuffer(GL_READ_FRAMEBUFFER, fb1);
+        glBindFramebuffer(GL_DRAW_FRAMEBUFFER, fb2);
+        glBlitFramebuffer(0, 0, kWidth, kHeight, 0, 0, kWidth, kHeight, GL_COLOR_BUFFER_BIT,
+                          GL_NEAREST);
+        ASSERT_GL_NO_ERROR();
+
+        EXPECT_PIXEL_COLOR_NEAR(1, 1, expected_color, 1);
+        ASSERT_GL_NO_ERROR();
+    }
+};
+
+TEST_P(MultisampleBasicTest, ResolveRGBA8ToFBO)
+{
+    testResolveToFBO(GL_RGBA8, GLColor(128, 153, 178, 204));
+}
+
+TEST_P(MultisampleBasicTest, ResolveRGB8ToFBO)
+{
+    testResolveToFBO(GL_RGB8, GLColor(128, 153, 178, 255));
+}
+
+TEST_P(MultisampleBasicTest, ResolveRG8ToFBO)
+{
+    testResolveToFBO(GL_RG8, GLColor(128, 153, 0, 255));
+}
+
 ANGLE_INSTANTIATE_TEST_COMBINE_1(MultisampleTest,
                                  PrintToStringParamName,
                                  testing::Values(false),
@@ -525,4 +640,8 @@ ANGLE_INSTANTIATE_TEST_COMBINE_1(MultisampleTestES3,
                                  WithNoFixture(ES3_VULKAN()),
                                  WithNoFixture(ES31_VULKAN()),
                                  WithNoFixture(ES3_METAL()));
+
+GTEST_ALLOW_UNINSTANTIATED_PARAMETERIZED_TEST(MultisampleBasicTest);
+ANGLE_INSTANTIATE_TEST_ES3(MultisampleBasicTest);
+
 }  // anonymous namespace
