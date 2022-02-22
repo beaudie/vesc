@@ -144,6 +144,24 @@
       "parentUuid": "eefc7823_ecf52bcb",
       "revId": "da8dc74bc4cfc59cbe76ef5e98f6d7a1406e0c4b",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ab564474_09c61d76",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.h",
+        "patchSetId": 23
+      },
+      "lineNbr": 1431,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-02-22T18:58:33Z",
+      "side": 1,
+      "message": "I\u0027m not particularly trying to support extra feedback loop; I just mentioned that generalizing TextureSampler by including read-only-images will also (by accident, but correctly) support feedback loop where the image is not simultaneously used as texture (and fb attachment) but read-only image (and fb attachment).\n\n`ImageShaderReadOnly` SGTM",
+      "parentUuid": "bb32e840_9ffc178a",
+      "revId": "da8dc74bc4cfc59cbe76ef5e98f6d7a1406e0c4b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
