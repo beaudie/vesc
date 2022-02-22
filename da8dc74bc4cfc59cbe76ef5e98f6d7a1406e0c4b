@@ -108,6 +108,24 @@
       "parentUuid": "ec266be8_36cb9506",
       "revId": "da8dc74bc4cfc59cbe76ef5e98f6d7a1406e0c4b",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "eefc7823_ecf52bcb",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.h",
+        "patchSetId": 23
+      },
+      "lineNbr": 1431,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-02-22T18:35:01Z",
+      "side": 1,
+      "message": "\"render-to\" not \"reader-to\". I said that in the context of feedback loop (for which `TextureSampler` is used, and `TextureSamplerOrImageRead` could subsume)",
+      "parentUuid": "eb8353d4_cb457471",
+      "revId": "da8dc74bc4cfc59cbe76ef5e98f6d7a1406e0c4b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
