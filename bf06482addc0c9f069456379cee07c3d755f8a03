@@ -16,6 +16,24 @@
       "message": "EGLSyncTest.AndroidNativeFence_ClientWait is passing on ES2/3 but skipping on Vulkan. Maybe an issue.",
       "revId": "bf06482addc0c9f069456379cee07c3d755f8a03",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "86e22087_dc0341b5",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 6
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-02-22T15:58:11Z",
+      "side": 1,
+      "message": "I see you linked this CL in the issue yesterday; is the above problem resolved?",
+      "parentUuid": "e1972fc7_db5a107a",
+      "revId": "bf06482addc0c9f069456379cee07c3d755f8a03",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
