@@ -830,7 +830,7 @@ void FramebufferMtl::setLoadStoreActionOnRenderPassFirstStart(
         else
         {
             // Default action is resolve but don't keep MS texture's content.
-            attachment.storeAction = MTLStoreActionMultisampleResolve;
+            attachment.storeAction = MTLStoreActionStoreAndMultisampleResolve;
         }
     }
     else
