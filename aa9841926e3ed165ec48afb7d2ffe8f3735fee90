@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "e4535f24_f8d14a5f",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-02-22T15:53:20Z",
+      "side": 1,
+      "message": "I can confirm the test is not generating an error anymore if I change the allocation size to 2GB.",
+      "revId": "aa9841926e3ed165ec48afb7d2ffe8f3735fee90",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
