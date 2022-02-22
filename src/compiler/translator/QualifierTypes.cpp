@@ -853,6 +853,11 @@ TLayoutQualifier JoinLayoutQualifiers(TLayoutQualifier leftQualifier,
         joinedQualifier.index = rightQualifier.index;
     }
 
+    if (rightQualifier.blendEquation.any())
+    {
+        joinedQualifier.blendEquation |= rightQualifier.blendEquation;
+    }
+
     return joinedQualifier;
 }
 
