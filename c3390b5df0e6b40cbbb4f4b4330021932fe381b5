@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "d15c177d_32a27ad1",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.h",
+        "patchSetId": 14
+      },
+      "lineNbr": 2495,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2022-02-22T21:48:36Z",
+      "side": 1,
+      "message": "Note for future cleanups. After this change, I am not sure if there is still value to keep ImageHelper and ImageViewHelper as two separate classes. Their life cycle are the same, maybe it\u0027s better to merge into one class, and you don\u0027t need these kind of punch hole methods as well.",
+      "range": {
+        "startLine": 2492,
+        "startChar": 2,
+        "endLine": 2495,
+        "endChar": 80
+      },
+      "revId": "c3390b5df0e6b40cbbb4f4b4330021932fe381b5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}

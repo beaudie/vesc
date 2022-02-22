@@ -251,6 +251,30 @@
       },
       "revId": "f031e4384ee0252779c4bea4c37255f06b17bc52",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "16d333d5_85723d06",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 12
+      },
+      "lineNbr": 5145,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2022-02-22T21:48:36Z",
+      "side": 1,
+      "message": "Maybe that is because of some other bugs you found while doing initial investigations with assertion? (i.e, that we are not retaining image properly?)",
+      "parentUuid": "e978ac2a_348a5a56",
+      "range": {
+        "startLine": 5137,
+        "startChar": 3,
+        "endLine": 5145,
+        "endChar": 16
+      },
+      "revId": "f031e4384ee0252779c4bea4c37255f06b17bc52",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
