@@ -162,6 +162,24 @@
       "parentUuid": "bb32e840_9ffc178a",
       "revId": "da8dc74bc4cfc59cbe76ef5e98f6d7a1406e0c4b",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "bfca4e98_9fae3d6d",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.h",
+        "patchSetId": 23
+      },
+      "lineNbr": 1431,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2022-02-22T20:17:25Z",
+      "side": 1,
+      "message": "I think the usage of this new bit ReadOperation seems wrong. These RenderPassUsage bits are specifically used to detect the *framebuffer attachment* related optimizations, like read only depth stencil attachment or feedback loop. If you look at RenderPassUsage::TextureSampler, it is only set if image.hasRenderPassUsageFlag(vk::RenderPassUsage::RenderTargetAttachment). The reason for that is the renderpass must have a pointer to the image so that these bits can be cleared at endRP time. And renderpass only have pointer to attached images, not textures. If I read it correctly you try to use it as a general way? then you will need to use other mechanism.\n\nIf your usage is intended to be exact the same as vk::RenderPassUsage::TextureSampler, so that we can detect read only depth stencil or feedback loop, then my suggestion is to add a new bit ImageRead and only insert if RenderTargetAttachment bit is set.",
+      "parentUuid": "ab564474_09c61d76",
+      "revId": "da8dc74bc4cfc59cbe76ef5e98f6d7a1406e0c4b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
