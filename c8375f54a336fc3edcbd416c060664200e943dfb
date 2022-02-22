@@ -52,6 +52,24 @@
       "parentUuid": "f54c28b2_a9fcf185",
       "revId": "c8375f54a336fc3edcbd416c060664200e943dfb",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "2fcc2698_c85c5eae",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1491823
+      },
+      "writtenOn": "2022-02-22T13:41:39Z",
+      "side": 1,
+      "message": "MultithreadingTestES3.MultithreadFenceDraw/ES3_Vulkan_SwiftShader passes on Linux, MultithreadingTestES3.MultithreadFenceDraw/ES3_Vulkan Crashes with Assert failed in setDeletedFenceSync (../../../src/libANGLE/capture/FrameCapture.cpp:6733): sync !\u003d nullptr\nThat\u0027s also the error on Windows ... I\u0027ll take a closer look.",
+      "parentUuid": "7492d95a_4ebdcb53",
+      "revId": "c8375f54a336fc3edcbd416c060664200e943dfb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
