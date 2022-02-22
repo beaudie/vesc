@@ -180,6 +180,24 @@
       "parentUuid": "ab564474_09c61d76",
       "revId": "da8dc74bc4cfc59cbe76ef5e98f6d7a1406e0c4b",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ab083e7e_7e6b5938",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.h",
+        "patchSetId": 23
+      },
+      "lineNbr": 1431,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-02-22T20:39:35Z",
+      "side": 1,
+      "message": "Thanks Charlie. Indeed Min is trying to detect all images that are used read-only. But this change is using `RenderPassUsage` a bit differently. It\u0027s setting this usage in the ImageHelper right away in `RenderPassCommandBufferHelper::imageRead`.\n\nI guess the real problem here is that no one is resetting the usage at render pass closure. Min, it seems that this bit is \"sticky\", so once it\u0027s set, we never reset it. Could you add a test in VulkanPerformanceCounterTest.cpp to expose this bug? Basically use the image such that this bit is set and a render pass is broken because of it. Then change the circumstances such that render pass wouldn\u0027t need breaking, but will be because of this bit. The test would fail for example because it expects 2 render passes, but observes 3.",
+      "parentUuid": "bfca4e98_9fae3d6d",
+      "revId": "da8dc74bc4cfc59cbe76ef5e98f6d7a1406e0c4b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
