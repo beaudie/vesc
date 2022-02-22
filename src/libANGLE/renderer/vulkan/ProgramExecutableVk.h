@@ -259,8 +259,7 @@ class ProgramExecutableVk
                                                   const gl::ProgramExecutable &executable);
     angle::Result getOrAllocateShaderResourcesDescriptorSet(
         ContextVk *contextVk,
-        const vk::DescriptorSetDesc *shaderBuffersDesc,
-        VkDescriptorSet *descriptorSetOut);
+        const vk::DescriptorSetDesc *shaderBuffersDesc);
     angle::Result updateBuffersDescriptorSet(ContextVk *contextVk,
                                              const gl::ShaderType shaderType,
                                              const vk::DescriptorSetDesc &shaderBuffersDesc,
