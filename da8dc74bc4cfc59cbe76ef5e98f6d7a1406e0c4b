@@ -126,6 +126,24 @@
       "parentUuid": "eb8353d4_cb457471",
       "revId": "da8dc74bc4cfc59cbe76ef5e98f6d7a1406e0c4b",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "bb32e840_9ffc178a",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.h",
+        "patchSetId": 23
+      },
+      "lineNbr": 1431,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2022-02-22T18:44:46Z",
+      "side": 1,
+      "message": "\"reader-to\" was a typo, I meant to write \"render-to\". I\u0027m confused now - what kind of feedback loops are you trying to support? If there\u0027s a write involved, TextureSamplerOImageRead is not the correct term either. How about ImageShaderReadOnly? That is a more succinct synonym for SamplerOrImageRead.",
+      "parentUuid": "eefc7823_ecf52bcb",
+      "revId": "da8dc74bc4cfc59cbe76ef5e98f6d7a1406e0c4b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
