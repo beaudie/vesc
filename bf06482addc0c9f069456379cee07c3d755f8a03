@@ -34,6 +34,41 @@
       "parentUuid": "e1972fc7_db5a107a",
       "revId": "bf06482addc0c9f069456379cee07c3d755f8a03",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "f990c6b4_bd5d540e",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 6
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1359249
+      },
+      "writtenOn": "2022-02-22T23:55:21Z",
+      "side": 1,
+      "message": "Update.",
+      "revId": "bf06482addc0c9f069456379cee07c3d755f8a03",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "6d6f0962_468720c5",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 6
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1359249
+      },
+      "writtenOn": "2022-02-22T23:55:21Z",
+      "side": 1,
+      "message": "These failures seems limited to OpenGLES, not Vulkan. I only changed Vulkan. See angle bug for more details.",
+      "parentUuid": "86e22087_dc0341b5",
+      "revId": "bf06482addc0c9f069456379cee07c3d755f8a03",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
