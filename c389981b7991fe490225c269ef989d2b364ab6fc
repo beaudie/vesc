@@ -16,6 +16,86 @@
       "message": "Currently, it is skipping on Vulkan. You can check the result of SwapShouldInvalidateDepthStencil, its PerfCounter.resolveImageCommands is not ZERO. The one is added in the WindowSurface::present. \nIt is a common issue for MSAA egl config. \n",
       "revId": "c389981b7991fe490225c269ef989d2b364ab6fc",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "d4094b6d_4a10c39f",
+        "filename": "src/libANGLE/renderer/vulkan/SurfaceVk.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 1710,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-02-22T15:13:40Z",
+      "side": 1,
+      "message": "I suggest adding a new counter, like `swapchainResolveInSubpass` which gets set to 0 here. When we optimize it, we can set it to 1. The test can expect 1 for it.",
+      "revId": "c389981b7991fe490225c269ef989d2b364ab6fc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "4ee67fc7_3ac23daa",
+        "filename": "src/tests/gl_tests/VulkanPerformanceCounterTest.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 215,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-02-22T15:13:40Z",
+      "side": 1,
+      "message": "I still don\u0027t understand why this change is necessary; the code in the constructor:\n\n        setSamples(4);\n        setMultisampleEnabled(true);\n\nis supposed to do exactly this. Could you please debug a bit and see why old code is not creating a multisampled EGL config for you?",
+      "range": {
+        "startLine": 214,
+        "startChar": 0,
+        "endLine": 215,
+        "endChar": 40
+      },
+      "revId": "c389981b7991fe490225c269ef989d2b364ab6fc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "37ac35e3_d8f10a5c",
+        "filename": "src/tests/gl_tests/VulkanPerformanceCounterTest.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 3314,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-02-22T15:13:40Z",
+      "side": 1,
+      "message": "Please duplicate the test instead of changing it. You can call it `SwapShouldResolveWithSubpass`.",
+      "revId": "c389981b7991fe490225c269ef989d2b364ab6fc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "5bf0548b_8e8d9930",
+        "filename": "src/tests/gl_tests/VulkanPerformanceCounterTest.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 3323,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-02-22T15:13:40Z",
+      "side": 1,
+      "message": "nit: You can always read and verify this counter separately. This function deals with load/store-related counters.",
+      "range": {
+        "startLine": 3323,
+        "startChar": 72,
+        "endLine": 3323,
+        "endChar": 74
+      },
+      "revId": "c389981b7991fe490225c269ef989d2b364ab6fc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
