@@ -41,6 +41,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "bcb003bd_ec537ad1",
+        "filename": "src/libANGLE/renderer/vulkan/TextureVk.cpp",
+        "patchSetId": 12
+      },
+      "lineNbr": 2281,
+      "author": {
+        "id": 1520902
+      },
+      "writtenOn": "2022-02-22T21:04:55Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "baa784a2_e41da3a9",
+      "range": {
+        "startLine": 2281,
+        "startChar": 42,
+        "endLine": 2281,
+        "endChar": 86
+      },
+      "revId": "f031e4384ee0252779c4bea4c37255f06b17bc52",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "4e837c1a_703e3c33",
@@ -54,6 +78,30 @@
       "writtenOn": "2022-02-22T18:03:29Z",
       "side": 1,
       "message": "Same as above comment",
+      "range": {
+        "startLine": 2704,
+        "startChar": 38,
+        "endLine": 2704,
+        "endChar": 82
+      },
+      "revId": "f031e4384ee0252779c4bea4c37255f06b17bc52",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "44b53621_aea046d4",
+        "filename": "src/libANGLE/renderer/vulkan/TextureVk.cpp",
+        "patchSetId": 12
+      },
+      "lineNbr": 2704,
+      "author": {
+        "id": 1520902
+      },
+      "writtenOn": "2022-02-22T21:04:55Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "4e837c1a_703e3c33",
       "range": {
         "startLine": 2704,
         "startChar": 38,
@@ -89,6 +137,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "dd73a58a_94b58747",
+        "filename": "src/libANGLE/renderer/vulkan/TextureVk.cpp",
+        "patchSetId": 12
+      },
+      "lineNbr": 3091,
+      "author": {
+        "id": 1520902
+      },
+      "writtenOn": "2022-02-22T21:04:55Z",
+      "side": 1,
+      "message": "Oh I did not try placing it inside releaseImageViews(), because I did not know it belongs to the job that \"releaseImageViews()\" is supposed to handle. I can try placing it inside releaseImageViews() and see if that triggers any error, maybe Jamie can help provide more insights on whether logically it makes sense to include this code in \"releaseImageViews()\".",
+      "parentUuid": "8a1368a5_3ab9b399",
+      "range": {
+        "startLine": 3081,
+        "startChar": 4,
+        "endLine": 3091,
+        "endChar": 37
+      },
+      "revId": "f031e4384ee0252779c4bea4c37255f06b17bc52",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "b5019b64_71ad8332",
         "filename": "src/libANGLE/renderer/vulkan/TextureVk.cpp",
         "patchSetId": 12
@@ -100,6 +172,30 @@
       "writtenOn": "2022-02-22T18:03:29Z",
       "side": 1,
       "message": "This looks no longer used?",
+      "range": {
+        "startLine": 3116,
+        "startChar": 5,
+        "endLine": 3116,
+        "endChar": 54
+      },
+      "revId": "f031e4384ee0252779c4bea4c37255f06b17bc52",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "6758298f_b1a50751",
+        "filename": "src/libANGLE/renderer/vulkan/TextureVk.cpp",
+        "patchSetId": 12
+      },
+      "lineNbr": 3116,
+      "author": {
+        "id": 1520902
+      },
+      "writtenOn": "2022-02-22T21:04:55Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "b5019b64_71ad8332",
       "range": {
         "startLine": 3116,
         "startChar": 5,
@@ -123,6 +219,30 @@
       "writtenOn": "2022-02-22T18:03:29Z",
       "side": 1,
       "message": "I think you can just destroy it instead of collectGarbage, since destroy call is only called when all reference are known to be finished. See line 5149, it calls mImsage.destroy directly. You can reference to ImageViewHelper::destroy() implementation to see how it destroy views.",
+      "range": {
+        "startLine": 5137,
+        "startChar": 3,
+        "endLine": 5145,
+        "endChar": 16
+      },
+      "revId": "f031e4384ee0252779c4bea4c37255f06b17bc52",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "e978ac2a_348a5a56",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 12
+      },
+      "lineNbr": 5145,
+      "author": {
+        "id": 1520902
+      },
+      "writtenOn": "2022-02-22T21:04:55Z",
+      "side": 1,
+      "message": "Got it. After I changed the collectGarbage() call to destroy() call on each object in mImageAndViewGarbage, some angle_perftests are failing with validation error: we are destroying vkImageViews while they are still used in command buffers. So it looks like we cannot assume when we call destroy on ImageHelper, it is also safe for us to destroy resources from ImageViewHelper. I will look into why.",
+      "parentUuid": "ac403b93_66ee87a5",
       "range": {
         "startLine": 5137,
         "startChar": 3,
