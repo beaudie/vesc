@@ -1210,7 +1210,8 @@ angle::Result FramebufferVk::blit(const gl::Context *context,
                 contextVk->flushCommandsAndEndRenderPass(RenderPassClosureReason::PrepareForBlit));
 
             const vk::ImageView *copyImageView = nullptr;
-            ANGLE_TRY(readRenderTarget->getAndRetainCopyImageView(contextVk, &copyImageView));
+            ANGLE_TRY(readRenderTarget->getAndRetainCopyImageView(
+                contextVk, &contextVk->getResourceUseList(), &copyImageView));
             ANGLE_TRY(utilsVk.colorBlitResolve(
                 contextVk, this, &readRenderTarget->getImageForCopy(), copyImageView, params));
         }
@@ -1402,7 +1403,8 @@ angle::Result FramebufferVk::resolveColorWithSubpass(ContextVk *contextVk,
     //   resolve attachment.
     RenderTargetVk *drawRenderTarget      = mRenderTargetCache.getColors()[drawColorIndexGL];
     const vk::ImageView *resolveImageView = nullptr;
-    ANGLE_TRY(drawRenderTarget->getImageView(contextVk, &resolveImageView));
+    ANGLE_TRY(drawRenderTarget->getImageView(contextVk, &contextVk->getResourceUseList(),
+                                             &resolveImageView));
     vk::Framebuffer *newSrcFramebuffer = nullptr;
     ANGLE_TRY(srcFramebufferVk->getFramebuffer(contextVk, &newSrcFramebuffer, resolveImageView));
     // 2. Update the RenderPassCommandBufferHelper with the new framebuffer and render pass
@@ -2077,7 +2079,8 @@ angle::Result FramebufferVk::getFramebuffer(ContextVk *contextVk,
 
         const vk::ImageView *imageView = nullptr;
         ANGLE_TRY(colorRenderTarget->getImageViewWithColorspace(
-            contextVk, mCurrentFramebufferDesc.getWriteControlMode(), &imageView));
+            contextVk, &contextVk->getResourceUseList(),
+            mCurrentFramebufferDesc.getWriteControlMode(), &imageView));
 
         attachments.push_back(imageView->getHandle());
     }
@@ -2087,7 +2090,8 @@ angle::Result FramebufferVk::getFramebuffer(ContextVk *contextVk,
     if (depthStencilRenderTarget)
     {
         const vk::ImageView *imageView = nullptr;
-        ANGLE_TRY(depthStencilRenderTarget->getImageView(contextVk, &imageView));
+        ANGLE_TRY(depthStencilRenderTarget->getImageView(
+            contextVk, &contextVk->getResourceUseList(), &imageView));
 
         attachments.push_back(imageView->getHandle());
     }
@@ -2112,7 +2116,8 @@ angle::Result FramebufferVk::getFramebuffer(ContextVk *contextVk,
             if (colorRenderTarget->hasResolveAttachment())
             {
                 const vk::ImageView *resolveImageView = nullptr;
-                ANGLE_TRY(colorRenderTarget->getResolveImageView(contextVk, &resolveImageView));
+                ANGLE_TRY(colorRenderTarget->getResolveImageView(
+                    contextVk, &contextVk->getResourceUseList(), &resolveImageView));
 
                 attachments.push_back(resolveImageView->getHandle());
             }
@@ -2123,7 +2128,8 @@ angle::Result FramebufferVk::getFramebuffer(ContextVk *contextVk,
     if (depthStencilRenderTarget && depthStencilRenderTarget->hasResolveAttachment())
     {
         const vk::ImageView *imageView = nullptr;
-        ANGLE_TRY(depthStencilRenderTarget->getResolveImageView(contextVk, &imageView));
+        ANGLE_TRY(depthStencilRenderTarget->getResolveImageView(
+            contextVk, &contextVk->getResourceUseList(), &imageView));
 
         attachments.push_back(imageView->getHandle());
     }

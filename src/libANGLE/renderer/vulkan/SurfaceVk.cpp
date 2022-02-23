@@ -2178,7 +2178,8 @@ angle::Result WindowSurfaceVk::getCurrentFramebuffer(ContextVk *contextVk,
     if (mDepthStencilImage.valid())
     {
         const vk::ImageView *imageView = nullptr;
-        ANGLE_TRY(mDepthStencilRenderTarget.getImageView(contextVk, &imageView));
+        ANGLE_TRY(mDepthStencilRenderTarget.getImageView(
+            contextVk, &contextVk->getResourceUseList(), &imageView));
         imageViews[1] = imageView->getHandle();
     }
 
@@ -2195,7 +2196,8 @@ angle::Result WindowSurfaceVk::getCurrentFramebuffer(ContextVk *contextVk,
     {
         // If multisampled, there is only a single color image and framebuffer.
         const vk::ImageView *imageView = nullptr;
-        ANGLE_TRY(mColorRenderTarget.getImageView(contextVk, &imageView));
+        ANGLE_TRY(mColorRenderTarget.getImageView(contextVk, &contextVk->getResourceUseList(),
+                                                  &imageView));
         imageViews[0] = imageView->getHandle();
         ANGLE_VK_TRY(contextVk, mFramebufferMS.init(contextVk->getDevice(), framebufferInfo));
     }
@@ -2205,8 +2207,8 @@ angle::Result WindowSurfaceVk::getCurrentFramebuffer(ContextVk *contextVk,
         {
             const vk::ImageView *imageView = nullptr;
             ANGLE_TRY(swapchainImage.imageViews.getLevelLayerDrawImageView(
-                contextVk, swapchainImage.image, vk::LevelIndex(0), 0,
-                gl::SrgbWriteControlMode::Default, &imageView));
+                contextVk, &contextVk->getResourceUseList(), swapchainImage.image,
+                vk::LevelIndex(0), 0, gl::SrgbWriteControlMode::Default, &imageView));
 
             imageViews[0] = imageView->getHandle();
 
@@ -2307,8 +2309,8 @@ angle::Result WindowSurfaceVk::drawOverlay(ContextVk *contextVk, SwapchainImage 
     // Draw overlay
     const vk::ImageView *imageView = nullptr;
     ANGLE_TRY(image->imageViews.getLevelLayerDrawImageView(
-        contextVk, image->image, vk::LevelIndex(0), 0, gl::SrgbWriteControlMode::Default,
-        &imageView));
+        contextVk, &contextVk->getResourceUseList(), image->image, vk::LevelIndex(0), 0,
+        gl::SrgbWriteControlMode::Default, &imageView));
     ANGLE_TRY(overlayVk->onPresent(contextVk, &image->image, imageView,
                                    Is90DegreeRotation(getPreTransform())));
 
