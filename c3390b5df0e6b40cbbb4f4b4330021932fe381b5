@@ -26,6 +26,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "d44376d8_f48e27d0",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 14
+      },
+      "lineNbr": 14,
+      "author": {
+        "id": 1520902
+      },
+      "writtenOn": "2022-02-23T19:01:23Z",
+      "side": 1,
+      "message": "I will provide the CPU wall time comparison once I have the trace perftests results.",
+      "parentUuid": "d696cc07_fb1e0646",
+      "range": {
+        "startLine": 13,
+        "startChar": 5,
+        "endLine": 14,
+        "endChar": 12
+      },
+      "revId": "c3390b5df0e6b40cbbb4f4b4330021932fe381b5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "8b0682d7_491b4f87",
         "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
         "patchSetId": 14
@@ -60,6 +84,30 @@
       "writtenOn": "2022-02-23T13:18:09Z",
       "side": 1,
       "message": "this change is the only thing that looks like it shouldn\u0027t be here. Charlie or Yuxin what alternatives do we have to storing garbage inside an ImageHelper class?",
+      "range": {
+        "startLine": 2297,
+        "startChar": 4,
+        "endLine": 2297,
+        "endChar": 56
+      },
+      "revId": "c3390b5df0e6b40cbbb4f4b4330021932fe381b5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "52630fbd_26082fce",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.h",
+        "patchSetId": 14
+      },
+      "lineNbr": 2297,
+      "author": {
+        "id": 1520902
+      },
+      "writtenOn": "2022-02-23T19:01:23Z",
+      "side": 1,
+      "message": "One alternative I have tried is to pass std::vector\u003cvk::GarbageObject\u003e imageAndViewGarbage as a parameter to ImageViewHelper::release(td::vector\u003cvk::GarbageObject\u003e \u0026imageAndViewGarbage), let the function fill up the vector with resources to be destroyed, and then pass ImageHelper::mUse together with this vector into RendererVk::mSharedGarbage. You can see patchset 2 for the implementation, or the proposal 1 in go/vangle-remove-imageviewhelper-from-resourceuselist.\n\nThe downside of this approach is we will have two pointers in mSharedGarbage pointing to the same ResourceUse: one to keep track of garbage objects from ImageHelper, the other one to keep track of garbage objects from ImageViewHelper. We can\u0027t use the existing ResourceUse.counter because we rely on that to determine if the resource is still used in recorded commands. We have to keep another garbageCounter in ResourceUse to keep track of number of references to the ResourceUse. To solve this problem we should try to combine the GarbageObject from both ImageHelper and ImageViewHelper into a single vector and use only 1 mUse copy for this combined garbage vector. However, we do not always release the imageview and image together, for instance: in some EGL tests, TextureVk doesn\u0027t own the image, we will call release on imageView first in TextureVk, and later the EGL will release/destroy the image. That\u0027s why we think it will be easier to let ImageHelper keep the GarbageObject vector as a member, so that the ImageHelper can keep track of any garbage objects from imageview when we need to release imageviews first, and append its\u0027 own garbage objects to the same vector when we release/destroy the ImageHelper later.",
+      "parentUuid": "fb802e4a_1c3b5665",
       "range": {
         "startLine": 2297,
         "startChar": 4,
@@ -107,6 +155,30 @@
       "side": 1,
       "message": "I\u0027d just make this a public method. There\u0027s no need to try and hide behind friend.\n\nI would suggest we leave the classes spit to make it easier to understand.",
       "parentUuid": "d15c177d_32a27ad1",
+      "range": {
+        "startLine": 2492,
+        "startChar": 2,
+        "endLine": 2495,
+        "endChar": 80
+      },
+      "revId": "c3390b5df0e6b40cbbb4f4b4330021932fe381b5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "8d22e0ef_2024e6b6",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.h",
+        "patchSetId": 14
+      },
+      "lineNbr": 2495,
+      "author": {
+        "id": 1520902
+      },
+      "writtenOn": "2022-02-23T19:01:23Z",
+      "side": 1,
+      "message": "Got it, thank you Jamie, I will make the method public.",
+      "parentUuid": "34e557f4_798a8fc5",
       "range": {
         "startLine": 2492,
         "startChar": 2,
