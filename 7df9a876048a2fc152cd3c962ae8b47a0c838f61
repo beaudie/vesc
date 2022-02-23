@@ -16,6 +16,52 @@
       "message": "PTAL",
       "revId": "7df9a876048a2fc152cd3c962ae8b47a0c838f61",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "f15cfa4d_a2fc5026",
+        "filename": "src/libANGLE/renderer/vulkan/vk_cache_utils.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 1792,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-02-23T21:48:00Z",
+      "side": 1,
+      "message": "s/as/la",
+      "range": {
+        "startLine": 1792,
+        "startChar": 30,
+        "endLine": 1792,
+        "endChar": 42
+      },
+      "revId": "7df9a876048a2fc152cd3c962ae8b47a0c838f61",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "d78b0509_d5df2381",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 1001,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-02-23T21:48:00Z",
+      "side": 1,
+      "message": "ditto",
+      "range": {
+        "startLine": 1001,
+        "startChar": 30,
+        "endLine": 1001,
+        "endChar": 42
+      },
+      "revId": "7df9a876048a2fc152cd3c962ae8b47a0c838f61",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
