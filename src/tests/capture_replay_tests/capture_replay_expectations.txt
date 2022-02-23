@@ -220,3 +220,8 @@
 3565 : TextureMultisampleTest.MultisampleTargetFramebufferTexture2D/* = CRASH
 3565 : TextureMultisampleTest.SimpleTexelFetch/* = CRASH
 3565 : TextureMultisampleTest.ValidateTextureStorageMultisampleParameters/* = CRASH
+
+
+# GLES 3.2 tests that fail because of missing features 
+5366 : GeometryShaderTestES32.MaxGeometryImageUniforms/* = CRASH
+5366 : ProgramPipelineTest32.MaxGeometryImageUniforms/* = CRASH
