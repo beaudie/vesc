@@ -1746,6 +1746,14 @@ void RendererVk::queryDeviceExtensionFeatures(const vk::ExtensionNameList &devic
     mDepthClipControlFeatures.sType =
         VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_DEPTH_CLIP_CONTROL_FEATURES_EXT;
 
+    mBlendOperationAdvancedFeatures = {};
+    mBlendOperationAdvancedFeatures.sType =
+        VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_BLEND_OPERATION_ADVANCED_FEATURES_EXT;
+
+    mBlendOperationAdvancedProperties = {};
+    mBlendOperationAdvancedProperties.sType =
+        VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_BLEND_OPERATION_ADVANCED_PROPERTIES_EXT;
+
     if (!vkGetPhysicalDeviceProperties2KHR || !vkGetPhysicalDeviceFeatures2KHR)
     {
         return;
@@ -1873,6 +1881,12 @@ void RendererVk::queryDeviceExtensionFeatures(const vk::ExtensionNameList &devic
         vk::AddToPNextChain(&deviceFeatures, &mDepthClipControlFeatures);
     }
 
+    if (ExtensionFound(VK_EXT_BLEND_OPERATION_ADVANCED_EXTENSION_NAME, deviceExtensionNames))
+    {
+        vk::AddToPNextChain(&deviceFeatures, &mBlendOperationAdvancedFeatures);
+        vk::AddToPNextChain(&deviceProperties, &mBlendOperationAdvancedProperties);
+    }
+
     vkGetPhysicalDeviceFeatures2KHR(mPhysicalDevice, &deviceFeatures);
     vkGetPhysicalDeviceProperties2KHR(mPhysicalDevice, &deviceProperties);
 
@@ -1921,6 +1935,8 @@ void RendererVk::queryDeviceExtensionFeatures(const vk::ExtensionNameList &devic
     mProtectedMemoryProperties.pNext                 = nullptr;
     mHostQueryResetFeatures.pNext                    = nullptr;
     mDepthClipControlFeatures.pNext                  = nullptr;
+    mBlendOperationAdvancedFeatures.pNext            = nullptr;
+    mBlendOperationAdvancedProperties.pNext          = nullptr;
 }
 
 angle::Result RendererVk::initializeDevice(DisplayVk *displayVk, uint32_t queueFamilyIndex)
@@ -2376,6 +2392,12 @@ angle::Result RendererVk::initializeDevice(DisplayVk *displayVk, uint32_t queueF
     {
         mEnabledDeviceExtensions.push_back(VK_EXT_DEPTH_CLIP_CONTROL_EXTENSION_NAME);
         vk::AddToPNextChain(&mEnabledFeatures, &mDepthClipControlFeatures);
+    }
+
+    if (getFeatures().supportsBlendOperationAdvanced.enabled)
+    {
+        mEnabledDeviceExtensions.push_back(VK_EXT_BLEND_OPERATION_ADVANCED_EXTENSION_NAME);
+        vk::AddToPNextChain(&mEnabledFeatures, &mBlendOperationAdvancedFeatures);
     }
 
     mCurrentQueueFamilyIndex = queueFamilyIndex;
@@ -2917,6 +2939,10 @@ void RendererVk::initFeatures(DisplayVk *displayVk,
 
     ANGLE_FEATURE_CONDITION(&mFeatures, supportsDepthClipControl,
                             mDepthClipControlFeatures.depthClipControl == VK_TRUE);
+
+    ANGLE_FEATURE_CONDITION(
+        &mFeatures, supportsBlendOperationAdvanced,
+        mBlendOperationAdvancedFeatures.advancedBlendCoherentOperations == VK_TRUE);
 
     ANGLE_FEATURE_CONDITION(&mFeatures, supportsTransformFeedbackExtension,
                             mTransformFeedbackFeatures.transformFeedback == VK_TRUE);
