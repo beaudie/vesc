@@ -3216,8 +3216,8 @@ angle::Result UtilsVk::unresolve(ContextVk *contextVk,
         ASSERT(colorRenderTarget->isImageTransient());
 
         colorSrc[colorIndexVk.get()] = &colorRenderTarget->getResolveImageForRenderPass();
-        ANGLE_TRY(
-            colorRenderTarget->getResolveImageView(contextVk, &colorSrcView[colorIndexVk.get()]));
+        ANGLE_TRY(colorRenderTarget->getResolveImageView(
+            contextVk, &contextVk->getResourceUseList(), &colorSrcView[colorIndexVk.get()]));
 
         ++colorIndexVk;
     }
@@ -3509,8 +3509,9 @@ angle::Result UtilsVk::allocateDescriptorSet(ContextVk *contextVk,
                                              VkDescriptorSet *descriptorSetOut)
 {
     ANGLE_TRY(mDescriptorPools[function].allocateDescriptorSets(
-        contextVk, mDescriptorSetLayouts[function][DescriptorSetIndex::Internal].get(), 1,
-        bindingOut, descriptorSetOut));
+        contextVk, &contextVk->getResourceUseList(),
+        mDescriptorSetLayouts[function][DescriptorSetIndex::Internal].get(), 1, bindingOut,
+        descriptorSetOut));
 
     mPerfCounters.descriptorSetsAllocated++;
 
