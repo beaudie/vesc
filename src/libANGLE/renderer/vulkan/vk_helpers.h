@@ -85,7 +85,7 @@ class DynamicBuffer : angle::NonCopyable
     // internally may trigger a new buffer to be created (which is returned in the optional
     // parameter `newBufferAllocatedOut`). The new region will be in the returned buffer at given
     // offset.
-    angle::Result allocate(ContextVk *contextVk,
+    angle::Result allocate(Context *context,
                            size_t sizeInBytes,
                            BufferHelper **bufferHelperOut,
                            bool *newBufferAllocatedOut);
@@ -93,7 +93,7 @@ class DynamicBuffer : angle::NonCopyable
     // This releases resources when they might currently be in use.
     void release(RendererVk *renderer);
 
-    // This adds inflight buffers to the context's mResourceUseList and then releases them
+    // This adds in-flight buffers to the context's mResourceUseList and then releases them
     void releaseInFlightBuffersToResourceUseList(ContextVk *contextVk);
 
     // This frees resources immediately.
@@ -120,7 +120,7 @@ class DynamicBuffer : angle::NonCopyable
 
   private:
     void reset();
-    angle::Result allocateNewBuffer(ContextVk *contextVk);
+    angle::Result allocateNewBuffer(Context *context);
 
     VkBufferUsageFlags mUsage;
     bool mHostVisible;
@@ -133,6 +133,9 @@ class DynamicBuffer : angle::NonCopyable
 
     BufferHelperPointerVector mInFlightBuffers;
     BufferHelperPointerVector mBufferFreeList;
+
+    // Statics
+    uint32_t mAllocations;
 };
 
 enum class DescriptorCacheResult
@@ -162,12 +165,14 @@ class DescriptorPoolHelper final : public Resource
     void destroy(RendererVk *renderer, VulkanCacheType cacheType);
     void release(ContextVk *contextVk, VulkanCacheType cacheType);
 
-    angle::Result allocateDescriptorSets(ContextVk *contextVk,
+    angle::Result allocateDescriptorSets(Context *context,
+                                         ResourceUseList *resourceUseList,
                                          const DescriptorSetLayout &descriptorSetLayout,
                                          uint32_t descriptorSetCount,
                                          VkDescriptorSet *descriptorSetsOut);
 
-    angle::Result allocateAndCacheDescriptorSet(ContextVk *contextVk,
+    angle::Result allocateAndCacheDescriptorSet(Context *context,
+                                                ResourceUseList *resourceUseList,
                                                 const DescriptorSetDesc &desc,
                                                 const DescriptorSetLayout &descriptorSetLayout,
                                                 VkDescriptorSet *descriptorSetOut);
@@ -219,13 +224,15 @@ class DynamicDescriptorPool final : angle::NonCopyable
 
     // We use the descriptor type to help count the number of free sets.
     // By convention, sets are indexed according to the constants in vk_cache_utils.h.
-    angle::Result allocateDescriptorSets(ContextVk *contextVk,
+    angle::Result allocateDescriptorSets(Context *context,
+                                         ResourceUseList *resourceUseList,
                                          const DescriptorSetLayout &descriptorSetLayout,
                                          uint32_t descriptorSetCount,
                                          RefCountedDescriptorPoolBinding *bindingOut,
                                          VkDescriptorSet *descriptorSetsOut);
 
-    angle::Result getOrAllocateDescriptorSet(ContextVk *contextVk,
+    angle::Result getOrAllocateDescriptorSet(Context *context,
+                                             ResourceUseList *resourceUseList,
                                              const DescriptorSetDesc &desc,
                                              const DescriptorSetLayout &descriptorSetLayout,
                                              RefCountedDescriptorPoolBinding *bindingOut,
@@ -265,7 +272,7 @@ class DynamicDescriptorPool final : angle::NonCopyable
     static void SetMaxSetsPerPoolMultiplierForTesting(uint32_t maxSetsPerPool);
 
   private:
-    angle::Result allocateNewPool(ContextVk *contextVk);
+    angle::Result allocateNewPool(Context *context);
 
     static constexpr uint32_t kMaxSetsPerPoolMax = 512;
     static uint32_t mMaxSetsPerPool;
@@ -2553,7 +2560,8 @@ class ImageViewHelper final : public Resource
                                 const gl::SamplerState &samplerState);
 
     // Creates a storage view with all layers of the level.
-    angle::Result getLevelStorageImageView(ContextVk *contextVk,
+    angle::Result getLevelStorageImageView(Context *context,
+                                           ResourceUseList *resourceUseList,
                                            gl::TextureType viewType,
                                            const ImageHelper &image,
                                            LevelIndex levelVk,
@@ -2563,7 +2571,8 @@ class ImageViewHelper final : public Resource
                                            const ImageView **imageViewOut);
 
     // Creates a storage view with a single layer of the level.
-    angle::Result getLevelLayerStorageImageView(ContextVk *contextVk,
+    angle::Result getLevelLayerStorageImageView(Context *context,
+                                                ResourceUseList *resourceUseList,
                                                 const ImageHelper &image,
                                                 LevelIndex levelVk,
                                                 uint32_t layer,
@@ -2572,7 +2581,8 @@ class ImageViewHelper final : public Resource
                                                 const ImageView **imageViewOut);
 
     // Creates a draw view with a range of layers of the level.
-    angle::Result getLevelDrawImageView(ContextVk *contextVk,
+    angle::Result getLevelDrawImageView(Context *context,
+                                        ResourceUseList *resourceUseList,
                                         const ImageHelper &image,
                                         LevelIndex levelVk,
                                         uint32_t layer,
@@ -2581,7 +2591,8 @@ class ImageViewHelper final : public Resource
                                         const ImageView **imageViewOut);
 
     // Creates a draw view with a single layer of the level.
-    angle::Result getLevelLayerDrawImageView(ContextVk *contextVk,
+    angle::Result getLevelLayerDrawImageView(Context *context,
+                                             ResourceUseList *resourceUseList,
                                              const ImageHelper &image,
                                              LevelIndex levelVk,
                                              uint32_t layer,
@@ -2716,7 +2727,7 @@ class BufferViewHelper final : public Resource
     void release(ContextVk *contextVk);
     void destroy(VkDevice device);
 
-    angle::Result getView(ContextVk *contextVk,
+    angle::Result getView(Context *context,
                           const BufferHelper &buffer,
                           VkDeviceSize bufferOffset,
                           const Format &format,
