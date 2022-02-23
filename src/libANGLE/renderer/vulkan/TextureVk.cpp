@@ -266,15 +266,15 @@ void Set3DBaseArrayLayerAndLayerCount(VkImageSubresourceLayers *Subresource)
     Subresource->layerCount     = 1;
 }
 
-const vk::Format *AdjustStorageViewFormatPerWorkarounds(ContextVk *contextVk,
+const vk::Format *AdjustStorageViewFormatPerWorkarounds(RendererVk *renderer,
                                                         const vk::Format *intended,
                                                         vk::ImageAccess access)
 {
     // r32f images are emulated with r32ui.
-    if (contextVk->getFeatures().emulateR32fImageAtomicExchange.enabled &&
+    if (renderer->getFeatures().emulateR32fImageAtomicExchange.enabled &&
         intended->getActualImageFormatID(access) == angle::FormatID::R32_FLOAT)
     {
-        return &contextVk->getRenderer()->getFormat(angle::FormatID::R32_UINT);
+        return &renderer->getFormat(angle::FormatID::R32_UINT);
     }
 
     return intended;
@@ -795,7 +795,8 @@ angle::Result TextureVk::copySubImageImpl(const gl::Context *context,
             contextVk->flushCommandsAndEndRenderPass(RenderPassClosureReason::PrepareForImageCopy));
 
         const vk::ImageView *copyImageView = nullptr;
-        ANGLE_TRY(colorReadRT->getAndRetainCopyImageView(contextVk, &copyImageView));
+        ANGLE_TRY(colorReadRT->getAndRetainCopyImageView(
+            contextVk, &contextVk->getResourceUseList(), &copyImageView));
 
         return copySubImageImplWithDraw(contextVk, offsetImageIndex, modifiedDestOffset, dstFormat,
                                         colorReadRT->getLevelIndex(), clippedSourceBox,
@@ -1834,8 +1835,8 @@ angle::Result TextureVk::generateMipmapsWithCompute(ContextVk *contextVk)
 
             const vk::LevelIndex srcLevelVk = dstBaseLevelVk - 1;
             ANGLE_TRY(getImageViews().getLevelLayerDrawImageView(
-                contextVk, *mImage, srcLevelVk, layer, gl::SrgbWriteControlMode::Default,
-                &srcView));
+                contextVk, &contextVk->getResourceUseList(), *mImage, srcLevelVk, layer,
+                gl::SrgbWriteControlMode::Default, &srcView));
 
             vk::LevelIndex dstLevelCount = maxGenerateLevels;
             for (vk::LevelIndex levelVk(0); levelVk < maxGenerateLevels; ++levelVk)
@@ -1850,8 +1851,8 @@ angle::Result TextureVk::generateMipmapsWithCompute(ContextVk *contextVk)
                 }
 
                 ANGLE_TRY(getImageViews().getLevelLayerDrawImageView(
-                    contextVk, *mImage, dstLevelVk, layer, gl::SrgbWriteControlMode::Default,
-                    &destLevelViews[levelVk.get()]));
+                    contextVk, &contextVk->getResourceUseList(), *mImage, dstLevelVk, layer,
+                    gl::SrgbWriteControlMode::Default, &destLevelViews[levelVk.get()]));
             }
 
             // If the image has fewer than maximum levels, fill the last views with a unused view.
@@ -2771,12 +2772,12 @@ void TextureVk::releaseOwnershipOfImage(const gl::Context *context)
     releaseAndDeleteImageAndViews(contextVk);
 }
 
-bool TextureVk::shouldDecodeSRGB(ContextVk *contextVk,
+bool TextureVk::shouldDecodeSRGB(vk::Context *context,
                                  GLenum srgbDecode,
                                  bool texelFetchStaticUse) const
 {
     // By default, we decode SRGB images.
-    const vk::Format &format = getBaseLevelFormat(contextVk->getRenderer());
+    const vk::Format &format = getBaseLevelFormat(context->getRenderer());
     bool decodeSRGB          = format.getActualImageFormat(getRequiredImageAccess()).isSRGB;
 
     // If the SRGB override is enabled, we also decode SRGB.
@@ -2801,21 +2802,22 @@ bool TextureVk::shouldDecodeSRGB(ContextVk *contextVk,
     return decodeSRGB;
 }
 
-const vk::ImageView &TextureVk::getReadImageViewAndRecordUse(ContextVk *contextVk,
+const vk::ImageView &TextureVk::getReadImageViewAndRecordUse(vk::Context *context,
+                                                             vk::ResourceUseList *resourceUseList,
                                                              GLenum srgbDecode,
                                                              bool texelFetchStaticUse) const
 {
     ASSERT(mImage->valid());
 
     const vk::ImageViewHelper &imageViews = getImageViews();
-    imageViews.retain(&contextVk->getResourceUseList());
+    imageViews.retain(resourceUseList);
 
     if (mState.isStencilMode() && imageViews.hasStencilReadImageView())
     {
         return imageViews.getStencilReadImageView();
     }
 
-    if (shouldDecodeSRGB(contextVk, srgbDecode, texelFetchStaticUse))
+    if (shouldDecodeSRGB(context, srgbDecode, texelFetchStaticUse))
     {
         ASSERT(imageViews.getSRGBReadImageView().valid());
         return imageViews.getSRGBReadImageView();
@@ -2825,19 +2827,20 @@ const vk::ImageView &TextureVk::getReadImageViewAndRecordUse(ContextVk *contextV
     return imageViews.getLinearReadImageView();
 }
 
-const vk::ImageView &TextureVk::getFetchImageViewAndRecordUse(ContextVk *contextVk,
+const vk::ImageView &TextureVk::getFetchImageViewAndRecordUse(vk::Context *context,
+                                                              vk::ResourceUseList *resourceUseList,
                                                               GLenum srgbDecode,
                                                               bool texelFetchStaticUse) const
 {
     ASSERT(mImage->valid());
 
     const vk::ImageViewHelper &imageViews = getImageViews();
-    imageViews.retain(&contextVk->getResourceUseList());
+    imageViews.retain(resourceUseList);
 
     // We don't currently support fetch for depth/stencil cube map textures.
     ASSERT(!imageViews.hasStencilReadImageView() || !imageViews.hasFetchImageView());
 
-    if (shouldDecodeSRGB(contextVk, srgbDecode, texelFetchStaticUse))
+    if (shouldDecodeSRGB(context, srgbDecode, texelFetchStaticUse))
     {
         return (imageViews.hasFetchImageView() ? imageViews.getSRGBFetchImageView()
                                                : imageViews.getSRGBReadImageView());
@@ -2876,17 +2879,21 @@ angle::Result TextureVk::getLevelLayerImageView(ContextVk *contextVk,
     uint32_t nativeLayer   = getNativeImageLayer(static_cast<uint32_t>(layer));
 
     return getImageViews().getLevelLayerDrawImageView(
-        contextVk, *mImage, levelVk, nativeLayer, gl::SrgbWriteControlMode::Default, imageViewOut);
+        contextVk, &contextVk->getResourceUseList(), *mImage, levelVk, nativeLayer,
+        gl::SrgbWriteControlMode::Default, imageViewOut);
 }
 
-angle::Result TextureVk::getStorageImageView(ContextVk *contextVk,
+angle::Result TextureVk::getStorageImageView(vk::Context *context,
+                                             vk::ResourceUseList *resourceUseList,
                                              const gl::ImageUnit &binding,
                                              const vk::ImageView **imageViewOut)
 {
-    angle::FormatID formatID = angle::Format::InternalFormatToID(binding.format);
-    const vk::Format *format = &contextVk->getRenderer()->getFormat(formatID);
+    RendererVk *renderer = context->getRenderer();
 
-    format = AdjustStorageViewFormatPerWorkarounds(contextVk, format, getRequiredImageAccess());
+    angle::FormatID formatID = angle::Format::InternalFormatToID(binding.format);
+    const vk::Format *format = &renderer->getFormat(formatID);
+
+    format = AdjustStorageViewFormatPerWorkarounds(renderer, format, getRequiredImageAccess());
 
     gl::LevelIndex nativeLevelGL =
         getNativeImageLevel(gl::LevelIndex(static_cast<uint32_t>(binding.level)));
@@ -2897,7 +2904,7 @@ angle::Result TextureVk::getStorageImageView(ContextVk *contextVk,
         uint32_t nativeLayer = getNativeImageLayer(static_cast<uint32_t>(binding.layer));
 
         return getImageViews().getLevelLayerStorageImageView(
-            contextVk, *mImage, nativeLevelVk, nativeLayer,
+            context, resourceUseList, *mImage, nativeLevelVk, nativeLayer,
             VK_IMAGE_USAGE_SAMPLED_BIT | VK_IMAGE_USAGE_STORAGE_BIT,
             format->getActualImageFormatID(getRequiredImageAccess()), imageViewOut);
     }
@@ -2905,17 +2912,17 @@ angle::Result TextureVk::getStorageImageView(ContextVk *contextVk,
     uint32_t nativeLayer = getNativeImageLayer(0);
 
     return getImageViews().getLevelStorageImageView(
-        contextVk, mState.getType(), *mImage, nativeLevelVk, nativeLayer,
+        context, resourceUseList, mState.getType(), *mImage, nativeLevelVk, nativeLayer,
         VK_IMAGE_USAGE_SAMPLED_BIT | VK_IMAGE_USAGE_STORAGE_BIT,
         format->getActualImageFormatID(getRequiredImageAccess()), imageViewOut);
 }
 
-angle::Result TextureVk::getBufferViewAndRecordUse(ContextVk *contextVk,
+angle::Result TextureVk::getBufferViewAndRecordUse(vk::Context *context,
                                                    const vk::Format *imageUniformFormat,
                                                    bool isImage,
                                                    const vk::BufferView **viewOut)
 {
-    RendererVk *renderer = contextVk->getRenderer();
+    RendererVk *renderer = context->getRenderer();
 
     ASSERT(mState.getBuffer().get() != nullptr);
 
@@ -2928,7 +2935,7 @@ angle::Result TextureVk::getBufferViewAndRecordUse(ContextVk *contextVk,
 
     if (isImage)
     {
-        imageUniformFormat = AdjustStorageViewFormatPerWorkarounds(contextVk, imageUniformFormat,
+        imageUniformFormat = AdjustStorageViewFormatPerWorkarounds(renderer, imageUniformFormat,
                                                                    getRequiredImageAccess());
     }
 
@@ -2936,7 +2943,7 @@ angle::Result TextureVk::getBufferViewAndRecordUse(ContextVk *contextVk,
     const vk::BufferHelper &buffer = vk::GetImpl(mState.getBuffer().get())->getBuffer();
     VkDeviceSize bufferOffset      = buffer.getOffset();
 
-    return mBufferViews.getView(contextVk, buffer, bufferOffset, *imageUniformFormat, viewOut);
+    return mBufferViews.getView(context, buffer, bufferOffset, *imageUniformFormat, viewOut);
 }
 
 angle::Result TextureVk::initImage(ContextVk *contextVk,
