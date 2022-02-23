@@ -60,6 +60,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "e5f5ebd7_0eb551dd",
+        "filename": "src/tests/gl_tests/VulkanPerformanceCounterTest.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 215,
+      "author": {
+        "id": 1340324
+      },
+      "writtenOn": "2022-02-23T06:03:15Z",
+      "side": 1,
+      "message": "The test runs with \"WithNoFixture\", mFixture is nullptr.",
+      "parentUuid": "4ee67fc7_3ac23daa",
+      "range": {
+        "startLine": 214,
+        "startChar": 0,
+        "endLine": 215,
+        "endChar": 40
+      },
+      "revId": "c389981b7991fe490225c269ef989d2b364ab6fc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "37ac35e3_d8f10a5c",
         "filename": "src/tests/gl_tests/VulkanPerformanceCounterTest.cpp",
         "patchSetId": 2
