@@ -245,6 +245,24 @@
       "message": "Shabi had an idea on how to narrow the workaround: Shabi can you remind us what your idea was?",
       "revId": "49d26e826accde25433654a50f766e6fd1a76c72",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "5a52d1e1_d54c8e02",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-02-23T21:56:54Z",
+      "side": 1,
+      "message": "Quoting from chat:\n\n\u003e When we decide if loadOp can become DONT_CARE based on whether storeOp is DONT_CARE and depth/stencil is unused, we just skip that.\n\u003e \n\u003e Basically skip this if based on the feature: https://source.chromium.org/chromium/chromium/src/+/main:third_party/angle/src/libANGLE/renderer/vulkan/vk_helpers.cpp;l\u003d1843\n\u003e \n\u003e Then legitimate invalidates will continue to work\n\u003e \n\u003e We could potentially add an if before it that says if (feature \u0026\u0026 storeOp \u003d\u003d DONT_CARE \u0026\u0026 loadOp \u003d\u003d CLEAR) { don\u0027t change loadOp; } to make it even more precise",
+      "parentUuid": "d72dccb1_cddb81fd",
+      "revId": "49d26e826accde25433654a50f766e6fd1a76c72",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
