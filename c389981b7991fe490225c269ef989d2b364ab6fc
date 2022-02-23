@@ -35,6 +35,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "844a739f_6a2aa096",
+        "filename": "src/libANGLE/renderer/vulkan/SurfaceVk.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 1710,
+      "author": {
+        "id": 1340324
+      },
+      "writtenOn": "2022-02-23T06:25:42Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "d4094b6d_4a10c39f",
+      "revId": "c389981b7991fe490225c269ef989d2b364ab6fc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "4ee67fc7_3ac23daa",
@@ -99,6 +117,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "c4d3e679_7e10ed6c",
+        "filename": "src/tests/gl_tests/VulkanPerformanceCounterTest.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 3314,
+      "author": {
+        "id": 1340324
+      },
+      "writtenOn": "2022-02-23T06:25:42Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "37ac35e3_d8f10a5c",
+      "revId": "c389981b7991fe490225c269ef989d2b364ab6fc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "5bf0548b_8e8d9930",
@@ -112,6 +148,30 @@
       "writtenOn": "2022-02-22T15:13:40Z",
       "side": 1,
       "message": "nit: You can always read and verify this counter separately. This function deals with load/store-related counters.",
+      "range": {
+        "startLine": 3323,
+        "startChar": 72,
+        "endLine": 3323,
+        "endChar": 74
+      },
+      "revId": "c389981b7991fe490225c269ef989d2b364ab6fc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "1f216e52_1b4ca195",
+        "filename": "src/tests/gl_tests/VulkanPerformanceCounterTest.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 3323,
+      "author": {
+        "id": 1340324
+      },
+      "writtenOn": "2022-02-23T06:25:42Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "5bf0548b_8e8d9930",
       "range": {
         "startLine": 3323,
         "startChar": 72,
