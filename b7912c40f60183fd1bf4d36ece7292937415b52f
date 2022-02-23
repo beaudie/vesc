@@ -1,0 +1,44 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "9eeed76f_dc3c046c",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 24
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1446209
+      },
+      "writtenOn": "2022-02-23T09:28:11Z",
+      "side": 1,
+      "message": "Sorry for so many different versions and very appreciate for your useful advice.Do you have any advice or concerns about the newest patch?Thanks a lot!",
+      "revId": "b7912c40f60183fd1bf4d36ece7292937415b52f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "7312f031_e681317f",
+        "filename": "src/libANGLE/renderer/vulkan/TextureVk.cpp",
+        "patchSetId": 24
+      },
+      "lineNbr": 2733,
+      "author": {
+        "id": 1446209
+      },
+      "writtenOn": "2022-02-23T09:28:11Z",
+      "side": 1,
+      "message": "Adding isOverWriteToSpecificLevel func to do full 2D texture update check,if it returns true,and there are staged update in base level,we can recreate image safely.Because following generatingMipmap operation will overwrite to other old levels based on base level data.\n\nAdding gl::LevelIndex(mState.getEffectiveBaseLevel()) \u003d\u003d firstLevelGL is to exclude non zero base level update,considering this case:\nglTexStorage2D();\nglTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_BASE_LEVEL, 0);\nglTexSubImage2D(level 0);\nglGenerateMipmap(GL_TEXTURE_2D);\nglTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_BASE_LEVEL, 1);\nglTexSubImage2D(level 1);-\u003edefer update\nglGenerateMipmap(GL_TEXTURE_2D);-\u003erecreate image,generate mipmaps based on level 1,but level 0 lost.",
+      "range": {
+        "startLine": 2732,
+        "startChar": 12,
+        "endLine": 2733,
+        "endChar": 96
+      },
+      "revId": "b7912c40f60183fd1bf4d36ece7292937415b52f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
