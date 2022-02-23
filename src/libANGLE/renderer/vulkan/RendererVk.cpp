@@ -3768,11 +3768,21 @@ angle::Result RendererVk::submitFrame(vk::Context *context,
 
     waitSemaphores.clear();
     waitSemaphoreStageMasks.clear();
-    for (vk::ResourceUseList &it : resourceUseLists)
+
+    if (!resourceUseLists.empty())
     {
-        it.releaseResourceUsesAndUpdateSerials(*submitSerialOut);
+        // TODO (http://anglebug.com/7045): From the release call, we always put resources into
+        // mGarbageList, even though the resource maybe still in the context's mResourceUseList.
+        // This result in two lists have poointers to the mUse and data race between two threads
+        // processing the two lists. This is a temporary fix to ensure that when we process resource
+        // list, we always hold mGarbageMutex as well so that data race will not occur.
+        std::lock_guard<std::mutex> lock(mGarbageMutex);
+        for (vk::ResourceUseList &it : resourceUseLists)
+        {
+            it.releaseResourceUsesAndUpdateSerials(*submitSerialOut);
+        }
+        resourceUseLists.clear();
     }
-    resourceUseLists.clear();
 
     return angle::Result::Continue;
 }
