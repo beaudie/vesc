@@ -275,6 +275,30 @@
       },
       "revId": "f031e4384ee0252779c4bea4c37255f06b17bc52",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "6e9f7f9e_1e287dc4",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 12
+      },
+      "lineNbr": 5145,
+      "author": {
+        "id": 1520902
+      },
+      "writtenOn": "2022-02-23T01:05:15Z",
+      "side": 1,
+      "message": "Yes it was due to we are destroying WindowSurfaceVk::mSwapchainImages.imageViews when they are still in use in command buffers. The two questions I have are:\n\n1. In WindowSurfaceVk::releaseSwapchainImages(), all of the mSwapchainImages.image are not in use in command buffers, but mSwapchainImages.imageViews are still in use in command buffers. Is this a valid case?\n\n2. In WindowSurfaceVk::getCurrentFramebuffer(), why do we need to loop through all the mSwapchainImages and call getLevelLayerDrawImageView() on each of them: https://source.chromium.org/chromium/chromium/src/+/main:third_party/angle/src/libANGLE/renderer/vulkan/SurfaceVk.cpp;l\u003d2204? when we only filling one imageViews[0]?",
+      "parentUuid": "16d333d5_85723d06",
+      "range": {
+        "startLine": 5137,
+        "startChar": 3,
+        "endLine": 5145,
+        "endChar": 16
+      },
+      "revId": "f031e4384ee0252779c4bea4c37255f06b17bc52",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
