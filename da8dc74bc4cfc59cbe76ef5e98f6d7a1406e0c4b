@@ -35,6 +35,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "3325f264_47f66bd2",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 23
+      },
+      "lineNbr": 218,
+      "author": {
+        "id": 1524687
+      },
+      "writtenOn": "2022-02-23T11:05:23Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "337b0cc1_11afa2b9",
+      "revId": "da8dc74bc4cfc59cbe76ef5e98f6d7a1406e0c4b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "0655c289_ad32a70c",
@@ -52,6 +70,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "4f49d408_0611b601",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 23
+      },
+      "lineNbr": 6789,
+      "author": {
+        "id": 1524687
+      },
+      "writtenOn": "2022-02-23T11:05:23Z",
+      "side": 1,
+      "message": "Yes, there is a typo. the function name should be endRenderPassIfComputeAccessAfterGraphicsTextureImageAccess. And it assimilate the endRenderPassIfComputeReadAfterAttachmentWrite.",
+      "parentUuid": "0655c289_ad32a70c",
+      "revId": "da8dc74bc4cfc59cbe76ef5e98f6d7a1406e0c4b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "b354531c_78270db7",
@@ -65,6 +101,30 @@
       "writtenOn": "2022-02-22T17:04:49Z",
       "side": 1,
       "message": "\"UsesBarrier\" makes it hard to understand why these matter. How about instead of \"UsesBarrier\", we call it \"WithLayoutTransition\"?\n\nThat makes it clearer IMO that the reason we need to know this is because of layouts.",
+      "range": {
+        "startLine": 1107,
+        "startChar": 18,
+        "endLine": 1107,
+        "endChar": 29
+      },
+      "revId": "da8dc74bc4cfc59cbe76ef5e98f6d7a1406e0c4b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "4a4b998c_cd9be540",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.h",
+        "patchSetId": 23
+      },
+      "lineNbr": 1107,
+      "author": {
+        "id": 1524687
+      },
+      "writtenOn": "2022-02-23T11:05:23Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "b354531c_78270db7",
       "range": {
         "startLine": 1107,
         "startChar": 18,
@@ -196,6 +256,24 @@
       "side": 1,
       "message": "Thanks Charlie. Indeed Min is trying to detect all images that are used read-only. But this change is using `RenderPassUsage` a bit differently. It\u0027s setting this usage in the ImageHelper right away in `RenderPassCommandBufferHelper::imageRead`.\n\nI guess the real problem here is that no one is resetting the usage at render pass closure. Min, it seems that this bit is \"sticky\", so once it\u0027s set, we never reset it. Could you add a test in VulkanPerformanceCounterTest.cpp to expose this bug? Basically use the image such that this bit is set and a render pass is broken because of it. Then change the circumstances such that render pass wouldn\u0027t need breaking, but will be because of this bit. The test would fail for example because it expects 2 render passes, but observes 3.",
       "parentUuid": "bfca4e98_9fae3d6d",
+      "revId": "da8dc74bc4cfc59cbe76ef5e98f6d7a1406e0c4b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "df85d7a7_456463a4",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.h",
+        "patchSetId": 23
+      },
+      "lineNbr": 1431,
+      "author": {
+        "id": 1524687
+      },
+      "writtenOn": "2022-02-23T11:05:23Z",
+      "side": 1,
+      "message": "Yes, this flag seems sticky. But this flag just plays a role of \"read\" operation identification. \nThe closure renderpass needs extra condition that need a layout transition. Advanced, if need a read image layout transition, this flag always be set. But anyway, if one renderpass be closed due this scenario, we\u0027d better to clear it (fixed in the last patch).",
+      "parentUuid": "ab083e7e_7e6b5938",
       "revId": "da8dc74bc4cfc59cbe76ef5e98f6d7a1406e0c4b",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
