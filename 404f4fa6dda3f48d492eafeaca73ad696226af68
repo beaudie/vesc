@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "94d5957d_2534d4ed",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-02-23T03:59:08Z",
+      "side": 1,
+      "message": "Parts of your change Brandon. I\u0027m splitting things such that I can hook up VK_EXT_blend_operation_advanced first (which would be _much_ simpler), then get around to converting the emulation code.",
+      "revId": "404f4fa6dda3f48d492eafeaca73ad696226af68",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
