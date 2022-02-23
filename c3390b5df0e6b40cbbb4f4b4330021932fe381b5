@@ -1,6 +1,75 @@
 {
   "comments": [
     {
+      "unresolved": true,
+      "key": {
+        "uuid": "d696cc07_fb1e0646",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 14
+      },
+      "lineNbr": 14,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2022-02-23T13:18:09Z",
+      "side": 1,
+      "message": "any improved timing metrics you can list?",
+      "range": {
+        "startLine": 13,
+        "startChar": 5,
+        "endLine": 14,
+        "endChar": 12
+      },
+      "revId": "c3390b5df0e6b40cbbb4f4b4330021932fe381b5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "8b0682d7_491b4f87",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 14
+      },
+      "lineNbr": 4737,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2022-02-23T13:18:09Z",
+      "side": 1,
+      "message": "nit: no need for this namespace prefix",
+      "range": {
+        "startLine": 4737,
+        "startChar": 4,
+        "endLine": 4737,
+        "endChar": 6
+      },
+      "revId": "c3390b5df0e6b40cbbb4f4b4330021932fe381b5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "fb802e4a_1c3b5665",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.h",
+        "patchSetId": 14
+      },
+      "lineNbr": 2297,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2022-02-23T13:18:09Z",
+      "side": 1,
+      "message": "this change is the only thing that looks like it shouldn\u0027t be here. Charlie or Yuxin what alternatives do we have to storing garbage inside an ImageHelper class?",
+      "range": {
+        "startLine": 2297,
+        "startChar": 4,
+        "endLine": 2297,
+        "endChar": 56
+      },
+      "revId": "c3390b5df0e6b40cbbb4f4b4330021932fe381b5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": false,
       "key": {
         "uuid": "d15c177d_32a27ad1",
@@ -14,6 +83,30 @@
       "writtenOn": "2022-02-22T21:48:36Z",
       "side": 1,
       "message": "Note for future cleanups. After this change, I am not sure if there is still value to keep ImageHelper and ImageViewHelper as two separate classes. Their life cycle are the same, maybe it\u0027s better to merge into one class, and you don\u0027t need these kind of punch hole methods as well.",
+      "range": {
+        "startLine": 2492,
+        "startChar": 2,
+        "endLine": 2495,
+        "endChar": 80
+      },
+      "revId": "c3390b5df0e6b40cbbb4f4b4330021932fe381b5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "34e557f4_798a8fc5",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.h",
+        "patchSetId": 14
+      },
+      "lineNbr": 2495,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2022-02-23T13:18:09Z",
+      "side": 1,
+      "message": "I\u0027d just make this a public method. There\u0027s no need to try and hide behind friend.\n\nI would suggest we leave the classes spit to make it easier to understand.",
+      "parentUuid": "d15c177d_32a27ad1",
       "range": {
         "startLine": 2492,
         "startChar": 2,
