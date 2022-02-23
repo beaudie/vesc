@@ -1139,7 +1139,8 @@ RendererVk::~RendererVk()
 bool RendererVk::hasSharedGarbage()
 {
     std::lock_guard<std::mutex> lock(mGarbageMutex);
-    return !mSharedGarbage.empty() || !mSuballocationGarbage.empty();
+    return !mSharedGarbage.empty() || !mPendingGarbage.empty() || !mSuballocationGarbage.empty() ||
+           !mPendingSuballocationGarbage.empty();
 }
 
 void RendererVk::releaseSharedResources(vk::ResourceUseList *resourceList)
@@ -3601,6 +3602,51 @@ void RendererVk::cleanupCompletedCommandsGarbage()
     (void)cleanupGarbage(getLastCompletedQueueSerial());
 }
 
+void RendererVk::cleanupPendingGarbage()
+{
+    std::lock_guard<std::mutex> lock(mGarbageMutex);
+
+    // Check if pending garbage is still pending. If not, move them to the garbage list.
+    vk::SharedGarbageList pendingGarbage;
+    while (!mPendingGarbage.empty())
+    {
+        vk::SharedGarbage &garbage = mPendingGarbage.front();
+        if (!garbage.usedInRecordedCommands())
+        {
+            mSharedGarbage.push(std::move(garbage));
+        }
+        else
+        {
+            pendingGarbage.push(std::move(garbage));
+        }
+        mPendingGarbage.pop();
+    }
+    if (!pendingGarbage.empty())
+    {
+        mPendingGarbage = std::move(pendingGarbage);
+    }
+
+    vk::SharedBufferSuballocationGarbageList pendingSuballocationGarbage;
+    while (!mPendingSuballocationGarbage.empty())
+    {
+        vk::SharedBufferSuballocationGarbage &suballocationGarbage =
+            mPendingSuballocationGarbage.front();
+        if (!suballocationGarbage.usedInRecordedCommands())
+        {
+            mSuballocationGarbage.push(std::move(suballocationGarbage));
+        }
+        else
+        {
+            pendingSuballocationGarbage.push(std::move(suballocationGarbage));
+        }
+        mPendingSuballocationGarbage.pop();
+    }
+    if (!pendingSuballocationGarbage.empty())
+    {
+        mPendingSuballocationGarbage = std::move(pendingSuballocationGarbage);
+    }
+}
+
 void RendererVk::onNewValidationMessage(const std::string &message)
 {
     mLastValidationMessage = message;
@@ -3769,11 +3815,19 @@ angle::Result RendererVk::submitFrame(vk::Context *context,
 
     waitSemaphores.clear();
     waitSemaphoreStageMasks.clear();
-    for (vk::ResourceUseList &it : resourceUseLists)
+
+    if (!resourceUseLists.empty())
     {
-        it.releaseResourceUsesAndUpdateSerials(*submitSerialOut);
+        for (vk::ResourceUseList &it : resourceUseLists)
+        {
+            it.releaseResourceUsesAndUpdateSerials(*submitSerialOut);
+        }
+        resourceUseLists.clear();
+
+        // Now that we have processed resourceUseList, some of pending garbage may no longer pending
+        // and should be moved to garbage list.
+        cleanupPendingGarbage();
     }
-    resourceUseLists.clear();
 
     return angle::Result::Continue;
 }
