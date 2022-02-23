@@ -679,6 +679,8 @@ class BlendStateExt final
     DrawBufferMask compareEquations(const EquationStorage::Type color,
                                     const EquationStorage::Type alpha) const;
 
+    bool usesAdvancedBlendEquation(size_t index) const;
+
     ///////// Blend Factors /////////
 
     FactorStorage::Type expandFactorValue(const GLenum func) const;

@@ -504,6 +504,20 @@ DrawBufferMask BlendStateExt::compareEquations(const EquationStorage::Type color
            EquationStorage::GetDiffMask(mEquationAlpha, alpha);
 }
 
+bool BlendStateExt::usesAdvancedBlendEquation(size_t index) const
+{
+    ASSERT(index < mMaxDrawBuffers);
+
+    const gl::BlendEquationType blendEquation =
+        EquationStorage::GetValueIndexed(index, mEquationColor);
+    if (blendEquation >= gl::BlendEquationType::Multiply &&
+        blendEquation <= gl::BlendEquationType::HslLuminosity)
+    {
+        return true;
+    }
+    return false;
+}
+
 BlendStateExt::FactorStorage::Type BlendStateExt::expandFactorValue(const GLenum func) const
 {
     return FactorStorage::GetReplicatedValue(FromGLenum<BlendFactorType>(func), mMaxFactorMask);
