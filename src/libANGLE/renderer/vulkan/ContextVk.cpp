@@ -778,6 +778,8 @@ ContextVk::ContextVk(const gl::State &state, gl::ErrorSet *errorSet, RendererVk 
         &ContextVk::handleDirtyGraphicsShaderResources;
     mGraphicsDirtyBitHandlers[DIRTY_BIT_FRAMEBUFFER_FETCH_BARRIER] =
         &ContextVk::handleDirtyGraphicsFramebufferFetchBarrier;
+    mGraphicsDirtyBitHandlers[DIRTY_BIT_BLEND_BARRIER] =
+        &ContextVk::handleDirtyGraphicsBlendBarrier;
     if (getFeatures().supportsTransformFeedbackExtension.enabled)
     {
         mGraphicsDirtyBitHandlers[DIRTY_BIT_TRANSFORM_FEEDBACK_BUFFERS] =
@@ -1900,7 +1902,25 @@ angle::Result ContextVk::handleDirtyGraphicsFramebufferFetchBarrier(
 
     mRenderPassCommandBuffer->pipelineBarrier(
         VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT, VK_PIPELINE_STAGE_FRAGMENT_SHADER_BIT,
-        VK_DEPENDENCY_BY_REGION_BIT, 1, &memoryBarrier, 0, nullptr, 0, nullptr);
+        VK_DEPENDENCY_BY_REGION_BIT | VK_DEPENDENCY_VIEW_LOCAL_BIT, 1, &memoryBarrier, 0, nullptr,
+        0, nullptr);
+
+    return angle::Result::Continue;
+}
+
+angle::Result ContextVk::handleDirtyGraphicsBlendBarrier(DirtyBits::Iterator *dirtyBitsIterator,
+                                                         DirtyBits dirtyBitMask)
+{
+    VkMemoryBarrier memoryBarrier = {};
+    memoryBarrier.sType           = VK_STRUCTURE_TYPE_MEMORY_BARRIER;
+    memoryBarrier.srcAccessMask   = VK_ACCESS_COLOR_ATTACHMENT_WRITE_BIT;
+    memoryBarrier.dstAccessMask   = VK_ACCESS_COLOR_ATTACHMENT_READ_NONCOHERENT_BIT_EXT;
+
+    mRenderPassCommandBuffer->pipelineBarrier(
+        VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT,
+        VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT,
+        VK_DEPENDENCY_BY_REGION_BIT | VK_DEPENDENCY_VIEW_LOCAL_BIT, 1, &memoryBarrier, 0, nullptr,
+        0, nullptr);
 
     return angle::Result::Continue;
 }
@@ -5059,6 +5079,11 @@ angle::Result ContextVk::memoryBarrierByRegion(const gl::Context *context, GLbit
 void ContextVk::framebufferFetchBarrier()
 {
     mGraphicsDirtyBits.set(DIRTY_BIT_FRAMEBUFFER_FETCH_BARRIER);
+}
+
+void ContextVk::blendBarrier()
+{
+    mGraphicsDirtyBits.set(DIRTY_BIT_BLEND_BARRIER);
 }
 
 angle::Result ContextVk::acquireTextures(const gl::Context *context,
