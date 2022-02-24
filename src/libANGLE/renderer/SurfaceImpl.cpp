@@ -150,4 +150,9 @@ egl::Error SurfaceImpl::setRenderBuffer(EGLint renderBuffer)
 {
     return egl::NoError();
 }
+
+void SurfaceImpl::getRenderBuffer(EGLenum *renderBufferOut) const
+{
+    return;
+}
 }  // namespace rx
