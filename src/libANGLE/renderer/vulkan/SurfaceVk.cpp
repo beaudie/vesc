@@ -1052,6 +1052,13 @@ angle::Result WindowSurfaceVk::initializeImpl(DisplayVk *displayVk)
     ANGLE_VK_CHECK(displayVk, (mSurfaceCaps.supportedCompositeAlpha & mCompositeAlpha) != 0,
                    VK_ERROR_INITIALIZATION_FAILED);
 
+    // Single buffer, if supported
+    if ((mState.attributes.getAsInt(EGL_RENDER_BUFFER, EGL_BACK_BUFFER) == EGL_SINGLE_BUFFER) &&
+        supportsSharedPresent())
+    {
+        mDesiredSwapchainPresentMode = VK_PRESENT_MODE_SHARED_DEMAND_REFRESH_KHR;
+    }
+
     ANGLE_TRY(createSwapChain(displayVk, extents, VK_NULL_HANDLE));
 
     // Create the semaphores that will be used for vkAcquireNextImageKHR.
@@ -2376,16 +2383,20 @@ egl::Error WindowSurfaceVk::getBufferAge(const gl::Context *context, EGLint *age
     return egl::NoError();
 }
 
+bool WindowSurfaceVk::supportsSharedPresent() const
+{
+    return (std::find(mPresentModes.begin(), mPresentModes.end(),
+                      VK_PRESENT_MODE_SHARED_DEMAND_REFRESH_KHR) != mPresentModes.end());
+}
+
 egl::Error WindowSurfaceVk::setRenderBuffer(EGLint renderBuffer)
 {
-    if (std::find(mPresentModes.begin(), mPresentModes.end(),
-                  VK_PRESENT_MODE_SHARED_DEMAND_REFRESH_KHR) == mPresentModes.end())
-    {
-        return egl::EglBadMatch();
-    }
-
     if (renderBuffer == EGL_SINGLE_BUFFER)
     {
+        if (!supportsSharedPresent())
+        {
+            return egl::EglBadMatch();
+        }
         mDesiredSwapchainPresentMode = VK_PRESENT_MODE_SHARED_DEMAND_REFRESH_KHR;
     }
     else  // EGL_BACK_BUFFER
@@ -2393,6 +2404,19 @@ egl::Error WindowSurfaceVk::setRenderBuffer(EGLint renderBuffer)
         mDesiredSwapchainPresentMode = VK_PRESENT_MODE_FIFO_KHR;
     }
     return egl::NoError();
+}
+
+void WindowSurfaceVk::getRenderBuffer(EGLint &renderBuffer)
+{
+    if (mSwapchainPresentMode == VK_PRESENT_MODE_SHARED_DEMAND_REFRESH_KHR)
+    {
+        renderBuffer = EGL_SINGLE_BUFFER;
+    }
+    else
+    {
+        renderBuffer = EGL_BACK_BUFFER;
+    }
+    return;
 }
 
 egl::Error WindowSurfaceVk::lockSurface(const egl::Display *display,
