@@ -150,4 +150,10 @@ egl::Error SurfaceImpl::setRenderBuffer(EGLint renderBuffer)
 {
     return egl::NoError();
 }
+
+void SurfaceImpl::getRenderBuffer(EGLint &renderBuffer)
+{
+    // Don't change if don't know.
+    return;
+}
 }  // namespace rx
