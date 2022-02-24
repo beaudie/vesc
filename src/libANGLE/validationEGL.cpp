@@ -2493,8 +2493,12 @@ bool ValidateCreateWindowSurface(const ValidationContext *val,
                 break;
 
             case EGL_VG_COLORSPACE:
-                val->setError(EGL_BAD_MATCH);
-                return false;
+                if (value != EGL_VG_COLORSPACE_sRGB)
+                {
+                    val->setError(EGL_BAD_MATCH);
+                    return false;
+                }
+                break;
 
             case EGL_GL_COLORSPACE:
                 ANGLE_VALIDATION_TRY(ValidateColorspaceAttribute(val, displayExtensions, value));
@@ -2577,14 +2581,6 @@ bool ValidateCreateWindowSurface(const ValidationContext *val,
                 val->setError(EGL_BAD_ATTRIBUTE);
                 return false;
         }
-    }
-
-    if ((config->surfaceType & EGL_MUTABLE_RENDER_BUFFER_BIT_KHR) != 0 &&
-        !displayExtensions.mutableRenderBufferKHR)
-    {
-        val->setError(EGL_BAD_ATTRIBUTE,
-                      "EGL_MUTABLE_RENDER_BUFFER_BIT_KHR requires EGL_KHR_mutable_render_buffer.");
-        return false;
     }
 
     if (Display::hasExistingWindowSurface(window))
@@ -5335,14 +5331,6 @@ bool ValidateSurfaceAttrib(const ValidationContext *val,
             break;
 
         case EGL_RENDER_BUFFER:
-            if (!display->getExtensions().mutableRenderBufferKHR)
-            {
-                val->setError(
-                    EGL_BAD_ATTRIBUTE,
-                    "Attribute EGL_RENDER_BUFFER requires EGL_KHR_mutable_render_buffer.");
-                return false;
-            }
-
             if (value != EGL_BACK_BUFFER && value != EGL_SINGLE_BUFFER)
             {
                 val->setError(EGL_BAD_ATTRIBUTE,
@@ -5350,12 +5338,23 @@ bool ValidateSurfaceAttrib(const ValidationContext *val,
                 return false;
             }
 
-            if ((surface->getConfig()->surfaceType & EGL_MUTABLE_RENDER_BUFFER_BIT_KHR) == 0)
+            if (value == EGL_SINGLE_BUFFER)
             {
-                val->setError(EGL_BAD_MATCH,
-                              "EGL_RENDER_BUFFER requires the surface type bit "
-                              "EGL_MUTABLE_RENDER_BUFFER_BIT_KHR.");
-                return false;
+                if (!display->getExtensions().mutableRenderBufferKHR)
+                {
+                    val->setError(
+                        EGL_BAD_ATTRIBUTE,
+                        "Attribute EGL_RENDER_BUFFER requires EGL_KHR_mutable_render_buffer.");
+                    return false;
+                }
+
+                if ((surface->getConfig()->surfaceType & EGL_MUTABLE_RENDER_BUFFER_BIT_KHR) == 0)
+                {
+                    val->setError(EGL_BAD_MATCH,
+                                  "EGL_RENDER_BUFFER requires the surface type bit "
+                                  "EGL_MUTABLE_RENDER_BUFFER_BIT_KHR.");
+                    return false;
+                }
             }
             break;
 
