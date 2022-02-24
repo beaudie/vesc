@@ -324,6 +324,7 @@ angle::Result GetAllocateInfo(const egl::AttributeMap &attribs,
 DmaBufImageSiblingVkLinux::DmaBufImageSiblingVkLinux(const egl::AttributeMap &attribs)
     : mAttribs(attribs),
       mFormat(GL_NONE),
+      mVkFormats(),
       mRenderable(false),
       mTextureable(false),
       mYUV(false),
@@ -338,6 +339,7 @@ DmaBufImageSiblingVkLinux::DmaBufImageSiblingVkLinux(const egl::AttributeMap &at
 
     int fourCCFormat = mAttribs.getAsInt(EGL_LINUX_DRM_FOURCC_EXT);
     mFormat          = gl::Format(angle::DrmFourCCFormatToGLInternalFormat(fourCCFormat, &mYUV));
+    mVkFormats       = angle::DrmFourCCFormatToVkFormats(fourCCFormat);
 
     mHasProtectedContent = mAttribs.getAsInt(EGL_PROTECTED_CONTENT_EXT, false);
 }
@@ -384,35 +386,24 @@ bool FindSupportedFlagsForFormat(RendererVk *renderer,
                                  uint64_t drmModifier,
                                  VkImageFormatListCreateInfo imageFormatListCreateInfo,
                                  VkImageUsageFlags *outUsageFlags,
-                                 VkImageCreateFlags *outCreateFlags,
+                                 VkImageCreateFlags createFlags,
                                  VkImageFormatProperties2 *outImageFormatProperties)
 {
-    VkImageUsageFlags supportedUsageFlags =
+    *outUsageFlags =
         FindSupportedUsageFlagsForFormat(renderer, format, drmModifier, imageFormatListCreateInfo,
-                                         *outUsageFlags, *outCreateFlags, outImageFormatProperties);
-    if (supportedUsageFlags == 0)
-    {
-        // Remove mutable format bit and try again.
-        *outCreateFlags &= ~VK_IMAGE_CREATE_MUTABLE_FORMAT_BIT;
-        supportedUsageFlags = FindSupportedUsageFlagsForFormat(
-            renderer, format, drmModifier, imageFormatListCreateInfo, *outUsageFlags,
-            *outCreateFlags, outImageFormatProperties);
-    }
-
-    *outUsageFlags = supportedUsageFlags;
-    return supportedUsageFlags != 0;
+                                         *outUsageFlags, createFlags, outImageFormatProperties);
+    return *outUsageFlags != 0;
 }
 
-angle::Result DmaBufImageSiblingVkLinux::initImpl(DisplayVk *displayVk)
+angle::Result DmaBufImageSiblingVkLinux::initWithFormat(DisplayVk *displayVk,
+                                                        const angle::Format &format,
+                                                        VkFormat vulkanFormat,
+                                                        bool mutableFormat)
 {
     RendererVk *renderer = displayVk->getRenderer();
 
-    const vk::Format &vkFormat  = renderer->getFormat(mFormat.info->sizedInternalFormat);
-    const angle::Format &format = vkFormat.getActualImageFormat(rx::vk::ImageAccess::SampleOnly);
-    const VkFormat vulkanFormat = vkFormat.getActualImageVkFormat(rx::vk::ImageAccess::SampleOnly);
-    const angle::FormatID intendedFormatID = vkFormat.getIntendedFormatID();
-    const angle::FormatID actualImageFormatID =
-        vkFormat.getActualImageFormatID(rx::vk::ImageAccess::SampleOnly);
+    const angle::FormatID intendedFormatID    = vk::GetFormatIDFromVkFormat(vulkanFormat);
+    const angle::FormatID actualImageFormatID = vk::GetFormatIDFromVkFormat(vulkanFormat);
 
     const uint32_t planeCount = GetPlaneCount(mAttribs);
 
@@ -478,8 +469,16 @@ angle::Result DmaBufImageSiblingVkLinux::initImpl(DisplayVk *displayVk)
         displayVk, actualImageFormatID, &externalMemoryImageCreateInfo, &imageFormatListCreateInfo,
         &imageListFormatsStorage, &createFlags);
 
+    if (!mutableFormat)
+    {
+        createFlags &= ~VK_IMAGE_CREATE_MUTABLE_FORMAT_BIT;
+        // When mutable format bit is not set, viewFormatCount must be 0 or 1.
+        imageFormatListCreateInfo.viewFormatCount =
+            std::min(imageFormatListCreateInfo.viewFormatCount, 1u);
+    }
+
     if (!FindSupportedFlagsForFormat(renderer, vulkanFormat, plane0Modifier,
-                                     imageFormatListCreateInfo, &usageFlags, &createFlags,
+                                     imageFormatListCreateInfo, &usageFlags, createFlags,
                                      &imageFormatProperties))
     {
         // The image is completely unusable.
@@ -552,6 +551,38 @@ angle::Result DmaBufImageSiblingVkLinux::initImpl(DisplayVk *displayVk)
     return mImage->initExternalMemory(
         displayVk, renderer->getMemoryProperties(), externalMemoryRequirements, allocateInfoCount,
         allocateInfo.allocateInfoPtr.data(), VK_QUEUE_FAMILY_FOREIGN_EXT, flags);
+}
+
+angle::Result DmaBufImageSiblingVkLinux::initImpl(DisplayVk *displayVk)
+{
+    RendererVk *renderer = displayVk->getRenderer();
+
+    const vk::Format &vkFormat  = renderer->getFormat(mFormat.info->sizedInternalFormat);
+    const angle::Format &format = vkFormat.getActualImageFormat(rx::vk::ImageAccess::SampleOnly);
+
+    angle::Result result = angle::Result::Stop;
+
+    for (VkFormat vkFmt : mVkFormats)
+    {
+        // Try all formats with mutable format bit first
+        result = initWithFormat(displayVk, format, vkFmt, true);
+        if (result == angle::Result::Continue)
+        {
+            return result;
+        }
+    }
+
+    for (VkFormat vkFmt : mVkFormats)
+    {
+        // Then try without mutable format bit
+        result = initWithFormat(displayVk, format, vkFmt, false);
+        if (result == angle::Result::Continue)
+        {
+            return result;
+        }
+    }
+
+    return result;
 }
 
 void DmaBufImageSiblingVkLinux::onDestroy(const egl::Display *display)

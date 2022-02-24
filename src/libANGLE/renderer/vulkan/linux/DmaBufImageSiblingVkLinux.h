@@ -39,11 +39,17 @@ class DmaBufImageSiblingVkLinux : public ExternalImageSiblingVk
     void release(RendererVk *renderer) override;
 
   private:
+    angle::Result initWithFormat(DisplayVk *displayVk,
+                                 const angle::Format &format,
+                                 VkFormat vulkanFormat,
+                                 bool mutableFormat);
+
     angle::Result initImpl(DisplayVk *displayVk);
 
     egl::AttributeMap mAttribs;
     gl::Extents mSize;
     gl::Format mFormat;
+    std::vector<VkFormat> mVkFormats;
 
     bool mRenderable;
     bool mTextureable;
