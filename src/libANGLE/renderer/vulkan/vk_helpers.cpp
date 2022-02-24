@@ -6159,6 +6159,8 @@ angle::Result ImageHelper::stageSubresourceUpdateImpl(ContextVk *contextVk,
                                   inputRowPitch, inputDepthPitch, stagingPointer, outputRowPitch,
                                   outputDepthPitch);
 
+    currentBuffer->flush(contextVk->getRenderer(), stagingOffset, allocationSize);
+    currentBuffer->invalidate(contextVk->getRenderer(), stagingOffset, allocationSize);
     // YUV formats need special handling.
     if (storageFormat.isYUV)
     {
