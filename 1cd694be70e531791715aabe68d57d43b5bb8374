@@ -22,6 +22,30 @@
       },
       "revId": "1cd694be70e531791715aabe68d57d43b5bb8374",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "396752e5_428a4cc8",
+        "filename": "src/libANGLE/renderer/vulkan/vk_caps_utils.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 534,
+      "author": {
+        "id": 1359667
+      },
+      "writtenOn": "2022-02-24T19:36:59Z",
+      "side": 1,
+      "message": "Yes I believe you are correct. This comment should be removed.",
+      "parentUuid": "276d9afa_21af8bc9",
+      "range": {
+        "startLine": 534,
+        "startChar": 7,
+        "endLine": 534,
+        "endChar": 60
+      },
+      "revId": "1cd694be70e531791715aabe68d57d43b5bb8374",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
