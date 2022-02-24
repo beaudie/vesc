@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "c6048696_7e191f1a",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 10
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-02-24T03:07:58Z",
+      "side": 1,
+      "message": "With the test fixed, I see the following results on Nvidia:\n\nANGLE main:\n*RESULT Clear_vulkan.gpu_time: scissoredClear\u003d 329785.4545454546 ns\n\nscissoredClearUseDrawClearOverVkCmdClearAttachments \u003d false:\n*RESULT Clear_vulkan.gpu_time: scissoredClear\u003d 69524.9454545455 ns\n\nscissoredClearUseDrawClearOverVkCmdClearAttachments \u003d true:\n*RESULT Clear_vulkan.gpu_time: scissoredClear\u003d 330223.6363636364 ns\n\nWhich means the feature is working correctly, and also that wow, vkCmdClearAttachments is so much faster than clear through draw! I would have expected that on Pixel6, but not Nvidia!",
+      "revId": "395640a6c762f7bb1dadcbade5d5e2098a7e33bc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b6a6b794_cac6f22b",
+        "filename": "src/tests/perf_tests/ClearPerf.cpp",
+        "patchSetId": 10
+      },
+      "lineNbr": 154,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-02-24T03:07:58Z",
+      "side": 1,
+      "message": "You need to add this here:\n\n```\n    glViewport(0, 0, params.fboSize, params.fboSize);\n    glDisable(GL_SCISSOR_TEST);\n```\n\nThat\u0027s why the rendering in the test was broken.",
+      "revId": "395640a6c762f7bb1dadcbade5d5e2098a7e33bc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
