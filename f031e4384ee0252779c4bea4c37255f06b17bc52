@@ -299,6 +299,30 @@
       },
       "revId": "f031e4384ee0252779c4bea4c37255f06b17bc52",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "99b3a2d5_0982f1fe",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 12
+      },
+      "lineNbr": 5145,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-02-24T14:38:29Z",
+      "side": 1,
+      "message": "One potential problem with release here is that maybe there\u0027s no chance to actually destroy these? Like, if destroy() is being called after vkQueueWaitIdle() on program termination, the rest of the code may not expect there to be garbage left?\n\nIf that\u0027s handled correctly, then release SGTM, but please add a comment.\n\nAlternatively, we could have also kept the views in `SwapchainCleanupData` so they get destroyed together with the swapchain, but functionally there\u0027s little difference.",
+      "parentUuid": "6e9f7f9e_1e287dc4",
+      "range": {
+        "startLine": 5137,
+        "startChar": 3,
+        "endLine": 5145,
+        "endChar": 16
+      },
+      "revId": "f031e4384ee0252779c4bea4c37255f06b17bc52",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
