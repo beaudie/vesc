@@ -2445,8 +2445,12 @@ bool ValidateCreateWindowSurface(const ValidationContext *val,
                     case EGL_BACK_BUFFER:
                         break;
                     case EGL_SINGLE_BUFFER:
-                        val->setError(EGL_BAD_MATCH);
-                        return false;  // Rendering directly to front buffer not supported
+                        if (!displayExtensions.supportSingleBufferWithCreateWindowSurface)
+                        {
+                            val->setError(EGL_BAD_MATCH);
+                            return false;  // Rendering directly to front buffer not supported
+                        }
+                        break;
                     default:
                         val->setError(EGL_BAD_ATTRIBUTE);
                         return false;
@@ -2493,8 +2497,12 @@ bool ValidateCreateWindowSurface(const ValidationContext *val,
                 break;
 
             case EGL_VG_COLORSPACE:
-                val->setError(EGL_BAD_MATCH);
-                return false;
+                if (value != EGL_VG_COLORSPACE_sRGB)
+                {
+                    val->setError(EGL_BAD_MATCH);
+                    return false;
+                }
+                break;
 
             case EGL_GL_COLORSPACE:
                 ANGLE_VALIDATION_TRY(ValidateColorspaceAttribute(val, displayExtensions, value));

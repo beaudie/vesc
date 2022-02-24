@@ -346,6 +346,9 @@ void DisplayVk::generateExtensions(egl::DisplayExtensions *outExtensions) const
         getRenderer()->getFeatures().supportsLockSurfaceExtension.enabled;
 
     outExtensions->partialUpdateKHR = true;
+
+    outExtensions->supportSingleBufferWithCreateWindowSurface =
+        getRenderer()->getFeatures().supportsSharedPresentableImageExtension.enabled;
 }
 
 void DisplayVk::generateCaps(egl::Caps *outCaps) const

@@ -652,6 +652,9 @@ struct DisplayExtensions
 
     // EGL_KHR_partial_update
     bool partialUpdateKHR = false;
+
+    // Support EGL_SINGLE_BUFFER with eglCreateWindowSurface
+    bool supportSingleBufferWithCreateWindowSurface = false;
 };
 
 struct DeviceExtensions

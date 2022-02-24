@@ -1052,6 +1052,14 @@ angle::Result WindowSurfaceVk::initializeImpl(DisplayVk *displayVk)
     ANGLE_VK_CHECK(displayVk, (mSurfaceCaps.supportedCompositeAlpha & mCompositeAlpha) != 0,
                    VK_ERROR_INITIALIZATION_FAILED);
 
+    if (mState.attributes.contains(EGL_RENDER_BUFFER))
+    {
+        if (setRenderBuffer(mState.attributes.getAsInt(EGL_RENDER_BUFFER)).isError())
+        {
+            return angle::Result::Incomplete;
+        }
+    }
+
     ANGLE_TRY(createSwapChain(displayVk, extents, VK_NULL_HANDLE));
 
     // Create the semaphores that will be used for vkAcquireNextImageKHR.
