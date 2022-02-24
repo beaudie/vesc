@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "69ad0a43_a1266668",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 25
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1446209
+      },
+      "writtenOn": "2022-02-24T11:57:32Z",
+      "side": 1,
+      "message": "Update test and add \u0027mLastNonShaderReadOnlyLayout,mCurrentShaderReadStageMask\u0027 to releaseImage() func.",
+      "revId": "f03ca6b3a0c769f61dd8d1bb6d7908d85709e325",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
