@@ -273,6 +273,7 @@ class WindowSurfaceVk : public SurfaceVk
     egl::Error getBufferAge(const gl::Context *context, EGLint *age) override;
 
     egl::Error setRenderBuffer(EGLint renderBuffer) override;
+    void getRenderBuffer(EGLenum *renderBufferOut) const override;
 
     bool isSharedPresentMode() const
     {
@@ -342,6 +343,8 @@ class WindowSurfaceVk : public SurfaceVk
     angle::Result newPresentSemaphore(vk::Context *context, vk::Semaphore *semaphoreOut);
 
     bool isMultiSampled() const;
+
+    bool supportsPresentMode(VkPresentModeKHR presentMode) const;
 
     std::vector<VkPresentModeKHR> mPresentModes;
 

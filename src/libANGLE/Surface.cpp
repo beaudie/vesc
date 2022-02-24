@@ -436,7 +436,9 @@ EGLint Surface::getPixelAspectRatio() const
 
 EGLenum Surface::getRenderBuffer() const
 {
-    return mRenderBuffer;
+    EGLenum renderBufferOut = mRenderBuffer;
+    mImplementation->getRenderBuffer(&renderBufferOut);
+    return renderBufferOut;
 }
 
 EGLenum Surface::getSwapBehavior() const
