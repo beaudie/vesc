@@ -2122,6 +2122,8 @@
             <command name="eglCreatePbufferFromClientBuffer"/>
             <command name="eglReleaseThread"/>
             <command name="eglWaitClient"/>
+            <require comment="EGL_EXT_image_dma_buf_import"/>
+            <require comment="EGL_EXT_image_dma_buf_import_modifiers"/>
         </require>
     </feature>
     <feature api="egl" name="EGL_VERSION_1_3" number="1.3">
