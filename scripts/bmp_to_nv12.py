@@ -1,4 +1,4 @@
-#!/usr/bin/python2
+#!/usr/bin/python3
 #
 # Copyright 2016 The ANGLE Project Authors. All rights reserved.
 # Use of this source code is governed by a BSD-style license that can be
@@ -18,7 +18,7 @@ if len(sys.argv) != 4:
 bmp_file = open(sys.argv[1], "rb")
 
 magic = bmp_file.read(2)
-if (magic != "BM"):
+if (magic.decode('UTF-8') != "BM"):
     print("Invalid BMP magic")
     exit(1)
 
@@ -49,22 +49,22 @@ bmp_file.close()
 # convert to YUV 4:4:4
 converted_pixels = bytearray(pixels)
 for i in range(0, width * height):
-    R, = struct.unpack("B", pixels[i * 3 + 2])
-    G, = struct.unpack("B", pixels[i * 3 + 1])
-    B, = struct.unpack("B", pixels[i * 3])
+    R, = struct.unpack("B", pixels[i * 3 + 2:i * 3 + 2 + 1])
+    G, = struct.unpack("B", pixels[i * 3 + 1:i * 3 + 1 + 1])
+    B, = struct.unpack("B", pixels[i * 3:i * 3 + 1])
     converted_pixels[i * 3] = ((66 * R + 129 * G + 25 * B + 128) >> 8) + 16
     converted_pixels[i * 3 + 1] = ((-38 * R - 74 * G + 112 * B + 128) >> 8) + 128
     converted_pixels[i * 3 + 2] = ((112 * R - 94 * G - 18 * B + 128) >> 8) + 128
 
 # downsample to packed UV buffer
-uv_buffer = bytearray(width * height / 2)
-for i in range(0, width * height / 2, 2):
-    U1 = converted_pixels[((((i / width) * 2) * width) + (i % width)) * 3 + 1]
-    U2 = converted_pixels[((((i / width) * 2) * width) + width + (i % width)) * 3 + 1]
-    V1 = converted_pixels[((((i / width) * 2) * width) + (i % width)) * 3 + 2]
-    V2 = converted_pixels[((((i / width) * 2) * width) + width + (i % width)) * 3 + 2]
-    uv_buffer[i] = (U1 + U2) / 2
-    uv_buffer[i + 1] = (V1 + V2) / 2
+uv_buffer = bytearray(int(width * height / 2))
+for i in range(0, int(width * height / 2), 2):
+    U1 = converted_pixels[(((int(i / width) * 2) * width) + (i % width)) * 3 + 1]
+    U2 = converted_pixels[(((int(i / width) * 2) * width) + width + (i % width)) * 3 + 1]
+    V1 = converted_pixels[(((int(i / width) * 2) * width) + (i % width)) * 3 + 2]
+    V2 = converted_pixels[(((int(i / width) * 2) * width) + width + (i % width)) * 3 + 2]
+    uv_buffer[i] = int((U1 + U2) / 2)
+    uv_buffer[i + 1] = int((V1 + V2) / 2)
 
 # extract the Y buffer
 y_buffer = bytearray(width * height)
@@ -81,7 +81,7 @@ for i in range(0, width * height):
     if (i % 16) == 0:
         nv12_file.write("\n    ")
     nv12_file.write(str(y_buffer[i]) + ",")
-for i in range(0, width * height / 2):
+for i in range(0, int(width * height / 2)):
     if (i % 16) == 0:
         nv12_file.write("\n    ")
     nv12_file.write(str(uv_buffer[i]) + ",")

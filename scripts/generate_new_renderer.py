@@ -1,4 +1,4 @@
-#!/usr/bin/python2
+#!/usr/bin/python3
 #
 # Copyright 2015 The ANGLE Project Authors. All rights reserved.
 # Use of this source code is governed by a BSD-style license that can be
@@ -38,10 +38,10 @@ impl_classes = [
     'Device',
     'Display',
     'FenceNV',
-    'FenceSync',
+    #'FenceSync',
     'Framebuffer',
     'Image',
-    'Path',
+    #'Path',
     'Program',
     'Query',
     'Renderbuffer',
