@@ -428,19 +428,32 @@ angle::Result DmaBufImageSiblingVkLinux::initImpl(DisplayVk *displayVk)
     if (!IsFormatSupported(renderer, vulkanFormat, plane0Modifier, usageFlags, createFlags,
                            imageFormatListCreateInfo, &imageFormatProperties))
     {
-        mRenderable = false;
-        usageFlags &= ~kRenderUsage;
-        if (!IsFormatSupported(renderer, vulkanFormat, plane0Modifier, usageFlags, createFlags,
-                               imageFormatListCreateInfo, &imageFormatProperties))
+        // Retry without mutable format bit
+        VkImageCreateFlags nonMutableCreateFlags =
+            createFlags & ~VK_IMAGE_CREATE_MUTABLE_FORMAT_BIT;
+        if (IsFormatSupported(renderer, vulkanFormat, plane0Modifier, usageFlags,
+                              nonMutableCreateFlags, imageFormatListCreateInfo,
+                              &imageFormatProperties))
         {
-            mTextureable = false;
-            usageFlags &= ~kTextureUsage;
-
+            createFlags = nonMutableCreateFlags;
+        }
+        else
+        {
+            mRenderable = false;
+            usageFlags &= ~kRenderUsage;
             if (!IsFormatSupported(renderer, vulkanFormat, plane0Modifier, usageFlags, createFlags,
                                    imageFormatListCreateInfo, &imageFormatProperties))
             {
-                // The image is completely unusable.
-                ANGLE_VK_CHECK(displayVk, false, VK_ERROR_FORMAT_NOT_SUPPORTED);
+                mTextureable = false;
+                usageFlags &= ~kTextureUsage;
+
+                if (!IsFormatSupported(renderer, vulkanFormat, plane0Modifier, usageFlags,
+                                       createFlags, imageFormatListCreateInfo,
+                                       &imageFormatProperties))
+                {
+                    // The image is completely unusable.
+                    ANGLE_VK_CHECK(displayVk, false, VK_ERROR_FORMAT_NOT_SUPPORTED);
+                }
             }
         }
     }
