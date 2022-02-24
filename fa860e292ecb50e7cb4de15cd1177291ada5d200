@@ -16,6 +16,29 @@
       "message": "There are some dEQP tests for eglCreatePlatformWindowSurfaceEXT, so I run them and manage to find an edge case for X11, which native_window should be `Window*` for eglCreatePlatformWindowSurfaceEXT, while it is `Window` for eglCreatePlatformWindowSurface..\n\nI also submitted a CL for the tests, you can find it in the \"relation chain\".\n\nCheers,\nAntonio",
       "revId": "fa860e292ecb50e7cb4de15cd1177291ada5d200",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "36babadd_c6e75312",
+        "filename": "src/libGLESv2/egl_ext_stubs.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 96,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2022-02-24T20:45:57Z",
+      "side": 1,
+      "message": "nit: don\u0027t override parameters - make a new variable.\n\nI don\u0027t understand this code at all TBH. What\u0027s special about X11 native window types here that we need to reinterpret the native window parameter value in this way?",
+      "range": {
+        "startLine": 96,
+        "startChar": 8,
+        "endLine": 96,
+        "endChar": 22
+      },
+      "revId": "fa860e292ecb50e7cb4de15cd1177291ada5d200",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
