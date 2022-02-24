@@ -4430,6 +4430,11 @@ egl::Error SetSurfaceAttrib(Surface *surface, EGLint attribute, EGLint value)
             surface->setTimestampsEnabled(value != EGL_FALSE);
             break;
         case EGL_RENDER_BUFFER:
+            if ((value == EGL_SINGLE_BUFFER) &&
+                ((surface->getConfig()->surfaceType & EGL_MUTABLE_RENDER_BUFFER_BIT_KHR) == 0))
+            {
+                return Error(EGL_BAD_MATCH);
+            }
             return surface->setRenderBuffer(value);
         default:
             UNREACHABLE();
