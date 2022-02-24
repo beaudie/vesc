@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ae8bebf4_aeb7d3a6",
+        "filename": "src/libANGLE/renderer/vulkan/linux/DmaBufImageSiblingVkLinux.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 457,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-02-24T17:32:28Z",
+      "side": 1,
+      "message": "You could potentially make this a helper, then try something like this:\n\n```\n- if not supported\n  - Call helper to try, if failed remove render, if failed remove texture\n  - If still failed, remove mutable and restore render/texture usage\n    - Call helper to try, if failed remove render, if failed remove texture\n```",
+      "range": {
+        "startLine": 444,
+        "startChar": 0,
+        "endLine": 457,
+        "endChar": 13
+      },
+      "revId": "976591eaa01e51eb23c6f428f21d198c990278e6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
