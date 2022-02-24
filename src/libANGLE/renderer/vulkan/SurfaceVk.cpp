@@ -65,6 +65,7 @@ VkPresentModeKHR GetDesiredPresentMode(const std::vector<VkPresentModeKHR> &pres
 
     bool mailboxAvailable   = false;
     bool immediateAvailable = false;
+    bool sharedPresent      = false;
 
     for (VkPresentModeKHR presentMode : presentModes)
     {
@@ -75,6 +76,9 @@ VkPresentModeKHR GetDesiredPresentMode(const std::vector<VkPresentModeKHR> &pres
                 break;
             case VK_PRESENT_MODE_IMMEDIATE_KHR:
                 immediateAvailable = true;
+                break;
+            case VK_PRESENT_MODE_SHARED_DEMAND_REFRESH_KHR:
+                sharedPresent = true;
                 break;
             default:
                 break;
@@ -89,6 +93,11 @@ VkPresentModeKHR GetDesiredPresentMode(const std::vector<VkPresentModeKHR> &pres
     if (mailboxAvailable)
     {
         return VK_PRESENT_MODE_MAILBOX_KHR;
+    }
+
+    if (sharedPresent)
+    {
+        return VK_PRESENT_MODE_SHARED_DEMAND_REFRESH_KHR;
     }
 
     // Note again that VK_PRESENT_MODE_FIFO_KHR is guaranteed to be available.
@@ -1052,6 +1061,14 @@ angle::Result WindowSurfaceVk::initializeImpl(DisplayVk *displayVk)
     }
     ANGLE_VK_CHECK(displayVk, (mSurfaceCaps.supportedCompositeAlpha & mCompositeAlpha) != 0,
                    VK_ERROR_INITIALIZATION_FAILED);
+
+    // Single buffer, if supported
+    if ((mState.attributes.getAsInt(EGL_RENDER_BUFFER, EGL_BACK_BUFFER) == EGL_SINGLE_BUFFER) &&
+        supportsSharedPresent())
+    {
+        std::vector<VkPresentModeKHR> presentModes = {VK_PRESENT_MODE_SHARED_DEMAND_REFRESH_KHR};
+        mDesiredSwapchainPresentMode               = GetDesiredPresentMode(presentModes, 0);
+    }
 
     ANGLE_TRY(createSwapChain(displayVk, extents, VK_NULL_HANDLE));
 
@@ -2053,6 +2070,12 @@ egl::Error WindowSurfaceVk::getMscRate(EGLint * /*numerator*/, EGLint * /*denomi
 
 void WindowSurfaceVk::setSwapInterval(EGLint interval)
 {
+    // If in single buffer mode ignore setSwapInterval
+    if (mSwapchainPresentMode == VK_PRESENT_MODE_SHARED_DEMAND_REFRESH_KHR)
+    {
+        return;
+    }
+
     const EGLint minSwapInterval = mState.config->minSwapInterval;
     const EGLint maxSwapInterval = mState.config->maxSwapInterval;
     ASSERT(minSwapInterval == 0 || minSwapInterval == 1);
@@ -2406,16 +2429,20 @@ egl::Error WindowSurfaceVk::getBufferAge(const gl::Context *context, EGLint *age
     return egl::NoError();
 }
 
+bool WindowSurfaceVk::supportsSharedPresent() const
+{
+    return (std::find(mPresentModes.begin(), mPresentModes.end(),
+                      VK_PRESENT_MODE_SHARED_DEMAND_REFRESH_KHR) != mPresentModes.end());
+}
+
 egl::Error WindowSurfaceVk::setRenderBuffer(EGLint renderBuffer)
 {
-    if (std::find(mPresentModes.begin(), mPresentModes.end(),
-                  VK_PRESENT_MODE_SHARED_DEMAND_REFRESH_KHR) == mPresentModes.end())
-    {
-        return egl::EglBadMatch();
-    }
-
     if (renderBuffer == EGL_SINGLE_BUFFER)
     {
+        if (!supportsSharedPresent())
+        {
+            return egl::EglBadMatch();
+        }
         mDesiredSwapchainPresentMode = VK_PRESENT_MODE_SHARED_DEMAND_REFRESH_KHR;
     }
     else  // EGL_BACK_BUFFER
@@ -2423,6 +2450,19 @@ egl::Error WindowSurfaceVk::setRenderBuffer(EGLint renderBuffer)
         mDesiredSwapchainPresentMode = VK_PRESENT_MODE_FIFO_KHR;
     }
     return egl::NoError();
+}
+
+void WindowSurfaceVk::getRenderBuffer(EGLint &renderBuffer)
+{
+    if (mSwapchainPresentMode == VK_PRESENT_MODE_SHARED_DEMAND_REFRESH_KHR)
+    {
+        renderBuffer = EGL_SINGLE_BUFFER;
+    }
+    else
+    {
+        renderBuffer = EGL_BACK_BUFFER;
+    }
+    return;
 }
 
 egl::Error WindowSurfaceVk::lockSurface(const egl::Display *display,
