@@ -632,14 +632,6 @@ struct FeaturesVk : FeatureSetBase
         "supportsLockSurfaceExtension", FeatureCategory::VulkanFeatures,
         "Surface supports the EGL_KHR_lock_surface3 extension", &members};
 
-    // When mutable_render_buffer goes into SINGLE_BUFFER mode, need to call swapbuffers at
-    // flush and finish so that the image is updated and presented to the display.
-    Feature swapbuffersOnFlushOrFinishWithSingleBuffer = {
-        "swapbuffersOnFlushOrFinishWithSingleBuffer", FeatureCategory::VulkanFeatures,
-        "Bypass deferredFlush with calling swapbuffers on flush or finish when in Shared Present "
-        "mode",
-        &members, "http://anglebug.com/6878"};
-
     // Whether dithering should be emulated.
     Feature emulateDithering = {"emulateDithering", FeatureCategory::VulkanFeatures,
                                 "Emulate OpenGL dithering", &members, "http://anglebug.com/6755"};
