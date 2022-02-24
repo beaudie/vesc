@@ -144,6 +144,30 @@
     {
       "unresolved": false,
       "key": {
+        "uuid": "68649df4_b4e84426",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.h",
+        "patchSetId": 14
+      },
+      "lineNbr": 2297,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2022-02-24T12:22:18Z",
+      "side": 1,
+      "message": "SGTM.",
+      "parentUuid": "52630fbd_26082fce",
+      "range": {
+        "startLine": 2297,
+        "startChar": 4,
+        "endLine": 2297,
+        "endChar": 56
+      },
+      "revId": "c3390b5df0e6b40cbbb4f4b4330021932fe381b5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
         "uuid": "d15c177d_32a27ad1",
         "filename": "src/libANGLE/renderer/vulkan/vk_helpers.h",
         "patchSetId": 14
