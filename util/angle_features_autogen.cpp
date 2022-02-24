@@ -247,8 +247,6 @@ constexpr PackedEnumMap<Feature, const char *> kFeatureNames = {{
     {Feature::SupportsSurfacelessQueryExtension, "supportsSurfacelessQueryExtension"},
     {Feature::SupportsTransformFeedbackExtension, "supportsTransformFeedbackExtension"},
     {Feature::SupportsYUVSamplerConversion, "supportsYUVSamplerConversion"},
-    {Feature::SwapbuffersOnFlushOrFinishWithSingleBuffer,
-     "swapbuffersOnFlushOrFinishWithSingleBuffer"},
     {Feature::SyncVertexArraysToDefault, "sync_vertex_arrays_to_default"},
     {Feature::UnbindFBOOnContextSwitch, "unbind_fbo_before_switching_context"},
     {Feature::UnfoldShortCircuits, "unfold_short_circuits"},

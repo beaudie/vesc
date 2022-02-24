@@ -63,8 +63,9 @@ VkPresentModeKHR GetDesiredPresentMode(const std::vector<VkPresentModeKHR> &pres
     //
     // If neither is supported, we fallback to FIFO.
 
-    bool mailboxAvailable   = false;
-    bool immediateAvailable = false;
+    bool mailboxAvailable        = false;
+    bool immediateAvailable      = false;
+    bool sharedPresentContinuous = false;
 
     for (VkPresentModeKHR presentMode : presentModes)
     {
@@ -76,6 +77,9 @@ VkPresentModeKHR GetDesiredPresentMode(const std::vector<VkPresentModeKHR> &pres
             case VK_PRESENT_MODE_IMMEDIATE_KHR:
                 immediateAvailable = true;
                 break;
+            case VK_PRESENT_MODE_SHARED_CONTINUOUS_REFRESH_KHR:
+                sharedPresentContinuous = true;
+                break;
             default:
                 break;
         }
@@ -84,6 +88,11 @@ VkPresentModeKHR GetDesiredPresentMode(const std::vector<VkPresentModeKHR> &pres
     if (immediateAvailable)
     {
         return VK_PRESENT_MODE_IMMEDIATE_KHR;
+    }
+
+    if (sharedPresentContinuous)
+    {
+        return VK_PRESENT_MODE_SHARED_CONTINUOUS_REFRESH_KHR;
     }
 
     if (mailboxAvailable)
@@ -1306,7 +1315,7 @@ angle::Result WindowSurfaceVk::createSwapChain(vk::Context *context,
     swapchainInfo.clipped               = VK_TRUE;
     swapchainInfo.oldSwapchain          = lastSwapchain;
 
-    if (mDesiredSwapchainPresentMode == VK_PRESENT_MODE_SHARED_DEMAND_REFRESH_KHR)
+    if (mDesiredSwapchainPresentMode == VK_PRESENT_MODE_SHARED_CONTINUOUS_REFRESH_KHR)
     {
         swapchainInfo.minImageCount = 1;
     }
@@ -1846,11 +1855,6 @@ angle::Result WindowSurfaceVk::swapImpl(const gl::Context *context,
     return angle::Result::Continue;
 }
 
-angle::Result WindowSurfaceVk::onSharedPresentContextFlush(const gl::Context *context)
-{
-    return swapImpl(context, nullptr, 0, nullptr);
-}
-
 void WindowSurfaceVk::deferAcquireNextImage(const gl::Context *context)
 {
     mNeedToAcquireNextSwapchainImage = true;
@@ -1928,7 +1932,7 @@ VkResult WindowSurfaceVk::acquireNextSwapchainImage(vk::Context *context)
 {
     VkDevice device = context->getDevice();
 
-    if ((mSwapchainPresentMode == VK_PRESENT_MODE_SHARED_DEMAND_REFRESH_KHR) &&
+    if ((mSwapchainPresentMode == VK_PRESENT_MODE_SHARED_CONTINUOUS_REFRESH_KHR) &&
         !mNeedToAcquireNextSwapchainImage)
     {
         ASSERT(mSwapchainImages.size());
@@ -1956,7 +1960,7 @@ VkResult WindowSurfaceVk::acquireNextSwapchainImage(vk::Context *context)
     SwapchainImage &image = mSwapchainImages[mCurrentSwapchainImageIndex];
 
     // Single Image Mode
-    if ((mSwapchainPresentMode == VK_PRESENT_MODE_SHARED_DEMAND_REFRESH_KHR) &&
+    if ((mSwapchainPresentMode == VK_PRESENT_MODE_SHARED_CONTINUOUS_REFRESH_KHR) &&
         (image.image.getCurrentImageLayout() != vk::ImageLayout::SharedPresent))
     {
         rx::RendererVk *rendererVk = context->getRenderer();
@@ -2053,6 +2057,12 @@ egl::Error WindowSurfaceVk::getMscRate(EGLint * /*numerator*/, EGLint * /*denomi
 
 void WindowSurfaceVk::setSwapInterval(EGLint interval)
 {
+    // Don't let setSwapInterval change presentation mode if using SHARED present.
+    if (mSwapchainPresentMode == VK_PRESENT_MODE_SHARED_CONTINUOUS_REFRESH_KHR)
+    {
+        return;
+    }
+
     const EGLint minSwapInterval = mState.config->minSwapInterval;
     const EGLint maxSwapInterval = mState.config->maxSwapInterval;
     ASSERT(minSwapInterval == 0 || minSwapInterval == 1);
@@ -2406,23 +2416,40 @@ egl::Error WindowSurfaceVk::getBufferAge(const gl::Context *context, EGLint *age
     return egl::NoError();
 }
 
+bool WindowSurfaceVk::supportsPresentMode(VkPresentModeKHR presentMode) const
+{
+    return (std::find(mPresentModes.begin(), mPresentModes.end(), presentMode) !=
+            mPresentModes.end());
+}
+
 egl::Error WindowSurfaceVk::setRenderBuffer(EGLint renderBuffer)
 {
-    if (std::find(mPresentModes.begin(), mPresentModes.end(),
-                  VK_PRESENT_MODE_SHARED_DEMAND_REFRESH_KHR) == mPresentModes.end())
-    {
-        return egl::EglBadMatch();
-    }
-
     if (renderBuffer == EGL_SINGLE_BUFFER)
     {
-        mDesiredSwapchainPresentMode = VK_PRESENT_MODE_SHARED_DEMAND_REFRESH_KHR;
+        if (!supportsPresentMode(VK_PRESENT_MODE_SHARED_CONTINUOUS_REFRESH_KHR))
+        {
+            return egl::EglBadMatch();
+        }
+        mDesiredSwapchainPresentMode = VK_PRESENT_MODE_SHARED_CONTINUOUS_REFRESH_KHR;
     }
     else  // EGL_BACK_BUFFER
     {
         mDesiredSwapchainPresentMode = VK_PRESENT_MODE_FIFO_KHR;
     }
     return egl::NoError();
+}
+
+void WindowSurfaceVk::getRenderBuffer(EGLint &renderBuffer)
+{
+    if (mSwapchainPresentMode == VK_PRESENT_MODE_SHARED_CONTINUOUS_REFRESH_KHR)
+    {
+        renderBuffer = EGL_SINGLE_BUFFER;
+    }
+    else
+    {
+        renderBuffer = EGL_BACK_BUFFER;
+    }
+    return;
 }
 
 egl::Error WindowSurfaceVk::lockSurface(const egl::Display *display,

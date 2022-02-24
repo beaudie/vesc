@@ -230,7 +230,6 @@ enum class Feature
     SupportsSurfacelessQueryExtension,
     SupportsTransformFeedbackExtension,
     SupportsYUVSamplerConversion,
-    SwapbuffersOnFlushOrFinishWithSingleBuffer,
     SyncVertexArraysToDefault,
     UnbindFBOOnContextSwitch,
     UnfoldShortCircuits,

@@ -559,12 +559,6 @@ struct FeaturesVk : FeatureSetBase
         &members,
     };
 
-    FeatureInfo swapbuffersOnFlushOrFinishWithSingleBuffer = {
-        "swapbuffersOnFlushOrFinishWithSingleBuffer", FeatureCategory::VulkanFeatures,
-        "Bypass deferredFlush with calling swapbuffers on flush or finish when in Shared Present "
-        "mode",
-        &members, "http://anglebug.com/6878"};
-
     FeatureInfo emulateDithering = {"emulateDithering", FeatureCategory::VulkanFeatures,
                                     "Emulate OpenGL dithering", &members,
                                     "http://anglebug.com/6755"};

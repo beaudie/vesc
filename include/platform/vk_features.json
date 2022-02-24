@@ -919,17 +919,6 @@
         },
 
         {
-            "name": "swapbuffersOnFlushOrFinishWithSingleBuffer",
-            "display_name": "swapbuffersOnFlushOrFinishWithSingleBuffer",
-            "category": "Features",
-            "description": [
-                "Bypass deferredFlush with calling swapbuffers on flush or finish when in Shared Present ",
-                "mode"
-            ],
-            "issue": "http://anglebug.com/6878"
-        },
-
-        {
             "name": "emulateDithering",
             "display_name": "emulateDithering",
             "category": "Features",
