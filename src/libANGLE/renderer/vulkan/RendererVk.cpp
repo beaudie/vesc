@@ -1606,6 +1606,8 @@ angle::Result RendererVk::initialize(DisplayVk *displayVk,
     ASSERT(mCoherentStagingBufferMemoryTypeIndex != kInvalidMemoryTypeIndex);
 
     // Non-coherent staging buffer
+    // Add host cache bit for non-coherent b/219974369
+    requiredFlags |= VK_MEMORY_PROPERTY_HOST_CACHED_BIT;
     ANGLE_VK_TRY(displayVk, mAllocator.findMemoryTypeIndexForBufferInfo(
                                 createInfo, requiredFlags, 0, persistentlyMapped,
                                 &mNonCoherentStagingBufferMemoryTypeIndex));
