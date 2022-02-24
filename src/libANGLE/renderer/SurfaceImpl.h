@@ -122,6 +122,7 @@ class SurfaceImpl : public FramebufferAttachmentObjectImpl
     virtual EGLint origin() const;
 
     virtual egl::Error setRenderBuffer(EGLint renderBuffer);
+    virtual void getRenderBuffer(EGLenum *renderBufferOut) const;
 
   protected:
     const egl::SurfaceState &mState;
