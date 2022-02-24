@@ -70,6 +70,24 @@
       "parentUuid": "ba2fb70f_324af98b",
       "revId": "29a1560f205b576e79aa600e1421b38e460b1ce4",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "bccb4542_028e6bd4",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 1610,
+      "author": {
+        "id": 1517514
+      },
+      "writtenOn": "2022-02-24T23:19:02Z",
+      "side": 1,
+      "message": "for cached non-coherent, we need add flush and invalidate.(",
+      "parentUuid": "101fb4cd_98896927",
+      "revId": "29a1560f205b576e79aa600e1421b38e460b1ce4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
