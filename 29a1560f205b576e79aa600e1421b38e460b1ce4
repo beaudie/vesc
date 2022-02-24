@@ -34,6 +34,24 @@
       "parentUuid": "12210a79_23f1b7ea",
       "revId": "29a1560f205b576e79aa600e1421b38e460b1ce4",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ba2fb70f_324af98b",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 1610,
+      "author": {
+        "id": 1175714
+      },
+      "writtenOn": "2022-02-24T19:43:47Z",
+      "side": 1,
+      "message": "I think we should also prefer cached even in the coherent case, and fall back to UC if we can\u0027t get cached + coherent.",
+      "parentUuid": "b6b67d66_6b7d4288",
+      "revId": "29a1560f205b576e79aa600e1421b38e460b1ce4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
