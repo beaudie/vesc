@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "2b51a19f_6433d69c",
+        "filename": "src/libANGLE/renderer/metal/VertexArrayMtl.mm",
+        "patchSetId": 1
+      },
+      "lineNbr": 487,
+      "author": {
+        "id": 1115588
+      },
+      "writtenOn": "2022-02-24T20:14:05Z",
+      "side": 1,
+      "message": "Is this used?",
+      "revId": "62f1d2e6dc28e82367aaf823968373c2e6917329",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "4ccc1d21_705823da",
+        "filename": "src/libANGLE/renderer/metal/VertexArrayMtl.mm",
+        "patchSetId": 1
+      },
+      "lineNbr": 667,
+      "author": {
+        "id": 1115588
+      },
+      "writtenOn": "2022-02-24T20:14:05Z",
+      "side": 1,
+      "message": "With this call to disbleForBuffer gone I don\u0027t see any calls in the code base to disableForBuffer. Not really sure what enableForBuffer and disableForBuffer do but just checking that it\u0027s okay that disbleForBuffer is never called.",
+      "revId": "62f1d2e6dc28e82367aaf823968373c2e6917329",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
