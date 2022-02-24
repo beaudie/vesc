@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "276d9afa_21af8bc9",
+        "filename": "src/libANGLE/renderer/vulkan/vk_caps_utils.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 534,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-02-24T02:27:36Z",
+      "side": 1,
+      "message": "Where does this come from? Also, sample rate shading is not the same as MSAA; it\u0027s when each sample is individually shaded, pretty sure it\u0027s irrelevant here.",
+      "range": {
+        "startLine": 534,
+        "startChar": 7,
+        "endLine": 534,
+        "endChar": 60
+      },
+      "revId": "1cd694be70e531791715aabe68d57d43b5bb8374",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
