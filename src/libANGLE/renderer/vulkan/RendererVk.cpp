@@ -1450,6 +1450,14 @@ angle::Result RendererVk::initialize(DisplayVk *displayVk,
     validationFeatures.enabledValidationFeatureCount = 1;
     validationFeatures.pEnabledValidationFeatures    = enabledFeatures;
 
+#if defined(ANGLE_PLATFORM_ANDROID)
+    // http://anglebug.com/7050 - Shader validation caching is broken on Android
+    VkValidationFeatureDisableEXT disabledFeatures[] = {
+        VK_VALIDATION_FEATURE_DISABLE_SHADER_VALIDATION_CACHE_EXT};
+    validationFeatures.disabledValidationFeatureCount = 1;
+    validationFeatures.pDisabledValidationFeatures    = disabledFeatures;
+#endif
+
     if (mEnableValidationLayers)
     {
         // Enable best practices output which includes perfdoc layer
