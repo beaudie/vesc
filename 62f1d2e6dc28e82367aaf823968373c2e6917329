@@ -33,6 +33,24 @@
       "message": "With this call to disbleForBuffer gone I don\u0027t see any calls in the code base to disableForBuffer. Not really sure what enableForBuffer and disableForBuffer do but just checking that it\u0027s okay that disbleForBuffer is never called.",
       "revId": "62f1d2e6dc28e82367aaf823968373c2e6917329",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "a00f142f_6b7dcb88",
+        "filename": "src/libANGLE/renderer/metal/VertexArrayMtl.mm",
+        "patchSetId": 1
+      },
+      "lineNbr": 667,
+      "author": {
+        "id": 1500872
+      },
+      "writtenOn": "2022-02-25T19:30:36Z",
+      "side": 1,
+      "message": "Both of these activate and deactivate the messaging system for the VAO. There\u0027s no cleanup needed here, when the observed object is deallocated, the observers will be safely removed.",
+      "parentUuid": "4ccc1d21_705823da",
+      "revId": "62f1d2e6dc28e82367aaf823968373c2e6917329",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
