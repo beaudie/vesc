@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "3b734c51_f2968eca",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 21
+      },
+      "lineNbr": 4721,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-02-25T21:16:17Z",
+      "side": 1,
+      "message": "Thanks for adding this to collectViewGarbage. I think you could just remove this from here now!",
+      "revId": "126e967de3978f0dc4f6cf0fa3f9749366ea39ba",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
