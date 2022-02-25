@@ -16,6 +16,46 @@
       "message": "PTAL",
       "revId": "8a8dc46fbb39c856e733b1ebc8b6f1edb4f98bb1",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "1e2ab036_bf23b8d8",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-02-25T18:45:04Z",
+      "side": 1,
+      "message": "Thanks for the fix! I wonder why ValidateTransformedSpirV doesn\u0027t catch this. Which test failed this?",
+      "revId": "8a8dc46fbb39c856e733b1ebc8b6f1edb4f98bb1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "228253cc_0527c854",
+        "filename": "src/libANGLE/renderer/glslang_wrapper_utils.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 3442,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-02-25T18:45:04Z",
+      "side": 1,
+      "message": "no need for `isReplaced`. If this is false, we are replacing the instruction with the same instruction, so no harm done.\n\nSo, you can make this transformation unconditional.",
+      "range": {
+        "startLine": 3442,
+        "startChar": 16,
+        "endLine": 3442,
+        "endChar": 26
+      },
+      "revId": "8a8dc46fbb39c856e733b1ebc8b6f1edb4f98bb1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
