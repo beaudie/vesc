@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "32a0ae7d_1e34d081",
+        "filename": "gni/angle.gni",
+        "patchSetId": 2
+      },
+      "lineNbr": 55,
+      "author": {
+        "id": 1305348
+      },
+      "writtenOn": "2022-02-25T19:24:08Z",
+      "side": 1,
+      "message": "I believe this should be `is_ggp` and is currently causing the ANGLE roller into Skia to fail.",
+      "range": {
+        "startLine": 55,
+        "startChar": 37,
+        "endLine": 55,
+        "endChar": 43
+      },
+      "revId": "e2d5eb729537663730b6091d2539c9710ccd07a9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
