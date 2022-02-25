@@ -50,6 +50,24 @@
       "message": "Obvious fix, so LGTM, but regression test would be nice",
       "revId": "63f10711eae64d59842fa2935378ef218b7d3e3e",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "59a3916b_07d9a501",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1359667
+      },
+      "writtenOn": "2022-02-25T19:22:31Z",
+      "side": 1,
+      "message": "This issue was seen in in one of our in-house apps. I\u0027ve looked into how we could create a regression test but couldn\u0027t find an easy way to reproduce the issue.",
+      "parentUuid": "b282f75a_89f7fc89",
+      "revId": "63f10711eae64d59842fa2935378ef218b7d3e3e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
