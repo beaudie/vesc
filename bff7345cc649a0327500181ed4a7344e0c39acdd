@@ -277,6 +277,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "cfc27c09_66f12abc",
+        "filename": "src/libANGLE/renderer/vulkan/TextureVk.cpp",
+        "patchSetId": 21
+      },
+      "lineNbr": 562,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-02-25T21:35:45Z",
+      "side": 1,
+      "message": "I think we need to add another condition here too. If the copy can be done, and the buffer is being written to be the GPU, it\u0027s bad to try and map it just to avoid a barrier, because that will cause a big GPU bubble.\n\nThis should be:\n\n     \u0026\u0026 (isOverWriteToAllDefinedLevel || bufferHelper.isCurrentlyInUseForWrite())\n\n---\n\nAlso, was this meant to say `!isOverWriteToAllDefinedLevel`?",
+      "parentUuid": "b02fffa8_067936d0",
+      "range": {
+        "startLine": 562,
+        "startChar": 59,
+        "endLine": 562,
+        "endChar": 87
+      },
+      "revId": "bff7345cc649a0327500181ed4a7344e0c39acdd",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "d4c396f2_08a2c8f1",
         "filename": "src/libANGLE/renderer/vulkan/TextureVk.cpp",
         "patchSetId": 21
@@ -374,6 +398,24 @@
       "writtenOn": "2022-02-16T18:37:55Z",
       "side": 1,
       "message": "The texture is very small, and the draw call is cheap. Granted, we don\u0027t currently re-check the fences when looking at whether the buffer is in use, but we might have facilities for this in the future.\n\nHow about making the texture buffer and use an artificial shader that\u0027s expensive? See kCostlyFS in TimerQueriesTest.cpp for example.",
+      "revId": "bff7345cc649a0327500181ed4a7344e0c39acdd",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "bcdd7db6_a3cc32be",
+        "filename": "src/tests/gl_tests/TextureTest.cpp",
+        "patchSetId": 21
+      },
+      "lineNbr": 6193,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-02-25T21:35:45Z",
+      "side": 1,
+      "message": "\u003e How about making the texture buffer\n\ntypo, I meant to say \"bigger\".",
+      "parentUuid": "9e79b80a_9036e552",
       "revId": "bff7345cc649a0327500181ed4a7344e0c39acdd",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
