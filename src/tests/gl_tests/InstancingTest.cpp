@@ -808,6 +808,68 @@ TEST_P(InstancingTestES3, LargestDivisor)
         << "Vertex attrib divisor read was not the same that was passed in.";
 }
 
+TEST_P(InstancingTestES3, IndexOverflow)
+{
+    constexpr char kVS[] = R"(#version 300 es
+precision highp float;
+ in vec4 attr0;
+
+ void main()
+ {
+	 gl_Position = vec4(attr0.x, 0.0, 0.0, 0.0);
+ })";
+
+    constexpr char kFS[] = R"(#version 300 es
+precision highp float;
+out vec4 color;
+
+void main()
+{
+	color = vec4(1.0, 0.0, 0.0, 1.0);
+})";
+
+    ANGLE_GL_PROGRAM(program, kVS, kFS);
+    glUseProgram(program);
+
+    GLBuffer buf;
+    GLBuffer buf2;
+    GLBuffer buf3;
+    GLBuffer buf4;
+    GLVertexArray vao;
+    GLVertexArray vao2;
+    GLVertexArray vao3;
+    GLTexture texture;
+
+    GLsizeiptr bufferSize  = 10000;
+    GLsizeiptr buffer3Size = 100000;
+    GLsizeiptr buffer4Size = 30000;
+
+    std::vector<uint8_t> bufferData(bufferSize);
+    std::vector<GLfloat> textureData(2000000);
+    std::vector<uint8_t> buffer3Data(buffer3Size);
+    std::vector<uint8_t> buffer4Data(buffer4Size);
+
+    glBindBuffer(GL_COPY_READ_BUFFER, buf);
+    glBufferData(GL_COPY_READ_BUFFER, bufferSize, &bufferData[0], GL_STATIC_DRAW);
+    glBindBuffer(GL_COPY_READ_BUFFER, buf2);
+    glBindTexture(GL_TEXTURE_2D_ARRAY, texture);
+    glTexImage3D(GL_TEXTURE_2D_ARRAY, 0, GL_RGB32F, 77, 74, 92, 0, GL_RGB, GL_FLOAT,
+                 &textureData[0]);
+    glBindVertexArray(vao);
+    glBindBuffer(GL_ARRAY_BUFFER, buf3);
+    glBufferData(GL_ARRAY_BUFFER, buffer3Size, &buffer3Data[0], GL_STATIC_DRAW);
+    glBindVertexArray(vao2);
+    glBindVertexArray(0);
+    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, buf4);
+    glBufferData(GL_ELEMENT_ARRAY_BUFFER, buffer4Size, &buffer4Data[0], GL_STATIC_DRAW);
+    glVertexAttribPointer(0, 4, GL_UNSIGNED_BYTE, GL_TRUE, 0, 0);
+    glVertexAttribDivisor(0, 1);
+    glBindVertexArray(vao3);
+    glBindVertexArray(0);
+    glDrawElements(GL_LINE_LOOP, 300, GL_UNSIGNED_SHORT, 0);
+    glDrawElements(GL_POINTS, 1000, GL_UNSIGNED_SHORT, 0);
+}
+
 GTEST_ALLOW_UNINSTANTIATED_PARAMETERIZED_TEST(InstancingTestES3);
 ANGLE_INSTANTIATE_TEST_ES3(InstancingTestES3);
 
