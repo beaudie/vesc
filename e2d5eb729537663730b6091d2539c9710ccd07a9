@@ -22,6 +22,30 @@
       },
       "revId": "e2d5eb729537663730b6091d2539c9710ccd07a9",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b48bb9b2_8d1ed91b",
+        "filename": "gni/angle.gni",
+        "patchSetId": 2
+      },
+      "lineNbr": 55,
+      "author": {
+        "id": 1520567
+      },
+      "writtenOn": "2022-02-25T19:24:59Z",
+      "side": 1,
+      "message": "Just hit Go on https://chromium-review.googlesource.com/c/angle/angle/+/3488558, and it\u0027s fixed. :-)",
+      "parentUuid": "32a0ae7d_1e34d081",
+      "range": {
+        "startLine": 55,
+        "startChar": 37,
+        "endLine": 55,
+        "endChar": 43
+      },
+      "revId": "e2d5eb729537663730b6091d2539c9710ccd07a9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
