@@ -48,6 +48,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "107c8d2c_291d4e0d",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 14
+      },
+      "lineNbr": 14,
+      "author": {
+        "id": 1520902
+      },
+      "writtenOn": "2022-02-25T19:05:55Z",
+      "side": 1,
+      "message": "I did a trace perftests run on all the games before/after the change (https://docs.google.com/spreadsheets/d/11uZAzq5_ccUr0mucrMdfOJv4zEYWPI5ITJv0KKmLSLg/edit?usp\u003dsharing). Unfortunately, I don\u0027t see significant improvements in CPU cost. It might be that we don\u0027t process the ResourceUseList per frame, and the change of ResourceUseList size is not big enough to reflect a performance difference. \n\nThe ResourceUseList size was indeed cut by almost half. I added the ResourceUseList size change in aztec_ruins in the comment.",
+      "parentUuid": "d44376d8_f48e27d0",
+      "range": {
+        "startLine": 13,
+        "startChar": 5,
+        "endLine": 14,
+        "endChar": 12
+      },
+      "revId": "c3390b5df0e6b40cbbb4f4b4330021932fe381b5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "8b0682d7_491b4f87",

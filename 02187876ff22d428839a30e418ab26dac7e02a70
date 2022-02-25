@@ -18,6 +18,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "bfdc04b6_87ca70ba",
+        "filename": "src/libANGLE/renderer/vulkan/SurfaceVk.cpp",
+        "patchSetId": 18
+      },
+      "lineNbr": 1497,
+      "author": {
+        "id": 1520902
+      },
+      "writtenOn": "2022-02-25T19:05:55Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "0e4ff6d9_d55151d1",
+      "revId": "02187876ff22d428839a30e418ab26dac7e02a70",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "5c90b6f2_09b8b441",
@@ -31,6 +49,30 @@
       "writtenOn": "2022-02-25T02:38:10Z",
       "side": 1,
       "message": "You can rephrase this to skip the part about the releaseImage() that comes after this. The main point of this comment is that we need to release the views, because the image is no longer available after staging itself as update. It doesn\u0027t really matter if releaseImage() is called afterwards or not.",
+      "range": {
+        "startLine": 3474,
+        "startChar": 58,
+        "endLine": 3476,
+        "endChar": 53
+      },
+      "revId": "02187876ff22d428839a30e418ab26dac7e02a70",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "f9a5bb86_36b165f5",
+        "filename": "src/libANGLE/renderer/vulkan/TextureVk.cpp",
+        "patchSetId": 18
+      },
+      "lineNbr": 3476,
+      "author": {
+        "id": 1520902
+      },
+      "writtenOn": "2022-02-25T19:05:55Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "5c90b6f2_09b8b441",
       "range": {
         "startLine": 3474,
         "startChar": 58,
@@ -64,6 +106,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "ba4b5b1a_fa980672",
+        "filename": "src/libANGLE/renderer/vulkan/TextureVk.cpp",
+        "patchSetId": 18
+      },
+      "lineNbr": 3488,
+      "author": {
+        "id": 1520902
+      },
+      "writtenOn": "2022-02-25T19:05:55Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "4e152d7c_84ac9bc0",
+      "range": {
+        "startLine": 3485,
+        "startChar": 0,
+        "endLine": 3488,
+        "endChar": 0
+      },
+      "revId": "02187876ff22d428839a30e418ab26dac7e02a70",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "31250199_5bef5ac8",
@@ -77,6 +143,24 @@
       "writtenOn": "2022-02-25T02:38:10Z",
       "side": 1,
       "message": "Please add a comment as to why there\u0027s this ASSERT. Something to the effect of making sure we are notified if some application pattern causes views to keep getting reallocated and create infinite garbage :)",
+      "revId": "02187876ff22d428839a30e418ab26dac7e02a70",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "66dbe2a2_610de133",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 18
+      },
+      "lineNbr": 4719,
+      "author": {
+        "id": 1520902
+      },
+      "writtenOn": "2022-02-25T19:05:55Z",
+      "side": 1,
+      "message": "That\u0027s a good point, so that if this assert causes tests to fail, we know that what that failure means and how we want to fix it, thank you!",
+      "parentUuid": "31250199_5bef5ac8",
       "revId": "02187876ff22d428839a30e418ab26dac7e02a70",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
