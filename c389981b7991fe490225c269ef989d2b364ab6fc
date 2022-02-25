@@ -102,6 +102,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "b8128457_6ed56a97",
+        "filename": "src/tests/gl_tests/VulkanPerformanceCounterTest.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 215,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-02-25T19:55:10Z",
+      "side": 1,
+      "message": "Well, `WithNoFixture` was added by this change itself. If you remove that, and let the fixture be automatically created, what goes wrong? If there\u0027s a bug, we should fix that in the code that creates the fixture, instead of having the test create its own fixture.",
+      "parentUuid": "e5f5ebd7_0eb551dd",
+      "range": {
+        "startLine": 214,
+        "startChar": 0,
+        "endLine": 215,
+        "endChar": 40
+      },
+      "revId": "c389981b7991fe490225c269ef989d2b364ab6fc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "37ac35e3_d8f10a5c",
         "filename": "src/tests/gl_tests/VulkanPerformanceCounterTest.cpp",
         "patchSetId": 2

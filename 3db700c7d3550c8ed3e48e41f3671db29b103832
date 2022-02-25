@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ea7b8679_09ed1342",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 2243,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-02-25T19:55:10Z",
+      "side": 1,
+      "message": "Should be 0. We can set it to 1 whenever we have that path implemented.",
+      "range": {
+        "startLine": 2243,
+        "startChar": 62,
+        "endLine": 2243,
+        "endChar": 63
+      },
+      "revId": "3db700c7d3550c8ed3e48e41f3671db29b103832",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
