@@ -1,6 +1,23 @@
 {
   "comments": [
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "a4aad1cb_1514a8ee",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 21
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1109584
+      },
+      "writtenOn": "2022-02-25T22:32:47Z",
+      "side": 1,
+      "message": "GPU Pixel Wrangler: I suspect that this introduced crashes on mac-swangle-chromium-x64. Filed angleproject:7063\n\nCould we consider a revert please? Thanks!",
+      "revId": "126e967de3978f0dc4f6cf0fa3f9749366ea39ba",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "3b734c51_f2968eca",
