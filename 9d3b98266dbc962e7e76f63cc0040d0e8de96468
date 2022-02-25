@@ -1,0 +1,89 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "9ead6221_374325df",
+        "filename": "include/platform/FeaturesVk.h",
+        "patchSetId": 44
+      },
+      "lineNbr": 494,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-02-25T17:24:32Z",
+      "side": 1,
+      "message": "You can make this official now since we want this enabled for ARM, right? And QC?",
+      "revId": "9d3b98266dbc962e7e76f63cc0040d0e8de96468",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "267147e3_286a8cf6",
+        "filename": "include/platform/FeaturesVk.h",
+        "patchSetId": 44
+      },
+      "lineNbr": 499,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-02-25T17:24:32Z",
+      "side": 1,
+      "message": "(don\u0027t forget this message too)",
+      "revId": "9d3b98266dbc962e7e76f63cc0040d0e8de96468",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "1d12a17d_824ec89f",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 44
+      },
+      "lineNbr": 3669,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-02-25T17:24:32Z",
+      "side": 1,
+      "message": "Is it really needed to start the render pass? Why not let DIRTY_BIT_RENDER_PASS (set by onRenderPassFinished) take care of it.\n\nHave you looked at RenderDoc to see what happens here? Is DIRTY_BIT_RENDER_PASS closing and reopening the render pass that\u0027s started here?",
+      "revId": "9d3b98266dbc962e7e76f63cc0040d0e8de96468",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "99fa8432_f57f7ff9",
+        "filename": "src/libANGLE/renderer/vulkan/FramebufferVk.cpp",
+        "patchSetId": 44
+      },
+      "lineNbr": 2632,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-02-25T17:24:32Z",
+      "side": 1,
+      "message": "I thought for a moment we are missing `depthStencilRenderTarget-\u003eonDepthStencilWrite()` here, to avoid a similar bug that prompted the onColorWrite above, but I see we mark the contents defined unconditionally for depth/stencil.\n\nIf you have the time, it would be nice to duplicate the color test that exposed that bug and make it work with depth/stencil instead just to avoid future regressions.",
+      "revId": "9d3b98266dbc962e7e76f63cc0040d0e8de96468",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "dcb1f017_524d047b",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 44
+      },
+      "lineNbr": 2261,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-02-25T17:24:32Z",
+      "side": 1,
+      "message": "nit: apply ANGLE_MAYBE_UNUSED to the colorIndex declaration above instead.",
+      "revId": "9d3b98266dbc962e7e76f63cc0040d0e8de96468",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
