@@ -16,6 +16,29 @@
       "message": "Turn off shader validation cache for Android until it is fixed and shown to be faster.",
       "revId": "7cd219b764a61967817cefb5e8654248658b8430",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "98c25fdb_22f56fe3",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 1453,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2022-02-25T20:42:24Z",
+      "side": 1,
+      "message": "nit: probably we should define an IsAndroid() to avoid propagation of ifdefs.",
+      "range": {
+        "startLine": 1453,
+        "startChar": 12,
+        "endLine": 1453,
+        "endChar": 34
+      },
+      "revId": "7cd219b764a61967817cefb5e8654248658b8430",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
