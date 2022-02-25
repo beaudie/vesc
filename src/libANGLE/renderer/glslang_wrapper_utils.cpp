@@ -3403,7 +3403,8 @@ TransformationState SpirvTransformer::transformDecorate(const uint32_t *instruct
     }
 
     // If using relaxed precision, generate instructions for the replacement id instead.
-    id = mVaryingPrecisionFixer.getReplacementId(id);
+    const bool isReplaced = mVaryingPrecisionFixer.isReplaced(id);
+    id                    = mVaryingPrecisionFixer.getReplacementId(id);
 
     uint32_t newDecorationValue = ShaderInterfaceVariableInfo::kInvalid;
 
@@ -3435,6 +3436,13 @@ TransformationState SpirvTransformer::transformDecorate(const uint32_t *instruct
             if (mOptions.isTransformFeedbackStage)
             {
                 mXfbCodeGenerator.addMemberDecorate(*info, id, mSpirvBlobOut);
+            }
+            break;
+        case spv::DecorationInvariant:
+            if (isReplaced)
+            {
+                spirv::WriteDecorate(mSpirvBlobOut, id, spv::DecorationInvariant, {});
+                return TransformationState::Transformed;
             }
             break;
         default:
