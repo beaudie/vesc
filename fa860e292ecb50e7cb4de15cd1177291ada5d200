@@ -111,6 +111,30 @@
       },
       "revId": "fa860e292ecb50e7cb4de15cd1177291ada5d200",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "ebda2685_3676d69f",
+        "filename": "src/libGLESv2/egl_ext_stubs.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 96,
+      "author": {
+        "id": 1528827
+      },
+      "writtenOn": "2022-02-25T15:49:15Z",
+      "side": 1,
+      "message": "It is in the commit message, but I agree it makes sense to put a comment here as it is not so straightforward.",
+      "parentUuid": "17e85351_07799867",
+      "range": {
+        "startLine": 96,
+        "startChar": 8,
+        "endLine": 96,
+        "endChar": 22
+      },
+      "revId": "fa860e292ecb50e7cb4de15cd1177291ada5d200",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
