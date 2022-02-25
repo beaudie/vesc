@@ -16,6 +16,63 @@
       "message": "refine some typo.",
       "revId": "1998d2e0ed05fba28d9d81f3961adbc2977d675a",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "96b1024f_872e77b4",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 25
+      },
+      "lineNbr": 236,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-02-25T20:18:43Z",
+      "side": 1,
+      "message": "This is not a complete solution unfortunately. What if there are 2 images in this situation? The flag is cleared only from one image.\n\nLooking back, I\u0027m not quite sure why you need this. Why isn\u0027t readImageWithLayoutTransition() enough for the purposes of this optimization?",
+      "revId": "1998d2e0ed05fba28d9d81f3961adbc2977d675a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b94bf7c8_20dd0464",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 25
+      },
+      "lineNbr": 6840,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-02-25T20:18:43Z",
+      "side": 1,
+      "message": "Again, this function should subsume the code from endRenderPassIfComputeReadAfterAttachmentWrite.",
+      "revId": "1998d2e0ed05fba28d9d81f3961adbc2977d675a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ea7cc8e7_a16f6881",
+        "filename": "src/tests/gl_tests/ComputeShaderTest.cpp",
+        "patchSetId": 25
+      },
+      "lineNbr": 4931,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-02-25T20:18:43Z",
+      "side": 1,
+      "message": "nit: you can remove \"dummy\" here (and in other tests)",
+      "range": {
+        "startLine": 4931,
+        "startChar": 15,
+        "endLine": 4931,
+        "endChar": 20
+      },
+      "revId": "1998d2e0ed05fba28d9d81f3961adbc2977d675a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
