@@ -323,6 +323,30 @@
       },
       "revId": "f031e4384ee0252779c4bea4c37255f06b17bc52",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "3883a921_72c12da4",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 12
+      },
+      "lineNbr": 5145,
+      "author": {
+        "id": 1520902
+      },
+      "writtenOn": "2022-02-25T00:54:11Z",
+      "side": 1,
+      "message": "Got it. As discussed offline, we should destroy all the remaining resources in this function. In the special case WindowsSurfaceVk::releaseSwapchainImages(ContextVk* contextVk), I will release the imageviews prior calling destroy() on mSwapchainImages.image, so that by the time destroy() is called, there are no imageview resources in the mImageAndViewGarbage to be destroyed.",
+      "parentUuid": "99b3a2d5_0982f1fe",
+      "range": {
+        "startLine": 5137,
+        "startChar": 3,
+        "endLine": 5145,
+        "endChar": 16
+      },
+      "revId": "f031e4384ee0252779c4bea4c37255f06b17bc52",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }

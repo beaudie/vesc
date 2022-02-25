@@ -18,6 +18,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "4e094fe8_d195be78",
+        "filename": "src/libANGLE/renderer/vulkan/SurfaceVk.cpp",
+        "patchSetId": 16
+      },
+      "lineNbr": 1498,
+      "author": {
+        "id": 1520902
+      },
+      "writtenOn": "2022-02-25T00:54:11Z",
+      "side": 1,
+      "message": "I see, I didn\u0027t know that not all the views created in getLevelLayerDrawImageView() are used by the GPU. Let each image retain its own views worked, but I was concerned that the serial assert failure https://chromium-review.googlesource.com/c/angle/angle/+/3426824/13/src/libANGLE/renderer/vulkan/SurfaceVk.cpp#1525 is going to cause some problem. But if we know that we are just creating the views but not using them, then what you suggested should be safe.",
+      "parentUuid": "4508bd9e_fbc58a86",
+      "revId": "429d76976048637858919055495089371ea37dcd",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "d1a33f37_b8952968",
@@ -31,6 +49,30 @@
       "writtenOn": "2022-02-24T14:38:29Z",
       "side": 1,
       "message": "You can simplify this by leaving `releaseImage` where it was (both if and else are calling it at the end anyway), then only add the `releaseImageViews`+related comment before stage-self.",
+      "range": {
+        "startLine": 2263,
+        "startChar": 0,
+        "endLine": 2284,
+        "endChar": 9
+      },
+      "revId": "429d76976048637858919055495089371ea37dcd",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "09f293ca_477b2d6a",
+        "filename": "src/libANGLE/renderer/vulkan/TextureVk.cpp",
+        "patchSetId": 16
+      },
+      "lineNbr": 2284,
+      "author": {
+        "id": 1520902
+      },
+      "writtenOn": "2022-02-25T00:54:11Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "d1a33f37_b8952968",
       "range": {
         "startLine": 2263,
         "startChar": 0,
@@ -64,6 +106,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "5434c86e_5bcdf3e4",
+        "filename": "src/libANGLE/renderer/vulkan/TextureVk.cpp",
+        "patchSetId": 16
+      },
+      "lineNbr": 2702,
+      "author": {
+        "id": 1520902
+      },
+      "writtenOn": "2022-02-25T00:54:11Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "99f254c0_9f1d1cdb",
+      "range": {
+        "startLine": 2691,
+        "startChar": 0,
+        "endLine": 2702,
+        "endChar": 64
+      },
+      "revId": "429d76976048637858919055495089371ea37dcd",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "d764000e_f3b1d128",
@@ -77,6 +143,30 @@
       "writtenOn": "2022-02-24T14:38:29Z",
       "side": 1,
       "message": "nit: just call it `imageViews`.",
+      "range": {
+        "startLine": 3372,
+        "startChar": 25,
+        "endLine": 3372,
+        "endChar": 41
+      },
+      "revId": "429d76976048637858919055495089371ea37dcd",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "adc6e2c8_cee18c00",
+        "filename": "src/libANGLE/renderer/vulkan/TextureVk.cpp",
+        "patchSetId": 16
+      },
+      "lineNbr": 3372,
+      "author": {
+        "id": 1520902
+      },
+      "writtenOn": "2022-02-25T00:54:11Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "d764000e_f3b1d128",
       "range": {
         "startLine": 3372,
         "startChar": 25,
