@@ -304,6 +304,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "cd645a4f_e321de00",
+        "filename": "src/libANGLE/renderer/vulkan/RenderTargetVk.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 104,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2022-02-25T05:28:56Z",
+      "side": 1,
+      "message": "Ah, thanks for the fix for the test.   I\u0027ve implemented your suggestion and added `RenderTargetVk::onColorWrite()`, which is called during `FramebufferVk::clearWithLoadOp()`, which fixes the test.\n\nLet me know what you think.",
+      "parentUuid": "257891c2_977b2e36",
+      "revId": "618de2a72f5ff7f1924d5e8c836b37f3b579124a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "4ec549b1_b10499fc",
         "filename": "src/libANGLE/renderer/vulkan/vk_cache_utils.cpp",
         "patchSetId": 5
