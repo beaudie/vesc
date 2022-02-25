@@ -18,6 +18,23 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "953c93cd_dd5a1c48",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2022-02-25T03:59:41Z",
+      "side": 1,
+      "message": "I can\u0027t confirm that this CL fixes the tests in question on the M1.\n\nWith no Metal validation layers or load/store action validation enabled, these tests pass on the M1 at top-of-tree without this CL.\n\nEven with this CL, this run:\n\nMTL_DEBUG_LAYER\u003d1 MTL_DEBUG_LAYER_VALIDATE_LOAD_ACTIONS\u003d1 MTL_DEBUG_LAYER_VALIDATE_STORE_ACTIONS\u003d1 MTL_DEBUG_LAYER_VALIDATE_UNRETAINED_RESOURCES\u003d4 out/Debug/angle_deqp_gles3_tests --use-angle\u003dmetal --gtest_filter\u003ddEQP.GLES3/functional_fbo_invalidate\\*\n\nhas the following failures:\n\n[  FAILED  ] 15 tests, listed below:\n[  FAILED  ] dEQP.GLES3/functional_fbo_invalidate_default_render_color, where GetParam() \u003d 32748\n[  FAILED  ] dEQP.GLES3/functional_fbo_invalidate_default_bind_color, where GetParam() \u003d 32753\n[  FAILED  ] dEQP.GLES3/functional_fbo_invalidate_default_draw_framebuffer_color, where GetParam() \u003d 32768\n[  FAILED  ] dEQP.GLES3/functional_fbo_invalidate_default_read_framebuffer_color, where GetParam() \u003d 32770\n[  FAILED  ] dEQP.GLES3/functional_fbo_invalidate_whole_render_color, where GetParam() \u003d 32773\n[  FAILED  ] dEQP.GLES3/functional_fbo_invalidate_whole_unbind_read_color, where GetParam() \u003d 32778\n[  FAILED  ] dEQP.GLES3/functional_fbo_invalidate_whole_unbind_read_color_stencil, where GetParam() \u003d 32782\n[  FAILED  ] dEQP.GLES3/functional_fbo_invalidate_whole_unbind_blit_color, where GetParam() \u003d 32783\n[  FAILED  ] dEQP.GLES3/functional_fbo_invalidate_whole_unbind_blit_msaa_color, where GetParam() \u003d 32787\n[  FAILED  ] dEQP.GLES3/functional_fbo_invalidate_target_framebuffer_framebuffer_color, where GetParam() \u003d 32851\n[  FAILED  ] dEQP.GLES3/functional_fbo_invalidate_target_framebuffer_draw_framebuffer_color, where GetParam() \u003d 32857\n[  FAILED  ] dEQP.GLES3/functional_fbo_invalidate_target_read_framebuffer_framebuffer_color, where GetParam() \u003d 32860\n[  FAILED  ] dEQP.GLES3/functional_fbo_invalidate_target_read_framebuffer_read_framebuffer_color, where GetParam() \u003d 32863\n[  FAILED  ] dEQP.GLES3/functional_fbo_invalidate_target_draw_framebuffer_framebuffer_color, where GetParam() \u003d 32869\n[  FAILED  ] dEQP.GLES3/functional_fbo_invalidate_target_draw_framebuffer_draw_framebuffer_color, where GetParam() \u003d 32875\n\nAdditionally, the WebGL conformance tests:\nhttps://www.khronos.org/registry/webgl/sdk/tests/deqp/functional/gles3/fboinvalidate/sub.html\nhttps://www.khronos.org/registry/webgl/sdk/tests/deqp/functional/gles3/fboinvalidate/whole.html\n\nwhich are suppressed in the Chromium-side webgl2_conformance_expectations.txt seem to be passing on top-of-tree Chromium with ANGLE\u0027s Metal backend on the M1 with or without this CL.\n",
+      "revId": "f5665df73314836f8b729848dc4b92c124317e05",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "98ce4d95_67acb239",
