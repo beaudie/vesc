@@ -63,6 +63,30 @@
       },
       "revId": "fa860e292ecb50e7cb4de15cd1177291ada5d200",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "c42de86d_a67a4e01",
+        "filename": "src/libGLESv2/egl_ext_stubs.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 96,
+      "author": {
+        "id": 1528827
+      },
+      "writtenOn": "2022-02-25T11:23:45Z",
+      "side": 1,
+      "message": "No problem, Jamie. I appreciate this is quite ugly, but it is a sort of workaround to implement `eglCreatePlatformWindowSurfaceEXT` in terms of `eglCreateWindowSurface`.\n\nA similar concern has been addressed already in Mesa:\nhttps://bugs.freedesktop.org/show_bug.cgi?id\u003d89920\n\nPlease, have a look at the example code here: https://www.khronos.org/registry/EGL/extensions/KHR/EGL_KHR_platform_x11.txt\n\n```\n#ifdef USE_EGL_KHR_PLATFORM_X11\n    window.egl \u003d eglCreatePlatformWindowSurface(config.dpy.egl,\n                                                config.egl,\n                                                \u0026window.x11,\n                                                NULL);\n#else\n    window.egl \u003d eglCreateWindowSurface(config.dpy.egl,\n                                        config.egl,\n                                        window.x11,\n                                        NULL);\n#endif\n```\n\nWhile `eglCreateWindowSurface` expects directly an X11 `Window`, `eglCreatePlatformWindowSurfaceEXT` expects a pointer to that, meaning `Window*`.\n\nHence why I de-reference the `native_window` in the code above, effectively getting the X11 `Window` value it is pointing to.",
+      "parentUuid": "0f7d04a6_76d0f9a6",
+      "range": {
+        "startLine": 96,
+        "startChar": 8,
+        "endLine": 96,
+        "endChar": 22
+      },
+      "revId": "fa860e292ecb50e7cb4de15cd1177291ada5d200",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
