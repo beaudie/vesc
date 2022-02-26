@@ -3,6 +3,57 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "4b4f911f_6a321c39",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 11,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2022-02-26T00:10:47Z",
+      "side": 1,
+      "message": "typo: correctly",
+      "revId": "62f1d2e6dc28e82367aaf823968373c2e6917329",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "46eb40e3_815b7b0a",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 16,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2022-02-26T00:10:47Z",
+      "side": 1,
+      "message": "Please mention that this is an upstreaming of https://bugs.webkit.org/show_bug.cgi?id\u003d236427 .",
+      "revId": "62f1d2e6dc28e82367aaf823968373c2e6917329",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "9325d023_64fd1471",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2022-02-26T00:10:47Z",
+      "side": 1,
+      "message": "Great test in particular. A couple of questions, but lgtm\u0027ing modulo Gregg\u0027s comments to unblock you.\n",
+      "revId": "62f1d2e6dc28e82367aaf823968373c2e6917329",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "2b51a19f_6433d69c",
         "filename": "src/libANGLE/renderer/metal/VertexArrayMtl.mm",
         "patchSetId": 1
@@ -49,6 +100,41 @@
       "side": 1,
       "message": "Both of these activate and deactivate the messaging system for the VAO. There\u0027s no cleanup needed here, when the observed object is deallocated, the observers will be safely removed.",
       "parentUuid": "4ccc1d21_705823da",
+      "revId": "62f1d2e6dc28e82367aaf823968373c2e6917329",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "83e7c2f3_47ee929c",
+        "filename": "src/libANGLE/renderer/metal/VertexArrayMtl.mm",
+        "patchSetId": 1
+      },
+      "lineNbr": 667,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2022-02-26T00:10:47Z",
+      "side": 1,
+      "message": "Still - do all buffers need observation, even if they don\u0027t need conversion? What if they aren\u0027t enabled as arrays - should the observation be disabled then?\n\nI note that this change wasn\u0027t in the original fix:\nhttps://bugs.webkit.org/show_bug.cgi?id\u003d236427",
+      "parentUuid": "a00f142f_6b7dcb88",
+      "revId": "62f1d2e6dc28e82367aaf823968373c2e6917329",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "31a366ca_b9f4aee4",
+        "filename": "src/libANGLE/renderer/metal/VertexArrayMtl.mm",
+        "patchSetId": 1
+      },
+      "lineNbr": 988,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2022-02-26T00:10:47Z",
+      "side": 1,
+      "message": "Consider removing unneeded whitespace change?",
       "revId": "62f1d2e6dc28e82367aaf823968373c2e6917329",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
