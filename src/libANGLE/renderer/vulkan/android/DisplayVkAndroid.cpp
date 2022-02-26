@@ -20,6 +20,13 @@
 #include "libANGLE/renderer/vulkan/android/WindowSurfaceVkAndroid.h"
 #include "libANGLE/renderer/vulkan/vk_caps_utils.h"
 
+#ifdef OLD_CODE
+#else  // OLD_CODE
+#    include <unistd.h>
+#    undef INFO
+#    define INFO(...) __android_log_print(ANDROID_LOG_INFO, "ANGLE", __VA_ARGS__)
+#endif  // OLD_CODE
+
 namespace rx
 {
 
@@ -84,6 +91,7 @@ egl::ConfigSet DisplayVkAndroid::generateConfigs()
 
         VkResult result = vkGetPhysicalDeviceSurfaceFormats2KHR(physicalDevice, &surfaceInfo2,
                                                                 &surfaceFormatCount, nullptr);
+        INFO("%s(): surfaceFormatCount = %u", __FUNCTION__, surfaceFormatCount);
         if (result != VK_SUCCESS)
         {
             return egl::ConfigSet();
@@ -109,9 +117,14 @@ egl::ConfigSet DisplayVkAndroid::generateConfigs()
             const angle::Format &angleFormat = angle::Format::Get(angleFormatID);
             GLenum glFormat                  = angleFormat.glInternalFormat;
 
+            INFO("%s(): GLformat = 0x%04x RGBA(%u, %u, %u, %u); DS(%u, %u)", __FUNCTION__, glFormat,
+                 angleFormat.redBits, angleFormat.greenBits, angleFormat.blueBits,
+                 angleFormat.alphaBits, angleFormat.depthBits, angleFormat.stencilBits);
+
             if (std::find(kDesiredColorFormats.begin(), kDesiredColorFormats.end(), glFormat) !=
                 kDesiredColorFormats.end())
             {
+                INFO("%s(): \t Adding this format!", __FUNCTION__);
                 kColorFormats.push_back(glFormat);
             }
         }
