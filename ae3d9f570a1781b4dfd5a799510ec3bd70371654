@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "5362db4c_50294a2f",
+        "filename": "include/platform/FeaturesVk.h",
+        "patchSetId": 48
+      },
+      "lineNbr": 498,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-02-26T02:44:42Z",
+      "side": 1,
+      "message": "nit: you could remove this from the public message.",
+      "range": {
+        "startLine": 498,
+        "startChar": 9,
+        "endLine": 498,
+        "endChar": 68
+      },
+      "revId": "ae3d9f570a1781b4dfd5a799510ec3bd70371654",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}

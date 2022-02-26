@@ -156,6 +156,24 @@
       "parentUuid": "dcb1f017_524d047b",
       "revId": "9d3b98266dbc962e7e76f63cc0040d0e8de96468",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ec1b9227_ecd181a3",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 44
+      },
+      "lineNbr": 2261,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-02-26T02:44:42Z",
+      "side": 1,
+      "message": "This doesn\u0027t work?\n\n```\nfor (ANGLE_MAYBE_UNUSED size_t colorIndex : framebufferVk-\u003egetState().getColorAttachmentsMask())\n```",
+      "parentUuid": "d207f56a_bbbb15fd",
+      "revId": "9d3b98266dbc962e7e76f63cc0040d0e8de96468",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
