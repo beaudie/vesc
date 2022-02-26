@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "dbc33828_21d7aa4f",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 27
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1524687
+      },
+      "writtenOn": "2022-02-26T13:06:13Z",
+      "side": 1,
+      "message": "update a new change.\n1, refine the function endRenderPassIfComputeAccessAfterGraphicsTextureImageAccess.\n2, when test case TextureSamplebyFSCSFS, renderpass get from mPerfCounters is wrong. It is caused by if mHasDeferredFlush is true in one renderpass, the internal flush happens, and reset the value of perfCounters. This behavior breaks the semantics of mPerfCounters, which is used for one frame (like boundary as swapbuffer). So if the flush is caused by deferredflush, skip to reset the perfcounter.",
+      "revId": "24af125338e4c812f704ead9528b29d4afe95115",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}

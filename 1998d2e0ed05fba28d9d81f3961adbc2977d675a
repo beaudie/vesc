@@ -71,6 +71,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "6c09aa53_d60f9ccf",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 25
+      },
+      "lineNbr": 236,
+      "author": {
+        "id": 1524687
+      },
+      "writtenOn": "2022-02-26T13:06:13Z",
+      "side": 1,
+      "message": "If one image no needs to do layout transition in RenderPassCommandBufferHelper::imageRead, the readImageWithLayoutTransition is false, but this image still be added to usedImages list. Then in the following invalidateCurrentTextures, the renderpass will be closed due to we will check IsRenderPassStartedAndUsesImage. This closure is unnecessary. In fact, IsRenderPassStartedAndUsesImage here suit for the colorImage and resolveImage as attachment write, but unfortunately, a misoperation happens. So we needs to filter out the image suit for using usesImage here.\n\nI found if one image use as colorImage/resolveImage, ANGLE already set its renderPassUsage to RenderPassUsage::RenderTargetAttachment, seems we can use this flag, no need to create a new renderPassUsage flag as previous change. \n\nThe test cases need close renderpass we discussed before as below for summary: \n1, for texture used as color attachment and CS texture sample it:\nwhen usesImage and image.renderPassUsage\u003d\u003dRenderTargetAttachment both are true;\n\n2, texture has a layout transition and CS texture sample it:\nwhen readImageWithLayoutTransition is true;\n\n3, FS read image and CS texture sample it:\nWe call imageWrite when FS read image, so here can add this image to mRenderPassReadImagesWithLayoutTransition list too. So this case also can be checked by if readImageWithLayoutTransition is true.\nBy the way, I\u0027m not sure why we call imageWrite even the shader only read the image.\n\n4, for CS access image\nwhen the usesImage is true.\n\nI update the related change, would you please help to check it.",
+      "parentUuid": "7dbeafad_da8d7a4e",
+      "revId": "1998d2e0ed05fba28d9d81f3961adbc2977d675a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "b94bf7c8_20dd0464",
