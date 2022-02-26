@@ -33,6 +33,24 @@
       "message": "You need to add this here:\n\n```\n    glViewport(0, 0, params.fboSize, params.fboSize);\n    glDisable(GL_SCISSOR_TEST);\n```\n\nThat\u0027s why the rendering in the test was broken.",
       "revId": "395640a6c762f7bb1dadcbade5d5e2098a7e33bc",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "369d112c_e70f6565",
+        "filename": "src/tests/perf_tests/ClearPerf.cpp",
+        "patchSetId": 10
+      },
+      "lineNbr": 154,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2022-02-26T00:59:08Z",
+      "side": 1,
+      "message": "Good find!   That was the issue.",
+      "parentUuid": "b6a6b794_cac6f22b",
+      "revId": "395640a6c762f7bb1dadcbade5d5e2098a7e33bc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
