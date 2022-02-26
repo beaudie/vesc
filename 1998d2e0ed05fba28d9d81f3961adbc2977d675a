@@ -55,6 +55,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "7dbeafad_da8d7a4e",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 25
+      },
+      "lineNbr": 236,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-02-26T02:48:37Z",
+      "side": 1,
+      "message": "Yes, as you discovered we can\u0027t _not_ add the image to the used-images list.\n\nMy suggestion was to not check usedImages at all. Because if readImageWithLayoutTransition is true, then the image is necessarily used for reading in the render pass, isn\u0027t that so?",
+      "parentUuid": "2247a81a_4f720c4f",
+      "revId": "1998d2e0ed05fba28d9d81f3961adbc2977d675a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "b94bf7c8_20dd0464",
         "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
         "patchSetId": 25
@@ -84,6 +102,24 @@
       "side": 1,
       "message": "I missed this concern. But If the confusion mentioned at last comment, I think the code of handling texture part in this function can be like as:\n    for (size_t textureUnit : executable-\u003egetActiveSamplersMask())\n    {\n    ... ...\n        //endRenderPassIfComputeReadAfterAttachmentWrite case\n        if (IsRenderPassStartedAndUsesImage(*mRenderPassCommands, image))\n        {\n            return flushCommandsAndEndRenderPass(\n                RenderPassClosureReason::ImageAttachmentThenComputeRead);\n        }\n    \n        //image layout transition case:\n        if (IsRenderPassStartedAndTransitionsImageLayout(*mRenderPassCommands, image))\n        {\n            return flushCommandsAndEndRenderPass(\n            RenderPassClosureReason::GraphicsTextureImageAccessThenComputeAccess);\n        }\n    }\n \nBesides, the image part of this function can use \u0027usesImage\u0027 as you mentioned before.",
       "parentUuid": "b94bf7c8_20dd0464",
+      "revId": "1998d2e0ed05fba28d9d81f3961adbc2977d675a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "122b0cf1_e18bc5d4",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 25
+      },
+      "lineNbr": 6840,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-02-26T02:48:37Z",
+      "side": 1,
+      "message": "Yes, that sounds good. Then you can delete endRenderPassIfComputeReadAfterAttachmentWrite",
+      "parentUuid": "cc6b96ba_760267c4",
       "revId": "1998d2e0ed05fba28d9d81f3961adbc2977d675a",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
