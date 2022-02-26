@@ -20,6 +20,13 @@
 #include "libANGLE/renderer/vulkan/android/WindowSurfaceVkAndroid.h"
 #include "libANGLE/renderer/vulkan/vk_caps_utils.h"
 
+#ifdef OLD_CODE
+#else  // OLD_CODE
+#    include <unistd.h>
+#    undef INFO
+#    define INFO(...) __android_log_print(ANDROID_LOG_INFO, "ANGLE", __VA_ARGS__)
+#endif  // OLD_CODE
+
 namespace rx
 {
 
@@ -83,6 +90,7 @@ egl::ConfigSet DisplayVkAndroid::generateConfigs()
 
         VkResult result = vkGetPhysicalDeviceSurfaceFormats2KHR(physicalDevice, &surfaceInfo2,
                                                                 &surfaceFormatCount, nullptr);
+        INFO("%s(): surfaceFormatCount = %u", __FUNCTION__, surfaceFormatCount);
         if (result != VK_SUCCESS)
         {
             return egl::ConfigSet();
@@ -108,20 +116,27 @@ egl::ConfigSet DisplayVkAndroid::generateConfigs()
             const angle::Format &angleFormat = angle::Format::Get(angleFormatID);
             GLenum glFormat                  = angleFormat.glInternalFormat;
 
+            INFO("%s(): GLformat = 0x%04x RGBA(%u, %u, %u, %u); DS(%u, %u)", __FUNCTION__, glFormat,
+                 angleFormat.redBits, angleFormat.greenBits, angleFormat.blueBits,
+                 angleFormat.alphaBits, angleFormat.depthBits, angleFormat.stencilBits);
+
             if (glFormat == GL_SRGB8_ALPHA8_EXT ||
                 (angleFormat.greenBits == 0 && angleFormat.blueBits == 0))
             {
                 // ANGLE won't use GL_SRGB8_ALPHA8_EXT for an EGLConfig (it uses GL_RGBA8 instead).
                 // Also, ANGLE is not ready to support the recently-added-to-the-Android-loader
                 // GL_RED format.
+                INFO("%s(): \t Skipping this format!", __FUNCTION__);
                 continue;
             }
             if (std::find(kColorFormats.begin(), kColorFormats.end(), glFormat) ==
                 kColorFormats.end())
             {
+                INFO("%s(): \t Adding this format!", __FUNCTION__);
                 kColorFormats.push_back(glFormat);
                 continue;
             }
+            INFO("%s(): \t Did not take a path above", __FUNCTION__);
         }
     }
 
