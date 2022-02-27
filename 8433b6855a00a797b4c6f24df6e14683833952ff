@@ -16,6 +16,46 @@
       "message": "This is ready for review, and requires the Android tm-dev CL ag/17017572.\n\nI decided to focus this first ANGLE CL for EGLConfig formats.  I\u0027ll work with Trevor to create an ANGLE CL for colorspaces.",
       "revId": "8433b6855a00a797b4c6f24df6e14683833952ff",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "69ec6274_00f5eb7b",
+        "filename": "src/libANGLE/renderer/vulkan/android/DisplayVkAndroid.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 102,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-02-27T02:08:52Z",
+      "side": 1,
+      "message": "nit: const",
+      "range": {
+        "startLine": 102,
+        "startChar": 13,
+        "endLine": 102,
+        "endChar": 14
+      },
+      "revId": "8433b6855a00a797b4c6f24df6e14683833952ff",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "e3d858f0_5da22cc4",
+        "filename": "src/libANGLE/renderer/vulkan/android/DisplayVkAndroid.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 123,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-02-27T02:08:52Z",
+      "side": 1,
+      "message": "nit: Redundant `continue;`",
+      "revId": "8433b6855a00a797b4c6f24df6e14683833952ff",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
