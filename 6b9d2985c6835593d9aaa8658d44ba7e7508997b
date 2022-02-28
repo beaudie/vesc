@@ -1,0 +1,106 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "1a70eba1_8e6e0a7b",
+        "filename": "src/libANGLE/capture/FrameCapture.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 929,
+      "author": {
+        "id": 1495282
+      },
+      "writtenOn": "2022-02-28T07:13:56Z",
+      "side": 1,
+      "message": "`i` is kind of superfluous here, why not \n```\nfor (auto\u0026 oldBuffer : buffersToRegen)\n{\n   formatResourceIndex(out, count);\n   out \u003c\u003c \"gBufferMap[\" \u003c\u003c oldBuffer \u003c\u003c \"]\";\n   ++count;\n}\n```\n(replace auto with type if preferred)",
+      "revId": "6b9d2985c6835593d9aaa8658d44ba7e7508997b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "8f79f4b5_ad8494f1",
+        "filename": "src/libANGLE/capture/FrameCapture.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 940,
+      "author": {
+        "id": 1495282
+      },
+      "writtenOn": "2022-02-28T07:13:56Z",
+      "side": 1,
+      "message": "Same here, the `i` is unused",
+      "revId": "6b9d2985c6835593d9aaa8658d44ba7e7508997b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "8fc4afed_a0493cba",
+        "filename": "src/libANGLE/capture/FrameCapture.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 1058,
+      "author": {
+        "id": 1495282
+      },
+      "writtenOn": "2022-02-28T07:13:56Z",
+      "side": 1,
+      "message": "Same as above.",
+      "revId": "6b9d2985c6835593d9aaa8658d44ba7e7508997b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "e3c2cf1f_b792c3c7",
+        "filename": "src/libANGLE/capture/FrameCapture.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 1105,
+      "author": {
+        "id": 1495282
+      },
+      "writtenOn": "2022-02-28T07:13:56Z",
+      "side": 1,
+      "message": "Here i is actually used, but I think that a range based for loop still looks better",
+      "revId": "6b9d2985c6835593d9aaa8658d44ba7e7508997b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "c49278b4_50b567d9",
+        "filename": "src/libANGLE/capture/FrameCapture.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 1174,
+      "author": {
+        "id": 1495282
+      },
+      "writtenOn": "2022-02-28T07:13:56Z",
+      "side": 1,
+      "message": "same",
+      "revId": "6b9d2985c6835593d9aaa8658d44ba7e7508997b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "4663124e_7887ae69",
+        "filename": "src/libANGLE/capture/FrameCapture.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 1215,
+      "author": {
+        "id": 1495282
+      },
+      "writtenOn": "2022-02-28T07:13:56Z",
+      "side": 1,
+      "message": "And another time.",
+      "revId": "6b9d2985c6835593d9aaa8658d44ba7e7508997b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
