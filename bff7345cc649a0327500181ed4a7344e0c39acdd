@@ -299,6 +299,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "8594a7ac_42f1266b",
+        "filename": "src/libANGLE/renderer/vulkan/TextureVk.cpp",
+        "patchSetId": 21
+      },
+      "lineNbr": 562,
+      "author": {
+        "id": 1446209
+      },
+      "writtenOn": "2022-02-28T11:18:58Z",
+      "side": 1,
+      "message": "Thanks very much for the perf notification,will add bufferHelper.isCurrentlyInUseForWrite() condition.\nIn addition:\nif isOverWriteToAllDefinedLevel\u003d\u003dtrue,we needn\u0027t defer flush,we can directly create new image here and do texture update on this new image(But it\u0027s not common case,so I didn\u0027t do it).\nIf isOverWriteToAllDefinedLevel\u003d\u003dfalse,we have to defer flush it and do image recreation in following glGenerateMipmap(if no glGenerateMipmap call,won\u0027t recreate image),see this case: \n glTexSubImage2D（level 0）\n glGenerateMipmap\n glDraw\n glTexSubImage2D（level 0）-\u003eisOverWriteToAllDefinedLevel\u003d\u003dfalse,create new image in glTexSubImage2D will cause other levels data lost.",
+      "parentUuid": "cfc27c09_66f12abc",
+      "range": {
+        "startLine": 562,
+        "startChar": 59,
+        "endLine": 562,
+        "endChar": 87
+      },
+      "revId": "bff7345cc649a0327500181ed4a7344e0c39acdd",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "d4c396f2_08a2c8f1",
@@ -415,6 +439,24 @@
       "writtenOn": "2022-02-25T21:35:45Z",
       "side": 1,
       "message": "\u003e How about making the texture buffer\n\ntypo, I meant to say \"bigger\".",
+      "parentUuid": "9e79b80a_9036e552",
+      "revId": "bff7345cc649a0327500181ed4a7344e0c39acdd",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "c9228c72_22caf5c0",
+        "filename": "src/tests/gl_tests/TextureTest.cpp",
+        "patchSetId": 21
+      },
+      "lineNbr": 6193,
+      "author": {
+        "id": 1446209
+      },
+      "writtenOn": "2022-02-28T11:18:58Z",
+      "side": 1,
+      "message": "np,I will update it in following patch.",
       "parentUuid": "9e79b80a_9036e552",
       "revId": "bff7345cc649a0327500181ed4a7344e0c39acdd",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"

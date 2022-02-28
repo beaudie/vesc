@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "45ec7d00_48a7763d",
+        "filename": "src/libANGLE/renderer/vulkan/TextureVk.cpp",
+        "patchSetId": 27
+      },
+      "lineNbr": 2712,
+      "author": {
+        "id": 1446209
+      },
+      "writtenOn": "2022-02-28T11:18:58Z",
+      "side": 1,
+      "message": "If image isn\u0027t in use,there will be no real FS-TS barrier,thus no need to recreate image.",
+      "range": {
+        "startLine": 2712,
+        "startChar": 13,
+        "endLine": 2712,
+        "endChar": 83
+      },
+      "revId": "b377bc4f054f24248e036dec41d9c8e75e4cd8e8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}

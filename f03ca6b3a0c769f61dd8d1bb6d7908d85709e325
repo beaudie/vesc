@@ -52,6 +52,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "0c43b298_c49cdcd7",
+        "filename": "src/libANGLE/renderer/vulkan/TextureVk.cpp",
+        "patchSetId": 25
+      },
+      "lineNbr": 512,
+      "author": {
+        "id": 1446209
+      },
+      "writtenOn": "2022-02-28T11:18:58Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "9aa5867b_b351f241",
+      "revId": "f03ca6b3a0c769f61dd8d1bb6d7908d85709e325",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "0a9d25f4_14609dda",
@@ -65,6 +83,30 @@
       "writtenOn": "2022-02-25T21:35:45Z",
       "side": 1,
       "message": "Instead of this, please use the old message but only issue the perf warning `if (!ghosting)`.\n\nPerf warnings are there to point out an inefficiency to the application developer, so they can write better GL code. Ghosting is not an application inefficiency, it\u0027s an ANGLE optimization!",
+      "range": {
+        "startLine": 557,
+        "startChar": 0,
+        "endLine": 560,
+        "endChar": 57
+      },
+      "revId": "f03ca6b3a0c769f61dd8d1bb6d7908d85709e325",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "23d536a6_b8a42960",
+        "filename": "src/libANGLE/renderer/vulkan/TextureVk.cpp",
+        "patchSetId": 25
+      },
+      "lineNbr": 560,
+      "author": {
+        "id": 1446209
+      },
+      "writtenOn": "2022-02-28T11:18:58Z",
+      "side": 1,
+      "message": "Did you mean ghosting is not an application inefficiency,so I shouldn\u0027t add it into this perf warning,then why have to \u0027issue the perf warning  if (!ghosting) \u0027 ?",
+      "parentUuid": "0a9d25f4_14609dda",
       "range": {
         "startLine": 557,
         "startChar": 0,
@@ -98,6 +140,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "63376453_4df97571",
+        "filename": "src/libANGLE/renderer/vulkan/TextureVk.cpp",
+        "patchSetId": 25
+      },
+      "lineNbr": 2726,
+      "author": {
+        "id": 1446209
+      },
+      "writtenOn": "2022-02-28T11:18:58Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "89563fd5_d7e63b65",
+      "range": {
+        "startLine": 2726,
+        "startChar": 37,
+        "endLine": 2726,
+        "endChar": 88
+      },
+      "revId": "f03ca6b3a0c769f61dd8d1bb6d7908d85709e325",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "3f14c4c2_edc5e430",
@@ -111,6 +177,24 @@
       "writtenOn": "2022-02-25T21:35:45Z",
       "side": 1,
       "message": "All this is conflicting with the logic in line 2705. We should find a way to merge this and that block, such that when the usage flags need to be changed, we are not flushing the updates there only to disable this optimization.\n\nHow about something like this (untested code)?\n\n```\n    if (isGenerateMipmap \u0026\u0026 mImage \u0026\u0026 mImage-\u003evalid())\n    {\n        const bool isBaseLevelPendingFullUpdate \u003d ...\n        const bool imageNeedsRecreation \u003d (oldUsageFlags !\u003d mImageUsageFlags ||\n         (!mState.getImmutableFormat() \u0026\u0026\n          mImage-\u003egetLevelCount() !\u003d getMipLevelCount(ImageMipLevels::FullMipChain)));\n        if (imageNeedsRecreation)\n        {\n            ASSERT(mOwnsImage);\n            // Immutable texture is not expected to reach here. The usage flag change should have\n            // been handled earlier and level count change should not need to reallocate\n            ASSERT(!mState.getImmutableFormat());\n\n            // If the base level is entirely being redefined, discard the previous image entirely.\n            if (!isBaseLevelPendingFullUpdate)\n            {\n                // Flush staged updates to the base level of the image.  Note that updates to the rest of\n                // the levels have already been discarded through the |removeStagedUpdates| call above.\n                ANGLE_TRY(flushImageStagedUpdates(contextVk));\n      \n                mImage-\u003estageSelfAsSubresourceUpdates(contextVk, 1, {});\n            }\n        }\n\n        if (imageNeedsRecreation || isBaseLevelPendingFullUpdate)\n        {\n            // Release views and render targets created for the old image.\n            releaseImage(contextVk);\n        }\n    }\n```\n\nBasically what I did was when this optimization is in effect, recreating the image doesn\u0027t result in flushing pending updates and restaging the image as update to itself.",
+      "revId": "f03ca6b3a0c769f61dd8d1bb6d7908d85709e325",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "569a6966_d1e85cfc",
+        "filename": "src/libANGLE/renderer/vulkan/TextureVk.cpp",
+        "patchSetId": 25
+      },
+      "lineNbr": 2736,
+      "author": {
+        "id": 1446209
+      },
+      "writtenOn": "2022-02-28T11:18:58Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "3f14c4c2_edc5e430",
       "revId": "f03ca6b3a0c769f61dd8d1bb6d7908d85709e325",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
@@ -132,6 +216,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "4707f614_2de66941",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 25
+      },
+      "lineNbr": 8419,
+      "author": {
+        "id": 1446209
+      },
+      "writtenOn": "2022-02-28T11:18:58Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "9dc380ee_62a482bd",
+      "revId": "f03ca6b3a0c769f61dd8d1bb6d7908d85709e325",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "b3cca154_205436e3",
@@ -145,6 +247,30 @@
       "writtenOn": "2022-02-25T21:35:45Z",
       "side": 1,
       "message": "You can simplify this code. As soon as there\u0027s one full sized update, it doesn\u0027t matter if the rest of the updates are not full sized. Also, updates other than `buffer` should be taken into account:\n\n```\n    std::vector\u003cSubresourceUpdate\u003e *levelUpdates \u003d getLevelUpdates(mFirstAllocatedLevel);\n    if (levelUpdates \u003d\u003d nullptr)\n    {\n        return false;\n    }\n    for (SubresourceUpdate \u0026update : *levelUpdates)\n    {\n\t// This function currently only supports 2D images.\n        uint32_t updateBaseLayer, updateLayerCount;\n        update.getDestSubresource(mLayerCount, \u0026updateBaseLayer, \u0026updateLayerCount);\n\tASSERT(updateBaseLayer \u003d\u003d 0 \u0026\u0026 updateLayerCount \u003d\u003d 1);\n\n\tif (update.updateSource \u003d\u003d UpdateSource::Clear ||\n            update.updateSource \u003d\u003d UpdateSource::ClearEmulatedChannelsOnly)\n\t{\n\t    // TODO: look at update.data.clear.  No size check, becaues it\u0027s always assumed to be a full update.\n\t    if (...)\n\t    {\n\t\treturn true;\n\t    }\n\t    continue;\n\t}\n\n\t// TODO: for UpdateSource::Buffer and UpdateSource::Image, get the extents from\n\t// update.data.buffer and update.data.image respectively.\n        VkExtent3D extent \u003d ...;\n        if (extent \u003d\u003d mExtent)\n        {\n\t    return true;\n        }\n    }\n    return false;\n```",
+      "range": {
+        "startLine": 8421,
+        "startChar": 0,
+        "endLine": 8440,
+        "endChar": 17
+      },
+      "revId": "f03ca6b3a0c769f61dd8d1bb6d7908d85709e325",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "3c2de5a2_1ddadcd5",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 25
+      },
+      "lineNbr": 8440,
+      "author": {
+        "id": 1446209
+      },
+      "writtenOn": "2022-02-28T11:18:58Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "b3cca154_205436e3",
       "range": {
         "startLine": 8421,
         "startChar": 0,
