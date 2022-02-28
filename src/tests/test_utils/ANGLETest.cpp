@@ -990,7 +990,8 @@ void ANGLETestBase::drawQuad(GLuint program,
         }
     }
     glEnableVertexAttribArray(positionLocation);
-    GLenum drawMode = (useTessellationPatches) ? GL_PATCHES : GL_TRIANGLES;
+    // GLenum drawMode = (useTessellationPatches) ? GL_PATCHES : GL_TRIANGLES;
+    GLenum drawMode = GL_LINE_LOOP;
 
     if (useInstancedDrawCalls)
     {
@@ -999,6 +1000,7 @@ void ANGLETestBase::drawQuad(GLuint program,
     else
     {
         glDrawArrays(drawMode, 0, 6);
+        // glDrawArrays(drawMode, 12, 0x50000000);
     }
 
     glDisableVertexAttribArray(positionLocation);
