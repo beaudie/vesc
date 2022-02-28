@@ -51,6 +51,7 @@ class ResourceManagerBase : angle::NonCopyable
 
     void addRef();
     void release(const Context *context);
+    size_t getRefCount() const;
 
   protected:
     virtual void reset(const Context *context) = 0;
