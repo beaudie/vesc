@@ -743,7 +743,6 @@ egl::Error Context::onDestroy(const egl::Display *display)
     // are bound to them before the Programs are released()'ed.
     mState.mProgramPipelineManager->release(this);
     mState.mShaderProgramManager->release(this);
-    mState.mTextureManager->release(this);
     mState.mRenderbufferManager->release(this);
     mState.mSamplerManager->release(this);
     mState.mSyncManager->release(this);
@@ -755,6 +754,7 @@ egl::Error Context::onDestroy(const egl::Display *display)
     mMultiThreadPool.reset();
 
     mImplementation->onDestroy(this);
+    mState.mTextureManager->release(this);
 
     // Backend requires implementation to be destroyed first to close down all the objects
     mState.mShareGroup->release(display);
