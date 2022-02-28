@@ -125,6 +125,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "8d722d93_046e3154",
+        "filename": "src/libANGLE/renderer/vulkan/FramebufferVk.cpp",
+        "patchSetId": 44
+      },
+      "lineNbr": 2632,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2022-02-28T19:41:01Z",
+      "side": 1,
+      "message": "Unfortunately, I\u0027m not going to be able to get the D/S test done also, but I can open a fix-it bug if you\u0027d like.",
+      "parentUuid": "99fa8432_f57f7ff9",
+      "revId": "9d3b98266dbc962e7e76f63cc0040d0e8de96468",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "dcb1f017_524d047b",
         "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
         "patchSetId": 44
@@ -172,6 +190,24 @@
       "side": 1,
       "message": "This doesn\u0027t work?\n\n```\nfor (ANGLE_MAYBE_UNUSED size_t colorIndex : framebufferVk-\u003egetState().getColorAttachmentsMask())\n```",
       "parentUuid": "d207f56a_bbbb15fd",
+      "revId": "9d3b98266dbc962e7e76f63cc0040d0e8de96468",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "2cf2803d_4abe71a6",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 44
+      },
+      "lineNbr": 2261,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2022-02-28T19:41:01Z",
+      "side": 1,
+      "message": "Oh, no parens is the magic.\n\nDone",
+      "parentUuid": "ec1b9227_ecd181a3",
       "revId": "9d3b98266dbc962e7e76f63cc0040d0e8de96468",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
