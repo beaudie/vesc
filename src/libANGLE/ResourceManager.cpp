@@ -49,13 +49,15 @@ void ResourceManagerBase::addRef()
     mRefCount++;
 }
 
-void ResourceManagerBase::release(const Context *context)
+ResourceManagerBase *ResourceManagerBase::release(const Context *context)
 {
     if (--mRefCount == 0)
     {
         reset(context);
         delete this;
+        return nullptr;
     }
+    return this;
 }
 
 template <typename ResourceType, typename ImplT, typename IDType>

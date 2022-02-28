@@ -833,7 +833,7 @@ class State : angle::NonCopyable
     // Not for general use.
     const BufferManager &getBufferManagerForCapture() const { return *mBufferManager; }
     const BoundBufferMap &getBoundBuffersForCapture() const { return mBoundBuffers; }
-    const TextureManager &getTextureManagerForCapture() const { return *mTextureManager; }
+    const TextureManager *getTextureManager() const { return mTextureManager; }
     const TextureBindingMap &getBoundTexturesForCapture() const { return mSamplerTextures; }
     const RenderbufferManager &getRenderbufferManagerForCapture() const
     {

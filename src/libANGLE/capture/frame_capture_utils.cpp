@@ -1427,10 +1427,9 @@ Result SerializeContextToString(const gl::Context *context, std::string *stringO
         }
     }
     {
-        const gl::TextureManager &textureManager =
-            context->getState().getTextureManagerForCapture();
+        const gl::TextureManager *textureManager = context->getState().getTextureManager();
         GroupScope shaderGroup(&json, "TextureManager");
-        for (const auto &texture : textureManager)
+        for (const auto &texture : *textureManager)
         {
             gl::Texture *texturePtr = texture.second;
             ANGLE_TRY(SerializeTexture(context, &json, &scratchBuffer, texturePtr));
