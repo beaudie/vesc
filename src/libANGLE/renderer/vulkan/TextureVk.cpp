@@ -2399,7 +2399,7 @@ angle::Result TextureVk::getAttachmentRenderTarget(const gl::Context *context,
 
 angle::Result TextureVk::ensureImageInitialized(ContextVk *contextVk, ImageMipLevels mipLevels)
 {
-    if (mImage->valid() && !mImage->hasStagedUpdatesInAllocatedLevels())
+    if (mImage == nullptr || (mImage->valid() && !mImage->hasStagedUpdatesInAllocatedLevels()))
     {
         return angle::Result::Continue;
     }
