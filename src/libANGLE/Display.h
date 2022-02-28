@@ -311,6 +311,8 @@ class Display final : public LabeledObject,
     // their own DebugAnnotator.
     void setGlobalDebugAnnotator() { gl::InitializeDebugAnnotations(&mAnnotator); }
 
+    size_t getGlobalTextureShareGroupUserCount() const { return mGlobalTextureShareGroupUsers; }
+
   private:
     Display(EGLenum platform, EGLNativeDisplayType displayId, Device *eglDevice);
 
