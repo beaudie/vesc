@@ -16,6 +16,29 @@
       "message": "PTAL. Roman this fixes the issue that you were looking at some time ago.",
       "revId": "611a9f9ae1f4986201da394d9ac3c0dbce7f2246",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "f175c2c4_789acf38",
+        "filename": "src/libANGLE/renderer/vulkan/ProgramExecutableVk.cpp",
+        "patchSetId": 12
+      },
+      "lineNbr": 1352,
+      "author": {
+        "id": 1531247
+      },
+      "writtenOn": "2022-02-28T20:04:21Z",
+      "side": 1,
+      "message": "This CL made me notice that this check is outside of the (!cacheHit) condition, which is not the case above.\n\nCan these two blocks be merged into a single one in a way where only the buffer setup is conditional on whether the binding is null?",
+      "range": {
+        "startLine": 1352,
+        "startChar": 8,
+        "endLine": 1352,
+        "endChar": 48
+      },
+      "revId": "611a9f9ae1f4986201da394d9ac3c0dbce7f2246",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
