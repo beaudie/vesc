@@ -859,6 +859,7 @@ void CommandQueue::destroy(Context *context)
 
     mFenceRecycler.destroy(context);
 
+    ASSERT(mGarbageQueue.empty());
     ASSERT(mInFlightCommands.empty() && mGarbageQueue.empty());
 }
 

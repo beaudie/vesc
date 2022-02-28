@@ -58,6 +58,11 @@ void ResourceManagerBase::release(const Context *context)
     }
 }
 
+size_t ResourceManagerBase::getRefCount() const
+{
+    return mRefCount;
+}
+
 template <typename ResourceType, typename ImplT, typename IDType>
 TypedResourceManager<ResourceType, ImplT, IDType>::~TypedResourceManager()
 {
