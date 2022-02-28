@@ -2880,9 +2880,9 @@ void CaptureShareGroupMidExecutionSetup(const gl::Context *context,
     }
 
     // Capture Texture setup and data.
-    const gl::TextureManager &textures = apiState.getTextureManagerForCapture();
+    const gl::TextureManager *textures = apiState.getTextureManager();
 
-    for (const auto &textureIter : textures)
+    for (const auto &textureIter : *textures)
     {
         gl::TextureID id     = {textureIter.first};
         gl::Texture *texture = textureIter.second;

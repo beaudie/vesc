@@ -746,7 +746,11 @@ egl::Error Context::onDestroy(const egl::Display *display)
     // are bound to them before the Programs are released()'ed.
     mState.mProgramPipelineManager->release(this);
     mState.mShaderProgramManager->release(this);
-    mState.mTextureManager->release(this);
+    const ResourceManagerBase *ret = mState.mTextureManager->release(this);
+    if (ret == nullptr)
+    {
+        mState.mTextureManager = nullptr;
+    }
     mState.mRenderbufferManager->release(this);
     mState.mSamplerManager->release(this);
     mState.mSyncManager->release(this);
