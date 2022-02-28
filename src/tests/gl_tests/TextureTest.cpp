@@ -387,6 +387,70 @@ void main()
     GLint mTexture2DUniformLocation;
 };
 
+class Texture2DTestSecurityBug : public TexCoordDrawTest
+{
+  protected:
+    Texture2DTestSecurityBug() : TexCoordDrawTest(), mTexture2D(0), mTexture2DUniformLocation(-1) {}
+
+    const char *getFragmentShaderSource() override
+    {
+        return "#version 300 es\n"
+               "precision highp float;\n"
+               "uniform highp sampler2D tex;\n"
+               "uniform highp float oColor[3];\n"
+               "out vec4 fragColor;\n"
+               "void main()\n"
+               "{\n"
+               "    vec4 outColor = textureProj(tex, vec3(0.1, 0.1, 0.1));\n"
+               "    fragColor[0] = outColor.x;\n"
+               "    fragColor[1] = oColor[1];\n"
+               "    fragColor[2] = oColor[2];\n"
+               "}\n";
+    }
+
+    const char *getVertexShaderSource() override
+    {
+
+        return "#version 300 es\n"
+               "in vec4 position;\n"
+               "void main()\n"
+               "{\n"
+               "    gl_Position = position;\n"
+               "}\n";
+    }
+
+    virtual const char *getTextureUniformName() { return "tex"; }
+
+    const char *getOutColorUniformName() { return "oColor"; }
+
+    void setUpProgram() override
+    {
+        TexCoordDrawTest::setUpProgram();
+        mTexture2DUniformLocation = glGetUniformLocation(mProgram, getTextureUniformName());
+        mOutColorUniformLocation  = glGetUniformLocation(mProgram, getOutColorUniformName());
+        ASSERT_NE(-1, mTexture2DUniformLocation);
+        ASSERT_NE(-1, mOutColorUniformLocation);
+    }
+
+    void testSetUp() override
+    {
+        TexCoordDrawTest::testSetUp();
+        mTexture2D = create2DTexture();
+
+        ASSERT_GL_NO_ERROR();
+    }
+
+    void testTearDown() override
+    {
+        glDeleteTextures(1, &mTexture2D);
+        TexCoordDrawTest::testTearDown();
+    }
+
+    GLuint mTexture2D;
+    GLint mTexture2DUniformLocation;
+    GLint mOutColorUniformLocation;
+};
+
 class Texture2DTestES3 : public Texture2DTest
 {
   protected:
@@ -1913,6 +1977,22 @@ TEST_P(Texture2DTest, ZeroSizedUploads)
     EXPECT_GL_NO_ERROR();
 
     glTexSubImage2D(GL_TEXTURE_2D, 0, 0, 0, 1, 0, GL_RGBA, GL_UNSIGNED_BYTE, pixel);
+    EXPECT_GL_NO_ERROR();
+}
+
+TEST_P(Texture2DTestSecurityBug, ChromiumBug)
+{
+    setUpProgram();
+    // glUniform3f(mOutColorUniformLocation, 0.49, 0.65, 0.81);
+    glActiveTexture(GL_TEXTURE0);
+    glBindTexture(GL_TEXTURE_2D, mTexture2D);
+    const GLubyte *pixel[1024] = {0};
+    glTexImage2D(GL_TEXTURE_2D, 1, 6410, 16, 16, 0, 6410, GL_UNSIGNED_BYTE, pixel);
+    EXPECT_GL_ERROR(GL_NO_ERROR);
+
+    glUseProgram(mProgram);
+    drawQuad(mProgram, "position", 0.5f);
+
     EXPECT_GL_NO_ERROR();
 }
 
@@ -10494,6 +10574,7 @@ TEST_P(ExtraSamplerCubeShadowUseTest, Basic)
     WithEmulateCopyTexImage2DFromRenderbuffers(ES3_OPENGL()), \
         WithEmulateCopyTexImage2DFromRenderbuffers(ES3_OPENGLES())
 ANGLE_INSTANTIATE_TEST(Texture2DTest, ANGLE_ALL_TEST_PLATFORMS_ES2, ES2_EMULATE_COPY_TEX_IMAGE());
+ANGLE_INSTANTIATE_TEST_ES3(Texture2DTestSecurityBug);
 ANGLE_INSTANTIATE_TEST_ES2(TextureCubeTest);
 ANGLE_INSTANTIATE_TEST_ES2(Texture2DTestWithDrawScale);
 ANGLE_INSTANTIATE_TEST_ES2(Sampler2DAsFunctionParameterTest);
