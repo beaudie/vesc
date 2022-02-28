@@ -916,6 +916,8 @@ class TextureD3D_2DMultisampleArray : public TextureD3DImmutableBase
 
     GLsizei getLayerCount(int level) const override;
 
+    angle::Result TextureGL::flushStagedUpdates(const gl::Context *context) override;
+
   protected:
     void markAllImagesDirty() override;
 

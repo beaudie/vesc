@@ -2131,4 +2131,9 @@ GLint TextureGL::getRequiredExternalTextureImageUnits(const gl::Context *context
     return result;
 }
 
+angle::Result TextureGL::flushStagedUpdates(const gl::Context *context)
+{
+    return angle::Result::Continue;
+}
+
 }  // namespace rx

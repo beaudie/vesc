@@ -779,6 +779,13 @@ Texture::Texture(rx::GLImplFactory *factory, TextureID id, TextureType type)
     mDirtyBits.set(DIRTY_BIT_IMPLEMENTATION);
 }
 
+angle::Result Texture::flushTextureStagedUpdates(const Context *context)
+{
+    ANGLE_TRY(mTexture->flushStagedUpdates(context));
+
+    return angle::Result::Continue;
+}
+
 void Texture::onDestroy(const Context *context)
 {
     if (mBoundSurface)

@@ -844,6 +844,11 @@ angle::Result TextureD3D::initializeContents(const gl::Context *context,
     return angle::Result::Continue;
 }
 
+angle::Result TextureD3D::flushStagedUpdates(const gl::Context *context)
+{
+    return angle::Result::Continue;
+}
+
 GLsizei TextureD3D::getRenderToTextureSamples()
 {
     if (mTexStorage)

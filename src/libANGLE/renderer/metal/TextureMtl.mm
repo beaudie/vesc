@@ -2354,4 +2354,9 @@ angle::Result TextureMtl::copySubTextureCPU(const gl::Context *context,
     return angle::Result::Continue;
 }
 
+angle::Result TextureMtl::flushStagedUpdates(const gl::Context *context)
+{
+    return angle::Result::Continue;
+}
+
 }

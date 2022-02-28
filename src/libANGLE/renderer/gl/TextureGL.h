@@ -215,6 +215,8 @@ class TextureGL : public TextureImpl
     GLenum getNativeInternalFormat(const gl::ImageIndex &index) const;
     bool hasEmulatedAlphaChannel(const gl::ImageIndex &index) const;
 
+    angle::Result flushStagedUpdates(const gl::Context *context) override;
+
   private:
     angle::Result recreateTexture(const gl::Context *context);
 

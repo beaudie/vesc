@@ -678,6 +678,16 @@ egl::Error Context::onDestroy(const egl::Display *display)
     // Dump frame capture if enabled.
     getShareGroup()->getFrameCaptureShared()->onDestroyContext(this);
 
+    // Flush any texture staged updates
+    if (mDisplayTextureShareGroup && mState.mShareGroup->getShareGroupContextCount() == 1)
+    {
+        for (const auto &textureIter : *mState.mTextureManager)
+        {
+            gl::Texture *texture = textureIter.second;
+            (void)texture->flushTextureStagedUpdates(this);
+        }
+    }
+
     // Remove context from the capture share group
     getShareGroup()->removeSharedContext(this);
 
@@ -743,6 +753,7 @@ egl::Error Context::onDestroy(const egl::Display *display)
     // are bound to them before the Programs are released()'ed.
     mState.mProgramPipelineManager->release(this);
     mState.mShaderProgramManager->release(this);
+
     mState.mTextureManager->release(this);
     mState.mRenderbufferManager->release(this);
     mState.mSamplerManager->release(this);
