@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "2cdbde17_b651a5b0",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2022-02-28T16:19:32Z",
+      "side": 1,
+      "message": "Due to extension requirements, this trace only runs on Pixel 6, so we don\u0027t get any new Skia Gold images.  If you force SwS to support EXT_shader_framebuffer_fetch, it renders plausibly, but throws VVL sync hazard errors.",
+      "revId": "c086e90d0ec4e3de2fb3fcd717c3871843e409f8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
