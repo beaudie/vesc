@@ -123,6 +123,8 @@ class TextureD3D : public TextureImpl, public angle::ObserverInterface
     // ObserverInterface implementation.
     void onSubjectStateChange(angle::SubjectIndex index, angle::SubjectMessage message) override;
 
+    angle::Result flushStagedUpdates(const gl::Context *context) override;
+
   protected:
     angle::Result setImageImpl(const gl::Context *context,
                                const gl::ImageIndex &index,

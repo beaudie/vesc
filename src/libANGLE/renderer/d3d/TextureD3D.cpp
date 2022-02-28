@@ -858,6 +858,11 @@ void TextureD3D::onSubjectStateChange(angle::SubjectIndex index, angle::SubjectM
     onStateChange(message);
 }
 
+angle::Result TextureD3D::flushStagedUpdates(const gl::Context *context)
+{
+    return angle::Result::Continue;
+}
+
 TextureD3D_2D::TextureD3D_2D(const gl::TextureState &state, RendererD3D *renderer)
     : TextureD3D(state, renderer)
 {
