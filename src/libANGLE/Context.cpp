@@ -391,6 +391,7 @@ Context::Context(egl::Display *display,
       mSkipValidation(GetNoError(attribs)),
       mDisplayTextureShareGroup(shareTextures != nullptr),
       mDisplaySemaphoreShareGroup(shareSemaphores != nullptr),
+      mFlushTextureStageUpdate(false),
       mErrors(this),
       mImplementation(display->getImplementation()
                           ->createContext(mState, &mErrors, config, shareContext, attribs)),
@@ -739,6 +740,12 @@ egl::Error Context::onDestroy(const egl::Display *display)
     releaseShaderCompiler();
 
     mState.reset(this);
+
+    if (mDisplayTextureShareGroup && mState.mShareGroup->getShareGroupContextCount() == 0 &&
+        display->getGlobalTextureShareGroupUserCount() > 0)
+    {
+        mFlushTextureStageUpdate = true;
+    }
 
     mState.mBufferManager->release(this);
     // mProgramPipelineManager must be before mShaderProgramManager to give each

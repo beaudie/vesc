@@ -649,6 +649,8 @@ class Context final : public egl::LabeledObject, angle::NonCopyable, public angl
     // Needed by capture serialization logic that works with a "const" Context pointer.
     void finishImmutable() const;
 
+    bool shouldFlushTextureStageUpdate() const { return mFlushTextureStageUpdate; }
+
   private:
     void initializeDefaultResources();
 
@@ -711,6 +713,7 @@ class Context final : public egl::LabeledObject, angle::NonCopyable, public angl
     bool mSkipValidation;
     bool mDisplayTextureShareGroup;
     bool mDisplaySemaphoreShareGroup;
+    bool mFlushTextureStageUpdate;
 
     // Recorded errors
     ErrorSet mErrors;
