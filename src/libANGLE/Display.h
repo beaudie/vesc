@@ -97,6 +97,8 @@ class ShareGroup final : angle::NonCopyable
 
     size_t getShareGroupContextCount() const { return mContexts.size(); }
 
+    size_t getShareGroupRefCount() const { return mRefCount; }
+
   protected:
     ~ShareGroup();
 
