@@ -89,6 +89,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "ae7e9a69_71c39a20",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 25
+      },
+      "lineNbr": 236,
+      "author": {
+        "id": 1524687
+      },
+      "writtenOn": "2022-02-28T02:08:25Z",
+      "side": 1,
+      "message": "Hi Shahbaz,\nAs mentioned in the last commend, seems it is more reasonable to change the name of \n\u0027readImageWithLayoutTransition\u0027 to \u0027imageWithLayoutTransition\u0027? This name include the case that the read image needed layout transition and make used in imageWrite more acceptable.",
+      "parentUuid": "6c09aa53_d60f9ccf",
+      "revId": "1998d2e0ed05fba28d9d81f3961adbc2977d675a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "b94bf7c8_20dd0464",
