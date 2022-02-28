@@ -68,7 +68,7 @@ class ContextVk : public ContextImpl, public vk::Context, public MultisampleText
 
     angle::Result initialize() override;
 
-    void onDestroy(const gl::Context *context) override;
+    void onDestroy(const gl::Context *context, bool flushTextureStagedUpdate = false) override;
 
     // Flush and finish.
     angle::Result flush(const gl::Context *context) override;

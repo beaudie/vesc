@@ -740,6 +740,13 @@ egl::Error Context::onDestroy(const egl::Display *display)
 
     mState.reset(this);
 
+    bool flushTextureStagedUpdates = false;
+    if (mDisplayTextureShareGroup && mState.mShareGroup->getShareGroupContextCount() == 0 &&
+        display->getGlobalTextureShareGroupUserCount() > 0)
+    {
+        flushTextureStagedUpdates = true;
+    }
+
     mState.mBufferManager->release(this);
     // mProgramPipelineManager must be before mShaderProgramManager to give each
     // PPO the chance to release any references they have to the Programs that
@@ -757,7 +764,7 @@ egl::Error Context::onDestroy(const egl::Display *display)
     mSingleThreadPool.reset();
     mMultiThreadPool.reset();
 
-    mImplementation->onDestroy(this);
+    mImplementation->onDestroy(this, flushTextureStagedUpdates);
 
     // Backend requires implementation to be destroyed first to close down all the objects
     mState.mShareGroup->release(display);

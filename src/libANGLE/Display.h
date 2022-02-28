@@ -318,6 +318,7 @@ class Display final : public LabeledObject,
                                EGLuint64KHR *modifiers,
                                EGLBoolean *external_only,
                                EGLint *num_modifiers);
+    size_t getGlobalTextureShareGroupUserCount() const { return mGlobalTextureShareGroupUsers; }
 
   private:
     Display(EGLenum platform, EGLNativeDisplayType displayId, Device *eglDevice);

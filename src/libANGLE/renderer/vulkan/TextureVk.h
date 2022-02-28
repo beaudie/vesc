@@ -276,6 +276,8 @@ class TextureVk : public TextureImpl, public angle::ObserverInterface
         return isDirty;
     }
 
+    angle::Result flushStagedUpdates(const gl::Context *context);
+
   private:
     // Transform an image index from the frontend into one that can be used on the backing
     // ImageHelper, taking into account mipmap or cube face offsets
