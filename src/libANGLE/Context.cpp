@@ -743,6 +743,13 @@ egl::Error Context::onDestroy(const egl::Display *display)
     // are bound to them before the Programs are released()'ed.
     mState.mProgramPipelineManager->release(this);
     mState.mShaderProgramManager->release(this);
+    // Test code to retrieve TextureVK in texture manager
+    for (const auto &textureIter : *mState.mTextureManager)
+    {
+        gl::Texture *texture = textureIter.second;
+        (void)texture->flushOrDropTextureStagedUpdates(this);
+    }
+
     mState.mTextureManager->release(this);
     mState.mRenderbufferManager->release(this);
     mState.mSamplerManager->release(this);

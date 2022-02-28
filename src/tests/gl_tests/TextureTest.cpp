@@ -10494,6 +10494,7 @@ TEST_P(ExtraSamplerCubeShadowUseTest, Basic)
     WithEmulateCopyTexImage2DFromRenderbuffers(ES3_OPENGL()), \
         WithEmulateCopyTexImage2DFromRenderbuffers(ES3_OPENGLES())
 ANGLE_INSTANTIATE_TEST(Texture2DTest, ANGLE_ALL_TEST_PLATFORMS_ES2, ES2_EMULATE_COPY_TEX_IMAGE());
+ANGLE_INSTANTIATE_TEST_ES3(Texture2DTestSecurityBug);
 ANGLE_INSTANTIATE_TEST_ES2(TextureCubeTest);
 ANGLE_INSTANTIATE_TEST_ES2(Texture2DTestWithDrawScale);
 ANGLE_INSTANTIATE_TEST_ES2(Sampler2DAsFunctionParameterTest);
