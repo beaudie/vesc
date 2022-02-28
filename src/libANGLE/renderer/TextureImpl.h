@@ -243,6 +243,8 @@ class TextureImpl : public FramebufferAttachmentObjectImpl
 
     virtual GLint getRequiredExternalTextureImageUnits(const gl::Context *context);
 
+    virtual angle::Result flushStagedUpdates(const gl::Context *context);
+
   protected:
     const gl::TextureState &mState;
 };

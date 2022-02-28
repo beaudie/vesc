@@ -637,6 +637,8 @@ class Texture final : public RefCountObject<TextureID>,
     // ObserverInterface implementation.
     void onSubjectStateChange(angle::SubjectIndex index, angle::SubjectMessage message) override;
 
+    angle::Result flushTextureStagedUpdates(const Context *context);
+
   private:
     rx::FramebufferAttachmentObjectImpl *getAttachmentImpl() const override;
 
