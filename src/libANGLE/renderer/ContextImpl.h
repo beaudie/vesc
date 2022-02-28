@@ -33,6 +33,7 @@ class ContextImpl : public GLImplFactory
     ContextImpl(const gl::State &state, gl::ErrorSet *errorSet);
     ~ContextImpl() override;
 
+    virtual void prepareForDestroy(const gl::Context *context) {}
     virtual void onDestroy(const gl::Context *context) {}
 
     virtual angle::Result initialize() = 0;

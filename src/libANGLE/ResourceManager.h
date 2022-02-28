@@ -50,7 +50,7 @@ class ResourceManagerBase : angle::NonCopyable
     ResourceManagerBase();
 
     void addRef();
-    void release(const Context *context);
+    const ResourceManagerBase *release(const Context *context);
 
   protected:
     virtual void reset(const Context *context) = 0;
@@ -80,6 +80,15 @@ class TypedResourceManager : public ResourceManagerBase
         return mObjectMap.begin();
     }
     typename ResourceMap<ResourceType, IDType>::Iterator end() const { return mObjectMap.end(); }
+
+    ImplT *releaseTyped(const Context *context)
+    {
+        if (release(context))
+        {
+            return static_cast<ImplT *>(this);
+        }
+        return nullptr;
+    }
 
   protected:
     ~TypedResourceManager() override;
@@ -169,6 +178,15 @@ class ShaderProgramManager : public ResourceManagerBase
     const ResourceMap<Program, ShaderProgramID> &getProgramsForCaptureAndPerf() const
     {
         return mPrograms;
+    }
+
+    ShaderProgramManager *releaseTyped(const Context *context)
+    {
+        if (release(context))
+        {
+            return this;
+        }
+        return nullptr;
     }
 
   protected:
@@ -323,6 +341,14 @@ class MemoryObjectManager : public ResourceManagerBase
     MemoryObjectID createMemoryObject(rx::GLImplFactory *factory);
     void deleteMemoryObject(const Context *context, MemoryObjectID handle);
     MemoryObject *getMemoryObject(MemoryObjectID handle) const;
+    MemoryObjectManager *releaseTyped(const Context *context)
+    {
+        if (release(context))
+        {
+            return this;
+        }
+        return nullptr;
+    }
 
   protected:
     ~MemoryObjectManager() override;
@@ -341,6 +367,14 @@ class SemaphoreManager : public ResourceManagerBase
     SemaphoreID createSemaphore(rx::GLImplFactory *factory);
     void deleteSemaphore(const Context *context, SemaphoreID handle);
     Semaphore *getSemaphore(SemaphoreID handle) const;
+    SemaphoreManager *releaseTyped(const Context *context)
+    {
+        if (release(context))
+        {
+            return this;
+        }
+        return nullptr;
+    }
 
   protected:
     ~SemaphoreManager() override;

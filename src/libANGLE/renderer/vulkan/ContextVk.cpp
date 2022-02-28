@@ -852,6 +852,27 @@ ContextVk::ContextVk(const gl::State &state, gl::ErrorSet *errorSet, RendererVk 
 
 ContextVk::~ContextVk() = default;
 
+void ContextVk::prepareForDestroy(const gl::Context *context)
+{
+    // Fix chromium:1299211: flush TextureVk staged updates if
+    // we are using the extension DisplayTextureShareGroup
+    // and we are destroying the last context in the EGL::ShareGroup
+    if (context->usingDisplayTextureShareGroup() &&
+        context->getShareGroup()->getShareGroupRefCount() == 1)
+    {
+        const gl::TextureManager *textureManager = context->getState().getTextureManager();
+        if (textureManager != nullptr)
+        {
+            for (const auto &textureIter : *textureManager)
+            {
+                gl::Texture *texture = textureIter.second;
+                TextureVk *textureVk = vk::GetImpl(texture);
+                (void)textureVk->flushStagedUpdates(context);
+            }
+        }
+    }
+}
+
 void ContextVk::onDestroy(const gl::Context *context)
 {
     outputCumulativePerfCounters();

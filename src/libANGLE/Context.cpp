@@ -684,6 +684,9 @@ egl::Error Context::onDestroy(const egl::Display *display)
     // Remove context from the capture share group
     getShareGroup()->removeSharedContext(this);
 
+    // Fix chromium:1299211
+    mImplementation->prepareForDestroy(this);
+
     if (mGLES1Renderer)
     {
         mGLES1Renderer->onDestroy(this, &mState);
@@ -740,19 +743,19 @@ egl::Error Context::onDestroy(const egl::Display *display)
 
     mState.reset(this);
 
-    mState.mBufferManager->release(this);
+    mState.mBufferManager = mState.mBufferManager->releaseTyped(this);
     // mProgramPipelineManager must be before mShaderProgramManager to give each
     // PPO the chance to release any references they have to the Programs that
     // are bound to them before the Programs are released()'ed.
-    mState.mProgramPipelineManager->release(this);
-    mState.mShaderProgramManager->release(this);
-    mState.mTextureManager->release(this);
-    mState.mRenderbufferManager->release(this);
-    mState.mSamplerManager->release(this);
-    mState.mSyncManager->release(this);
-    mState.mFramebufferManager->release(this);
-    mState.mMemoryObjectManager->release(this);
-    mState.mSemaphoreManager->release(this);
+    mState.mProgramPipelineManager = mState.mProgramPipelineManager->releaseTyped(this);
+    mState.mShaderProgramManager   = mState.mShaderProgramManager->releaseTyped(this);
+    mState.mTextureManager         = mState.mTextureManager->releaseTyped(this);
+    mState.mRenderbufferManager    = mState.mRenderbufferManager->releaseTyped(this);
+    mState.mSamplerManager         = mState.mSamplerManager->releaseTyped(this);
+    mState.mSyncManager            = mState.mSyncManager->releaseTyped(this);
+    mState.mFramebufferManager     = mState.mFramebufferManager->releaseTyped(this);
+    mState.mMemoryObjectManager    = mState.mMemoryObjectManager->releaseTyped(this);
+    mState.mSemaphoreManager       = mState.mSemaphoreManager->releaseTyped(this);
 
     mSingleThreadPool.reset();
     mMultiThreadPool.reset();
