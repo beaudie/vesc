@@ -3491,4 +3491,18 @@ void TextureVk::stageSelfAsSubresourceUpdates(ContextVk *contextVk)
     mImage->stageSelfAsSubresourceUpdates(contextVk, mImage->getLevelCount(), mRedefinedLevels);
 }
 
+angle::Result TextureVk::flushStagedUpdates(const gl::Context *context)
+{
+    ContextVk *contextVk = vk::GetImpl(context);
+    if (mImage == nullptr)
+    {
+        return angle::Result::Continue;
+    }
+    if (!mImage->valid())
+    {
+        ANGLE_TRY(ensureImageInitialized(contextVk, ImageMipLevels::EnabledLevels));
+    }
+    return flushImageStagedUpdates(contextVk);
+}
+
 }  // namespace rx
