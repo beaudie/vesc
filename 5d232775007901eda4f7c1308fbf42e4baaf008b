@@ -122,6 +122,24 @@
       "parentUuid": "05798f48_b8b912e2",
       "revId": "5d232775007901eda4f7c1308fbf42e4baaf008b",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ad6d6541_79aca79c",
+        "filename": "src/libANGLE/capture/capture_gles_2_0_params.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 694,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2022-02-28T17:03:22Z",
+      "side": 1,
+      "message": "Gert, can you add this to your comment in the source further explaining why we have to do this implementation specific workaround?  I\u0027m okay moving forward with it to unblock your progress.",
+      "parentUuid": "1baafd99_2eea18e4",
+      "revId": "5d232775007901eda4f7c1308fbf42e4baaf008b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
