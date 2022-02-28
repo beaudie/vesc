@@ -3450,4 +3450,22 @@ bool TextureVk::imageHasActualImageFormat(angle::FormatID actualFormatID) const
     return mImage && (mImage->getActualFormatID() != actualFormatID);
 }
 
+angle::Result TextureVk::flushOrDropStagedUpdates(const gl::Context *context)
+{
+    ContextVk *contextVk = vk::GetImpl(context);
+    if (mImage == nullptr)
+    {
+        return angle::Result::Continue;
+    }
+    if (mImage->valid())
+    {
+        return flushImageStagedUpdates(contextVk);
+    }
+    else
+    {
+        releaseStagedUpdates(contextVk);
+        return angle::Result::Continue;
+    }
+}
+
 }  // namespace rx
