@@ -743,7 +743,7 @@ egl::Error Context::onDestroy(const egl::Display *display)
     // are bound to them before the Programs are released()'ed.
     mState.mProgramPipelineManager->release(this);
     mState.mShaderProgramManager->release(this);
-    mState.mTextureManager->release(this);
+    // mState.mTextureManager->release(this);
     mState.mRenderbufferManager->release(this);
     mState.mSamplerManager->release(this);
     mState.mSyncManager->release(this);
@@ -751,10 +751,16 @@ egl::Error Context::onDestroy(const egl::Display *display)
     mState.mMemoryObjectManager->release(this);
     mState.mSemaphoreManager->release(this);
 
-    mSingleThreadPool.reset();
-    mMultiThreadPool.reset();
+    //    mSingleThreadPool.reset();
+    //    mMultiThreadPool.reset();
 
     mImplementation->onDestroy(this);
+
+    // Fix chromium:1299211. We need to access mTextureManager in ContextVk::onDestroy(),
+    // so we release the mTextureManager after the call on mImplementation->onDestroy().
+    mState.mTextureManager->release(this);
+    mSingleThreadPool.reset();
+    mMultiThreadPool.reset();
 
     // Backend requires implementation to be destroyed first to close down all the objects
     mState.mShareGroup->release(display);
