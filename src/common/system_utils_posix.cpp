@@ -202,8 +202,14 @@ void *OpenSystemLibraryWithExtensionAndGetError(const char *libraryName,
 
     std::string fullPath = directory + libraryName;
 #if ANGLE_PLATFORM_IOS
+    // The binary inside .framework does not have extension, so drop
+    // the .framework prefix from libraryName
+    std::string stdLibraryName = libraryName;
+    size_t pos                 = stdLibraryName.find_last_of(".framework");
+    if (pos != std::string::npos)
+        stdLibraryName = stdLibraryName.substr(0, pos);
     // On iOS, dlopen needs a suffix on the framework name to work.
-    fullPath = fullPath + "/" + libraryName;
+    fullPath = fullPath + "/" + stdLibraryName;
 #endif
 
     return OpenPosixLibrary(fullPath, extraFlags, errorOut);

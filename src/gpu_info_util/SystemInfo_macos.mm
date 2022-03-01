@@ -17,10 +17,22 @@
 
 #    include "common/gl/cgl/FunctionsCGL.h"
 
-#    if !defined(__MAC_OS_X_VERSION_MIN_REQUIRED) || __MAC_OS_X_VERSION_MIN_REQUIRED >= 120000
-#        define HAVE_MAIN_PORT_DEFAULT 1
+#    if defined(ANGLE_PLATFORM_MACOS)
+
+#        if !defined(__MAC_OS_X_VERSION_MIN_REQUIRED) || __MAC_OS_X_VERSION_MIN_REQUIRED >= 120000
+#            define HAVE_MAIN_PORT_DEFAULT 1
+#        else
+#            define HAVE_MAIN_PORT_DEFAULT 0
+#        endif
+
 #    else
-#        define HAVE_MAIN_PORT_DEFAULT 0
+
+#        if !defined(__IPHONE_OS_VERSION_MIN_REQUIRED) || __IPHONE_OS_VERSION_MIN_REQUIRED >= 150000
+#            define HAVE_MAIN_PORT_DEFAULT 1
+#        else
+#            define HAVE_MAIN_PORT_DEFAULT 0
+#        endif
+
 #    endif
 
 namespace angle
@@ -252,7 +264,7 @@ uint64_t GetGpuIDFromDisplayID(uint32_t displayID)
 // Used with permission.
 uint64_t GetGpuIDFromOpenGLDisplayMask(uint32_t displayMask)
 {
-    if (@available(macOS 10.13, *))
+    if (@available(macOS 10.13, macCatalyst 13.0, *))
     {
         GLint numRenderers              = 0;
         CGLRendererInfoObj rendererInfo = nullptr;
@@ -347,7 +359,9 @@ VendorID GetVendorIDFromMetalDeviceRegistryID(uint64_t registryID)
 
         return vendorId;
     }
+#    if defined(ANGLE_PLATFORM_MACOS)
     return 0;
+#    endif
 }
 
 bool GetSystemInfo_mac(SystemInfo *info)
@@ -371,7 +385,7 @@ bool GetSystemInfo_mac(SystemInfo *info)
 
     // Then override the activeGPUIndex field of info to reflect the current
     // GPU instead of the non-intel GPU
-    if (@available(macOS 10.13, *))
+    if (@available(macOS 10.13, macCatalyst 13.0, *))
     {
         SetActiveGPUIndex(info);
     }
