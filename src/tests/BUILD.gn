@@ -458,6 +458,7 @@ if (build_angle_perftests) {
 
     deps = [
       ":angle_perftests_shared",
+      ":angle_system_info_test",
       ":angle_trace_perftests",
       "$angle_spirv_tools_dir:spvtools_val",
     ]
