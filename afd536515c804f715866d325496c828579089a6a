@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ef19639b_28b7f460",
+        "filename": "src/libANGLE/renderer/vulkan/ProgramExecutableVk.cpp",
+        "patchSetId": 13
+      },
+      "lineNbr": 1312,
+      "author": {
+        "id": 1531247
+      },
+      "writtenOn": "2022-03-01T16:40:22Z",
+      "side": 1,
+      "message": "Don\u0027t we need a getOrAllocateShaderResourcesDescriptorSet call before this line as well?",
+      "range": {
+        "startLine": 1312,
+        "startChar": 48,
+        "endLine": 1312,
+        "endChar": 99
+      },
+      "revId": "afd536515c804f715866d325496c828579089a6a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
