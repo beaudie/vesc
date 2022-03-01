@@ -16,6 +16,74 @@
       "message": "PTAL",
       "revId": "0ea2484253ce3b77b59ec64e4cbb809506c39ab5",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "01d26d32_689b8dba",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 9
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-03-01T22:56:55Z",
+      "side": 1,
+      "message": "Switching reviewers, as Tim has changed teams.\n\nAny perf numbers to share?",
+      "revId": "0ea2484253ce3b77b59ec64e4cbb809506c39ab5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "7d406b77_dd749400",
+        "filename": "src/libANGLE/renderer/vulkan/ProgramVk.cpp",
+        "patchSetId": 9
+      },
+      "lineNbr": 255,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-03-01T22:56:55Z",
+      "side": 1,
+      "message": "nit: Actually compiling compute shaders would be an easy win because there\u0027s basically no state affecting it!",
+      "revId": "0ea2484253ce3b77b59ec64e4cbb809506c39ab5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "d8262a6d_51599f37",
+        "filename": "src/libANGLE/renderer/vulkan/ProgramVk.cpp",
+        "patchSetId": 9
+      },
+      "lineNbr": 256,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-03-01T22:56:55Z",
+      "side": 1,
+      "message": "What is this about?",
+      "revId": "0ea2484253ce3b77b59ec64e4cbb809506c39ab5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "1e76ccfc_f2d117fe",
+        "filename": "src/libANGLE/renderer/vulkan/ProgramVk.cpp",
+        "patchSetId": 9
+      },
+      "lineNbr": 288,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-03-01T22:56:55Z",
+      "side": 1,
+      "message": "What about specialization constants? We were thinking those would be the most problematic ones. Because this becomes useless when the spec constants change.\n\nWe might have to make some of our spec constants uniform (like framebuffer width/height), or make best guesses (like device rotation). We probably even need to compile a few different combinations.",
+      "revId": "0ea2484253ce3b77b59ec64e4cbb809506c39ab5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
