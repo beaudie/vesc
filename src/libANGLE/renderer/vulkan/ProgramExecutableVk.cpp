@@ -2049,14 +2049,24 @@ ProgramExecutablePerfCounters ProgramExecutableVk::getAndResetObjectPerfCounters
     mShaderBufferDescriptorsCache.accumulateCacheStats(VulkanCacheType::ShaderBuffersDescriptors,
                                                        this);
 
+    mPerfCounters.descriptorSetCacheKeySizesBytes[DescriptorSetIndex::UniformsAndXfb] =
+        static_cast<uint32_t>(mUniformsAndXfbDescriptorsCache.getTotalCacheKeySizeBytes());
+    mPerfCounters.descriptorSetCacheKeySizesBytes[DescriptorSetIndex::Texture] =
+        static_cast<uint32_t>(mTextureDescriptorsCache.getTotalCacheKeySizeBytes());
+    mPerfCounters.descriptorSetCacheKeySizesBytes[DescriptorSetIndex::ShaderResource] =
+        static_cast<uint32_t>(mShaderBufferDescriptorsCache.getTotalCacheKeySizeBytes());
+
     mCumulativePerfCounters.descriptorSetAllocations += mPerfCounters.descriptorSetAllocations;
     mCumulativePerfCounters.descriptorSetCacheHits += mPerfCounters.descriptorSetCacheHits;
     mCumulativePerfCounters.descriptorSetCacheMisses += mPerfCounters.descriptorSetCacheMisses;
+    mCumulativePerfCounters.descriptorSetCacheKeySizesBytes +=
+        mPerfCounters.descriptorSetCacheKeySizesBytes;
 
-    ProgramExecutablePerfCounters counters = mPerfCounters;
-    mPerfCounters.descriptorSetAllocations = {};
-    mPerfCounters.descriptorSetCacheHits   = {};
-    mPerfCounters.descriptorSetCacheMisses = {};
+    ProgramExecutablePerfCounters counters        = mPerfCounters;
+    mPerfCounters.descriptorSetAllocations        = {};
+    mPerfCounters.descriptorSetCacheHits          = {};
+    mPerfCounters.descriptorSetCacheMisses        = {};
+    mPerfCounters.descriptorSetCacheKeySizesBytes = {};
     return counters;
 }
 
