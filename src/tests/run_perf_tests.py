@@ -19,6 +19,8 @@ import re
 import subprocess
 import sys
 
+import android_helper
+
 # Add //src/testing into sys.path for importing xvfb and test_env, and
 # //src/testing/scripts for importing common.
 d = os.path.dirname
@@ -333,12 +335,29 @@ def main():
     # TODO: Reduce lag from trace uploads and remove this. http://anglebug.com/6854
     env['DEVICE_TIMEOUT_MULTIPLIER'] = '20'
 
-    # Get test list
-    cmd = [get_binary_name(args.test_suite), '--list-tests', '--verbose']
-    exit_code, lines = _run_and_get_output(args, cmd, env)
-    if exit_code != EXIT_SUCCESS:
-        logging.fatal('Could not find test list from test output:\n%s' % '\n'.join(lines))
-    tests = _get_tests_from_output(lines)
+    is_android = False
+    with common.temporary_file() as tempfile_path:
+        binary = get_binary_name('angle_system_info_test')
+        sysinfo_cmd = [binary, '--vulkan', '-v']
+        exit_code, lines = _run_and_get_output(args, sysinfo_cmd, env)
+        for ln in lines:
+            logging.info('qwe %s' % ln.strip())
+            if 'Additional test environment' in ln or 'android/test_runner.py' in ln:
+                is_android = True
+
+    if is_android:
+        android_helper.install_apk(args.test_suite)
+
+        lines = android_helper.list_tests()
+
+        tests = _get_tests_from_output(lines)
+    else:
+        # Get test list
+        cmd = [get_binary_name(args.test_suite), '--list-tests', '--verbose']
+        exit_code, lines = _run_and_get_output(args, cmd, env)
+        if exit_code != EXIT_SUCCESS:
+            logging.fatal('Could not find test list from test output:\n%s' % '\n'.join(lines))
+        tests = _get_tests_from_output(lines)
 
     if args.filter:
         tests = _filter_tests(tests, args.filter)
@@ -353,14 +372,37 @@ def main():
 
     logging.info('Running %d test%s' % (num_tests, 's' if num_tests > 1 else ' '))
 
+    # to_copy = set()
+    # for t in tests:
+    #     m = re.search(r'TracePerfTest.Run/(native|vulkan)_(.*)', t)
+    #     if m:
+    #         to_copy.add(m.group(2))
+
+    # for f in to_copy:
+    #     fn = 'src/tests/restricted_traces/' + f + '/' + f + '.angledata.gz'
+    #     run([adb_path, 'push', '../../' + fn, '/sdcard/chromium_tests_root/' + fn])
+
+    #raise Exception(to_copy)
+
     # Run tests
     results = Results()
 
     histograms = histogram_set.HistogramSet()
     total_errors = 0
 
+    data_copied = set()
     for test_index in range(num_tests):
         test = tests[test_index]
+
+        m = re.search(r'TracePerfTest.Run/(native|vulkan)_(.*)', test)
+        if m:
+            orig_fn = m.group(2)
+            if orig_fn not in data_copied:
+                android_helper.copy_angledata(orig_fn)
+                data_copied.add(orig_fn)
+
+        # if 'TracePerfTest.Run/' not in test:
+        #     continue
         cmd = [
             get_binary_name(args.test_suite),
             '--gtest_filter=%s' % test,
@@ -380,7 +422,8 @@ def main():
                 '--warmup-loops',
                 str(args.warmup_loops),
             ]
-            exit_code, calibrate_output = _run_and_get_output(args, cmd_calibrate, env)
+            exit_code, calibrate_output = android_helper.run_and_get_output2(
+                args, cmd_calibrate, env)
             if exit_code != EXIT_SUCCESS:
                 logging.fatal('%s failed. Output:\n%s' %
                               (cmd_calibrate[0], '\n'.join(calibrate_output)))
@@ -419,8 +462,10 @@ def main():
                 cmd_run += ['--perf-counters', args.perf_counters]
 
             with common.temporary_file() as histogram_file_path:
-                cmd_run += ['--isolated-script-test-perf-output=%s' % histogram_file_path]
-                exit_code, output = _run_and_get_output(args, cmd_run, env)
+                device_histogram_file_path = '/sdcard/Download/histogram-db7f74576d6f5.gtest_out'
+                android_helper.remove_file_from_device(device_histogram_file_path)
+                cmd_run += ['--isolated-script-test-perf-output=%s' % device_histogram_file_path]
+                exit_code, output = android_helper.run_and_get_output2(args, cmd_run, env)
                 if exit_code != EXIT_SUCCESS:
                     logging.error('%s failed. Output:\n%s' % (cmd_run[0], '\n'.join(output)))
                     results.result_fail(test)
@@ -436,6 +481,7 @@ def main():
                              (test_index + 1, num_tests, sample + 1, args.samples_per_test,
                               str(sample_wall_times)))
                 wall_times += sample_wall_times
+                android_helper.pull(device_histogram_file_path, histogram_file_path)
                 with open(histogram_file_path) as histogram_file:
                     sample_json = json.load(histogram_file)
                     sample_histogram = histogram_set.HistogramSet()
