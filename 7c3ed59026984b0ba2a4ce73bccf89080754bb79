@@ -22,6 +22,30 @@
       },
       "revId": "7c3ed59026984b0ba2a4ce73bccf89080754bb79",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "63a3fcf5_b613e776",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 2660,
+      "author": {
+        "id": 1491823
+      },
+      "writtenOn": "2022-03-01T16:51:50Z",
+      "side": 1,
+      "message": "Regarding the \"clang-format off\", the problem is that the re-formatting puts more than one extension on one line, and I think that this makes the code a lot less readable. \n\nI\u0027ll see how I can move the code into the front-end.",
+      "parentUuid": "3c2beda0_ddfbb71d",
+      "range": {
+        "startLine": 2658,
+        "startChar": 0,
+        "endLine": 2660,
+        "endChar": 27
+      },
+      "revId": "7c3ed59026984b0ba2a4ce73bccf89080754bb79",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
