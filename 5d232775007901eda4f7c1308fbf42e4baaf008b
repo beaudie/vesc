@@ -24,6 +24,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "3a60b007_f155aa3f",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 3
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1491823
+      },
+      "writtenOn": "2022-03-01T07:51:27Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "76cd311d_aad42a6c",
+      "range": {
+        "startLine": 7,
+        "startChar": 25,
+        "endLine": 7,
+        "endChar": 38
+      },
+      "revId": "5d232775007901eda4f7c1308fbf42e4baaf008b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "50568c1e_0b3b7e6f",
@@ -61,6 +85,30 @@
       "side": 1,
       "message": "Added a  direction to the table.",
       "parentUuid": "50568c1e_0b3b7e6f",
+      "range": {
+        "startLine": 8,
+        "startChar": 0,
+        "endLine": 11,
+        "endChar": 39
+      },
+      "revId": "5d232775007901eda4f7c1308fbf42e4baaf008b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "94f5b3e3_4cec3c20",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 3
+      },
+      "lineNbr": 11,
+      "author": {
+        "id": 1491823
+      },
+      "writtenOn": "2022-03-01T07:51:27Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "f297dfc2_69a9fc7d",
       "range": {
         "startLine": 8,
         "startChar": 0,
@@ -138,6 +186,24 @@
       "side": 1,
       "message": "Gert, can you add this to your comment in the source further explaining why we have to do this implementation specific workaround?  I\u0027m okay moving forward with it to unblock your progress.",
       "parentUuid": "1baafd99_2eea18e4",
+      "revId": "5d232775007901eda4f7c1308fbf42e4baaf008b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "ef227ec4_b9db74b9",
+        "filename": "src/libANGLE/capture/capture_gles_2_0_params.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 694,
+      "author": {
+        "id": 1491823
+      },
+      "writtenOn": "2022-03-01T07:51:27Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "ad6d6541_79aca79c",
       "revId": "5d232775007901eda4f7c1308fbf42e4baaf008b",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
