@@ -1246,41 +1246,48 @@ struct RenderPassPerfCounters
     uint8_t readOnlyDepthStencil;
 };
 
+#define ANGLE_VK_PERF_COUNTERS_X(FN)              \
+    FN(primaryBuffers)                            \
+    FN(renderPasses)                              \
+    FN(writeDescriptorSets)                       \
+    FN(flushedOutsideRenderPassCommandBuffers)    \
+    FN(resolveImageCommands)                      \
+    FN(depthClears)                               \
+    FN(depthLoads)                                \
+    FN(depthStores)                               \
+    FN(stencilClears)                             \
+    FN(stencilLoads)                              \
+    FN(stencilStores)                             \
+    FN(colorAttachmentUnresolves)                 \
+    FN(depthAttachmentUnresolves)                 \
+    FN(stencilAttachmentUnresolves)               \
+    FN(colorAttachmentResolves)                   \
+    FN(depthAttachmentResolves)                   \
+    FN(stencilAttachmentResolves)                 \
+    FN(readOnlyDepthStencilRenderPasses)          \
+    FN(descriptorSetAllocations)                  \
+    FN(descriptorSetCacheTotalSize)               \
+    FN(descriptorSetCacheKeySizeBytes)            \
+    FN(uniformsAndXfbDescriptorSetCacheHits)      \
+    FN(uniformsAndXfbDescriptorSetCacheMisses)    \
+    FN(uniformsAndXfbDescriptorSetCacheTotalSize) \
+    FN(textureDescriptorSetCacheHits)             \
+    FN(textureDescriptorSetCacheMisses)           \
+    FN(textureDescriptorSetCacheTotalSize)        \
+    FN(shaderBuffersDescriptorSetCacheHits)       \
+    FN(shaderBuffersDescriptorSetCacheMisses)     \
+    FN(shaderBuffersDescriptorSetCacheTotalSize)  \
+    FN(buffersGhosted)                            \
+    FN(vertexArraySyncStateCalls)
+
+#define ANGLE_DECLARE_PERF_COUNTER(COUNTER) uint32_t COUNTER;
+
 struct PerfCounters
 {
-    uint32_t primaryBuffers;
-    uint32_t renderPasses;
-    uint32_t writeDescriptorSets;
-    uint32_t flushedOutsideRenderPassCommandBuffers;
-    uint32_t resolveImageCommands;
-    uint32_t depthClears;
-    uint32_t depthLoads;
-    uint32_t depthStores;
-    uint32_t stencilClears;
-    uint32_t stencilLoads;
-    uint32_t stencilStores;
-    uint32_t colorAttachmentUnresolves;
-    uint32_t depthAttachmentUnresolves;
-    uint32_t stencilAttachmentUnresolves;
-    uint32_t colorAttachmentResolves;
-    uint32_t depthAttachmentResolves;
-    uint32_t stencilAttachmentResolves;
-    uint32_t readOnlyDepthStencilRenderPasses;
-    uint32_t descriptorSetAllocations;
-    uint32_t descriptorSetCacheTotalSize;
-    uint32_t descriptorSetCacheKeySizeBytes;
-    uint32_t uniformsAndXfbDescriptorSetCacheHits;
-    uint32_t uniformsAndXfbDescriptorSetCacheMisses;
-    uint32_t uniformsAndXfbDescriptorSetCacheTotalSize;
-    uint32_t textureDescriptorSetCacheHits;
-    uint32_t textureDescriptorSetCacheMisses;
-    uint32_t textureDescriptorSetCacheTotalSize;
-    uint32_t shaderBuffersDescriptorSetCacheHits;
-    uint32_t shaderBuffersDescriptorSetCacheMisses;
-    uint32_t shaderBuffersDescriptorSetCacheTotalSize;
-    uint32_t buffersGhosted;
-    uint32_t vertexArraySyncStateCalls;
+    ANGLE_VK_PERF_COUNTERS_X(ANGLE_DECLARE_PERF_COUNTER)
 };
+
+#undef ANGLE_DECLARE_PERF_COUNTER
 
 // A Vulkan image level index.
 using LevelIndex = gl::LevelIndexWrapper<uint32_t>;

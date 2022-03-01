@@ -3702,6 +3702,9 @@ Extensions Context::generateSupportedExtensions() const
     // Always enabled. Will return a default string if capture is not enabled.
     supportedExtensions.getSerializedContextStringANGLE = true;
 
+    // Performance counter queries are always supported. Different groups exist on each back-end.
+    supportedExtensions.performanceMonitorAMD = true;
+
     return supportedExtensions;
 }
 
@@ -9399,9 +9402,51 @@ void Context::getPerfMonitorGroupString(GLuint group,
                                         GLsizei bufSize,
                                         GLsizei *length,
                                         GLchar *groupString)
-{}
+{
+    const PerfMonitorCounterGroups &perfMonitorGroups = mImplementation->getPerfMonitorCounters();
+    ASSERT(group < perfMonitorGroups.size());
 
-void Context::getPerfMonitorGroups(GLint *numGroups, GLsizei groupsSize, GLuint *groups) {}
+    const PerfMonitorCounterGroup &perfMonitorGroup = perfMonitorGroups[group];
+    const std::string &groupName                    = perfMonitorGroup.name;
+
+    GLsizei numCharsWritten = std::min(bufSize, static_cast<GLsizei>(groupName.size()));
+
+    if (length)
+    {
+        if (bufSize == 0)
+        {
+            *length = static_cast<GLsizei>(groupName.size());
+        }
+        else
+        {
+            // Excludes null terminator.
+            ASSERT(numCharsWritten > 0);
+            *length = numCharsWritten - 1;
+        }
+    }
+
+    if (groupString)
+    {
+        memcpy(groupString, groupName.c_str(), numCharsWritten);
+    }
+}
+
+void Context::getPerfMonitorGroups(GLint *numGroups, GLsizei groupsSize, GLuint *groups)
+{
+    const PerfMonitorCounterGroups &perfMonitorGroups = mImplementation->getPerfMonitorCounters();
+
+    if (numGroups)
+    {
+        *numGroups = static_cast<GLint>(perfMonitorGroups.size());
+    }
+
+    GLuint maxGroupIndex =
+        std::min<GLuint>(groupsSize, static_cast<GLuint>(perfMonitorGroups.size()));
+    for (GLuint groupIndex = 0; groupIndex < maxGroupIndex; ++groupIndex)
+    {
+        groups[groupIndex] = groupIndex;
+    }
+}
 
 void Context::selectPerfMonitorCounters(GLuint monitor,
                                         GLboolean enable,
