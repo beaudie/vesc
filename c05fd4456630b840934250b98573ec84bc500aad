@@ -1,0 +1,55 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "a8796ea6_a0034a24",
+        "filename": "src/libANGLE/Display.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 2371,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-03-01T22:10:58Z",
+      "side": 1,
+      "message": "Please remove the `#ifdef`s. For one, the extension won\u0027t be supported on non-Linux, so these entry points won\u0027t be called. Also, the default implementation of these in DisplayImpl already do `UNREACHABLE()`.",
+      "revId": "c05fd4456630b840934250b98573ec84bc500aad",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "be5cdfe6_ec186095",
+        "filename": "src/libANGLE/validationEGL.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 6528,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-03-01T22:10:58Z",
+      "side": 1,
+      "message": "Should check if extension is available.",
+      "revId": "c05fd4456630b840934250b98573ec84bc500aad",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "006b7829_8e3e9419",
+        "filename": "src/libANGLE/validationEGL.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 6553,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-03-01T22:10:58Z",
+      "side": 1,
+      "message": "ditto",
+      "revId": "c05fd4456630b840934250b98573ec84bc500aad",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
