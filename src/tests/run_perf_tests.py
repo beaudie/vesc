@@ -18,6 +18,8 @@ import os
 import re
 import subprocess
 import sys
+import tarfile
+import glob
 
 # Add //src/testing into sys.path for importing xvfb and test_env, and
 # //src/testing/scripts for importing common.
@@ -35,6 +37,10 @@ sys.path.append(os.path.join(ANGLE_DIR, 'third_party', 'catapult', 'tracing'))
 from tracing.value import histogram
 from tracing.value import histogram_set
 from tracing.value import merge_histograms
+
+sys.path.append(os.path.join(ANGLE_DIR, 'third_party', 'catapult', 'devil'))
+from devil.android.sdk import adb_wrapper
+from devil.android import apk_helper
 
 DEFAULT_TEST_SUITE = 'angle_perftests'
 DEFAULT_LOG = 'info'
@@ -332,6 +338,79 @@ def main():
     # The harness currently uploads all traces in a batch, which is very slow.
     # TODO: Reduce lag from trace uploads and remove this. http://anglebug.com/6854
     env['DEVICE_TIMEOUT_MULTIPLIER'] = '20'
+
+    is_android = False
+    with common.temporary_file() as tempfile_path:
+        binary = get_binary_name('angle_system_info_test')
+        sysinfo_cmd = [binary, '--vulkan', '-v']
+        exit_code, lines = _run_and_get_output(args, sysinfo_cmd, env)
+        for ln in lines:
+            logging.info('qwe %s' % ln.strip())
+            if 'Additional test environment' in ln or 'android/test_runner.py' in ln:
+                is_android = True
+
+    if is_android:
+
+        def run(cmd):
+            logging.info('qwe2 cmd %s', cmd)
+            out = subprocess.check_output(cmd)
+            for ln in out.decode('utf-8').split('\n'):
+                logging.info('qwe2 out=%s', ln)
+            return out.decode('utf-8').split('\n')
+
+        adb_path = adb_wrapper.AdbWrapper.GetAdbPath()
+        suite = args.test_suite
+        # constants.GetOutDirectory() seems to be set to ./. on bots and locally
+        apk_path = os.path.join('%s_apk' % suite, '%s-debug.apk' % suite)
+        logging.info('qwe2 adb_path=%s apk_path=%s apk_size=%s' %
+                     (adb_path, apk_path, os.path.getsize(apk_path)))
+
+        run([adb_path, "devices", "-l"])
+        run([adb_path, 'install', '-r', '-d', apk_path])
+
+        apkh = apk_helper.ToHelper(apk_path)
+        permissions = apkh.GetPermissions()
+        logging.info('qwe2 permissions=%s', permissions)
+
+        def tadd(tar, f):
+            assert (f.startswith('../../'))
+            tar.add(f, arcname=f.replace('../../', ''))
+
+        run([adb_path, 'shell', 'mkdir -p /sdcard/chromium_tests_root/'])
+
+        with common.temporary_file() as tempfile_path:
+            with tarfile.open(tempfile_path, 'w', format=tarfile.GNU_FORMAT) as tar:
+                for f in glob.glob('../../src/tests/restricted_traces/*/*.json', recursive=True):
+                    tadd(tar, f)
+                tadd(tar, '../../src/tests/restricted_traces/restricted_traces.json')
+            run([adb_path, 'push', tempfile_path, '/sdcard/chromium_tests_root/tart.tar'])
+
+        run([
+            adb_path, 'shell',
+            'tar -xf /sdcard/chromium_tests_root/tart.tar -C /sdcard/chromium_tests_root/'
+        ])
+
+        run([adb_path, 'shell', 'ls /sdcard/chromium_tests_root/src/tests/restricted_traces/'])
+
+        run([
+            adb_path, 'shell',
+            'p=com.android.angle.test;for q in android.permission.CAMERA android.permission.CHANGE_CONFIGURATION android.permission.READ_EXTERNAL_STORAGE android.permission.RECORD_AUDIO android.permission.WRITE_EXTERNAL_STORAGE;do pm grant "$p" "$q";echo "~X~$q~X~$?~X~";done;appops set com.android.angle.test MANAGE_EXTERNAL_STORAGE allow;echo "~X~MANAGE_EXTERNAL_STORAGE~X~$?~X~"'
+        ])
+        cmd = (
+            'p=com.android.angle.test;am instrument -w -e '
+            'org.chromium.native_test.NativeTestInstrumentationTestRunner.NativeTestActivity '
+            '"$p".AngleUnitTestActivity -e org.chromium.native_test.NativeTestInstrumentationTestRunner.ShardNanoTimeout 2400000000000 '
+            '-e org.chromium.native_test.NativeTest.CommandLineFlags '
+            '"--list-tests" '
+            '-e org.chromium.native_test.NativeTestInstrumentationTestRunner.StdoutFile '
+            '/sdcard/Download/temp_file-db7f74576d6f5.gtest_out '
+            '"$p"/org.chromium.build.gtest_apk.NativeTestInstrumentationTestRunner')
+        run([adb_path, 'shell', cmd])
+
+        lines = run([adb_path, 'shell', 'cat /sdcard/Download/temp_file-db7f74576d6f5.gtest_out'])
+        tests = _get_tests_from_output(lines)
+
+        raise Exception(tests)
 
     # Get test list
     cmd = [get_binary_name(args.test_suite), '--list-tests', '--verbose']
