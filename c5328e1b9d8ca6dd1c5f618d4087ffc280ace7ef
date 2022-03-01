@@ -34,7 +34,24 @@
       "parentUuid": "32d5c36c_81c6a789",
       "revId": "c5328e1b9d8ca6dd1c5f618d4087ffc280ace7ef",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "f2b043ce_efbe501b",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1520902
+      },
+      "writtenOn": "2022-03-01T22:18:48Z",
+      "side": 1,
+      "message": "Got it, I will remember to pre-mark Code-Review +2 in the future for trivial changes.",
+      "parentUuid": "6263b68c_2872bb3e",
+      "revId": "c5328e1b9d8ca6dd1c5f618d4087ffc280ace7ef",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
-  ],
-  "submitRequirementResults": []
+  ]
 }
