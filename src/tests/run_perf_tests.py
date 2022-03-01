@@ -328,6 +328,14 @@ def main():
     # TODO: Reduce lag from trace uploads and remove this. http://anglebug.com/6854
     env['DEVICE_TIMEOUT_MULTIPLIER'] = '20'
 
+    with common.temporary_file() as tempfile_path:
+        binary = get_binary_name('angle_system_info_test')
+        sysinfo_cmd = [binary, '--vulkan', '-v']
+        exit_code, lines = _run_and_get_output(args, sysinfo_cmd, env)
+        for ln in lines:
+            logging.info('qwe %s' % ln.strip())
+    raise Exception('qwe done')
+
     # Get test list
     cmd = [get_binary_name(args.test_suite), '--list-tests', '--verbose']
     exit_code, lines = _run_and_get_output(args, cmd, env)

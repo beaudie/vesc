@@ -685,7 +685,7 @@
           'shards': 30,
         },
         'swarming': {
-          'shards': 20,
+          'shards': 1,
         },
       },
     },
