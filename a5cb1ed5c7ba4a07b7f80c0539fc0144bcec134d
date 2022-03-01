@@ -33,6 +33,24 @@
       "message": "I\u0027d believe this fixes the crash. Not using memcpy is likely a perf degradation on platforms that don\u0027t require aligned input.\n\nWhat about a prefix/suffix copy with a memcpy as the middle large copy?",
       "revId": "a5cb1ed5c7ba4a07b7f80c0539fc0144bcec134d",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "de5504e8_1fd30763",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1340649
+      },
+      "writtenOn": "2022-03-01T04:38:09Z",
+      "side": 1,
+      "message": "\u003e What about a prefix/suffix copy with a memcpy as the middle large copy?\n\ngiven unaligned writes seem to have no issues, have updated logic to be a bit more performant",
+      "parentUuid": "82aea9e5_e7e11137",
+      "revId": "a5cb1ed5c7ba4a07b7f80c0539fc0144bcec134d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
