@@ -4119,6 +4119,34 @@ TEST_P(FramebufferTest_ES3, BindRenderbufferThenModifySize)
     ASSERT_GL_NO_ERROR();
 }
 
+// Covers a bug when changing a base level of a texture bound to a FBO and as a sampler.
+TEST_P(FramebufferTest_ES3, RenderingFeedbackLoopChangeBaseLevel)
+{
+    ANGLE_GL_PROGRAM(testProgram, essl1_shaders::vs::Texture2D(), essl1_shaders::fs::Texture2D());
+    glUseProgram(testProgram);
+
+    GLTexture tex;
+    glBindTexture(GL_TEXTURE_2D, tex);
+    for (int mip = 0; mip < 6; ++mip)
+    {
+        int size = std::max(10 >> mip, 1);
+        glTexImage2D(GL_TEXTURE_2D, mip, GL_RGBA8, size, size, 0, GL_RGBA, GL_UNSIGNED_BYTE,
+                     nullptr);
+    }
+
+    GLFramebuffer fb;
+    glBindFramebuffer(GL_FRAMEBUFFER, fb);
+    for (int level = 0; level < 6; ++level)
+    {
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_BASE_LEVEL, level);
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+        glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, tex, level);
+        glDrawArrays(GL_POINTS, 0, 1);
+    }
+
+    ASSERT_GL_NO_ERROR();
+}
+
 ANGLE_INSTANTIATE_TEST_ES2(AddMockTextureNoRenderTargetTest);
 ANGLE_INSTANTIATE_TEST_ES2(FramebufferTest);
 ANGLE_INSTANTIATE_TEST_ES2_AND_ES3(FramebufferFormatsTest);
