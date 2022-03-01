@@ -979,6 +979,44 @@ enum class MultisamplingMode
     // resolve of multisampled data.
     MultisampledRenderToTexture,
 };
+
+struct PerfMonitorCounter
+{
+    PerfMonitorCounter();
+    ~PerfMonitorCounter();
+
+    std::string name;
+    uint32_t value;
+};
+using PerfMonitorCounters = std::vector<PerfMonitorCounter>;
+
+struct PerfMonitorCounterGroup
+{
+    PerfMonitorCounterGroup();
+    ~PerfMonitorCounterGroup();
+
+    std::string name;
+    PerfMonitorCounters counters;
+};
+using PerfMonitorCounterGroups = std::vector<PerfMonitorCounterGroup>;
+
+uint32_t GetPerfMonitorCounterIndex(const PerfMonitorCounters &counters, const std::string &name);
+const PerfMonitorCounter &GetPerfMonitorCounter(const PerfMonitorCounters &counters,
+                                                const std::string &name);
+PerfMonitorCounter &GetPerfMonitorCounter(PerfMonitorCounters &counters, const std::string &name);
+uint32_t GetPerfMonitorCounterGroupIndex(const PerfMonitorCounterGroups &groups,
+                                         const std::string &name);
+const PerfMonitorCounterGroup &GetPerfMonitorCounterGroup(const PerfMonitorCounterGroups &groups,
+                                                          const std::string &name);
+PerfMonitorCounterGroup &GetPerfMonitorCounterGroup(PerfMonitorCounterGroups &groups,
+                                                    const std::string &name);
+
+struct PerfMonitorTriplet
+{
+    GLuint group;
+    GLuint counter;
+    GLuint value;
+};
 }  // namespace gl
 
 namespace rx
