@@ -58,6 +58,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "233a546c_26543cf5",
+        "filename": "src/libANGLE/renderer/vulkan/ProgramExecutableVk.cpp",
+        "patchSetId": 12
+      },
+      "lineNbr": 1303,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2022-03-01T16:26:32Z",
+      "side": 1,
+      "message": "I cleaned this up a bit and removed the out descriptorSet parameter from getOrAllocate.",
+      "parentUuid": "20e3f261_756877b3",
+      "range": {
+        "startLine": 1303,
+        "startChar": 0,
+        "endLine": 1303,
+        "endChar": 93
+      },
+      "revId": "611a9f9ae1f4986201da394d9ac3c0dbce7f2246",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "9b96944b_e6082a6d",
@@ -81,6 +105,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "881e5c75_28c6fac7",
+        "filename": "src/libANGLE/renderer/vulkan/ProgramExecutableVk.cpp",
+        "patchSetId": 12
+      },
+      "lineNbr": 1322,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2022-03-01T16:26:32Z",
+      "side": 1,
+      "message": "Thanks for catching. Roman pointed out the same issue. This could have a small correctness bug when using UBOs or SSBOs in conjunction with storage images or framebuffer fetch. I did not (yet) add a regression test because it\u0027s pretty tricky to write and how narrow the use case is.",
+      "parentUuid": "9b96944b_e6082a6d",
+      "range": {
+        "startLine": 1318,
+        "startChar": 16,
+        "endLine": 1322,
+        "endChar": 17
+      },
+      "revId": "611a9f9ae1f4986201da394d9ac3c0dbce7f2246",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "f175c2c4_789acf38",
@@ -94,6 +142,30 @@
       "writtenOn": "2022-02-28T20:04:21Z",
       "side": 1,
       "message": "This CL made me notice that this check is outside of the (!cacheHit) condition, which is not the case above.\n\nCan these two blocks be merged into a single one in a way where only the buffer setup is conditional on whether the binding is null?",
+      "range": {
+        "startLine": 1352,
+        "startChar": 8,
+        "endLine": 1352,
+        "endChar": 48
+      },
+      "revId": "611a9f9ae1f4986201da394d9ac3c0dbce7f2246",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "3e2dfcb6_777824b5",
+        "filename": "src/libANGLE/renderer/vulkan/ProgramExecutableVk.cpp",
+        "patchSetId": 12
+      },
+      "lineNbr": 1352,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2022-03-01T16:26:32Z",
+      "side": 1,
+      "message": "I don\u0027t think I can merge the blocks without a bigger refactor. I fixed the bug above that Charlie also pointed out.",
+      "parentUuid": "f175c2c4_789acf38",
       "range": {
         "startLine": 1352,
         "startChar": 8,
