@@ -2648,17 +2648,42 @@ gl::Version RendererVk::getMaxSupportedESVersion() const
         return maxVersion;
     }
 
-    // Limit to ES3.1 if there are any blockers for 3.2.
-    if (!vk::CanSupportGPUShader5EXT(mPhysicalDeviceFeatures) &&
-        !mFeatures.exposeNonConformantExtensionsAndVersions.enabled)
-    {
-        maxVersion = LimitVersionTo(maxVersion, {3, 1});
-    }
-
-    // TODO: more extension checks for 3.2.  http://anglebug.com/5366
     if (!mFeatures.exposeNonConformantExtensionsAndVersions.enabled)
     {
-        maxVersion = LimitVersionTo(maxVersion, {3, 1});
+        ensureCapsInitialized();
+        // Limit to ES3.1 if there are any blockers for 3.2.
+
+        // KHR_robustness and OES_tesselation_shader are not defined in gl.xml
+        // therefore in these cases we check for the EXT extensions.
+
+        // Preserve one extension per line
+        // clang-format off
+        if (!vk::CanSupportGPUShader5EXT(mPhysicalDeviceFeatures) ||
+            !mNativeExtensions.blendEquationAdvancedKHR ||
+            !mNativeExtensions.colorBufferFloatEXT ||
+            !mNativeExtensions.copyImageOES ||
+            !mNativeExtensions.debugKHR ||
+            !mNativeExtensions.drawBuffersIndexedOES ||
+            !mNativeExtensions.drawElementsBaseVertexOES ||
+            !mNativeExtensions.geometryShaderOES ||
+            !mNativeExtensions.primitiveBoundingBoxOES ||
+            !mNativeExtensions.robustnessEXT ||
+            !mNativeExtensions.sampleShadingOES ||
+            !mNativeExtensions.sampleVariablesOES ||
+            !mNativeExtensions.shaderMultisampleInterpolationOES ||
+            !mNativeExtensions.shaderImageAtomicOES ||
+            !mNativeExtensions.shaderIoBlocksAny() ||
+            !mNativeExtensions.tessellationShaderEXT ||
+            !mNativeExtensions.textureBorderClampOES ||
+            !mNativeExtensions.textureBufferOES ||
+            !mNativeExtensions.textureCompressionAstcHdrKHR ||
+            !mNativeExtensions.textureCubeMapArrayOES ||
+            !mNativeExtensions.textureStencil8OES ||
+            !mNativeExtensions.textureStorageMultisample2dArrayOES)
+        {
+            maxVersion = LimitVersionTo(maxVersion, {3, 1});
+        }
+        //clang format on
     }
 
     // Limit to ES3.0 if there are any blockers for 3.1.
