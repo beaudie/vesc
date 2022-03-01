@@ -458,11 +458,15 @@ if (build_angle_perftests) {
 
     deps = [
       ":angle_perftests_shared",
+      ":angle_system_info_test",
       ":angle_trace_perftests",
       "$angle_spirv_tools_dir:spvtools_val",
     ]
 
-    data = [ "$angle_root/src/tests/run_perf_tests.py" ]
+    data = [
+      "$angle_root/src/tests/android_helper.py",
+      "$angle_root/src/tests/run_perf_tests.py",
+    ]
 
     data_deps = [
       "${angle_root}:libEGL",
