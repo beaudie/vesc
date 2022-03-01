@@ -36,6 +36,9 @@ from tracing.value import histogram
 from tracing.value import histogram_set
 from tracing.value import merge_histograms
 
+sys.path.append(os.path.join(ANGLE_DIR, 'third_party', 'catapult', 'devil'))
+from devil.android.sdk import adb_wrapper
+
 DEFAULT_TEST_SUITE = 'angle_perftests'
 DEFAULT_LOG = 'info'
 DEFAULT_SAMPLES = 4
@@ -332,6 +335,25 @@ def main():
     # The harness currently uploads all traces in a batch, which is very slow.
     # TODO: Reduce lag from trace uploads and remove this. http://anglebug.com/6854
     env['DEVICE_TIMEOUT_MULTIPLIER'] = '20'
+
+    is_android = False
+    with common.temporary_file() as tempfile_path:
+        binary = get_binary_name('angle_system_info_test')
+        sysinfo_cmd = [binary, '--vulkan', '-v']
+        exit_code, lines = _run_and_get_output(args, sysinfo_cmd, env)
+        for ln in lines:
+            logging.info('qwe %s' % ln.strip())
+            if 'Additional test environment' in ln or 'android/test_runner.py' in ln:
+                is_android = True
+
+    if is_android:
+        adb_path = adb_wrapper.AdbWrapper.GetAdbPath()
+        suite = args.test_suite
+        # constants.GetOutDirectory() seems to be set to ./. on bots and locally
+        apk_path = os.path.join('%s_apk' % suite, '%s-debug.apk' % suite)
+
+        raise Exception('adb_path=%s apk_path=%s apk_size=%s' %
+                        (adb_path, apk_path, os.path.getsize(apk_path)))
 
     # Get test list
     cmd = [get_binary_name(args.test_suite), '--list-tests', '--verbose']
