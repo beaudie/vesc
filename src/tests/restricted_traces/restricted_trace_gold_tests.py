@@ -29,6 +29,8 @@ d = os.path.dirname
 THIS_DIR = d(os.path.abspath(__file__))
 sys.path.insert(0, d(THIS_DIR))
 
+import android_helper
+
 from skia_gold import angle_skia_gold_properties
 from skia_gold import angle_skia_gold_session_manager
 
@@ -57,10 +59,6 @@ DEFAULT_SCREENSHOT_PREFIX = 'angle_vulkan_'
 SWIFTSHADER_SCREENSHOT_PREFIX = 'angle_vulkan_swiftshader_'
 DEFAULT_BATCH_SIZE = 5
 DEFAULT_LOG = 'info'
-
-# Filters out stuff like: " I   72.572s run_tests_on_device(96071FFAZ00096) "
-ANDROID_LOGGING_PREFIX = r'I +\d+.\d+s \w+\(\w+\)  '
-ANDROID_BEGIN_SYSTEM_INFO = '>>ScopedMainEntryLogger'
 
 # Test expectations
 FAIL = 'FAIL'
@@ -129,7 +127,13 @@ def run_wrapper(args, cmd, env, stdoutfile=None):
     if args.xvfb:
         return xvfb.run_executable(cmd, env, stdoutfile=stdoutfile)
     else:
-        return test_env.run_command_with_output(cmd, env=env, stdoutfile=stdoutfile)
+        if 'angle_perftest' in cmd[0]:
+            exit_code, out = android_helper.run_and_get_output2(args, cmd, env)
+            with open(stdoutfile, 'w') as f:
+                f.write('\n'.join(out))
+            return exit_code
+        else:
+            return test_env.run_command_with_output(cmd, env=env, stdoutfile=stdoutfile)
 
 
 def to_hex(num):
@@ -297,6 +301,8 @@ def _get_gtest_filter_for_batch(args, batch):
 def _run_tests(args, tests, extra_flags, env, screenshot_dir, results, test_results):
     keys = get_skia_gold_keys(args, env)
 
+    android_helper.install_apk(args.test_suite)
+
     with temporary_dir('angle_skia_gold_') as skia_gold_temp_dir:
         gold_properties = angle_skia_gold_properties.ANGLESkiaGoldProperties(args)
         gold_session_manager = angle_skia_gold_session_manager.ANGLESkiaGoldSessionManager(
@@ -320,6 +326,10 @@ def _run_tests(args, tests, extra_flags, env, screenshot_dir, results, test_resu
         batches = _get_batches(traces, args.batch_size)
 
         for batch in batches:
+            for trace in batch:
+                orig_fn = trace
+                android_helper.copy_angledata(orig_fn)
+
             for iteration in range(0, args.flaky_retries + 1):
                 with common.temporary_file() as tempfile_path:
                     # This is how we signal early exit
@@ -330,10 +340,11 @@ def _run_tests(args, tests, extra_flags, env, screenshot_dir, results, test_resu
                         logging.info('Test run failed, running retry #%d...' % iteration)
 
                     gtest_filter = _get_gtest_filter_for_batch(args, batch)
+                    temp_device_dir = android_helper.temp_device_dir()
                     cmd = [
                         get_binary_name(args.test_suite),
                         gtest_filter,
-                        '--render-test-output-dir=%s' % screenshot_dir,
+                        '--render-test-output-dir=%s' % temp_device_dir,
                         '--one-frame-only',
                         '--verbose-logging',
                         '--enable-all-trace-tests',
@@ -341,6 +352,8 @@ def _run_tests(args, tests, extra_flags, env, screenshot_dir, results, test_resu
                     batch_result = PASS if run_wrapper(args, cmd, env,
                                                        tempfile_path) == 0 else FAIL
 
+                    android_helper.pull_dir(temp_device_dir, screenshot_dir)
+                    android_helper.remove_dir_from_device(temp_device_dir)
                     next_batch = []
                     for trace in batch:
                         artifacts = {}

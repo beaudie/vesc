@@ -76,6 +76,7 @@ group("angle_restricted_trace_gold_tests") {
     "$angle_root/src/tests:angle_system_info_test",
   ]
   data = [
+    "$angle_root/src/tests/android_helper.py",
     "restricted_trace_gold_tests.py",
     "restricted_traces.json",
     "../skia_gold/",
