@@ -2697,7 +2697,7 @@ bool ValidateBeginPerfMonitorAMD(const Context *context,
         return false;
     }
 
-    return false;
+    return true;
 }
 
 bool ValidateDeletePerfMonitorsAMD(const Context *context,
@@ -2711,7 +2711,7 @@ bool ValidateDeletePerfMonitorsAMD(const Context *context,
         return false;
     }
 
-    return false;
+    return true;
 }
 
 bool ValidateEndPerfMonitorAMD(const Context *context, angle::EntryPoint entryPoint, GLuint monitor)
@@ -2722,7 +2722,7 @@ bool ValidateEndPerfMonitorAMD(const Context *context, angle::EntryPoint entryPo
         return false;
     }
 
-    return false;
+    return true;
 }
 
 bool ValidateGenPerfMonitorsAMD(const Context *context,
@@ -2736,7 +2736,7 @@ bool ValidateGenPerfMonitorsAMD(const Context *context,
         return false;
     }
 
-    return false;
+    return true;
 }
 
 bool ValidateGetPerfMonitorCounterDataAMD(const Context *context,
@@ -2753,7 +2753,7 @@ bool ValidateGetPerfMonitorCounterDataAMD(const Context *context,
         return false;
     }
 
-    return false;
+    return true;
 }
 
 bool ValidateGetPerfMonitorCounterInfoAMD(const Context *context,
@@ -2769,7 +2769,7 @@ bool ValidateGetPerfMonitorCounterInfoAMD(const Context *context,
         return false;
     }
 
-    return false;
+    return true;
 }
 
 bool ValidateGetPerfMonitorCounterStringAMD(const Context *context,
@@ -2786,7 +2786,7 @@ bool ValidateGetPerfMonitorCounterStringAMD(const Context *context,
         return false;
     }
 
-    return false;
+    return true;
 }
 
 bool ValidateGetPerfMonitorCountersAMD(const Context *context,
@@ -2803,7 +2803,7 @@ bool ValidateGetPerfMonitorCountersAMD(const Context *context,
         return false;
     }
 
-    return false;
+    return true;
 }
 
 bool ValidateGetPerfMonitorGroupStringAMD(const Context *context,
@@ -2819,7 +2819,7 @@ bool ValidateGetPerfMonitorGroupStringAMD(const Context *context,
         return false;
     }
 
-    return false;
+    return true;
 }
 
 bool ValidateGetPerfMonitorGroupsAMD(const Context *context,
@@ -2834,7 +2834,7 @@ bool ValidateGetPerfMonitorGroupsAMD(const Context *context,
         return false;
     }
 
-    return false;
+    return true;
 }
 
 bool ValidateSelectPerfMonitorCountersAMD(const Context *context,
@@ -2851,6 +2851,6 @@ bool ValidateSelectPerfMonitorCountersAMD(const Context *context,
         return false;
     }
 
-    return false;
+    return true;
 }
 }  // namespace gl
