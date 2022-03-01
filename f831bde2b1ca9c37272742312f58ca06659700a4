@@ -1,0 +1,44 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "6ed2236b_eaf3f236",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1290487
+      },
+      "writtenOn": "2022-03-01T19:47:09Z",
+      "side": 1,
+      "message": "I simplified the code that accepts/rejects formats that the Android Vulkan loader returns.  With this code, ANGLE is insulated from any new formats that are added to Android that ANGLE does not want as EGLConfigs.",
+      "revId": "f831bde2b1ca9c37272742312f58ca06659700a4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "3559a5db_91dad9cd",
+        "filename": "src/libANGLE/renderer/vulkan/android/DisplayVkAndroid.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 114,
+      "author": {
+        "id": 1290487
+      },
+      "writtenOn": "2022-03-01T19:47:09Z",
+      "side": 1,
+      "message": "I reworked this to: 1) be simpler; 2) only accept formats that ANGLE desires (to avoid formats that get added to the Android Vulkan loader that ANGLE does not want to use for EGLConfigs).",
+      "range": {
+        "startLine": 112,
+        "startChar": 0,
+        "endLine": 114,
+        "endChar": 0
+      },
+      "revId": "f831bde2b1ca9c37272742312f58ca06659700a4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
