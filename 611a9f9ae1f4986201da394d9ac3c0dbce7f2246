@@ -18,6 +18,69 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "edf1bafe_3d3e636d",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 12
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2022-03-01T01:32:22Z",
+      "side": 1,
+      "message": "LGTM with minor nit.",
+      "revId": "611a9f9ae1f4986201da394d9ac3c0dbce7f2246",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "20e3f261_756877b3",
+        "filename": "src/libANGLE/renderer/vulkan/ProgramExecutableVk.cpp",
+        "patchSetId": 12
+      },
+      "lineNbr": 1303,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2022-03-01T01:32:22Z",
+      "side": 1,
+      "message": "nit: Should this line move to line 1310, since otherwise it will be returned from getOrAllocateShaderResourcesDescriptorSet() call.",
+      "range": {
+        "startLine": 1303,
+        "startChar": 0,
+        "endLine": 1303,
+        "endChar": 93
+      },
+      "revId": "611a9f9ae1f4986201da394d9ac3c0dbce7f2246",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "9b96944b_e6082a6d",
+        "filename": "src/libANGLE/renderer/vulkan/ProgramExecutableVk.cpp",
+        "patchSetId": 12
+      },
+      "lineNbr": 1322,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2022-03-01T01:32:22Z",
+      "side": 1,
+      "message": "Shouldn\u0027t this outside if(!cacheHit) to be consistent with the code around line 1352? Or at least you can add an assertion that mDynamicShaderBufferDescriptorOffsets is euqal to empty buffer offset  if cacheHit is true (which I expect so). Since this is a rare case that no real app should hit (right?), I don\u0027t mind taking a few more instructions to keep them consistent.",
+      "range": {
+        "startLine": 1318,
+        "startChar": 16,
+        "endLine": 1322,
+        "endChar": 17
+      },
+      "revId": "611a9f9ae1f4986201da394d9ac3c0dbce7f2246",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "f175c2c4_789acf38",
