@@ -88,6 +88,24 @@
       "parentUuid": "101fb4cd_98896927",
       "revId": "29a1560f205b576e79aa600e1421b38e460b1ce4",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "9f43a7ff_5b3db5b4",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 1610,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2022-03-01T19:02:25Z",
+      "side": 1,
+      "message": "We probbaly should have \"Cached\" or \"UnCached\"baked into the memory type name as well so that it is easy to read.\n\nThe value for CachedCoherent does have power cost.",
+      "parentUuid": "bccb4542_028e6bd4",
+      "revId": "29a1560f205b576e79aa600e1421b38e460b1ce4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }

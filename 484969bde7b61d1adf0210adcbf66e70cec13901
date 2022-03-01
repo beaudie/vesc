@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "4cb78fd0_3ea61e92",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 5
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2022-03-01T19:02:25Z",
+      "side": 1,
+      "message": "LGTM.\n\nI think for now this looks okay to me. I think the main reason it hits the bug hailin was seeing is that the load function is doing CPU trans-coding. For that you definitely want cached memory since CPU will be reading. In future we could look into pick UnCachedCoherent memory if we know for sure CPU will not be reading, so that we do not polute CPU cache as well as save flush instruction overhead. ",
+      "revId": "484969bde7b61d1adf0210adcbf66e70cec13901",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
