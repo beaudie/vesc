@@ -444,10 +444,55 @@ constexpr SkippedSyncvalMessage kSkippedSyncvalMessages[] = {
     // dynamic uniform buffers. The failures are gone if I force mUniformBufferDescriptorType to
     // VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER. My guess is that syncval is not doing a fine grain enough
     // range tracking with dynamic uniform buffers. http://anglebug.com/6725
+<<<<<<< HEAD   (c57eb1 [M99] Vulkan: Fix issue with redefining a layered attachment)
     {"SYNC-HAZARD-WRITE_AFTER_READ", "usage: SYNC_VERTEX_SHADER_UNIFORM_READ", "", false},
     {"SYNC-HAZARD-READ_AFTER_WRITE", "usage: SYNC_VERTEX_SHADER_UNIFORM_READ", "", false},
     {"SYNC-HAZARD-WRITE_AFTER_READ", "type: VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER_DYNAMIC", "", false},
     {"SYNC-HAZARD-READ_AFTER_WRITE", "type: VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER_DYNAMIC", "", false},
+=======
+    {
+        "SYNC-HAZARD-WRITE_AFTER_READ",
+        "usage: SYNC_VERTEX_SHADER_UNIFORM_READ",
+    },
+    {
+        "SYNC-HAZARD-READ_AFTER_WRITE",
+        "usage: SYNC_VERTEX_SHADER_UNIFORM_READ",
+    },
+    {
+        "SYNC-HAZARD-WRITE_AFTER_READ",
+        "type: VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER_DYNAMIC",
+    },
+    {
+        "SYNC-HAZARD-READ_AFTER_WRITE",
+        "type: VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER_DYNAMIC",
+    },
+    // Coherent framebuffer fetch is enabled on some platforms that are known apriori to have the
+    // needed behavior, even though this is not specified in the Vulkan spec.  These generate
+    // syncval errors that are benign on those platforms.
+    // http://anglebug.com/6870
+    // From: TracePerfTest.Run/vulkan_dead_by_daylight
+    // From: TracePerfTest.Run/vulkan_genshin_impact
+    {"SYNC-HAZARD-READ_AFTER_WRITE",
+     "vkCmdBeginRenderPass: Hazard READ_AFTER_WRITE in subpass 0 for attachment ",
+     "aspect color during load with loadOp VK_ATTACHMENT_LOAD_OP_LOAD. Access info (usage: "
+     "SYNC_COLOR_ATTACHMENT_OUTPUT_COLOR_ATTACHMENT_READ, prior_usage: "
+     "SYNC_IMAGE_LAYOUT_TRANSITION, write_barriers: 0, command: vkCmdEndRenderPass",
+     false, true},
+    {"SYNC-HAZARD-WRITE_AFTER_WRITE",
+     "vkCmdBeginRenderPass: Hazard WRITE_AFTER_WRITE in subpass 0 for attachment ",
+     "image layout transition (old_layout: VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL, new_layout: "
+     "VK_IMAGE_LAYOUT_GENERAL). Access info (usage: SYNC_IMAGE_LAYOUT_TRANSITION, prior_usage: "
+     "SYNC_COLOR_ATTACHMENT_OUTPUT_COLOR_ATTACHMENT_WRITE, write_barriers:",
+     false, true},
+    // http://anglebug.com/7070
+    {
+        "SYNC-HAZARD-READ_AFTER_WRITE",
+        "type: VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER, imageLayout: VK_IMAGE_LAYOUT_GENERAL, "
+        "binding #0, index 0. Access info (usage: SYNC_FRAGMENT_SHADER_SHADER_STORAGE_READ, "
+        "prior_usage: SYNC_COLOR_ATTACHMENT_OUTPUT_COLOR_ATTACHMENT_WRITE, write_barriers: 0, "
+        "command: vkCmdBeginRenderPass",
+    },
+>>>>>>> CHANGE (ea7030 Fix base level changes not updating FBO completeness check.)
 };
 
 enum class DebugMessageReport
