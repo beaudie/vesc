@@ -106,6 +106,24 @@
       "parentUuid": "bccb4542_028e6bd4",
       "revId": "29a1560f205b576e79aa600e1421b38e460b1ce4",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "479aee7d_ebcff84c",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 1610,
+      "author": {
+        "id": 1517514
+      },
+      "writtenOn": "2022-03-01T20:59:52Z",
+      "side": 1,
+      "message": "https://source.chromium.org/chromium/chromium/src/+/main:third_party/angle/src/libANGLE/renderer/vulkan/vk_helpers.cpp;l\u003d7233, already have flush here. no additional flush needed.",
+      "parentUuid": "9f43a7ff_5b3db5b4",
+      "revId": "29a1560f205b576e79aa600e1421b38e460b1ce4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
