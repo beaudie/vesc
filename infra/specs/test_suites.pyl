@@ -610,13 +610,13 @@
     'angle_end2end_vulkan_gtests': {
       'angle_end2end_tests': {
         'android_args': [
-          '--shard-timeout=300',
+          '--shard-timeout=400',
           '-v',
           # We use this argument to save test artifacts.
           '--render-test-output-dir=${ISOLATED_OUTDIR}',
         ],
         'android_swarming': {
-          'shards': 4,
+          'shards': 6,
         },
         'args': [
           'angle_end2end_tests',
@@ -677,7 +677,6 @@
       'angle_perftests': {
         'args': [
           '--log=debug',
-          '--show-test-stdout',
         ],
         'merge': {
           'script': '//scripts/process_angle_perf_results.py',
@@ -698,7 +697,6 @@
         'args': [
           '--log=debug',
           '--smoke-test-mode',
-          '--show-test-stdout',
         ],
         'merge': {
           'script': '//scripts/process_angle_perf_results.py',
@@ -1068,20 +1066,6 @@
         },
       },
     },
-
-    'swangle_white_box_tests': {
-      'angle_white_box_tests': {
-        'args': [
-          'angle_white_box_tests',
-          '--bot-mode',
-          '--gtest_filter=*Vulkan_SwiftShader*',
-        ],
-        'linux_args': [
-          '--xvfb',
-        ],
-        'use_isolated_scripts_api': True,
-      },
-    }
   },
 
   'compound_suites': {
@@ -1181,12 +1165,10 @@
       'swangle_deqp_khr_gles31_tests',
       'swangle_deqp_khr_gles3_tests',
       'swangle_end2end_tests',
-      'swangle_white_box_tests',
     ],
 
     'swangle_non_deqp_slow_gtests': [
       'swangle_end2end_slow_tests',
-      'swangle_white_box_tests',
     ],
 
     'swangle_slow_gtests': [
@@ -1204,7 +1186,6 @@
       'swangle_deqp_khr_gles31_tests',
       'swangle_deqp_khr_gles3_tests',
       'swangle_end2end_tests',
-      'swangle_white_box_tests',
     ],
 
     'win10_intel_gtests': [
