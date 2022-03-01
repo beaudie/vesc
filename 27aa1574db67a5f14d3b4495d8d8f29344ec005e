@@ -1,0 +1,95 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "0cda4289_c3bbe51f",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 11
+      },
+      "lineNbr": 2464,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-03-01T22:40:55Z",
+      "side": 1,
+      "message": "Please refactor the shared pieces with submitFrame!",
+      "revId": "27aa1574db67a5f14d3b4495d8d8f29344ec005e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "341fa8ef_d59c5b8a",
+        "filename": "src/libANGLE/renderer/vulkan/SecondaryCommandBuffer.h",
+        "patchSetId": 11
+      },
+      "lineNbr": 1131,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-03-01T22:40:55Z",
+      "side": 1,
+      "message": "nit: I would clarify that this means that \"this is an underestimation\".",
+      "revId": "27aa1574db67a5f14d3b4495d8d8f29344ec005e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "a66cbb14_84649214",
+        "filename": "src/libANGLE/renderer/vulkan/vk_command_buffer_utils.h",
+        "patchSetId": 11
+      },
+      "lineNbr": 27,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-03-01T22:40:55Z",
+      "side": 1,
+      "message": "This function is unused?",
+      "revId": "27aa1574db67a5f14d3b4495d8d8f29344ec005e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "558891df_3982aaeb",
+        "filename": "src/libANGLE/renderer/vulkan/vk_command_buffer_utils.h",
+        "patchSetId": 11
+      },
+      "lineNbr": 37,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-03-01T22:40:55Z",
+      "side": 1,
+      "message": "nit: ... issued between buffers and images\n\nIn the future, we can extend this to accumulate elsewhere where we issue a copy.",
+      "range": {
+        "startLine": 37,
+        "startChar": 33,
+        "endLine": 37,
+        "endChar": 71
+      },
+      "revId": "27aa1574db67a5f14d3b4495d8d8f29344ec005e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "3a21b003_679e60d8",
+        "filename": "src/libANGLE/renderer/vulkan/vk_command_buffer_utils.h",
+        "patchSetId": 11
+      },
+      "lineNbr": 39,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-03-01T22:40:55Z",
+      "side": 1,
+      "message": "I realize now that CommandBufferCommandTracker is not actually a good place to store this. Could you please move this to ContextVk? Basically the outside command buffer helper may be flushed to the primary CB multiple times before a render pass is done, and so this keeps getting reset.",
+      "revId": "27aa1574db67a5f14d3b4495d8d8f29344ec005e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
