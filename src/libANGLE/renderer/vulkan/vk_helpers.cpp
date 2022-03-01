@@ -1721,8 +1721,13 @@ void CommandBufferHelper::invalidateRenderPassDepthAttachment(const gl::DepthSte
 {
     ASSERT(mIsRenderPassCommandBuffer);
     // Keep track of the size of commands in the command buffer.  If the size grows in the
+<<<<<<< HEAD   (2b75a2 [M96-LTS] Vulkan: Fix issue with redefining a layered attach)
     // future, that implies that drawing occured since invalidated.
     mDepthCmdSizeInvalidated = mCommandBuffer.getCommandSize();
+=======
+    // future, that implies that drawing occurred since invalidated.
+    mDepthCmdCountInvalidated = getRenderPassWriteCommandCount();
+>>>>>>> CHANGE (ea7030 Fix base level changes not updating FBO completeness check.)
 
     // Also track the size if the attachment is currently disabled.
     const bool isDepthWriteEnabled = dsState.depthTest && dsState.depthMask;

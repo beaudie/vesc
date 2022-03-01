@@ -127,6 +127,7 @@
 6180 : UniformBufferTest.ManyBlocks/ES3_Vulkan_SwiftShader = FAIL
 
 # Skip because crashes
+<<<<<<< HEAD   (2b75a2 [M96-LTS] Vulkan: Fix issue with redefining a layered attach)
 6313 : CopyTextureTestES3.InvalidateBlitThenBlend1000Layers/ES3_Vulkan_SwiftShader = SKIP_FOR_CAPTURE
 6313 : CopyTextureTestES3.InvalidateBlitThenBlend3Layers/ES3_Vulkan_SwiftShader = SKIP_FOR_CAPTURE
 6314 : FramebufferTest_ES3.AttachmentsWithUnequalDimensions/ES3_Vulkan_SwiftShader = SKIP_FOR_CAPTURE
@@ -149,6 +150,24 @@
 6399 : Texture2DTestES3.TexStorage2DLargeYuvTextureCount/ES3_Vulkan_SwiftShader = SKIP_FOR_CAPTURE
 6314 : Texture2DTestES3.UpdateRenderTargetCacheOnDestroyTexStorage/ES3_Vulkan_SwiftShader = SKIP_FOR_CAPTURE
 6335 DEBUG : VulkanExternalImageTest.ShouldImportSemaphoreOpaqueFd/ES3_Vulkan_SwiftShader = SKIP_FOR_CAPTURE
+=======
+6313 : CopyTextureTestES3.InvalidateBlitThenBlend1000Layers/* = CRASH
+6313 : CopyTextureTestES3.InvalidateBlitThenBlend3Layers/* = CRASH
+6314 : FramebufferTest_ES3.AttachmentsWithUnequalDimensions/* = CRASH
+6314 : FramebufferTest_ES3.ChangeAttachmentThenInvalidateAndDraw/* = CRASH
+6314 : FramebufferTest_ES3.RenderAndInvalidateImmutableTextureWithBeyondMaxLevel/* = CRASH
+6180 : ImageTestES3.SourceCubeTargetExternalESSL3/* = FAIL
+6334 : MipmapTestES3.GenerateMipmapBaseLevelOutOfRangeImmutableTexture/* = CRASH
+6333 : Texture2DFloatTestES3.TextureHalfFloatLinearLegacyTest/* = CRASH
+6333 : Texture2DFloatTestES3.TextureHalfFloatSampleLegacyTest/* = CRASH
+6334 : Texture2DTestES3.ImmutableTextureBaseLevelOutOfRange/* = CRASH
+6399 : Texture2DTestES3.TexStorage2DCycleThroughYuvSourcesNoData/* = CRASH
+6334 : Texture2DTestES3.TextureBaseLevelGreaterThanMaxLevel/* = CRASH
+6399 : Texture2DTestES3.TexStorage2DSimultaneousUseOfMultipleYuvSourcesNoData/* = CRASH
+6400 : Texture2DTestES3.TextureCompletenessChangesWithBaseLevel/* = CRASH
+6399 : Texture2DTestES3.TexStorage2DLargeYuvTextureCount/* = CRASH
+6335 DEBUG : VulkanExternalImageTest.ShouldImportSemaphoreOpaqueFd/* = CRASH
+>>>>>>> CHANGE (ea7030 Fix base level changes not updating FBO completeness check.)
 
 # Skip because CompileFailed
 6521 : ReadPixelsPBOTest.ExistingDataPreserved/ES3_Vulkan_SwiftShader = SKIP_FOR_CAPTURE
