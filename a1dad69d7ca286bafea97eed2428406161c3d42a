@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "7bad807b_c32082d5",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 6
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-03-01T21:46:42Z",
+      "side": 1,
+      "message": "Thanks!\n\n+Amirali, you can move on with optimizing the swapchain resolve based on this benchmark!",
+      "revId": "a1dad69d7ca286bafea97eed2428406161c3d42a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
