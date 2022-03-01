@@ -54,6 +54,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "43c24260_8e8f6138",
+        "filename": "src/libANGLE/renderer/vulkan/ProgramVk.cpp",
+        "patchSetId": 9
+      },
+      "lineNbr": 255,
+      "author": {
+        "id": 1340649
+      },
+      "writtenOn": "2022-03-01T23:54:25Z",
+      "side": 1,
+      "message": "have no data to validate change. could be a follow up change if we do get some usecase?",
+      "parentUuid": "7d406b77_dd749400",
+      "revId": "0ea2484253ce3b77b59ec64e4cbb809506c39ab5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "d8262a6d_51599f37",
         "filename": "src/libANGLE/renderer/vulkan/ProgramVk.cpp",
         "patchSetId": 9
@@ -71,6 +89,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "7e8db591_a64c31b3",
+        "filename": "src/libANGLE/renderer/vulkan/ProgramVk.cpp",
+        "patchSetId": 9
+      },
+      "lineNbr": 256,
+      "author": {
+        "id": 1340649
+      },
+      "writtenOn": "2022-03-01T23:54:25Z",
+      "side": 1,
+      "message": "all usecases (a.k.a traces) we looked at had \u003c\u003d 3 out vars. since we are populating pipeline cache as well, did not want to bloat it for shaders that are uncommon",
+      "parentUuid": "d8262a6d_51599f37",
+      "revId": "0ea2484253ce3b77b59ec64e4cbb809506c39ab5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "1e76ccfc_f2d117fe",
         "filename": "src/libANGLE/renderer/vulkan/ProgramVk.cpp",
         "patchSetId": 9
@@ -82,6 +118,24 @@
       "writtenOn": "2022-03-01T22:56:55Z",
       "side": 1,
       "message": "What about specialization constants? We were thinking those would be the most problematic ones. Because this becomes useless when the spec constants change.\n\nWe might have to make some of our spec constants uniform (like framebuffer width/height), or make best guesses (like device rotation). We probably even need to compile a few different combinations.",
+      "revId": "0ea2484253ce3b77b59ec64e4cbb809506c39ab5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "f37e3d24_d00bce32",
+        "filename": "src/libANGLE/renderer/vulkan/ProgramVk.cpp",
+        "patchSetId": 9
+      },
+      "lineNbr": 288,
+      "author": {
+        "id": 1340649
+      },
+      "writtenOn": "2022-03-01T23:54:25Z",
+      "side": 1,
+      "message": "the idea behind the change is to improve hit rate of Vulkan ICD shader cache. Pipeline cache hits was not the goal",
+      "parentUuid": "1e76ccfc_f2d117fe",
       "revId": "0ea2484253ce3b77b59ec64e4cbb809506c39ab5",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
