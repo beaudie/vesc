@@ -3,6 +3,29 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "3ce932ad_47ef4702",
+        "filename": "src/libANGLE/renderer/vulkan/TextureVk.cpp",
+        "patchSetId": 27
+      },
+      "lineNbr": 519,
+      "author": {
+        "id": 1446209
+      },
+      "writtenOn": "2022-03-01T11:36:40Z",
+      "side": 1,
+      "message": "Will redefine PBO staged update logic,because switching to copied on cpu will cause perf regression.",
+      "range": {
+        "startLine": 519,
+        "startChar": 13,
+        "endLine": 519,
+        "endChar": 41
+      },
+      "revId": "b377bc4f054f24248e036dec41d9c8e75e4cd8e8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "45ec7d00_48a7763d",
         "filename": "src/libANGLE/renderer/vulkan/TextureVk.cpp",
         "patchSetId": 27
