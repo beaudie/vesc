@@ -848,6 +848,23 @@ ContextVk::ContextVk(const gl::State &state, gl::ErrorSet *errorSet, RendererVk 
     mDescriptorBufferInfos.reserve(kDescriptorBufferInfosInitialSize);
     mDescriptorImageInfos.reserve(kDescriptorImageInfosInitialSize);
     mWriteDescriptorSets.reserve(kDescriptorWriteInfosInitialSize);
+
+    gl::PerfMonitorCounterGroup vulkanGroup;
+    vulkanGroup.name = "vulkan";
+
+#define ANGLE_ADD_PERF_MONITOR_COUNTER_GROUP(COUNTER) \
+    {                                                 \
+        gl::PerfMonitorCounter counter;               \
+        counter.name  = #COUNTER;                     \
+        counter.value = 0;                            \
+        vulkanGroup.counters.push_back(counter);      \
+    }
+
+    ANGLE_VK_PERF_COUNTERS_X(ANGLE_ADD_PERF_MONITOR_COUNTER_GROUP)
+
+#undef ANGLE_ADD_PERF_MONITOR_COUNTER_GROUP
+
+    mPerfMonitorCounters.push_back(vulkanGroup);
 }
 
 ContextVk::~ContextVk() = default;
@@ -2305,6 +2322,16 @@ void ContextVk::syncObjectPerfCounters()
     {
         mPerfCounters.descriptorSetCacheTotalSize += driverSet.descriptorSetCache.getSize();
     }
+
+    gl::PerfMonitorCounters &counters =
+        gl::GetPerfMonitorCounterGroup(mPerfMonitorCounters, "vulkan").counters;
+
+#define ANGLE_UPDATE_PERF_MAP(COUNTER) \
+    gl::GetPerfMonitorCounter(counters, #COUNTER).value = mPerfCounters.COUNTER;
+
+    ANGLE_VK_PERF_COUNTERS_X(ANGLE_UPDATE_PERF_MAP)
+
+#undef ANGLE_UPDATE_PERF_MAP
 }
 
 void ContextVk::updateOverlayOnPresent()
@@ -6866,5 +6893,10 @@ ProgramExecutableVk *ContextVk::getExecutable() const
         }
     }
     return nullptr;
+}
+
+const gl::PerfMonitorCounterGroups &ContextVk::getPerfMonitorCounters() const
+{
+    return mPerfMonitorCounters;
 }
 }  // namespace rx

@@ -688,6 +688,8 @@ class ContextVk : public ContextImpl, public vk::Context, public MultisampleText
         return angle::Result::Continue;
     }
 
+    const gl::PerfMonitorCounterGroups &getPerfMonitorCounters() const override;
+
   private:
     // Dirty bits.
     enum DirtyBitType : size_t
@@ -1211,6 +1213,7 @@ class ContextVk : public ContextImpl, public vk::Context, public MultisampleText
 
     // A mix of per-frame and per-run counters.
     vk::PerfCounters mPerfCounters;
+    gl::PerfMonitorCounterGroups mPerfMonitorCounters;
     ContextVkPerfCounters mContextPerfCounters;
     ContextVkPerfCounters mCumulativeContextPerfCounters;
 
