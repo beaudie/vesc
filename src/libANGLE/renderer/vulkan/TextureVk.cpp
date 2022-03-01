@@ -1653,12 +1653,8 @@ angle::Result TextureVk::redefineLevel(const gl::Context *context,
                 mRedefinedLevels.set(levelIndexGL.get(), !isCompatibleRedefinition);
             }
 
-            bool isUpdateToSingleLevelImage =
-                mImage->getLevelCount() == 1 && mImage->getFirstAllocatedLevel() == levelIndexGL;
-
-            // If incompatible, and redefining the single-level image, release it so it can be
-            // recreated immediately.  This is an optimization to avoid an extra copy.
-            if (!isCompatibleRedefinition && isUpdateToSingleLevelImage)
+            // If incompatible, release the image so it can be recreated immediately.
+            if (!isCompatibleRedefinition)
             {
                 releaseImage(contextVk);
             }
@@ -2375,10 +2371,14 @@ angle::Result TextureVk::getAttachmentRenderTarget(const gl::Context *context,
                                      gl::LevelIndex(imageIndex.getLevelIndex()),
                                      renderToTextureIndex);
 
-        ASSERT(imageIndex.getLevelIndex() <
-               static_cast<int32_t>(mSingleLayerRenderTargets[renderToTextureIndex].size()));
-        *rtOut = &mSingleLayerRenderTargets[renderToTextureIndex][imageIndex.getLevelIndex()]
-                                           [layerIndex];
+        std::vector<RenderTargetVector> &levelRenderTargets =
+            mSingleLayerRenderTargets[renderToTextureIndex];
+        ASSERT(imageIndex.getLevelIndex() < static_cast<int32_t>(levelRenderTargets.size()));
+
+        RenderTargetVector &layerRenderTargets = levelRenderTargets[imageIndex.getLevelIndex()];
+        ASSERT(imageIndex.getLayerIndex() < static_cast<int32_t>(layerRenderTargets.size()));
+
+        *rtOut = &layerRenderTargets[layerIndex];
     }
     else
     {
