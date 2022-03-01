@@ -46,6 +46,30 @@
       },
       "revId": "7c3ed59026984b0ba2a4ce73bccf89080754bb79",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "6a320348_9f17e090",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 2660,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2022-03-01T16:58:11Z",
+      "side": 1,
+      "message": "Yes, auto-formatting can in many cases make code less readable than manually formatted code. For an open-source project we prioritize maintainability over readability in most cases. With some exceptions. I don\u0027t think this is a case where we need the exception. If you disagree we can ask for feedback from other maintainers.\n\nThanks for looking at moving it to the front-end!",
+      "parentUuid": "63a3fcf5_b613e776",
+      "range": {
+        "startLine": 2658,
+        "startChar": 0,
+        "endLine": 2660,
+        "endChar": 27
+      },
+      "revId": "7c3ed59026984b0ba2a4ce73bccf89080754bb79",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
