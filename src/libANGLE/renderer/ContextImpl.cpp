@@ -9,6 +9,7 @@
 
 #include "libANGLE/renderer/ContextImpl.h"
 
+#include "common/third_party/base/anglebase/no_destructor.h"
 #include "libANGLE/Context.h"
 
 namespace rx
@@ -79,4 +80,9 @@ angle::Result ContextImpl::releaseTextures(const gl::Context *context,
     return angle::Result::Stop;
 }
 
+const gl::PerfMonitorCounterGroups &ContextImpl::getPerfMonitorCounters() const
+{
+    static angle::base::NoDestructor<gl::PerfMonitorCounterGroups> sCounters;
+    return *sCounters;
+}
 }  // namespace rx
