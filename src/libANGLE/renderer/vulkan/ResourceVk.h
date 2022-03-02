@@ -86,6 +86,14 @@ class SharedResourceUse final : angle::NonCopyable
         mUse->counter++;
     }
 
+    ANGLE_INLINE void clone(const SharedResourceUse &rhs)
+    {
+        ASSERT(rhs.valid());
+        ASSERT(valid());
+        mUse->counter = rhs.mUse->counter;
+        mUse->serial  = rhs.mUse->serial;
+    }
+
     // The base counter value for a live resource is "1". Any value greater than one indicates
     // the resource is in use by a command buffer.
     ANGLE_INLINE bool usedInRecordedCommands() const
