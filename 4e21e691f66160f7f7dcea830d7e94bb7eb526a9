@@ -34,6 +34,24 @@
       "parentUuid": "9533f666_ac3b205e",
       "revId": "4e21e691f66160f7f7dcea830d7e94bb7eb526a9",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "05525c0a_053ba26f",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 13
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2022-03-02T19:15:07Z",
+      "side": 1,
+      "message": "It does add some additional code complexity - I guess my concern is that it might be better to avoid the code complexity if this is an issue that only affects application startup.",
+      "parentUuid": "94d5a4e8_2271cab5",
+      "revId": "4e21e691f66160f7f7dcea830d7e94bb7eb526a9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
