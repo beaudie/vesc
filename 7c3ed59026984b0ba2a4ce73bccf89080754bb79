@@ -166,6 +166,29 @@
       },
       "revId": "7c3ed59026984b0ba2a4ce73bccf89080754bb79",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "d840fe8b_36e189cd",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 2768,
+      "author": {
+        "id": 1359667
+      },
+      "writtenOn": "2022-03-02T19:45:37Z",
+      "side": 1,
+      "message": "This is choosing the min of these two values. So even if `getMaxSupportedESVersion()` returns 3.2, it is still capped here to 3.1. This also needs to be updated.",
+      "range": {
+        "startLine": 2768,
+        "startChar": 11,
+        "endLine": 2768,
+        "endChar": 62
+      },
+      "revId": "7c3ed59026984b0ba2a4ce73bccf89080754bb79",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
