@@ -87,6 +87,24 @@
       "parentUuid": "d2b7eb00_aa19d9fb",
       "revId": "16355f0e9ae343425f8ba1e274694478b3803708",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "4a0fdeb3_6dc7c923",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 8
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1340649
+      },
+      "writtenOn": "2022-03-02T17:54:43Z",
+      "side": 1,
+      "message": "i see what you mean, you were talking of from an entire buffer perspective instead of per-row.\n\n\u003e I suspect on some platforms we\u0027ll want to unaligned copies to just use memcpy anyway\n\nfrom what we have seen unaligned read issues manifest only on arm 32-bit platforms\n\n\u003e Let\u0027s land for now\n\nthanks",
+      "parentUuid": "2dd55073_3b80853e",
+      "revId": "16355f0e9ae343425f8ba1e274694478b3803708",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
