@@ -33,6 +33,24 @@
       "message": "Brandon, it would be welcome to instead fix this properly using the GLES requirements and Vulkan capabilities. See also similar work here:\n\nhttps://chromium-review.googlesource.com/c/angle/angle/+/3497683\n\nWhat are your thoughts on using a more general method?",
       "revId": "cc3a724ba5fa0a1b1fe94e31323846ce52001483",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "8f13f582_56ad4cf1",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1340649
+      },
+      "writtenOn": "2022-03-02T20:56:07Z",
+      "side": 1,
+      "message": "jamie, checking extension list and others will be a run time thing (when creating contexts). `kExposeNonConformantExtensionsAndVersions` is a build time flag\n\nthese 2 changes are tangential, Brandon\u0027s CL is so that we dont have to maintain a private patch enabling 3.2 version when we build upstream angle",
+      "parentUuid": "79387fdf_664a780c",
+      "revId": "cc3a724ba5fa0a1b1fe94e31323846ce52001483",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
