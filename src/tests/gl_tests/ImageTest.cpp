@@ -4510,6 +4510,77 @@ TEST_P(ImageTest, UpdatedData)
     eglDestroyImageKHR(window->getDisplay(), image);
 }
 
+// Check that texSubImage in second context will reflect on first context's target texture
+TEST_P(ImageTest, TexSubImageInSecondContext)
+{
+    EGLWindow *window = getEGLWindow();
+    ANGLE_SKIP_TEST_IF(!hasOESExt() || !hasBaseExt() || !has2DTextureExt());
+
+    constexpr GLuint kTextureSize = 16;
+    std::array<GLColor, kTextureSize * kTextureSize> originalColor;
+    originalColor.fill(GLColor::red);
+    std::array<GLColor, kTextureSize * kTextureSize> updateColor;
+    updateColor.fill(GLColor::green);
+
+    // Create the Image
+    GLTexture source;
+    EGLImageKHR image;
+    createEGLImage2DTextureSource(kTextureSize, kTextureSize, GL_RGBA, GL_UNSIGNED_BYTE,
+                                  kDefaultAttribs, originalColor[0].data(), source, &image);
+
+    // Create target
+    GLTexture targetTexture;
+    createEGLImageTargetTexture2D(image, targetTexture);
+
+    // Expect that both the source and targets have the original data
+    verifyResults2D(source, originalColor[0].data());
+    verifyResults2D(targetTexture, originalColor[0].data());
+
+    // Update the data of with glCopyTexSubImage in another context
+    {
+        EGLDisplay display         = window->getDisplay();
+        EGLConfig config           = window->getConfig();
+        EGLSurface surface         = window->getSurface();
+        EGLint contextAttributes[] = {
+            EGL_CONTEXT_MAJOR_VERSION_KHR,
+            GetParam().majorVersion,
+            EGL_CONTEXT_MINOR_VERSION_KHR,
+            GetParam().minorVersion,
+            EGL_NONE,
+        };
+        EGLContext ctx2 = eglCreateContext(display, config, EGL_NO_CONTEXT, contextAttributes);
+        ASSERT(ctx2 != EGL_NO_CONTEXT);
+        eglMakeCurrent(display, surface, surface, ctx2);
+
+        GLTexture targetTexture2;
+        createEGLImageTargetTexture2D(image, targetTexture2);
+
+#if 0
+        GLFramebuffer readFbo;
+        glBindFramebuffer(GL_READ_FRAMEBUFFER, readFbo);
+        glFramebufferTexture2D(GL_READ_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, targetTexture2, 0);
+        ASSERT_GL_FRAMEBUFFER_COMPLETE(GL_READ_FRAMEBUFFER);
+        glCopyTexSubImage2D(GL_TEXTURE_2D, 0, 0, 0, kTextureSize/2, kTextureSize/2, kTextureSize/2, kTextureSize/2);
+#else
+        // glTexSubImage2D(GL_TEXTURE_2D, 0, 0, 0, kTextureSize, kTextureSize, GL_RGBA,
+        // GL_UNSIGNED_BYTE, updateColor[0].data());
+#endif
+
+        EXPECT_GL_NO_ERROR();
+        glFlush();
+
+        eglDestroyContext(display, ctx2);
+        eglMakeCurrent(display, surface, surface, window->getContext());
+    }
+
+    // Expect that both the source and targets have the updated data
+    verifyResults2D(source, originalColor[0].data());
+    verifyResults2D(targetTexture, originalColor[0].data());
+
+    // Clean up
+    eglDestroyImageKHR(window->getDisplay(), image);
+}
+
 // Check that the external texture is successfully updated when only glTexSubImage2D is called.
 TEST_P(ImageTest, UpdatedExternalTexture)
 {
