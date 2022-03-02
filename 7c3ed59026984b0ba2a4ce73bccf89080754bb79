@@ -118,6 +118,30 @@
       },
       "revId": "7c3ed59026984b0ba2a4ce73bccf89080754bb79",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "949cac3f_14375c74",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 2660,
+      "author": {
+        "id": 1491823
+      },
+      "writtenOn": "2022-03-02T15:45:43Z",
+      "side": 1,
+      "message": "There are two problems: first there is this IDC mock check that forces GLES 3.2 and must be forced in the vulkan backend and somehow be maintained in the front-end, and then there is forcing GLES 3.2 by using the feature, which also would have to be done in the back-end, because the context version is already needed in vk_caps_utils.cpp:1222. So far I didn\u0027t test what happens if that piece always gets 3.2 as version ...",
+      "parentUuid": "9d9f0e75_b7fd5ccb",
+      "range": {
+        "startLine": 2658,
+        "startChar": 0,
+        "endLine": 2660,
+        "endChar": 27
+      },
+      "revId": "7c3ed59026984b0ba2a4ce73bccf89080754bb79",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
