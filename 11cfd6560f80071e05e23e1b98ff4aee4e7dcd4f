@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "569424a0_6b7c20c3",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 6
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2022-03-02T00:41:45Z",
+      "side": 1,
+      "message": "I implemented it differently now by splitting out garbage that pending submission into it\u0027s own list, so that they can be processed at the submission time. So please PTAL.",
+      "revId": "11cfd6560f80071e05e23e1b98ff4aee4e7dcd4f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
