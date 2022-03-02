@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "9533f666_ac3b205e",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 13
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2022-03-02T15:37:03Z",
+      "side": 1,
+      "message": "Sorry I haven\u0027t followed the conversation here - what led to the special case avoiding a RP break? Which application(s) would demonstrate this to be an issue? ",
+      "revId": "4e21e691f66160f7f7dcea830d7e94bb7eb526a9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
