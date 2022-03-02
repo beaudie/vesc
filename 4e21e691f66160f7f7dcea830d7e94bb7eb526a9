@@ -16,6 +16,24 @@
       "message": "Sorry I haven\u0027t followed the conversation here - what led to the special case avoiding a RP break? Which application(s) would demonstrate this to be an issue? ",
       "revId": "4e21e691f66160f7f7dcea830d7e94bb7eb526a9",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "94d5a4e8_2271cab5",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 13
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1525982
+      },
+      "writtenOn": "2022-03-02T19:13:41Z",
+      "side": 1,
+      "message": "We haven\u0027t seen this issue in any applications so far. The test was added just to ensure that the render pass doesn\u0027t end due to the outside command buffer submission triggered by the loading texture size, especially if the pattern of such submissions becomes more complex in the future.",
+      "parentUuid": "9533f666_ac3b205e",
+      "revId": "4e21e691f66160f7f7dcea830d7e94bb7eb526a9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
