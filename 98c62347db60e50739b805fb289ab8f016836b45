@@ -33,6 +33,24 @@
       "message": "Thanks, please ping me when merge to M96 gets approved.",
       "revId": "98c62347db60e50739b805fb289ab8f016836b45",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "8e88c61c_aa47c4ed",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1516057
+      },
+      "writtenOn": "2022-03-02T08:55:10Z",
+      "side": 1,
+      "message": "Thanks for reviewing Shahbaz, it was approved yesterday, could you please submit it?",
+      "parentUuid": "90d116f5_21be3e4a",
+      "revId": "98c62347db60e50739b805fb289ab8f016836b45",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
