@@ -18,6 +18,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "34c8723f_6d17662b",
+        "filename": "src/libANGLE/Display.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 2371,
+      "author": {
+        "id": 1528827
+      },
+      "writtenOn": "2022-03-02T10:20:59Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "a8796ea6_a0034a24",
+      "revId": "c05fd4456630b840934250b98573ec84bc500aad",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "be5cdfe6_ec186095",
@@ -35,6 +53,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "a1f8524f_2c3835e5",
+        "filename": "src/libANGLE/validationEGL.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 6528,
+      "author": {
+        "id": 1528827
+      },
+      "writtenOn": "2022-03-02T10:20:59Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "be5cdfe6_ec186095",
+      "revId": "c05fd4456630b840934250b98573ec84bc500aad",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "006b7829_8e3e9419",
@@ -48,6 +84,24 @@
       "writtenOn": "2022-03-01T22:10:58Z",
       "side": 1,
       "message": "ditto",
+      "revId": "c05fd4456630b840934250b98573ec84bc500aad",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "9c8e6a5d_03b358e8",
+        "filename": "src/libANGLE/validationEGL.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 6553,
+      "author": {
+        "id": 1528827
+      },
+      "writtenOn": "2022-03-02T10:20:59Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "006b7829_8e3e9419",
       "revId": "c05fd4456630b840934250b98573ec84bc500aad",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
