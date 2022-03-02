@@ -142,6 +142,30 @@
       },
       "revId": "7c3ed59026984b0ba2a4ce73bccf89080754bb79",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "4576ba12_9a473801",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 2660,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2022-03-02T15:54:39Z",
+      "side": 1,
+      "message": "Hm, I guess I\u0027m still unclear - what tests or apps start failing if we return 3.2 instead of 3.1 from (!mFeatures.exposeNonConformantExtensionsAndVersions.enabled)?\n\nAs far as I can see vk_caps_utils only uses the major version, not the minor.",
+      "parentUuid": "949cac3f_14375c74",
+      "range": {
+        "startLine": 2658,
+        "startChar": 0,
+        "endLine": 2660,
+        "endChar": 27
+      },
+      "revId": "7c3ed59026984b0ba2a4ce73bccf89080754bb79",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
