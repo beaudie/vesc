@@ -645,6 +645,10 @@ struct FeaturesVk : FeatureSetBase
     Feature retainSpirvDebugInfo = {"retainSpirvDebugInfo", FeatureCategory::VulkanFeatures,
                                     "Retain debug info in SPIR-V blob.", &members,
                                     "http://anglebug.com/5901"};
+
+    Feature limitConformantGlesVersionTo31 = {"limitConformantGlesVersionTo31",
+                                              FeatureCategory::VulkanFeatures,
+                                              "Limit the maxiumum GLES version to 3.1", &members};
 };
 
 inline FeaturesVk::FeaturesVk()  = default;

@@ -2728,7 +2728,9 @@ gl::Version RendererVk::getMaxSupportedESVersion() const
 
 gl::Version RendererVk::getMaxConformantESVersion() const
 {
-    return LimitVersionTo(getMaxSupportedESVersion(), {3, 1});
+    return mFeatures.limitConformantGlesVersionTo31.enabled
+               ? LimitVersionTo(getMaxSupportedESVersion(), {3, 1})
+               : getMaxSupportedESVersion();
 }
 
 void RendererVk::initFeatures(DisplayVk *displayVk,
@@ -3133,7 +3135,7 @@ void RendererVk::initFeatures(DisplayVk *displayVk,
 
     // Whether non-conformant configurations and extensions should be exposed.
     ANGLE_FEATURE_CONDITION(&mFeatures, exposeNonConformantExtensionsAndVersions,
-                            kExposeNonConformantExtensionsAndVersions);
+                            kExposeNonConformantExtensionsAndVersions || isSamsung);
 
     // Disabled by default. Only enable it for experimental purpose, as this will cause various
     // tests to fail.
@@ -3187,6 +3189,8 @@ void RendererVk::initFeatures(DisplayVk *displayVk,
 
     // Retain debug info in SPIR-V blob.
     ANGLE_FEATURE_CONDITION(&mFeatures, retainSpirvDebugInfo, getEnableValidationLayers());
+
+    ANGLE_FEATURE_CONDITION(&mFeatures, limitConformantGlesVersionTo31, !isSamsung);
 
     angle::PlatformMethods *platform = ANGLEPlatformCurrent();
     platform->overrideFeaturesVk(platform, &mFeatures);
