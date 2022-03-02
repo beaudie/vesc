@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "892bb9e1_c13aac3b",
+        "filename": "doc/CaptureAndReplay.md",
+        "patchSetId": 1
+      },
+      "lineNbr": 76,
+      "author": {
+        "id": 1531247
+      },
+      "writtenOn": "2022-03-02T22:39:02Z",
+      "side": 1,
+      "message": "`gn gen` breaks due to missing .txt file when I follow these steps, maybe https://anglebug.com/5911 should be linked here?",
+      "range": {
+        "startLine": 76,
+        "startChar": 0,
+        "endLine": 76,
+        "endChar": 2
+      },
+      "revId": "aa9e7cae66afc4226d3d4b7188ee522b4ad5efed",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "6441ca5d_77fa3824",
+        "filename": "doc/CaptureAndReplay.md",
+        "patchSetId": 1
+      },
+      "lineNbr": 94,
+      "author": {
+        "id": 1531247
+      },
+      "writtenOn": "2022-03-02T22:39:02Z",
+      "side": 1,
+      "message": "These steps worked on my cloudtop with simple_texture_2d!",
+      "range": {
+        "startLine": 94,
+        "startChar": 3,
+        "endLine": 94,
+        "endChar": 29
+      },
+      "revId": "aa9e7cae66afc4226d3d4b7188ee522b4ad5efed",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
