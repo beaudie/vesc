@@ -18,6 +18,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "85b95410_f4349244",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 11
+      },
+      "lineNbr": 2464,
+      "author": {
+        "id": 1525982
+      },
+      "writtenOn": "2022-03-02T03:01:03Z",
+      "side": 1,
+      "message": "Refactored into a helper function.",
+      "parentUuid": "0cda4289_c3bbe51f",
+      "revId": "27aa1574db67a5f14d3b4495d8d8f29344ec005e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "341fa8ef_d59c5b8a",
@@ -35,6 +53,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "c89be871_8aa3861f",
+        "filename": "src/libANGLE/renderer/vulkan/SecondaryCommandBuffer.h",
+        "patchSetId": 11
+      },
+      "lineNbr": 1131,
+      "author": {
+        "id": 1525982
+      },
+      "writtenOn": "2022-03-02T03:01:03Z",
+      "side": 1,
+      "message": "Comment updated.",
+      "parentUuid": "341fa8ef_d59c5b8a",
+      "revId": "27aa1574db67a5f14d3b4495d8d8f29344ec005e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "a66cbb14_84649214",
@@ -48,6 +84,24 @@
       "writtenOn": "2022-03-01T22:40:55Z",
       "side": 1,
       "message": "This function is unused?",
+      "revId": "27aa1574db67a5f14d3b4495d8d8f29344ec005e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "ffd14fb7_97b472ba",
+        "filename": "src/libANGLE/renderer/vulkan/vk_command_buffer_utils.h",
+        "patchSetId": 11
+      },
+      "lineNbr": 27,
+      "author": {
+        "id": 1525982
+      },
+      "writtenOn": "2022-03-02T03:01:03Z",
+      "side": 1,
+      "message": "Yes. Removed.",
+      "parentUuid": "a66cbb14_84649214",
       "revId": "27aa1574db67a5f14d3b4495d8d8f29344ec005e",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
@@ -75,6 +129,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "fa2ebc69_29d8acd4",
+        "filename": "src/libANGLE/renderer/vulkan/vk_command_buffer_utils.h",
+        "patchSetId": 11
+      },
+      "lineNbr": 37,
+      "author": {
+        "id": 1525982
+      },
+      "writtenOn": "2022-03-02T03:01:03Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "558891df_3982aaeb",
+      "range": {
+        "startLine": 37,
+        "startChar": 33,
+        "endLine": 37,
+        "endChar": 71
+      },
+      "revId": "27aa1574db67a5f14d3b4495d8d8f29344ec005e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "3a21b003_679e60d8",
@@ -88,6 +166,24 @@
       "writtenOn": "2022-03-01T22:40:55Z",
       "side": 1,
       "message": "I realize now that CommandBufferCommandTracker is not actually a good place to store this. Could you please move this to ContextVk? Basically the outside command buffer helper may be flushed to the primary CB multiple times before a render pass is done, and so this keeps getting reset.",
+      "revId": "27aa1574db67a5f14d3b4495d8d8f29344ec005e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "307692fc_d1e6777d",
+        "filename": "src/libANGLE/renderer/vulkan/vk_command_buffer_utils.h",
+        "patchSetId": 11
+      },
+      "lineNbr": 39,
+      "author": {
+        "id": 1525982
+      },
+      "writtenOn": "2022-03-02T03:01:03Z",
+      "side": 1,
+      "message": "Moved mCopySize and related functions to ContextVk.",
+      "parentUuid": "3a21b003_679e60d8",
       "revId": "27aa1574db67a5f14d3b4495d8d8f29344ec005e",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
