@@ -16,6 +16,46 @@
       "message": "PTAL",
       "revId": "dd8f4c7f2bb0e6af6968d738cbac3157342c9501",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "718abd6c_9a47d9d5",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 14
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2022-03-03T22:37:37Z",
+      "side": 1,
+      "message": "LGTM",
+      "revId": "dd8f4c7f2bb0e6af6968d738cbac3157342c9501",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "1d0be4fd_1f484815",
+        "filename": "src/libANGLE/renderer/vulkan/vk_cache_utils.h",
+        "patchSetId": 14
+      },
+      "lineNbr": 1145,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2022-03-03T22:37:37Z",
+      "side": 1,
+      "message": "nit: cheaper just return mPayload.size() and do `* sizeof(uint32_t)\u0027 in the very end, which means name this as getKeySize();",
+      "range": {
+        "startLine": 1145,
+        "startChar": 11,
+        "endLine": 1145,
+        "endChar": 26
+      },
+      "revId": "dd8f4c7f2bb0e6af6968d738cbac3157342c9501",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
