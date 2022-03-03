@@ -3,6 +3,23 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "ae98464e_22b22467",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2022-03-03T19:52:15Z",
+      "side": 1,
+      "message": "Yuxin, did you verify mac-swangle-chromium-try-x64 on the try check fails before you added the fix? Just want to make our testing is valid.",
+      "revId": "7c2892f969f9c5556f9ad348cecce757fd7c971a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "ff040295_948f5b5a",
         "filename": "src/libANGLE/renderer/vulkan/ResourceVk.h",
         "patchSetId": 2
