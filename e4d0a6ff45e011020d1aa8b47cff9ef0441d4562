@@ -16,6 +16,23 @@
       "message": "any more comments about the changes. \n\nthanks\n\nhailin ",
       "revId": "e4d0a6ff45e011020d1aa8b47cff9ef0441d4562",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "90f9a704_a6913d8d",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 6
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2022-03-03T19:48:54Z",
+      "side": 1,
+      "message": "Shabi\u0027s temporarily OOO. Approving in his absence, though feel free to leave any comments for follow-up Shabi.",
+      "revId": "e4d0a6ff45e011020d1aa8b47cff9ef0441d4562",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
