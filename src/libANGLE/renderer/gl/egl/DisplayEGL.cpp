@@ -789,9 +789,19 @@ egl::Error DisplayEGL::makeCurrent(egl::Display *display,
     return DisplayGL::makeCurrent(display, drawSurface, readSurface, context);
 }
 
-gl::Version DisplayEGL::getMaxSupportedESVersion() const
+gl::Version DisplayEGL::getMaxSupportedESVersionImpl() const
 {
     return mRenderer->getMaxSupportedESVersion();
+}
+
+const gl::Caps &DisplayEGL::getNativeCaps() const
+{
+    return mRenderer->getNativeCaps();
+}
+
+const gl::Extensions &DisplayEGL::getNativeExtensions() const
+{
+    return mRenderer->getNativeExtensions();
 }
 
 void DisplayEGL::destroyNativeContext(EGLContext context)

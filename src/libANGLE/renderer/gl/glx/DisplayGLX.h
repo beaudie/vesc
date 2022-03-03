@@ -73,8 +73,6 @@ class DisplayGLX : public DisplayGL
     egl::Error waitClient(const gl::Context *context) override;
     egl::Error waitNative(const gl::Context *context, EGLint engine) override;
 
-    gl::Version getMaxSupportedESVersion() const override;
-
     // Synchronizes with the X server.
     // Calling this is required at the end of every functions that does buffered
     // X calls (not for glX calls) otherwise there might be race conditions
@@ -117,6 +115,11 @@ class DisplayGLX : public DisplayGL
                                     const Optional<gl::Version> &version,
                                     int profileMask,
                                     glx::Context *context);
+
+    gl::Version getMaxSupportedESVersionImpl() const override;
+
+    const gl::Caps &getNativeCaps() const override;
+    const gl::Extensions &getNativeExtensions() const override;
 
     std::shared_ptr<RendererGL> mRenderer;
 

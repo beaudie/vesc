@@ -87,8 +87,6 @@ class DisplayEGL : public DisplayGL
                            egl::Surface *readSurface,
                            gl::Context *context) override;
 
-    gl::Version getMaxSupportedESVersion() const override;
-
     void initializeFrontendFeatures(angle::FrontendFeatures *features) const override;
 
     void populateFeatureList(angle::FeatureList *features) override;
@@ -126,6 +124,10 @@ class DisplayEGL : public DisplayGL
                               std::shared_ptr<RendererEGL> *outRenderer);
 
     egl::Error makeCurrentSurfaceless(gl::Context *context) override;
+
+    gl::Version getMaxSupportedESVersionImpl() const override;
+    const gl::Caps &getNativeCaps() const override;
+    const gl::Extensions &getNativeExtensions() const override;
 
     template <typename T>
     void getConfigAttrib(EGLConfig config, EGLint attribute, T *value) const;

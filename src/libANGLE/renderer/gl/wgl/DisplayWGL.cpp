@@ -762,9 +762,9 @@ void DisplayWGL::releaseD3DDevice(HANDLE deviceHandle)
     }
 }
 
-gl::Version DisplayWGL::getMaxSupportedESVersion() const
+gl::Version DisplayWGL::getMaxSupportedESVersionImpl() const
 {
-    return mRenderer->getMaxSupportedESVersion();
+    gl::Version version = mRenderer->getMaxSupportedESVersion();
 }
 
 void DisplayWGL::destroyNativeContext(HGLRC context)

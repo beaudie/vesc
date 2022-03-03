@@ -1114,6 +1114,30 @@ void RendererVk::ensureCapsInitialized() const
 
     // GL_KHR_parallel_shader_compile
     mNativeExtensions.parallelShaderCompileKHR = false;
+
+    if (mFeatures.exposeNonConformantExtensionsAndVersions.enabled)
+    {
+        mNativeExtensions.blendEquationAdvancedKHR            = true;
+        mNativeExtensions.colorBufferFloatEXT                 = true;
+        mNativeExtensions.copyImageOES                        = true;
+        mNativeExtensions.debugKHR                            = true;
+        mNativeExtensions.drawBuffersIndexedOES               = true;
+        mNativeExtensions.drawElementsBaseVertexOES           = true;
+        mNativeExtensions.geometryShaderOES                   = true;
+        mNativeExtensions.gpuShader5EXT                       = true;
+        mNativeExtensions.robustnessEXT                       = true;
+        mNativeExtensions.sampleShadingOES                    = true;
+        mNativeExtensions.sampleVariablesOES                  = true;
+        mNativeExtensions.shaderMultisampleInterpolationOES   = true;
+        mNativeExtensions.tessellationShaderEXT               = true;
+        mNativeExtensions.textureBorderClampOES               = true;
+        mNativeExtensions.textureBufferOES                    = true;
+        mNativeExtensions.textureCompressionAstcHdrKHR        = true;
+        mNativeExtensions.textureCompressionAstcLdrKHR        = true;
+        mNativeExtensions.textureCubeMapArrayOES              = true;
+        mNativeExtensions.textureStencil8OES                  = true;
+        mNativeExtensions.textureStorageMultisample2dArrayOES = true;
+    }
 }
 
 namespace vk

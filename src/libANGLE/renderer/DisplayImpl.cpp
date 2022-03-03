@@ -111,6 +111,35 @@ const egl::Caps &DisplayImpl::getCaps() const
     return mCaps;
 }
 
+gl::Version DisplayImpl::getMaxSupportedESVersion() const
+{
+    gl::Version version = getMaxSupportedESVersionImpl();
+
+    // if the backend reports the largest possible version, don't bother
+    // doing further checks
+    if (version.major == 3 && version.minor == 2)
+    {
+        return version;
+    }
+
+    const gl::Extensions &extensions = getNativeExtensions();
+
+    if (version.major == 3 && version.minor >= 1 && extensions.gpuShader5EXT &&
+        extensions.blendEquationAdvancedKHR && extensions.colorBufferFloatEXT &&
+        extensions.copyImageOES && extensions.debugKHR && extensions.drawBuffersIndexedOES &&
+        extensions.drawElementsBaseVertexOES && extensions.geometryShaderOES &&
+        extensions.primitiveBoundingBoxOES && extensions.robustnessEXT &&
+        extensions.sampleShadingOES && extensions.sampleVariablesOES &&
+        extensions.shaderMultisampleInterpolationOES && extensions.shaderImageAtomicOES &&
+        extensions.tessellationShaderEXT && extensions.shaderIoBlocksAny() &&
+        extensions.textureBorderClampOES && extensions.textureBufferOES &&
+        extensions.textureCompressionAstcHdrKHR && extensions.textureCubeMapArrayOES &&
+        extensions.textureStencil8OES && extensions.textureStorageMultisample2dArrayOES)
+        version.minor = 2;
+
+    return version;
+}
+
 DeviceImpl *DisplayImpl::createDevice()
 {
     return new MockDevice();

@@ -74,8 +74,6 @@ class DisplayWGL : public DisplayGL
     egl::Error registerD3DDevice(IUnknown *device, HANDLE *outHandle);
     void releaseD3DDevice(HANDLE handle);
 
-    gl::Version getMaxSupportedESVersion() const override;
-
     void destroyNativeContext(HGLRC context);
 
     WorkerContext *createWorkerContext(std::string *infoLog,
@@ -89,6 +87,10 @@ class DisplayWGL : public DisplayGL
     RendererGL *getRenderer() const override;
 
   private:
+    gl::Version getMaxSupportedESVersionImpl() const override;
+    const gl::Caps &getNativeCaps() const override;
+    const gl::Extensions &getNativeExtensions() const override;
+
     egl::Error initializeImpl(egl::Display *display);
     void destroy();
 

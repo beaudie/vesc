@@ -76,8 +76,6 @@ class DisplayEAGL : public DisplayGL
     egl::Error waitClient(const gl::Context *context) override;
     egl::Error waitNative(const gl::Context *context, EGLint engine) override;
 
-    gl::Version getMaxSupportedESVersion() const override;
-
     EAGLContextObj getEAGLContext() const;
 
     WorkerContext *createWorkerContext(std::string *infoLog);
@@ -90,6 +88,9 @@ class DisplayEAGL : public DisplayGL
 
   private:
     egl::Error makeCurrentSurfaceless(gl::Context *context) override;
+    gl::Version getMaxSupportedESVersionImpl() const override;
+    const gl::Caps &getNativeCaps() const override;
+    const gl::Extensions &getNativeExtensions() const override;
 
     void generateExtensions(egl::DisplayExtensions *outExtensions) const override;
     void generateCaps(egl::Caps *outCaps) const override;

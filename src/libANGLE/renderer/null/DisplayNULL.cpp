@@ -137,9 +137,19 @@ egl::Error DisplayNULL::waitNative(const gl::Context *context, EGLint engine)
     return egl::NoError();
 }
 
-gl::Version DisplayNULL::getMaxSupportedESVersion() const
+gl::Version DisplayNULL::getMaxSupportedESVersionImpl() const
 {
     return gl::Version(3, 2);
+}
+
+const gl::Extensions &DisplayNULL::getNativeExtensions() const
+{
+    return mExtensions;
+}
+
+const gl::Caps &DisplayNULL::getNativeCaps() const
+{
+    return mCaps;
 }
 
 gl::Version DisplayNULL::getMaxConformantESVersion() const

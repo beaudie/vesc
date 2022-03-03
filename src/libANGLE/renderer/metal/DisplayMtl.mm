@@ -416,7 +416,7 @@ ExternalImageSiblingImpl *DisplayMtl::createExternalImageSibling(const gl::Conte
     }
 }
 
-gl::Version DisplayMtl::getMaxSupportedESVersion() const
+gl::Version DisplayMtl::getMaxSupportedESVersionImpl() const
 {
 #if TARGET_OS_SIMULATOR
     // Simulator should be able to support ES3, despite not supporting iOS GPU

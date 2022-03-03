@@ -107,6 +107,16 @@ std::string DisplayVk::getVersionString(bool includeFullVersion)
     return std::string();
 }
 
+const gl::Extensions &DisplayVk::getNativeExtensions() const
+{
+    return mRenderer->getNativeExtensions();
+}
+
+const gl::Caps &DisplayVk::getNativeCaps() const
+{
+    return mRenderer->getNativeCaps();
+}
+
 DeviceImpl *DisplayVk::createDevice()
 {
     return new DeviceVk();
@@ -197,7 +207,7 @@ EGLSyncImpl *DisplayVk::createSync(const egl::AttributeMap &attribs)
     return new EGLSyncVk(attribs);
 }
 
-gl::Version DisplayVk::getMaxSupportedESVersion() const
+gl::Version DisplayVk::getMaxSupportedESVersionImpl() const
 {
     return mRenderer->getMaxSupportedESVersion();
 }

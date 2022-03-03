@@ -329,7 +329,7 @@ egl::Error DisplayEAGL::waitNative(const gl::Context *context, EGLint engine)
     return egl::NoError();
 }
 
-gl::Version DisplayEAGL::getMaxSupportedESVersion() const
+gl::Version DisplayEAGL::getMaxSupportedESVersionImpl() const
 {
     return mRenderer->getMaxSupportedESVersion();
 }

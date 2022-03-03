@@ -820,9 +820,19 @@ egl::Error DisplayGLX::waitNative(const gl::Context *context, EGLint engine)
     return egl::NoError();
 }
 
-gl::Version DisplayGLX::getMaxSupportedESVersion() const
+gl::Version DisplayGLX::getMaxSupportedESVersionImpl() const
 {
     return mRenderer->getMaxSupportedESVersion();
+}
+
+const gl::Caps &DisplayGLX::getNativeCaps() const
+{
+    return mRenderer->getNativeCaps();
+}
+
+const gl::Extensions &DisplayGLX::getNativeExtensions() const
+{
+    return mRenderer->getNativeExtensions();
 }
 
 void DisplayGLX::syncXCommands(bool alwaysSync) const

@@ -89,7 +89,6 @@ class DisplayMtl : public DisplayImpl
                                                          EGLenum target,
                                                          EGLClientBuffer buffer,
                                                          const egl::AttributeMap &attribs) override;
-    gl::Version getMaxSupportedESVersion() const override;
     gl::Version getMaxConformantESVersion() const override;
 
     EGLSyncImpl *createSync(const egl::AttributeMap &attribs) override;
@@ -167,6 +166,7 @@ class DisplayMtl : public DisplayImpl
     void generateCaps(egl::Caps *outCaps) const override;
 
   private:
+    gl::Version getMaxSupportedESVersionImpl() const override;
     angle::Result initializeImpl(egl::Display *display);
     void ensureCapsInitialized() const;
     void initializeCaps() const;

@@ -112,6 +112,8 @@ class Format final : private angle::NonCopyable
 
     LoadImageFunctionInfo getTextureLoadFunction(ImageAccess access, GLenum type) const
     {
+        ASSERT(mRenderableTextureLoadFunctions);
+        ASSERT(mTextureLoadFunctions);
         return ImageAccess::Renderable == access ? mRenderableTextureLoadFunctions(type)
                                                  : mTextureLoadFunctions(type);
     }

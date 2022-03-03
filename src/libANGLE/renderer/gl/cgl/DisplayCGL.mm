@@ -504,9 +504,19 @@ egl::Error DisplayCGL::waitNative(const gl::Context *context, EGLint engine)
     return egl::NoError();
 }
 
-gl::Version DisplayCGL::getMaxSupportedESVersion() const
+gl::Version DisplayCGL::getMaxSupportedESVersionImpl() const
 {
     return mRenderer->getMaxSupportedESVersion();
+}
+
+const gl::Caps &DisplayCGL::getNativeCaps() const
+{
+    return mRenderer->getNativeCaps();
+}
+
+const gl::Extensions &DisplayCGL::getNativextensions() const
+{
+    return mRenderer->getNativeExtensions();
 }
 
 egl::Error DisplayCGL::makeCurrentSurfaceless(gl::Context *context)

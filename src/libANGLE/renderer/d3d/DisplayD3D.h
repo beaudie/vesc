@@ -90,7 +90,6 @@ class DisplayD3D : public DisplayImpl, public d3d::Context
 
     egl::Error waitClient(const gl::Context *context) override;
     egl::Error waitNative(const gl::Context *context, EGLint engine) override;
-    gl::Version getMaxSupportedESVersion() const override;
     gl::Version getMaxConformantESVersion() const override;
 
     void handleResult(HRESULT hr,
@@ -104,6 +103,9 @@ class DisplayD3D : public DisplayImpl, public d3d::Context
     void populateFeatureList(angle::FeatureList *features) override;
 
   private:
+    gl::Version getMaxSupportedESVersionImpl() const override;
+    const gl::Caps &getNativeCaps() const override;
+    const gl::Extensions &getNativeExtensions() const override;
     void generateExtensions(egl::DisplayExtensions *outExtensions) const override;
     void generateCaps(egl::Caps *outCaps) const override;
 

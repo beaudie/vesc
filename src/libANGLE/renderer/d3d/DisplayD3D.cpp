@@ -419,9 +419,19 @@ egl::Error DisplayD3D::waitNative(const gl::Context *context, EGLint engine)
     return egl::NoError();
 }
 
-gl::Version DisplayD3D::getMaxSupportedESVersion() const
+gl::Version DisplayD3D::getMaxSupportedESVersionImpl() const
 {
     return mRenderer->getMaxSupportedESVersion();
+}
+
+const gl::Caps &DisplayD3D::getNativeCaps() const
+{
+    return mRenderer->getNativeCaps();
+}
+
+const gl::Extensions &DisplayD3D::getNativeExtensions() const
+{
+    return mRenderer->getNativeExtensions();
 }
 
 gl::Version DisplayD3D::getMaxConformantESVersion() const

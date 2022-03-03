@@ -128,7 +128,6 @@ class DisplayVk : public DisplayImpl, public vk::Context
 
     EGLSyncImpl *createSync(const egl::AttributeMap &attribs) override;
 
-    gl::Version getMaxSupportedESVersion() const override;
     gl::Version getMaxConformantESVersion() const override;
 
     egl::Error validateImageClientBuffer(const gl::Context *context,
@@ -169,6 +168,10 @@ class DisplayVk : public DisplayImpl, public vk::Context
     void generateExtensions(egl::DisplayExtensions *outExtensions) const override;
 
   private:
+    gl::Version getMaxSupportedESVersionImpl() const override;
+    const gl::Extensions &getNativeExtensions() const override;
+    const gl::Caps &getNativeCaps() const override;
+
     virtual SurfaceImpl *createWindowSurfaceVk(const egl::SurfaceState &state,
                                                EGLNativeWindowType window) = 0;
     void generateCaps(egl::Caps *outCaps) const override;

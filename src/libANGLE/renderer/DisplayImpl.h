@@ -102,8 +102,8 @@ class DisplayImpl : public EGLImplFactory, public angle::Subject
 
     virtual egl::Error waitClient(const gl::Context *context)                = 0;
     virtual egl::Error waitNative(const gl::Context *context, EGLint engine) = 0;
-    virtual gl::Version getMaxSupportedESVersion() const                     = 0;
-    virtual gl::Version getMaxConformantESVersion() const                    = 0;
+    gl::Version getMaxSupportedESVersion() const;
+    virtual gl::Version getMaxConformantESVersion() const = 0;
     const egl::Caps &getCaps() const;
 
     virtual void setBlobCacheFuncs(EGLSetBlobFuncANDROID set, EGLGetBlobFuncANDROID get) {}
@@ -127,6 +127,9 @@ class DisplayImpl : public EGLImplFactory, public angle::Subject
     const egl::DisplayState &mState;
 
   private:
+    virtual gl::Version getMaxSupportedESVersionImpl() const                     = 0;
+    virtual const gl::Extensions &getNativeExtensions() const                    = 0;
+    virtual const gl::Caps &getNativeCaps() const                                = 0;
     virtual void generateExtensions(egl::DisplayExtensions *outExtensions) const = 0;
     virtual void generateCaps(egl::Caps *outCaps) const                          = 0;
 
