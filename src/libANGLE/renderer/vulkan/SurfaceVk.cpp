@@ -175,6 +175,8 @@ VkColorSpaceKHR MapEglColorSpaceToVkColorSpace(EGLenum EGLColorspace)
             return VK_COLOR_SPACE_EXTENDED_SRGB_LINEAR_EXT;
         case EGL_GL_COLORSPACE_SCRGB_EXT:
             return VK_COLOR_SPACE_EXTENDED_SRGB_NONLINEAR_EXT;
+        case EGL_GL_COLORSPACE_BT2020_LINEAR_EXT:
+            return VK_COLOR_SPACE_BT2020_LINEAR_EXT;
         default:
             UNREACHABLE();
             return VK_COLOR_SPACE_SRGB_NONLINEAR_KHR;

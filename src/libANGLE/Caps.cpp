@@ -1300,6 +1300,7 @@ std::vector<std::string> DisplayExtensions::getStrings() const
     InsertExtensionString("EGL_KHR_lock_surface3",                               lockSurface3KHR,                    &extensionStrings);
     InsertExtensionString("EGL_ANGLE_vulkan_image",                              vulkanImageANGLE,                   &extensionStrings);
     InsertExtensionString("EGL_ANGLE_metal_create_context_ownership_identity",   metalCreateContextOwnershipIdentityANGLE, &extensionStrings);
+    InsertExtensionString("EGL_EXT_gl_colorspace_bt2020_linear",                 glColorspaceBt2020EXT,              &extensionStrings);
     // clang-format on
 
     return extensionStrings;

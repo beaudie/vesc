@@ -346,6 +346,8 @@ void DisplayVk::generateExtensions(egl::DisplayExtensions *outExtensions) const
 
     outExtensions->lockSurface3KHR =
         getRenderer()->getFeatures().supportsLockSurfaceExtension.enabled;
+
+    outExtensions->glColorspaceBt2020EXT = true;
 }
 
 void DisplayVk::generateCaps(egl::Caps *outCaps) const

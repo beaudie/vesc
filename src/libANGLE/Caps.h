@@ -646,6 +646,9 @@ struct DisplayExtensions
 
     // EGL_ANGLE_metal_create_context_ownership_identity
     bool metalCreateContextOwnershipIdentityANGLE = false;
+
+    // EGL_EXT_gl_colorspace_bt2020_linear
+    bool glColorspaceBt2020EXT = false;
 };
 
 struct DeviceExtensions
