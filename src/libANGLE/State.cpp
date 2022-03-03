@@ -425,7 +425,8 @@ State::~State() {}
 void State::initialize(Context *context)
 {
     const Extensions &nativeExtensions = context->getImplementation()->getNativeExtensions();
-    const Version &clientVersion       = context->getClientVersion();
+    const Version &clientVersion = isWebGL() ? std::min(context->getClientVersion(), Version(3, 1))
+                                             : context->getClientVersion();
 
     mBlendStateExt = BlendStateExt(mCaps.maxDrawBuffers);
 

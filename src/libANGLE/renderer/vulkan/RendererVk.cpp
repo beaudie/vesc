@@ -2728,7 +2728,9 @@ gl::Version RendererVk::getMaxSupportedESVersion() const
 
 gl::Version RendererVk::getMaxConformantESVersion() const
 {
-    return LimitVersionTo(getMaxSupportedESVersion(), {3, 1});
+    return mFeatures.exposeNonConformantExtensionsAndVersions.enabled
+               ? getMaxSupportedESVersion()
+               : LimitVersionTo(getMaxSupportedESVersion(), {3, 1});
 }
 
 void RendererVk::initFeatures(DisplayVk *displayVk,
