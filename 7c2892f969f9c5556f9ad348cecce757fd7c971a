@@ -18,6 +18,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "ffb2a979_37edffd1",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1520902
+      },
+      "writtenOn": "2022-03-03T21:03:36Z",
+      "side": 1,
+      "message": "Hi Jamie, yes I ran the mac-swangle-chromium-try-x64 on the patch1: https://ci.chromium.org/ui/p/chromium/builders/try/mac-swangle-chromium-try-x64/135/overview, and the test failed as expected.",
+      "parentUuid": "ae98464e_22b22467",
+      "revId": "7c2892f969f9c5556f9ad348cecce757fd7c971a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "ff040295_948f5b5a",
