@@ -36,6 +36,23 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "cd749a8f_996245c9",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2022-03-03T21:13:16Z",
+      "side": 1,
+      "message": "LGTM pending further comments from Charlie.",
+      "revId": "7c2892f969f9c5556f9ad348cecce757fd7c971a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "ff040295_948f5b5a",
@@ -120,6 +137,30 @@
       "side": 1,
       "message": "If the image is used in a single context\u0027s recorded commands, then we should allow for immediate GC. Right now you\u0027re asserting the image is never used in any context, which seems like it might not fix the issue.\n\nAdding a new method like \"usedInMultipleRecordedCommands\" might be appropriate.",
       "parentUuid": "bfdaa6c8_4a77efdc",
+      "range": {
+        "startLine": 4742,
+        "startChar": 4,
+        "endLine": 4766,
+        "endChar": 5
+      },
+      "revId": "7c2892f969f9c5556f9ad348cecce757fd7c971a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "4d3116b2_a311add7",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 4766,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2022-03-03T21:13:16Z",
+      "side": 1,
+      "message": "Charlie pointed out that we still don\u0027t know which context is using the image, so we have to rely on \"isUsedInRecordedCommands\".",
+      "parentUuid": "18eae6c9_f4af43c6",
       "range": {
         "startLine": 4742,
         "startChar": 4,
