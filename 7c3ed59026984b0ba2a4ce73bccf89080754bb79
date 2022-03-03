@@ -170,6 +170,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "500df8b4_7fe7ddd1",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 2660,
+      "author": {
+        "id": 1491823
+      },
+      "writtenOn": "2022-03-03T20:09:13Z",
+      "side": 1,
+      "message": "There are two tests in the expectations that fail (crash). \n\nNow after trying to somehow move the checks to the front-end I realized that `exposeNonConformantExtensionsAndVersions` is a Vulkan only feature, so it can\u0027t be used outside the Vulkan back-end. This complicates things. I thought that overriding the enabled extensions in the back-end would work, but then I saw that I actually end up in DisplayGLX and not in DisplayVK, but there I also don\u0027t have access to the feature override, so something goes wrong and the otherwise passing test  GetImageTestES32.CompressedTexImageCubeMapArray/ES3_2_Vulkan crashes with a null-pointer deref because some function pointer is 0, probably because the front-end still thinks that it is GLES 3.1. In summary, I could imagine that the only way to move this into the front-end would be to also move `exposeNonConformantExtensionsAndVersions` into front-end features.",
+      "parentUuid": "4576ba12_9a473801",
+      "range": {
+        "startLine": 2658,
+        "startChar": 0,
+        "endLine": 2660,
+        "endChar": 27
+      },
+      "revId": "7c3ed59026984b0ba2a4ce73bccf89080754bb79",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "d840fe8b_36e189cd",
         "filename": "src/libANGLE/renderer/vulkan/RendererVk.cpp",
         "patchSetId": 1
@@ -181,6 +205,30 @@
       "writtenOn": "2022-03-02T19:45:37Z",
       "side": 1,
       "message": "This is choosing the min of these two values. So even if `getMaxSupportedESVersion()` returns 3.2, it is still capped here to 3.1. This also needs to be updated.",
+      "range": {
+        "startLine": 2768,
+        "startChar": 11,
+        "endLine": 2768,
+        "endChar": 62
+      },
+      "revId": "7c3ed59026984b0ba2a4ce73bccf89080754bb79",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "942daa99_1ad77070",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 2768,
+      "author": {
+        "id": 1491823
+      },
+      "writtenOn": "2022-03-03T20:09:13Z",
+      "side": 1,
+      "message": "`getMaxConformantESVersion()` is only called in `Context.cpp:GetClientVersion` and it is only used to upgrade the requested client version under certain circumstances. If the client requests 3.2 it is of no consequence if this function returns a value that is lower.",
+      "parentUuid": "d840fe8b_36e189cd",
       "range": {
         "startLine": 2768,
         "startChar": 11,
