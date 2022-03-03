@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ecda2513_0baa5f07",
+        "filename": "doc/CaptureAndReplay.md",
+        "patchSetId": 2
+      },
+      "lineNbr": 128,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2022-03-03T14:31:54Z",
+      "side": 1,
+      "message": "this isn\u0027t necessary to run the trace, and it is only necessary if you\u0027re going to upload / download the trace from cloud storage. I\u0027d suggest removing these steps.",
+      "range": {
+        "startLine": 124,
+        "startChar": 0,
+        "endLine": 128,
+        "endChar": 3
+      },
+      "revId": "b9af57c951e450cc02cc07576369313af1c1a94c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
