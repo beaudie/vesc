@@ -76,6 +76,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "89ec35ce_adfe570c",
+        "filename": "src/libANGLE/renderer/vulkan/ResourceVk.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 95,
+      "author": {
+        "id": 1520902
+      },
+      "writtenOn": "2022-03-03T22:23:41Z",
+      "side": 1,
+      "message": "Thanks Charlie!",
+      "parentUuid": "ff040295_948f5b5a",
+      "range": {
+        "startLine": 89,
+        "startChar": 4,
+        "endLine": 95,
+        "endChar": 5
+      },
+      "revId": "7c2892f969f9c5556f9ad348cecce757fd7c971a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "1bf5577f_f958064e",
@@ -171,6 +195,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "18afc50f_11288e03",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 4766,
+      "author": {
+        "id": 1520902
+      },
+      "writtenOn": "2022-03-03T22:23:41Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "4d3116b2_a311add7",
+      "range": {
+        "startLine": 4742,
+        "startChar": 4,
+        "endLine": 4766,
+        "endChar": 5
+      },
+      "revId": "7c2892f969f9c5556f9ad348cecce757fd7c971a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "af9d01b0_8867bd05",
@@ -184,6 +232,30 @@
       "writtenOn": "2022-03-03T19:14:02Z",
       "side": 1,
       "message": "Also don\u0027t need this. See the other comment.",
+      "range": {
+        "startLine": 2044,
+        "startChar": 0,
+        "endLine": 2044,
+        "endChar": 42
+      },
+      "revId": "7c2892f969f9c5556f9ad348cecce757fd7c971a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "ba1bc428_210c5fe8",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 2044,
+      "author": {
+        "id": 1520902
+      },
+      "writtenOn": "2022-03-03T22:23:41Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "af9d01b0_8867bd05",
       "range": {
         "startLine": 2044,
         "startChar": 0,
