@@ -1116,8 +1116,6 @@ angle::Result CommandQueue::submitFrame(
     }
     mInFlightCommands.emplace_back(scopedBatch.release());
 
-    ANGLE_TRY(checkCompletedCommands(context));
-
     // CPU should be throttled to avoid mInFlightCommands from growing too fast. Important for
     // off-screen scenarios.
     if (mInFlightCommands.size() > kInFlightCommandsLimit)
