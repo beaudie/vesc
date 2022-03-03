@@ -41,6 +41,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "d97958a2_99fbd1c7",
+        "filename": "src/libANGLE/renderer/vulkan/ProgramExecutableVk.cpp",
+        "patchSetId": 11
+      },
+      "lineNbr": 929,
+      "author": {
+        "id": 1340649
+      },
+      "writtenOn": "2022-03-03T23:28:07Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "dc59583d_dda28282",
+      "range": {
+        "startLine": 929,
+        "startChar": 2,
+        "endLine": 929,
+        "endChar": 60
+      },
+      "revId": "8ea809fe406d122f2a1ba765d8a8a66f023ca882",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "911bcf29_4a17d097",
@@ -54,6 +78,30 @@
       "writtenOn": "2022-03-03T22:31:06Z",
       "side": 1,
       "message": "nit: remove \"ForProgram\" suffix because there\u0027s no need to clarify that the pipeline is for a program.",
+      "range": {
+        "startLine": 147,
+        "startChar": 18,
+        "endLine": 147,
+        "endChar": 47
+      },
+      "revId": "8ea809fe406d122f2a1ba765d8a8a66f023ca882",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "f260b50e_da007e88",
+        "filename": "src/libANGLE/renderer/vulkan/ProgramExecutableVk.h",
+        "patchSetId": 11
+      },
+      "lineNbr": 147,
+      "author": {
+        "id": 1340649
+      },
+      "writtenOn": "2022-03-03T23:28:07Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "911bcf29_4a17d097",
       "range": {
         "startLine": 147,
         "startChar": 18,
@@ -87,6 +135,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "dadcb070_b8a5a94a",
+        "filename": "src/libANGLE/renderer/vulkan/ProgramExecutableVk.h",
+        "patchSetId": 11
+      },
+      "lineNbr": 150,
+      "author": {
+        "id": 1340649
+      },
+      "writtenOn": "2022-03-03T23:28:07Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "185a29ed_e9f29e21",
+      "range": {
+        "startLine": 150,
+        "startChar": 48,
+        "endLine": 150,
+        "endChar": 88
+      },
+      "revId": "8ea809fe406d122f2a1ba765d8a8a66f023ca882",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "26121bcc_3ad426c8",
@@ -100,6 +172,30 @@
       "writtenOn": "2022-03-03T22:31:06Z",
       "side": 1,
       "message": "minor nit: omit \"Desc\" from this and below as this method lines up with \"setRenderPass\"",
+      "range": {
+        "startLine": 2757,
+        "startChar": 27,
+        "endLine": 2757,
+        "endChar": 55
+      },
+      "revId": "8ea809fe406d122f2a1ba765d8a8a66f023ca882",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "eeb2a559_2aee8c31",
+        "filename": "src/libANGLE/renderer/vulkan/vk_cache_utils.cpp",
+        "patchSetId": 11
+      },
+      "lineNbr": 2757,
+      "author": {
+        "id": 1340649
+      },
+      "writtenOn": "2022-03-03T23:28:07Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "26121bcc_3ad426c8",
       "range": {
         "startLine": 2757,
         "startChar": 27,
@@ -135,6 +231,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "b4c2ee50_0cd2aa0a",
+        "filename": "src/tests/test_utils/angle_test_configs.cpp",
+        "patchSetId": 11
+      },
+      "lineNbr": 336,
+      "author": {
+        "id": 1340649
+      },
+      "writtenOn": "2022-03-03T23:28:07Z",
+      "side": 1,
+      "message": "there is no vulkan string here, what do you mean?",
+      "parentUuid": "4dd15291_ece26a87",
+      "range": {
+        "startLine": 336,
+        "startChar": 19,
+        "endLine": 336,
+        "endChar": 44
+      },
+      "revId": "8ea809fe406d122f2a1ba765d8a8a66f023ca882",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "5550a980_bed0ba11",
         "filename": "src/tests/test_utils/angle_test_configs.h",
         "patchSetId": 11
@@ -146,6 +266,30 @@
       "writtenOn": "2022-03-03T22:31:06Z",
       "side": 1,
       "message": "one other minor nit: I\u0027d suggest we explicitly name this mixin \"WtihCreateVulkanPipelineDuringLink\" to match \"WithVulkanPreferCPUForBufferSubData\" and \"WithForceVulkanFallbackFormat\"",
+      "range": {
+        "startLine": 353,
+        "startChar": 26,
+        "endLine": 353,
+        "endChar": 54
+      },
+      "revId": "8ea809fe406d122f2a1ba765d8a8a66f023ca882",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "fa725552_f76fdc04",
+        "filename": "src/tests/test_utils/angle_test_configs.h",
+        "patchSetId": 11
+      },
+      "lineNbr": 353,
+      "author": {
+        "id": 1340649
+      },
+      "writtenOn": "2022-03-03T23:28:07Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "5550a980_bed0ba11",
       "range": {
         "startLine": 353,
         "startChar": 26,
