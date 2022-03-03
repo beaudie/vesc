@@ -1,0 +1,73 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "a345b4d8_e37ab6ff",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 3
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2022-03-03T19:43:28Z",
+      "side": 1,
+      "message": "nit: to SwANGLE tests. This will also add to other non-ASAN configs.",
+      "range": {
+        "startLine": 7,
+        "startChar": 29,
+        "endLine": 7,
+        "endChar": 34
+      },
+      "revId": "531ad2ee2d68714ff0afdce6c1aa496be1084436",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "d15f464c_7b0898ba",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 3
+      },
+      "lineNbr": 14,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2022-03-03T19:43:28Z",
+      "side": 1,
+      "message": "nit: file a bug for this?",
+      "range": {
+        "startLine": 14,
+        "startChar": 5,
+        "endLine": 14,
+        "endChar": 9
+      },
+      "revId": "531ad2ee2d68714ff0afdce6c1aa496be1084436",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "a7f2d66d_787e5052",
+        "filename": "infra/specs/test_suites.pyl",
+        "patchSetId": 3
+      },
+      "lineNbr": 1085,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2022-03-03T19:43:28Z",
+      "side": 1,
+      "message": "Can we assume for now we can use the same flags for the slow and default version? Did you see any timeouts or anything that led to you defining this config. If not let\u0027s remove it unless we need it for a specific reason.",
+      "range": {
+        "startLine": 1069,
+        "startChar": 0,
+        "endLine": 1085,
+        "endChar": 6
+      },
+      "revId": "531ad2ee2d68714ff0afdce6c1aa496be1084436",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
