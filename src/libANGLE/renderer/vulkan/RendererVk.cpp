@@ -2729,7 +2729,16 @@ gl::Version RendererVk::getMaxSupportedESVersion() const
 
 gl::Version RendererVk::getMaxConformantESVersion() const
 {
-    return LimitVersionTo(getMaxSupportedESVersion(), {3, 1});
+    bool isSwiftShader =
+        IsSwiftshader(mPhysicalDeviceProperties.vendorID, mPhysicalDeviceProperties.deviceID);
+    const gl::Version maxSupportedESVersion = getMaxSupportedESVersion();
+
+    if (mFeatures.exposeNonConformantExtensionsAndVersions.enabled && !isSwiftShader)
+    {
+        return maxSupportedESVersion;
+    }
+
+    return LimitVersionTo(maxSupportedESVersion, {3, 1});
 }
 
 void RendererVk::initFeatures(DisplayVk *displayVk,
