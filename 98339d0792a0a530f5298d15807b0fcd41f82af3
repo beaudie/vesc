@@ -34,6 +34,24 @@
       "parentUuid": "b15800cf_6ffab487",
       "revId": "98339d0792a0a530f5298d15807b0fcd41f82af3",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "ccaa89e0_6a27ed9d",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1491687
+      },
+      "writtenOn": "2022-03-03T15:25:54Z",
+      "side": 1,
+      "message": "I added a test that reproduces the issue.\n\nThe general issue is that Unity uses the same vertex array object through the whole application runtime without deleting it.\nOnce during the application runtime, before triggering MEC, a vertex attrib pointer is set. In the case of Shadowgun Legends it attribute array #6. The attribute arrat is also disabled after draw using `glDisableVertexAttribArray` and it\u0027s buffer gets deleted. MEC tries to capture all attribs, even disabled. We end up trying to capture an attrib which was used once, but which now points to a deleted buffer.\n\nPseudocode:\n\n```\n// First attrib setup using attribs 0+1\nglGenVertexArrays(1, ...);\nglBindVertexArray(...);\n\nglEnableVertexAttribArray(0);\nglEnableVertexAttribArray(1);\n\nglGenBuffers(...);\nglBindBuffer(GL_ARRAY_BUFFER, ...);\nglBufferData(GL_ARRAY_BUFFER, ...);\n\nglVertexAttribPointer(0, ...);\nglVertexAttribPointer(1, ...);\nglDrawArrays(...);\n\nglDisableVertexAttribArray(0);\nglDisableVertexAttribArray(1);\n\nglDeleteBuffers(...);\n\n// Second attrib setup using only attrib 0\nglEnableVertexAttribArray(0);\n\nglGenBuffers(...);\nglBindBuffer(GL_ARRAY_BUFFER, ...);\nglBufferData(GL_ARRAY_BUFFER, ...);\n\nglVertexAttribPointer(0, ...);\nglDrawArrays(...);\n\nglDisableVertexAttribArray(0);\n\n// When MEC is triggered here it picks up the invalid attrib array #1\n```",
+      "parentUuid": "a2202e20_8919a9c6",
+      "revId": "98339d0792a0a530f5298d15807b0fcd41f82af3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
