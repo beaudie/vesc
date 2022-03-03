@@ -16,6 +16,29 @@
       "message": "Thanks!",
       "revId": "9bf3c7f8a87fa83578e38347af8a41f2f1b54308",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "99c634bf_92eb7157",
+        "filename": "infra/specs/test_suites.pyl",
+        "patchSetId": 4
+      },
+      "lineNbr": 1082,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2022-03-03T20:18:55Z",
+      "side": 1,
+      "message": "because these are the same, I suggest you remove the _slow version and use the default set of flags for both sets of compound suites, like we do for end2end_tests.",
+      "range": {
+        "startLine": 1069,
+        "startChar": 0,
+        "endLine": 1082,
+        "endChar": 6
+      },
+      "revId": "9bf3c7f8a87fa83578e38347af8a41f2f1b54308",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
