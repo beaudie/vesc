@@ -1,0 +1,73 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ff040295_948f5b5a",
+        "filename": "src/libANGLE/renderer/vulkan/ResourceVk.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 95,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2022-03-03T19:14:02Z",
+      "side": 1,
+      "message": "I saw there is getSerial() and updateSerialOneOff() API here, since you will only use clone if counter\u003d\u003d1, I think you don\u0027t need this API. Just create a new mUSe and then newUse.updateSerialOneOff(oldUse.getSerial()); See the other comment.",
+      "range": {
+        "startLine": 89,
+        "startChar": 4,
+        "endLine": 95,
+        "endChar": 5
+      },
+      "revId": "7c2892f969f9c5556f9ad348cecce757fd7c971a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "1bf5577f_f958064e",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 4766,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2022-03-03T19:14:02Z",
+      "side": 1,
+      "message": "I would just do this:\n\nimageView-\u003erelease(renderer, mImageAndViewGarbage);\n    \nif(!mUse.usedInRecordedCommands())\n{\n   SharedResourceUse use;\n   use.updateSerialOneOff(mUse.getSerial());\n   renderer-\u003ecollectGarbage(std::move(use),std::move(mImageAndViewGarbage));\n}\n    \nASSERT(mImageAndViewGarbage.size() \u003c\u003d 1000);\n\nThis way, when possible, you are releasing all collected views.",
+      "range": {
+        "startLine": 4742,
+        "startChar": 4,
+        "endLine": 4766,
+        "endChar": 5
+      },
+      "revId": "7c2892f969f9c5556f9ad348cecce757fd7c971a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "af9d01b0_8867bd05",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 2044,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2022-03-03T19:14:02Z",
+      "side": 1,
+      "message": "Also don\u0027t need this. See the other comment.",
+      "range": {
+        "startLine": 2044,
+        "startChar": 0,
+        "endLine": 2044,
+        "endChar": 42
+      },
+      "revId": "7c2892f969f9c5556f9ad348cecce757fd7c971a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
