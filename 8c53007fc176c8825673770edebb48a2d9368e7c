@@ -33,6 +33,24 @@
       "message": "EXPECT_GL_NO_ERROR()?",
       "revId": "8c53007fc176c8825673770edebb48a2d9368e7c",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "d1da48f5_e2c398c4",
+        "filename": "src/tests/gl_tests/TransformFeedbackTest.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 3997,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2022-03-03T20:30:11Z",
+      "side": 1,
+      "message": "Not clearly defined. The spec says that it\u0027s an error to call BeginTransformFeedback without a buffer bound. It doesn\u0027t say what happens when you delete a buffer that\u0027s in-use. It\u0027s probably undefined behaviour, but we still can\u0027t let ANGLE have a security hole here. We could make this a specific condition error in WebGL if necessary.",
+      "parentUuid": "7b678a2b_c948f6c8",
+      "revId": "8c53007fc176c8825673770edebb48a2d9368e7c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
