@@ -2738,7 +2738,21 @@ gl::Version RendererVk::getMaxSupportedESVersion() const
 
 gl::Version RendererVk::getMaxConformantESVersion() const
 {
-    return LimitVersionTo(getMaxSupportedESVersion(), {3, 1});
+    const gl::Version maxSupportedESVersion = getMaxSupportedESVersion();
+    const bool hasGeometryAndTessSupport =
+        getNativeExtensions().geometryShaderAny() && getNativeExtensions().tessellationShaderEXT;
+
+    if (!hasGeometryAndTessSupport)
+    {
+        return LimitVersionTo(maxSupportedESVersion, {3, 1});
+    }
+
+    if (mFeatures.exposeNonConformantExtensionsAndVersions.enabled)
+    {
+        return maxSupportedESVersion;
+    }
+
+    return LimitVersionTo(maxSupportedESVersion, {3, 1});
 }
 
 void RendererVk::initFeatures(DisplayVk *displayVk,
