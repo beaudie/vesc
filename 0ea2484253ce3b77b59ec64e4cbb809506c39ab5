@@ -448,6 +448,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "423fa73f_b49516bd",
+        "filename": "src/libANGLE/renderer/vulkan/ProgramVk.cpp",
+        "patchSetId": 9
+      },
+      "lineNbr": 288,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2022-03-03T22:31:06Z",
+      "side": 1,
+      "message": "I\u0027d suggest we record the error here, I don\u0027t think there\u0027s any possible performance loss. An error could mean a device context loss, driver crash, or other serious problem that means we need to immediately exit and return control to the application. ANGLE never ignores errors in an attempt to keep running.\n\nI think all that\u0027s needed is to return the LinkEventDone with the status returned from the compile call.",
+      "parentUuid": "a17fbabb_56990f42",
+      "revId": "0ea2484253ce3b77b59ec64e4cbb809506c39ab5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "17adffd6_8a19273f",
         "filename": "src/libANGLE/renderer/vulkan/ProgramVk.h",
         "patchSetId": 9

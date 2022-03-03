@@ -16,6 +16,144 @@
       "message": "PTAL",
       "revId": "8ea809fe406d122f2a1ba765d8a8a66f023ca882",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "dc59583d_dda28282",
+        "filename": "src/libANGLE/renderer/vulkan/ProgramExecutableVk.cpp",
+        "patchSetId": 11
+      },
+      "lineNbr": 929,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2022-03-03T22:31:06Z",
+      "side": 1,
+      "message": "nit: you can merge \"executable\" and \"glExecutable\"\n\n(seems accidental that we have two variables for this)",
+      "range": {
+        "startLine": 929,
+        "startChar": 2,
+        "endLine": 929,
+        "endChar": 60
+      },
+      "revId": "8ea809fe406d122f2a1ba765d8a8a66f023ca882",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "911bcf29_4a17d097",
+        "filename": "src/libANGLE/renderer/vulkan/ProgramExecutableVk.h",
+        "patchSetId": 11
+      },
+      "lineNbr": 147,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2022-03-03T22:31:06Z",
+      "side": 1,
+      "message": "nit: remove \"ForProgram\" suffix because there\u0027s no need to clarify that the pipeline is for a program.",
+      "range": {
+        "startLine": 147,
+        "startChar": 18,
+        "endLine": 147,
+        "endChar": 47
+      },
+      "revId": "8ea809fe406d122f2a1ba765d8a8a66f023ca882",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "185a29ed_e9f29e21",
+        "filename": "src/libANGLE/renderer/vulkan/ProgramExecutableVk.h",
+        "patchSetId": 11
+      },
+      "lineNbr": 150,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2022-03-03T22:31:06Z",
+      "side": 1,
+      "message": "very small nit: this can be a const \u0026 to avoid any potential of nullptr",
+      "range": {
+        "startLine": 150,
+        "startChar": 48,
+        "endLine": 150,
+        "endChar": 88
+      },
+      "revId": "8ea809fe406d122f2a1ba765d8a8a66f023ca882",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "26121bcc_3ad426c8",
+        "filename": "src/libANGLE/renderer/vulkan/vk_cache_utils.cpp",
+        "patchSetId": 11
+      },
+      "lineNbr": 2757,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2022-03-03T22:31:06Z",
+      "side": 1,
+      "message": "minor nit: omit \"Desc\" from this and below as this method lines up with \"setRenderPass\"",
+      "range": {
+        "startLine": 2757,
+        "startChar": 27,
+        "endLine": 2757,
+        "endChar": 55
+      },
+      "revId": "8ea809fe406d122f2a1ba765d8a8a66f023ca882",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "4dd15291_ece26a87",
+        "filename": "src/tests/test_utils/angle_test_configs.cpp",
+        "patchSetId": 11
+      },
+      "lineNbr": 336,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2022-03-03T22:31:06Z",
+      "side": 1,
+      "message": "you can probably leave Vulkan out of this for bevity, as we match _FallbackFormat",
+      "range": {
+        "startLine": 336,
+        "startChar": 19,
+        "endLine": 336,
+        "endChar": 44
+      },
+      "revId": "8ea809fe406d122f2a1ba765d8a8a66f023ca882",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "5550a980_bed0ba11",
+        "filename": "src/tests/test_utils/angle_test_configs.h",
+        "patchSetId": 11
+      },
+      "lineNbr": 353,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2022-03-03T22:31:06Z",
+      "side": 1,
+      "message": "one other minor nit: I\u0027d suggest we explicitly name this mixin \"WtihCreateVulkanPipelineDuringLink\" to match \"WithVulkanPreferCPUForBufferSubData\" and \"WithForceVulkanFallbackFormat\"",
+      "range": {
+        "startLine": 353,
+        "startChar": 26,
+        "endLine": 353,
+        "endChar": 54
+      },
+      "revId": "8ea809fe406d122f2a1ba765d8a8a66f023ca882",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
