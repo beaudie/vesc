@@ -49,6 +49,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "bfdaa6c8_4a77efdc",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 4766,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2022-03-03T19:26:02Z",
+      "side": 1,
+      "message": "sorry, you need to call newUse.init() first before calling updateSerialOneOff.",
+      "parentUuid": "1bf5577f_f958064e",
+      "range": {
+        "startLine": 4742,
+        "startChar": 4,
+        "endLine": 4766,
+        "endChar": 5
+      },
+      "revId": "7c2892f969f9c5556f9ad348cecce757fd7c971a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "af9d01b0_8867bd05",
         "filename": "src/libANGLE/renderer/vulkan/vk_helpers.h",
         "patchSetId": 2
