@@ -33,6 +33,24 @@
       "message": "Drive-by: Allowing earlier clean up aside, I think it\u0027s worth figuring out why we were generating so much garbage in the first place. What was causing the views to be recreated so frequently?\n\nFollow up stuff for sure.",
       "revId": "ce6a09b68c33c2f853b9665372f3876bafb69b77",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "4c7dc804_0c698606",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1520902
+      },
+      "writtenOn": "2022-03-04T01:26:58Z",
+      "side": 1,
+      "message": "Hi Shabi, I didn\u0027t figure out what was causing the views to be recreated frequently. The failed test was on mac os, and I don\u0027t have a mac os to reproduce the failed test locally. If you know a way to repro the test/use the mac-swangle-chromium-try-x64 job to debug, I would appreciate your help :) \n\nTo make sure we are tracking the issue: I created a ticket https://bugs.chromium.org/p/angleproject/issues/detail?id\u003d7075.",
+      "parentUuid": "038cf9d4_0ec4e5aa",
+      "revId": "ce6a09b68c33c2f853b9665372f3876bafb69b77",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
