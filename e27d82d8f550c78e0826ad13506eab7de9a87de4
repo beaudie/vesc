@@ -53,6 +53,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "6c1e5063_b415d9a8",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1531247
+      },
+      "writtenOn": "2022-03-04T20:21:03Z",
+      "side": 1,
+      "message": "Yes, right, I misread your comment on the bug. Reverted those changes.",
+      "parentUuid": "60f99952_07501343",
+      "revId": "e27d82d8f550c78e0826ad13506eab7de9a87de4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "d3923628_3dc3c21d",
@@ -66,6 +84,30 @@
       "writtenOn": "2022-03-04T20:05:12Z",
       "side": 1,
       "message": "the sample is pretty broken iiuc, we should probably update the docs for the sample along with this enabled feature.",
+      "range": {
+        "startLine": 97,
+        "startChar": 0,
+        "endLine": 101,
+        "endChar": 33
+      },
+      "revId": "e27d82d8f550c78e0826ad13506eab7de9a87de4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "506b72d2_9b7a05c6",
+        "filename": "doc/CaptureAndReplay.md",
+        "patchSetId": 1
+      },
+      "lineNbr": 101,
+      "author": {
+        "id": 1531247
+      },
+      "writtenOn": "2022-03-04T20:21:03Z",
+      "side": 1,
+      "message": "This is part of Cody\u0027s change: https://crrev.com/c/3500905",
+      "parentUuid": "d3923628_3dc3c21d",
       "range": {
         "startLine": 97,
         "startChar": 0,
