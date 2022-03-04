@@ -87,6 +87,30 @@
       },
       "revId": "649b12f5afdd12a9d46a8bfdba6b7e6c551f66b5",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "d7f0a889_9b734c28",
+        "filename": "src/libANGLE/capture/FrameCapture.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 2192,
+      "author": {
+        "id": 1491687
+      },
+      "writtenOn": "2022-03-04T17:17:10Z",
+      "side": 1,
+      "message": "I went with cleaning up the huge statement and splitting out the skip condition. Even though this could be reduced logically when keeping the skip statement inverted, I think this is more readable as it represents the case we do not want. `buffer \u003d null` and `attrib offset !\u003d null`.",
+      "parentUuid": "2bda507b_fcbfa7f0",
+      "range": {
+        "startLine": 2190,
+        "startChar": 0,
+        "endLine": 2192,
+        "endChar": 79
+      },
+      "revId": "649b12f5afdd12a9d46a8bfdba6b7e6c551f66b5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
