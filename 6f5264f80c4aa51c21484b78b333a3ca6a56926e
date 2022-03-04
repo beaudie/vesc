@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "7b78455e_f76e67f3",
+        "filename": "src/libANGLE/capture/FrameCapture.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 2189,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2022-03-04T19:05:46Z",
+      "side": 1,
+      "message": "I think this is wrong here, should be \u003d\u003d nullptr",
+      "range": {
+        "startLine": 2189,
+        "startChar": 72,
+        "endLine": 2189,
+        "endChar": 97
+      },
+      "revId": "6f5264f80c4aa51c21484b78b333a3ca6a56926e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "1fe583bf_7f872833",
+        "filename": "src/libANGLE/capture/FrameCapture.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 2194,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2022-03-04T19:05:46Z",
+      "side": 1,
+      "message": "I still think you can remove this binding.getBuffer.get() !\u003d nullptr clause",
+      "range": {
+        "startLine": 2194,
+        "startChar": 14,
+        "endLine": 2194,
+        "endChar": 49
+      },
+      "revId": "6f5264f80c4aa51c21484b78b333a3ca6a56926e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
