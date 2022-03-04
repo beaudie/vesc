@@ -218,6 +218,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "5556e8aa_0ffd322a",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 2660,
+      "author": {
+        "id": 1491823
+      },
+      "writtenOn": "2022-03-04T11:42:18Z",
+      "side": 1,
+      "message": "It seems that the feature is used quite extensively in the Vulkan back-end (at least for exposing geometry shaders, tesselation shader, and texture buffer support). Which means it will take some work to move it.",
+      "parentUuid": "a85c43fa_a524fb4f",
+      "range": {
+        "startLine": 2658,
+        "startChar": 0,
+        "endLine": 2660,
+        "endChar": 27
+      },
+      "revId": "7c3ed59026984b0ba2a4ce73bccf89080754bb79",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "d840fe8b_36e189cd",
         "filename": "src/libANGLE/renderer/vulkan/RendererVk.cpp",
         "patchSetId": 1
