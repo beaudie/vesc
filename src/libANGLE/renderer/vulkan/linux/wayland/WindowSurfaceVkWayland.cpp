@@ -27,7 +27,7 @@ void WindowSurfaceVkWayland::ResizeCallback(wl_egl_window *eglWindow, void *payl
 WindowSurfaceVkWayland::WindowSurfaceVkWayland(const egl::SurfaceState &surfaceState,
                                                EGLNativeWindowType window,
                                                wl_display *display)
-    : WindowSurfaceVk(surfaceState, window), mWaylandDisplay(display)
+    : WindowSurfaceVkSwapchain(surfaceState, window), mWaylandDisplay(display)
 {
     wl_egl_window *eglWindow   = reinterpret_cast<wl_egl_window *>(window);
     eglWindow->resize_callback = WindowSurfaceVkWayland::ResizeCallback;
