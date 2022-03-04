@@ -17,7 +17,7 @@ namespace rx
 WindowSurfaceVkXcb::WindowSurfaceVkXcb(const egl::SurfaceState &surfaceState,
                                        EGLNativeWindowType window,
                                        xcb_connection_t *conn)
-    : WindowSurfaceVk(surfaceState, window), mXcbConnection(conn)
+    : WindowSurfaceVkSwapchain(surfaceState, window), mXcbConnection(conn)
 {}
 
 angle::Result WindowSurfaceVkXcb::createSurfaceVk(vk::Context *context, gl::Extents *extentsOut)
