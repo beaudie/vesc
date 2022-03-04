@@ -105,6 +105,24 @@
       "parentUuid": "5fccd1d3_11899906",
       "revId": "2cad75a931605a44b459592ceebccd8cfe7aaecb",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "3ec2d7c1_9c73069e",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1509302
+      },
+      "writtenOn": "2022-03-04T17:45:43Z",
+      "side": 1,
+      "message": "If the caller is something caring about performance, isn\u0027t the caller already doing onscreen rendering or offscreen with proper sync checking and latency control? which is the case for GFXBench and the various GL apps we care about.\n\nMy mental model is that this fallback throttle is for the mystery unknown test mentioned in the very original troduce of this check code in submitFrame. Later throttle logic added below should have already superceded the workaround to be removed here.\n\nThe main issue for virtualization is that we must try avoiding any Vulkan calls requiring synchronous true return from the host. This is the last piece in ANGLE causing trouble for us (I\u0027ve heard same happening for gfxstream as well, the overhead is ~300us per submit + the initial longer wait for the guest to catch up with host timeline. So on ARM with ANGLE\u0027s per pass submission, a complex app normally run into \u003e 10 submissions per frame. The performance delta is very non-trivial.)",
+      "parentUuid": "54a0f24c_c30a4a1b",
+      "revId": "2cad75a931605a44b459592ceebccd8cfe7aaecb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
