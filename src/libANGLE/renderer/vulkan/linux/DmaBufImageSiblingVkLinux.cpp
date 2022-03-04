@@ -192,13 +192,13 @@ bool IsFormatSupported(RendererVk *renderer,
                        VkImageCreateFlags createFlags,
                        VkImageFormatProperties2 *imageFormatPropertiesOut)
 {
-    VkExternalMemoryImageCreateInfo externalMemoryImageCreateInfo = {};
-    externalMemoryImageCreateInfo.sType       = VK_STRUCTURE_TYPE_EXTERNAL_MEMORY_IMAGE_CREATE_INFO;
-    externalMemoryImageCreateInfo.handleTypes = VK_EXTERNAL_MEMORY_HANDLE_TYPE_DMA_BUF_BIT_EXT;
+    VkPhysicalDeviceExternalImageFormatInfo externaImageFormatInfo = {};
+    externaImageFormatInfo.sType       = VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_EXTERNAL_IMAGE_FORMAT_INFO;
+    externaImageFormatInfo.handleType  = VK_EXTERNAL_MEMORY_HANDLE_TYPE_DMA_BUF_BIT_EXT;
 
     VkPhysicalDeviceImageFormatInfo2 imageFormatInfo = {};
     imageFormatInfo.sType  = VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_IMAGE_FORMAT_INFO_2;
-    imageFormatInfo.pNext  = &externalMemoryImageCreateInfo;
+    imageFormatInfo.pNext  = &externaImageFormatInfo;
     imageFormatInfo.format = vkFormat;
     imageFormatInfo.type   = VK_IMAGE_TYPE_2D;
     imageFormatInfo.tiling = VK_IMAGE_TILING_OPTIMAL;
@@ -208,7 +208,7 @@ bool IsFormatSupported(RendererVk *renderer,
     VkPhysicalDeviceImageDrmFormatModifierInfoEXT drmFormatModifierInfo = {};
     drmFormatModifierInfo.sType =
         VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_IMAGE_DRM_FORMAT_MODIFIER_INFO_EXT;
-    drmFormatModifierInfo.pNext             = &externalMemoryImageCreateInfo;
+    drmFormatModifierInfo.pNext             = &externaImageFormatInfo;
     drmFormatModifierInfo.drmFormatModifier = drmModifier;
     drmFormatModifierInfo.sharingMode       = VK_SHARING_MODE_EXCLUSIVE;
     if (drmModifier != 0)
