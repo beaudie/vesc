@@ -22,7 +22,7 @@ namespace rx
 
 WindowSurfaceVkFuchsia::WindowSurfaceVkFuchsia(const egl::SurfaceState &surfaceState,
                                                EGLNativeWindowType window)
-    : WindowSurfaceVk(surfaceState, window)
+    : WindowSurfaceVkSwapchain(surfaceState, window)
 {}
 
 WindowSurfaceVkFuchsia::~WindowSurfaceVkFuchsia() {}
