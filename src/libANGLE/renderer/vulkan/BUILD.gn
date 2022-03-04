@@ -8,6 +8,10 @@ import("//build/config/dcheck_always_on.gni")
 import("//build_overrides/swiftshader.gni")
 import("../../../../gni/angle.gni")
 
+if (angle_use_gbm) {
+  import("//build/config/linux/pkg_config.gni")
+}
+
 assert(angle_enable_vulkan)
 
 declare_args() {
@@ -210,7 +214,13 @@ if (angle_use_gbm) {
   _vulkan_backend_sources += [
     "linux/gbm/DisplayVkGbm.cpp",
     "linux/gbm/DisplayVkGbm.h",
+    "linux/gbm/SurfaceVkGbm.cpp",
+    "linux/gbm/SurfaceVkGbm.h",
   ]
+
+  pkg_config("libdrm") {
+    packages = [ "libdrm" ]
+  }
 }
 
 if (is_fuchsia) {
@@ -324,6 +334,7 @@ angle_source_set("angle_vulkan_backend") {
   if (is_linux || is_chromeos) {
     deps += [ "$angle_root/src/common/linux:angle_dma_buf" ]
     if (angle_use_gbm) {
+      public_configs += [ ":libdrm" ]
       deps += [ "//third_party/minigbm" ]
     }
   }
