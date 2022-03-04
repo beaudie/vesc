@@ -15,7 +15,7 @@
 namespace rx
 {
 
-class WindowSurfaceVkGGP : public WindowSurfaceVk
+class WindowSurfaceVkGGP : public WindowSurfaceVkSwapchain
 {
   public:
     WindowSurfaceVkGGP(const egl::SurfaceState &surfaceState, EGLNativeWindowType window);

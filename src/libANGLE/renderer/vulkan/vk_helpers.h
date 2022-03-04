@@ -3149,6 +3149,8 @@ enum class PresentMode
     SharedDemandRefreshKHR     = VK_PRESENT_MODE_SHARED_DEMAND_REFRESH_KHR,
     SharedContinuousRefreshKHR = VK_PRESENT_MODE_SHARED_CONTINUOUS_REFRESH_KHR,
 
+    GbmANGLE = 6,
+
     InvalidEnum,
     EnumCount = InvalidEnum,
 };

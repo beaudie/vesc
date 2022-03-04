@@ -13,6 +13,8 @@
 
 #include "common/linux/dma_buf_utils.h"
 #include "libANGLE/Display.h"
+#include "libANGLE/renderer/vulkan/RendererVk.h"
+#include "libANGLE/renderer/vulkan/linux/gbm/SurfaceVkGbm.h"
 #include "libANGLE/renderer/vulkan/vk_caps_utils.h"
 
 namespace rx
@@ -48,11 +50,16 @@ bool DisplayVkGbm::isValidNativeWindow(EGLNativeWindowType window) const
 SurfaceImpl *DisplayVkGbm::createWindowSurfaceVk(const egl::SurfaceState &state,
                                                  EGLNativeWindowType window)
 {
-    return nullptr;
+    return new SurfaceVkGbm(state, window);
 }
 
 egl::ConfigSet DisplayVkGbm::generateConfigs()
 {
+    if (!getRenderer()->getFeatures().supportsExternalMemoryDmaBufAndModifiers.enabled)
+    {
+        return {};  // No configuration supported
+    }
+
     const std::array<GLenum, 1> kColorFormats = {GL_BGRA8_EXT};
 
     std::vector<GLenum> depthStencilFormats(
@@ -68,7 +75,11 @@ egl::ConfigSet DisplayVkGbm::generateConfigs()
         egl_vk::GenerateConfigs(kColorFormats.data(), kColorFormats.size(),
                                 depthStencilFormats.data(), depthStencilFormats.size(), this);
 
-    cfgSet.begin()->second.nativeVisualID = DRM_FORMAT_XRGB8888;
+    for (std::pair<const EGLint, egl::Config> &cfgEntry : cfgSet)
+    {
+        egl::Config &cfg   = cfgEntry.second;
+        cfg.nativeVisualID = DRM_FORMAT_XRGB8888;
+    }
 
     return cfgSet;
 }

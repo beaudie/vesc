@@ -10145,8 +10145,11 @@ static_assert(static_cast<uint32_t>(PresentMode::SharedContinuousRefreshKHR) ==
                   VK_PRESENT_MODE_SHARED_CONTINUOUS_REFRESH_KHR,
               "PresentMode must be updated");
 
+static_assert(static_cast<uint32_t>(PresentMode::GbmANGLE) == 6, "PresentMode must be updated");
+
 VkPresentModeKHR ConvertPresentModeToVkPresentMode(PresentMode presentMode)
 {
+    ASSERT(presentMode != PresentMode::GbmANGLE);
     return static_cast<VkPresentModeKHR>(presentMode);
 }
 
