@@ -51,6 +51,24 @@
       "parentUuid": "0fc4f36f_29eb94ef",
       "revId": "2cad75a931605a44b459592ceebccd8cfe7aaecb",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "596be522_18eb9c99",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1509302
+      },
+      "writtenOn": "2022-03-04T03:20:55Z",
+      "side": 1,
+      "message": "The very original change that added this excessive cmd buffer recycling at submitFrame was said to work around some long running test(didn’t say which). Later there was the throttling logic added below to force waiting if inflight is too high. IIUC, that throttle logic below should have covered the edge case that the app is neither doing on screen rendering nor checking syncs for offscreen rendering. It will retire those already waited being signaled. So I believe it’s never going to run unbound.",
+      "tag": "mailMessageId\u003d\u003cCAKT\u003ddDkkfEaxjrgACfySSJ7PdAGVZOCWmxsMRvmQOdtsb2BOqA@mail.gmail.com\u003e",
+      "revId": "2cad75a931605a44b459592ceebccd8cfe7aaecb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
