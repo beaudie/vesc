@@ -136,6 +136,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "08c4f712_f73325cb",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 13
+      },
+      "lineNbr": 2410,
+      "author": {
+        "id": 1525982
+      },
+      "writtenOn": "2022-03-04T06:30:49Z",
+      "side": 1,
+      "message": "Changed to RenderPassUpdate.",
+      "parentUuid": "e1ec3e84_65a2add5",
+      "range": {
+        "startLine": 2410,
+        "startChar": 49,
+        "endLine": 2410,
+        "endChar": 53
+      },
+      "revId": "4e21e691f66160f7f7dcea830d7e94bb7eb526a9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "30002110_a1ee469c",
@@ -149,6 +173,24 @@
       "writtenOn": "2022-03-04T00:13:07Z",
       "side": 1,
       "message": "Avoiding this is exactly why I asked for `mCopySize` to be moved to context! The thing is, we don\u0027t want to forget about pending copy size just because outside RP commands have been moved to the primary (which is something we do frequently).\n\nCould you please move this to `submitFrame`?",
+      "revId": "4e21e691f66160f7f7dcea830d7e94bb7eb526a9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "4614a054_64034b48",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 13
+      },
+      "lineNbr": 6342,
+      "author": {
+        "id": 1525982
+      },
+      "writtenOn": "2022-03-04T06:30:49Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "30002110_a1ee469c",
       "revId": "4e21e691f66160f7f7dcea830d7e94bb7eb526a9",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
@@ -170,6 +212,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "361c73e2_ca80dc07",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 13
+      },
+      "lineNbr": 7264,
+      "author": {
+        "id": 1525982
+      },
+      "writtenOn": "2022-03-04T06:30:49Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "1ecc18f5_008eea71",
+      "revId": "4e21e691f66160f7f7dcea830d7e94bb7eb526a9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "682489b2_16416cfb",
@@ -183,6 +243,24 @@
       "writtenOn": "2022-03-04T00:13:07Z",
       "side": 1,
       "message": "To be extra careful here, could you also add a counter that counts the number of submitFrames? Then we can expect here that the number is increased, and ensure submission actually happened.",
+      "revId": "4e21e691f66160f7f7dcea830d7e94bb7eb526a9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "121927fd_2146b31b",
+        "filename": "src/tests/gl_tests/VulkanPerformanceCounterTest.cpp",
+        "patchSetId": 13
+      },
+      "lineNbr": 297,
+      "author": {
+        "id": 1525982
+      },
+      "writtenOn": "2022-03-04T06:30:49Z",
+      "side": 1,
+      "message": "Sounds good. Added.",
+      "parentUuid": "682489b2_16416cfb",
       "revId": "4e21e691f66160f7f7dcea830d7e94bb7eb526a9",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
