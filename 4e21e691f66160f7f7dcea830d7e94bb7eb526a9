@@ -52,6 +52,41 @@
       "parentUuid": "94d5a4e8_2271cab5",
       "revId": "4e21e691f66160f7f7dcea830d7e94bb7eb526a9",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "1f931fbb_70ae7b24",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 13
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-03-04T00:05:06Z",
+      "side": 1,
+      "message": "+Mohan, I believe you had something like this in the works; do give it a try and let us know how the implementations compare.",
+      "revId": "4e21e691f66160f7f7dcea830d7e94bb7eb526a9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b8a2745a_fa385a49",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 13
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-03-04T00:05:06Z",
+      "side": 1,
+      "message": "We shouldn\u0027t break the render pass because during loading (be it first frame, or in-game loading) we issue a lot of copies as textures get used during the render pass. You don\u0027t want to keep breaking that render pass just to do the copies earlier, because that frame will slow down to a crawl.",
+      "parentUuid": "05525c0a_053ba26f",
+      "revId": "4e21e691f66160f7f7dcea830d7e94bb7eb526a9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
