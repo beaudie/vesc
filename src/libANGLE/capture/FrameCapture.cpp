@@ -57,7 +57,6 @@ namespace angle
 namespace
 {
 
-constexpr char kEnabledVarName[]        = "ANGLE_CAPTURE_ENABLED";
 constexpr char kOutDirectoryVarName[]   = "ANGLE_CAPTURE_OUT_DIR";
 constexpr char kFrameStartVarName[]     = "ANGLE_CAPTURE_FRAME_START";
 constexpr char kFrameEndVarName[]       = "ANGLE_CAPTURE_FRAME_END";
@@ -80,7 +79,6 @@ constexpr size_t kStringLengthLimit = 16380;
 constexpr size_t kDefaultSourceFileSizeThreshold = 400000;
 
 // Android debug properties that correspond to the above environment variables
-constexpr char kAndroidEnabled[]        = "debug.angle.capture.enabled";
 constexpr char kAndroidOutDir[]         = "debug.angle.capture.out_dir";
 constexpr char kAndroidFrameStart[]     = "debug.angle.capture.frame_start";
 constexpr char kAndroidFrameEnd[]       = "debug.angle.capture.frame_end";
@@ -4498,7 +4496,7 @@ void FrameCapture::reset()
 
 FrameCaptureShared::FrameCaptureShared()
     : mLastContextId{0},
-      mEnabled(true),
+      mEnabled(false),
       mSerializeStateEnabled(false),
       mCompression(true),
       mClientVertexArrayMap{},
@@ -4516,13 +4514,6 @@ FrameCaptureShared::FrameCaptureShared()
       mWindowSurfaceContextID({0})
 {
     reset();
-
-    std::string enabledFromEnv =
-        GetEnvironmentVarOrUnCachedAndroidProperty(kEnabledVarName, kAndroidEnabled);
-    if (enabledFromEnv == "0")
-    {
-        mEnabled = false;
-    }
 
     std::string pathFromEnv =
         GetEnvironmentVarOrUnCachedAndroidProperty(kOutDirectoryVarName, kAndroidOutDir);
@@ -4637,10 +4628,7 @@ FrameCaptureShared::FrameCaptureShared()
         setCaptureActive();
     }
 
-    if (mCaptureEndFrame < mCaptureStartFrame)
-    {
-        mEnabled = false;
-    }
+    mEnabled = mCaptureEndFrame > 0 && mCaptureEndFrame >= mCaptureStartFrame;
 
     mReplayWriter.setCaptureLabel(mCaptureLabel);
 }

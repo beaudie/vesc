@@ -13,7 +13,7 @@ Limitations:
 
 ## Capturing and replaying an application
 
-To build ANGLE with capture and replay enabled update your GN args:
+To build ANGLE with capture and replay supported update your GN args:
 
 ```
 angle_with_capture_by_default = true
@@ -33,8 +33,6 @@ corresponding `angledata` files.
 
 Some simple environment variables control frame capture:
 
- * `ANGLE_CAPTURE_ENABLED`:
-   * Set to `0` to disable capture entirely. Default is `1`.
  * `ANGLE_CAPTURE_COMPRESSION`:
    * Set to `0` to disable capture compression. Default is `1`.
  * `ANGLE_CAPTURE_OUT_DIR=<path>`:
@@ -44,8 +42,7 @@ Some simple environment variables control frame capture:
    * Uses mid-execution capture to write "Setup" functions that starts a Context at frame `n`.
    * Example: `ANGLE_CAPTURE_FRAME_START=2`. Default is `0`.
  * `ANGLE_CAPTURE_FRAME_END=<n>`:
-   * By default ANGLE will capture the first ten frames. This variable can override the default.
-   * Example: `ANGLE_CAPTURE_FRAME_END=4`. Default is `10`.
+   * Example: `ANGLE_CAPTURE_FRAME_END=4`. Default is `0` which disables capture.
  * `ANGLE_CAPTURE_LABEL=<label>`:
    * When specified, files and functions will be labeled uniquely.
    * Example: `ANGLE_CAPTURE_LABEL=foo`
@@ -101,10 +98,8 @@ See [samples/BUILD.gn](../samples/BUILD.gn) for details. Then build and run your
 
 ```
 $ autoninja -C out/Debug capture_replay_sample
-$ ANGLE_CAPTURE_ENABLED=0 out/Debug/capture_replay_sample
+$ out/Debug/capture_replay_sample
 ```
-
-Note that we specify `ANGLE_CAPTURE_ENABLED=0` to prevent re-capturing when running the replay.
 
 ## Capturing an Android application
 
