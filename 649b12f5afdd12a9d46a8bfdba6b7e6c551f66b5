@@ -1,0 +1,44 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "bb706b9e_208893e0",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 5
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2022-03-04T16:15:26Z",
+      "side": 1,
+      "message": "LGTM with some cleanup in the code.",
+      "revId": "649b12f5afdd12a9d46a8bfdba6b7e6c551f66b5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "20d2aafc_8e5de1d0",
+        "filename": "src/libANGLE/capture/FrameCapture.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 2192,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2022-03-04T16:15:26Z",
+      "side": 1,
+      "message": "This block has gotten a bit ugly (and checks the same condition twice).  It might make sense to break it up into two or more bools that you AND together, for readability.  You can add the comment to the declaration of the bool, and maybe reference VertexAttributeTestES3.InvalidAttribPointer as an example.  Jamie is the expert here, so can defer to his advice.\n\nAlso, can you change the code to directly reflect what you state in your comment rather than the inverse (or vice versa)? i.e.\n\n```\n// Don\u0027t capture CaptureVertexAttribPointer calls when the array buffer is null\n// and a non-null attrib pointer is used.\nbool skipCapture \u003d (binding.getBuffer().get() \u003d\u003d nullptr) \u0026\u0026\n                    attrib.pointer !\u003d nullptr;\n...\nif (!skipCapture)\n{\n   // do the thing\n}\n```",
+      "range": {
+        "startLine": 2190,
+        "startChar": 0,
+        "endLine": 2192,
+        "endChar": 79
+      },
+      "revId": "649b12f5afdd12a9d46a8bfdba6b7e6c551f66b5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
