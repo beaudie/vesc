@@ -17,7 +17,7 @@
 namespace rx
 {
 
-class WindowSurfaceVkMac : public WindowSurfaceVk
+class WindowSurfaceVkMac : public WindowSurfaceVkSwapchain
 {
   public:
     WindowSurfaceVkMac(const egl::SurfaceState &surfaceState, EGLNativeWindowType window);
