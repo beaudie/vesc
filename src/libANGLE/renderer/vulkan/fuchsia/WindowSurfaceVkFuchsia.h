@@ -15,7 +15,7 @@
 namespace rx
 {
 
-class WindowSurfaceVkFuchsia : public WindowSurfaceVk
+class WindowSurfaceVkFuchsia : public WindowSurfaceVkSwapchain
 {
   public:
     WindowSurfaceVkFuchsia(const egl::SurfaceState &surfaceState, EGLNativeWindowType window);
