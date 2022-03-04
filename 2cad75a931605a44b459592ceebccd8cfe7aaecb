@@ -87,6 +87,24 @@
       "parentUuid": "33523228_0ce2b1d4",
       "revId": "2cad75a931605a44b459592ceebccd8cfe7aaecb",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "54a0f24c_c30a4a1b",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2022-03-04T17:31:45Z",
+      "side": 1,
+      "message": "The problem is not just the memory pressure, it is also for performance. For example, bufferSubData code path check its\u0027 serial against mLastCompletedQueueSerial to see if previous GPU access is finished or not, if yes, then it go down the fast path. This CL will cause mLastCompletedQueueSerial 50 submissions behind, which means that code path will always go down the slow path. And also the garbage collection code rely on that to clean up garbages. There is strong motivation for ANGLE to know the GPU progress as much as possible. Right now this is the mechanism that ANGLE gets the GPU progress, so the implication is high.\n\nWe should look at the problem you ran into and see what\u0027s the best solution for you.",
+      "parentUuid": "5fccd1d3_11899906",
+      "revId": "2cad75a931605a44b459592ceebccd8cfe7aaecb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
