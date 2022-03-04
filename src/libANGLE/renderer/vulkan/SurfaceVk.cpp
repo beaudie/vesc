@@ -95,13 +95,6 @@ VkPresentModeKHR GetDesiredPresentMode(const std::vector<VkPresentModeKHR> &pres
     return VK_PRESENT_MODE_FIFO_KHR;
 }
 
-constexpr VkImageUsageFlags kSurfaceVkImageUsageFlags =
-    VK_IMAGE_USAGE_TRANSFER_DST_BIT | VK_IMAGE_USAGE_TRANSFER_SRC_BIT | VK_IMAGE_USAGE_SAMPLED_BIT;
-constexpr VkImageUsageFlags kSurfaceVkColorImageUsageFlags =
-    kSurfaceVkImageUsageFlags | VK_IMAGE_USAGE_COLOR_ATTACHMENT_BIT;
-constexpr VkImageUsageFlags kSurfaceVkDepthStencilImageUsageFlags =
-    kSurfaceVkImageUsageFlags | VK_IMAGE_USAGE_DEPTH_STENCIL_ATTACHMENT_BIT;
-
 // If the device is rotated with any of the following transform flags, the swapchain width and
 // height must be swapped (e.g. make a landscape window portrait).  This must also be done for all
 // attachments used with the swapchain (i.e. depth, stencil, and multisample buffers).
