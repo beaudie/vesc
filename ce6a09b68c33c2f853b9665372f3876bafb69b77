@@ -16,6 +16,23 @@
       "message": "Nice!",
       "revId": "ce6a09b68c33c2f853b9665372f3876bafb69b77",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "038cf9d4_0ec4e5aa",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-03-04T00:55:23Z",
+      "side": 1,
+      "message": "Drive-by: Allowing earlier clean up aside, I think it\u0027s worth figuring out why we were generating so much garbage in the first place. What was causing the views to be recreated so frequently?\n\nFollow up stuff for sure.",
+      "revId": "ce6a09b68c33c2f853b9665372f3876bafb69b77",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
