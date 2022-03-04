@@ -18,6 +18,23 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "7242cdd0_dbc436bf",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 14
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1340649
+      },
+      "writtenOn": "2022-03-04T21:33:14Z",
+      "side": 1,
+      "message": "thanks, landing this",
+      "revId": "87f23ef70f270f193fef43f635fd3d7f979c68f4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "6e2109cd_10750d9d",
@@ -31,6 +48,30 @@
       "writtenOn": "2022-03-04T15:05:12Z",
       "side": 1,
       "message": "I\u0027m surprised that triangle strips were more common than triangles.",
+      "range": {
+        "startLine": 287,
+        "startChar": 35,
+        "endLine": 287,
+        "endChar": 67
+      },
+      "revId": "87f23ef70f270f193fef43f635fd3d7f979c68f4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "331b08fb_153d593c",
+        "filename": "src/libANGLE/renderer/vulkan/ProgramVk.cpp",
+        "patchSetId": 14
+      },
+      "lineNbr": 287,
+      "author": {
+        "id": 1340649
+      },
+      "writtenOn": "2022-03-04T21:33:14Z",
+      "side": 1,
+      "message": "Ack\n\nby \"common\" i meant \"common in games/apps that showed perf improvement due to better shader cache hits\"",
+      "parentUuid": "6e2109cd_10750d9d",
       "range": {
         "startLine": 287,
         "startChar": 35,
