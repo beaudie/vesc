@@ -39,6 +39,30 @@
       },
       "revId": "ff98f6ffe53a6f3780f3ca0865e84c7de5f4cb5f",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "1ace845b_ae4a2502",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 1675,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2022-03-04T21:54:10Z",
+      "side": 1,
+      "message": "Done. Learned new thing (you can do three way max on C++ 11).",
+      "parentUuid": "959256a1_6861f7c2",
+      "range": {
+        "startLine": 1673,
+        "startChar": 0,
+        "endLine": 1675,
+        "endChar": 92
+      },
+      "revId": "ff98f6ffe53a6f3780f3ca0865e84c7de5f4cb5f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
