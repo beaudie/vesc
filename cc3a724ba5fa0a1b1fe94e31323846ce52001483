@@ -87,6 +87,24 @@
       "parentUuid": "b10385c6_1c86233d",
       "revId": "cc3a724ba5fa0a1b1fe94e31323846ce52001483",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "de32e17e_88008108",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-03-04T00:22:28Z",
+      "side": 1,
+      "message": "I think what Jamie meant was \"why doesn\u0027t ANGLE already pick Samsung to be ES3.2 conformant based on its own extension-availability checks?\"\n\nIf I got that right Jamie, I believe the answer is that Samsung is conformant due to unwritten agreements with their driver that make officially-seeming non-conformant extensions to actually be unofficially conformant.\n\nSo based on (public) Vulkan rules alone, Samsung\u0027s driver is not able to do ES3.2.",
+      "parentUuid": "c2944626_45de5a03",
+      "revId": "cc3a724ba5fa0a1b1fe94e31323846ce52001483",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
