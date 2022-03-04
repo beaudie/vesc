@@ -16,6 +16,40 @@
       "message": "Note that while only RG8, R8, R16F failed on the WebGL CTS, many more formats failed in the end2end tests. Wasn\u0027t sure if I should add all possible formats or just common ones.",
       "revId": "df15a8ec2d7373f479f30ebe190d9d4d03608722",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "5b7ff4fe_659b2ab7",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 5
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2022-03-04T01:28:08Z",
+      "side": 1,
+      "message": "lgtm - great work tracking this down.\n",
+      "revId": "df15a8ec2d7373f479f30ebe190d9d4d03608722",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b0ba9b09_ca47c4f7",
+        "filename": "src/tests/angle_end2end_tests_expectations.txt",
+        "patchSetId": 5
+      },
+      "lineNbr": 195,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2022-03-04T01:28:08Z",
+      "side": 1,
+      "message": "Are these failing on AMD GPUs or only Intel? If just Intel, could you mark these MAC METAL INTEL?\n\nCould you please file a follow-on bug describing these failures, block it on anglebug.com/7049, and reference it here? Because otherwise we won\u0027t have an open bug tracking this if we aim to close 7049 with this CL (and I think we should).",
+      "revId": "df15a8ec2d7373f479f30ebe190d9d4d03608722",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
