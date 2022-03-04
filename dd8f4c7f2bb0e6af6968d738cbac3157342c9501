@@ -56,6 +56,30 @@
       },
       "revId": "dd8f4c7f2bb0e6af6968d738cbac3157342c9501",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "8c8a8e0a_3a24ce1a",
+        "filename": "src/libANGLE/renderer/vulkan/vk_cache_utils.h",
+        "patchSetId": 14
+      },
+      "lineNbr": 1145,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2022-03-04T19:10:56Z",
+      "side": 1,
+      "message": "I had that solution here before, and I went with this solution because the cache key type changes in a future patch, so we\u0027d still need to use a multiplication here. I don\u0027t think the perf impact or this multiplication is measurable, and using bytes has an advantage in terms of being consistent.",
+      "parentUuid": "1d0be4fd_1f484815",
+      "range": {
+        "startLine": 1145,
+        "startChar": 11,
+        "endLine": 1145,
+        "endChar": 26
+      },
+      "revId": "dd8f4c7f2bb0e6af6968d738cbac3157342c9501",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }

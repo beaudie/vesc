@@ -16,6 +16,24 @@
       "message": "nit: Not sure if this will double count the descriptorSetCacheKeySizesBytes, because the getTotalCacheKeySizeBytes() is returning the cache key size of the same cache tables each frame. For example, if the cache table size doesn\u0027t change over the past 10 frames, we would have cacheKeySize of cache table * 10 stored in this value, but the \"mCumulativePerfCounters.descriptorSetCacheKeySizesBytes\" should remain the same over the last 10 frames, rather than keeps growing as the table doesn\u0027t change. Maybe we just need a \"\u003d\", instead of \"+\u003d\".",
       "revId": "c3b4faa94c449ac9753d8bb26187d376c3ffa6a5",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "44a1a87d_3292bd2a",
+        "filename": "src/libANGLE/renderer/vulkan/ProgramExecutableVk.cpp",
+        "patchSetId": 15
+      },
+      "lineNbr": 2063,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2022-03-04T19:10:56Z",
+      "side": 1,
+      "message": "I removed this - we don\u0027t really use the cumulative perf counters and you\u0027re right that accumulating cache key size over time doesn\u0027t make sense.",
+      "parentUuid": "baf509ee_a9c1d5a6",
+      "revId": "c3b4faa94c449ac9753d8bb26187d376c3ffa6a5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
