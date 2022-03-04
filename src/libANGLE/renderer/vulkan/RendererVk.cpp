@@ -47,6 +47,12 @@ constexpr bool kExposeNonConformantExtensionsAndVersions = true;
 #else
 constexpr bool kExposeNonConformantExtensionsAndVersions = false;
 #endif
+
+#if defined(ANGLE_ENABLE_SPIRV_GENERATION_THROUGH_GLSLANG)
+constexpr bool kEnableSpirvGenThroughGlslang = true;
+#else
+constexpr bool kEnableSpirvGenThroughGlslang             = false;
+#endif
 }  // anonymous namespace
 
 namespace rx
@@ -3187,6 +3193,8 @@ void RendererVk::initFeatures(DisplayVk *displayVk,
 
     // Retain debug info in SPIR-V blob.
     ANGLE_FEATURE_CONDITION(&mFeatures, retainSpirvDebugInfo, getEnableValidationLayers());
+
+    ANGLE_FEATURE_CONDITION(&mFeatures, generateSPIRVThroughGlslang, kEnableSpirvGenThroughGlslang);
 
     angle::PlatformMethods *platform = ANGLEPlatformCurrent();
     platform->overrideFeaturesVk(platform, &mFeatures);
