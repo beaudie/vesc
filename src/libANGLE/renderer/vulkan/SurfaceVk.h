@@ -20,6 +20,8 @@ namespace rx
 {
 class RendererVk;
 
+VkImageUsageFlags GetSwapchainImageUsageFlags(const angle::FeaturesVk &features);
+
 class SurfaceVk : public SurfaceImpl, public angle::ObserverInterface
 {
   public:
@@ -290,22 +292,51 @@ class WindowSurfaceVk : public SurfaceVk
     angle::Result onSharedPresentContextFlush(const gl::Context *context);
 
   protected:
+    angle::Result initColor(vk::Context *context,
+                            const VkExtent3D &vkExtents,
+                            const vk::Format &format);
+    angle::Result initDepthStencil(vk::Context *context, const VkExtent3D &vkExtents);
+
     angle::Result prepareSwapImpl(const gl::Context *context);
-    angle::Result swapImpl(const gl::Context *context,
-                           const EGLint *rects,
-                           EGLint n_rects,
-                           const void *pNextChain);
+    virtual angle::Result swapImpl(const gl::Context *context,
+                                   const EGLint *rects,
+                                   EGLint n_rects,
+                                   const void *pNextChain);
+
+    angle::Result present(ContextVk *contextVk,
+                          const EGLint *rects,
+                          EGLint n_rects,
+                          const void *pNextChain,
+                          bool *presentOutOfDate);
+    virtual angle::Result presentImpl(ContextVk *contextVk,
+                                      vk::OutsideRenderPassCommandBuffer *commandBuffer,
+                                      Serial *swapSerial,
+                                      const EGLint *rects,
+                                      EGLint n_rects,
+                                      const void *pNextChain,
+                                      bool *presentOutOfDate);
+
+    bool isMultiSampled() const;
 
     EGLNativeWindowType mNativeWindowType;
     VkSurfaceKHR mSurface;
     VkSurfaceCapabilitiesKHR mSurfaceCaps;
     VkBool32 mSupportsProtectedSwapchain;
+    std::vector<impl::SwapchainImage> mSwapchainImages;
+    uint32_t mCurrentSwapchainImageIndex;
+    VkPresentModeKHR mSwapchainPresentMode;  // Current swapchain mode
+
+    // True when acquiring the next image is deferred.
+    bool mNeedToAcquireNextSwapchainImage;
+
+    // EGL_EXT_buffer_age: Track frame count.
+    uint64_t mFrameCount;
 
   private:
     virtual angle::Result createSurfaceVk(vk::Context *context, gl::Extents *extentsOut)      = 0;
     virtual angle::Result getCurrentWindowSize(vk::Context *context, gl::Extents *extentsOut) = 0;
 
-    angle::Result initializeImpl(DisplayVk *displayVk);
+    virtual angle::Result initializeImpl(DisplayVk *displayVk);
     angle::Result recreateSwapchain(ContextVk *contextVk, const gl::Extents &extents);
     angle::Result createSwapChain(vk::Context *context,
                                   const gl::Extents &extents,
@@ -329,11 +360,6 @@ class WindowSurfaceVk : public SurfaceVk
     angle::Result computePresentOutOfDate(vk::Context *context,
                                           VkResult result,
                                           bool *presentOutOfDate);
-    angle::Result present(ContextVk *contextVk,
-                          const EGLint *rects,
-                          EGLint n_rects,
-                          const void *pNextChain,
-                          bool *presentOutOfDate);
 
     void updateOverlay(ContextVk *contextVk) const;
     bool overlayHasEnabledWidget(ContextVk *contextVk) const;
@@ -341,15 +367,12 @@ class WindowSurfaceVk : public SurfaceVk
 
     angle::Result newPresentSemaphore(vk::Context *context, vk::Semaphore *semaphoreOut);
 
-    bool isMultiSampled() const;
-
     bool supportsPresentMode(VkPresentModeKHR presentMode) const;
 
     std::vector<VkPresentModeKHR> mPresentModes;
 
     VkSwapchainKHR mSwapchain;
     // Cached information used to recreate swapchains.
-    VkPresentModeKHR mSwapchainPresentMode;         // Current swapchain mode
     VkPresentModeKHR mDesiredSwapchainPresentMode;  // Desired mode set through setSwapInterval()
     uint32_t mMinImageCount;
     VkSurfaceTransformFlagBitsKHR mPreTransform;
@@ -369,9 +392,7 @@ class WindowSurfaceVk : public SurfaceVk
     // this array can go grow indefinitely.
     std::vector<impl::SwapchainCleanupData> mOldSwapchains;
 
-    std::vector<impl::SwapchainImage> mSwapchainImages;
     std::vector<angle::ObserverBinding> mSwapchainImageBindings;
-    uint32_t mCurrentSwapchainImageIndex;
 
     // Given that the CPU is throttled after a number of swaps, there is an upper bound to the
     // number of semaphores that are used to acquire swapchain images, and that is
@@ -413,12 +434,6 @@ class WindowSurfaceVk : public SurfaceVk
     vk::ImageViewHelper mColorImageMSViews;
     angle::ObserverBinding mColorImageMSBinding;
     vk::Framebuffer mFramebufferMS;
-
-    // True when acquiring the next image is deferred.
-    bool mNeedToAcquireNextSwapchainImage;
-
-    // EGL_EXT_buffer_age: Track frame count.
-    uint64_t mFrameCount;
 
     // EGL_KHR_lock_surface3
     vk::BufferHelper mLockBufferHelper;
