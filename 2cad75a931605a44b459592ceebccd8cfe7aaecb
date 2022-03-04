@@ -69,6 +69,24 @@
       "tag": "mailMessageId\u003d\u003cCAKT\u003ddDkkfEaxjrgACfySSJ7PdAGVZOCWmxsMRvmQOdtsb2BOqA@mail.gmail.com\u003e",
       "revId": "2cad75a931605a44b459592ceebccd8cfe7aaecb",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "5fccd1d3_11899906",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1509302
+      },
+      "writtenOn": "2022-03-04T05:36:33Z",
+      "side": 1,
+      "message": "I was specifically referring to the lines below the one line removed by this CL:\n```\n    // CPU should be throttled to avoid mInFlightCommands from growing too fast. Important for\n    // off-screen scenarios.\n    if (mInFlightCommands.size() \u003e kInFlightCommandsLimit)\n    {\n        size_t numCommandsToFinish \u003d mInFlightCommands.size() - kInFlightCommandsLimit;\n        Serial finishSerial        \u003d mInFlightCommands[numCommandsToFinish].serial;\n        ANGLE_TRY(finishToSerial(context, finishSerial, renderer-\u003egetMaxFenceWaitTimeNs()));\n    }\n```\nIt caps the submited cmd batches at `50`. It\u0027s not big, and won\u0027t cause memory pressure for edge case tests that do not checking any syncs.\n\n`finishToSerial()` -\u003e `retireFinishedCommands()` \u003c- the same retire func used by `checkCompletedCommands()`.",
+      "parentUuid": "33523228_0ce2b1d4",
+      "revId": "2cad75a931605a44b459592ceebccd8cfe7aaecb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
