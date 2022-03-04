@@ -13,6 +13,7 @@
 
 #include "common/linux/dma_buf_utils.h"
 #include "libANGLE/Display.h"
+#include "libANGLE/renderer/vulkan/linux/gbm/SurfaceVkGbm.h"
 #include "libANGLE/renderer/vulkan/vk_caps_utils.h"
 
 namespace rx
@@ -48,7 +49,7 @@ bool DisplayVkGbm::isValidNativeWindow(EGLNativeWindowType window) const
 SurfaceImpl *DisplayVkGbm::createWindowSurfaceVk(const egl::SurfaceState &state,
                                                  EGLNativeWindowType window)
 {
-    return nullptr;
+    return new SurfaceVkGbm(state, window, mGbmDevice);
 }
 
 egl::ConfigSet DisplayVkGbm::generateConfigs()
