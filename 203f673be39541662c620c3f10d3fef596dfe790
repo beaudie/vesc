@@ -16,6 +16,29 @@
       "message": "Code LGTM, let\u0027s see what the bots have to say.",
       "revId": "203f673be39541662c620c3f10d3fef596dfe790",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ed107748_e1515a57",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 2734,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2022-03-04T21:21:50Z",
+      "side": 1,
+      "message": "looks like this causes issues with SwiftShader. You can also default to 3.1 for SwiftShader by copying this line:\n\n    bool isSwiftShader \u003d\n        IsSwiftshader(mPhysicalDeviceProperties.vendorID, mPhysicalDeviceProperties.deviceID);\n\nI\u0027d recommend refactoring this code to avoid the ternary operator and putting each check in its own line.",
+      "range": {
+        "startLine": 2732,
+        "startChar": 0,
+        "endLine": 2734,
+        "endChar": 68
+      },
+      "revId": "203f673be39541662c620c3f10d3fef596dfe790",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
