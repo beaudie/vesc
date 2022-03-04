@@ -22,6 +22,30 @@
       },
       "revId": "ee96a46107f362c23f115f4891aeef38d2ebb364",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "a9e8b820_bb201bc5",
+        "filename": "doc/CaptureAndReplay.md",
+        "patchSetId": 2
+      },
+      "lineNbr": 16,
+      "author": {
+        "id": 1531247
+      },
+      "writtenOn": "2022-03-04T22:22:14Z",
+      "side": 0,
+      "message": "No problem! Just checking what makes most sense here, kind of confusing either way.",
+      "parentUuid": "7711d582_1bb74198",
+      "range": {
+        "startLine": 16,
+        "startChar": 39,
+        "endLine": 16,
+        "endChar": 46
+      },
+      "revId": "ee96a46107f362c23f115f4891aeef38d2ebb364",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
