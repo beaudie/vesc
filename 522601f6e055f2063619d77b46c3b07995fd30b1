@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "24da8f82_38c08513",
+        "filename": "src/libANGLE/State.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 430,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2022-03-04T13:22:56Z",
+      "side": 1,
+      "message": "this seems pretty fragile - the mClientVersion variable stored in State is wrong and you\u0027re only overriding it for one function.\n\nI suggest editing \"GetClientVersion\" in Context.cpp to call GetWebGLContext (you\u0027ll need to move that function up in the file to just before \"GetClientVersion\") and limit to ES 3.1 in that case.\n\nWe should technically also edit \"ValidateCreateContext\" to reject explicitly trying to create an ES 3.2 webgl context, if you have the time to make that small fix. Otherwise please file a bug.",
+      "range": {
+        "startLine": 428,
+        "startChar": 0,
+        "endLine": 430,
+        "endChar": 0
+      },
+      "revId": "522601f6e055f2063619d77b46c3b07995fd30b1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
