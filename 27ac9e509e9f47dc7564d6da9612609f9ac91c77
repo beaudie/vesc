@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "b3117493_d853275c",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 6
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1132329
+      },
+      "writtenOn": "2022-03-04T18:49:06Z",
+      "side": 1,
+      "message": "Verified this fixes dmabuf import failure triggered by this recent fix:\n2944e265dedd8e9b9dbbf7c763b62f4716c5b0bd.\n\nReady for review?\n",
+      "revId": "27ac9e509e9f47dc7564d6da9612609f9ac91c77",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
