@@ -20,6 +20,23 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "70ef531a_aa3b7cc6",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1531247
+      },
+      "writtenOn": "2022-03-04T20:05:15Z",
+      "side": 1,
+      "message": "Oh hold on, I might have misread part of your comment Jamie https://anglebug.com/6397#c4\n\nWould you rather keep these vars just in case they might be useful in developer workflows?",
+      "revId": "e27d82d8f550c78e0826ad13506eab7de9a87de4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "d3923628_3dc3c21d",
         "filename": "doc/CaptureAndReplay.md",
         "patchSetId": 1
