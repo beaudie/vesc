@@ -15,7 +15,7 @@
 namespace rx
 {
 
-class WindowSurfaceVkAndroid : public WindowSurfaceVk
+class WindowSurfaceVkAndroid : public WindowSurfaceVkSwapchain
 {
   public:
     WindowSurfaceVkAndroid(const egl::SurfaceState &surfaceState, EGLNativeWindowType window);
