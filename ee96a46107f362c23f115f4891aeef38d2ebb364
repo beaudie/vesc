@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "7711d582_1bb74198",
+        "filename": "doc/CaptureAndReplay.md",
+        "patchSetId": 2
+      },
+      "lineNbr": 16,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2022-03-04T21:50:38Z",
+      "side": 0,
+      "message": "I\u0027d like to leave this as is.  On Android, we don\u0027t use START or END frame at all.  When its enabled and we set a trigger, that capture will happen.\n\nWe may soon add support for \"in source\" triggers as well, so you won\u0027t have to define a start and end range on desktop either.\n\nSorry to nitpick, that\u0027s what happens when we start changing docs though. :)",
+      "range": {
+        "startLine": 16,
+        "startChar": 39,
+        "endLine": 16,
+        "endChar": 46
+      },
+      "revId": "ee96a46107f362c23f115f4891aeef38d2ebb364",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}

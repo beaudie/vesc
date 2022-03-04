@@ -1,0 +1,44 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "0265f37c_bf9b5e46",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2022-03-04T21:50:38Z",
+      "side": 1,
+      "message": "LGTM with one request.",
+      "revId": "5f4e45b717845544435d7ecd92ed7da1421a8a7c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "6685d91d_e751d98f",
+        "filename": "doc/CaptureAndReplay.md",
+        "patchSetId": 2
+      },
+      "lineNbr": 47,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2022-03-04T21:50:38Z",
+      "side": 1,
+      "message": "This is only true on desktop, but these are desktop centric steps, so okay to leave it as you have it.",
+      "range": {
+        "startLine": 47,
+        "startChar": 64,
+        "endLine": 47,
+        "endChar": 72
+      },
+      "revId": "5f4e45b717845544435d7ecd92ed7da1421a8a7c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
