@@ -266,6 +266,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "36a677c1_ce5cae91",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 2660,
+      "author": {
+        "id": 1491823
+      },
+      "writtenOn": "2022-03-04T14:03:58Z",
+      "side": 1,
+      "message": "That was more or less my idea (not quite, but similar), When the feature is set I wanted to enable all extensions in the vulkan backend, and then, in the frontend I was checking  the features to set the version according to available extensions and caps. With that a test crashed that passes otherwise, because for some reason I get a DisplayGLX at the beginning that doesn\u0027t see the feature override, returns a context version of type 3.1 and this leads to a crash (like described above) because apparently a function pointer that seems to be set only with GLES 3.2 is still 0.\n\nThere is also a tricky thing with returning 3.2 and then disabling it if it is not supported: In `RendererVk::getMaxSupportedESVersion()` the version 3.2 is returned when `isMockICDEnabled()` returns true, so my guess would be that I should not touch a 3.2 reported from the back-end, because it might be set based on this test of which the front-end knows nothing.",
+      "parentUuid": "8190f0bb_1c6dedf9",
+      "range": {
+        "startLine": 2658,
+        "startChar": 0,
+        "endLine": 2660,
+        "endChar": 27
+      },
+      "revId": "7c3ed59026984b0ba2a4ce73bccf89080754bb79",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "d840fe8b_36e189cd",
         "filename": "src/libANGLE/renderer/vulkan/RendererVk.cpp",
         "patchSetId": 1
