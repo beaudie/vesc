@@ -242,6 +242,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "8190f0bb_1c6dedf9",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 2660,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2022-03-04T13:12:07Z",
+      "side": 1,
+      "message": "I suggest you return 3.2 available by default as a max supported conformant version, and limit to 3.1 in the front-end if extensions are available. That way you don\u0027t have to worry about the feature. And other types of back-end in ANGLE won\u0027t be affected.",
+      "parentUuid": "5556e8aa_0ffd322a",
+      "range": {
+        "startLine": 2658,
+        "startChar": 0,
+        "endLine": 2660,
+        "endChar": 27
+      },
+      "revId": "7c3ed59026984b0ba2a4ce73bccf89080754bb79",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "d840fe8b_36e189cd",
         "filename": "src/libANGLE/renderer/vulkan/RendererVk.cpp",
         "patchSetId": 1
