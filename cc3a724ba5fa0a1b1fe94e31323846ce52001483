@@ -141,6 +141,24 @@
       "parentUuid": "40803671_ed61f60b",
       "revId": "cc3a724ba5fa0a1b1fe94e31323846ce52001483",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "9fadc976_0cfebc71",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1340649
+      },
+      "writtenOn": "2022-03-04T21:27:08Z",
+      "side": 1,
+      "message": "thats mainly for `EGL_KHR_gl_texture_3D_image` nevertheless, we would prefer a feature flag versus the run-time check (since it is going to take a lot longer for the spec to be finalized)",
+      "parentUuid": "6f55d9bd_4bd5e378",
+      "revId": "cc3a724ba5fa0a1b1fe94e31323846ce52001483",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
