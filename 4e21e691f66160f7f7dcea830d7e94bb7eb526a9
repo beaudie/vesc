@@ -114,6 +114,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "e1ec3e84_65a2add5",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 13
+      },
+      "lineNbr": 2410,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-03-04T00:14:46Z",
+      "side": 1,
+      "message": "See for example `QueueSubmitType`.",
+      "parentUuid": "7631596c_4a84c17b",
+      "range": {
+        "startLine": 2410,
+        "startChar": 49,
+        "endLine": 2410,
+        "endChar": 53
+      },
+      "revId": "4e21e691f66160f7f7dcea830d7e94bb7eb526a9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "30002110_a1ee469c",
         "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
         "patchSetId": 13
