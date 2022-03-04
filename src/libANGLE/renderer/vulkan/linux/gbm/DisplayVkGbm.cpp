@@ -13,6 +13,7 @@
 
 #include "common/linux/dma_buf_utils.h"
 #include "libANGLE/Display.h"
+#include "libANGLE/renderer/vulkan/linux/gbm/SurfaceVkGbm.h"
 #include "libANGLE/renderer/vulkan/vk_caps_utils.h"
 
 namespace rx
@@ -48,7 +49,7 @@ bool DisplayVkGbm::isValidNativeWindow(EGLNativeWindowType window) const
 SurfaceImpl *DisplayVkGbm::createWindowSurfaceVk(const egl::SurfaceState &state,
                                                  EGLNativeWindowType window)
 {
-    return nullptr;
+    return new SurfaceVkGbm(state, window, mGbmDevice);
 }
 
 egl::ConfigSet DisplayVkGbm::generateConfigs()
@@ -68,7 +69,11 @@ egl::ConfigSet DisplayVkGbm::generateConfigs()
         egl_vk::GenerateConfigs(kColorFormats.data(), kColorFormats.size(),
                                 depthStencilFormats.data(), depthStencilFormats.size(), this);
 
-    cfgSet.begin()->second.nativeVisualID = DRM_FORMAT_XRGB8888;
+    for (auto &cfgEntry : cfgSet)
+    {
+        egl::Config &cfg   = cfgEntry.second;
+        cfg.nativeVisualID = DRM_FORMAT_XRGB8888;
+    }
 
     return cfgSet;
 }
