@@ -194,6 +194,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "a85c43fa_a524fb4f",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 2660,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-03-04T00:37:42Z",
+      "side": 1,
+      "message": "\u003e to also move `exposeNonConformantExtensionsAndVersions` into front-end features.\n\nI don\u0027t see a problem with that. Pretty sure metal/ would eventually want to start using it too.",
+      "parentUuid": "500df8b4_7fe7ddd1",
+      "range": {
+        "startLine": 2658,
+        "startChar": 0,
+        "endLine": 2660,
+        "endChar": 27
+      },
+      "revId": "7c3ed59026984b0ba2a4ce73bccf89080754bb79",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "d840fe8b_36e189cd",
         "filename": "src/libANGLE/renderer/vulkan/RendererVk.cpp",
         "patchSetId": 1
