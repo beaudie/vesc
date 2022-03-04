@@ -1670,6 +1670,9 @@ angle::Result RendererVk::initialize(DisplayVk *displayVk,
     mVertexConversionBufferAlignment = std::max(
         vk::kVertexBufferAlignment,
         static_cast<size_t>(mPhysicalDeviceProperties.limits.minStorageBufferOffsetAlignment));
+    mVertexConversionBufferAlignment =
+        std::max(mVertexConversionBufferAlignment,
+                 static_cast<size_t>(mPhysicalDeviceProperties.limits.nonCoherentAtomSize));
     ASSERT(gl::isPow2(mVertexConversionBufferAlignment));
 
     {
