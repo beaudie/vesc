@@ -24,7 +24,7 @@ constexpr EGLAttrib kDefaultStreamDescriptor = static_cast<EGLAttrib>(kGgpPrimar
 
 WindowSurfaceVkGGP::WindowSurfaceVkGGP(const egl::SurfaceState &surfaceState,
                                        EGLNativeWindowType window)
-    : WindowSurfaceVk(surfaceState, window)
+    : WindowSurfaceVkSwapchain(surfaceState, window)
 {}
 
 angle::Result WindowSurfaceVkGGP::createSurfaceVk(vk::Context *context, gl::Extents *extentsOut)

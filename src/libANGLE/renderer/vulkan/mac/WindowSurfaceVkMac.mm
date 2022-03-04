@@ -20,7 +20,7 @@ namespace rx
 
 WindowSurfaceVkMac::WindowSurfaceVkMac(const egl::SurfaceState &surfaceState,
                                        EGLNativeWindowType window)
-    : WindowSurfaceVk(surfaceState, window), mMetalLayer(nullptr)
+    : WindowSurfaceVkSwapchain(surfaceState, window), mMetalLayer(nullptr)
 {}
 
 WindowSurfaceVkMac::~WindowSurfaceVkMac()
