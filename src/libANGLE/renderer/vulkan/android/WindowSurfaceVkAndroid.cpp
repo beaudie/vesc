@@ -18,7 +18,7 @@ namespace rx
 
 WindowSurfaceVkAndroid::WindowSurfaceVkAndroid(const egl::SurfaceState &surfaceState,
                                                EGLNativeWindowType window)
-    : WindowSurfaceVk(surfaceState, window)
+    : WindowSurfaceVkSwapchain(surfaceState, window)
 {}
 
 angle::Result WindowSurfaceVkAndroid::createSurfaceVk(vk::Context *context, gl::Extents *extentsOut)

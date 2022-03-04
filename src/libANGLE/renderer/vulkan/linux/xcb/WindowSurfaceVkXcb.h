@@ -17,7 +17,7 @@ struct xcb_connection_t;
 namespace rx
 {
 
-class WindowSurfaceVkXcb : public WindowSurfaceVk
+class WindowSurfaceVkXcb : public WindowSurfaceVkSwapchain
 {
   public:
     WindowSurfaceVkXcb(const egl::SurfaceState &surfaceState,

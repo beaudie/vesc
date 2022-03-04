@@ -18,7 +18,7 @@ struct wl_egl_window;
 namespace rx
 {
 
-class WindowSurfaceVkWayland : public WindowSurfaceVk
+class WindowSurfaceVkWayland : public WindowSurfaceVkSwapchain
 {
   public:
     // Requests of new sizes from client go through this callback, but actual resize will happen
