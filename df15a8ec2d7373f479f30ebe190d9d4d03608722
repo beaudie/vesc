@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "ac612f08_eb778717",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 5
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1115588
+      },
+      "writtenOn": "2022-03-04T00:20:24Z",
+      "side": 1,
+      "message": "Note that while only RG8, R8, R16F failed on the WebGL CTS, many more formats failed in the end2end tests. Wasn\u0027t sure if I should add all possible formats or just common ones.",
+      "revId": "df15a8ec2d7373f479f30ebe190d9d4d03608722",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
