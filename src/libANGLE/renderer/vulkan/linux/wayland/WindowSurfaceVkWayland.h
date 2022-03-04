@@ -18,7 +18,7 @@ struct wl_egl_window;
 namespace rx
 {
 
-class WindowSurfaceVkWayland : public WindowSurfaceVk
+class WindowSurfaceVkWayland : public WindowSurfaceVkSwapchain
 {
   public:
     static void ResizeCallback(wl_egl_window *window, void *payload);
