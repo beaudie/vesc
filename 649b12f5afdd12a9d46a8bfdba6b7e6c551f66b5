@@ -39,6 +39,30 @@
       },
       "revId": "649b12f5afdd12a9d46a8bfdba6b7e6c551f66b5",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "03f842e0_24444046",
+        "filename": "src/libANGLE/capture/FrameCapture.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 2192,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2022-03-04T16:18:12Z",
+      "side": 1,
+      "message": "Just remove the first binding.getBuffer() check, it\u0027s redundant.\n\nthe pointer check should be !\u003d nullptr though",
+      "parentUuid": "20d2aafc_8e5de1d0",
+      "range": {
+        "startLine": 2190,
+        "startChar": 0,
+        "endLine": 2192,
+        "endChar": 79
+      },
+      "revId": "649b12f5afdd12a9d46a8bfdba6b7e6c551f66b5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
