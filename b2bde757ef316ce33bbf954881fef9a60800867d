@@ -16,6 +16,46 @@
       "message": "Thanks!",
       "revId": "b2bde757ef316ce33bbf954881fef9a60800867d",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "20d8299b_452d9188",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 15
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-03-05T07:07:06Z",
+      "side": 1,
+      "message": "LGTM, thanks",
+      "revId": "b2bde757ef316ce33bbf954881fef9a60800867d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "07f8547f_bb1e237e",
+        "filename": "src/tests/gl_tests/VulkanPerformanceCounterTest.cpp",
+        "patchSetId": 15
+      },
+      "lineNbr": 283,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-03-05T07:07:06Z",
+      "side": 1,
+      "message": "nit: could also do `* kNumSubmits` here and test N\u003e1 submissions",
+      "range": {
+        "startLine": 283,
+        "startChar": 62,
+        "endLine": 283,
+        "endChar": 63
+      },
+      "revId": "b2bde757ef316ce33bbf954881fef9a60800867d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
