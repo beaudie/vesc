@@ -123,6 +123,24 @@
       "parentUuid": "54a0f24c_c30a4a1b",
       "revId": "2cad75a931605a44b459592ceebccd8cfe7aaecb",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "130bf605_7cbcd8bc",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-03-05T07:23:21Z",
+      "side": 1,
+      "message": "Have you checked where `checkCompletedCommands` is called? It\u0027s in sync\u0027s `getStatus`, query\u0027s `getResult` and `submitFrame`. Basically if the application doesn\u0027t use sync or query objects (i.e. most apps with onscreen rendering), what this change removes was the only place we were checking for GPU progress. I think Charlie\u0027s concern is very real.\n\nI added a comment on the bug.",
+      "parentUuid": "3ec2d7c1_9c73069e",
+      "revId": "2cad75a931605a44b459592ceebccd8cfe7aaecb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
