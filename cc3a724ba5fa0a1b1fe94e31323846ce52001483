@@ -159,6 +159,24 @@
       "parentUuid": "6f55d9bd_4bd5e378",
       "revId": "cc3a724ba5fa0a1b1fe94e31323846ce52001483",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "4c7cd355_a2903c30",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-03-05T07:45:30Z",
+      "side": 1,
+      "message": "Ok, having exposeNonConformantExtensionsAndVersions set to true for samsung is fine with me. What\u0027s the point of `limitConformantGlesVersionTo31` though? For !samsung, why not let things be the way they currently are?",
+      "parentUuid": "9fadc976_0cfebc71",
+      "revId": "cc3a724ba5fa0a1b1fe94e31323846ce52001483",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
