@@ -16,6 +16,23 @@
       "message": "Thanks for the bug updates.\n\nThis is a small enough change that I think it\u0027s OK if I +2 it so it can land today.\n",
       "revId": "d7d0457b32759ec0b73a810bcffce0fa7209e6d0",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "bb5517e4_b3344061",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 7
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2022-03-05T00:59:10Z",
+      "side": 1,
+      "message": "Per https://logs.chromium.org/logs/angle/buildbucket/cr-buildbucket/8820576078177865681/+/u/GLES_3.0_trace_tests/stdout it looks like the new MultisampleResolveTest tests have to be skipped on Vulkan/SwiftShader.\n",
+      "revId": "d7d0457b32759ec0b73a810bcffce0fa7209e6d0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
