@@ -18,6 +18,23 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "9646be73_33135074",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-03-05T07:03:31Z",
+      "side": 1,
+      "message": "Nack. `angle_enable_spirv_gen_through_glslang` doesn\u0027t mean \"use glslang\", but rather have the code for it compiled so it could be used for testing. What your change does is make debug builds use glslang and release builds not, which is not very useful.",
+      "revId": "65c14701ec2ca819840de592f35395c1ccdbb86a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "3b626f65_5306ff3e",
