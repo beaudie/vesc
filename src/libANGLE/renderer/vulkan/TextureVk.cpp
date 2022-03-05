@@ -3046,6 +3046,20 @@ void TextureVk::releaseImage(ContextVk *contextVk)
 {
     RendererVk *renderer = contextVk->getRenderer();
 
+    for (vk::ImageViewHelper &imageViews : mMultisampledImageViews)
+    {
+        if (mImage == nullptr)
+        {
+            ASSERT(imageViews.isImageViewGarbageEmpty());
+        }
+        else
+        {
+            ASSERT(mImage->getSharedResourceUse().getSerial() >=
+                   imageViews.getSharedResourceUse().getSerial());
+        }
+        imageViews.release(renderer);
+    }
+
     if (mImage)
     {
         if (mOwnsImage)
@@ -3065,11 +3079,6 @@ void TextureVk::releaseImage(ContextVk *contextVk)
         {
             image.releaseImageFromShareContexts(renderer, contextVk);
         }
-    }
-
-    for (vk::ImageViewHelper &imageViews : mMultisampledImageViews)
-    {
-        imageViews.release(renderer);
     }
 
     for (auto &renderTargets : mSingleLayerRenderTargets)
@@ -3346,7 +3355,18 @@ uint32_t TextureVk::getImageViewLayerCount() const
 
 angle::Result TextureVk::refreshImageViews(ContextVk *contextVk)
 {
-    getImageViews().release(contextVk->getRenderer());
+    RendererVk *renderer                  = contextVk->getRenderer();
+    vk::ImageViewHelper &defaultImageView = getImageViews();
+    if (mImage == nullptr)
+    {
+        ASSERT(defaultImageView.isImageViewGarbageEmpty());
+    }
+    else
+    {
+        ASSERT(mImage->getSharedResourceUse().getSerial() >=
+               defaultImageView.getSharedResourceUse().getSerial());
+    }
+    defaultImageView.release(renderer);
     const gl::ImageDesc &baseLevelDesc = mState.getBaseLevelDesc();
 
     ANGLE_TRY(initImageViews(contextVk, mImage->getActualFormat(), baseLevelDesc.format.info->sized,

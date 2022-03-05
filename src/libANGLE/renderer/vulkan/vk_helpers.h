@@ -2494,6 +2494,8 @@ class ImageViewHelper final : public Resource
         SrgbDecodeMode srgbDecodeMode,
         gl::SrgbOverride srgbOverrideMode) const;
 
+    bool isImageViewGarbageEmpty() const;
+
   private:
     ImageView &getReadImageView()
     {

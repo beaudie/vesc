@@ -276,6 +276,19 @@ void RenderbufferVk::releaseImage(ContextVk *contextVk)
 {
     RendererVk *renderer = contextVk->getRenderer();
 
+    if (mImage == nullptr || !mImage->valid())
+    {
+        ASSERT(mImageViews.isImageViewGarbageEmpty());
+        ASSERT(mMultisampledImageViews.isImageViewGarbageEmpty());
+    }
+    else
+    {
+        ASSERT(mImage->getSharedResourceUse().getSerial() >=
+               mImageViews.getSharedResourceUse().getSerial());
+        ASSERT(mImage->getSharedResourceUse().getSerial() >=
+               mMultisampledImageViews.getSharedResourceUse().getSerial());
+    }
+
     if (mImage && mOwnsImage)
     {
         mImage->releaseImageFromShareContexts(renderer, contextVk);

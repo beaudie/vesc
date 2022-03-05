@@ -8620,6 +8620,18 @@ void ImageViewHelper::release(RendererVk *renderer)
     mImageViewSerial = renderer->getResourceSerialFactory().generateImageOrBufferViewSerial();
 }
 
+bool ImageViewHelper::isImageViewGarbageEmpty() const
+{
+    return mPerLevelRangeLinearReadImageViews.empty() &&
+           mPerLevelRangeLinearCopyImageViews.empty() &&
+           mPerLevelRangeLinearFetchImageViews.empty() &&
+           mPerLevelRangeSRGBReadImageViews.empty() && mPerLevelRangeSRGBCopyImageViews.empty() &&
+           mPerLevelRangeSRGBFetchImageViews.empty() &&
+           mPerLevelRangeStencilReadImageViews.empty() && mLayerLevelDrawImageViews.empty() &&
+           mLayerLevelDrawImageViewsLinear.empty() && mSubresourceDrawImageViews.empty() &&
+           mLayerLevelStorageImageViews.empty();
+}
+
 void ImageViewHelper::destroy(VkDevice device)
 {
     mCurrentBaseMaxLevelHash = 0;
