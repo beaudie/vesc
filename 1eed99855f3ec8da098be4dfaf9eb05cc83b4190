@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "3ebce1b0_5e0492bf",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 4
+      },
+      "lineNbr": 9,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-03-05T07:54:40Z",
+      "side": 1,
+      "message": "Out of curiosity, what was the issue? Currently, with exposeNonConformantExtensionsAndVersions we default to ES3.2, and fall back to ES3.0 or ES2.0 if something is missing. Those are checks for rather basic features, was one of those missing? Why?!",
+      "range": {
+        "startLine": 9,
+        "startChar": 4,
+        "endLine": 9,
+        "endChar": 12
+      },
+      "revId": "1eed99855f3ec8da098be4dfaf9eb05cc83b4190",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
