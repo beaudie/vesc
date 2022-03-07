@@ -1,0 +1,55 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "193609f3_5fd21b44",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 5
+      },
+      "lineNbr": 13,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2022-03-07T20:27:00Z",
+      "side": 1,
+      "message": "Do you know whether the test case from https://bugs.webkit.org/show_bug.cgi?id\u003d237113 is fixed with this fix, too? I suspect that it is and that the WebKit folks will want to cherry-pick this immediately. If it is, please mention this in the CL description.",
+      "revId": "48e51d0e2b4e0888e939fb3f4aa4d2cd7d6c93e1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "6689acef_46c43c8f",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 5
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2022-03-07T20:27:00Z",
+      "side": 1,
+      "message": "lgtm\n\nGreat work Gregg tracking this down. A couple of small questions. Hoping for one more pair of eyeballs on this change.\n",
+      "revId": "48e51d0e2b4e0888e939fb3f4aa4d2cd7d6c93e1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "4551f46b_c75bbcfd",
+        "filename": "src/libANGLE/renderer/metal/FrameBufferMtl.mm",
+        "patchSetId": 5
+      },
+      "lineNbr": 824,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2022-03-07T20:27:00Z",
+      "side": 1,
+      "message": "This is fantastic - great work tracking this down.\n\nIs there a code path where if glInvalidateFramebuffer is called after glBlitFramebuffer, ending the render pass - that MTLStoreActionStoreAndMultisampleResolve for this attachment can still be downgraded to MTLStoreActionMultisampleResolve? That will retain the performance advantages of the previous code when it\u0027s legal to. Theoretically, in Chrome, using  preserveDrawingBuffer:false in WebGL\u0027s context creation attributes will allow this downgrading.",
+      "revId": "48e51d0e2b4e0888e939fb3f4aa4d2cd7d6c93e1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
