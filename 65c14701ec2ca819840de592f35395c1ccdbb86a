@@ -35,6 +35,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "d8d72136_a0666d84",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1359667
+      },
+      "writtenOn": "2022-03-07T19:00:01Z",
+      "side": 1,
+      "message": "\u003e doesn\u0027t mean \"use glslang\", but rather have the code for it compiled so it could be used for testing\nSo should I instead have a different build flag to use glslang?\n\u003e What your change does is make debug builds use glslang and release builds not\nI see, so this is the first part you pointed out where this flag is mainly for determining if glslang should be compiled or not. This is making more sense to use a different/new build flag to \"use glslang\"",
+      "parentUuid": "9646be73_33135074",
+      "revId": "65c14701ec2ca819840de592f35395c1ccdbb86a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "3b626f65_5306ff3e",
