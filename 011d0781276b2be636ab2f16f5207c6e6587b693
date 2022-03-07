@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "69a11728_e1d38572",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1115588
+      },
+      "writtenOn": "2022-03-07T09:57:10Z",
+      "side": 1,
+      "message": "AFAIK this test (and the WebGL CTS test just added) only fail on M1 without this change.",
+      "revId": "011d0781276b2be636ab2f16f5207c6e6587b693",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
