@@ -68,6 +68,23 @@
       "message": "3029049: Early return when rebinding the same buffer, sampler or texture | https://chromium-review.googlesource.com/c/angle/angle/+/3029049",
       "revId": "1c0961055944a34109b547f486aa14e9fc96b7b3",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "3d17704c_5e5aa5a8",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 8
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1340649
+      },
+      "writtenOn": "2022-03-07T17:22:50Z",
+      "side": 1,
+      "message": "jamie, is there a path to land this without affecting d3d? was hoping to close this for internal milestone",
+      "revId": "1c0961055944a34109b547f486aa14e9fc96b7b3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
