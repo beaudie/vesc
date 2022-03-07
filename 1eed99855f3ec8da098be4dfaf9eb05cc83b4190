@@ -22,6 +22,29 @@
       },
       "revId": "1eed99855f3ec8da098be4dfaf9eb05cc83b4190",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "f9bd0e2d_39418026",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 2736,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2022-03-07T17:29:25Z",
+      "side": 1,
+      "message": "looks like this fails on QC as well as SwS. Local debugging shows it\u0027s basically because we don\u0027t support GS / TS . How about instead we early return ES 3.1 support if GS/TS is missing?",
+      "range": {
+        "startLine": 2736,
+        "startChar": 71,
+        "endLine": 2736,
+        "endChar": 84
+      },
+      "revId": "1eed99855f3ec8da098be4dfaf9eb05cc83b4190",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
