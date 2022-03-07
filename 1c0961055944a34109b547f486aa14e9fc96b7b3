@@ -85,6 +85,24 @@
       "message": "jamie, is there a path to land this without affecting d3d? was hoping to close this for internal milestone",
       "revId": "1c0961055944a34109b547f486aa14e9fc96b7b3",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "c1538b7e_0fc17af5",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 8
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2022-03-07T17:30:35Z",
+      "side": 1,
+      "message": "Because it\u0027s a change to the front-end, there\u0027s no way to land this without some possible interaction with other back-ends. If you want to help out you can help me diagnose the bug and I can propose a quick fix. OOO today but I can prioritize this for this week.",
+      "parentUuid": "3d17704c_5e5aa5a8",
+      "revId": "1c0961055944a34109b547f486aa14e9fc96b7b3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
