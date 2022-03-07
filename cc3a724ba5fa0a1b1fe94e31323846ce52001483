@@ -177,6 +177,24 @@
       "parentUuid": "9fadc976_0cfebc71",
       "revId": "cc3a724ba5fa0a1b1fe94e31323846ce52001483",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "66d574dd_8d5fa6c6",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1340649
+      },
+      "writtenOn": "2022-03-07T16:58:17Z",
+      "side": 1,
+      "message": "\u003e What\u0027s the point of  `limitConformantGlesVersionTo31`  though?\n\ntrain of thought was angle by default does not need to limit to a specific GLES version and vendors can opt-in to a limit should they want to. Workaround for the fact that features are boolean instead of custom type",
+      "parentUuid": "4c7cd355_a2903c30",
+      "revId": "cc3a724ba5fa0a1b1fe94e31323846ce52001483",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
