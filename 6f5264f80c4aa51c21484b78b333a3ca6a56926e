@@ -26,6 +26,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "149f85c8_f3f9ee5b",
+        "filename": "src/libANGLE/capture/FrameCapture.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 2189,
+      "author": {
+        "id": 1491687
+      },
+      "writtenOn": "2022-03-08T10:57:47Z",
+      "side": 1,
+      "message": "The case we are trying to avoid here is when 0 is bound to the `ARRAY_BUFFER`, which will happen here on `binding.getBuffer().get() \u003d\u003d nullptr`, and the attrib pointer is non-null, so `!\u003d nullptr`:\n\n```\nGL_INVALID_OPERATION is generated a non-zero vertex array object is bound, zero is bound to the GL_ARRAY_BUFFER buffer object binding point and the pointer argument is not NULL.\n```\n\nhttps://source.chromium.org/chromium/chromium/src/+/main:third_party/angle/src/libANGLE/validationES2.h;l\u003d105?q\u003dvalidationes2.h\n\nhttps://www.khronos.org/registry/OpenGL-Refpages/es3.0/html/glVertexAttribPointer.xhtml\n\nAccording to the spec, there won\u0027t be an error if the `ARRAY_BUFFER` is unbound and the attrib pointer `\u003d\u003d nullptr`.\n\nPlease note that in previous patches I was using the negated term, which would also be possible but the currently proposed one matches the spec language better.\n\n```\nbool isAttribValid \u003d binding.getBuffer().get() !\u003d nullptr || attrib.pointer \u003d\u003d nullptr;\n\nif (isAttribValid \u0026\u0026\n    ...)\n```",
+      "parentUuid": "7b78455e_f76e67f3",
+      "range": {
+        "startLine": 2189,
+        "startChar": 72,
+        "endLine": 2189,
+        "endChar": 97
+      },
+      "revId": "6f5264f80c4aa51c21484b78b333a3ca6a56926e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "1fe583bf_7f872833",
         "filename": "src/libANGLE/capture/FrameCapture.cpp",
         "patchSetId": 6
@@ -37,6 +61,30 @@
       "writtenOn": "2022-03-04T19:05:46Z",
       "side": 1,
       "message": "I still think you can remove this binding.getBuffer.get() !\u003d nullptr clause",
+      "range": {
+        "startLine": 2194,
+        "startChar": 14,
+        "endLine": 2194,
+        "endChar": 49
+      },
+      "revId": "6f5264f80c4aa51c21484b78b333a3ca6a56926e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "e6ca9b69_b85d525a",
+        "filename": "src/libANGLE/capture/FrameCapture.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 2194,
+      "author": {
+        "id": 1491687
+      },
+      "writtenOn": "2022-03-08T10:57:47Z",
+      "side": 1,
+      "message": "This would skip capturing attributes where an array buffer is bound and `attrib.format`, `attrib.pointer` and `binding.getStride()` equal the default values.\n\nNot sure if this makes sense, but it would change the behavior beyond skipping the invalid condition.\n\nLogically this clause could only be removed if the skip condition above was `bool skipInvalidAttrib \u003d binding.getBuffer().get() !\u003d nullptr \u0026\u0026 attrib.pointer \u003d\u003d nullptr`, as `defaultAttrib.pointer` resolves to `nullptr` and the `|| attrib.pointer !\u003d defaultAttrib.pointer ||` condition would still trigger.",
+      "parentUuid": "1fe583bf_7f872833",
       "range": {
         "startLine": 2194,
         "startChar": 14,
