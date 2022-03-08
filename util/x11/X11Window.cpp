@@ -361,6 +361,15 @@ bool X11Window::initializeImpl(const std::string &name, int width, int height)
         return false;
     }
 
+    // Set PMinSize on XSizeHints so windows larger than the screen do not get adjusted to screen
+    // size
+    XSizeHints sizeHints = {
+        .flags      = PMinSize,
+        .min_width  = width,
+        .min_height = height,
+    };
+    XSetWMNormalHints(mDisplay, mWindow, &sizeHints);
+
     XFlush(mDisplay);
 
     mX      = 0;
