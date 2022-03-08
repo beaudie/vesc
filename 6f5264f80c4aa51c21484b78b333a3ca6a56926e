@@ -74,6 +74,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "30fef7ed_06af3706",
+        "filename": "src/libANGLE/capture/FrameCapture.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 2189,
+      "author": {
+        "id": 1491687
+      },
+      "writtenOn": "2022-03-08T16:13:40Z",
+      "side": 1,
+      "message": "I tried checking for `attrib.pointer \u003d\u003d nullptr` instead of `attrib.pointer !\u003d nullptr` in this patch, and both capturing the `InvalidAttribPointer` test and the `shadowgun_legends` app result in traces that produce the GL error again:\n```\nClient data cannot be used with a non-default vertex array object.\n```\n\nThe situation this patch is trying to avoid is having VAO !\u003d 0, binding a buffer, deleting that buffer, so `buffer \u003d\u003d nullptr` and a non-NULL offset which is left on the attrib pointer, so `attirb.pointer !\u003d nullptr`.\n\nIn the test case it\u0027s the following line that sets a non-NULL pointer and produces the issue:\n```\nglVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 6, reinterpret_cast\u003cconst void *\u003e(6));\n```\n\nIt\u0027s buffer gets deleted and we end up with buffer \u003d\u003d nullptr and attrib.pointer \u003d\u003d 6, which is non-NULL, so !\u003d nullptr.",
+      "parentUuid": "8525743f_4767916f",
+      "range": {
+        "startLine": 2189,
+        "startChar": 72,
+        "endLine": 2189,
+        "endChar": 97
+      },
+      "revId": "6f5264f80c4aa51c21484b78b333a3ca6a56926e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "1fe583bf_7f872833",
         "filename": "src/libANGLE/capture/FrameCapture.cpp",
         "patchSetId": 6
