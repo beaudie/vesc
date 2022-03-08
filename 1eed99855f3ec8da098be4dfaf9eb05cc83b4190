@@ -24,6 +24,23 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "6fd5043b_6adaa82f",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-03-08T04:26:03Z",
+      "side": 1,
+      "message": "Drive-by: This is starting to get more and more hacky. How about we do the opposite, like have a feature that specifically says \"expose this and that GLES extensions\", and short-circuit whatever \"if\" is failing for your platform until the underlying issue can be fixed?",
+      "revId": "1eed99855f3ec8da098be4dfaf9eb05cc83b4190",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "f9bd0e2d_39418026",
