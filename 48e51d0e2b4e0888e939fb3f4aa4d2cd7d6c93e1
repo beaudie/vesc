@@ -20,6 +20,24 @@
     {
       "unresolved": false,
       "key": {
+        "uuid": "fe54c166_22924aeb",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 5
+      },
+      "lineNbr": 13,
+      "author": {
+        "id": 1115588
+      },
+      "writtenOn": "2022-03-08T00:00:30Z",
+      "side": 1,
+      "message": "Yes it does. Added it to the CL description",
+      "parentUuid": "193609f3_5fd21b44",
+      "revId": "48e51d0e2b4e0888e939fb3f4aa4d2cd7d6c93e1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
         "uuid": "6689acef_46c43c8f",
         "filename": "/PATCHSET_LEVEL",
         "patchSetId": 5
@@ -65,6 +83,24 @@
       "writtenOn": "2022-03-07T20:27:00Z",
       "side": 1,
       "message": "This is fantastic - great work tracking this down.\n\nIs there a code path where if glInvalidateFramebuffer is called after glBlitFramebuffer, ending the render pass - that MTLStoreActionStoreAndMultisampleResolve for this attachment can still be downgraded to MTLStoreActionMultisampleResolve? That will retain the performance advantages of the previous code when it\u0027s legal to. Theoretically, in Chrome, using  preserveDrawingBuffer:false in WebGL\u0027s context creation attributes will allow this downgrading.",
+      "revId": "48e51d0e2b4e0888e939fb3f4aa4d2cd7d6c93e1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "7d78b1ce_87921242",
+        "filename": "src/libANGLE/renderer/metal/FrameBufferMtl.mm",
+        "patchSetId": 5
+      },
+      "lineNbr": 824,
+      "author": {
+        "id": 1115588
+      },
+      "writtenOn": "2022-03-08T00:00:30Z",
+      "side": 1,
+      "message": "At a glance it doesn\u0027t appear there is a path for glInvalidateFramebuffer nor preserveDrawingBuffer:false to do the performant thing here. It seemed to me best to get it passing the tests and being a conformant implementation, then someone can go add in optimizations after.",
+      "parentUuid": "4551f46b_c75bbcfd",
       "revId": "48e51d0e2b4e0888e939fb3f4aa4d2cd7d6c93e1",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
