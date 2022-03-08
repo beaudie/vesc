@@ -103,6 +103,24 @@
       "parentUuid": "4551f46b_c75bbcfd",
       "revId": "48e51d0e2b4e0888e939fb3f4aa4d2cd7d6c93e1",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "8c4cce76_f7687e98",
+        "filename": "src/libANGLE/renderer/metal/FrameBufferMtl.mm",
+        "patchSetId": 5
+      },
+      "lineNbr": 824,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2022-03-08T01:19:34Z",
+      "side": 1,
+      "message": "That\u0027s fine - agreed with doing it that way. Please file a follow-on bug and cc: me on it - thanks.",
+      "parentUuid": "7d78b1ce_87921242",
+      "revId": "48e51d0e2b4e0888e939fb3f4aa4d2cd7d6c93e1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
