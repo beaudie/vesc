@@ -33,6 +33,24 @@
       "message": "This actually seems to break rendering on the bots:\n\nhttps://angle-gold.skia.org/search?issue\u003d3507514\u0026crs\u003dgerrit\u0026patchsets\u003d1\u0026corpus\u003dangle",
       "revId": "88bf4b025f240a7ee69813684467f662fdaea32e",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "da5de6b7_1f320c08",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1491687
+      },
+      "writtenOn": "2022-03-08T14:55:47Z",
+      "side": 1,
+      "message": "Unfortunately how these flags get handled can be heterogeneous across window managers and versions (especially historic versions). I can confirm that this fixes at least current GNOME and WMs that match it\u0027s behavior.",
+      "parentUuid": "abe9d896_57c38ce8",
+      "revId": "88bf4b025f240a7ee69813684467f662fdaea32e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
