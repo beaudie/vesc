@@ -195,6 +195,24 @@
       "parentUuid": "4c7cd355_a2903c30",
       "revId": "cc3a724ba5fa0a1b1fe94e31323846ce52001483",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "094d4a26_60a525ab",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-03-08T04:21:40Z",
+      "side": 1,
+      "message": "Ok, I highly doubt any vendor would want to intentionally limit itself to GLES3.1 if it is GLES3.2 capable. You could drop that feature IMO.",
+      "parentUuid": "66d574dd_8d5fa6c6",
+      "revId": "cc3a724ba5fa0a1b1fe94e31323846ce52001483",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
