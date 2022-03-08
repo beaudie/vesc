@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "c1e8a568_6b5b45e1",
+        "filename": "src/libANGLE/Context.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 1215,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2022-03-08T20:43:07Z",
+      "side": 1,
+      "message": "nit: use mState.getTargetTexture(target)-\u003eid()",
+      "range": {
+        "startLine": 1215,
+        "startChar": 25,
+        "endLine": 1215,
+        "endChar": 44
+      },
+      "revId": "1d71cdb8f23d48c8d21fa8413cd2f1ca4d0f73d5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "3177ec9e_8d9f48c9",
+        "filename": "src/tests/gl_tests/CopyTexImageTest.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 942,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2022-03-08T20:43:07Z",
+      "side": 1,
+      "message": "to fix, add this line:\n\n  onStateChange(angle::SubjectMessage::DirtyBitsFlagged);\n\nto TextureD3D_2D::copySubImage after mDirtyImages \u003d true;\n\nRepeat for Cube/3D/2D Array.",
+      "range": {
+        "startLine": 942,
+        "startChar": 5,
+        "endLine": 942,
+        "endChar": 34
+      },
+      "revId": "1d71cdb8f23d48c8d21fa8413cd2f1ca4d0f73d5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
