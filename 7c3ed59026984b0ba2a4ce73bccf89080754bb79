@@ -338,6 +338,29 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "a3fcd47e_44acddf7",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 2679,
+      "author": {
+        "id": 1340649
+      },
+      "writtenOn": "2022-03-08T01:18:28Z",
+      "side": 1,
+      "message": "hdr profiles for astc texture compression is not a requirement for 3.2",
+      "range": {
+        "startLine": 2679,
+        "startChar": 31,
+        "endLine": 2679,
+        "endChar": 60
+      },
+      "revId": "7c3ed59026984b0ba2a4ce73bccf89080754bb79",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "d840fe8b_36e189cd",
         "filename": "src/libANGLE/renderer/vulkan/RendererVk.cpp",
         "patchSetId": 1
