@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "2e40ccdb_6f507ed7",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 2732,
+      "author": {
+        "id": 1359667
+      },
+      "writtenOn": "2022-03-08T19:53:23Z",
+      "side": 0,
+      "message": "@Shabi, this is the issue that is being fixed. Even if all the checks allow us to return 3.2 from `getMaxSupportedESVersion()` we are still limited to 3.1 here.",
+      "range": {
+        "startLine": 2732,
+        "startChar": 4,
+        "endLine": 2732,
+        "endChar": 62
+      },
+      "revId": "bf3cdca5844b387ef6dc8cc2618e123b8b8783c5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
