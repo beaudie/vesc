@@ -24,6 +24,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "c8c81a1a_6ae656fc",
+        "filename": "src/tests/capture_replay_tests/capture_replay_expectations.txt",
+        "patchSetId": 12
+      },
+      "lineNbr": 178,
+      "author": {
+        "id": 1115588
+      },
+      "writtenOn": "2022-03-08T00:37:59Z",
+      "side": 1,
+      "message": "Thanks Jamie, I will address as I fix this  \n\nhttps://bugs.chromium.org/p/angleproject/issues/detail?id\u003d7081",
+      "parentUuid": "667f89ea_87f25fdb",
+      "range": {
+        "startLine": 178,
+        "startChar": 5,
+        "endLine": 178,
+        "endChar": 9
+      },
+      "revId": "2e7cfa9b1f6fb5f702795b16ddd1a7c1085e6fac",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "ffe02257_5f08bc0d",
@@ -37,6 +61,30 @@
       "writtenOn": "2022-03-07T16:53:09Z",
       "side": 1,
       "message": "nit: can you use /* instead of /ES3_Vulkan_SwiftShader as in the rest of the file?",
+      "range": {
+        "startLine": 179,
+        "startChar": 59,
+        "endLine": 179,
+        "endChar": 82
+      },
+      "revId": "2e7cfa9b1f6fb5f702795b16ddd1a7c1085e6fac",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "5096bf41_d891e669",
+        "filename": "src/tests/capture_replay_tests/capture_replay_expectations.txt",
+        "patchSetId": 12
+      },
+      "lineNbr": 179,
+      "author": {
+        "id": 1115588
+      },
+      "writtenOn": "2022-03-08T00:37:59Z",
+      "side": 1,
+      "message": "Same as above, will address in https://bugs.chromium.org/p/angleproject/issues/detail?id\u003d7081",
+      "parentUuid": "ffe02257_5f08bc0d",
       "range": {
         "startLine": 179,
         "startChar": 59,
