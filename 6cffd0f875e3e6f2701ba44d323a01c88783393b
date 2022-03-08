@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "430b7c1a_08ac1179",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 2752,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2022-03-08T20:31:04Z",
+      "side": 1,
+      "message": "you can remove this.",
+      "range": {
+        "startLine": 2752,
+        "startChar": 71,
+        "endLine": 2752,
+        "endChar": 84
+      },
+      "revId": "6cffd0f875e3e6f2701ba44d323a01c88783393b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
