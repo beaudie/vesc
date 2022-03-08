@@ -41,6 +41,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "79751a47_9d4d3b38",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2022-03-08T14:57:53Z",
+      "side": 1,
+      "message": "Let\u0027s stick with my suggestion above.",
+      "parentUuid": "6fd5043b_6adaa82f",
+      "revId": "1eed99855f3ec8da098be4dfaf9eb05cc83b4190",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "f9bd0e2d_39418026",
