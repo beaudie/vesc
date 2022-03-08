@@ -50,6 +50,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "8525743f_4767916f",
+        "filename": "src/libANGLE/capture/FrameCapture.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 2189,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2022-03-08T14:56:28Z",
+      "side": 1,
+      "message": "This isn\u0027t my understanding of the issue. My understanding is that you have VAO !\u003d 0, you bind a buffer, then you delete that buffer, leaving the situation where you have both buffer and pointer \u003d\u003d nullptr. Can you check that out?",
+      "parentUuid": "149f85c8_f3f9ee5b",
+      "range": {
+        "startLine": 2189,
+        "startChar": 72,
+        "endLine": 2189,
+        "endChar": 97
+      },
+      "revId": "6f5264f80c4aa51c21484b78b333a3ca6a56926e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "1fe583bf_7f872833",
         "filename": "src/libANGLE/capture/FrameCapture.cpp",
         "patchSetId": 6
@@ -85,6 +109,30 @@
       "side": 1,
       "message": "This would skip capturing attributes where an array buffer is bound and `attrib.format`, `attrib.pointer` and `binding.getStride()` equal the default values.\n\nNot sure if this makes sense, but it would change the behavior beyond skipping the invalid condition.\n\nLogically this clause could only be removed if the skip condition above was `bool skipInvalidAttrib \u003d binding.getBuffer().get() !\u003d nullptr \u0026\u0026 attrib.pointer \u003d\u003d nullptr`, as `defaultAttrib.pointer` resolves to `nullptr` and the `|| attrib.pointer !\u003d defaultAttrib.pointer ||` condition would still trigger.",
       "parentUuid": "1fe583bf_7f872833",
+      "range": {
+        "startLine": 2194,
+        "startChar": 14,
+        "endLine": 2194,
+        "endChar": 49
+      },
+      "revId": "6f5264f80c4aa51c21484b78b333a3ca6a56926e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "d84998ff_11d89acd",
+        "filename": "src/libANGLE/capture/FrameCapture.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 2194,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2022-03-08T14:56:28Z",
+      "side": 1,
+      "message": "See above.",
+      "parentUuid": "e6ca9b69_b85d525a",
       "range": {
         "startLine": 2194,
         "startChar": 14,
