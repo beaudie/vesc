@@ -16,6 +16,121 @@
       "message": "Re-LGTM",
       "revId": "4f3a7a9f10aba27b5703b106e625ab2e387d766a",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "81274a98_4ffa67f5",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 16
+      },
+      "lineNbr": 2434,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2022-03-09T01:43:51Z",
+      "side": 1,
+      "message": "This is a bit heavy. My suggestion is to have a preparation CL that split mResourceList into each CommandBufferHelper, so that each command buffer has its own mResourceUseList. That way, you don\u0027t need to have special handling here. I think it will be cleaner that way (this entire function will be keep as is, I think).",
+      "range": {
+        "startLine": 2434,
+        "startChar": 8,
+        "endLine": 2434,
+        "endChar": 65
+      },
+      "revId": "4f3a7a9f10aba27b5703b106e625ab2e387d766a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "f1f495f6_a465709b",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.h",
+        "patchSetId": 16
+      },
+      "lineNbr": 1218,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2022-03-09T01:43:51Z",
+      "side": 1,
+      "message": "instead of track it in context, why not track it in the CommandBufferHelper? It seems to me reasonable to track in CommandBufferHelper instead of context, since you are tracking how many bytes this command buffer will copy. And you can just add extra argument in copyBufferToImage() and pass the stagingBufferSize into commandBuffer-\u003ecopyBufferToImage() call directly (thus encapsulate the mCopySize in the CommandBufferHelper class).",
+      "range": {
+        "startLine": 1218,
+        "startChar": 13,
+        "endLine": 1218,
+        "endChar": 22
+      },
+      "revId": "4f3a7a9f10aba27b5703b106e625ab2e387d766a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "5ee876c1_da71a1c7",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 16
+      },
+      "lineNbr": 7244,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2022-03-09T01:43:51Z",
+      "side": 1,
+      "message": "Instead of calculating it here, I think you should just add a new field in BufferUpdate structure:\n         VkDeviceSize stagingBufferSize;\nAnd then in ImageHelper::SubresourceUpdate::SubresourceUpdate(RefCounted\u003cBufferHelper\u003e *bufferIn,...), you set it to the staging buffer size:\nstagingBufferSize \u003d bufferIn-\u003eget().getSize();\n\nBasically you use staging buffer size instead of actual bytes to copy. This is much simpler and good enough for our purpose.",
+      "range": {
+        "startLine": 7243,
+        "startChar": 16,
+        "endLine": 7244,
+        "endChar": 79
+      },
+      "revId": "4f3a7a9f10aba27b5703b106e625ab2e387d766a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "55ccaf7e_125f7ef7",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 16
+      },
+      "lineNbr": 7268,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2022-03-09T01:43:51Z",
+      "side": 1,
+      "message": "Do we want to track this? Image to image copy does not help reduce address space usage. And there are in generally not that common anyway. They usually because of app issued a copyTexImage instead of part of texture initialization during app launch time. My vote is to only track bufferToImage copy and skip this entirely, for the simplicity.",
+      "range": {
+        "startLine": 7263,
+        "startChar": 17,
+        "endLine": 7268,
+        "endChar": 47
+      },
+      "revId": "4f3a7a9f10aba27b5703b106e625ab2e387d766a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "f22808f9_bc3e7883",
+        "filename": "src/tests/gl_tests/VulkanPerformanceCounterTest.cpp",
+        "patchSetId": 16
+      },
+      "lineNbr": 22,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2022-03-09T01:43:51Z",
+      "side": 1,
+      "message": "I don\u0027t think you need this, right?",
+      "range": {
+        "startLine": 22,
+        "startChar": 0,
+        "endLine": 22,
+        "endChar": 48
+      },
+      "revId": "4f3a7a9f10aba27b5703b106e625ab2e387d766a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
