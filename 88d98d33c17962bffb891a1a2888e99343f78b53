@@ -20,6 +20,29 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "d5599977_a5a052e2",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 2729,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2022-03-09T20:44:41Z",
+      "side": 1,
+      "message": "it would be better to keep a count here then sum them in ContextVk\u0027s counter summing method. having a mutable accessor in contextVk is a mess.",
+      "range": {
+        "startLine": 2729,
+        "startChar": 4,
+        "endLine": 2729,
+        "endChar": 13
+      },
+      "revId": "88d98d33c17962bffb891a1a2888e99343f78b53",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "2a3d77ce_eb7fb024",
         "filename": "src/libANGLE/renderer/vulkan/vk_utils.h",
         "patchSetId": 2
