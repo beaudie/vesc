@@ -24,6 +24,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "a5fadb8f_bb2e49d9",
+        "filename": "src/libANGLE/Context.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 1215,
+      "author": {
+        "id": 1340649
+      },
+      "writtenOn": "2022-03-09T16:44:08Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "c1e8a568_6b5b45e1",
+      "range": {
+        "startLine": 1215,
+        "startChar": 25,
+        "endLine": 1215,
+        "endChar": 44
+      },
+      "revId": "1d71cdb8f23d48c8d21fa8413cd2f1ca4d0f73d5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "3177ec9e_8d9f48c9",
@@ -37,6 +61,30 @@
       "writtenOn": "2022-03-08T20:43:07Z",
       "side": 1,
       "message": "to fix, add this line:\n\n  onStateChange(angle::SubjectMessage::DirtyBitsFlagged);\n\nto TextureD3D_2D::copySubImage after mDirtyImages \u003d true;\n\nRepeat for Cube/3D/2D Array.",
+      "range": {
+        "startLine": 942,
+        "startChar": 5,
+        "endLine": 942,
+        "endChar": 34
+      },
+      "revId": "1d71cdb8f23d48c8d21fa8413cd2f1ca4d0f73d5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "82543e50_39c4308f",
+        "filename": "src/tests/gl_tests/CopyTexImageTest.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 942,
+      "author": {
+        "id": 1340649
+      },
+      "writtenOn": "2022-03-09T16:44:08Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "3177ec9e_8d9f48c9",
       "range": {
         "startLine": 942,
         "startChar": 5,
