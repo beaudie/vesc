@@ -82,6 +82,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "678bf0ac_97646a63",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 2729,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2022-03-09T23:19:14Z",
+      "side": 1,
+      "message": "If you want it be more acurate, it probably should keep it in sharedGroupVk, and then when context reports the data, it pull from SharedGroupVk.",
+      "parentUuid": "8659c1b0_3a2c5bc9",
+      "range": {
+        "startLine": 2729,
+        "startChar": 4,
+        "endLine": 2729,
+        "endChar": 13
+      },
+      "revId": "88d98d33c17962bffb891a1a2888e99343f78b53",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "2a3d77ce_eb7fb024",
@@ -95,6 +119,30 @@
       "writtenOn": "2022-03-09T20:04:26Z",
       "side": 1,
       "message": "Needs to start with lower case:\n`allocateNewBufferBlockCalls`",
+      "range": {
+        "startLine": 1283,
+        "startChar": 13,
+        "endLine": 1283,
+        "endChar": 40
+      },
+      "revId": "88d98d33c17962bffb891a1a2888e99343f78b53",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "316f4492_44d282fc",
+        "filename": "src/libANGLE/renderer/vulkan/vk_utils.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 1283,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2022-03-09T23:19:14Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "2a3d77ce_eb7fb024",
       "range": {
         "startLine": 1283,
         "startChar": 13,
