@@ -16,6 +16,23 @@
       "message": "Tried rubber stamper, looks like I still need a +2 from either of you.",
       "revId": "2bcd9e72682c56e755e074bf1989e7f4a4fa3c61",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "86994170_074e55ac",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1491687
+      },
+      "writtenOn": "2022-03-09T16:08:07Z",
+      "side": 1,
+      "message": "Runs cleanly on Mesa/AMD and Pixel 6 with VVL enabled.",
+      "revId": "2bcd9e72682c56e755e074bf1989e7f4a4fa3c61",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
