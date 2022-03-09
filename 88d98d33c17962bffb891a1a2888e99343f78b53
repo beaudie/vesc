@@ -1,0 +1,44 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "107afe8b_1c004034",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2022-03-09T20:04:26Z",
+      "side": 1,
+      "message": "LGTM with one nit, although I\u0027m not super familiar with this code.\n\nI like the direction of reducing the length of time we hold on to staging buffers, maybe even back to back frames without use is good.",
+      "revId": "88d98d33c17962bffb891a1a2888e99343f78b53",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "2a3d77ce_eb7fb024",
+        "filename": "src/libANGLE/renderer/vulkan/vk_utils.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 1283,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2022-03-09T20:04:26Z",
+      "side": 1,
+      "message": "Needs to start with lower case:\n`allocateNewBufferBlockCalls`",
+      "range": {
+        "startLine": 1283,
+        "startChar": 13,
+        "endLine": 1283,
+        "endChar": 40
+      },
+      "revId": "88d98d33c17962bffb891a1a2888e99343f78b53",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
