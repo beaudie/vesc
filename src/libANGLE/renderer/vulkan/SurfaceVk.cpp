@@ -158,15 +158,19 @@ angle::Result InitImageHelper(DisplayVk *displayVk,
     return angle::Result::Continue;
 }
 
-VkColorSpaceKHR MapEglColorSpaceToVkColorSpace(EGLenum EGLColorspace)
+VkColorSpaceKHR MapEglColorSpaceToVkColorSpace(EGLenum eglColorspace)
 {
-    switch (EGLColorspace)
+    // The mapping below is the outcome of the discussion related to colorspaces recorded here ->
+    // https://gitlab.khronos.org/vulkan/vulkan/-/issues/2827
+    switch (eglColorspace)
     {
         case EGL_NONE:
         case EGL_GL_COLORSPACE_LINEAR:
+            return VK_COLOR_SPACE_PASS_THROUGH_EXT;
         case EGL_GL_COLORSPACE_SRGB_KHR:
-        case EGL_GL_COLORSPACE_DISPLAY_P3_PASSTHROUGH_EXT:
             return VK_COLOR_SPACE_SRGB_NONLINEAR_KHR;
+        case EGL_GL_COLORSPACE_DISPLAY_P3_PASSTHROUGH_EXT:
+            return VK_COLOR_SPACE_DISPLAY_P3_NONLINEAR_EXT;
         case EGL_GL_COLORSPACE_DISPLAY_P3_LINEAR_EXT:
             return VK_COLOR_SPACE_DISPLAY_P3_LINEAR_EXT;
         case EGL_GL_COLORSPACE_DISPLAY_P3_EXT:
@@ -181,7 +185,7 @@ VkColorSpaceKHR MapEglColorSpaceToVkColorSpace(EGLenum EGLColorspace)
             return VK_COLOR_SPACE_HDR10_ST2084_EXT;
         default:
             UNREACHABLE();
-            return VK_COLOR_SPACE_SRGB_NONLINEAR_KHR;
+            return VK_COLOR_SPACE_PASS_THROUGH_EXT;
     }
 }
 
