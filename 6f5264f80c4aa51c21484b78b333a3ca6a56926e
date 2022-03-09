@@ -98,6 +98,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "37a930e9_35e6fa29",
+        "filename": "src/libANGLE/capture/FrameCapture.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 2189,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2022-03-09T16:37:12Z",
+      "side": 1,
+      "message": "OK OK, it seems we set pointer to the offset value even for non-default VAOs. I understand my confusion. I was assuming when we set an attrib pointer we don\u0027t set the pointer value. We do set it for GetAttribPointer queries.\n\nIIUC your current code is bugged because it skips all client attribs (no buffer, non nullptr pointer). You could instead skip client attribs for non-default VAOs, which should work around the specific problem you\u0027re having. It still could be a problem for default FBOs, and if that happens, let me know and I\u0027ll try to suggest some alternatives.",
+      "parentUuid": "30fef7ed_06af3706",
+      "range": {
+        "startLine": 2189,
+        "startChar": 72,
+        "endLine": 2189,
+        "endChar": 97
+      },
+      "revId": "6f5264f80c4aa51c21484b78b333a3ca6a56926e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "1fe583bf_7f872833",
         "filename": "src/libANGLE/capture/FrameCapture.cpp",
         "patchSetId": 6
