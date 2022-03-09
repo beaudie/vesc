@@ -89,6 +89,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "4a6fdb38_c562c38b",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 16
+      },
+      "lineNbr": 7244,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2022-03-09T17:35:35Z",
+      "side": 1,
+      "message": "You even don\u0027t need add any new field. All you need to do is use currentBuffer-\u003egetSize().",
+      "parentUuid": "5ee876c1_da71a1c7",
+      "range": {
+        "startLine": 7243,
+        "startChar": 16,
+        "endLine": 7244,
+        "endChar": 79
+      },
+      "revId": "4f3a7a9f10aba27b5703b106e625ab2e387d766a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "55ccaf7e_125f7ef7",
         "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
         "patchSetId": 16
