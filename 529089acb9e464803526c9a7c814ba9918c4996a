@@ -1,0 +1,112 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "747f95b2_dcda79bc",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1326275
+      },
+      "writtenOn": "2022-03-09T16:08:05Z",
+      "side": 1,
+      "message": "LGTM! Just a couple nits",
+      "revId": "529089acb9e464803526c9a7c814ba9918c4996a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "d8e92e18_62995f56",
+        "filename": "extensions/EGL_ANGLE_platform_angle_device_id.txt",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1326275
+      },
+      "writtenOn": "2022-03-09T16:08:05Z",
+      "side": 1,
+      "message": "Just a note: we plan to remove EGL_ANGLE_display_power_preference soon once the device_id path is fully supported. I can re-update this extension once we do",
+      "revId": "529089acb9e464803526c9a7c814ba9918c4996a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "5157309c_8a4ee655",
+        "filename": "src/libANGLE/Display.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 113,
+      "author": {
+        "id": 1326275
+      },
+      "writtenOn": "2022-03-09T16:08:05Z",
+      "side": 1,
+      "message": "nit: could use GetSystemDeviceIdFromParts to key off of one value, though functionally it doesn\u0027t matter",
+      "revId": "529089acb9e464803526c9a7c814ba9918c4996a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "92dcb27a_5776cba6",
+        "filename": "src/tests/egl_tests/EGLDisplaySelectionTest.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 517,
+      "author": {
+        "id": 1326275
+      },
+      "writtenOn": "2022-03-09T16:08:05Z",
+      "side": 1,
+      "message": "nit: remove if this isn\u0027t relevant",
+      "revId": "529089acb9e464803526c9a7c814ba9918c4996a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "5816236e_1e6f80ae",
+        "filename": "src/tests/egl_tests/EGLDisplaySelectionTest.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 535,
+      "author": {
+        "id": 1326275
+      },
+      "writtenOn": "2022-03-09T16:08:05Z",
+      "side": 1,
+      "message": "nit: remove if not relevant",
+      "revId": "529089acb9e464803526c9a7c814ba9918c4996a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "fbb338d8_274309a2",
+        "filename": "src/tests/egl_tests/EGLDisplaySelectionTest.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 639,
+      "author": {
+        "id": 1326275
+      },
+      "writtenOn": "2022-03-09T16:08:05Z",
+      "side": 1,
+      "message": "I\u0027m a bit confused by this.\nTo me this would mean you\u0027d like to test the interaction of EGL_ANGLE_platform_angle_device_id and EGL_ANGLE_display_power_preference, but the tests are skipped if displayPowerPreference is set.\nI think you could just remove the SKIP condition as well as these instantiations. But please correct me if there is another reason I\u0027m missing.",
+      "range": {
+        "startLine": 636,
+        "startChar": 15,
+        "endLine": 639,
+        "endChar": 67
+      },
+      "revId": "529089acb9e464803526c9a7c814ba9918c4996a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
