@@ -158,15 +158,20 @@ angle::Result InitImageHelper(DisplayVk *displayVk,
     return angle::Result::Continue;
 }
 
-VkColorSpaceKHR MapEglColorSpaceToVkColorSpace(EGLenum EGLColorspace)
+VkColorSpaceKHR MapEglColorSpaceToVkColorSpace(EGLenum eglColorspace)
 {
-    switch (EGLColorspace)
+    // The mapping below is the outcome of the discussion related to colorspaces recorded here ->
+    // https://gitlab.khronos.org/vulkan/vulkan/-/issues/2827
+    switch (eglColorspace)
     {
-        case EGL_NONE:
         case EGL_GL_COLORSPACE_LINEAR:
+            // Technically this maps to VK_COLOR_SPACE_PASS_THROUGH_EXT or even
+            // VK_COLOR_SPACE_BT709_LINEAR_EXT but support for these are almost nonexistent.
+            // For broader compatibility, return VK_COLOR_SPACE_SRGB_NONLINEAR_KHR instead.
         case EGL_GL_COLORSPACE_SRGB_KHR:
-        case EGL_GL_COLORSPACE_DISPLAY_P3_PASSTHROUGH_EXT:
             return VK_COLOR_SPACE_SRGB_NONLINEAR_KHR;
+        case EGL_GL_COLORSPACE_DISPLAY_P3_PASSTHROUGH_EXT:
+            return VK_COLOR_SPACE_DISPLAY_P3_NONLINEAR_EXT;
         case EGL_GL_COLORSPACE_DISPLAY_P3_LINEAR_EXT:
             return VK_COLOR_SPACE_DISPLAY_P3_LINEAR_EXT;
         case EGL_GL_COLORSPACE_DISPLAY_P3_EXT:
@@ -181,7 +186,7 @@ VkColorSpaceKHR MapEglColorSpaceToVkColorSpace(EGLenum EGLColorspace)
             return VK_COLOR_SPACE_HDR10_ST2084_EXT;
         default:
             UNREACHABLE();
-            return VK_COLOR_SPACE_SRGB_NONLINEAR_KHR;
+            return VK_COLOR_SPACE_PASS_THROUGH_EXT;
     }
 }
 
@@ -1013,7 +1018,7 @@ angle::Result WindowSurfaceVk::initializeImpl(DisplayVk *displayVk)
 
     bool surfaceFormatSupported = false;
     VkColorSpaceKHR colorSpace  = MapEglColorSpaceToVkColorSpace(
-        static_cast<EGLenum>(mState.attributes.get(EGL_GL_COLORSPACE, EGL_NONE)));
+        static_cast<EGLenum>(mState.attributes.get(EGL_GL_COLORSPACE, EGL_GL_COLORSPACE_LINEAR)));
 
     if (renderer->getFeatures().supportsSurfaceCapabilities2Extension.enabled)
     {
@@ -1289,7 +1294,7 @@ angle::Result WindowSurfaceVk::createSwapChain(vk::Context *context,
     swapchainInfo.minImageCount   = mMinImageCount;
     swapchainInfo.imageFormat     = vk::GetVkFormatFromFormatID(actualFormatID);
     swapchainInfo.imageColorSpace = MapEglColorSpaceToVkColorSpace(
-        static_cast<EGLenum>(mState.attributes.get(EGL_GL_COLORSPACE, EGL_NONE)));
+        static_cast<EGLenum>(mState.attributes.get(EGL_GL_COLORSPACE, EGL_GL_COLORSPACE_LINEAR)));
     // Note: Vulkan doesn't allow 0-width/height swapchains.
     swapchainInfo.imageExtent.width     = std::max(rotatedExtents.width, 1);
     swapchainInfo.imageExtent.height    = std::max(rotatedExtents.height, 1);
