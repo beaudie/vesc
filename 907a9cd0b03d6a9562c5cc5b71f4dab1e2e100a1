@@ -89,6 +89,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "1c62d878_a1a2b64c",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 21
+      },
+      "lineNbr": 864,
+      "author": {
+        "id": 1520902
+      },
+      "writtenOn": "2022-03-10T20:06:48Z",
+      "side": 1,
+      "message": "I am thinking that flushing texture staged updates is only necessary when we are using the ShareDisplayTextureGroup extension, and we are also destroying the sharegroup that holds the staged updates: \n\n1) shareDisplayTextureGroup \u003d\u003d false \u0026\u0026 lastContextInSharedGroup \u003d\u003d true\nIf we are not using the extension, then destroying the sharegroup will automatically destroy all the textures. \n\n2) shareDisplayTextureGroup \u003d\u003d true \u0026\u0026 lastContextInSharedGroup \u003d\u003d false\nIf this is not the last context in sharegroup, sharegroup will stay alive and we don\u0027t have to flush the updates to empty the sharegroup::bufferpool. \n\n3) shareDisplayTextureGroup \u003d\u003d false \u0026\u0026 lastContextInSharedGroup \u003d\u003d false\nDestroying the context will automatically destroy all the textures.\n\nOnly when both conditions met we are required to flush.\n\nRemoving the check should work, it is just that we might flush more than necessary.",
+      "parentUuid": "295e37fe_c419367b",
+      "range": {
+        "startLine": 864,
+        "startChar": 36,
+        "endLine": 864,
+        "endChar": 60
+      },
+      "revId": "907a9cd0b03d6a9562c5cc5b71f4dab1e2e100a1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "96ce74e6_8b44507a",
         "filename": "src/tests/egl_tests/EGLContextSharingTest.cpp",
         "patchSetId": 21
