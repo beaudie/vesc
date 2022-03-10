@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "1ba9c79f_36926334",
+        "filename": "src/libANGLE/validationES.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 4165,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2022-03-10T14:16:56Z",
+      "side": 1,
+      "message": "this is a bit more checking than we want to do here, as it\u0027ll iterate all the draw buffers and do a bunch of ifs here. Please replace this with a very quick check when there are no non-default advanced blend states.",
+      "range": {
+        "startLine": 4143,
+        "startChar": 0,
+        "endLine": 4165,
+        "endChar": 0
+      },
+      "revId": "df1fca98732025b7a90a0a558c46fb2b63d86cd4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "20487968_5268482e",
+        "filename": "src/libANGLE/validationESEXT.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 625,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2022-03-10T14:16:56Z",
+      "side": 1,
+      "message": "I believe you should still be checking for the extension here.",
+      "range": {
+        "startLine": 625,
+        "startChar": 4,
+        "endLine": 625,
+        "endChar": 11
+      },
+      "revId": "df1fca98732025b7a90a0a558c46fb2b63d86cd4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
