@@ -1,0 +1,136 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "aebb2ea9_e78ad5dc",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 21
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2022-03-10T19:27:36Z",
+      "side": 1,
+      "message": "Nice work.",
+      "revId": "907a9cd0b03d6a9562c5cc5b71f4dab1e2e100a1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "161d5448_037515ad",
+        "filename": "src/libANGLE/Context.cpp",
+        "patchSetId": 21
+      },
+      "lineNbr": 758,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2022-03-10T19:27:36Z",
+      "side": 1,
+      "message": "suggest we change all of these to be consistent. if you make the typed resource manager change each can still be on one line.",
+      "range": {
+        "startLine": 758,
+        "startChar": 11,
+        "endLine": 758,
+        "endChar": 31
+      },
+      "revId": "907a9cd0b03d6a9562c5cc5b71f4dab1e2e100a1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "57d32a0b_0a6ea4c6",
+        "filename": "src/libANGLE/ResourceManager.h",
+        "patchSetId": 21
+      },
+      "lineNbr": 66,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2022-03-10T19:27:36Z",
+      "side": 1,
+      "message": "nit: maybe make a releaseTyped method here that casts the return value of release() to the derived type. Then you can remove the if statements in the Context.cpp class.",
+      "range": {
+        "startLine": 66,
+        "startChar": 36,
+        "endLine": 66,
+        "endChar": 55
+      },
+      "revId": "907a9cd0b03d6a9562c5cc5b71f4dab1e2e100a1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "295e37fe_c419367b",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 21
+      },
+      "lineNbr": 864,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2022-03-10T19:27:36Z",
+      "side": 1,
+      "message": "I don\u0027t understand why you have this check in here. Can you explain? Will everything work if you remove this check?",
+      "range": {
+        "startLine": 864,
+        "startChar": 36,
+        "endLine": 864,
+        "endChar": 60
+      },
+      "revId": "907a9cd0b03d6a9562c5cc5b71f4dab1e2e100a1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "96ce74e6_8b44507a",
+        "filename": "src/tests/egl_tests/EGLContextSharingTest.cpp",
+        "patchSetId": 21
+      },
+      "lineNbr": 366,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2022-03-10T19:27:36Z",
+      "side": 1,
+      "message": "nit: please add a comment describing the test, and rename this to clarify what the test is doing.",
+      "range": {
+        "startLine": 366,
+        "startChar": 30,
+        "endLine": 366,
+        "endChar": 49
+      },
+      "revId": "907a9cd0b03d6a9562c5cc5b71f4dab1e2e100a1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "884525cf_694e88e9",
+        "filename": "src/tests/egl_tests/EGLContextSharingTest.cpp",
+        "patchSetId": 21
+      },
+      "lineNbr": 374,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2022-03-10T19:27:36Z",
+      "side": 1,
+      "message": "nit: use ANGLE_SKIP_TEST_IF. You can optionally clean up the rest of the file as well.",
+      "range": {
+        "startLine": 369,
+        "startChar": 0,
+        "endLine": 374,
+        "endChar": 5
+      },
+      "revId": "907a9cd0b03d6a9562c5cc5b71f4dab1e2e100a1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
