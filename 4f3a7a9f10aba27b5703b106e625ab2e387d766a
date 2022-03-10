@@ -463,6 +463,30 @@
       },
       "revId": "4f3a7a9f10aba27b5703b106e625ab2e387d766a",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "9550cbf4_acccd69c",
+        "filename": "src/tests/gl_tests/VulkanPerformanceCounterTest.cpp",
+        "patchSetId": 16
+      },
+      "lineNbr": 22,
+      "author": {
+        "id": 1525982
+      },
+      "writtenOn": "2022-03-10T21:23:47Z",
+      "side": 1,
+      "message": "Removed, as it is no longer allowed in the compilation.",
+      "parentUuid": "1325c6a0_34d04f63",
+      "range": {
+        "startLine": 22,
+        "startChar": 0,
+        "endLine": 22,
+        "endChar": 48
+      },
+      "revId": "4f3a7a9f10aba27b5703b106e625ab2e387d766a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
