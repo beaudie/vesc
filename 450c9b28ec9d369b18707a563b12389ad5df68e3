@@ -175,6 +175,24 @@
       "parentUuid": "b7ff6d8a_c5da5bce",
       "revId": "450c9b28ec9d369b18707a563b12389ad5df68e3",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "99ccf74d_07f510f6",
+        "filename": "src/libANGLE/renderer/vulkan/SurfaceVk.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 169,
+      "author": {
+        "id": 1340649
+      },
+      "writtenOn": "2022-03-10T22:27:29Z",
+      "side": 1,
+      "message": "\u003e Why is it okay mapping LINEAR to SRGB_NONLINEAR?\n\n1. it isn\u0027t, but right now no bots android or otherwise supports `VK_COLOR_SPACE_PASS_THROUGH_EXT` or `VK_COLOR_SPACE_BT709_LINEAR_EXT` (at least from my local testing)\n2. the code has not changed (except for display_p3), i just added clarification comments where it seemed necessary\n\nit may help if you can provide some context on how you intend to fix this issue through querying ICD",
+      "parentUuid": "658fefe0_38705a89",
+      "revId": "450c9b28ec9d369b18707a563b12389ad5df68e3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
