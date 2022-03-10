@@ -72,6 +72,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "2914317f_10ac92d2",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1452687
+      },
+      "writtenOn": "2022-03-10T22:44:18Z",
+      "side": 1,
+      "message": "Unlikely. But it could.\nOne possibility if you need it to be static is to query for supported formats on start, and store that somewhere for later.\n\nIt\u0027s extremely unlikely to change during runtime though. Hence why a query for every egl format feels fine to me.",
+      "parentUuid": "cfaa23db_56106320",
+      "revId": "450c9b28ec9d369b18707a563b12389ad5df68e3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "e3aec523_66c0b71c",
         "filename": "src/libANGLE/renderer/vulkan/SurfaceVk.cpp",
         "patchSetId": 2
@@ -191,6 +209,24 @@
       "side": 1,
       "message": "\u003e Why is it okay mapping LINEAR to SRGB_NONLINEAR?\n\n1. it isn\u0027t, but right now no bots android or otherwise supports `VK_COLOR_SPACE_PASS_THROUGH_EXT` or `VK_COLOR_SPACE_BT709_LINEAR_EXT` (at least from my local testing)\n2. the code has not changed (except for display_p3), i just added clarification comments where it seemed necessary\n\nit may help if you can provide some context on how you intend to fix this issue through querying ICD",
       "parentUuid": "658fefe0_38705a89",
+      "revId": "450c9b28ec9d369b18707a563b12389ad5df68e3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "e4730e51_864d4d0d",
+        "filename": "src/libANGLE/renderer/vulkan/SurfaceVk.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 169,
+      "author": {
+        "id": 1452687
+      },
+      "writtenOn": "2022-03-10T22:44:18Z",
+      "side": 1,
+      "message": "The surface query CL is up over at https://chromium-review.googlesource.com/c/angle/angle/+/3232815\n\nIt\u0027s at a very rough draft state, but hopefully that gives you an idea of what I mean",
+      "parentUuid": "99ccf74d_07f510f6",
       "revId": "450c9b28ec9d369b18707a563b12389ad5df68e3",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
