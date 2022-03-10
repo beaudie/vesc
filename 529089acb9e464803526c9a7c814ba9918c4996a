@@ -107,6 +107,24 @@
     {
       "unresolved": false,
       "key": {
+        "uuid": "6ba07ef1_0e7851a2",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1449558
+      },
+      "writtenOn": "2022-03-10T20:01:54Z",
+      "side": 1,
+      "message": "I fixed the commented out code to be normal code, didn\u0027t want to commit those.\nWhat other changes would there be?",
+      "parentUuid": "2229753d_4d6ad1fc",
+      "revId": "529089acb9e464803526c9a7c814ba9918c4996a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
         "uuid": "d8e92e18_62995f56",
         "filename": "extensions/EGL_ANGLE_platform_angle_device_id.txt",
         "patchSetId": 2
@@ -300,6 +318,30 @@
       "side": 1,
       "message": "Yeah, the interaction test was the target.\nJust ran into some test framework issue in ANGLETest and commented stuff out during development. I guess it was a long day judging from the quality of the patch..",
       "parentUuid": "fbb338d8_274309a2",
+      "range": {
+        "startLine": 636,
+        "startChar": 15,
+        "endLine": 639,
+        "endChar": 67
+      },
+      "revId": "529089acb9e464803526c9a7c814ba9918c4996a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "2f8b81cd_cdcaeb00",
+        "filename": "src/tests/egl_tests/EGLDisplaySelectionTest.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 639,
+      "author": {
+        "id": 1449558
+      },
+      "writtenOn": "2022-03-10T20:01:54Z",
+      "side": 1,
+      "message": "Hmm. it has been a long day today too..\nSo the intention is:\nIf the EGL_ANGLE_display_power_preference is _not_ supported\nAND\nthe test parameters use displayPowerPreference\nTHEN the test is skipped.\n\nI.e. it is not a failure to not support EGL_ANGLE_display_power_preference.\n\nSo if somebody compiled out EGL_ANGLE_display_power_preference but didn\u0027t remove the extra parametrised test instantiations, the tests would still pass.",
+      "parentUuid": "24c2b09e_0af58691",
       "range": {
         "startLine": 636,
         "startChar": 15,
