@@ -282,10 +282,12 @@ EGLAPI EGLBoolean EGLAPIENTRY eglGetMscRateANGLE(EGLDisplay dpy,
 typedef void(EGLAPIENTRYP PFNEGLRELEASEHIGHPOWERGPUANGLEPROC) (EGLDisplay dpy, EGLContext ctx);
 typedef void(EGLAPIENTRYP PFNEGLREACQUIREHIGHPOWERGPUANGLEPROC) (EGLDisplay dpy, EGLContext ctx);
 typedef void(EGLAPIENTRYP PFNEGLHANDLEGPUSWITCHANGLEPROC) (EGLDisplay dpy);
+typedef void(EGLAPIENTRYP PFNEGLSETGPUANGLEPROC) (EGLDisplay dpy, EGLint gpuIDHigh, EGLint gpuIDLow);
 #ifdef EGL_EGLEXT_PROTOTYPES
 EGLAPI void EGLAPIENTRY eglReleaseHighPowerGPUANGLE(EGLDisplay dpy, EGLContext ctx);
 EGLAPI void EGLAPIENTRY eglReacquireHighPowerGPUANGLE(EGLDisplay dpy, EGLContext ctx);
 EGLAPI void EGLAPIENTRY eglHandleGPUSwitchANGLE(EGLDisplay dpy);
+EGLAPI void EGLAPIENTRY eglSetGPUANGLE(EGLDisplay dpy, EGLint gpuIDHigh, EGLint gpuIDLow);
 #endif
 #endif /* EGL_ANGLE_power_preference */
 
