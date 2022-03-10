@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "856b13e1_08854751",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 1234,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2022-03-10T15:10:55Z",
+      "side": 1,
+      "message": "This solution adds an extra if statement to the \"good\" path, as well as more CPU overhead on EAB changes in the \"good\" path. An alternate solution is to force reset the index buffer after each line loop draw. This would cost more on successive line loop draws, but I doubt cpu overhead of line loop draws is going to be a big problem for any app.\n\nThe solution would call a \"resetLineLoopDraw\" at the end of the \"if (mode \u003d\u003d gl::PrimitiveMode::LineLoop)\" blocks in each draw() method.",
+      "range": {
+        "startLine": 1225,
+        "startChar": 0,
+        "endLine": 1234,
+        "endChar": 0
+      },
+      "revId": "09a26c88aa826dc8736c053a71f009f4a97c6339",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
