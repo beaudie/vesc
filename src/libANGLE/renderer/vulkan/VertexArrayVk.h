@@ -84,6 +84,10 @@ class VertexArrayVk : public VertexArrayImpl
 
     vk::BufferHelper *getCurrentElementArrayBuffer() const { return mCurrentElementArrayBuffer; }
 
+    void saveCurrentElementArrayBufferBeforeLineLoop();
+
+    void popCurrentElementArrayBufferAfterLineLoop(ContextVk *contextVk);
+
     angle::Result convertIndexBufferGPU(ContextVk *contextVk,
                                         BufferVk *bufferVk,
                                         const void *indices);
@@ -139,6 +143,7 @@ class VertexArrayVk : public VertexArrayImpl
     gl::AttribArray<GLuint> mCurrentArrayBufferStrides;
     gl::AttributesMask mCurrentArrayBufferCompressed;
     vk::BufferHelper *mCurrentElementArrayBuffer;
+    vk::BufferHelper *mElementArrayBufferBeforeLineLoop;
 
     // Cached element array buffers for improving performance.
     vk::BufferHelperPointerVector mCachedStreamIndexBuffers;
