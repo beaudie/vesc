@@ -157,6 +157,24 @@
       "parentUuid": "c6f8e96c_fb7166eb",
       "revId": "450c9b28ec9d369b18707a563b12389ad5df68e3",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "658fefe0_38705a89",
+        "filename": "src/libANGLE/renderer/vulkan/SurfaceVk.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 169,
+      "author": {
+        "id": 1452687
+      },
+      "writtenOn": "2022-03-10T22:08:44Z",
+      "side": 1,
+      "message": "Why is it okay mapping LINEAR to SRGB_NONLINEAR?\nThat just seems incorrect to me?",
+      "parentUuid": "b7ff6d8a_c5da5bce",
+      "revId": "450c9b28ec9d369b18707a563b12389ad5df68e3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
