@@ -16,6 +16,23 @@
       "message": "PTAL",
       "revId": "450c9b28ec9d369b18707a563b12389ad5df68e3",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "e3aec523_66c0b71c",
+        "filename": "src/libANGLE/renderer/vulkan/SurfaceVk.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 169,
+      "author": {
+        "id": 1175714
+      },
+      "writtenOn": "2022-03-10T19:06:19Z",
+      "side": 1,
+      "message": "this is bc bt709 linear ext is only let through the filter in android swapchain code recently, right? do we want to try and fallback?",
+      "revId": "450c9b28ec9d369b18707a563b12389ad5df68e3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
