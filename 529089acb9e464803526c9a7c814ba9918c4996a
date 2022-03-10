@@ -52,6 +52,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": true,
+      "key": {
+        "uuid": "4c6ad909_11513b2c",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1326275
+      },
+      "writtenOn": "2022-03-10T18:38:25Z",
+      "side": 1,
+      "message": "We talked with Kyle and Sarah at the sync-up today and option 1 is better.\nThis CL can land as-is with no changes. Then will you please follow-up with any changes in a 2nd CL?\nThanks",
+      "parentUuid": "7dca8e2a_5faef0ac",
+      "revId": "529089acb9e464803526c9a7c814ba9918c4996a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": false,
       "key": {
         "uuid": "d8e92e18_62995f56",
