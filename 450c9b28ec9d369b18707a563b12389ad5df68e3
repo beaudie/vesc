@@ -50,6 +50,24 @@
       "message": "this is bc bt709 linear ext is only let through the filter in android swapchain code recently, right? do we want to try and fallback?",
       "revId": "450c9b28ec9d369b18707a563b12389ad5df68e3",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "f8575c15_32c6bcd0",
+        "filename": "src/libANGLE/renderer/vulkan/SurfaceVk.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 169,
+      "author": {
+        "id": 1340649
+      },
+      "writtenOn": "2022-03-10T20:21:28Z",
+      "side": 1,
+      "message": "\u003e this is bc bt709 linear ext is only let through the filter in android swapchain code recently, right?\n\neven now on android `VK_COLOR_SPACE_BT709_LINEAR_EXT` colorspace is not exposed for any format (and i think from Android N or so, srgb is the preferred default) -\u003e https://cs.android.com/android/platform/superproject/+/master:frameworks/native/vulkan/libvulkan/swapchain.cpp;l\u003d712\n\n\u003e do we want to try and fallback?\n\nthis patch does fall back to `VK_COLOR_SPACE_SRGB_NONLINEAR_KHR`, which fallback are you talking about?\n\nAlso, this is not just an Android issue, almost all bots had issues when i did the \"right mapping\". You can see the bot failures with PS1",
+      "parentUuid": "e3aec523_66c0b71c",
+      "revId": "450c9b28ec9d369b18707a563b12389ad5df68e3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
