@@ -117,6 +117,7 @@ const ProcEntry g_procTable[] = {
     {"eglReleaseThread", P(EGL_ReleaseThread)},
     {"eglSetBlobCacheFuncsANDROID", P(EGL_SetBlobCacheFuncsANDROID)},
     {"eglSetDamageRegionKHR", P(EGL_SetDamageRegionKHR)},
+    {"eglSetGPUANGLE", P(EGL_SetGPUANGLE)},
     {"eglSignalSyncKHR", P(EGL_SignalSyncKHR)},
     {"eglStreamAttribKHR", P(EGL_StreamAttribKHR)},
     {"eglStreamConsumerAcquireKHR", P(EGL_StreamConsumerAcquireKHR)},
@@ -945,5 +946,5 @@ const ProcEntry g_procTable[] = {
     {"glWaitSync", P(GL_WaitSync)},
     {"glWeightPointerOES", P(GL_WeightPointerOES)}};
 
-const size_t g_numProcs = 912;
+const size_t g_numProcs = 913;
 }  // namespace egl

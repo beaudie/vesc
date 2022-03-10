@@ -95,6 +95,7 @@ EXPORTS
     eglHandleGPUSwitchANGLE
     eglReacquireHighPowerGPUANGLE
     eglReleaseHighPowerGPUANGLE
+    eglSetGPUANGLE
 
     ; EGL_ANGLE_prepare_swap_buffers
     eglPrepareSwapBuffersANGLE

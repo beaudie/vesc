@@ -218,6 +218,7 @@ enum class EntryPoint
     EGLReleaseThread,
     EGLSetBlobCacheFuncsANDROID,
     EGLSetDamageRegionKHR,
+    EGLSetGPUANGLE,
     EGLSignalSyncKHR,
     EGLStreamAttribKHR,
     EGLStreamConsumerAcquireKHR,

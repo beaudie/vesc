@@ -424,6 +424,8 @@ const char *GetEntryPointName(EntryPoint ep)
             return "eglSetBlobCacheFuncsANDROID";
         case EntryPoint::EGLSetDamageRegionKHR:
             return "eglSetDamageRegionKHR";
+        case EntryPoint::EGLSetGPUANGLE:
+            return "eglSetGPUANGLE";
         case EntryPoint::EGLSignalSyncKHR:
             return "eglSignalSyncKHR";
         case EntryPoint::EGLStreamAttribKHR:
