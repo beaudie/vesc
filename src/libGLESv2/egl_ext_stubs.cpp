@@ -824,6 +824,15 @@ void HandleGPUSwitchANGLE(Thread *thread, Display *display)
     thread->setSuccess();
 }
 
+void SetGPUANGLE(Thread *thread, Display *display, EGLint gpuIDHigh, EGLint gpuIDLow)
+{
+    ANGLE_EGL_TRY(thread, display->prepareForCall(), "eglSetGPUANGLE", GetDisplayIfValid(display));
+    ANGLE_EGL_TRY(thread, display->setGPU(gpuIDHigh, gpuIDLow), "eglSetGPUANGLE",
+                  GetDisplayIfValid(display));
+
+    thread->setSuccess();
+}
+
 EGLBoolean QueryDisplayAttribANGLE(Thread *thread,
                                    Display *display,
                                    EGLint attribute,
