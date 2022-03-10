@@ -35,6 +35,23 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "610ba180_227ae24f",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1452687
+      },
+      "writtenOn": "2022-03-10T21:07:44Z",
+      "side": 1,
+      "message": "I am in the middle of rewriting this code to use VK_GOOGLE_surfaceless_query to actually query which specific formats are supported on device.",
+      "revId": "450c9b28ec9d369b18707a563b12389ad5df68e3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "e3aec523_66c0b71c",
