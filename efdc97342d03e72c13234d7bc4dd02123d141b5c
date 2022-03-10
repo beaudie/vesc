@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "23e21792_56ca4594",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 7
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2022-03-10T19:08:39Z",
+      "side": 1,
+      "message": "Assert failure:\n\nContextVk.cpp:1891 (handleDirtyGraphicsIndexBuffer): \t! Assert failed in handleDirtyGraphicsIndexBuffer (../../src/libANGLE/renderer/vulkan/ContextVk.cpp:1891): elementArrayBuffer !\u003d nullptr\n\nFATAL: ContextVk.cpp:1891 (handleDirtyGraphicsIndexBuffer): \t! Assert failed in handleDirtyGraphicsIndexBuffer (../../src/libANGLE/renderer/vulkan/ContextVk.cpp:1891): elementArrayBuffer !\u003d nullptr",
+      "revId": "efdc97342d03e72c13234d7bc4dd02123d141b5c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
