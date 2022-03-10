@@ -16,6 +16,23 @@
       "message": "Assert failure:\n\nContextVk.cpp:1891 (handleDirtyGraphicsIndexBuffer): \t! Assert failed in handleDirtyGraphicsIndexBuffer (../../src/libANGLE/renderer/vulkan/ContextVk.cpp:1891): elementArrayBuffer !\u003d nullptr\n\nFATAL: ContextVk.cpp:1891 (handleDirtyGraphicsIndexBuffer): \t! Assert failed in handleDirtyGraphicsIndexBuffer (../../src/libANGLE/renderer/vulkan/ContextVk.cpp:1891): elementArrayBuffer !\u003d nullptr",
       "revId": "efdc97342d03e72c13234d7bc4dd02123d141b5c",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "25b18140_20e7cfb4",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 7
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2022-03-10T19:13:32Z",
+      "side": 1,
+      "message": "I have an alternate solution if this turns out to have edge cases:\n\nadd ContextVk::setupDrawNonIndexed\n\nsetupDrawNonIndexed calls this code:\n\n    // Set any dirty bits that depend on draw call parameters or other objects.\n    if (mode !\u003d mCurrentDrawMode)\n    {\n        invalidateCurrentGraphicsPipeline();\n        mCurrentDrawMode \u003d mode;\n        mGraphicsPipelineDesc-\u003eupdateTopology(\u0026mGraphicsPipelineTransition, mCurrentDrawMode);\n    }\n\nThen calls setupDraw. We remove the draw mode check from setupDraw.\n\nsetupDrawIndexed the same check, and also calls updateElementArrayBuffer in the if statement, then calls setupDraw.\n\nWe keep the updateElementArrayBuffer call in the (indexType !\u003d mCurrentDrawElementsType) block.\n\nThen we can remove the reset calls from the line loop conditions.\n\nI think this should be a bit cleaner code, and still preserve good performance most of the time.",
+      "revId": "efdc97342d03e72c13234d7bc4dd02123d141b5c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
