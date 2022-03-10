@@ -229,6 +229,24 @@
       "parentUuid": "99ccf74d_07f510f6",
       "revId": "450c9b28ec9d369b18707a563b12389ad5df68e3",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ba2c8c01_e5e3e50c",
+        "filename": "src/libANGLE/renderer/vulkan/SurfaceVk.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 169,
+      "author": {
+        "id": 1340649
+      },
+      "writtenOn": "2022-03-10T23:57:26Z",
+      "side": 1,
+      "message": "\u003e The surface query CL is up over at ...\n\nin that CL, when `bt709LinearSupport` is false you will end up failing on many bots. How do you plan to address the case where vendor doesn\u0027t support `VK_GOOGLE_surfaceless_query`?",
+      "parentUuid": "e4730e51_864d4d0d",
+      "revId": "450c9b28ec9d369b18707a563b12389ad5df68e3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
