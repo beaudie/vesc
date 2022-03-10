@@ -66,6 +66,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "f42bdff3_4373c526",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.h",
+        "patchSetId": 16
+      },
+      "lineNbr": 1218,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-03-10T06:12:21Z",
+      "side": 1,
+      "message": "We originally tracked this in CommandBufferHelper, but that doesn\u0027t work well. We frequently flushOutsideRPCommands() for barrier reasons which would reset this counter, so you\u0027d lose track of how much copy is backed up and could be flushed early.\n\nBy tracking in the context, we flush every whatever MB copies, no matter how many times the outside RP commands are flushed to primary CB.",
+      "parentUuid": "f1f495f6_a465709b",
+      "range": {
+        "startLine": 1218,
+        "startChar": 13,
+        "endLine": 1218,
+        "endChar": 22
+      },
+      "revId": "4f3a7a9f10aba27b5703b106e625ab2e387d766a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "5ee876c1_da71a1c7",
         "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
         "patchSetId": 16
