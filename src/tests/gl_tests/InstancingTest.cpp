@@ -808,6 +808,49 @@ TEST_P(InstancingTestES3, LargestDivisor)
         << "Vertex attrib divisor read was not the same that was passed in.";
 }
 
+// Verify that the index offset for the element array buffer does not overflow after a line loop
+// draw call.
+TEST_P(InstancingTestES3, IndexOverflowAfterLineLoop)
+{
+    constexpr char kVS[] = R"(#version 300 es
+precision highp float;
+in vec4 attr0;
+
+void main()
+{
+  gl_Position = vec4(attr0.x, 0.0, 0.0, 0.0);
+})";
+
+    constexpr char kFS[] = R"(#version 300 es
+precision highp float;
+out vec4 color;
+
+void main()
+{
+   color = vec4(1.0, 0.0, 0.0, 1.0);
+})";
+
+    ANGLE_GL_PROGRAM(program, kVS, kFS);
+    glUseProgram(program);
+
+    GLBuffer buf;
+    GLTexture texture;
+    GLsizeiptr bufferSize = 30000;
+    std::vector<GLfloat> textureData(2000000);
+    std::vector<uint8_t> bufferData(bufferSize);
+    glBindTexture(GL_TEXTURE_2D_ARRAY, texture);
+    glTexImage3D(GL_TEXTURE_2D_ARRAY, 0, GL_RGB32F, 77, 74, 92, 0, GL_RGB, GL_FLOAT,
+                 &textureData[0]);
+
+    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, buf);
+    glBufferData(GL_ELEMENT_ARRAY_BUFFER, bufferSize, &bufferData[0], GL_STATIC_DRAW);
+
+    glDrawElements(GL_LINE_LOOP, 300, GL_UNSIGNED_SHORT, 0);
+    glDrawElements(GL_POINTS, 1000, GL_UNSIGNED_SHORT, 0);
+    glDrawElements(GL_LINE_LOOP, 300, GL_UNSIGNED_BYTE, 0);
+    glDrawElements(GL_POINTS, 1000, GL_UNSIGNED_BYTE, 0);
+}
+
 GTEST_ALLOW_UNINSTANTIATED_PARAMETERIZED_TEST(InstancingTestES3);
 ANGLE_INSTANTIATE_TEST_ES3(InstancingTestES3);
 

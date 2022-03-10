@@ -2868,8 +2868,10 @@ angle::Result ContextVk::drawElements(const gl::Context *context,
     if (mode == gl::PrimitiveMode::LineLoop)
     {
         uint32_t indexCount;
+        getVertexArray()->saveCurrentElementArrayBufferBeforeLineLoop();
         ANGLE_TRY(setupLineLoopDraw(context, mode, 0, count, type, indices, &indexCount));
         vk::LineLoopHelper::Draw(indexCount, 0, mRenderPassCommandBuffer);
+        getVertexArray()->popCurrentElementArrayBufferAfterLineLoop();
     }
     else
     {
