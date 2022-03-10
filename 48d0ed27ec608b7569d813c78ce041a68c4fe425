@@ -43,6 +43,29 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "6eebafe1_e40a518e",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 19
+      },
+      "lineNbr": 7366,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2022-03-10T23:38:06Z",
+      "side": 1,
+      "message": "This function is a bit odd, that it have nothing to do with ImageHelper. I suggest get rid of this function and move the following 4 lines of code to ContextVk::onCopy.\n\n    if (copySize \u003e\u003d kMaxCopySize)\n    {\n        ANGLE_TRY(contextVk-\u003esubmitOutsideRenderPassCommandsImpl());\n    }",
+      "range": {
+        "startLine": 7356,
+        "startChar": 0,
+        "endLine": 7366,
+        "endChar": 1
+      },
+      "revId": "48d0ed27ec608b7569d813c78ce041a68c4fe425",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "052dad99_6630d5ed",
         "filename": "src/libANGLE/renderer/vulkan/vk_utils.h",
         "patchSetId": 19
