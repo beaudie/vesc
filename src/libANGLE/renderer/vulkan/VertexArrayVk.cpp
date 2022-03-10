@@ -160,6 +160,7 @@ VertexArrayVk::VertexArrayVk(ContextVk *contextVk, const gl::VertexArrayState &s
       mCurrentArrayBufferRelativeOffsets{},
       mCurrentArrayBuffers{},
       mCurrentElementArrayBuffer(nullptr),
+      mElementArrayBufferBeforeLineLoop(nullptr),
       mLineLoopHelper(contextVk->getRenderer()),
       mDirtyLineLoopTranslation(true)
 {
@@ -188,6 +189,18 @@ void VertexArrayVk::destroy(const gl::Context *context)
     mTranslatedByteIndexData.release(renderer);
     mTranslatedByteIndirectData.release(renderer);
     mLineLoopHelper.release(contextVk);
+}
+
+void VertexArrayVk::saveCurrentElementArrayBufferBeforeLineLoop()
+{
+    mElementArrayBufferBeforeLineLoop = mCurrentElementArrayBuffer;
+}
+
+void VertexArrayVk::popCurrentElementArrayBufferAfterLineLoop(ContextVk *contextVk)
+{
+    mCurrentElementArrayBuffer->release(contextVk->getRenderer());
+    mCurrentElementArrayBuffer        = mElementArrayBufferBeforeLineLoop;
+    mElementArrayBufferBeforeLineLoop = nullptr;
 }
 
 angle::Result VertexArrayVk::convertIndexBufferGPU(ContextVk *contextVk,
