@@ -22,6 +22,30 @@
       },
       "revId": "09a26c88aa826dc8736c053a71f009f4a97c6339",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "c36142bf_1cdb1781",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 1234,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2022-03-10T18:37:52Z",
+      "side": 1,
+      "message": "That means I have to spread the call in quite a few places, and handle type change differently as well. Code will be more fragile, but does save a few cpu cycles in the common code path. Since this is in draw path, I understand the concern. Done.",
+      "parentUuid": "856b13e1_08854751",
+      "range": {
+        "startLine": 1225,
+        "startChar": 0,
+        "endLine": 1234,
+        "endChar": 0
+      },
+      "revId": "09a26c88aa826dc8736c053a71f009f4a97c6339",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
