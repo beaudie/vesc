@@ -1198,14 +1198,18 @@ angle::Result ContextVk::setupIndexedDraw(const gl::Context *context,
                                           const void *indices)
 {
     ASSERT(mode != gl::PrimitiveMode::LineLoop);
+    VertexArrayVk *vertexArrayVk = getVertexArray();
 
     if (indexType != mCurrentDrawElementsType)
     {
         mCurrentDrawElementsType = indexType;
+        // If you were drawing with GL_UNSIGNED_BYTE type previously, we may allocate its own
+        // element buffer and modify mCurrentElementArrayBuffer. When we switch out of that draw
+        // mode, we must reset mCurrentElementArrayBuffer back to the vertexArray's element buffer.
+        vertexArrayVk->updateCurrentElementArrayBuffer();
         ANGLE_TRY(onIndexBufferChange(nullptr));
     }
 
-    VertexArrayVk *vertexArrayVk         = getVertexArray();
     const gl::Buffer *elementArrayBuffer = vertexArrayVk->getState().getElementArrayBuffer();
     if (!elementArrayBuffer)
     {
@@ -1378,6 +1382,15 @@ angle::Result ContextVk::setupLineLoopDraw(const gl::Context *context,
                                    : gl::DrawElementsType::UnsignedInt;
     return setupDraw(context, mode, firstVertex, vertexOrIndexCount, 1, indexTypeOrInvalid, indices,
                      mIndexedDirtyBitsMask);
+}
+
+void ContextVk::resetLineLoopDrawMode()
+{
+    // When you draw with LineLoop mode we may allocate its own
+    // element buffer and modify mCurrentElementArrayBuffer. To avoid adding extra cost in
+    // non-lineloop mode that has to reset mCurrentElementArrayBuffer.
+    VertexArrayVk *vertexArrayVk = getVertexArray();
+    vertexArrayVk->updateCurrentElementArrayBuffer();
 }
 
 angle::Result ContextVk::setupDispatch(const gl::Context *context)
@@ -2800,6 +2813,7 @@ angle::Result ContextVk::drawArrays(const gl::Context *context,
         ANGLE_TRY(setupLineLoopDraw(context, mode, first, count, gl::DrawElementsType::InvalidEnum,
                                     nullptr, &numIndices));
         vk::LineLoopHelper::Draw(numIndices, 0, mRenderPassCommandBuffer);
+        resetLineLoopDrawMode();
     }
     else
     {
@@ -2824,6 +2838,7 @@ angle::Result ContextVk::drawArraysInstanced(const gl::Context *context,
         ANGLE_TRY(setupLineLoopDraw(context, mode, first, clampedVertexCount,
                                     gl::DrawElementsType::InvalidEnum, nullptr, &numIndices));
         mRenderPassCommandBuffer->drawIndexedInstanced(numIndices, instances);
+        resetLineLoopDrawMode();
         return angle::Result::Continue;
     }
 
@@ -2849,6 +2864,7 @@ angle::Result ContextVk::drawArraysInstancedBaseInstance(const gl::Context *cont
                                     gl::DrawElementsType::InvalidEnum, nullptr, &numIndices));
         mRenderPassCommandBuffer->drawIndexedInstancedBaseVertexBaseInstance(numIndices, instances,
                                                                              0, 0, baseInstance);
+        resetLineLoopDrawMode();
         return angle::Result::Continue;
     }
 
@@ -2870,6 +2886,7 @@ angle::Result ContextVk::drawElements(const gl::Context *context,
         uint32_t indexCount;
         ANGLE_TRY(setupLineLoopDraw(context, mode, 0, count, type, indices, &indexCount));
         vk::LineLoopHelper::Draw(indexCount, 0, mRenderPassCommandBuffer);
+        resetLineLoopDrawMode();
     }
     else
     {
@@ -2892,6 +2909,7 @@ angle::Result ContextVk::drawElementsBaseVertex(const gl::Context *context,
         uint32_t indexCount;
         ANGLE_TRY(setupLineLoopDraw(context, mode, 0, count, type, indices, &indexCount));
         vk::LineLoopHelper::Draw(indexCount, baseVertex, mRenderPassCommandBuffer);
+        resetLineLoopDrawMode();
     }
     else
     {
@@ -2914,6 +2932,7 @@ angle::Result ContextVk::drawElementsInstanced(const gl::Context *context,
         uint32_t indexCount;
         ANGLE_TRY(setupLineLoopDraw(context, mode, 0, count, type, indices, &indexCount));
         count = indexCount;
+        resetLineLoopDrawMode();
     }
     else
     {
@@ -2937,6 +2956,7 @@ angle::Result ContextVk::drawElementsInstancedBaseVertex(const gl::Context *cont
         uint32_t indexCount;
         ANGLE_TRY(setupLineLoopDraw(context, mode, 0, count, type, indices, &indexCount));
         count = indexCount;
+        resetLineLoopDrawMode();
     }
     else
     {
@@ -2962,6 +2982,7 @@ angle::Result ContextVk::drawElementsInstancedBaseVertexBaseInstance(const gl::C
         ANGLE_TRY(setupLineLoopDraw(context, mode, 0, count, type, indices, &indexCount));
         mRenderPassCommandBuffer->drawIndexedInstancedBaseVertexBaseInstance(
             indexCount, instances, 0, baseVertex, baseInstance);
+        resetLineLoopDrawMode();
         return angle::Result::Continue;
     }
 

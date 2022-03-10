@@ -827,6 +827,8 @@ class ContextVk : public ContextImpl, public vk::Context, public MultisampleText
                                     gl::DrawElementsType indexTypeOrInvalid,
                                     const void *indices,
                                     uint32_t *numIndicesOut);
+    void resetLineLoopDrawMode();
+
     angle::Result setupDispatch(const gl::Context *context);
 
     gl::Rectangle getCorrectedViewport(const gl::Rectangle &viewport) const;
