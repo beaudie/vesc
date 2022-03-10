@@ -1146,7 +1146,6 @@ angle::Result TextureD3D_2D::copySubImage(const gl::Context *context,
         ANGLE_TRY(mImageArray[index.getLevelIndex()]->copyFromFramebuffer(context, clippedOffset,
                                                                           clippedArea, source));
         mDirtyImages = true;
-        onStateChange(angle::SubjectMessage::DirtyBitsFlagged);
     }
     else
     {
@@ -1855,7 +1854,6 @@ angle::Result TextureD3D_Cube::copyImage(const gl::Context *context,
         ANGLE_TRY(mImageArray[faceIndex][index.getLevelIndex()]->copyFromFramebuffer(
             context, destOffset, clippedArea, source));
         mDirtyImages = true;
-        onStateChange(angle::SubjectMessage::DirtyBitsFlagged);
     }
     else
     {
@@ -1900,7 +1898,6 @@ angle::Result TextureD3D_Cube::copySubImage(const gl::Context *context,
         ANGLE_TRY(mImageArray[faceIndex][index.getLevelIndex()]->copyFromFramebuffer(
             context, clippedOffset, clippedArea, source));
         mDirtyImages = true;
-        onStateChange(angle::SubjectMessage::DirtyBitsFlagged);
     }
     else
     {
@@ -2630,7 +2627,6 @@ angle::Result TextureD3D_3D::copySubImage(const gl::Context *context,
     ANGLE_TRY(mImageArray[index.getLevelIndex()]->copyFromFramebuffer(context, clippedDestOffset,
                                                                       clippedSourceArea, source));
     mDirtyImages = true;
-    onStateChange(angle::SubjectMessage::DirtyBitsFlagged);
 
     if (syncTexStorage)
     {
@@ -3319,7 +3315,6 @@ angle::Result TextureD3D_2DArray::copySubImage(const gl::Context *context,
         ANGLE_TRY(mImageArray[index.getLevelIndex()][clippedDestOffset.z]->copyFromFramebuffer(
             context, destLayerOffset, clippedSourceArea, source));
         mDirtyImages = true;
-        onStateChange(angle::SubjectMessage::DirtyBitsFlagged);
     }
     else
     {
