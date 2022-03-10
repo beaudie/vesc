@@ -104,6 +104,24 @@
       "parentUuid": "7893579d_cd7e7b4b",
       "revId": "450c9b28ec9d369b18707a563b12389ad5df68e3",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b7ff6d8a_c5da5bce",
+        "filename": "src/libANGLE/renderer/vulkan/SurfaceVk.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 169,
+      "author": {
+        "id": 1290487
+      },
+      "writtenOn": "2022-03-10T20:58:34Z",
+      "side": 1,
+      "message": "Ahh.  It\u0027s good that we\u0027re pushing this to AOSP.  Hopefully, we can collaborate there to make the loader code good for Android.\n\nFYI ... I\u0027m heading off to an appointment for a bit",
+      "parentUuid": "c6f8e96c_fb7166eb",
+      "revId": "450c9b28ec9d369b18707a563b12389ad5df68e3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
