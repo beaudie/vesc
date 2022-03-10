@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "27e15ac1_72eb9399",
+        "filename": "src/tests/gl_tests/GLSLTest.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 3148,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-03-10T08:02:14Z",
+      "side": 1,
+      "message": "Instead, please check equality with the values provided below with `glUniform1*`. This way, the test continues to make sure that matrix constructors are working correctly.",
+      "range": {
+        "startLine": 3148,
+        "startChar": 29,
+        "endLine": 3148,
+        "endChar": 32
+      },
+      "revId": "6808428d63e0b9731a09f2bdc664b2dfaf2e118c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
