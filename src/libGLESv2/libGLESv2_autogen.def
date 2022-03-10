@@ -1238,6 +1238,7 @@ EXPORTS
     EGL_HandleGPUSwitchANGLE
     EGL_ReacquireHighPowerGPUANGLE
     EGL_ReleaseHighPowerGPUANGLE
+    EGL_SetGPUANGLE
 
     ; EGL_ANGLE_prepare_swap_buffers
     EGL_PrepareSwapBuffersANGLE

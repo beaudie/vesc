@@ -364,6 +364,23 @@ void EGLAPIENTRY EGL_HandleGPUSwitchANGLE(EGLDisplay dpy)
     HandleGPUSwitchANGLE(thread, dpyPacked);
 }
 
+void EGLAPIENTRY EGL_SetGPUANGLE(EGLDisplay dpy, EGLint gpuIDHigh, EGLint gpuIDLow)
+{
+
+    ANGLE_SCOPED_GLOBAL_LOCK();
+    EGL_EVENT(SetGPUANGLE, "dpy = 0x%016" PRIxPTR ", gpuIDHigh = %d, gpuIDLow = %d", (uintptr_t)dpy,
+              gpuIDHigh, gpuIDLow);
+
+    Thread *thread = egl::GetCurrentThread();
+
+    egl::Display *dpyPacked = PackParam<egl::Display *>(dpy);
+
+    ANGLE_EGL_VALIDATE_VOID(thread, SetGPUANGLE, GetDisplayIfValid(dpyPacked), dpyPacked, gpuIDHigh,
+                            gpuIDLow);
+
+    SetGPUANGLE(thread, dpyPacked, gpuIDHigh, gpuIDLow);
+}
+
 // EGL_ANGLE_prepare_swap_buffers
 EGLBoolean EGLAPIENTRY EGL_PrepareSwapBuffersANGLE(EGLDisplay dpy, EGLSurface surface)
 {
