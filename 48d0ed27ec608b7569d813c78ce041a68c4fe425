@@ -1,0 +1,67 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "1315f1b3_9162e29f",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 19
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2022-03-10T22:10:06Z",
+      "side": 1,
+      "message": "G",
+      "revId": "48d0ed27ec608b7569d813c78ce041a68c4fe425",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "211fc7c4_8c5b053e",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.h",
+        "patchSetId": 19
+      },
+      "lineNbr": 1220,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2022-03-10T22:10:06Z",
+      "side": 1,
+      "message": "hoping we can eliminate this - sorry if I missed the reset of the conversation. If we need to keep it please give it a more descriptive name.",
+      "range": {
+        "startLine": 1220,
+        "startChar": 17,
+        "endLine": 1220,
+        "endChar": 27
+      },
+      "revId": "48d0ed27ec608b7569d813c78ce041a68c4fe425",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "052dad99_6630d5ed",
+        "filename": "src/libANGLE/renderer/vulkan/vk_utils.h",
+        "patchSetId": 19
+      },
+      "lineNbr": 1249,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2022-03-10T22:10:06Z",
+      "side": 1,
+      "message": "please remove",
+      "range": {
+        "startLine": 1249,
+        "startChar": 7,
+        "endLine": 1249,
+        "endChar": 19
+      },
+      "revId": "48d0ed27ec608b7569d813c78ce041a68c4fe425",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
