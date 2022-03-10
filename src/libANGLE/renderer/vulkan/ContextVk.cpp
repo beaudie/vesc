@@ -1222,6 +1222,16 @@ angle::Result ContextVk::setupIndexedDraw(const gl::Context *context,
     }
     else
     {
+        // When you draw ith LineLoop mode or Uint8 type, we may allocate its own element buffer and
+        // modifies mCurrentElementArrayBuffer. When we switch out of that draw mode, we must reset
+        // mCurrentElementArrayBuffer to the vertexArray's element buffer. Since in either case we
+        // set DIRTY_BIT_INDEX_BUFFER dirty bit, we use this bit to re-sync
+        // mCurrentElementArrayBuffer.
+        if (mGraphicsDirtyBits[DIRTY_BIT_INDEX_BUFFER])
+        {
+            vertexArrayVk->syncCurrentElementArrayBuffer();
+        }
+
         mCurrentIndexBufferOffset = reinterpret_cast<VkDeviceSize>(indices);
 
         if (indices != mLastIndexBufferOffset)
