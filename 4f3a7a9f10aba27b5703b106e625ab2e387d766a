@@ -20,6 +20,52 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "ee99d0be_259c654e",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 16
+      },
+      "lineNbr": 2405,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2022-03-10T15:03:15Z",
+      "side": 1,
+      "message": "naming nit: I don\u0027t quite understand what the enum means - is this to distinguish a submit for RP + Outside from a submit that\u0027s just Outside? In that case, how about SubmitFrameType::OutsideRPCommandsOnly and SubmitFrameType::OutsideAndRPCommands ?",
+      "range": {
+        "startLine": 2405,
+        "startChar": 55,
+        "endLine": 2405,
+        "endChar": 94
+      },
+      "revId": "4f3a7a9f10aba27b5703b106e625ab2e387d766a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "690990d4_90410eba",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 16
+      },
+      "lineNbr": 2408,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2022-03-10T15:03:15Z",
+      "side": 1,
+      "message": "naming nit: submitFrameImpl to match our usage with other methods",
+      "range": {
+        "startLine": 2408,
+        "startChar": 25,
+        "endLine": 2408,
+        "endChar": 42
+      },
+      "revId": "4f3a7a9f10aba27b5703b106e625ab2e387d766a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "81274a98_4ffa67f5",
         "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
         "patchSetId": 16
@@ -36,6 +82,53 @@
         "startChar": 8,
         "endLine": 2434,
         "endChar": 65
+      },
+      "revId": "4f3a7a9f10aba27b5703b106e625ab2e387d766a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "4ad2790a_68b8e959",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 16
+      },
+      "lineNbr": 2434,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2022-03-10T15:03:15Z",
+      "side": 1,
+      "message": "+1",
+      "parentUuid": "81274a98_4ffa67f5",
+      "range": {
+        "startLine": 2434,
+        "startChar": 8,
+        "endLine": 2434,
+        "endChar": 65
+      },
+      "revId": "4f3a7a9f10aba27b5703b106e625ab2e387d766a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "9a2c1bb6_7db85122",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 16
+      },
+      "lineNbr": 6316,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2022-03-10T15:03:15Z",
+      "side": 1,
+      "message": "also impl",
+      "range": {
+        "startLine": 6316,
+        "startChar": 25,
+        "endLine": 6316,
+        "endChar": 62
       },
       "revId": "4f3a7a9f10aba27b5703b106e625ab2e387d766a",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
@@ -153,6 +246,29 @@
         "startChar": 17,
         "endLine": 7268,
         "endChar": 47
+      },
+      "revId": "4f3a7a9f10aba27b5703b106e625ab2e387d766a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "58221e45_7c86fc05",
+        "filename": "src/libANGLE/renderer/vulkan/vk_utils.h",
+        "patchSetId": 16
+      },
+      "lineNbr": 1253,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2022-03-10T15:03:15Z",
+      "side": 1,
+      "message": "nit: submittedFrames",
+      "range": {
+        "startLine": 1253,
+        "startChar": 13,
+        "endLine": 1253,
+        "endChar": 25
       },
       "revId": "4f3a7a9f10aba27b5703b106e625ab2e387d766a",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
