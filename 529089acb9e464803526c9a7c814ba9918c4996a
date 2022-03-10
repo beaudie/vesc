@@ -72,6 +72,41 @@
     {
       "unresolved": false,
       "key": {
+        "uuid": "2229753d_4d6ad1fc",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1449558
+      },
+      "writtenOn": "2022-03-10T18:41:18Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "7dca8e2a_5faef0ac",
+      "revId": "529089acb9e464803526c9a7c814ba9918c4996a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "3a7ebfc2_6eb5cfab",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1449558
+      },
+      "writtenOn": "2022-03-10T18:41:18Z",
+      "side": 1,
+      "message": "thanks",
+      "revId": "529089acb9e464803526c9a7c814ba9918c4996a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
         "uuid": "d8e92e18_62995f56",
         "filename": "extensions/EGL_ANGLE_platform_angle_device_id.txt",
         "patchSetId": 2
@@ -100,6 +135,24 @@
       "writtenOn": "2022-03-09T16:08:05Z",
       "side": 1,
       "message": "nit: could use GetSystemDeviceIdFromParts to key off of one value, though functionally it doesn\u0027t matter",
+      "revId": "529089acb9e464803526c9a7c814ba9918c4996a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "3e10ebe2_9603d438",
+        "filename": "src/libANGLE/Display.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 113,
+      "author": {
+        "id": 1449558
+      },
+      "writtenOn": "2022-03-10T18:41:18Z",
+      "side": 1,
+      "message": "I think it\u0027s clearer that the keying is done with the inputs (EGLAttribs) like it is done with the other properties..",
+      "parentUuid": "5157309c_8a4ee655",
       "revId": "529089acb9e464803526c9a7c814ba9918c4996a",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
@@ -139,6 +192,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "6eaaa0b5_4689a4fe",
+        "filename": "src/tests/egl_tests/EGLDisplaySelectionTest.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 517,
+      "author": {
+        "id": 1449558
+      },
+      "writtenOn": "2022-03-10T18:41:18Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "80a5129e_c15b5026",
+      "revId": "529089acb9e464803526c9a7c814ba9918c4996a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "5816236e_1e6f80ae",
@@ -174,6 +245,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "28c5884a_7d659e1a",
+        "filename": "src/tests/egl_tests/EGLDisplaySelectionTest.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 535,
+      "author": {
+        "id": 1449558
+      },
+      "writtenOn": "2022-03-10T18:41:18Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "67974fc8_dd4581a1",
+      "revId": "529089acb9e464803526c9a7c814ba9918c4996a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "fbb338d8_274309a2",
@@ -187,6 +276,30 @@
       "writtenOn": "2022-03-09T16:08:05Z",
       "side": 1,
       "message": "I\u0027m a bit confused by this.\nTo me this would mean you\u0027d like to test the interaction of EGL_ANGLE_platform_angle_device_id and EGL_ANGLE_display_power_preference, but the tests are skipped if displayPowerPreference is set.\nI think you could just remove the SKIP condition as well as these instantiations. But please correct me if there is another reason I\u0027m missing.",
+      "range": {
+        "startLine": 636,
+        "startChar": 15,
+        "endLine": 639,
+        "endChar": 67
+      },
+      "revId": "529089acb9e464803526c9a7c814ba9918c4996a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "24c2b09e_0af58691",
+        "filename": "src/tests/egl_tests/EGLDisplaySelectionTest.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 639,
+      "author": {
+        "id": 1449558
+      },
+      "writtenOn": "2022-03-10T18:41:18Z",
+      "side": 1,
+      "message": "Yeah, the interaction test was the target.\nJust ran into some test framework issue in ANGLETest and commented stuff out during development. I guess it was a long day judging from the quality of the patch..",
+      "parentUuid": "fbb338d8_274309a2",
       "range": {
         "startLine": 636,
         "startChar": 15,
