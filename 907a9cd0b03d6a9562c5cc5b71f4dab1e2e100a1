@@ -41,6 +41,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "ae0d7677_1043ba0c",
+        "filename": "src/libANGLE/Context.cpp",
+        "patchSetId": 21
+      },
+      "lineNbr": 758,
+      "author": {
+        "id": 1520902
+      },
+      "writtenOn": "2022-03-11T00:30:04Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "161d5448_037515ad",
+      "range": {
+        "startLine": 758,
+        "startChar": 11,
+        "endLine": 758,
+        "endChar": 31
+      },
+      "revId": "907a9cd0b03d6a9562c5cc5b71f4dab1e2e100a1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "57d32a0b_0a6ea4c6",
@@ -138,6 +162,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "eee8f50d_758dd72b",
+        "filename": "src/libANGLE/ResourceManager.h",
+        "patchSetId": 21
+      },
+      "lineNbr": 66,
+      "author": {
+        "id": 1520902
+      },
+      "writtenOn": "2022-03-11T00:30:04Z",
+      "side": 1,
+      "message": "Adding a new virtual function should work! I implemented it in the latest patch 22. That solves the problem of trying to access TextureManager after it has been deleted. However I believe what Jamie suggested is a good practice: it will avoid leaving the ResourceManager pointers to dangling pointers after the release() call.",
+      "parentUuid": "b4d12419_b95cb3e6",
+      "range": {
+        "startLine": 66,
+        "startChar": 36,
+        "endLine": 66,
+        "endChar": 55
+      },
+      "revId": "907a9cd0b03d6a9562c5cc5b71f4dab1e2e100a1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "295e37fe_c419367b",
         "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
         "patchSetId": 21
@@ -209,6 +257,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "1fbb1a19_b0cc7800",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 21
+      },
+      "lineNbr": 864,
+      "author": {
+        "id": 1520902
+      },
+      "writtenOn": "2022-03-11T00:30:04Z",
+      "side": 1,
+      "message": "I checked and we can have multiple contexts belong to the same shared group: egl::ShareGroup::mRefCount can be bigger than 1, with this extension enabled. \n\nFor instance, if I change the line 375: https://chromium-review.googlesource.com/c/angle/angle/+/3495879/22/src/tests/egl_tests/EGLContextSharingTest.cpp#375, to EGLContext context2 \u003d eglCreateContext(display, config, context1, inShareGroupContextAttribs); Then both both context1 and context2 belong to the same ShareGroup. When I delete context1, the ShareGroup refcount goes to 1, and it won\u0027t be destroyed. If I don\u0027t flush texture stage updates, the program won\u0027t crash and the test still passes.\n\nEarlier it was my mistake that I didn\u0027t check how does Context / ContextVk get added to ShareGroup / ShareGroupVk. Creating a context doesn\u0027t add it to the ShareGroup automatically. The context is added to the ShareGroup later when EGL::makeCurrent() is called on the context. Checking the number of context in ShareGroup to determine if the ShareGroup will be destroyed is indeed incorrect. \n\nI changed it to check the refcount of ShareGroup. This will require adding a new member function to refcount in class ShareGroup. If it is preferred to not adding a new member function in ShareGroup, and it doesn\u0027t harm to flush more than necessary, I can proceed with checking extension only.",
+      "parentUuid": "afb69704_53ed1fc7",
+      "range": {
+        "startLine": 864,
+        "startChar": 36,
+        "endLine": 864,
+        "endChar": 60
+      },
+      "revId": "907a9cd0b03d6a9562c5cc5b71f4dab1e2e100a1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "96ce74e6_8b44507a",
         "filename": "src/tests/egl_tests/EGLContextSharingTest.cpp",
         "patchSetId": 21
@@ -220,6 +292,30 @@
       "writtenOn": "2022-03-10T19:27:36Z",
       "side": 1,
       "message": "nit: please add a comment describing the test, and rename this to clarify what the test is doing.",
+      "range": {
+        "startLine": 366,
+        "startChar": 30,
+        "endLine": 366,
+        "endChar": 49
+      },
+      "revId": "907a9cd0b03d6a9562c5cc5b71f4dab1e2e100a1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "e2aaf16a_7e4d62d1",
+        "filename": "src/tests/egl_tests/EGLContextSharingTest.cpp",
+        "patchSetId": 21
+      },
+      "lineNbr": 366,
+      "author": {
+        "id": 1520902
+      },
+      "writtenOn": "2022-03-11T00:30:04Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "96ce74e6_8b44507a",
       "range": {
         "startLine": 366,
         "startChar": 30,
@@ -243,6 +339,30 @@
       "writtenOn": "2022-03-10T19:27:36Z",
       "side": 1,
       "message": "nit: use ANGLE_SKIP_TEST_IF. You can optionally clean up the rest of the file as well.",
+      "range": {
+        "startLine": 369,
+        "startChar": 0,
+        "endLine": 374,
+        "endChar": 5
+      },
+      "revId": "907a9cd0b03d6a9562c5cc5b71f4dab1e2e100a1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "8070fcb2_fbf6765a",
+        "filename": "src/tests/egl_tests/EGLContextSharingTest.cpp",
+        "patchSetId": 21
+      },
+      "lineNbr": 374,
+      "author": {
+        "id": 1520902
+      },
+      "writtenOn": "2022-03-11T00:30:04Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "884525cf_694e88e9",
       "range": {
         "startLine": 369,
         "startChar": 0,
