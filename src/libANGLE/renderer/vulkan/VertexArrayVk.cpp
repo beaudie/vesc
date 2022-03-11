@@ -161,7 +161,8 @@ VertexArrayVk::VertexArrayVk(ContextVk *contextVk, const gl::VertexArrayState &s
       mCurrentArrayBuffers{},
       mCurrentElementArrayBuffer(nullptr),
       mLineLoopHelper(contextVk->getRenderer()),
-      mDirtyLineLoopTranslation(true)
+      mDirtyLineLoopTranslation(true),
+      mUsedInLineLoopMode(false)
 {
     vk::BufferHelper &emptyBuffer = contextVk->getEmptyBuffer();
 
@@ -924,6 +925,7 @@ angle::Result VertexArrayVk::handleLineLoop(ContextVk *contextVk,
                                             const void *indices,
                                             uint32_t *indexCountOut)
 {
+    mUsedInLineLoopMode = true;
     if (indexTypeOrInvalid != gl::DrawElementsType::InvalidEnum)
     {
         // Handle GL_LINE_LOOP drawElements.
