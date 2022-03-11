@@ -12,11 +12,18 @@
 #include <iostream>
 #include <sstream>
 
+#include "anglebase/no_destructor.h"
 #include "common/debug.h"
 #include "common/string_utils.h"
+#include "common/system_utils.h"
 
 namespace angle
 {
+namespace
+{
+constexpr char kANGLEPreferredDeviceEnv[] = "ANGLE_PREFERRED_DEVICE";
+}
+
 std::string VendorName(VendorID vendor)
 {
     switch (vendor)
@@ -100,6 +107,22 @@ bool SystemInfo::hasAMDGPU() const
         }
     }
     return false;
+}
+
+std::optional<SystemDeviceID> SystemInfo::getPreferredDeviceSystemDeviceId() const
+{
+    std::string device = GetPreferredDeviceString();
+    if (!device.empty())
+    {
+        for (auto &gpu : gpus)
+        {
+            std::string vendor = VendorName(gpu.vendorId);
+            ToLower(&vendor);
+            if (vendor == device)
+                return gpu.systemDeviceId;
+        }
+    }
+    return std::nullopt;
 }
 
 bool IsAMD(VendorID vendorId)
@@ -383,6 +406,16 @@ uint32_t GetSystemDeviceIdHighPart(uint64_t systemDeviceId)
 uint32_t GetSystemDeviceIdLowPart(uint64_t systemDeviceId)
 {
     return systemDeviceId & 0xffffffff;
+}
+
+std::string GetPreferredDeviceString()
+{
+    static const base::NoDestructor<std::string> s_preferredDevice([] {
+        std::string device = angle::GetEnvironmentVar(kANGLEPreferredDeviceEnv);
+        ToLower(&device);
+        return device;
+    }());
+    return *s_preferredDevice;
 }
 
 }  // namespace angle
