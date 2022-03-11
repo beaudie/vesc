@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "90414977_e364c2b9",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1449558
+      },
+      "writtenOn": "2022-03-11T13:27:23Z",
+      "side": 1,
+      "message": "How much would this break ANGLE test bot test expectations? Does the infra have Macs with switchable gpu hardware? ",
+      "revId": "6db4299725dd9abc290d199f87cc131e0fb9d7a3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
