@@ -210,6 +210,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "68edacb5_ec0a3819",
+        "filename": "src/libANGLE/ResourceManager.h",
+        "patchSetId": 21
+      },
+      "lineNbr": 66,
+      "author": {
+        "id": 1520902
+      },
+      "writtenOn": "2022-03-11T02:24:04Z",
+      "side": 1,
+      "message": "I see what you meant. When mState.ResourceManager-\u003erelease() is called, we are decrementing the refcount, so technically we should set the current pointer to null regardless whether the ResourceManager is destroyed, because we are supposed to have one less pointer pointing to the ResourceManager.\n\nI am fine with removing the changes, or manually set the pointer to null for all these lines.",
+      "parentUuid": "08154f2b_8ba1bc71",
+      "range": {
+        "startLine": 66,
+        "startChar": 36,
+        "endLine": 66,
+        "endChar": 55
+      },
+      "revId": "907a9cd0b03d6a9562c5cc5b71f4dab1e2e100a1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "295e37fe_c419367b",
         "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
         "patchSetId": 21
