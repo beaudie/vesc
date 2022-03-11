@@ -1246,7 +1246,10 @@ angle::Result ContextVk::setupIndexedDraw(const gl::Context *context,
         invalidateCurrentGraphicsPipeline();
         mCurrentDrawMode = mode;
         mGraphicsPipelineDesc->updateTopology(&mGraphicsPipelineTransition, mCurrentDrawMode);
+    }
 
+    if (vertexArrayVk->getAndResetUsedInLineLoopMode())
+    {
         // When you draw with LineLoop mode we may allocate its own element buffer and modify
         // mCurrentElementArrayBuffer. To avoid adding extra cost in non-lineloop mode that has to
         // reset mCurrentElementArrayBuffer.
