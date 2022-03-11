@@ -1,0 +1,44 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "1befaa46_1efa4d69",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 22
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2022-03-11T01:40:28Z",
+      "side": 1,
+      "message": "Other than the mamager related changes (see my comment), LGTM.",
+      "revId": "352b4de565bf7f84021f4736f651ede4c931156f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "d1990444_53d2e0b6",
+        "filename": "src/libANGLE/Context.cpp",
+        "patchSetId": 22
+      },
+      "lineNbr": 758,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2022-03-11T01:40:28Z",
+      "side": 1,
+      "message": "But all these above lines are incorrect though: mState is context state. on destroy, that context\u0027s pointer should be null, regardless other context still pointing to the manager or not, or, the manager is actually freed or not.",
+      "range": {
+        "startLine": 758,
+        "startChar": 4,
+        "endLine": 758,
+        "endChar": 82
+      },
+      "revId": "352b4de565bf7f84021f4736f651ede4c931156f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}

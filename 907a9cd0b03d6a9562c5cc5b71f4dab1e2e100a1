@@ -186,6 +186,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "08154f2b_8ba1bc71",
+        "filename": "src/libANGLE/ResourceManager.h",
+        "patchSetId": 21
+      },
+      "lineNbr": 66,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2022-03-11T01:40:28Z",
+      "side": 1,
+      "message": "\u003e it will avoid leaving the ResourceManager pointers to dangling pointers after the release() call.\nSee my other comment. If you want to do that, it should set to null regardless of manager been freed or not. But anway, with the prepareForDestroy(), you no longer need this.\n\nFolks may disagree, but IMHO, it is waste of cpu cycle to set the pointer to null on the destroy. You do not zero fill a data structure on destructor. You only do so when you are debugging certain memory issues. You can assert to ensure bad things dont creep in, or set to null in assert build, but ,..., I will leave to you guys to decide.",
+      "parentUuid": "eee8f50d_758dd72b",
+      "range": {
+        "startLine": 66,
+        "startChar": 36,
+        "endLine": 66,
+        "endChar": 55
+      },
+      "revId": "907a9cd0b03d6a9562c5cc5b71f4dab1e2e100a1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "295e37fe_c419367b",
         "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
         "patchSetId": 21
