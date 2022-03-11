@@ -107,6 +107,13 @@ class VertexArrayVk : public VertexArrayImpl
         return mStreamingVertexAttribsMask;
     }
 
+    bool getAndResetUsedInLineLoopMode()
+    {
+        bool usedInLineLoopMode = mUsedInLineLoopMode;
+        mUsedInLineLoopMode     = false;
+        return usedInLineLoopMode;
+    }
+
   private:
     angle::Result setDefaultPackedInput(ContextVk *contextVk, size_t attribIndex);
 
@@ -154,6 +161,7 @@ class VertexArrayVk : public VertexArrayImpl
     Optional<GLint> mLineLoopBufferFirstIndex;
     Optional<size_t> mLineLoopBufferLastIndex;
     bool mDirtyLineLoopTranslation;
+    bool mUsedInLineLoopMode;
 
     // Track client and/or emulated attribs that we have to stream their buffer contents
     gl::AttributesMask mStreamingVertexAttribsMask;

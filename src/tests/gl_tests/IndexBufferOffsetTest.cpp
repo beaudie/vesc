@@ -358,6 +358,65 @@ TEST_P(IndexBufferOffsetTestES3, UseAsUBOThenUpdateThenUInt32IndexSmallUpdates)
     runTest(GL_UNSIGNED_INT, 4, indexData, UpdateType::BigThenSmallUpdate, true);
 }
 
+// This is a regression test to catch corner case where the same element array buffer is used across
+// draws in line loop and triangle modes.
+TEST_P(IndexBufferOffsetTestES3, RebindingSameBufferAcrossDifferentModes)
+{
+    const auto &vertices                    = GetIndexedQuadVertices();
+    constexpr std::array<GLuint, 6> indices = {{0, 1, 2, 0, 2, 3}};
+
+    ANGLE_GL_PROGRAM(programDrawRed, essl1_shaders::vs::Simple(), essl1_shaders::fs::Red());
+    ANGLE_GL_PROGRAM(programDrawBlue, essl1_shaders::vs::Simple(), essl1_shaders::fs::Blue());
+
+    glUseProgram(programDrawRed);
+
+    GLint posLocation = glGetAttribLocation(programDrawRed, essl1_shaders::PositionAttrib());
+    ASSERT_NE(-1, posLocation);
+
+    GLuint vertexArray[2];
+    glGenVertexArrays(2, &vertexArray[0]);
+    glBindVertexArray(vertexArray[0]);
+
+    GLBuffer indexBuffer;
+    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, indexBuffer);
+    glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(indices[0]) * indices.size(), indices.data(),
+                 GL_STATIC_DRAW);
+
+    GLBuffer vertexBuffer[2];
+    for (int i = 0; i < 2; i++)
+    {
+        glBindVertexArray(vertexArray[i]);
+        glBindBuffer(GL_ARRAY_BUFFER, vertexBuffer[i]);
+        glBufferData(GL_ARRAY_BUFFER, sizeof(vertices[0]) * vertices.size(), vertices.data(),
+                     GL_STATIC_DRAW);
+        glVertexAttribPointer(posLocation, 3, GL_FLOAT, GL_FALSE, 0, 0);
+        glEnableVertexAttribArray(posLocation);
+        glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, indexBuffer);
+    }
+
+    glBindVertexArray(vertexArray[0]);
+    glDrawArrays(GL_LINE_LOOP, 0, 4);
+
+    glBindVertexArray(vertexArray[1]);
+    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, indexBuffer);
+    glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, nullptr);
+    EXPECT_PIXEL_COLOR_EQ(0, 0, GLColor::red);
+    EXPECT_PIXEL_COLOR_EQ(getWindowWidth() - 1, 0, GLColor::red);
+    EXPECT_PIXEL_COLOR_EQ(0, getWindowHeight() - 1, GLColor::red);
+    EXPECT_PIXEL_COLOR_EQ(getWindowWidth() - 1, getWindowHeight() - 1, GLColor::red);
+
+    glUseProgram(programDrawBlue);
+    glBindVertexArray(vertexArray[0]);
+    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, indexBuffer);
+    glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, nullptr);
+    EXPECT_PIXEL_COLOR_EQ(0, 0, GLColor::blue);
+    EXPECT_PIXEL_COLOR_EQ(getWindowWidth() - 1, 0, GLColor::blue);
+    EXPECT_PIXEL_COLOR_EQ(0, getWindowHeight() - 1, GLColor::blue);
+    EXPECT_PIXEL_COLOR_EQ(getWindowWidth() - 1, getWindowHeight() - 1, GLColor::blue);
+
+    ASSERT_GL_NO_ERROR();
+}
+
 // Uses index buffer offset and 2 drawElement calls one of the other, makes sure the second
 // drawElement call will use the correct offset.
 TEST_P(IndexBufferOffsetTest, DrawAtDifferentOffsets)
