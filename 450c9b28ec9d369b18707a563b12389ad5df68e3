@@ -247,6 +247,24 @@
       "parentUuid": "e4730e51_864d4d0d",
       "revId": "450c9b28ec9d369b18707a563b12389ad5df68e3",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "bd758c4e_206e5e82",
+        "filename": "src/libANGLE/renderer/vulkan/SurfaceVk.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 169,
+      "author": {
+        "id": 1340649
+      },
+      "writtenOn": "2022-03-11T01:28:32Z",
+      "side": 1,
+      "message": "atleast on android, where i assume you will be adding support for `VK_GOOGLE_surfaceless_query` do you plan on replacing the call to `DoesSurfaceSupportFormatAndColorspace` with a lookup of a cached map of the results of `GetSupportedVkColorSpace`?",
+      "parentUuid": "ba2c8c01_e5e3e50c",
+      "revId": "450c9b28ec9d369b18707a563b12389ad5df68e3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
