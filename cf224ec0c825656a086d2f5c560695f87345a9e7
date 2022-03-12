@@ -34,6 +34,24 @@
       "parentUuid": "71f8d19f_0352c764",
       "revId": "cf224ec0c825656a086d2f5c560695f87345a9e7",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "95c52a4f_226415ef",
+        "filename": "src/libANGLE/renderer/vulkan/vk_cache_utils.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 1206,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-03-12T00:38:18Z",
+      "side": 0,
+      "message": "AMD/Samsung also confirmed that it\u0027s harmless. I\u0027ll have to poke ARM again.\n\nThe reason I can\u0027t keep this conditional is that we need a compatible VkRenderPass before the RP starts, and the real VkRenderPass at the end has to match. We can\u0027t know if an in-RP barrier would be necessary or not, so we can\u0027t decide to add this self-dependency after the fact. This is a problem both for advanced blend and framebuffer fetch. We currently break the RP on framebuffer fetch barrier for descriptor-related reasons, which I eventually want to fix (so framebuffer fetch would _actually_ be fast).",
+      "parentUuid": "19338569_ee93199d",
+      "revId": "cf224ec0c825656a086d2f5c560695f87345a9e7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
