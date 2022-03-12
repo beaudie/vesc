@@ -1,0 +1,174 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "4393313b_c03d793b",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 7
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2022-03-12T01:19:31Z",
+      "side": 1,
+      "message": "lgtm\n\nA few minor naming and grammar comments regarding the extension.\n",
+      "revId": "487eaa166bc3fb3cfa505c399feefcf7e80b43ea",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "d813e5bc_41b5aedc",
+        "filename": "extensions/EGL_ANGLE_power_preference.txt",
+        "patchSetId": 7
+      },
+      "lineNbr": 53,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2022-03-12T01:19:31Z",
+      "side": 1,
+      "message": "Could we consider making this name a bit longer, to avoid the situation where we might want to use this name in a future extension? This extension is pretty legacy - can only (feasibly) be implemented on macOS on OpenGL.\n\nOther ideas: eglSwitchToGPUANGLE, eglSetActiveGPUANGLE, eglSetGPUForDisplayANGLE, eglSetActiveGPUForDisplayANGLE?",
+      "revId": "487eaa166bc3fb3cfa505c399feefcf7e80b43ea",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "490fe762_4c5cd9ac",
+        "filename": "extensions/EGL_ANGLE_power_preference.txt",
+        "patchSetId": 7
+      },
+      "lineNbr": 126,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2022-03-12T01:19:31Z",
+      "side": 1,
+      "message": "Could you clean up the whitespace in this file?",
+      "revId": "487eaa166bc3fb3cfa505c399feefcf7e80b43ea",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "f49102ee_8de7ca2c",
+        "filename": "extensions/EGL_ANGLE_power_preference.txt",
+        "patchSetId": 7
+      },
+      "lineNbr": 130,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2022-03-12T01:19:31Z",
+      "side": 1,
+      "message": "Suggest either \"On the macOS platform\" or \"On macOS\". Also \"the sandbox policy\".",
+      "revId": "487eaa166bc3fb3cfa505c399feefcf7e80b43ea",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "38dc7f5e_d84bf92c",
+        "filename": "extensions/EGL_ANGLE_power_preference.txt",
+        "patchSetId": 7
+      },
+      "lineNbr": 132,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2022-03-12T01:19:31Z",
+      "side": 1,
+      "message": "other -\u003e another",
+      "revId": "487eaa166bc3fb3cfa505c399feefcf7e80b43ea",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "7498bbca_92eda4f9",
+        "filename": "extensions/EGL_ANGLE_power_preference.txt",
+        "patchSetId": 7
+      },
+      "lineNbr": 134,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2022-03-12T01:19:31Z",
+      "side": 1,
+      "message": "match to -\u003e match",
+      "revId": "487eaa166bc3fb3cfa505c399feefcf7e80b43ea",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "04d9299b_78a0c5d9",
+        "filename": "src/libANGLE/Display.h",
+        "patchSetId": 7
+      },
+      "lineNbr": 306,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2022-03-12T01:19:31Z",
+      "side": 1,
+      "message": "Per comments in the extension documentation above - suggest expanding this name out to something like switchToGPU or setActiveGPU.",
+      "revId": "487eaa166bc3fb3cfa505c399feefcf7e80b43ea",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "9bfed5b2_e0a4f781",
+        "filename": "src/libANGLE/renderer/gl/cgl/DisplayCGL.h",
+        "patchSetId": 7
+      },
+      "lineNbr": 117,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2022-03-12T01:19:31Z",
+      "side": 1,
+      "message": "Please rename this method to avoid overloading the public method. It\u0027s especially confusing when the incoming types are int-like.",
+      "revId": "487eaa166bc3fb3cfa505c399feefcf7e80b43ea",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "f9cde196_9b2b4051",
+        "filename": "src/tests/egl_tests/EGLPowerPreferenceTest.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 24,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2022-03-12T01:19:31Z",
+      "side": 1,
+      "message": "Could you file a follow-on anglebug about this task and use TODO(anglebug.com/bugid) instead of FIXME?",
+      "revId": "487eaa166bc3fb3cfa505c399feefcf7e80b43ea",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "7e39cf9f_0125870d",
+        "filename": "src/tests/test_utils/system_info_util.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 22,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2022-03-12T01:19:31Z",
+      "side": 1,
+      "message": "Feels like this is the Nth time we\u0027ve written this code. 😊",
+      "revId": "487eaa166bc3fb3cfa505c399feefcf7e80b43ea",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
