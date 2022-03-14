@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "8c01cf7d_bda87382",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 3
+      },
+      "lineNbr": 32,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2022-03-14T22:36:32Z",
+      "side": 1,
+      "message": "Please remove blank line in the footer - not sure all the automated tools will handle it.",
+      "revId": "fcaf4d8435d6d13eb3dfeeba14e2078a37a0d2fa",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "60d77b49_44a47577",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2022-03-14T22:36:32Z",
+      "side": 1,
+      "message": "This will probably break angle_end2end_tests on the dual-GPU Intel/AMD MacBook Pros which are on ANGLE\u0027s commit queue, because they\u0027ll be running on the Intel GPU rather than the expected AMD GPU. Sending this to the bots to confirm.\n\nOne way to resolve this would be to add a command line flag to the test harness which would have the same effect as the environment variable. In our infrastructure it\u0027s easy to add command line flags but not easy to set environment variables per test. If the command line flag is supported then we can help you add it to the test invocations.\n",
+      "revId": "fcaf4d8435d6d13eb3dfeeba14e2078a37a0d2fa",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
