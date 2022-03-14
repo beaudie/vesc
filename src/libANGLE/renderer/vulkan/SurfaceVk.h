@@ -170,6 +170,7 @@ struct SwapchainImage : angle::NonCopyable
     vk::ImageViewHelper imageViews;
     vk::Framebuffer framebuffer;
     vk::Framebuffer fetchFramebuffer;
+    vk::Framebuffer framebufferResolveMS;
 
     // A circular array of semaphores used for presenting this image.
     static constexpr size_t kPresentHistorySize = kSwapHistorySize + 1;
@@ -179,6 +180,12 @@ struct SwapchainImage : angle::NonCopyable
 }  // namespace impl
 
 enum class FramebufferFetchMode
+{
+    Disabled,
+    Enabled,
+};
+
+enum class FramebufferResolveOptimizationMS
 {
     Disabled,
     Enabled,
@@ -416,6 +423,10 @@ class WindowSurfaceVk : public SurfaceVk
 
     // GL_EXT_shader_framebuffer_fetch
     FramebufferFetchMode mFramebufferFetchMode = FramebufferFetchMode::Disabled;
+
+    // True for multisample resolve subpass optimization
+    FramebufferResolveOptimizationMS mFramebufferResolveMSMode =
+        FramebufferResolveOptimizationMS::Disabled;
 };
 
 }  // namespace rx

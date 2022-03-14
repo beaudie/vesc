@@ -1762,7 +1762,8 @@ void RenderPassCommandBufferHelper::finalizeColorImageLayout(
         mImageOptimizeForPresent->setCurrentImageLayout(ImageLayout::Present);
         // TODO(syoussefi):  We currently don't store the layout of the resolve attachments, so once
         // multisampled backbuffers are optimized to use resolve attachments, this information needs
-        // to be stored somewhere.  http://anglebug.com/4836
+        // to be stored somewhere.  http://anglebug.com/----
+        // New bug: The optimization for resolve attachment is not taking effect
         SetBitField(mAttachmentOps[packedAttachmentIndex].finalLayout,
                     mImageOptimizeForPresent->getCurrentImageLayout());
         mImageOptimizeForPresent = nullptr;
@@ -2241,6 +2242,13 @@ void RenderPassCommandBufferHelper::updateRenderPassForResolve(ContextVk *contex
     mRenderPassDesc = renderPassDesc;
 }
 
+void RenderPassCommandBufferHelper::updateRenderPassDescForResolve(
+    ContextVk *contextVk,
+    const RenderPassDesc &renderPassDesc)
+{
+    mRenderPassDesc = renderPassDesc;
+}
+
 void RenderPassCommandBufferHelper::resumeTransformFeedback()
 {
     ASSERT(isTransformFeedbackStarted());
@@ -2304,6 +2312,11 @@ void RenderPassCommandBufferHelper::growRenderArea(ContextVk *contextVk,
     // Remove invalidates that are no longer applicable.
     mDepthAttachment.onRenderAreaGrowth(contextVk, mRenderArea);
     mStencilAttachment.onRenderAreaGrowth(contextVk, mRenderArea);
+}
+
+void RenderPassCommandBufferHelper::updateMultisampleSubpassResolve(bool multisampleSubpassResolve)
+{
+    mRenderPassDesc.updateMultisampleSubpassResolve(multisampleSubpassResolve);
 }
 
 void RenderPassCommandBufferHelper::addCommandDiagnostics(ContextVk *contextVk)

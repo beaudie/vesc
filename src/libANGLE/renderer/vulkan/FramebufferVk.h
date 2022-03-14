@@ -144,6 +144,12 @@ class FramebufferVk : public FramebufferImpl
     GLint getSamples() const;
 
     const vk::RenderPassDesc &getRenderPassDesc() const { return mRenderPassDesc; }
+    const vk::FramebufferDesc &getCurrentFramebufferDesc() const { return mCurrentFramebufferDesc; }
+
+    void updateColorResolveAttachment(
+        uint32_t colorIndexGL,
+        vk::ImageOrBufferViewSubresourceSerial resolveImageViewSerial);
+    void updateColorResolveRenderPassDesc(uint32_t colorIndexGL);
 
     angle::Result getFramebuffer(ContextVk *contextVk,
                                  vk::Framebuffer **framebufferOut,
@@ -161,6 +167,9 @@ class FramebufferVk : public FramebufferImpl
 
     void onSwitchProgramFramebufferFetch(ContextVk *contextVk, bool programUsesFramebufferFetch);
     bool hasFramebufferFetch() const { return mCurrentFramebufferDesc.hasFramebufferFetch(); }
+
+    void removeColorResolveRenderPassDesc(uint32_t colorIndexGL);
+    void removeColorResolveAttachment(uint32_t colorIndexGL);
 
   private:
     FramebufferVk(RendererVk *renderer,
@@ -233,11 +242,6 @@ class FramebufferVk : public FramebufferImpl
 
     VkClearValue getCorrectedColorClearValue(size_t colorIndexGL,
                                              const VkClearColorValue &clearColor) const;
-
-    void updateColorResolveAttachment(
-        uint32_t colorIndexGL,
-        vk::ImageOrBufferViewSubresourceSerial resolveImageViewSerial);
-    void removeColorResolveAttachment(uint32_t colorIndexGL);
 
     void updateLayerCount();
 

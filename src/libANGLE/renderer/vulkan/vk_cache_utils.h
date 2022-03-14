@@ -210,6 +210,12 @@ class alignas(4) RenderPassDesc final
     void updateRenderToTexture(bool isRenderToTexture) { mIsRenderToTexture = isRenderToTexture; }
     bool isRenderToTexture() const { return mIsRenderToTexture; }
 
+    void updateMultisampleSubpassResolve(bool multisampleSubpassResolve)
+    {
+        mMultisampleSubpassResolve = multisampleSubpassResolve;
+    }
+    bool isMultisampleSubpassResolve() const { return mMultisampleSubpassResolve; }
+
     angle::FormatID operator[](size_t index) const
     {
         ASSERT(index < gl::IMPLEMENTATION_MAX_DRAW_BUFFERS + 1);
@@ -231,12 +237,13 @@ class alignas(4) RenderPassDesc final
 
     // Multisampled render to texture
     uint8_t mIsRenderToTexture : 1;
+    uint8_t mMultisampleSubpassResolve : 1;
     uint8_t mResolveDepthStencil : 1;
     uint8_t mUnresolveDepth : 1;
     uint8_t mUnresolveStencil : 1;
 
     // Available space for expansion.
-    uint8_t mPadding1 : 2;
+    uint8_t mPadding1 : 1;
     uint8_t mPadding2;
 
     // Whether each color attachment has a corresponding resolve attachment.  Color resolve

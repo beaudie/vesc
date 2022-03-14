@@ -1342,11 +1342,22 @@ void FramebufferVk::updateColorResolveAttachment(
     mRenderPassDesc.packColorResolveAttachment(colorIndexGL);
 }
 
+void FramebufferVk::updateColorResolveRenderPassDesc(uint32_t colorIndexGL)
+{
+    mFramebuffer = nullptr;
+    mRenderPassDesc.packColorResolveAttachment(colorIndexGL);
+}
+
 void FramebufferVk::removeColorResolveAttachment(uint32_t colorIndexGL)
 {
     mCurrentFramebufferDesc.updateColorResolve(colorIndexGL,
                                                vk::kInvalidImageOrBufferViewSubresourceSerial);
     mFramebuffer = nullptr;
+    mRenderPassDesc.removeColorResolveAttachment(colorIndexGL);
+}
+
+void FramebufferVk::removeColorResolveRenderPassDesc(uint32_t colorIndexGL)
+{
     mRenderPassDesc.removeColorResolveAttachment(colorIndexGL);
 }
 
