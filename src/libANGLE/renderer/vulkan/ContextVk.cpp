@@ -3526,17 +3526,21 @@ angle::Result ContextVk::multiDrawElementsInstancedBaseVertexBaseInstance(
         drawcount);
 }
 
-void ContextVk::optimizeRenderPassForPresent(VkFramebuffer framebufferHandle,
-                                             vk::ImageHelper *colorImage)
+angle::Result ContextVk::optimizeRenderPassForPresent(VkFramebuffer framebufferHandle,
+                                                      vk::ImageViewHelper *colorImageView,
+                                                      vk::ImageHelper *colorImage,
+                                                      vk::ImageHelper *colorImageMS,
+                                                      vk::Framebuffer *framebufferMS,
+                                                      bool *imageResolved)
 {
     if (!mRenderPassCommands->started())
     {
-        return;
+        return angle::Result::Continue;
     }
 
     if (framebufferHandle != mRenderPassCommands->getFramebufferHandle())
     {
-        return;
+        return angle::Result::Continue;
     }
 
     // EGL1.5 spec: The contents of ancillary buffers are always undefined after calling
@@ -3553,11 +3557,40 @@ void ContextVk::optimizeRenderPassForPresent(VkFramebuffer framebufferHandle,
             dsState, mRenderPassCommands->getRenderArea());
     }
 
+    // Resolve the multisample image and invalidate it
+    if (colorImageMS->valid())
+    {
+        drawFramebufferVk->updateColorResolveRenderPassDesc(0);
+
+        const vk::ImageView *resolveImageView = nullptr;
+        ANGLE_TRY(colorImageView->getLevelLayerDrawImageView(this, *colorImage, vk::LevelIndex(0),
+                                                             0, gl::SrgbWriteControlMode::Default,
+                                                             &resolveImageView));
+
+        vk::RenderPassCommandBufferHelper &commandBufferHelper = getStartedRenderPassCommands();
+        commandBufferHelper.updateRenderPassForResolve(this, framebufferMS,
+                                                       drawFramebufferVk->getRenderPassDesc());
+
+        onImageRenderPassWrite(
+            gl::LevelIndex(0), 0, drawFramebufferVk->getCurrentFramebufferDesc().getLayerCount(),
+            VK_IMAGE_ASPECT_COLOR_BIT, vk::ImageLayout::ColorAttachment, colorImage);
+        ANGLE_TRY(
+            flushCommandsAndEndRenderPass(RenderPassClosureReason::AlreadySpecifiedElsewhere));
+
+        // Remove the resolve attachment from the source framebuffer.
+        drawFramebufferVk->removeColorResolveRenderPassDesc(0);
+
+        *imageResolved = true;
+
+        mPerfCounters.swapchainResolveInSubpass++;
+    }
+
     // Use finalLayout instead of extra barrier for layout change to present
     if (colorImage != nullptr)
     {
         mRenderPassCommands->setImageOptimizeForPresent(colorImage);
     }
+    return angle::Result::Continue;
 }
 
 gl::GraphicsResetStatus ContextVk::getResetStatus()

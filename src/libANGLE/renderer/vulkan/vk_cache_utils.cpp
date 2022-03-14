@@ -1050,7 +1050,7 @@ angle::Result InitializeRenderPassFromDesc(ContextVk *contextVk,
                                            const RenderPassDesc &desc,
                                            const AttachmentOpsArray &ops,
                                            RenderPassHelper *renderPassHelper)
-{
+{  // Check desc.isRenderToTexture(). If true, do not apply invalidation flag for resolve.
     constexpr VkAttachmentReference kUnusedAttachment   = {VK_ATTACHMENT_UNUSED,
                                                          VK_IMAGE_LAYOUT_UNDEFINED};
     constexpr VkAttachmentReference2 kUnusedAttachment2 = {
@@ -1175,6 +1175,12 @@ angle::Result InitializeRenderPassFromDesc(ContextVk *contextVk,
         colorRef.layout     = VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL;
 
         // If color attachment is invalidated, try to remove its resolve attachment altogether.
+        //        WARN() << desc.isMultisampleSubpassResolve();
+        //        if (!desc.isRenderToTexture()) {
+        //
+        //        }
+        //        if (canRemoveResolveAttachments && isColorInvalidated.test(colorIndexGL) &&
+        //        !desc.isMultisampleSubpassResolve())
         if (canRemoveResolveAttachments && isColorInvalidated.test(colorIndexGL))
         {
             colorResolveAttachmentRefs.push_back(kUnusedAttachment);

@@ -712,6 +712,7 @@ SwapchainImage::SwapchainImage(SwapchainImage &&other)
       imageViews(std::move(other.imageViews)),
       framebuffer(std::move(other.framebuffer)),
       fetchFramebuffer(std::move(other.fetchFramebuffer)),
+      framebufferResolveMS(std::move(other.framebufferResolveMS)),
       presentHistory(std::move(other.presentHistory))
 {}
 }  // namespace impl
@@ -1509,6 +1510,10 @@ void WindowSurfaceVk::releaseSwapchainImages(ContextVk *contextVk)
         {
             contextVk->addGarbage(&swapchainImage.fetchFramebuffer);
         }
+        if (swapchainImage.framebufferResolveMS.valid())
+        {
+            contextVk->addGarbage(&swapchainImage.framebufferResolveMS);
+        }
 
         // present history must have already been taken care of.
         for (ImagePresentHistory &presentHistory : swapchainImage.presentHistory)
@@ -1542,6 +1547,10 @@ void WindowSurfaceVk::destroySwapChainImages(DisplayVk *displayVk)
         if (swapchainImage.fetchFramebuffer.valid())
         {
             swapchainImage.fetchFramebuffer.destroy(device);
+        }
+        if (swapchainImage.framebufferResolveMS.valid())
+        {
+            swapchainImage.framebufferResolveMS.destroy(device);
         }
 
         for (ImagePresentHistory &presentHistory : swapchainImage.presentHistory)
@@ -1678,10 +1687,14 @@ angle::Result WindowSurfaceVk::present(ContextVk *contextVk,
     // We can only do present related optimization if this is the last renderpass that touches the
     // swapchain image. MSAA resolve and overlay will insert another renderpass which disqualifies
     // the optimization.
+    bool imageResolved = false;
     if (currentFramebuffer.valid())
     {
-        contextVk->optimizeRenderPassForPresent(
-            currentFramebuffer.getHandle(), mColorImageMS.valid() ? &mColorImageMS : &image.image);
+        mFramebufferResolveMSMode = FramebufferResolveOptimizationMS::Enabled;
+        ANGLE_TRY(contextVk->optimizeRenderPassForPresent(
+            currentFramebuffer.getHandle(), &image.imageViews, &image.image, &mColorImageMS,
+            &image.framebufferResolveMS, &imageResolved));
+        mFramebufferResolveMSMode = FramebufferResolveOptimizationMS::Disabled;
     }
 
     // Because the color attachment defers layout changes until endRenderPass time, we must call
@@ -1692,7 +1705,7 @@ angle::Result WindowSurfaceVk::present(ContextVk *contextVk,
     vk::OutsideRenderPassCommandBuffer *commandBuffer;
     ANGLE_TRY(contextVk->getOutsideRenderPassCommandBuffer({}, &commandBuffer));
 
-    if (mColorImageMS.valid())
+    if (mColorImageMS.valid() && !imageResolved)
     {
         // Transition the multisampled image to TRANSFER_SRC for resolve.
         vk::CommandBufferAccess access;
@@ -2190,9 +2203,10 @@ angle::Result WindowSurfaceVk::getCurrentFramebuffer(ContextVk *contextVk,
     }
 
     VkFramebufferCreateInfo framebufferInfo = {};
+    uint32_t attachmentCount                = mDepthStencilImage.valid() ? 2u : 1u;
 
     const gl::Extents rotatedExtents      = mColorRenderTarget.getRotatedExtents();
-    std::array<VkImageView, 2> imageViews = {};
+    std::array<VkImageView, 3> imageViews = {};
 
     if (mDepthStencilImage.valid())
     {
@@ -2204,7 +2218,7 @@ angle::Result WindowSurfaceVk::getCurrentFramebuffer(ContextVk *contextVk,
     framebufferInfo.sType           = VK_STRUCTURE_TYPE_FRAMEBUFFER_CREATE_INFO;
     framebufferInfo.flags           = 0;
     framebufferInfo.renderPass      = compatibleRenderPass.getHandle();
-    framebufferInfo.attachmentCount = (mDepthStencilImage.valid() ? 2u : 1u);
+    framebufferInfo.attachmentCount = attachmentCount;
     framebufferInfo.pAttachments    = imageViews.data();
     framebufferInfo.width           = static_cast<uint32_t>(rotatedExtents.width);
     framebufferInfo.height          = static_cast<uint32_t>(rotatedExtents.height);
@@ -2239,6 +2253,33 @@ angle::Result WindowSurfaceVk::getCurrentFramebuffer(ContextVk *contextVk,
                 ANGLE_VK_TRY(contextVk, swapchainImage.framebuffer.init(contextVk->getDevice(),
                                                                         framebufferInfo));
             }
+        }
+    }
+
+    // Multisampled resolve framebuffer
+    if (isMultiSampled())
+    {
+        VkFramebufferCreateInfo framebufferInfoMS = {};
+        framebufferInfoMS.sType                   = VK_STRUCTURE_TYPE_FRAMEBUFFER_CREATE_INFO;
+        framebufferInfoMS.flags                   = 0;
+        framebufferInfoMS.renderPass              = compatibleRenderPass.getHandle();
+        framebufferInfoMS.attachmentCount         = attachmentCount + 1;
+        framebufferInfoMS.pAttachments            = imageViews.data();
+        framebufferInfoMS.width                   = static_cast<uint32_t>(rotatedExtents.width);
+        framebufferInfoMS.height                  = static_cast<uint32_t>(rotatedExtents.height);
+        framebufferInfoMS.layers                  = 1;
+
+        const vk::ImageView *imageView = nullptr;
+        ANGLE_TRY(mColorRenderTarget.getImageView(contextVk, &imageView));
+        imageViews[attachmentCount] = imageView->getHandle();
+        for (SwapchainImage &swapchainImage : mSwapchainImages)
+        {
+            ANGLE_TRY(swapchainImage.imageViews.getLevelLayerDrawImageView(
+                contextVk, swapchainImage.image, vk::LevelIndex(0), 0,
+                gl::SrgbWriteControlMode::Default, &imageView));
+
+            ANGLE_VK_TRY(contextVk, swapchainImage.framebufferResolveMS.init(contextVk->getDevice(),
+                                                                             framebufferInfoMS));
         }
     }
 

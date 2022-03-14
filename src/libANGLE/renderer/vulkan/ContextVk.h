@@ -454,7 +454,12 @@ class ContextVk : public ContextImpl, public vk::Context, public MultisampleText
         UpdateDepthFeedbackLoopReason depthReason,
         UpdateDepthFeedbackLoopReason stencilReason);
 
-    void optimizeRenderPassForPresent(VkFramebuffer framebufferHandle, vk::ImageHelper *colorImage);
+    angle::Result optimizeRenderPassForPresent(VkFramebuffer framebufferHandle,
+                                               vk::ImageViewHelper *colorImageView,
+                                               vk::ImageHelper *colorImage,
+                                               vk::ImageHelper *colorImageMS,
+                                               vk::Framebuffer *framebufferMS,
+                                               bool *imageResolved);
 
     vk::DynamicQueryPool *getQueryPool(gl::QueryType queryType);
 
