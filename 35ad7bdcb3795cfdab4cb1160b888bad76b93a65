@@ -1,0 +1,44 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "fa936bc5_b5ccf8b5",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 24
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2022-03-14T23:07:47Z",
+      "side": 1,
+      "message": "I like this version.",
+      "revId": "35ad7bdcb3795cfdab4cb1160b888bad76b93a65",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "913dad68_e15d930d",
+        "filename": "src/libANGLE/Context.cpp",
+        "patchSetId": 24
+      },
+      "lineNbr": 695,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2022-03-14T23:07:47Z",
+      "side": 1,
+      "message": "I think you need to call syncState even with no dirty bit set. I believe you will trigger assertion that you may have to relax it to include \"Other\" (or maybe add a new command if other is not appropriate?)",
+      "range": {
+        "startLine": 695,
+        "startChar": 11,
+        "endLine": 695,
+        "endChar": 42
+      },
+      "revId": "35ad7bdcb3795cfdab4cb1160b888bad76b93a65",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
