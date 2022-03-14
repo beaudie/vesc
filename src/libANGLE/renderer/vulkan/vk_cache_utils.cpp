@@ -1184,9 +1184,11 @@ angle::Result InitializeRenderPassFromDesc(ContextVk *contextVk,
             colorResolveAttachmentRefs.push_back(colorRef);
         }
 
+        // For multisample images, the resolve attachment should not be invalidated.
         UnpackColorResolveAttachmentDesc(
             &attachmentDescs[attachmentCount.get()], attachmentFormatID,
-            desc.hasColorUnresolveAttachment(colorIndexGL), isColorInvalidated.test(colorIndexGL));
+            desc.hasColorUnresolveAttachment(colorIndexGL),
+            isColorInvalidated.test(colorIndexGL) && !desc.isRenderToTexture());
 
         ++attachmentCount;
     }

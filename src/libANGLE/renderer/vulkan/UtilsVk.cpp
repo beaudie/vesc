@@ -2014,7 +2014,8 @@ angle::Result UtilsVk::clearFramebuffer(ContextVk *contextVk,
     vk::RenderPassCommandBuffer *commandBuffer;
 
     // Start a new render pass if not already started
-    ANGLE_TRY(framebuffer->getFramebuffer(contextVk, &currentFramebuffer, nullptr));
+    ANGLE_TRY(framebuffer->getFramebuffer(contextVk, &currentFramebuffer, nullptr,
+                                          vk::FramebufferResolveOptimizePresentMS::Disabled));
     if (contextVk->hasStartedRenderPassWithFramebuffer(currentFramebuffer))
     {
         commandBuffer = &contextVk->getStartedRenderPassCommands().getCommandBuffer();
