@@ -18,6 +18,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "d854abe6_d17849d3",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1340649
+      },
+      "writtenOn": "2022-03-14T16:23:42Z",
+      "side": 1,
+      "message": "Ack, will leave that to charlie who worked on some refactoring here -\u003e https://chromium-review.googlesource.com/c/angle/angle/+/3513553",
+      "parentUuid": "49b7d5bf_ab1e7db7",
+      "revId": "1cb74e51b04b1c69ef42dee052b973d9056d6e84",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "e85bd1b4_3190dfee",
@@ -31,6 +49,30 @@
       "writtenOn": "2022-03-14T13:33:32Z",
       "side": 1,
       "message": "nit: can you update this to use GLVertexArray?",
+      "range": {
+        "startLine": 376,
+        "startChar": 4,
+        "endLine": 376,
+        "endChar": 11
+      },
+      "revId": "1cb74e51b04b1c69ef42dee052b973d9056d6e84",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "df5cb4b4_2c1a0e57",
+        "filename": "src/tests/gl_tests/IndexBufferOffsetTest.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 376,
+      "author": {
+        "id": 1340649
+      },
+      "writtenOn": "2022-03-14T16:23:42Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "e85bd1b4_3190dfee",
       "range": {
         "startLine": 376,
         "startChar": 4,
