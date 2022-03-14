@@ -46,6 +46,30 @@
       },
       "revId": "6b7d0df0c5c8b633524cc8cde8d0a7c590a9f83f",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "4898b55c_00647b73",
+        "filename": "src/libANGLE/renderer/vulkan/VertexArrayVk.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 852,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2022-03-14T17:05:20Z",
+      "side": 1,
+      "message": "I don\u0027t think it is security problem. For robust context, it will zero fill the buffer when it gets allocated, so you always get zero.\n\nIt is because app is providing less data (in this case no data) than required for draw. So I am not adding a new case where you will get garbage data.",
+      "parentUuid": "c2b03214_ddad6037",
+      "range": {
+        "startLine": 852,
+        "startChar": 81,
+        "endLine": 852,
+        "endChar": 95
+      },
+      "revId": "6b7d0df0c5c8b633524cc8cde8d0a7c590a9f83f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
