@@ -253,12 +253,25 @@ GLuint createShaderProgram(GLenum type, const GLchar *shaderString)
     glShaderSource(shader, 1, &shaderString, nullptr);
     glCompileShader(shader);
 
+    GLint compiled;
+    glGetShaderiv(shader, GL_COMPILE_STATUS, &compiled);
+
+    if (!compiled)
+    {
+        GLint infoLogLength;
+        glGetShaderiv(shader, GL_INFO_LOG_LENGTH, &infoLogLength);
+        GLchar *infoLog = new GLchar[infoLogLength];
+        glGetShaderInfoLog(shader, infoLogLength, NULL, infoLog);
+        fprintf(stderr, "Shader Compilation failed:\n%s\n for \n'%s'\n", infoLog, shaderString);
+        delete[] infoLog;
+        glDeleteShader(shader);
+        return 0;
+    }
+
     GLuint program = glCreateProgram();
 
     if (program)
     {
-        GLint compiled;
-        glGetShaderiv(shader, GL_COMPILE_STATUS, &compiled);
         glProgramParameteri(program, GL_PROGRAM_SEPARABLE, GL_TRUE);
         if (compiled)
         {
