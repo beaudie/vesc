@@ -234,6 +234,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "c9d44472_ae20cddf",
+        "filename": "src/libANGLE/ResourceManager.h",
+        "patchSetId": 21
+      },
+      "lineNbr": 66,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2022-03-14T13:37:43Z",
+      "side": 1,
+      "message": "Sorry Charlie, I specifically had suggested the solution we had before to avoid adding extra impl methods. The priority here would be to keep the number of new APIs in the renderer interface as low as possible. Is this acceptable?",
+      "parentUuid": "68edacb5_ec0a3819",
+      "range": {
+        "startLine": 66,
+        "startChar": 36,
+        "endLine": 66,
+        "endChar": 55
+      },
+      "revId": "907a9cd0b03d6a9562c5cc5b71f4dab1e2e100a1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "295e37fe_c419367b",
         "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
         "patchSetId": 21
