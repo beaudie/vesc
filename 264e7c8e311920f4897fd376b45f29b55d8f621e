@@ -20,6 +20,24 @@
     {
       "unresolved": false,
       "key": {
+        "uuid": "3de01046_d615675e",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 3
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2022-03-14T19:47:58Z",
+      "side": 1,
+      "message": "Thanks for spotting this.",
+      "parentUuid": "ae41cdaa_3cdfa4c3",
+      "revId": "264e7c8e311920f4897fd376b45f29b55d8f621e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
         "uuid": "904cd841_b768c8a3",
         "filename": "/PATCHSET_LEVEL",
         "patchSetId": 3
