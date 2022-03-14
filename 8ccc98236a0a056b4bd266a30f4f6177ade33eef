@@ -16,6 +16,23 @@
       "message": "LGTM",
       "revId": "8ccc98236a0a056b4bd266a30f4f6177ade33eef",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "f67e7216_62e6f564",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2022-03-14T14:41:59Z",
+      "side": 1,
+      "message": "PTAL Yuxin or Charlie/Frank for +2",
+      "revId": "8ccc98236a0a056b4bd266a30f4f6177ade33eef",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
