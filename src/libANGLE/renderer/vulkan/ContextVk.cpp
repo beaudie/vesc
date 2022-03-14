@@ -3311,7 +3311,8 @@ angle::Result ContextVk::multiDrawElementsInstancedBaseVertexBaseInstance(
 }
 
 void ContextVk::optimizeRenderPassForPresent(VkFramebuffer framebufferHandle,
-                                             vk::ImageHelper *colorImage)
+                                             vk::ImageHelper *colorImage,
+                                             bool isMultisampled)
 {
     if (!mRenderPassCommands->started())
     {
@@ -3335,6 +3336,19 @@ void ContextVk::optimizeRenderPassForPresent(VkFramebuffer framebufferHandle,
             dsState, mRenderPassCommands->getRenderArea());
         mRenderPassCommands->invalidateRenderPassStencilAttachment(
             dsState, mRenderPassCommands->getRenderArea());
+    }
+
+    // Resolve the multisample image and invalidate it
+    if (isMultisampled)
+    {
+        RenderTargetVk *colorRenderTarget = drawFramebufferVk->getColorReadRenderTarget();
+        colorRenderTarget->onColorResolve(
+            this, drawFramebufferVk->getCurrentFramebufferDesc().getLayerCount());
+
+        // Invalidate the multisample image content
+        colorImage->invalidateSubresourceContent(this, gl::LevelIndex(0), 0, 1);
+
+        mPerfCounters.swapchainResolveInSubpass++;
     }
 
     // Use finalLayout instead of extra barrier for layout change to present

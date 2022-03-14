@@ -144,6 +144,7 @@ class FramebufferVk : public FramebufferImpl
     GLint getSamples() const;
 
     const vk::RenderPassDesc &getRenderPassDesc() const { return mRenderPassDesc; }
+    const vk::FramebufferDesc &getCurrentFramebufferDesc() const { return mCurrentFramebufferDesc; }
 
     angle::Result getFramebuffer(ContextVk *contextVk,
                                  vk::Framebuffer **framebufferOut,

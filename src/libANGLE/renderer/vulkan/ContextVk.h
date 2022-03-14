@@ -398,7 +398,9 @@ class ContextVk : public ContextImpl, public vk::Context, public MultisampleText
     void invalidateComputeDescriptorSet(DescriptorSetIndex usedDescriptorSet);
     void invalidateViewportAndScissor();
 
-    void optimizeRenderPassForPresent(VkFramebuffer framebufferHandle, vk::ImageHelper *colorImage);
+    void optimizeRenderPassForPresent(VkFramebuffer framebufferHandle,
+                                      vk::ImageHelper *colorImage,
+                                      bool isMultisampled);
 
     vk::DynamicQueryPool *getQueryPool(gl::QueryType queryType);
 

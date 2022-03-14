@@ -1680,7 +1680,8 @@ angle::Result WindowSurfaceVk::present(ContextVk *contextVk,
     if (currentFramebuffer.valid())
     {
         contextVk->optimizeRenderPassForPresent(
-            currentFramebuffer.getHandle(), mColorImageMS.valid() ? &mColorImageMS : &image.image);
+            currentFramebuffer.getHandle(), mColorImageMS.valid() ? &mColorImageMS : &image.image,
+            isMultiSampled());
     }
 
     // Because the color attachment defers layout changes until endRenderPass time, we must call

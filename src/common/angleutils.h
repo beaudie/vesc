@@ -133,6 +133,7 @@ struct PerfMonitorTriplet
     FN(renderPasses)                              \
     FN(writeDescriptorSets)                       \
     FN(flushedOutsideRenderPassCommandBuffers)    \
+    FN(swapchainResolveInSubpass)                 \
     FN(resolveImageCommands)                      \
     FN(depthClears)                               \
     FN(depthLoads)                                \
