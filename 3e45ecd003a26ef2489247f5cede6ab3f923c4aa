@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "be6aedfc_d77b01f8",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.h",
+        "patchSetId": 18
+      },
+      "lineNbr": 84,
+      "author": {
+        "id": 1520902
+      },
+      "writtenOn": "2022-03-14T22:50:28Z",
+      "side": 1,
+      "message": "there is a typo here: growDesciptorCapacity --\u003e growDescriptorCapacity",
+      "revId": "3e45ecd003a26ef2489247f5cede6ab3f923c4aa",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
