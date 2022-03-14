@@ -136,6 +136,7 @@ struct PerfMonitorTriplet
     FN(submittedFrames)                           \
     FN(writeDescriptorSets)                       \
     FN(flushedOutsideRenderPassCommandBuffers)    \
+    FN(swapchainResolveInSubpass)                 \
     FN(resolveImageCommands)                      \
     FN(colorLoadOpClears)                         \
     FN(colorLoadOpLoads)                          \

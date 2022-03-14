@@ -170,6 +170,7 @@ struct SwapchainImage : angle::NonCopyable
     vk::ImageViewHelper imageViews;
     vk::Framebuffer framebuffer;
     vk::Framebuffer fetchFramebuffer;
+    vk::Framebuffer framebufferResolveMS;
 
     // A circular array of semaphores used for presenting this image.
     static constexpr size_t kPresentHistorySize = kSwapHistorySize + 1;
@@ -242,12 +243,15 @@ class WindowSurfaceVk : public SurfaceVk
     angle::Result initializeContents(const gl::Context *context,
                                      const gl::ImageIndex &imageIndex) override;
 
-    vk::Framebuffer &chooseFramebuffer();
+    vk::Framebuffer &chooseFramebuffer(
+        const vk::FramebufferResolveOptimizePresentMS framebufferResolveMSMode);
 
-    angle::Result getCurrentFramebuffer(ContextVk *context,
-                                        FramebufferFetchMode fetchMode,
-                                        const vk::RenderPass &compatibleRenderPass,
-                                        vk::Framebuffer **framebufferOut);
+    angle::Result getCurrentFramebuffer(
+        ContextVk *context,
+        FramebufferFetchMode fetchMode,
+        const vk::RenderPass &compatibleRenderPass,
+        const vk::FramebufferResolveOptimizePresentMS framebufferResolveMSMode,
+        vk::Framebuffer **framebufferOut);
 
     const vk::Semaphore *getAndResetAcquireImageSemaphore();
 
