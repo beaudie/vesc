@@ -49,6 +49,12 @@ struct TextureUnit final
     GLenum srgbDecode;
 };
 
+enum class FramebufferResolveOptimizePresentMS
+{
+    Disabled,
+    Enabled,
+};
+
 // A dynamic buffer is conceptually an infinitely long buffer. Each time you write to the buffer,
 // you will always write to a previously unused portion. After a series of writes, you must flush
 // the buffer data to the device. Buffer lifetime currently assumes that each new allocation will
@@ -1257,6 +1263,7 @@ class RenderPassCommandBufferHelper final : public CommandBufferHelperCommon
     void updateRenderPassForResolve(ContextVk *contextVk,
                                     Framebuffer *newFramebuffer,
                                     const RenderPassDesc &renderPassDesc);
+    void updateRenderPassDescForResolve(ContextVk *contextVk, const RenderPassDesc &renderPassDesc);
 
     bool hasDepthStencilWriteOrClear() const
     {
@@ -1279,6 +1286,8 @@ class RenderPassCommandBufferHelper final : public CommandBufferHelperCommon
         }
     }
     void addCommandDiagnostics(ContextVk *contextVk);
+
+    void updateMultisampleSubpassResolve(bool multisampleSubpassResolve);
 
   private:
     angle::Result initializeCommandBuffer(Context *context);
