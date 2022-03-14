@@ -51,6 +51,23 @@
       "parentUuid": "be504a07_18cd1b96",
       "revId": "82145061b0c7ea191282ede27e48b334399339b8",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "d256ed63_64e71fa0",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 17
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2022-03-14T20:00:14Z",
+      "side": 1,
+      "message": "One more suggestion for the related change: I believe a lot of places you are passing in mResourceUseList just because of emptyBuffer might be used. The empty buffer is always kept until context shut down, so there is no real reason to add it into list. If you ran into syncval errors because of not maintaining emptyBuffer barrier properly, my suggestion is just ignore all syncval errors comes from emptyBuffer. I just sees zero value to have to maintain emptyBuffer in proper barriered and proper queueSerial. That way, you can remove passing around mResourceUseList in most of the APIs, I think.",
+      "revId": "82145061b0c7ea191282ede27e48b334399339b8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
