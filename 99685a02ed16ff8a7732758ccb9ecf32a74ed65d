@@ -16,6 +16,24 @@
       "message": "That\u0027s an assertion failure inside Skia. Not sure whether that might be a flake - cc\u0027ing Brian and Yuly - but let\u0027s try again.\n",
       "revId": "99685a02ed16ff8a7732758ccb9ecf32a74ed65d",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "37d26c44_d6f748f4",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 5
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1001921
+      },
+      "writtenOn": "2022-03-14T22:29:14Z",
+      "side": 1,
+      "message": "Do you mean conformance/uniforms/out-of-bounds-uniform-array-access.html in https://ci.chromium.org/ui/p/chromium/builders/try/android-angle-chromium-try/5981/overview?\n\nPer the logcat in https://cas-viewer.appspot.com/projects/chromium-swarm/instances/default_instance/blobs/197e5f0ab5ad4ed4d2604aacb61475bcec4ff5f37f364fcc7bfa6110f2dcd86b/18609?filename\u003dsymbolized_logcat-2022-03-11-17-48-42-690995.txt it looks like something similar has been reported in crbug.com/1304037#c5",
+      "parentUuid": "5653d97c_cf7c1e89",
+      "revId": "99685a02ed16ff8a7732758ccb9ecf32a74ed65d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
