@@ -50,6 +50,24 @@
       "message": "Should we also change the other places that use \"VK_ICD_FILENAMES\" in code: https://source.chromium.org/search?q\u003dVK_ICD_FILENAMES\u0026ss\u003dchromium%2Fchromium%2Fsrc?",
       "revId": "97068d2609f25850428e36a858fe8b5708dd0022",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ec7f95c9_007afba8",
+        "filename": "src/common/vulkan/vulkan_icd.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 60,
+      "author": {
+        "id": 1520902
+      },
+      "writtenOn": "2022-03-14T23:10:38Z",
+      "side": 1,
+      "message": "I am guessing it is because \"VK_ICD_FILENAMES\" is deprecated and should be replaced by \"VK_DRIVER_FILES\": https://github.com/KhronosGroup/Vulkan-Loader/blob/master/docs/LoaderDriverInterface.md#overriding-the-default-driver-discovery.",
+      "parentUuid": "b9f0f3a9_a6111326",
+      "revId": "97068d2609f25850428e36a858fe8b5708dd0022",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
