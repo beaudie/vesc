@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "fcb30fab_7abe7b46",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 9
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1185209
+      },
+      "writtenOn": "2022-03-15T13:58:42Z",
+      "side": 1,
+      "message": "This change is breaking the Angle build/roll with Skia. From the added include, there is no vulkan_core.h. https://logs.chromium.org/logs/skia/59a5235481821b11/+/steps/ninja/0/stdout",
+      "revId": "daef95775f7b6dc3bdb0a40662fcb36b68ebf501",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
