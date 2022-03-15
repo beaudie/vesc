@@ -19,6 +19,7 @@
 namespace rx
 {
 class RendererVk;
+class WindowSurfaceVk;
 
 class SurfaceVk : public SurfaceImpl, public angle::ObserverInterface
 {
@@ -28,6 +29,8 @@ class SurfaceVk : public SurfaceImpl, public angle::ObserverInterface
                                             const gl::ImageIndex &imageIndex,
                                             GLsizei samples,
                                             FramebufferAttachmentRenderTarget **rtOut) override;
+
+    virtual WindowSurfaceVk *getAsWindowSurface() { return nullptr; }
 
   protected:
     SurfaceVk(const egl::SurfaceState &surfaceState);
@@ -196,6 +199,8 @@ class WindowSurfaceVk : public SurfaceVk
   public:
     WindowSurfaceVk(const egl::SurfaceState &surfaceState, EGLNativeWindowType window);
     ~WindowSurfaceVk() override;
+
+    WindowSurfaceVk *getAsWindowSurface() override { return this; }
 
     void destroy(const egl::Display *display) override;
 
