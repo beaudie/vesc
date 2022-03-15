@@ -1,0 +1,67 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "9b5cd280_51de0c24",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 26
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2022-03-15T02:57:11Z",
+      "side": 1,
+      "message": "otherwise looks good to me.",
+      "revId": "584e93add485f2ab0e158324680d1d66261c4d3e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "43a6be87_252d67ae",
+        "filename": "src/libANGLE/Context.cpp",
+        "patchSetId": 26
+      },
+      "lineNbr": 690,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2022-03-15T02:57:11Z",
+      "side": 1,
+      "message": "I think you should use getShareGroup()-\u003egetShareGroupContextCount(). Otherwise there is a poetnial bug here as well if someone add a refcount to share group and the last ctx is detroyed and this gets skipped and then refcount gets dropped and shared group gets freed, now you get into the same bug as before. getShareGroupContextCount() ensures you do this when last ctx is destroyed.",
+      "range": {
+        "startLine": 690,
+        "startChar": 37,
+        "endLine": 690,
+        "endChar": 82
+      },
+      "revId": "584e93add485f2ab0e158324680d1d66261c4d3e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "61ad5dd8_3093b484",
+        "filename": "src/libANGLE/Display.h",
+        "patchSetId": 26
+      },
+      "lineNbr": 100,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2022-03-15T02:57:11Z",
+      "side": 1,
+      "message": "I think this is not needed. See above comment.",
+      "range": {
+        "startLine": 100,
+        "startChar": 11,
+        "endLine": 100,
+        "endChar": 32
+      },
+      "revId": "584e93add485f2ab0e158324680d1d66261c4d3e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
