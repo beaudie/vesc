@@ -552,6 +552,11 @@ struct FeaturesGL : FeatureSetBase
         "emulate_immutable_compressed_texture_3d", FeatureCategory::OpenGLWorkarounds,
         "Use non-immutable texture allocation to work around a driver bug.", &members,
         "https://crbug.com/1060012"};
+
+    Feature alwaysUnbindFramebufferTexture2D = {
+        "always_unbind_framebuffer_texture_2d", FeatureCategory::OpenGLWorkarounds,
+        "Force unbind framebufferTexture2D before binding renderbuffer to work around driver bug.",
+        &members, "https://anglebug.com/5536"};
 };
 
 inline FeaturesGL::FeaturesGL()  = default;

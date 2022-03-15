@@ -74,7 +74,8 @@ static BlitFramebufferBounds GetBlitFramebufferBounds(const gl::Context *context
     return bounds;
 }
 
-void BindFramebufferAttachment(const FunctionsGL *functions,
+void BindFramebufferAttachment(const gl::Context *context,
+                               const FunctionsGL *functions,
                                GLenum attachmentPoint,
                                const FramebufferAttachment *attachment)
 {
@@ -159,6 +160,14 @@ void BindFramebufferAttachment(const FunctionsGL *functions,
         {
             const Renderbuffer *renderbuffer     = attachment->getRenderbuffer();
             const RenderbufferGL *renderbufferGL = GetImplAs<RenderbufferGL>(renderbuffer);
+
+            const angle::FeaturesGL &features = GetFeaturesGL(context);
+            if (features.alwaysUnbindFramebufferTexture2D.enabled &&
+                attachmentPoint == GL_COLOR_ATTACHMENT0)
+            {
+                functions->framebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D,
+                                                0, 0);
+            }
 
             functions->framebufferRenderbuffer(GL_FRAMEBUFFER, attachmentPoint, GL_RENDERBUFFER,
                                                renderbufferGL->getRenderbufferID());
@@ -1266,7 +1275,7 @@ angle::Result FramebufferGL::syncState(const gl::Context *context,
             case Framebuffer::DIRTY_BIT_DEPTH_ATTACHMENT:
             {
                 const FramebufferAttachment *newAttachment = mState.getDepthAttachment();
-                BindFramebufferAttachment(functions, GL_DEPTH_ATTACHMENT, newAttachment);
+                BindFramebufferAttachment(context, functions, GL_DEPTH_ATTACHMENT, newAttachment);
                 if (newAttachment)
                 {
                     attachment = newAttachment;
@@ -1276,7 +1285,7 @@ angle::Result FramebufferGL::syncState(const gl::Context *context,
             case Framebuffer::DIRTY_BIT_STENCIL_ATTACHMENT:
             {
                 const FramebufferAttachment *newAttachment = mState.getStencilAttachment();
-                BindFramebufferAttachment(functions, GL_STENCIL_ATTACHMENT, newAttachment);
+                BindFramebufferAttachment(context, functions, GL_STENCIL_ATTACHMENT, newAttachment);
                 if (newAttachment)
                 {
                     attachment = newAttachment;
@@ -1327,7 +1336,7 @@ angle::Result FramebufferGL::syncState(const gl::Context *context,
                     size_t index =
                         static_cast<size_t>(dirtyBit - Framebuffer::DIRTY_BIT_COLOR_ATTACHMENT_0);
                     const FramebufferAttachment *newAttachment = mState.getColorAttachment(index);
-                    BindFramebufferAttachment(functions,
+                    BindFramebufferAttachment(context, functions,
                                               static_cast<GLenum>(GL_COLOR_ATTACHMENT0 + index),
                                               newAttachment);
                     if (newAttachment)
