@@ -87,6 +87,24 @@
       "message": "LGTM",
       "revId": "0d5311e37009cf26706630133fc53da9cd7f3b2a",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "b2911502_e70182b0",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2022-03-15T22:05:39Z",
+      "side": 1,
+      "message": "In his original message, he states:\n\nI saw your commit “Vulkan: resync mCurrentElementArrayBuffer when out of lineloop” as I was trying to debug that exact problem, but I think your fix missed something. I have a test case that still fails after that:\n\nAnd then a test is included below that. Can you verify if that test reproduces the issue, and work it into the CL as appropriate?",
+      "parentUuid": "11e2aef7_febab8a3",
+      "revId": "0d5311e37009cf26706630133fc53da9cd7f3b2a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
