@@ -141,6 +141,23 @@
       "parentUuid": "097b0f34_ec401a12",
       "revId": "0d5311e37009cf26706630133fc53da9cd7f3b2a",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "d65cc705_d0b12b6c",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2022-03-15T22:17:38Z",
+      "side": 1,
+      "message": "Charlie said offline that this fixed an assertion that Steven reported. Steven / Charlie, if you could work together to produce a regression test that would be welcome. Fine if you land that as a follow-up CL.",
+      "revId": "0d5311e37009cf26706630133fc53da9cd7f3b2a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
