@@ -65,6 +65,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "04e9ab5e_b303f831",
+        "filename": "src/libANGLE/Context.cpp",
+        "patchSetId": 26
+      },
+      "lineNbr": 690,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2022-03-15T16:15:01Z",
+      "side": 1,
+      "message": "given this is very specific usage case, over flush in some edge case is okay, as long as not under flush. I am also okay with jamie\u0027s suggestion that always do the flush when any ctx tears down.",
+      "parentUuid": "259bbc19_7c6d0b9b",
+      "range": {
+        "startLine": 690,
+        "startChar": 37,
+        "endLine": 690,
+        "endChar": 82
+      },
+      "revId": "584e93add485f2ab0e158324680d1d66261c4d3e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "61ad5dd8_3093b484",
