@@ -34,6 +34,24 @@
       "parentUuid": "2bd05698_9f7bf11d",
       "revId": "0d5311e37009cf26706630133fc53da9cd7f3b2a",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "b8b2e284_c6de5d8a",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2022-03-15T22:02:14Z",
+      "side": 1,
+      "message": "So, Steven had reported a new issue, and that prompted us to make this CL. Is there a regression test for the issue he discovered?",
+      "parentUuid": "ae22821d_52b9a1e6",
+      "revId": "0d5311e37009cf26706630133fc53da9cd7f3b2a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
