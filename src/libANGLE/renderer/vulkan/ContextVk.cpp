@@ -4764,7 +4764,8 @@ angle::Result ContextVk::onMakeCurrent(const gl::Context *context)
 
     if (drawSurface && drawSurface->getType() == EGL_WINDOW_BIT)
     {
-        mCurrentWindowSurface = GetImplAs<WindowSurfaceVk>(drawSurface);
+        SurfaceVk *drawSurfaceVk = GetImplAs<SurfaceVk>(drawSurface);
+        mCurrentWindowSurface    = drawSurfaceVk->getAsWindowSurface();
     }
     else
     {
