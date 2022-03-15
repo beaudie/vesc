@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "e630feed_7556624d",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1394635
+      },
+      "writtenOn": "2022-03-15T23:25:27Z",
+      "side": 1,
+      "message": "FYI: D3D requires the base mip level to have multiple-of-4 dimensions. To avoid undefined behavior, ANGLE should re-introduce the `ValidCompressedBaseLevelForWebGL` as a D3D-specific limitation.",
+      "revId": "6baf16756316e75064b3de9acaf56074b37d2e42",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
