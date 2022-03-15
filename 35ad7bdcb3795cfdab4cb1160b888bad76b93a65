@@ -39,6 +39,30 @@
       },
       "revId": "35ad7bdcb3795cfdab4cb1160b888bad76b93a65",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b5cbd6b6_28fc1aaa",
+        "filename": "src/libANGLE/Context.cpp",
+        "patchSetId": 24
+      },
+      "lineNbr": 695,
+      "author": {
+        "id": 1520902
+      },
+      "writtenOn": "2022-03-15T07:09:21Z",
+      "side": 1,
+      "message": "I\u0027ve excluded the Command::Other from the assertion: https://chromium-review.googlesource.com/c/angle/angle/+/3495879/28/src/libANGLE/Texture.cpp#2132.\n\nI also needed to make some changes in TextureVk::syncState() and TextureVk::ensureImageInitialized(), because in some win-angle-chromium tests, mImage be nullptr when we call TextureVk::syncState() from Context::onDestroy().",
+      "parentUuid": "913dad68_e15d930d",
+      "range": {
+        "startLine": 695,
+        "startChar": 11,
+        "endLine": 695,
+        "endChar": 42
+      },
+      "revId": "35ad7bdcb3795cfdab4cb1160b888bad76b93a65",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
