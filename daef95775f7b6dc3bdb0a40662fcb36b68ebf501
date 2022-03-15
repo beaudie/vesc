@@ -34,6 +34,24 @@
       "parentUuid": "fcb30fab_7abe7b46",
       "revId": "daef95775f7b6dc3bdb0a40662fcb36b68ebf501",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "a9e8a121_0e508f19",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 9
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1185209
+      },
+      "writtenOn": "2022-03-15T14:35:27Z",
+      "side": 1,
+      "message": "TBH not sure, this is just building an Angle .cpp file, so not sure how all the flags are set up (i.e. I mostly work on Skia). But wrapping the includes around a precompile flag was my gut thought on what would fix things. Hopefully Jamie or Shahbaz can give more insight from the Angle perspective.",
+      "parentUuid": "edde8c59_90c873e9",
+      "revId": "daef95775f7b6dc3bdb0a40662fcb36b68ebf501",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
