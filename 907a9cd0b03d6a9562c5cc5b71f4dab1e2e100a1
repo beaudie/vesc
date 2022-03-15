@@ -304,6 +304,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "5ca82f4e_5df20ba0",
+        "filename": "src/libANGLE/ResourceManager.h",
+        "patchSetId": 21
+      },
+      "lineNbr": 66,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2022-03-15T21:47:31Z",
+      "side": 1,
+      "message": "Resolved offline with new solution.",
+      "parentUuid": "fdb8a2fa_b355ea64",
+      "range": {
+        "startLine": 66,
+        "startChar": 36,
+        "endLine": 66,
+        "endChar": 55
+      },
+      "revId": "907a9cd0b03d6a9562c5cc5b71f4dab1e2e100a1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "295e37fe_c419367b",
