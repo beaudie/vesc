@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "82922bd2_ec66dd6d",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1516057
+      },
+      "writtenOn": "2022-03-15T14:02:20Z",
+      "side": 1,
+      "message": "Tests passing locally:\n\n$ ./out/Debug/angle_end2end_tests --gtest_filter\u003d\"FramebufferTest_ES3.*\" --bot-mode\n...\n...\n$ head -8 output.json \n{\n    \"interrupted\": false,\n    \"path_delimiter\": \".\",\n    \"version\": 3,\n    \"seconds_since_epoch\": 1647352847,\n    \"num_failures_by_type\": {\n        \"PASS\": 344\n    },\n\n\nJamie, could you please submit the change?",
+      "revId": "de6c5ff60c36e0af5c7daee35b3519419c797a6a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
