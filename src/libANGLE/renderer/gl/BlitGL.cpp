@@ -199,6 +199,18 @@ angle::Result PrepareForClear(StateManagerGL *stateManager,
     return angle::Result::Continue;
 }
 
+angle::Result UnbindAttachment(const gl::Context *context,
+                               const FunctionsGL *functions,
+                               GLenum framebufferTarget,
+                               const GLenum attachment)
+{
+    ANGLE_GL_TRY(context, functions->framebufferTexture2D(framebufferTarget, attachment,
+                                                          GL_TEXTURE_2D, 0, 0));
+    ANGLE_GL_TRY(context, functions->framebufferRenderbuffer(framebufferTarget, attachment,
+                                                             GL_RENDERBUFFER, 0));
+    return angle::Result::Continue;
+}
+
 angle::Result UnbindAttachments(const gl::Context *context,
                                 const FunctionsGL *functions,
                                 GLenum framebufferTarget,
@@ -206,8 +218,7 @@ angle::Result UnbindAttachments(const gl::Context *context,
 {
     for (GLenum bindTarget : bindTargets)
     {
-        ANGLE_GL_TRY(context, functions->framebufferRenderbuffer(framebufferTarget, bindTarget,
-                                                                 GL_RENDERBUFFER, 0));
+        ANGLE_TRY(UnbindAttachment(context, functions, framebufferTarget, bindTarget));
     }
     return angle::Result::Continue;
 }
@@ -391,6 +402,9 @@ angle::Result BlitGL::copySubImageToLUMAWorkaroundTexture(const gl::Context *con
     ANGLE_TRY(orphanScratchTextures(context));
 
     ANGLE_TRY(scopedState.exit(context));
+
+    ANGLE_TRY(UnbindAttachment(context, mFunctions, GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0));
+
     return angle::Result::Continue;
 }
 
@@ -417,8 +431,7 @@ angle::Result BlitGL::blitColorBufferWithShader(const gl::Context *context,
     angle::Result result = blitColorBufferWithShader(context, source, mScratchFBO, sourceAreaIn,
                                                      destAreaIn, filter, writeAlpha);
     // Unbind the texture from the the scratch framebuffer.
-    ANGLE_GL_TRY(context, mFunctions->framebufferRenderbuffer(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0,
-                                                              GL_RENDERBUFFER, 0));
+    ANGLE_TRY(UnbindAttachment(context, mFunctions, GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0));
     return result;
 }
 
@@ -669,6 +682,9 @@ angle::Result BlitGL::copySubTexture(const gl::Context *context,
 
     *copySucceededOut = true;
     ANGLE_TRY(scopedState.exit(context));
+
+    ANGLE_TRY(UnbindAttachment(context, mFunctions, GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0));
+
     return angle::Result::Continue;
 }
 
@@ -985,11 +1001,7 @@ angle::Result BlitGL::clearRenderbuffer(const gl::Context *context,
     ANGLE_GL_TRY(context, mFunctions->clear(clearMask));
 
     // Unbind
-    for (GLenum bindTarget : bindTargets)
-    {
-        ANGLE_GL_TRY(context, mFunctions->framebufferRenderbuffer(GL_FRAMEBUFFER, bindTarget,
-                                                                  GL_RENDERBUFFER, 0));
-    }
+    ANGLE_TRY(UnbindAttachments(context, mFunctions, GL_FRAMEBUFFER, unbindTargets));
 
     return angle::Result::Continue;
 }
@@ -1029,8 +1041,7 @@ angle::Result BlitGL::clearRenderableTextureAlphaToOne(const gl::Context *contex
     ANGLE_GL_TRY(context, mFunctions->clear(GL_COLOR_BUFFER_BIT));
 
     // Unbind the texture from the the scratch framebuffer
-    ANGLE_GL_TRY(context, mFunctions->framebufferRenderbuffer(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0,
-                                                              GL_RENDERBUFFER, 0));
+    ANGLE_TRY(UnbindAttachment(context, mFunctions, GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0));
 
     return angle::Result::Continue;
 }
@@ -1110,7 +1121,9 @@ angle::Result BlitGL::generateSRGBMipmap(const gl::Context *context,
 
     ANGLE_TRY(orphanScratchTextures(context));
 
+    ANGLE_TRY(UnbindAttachment(context, mFunctions, GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0));
     ANGLE_TRY(scopedState.exit(context));
+
     return angle::Result::Continue;
 }
 
