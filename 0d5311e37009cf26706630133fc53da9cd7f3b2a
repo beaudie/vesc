@@ -105,6 +105,24 @@
       "parentUuid": "11e2aef7_febab8a3",
       "revId": "0d5311e37009cf26706630133fc53da9cd7f3b2a",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "097b0f34_ec401a12",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2022-03-15T22:07:09Z",
+      "side": 1,
+      "message": "That test already added in previous CL (and landed).",
+      "parentUuid": "b2911502_e70182b0",
+      "revId": "0d5311e37009cf26706630133fc53da9cd7f3b2a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
