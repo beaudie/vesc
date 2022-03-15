@@ -1,0 +1,67 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "1656db6e_d4b86fb3",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 28
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2022-03-15T13:46:51Z",
+      "side": 1,
+      "message": "Yuxin, the flushes are triggering errors on Metal. One solution would be to early exit from TexutureMtl::syncState if the command type is \"Other\". I\u0027m not sure exactly what the error is , the log just says \"GL error: HIGH: Metal backend encountered an error. Code\u003d1282.\".",
+      "revId": "59307b1db7c9e795761dc17d7eac5783b3aaa656",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "5293cf29_a4791774",
+        "filename": "src/libANGLE/Context.cpp",
+        "patchSetId": 28
+      },
+      "lineNbr": 690,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2022-03-15T13:46:51Z",
+      "side": 1,
+      "message": "again I\u0027d suggest you take this out and just always process this on a teardown",
+      "range": {
+        "startLine": 690,
+        "startChar": 34,
+        "endLine": 690,
+        "endChar": 86
+      },
+      "revId": "59307b1db7c9e795761dc17d7eac5783b3aaa656",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "1bdf1fae_a615fed8",
+        "filename": "src/libANGLE/Context.cpp",
+        "patchSetId": 28
+      },
+      "lineNbr": 695,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2022-03-15T13:46:51Z",
+      "side": 1,
+      "message": "I think we probably shouldn\u0027t use ANGLE_TRY here because it\u0027ll skip the rest of the destruction. feel free to use ANGLE_SWALLOW_ERR if needed.",
+      "range": {
+        "startLine": 695,
+        "startChar": 12,
+        "endLine": 695,
+        "endChar": 21
+      },
+      "revId": "59307b1db7c9e795761dc17d7eac5783b3aaa656",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
