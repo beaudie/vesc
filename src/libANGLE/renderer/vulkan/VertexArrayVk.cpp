@@ -463,6 +463,18 @@ angle::Result VertexArrayVk::convertVertexBufferCPU(ContextVk *contextVk,
     return angle::Result::Continue;
 }
 
+<<<<<<< HEAD   (2a58cc [M96-LTS] Fix base level changes not updating FBO completene)
+=======
+void VertexArrayVk::updateCurrentElementArrayBuffer()
+{
+    ASSERT(mState.getElementArrayBuffer() != nullptr);
+    ASSERT(mState.getElementArrayBuffer()->getSize() > 0);
+
+    BufferVk *bufferVk         = vk::GetImpl(mState.getElementArrayBuffer());
+    mCurrentElementArrayBuffer = &bufferVk->getBuffer();
+}
+
+>>>>>>> CHANGE (349636 Vulkan: Update mCurrentElementArrayBuffersync based on dirty)
 angle::Result VertexArrayVk::syncState(const gl::Context *context,
                                        const gl::VertexArray::DirtyBits &dirtyBits,
                                        gl::VertexArray::DirtyAttribBitsArray *attribBits,
@@ -488,6 +500,7 @@ angle::Result VertexArrayVk::syncState(const gl::Context *context,
                 {
                     // Note that just updating buffer data may still result in a new
                     // vk::BufferHelper allocation.
+<<<<<<< HEAD   (2a58cc [M96-LTS] Fix base level changes not updating FBO completene)
                     BufferVk *bufferVk = vk::GetImpl(bufferGL);
                     mCurrentElementArrayBuffer =
                         &bufferVk->getBufferAndOffset(&mCurrentElementArrayBufferOffset);
@@ -496,6 +509,13 @@ angle::Result VertexArrayVk::syncState(const gl::Context *context,
                 {
                     mCurrentElementArrayBuffer       = nullptr;
                     mCurrentElementArrayBufferOffset = 0;
+=======
+                    updateCurrentElementArrayBuffer();
+                }
+                else
+                {
+                    mCurrentElementArrayBuffer = nullptr;
+>>>>>>> CHANGE (349636 Vulkan: Update mCurrentElementArrayBuffersync based on dirty)
                 }
 
                 mLineLoopBufferFirstIndex.reset();

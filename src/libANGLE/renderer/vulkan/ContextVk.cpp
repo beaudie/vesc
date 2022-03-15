@@ -917,7 +917,12 @@ angle::Result ContextVk::setupIndexedDraw(const gl::Context *context,
         ANGLE_TRY(onIndexBufferChange(nullptr));
     }
 
+<<<<<<< HEAD   (2a58cc [M96-LTS] Fix base level changes not updating FBO completene)
     const gl::Buffer *elementArrayBuffer = mVertexArray->getState().getElementArrayBuffer();
+=======
+    VertexArrayVk *vertexArrayVk         = getVertexArray();
+    const gl::Buffer *elementArrayBuffer = vertexArrayVk->getState().getElementArrayBuffer();
+>>>>>>> CHANGE (349636 Vulkan: Update mCurrentElementArrayBuffersync based on dirty)
     if (!elementArrayBuffer)
     {
         mGraphicsDirtyBits.set(DIRTY_BIT_INDEX_BUFFER);
@@ -933,6 +938,17 @@ angle::Result ContextVk::setupIndexedDraw(const gl::Context *context,
             mGraphicsDirtyBits.set(DIRTY_BIT_INDEX_BUFFER);
             mLastIndexBufferOffset = indices;
         }
+
+        // When you draw with LineLoop mode or GL_UNSIGNED_BYTE type, we may allocate its own
+        // element buffer and modify mCurrentElementArrayBuffer. When we switch out of that draw
+        // mode, we must reset mCurrentElementArrayBuffer back to the vertexArray's element buffer.
+        // Since in either case we set DIRTY_BIT_INDEX_BUFFER dirty bit, we use this bit to re-sync
+        // mCurrentElementArrayBuffer.
+        if (mGraphicsDirtyBits[DIRTY_BIT_INDEX_BUFFER])
+        {
+            vertexArrayVk->updateCurrentElementArrayBuffer();
+        }
+
         if (shouldConvertUint8VkIndexType(indexType) && mGraphicsDirtyBits[DIRTY_BIT_INDEX_BUFFER])
         {
             ANGLE_PERF_WARNING(getDebug(), GL_DEBUG_SEVERITY_LOW,
@@ -3705,8 +3721,13 @@ angle::Result ContextVk::syncState(const gl::Context *context,
             {
                 mVertexArray = vk::GetImpl(glState.getVertexArray());
                 invalidateDefaultAttributes(context->getStateCache().getActiveDefaultAttribsMask());
+<<<<<<< HEAD   (2a58cc [M96-LTS] Fix base level changes not updating FBO completene)
                 ANGLE_TRY(mVertexArray->updateActiveAttribInfo(this));
                 ANGLE_TRY(onIndexBufferChange(mVertexArray->getCurrentElementArrayBuffer()));
+=======
+                ANGLE_TRY(vertexArrayVk->updateActiveAttribInfo(this));
+                ANGLE_TRY(onIndexBufferChange(vertexArrayVk->getCurrentElementArrayBuffer()));
+>>>>>>> CHANGE (349636 Vulkan: Update mCurrentElementArrayBuffersync based on dirty)
                 break;
             }
             case gl::State::DIRTY_BIT_DRAW_INDIRECT_BUFFER_BINDING:
