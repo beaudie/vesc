@@ -69,6 +69,57 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": true,
+      "key": {
+        "uuid": "34b36d9a_10dc22af",
+        "filename": "src/compiler/translator/TranslatorMetalDirect/AstHelpers.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 59,
+      "author": {
+        "id": 1500872
+      },
+      "writtenOn": "2022-03-15T01:01:54Z",
+      "side": 1,
+      "message": "Nit: Would it be worth making a more generic Clone Function and Prepend Params with std::vector\u003cconst TVariable*\u003e \u0026params?",
+      "revId": "d8a912af66b3e94aaeed72551fb4996cfcf7b6f0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "af276230_f4ca3fd4",
+        "filename": "src/compiler/translator/TranslatorMetalDirect/EmitMetal.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 1843,
+      "author": {
+        "id": 1500872
+      },
+      "writtenOn": "2022-03-15T01:01:54Z",
+      "side": 1,
+      "message": "Nit: Can we add a names constant for this?",
+      "revId": "d8a912af66b3e94aaeed72551fb4996cfcf7b6f0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "1e1bccf3_35a3d122",
+        "filename": "src/compiler/translator/TranslatorMetalDirect/RewritePipelines.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 828,
+      "author": {
+        "id": 1500872
+      },
+      "writtenOn": "2022-03-15T01:01:54Z",
+      "side": 1,
+      "message": "I\u0027m trying to figure out if we\u0027ll end up in a situation where mPipelineMainLocalVar.external/external extra are nil. There\u0027s a secondary case in getExternalPipelineVariable() to handle that situation. Here, we\u0027d want to call mainFunc.getParam(0); and mainFunc.getParam(1); to get the replacement variables, if they were nil.",
+      "revId": "d8a912af66b3e94aaeed72551fb4996cfcf7b6f0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": false,
       "key": {
         "uuid": "682edc7e_67724a51",
