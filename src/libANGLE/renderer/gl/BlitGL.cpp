@@ -666,7 +666,8 @@ angle::Result BlitGL::copySubTexture(const gl::Context *context,
 
     ANGLE_TRY(setVAOState(context));
     ANGLE_GL_TRY(context, mFunctions->drawArrays(GL_TRIANGLES, 0, 3));
-
+    ANGLE_GL_TRY(context, mFunctions->framebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0,
+                                                           ToGLenum(destTarget), 0, 0));
     *copySucceededOut = true;
     ANGLE_TRY(scopedState.exit(context));
     return angle::Result::Continue;
