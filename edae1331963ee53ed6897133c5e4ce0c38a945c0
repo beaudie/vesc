@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "a56f4202_97ecc7e0",
+        "filename": "src/libANGLE/Caps.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 159,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2022-03-16T19:57:55Z",
+      "side": 1,
+      "message": "isn\u0027t this just for compressed textures? can you mention that in the name of the limitation?",
+      "range": {
+        "startLine": 159,
+        "startChar": 9,
+        "endLine": 159,
+        "endChar": 36
+      },
+      "revId": "edae1331963ee53ed6897133c5e4ce0c38a945c0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "bf0e9e64_be25ac29",
+        "filename": "src/libANGLE/validationES.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 1089,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2022-03-16T19:57:55Z",
+      "side": 1,
+      "message": "just checking - can we combine the WebGL \u0026 non-WebGL clauses? i feel like they\u0027re for the same reason.",
+      "range": {
+        "startLine": 1089,
+        "startChar": 17,
+        "endLine": 1089,
+        "endChar": 49
+      },
+      "revId": "edae1331963ee53ed6897133c5e4ce0c38a945c0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
