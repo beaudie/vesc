@@ -2455,6 +2455,9 @@ angle::Result ContextVk::submitFrame(const vk::Semaphore *signalSemaphore, Seria
     }
 
     getShareGroupVk()->acquireResourceUseList(std::move(mResourceUseList));
+    getShareGroupVk()->acquireResourceUseList(std::move(mRenderPassCommands->getResourceUseList()));
+    getShareGroupVk()->acquireResourceUseList(
+        std::move(mOutsideRenderPassCommands->getResourceUseList()));
     ANGLE_TRY(mRenderer->submitFrame(this, hasProtectedContent(), mContextPriority,
                                      std::move(mWaitSemaphores),
                                      std::move(mWaitSemaphoreStageMasks), signalSemaphore,
