@@ -2454,7 +2454,10 @@ angle::Result ContextVk::submitFrame(const vk::Semaphore *signalSemaphore, Seria
         dumpCommandStreamDiagnostics();
     }
 
+    getShareGroupVk()->acquireResourceUseList(
+        std::move(mOutsideRenderPassCommands->getResourceUseList()));
     getShareGroupVk()->acquireResourceUseList(std::move(mResourceUseList));
+    getShareGroupVk()->acquireResourceUseList(std::move(mRenderPassCommands->getResourceUseList()));
     ANGLE_TRY(mRenderer->submitFrame(this, hasProtectedContent(), mContextPriority,
                                      std::move(mWaitSemaphores),
                                      std::move(mWaitSemaphoreStageMasks), signalSemaphore,
@@ -6197,6 +6200,9 @@ angle::Result ContextVk::flushCommandsAndEndRenderPassImpl(QueueSubmitType queue
                                    mRenderPassCommands->getAttachmentOps(), &renderPass));
 
     flushDescriptorSetUpdates();
+
+    getShareGroupVk()->acquireResourceUseList(std::move(mRenderPassCommands->getResourceUseList()));
+
     ANGLE_TRY(mRenderer->flushRenderPassCommands(this, hasProtectedContent(), *renderPass,
                                                  &mRenderPassCommands));
 
@@ -6341,6 +6347,10 @@ angle::Result ContextVk::flushOutsideRenderPassCommands()
     }
 
     flushDescriptorSetUpdates();
+
+    getShareGroupVk()->acquireResourceUseList(
+        std::move(mOutsideRenderPassCommands->getResourceUseList()));
+
     ANGLE_TRY(mRenderer->flushOutsideRPCommands(this, hasProtectedContent(),
                                                 &mOutsideRenderPassCommands));
 
