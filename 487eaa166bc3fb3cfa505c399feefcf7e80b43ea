@@ -35,6 +35,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "c114aa4b_cc7fd9c8",
+        "filename": "extensions/EGL_ANGLE_power_preference.txt",
+        "patchSetId": 7
+      },
+      "lineNbr": 53,
+      "author": {
+        "id": 1449558
+      },
+      "writtenOn": "2022-03-16T19:35:37Z",
+      "side": 1,
+      "message": "the existing function was \n  eglHandleGPUSwitch\n  \nAdded this as \n  eglForceGPUSwitch",
+      "parentUuid": "d813e5bc_41b5aedc",
+      "revId": "487eaa166bc3fb3cfa505c399feefcf7e80b43ea",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "490fe762_4c5cd9ac",
@@ -48,6 +66,24 @@
       "writtenOn": "2022-03-12T01:19:31Z",
       "side": 1,
       "message": "Could you clean up the whitespace in this file?",
+      "revId": "487eaa166bc3fb3cfa505c399feefcf7e80b43ea",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "6f96bc8d_85e5fd3f",
+        "filename": "extensions/EGL_ANGLE_power_preference.txt",
+        "patchSetId": 7
+      },
+      "lineNbr": 126,
+      "author": {
+        "id": 1449558
+      },
+      "writtenOn": "2022-03-16T19:35:37Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "490fe762_4c5cd9ac",
       "revId": "487eaa166bc3fb3cfa505c399feefcf7e80b43ea",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
@@ -69,6 +105,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "132907d2_02c47bd8",
+        "filename": "extensions/EGL_ANGLE_power_preference.txt",
+        "patchSetId": 7
+      },
+      "lineNbr": 130,
+      "author": {
+        "id": 1449558
+      },
+      "writtenOn": "2022-03-16T19:35:37Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "f49102ee_8de7ca2c",
+      "revId": "487eaa166bc3fb3cfa505c399feefcf7e80b43ea",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "38dc7f5e_d84bf92c",
@@ -82,6 +136,24 @@
       "writtenOn": "2022-03-12T01:19:31Z",
       "side": 1,
       "message": "other -\u003e another",
+      "revId": "487eaa166bc3fb3cfa505c399feefcf7e80b43ea",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "777d20c3_4cef79d2",
+        "filename": "extensions/EGL_ANGLE_power_preference.txt",
+        "patchSetId": 7
+      },
+      "lineNbr": 132,
+      "author": {
+        "id": 1449558
+      },
+      "writtenOn": "2022-03-16T19:35:37Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "38dc7f5e_d84bf92c",
       "revId": "487eaa166bc3fb3cfa505c399feefcf7e80b43ea",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
@@ -103,6 +175,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "ab5db190_a461dedb",
+        "filename": "extensions/EGL_ANGLE_power_preference.txt",
+        "patchSetId": 7
+      },
+      "lineNbr": 134,
+      "author": {
+        "id": 1449558
+      },
+      "writtenOn": "2022-03-16T19:35:37Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "7498bbca_92eda4f9",
+      "revId": "487eaa166bc3fb3cfa505c399feefcf7e80b43ea",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "04d9299b_78a0c5d9",
@@ -116,6 +206,24 @@
       "writtenOn": "2022-03-12T01:19:31Z",
       "side": 1,
       "message": "Per comments in the extension documentation above - suggest expanding this name out to something like switchToGPU or setActiveGPU.",
+      "revId": "487eaa166bc3fb3cfa505c399feefcf7e80b43ea",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "830632d8_74361d9a",
+        "filename": "src/libANGLE/Display.h",
+        "patchSetId": 7
+      },
+      "lineNbr": 306,
+      "author": {
+        "id": 1449558
+      },
+      "writtenOn": "2022-03-16T19:35:37Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "04d9299b_78a0c5d9",
       "revId": "487eaa166bc3fb3cfa505c399feefcf7e80b43ea",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
@@ -137,6 +245,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "cebee239_c675b61a",
+        "filename": "src/libANGLE/renderer/gl/cgl/DisplayCGL.h",
+        "patchSetId": 7
+      },
+      "lineNbr": 117,
+      "author": {
+        "id": 1449558
+      },
+      "writtenOn": "2022-03-16T19:35:37Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "9bfed5b2_e0a4f781",
+      "revId": "487eaa166bc3fb3cfa505c399feefcf7e80b43ea",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "f9cde196_9b2b4051",
@@ -150,6 +276,24 @@
       "writtenOn": "2022-03-12T01:19:31Z",
       "side": 1,
       "message": "Could you file a follow-on anglebug about this task and use TODO(anglebug.com/bugid) instead of FIXME?",
+      "revId": "487eaa166bc3fb3cfa505c399feefcf7e80b43ea",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "4fd2ad9b_e048e556",
+        "filename": "src/tests/egl_tests/EGLPowerPreferenceTest.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 24,
+      "author": {
+        "id": 1449558
+      },
+      "writtenOn": "2022-03-16T19:35:37Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "f9cde196_9b2b4051",
       "revId": "487eaa166bc3fb3cfa505c399feefcf7e80b43ea",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
