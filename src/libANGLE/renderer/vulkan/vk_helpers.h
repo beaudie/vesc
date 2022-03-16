@@ -93,8 +93,10 @@ class DynamicBuffer : angle::NonCopyable
     // This releases resources when they might currently be in use.
     void release(RendererVk *renderer);
 
-    // This adds in-flight buffers to the context's mResourceUseList and then releases them
-    void releaseInFlightBuffersToResourceUseList(ContextVk *contextVk);
+    // This adds in-flight buffers to the mResourceUseList in the outside render pass command buffer
+    // and then releases them
+    void releaseInFlightBuffersToResourceUseList(ContextVk *contextVk,
+                                                 vk::ResourceUseList &resourceUseList);
 
     // This frees resources immediately.
     void destroy(RendererVk *renderer);
@@ -1019,6 +1021,8 @@ class CommandBufferHelperCommon : angle::NonCopyable
 
     bool hasGLMemoryBarrierIssued() const { return mHasGLMemoryBarrierIssued; }
 
+    vk::ResourceUseList &getResourceUseList() { return mResourceUseList; }
+
     // Dumping the command stream is disabled by default.
     static constexpr bool kEnableCommandStreamDiagnostics = false;
 
@@ -1075,6 +1079,7 @@ class CommandBufferHelperCommon : angle::NonCopyable
     // For Buffers, we track the read/write access type so we can enable simultaneous reads.
     static constexpr uint32_t kFlatMapSize = 16;
     angle::FlatUnorderedMap<BufferSerial, BufferAccess, kFlatMapSize> mUsedBuffers;
+    vk::ResourceUseList mResourceUseList;
 };
 
 class OutsideRenderPassCommandBufferHelper final : public CommandBufferHelperCommon
@@ -2858,6 +2863,30 @@ struct CommandBufferImageWrite
     uint32_t layerStart;
     uint32_t layerCount;
 };
+struct CommandBufferBufferAcquireSemaphore
+{
+    SemaphoreVk *semaphore;
+    BufferHelper *buffer;
+};
+struct CommandBufferBufferReleaseSemaphore
+{
+    SemaphoreVk *semaphore;
+    BufferHelper *buffer;
+};
+struct CommandBufferImageAcquireSemaphore
+{
+    SemaphoreVk *semaphore;
+    ImageHelper *image;
+};
+struct CommandBufferImageReleaseSemaphore
+{
+    SemaphoreVk *semaphore;
+    ImageHelper *image;
+};
+struct CommandBufferResourceUpdate
+{
+    Resource *resource;
+};
 class CommandBufferAccess : angle::NonCopyable
 {
   public:
@@ -2914,18 +2943,45 @@ class CommandBufferAccess : angle::NonCopyable
         onImageWrite(levelStart, levelCount, layerStart, layerCount, aspectFlags,
                      ImageLayout::ComputeShaderWrite, image);
     }
+    void onBufferSemaphoreAcquire(SemaphoreVk *semaphore, BufferHelper *buffer);
+    void onBufferSemaphoreRelease(SemaphoreVk *semaphore, BufferHelper *buffer);
+    void onImageSemaphoreAcquire(SemaphoreVk *semaphore, ImageHelper *image);
+    void onImageSemaphoreRelease(SemaphoreVk *semaphore, ImageHelper *image);
+    void onResourceUpdate(Resource *resource);
 
     // The limits reflect the current maximum concurrent usage of each resource type.  ASSERTs will
     // fire if this limit is exceeded in the future.
-    using ReadBuffers  = angle::FixedVector<CommandBufferBufferAccess, 2>;
-    using WriteBuffers = angle::FixedVector<CommandBufferBufferAccess, 2>;
-    using ReadImages   = angle::FixedVector<CommandBufferImageAccess, 2>;
-    using WriteImages  = angle::FixedVector<CommandBufferImageWrite, 1>;
+    using ReadBuffers              = angle::FixedVector<CommandBufferBufferAccess, 2>;
+    using WriteBuffers             = angle::FixedVector<CommandBufferBufferAccess, 2>;
+    using ReadImages               = angle::FixedVector<CommandBufferImageAccess, 2>;
+    using WriteImages              = angle::FixedVector<CommandBufferImageWrite, 1>;
+    using AcquireSemaphoresBuffers = angle::FixedVector<CommandBufferBufferAcquireSemaphore, 1>;
+    using ReleaseSemaphoresBuffers = angle::FixedVector<CommandBufferBufferReleaseSemaphore, 1>;
+    using AcquireSemaphoresImages  = angle::FixedVector<CommandBufferImageAcquireSemaphore, 1>;
+    using ReleaseSemaphoresImages  = angle::FixedVector<CommandBufferImageReleaseSemaphore, 1>;
+    using UpdateResources          = angle::FixedVector<CommandBufferResourceUpdate, 1>;
 
     const ReadBuffers &getReadBuffers() const { return mReadBuffers; }
     const WriteBuffers &getWriteBuffers() const { return mWriteBuffers; }
     const ReadImages &getReadImages() const { return mReadImages; }
     const WriteImages &getWriteImages() const { return mWriteImages; }
+    const AcquireSemaphoresBuffers &getAcquireSemaphoresBuffers() const
+    {
+        return mAcquireSemaphoresBuffers;
+    }
+    const ReleaseSemaphoresBuffers &getReleaseSemaphoresBuffers() const
+    {
+        return mReleaseSemaphoresBuffers;
+    }
+    const AcquireSemaphoresImages &getAcquireSemaphoresImages() const
+    {
+        return mAcquireSemaphoresImages;
+    }
+    const ReleaseSemaphoresImages &getReleaseSemaphoresImages() const
+    {
+        return mReleaseSemaphoresImages;
+    }
+    const UpdateResources &getUpdateResources() const { return mUpdateResources; }
 
   private:
     void onBufferRead(VkAccessFlags readAccessType, PipelineStage readStage, BufferHelper *buffer);
@@ -2946,6 +3002,11 @@ class CommandBufferAccess : angle::NonCopyable
     WriteBuffers mWriteBuffers;
     ReadImages mReadImages;
     WriteImages mWriteImages;
+    AcquireSemaphoresBuffers mAcquireSemaphoresBuffers;
+    ReleaseSemaphoresBuffers mReleaseSemaphoresBuffers;
+    AcquireSemaphoresImages mAcquireSemaphoresImages;
+    ReleaseSemaphoresImages mReleaseSemaphoresImages;
+    UpdateResources mUpdateResources;
 };
 
 // This class' responsibility is to create index buffers needed to support line loops in Vulkan.

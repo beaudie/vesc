@@ -1228,7 +1228,8 @@ CommandBufferHelperCommon::CommandBufferHelperCommon()
       mPipelineBarrierMask(),
       mCommandPool(nullptr),
       mHasShaderStorageOutput(false),
-      mHasGLMemoryBarrierIssued(false)
+      mHasGLMemoryBarrierIssued(false),
+      mResourceUseList()
 {}
 
 CommandBufferHelperCommon::~CommandBufferHelperCommon() {}
@@ -1250,6 +1251,8 @@ void CommandBufferHelperCommon::resetImpl()
     mAllocator.push();
 
     mUsedBuffers.clear();
+    mResourceUseList.releaseResourceUses();
+    ASSERT(mResourceUseList.empty());
 }
 
 void CommandBufferHelperCommon::bufferRead(ContextVk *contextVk,
@@ -1267,7 +1270,7 @@ void CommandBufferHelperCommon::bufferRead(ContextVk *contextVk,
     if (!mUsedBuffers.contains(buffer->getBufferSerial()))
     {
         mUsedBuffers.insert(buffer->getBufferSerial(), BufferAccess::Read);
-        buffer->retainReadOnly(&contextVk->getResourceUseList());
+        buffer->retainReadOnly(&mResourceUseList);
     }
 }
 
@@ -1277,7 +1280,7 @@ void CommandBufferHelperCommon::bufferWrite(ContextVk *contextVk,
                                             AliasingMode aliasingMode,
                                             BufferHelper *buffer)
 {
-    buffer->retainReadWrite(&contextVk->getResourceUseList());
+    buffer->retainReadWrite(&mResourceUseList);
     VkPipelineStageFlagBits stageBits = kPipelineStageFlagBitMap[writeStage];
     if (buffer->recordWriteBarrier(writeAccessType, stageBits, &mPipelineBarriers[writeStage]))
     {
@@ -1369,7 +1372,7 @@ void CommandBufferHelperCommon::imageWriteImpl(ContextVk *contextVk,
                                                AliasingMode aliasingMode,
                                                ImageHelper *image)
 {
-    image->retain(&contextVk->getResourceUseList());
+    image->retain(&mResourceUseList);
     image->onWrite(level, 1, layerStart, layerCount, aspectFlags);
     // Write always requires a barrier
     updateImageLayoutAndBarrier(contextVk, image, aspectFlags, imageLayout);
@@ -1434,7 +1437,7 @@ void OutsideRenderPassCommandBufferHelper::imageRead(ContextVk *contextVk,
                                                      ImageHelper *image)
 {
     imageReadImpl(contextVk, aspectFlags, imageLayout, image);
-    image->retain(&contextVk->getResourceUseList());
+    image->retain(&mResourceUseList);
 }
 
 void OutsideRenderPassCommandBufferHelper::imageWrite(ContextVk *contextVk,
@@ -1557,7 +1560,7 @@ void RenderPassCommandBufferHelper::imageRead(ContextVk *contextVk,
     if (!usesImage(*image))
     {
         mRenderPassUsedImages.insert(image->getImageSerial());
-        image->retain(&contextVk->getResourceUseList());
+        image->retain(&mResourceUseList);
     }
 }
 
@@ -1594,7 +1597,7 @@ void RenderPassCommandBufferHelper::colorImagesDraw(ResourceUseList *resourceUse
 {
     ASSERT(packedAttachmentIndex < mColorAttachmentsCount);
 
-    image->retain(resourceUseList);
+    image->retain(&mResourceUseList);
     if (!usesImage(*image))
     {
         // This is possible due to different layers of the same texture being attached to different
@@ -1606,7 +1609,7 @@ void RenderPassCommandBufferHelper::colorImagesDraw(ResourceUseList *resourceUse
 
     if (resolveImage)
     {
-        resolveImage->retain(resourceUseList);
+        resolveImage->retain(&mResourceUseList);
         if (!usesImage(*resolveImage))
         {
             mRenderPassUsedImages.insert(resolveImage->getImageSerial());
@@ -1616,12 +1619,13 @@ void RenderPassCommandBufferHelper::colorImagesDraw(ResourceUseList *resourceUse
     }
 }
 
-void RenderPassCommandBufferHelper::depthStencilImagesDraw(ResourceUseList *resourceUseList,
-                                                           gl::LevelIndex level,
-                                                           uint32_t layerStart,
-                                                           uint32_t layerCount,
-                                                           ImageHelper *image,
-                                                           ImageHelper *resolveImage)
+void RenderPassCommandBufferHelper::depthStencilImagesDraw(
+    ResourceUseList *resourceUseList,  // Remove arg?
+    gl::LevelIndex level,
+    uint32_t layerStart,
+    uint32_t layerCount,
+    ImageHelper *image,
+    ImageHelper *resolveImage)
 {
     ASSERT(!usesImage(*image));
     ASSERT(!resolveImage || !usesImage(*resolveImage));
@@ -1629,7 +1633,7 @@ void RenderPassCommandBufferHelper::depthStencilImagesDraw(ResourceUseList *reso
     // Because depthStencil buffer's read/write property can change while we build renderpass, we
     // defer the image layout changes until endRenderPass time or when images going away so that we
     // only insert layout change barrier once.
-    image->retain(resourceUseList);
+    image->retain(&mResourceUseList);
     mRenderPassUsedImages.insert(image->getImageSerial());
 
     mDepthAttachment.init(image, level, layerStart, layerCount, VK_IMAGE_ASPECT_DEPTH_BIT);
@@ -1640,7 +1644,7 @@ void RenderPassCommandBufferHelper::depthStencilImagesDraw(ResourceUseList *reso
         // Note that the resolve depth/stencil image has the same level/layer index as the
         // depth/stencil image as currently it can only ever come from
         // multisampled-render-to-texture renderbuffers.
-        resolveImage->retain(resourceUseList);
+        resolveImage->retain(&mResourceUseList);
         mRenderPassUsedImages.insert(resolveImage->getImageSerial());
 
         mDepthResolveAttachment.init(resolveImage, level, layerStart, layerCount,
@@ -2602,15 +2606,21 @@ void DynamicBuffer::release(RendererVk *renderer)
     }
 }
 
-void DynamicBuffer::releaseInFlightBuffersToResourceUseList(ContextVk *contextVk)
+void DynamicBuffer::releaseInFlightBuffersToResourceUseList(ContextVk *contextVk,
+                                                            vk::ResourceUseList &resourceUseList)
 {
-    ResourceUseList *resourceUseList = &contextVk->getResourceUseList();
+    //    ResourceUseList *resourceUseList = &contextVk->getResourceUseList();
+    //    ResourceUseList *resourceUseListRP =
+    //    &contextVk->getStartedRenderPassCommands().getResourceUseList();
+    // Outside RP? This function is only used in flushAndGetSerial(), where outside RP command
+    // buffer is used. In that case, change the output of this function to angle::Result.
+
     for (std::unique_ptr<BufferHelper> &bufferHelper : mInFlightBuffers)
     {
         // This function is used only for internal buffers, and they are all read-only.
         // It's possible this may change in the future, but there isn't a good way to detect that,
         // unfortunately.
-        bufferHelper->retainReadOnly(resourceUseList);
+        bufferHelper->retainReadOnly(&resourceUseList);
 
         // We only keep free buffers that have the same size. Note that bufferHelper's size is
         // suballocation's size. We need to use the whole block memory size here.
@@ -3394,7 +3404,6 @@ void QueryHelper::endQueryImpl(ContextVk *contextVk, CommandBufferT *commandBuff
     mStatus = QueryStatus::Ended;
     // Query results are available after endQuery, retain this query so that we get its serial
     // updated which is used to indicate that query results are (or will be) available.
-    retain(&contextVk->getResourceUseList());
 }
 
 angle::Result QueryHelper::beginQuery(ContextVk *contextVk)
@@ -3423,8 +3432,10 @@ angle::Result QueryHelper::endQuery(ContextVk *contextVk)
             RenderPassClosureReason::EndNonRenderPassQuery));
     }
 
+    CommandBufferAccess access;
     OutsideRenderPassCommandBuffer *commandBuffer;
-    ANGLE_TRY(contextVk->getOutsideRenderPassCommandBuffer({}, &commandBuffer));
+    access.onResourceUpdate(this);
+    ANGLE_TRY(contextVk->getOutsideRenderPassCommandBuffer(access, &commandBuffer));
 
     ANGLE_TRY(contextVk->handleGraphicsEventLog(rx::GraphicsEventCmdBuf::InOutsideCmdBufQueryCmd));
 
@@ -3467,6 +3478,7 @@ void QueryHelper::endRenderPassQuery(ContextVk *contextVk)
     if (mStatus == QueryStatus::Active)
     {
         endQueryImpl(contextVk, &contextVk->getStartedRenderPassCommands().getCommandBuffer());
+        retain(&contextVk->getStartedRenderPassCommands().getResourceUseList());
     }
 }
 
@@ -3478,8 +3490,10 @@ angle::Result QueryHelper::flushAndWriteTimestamp(ContextVk *contextVk)
             contextVk->flushCommandsAndEndRenderPass(RenderPassClosureReason::TimestampQuery));
     }
 
+    CommandBufferAccess access;
     OutsideRenderPassCommandBuffer *commandBuffer;
-    ANGLE_TRY(contextVk->getOutsideRenderPassCommandBuffer({}, &commandBuffer));
+    access.onResourceUpdate(this);
+    ANGLE_TRY(contextVk->getOutsideRenderPassCommandBuffer(access, &commandBuffer));
     writeTimestamp(contextVk, commandBuffer);
     return angle::Result::Continue;
 }
@@ -3501,7 +3515,6 @@ void QueryHelper::writeTimestamp(ContextVk *contextVk,
     commandBuffer->writeTimestamp(VK_PIPELINE_STAGE_BOTTOM_OF_PIPE_BIT, queryPool, mQuery);
     // timestamp results are available immediately, retain this query so that we get its serial
     // updated which is used to indicate that query results are (or will be) available.
-    retain(&contextVk->getResourceUseList());
 }
 
 bool QueryHelper::hasSubmittedCommands() const
@@ -4362,8 +4375,6 @@ void BufferHelper::acquireFromExternal(ContextVk *contextVk,
                                        OutsideRenderPassCommandBuffer *commandBuffer)
 {
     mCurrentQueueFamilyIndex = externalQueueFamilyIndex;
-
-    retainReadWrite(&contextVk->getResourceUseList());
     changeQueue(rendererQueueFamilyIndex, commandBuffer);
 }
 
@@ -4373,8 +4384,6 @@ void BufferHelper::releaseToExternal(ContextVk *contextVk,
                                      OutsideRenderPassCommandBuffer *commandBuffer)
 {
     ASSERT(mCurrentQueueFamilyIndex == rendererQueueFamilyIndex);
-
-    retainReadWrite(&contextVk->getResourceUseList());
     changeQueue(externalQueueFamilyIndex, commandBuffer);
 }
 
@@ -5599,7 +5608,6 @@ void ImageHelper::acquireFromExternal(ContextVk *contextVk,
     mCurrentLayout           = currentLayout;
     mCurrentQueueFamilyIndex = externalQueueFamilyIndex;
 
-    retain(&contextVk->getResourceUseList());
     changeLayoutAndQueue(contextVk, getAspectFlags(), mCurrentLayout, rendererQueueFamilyIndex,
                          commandBuffer);
 
@@ -5622,8 +5630,6 @@ void ImageHelper::releaseToExternal(ContextVk *contextVk,
                                     OutsideRenderPassCommandBuffer *commandBuffer)
 {
     ASSERT(mCurrentQueueFamilyIndex == rendererQueueFamilyIndex);
-
-    retain(&contextVk->getResourceUseList());
     changeLayoutAndQueue(contextVk, getAspectFlags(), desiredLayout, externalQueueFamilyIndex,
                          commandBuffer);
 }
@@ -5982,9 +5988,6 @@ angle::Result ImageHelper::CopyImageSubData(const gl::Context *context,
     {
         bool isSrc3D = srcImage->getType() == VK_IMAGE_TYPE_3D;
         bool isDst3D = dstImage->getType() == VK_IMAGE_TYPE_3D;
-
-        srcImage->retain(&contextVk->getResourceUseList());
-        dstImage->retain(&contextVk->getResourceUseList());
 
         VkImageCopy region = {};
 
@@ -8342,7 +8345,6 @@ angle::Result ImageHelper::readPixels(ContextVk *contextVk,
             contextVk, contextVk->hasProtectedContent(), renderer->getMemoryProperties(),
             gl::Extents(area.width, area.height, 1), mIntendedFormatID, mActualFormatID,
             VK_IMAGE_USAGE_TRANSFER_SRC_BIT | VK_IMAGE_USAGE_TRANSFER_DST_BIT, 1));
-        resolvedImage.get().retain(&contextVk->getResourceUseList());
     }
 
     VkImageAspectFlags layoutChangeAspectFlags = src->getAspectFlags();
@@ -9666,6 +9668,30 @@ void CommandBufferAccess::onImageWrite(gl::LevelIndex levelStart,
     ASSERT(image->getImageSerial().valid());
     mWriteImages.emplace_back(CommandBufferImageAccess{image, aspectFlags, imageLayout}, levelStart,
                               levelCount, layerStart, layerCount);
+}
+
+void CommandBufferAccess::onBufferSemaphoreAcquire(SemaphoreVk *semaphore, BufferHelper *buffer)
+{
+    mAcquireSemaphoresBuffers.emplace_back(CommandBufferBufferAcquireSemaphore{semaphore, buffer});
+}
+
+void CommandBufferAccess::onBufferSemaphoreRelease(SemaphoreVk *semaphore, BufferHelper *buffer)
+{
+    mReleaseSemaphoresBuffers.emplace_back(CommandBufferBufferReleaseSemaphore{semaphore, buffer});
+}
+void CommandBufferAccess::onImageSemaphoreAcquire(SemaphoreVk *semaphore, ImageHelper *image)
+{
+    mAcquireSemaphoresImages.emplace_back(CommandBufferImageAcquireSemaphore{semaphore, image});
+}
+
+void CommandBufferAccess::onImageSemaphoreRelease(SemaphoreVk *semaphore, ImageHelper *image)
+{
+    mReleaseSemaphoresImages.emplace_back(CommandBufferImageReleaseSemaphore{semaphore, image});
+}
+
+void CommandBufferAccess::onResourceUpdate(Resource *resource)
+{
+    mUpdateResources.emplace_back(CommandBufferResourceUpdate{resource});
 }
 
 }  // namespace vk
