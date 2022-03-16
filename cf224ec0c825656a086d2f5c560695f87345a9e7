@@ -70,6 +70,24 @@
       "parentUuid": "95c52a4f_226415ef",
       "revId": "cf224ec0c825656a086d2f5c560695f87345a9e7",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "bbead698_dce5ff1a",
+        "filename": "src/libANGLE/renderer/vulkan/vk_cache_utils.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 1206,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2022-03-16T22:26:27Z",
+      "side": 0,
+      "message": "I also have a bit worry on this back on my mind (new GPUs and new driver optimizations etc). But I also do not have alternative proposal. So I am +1 on the CL, but if any ways to safe guard this either with code or performance test will be nice.",
+      "parentUuid": "30ec9e0a_e8cedd09",
+      "revId": "cf224ec0c825656a086d2f5c560695f87345a9e7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
