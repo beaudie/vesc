@@ -1030,6 +1030,11 @@ bool ValidImageSizeParameters(const Context *context,
     return true;
 }
 
+bool ValidCompressedDimension(GLsizei size, GLuint blockSize, GLint level)
+{
+    return (level > 0) || (size % blockSize == 0);
+}
+
 bool ValidCompressedBaseLevelForWebGL(GLsizei size, GLuint blockSize, GLint level)
 {
     // Avoid C++ undefined behavior.
@@ -1089,7 +1094,17 @@ bool ValidCompressedImageSize(const Context *context,
                 return false;
             }
         }
-        // non-WebGL check is not necessary for the following formats
+        // D3D requires the base mip level to have multiple-of-4 dimensions.
+        else if (context->IsD3D())
+        {
+            if (!ValidCompressedDimension(width, formatInfo.compressedBlockWidth, level) ||
+                !ValidCompressedDimension(height, formatInfo.compressedBlockHeight, level) ||
+                !ValidCompressedDimension(depth, formatInfo.compressedBlockDepth, level))
+            {
+                return false;
+            }
+        }
+        // non-WebGL and non-D3D check is not necessary for the following formats
         // From EXT_texture_compression_s3tc specification:
         // If the width or height is not a multiple of four, there will be 4x4 blocks at the edge of
         // the image that contain "extra" texels that are not part of the image. From

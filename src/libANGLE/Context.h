@@ -577,6 +577,20 @@ class Context final : public egl::LabeledObject, angle::NonCopyable, public angl
     bool isWebGL() const { return mState.isWebGL(); }
     bool isWebGL1() const { return mState.isWebGL1(); }
 
+    bool IsD3D11() const
+    {
+        std::string rendererString(reinterpret_cast<const char *>(getString(GL_RENDERER)));
+        return (rendererString.find("Direct3D11 vs_5_0") != std::string::npos);
+    }
+
+    bool IsD3D9() const
+    {
+        std::string rendererString(reinterpret_cast<const char *>(getString(GL_RENDERER)));
+        return (rendererString.find("Direct3D9") != std::string::npos);
+    }
+
+    bool IsD3D() const { return IsD3D9() || IsD3D11(); }
+
     bool isValidBufferBinding(BufferBinding binding) const { return mValidBufferBindings[binding]; }
 
     // GLES1 emulation: Renderer level (for validation)
