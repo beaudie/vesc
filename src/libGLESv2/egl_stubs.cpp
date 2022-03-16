@@ -400,6 +400,7 @@ EGLDisplay GetPlatformDisplay(Thread *thread,
     switch (platform)
     {
         case EGL_PLATFORM_ANGLE_ANGLE:
+        case EGL_PLATFORM_WAYLAND_EXT:
         {
             return Display::GetDisplayFromNativeDisplay(
                 platform, gl::bitCast<EGLNativeDisplayType>(native_display), attribMap);

@@ -877,6 +877,7 @@ Display::~Display()
     switch (mPlatform)
     {
         case EGL_PLATFORM_ANGLE_ANGLE:
+        case EGL_PLATFORM_WAYLAND_EXT:
         {
             ANGLEPlatformDisplayMap *displays      = GetANGLEPlatformDisplayMap();
             ANGLEPlatformDisplayMap::iterator iter = displays->find(ANGLEPlatformDisplay(
