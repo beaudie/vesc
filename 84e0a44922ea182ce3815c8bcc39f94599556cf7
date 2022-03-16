@@ -1,0 +1,55 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ec26836f_1b907c4d",
+        "filename": "src/libANGLE/renderer/vulkan/linux/wayland/DisplayVkWayland.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 196,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-03-16T19:27:14Z",
+      "side": 1,
+      "message": "Can `GetDrmFormats` be cached to avoid re-evaluating it every time?",
+      "revId": "84e0a44922ea182ce3815c8bcc39f94599556cf7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "c29f9c82_b47dcb2d",
+        "filename": "src/libANGLE/renderer/vulkan/linux/wayland/DisplayVkWayland.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 228,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-03-16T19:27:14Z",
+      "side": 1,
+      "message": "A comment with an overview of what this function does would be good.",
+      "revId": "84e0a44922ea182ce3815c8bcc39f94599556cf7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "dbdd75f2_53d145e6",
+        "filename": "src/libANGLE/renderer/vulkan/linux/wayland/DisplayVkWayland.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 254,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-03-16T19:27:14Z",
+      "side": 1,
+      "message": "Is the `set_intersection` addressing a real or theoretical issue? Like are there actually instances of two DRM formats that have the same VK format but not the same modifiers? If not, the logic could be simplified and ASSERT()s added. Otherwise the logic here is just untested code. If yes, nevermind this comment!",
+      "revId": "84e0a44922ea182ce3815c8bcc39f94599556cf7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
