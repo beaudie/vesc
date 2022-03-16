@@ -692,7 +692,8 @@ DisplayState::~DisplayState() {}
 //
 // static
 Display *Display::GetDisplayFromNativeDisplay(EGLNativeDisplayType nativeDisplay,
-                                              const AttributeMap &attribMap)
+                                              const AttributeMap &attribMap,
+                                              EGLenum platform)
 {
     Display *display = nullptr;
 
@@ -722,7 +723,7 @@ Display *Display::GetDisplayFromNativeDisplay(EGLNativeDisplayType nativeDisplay
             return nullptr;
         }
 
-        display = new Display(EGL_PLATFORM_ANGLE_ANGLE, nativeDisplay, nullptr);
+        display = new Display(platform, nativeDisplay, nullptr);
         displays->insert(std::make_pair(displayKey, display));
     }
     // Apply new attributes if the display is not initialized yet.
@@ -730,10 +731,14 @@ Display *Display::GetDisplayFromNativeDisplay(EGLNativeDisplayType nativeDisplay
     {
         display->setAttributes(updatedAttribMap);
 
-        EGLAttrib displayType = display->mAttributeMap.get(EGL_PLATFORM_ANGLE_TYPE_ANGLE);
-        EGLAttrib deviceType  = display->mAttributeMap.get(EGL_PLATFORM_ANGLE_DEVICE_TYPE_ANGLE);
-        EGLAttrib platformType =
-            display->mAttributeMap.get(EGL_PLATFORM_ANGLE_NATIVE_PLATFORM_TYPE_ANGLE);
+        EGLAttrib displayType  = display->mAttributeMap.get(EGL_PLATFORM_ANGLE_TYPE_ANGLE);
+        EGLAttrib deviceType   = display->mAttributeMap.get(EGL_PLATFORM_ANGLE_DEVICE_TYPE_ANGLE);
+        EGLAttrib platformType = platform;
+        if (platform == EGL_PLATFORM_ANGLE_ANGLE)
+        {
+            platformType =
+                display->mAttributeMap.get(EGL_PLATFORM_ANGLE_NATIVE_PLATFORM_TYPE_ANGLE);
+        }
         rx::DisplayImpl *impl =
             CreateDisplayFromAttribs(displayType, deviceType, platformType, display->getState());
         if (impl == nullptr)
