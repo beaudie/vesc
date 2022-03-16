@@ -151,7 +151,8 @@ class Display final : public LabeledObject,
 
     static Display *GetDisplayFromDevice(Device *device, const AttributeMap &attribMap);
     static Display *GetDisplayFromNativeDisplay(EGLNativeDisplayType nativeDisplay,
-                                                const AttributeMap &attribMap);
+                                                const AttributeMap &attribMap,
+                                                GLenum platform);
     static Display *GetExistingDisplayFromNativeDisplay(EGLNativeDisplayType nativeDisplay);
 
     using EglDisplaySet = std::set<Display *>;
