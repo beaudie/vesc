@@ -1360,6 +1360,7 @@ bool ValidateES3TexStorageParametersBase(const Context *context,
     switch (target)
     {
         case TextureType::_2D:
+        case TextureType::External:
         {
             if (width > caps.max2DTextureSize || height > caps.max2DTextureSize)
             {
