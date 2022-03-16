@@ -1030,7 +1030,7 @@ bool ValidImageSizeParameters(const Context *context,
     return true;
 }
 
-bool ValidCompressedBaseLevelForWebGL(GLsizei size, GLuint blockSize, GLint level)
+bool ValidCompressedBaseLevel(GLsizei size, GLuint blockSize, GLint level)
 {
     // Avoid C++ undefined behavior.
     constexpr int maxValidShifts = 31;
@@ -1076,20 +1076,19 @@ bool ValidCompressedImageSize(const Context *context,
 
     if (CompressedTextureFormatRequiresExactSize(internalFormat))
     {
-        // In WebGL compatibility mode, enforce that the base level implied
+        // In WebGL compatibility mode and D3D, enforce that the base level implied
         // by the compressed texture's mip level would conform to the block
-        // size. This is more strict than the non-WebGL check.
-        if (context->isWebGL())
+        // size.
+        if (context->isWebGL() || context->getLimitations().compressedBaseMipLevelMultipleOfFour)
         {
-            if (!ValidCompressedBaseLevelForWebGL(width, formatInfo.compressedBlockWidth, level) ||
-                !ValidCompressedBaseLevelForWebGL(height, formatInfo.compressedBlockHeight,
-                                                  level) ||
-                !ValidCompressedBaseLevelForWebGL(depth, formatInfo.compressedBlockDepth, level))
+            if (!ValidCompressedBaseLevel(width, formatInfo.compressedBlockWidth, level) ||
+                !ValidCompressedBaseLevel(height, formatInfo.compressedBlockHeight, level) ||
+                !ValidCompressedBaseLevel(depth, formatInfo.compressedBlockDepth, level))
             {
                 return false;
             }
         }
-        // non-WebGL check is not necessary for the following formats
+        // non-WebGL and non-D3D check is not necessary for the following formats
         // From EXT_texture_compression_s3tc specification:
         // If the width or height is not a multiple of four, there will be 4x4 blocks at the edge of
         // the image that contain "extra" texels that are not part of the image. From

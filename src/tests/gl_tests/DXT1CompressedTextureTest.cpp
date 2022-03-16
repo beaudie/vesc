@@ -221,6 +221,9 @@ TEST_P(DXT1CompressedTextureTest, NonBlockSizesMipLevels)
 {
     ANGLE_SKIP_TEST_IF(!IsGLExtensionEnabled("GL_EXT_texture_compression_dxt1"));
 
+    // D3D does not support compressed textures where the base mip level is not a multiple of 4
+    ANGLE_SKIP_TEST_IF(IsD3D());
+
     GLTexture texture;
     glBindTexture(GL_TEXTURE_2D, texture.get());
 
