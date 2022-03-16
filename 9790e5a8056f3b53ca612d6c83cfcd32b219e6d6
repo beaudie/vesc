@@ -24,6 +24,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "64f9da91_d01f20f9",
+        "filename": "src/libANGLE/validationES.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 1100,
+      "author": {
+        "id": 1359667
+      },
+      "writtenOn": "2022-03-16T22:47:30Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "7571206b_261fefb8",
+      "range": {
+        "startLine": 1097,
+        "startChar": 82,
+        "endLine": 1100,
+        "endChar": 75
+      },
+      "revId": "9790e5a8056f3b53ca612d6c83cfcd32b219e6d6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "3dc3ef2f_fbef8648",
@@ -37,6 +61,24 @@
       "writtenOn": "2022-03-16T22:30:18Z",
       "side": 1,
       "message": "nit: please use angle_end2end_tests_expectations.txt",
+      "revId": "9790e5a8056f3b53ca612d6c83cfcd32b219e6d6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "12aeb84e_fd24ef3f",
+        "filename": "src/tests/gl_tests/DXT1CompressedTextureTest.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 225,
+      "author": {
+        "id": 1359667
+      },
+      "writtenOn": "2022-03-16T22:47:30Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "3dc3ef2f_fbef8648",
       "revId": "9790e5a8056f3b53ca612d6c83cfcd32b219e6d6",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
