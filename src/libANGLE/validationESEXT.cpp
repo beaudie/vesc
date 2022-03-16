@@ -2592,8 +2592,15 @@ bool ValidateEGLImageTargetTextureStorageEXT(const Context *context,
                                              GLeglImageOES image,
                                              const GLint *attrib_list)
 {
-    UNREACHABLE();
-    return false;
+    Texture *tex = context->getTexture({texture});
+    if (tex == nullptr)
+    {
+        context->validationError(entryPoint, GL_INVALID_OPERATION, kInvalidTextureName);
+        return false;
+    }
+
+    return ValidateEGLImageTargetTexStorageEXT(
+        context, entryPoint, ToGLenum(tex->getState().getType()), image, attrib_list);
 }
 
 bool ValidateEGLImageTargetTexStorageEXT(const Context *context,
@@ -2602,8 +2609,61 @@ bool ValidateEGLImageTargetTexStorageEXT(const Context *context,
                                          GLeglImageOES image,
                                          const GLint *attrib_list)
 {
-    UNREACHABLE();
-    return false;
+    if (!context->getExtensions().EGLImageStorageEXT)
+    {
+        context->validationError(entryPoint, GL_INVALID_OPERATION, kExtensionNotEnabled);
+        return false;
+    }
+
+    gl::TextureType texTargetType = FromGLenum<TextureType>(target);
+    egl::Image *imageObject       = static_cast<egl::Image *>(image);
+
+    switch (texTargetType)
+    {
+        case TextureType::External:
+            if (!context->getExtensions().EGLImageExternalOES)
+            {
+                context->validationError(entryPoint, GL_INVALID_ENUM, kEnumNotSupported);
+            }
+            break;
+        case TextureType::CubeMapArray:
+            if (!context->getExtensions().textureCubeMapArrayAny())
+            {
+                context->validationError(entryPoint, GL_INVALID_ENUM, kEnumNotSupported);
+            }
+            break;
+        case TextureType::_2D:
+        case TextureType::_2DArray:
+        case TextureType::_3D:
+        case TextureType::CubeMap:
+            break;
+        default:
+            context->validationError(entryPoint, GL_INVALID_ENUM, kInvalidTextureTarget);
+            return false;
+    }
+
+    // Validate egl source image is valid
+    if (!ValidateEGLImageObject(context, entryPoint, texTargetType, image))
+    {
+        return false;
+    }
+
+    // attrib list validation
+    if (attrib_list != nullptr && attrib_list[0] != GL_NONE)
+    {
+        context->validationError(entryPoint, GL_INVALID_VALUE, kAttributeListNotNull);
+        return false;
+    }
+
+    GLsizei levels        = imageObject->getLevelCount();
+    Extents size          = imageObject->getExtents();
+    GLsizei width         = static_cast<GLsizei>(size.width);
+    GLsizei height        = static_cast<GLsizei>(size.height);
+    GLsizei depth         = static_cast<GLsizei>(size.depth);
+    GLenum internalformat = imageObject->getFormat().info->sizedInternalFormat;
+
+    return ValidateES3TexStorageParametersBase(context, entryPoint, texTargetType, levels,
+                                               internalformat, width, height, depth);
 }
 
 bool ValidateAcquireTexturesANGLE(const Context *context,
