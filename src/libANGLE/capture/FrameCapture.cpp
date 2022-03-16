@@ -1831,13 +1831,10 @@ bool IsTextureUpdate(CallCapture &call)
         case EntryPoint::GLTextureSubImage1D:
         case EntryPoint::GLTextureSubImage2D:
         case EntryPoint::GLTextureSubImage3D:
-            return true;
-
         case EntryPoint::GLCopyImageSubData:
         case EntryPoint::GLCopyImageSubDataEXT:
         case EntryPoint::GLCopyImageSubDataOES:
-            return false;
-
+            return true;
         default:
             return false;
     }
@@ -5069,6 +5066,7 @@ void FrameCaptureShared::trackTextureUpdate(const gl::Context *context, const Ca
 {
     int index             = 0;
     std::string paramName = "targetPacked";
+    ParamType paramType   = ParamType::TTextureTarget;
 
     // Some calls provide the textureID directly
     switch (call.entryPoint)
@@ -5076,12 +5074,21 @@ void FrameCaptureShared::trackTextureUpdate(const gl::Context *context, const Ca
         case EntryPoint::GLCompressedCopyTextureCHROMIUM:
             index     = 1;
             paramName = "destIdPacked";
+            paramType = ParamType::TTextureID;
             break;
         case EntryPoint::GLCopyTextureCHROMIUM:
         case EntryPoint::GLCopySubTextureCHROMIUM:
         case EntryPoint::GLCopyTexture3DANGLE:
             index     = 3;
             paramName = "destIdPacked";
+            paramType = ParamType::TTextureID;
+            break;
+        case EntryPoint::GLCopyImageSubData:
+        case EntryPoint::GLCopyImageSubDataEXT:
+        case EntryPoint::GLCopyImageSubDataOES:
+            index     = 7;
+            paramName = "dstTarget";
+            paramType = ParamType::TGLenum;
             break;
         default:
             break;
@@ -5089,21 +5096,38 @@ void FrameCaptureShared::trackTextureUpdate(const gl::Context *context, const Ca
 
     // For the rest, look it up based on the currently bound texture
     GLuint id = 0;
-    if (index == 0)
+    switch (paramType)
     {
-        gl::TextureTarget targetPacked =
-            call.params.getParam(paramName.c_str(), ParamType::TTextureTarget, index)
-                .value.TextureTargetVal;
-        gl::TextureType textureType = gl::TextureTargetToType(targetPacked);
-        gl::Texture *texture        = context->getState().getTargetTexture(textureType);
-        id                          = texture->id().value;
-    }
-    else
-    {
-        gl::TextureID destIDPacked =
-            call.params.getParam(paramName.c_str(), ParamType::TTextureID, index)
-                .value.TextureIDVal;
-        id = destIDPacked.value;
+        case ParamType::TTextureTarget:
+        {
+            gl::TextureTarget targetPacked =
+                call.params.getParam(paramName.c_str(), ParamType::TTextureTarget, index)
+                    .value.TextureTargetVal;
+            gl::TextureType textureType = gl::TextureTargetToType(targetPacked);
+            gl::Texture *texture        = context->getState().getTargetTexture(textureType);
+            id                          = texture->id().value;
+            break;
+        }
+        case ParamType::TTextureID:
+        {
+            gl::TextureID destIDPacked =
+                call.params.getParam(paramName.c_str(), ParamType::TTextureID, index)
+                    .value.TextureIDVal;
+            id = destIDPacked.value;
+            break;
+        }
+        case ParamType::TGLenum:
+        {
+            GLenum target =
+                call.params.getParam(paramName.c_str(), ParamType::TGLenum, index).value.GLenumVal;
+            gl::TextureTarget targetPacked = gl::PackParam<gl::TextureTarget>(target);
+            gl::TextureType textureType    = gl::TextureTargetToType(targetPacked);
+            gl::Texture *texture           = context->getState().getTargetTexture(textureType);
+            id                             = texture->id().value;
+            break;
+        }
+        default:
+            UNREACHABLE();
     }
 
     // Mark it as modified
