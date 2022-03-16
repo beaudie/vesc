@@ -87,14 +87,14 @@
 3577 VULKAN : KHR-GLES32.core.gpu_shader5.*clamp*_border = SKIP
 3577 VULKAN : KHR-GLES32.core.gpu_shader5.*clamp*_edge = SKIP
 
-// Validation error from EXT_gpu_shader5
-5361 VULKAN : KHR-GLES32.core.gpu_shader5.precise_qualifier = FAIL
+// Validation error from EXT_gpu_shader5 (seem to be passing on March 16, 2022)
+//5361 VULKAN : KHR-GLES32.core.gpu_shader5.precise_qualifier = FAIL
 
 // No known implementation supports STORAGE_TEXEL_BUFFER support for RGB32 formats
 3573 VULKAN : KHR-GLES32.core.texture_buffer.texture_buffer_texture_buffer_range = SKIP
 
-// Incorrect dependency to VK_EXT_shader_atomic_float
-5342 VULKAN : KHR-GLES32.core.texture_buffer.texture_buffer_atomic_functions = FAIL
+// Incorrect dependency to VK_EXT_shader_atomic_float (seem to be passing on March 16, 2022)
+//5342 VULKAN : KHR-GLES32.core.texture_buffer.texture_buffer_atomic_functions = FAIL
 
 // Desktop cards without native etc support
 5276 AMD VULKAN LINUX : KHR-GLES32.core.texture_cube_map_array.etc2_texture = FAIL
