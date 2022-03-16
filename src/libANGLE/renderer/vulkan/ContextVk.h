@@ -547,6 +547,7 @@ class ContextVk : public ContextImpl, public vk::Context, public MultisampleText
     const gl::OverlayType *getOverlay() const { return mState.getOverlay(); }
 
     vk::ResourceUseList &getResourceUseList() { return mResourceUseList; }
+    vk::ResourceUseList &getResourceUseListForQueryType(VkQueryType queryType);
 
     angle::Result onBufferReleaseToExternal(const vk::BufferHelper &buffer);
     angle::Result onImageReleaseToExternal(const vk::ImageHelper &image);
@@ -1061,9 +1062,11 @@ class ContextVk : public ContextImpl, public vk::Context, public MultisampleText
     angle::Result handleDirtyEventLogImpl(CommandBufferT *commandBuffer);
     template <typename CommandBufferHelperT>
     angle::Result handleDirtyTexturesImpl(CommandBufferHelperT *commandBufferHelper,
+                                          vk::ResourceUseList &resourceUseList,
                                           PipelineType pipelineType);
     template <typename CommandBufferHelperT>
     angle::Result handleDirtyShaderResourcesImpl(CommandBufferHelperT *commandBufferHelper,
+                                                 vk::ResourceUseList &resourceUseList,
                                                  PipelineType pipelineType);
     void handleDirtyShaderBufferResourcesImpl(vk::CommandBufferHelperCommon *commandBufferHelper);
     template <typename CommandBufferT>
@@ -1080,6 +1083,7 @@ class ContextVk : public ContextImpl, public vk::Context, public MultisampleText
                                          uint8_t **ptrOut,
                                          bool *newBufferOut);
     angle::Result updateDriverUniformsDescriptorSet(bool newBuffer,
+                                                    vk::ResourceUseList &resourceUseList,
                                                     size_t driverUniformsSize,
                                                     PipelineType pipelineType);
 
