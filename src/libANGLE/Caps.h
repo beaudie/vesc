@@ -154,6 +154,9 @@ struct Limitations
 
     // No compressed TEXTURE_3D support.
     bool noCompressedTexture3D = false;
+
+    // D3D does not support non-multiple of 4 base mip level
+    bool baseMipLevelMultipleOfFour = false;
 };
 
 struct TypePrecision

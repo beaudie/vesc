@@ -786,6 +786,9 @@ void GenerateCaps(IDirect3D9 *d3d9,
 
     // D3D9 does not support vertex attribute aliasing
     limitations->noVertexAttributeAliasing = true;
+
+    // D3D9 does not support non-multiple of 4 base mip levels
+    limitations->baseMipLevelMultipleOfFour = true;
 }
 
 }  // namespace d3d9_gl
