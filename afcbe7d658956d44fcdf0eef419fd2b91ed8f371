@@ -34,6 +34,24 @@
       "parentUuid": "7578a248_746de840",
       "revId": "afcbe7d658956d44fcdf0eef419fd2b91ed8f371",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "991db157_adf81525",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1528827
+      },
+      "writtenOn": "2022-03-16T15:36:37Z",
+      "side": 1,
+      "message": "Yep, sorry about that.\nI removed the vulkan directory from system includes, and managed to compile both ANGLE and chromium successfully.",
+      "parentUuid": "090a1ecc_4ee326d0",
+      "revId": "afcbe7d658956d44fcdf0eef419fd2b91ed8f371",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
