@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "c016a971_078a59e1",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 6
+      },
+      "lineNbr": 8,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-03-16T17:01:01Z",
+      "side": 1,
+      "message": "Please open a bug at anglebug.com/new and then add the tag here:\n\n```\nBug: angleproject:NNNN\n```\n\nwhere `NNNN` is the bug number.",
+      "revId": "d02c747213e0c954f4859c95494ac4bd042b21f3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "ce06e5bc_aae6333d",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 6
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-03-16T17:01:01Z",
+      "side": 1,
+      "message": "Thanks for the contribution. How tested is ANGLE on this architecture?",
+      "revId": "d02c747213e0c954f4859c95494ac4bd042b21f3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
