@@ -52,6 +52,23 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "eeea9149_2c3558f4",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2022-03-17T17:33:20Z",
+      "side": 1,
+      "message": "I\u0027m not familiar enough with the details of the buffer watching to comment there but I think this approach is good. An extra bool check in setupDraw is not going to be less performant than checking in ContextMtl and this seems like a good place to have the logic.",
+      "revId": "62f1d2e6dc28e82367aaf823968373c2e6917329",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "2b51a19f_6433d69c",
