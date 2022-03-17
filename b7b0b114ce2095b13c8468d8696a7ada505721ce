@@ -1,0 +1,67 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "e5fc5209_bf0cf248",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2022-03-17T19:13:40Z",
+      "side": 1,
+      "message": "Just some drive-by nits as I was looking at the failing webgl test.",
+      "revId": "b7b0b114ce2095b13c8468d8696a7ada505721ce",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b47d1fc6_47c5cdcb",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 5843,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2022-03-17T19:13:40Z",
+      "side": 1,
+      "message": "I would move these into new contextvk functions which do the same check as getDefaultBufferPool instead of doing the ternary operators here.",
+      "range": {
+        "startLine": 5839,
+        "startChar": 8,
+        "endLine": 5843,
+        "endChar": 97
+      },
+      "revId": "b7b0b114ce2095b13c8468d8696a7ada505721ce",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "09a22a69_d6d79654",
+        "filename": "src/libANGLE/renderer/vulkan/vk_utils.h",
+        "patchSetId": 4
+      },
+      "lineNbr": 477,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2022-03-17T19:13:40Z",
+      "side": 1,
+      "message": "nit: capitalized function names if they\u0027re global.",
+      "range": {
+        "startLine": 468,
+        "startChar": 0,
+        "endLine": 477,
+        "endChar": 0
+      },
+      "revId": "b7b0b114ce2095b13c8468d8696a7ada505721ce",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
