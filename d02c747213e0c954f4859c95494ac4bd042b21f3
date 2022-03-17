@@ -18,6 +18,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": true,
+      "key": {
+        "uuid": "9d744342_fef8b1f5",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 6
+      },
+      "lineNbr": 8,
+      "author": {
+        "id": 1526012
+      },
+      "writtenOn": "2022-03-17T02:45:21Z",
+      "side": 1,
+      "message": "ok, a bug is created: https://bugs.chromium.org/p/angleproject/issues/detail?id\u003d7104",
+      "parentUuid": "c016a971_078a59e1",
+      "revId": "d02c747213e0c954f4859c95494ac4bd042b21f3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": false,
       "key": {
         "uuid": "ce06e5bc_aae6333d",
