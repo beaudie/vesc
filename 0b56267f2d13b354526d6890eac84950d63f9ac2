@@ -16,6 +16,24 @@
       "message": "Alternatively, you could just move the case label up one line and remove the fallthrough. gl_FragCoord is not going to be invariant anyway.\n\nThat\u0027s assuming [[position]] is applicable to gl_FragCoord for some reason and that\u0027s not a bug.",
       "revId": "0b56267f2d13b354526d6890eac84950d63f9ac2",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "905d4ffb_4dd3b9c0",
+        "filename": "src/compiler/translator/TranslatorMetalDirect/EmitMetal.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 783,
+      "author": {
+        "id": 1116015
+      },
+      "writtenOn": "2022-03-17T13:40:56Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "6bd6bf39_43a8acd7",
+      "revId": "0b56267f2d13b354526d6890eac84950d63f9ac2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
