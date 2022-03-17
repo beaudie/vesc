@@ -88,7 +88,7 @@ HRESULT NativeWindow11Win32::createSwapChain(ID3D11Device *device,
         {
             IDXGIDevice *dxgiDevice = d3d11::DynamicCastComObject<IDXGIDevice>(device);
             HRESULT result          = createDComp(dxgiDevice, __uuidof(IDCompositionDevice),
-                                         reinterpret_cast<void **>(&mDevice));
+                                                  reinterpret_cast<void **>(&mDevice));
             SafeRelease(dxgiDevice);
 
             if (FAILED(result))
@@ -160,7 +160,7 @@ HRESULT NativeWindow11Win32::createSwapChain(ID3D11Device *device,
         swapChainDesc.BufferUsage =
             DXGI_USAGE_RENDER_TARGET_OUTPUT | DXGI_USAGE_SHADER_INPUT | DXGI_USAGE_BACK_BUFFER;
         swapChainDesc.BufferCount   = 1;
-        swapChainDesc.Scaling       = DXGI_SCALING_STRETCH;
+        swapChainDesc.Scaling       = DXGI_SCALING_NONE;
         swapChainDesc.SwapEffect    = DXGI_SWAP_EFFECT_SEQUENTIAL;
         swapChainDesc.AlphaMode     = DXGI_ALPHA_MODE_UNSPECIFIED;
         swapChainDesc.Flags         = 0;

@@ -368,11 +368,6 @@ EGLint SwapChain11::resetOffscreenColorBuffer(DisplayD3D *displayD3D,
         const int yoffset                  = std::max(backbufferHeight - previousHeight, 0);
         deviceContext->CopySubresourceRegion(mOffscreenTexture.get(), 0, 0, yoffset, 0,
                                              previousOffscreenTexture.get(), 0, &sourceBox);
-
-        if (mSwapChain)
-        {
-            swapRect(displayD3D, 0, 0, backbufferWidth, backbufferHeight);
-        }
     }
 
     return EGL_SUCCESS;
