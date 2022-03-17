@@ -1067,11 +1067,12 @@ bool ValidImageSizeParameters(const Context *context,
 
 bool ValidCompressedBaseLevel(GLsizei size, GLuint blockSize, GLint level)
 {
-    // Avoid C++ undefined behavior.
-    constexpr int maxValidShifts = 31;
-    if (level > maxValidShifts)
-        return false;
-    return ((size << level) % blockSize) == 0;
+    // Already checked in ValidMipLevel.
+    ASSERT(level < 32);
+    // This function is used only for 4x4 BC formats.
+    ASSERT(blockSize == 4);
+    // Use the constant value to avoid division.
+    return ((size << level) % 4) == 0;
 }
 
 bool ValidCompressedImageSize(const Context *context,
