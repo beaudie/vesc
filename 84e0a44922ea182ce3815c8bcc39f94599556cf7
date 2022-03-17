@@ -18,6 +18,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "c153a442_e2703d37",
+        "filename": "src/libANGLE/renderer/vulkan/linux/wayland/DisplayVkWayland.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 196,
+      "author": {
+        "id": 1528827
+      },
+      "writtenOn": "2022-03-17T11:18:01Z",
+      "side": 1,
+      "message": "I moved it in the `initialize()` function.",
+      "parentUuid": "ec26836f_1b907c4d",
+      "revId": "84e0a44922ea182ce3815c8bcc39f94599556cf7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "c29f9c82_b47dcb2d",
@@ -35,6 +53,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "05dafb95_1b747ee1",
+        "filename": "src/libANGLE/renderer/vulkan/linux/wayland/DisplayVkWayland.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 228,
+      "author": {
+        "id": 1528827
+      },
+      "writtenOn": "2022-03-17T11:18:01Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "c29f9c82_b47dcb2d",
+      "revId": "84e0a44922ea182ce3815c8bcc39f94599556cf7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "dbdd75f2_53d145e6",
@@ -48,6 +84,24 @@
       "writtenOn": "2022-03-16T19:27:14Z",
       "side": 1,
       "message": "Is the `set_intersection` addressing a real or theoretical issue? Like are there actually instances of two DRM formats that have the same VK format but not the same modifiers? If not, the logic could be simplified and ASSERT()s added. Otherwise the logic here is just untested code. If yes, nevermind this comment!",
+      "revId": "84e0a44922ea182ce3815c8bcc39f94599556cf7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ad3e2837_24dd0df0",
+        "filename": "src/libANGLE/renderer/vulkan/linux/wayland/DisplayVkWayland.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 254,
+      "author": {
+        "id": 1528827
+      },
+      "writtenOn": "2022-03-17T11:18:01Z",
+      "side": 1,
+      "message": "I actually had an issue testing this, and I think we should look at the problem from a different perspective, where a DRM format may correspond to multiple VK formats.\n\nWe use Vulkan calls to collect modifiers for those Vulkan formats, but each format can have a different set of modifiers. E.g. the driver of my integrated graphics card, advertises `DRM_FOURCC_I915_Y_TILED_CCS` for `VK_FORMAT_B8G8R8A8_UNORM`, but it does not for `VK_FORMAT_B8G8R8A8_SRGB`.\n\nWe can not distinguish DRM formats between UNORM and SRGB, hence we return both here:\n```\nstd::vector\u003cVkFormat\u003e DrmFourCCFormatToVkFormats(int fourccFormat) {\n  // ...\n  case DRM_FORMAT_ARGB8888:\n  case DRM_FORMAT_XRGB8888:\n    return {VK_FORMAT_B8G8R8A8_SRGB, VK_FORMAT_B8G8R8A8_UNORM};\n  // ...\n}\n```\n\nFinally, we need to guarantee that the DRM format modifiers returned by `queryDmaBufModifiers` are actually valid for all our possible Vulkan formats, hence why the intersection.",
+      "parentUuid": "dbdd75f2_53d145e6",
       "revId": "84e0a44922ea182ce3815c8bcc39f94599556cf7",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
