@@ -22,6 +22,30 @@
       },
       "revId": "3c4d5577053575ddc6d279d1907084a940c67406",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "f73d481c_029a65d6",
+        "filename": "src/libANGLE/renderer/vulkan/vk_cache_utils.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 1290,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-03-17T03:06:32Z",
+      "side": 1,
+      "message": "Ack, but I left it if you don\u0027t mind. At the call site (here), it\u0027s not obvious that `InitializeDefaultSubpassSelfDependencies` always adds a dependency. In fact, I plan to make it not do so when taking advantage of the ARM coherent thingy extension.",
+      "parentUuid": "10780efc_ff921a6e",
+      "range": {
+        "startLine": 1290,
+        "startChar": 4,
+        "endLine": 1290,
+        "endChar": 37
+      },
+      "revId": "3c4d5577053575ddc6d279d1907084a940c67406",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }

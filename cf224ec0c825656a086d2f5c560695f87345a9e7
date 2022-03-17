@@ -88,6 +88,24 @@
       "parentUuid": "30ec9e0a_e8cedd09",
       "revId": "cf224ec0c825656a086d2f5c560695f87345a9e7",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "3bf62a8c_dc25592b",
+        "filename": "src/libANGLE/renderer/vulkan/vk_cache_utils.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 1206,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-03-17T03:06:32Z",
+      "side": 0,
+      "message": "Ack. I did manually check on ARM to make sure there are no regressions (there were none), at some point we should be able to rely on our perf bots to catch regressions.",
+      "parentUuid": "bbead698_dce5ff1a",
+      "revId": "cf224ec0c825656a086d2f5c560695f87345a9e7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
