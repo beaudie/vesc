@@ -68,6 +68,24 @@
       "parentUuid": "8dc019ed_71dd8111",
       "revId": "29b0ff7fca7cdda42b228ab93896f58874934cad",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "bd4e5b0f_3126f857",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 1064,
+      "author": {
+        "id": 1525982
+      },
+      "writtenOn": "2022-03-17T20:03:50Z",
+      "side": 1,
+      "message": "Thanks. Removed the ContextVk retains in those functions, as well as a few others.",
+      "parentUuid": "98af2629_a744d741",
+      "revId": "29b0ff7fca7cdda42b228ab93896f58874934cad",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
