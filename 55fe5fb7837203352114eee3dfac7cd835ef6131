@@ -34,6 +34,24 @@
       "parentUuid": "0779e786_74a35635",
       "revId": "55fe5fb7837203352114eee3dfac7cd835ef6131",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "66ce2dfe_1ca0337b",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1125810
+      },
+      "writtenOn": "2022-03-17T13:23:17Z",
+      "side": 1,
+      "message": "Mmm.\n\nThe first question is: why EGL_PLATFORM_ANGLE_ANGLE? I can see how that makes sense from a WebGL perspective, but otherwise ANGLE is not a platform. A wl_surface or an X11 Window or a HWND is not ANGLE\u0027s native window type - so why would you create an ANGLE platform to pass in those types? (I can guess at the history here and that it would still make a certain amount of sense to choose between underlying implementations, but glvnd/EGLDevice are a better fit for that if you ask me.)\n\nSecondly, on non-Windows/Android systems, there is no \u0027the display\u0027, so we need to pass in a native display pointer. There can be multiple Wayland servers or X servers on a single machine: if you\u0027re using completely separate instances for app isolation, or nested instances also for isolation, or for development, etc. Chromium itself contains a Wayland server ... so we need to pass in a pointer to the underlying display (again in friction with EGL_PLATFORM_ANGLE_ANGLE, given that the EGL platform interface was meant to disambiguate these types, not just keep them mashed up but with more verbosity for the user).\n\nEven if there was only one system-global display server, you still need to pass in a pointer to a display connection for correctness. Wayland has a strictly per-client ID space, so you cannot create a Wayland surface from one connection and pass it to another connection. X11 does not have this restriction as it has global IDs, but there are sequencing issues: if you call XCreateWindow on one connection and pass that Window ID to another connection, it might work. Or it might not, if you haven\u0027t done a blocking roundtrip to make sure the server has processed your window-create request, which is pretty pointless. (There are other sequencing issues even in the steady state, but you get the idea.)\n\nSo we\u0027re already at the point of a hard requirement for native display and window types being passed in through the platform interface - and a wl_display/wl_surface is _not_ ANGLE\u0027s \u0027native type\u0027.\n\nEven if you close your eyes and ignore this, there isn\u0027t even one window system. On a modern native Wayland system, you will have three window systems available to you. The Wayland server will be using EGL+GL(ES) to do its own internal composition, and it wants to use EGL_KHR_platform_gbm: its output isn\u0027t feeding itself, but its upstream display platform, which is DRM/KMS for the display controller. Wayland clients will of course be using EGL_KHR_platform_wayland to connect to the Wayland server. X11 clients will be using EGL_KHR_platform_x11 to connect to the Xwayland server, which will in turn be using EGL_KHR_platform_wayland to connect to the Wayland server. (For native X11-only systems, it\u0027s similar: the X server uses EGL_KHR_platform_gbm, and clients use EGL_KHR_platform_x11).\n\nSo yeah, that\u0027s what necessitates implementing the platforms: we _could_ group three window systems under EGL_PLATFORM_ANGLE_ANGLE and attempt to internally disambiguate, but ... why? The EGL platform extensions were literally created to make it unambiguous to begin with.\n\nThe other, larger, issue is about just using ANGLE for general-purpose systems. Every Wayland client out there today uses EGL_PLATFORM_WAYLAND_KHR. If you\u0027re deploying a general-purpose system with ANGLE as the EGL/GL(ES) implementation, it means every single client would have to be patched to use EGL_PLATFORM_ANGLE_ANGLE instead. That\u0027s not really a good idea (as above) and also probably infeasible.\n\nSo yeah, coming back to the first question - is there a reason to _not_ implement the actual platform extensions?",
+      "parentUuid": "033bc216_f90d737d",
+      "revId": "55fe5fb7837203352114eee3dfac7cd835ef6131",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
