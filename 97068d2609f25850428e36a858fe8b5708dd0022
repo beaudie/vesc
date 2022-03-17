@@ -86,6 +86,24 @@
       "parentUuid": "ec7f95c9_007afba8",
       "revId": "97068d2609f25850428e36a858fe8b5708dd0022",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "1e853a92_da060307",
+        "filename": "src/common/vulkan/vulkan_icd.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 60,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2022-03-17T15:08:59Z",
+      "side": 1,
+      "message": "Thanks, the variables in vk_utils.cpp are actually unused and I removed them. The other references are all in other projects. I believe most people are already alerted to this upcoming change.",
+      "parentUuid": "3f8eb86a_8e8fb4bb",
+      "revId": "97068d2609f25850428e36a858fe8b5708dd0022",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
