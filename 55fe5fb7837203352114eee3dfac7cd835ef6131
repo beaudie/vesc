@@ -70,6 +70,24 @@
       "parentUuid": "66ce2dfe_1ca0337b",
       "revId": "55fe5fb7837203352114eee3dfac7cd835ef6131",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "8ddf2272_6e13783a",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2022-03-17T13:51:32Z",
+      "side": 1,
+      "message": "I don\u0027t think we need to dig too deeply into the pros/cons of platform_angle vs other platform exts. It\u0027s just kinda where we ended up without really researching the most idiomatic extensions. I like re-using existing extensions where possible.\n\nOne request would be to split up this CL into a refactoring CL and a functionality CL. There\u0027s quite a few large diffs that would be nice to hide in a simple prior CL.",
+      "parentUuid": "e8f983b9_f6e1d8b1",
+      "revId": "55fe5fb7837203352114eee3dfac7cd835ef6131",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
