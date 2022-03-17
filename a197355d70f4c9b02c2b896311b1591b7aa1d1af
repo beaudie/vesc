@@ -1,6 +1,23 @@
 {
   "comments": [
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "82ee1baa_2cfcb750",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 7
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2022-03-17T20:10:39Z",
+      "side": 1,
+      "message": "Overall this lgtm, but I\u0027m concerned about changing the behavior of our test runs on the dual-GPU MacBook Pros. Have sent this for a dry run, though green won\u0027t necessarily prove that the tests were run on the desired GPU.\n",
+      "revId": "a197355d70f4c9b02c2b896311b1591b7aa1d1af",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "3ab986a4_7f03defd",
