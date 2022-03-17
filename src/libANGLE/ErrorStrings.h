@@ -19,6 +19,7 @@ namespace err
 MSG k3DDepthStencil = "Format cannot be GL_DEPTH_COMPONENT or GL_DEPTH_STENCIL if target is GL_TEXTURE_3D";
 MSG kANGLECopyTexture3DUnavailable = "GL_ANGLE_copy_texture_3d extension not available.";
 MSG kAtomicCounterResourceName = "Active atomic counter resources are not assigned name strings.";
+MSG kAttributeListNotNull = "Attribute list must be NULL or GL_NONE";
 MSG kAttributeZeroRequiresDivisorLimitation = "The current context doesn't support setting a non-zero divisor on the attribute with index zero. Please reorder the attributes in your vertex shader so that attribute zero can have a zero divisor.";
 MSG kBaseLevelNegative = "Base level must be at least 0.";
 MSG kBaseLevelNonZero = "Base level must be 0.";
@@ -100,6 +101,7 @@ MSG kDrawIndirectBufferNotBound = "Draw indirect buffer must be bound.";
 MSG kEGLImageCannotCreate2DMultisampled = "Cannot create a 2D texture from a multisampled EGL image.";
 MSG kEGLImageRenderbufferFormatNotSupported = "EGL image internal format is not supported as a renderbuffer.";
 MSG kEGLImageTextureFormatNotSupported = "EGL image internal format is not supported as a texture.";
+MSG kEGLImageTextureTargetMismatch = "The source EGL image is incompatible with the target texture type.";
 MSG kElementArrayBufferBoundForTransformFeedback = "It is undefined behavior to use an element array buffer that is bound for transform feedback.";
 MSG kElementArrayNoBufferOrPointer = "No element array buffer and no pointer.";
 MSG kEnumNotSupported = "Enum is not currently supported.";
