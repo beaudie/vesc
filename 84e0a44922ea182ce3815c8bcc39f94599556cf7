@@ -122,6 +122,24 @@
       "parentUuid": "dbdd75f2_53d145e6",
       "revId": "84e0a44922ea182ce3815c8bcc39f94599556cf7",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "fb5244ba_270a664e",
+        "filename": "src/libANGLE/renderer/vulkan/linux/wayland/DisplayVkWayland.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 254,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-03-17T14:06:42Z",
+      "side": 1,
+      "message": "Ack, thanks for the details.",
+      "parentUuid": "76e5d7b2_0c525a8c",
+      "revId": "84e0a44922ea182ce3815c8bcc39f94599556cf7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
