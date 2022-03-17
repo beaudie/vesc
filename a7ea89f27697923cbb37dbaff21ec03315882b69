@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "8f8e0f0b_782f961a",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 14
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2022-03-17T17:59:50Z",
+      "side": 1,
+      "message": "Charlie/Yuxin PTAL. Frank/Shabi FYI.",
+      "revId": "a7ea89f27697923cbb37dbaff21ec03315882b69",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
