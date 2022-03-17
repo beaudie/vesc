@@ -52,6 +52,24 @@
       "parentUuid": "033bc216_f90d737d",
       "revId": "55fe5fb7837203352114eee3dfac7cd835ef6131",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "e8f983b9_f6e1d8b1",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1125810
+      },
+      "writtenOn": "2022-03-17T13:47:15Z",
+      "side": 1,
+      "message": "Arguing with myself: the obvious counter would be that the EGL_ANGLE_platform_angle_* extensions let you specify details about the underlying implementation (e.g. \u0027I want ANGLE to use Vulkan\u0027 or \u0027I want ANGLE to use Metal\u0027). But these are orthogonal to \u0027I want ANGLE to use Wayland and I want to connect to this Wayland server\u0027.\n\nEGLDevice is in a similar boat: it\u0027s specified as an EGL platform, but \u0027I want to use my powerful discrete GPU\u0027 and \u0027I want to display on this Wayland server\u0027 should not be conflated and mutually exclusive.\n\nTo that end we\u0027d discussed a new extension which would make them orthogonal: https://github.com/KhronosGroup/EGL-Registry/pull/23\n\nSo platform would be reserved for window-system specification as intended, and device would be about how the rendering occurred. If we were able to push that forward (we haven\u0027t because we\u0027ve been working on a bunch of Mesa internals to make it usefully possible and multi-GPU works just about well enough that it hasn\u0027t been burningly critical), then ANGLE could do the same: enumerate devices for each of the underlying GPUs/APIs/whatever, apps who don\u0027t care would get the default, and apps who did care could still specify details about the rendering via device together with details about the winsys via platform.",
+      "parentUuid": "66ce2dfe_1ca0337b",
+      "revId": "55fe5fb7837203352114eee3dfac7cd835ef6131",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
