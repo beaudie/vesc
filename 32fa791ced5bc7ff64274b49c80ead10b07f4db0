@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "00bf1893_fcf2ec5c",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 10
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-03-17T03:43:19Z",
+      "side": 1,
+      "message": "suggestion for the title:\n\n```\nAdd loongarch support\n```",
+      "revId": "32fa791ced5bc7ff64274b49c80ead10b07f4db0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "2755fe46_8c566a80",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 10
+      },
+      "lineNbr": 10,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-03-17T03:43:19Z",
+      "side": 1,
+      "message": "nit: you\u0027d need to remove this blank line to avoid a presubmit check error.",
+      "revId": "32fa791ced5bc7ff64274b49c80ead10b07f4db0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
