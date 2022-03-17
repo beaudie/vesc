@@ -16,6 +16,23 @@
       "message": "Thanks!",
       "revId": "29b0ff7fca7cdda42b228ab93896f58874934cad",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "9acdabf6_0030eb83",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2022-03-17T16:48:42Z",
+      "side": 1,
+      "message": "LGTM. You should also want add another reviewer here.",
+      "revId": "29b0ff7fca7cdda42b228ab93896f58874934cad",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
