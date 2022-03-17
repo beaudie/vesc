@@ -106,6 +106,24 @@
       "parentUuid": "8ddf2272_6e13783a",
       "revId": "55fe5fb7837203352114eee3dfac7cd835ef6131",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "bf5edc25_cda5fcfd",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-03-17T14:21:54Z",
+      "side": 1,
+      "message": "Thanks for the explanations. SGTM",
+      "parentUuid": "03f83708_ce60e450",
+      "revId": "55fe5fb7837203352114eee3dfac7cd835ef6131",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
