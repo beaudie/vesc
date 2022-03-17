@@ -3,6 +3,29 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "6325dc5f_62fe9005",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 6347,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2022-03-17T00:46:29Z",
+      "side": 1,
+      "message": "You need to call getShareGroupVk()-\u003eacquireResourceUseList(std::move(mOutsideRenderPassCommands-\u003egetResourceUseList())); before this.",
+      "range": {
+        "startLine": 6347,
+        "startChar": 25,
+        "endLine": 6347,
+        "endChar": 47
+      },
+      "revId": "604645133e6ed0d5f865de53e2a8af7391216ec4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "31ba3426_ccad9464",
         "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
         "patchSetId": 1
