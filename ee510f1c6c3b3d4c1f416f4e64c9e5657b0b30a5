@@ -16,6 +16,24 @@
       "message": "Should this instead fall back to X11?\n\nLike (untested code):\n\n```\n#    if defined(ANGLE_USE_WAYLAND)\n    // Prefer wayland\n    mNativeDisplay \u003d bitCast\u003ceglw::EGLNativeDisplayType\u003e(wl_display_connect(nullptr));\n#    endif\n#    if defined(ANGLE_USE_X11)\n    // Make sure to only open the X display once so that it can be used by the EGL display as well\n    // as pixmaps\n    if (mNativeDisplay \u003d\u003d 0)\n    {\n        mNativeDisplay \u003d bitCast\u003ceglw::EGLNativeDisplayType\u003e(XOpenDisplay(nullptr));\n    }\n#    endif\n```",
       "revId": "ee510f1c6c3b3d4c1f416f4e64c9e5657b0b30a5",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "c40580d7_2e1d4097",
+        "filename": "src/tests/deqp_support/tcuANGLENativeDisplayFactory.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 435,
+      "author": {
+        "id": 1528827
+      },
+      "writtenOn": "2022-03-17T11:24:28Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "f074dbda_339cbc9a",
+      "revId": "ee510f1c6c3b3d4c1f416f4e64c9e5657b0b30a5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
