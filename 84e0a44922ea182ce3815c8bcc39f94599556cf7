@@ -104,6 +104,24 @@
       "parentUuid": "dbdd75f2_53d145e6",
       "revId": "84e0a44922ea182ce3815c8bcc39f94599556cf7",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "76e5d7b2_0c525a8c",
+        "filename": "src/libANGLE/renderer/vulkan/linux/wayland/DisplayVkWayland.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 254,
+      "author": {
+        "id": 1125810
+      },
+      "writtenOn": "2022-03-17T12:43:25Z",
+      "side": 1,
+      "message": "It\u0027s the other way around - one DRM format can map to multiple Vulkan formats. DRM formats don\u0027t carry colourspace information, so DRM_FORMAT_XRGB8888 can be either VK_FORMAT_B8G8R8_UNORM or VK_FORMAT_B8G8R8_SRGB (channel inversion intentional).\n\nsRGB tends to have more restrictions on it than UNORM, e.g. Intel only allows compression on UNORM.",
+      "parentUuid": "dbdd75f2_53d145e6",
+      "revId": "84e0a44922ea182ce3815c8bcc39f94599556cf7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
