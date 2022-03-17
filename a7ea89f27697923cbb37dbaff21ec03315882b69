@@ -16,6 +16,23 @@
       "message": "Charlie/Yuxin PTAL. Frank/Shabi FYI.",
       "revId": "a7ea89f27697923cbb37dbaff21ec03315882b69",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "bf02fcea_fb27ed45",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 14
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2022-03-17T21:32:12Z",
+      "side": 1,
+      "message": "I suggest for mean value, we exclude the first one second of run, so that the texture loading memory usage will be reflected by peak memory usage, but not get into the \"stable\" memory usage. And be consistent with data out of Cody\u0027s script as well. ",
+      "revId": "a7ea89f27697923cbb37dbaff21ec03315882b69",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
