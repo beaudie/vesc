@@ -22,6 +22,30 @@
       },
       "revId": "a932231b1d90411fcf04eec30107b033ba384d1f",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "6bbda249_57782046",
+        "filename": "src/libANGLE/Caps.h",
+        "patchSetId": 6
+      },
+      "lineNbr": 695,
+      "author": {
+        "id": 1528827
+      },
+      "writtenOn": "2022-03-17T13:56:49Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "698b97b2_1b689de8",
+      "range": {
+        "startLine": 695,
+        "startChar": 9,
+        "endLine": 695,
+        "endChar": 25
+      },
+      "revId": "a932231b1d90411fcf04eec30107b033ba384d1f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
