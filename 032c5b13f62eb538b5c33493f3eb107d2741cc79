@@ -1,0 +1,112 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "ba6dc5e3_6d7d390c",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-03-17T03:19:48Z",
+      "side": 1,
+      "message": "We need to figure out a way to test this for correctness. The new test passes because the counter says the resolve has happened, while it actually hasn\u0027t.\n\nWe might be able to take advantage of the buffer age extension for that.",
+      "revId": "032c5b13f62eb538b5c33493f3eb107d2741cc79",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "5f977b42_7705f923",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 3346,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-03-17T03:19:48Z",
+      "side": 1,
+      "message": "Something is missing here. The render pass is never told what the resolve image is! We need to pass in both the single sampled image and the swapchain image (which obviates isMultisampled).",
+      "revId": "032c5b13f62eb538b5c33493f3eb107d2741cc79",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "4a309996_620c01fd",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 3355,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-03-17T03:19:48Z",
+      "side": 1,
+      "message": "One (existing) issue here is that this is making the render pass set the layout of the MSAA image to PRESENT_SRC, instead of the resolve image.\n\nThe code in RenderPassCommandBufferHelper that chooses the layout would also need to be made aware of the fact that the image may be a resolve attachment, not necessarily the color attachment. I have left a TODO in `finalizeColorImageLayout` about that.",
+      "revId": "032c5b13f62eb538b5c33493f3eb107d2741cc79",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "9c1709a8_87d63a95",
+        "filename": "src/libANGLE/renderer/vulkan/SurfaceVk.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 1690,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-03-17T03:19:48Z",
+      "side": 1,
+      "message": "Probably need to call finalizeImageLayout on the MSAA image too, based on the comment in ContextVk.cpp",
+      "revId": "032c5b13f62eb538b5c33493f3eb107d2741cc79",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "05190e88_5db4b6d7",
+        "filename": "src/libANGLE/renderer/vulkan/SurfaceVk.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 1695,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-03-17T03:19:48Z",
+      "side": 1,
+      "message": "There should be some feedback from `optimizeRenderPassForPresent` that indicates whether resolve actually happened on the subpass. If so, this if should not be taken.",
+      "revId": "032c5b13f62eb538b5c33493f3eb107d2741cc79",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "44ef4d48_d8c01230",
+        "filename": "src/libANGLE/renderer/vulkan/SurfaceVk.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 1722,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-03-17T03:19:48Z",
+      "side": 1,
+      "message": "*As a follow up*, could you please move this up to before `optimizeRenderPassForPresent`?",
+      "range": {
+        "startLine": 1718,
+        "startChar": 0,
+        "endLine": 1722,
+        "endChar": 5
+      },
+      "revId": "032c5b13f62eb538b5c33493f3eb107d2741cc79",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
