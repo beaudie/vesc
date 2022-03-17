@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "3ab986a4_7f03defd",
+        "filename": "src/gpu_info_util/SystemInfo.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 418,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2022-03-17T14:23:35Z",
+      "side": 1,
+      "message": "Could we not cache this? Looks like it will change the behaviour if the user tries to create a new display by changing the environment variable. I also think it\u0027s probably more intuitive.",
+      "range": {
+        "startLine": 413,
+        "startChar": 0,
+        "endLine": 418,
+        "endChar": 30
+      },
+      "revId": "a197355d70f4c9b02c2b896311b1591b7aa1d1af",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "f45c59e9_c11fc1e3",
+        "filename": "src/gpu_info_util/SystemInfo.h",
+        "patchSetId": 7
+      },
+      "lineNbr": 65,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2022-03-17T14:23:35Z",
+      "side": 1,
+      "message": "Can this return the index into gpus instead? That would allow users to get other info about the gpu as well without searching for the one with the matching device id.\n\nI would call it `getPreferredGPUIndex` in that case.",
+      "range": {
+        "startLine": 65,
+        "startChar": 18,
+        "endLine": 65,
+        "endChar": 32
+      },
+      "revId": "a197355d70f4c9b02c2b896311b1591b7aa1d1af",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
