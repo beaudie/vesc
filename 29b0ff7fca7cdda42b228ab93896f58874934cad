@@ -33,6 +33,23 @@
       "message": "LGTM. You should also want add another reviewer here.",
       "revId": "29b0ff7fca7cdda42b228ab93896f58874934cad",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "8dc019ed_71dd8111",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 1064,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-03-17T16:57:35Z",
+      "side": 1,
+      "message": "Why the double retains?",
+      "revId": "29b0ff7fca7cdda42b228ab93896f58874934cad",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
