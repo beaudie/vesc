@@ -5836,9 +5836,11 @@ angle::Result ContextVk::flushAndGetSerial(const vk::Semaphore *signalSemaphore,
     if ((renderPassClosureReason == RenderPassClosureReason::GLFlush ||
          renderPassClosureReason == RenderPassClosureReason::GLFinish ||
          renderPassClosureReason == RenderPassClosureReason::EGLSwapBuffers) &&
-        mShareGroupVk->isDueForBufferPoolPrune())
+        (mState.hasDisplayTextureShareGroup() ? mRenderer->isDueForBufferPoolPrune()
+                                              : mShareGroupVk->isDueForBufferPoolPrune()))
     {
-        mShareGroupVk->pruneDefaultBufferPools(mRenderer);
+        mState.hasDisplayTextureShareGroup() ? mRenderer->pruneDefaultBufferPools()
+                                             : mShareGroupVk->pruneDefaultBufferPools(mRenderer);
     }
 
     return angle::Result::Continue;
