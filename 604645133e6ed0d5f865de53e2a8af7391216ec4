@@ -24,6 +24,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "a2ab3e01_466a2b32",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 6347,
+      "author": {
+        "id": 1525982
+      },
+      "writtenOn": "2022-03-17T00:51:25Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "6325dc5f_62fe9005",
+      "range": {
+        "startLine": 6347,
+        "startChar": 25,
+        "endLine": 6347,
+        "endChar": 47
+      },
+      "revId": "604645133e6ed0d5f865de53e2a8af7391216ec4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "31ba3426_ccad9464",
@@ -37,6 +61,30 @@
       "writtenOn": "2022-03-17T00:35:25Z",
       "side": 1,
       "message": "I think you should assert mResourceUseList.empty() here and will be able to find bugs.",
+      "range": {
+        "startLine": 1033,
+        "startChar": 4,
+        "endLine": 1033,
+        "endChar": 43
+      },
+      "revId": "604645133e6ed0d5f865de53e2a8af7391216ec4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "57fb2d1a_437d10ee",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 1033,
+      "author": {
+        "id": 1525982
+      },
+      "writtenOn": "2022-03-17T00:51:25Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "31ba3426_ccad9464",
       "range": {
         "startLine": 1033,
         "startChar": 4,
