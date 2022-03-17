@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "01f810ff_94c16e00",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-03-17T02:44:46Z",
+      "side": 1,
+      "message": "Rubber stamper didn\u0027t stamp. Does this still need to land?",
+      "revId": "5f1cc698b5edae3e91f73a4afb7e83cec505119d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
