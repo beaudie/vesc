@@ -16,6 +16,24 @@
       "message": "this is the win-trace bot failure -\n\n Unexpected \u0027Fail\u0027 (1):\n[INFO/MainProcess]      ImageTestES3.Source2DTarget2DStorageOrphan/ES3_Vulkan_SwiftShader Fail (expected Pass or is new test)\n\nit is indeed a new test, how do you usually resolve this?",
       "revId": "6289c0319a20f9d054c4a6d0990ba964ce43ff69",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "0aae6e2e_03278895",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2022-03-18T19:47:04Z",
+      "side": 1,
+      "message": "update capture_replay_expectations to indicate it\u0027s a failure",
+      "parentUuid": "6d4cbdda_55e93cb5",
+      "revId": "6289c0319a20f9d054c4a6d0990ba964ce43ff69",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
