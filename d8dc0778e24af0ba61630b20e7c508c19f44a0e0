@@ -16,6 +16,23 @@
       "message": "Sorry our infrastructure is causing unrelated flakes affecting your CL. We\u0027re discussing internally whether to file this against the infra team.\n",
       "revId": "d8dc0778e24af0ba61630b20e7c508c19f44a0e0",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "358aee16_820d742a",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 12
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2022-03-18T19:29:40Z",
+      "side": 1,
+      "message": "Does this really need to depend on https://chromium-review.googlesource.com/c/angle/angle/+/3516114 ? If not then please feel free to decouple it (uploading this patch as a fresh CL unrelated to the other one, if necessary) and let\u0027s get it landed.",
+      "revId": "d8dc0778e24af0ba61630b20e7c508c19f44a0e0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
