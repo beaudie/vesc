@@ -106,6 +106,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "b02a75a4_c828993a",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 14
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2022-03-18T13:40:19Z",
+      "side": 1,
+      "message": "Yes, I report both median and peak memory usage.",
+      "parentUuid": "1a145928_c6613035",
+      "revId": "a7ea89f27697923cbb37dbaff21ec03315882b69",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "17d60292_6f143eeb",
@@ -119,6 +137,30 @@
       "writtenOn": "2022-03-17T21:47:08Z",
       "side": 1,
       "message": "medium",
+      "range": {
+        "startLine": 423,
+        "startChar": 19,
+        "endLine": 423,
+        "endChar": 23
+      },
+      "revId": "a7ea89f27697923cbb37dbaff21ec03315882b69",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "76c35a77_168733bf",
+        "filename": "src/tests/perf_tests/ANGLEPerfTest.cpp",
+        "patchSetId": 14
+      },
+      "lineNbr": 423,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2022-03-18T13:40:19Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "17d60292_6f143eeb",
       "range": {
         "startLine": 423,
         "startChar": 19,
