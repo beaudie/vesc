@@ -105,6 +105,24 @@
       "parentUuid": "cd1824ba_7729966b",
       "revId": "32fa791ced5bc7ff64274b49c80ead10b07f4db0",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "cea0145a_d73f3a7d",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 10
+      },
+      "lineNbr": 10,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-03-18T02:35:58Z",
+      "side": 1,
+      "message": "Whitespace is still there. The title should look like this:\n\n```\nAdd loongarch support\n\nBug: angleproject:7104\nChange-Id: I9b9c57b76463f16d0c3c7ccc8b81c1bb657a3cc8\n```",
+      "parentUuid": "7eed4257_3df8e9d4",
+      "revId": "32fa791ced5bc7ff64274b49c80ead10b07f4db0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
