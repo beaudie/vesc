@@ -16,6 +16,23 @@
       "message": "PTAL Yuxin or Shabi.",
       "revId": "d9814687eeac8c36cfedf840bb9462c510258919",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "369a8e73_9fc25d73",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 16
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-03-18T14:10:44Z",
+      "side": 1,
+      "message": "LGTM, but leaving +2 to Yuxin as selected reviewer",
+      "revId": "d9814687eeac8c36cfedf840bb9462c510258919",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
