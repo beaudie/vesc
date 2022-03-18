@@ -1889,11 +1889,19 @@ angle::Result WindowSurfaceVk::doDeferredAcquireNextImage(const gl::Context *con
     if (mState.swapBehavior == EGL_BUFFER_DESTROYED && mBufferAgeQueryFrameNumber == 0)
     {
         mSwapchainImages[mCurrentSwapchainImageIndex].image.invalidateSubresourceContent(
-            contextVk, gl::LevelIndex(0), 0, 1);
-        mColorImageMS.invalidateSubresourceContent(contextVk, gl::LevelIndex(0), 0, 1);
+            contextVk, gl::LevelIndex(0), 0, 1, nullptr);
+        if (mColorImageMS.valid())
+        {
+            mColorImageMS.invalidateSubresourceContent(contextVk, gl::LevelIndex(0), 0, 1, nullptr);
+        }
     }
-    mDepthStencilImage.invalidateSubresourceContent(contextVk, gl::LevelIndex(0), 0, 1);
-    mDepthStencilImage.invalidateSubresourceStencilContent(contextVk, gl::LevelIndex(0), 0, 1);
+    if (mDepthStencilImage.valid())
+    {
+        mDepthStencilImage.invalidateSubresourceContent(contextVk, gl::LevelIndex(0), 0, 1,
+                                                        nullptr);
+        mDepthStencilImage.invalidateSubresourceStencilContent(contextVk, gl::LevelIndex(0), 0, 1,
+                                                               nullptr);
+    }
 
     return angle::Result::Continue;
 }
