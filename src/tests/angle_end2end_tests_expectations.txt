@@ -261,6 +261,8 @@
 4841 D3D9 : DXT1CompressedTextureTest.NonBlockSizesMipLevels/* = SKIP
 4841 D3D11 : DXT1CompressedTextureTest.NonBlockSizesMipLevels/* = SKIP
 7109 D3D11 : ClearTestRGB_ES3.*/* = SKIP
+7109 D3D11 : SimpleStateChangeTestES3.InvalidateRGBThenDraw/* = SKIP
+7109 D3D11 : SimpleStateChangeTestES3.DrawAndInvalidateRGBThenVerifyAlpha/* = SKIP
 
 // Android
 6095 ANDROID GLES : GLSLTest_ES3.InitGlobalComplexConstant/* = SKIP
