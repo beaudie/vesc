@@ -56,6 +56,30 @@
       },
       "revId": "89361927a7f67b1963dad6b9cb819a9dca5b6f22",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "f2251145_f8ad02cf",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 1660,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-03-18T17:07:02Z",
+      "side": 1,
+      "message": "Ack (Done in follow up CL, to avoid having to rerun the bots)",
+      "parentUuid": "8f9eb9bb_d8e24c58",
+      "range": {
+        "startLine": 1660,
+        "startChar": 4,
+        "endLine": 1660,
+        "endChar": 33
+      },
+      "revId": "89361927a7f67b1963dad6b9cb819a9dca5b6f22",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
