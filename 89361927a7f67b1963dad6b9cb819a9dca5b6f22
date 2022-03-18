@@ -16,6 +16,46 @@
       "message": "This change is almost entirely refactoring. Next CL will reuse this code to make color images treated the same way as D/S, so hopefully things will be less of a mess.",
       "revId": "89361927a7f67b1963dad6b9cb819a9dca5b6f22",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "e1465c96_4a651c23",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2022-03-18T16:56:21Z",
+      "side": 1,
+      "message": "LGTM",
+      "revId": "89361927a7f67b1963dad6b9cb819a9dca5b6f22",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "8f9eb9bb_d8e24c58",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 1660,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2022-03-18T16:56:21Z",
+      "side": 1,
+      "message": "You can\u0027t have a resolve image if there is no depthStencilImage, right? Might move the entire if block into line 1657 (so that one less if check when there is no ds attachment)",
+      "range": {
+        "startLine": 1660,
+        "startChar": 4,
+        "endLine": 1660,
+        "endChar": 33
+      },
+      "revId": "89361927a7f67b1963dad6b9cb819a9dca5b6f22",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
