@@ -1046,6 +1046,7 @@ void CommandBufferHelperCommon::bufferRead(ContextVk *contextVk,
     if (!mUsedBuffers.contains(buffer->getBufferSerial()))
     {
         mUsedBuffers.insert(buffer->getBufferSerial(), BufferAccess::Read);
+        ALOG("inserting at line %d, capacity=%d", __LINE__, (int)(mUsedBuffers.getCapacity()));
         buffer->retainReadOnly(&contextVk->getResourceUseList());
     }
 }
@@ -1071,6 +1072,7 @@ void CommandBufferHelperCommon::bufferWrite(ContextVk *contextVk,
     {
         ASSERT(!usesBuffer(*buffer));
         mUsedBuffers.insert(buffer->getBufferSerial(), BufferAccess::Write);
+        ALOG("inserting at line %d", __LINE__);
     }
 
     // Make sure host-visible buffer writes result in a barrier inserted at the end of the frame to

@@ -91,6 +91,7 @@ class FastVector final
 
     // Specialty function that removes a known element and might shuffle the list.
     void remove_and_permute(const value_type &element);
+    size_type getCapacity() const { return mReservedSize; }
 
   private:
     void assign_from_initializer_list(std::initializer_list<value_type> init);
@@ -445,6 +446,7 @@ void FastVector<T, N, Storage>::ensure_capacity(size_t capacity)
 
         mData         = newData;
         mReservedSize = newSize;
+        ALOG("*** FastVector::ensure_capacity. newsize=%d", (int)mReservedSize);
     }
 }
 
@@ -491,6 +493,7 @@ class FlatUnorderedMap final
 
     bool empty() const { return mData.empty(); }
     size_t size() const { return mData.size(); }
+    size_t getCapacity() const { return mData.getCapacity(); }
 
   private:
     FastVector<Pair, N> mData;

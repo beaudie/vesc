@@ -23,6 +23,10 @@
 #include "common/entry_points_enum_autogen.h"
 #include "common/platform.h"
 
+#include <android/log.h>
+#define LOG_TAG "LAO"
+#define ALOG(...) __android_log_print(ANDROID_LOG_INFO, LOG_TAG, __VA_ARGS__)
+
 #if defined(ANGLE_PLATFORM_WINDOWS)
 #    include <sal.h>
 typedef unsigned long DWORD;
