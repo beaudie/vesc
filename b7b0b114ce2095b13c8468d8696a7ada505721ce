@@ -43,6 +43,29 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "f61b26e9_544f86d4",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.h",
+        "patchSetId": 4
+      },
+      "lineNbr": 739,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2022-03-18T17:10:32Z",
+      "side": 1,
+      "message": "Maybe wrap these and vk::getDefaultBufferPool() vk::pruneDefaultBufferPools() into a class. I think it will be cleaner that way.",
+      "range": {
+        "startLine": 736,
+        "startChar": 4,
+        "endLine": 739,
+        "endChar": 0
+      },
+      "revId": "b7b0b114ce2095b13c8468d8696a7ada505721ce",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "09a22a69_d6d79654",
         "filename": "src/libANGLE/renderer/vulkan/vk_utils.h",
         "patchSetId": 4
