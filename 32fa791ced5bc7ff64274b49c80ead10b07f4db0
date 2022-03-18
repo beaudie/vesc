@@ -141,6 +141,24 @@
       "parentUuid": "cea0145a_d73f3a7d",
       "revId": "32fa791ced5bc7ff64274b49c80ead10b07f4db0",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "149b7994_f2be0929",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 10
+      },
+      "lineNbr": 10,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-03-18T02:45:31Z",
+      "side": 1,
+      "message": "Note the lack of `[]` around the bug number. I see how the presubmit error is confusing, sorry about that.",
+      "parentUuid": "6ba117af_c310b1c1",
+      "revId": "32fa791ced5bc7ff64274b49c80ead10b07f4db0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
