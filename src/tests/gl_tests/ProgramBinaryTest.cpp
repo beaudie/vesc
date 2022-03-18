@@ -555,6 +555,10 @@ void main()
 }
 )";
 
+    GLint binaryFormatCount = 0;
+    glGetIntegerv(GL_NUM_PROGRAM_BINARY_FORMATS, &binaryFormatCount);
+    ANGLE_SKIP_TEST_IF(binaryFormatCount == 0);
+
     const auto &vertices = GetIndexedQuadVertices();
 
     GLBuffer vertexBuffer;
