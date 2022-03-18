@@ -20,6 +20,24 @@
     {
       "unresolved": false,
       "key": {
+        "uuid": "e7a3dd50_89756e3e",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 3
+      },
+      "lineNbr": 8,
+      "author": {
+        "id": 1394635
+      },
+      "writtenOn": "2022-03-18T22:56:31Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "f5ff7b87_0ec68afc",
+      "revId": "d8a912af66b3e94aaeed72551fb4996cfcf7b6f0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
         "uuid": "0e886765_c1f7f3bd",
         "filename": "/PATCHSET_LEVEL",
         "patchSetId": 3
@@ -69,6 +87,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "2d747445_19232178",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1394635
+      },
+      "writtenOn": "2022-03-18T22:56:31Z",
+      "side": 1,
+      "message": "Thanks for the heads up. This test uncovered a frontend bug; fixed in I90f17307efb98934b1faf44f2efbdbcfa4db9e0c.",
+      "parentUuid": "f5ddff0d_d093333c",
+      "revId": "d8a912af66b3e94aaeed72551fb4996cfcf7b6f0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "34b36d9a_10dc22af",
@@ -82,6 +118,24 @@
       "writtenOn": "2022-03-15T01:01:54Z",
       "side": 1,
       "message": "Nit: Would it be worth making a more generic Clone Function and Prepend Params with std::vector\u003cconst TVariable*\u003e \u0026params?",
+      "revId": "d8a912af66b3e94aaeed72551fb4996cfcf7b6f0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "dd6316d6_4aa760b3",
+        "filename": "src/compiler/translator/TranslatorMetalDirect/AstHelpers.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 59,
+      "author": {
+        "id": 1394635
+      },
+      "writtenOn": "2022-03-18T22:56:31Z",
+      "side": 1,
+      "message": "We could use the existing CloneFunctionAndAppendParams but I preferred to avoid allocating an extra vector since it\u0027s always only two elements.",
+      "parentUuid": "34b36d9a_10dc22af",
       "revId": "d8a912af66b3e94aaeed72551fb4996cfcf7b6f0",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
@@ -103,6 +157,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "5ba0513a_8ef2a8f7",
+        "filename": "src/compiler/translator/TranslatorMetalDirect/EmitMetal.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 1843,
+      "author": {
+        "id": 1394635
+      },
+      "writtenOn": "2022-03-18T22:56:31Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "af276230_f4ca3fd4",
+      "revId": "d8a912af66b3e94aaeed72551fb4996cfcf7b6f0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "1e1bccf3_35a3d122",
@@ -116,6 +188,24 @@
       "writtenOn": "2022-03-15T01:01:54Z",
       "side": 1,
       "message": "I\u0027m trying to figure out if we\u0027ll end up in a situation where mPipelineMainLocalVar.external/external extra are nil. There\u0027s a secondary case in getExternalPipelineVariable() to handle that situation. Here, we\u0027d want to call mainFunc.getParam(0); and mainFunc.getParam(1); to get the replacement variables, if they were nil.",
+      "revId": "d8a912af66b3e94aaeed72551fb4996cfcf7b6f0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "44bdc3f2_611770ac",
+        "filename": "src/compiler/translator/TranslatorMetalDirect/RewritePipelines.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 828,
+      "author": {
+        "id": 1394635
+      },
+      "writtenOn": "2022-03-18T22:56:31Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "1e1bccf3_35a3d122",
       "revId": "d8a912af66b3e94aaeed72551fb4996cfcf7b6f0",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
