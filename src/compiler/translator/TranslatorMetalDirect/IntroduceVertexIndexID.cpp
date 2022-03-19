@@ -29,6 +29,13 @@ constexpr const TVariable kgl_instanceIdMetal(
     TExtension::UNDEFINED,
     StaticType::Get<EbtUInt, EbpHigh, EvqInstanceID, 1, 1>());
 
+constexpr const TVariable kgl_baseInstanceMetal(
+    BuiltInId::gl_BaseInstance,
+    ImmutableString("baseInstance"),
+    SymbolType::AngleInternal,
+    TExtension::UNDEFINED,
+    StaticType::Get<EbtUInt, EbpHigh, EvqInstanceID, 1, 1>());
+
 class Rewriter : public TIntermRebuild
 {
   public:
@@ -61,6 +68,7 @@ class Rewriter : public TIntermRebuild
             if (needsInstanceId)
             {
                 mVariablesToIntroduce.push_back(&kgl_instanceIdMetal);
+                mVariablesToIntroduce.push_back(&kgl_baseInstanceMetal);
             }
             if (needsVertexId)
             {
