@@ -33,6 +33,23 @@
       "message": "Does this really need to depend on https://chromium-review.googlesource.com/c/angle/angle/+/3516114 ? If not then please feel free to decouple it (uploading this patch as a fresh CL unrelated to the other one, if necessary) and let\u0027s get it landed.",
       "revId": "d8dc0778e24af0ba61630b20e7c508c19f44a0e0",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "5520ade0_f23d4deb",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 12
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2022-03-19T00:40:15Z",
+      "side": 1,
+      "message": "It looks like this has to be submitted before the related CL. CQ\u0027ing. The Vulkan failure was unrelated.\n",
+      "revId": "d8dc0778e24af0ba61630b20e7c508c19f44a0e0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
