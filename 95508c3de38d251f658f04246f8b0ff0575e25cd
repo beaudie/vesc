@@ -16,6 +16,23 @@
       "message": "I double-checked the angle_end2end_tests, angle_deqp_gles2_gl_tests, and angle_deqp_gles3_gl_tests results on AMD GPUs from:\nhttps://ci.chromium.org/ui/p/angle/builders/try/mac-test/3345/overview\n\nand they all look like they properly ran on the AMD GPU.\n\nThanks Kimmo for fixing this and persisting with the review. CQ\u0027ing.\n",
       "revId": "95508c3de38d251f658f04246f8b0ff0575e25cd",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "2ed4cca8_9f8937f8",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 8
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2022-03-19T01:32:03Z",
+      "side": 1,
+      "message": "https://chromium-review.googlesource.com/c/angle/angle/+/3516274 has been merged; this now needs to be rebased.\n",
+      "revId": "95508c3de38d251f658f04246f8b0ff0575e25cd",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
