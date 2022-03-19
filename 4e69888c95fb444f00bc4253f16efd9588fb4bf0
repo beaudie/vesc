@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "e3ca40e5_1adbc51d",
+        "filename": "src/tests/gl_tests/StateChangeTest.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 3322,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-03-19T03:53:24Z",
+      "side": 1,
+      "message": "This test shows the bug (prior to this change) in RenderDoc, as storeOp\u003dDONT_CARE is used, followed by an image-\u003ebuffer copy. I could not make the test locally fail however on Nvidia and Qualcomm (nor ARM for that matter, but we don\u0027t emulate RGB on ARM anyway). It\u0027s possible this could have been observed as flaky failures somewhere if the test existed previously.\n\nAfter the change, I see through RenderDoc that on Nvidia, the invalidate is discarded as expected, and on Qualcomm, the image is cleared prior to readback again as expected.",
+      "revId": "4e69888c95fb444f00bc4253f16efd9588fb4bf0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
