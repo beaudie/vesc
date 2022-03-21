@@ -60,6 +60,30 @@
     {
       "unresolved": false,
       "key": {
+        "uuid": "68f7ef29_00cb3c24",
+        "filename": "src/tests/restricted_traces/restricted_trace_perf.py",
+        "patchSetId": 3
+      },
+      "lineNbr": 69,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2022-03-21T22:07:30Z",
+      "side": 1,
+      "message": "It would make sense, but what we have is working fine, so I\u0027d defer this work until required.",
+      "parentUuid": "da8a060a_69948908",
+      "range": {
+        "startLine": 69,
+        "startChar": 4,
+        "endLine": 69,
+        "endChar": 18
+      },
+      "revId": "aaf3e40a8cebee01cccf3fff0a05028a1ed6df3d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
         "uuid": "ec6f3db3_b28fc105",
         "filename": "src/tests/restricted_traces/restricted_trace_perf.py",
         "patchSetId": 3
@@ -71,6 +95,30 @@
       "writtenOn": "2022-03-14T15:52:36Z",
       "side": 1,
       "message": "Probably a matter of preference but unnamed tuple (`return process, time_elapsed`) with most uses as `process, _ \u003d run_command(...)` would be fairly pythonic here IMO; it\u0027s very common to return multiple vars in python and rely on variable naming instead of named tuples.",
+      "range": {
+        "startLine": 73,
+        "startChar": 4,
+        "endLine": 73,
+        "endChar": 40
+      },
+      "revId": "aaf3e40a8cebee01cccf3fff0a05028a1ed6df3d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "3a22675b_246cf7fb",
+        "filename": "src/tests/restricted_traces/restricted_trace_perf.py",
+        "patchSetId": 3
+      },
+      "lineNbr": 73,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2022-03-21T22:07:30Z",
+      "side": 1,
+      "message": "Got it, thanks Roman, I appreciate the pythonic advice (I only know enough to get by).  Will keep this in mind for the next update.  I upload known working versions used when generating results.",
+      "parentUuid": "ec6f3db3_b28fc105",
       "range": {
         "startLine": 73,
         "startChar": 4,
@@ -94,6 +142,30 @@
       "writtenOn": "2022-03-14T15:52:36Z",
       "side": 1,
       "message": "Could you add a comment or otherwise make it a bit more clear what 0.25 means here?",
+      "range": {
+        "startLine": 126,
+        "startChar": 61,
+        "endLine": 126,
+        "endChar": 65
+      },
+      "revId": "aaf3e40a8cebee01cccf3fff0a05028a1ed6df3d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "296cea0e_b446517c",
+        "filename": "src/tests/restricted_traces/restricted_trace_perf.py",
+        "patchSetId": 3
+      },
+      "lineNbr": 126,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2022-03-21T22:07:30Z",
+      "side": 1,
+      "message": "Updated the comment to clarify",
+      "parentUuid": "ffa3aee5_87785426",
       "range": {
         "startLine": 126,
         "startChar": 61,
