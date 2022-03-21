@@ -72,6 +72,69 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "421cad33_d89a88c3",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2022-03-21T22:49:39Z",
+      "side": 1,
+      "message": "I do agree it would be nice to forget about RBG if possible, though I think now we expose RGB for some reason so it might be something we need to deal with.",
+      "revId": "ce47c54b9808d75e028b51024c962f30cf05d78c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ccb885bf_7571670b",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 2817,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2022-03-21T22:49:39Z",
+      "side": 1,
+      "message": "nit: IMR / TBR are a bit of an obscure term, maybe isTileBased / isImmediateMode. TBH I don\u0027t know if this logic is totally reliable.",
+      "range": {
+        "startLine": 2816,
+        "startChar": 14,
+        "endLine": 2817,
+        "endChar": 21
+      },
+      "revId": "ce47c54b9808d75e028b51024c962f30cf05d78c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "2d4fb86e_fc36639c",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 2820,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2022-03-21T22:49:39Z",
+      "side": 1,
+      "message": "This seems a bit counter productive for new adopters. Suggest you remove it. At the worst you could make it a warning. If this is something you really want, I\u0027d suggest you make it a property exposed by the Vulkan Physical Device.",
+      "range": {
+        "startLine": 2819,
+        "startChar": 0,
+        "endLine": 2820,
+        "endChar": 49
+      },
+      "revId": "ce47c54b9808d75e028b51024c962f30cf05d78c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "a050602a_43005cbc",
