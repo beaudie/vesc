@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "44c41fb5_657aef5b",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 2
+      },
+      "lineNbr": 11,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2022-03-21T16:22:08Z",
+      "side": 1,
+      "message": "A few other bugs to tag:\nangleproject:5604\nangleproject:6104\nb/181797364",
+      "revId": "cfa68b1f4caffc7c00b3d478c7e6ead0b499fc31",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "f44d04fb_5eca1e2d",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2022-03-21T16:22:08Z",
+      "side": 1,
+      "message": "So nice to see this code getting deleted.  Thanks for pushing on the compressed texture readback Lubosz!",
+      "revId": "cfa68b1f4caffc7c00b3d478c7e6ead0b499fc31",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
