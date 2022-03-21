@@ -16,6 +16,23 @@
       "message": "I don\u0027t have access to dry runs and can\u0027t commit.",
       "revId": "5074ae7665a2caed947fa15979b356a8e78f138d",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "6f23bee1_244e65c5",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2022-03-21T21:38:03Z",
+      "side": 1,
+      "message": "LGTM, +Shabi for Chrome coverage.",
+      "revId": "5074ae7665a2caed947fa15979b356a8e78f138d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
