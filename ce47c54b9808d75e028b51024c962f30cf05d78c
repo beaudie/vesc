@@ -38,6 +38,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "120befd7_49353f92",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2022-03-21T21:34:47Z",
+      "side": 1,
+      "message": "Could you verify? I think if possible we should keep GPUs in the same behavior.",
+      "parentUuid": "3c93e25d_fe0957d0",
+      "revId": "ce47c54b9808d75e028b51024c962f30cf05d78c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "a050602a_43005cbc",
         "filename": "src/tests/gl_tests/StateChangeTest.cpp",
         "patchSetId": 3
