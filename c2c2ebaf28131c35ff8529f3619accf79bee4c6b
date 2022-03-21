@@ -22,6 +22,30 @@
       },
       "revId": "c2c2ebaf28131c35ff8529f3619accf79bee4c6b",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "b5311e4e_e8eb94fe",
+        "filename": "src/tests/gl_tests/GLSLTest.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 15022,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-03-21T17:15:23Z",
+      "side": 1,
+      "message": "Previously, that would produce something like this:\n\n```\n    int a, i;\n    while (true)\n    {\n      {\n        v\u003d1.0f;\n        gl_FragCoord;\n        continue;\n      }\n      gl_FragCoord;\n    }\n```\n\nNow it produces:\n\n```\n    int a, i;\n    while (true)\n    {\n      {\n        v\u003d1.0f;\n        gl_FragCoord;\n        continue;\n      }\n    }\n```\n\nwhich is identical. The `gl_FragCoord;` that\u0027s eliminated (or rather avoided generation) in this change was dead code.",
+      "parentUuid": "fcadc2ce_095411f1",
+      "range": {
+        "startLine": 15022,
+        "startChar": 0,
+        "endLine": 15022,
+        "endChar": 84
+      },
+      "revId": "c2c2ebaf28131c35ff8529f3619accf79bee4c6b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
