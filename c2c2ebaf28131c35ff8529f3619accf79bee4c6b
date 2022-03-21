@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "fcadc2ce_095411f1",
+        "filename": "src/tests/gl_tests/GLSLTest.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 15022,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2022-03-21T16:42:36Z",
+      "side": 1,
+      "message": "How about the following shader that end with branch, will it not gets treated like dead code and gets eliminated?\n\nvarying float v;\nvoid main()\n{\n    \n    for(int a,i;;gl_FragCoord)\n    {\n       v\u003d1.0f;\n       continue;\n    }\n}",
+      "range": {
+        "startLine": 15022,
+        "startChar": 0,
+        "endLine": 15022,
+        "endChar": 84
+      },
+      "revId": "c2c2ebaf28131c35ff8529f3619accf79bee4c6b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
