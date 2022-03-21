@@ -33,6 +33,23 @@
       "message": "So nice to see this code getting deleted.  Thanks for pushing on the compressed texture readback Lubosz!",
       "revId": "cfa68b1f4caffc7c00b3d478c7e6ead0b499fc31",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "e4dea023_e0a501ae",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2022-03-21T16:24:52Z",
+      "side": 1,
+      "message": "Awesome, 400 lines gone.",
+      "revId": "cfa68b1f4caffc7c00b3d478c7e6ead0b499fc31",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
