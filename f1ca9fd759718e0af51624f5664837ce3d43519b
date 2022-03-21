@@ -1,0 +1,44 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "e6328632_fe78464a",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2022-03-21T16:31:08Z",
+      "side": 1,
+      "message": "LGTM, good follow up.  I believe PUBG Mobile is using CopyImageSubData if you\u0027d like to verify this change.  Retracing it may be sufficient.",
+      "revId": "f1ca9fd759718e0af51624f5664837ce3d43519b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "49196623_a5a9248e",
+        "filename": "src/libANGLE/capture/FrameCapture.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 5130,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2022-03-21T16:31:08Z",
+      "side": 1,
+      "message": "Can you add an output here like below?\n```\n            ERR() \u003c\u003c \"Unhandled paramType\u003d \" \u003c\u003c paramType;\n            UNREACHABLE();\n            break;\n```\nI know the break is redundant, but it makes the code easier to read and maintain.",
+      "range": {
+        "startLine": 5130,
+        "startChar": 12,
+        "endLine": 5130,
+        "endChar": 23
+      },
+      "revId": "f1ca9fd759718e0af51624f5664837ce3d43519b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
