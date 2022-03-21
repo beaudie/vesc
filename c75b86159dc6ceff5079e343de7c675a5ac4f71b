@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "5d42b1fa_a8f4afab",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1001629
+      },
+      "writtenOn": "2022-03-21T12:44:05Z",
+      "side": 1,
+      "message": "I\u0027ll reply to this one, but it applies to all of these you sent to subprojects:\n\nSubprojects usually deps in some fixed version of buildtools/. So unless you also roll buildtools, I think this patch won\u0027t work (since old buildtools doesn\u0027t have the two sha1 files.)\n\nBut the the expectations for subprojects is that they do things like this themselves when they roll in new buildtools/ etc, and that we put useful and explicit instructions on what to do in some easy-to-find place (the CL desc that does the change in src.git, or the bug linked to from there). Example: https://chromium-review.googlesource.com/c/chromium/src/+/2713283 (note that this one also pulled in several subproject owners on the bug and discussed things with them before making the change -- but your change is much simpler and fairly mechanical, so that part isn\u0027t needed.)\n\nSummary: If you do want to do this for subprojects, you\u0027ll have to roll their buildtools as well. Else, write good instructions and let subprojects figure it out themselves.",
+      "revId": "c75b86159dc6ceff5079e343de7c675a5ac4f71b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
