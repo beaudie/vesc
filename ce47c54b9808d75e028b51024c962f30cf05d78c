@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "a050602a_43005cbc",
+        "filename": "src/tests/gl_tests/StateChangeTest.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 3313,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2022-03-21T17:01:30Z",
+      "side": 1,
+      "message": "Isn\u0027t that EXPECT_PIXEL_COLOR_EQ will end renderpass and submit and read out, which means glInvalidateFramebuffer will be called on empty renderpass, thus becomes a nop (since nothing to invalidate)? A better test maybe change EXPECT_PIXEL_COLOR_EQ to a copyTexSubImage to another texture or PBO read or something that will not end renderpass.",
+      "range": {
+        "startLine": 3307,
+        "startChar": 4,
+        "endLine": 3313,
+        "endChar": 0
+      },
+      "revId": "ce47c54b9808d75e028b51024c962f30cf05d78c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
