@@ -56,6 +56,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "5a400292_57cc61cc",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2022-03-21T21:49:00Z",
+      "side": 1,
+      "message": "My gut feeling is that RGB+invalidate combination maybe just not worth optimizing, and we can simply do what you did for IMR, unless you can find a real world usage says otherwise.",
+      "parentUuid": "120befd7_49353f92",
+      "revId": "ce47c54b9808d75e028b51024c962f30cf05d78c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "a050602a_43005cbc",
         "filename": "src/tests/gl_tests/StateChangeTest.cpp",
         "patchSetId": 3
