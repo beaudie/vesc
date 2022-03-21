@@ -16,6 +16,253 @@
       "message": "PTAL",
       "revId": "5d6615c60e34e7a397afdba9630fb0578e36c4c2",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "b34c0a03_24e9452d",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 6
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2022-03-21T23:19:01Z",
+      "side": 1,
+      "message": "Mostly nits and a few design suggestions. Looks good, thanks for adding this.",
+      "revId": "5d6615c60e34e7a397afdba9630fb0578e36c4c2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "48ebeaf7_86f36d8a",
+        "filename": "src/libANGLE/Context.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 8921,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2022-03-21T23:19:01Z",
+      "side": 1,
+      "message": "We don\u0027t support any DSA extensions so this should not be exposed (don\u0027t think they even exist for GLES). Maybe our autogen generated this erroneously from gl.xml.",
+      "range": {
+        "startLine": 8918,
+        "startChar": 0,
+        "endLine": 8921,
+        "endChar": 98
+      },
+      "revId": "5d6615c60e34e7a397afdba9630fb0578e36c4c2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "38a042d7_fbb6c5d7",
+        "filename": "src/libANGLE/Texture.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 1926,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2022-03-21T23:19:01Z",
+      "side": 1,
+      "message": "static cast doesn\u0027t seem necessary. `1u` would also work.",
+      "range": {
+        "startLine": 1926,
+        "startChar": 48,
+        "endLine": 1926,
+        "endChar": 70
+      },
+      "revId": "5d6615c60e34e7a397afdba9630fb0578e36c4c2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "14abaf13_7ad2d97a",
+        "filename": "src/libANGLE/renderer/ImageImpl.h",
+        "patchSetId": 6
+      },
+      "lineNbr": 43,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2022-03-21T23:19:01Z",
+      "side": 1,
+      "message": "Since we\u0027re already dealing with layered, cube map and layered cube map textures. Could this return a gl::TextureType enum directly now?",
+      "range": {
+        "startLine": 43,
+        "startChar": 4,
+        "endLine": 43,
+        "endChar": 35
+      },
+      "revId": "5d6615c60e34e7a397afdba9630fb0578e36c4c2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "fba06adb_84d98eca",
+        "filename": "src/libANGLE/renderer/ImageImpl.h",
+        "patchSetId": 6
+      },
+      "lineNbr": 47,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2022-03-21T23:19:01Z",
+      "side": 1,
+      "message": "nit: size_t for consistency?",
+      "range": {
+        "startLine": 47,
+        "startChar": 12,
+        "endLine": 47,
+        "endChar": 20
+      },
+      "revId": "5d6615c60e34e7a397afdba9630fb0578e36c4c2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "aab63462_b7d2bffb",
+        "filename": "src/libANGLE/renderer/vulkan/TextureVk.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 186,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2022-03-21T23:19:01Z",
+      "side": 1,
+      "message": "nit: break this into a new if for readability.",
+      "range": {
+        "startLine": 186,
+        "startChar": 71,
+        "endLine": 186,
+        "endChar": 92
+      },
+      "revId": "5d6615c60e34e7a397afdba9630fb0578e36c4c2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "76f40be2_c25af69a",
+        "filename": "src/libANGLE/renderer/vulkan/android/HardwareBufferImageSiblingVkAndroid.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 303,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2022-03-21T23:19:01Z",
+      "side": 1,
+      "message": "Could you factor this into a similar `AhbDescUsageToTextureType(desc, layerCount)`? It also removes the statefulness here, depending on mUsage being set above for isCubeMap to work.",
+      "range": {
+        "startLine": 298,
+        "startChar": 4,
+        "endLine": 303,
+        "endChar": 5
+      },
+      "revId": "5d6615c60e34e7a397afdba9630fb0578e36c4c2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "9aaf9133_bb66543b",
+        "filename": "src/libANGLE/renderer/vulkan/android/HardwareBufferImageSiblingVkAndroid.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 430,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2022-03-21T23:19:01Z",
+      "side": 1,
+      "message": "Probably worth pre-computing.",
+      "range": {
+        "startLine": 428,
+        "startChar": 11,
+        "endLine": 430,
+        "endChar": 19
+      },
+      "revId": "5d6615c60e34e7a397afdba9630fb0578e36c4c2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "4905a71d_d59f9c02",
+        "filename": "src/libANGLE/validationES3.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 1363,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2022-03-21T23:19:01Z",
+      "side": 1,
+      "message": "I think this would allow the external target for regular glTexStorage calls which is not the intent.",
+      "range": {
+        "startLine": 1363,
+        "startChar": 8,
+        "endLine": 1363,
+        "endChar": 35
+      },
+      "revId": "5d6615c60e34e7a397afdba9630fb0578e36c4c2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "17d5f6bc_36cbae4b",
+        "filename": "src/libANGLE/validationESEXT.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 2609,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2022-03-21T23:19:01Z",
+      "side": 1,
+      "message": "I think this remains unreachable.",
+      "range": {
+        "startLine": 2601,
+        "startChar": 0,
+        "endLine": 2609,
+        "endChar": 86
+      },
+      "revId": "5d6615c60e34e7a397afdba9630fb0578e36c4c2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "d6f7e5ff_cf892674",
+        "filename": "src/libANGLE/validationESEXT.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 2672,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2022-03-21T23:19:01Z",
+      "side": 1,
+      "message": "I think it\u0027s risky to try to re-use the validation in this case. We\u0027ve had issues where the user requested an ES2 context which didn\u0027t support some format and they couldn\u0027t import EGL images with that format (like RGBA16F). We work around this by assuming all EGL images support texturing.\n\nMany of the things that ValidateES3TexStorageParametersBase checks we could probably assert here (valid dimensions, valid format) because the egl image could not have been created otherwise. We can also borrow some validation from ValidateEGLImageTargetTexture2DOES.",
+      "range": {
+        "startLine": 2664,
+        "startChar": 0,
+        "endLine": 2672,
+        "endChar": 85
+      },
+      "revId": "5d6615c60e34e7a397afdba9630fb0578e36c4c2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
