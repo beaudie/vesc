@@ -1,6 +1,23 @@
 {
   "comments": [
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "f79b9702_0edc4fac",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2022-03-21T21:31:42Z",
+      "side": 1,
+      "message": "Do you know which app actually uses RGB swapchain? If no real known app uses it this way, one simple solution is drop invalidate if there is emulate channel. Make code much simpler and consistent behavior across all GPUs.",
+      "revId": "ce47c54b9808d75e028b51024c962f30cf05d78c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "a050602a_43005cbc",
