@@ -90,6 +90,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "b5490dc7_f5e08d31",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.h",
+        "patchSetId": 4
+      },
+      "lineNbr": 739,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2022-03-21T21:45:15Z",
+      "side": 1,
+      "message": "I agree with this but let\u0027s do it as a follow up patch. I\u0027d like to get the security issue fixed as soon as possible.",
+      "parentUuid": "f61b26e9_544f86d4",
+      "range": {
+        "startLine": 736,
+        "startChar": 4,
+        "endLine": 739,
+        "endChar": 0
+      },
+      "revId": "b7b0b114ce2095b13c8468d8696a7ada505721ce",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "09a22a69_d6d79654",
         "filename": "src/libANGLE/renderer/vulkan/vk_utils.h",
         "patchSetId": 4
