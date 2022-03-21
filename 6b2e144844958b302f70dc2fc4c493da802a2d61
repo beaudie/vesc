@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "faf7197e_a5c08a6e",
+        "filename": "src/tests/gl_tests/ProgramBinaryTest.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 560,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2022-03-21T16:26:09Z",
+      "side": 1,
+      "message": "tiny nit: I think the other tests place this before the shaders.",
+      "range": {
+        "startLine": 556,
+        "startChar": 3,
+        "endLine": 560,
+        "endChar": 47
+      },
+      "revId": "6b2e144844958b302f70dc2fc4c493da802a2d61",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
