@@ -72,11 +72,10 @@ $ ANGLE_CAPTURE_FRAME_END=4 ANGLE_CAPTURE_OUT_DIR=samples/capture_replay out/Deb
 
 ## Running the capture_replay sample (desktop only)
 
-*Note: The capture_replay sample is broken until http://anglebug.com/5911 is addressed.*
-
 To run a sample replay you can use a template located in
 [samples/capture_replay](../samples/capture_replay). First run your capture and ensure all capture
 files are written to `samples/capture_replay`. You can conveniently use `ANGLE_CAPTURE_OUT_DIR`.
+Make sure `ANGLE_CAPTURE_LABEL` is left unset to use the default file names.
 Then enable the `capture_replay_sample` via `gn args`:
 
 ```
