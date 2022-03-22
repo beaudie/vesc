@@ -1125,9 +1125,9 @@ void RenderPassAttachment::finalizeLoadStore(Context *context,
     const bool supportsStoreOpNone =
         supportsLoadStoreOpNone ||
         context->getRenderer()->getFeatures().supportsRenderPassStoreOpNoneQCOM.enabled;
-    if (mImage->hasRenderPassUsageFlag(RenderPassUsage::ReadOnlyAttachment) && supportsStoreOpNone)
+    if (mAccess == ResourceAccess::ReadOnly && supportsStoreOpNone)
     {
-        if (*storeOp == RenderPassStoreOp::Store)
+        if (*storeOp == RenderPassStoreOp::Store && *loadOp != RenderPassLoadOp::Clear)
         {
             *storeOp = RenderPassStoreOp::None;
         }
