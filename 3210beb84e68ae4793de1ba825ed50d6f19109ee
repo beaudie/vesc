@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "83bd1406_c9eac78e",
+        "filename": "src/tests/deqp_support/deqp_gles31_test_expectations.txt",
+        "patchSetId": 7
+      },
+      "lineNbr": 167,
+      "author": {
+        "id": 1531247
+      },
+      "writtenOn": "2022-03-22T18:16:56Z",
+      "side": 0,
+      "message": "Pixel 6 doesn\u0027t seem to like the change on this line: https://ci.chromium.org/ui/p/angle/builders/ci/android-arm64-exp-test/326/overview",
+      "range": {
+        "startLine": 167,
+        "startChar": 0,
+        "endLine": 167,
+        "endChar": 89
+      },
+      "revId": "3210beb84e68ae4793de1ba825ed50d6f19109ee",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
