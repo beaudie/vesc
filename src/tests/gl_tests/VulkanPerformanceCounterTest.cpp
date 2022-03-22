@@ -6,8 +6,6 @@
 // VulkanPerformanceCounterTest:
 //   Validates specific GL call patterns with ANGLE performance counters.
 //   For example we can verify a certain call set doesn't break the RenderPass.
-//
-// TODO(jmadill): Move to a GL extension. http://anglebug.com/4918
 
 #include "test_utils/ANGLETest.h"
 #include "test_utils/angle_test_instantiate.h"
@@ -896,6 +894,211 @@ TEST_P(VulkanPerformanceCounterTest, ColorInvalidateDiscardDraw)
     compareColorOpCounters(getPerfCounters(), expected);
 }
 
+// Tests that masked draws results in no load and store.
+//
+// - Scenario: mask color, draw
+TEST_P(VulkanPerformanceCounterTest, ColorMaskDraw)
+{
+    ANGLE_SKIP_TEST_IF(!IsGLExtensionEnabled(kPerfMonitorExtensionName));
+    initANGLEFeatures();
+
+    angle::VulkanPerfCounters expected;
+
+    // Expect rpCount+1, color(Clears+0, Loads+0, LoadNones+1, Stores+0, StoreNones+1)
+    setExpectedCountersForColorOps(getPerfCounters(), 1, 0, 0, 1, 0, 1, &expected);
+
+    GLFramebuffer framebuffer;
+    GLTexture texture;
+    setupForColorOpsTest(&framebuffer, &texture);
+
+    // Initialize the color buffer
+    glClearColor(1, 0, 0, 1);
+    glClear(GL_COLOR_BUFFER_BIT);
+    EXPECT_PIXEL_COLOR_EQ(0, 0, GLColor::red);
+
+    // Mask color output
+    glColorMask(GL_FALSE, GL_FALSE, GL_FALSE, GL_FALSE);
+
+    // Draw
+    ANGLE_GL_PROGRAM(program, essl1_shaders::vs::Simple(), essl1_shaders::fs::Green());
+    drawQuad(program, essl1_shaders::PositionAttrib(), 0.5f);
+    ASSERT_GL_NO_ERROR();
+
+    EXPECT_EQ(expected.renderPasses, getPerfCounters().renderPasses);
+
+    // Break the render pass and check how many loads and stores were actually done
+    EXPECT_PIXEL_COLOR_EQ(0, 0, GLColor::red);
+    compareColorOpCounters(getPerfCounters(), expected);
+
+    // Start and end another render pass without color mask
+    ++expected.renderPasses;
+    ++expected.colorLoadOpLoads;
+    ++expected.colorStoreOpStores;
+
+    glColorMask(GL_TRUE, GL_TRUE, GL_TRUE, GL_TRUE);
+    drawQuad(program, essl1_shaders::PositionAttrib(), 0.5f);
+    ASSERT_GL_NO_ERROR();
+    EXPECT_PIXEL_COLOR_EQ(0, 0, GLColor::green);
+
+    compareColorOpCounters(getPerfCounters(), expected);
+}
+
+// Tests that discarded draws results in no load and store.
+//
+// - Scenario: rasterizer discard, draw
+TEST_P(VulkanPerformanceCounterTest, ColorDiscardDraw)
+{
+    ANGLE_SKIP_TEST_IF(!IsGLExtensionEnabled(kPerfMonitorExtensionName));
+    initANGLEFeatures();
+
+    angle::VulkanPerfCounters expected;
+
+    // Expect rpCount+1, color(Clears+0, Loads+0, LoadNones+1, Stores+0, StoreNones+1)
+    setExpectedCountersForColorOps(getPerfCounters(), 1, 0, 0, 1, 0, 1, &expected);
+
+    GLFramebuffer framebuffer;
+    GLTexture texture;
+    setupForColorOpsTest(&framebuffer, &texture);
+
+    // Initialize the color buffer
+    glClearColor(1, 0, 0, 1);
+    glClear(GL_COLOR_BUFFER_BIT);
+    EXPECT_PIXEL_COLOR_EQ(0, 0, GLColor::red);
+
+    // Mask color output
+    glEnable(GL_RASTERIZER_DISCARD);
+
+    // Draw
+    ANGLE_GL_PROGRAM(program, essl1_shaders::vs::Simple(), essl1_shaders::fs::Green());
+    drawQuad(program, essl1_shaders::PositionAttrib(), 0.5f);
+    ASSERT_GL_NO_ERROR();
+
+    EXPECT_EQ(expected.renderPasses, getPerfCounters().renderPasses);
+
+    // Break the render pass and check how many loads and stores were actually done
+    EXPECT_PIXEL_COLOR_EQ(0, 0, GLColor::red);
+    compareColorOpCounters(getPerfCounters(), expected);
+
+    // Start and end another render pass without color mask
+    ++expected.renderPasses;
+    ++expected.colorLoadOpLoads;
+    ++expected.colorStoreOpStores;
+
+    glDisable(GL_RASTERIZER_DISCARD);
+    drawQuad(program, essl1_shaders::PositionAttrib(), 0.5f);
+    ASSERT_GL_NO_ERROR();
+    EXPECT_PIXEL_COLOR_EQ(0, 0, GLColor::green);
+
+    compareColorOpCounters(getPerfCounters(), expected);
+}
+
+// Test that read-only color usage results in load but no store.
+//
+// - Scenario: mask color, framebuffer fetch draw
+TEST_P(VulkanPerformanceCounterTest_ES31, ColorMaskedFramebufferFetchDraw)
+{
+    ANGLE_SKIP_TEST_IF(!IsGLExtensionEnabled(kPerfMonitorExtensionName));
+    ANGLE_SKIP_TEST_IF(!IsGLExtensionEnabled("GL_EXT_shader_framebuffer_fetch_non_coherent"));
+    initANGLEFeatures();
+
+    angle::VulkanPerfCounters expected;
+
+    // Expect rpCount+1, color(Clears+0, Loads+1, LoadNones+0, Stores+0, StoreNones+1)
+    setExpectedCountersForColorOps(getPerfCounters(), 1, 0, 1, 0, 0, 1, &expected);
+
+    GLFramebuffer framebuffer;
+    GLTexture texture;
+    setupForColorOpsTest(&framebuffer, &texture);
+
+    // Initialize the color buffer
+    const std::array<float, 4> kClearColor = {
+        0.2,
+        0.4,
+        0.6,
+        0.7,
+    };
+    glClearColor(kClearColor[0], kClearColor[1], kClearColor[2], kClearColor[3]);
+    glClear(GL_COLOR_BUFFER_BIT);
+    EXPECT_PIXEL_NEAR(0, 0, static_cast<uint8_t>(kClearColor[0] * 255.0f),
+                      static_cast<uint8_t>(kClearColor[1] * 255.0f),
+                      static_cast<uint8_t>(kClearColor[2] * 255.0f),
+                      static_cast<uint8_t>(kClearColor[3] * 255.0f), 1);
+
+    // Create output buffer
+    constexpr GLsizei kBufferSize = kOpsTestSize * kOpsTestSize * sizeof(float[4]);
+    GLBuffer buffer;
+    glBindBuffer(GL_SHADER_STORAGE_BUFFER, buffer);
+    glBufferData(GL_SHADER_STORAGE_BUFFER, kBufferSize, nullptr, GL_STATIC_DRAW);
+    glBindBufferRange(GL_SHADER_STORAGE_BUFFER, 0, buffer, 0, kBufferSize);
+
+    // Zero-initialize it
+    void *bufferData = glMapBufferRange(
+        GL_SHADER_STORAGE_BUFFER, 0, kBufferSize,
+        GL_MAP_WRITE_BIT | GL_MAP_INVALIDATE_BUFFER_BIT | GL_MAP_UNSYNCHRONIZED_BIT);
+    memset(bufferData, 0, kBufferSize);
+    glUnmapBuffer(GL_SHADER_STORAGE_BUFFER);
+
+    // Mask color output
+    glColorMask(GL_FALSE, GL_FALSE, GL_FALSE, GL_FALSE);
+
+    static constexpr char kVS[] = R"(#version 310 es
+in highp vec4 a_position;
+
+void main (void)
+{
+    gl_Position = a_position;
+})";
+
+    static constexpr char kFS[] = R"(#version 310 es
+#extension GL_EXT_shader_framebuffer_fetch_non_coherent : require
+layout(noncoherent, location = 0) inout highp vec4 o_color;
+
+layout(std140, binding = 0) buffer outBlock {
+    highp vec4 data[256];
+};
+
+uniform highp vec4 u_color;
+void main (void)
+{
+    uint index = uint(gl_FragCoord.y) * 16u + uint(gl_FragCoord.x);
+    data[index] = o_color;
+    o_color += u_color;
+})";
+
+    // Draw
+    ANGLE_GL_PROGRAM(program, kVS, kFS);
+    drawQuad(program, essl1_shaders::PositionAttrib(), 0.5f);
+    ASSERT_GL_NO_ERROR();
+
+    EXPECT_EQ(expected.renderPasses, getPerfCounters().renderPasses);
+
+    // Break the render pass and check how many loads and stores were actually done
+    EXPECT_PIXEL_NEAR(0, 0, static_cast<uint8_t>(kClearColor[0] * 255.0f),
+                      static_cast<uint8_t>(kClearColor[1] * 255.0f),
+                      static_cast<uint8_t>(kClearColor[2] * 255.0f),
+                      static_cast<uint8_t>(kClearColor[3] * 255.0f), 1);
+    compareColorOpCounters(getPerfCounters(), expected);
+
+    // Read back the storage buffer and make sure framebuffer fetch worked as intended despite
+    // masked color.
+    glMemoryBarrier(GL_BUFFER_UPDATE_BARRIER_BIT);
+
+    const float *colorData = static_cast<const float *>(
+        glMapBufferRange(GL_SHADER_STORAGE_BUFFER, 0, kBufferSize, GL_MAP_READ_BIT));
+    for (uint32_t y = 0; y < kOpsTestSize; ++y)
+    {
+        for (uint32_t x = 0; x < kOpsTestSize; ++x)
+        {
+            uint32_t ssboIndex = (y * kOpsTestSize + x) * 4;
+            EXPECT_NEAR(colorData[ssboIndex + 0], kClearColor[0], 0.05);
+            EXPECT_NEAR(colorData[ssboIndex + 1], kClearColor[1], 0.05);
+            EXPECT_NEAR(colorData[ssboIndex + 2], kClearColor[2], 0.05);
+            EXPECT_NEAR(colorData[ssboIndex + 3], kClearColor[3], 0.05);
+        }
+    }
+    glUnmapBuffer(GL_SHADER_STORAGE_BUFFER);
+}
+
 // Tests that common PUBG MOBILE case does not break render pass, and that counts are correct:
 //
 // - Scenario: invalidate, disable, draw
@@ -1714,9 +1917,10 @@ TEST_P(VulkanPerformanceCounterTest, DepthStencilInvalidateAndMaskedClear)
     compareDepthStencilOpCounters(getPerfCounters(), expected);
 
     // Expect rpCount+1, depth(Clears+0, Loads+1, LoadNones+0, Stores+1, StoreNones+0),
-    // stencil(Clears+0, Loads+1, LoadNones+0, Stores+1, StoreNones+0)
+    // stencil(Clears+0, Loads+1, LoadNones+0, Stores+0, StoreNones+1)
+    // Note that depth write is enabled, while stencil is disabled.
     setExpectedCountersForDepthOps(getPerfCounters(), 1, 0, 1, 0, 1, 0, &expected);
-    setExpectedCountersForStencilOps(getPerfCounters(), 0, 1, 0, 1, 0, &expected);
+    setExpectedCountersForStencilOps(getPerfCounters(), 0, 1, 0, 0, 1, &expected);
 
     // Bind FBO again and try to use the depth buffer without clear. This should result in
     // loadOp=LOAD and StoreOP=STORE
@@ -1806,9 +2010,10 @@ TEST_P(VulkanPerformanceCounterTest, DepthStencilInvalidateDetachModifyTexAttach
     // Draw again, showing that the modified depth-stencil value prevents a new color value
     //
     // Expect rpCount+1, depth(Clears+0, Loads+1, LoadNones+0, Stores+1, StoreNones+0),
-    // stencil(Clears+0, Loads+1, LoadNones+0, Stores+1, StoreNones+0)
+    // stencil(Clears+0, Loads+1, LoadNones+0, Stores+0, StoreNones+1)
+    // Note that depth write is enabled, while stencil is disabled.
     setExpectedCountersForDepthOps(getPerfCounters(), 1, 0, 1, 0, 1, 0, &expected);
-    setExpectedCountersForStencilOps(getPerfCounters(), 0, 1, 0, 1, 0, &expected);
+    setExpectedCountersForStencilOps(getPerfCounters(), 0, 1, 0, 0, 1, &expected);
     drawQuad(greenProgram, essl1_shaders::PositionAttrib(), 0.5f);
     ASSERT_GL_NO_ERROR();
     // Check for the expected number of render passes, expected color, and other expected counters
@@ -1819,9 +2024,9 @@ TEST_P(VulkanPerformanceCounterTest, DepthStencilInvalidateDetachModifyTexAttach
     // Draw again, using a different depth value, so that the drawing takes place
     //
     // Expect rpCount+1, depth(Clears+0, Loads+1, LoadNones+0, Stores+1, StoreNones+0),
-    // stencil(Clears+0, Loads+1, LoadNones+0, Stores+1, StoreNones+0)
+    // stencil(Clears+0, Loads+1, LoadNones+0, Stores+0, StoreNones+1)
     setExpectedCountersForDepthOps(getPerfCounters(), 1, 0, 1, 0, 1, 0, &expected);
-    setExpectedCountersForStencilOps(getPerfCounters(), 0, 1, 0, 1, 0, &expected);
+    setExpectedCountersForStencilOps(getPerfCounters(), 0, 1, 0, 0, 1, &expected);
     drawQuad(greenProgram, essl1_shaders::PositionAttrib(), 0.2f);
     ASSERT_GL_NO_ERROR();
     // Check for the expected number of render passes, expected color, and other expected counters
