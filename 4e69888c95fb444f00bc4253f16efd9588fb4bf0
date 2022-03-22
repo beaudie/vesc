@@ -52,6 +52,24 @@
       "parentUuid": "6a8341db_e8ff7849",
       "revId": "4e69888c95fb444f00bc4253f16efd9588fb4bf0",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "8ebcacff_d35cddce",
+        "filename": "src/tests/gl_tests/StateChangeTest.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 3322,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-03-22T01:34:21Z",
+      "side": 1,
+      "message": "Won\u0027t work:\n\n- Where RGB is supported natively, you\u0027d have to expect storeOp\u003dDONT_CARE, next-loadOp\u003dDONT_CARE\n- Where it\u0027s emulated on IMR, you\u0027d have to expect storeOp\u003dSTORE, next-loadOp\u003dLOAD\n- Where it\u0027s emulated on TBR, you\u0027d have to expect storeOp\u003dDONT_CARE, next-loadOp\u003dCLEAR\n\nChecking exactly that is way too much internal knowledge for the test IMO.\n\nThe work that builds on top of this (mid-RP clear optimization) would probably add more coverage to this. I\u0027ll make sure to add an RGB clear test for it.",
+      "parentUuid": "57ddfb21_2ede4010",
+      "revId": "4e69888c95fb444f00bc4253f16efd9588fb4bf0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }

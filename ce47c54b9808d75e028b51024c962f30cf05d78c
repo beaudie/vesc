@@ -148,6 +148,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "a6cb323b_2da2b5bf",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 2817,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-03-22T01:34:21Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "ccb885bf_7571670b",
+      "range": {
+        "startLine": 2816,
+        "startChar": 14,
+        "endLine": 2817,
+        "endChar": 21
+      },
+      "revId": "ce47c54b9808d75e028b51024c962f30cf05d78c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "2d4fb86e_fc36639c",
@@ -161,6 +185,30 @@
       "writtenOn": "2022-03-21T22:49:39Z",
       "side": 1,
       "message": "This seems a bit counter productive for new adopters. Suggest you remove it. At the worst you could make it a warning. If this is something you really want, I\u0027d suggest you make it a property exposed by the Vulkan Physical Device.",
+      "range": {
+        "startLine": 2819,
+        "startChar": 0,
+        "endLine": 2820,
+        "endChar": 49
+      },
+      "revId": "ce47c54b9808d75e028b51024c962f30cf05d78c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "4599803a_098eea9b",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 2820,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-03-22T01:34:21Z",
+      "side": 1,
+      "message": "Done (made it a warning).",
+      "parentUuid": "2d4fb86e_fc36639c",
       "range": {
         "startLine": 2819,
         "startChar": 0,
