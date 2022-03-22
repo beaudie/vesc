@@ -1050,7 +1050,7 @@ class ContextVk : public ContextImpl, public vk::Context, public MultisampleText
         size_t bufferCount,
         const gl::TransformFeedbackBuffersArray<vk::BufferHelper *> &buffers);
 
-    angle::Result updateRenderPassDepthStencilAccess();
+    angle::Result updateRenderPassDepthStencilAccess(gl::Command command);
     bool shouldSwitchToReadOnlyDepthFeedbackLoopMode(gl::Texture *texture,
                                                      gl::Command command) const;
 

@@ -4248,7 +4248,8 @@ angle::Result Context::prepareForClear(GLbitfield mask)
 {
     // Sync the draw framebuffer manually after the clear attachments.
     ANGLE_TRY(mState.getDrawFramebuffer()->ensureClearAttachmentsInitialized(this, mask));
-    return syncStateForClear();
+    return syncStateForClear(mask == GL_COLOR_BUFFER_BIT ? Command::ClearColorOnly
+                                                         : Command::Clear);
 }
 
 angle::Result Context::prepareForClearBuffer(GLenum buffer, GLint drawbuffer)
@@ -4256,7 +4257,7 @@ angle::Result Context::prepareForClearBuffer(GLenum buffer, GLint drawbuffer)
     // Sync the draw framebuffer manually after the clear attachments.
     ANGLE_TRY(mState.getDrawFramebuffer()->ensureClearBufferAttachmentsInitialized(this, buffer,
                                                                                    drawbuffer));
-    return syncStateForClear();
+    return syncStateForClear(buffer == GL_COLOR ? Command::ClearColorOnly : Command::Clear);
 }
 
 ANGLE_INLINE angle::Result Context::prepareForCopyImage()
@@ -5507,9 +5508,9 @@ angle::Result Context::syncStateForBlit()
     return syncState(mBlitDirtyBits, mBlitDirtyObjects, Command::Blit);
 }
 
-angle::Result Context::syncStateForClear()
+angle::Result Context::syncStateForClear(Command command)
 {
-    return syncState(mClearDirtyBits, mClearDirtyObjects, Command::Clear);
+    return syncState(mClearDirtyBits, mClearDirtyObjects, command);
 }
 
 angle::Result Context::syncTextureForCopy(Texture *texture)
