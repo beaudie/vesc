@@ -41,6 +41,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "b42649d7_41b13410",
+        "filename": "src/gpu_info_util/SystemInfo.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 418,
+      "author": {
+        "id": 1449558
+      },
+      "writtenOn": "2022-03-22T13:43:43Z",
+      "side": 1,
+      "message": "Right.. I thought of this as more of a hack for ANGLE internal use? It\u0027s not part of the API contract and generally the environment shouldn\u0027t be changed.\n\nUsers cannot change environment as they don\u0027t know which thread will read it or when. The environment isn\u0027t thread-safe.\n\nChanged it to non-caching.",
+      "parentUuid": "3ab986a4_7f03defd",
+      "range": {
+        "startLine": 413,
+        "startChar": 0,
+        "endLine": 418,
+        "endChar": 30
+      },
+      "revId": "a197355d70f4c9b02c2b896311b1591b7aa1d1af",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "f45c59e9_c11fc1e3",
@@ -54,6 +78,30 @@
       "writtenOn": "2022-03-17T14:23:35Z",
       "side": 1,
       "message": "Can this return the index into gpus instead? That would allow users to get other info about the gpu as well without searching for the one with the matching device id.\n\nI would call it `getPreferredGPUIndex` in that case.",
+      "range": {
+        "startLine": 65,
+        "startChar": 18,
+        "endLine": 65,
+        "endChar": 32
+      },
+      "revId": "a197355d70f4c9b02c2b896311b1591b7aa1d1af",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "07cea70f_9b005157",
+        "filename": "src/gpu_info_util/SystemInfo.h",
+        "patchSetId": 7
+      },
+      "lineNbr": 65,
+      "author": {
+        "id": 1449558
+      },
+      "writtenOn": "2022-03-22T13:43:43Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "f45c59e9_c11fc1e3",
       "range": {
         "startLine": 65,
         "startChar": 18,
