@@ -430,6 +430,7 @@ class ContextVk : public ContextImpl, public vk::Context, public MultisampleText
     angle::Result onPauseTransformFeedback();
     void pauseTransformFeedbackIfActiveUnpaused();
 
+    void onColorAccessChange() { mGraphicsDirtyBits |= kColorAccessChangeDirtyBits; }
     void onDepthStencilAccessChange() { mGraphicsDirtyBits |= kDepthStencilAccessChangeDirtyBits; }
 
     // When UtilsVk issues draw or dispatch calls, it binds a new pipeline and descriptor sets that
@@ -559,13 +560,16 @@ class ContextVk : public ContextImpl, public vk::Context, public MultisampleText
                                         imageLayout, vk::AliasingMode::Allowed, image);
     }
 
-    void onColorDraw(vk::ImageHelper *image,
+    void onColorDraw(gl::LevelIndex level,
+                     uint32_t layerStart,
+                     uint32_t layerCount,
+                     vk::ImageHelper *image,
                      vk::ImageHelper *resolveImage,
                      vk::PackedAttachmentIndex packedAttachmentIndex)
     {
         ASSERT(mRenderPassCommands->started());
-        mRenderPassCommands->colorImagesDraw(&mResourceUseList, image, resolveImage,
-                                             packedAttachmentIndex);
+        mRenderPassCommands->colorImagesDraw(&mResourceUseList, level, layerStart, layerCount,
+                                             image, resolveImage, packedAttachmentIndex);
     }
     void onDepthStencilDraw(gl::LevelIndex level,
                             uint32_t layerStart,
@@ -753,7 +757,8 @@ class ContextVk : public ContextImpl, public vk::Context, public MultisampleText
         // Dirty bits that must be processed after the render pass is started.  Their handlers
         // record commands.
         DIRTY_BIT_EVENT_LOG,
-        // Update depth/stencil accesses in the render pass.
+        // Update color and depth/stencil accesses in the render pass.
+        DIRTY_BIT_COLOR_ACCESS,
         DIRTY_BIT_DEPTH_STENCIL_ACCESS,
         // Pipeline needs to rebind because a new command buffer has been allocated, or UtilsVk has
         // changed the binding.  The pipeline itself doesn't need to be recreated.
@@ -931,6 +936,8 @@ class ContextVk : public ContextImpl, public vk::Context, public MultisampleText
                                                 DirtyBits dirtyBitMask);
     angle::Result handleDirtyGraphicsEventLog(DirtyBits::Iterator *dirtyBitsIterator,
                                               DirtyBits dirtyBitMask);
+    angle::Result handleDirtyGraphicsColorAccess(DirtyBits::Iterator *dirtyBitsIterator,
+                                                 DirtyBits dirtyBitMask);
     angle::Result handleDirtyGraphicsDepthStencilAccess(DirtyBits::Iterator *dirtyBitsIterator,
                                                         DirtyBits dirtyBitMask);
     angle::Result handleDirtyGraphicsPipelineBinding(DirtyBits::Iterator *dirtyBitsIterator,
@@ -1137,6 +1144,7 @@ class ContextVk : public ContextImpl, public vk::Context, public MultisampleText
     DirtyBits mIndexedDirtyBitsMask;
     DirtyBits mNewGraphicsCommandBufferDirtyBits;
     DirtyBits mNewComputeCommandBufferDirtyBits;
+    static constexpr DirtyBits kColorAccessChangeDirtyBits{DIRTY_BIT_COLOR_ACCESS};
     static constexpr DirtyBits kDepthStencilAccessChangeDirtyBits{
         DIRTY_BIT_READ_ONLY_DEPTH_FEEDBACK_LOOP_MODE, DIRTY_BIT_DEPTH_STENCIL_ACCESS};
     static constexpr DirtyBits kIndexAndVertexDirtyBits{DIRTY_BIT_VERTEX_BUFFERS,

@@ -98,7 +98,8 @@ void RenderTargetVk::onColorDraw(ContextVk *contextVk,
     ASSERT(!mImage->getActualFormat().hasDepthOrStencilBits());
     ASSERT(framebufferLayerCount <= mLayerCount);
 
-    contextVk->onColorDraw(mImage, mResolveImage, packedAttachmentIndex);
+    contextVk->onColorDraw(mLevelIndexGL, mLayerIndex, framebufferLayerCount, mImage, mResolveImage,
+                           packedAttachmentIndex);
     mImage->onWrite(mLevelIndexGL, 1, mLayerIndex, framebufferLayerCount,
                     VK_IMAGE_ASPECT_COLOR_BIT);
     if (mResolveImage)

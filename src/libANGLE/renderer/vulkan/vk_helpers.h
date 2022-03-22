@@ -953,17 +953,26 @@ class RenderPassAttachment final
     gl::Rectangle mInvalidateArea;
 };
 
-// Stores ImageHelpers In packed attachment index
-class PackedImageAttachmentArray final
+// Stores RenderPassAttachment In packed attachment index
+class PackedRenderPassAttachmentArray final
 {
   public:
-    PackedImageAttachmentArray() : mImages{} {}
-    ~PackedImageAttachmentArray() = default;
-    ImageHelper *&operator[](PackedAttachmentIndex index) { return mImages[index.get()]; }
-    void reset() { mImages.fill(nullptr); }
+    PackedRenderPassAttachmentArray() : mAttachments{} {}
+    ~PackedRenderPassAttachmentArray() = default;
+    RenderPassAttachment &operator[](PackedAttachmentIndex index)
+    {
+        return mAttachments[index.get()];
+    }
+    void reset()
+    {
+        for (RenderPassAttachment &attachment : mAttachments)
+        {
+            attachment.reset();
+        }
+    }
 
   private:
-    gl::AttachmentArray<ImageHelper *> mImages;
+    gl::AttachmentArray<RenderPassAttachment> mAttachments;
 };
 
 // The following are used to help track the state of an invalidated attachment.
@@ -1150,6 +1159,9 @@ class RenderPassCommandBufferHelper final : public CommandBufferHelperCommon
                     ImageHelper *image);
 
     void colorImagesDraw(ResourceUseList *resourceUseList,
+                         gl::LevelIndex level,
+                         uint32_t layerStart,
+                         uint32_t layerCount,
                          ImageHelper *image,
                          ImageHelper *resolveImage,
                          PackedAttachmentIndex packedAttachmentIndex);
@@ -1194,7 +1206,10 @@ class RenderPassCommandBufferHelper final : public CommandBufferHelperCommon
 
     void endTransformFeedback();
 
-    void invalidateRenderPassColorAttachment(PackedAttachmentIndex attachmentIndex);
+    void invalidateRenderPassColorAttachment(const gl::State &state,
+                                             size_t colorIndexGL,
+                                             PackedAttachmentIndex attachmentIndex,
+                                             const gl::Rectangle &invalidateArea);
     void invalidateRenderPassDepthAttachment(const gl::DepthStencilState &dsState,
                                              const gl::Rectangle &invalidateArea);
     void invalidateRenderPassStencilAttachment(const gl::DepthStencilState &dsState,
@@ -1225,6 +1240,7 @@ class RenderPassCommandBufferHelper final : public CommandBufferHelperCommon
 
     VkFramebuffer getFramebufferHandle() const { return mFramebuffer.getHandle(); }
 
+    void onColorAccess(PackedAttachmentIndex packedAttachmentIndex, ResourceAccess access);
     void onDepthAccess(ResourceAccess access);
     void onStencilAccess(ResourceAccess access);
 
@@ -1273,9 +1289,13 @@ class RenderPassCommandBufferHelper final : public CommandBufferHelperCommon
                                   ImageHelper *image,
                                   PackedAttachmentIndex packedAttachmentIndex,
                                   bool isResolveImage);
+    void finalizeColorImageLoadStore(Context *context, PackedAttachmentIndex packedAttachmentIndex);
     void finalizeDepthStencilImageLayout(Context *context);
     void finalizeDepthStencilResolveImageLayout(Context *context);
     void finalizeDepthStencilLoadStore(Context *context);
+
+    void finalizeColorImageLayoutAndLoadStore(Context *context,
+                                              PackedAttachmentIndex packedAttachmentIndex);
     void finalizeDepthStencilImageLayoutAndLoadStore(Context *context);
 
     // When using Vulkan secondary command buffers, each subpass must be recorded in a separate
@@ -1313,11 +1333,11 @@ class RenderPassCommandBufferHelper final : public CommandBufferHelperCommon
     // different layout.
     angle::FlatUnorderedSet<ImageSerial, kFlatMapSize> mRenderPassUsedImages;
 
-    // Array size of mColorImages
-    PackedAttachmentCount mColorImagesCount;
+    // Array size of mColorAttachments
+    PackedAttachmentCount mColorAttachmentsCount;
     // Attached render target images. Color and depth resolve images always come last.
-    PackedImageAttachmentArray mColorImages;
-    PackedImageAttachmentArray mColorResolveImages;
+    PackedRenderPassAttachmentArray mColorAttachments;
+    PackedRenderPassAttachmentArray mColorResolveAttachments;
 
     RenderPassAttachment mDepthAttachment;
     RenderPassAttachment mDepthResolveAttachment;

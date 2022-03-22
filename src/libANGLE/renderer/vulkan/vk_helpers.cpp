@@ -1471,7 +1471,7 @@ RenderPassCommandBufferHelper::RenderPassCommandBufferHelper()
       mIsTransformFeedbackActiveUnpaused(false),
       mPreviousSubpassesCmdCount(0),
       mDepthStencilAttachmentIndex(kAttachmentIndexInvalid),
-      mColorImagesCount(0),
+      mColorAttachmentsCount(0),
       mImageOptimizeForPresent(nullptr)
 {}
 
@@ -1495,23 +1495,28 @@ angle::Result RenderPassCommandBufferHelper::reset(Context *context)
 {
     resetImpl();
 
+    for (PackedAttachmentIndex index = kAttachmentIndexZero; index < mColorAttachmentsCount;
+         ++index)
+    {
+        mColorAttachments[index].reset();
+        mColorResolveAttachments[index].reset();
+    }
+
+    mDepthAttachment.reset();
+    mDepthResolveAttachment.reset();
+    mStencilAttachment.reset();
+    mStencilResolveAttachment.reset();
+
     mRenderPassStarted                 = false;
     mValidTransformFeedbackBufferCount = 0;
     mRebindTransformFeedbackBuffers    = false;
     mHasShaderStorageOutput            = false;
     mHasGLMemoryBarrierIssued          = false;
     mPreviousSubpassesCmdCount         = 0;
-    mColorImagesCount                  = PackedAttachmentCount(0);
+    mColorAttachmentsCount             = PackedAttachmentCount(0);
     mDepthStencilAttachmentIndex       = kAttachmentIndexInvalid;
     mRenderPassUsedImages.clear();
-    mColorImages.reset();
-    mColorResolveImages.reset();
     mImageOptimizeForPresent = nullptr;
-
-    mDepthAttachment.reset();
-    mDepthResolveAttachment.reset();
-    mStencilAttachment.reset();
-    mStencilResolveAttachment.reset();
 
     // Reset and re-initialize the command buffers
     for (uint32_t subpass = 0; subpass <= mCurrentSubpass; ++subpass)
@@ -1563,11 +1568,14 @@ void RenderPassCommandBufferHelper::imageWrite(ContextVk *contextVk,
 }
 
 void RenderPassCommandBufferHelper::colorImagesDraw(ResourceUseList *resourceUseList,
+                                                    gl::LevelIndex level,
+                                                    uint32_t layerStart,
+                                                    uint32_t layerCount,
                                                     ImageHelper *image,
                                                     ImageHelper *resolveImage,
                                                     PackedAttachmentIndex packedAttachmentIndex)
 {
-    ASSERT(packedAttachmentIndex < mColorImagesCount);
+    ASSERT(packedAttachmentIndex < mColorAttachmentsCount);
 
     image->retain(resourceUseList);
     if (!usesImage(*image))
@@ -1576,9 +1584,8 @@ void RenderPassCommandBufferHelper::colorImagesDraw(ResourceUseList *resourceUse
         // attachments
         mRenderPassUsedImages.insert(image->getImageSerial());
     }
-    ASSERT(mColorImages[packedAttachmentIndex] == nullptr);
-    mColorImages[packedAttachmentIndex] = image;
-    image->setRenderPassUsageFlag(RenderPassUsage::RenderTargetAttachment);
+    mColorAttachments[packedAttachmentIndex].init(image, level, layerStart, layerCount,
+                                                  VK_IMAGE_ASPECT_COLOR_BIT);
 
     if (resolveImage)
     {
@@ -1587,9 +1594,8 @@ void RenderPassCommandBufferHelper::colorImagesDraw(ResourceUseList *resourceUse
         {
             mRenderPassUsedImages.insert(resolveImage->getImageSerial());
         }
-        ASSERT(mColorResolveImages[packedAttachmentIndex] == nullptr);
-        mColorResolveImages[packedAttachmentIndex] = resolveImage;
-        resolveImage->setRenderPassUsageFlag(RenderPassUsage::RenderTargetAttachment);
+        mColorResolveAttachments[packedAttachmentIndex].init(resolveImage, level, layerStart,
+                                                             layerCount, VK_IMAGE_ASPECT_COLOR_BIT);
     }
 }
 
@@ -1625,6 +1631,13 @@ void RenderPassCommandBufferHelper::depthStencilImagesDraw(ResourceUseList *reso
         mStencilResolveAttachment.init(resolveImage, level, layerStart, layerCount,
                                        VK_IMAGE_ASPECT_STENCIL_BIT);
     }
+}
+
+void RenderPassCommandBufferHelper::onColorAccess(PackedAttachmentIndex packedAttachmentIndex,
+                                                  ResourceAccess access)
+{
+    ASSERT(packedAttachmentIndex < mColorAttachmentsCount);
+    mColorAttachments[packedAttachmentIndex].onAccess(access, getRenderPassWriteCommandCount());
 }
 
 void RenderPassCommandBufferHelper::onDepthAccess(ResourceAccess access)
@@ -1680,7 +1693,7 @@ void RenderPassCommandBufferHelper::finalizeColorImageLayout(
     PackedAttachmentIndex packedAttachmentIndex,
     bool isResolveImage)
 {
-    ASSERT(packedAttachmentIndex < mColorImagesCount);
+    ASSERT(packedAttachmentIndex < mColorAttachmentsCount);
     ASSERT(image != nullptr);
 
     // Do layout change.
@@ -1716,7 +1729,46 @@ void RenderPassCommandBufferHelper::finalizeColorImageLayout(
         mImageOptimizeForPresent = nullptr;
     }
 
-    image->resetRenderPassUsageFlags();
+    if (isResolveImage)
+    {
+        // Note: the color image will have its flags reset after load/store ops are determined.
+        image->resetRenderPassUsageFlags();
+    }
+}
+
+void RenderPassCommandBufferHelper::finalizeColorImageLoadStore(
+    Context *context,
+    PackedAttachmentIndex packedAttachmentIndex)
+{
+    PackedAttachmentOpsDesc &ops = mAttachmentOps[packedAttachmentIndex];
+    RenderPassLoadOp loadOp      = static_cast<RenderPassLoadOp>(ops.loadOp);
+    RenderPassStoreOp storeOp    = static_cast<RenderPassStoreOp>(ops.storeOp);
+
+    // This has to be called after layout been finalized
+    ASSERT(ops.initialLayout != static_cast<uint16_t>(ImageLayout::Undefined));
+
+    uint32_t currentCmdCount = getRenderPassWriteCommandCount();
+    bool isInvalidated       = false;
+
+    RenderPassAttachment &colorAttachment = mColorAttachments[packedAttachmentIndex];
+    colorAttachment.finalizeLoadStore(context, currentCmdCount,
+                                      mRenderPassDesc.getColorUnresolveAttachmentMask().any(),
+                                      &loadOp, &storeOp, &isInvalidated);
+
+    if (isInvalidated)
+    {
+        ops.isInvalidated = true;
+    }
+
+    // If the image is being written to, mark its contents defined.
+    // This has to be done after storeOp has been finalized.
+    if (storeOp == RenderPassStoreOp::Store)
+    {
+        colorAttachment.restoreContent();
+    }
+
+    SetBitField(ops.loadOp, loadOp);
+    SetBitField(ops.storeOp, storeOp);
 }
 
 void RenderPassCommandBufferHelper::finalizeDepthStencilImageLayout(Context *context)
@@ -1808,17 +1860,19 @@ void RenderPassCommandBufferHelper::finalizeImageLayout(Context *context, const 
 {
     if (image->hasRenderPassUsageFlag(RenderPassUsage::RenderTargetAttachment))
     {
-        for (PackedAttachmentIndex index = kAttachmentIndexZero; index < mColorImagesCount; ++index)
+        for (PackedAttachmentIndex index = kAttachmentIndexZero; index < mColorAttachmentsCount;
+             ++index)
         {
-            if (mColorImages[index] == image)
+            if (mColorAttachments[index].getImage() == image)
             {
-                finalizeColorImageLayout(context, mColorImages[index], index, false);
-                mColorImages[index] = nullptr;
+                finalizeColorImageLayoutAndLoadStore(context, index);
+                mColorAttachments[index].reset();
             }
-            else if (mColorResolveImages[index] == image)
+            else if (mColorResolveAttachments[index].getImage() == image)
             {
-                finalizeColorImageLayout(context, mColorResolveImages[index], index, true);
-                mColorResolveImages[index] = nullptr;
+                finalizeColorImageLayout(context, mColorResolveAttachments[index].getImage(), index,
+                                         true);
+                mColorResolveAttachments[index].reset();
             }
         }
     }
@@ -1892,6 +1946,17 @@ void RenderPassCommandBufferHelper::finalizeDepthStencilLoadStore(Context *conte
     SetBitField(dsOps.stencilStoreOp, stencilStoreOp);
 }
 
+void RenderPassCommandBufferHelper::finalizeColorImageLayoutAndLoadStore(
+    Context *context,
+    PackedAttachmentIndex packedAttachmentIndex)
+{
+    finalizeColorImageLayout(context, mColorAttachments[packedAttachmentIndex].getImage(),
+                             packedAttachmentIndex, false);
+    finalizeColorImageLoadStore(context, packedAttachmentIndex);
+
+    mColorAttachments[packedAttachmentIndex].getImage()->resetRenderPassUsageFlags();
+}
+
 void RenderPassCommandBufferHelper::finalizeDepthStencilImageLayoutAndLoadStore(Context *context)
 {
     finalizeDepthStencilImageLayout(context);
@@ -1917,7 +1982,7 @@ angle::Result RenderPassCommandBufferHelper::beginRenderPass(
     mRenderPassDesc              = renderPassDesc;
     mAttachmentOps               = renderPassAttachmentOps;
     mDepthStencilAttachmentIndex = depthStencilAttachmentIndex;
-    mColorImagesCount            = colorAttachmentCount;
+    mColorAttachmentsCount       = colorAttachmentCount;
     mFramebuffer.setHandle(framebuffer.getHandle());
     mRenderArea       = renderArea;
     mClearValues      = clearValues;
@@ -1943,15 +2008,17 @@ angle::Result RenderPassCommandBufferHelper::endRenderPass(ContextVk *contextVk)
 {
     ANGLE_TRY(endRenderPassCommandBuffer(contextVk));
 
-    for (PackedAttachmentIndex index = kAttachmentIndexZero; index < mColorImagesCount; ++index)
+    for (PackedAttachmentIndex index = kAttachmentIndexZero; index < mColorAttachmentsCount;
+         ++index)
     {
-        if (mColorImages[index])
+        if (mColorAttachments[index].getImage() != nullptr)
         {
-            finalizeColorImageLayout(contextVk, mColorImages[index], index, false);
+            finalizeColorImageLayoutAndLoadStore(contextVk, index);
         }
-        if (mColorResolveImages[index])
+        if (mColorResolveAttachments[index].getImage() != nullptr)
         {
-            finalizeColorImageLayout(contextVk, mColorResolveImages[index], index, true);
+            finalizeColorImageLayout(contextVk, mColorResolveAttachments[index].getImage(), index,
+                                     true);
         }
     }
 
@@ -2042,10 +2109,21 @@ void RenderPassCommandBufferHelper::endTransformFeedback()
 }
 
 void RenderPassCommandBufferHelper::invalidateRenderPassColorAttachment(
-    PackedAttachmentIndex attachmentIndex)
+    const gl::State &state,
+    size_t colorIndexGL,
+    PackedAttachmentIndex attachmentIndex,
+    const gl::Rectangle &invalidateArea)
 {
-    SetBitField(mAttachmentOps[attachmentIndex].storeOp, RenderPassStoreOp::DontCare);
-    mAttachmentOps[attachmentIndex].isInvalidated = true;
+    // Color write is enabled if:
+    //
+    // - Draw buffer is enabled (this is implicit, as invalidate only affects enabled draw buffers)
+    // - Color output is not entirely masked
+    // - Rasterizer-discard is not enabled
+    const gl::BlendStateExt &blendStateExt = state.getBlendStateExt();
+    const bool isColorWriteEnabled =
+        blendStateExt.getColorMaskIndexed(colorIndexGL) != 0 && state.isRasterizerDiscardEnabled();
+    mColorAttachments[attachmentIndex].invalidate(invalidateArea, isColorWriteEnabled,
+                                                  getRenderPassWriteCommandCount());
 }
 
 void RenderPassCommandBufferHelper::invalidateRenderPassDepthAttachment(
