@@ -3,6 +3,29 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "7542a374_77107d49",
+        "filename": "src/tests/gl_tests/ProgramBinaryTest.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 559,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2022-03-22T14:39:10Z",
+      "side": 1,
+      "message": "We disable binary formats when capture is enabled:\nhttps://source.chromium.org/chromium/chromium/src/+/main:third_party/angle/src/libANGLE/Context.cpp;l\u003d3974-3980\n\nWe did add the ability to force it on though, specifically for Fortnite, which won\u0027t start without it.  I\u0027m curious what the test does when you enable `enableProgramBinaryForCapture`.",
+      "range": {
+        "startLine": 559,
+        "startChar": 18,
+        "endLine": 559,
+        "endChar": 47
+      },
+      "revId": "6b2e144844958b302f70dc2fc4c493da802a2d61",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "faf7197e_a5c08a6e",
         "filename": "src/tests/gl_tests/ProgramBinaryTest.cpp",
         "patchSetId": 2
