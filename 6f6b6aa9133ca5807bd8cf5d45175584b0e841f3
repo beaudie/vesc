@@ -33,6 +33,24 @@
       "message": "The revert says the extension was not enabled due to test bug... should there be a fix accompanied?",
       "revId": "6f6b6aa9133ca5807bd8cf5d45175584b0e841f3",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "4c675608_708a8914",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2022-03-22T18:17:34Z",
+      "side": 1,
+      "message": "The bug was sitting in the chair. I think I may have not rebuilt the test that asserted the extension was enabled when I was doing local testing.",
+      "parentUuid": "e1bd6434_cf7d061e",
+      "revId": "6f6b6aa9133ca5807bd8cf5d45175584b0e841f3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
