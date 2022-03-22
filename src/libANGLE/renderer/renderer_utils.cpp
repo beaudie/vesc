@@ -591,12 +591,25 @@ angle::Result IncompleteTextureSet::getIncompleteTexture(
 
     ContextImpl *implFactory = context->getImplementation();
 
-    const gl::Extents colorSize(1, 1, 1);
+    gl::Extents colorSize(1, 1, 1);
     gl::PixelUnpackState unpack;
     unpack.alignment = 1;
-    const gl::Box area(0, 0, 0, 1, 1, 1);
+    gl::Box area(0, 0, 0, 1, 1, 1);
     const IncompleteTextureParameters &incompleteTextureParam =
         kIncompleteTextureParameters[format];
+
+    // Cube map arrays are expected to have layer counts that are multiples of 6
+    if (type == gl::TextureType::CubeMapArray)
+    {
+        // From the GLES 3.2 spec:
+        //   8.18. IMMUTABLE-FORMAT TEXTURE IMAGES
+        //   TexStorage3D Errors
+        //   An INVALID_OPERATION error is generated if any of the following conditions hold:
+        //     * target is TEXTURE_CUBE_MAP_ARRAY and depth is not a multiple of 6
+        // Since ANGLE treats incomplete textures as immutable, respect that here.
+        colorSize.depth = 6;
+        area.depth      = 6;
+    }
 
     // If a texture is external use a 2D texture for the incomplete texture
     gl::TextureType createType = (type == gl::TextureType::External) ? gl::TextureType::_2D : type;
