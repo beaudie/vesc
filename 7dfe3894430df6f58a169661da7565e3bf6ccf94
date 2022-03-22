@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "7e2dd9bf_77a4227d",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2022-03-22T00:17:45Z",
+      "side": 1,
+      "message": "lgtm\n\nGreat work tracking this down and writing the test case for it Alexey! I confirmed that the new test was run on mac-test in previous patch sets.\n",
+      "revId": "7dfe3894430df6f58a169661da7565e3bf6ccf94",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
