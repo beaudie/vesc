@@ -16,6 +16,23 @@
       "message": "PTAL. This is a reland (you can compare to PS1) but it looks like I messed up my local testing of the first CL and the test I added just wasn\u0027t running at all.\n\nThis time I super confirmed that the extension is present and being used by Chrome.",
       "revId": "6f6b6aa9133ca5807bd8cf5d45175584b0e841f3",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "e1bd6434_cf7d061e",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-03-22T15:38:51Z",
+      "side": 1,
+      "message": "The revert says the extension was not enabled due to test bug... should there be a fix accompanied?",
+      "revId": "6f6b6aa9133ca5807bd8cf5d45175584b0e841f3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
