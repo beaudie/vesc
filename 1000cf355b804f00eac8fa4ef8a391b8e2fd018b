@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "6290d5e3_6be8fbb6",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1001921
+      },
+      "writtenOn": "2022-03-22T02:02:36Z",
+      "side": 1,
+      "message": "Jamie, PTAL, suppressed VUID.",
+      "revId": "1000cf355b804f00eac8fa4ef8a391b8e2fd018b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
