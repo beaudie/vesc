@@ -65,6 +65,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "fc3a1fc5_74731584",
+        "filename": "src/gpu_info_util/SystemInfo.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 418,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2022-03-22T17:48:35Z",
+      "side": 1,
+      "message": "You\u0027re right, its for our internal use (and possibly Chrome). I\u0027ve just seen a bunch of bugs where we were testing with the wrong GPU unexpectedly so the simpler this API is the better.",
+      "parentUuid": "b42649d7_41b13410",
+      "range": {
+        "startLine": 413,
+        "startChar": 0,
+        "endLine": 418,
+        "endChar": 30
+      },
+      "revId": "a197355d70f4c9b02c2b896311b1591b7aa1d1af",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "f45c59e9_c11fc1e3",
