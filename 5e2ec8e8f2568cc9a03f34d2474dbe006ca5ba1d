@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "c6c34632_0f29b785",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-03-22T19:56:28Z",
+      "side": 1,
+      "message": "Motivations for this change:\n\n- To track color access, it turned out to be a mess doing it the D/S way without dirty bits. The mess basically stems from the fact that we update color masks etc in both context and framebuffer syncs, and the framebuffer and the currently open render pass don\u0027t necessarily match. Tracking color access with dirty bits is simpler, and so I made D/S similar to that.\n- With dirty bits, we can more efficiently make more state affect D/S access, for example rasterizer discard. I suspect this will soon be a necessity when optimizing that app that had a first xfb pass with rasterizer discard on the default swapchain.",
+      "revId": "5e2ec8e8f2568cc9a03f34d2474dbe006ca5ba1d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
