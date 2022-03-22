@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "c7f1bfdb_a7457381",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 5
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1290487
+      },
+      "writtenOn": "2022-03-22T14:36:51Z",
+      "side": 1,
+      "message": "This CL is ready for review.  Previous patchsets removed various FAIL lines from expectation files, and then I observed which tests still failed.  I added back Pixel 6 FAIL lines since CQ bots don\u0027t include any Pixel 6\u0027s.  I\u0027ll start testing those on my Pixel 6 soon.\n\nI\u0027ve been trying to record status in the spreadsheet that Yuxin created (thanks again).",
+      "revId": "3a82eb448e6833d59e85d9b291039e67413d2d98",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
