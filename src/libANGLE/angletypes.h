@@ -34,6 +34,7 @@ enum class Command
 {
     Blit,
     Clear,
+    ClearColorOnly,
     CopyImage,
     Dispatch,
     Draw,
