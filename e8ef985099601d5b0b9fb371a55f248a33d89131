@@ -33,6 +33,24 @@
       "message": "Thanks for finding this.\nI was wondering why there were no -\u003e AOSP rolls to approve in this wrangling shift.\nDid you get some notification about the autoroller not being able to create a CL?\nIf there is one, I think wrangler needs to get it, too.",
       "revId": "e8ef985099601d5b0b9fb371a55f248a33d89131",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "7d5a8697_02317fa4",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1290487
+      },
+      "writtenOn": "2022-03-22T22:22:34Z",
+      "side": 1,
+      "message": "Seems like we need something to notify us.  We got lucky here.  Frank Yang noticed it last week, and pinged me on chat.  Then, he filed a bug and sent it to Geoff, who passed it on to me:-).",
+      "parentUuid": "79b91e19_8f8fab07",
+      "revId": "e8ef985099601d5b0b9fb371a55f248a33d89131",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
