@@ -937,6 +937,12 @@ class TextureCubeTestES3 : public ANGLETest
     TextureCubeTestES3() {}
 };
 
+class TextureCubeArrayTestES3 : public ANGLETest
+{
+  protected:
+    TextureCubeArrayTestES3() {}
+};
+
 class SamplerArrayTest : public TexCoordDrawTest
 {
   protected:
@@ -8991,6 +8997,44 @@ TEST_P(TextureCubeTestES3, CubeMapPixelUnpackBuffer)
     EXPECT_PIXEL_COLOR_EQ(0, 0, angle::GLColor::red);
 }
 
+// This mirrors a scenario seen in GFXBench Car Chase where a
+// default CUBE_MAP_ARRAY texture is used without being setup.
+// Its ends up sampling from an incomplete texture.
+TEST_P(TextureCubeArrayTestES3, IncompleteTexture)
+{
+    constexpr char kVS[] =
+        R"(#version 310 es
+        precision mediump float;
+        in vec3 pos;
+        void main() {
+            gl_Position = vec4(pos, 1.0);
+        })";
+
+    constexpr char kFS[] =
+        R"(#version 310 es
+        #extension GL_EXT_texture_cube_map_array : enable
+        precision mediump float;
+        out vec4 color;
+        uniform lowp samplerCubeArray uTex;
+        void main(){
+            color = texture(uTex, vec4(0.0));
+        })";
+
+    ANGLE_GL_PROGRAM(program, kVS, kFS);
+    glUseProgram(program);
+
+    glUniform1i(glGetUniformLocation(program, "uTex"), 0);
+    glActiveTexture(GL_TEXTURE0);
+
+    // Bind the default texture and don't set it up. This ends up being incomplete.
+    glBindTexture(GL_TEXTURE_CUBE_MAP_ARRAY, 0);
+
+    drawQuad(program, "pos", 0.5f, 1.0f, true);
+    ASSERT_GL_NO_ERROR();
+
+    EXPECT_PIXEL_COLOR_EQ(0, 0, angle::GLColor::white);
+}
+
 // Verify that using negative texture base level and max level generates GL_INVALID_VALUE.
 TEST_P(Texture2DTestES3, NegativeTextureBaseLevelAndMaxLevel)
 {
@@ -10567,6 +10611,9 @@ ANGLE_INSTANTIATE_TEST_ES2(Texture2DFloatTestES2);
 
 GTEST_ALLOW_UNINSTANTIATED_PARAMETERIZED_TEST(TextureCubeTestES3);
 ANGLE_INSTANTIATE_TEST_ES3(TextureCubeTestES3);
+
+GTEST_ALLOW_UNINSTANTIATED_PARAMETERIZED_TEST(TextureCubeArrayTestES3);
+ANGLE_INSTANTIATE_TEST_ES31(TextureCubeArrayTestES3);
 
 GTEST_ALLOW_UNINSTANTIATED_PARAMETERIZED_TEST(Texture2DIntegerTestES3);
 ANGLE_INSTANTIATE_TEST_ES3(Texture2DIntegerTestES3);
