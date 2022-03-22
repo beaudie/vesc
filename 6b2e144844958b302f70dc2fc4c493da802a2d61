@@ -26,6 +26,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "429d86a6_6ae280ca",
+        "filename": "src/tests/gl_tests/ProgramBinaryTest.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 559,
+      "author": {
+        "id": 1491823
+      },
+      "writtenOn": "2022-03-22T18:05:19Z",
+      "side": 1,
+      "message": "Firstly the test fails because GetProgramBinaryOES parameters are not captured. \nWith this: https://chromium-review.googlesource.com/c/angle/angle/+/3543805\nand enable above flag I get:  \n\n```\nPass: \n\tProgramBinaryES3Test.UniformBlockBindingNoDraw/ES3_Vulkan_SwiftShader\n\tProgramBinaryES3Test.UniformBlockBindingWithDraw/ES3_Vulkan_SwiftShader\nFail: \n\tProgramBinaryES3Test.ActiveUniformShader/ES3_Vulkan_SwiftShader\n\tProgramBinaryES3Test.BinaryWithLargeUniformCount/ES3_Vulkan_SwiftShader\n\tProgramBinaryES3Test.SaveAndLoadDetachedShaders/ES3_Vulkan_SwiftShader\n\tProgramBinaryES3Test.TestArrayOfStructUniform/ES3_Vulkan_SwiftShader\n```\n\nThe failure are basically variations of \n\n```\n    \"UniformLocations\": {},\n    \"Uniforms\": {},\n+   \"a_position\": 0,\n    \"workGroupSize\": {\n```",
+      "parentUuid": "7542a374_77107d49",
+      "range": {
+        "startLine": 559,
+        "startChar": 18,
+        "endLine": 559,
+        "endChar": 47
+      },
+      "revId": "6b2e144844958b302f70dc2fc4c493da802a2d61",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "faf7197e_a5c08a6e",
         "filename": "src/tests/gl_tests/ProgramBinaryTest.cpp",
         "patchSetId": 2
