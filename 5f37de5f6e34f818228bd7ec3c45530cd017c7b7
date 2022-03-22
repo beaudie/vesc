@@ -57,6 +57,30 @@
       },
       "revId": "5f37de5f6e34f818228bd7ec3c45530cd017c7b7",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "15927c55_96e42097",
+        "filename": "src/libANGLE/renderer/vulkan/FramebufferVk.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 1573,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-03-22T17:53:26Z",
+      "side": 1,
+      "message": "\u003e The only changes ever done are done if `preferToKeepContentsDefined` is true.\n\nWell, it\u0027s *RenderTarget-\u003einvalidateEntire*Content that decides, per attachment, if invalidate should be skipped.",
+      "parentUuid": "495812fa_328f1785",
+      "range": {
+        "startLine": 1569,
+        "startChar": 0,
+        "endLine": 1573,
+        "endChar": 0
+      },
+      "revId": "5f37de5f6e34f818228bd7ec3c45530cd017c7b7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
