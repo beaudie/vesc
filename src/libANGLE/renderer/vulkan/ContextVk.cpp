@@ -282,18 +282,20 @@ EventName GetTraceEventName(const char *title, uint32_t counter)
     return buf;
 }
 
-vk::ResourceAccess GetDepthAccess(const gl::DepthStencilState &dsState)
+vk::ResourceAccess GetDepthAccess(const gl::DepthStencilState &dsState, gl::Command command)
 {
-    if (!dsState.depthTest)
+    // Note that clear commands don't respect depth test enable, only the mask
+    if (!dsState.depthTest && command != gl::Command::Clear)
     {
         return vk::ResourceAccess::Unused;
     }
     return dsState.isDepthMaskedOut() ? vk::ResourceAccess::ReadOnly : vk::ResourceAccess::Write;
 }
 
-vk::ResourceAccess GetStencilAccess(const gl::DepthStencilState &dsState)
+vk::ResourceAccess GetStencilAccess(const gl::DepthStencilState &dsState, gl::Command command)
 {
-    if (!dsState.stencilTest)
+    // Note that clear commands don't respect stencil test enable, only the mask
+    if (!dsState.stencilTest && command != gl::Command::Clear)
     {
         return vk::ResourceAccess::Unused;
     }
@@ -4043,7 +4045,7 @@ angle::Result ContextVk::syncState(const gl::Context *context,
                 mGraphicsPipelineDesc->updateDepthWriteEnabled(&mGraphicsPipelineTransition,
                                                                glState.getDepthStencilState(),
                                                                glState.getDrawFramebuffer());
-                ANGLE_TRY(updateRenderPassDepthStencilAccess());
+                ANGLE_TRY(updateRenderPassDepthStencilAccess(command));
                 break;
             }
             case gl::State::DIRTY_BIT_STENCIL_TEST_ENABLED:
@@ -4051,7 +4053,7 @@ angle::Result ContextVk::syncState(const gl::Context *context,
                 mGraphicsPipelineDesc->updateStencilTestEnabled(&mGraphicsPipelineTransition,
                                                                 glState.getDepthStencilState(),
                                                                 glState.getDrawFramebuffer());
-                ANGLE_TRY(updateRenderPassDepthStencilAccess());
+                iter.setLaterBit(gl::State::DIRTY_BIT_STENCIL_WRITEMASK_FRONT);
                 break;
             }
             case gl::State::DIRTY_BIT_STENCIL_FUNCS_FRONT:
@@ -4076,6 +4078,7 @@ angle::Result ContextVk::syncState(const gl::Context *context,
                 mGraphicsPipelineDesc->updateStencilFrontWriteMask(&mGraphicsPipelineTransition,
                                                                    glState.getDepthStencilState(),
                                                                    glState.getDrawFramebuffer());
+                ANGLE_TRY(updateRenderPassDepthStencilAccess(command));
                 break;
             case gl::State::DIRTY_BIT_STENCIL_WRITEMASK_BACK:
                 mGraphicsPipelineDesc->updateStencilBackWriteMask(&mGraphicsPipelineTransition,
@@ -6118,8 +6121,8 @@ angle::Result ContextVk::startRenderPass(gl::Rectangle renderArea,
     ANGLE_TRY(resumeRenderPassQueriesIfActive());
 
     const gl::DepthStencilState &dsState = mState.getDepthStencilState();
-    vk::ResourceAccess depthAccess       = GetDepthAccess(dsState);
-    vk::ResourceAccess stencilAccess     = GetStencilAccess(dsState);
+    vk::ResourceAccess depthAccess       = GetDepthAccess(dsState, gl::Command::Other);
+    vk::ResourceAccess stencilAccess     = GetStencilAccess(dsState, gl::Command::Other);
     mRenderPassCommands->onDepthAccess(depthAccess);
     mRenderPassCommands->onStencilAccess(stencilAccess);
 
@@ -6584,14 +6587,14 @@ void ContextVk::onProgramExecutableReset(ProgramExecutableVk *executableVk)
     }
 }
 
-angle::Result ContextVk::updateRenderPassDepthStencilAccess()
+angle::Result ContextVk::updateRenderPassDepthStencilAccess(gl::Command command)
 {
     FramebufferVk *drawFramebufferVk = getDrawFramebuffer();
     if (hasStartedRenderPass() && drawFramebufferVk->getDepthStencilRenderTarget())
     {
         const gl::DepthStencilState &dsState = mState.getDepthStencilState();
-        vk::ResourceAccess depthAccess       = GetDepthAccess(dsState);
-        vk::ResourceAccess stencilAccess     = GetStencilAccess(dsState);
+        vk::ResourceAccess depthAccess       = GetDepthAccess(dsState, command);
+        vk::ResourceAccess stencilAccess     = GetStencilAccess(dsState, command);
 
         if ((depthAccess == vk::ResourceAccess::Write ||
              stencilAccess == vk::ResourceAccess::Write) &&
