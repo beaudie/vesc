@@ -107,6 +107,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "4472aec1_0254f153",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-03-22T01:08:23Z",
+      "side": 1,
+      "message": "Context: b/180139027\n\nThere is at least one game we know of that was affected by this.",
+      "parentUuid": "24878556_662e7b92",
+      "revId": "ce47c54b9808d75e028b51024c962f30cf05d78c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "ccb885bf_7571670b",
