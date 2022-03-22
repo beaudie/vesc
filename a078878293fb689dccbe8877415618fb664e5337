@@ -33,6 +33,23 @@
       "message": "Gonna +2 proactively in case you prefer to land this one",
       "revId": "a078878293fb689dccbe8877415618fb664e5337",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "aa373dc7_dc1b163d",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1001921
+      },
+      "writtenOn": "2022-03-22T01:30:28Z",
+      "side": 1,
+      "message": "I prefer this one for the context.\nThanks for pointing out the other one, I\u0027ll abandon it.",
+      "revId": "a078878293fb689dccbe8877415618fb664e5337",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
