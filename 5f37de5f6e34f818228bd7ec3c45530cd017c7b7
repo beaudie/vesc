@@ -16,6 +16,24 @@
       "message": "LGTM once Jamie\u0027s comment closed.",
       "revId": "5f37de5f6e34f818228bd7ec3c45530cd017c7b7",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "52483e1e_84dc5c9a",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-03-22T17:22:23Z",
+      "side": 1,
+      "message": "Thanks. Anything else Jamie?",
+      "parentUuid": "64ea9b80_80db4d9e",
+      "revId": "5f37de5f6e34f818228bd7ec3c45530cd017c7b7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
