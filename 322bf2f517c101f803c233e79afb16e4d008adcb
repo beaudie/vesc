@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "6d3fd54d_11427e61",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-03-22T19:51:37Z",
+      "side": 1,
+      "message": "The gl::Command stuff is reverted in the next change. I wanted to have something that passes the tests before the more complicated change.",
+      "revId": "322bf2f517c101f803c233e79afb16e4d008adcb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
