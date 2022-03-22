@@ -18,6 +18,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "e0e1c7f4_b1bafe7b",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 5
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1520902
+      },
+      "writtenOn": "2022-03-22T18:04:43Z",
+      "side": 1,
+      "message": "Thank you Ian! I have couple questions:\n\n1. Does this CL only cover tests that are marked as \"FAIL\"?\n2. Does this CL only verify the tests on Pixel 4 (android-arm64-test)?",
+      "parentUuid": "c7f1bfdb_a7457381",
+      "revId": "3a82eb448e6833d59e85d9b291039e67413d2d98",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "467d31a2_8845458c",
