@@ -180,6 +180,7 @@ class ANGLE_UTIL_EXPORT EGLWindow : public GLWindowBase
 
     // Only initializes the Context.
     bool initializeContext();
+    bool initializeContext(EGLContext share, EGLint *extraAttributes);
 
     void destroySurface();
     void destroyContext();

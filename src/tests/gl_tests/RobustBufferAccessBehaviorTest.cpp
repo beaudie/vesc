@@ -72,7 +72,11 @@ class RobustBufferAccessBehaviorTest : public ANGLETest
             return false;
         }
 
-        if (!mEGLWindow->initializeContext())
+        EGLint inShareGroupContextAttribs[] = {EGL_DISPLAY_TEXTURE_SHARE_GROUP_ANGLE, EGL_TRUE,
+                                               EGL_ROBUST_RESOURCE_INITIALIZATION_ANGLE, EGL_TRUE,
+                                               EGL_NONE};
+
+        if (!mEGLWindow->initializeContext(EGL_NO_CONTEXT, inShareGroupContextAttribs))
         {
             return false;
         }
@@ -139,8 +143,9 @@ class RobustBufferAccessBehaviorTest : public ANGLETest
 
         GLBuffer bufferIncomplete;
         glBindBuffer(GL_ARRAY_BUFFER, bufferIncomplete);
-        std::array<GLfloat, 12> randomData = {
-            {0.2f, 0.2f, 0.2f, 0.2f, 0.2f, 0.2f, 0.2f, 0.2f, 0.2f, 0.2f, 0.2f, 0.2f}};
+        std::array<GLfloat, 4> randomData = {0.2f, 0.2f, 0.2f, 0.2f};
+        /*std::array<GLfloat, 12> randomData = {
+            {0.2f, 0.2f, 0.2f, 0.2f, 0.2f, 0.2f, 0.2f, 0.2f, 0.2f, 0.2f, 0.2f, 0.2f}};*/
         glBufferData(GL_ARRAY_BUFFER, sizeof(GLfloat) * randomData.size(), randomData.data(),
                      drawType);
 
@@ -150,7 +155,8 @@ class RobustBufferAccessBehaviorTest : public ANGLETest
         glClearColor(0.0, 0.0, 1.0, 1.0);
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-        drawIndexedQuad(mProgram, "position", 0.5f);
+        // drawIndexedQuad(mProgram, "position", 0.5f);
+        drawQuad(mProgram, "position", 0.5);
 
         int width     = getWindowWidth();
         int height    = getWindowHeight();
@@ -512,6 +518,70 @@ TEST_P(RobustBufferAccessBehaviorTest, EmptyBuffer)
     ASSERT_GL_NO_ERROR();
 }
 
+// Adapted from WebGL test
+// conformance/rendering/out of bounds array buffers.html
+
+TEST_P(RobustBufferAccessBehaviorTest, BufferOutOfBounds)
+{
+    ANGLE_SKIP_TEST_IF(!initExtension());
+
+    if (mProgram == 0)
+    {
+        initBasicProgram();
+    }
+
+    constexpr GLint kPosLoc    = 0;
+    constexpr GLint kRandomLoc = 1;
+
+    ASSERT_EQ(kPosLoc, glGetAttribLocation(mProgram, "position"));
+    ASSERT_EQ(kRandomLoc, glGetAttribLocation(mProgram, "vecRandom"));
+
+    // Create a buffer of 200 valid sets of quad lists.
+    constexpr size_t kNumQuads = 200;
+    using QuadVerts            = std::array<Vector3, 6>;
+    std::vector<QuadVerts> quadVerts(kNumQuads, GetQuadVertices());
+
+    GLBuffer positionBuf;
+    glBindBuffer(GL_ARRAY_BUFFER, positionBuf);
+    glBufferData(GL_ARRAY_BUFFER, kNumQuads * sizeof(QuadVerts), quadVerts.data(), GL_STATIC_DRAW);
+    glVertexAttribPointer(kPosLoc, 3, GL_FLOAT, GL_FALSE, 0, nullptr);
+    glEnableVertexAttribArray(kPosLoc);
+
+    // create a buffer of 6 random values
+    std::array<GLfloat, 6> randomData = {0.2f, 0.2f, 0.2f, 0.2f, 0.2f, 0.2f};
+    GLBuffer randomBuf;
+    glBindBuffer(GL_ARRAY_BUFFER, randomBuf);
+    glBufferData(GL_ARRAY_BUFFER, randomData.size() * sizeof(GLfloat), randomData.data(),
+                 GL_STATIC_DRAW);
+    glVertexAttribPointer(kRandomLoc, 4, GL_FLOAT, GL_FALSE, 0, nullptr);
+    glEnableVertexAttribArray(kRandomLoc);
+
+    glClearColor(0.0, 0.0, 1.0, 1.0);
+    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+
+    // This will access randomBuf beyond the data we stored
+    glDrawArrays(GL_TRIANGLES, (kNumQuads - 1) * 6, 6);
+    int width     = getWindowWidth();
+    int height    = getWindowHeight();
+    GLenum result = glGetError();
+
+    if (result == GL_INVALID_OPERATION)
+    {
+        EXPECT_PIXEL_COLOR_EQ(width * 1 / 4, height * 1 / 4, GLColor::blue);
+        EXPECT_PIXEL_COLOR_EQ(width * 1 / 4, height * 3 / 4, GLColor::blue);
+        EXPECT_PIXEL_COLOR_EQ(width * 3 / 4, height * 1 / 4, GLColor::blue);
+        EXPECT_PIXEL_COLOR_EQ(width * 3 / 4, height * 3 / 4, GLColor::blue);
+    }
+    else
+    {
+        EXPECT_GLENUM_EQ(GL_NO_ERROR, result);
+        EXPECT_PIXEL_COLOR_EQ(width * 1 / 4, height * 1 / 4, GLColor::green);
+        EXPECT_PIXEL_COLOR_EQ(width * 1 / 4, height * 3 / 4, GLColor::green);
+        EXPECT_PIXEL_COLOR_EQ(width * 3 / 4, height * 1 / 4, GLColor::green);
+        EXPECT_PIXEL_COLOR_EQ(width * 3 / 4, height * 3 / 4, GLColor::green);
+    }
+}
+
 // Tests robust buffer access with dynamic buffer usage.
 TEST_P(RobustBufferAccessBehaviorTest, DynamicBuffer)
 {
@@ -680,6 +750,7 @@ void main(void) {
 
 ANGLE_INSTANTIATE_TEST(RobustBufferAccessBehaviorTest,
                        WithNoFixture(ES3_VULKAN()),
+                       WithNoFixture(ES3_VULKAN_SWIFTSHADER()),
                        WithNoFixture(ES3_OPENGL()),
                        WithNoFixture(ES3_OPENGLES()),
                        WithNoFixture(ES3_D3D11()),

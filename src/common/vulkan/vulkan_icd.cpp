@@ -57,8 +57,8 @@ ANGLE_MAYBE_UNUSED const std::string WrapICDEnvironment(const char *icdEnvironme
 ANGLE_MAYBE_UNUSED constexpr char kLoaderLayersPathEnv[] = "VK_LAYER_PATH";
 ANGLE_MAYBE_UNUSED constexpr char kLayerEnablesEnv[]     = "VK_LAYER_ENABLES";
 
-constexpr char kLoaderICDFilenamesEnv[]              = "VK_ICD_FILENAMES";
-constexpr char kANGLEPreferredDeviceEnv[]            = "ANGLE_PREFERRED_DEVICE";
+constexpr char kLoaderICDFilenamesEnv[] = "VK_ICD_FILENAMES";
+// constexpr char kANGLEPreferredDeviceEnv[]            = "ANGLE_PREFERRED_DEVICE";
 constexpr char kValidationLayersCustomSTypeListEnv[] = "VK_LAYER_CUSTOM_STYPE_LIST";
 constexpr char kNoDeviceSelect[]                     = "NODEVICE_SELECT";
 
@@ -90,8 +90,10 @@ ICDFilterFunc GetFilterForICD(vk::ICD preferredICD)
                                  strlen(kSwiftShaderDeviceName)) == 0));
             };
         default:
-            const std::string anglePreferredDevice =
-                angle::GetEnvironmentVar(kANGLEPreferredDeviceEnv);
+            /*const std::string anglePreferredDevice =
+                angle::GetEnvironmentVar(kANGLEPreferredDeviceEnv);*/
+            const std::string anglePreferredDevice = "Intel(R) UHD Graphics";
+            // const std::string anglePreferredDevice = "intel";
             return [anglePreferredDevice](const VkPhysicalDeviceProperties &deviceProperties) {
                 return (anglePreferredDevice == deviceProperties.deviceName);
             };

@@ -230,9 +230,10 @@ bool GetClientArraysEnabled(const egl::AttributeMap &attribs)
 
 bool GetRobustResourceInit(egl::Display *display, const egl::AttributeMap &attribs)
 {
-    const angle::FrontendFeatures &frontendFeatures = display->getFrontendFeatures();
-    return (frontendFeatures.forceRobustResourceInit.enabled ||
-            attribs.get(EGL_ROBUST_RESOURCE_INITIALIZATION_ANGLE, EGL_FALSE) == EGL_TRUE);
+    // const angle::FrontendFeatures &frontendFeatures = display->getFrontendFeatures();
+    // return (frontendFeatures.forceRobustResourceInit.enabled ||
+    // attribs.get(EGL_ROBUST_RESOURCE_INITIALIZATION_ANGLE, EGL_FALSE) == EGL_TRUE);
+    return true;
 }
 
 EGLenum GetContextPriority(const egl::AttributeMap &attribs)

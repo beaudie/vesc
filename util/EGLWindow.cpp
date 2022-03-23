@@ -743,6 +743,24 @@ bool EGLWindow::initializeContext()
     return true;
 }
 
+bool EGLWindow::initializeContext(EGLContext share, EGLint *extraAttributes)
+{
+    mContext = createContext(share, extraAttributes);
+    if (mContext == EGL_NO_CONTEXT)
+    {
+        destroyGL();
+        return false;
+    }
+
+    if (!makeCurrent())
+    {
+        destroyGL();
+        return false;
+    }
+
+    return true;
+}
+
 void EGLWindow::destroyGL()
 {
     destroyContext();
