@@ -1,0 +1,73 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "bfedb8f5_a1724c97",
+        "filename": "src/libANGLE/capture/capture_gles_ext_params.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 3200,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2022-03-23T00:19:41Z",
+      "side": 1,
+      "message": "need to check this one as well, see below. i forget how length works, if it\u0027s an inout or out variable.",
+      "range": {
+        "startLine": 3200,
+        "startChar": 4,
+        "endLine": 3200,
+        "endChar": 17
+      },
+      "revId": "102416547f8ddddddf28b026066183e5daeb6b5a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "8fcb970a_2063dcc9",
+        "filename": "src/libANGLE/capture/capture_gles_ext_params.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 3212,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2022-03-23T00:19:41Z",
+      "side": 1,
+      "message": "same as below IIUC",
+      "range": {
+        "startLine": 3212,
+        "startChar": 4,
+        "endLine": 3212,
+        "endChar": 17
+      },
+      "revId": "102416547f8ddddddf28b026066183e5daeb6b5a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "e74bce41_c7fb7431",
+        "filename": "src/libANGLE/capture/capture_gles_ext_params.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 3224,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2022-03-23T00:19:41Z",
+      "side": 1,
+      "message": "I think this is a readbuffer thing, you\u0027re not actually reading back data. Check how we set the read buffer size for other get methods.",
+      "range": {
+        "startLine": 3224,
+        "startChar": 4,
+        "endLine": 3224,
+        "endChar": 68
+      },
+      "revId": "102416547f8ddddddf28b026066183e5daeb6b5a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
