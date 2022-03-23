@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "7bfc6253_773a83fc",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 4190,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2022-03-23T18:42:02Z",
+      "side": 1,
+      "message": "This (and bunch of new onDepthStencilAccessChange call you added bellow) looks fixing existing bugs, is there new tests you could add that shows failure before the CL and success after the CL?",
+      "range": {
+        "startLine": 4190,
+        "startChar": 16,
+        "endLine": 4190,
+        "endChar": 42
+      },
+      "revId": "5ce9ad6edd630be19ea4561205c6f1363a1c5e6a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
