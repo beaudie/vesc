@@ -24,6 +24,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "27a3b3be_df2b5c42",
+        "filename": "src/libANGLE/capture/capture_gles_ext_params.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 3200,
+      "author": {
+        "id": 1491823
+      },
+      "writtenOn": "2022-03-23T09:32:21Z",
+      "side": 1,
+      "message": "bufSize is the actual size if the readback buffer, length is the number of bytes written to it (if the parameter is !\u003d nullptr).",
+      "parentUuid": "bfedb8f5_a1724c97",
+      "range": {
+        "startLine": 3200,
+        "startChar": 4,
+        "endLine": 3200,
+        "endChar": 17
+      },
+      "revId": "102416547f8ddddddf28b026066183e5daeb6b5a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "8fcb970a_2063dcc9",
@@ -47,6 +71,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "69d729d6_b73ca705",
+        "filename": "src/libANGLE/capture/capture_gles_ext_params.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 3212,
+      "author": {
+        "id": 1491823
+      },
+      "writtenOn": "2022-03-23T09:32:21Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "8fcb970a_2063dcc9",
+      "range": {
+        "startLine": 3212,
+        "startChar": 4,
+        "endLine": 3212,
+        "endChar": 17
+      },
+      "revId": "102416547f8ddddddf28b026066183e5daeb6b5a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "e74bce41_c7fb7431",
@@ -60,6 +108,30 @@
       "writtenOn": "2022-03-23T00:19:41Z",
       "side": 1,
       "message": "I think this is a readbuffer thing, you\u0027re not actually reading back data. Check how we set the read buffer size for other get methods.",
+      "range": {
+        "startLine": 3224,
+        "startChar": 4,
+        "endLine": 3224,
+        "endChar": 68
+      },
+      "revId": "102416547f8ddddddf28b026066183e5daeb6b5a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "fade2e43_64e2caed",
+        "filename": "src/libANGLE/capture/capture_gles_ext_params.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 3224,
+      "author": {
+        "id": 1491823
+      },
+      "writtenOn": "2022-03-23T09:32:21Z",
+      "side": 1,
+      "message": "In the tests the program binaries are actually loaded and then used, so my guess would be that the data is really required. \n\nPeeking at CaptureGetProgramResourceiv_*, there we only record the required readback buffer size for return parameters like length, but the binary data is actually read back. I\u0027ve changed the CL to handle it here likewise.\n\nSome tests are failing because of the `in position`/ `attribute position` that is not available in the captured context, but in the replay.\n\nI didn\u0027t annotate this Since we don\u0027t run with enableProgramBinaryForCapture.",
+      "parentUuid": "e74bce41_c7fb7431",
       "range": {
         "startLine": 3224,
         "startChar": 4,
