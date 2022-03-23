@@ -22,6 +22,30 @@
       },
       "revId": "5ce9ad6edd630be19ea4561205c6f1363a1c5e6a",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "e1611993_b26660c0",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 4190,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-03-23T19:01:55Z",
+      "side": 1,
+      "message": "There already are tests. Look at the changes in VulkanPerformanceCounterTest which had incorrect assumptions about stencil ops. I had changed one of them to enable stencil writes through setting the stencil func to exercise this.",
+      "parentUuid": "7bfc6253_773a83fc",
+      "range": {
+        "startLine": 4190,
+        "startChar": 16,
+        "endLine": 4190,
+        "endChar": 42
+      },
+      "revId": "5ce9ad6edd630be19ea4561205c6f1363a1c5e6a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
