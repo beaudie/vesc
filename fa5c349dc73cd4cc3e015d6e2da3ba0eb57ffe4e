@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "28e1f0da_7e061ebe",
+        "filename": "src/libANGLE/validationES.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 108,
+      "author": {
+        "id": 1529502
+      },
+      "writtenOn": "2022-03-24T00:43:48Z",
+      "side": 0,
+      "message": "Remove entirely or check the context has webgl compatibility?",
+      "revId": "fa5c349dc73cd4cc3e015d6e2da3ba0eb57ffe4e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
