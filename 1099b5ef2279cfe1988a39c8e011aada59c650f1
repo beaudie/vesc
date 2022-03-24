@@ -18,6 +18,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "3acf20ab_26f48a6c",
+        "filename": "src/tests/gl_tests/FramebufferTest.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 486,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-03-24T03:40:52Z",
+      "side": 0,
+      "message": "It was leftover debug code. Before `--renderdoc`, sometimes we had to add a few swaps so RD would capture the frame correctly.",
+      "parentUuid": "b1c8b533_9a83119e",
+      "revId": "1099b5ef2279cfe1988a39c8e011aada59c650f1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "cce1a928_e48ba94a",
@@ -31,6 +49,24 @@
       "writtenOn": "2022-03-23T19:03:16Z",
       "side": 0,
       "message": "These swapBuffers() were to make sure that we were appropriately dealing with render pass store ops for depth/and or stencil (in this and the other tests that you replaced these in).\n\nAt the time, we actually were better than the Pixel 4 driver (i.e. the content analysis team found that we eliminated a render pass for a real game(s)).  I don\u0027t want to lose that ability with this/follow-on CL(s)?",
+      "revId": "1099b5ef2279cfe1988a39c8e011aada59c650f1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "2ac1de74_7182b022",
+        "filename": "src/tests/gl_tests/VulkanPerformanceCounterTest.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 949,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-03-24T03:40:52Z",
+      "side": 0,
+      "message": "These call `glReadPixels`, so they are breaking the render pass the same way `swapBuffers` does. We are still checking load/store op as before.",
+      "parentUuid": "cce1a928_e48ba94a",
       "revId": "1099b5ef2279cfe1988a39c8e011aada59c650f1",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }

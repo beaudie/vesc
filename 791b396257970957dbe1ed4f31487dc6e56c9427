@@ -35,6 +35,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "5434333b_45193608",
+        "filename": "src/common/angleutils.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 133,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-03-24T03:40:52Z",
+      "side": 1,
+      "message": "Ack, but would defer that to Jamie as the author. I have nothing more to say other than it\u0027s an X macro for the perf counters.",
+      "parentUuid": "9a61de9a_444f9aed",
+      "revId": "791b396257970957dbe1ed4f31487dc6e56c9427",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "0451816f_81499ab1",
@@ -48,6 +66,24 @@
       "writtenOn": "2022-03-23T19:03:16Z",
       "side": 1,
       "message": "Nice test!  I similar/varied logic in other parts of this CL.  I like it.",
+      "revId": "791b396257970957dbe1ed4f31487dc6e56c9427",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "bdae25c8_4fa57188",
+        "filename": "src/tests/gl_tests/ClearTest.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 2022,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-03-24T03:40:52Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "0451816f_81499ab1",
       "revId": "791b396257970957dbe1ed4f31487dc6e56c9427",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
@@ -75,6 +111,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "d34d4a6f_c781934f",
+        "filename": "src/tests/gl_tests/VulkanPerformanceCounterTest.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 3520,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-03-24T03:40:52Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "bff99986_4571a887",
+      "range": {
+        "startLine": 3520,
+        "startChar": 7,
+        "endLine": 3520,
+        "endChar": 11
+      },
+      "revId": "791b396257970957dbe1ed4f31487dc6e56c9427",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "3cdb7c64_98a70378",
@@ -88,6 +148,30 @@
       "writtenOn": "2022-03-23T19:03:16Z",
       "side": 1,
       "message": "Shouldn\u0027t we be checking the number of loads (0), clears (1), and stores (1)?",
+      "range": {
+        "startLine": 3542,
+        "startChar": 1,
+        "endLine": 3544,
+        "endChar": 0
+      },
+      "revId": "791b396257970957dbe1ed4f31487dc6e56c9427",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "b1aa6a80_ebd5f2a5",
+        "filename": "src/tests/gl_tests/VulkanPerformanceCounterTest.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 3544,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-03-24T03:40:52Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "3cdb7c64_98a70378",
       "range": {
         "startLine": 3542,
         "startChar": 1,
