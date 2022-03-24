@@ -198,8 +198,8 @@ void ApplySampleCoverage(const gl::State &glState,
 
     uint32_t maskBitOffset = maskNumber * 32;
     uint32_t coverageMask  = coverageSampleCount >= (maskBitOffset + 32)
-                                ? std::numeric_limits<uint32_t>::max()
-                                : (1u << (coverageSampleCount - maskBitOffset)) - 1;
+                                 ? std::numeric_limits<uint32_t>::max()
+                                 : (1u << (coverageSampleCount - maskBitOffset)) - 1;
 
     if (glState.getSampleCoverageInvert())
     {
@@ -301,7 +301,7 @@ vk::ResourceAccess GetColorAccess(const gl::State &state,
 
     const gl::BlendStateExt &blendStateExt = state.getBlendStateExt();
     uint8_t colorMask                      = gl::BlendStateExt::ColorMaskStorage::GetValueIndexed(
-        colorIndexGL, blendStateExt.getColorMaskBits());
+                             colorIndexGL, blendStateExt.getColorMaskBits());
     if (emulatedAlphaMask[colorIndexGL])
     {
         colorMask &= ~VK_COLOR_COMPONENT_A_BIT;
@@ -756,6 +756,7 @@ ContextVk::ContextVk(const gl::State &state, gl::ErrorSet *errorSet, RendererVk 
       mFlipViewportForReadFramebuffer(false),
       mIsAnyHostVisibleBufferWritten(false),
       mEmulateSeamfulCubeMapSampling(false),
+      mPrevTexture(nullptr),
       mOutsideRenderPassCommands(nullptr),
       mRenderPassCommands(nullptr),
       mQueryEventType(GraphicsEventCmdBuf::NotInQueryCmd),
@@ -2801,6 +2802,72 @@ angle::Result ContextVk::onCopyUpdate(VkDeviceSize size)
     {
         ANGLE_TRY(submitOutsideRenderPassCommandsImpl());
     }
+    return angle::Result::Continue;
+}
+
+angle::Result ContextVk::onTextureUpload(TextureVk *newTexture)
+{
+    ASSERT(mPrevTexture);
+
+    // Return if the texture is immutable.
+    if (!mPrevTexture->getState()->getImmutableFormat())
+    {
+        return angle::Result::Continue;
+    }
+
+    // Return if the texture has not changed.
+    if (mPrevTexture == newTexture)
+    {
+        return angle::Result::Continue;
+    }
+
+    // If base level is not 0, skip the optimization.
+    if (mPrevTexture->getState()->getBaseLevel() != 0)
+    {
+        return angle::Result::Continue;
+    }
+
+    // Return if the texture type is cubemap and it is not complete.
+    if (mPrevTexture->getState()->getType() == gl::TextureType::CubeMap &&
+        !mPrevTexture->getState()->isCubeComplete())
+    {
+        // Replace the previous texture with the new
+        mPrevTexture = newTexture;
+        return angle::Result::Continue;
+    }
+
+    // For the special cubemap case, check if it is complete.
+    bool isCompleteCubeMap = (mPrevTexture->getState()->getType() == gl::TextureType::CubeMap &&
+                              mPrevTexture->getState()->isCubeComplete());
+    gl::TextureTarget textureTarget =
+        (isCompleteCubeMap)
+            ? gl::kCubeMapTextureTargetMin
+            : gl::TextureTypeToTarget(mPrevTexture->getState()->getType(), 0);  // Layer index is 0?
+
+    // Acquire mip levels 0 and 1 to check if it is appropriate to flush the texture updates.
+    // (Check for other mip levels?)
+    gl::ImageDesc imageDesc0 = mPrevTexture->getState()->getImageDesc(textureTarget, 0);
+    gl::ImageDesc imageDesc1 = mPrevTexture->getState()->getImageDesc(textureTarget, 1);
+
+    // bool shouldCheckDepth = true;
+    bool isSizeCompatible = (imageDesc0.size.width >> 1 == imageDesc1.size.width) &&
+                            (imageDesc0.size.height >> 1 == imageDesc1.size.height);
+    // Check the depth if the texture is 3D. For others, check if they are equal (or skip).
+    // (log and check depth if it is 0 for 2d, 2d_array, and cubemap?)
+    // Find a test (depth is 1 for 2D)
+
+    bool isFormatCompatible          = (imageDesc0.format.info->sizedInternalFormat ==
+                               imageDesc1.format.info->sizedInternalFormat);
+    bool isNumberOfSamplesCompatible = (imageDesc0.samples == imageDesc1.samples);
+
+    if (isSizeCompatible && isFormatCompatible && isNumberOfSamplesCompatible)
+    {
+        ANGLE_TRY(mPrevTexture->ensureImageInitialized(this, ImageMipLevels::FullMipChain));
+    }
+
+    // Replace the previous texture with the new
+    mPrevTexture = newTexture;
+
     return angle::Result::Continue;
 }
 
