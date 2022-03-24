@@ -54,6 +54,10 @@ class ShareGroupVk : public ShareGroupImpl
     void addContext(ContextVk *contextVk);
     void removeContext(ContextVk *contextVk);
 
+    TextureVk *getPrevTexture() { return mPrevTexture; }
+    void setPrevTexture(TextureVk *texture) { mPrevTexture = texture; }
+    void resetPrevTexture() { mPrevTexture = nullptr; }
+
   private:
     // ANGLE uses a PipelineLayout cache to store compatible pipeline layouts.
     PipelineLayoutCache mPipelineLayoutCache;
@@ -77,6 +81,9 @@ class ShareGroupVk : public ShareGroupImpl
 
     // The system time when last pruneEmptyBuffer gets called.
     double mLastPruneTime;
+
+    // Keep track of the previously stored texture. Used to flush mutable textures.
+    TextureVk *mPrevTexture;
 
     // If true, it is expected that a BufferBlock may still in used by textures that outlived
     // ShareGroup. The non-empty BufferBlock will be put into RendererVk's orphan list instead.
