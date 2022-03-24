@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "04af6bc2_5a9cda50",
+        "filename": "src/tests/gl_tests/TextureTest.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 9037,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2022-03-24T00:16:28Z",
+      "side": 1,
+      "message": "This line is causing the test to fail on AMD Windows.  It consistently gets a different value:\n\n error: Expected equality of these values:\n  angle::GLColor::black\n    Which is: Black\n  angle::ReadColor(0, 0)\n    Which is: (90, 93, 0, 255)\n\nI could drop it, since it isn\u0027t really the point of the test (we error out after drawQuad without fixes).  Curious what either of you thinks about verifying incomplete textures return solid black.  Could be done with a separate test I suppose.",
+      "range": {
+        "startLine": 9037,
+        "startChar": 0,
+        "endLine": 9037,
+        "endChar": 55
+      },
+      "revId": "e9427cda0fdc8c577e9969cfc184d1255a0e7dc9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
