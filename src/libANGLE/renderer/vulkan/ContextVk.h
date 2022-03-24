@@ -473,6 +473,8 @@ class ContextVk : public ContextImpl, public vk::Context, public MultisampleText
         return mActiveTextures;
     }
     const gl::ActiveTextureArray<TextureVk *> &getActiveImages() const { return mActiveImages; }
+    TextureVk *getPrevTexture() { return mPrevTexture; }
+    void setPrevTexture(TextureVk *texture) { mPrevTexture = texture; }
 
     angle::Result onIndexBufferChange(const vk::BufferHelper *currentIndexBuffer);
 
@@ -707,6 +709,9 @@ class ContextVk : public ContextImpl, public vk::Context, public MultisampleText
     // Keeping track of the buffer copy size. Used to determine when to submit the outside command
     // buffer.
     angle::Result onCopyUpdate(VkDeviceSize size);
+
+    // Flushing the mutable textures more often
+    angle::Result onTextureUpload(TextureVk *newTexture);
 
     // Implementation of MultisampleTextureInitializer
     angle::Result initializeMultisampleTextureToBlack(const gl::Context *context,
@@ -1283,6 +1288,9 @@ class ContextVk : public ContextImpl, public vk::Context, public MultisampleText
     vk::DescriptorSetDesc mShaderBuffersDescriptorDesc;
 
     gl::ActiveTextureArray<TextureVk *> mActiveImages;
+
+    // Keep track of the previous texture to flush if necessary (change into array?)
+    TextureVk *mPrevTexture;
 
     // "Current Value" aka default vertex attribute state.
     gl::AttributesMask mDirtyDefaultAttribsMask;
