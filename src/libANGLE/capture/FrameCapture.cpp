@@ -1856,14 +1856,22 @@ void CaptureFramebufferAttachment(std::vector<CallCapture> *setupCalls,
 {
     GLuint resourceID = attachment.getResource()->getId();
 
-    // TODO(jmadill): Layer attachments. http://anglebug.com/3662
     if (attachment.type() == GL_TEXTURE)
     {
         gl::ImageIndex index = attachment.getTextureImageIndex();
 
-        Capture(setupCalls, framebufferFuncs.framebufferTexture2D(
-                                replayState, true, GL_FRAMEBUFFER, attachment.getBinding(),
-                                index.getTarget(), {resourceID}, index.getLevelIndex()));
+        if (index.isLayered())
+        {
+            Capture(setupCalls, CaptureFramebufferTextureLayer(
+                                    replayState, true, GL_FRAMEBUFFER, attachment.getBinding(),
+                                    {resourceID}, index.getLevelIndex(), index.getLayerIndex()));
+        }
+        else
+        {
+            Capture(setupCalls, framebufferFuncs.framebufferTexture2D(
+                                    replayState, true, GL_FRAMEBUFFER, attachment.getBinding(),
+                                    index.getTarget(), {resourceID}, index.getLevelIndex()));
+        }
     }
     else
     {
@@ -2379,13 +2387,9 @@ void CaptureTextureContents(std::vector<CallCapture> *setupCalls,
         return;
     }
 
-    bool is3D =
-        (index.getType() == gl::TextureType::_3D || index.getType() == gl::TextureType::_2DArray ||
-         index.getType() == gl::TextureType::CubeMapArray);
-
     if (format.compressed)
     {
-        if (is3D)
+        if (index.usesTex3D())
         {
             if (texture->getImmutableFormat())
             {
@@ -2424,7 +2428,7 @@ void CaptureTextureContents(std::vector<CallCapture> *setupCalls,
     }
     else
     {
-        if (is3D)
+        if (index.usesTex3D())
         {
             if (texture->getImmutableFormat())
             {
