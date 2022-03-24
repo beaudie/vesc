@@ -102,9 +102,8 @@ void GetDefaultOutputLayoutFromShader(
     }
 }
 
-void GetDefaultImage2DBindLayoutFromShader(
-    const std::vector<sh::ShaderVariable> &image2DUniforms,
-    gl::ImageUnitTextureTypeMap *image2DBindLayout)
+void GetDefaultImage2DBindLayoutFromShader(const std::vector<sh::ShaderVariable> &image2DUniforms,
+                                           gl::ImageUnitTextureTypeMap *image2DBindLayout)
 {
     image2DBindLayout->clear();
 
@@ -1056,13 +1055,16 @@ std::unique_ptr<rx::LinkEvent> ProgramD3D::load(const gl::Context *context,
         return nullptr;
     }
 
-    ASSERT(mImage2DUniforms[gl::ShaderType::Compute].empty());
-    for (size_t image2DUniformIndex = 0; image2DUniformIndex < image2DUniformCount;
-         ++image2DUniformIndex)
+    for (auto shaderType : {gl::ShaderType::Compute})
     {
-        sh::ShaderVariable image2Duniform;
-        gl::LoadShaderVar(stream, &image2Duniform);
-        mImage2DUniforms[gl::ShaderType::Compute].push_back(image2Duniform);
+        ASSERT(mImage2DUniforms[shaderType].empty());
+        for (size_t image2DUniformIndex = 0; image2DUniformIndex < image2DUniformCount;
+             ++image2DUniformIndex)
+        {
+            sh::ShaderVariable image2Duniform;
+            gl::LoadShaderVar(stream, &image2Duniform);
+            mImage2DUniforms[shaderType].push_back(image2Duniform);
+        }
     }
 
     for (unsigned int ii = 0; ii < gl::IMPLEMENTATION_MAX_ATOMIC_COUNTER_BUFFER_BINDINGS; ++ii)
@@ -1304,8 +1306,9 @@ angle::Result ProgramD3D::loadBinaryShaderExecutables(d3d::Context *contextD3D,
     size_t bindLayoutCount = stream->readInt<size_t>();
     for (size_t bindLayoutIndex = 0; bindLayoutIndex < bindLayoutCount; bindLayoutIndex++)
     {
-        mImage2DBindLayoutCache[gl::ShaderType::Compute].insert(std::pair<unsigned int, gl::TextureType>(
-            stream->readInt<unsigned int>(), gl::TextureType::_2D));
+        mImage2DBindLayoutCache[gl::ShaderType::Compute].insert(
+            std::pair<unsigned int, gl::TextureType>(stream->readInt<unsigned int>(),
+                                                     gl::TextureType::_2D));
     }
 
     initializeUniformStorage(mState.getExecutable().getLinkedShaderStages());
@@ -1375,10 +1378,13 @@ void ProgramD3D::save(const gl::Context *context, gl::BinaryOutputStream *stream
         }
     }
 
-    stream->writeInt(mImage2DUniforms[gl::ShaderType::Compute].size());
-    for (const sh::ShaderVariable &image2DUniform : mImage2DUniforms[gl::ShaderType::Compute])
+    for (auto shaderType : {gl::ShaderType::Compute})
     {
-        gl::WriteShaderVar(stream, image2DUniform);
+        stream->writeInt(mImage2DUniforms[shaderType].size());
+        for (const sh::ShaderVariable &image2DUniform : mImage2DUniforms[shaderType])
+        {
+            gl::WriteShaderVar(stream, image2DUniform);
+        }
     }
 
     for (unsigned int ii = 0; ii < gl::IMPLEMENTATION_MAX_ATOMIC_COUNTER_BUFFER_BINDINGS; ++ii)
@@ -1734,11 +1740,25 @@ void ProgramD3D::updateCachedOutputLayoutFromShader()
     updateCachedPixelExecutableIndex();
 }
 
-void ProgramD3D::updateCachedImage2DBindLayoutFromComputeShader()
+void ProgramD3D::updateCachedImage2DBindLayoutFromShader(gl::ShaderType shaderType)
 {
-    GetDefaultImage2DBindLayoutFromShader(mImage2DUniforms[gl::ShaderType::Compute],
-                                          &mImage2DBindLayoutCache[gl::ShaderType::Compute]);
-    updateCachedComputeExecutableIndex();
+    GetDefaultImage2DBindLayoutFromShader(mImage2DUniforms[shaderType],
+                                          &mImage2DBindLayoutCache[shaderType]);
+    switch (shaderType)
+    {
+        case gl::ShaderType::Compute:
+            updateCachedComputeExecutableIndex();
+            break;
+        case gl::ShaderType::Fragment:
+            updateCachedPixelExecutableIndex();
+            break;
+        case gl::ShaderType::Vertex:
+            updateCachedVertexExecutableIndex();
+            break;
+        default:
+            ASSERT(false);
+            break;
+    }
 }
 
 class ProgramD3D::GetGeometryExecutableTask : public ProgramD3D::GetExecutableTask
@@ -1773,7 +1793,7 @@ class ProgramD3D::GetComputeExecutableTask : public ProgramD3D::GetExecutableTas
     angle::Result run() override
     {
         ANGLE_TRACE_EVENT0("gpu.angle", "ProgramD3D::GetComputeExecutableTask::run");
-        mProgram->updateCachedImage2DBindLayoutFromComputeShader();
+        mProgram->updateCachedImage2DBindLayoutFromShader(gl::ShaderType::Compute);
         ShaderExecutableD3D *computeExecutable = nullptr;
         ANGLE_TRY(mProgram->getComputeExecutableForImage2DBindLayout(this, &computeExecutable,
                                                                      &mInfoLog));
@@ -2000,7 +2020,8 @@ angle::Result ProgramD3D::getComputeExecutableForImage2DBindLayout(
     }
 
     std::string finalComputeHLSL = mDynamicHLSL->generateShaderForImage2DBindSignature(
-        context, *this, mState, gl::ShaderType::Compute, mImage2DUniforms[gl::ShaderType::Compute], mImage2DBindLayoutCache[gl::ShaderType::Compute]);
+        context, *this, mState, gl::ShaderType::Compute, mImage2DUniforms[gl::ShaderType::Compute],
+        mImage2DBindLayoutCache[gl::ShaderType::Compute]);
 
     // Generate new compute executable
     ShaderExecutableD3D *computeExecutable = nullptr;
