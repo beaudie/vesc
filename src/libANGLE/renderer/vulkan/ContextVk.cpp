@@ -756,6 +756,7 @@ ContextVk::ContextVk(const gl::State &state, gl::ErrorSet *errorSet, RendererVk 
       mFlipViewportForReadFramebuffer(false),
       mIsAnyHostVisibleBufferWritten(false),
       mEmulateSeamfulCubeMapSampling(false),
+      mPrevTexture(nullptr),
       mOutsideRenderPassCommands(nullptr),
       mRenderPassCommands(nullptr),
       mQueryEventType(GraphicsEventCmdBuf::NotInQueryCmd),
@@ -2812,6 +2813,28 @@ angle::Result ContextVk::onCopyUpdate(VkDeviceSize size)
     {
         ANGLE_TRY(submitOutsideRenderPassCommandsImpl());
     }
+    return angle::Result::Continue;
+}
+
+angle::Result ContextVk::onTextureUpload(TextureVk *newTexture)
+{
+    // Make sure the texture is valid and mutable
+    ASSERT(mPrevTexture && !mPrevTexture->getState()->getImmutableFormat());
+
+    // Return if the texture has not changed.
+    if (mPrevTexture == newTexture)
+    {
+        return angle::Result::Continue;
+    }
+
+    if (mPrevTexture->isTextureConsistentlySpecifiedForFlush())
+    {
+        ANGLE_TRY(mPrevTexture->ensureImageInitialized(this, ImageMipLevels::FullMipChain));
+    }
+
+    // Replace the previous texture with the new
+    mPrevTexture = newTexture;
+
     return angle::Result::Continue;
 }
 
