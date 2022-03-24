@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "68320a1d_b1617d1e",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2022-03-24T18:02:33Z",
+      "side": 1,
+      "message": "LGTM once the SwiftShader tests are suppressed.",
+      "revId": "c0b11b9912d44b7ad56ba823ad248ab1be7147dc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
