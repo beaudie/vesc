@@ -16,6 +16,24 @@
       "message": "All of this seems to be to get a current context with WebGL compatibility enabled. You can use ANGLETest\u0027s setWebGLCompatibilityEnabled(true) method in the constructor of this test to achieve this with much less code, and only one context - please look into that.",
       "revId": "d0cedeb9a2ef348de5bb6d7c70bab1282fce1221",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "119605e2_1d7f45e1",
+        "filename": "src/tests/gl_tests/ReadPixelsTest.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 1064,
+      "author": {
+        "id": 1529502
+      },
+      "writtenOn": "2022-03-24T01:19:18Z",
+      "side": 1,
+      "message": "Thanks, that\u0027s much simpler!",
+      "parentUuid": "94ea6020_a3e63e3d",
+      "revId": "d0cedeb9a2ef348de5bb6d7c70bab1282fce1221",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
