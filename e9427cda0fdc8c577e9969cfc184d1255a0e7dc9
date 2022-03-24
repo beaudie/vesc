@@ -48,6 +48,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "da07fadc_be78c964",
+        "filename": "src/libANGLE/renderer/renderer_utils.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 672,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2022-03-24T21:15:33Z",
+      "side": 1,
+      "message": "By my reading, CubeMapArray textures are weird.  The layer count is actually the number of \"cube faces\", which is why they must be in multiples of 6.  So I think this is doing the right thing, sending CubeMapArray textures through the same init path as 2DArray textures.",
+      "parentUuid": "8332ad0d_dbcb8212",
+      "range": {
+        "startLine": 667,
+        "startChar": 0,
+        "endLine": 672,
+        "endChar": 5
+      },
+      "revId": "e9427cda0fdc8c577e9969cfc184d1255a0e7dc9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "bab19698_e91c9c14",
@@ -85,6 +109,30 @@
       "side": 1,
       "message": "Totally missed that, I think I\u0027ll move it over.",
       "parentUuid": "bab19698_e91c9c14",
+      "range": {
+        "startLine": 9003,
+        "startChar": 33,
+        "endLine": 9003,
+        "endChar": 50
+      },
+      "revId": "e9427cda0fdc8c577e9969cfc184d1255a0e7dc9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "9937e21e_b1ebb3c4",
+        "filename": "src/tests/gl_tests/TextureTest.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 9003,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2022-03-24T21:15:33Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "028e8773_3ed057be",
       "range": {
         "startLine": 9003,
         "startChar": 33,
@@ -156,6 +204,30 @@
       "side": 1,
       "message": "AMD Windows Vulkan? It could be a driver bug yeah. On the other hand the initialization logic I\u0027d suspect is not initializing the whole 6 slices.",
       "parentUuid": "d78a04ed_258d1a98",
+      "range": {
+        "startLine": 9037,
+        "startChar": 0,
+        "endLine": 9037,
+        "endChar": 55
+      },
+      "revId": "e9427cda0fdc8c577e9969cfc184d1255a0e7dc9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "cbed69c2_359a7521",
+        "filename": "src/tests/gl_tests/TextureTest.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 9037,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2022-03-24T21:15:33Z",
+      "side": 1,
+      "message": "I added a suppression.",
+      "parentUuid": "180dda15_65af55b0",
       "range": {
         "startLine": 9037,
         "startChar": 0,
