@@ -856,6 +856,7 @@ std::string generateShaderForImage2DBindSignature(
     ProgramD3D &programD3D,
     const gl::ProgramState &programData,
     gl::ShaderType shaderType,
+    const std::string &shaderHLSL,
     std::vector<sh::ShaderVariable> &image2DUniforms,
     const gl::ImageUnitTextureTypeMap &image2DBindLayout)
 {
@@ -910,11 +911,11 @@ std::string generateShaderForImage2DBindSignature(
                                       &image2DTexture2DArrayIndex, &image2DTexture2DIndex);
     }
 
-    std::string shaderHLSL(programData.getAttachedShader(shaderType)->getTranslatedSource());
-    bool success = angle::ReplaceSubstring(&shaderHLSL, kImage2DFunctionString, out.str());
+    std::string result = shaderHLSL;
+    bool success       = angle::ReplaceSubstring(&result, kImage2DFunctionString, out.str());
     ASSERT(success);
 
-    return shaderHLSL;
+    return result;
 }
 
 }  // namespace rx
