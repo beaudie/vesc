@@ -19,6 +19,7 @@ std::string generateShaderForImage2DBindSignature(
     ProgramD3D &programD3D,
     const gl::ProgramState &programData,
     gl::ShaderType shaderType,
+    const std::string &shaderHLSL,
     std::vector<sh::ShaderVariable> &image2DUniforms,
     const gl::ImageUnitTextureTypeMap &image2DBindLayout);
 
@@ -27,11 +28,12 @@ inline std::string GenerateShaderForImage2DBindSignature(
     ProgramD3D &programD3D,
     const gl::ProgramState &programData,
     gl::ShaderType shaderType,
+    const std::string shaderHLSL,
     std::vector<sh::ShaderVariable> &image2DUniforms,
     const gl::ImageUnitTextureTypeMap &image2DBindLayout)
 {
     return generateShaderForImage2DBindSignature(context, programD3D, programData, shaderType,
-                                                 image2DUniforms, image2DBindLayout);
+                                                 shaderHLSL, image2DUniforms, image2DBindLayout);
 }
 
 }  // namespace rx
