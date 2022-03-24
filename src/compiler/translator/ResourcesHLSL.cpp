@@ -166,11 +166,12 @@ static TString InterfaceBlockScalarVectorFieldPaddingString(const TType &type)
 ResourcesHLSL::ResourcesHLSL(StructureHLSL *structureHLSL,
                              ShShaderOutput outputType,
                              const std::vector<ShaderVariable> &uniforms,
-                             unsigned int firstUniformRegister)
+                             unsigned int firstUniformRegister,
+                             unsigned int firstUAVRegister)
     : mUniformRegister(firstUniformRegister),
       mUniformBlockRegister(0),
       mSRVRegister(0),
-      mUAVRegister(0),
+      mUAVRegister(firstUAVRegister),
       mSamplerCount(0),
       mStructureHLSL(structureHLSL),
       mOutputType(outputType),
