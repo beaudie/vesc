@@ -132,63 +132,6 @@ VkResult VerifyExtensionsPresent(const vk::ExtensionNameList &haystack,
 
 // Array of Validation error/warning messages that will be ignored, should include bugID
 constexpr const char *kSkippedMessages[] = {
-    // http://anglebug.com/2866
-    "UNASSIGNED-CoreValidation-Shader-OutputNotConsumed",
-    // http://anglebug.com/4883
-    "UNASSIGNED-CoreValidation-Shader-InputNotProduced",
-    // http://anglebug.com/2796
-    "UNASSIGNED-CoreValidation-Shader-PointSizeMissing",
-    // http://anglebug.com/3832
-    "VUID-VkPipelineInputAssemblyStateCreateInfo-topology-00428",
-    // Best Practices Skips https://issuetracker.google.com/issues/166641492
-    // https://issuetracker.google.com/issues/166793850
-    "UNASSIGNED-BestPractices-vkCreateCommandPool-command-buffer-reset",
-    "UNASSIGNED-BestPractices-pipeline-stage-flags",
-    "UNASSIGNED-BestPractices-Error-Result",
-    "UNASSIGNED-BestPractices-vkAllocateMemory-small-allocation",
-    "UNASSIGNED-BestPractices-vkBindMemory-small-dedicated-allocation",
-    "UNASSIGNED-BestPractices-vkAllocateMemory-too-many-objects",
-    "UNASSIGNED-BestPractices-vkCreateDevice-deprecated-extension",
-    "UNASSIGNED-BestPractices-vkCreateRenderPass-image-requires-memory",
-    "UNASSIGNED-BestPractices-vkCreateGraphicsPipelines-too-many-instanced-vertex-buffers",
-    "UNASSIGNED-BestPractices-DrawState-ClearCmdBeforeDraw",
-    "UNASSIGNED-BestPractices-vkCmdClearAttachments-clear-after-load",
-    // http://anglebug.com/4928
-    "VUID-vkMapMemory-memory-00683",
-    // http://anglebug.com/5027
-    "UNASSIGNED-CoreValidation-Shader-PushConstantOutOfRange",
-    // http://anglebug.com/5304
-    "VUID-vkCmdDraw-magFilter-04553",
-    "VUID-vkCmdDrawIndexed-magFilter-04553",
-    // http://anglebug.com/5309
-    "VUID-VkImageViewCreateInfo-usage-02652",
-    // http://anglebug.com/5336
-    "UNASSIGNED-BestPractices-vkCreateDevice-specialuse-extension",
-    // http://anglebug.com/5331
-    "VUID-VkSubpassDescriptionDepthStencilResolve-depthResolveMode-parameter",
-    "VUID-VkSubpassDescriptionDepthStencilResolve-stencilResolveMode-parameter",
-    // http://issuetracker.google.com/175584609
-    "VUID-vkCmdDraw-None-04584",
-    "VUID-vkCmdDrawIndexed-None-04584",
-    "VUID-vkCmdDrawIndirect-None-04584",
-    "VUID-vkCmdDrawIndirectCount-None-04584",
-    "VUID-vkCmdDrawIndexedIndirect-None-04584",
-    "VUID-vkCmdDrawIndexedIndirectCount-None-04584",
-    // http://anglebug.com/5912
-    "VUID-VkImageViewCreateInfo-pNext-01585",
-    // http://anglebug.com/6442
-    "UNASSIGNED-CoreValidation-Shader-InterfaceTypeMismatch",
-    // http://anglebug.com/6514
-    "vkEnumeratePhysicalDevices: One or more layers modified physical devices",
-    // When using Vulkan secondary command buffers, the command buffer is begun with the current
-    // framebuffer specified in pInheritanceInfo::framebuffer.  If the framebuffer is multisampled
-    // and is resolved, an optimization would change the framebuffer to add the resolve target and
-    // use a subpass resolve operation instead.  The following error complains that the framebuffer
-    // used to start the render pass and the one specified in pInheritanceInfo::framebuffer must be
-    // equal, which is not true in that case.  In practice, this is benign, as the part of the
-    // framebuffer that's accessed by the command buffer is identically laid out.
-    // http://anglebug.com/6811
-    "VUID-vkCmdExecuteCommands-pCommandBuffers-00099",
     // http://anglebug.com/7105
     "VUID-vkCmdDraw-None-06538",
     "VUID-vkCmdDrawIndexed-None-06538",
