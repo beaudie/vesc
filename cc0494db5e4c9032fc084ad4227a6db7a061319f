@@ -1,0 +1,72 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "c0968515_45aecfa9",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2022-03-24T02:01:17Z",
+      "side": 1,
+      "message": "Very nice. lgtm modulo a couple of nits.\n",
+      "revId": "cc0494db5e4c9032fc084ad4227a6db7a061319f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "4837306e_d0238407",
+        "filename": "src/tests/gl_tests/ReadPixelsTest.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 1051,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2022-03-24T02:01:17Z",
+      "side": 1,
+      "message": "Please use ASSERT_GL_FRAMEBUFFER_COMPLETE (which I personally only learned about recently).",
+      "revId": "cc0494db5e4c9032fc084ad4227a6db7a061319f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "a0b32b36_f1fb83b2",
+        "filename": "src/tests/gl_tests/ReadPixelsTest.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 1085,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2022-03-24T02:01:17Z",
+      "side": 1,
+      "message": "Before this call, best to EXPECT_GL_NO_ERROR() just to be safe.",
+      "revId": "cc0494db5e4c9032fc084ad4227a6db7a061319f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "614960fb_977eb27f",
+        "filename": "src/tests/gl_tests/ReadPixelsTest.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 1096,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2022-03-24T02:01:17Z",
+      "side": 1,
+      "message": "Same above this call.",
+      "revId": "cc0494db5e4c9032fc084ad4227a6db7a061319f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
