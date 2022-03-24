@@ -67,7 +67,6 @@
 #define yylex pplex
 #define yyerror pperror
 #define yydebug ppdebug
-#define yynerrs ppnerrs
 
 /* First part of user prologue.  */
 
@@ -979,9 +978,6 @@ int yyparse(Context *context)
     YY_INITIAL_VALUE(static YYSTYPE yyval_default;)
     YYSTYPE yylval YY_INITIAL_VALUE(= yyval_default);
 
-    /* Number of syntax errors so far.  */
-    int yynerrs;
-
     int yystate;
     /* Number of tokens to shift before error messages enabled.  */
     int yyerrstatus;
@@ -1034,7 +1030,6 @@ int yyparse(Context *context)
 
     yystate     = 0;
     yyerrstatus = 0;
-    yynerrs     = 0;
     yychar      = YYEMPTY; /* Cause a token to be read.  */
     goto yysetstate;
 
@@ -1603,7 +1598,6 @@ yyerrlab:
     /* If not already recovering from an error, report this error.  */
     if (!yyerrstatus)
     {
-        ++yynerrs;
 #if !YYERROR_VERBOSE
         yyerror(context, YY_("syntax error"));
 #else
