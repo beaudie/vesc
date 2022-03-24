@@ -373,7 +373,9 @@ OutputHLSL::OutputHLSL(sh::GLenum shaderType,
 
     unsigned int firstUniformRegister =
         (compileOptions & SH_SKIP_D3D_CONSTANT_REGISTER_ZERO) != 0 ? 1u : 0u;
-    mResourcesHLSL = new ResourcesHLSL(mStructureHLSL, outputType, uniforms, firstUniformRegister);
+    unsigned int firstUAVRegister = (shaderType == GL_COMPUTE_SHADER) ? 0u : 1u;
+    mResourcesHLSL = new ResourcesHLSL(mStructureHLSL, outputType, uniforms, firstUniformRegister,
+                                       firstUAVRegister);
 
     if (mOutputType == SH_HLSL_3_0_OUTPUT)
     {
@@ -854,10 +856,19 @@ void OutputHLSL::header(TInfoSinkBase &out,
 
             if (mOutputType == SH_HLSL_4_1_OUTPUT)
             {
-                mResourcesHLSL->samplerMetadataUniforms(out, 4);
+                unsigned int registerIndex = 4;
+                mResourcesHLSL->samplerMetadataUniforms(out, registerIndex);
+                // Sampler metadata struct must be two 4-vec, 32 bytes.
+                registerIndex += mResourcesHLSL->getSamplerCount() * 2;
+                mResourcesHLSL->imageMetadataUniforms(out, registerIndex);
             }
 
             out << "};\n";
+
+            if (mResourcesHLSL->hasImages())
+            {
+                out << kImage2DFunctionString << "\n";
+            }
         }
         else
         {
