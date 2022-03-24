@@ -1033,6 +1033,66 @@ class ReadPixelsErrorTest : public ReadPixelsTest
     GLuint mFBO;
 };
 
+// a test class to be used for error checking of glReadPixels with WebGLCompatibility
+class ReadPixelsWebGLErrorTest : public ReadPixelsTest
+{
+  protected:
+    ReadPixelsWebGLErrorTest()
+        : mTexture(0), mFBO(0), mContext1(0), mContext2(0), mDisplay(0), mSurface(0)
+    {}
+
+    void testSetUp() override
+    {
+        glGenTextures(1, &mTexture);
+        glBindTexture(GL_TEXTURE_2D, mTexture);
+        glTexStorage2D(GL_TEXTURE_2D, 1, GL_RGBA8, 4, 1);
+
+        glGenFramebuffers(1, &mFBO);
+        glBindFramebuffer(GL_FRAMEBUFFER, mFBO);
+        glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, mTexture, 0);
+        ASSERT_EGLENUM_EQ(GL_FRAMEBUFFER_COMPLETE, glCheckFramebufferStatus(GL_FRAMEBUFFER));
+
+        EGLWindow *window          = getEGLWindow();
+        mDisplay                   = window->getDisplay();
+        EGLConfig config           = window->getConfig();
+        mSurface                   = window->getSurface();
+        EGLint contextAttributes[] = {
+            EGL_CONTEXT_MAJOR_VERSION_KHR,
+            GetParam().majorVersion,
+            EGL_CONTEXT_MINOR_VERSION_KHR,
+            GetParam().minorVersion,
+            EGL_CONTEXT_WEBGL_COMPATIBILITY_ANGLE,
+            EGL_TRUE,
+            EGL_NONE,
+        };
+        mContext1 = eglGetCurrentContext();
+        // Create context2, sharing resources with context1.
+        mContext2 = eglCreateContext(mDisplay, config, mContext1, contextAttributes);
+        ASSERT_NE(mContext2, EGL_NO_CONTEXT);
+        eglMakeCurrent(mDisplay, mSurface, mSurface, mContext2);
+
+        ASSERT_GL_NO_ERROR();
+    }
+
+    void testTearDown() override
+    {
+        glDeleteTextures(1, &mTexture);
+        glDeleteFramebuffers(1, &mFBO);
+
+        eglMakeCurrent(mDisplay, mSurface, mSurface, mContext1);
+        eglDestroyContext(mDisplay, mContext2);
+
+        ASSERT_GL_NO_ERROR();
+    }
+
+    GLuint mTexture;
+    GLuint mFBO;
+    EGLContext mContext1;
+    EGLContext mContext2;
+    EGLDisplay mDisplay;
+    EGLSurface mSurface;
+};
+
 //  The test verifies that glReadPixels generates a GL_INVALID_OPERATION error
 //  when the read buffer is GL_NONE.
 //  Reference: GLES 3.0.4, Section 4.3.2 Reading Pixels
@@ -1043,6 +1103,28 @@ TEST_P(ReadPixelsErrorTest, ReadBufferIsNone)
     std::vector<GLubyte> pixels(4);
     glReadPixels(0, 0, 1, 1, GL_RGBA, GL_UNSIGNED_BYTE, pixels.data());
     EXPECT_GL_ERROR(GL_INVALID_OPERATION);
+}
+
+// Test that WebGL context readpixels generates an error when reading GL_UNSIGNED_INT_24_8 type.
+TEST_P(ReadPixelsWebGLErrorTest, TypeIsUnsignedInt24_8)
+{
+    glBindFramebuffer(GL_FRAMEBUFFER, mFBO);
+    glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, mTexture, 0);
+    glReadBuffer(GL_COLOR_ATTACHMENT0);
+    std::vector<GLuint> pixels(4);
+    glReadPixels(0, 0, 1, 1, GL_RGBA, GL_UNSIGNED_INT_24_8, pixels.data());
+    EXPECT_GL_ERROR(GL_INVALID_ENUM);
+}
+
+// Test that WebGL context readpixels generates an error when reading GL_DEPTH_COMPONENT format.
+TEST_P(ReadPixelsWebGLErrorTest, FormatIsDepthComponent)
+{
+    glBindFramebuffer(GL_FRAMEBUFFER, mFBO);
+    glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, mTexture, 0);
+    glReadBuffer(GL_COLOR_ATTACHMENT0);
+    std::vector<GLubyte> pixels(4);
+    glReadPixels(0, 0, 1, 1, GL_DEPTH_COMPONENT, GL_UNSIGNED_BYTE, pixels.data());
+    EXPECT_GL_ERROR(GL_INVALID_ENUM);
 }
 
 }  // anonymous namespace
@@ -1066,3 +1148,6 @@ ANGLE_INSTANTIATE_TEST_ES3(ReadPixelsTextureTest);
 
 GTEST_ALLOW_UNINSTANTIATED_PARAMETERIZED_TEST(ReadPixelsErrorTest);
 ANGLE_INSTANTIATE_TEST_ES3(ReadPixelsErrorTest);
+
+GTEST_ALLOW_UNINSTANTIATED_PARAMETERIZED_TEST(ReadPixelsWebGLErrorTest);
+ANGLE_INSTANTIATE_TEST_ES3(ReadPixelsWebGLErrorTest);
