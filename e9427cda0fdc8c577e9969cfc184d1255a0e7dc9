@@ -26,6 +26,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "8332ad0d_dbcb8212",
+        "filename": "src/libANGLE/renderer/renderer_utils.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 672,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2022-03-24T17:34:11Z",
+      "side": 1,
+      "message": "Could be the root cause of the color difference I suppose, will look closer.",
+      "parentUuid": "a7ced485_841ad49a",
+      "range": {
+        "startLine": 667,
+        "startChar": 0,
+        "endLine": 672,
+        "endChar": 5
+      },
+      "revId": "e9427cda0fdc8c577e9969cfc184d1255a0e7dc9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "bab19698_e91c9c14",
         "filename": "src/tests/gl_tests/TextureTest.cpp",
         "patchSetId": 4
@@ -37,6 +61,30 @@
       "writtenOn": "2022-03-24T14:23:33Z",
       "side": 1,
       "message": "nit: we have IncompleteTextureTest.cpp, though it\u0027s also okay to include this test here.",
+      "range": {
+        "startLine": 9003,
+        "startChar": 33,
+        "endLine": 9003,
+        "endChar": 50
+      },
+      "revId": "e9427cda0fdc8c577e9969cfc184d1255a0e7dc9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "028e8773_3ed057be",
+        "filename": "src/tests/gl_tests/TextureTest.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 9003,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2022-03-24T17:34:11Z",
+      "side": 1,
+      "message": "Totally missed that, I think I\u0027ll move it over.",
+      "parentUuid": "bab19698_e91c9c14",
       "range": {
         "startLine": 9003,
         "startChar": 33,
