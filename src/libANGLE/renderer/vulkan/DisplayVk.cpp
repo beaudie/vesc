@@ -415,6 +415,7 @@ ShareGroupVk::ShareGroupVk()
 {
     mLastPruneTime             = angle::GetCurrentSystemTime();
     mOrphanNonEmptyBufferBlock = false;
+    mPrevTexture               = nullptr;
 }
 
 void ShareGroupVk::addContext(ContextVk *contextVk)
@@ -451,6 +452,8 @@ void ShareGroupVk::onDestroy(const egl::Display *display)
 
     mPipelineLayoutCache.destroy(renderer);
     mDescriptorSetLayoutCache.destroy(renderer);
+
+    ASSERT(mPrevTexture == nullptr);
 
     ASSERT(mResourceUseLists.empty());
 }

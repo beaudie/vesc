@@ -3367,6 +3367,26 @@ TEST_P(Texture2DTest, SubImageValidationOverflow)
     EXPECT_GL_ERROR(GL_INVALID_VALUE);
 }
 
+// Test to make sure that the pointer to previous texture in context does not point to a deleted
+// texture.
+TEST_P(Texture2DTest, NoReferenceToDeletedPrevTexture)
+{
+    GLTexture texture1;
+    glBindTexture(GL_TEXTURE_2D, texture1);
+    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, 8, 8, 0, GL_RGBA, GL_UNSIGNED_BYTE,
+                 GLColor::red.data());
+    texture1.reset();
+    EXPECT_GL_NO_ERROR();
+
+    GLTexture texture2;
+    glBindTexture(GL_TEXTURE_2D, texture2);
+    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, 8, 8, 0, GL_RGBA, GL_UNSIGNED_BYTE,
+                 GLColor::green.data());
+    EXPECT_GL_NO_ERROR();
+
+    texture2.reset();
+}
+
 // Test to ensure that glTexStorage3D accepts ASTC sliced 3D. https://crbug.com/1060012
 TEST_P(Texture3DTestES3, ImmutableASTCSliced3D)
 {
