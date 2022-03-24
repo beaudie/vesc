@@ -22,6 +22,30 @@
       },
       "revId": "e9427cda0fdc8c577e9969cfc184d1255a0e7dc9",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "d78a04ed_258d1a98",
+        "filename": "src/tests/gl_tests/TextureTest.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 9037,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-03-24T01:36:35Z",
+      "side": 1,
+      "message": "I see in a number of places in the GLES spec that it\u0027s specified that incomplete textures should return black. The check is good IMO.\n\nOur AMD hardware and driver on windows are both extremely old. Just suppress the test (you could also WontFix the bug you create for it right away).",
+      "parentUuid": "04af6bc2_5a9cda50",
+      "range": {
+        "startLine": 9037,
+        "startChar": 0,
+        "endLine": 9037,
+        "endChar": 55
+      },
+      "revId": "e9427cda0fdc8c577e9969cfc184d1255a0e7dc9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
