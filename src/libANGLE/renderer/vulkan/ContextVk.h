@@ -473,6 +473,9 @@ class ContextVk : public ContextImpl, public vk::Context, public MultisampleText
         return mActiveTextures;
     }
     const gl::ActiveTextureArray<TextureVk *> &getActiveImages() const { return mActiveImages; }
+    TextureVk *getPrevTexture() { return getShareGroupVk()->getPrevTexture(); }
+    void setPrevTexture(TextureVk *texture) { getShareGroupVk()->setPrevTexture(texture); }
+    void resetPrevTexture() { getShareGroupVk()->resetPrevTexture(); }
 
     angle::Result onIndexBufferChange(const vk::BufferHelper *currentIndexBuffer);
 
@@ -707,6 +710,9 @@ class ContextVk : public ContextImpl, public vk::Context, public MultisampleText
     // Keeping track of the buffer copy size. Used to determine when to submit the outside command
     // buffer.
     angle::Result onCopyUpdate(VkDeviceSize size);
+
+    // Flushing the mutable textures more often
+    angle::Result onMutableTextureUpload(TextureVk *newTexture);
 
     // Implementation of MultisampleTextureInitializer
     angle::Result initializeMultisampleTextureToBlack(const gl::Context *context,

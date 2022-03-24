@@ -439,6 +439,52 @@ bool TextureVk::isFastUnpackPossible(const vk::Format &vkFormat, size_t offset) 
            (offset % imageCopyAlignment) == 0;
 }
 
+bool TextureVk::isTextureConsistentlySpecifiedForFlush()
+{
+    // Check if the base level is 0.
+    if (mState.getBaseLevel() != 0)
+    {
+        return false;
+    }
+
+    // Check if the texture type is cubemap and it is not complete.
+    if (mState.getType() == gl::TextureType::CubeMap && !mState.isCubeComplete())
+    {
+        return false;
+    }
+
+    // Check if the first two mip levels are present. (Update?)
+    if (mState.getImageDescs().size() < 2)
+    {
+        return false;
+    }
+
+    // Determine the texture target (special case for cubemap)
+    bool isCompleteCubeMap =
+        (mState.getType() == gl::TextureType::CubeMap && mState.isCubeComplete());
+    gl::TextureTarget textureTarget = (isCompleteCubeMap)
+                                          ? gl::kCubeMapTextureTargetMin
+                                          : gl::TextureTypeToTarget(mState.getType(), 0);
+
+    // Acquire mip levels 0 and 1 to check if it is appropriate to flush the texture updates.
+    gl::ImageDesc imageDesc0 = mState.getImageDesc(textureTarget, 0);
+    gl::ImageDesc imageDesc1 = mState.getImageDesc(textureTarget, 1);
+
+    // Check the depth if the texture is 2DArray or 3D. For others, skip.
+    bool isDepthCompatible = !(mState.getType() == gl::TextureType::_3D ||
+                               mState.getType() == gl::TextureType::_2DArray) ||
+                             (imageDesc0.size.depth >> 1 == imageDesc1.size.depth);
+
+    bool isSizeCompatible = (imageDesc0.size.width >> 1 == imageDesc1.size.width) &&
+                            (imageDesc0.size.height >> 1 == imageDesc1.size.height) &&
+                            isDepthCompatible;
+    bool isFormatCompatible          = (imageDesc0.format.info->sizedInternalFormat ==
+                               imageDesc1.format.info->sizedInternalFormat);
+    bool isNumberOfSamplesCompatible = (imageDesc0.samples == imageDesc1.samples);
+
+    return isSizeCompatible && isFormatCompatible && isNumberOfSamplesCompatible;
+}
+
 bool TextureVk::shouldUpdateBeStaged(gl::LevelIndex textureLevelIndexGL,
                                      angle::FormatID dstImageFormatID) const
 {
@@ -574,6 +620,12 @@ angle::Result TextureVk::setSubImageImpl(const gl::Context *context,
         {
             ANGLE_TRY(contextVk->submitStagedTextureUpdates());
         }
+    }
+
+    // Check if we should flush any mutable textures from before.
+    if (!mState.getImmutableFormat())
+    {
+        ANGLE_TRY(contextVk->onMutableTextureUpload(this));
     }
 
     return angle::Result::Continue;
@@ -1309,7 +1361,7 @@ angle::Result TextureVk::setStorageMultisample(const gl::Context *context,
     ASSERT(!mRedefinedLevels.any());
     ANGLE_TRY(initImage(contextVk, format.getIntendedFormatID(),
                         format.getActualImageFormatID(getRequiredImageAccess()),
-                        ImageMipLevels::FullMipChain));
+                        ImageMipLevels::FullMipChainForGenerateMipmap));
 
     return angle::Result::Continue;
 }
@@ -1497,6 +1549,12 @@ void TextureVk::releaseAndDeleteImageAndViews(ContextVk *contextVk)
         mImageCreateFlags       = 0;
         SafeDelete(mImage);
     }
+
+    if (contextVk->getPrevTexture() == this)
+    {
+        contextVk->resetPrevTexture();
+    }
+
     mBufferViews.release(contextVk);
     mRedefinedLevels.reset();
 }
@@ -1937,7 +1995,7 @@ angle::Result TextureVk::generateMipmap(const gl::Context *context)
            mImage->getFirstAllocatedLevel() == gl::LevelIndex(mState.getEffectiveBaseLevel()));
 
     // Only staged update here is the robust resource init if any.
-    ANGLE_TRY(ensureImageInitialized(contextVk, ImageMipLevels::FullMipChain));
+    ANGLE_TRY(ensureImageInitialized(contextVk, ImageMipLevels::FullMipChainForGenerateMipmap));
 
     vk::LevelIndex baseLevel = mImage->toVkLevel(gl::LevelIndex(mState.getEffectiveBaseLevel()));
     vk::LevelIndex maxLevel  = mImage->toVkLevel(gl::LevelIndex(mState.getMipmapMaxLevel()));
@@ -2242,8 +2300,9 @@ angle::Result TextureVk::respecifyImageStorage(ContextVk *contextVk)
         ANGLE_TRY(ensureImageAllocated(contextVk, format));
         ANGLE_TRY(initImage(contextVk, format.getIntendedFormatID(),
                             format.getActualImageFormatID(getRequiredImageAccess()),
-                            mState.getImmutableFormat() ? ImageMipLevels::FullMipChain
-                                                        : ImageMipLevels::EnabledLevels));
+                            mState.getImmutableFormat()
+                                ? ImageMipLevels::FullMipChainForGenerateMipmap
+                                : ImageMipLevels::EnabledLevels));
 
         // Make a copy of the old image (that's being released) and stage that as an update to the
         // new image.
@@ -2392,8 +2451,7 @@ angle::Result TextureVk::ensureImageInitialized(ContextVk *contextVk, ImageMipLe
         const vk::Format &format = getBaseLevelFormat(contextVk->getRenderer());
         ANGLE_TRY(initImage(contextVk, format.getIntendedFormatID(),
                             format.getActualImageFormatID(getRequiredImageAccess()), mipLevels));
-
-        if (mipLevels == ImageMipLevels::FullMipChain)
+        if (mipLevels == ImageMipLevels::FullMipChainForGenerateMipmap)
         {
             // Remove staged updates to non-base mips when generating mipmaps.  These can only be
             // emulated format init clears that are staged in initImage.
@@ -2643,7 +2701,8 @@ angle::Result TextureVk::respecifyImageStorageIfNecessary(ContextVk *contextVk, 
     if (isGenerateMipmap && mImage && mImage->valid() &&
         (oldUsageFlags != mImageUsageFlags ||
          (!mState.getImmutableFormat() &&
-          mImage->getLevelCount() != getMipLevelCount(ImageMipLevels::FullMipChain))))
+          mImage->getLevelCount() !=
+              getMipLevelCount(ImageMipLevels::FullMipChainForGenerateMipmap))))
     {
         ASSERT(mOwnsImage);
         // Immutable texture is not expected to reach here. The usage flag change should have
@@ -2701,8 +2760,9 @@ angle::Result TextureVk::syncState(const gl::Context *context,
 
     // Initialize the image storage and flush the pixel buffer.
     const bool isGenerateMipmap = source == gl::Command::GenerateMipmap;
-    ANGLE_TRY(ensureImageInitialized(contextVk, isGenerateMipmap ? ImageMipLevels::FullMipChain
-                                                                 : ImageMipLevels::EnabledLevels));
+    ANGLE_TRY(ensureImageInitialized(contextVk, isGenerateMipmap
+                                                    ? ImageMipLevels::FullMipChainForGenerateMipmap
+                                                    : ImageMipLevels::EnabledLevels));
 
     // Mask out the IMPLEMENTATION dirty bit to avoid unnecessary syncs.
     gl::Texture::DirtyBits localBits = dirtyBits;
@@ -3116,6 +3176,7 @@ uint32_t TextureVk::getMipLevelCount(ImageMipLevels mipLevels) const
         // Returns all mipmap levels from base to max regardless if an image has been specified or
         // not.
         case ImageMipLevels::FullMipChain:
+        case ImageMipLevels::FullMipChainForGenerateMipmap:
             return getMaxLevelCount() - mState.getEffectiveBaseLevel();
 
         default:
@@ -3446,7 +3507,7 @@ angle::Result TextureVk::ensureRenderable(ContextVk *contextVk,
         {
             levelGLStart = gl::LevelIndex(0);
             levelGLEnd   = gl::LevelIndex(mState.getImmutableLevels());
-            mipLevels    = ImageMipLevels::FullMipChain;
+            mipLevels    = ImageMipLevels::FullMipChainForGenerateMipmap;
         }
         else
         {
