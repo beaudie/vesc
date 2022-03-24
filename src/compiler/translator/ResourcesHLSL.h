@@ -25,7 +25,8 @@ class ResourcesHLSL : angle::NonCopyable
     ResourcesHLSL(StructureHLSL *structureHLSL,
                   ShShaderOutput outputType,
                   const std::vector<ShaderVariable> &uniforms,
-                  unsigned int firstUniformRegister);
+                  unsigned int firstUniformRegister,
+                  unsigned int firstUAVRegister);
 
     void reserveUniformRegisters(unsigned int registerCount);
     void reserveUniformBlockRegisters(unsigned int registerCount);
@@ -69,6 +70,7 @@ class ResourcesHLSL : angle::NonCopyable
 
     unsigned int getReadonlyImage2DRegisterIndex() const { return mReadonlyImage2DRegisterIndex; }
     unsigned int getImage2DRegisterIndex() const { return mImage2DRegisterIndex; }
+    bool hasImages() const { return mReadonlyImageCount > 0 || mImageCount > 0; }
 
   private:
     TString uniformBlockString(const TInterfaceBlock &interfaceBlock,
