@@ -18,6 +18,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "5636b44a_10171ba1",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 11,
+      "author": {
+        "id": 1500872
+      },
+      "writtenOn": "2022-03-24T14:59:13Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "4b4f911f_6a321c39",
+      "revId": "62f1d2e6dc28e82367aaf823968373c2e6917329",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "46eb40e3_815b7b0a",
@@ -31,6 +49,24 @@
       "writtenOn": "2022-02-26T00:10:47Z",
       "side": 1,
       "message": "Please mention that this is an upstreaming of https://bugs.webkit.org/show_bug.cgi?id\u003d236427 .",
+      "revId": "62f1d2e6dc28e82367aaf823968373c2e6917329",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "5d29e492_88303c9b",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 16,
+      "author": {
+        "id": 1500872
+      },
+      "writtenOn": "2022-03-24T14:59:13Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "46eb40e3_815b7b0a",
       "revId": "62f1d2e6dc28e82367aaf823968373c2e6917329",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
@@ -82,6 +118,24 @@
       "writtenOn": "2022-02-24T20:14:05Z",
       "side": 1,
       "message": "Is this used?",
+      "revId": "62f1d2e6dc28e82367aaf823968373c2e6917329",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "88240417_f9a50da5",
+        "filename": "src/libANGLE/renderer/metal/VertexArrayMtl.mm",
+        "patchSetId": 1
+      },
+      "lineNbr": 487,
+      "author": {
+        "id": 1500872
+      },
+      "writtenOn": "2022-03-24T14:59:13Z",
+      "side": 1,
+      "message": "Missing an if check.",
+      "parentUuid": "2b51a19f_6433d69c",
       "revId": "62f1d2e6dc28e82367aaf823968373c2e6917329",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
@@ -139,6 +193,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "3aa3ec82_e04ce85f",
+        "filename": "src/libANGLE/renderer/metal/VertexArrayMtl.mm",
+        "patchSetId": 1
+      },
+      "lineNbr": 667,
+      "author": {
+        "id": 1500872
+      },
+      "writtenOn": "2022-03-24T14:59:13Z",
+      "side": 1,
+      "message": "That\u0027s right, it took me another checkin here:\n   https://bugs.webkit.org/show_bug.cgi?id\u003d236733",
+      "parentUuid": "83e7c2f3_47ee929c",
+      "revId": "62f1d2e6dc28e82367aaf823968373c2e6917329",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "31a366ca_b9f4aee4",
@@ -152,6 +224,24 @@
       "writtenOn": "2022-02-26T00:10:47Z",
       "side": 1,
       "message": "Consider removing unneeded whitespace change?",
+      "revId": "62f1d2e6dc28e82367aaf823968373c2e6917329",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "7277b6c7_ccf8db59",
+        "filename": "src/libANGLE/renderer/metal/VertexArrayMtl.mm",
+        "patchSetId": 1
+      },
+      "lineNbr": 988,
+      "author": {
+        "id": 1500872
+      },
+      "writtenOn": "2022-03-24T14:59:13Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "31a366ca_b9f4aee4",
       "revId": "62f1d2e6dc28e82367aaf823968373c2e6917329",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
