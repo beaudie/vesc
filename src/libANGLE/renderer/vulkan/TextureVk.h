@@ -21,10 +21,11 @@ namespace rx
 
 enum class ImageMipLevels
 {
-    EnabledLevels = 0,
-    FullMipChain  = 1,
+    EnabledLevels              = 0,
+    FullMipChainGenerateMipmap = 1,
+    FullMipChain               = 2,
 
-    InvalidEnum = 2,
+    InvalidEnum = 3,
 };
 
 enum class TextureUpdateResult
@@ -201,6 +202,8 @@ class TextureVk : public TextureImpl, public angle::ObserverInterface
         ASSERT(mImage && mImage->valid());
         return *mImage;
     }
+
+    const gl::TextureState *getState() { return &mState; }
 
     void retainBufferViews(vk::ResourceUseList *resourceUseList)
     {
