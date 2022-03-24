@@ -1034,7 +1034,6 @@ angle::Result BufferVk::acquireBufferHelper(ContextVk *contextVk,
 {
     RendererVk *renderer = contextVk->getRenderer();
     size_t size          = roundUpPow2(sizeInBytes, kBufferSizeGranularity);
-    size_t alignment     = GetDefaultBufferAlignment(renderer);
 
     if (mBuffer.valid())
     {
@@ -1042,7 +1041,23 @@ angle::Result BufferVk::acquireBufferHelper(ContextVk *contextVk,
     }
 
     // Allocate the buffer directly
-    ANGLE_TRY(mBuffer.initSuballocation(contextVk, mMemoryTypeIndex, size, alignment));
+    // if(contextVk->isRobustResourceInitEnabled())
+    {
+        VkBufferCreateInfo createInfo    = {};
+        createInfo.sType                 = VK_STRUCTURE_TYPE_BUFFER_CREATE_INFO;
+        createInfo.flags                 = 0;
+        createInfo.size                  = size;
+        createInfo.usage                 = GetDefaultBufferUsageFlags(renderer);
+        createInfo.sharingMode           = VK_SHARING_MODE_EXCLUSIVE;
+        createInfo.queueFamilyIndexCount = 0;
+        createInfo.pQueueFamilyIndices   = nullptr;
+        ANGLE_TRY(mBuffer.init(contextVk, createInfo, mMemoryPropertyFlags));
+    }
+    /*else
+    {
+        size_t alignment     = GetDefaultBufferAlignment(renderer);
+        ANGLE_TRY(mBuffer.initSuballocation(contextVk, mMemoryTypeIndex, size, alignment));
+    }*/
 
     if (updateType == BufferUpdateType::ContentsUpdate)
     {
