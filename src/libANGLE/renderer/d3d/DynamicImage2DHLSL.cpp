@@ -856,8 +856,10 @@ std::string generateShaderForImage2DBindSignature(
     ProgramD3D &programD3D,
     const gl::ProgramState &programData,
     gl::ShaderType shaderType,
+    const std::string &shaderHLSL,
     std::vector<sh::ShaderVariable> &image2DUniforms,
-    const gl::ImageUnitTextureTypeMap &image2DBindLayout)
+    const gl::ImageUnitTextureTypeMap &image2DBindLayout,
+    unsigned int baseUAVRegister)
 {
     std::vector<std::vector<sh::ShaderVariable>> groupedImage2DUniforms(IMAGE2D_MAX + 1);
     unsigned int image2DTexture3DCount = 0, image2DTexture2DArrayCount = 0;
@@ -892,8 +894,8 @@ std::string generateShaderForImage2DBindSignature(
 
     gl::Shader *shaderGL                     = programData.getAttachedShader(shaderType);
     const ShaderD3D *shaderD3D               = GetImplAs<ShaderD3D>(shaderGL);
-    unsigned int groupTextureRegisterIndex   = shaderD3D->getReadonlyImage2DRegisterIndex();
-    unsigned int groupRWTextureRegisterIndex = shaderD3D->getImage2DRegisterIndex();
+    unsigned int groupTextureRegisterIndex   = baseUAVRegister + shaderD3D->getReadonlyImage2DRegisterIndex();
+    unsigned int groupRWTextureRegisterIndex = baseUAVRegister + shaderD3D->getImage2DRegisterIndex();
     unsigned int image2DTexture3DIndex       = 0;
     unsigned int image2DTexture2DArrayIndex  = image2DTexture3DCount;
     unsigned int image2DTexture2DIndex       = image2DTexture3DCount + image2DTexture2DArrayCount;
@@ -908,11 +910,11 @@ std::string generateShaderForImage2DBindSignature(
                                       &image2DTexture2DArrayIndex, &image2DTexture2DIndex);
     }
 
-    std::string shaderHLSL(programData.getAttachedShader(shaderType)->getTranslatedSource());
-    bool success = angle::ReplaceSubstring(&shaderHLSL, kImage2DFunctionString, out.str());
+    std::string result = shaderHLSL;
+    bool success       = angle::ReplaceSubstring(&result, kImage2DFunctionString, out.str());
     ASSERT(success);
 
-    return shaderHLSL;
+    return result;
 }
 
 }  // namespace rx
