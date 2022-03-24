@@ -413,6 +413,7 @@ ShareGroupVk::ShareGroupVk()
 {
     mLastPruneTime             = angle::GetCurrentSystemTime();
     mOrphanNonEmptyBufferBlock = false;
+    mPrevTexture               = nullptr;
 }
 
 void ShareGroupVk::addContext(ContextVk *contextVk)

@@ -2815,6 +2815,25 @@ angle::Result ContextVk::onCopyUpdate(VkDeviceSize size)
     return angle::Result::Continue;
 }
 
+angle::Result ContextVk::onMutableTextureUpload(TextureVk *newTexture)
+{
+    // Make sure the texture is valid and mutable
+    ASSERT(getPrevTexture() && !getPrevTexture()->getState()->getImmutableFormat());
+
+    // Return if the texture has not changed.
+    if (getPrevTexture() == newTexture)
+    {
+        return angle::Result::Continue;
+    }
+
+    if (getPrevTexture()->isTextureConsistentlySpecifiedForFlush())
+    {
+        ANGLE_TRY(getPrevTexture()->ensureImageInitialized(this, ImageMipLevels::FullMipChain));
+    }
+
+    return angle::Result::Continue;
+}
+
 angle::Result ContextVk::synchronizeCpuGpuTime()
 {
     ASSERT(mGpuEventsEnabled);
