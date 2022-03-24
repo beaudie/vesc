@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "a333d9d4_e5dc5723",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1500872
+      },
+      "writtenOn": "2022-03-24T15:58:46Z",
+      "side": 1,
+      "message": "I think we might be OK to abandon this change, our other multisample fixes seem to have fixed this.",
+      "revId": "27921fc0004a241630e24071c1e735d892f8c76a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
