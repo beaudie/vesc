@@ -20,6 +20,7 @@
 #include "libANGLE/renderer/vulkan/RendererVk.h"
 #include "libANGLE/renderer/vulkan/SurfaceVk.h"
 #include "libANGLE/renderer/vulkan/SyncVk.h"
+#include "libANGLE/renderer/vulkan/TextureVk.h"
 #include "libANGLE/renderer/vulkan/VkImageImageSiblingVk.h"
 #include "libANGLE/trace.h"
 
@@ -416,6 +417,7 @@ ShareGroupVk::ShareGroupVk()
 {
     mLastPruneTime             = angle::GetCurrentSystemTime();
     mOrphanNonEmptyBufferBlock = false;
+    mPrevTexture               = nullptr;
 }
 
 void ShareGroupVk::addContext(ContextVk *contextVk)
@@ -453,6 +455,8 @@ void ShareGroupVk::onDestroy(const egl::Display *display)
     mPipelineLayoutCache.destroy(renderer);
     mDescriptorSetLayoutCache.destroy(renderer);
 
+    resetPrevTexture();
+
     ASSERT(mResourceUseLists.empty());
 }
 
@@ -465,6 +469,44 @@ void ShareGroupVk::releaseResourceUseLists(const Serial &submitSerial)
             it.releaseResourceUsesAndUpdateSerials(submitSerial);
         }
         mResourceUseLists.clear();
+    }
+}
+
+angle::Result ShareGroupVk::onMutableTextureUpload(ContextVk *contextVk, TextureVk *newTexture)
+{
+    // Return if the previous texture is null, after setting it to the current texture.
+    if (mPrevTexture == nullptr)
+    {
+        mPrevTexture = newTexture;
+        return angle::Result::Continue;
+    }
+
+    // Make sure the previous texture is valid and mutable.
+    ASSERT(!mPrevTexture->isImmutable());
+
+    // Return if the texture has not changed.
+    if (mPrevTexture == newTexture)
+    {
+        return angle::Result::Continue;
+    }
+
+    if (mPrevTexture->isTextureConsistentlySpecifiedForFlush())
+    {
+        ANGLE_TRY(mPrevTexture->ensureImageInitialized(contextVk, ImageMipLevels::FullMipChain));
+        contextVk->getPerfCounters().mutableTexturesUploaded++;
+    }
+
+    // Replace the previous texture with the new one.
+    mPrevTexture = newTexture;
+
+    return angle::Result::Continue;
+}
+
+void ShareGroupVk::onTextureRelease(TextureVk *textureVk)
+{
+    if (mPrevTexture == textureVk)
+    {
+        resetPrevTexture();
     }
 }
 
