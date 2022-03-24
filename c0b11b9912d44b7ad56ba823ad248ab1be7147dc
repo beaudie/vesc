@@ -16,6 +16,24 @@
       "message": "LGTM once the SwiftShader tests are suppressed.",
       "revId": "c0b11b9912d44b7ad56ba823ad248ab1be7147dc",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "cb05d4f8_6a22d209",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1520902
+      },
+      "writtenOn": "2022-03-24T18:59:32Z",
+      "side": 1,
+      "message": "Thank you Jamie. The SwiftShader test suppresion CL is here: https://chromium-review.googlesource.com/c/chromium/src/+/3549943",
+      "parentUuid": "68320a1d_b1617d1e",
+      "revId": "c0b11b9912d44b7ad56ba823ad248ab1be7147dc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
