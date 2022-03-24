@@ -3,6 +3,52 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "a7ced485_841ad49a",
+        "filename": "src/libANGLE/renderer/renderer_utils.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 672,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2022-03-24T14:23:33Z",
+      "side": 1,
+      "message": "are you sure this is doing the initialization correctly? Won\u0027t this cube map array have multiple slices that might not be fully described by \"clearColor\"?",
+      "range": {
+        "startLine": 667,
+        "startChar": 0,
+        "endLine": 672,
+        "endChar": 5
+      },
+      "revId": "e9427cda0fdc8c577e9969cfc184d1255a0e7dc9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "bab19698_e91c9c14",
+        "filename": "src/tests/gl_tests/TextureTest.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 9003,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2022-03-24T14:23:33Z",
+      "side": 1,
+      "message": "nit: we have IncompleteTextureTest.cpp, though it\u0027s also okay to include this test here.",
+      "range": {
+        "startLine": 9003,
+        "startChar": 33,
+        "endLine": 9003,
+        "endChar": 50
+      },
+      "revId": "e9427cda0fdc8c577e9969cfc184d1255a0e7dc9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "04af6bc2_5a9cda50",
         "filename": "src/tests/gl_tests/TextureTest.cpp",
         "patchSetId": 4
@@ -38,6 +84,30 @@
       "side": 1,
       "message": "I see in a number of places in the GLES spec that it\u0027s specified that incomplete textures should return black. The check is good IMO.\n\nOur AMD hardware and driver on windows are both extremely old. Just suppress the test (you could also WontFix the bug you create for it right away).",
       "parentUuid": "04af6bc2_5a9cda50",
+      "range": {
+        "startLine": 9037,
+        "startChar": 0,
+        "endLine": 9037,
+        "endChar": 55
+      },
+      "revId": "e9427cda0fdc8c577e9969cfc184d1255a0e7dc9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "180dda15_65af55b0",
+        "filename": "src/tests/gl_tests/TextureTest.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 9037,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2022-03-24T14:23:33Z",
+      "side": 1,
+      "message": "AMD Windows Vulkan? It could be a driver bug yeah. On the other hand the initialization logic I\u0027d suspect is not initializing the whole 6 slices.",
+      "parentUuid": "d78a04ed_258d1a98",
       "range": {
         "startLine": 9037,
         "startChar": 0,
