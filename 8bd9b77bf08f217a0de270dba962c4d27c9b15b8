@@ -1,0 +1,96 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "e24bfa2f_cd581255",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 538,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2022-03-24T18:23:05Z",
+      "side": 1,
+      "message": "void orphanBufferBlock( BufferBlock \u0026block) \n{\n       mOrphanedBufferPool.appendBufferBlock(block);\n}\n\nAnd then you add appendBufferBlock() to BufferPool class.\n\nclass BufferPool\n{\n...\n   void appendBufferBlock(BufferBlock \u0026block)\n   {\n       mBufferBlocks.push_back(std::move(block));     \n   }\n...\n}",
+      "range": {
+        "startLine": 538,
+        "startChar": 5,
+        "endLine": 538,
+        "endChar": 95
+      },
+      "revId": "8bd9b77bf08f217a0de270dba962c4d27c9b15b8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "4f9bb877_4402a899",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 734,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2022-03-24T18:23:05Z",
+      "side": 1,
+      "message": "vk::BufferPool mOrphanedBufferPool;",
+      "range": {
+        "startLine": 734,
+        "startChar": 4,
+        "endLine": 734,
+        "endChar": 55
+      },
+      "revId": "8bd9b77bf08f217a0de270dba962c4d27c9b15b8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "54644ae3_76c12573",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 2802,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2022-03-24T18:23:05Z",
+      "side": 1,
+      "message": "renderer-\u003eorphanBufferBlock(block);",
+      "range": {
+        "startLine": 2801,
+        "startChar": 12,
+        "endLine": 2802,
+        "endChar": 71
+      },
+      "revId": "8bd9b77bf08f217a0de270dba962c4d27c9b15b8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "940d1334_090f95de",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 864,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2022-03-24T18:23:05Z",
+      "side": 1,
+      "message": "I dont think you need a new class. You can just use BufferPool class.",
+      "range": {
+        "startLine": 864,
+        "startChar": 6,
+        "endLine": 864,
+        "endChar": 28
+      },
+      "revId": "8bd9b77bf08f217a0de270dba962c4d27c9b15b8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
