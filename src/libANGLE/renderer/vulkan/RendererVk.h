@@ -535,6 +535,8 @@ class RendererVk : angle::NonCopyable
         return mDeviceLocalVertexConversionBufferMemoryTypeIndex;
     }
 
+    vk::DisplayShareBufferPool &getDisplayShareBufferPool() { return mDisplayShareBufferPool; }
+
   private:
     angle::Result initializeDevice(DisplayVk *displayVk, uint32_t queueFamilyIndex);
     void ensureCapsInitialized() const;
@@ -729,6 +731,7 @@ class RendererVk : angle::NonCopyable
 
     vk::ExtensionNameList mEnabledInstanceExtensions;
     vk::ExtensionNameList mEnabledDeviceExtensions;
+    vk::DisplayShareBufferPool mDisplayShareBufferPool;
 };
 
 }  // namespace rx

@@ -1170,6 +1170,7 @@ void RendererVk::releaseSharedResources(vk::ResourceUseList *resourceList)
 
 void RendererVk::onDestroy(vk::Context *context)
 {
+    mDisplayShareBufferPool.destroy(this);
     {
         std::lock_guard<std::mutex> lock(mCommandQueueMutex);
         if (isAsyncCommandQueueEnabled())

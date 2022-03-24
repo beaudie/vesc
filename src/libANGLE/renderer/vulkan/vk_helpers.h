@@ -841,6 +841,9 @@ class BufferPool : angle::NonCopyable
 
     bool valid() const { return mSize != 0; }
 
+    static constexpr int32_t kMaxCountRemainsEmpty = 4;
+    static constexpr int32_t kMaxEmptyBufferCount  = 16;
+
   private:
     angle::Result allocateNewBuffer(ContextVk *contextVk, VkDeviceSize sizeInBytes);
 
@@ -855,10 +858,25 @@ class BufferPool : angle::NonCopyable
     // we have more than kMaxEmptyBufferCount number of empty buffers, we will actually free it.
     // That way we avoid the situation that a buffer just becomes empty and gets freed right after
     // and only to find out that we have to allocate a new one next frame.
-    static constexpr int32_t kMaxCountRemainsEmpty = 4;
-    static constexpr int32_t kMaxEmptyBufferCount  = 16;
 };
 using BufferPoolPointerArray = std::array<std::unique_ptr<BufferPool>, VK_MAX_MEMORY_TYPES>;
+
+class DisplayShareBufferPool : angle::NonCopyable
+{
+  public:
+    DisplayShareBufferPool();
+    ~DisplayShareBufferPool();
+    void destroy(RendererVk *renderer);
+    void addBufferBlocks(std::unique_ptr<BufferBlock> &bufferBlock);
+    void pruneEmptyBuffers(RendererVk *renderer,
+                           int32_t maxCountRemainsEmpty,
+                           int32_t maxEmptyBufferCount);
+    void setDeviceSize(VkDeviceSize size);
+
+  private:
+    BufferBlockPointerVector mBufferBlocks;
+    VkDeviceSize mSize;
+};
 
 enum class BufferAccess
 {

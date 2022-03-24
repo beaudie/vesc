@@ -2796,10 +2796,94 @@ void BufferPool::destroy(RendererVk *renderer)
 {
     for (std::unique_ptr<BufferBlock> &block : mBufferBlocks)
     {
+        if (!block->isEmpty())
+        {
+            renderer->getDisplayShareBufferPool().addBufferBlocks(block);
+            renderer->getDisplayShareBufferPool().setDeviceSize(mSize);
+        }
+        else
+        {
+            ASSERT(block->isEmpty());
+            block->destroy(renderer);
+        }
+    }
+    mBufferBlocks.clear();
+}
+
+DisplayShareBufferPool::DisplayShareBufferPool() : mSize(0) {}
+
+DisplayShareBufferPool::~DisplayShareBufferPool()
+{
+    ASSERT(mBufferBlocks.empty());
+}
+
+void DisplayShareBufferPool::addBufferBlocks(std::unique_ptr<BufferBlock> &bufferBlock)
+{
+    mBufferBlocks.push_back(std::move(bufferBlock));
+}
+
+void DisplayShareBufferPool::destroy(RendererVk *renderer)
+{
+    for (std::unique_ptr<BufferBlock> &block : mBufferBlocks)
+    {
         ASSERT(block->isEmpty());
         block->destroy(renderer);
     }
     mBufferBlocks.clear();
+}
+
+void DisplayShareBufferPool::pruneEmptyBuffers(RendererVk *renderer,
+                                               int32_t maxCountRemainsEmpty,
+                                               int32_t maxEmptyBufferCount)
+{
+    int emptyBufferCount = 0;
+    int freedBufferCount = 0;
+    for (auto iter = mBufferBlocks.rbegin(); iter != mBufferBlocks.rend();)
+    {
+        if (!(*iter)->isEmpty())
+        {
+            ++iter;
+            continue;
+        }
+
+        // Record how many times this buffer block has found to be empty  seqentially.
+        int32_t countRemainsEmpty = (*iter)->getAndIncrementEmptyCounter();
+
+        // We will always free empty buffers that has smaller size. Or if the empty buffer has been
+        // found empty for long enough time, or we accumulated too many empty buffers, we also free
+        // it.
+        if ((*iter)->getMemorySize() < mSize || countRemainsEmpty >= maxCountRemainsEmpty ||
+            emptyBufferCount >= maxEmptyBufferCount)
+        {
+            (*iter)->destroy(renderer);
+            (*iter).reset();
+            ++freedBufferCount;
+        }
+        else
+        {
+            ++emptyBufferCount;
+        }
+        ++iter;
+    }
+
+    // Remove the null pointers all at once, if any.
+    if (freedBufferCount)
+    {
+        BufferBlockPointerVector compactedBlocks;
+        for (auto iter = mBufferBlocks.begin(); iter != mBufferBlocks.end(); ++iter)
+        {
+            if (*iter)
+            {
+                compactedBlocks.push_back(std::move(*iter));
+            }
+        }
+        mBufferBlocks = std::move(compactedBlocks);
+    }
+}
+
+void DisplayShareBufferPool::setDeviceSize(VkDeviceSize size)
+{
+    mSize = size;
 }
 
 // DescriptorPoolHelper implementation.

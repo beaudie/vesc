@@ -504,6 +504,9 @@ void ShareGroupVk::pruneDefaultBufferPools(RendererVk *renderer)
     {
         mSmallBufferPool->pruneEmptyBuffers(renderer);
     }
+
+    renderer->getDisplayShareBufferPool().pruneEmptyBuffers(
+        renderer, vk::BufferPool::kMaxCountRemainsEmpty, vk::BufferPool::kMaxEmptyBufferCount);
 }
 
 bool ShareGroupVk::isDueForBufferPoolPrune()
