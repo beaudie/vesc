@@ -87,6 +87,30 @@
       },
       "revId": "af4c0c9ad2b7759d6f6246a942b489ac3ac24030",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "3de5291a_67cdf9cc",
+        "filename": "doc/CaptureAndReplay.md",
+        "patchSetId": 4
+      },
+      "lineNbr": 70,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2022-03-25T15:39:35Z",
+      "side": 1,
+      "message": "Ah, okay, I guess it\u0027s specific to dEQP tests that we get Vulkan by default. N/m then, better keep it.",
+      "parentUuid": "a79e4a9a_5c9e82e6",
+      "range": {
+        "startLine": 70,
+        "startChar": 100,
+        "endLine": 70,
+        "endChar": 119
+      },
+      "revId": "af4c0c9ad2b7759d6f6246a942b489ac3ac24030",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
