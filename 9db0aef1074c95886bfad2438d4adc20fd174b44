@@ -26,6 +26,30 @@
     {
       "unresolved": false,
       "key": {
+        "uuid": "92ab1a3a_60357475",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 10
+      },
+      "lineNbr": 15,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-03-25T20:46:10Z",
+      "side": 1,
+      "message": "Yeap, and I don\u0027t attempt to optimize that right now. We do continue to break the render pass right away on color invalidates.\n\nFWIW, apps _should_ invalidate color of MSAA buffers after resolve, but even if they do, we don\u0027t optimize storeOp for that yet (which I believe ARM brought up as a problem sometime in the past).",
+      "parentUuid": "857e8aa2_42f74ae5",
+      "range": {
+        "startLine": 13,
+        "startChar": 0,
+        "endLine": 15,
+        "endChar": 57
+      },
+      "revId": "9db0aef1074c95886bfad2438d4adc20fd174b44",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
         "uuid": "7d818c99_05c74bd2",
         "filename": "/PATCHSET_LEVEL",
         "patchSetId": 10
@@ -58,6 +82,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "f61a25a2_1ebd0e1e",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 10
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-03-25T20:46:10Z",
+      "side": 1,
+      "message": "Resolved offline.",
+      "parentUuid": "7d818c99_05c74bd2",
+      "revId": "9db0aef1074c95886bfad2438d4adc20fd174b44",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "72f66b1e_9a15d1e5",
@@ -71,6 +113,30 @@
       "writtenOn": "2022-03-25T17:14:33Z",
       "side": 1,
       "message": "I guess this whole block of code will be executed quite often now for all apps. Which app gets benefit for the improvement you try to do?",
+      "range": {
+        "startLine": 1881,
+        "startChar": 13,
+        "endLine": 1881,
+        "endChar": 55
+      },
+      "revId": "9db0aef1074c95886bfad2438d4adc20fd174b44",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "25a6acfa_4390c567",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 10
+      },
+      "lineNbr": 1881,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-03-25T20:46:10Z",
+      "side": 1,
+      "message": "Chatted offline. The code is actually executed very rarely, and has real impact on traces; for example by optimizing storeOp in Genshin Impact, and enabling optimizations such as anglebug.com/7034 which is currently the bottleneck in that trace.",
+      "parentUuid": "72f66b1e_9a15d1e5",
       "range": {
         "startLine": 1881,
         "startChar": 13,
@@ -98,6 +164,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "ef91ee17_1e286cc2",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 10
+      },
+      "lineNbr": 4306,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-03-25T20:46:10Z",
+      "side": 1,
+      "message": "I see your point, but maybe updateRasterizerDiscardEnabled() should get a better name instead. updateRasterizerDiscardEnabled() can under-the-hood swap rasterizer discard with color mask for the sake of pipeline statistics query (which doesn\u0027t work with rasterizer discard on some hardware). It nevertheless makes sure color is not output.\n\nIf I add this there, `onColorAccessChange()` would be unnecessary called at the boundaries of primitives generated query. Arguably not a big deal, but it\u0027s strictly worse than adding it on the state check.",
+      "parentUuid": "89828043_66be8559",
+      "revId": "9db0aef1074c95886bfad2438d4adc20fd174b44",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "2ad69d0e_62315107",
@@ -111,6 +195,30 @@
       "writtenOn": "2022-03-25T17:14:33Z",
       "side": 1,
       "message": "Since it is helper function, it could be more explicit. When I read this, I was thinking full clear means not a scissored clear.\n\nMaybe make this IsClear and change IsClear to IsClearOfAnyChannel?",
+      "range": {
+        "startLine": 870,
+        "startChar": 5,
+        "endLine": 870,
+        "endChar": 16
+      },
+      "revId": "9db0aef1074c95886bfad2438d4adc20fd174b44",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "aecb9647_05bed1e9",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 10
+      },
+      "lineNbr": 870,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-03-25T20:46:10Z",
+      "side": 1,
+      "message": "I kept IsClear to contain all clears, but changed this to IsClearOfAllChannels. WDYT?",
+      "parentUuid": "2ad69d0e_62315107",
       "range": {
         "startLine": 870,
         "startChar": 5,

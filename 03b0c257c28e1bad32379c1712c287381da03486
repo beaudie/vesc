@@ -22,6 +22,30 @@
       },
       "revId": "03b0c257c28e1bad32379c1712c287381da03486",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "7a68db0e_4b7f46c0",
+        "filename": "src/libANGLE/renderer/vulkan/RenderTargetVk.cpp",
+        "patchSetId": 10
+      },
+      "lineNbr": 103,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-03-25T20:46:10Z",
+      "side": 0,
+      "message": "Yes definitely. That\u0027s done identically to depth/stencil now, at the end of the render pass when if we know if color was really written to or not.",
+      "parentUuid": "f69d2e66_1968fd68",
+      "range": {
+        "startLine": 102,
+        "startChar": 0,
+        "endLine": 103,
+        "endChar": 47
+      },
+      "revId": "03b0c257c28e1bad32379c1712c287381da03486",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
