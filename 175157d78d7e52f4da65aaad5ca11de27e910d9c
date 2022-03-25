@@ -33,6 +33,23 @@
       "message": "Re-add me when green.",
       "revId": "175157d78d7e52f4da65aaad5ca11de27e910d9c",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "611503b6_952c4c26",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1175714
+      },
+      "writtenOn": "2022-03-25T21:03:31Z",
+      "side": 1,
+      "message": "lgtm assuming cq happy",
+      "revId": "175157d78d7e52f4da65aaad5ca11de27e910d9c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
