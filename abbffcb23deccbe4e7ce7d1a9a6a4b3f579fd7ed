@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "64cee4ab_abeb0214",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1290487
+      },
+      "writtenOn": "2022-03-25T04:38:32Z",
+      "side": 1,
+      "message": "The test bots get different results than my Pixel 6 (running a pre-release Android T, and thus newer drivers).  Seems like we can\u0027t undo these supressions while they fail on the bots.",
+      "revId": "abbffcb23deccbe4e7ce7d1a9a6a4b3f579fd7ed",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
