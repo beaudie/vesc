@@ -51,6 +51,29 @@
       "message": "I think so. Somewhere in our BUILD.gn files.",
       "revId": "0bece35078d216b1ff579f74d423d08a9f9dfff4",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b49443d0_62be4a79",
+        "filename": "src/compiler/translator/glslang_tab_autogen.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 80,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2022-03-25T15:16:21Z",
+      "side": 1,
+      "message": "you can see the existing suppression blocks here.\n\nSee https://source.chromium.org/chromium/chromium/src/+/main:third_party/angle/src/compiler/translator/glslang.y;l\u003d29?q\u003dglslang.y\u0026ss\u003dchromium\n\nThere\u0027s also https://source.chromium.org/chromium/chromium/src/+/main:third_party/angle/src/compiler/preprocessor/preprocessor.y;l\u003d26\n\nPlease add your suppressions to these source files then re-run code generation:\n\nhttps://chromium.googlesource.com/angle/angle/+/main/doc/ContributingCode.md#build-maintenance\n\nUpdating the baked compiler is possible though a bit more work, and may or may not fix the issue:\n\nhttps://source.chromium.org/chromium/chromium/src/+/main:third_party/angle/tools/flex-bison/README.md",
+      "range": {
+        "startLine": 80,
+        "startChar": 0,
+        "endLine": 80,
+        "endChar": 54
+      },
+      "revId": "0bece35078d216b1ff579f74d423d08a9f9dfff4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
