@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b973627d_06c05d2e",
+        "filename": "src/libANGLE/renderer/d3d/ProgramD3D.cpp",
+        "patchSetId": 8
+      },
+      "lineNbr": 1747,
+      "author": {
+        "id": 1116015
+      },
+      "writtenOn": "2022-03-25T17:23:46Z",
+      "side": 1,
+      "message": "Note: this could be simplified in the future by refactoring m*Executables and mCached*ExecutableIndex and updatedCached*ExecutableIndex() via maps.",
+      "revId": "84d20b8171141696e514ce60132e4002ec694ef0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
