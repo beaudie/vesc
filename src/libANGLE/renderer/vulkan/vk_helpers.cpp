@@ -7374,6 +7374,7 @@ angle::Result ImageHelper::flushStagedUpdates(ContextVk *contextVk,
     // the clear.
     if (mCurrentSingleClearValue.valid())
     {
+        ASSERT(levelGLStart + 1 == levelGLEnd);
         std::vector<SubresourceUpdate> *levelUpdates =
             getLevelUpdates(gl::LevelIndex(mCurrentSingleClearValue.value().levelIndex));
         if (levelUpdates && levelUpdates->size() == 1)
@@ -7382,6 +7383,8 @@ angle::Result ImageHelper::flushStagedUpdates(ContextVk *contextVk,
             if (IsClearOfAllChannels(update.updateSource) &&
                 mCurrentSingleClearValue.value() == update.data.clear)
             {
+                setContentDefined(toVkLevel(levelGLStart), 1, layerStart, layerEnd - layerStart,
+                                  update.data.clear.aspectFlags);
                 ANGLE_VK_PERF_WARNING(contextVk, GL_DEBUG_SEVERITY_LOW,
                                       "Repeated Clear on framebuffer attachment dropped");
                 update.release(contextVk->getRenderer());
