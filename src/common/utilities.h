@@ -118,6 +118,10 @@ unsigned int ArraySizeProduct(const std::vector<unsigned int> &arraySizes);
 // Returns the product of the sizes in the vector except for the outermost dimension, or 1 if the
 // vector is empty.
 unsigned int InnerArraySizeProduct(const std::vector<unsigned int> &arraySizes);
+// Product of sizes according to first/last indexes.
+unsigned int PartialArraySizeProduct(const std::vector<unsigned int> &arraySizes,
+                                     size_t firstIndexInclusive,
+                                     size_t lastIndexExclusive);
 // Returns the outermost array dimension, or 1 if the vector is empty.
 unsigned int OutermostArraySize(const std::vector<unsigned int> &arraySizes);
 
