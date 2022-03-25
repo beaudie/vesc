@@ -22,6 +22,23 @@
       },
       "revId": "9db0aef1074c95886bfad2438d4adc20fd174b44",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "89828043_66be8559",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 10
+      },
+      "lineNbr": 4306,
+      "author": {
+        "id": 1175714
+      },
+      "writtenOn": "2022-03-25T17:13:10Z",
+      "side": 1,
+      "message": "currently you don\u0027t use onColorAccessChange in DIRTY_BIT_COLOR_MASK\u0027s switch statement as that\u0027s foleded into onColorMaskChange. Can we also fold this onColorAccessChange into updateRasterizerDiscardEnabled?",
+      "revId": "9db0aef1074c95886bfad2438d4adc20fd174b44",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }

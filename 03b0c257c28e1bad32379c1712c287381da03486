@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "f69d2e66_1968fd68",
+        "filename": "src/libANGLE/renderer/vulkan/RenderTargetVk.cpp",
+        "patchSetId": 10
+      },
+      "lineNbr": 103,
+      "author": {
+        "id": 1175714
+      },
+      "writtenOn": "2022-03-25T17:13:10Z",
+      "side": 0,
+      "message": "are we still doing what onWrite does somewhere else?",
+      "range": {
+        "startLine": 102,
+        "startChar": 0,
+        "endLine": 103,
+        "endChar": 47
+      },
+      "revId": "03b0c257c28e1bad32379c1712c287381da03486",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
