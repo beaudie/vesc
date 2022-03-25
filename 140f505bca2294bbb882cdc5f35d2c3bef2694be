@@ -16,6 +16,24 @@
       "message": "Here\u0027s an alternative, but I didn\u0027t dig too deep into that: https://chromium-review.googlesource.com/c/angle/angle/+/3552091",
       "revId": "140f505bca2294bbb882cdc5f35d2c3bef2694be",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "30f71701_5c0fb045",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-03-25T19:07:03Z",
+      "side": 1,
+      "message": "Also, I verified this by manual error injection, but don\u0027t know how it can be automatically tested",
+      "parentUuid": "0a7aab7c_f6d90103",
+      "revId": "140f505bca2294bbb882cdc5f35d2c3bef2694be",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
