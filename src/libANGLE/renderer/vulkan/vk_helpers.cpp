@@ -7382,6 +7382,8 @@ angle::Result ImageHelper::flushStagedUpdates(ContextVk *contextVk,
             if (IsClearOfAllChannels(update.updateSource) &&
                 mCurrentSingleClearValue.value() == update.data.clear)
             {
+                setContentDefined(toVkLevel(levelGLStart), levelGLEnd - levelGLStart, layerStart,
+                                  layerEnd - layerStart, update.data.clear.aspectFlags);
                 ANGLE_VK_PERF_WARNING(contextVk, GL_DEBUG_SEVERITY_LOW,
                                       "Repeated Clear on framebuffer attachment dropped");
                 update.release(contextVk->getRenderer());
