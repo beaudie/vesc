@@ -361,14 +361,14 @@ class RendererVk : angle::NonCopyable
         }
         else
         {
-            std::lock_guard<std::mutex> lock(mCommandQueueMutex);
+            std::lock_guard<std::recursive_mutex> lock(mCommandQueueMutex);
             return mCommandQueue.getLastCompletedQueueSerial();
         }
     }
 
     ANGLE_INLINE bool isCommandQueueBusy()
     {
-        std::lock_guard<std::mutex> lock(mCommandQueueMutex);
+        std::lock_guard<std::recursive_mutex> lock(mCommandQueueMutex);
         if (isAsyncCommandQueueEnabled())
         {
             return mCommandProcessor.isBusy();
@@ -686,7 +686,7 @@ class RendererVk : angle::NonCopyable
     std::deque<PendingOneOffCommands> mPendingOneOffCommands;
 
     // Synchronous Command Queue
-    std::mutex mCommandQueueMutex;
+    std::recursive_mutex mCommandQueueMutex;
     vk::CommandQueue mCommandQueue;
 
     // Async Command Queue
