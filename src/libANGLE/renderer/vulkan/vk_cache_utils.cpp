@@ -889,10 +889,15 @@ void UpdateRenderPassColorPerfCounters(const VkRenderPassCreateInfo &createInfo,
                                        const VkSubpassDescription &subpass,
                                        RenderPassPerfCounters *countersOut)
 {
-    for (uint32_t index = 0; index < createInfo.attachmentCount; index++)
+    for (uint32_t index = 0; index < subpass.colorAttachmentCount; index++)
     {
-        VkAttachmentLoadOp loadOp   = createInfo.pAttachments[index].loadOp;
-        VkAttachmentStoreOp storeOp = createInfo.pAttachments[index].storeOp;
+        uint32_t colorIndex = subpass.pColorAttachments[index].attachment;
+        if (colorIndex == VK_ATTACHMENT_UNUSED)
+        {
+            continue;
+        }
+        VkAttachmentLoadOp loadOp   = createInfo.pAttachments[colorIndex].loadOp;
+        VkAttachmentStoreOp storeOp = createInfo.pAttachments[colorIndex].storeOp;
         countersOut->colorClears += loadOp == VK_ATTACHMENT_LOAD_OP_CLEAR ? 1 : 0;
         countersOut->colorLoads += loadOp == VK_ATTACHMENT_LOAD_OP_LOAD ? 1 : 0;
         countersOut->colorStores += storeOp == VK_ATTACHMENT_STORE_OP_STORE ? 1 : 0;
