@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "8ca57b2c_6e0aaced",
+        "filename": "src/libANGLE/renderer/d3d/ProgramD3D.cpp",
+        "patchSetId": 9
+      },
+      "lineNbr": 1051,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2022-03-25T18:56:41Z",
+      "side": 1,
+      "message": "same as below",
+      "range": {
+        "startLine": 1051,
+        "startChar": 9,
+        "endLine": 1051,
+        "endChar": 14
+      },
+      "revId": "df7dfe4e4e6c474faca4cc56229990952d4587e3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "cb0e91e2_1cc3f88f",
+        "filename": "src/libANGLE/renderer/d3d/ProgramD3D.cpp",
+        "patchSetId": 9
+      },
+      "lineNbr": 1381,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2022-03-25T18:56:41Z",
+      "side": 1,
+      "message": "nit: use explicit type for very basic types to increase readability (see style guide)",
+      "range": {
+        "startLine": 1381,
+        "startChar": 9,
+        "endLine": 1381,
+        "endChar": 14
+      },
+      "revId": "df7dfe4e4e6c474faca4cc56229990952d4587e3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
