@@ -6640,6 +6640,8 @@ void ImageHelper::invalidateSubresourceContentImpl(ContextVk *contextVk,
         return;
     }
 
+    mCurrentSingleClearValue.reset();
+
     uint8_t layerRangeBits =
         GetContentDefinedLayerRangeBits(layerIndex, layerCount, kMaxContentDefinedLayerCount);
     *contentDefinedMask &= static_cast<uint8_t>(~layerRangeBits);
