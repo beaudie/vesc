@@ -52,6 +52,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "7aa3315b_bac0d39a",
+        "filename": "src/tests/deqp_support/deqp_gles31_test_expectations.txt",
+        "patchSetId": 2
+      },
+      "lineNbr": 1340,
+      "author": {
+        "id": 1290487
+      },
+      "writtenOn": "2022-03-25T01:13:35Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "3a154dfd_d15b082d",
+      "revId": "48103faedc7dcd4ce893c289fd46180506b10600",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "fde2c5dd_4494e86c",
@@ -65,6 +83,24 @@
       "writtenOn": "2022-03-25T00:56:50Z",
       "side": 1,
       "message": "Do we need to keep this commented-out line?",
+      "revId": "48103faedc7dcd4ce893c289fd46180506b10600",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "dd17baaf_30ccfe56",
+        "filename": "src/tests/deqp_support/deqp_gles3_test_expectations.txt",
+        "patchSetId": 2
+      },
+      "lineNbr": 1793,
+      "author": {
+        "id": 1290487
+      },
+      "writtenOn": "2022-03-25T01:13:35Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "fde2c5dd_4494e86c",
       "revId": "48103faedc7dcd4ce893c289fd46180506b10600",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
