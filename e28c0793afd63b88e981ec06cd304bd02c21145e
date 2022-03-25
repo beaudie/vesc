@@ -16,6 +16,23 @@
       "message": "Based on PS2 bot run, I added back some (too many) SKIPs",
       "revId": "e28c0793afd63b88e981ec06cd304bd02c21145e",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "9fb871a6_8748a033",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1290487
+      },
+      "writtenOn": "2022-03-25T03:16:19Z",
+      "side": 1,
+      "message": "I hope that the crashes are predictable and not random.  If so, there should be no failures with this patchset.  I haven\u0027t run all of these tests on Pixel 6, but so far, everything passes on Pixel 6.  This could be a matter of Qualcomm driver bugs (which will never be fixed).",
+      "revId": "e28c0793afd63b88e981ec06cd304bd02c21145e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
