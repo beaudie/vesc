@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "4261c3da_983d673a",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1290487
+      },
+      "writtenOn": "2022-03-25T01:31:05Z",
+      "side": 1,
+      "message": "Try some other Pixel4 SKIPs",
+      "revId": "05cac10eb4573a7f7768093f9af0b0c567b4cf80",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
