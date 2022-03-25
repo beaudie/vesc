@@ -929,7 +929,16 @@ class [[nodiscard]] ScopedContextRef
 };
 
 // Thread-local current valid context bound to the thread.
-#if defined(ANGLE_PLATFORM_APPLE)
+// GCC < 10.4 or 11.0 - 11.3 miscodegen extern thread_local variable accesses.
+// See https://gcc.gnu.org/bugzilla/show_bug.cgi?id=104862
+#if defined(__GNUC__)
+#    if __GNUC__ < 10 || __GNUC__ == 10 && __GNUC_MINOR__ < 4 || \
+        __GNUC__ == 11 && __GNUC_MINOR__ < 3
+#        define ANGLE_USE_CONTEXT_VIRTUAL_CALL 1
+#    endif
+#endif
+
+#if defined(ANGLE_PLATFORM_APPLE) || defined(ANGLE_USE_CONTEXT_VIRTUAL_CALL)
 extern Context *GetCurrentValidContextTLS();
 extern void SetCurrentValidContextTLS(Context *context);
 #else
