@@ -1758,7 +1758,7 @@ angle::Result FramebufferVk::flushColorAttachmentUpdates(const gl::Context *cont
     drawRenderTarget = mRenderTargetCache.getColorDraw(mState, colorIndexGL);
     if (drawRenderTarget)
     {
-        if (deferClears && mState.getEnabledDrawBuffers().test(colorIndexGL))
+        if (deferClears)
         {
             ANGLE_TRY(
                 drawRenderTarget->flushStagedUpdates(contextVk, &mDeferredClears, colorIndexGL,
