@@ -328,12 +328,14 @@ class ObjectAndSerial final : angle::NonCopyable
     Serial mSerial;
 };
 
+class BufferSuballocation;
 // Reference to a deleted object. The object is due to be destroyed at some point in the future.
 // |mHandleType| determines the type of the object and which destroy function should be called.
 class GarbageObject
 {
   public:
     GarbageObject();
+    GarbageObject(BufferSuballocation *suballocation);
     GarbageObject(GarbageObject &&other);
     GarbageObject &operator=(GarbageObject &&rhs);
 
@@ -1009,6 +1011,7 @@ class BufferSuballocation final : angle::NonCopyable
     BufferSerial getBlockSerial() const;
     uint8_t *getBlockMemory() const;
     VkDeviceSize getBlockMemorySize() const;
+    bool isSuballocated() const { return mBufferBlock->hasVirtualBlock(); }
 
   private:
     // Only used by DynamicBuffer where DynamicBuffer does the actual suballocation and pass the
