@@ -289,8 +289,6 @@ class CommandQueueInterface : angle::NonCopyable
     virtual angle::Result init(Context *context, const DeviceQueueMap &queueMap) = 0;
     virtual void destroy(Context *context)                                       = 0;
 
-    virtual void handleDeviceLost(RendererVk *renderer) = 0;
-
     // Wait until the desired serial has been completed.
     virtual angle::Result finishToSerial(Context *context,
                                          Serial finishSerial,
@@ -357,8 +355,6 @@ class CommandQueue final : public CommandQueueInterface
     angle::Result init(Context *context, const DeviceQueueMap &queueMap) override;
     void destroy(Context *context) override;
     void clearAllGarbage(RendererVk *renderer);
-
-    void handleDeviceLost(RendererVk *renderer) override;
 
     angle::Result finishToSerial(Context *context, Serial finishSerial, uint64_t timeout) override;
     angle::Result waitIdle(Context *context, uint64_t timeout) override;
@@ -507,8 +503,6 @@ class CommandProcessor : public Context, public CommandQueueInterface
     angle::Result init(Context *context, const DeviceQueueMap &queueMap) override;
 
     void destroy(Context *context) override;
-
-    void handleDeviceLost(RendererVk *renderer) override;
 
     angle::Result finishToSerial(Context *context, Serial finishSerial, uint64_t timeout) override;
 

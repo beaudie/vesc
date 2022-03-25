@@ -372,7 +372,6 @@ void CommandProcessor::handleError(VkResult errorCode,
     if (errorCode == VK_ERROR_DEVICE_LOST)
     {
         WARN() << errorStream.str();
-        handleDeviceLost(mRenderer);
     }
 
     std::lock_guard<std::mutex> queueLock(mErrorMutex);
@@ -423,20 +422,14 @@ void CommandProcessor::processTasks()
 {
     while (true)
     {
-        bool exitThread      = false;
-        angle::Result result = processTasksImpl(&exitThread);
+        bool exitThread = false;
+        // Regardless of whether the commands succeed or fail, the tasks are executed until the
+        // thread is asked to stop.
+        ANGLE_MAYBE_UNUSED angle::Result result = processTasksImpl(&exitThread);
         if (exitThread)
         {
             // We are doing a controlled exit of the thread, break out of the while loop.
             break;
-        }
-        if (result != angle::Result::Continue)
-        {
-            // TODO: https://issuetracker.google.com/issues/170311829 - follow-up on error handling
-            // ContextVk::commandProcessorSyncErrorsAndQueueCommand and WindowSurfaceVk::destroy
-            // do error processing, is anything required here? Don't think so, mostly need to
-            // continue the worker thread until it's been told to exit.
-            UNREACHABLE();
         }
     }
 }
@@ -673,16 +666,6 @@ angle::Result CommandProcessor::waitIdle(Context *context, uint64_t timeout)
     return waitForWorkComplete(context);
 }
 
-void CommandProcessor::handleDeviceLost(RendererVk *renderer)
-{
-    ANGLE_TRACE_EVENT0("gpu.angle", "CommandProcessor::handleDeviceLost");
-    std::unique_lock<std::mutex> lock(mWorkerMutex);
-    mWorkerIdleCondition.wait(lock, [this] { return (mTasks.empty() && mWorkerThreadIdle); });
-
-    // Worker thread is idle and command queue is empty so good to continue
-    mCommandQueue.handleDeviceLost(renderer);
-}
-
 VkResult CommandProcessor::getLastAndClearPresentResult(VkSwapchainKHR swapchain)
 {
     std::unique_lock<std::mutex> lock(mSwapchainStatusMutex);
@@ -891,7 +874,7 @@ angle::Result CommandQueue::checkCompletedCommands(Context *context)
         {
             break;
         }
-        ANGLE_VK_TRY(context, result);
+        ANGLE_VK_TRY(context, VK_ERROR_DEVICE_LOST);
         ++finishedCount;
     }
 
@@ -971,29 +954,6 @@ void CommandQueue::clearAllGarbage(RendererVk *renderer)
         }
         mGarbageQueue.pop();
     }
-}
-
-void CommandQueue::handleDeviceLost(RendererVk *renderer)
-{
-    ANGLE_TRACE_EVENT0("gpu.angle", "CommandQueue::handleDeviceLost");
-
-    VkDevice device = renderer->getDevice();
-
-    for (CommandBatch &batch : mInFlightCommands)
-    {
-        // On device loss we need to wait for fence to be signaled before destroying it
-        VkResult status = batch.fence.get().wait(device, renderer->getMaxFenceWaitTimeNs());
-        // If the wait times out, it is probably not possible to recover from lost device
-        ASSERT(status == VK_SUCCESS || status == VK_ERROR_DEVICE_LOST);
-
-        // On device lost, here simply destroy the CommandBuffer, it will fully cleared later
-        // by CommandPool::destroy
-        batch.primaryCommands.destroy(device);
-
-        batch.resetSecondaryCommandBuffers(device);
-        batch.fence.reset(device);
-    }
-    mInFlightCommands.clear();
 }
 
 bool CommandQueue::allInFlightCommandsAreAfterSerial(Serial serial)

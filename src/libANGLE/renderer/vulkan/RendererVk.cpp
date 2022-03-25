@@ -3894,20 +3894,6 @@ angle::Result RendererVk::submitFrame(vk::Context *context,
     return angle::Result::Continue;
 }
 
-void RendererVk::handleDeviceLost()
-{
-    std::lock_guard<std::mutex> lock(mCommandQueueMutex);
-
-    if (isAsyncCommandQueueEnabled())
-    {
-        mCommandProcessor.handleDeviceLost(this);
-    }
-    else
-    {
-        mCommandQueue.handleDeviceLost(this);
-    }
-}
-
 angle::Result RendererVk::finishToSerial(vk::Context *context, Serial serial)
 {
     std::lock_guard<std::mutex> lock(mCommandQueueMutex);
