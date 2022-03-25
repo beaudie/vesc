@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "d8f056b3_5f36f1ca",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 7
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1290487
+      },
+      "writtenOn": "2022-03-25T15:22:19Z",
+      "side": 1,
+      "message": "Ready for review.  Previous patchsets engage in some experimentation.  This patchset is the same as PS5, which passed.\n\nThis CL cleans up the expectations files some.  In the end, it looks like all of these pass on Pixel 6 (from bot runs and from my own testing).  Thus, they shouldn\u0027t block Pixel 6.",
+      "revId": "dbff4cbb73e454f75a53a8a66bd6a6c036bda3c6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
