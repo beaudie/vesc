@@ -1185,7 +1185,7 @@ void RendererVk::onDestroy(vk::Context *context)
     }
 
     {
-        std::lock_guard<std::mutex> lock(mCommandQueueMutex);
+        vk::ScopedCommandQueueLock lock(this, mCommandQueueMutex);
         if (isAsyncCommandQueueEnabled())
         {
             mCommandProcessor.destroy(context);
@@ -3555,7 +3555,7 @@ angle::Result RendererVk::queueSubmitOneOff(vk::Context *context,
 {
     ANGLE_TRACE_EVENT0("gpu.angle", "RendererVk::queueSubmitOneOff");
 
-    std::lock_guard<std::mutex> commandQueueLock(mCommandQueueMutex);
+    vk::ScopedCommandQueueLock lock(this, mCommandQueueMutex);
 
     Serial submitQueueSerial;
     if (isAsyncCommandQueueEnabled())
@@ -3862,7 +3862,7 @@ angle::Result RendererVk::submitFrame(vk::Context *context,
                                       vk::SecondaryCommandPools *commandPools,
                                       Serial *submitSerialOut)
 {
-    std::lock_guard<std::mutex> commandQueueLock(mCommandQueueMutex);
+    vk::ScopedCommandQueueLock lock(this, mCommandQueueMutex);
 
     vk::SecondaryCommandBufferList commandBuffersToReset = {
         std::move(mOutsideRenderPassCommandBufferRecycler.releaseCommandBuffersToReset()),
@@ -3896,7 +3896,20 @@ angle::Result RendererVk::submitFrame(vk::Context *context,
 
 void RendererVk::handleDeviceLost()
 {
-    std::lock_guard<std::mutex> lock(mCommandQueueMutex);
+    // If the lock is already taken, it must be taken by ScopedCommandQueueLock, which would call
+    // handleDeviceLostNoLock when appropriate.
+    if (!mCommandQueueMutex.try_lock())
+    {
+        return;
+    }
+    handleDeviceLostNoLock();
+    mCommandQueueMutex.unlock();
+}
+
+void RendererVk::handleDeviceLostNoLock()
+{
+    // The lock must already be taken, either by handleDeviceLost() or ScopedCommandQueueLock
+    ASSERT(mCommandQueueMutex.try_lock() == false);
 
     if (isAsyncCommandQueueEnabled())
     {
@@ -3910,7 +3923,7 @@ void RendererVk::handleDeviceLost()
 
 angle::Result RendererVk::finishToSerial(vk::Context *context, Serial serial)
 {
-    std::lock_guard<std::mutex> lock(mCommandQueueMutex);
+    vk::ScopedCommandQueueLock lock(this, mCommandQueueMutex);
 
     if (isAsyncCommandQueueEnabled())
     {
@@ -3931,7 +3944,8 @@ angle::Result RendererVk::waitForSerialWithUserTimeout(vk::Context *context,
 {
     ANGLE_TRACE_EVENT0("gpu.angle", "RendererVk::waitForSerialWithUserTimeout");
 
-    std::lock_guard<std::mutex> lock(mCommandQueueMutex);
+    vk::ScopedCommandQueueLock lock(this, mCommandQueueMutex);
+
     if (isAsyncCommandQueueEnabled())
     {
         ANGLE_TRY(mCommandProcessor.waitForSerialWithUserTimeout(context, serial, timeout, result));
@@ -3946,7 +3960,7 @@ angle::Result RendererVk::waitForSerialWithUserTimeout(vk::Context *context,
 
 angle::Result RendererVk::finish(vk::Context *context, bool hasProtectedContent)
 {
-    std::lock_guard<std::mutex> lock(mCommandQueueMutex);
+    vk::ScopedCommandQueueLock lock(this, mCommandQueueMutex);
 
     if (isAsyncCommandQueueEnabled())
     {
@@ -3962,7 +3976,7 @@ angle::Result RendererVk::finish(vk::Context *context, bool hasProtectedContent)
 
 angle::Result RendererVk::checkCompletedCommands(vk::Context *context)
 {
-    std::lock_guard<std::mutex> lock(mCommandQueueMutex);
+    vk::ScopedCommandQueueLock lock(this, mCommandQueueMutex);
     // TODO: https://issuetracker.google.com/169788986 - would be better if we could just wait
     // for the work we need but that requires QueryHelper to use the actual serial for the
     // query.
@@ -3986,7 +4000,7 @@ angle::Result RendererVk::flushRenderPassCommands(
 {
     ANGLE_TRACE_EVENT0("gpu.angle", "RendererVk::flushRenderPassCommands");
 
-    std::lock_guard<std::mutex> lock(mCommandQueueMutex);
+    vk::ScopedCommandQueueLock lock(this, mCommandQueueMutex);
     if (isAsyncCommandQueueEnabled())
     {
         ANGLE_TRY(mCommandProcessor.flushRenderPassCommands(context, hasProtectedContent,
@@ -4008,7 +4022,7 @@ angle::Result RendererVk::flushOutsideRPCommands(
 {
     ANGLE_TRACE_EVENT0("gpu.angle", "RendererVk::flushOutsideRPCommands");
 
-    std::lock_guard<std::mutex> lock(mCommandQueueMutex);
+    vk::ScopedCommandQueueLock lock(this, mCommandQueueMutex);
     if (isAsyncCommandQueueEnabled())
     {
         ANGLE_TRY(mCommandProcessor.flushOutsideRPCommands(context, hasProtectedContent,
@@ -4027,7 +4041,7 @@ VkResult RendererVk::queuePresent(vk::Context *context,
                                   egl::ContextPriority priority,
                                   const VkPresentInfoKHR &presentInfo)
 {
-    std::lock_guard<std::mutex> lock(mCommandQueueMutex);
+    vk::ScopedCommandQueueLock lock(this, mCommandQueueMutex);
 
     VkResult result = VK_SUCCESS;
     if (isAsyncCommandQueueEnabled())
