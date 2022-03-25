@@ -156,6 +156,12 @@
 // Flaky timeouts on SwANGLE
 1173237 SWIFTSHADER : dEQP-GLES31.functional.shaders.builtin_functions.precision.refract.lowp_compute.vec4 = SKIP
 
+// Inconsistent interaction between depth/stencil formats and border color in swiftshader
+6200 SWIFTSHADER : dEQP-GLES31.functional.texture.border_clamp.depth_compare_mode.depth_component16.* = SKIP
+6200 SWIFTSHADER : dEQP-GLES31.functional.texture.border_clamp.depth_compare_mode.depth_component24.* = SKIP
+6200 SWIFTSHADER : dEQP-GLES31.functional.texture.border_clamp.depth_compare_mode.depth24_stencil8.* = SKIP
+6200 SWIFTSHADER : dEQP-GLES31.functional.texture.border_clamp.depth_compare_mode.depth32f_stencil8.* = SKIP
+
 ////
 //// General Vulkan expectations
 ////
