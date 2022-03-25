@@ -41,6 +41,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "807dda7e_ebc92696",
+        "filename": "doc/CaptureAndReplay.md",
+        "patchSetId": 3
+      },
+      "lineNbr": 48,
+      "author": {
+        "id": 1531247
+      },
+      "writtenOn": "2022-03-25T14:47:26Z",
+      "side": 1,
+      "message": "I raised the issue about flag confusion here as well: https://anglebug.com/6397#c3\n\nI think this discussion is out of scope of this CL however, maybe it could be continued on that bug?",
+      "parentUuid": "cbd91994_b9276fe9",
+      "range": {
+        "startLine": 47,
+        "startChar": 0,
+        "endLine": 48,
+        "endChar": 33
+      },
+      "revId": "74ddadf3ba412b66cce041a7f54d96bcbd810864",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "0d6474a4_744d4a2c",
@@ -54,6 +78,30 @@
       "writtenOn": "2022-03-25T02:42:47Z",
       "side": 1,
       "message": "Can you add `--use-angle\u003dvulkan` to this line?  Frame capture really only works correctly with that backend.",
+      "range": {
+        "startLine": 70,
+        "startChar": 0,
+        "endLine": 70,
+        "endChar": 100
+      },
+      "revId": "74ddadf3ba412b66cce041a7f54d96bcbd810864",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "7f7d4433_3adb3416",
+        "filename": "doc/CaptureAndReplay.md",
+        "patchSetId": 3
+      },
+      "lineNbr": 70,
+      "author": {
+        "id": 1531247
+      },
+      "writtenOn": "2022-03-25T14:47:26Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "0d6474a4_744d4a2c",
       "range": {
         "startLine": 70,
         "startChar": 0,
@@ -87,6 +135,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "d5e19226_1918aad2",
+        "filename": "doc/CaptureAndReplay.md",
+        "patchSetId": 3
+      },
+      "lineNbr": 76,
+      "author": {
+        "id": 1531247
+      },
+      "writtenOn": "2022-03-25T14:47:26Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "84860529_fc86f33f",
+      "range": {
+        "startLine": 76,
+        "startChar": 68,
+        "endLine": 76,
+        "endChar": 76
+      },
+      "revId": "74ddadf3ba412b66cce041a7f54d96bcbd810864",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "5745b766_2e6d9005",
@@ -100,6 +172,30 @@
       "writtenOn": "2022-03-25T02:42:47Z",
       "side": 1,
       "message": "Can you tweak this to say \"is left unset during capture\"?  This whole section is a little repetitive in that we already ran the sample with capture enabled in the previous section.  Don\u0027t need to rewrite it all at this moment, primarily need to get the fix in.",
+      "range": {
+        "startLine": 78,
+        "startChar": 31,
+        "endLine": 78,
+        "endChar": 32
+      },
+      "revId": "74ddadf3ba412b66cce041a7f54d96bcbd810864",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "52d2d898_cf26d27a",
+        "filename": "doc/CaptureAndReplay.md",
+        "patchSetId": 3
+      },
+      "lineNbr": 78,
+      "author": {
+        "id": 1531247
+      },
+      "writtenOn": "2022-03-25T14:47:26Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "5745b766_2e6d9005",
       "range": {
         "startLine": 78,
         "startChar": 31,
