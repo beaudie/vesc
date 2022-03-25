@@ -65,6 +65,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "091437da_78c3aec4",
+        "filename": "doc/CaptureAndReplay.md",
+        "patchSetId": 3
+      },
+      "lineNbr": 48,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2022-03-25T15:33:05Z",
+      "side": 1,
+      "message": "Okay, I replied on that bug.",
+      "parentUuid": "807dda7e_ebc92696",
+      "range": {
+        "startLine": 47,
+        "startChar": 0,
+        "endLine": 48,
+        "endChar": 33
+      },
+      "revId": "74ddadf3ba412b66cce041a7f54d96bcbd810864",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "0d6474a4_744d4a2c",

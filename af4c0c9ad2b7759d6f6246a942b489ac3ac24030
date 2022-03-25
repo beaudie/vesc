@@ -63,6 +63,30 @@
       },
       "revId": "af4c0c9ad2b7759d6f6246a942b489ac3ac24030",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "a79e4a9a_5c9e82e6",
+        "filename": "doc/CaptureAndReplay.md",
+        "patchSetId": 4
+      },
+      "lineNbr": 70,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2022-03-25T15:33:05Z",
+      "side": 1,
+      "message": "Without the flag I\u0027m getting d3d11 on Windows:\n```\nC:\\src\\angle\u003eout\\Debug\\simple_texture_2d.exe\nINFO: Limit some features because FrameCapture is enabled\n\nINFO: Disabling GL_OES_get_program_binary for trace portability\nINFO: Limiting image unit count to 8\nINFO: Setting uniform buffer offset alignment to 256\nINFO: Disabling GL_EXT_map_buffer_range and GL_OES_mapbuffer during capture, which are not supported on some native drivers\nINFO: Disabling GL_CHROMIUM_bind_uniform_location during capture, which is not supported on native drivers\nINFO: Disabling GL_NV_shader_noperspective_interpolation during capture, which is not supported on some native drivers\nINFO: Limiting draw buffer count to 4\nINFO: Enabling validation to prevent invalid calls from being captured. This effectively disables GL_KHR_no_error and enables GL_ANGLE_robust_client_memory.\nINFO: Disabling GL_OES_depth32 during capture, which is not widely supported on mobile\nINFO: Limiting max atomic counter buffer bindings to 6\nINFO: Limiting max shader storage buffer bindings to 12\nERR: StateManager11.cpp:980 (syncState):        ! Assert failed in syncState (../../src/libANGLE/renderer/d3d/d3d11/StateManager11.cpp:980): mCurBlendStateExt.mMaxDrawBuffers \u003d\u003d blendStateExt.mMaxDrawBuffers\nFATAL: StateManager11.cpp:980 (syncState):      ! Assert failed in syncState (../../src/libANGLE/renderer/d3d/d3d11/StateManager11.cpp:980): mCurBlendStateExt.mMaxDrawBuffers \u003d\u003d blendStateExt.mMaxDrawBuffers\n\nC:\\src\\angle\u003e\n```",
+      "parentUuid": "6ba613b6_1f80886d",
+      "range": {
+        "startLine": 70,
+        "startChar": 100,
+        "endLine": 70,
+        "endChar": 119
+      },
+      "revId": "af4c0c9ad2b7759d6f6246a942b489ac3ac24030",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
