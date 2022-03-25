@@ -324,17 +324,19 @@ class RendererVk : angle::NonCopyable
     }
 
     void collectSuballocationGarbage(vk::SharedResourceUse &&use,
-                                     vk::BufferSuballocation &&suballocation)
+                                     vk::BufferSuballocation &&suballocation,
+                                     vk::Buffer &&buffer)
     {
         std::lock_guard<std::mutex> lock(mGarbageMutex);
         if (use.usedInRecordedCommands())
         {
-            mPendingSubmissionSuballocationGarbage.emplace(std::move(use),
-                                                           std::move(suballocation));
+            mPendingSubmissionSuballocationGarbage.emplace(std::move(use), std::move(suballocation),
+                                                           std::move(buffer));
         }
         else
         {
-            mSuballocationGarbage.emplace(std::move(use), std::move(suballocation));
+            mSuballocationGarbage.emplace(std::move(use), std::move(suballocation),
+                                          std::move(buffer));
         }
     }
 
