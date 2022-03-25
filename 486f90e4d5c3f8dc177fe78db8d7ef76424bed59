@@ -16,6 +16,24 @@
       "message": "LGTM - can we get a regression test for this?",
       "revId": "486f90e4d5c3f8dc177fe78db8d7ef76424bed59",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "a5eaff85_82b6f829",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1518892
+      },
+      "writtenOn": "2022-03-25T18:59:48Z",
+      "side": 1,
+      "message": "The test in patch 4 basically covers this too.",
+      "parentUuid": "865299a7_04b71f12",
+      "revId": "486f90e4d5c3f8dc177fe78db8d7ef76424bed59",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
