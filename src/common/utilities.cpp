@@ -963,18 +963,20 @@ bool SamplerNameContainsNonZeroArrayElement(const std::string &name)
 
 unsigned int ArraySizeProduct(const std::vector<unsigned int> &arraySizes)
 {
-    unsigned int arraySizeProduct = 1u;
-    for (unsigned int arraySize : arraySizes)
-    {
-        arraySizeProduct *= arraySize;
-    }
-    return arraySizeProduct;
+    return PartialArraySizeProduct(arraySizes, 0, arraySizes.size());
 }
 
 unsigned int InnerArraySizeProduct(const std::vector<unsigned int> &arraySizes)
 {
+    return PartialArraySizeProduct(arraySizes, 0, arraySizes.empty() ? 0 : arraySizes.size() - 1);
+}
+
+unsigned int PartialArraySizeProduct(const std::vector<unsigned int> &arraySizes,
+                                     size_t firstIndexInclusive,
+                                     size_t lastIndexExclusive)
+{
     unsigned int arraySizeProduct = 1u;
-    for (size_t index = 0; index + 1 < arraySizes.size(); ++index)
+    for (size_t index = firstIndexInclusive; index < lastIndexExclusive; ++index)
     {
         arraySizeProduct *= arraySizes[index];
     }

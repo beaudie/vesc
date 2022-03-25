@@ -458,6 +458,15 @@ class FlattenUniformVisitor : public sh::VariableNameVisitor
             {
                 linkedUniform.setParentArrayIndex(variable.parentArrayIndex());
             }
+            uint32_t parentOffset = 0;
+            size_t numDimensions  = arraySizes.size();
+            for (size_t dimension = 0; dimension < numDimensions; ++dimension)
+            {
+                uint32_t innerArraySize =
+                    gl::PartialArraySizeProduct(arraySizes, dimension, numDimensions);
+                parentOffset += innerArraySize * mArrayElementStack[dimension];
+            }
+            linkedUniform.outerArrayOffset = parentOffset;
             if (mMarkActive)
             {
                 linkedUniform.setActive(mShaderType, true);
@@ -505,6 +514,18 @@ class FlattenUniformVisitor : public sh::VariableNameVisitor
         sh::VariableNameVisitor::exitStructAccess(structVar, isRowMajor);
     }
 
+    void enterArrayElement(const sh::ShaderVariable &arrayVar, unsigned int arrayElement) override
+    {
+        mArrayElementStack.push_back(arrayElement);
+        sh::VariableNameVisitor::enterArrayElement(arrayVar, arrayElement);
+    }
+
+    void exitArrayElement(const sh::ShaderVariable &arrayVar, unsigned int arrayElement) override
+    {
+        mArrayElementStack.pop_back();
+        sh::VariableNameVisitor::exitArrayElement(arrayVar, arrayElement);
+    }
+
     ShaderUniformCount getCounts() const { return mUniformCount; }
 
   private:
@@ -525,6 +546,7 @@ class FlattenUniformVisitor : public sh::VariableNameVisitor
     std::vector<LinkedUniform> *mAtomicCounterUniforms;
     std::vector<LinkedUniform> *mInputAttachmentUniforms;
     std::vector<UnusedUniform> *mUnusedUniforms;
+    std::vector<unsigned int> mArrayElementStack;
     ShaderUniformCount mUniformCount;
     unsigned int mStructStackSize = 0;
 };
