@@ -16,6 +16,24 @@
       "message": "If I understand correctly, \"choose tryjobs\" then ticking android-arm64-exp-test would be a way to test cl on bot\u0027s Pixel 6\u0027s, and might have caught this on the original cl?",
       "revId": "45543295b75842b499c137a9ed3a727e818ef185",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "1beb9c63_46156439",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1001921
+      },
+      "writtenOn": "2022-03-25T14:53:39Z",
+      "side": 1,
+      "message": "This should have worked in theory, but in practice it fails because we don\u0027t have enough Pixel 6 phones in Labs.",
+      "tag": "mailMessageId\u003d\u003cCAKK1iFD+vW3FRwHAXpTBe0XsSBpQjozG+FYbDQksVgvCrGYu+w@mail.gmail.com\u003e",
+      "revId": "45543295b75842b499c137a9ed3a727e818ef185",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
