@@ -52,6 +52,35 @@ class VulkanPerformanceCounterTest : public ANGLETest
         ASSERT_GL_FRAMEBUFFER_COMPLETE(GL_FRAMEBUFFER);
     }
 
+    void setupForColorDepthInvalidateTest(GLProgram *program,
+                                          GLFramebuffer *framebuffer,
+                                          GLTexture *texture,
+                                          GLRenderbuffer *renderbuffer)
+    {
+        glUseProgram(*program);
+
+        // Setup to draw to color, depth, and stencil
+        glBindFramebuffer(GL_FRAMEBUFFER, *framebuffer);
+        glBindTexture(GL_TEXTURE_2D, *texture);
+        glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, kInvalidateTestSize, kInvalidateTestSize, 0,
+                     GL_RGBA, GL_UNSIGNED_BYTE, nullptr);
+        glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, *texture, 0);
+        glBindRenderbuffer(GL_RENDERBUFFER, *renderbuffer);
+        glRenderbufferStorage(GL_RENDERBUFFER, GL_DEPTH_COMPONENT24, kInvalidateTestSize,
+                              kInvalidateTestSize);
+        glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_RENDERBUFFER,
+                                  *renderbuffer);
+        ASSERT_GL_FRAMEBUFFER_COMPLETE(GL_FRAMEBUFFER);
+
+        // Clear and draw with depth and stencil buffer enabled
+        glEnable(GL_DEPTH_TEST);
+        glDepthMask(GL_TRUE);
+        glDepthFunc(GL_GEQUAL);
+        glClearDepthf(0.99f);
+        glViewport(0, 0, kInvalidateTestSize, kInvalidateTestSize);
+        ASSERT_GL_NO_ERROR();
+    }
+
     void setupClearAndDrawForDepthStencilInvalidateTest(GLProgram *program,
                                                         GLFramebuffer *framebuffer,
                                                         GLTexture *texture,
@@ -119,6 +148,25 @@ class VulkanPerformanceCounterTest : public ANGLETest
         expected->colorStores  = counters.colorStores + incrementalColorStores;
     }
 
+    void setExpectedCountersForColorDepthInvalidateTest(const angle::VulkanPerfCounters &counters,
+                                                        uint32_t incrementalRenderPasses,
+                                                        uint32_t incrementalColorClears,
+                                                        uint32_t incrementalColorLoads,
+                                                        uint32_t incrementalColorStores,
+                                                        uint32_t incrementalDepthClears,
+                                                        uint32_t incrementalDepthLoads,
+                                                        uint32_t incrementalDepthStores,
+                                                        angle::VulkanPerfCounters *expected)
+    {
+        expected->renderPasses = counters.renderPasses + incrementalRenderPasses;
+        expected->colorClears  = counters.colorClears + incrementalColorClears;
+        expected->colorLoads   = counters.colorLoads + incrementalColorLoads;
+        expected->colorStores  = counters.colorStores + incrementalColorStores;
+        expected->depthClears  = counters.depthClears + incrementalDepthClears;
+        expected->depthLoads   = counters.depthLoads + incrementalDepthLoads;
+        expected->depthStores  = counters.depthStores + incrementalDepthStores;
+    }
+
     void compareDepthStencilCountersForInvalidateTest(const angle::VulkanPerfCounters &counters,
                                                       const angle::VulkanPerfCounters &expected)
     {
@@ -136,6 +184,17 @@ class VulkanPerformanceCounterTest : public ANGLETest
         EXPECT_EQ(expected.colorClears, counters.colorClears);
         EXPECT_EQ(expected.colorLoads, counters.colorLoads);
         EXPECT_EQ(expected.colorStores, counters.colorStores);
+    }
+
+    void compareColorDepthCountersForInvalidateTest(const angle::VulkanPerfCounters &counters,
+                                                    const angle::VulkanPerfCounters &expected)
+    {
+        EXPECT_EQ(expected.colorClears, counters.colorClears);
+        EXPECT_EQ(expected.colorLoads, counters.colorLoads);
+        EXPECT_EQ(expected.colorStores, counters.colorStores);
+        EXPECT_EQ(expected.depthClears, counters.depthClears);
+        EXPECT_EQ(expected.depthLoads, counters.depthLoads);
+        EXPECT_EQ(expected.depthStores, counters.depthStores);
     }
 
     void setAndIncrementDepthStencilLoadCountersForInvalidateTest(
@@ -702,6 +761,61 @@ TEST_P(VulkanPerformanceCounterTest, ColorInvalidateMaskDraw)
     EXPECT_PIXEL_COLOR_EQ(0, 0, GLColor::red);
 
     compareColorCountersForInvalidateTest(getPerfCounters(), expected);
+}
+
+// Tests that color clears are respected after invalidate
+TEST_P(VulkanPerformanceCounterTest, ColorClearAfterInvalidate)
+{
+    ANGLE_SKIP_TEST_IF(!IsGLExtensionEnabled(kPerfMonitorExtensionName));
+
+    angle::VulkanPerfCounters expected;
+
+    ANGLE_GL_PROGRAM(program, essl1_shaders::vs::Simple(), essl1_shaders::fs::Red());
+    GLFramebuffer framebuffer;
+    GLTexture texture;
+    GLRenderbuffer renderbuffer;
+    setupForColorDepthInvalidateTest(&program, &framebuffer, &texture, &renderbuffer);
+
+    // Expect rpCount+1, color(Clears+1, Loads+0, Stores+1), depth(Clears+1, Load+0, Stores+0)
+    setExpectedCountersForColorDepthInvalidateTest(getPerfCounters(), 1, 1, 0, 1, 1, 0, 0,
+                                                   &expected);
+
+    // Execute the scenario that this test is for:
+
+    // Invalidate (loadOp C=DONTCARE, D=DONTCARE)
+    const GLenum discards[] = {GL_DEPTH_ATTACHMENT, GL_COLOR_ATTACHMENT0};
+    glInvalidateFramebuffer(GL_FRAMEBUFFER, 2, discards);
+    ASSERT_GL_NO_ERROR();
+
+    // Clear (loadOp C=CLEAR, D=CLEAR)
+    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+
+    // Save existing draw buffers
+    GLint maxDrawBuffers = 0;
+    glGetIntegerv(GL_MAX_DRAW_BUFFERS, &maxDrawBuffers);
+    std::vector<GLenum> savedDrawBuffers(maxDrawBuffers);
+    for (int i = 0; i < maxDrawBuffers; i++)
+        glGetIntegerv(GL_DRAW_BUFFER0 + i, (GLint *)&savedDrawBuffers[i]);
+
+    // Draw depth-only
+    glDrawBuffers(0, nullptr);
+    glColorMask(GL_FALSE, GL_FALSE, GL_FALSE, GL_FALSE);
+    drawQuad(program, essl1_shaders::PositionAttrib(), 0.5f);
+    glDrawBuffers(maxDrawBuffers, savedDrawBuffers.data());
+    glColorMask(GL_TRUE, GL_TRUE, GL_TRUE, GL_TRUE);
+    ASSERT_GL_NO_ERROR();
+
+    // Invalidate depth only (storeOp should be C=STORE/D=CLEAR)
+    glInvalidateFramebuffer(GL_FRAMEBUFFER, 1, discards);
+
+    glBindFramebuffer(GL_FRAMEBUFFER, 0);
+
+    EXPECT_EQ(expected.renderPasses, getPerfCounters().renderPasses);
+
+    // Use swapBuffers and then check how many loads and stores were actually done
+    swapBuffers();
+    compareColorDepthCountersForInvalidateTest(getPerfCounters(), expected);
+    ASSERT_GL_NO_ERROR();
 }
 
 // Tests that invalidate followed by discarded draws results in no load and store.
