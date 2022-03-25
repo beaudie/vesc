@@ -30,7 +30,7 @@ const int kExceptionSignals[] = {SIGSEGV, SIGABRT, SIGFPE, SIGILL, SIGBUS, -1};
 
 struct sigaction g_old_sa[NSIG];
 
-class ScopedMainEntryLogger
+class ANGLE_NO_DISCARD ScopedMainEntryLogger
 {
   public:
     ScopedMainEntryLogger() { printf(">>ScopedMainEntryLogger\n"); }
