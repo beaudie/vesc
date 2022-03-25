@@ -293,11 +293,18 @@ config("disable_unreachable_code_break_warning") {
   }
 }
 
+config("disable_unused_but_set_variable_warning") {
+  if (is_clang) {
+    cflags = [ "-Wno-unused-but-set-variable" ]
+  }
+}
+
 angle_static_library("preprocessor") {
   sources = angle_preprocessor_sources
 
-  # preprocessor_tab_autogen.cpp contains an instance of this.
+  # preprocessor_tab_autogen.cpp contains an instance of these.
   configs += [ ":disable_unreachable_code_break_warning" ]
+  configs += [ ":disable_unused_but_set_variable_warning" ]
 
   public_deps = [
     ":angle_common",
@@ -639,6 +646,9 @@ template("translator_lib") {
       # For some reason this warning doesn't get triggered in Chromium
       cflags = [ "/wd4718" ]
     }
+
+    # glslang_tab_autogen.cpp contains an instance of this.
+    configs += [ ":disable_unused_but_set_variable_warning" ]
   }
 }
 
