@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "5ac9c1b1_06256659",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1290487
+      },
+      "writtenOn": "2022-03-25T03:06:14Z",
+      "side": 1,
+      "message": "Based on PS2 bot run, I added back some (too many) SKIPs",
+      "revId": "e28c0793afd63b88e981ec06cd304bd02c21145e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
