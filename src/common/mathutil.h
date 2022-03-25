@@ -119,6 +119,34 @@ inline T clamp(T x, MIN min, MAX max)
     return x > min ? (x > max ? max : x) : min;
 }
 
+template <typename T>
+T clampForBitCount(T value, size_t bitCount)
+{
+    static_assert(std::numeric_limits<T>::is_integer, "T must be an integer.");
+
+    if (bitCount == 0)
+    {
+        return 0;
+    }
+
+    const bool fullSize = bitCount == sizeof(T) * 8;
+    T min               = 0;
+    T max               = 0;
+
+    if (std::numeric_limits<T>::is_signed)
+    {
+        min = (fullSize) ? std::numeric_limits<T>::min() : -1 * (1 << (bitCount - 1));
+        max = (fullSize) ? std::numeric_limits<T>::max() : (1 << (bitCount - 1)) - 1;
+    }
+    else
+    {
+        min = 0;
+        max = (fullSize) ? std::numeric_limits<T>::max() : (1 << bitCount) - 1;
+    }
+
+    return gl::clamp(value, min, max);
+}
+
 inline float clamp01(float x)
 {
     return clamp(x, 0.0f, 1.0f);

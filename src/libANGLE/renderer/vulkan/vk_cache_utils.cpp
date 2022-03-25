@@ -1414,6 +1414,58 @@ void InitializeSpecializationInfo(
     specializationInfoOut->pData         = &specConsts;
 }
 
+// Utility for clamping the range of border color values based off base formats.
+gl::ColorGeneric ClampBorderColor(const angle::ColorGeneric &borderColorGeneric,
+                                  const angle::Format &format)
+{
+    gl::ColorGeneric clampedBorderColor;
+
+    if (format.isSint())
+    {
+        clampedBorderColor.colorI.red =
+            gl::clampForBitCount<int>(borderColorGeneric.colorI.red, format.redBits);
+        clampedBorderColor.colorI.green =
+            gl::clampForBitCount<int>(borderColorGeneric.colorI.green, format.greenBits);
+        clampedBorderColor.colorI.blue =
+            gl::clampForBitCount<int>(borderColorGeneric.colorI.blue, format.blueBits);
+        clampedBorderColor.colorI.alpha =
+            gl::clampForBitCount<int>(borderColorGeneric.colorI.alpha, format.alphaBits);
+    }
+    else if (format.isUint())
+    {
+        clampedBorderColor.colorUI.red =
+            gl::clampForBitCount<unsigned int>(borderColorGeneric.colorUI.red, format.redBits);
+        clampedBorderColor.colorUI.green =
+            gl::clampForBitCount<unsigned int>(borderColorGeneric.colorUI.green, format.greenBits);
+        clampedBorderColor.colorUI.blue =
+            gl::clampForBitCount<unsigned int>(borderColorGeneric.colorUI.blue, format.blueBits);
+        clampedBorderColor.colorUI.alpha =
+            gl::clampForBitCount<unsigned int>(borderColorGeneric.colorUI.alpha, format.alphaBits);
+    }
+    else if (format.isSnorm())
+    {
+        // clamp between -1.0f and 1.0f
+        clampedBorderColor.colorF.red   = gl::clamp(borderColorGeneric.colorF.red, -1.0f, 1.0f);
+        clampedBorderColor.colorF.green = gl::clamp(borderColorGeneric.colorF.green, -1.0f, 1.0f);
+        clampedBorderColor.colorF.blue  = gl::clamp(borderColorGeneric.colorF.blue, -1.0f, 1.0f);
+        clampedBorderColor.colorF.alpha = gl::clamp(borderColorGeneric.colorF.alpha, -1.0f, 1.0f);
+    }
+    else if (format.isUnorm())
+    {
+        // clamp between 0.0f and 1.0f
+        clampedBorderColor.colorF.red   = gl::clamp01(borderColorGeneric.colorF.red);
+        clampedBorderColor.colorF.green = gl::clamp01(borderColorGeneric.colorF.green);
+        clampedBorderColor.colorF.blue  = gl::clamp01(borderColorGeneric.colorF.blue);
+        clampedBorderColor.colorF.alpha = gl::clamp01(borderColorGeneric.colorF.alpha);
+    }
+    else
+    {
+        clampedBorderColor = borderColorGeneric;
+    }
+
+    return clampedBorderColor;
+}
+
 // Utility for setting a value on a packed 4-bit integer array.
 template <typename SrcT>
 void Int4Array_Set(uint8_t *arrayBytes, uint32_t arrayIndex, SrcT value)
@@ -3370,8 +3422,12 @@ void SamplerDesc::update(ContextVk *contextVk,
     mBorderColorType =
         (samplerState.getBorderColor().type == angle::ColorGeneric::Type::Float) ? 0 : 1;
 
+    // Clamp border color according to component depth of the format
     const vk::Format &vkFormat = contextVk->getRenderer()->getFormat(intendedFormatID);
-    mBorderColor               = samplerState.getBorderColor().colorF;
+    gl::ColorGeneric clampedBorderColor =
+        ClampBorderColor(samplerState.getBorderColor(), vkFormat.getIntendedFormat());
+
+    mBorderColor = clampedBorderColor.colorF;
     if (vkFormat.getIntendedFormatID() != angle::FormatID::NONE)
     {
         LoadTextureBorderFunctionInfo loadFunction = vkFormat.getTextureBorderLoadFunctions();
