@@ -16,6 +16,52 @@
       "message": "PTAL",
       "revId": "591154bd32b8e8ba6d7bcb8e4911449685ffe54b",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "39a2c249_d6271a3f",
+        "filename": "src/libANGLE/renderer/vulkan/TextureVk.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 2442,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-03-25T02:46:33Z",
+      "side": 1,
+      "message": "Good catch, but this seems untested? I didn\u0027t notice any tests that import a subset of layers.",
+      "range": {
+        "startLine": 2442,
+        "startChar": 38,
+        "endLine": 2442,
+        "endChar": 48
+      },
+      "revId": "591154bd32b8e8ba6d7bcb8e4911449685ffe54b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "aae8675a_5adf8053",
+        "filename": "src/libANGLE/renderer/vulkan/android/HardwareBufferImageSiblingVkAndroid.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 301,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-03-25T02:46:33Z",
+      "side": 1,
+      "message": "nit: !\u003d 0",
+      "range": {
+        "startLine": 301,
+        "startChar": 83,
+        "endLine": 301,
+        "endChar": 84
+      },
+      "revId": "591154bd32b8e8ba6d7bcb8e4911449685ffe54b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
