@@ -16,6 +16,23 @@
       "message": "Hi Jamie or Shahbaz, PTAL. Thanks",
       "revId": "22ba02fec2b67710abc0264b4ca2727b7d5ce6f7",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "b3381035_7cb15cb2",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 5
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-03-25T14:50:57Z",
+      "side": 1,
+      "message": "Unfortunately recursive locks here are not bullet proof (performance degradation aside). CommandQueue might very well be in the middle of processing commands when the error happens, and then handleDeviceLost kicks in and starts working on the same list of commands.\n\nAn interesting read on recursive mutexes from the creator of recursive mutexes himself: http://www.zaval.org/resources/library/butenhof1.html (TL;DR they were a bad idea)\n\nI gave it some thought, and maybe what we could do is defer the cleanup that handleDeviceLost is doing to after the mutex is unlocked, so it can pick the lock again. Basically handleDeviceLost() sets a flag in the renderer (already done in notifyDeviceLost() actually), and then have our lock_guard\u0027s turned into an ANGLE RAII type that locks the mutex in the constructor and in the destructor, before unlocking checks the device lost flag and calls RendererVk::handleDeviceLostImpl() (which doesn\u0027t lock). The original RendererVk::handleDeviceLostImpl() could `try_lock` and skip clean up if lock is already held, because the other owner of the lock will do the clean up.",
+      "revId": "22ba02fec2b67710abc0264b4ca2727b7d5ce6f7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
