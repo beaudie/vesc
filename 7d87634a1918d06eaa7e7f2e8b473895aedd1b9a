@@ -26,6 +26,30 @@
     {
       "unresolved": false,
       "key": {
+        "uuid": "65fbe623_ca88898d",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 6167,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-03-25T20:14:39Z",
+      "side": 0,
+      "message": "Yeap.",
+      "parentUuid": "2e0fddbf_5a6b46cf",
+      "range": {
+        "startLine": 6160,
+        "startChar": 4,
+        "endLine": 6167,
+        "endChar": 0
+      },
+      "revId": "7d87634a1918d06eaa7e7f2e8b473895aedd1b9a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
         "uuid": "2dadd247_0b7c55f2",
         "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
         "patchSetId": 5
@@ -37,6 +61,30 @@
       "writtenOn": "2022-03-25T16:35:25Z",
       "side": 0,
       "message": "I guess this is also handled by dirty bit handler now.",
+      "range": {
+        "startLine": 6636,
+        "startChar": 25,
+        "endLine": 6636,
+        "endChar": 59
+      },
+      "revId": "7d87634a1918d06eaa7e7f2e8b473895aedd1b9a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "ed4405f5_edd4946e",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 6636,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-03-25T20:14:39Z",
+      "side": 0,
+      "message": "Yes.",
+      "parentUuid": "2dadd247_0b7c55f2",
       "range": {
         "startLine": 6636,
         "startChar": 25,

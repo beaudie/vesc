@@ -41,6 +41,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "009e873c_7e7c0f83",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 1772,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-03-25T20:14:39Z",
+      "side": 1,
+      "message": "I couldn\u0027t find a clean way to pass in the access; like from FramebufferVk. Things ended up looking uglier.\n\nAdded an enum class to make the bools named and hopefully a bit cleaner. As a bonus, I realized that if only stencil is cleared for example, we can add another enum (None) so that depth is not unnecessarily marked as having been accessed. Although there\u0027s little benefit to that for the sake of detecting and breaking depth/stencil feedback loop.\n\nGoing to land this change, I\u0027ll apply any further feedback in the follow ups.",
+      "parentUuid": "ec8d690b_9fe3f56e",
+      "range": {
+        "startLine": 1771,
+        "startChar": 4,
+        "endLine": 1772,
+        "endChar": 24
+      },
+      "revId": "03b0c257c28e1bad32379c1712c287381da03486",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "3b077b73_ecc6aed0",
@@ -54,6 +78,30 @@
       "writtenOn": "2022-03-25T16:35:25Z",
       "side": 1,
       "message": "Is there order requirement of these dirty bits? If yes, could you add some assertion to ensure?",
+      "range": {
+        "startLine": 757,
+        "startChar": 8,
+        "endLine": 757,
+        "endChar": 38
+      },
+      "revId": "03b0c257c28e1bad32379c1712c287381da03486",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "75db81e7_4282b22f",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.h",
+        "patchSetId": 5
+      },
+      "lineNbr": 757,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-03-25T20:14:39Z",
+      "side": 1,
+      "message": "Done. The split around `DIRTY_BIT_RENDER_PASS` must be maintained, so I added checks for all the dirty bits.\n\nI added that to the next CL which adds another dirty bit too.",
+      "parentUuid": "3b077b73_ecc6aed0",
       "range": {
         "startLine": 757,
         "startChar": 8,
