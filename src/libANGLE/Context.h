@@ -929,12 +929,8 @@ class [[nodiscard]] ScopedContextRef
 };
 
 // Thread-local current valid context bound to the thread.
-#if defined(ANGLE_PLATFORM_APPLE)
 extern Context *GetCurrentValidContextTLS();
 extern void SetCurrentValidContextTLS(Context *context);
-#else
-extern thread_local Context *gCurrentValidContext;
-#endif
 
 extern void SetCurrentValidContext(Context *context);
 

@@ -475,7 +475,15 @@ void SetCurrentValidContextTLS(Context *context)
     angle::SetTLSValue(CurrentValidContextIndex, context);
 }
 #else
-thread_local Context *gCurrentValidContext = nullptr;
+static thread_local Context *gCurrentValidContext = nullptr;
+Context *GetCurrentValidContextTLS()
+{
+    return gCurrentValidContext;
+}
+void SetCurrentValidContextTLS(Context *context)
+{
+    gCurrentValidContext = context;
+}
 #endif
 
 // Handle setting the current context in TLS on different platforms
@@ -489,11 +497,7 @@ extern void SetCurrentValidContext(Context *context)
     }
 #endif
 
-#if defined(ANGLE_PLATFORM_APPLE)
     SetCurrentValidContextTLS(context);
-#else
-    gCurrentValidContext = context;
-#endif
 }
 
 Context::Context(egl::Display *display,
