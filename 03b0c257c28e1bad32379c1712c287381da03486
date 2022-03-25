@@ -1,0 +1,67 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "91ff38a6_c097d5ee",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 5
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2022-03-25T16:35:25Z",
+      "side": 1,
+      "message": "Overall looks good to me with some minor comment.",
+      "revId": "03b0c257c28e1bad32379c1712c287381da03486",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ec8d690b_9fe3f56e",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 1772,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2022-03-25T16:35:25Z",
+      "side": 1,
+      "message": "I personally think it is cleaner just pass \nvk::ResourceAccess depthAccess and vk::ResourceAccess stencilAccess\nhere rather than two bools. These could be true only when called from FramebufferVk::clearImpl() but all other state validation code has to check it as well. And I think there are general opposition to pass bools around?",
+      "range": {
+        "startLine": 1771,
+        "startChar": 4,
+        "endLine": 1772,
+        "endChar": 24
+      },
+      "revId": "03b0c257c28e1bad32379c1712c287381da03486",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "3b077b73_ecc6aed0",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.h",
+        "patchSetId": 5
+      },
+      "lineNbr": 757,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2022-03-25T16:35:25Z",
+      "side": 1,
+      "message": "Is there order requirement of these dirty bits? If yes, could you add some assertion to ensure?",
+      "range": {
+        "startLine": 757,
+        "startChar": 8,
+        "endLine": 757,
+        "endChar": 38
+      },
+      "revId": "03b0c257c28e1bad32379c1712c287381da03486",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
