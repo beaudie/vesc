@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "36dd6be1_6410ceac",
+        "filename": "src/compiler/translator/OutputHLSL.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 376,
+      "author": {
+        "id": 1116015
+      },
+      "writtenOn": "2022-03-25T15:24:31Z",
+      "side": 1,
+      "message": "Note: unlike compute shaders, pixel shaders have an output, which lives in the same register space as UAVs. So UAV numbering for pixel shaders can\u0027t start at zero.\n\nHowever, while \"1\" works, I\u0027m not sure if it\u0027s always correct. Is there only a single output? Does D3D have the equivalent of multiple draw buffers? If so, should that increase the first available UAV register? What about vertex shaders?",
+      "revId": "e8a87c009e62974de82e7072fffe5418123e8693",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "9344d156_bff04562",
+        "filename": "src/libANGLE/renderer/d3d/DynamicImage2DHLSL.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 914,
+      "author": {
+        "id": 1116015
+      },
+      "writtenOn": "2022-03-25T15:24:31Z",
+      "side": 1,
+      "message": "We need to use the passed-in shader, since the pixel shader may have already been modified at link time for dynamic output layouts.\n\nQuestion: is it ok that we\u0027re still referring to the rest of the pixel shaderD3D and shaderGL object above to get register assignments, etc? Are those still correct after the dynamic output layout transformation?",
+      "revId": "e8a87c009e62974de82e7072fffe5418123e8693",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
