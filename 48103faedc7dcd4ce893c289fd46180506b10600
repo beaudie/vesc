@@ -16,6 +16,23 @@
       "message": "The SKIP is still needed, but not for the Pixel 6",
       "revId": "48103faedc7dcd4ce893c289fd46180506b10600",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "a2730718_5ed6dbaa",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1290487
+      },
+      "writtenOn": "2022-03-25T00:54:44Z",
+      "side": 1,
+      "message": "I tested all of the tests that were expected to fail/crash on Pixel 6, and found that many can be removed.  I updated the spreadsheet accordingly.",
+      "revId": "48103faedc7dcd4ce893c289fd46180506b10600",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
