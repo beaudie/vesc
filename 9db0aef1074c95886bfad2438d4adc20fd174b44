@@ -24,6 +24,46 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "7d818c99_05c74bd2",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 10
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2022-03-25T17:14:33Z",
+      "side": 1,
+      "message": "Overall my worry is that we are taking all these complexity and extra CPU cost of tracking \"if you actually writing to a color attachment or not\" for an unimportant usage (or tell me which real app will get benefit and how much). Previously we are assuming as long as you attach an image to draw FBO and enabled, you are writing to it. With this change, you are trying to get more accurate answer of it with the extra logic, and I am not convinced that this is actually worth it. A real usage case will be useful here.",
+      "revId": "9db0aef1074c95886bfad2438d4adc20fd174b44",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "72f66b1e_9a15d1e5",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 10
+      },
+      "lineNbr": 1881,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2022-03-25T17:14:33Z",
+      "side": 1,
+      "message": "I guess this whole block of code will be executed quite often now for all apps. Which app gets benefit for the improvement you try to do?",
+      "range": {
+        "startLine": 1881,
+        "startChar": 13,
+        "endLine": 1881,
+        "endChar": 55
+      },
+      "revId": "9db0aef1074c95886bfad2438d4adc20fd174b44",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "89828043_66be8559",
@@ -37,6 +77,29 @@
       "writtenOn": "2022-03-25T17:13:10Z",
       "side": 1,
       "message": "currently you don\u0027t use onColorAccessChange in DIRTY_BIT_COLOR_MASK\u0027s switch statement as that\u0027s foleded into onColorMaskChange. Can we also fold this onColorAccessChange into updateRasterizerDiscardEnabled?",
+      "revId": "9db0aef1074c95886bfad2438d4adc20fd174b44",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "2ad69d0e_62315107",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 10
+      },
+      "lineNbr": 870,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2022-03-25T17:14:33Z",
+      "side": 1,
+      "message": "Since it is helper function, it could be more explicit. When I read this, I was thinking full clear means not a scissored clear.\n\nMaybe make this IsClear and change IsClear to IsClearOfAnyChannel?",
+      "range": {
+        "startLine": 870,
+        "startChar": 5,
+        "endLine": 870,
+        "endChar": 16
+      },
       "revId": "9db0aef1074c95886bfad2438d4adc20fd174b44",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
