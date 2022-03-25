@@ -7382,8 +7382,28 @@ angle::Result ImageHelper::flushStagedUpdates(ContextVk *contextVk,
             if (IsClearOfAllChannels(update.updateSource) &&
                 mCurrentSingleClearValue.value() == update.data.clear)
             {
-                ANGLE_VK_PERF_WARNING(contextVk, GL_DEBUG_SEVERITY_LOW,
-                                      "Repeated Clear on framebuffer attachment dropped");
+                bool allDefined = true;
+
+                for (gl::LevelIndex updateMipLevelGL = levelGLStart; updateMipLevelGL < levelGLEnd;
+                     ++updateMipLevelGL)
+                {
+                    if (!hasSubresourceDefinedContent(updateMipLevelGL, layerStart, 1))
+                    {
+                        const LevelIndex updateMipLevelVk = toVkLevel(updateMipLevelGL);
+                        uint32_t updateBaseLayer, updateLayerCount;
+                        update.getDestSubresource(mLayerCount, &updateBaseLayer, &updateLayerCount);
+                        setContentDefined(updateMipLevelVk, 1, updateBaseLayer, updateLayerCount,
+                                          update.data.clear.aspectFlags);
+                        allDefined = false;
+                    }
+                }
+
+                if (allDefined)
+                {
+                    ANGLE_VK_PERF_WARNING(contextVk, GL_DEBUG_SEVERITY_LOW,
+                                          "Repeated Clear on framebuffer attachment dropped");
+                }
+
                 update.release(contextVk->getRenderer());
                 levelUpdates->clear();
                 return angle::Result::Continue;
