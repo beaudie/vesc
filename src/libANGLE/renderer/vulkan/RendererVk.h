@@ -686,7 +686,7 @@ class RendererVk : angle::NonCopyable
     std::deque<PendingOneOffCommands> mPendingOneOffCommands;
 
     // Synchronous Command Queue
-    std::mutex mCommandQueueMutex;
+    std::recursive_mutex mCommandQueueMutex;
     vk::CommandQueue mCommandQueue;
 
     // Async Command Queue
