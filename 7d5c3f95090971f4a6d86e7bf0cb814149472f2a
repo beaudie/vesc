@@ -34,6 +34,41 @@
       "parentUuid": "841147e5_47929ca1",
       "revId": "7d5c3f95090971f4a6d86e7bf0cb814149472f2a",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "677abadd_628981a9",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-03-26T02:46:07Z",
+      "side": 1,
+      "message": "And here\u0027s a simplified version of the above that flushes the clear with glReadPixels, demonstrating the same problem. Feel free to include both tests:\n\n```\n    constexpr GLsizei kSize \u003d 2;\n\n    GLTexture tex;\n    glBindTexture(GL_TEXTURE_2D, tex);\n    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, kSize, kSize, 0, GL_RGBA, GL_UNSIGNED_BYTE, nullptr);\n\n    GLFramebuffer fbo;\n    glBindFramebuffer(GL_FRAMEBUFFER, fbo);\n    glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, tex, 0);\n\n    // Clear the image, and make sure the clear is flushed outside the render pass.\n    glClearColor(1, 0, 0, 1);\n    glClear(GL_COLOR_BUFFER_BIT);\n    EXPECT_PIXEL_COLOR_EQ(0, 0, GLColor::red);\n\n    // Invalidate it such that the contents are marked as undefined.  Note that regarldess of the\n    // marking, the image is cleared nevertheless.\n    const GLenum discards[] \u003d {GL_COLOR_ATTACHMENT0};\n    glInvalidateFramebuffer(GL_FRAMEBUFFER, 1, discards);\n\n    // Clear it again to the same color, and make sure the clear is flushed outside the render pass,\n    // which may be optimized out.\n    glClear(GL_COLOR_BUFFER_BIT);\n    EXPECT_PIXEL_COLOR_EQ(0, 0, GLColor::red);\n\n    // Draw with blend.  If the second clear is dropped and the image continues to be marked as\n    // invalidated, loadOp\u003dDONT_CARE would be used instead of loadOp\u003dLOAD.\n    glEnable(GL_BLEND);\n    glBlendFunc(GL_ONE, GL_ONE);\n\n    ANGLE_GL_PROGRAM(program, essl1_shaders::vs::Simple(), essl1_shaders::fs::Blue());\n    drawQuad(program, essl1_shaders::PositionAttrib(), 0);\n    EXPECT_PIXEL_COLOR_EQ(0, 0, GLColor::magenta);\n```",
+      "parentUuid": "ce04019a_1693d484",
+      "revId": "7d5c3f95090971f4a6d86e7bf0cb814149472f2a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ea1648ac_8893fed6",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 6643,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-03-26T02:46:07Z",
+      "side": 1,
+      "message": "I changed my mind about this. The truth is that even though the image is *marked as* invalidated, it does actually continue to contain the cleared value. On repeated clear, this change makes the image get cleared again for no reason.\n\nArguably all this is in the \"app is doing nonsense realm\", but an equally valid (and more efficient) fix would be to mark the contents of the image defined in `ImageHelper::flushStagedUpdates`, right where the perf warning about duplicate clear being dropped is issued.\n\nIn other words, we continue to remember that the image is actually cleared, and if so on next flushStagedUpdates we mark it as contents-defined, similarly to how every other update in that function do it.",
+      "revId": "7d5c3f95090971f4a6d86e7bf0cb814149472f2a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
