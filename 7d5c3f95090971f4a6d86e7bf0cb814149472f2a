@@ -16,6 +16,24 @@
       "message": "also, regression test is welcome.",
       "revId": "7d5c3f95090971f4a6d86e7bf0cb814149472f2a",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "ce04019a_1693d484",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-03-26T02:39:02Z",
+      "side": 1,
+      "message": "I managed to figure out a way to test this:\n\n```\n    constexpr GLsizei kSize \u003d 2;\n\n    // tex[0] is what\u0027s being tested.  The others are helpers.\n    GLTexture tex[3];\n    for (int i \u003d 0; i \u003c 3; ++i)\n    {\n        glBindTexture(GL_TEXTURE_2D, tex[i]);\n        glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, kSize, kSize, 0, GL_RGBA, GL_UNSIGNED_BYTE, nullptr);\n    }\n\n    GLFramebuffer fbo[3];\n    for (int i \u003d 0; i \u003c 3; ++i)\n    {\n        glBindFramebuffer(GL_FRAMEBUFFER, fbo[i]);\n        glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, tex[i], 0);\n    }\n\n    // Clear the image through fbo[0], and make sure the clear is flushed outside the render pass.\n    glBindFramebuffer(GL_FRAMEBUFFER, fbo[0]);\n    glClearColor(1, 0, 0, 1);\n    glClear(GL_COLOR_BUFFER_BIT);\n    EXPECT_PIXEL_COLOR_EQ(0, 0, GLColor::red);\n\n    // Invalidate it such that the contents are marked as undefined.  Note that regarldess of the\n    // marking, the image is cleared nevertheless.\n    const GLenum discards[] \u003d {GL_COLOR_ATTACHMENT0};\n    glInvalidateFramebuffer(GL_FRAMEBUFFER, 1, discards);\n\n    // Clear it again to the same color.\n    glClear(GL_COLOR_BUFFER_BIT);\n\n    // Bind tex[0] to fbo[1] as the read fbo, and blit to fbo[2]\n    glBindFramebuffer(GL_READ_FRAMEBUFFER, fbo[1]);\n    glFramebufferTexture2D(GL_READ_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, tex[0], 0);\n    glBindFramebuffer(GL_DRAW_FRAMEBUFFER, fbo[2]);\n\n    // Blit.  This causes the second clear of tex[0] to be flushed outside the render pass, which\n    // may be optimized out.\n    glBlitFramebuffer(0, 0, kSize, kSize, 0, 0, kSize, kSize, GL_COLOR_BUFFER_BIT, GL_NEAREST);\n\n    // Switch back to fbo[0] and draw with blend.  If the second clear is dropped and the image\n    // continues to be marked as invalidated, loadOp\u003dDONT_CARE would be used instead of loadOp\u003dLOAD.\n    glBindFramebuffer(GL_FRAMEBUFFER, fbo[0]);\n\n    glEnable(GL_BLEND);\n    glBlendFunc(GL_ONE, GL_ONE);\n\n    ANGLE_GL_PROGRAM(program, essl1_shaders::vs::Simple(), essl1_shaders::fs::Blue());\n    drawQuad(program, essl1_shaders::PositionAttrib(), 0);\n    EXPECT_PIXEL_COLOR_EQ(0, 0, GLColor::magenta);\n```\n\nThis should go in the VulkanPerformanceCounterTests, and should verify that loadOp\u003dLOAD is used (instead of loadOp\u003dDONT_CARE).\n\nThe core algorithm of the test is:\n\n- Clear and flush outside RP\n- Invalidate\n- Clear again and flush outside RP (I did this with blit)\n- Draw (uses loadOp\u003dDONT_CARE which is wrong)",
+      "parentUuid": "841147e5_47929ca1",
+      "revId": "7d5c3f95090971f4a6d86e7bf0cb814149472f2a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
