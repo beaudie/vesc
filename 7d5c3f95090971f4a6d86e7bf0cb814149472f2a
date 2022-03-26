@@ -87,6 +87,24 @@
       "parentUuid": "ea1648ac_8893fed6",
       "revId": "7d5c3f95090971f4a6d86e7bf0cb814149472f2a",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "0ce432e1_d570b5e5",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 6643,
+      "author": {
+        "id": 1518892
+      },
+      "writtenOn": "2022-03-26T07:06:27Z",
+      "side": 1,
+      "message": "Updated the patch, please verify this is what you were asking for. 😊",
+      "parentUuid": "08d56e6e_badca4df",
+      "revId": "7d5c3f95090971f4a6d86e7bf0cb814149472f2a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
