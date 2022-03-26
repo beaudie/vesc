@@ -70,6 +70,30 @@
       },
       "revId": "c9658bc78d5864c3e83cff9738d67464a1ee0b4f",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "e36ef221_28ecc860",
+        "filename": "src/tests/gl_tests/IncompleteTextureTest.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 267,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2022-03-26T22:43:57Z",
+      "side": 1,
+      "message": "Nevermind, it is working.  Here\u0027s how I proved it:\n```\n    angle::Result IncompleteTextureSet::getIncompleteTexture(\n    {\n         // We need to provide enough pixel data to fill the array of six faces\n         GLubyte incompleteCubeArrayPixels[kCubeMapArraySize][4];\n-        for (int i \u003d 0; i \u003c kCubeMapArraySize; ++i)\n-        {\n-            incompleteCubeArrayPixels[i][0] \u003d incompleteTextureParam.clearColor[0];\n-            incompleteCubeArrayPixels[i][1] \u003d incompleteTextureParam.clearColor[1];\n-            incompleteCubeArrayPixels[i][2] \u003d incompleteTextureParam.clearColor[2];\n-            incompleteCubeArrayPixels[i][3] \u003d incompleteTextureParam.clearColor[3];\n-        }\n+\n+        // red\n+        incompleteCubeArrayPixels[0][0] \u003d 0xFF;\n+        incompleteCubeArrayPixels[0][1] \u003d 0x0;\n+        incompleteCubeArrayPixels[0][2] \u003d 0x0;\n+        incompleteCubeArrayPixels[0][3] \u003d 0xFF;\n+        // green\n+        incompleteCubeArrayPixels[1][0] \u003d 0x0;\n+        incompleteCubeArrayPixels[1][1] \u003d 0xFF;\n+        incompleteCubeArrayPixels[1][2] \u003d 0x0;\n+        incompleteCubeArrayPixels[1][3] \u003d 0xFF;\n+        // blue\n+        incompleteCubeArrayPixels[2][0] \u003d 0x0;\n+        incompleteCubeArrayPixels[2][1] \u003d 0x0;\n+        incompleteCubeArrayPixels[2][2] \u003d 0xFF;\n+        incompleteCubeArrayPixels[2][3] \u003d 0xFF;\n+        // yellow\n+        incompleteCubeArrayPixels[3][0] \u003d 0xFF;\n+        incompleteCubeArrayPixels[3][1] \u003d 0xFF;\n+        incompleteCubeArrayPixels[3][2] \u003d 0x0;\n+        incompleteCubeArrayPixels[3][3] \u003d 0xFF;\n+        // magenta\n+        incompleteCubeArrayPixels[4][0] \u003d 0xFF;\n+        incompleteCubeArrayPixels[4][1] \u003d 0x0;\n+        incompleteCubeArrayPixels[4][2] \u003d 0xFF;\n+        incompleteCubeArrayPixels[4][3] \u003d 0xFF;\n+        // white\n+        incompleteCubeArrayPixels[5][0] \u003d 0xFF;\n+        incompleteCubeArrayPixels[5][1] \u003d 0xFF;\n+        incompleteCubeArrayPixels[5][2] \u003d 0xFF;\n+        incompleteCubeArrayPixels[5][3] \u003d 0xFF;\n\n         ANGLE_TRY(t-\u003esetSubImage(mutableContext, unpack, nullptr,\n         ...\nTEST_P(IncompleteTextureTestES31, IncompleteTextureCubeMapArray)\n         out vec4 color;\n         uniform lowp samplerCubeArray uTex;\n         void main(){\n-            vec4 outColor \u003d vec4(0.0);\n+            vec4 black \u003d vec4(0.0, 0.0, 0.0, 1.0);\n+            vec4 outColor \u003d black;\n\n             // Pull a color from each cube face to ensure they are all initialized\n-            outColor +\u003d texture(uTex, vec4(1.0, 0.0, 0.0, 0.0));\n-            outColor +\u003d texture(uTex, vec4(-1.0, 0.0, 0.0, 0.0));\n-            outColor +\u003d texture(uTex, vec4(0.0, 1.0, 0.0, 0.0));\n-            outColor +\u003d texture(uTex, vec4(0.0, -1.0, 0.0, 0.0));\n-            outColor +\u003d texture(uTex, vec4(0.0, 0.0, 1.0, 0.0));\n-            outColor +\u003d texture(uTex, vec4(0.0, 0.0, -1.0, 0.0));\n+            // Array index is zero for each\n+            vec4 red     \u003d vec4(1.0, 0.0, 0.0, 1.0);\n+            vec4 green   \u003d vec4(0.0, 1.0, 0.0, 1.0);\n+            vec4 blue    \u003d vec4(0.0, 0.0, 1.0, 1.0);\n+            vec4 yellow  \u003d vec4(1.0, 1.0, 0.0, 1.0);\n+            vec4 magenta \u003d vec4(1.0, 0.0, 1.0, 1.0);\n+            vec4 white   \u003d vec4(1.0, 1.0, 1.0, 1.0);\n+\n+            vec4 posX \u003d vec4( 1.0, 0.0,  0.0, 0.0);\n+            vec4 negX \u003d vec4(-1.0, 0.0,  0.0, 0.0);\n+            vec4 posY \u003d vec4(0.0,  1.0,  0.0, 0.0);\n+            vec4 negY \u003d vec4(0.0, -1.0,  0.0, 0.0);\n+            vec4 posZ \u003d vec4(0.0,  0.0,  1.0, 0.0);\n+            vec4 negZ \u003d vec4(0.0,  0.0, -1.0, 0.0);\n+\n+            if (red !\u003d texture(uTex, posX))\n+            {\n+                outColor \u003d red;\n+            }\n+            else if (outColor \u003d\u003d black \u0026\u0026 green !\u003d texture(uTex, negX))\n+            {\n+                outColor \u003d green;\n+            }\n+            else if (outColor \u003d\u003d black \u0026\u0026 blue !\u003d texture(uTex, posY))\n+            {\n+                outColor \u003d blue;\n+            }\n+            else if (outColor \u003d\u003d black \u0026\u0026 yellow !\u003d texture(uTex, negY))\n+            {\n+                outColor \u003d yellow;\n+            }\n+            else if (outColor \u003d\u003d black \u0026\u0026  magenta !\u003d texture(uTex, posZ))\n+            {\n+                outColor \u003d magenta;\n+            }\n+            else if (outColor \u003d\u003d black \u0026\u0026 white !\u003d texture(uTex, negZ))\n+            {\n+                outColor \u003d white;\n+            }\n\n             color \u003d outColor;\n         })\";\n```",
+      "parentUuid": "5979059d_ec99ddd4",
+      "range": {
+        "startLine": 267,
+        "startChar": 20,
+        "endLine": 267,
+        "endChar": 27
+      },
+      "revId": "c9658bc78d5864c3e83cff9738d67464a1ee0b4f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
