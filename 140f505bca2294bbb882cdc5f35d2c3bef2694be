@@ -36,6 +36,23 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "bc5d4d85_2a8500fe",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-03-26T01:54:09Z",
+      "side": 1,
+      "message": "Moved",
+      "revId": "140f505bca2294bbb882cdc5f35d2c3bef2694be",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "56148961_d0272d12",
@@ -49,6 +66,30 @@
       "writtenOn": "2022-03-26T00:16:13Z",
       "side": 1,
       "message": "Do we need holding mutex for them?",
+      "range": {
+        "startLine": 1215,
+        "startChar": 0,
+        "endLine": 1216,
+        "endChar": 49
+      },
+      "revId": "140f505bca2294bbb882cdc5f35d2c3bef2694be",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "af571f99_08383400",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 1216,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-03-26T01:54:09Z",
+      "side": 1,
+      "message": "I don\u0027t believe so, we can\u0027t have one thread destroying the renderer while another is using it. We most likely don\u0027t strictly need the lock in line 1188 either (other than maybe for the mutex-implicit memory-barrier related reasons)",
+      "parentUuid": "56148961_d0272d12",
       "range": {
         "startLine": 1215,
         "startChar": 0,
@@ -82,6 +123,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "2c9d5e40_a9240b35",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 3868,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-03-26T01:54:09Z",
+      "side": 1,
+      "message": "`mCommandBufferRecyclerMutex` is used in the `get` and `recycle` functions of the recycler, which means it\u0027s protecting the `mCommandBufferHelperFreeList` member.\n\nThis is touching the `mSecondaryCommandBuffersToReset` member. You are right that there might be a threading bug there. That\u0027s unrelated to this change though (and it\u0027s for a feature that\u0027s not used by ANGLE at the moment (using Vulkan secondary command buffers)). I\u0027ll open a bug for it.",
+      "parentUuid": "7a4b6c3b_61a9f441",
+      "range": {
+        "startLine": 3868,
+        "startChar": 18,
+        "endLine": 3868,
+        "endChar": 57
+      },
+      "revId": "140f505bca2294bbb882cdc5f35d2c3bef2694be",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "8560334a_8fef4b44",
@@ -95,6 +160,30 @@
       "writtenOn": "2022-03-26T00:16:13Z",
       "side": 1,
       "message": "Can we make classes of mCommandProcessor and mCommandQueue thread safe? and then we can just remove mCommandQueueMutex from this RendererVK. And we don\u0027t need the defer handleDeiceLost logic. WDYT?",
+      "range": {
+        "startLine": 3916,
+        "startChar": 8,
+        "endLine": 3916,
+        "endChar": 25
+      },
+      "revId": "140f505bca2294bbb882cdc5f35d2c3bef2694be",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "5216d169_71d6f2d7",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 3916,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-03-26T01:54:09Z",
+      "side": 1,
+      "message": "Nack. The fact that locking is done outside the class has been an intentional design, although I\u0027m not clear on all the details. Jamie could fill you in.",
+      "parentUuid": "8560334a_8fef4b44",
       "range": {
         "startLine": 3916,
         "startChar": 8,
