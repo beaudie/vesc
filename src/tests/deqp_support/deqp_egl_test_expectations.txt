@@ -162,6 +162,8 @@
 6953 PIXEL4ORXL VULKAN : dEQP-EGL.functional.partial_update.odd_render_render_even_render = FAIL
 6953 PIXEL4ORXL VULKAN : dEQP-EGL.functional.partial_update.odd_render_render_even_render_render = FAIL
 
+9999 PIXEL4ORXL VULKAN : dEQP-EGL.functional.swap_buffers_with_damage.* = SKIP
+
 // Pixel 6 Vulkan
 // These fail on the Android S bots, but pass on pre-release Android T drivers:
 6899 PIXEL6 VULKAN : dEQP-EGL.functional.query_context.*.rgb888_window = FAIL
