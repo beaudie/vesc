@@ -69,6 +69,24 @@
       "message": "I changed my mind about this. The truth is that even though the image is *marked as* invalidated, it does actually continue to contain the cleared value. On repeated clear, this change makes the image get cleared again for no reason.\n\nArguably all this is in the \"app is doing nonsense realm\", but an equally valid (and more efficient) fix would be to mark the contents of the image defined in `ImageHelper::flushStagedUpdates`, right where the perf warning about duplicate clear being dropped is issued.\n\nIn other words, we continue to remember that the image is actually cleared, and if so on next flushStagedUpdates we mark it as contents-defined, similarly to how every other update in that function do it.",
       "revId": "7d5c3f95090971f4a6d86e7bf0cb814149472f2a",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "08d56e6e_badca4df",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 6643,
+      "author": {
+        "id": 1518892
+      },
+      "writtenOn": "2022-03-26T05:30:00Z",
+      "side": 1,
+      "message": "So something like this?\n\n- If contents are marked as defined, and the clear value is the same as the previous clear value, spew the existing perf warning\n- If contents are marked as *not* defined, and the clear value is the same as the previous clear value, mark contents as defined\n\nThat sort of makes sense, but...\n\nI\u0027m a little puzzled as to how we know the memory backing the image is actually present and cleared after it\u0027s been marked as undefined by an invalidate. In my app\u0027s case, when the Vulkan backend dropped the \"redundant\" clear, my app was later reading from that FBO\u0027s color attachment texture and getting garbage data back. Where was it actually reading from?",
+      "parentUuid": "ea1648ac_8893fed6",
+      "revId": "7d5c3f95090971f4a6d86e7bf0cb814149472f2a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
