@@ -34,6 +34,23 @@
       "parentUuid": "865299a7_04b71f12",
       "revId": "486f90e4d5c3f8dc177fe78db8d7ef76424bed59",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "ae2bdc7d_78e70382",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-03-26T02:53:19Z",
+      "side": 1,
+      "message": "Nice. I looked over FramebufferVk, and didn\u0027t find anywhere else that we assume deferred-clears match enabled buffers, so should be good.\n\nFeel free to squash the test CL into this one.",
+      "revId": "486f90e4d5c3f8dc177fe78db8d7ef76424bed59",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
