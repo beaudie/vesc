@@ -123,6 +123,24 @@
       "parentUuid": "0ce432e1_d570b5e5",
       "revId": "7d5c3f95090971f4a6d86e7bf0cb814149472f2a",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "3e15bb56_2c908c47",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 6643,
+      "author": {
+        "id": 1518892
+      },
+      "writtenOn": "2022-03-26T07:18:32Z",
+      "side": 1,
+      "message": "Er that should read \"should the start of this renderpass use LoadOp C\u003dClear,D\u003dClear or C\u003dLoad,D\u003dClear since the clear is the same as the previous one?\"",
+      "parentUuid": "8e1a4e4a_a317a871",
+      "revId": "7d5c3f95090971f4a6d86e7bf0cb814149472f2a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
