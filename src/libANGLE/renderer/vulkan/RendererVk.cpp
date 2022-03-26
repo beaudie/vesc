@@ -192,6 +192,9 @@ constexpr const char *kSkippedMessages[] = {
     // http://anglebug.com/7105
     "VUID-vkCmdDraw-None-06538",
     "VUID-vkCmdDrawIndexed-None-06538",
+    // http://crbug.com/
+    "VUID-VkPresentInfoKHR-pImageIndices-01296",
+    "UNASSIGNED-CoreValidation-DrawState-QueueForwardProgress",
 };
 
 struct SkippedSyncvalMessage
