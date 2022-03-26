@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "6cf65d13_c367a57e",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 7
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1001921
+      },
+      "writtenOn": "2022-03-26T19:11:25Z",
+      "side": 1,
+      "message": "Shabi, PTAL, suppressing some VVL messages and tests to get the roll going.",
+      "revId": "0ac160a1910988defdbd956d3a167587e4c643d9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
