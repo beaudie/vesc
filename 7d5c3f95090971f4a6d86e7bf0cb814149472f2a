@@ -105,6 +105,24 @@
       "parentUuid": "08d56e6e_badca4df",
       "revId": "7d5c3f95090971f4a6d86e7bf0cb814149472f2a",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "8e1a4e4a_a317a871",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 6643,
+      "author": {
+        "id": 1518892
+      },
+      "writtenOn": "2022-03-26T07:17:49Z",
+      "side": 1,
+      "message": "I\u0027m not totally certain I did this right, actually. It functionally works but...\n\nIf we have a sequence like:\n\n- Invalidate color+depth\n- Clear\n- Draw depth\n- Invalidate depth\n\nAnd the image was cleared identically in the previous frame with only depth writes since the last clear, should the start of this renderpass use LoadOp C\u003dClear,D\u003dClear or C\u003dLoad,D\u003dLoad since the clear is the same as the previous one?\n\nRight now, with this patch series, it results in LoadOp C\u003dClear,D\u003dClear and StoreOp C\u003dStore,D\u003dDontCare. I imagine it should probably be either:\n\n- LoadOp C\u003dLoad,D\u003dClear + StoreOp C\u003dStore,D\u003dDontCare\n- LoadOp C\u003dLoad,D\u003dClear + StoreOp C\u003dDontCare,D\u003dDontCare (if it notices there were no color writes and the previous LoadOp was C\u003dLoad, it could just skip storing and leave the old contents alone, right?)",
+      "parentUuid": "0ce432e1_d570b5e5",
+      "revId": "7d5c3f95090971f4a6d86e7bf0cb814149472f2a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
