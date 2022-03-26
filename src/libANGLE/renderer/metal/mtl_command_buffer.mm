@@ -581,6 +581,8 @@ CommandBuffer::~CommandBuffer()
     cleanup();
 }
 
+uint64_t CommandBuffer::sLastCommittedSerial = 0;
+
 bool CommandBuffer::ready() const
 {
     std::lock_guard<std::mutex> lg(mLock);
@@ -837,6 +839,10 @@ bool CommandBuffer::commitImpl()
 
     // Notify command queue
     mCmdQueue.onCommandBufferCommitted(get(), mQueueSerial);
+
+    ++sLastCommittedSerial;
+    ASSERT(sLastCommittedSerial == mQueueSerial &&
+           "Verify that CommandBuffers are submitted in order");
 
     // Do the actual commit
     [get() enqueue];

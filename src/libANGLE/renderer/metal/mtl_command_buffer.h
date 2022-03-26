@@ -13,6 +13,7 @@
 
 #import <Metal/Metal.h>
 #import <QuartzCore/CAMetalLayer.h>
+#include <cstdint>
 
 #include <deque>
 #include <memory>
@@ -157,6 +158,7 @@ class CommandBuffer final : public WrappedObject<id<MTLCommandBuffer>>, angle::N
     CommandEncoder *mActiveCommandEncoder = nullptr;
 
     uint64_t mQueueSerial = 0;
+    static uint64_t sLastCommittedSerial;
 
     mutable std::mutex mLock;
 
