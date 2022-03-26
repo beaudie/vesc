@@ -1350,6 +1350,10 @@ angle::Result ContextMtl::onMakeCurrent(const gl::Context *context)
 angle::Result ContextMtl::onUnMakeCurrent(const gl::Context *context)
 {
     flushCommandBuffer(mtl::WaitUntilScheduled);
+    // Note: this 2nd flush is needed because if there is a query in progress
+    // then during flush, new command buffers are allocated that also need
+    // to be flushed.
+    flushCommandBuffer(mtl::WaitUntilScheduled);
     return angle::Result::Continue;
 }
 
