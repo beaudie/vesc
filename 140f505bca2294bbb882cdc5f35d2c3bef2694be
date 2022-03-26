@@ -34,6 +34,75 @@
       "parentUuid": "0a7aab7c_f6d90103",
       "revId": "140f505bca2294bbb882cdc5f35d2c3bef2694be",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "56148961_d0272d12",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 1216,
+      "author": {
+        "id": 1000050
+      },
+      "writtenOn": "2022-03-26T00:16:13Z",
+      "side": 1,
+      "message": "Do we need holding mutex for them?",
+      "range": {
+        "startLine": 1215,
+        "startChar": 0,
+        "endLine": 1216,
+        "endChar": 49
+      },
+      "revId": "140f505bca2294bbb882cdc5f35d2c3bef2694be",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "7a4b6c3b_61a9f441",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 3868,
+      "author": {
+        "id": 1000050
+      },
+      "writtenOn": "2022-03-26T00:16:13Z",
+      "side": 1,
+      "message": "Don\u0027t we need holding mutex mCommandBufferRecyclerMutex for accessing mOutsideRenderPassCommandBufferRecycler and mOutsideRenderPassCommandBufferRecycler ?",
+      "range": {
+        "startLine": 3868,
+        "startChar": 18,
+        "endLine": 3868,
+        "endChar": 57
+      },
+      "revId": "140f505bca2294bbb882cdc5f35d2c3bef2694be",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "8560334a_8fef4b44",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 3916,
+      "author": {
+        "id": 1000050
+      },
+      "writtenOn": "2022-03-26T00:16:13Z",
+      "side": 1,
+      "message": "Can we make classes of mCommandProcessor and mCommandQueue thread safe? and then we can just remove mCommandQueueMutex from this RendererVK. And we don\u0027t need the defer handleDeiceLost logic. WDYT?",
+      "range": {
+        "startLine": 3916,
+        "startChar": 8,
+        "endLine": 3916,
+        "endChar": 25
+      },
+      "revId": "140f505bca2294bbb882cdc5f35d2c3bef2694be",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
