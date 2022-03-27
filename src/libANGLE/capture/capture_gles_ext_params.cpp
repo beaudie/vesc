@@ -3221,7 +3221,7 @@ void CaptureGetProgramBinaryOES_binary(const State &glState,
                                        void *binary,
                                        ParamCapture *paramCapture)
 {
-    CaptureMemory(binary, length != nullptr ? *length : bufSize, paramCapture);
+    paramCapture->readBufferSizeBytes = length != nullptr ? *length : bufSize;
 }
 
 void CaptureProgramBinaryOES_binary(const State &glState,
