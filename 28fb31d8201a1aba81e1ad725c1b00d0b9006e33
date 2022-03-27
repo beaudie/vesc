@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "6d96ac97_2c26b40f",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1518892
+      },
+      "writtenOn": "2022-03-27T02:46:05Z",
+      "side": 1,
+      "message": "OK, if we don\u0027t care about whether to print the warning or not based on whether it was previously invalidated, then this should be ready to go.",
+      "revId": "28fb31d8201a1aba81e1ad725c1b00d0b9006e33",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
