@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "7b7a28f6_d5a2058d",
+        "filename": "src/tests/deqp_support/deqp_gles31_test_expectations.txt",
+        "patchSetId": 5
+      },
+      "lineNbr": 373,
+      "author": {
+        "id": 1001921
+      },
+      "writtenOn": "2022-03-27T21:43:57Z",
+      "side": 0,
+      "message": "Still fails.\nhttps://ci.chromium.org/ui/p/angle/builders/ci/android-arm64-exp-test/347/overview\nPlease fix.",
+      "range": {
+        "startLine": 373,
+        "startChar": 0,
+        "endLine": 373,
+        "endChar": 127
+      },
+      "revId": "3f331faeb1bb12b3c281697aecc601ac5a163fb9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
