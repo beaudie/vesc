@@ -141,6 +141,24 @@
       "parentUuid": "8e1a4e4a_a317a871",
       "revId": "7d5c3f95090971f4a6d86e7bf0cb814149472f2a",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "dadc3b8f_cab54552",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 6643,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-03-27T01:53:31Z",
+      "side": 1,
+      "message": "Nah, it\u0027s much simpler than that. See the other comment.\n\n\u003e I\u0027m a little puzzled as to how we know the memory backing the image is actually present and cleared after it\u0027s been marked as undefined by an invalidate.\n\nAs ugly as this (necessary) optimization is, we are very conservative with disabling it. It only needs to serve to optimize one benchmark. Basically soon as there\u0027s anything that might touch the image, we disable the optimization. If the contents have just been marked invalid, but not otherwise touched, there\u0027s no reason to think it doesn\u0027t still contain the cleared value.\n\n\u003e In my app\u0027s case, when the Vulkan backend dropped the \"redundant\" clear, my app was later reading from that FBO\u0027s color attachment texture and getting garbage data back. Where was it actually reading from?\n\nCan\u0027t really tell without a test or capture or something, but one thing I could think for example is if you had a render pass after the second clear, it would use loadOp\u003dDONT_CARE, maybe that\u0027s where garbage was coming from? Or maybe you just hit another bug?",
+      "parentUuid": "3e15bb56_2c908c47",
+      "revId": "7d5c3f95090971f4a6d86e7bf0cb814149472f2a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
