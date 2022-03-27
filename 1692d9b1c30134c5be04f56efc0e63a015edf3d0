@@ -46,6 +46,30 @@
       },
       "revId": "1692d9b1c30134c5be04f56efc0e63a015edf3d0",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "13fd06ad_d465e10a",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 7402,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-03-27T02:42:01Z",
+      "side": 1,
+      "message": "The perf warning is justified IMO. If you clear, invalidate then reclear to the same value ... you deserve a warning :P\n\nYou _could_ specialize the warning like, if defined say \"repeated clear dropped\", and if not defined say \"we undid your invalidate and also dropped the repeated clear\". But that might be overkill for this scenario.",
+      "parentUuid": "cdae54a0_0f2bca32",
+      "range": {
+        "startLine": 7385,
+        "startChar": 0,
+        "endLine": 7402,
+        "endChar": 17
+      },
+      "revId": "1692d9b1c30134c5be04f56efc0e63a015edf3d0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
