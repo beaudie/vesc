@@ -159,6 +159,24 @@
       "parentUuid": "3e15bb56_2c908c47",
       "revId": "7d5c3f95090971f4a6d86e7bf0cb814149472f2a",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "2d1ce903_ae288821",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 6643,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-03-27T02:04:45Z",
+      "side": 1,
+      "message": "\u003e Er that should read \"should the start of this renderpass use LoadOp C\u003dClear,D\u003dClear or C\u003dLoad,D\u003dClear since the clear is the same as the previous one?\"\n\nSo, currently we use loadOp\u003dLOAD I believe. It shouldn\u0027t be hard to change that to loadOp\u003dCLEAR, but I don\u0027t believe anything here is worth optimizing.\n\nThat said:\n\n\u003e if it notices there were no color writes and the previous LoadOp was C\u003dLoad, it could just skip storing and leave the old contents alone, right?\n\nYou should know that storeOp\u003dDONT_CARE is a write operation. It doesn\u0027t mean \"leave the contents be\", but rather \"feel free to write garbage over it\". So no, we can\u0027t do that. We _could_ use storeOp\u003dNONE though, and I have a patch (not yet put up) that does that. That patch in turn builds on the patches I recently submitted (because before we didn\u0027t know that color is not written to). In your particular case, it would even realize that loadOp\u003dLOAD was unnecessary and it would use loadOp\u003dNONE+storeOp\u003dNONE.",
+      "parentUuid": "dadc3b8f_cab54552",
+      "revId": "7d5c3f95090971f4a6d86e7bf0cb814149472f2a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
