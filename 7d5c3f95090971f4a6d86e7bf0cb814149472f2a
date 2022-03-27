@@ -177,6 +177,24 @@
       "parentUuid": "dadc3b8f_cab54552",
       "revId": "7d5c3f95090971f4a6d86e7bf0cb814149472f2a",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "a0db8bc5_207c4ce7",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 6643,
+      "author": {
+        "id": 1518892
+      },
+      "writtenOn": "2022-03-27T02:17:02Z",
+      "side": 1,
+      "message": "Yeah, I read the docs on the store operations after I wrote that comment, so I agree that loadOp None storeOp None would be far better.\n\nBut right now with this patch series it ends up as loadOp C\u003dClear,D\u003dClear, which is correct for depth but not for color (it\u0027s still doing the redundant clear there).",
+      "parentUuid": "2d1ce903_ae288821",
+      "revId": "7d5c3f95090971f4a6d86e7bf0cb814149472f2a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }

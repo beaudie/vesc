@@ -22,6 +22,30 @@
       },
       "revId": "1692d9b1c30134c5be04f56efc0e63a015edf3d0",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "cdae54a0_0f2bca32",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 7402,
+      "author": {
+        "id": 1518892
+      },
+      "writtenOn": "2022-03-27T02:17:02Z",
+      "side": 1,
+      "message": "The conditional I think is still necessary to suppress the perf warning (indicating we did actually do *something* at least), unless we just want to always spew that warning even if we clear across invalidates.",
+      "parentUuid": "4bf81ff0_00c5c5ab",
+      "range": {
+        "startLine": 7385,
+        "startChar": 0,
+        "endLine": 7402,
+        "endChar": 17
+      },
+      "revId": "1692d9b1c30134c5be04f56efc0e63a015edf3d0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
