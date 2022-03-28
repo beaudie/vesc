@@ -51,6 +51,24 @@
       "parentUuid": "34f773cb_2e88b82e",
       "revId": "28fb31d8201a1aba81e1ad725c1b00d0b9006e33",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ec1d61fb_e3c1a4ad",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 7385,
+      "author": {
+        "id": 1518892
+      },
+      "writtenOn": "2022-03-28T09:05:10Z",
+      "side": 1,
+      "message": "Oh, that\u0027s why the tests are failing in CQ on one of the other changes:\n\nAssert failed in flushStagedUpdates (../../src/libANGLE/renderer/vulkan/vk_helpers.cpp:7377): levelGLStart + 1 \u003d\u003d levelGLEnd\n\nAny thoughts on how to proceed?",
+      "parentUuid": "09b2851f_b1c84c9e",
+      "revId": "28fb31d8201a1aba81e1ad725c1b00d0b9006e33",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
