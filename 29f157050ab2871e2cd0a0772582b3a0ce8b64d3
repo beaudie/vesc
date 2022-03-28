@@ -18,6 +18,23 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "747ef0b2_260ce209",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1359249
+      },
+      "writtenOn": "2022-03-28T20:28:43Z",
+      "side": 1,
+      "message": "Reply",
+      "revId": "29f157050ab2871e2cd0a0772582b3a0ce8b64d3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "110f834b_219c5eda",
@@ -41,6 +58,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "42e3836c_e4e5f36f",
+        "filename": "src/libANGLE/renderer/vulkan/SurfaceVk.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 1059,
+      "author": {
+        "id": 1359249
+      },
+      "writtenOn": "2022-03-28T20:28:43Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "110f834b_219c5eda",
+      "range": {
+        "startLine": 1059,
+        "startChar": 34,
+        "endLine": 1059,
+        "endChar": 44
+      },
+      "revId": "29f157050ab2871e2cd0a0772582b3a0ce8b64d3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "7c60f45d_aeaf8484",
@@ -54,6 +95,30 @@
       "writtenOn": "2022-03-28T20:21:15Z",
       "side": 1,
       "message": "This flag seems a bit wrong; this is not an extension. Why not check for mutableRenderBufferKHR instead?",
+      "range": {
+        "startLine": 2448,
+        "startChar": 47,
+        "endLine": 2448,
+        "endChar": 89
+      },
+      "revId": "29f157050ab2871e2cd0a0772582b3a0ce8b64d3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "5cad3cc7_56908294",
+        "filename": "src/libANGLE/validationEGL.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 2448,
+      "author": {
+        "id": 1359249
+      },
+      "writtenOn": "2022-03-28T20:28:43Z",
+      "side": 1,
+      "message": "Correct not an extension. I needed a feature flag, the source that enables is only feature that says SHARED_PRESENT is supported. Best I could think of.\n\nMutabel_render_buffer is different - change to SINGLE, after Surface is created. Creating with SINGLE is a standard EGL spec that was never enabled in ANGLE. Doesn\u0027t even have an error for it.",
+      "parentUuid": "7c60f45d_aeaf8484",
       "range": {
         "startLine": 2448,
         "startChar": 47,
