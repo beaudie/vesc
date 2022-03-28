@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "efe35b0c_408c4222",
+        "filename": "src/compiler/translator/ParseContext.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 3437,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2022-03-28T22:19:09Z",
+      "side": 1,
+      "message": "If I add this assert here:\n```\nASSERT(symbolTable.getGlInVariableWithArraySize() !\u003d nullptr);\n```\nit fires with the provided test (and target app):\n```\n[ RUN      ] GeometryShaderTest.DeferredSetOfArrayInputSize/ES3_1_Vulkan\n../../src/tests/test_utils/ANGLETest.cpp(64): error: ParseContext.cpp:3437 (parseGeometryShaderInputLayoutQualifier):   ! Assert failed in parseGeometryShaderInputLayoutQualifier (../../src/compiler/translator/ParseContext.cpp:3437): symbolTable.getGlInVariableWithArraySize() !\u003d nullptr\n```",
+      "revId": "2730242c1ef9a03081e4cbe9291127ff17adf7dc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
