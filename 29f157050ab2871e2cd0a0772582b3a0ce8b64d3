@@ -35,6 +35,23 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "3bb41c3f_7abe04af",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1359249
+      },
+      "writtenOn": "2022-03-28T20:41:07Z",
+      "side": 1,
+      "message": "Question",
+      "revId": "29f157050ab2871e2cd0a0772582b3a0ce8b64d3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "110f834b_219c5eda",
@@ -143,6 +160,30 @@
       "side": 1,
       "message": "Ok if it\u0027s a core feature of EGL, then you should need this `if`. If you have to, you can add a feature in FrontendFeatures.h and initialize it in the backend. Similar to `enableCompressingPipelineCacheInThreadPool` for example.",
       "parentUuid": "5cad3cc7_56908294",
+      "range": {
+        "startLine": 2448,
+        "startChar": 47,
+        "endLine": 2448,
+        "endChar": 89
+      },
+      "revId": "29f157050ab2871e2cd0a0772582b3a0ce8b64d3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "2451924b_1f482136",
+        "filename": "src/libANGLE/validationEGL.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 2448,
+      "author": {
+        "id": 1359249
+      },
+      "writtenOn": "2022-03-28T20:41:07Z",
+      "side": 1,
+      "message": "This is dependent on Vulkan supporting SHARED_PRESENT mode(s). Does that work with FrontendFeatures? I don\u0027t think I have touched those yet.",
+      "parentUuid": "43ecaef9_82789156",
       "range": {
         "startLine": 2448,
         "startChar": 47,
