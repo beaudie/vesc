@@ -69,6 +69,24 @@
       "parentUuid": "09b2851f_b1c84c9e",
       "revId": "28fb31d8201a1aba81e1ad725c1b00d0b9006e33",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b5c9d080_41aea803",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 7385,
+      "author": {
+        "id": 1518892
+      },
+      "writtenOn": "2022-03-28T09:11:51Z",
+      "side": 1,
+      "message": "Maybe this (patchset 7) is the right place to assert, actually.",
+      "parentUuid": "ec1d61fb_e3c1a4ad",
+      "revId": "28fb31d8201a1aba81e1ad725c1b00d0b9006e33",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
