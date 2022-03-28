@@ -184,6 +184,29 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "f76bab3d_8faa9266",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 3901,
+      "author": {
+        "id": 1000050
+      },
+      "writtenOn": "2022-03-28T22:30:29Z",
+      "side": 1,
+      "message": "try_lock() \u003d\u003d false, it means the lock is hold by one thread. It is not necessary to be the thread calling this method. So I think it is racing. For example:\n1. Thread A holding the lock.\n2. Thread B calls this method for some reasons.\n3. try_lock() returns false.\n4. The thread A releases the lock without calling handleDeviceLostNoLock().\n5. The thread B returns at line 3903 without calling handleDeviceLostNoLock() too.\n\nDo we care about this case?",
+      "range": {
+        "startLine": 3901,
+        "startChar": 9,
+        "endLine": 3901,
+        "endChar": 38
+      },
+      "revId": "140f505bca2294bbb882cdc5f35d2c3bef2694be",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "8560334a_8fef4b44",
         "filename": "src/libANGLE/renderer/vulkan/RendererVk.cpp",
         "patchSetId": 2
