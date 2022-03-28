@@ -16,6 +16,23 @@
       "message": "+Charlie for review since Jamie is out",
       "revId": "d60e234bf77b7c38210d89102c92cf0fe255a5c3",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "e1656a21_1fd8d506",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-03-28T20:22:47Z",
+      "side": 1,
+      "message": "Re-LGTM, thanks for pushing through despite tedium",
+      "revId": "d60e234bf77b7c38210d89102c92cf0fe255a5c3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
