@@ -105,6 +105,24 @@
       "parentUuid": "b5c9d080_41aea803",
       "revId": "28fb31d8201a1aba81e1ad725c1b00d0b9006e33",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "a8247cc5_af5163de",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 7385,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-03-28T18:24:45Z",
+      "side": 1,
+      "message": "Filed a bug for this: anglebug.com/7133",
+      "parentUuid": "4b5457f5_5f4ce98a",
+      "revId": "28fb31d8201a1aba81e1ad725c1b00d0b9006e33",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
