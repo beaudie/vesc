@@ -16,6 +16,24 @@
       "message": "It looks like some traces fail to compile after this.\nhttps://ci.chromium.org/ui/p/angle/builders/ci/win-trace/1120/overview",
       "revId": "7a85d114b5a37de93a0738491ffb7faf69b33469",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "248b9a62_fa7519b4",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-03-28T02:00:39Z",
+      "side": 1,
+      "message": "Took a look, but didn\u0027t notice anything related. There was a goma error in one, and d3d device failed to create in another.\n\nLet\u0027s see if it recovers.",
+      "parentUuid": "4be46bca_4b46bf56",
+      "revId": "7a85d114b5a37de93a0738491ffb7faf69b33469",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
