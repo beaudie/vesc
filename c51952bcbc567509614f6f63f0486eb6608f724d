@@ -16,6 +16,24 @@
       "message": "A basic end2end test would be welcome. Also, in the very least could you add an ASSERT in `GetPipelineStage` that the result is a valid shader stage? ",
       "revId": "c51952bcbc567509614f6f63f0486eb6608f724d",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "e4102ba2_75891b8f",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2022-03-28T20:20:14Z",
+      "side": 1,
+      "message": "Added the assert and an end2end test.  It was quite tedious trying to isolate this problem in a unit test, so hopefully we can rely on the traces for this coverage instead.",
+      "parentUuid": "b7950d80_53d47aba",
+      "revId": "c51952bcbc567509614f6f63f0486eb6608f724d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
