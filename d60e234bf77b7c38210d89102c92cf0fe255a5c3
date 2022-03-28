@@ -73,6 +73,30 @@
       },
       "revId": "d60e234bf77b7c38210d89102c92cf0fe255a5c3",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "3c7168f0_c76ae102",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 3919,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-03-28T20:43:11Z",
+      "side": 1,
+      "message": "It was never out of bounds, just some stages were not set, so it was reading the default value of 0. This ASSERT is not bullet-proof, but for the lack of a better one ...",
+      "parentUuid": "efeba05f_bbbfde47",
+      "range": {
+        "startLine": 3914,
+        "startChar": 4,
+        "endLine": 3919,
+        "endChar": 58
+      },
+      "revId": "d60e234bf77b7c38210d89102c92cf0fe255a5c3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
