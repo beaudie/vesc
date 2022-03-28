@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "319f0483_23033e64",
+        "filename": "src/libANGLE/renderer/vulkan/vk_utils.h",
+        "patchSetId": 8
+      },
+      "lineNbr": 331,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2022-03-28T23:11:01Z",
+      "side": 1,
+      "message": "Remove.",
+      "range": {
+        "startLine": 331,
+        "startChar": 6,
+        "endLine": 331,
+        "endChar": 25
+      },
+      "revId": "55be9f4a06768dd04f676fab34931a256401d142",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "104e7fba_f4f79bad",
+        "filename": "src/libANGLE/renderer/vulkan/vk_utils.h",
+        "patchSetId": 8
+      },
+      "lineNbr": 338,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2022-03-28T23:11:01Z",
+      "side": 1,
+      "message": "Remove.",
+      "range": {
+        "startLine": 338,
+        "startChar": 4,
+        "endLine": 338,
+        "endChar": 17
+      },
+      "revId": "55be9f4a06768dd04f676fab34931a256401d142",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
