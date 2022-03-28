@@ -33,6 +33,46 @@
       "message": "Re-LGTM, thanks for pushing through despite tedium",
       "revId": "d60e234bf77b7c38210d89102c92cf0fe255a5c3",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "d861a1ab_3e0112dc",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2022-03-28T20:34:54Z",
+      "side": 1,
+      "message": "LGTM.",
+      "revId": "d60e234bf77b7c38210d89102c92cf0fe255a5c3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "efeba05f_bbbfde47",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 3919,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2022-03-28T20:34:54Z",
+      "side": 1,
+      "message": "Is this needed? I thought the gl::ShaderMap will assert if stage is out of bounds. See https://source.chromium.org/chromium/chromium/src/+/main:third_party/angle/src/common/PackedEnums.h;l\u003d141;drc\u003d006dbe60437ddb4527ca1be442580235dcca1d19",
+      "range": {
+        "startLine": 3914,
+        "startChar": 4,
+        "endLine": 3919,
+        "endChar": 58
+      },
+      "revId": "d60e234bf77b7c38210d89102c92cf0fe255a5c3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
