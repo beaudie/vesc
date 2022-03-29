@@ -50,6 +50,24 @@
       "message": "Drive by: So now do we always want libpci built with ChromeCast? It makes me wonder why we didn\u0027t unconditionally want that previously.",
       "revId": "f420c01a09a3e015042ca9b0e21705884ccf611d",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "45661e16_9e10ba42",
+        "filename": "BUILD.gn",
+        "patchSetId": 1
+      },
+      "lineNbr": 25,
+      "author": {
+        "id": 1001982
+      },
+      "writtenOn": "2022-03-29T17:45:02Z",
+      "side": 1,
+      "message": "Chromecast builds on platforms that don\u0027t need libpci can override use_libpci \u003d false on a platform-by-platform basis. The downstream builders can work either way, but I can check with their maintainers what they would like to do with use_libpci on their linux builders.",
+      "parentUuid": "a753b9a4_a3e41bd8",
+      "revId": "f420c01a09a3e015042ca9b0e21705884ccf611d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
