@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "2a74ec94_11ae5a68",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1115588
+      },
+      "writtenOn": "2022-03-29T17:39:18Z",
+      "side": 1,
+      "message": "Yes, I know this is gross but it\u0027s not clear to me how to fix this in a clean way without major refactoring. Open to ideas.",
+      "revId": "a2ba1f885fbf4e674402e26c18c50e013abd870c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
