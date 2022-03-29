@@ -1,0 +1,73 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "a8dd4a06_cf2361e7",
+        "filename": "src/tests/gl_tests/VulkanPerformanceCounterTest.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 55,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-03-29T02:32:49Z",
+      "side": 1,
+      "message": "s/Invalidate/Ops\n\nSome renames are happening in https://chromium-review.googlesource.com/c/angle/angle/+/3556367 which is about to land (sorry about merge conflicts)",
+      "range": {
+        "startLine": 55,
+        "startChar": 9,
+        "endLine": 55,
+        "endChar": 41
+      },
+      "revId": "2faf1db57b8fa74315dbc26cb011d62c0debf4ae",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "5b71a6cb_b5c9f29e",
+        "filename": "src/tests/gl_tests/VulkanPerformanceCounterTest.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 151,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-03-29T02:32:49Z",
+      "side": 1,
+      "message": "No need for a new function, you can call `setExpected..Depth...` and `setExpectedColor...` separately.",
+      "range": {
+        "startLine": 151,
+        "startChar": 9,
+        "endLine": 151,
+        "endChar": 55
+      },
+      "revId": "2faf1db57b8fa74315dbc26cb011d62c0debf4ae",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "397b0718_95bb04d5",
+        "filename": "src/tests/gl_tests/VulkanPerformanceCounterTest.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 189,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-03-29T02:32:49Z",
+      "side": 1,
+      "message": "ditto. Also, it\u0027s harmless to call `compareDepthStencilCountersForInvalidateTest` if stencil is unused.",
+      "range": {
+        "startLine": 189,
+        "startChar": 9,
+        "endLine": 189,
+        "endChar": 51
+      },
+      "revId": "2faf1db57b8fa74315dbc26cb011d62c0debf4ae",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
