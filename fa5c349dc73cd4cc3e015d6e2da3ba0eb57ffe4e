@@ -52,6 +52,24 @@
       "parentUuid": "f7f96a0d_944e828b",
       "revId": "fa5c349dc73cd4cc3e015d6e2da3ba0eb57ffe4e",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "6cc68630_f4c56aa3",
+        "filename": "src/libANGLE/validationES.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 108,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2022-03-29T17:37:34Z",
+      "side": 0,
+      "message": "If we pass the tests, it\u0027s probably better to not special case WebGL here and just remove this format. It will still fail validation, but later with a different error.\n\nJohn, can we do a test run (or have you already?) with this format just removed like it was in patchset 1?",
+      "parentUuid": "62501859_9c93ceac",
+      "revId": "fa5c349dc73cd4cc3e015d6e2da3ba0eb57ffe4e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
