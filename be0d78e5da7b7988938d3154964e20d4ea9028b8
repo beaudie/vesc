@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ef792ef8_0139a3cb",
+        "filename": "src/libANGLE/renderer/vulkan/vk_cache_utils.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 3401,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-03-29T02:23:21Z",
+      "side": 0,
+      "message": "Hurray! Please also remove these:\n\n- gen_load_texture_border_functions_table.py\n- load_texture_border_functions_table_autogen.cpp\n- `struct LoadTextureBorderFunctionInfo`\n- `getTextureBorderLoadFunctions()`",
+      "range": {
+        "startLine": 3401,
+        "startChar": 8,
+        "endLine": 3401,
+        "endChar": 37
+      },
+      "revId": "be0d78e5da7b7988938d3154964e20d4ea9028b8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
