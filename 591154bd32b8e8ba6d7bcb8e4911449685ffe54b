@@ -43,6 +43,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "2c1e4e51_f5b775c3",
+        "filename": "src/libANGLE/renderer/vulkan/TextureVk.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 2442,
+      "author": {
+        "id": 1340649
+      },
+      "writtenOn": "2022-03-29T21:12:16Z",
+      "side": 1,
+      "message": "earlier we would flush staged updates for all levels/layers of the image but now we only flush those levels/layers that have an imageview attached to it so we end up updating only those layers that will be used.",
+      "parentUuid": "39a2c249_d6271a3f",
+      "range": {
+        "startLine": 2442,
+        "startChar": 38,
+        "endLine": 2442,
+        "endChar": 48
+      },
+      "revId": "591154bd32b8e8ba6d7bcb8e4911449685ffe54b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "aae8675a_5adf8053",
         "filename": "src/libANGLE/renderer/vulkan/android/HardwareBufferImageSiblingVkAndroid.cpp",
         "patchSetId": 7
