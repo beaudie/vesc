@@ -231,6 +231,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "fc3bc876_9751656e",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 3901,
+      "author": {
+        "id": 1000050
+      },
+      "writtenOn": "2022-03-29T12:19:14Z",
+      "side": 1,
+      "message": "If I read the code correctly, I think thread A could call `mRenderer-\u003eisDeviceLost()` before thread B calls `mRenderer-\u003enotifyDeviceLost()` from `ContextVk::handleDeviceLost()`. So thread A will think the renderer is not lost, and skip calling `handleDeviceLostNoLock()`.",
+      "parentUuid": "be5040ea_75f12ab2",
+      "range": {
+        "startLine": 3901,
+        "startChar": 9,
+        "endLine": 3901,
+        "endChar": 38
+      },
+      "revId": "140f505bca2294bbb882cdc5f35d2c3bef2694be",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "8560334a_8fef4b44",
         "filename": "src/libANGLE/renderer/vulkan/RendererVk.cpp",
         "patchSetId": 2
