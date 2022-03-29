@@ -68,6 +68,24 @@
       "parentUuid": "a753b9a4_a3e41bd8",
       "revId": "f420c01a09a3e015042ca9b0e21705884ccf611d",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "8830c122_39a540bc",
+        "filename": "BUILD.gn",
+        "patchSetId": 1
+      },
+      "lineNbr": 25,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-03-29T18:01:52Z",
+      "side": 1,
+      "message": "Ack. In that case, we should probably rename this to say `angle_use_libpci`.",
+      "parentUuid": "45661e16_9e10ba42",
+      "revId": "f420c01a09a3e015042ca9b0e21705884ccf611d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
