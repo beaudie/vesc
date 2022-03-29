@@ -16,6 +16,23 @@
       "message": "Will land after vulkan-deps rolls",
       "revId": "d3f03ec8c69c758b6015766dafee7afbd4bec892",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "30573aae_7f4f035e",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1001921
+      },
+      "writtenOn": "2022-03-29T20:38:18Z",
+      "side": 1,
+      "message": "https://chromium-review.googlesource.com/c/angle/angle/+/3558473 rolled, so this should be good to go.",
+      "revId": "d3f03ec8c69c758b6015766dafee7afbd4bec892",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
