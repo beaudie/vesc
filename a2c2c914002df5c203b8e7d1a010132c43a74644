@@ -22,6 +22,30 @@
       },
       "revId": "a2c2c914002df5c203b8e7d1a010132c43a74644",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "876c3be8_080ae115",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 1130,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-03-29T01:54:35Z",
+      "side": 1,
+      "message": "There\u0027s a comment about why that\u0027s not done:\n\n```\n    // Tracks the highest access during the entire render pass (Write being the highest), excluding\n    // clear through loadOp.  This allows loadOp\u003dClear to be optimized out when we find out that the\n    // attachment is not used in the render pass at all and storeOp\u003dDontCare, or that a\n    // mid-render-pass clear could be hoisted to loadOp\u003dClear.\n```",
+      "parentUuid": "9b559256_cd18e8b5",
+      "range": {
+        "startLine": 1130,
+        "startChar": 48,
+        "endLine": 1130,
+        "endChar": 86
+      },
+      "revId": "a2c2c914002df5c203b8e7d1a010132c43a74644",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
