@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "416eb2b1_b18bc544",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1491687
+      },
+      "writtenOn": "2022-03-29T10:51:20Z",
+      "side": 1,
+      "message": "I squashed the other commit as it would introduce an undesired state between both commits where GLCopyImageSubData calls are not tracked as texture updates.",
+      "revId": "834bc627120316adf1c05bf668324f6ae20ea56d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
