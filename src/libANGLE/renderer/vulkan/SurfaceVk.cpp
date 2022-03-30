@@ -671,6 +671,12 @@ EGLint OffscreenSurfaceVk::origin() const
     return EGL_UPPER_LEFT_KHR;
 }
 
+FramebufferSurfaceVk::FramebufferSurfaceVk(const egl::SurfaceState &surfaceState)
+    : SurfaceVk(surfaceState)
+{}
+
+FramebufferSurfaceVk::~FramebufferSurfaceVk() = default;
+
 namespace impl
 {
 SwapchainCleanupData::SwapchainCleanupData() = default;
@@ -735,7 +741,7 @@ SwapchainImage::SwapchainImage(SwapchainImage &&other)
 using namespace impl;
 
 WindowSurfaceVk::WindowSurfaceVk(const egl::SurfaceState &surfaceState, EGLNativeWindowType window)
-    : SurfaceVk(surfaceState),
+    : FramebufferSurfaceVk(surfaceState),
       mNativeWindowType(window),
       mSurface(VK_NULL_HANDLE),
       mSupportsProtectedSwapchain(false),
