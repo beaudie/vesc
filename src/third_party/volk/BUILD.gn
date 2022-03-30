@@ -2,6 +2,7 @@
 # Use of this source code is governed by a BSD-style license that can be
 # found in the LICENSE file.
 
+import("//build_overrides/vulkan_headers.gni")
 import("../../../gni/angle.gni")
 
 config("volk_config") {
@@ -18,5 +19,8 @@ source_set("volk") {
   public_deps = [ "$angle_vulkan_headers_dir:vulkan_headers" ]
   if (angle_use_wayland) {
     include_dirs = [ "$angle_wayland_dir/src" ]
+    if (defined(vulkan_wayland_include_dirs)) {
+      include_dirs += vulkan_wayland_include_dirs
+    }
   }
 }

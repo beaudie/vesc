@@ -3,6 +3,9 @@
 # found in the LICENSE file.
 
 import("../gni/angle.gni")
+if (angle_enable_vulkan) {
+  import("//build_overrides//vulkan_headers.gni")
+}
 
 _util_sources = [
   "EGLPlatformParameters.h",
@@ -198,6 +201,11 @@ foreach(is_shared_library,
       ":angle_test_utils",
       ":angle_util_loader_headers",
     ]
+
+    if (angle_use_wayland && defined(vulkan_wayland_include_dirs)) {
+      include_dirs = vulkan_wayland_include_dirs
+    }
+
     libs = []
 
     if (is_linux || is_chromeos) {
