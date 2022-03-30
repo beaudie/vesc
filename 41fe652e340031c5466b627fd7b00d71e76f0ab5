@@ -96,6 +96,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "22ae56f2_a4e38a9b",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2022-03-30T17:05:50Z",
+      "side": 1,
+      "message": "Right, some details are there. What\u0027s missing is a description of what the specific bug is.",
+      "parentUuid": "2958600b_d0c0bf6d",
+      "range": {
+        "startLine": 7,
+        "startChar": 0,
+        "endLine": 7,
+        "endChar": 49
+      },
+      "revId": "41fe652e340031c5466b627fd7b00d71e76f0ab5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "70c17302_010ae156",
