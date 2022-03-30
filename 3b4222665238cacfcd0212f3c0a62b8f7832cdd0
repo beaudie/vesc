@@ -52,6 +52,24 @@
       "parentUuid": "a9e2a65d_561e94d6",
       "revId": "3b4222665238cacfcd0212f3c0a62b8f7832cdd0",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "a0dd0cb1_03f763e8",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2022-03-30T17:56:56Z",
+      "side": 1,
+      "message": "Weird, they disappeared. Maybe because of flaky retries, they went away. There does seem to be at least one Vulkan failure though in end2end_tests. Any fix needed here?",
+      "parentUuid": "a9e2a65d_561e94d6",
+      "revId": "3b4222665238cacfcd0212f3c0a62b8f7832cdd0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
