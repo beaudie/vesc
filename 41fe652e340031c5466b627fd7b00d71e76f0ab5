@@ -72,6 +72,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "2958600b_d0c0bf6d",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-03-30T16:16:29Z",
+      "side": 1,
+      "message": "The details are there in the commit message (not itemized like that, but similar contents).",
+      "parentUuid": "3cf9fde9_217b887a",
+      "range": {
+        "startLine": 7,
+        "startChar": 0,
+        "endLine": 7,
+        "endChar": 49
+      },
+      "revId": "41fe652e340031c5466b627fd7b00d71e76f0ab5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "70c17302_010ae156",
@@ -126,6 +150,30 @@
       "side": 1,
       "message": "Makes sense, will do soon.",
       "parentUuid": "d17b2070_993798a4",
+      "range": {
+        "startLine": 2321,
+        "startChar": 8,
+        "endLine": 2321,
+        "endChar": 49
+      },
+      "revId": "41fe652e340031c5466b627fd7b00d71e76f0ab5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "2107e651_b4ab697b",
+        "filename": "src/libANGLE/renderer/vulkan/TextureVk.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 2321,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-03-30T16:16:29Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "6254b657_561fc35b",
       "range": {
         "startLine": 2321,
         "startChar": 8,
