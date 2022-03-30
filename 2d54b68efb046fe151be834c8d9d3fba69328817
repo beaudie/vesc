@@ -22,6 +22,30 @@
       },
       "revId": "2d54b68efb046fe151be834c8d9d3fba69328817",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "ad15766d_22c5a2e8",
+        "filename": "src/compiler/translator/OutputSPIRV.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 2071,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-03-30T17:29:19Z",
+      "side": 0,
+      "message": "No, that was something else that was fixed long ago. The comment was stale.",
+      "parentUuid": "216d9518_f6509335",
+      "range": {
+        "startLine": 2071,
+        "startChar": 0,
+        "endLine": 2071,
+        "endChar": 92
+      },
+      "revId": "2d54b68efb046fe151be834c8d9d3fba69328817",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }

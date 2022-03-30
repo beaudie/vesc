@@ -24,6 +24,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "4e73346c_9aba341f",
+        "filename": "src/compiler/translator/OutputSPIRV.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 2036,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-03-30T17:29:19Z",
+      "side": 1,
+      "message": "Good point, updated the comment.",
+      "parentUuid": "fe4babe2_96b40da5",
+      "range": {
+        "startLine": 2034,
+        "startChar": 24,
+        "endLine": 2036,
+        "endChar": 69
+      },
+      "revId": "965d9a6f6e27b8b6c1f6d0aff1cef43e9ac8b347",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "53db00b2_3ba99059",
@@ -37,6 +61,30 @@
       "writtenOn": "2022-03-30T16:12:36Z",
       "side": 1,
       "message": "Consider adding a test that aliases against a global as well. e.g.:\n\n  int x \u003d 1;\n  bool outParamsDoNotAliasGlobal(out int y) {\n    y \u003d 2;\n    return x \u003d\u003d 1;  // x should not have changed yet\n  }\n  void main() {\n    gl_FragColor \u003d outParamsDoNotAliasGlobal(x) ? colorGreen : colorRed;\n  }",
+      "range": {
+        "startLine": 15237,
+        "startChar": 0,
+        "endLine": 15237,
+        "endChar": 1
+      },
+      "revId": "965d9a6f6e27b8b6c1f6d0aff1cef43e9ac8b347",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "45b3f0d6_0fa06198",
+        "filename": "src/tests/gl_tests/GLSLTest.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 15237,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-03-30T17:29:19Z",
+      "side": 1,
+      "message": "Done, good idea.",
+      "parentUuid": "53db00b2_3ba99059",
       "range": {
         "startLine": 15237,
         "startChar": 0,
