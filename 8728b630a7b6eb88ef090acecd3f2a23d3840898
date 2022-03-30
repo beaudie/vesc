@@ -33,6 +33,23 @@
       "message": "Sorry, can you clarify how you\u0027re fixing the Chrome roll?",
       "revId": "8728b630a7b6eb88ef090acecd3f2a23d3840898",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "ddda0111_89df4f86",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2022-03-30T19:14:15Z",
+      "side": 1,
+      "message": "LGTM if you can clarify at least in the commit message what the expected roll behaviour is.",
+      "revId": "8728b630a7b6eb88ef090acecd3f2a23d3840898",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
