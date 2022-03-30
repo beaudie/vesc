@@ -355,6 +355,30 @@
       },
       "revId": "434550359d1bf2a86ea841fdc2c4d621423dfa35",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "af43ab64_5544ee76",
+        "filename": "src/tests/deqp_support/deqp_gles31_test_expectations.txt",
+        "patchSetId": 4
+      },
+      "lineNbr": 160,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2022-03-30T19:13:12Z",
+      "side": 1,
+      "message": "Definitely if it\u0027s a SwS bug we can land CLs. Are you saying you think this is a SwiftShader bug? The problem is that SwiftShader passes an independent set of conformance tests. In our experience, it\u0027s usually the case that these failures are ANGLE bugs, and when they\u0027re not, it means there was a gap in the CTS. In any case, we\u0027d need to clarify that we\u0027re not introducing new feature bugs or turning off features by landing CLs. Is it possible your CL introduces a bug that is only visible on non-AMD platforms?",
+      "parentUuid": "76bb47e6_81b05a83",
+      "range": {
+        "startLine": 160,
+        "startChar": 0,
+        "endLine": 160,
+        "endChar": 4
+      },
+      "revId": "434550359d1bf2a86ea841fdc2c4d621423dfa35",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
