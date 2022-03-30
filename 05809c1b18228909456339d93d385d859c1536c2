@@ -1,6 +1,29 @@
 {
   "comments": [
     {
+      "unresolved": true,
+      "key": {
+        "uuid": "fcd7cb89_ce42e22d",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 9,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2022-03-30T17:25:49Z",
+      "side": 1,
+      "message": "6947",
+      "range": {
+        "startLine": 9,
+        "startChar": 18,
+        "endLine": 9,
+        "endChar": 22
+      },
+      "revId": "05809c1b18228909456339d93d385d859c1536c2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": false,
       "key": {
         "uuid": "a7fa9225_4b01d09a",
@@ -14,6 +37,23 @@
       "writtenOn": "2022-03-30T17:25:17Z",
       "side": 1,
       "message": "Huzzah!",
+      "revId": "05809c1b18228909456339d93d385d859c1536c2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "874d2156_1f2d0161",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2022-03-30T17:25:49Z",
+      "side": 1,
+      "message": "one comment.",
       "revId": "05809c1b18228909456339d93d385d859c1536c2",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
