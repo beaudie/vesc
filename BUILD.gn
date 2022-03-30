@@ -4,6 +4,10 @@
 
 # import the ozone_platform_x11 variable
 import("gni/angle.gni")
+if (angle_enable_vulkan) {
+  import("//build_overrides//vulkan_headers.gni")
+}
+
 if (angle_has_build) {
   import("//build/config/linux/pkg_config.gni")
   import("//build/config/sanitizers/sanitizers.gni")
@@ -439,6 +443,13 @@ config("angle_gl_visibility_config") {
   }
 }
 
+config("angle_vulkan_wayland_config") {
+  if (angle_enable_vulkan && angle_use_wayland &&
+      defined(vulkan_wayland_include_dirs)) {
+    include_dirs = vulkan_wayland_include_dirs
+  }
+}
+
 config("angle_gpu_info_util_config") {
   include_dirs = [
     "include",
@@ -450,6 +461,7 @@ angle_static_library("angle_gpu_info_util") {
   public_configs += [
     ":angle_gpu_info_util_config",
     ":angle_backend_config",
+    ":angle_vulkan_wayland_config",
   ]
   public_deps = [ ":angle_common" ]
   sources = libangle_gpu_info_util_sources

@@ -250,7 +250,10 @@ angle_source_set("angle_vk_mem_alloc_wrapper") {
     "$angle_root/src/common/vulkan:angle_vulkan_headers",
     "$angle_vulkan_memory_allocator_dir",
   ]
-  configs += [ "$angle_root:angle_no_cfi_unrelated_cast" ]
+  configs += [
+    "$angle_root:angle_no_cfi_unrelated_cast",
+    "$angle_root:angle_vulkan_wayland_config",
+  ]
   sources = [
     "vk_mem_alloc_wrapper.cpp",
     "vk_mem_alloc_wrapper.h",
