@@ -1203,6 +1203,21 @@ TracePerfTest::TracePerfTest(const TracePerfParams &params)
         addExtensionPrerequisite("GL_KHR_texture_compression_astc_ldr");
     }
 
+    if (traceNameIs("car_chase"))
+    {
+        // TODO: http://anglebug.com/7173 Fails on older Intel SKU
+        if (IsWindows() && IsIntelHD630Mobile())
+        {
+            mSkipTest = true;
+        }
+
+        addExtensionPrerequisite("GL_EXT_geometry_shader");
+        addExtensionPrerequisite("GL_EXT_primitive_bounding_box");
+        addExtensionPrerequisite("GL_EXT_tessellation_shader");
+        addExtensionPrerequisite("GL_KHR_texture_compression_astc_ldr");
+        addExtensionPrerequisite("GL_EXT_texture_cube_map_array");
+    }
+
     ASSERT(mParams.surfaceType == SurfaceType::Window || gEnableAllTraceTests);
     ASSERT(mParams.eglParameters.deviceType == EGL_PLATFORM_ANGLE_DEVICE_TYPE_HARDWARE_ANGLE ||
            gEnableAllTraceTests);
