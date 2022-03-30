@@ -106,6 +106,24 @@
       "parentUuid": "a0dd0cb1_03f763e8",
       "revId": "3b4222665238cacfcd0212f3c0a62b8f7832cdd0",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "49f08e17_06ab228c",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2022-03-30T18:02:45Z",
+      "side": 1,
+      "message": "To clarify, when I said \"they went away\", I was referring to the untriaged golden images with rendering errors.",
+      "parentUuid": "abdeeee0_e605a2fe",
+      "revId": "3b4222665238cacfcd0212f3c0a62b8f7832cdd0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
