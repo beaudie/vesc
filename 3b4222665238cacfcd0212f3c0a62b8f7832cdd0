@@ -124,6 +124,24 @@
       "parentUuid": "abdeeee0_e605a2fe",
       "revId": "3b4222665238cacfcd0212f3c0a62b8f7832cdd0",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "aafcec75_a934283e",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-03-30T18:04:48Z",
+      "side": 1,
+      "message": "Ok maybe you\u0027re thinking of https://chromium-review.googlesource.com/c/angle/angle/+/3561280? There were GOLD failures there; two new images (because I guess the trace didn\u0027t run on SwS before) and one with 1-bit-diff pixels. They went away because I accepted the images.",
+      "parentUuid": "49f08e17_06ab228c",
+      "revId": "3b4222665238cacfcd0212f3c0a62b8f7832cdd0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
