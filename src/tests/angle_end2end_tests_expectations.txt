@@ -548,3 +548,7 @@
 7029 NVIDIA GLES : GLSLTest.SwizzledChainedAssignIncrement/* = SKIP
 
 7085 : VulkanPerformanceCounterTest.DepthStencilInvalidateDrawDisable/* = SKIP
+
+// Produces VkImageMemoryBarrier VVL error
+7139 VULKAN : FramebufferTest_ES3.ShadowSamplerChange/* = SKIP
+7139 NVIDIA WIN GLES : FramebufferTest_ES3.ShadowSamplerChange/* = SKIP

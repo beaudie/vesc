@@ -194,3 +194,5 @@
 5366 : ProgramPipelineTest32.MaxGeometryImageUniforms/* = CRASH
 
 7088 : VulkanPerformanceCounterTest* = SKIP_FOR_CAPTURE
+
+7139 : FramebufferTest_ES3.ShadowSamplerChange/* = SKIP_FOR_CAPTURE
