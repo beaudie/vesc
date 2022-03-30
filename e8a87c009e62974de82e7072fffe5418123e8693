@@ -20,6 +20,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "aece481f_372238af",
+        "filename": "src/compiler/translator/OutputHLSL.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 376,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2022-03-30T17:24:03Z",
+      "side": 1,
+      "message": "D3D can support multiple render target outputs. Can you add a test with these storage images and MRT? VS/FS can also have storage buffers, I don\u0027t know if this conflicts.",
+      "parentUuid": "36dd6be1_6410ceac",
+      "revId": "e8a87c009e62974de82e7072fffe5418123e8693",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "9344d156_bff04562",
         "filename": "src/libANGLE/renderer/d3d/DynamicImage2DHLSL.cpp",
         "patchSetId": 4
@@ -31,6 +49,24 @@
       "writtenOn": "2022-03-25T15:24:31Z",
       "side": 1,
       "message": "We need to use the passed-in shader, since the pixel shader may have already been modified at link time for dynamic output layouts.\n\nQuestion: is it ok that we\u0027re still referring to the rest of the pixel shaderD3D and shaderGL object above to get register assignments, etc? Are those still correct after the dynamic output layout transformation?",
+      "revId": "e8a87c009e62974de82e7072fffe5418123e8693",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "6d7d2a0a_f928976a",
+        "filename": "src/libANGLE/renderer/d3d/DynamicImage2DHLSL.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 914,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2022-03-30T17:24:03Z",
+      "side": 1,
+      "message": "I don\u0027t recall the details. Hopefully a test with MRT with some storage image rewriting (I believe integer outputs would be one condition?) + storage images would prove it\u0027s correct.",
+      "parentUuid": "9344d156_bff04562",
       "revId": "e8a87c009e62974de82e7072fffe5418123e8693",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
