@@ -321,14 +321,14 @@ FramebufferVk *FramebufferVk::CreateUserFBO(RendererVk *renderer, const gl::Fram
 // static
 FramebufferVk *FramebufferVk::CreateDefaultFBO(RendererVk *renderer,
                                                const gl::FramebufferState &state,
-                                               WindowSurfaceVk *backbuffer)
+                                               FramebufferSurfaceVk *backbuffer)
 {
     return new FramebufferVk(renderer, state, backbuffer);
 }
 
 FramebufferVk::FramebufferVk(RendererVk *renderer,
                              const gl::FramebufferState &state,
-                             WindowSurfaceVk *backbuffer)
+                             FramebufferSurfaceVk *backbuffer)
     : FramebufferImpl(state),
       mBackbuffer(backbuffer),
       mFramebuffer(nullptr),
