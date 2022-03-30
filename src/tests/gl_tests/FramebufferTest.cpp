@@ -4495,6 +4495,73 @@ TEST_P(FramebufferTest_ES3, InvalidateClearDraw)
     EXPECT_PIXEL_COLOR_EQ(0, 0, GLColor::magenta);
 }
 
+// Produces VUID-VkImageMemoryBarrier-oldLayout-01197 VVL error with a "Render pass closed due to
+// framebuffer change" command buffer label. As seen in Black Desert Mobile.
+TEST_P(FramebufferTest_ES3, ShadowSamplerChange)
+{
+    {
+        ANGLE_GL_PROGRAM(program, essl3_shaders::vs::Zero(), essl3_shaders::fs::Red());
+        glUseProgram(program);
+
+        glDrawArrays(GL_TRIANGLES, 0, 6);
+
+        ASSERT_GL_NO_ERROR();
+    }
+
+    GLFramebuffer framebuffer;
+    glBindFramebuffer(GL_FRAMEBUFFER, framebuffer);
+
+    GLTexture colorAttachment;
+    glBindTexture(GL_TEXTURE_2D, colorAttachment);
+    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, kWidth, kHeight, 0, GL_RGBA, GL_UNSIGNED_BYTE, nullptr);
+    glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, colorAttachment, 0);
+
+    GLTexture depthAttachment;
+    glBindTexture(GL_TEXTURE_2D, depthAttachment);
+    glTexImage2D(GL_TEXTURE_2D, 0, GL_DEPTH_COMPONENT16, kWidth, kHeight, 0, GL_DEPTH_COMPONENT,
+                 GL_UNSIGNED_SHORT, nullptr);
+    glFramebufferTexture2D(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_TEXTURE_2D, depthAttachment, 0);
+    ASSERT_GL_NO_ERROR();
+
+    {
+        constexpr char kFS[] = R"(#version 300 es
+precision mediump float;
+uniform mediump sampler2DShadow tex2DShadow;
+
+out vec4 fragColor;
+
+void main()
+{
+    fragColor = vec4(1) * textureProj(tex2DShadow, vec4(0));
+})";
+
+        ANGLE_GL_PROGRAM(program, essl3_shaders::vs::Zero(), kFS);
+        glUseProgram(program);
+
+        glDrawArrays(GL_TRIANGLES, 0, 6);
+
+        ASSERT_GL_NO_ERROR();
+    }
+    {
+        constexpr char kVS[] = R"(#version 300 es
+uniform mediump sampler2DShadow tex2DShadow;
+
+out float v_shadow;
+
+void main()
+{
+    v_shadow = textureProj(tex2DShadow, vec4(0));
+})";
+
+        ANGLE_GL_PROGRAM(program, kVS, essl3_shaders::fs::Red());
+        glUseProgram(program);
+
+        glDrawArrays(GL_TRIANGLES, 0, 6);
+
+        ASSERT_GL_NO_ERROR();
+    }
+}
+
 ANGLE_INSTANTIATE_TEST_ES2(AddMockTextureNoRenderTargetTest);
 ANGLE_INSTANTIATE_TEST_ES2(FramebufferTest);
 ANGLE_INSTANTIATE_TEST_ES2_AND_ES3(FramebufferFormatsTest);
