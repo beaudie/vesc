@@ -88,6 +88,24 @@
       "parentUuid": "a0dd0cb1_03f763e8",
       "revId": "3b4222665238cacfcd0212f3c0a62b8f7832cdd0",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "abdeeee0_e605a2fe",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-03-30T17:59:13Z",
+      "side": 1,
+      "message": "Nope, the Android one is failing GLES. It\u0027s only AMD/Windows that\u0027s failing Vulkan, and that\u0027s an ancient driver on an ancient hardware. I see the following diff between what ANGLE produces and what glslang produces (- is ANGLE, + is glslang), and it looks like the (ancient) AMD driver is miscompiling it:\n\n```\n          %22 \u003d OpLabel\n                OpStore %21 %23\n          %24 \u003d OpLoad %3 %6\n          %25 \u003d OpFOrdEqual %17 %24 %4\n+               OpSelectionMerge %105 None\n+               OpBranchConditional %25 %104 %105\n+        %104 \u003d OpLabel\n          %26 \u003d OpLoad %3 %21\n          %27 \u003d OpFOrdEqual %17 %26 %23\n-         %28 \u003d OpLogicalAnd %17 %25 %27\n+               OpBranch %105\n+        %105 \u003d OpLabel\n+        %106 \u003d OpPhi %17 %25 %22 %27 %104\n-               OpReturnValue %28\n+               OpReturnValue %106\n```",
+      "parentUuid": "a0dd0cb1_03f763e8",
+      "revId": "3b4222665238cacfcd0212f3c0a62b8f7832cdd0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
