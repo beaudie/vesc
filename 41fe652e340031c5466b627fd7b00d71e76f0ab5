@@ -3,6 +3,29 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "c7b54973_c5be2cf5",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2022-03-30T14:54:20Z",
+      "side": 1,
+      "message": "nit: sounds like you\u0027re just doing a refactor. you\u0027re also fixing something - what are you fixing?",
+      "range": {
+        "startLine": 7,
+        "startChar": 0,
+        "endLine": 7,
+        "endChar": 49
+      },
+      "revId": "41fe652e340031c5466b627fd7b00d71e76f0ab5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "70c17302_010ae156",
         "filename": "/PATCHSET_LEVEL",
         "patchSetId": 1
@@ -14,6 +37,29 @@
       "writtenOn": "2022-03-30T14:50:30Z",
       "side": 1,
       "message": "I can\u0027t explain the intel/windows trace. It\u0027s not reproducible on newer driver apparently (from Cody\u0027s testing). I verified locally that the three new reasons for the image respecify (usage flags different, create flags different, image reallocated due to sampler state) are not hit in this trace.\n\nOpen to ideas.",
+      "revId": "41fe652e340031c5466b627fd7b00d71e76f0ab5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "d17b2070_993798a4",
+        "filename": "src/libANGLE/renderer/vulkan/TextureVk.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 2321,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2022-03-30T14:54:20Z",
+      "side": 1,
+      "message": "nit: probably don\u0027t use the term \u0027syncState\u0027 and don\u0027t use dirty bits, those are strictly in correlation with the syncState function. Can you pass this information along some other way? +1 to Code-Review conditional on those changes.",
+      "range": {
+        "startLine": 2321,
+        "startChar": 8,
+        "endLine": 2321,
+        "endChar": 49
+      },
       "revId": "41fe652e340031c5466b627fd7b00d71e76f0ab5",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
