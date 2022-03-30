@@ -397,6 +397,30 @@
       },
       "revId": "434550359d1bf2a86ea841fdc2c4d621423dfa35",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "d3687095_5f23b9a2",
+        "filename": "src/tests/deqp_support/deqp_gles31_test_expectations.txt",
+        "patchSetId": 4
+      },
+      "lineNbr": 160,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2022-03-30T20:42:08Z",
+      "side": 1,
+      "message": "Shabi stepped up and found that there\u0027s something specific with shadow samplers that could be a bug in SwS. I\u0027d still recommend we leave this feature off on SwS for now - Shabi said he can file a bug for investigation there tomorrow. It very well could be a gap in CTS with shadow samplers and depth formats. Thanks for your patience Mohan.",
+      "parentUuid": "af43ab64_5544ee76",
+      "range": {
+        "startLine": 160,
+        "startChar": 0,
+        "endLine": 160,
+        "endChar": 4
+      },
+      "revId": "434550359d1bf2a86ea841fdc2c4d621423dfa35",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
