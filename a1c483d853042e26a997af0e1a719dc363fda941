@@ -1,0 +1,44 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "97c4b522_710b0356",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 5
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2022-03-30T12:56:32Z",
+      "side": 1,
+      "message": "Some redness in the bots.",
+      "revId": "a1c483d853042e26a997af0e1a719dc363fda941",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "413d7818_7138cd88",
+        "filename": "src/compiler/translator/ParseContext.h",
+        "patchSetId": 5
+      },
+      "lineNbr": 742,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2022-03-30T12:56:32Z",
+      "side": 1,
+      "message": "does it make sense to use separate variables for these? should we merge them into mDeferredArrayTypesToSize?",
+      "range": {
+        "startLine": 741,
+        "startChar": 0,
+        "endLine": 742,
+        "endChar": 55
+      },
+      "revId": "a1c483d853042e26a997af0e1a719dc363fda941",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
