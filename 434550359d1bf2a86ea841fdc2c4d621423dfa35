@@ -168,6 +168,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "d7b448f7_bb1035e1",
+        "filename": "src/libANGLE/renderer/vulkan/vk_cache_utils.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 1462,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-03-30T20:26:05Z",
+      "side": 1,
+      "message": "Ok. I\u0027m not sure where you got this from: \"Since both depth and stencil need to set the red channel as the border color\", because depth/stencil probably uses the red and green channels, but I think the real point here is that stencil doesn\u0027t actually need clamping (it\u0027s an int, and besides it invariably has 8 bits anyway).\n\nSo you should be able to get away with just this:\n\n```\n    // Handle depth\n    if (format.hasDepthOrStencilBits())\n    {\n        if (format.depthBits \u003e 0)\n        {\n            // D or D/S formats\n            if (format.isUnorm())\n            {\n                adjustedBorderColor.colorF.red \u003d gl::clamp01(borderColorGeneric.colorF.red);\n            }\n        }\n\n        return adjustedBorderColor;\n    }\n```",
+      "parentUuid": "352c09a7_d21b71a0",
+      "revId": "434550359d1bf2a86ea841fdc2c4d621423dfa35",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "1a7132f9_f6b0f645",
         "filename": "src/tests/deqp_support/deqp_gles31_test_expectations.txt",
         "patchSetId": 4
