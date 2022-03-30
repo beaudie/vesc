@@ -283,6 +283,30 @@
       },
       "revId": "434550359d1bf2a86ea841fdc2c4d621423dfa35",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "0595aead_448089d8",
+        "filename": "src/tests/deqp_support/deqp_gles31_test_expectations.txt",
+        "patchSetId": 4
+      },
+      "lineNbr": 160,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2022-03-30T17:52:44Z",
+      "side": 1,
+      "message": "We can\u0027t land this if it breaks other platforms that depend on it. So if you can contribute to the fix, that\u0027ll help us land this. Otherwise we\u0027ll have to prove it won\u0027t affect anything we need. I believe we have run into this situation before. I\u0027m happy to broaden the policy discussion, but I think we should instate a policy that if it\u0027s not a SwS bug, and it\u0027s most likely an ANGLE bug, we shouldn\u0027t land it.",
+      "parentUuid": "bd466085_3e294f17",
+      "range": {
+        "startLine": 160,
+        "startChar": 0,
+        "endLine": 160,
+        "endChar": 4
+      },
+      "revId": "434550359d1bf2a86ea841fdc2c4d621423dfa35",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
