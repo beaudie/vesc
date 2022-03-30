@@ -331,6 +331,30 @@
       },
       "revId": "434550359d1bf2a86ea841fdc2c4d621423dfa35",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "76bb47e6_81b05a83",
+        "filename": "src/tests/deqp_support/deqp_gles31_test_expectations.txt",
+        "patchSetId": 4
+      },
+      "lineNbr": 160,
+      "author": {
+        "id": 1340649
+      },
+      "writtenOn": "2022-03-30T18:17:43Z",
+      "side": 1,
+      "message": "\u003e I think we should instate a policy that if it\u0027s not a SwS bug, and it\u0027s most likely an ANGLE bug, we shouldn\u0027t land it\n\nTBH, this is way too inflexible especially given that SwS can have bugs as well. Bots have multiple vendor implementations and if a CL passes with them that needs to count otherwise ANGLE will end up being stuck with GLES31. i think we need to broaden the policy filter",
+      "parentUuid": "23ee28fc_60da7027",
+      "range": {
+        "startLine": 160,
+        "startChar": 0,
+        "endLine": 160,
+        "endChar": 4
+      },
+      "revId": "434550359d1bf2a86ea841fdc2c4d621423dfa35",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
