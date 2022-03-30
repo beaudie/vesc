@@ -439,11 +439,17 @@ config("angle_gl_visibility_config") {
   }
 }
 
+import("//build_overrides//vulkan_headers.gni")
+
 config("angle_gpu_info_util_config") {
   include_dirs = [
     "include",
     "src",
   ]
+
+  if (angle_use_wayland && defined(vulkan_wayland_include_dirs)) {
+    include_dirs += vulkan_wayland_include_dirs
+  }
 }
 
 angle_static_library("angle_gpu_info_util") {

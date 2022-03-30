@@ -2,6 +2,7 @@
 # Use of this source code is governed by a BSD-style license that can be
 # found in the LICENSE file.
 
+import("//build_overrides/vulkan_headers.gni")
 import("../gni/angle.gni")
 
 _util_sources = [
@@ -198,6 +199,11 @@ foreach(is_shared_library,
       ":angle_test_utils",
       ":angle_util_loader_headers",
     ]
+
+    if (angle_use_wayland && defined(vulkan_wayland_include_dirs)) {
+      include_dirs = vulkan_wayland_include_dirs
+    }
+
     libs = []
 
     if (is_linux || is_chromeos) {

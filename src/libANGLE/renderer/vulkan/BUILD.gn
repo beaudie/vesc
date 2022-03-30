@@ -6,6 +6,7 @@
 
 import("//build/config/dcheck_always_on.gni")
 import("//build_overrides/swiftshader.gni")
+import("//build_overrides/vulkan_headers.gni")
 import("../../../../gni/angle.gni")
 
 assert(angle_enable_vulkan)
@@ -262,6 +263,10 @@ angle_source_set("angle_vk_mem_alloc_wrapper") {
       "-Wno-suggest-destructor-override",
       "-Wno-suggest-override",
     ]
+  }
+
+  if (angle_use_wayland && defined(vulkan_wayland_include_dirs)) {
+    include_dirs = vulkan_wayland_include_dirs
   }
 }
 
