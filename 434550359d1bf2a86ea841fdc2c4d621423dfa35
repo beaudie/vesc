@@ -307,6 +307,30 @@
       },
       "revId": "434550359d1bf2a86ea841fdc2c4d621423dfa35",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "23ee28fc_60da7027",
+        "filename": "src/tests/deqp_support/deqp_gles31_test_expectations.txt",
+        "patchSetId": 4
+      },
+      "lineNbr": 160,
+      "author": {
+        "id": 1340649
+      },
+      "writtenOn": "2022-03-30T18:12:02Z",
+      "side": 1,
+      "message": "\u003e We can\u0027t land this if it breaks other platforms that depend on it\n\ni can leave border color extension disabled for SwS, if that is what is the issue. this aint breaking any other platform, can you elaborate on what you mean by this?\n\n\u003e Otherwise we\u0027ll have to prove it won\u0027t affect anything we need\n\nThe tests pass on an off-the-shelf AMD vulkan driver while it fails without this CL. I am not sure what you are asking here",
+      "parentUuid": "0595aead_448089d8",
+      "range": {
+        "startLine": 160,
+        "startChar": 0,
+        "endLine": 160,
+        "endChar": 4
+      },
+      "revId": "434550359d1bf2a86ea841fdc2c4d621423dfa35",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
