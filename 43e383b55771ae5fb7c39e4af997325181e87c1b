@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "f77984a5_da28a0fc",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1491687
+      },
+      "writtenOn": "2022-03-30T13:58:20Z",
+      "side": 1,
+      "message": "\u003e Patch Set 3: Code-Review+2\n\u003e \n\u003e The vote Code-Review+2 is ignored as code-owner approval since the label doesn\u0027t allow self approval of the patch set uploader.\n\u003e \n\nOops",
+      "revId": "43e383b55771ae5fb7c39e4af997325181e87c1b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
