@@ -184,6 +184,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "7c58bc58_972aaa53",
+        "filename": "src/libANGLE/renderer/vulkan/vk_cache_utils.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 1462,
+      "author": {
+        "id": 1340649
+      },
+      "writtenOn": "2022-03-30T21:22:14Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "d7b448f7_bb1035e1",
+      "revId": "434550359d1bf2a86ea841fdc2c4d621423dfa35",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "1a7132f9_f6b0f645",
@@ -413,6 +431,30 @@
       "side": 1,
       "message": "Shabi stepped up and found that there\u0027s something specific with shadow samplers that could be a bug in SwS. I\u0027d still recommend we leave this feature off on SwS for now - Shabi said he can file a bug for investigation there tomorrow. It very well could be a gap in CTS with shadow samplers and depth formats. Thanks for your patience Mohan.",
       "parentUuid": "af43ab64_5544ee76",
+      "range": {
+        "startLine": 160,
+        "startChar": 0,
+        "endLine": 160,
+        "endChar": 4
+      },
+      "revId": "434550359d1bf2a86ea841fdc2c4d621423dfa35",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "6a09a4ab_5d5ba703",
+        "filename": "src/tests/deqp_support/deqp_gles31_test_expectations.txt",
+        "patchSetId": 4
+      },
+      "lineNbr": 160,
+      "author": {
+        "id": 1340649
+      },
+      "writtenOn": "2022-03-30T21:22:14Z",
+      "side": 1,
+      "message": "disabled on SwS. should now be ready to land. thanks jamie, shabi",
+      "parentUuid": "d3687095_5f23b9a2",
       "range": {
         "startLine": 160,
         "startChar": 0,
