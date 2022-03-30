@@ -16,6 +16,75 @@
       "message": "\u003e Patch Set 3: Code-Review+2\n\u003e \n\u003e The vote Code-Review+2 is ignored as code-owner approval since the label doesn\u0027t allow self approval of the patch set uploader.\n\u003e \n\nOops",
       "revId": "43e383b55771ae5fb7c39e4af997325181e87c1b",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "0e1c9490_08d1837f",
+        "filename": "src/tests/angle_end2end_tests_expectations.txt",
+        "patchSetId": 3
+      },
+      "lineNbr": 554,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2022-03-30T14:50:55Z",
+      "side": 1,
+      "message": "probably file a separate bug for this.",
+      "range": {
+        "startLine": 554,
+        "startChar": 0,
+        "endLine": 554,
+        "endChar": 5
+      },
+      "revId": "43e383b55771ae5fb7c39e4af997325181e87c1b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b63136f7_2530ac75",
+        "filename": "src/tests/capture_replay_tests/capture_replay_expectations.txt",
+        "patchSetId": 3
+      },
+      "lineNbr": 198,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2022-03-30T14:50:55Z",
+      "side": 1,
+      "message": "still a win-trace bot failure?",
+      "range": {
+        "startLine": 198,
+        "startChar": 27,
+        "endLine": 198,
+        "endChar": 46
+      },
+      "revId": "43e383b55771ae5fb7c39e4af997325181e87c1b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "43ec4aaf_363d8920",
+        "filename": "src/tests/gl_tests/FramebufferTest.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 4498,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2022-03-30T14:50:55Z",
+      "side": 1,
+      "message": "maybe a couple comments as to what the test is setting up and triggering?",
+      "range": {
+        "startLine": 4498,
+        "startChar": 12,
+        "endLine": 4498,
+        "endChar": 16
+      },
+      "revId": "43e383b55771ae5fb7c39e4af997325181e87c1b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
