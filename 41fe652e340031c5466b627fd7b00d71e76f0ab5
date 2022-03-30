@@ -24,6 +24,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "8e59adc2_5422ae10",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-03-30T15:07:19Z",
+      "side": 1,
+      "message": "In TextureVk::syncState we respecify the image on many conditions:\n\n- base/max change\n- usage/create flag change\n- redefined-levels\n- generate mipmap adding levels\n- sampler state adding levels\n- used as attachment (so format needs to be made renderable)\n\nIn TextureVk::getAttachmentRenderTarget, we slowly added some of these as bugs were found:\n\n- base/max change\n- redefined-levels\n- used as attachment (so format needs to be made renderable)\n\nThe bug that prompted this fix was the missing \"usage/create flag change\".\n\nThis change is not just refactoring things, it\u0027s making both codes use the same logic, so anything in TextureVk::syncState that can respecify the image, it could also do so in TextureVk::getAttachmentRenderTarget. Generate mipmap doesn\u0027t make sense, which is naturally ignored by TextureVk::getAttachmentRenderTarget using gl::Command::Draw.",
+      "parentUuid": "c7b54973_c5be2cf5",
+      "range": {
+        "startLine": 7,
+        "startChar": 0,
+        "endLine": 7,
+        "endChar": 49
+      },
+      "revId": "41fe652e340031c5466b627fd7b00d71e76f0ab5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "70c17302_010ae156",
@@ -54,6 +78,30 @@
       "writtenOn": "2022-03-30T14:54:20Z",
       "side": 1,
       "message": "nit: probably don\u0027t use the term \u0027syncState\u0027 and don\u0027t use dirty bits, those are strictly in correlation with the syncState function. Can you pass this information along some other way? +1 to Code-Review conditional on those changes.",
+      "range": {
+        "startLine": 2321,
+        "startChar": 8,
+        "endLine": 2321,
+        "endChar": 49
+      },
+      "revId": "41fe652e340031c5466b627fd7b00d71e76f0ab5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "6254b657_561fc35b",
+        "filename": "src/libANGLE/renderer/vulkan/TextureVk.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 2321,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-03-30T15:07:19Z",
+      "side": 1,
+      "message": "Makes sense, will do soon.",
+      "parentUuid": "d17b2070_993798a4",
       "range": {
         "startLine": 2321,
         "startChar": 8,
