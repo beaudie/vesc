@@ -132,6 +132,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "8b4951df_090aa6d1",
+        "filename": "src/libANGLE/renderer/vulkan/vk_cache_utils.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 1462,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-03-30T03:51:11Z",
+      "side": 1,
+      "message": "I mean, in line 1466 stencil is clamped for stencil-only formats. In line 1474 depth is clamped for depth and depth+stencil formats.  If stencil should be clamped for stencil-only formats, don\u0027t you think it should also be clamped for depth+stencil formats by analogy?",
+      "parentUuid": "dacaac3b_37d04dfd",
+      "revId": "434550359d1bf2a86ea841fdc2c4d621423dfa35",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "1a7132f9_f6b0f645",
         "filename": "src/tests/deqp_support/deqp_gles31_test_expectations.txt",
         "patchSetId": 4
@@ -167,6 +185,30 @@
       "side": 1,
       "message": "by `Inconsistent` i tried to imply that SwS \"results\" are inconsistent with those from AMD. I have not looked into why it is failing on SwS other that the pixel comparisons fail.\n\nhappy to reword the comment if needed",
       "parentUuid": "1a7132f9_f6b0f645",
+      "range": {
+        "startLine": 160,
+        "startChar": 0,
+        "endLine": 160,
+        "endChar": 4
+      },
+      "revId": "434550359d1bf2a86ea841fdc2c4d621423dfa35",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "b773fa46_becabd1b",
+        "filename": "src/tests/deqp_support/deqp_gles31_test_expectations.txt",
+        "patchSetId": 4
+      },
+      "lineNbr": 160,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-03-30T03:51:11Z",
+      "side": 1,
+      "message": "Ack. This is fine IMO, we can look into it later for SwiftShader.",
+      "parentUuid": "833dedc9_9a69d67c",
       "range": {
         "startLine": 160,
         "startChar": 0,
