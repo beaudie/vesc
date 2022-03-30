@@ -16,6 +16,23 @@
       "message": "FYI, I\u0027m checking to see how Chromium likes this. Hopefully I don\u0027t need a rebaseline :-S\n\nhttps://chromium-review.googlesource.com/c/chromium/src/+/3561459",
       "revId": "8728b630a7b6eb88ef090acecd3f2a23d3840898",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "07d5601e_7c77c167",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2022-03-30T19:13:42Z",
+      "side": 1,
+      "message": "Sorry, can you clarify how you\u0027re fixing the Chrome roll?",
+      "revId": "8728b630a7b6eb88ef090acecd3f2a23d3840898",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
