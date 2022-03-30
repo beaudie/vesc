@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "65478064_e23b0a48",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 6
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2022-03-30T00:45:16Z",
+      "side": 1,
+      "message": "lgtm +2\n\n+geofflang, jonahr as FYI\n",
+      "revId": "bfdffa967a91f2429006e443dfd340434ad46716",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "a35fbee5_3f1b2b42",
+        "filename": "src/libANGLE/renderer/metal/ContextMtl.mm",
+        "patchSetId": 6
+      },
+      "lineNbr": 1353,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2022-03-30T00:45:16Z",
+      "side": 1,
+      "message": "Please use format:\n\nTODO(anglebug.com/7138): note: this 2nd flush...\n\nto make it easier to search for this later.",
+      "revId": "bfdffa967a91f2429006e443dfd340434ad46716",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
