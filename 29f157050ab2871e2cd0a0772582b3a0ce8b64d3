@@ -216,6 +216,30 @@
       },
       "revId": "29f157050ab2871e2cd0a0772582b3a0ce8b64d3",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "882c955b_9cdc56f0",
+        "filename": "src/libANGLE/validationEGL.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 2448,
+      "author": {
+        "id": 1540133
+      },
+      "writtenOn": "2022-03-30T15:48:33Z",
+      "side": 1,
+      "message": "Relevant section of the EGL spec\u0027s says:\n\n\u003e Client APIs may not be able to respect the requested rendering buffer.  \n\u003e To determine the actual buffer that a context will render to by default, \n\u003e call eglQueryContext with attribute EGL_RENDER_BUFFER.\n\nIt isn\u0027t an EGL_BAD_MATCH case just because EGL_SINGLE_BUFFER isn\u0027t supported. This chunk should just be:\n  case EGL_SINGLE_BUFFER:\n    break;",
+      "parentUuid": "12a95470_9502e17b",
+      "range": {
+        "startLine": 2448,
+        "startChar": 47,
+        "endLine": 2448,
+        "endChar": 89
+      },
+      "revId": "29f157050ab2871e2cd0a0772582b3a0ce8b64d3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
