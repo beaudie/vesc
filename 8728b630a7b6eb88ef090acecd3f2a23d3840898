@@ -50,6 +50,24 @@
       "message": "LGTM if you can clarify at least in the commit message what the expected roll behaviour is.",
       "revId": "8728b630a7b6eb88ef090acecd3f2a23d3840898",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "2ed173c7_ef09984b",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-03-30T19:24:01Z",
+      "side": 1,
+      "message": "Done.",
+      "parentUuid": "ddda0111_89df4f86",
+      "revId": "8728b630a7b6eb88ef090acecd3f2a23d3840898",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
