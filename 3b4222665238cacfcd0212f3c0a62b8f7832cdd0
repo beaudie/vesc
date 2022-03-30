@@ -195,6 +195,24 @@
       "message": "Looks like your Metal code also has a similar aliasing issue?\n\n    GLSLTest.AliasingFunctionOutParamAndGlobal/ES2_Metal (../../src/tests/gl_tests/GLSLTest.cpp:15240) (FAIL)\n    GLSLTest.AliasingFunctionOutParamAndGlobal/ES3_Metal (../../src/tests/gl_tests/GLSLTest.cpp:15240) (FAIL)\n\nWe wrap our Metal calls with inouts in a helper function to dodge this issue:\nhttps://osscs.corp.google.com/skia/skia/+/main:tests/sksl/shared/OutParamsAreDistinctFromGlobal.metal?q\u003d_skOutParamHelper0_out_params_are_distinct_from_global_bh\n\nWe also needed to do this to handle swizzled out params, which are unfortunately allowed.",
       "revId": "3b4222665238cacfcd0212f3c0a62b8f7832cdd0",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "ea77f969_3a02b260",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-03-30T20:15:54Z",
+      "side": 1,
+      "message": "Thanks for the info. I opened a bug for metal/ folks to take a look.",
+      "parentUuid": "ee2034d0_3c0fe054",
+      "revId": "3b4222665238cacfcd0212f3c0a62b8f7832cdd0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
