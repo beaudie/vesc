@@ -70,6 +70,24 @@
       "parentUuid": "a9e2a65d_561e94d6",
       "revId": "3b4222665238cacfcd0212f3c0a62b8f7832cdd0",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "601c43f3_205abcc7",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1408173
+      },
+      "writtenOn": "2022-03-30T17:57:57Z",
+      "side": 1,
+      "message": "The failure is in one of the newly added tests.",
+      "parentUuid": "a0dd0cb1_03f763e8",
+      "revId": "3b4222665238cacfcd0212f3c0a62b8f7832cdd0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
