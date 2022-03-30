@@ -439,6 +439,13 @@ config("angle_gl_visibility_config") {
   }
 }
 
+config("angle_vulkan_wayland_config") {
+  if (angle_enable_vulkan && angle_use_wayland &&
+      defined(vulkan_wayland_include_dirs)) {
+    include_dirs = vulkan_wayland_include_dirs
+  }
+}
+
 config("angle_gpu_info_util_config") {
   include_dirs = [
     "include",
