@@ -150,6 +150,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "352c09a7_d21b71a0",
+        "filename": "src/libANGLE/renderer/vulkan/vk_cache_utils.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 1462,
+      "author": {
+        "id": 1340649
+      },
+      "writtenOn": "2022-03-30T17:46:49Z",
+      "side": 1,
+      "message": "this is the only mention of depth in the spec -\n If the texture contains depth components, the first component of\n TEXTURE_BORDER_COLOR_EXT is interpreted as a depth value.\n \nthere is no mention of stencil in the spec. Since both depth and stencil need to setthe red channel as the border color i am assuming spec authors assumed mutual exclusivity. Given deqp tests for combined depth/stencil pass im inclined to not put more effort into this. WDYT?",
+      "parentUuid": "8b4951df_090aa6d1",
+      "revId": "434550359d1bf2a86ea841fdc2c4d621423dfa35",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "1a7132f9_f6b0f645",
         "filename": "src/tests/deqp_support/deqp_gles31_test_expectations.txt",
         "patchSetId": 4
@@ -233,6 +251,30 @@
       "side": 1,
       "message": "Can you help us figure this out Mohan? We need to determine if this is a bug in SwiftShader (unlikely) or a bug in ANGLE (more likely), in which case we\u0027d like to know how to fix it.",
       "parentUuid": "b773fa46_becabd1b",
+      "range": {
+        "startLine": 160,
+        "startChar": 0,
+        "endLine": 160,
+        "endChar": 4
+      },
+      "revId": "434550359d1bf2a86ea841fdc2c4d621423dfa35",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "bd466085_3e294f17",
+        "filename": "src/tests/deqp_support/deqp_gles31_test_expectations.txt",
+        "patchSetId": 4
+      },
+      "lineNbr": 160,
+      "author": {
+        "id": 1340649
+      },
+      "writtenOn": "2022-03-30T17:46:49Z",
+      "side": 1,
+      "message": "\u003e Can you help us figure this out\n\nwith off-the-shelf AMD card that supports vulkan border color extension the existing deqp tests related depth passed. what kind of help we talking here jamie?",
+      "parentUuid": "ea3ac682_f1f21744",
       "range": {
         "startLine": 160,
         "startChar": 0,

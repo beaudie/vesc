@@ -33,6 +33,24 @@
       "message": "nits: Please also test one random value like 0x4D34A0B1\n\nAlso test clamp with 0 bits",
       "revId": "202dd9d31b7bef31ff41b1c75e6b43241c6628ea",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "91ff20dc_e2072697",
+        "filename": "src/common/mathutil_unittest.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 405,
+      "author": {
+        "id": 1340649
+      },
+      "writtenOn": "2022-03-30T17:46:49Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "39d2c7b6_eac5860c",
+      "revId": "202dd9d31b7bef31ff41b1c75e6b43241c6628ea",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
