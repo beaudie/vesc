@@ -123,6 +123,31 @@ class OffscreenSurfaceVk : public SurfaceVk
     vk::BufferHelper mLockBufferHelper;
 };
 
+enum class FramebufferFetchMode
+{
+    Disabled,
+    Enabled,
+};
+
+enum class SwapchainResolveMode
+{
+    Disabled,
+    Enabled,
+};
+
+class FramebufferSurfaceVk : public SurfaceVk
+{
+  public:
+    FramebufferSurfaceVk(const egl::SurfaceState &surfaceState);
+    ~FramebufferSurfaceVk() override;
+
+    virtual angle::Result getCurrentFramebuffer(ContextVk *context,
+                                                FramebufferFetchMode fetchMode,
+                                                const vk::RenderPass &compatibleRenderPass,
+                                                const SwapchainResolveMode swapchainResolveMode,
+                                                vk::Framebuffer **framebufferOut) = 0;
+};
+
 // Data structures used in WindowSurfaceVk
 namespace impl
 {
@@ -183,19 +208,7 @@ struct SwapchainImage : angle::NonCopyable
 };
 }  // namespace impl
 
-enum class FramebufferFetchMode
-{
-    Disabled,
-    Enabled,
-};
-
-enum class SwapchainResolveMode
-{
-    Disabled,
-    Enabled,
-};
-
-class WindowSurfaceVk : public SurfaceVk
+class WindowSurfaceVk : public FramebufferSurfaceVk
 {
   public:
     WindowSurfaceVk(const egl::SurfaceState &surfaceState, EGLNativeWindowType window);
@@ -262,7 +275,7 @@ class WindowSurfaceVk : public SurfaceVk
                                         FramebufferFetchMode fetchMode,
                                         const vk::RenderPass &compatibleRenderPass,
                                         const SwapchainResolveMode swapchainResolveMode,
-                                        vk::Framebuffer **framebufferOut);
+                                        vk::Framebuffer **framebufferOut) override;
 
     const vk::Semaphore *getAndResetAcquireImageSemaphore();
 

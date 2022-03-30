@@ -24,7 +24,7 @@ namespace rx
 {
 class RendererVk;
 class RenderTargetVk;
-class WindowSurfaceVk;
+class FramebufferSurfaceVk;
 
 // FramebufferVk Cache
 class FramebufferCache final : angle::NonCopyable
@@ -57,7 +57,7 @@ class FramebufferVk : public FramebufferImpl
     // references. See Surface::setIsCurrent(bool).
     static FramebufferVk *CreateDefaultFBO(RendererVk *renderer,
                                            const gl::FramebufferState &state,
-                                           WindowSurfaceVk *backbuffer);
+                                           FramebufferSurfaceVk *backbuffer);
 
     ~FramebufferVk() override;
     void destroy(const gl::Context *context) override;
@@ -173,7 +173,7 @@ class FramebufferVk : public FramebufferImpl
   private:
     FramebufferVk(RendererVk *renderer,
                   const gl::FramebufferState &state,
-                  WindowSurfaceVk *backbuffer);
+                  FramebufferSurfaceVk *backbuffer);
 
     // The 'in' rectangles must be clipped to the scissor and FBO. The clipping is done in 'blit'.
     angle::Result blitWithCommand(ContextVk *contextVk,
@@ -244,7 +244,7 @@ class FramebufferVk : public FramebufferImpl
 
     void updateLayerCount();
 
-    WindowSurfaceVk *mBackbuffer;
+    FramebufferSurfaceVk *mBackbuffer;
 
     vk::RenderPassDesc mRenderPassDesc;
     vk::FramebufferHelper *mFramebuffer;
