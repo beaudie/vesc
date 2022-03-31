@@ -20,6 +20,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "965548cc_e957bc7b",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2022-03-31T20:01:59Z",
+      "side": 1,
+      "message": "Since the variable won\u0027t be accessed until main runs and uses the function, why does it need to be sized early?  Is it due to parsing order?\n\nThis does not fail to compile currently (with the patch):\n```\nconst std::string \u0026shaderString3 \u003d\n    R\"(#version 310 es\n    #extension GL_EXT_geometry_shader : require\n    in vec4 texcoord[];\n    vec4 get_texcoord()\n    {\n        return texcoord[0];\n    }\n    layout (points) in;\n    layout (points, max_vertices \u003d 1) out;\n    void main()\n    {\n        vec4 coord \u003d get_texcoord();\n        int length \u003d texcoord.length();\n    })\";\n```",
+      "parentUuid": "63993bbf_2cb256fd",
+      "revId": "fe4a522e9f4792711b8225b7904692da3bdd9967",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "42759e00_6b1b67f3",
         "filename": "src/compiler/translator/ParseContext.cpp",
         "patchSetId": 2
@@ -31,6 +49,30 @@
       "writtenOn": "2022-03-31T18:16:17Z",
       "side": 1,
       "message": "Needs to be updated",
+      "range": {
+        "startLine": 1241,
+        "startChar": 61,
+        "endLine": 1241,
+        "endChar": 92
+      },
+      "revId": "fe4a522e9f4792711b8225b7904692da3bdd9967",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "23a867a3_b7cd71bd",
+        "filename": "src/compiler/translator/ParseContext.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 1241,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2022-03-31T20:01:59Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "42759e00_6b1b67f3",
       "range": {
         "startLine": 1241,
         "startChar": 61,
@@ -64,6 +106,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "0b92ffdf_378285c9",
+        "filename": "src/compiler/translator/ParseContext.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 1251,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2022-03-31T20:01:59Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "8955b028_f9432990",
+      "range": {
+        "startLine": 1251,
+        "startChar": 83,
+        "endLine": 1251,
+        "endChar": 95
+      },
+      "revId": "fe4a522e9f4792711b8225b7904692da3bdd9967",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "ecd7d51d_2c48318c",
@@ -81,6 +147,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "1f440639_23836e1a",
+        "filename": "src/compiler/translator/ParseContext.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 1258,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2022-03-31T20:01:59Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "ecd7d51d_2c48318c",
+      "revId": "fe4a522e9f4792711b8225b7904692da3bdd9967",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "a0e6f3fd_b5c514c1",
@@ -94,6 +178,30 @@
       "writtenOn": "2022-03-31T18:16:17Z",
       "side": 1,
       "message": "Good for debugging, but shouldn\u0027t be a warning. It\u0027s not a warning for tessellation, is it?\n\nAlso the comment above this needs updating",
+      "range": {
+        "startLine": 2836,
+        "startChar": 0,
+        "endLine": 2839,
+        "endChar": 36
+      },
+      "revId": "fe4a522e9f4792711b8225b7904692da3bdd9967",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "f75aa73c_b9c60a30",
+        "filename": "src/compiler/translator/ParseContext.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 2839,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2022-03-31T20:01:59Z",
+      "side": 1,
+      "message": "The behavior we\u0027re allowing is against the spec, but applications already expect it to work, that\u0027s why I left it as a warning.  The spec quote is still valid.  I can drop it if you prefer.  I don\u0027t know if tessellation emits the same warning, we don\u0027t have as many unit tests for that.",
+      "parentUuid": "a0e6f3fd_b5c514c1",
       "range": {
         "startLine": 2836,
         "startChar": 0,
