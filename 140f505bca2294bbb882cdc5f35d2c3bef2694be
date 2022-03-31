@@ -301,6 +301,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "74191dea_4aa9b694",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 3901,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-03-31T13:57:12Z",
+      "side": 1,
+      "message": "Ok that\u0027s a fair point, I made sure `RendererVk::onDestroy()` handles device loss no matter what.\n\nIt seems to me that the only way we are guaranteed device loss is handled is if we lock around every Vulkan API call; which is practically impossible.",
+      "parentUuid": "0fef2463_7eea3e19",
+      "range": {
+        "startLine": 3901,
+        "startChar": 9,
+        "endLine": 3901,
+        "endChar": 38
+      },
+      "revId": "140f505bca2294bbb882cdc5f35d2c3bef2694be",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "8560334a_8fef4b44",
