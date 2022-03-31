@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "51ef3b68_b2741907",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-03-31T02:09:54Z",
+      "side": 1,
+      "message": "Bots are green, in case you were waiting on that for review. The fix itself hasn\u0027t changed.",
+      "revId": "652995d9b50c88fcdbcd9821066a66c2ddfc8cf3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
