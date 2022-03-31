@@ -34,6 +34,23 @@
       "parentUuid": "4cc5e8bf_f4a03153",
       "revId": "eefbcd49df30c17e6e75db120c997afc397a319f",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "319f9064_a9bc2dfd",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1340649
+      },
+      "writtenOn": "2022-03-31T15:38:08Z",
+      "side": 1,
+      "message": "for my own clarity, the emulation path is already functional, right?",
+      "revId": "eefbcd49df30c17e6e75db120c997afc397a319f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
