@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "aa408563_0d80c45c",
+        "filename": "src/libANGLE/renderer/vulkan/SurfaceVk.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 2375,
+      "author": {
+        "id": 1359249
+      },
+      "writtenOn": "2022-03-31T16:30:23Z",
+      "side": 0,
+      "message": "This was a bug. Only do for SINGLE case.",
+      "revId": "4b262ffd5a880c67e873bcb1c509ad7393ac1c11",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
