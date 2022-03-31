@@ -92,6 +92,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "5b1e5c28_7f06314c",
+        "filename": "src/compiler/translator/OutputHLSL.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 376,
+      "author": {
+        "id": 1116015
+      },
+      "writtenOn": "2022-03-31T21:26:03Z",
+      "side": 1,
+      "message": "It turns out this change (firstUAVRegister) isn\u0027t fixing the register assignments for UAVs for image load/store. It\u0027s fixing the register assignments for UAVs for SSBOs.\n\nIt looks like SSBO declarations will will have to move to the dynamic phase as well, in order to accommodate dynamic output layout in pixel shaders.",
+      "parentUuid": "391d5ce0_d30162f8",
+      "revId": "e8a87c009e62974de82e7072fffe5418123e8693",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "9344d156_bff04562",
         "filename": "src/libANGLE/renderer/d3d/DynamicImage2DHLSL.cpp",
         "patchSetId": 4
