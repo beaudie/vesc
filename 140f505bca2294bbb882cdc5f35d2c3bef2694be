@@ -279,6 +279,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "0fef2463_7eea3e19",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 3901,
+      "author": {
+        "id": 1000050
+      },
+      "writtenOn": "2022-03-31T13:14:34Z",
+      "side": 1,
+      "message": "I remember you mentioned ANGLE assumes no garbage, when the RendererVK is being destroyed. However if the race problem happens, client may call `ContextVk::getResetStatus()` and think the context is lost, and then destroy the context without calling `handleDeviceLostNoLock()`. Will it cause any problem?\n\nHowever, chrome is only using VANGLE on single thread currently, so the CL fixes the chrome deadlock issue. It will not cause any problem with chrome. But I know VANLE will be used as default GL implementation on Android. Maybe it will cause problem there.\n\nThe change is LGTM if it is just for chrome. So +1 for this CL. But it is definitely better to handle the threading properly.",
+      "parentUuid": "37b47791_4f46904d",
+      "range": {
+        "startLine": 3901,
+        "startChar": 9,
+        "endLine": 3901,
+        "endChar": 38
+      },
+      "revId": "140f505bca2294bbb882cdc5f35d2c3bef2694be",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "8560334a_8fef4b44",
         "filename": "src/libANGLE/renderer/vulkan/RendererVk.cpp",
         "patchSetId": 2
