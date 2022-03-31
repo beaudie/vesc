@@ -255,6 +255,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "37b47791_4f46904d",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 3901,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-03-31T03:14:10Z",
+      "side": 1,
+      "message": "But is that a problem? If thread A sees mRenderer-\u003eisDeviceLost() is false, then surely it didn\u0027t generate the device loss itself (so whatever commands it issued had run fine). Thread B marks the device lost, which can race and not get handled right away, ok, but it would the next time any API command is issued, no?",
+      "parentUuid": "fc3bc876_9751656e",
+      "range": {
+        "startLine": 3901,
+        "startChar": 9,
+        "endLine": 3901,
+        "endChar": 38
+      },
+      "revId": "140f505bca2294bbb882cdc5f35d2c3bef2694be",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "8560334a_8fef4b44",
         "filename": "src/libANGLE/renderer/vulkan/RendererVk.cpp",
         "patchSetId": 2
