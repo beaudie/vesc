@@ -89,6 +89,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "f1bd8251_07e5dfc4",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2022-03-31T15:49:00Z",
+      "side": 1,
+      "message": "We found pretty much every driver already support the functionality. So the extension is really just a validation layer fix. And guarantee.",
+      "parentUuid": "e82dca75_f4639b36",
+      "revId": "eefbcd49df30c17e6e75db120c997afc397a319f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "2d000db8_3a94311b",
