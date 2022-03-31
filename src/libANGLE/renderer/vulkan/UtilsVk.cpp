@@ -1556,25 +1556,24 @@ angle::Result UtilsVk::convertIndexBuffer(ContextVk *contextVk,
     vk::OutsideRenderPassCommandBuffer *commandBuffer;
     ANGLE_TRY(contextVk->getOutsideRenderPassCommandBuffer(access, &commandBuffer));
 
-    VkDescriptorSet descriptorSet;
-    vk::RefCountedDescriptorPoolBinding descriptorPoolBinding;
-    ANGLE_TRY(allocateDescriptorSet(contextVk, Function::ConvertIndexBuffer, &descriptorPoolBinding,
-                                    &descriptorSet));
+    vk::DescriptorSetDescBuilder descBuilder;
+    descBuilder.updateWriteDesc(kConvertIndexDestinationBinding, VK_DESCRIPTOR_TYPE_STORAGE_BUFFER,
+                                2);
 
-    std::array<VkDescriptorBufferInfo, 2> buffers = {{
-        {dst->getBuffer().getHandle(), dst->getOffset(), dst->getSize()},
-        {src->getBuffer().getHandle(), src->getOffset(), src->getSize()},
+    std::array<vk::DescriptorInfoDesc, 2> buffers = {{
+        {dst->getBlockSerial().getValue(), dst->getOffset(), dst->getSize(), 0},
+        {src->getBlockSerial().getValue(), src->getOffset(), src->getSize(), 0},
     }};
 
-    VkWriteDescriptorSet writeInfo = {};
-    writeInfo.sType                = VK_STRUCTURE_TYPE_WRITE_DESCRIPTOR_SET;
-    writeInfo.dstSet               = descriptorSet;
-    writeInfo.dstBinding           = kConvertIndexDestinationBinding;
-    writeInfo.descriptorCount      = 2;
-    writeInfo.descriptorType       = VK_DESCRIPTOR_TYPE_STORAGE_BUFFER;
-    writeInfo.pBufferInfo          = buffers.data();
+    descBuilder.updateInfoDesc(kConvertIndexDestinationBinding, 0, buffers[0],
+                               dst->getBuffer().getHandle());
+    descBuilder.updateInfoDesc(kConvertIndexDestinationBinding, 1, buffers[1],
+                               src->getBuffer().getHandle());
 
-    vkUpdateDescriptorSets(contextVk->getDevice(), 1, &writeInfo, 0, nullptr);
+    vk::RefCountedDescriptorPoolBinding descriptorPoolBinding;
+    VkDescriptorSet descriptorSet;
+    ANGLE_TRY(updateDescriptorSet(contextVk, Function::ConvertIndexBuffer, descBuilder,
+                                  &descriptorPoolBinding, &descriptorSet));
 
     ConvertIndexShaderParams shaderParams = {params.srcOffset, params.dstOffset >> 2,
                                              params.maxIndex, 0};
@@ -1622,29 +1621,35 @@ angle::Result UtilsVk::convertIndexIndirectBuffer(ContextVk *contextVk,
     vk::OutsideRenderPassCommandBuffer *commandBuffer;
     ANGLE_TRY(contextVk->getOutsideRenderPassCommandBuffer(access, &commandBuffer));
 
-    VkDescriptorSet descriptorSet;
-    vk::RefCountedDescriptorPoolBinding descriptorPoolBinding;
-    ANGLE_TRY(allocateDescriptorSet(contextVk, Function::ConvertIndexIndirectBuffer,
-                                    &descriptorPoolBinding, &descriptorSet));
+    vk::DescriptorSetDescBuilder descBuilder;
+    descBuilder.updateWriteDesc(kConvertIndexDestinationBinding, VK_DESCRIPTOR_TYPE_STORAGE_BUFFER,
+                                4);
 
-    std::array<VkDescriptorBufferInfo, 4> buffers = {{
-        {dstIndexBuf->getBuffer().getHandle(), dstIndexBuf->getOffset(), dstIndexBuf->getSize()},
-        {srcIndexBuf->getBuffer().getHandle(), srcIndexBuf->getOffset(), srcIndexBuf->getSize()},
-        {srcIndirectBuf->getBuffer().getHandle(), srcIndirectBuf->getOffset(),
+    std::array<vk::DescriptorInfoDesc, 4> buffers = {{
+        {dstIndexBuf->getBlockSerial().getValue(), dstIndexBuf->getOffset(),
+         dstIndexBuf->getSize()},
+        {srcIndexBuf->getBlockSerial().getValue(), srcIndexBuf->getOffset(),
+         srcIndexBuf->getSize()},
+        {srcIndirectBuf->getBlockSerial().getValue(), srcIndirectBuf->getOffset(),
          srcIndirectBuf->getSize()},
-        {dstIndirectBuf->getBuffer().getHandle(), dstIndirectBuf->getOffset(),
+        {dstIndirectBuf->getBlockSerial().getValue(), dstIndirectBuf->getOffset(),
          dstIndirectBuf->getSize()},
     }};
 
-    VkWriteDescriptorSet writeInfo = {};
-    writeInfo.sType                = VK_STRUCTURE_TYPE_WRITE_DESCRIPTOR_SET;
-    writeInfo.dstSet               = descriptorSet;
-    writeInfo.dstBinding           = kConvertIndexDestinationBinding;
-    writeInfo.descriptorCount      = 4;
-    writeInfo.descriptorType       = VK_DESCRIPTOR_TYPE_STORAGE_BUFFER;
-    writeInfo.pBufferInfo          = buffers.data();
+    std::array<VkBuffer, 4> handles = {
+        {dstIndexBuf->getBuffer().getHandle(), srcIndexBuf->getBuffer().getHandle(),
+         srcIndirectBuf->getBuffer().getHandle(), dstIndirectBuf->getBuffer().getHandle()}};
 
-    vkUpdateDescriptorSets(contextVk->getDevice(), 1, &writeInfo, 0, nullptr);
+    for (size_t descriptorIndex = 0; descriptorIndex < 4; ++descriptorIndex)
+    {
+        descBuilder.updateInfoDesc(kConvertIndexDestinationBinding, descriptorIndex,
+                                   buffers[descriptorIndex], handles[descriptorIndex]);
+    }
+
+    VkDescriptorSet descriptorSet;
+    vk::RefCountedDescriptorPoolBinding descriptorPoolBinding;
+    ANGLE_TRY(updateDescriptorSet(contextVk, Function::ConvertIndexIndirectBuffer, descBuilder,
+                                  &descriptorPoolBinding, &descriptorSet));
 
     ConvertIndexIndirectShaderParams shaderParams = {
         params.srcIndirectBufOffset >> 2, params.srcIndexBufOffset, params.dstIndexBufOffset >> 2,
@@ -1694,31 +1699,38 @@ angle::Result UtilsVk::convertLineLoopIndexIndirectBuffer(
     vk::OutsideRenderPassCommandBuffer *commandBuffer;
     ANGLE_TRY(contextVk->getOutsideRenderPassCommandBuffer(access, &commandBuffer));
 
-    VkDescriptorSet descriptorSet;
-    vk::RefCountedDescriptorPoolBinding descriptorPoolBinding;
-    ANGLE_TRY(allocateDescriptorSet(contextVk, Function::ConvertIndexIndirectLineLoopBuffer,
-                                    &descriptorPoolBinding, &descriptorSet));
-
-    std::array<VkDescriptorBufferInfo, 4> buffers = {{
-        {dstIndexBuffer->getBuffer().getHandle(), dstIndexBuffer->getOffset(),
+    std::array<vk::DescriptorInfoDesc, 4> buffers = {{
+        {dstIndexBuffer->getBlockSerial().getValue(), dstIndexBuffer->getOffset(),
          dstIndexBuffer->getSize()},
-        {srcIndexBuffer->getBuffer().getHandle(), srcIndexBuffer->getOffset(),
+        {srcIndexBuffer->getBlockSerial().getValue(), srcIndexBuffer->getOffset(),
          srcIndexBuffer->getSize()},
-        {srcIndirectBuffer->getBuffer().getHandle(), srcIndirectBuffer->getOffset(),
+        {srcIndirectBuffer->getBlockSerial().getValue(), srcIndirectBuffer->getOffset(),
          srcIndirectBuffer->getSize()},
-        {dstIndirectBuffer->getBuffer().getHandle(), dstIndirectBuffer->getOffset(),
+        {dstIndirectBuffer->getBlockSerial().getValue(), dstIndirectBuffer->getOffset(),
          dstIndirectBuffer->getSize()},
     }};
 
-    VkWriteDescriptorSet writeInfo = {};
-    writeInfo.sType                = VK_STRUCTURE_TYPE_WRITE_DESCRIPTOR_SET;
-    writeInfo.dstSet               = descriptorSet;
-    writeInfo.dstBinding           = kConvertIndexDestinationBinding;
-    writeInfo.descriptorCount      = 4;
-    writeInfo.descriptorType       = VK_DESCRIPTOR_TYPE_STORAGE_BUFFER;
-    writeInfo.pBufferInfo          = buffers.data();
+    std::array<VkBuffer, 4> handles = {{
+        dstIndexBuffer->getBuffer().getHandle(),
+        srcIndexBuffer->getBuffer().getHandle(),
+        srcIndirectBuffer->getBuffer().getHandle(),
+        dstIndirectBuffer->getBuffer().getHandle(),
+    }};
 
-    vkUpdateDescriptorSets(contextVk->getDevice(), 1, &writeInfo, 0, nullptr);
+    vk::DescriptorSetDescBuilder descBuilder;
+    descBuilder.updateWriteDesc(kConvertIndexDestinationBinding, VK_DESCRIPTOR_TYPE_STORAGE_BUFFER,
+                                4);
+
+    for (size_t descriptorIndex = 0; descriptorIndex < 4; ++descriptorIndex)
+    {
+        descBuilder.updateInfoDesc(kConvertIndexDestinationBinding, descriptorIndex,
+                                   buffers[descriptorIndex], handles[descriptorIndex]);
+    }
+
+    VkDescriptorSet descriptorSet;
+    vk::RefCountedDescriptorPoolBinding descriptorPoolBinding;
+    ANGLE_TRY(updateDescriptorSet(contextVk, Function::ConvertIndexIndirectLineLoopBuffer,
+                                  descBuilder, &descriptorPoolBinding, &descriptorSet));
 
     ConvertIndexIndirectLineLoopShaderParams shaderParams = {
         params.indirectBufferOffset >> 2, params.dstIndirectBufferOffset >> 2,
@@ -1760,29 +1772,35 @@ angle::Result UtilsVk::convertLineLoopArrayIndirectBuffer(
     vk::OutsideRenderPassCommandBuffer *commandBuffer;
     ANGLE_TRY(contextVk->getOutsideRenderPassCommandBuffer(access, &commandBuffer));
 
-    VkDescriptorSet descriptorSet;
-    vk::RefCountedDescriptorPoolBinding descriptorPoolBinding;
-    ANGLE_TRY(allocateDescriptorSet(contextVk, Function::ConvertIndirectLineLoopBuffer,
-                                    &descriptorPoolBinding, &descriptorSet));
-
-    std::array<VkDescriptorBufferInfo, 3> buffers = {{
-        {srcIndirectBuffer->getBuffer().getHandle(), srcIndirectBuffer->getOffset(),
+    std::array<vk::DescriptorInfoDesc, 3> buffers = {{
+        {srcIndirectBuffer->getBlockSerial().getValue(), srcIndirectBuffer->getOffset(),
          srcIndirectBuffer->getSize()},
-        {dstIndirectBuffer->getBuffer().getHandle(), dstIndirectBuffer->getOffset(),
+        {dstIndirectBuffer->getBlockSerial().getValue(), dstIndirectBuffer->getOffset(),
          dstIndirectBuffer->getSize()},
-        {dstIndexBuffer->getBuffer().getHandle(), dstIndexBuffer->getOffset(),
+        {dstIndexBuffer->getBlockSerial().getValue(), dstIndexBuffer->getOffset(),
          dstIndexBuffer->getSize()},
     }};
 
-    VkWriteDescriptorSet writeInfo = {};
-    writeInfo.sType                = VK_STRUCTURE_TYPE_WRITE_DESCRIPTOR_SET;
-    writeInfo.dstSet               = descriptorSet;
-    writeInfo.dstBinding           = kConvertIndexDestinationBinding;
-    writeInfo.descriptorCount      = 3;
-    writeInfo.descriptorType       = VK_DESCRIPTOR_TYPE_STORAGE_BUFFER;
-    writeInfo.pBufferInfo          = buffers.data();
+    std::array<VkBuffer, 3> handles = {{
+        srcIndirectBuffer->getBuffer().getHandle(),
+        dstIndirectBuffer->getBuffer().getHandle(),
+        dstIndexBuffer->getBuffer().getHandle(),
+    }};
 
-    vkUpdateDescriptorSets(contextVk->getDevice(), 1, &writeInfo, 0, nullptr);
+    vk::DescriptorSetDescBuilder descBuilder;
+    descBuilder.updateWriteDesc(kConvertIndexDestinationBinding, VK_DESCRIPTOR_TYPE_STORAGE_BUFFER,
+                                3);
+
+    for (size_t descriptorIndex = 0; descriptorIndex < 3; ++descriptorIndex)
+    {
+        descBuilder.updateInfoDesc(kConvertIndexDestinationBinding, descriptorIndex,
+                                   buffers[descriptorIndex], handles[descriptorIndex]);
+    }
+
+    VkDescriptorSet descriptorSet;
+    vk::RefCountedDescriptorPoolBinding descriptorPoolBinding;
+    ANGLE_TRY(updateDescriptorSet(contextVk, Function::ConvertIndirectLineLoopBuffer, descBuilder,
+                                  &descriptorPoolBinding, &descriptorSet));
 
     ConvertIndirectLineLoopShaderParams shaderParams = {params.indirectBufferOffset >> 2,
                                                         params.dstIndirectBufferOffset >> 2,
@@ -1925,27 +1943,33 @@ angle::Result UtilsVk::convertVertexBufferImpl(ContextVk *contextVk,
 {
     ANGLE_TRY(ensureConvertVertexResourcesInitialized(contextVk));
 
-    VkDescriptorSet descriptorSet;
-    vk::RefCountedDescriptorPoolBinding descriptorPoolBinding;
-    ANGLE_TRY(allocateDescriptorSet(contextVk, Function::ConvertVertexBuffer,
-                                    &descriptorPoolBinding, &descriptorSet));
+    std::array<vk::DescriptorInfoDesc, 2> buffers = {{
+        {dst->getBlockSerial().getValue(), dst->getOffset(), dst->getSize()},
+        {src->getBlockSerial().getValue(), src->getOffset(), src->getSize()},
+    }};
 
-    VkWriteDescriptorSet writeInfo    = {};
-    VkDescriptorBufferInfo buffers[2] = {
-        {dst->getBuffer().getHandle(), dst->getOffset(), dst->getSize()},
-        {src->getBuffer().getHandle(), src->getOffset(), src->getSize()},
-    };
+    std::array<VkBuffer, 2> handles = {{
+        dst->getBuffer().getHandle(),
+        src->getBuffer().getHandle(),
+    }};
+
     static_assert(kConvertVertexDestinationBinding + 1 == kConvertVertexSourceBinding,
                   "Update write info");
 
-    writeInfo.sType           = VK_STRUCTURE_TYPE_WRITE_DESCRIPTOR_SET;
-    writeInfo.dstSet          = descriptorSet;
-    writeInfo.dstBinding      = kConvertVertexDestinationBinding;
-    writeInfo.descriptorCount = 2;
-    writeInfo.descriptorType  = VK_DESCRIPTOR_TYPE_STORAGE_BUFFER;
-    writeInfo.pBufferInfo     = buffers;
+    vk::DescriptorSetDescBuilder descBuilder;
+    descBuilder.updateWriteDesc(kConvertVertexDestinationBinding, VK_DESCRIPTOR_TYPE_STORAGE_BUFFER,
+                                2);
 
-    vkUpdateDescriptorSets(contextVk->getDevice(), 1, &writeInfo, 0, nullptr);
+    for (size_t descriptorIndex = 0; descriptorIndex < 2; ++descriptorIndex)
+    {
+        descBuilder.updateInfoDesc(kConvertIndexDestinationBinding, descriptorIndex,
+                                   buffers[descriptorIndex], handles[descriptorIndex]);
+    }
+
+    VkDescriptorSet descriptorSet;
+    vk::RefCountedDescriptorPoolBinding descriptorPoolBinding;
+    ANGLE_TRY(updateDescriptorSet(contextVk, Function::ConvertIndirectLineLoopBuffer, descBuilder,
+                                  &descriptorPoolBinding, &descriptorSet));
 
     vk::RefCounted<vk::ShaderAndSerial> *shader = nullptr;
     ANGLE_TRY(contextVk->getShaderLibrary().getConvertVertex_comp(contextVk, flags, &shader));
@@ -2446,11 +2470,25 @@ angle::Result UtilsVk::blitResolveImpl(ContextVk *contextVk,
                       framebuffer->getState().getEnabledDrawBuffers());
     UpdateDepthStencilAccess(contextVk, framebuffer, blitDepth, blitStencil);
 
-    VkDescriptorImageInfo imageInfos[2] = {};
+    vk::DescriptorSetDescBuilder descBuilder;
+    descBuilder.updateWriteDesc(kBlitResolveColorOrDepthBinding, VK_DESCRIPTOR_TYPE_SAMPLED_IMAGE,
+                                1);
+    descBuilder.updateWriteDesc(kBlitResolveStencilBinding, VK_DESCRIPTOR_TYPE_SAMPLED_IMAGE, 1);
+    descBuilder.updateWriteDesc(kBlitResolveSamplerBinding, VK_DESCRIPTOR_TYPE_SAMPLER, 1);
 
     if (blitColor)
     {
-        imageInfos[0].imageView   = srcColorView->getHandle();
+        vk::DescriptorInfoDesc infoDesc = {};
+        SetBitField(infoDesc.imageLayoutOrRange, src->getCurrentImageLayout());
+        infoDesc.imageSubresourceRange = 0;
+        infoDesc.imageViewSerialOrOffset = srcColorView->;
+        infoDesc.
+
+        descBuilder
+            .updateInfoDesc(kBlitResolveColorOrDepthBinding, 0, )
+
+                imageInfos[0]
+            .imageView            = srcColorView->getHandle();
         imageInfos[0].imageLayout = src->getCurrentLayout();
     }
     if (blitDepth)
@@ -2466,6 +2504,7 @@ angle::Result UtilsVk::blitResolveImpl(ContextVk *contextVk,
 
     VkDescriptorImageInfo samplerInfo = {};
     samplerInfo.sampler = params.linear ? mLinearSampler.getHandle() : mPointSampler.getHandle();
+
 
     VkWriteDescriptorSet writeInfos[3] = {};
     writeInfos[0].sType                = VK_STRUCTURE_TYPE_WRITE_DESCRIPTOR_SET;
@@ -3529,15 +3568,28 @@ angle::Result UtilsVk::drawOverlay(ContextVk *contextVk,
         RenderPassClosureReason::TemporaryForOverlayDraw);
 }
 
-angle::Result UtilsVk::allocateDescriptorSet(ContextVk *contextVk,
-                                             Function function,
-                                             vk::RefCountedDescriptorPoolBinding *bindingOut,
-                                             VkDescriptorSet *descriptorSetOut)
+angle::Result UtilsVk::updateDescriptorSet(ContextVk *contextVk,
+                                           Function function,
+                                           const vk::DescriptorSetDescBuilder &descriptorSetDesc,
+                                           vk::RefCountedDescriptorPoolBinding *bindingOut,
+                                           VkDescriptorSet *descriptorSetOut)
 {
-    ANGLE_TRY(mDescriptorPools[function].allocateDescriptorSets(
-        contextVk, &contextVk->getResourceUseList(),
-        mDescriptorSetLayouts[function][DescriptorSetIndex::Internal].get(), 1, bindingOut,
-        descriptorSetOut));
+    vk::ResourceUseList *resourceUseList = &contextVk->getResourceUseList();
+
+    vk::DescriptorCacheResult cacheResult;
+    ANGLE_TRY(mDescriptorPools[function].getOrAllocateDescriptorSet(
+        contextVk, resourceUseList, descriptorSetDesc.getDesc(),
+        mDescriptorSetLayouts[function][DescriptorSetIndex::Internal].get(), bindingOut,
+        descriptorSetOut, &cacheResult));
+
+    if (cacheResult == vk::DescriptorCacheResult::NewAllocation)
+    {
+        contextVk->updateDescriptorSet(descriptorSetDesc, *descriptorSetOut);
+    }
+    else
+    {
+        bindingOut->get().retain(resourceUseList);
+    }
 
     return angle::Result::Continue;
 }

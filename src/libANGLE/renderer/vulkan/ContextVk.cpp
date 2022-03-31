@@ -7129,4 +7129,11 @@ void ContextVk::pruneDefaultBufferPools()
     }
     return mShareGroupVk->pruneDefaultBufferPools(mRenderer);
 }
+
+void ContextVk::updateDescriptorSet(const vk::DescriptorSetDescBuilder &descriptorSetUpdate,
+                                    VkDescriptorSet descriptorSet)
+{
+    descriptorSetUpdate.updateDescriptorSet(&mUpdateDescriptorSetsBuilder, descriptorSet);
+    flushDescriptorSetUpdates();
+}
 }  // namespace rx

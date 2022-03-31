@@ -763,6 +763,9 @@ class ContextVk : public ContextImpl, public vk::Context, public MultisampleText
         mVulkanCacheStats[cache].accumulate(stats);
     }
 
+    void updateDescriptorSet(const vk::DescriptorSetDescBuilder &descriptorSetUpdate,
+                             VkDescriptorSet descriptorSet);
+
   private:
     // Dirty bits.
     enum DirtyBitType : size_t

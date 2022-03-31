@@ -1268,6 +1268,17 @@ class DescriptorSetDescBuilder final
 
     void reset();
 
+    // General helpers for any kind of descriptor.
+    void updateWriteDesc(uint32_t bindingIndex,
+                         VkDescriptorType descriptorType,
+                         uint32_t descriptorCount);
+
+    template <typename HandleT>
+    void updateInfoDesc(uint32_t bindingIndex,
+                        uint32_t descriptorIndex,
+                        const DescriptorInfoDesc &infoDesc,
+                        HandleT handle);
+
     // Specific helpers for uniforms/xfb descriptors.
     void updateUniformWrite(uint32_t shaderStageCount);
     void updateUniformBuffer(uint32_t shaderIndex,
@@ -1343,15 +1354,48 @@ class DescriptorSetDescBuilder final
         bool emulateSeamfulCubeMapSampling,
         PipelineType pipelineType);
 
-    void updateWriteDesc(uint32_t bindingIndex,
-                         VkDescriptorType descriptorType,
-                         uint32_t descriptorCount);
+    void updateHandle(uint32_t infoIndex, VkBuffer buffer);
+    void updateHandle(uint32_t infoIndex, VkSampler sampler);
+    void updateHandle(uint32_t infoIndex, VkBufferView bufferView);
+    void updateHandle(uint32_t infoIndex, VkImageView imageView);
 
     DescriptorSetDesc mDesc;
     angle::FastMap<DescriptorDescHandles, kFastDescriptorSetDescLimit> mHandles;
     angle::FastMap<uint32_t, kFastDescriptorSetDescLimit> mDynamicOffsets;
     uint32_t mCurrentInfoIndex = 0;
 };
+
+template <typename HandleT>
+ANGLE_INLINE void DescriptorSetDescBuilder::updateInfoDesc(uint32_t bindingIndex,
+                                                           uint32_t descriptorIndex,
+                                                           const DescriptorInfoDesc &infoDesc,
+                                                           HandleT handle)
+{
+    uint32_t infoIndex = mDesc.getInfoDescIndex(bindingIndex) + descriptorIndex;
+    mDesc.updateInfoDesc(infoIndex, infoDesc);
+    updateHandle(infoIndex, handle);
+}
+
+ANGLE_INLINE void DescriptorSetDescBuilder::updateHandle(uint32_t infoIndex, VkBuffer buffer)
+{
+    mHandles[infoIndex].buffer = buffer;
+}
+
+ANGLE_INLINE void DescriptorSetDescBuilder::updateHandle(uint32_t infoIndex, VkSampler sampler)
+{
+    mHandles[infoIndex].sampler = sampler;
+}
+
+ANGLE_INLINE void DescriptorSetDescBuilder::updateHandle(uint32_t infoIndex,
+                                                         VkBufferView bufferView)
+{
+    mHandles[infoIndex].bufferView = bufferView;
+}
+
+ANGLE_INLINE void DescriptorSetDescBuilder::updateHandle(uint32_t infoIndex, VkImageView imageView)
+{
+    mHandles[infoIndex].imageView = imageView;
+}
 
 // In the FramebufferDesc object:
 //  - Depth/stencil serial is at index 0

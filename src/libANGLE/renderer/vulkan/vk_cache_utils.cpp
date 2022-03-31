@@ -1109,8 +1109,8 @@ angle::Result InitializeRenderPassFromDesc(ContextVk *contextVk,
         VkAttachmentReference colorRef;
         colorRef.attachment = attachmentCount.get();
         colorRef.layout     = needInputAttachments
-                              ? VK_IMAGE_LAYOUT_GENERAL
-                              : ConvertImageLayoutToVkImageLayout(
+                                  ? VK_IMAGE_LAYOUT_GENERAL
+                                  : ConvertImageLayoutToVkImageLayout(
                                     static_cast<ImageLayout>(ops[attachmentCount].initialLayout));
         colorAttachmentRefs.push_back(colorRef);
 
@@ -1265,8 +1265,8 @@ angle::Result InitializeRenderPassFromDesc(ContextVk *contextVk,
     applicationSubpass->colorAttachmentCount = static_cast<uint32_t>(colorAttachmentRefs.size());
     applicationSubpass->pColorAttachments    = colorAttachmentRefs.data();
     applicationSubpass->pResolveAttachments  = attachmentCount.get() > nonResolveAttachmentCount
-                                                  ? colorResolveAttachmentRefs.data()
-                                                  : nullptr;
+                                                   ? colorResolveAttachmentRefs.data()
+                                                   : nullptr;
     applicationSubpass->pDepthStencilAttachment =
         (depthStencilAttachmentRef.attachment != VK_ATTACHMENT_UNUSED ? &depthStencilAttachmentRef
                                                                       : nullptr);

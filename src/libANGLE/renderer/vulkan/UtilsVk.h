@@ -543,10 +543,11 @@ class UtilsVk : angle::NonCopyable
                                   const BlitResolveParameters &params);
 
     // Allocates a single descriptor set.
-    angle::Result allocateDescriptorSet(ContextVk *contextVk,
-                                        Function function,
-                                        vk::RefCountedDescriptorPoolBinding *bindingOut,
-                                        VkDescriptorSet *descriptorSetOut);
+    angle::Result updateDescriptorSet(ContextVk *contextVk,
+                                      Function function,
+                                      const vk::DescriptorSetDescBuilder &descriptorSetDesc,
+                                      vk::RefCountedDescriptorPoolBinding *bindingOut,
+                                      VkDescriptorSet *descriptorSetOut);
 
     void outputCumulativePerfCounters();
 
