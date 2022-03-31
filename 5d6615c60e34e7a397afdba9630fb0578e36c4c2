@@ -176,6 +176,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "e4e6ead6_50f676ea",
+        "filename": "src/libANGLE/renderer/ImageImpl.h",
+        "patchSetId": 6
+      },
+      "lineNbr": 43,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2022-03-31T15:54:50Z",
+      "side": 1,
+      "message": "We just had a bunch of code inferring the type from this parameter and layer count which could be simplified.  Not a big deal.",
+      "parentUuid": "82aaa95b_ba3c4121",
+      "range": {
+        "startLine": 43,
+        "startChar": 4,
+        "endLine": 43,
+        "endChar": 35
+      },
+      "revId": "5d6615c60e34e7a397afdba9630fb0578e36c4c2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "fba06adb_84d98eca",
@@ -213,6 +237,30 @@
       "side": 1,
       "message": "nack, if you look at data type of levels in other places like `TextureState` and `ImageHelper` it uses `unsgined int` types. we might want to keep that broader consistency",
       "parentUuid": "fba06adb_84d98eca",
+      "range": {
+        "startLine": 47,
+        "startChar": 12,
+        "endLine": 47,
+        "endChar": 20
+      },
+      "revId": "5d6615c60e34e7a397afdba9630fb0578e36c4c2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "ec6879e6_3d72f0b0",
+        "filename": "src/libANGLE/renderer/ImageImpl.h",
+        "patchSetId": 6
+      },
+      "lineNbr": 47,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2022-03-31T15:54:50Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "7d5fd249_11563d28",
       "range": {
         "startLine": 47,
         "startChar": 12,
