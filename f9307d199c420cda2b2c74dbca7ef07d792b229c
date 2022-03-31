@@ -87,6 +87,30 @@
       },
       "revId": "f9307d199c420cda2b2c74dbca7ef07d792b229c",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "1848b1c5_6f9ca27a",
+        "filename": "src/libANGLE/Surface.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 219,
+      "author": {
+        "id": 1340649
+      },
+      "writtenOn": "2022-03-31T16:05:17Z",
+      "side": 1,
+      "message": "\u003e If it\u0027s safe to re-destroy\n\nit is not, the object would be garbage after 1st destroy\n\n\u003e because the surface is already destroyed ... Or if this is expected to only be used for the keep-destroyed-alive situation\n\nupdating this comment -\u003e \"it just needs to keep an already destroyed surface alive during our internal context juggling\" to \"it just needs to keep a potentially destroyed surface alive during our internal context juggling\".\n\nI wanted to use the \"acquire\" / \"release\" pattern and not talk about ref at all but saw ScopedContextRef and thought you guys might want to continue the pattern",
+      "parentUuid": "c2827d01_0a090bcd",
+      "range": {
+        "startLine": 215,
+        "startChar": 0,
+        "endLine": 219,
+        "endChar": 5
+      },
+      "revId": "f9307d199c420cda2b2c74dbca7ef07d792b229c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
