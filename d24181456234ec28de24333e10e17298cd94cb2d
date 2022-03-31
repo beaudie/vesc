@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "23a952e7_0d187b96",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1359249
+      },
+      "writtenOn": "2022-03-31T16:18:11Z",
+      "side": 1,
+      "message": "New patch.\nThe test cases need to be visual verified. So, I have automation, but need confirmation.\nMade fixes. I could a bug or two and fixed.\nI think all feedback got fixed.",
+      "revId": "d24181456234ec28de24333e10e17298cd94cb2d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}

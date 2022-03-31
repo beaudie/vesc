@@ -242,6 +242,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "0ecc90e2_d93df60f",
+        "filename": "src/libANGLE/validationEGL.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 2448,
+      "author": {
+        "id": 1359249
+      },
+      "writtenOn": "2022-03-31T16:18:11Z",
+      "side": 1,
+      "message": "yes. Will do.",
+      "parentUuid": "882c955b_9cdc56f0",
+      "range": {
+        "startLine": 2448,
+        "startChar": 47,
+        "endLine": 2448,
+        "endChar": 89
+      },
+      "revId": "29f157050ab2871e2cd0a0772582b3a0ce8b64d3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "499a9756_310bae5f",
@@ -255,6 +279,24 @@
       "writtenOn": "2022-03-30T16:09:54Z",
       "side": 1,
       "message": "Should this have a test for EGL_RENDER_BUFFER here?\n  EGLint actualRenderbuffer;\n  EXPECT_EGL_TRUE(eglQueryContext(mDisplay, context, EGL_RENDER_BUFFER, \u0026actualRenderbuffer);\n  EXPECT_EGL_TRUE(actualRenderbuffer \u003d\u003d EGL_SINGLE_BUFFER);\nAlthough it\u0027s not an error per-se if this isn\u0027t true (it should just indicate that FBR is supported or not, and carry on as EGL_BACK_BUFFER if it isn\u0027t).",
+      "revId": "29f157050ab2871e2cd0a0772582b3a0ce8b64d3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "5aaac1c1_a49bfd1a",
+        "filename": "src/tests/egl_tests/EGLSurfaceTest.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 1594,
+      "author": {
+        "id": 1359249
+      },
+      "writtenOn": "2022-03-31T16:18:11Z",
+      "side": 1,
+      "message": "Yes, the test need some debugging. Thanks for the check. The glReadPixels isn\u0027t going to work here either, need a visual check.\n\nI added some code to get the render buffer.",
+      "parentUuid": "499a9756_310bae5f",
       "revId": "29f157050ab2871e2cd0a0772582b3a0ce8b64d3",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
