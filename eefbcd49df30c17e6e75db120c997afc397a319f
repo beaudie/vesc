@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "4cc5e8bf_f4a03153",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-03-31T04:02:56Z",
+      "side": 1,
+      "message": "Mohan, do you have this extension implemented? If so, please give the test in anglebug.com/3832 a try with this change: dEQP.GLES3/functional_primitive_restart_basic_lines_unsigned_byte_draw_elements_instanced\n\nNothing should really change (test passes both before and after), other than that there wouldn\u0027t be a VVL error about primitive restart.\n\nIf you driver doesn\u0027t implement this extension, it should take a whole 2 minutes to implement it :) The behavior is there in the hardware and the test works, you\u0027d just need to advertise it to make it official.",
+      "revId": "eefbcd49df30c17e6e75db120c997afc397a319f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
