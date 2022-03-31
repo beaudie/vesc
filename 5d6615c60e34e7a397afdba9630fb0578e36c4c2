@@ -200,6 +200,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "dbd2c55b_33552102",
+        "filename": "src/libANGLE/renderer/ImageImpl.h",
+        "patchSetId": 6
+      },
+      "lineNbr": 43,
+      "author": {
+        "id": 1340649
+      },
+      "writtenOn": "2022-03-31T15:58:09Z",
+      "side": 1,
+      "message": "ah, replace existing methods with a single `getTextureType` method. Follow up change please 😊",
+      "parentUuid": "e4e6ead6_50f676ea",
+      "range": {
+        "startLine": 43,
+        "startChar": 4,
+        "endLine": 43,
+        "endChar": 35
+      },
+      "revId": "5d6615c60e34e7a397afdba9630fb0578e36c4c2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "fba06adb_84d98eca",
@@ -543,6 +567,30 @@
       "side": 1,
       "message": "i have refactored this to address your concerns and maximize safe code reuse",
       "parentUuid": "d6f7e5ff_cf892674",
+      "range": {
+        "startLine": 2664,
+        "startChar": 0,
+        "endLine": 2672,
+        "endChar": 85
+      },
+      "revId": "5d6615c60e34e7a397afdba9630fb0578e36c4c2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "fc8fb947_5a23d221",
+        "filename": "src/libANGLE/validationESEXT.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 2672,
+      "author": {
+        "id": 1340649
+      },
+      "writtenOn": "2022-03-31T15:58:09Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "390727d1_be0abb78",
       "range": {
         "startLine": 2664,
         "startChar": 0,
