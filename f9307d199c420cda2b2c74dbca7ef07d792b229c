@@ -289,6 +289,30 @@
       },
       "revId": "f9307d199c420cda2b2c74dbca7ef07d792b229c",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "edaef073_6937d39c",
+        "filename": "src/libANGLE/Surface.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 219,
+      "author": {
+        "id": 1340649
+      },
+      "writtenOn": "2022-03-31T18:32:14Z",
+      "side": 1,
+      "message": "ha ha, apologies. the \"WDYT\" comment was for having `ASSERT(mRefCount \u003e 0)` instead of `if (mRefCount \u003e 0)` and silently returning without doing anything to `refCount`\n\nadding this `ASSERT(mRefCount \u003d\u003d 0);` at the end would be incorrect because this context juggling can happen with surfaces that have not been destroyed as well. if you remove this call `eglDestroySurface(mDisplay, mPbufferSurface);` from my new test, it is still a valid test and `mRefCount` will not be `0` in `~ScopedSurfaceRef`",
+      "parentUuid": "a8accfb2_fe9f31d5",
+      "range": {
+        "startLine": 215,
+        "startChar": 0,
+        "endLine": 219,
+        "endChar": 5
+      },
+      "revId": "f9307d199c420cda2b2c74dbca7ef07d792b229c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
