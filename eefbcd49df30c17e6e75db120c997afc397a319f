@@ -51,6 +51,47 @@
       "message": "for my own clarity, the emulation path is already functional, right?",
       "revId": "eefbcd49df30c17e6e75db120c997afc397a319f",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "9ea8791d_618e9ddf",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2022-03-31T15:42:32Z",
+      "side": 1,
+      "message": "There\u0027s no emulation path, we just assume drivers support this functionality.",
+      "parentUuid": "319f9064_a9bc2dfd",
+      "revId": "eefbcd49df30c17e6e75db120c997afc397a319f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "2d000db8_3a94311b",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 596,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2022-03-31T15:42:32Z",
+      "side": 1,
+      "message": "rather than checking multiple lists here, maybe it would make sense to make the list more dynamic and build it depending on what extensions are available or not during device setup.",
+      "range": {
+        "startLine": 583,
+        "startChar": 0,
+        "endLine": 596,
+        "endChar": 0
+      },
+      "revId": "eefbcd49df30c17e6e75db120c997afc397a319f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
