@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "8dceecc4_d0e4ba23",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-03-31T03:05:30Z",
+      "side": 1,
+      "message": "In line with our promise that exposing this extension means the geometry shader output limit doesn\u0027t need to get any higher than the minimum.",
+      "revId": "a1196173c71a45123dda80fc668d69b63a63f228",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
