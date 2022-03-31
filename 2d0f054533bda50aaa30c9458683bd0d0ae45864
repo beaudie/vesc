@@ -41,6 +41,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "3df47f74_a5743c76",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.cpp",
+        "patchSetId": 12
+      },
+      "lineNbr": 1676,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2022-03-31T17:05:41Z",
+      "side": 1,
+      "message": "Agree. Lets do that in a separate follow up clean up CL.",
+      "parentUuid": "b637f4d6_00828ac4",
+      "range": {
+        "startLine": 1659,
+        "startChar": 0,
+        "endLine": 1676,
+        "endChar": 32
+      },
+      "revId": "2d0f054533bda50aaa30c9458683bd0d0ae45864",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "828e1b3f_a2bec3cf",
@@ -54,6 +78,30 @@
       "writtenOn": "2022-03-31T14:20:12Z",
       "side": 1,
       "message": "nit: D",
+      "range": {
+        "startLine": 433,
+        "startChar": 5,
+        "endLine": 433,
+        "endChar": 6
+      },
+      "revId": "2d0f054533bda50aaa30c9458683bd0d0ae45864",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "3ca7aade_387b356d",
+        "filename": "src/tests/gl_tests/RobustResourceInitTest.cpp",
+        "patchSetId": 12
+      },
+      "lineNbr": 433,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2022-03-31T17:05:41Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "828e1b3f_a2bec3cf",
       "range": {
         "startLine": 433,
         "startChar": 5,
