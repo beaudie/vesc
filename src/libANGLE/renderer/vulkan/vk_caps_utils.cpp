@@ -792,6 +792,8 @@ void RendererVk::ensureCapsInitialized() const
     // a storage buffer.  We nevertheless limit this to something reasonable (4096 arbitrarily).
     const int32_t maxAtomicCounters =
         std::min<int32_t>(4096, limitsVk.maxStorageBufferRange / sizeof(uint32_t));
+    INFO() << "Yuxin Debug: "
+           << "maxAtomicCounters: " << maxAtomicCounters;
     for (gl::ShaderType shaderType : gl::AllShaderTypes())
     {
         mNativeCaps.maxShaderAtomicCounters[shaderType] = maxAtomicCounters;
@@ -800,7 +802,11 @@ void RendererVk::ensureCapsInitialized() const
     // Set maxShaderAtomicCounters to zero if atomic is not supported.
     if (!mPhysicalDeviceFeatures.vertexPipelineStoresAndAtomics)
     {
-        mNativeCaps.maxShaderAtomicCounters[gl::ShaderType::Vertex] = 0;
+        INFO() << "Yuxin Debug: vertexPipelineStoresAndAtomics is not suppored";
+        mNativeCaps.maxShaderAtomicCounters[gl::ShaderType::Vertex]         = 0;
+        mNativeCaps.maxShaderAtomicCounters[gl::ShaderType::Geometry]       = 0;
+        mNativeCaps.maxShaderAtomicCounters[gl::ShaderType::TessControl]    = 0;
+        mNativeCaps.maxShaderAtomicCounters[gl::ShaderType::TessEvaluation] = 0;
     }
     if (!mPhysicalDeviceFeatures.fragmentStoresAndAtomics)
     {
