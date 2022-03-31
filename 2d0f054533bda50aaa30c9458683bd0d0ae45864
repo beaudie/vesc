@@ -1,0 +1,67 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "3b43c00f_23f648ef",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 12
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-03-31T14:20:12Z",
+      "side": 1,
+      "message": "Great job! This turned out much cleaner and more efficient than I imaged.",
+      "revId": "2d0f054533bda50aaa30c9458683bd0d0ae45864",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b637f4d6_00828ac4",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.cpp",
+        "patchSetId": 12
+      },
+      "lineNbr": 1676,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-03-31T14:20:12Z",
+      "side": 1,
+      "message": "Suggest keeping in a helper function, this function is huge as it is!",
+      "range": {
+        "startLine": 1659,
+        "startChar": 0,
+        "endLine": 1676,
+        "endChar": 32
+      },
+      "revId": "2d0f054533bda50aaa30c9458683bd0d0ae45864",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "828e1b3f_a2bec3cf",
+        "filename": "src/tests/gl_tests/RobustResourceInitTest.cpp",
+        "patchSetId": 12
+      },
+      "lineNbr": 433,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-03-31T14:20:12Z",
+      "side": 1,
+      "message": "nit: D",
+      "range": {
+        "startLine": 433,
+        "startChar": 5,
+        "endLine": 433,
+        "endChar": 6
+      },
+      "revId": "2d0f054533bda50aaa30c9458683bd0d0ae45864",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
