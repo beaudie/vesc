@@ -1,0 +1,107 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "63993bbf_2cb256fd",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-03-31T18:16:17Z",
+      "side": 1,
+      "message": "I don\u0027t know if we have a check for this, but we should also make sure on first use that the array is sized. If there isn\u0027t one already, you could add a test that does something like:\n\n```\ndeclare unsized array\nvoid f() { use the array; }\ndeclare the layout\nvoid main() { f(); }\n```\n\nChanging the type after the array is used may work, but IIRC this scenario is illegal and should produce an error.",
+      "revId": "fe4a522e9f4792711b8225b7904692da3bdd9967",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "42759e00_6b1b67f3",
+        "filename": "src/compiler/translator/ParseContext.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 1241,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-03-31T18:16:17Z",
+      "side": 1,
+      "message": "Needs to be updated",
+      "range": {
+        "startLine": 1241,
+        "startChar": 61,
+        "endLine": 1241,
+        "endChar": 92
+      },
+      "revId": "fe4a522e9f4792711b8225b7904692da3bdd9967",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "8955b028_f9432990",
+        "filename": "src/compiler/translator/ParseContext.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 1251,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-03-31T18:16:17Z",
+      "side": 1,
+      "message": "also here",
+      "range": {
+        "startLine": 1251,
+        "startChar": 83,
+        "endLine": 1251,
+        "endChar": 95
+      },
+      "revId": "fe4a522e9f4792711b8225b7904692da3bdd9967",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ecd7d51d_2c48318c",
+        "filename": "src/compiler/translator/ParseContext.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 1258,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-03-31T18:16:17Z",
+      "side": 1,
+      "message": "You should be able to de-duplicate this with the previous if, just use a different string for the error if you have to (but honestly I would just use the same string encompassing both cases)",
+      "revId": "fe4a522e9f4792711b8225b7904692da3bdd9967",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "a0e6f3fd_b5c514c1",
+        "filename": "src/compiler/translator/ParseContext.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 2839,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-03-31T18:16:17Z",
+      "side": 1,
+      "message": "Good for debugging, but shouldn\u0027t be a warning. It\u0027s not a warning for tessellation, is it?\n\nAlso the comment above this needs updating",
+      "range": {
+        "startLine": 2836,
+        "startChar": 0,
+        "endLine": 2839,
+        "endChar": 36
+      },
+      "revId": "fe4a522e9f4792711b8225b7904692da3bdd9967",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
