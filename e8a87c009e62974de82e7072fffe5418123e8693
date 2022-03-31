@@ -38,6 +38,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "491406bb_47410d35",
+        "filename": "src/compiler/translator/OutputHLSL.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 376,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2022-03-31T16:16:38Z",
+      "side": 1,
+      "message": "I re-learned out outputs of shaders work in d3d. They don\u0027t use registers like uniforms (just semantic names like `SV_TARGET2`) so I don\u0027t think you need to worry about that. See `DynamicHLSL::generatePixelShaderForOutputSignature` for where that\u0027s generated.\n\nThat said, I\u0027m not sure why you needed to start with register 1. Register 0 is possibly used for our translation uniforms.",
+      "parentUuid": "aece481f_372238af",
+      "revId": "e8a87c009e62974de82e7072fffe5418123e8693",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "9344d156_bff04562",
         "filename": "src/libANGLE/renderer/d3d/DynamicImage2DHLSL.cpp",
         "patchSetId": 4
