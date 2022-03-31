@@ -152,9 +152,10 @@ class RendererVk : angle::NonCopyable
     {
         return mPhysicalDeviceProperties;
     }
-    const VkPhysicalDeviceSubgroupProperties &getPhysicalDeviceSubgroupProperties() const
+    const VkPhysicalDevicePrimitivesGeneratedQueryFeaturesEXT &
+    getPhysicalDevicePrimitivesGeneratedQueryFeatures() const
     {
-        return mSubgroupProperties;
+        return mPrimitivesGeneratedQueryFeatures;
     }
     const VkPhysicalDeviceFeatures &getPhysicalDeviceFeatures() const
     {
@@ -611,6 +612,7 @@ class RendererVk : angle::NonCopyable
     VkPhysicalDeviceProtectedMemoryProperties mProtectedMemoryProperties;
     VkPhysicalDeviceHostQueryResetFeaturesEXT mHostQueryResetFeatures;
     VkPhysicalDeviceDepthClipControlFeaturesEXT mDepthClipControlFeatures;
+    VkPhysicalDevicePrimitivesGeneratedQueryFeaturesEXT mPrimitivesGeneratedQueryFeatures;
     VkPhysicalDevicePrimitiveTopologyListRestartFeaturesEXT mPrimitiveTopologyListRestartFeatures;
     VkPhysicalDeviceBlendOperationAdvancedFeaturesEXT mBlendOperationAdvancedFeatures;
     VkPhysicalDeviceBlendOperationAdvancedPropertiesEXT mBlendOperationAdvancedProperties;
