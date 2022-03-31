@@ -159,6 +159,24 @@
       "parentUuid": "43c7dea2_51410a1d",
       "revId": "e8a87c009e62974de82e7072fffe5418123e8693",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "96a19538_06a7a6b3",
+        "filename": "src/libANGLE/renderer/d3d/DynamicImage2DHLSL.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 914,
+      "author": {
+        "id": 1216604
+      },
+      "writtenOn": "2022-03-31T17:34:45Z",
+      "side": 1,
+      "message": "Ahh, good to know, thanks.\n\nIn that case, it\u0027ll all have to be dynamic. I\u0027m going to try leaving the assignments as-is, and then offsetting both the register assignments and the corresponding slots passed in the API calls (not done in this CL).",
+      "parentUuid": "59d8fd98_ad3e5675",
+      "revId": "e8a87c009e62974de82e7072fffe5418123e8693",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
