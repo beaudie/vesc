@@ -817,7 +817,6 @@ void StateManager11::setUnorderedAccessViewInternal(gl::ShaderType shaderType,
                                                     UINT resourceSlot,
                                                     const UAVType *uav)
 {
-    ASSERT(shaderType == gl::ShaderType::Compute);
     ASSERT(static_cast<size_t>(resourceSlot) < mCurComputeUAVs.size());
     const ViewRecord<D3D11_UNORDERED_ACCESS_VIEW_DESC> &record = mCurComputeUAVs[resourceSlot];
 
@@ -837,7 +836,17 @@ void StateManager11::setUnorderedAccessViewInternal(gl::ShaderType shaderType,
             unsetConflictingSRVs(gl::PipelineType::ComputePipeline, gl::ShaderType::Compute,
                                  resource, nullptr, false);
         }
-        deviceContext->CSSetUnorderedAccessViews(resourceSlot, 1, &uavPtr, nullptr);
+        switch (shaderType) {
+            case gl::ShaderType::Compute:
+                deviceContext->CSSetUnorderedAccessViews(resourceSlot, 1, &uavPtr, nullptr);
+                break;
+            case gl::ShaderType::Fragment:
+                deviceContext->OMSetRenderTargetsAndUnorderedAccessViews(D3D11_KEEP_RENDER_TARGETS_AND_DEPTH_STENCIL, nullptr, nullptr, resourceSlot, 1, &uavPtr, nullptr);
+                break;
+            default:
+                UNIMPLEMENTED();
+                break;
+        }
 
         mCurComputeUAVs.update(resourceSlot, uavPtr);
     }
@@ -3761,6 +3770,7 @@ angle::Result StateManager11::syncShaderStorageBuffersForShader(const gl::Contex
 
         switch (shaderType)
         {
+            case gl::ShaderType::Fragment:
             case gl::ShaderType::Compute:
             {
                 setUnorderedAccessViewInternal(shaderType, registerIndex, uavPtr);
@@ -3768,7 +3778,6 @@ angle::Result StateManager11::syncShaderStorageBuffersForShader(const gl::Contex
             }
 
             case gl::ShaderType::Vertex:
-            case gl::ShaderType::Fragment:
             case gl::ShaderType::Geometry:
                 UNIMPLEMENTED();
                 break;
