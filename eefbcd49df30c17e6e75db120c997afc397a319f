@@ -71,6 +71,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "e82dca75_f4639b36",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1340649
+      },
+      "writtenOn": "2022-03-31T15:46:23Z",
+      "side": 1,
+      "message": "interesting, we do not expose this extension, maybe functionality is in there but just not exposed? need to check",
+      "parentUuid": "9ea8791d_618e9ddf",
+      "revId": "eefbcd49df30c17e6e75db120c997afc397a319f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "2d000db8_3a94311b",
@@ -84,6 +102,30 @@
       "writtenOn": "2022-03-31T15:42:32Z",
       "side": 1,
       "message": "rather than checking multiple lists here, maybe it would make sense to make the list more dynamic and build it depending on what extensions are available or not during device setup.",
+      "range": {
+        "startLine": 583,
+        "startChar": 0,
+        "endLine": 596,
+        "endChar": 0
+      },
+      "revId": "eefbcd49df30c17e6e75db120c997afc397a319f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "7bcb87a1_ec30ed23",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 596,
+      "author": {
+        "id": 1340649
+      },
+      "writtenOn": "2022-03-31T15:46:23Z",
+      "side": 1,
+      "message": "+1",
+      "parentUuid": "2d000db8_3a94311b",
       "range": {
         "startLine": 583,
         "startChar": 0,
