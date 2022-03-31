@@ -39,6 +39,30 @@
       },
       "revId": "f9307d199c420cda2b2c74dbca7ef07d792b229c",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "c480cd22_8f6337cf",
+        "filename": "src/libANGLE/Surface.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 219,
+      "author": {
+        "id": 1340649
+      },
+      "writtenOn": "2022-03-31T15:48:25Z",
+      "side": 1,
+      "message": "\u003e why not use that?\n\n1. mirroring what ScopedContextRef did\n2. the sopedref should not destroy a surface, it just needs to keep an already destroyed surface alive during our internal context juggling\n\n\u003e release is missing a check for  mRefCount \u003d\u003d 0\n\nwill add",
+      "parentUuid": "9e2cf66f_2cc57955",
+      "range": {
+        "startLine": 215,
+        "startChar": 0,
+        "endLine": 219,
+        "endChar": 5
+      },
+      "revId": "f9307d199c420cda2b2c74dbca7ef07d792b229c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
