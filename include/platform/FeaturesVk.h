@@ -413,6 +413,13 @@ struct FeaturesVk : FeatureSetBase
                                         "VkDevice supports VK_EXT_depth_clip_control extension.",
                                         &members, "http://anglebug.com/5421"};
 
+    // Whether the VkDevice supports the VK_EXT_primitive_topology_list_restart extension
+    // http://anglebug.com/3832
+    Feature supportsPrimitiveTopologyListRestart = {
+        "supportsPrimitiveTopologyListRestart", FeatureCategory::VulkanFeatures,
+        "VkDevice supports VK_EXT_primitive_topology_list_restart extension.", &members,
+        "http://anglebug.com/3832"};
+
     // Whether the VkDevice supports the VK_EXT_blend_operation_advanced extension
     // http://anglebug.com/3586
     Feature supportsBlendOperationAdvanced = {

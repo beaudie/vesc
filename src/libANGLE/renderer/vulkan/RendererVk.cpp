@@ -138,8 +138,6 @@ constexpr const char *kSkippedMessages[] = {
     "UNASSIGNED-CoreValidation-Shader-InputNotProduced",
     // http://anglebug.com/2796
     "UNASSIGNED-CoreValidation-Shader-PointSizeMissing",
-    // http://anglebug.com/3832
-    "VUID-VkPipelineInputAssemblyStateCreateInfo-topology-00428",
     // Best Practices Skips https://issuetracker.google.com/issues/166641492
     // https://issuetracker.google.com/issues/166793850
     "UNASSIGNED-BestPractices-vkCreateCommandPool-command-buffer-reset",
@@ -192,6 +190,13 @@ constexpr const char *kSkippedMessages[] = {
     // http://anglebug.com/7105
     "VUID-vkCmdDraw-None-06538",
     "VUID-vkCmdDrawIndexed-None-06538",
+};
+
+// Validation messages that should be ignored only when VK_EXT_primitive_topology_list_restart is
+// not present.
+constexpr const char *kNoListRestartSkippedMessages[] = {
+    // http://anglebug.com/3832
+    "VUID-VkPipelineInputAssemblyStateCreateInfo-topology-00428",
 };
 
 struct SkippedSyncvalMessage
@@ -550,6 +555,21 @@ enum class DebugMessageReport
     Print,
 };
 
+bool IsMessageInSkipList(const char *message,
+                         const char *const skippedList[],
+                         size_t skippedListSize)
+{
+    for (size_t index = 0; index < skippedListSize; ++index)
+    {
+        if (strstr(message, skippedList[index]) != nullptr)
+        {
+            return true;
+        }
+    }
+
+    return false;
+}
+
 // Suppress validation errors that are known.  Returns DebugMessageReport::Ignore in that case.
 DebugMessageReport ShouldReportDebugMessage(RendererVk *renderer,
                                             const char *messageId,
@@ -561,12 +581,17 @@ DebugMessageReport ShouldReportDebugMessage(RendererVk *renderer,
     }
 
     // Check with non-syncval messages:
-    for (const char *msg : kSkippedMessages)
+    if (IsMessageInSkipList(message, kSkippedMessages, ArraySize(kSkippedMessages)))
     {
-        if (strstr(message, msg) != nullptr)
-        {
-            return DebugMessageReport::Ignore;
-        }
+        return DebugMessageReport::Ignore;
+    }
+
+    const bool hasListRestartSupport =
+        renderer->getFeatures().supportsPrimitiveTopologyListRestart.enabled;
+    if (!hasListRestartSupport && IsMessageInSkipList(message, kNoListRestartSkippedMessages,
+                                                      ArraySize(kNoListRestartSkippedMessages)))
+    {
+        return DebugMessageReport::Ignore;
     }
 
     // Then check with syncval messages:
@@ -1801,6 +1826,10 @@ void RendererVk::queryDeviceExtensionFeatures(const vk::ExtensionNameList &devic
     mDepthClipControlFeatures.sType =
         VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_DEPTH_CLIP_CONTROL_FEATURES_EXT;
 
+    mPrimitiveTopologyListRestartFeatures = {};
+    mPrimitiveTopologyListRestartFeatures.sType =
+        VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_PRIMITIVE_TOPOLOGY_LIST_RESTART_FEATURES_EXT;
+
     mBlendOperationAdvancedFeatures = {};
     mBlendOperationAdvancedFeatures.sType =
         VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_BLEND_OPERATION_ADVANCED_FEATURES_EXT;
@@ -1936,6 +1965,11 @@ void RendererVk::queryDeviceExtensionFeatures(const vk::ExtensionNameList &devic
         vk::AddToPNextChain(&deviceFeatures, &mDepthClipControlFeatures);
     }
 
+    if (ExtensionFound(VK_EXT_PRIMITIVE_TOPOLOGY_LIST_RESTART_EXTENSION_NAME, deviceExtensionNames))
+    {
+        vk::AddToPNextChain(&deviceFeatures, &mPrimitiveTopologyListRestartFeatures);
+    }
+
     if (ExtensionFound(VK_EXT_BLEND_OPERATION_ADVANCED_EXTENSION_NAME, deviceExtensionNames))
     {
         vk::AddToPNextChain(&deviceFeatures, &mBlendOperationAdvancedFeatures);
@@ -1968,6 +2002,7 @@ void RendererVk::queryDeviceExtensionFeatures(const vk::ExtensionNameList &devic
     mProtectedMemoryProperties.pNext                 = nullptr;
     mHostQueryResetFeatures.pNext                    = nullptr;
     mDepthClipControlFeatures.pNext                  = nullptr;
+    mPrimitiveTopologyListRestartFeatures.pNext      = nullptr;
     mBlendOperationAdvancedFeatures.pNext            = nullptr;
     mBlendOperationAdvancedProperties.pNext          = nullptr;
 }
@@ -2413,6 +2448,12 @@ angle::Result RendererVk::initializeDevice(DisplayVk *displayVk, uint32_t queueF
     {
         mEnabledDeviceExtensions.push_back(VK_EXT_DEPTH_CLIP_CONTROL_EXTENSION_NAME);
         vk::AddToPNextChain(&mEnabledFeatures, &mDepthClipControlFeatures);
+    }
+
+    if (getFeatures().supportsPrimitiveTopologyListRestart.enabled)
+    {
+        mEnabledDeviceExtensions.push_back(VK_EXT_PRIMITIVE_TOPOLOGY_LIST_RESTART_EXTENSION_NAME);
+        vk::AddToPNextChain(&mEnabledFeatures, &mPrimitiveTopologyListRestartFeatures);
     }
 
     if (getFeatures().supportsBlendOperationAdvanced.enabled)
@@ -3002,6 +3043,10 @@ void RendererVk::initFeatures(DisplayVk *displayVk,
 
     ANGLE_FEATURE_CONDITION(&mFeatures, supportsDepthClipControl,
                             mDepthClipControlFeatures.depthClipControl == VK_TRUE);
+
+    ANGLE_FEATURE_CONDITION(
+        &mFeatures, supportsPrimitiveTopologyListRestart,
+        mPrimitiveTopologyListRestartFeatures.primitiveTopologyListRestart == VK_TRUE);
 
     ANGLE_FEATURE_CONDITION(
         &mFeatures, supportsBlendOperationAdvanced,
