@@ -141,6 +141,24 @@
       "parentUuid": "6d7d2a0a_f928976a",
       "revId": "e8a87c009e62974de82e7072fffe5418123e8693",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "59d8fd98_ad3e5675",
+        "filename": "src/libANGLE/renderer/d3d/DynamicImage2DHLSL.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 914,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2022-03-31T17:21:19Z",
+      "side": 1,
+      "message": "I believe it\u0027s not link-time, but draw-time, based on the current Framebuffer. See ProgramD3D::updateCachedOutputLayout. If the FBO has a missing attachment, we adjust the output layout.",
+      "parentUuid": "43c7dea2_51410a1d",
+      "revId": "e8a87c009e62974de82e7072fffe5418123e8693",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
