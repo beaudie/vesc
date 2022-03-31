@@ -16,6 +16,23 @@
       "message": "Request for checking the validity of MRT + this new feature.",
       "revId": "a33fe802a216daeda278fdc8266da34c100a12de",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "2bf72b65_3d8c0932",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 10
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1216604
+      },
+      "writtenOn": "2022-03-31T16:59:08Z",
+      "side": 1,
+      "message": "Thanks for your comments!",
+      "revId": "a33fe802a216daeda278fdc8266da34c100a12de",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }

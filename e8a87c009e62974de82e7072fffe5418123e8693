@@ -56,6 +56,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "19b6fcba_3001003a",
+        "filename": "src/compiler/translator/OutputHLSL.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 376,
+      "author": {
+        "id": 1216604
+      },
+      "writtenOn": "2022-03-31T16:59:08Z",
+      "side": 1,
+      "message": "Here\u0027s the FXC error if I don\u0027t bump the register to 1:\n\nerror X4509: UAV registers live in the same name space as outputs, so they must be bound to at least u1, manual bind to slot u0 failed\n\nBy \"outputs\" in a pixel shader, I assume it means SV_TARGET*. So I think I would need to start above the highest-used target.",
+      "parentUuid": "491406bb_47410d35",
+      "revId": "e8a87c009e62974de82e7072fffe5418123e8693",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "9344d156_bff04562",
         "filename": "src/libANGLE/renderer/d3d/DynamicImage2DHLSL.cpp",
         "patchSetId": 4
