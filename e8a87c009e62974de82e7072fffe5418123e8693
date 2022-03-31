@@ -74,6 +74,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "391d5ce0_d30162f8",
+        "filename": "src/compiler/translator/OutputHLSL.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 376,
+      "author": {
+        "id": 1216604
+      },
+      "writtenOn": "2022-03-31T17:10:26Z",
+      "side": 1,
+      "message": "And the trick with that is that the output layout seems to be computed in DynamicHLSL::getPixelShaderOutputKey(), which is long after the translator has run. So it\u0027s possible that register assignment might have to move to the dynamic HLSL phase as well. Or maybe I\u0027m wrong and there\u0027s still a chance to retrieve the output layout size in the translator.",
+      "parentUuid": "19b6fcba_3001003a",
+      "revId": "e8a87c009e62974de82e7072fffe5418123e8693",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "9344d156_bff04562",
         "filename": "src/libANGLE/renderer/d3d/DynamicImage2DHLSL.cpp",
         "patchSetId": 4
@@ -103,6 +121,24 @@
       "side": 1,
       "message": "I don\u0027t recall the details. Hopefully a test with MRT with some storage image rewriting (I believe integer outputs would be one condition?) + storage images would prove it\u0027s correct.",
       "parentUuid": "9344d156_bff04562",
+      "revId": "e8a87c009e62974de82e7072fffe5418123e8693",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "43c7dea2_51410a1d",
+        "filename": "src/libANGLE/renderer/d3d/DynamicImage2DHLSL.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 914,
+      "author": {
+        "id": 1216604
+      },
+      "writtenOn": "2022-03-31T17:10:26Z",
+      "side": 1,
+      "message": "Thanks. I\u0027ll look for a test, or write one.\n\nAny idea why this stuff has to be done at link time? Is there something in other shader stages that can affect the pixel shader output layout? (And similarly for image2D output: do other shader stages affect it, given that up to now it has been a compute-only feature?)",
+      "parentUuid": "6d7d2a0a_f928976a",
       "revId": "e8a87c009e62974de82e7072fffe5418123e8693",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
