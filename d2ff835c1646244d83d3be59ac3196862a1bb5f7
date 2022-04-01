@@ -1,6 +1,23 @@
 {
   "comments": [
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "3f554dbc_131b08a3",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1359249
+      },
+      "writtenOn": "2022-04-01T20:26:23Z",
+      "side": 1,
+      "message": "Responses. thanks for feedback. Open request for feedback on the first.",
+      "revId": "d2ff835c1646244d83d3be59ac3196862a1bb5f7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "e4609621_1b89fa11",
@@ -20,6 +37,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "e34f8b2a_deb31247",
+        "filename": "src/libANGLE/renderer/SurfaceImpl.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 156,
+      "author": {
+        "id": 1359249
+      },
+      "writtenOn": "2022-04-01T20:26:23Z",
+      "side": 1,
+      "message": "Bad comment. I was trying so that it is only updated, if the backend, SurfaceVk or similar knows what the updated value. Otherwise, its the value set and get in Surface.cpp. Not sure If I just want to return EGL_BACK_BUFFER here, and then just override for SurfaceVk.cpp?\nMost backends don\u0027t have support implemented, so its always EGL_BACK_BUFFER.",
+      "parentUuid": "e4609621_1b89fa11",
+      "revId": "d2ff835c1646244d83d3be59ac3196862a1bb5f7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "09991050_a1e23234",
         "filename": "src/libANGLE/renderer/vulkan/SurfaceVk.cpp",
         "patchSetId": 4
@@ -31,6 +66,24 @@
       "writtenOn": "2022-04-01T20:19:35Z",
       "side": 1,
       "message": "Looking back, this seems wrong, it\u0027s ignoring swap interval. We have a function called `GetDesiredPresentMode` that determines the desired present mode. I suggest passing `renderBuffer` to that function, and move this `if` logic there.\n\nThen you can remove the logic in line 1055 and replace it with a call to `mDesiredSwapchainPresentMode \u003d GetDesiredPresentMode(...);` as well.",
+      "revId": "d2ff835c1646244d83d3be59ac3196862a1bb5f7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "3370012b_92ba5f03",
+        "filename": "src/libANGLE/renderer/vulkan/SurfaceVk.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 2398,
+      "author": {
+        "id": 1359249
+      },
+      "writtenOn": "2022-04-01T20:26:23Z",
+      "side": 1,
+      "message": "I\u0027ll work on it.",
+      "parentUuid": "09991050_a1e23234",
       "revId": "d2ff835c1646244d83d3be59ac3196862a1bb5f7",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
