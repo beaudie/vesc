@@ -365,6 +365,7 @@ std::vector<ParamT> FilterWithFunc(const std::vector<ParamT> &in, FilterFunc fil
         if (COND)                                                 \
         {                                                         \
             std::cout << "Test skipped: " #COND "." << std::endl; \
+            GTEST_SKIP() << #COND;                                \
             return;                                               \
         }                                                         \
     } while (0)
