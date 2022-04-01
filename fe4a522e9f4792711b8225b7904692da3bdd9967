@@ -36,6 +36,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "b93aa2de_ef45a39c",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-04-01T01:36:56Z",
+      "side": 1,
+      "message": "I think it should (fail). Yes the problem is parse order. The TType of the variable is used to derive the TType of nodes that use it, so the fact that we change it after declaration is only correct if the variable isn\u0027t otherwise used.\n\nTessellation may very well be broken here too.\n\nThat said, we are already accepting a shader that we should technically fail to compile, and the TType problems that may arise are really corner cases, so we\u0027re technically in the weeds. I wouldn\u0027t worry too much about it.",
+      "parentUuid": "965548cc_e957bc7b",
+      "revId": "fe4a522e9f4792711b8225b7904692da3bdd9967",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "42759e00_6b1b67f3",
@@ -202,6 +220,30 @@
       "side": 1,
       "message": "The behavior we\u0027re allowing is against the spec, but applications already expect it to work, that\u0027s why I left it as a warning.  The spec quote is still valid.  I can drop it if you prefer.  I don\u0027t know if tessellation emits the same warning, we don\u0027t have as many unit tests for that.",
       "parentUuid": "a0e6f3fd_b5c514c1",
+      "range": {
+        "startLine": 2836,
+        "startChar": 0,
+        "endLine": 2839,
+        "endChar": 36
+      },
+      "revId": "fe4a522e9f4792711b8225b7904692da3bdd9967",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "ab481747_1d529986",
+        "filename": "src/compiler/translator/ParseContext.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 2839,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-04-01T01:36:56Z",
+      "side": 1,
+      "message": "Ack, you\u0027re right tessellation and geometry are being different in this regard.",
+      "parentUuid": "f75aa73c_b9c60a30",
       "range": {
         "startLine": 2836,
         "startChar": 0,
