@@ -345,16 +345,19 @@ std::shared_ptr<WaitableCompileEvent> ShaderD3D::compile(const gl::Context *cont
         mSlowCompilingUniformBlockSet =
             GetSlowCompilingUniformBlockSet(sh::GetSlowCompilingUniformBlockSet(compilerHandle));
 
-        for (const sh::InterfaceBlock &interfaceBlock : mState.getShaderStorageBlocks())
+        if (mState.getShaderType() == gl::ShaderType::Compute)
         {
-            if (interfaceBlock.active)
+            for (const sh::InterfaceBlock &interfaceBlock : mState.getShaderStorageBlocks())
             {
-                unsigned int index = static_cast<unsigned int>(-1);
-                bool blockRegisterResult =
-                    sh::GetShaderStorageBlockRegister(compilerHandle, interfaceBlock.name, &index);
-                ASSERT(blockRegisterResult);
+                if (interfaceBlock.active)
+                {
+                    unsigned int index       = static_cast<unsigned int>(-1);
+                    bool blockRegisterResult = sh::GetShaderStorageBlockRegister(
+                        compilerHandle, interfaceBlock.name, &index);
+                    ASSERT(blockRegisterResult);
 
-                mShaderStorageBlockRegisterMap[interfaceBlock.name] = index;
+                    mShaderStorageBlockRegisterMap[interfaceBlock.name] = index;
+                }
             }
         }
 
