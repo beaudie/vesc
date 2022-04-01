@@ -33,6 +33,86 @@
       "message": "BTW, the Mac failure was a flake (I restarted it, but haven\u0027t filed a bug for the flake)",
       "revId": "ca943167e4b999cba807b8a13712995ffb656188",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "e42c7758_5c7ac306",
+        "filename": "src/tests/gl_tests/AtomicCounterBufferTest.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 76,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-04-01T19:20:37Z",
+      "side": 1,
+      "message": "I would cap maxTessellationControlAtomicCounters to some small value, like 16, before using it in tests. We don\u0027t practically have a limit for this (other than Vulkan limit on storage buffer size), so on some devices you might get intmax here, which memory-wise is not great",
+      "revId": "ca943167e4b999cba807b8a13712995ffb656188",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "fdf99fa9_fd09f7ae",
+        "filename": "src/tests/gl_tests/AtomicCounterBufferTest.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 116,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-04-01T19:20:37Z",
+      "side": 1,
+      "message": "This doesn\u0027t seem to match the logic in the comment. For ID 0, it\u0027s correct, but for ID 1, it\u0027s only `counter_id` 1 where `1%counter_id \u003d\u003d 0`. For ID 2, it\u0027s only `counter_id`s 1 and 2.\n\nMaybe you meant to do `counter_id % max(1, gl_InvocationID) \u003d\u003d 0`?",
+      "revId": "ca943167e4b999cba807b8a13712995ffb656188",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "4c07a216_da25f47d",
+        "filename": "src/tests/gl_tests/AtomicCounterBufferTest.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 172,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-04-01T19:20:37Z",
+      "side": 1,
+      "message": "As much as I like snake_case, ANGLE uses camelCase!",
+      "range": {
+        "startLine": 172,
+        "startChar": 10,
+        "endLine": 172,
+        "endChar": 44
+      },
+      "revId": "ca943167e4b999cba807b8a13712995ffb656188",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "0bd07b0b_106f07b0",
+        "filename": "src/tests/gl_tests/AtomicCounterBufferTest.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 216,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-04-01T19:20:37Z",
+      "side": 1,
+      "message": "ditto",
+      "range": {
+        "startLine": 216,
+        "startChar": 23,
+        "endLine": 216,
+        "endChar": 62
+      },
+      "revId": "ca943167e4b999cba807b8a13712995ffb656188",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
