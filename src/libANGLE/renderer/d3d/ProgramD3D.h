@@ -106,6 +106,15 @@ struct D3DUniformBlock : D3DInterfaceBlock
     gl::ShaderMap<unsigned int> mStructureByteStrides;
 };
 
+struct D3DShaderStorageBlock : public D3DInterfaceBlock
+{
+    D3DShaderStorageBlock();
+    D3DShaderStorageBlock(const D3DShaderStorageBlock &other);
+
+    std::string mName;
+    unsigned int mArraySize = 0;
+};
+
 struct D3DUBOCache
 {
     unsigned int registerIndex;
@@ -584,7 +593,7 @@ class ProgramD3D : public ProgramImpl
     std::map<std::string, int> mImageBindingMap;
     std::map<std::string, int> mAtomicBindingMap;
     std::vector<D3DUniformBlock> mD3DUniformBlocks;
-    std::vector<D3DInterfaceBlock> mD3DShaderStorageBlocks;
+    std::vector<D3DShaderStorageBlock> mD3DShaderStorageBlocks;
     std::array<unsigned int, gl::IMPLEMENTATION_MAX_ATOMIC_COUNTER_BUFFER_BINDINGS>
         mComputeAtomicCounterBufferRegisterIndices;
 
