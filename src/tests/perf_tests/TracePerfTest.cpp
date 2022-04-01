@@ -668,13 +668,15 @@ TracePerfTest::TracePerfTest(const TracePerfParams &params)
     // TODO: http://anglebug.com/4533 This fails after the upgrade to the 26.20.100.7870 driver.
     if (IsWindows() && IsIntel() && mParams.isVulkan() && traceNameIs("manhattan_10"))
     {
-        mSkipTest = true;
+        mSkipTestReason = "http://anglebug.com/4533 Fails after the upgrade to the 26.20.100.7870";
+        mSkipTest       = true;
     }
 
     // TODO: http://anglebug.com/4731 Fails on older Intel drivers. Passes in newer.
     if (IsWindows() && IsIntel() && !mParams.isANGLE() && traceNameIs("angry_birds_2_1500"))
     {
-        mSkipTest = true;
+        mSkipTestReason = "http://anglebug.com/4731 Fails on older Intel drivers";
+        mSkipTest       = true;
     }
 
     if (traceNameIs("cod_mobile"))
@@ -693,7 +695,8 @@ TracePerfTest::TracePerfTest(const TracePerfParams &params)
         // Flaky on Intel/windows http://anglebug.com/6568
         if (IsWindows() && IsIntel())
         {
-            mSkipTest = true;
+            mSkipTestReason = "http://anglebug.com/6568 Flaky on Intel/windows";
+            mSkipTest       = true;
         }
     }
 
@@ -740,7 +743,8 @@ TracePerfTest::TracePerfTest(const TracePerfParams &params)
         // TODO(https://anglebug.com/5517) Linux+Intel generates "Framebuffer is incomplete" errors.
         if (IsLinux() && IsIntel() && mParams.isVulkan())
         {
-            mSkipTest = true;
+            mSkipTestReason = "https://anglebug.com/5517 'Framebuffer is incomplete' errors.";
+            mSkipTest       = true;
         }
     }
 
@@ -761,7 +765,8 @@ TracePerfTest::TracePerfTest(const TracePerfParams &params)
         // Failing on Linux Intel and AMD due to invalid enum. http://anglebug.com/5822
         if (IsLinux() && (IsIntel() || IsAMD()) && mParams.driver != GLESDriverType::AngleEGL)
         {
-            mSkipTest = true;
+            mSkipTestReason = "http://anglebug.com/5822 invalid enum";
+            mSkipTest       = true;
         }
     }
 
@@ -781,7 +786,8 @@ TracePerfTest::TracePerfTest(const TracePerfParams &params)
         // incomplete" errors with the Vulkan backend.
         if (mParams.isVulkan() && ((IsLinux() && IsIntel()) || IsPixel2()))
         {
-            mSkipTest = true;
+            mSkipTestReason = "https://anglebug.com/5517 'Framebuffer is incomplete' errors.";
+            mSkipTest       = true;
         }
     }
 

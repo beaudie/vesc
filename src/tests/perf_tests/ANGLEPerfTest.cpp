@@ -278,7 +278,7 @@ void ANGLEPerfTest::run()
 {
     if (mSkipTest)
     {
-        return;
+        GTEST_SKIP() << mSkipTestReason;
     }
 
     if (mStepsToRun <= 0)
@@ -714,8 +714,8 @@ ANGLERenderTest::ANGLERenderTest(const std::string &name,
             mEntryPointsLib.reset(OpenSharedLibraryWithExtension(
                 GetNativeEGLLibraryNameWithExtension(), SearchType::SystemDir));
 #else
-            std::cerr << "Not implemented." << std::endl;
-            mSkipTest = true;
+            mSkipTestReason = "Not implemented.";
+            mSkipTest       = true;
 #endif  // defined(ANGLE_USE_UTIL_LOADER) && !defined(ANGLE_PLATFORM_WINDOWS)
             break;
         case GLESDriverType::SystemWGL:
@@ -723,13 +723,13 @@ ANGLERenderTest::ANGLERenderTest(const std::string &name,
             mGLWindow = WGLWindow::New(testParams.majorVersion, testParams.minorVersion);
             mEntryPointsLib.reset(OpenSharedLibrary("opengl32", SearchType::SystemDir));
 #else
-            std::cout << "WGL driver not available. Skipping test." << std::endl;
-            mSkipTest = true;
+            mSkipTestReason = "WGL driver not available.";
+            mSkipTest       = true;
 #endif  // defined(ANGLE_USE_UTIL_LOADER) && defined(ANGLE_PLATFORM_WINDOWS)
             break;
         default:
-            std::cerr << "Error in switch." << std::endl;
-            mSkipTest = true;
+            mSkipTestReason = "Error in switch.";
+            mSkipTest       = true;
             break;
     }
 }
@@ -804,8 +804,8 @@ void ANGLERenderTest::SetUp()
     switch (res)
     {
         case GLWindowResult::NoColorspaceSupport:
-            mSkipTest = true;
-            std::cout << "Test skipped due to missing support for color spaces." << std::endl;
+            mSkipTest       = true;
+            mSkipTestReason = "Missing support for color spaces.";
             return;
         case GLWindowResult::Error:
             mSkipTest = true;
@@ -831,9 +831,10 @@ void ANGLERenderTest::SetUp()
         mIsTimestampQueryAvailable = EnsureGLExtensionEnabled("GL_EXT_disjoint_timer_query");
     }
 
-    if (!areExtensionPrerequisitesFulfilled())
+    if (!areExtensionPrerequisitesFulfilled(&mSkipTestReason))
     {
         mSkipTest = true;
+        GTEST_SKIP() << mSkipTestReason;
     }
 
     if (mSkipTest)
@@ -1141,14 +1142,17 @@ GLWindowBase *ANGLERenderTest::getGLWindow()
     return mGLWindow;
 }
 
-bool ANGLERenderTest::areExtensionPrerequisitesFulfilled() const
+bool ANGLERenderTest::areExtensionPrerequisitesFulfilled(std::string *reason) const
 {
     for (const char *extension : mExtensionPrerequisites)
     {
         if (!CheckExtensionExists(reinterpret_cast<const char *>(glGetString(GL_EXTENSIONS)),
                                   extension))
         {
-            std::cout << "Test skipped due to missing extension: " << extension << std::endl;
+            if (reason != nullptr)
+            {
+                *reason = std::string("Test skipped due to missing extension: ") + extension;
+            }
             return false;
         }
     }

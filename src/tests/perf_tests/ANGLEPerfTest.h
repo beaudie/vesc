@@ -118,6 +118,7 @@ class ANGLEPerfTest : public testing::Test, angle::NonCopyable
     Timer mTimer;
     uint64_t mGPUTimeNs;
     bool mSkipTest;
+    std::string mSkipTestReason;
     std::unique_ptr<perf_test::PerfResultReporter> mReporter;
     int mStepsToRun;
     int mTrialNumStepsPerformed;
@@ -214,7 +215,7 @@ class ANGLERenderTest : public ANGLEPerfTest
     void finishTest() override;
     void computeGPUTime() override;
 
-    bool areExtensionPrerequisitesFulfilled() const;
+    bool areExtensionPrerequisitesFulfilled(std::string *reason = nullptr) const;
 
     void initPerfCounters();
 
