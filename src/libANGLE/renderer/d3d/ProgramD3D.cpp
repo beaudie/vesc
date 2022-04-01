@@ -1542,9 +1542,11 @@ angle::Result ProgramD3D::getPixelExecutableForCachedOutputLayout(
         return angle::Result::Continue;
     }
 
+    gl::Shader *shader = mState.getAttachedShader(gl::ShaderType::Fragment);
+
     std::string pixelHLSL = mDynamicHLSL->generatePixelShaderForOutputSignature(
         mShaderHLSL[gl::ShaderType::Fragment], mPixelShaderKey, mUsesFragDepth,
-        mPixelShaderOutputLayoutCache);
+        mPixelShaderOutputLayoutCache, shader->getShaderStorageBlocks());
 
     std::string finalPixelHLSL = mDynamicHLSL->generateShaderForImage2DBindSignature(
         context, *this, mState, gl::ShaderType::Fragment, pixelHLSL,
@@ -2212,7 +2214,7 @@ void ProgramD3D::initializeShaderStorageBlocks()
 
         for (gl::ShaderType shaderType : gl::AllShaderTypes())
         {
-            if (shaderStorageBlock.isActive(shaderType))
+            if (shaderType == gl::ShaderType::Compute && shaderStorageBlock.isActive(shaderType))
             {
                 ASSERT(shadersD3D[shaderType]);
                 unsigned int baseRegister =
@@ -3274,6 +3276,11 @@ const D3DUniform *ProgramD3D::getD3DUniformFromLocation(GLint location) const
 
 bool ProgramD3D::hasVertexExecutableForCachedInputLayout()
 {
+    if (!mState.getAttachedShader(gl::ShaderType::Vertex))
+    {
+        return true;
+    }
+
     return mCachedVertexExecutableIndex.valid();
 }
 
@@ -3292,6 +3299,11 @@ bool ProgramD3D::hasGeometryExecutableForPrimitiveType(const gl::State &state,
 
 bool ProgramD3D::hasPixelExecutableForCachedOutputLayout()
 {
+    if (!mState.getAttachedShader(gl::ShaderType::Fragment))
+    {
+        return true;
+    }
+
     return mCachedPixelExecutableIndex.valid();
 }
 
