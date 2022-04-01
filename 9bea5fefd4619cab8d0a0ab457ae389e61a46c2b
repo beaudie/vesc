@@ -16,6 +16,23 @@
       "message": "PTAL - surprisingly the test \"dEQP.GLES31/functional_texture_border_clamp_range_clamp_nearest_unorm_depth_uint_stencil_sample_stencil\" is missing from ANGLE\u0027s GLES31 test list",
       "revId": "9bea5fefd4619cab8d0a0ab457ae389e61a46c2b",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "fc0df469_c183dd7b",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-04-01T03:08:40Z",
+      "side": 1,
+      "message": "Oops!\n\nAlso, I understand now why you need only handle either depth or stencil (but not both). The _texture_ can only be either of those (and so can the border color).",
+      "revId": "9bea5fefd4619cab8d0a0ab457ae389e61a46c2b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
