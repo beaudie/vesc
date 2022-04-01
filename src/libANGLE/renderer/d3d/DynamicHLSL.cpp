@@ -125,6 +125,43 @@ void WriteArrayString(std::ostringstream &strstr, unsigned int i)
     strstr << "]";
 }
 
+std::string ShaderStorageBlockHeader(gl::Shader *shader, size_t baseUAVRegister)
+{
+    const std::vector<sh::InterfaceBlock> &ssboInterfaceBlocks = shader->getShaderStorageBlocks();
+    if (ssboInterfaceBlocks.empty())
+    {
+        return "";
+    }
+
+    ShaderD3D *shaderD3D = GetImplAs<ShaderD3D>(shader);
+    std::string ssboHeader;
+    std::ostringstream out(ssboHeader);
+    for (const sh::InterfaceBlock &ssbo : ssboInterfaceBlocks)
+    {
+        size_t uavRegister = baseUAVRegister + shaderD3D->getShaderStorageBlockRegister(ssbo.name);
+        std::string name   = !ssbo.instanceName.empty() ? ssbo.instanceName : ssbo.name;
+        if (ssbo.isArray())
+        {
+            for (unsigned int arrayIndex = 0; arrayIndex < ssbo.arraySize; arrayIndex++)
+            {
+                out << "RWByteAddressBuffer "
+                    << "dx_" << name << "_" << arrayIndex << ": register(u"
+                    << uavRegister + arrayIndex << ");\n";
+            }
+        }
+        else
+        {
+            out << "RWByteAddressBuffer "
+                << "_" << name << ": register(u" << uavRegister << ");\n";
+        }
+    }
+    return out.str();
+}
+
+// kShaderStorageDeclarationString must be the same as outputHLSL.
+constexpr const char kShaderStorageDeclarationString[] =
+    "// @@ SHADER STORAGE DECLARATION STRING @@";
+
 constexpr const char *VERTEX_ATTRIBUTE_STUB_STRING      = "@@ VERTEX ATTRIBUTES @@";
 constexpr const char *VERTEX_OUTPUT_STUB_STRING         = "@@ VERTEX OUTPUT @@";
 constexpr const char *PIXEL_OUTPUT_STUB_STRING          = "@@ PIXEL OUTPUT @@";
@@ -144,7 +181,8 @@ DynamicHLSL::DynamicHLSL(RendererD3D *const renderer) : mRenderer(renderer) {}
 std::string DynamicHLSL::generateVertexShaderForInputLayout(
     const std::string &sourceShader,
     const InputLayout &inputLayout,
-    const std::vector<sh::ShaderVariable> &shaderAttributes) const
+    const std::vector<sh::ShaderVariable> &shaderAttributes,
+    gl::Shader *shader) const
 {
     std::ostringstream structStream;
     std::ostringstream initStream;
@@ -269,6 +307,10 @@ std::string DynamicHLSL::generateVertexShaderForInputLayout(
         angle::ReplaceSubstring(&vertexHLSL, VERTEX_ATTRIBUTE_STUB_STRING, structStream.str());
     ASSERT(success);
 
+    std::string ssboHeader = ShaderStorageBlockHeader(shader, inputLayout.size());
+    success = angle::ReplaceSubstring(&vertexHLSL, kShaderStorageDeclarationString, ssboHeader);
+    ASSERT(success);
+
     return vertexHLSL;
 }
 
@@ -276,7 +318,8 @@ std::string DynamicHLSL::generatePixelShaderForOutputSignature(
     const std::string &sourceShader,
     const std::vector<PixelShaderOutputVariable> &outputVariables,
     bool usesFragDepth,
-    const std::vector<GLenum> &outputLayout) const
+    const std::vector<GLenum> &outputLayout,
+    gl::Shader *shader) const
 {
     const int shaderModel      = mRenderer->getMajorShaderModel();
     std::string targetSemantic = (shaderModel >= 4) ? "SV_TARGET" : "COLOR";
@@ -348,6 +391,10 @@ std::string DynamicHLSL::generatePixelShaderForOutputSignature(
 
     bool success =
         angle::ReplaceSubstring(&pixelHLSL, PIXEL_OUTPUT_STUB_STRING, declarationStream.str());
+    ASSERT(success);
+
+    std::string ssboHeader = ShaderStorageBlockHeader(shader, numOutputs);
+    success = angle::ReplaceSubstring(&pixelHLSL, kShaderStorageDeclarationString, ssboHeader);
     ASSERT(success);
 
     return pixelHLSL;
