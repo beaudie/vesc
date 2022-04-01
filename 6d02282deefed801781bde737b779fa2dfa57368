@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "b4d35306_389304f8",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 11
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1323689
+      },
+      "writtenOn": "2022-04-01T18:53:52Z",
+      "side": 1,
+      "message": "Here\u0027s a first pass at addressing the driver bug. Let me know if there are other cases we should be checking or if we should go about this a different way. Thanks!",
+      "revId": "6d02282deefed801781bde737b779fa2dfa57368",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
