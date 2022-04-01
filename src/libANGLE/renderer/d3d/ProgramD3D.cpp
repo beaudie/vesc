@@ -381,6 +381,10 @@ D3DUniformBlock::D3DUniformBlock()
 
 D3DUniformBlock::D3DUniformBlock(const D3DUniformBlock &other) = default;
 
+D3DShaderStorageBlock::D3DShaderStorageBlock() {}
+
+D3DShaderStorageBlock::D3DShaderStorageBlock(const D3DShaderStorageBlock &other) = default;
+
 // D3DVarying Implementation
 
 D3DVarying::D3DVarying() : semanticIndex(0), componentCount(0), outputSlot(0) {}
@@ -1024,9 +1028,11 @@ std::unique_ptr<rx::LinkEvent> ProgramD3D::load(const gl::Context *context,
     ASSERT(mD3DShaderStorageBlocks.empty());
     for (size_t blockIndex = 0; blockIndex < shaderStorageBlockCount; ++blockIndex)
     {
-        D3DInterfaceBlock shaderStorageBlock;
+        D3DShaderStorageBlock shaderStorageBlock;
         for (gl::ShaderType shaderType : gl::AllShaderTypes())
         {
+            stream->readString(&shaderStorageBlock.mName);
+            stream->readInt(&shaderStorageBlock.mArraySize);
             stream->readInt(&shaderStorageBlock.mShaderRegisterIndexes[shaderType]);
         }
         mD3DShaderStorageBlocks.push_back(shaderStorageBlock);
@@ -1544,7 +1550,7 @@ angle::Result ProgramD3D::getPixelExecutableForCachedOutputLayout(
 
     std::string finalPixelHLSL = mDynamicHLSL->generatePixelShaderForOutputSignature(
         mShaderHLSL[gl::ShaderType::Fragment], mPixelShaderKey, mUsesFragDepth,
-        mPixelShaderOutputLayoutCache);
+        mPixelShaderOutputLayoutCache, mD3DShaderStorageBlocks);
 
     // Generate new pixel executable
     ShaderExecutableD3D *pixelExecutable = nullptr;
@@ -1587,7 +1593,8 @@ angle::Result ProgramD3D::getVertexExecutableForCachedInputLayout(
 
     // Generate new dynamic layout with attribute conversions
     std::string finalVertexHLSL = mDynamicHLSL->generateVertexShaderForInputLayout(
-        mShaderHLSL[gl::ShaderType::Vertex], mCachedInputLayout, mState.getProgramInputs());
+        mShaderHLSL[gl::ShaderType::Vertex], mCachedInputLayout, mState.getProgramInputs(),
+        mD3DShaderStorageBlocks);
 
     // Generate new vertex executable
     ShaderExecutableD3D *vertexExecutable = nullptr;
@@ -2177,7 +2184,8 @@ GLboolean ProgramD3D::validate(const gl::Caps & /*caps*/, gl::InfoLog * /*infoLo
 
 void ProgramD3D::initializeShaderStorageBlocks()
 {
-    if (mState.getShaderStorageBlocks().empty())
+    const std::vector<gl::InterfaceBlock> &shaderStorageBlocks = mState.getShaderStorageBlocks();
+    if (shaderStorageBlocks.empty())
     {
         return;
     }
@@ -2185,31 +2193,33 @@ void ProgramD3D::initializeShaderStorageBlocks()
     ASSERT(mD3DShaderStorageBlocks.empty());
 
     // Assign registers and update sizes.
-    gl::ShaderMap<const ShaderD3D *> shadersD3D = {};
-    for (gl::ShaderType shaderType : gl::AllShaderTypes())
+    for (size_t i = 0; i < shaderStorageBlocks.size(); i++)
     {
-        shadersD3D[shaderType] = SafeGetImplAs<ShaderD3D>(mState.getAttachedShader(shaderType));
-    }
-
-    for (const gl::InterfaceBlock &shaderStorageBlock : mState.getShaderStorageBlocks())
-    {
+        const gl::InterfaceBlock &shaderStorageBlock = shaderStorageBlocks[i];
         unsigned int shaderStorageBlockElement =
             shaderStorageBlock.isArray ? shaderStorageBlock.arrayElement : 0;
-
-        D3DInterfaceBlock d3dShaderStorageBlock;
+        D3DShaderStorageBlock d3dShaderStorageBlock;
 
         for (gl::ShaderType shaderType : gl::AllShaderTypes())
         {
             if (shaderStorageBlock.isActive(shaderType))
             {
-                ASSERT(shadersD3D[shaderType]);
+                gl::Shader *shader   = mState.getAttachedShader(shaderType);
+                ShaderD3D *shaderD3D = SafeGetImplAs<ShaderD3D>(shader);
                 unsigned int baseRegister =
-                    shadersD3D[shaderType]->getShaderStorageBlockRegister(shaderStorageBlock.name);
+                    shaderD3D->getShaderStorageBlockRegister(shaderStorageBlock.name);
+
+                const sh::InterfaceBlock &ssbo = shader->getShaderStorageBlocks()[i];
+                ASSERT(ssbo.staticUse);
+                ASSERT(ssbo.name == shaderStorageBlock.name);
+                d3dShaderStorageBlock.mName =
+                    !ssbo.instanceName.empty() ? ssbo.instanceName : ssbo.name;
+                d3dShaderStorageBlock.mArraySize = ssbo.isArray() ? ssbo.arraySize : 0;
+
                 d3dShaderStorageBlock.mShaderRegisterIndexes[shaderType] =
                     baseRegister + shaderStorageBlockElement;
             }
         }
-
         mD3DShaderStorageBlocks.push_back(d3dShaderStorageBlock);
     }
 }
