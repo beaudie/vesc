@@ -24,6 +24,8 @@ namespace
 {
 
 constexpr const ImmutableString kAngleDecorString("angle_");
+constexpr const char kShaderStorageDeclarationString[] =
+    "// @@ SHADER STORAGE DECLARATION STRING @@";
 
 static const char *UniformRegisterPrefix(const TType &type)
 {
@@ -763,6 +765,7 @@ TString ResourcesHLSL::uniformBlocksHeader(
 }
 
 TString ResourcesHLSL::shaderStorageBlocksHeader(
+    GLenum shaderType,
     const ReferencedInterfaceBlocks &referencedInterfaceBlocks)
 {
     TString interfaceBlocks;
@@ -778,19 +781,31 @@ TString ResourcesHLSL::shaderStorageBlocksHeader(
         if (instanceVariable != nullptr && instanceVariable->getType().isArray())
         {
             unsigned int instanceArraySize = instanceVariable->getType().getOutermostArraySize();
-            for (unsigned int arrayIndex = 0; arrayIndex < instanceArraySize; arrayIndex++)
+            if (shaderType == GL_COMPUTE_SHADER)
             {
-                interfaceBlocks += shaderStorageBlockString(
-                    interfaceBlock, instanceVariable, activeRegister + arrayIndex, arrayIndex);
+                for (unsigned int arrayIndex = 0; arrayIndex < instanceArraySize; arrayIndex++)
+                {
+                    interfaceBlocks += shaderStorageBlockString(
+                        interfaceBlock, instanceVariable, activeRegister + arrayIndex, arrayIndex);
+                }
             }
             mUAVRegister += instanceArraySize;
         }
         else
         {
-            interfaceBlocks += shaderStorageBlockString(interfaceBlock, instanceVariable,
-                                                        activeRegister, GL_INVALID_INDEX);
+            if (shaderType == GL_COMPUTE_SHADER)
+            {
+                interfaceBlocks += shaderStorageBlockString(interfaceBlock, instanceVariable,
+                                                            activeRegister, GL_INVALID_INDEX);
+            }
             mUAVRegister += 1u;
         }
+    }
+
+    if (shaderType != GL_COMPUTE_SHADER)
+    {
+        interfaceBlocks += kShaderStorageDeclarationString;
+        interfaceBlocks += "\n";
     }
 
     return (interfaceBlocks.empty() ? "" : ("// Shader Storage Blocks\n\n" + interfaceBlocks));
