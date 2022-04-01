@@ -35,6 +35,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "a4cb2812_e2cc9dcc",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 3346,
+      "author": {
+        "id": 1525982
+      },
+      "writtenOn": "2022-04-01T01:27:48Z",
+      "side": 1,
+      "message": "Updated.",
+      "parentUuid": "5f977b42_7705f923",
+      "revId": "032c5b13f62eb538b5c33493f3eb107d2741cc79",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "4a309996_620c01fd",
@@ -48,6 +66,24 @@
       "writtenOn": "2022-03-17T03:19:48Z",
       "side": 1,
       "message": "One (existing) issue here is that this is making the render pass set the layout of the MSAA image to PRESENT_SRC, instead of the resolve image.\n\nThe code in RenderPassCommandBufferHelper that chooses the layout would also need to be made aware of the fact that the image may be a resolve attachment, not necessarily the color attachment. I have left a TODO in `finalizeColorImageLayout` about that.",
+      "revId": "032c5b13f62eb538b5c33493f3eb107d2741cc79",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "4b448b7d_99d5818f",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 3355,
+      "author": {
+        "id": 1525982
+      },
+      "writtenOn": "2022-04-01T01:27:48Z",
+      "side": 1,
+      "message": "Filed a bug and updated the TODO.",
+      "parentUuid": "4a309996_620c01fd",
       "revId": "032c5b13f62eb538b5c33493f3eb107d2741cc79",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
@@ -69,6 +105,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "3156f653_37ae0142",
+        "filename": "src/libANGLE/renderer/vulkan/SurfaceVk.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 1690,
+      "author": {
+        "id": 1525982
+      },
+      "writtenOn": "2022-04-01T01:27:48Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "9c1709a8_87d63a95",
+      "revId": "032c5b13f62eb538b5c33493f3eb107d2741cc79",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "05190e88_5db4b6d7",
@@ -86,6 +140,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "2be3d301_fc94666b",
+        "filename": "src/libANGLE/renderer/vulkan/SurfaceVk.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 1695,
+      "author": {
+        "id": 1525982
+      },
+      "writtenOn": "2022-04-01T01:27:48Z",
+      "side": 1,
+      "message": "Added the feedback from `optimizeRenderPassForPresent()` here (`imageResolved`).",
+      "parentUuid": "05190e88_5db4b6d7",
+      "revId": "032c5b13f62eb538b5c33493f3eb107d2741cc79",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "44ef4d48_d8c01230",
@@ -99,6 +171,30 @@
       "writtenOn": "2022-03-17T03:19:48Z",
       "side": 1,
       "message": "*As a follow up*, could you please move this up to before `optimizeRenderPassForPresent`?",
+      "range": {
+        "startLine": 1718,
+        "startChar": 0,
+        "endLine": 1722,
+        "endChar": 5
+      },
+      "revId": "032c5b13f62eb538b5c33493f3eb107d2741cc79",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "319ee76c_7e7b1d62",
+        "filename": "src/libANGLE/renderer/vulkan/SurfaceVk.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 1722,
+      "author": {
+        "id": 1525982
+      },
+      "writtenOn": "2022-04-01T01:27:48Z",
+      "side": 1,
+      "message": "As per our discussion, this will start a new render pass and can affect the current render pass if moved above this function.",
+      "parentUuid": "44ef4d48_d8c01230",
       "range": {
         "startLine": 1718,
         "startChar": 0,
