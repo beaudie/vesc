@@ -1768,6 +1768,8 @@ angle::Result Renderer11::drawArrays(const gl::Context *context,
         return angle::Result::Continue;
     }
 
+    ANGLE_TRY(markRawBufferUsage(context));
+
     ProgramD3D *programD3D        = mStateManager.getProgramD3D();
     GLsizei adjustedInstanceCount = GetAdjustedInstanceCount(programD3D, instanceCount);
 
@@ -1860,6 +1862,8 @@ angle::Result Renderer11::drawElements(const gl::Context *context,
         return angle::Result::Continue;
     }
 
+    ANGLE_TRY(markRawBufferUsage(context));
+
     // Transform feedback is not allowed for DrawElements, this error should have been caught at the
     // API validation layer.
     const gl::State &glState = context->getState();
@@ -1945,9 +1949,10 @@ angle::Result Renderer11::drawArraysIndirect(const gl::Context *context, const v
         return angle::Result::Continue;
     }
 
+    ANGLE_TRY(markRawBufferUsage(context));
+
     const gl::State &glState = context->getState();
     ASSERT(!glState.isTransformFeedbackActiveUnpaused());
-
     gl::Buffer *drawIndirectBuffer = glState.getTargetBuffer(gl::BufferBinding::DrawIndirect);
     ASSERT(drawIndirectBuffer);
     Buffer11 *storage = GetImplAs<Buffer11>(drawIndirectBuffer);
@@ -1966,6 +1971,8 @@ angle::Result Renderer11::drawElementsIndirect(const gl::Context *context, const
     {
         return angle::Result::Continue;
     }
+
+    ANGLE_TRY(markRawBufferUsage(context));
 
     const gl::State &glState = context->getState();
     ASSERT(!glState.isTransformFeedbackActiveUnpaused());
