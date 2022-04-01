@@ -1786,6 +1786,8 @@ angle::Result Renderer11::drawArrays(const gl::Context *context,
         }
     }
 
+    ANGLE_TRY(markRawBufferUsage(context));
+
     switch (mode)
     {
         case gl::PrimitiveMode::LineLoop:
@@ -1863,6 +1865,9 @@ angle::Result Renderer11::drawElements(const gl::Context *context,
     // Transform feedback is not allowed for DrawElements, this error should have been caught at the
     // API validation layer.
     const gl::State &glState = context->getState();
+
+    ANGLE_TRY(markRawBufferUsage(context));
+
     ASSERT(!glState.isTransformFeedbackActiveUnpaused());
 
     // If this draw call is coming from an indirect call, offset by the indirect call's base vertex.
@@ -1946,6 +1951,9 @@ angle::Result Renderer11::drawArraysIndirect(const gl::Context *context, const v
     }
 
     const gl::State &glState = context->getState();
+
+    ANGLE_TRY(markRawBufferUsage(context));
+
     ASSERT(!glState.isTransformFeedbackActiveUnpaused());
 
     gl::Buffer *drawIndirectBuffer = glState.getTargetBuffer(gl::BufferBinding::DrawIndirect);
@@ -1968,6 +1976,9 @@ angle::Result Renderer11::drawElementsIndirect(const gl::Context *context, const
     }
 
     const gl::State &glState = context->getState();
+
+    ANGLE_TRY(markRawBufferUsage(context));
+
     ASSERT(!glState.isTransformFeedbackActiveUnpaused());
 
     gl::Buffer *drawIndirectBuffer = glState.getTargetBuffer(gl::BufferBinding::DrawIndirect);
