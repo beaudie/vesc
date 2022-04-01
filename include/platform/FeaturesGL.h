@@ -559,6 +559,11 @@ struct FeaturesGL : FeatureSetBase
     Feature emulateRGB10 = {"emulate_rgb10", FeatureCategory::OpenGLWorkarounds,
                             "Emulate RGB10 support using RGB10_A2.", &members,
                             "https://crbug.com/1300575"};
+
+    Feature alwaysUnbindFramebufferTexture2D = {
+        "always_unbind_framebuffer_texture_2d", FeatureCategory::OpenGLWorkarounds,
+        "Force unbind framebufferTexture2D before binding renderbuffer to work around driver bug.",
+        &members, "https://anglebug.com/5536"};
 };
 
 inline FeaturesGL::FeaturesGL()  = default;
