@@ -16,6 +16,23 @@
       "message": "Looking good Yuxin (though I want to study the new tests more, as Shabi knows more about atomics).  Questions about the new tests:\n\nWhat devices did you try the new tests with?  On the bots, I\u0027m guessing that they are exercised on desktop and Pixel 4.  Do you have a Pixel 4, to ensure the tests aren\u0027t skipped there?  If not, I can help with that.",
       "revId": "ca943167e4b999cba807b8a13712995ffb656188",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "03bf7265_2287be7e",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1290487
+      },
+      "writtenOn": "2022-04-01T18:59:04Z",
+      "side": 1,
+      "message": "BTW, the Mac failure was a flake (I restarted it, but haven\u0027t filed a bug for the flake)",
+      "revId": "ca943167e4b999cba807b8a13712995ffb656188",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
