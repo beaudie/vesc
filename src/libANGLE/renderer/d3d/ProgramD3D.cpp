@@ -1542,9 +1542,16 @@ angle::Result ProgramD3D::getPixelExecutableForCachedOutputLayout(
         return angle::Result::Continue;
     }
 
+    gl::Shader *shader = mState.getAttachedShader(gl::ShaderType::Fragment);
+
+    if (!shader)
+    {
+        return angle::Result::Continue;
+    }
+
     std::string finalPixelHLSL = mDynamicHLSL->generatePixelShaderForOutputSignature(
         mShaderHLSL[gl::ShaderType::Fragment], mPixelShaderKey, mUsesFragDepth,
-        mPixelShaderOutputLayoutCache);
+        mPixelShaderOutputLayoutCache, shader);
 
     // Generate new pixel executable
     ShaderExecutableD3D *pixelExecutable = nullptr;
@@ -1585,9 +1592,15 @@ angle::Result ProgramD3D::getVertexExecutableForCachedInputLayout(
         return angle::Result::Continue;
     }
 
+    gl::Shader *shader = mState.getAttachedShader(gl::ShaderType::Vertex);
+    if (!shader)
+    {
+        return angle::Result::Continue;
+    }
+
     // Generate new dynamic layout with attribute conversions
     std::string finalVertexHLSL = mDynamicHLSL->generateVertexShaderForInputLayout(
-        mShaderHLSL[gl::ShaderType::Vertex], mCachedInputLayout, mState.getProgramInputs());
+        mShaderHLSL[gl::ShaderType::Vertex], mCachedInputLayout, mState.getProgramInputs(), shader);
 
     // Generate new vertex executable
     ShaderExecutableD3D *vertexExecutable = nullptr;
@@ -2202,11 +2215,14 @@ void ProgramD3D::initializeShaderStorageBlocks()
         {
             if (shaderStorageBlock.isActive(shaderType))
             {
-                ASSERT(shadersD3D[shaderType]);
-                unsigned int baseRegister =
-                    shadersD3D[shaderType]->getShaderStorageBlockRegister(shaderStorageBlock.name);
-                d3dShaderStorageBlock.mShaderRegisterIndexes[shaderType] =
-                    baseRegister + shaderStorageBlockElement;
+                if (shadersD3D[shaderType])
+                {
+                    unsigned int baseRegister =
+                        shadersD3D[shaderType]->getShaderStorageBlockRegister(
+                            shaderStorageBlock.name);
+                    d3dShaderStorageBlock.mShaderRegisterIndexes[shaderType] =
+                        baseRegister + shaderStorageBlockElement;
+                }
             }
         }
 
@@ -3262,6 +3278,11 @@ const D3DUniform *ProgramD3D::getD3DUniformFromLocation(GLint location) const
 
 bool ProgramD3D::hasVertexExecutableForCachedInputLayout()
 {
+    if (!mState.getAttachedShader(gl::ShaderType::Vertex))
+    {
+        return true;
+    }
+
     return mCachedVertexExecutableIndex.valid();
 }
 
@@ -3280,6 +3301,11 @@ bool ProgramD3D::hasGeometryExecutableForPrimitiveType(const gl::State &state,
 
 bool ProgramD3D::hasPixelExecutableForCachedOutputLayout()
 {
+    if (!mState.getAttachedShader(gl::ShaderType::Fragment))
+    {
+        return true;
+    }
+
     return mCachedPixelExecutableIndex.valid();
 }
 
