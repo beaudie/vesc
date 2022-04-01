@@ -1786,6 +1786,13 @@ angle::Result Renderer11::drawArrays(const gl::Context *context,
         }
     }
 
+    const gl::Program *program = glState.getProgram();
+
+    if (program->getActiveShaderStorageBlockCount() > 0 ||
+        program->getActiveAtomicCounterBufferCount() > 0)
+    {
+        ANGLE_TRY(markRawBufferUsage(context));
+    }
     switch (mode)
     {
         case gl::PrimitiveMode::LineLoop:
