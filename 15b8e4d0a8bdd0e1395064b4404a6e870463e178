@@ -16,6 +16,23 @@
       "message": "If you want to keep this or if there\u0027s a point no problem. I just saw it appeared to not be used.",
       "revId": "15b8e4d0a8bdd0e1395064b4404a6e870463e178",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "bf843ba9_91d579e1",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2022-04-01T00:30:56Z",
+      "side": 1,
+      "message": "lgtm from my standpoint. No need to keep around unused code.\n",
+      "revId": "15b8e4d0a8bdd0e1395064b4404a6e870463e178",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
