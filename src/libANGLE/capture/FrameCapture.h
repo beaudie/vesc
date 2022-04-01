@@ -752,6 +752,8 @@ class FrameCaptureShared final : angle::NonCopyable
         }
     }
 
+    gl::PixelUnpackState &getInitialUnpackState() { return mInitialUnpackState; }
+
   private:
     void writeJSON(const gl::Context *context);
     void writeCppReplayIndexFiles(const gl::Context *context, bool writeResetContextCall);
@@ -850,6 +852,8 @@ class FrameCaptureShared final : angle::NonCopyable
     gl::ContextID mWindowSurfaceContextID;
 
     std::vector<CallCapture> mShareGroupSetupCalls;
+
+    gl::PixelUnpackState mInitialUnpackState;
 };
 
 template <typename CaptureFuncT, typename... ArgsT>

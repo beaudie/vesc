@@ -3385,6 +3385,7 @@ void CaptureShareGroupMidExecutionSetup(const gl::Context *context,
     gl::PixelUnpackState &currentUnpackState = replayState.getUnpackState();
     if (currentUnpackState.alignment != 1)
     {
+        frameCaptureShared->getInitialUnpackState().alignment = currentUnpackState.alignment;
         cap(CapturePixelStorei(replayState, true, GL_UNPACK_ALIGNMENT, 1));
         currentUnpackState.alignment = 1;
     }
@@ -4765,6 +4766,14 @@ void CaptureMidExecutionSetup(const gl::Context *context,
 
     // Clean up the replay state.
     replayState.reset(context);
+
+    // Reset pixel unpack alignment to original state
+    FrameCaptureShared *frameCaptureShared = context->getShareGroup()->getFrameCaptureShared();
+    if (currentUnpackState.alignment != frameCaptureShared->getInitialUnpackState().alignment)
+    {
+        cap(CapturePixelStorei(replayState, true, GL_UNPACK_ALIGNMENT,
+                               frameCaptureShared->getInitialUnpackState().alignment));
+    }
 
     if (validationEnabled)
     {
