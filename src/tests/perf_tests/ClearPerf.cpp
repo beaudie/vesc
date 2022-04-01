@@ -95,7 +95,7 @@ ClearBenchmark::ClearBenchmark() : ANGLERenderTest("Clear", GetParam()), mProgra
     // Crashes on nvidia+d3d11. http://crbug.com/945415
     if (GetParam().getRenderer() == EGL_PLATFORM_ANGLE_TYPE_D3D11_ANGLE)
     {
-        mSkipTest = true;
+        skipTest("http://crbug.com/945415 crash");
     }
 }
 

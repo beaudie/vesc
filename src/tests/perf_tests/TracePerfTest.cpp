@@ -668,13 +668,13 @@ TracePerfTest::TracePerfTest(const TracePerfParams &params)
     // TODO: http://anglebug.com/4533 This fails after the upgrade to the 26.20.100.7870 driver.
     if (IsWindows() && IsIntel() && mParams.isVulkan() && traceNameIs("manhattan_10"))
     {
-        mSkipTest = true;
+        skipTest("http://anglebug.com/4533 Fails after the upgrade to the 26.20.100.7870");
     }
 
     // TODO: http://anglebug.com/4731 Fails on older Intel drivers. Passes in newer.
     if (IsWindows() && IsIntel() && !mParams.isANGLE() && traceNameIs("angry_birds_2_1500"))
     {
-        mSkipTest = true;
+        skipTest("http://anglebug.com/4731 Fails on older Intel drivers");
     }
 
     if (traceNameIs("cod_mobile"))
@@ -693,7 +693,7 @@ TracePerfTest::TracePerfTest(const TracePerfParams &params)
         // Flaky on Intel/windows http://anglebug.com/6568
         if (IsWindows() && IsIntel())
         {
-            mSkipTest = true;
+            skipTest("http://anglebug.com/6568 flaky");
         }
     }
 
@@ -740,7 +740,7 @@ TracePerfTest::TracePerfTest(const TracePerfParams &params)
         // TODO(https://anglebug.com/5517) Linux+Intel generates "Framebuffer is incomplete" errors.
         if (IsLinux() && IsIntel() && mParams.isVulkan())
         {
-            mSkipTest = true;
+            skipTest("https://anglebug.com/5517 'Framebuffer is incomplete' errors");
         }
     }
 
@@ -761,7 +761,7 @@ TracePerfTest::TracePerfTest(const TracePerfParams &params)
         // Failing on Linux Intel and AMD due to invalid enum. http://anglebug.com/5822
         if (IsLinux() && (IsIntel() || IsAMD()) && mParams.driver != GLESDriverType::AngleEGL)
         {
-            mSkipTest = true;
+            skipTest("http://anglebug.com/5822 invalid enum");
         }
     }
 
@@ -781,7 +781,7 @@ TracePerfTest::TracePerfTest(const TracePerfParams &params)
         // incomplete" errors with the Vulkan backend.
         if (mParams.isVulkan() && ((IsLinux() && IsIntel()) || IsPixel2()))
         {
-            mSkipTest = true;
+            skipTest("https://anglebug.com/5517 'Framebuffer is incomplete' errors");
         }
     }
 
@@ -790,7 +790,7 @@ TracePerfTest::TracePerfTest(const TracePerfParams &params)
         // TODO: http://anglebug.com/5591 Trace crashes on Pixel 2 in vulkan driver
         if (IsPixel2() && mParams.isVulkan())
         {
-            mSkipTest = true;
+            skipTest("http://anglebug.com/5591 Trace crashes on Pixel 2 in vulkan driver");
         }
     }
 
@@ -799,7 +799,7 @@ TracePerfTest::TracePerfTest(const TracePerfParams &params)
         // TODO: http://anglebug.com/5591 Trace crashes on Pixel 2
         if (IsPixel2())
         {
-            mSkipTest = true;
+            skipTest("http://anglebug.com/5591 Trace crashes on Pixel 2");
         }
     }
 
@@ -818,7 +818,7 @@ TracePerfTest::TracePerfTest(const TracePerfParams &params)
     {
         if (IsWindows() && IsAMD() && mParams.isVulkan())
         {
-            mSkipTest = true;
+            skipTest("");  // TODO: add reason
         }
     }
 
@@ -828,7 +828,7 @@ TracePerfTest::TracePerfTest(const TracePerfParams &params)
         // GL_INVALID_OPERATION
         if (IsLinux() && (IsIntel() || IsAMD()) && !mParams.isVulkan())
         {
-            mSkipTest = true;
+            skipTest("https://anglebug.com/5629 native GLES generates GL_INVALID_OPERATION");
         }
     }
 
@@ -837,7 +837,7 @@ TracePerfTest::TracePerfTest(const TracePerfParams &params)
         // TODO: https://anglebug.com/5663 Incorrect pixels on NVIDIA Windows for first frame
         if (IsWindows() && IsNVIDIA() && mParams.isVulkan() && !mParams.isSwiftshader())
         {
-            mSkipTest = true;
+            skipTest("https://anglebug.com/5663 Incorrect pixels for first frame");
         }
     }
 
@@ -851,12 +851,13 @@ TracePerfTest::TracePerfTest(const TracePerfParams &params)
         // TODO: https://anglebug.com/5613 NVIDIA native driver spews undefined behavior warnings
         if (IsNVIDIA() && !mParams.isVulkan())
         {
-            mSkipTest = true;
+            skipTest(
+                "https://anglebug.com/5613 NVIDIA native driver spews undefined behavior warnings");
         }
         // TODO: https://anglebug.com/5724 Device lost on Win Intel
         if (IsWindows() && IsIntel() && mParams.isVulkan())
         {
-            mSkipTest = true;
+            skipTest("https://anglebug.com/5724 Device lost on Win Intel");
         }
     }
 
@@ -865,7 +866,7 @@ TracePerfTest::TracePerfTest(const TracePerfParams &params)
         // TODO: http://anglebug.com/5875 Intel Windows Vulkan flakily renders entirely black
         if (IsWindows() && IsIntel() && mParams.isVulkan())
         {
-            mSkipTest = true;
+            skipTest("http://anglebug.com/5875 flakily renders entirely black");
         }
     }
 
@@ -874,7 +875,7 @@ TracePerfTest::TracePerfTest(const TracePerfParams &params)
         // TODO: http://anglebug.com/5716 Trace crashes on Pixel 2 in vulkan driver
         if (IsPixel2() && mParams.isVulkan())
         {
-            mSkipTest = true;
+            skipTest("http://anglebug.com/5716 crashes on Pixel 2 in vulkan driver");
         }
     }
 
@@ -888,7 +889,7 @@ TracePerfTest::TracePerfTest(const TracePerfParams &params)
         // TODO: http://crbug.com/1187752 Corrupted image
         if (IsWindows() && IsAMD() && mParams.isVulkan())
         {
-            mSkipTest = true;
+            skipTest("http://crbug.com/1187752 Corrupted image");
         }
     }
 
@@ -905,7 +906,7 @@ TracePerfTest::TracePerfTest(const TracePerfParams &params)
         // TODO: http://anglebug.com/5772 Pixel 2 errors with "Framebuffer is incomplete" on Vulkan
         if (IsPixel2() && mParams.isVulkan())
         {
-            mSkipTest = true;
+            skipTest("http://anglebug.com/5772 'Framebuffer is incomplete' errors");
         }
     }
 
@@ -914,7 +915,7 @@ TracePerfTest::TracePerfTest(const TracePerfParams &params)
         // TODO: http://anglebug.com/5777 ARM doesn't have enough VS storage blocks
         if (IsAndroid() && IsARM())
         {
-            mSkipTest = true;
+            skipTest("http://anglebug.com/5777 ARM doesn't have enough VS storage blocks");
         }
     }
 
@@ -926,7 +927,7 @@ TracePerfTest::TracePerfTest(const TracePerfParams &params)
         // TODO: http://anglebug.com/5815 Trace is crashing on Intel Linux
         if (IsLinux() && IsIntel() && mParams.isVulkan())
         {
-            mSkipTest = true;
+            skipTest("http://anglebug.com/5815 crash");
         }
     }
 
@@ -937,7 +938,7 @@ TracePerfTest::TracePerfTest(const TracePerfParams &params)
         // TODO: http://anglebug.com/5553 Pixel 2 errors with "Framebuffer is incomplete" on Vulkan
         if (IsPixel2() && mParams.isVulkan())
         {
-            mSkipTest = true;
+            skipTest("http://anglebug.com/5553 'Framebuffer is incomplete' errors");
         }
     }
 
@@ -949,7 +950,7 @@ TracePerfTest::TracePerfTest(const TracePerfParams &params)
         // incomplete" on Vulkan
         if (((IsLinux() && IsIntel()) || IsPixel2()) && mParams.isVulkan())
         {
-            mSkipTest = true;
+            skipTest("http://anglebug.com/5807 'Framebuffer is incomplete' errors");
         }
     }
 
@@ -959,7 +960,8 @@ TracePerfTest::TracePerfTest(const TracePerfParams &params)
         if (IsAndroid() && (IsPixel2() || IsPixel4() || IsPixel4XL()) &&
             mParams.driver == GLESDriverType::SystemEGL)
         {
-            mSkipTest = true;
+            skipTest(
+                "http://anglebug.com/5823 Adreno gives a driver error with empty/small draw calls");
         }
     }
 
@@ -975,7 +977,7 @@ TracePerfTest::TracePerfTest(const TracePerfParams &params)
         // Mesa versions below 20.3.5 produce the same issue on Linux+Mesa/Intel Vulkan
         if (IsLinux() && (IsAMD() || IsIntel()) && mParams.isVulkan() && !mParams.isSwiftshader())
         {
-            mSkipTest = true;
+            skipTest("https://anglebug.com/5827 GL_INVALID_FRAMEBUFFER_OPERATION");
         }
     }
 
@@ -984,7 +986,7 @@ TracePerfTest::TracePerfTest(const TracePerfParams &params)
         // TODO: http://anglebug.com/5837 Intel Linux Vulkan errors with "Framebuffer is incomplete"
         if ((IsLinux() && IsIntel()) && mParams.isVulkan())
         {
-            mSkipTest = true;
+            skipTest("http://anglebug.com/5837 'Framebuffer is incomplete' errors");
         }
     }
 
@@ -993,7 +995,7 @@ TracePerfTest::TracePerfTest(const TracePerfParams &params)
         // TODO: http://anglebug.com/5877 Trace crashes on Pixel 2 in vulkan driver
         if (IsPixel2() && mParams.isVulkan())
         {
-            mSkipTest = true;
+            skipTest("http://anglebug.com/5877 crash");
         }
     }
 
@@ -1007,7 +1009,7 @@ TracePerfTest::TracePerfTest(const TracePerfParams &params)
     {
         if (IsWindows() && IsIntel() && mParams.driver != GLESDriverType::AngleEGL)
         {
-            mSkipTest = true;
+            skipTest("http://anglebug.com/5943 GL_INVALID_ENUM");
         }
     }
 
@@ -1017,10 +1019,15 @@ TracePerfTest::TracePerfTest(const TracePerfParams &params)
         addExtensionPrerequisite("GL_KHR_texture_compression_astc_ldr");
 
         // TODO: http://anglebug.com/5989 Intel Linux crashing on teardown
-        // TODO: http://anglebug.com/5994 Intel Windows timing out periodically
-        if ((IsLinux() || IsWindows()) && IsIntel() && mParams.isVulkan())
+        if (IsLinux() && IsIntel() && mParams.isVulkan())
         {
-            mSkipTest = true;
+            skipTest("http://anglebug.com/5989 crash on teardown");
+        }
+
+        // TODO: http://anglebug.com/5994 Intel Windows timing out periodically
+        if (IsWindows() && IsIntel() && mParams.isVulkan())
+        {
+            skipTest("http://anglebug.com/5994 timing out periodically");
         }
     }
 
@@ -1032,7 +1039,7 @@ TracePerfTest::TracePerfTest(const TracePerfParams &params)
         // TODO: http://anglebug.com/6017 ARM doesn't have enough VS storage blocks
         if (IsAndroid() && IsARM())
         {
-            mSkipTest = true;
+            skipTest("http://anglebug.com/6017 ARM doesn't have enough VS storage blocks");
         }
     }
 
@@ -1041,16 +1048,21 @@ TracePerfTest::TracePerfTest(const TracePerfParams &params)
         addExtensionPrerequisite("GL_KHR_texture_compression_astc_ldr");
 
         // TODO: http://anglebug.com/6023 Crashes on Pixel 2 in vulkan driver
-        // TODO: http://anglebug.com/6029 Crashes on Linux Intel Vulkan
-        if (((IsLinux() && IsIntel()) || IsPixel2()) && mParams.isVulkan())
+        if (IsPixel2() && mParams.isVulkan())
         {
-            mSkipTest = true;
+            skipTest("http://anglebug.com/6023 crash");
+        }
+
+        // TODO: http://anglebug.com/6029 Crashes on Linux Intel Vulkan
+        if ((IsLinux() && IsIntel()) && mParams.isVulkan())
+        {
+            skipTest("http://anglebug.com/6029 crash");
         }
 
         // Genshin is too large to handle in 32-bit mode.
         if (!Is64Bit())
         {
-            mSkipTest = true;
+            skipTest("too large to handle in 32-bit mode");
         }
     }
 
@@ -1059,7 +1071,7 @@ TracePerfTest::TracePerfTest(const TracePerfParams &params)
         // Fails on native Mesa. http://anglebug.com/6711
         if (IsLinux() && IsIntel() && !mParams.isVulkan())
         {
-            mSkipTest = true;
+            skipTest("http://anglebug.com/6711 fails on native Mesa");
         }
     }
 
@@ -1070,7 +1082,7 @@ TracePerfTest::TracePerfTest(const TracePerfParams &params)
         // TODO: http://anglebug.com/6240 Internal errors on Windows/Intel and NVIDIA
         if (((IsWindows() && IsIntel()) || IsNVIDIA()) && !mParams.isVulkan())
         {
-            mSkipTest = true;
+            skipTest("http://anglebug.com/6240 internal errors");
         }
     }
 
@@ -1079,7 +1091,7 @@ TracePerfTest::TracePerfTest(const TracePerfParams &params)
         // Flaky on Intel. http://anglebug.com/6294
         if (IsWindows() && IsIntel())
         {
-            mSkipTest = true;
+            skipTest("http://anglebug.com/6294 flaky");
         }
     }
 
@@ -1094,7 +1106,7 @@ TracePerfTest::TracePerfTest(const TracePerfParams &params)
         // Flaky on Intel. http://anglebug.com/6372
         if (IsWindows() && IsIntel())
         {
-            mSkipTest = true;
+            skipTest("http://anglebug.com/6372 flaky");
         }
     }
 
@@ -1109,7 +1121,7 @@ TracePerfTest::TracePerfTest(const TracePerfParams &params)
         // error VUID-vkDestroyBuffer-buffer-00922
         if (IsQualcomm() && mParams.isVulkan())
         {
-            mSkipTest = true;
+            skipTest("http://anglebug.com/6443 vulkan validation error");
         }
     }
 
@@ -1121,7 +1133,7 @@ TracePerfTest::TracePerfTest(const TracePerfParams &params)
         // Crashes on Linux Intel
         if (IsIntel())
         {
-            mSkipTest = true;
+            skipTest("http://anglebug.com/6548 nondeterministic crashes");
         }
     }
 
@@ -1132,7 +1144,7 @@ TracePerfTest::TracePerfTest(const TracePerfParams &params)
         // http://anglebug.com/6657 - Native test timing out on Intel Linux
         if (IsLinux() && IsIntel() && !mParams.isVulkan())
         {
-            mSkipTest = true;
+            skipTest("http://anglebug.com/6657 timing out");
         }
     }
 
@@ -1142,7 +1154,7 @@ TracePerfTest::TracePerfTest(const TracePerfParams &params)
         if ((IsLinux() || IsWindows()) && IsNVIDIA() &&
             mParams.driver == GLESDriverType::AngleEGL && !mParams.isSwiftshader())
         {
-            mSkipTest = true;
+            skipTest("http://anglebug.com/6658 crash in Vulkan backend");
         }
     }
 
@@ -1161,7 +1173,7 @@ TracePerfTest::TracePerfTest(const TracePerfParams &params)
         // http://anglebug.com/6850 - Crashing in Nvidia GLES driver.
         if (IsLinux() && IsNVIDIA() && mParams.driver != GLESDriverType::AngleEGL)
         {
-            mSkipTest = true;
+            skipTest("http://anglebug.com/6850 crash in Nvidia GLES driver");
         }
     }
 
@@ -1187,7 +1199,7 @@ TracePerfTest::TracePerfTest(const TracePerfParams &params)
         // buffer that was recreated during the trace
         if ((IsAndroid() && IsQualcomm()) && mParams.driver != GLESDriverType::AngleEGL)
         {
-            mSkipTest = true;
+            skipTest("http://anglebug.com/7017 Qualcomm native driver gets confused");
         }
     }
 
@@ -1241,8 +1253,8 @@ void TracePerfTest::initializeBenchmark()
 
     if (!mTraceLibrary->valid())
     {
-        mSkipTest = true;
-        FAIL() << "Could not load trace library.";
+        failTest("Could not load trace library.");
+        return;
     }
 
     mStartFrame = traceInfo.frameStart;
@@ -1254,8 +1266,7 @@ void TracePerfTest::initializeBenchmark()
     char testDataDir[kMaxPath] = {};
     if (!FindTraceTestDataPath(traceInfo.name, testDataDir, kMaxPath))
     {
-        mSkipTest = true;
-        FAIL() << "Could not find test data folder.";
+        failTest("Could not find test data folder.");
     }
 
     mTraceLibrary->setBinaryDataDir(testDataDir);
@@ -1922,7 +1933,7 @@ void TracePerfTest::saveScreenshot(const std::string &screenshotName)
     if (!angle::SavePNGRGB(screenshotName.c_str(), "ANGLE Screenshot", mTestParams.windowWidth,
                            mTestParams.windowHeight, rgbData))
     {
-        FAIL() << "Error saving screenshot: " << screenshotName;
+        failTest(std::string("Error saving screenshot: ") + screenshotName);
     }
     else
     {

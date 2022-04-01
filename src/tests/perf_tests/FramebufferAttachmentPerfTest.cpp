@@ -83,7 +83,7 @@ void FramebufferAttachmentBenchmark::initializeBenchmark()
     if (mTextures.size() > static_cast<size_t>(maxAttachmentCount))
     {
         // Texture count exceeds maximum attachment unit count, skip the test
-        mSkipTest = true;
+        skipTest("Texture count exceeds maximum attachment unit count");
     }
 }
 
