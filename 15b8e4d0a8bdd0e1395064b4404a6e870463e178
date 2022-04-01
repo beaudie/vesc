@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "7dd4547c_e93afe95",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1115588
+      },
+      "writtenOn": "2022-04-01T00:28:06Z",
+      "side": 1,
+      "message": "If you want to keep this or if there\u0027s a point no problem. I just saw it appeared to not be used.",
+      "revId": "15b8e4d0a8bdd0e1395064b4404a6e870463e178",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
