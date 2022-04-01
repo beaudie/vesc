@@ -2856,6 +2856,7 @@ angle::Result BufferPool::allocateNewBuffer(ContextVk *contextVk, VkDeviceSize s
     ANGLE_TRY(AllocateBufferMemory(contextVk, memoryPropertyFlags, &memoryPropertyFlagsOut, nullptr,
                                    &buffer.get(), &deviceMemory.get(), &sizeOut));
     ASSERT(sizeOut >= mSize);
+    renderer->mTotalAllocatedMemorySizeForBuffer += sizeOut;
 
     // Allocate bufferBlock
     std::unique_ptr<BufferBlock> block = std::make_unique<BufferBlock>();
@@ -4035,6 +4036,7 @@ angle::Result BufferHelper::init(Context *context,
     ANGLE_TRY(AllocateBufferMemory(context, requiredFlags, &memoryPropertyFlagsOut, nullptr,
                                    &buffer.get(), &deviceMemory.get(), &sizeOut));
     ASSERT(sizeOut >= createInfo->size);
+    renderer->mTotalAllocatedMemorySizeForBuffer += sizeOut;
 
     mSuballocation.initWithEntireBuffer(context, buffer.get(), deviceMemory.get(),
                                         memoryPropertyFlagsOut, requestedCreateInfo.size);
@@ -4947,6 +4949,9 @@ void ImageHelper::releaseImage(RendererVk *renderer)
     ASSERT(mImageAndViewGarbage.size() <= 1000);
     releaseImageAndViewGarbage(renderer);
     setEntireContentUndefined();
+
+    renderer->mTotalAllocatedMemorySizeForImage -= mAllocatedMemorySize;
+    mAllocatedMemorySize = 0;
 }
 
 void ImageHelper::releaseImageFromShareContexts(RendererVk *renderer, ContextVk *contextVk)
@@ -5138,13 +5143,18 @@ angle::Result ImageHelper::initMemory(Context *context,
                                       VkMemoryPropertyFlags flags)
 {
     // TODO(jmadill): Memory sub-allocation. http://anglebug.com/2162
-    VkDeviceSize size;
     if (hasProtectedContent)
     {
         flags |= VK_MEMORY_PROPERTY_PROTECTED_BIT;
     }
-    ANGLE_TRY(AllocateImageMemory(context, flags, &flags, nullptr, &mImage, &mDeviceMemory, &size));
+    ANGLE_TRY(AllocateImageMemory(context, flags, &flags, nullptr, &mImage, &mDeviceMemory,
+                                  &mAllocatedMemorySize));
     mCurrentQueueFamilyIndex = context->getRenderer()->getQueueFamilyIndex();
+
+    context->getRenderer()->mTotalAllocatedMemorySizeForImage += mAllocatedMemorySize;
+    ALOG(" ImageHelper::initMemory intendedFormat:%d actualFormat:%d size:%u, ext(%d x %d x %d)",
+         mIntendedFormatID, mActualFormatID, (unsigned int)mAllocatedMemorySize, mExtents.width,
+         mExtents.height, mExtents.depth);
 
     RendererVk *renderer = context->getRenderer();
     if (renderer->getFeatures().allocateNonZeroMemory.enabled)
@@ -5152,7 +5162,7 @@ angle::Result ImageHelper::initMemory(Context *context,
         // Can't map the memory. Use a staging resource.
         if ((flags & VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT) == 0)
         {
-            ANGLE_TRY(initializeNonZeroMemory(context, hasProtectedContent, size));
+            ANGLE_TRY(initializeNonZeroMemory(context, hasProtectedContent, mAllocatedMemorySize));
         }
     }
 
@@ -5374,6 +5384,9 @@ void ImageHelper::destroy(RendererVk *renderer)
     mLevelCount    = 0;
 
     setEntireContentUndefined();
+
+    renderer->mTotalAllocatedMemorySizeForImage -= mAllocatedMemorySize;
+    mAllocatedMemorySize = 0;
 }
 
 void ImageHelper::init2DWeakReference(Context *context,
@@ -7322,6 +7335,9 @@ void ImageHelper::stageSelfAsSubresourceUpdates(ContextVk *contextVk,
     // Vulkan objects
     prevImage->get().mImage        = std::move(mImage);
     prevImage->get().mDeviceMemory = std::move(mDeviceMemory);
+
+    prevImage->get().mAllocatedMemorySize = mAllocatedMemorySize;
+    mAllocatedMemorySize                  = 0;
 
     // Barrier information.  Note: mLevelCount is set to levelCount so that only the necessary
     // levels are transitioned when flushing the update.

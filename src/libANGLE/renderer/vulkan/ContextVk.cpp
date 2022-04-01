@@ -5882,6 +5882,11 @@ angle::Result ContextVk::updateActiveTextures(const gl::Context *context, gl::Co
                 "The Vulkan driver does not support texture format 0x%04X, emulating with 0x%04X",
                 image.getIntendedFormat().glInternalFormat,
                 image.getActualFormat().glInternalFormat);
+            ALOG(
+                "The Vulkan driver does not support texture format 0x%04X (ID:%d), emulating with "
+                "0x%04X (ID:%d)",
+                image.getIntendedFormat().glInternalFormat, image.getIntendedFormatID(),
+                image.getActualFormat().glInternalFormat, image.getActualFormatID());
         }
 
         vk::ImageOrBufferViewSubresourceSerial imageViewSerial =

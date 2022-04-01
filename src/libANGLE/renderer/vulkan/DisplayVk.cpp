@@ -460,6 +460,9 @@ void ShareGroupVk::pruneDefaultBufferPools(RendererVk *renderer)
     mLastPruneTime = angle::GetCurrentSystemTime();
 
     vk::PruneDefaultBufferPools(renderer, mDefaultBufferPools, mSmallBufferPool);
+    ALOG("totalSize: Image:%llu buffer:%llu",
+         (unsigned long long)renderer->mTotalAllocatedMemorySizeForImage,
+         (unsigned long long)renderer->mTotalAllocatedMemorySizeForBuffer);
 }
 
 bool ShareGroupVk::isDueForBufferPoolPrune()

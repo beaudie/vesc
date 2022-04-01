@@ -1748,6 +1748,9 @@ angle::Result RendererVk::initialize(DisplayVk *displayVk,
 
     setGlobalDebugAnnotator();
 
+    mTotalAllocatedMemorySizeForImage  = 0;
+    mTotalAllocatedMemorySizeForBuffer = 0;
+
     return angle::Result::Continue;
 }
 

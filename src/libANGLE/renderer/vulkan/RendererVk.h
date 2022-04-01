@@ -755,6 +755,10 @@ class RendererVk : angle::NonCopyable
     std::unique_ptr<vk::BufferPool> mSmallBufferPool;
 
     double mLastPruneTime;
+
+  public:
+    VkDeviceSize mTotalAllocatedMemorySizeForImage;
+    VkDeviceSize mTotalAllocatedMemorySizeForBuffer;
 };
 
 }  // namespace rx

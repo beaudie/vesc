@@ -2370,6 +2370,7 @@ class ImageHelper final : public Resource, public angle::Subject
     angle::FormatID mActualFormatID;
     GLint mSamples;
     ImageSerial mImageSerial;
+    VkDeviceSize mAllocatedMemorySize;
 
     // Current state.
     ImageLayout mCurrentLayout;

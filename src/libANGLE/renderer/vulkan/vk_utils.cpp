@@ -1671,6 +1671,7 @@ void BufferBlock::destroy(RendererVk *renderer)
     mVirtualBlock.destroy(device);
     mBuffer.destroy(device);
     mDeviceMemory.destroy(device);
+    renderer->mTotalAllocatedMemorySizeForBuffer -= mSize;
 }
 
 angle::Result BufferBlock::init(ContextVk *contextVk,
