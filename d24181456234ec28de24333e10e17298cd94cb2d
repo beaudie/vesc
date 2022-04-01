@@ -136,6 +136,24 @@
       "message": "Shahbaz, I am not sure about using this.\nALLOW_UNINSTANCIATED\nI got error last run. Seemed like this is needed, but unsure about what it means, and when to use.",
       "revId": "d24181456234ec28de24333e10e17298cd94cb2d",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "8f6f7f98_9752f568",
+        "filename": "src/tests/egl_tests/EGLSurfaceTest.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 1664,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-04-01T20:19:35Z",
+      "side": 1,
+      "message": "It\u0027s just suppressing a gtest warning about the test suite not being instantiated. The test suite is run only on Vulkan here, so for example on mac without a Vulkan build, it would not be instantiated.",
+      "parentUuid": "30ea35d3_60657091",
+      "revId": "d24181456234ec28de24333e10e17298cd94cb2d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }

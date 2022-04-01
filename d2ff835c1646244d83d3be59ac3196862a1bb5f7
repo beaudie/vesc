@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "e4609621_1b89fa11",
+        "filename": "src/libANGLE/renderer/SurfaceImpl.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 156,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-04-01T20:19:35Z",
+      "side": 1,
+      "message": "Don\u0027t know what?\n\nAlso, `getRenderBuffer` seems to be unused. Should it be called from Surface.cpp?",
+      "revId": "d2ff835c1646244d83d3be59ac3196862a1bb5f7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "09991050_a1e23234",
+        "filename": "src/libANGLE/renderer/vulkan/SurfaceVk.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 2398,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-04-01T20:19:35Z",
+      "side": 1,
+      "message": "Looking back, this seems wrong, it\u0027s ignoring swap interval. We have a function called `GetDesiredPresentMode` that determines the desired present mode. I suggest passing `renderBuffer` to that function, and move this `if` logic there.\n\nThen you can remove the logic in line 1055 and replace it with a call to `mDesiredSwapchainPresentMode \u003d GetDesiredPresentMode(...);` as well.",
+      "revId": "d2ff835c1646244d83d3be59ac3196862a1bb5f7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
