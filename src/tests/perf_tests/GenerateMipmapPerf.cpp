@@ -127,14 +127,14 @@ GenerateMipmapBenchmarkBase::GenerateMipmapBenchmarkBase(const char *benchmarkNa
     // Crashes on nvidia+d3d11. http://crbug.com/945415
     if (GetParam().getRenderer() == EGL_PLATFORM_ANGLE_TYPE_D3D11_ANGLE)
     {
-        mSkipTest = true;
+        skipTest("http://crbug.com/945415 crash");
     }
 
     // Fails on Windows7 NVIDIA Vulkan, presumably due to old drivers. http://crbug.com/1096510
     if (IsWindows7() && IsNVIDIA() &&
         GetParam().eglParameters.renderer == EGL_PLATFORM_ANGLE_TYPE_VULKAN_ANGLE)
     {
-        mSkipTest = true;
+        skipTest("http://crbug.com/1096510 failure due to old drivers?");
     }
 }
 

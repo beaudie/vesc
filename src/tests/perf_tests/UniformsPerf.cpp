@@ -175,7 +175,7 @@ UniformsBenchmark::UniformsBenchmark() : ANGLERenderTest("Uniforms", GetParam())
     if (IsWindows7() && IsNVIDIA() &&
         GetParam().eglParameters.renderer == EGL_PLATFORM_ANGLE_TYPE_VULKAN_ANGLE)
     {
-        mSkipTest = true;
+        skipTest("http://crbug.com/1096510 fails due to old drivers?");
     }
 }
 

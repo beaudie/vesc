@@ -143,7 +143,7 @@ VulkanBarriersPerfBenchmark::VulkanBarriersPerfBenchmark()
     // Fails on Windows7 NVIDIA Vulkan, presumably due to old drivers. http://crbug.com/1096510
     if (IsNVIDIA() && IsWindows7())
     {
-        mSkipTest = true;
+        skipTest("http://crbug.com/1096510 fails due to old drivers?");
     }
 }
 
