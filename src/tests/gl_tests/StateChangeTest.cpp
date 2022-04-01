@@ -4560,9 +4560,6 @@ void main()
 // call works correctly.  This requires a barrier in between the draw calls.
 TEST_P(SimpleStateChangeTestES31, DrawWithUBOThenDrawWithSSBO)
 {
-    // http://anglebug.com/5593
-    ANGLE_SKIP_TEST_IF(IsD3D11());
-
     GLint maxFragmentShaderStorageBlocks;
     glGetIntegerv(GL_MAX_FRAGMENT_SHADER_STORAGE_BLOCKS, &maxFragmentShaderStorageBlocks);
 
