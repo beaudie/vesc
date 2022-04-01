@@ -125,6 +125,10 @@ void WriteArrayString(std::ostringstream &strstr, unsigned int i)
     strstr << "]";
 }
 
+// kShaderStorageDeclarationString must be the same as outputHLSL.
+constexpr const char kShaderStorageDeclarationString[] =
+    "// @@ SHADER STORAGE DECLARATION STRING @@";
+
 constexpr const char *VERTEX_ATTRIBUTE_STUB_STRING      = "@@ VERTEX ATTRIBUTES @@";
 constexpr const char *VERTEX_OUTPUT_STUB_STRING         = "@@ VERTEX OUTPUT @@";
 constexpr const char *PIXEL_OUTPUT_STUB_STRING          = "@@ PIXEL OUTPUT @@";
@@ -276,7 +280,8 @@ std::string DynamicHLSL::generatePixelShaderForOutputSignature(
     const std::string &sourceShader,
     const std::vector<PixelShaderOutputVariable> &outputVariables,
     bool usesFragDepth,
-    const std::vector<GLenum> &outputLayout) const
+    const std::vector<GLenum> &outputLayout,
+    const std::vector<sh::InterfaceBlock> &ssboInterfaceBlocks) const
 {
     const int shaderModel      = mRenderer->getMajorShaderModel();
     std::string targetSemantic = (shaderModel >= 4) ? "SV_TARGET" : "COLOR";
@@ -349,6 +354,36 @@ std::string DynamicHLSL::generatePixelShaderForOutputSignature(
     bool success =
         angle::ReplaceSubstring(&pixelHLSL, PIXEL_OUTPUT_STUB_STRING, declarationStream.str());
     ASSERT(success);
+
+    unsigned int uavRegister = static_cast<unsigned int>(numOutputs);
+    if (!ssboInterfaceBlocks.empty())
+    {
+        std::string ssboHeader = "// Shader Storage Blocks\n\n";
+        std::ostringstream out(ssboHeader);
+        for (const sh::InterfaceBlock &ssbo : ssboInterfaceBlocks)
+        {
+            if (ssbo.isArray())
+            {
+                for (unsigned int arrayIndex = 0; arrayIndex < ssbo.arraySize; arrayIndex++)
+                {
+                    out << "RWByteAddressBuffer "
+                        << "dx_" << ssbo.instanceName << "_" << arrayIndex << ": register(u"
+                        << uavRegister << ");\n";
+                    uavRegister++;
+                }
+            }
+            else
+            {
+                out << "RWByteAddressBuffer "
+                    << "dx_" << ssbo.instanceName << "_0"
+                    << ": register(u" << uavRegister << ");\n";
+                uavRegister += 1u;
+            }
+        }
+
+        success = angle::ReplaceSubstring(&pixelHLSL, kShaderStorageDeclarationString, out.str());
+        ASSERT(success);
+    }
 
     return pixelHLSL;
 }

@@ -503,9 +503,10 @@ void ShaderStorageBlockOutputHLSL::traverseSSBOAccess(TIntermTyped *node, SSBOMe
     loc->traverse(mOutputHLSL);
 }
 
-void ShaderStorageBlockOutputHLSL::writeShaderStorageBlocksHeader(TInfoSinkBase &out) const
+void ShaderStorageBlockOutputHLSL::writeShaderStorageBlocksHeader(GLenum shaderType,
+                                                                  TInfoSinkBase &out) const
 {
-    out << mResourcesHLSL->shaderStorageBlocksHeader(mReferencedShaderStorageBlocks);
+    out << mResourcesHLSL->shaderStorageBlocksHeader(shaderType, mReferencedShaderStorageBlocks);
     mSSBOFunctionHLSL->shaderStorageBlockFunctionHeader(out);
 }
 
