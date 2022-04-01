@@ -965,8 +965,6 @@ TEST_P(ProgramBinaryES31Test, ProgramBinaryWithComputeShader)
     GLint binaryFormatCount = 0;
     glGetIntegerv(GL_NUM_PROGRAM_BINARY_FORMATS, &binaryFormatCount);
     ANGLE_SKIP_TEST_IF(binaryFormatCount == 0);
-    // http://anglebug.com/4092
-    ANGLE_SKIP_TEST_IF(IsVulkan());
 
     constexpr char kCS[] =
         "#version 310 es\n"
