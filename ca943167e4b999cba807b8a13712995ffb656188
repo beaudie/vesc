@@ -37,6 +37,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "0501af45_5dd45239",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1520902
+      },
+      "writtenOn": "2022-04-02T00:19:56Z",
+      "side": 1,
+      "message": "Hi Ian, I tried the new tests on Linux Desktop and Pixel 6. The test passed on Linux Desktop, and is skipped on Pixel 6, due to Arm is missing vertexPipelineStoresAndAtomics feature.\n\nI tried on Pixel 4, too. The test is skipped on Pixel 4, but the vertexPipelineStoresAndAtomics is true on the device, which is weird. I will look into why.",
+      "parentUuid": "33f183f0_4b85f4ef",
+      "revId": "ca943167e4b999cba807b8a13712995ffb656188",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "e42c7758_5c7ac306",
         "filename": "src/tests/gl_tests/AtomicCounterBufferTest.cpp",
         "patchSetId": 4
