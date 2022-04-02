@@ -1,0 +1,244 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "f7609401_a859d5e8",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 6
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-04-02T02:31:34Z",
+      "side": 1,
+      "message": "Coming along nicely!",
+      "revId": "195dd0da38798c6e33abccc43713201271862e02",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "e3c0bcf1_d2203561",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 3574,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-04-02T02:31:34Z",
+      "side": 1,
+      "message": "nit: `constexpr` here. The symbol then becomes `kFramebufferResolveMSMode`",
+      "range": {
+        "startLine": 3574,
+        "startChar": 7,
+        "endLine": 3574,
+        "endChar": 8
+      },
+      "revId": "195dd0da38798c6e33abccc43713201271862e02",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "460fda1d_de777dac",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 3584,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-04-02T02:31:34Z",
+      "side": 1,
+      "message": "No need for this, just use 1 (swapchain doesn\u0027t have layers)",
+      "range": {
+        "startLine": 3584,
+        "startChar": 34,
+        "endLine": 3584,
+        "endChar": 96
+      },
+      "revId": "195dd0da38798c6e33abccc43713201271862e02",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "0e528e1b_36e0dd13",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 3587,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-04-02T02:31:34Z",
+      "side": 1,
+      "message": "nit: can be `const`",
+      "range": {
+        "startLine": 3587,
+        "startChar": 7,
+        "endLine": 3587,
+        "endChar": 8
+      },
+      "revId": "195dd0da38798c6e33abccc43713201271862e02",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "a321fd84_7a60d829",
+        "filename": "src/libANGLE/renderer/vulkan/FramebufferVk.h",
+        "patchSetId": 6
+      },
+      "lineNbr": 147,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-04-02T02:31:34Z",
+      "side": 1,
+      "message": "Can remove this.",
+      "revId": "195dd0da38798c6e33abccc43713201271862e02",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b739a384_433fa684",
+        "filename": "src/libANGLE/renderer/vulkan/SurfaceVk.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 1696,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-04-02T02:31:34Z",
+      "side": 1,
+      "message": "Please add `\u0026\u0026 !overlayHasEnabledWidget(contextVk)`. Otherwise this breaks the overlay.",
+      "range": {
+        "startLine": 1696,
+        "startChar": 34,
+        "endLine": 1696,
+        "endChar": 35
+      },
+      "revId": "195dd0da38798c6e33abccc43713201271862e02",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "5b3eabbd_1e31a82c",
+        "filename": "src/libANGLE/renderer/vulkan/vk_cache_utils.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 1187,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-04-02T02:31:34Z",
+      "side": 1,
+      "message": "Suggest:\n\n```\n// When multisampled-render-to-texture is used, invalidating an attachment invalidates both the\n// multisampled and the resolve attachments.  Otherwise, the resolve attachment is independent from\n// the multisampled attachment, and is never invalidated.\n```",
+      "revId": "195dd0da38798c6e33abccc43713201271862e02",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "86d80cb5_6c8bb9cc",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.h",
+        "patchSetId": 6
+      },
+      "lineNbr": 52,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-04-02T02:31:34Z",
+      "side": 1,
+      "message": "Let\u0027s call this `SwapchainResolveMode`. You can move it next to `FramebufferFetchMode` in SurfaceVk.h.",
+      "range": {
+        "startLine": 52,
+        "startChar": 11,
+        "endLine": 52,
+        "endChar": 46
+      },
+      "revId": "195dd0da38798c6e33abccc43713201271862e02",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "04b7b0c7_d6abfb85",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.h",
+        "patchSetId": 6
+      },
+      "lineNbr": 1266,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-04-02T02:31:34Z",
+      "side": 1,
+      "message": "Leftover to delete",
+      "revId": "195dd0da38798c6e33abccc43713201271862e02",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "d848c000_b06535ba",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.h",
+        "patchSetId": 6
+      },
+      "lineNbr": 1290,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-04-02T02:31:34Z",
+      "side": 1,
+      "message": "Leftover to delete",
+      "revId": "195dd0da38798c6e33abccc43713201271862e02",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "21a19b29_7d1c743d",
+        "filename": "src/tests/gl_tests/VulkanPerformanceCounterTest.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 4222,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-04-02T02:31:34Z",
+      "side": 1,
+      "message": "Please test the color ops here too. colorLoadOpClears should be +1, colorStoreOpStores should be +1 too.",
+      "revId": "195dd0da38798c6e33abccc43713201271862e02",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "eec85b24_cfe67efa",
+        "filename": "src/tests/gl_tests/VulkanPerformanceCounterTest.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 4252,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-04-02T02:31:34Z",
+      "side": 1,
+      "message": "You can delete this line :)",
+      "range": {
+        "startLine": 4252,
+        "startChar": 4,
+        "endLine": 4252,
+        "endChar": 67
+      },
+      "revId": "195dd0da38798c6e33abccc43713201271862e02",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
