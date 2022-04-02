@@ -55,6 +55,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "d4c226c3_ad9e2b38",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1520902
+      },
+      "writtenOn": "2022-04-02T00:24:45Z",
+      "side": 1,
+      "message": "I found that the test is skipped on Pixel 4, because IsGLExtensionEnabled(\"GL_EXT_tessellation_shader\") is false. I will add this to the ANGLE_SKIP_TEST_IF macro.",
+      "parentUuid": "0501af45_5dd45239",
+      "revId": "ca943167e4b999cba807b8a13712995ffb656188",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "e42c7758_5c7ac306",
         "filename": "src/tests/gl_tests/AtomicCounterBufferTest.cpp",
         "patchSetId": 4
