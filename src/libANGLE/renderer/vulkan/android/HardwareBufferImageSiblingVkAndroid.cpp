@@ -146,7 +146,8 @@ egl::Error HardwareBufferImageSiblingVkAndroid::ValidateHardwareBuffer(
         return egl::EglBadParameter() << "Failed to query AHardwareBuffer properties";
     }
 
-    if (bufferFormatProperties.format == VK_FORMAT_UNDEFINED)
+    if (bufferFormatProperties.format == VK_FORMAT_UNDEFINED ||
+        bufferFormatProperties.format == VK_FORMAT_G8_B8R8_2PLANE_420_UNORM)
     {
         ASSERT(bufferFormatProperties.externalFormat != 0);
         // We must have an external format, check that it supports texture sampling
@@ -320,7 +321,8 @@ angle::Result HardwareBufferImageSiblingVkAndroid::initImpl(DisplayVk *displayVk
         VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT |
         (hasProtectedContent() ? VK_MEMORY_PROPERTY_PROTECTED_BIT : 0);
 
-    if (bufferFormatProperties.format == VK_FORMAT_UNDEFINED)
+    if (bufferFormatProperties.format == VK_FORMAT_UNDEFINED ||
+        bufferFormatProperties.format == VK_FORMAT_G8_B8R8_2PLANE_420_UNORM)
     {
         // Note from Vulkan spec: Since GL_OES_EGL_image_external does not require the same sampling
         // and conversion calculations as Vulkan does, achieving identical results between APIs may

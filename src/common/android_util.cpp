@@ -267,7 +267,7 @@ GLenum getPixelFormatInfo(int pixelFormat, bool *isYUV)
             // as RGB.
             WARN() << "Unknown pixelFormat: " << pixelFormat << ". Treating as RGB8";
             *isYUV = true;
-            return GL_RGB8;
+            return GL_G8_B8R8_2PLANE_420_UNORM_ANGLE;
     }
 }
 
