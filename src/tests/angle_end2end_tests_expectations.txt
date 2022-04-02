@@ -8,7 +8,8 @@
 6718 TSAN : MultithreadingTestES3.MultithreadFenceDraw/* = SKIP
 6718 TSAN : MultithreadingTestES3.MultithreadFenceTexImage/* = SKIP
 6746 TSAN : *AsyncQueue* = SKIP
-6804 LINUX VULKAN TSAN : MultithreadingTest.MultiContextDrawWithSwapBuffers/* = SKIP
+6804 TSAN : MultithreadingTest.MultiContextDrawWithSwapBuffers/* = SKIP
+7159 TSAN : InstancingTestES3.LargeDivisor/* = SKIP
 
 // Generic
 // Fails in the flush thread when calling eglMakeCurrent.
