@@ -3262,6 +3262,11 @@ const D3DUniform *ProgramD3D::getD3DUniformFromLocation(GLint location) const
 
 bool ProgramD3D::hasVertexExecutableForCachedInputLayout()
 {
+    if (!mState.getAttachedShader(gl::ShaderType::Vertex))
+    {
+        return true;
+    }
+
     return mCachedVertexExecutableIndex.valid();
 }
 
@@ -3280,6 +3285,11 @@ bool ProgramD3D::hasGeometryExecutableForPrimitiveType(const gl::State &state,
 
 bool ProgramD3D::hasPixelExecutableForCachedOutputLayout()
 {
+    if (!mState.getAttachedShader(gl::ShaderType::Fragment))
+    {
+        return true;
+    }
+
     return mCachedPixelExecutableIndex.valid();
 }
 
