@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "983b57f4_724316ff",
+        "filename": "src/tests/perf_tests/TracePerfTest.cpp",
+        "patchSetId": 9
+      },
+      "lineNbr": 668,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2022-04-04T21:35:09Z",
+      "side": 1,
+      "message": "I like the approach of printing out the reason for the skip, along with the bug.  I don\u0027t like that it is basically duplicating the comment.  Jamie, would you be okay removing all the TODO\u0027s (which is more of an ANGLE staple) and letting the skipTest reason be the source of truth?",
+      "range": {
+        "startLine": 668,
+        "startChar": 0,
+        "endLine": 668,
+        "endChar": 96
+      },
+      "revId": "355e38be7d1e5c82a3eb92a574e781ac15421038",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
