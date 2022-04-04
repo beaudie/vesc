@@ -46,10 +46,10 @@ RandomOrderExecutor::RandomOrderExecutor(TestPackageRoot &root,
     m_nodeStack.push_back(NodeStackEntry(&root));
     root.getChildren(m_nodeStack[0].children);
 
-    if (enableRenderDocCapture)
-    {
-        mRenderDoc.attach();
-    }
+    // if (enableRenderDocCapture)
+    //{
+    mRenderDoc.attach();
+    //}
 }
 
 RandomOrderExecutor::~RandomOrderExecutor(void)
@@ -238,11 +238,11 @@ tcu::TestStatus RandomOrderExecutor::executeInner(TestCase *testCase, const std:
         {
             // Make every iteration produce one renderdoc frame.  Include the init code in the first
             // frame, and the deinit code in the last frame.
-            if (!isFirstFrameBeingCaptured)
-            {
-                mRenderDoc.endFrame();
-                mRenderDoc.startFrame();
-            }
+            // if (!isFirstFrameBeingCaptured)
+            //{
+            mRenderDoc.endFrame();
+            mRenderDoc.startFrame();
+            //}
             isFirstFrameBeingCaptured = false;
 
             iterateResult = m_caseExecutor->iterate(testCase);

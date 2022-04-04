@@ -4866,6 +4866,8 @@ void Context::framebufferTextureLayer(GLenum target,
     {
         Texture *textureObject = getTexture(texture);
         ImageIndex index       = ImageIndex::MakeFromType(textureObject->getType(), level, layer);
+        INFO() << "Yuxin Debug ImageIndex is: " << index.getLayerIndex() << " "
+               << index.getLevelIndex();
         framebuffer->setAttachment(this, GL_TEXTURE, attachment, index, textureObject);
     }
     else
