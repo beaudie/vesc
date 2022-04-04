@@ -106,6 +106,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "615fbed2_01d1814f",
+        "filename": "src/tests/gl_tests/AtomicCounterBufferTest.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 76,
+      "author": {
+        "id": 1520902
+      },
+      "writtenOn": "2022-04-04T17:31:04Z",
+      "side": 1,
+      "message": "Oh ok, that is interesting, I didn\u0027t know on certain devices we might get intmax for GL_MAX_TESS_CONTROL_ATOMIC_COUNTERS. Where can I find such information?",
+      "parentUuid": "e42c7758_5c7ac306",
+      "revId": "ca943167e4b999cba807b8a13712995ffb656188",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "fdf99fa9_fd09f7ae",
@@ -119,6 +137,24 @@
       "writtenOn": "2022-04-01T19:20:37Z",
       "side": 1,
       "message": "This doesn\u0027t seem to match the logic in the comment. For ID 0, it\u0027s correct, but for ID 1, it\u0027s only `counter_id` 1 where `1%counter_id \u003d\u003d 0`. For ID 2, it\u0027s only `counter_id`s 1 and 2.\n\nMaybe you meant to do `counter_id % max(1, gl_InvocationID) \u003d\u003d 0`?",
+      "revId": "ca943167e4b999cba807b8a13712995ffb656188",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "6ccb6892_ceafe003",
+        "filename": "src/tests/gl_tests/AtomicCounterBufferTest.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 116,
+      "author": {
+        "id": 1520902
+      },
+      "writtenOn": "2022-04-04T17:31:04Z",
+      "side": 1,
+      "message": "Sorry, my understanding for the math part was off. I have updated the comment.",
+      "parentUuid": "fdf99fa9_fd09f7ae",
       "revId": "ca943167e4b999cba807b8a13712995ffb656188",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
@@ -146,6 +182,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "5182d4e3_e6737e0f",
+        "filename": "src/tests/gl_tests/AtomicCounterBufferTest.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 172,
+      "author": {
+        "id": 1520902
+      },
+      "writtenOn": "2022-04-04T17:31:04Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "4c07a216_da25f47d",
+      "range": {
+        "startLine": 172,
+        "startChar": 10,
+        "endLine": 172,
+        "endChar": 44
+      },
+      "revId": "ca943167e4b999cba807b8a13712995ffb656188",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "0bd07b0b_106f07b0",
@@ -159,6 +219,30 @@
       "writtenOn": "2022-04-01T19:20:37Z",
       "side": 1,
       "message": "ditto",
+      "range": {
+        "startLine": 216,
+        "startChar": 23,
+        "endLine": 216,
+        "endChar": 62
+      },
+      "revId": "ca943167e4b999cba807b8a13712995ffb656188",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "ab230530_e9483188",
+        "filename": "src/tests/gl_tests/AtomicCounterBufferTest.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 216,
+      "author": {
+        "id": 1520902
+      },
+      "writtenOn": "2022-04-04T17:31:04Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "0bd07b0b_106f07b0",
       "range": {
         "startLine": 216,
         "startChar": 23,
