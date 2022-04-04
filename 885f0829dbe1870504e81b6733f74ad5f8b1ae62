@@ -101,6 +101,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "229b146c_36146ff6",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 3
+      },
+      "lineNbr": 9,
+      "author": {
+        "id": 1000050
+      },
+      "writtenOn": "2022-04-04T15:35:58Z",
+      "side": 1,
+      "message": "I tried passing GL_RGBX8_AGNLE to eglCreateImage(). it fails. Seems angle::Format::InternalFormatToID() doesn\u0027t support GL_RGBX8_AGNLE. I will fix it in followup cls.",
+      "parentUuid": "67abf19b_4834bd24",
+      "revId": "885f0829dbe1870504e81b6733f74ad5f8b1ae62",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "e1196683_c9a5518e",
