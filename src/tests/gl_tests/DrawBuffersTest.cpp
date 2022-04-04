@@ -996,6 +996,47 @@ TEST_P(DrawBuffersTestES3, 2DArrayTextures)
     glDeleteProgram(program);
 }
 
+// Test that binding multiple faces of a CubeMap texture works correctly
+TEST_P(DrawBuffersTestES3, CubeMapTextures)
+{
+    ANGLE_SKIP_TEST_IF(!setupTest());
+
+    GLTexture texture;
+    glBindTexture(GL_TEXTURE_CUBE_MAP, texture.get());
+    glTexStorage2D(GL_TEXTURE_CUBE_MAP, 1, GL_RGBA8, getWindowWidth(), getWindowHeight());
+    EXPECT_GL_NO_ERROR();
+
+    glFramebufferTextureLayer(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, texture.get(), 0, 0);
+    glFramebufferTextureLayer(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT1, texture.get(), 0, 1);
+    glFramebufferTextureLayer(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT2, texture.get(), 0, 2);
+    glFramebufferTextureLayer(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT3, texture.get(), 0, 3);
+    EXPECT_GL_NO_ERROR();
+
+    bool flags[8] = {true, true, true, true, false};
+
+    GLuint program;
+    setupMRTProgram(flags, &program);
+
+    const GLenum bufs[] = {
+        GL_COLOR_ATTACHMENT0,
+        GL_COLOR_ATTACHMENT1,
+        GL_COLOR_ATTACHMENT2,
+        GL_COLOR_ATTACHMENT3,
+    };
+
+    glDrawBuffers(4, bufs);
+    drawQuad(program, positionAttrib(), 0.5);
+
+    verifyAttachmentLayer(0, texture.get(), 0, 0);
+    verifyAttachmentLayer(1, texture.get(), 0, 1);
+    verifyAttachmentLayer(2, texture.get(), 0, 2);
+    verifyAttachmentLayer(3, texture.get(), 0, 3);
+
+    EXPECT_GL_NO_ERROR();
+
+    glDeleteProgram(program);
+}
+
 // Test that blend works when draw buffers and framebuffers change.
 TEST_P(DrawBuffersTestES3, BlendWithDrawBufferAndFramebufferChanges)
 {
