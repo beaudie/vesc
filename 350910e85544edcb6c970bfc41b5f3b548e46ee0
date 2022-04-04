@@ -16,6 +16,23 @@
       "message": "LGTM, thanks",
       "revId": "350910e85544edcb6c970bfc41b5f3b548e46ee0",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "a2beaa86_b480b277",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 6
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1520902
+      },
+      "writtenOn": "2022-04-04T20:54:51Z",
+      "side": 1,
+      "message": "One thing I would like to mention is that, the test suite \"AtomicCounterBufferTest31\" seems buggy: https://bugs.chromium.org/p/angleproject/issues/detail?id\u003d7170. This is irrelevant to the change I am making. I logged the issue and will look into it later.",
+      "revId": "350910e85544edcb6c970bfc41b5f3b548e46ee0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
