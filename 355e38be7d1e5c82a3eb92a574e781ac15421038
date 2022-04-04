@@ -22,6 +22,30 @@
       },
       "revId": "355e38be7d1e5c82a3eb92a574e781ac15421038",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "64cc4d0d_f6476f8c",
+        "filename": "src/tests/perf_tests/TracePerfTest.cpp",
+        "patchSetId": 9
+      },
+      "lineNbr": 668,
+      "author": {
+        "id": 1531247
+      },
+      "writtenOn": "2022-04-04T21:49:10Z",
+      "side": 1,
+      "message": "Yeah, I thought about this duplication as well.\n\nIf we were to do as you\u0027re suggesting Cody, one question I have is should those messages include the conditions under which the skip happens and when it doesn\u0027t? (some of the comments mention something like \"linux intel\")\n\nAlso, if we\u0027re open to adding macros then it could be done like this:\nSKIP_TEST(\"manhattan_10\", IsWindows() \u0026\u0026 IsIntel() \u0026\u0026 mParams.isVulkan(), \"bug+description\");\n\nwhich could then log the second argument as a string \"IsWindows() \u0026\u0026 IsIntel() \u0026\u0026 mParams.isVulkan()\" and then the specific condition should be clear and wouldn\u0027t cause condition/docstring mismatch over time.\n\nBut that\u0027s under assumption that we want macros and want these details to be included, and I\u0027m not sure about neither of those.",
+      "parentUuid": "983b57f4_724316ff",
+      "range": {
+        "startLine": 668,
+        "startChar": 0,
+        "endLine": 668,
+        "endChar": 96
+      },
+      "revId": "355e38be7d1e5c82a3eb92a574e781ac15421038",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
