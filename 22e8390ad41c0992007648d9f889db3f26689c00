@@ -43,6 +43,29 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "5e79e448_24b95f69",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 8
+      },
+      "lineNbr": 2690,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2022-04-04T21:19:43Z",
+      "side": 1,
+      "message": "You should remove this if statement as well.",
+      "range": {
+        "startLine": 2690,
+        "startChar": 3,
+        "endLine": 2690,
+        "endChar": 65
+      },
+      "revId": "22e8390ad41c0992007648d9f889db3f26689c00",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "d310ab7a_de48d485",
         "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
         "patchSetId": 8
