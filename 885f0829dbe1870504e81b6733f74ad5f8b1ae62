@@ -85,6 +85,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "67abf19b_4834bd24",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 3
+      },
+      "lineNbr": 9,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-04-04T15:06:41Z",
+      "side": 1,
+      "message": "Yes my first instinct was also to have Chrome ask for GL_RGBX instead of GL_RGB. GL_RGBX is an ANGLE extension that was relatively recently added: https://source.chromium.org/chromium/chromium/src/+/main:third_party/angle/extensions/ANGLE_rgbx_internal_format.txt",
+      "parentUuid": "f89470ab_2e8691a5",
+      "revId": "885f0829dbe1870504e81b6733f74ad5f8b1ae62",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "e1196683_c9a5518e",
         "filename": "/COMMIT_MSG",
         "patchSetId": 3
