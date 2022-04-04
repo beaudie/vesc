@@ -46,6 +46,30 @@
       },
       "revId": "355e38be7d1e5c82a3eb92a574e781ac15421038",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "46ed271c_b1d5bd40",
+        "filename": "src/tests/perf_tests/TracePerfTest.cpp",
+        "patchSetId": 9
+      },
+      "lineNbr": 668,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2022-04-04T22:04:12Z",
+      "side": 1,
+      "message": "I would thumbs down any new macro if we can avoid that.\n\nI think you can leave out the platform condition portion of the check, unless they are already in the comment.  Probably safest to just move the entire comment into the print and then remove all the comments.  Then future greps for \"TODO\" will still get a hit.  Then this one would become:\n\n        skipTest(\"TODO: http://anglebug.com/4533 This fails after the upgrade to the 26.20.100.7870 driver\");",
+      "parentUuid": "64cc4d0d_f6476f8c",
+      "range": {
+        "startLine": 668,
+        "startChar": 0,
+        "endLine": 668,
+        "endChar": 96
+      },
+      "revId": "355e38be7d1e5c82a3eb92a574e781ac15421038",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
