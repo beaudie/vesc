@@ -41,6 +41,48 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "e0446ddb_e9099397",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 3
+      },
+      "lineNbr": 9,
+      "author": {
+        "id": 1000050
+      },
+      "writtenOn": "2022-04-04T14:51:11Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "21a6c39c_d0c6e077",
+      "range": {
+        "startLine": 9,
+        "startChar": 15,
+        "endLine": 9,
+        "endChar": 22
+      },
+      "revId": "885f0829dbe1870504e81b6733f74ad5f8b1ae62",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "f89470ab_2e8691a5",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 3
+      },
+      "lineNbr": 9,
+      "author": {
+        "id": 1000050
+      },
+      "writtenOn": "2022-04-04T14:51:11Z",
+      "side": 1,
+      "message": "When WebGL requests canvas without alpha channel, it will request shared image backing with viz::ResourceFormat::RGBX_8888[1] format. I think vulkan doesn\u0027t support R8G8B8X8, so we always create VkImage with R8G8B8A8, and then import it into angle.\n\nI just check VkFormat, it support R8G8B8_UNORM, what is this format? Does it use 4 bytes per pixel as RGBX_8888?\n\n[1] https://source.chromium.org/chromium/chromium/src/+/main:third_party/blink/renderer/platform/graphics/gpu/drawing_buffer.cc;l\u003d1807?q\u003dRGBX\u0026ss\u003dchromium%2Fchromium%2Fsrc:third_party%2Fblink%2Frenderer%2Fplatform%2Fgraphics%2Fgpu%2F",
+      "parentUuid": "1e47efe6_acb53d35",
+      "revId": "885f0829dbe1870504e81b6733f74ad5f8b1ae62",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "e1196683_c9a5518e",
@@ -64,6 +106,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "db85f6c8_726eb440",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 3
+      },
+      "lineNbr": 10,
+      "author": {
+        "id": 1000050
+      },
+      "writtenOn": "2022-04-04T14:51:11Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "e1196683_c9a5518e",
+      "range": {
+        "startLine": 10,
+        "startChar": 9,
+        "endLine": 10,
+        "endChar": 17
+      },
+      "revId": "885f0829dbe1870504e81b6733f74ad5f8b1ae62",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "165b57d2_064f89a4",
@@ -77,6 +143,30 @@
       "writtenOn": "2022-04-04T14:30:22Z",
       "side": 1,
       "message": "typo",
+      "range": {
+        "startLine": 13,
+        "startChar": 48,
+        "endLine": 13,
+        "endChar": 59
+      },
+      "revId": "885f0829dbe1870504e81b6733f74ad5f8b1ae62",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "0977e936_50ddcae4",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 3
+      },
+      "lineNbr": 13,
+      "author": {
+        "id": 1000050
+      },
+      "writtenOn": "2022-04-04T14:51:11Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "165b57d2_064f89a4",
       "range": {
         "startLine": 13,
         "startChar": 48,
