@@ -1,0 +1,67 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "3e5716b4_b943a1b4",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 8
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2022-04-04T20:58:47Z",
+      "side": 1,
+      "message": "My personally preference is to only add to command buffer\u0027s list for a few APIs (I think the patchset 5), mainly where the staging buffer are been added into list, which should be very safe to do. This new patch expand it to almost all cases, which does make me worry about potential bugs. I am not saying we should not do for all cases, but that do needs high scrutinize and possibly more assertions (and with limited benefits). The staging buffer case is high reward with very limited risk.",
+      "revId": "22e8390ad41c0992007648d9f889db3f26689c00",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "524bdfbf_f6492c1b",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 8
+      },
+      "lineNbr": 2683,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2022-04-04T20:58:47Z",
+      "side": 1,
+      "message": "The main point of this CL is to make staging buffers able to GPU complete as soon as copy is done. To achieve this goal, you should only acquire mOutsideRenderPassCommands-\u003egetResourceUseList() when you are submitting outside command buffers. So either you move this acquire outside this function so that you only acuqire needed list (which was what I was original thinking), or you use if check here. Otherwise, there really isn\u0027t much point to split into three list.",
+      "range": {
+        "startLine": 2681,
+        "startChar": 4,
+        "endLine": 2683,
+        "endChar": 75
+      },
+      "revId": "22e8390ad41c0992007648d9f889db3f26689c00",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "d310ab7a_de48d485",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 8
+      },
+      "lineNbr": 1277,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2022-04-04T20:58:47Z",
+      "side": 1,
+      "message": "I think you should not call releaseResourceUses() here. it defeats the whole purpose of assert here. The whole point of this assert is to ensure we processed the resource list before it gets resetted.",
+      "range": {
+        "startLine": 1276,
+        "startChar": 4,
+        "endLine": 1277,
+        "endChar": 37
+      },
+      "revId": "22e8390ad41c0992007648d9f889db3f26689c00",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
