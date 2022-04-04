@@ -16,6 +16,69 @@
       "message": "Note: there are a few more files where `mSkipTest \u003d true` is set, I didn\u0027t touch these:\nhttps://source.chromium.org/search?q\u003df:angle%20mSkipTest.*%5C%3D.*true\u0026ss\u003dchromium",
       "revId": "bfee25bdbb2ca7c858476ce549c6d9d79701ae8b",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "ebdda60e_16bcefd5",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 8
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2022-04-04T18:50:18Z",
+      "side": 1,
+      "message": "LGTM - can you make sure with manual verification that expected FAIL/SKIP match?",
+      "revId": "bfee25bdbb2ca7c858476ce549c6d9d79701ae8b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "0d9a61ff_cbd4aed9",
+        "filename": "src/tests/perf_tests/ANGLEPerfTest.cpp",
+        "patchSetId": 8
+      },
+      "lineNbr": 778,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2022-04-04T18:50:18Z",
+      "side": 1,
+      "message": "nit: failTest?",
+      "range": {
+        "startLine": 778,
+        "startChar": 8,
+        "endLine": 778,
+        "endChar": 16
+      },
+      "revId": "bfee25bdbb2ca7c858476ce549c6d9d79701ae8b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ea0ee15f_79f2ad11",
+        "filename": "src/tests/perf_tests/ANGLEPerfTest.cpp",
+        "patchSetId": 8
+      },
+      "lineNbr": 808,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2022-04-04T18:50:18Z",
+      "side": 1,
+      "message": "same for these",
+      "range": {
+        "startLine": 808,
+        "startChar": 12,
+        "endLine": 808,
+        "endChar": 20
+      },
+      "revId": "bfee25bdbb2ca7c858476ce549c6d9d79701ae8b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
