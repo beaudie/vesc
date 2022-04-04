@@ -55,6 +55,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "0a5b74f9_13728a9e",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 8
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1531247
+      },
+      "writtenOn": "2022-04-04T18:56:53Z",
+      "side": 1,
+      "message": "Let me give it a try, not sure if I\u0027ll have a good \"reason\" string for all of those cases but worst case I can leave it empty.",
+      "parentUuid": "564b1623_9916877b",
+      "revId": "bfee25bdbb2ca7c858476ce549c6d9d79701ae8b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "0d9a61ff_cbd4aed9",
         "filename": "src/tests/perf_tests/ANGLEPerfTest.cpp",
         "patchSetId": 8
@@ -66,6 +84,30 @@
       "writtenOn": "2022-04-04T18:50:18Z",
       "side": 1,
       "message": "nit: failTest?",
+      "range": {
+        "startLine": 778,
+        "startChar": 8,
+        "endLine": 778,
+        "endChar": 16
+      },
+      "revId": "bfee25bdbb2ca7c858476ce549c6d9d79701ae8b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ef2b6e5f_0cf67d62",
+        "filename": "src/tests/perf_tests/ANGLEPerfTest.cpp",
+        "patchSetId": 8
+      },
+      "lineNbr": 778,
+      "author": {
+        "id": 1531247
+      },
+      "writtenOn": "2022-04-04T18:56:53Z",
+      "side": 1,
+      "message": "What do you mean by failTest?\nThe reason I added skipTest() here was because this line was setting `mSkipTest \u003d true` before and skipTest() does that + sets a reason.",
+      "parentUuid": "0d9a61ff_cbd4aed9",
       "range": {
         "startLine": 778,
         "startChar": 8,
