@@ -124,6 +124,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "dfccf571_a1a2a1ca",
+        "filename": "src/tests/gl_tests/AtomicCounterBufferTest.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 76,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-04-04T17:37:51Z",
+      "side": 1,
+      "message": "In `vk_caps_utils.cpp`, we set the GL limits based on Vulkan limits. The part that sets this limit actually does cap it to 4k, so I was wrong about intmax:\n\n```\n    // There is no particular limit to how many atomic counters there can be, other than the size of\n    // a storage buffer.  We nevertheless limit this to something reasonable (4096 arbitrarily).\n    const int32_t maxAtomicCounters \u003d\n        std::min\u003cint32_t\u003e(4096, limitsVk.maxStorageBufferRange / sizeof(uint32_t));\n    for (gl::ShaderType shaderType : gl::AllShaderTypes())\n    {\n        mNativeCaps.maxShaderAtomicCounters[shaderType] \u003d maxAtomicCounters;\n    }\n```\n\nCapping it to a small value is good practice nevertheless, for example if running this test on a native driver instead of ANGLE.",
+      "parentUuid": "615fbed2_01d1814f",
+      "revId": "ca943167e4b999cba807b8a13712995ffb656188",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "fdf99fa9_fd09f7ae",
