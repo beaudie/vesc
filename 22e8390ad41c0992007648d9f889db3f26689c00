@@ -38,6 +38,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "272643ad_aff79ac8",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 8
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1525982
+      },
+      "writtenOn": "2022-04-05T17:38:41Z",
+      "side": 1,
+      "message": "I also lean towards the two-step approach. We can split this CL into a part similar to PS5 and a part with the rest.",
+      "parentUuid": "ad9ff450_1c327ec6",
+      "revId": "22e8390ad41c0992007648d9f889db3f26689c00",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "524bdfbf_f6492c1b",
         "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
         "patchSetId": 8
@@ -49,6 +67,30 @@
       "writtenOn": "2022-04-04T20:58:47Z",
       "side": 1,
       "message": "The main point of this CL is to make staging buffers able to GPU complete as soon as copy is done. To achieve this goal, you should only acquire mOutsideRenderPassCommands-\u003egetResourceUseList() when you are submitting outside command buffers. So either you move this acquire outside this function so that you only acuqire needed list (which was what I was original thinking), or you use if check here. Otherwise, there really isn\u0027t much point to split into three list.",
+      "range": {
+        "startLine": 2681,
+        "startChar": 4,
+        "endLine": 2683,
+        "endChar": 75
+      },
+      "revId": "22e8390ad41c0992007648d9f889db3f26689c00",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "e1e9733e_3386aa22",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 8
+      },
+      "lineNbr": 2683,
+      "author": {
+        "id": 1525982
+      },
+      "writtenOn": "2022-04-05T17:38:41Z",
+      "side": 1,
+      "message": "Moved the `acquireResourceUseList()` functions above, and changed `submitFrameOutsideCommandBufferOnly()` so it would only acquire the outside command buffer resource use list.",
+      "parentUuid": "524bdfbf_f6492c1b",
       "range": {
         "startLine": 2681,
         "startChar": 4,
@@ -82,6 +124,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "b366e4df_792f11fb",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 8
+      },
+      "lineNbr": 2690,
+      "author": {
+        "id": 1525982
+      },
+      "writtenOn": "2022-04-05T17:38:41Z",
+      "side": 1,
+      "message": "Updated. Now the if-statement is only around `onRenderPassFinished()`, since submitting the outside command buffer should not break the render pass.",
+      "parentUuid": "5e79e448_24b95f69",
+      "range": {
+        "startLine": 2690,
+        "startChar": 3,
+        "endLine": 2690,
+        "endChar": 65
+      },
+      "revId": "22e8390ad41c0992007648d9f889db3f26689c00",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "d310ab7a_de48d485",
@@ -95,6 +161,30 @@
       "writtenOn": "2022-04-04T20:58:47Z",
       "side": 1,
       "message": "I think you should not call releaseResourceUses() here. it defeats the whole purpose of assert here. The whole point of this assert is to ensure we processed the resource list before it gets resetted.",
+      "range": {
+        "startLine": 1276,
+        "startChar": 4,
+        "endLine": 1277,
+        "endChar": 37
+      },
+      "revId": "22e8390ad41c0992007648d9f889db3f26689c00",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "2a70ebfb_61cbfb6b",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 8
+      },
+      "lineNbr": 1277,
+      "author": {
+        "id": 1525982
+      },
+      "writtenOn": "2022-04-05T17:38:41Z",
+      "side": 1,
+      "message": "Removed.",
+      "parentUuid": "d310ab7a_de48d485",
       "range": {
         "startLine": 1276,
         "startChar": 4,
