@@ -9270,7 +9270,7 @@ egl::Error Context::setDefaultFramebuffer(egl::Surface *drawSurface, egl::Surfac
     ASSERT(mCurrentDrawSurface == nullptr);
     ASSERT(mCurrentReadSurface == nullptr);
 
-    Framebuffer *newDefaultFramebuffer = nullptr;
+    std::unique_ptr<Framebuffer> newDefaultFramebuffer;
 
     mCurrentDrawSurface = drawSurface;
     mCurrentReadSurface = readSurface;
@@ -9278,11 +9278,12 @@ egl::Error Context::setDefaultFramebuffer(egl::Surface *drawSurface, egl::Surfac
     if (drawSurface != nullptr)
     {
         ANGLE_TRY(drawSurface->makeCurrent(this));
-        newDefaultFramebuffer = drawSurface->createDefaultFramebuffer(this, readSurface);
+        newDefaultFramebuffer = std::make_unique<Framebuffer>(this, drawSurface, readSurface);
     }
     else
     {
-        newDefaultFramebuffer = new Framebuffer(this, mImplementation.get(), readSurface);
+        newDefaultFramebuffer =
+            std::make_unique<Framebuffer>(this, mImplementation.get(), readSurface);
     }
     ASSERT(newDefaultFramebuffer);
 
@@ -9293,7 +9294,7 @@ egl::Error Context::setDefaultFramebuffer(egl::Surface *drawSurface, egl::Surfac
 
     // Update default framebuffer, the binding of the previous default
     // framebuffer (or lack of) will have a nullptr.
-    mState.mFramebufferManager->setDefaultFramebuffer(newDefaultFramebuffer);
+    mState.mFramebufferManager->setDefaultFramebuffer(std::move(newDefaultFramebuffer));
     if (mState.getDrawFramebuffer() == nullptr)
     {
         bindDrawFramebuffer(newDefaultFramebuffer->id());

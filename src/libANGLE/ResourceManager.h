@@ -10,6 +10,8 @@
 #ifndef LIBANGLE_RESOURCEMANAGER_H_
 #define LIBANGLE_RESOURCEMANAGER_H_
 
+#include <memory>
+
 #include "angle_gl.h"
 #include "common/angleutils.h"
 #include "libANGLE/Error.h"
@@ -272,7 +274,7 @@ class FramebufferManager
   public:
     FramebufferID createFramebuffer();
     Framebuffer *getFramebuffer(FramebufferID handle) const;
-    void setDefaultFramebuffer(Framebuffer *framebuffer);
+    void setDefaultFramebuffer(std::unique_ptr<Framebuffer> &&framebuffer);
     Framebuffer *getDefaultFramebuffer() const;
 
     void invalidateFramebufferCompletenessCache() const;

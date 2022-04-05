@@ -372,10 +372,10 @@ Framebuffer *FramebufferManager::getFramebuffer(FramebufferID handle) const
     return mObjectMap.query(handle);
 }
 
-void FramebufferManager::setDefaultFramebuffer(Framebuffer *framebuffer)
+void FramebufferManager::setDefaultFramebuffer(std::unique_ptr<Framebuffer> &&framebuffer)
 {
     ASSERT(framebuffer == nullptr || framebuffer->isDefault());
-    mObjectMap.assign(Framebuffer::kDefaultDrawFramebufferHandle, framebuffer);
+    mObjectMap.assign(Framebuffer::kDefaultDrawFramebufferHandle, framebuffer.release());
 }
 
 Framebuffer *FramebufferManager::getDefaultFramebuffer() const
