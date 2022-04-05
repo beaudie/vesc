@@ -33,6 +33,24 @@
       "message": "Yuxin: PTAL",
       "revId": "0111087afde5131aee1504b0a5ae55d8f18680ed",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "08e29352_756206cd",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2022-04-05T15:10:42Z",
+      "side": 1,
+      "message": "Example output here:\n\nhttps://paste.googleplex.com/5194881807941632",
+      "parentUuid": "618d741e_b867de58",
+      "revId": "0111087afde5131aee1504b0a5ae55d8f18680ed",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
