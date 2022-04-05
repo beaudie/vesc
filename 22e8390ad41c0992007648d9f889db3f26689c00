@@ -20,6 +20,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "ad9ff450_1c327ec6",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 8
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-04-05T13:54:52Z",
+      "side": 1,
+      "message": "Talked it over with Jamie too. It\u0027d be good to have a clean implementation with the full split, but we could do that in two steps. We could submit something similar to PS5 of this CL (with a fix so that outside-RP-only submits don\u0027t do copies anymore), then follow up with the complete split. If the complete split turned out problematic, the revert wouldn\u0027t affect the original optimization.",
+      "parentUuid": "3e5716b4_b943a1b4",
+      "revId": "22e8390ad41c0992007648d9f889db3f26689c00",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "524bdfbf_f6492c1b",
         "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
         "patchSetId": 8
