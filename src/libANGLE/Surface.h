@@ -11,6 +11,8 @@
 #ifndef LIBANGLE_SURFACE_H_
 #define LIBANGLE_SURFACE_H_
 
+#include <memory>
+
 #include <EGL/egl.h>
 
 #include "common/PackedEnums.h"
@@ -104,9 +106,6 @@ class Surface : public LabeledObject, public gl::FramebufferAttachmentObject
 
     void setFixedWidth(EGLint width);
     void setFixedHeight(EGLint height);
-
-    gl::Framebuffer *createDefaultFramebuffer(const gl::Context *context,
-                                              egl::Surface *readSurface);
 
     const Config *getConfig() const;
 
@@ -226,8 +225,6 @@ class Surface : public LabeledObject, public gl::FramebufferAttachmentObject
             EGLenum buftype = EGL_NONE);
     ~Surface() override;
     rx::FramebufferAttachmentObjectImpl *getAttachmentImpl() const override;
-
-    gl::Framebuffer *createDefaultFramebuffer(const Display *display);
 
     // ANGLE-only method, used internally
     friend class gl::Texture;
@@ -373,7 +370,7 @@ class SurfaceDeleter final
     const Display *mDisplay;
 };
 
-using SurfacePointer = angle::UniqueObjectPointerBase<Surface, SurfaceDeleter>;
+using SurfacePointer = std::unique_ptr<Surface, SurfaceDeleter>;
 
 }  // namespace egl
 
