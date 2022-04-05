@@ -22,6 +22,30 @@
       },
       "revId": "9cdddd5cf5f6ce2f9ebe647018d77b096d0e6708",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "3c4b380e_42a419fc",
+        "filename": "BUILD.gn",
+        "patchSetId": 3
+      },
+      "lineNbr": 464,
+      "author": {
+        "id": 1528827
+      },
+      "writtenOn": "2022-04-05T17:24:24Z",
+      "side": 1,
+      "message": "I actually managed to simplify it even more.",
+      "parentUuid": "09d9ca92_81d97899",
+      "range": {
+        "startLine": 464,
+        "startChar": 6,
+        "endLine": 464,
+        "endChar": 33
+      },
+      "revId": "9cdddd5cf5f6ce2f9ebe647018d77b096d0e6708",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
