@@ -16,6 +16,23 @@
       "message": "LGTM.\n\nDo you have example output that shows how it will look like?",
       "revId": "0111087afde5131aee1504b0a5ae55d8f18680ed",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "5f8d1d71_d101ec53",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2022-04-05T14:28:50Z",
+      "side": 1,
+      "message": "Yuxin: PTAL",
+      "revId": "0111087afde5131aee1504b0a5ae55d8f18680ed",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
