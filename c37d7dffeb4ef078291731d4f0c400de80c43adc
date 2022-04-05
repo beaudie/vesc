@@ -16,6 +16,24 @@
       "message": "We won\u0027t land this until after Lubosz completes a retrace, since this won\u0027t retrace on SwiftShader.",
       "revId": "c37d7dffeb4ef078291731d4f0c400de80c43adc",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "79e95a01_4d88398a",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2022-04-05T16:34:05Z",
+      "side": 1,
+      "message": "From chatting with Lubosz, we agree the retrace script should be updated to handle traces that can\u0027t be run, like with a filter or exception list.  Let\u0027s go ahead and land the trace so it can be incorporated.",
+      "parentUuid": "3347a076_cd9cd453",
+      "revId": "c37d7dffeb4ef078291731d4f0c400de80c43adc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
