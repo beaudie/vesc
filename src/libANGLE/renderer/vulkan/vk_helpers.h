@@ -10,6 +10,7 @@
 #define LIBANGLE_RENDERER_VULKAN_VK_HELPERS_H_
 
 #include "common/MemoryBuffer.h"
+#include "libANGLE/renderer/vulkan/SyncVk.h"
 #include "libANGLE/renderer/vulkan/vk_cache_utils.h"
 #include "libANGLE/renderer/vulkan/vk_format_utils.h"
 
@@ -93,8 +94,9 @@ class DynamicBuffer : angle::NonCopyable
     // This releases resources when they might currently be in use.
     void release(RendererVk *renderer);
 
-    // This adds in-flight buffers to the context's mResourceUseList and then releases them
-    void releaseInFlightBuffersToResourceUseList(ContextVk *contextVk);
+    // This adds in-flight buffers to the mResourceUseList in the outside render pass command buffer
+    // and then releases them
+    angle::Result releaseInFlightBuffersToResourceUseList(ContextVk *contextVk);
 
     // This frees resources immediately.
     void destroy(RendererVk *renderer);
@@ -258,7 +260,7 @@ class DynamicallyGrowingPool : angle::NonCopyable
     angle::Result allocateNewEntryPool(ContextVk *contextVk, Pool &&pool);
 
     // Called by the implementation whenever an entry is freed.
-    void onEntryFreed(ContextVk *contextVk, size_t poolIndex);
+    void onEntryFreed(ResourceUseList *resourceUseList, size_t poolIndex);
 
     const Pool &getPool(size_t index) const
     {
@@ -478,7 +480,7 @@ class DynamicSemaphorePool final : public DynamicallyGrowingPool<std::vector<Sem
     // autoFree can be used to allocate a semaphore that's expected to be freed at the end of the
     // frame.  This renders freeSemaphore unnecessary and saves an eventual search.
     angle::Result allocateSemaphore(ContextVk *contextVk, SemaphoreHelper *semaphoreOut);
-    void freeSemaphore(ContextVk *contextVk, SemaphoreHelper *semaphore);
+    void freeSemaphore(ResourceUseList *resourceUseList, SemaphoreHelper *semaphore);
 
   private:
     angle::Result allocatePoolImpl(ContextVk *contextVk,
@@ -1175,15 +1177,13 @@ class RenderPassCommandBufferHelper final : public CommandBufferHelperCommon
                     AliasingMode aliasingMode,
                     ImageHelper *image);
 
-    void colorImagesDraw(ResourceUseList *resourceUseList,
-                         gl::LevelIndex level,
+    void colorImagesDraw(gl::LevelIndex level,
                          uint32_t layerStart,
                          uint32_t layerCount,
                          ImageHelper *image,
                          ImageHelper *resolveImage,
                          PackedAttachmentIndex packedAttachmentIndex);
-    void depthStencilImagesDraw(ResourceUseList *resourceUseList,
-                                gl::LevelIndex level,
+    void depthStencilImagesDraw(gl::LevelIndex level,
                                 uint32_t layerStart,
                                 uint32_t layerCount,
                                 ImageHelper *image,
@@ -2882,6 +2882,14 @@ struct CommandBufferImageWrite
     uint32_t layerStart;
     uint32_t layerCount;
 };
+struct CommandBufferBufferExternalAcquireRelease
+{
+    BufferHelper *buffer;
+};
+struct CommandBufferResourceAccess
+{
+    Resource *resource;
+};
 class CommandBufferAccess : angle::NonCopyable
 {
   public:
@@ -2938,6 +2946,11 @@ class CommandBufferAccess : angle::NonCopyable
         onImageWrite(levelStart, levelCount, layerStart, layerCount, aspectFlags,
                      ImageLayout::ComputeShaderWrite, image);
     }
+    void onExternalAcquireRelease(ImageHelper *image) { onResourceAccess(image); }
+    void onQueryAccess(QueryHelper *query) { onResourceAccess(query); }
+    void onPipelineAccess(PipelineHelper *pipeline) { onResourceAccess(pipeline); }
+    void onSyncAccess(SyncHelper *sync) { onResourceAccess(sync); }
+    void onBufferExternalAcquireRelease(BufferHelper *buffer);
 
     // The limits reflect the current maximum concurrent usage of each resource type.  ASSERTs will
     // fire if this limit is exceeded in the future.
@@ -2945,11 +2958,19 @@ class CommandBufferAccess : angle::NonCopyable
     using WriteBuffers = angle::FixedVector<CommandBufferBufferAccess, 2>;
     using ReadImages   = angle::FixedVector<CommandBufferImageAccess, 2>;
     using WriteImages  = angle::FixedVector<CommandBufferImageWrite, 1>;
+    using ExternalAcquireReleaseBuffers =
+        angle::FixedVector<CommandBufferBufferExternalAcquireRelease, 1>;
+    using AccessResources = angle::FixedVector<CommandBufferResourceAccess, 1>;
 
     const ReadBuffers &getReadBuffers() const { return mReadBuffers; }
     const WriteBuffers &getWriteBuffers() const { return mWriteBuffers; }
     const ReadImages &getReadImages() const { return mReadImages; }
     const WriteImages &getWriteImages() const { return mWriteImages; }
+    const ExternalAcquireReleaseBuffers &getExternalAcquireReleaseBuffers() const
+    {
+        return mExternalAcquireReleaseBuffers;
+    }
+    const AccessResources &getAccessResources() const { return mAccessResources; }
 
   private:
     void onBufferRead(VkAccessFlags readAccessType, PipelineStage readStage, BufferHelper *buffer);
@@ -2965,11 +2986,14 @@ class CommandBufferAccess : angle::NonCopyable
                       VkImageAspectFlags aspectFlags,
                       ImageLayout imageLayout,
                       ImageHelper *image);
+    void onResourceAccess(Resource *resource);
 
     ReadBuffers mReadBuffers;
     WriteBuffers mWriteBuffers;
     ReadImages mReadImages;
     WriteImages mWriteImages;
+    ExternalAcquireReleaseBuffers mExternalAcquireReleaseBuffers;
+    AccessResources mAccessResources;
 };
 
 // This class' responsibility is to create index buffers needed to support line loops in Vulkan.
