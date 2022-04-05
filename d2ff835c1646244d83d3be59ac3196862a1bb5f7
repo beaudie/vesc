@@ -53,6 +53,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "9a886266_f43253ca",
+        "filename": "src/libANGLE/renderer/SurfaceImpl.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 156,
+      "author": {
+        "id": 1359249
+      },
+      "writtenOn": "2022-04-05T17:17:52Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "e34f8b2a_deb31247",
+      "revId": "d2ff835c1646244d83d3be59ac3196862a1bb5f7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "09991050_a1e23234",
@@ -84,6 +102,24 @@
       "side": 1,
       "message": "I\u0027ll work on it.",
       "parentUuid": "09991050_a1e23234",
+      "revId": "d2ff835c1646244d83d3be59ac3196862a1bb5f7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "00fd6494_570aad24",
+        "filename": "src/libANGLE/renderer/vulkan/SurfaceVk.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 2398,
+      "author": {
+        "id": 1359249
+      },
+      "writtenOn": "2022-04-05T17:17:52Z",
+      "side": 1,
+      "message": "Check if I got what you suggested.",
+      "parentUuid": "3370012b_92ba5f03",
       "revId": "d2ff835c1646244d83d3be59ac3196862a1bb5f7",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
