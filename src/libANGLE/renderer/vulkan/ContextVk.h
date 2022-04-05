@@ -540,6 +540,7 @@ class ContextVk : public ContextImpl, public vk::Context, public MultisampleText
     const gl::OverlayType *getOverlay() const { return mState.getOverlay(); }
 
     vk::ResourceUseList &getResourceUseList() { return mResourceUseList; }
+    vk::ResourceUseList &getResourceUseListForQueryType(VkQueryType queryType);
 
     angle::Result onBufferReleaseToExternal(const vk::BufferHelper &buffer);
     angle::Result onImageReleaseToExternal(const vk::ImageHelper &image);
@@ -572,8 +573,8 @@ class ContextVk : public ContextImpl, public vk::Context, public MultisampleText
                      vk::PackedAttachmentIndex packedAttachmentIndex)
     {
         ASSERT(mRenderPassCommands->started());
-        mRenderPassCommands->colorImagesDraw(&mResourceUseList, level, layerStart, layerCount,
-                                             image, resolveImage, packedAttachmentIndex);
+        mRenderPassCommands->colorImagesDraw(level, layerStart, layerCount, image, resolveImage,
+                                             packedAttachmentIndex);
     }
     void onDepthStencilDraw(gl::LevelIndex level,
                             uint32_t layerStart,
@@ -582,8 +583,8 @@ class ContextVk : public ContextImpl, public vk::Context, public MultisampleText
                             vk::ImageHelper *resolveImage)
     {
         ASSERT(mRenderPassCommands->started());
-        mRenderPassCommands->depthStencilImagesDraw(&mResourceUseList, level, layerStart,
-                                                    layerCount, image, resolveImage);
+        mRenderPassCommands->depthStencilImagesDraw(level, layerStart, layerCount, image,
+                                                    resolveImage);
     }
 
     void finalizeImageLayout(const vk::ImageHelper *image)
@@ -600,6 +601,15 @@ class ContextVk : public ContextImpl, public vk::Context, public MultisampleText
     {
         ANGLE_TRY(onResourceAccess(access));
         *commandBufferOut = &mOutsideRenderPassCommands->getCommandBuffer();
+        return angle::Result::Continue;
+    }
+
+    angle::Result getOutsideRenderPassCommandBufferHelper(
+        const vk::CommandBufferAccess &access,
+        vk::OutsideRenderPassCommandBufferHelper **commandBufferHelperOut)
+    {
+        ANGLE_TRY(onResourceAccess(access));
+        *commandBufferHelperOut = mOutsideRenderPassCommands;
         return angle::Result::Continue;
     }
 
