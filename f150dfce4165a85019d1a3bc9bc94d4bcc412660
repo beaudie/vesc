@@ -1,0 +1,44 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "de386d51_60e967c3",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 13
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2022-04-05T23:31:28Z",
+      "side": 1,
+      "message": "LGTM.",
+      "revId": "f150dfce4165a85019d1a3bc9bc94d4bcc412660",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "16253ae9_b39a5ee9",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 13
+      },
+      "lineNbr": 2688,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2022-04-05T23:31:28Z",
+      "side": 1,
+      "message": "I think this can be moved into ContextVk::submitFrame() call, and then you don\u0027t need to pass in submitFrameType into this function.\n\nAs a side note, I also suggest you rename ContextVk::submitFrameImpl to ContextVk::submitCommands, since this is no longer submitting a frame.",
+      "range": {
+        "startLine": 2688,
+        "startChar": 0,
+        "endLine": 2688,
+        "endChar": 81
+      },
+      "revId": "f150dfce4165a85019d1a3bc9bc94d4bcc412660",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
