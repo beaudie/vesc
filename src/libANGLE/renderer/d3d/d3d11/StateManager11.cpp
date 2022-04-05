@@ -836,12 +836,19 @@ void StateManager11::setUnorderedAccessViewInternal(gl::ShaderType shaderType,
             unsetConflictingSRVs(gl::PipelineType::ComputePipeline, gl::ShaderType::Compute,
                                  resource, nullptr, false);
         }
-        switch (shaderType) {
+        switch (shaderType)
+        {
+            case gl::ShaderType::Vertex:
+            case gl::ShaderType::Fragment:
+            {
+                UINT baseUAVRegister = static_cast<UINT>(mProgramD3D->getPixelShaderKey().size());
+                deviceContext->OMSetRenderTargetsAndUnorderedAccessViews(
+                    D3D11_KEEP_RENDER_TARGETS_AND_DEPTH_STENCIL, nullptr, nullptr,
+                    baseUAVRegister + resourceSlot, 1, &uavPtr, nullptr);
+                break;
+            }
             case gl::ShaderType::Compute:
                 deviceContext->CSSetUnorderedAccessViews(resourceSlot, 1, &uavPtr, nullptr);
-                break;
-            case gl::ShaderType::Fragment:
-                deviceContext->OMSetRenderTargetsAndUnorderedAccessViews(D3D11_KEEP_RENDER_TARGETS_AND_DEPTH_STENCIL, nullptr, nullptr, resourceSlot, 1, &uavPtr, nullptr);
                 break;
             default:
                 UNIMPLEMENTED();
@@ -2351,7 +2358,7 @@ angle::Result StateManager11::updateState(const gl::Context *context,
                 // TODO(jie.a.chen@intel.com): http://anglebug.com/1729
                 break;
             case DIRTY_BIT_PROGRAM_SHADER_STORAGE_BUFFERS:
-                // TODO(jie.a.chen@intel.com): http://anglebug.com/1951
+                ANGLE_TRY(syncShaderStorageBuffers(context));
                 break;
             case DIRTY_BIT_SHADERS:
                 ANGLE_TRY(syncProgram(context, mode));
@@ -3770,6 +3777,7 @@ angle::Result StateManager11::syncShaderStorageBuffersForShader(const gl::Contex
 
         switch (shaderType)
         {
+            case gl::ShaderType::Vertex:
             case gl::ShaderType::Fragment:
             case gl::ShaderType::Compute:
             {
@@ -3777,7 +3785,6 @@ angle::Result StateManager11::syncShaderStorageBuffersForShader(const gl::Contex
                 break;
             }
 
-            case gl::ShaderType::Vertex:
             case gl::ShaderType::Geometry:
                 UNIMPLEMENTED();
                 break;
@@ -3872,9 +3879,12 @@ angle::Result StateManager11::syncAtomicCounterBuffersForShader(const gl::Contex
 
 angle::Result StateManager11::syncShaderStorageBuffers(const gl::Context *context)
 {
-    if (mProgramD3D->hasShaderStage(gl::ShaderType::Compute))
+    for (gl::ShaderType shaderType : gl::AllShaderTypes())
     {
-        ANGLE_TRY(syncShaderStorageBuffersForShader(context, gl::ShaderType::Compute));
+        if (mProgramD3D->hasShaderStage(shaderType))
+        {
+            ANGLE_TRY(syncShaderStorageBuffersForShader(context, shaderType));
+        }
     }
 
     return angle::Result::Continue;
