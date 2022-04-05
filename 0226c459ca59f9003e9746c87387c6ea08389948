@@ -24,6 +24,23 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": true,
+      "key": {
+        "uuid": "a8cc3409_1f1fda71",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 2
+      },
+      "lineNbr": 10,
+      "author": {
+        "id": 1340649
+      },
+      "writtenOn": "2022-04-05T22:18:41Z",
+      "side": 1,
+      "message": "nit - the template is something like -\n\n Roll volk from begin_sha1 to end_sha1 (xxx revisions)",
+      "revId": "0226c459ca59f9003e9746c87387c6ea08389948",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": false,
       "key": {
         "uuid": "0cfe0451_a6258f34",
@@ -37,6 +54,23 @@
       "writtenOn": "2022-04-05T22:07:22Z",
       "side": 1,
       "message": "LGTM, thanks! Mohan FYI.",
+      "revId": "0226c459ca59f9003e9746c87387c6ea08389948",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "3344f85e_47d05cd5",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1340649
+      },
+      "writtenOn": "2022-04-05T22:18:41Z",
+      "side": 1,
+      "message": "thanks a ton Yuxin and jamie.",
       "revId": "0226c459ca59f9003e9746c87387c6ea08389948",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
