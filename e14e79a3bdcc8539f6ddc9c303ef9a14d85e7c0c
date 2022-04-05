@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "6088e700_22410322",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1528827
+      },
+      "writtenOn": "2022-04-05T09:49:30Z",
+      "side": 1,
+      "message": "This is required for https://chromium-review.googlesource.com/c/chromium/src/+/3455146 to build correctly on platforms with no wayland in their system directories.",
+      "revId": "e14e79a3bdcc8539f6ddc9c303ef9a14d85e7c0c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
