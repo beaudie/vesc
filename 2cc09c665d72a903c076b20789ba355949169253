@@ -35,6 +35,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "58f8360c_c7468512",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 6
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1359249
+      },
+      "writtenOn": "2022-04-05T18:05:38Z",
+      "side": 1,
+      "message": "OK. Makes sense\nI can\u0027t get all of it. I need some of it.",
+      "parentUuid": "6d58a744_878d25d7",
+      "revId": "2cc09c665d72a903c076b20789ba355949169253",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "c9e6361f_b3ec1fe4",
@@ -48,6 +66,30 @@
       "writtenOn": "2022-04-05T17:29:52Z",
       "side": 1,
       "message": "How about passing `mState.attributes.getAsInt(EGL_RENDER_BUFFER, EGL_BACK_BUFFER)` to `GetDesiredPresentMode`, in which case it would only select SHARED when renderBuffer is EGL_SINGLE_BUFFER?\n\nIn that case, we can also reuse `GetDesiredPresentMode` in `setRenderBuffer` below.\n\nI believe the logic of `if (renderBuffer \u003d\u003d EGL_SINGLE_BUFFER \u0026\u0026 !supportsSharedPresent()) { fail }` could fold in `GetDesiredPresentMode` as a consequence.",
+      "range": {
+        "startLine": 1065,
+        "startChar": 0,
+        "endLine": 1070,
+        "endChar": 5
+      },
+      "revId": "2cc09c665d72a903c076b20789ba355949169253",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "f6398412_7b71baf3",
+        "filename": "src/libANGLE/renderer/vulkan/SurfaceVk.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 1070,
+      "author": {
+        "id": 1359249
+      },
+      "writtenOn": "2022-04-05T18:05:38Z",
+      "side": 1,
+      "message": "It kinda makes GetDesiredPresentMode weird:\n\nGetDesiredPresentMode(presentModesVector, swapInterval, renderBuffer);\n\nrenderBuffer would go first, if SINGLE_BUFFER\nthen swapInterval \u003e 0\nthen one of the other presentModes.\n\nis that OK?\nIt is also call in setSwapInterval, I would put EGL_BACK_BUFFER there? Does that potentially change mode?",
+      "parentUuid": "c9e6361f_b3ec1fe4",
       "range": {
         "startLine": 1065,
         "startChar": 0,
