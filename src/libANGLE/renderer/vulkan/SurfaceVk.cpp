@@ -132,7 +132,8 @@ angle::Result InitImageHelper(DisplayVk *displayVk,
     RendererVk *rendererVk = displayVk->getRenderer();
     // If shaders may be fetching from this, we need this image to be an input
     if (rendererVk->getFeatures().supportsShaderFramebufferFetch.enabled ||
-        rendererVk->getFeatures().supportsShaderFramebufferFetchNonCoherent.enabled)
+        rendererVk->getFeatures().supportsShaderFramebufferFetchNonCoherent.enabled ||
+        rendererVk->getFeatures().emulateAdvancedBlendEquations.enabled)
     {
         usage |= VK_IMAGE_USAGE_INPUT_ATTACHMENT_BIT;
     }
@@ -1278,7 +1279,8 @@ angle::Result WindowSurfaceVk::createSwapChain(vk::Context *context,
 
     // If shaders may be fetching from this, we need this image to be an input
     if (renderer->getFeatures().supportsShaderFramebufferFetch.enabled ||
-        renderer->getFeatures().supportsShaderFramebufferFetchNonCoherent.enabled)
+        renderer->getFeatures().supportsShaderFramebufferFetchNonCoherent.enabled ||
+        renderer->getFeatures().emulateAdvancedBlendEquations.enabled)
     {
         imageUsageFlags |= VK_IMAGE_USAGE_INPUT_ATTACHMENT_BIT;
     }
