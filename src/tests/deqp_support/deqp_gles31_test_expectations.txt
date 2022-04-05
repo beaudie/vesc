@@ -166,6 +166,12 @@
 // Framebuffer fetch implementation bug
 6909 VULKAN : dEQP-GLES31.functional.shaders.framebuffer_fetch.basic.framebuffer_texture_layer = SKIP
 
+// Emulated advanced blend equations (only Nvidia and SwiftShader support the Vulkan extension):
+3586 AMD VULKAN : dEQP-GLES31.functional.blend_equation_advanced.msaa.* = FAIL
+3586 INTEL VULKAN : dEQP-GLES31.functional.blend_equation_advanced.msaa.* = FAIL
+3586 PIXEL4ORXL VULKAN : dEQP-GLES31.functional.blend_equation_advanced.msaa.* = FAIL
+3586 PIXEL6 VULKAN : dEQP-GLES31.functional.blend_equation_advanced.msaa.* = FAIL
+
 ////
 //// AMD Vulkan expectations
 ////

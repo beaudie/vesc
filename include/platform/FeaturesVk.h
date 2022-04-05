@@ -644,6 +644,11 @@ struct FeaturesVk : FeatureSetBase
     Feature emulateDithering = {"emulateDithering", FeatureCategory::VulkanFeatures,
                                 "Emulate OpenGL dithering", &members, "http://anglebug.com/6755"};
 
+    // Whether GL_KHR_blend_equation_advanced should be emulated.
+    Feature emulateAdvancedBlendEquations = {
+        "emulateAdvancedBlendEquations", FeatureCategory::VulkanFeatures,
+        "Emulate GL_KHR_blend_equation_advanced", &members, "http://anglebug.com/3586"};
+
     // Android bug workaround which assumes VkPresentRegionsKHR to have a bottom-left origin
     // instead of top-left as specified by VK_KHR_incremental_present
     Feature bottomLeftOriginPresentRegionRectangles = {
