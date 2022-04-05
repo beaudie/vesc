@@ -1,6 +1,40 @@
 {
   "comments": [
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "f30e9ce4_4460528b",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-04-05T03:41:23Z",
+      "side": 1,
+      "message": "Working on this now. I believe at least keeping the current limitations of the emulation, it shouldn\u0027t take long.",
+      "revId": "1cd694be70e531791715aabe68d57d43b5bb8374",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ffc5816b_d6529967",
+        "filename": "src/libANGLE/renderer/vulkan/ProgramExecutableVk.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 937,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-04-05T03:41:23Z",
+      "side": 1,
+      "message": "My understanding from the spec was that, even though a single color attachment can use advanced blend, it could be any index. Is that not correct?\n\nLike, if the shader has 4 color attachment outputs, and uses advanced blend for color attachment 2, is that not supposed to work?",
+      "revId": "1cd694be70e531791715aabe68d57d43b5bb8374",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "276d9afa_21af8bc9",
@@ -61,6 +95,24 @@
       "writtenOn": "2022-02-24T20:42:43Z",
       "side": 1,
       "message": "I presume MSAA is not supported because subpassInput is used (because shader doesn\u0027t know if it should use subpassInputMS). What did you do for this to get conformance?",
+      "revId": "1cd694be70e531791715aabe68d57d43b5bb8374",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "c1cdd883_dccb7cc1",
+        "filename": "src/tests/deqp_support/deqp_gles31_test_expectations.txt",
+        "patchSetId": 2
+      },
+      "lineNbr": 173,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-04-05T03:41:23Z",
+      "side": 1,
+      "message": "Still curious to know how you could achieve conformance without MSAA support",
+      "parentUuid": "572bd233_cc211eff",
       "revId": "1cd694be70e531791715aabe68d57d43b5bb8374",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
