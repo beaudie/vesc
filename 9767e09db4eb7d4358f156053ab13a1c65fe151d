@@ -56,6 +56,30 @@
       },
       "revId": "9767e09db4eb7d4358f156053ab13a1c65fe151d",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "088b28c3_1ba581a4",
+        "filename": "src/libANGLE/renderer/gl/FramebufferGL.cpp",
+        "patchSetId": 15
+      },
+      "lineNbr": 166,
+      "author": {
+        "id": 1323689
+      },
+      "writtenOn": "2022-04-05T21:37:48Z",
+      "side": 1,
+      "message": "Hi Jonah, thanks for pointing out how to get the number of color attachments. The upper bound was added so that we\u0027re only calling framebufferTexture2D for color attachments although I realize I didn\u0027t grab a good upper bound to begin with. \n\nThat being said, do you know if we\u0027d need to worry about what attachments are valid in calls to framebufferTexture2D depending on the OpenGL/ES version we\u0027re using? Looking through the docs I see that in OpenGL es2.0 for example, the only valid attachments are GL_COLOR_ATTACHMENT0, GL_DEPTH_ATTACHMENT, or GL_STENCIL_ATTACHMENT. Looks like we could generate a GL_INVALID_ENUM error if we tried to unbind an invalid attachment. I\u0027m not sure what versions are currently supported though so I don\u0027t know if that\u0027s an issue.\n\nAdding onto this, I\u0027m not sure if the original driver error we\u0027re working around is generated on a DEPTH or STENCIL attachment, it\u0027s possible we want to unbind those as well. Vasily, do you think we\u0027d hit the error there? I can get a build together to check if needed.",
+      "parentUuid": "258f3f44_75fbec4a",
+      "range": {
+        "startLine": 166,
+        "startChar": 17,
+        "endLine": 166,
+        "endChar": 57
+      },
+      "revId": "9767e09db4eb7d4358f156053ab13a1c65fe151d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
