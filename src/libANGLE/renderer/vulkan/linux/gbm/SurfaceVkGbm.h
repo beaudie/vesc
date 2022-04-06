@@ -32,6 +32,7 @@ struct GbmImage final : angle::NonCopyable
     vk::ImageHelper image;
     vk::ImageViewHelper imageViews;
     vk::Framebuffer framebuffer;
+    vk::Framebuffer fetchFramebuffer;
 };
 
 class SurfaceVkGbm : public FramebufferSurfaceVk
@@ -105,6 +106,9 @@ class SurfaceVkGbm : public FramebufferSurfaceVk
     // A circular buffer that stores the serial of the submission fence of the context on every
     // swap. The CPU is throttled by waiting for the 2nd previous serial to finish.
     angle::CircularBuffer<Serial, impl::kSwapHistorySize> mSwapHistory;
+
+    // GL_EXT_shader_framebuffer_fetch
+    FramebufferFetchMode mFramebufferFetchMode = FramebufferFetchMode::Disabled;
 };
 
 }  // namespace rx
