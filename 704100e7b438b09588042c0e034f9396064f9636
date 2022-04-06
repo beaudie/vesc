@@ -56,6 +56,30 @@
       },
       "revId": "704100e7b438b09588042c0e034f9396064f9636",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "4c3cf78b_9008059e",
+        "filename": "src/tests/gl_tests/VulkanPerformanceCounterTest.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 192,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-04-06T01:22:18Z",
+      "side": 1,
+      "message": "Yes. This draw was always failing the depth test. No other test actually verified the rendering result of this, so it didn\u0027t matter.",
+      "parentUuid": "e35ba3f2_7d70c05e",
+      "range": {
+        "startLine": 192,
+        "startChar": 0,
+        "endLine": 192,
+        "endChar": 65
+      },
+      "revId": "704100e7b438b09588042c0e034f9396064f9636",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
