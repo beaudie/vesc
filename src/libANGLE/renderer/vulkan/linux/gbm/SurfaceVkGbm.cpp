@@ -37,6 +37,20 @@
 
 namespace rx
 {
+namespace
+{
+angle::SubjectIndex kAnySurfaceImageSubjectIndex = 0;
+
+GLint GetSampleCount(const egl::Config *config)
+{
+    GLint samples = 1;
+    if (config->sampleBuffers && config->samples > 1)
+    {
+        samples = config->samples;
+    }
+    return samples;
+}
+}  // namespace
 
 GbmImage::GbmImage()  = default;
 GbmImage::~GbmImage() = default;
@@ -45,7 +59,8 @@ GbmImage::GbmImage(GbmImage &&other)
     : image(std::move(other.image)),
       imageViews(std::move(other.imageViews)),
       framebuffer(std::move(other.framebuffer)),
-      fetchFramebuffer(std::move(other.fetchFramebuffer))
+      fetchFramebuffer(std::move(other.fetchFramebuffer)),
+      framebufferResolveMS(std::move(other.framebufferResolveMS))
 {}
 
 SurfaceVkGbm::SurfaceVkGbm(const egl::SurfaceState &surfaceState,
@@ -54,12 +69,23 @@ SurfaceVkGbm::SurfaceVkGbm(const egl::SurfaceState &surfaceState,
     : FramebufferSurfaceVk(surfaceState),
       mGbmDevice(gbmDevice),
       mGbmSurface(reinterpret_cast<gbm_surface *>(window)),
-      mCurrentGbmImageIndex(0)
+      mWidth(0),
+      mHeight(0),
+      mCurrentGbmImageIndex(0),
+      mDepthStencilImageBinding(this, kAnySurfaceImageSubjectIndex),
+      mColorImageMSBinding(this, kAnySurfaceImageSubjectIndex),
+      mFramebufferFetchMode(FramebufferFetchMode::Disabled)
 {
     (void)mGbmDevice;
 
+    // Initialize the color render target with the multisampled targets. If not multisampled, the
+    // render target will be updated to refer to a GBM image.
+    mColorRenderTarget.init(&mColorImageMS, &mColorImageMSViews, nullptr, nullptr,
+                            gl::LevelIndex(0), 0, 1, RenderTargetTransience::Default);
     mDepthStencilRenderTarget.init(&mDepthStencilImage, &mDepthStencilImageViews, nullptr, nullptr,
                                    gl::LevelIndex(0), 0, 1, RenderTargetTransience::Default);
+    mDepthStencilImageBinding.bind(&mDepthStencilImage);
+    mColorImageMSBinding.bind(&mColorImageMS);
 }
 
 SurfaceVkGbm::~SurfaceVkGbm() {}
@@ -81,6 +107,10 @@ constexpr VkImageAspectFlagBits kMemoryPlaneAspects[kMaxMemoryPlanes] = {
 angle::Result SurfaceVkGbm::initializeImpl(DisplayVk *displayVk)
 {
     RendererVk *renderer = displayVk->getRenderer();
+
+    mColorImageMSViews.init(renderer);
+    mDepthStencilImageViews.init(renderer);
+
     renderer->reloadVolkIfNeeded();
 
     size_t boCount = gbm_surface_get_buffer_count(mGbmSurface);
@@ -95,8 +125,8 @@ angle::Result SurfaceVkGbm::initializeImpl(DisplayVk *displayVk)
 
     gbm_bo *firstBO = bos[0];
 
-    uint32_t width  = gbm_bo_get_width(firstBO);
-    uint32_t height = gbm_bo_get_height(firstBO);
+    mWidth  = gbm_bo_get_width(firstBO);
+    mHeight = gbm_bo_get_height(firstBO);
 
     // We need transfer src for reading back from the backbuffer.
     VkImageUsageFlags usage = kSurfaceVkColorImageUsageFlags;
@@ -148,7 +178,7 @@ angle::Result SurfaceVkGbm::initializeImpl(DisplayVk *displayVk)
         }
 
         VkExtent3D extents = {gbm_bo_get_width(bo), gbm_bo_get_height(bo), 1};
-        ASSERT(extents.width == width && extents.height == height);
+        ASSERT(extents.width == mWidth && extents.height == mHeight);
 
         // Get format from BO and convert it to angle::FormatID
         uint32_t drmFormat = gbm_bo_get_format(bo);
@@ -247,10 +277,6 @@ angle::Result SurfaceVkGbm::initializeImpl(DisplayVk *displayVk)
     {
         int acquired = gbm_surface_acquire_back_buffer(mGbmSurface, &mCurrentGbmImageIndex);
         ASSERT(acquired);
-
-        GbmImage &gbmImage = mGbmImages[mCurrentGbmImageIndex];
-        mColorRenderTarget.init(&gbmImage.image, &gbmImage.imageViews, nullptr, nullptr,
-                                gl::LevelIndex(0), 0, 1, RenderTargetTransience::Default);
     }
 
     GLint samples = 1;
@@ -262,7 +288,7 @@ angle::Result SurfaceVkGbm::initializeImpl(DisplayVk *displayVk)
 
         const VkImageUsageFlags dsUsage = kSurfaceVkDepthStencilImageUsageFlags;
 
-        VkExtent3D extents = {width, height, 1};
+        VkExtent3D extents = {mWidth, mHeight, 1};
 
         ANGLE_TRY(mDepthStencilImage.init(
             displayVk, gl::TextureType::_2D, extents, dsFormat, samples, dsUsage, gl::LevelIndex(0),
@@ -289,9 +315,9 @@ void SurfaceVkGbm::destroy(const egl::Display *display)
 
     mDepthStencilImage.destroy(renderer);
     mDepthStencilImageViews.destroy(device);
-    // mColorImageMS.destroy(renderer);
-    // mColorImageMSViews.destroy(device);
-    // mFramebufferMS.destroy(device);
+    mColorImageMS.destroy(renderer);
+    mColorImageMSViews.destroy(device);
+    mFramebufferMS.destroy(device);
 
     for (GbmImage &gbmImage : mGbmImages)
     {
@@ -302,9 +328,34 @@ void SurfaceVkGbm::destroy(const egl::Display *display)
         {
             gbmImage.fetchFramebuffer.destroy(device);
         }
+        if (gbmImage.framebufferResolveMS.valid())
+        {
+            gbmImage.framebufferResolveMS.destroy(device);
+        }
     }
 
     mGbmImages.clear();
+}
+
+angle::Result SurfaceVkGbm::getAttachmentRenderTarget(const gl::Context *context,
+                                                      GLenum binding,
+                                                      const gl::ImageIndex &imageIndex,
+                                                      GLsizei samples,
+                                                      FramebufferAttachmentRenderTarget **rtOut)
+{
+    ContextVk *contextVk = vk::GetImpl(context);
+    ANGLE_VK_TRACE_EVENT_AND_MARKER(contextVk, "First Swap Image Use");
+    ANGLE_TRY(initializeMS(contextVk));
+
+    if (mState.config->renderTargetFormat != GL_NONE && !isMultiSampled())
+    {
+        // Update RenderTarget pointers to this swapchain image if not multisampling
+        GbmImage &gbmImage = mGbmImages[mCurrentGbmImageIndex];
+        mColorRenderTarget.updateSwapchainImage(&gbmImage.image, &gbmImage.imageViews, nullptr,
+                                                nullptr);
+    }
+
+    return SurfaceVk::getAttachmentRenderTarget(context, binding, imageIndex, samples, rtOut);
 }
 
 FramebufferImpl *SurfaceVkGbm::createDefaultFramebuffer(const gl::Context *context,
@@ -312,6 +363,49 @@ FramebufferImpl *SurfaceVkGbm::createDefaultFramebuffer(const gl::Context *conte
 {
     RendererVk *renderer = vk::GetImpl(context)->getRenderer();
     return FramebufferVk::CreateDefaultFBO(renderer, state, this);
+}
+
+angle::Result SurfaceVkGbm::initializeMS(ContextVk *context)
+{
+    if (mColorImageMS.valid())
+    {
+        return angle::Result::Continue;
+    }
+
+    // If multisampling is enabled, create a multisampled image which gets resolved just prior to
+    // present.
+    GLint samples = GetSampleCount(mState.config);
+    ANGLE_VK_CHECK(context, samples > 0, VK_ERROR_INITIALIZATION_FAILED);
+    if (samples == 1)
+    {
+        return angle::Result::Continue;
+    }
+
+    RendererVk *renderer = context->getRenderer();
+
+    GLenum renderTargetFormat = gl::GetNonLinearFormat(mState.config->renderTargetFormat);
+    const vk::Format &format  = renderer->getFormat(renderTargetFormat);
+
+    VkExtent3D vkExtents = {mWidth, mHeight, 1};
+
+    bool robustInit = mState.isRobustResourceInitEnabled();
+
+    const VkImageUsageFlags usage = kSurfaceVkColorImageUsageFlags;
+
+    // Create a multisampled image that will be rendered to, and then resolved to a GBM image.
+    ANGLE_TRY(mColorImageMS.initMSAASwapchain(context, gl::TextureType::_2D, vkExtents, false,
+                                              format, samples, usage, gl::LevelIndex(0), 1, 1,
+                                              robustInit, mState.hasProtectedContent()));
+    ANGLE_TRY(mColorImageMS.initMemory(context, mState.hasProtectedContent(),
+                                       renderer->getMemoryProperties(),
+                                       VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT));
+
+    // Initialize the color render target with the multisampled targets.  If not multisampled,
+    // the render target will be updated to refer to a swapchain image on every acquire.
+    mColorRenderTarget.init(&mColorImageMS, &mColorImageMSViews, nullptr, nullptr,
+                            gl::LevelIndex(0), 0, 1, RenderTargetTransience::Default);
+
+    return angle::Result::Continue;
 }
 
 egl::Error SurfaceVkGbm::swap(const gl::Context *context)
@@ -349,13 +443,43 @@ angle::Result SurfaceVkGbm::present(ContextVk *contextVk)
     bool imageResolved = false;
     if (currentFramebuffer.valid())
     {
-        ANGLE_TRY(contextVk->optimizeRenderPassForPresent(currentFramebuffer.getHandle(), &image.imageViews,
-                                                &image.image, &mColorImageMS, &imageResolved));
+        ANGLE_TRY(contextVk->optimizeRenderPassForPresent(currentFramebuffer.getHandle(),
+                                                          &image.imageViews, &image.image,
+                                                          &mColorImageMS, &imageResolved));
     }
+
+    // Because the color attachment defers layout changes until endRenderPass time, we must call
+    // finalize the layout transition in the renderpass before we insert layout change to
+    // ImageLayout::ColorAttachment below.
     contextVk->finalizeImageLayout(&image.image);
+    contextVk->finalizeImageLayout(&mColorImageMS);
 
     vk::OutsideRenderPassCommandBuffer *commandBuffer;
     ANGLE_TRY(contextVk->getOutsideRenderPassCommandBuffer({}, &commandBuffer));
+
+    if (isMultiSampled())
+    {
+        // Transition the multisampled image to TRANSFER_SRC for resolve.
+        vk::CommandBufferAccess access;
+        access.onImageTransferRead(VK_IMAGE_ASPECT_COLOR_BIT, &mColorImageMS);
+        access.onImageTransferWrite(gl::LevelIndex(0), 1, 0, 1, VK_IMAGE_ASPECT_COLOR_BIT,
+                                    &image.image);
+
+        ANGLE_TRY(contextVk->getOutsideRenderPassCommandBuffer(access, &commandBuffer));
+
+        VkImageResolve resolveRegion                = {};
+        resolveRegion.srcSubresource.aspectMask     = VK_IMAGE_ASPECT_COLOR_BIT;
+        resolveRegion.srcSubresource.mipLevel       = 0;
+        resolveRegion.srcSubresource.baseArrayLayer = 0;
+        resolveRegion.srcSubresource.layerCount     = 1;
+        resolveRegion.srcOffset                     = {};
+        resolveRegion.dstSubresource                = resolveRegion.srcSubresource;
+        resolveRegion.dstOffset                     = {};
+        resolveRegion.extent                        = image.image.getRotatedExtents();
+
+        mColorImageMS.resolve(&image.image, resolveRegion, commandBuffer);
+    }
+
     image.image.recordReadBarrier(contextVk, VK_IMAGE_ASPECT_COLOR_BIT,
                                   vk::ImageLayout::ColorAttachment, commandBuffer);
 
@@ -383,11 +507,17 @@ angle::Result SurfaceVkGbm::swapImpl(const gl::Context *context)
 
     // Make sure render target is up to date
     GbmImage &gbmImage = mGbmImages[mCurrentGbmImageIndex];
-    mColorRenderTarget.updateSwapchainImage(&gbmImage.image, &gbmImage.imageViews, nullptr,
-                                            nullptr);
+    // Update RenderTarget pointers to this swapchain image if not multisampling.
+    if (!isMultiSampled())
+    {
+        mColorRenderTarget.updateSwapchainImage(&gbmImage.image, &gbmImage.imageViews, nullptr,
+                                                nullptr);
+    }
 
     // Present previously acquired back-buffer
     ContextVk *contextVk = vk::GetImpl(context);
+    ANGLE_TRY(initializeMS(contextVk));
+
     ANGLE_TRY(present(contextVk));
 
     RendererVk *renderer = contextVk->getRenderer();
@@ -445,12 +575,12 @@ void SurfaceVkGbm::setSwapInterval(EGLint /*interval*/) {}
 
 EGLint SurfaceVkGbm::getWidth() const
 {
-    return static_cast<EGLint>(mColorRenderTarget.getExtents().width);
+    return static_cast<EGLint>(mWidth);
 }
 
 EGLint SurfaceVkGbm::getHeight() const
 {
-    return static_cast<EGLint>(mColorRenderTarget.getExtents().height);
+    return static_cast<EGLint>(mHeight);
 }
 
 EGLint SurfaceVkGbm::isPostSubBufferSupported() const
@@ -465,6 +595,13 @@ EGLint SurfaceVkGbm::getSwapBehavior() const
 
 vk::Framebuffer &SurfaceVkGbm::chooseFramebuffer(const SwapchainResolveMode swapchainResolveMode)
 {
+    if (isMultiSampled())
+    {
+        return swapchainResolveMode == SwapchainResolveMode::Enabled
+                   ? mGbmImages[mCurrentGbmImageIndex].framebufferResolveMS
+                   : mFramebufferMS;
+    }
+
     return mFramebufferFetchMode == FramebufferFetchMode::Enabled
                ? mGbmImages[mCurrentGbmImageIndex].fetchFramebuffer
                : mGbmImages[mCurrentGbmImageIndex].framebuffer;
@@ -510,24 +647,54 @@ angle::Result SurfaceVkGbm::getCurrentFramebuffer(ContextVk *contextVk,
     framebufferInfo.height          = static_cast<uint32_t>(rotatedExtents.height);
     framebufferInfo.layers          = 1;
 
-    for (GbmImage &gbmImage : mGbmImages)
+    if (isMultiSampled())
     {
         const vk::ImageView *imageView = nullptr;
-        ANGLE_TRY(gbmImage.imageViews.getLevelLayerDrawImageView(
-            contextVk, gbmImage.image, vk::LevelIndex(0), 0, gl::SrgbWriteControlMode::Default,
-            &imageView));
-
+        ANGLE_TRY(mColorRenderTarget.getImageView(contextVk, &imageView));
         imageViews[0] = imageView->getHandle();
 
-        if (fetchMode == FramebufferFetchMode::Enabled)
+        if (swapchainResolveMode == SwapchainResolveMode::Enabled)
         {
-            ANGLE_VK_TRY(contextVk,
-                         gbmImage.fetchFramebuffer.init(contextVk->getDevice(), framebufferInfo));
+            framebufferInfo.attachmentCount = attachmentCount + 1;
+
+            for (GbmImage &gbmImage : mGbmImages)
+            {
+                ANGLE_TRY(gbmImage.imageViews.getLevelLayerDrawImageView(
+                    contextVk, gbmImage.image, vk::LevelIndex(0), 0,
+                    gl::SrgbWriteControlMode::Default, &imageView));
+                imageViews[attachmentCount] = imageView->getHandle();
+                ANGLE_VK_TRY(contextVk, gbmImage.framebufferResolveMS.init(contextVk->getDevice(),
+                                                                           framebufferInfo));
+            }
         }
         else
         {
-            ANGLE_VK_TRY(contextVk,
-                         gbmImage.framebuffer.init(contextVk->getDevice(), framebufferInfo));
+
+            // If multisampled, there is only a single color image and framebuffer.
+            ANGLE_VK_TRY(contextVk, mFramebufferMS.init(contextVk->getDevice(), framebufferInfo));
+        }
+    }
+    else
+    {
+        for (GbmImage &gbmImage : mGbmImages)
+        {
+            const vk::ImageView *imageView = nullptr;
+            ANGLE_TRY(gbmImage.imageViews.getLevelLayerDrawImageView(
+                contextVk, gbmImage.image, vk::LevelIndex(0), 0, gl::SrgbWriteControlMode::Default,
+                &imageView));
+
+            imageViews[0] = imageView->getHandle();
+
+            if (fetchMode == FramebufferFetchMode::Enabled)
+            {
+                ANGLE_VK_TRY(contextVk, gbmImage.fetchFramebuffer.init(contextVk->getDevice(),
+                                                                       framebufferInfo));
+            }
+            else
+            {
+                ANGLE_VK_TRY(contextVk,
+                             gbmImage.framebuffer.init(contextVk->getDevice(), framebufferInfo));
+            }
         }
     }
 
@@ -541,10 +708,13 @@ angle::Result SurfaceVkGbm::initializeContents(const gl::Context *context,
 {
     ContextVk *contextVk = vk::GetImpl(context);
 
+    ANGLE_TRY(initializeMS(contextVk));
+
     ASSERT(mGbmImages.size() > 0);
     ASSERT(mCurrentGbmImageIndex < mGbmImages.size());
 
-    vk::ImageHelper *image = &mGbmImages[mCurrentGbmImageIndex].image;
+    vk::ImageHelper *image =
+        isMultiSampled() ? &mColorImageMS : &mGbmImages[mCurrentGbmImageIndex].image;
     image->stageRobustResourceClear(imageIndex);
     ANGLE_TRY(image->flushAllStagedUpdates(contextVk));
 
@@ -574,6 +744,11 @@ egl::Error SurfaceVkGbm::unlockSurface(const egl::Display *display, bool preserv
 EGLint SurfaceVkGbm::origin() const
 {
     return EGL_UPPER_LEFT_KHR;
+}
+
+bool SurfaceVkGbm::isMultiSampled() const
+{
+    return mColorImageMS.valid();
 }
 
 }  // namespace rx

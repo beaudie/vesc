@@ -18,7 +18,6 @@ struct gbm_bo;
 
 namespace rx
 {
-
 constexpr size_t kMaxMemoryPlanes        = 4;
 static constexpr size_t kSwapHistorySize = 2;
 
@@ -33,6 +32,7 @@ struct GbmImage final : angle::NonCopyable
     vk::ImageViewHelper imageViews;
     vk::Framebuffer framebuffer;
     vk::Framebuffer fetchFramebuffer;
+    vk::Framebuffer framebufferResolveMS;
 };
 
 class SurfaceVkGbm : public FramebufferSurfaceVk
@@ -46,6 +46,11 @@ class SurfaceVkGbm : public FramebufferSurfaceVk
     egl::Error initialize(const egl::Display *display) override;
     void destroy(const egl::Display *display) override;
 
+    angle::Result getAttachmentRenderTarget(const gl::Context *context,
+                                            GLenum binding,
+                                            const gl::ImageIndex &imageIndex,
+                                            GLsizei samples,
+                                            FramebufferAttachmentRenderTarget **rtOut) override;
     FramebufferImpl *createDefaultFramebuffer(const gl::Context *context,
                                               const gl::FramebufferState &state) override;
     egl::Error swap(const gl::Context *context) override;
@@ -90,25 +95,40 @@ class SurfaceVkGbm : public FramebufferSurfaceVk
   private:
     angle::Result initializeImpl(DisplayVk *displayVk);
     vk::Framebuffer &chooseFramebuffer(const SwapchainResolveMode swapchainResolveMode);
+    angle::Result initializeMS(ContextVk *context);
     angle::Result swapImpl(const gl::Context *context);
     angle::Result present(ContextVk *contextVk);
 
     bool acquireNextImage();
 
+    bool isMultiSampled() const;
+
     gbm_device *mGbmDevice;
     gbm_surface *mGbmSurface;
 
+    uint32_t mWidth;
+    uint32_t mHeight;
+
     std::vector<GbmImage> mGbmImages;
+    size_t mCurrentGbmImageIndex;
+
+    // Depth/stencil image. Possibly multisampled.
     vk::ImageHelper mDepthStencilImage;
     vk::ImageViewHelper mDepthStencilImageViews;
-    size_t mCurrentGbmImageIndex;
+    angle::ObserverBinding mDepthStencilImageBinding;
+
+    // Multisample color image, view and framebuffer, if multisampling enabled.
+    vk::ImageHelper mColorImageMS;
+    vk::ImageViewHelper mColorImageMSViews;
+    angle::ObserverBinding mColorImageMSBinding;
+    vk::Framebuffer mFramebufferMS;
 
     // A circular buffer that stores the serial of the submission fence of the context on every
     // swap. The CPU is throttled by waiting for the 2nd previous serial to finish.
     angle::CircularBuffer<Serial, impl::kSwapHistorySize> mSwapHistory;
 
     // GL_EXT_shader_framebuffer_fetch
-    FramebufferFetchMode mFramebufferFetchMode = FramebufferFetchMode::Disabled;
+    FramebufferFetchMode mFramebufferFetchMode;
 };
 
 }  // namespace rx
