@@ -1135,8 +1135,7 @@ RendererVk::RendererVk()
       mPipelineCacheInitialized(false),
       mValidationMessageCount(0),
       mCommandProcessor(this),
-      mSupportedVulkanPipelineStageMask(0),
-      mLastPruneTime(angle::GetCurrentSystemTime())
+      mSupportedVulkanPipelineStageMask(0)
 {
     VkFormatProperties invalid = {0, 0, kInvalidFormatFeatureFlags};
     mFormatProperties.fill(invalid);
@@ -1176,34 +1175,6 @@ void RendererVk::releaseSharedResources(vk::ResourceUseList *resourceList)
 
 void RendererVk::onDestroy(vk::Context *context)
 {
-    // Make sure device loss is handled, despite potential race conditions.  Device loss is only
-    // procesed under the mCommandQueueMutex lock, but it may be generated from any Vulkan command.
-    // For example:
-    //
-    // - Thread A may proceed without a device loss, but be at ~ScopedCommandQueueLock before
-    //   unlocking the mutex.
-    // - Thread B may generate a device loss, but cannot take the lock in handleDeviceLost.
-    //
-    // In the above scenario, neither thread handles device loss.  If the application destroys the
-    // display at this moment, device loss needs to be handled.
-    if (isDeviceLost())
-    {
-        handleDeviceLost();
-    }
-
-    for (std::unique_ptr<vk::BufferPool> &pool : mDefaultBufferPools)
-    {
-        if (pool)
-        {
-            pool->destroy(this);
-        }
-    }
-
-    if (mSmallBufferPool)
-    {
-        mSmallBufferPool->destroy(this);
-    }
-
     {
         vk::ScopedCommandQueueLock lock(this, mCommandQueueMutex);
         if (isAsyncCommandQueueEnabled())
@@ -4239,24 +4210,6 @@ VkDeviceSize RendererVk::getPreferedBufferBlockSize(uint32_t memoryTypeIndex) co
     // Try not to exceed 1/64 of heap size to begin with.
     const VkDeviceSize heapSize = getMemoryProperties().getHeapSizeForMemoryType(memoryTypeIndex);
     return std::min(heapSize / 64, mPreferredLargeHeapBlockSize);
-}
-
-vk::BufferPool *RendererVk::getDefaultBufferPool(VkDeviceSize size, uint32_t memoryTypeIndex)
-{
-    return vk::GetDefaultBufferPool(mSmallBufferPool, mDefaultBufferPools, this, size,
-                                    memoryTypeIndex);
-}
-
-void RendererVk::pruneDefaultBufferPools()
-{
-    mLastPruneTime = angle::GetCurrentSystemTime();
-
-    vk::PruneDefaultBufferPools(this, mDefaultBufferPools, mSmallBufferPool);
-}
-
-bool RendererVk::isDueForBufferPoolPrune()
-{
-    return vk::IsDueForBufferPoolPrune(mLastPruneTime);
 }
 
 namespace vk
