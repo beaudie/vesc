@@ -309,6 +309,7 @@ void PackPixels(const PackPixelsParams &params,
     int destHeight        = params.area.height;
     int xAxisPitch        = 0;
     int yAxisPitch        = 0;
+
     switch (params.rotation)
     {
         case SurfaceRotation::Identity:

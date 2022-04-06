@@ -1359,10 +1359,29 @@ Error Display::createImage(const gl::Context *context,
 
     angle::UniqueObjectPointer<Image, Display> imagePtr(
         new Image(mImplementation, context, target, sibling, attribs), this);
+<<<<<<< HEAD
     ANGLE_TRY(imagePtr->initialize(this));
 
     Image *image = imagePtr.release();
 
+=======
+    ANGLE_LOG(ERR) << "createImage: trying to initialize...";
+    ANGLE_TRY(imagePtr->initialize(this));
+    ANGLE_LOG(ERR) << "createImage: initiliazed";
+
+    Image *image = imagePtr.release();
+
+    if (!outImage)
+    {
+        ANGLE_LOG(ERR) << "createImage: out is null!!!!!!!!!!!!!!!";
+    }
+
+    if (!image)
+    {
+        ANGLE_LOG(ERR) << "createImage: image is null!!!!!!!!!!!!!!!";
+    }
+
+>>>>>>> fd52b0ca4f (yuv to rgba conversion with compute shader)
     ASSERT(outImage != nullptr);
     *outImage = image;
 
