@@ -107,12 +107,6 @@ struct DefaultUniformBlock final : private angle::NonCopyable
 using DescriptorSetCountList   = angle::PackedEnumMap<DescriptorSetIndex, uint32_t>;
 using ImmutableSamplerIndexMap = angle::HashMap<vk::YcbcrConversionDesc, uint32_t>;
 
-struct ProgramExecutablePerfCounters
-{
-    angle::PackedEnumMap<DescriptorSetIndex, CacheStats> cacheStats;
-    DescriptorSetCountList descriptorSetCacheKeySizesBytes;
-};
-
 using DefaultUniformBlockMap = gl::ShaderMap<std::shared_ptr<DefaultUniformBlock>>;
 
 class ProgramExecutableVk
@@ -130,10 +124,9 @@ class ProgramExecutableVk
 
     void clearVariableInfoMap();
 
-    ProgramInfo &getGraphicsDefaultProgramInfo() { return mGraphicsProgramInfos[0]; }
-    ProgramInfo &getGraphicsProgramInfo(ProgramTransformOptions option)
+    ProgramInfo &getGraphicsProgramInfo()
     {
-        uint8_t index = gl::bitCast<uint8_t, ProgramTransformOptions>(option);
+        uint8_t index = gl::bitCast<uint8_t, ProgramTransformOptions>(mTransformOptions);
         return mGraphicsProgramInfos[index];
     }
     ProgramInfo &getComputeProgramInfo() { return mComputeProgramInfo; }
@@ -210,9 +203,6 @@ class ProgramExecutableVk
         return (mImmutableSamplerIndexMap == immutableSamplerIndexMap);
     }
 
-    void accumulateCacheStats(VulkanCacheType cacheType, const CacheStats &cacheStats);
-    ProgramExecutablePerfCounters getAndResetObjectPerfCounters();
-
     size_t getDefaultUniformAlignedSize(vk::Context *context, gl::ShaderType shaderType) const
     {
         RendererVk *renderer = context->getRenderer();
@@ -243,19 +233,13 @@ class ProgramExecutableVk
     friend class ProgramVk;
     friend class ProgramPipelineVk;
 
-    angle::Result allocUniformAndXfbDescriptorSet(vk::Context *context,
-                                                  vk::ResourceUseList *resourceUseList,
-                                                  vk::BufferHelper *defaultUniformBuffer,
-                                                  const vk::DescriptorSetDesc &xfbBufferDesc,
-                                                  bool *newDescriptorSetAllocated);
+    angle::Result getOrAllocateUniformsAndXfbDescriptorSet(
+        vk::Context *context,
+        vk::ResourceUseList *resourceUseList,
+        vk::BufferHelper *defaultUniformBuffer,
+        const vk::DescriptorSetDesc &uniformsAndXfbDesc,
+        vk::DescriptorCacheResult *cacheResult);
 
-    angle::Result allocateDescriptorSet(vk::Context *context,
-                                        vk::ResourceUseList *resourceUseList,
-                                        DescriptorSetIndex descriptorSetIndex);
-    angle::Result allocateDescriptorSetAndGetInfo(vk::Context *context,
-                                                  vk::ResourceUseList *resourceUseList,
-                                                  DescriptorSetIndex descriptorSetIndex,
-                                                  bool *newPoolAllocatedOut);
     void addInterfaceBlockDescriptorSetDesc(const std::vector<gl::InterfaceBlock> &blocks,
                                             gl::ShaderType shaderType,
                                             VkDescriptorType descType,
@@ -289,10 +273,11 @@ class ProgramExecutableVk
                                                   const gl::ProgramExecutable &executable,
                                                   bool isTransformFeedbackActiveUnpaused,
                                                   TransformFeedbackVk *transformFeedbackVk);
-    angle::Result allocateShaderResourcesDescriptorSet(
+    angle::Result getOrAllocateShaderResourcesDescriptorSet(
         vk::Context *context,
         vk::ResourceUseList *resourceUseList,
-        const vk::DescriptorSetDesc *shaderBuffersDesc);
+        const vk::DescriptorSetDesc *shaderBuffersDescOrNull,
+        vk::DescriptorCacheResult *cacheResultOut);
     angle::Result updateBuffersDescriptorSet(vk::Context *context,
                                              UpdateDescriptorSetsBuilder *updateBuilder,
                                              vk::BufferHelper *emptyBuffer,
@@ -303,7 +288,7 @@ class ProgramExecutableVk
                                              const std::vector<gl::InterfaceBlock> &blocks,
                                              VkDescriptorType descriptorType,
                                              VkDeviceSize maxBoundBufferRange,
-                                             bool cacheHit);
+                                             vk::DescriptorCacheResult cacheResult);
     angle::Result updateAtomicCounterBuffersDescriptorSet(
         vk::Context *context,
         UpdateDescriptorSetsBuilder *updateBuilder,
@@ -313,7 +298,7 @@ class ProgramExecutableVk
         const gl::ProgramExecutable &executable,
         gl::ShaderType shaderType,
         const vk::DescriptorSetDesc &shaderBuffersDesc,
-        bool cacheHit);
+        vk::DescriptorCacheResult cacheResult);
     angle::Result updateImagesDescriptorSet(vk::Context *context,
                                             vk::ResourceUseList *resourceUseList,
                                             UpdateDescriptorSetsBuilder *updateBuilder,
@@ -321,13 +306,6 @@ class ProgramExecutableVk
                                             const std::vector<gl::ImageUnit> &imageUnits,
                                             const gl::ProgramExecutable &executable,
                                             gl::ShaderType shaderType);
-
-    static angle::Result InitDynamicDescriptorPool(
-        vk::Context *context,
-        vk::DescriptorSetLayoutDesc &descriptorSetLayoutDesc,
-        VkDescriptorSetLayout descriptorSetLayout,
-        uint32_t descriptorCountMultiplier,
-        vk::DynamicDescriptorPool *dynamicDescriptorPool);
 
     size_t calcUniformUpdateRequiredSpace(vk::Context *context,
                                           const gl::ProgramExecutable &glExecutable,
@@ -383,15 +361,13 @@ class ProgramExecutableVk
                                            const gl::ProgramExecutable &glExecutable,
                                            const gl::ShaderMap<size_t> &requiredBufferSize);
 
-    // Descriptor sets for uniform blocks and textures for this program.
+    // Descriptor sets and pools for shader resources for this program.
     vk::DescriptorSetArray<VkDescriptorSet> mDescriptorSets;
     vk::DescriptorSetArray<VkDescriptorSet> mEmptyDescriptorSets;
+    vk::DescriptorSetArray<vk::DescriptorPoolPointer> mDescriptorPools;
+    vk::DescriptorSetArray<vk::RefCountedDescriptorPoolBinding> mDescriptorPoolBindings;
     uint32_t mNumDefaultUniformDescriptors;
     vk::BufferSerial mCurrentDefaultUniformBufferSerial;
-
-    DescriptorSetCache mUniformsAndXfbDescriptorsCache;
-    DescriptorSetCache mTextureDescriptorsCache;
-    DescriptorSetCache mShaderBufferDescriptorsCache;
 
     // We keep a reference to the pipeline and descriptor set layouts. This ensures they don't get
     // deleted while this program is in use.
@@ -399,15 +375,6 @@ class ProgramExecutableVk
     ImmutableSamplerIndexMap mImmutableSamplerIndexMap;
     vk::BindingPointer<vk::PipelineLayout> mPipelineLayout;
     vk::DescriptorSetLayoutPointerArray mDescriptorSetLayouts;
-
-    // Keep bindings to the descriptor pools. This ensures the pools stay valid while the Program
-    // is in use.
-    vk::DescriptorSetArray<vk::RefCountedDescriptorPoolBinding> mDescriptorPoolBindings;
-
-    // Store descriptor pools here. We store the descriptors in the Program to facilitate descriptor
-    // cache management. It can also allow fewer descriptors for shaders which use fewer
-    // textures/buffers.
-    vk::DescriptorSetArray<vk::DynamicDescriptorPool> mDynamicDescriptorPools;
 
     // A set of dynamic offsets used with vkCmdBindDescriptorSets for the default uniform buffers.
     VkDescriptorType mUniformBufferDescriptorType;
@@ -429,9 +396,6 @@ class ProgramExecutableVk
     gl::ShaderBitSet mDefaultUniformBlocksDirty;
 
     ShaderInfo mOriginalShaderInfo;
-
-    ProgramExecutablePerfCounters mPerfCounters;
-    ProgramExecutablePerfCounters mCumulativePerfCounters;
 };
 
 }  // namespace rx
