@@ -1,0 +1,44 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "3eab00a9_70c0c2e8",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2022-04-06T17:00:10Z",
+      "side": 1,
+      "message": "Thanks for the quick fix Shabi",
+      "revId": "025c159e490a11b3075e6689064aaaa94d7b6efa",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "73e0bcff_c2869f00",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 6775,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2022-04-06T17:00:10Z",
+      "side": 1,
+      "message": "nit: This could use a comment explaining why it is true.  Based on the below code, we\u0027re treating it like an emulated format that doesn\u0027t exist.  This is fine, just wasn\u0027t immediately obvious.",
+      "range": {
+        "startLine": 6775,
+        "startChar": 0,
+        "endLine": 6775,
+        "endChar": 51
+      },
+      "revId": "025c159e490a11b3075e6689064aaaa94d7b6efa",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
