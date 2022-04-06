@@ -379,6 +379,19 @@ angle::Result HardwareBufferImageSiblingVkAndroid::initImpl(DisplayVk *displayVk
                                                       kColorRenderableRequiredBits) ||
                   renderer->hasImageFormatFeatureBits(vkFormat.getActualRenderableImageFormatID(),
                                                       kDepthStencilRenderableRequiredBits);
+    if (mYUV)
+    {
+        ANGLE_LOG(ERR) << "HardwareBufferImageSiblingVkAndroid::initImpl is yuv. actual fmt id: "
+                       << vkFormat.getActualRenderableImageVkFormat() << " renderable? "
+                       << mRenderable;
+        mRenderable = true;
+    }
+    else
+    {
+        ANGLE_LOG(ERR)
+            << "HardwareBufferImageSiblingVkAndroid::initImpl not is yuv. actual fmt id: "
+            << vkFormat.getActualRenderableImageVkFormat() << " renderable? " << mRenderable;
+    }
 
     constexpr uint32_t kTextureableRequiredBits =
         VK_FORMAT_FEATURE_SAMPLED_IMAGE_BIT | VK_FORMAT_FEATURE_SAMPLED_IMAGE_FILTER_LINEAR_BIT;
