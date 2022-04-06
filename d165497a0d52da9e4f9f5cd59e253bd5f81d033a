@@ -35,6 +35,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "6b3b0fee_5aa5face",
+        "filename": "src/tests/gl_tests/DrawBuffersTest.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 1000,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2022-04-06T17:51:06Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "68a2902e_a7a06932",
+      "revId": "d165497a0d52da9e4f9f5cd59e253bd5f81d033a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "f7908550_5cef2b08",
@@ -48,6 +66,30 @@
       "writtenOn": "2022-04-05T15:02:38Z",
       "side": 1,
       "message": "nit: May be my personal paranoia, but could you make the attachment index and the layer not match?",
+      "range": {
+        "startLine": 1010,
+        "startChar": 86,
+        "endLine": 1010,
+        "endChar": 87
+      },
+      "revId": "d165497a0d52da9e4f9f5cd59e253bd5f81d033a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "c3df7b6a_85d99cf9",
+        "filename": "src/tests/gl_tests/DrawBuffersTest.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 1010,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2022-04-06T17:51:06Z",
+      "side": 1,
+      "message": "I flipped the order of layers.",
+      "parentUuid": "f7908550_5cef2b08",
       "range": {
         "startLine": 1010,
         "startChar": 86,
