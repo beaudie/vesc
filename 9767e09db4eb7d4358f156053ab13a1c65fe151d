@@ -152,6 +152,30 @@
       },
       "revId": "9767e09db4eb7d4358f156053ab13a1c65fe151d",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "0ba9a41e_e1b1723a",
+        "filename": "src/libANGLE/renderer/gl/FramebufferGL.cpp",
+        "patchSetId": 15
+      },
+      "lineNbr": 166,
+      "author": {
+        "id": 1323689
+      },
+      "writtenOn": "2022-04-06T18:12:34Z",
+      "side": 1,
+      "message": "Talked with Vasiliy and I think we\u0027ll leave it unscoped for now if that sounds ok. I think with the ANGLE frontend validation it\u0027s safest/cleanest at this point just to unbind everything in case the driver bug also applies to other attachments.",
+      "parentUuid": "f26cc0ea_eed3df3a",
+      "range": {
+        "startLine": 166,
+        "startChar": 17,
+        "endLine": 166,
+        "endChar": 57
+      },
+      "revId": "9767e09db4eb7d4358f156053ab13a1c65fe151d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
