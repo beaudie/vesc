@@ -24,6 +24,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "d47130a7_acb26de9",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 2
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1520902
+      },
+      "writtenOn": "2022-04-06T00:00:56Z",
+      "side": 1,
+      "message": "Thanks Jamie, I have updated the CL title.",
+      "parentUuid": "34a175c7_87c2dd7d",
+      "range": {
+        "startLine": 7,
+        "startChar": 0,
+        "endLine": 7,
+        "endChar": 16
+      },
+      "revId": "0226c459ca59f9003e9746c87387c6ea08389948",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "a8cc3409_1f1fda71",
@@ -37,6 +61,24 @@
       "writtenOn": "2022-04-05T22:18:41Z",
       "side": 1,
       "message": "nit - the template is something like -\n\n Roll volk from begin_sha1 to end_sha1 (xxx revisions)",
+      "revId": "0226c459ca59f9003e9746c87387c6ea08389948",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "a323b69d_36c24696",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 2
+      },
+      "lineNbr": 10,
+      "author": {
+        "id": 1520902
+      },
+      "writtenOn": "2022-04-06T00:00:56Z",
+      "side": 1,
+      "message": "Thank you Mohan, I have updated the description.",
+      "parentUuid": "a8cc3409_1f1fda71",
       "revId": "0226c459ca59f9003e9746c87387c6ea08389948",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
