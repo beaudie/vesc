@@ -108,6 +108,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "0f9966d9_8b3264b8",
+        "filename": "src/compiler/translator/OutputHLSL.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 376,
+      "author": {
+        "id": 1116015
+      },
+      "writtenOn": "2022-04-06T03:39:14Z",
+      "side": 1,
+      "message": "Done. Dynamic output of SSBO declarations is implemented in an upstream CL.",
+      "parentUuid": "5b1e5c28_7f06314c",
+      "revId": "e8a87c009e62974de82e7072fffe5418123e8693",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "9344d156_bff04562",
