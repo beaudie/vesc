@@ -98,6 +98,30 @@
       },
       "revId": "2cc09c665d72a903c076b20789ba355949169253",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "df699f6c_33964ac6",
+        "filename": "src/libANGLE/renderer/vulkan/SurfaceVk.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 1070,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-04-06T04:28:04Z",
+      "side": 1,
+      "message": "I guess the question is, what\u0027s the expected behavior if SINGLE_BUFFER and swapInterval \u003e 0? I don\u0027t know which should take precedence.\n\nAlso, yes, render buffer affecting setSwapInterval sounds right to me. If render buffer is SINGLE_BUFFER and setSwapInterval is called, don\u0027t you think SINGLE_BUFFER should be taken into account?",
+      "parentUuid": "f6398412_7b71baf3",
+      "range": {
+        "startLine": 1065,
+        "startChar": 0,
+        "endLine": 1070,
+        "endChar": 5
+      },
+      "revId": "2cc09c665d72a903c076b20789ba355949169253",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
