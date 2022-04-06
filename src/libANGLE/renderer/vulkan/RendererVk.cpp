@@ -1197,6 +1197,13 @@ void RendererVk::onDestroy(vk::Context *context)
         handleDeviceLost();
     }
 
+    for (std::unique_ptr<vk::BufferBlock> &block : mOrphanedBufferBlocks)
+    {
+        ASSERT(block->isEmpty());
+        block->destroy(this);
+    }
+    mOrphanedBufferBlocks.clear();
+
     {
         vk::ScopedCommandQueueLock lock(this, mCommandQueueMutex);
         if (isAsyncCommandQueueEnabled())
@@ -3677,9 +3684,34 @@ bool RendererVk::haveSameFormatFeatureBits(angle::FormatID formatID1,
            hasImageFormatFeatureBits(formatID2, fmt1OptimalFeatureBits);
 }
 
+void RendererVk::addBufferBlockToOrphanList(vk::BufferBlock *block)
+{
+    std::lock_guard<std::mutex> lock(mGarbageMutex);
+    mOrphanedBufferBlocks.emplace_back(block);
+}
+
+void RendererVk::pruneOrphanedBufferBlocks()
+{
+    for (auto iter = mOrphanedBufferBlocks.begin(); iter != mOrphanedBufferBlocks.end();)
+    {
+        if (!(*iter)->isEmpty())
+        {
+            ++iter;
+            continue;
+        }
+        (*iter)->destroy(this);
+        iter = mOrphanedBufferBlocks.erase(iter);
+    }
+}
+
 angle::Result RendererVk::cleanupGarbage(Serial lastCompletedQueueSerial)
 {
     std::lock_guard<std::mutex> lock(mGarbageMutex);
+
+    if (!mOrphanedBufferBlocks.empty())
+    {
+        pruneOrphanedBufferBlocks();
+    }
 
     // Clean up general garbages
     while (!mSharedGarbage.empty())
