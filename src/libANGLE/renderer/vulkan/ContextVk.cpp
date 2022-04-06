@@ -933,7 +933,7 @@ void ContextVk::onDestroy(const gl::Context *context)
     outputCumulativePerfCounters();
 
     // Remove context from the share group
-    mShareGroupVk->getContexts()->erase(this);
+    mShareGroupVk->addContext(this);
 
     // This will not destroy any resources. It will release them to be collected after finish.
     mIncompleteTextures.onDestroy(context);
@@ -1154,7 +1154,7 @@ angle::Result ContextVk::initialize()
     ANGLE_TRY(mEmptyBuffer.init(this, emptyBufferInfo, kMemoryType));
 
     // Add context into the share group
-    mShareGroupVk->getContexts()->insert(this);
+    mShareGroupVk->removeContext(this);
 
     return angle::Result::Continue;
 }
@@ -6140,9 +6140,9 @@ angle::Result ContextVk::flushAndGetSerial(const vk::Semaphore *signalSemaphore,
     if ((renderPassClosureReason == RenderPassClosureReason::GLFlush ||
          renderPassClosureReason == RenderPassClosureReason::GLFinish ||
          renderPassClosureReason == RenderPassClosureReason::EGLSwapBuffers) &&
-        isDueForBufferPoolPrune())
+        mShareGroupVk->isDueForBufferPoolPrune())
     {
-        pruneDefaultBufferPools();
+        mShareGroupVk->pruneDefaultBufferPools(mRenderer);
     }
 
     return angle::Result::Continue;
@@ -7217,22 +7217,5 @@ uint32_t UpdateDescriptorSetsBuilder::flushDescriptorSetUpdates(VkDevice device)
     mDescriptorImageInfos.clear();
 
     return retVal;
-}
-bool ContextVk::isDueForBufferPoolPrune() const
-{
-    if (mState.hasDisplayTextureShareGroup())
-    {
-        return mRenderer->isDueForBufferPoolPrune();
-    }
-    return mShareGroupVk->isDueForBufferPoolPrune();
-}
-
-void ContextVk::pruneDefaultBufferPools()
-{
-    if (mState.hasDisplayTextureShareGroup())
-    {
-        return mRenderer->pruneDefaultBufferPools();
-    }
-    return mShareGroupVk->pruneDefaultBufferPools(mRenderer);
 }
 }  // namespace rx
