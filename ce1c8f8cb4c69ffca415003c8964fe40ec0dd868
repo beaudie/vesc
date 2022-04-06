@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "ac95bc35_7bfd3ff3",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 19
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1323689
+      },
+      "writtenOn": "2022-04-06T20:37:10Z",
+      "side": 1,
+      "message": "Hey Jonah, could you help CQ+2 the patch now that\u0027s it ready? I think I don\u0027t have permission since I\u0027m not a committer in ANGLE. Thanks!",
+      "revId": "ce1c8f8cb4c69ffca415003c8964fe40ec0dd868",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
