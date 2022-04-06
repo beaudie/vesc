@@ -44,7 +44,8 @@ GbmImage::~GbmImage() = default;
 GbmImage::GbmImage(GbmImage &&other)
     : image(std::move(other.image)),
       imageViews(std::move(other.imageViews)),
-      framebuffer(std::move(other.framebuffer))
+      framebuffer(std::move(other.framebuffer)),
+      fetchFramebuffer(std::move(other.fetchFramebuffer))
 {}
 
 SurfaceVkGbm::SurfaceVkGbm(const egl::SurfaceState &surfaceState,
@@ -297,10 +298,10 @@ void SurfaceVkGbm::destroy(const egl::Display *display)
         gbmImage.image.destroy(renderer);
         gbmImage.imageViews.destroy(device);
         gbmImage.framebuffer.destroy(device);
-        // if (gbmImage.fetchFramebuffer.valid())
-        // {
-        //     gbmImage.fetchFramebuffer.destroy(device);
-        // }
+        if (gbmImage.fetchFramebuffer.valid())
+        {
+            gbmImage.fetchFramebuffer.destroy(device);
+        }
     }
 
     mGbmImages.clear();
@@ -464,7 +465,9 @@ EGLint SurfaceVkGbm::getSwapBehavior() const
 
 vk::Framebuffer &SurfaceVkGbm::chooseFramebuffer(const SwapchainResolveMode swapchainResolveMode)
 {
-    return mGbmImages[mCurrentGbmImageIndex].framebuffer;
+    return mFramebufferFetchMode == FramebufferFetchMode::Enabled
+               ? mGbmImages[mCurrentGbmImageIndex].fetchFramebuffer
+               : mGbmImages[mCurrentGbmImageIndex].framebuffer;
 }
 
 angle::Result SurfaceVkGbm::getCurrentFramebuffer(ContextVk *contextVk,
@@ -473,7 +476,8 @@ angle::Result SurfaceVkGbm::getCurrentFramebuffer(ContextVk *contextVk,
                                                   const SwapchainResolveMode swapchainResolveMode,
                                                   vk::Framebuffer **framebufferOut)
 {
-    ASSERT(fetchMode == FramebufferFetchMode::Disabled);
+    // Track the new fetch mode
+    mFramebufferFetchMode = fetchMode;
 
     vk::Framebuffer &currentFramebuffer = chooseFramebuffer(swapchainResolveMode);
 
@@ -515,7 +519,16 @@ angle::Result SurfaceVkGbm::getCurrentFramebuffer(ContextVk *contextVk,
 
         imageViews[0] = imageView->getHandle();
 
-        ANGLE_VK_TRY(contextVk, gbmImage.framebuffer.init(contextVk->getDevice(), framebufferInfo));
+        if (fetchMode == FramebufferFetchMode::Enabled)
+        {
+            ANGLE_VK_TRY(contextVk,
+                         gbmImage.fetchFramebuffer.init(contextVk->getDevice(), framebufferInfo));
+        }
+        else
+        {
+            ANGLE_VK_TRY(contextVk,
+                         gbmImage.framebuffer.init(contextVk->getDevice(), framebufferInfo));
+        }
     }
 
     ASSERT(currentFramebuffer.valid());
