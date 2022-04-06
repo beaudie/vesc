@@ -729,14 +729,7 @@ class ContextVk : public ContextImpl, public vk::Context, public MultisampleText
 
     vk::BufferPool *getDefaultBufferPool(VkDeviceSize size, uint32_t memoryTypeIndex)
     {
-        if (mState.hasDisplayTextureShareGroup())
-        {
-            return mRenderer->getDefaultBufferPool(size, memoryTypeIndex);
-        }
-        else
-        {
-            return mShareGroupVk->getDefaultBufferPool(mRenderer, size, memoryTypeIndex);
-        }
+        return mShareGroupVk->getDefaultBufferPool(mRenderer, size, memoryTypeIndex);
     }
 
     angle::Result allocateStreamedVertexBuffer(size_t attribIndex,
@@ -1178,9 +1171,6 @@ class ContextVk : public ContextImpl, public vk::Context, public MultisampleText
     void updateShaderResourcesDescriptorDesc(PipelineType pipelineType);
 
     ContextVkPerfCounters getAndResetObjectPerfCounters();
-
-    bool isDueForBufferPoolPrune() const;
-    void pruneDefaultBufferPools();
 
     std::array<GraphicsDirtyBitHandler, DIRTY_BIT_MAX> mGraphicsDirtyBitHandlers;
     std::array<ComputeDirtyBitHandler, DIRTY_BIT_MAX> mComputeDirtyBitHandlers;
