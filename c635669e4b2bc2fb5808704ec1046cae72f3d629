@@ -16,6 +16,23 @@
       "message": "Jamie: PTAL. Thanks!",
       "revId": "c635669e4b2bc2fb5808704ec1046cae72f3d629",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "1151c736_9ebe35b8",
+        "filename": "src/libANGLE/renderer/d3d/ProgramD3D.cpp",
+        "patchSetId": 23
+      },
+      "lineNbr": 1549,
+      "author": {
+        "id": 1116015
+      },
+      "writtenOn": "2022-04-06T21:34:31Z",
+      "side": 1,
+      "message": "I put this up as a separate change, and (to my surprise) it passed all tests, but I have a feeling it\u0027s wrong.\n\nWe get here when we have the default shader (eg., after a glDetachShader()), but in that case we still need to compile the default shader (and possibly rewrite it for output layout). We just don\u0027t need to do SSBO rewriting, since there aren\u0027t going to be any SSBOs in the default shader to rewrite. So I\u0027ll move the check there.",
+      "revId": "c635669e4b2bc2fb5808704ec1046cae72f3d629",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
