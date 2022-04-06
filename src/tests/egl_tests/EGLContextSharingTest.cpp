@@ -361,8 +361,8 @@ TEST_P(EGLContextSharingTest, DisplayShareGroupReleasedWithLastContext)
 TEST_P(EGLContextSharingTest, DisplayShareGroupReleaseShareGroupThatOwnsStagedUpdates)
 {
     EGLDisplay display = getEGLWindow()->getDisplay();
-    ANGLE_SKIP_TEST_IF(isVulkanRenderer() || !IsEGLDisplayExtensionEnabled(
-                                                 display, "EGL_ANGLE_display_texture_share_group"));
+    ANGLE_SKIP_TEST_IF(
+        !IsEGLDisplayExtensionEnabled(display, "EGL_ANGLE_display_texture_share_group"));
 
     EGLConfig config   = getEGLWindow()->getConfig();
     EGLSurface surface = getEGLWindow()->getSurface();

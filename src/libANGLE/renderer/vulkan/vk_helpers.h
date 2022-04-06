@@ -848,9 +848,10 @@ class BufferPool : angle::NonCopyable
                                  VkDeviceSize alignment,
                                  BufferSuballocation *suballocation);
 
-    // This frees resources immediately.
-    void destroy(RendererVk *renderer);
-
+    // Frees resources immediately, or orphan the non-empty BufferBlocks if allowed. If orphan is
+    // not allowed, it will assert if BufferBlock is still not empty.
+    void destroy(RendererVk *renderer, bool orphanAllowed);
+    // Remove and destroy empty BufferBlocks
     void pruneEmptyBuffers(RendererVk *renderer);
 
     bool valid() const { return mSize != 0; }
