@@ -70,6 +70,23 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "334bfc72_e02f6db0",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 6
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1359249
+      },
+      "writtenOn": "2022-04-06T23:02:34Z",
+      "side": 1,
+      "message": "Correction in my text. The spec has no text about EGL_SINGLE_BUFFER and eglSwapInterval.",
+      "revId": "2cc09c665d72a903c076b20789ba355949169253",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "c9e6361f_b3ec1fe4",
@@ -155,6 +172,30 @@
       "side": 1,
       "message": "There is no spec detail for what if eglSwapInterval is called while in EGL_SINGLE_BUFFER. It seems to me eglSwapInterval only applies to EGL_BACK_BUFFER. So I\u0027d ignore eglSwapInterval while in EGL_SINGLE_BUFFER - but this is written in spec. eglSwapInterval doesn\u0027t mean anything to EGL_SINGLE_BUFFER.",
       "parentUuid": "df699f6c_33964ac6",
+      "range": {
+        "startLine": 1065,
+        "startChar": 0,
+        "endLine": 1070,
+        "endChar": 5
+      },
+      "revId": "2cc09c665d72a903c076b20789ba355949169253",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "1c686d93_8eb4caca",
+        "filename": "src/libANGLE/renderer/vulkan/SurfaceVk.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 1070,
+      "author": {
+        "id": 1359249
+      },
+      "writtenOn": "2022-04-06T23:02:34Z",
+      "side": 1,
+      "message": "*but this is NOT written in spec.",
+      "parentUuid": "1495dbb2_5eaf89f2",
       "range": {
         "startLine": 1065,
         "startChar": 0,
