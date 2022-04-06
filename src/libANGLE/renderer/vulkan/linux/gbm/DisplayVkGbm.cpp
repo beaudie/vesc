@@ -69,7 +69,11 @@ egl::ConfigSet DisplayVkGbm::generateConfigs()
         egl_vk::GenerateConfigs(kColorFormats.data(), kColorFormats.size(),
                                 depthStencilFormats.data(), depthStencilFormats.size(), this);
 
-    cfgSet.begin()->second.nativeVisualID = DRM_FORMAT_XRGB8888;
+    for (auto &cfgEntry : cfgSet)
+    {
+        egl::Config &cfg   = cfgEntry.second;
+        cfg.nativeVisualID = DRM_FORMAT_XRGB8888;
+    }
 
     return cfgSet;
 }
