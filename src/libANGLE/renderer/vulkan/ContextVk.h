@@ -42,6 +42,7 @@ using EventName                               = std::array<char, kMaxGpuEventNam
 static constexpr VkDeviceSize kMaxBufferToImageCopySize = 1 << 28;
 
 using ContextVkDescriptorSetList = angle::PackedEnumMap<PipelineType, uint32_t>;
+using CounterPipelineTypeMap     = angle::PackedEnumMap<PipelineType, uint32_t>;
 
 enum class GraphicsEventCmdBuf
 {
@@ -747,6 +748,18 @@ class ContextVk : public ContextImpl, public vk::Context, public MultisampleText
 
     void resetPerFramePerfCounters();
 
+    angle::Result bindCachedDescriptorPool(
+        DescriptorSetIndex descriptorSetIndex,
+        const vk::DescriptorSetLayoutDesc &descriptorSetLayoutDesc,
+        uint32_t descriptorCountMultiplier,
+        vk::DescriptorPoolPointer *poolPointerOut);
+
+    // Accumulate cache stats for a specific cache
+    void accumulateCacheStats(VulkanCacheType cache, const CacheStats &stats)
+    {
+        mVulkanCacheStats[cache].accumulate(stats);
+    }
+
   private:
     // Dirty bits.
     enum DirtyBitType : size_t
@@ -858,18 +871,17 @@ class ContextVk : public ContextImpl, public vk::Context, public MultisampleText
 
     struct DriverUniformsDescriptorSet
     {
-        vk::DynamicBuffer dynamicBuffer;
-        VkDescriptorSet descriptorSet;
-        vk::BufferHelper *currentBuffer;
-        vk::BindingPointer<vk::DescriptorSetLayout> descriptorSetLayout;
-        vk::RefCountedDescriptorPoolBinding descriptorPoolBinding;
-        DriverUniformsDescriptorSetCache descriptorSetCache;
-
         DriverUniformsDescriptorSet();
         ~DriverUniformsDescriptorSet();
 
         void init(RendererVk *rendererVk);
         void destroy(RendererVk *rendererVk);
+
+        vk::DynamicBuffer dynamicBuffer;
+        VkDescriptorSet descriptorSet;
+        vk::BufferHelper *currentBuffer;
+        vk::BindingPointer<vk::DescriptorSetLayout> descriptorSetLayout;
+        vk::RefCountedDescriptorPoolBinding descriptorPoolBinding;
     };
 
     // The GpuEventQuery struct holds together a timestamp query and enough data to create a
@@ -1383,6 +1395,8 @@ class ContextVk : public ContextImpl, public vk::Context, public MultisampleText
     // Viewport and scissor are handled as dynamic state.
     VkViewport mViewport;
     VkRect2D mScissor;
+
+    VulkanCacheStats mVulkanCacheStats;
 };
 
 ANGLE_INLINE angle::Result ContextVk::endRenderPassIfTransformFeedbackBuffer(
