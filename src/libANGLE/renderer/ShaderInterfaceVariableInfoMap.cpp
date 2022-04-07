@@ -143,4 +143,22 @@ const gl::ShaderMap<ShaderInterfaceVariableInfoMap::VariableTypeToIndexMap>
 {
     return mIndexedResourceIndexMap;
 }
+
+uint32_t ShaderInterfaceVariableInfoMap::getDefaultUniformBinding(gl::ShaderType shaderType) const
+{
+    return getDefaultUniformInfo(shaderType).binding;
+}
+
+uint32_t ShaderInterfaceVariableInfoMap::getXfbBufferBinding(uint32_t xfbBufferIndex) const
+{
+    return getTransformFeedbackInfo(gl::ShaderType::Vertex, xfbBufferIndex).binding;
+}
+
+uint32_t ShaderInterfaceVariableInfoMap::getAtomicCounterBufferBinding(
+    gl::ShaderType shaderType,
+    uint32_t atomicCounterBufferIndex) const
+{
+    ASSERT(hasAtomicCounterInfo(shaderType));
+    return getAtomicCounterInfo(shaderType).binding + atomicCounterBufferIndex;
+}
 }  // namespace rx

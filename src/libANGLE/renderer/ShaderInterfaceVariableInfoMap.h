@@ -85,6 +85,11 @@ class ShaderInterfaceVariableInfoMap final : angle::NonCopyable
     const ShaderInterfaceVariableInfo &getTransformFeedbackInfo(gl::ShaderType shaderType,
                                                                 uint32_t bufferIndex) const;
 
+    uint32_t getDefaultUniformBinding(gl::ShaderType shaderType) const;
+    uint32_t getXfbBufferBinding(uint32_t xfbBufferIndex) const;
+    uint32_t getAtomicCounterBufferBinding(gl::ShaderType shaderType,
+                                           uint32_t atomicCounterBufferIndex) const;
+
     using VariableNameToInfoArray = std::vector<ShaderInterfaceVariableInfo>;
     using VariableTypeToInfoMap = angle::PackedEnumMap<ShaderVariableType, VariableNameToInfoArray>;
     using NameToTypeAndIndexMap = angle::HashMap<std::string, TypeAndIndex>;
