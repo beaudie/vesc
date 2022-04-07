@@ -75,19 +75,20 @@ class ShaderInterfaceVariableInfoMap final : angle::NonCopyable
                                             const std::string &variableName);
 
     const ShaderInterfaceVariableInfo &getDefaultUniformInfo(gl::ShaderType shaderType) const;
-    const ShaderInterfaceVariableInfo &getIndexedVariableInfo(
-        const gl::ProgramExecutable &executable,
-        gl::ShaderType shaderType,
-        ShaderVariableType variableType,
-        uint32_t variableIndex) const;
+    const ShaderInterfaceVariableInfo &getIndexedVariableInfo(gl::ShaderType shaderType,
+                                                              ShaderVariableType variableType,
+                                                              uint32_t variableIndex) const;
     bool hasAtomicCounterInfo(gl::ShaderType shaderType) const;
     const ShaderInterfaceVariableInfo &getAtomicCounterInfo(gl::ShaderType shaderType) const;
-    const ShaderInterfaceVariableInfo &getFramebufferFetchInfo(
-        const gl::ProgramExecutable &executable,
-        gl::ShaderType shaderType) const;
+    const ShaderInterfaceVariableInfo &getFramebufferFetchInfo(gl::ShaderType shaderType) const;
     bool hasTransformFeedbackInfo(gl::ShaderType shaderType, uint32_t bufferIndex) const;
     const ShaderInterfaceVariableInfo &getTransformFeedbackInfo(gl::ShaderType shaderType,
                                                                 uint32_t bufferIndex) const;
+
+    uint32_t getDefaultUniformBinding(gl::ShaderType shaderType) const;
+    uint32_t getXfbBufferBinding(uint32_t xfbBufferIndex) const;
+    uint32_t getAtomicCounterBufferBinding(gl::ShaderType shaderType,
+                                           uint32_t atomicCounterBufferIndex) const;
 
     using VariableNameToInfoArray = std::vector<ShaderInterfaceVariableInfo>;
     using VariableTypeToInfoMap = angle::PackedEnumMap<ShaderVariableType, VariableNameToInfoArray>;
@@ -141,8 +142,7 @@ ShaderInterfaceVariableInfoMap::getDefaultUniformInfo(gl::ShaderType shaderType)
 }
 
 ANGLE_INLINE const ShaderInterfaceVariableInfo &
-ShaderInterfaceVariableInfoMap::getIndexedVariableInfo(const gl::ProgramExecutable &executable,
-                                                       gl::ShaderType shaderType,
+ShaderInterfaceVariableInfoMap::getIndexedVariableInfo(gl::ShaderType shaderType,
                                                        ShaderVariableType variableType,
                                                        uint32_t resourceIndex) const
 {
@@ -165,8 +165,7 @@ ShaderInterfaceVariableInfoMap::getAtomicCounterInfo(gl::ShaderType shaderType) 
 }
 
 ANGLE_INLINE const ShaderInterfaceVariableInfo &
-ShaderInterfaceVariableInfoMap::getFramebufferFetchInfo(const gl::ProgramExecutable &executable,
-                                                        gl::ShaderType shaderType) const
+ShaderInterfaceVariableInfoMap::getFramebufferFetchInfo(gl::ShaderType shaderType) const
 {
     return mData[shaderType][ShaderVariableType::FramebufferFetch][0];
 }
