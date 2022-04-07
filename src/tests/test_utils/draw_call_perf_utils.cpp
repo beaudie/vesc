@@ -100,7 +100,7 @@ void Generate2DTriangleData(size_t numTris, std::vector<float> *floatData)
 
 GLuint SetupSimpleScaleAndOffsetProgram()
 {
-    GLuint program = CompileProgram(kSimpleScaleAndOffsetVS, kSimpleFS);
+    GLuint program = CompileProgramNoDetach(kSimpleScaleAndOffsetVS, kSimpleFS);
     if (program == 0u)
     {
         return program;
@@ -119,7 +119,7 @@ GLuint SetupSimpleScaleAndOffsetProgram()
 
 GLuint SetupSimpleDrawProgram()
 {
-    GLuint program = CompileProgram(kSimpleDrawVS, kSimpleFS);
+    GLuint program = CompileProgramNoDetach(kSimpleDrawVS, kSimpleFS);
     if (program == 0u)
     {
         return program;
@@ -133,7 +133,7 @@ GLuint SetupSimpleDrawProgram()
 
 GLuint SetupSimpleTextureProgram()
 {
-    GLuint program = CompileProgram(kSimpleTexCoordVS, kSimpleTextureFS);
+    GLuint program = CompileProgramNoDetach(kSimpleTexCoordVS, kSimpleTextureFS);
     if (program == 0u)
     {
         return program;
@@ -147,7 +147,7 @@ GLuint SetupSimpleTextureProgram()
 
 GLuint SetupDoubleTextureProgram()
 {
-    GLuint program = CompileProgram(kSimpleTexCoordVS, kDoubleTextureFS);
+    GLuint program = CompileProgramNoDetach(kSimpleTexCoordVS, kDoubleTextureFS);
     if (program == 0u)
     {
         return program;
@@ -161,7 +161,7 @@ GLuint SetupDoubleTextureProgram()
 
 GLuint SetupEightTextureProgram()
 {
-    GLuint program = CompileProgram(kSimpleTexCoordVS, kEightTextureFS);
+    GLuint program = CompileProgramNoDetach(kSimpleTexCoordVS, kEightTextureFS);
     if (program == 0u)
     {
         return program;

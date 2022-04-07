@@ -1887,7 +1887,7 @@ TEST_P(MultiviewRenderTest, ProgramRelinkUpdatesAttribDivisor)
     };
 
     std::string vsSource = generateVertexShaderSource(kNumViews, extensionName());
-    ANGLE_GL_PROGRAM(program, vsSource.c_str(), FS.c_str());
+    ANGLE_GL_PROGRAM_NO_DETACH(program, vsSource.c_str(), FS.c_str());
     glUseProgram(program);
 
     GLint positionLoc;

@@ -7537,7 +7537,7 @@ void main()
 }
 )";
 
-    ANGLE_GL_PROGRAM(testProgram, kVS, kFS);
+    ANGLE_GL_PROGRAM_NO_DETACH(testProgram, kVS, kFS);
     glUseProgram(testProgram);
 
     GLTexture texture;
