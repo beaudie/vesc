@@ -228,6 +228,30 @@
       },
       "revId": "2cc09c665d72a903c076b20789ba355949169253",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "d0c97afe_51d6094e",
+        "filename": "src/libANGLE/renderer/vulkan/SurfaceVk.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 1070,
+      "author": {
+        "id": 1359249
+      },
+      "writtenOn": "2022-04-07T18:56:26Z",
+      "side": 1,
+      "message": "The desired present mode is in the \"presentModes\", and we control this with swapInterval. So the simple thing is in setSwapInterval - to ignore if we are in SHARED_PRESNT. otherwise this would change modes, and there is not indication that is what spec suggests or app wants to do. So check out next patch, its simple.",
+      "parentUuid": "fb77f201_bccea51c",
+      "range": {
+        "startLine": 1065,
+        "startChar": 0,
+        "endLine": 1070,
+        "endChar": 5
+      },
+      "revId": "2cc09c665d72a903c076b20789ba355949169253",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
