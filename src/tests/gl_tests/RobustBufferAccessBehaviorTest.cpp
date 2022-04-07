@@ -613,7 +613,6 @@ void main(void) {
 
     ANGLE_GL_PROGRAM(program, kVS, kFS);
     glBindAttribLocation(program, 0, "a_position");
-    glLinkProgram(program);
     ASSERT_TRUE(CheckLinkStatusAndReturnProgram(program, true));
 
     glEnableVertexAttribArray(0);
@@ -657,7 +656,6 @@ void main(void) {
 
     ANGLE_GL_PROGRAM(program, kVS, kFS);
     glBindAttribLocation(program, 0, "a_position");
-    glLinkProgram(program);
     ASSERT_TRUE(CheckLinkStatusAndReturnProgram(program, true));
 
     glEnableVertexAttribArray(0);

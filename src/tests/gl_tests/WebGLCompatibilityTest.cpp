@@ -5472,7 +5472,6 @@ TEST_P(WebGL2CompatibilityTest, TransformFeedbackDoubleBinding)
     ANGLE_GL_PROGRAM(program, kVS, kFS);
     static const char *varyings[] = {"b", "c"};
     glTransformFeedbackVaryings(program, 2, varyings, GL_SEPARATE_ATTRIBS);
-    glLinkProgram(program);
     glUseProgram(program);
     ASSERT_GL_NO_ERROR();
 
