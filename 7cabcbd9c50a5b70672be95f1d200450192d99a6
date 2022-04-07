@@ -45,6 +45,30 @@
       },
       "revId": "7cabcbd9c50a5b70672be95f1d200450192d99a6",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "9c30cfb4_44a5551e",
+        "filename": "src/tests/deqp_support/deqp_gles31_test_expectations.txt",
+        "patchSetId": 3
+      },
+      "lineNbr": 173,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-04-07T17:37:03Z",
+      "side": 1,
+      "message": "Only MSAA",
+      "parentUuid": "d76f165e_0891ba8b",
+      "range": {
+        "startLine": 168,
+        "startChar": 0,
+        "endLine": 173,
+        "endChar": 81
+      },
+      "revId": "7cabcbd9c50a5b70672be95f1d200450192d99a6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
