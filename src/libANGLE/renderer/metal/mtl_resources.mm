@@ -769,6 +769,11 @@ uint32_t Texture::samples() const
     return static_cast<uint32_t>(get().sampleCount);
 }
 
+bool Texture::hasIOSurface() const
+{
+    return (get().iosurface) != nullptr;
+}
+
 angle::Result Texture::resize(ContextMtl *context, uint32_t width, uint32_t height)
 {
     // Resizing texture view is not supported.
