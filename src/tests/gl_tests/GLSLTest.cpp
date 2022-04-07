@@ -8445,7 +8445,7 @@ TEST_P(GLSLTest, DrawAfterShaderLinkError)
         ASSERT_FALSE(compileResult);
     }
 
-    ANGLE_GL_PROGRAM(program, kVS, kFS);
+    ANGLE_GL_PROGRAM_NO_DETACH(program, kVS, kFS);
     GLuint fs = GetProgramShader(program.get(), GL_FRAGMENT_SHADER);
 
     glClearColor(1.0f, 0.0f, 0.0f, 1.0f);

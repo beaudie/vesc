@@ -28,6 +28,7 @@ CompileProgramWithTransformFeedback(const char *vsSource,
                                     GLenum bufferMode);
 
 ANGLE_UTIL_EXPORT GLuint CompileProgram(const char *vsSource, const char *fsSource);
+ANGLE_UTIL_EXPORT GLuint CompileProgramNoDetach(const char *vsSource, const char *fsSource);
 
 ANGLE_UTIL_EXPORT GLuint CompileProgram(const char *vsSource,
                                         const char *fsSource,

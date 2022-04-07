@@ -508,7 +508,6 @@ void main()
     glBindAttribLocation(program, 0, "a_position");
     glBindAttribLocation(program, 1, "a_transform");
     glBindAttribLocation(program, 2, "a_color");
-    glLinkProgram(program);
     glUseProgram(program);
     ASSERT_GL_NO_ERROR();
 

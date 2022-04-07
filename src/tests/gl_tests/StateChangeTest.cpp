@@ -1059,20 +1059,6 @@ TEST_P(StateChangeTestES3, VertexArrayObjectAndDisabledAttributes)
     glBindAttribLocation(dualProgram, positionLocation, "position");
     glBindAttribLocation(dualProgram, colorLocation, "color");
 
-    {
-        glLinkProgram(singleProgram);
-        GLint linkStatus;
-        glGetProgramiv(singleProgram, GL_LINK_STATUS, &linkStatus);
-        ASSERT_NE(linkStatus, 0);
-    }
-
-    {
-        glLinkProgram(dualProgram);
-        GLint linkStatus;
-        glGetProgramiv(dualProgram, GL_LINK_STATUS, &linkStatus);
-        ASSERT_NE(linkStatus, 0);
-    }
-
     glUseProgram(singleProgram);
 
     // Initialize position vertex buffer.
@@ -6407,7 +6393,6 @@ void main()
     ANGLE_GL_PROGRAM(program, kVS, kFS);
     glBindAttribLocation(program, 0, "a_position");
     glBindAttribLocation(program, 1, "a_attrib");
-    glLinkProgram(program);
     glUseProgram(program);
     ASSERT_GL_NO_ERROR();
 

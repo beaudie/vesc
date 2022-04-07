@@ -1188,7 +1188,6 @@ TEST_P(VertexAttributeTest, SimpleBindAttribLocation)
     GLuint program = compileMultiAttribProgram(1);
     glBindAttribLocation(program, 2, "position");
     glBindAttribLocation(program, 3, "a0");
-    glLinkProgram(program);
 
     // Setup and draw the quad
     setupMultiAttribs(program, 1, 0.5f);
@@ -1700,7 +1699,6 @@ void main()
     ANGLE_GL_PROGRAM(program, kVS, kFS);
     glBindAttribLocation(program, 0, "a_position");
     glBindAttribLocation(program, 1, "a_attrib");
-    glLinkProgram(program);
     glUseProgram(program);
     ASSERT_GL_NO_ERROR();
 
@@ -1761,7 +1759,6 @@ void main() {
     ANGLE_GL_PROGRAM(program, kVS, kFS);
     glBindAttribLocation(program, 0, "a_position");
     glBindAttribLocation(program, 1, "a_ColorTest");
-    glLinkProgram(program);
     glUseProgram(program);
     ASSERT_GL_NO_ERROR();
 
@@ -1833,7 +1830,6 @@ void main() {
     ANGLE_GL_PROGRAM(program, kVS, kFS);
     glBindAttribLocation(program, 0, "a_position");
     glBindAttribLocation(program, 1, "a_ColorTest");
-    glLinkProgram(program);
     glUseProgram(program);
     ASSERT_GL_NO_ERROR();
 
@@ -1915,7 +1911,6 @@ void main() {
     ANGLE_GL_PROGRAM(program, kVS, kFS);
     glBindAttribLocation(program, 0, "a_position");
     glBindAttribLocation(program, 1, "a_ColorTest");
-    glLinkProgram(program);
     glUseProgram(program);
     ASSERT_GL_NO_ERROR();
 
@@ -1986,7 +1981,6 @@ void main() {
 })";
 
     ANGLE_GL_PROGRAM(program, kVS, kFS);
-    glLinkProgram(program);
     glUseProgram(program);
     ASSERT_GL_NO_ERROR();
 
@@ -2478,7 +2472,6 @@ void main()
 
     // Mark the program separable and re-link it so it can be bound to the PPO.
     glProgramParameteri(mProgram, GL_PROGRAM_SEPARABLE, GL_TRUE);
-    glLinkProgram(mProgram);
     mProgram = CheckLinkStatusAndReturnProgram(mProgram, true);
 
     GLProgramPipeline pipeline;
