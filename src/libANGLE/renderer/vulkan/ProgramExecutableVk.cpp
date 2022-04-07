@@ -599,27 +599,29 @@ void ProgramExecutableVk::addImageDescriptorSetDesc(const gl::ProgramExecutable 
 
     for (uint32_t imageIndex = 0; imageIndex < imageBindings.size(); ++imageIndex)
     {
-        const gl::ImageBinding &imageBinding = imageBindings[imageIndex];
-        uint32_t uniformIndex                = executable.getUniformIndexFromImageIndex(imageIndex);
+        uint32_t uniformIndex = executable.getUniformIndexFromImageIndex(imageIndex);
         const gl::LinkedUniform &imageUniform = uniforms[uniformIndex];
-
-        std::string imageName = GlslangGetMappedSamplerName(imageUniform.name);
-
-        // The front-end always binds array image units sequentially.
-        uint32_t arraySize = static_cast<uint32_t>(imageBinding.boundImageUnits.size());
 
         // 2D arrays are split into multiple 1D arrays when generating LinkedUniforms. Since they
         // are flattened into one array, ignore the nonzero elements and expand the array to the
         // total array size.
-        if (gl::SamplerNameContainsNonZeroArrayElement(imageUniform.name))
+        if (imageUniform.outerArrayOffset > 0)
         {
+            ASSERT(gl::SamplerNameContainsNonZeroArrayElement(imageUniform.name));
             continue;
         }
 
+        ASSERT(!gl::SamplerNameContainsNonZeroArrayElement(imageUniform.name));
+
+        // The front-end always binds array image units sequentially.
+        const gl::ImageBinding &imageBinding = imageBindings[imageIndex];
+        uint32_t arraySize = static_cast<uint32_t>(imageBinding.boundImageUnits.size());
         for (unsigned int outerArraySize : imageUniform.outerArraySizes)
         {
             arraySize *= outerArraySize;
         }
+
+        std::string imageName = GlslangGetMappedSamplerName(imageUniform.name);
 
         for (gl::ShaderType shaderType : executable.getLinkedShaderStages())
         {
@@ -693,28 +695,29 @@ angle::Result ProgramExecutableVk::addTextureDescriptorSetDesc(
 
     for (uint32_t textureIndex = 0; textureIndex < samplerBindings.size(); ++textureIndex)
     {
-        const gl::SamplerBinding &samplerBinding = samplerBindings[textureIndex];
-
         uint32_t uniformIndex = executable.getUniformIndexFromSamplerIndex(textureIndex);
         const gl::LinkedUniform &samplerUniform = uniforms[uniformIndex];
-
-        const std::string samplerName = GlslangGetMappedSamplerName(samplerUniform.name);
-
-        // The front-end always binds array sampler units sequentially.
-        uint32_t arraySize = static_cast<uint32_t>(samplerBinding.boundTextureUnits.size());
 
         // 2D arrays are split into multiple 1D arrays when generating LinkedUniforms. Since they
         // are flattened into one array, ignore the nonzero elements and expand the array to the
         // total array size.
-        if (gl::SamplerNameContainsNonZeroArrayElement(samplerUniform.name))
+        if (samplerUniform.outerArrayOffset > 0)
         {
+            ASSERT(gl::SamplerNameContainsNonZeroArrayElement(samplerUniform.name));
             continue;
         }
 
+        ASSERT(!gl::SamplerNameContainsNonZeroArrayElement(samplerUniform.name));
+
+        // The front-end always binds array sampler units sequentially.
+        const gl::SamplerBinding &samplerBinding = samplerBindings[textureIndex];
+        uint32_t arraySize = static_cast<uint32_t>(samplerBinding.boundTextureUnits.size());
         for (unsigned int outerArraySize : samplerUniform.outerArraySizes)
         {
             arraySize *= outerArraySize;
         }
+
+        const std::string samplerName = GlslangGetMappedSamplerName(samplerUniform.name);
 
         for (gl::ShaderType shaderType : executable.getLinkedShaderStages())
         {

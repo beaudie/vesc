@@ -37,6 +37,10 @@ class ShaderInterfaceVariableInfoMap final : angle::NonCopyable
                                           const std::string &variableName);
     size_t variableCount(gl::ShaderType shaderType) const { return mData[shaderType].size(); }
 
+    const ShaderInterfaceVariableInfo &getTextureInfo(const gl::ProgramExecutable &executable,
+                                                      gl::ShaderType shaderType,
+                                                      uint32_t textureIndex) const;
+
     using VariableNameToInfoMap = angle::HashMap<std::string, ShaderInterfaceVariableInfo>;
 
     class Iterator final
@@ -60,5 +64,16 @@ class ShaderInterfaceVariableInfoMap final : angle::NonCopyable
     gl::ShaderMap<VariableNameToInfoMap> mData;
 };
 
+ANGLE_INLINE const ShaderInterfaceVariableInfo &ShaderInterfaceVariableInfoMap::getTextureInfo(
+    const gl::ProgramExecutable &executable,
+    gl::ShaderType shaderType,
+    uint32_t textureIndex) const
+{
+    const std::vector<gl::LinkedUniform> &uniforms = executable.getUniforms();
+    uint32_t uniformIndex = executable.getUniformIndexFromSamplerIndex(textureIndex);
+    const gl::LinkedUniform &samplerUniform = uniforms[uniformIndex];
+    const std::string samplerName           = GlslangGetMappedSamplerName(samplerUniform.name);
+    return get(shaderType, samplerName);
+}
 }  // namespace rx
 #endif  // LIBANGLE_RENDERER_SHADERINTERFACEVARIABLEINFOMAP_H_
