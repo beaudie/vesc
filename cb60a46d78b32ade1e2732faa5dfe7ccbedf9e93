@@ -26,6 +26,47 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "4a3d9b8a_3d8bc9a5",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 26
+      },
+      "lineNbr": 24,
+      "author": {
+        "id": 1116015
+      },
+      "writtenOn": "2022-04-07T15:05:55Z",
+      "side": 1,
+      "message": "I thought about it. The dispatch...() paths do that. Here\u0027s the thing: markRawBufferUsage() does the following: \n\n    for (size_t blockIndex \u003d 0; blockIndex \u003c program-\u003egetActiveShaderStorageBlockCount(); blockIndex++) {...}\n    for (const auto \u0026atomicCounterBuffer : program-\u003egetState().getAtomicCounterBuffers()) {...}\nreturn angle::Result::Continue;\n\nwhich in the null case amounts to duplicating the checks which guard it, which are:\n\n    if (program-\u003egetActiveShaderStorageBlockCount() \u003e 0 ||\n        program-\u003egetActiveAtomicCounterBufferCount() \u003e 0)\n    {\n       ANGLE_TRY(markRawBufferUsage(context));\n    }\n\nIf we put them in a fastSkip() function (as you suggest), wwe\u0027ve got two functions doing essentially the same checks. If you\u0027re worried about function call overhead, it comes down to how much you trust the compiler to inline one and not the other.\n\nAnyway I\u0027m not opposed to it, just wanted to explain my throught process on why I didn\u0027t.",
+      "parentUuid": "383b61fd_65a4c930",
+      "range": {
+        "startLine": 20,
+        "startChar": 0,
+        "endLine": 24,
+        "endChar": 0
+      },
+      "revId": "cb60a46d78b32ade1e2732faa5dfe7ccbedf9e93",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "93f42c43_b57988a4",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 26
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1116015
+      },
+      "writtenOn": "2022-04-07T15:05:55Z",
+      "side": 1,
+      "message": "Thanks for your review!",
+      "revId": "cb60a46d78b32ade1e2732faa5dfe7ccbedf9e93",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "ac6b6edc_660f8d6a",
         "filename": "src/libANGLE/renderer/d3d/ProgramD3D.cpp",
         "patchSetId": 26
@@ -37,6 +78,30 @@
       "writtenOn": "2022-04-07T14:13:48Z",
       "side": 1,
       "message": "are you assuming this is only called during link? I\u0027m worried that if this is called during draw time/normal execution, the shaders can be unbound. This is maybe an untested case. If this is an issue we\u0027ll need to instead use the information in the program executable. also we\u0027d need a regression test.",
+      "range": {
+        "startLine": 1545,
+        "startChar": 32,
+        "endLine": 1545,
+        "endChar": 49
+      },
+      "revId": "cb60a46d78b32ade1e2732faa5dfe7ccbedf9e93",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ce35ffe7_d3f3ef3a",
+        "filename": "src/libANGLE/renderer/d3d/ProgramD3D.cpp",
+        "patchSetId": 26
+      },
+      "lineNbr": 1545,
+      "author": {
+        "id": 1116015
+      },
+      "writtenOn": "2022-04-07T15:05:55Z",
+      "side": 1,
+      "message": "OK, I was unclear about how this state occurs (the shader going null). Thanks for clarifying. Looks like I\u0027ll have to stash the register assignments elsewhere and not rely on the shader.",
+      "parentUuid": "ac6b6edc_660f8d6a",
       "range": {
         "startLine": 1545,
         "startChar": 32,
