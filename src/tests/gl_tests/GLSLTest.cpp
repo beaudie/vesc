@@ -15461,6 +15461,50 @@ void main()
     EXPECT_PIXEL_COLOR_EQ(0, 0, GLColor::white);
     ASSERT_GL_NO_ERROR();
 }
+
+TEST_P(GLSLTest_ES3, MonomorphizeForAndContinue)
+{
+    // Issue: A while loop's expression, and a branch 
+    // condition with EOpContinue were being deep
+    // copied as part of monomorphize functions, 
+    // causing a crash, as they were not null-checked.
+    constexpr char kFS[] =
+        R"(#version 300 es
+        
+        precision mediump float;
+        out vec4 fragOut;
+        struct aParam
+        {
+            sampler2D sampler;
+        };
+        uniform aParam theParam;
+
+        float monomorphizedFunction(aParam a)
+        {
+            int i = 0;
+            vec4 j = vec4(0);
+            for(;;)
+            {
+                if(i++ < 10)
+                {
+                    j += texture(a.sampler, vec2(0.0f,0.0f));
+                    continue;
+                }
+                break;
+            }
+            return j.a;
+        }
+        void main()
+        {
+            fragOut.a = monomorphizedFunction(theParam);
+        }
+
+        
+)";
+    CompileShader(GL_FRAGMENT_SHADER, kFS);
+    ASSERT_GL_NO_ERROR();
+}
+
 }  // anonymous namespace
 
 ANGLE_INSTANTIATE_TEST_ES2_AND_ES3_AND(GLSLTest,
