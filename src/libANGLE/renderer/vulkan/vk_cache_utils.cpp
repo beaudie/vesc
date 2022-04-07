@@ -1052,7 +1052,7 @@ angle::Result InitializeRenderPassFromDesc(ContextVk *contextVk,
                                            RenderPassHelper *renderPassHelper)
 {
     constexpr VkAttachmentReference kUnusedAttachment   = {VK_ATTACHMENT_UNUSED,
-                                                         VK_IMAGE_LAYOUT_UNDEFINED};
+                                                           VK_IMAGE_LAYOUT_UNDEFINED};
     constexpr VkAttachmentReference2 kUnusedAttachment2 = {
         VK_STRUCTURE_TYPE_ATTACHMENT_REFERENCE_2_KHR, nullptr, VK_ATTACHMENT_UNUSED,
         VK_IMAGE_LAYOUT_UNDEFINED, 0};
@@ -1112,9 +1112,9 @@ angle::Result InitializeRenderPassFromDesc(ContextVk *contextVk,
         VkAttachmentReference colorRef;
         colorRef.attachment = attachmentCount.get();
         colorRef.layout     = needInputAttachments
-                              ? VK_IMAGE_LAYOUT_GENERAL
-                              : ConvertImageLayoutToVkImageLayout(
-                                    static_cast<ImageLayout>(ops[attachmentCount].initialLayout));
+                                  ? VK_IMAGE_LAYOUT_GENERAL
+                                  : ConvertImageLayoutToVkImageLayout(
+                                        static_cast<ImageLayout>(ops[attachmentCount].initialLayout));
         colorAttachmentRefs.push_back(colorRef);
 
         UnpackAttachmentDesc(&attachmentDescs[attachmentCount.get()], attachmentFormatID,
@@ -1149,7 +1149,7 @@ angle::Result InitializeRenderPassFromDesc(ContextVk *contextVk,
 
         depthStencilAttachmentRef.attachment = attachmentCount.get();
         depthStencilAttachmentRef.layout     = ConvertImageLayoutToVkImageLayout(
-            static_cast<ImageLayout>(ops[attachmentCount].initialLayout));
+                static_cast<ImageLayout>(ops[attachmentCount].initialLayout));
 
         UnpackAttachmentDesc(&attachmentDescs[attachmentCount.get()], attachmentFormatID,
                              attachmentSamples, ops[attachmentCount]);
@@ -1272,8 +1272,8 @@ angle::Result InitializeRenderPassFromDesc(ContextVk *contextVk,
     applicationSubpass->colorAttachmentCount = static_cast<uint32_t>(colorAttachmentRefs.size());
     applicationSubpass->pColorAttachments    = colorAttachmentRefs.data();
     applicationSubpass->pResolveAttachments  = attachmentCount.get() > nonResolveAttachmentCount
-                                                  ? colorResolveAttachmentRefs.data()
-                                                  : nullptr;
+                                                   ? colorResolveAttachmentRefs.data()
+                                                   : nullptr;
     applicationSubpass->pDepthStencilAttachment =
         (depthStencilAttachmentRef.attachment != VK_ATTACHMENT_UNUSED ? &depthStencilAttachmentRef
                                                                       : nullptr);
@@ -3223,8 +3223,8 @@ FramebufferDesc::FramebufferDesc()
     reset();
 }
 
-FramebufferDesc::~FramebufferDesc()                            = default;
-FramebufferDesc::FramebufferDesc(const FramebufferDesc &other) = default;
+FramebufferDesc::~FramebufferDesc()                                       = default;
+FramebufferDesc::FramebufferDesc(const FramebufferDesc &other)            = default;
 FramebufferDesc &FramebufferDesc::operator=(const FramebufferDesc &other) = default;
 
 void FramebufferDesc::update(uint32_t index, ImageOrBufferViewSubresourceSerial serial)
@@ -3791,7 +3791,7 @@ angle::Result RenderPassCache::getRenderPassWithOpsImpl(ContextVk *contextVk,
         outerIt            = emplaceResult.first;
     }
 
-    mRenderPassWithOpsCacheStats.miss();
+    mRenderPassWithOpsCacheStats.missAndIncrementSize();
     vk::RenderPassHelper newRenderPass;
     ANGLE_TRY(vk::InitializeRenderPassFromDesc(contextVk, desc, attachmentOps, &newRenderPass));
 
@@ -3921,7 +3921,7 @@ angle::Result DescriptorSetLayoutCache::getDescriptorSetLayout(
         return angle::Result::Continue;
     }
 
-    mCacheStats.miss();
+    mCacheStats.missAndIncrementSize();
     // We must unpack the descriptor set layout description.
     vk::DescriptorSetLayoutBindingVector bindingVector;
     std::vector<VkSampler> immutableSamplers;
@@ -3982,7 +3982,7 @@ angle::Result PipelineLayoutCache::getPipelineLayout(
         return angle::Result::Continue;
     }
 
-    mCacheStats.miss();
+    mCacheStats.missAndIncrementSize();
     // Note this does not handle gaps in descriptor set layouts gracefully.
     angle::FixedVector<VkDescriptorSetLayout, vk::kMaxDescriptorSetLayouts> setLayoutHandles;
     for (const vk::BindingPointer<vk::DescriptorSetLayout> &layoutPtr : descriptorSetLayouts)
@@ -4078,7 +4078,7 @@ angle::Result SamplerYcbcrConversionCache::getSamplerYcbcrConversion(
         return angle::Result::Continue;
     }
 
-    mCacheStats.miss();
+    mCacheStats.missAndIncrementSize();
 
     // Create the VkSamplerYcbcrConversion
     VkSamplerYcbcrConversionCreateInfo samplerYcbcrConversionInfo = {};
@@ -4168,7 +4168,7 @@ angle::Result SamplerCache::getSampler(ContextVk *contextVk,
         return angle::Result::Continue;
     }
 
-    mCacheStats.miss();
+    mCacheStats.missAndIncrementSize();
     vk::SamplerHelper samplerHelper(contextVk);
     ANGLE_TRY(desc.init(contextVk, &samplerHelper.get()));
 
@@ -4180,12 +4180,5 @@ angle::Result SamplerCache::getSampler(ContextVk *contextVk,
     contextVk->getRenderer()->onAllocateHandle(vk::HandleType::Sampler);
 
     return angle::Result::Continue;
-}
-
-// DriverUniformsDescriptorSetCache implementation.
-void DriverUniformsDescriptorSetCache::destroy(RendererVk *rendererVk)
-{
-    accumulateCacheStats(rendererVk);
-    mPayload.clear();
 }
 }  // namespace rx
