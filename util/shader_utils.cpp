@@ -47,10 +47,8 @@ GLuint CompileProgramInternal(const char *vsSource,
     GLuint program = glCreateProgram();
 
     glAttachShader(program, vs);
-    glDeleteShader(vs);
 
     glAttachShader(program, fs);
-    glDeleteShader(fs);
 
     GLuint tcs = 0;
     GLuint tes = 0;
@@ -68,7 +66,6 @@ GLuint CompileProgramInternal(const char *vsSource,
         }
 
         glAttachShader(program, tcs);
-        glDeleteShader(tcs);
     }
 
     if (strlen(tesSource) > 0)
@@ -84,7 +81,6 @@ GLuint CompileProgramInternal(const char *vsSource,
         }
 
         glAttachShader(program, tes);
-        glDeleteShader(tes);
     }
 
     if (strlen(gsSource) > 0)
@@ -101,7 +97,6 @@ GLuint CompileProgramInternal(const char *vsSource,
         }
 
         glAttachShader(program, gs);
-        glDeleteShader(gs);
     }
 
     if (preLinkCallback)
@@ -110,6 +105,25 @@ GLuint CompileProgramInternal(const char *vsSource,
     }
 
     glLinkProgram(program);
+    glDetachShader(program, vs);
+    glDeleteShader(vs);
+    glDetachShader(program, fs);
+    glDeleteShader(fs);
+    if (tcs != 0)
+    {
+        glDetachShader(program, tcs);
+        glDeleteShader(tcs);
+    }
+    if (tes != 0)
+    {
+        glDetachShader(program, tes);
+        glDeleteShader(tes);
+    }
+    if (gs != 0)
+    {
+        glDetachShader(program, gs);
+        glDeleteShader(gs);
+    }
 
     return CheckLinkStatusAndReturnProgram(program, true);
 }
