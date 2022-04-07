@@ -470,7 +470,7 @@ void main() {
     outSrc1 = src1;
 })";
 
-    mProgram = CompileProgram(essl3_shaders::vs::Simple(), kFS, [](GLuint program) {
+    mProgram = CompileProgramNoDetach(essl3_shaders::vs::Simple(), kFS, [](GLuint program) {
         glBindFragDataLocationIndexedEXT(program, 0, 0, "outSrc0");
         glBindFragDataLocationIndexedEXT(program, 0, 1, "outSrc1");
     });
@@ -618,8 +618,8 @@ void main() {
 
     for (const testCase &test : testCases)
     {
-        mProgram =
-            CompileProgram(essl3_shaders::vs::Simple(), kFragColorShader, [&](GLuint program) {
+        mProgram = CompileProgramNoDetach(
+            essl3_shaders::vs::Simple(), kFragColorShader, [&](GLuint program) {
                 glBindFragDataLocationEXT(program, kUnusedLocation,
                                           test.unusedLocationName.c_str());
                 glBindFragDataLocationEXT(program, kFragData0Location,
@@ -658,10 +658,11 @@ void main() {
     SecondaryFragData = src1;
 })";
 
-    mProgram = CompileProgram(essl3_shaders::vs::Simple(), kFragDataShader, [](GLuint program) {
-        glBindFragDataLocationEXT(program, 0, "FragData[0]");
-        glBindFragDataLocationIndexedEXT(program, 0, 1, "SecondaryFragData[0]");
-    });
+    mProgram =
+        CompileProgramNoDetach(essl3_shaders::vs::Simple(), kFragDataShader, [](GLuint program) {
+            glBindFragDataLocationEXT(program, 0, "FragData[0]");
+            glBindFragDataLocationIndexedEXT(program, 0, 1, "SecondaryFragData[0]");
+        });
 
     LinkProgram();
 

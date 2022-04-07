@@ -2953,7 +2953,7 @@ void main()
     gl_FragColor = result > 0.0 ? vec4(0, 1, 0, 1) : vec4(1, 0, 0, 1);
 })";
 
-    ANGLE_GL_PROGRAM(program, kVertexShader, kFragmentShader);
+    ANGLE_GL_PROGRAM_NO_DETACH(program, kVertexShader, kFragmentShader);
 
     // Force a gap in attributes by using location 0 and 3
     GLint positionLocation = 0;
@@ -3210,7 +3210,7 @@ void main()
     out_color = result > 0.0 ? vec4(0, 1, 0, 1) : vec4(1, 0, 0, 1);
 })";
 
-    ANGLE_GL_PROGRAM(program, kVertexShader, kFragmentShader);
+    ANGLE_GL_PROGRAM_NO_DETACH(program, kVertexShader, kFragmentShader);
 
     // Re-link the program to update the attribute locations
     glLinkProgram(program);
@@ -3261,7 +3261,7 @@ void main()
     out_color = result > 0.0 ? vec4(0, 1, 0, 1) : vec4(1, 0, 0, 1);
 })";
 
-    ANGLE_GL_PROGRAM(program, kVertexShader, kFragmentShader);
+    ANGLE_GL_PROGRAM_NO_DETACH(program, kVertexShader, kFragmentShader);
 
     // Re-link the program to update the attribute locations
     glLinkProgram(program);
@@ -3907,7 +3907,6 @@ void main(void) {
 
     ANGLE_GL_PROGRAM(program, kVS, kFS);
     glBindAttribLocation(program, 0, "attr1");
-    glLinkProgram(program);
     ASSERT_TRUE(CheckLinkStatusAndReturnProgram(program, true));
     glUseProgram(program);
 

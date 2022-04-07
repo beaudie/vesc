@@ -172,7 +172,7 @@ void main()
     gl_FragColor = isZero(u_uniform) ? vec4(0, 1, 0, 1) : vec4(1, 0, 0, 1);
 })";
 
-    ANGLE_GL_PROGRAM(program, essl1_shaders::vs::Simple(), kFS);
+    ANGLE_GL_PROGRAM_NO_DETACH(program, essl1_shaders::vs::Simple(), kFS);
     glUseProgram(program);
 
     drawQuad(program, essl1_shaders::PositionAttrib(), 0.5f, 1.0f, true);
