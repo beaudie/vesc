@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "383b61fd_65a4c930",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 26
+      },
+      "lineNbr": 24,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2022-04-07T14:13:48Z",
+      "side": 1,
+      "message": "if there\u0027s a way you could do a fast skip of calling this function when not needed that would be appreciated. i.e. if (!fastSkip()) ANGLE_TRY(markRaw()) so common draw calls are minimally impacted.",
+      "range": {
+        "startLine": 20,
+        "startChar": 0,
+        "endLine": 24,
+        "endChar": 0
+      },
+      "revId": "cb60a46d78b32ade1e2732faa5dfe7ccbedf9e93",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ac6b6edc_660f8d6a",
+        "filename": "src/libANGLE/renderer/d3d/ProgramD3D.cpp",
+        "patchSetId": 26
+      },
+      "lineNbr": 1545,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2022-04-07T14:13:48Z",
+      "side": 1,
+      "message": "are you assuming this is only called during link? I\u0027m worried that if this is called during draw time/normal execution, the shaders can be unbound. This is maybe an untested case. If this is an issue we\u0027ll need to instead use the information in the program executable. also we\u0027d need a regression test.",
+      "range": {
+        "startLine": 1545,
+        "startChar": 32,
+        "endLine": 1545,
+        "endChar": 49
+      },
+      "revId": "cb60a46d78b32ade1e2732faa5dfe7ccbedf9e93",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
