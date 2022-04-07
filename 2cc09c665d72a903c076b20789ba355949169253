@@ -204,6 +204,30 @@
       },
       "revId": "2cc09c665d72a903c076b20789ba355949169253",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "fb77f201_bccea51c",
+        "filename": "src/libANGLE/renderer/vulkan/SurfaceVk.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 1070,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-04-07T04:29:48Z",
+      "side": 1,
+      "message": "Right, then yeah GetDesiredPresentMode should take SINGLE_BUFFER into account. Vice versa, setRenderBuffer when !SINGLE_BUFFER should take the swap interval into account.\n\nMight need to cache the interval for use at setRenderBuffer time if not available already as state.",
+      "parentUuid": "1c686d93_8eb4caca",
+      "range": {
+        "startLine": 1065,
+        "startChar": 0,
+        "endLine": 1070,
+        "endChar": 5
+      },
+      "revId": "2cc09c665d72a903c076b20789ba355949169253",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
