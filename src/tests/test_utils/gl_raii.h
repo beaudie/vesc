@@ -184,6 +184,11 @@ class GLProgram
         mHandle = CompileProgram(vertexShader, fragmentShader);
     }
 
+    void makeRasterNoDetach(const char *vertexShader, const char *fragmentShader)
+    {
+        mHandle = CompileProgramNoDetach(vertexShader, fragmentShader);
+    }
+
     void makeRaster(const char *vertexShader,
                     const char *geometryShader,
                     const char *fragmentShader)
@@ -259,6 +264,11 @@ class GLProgram
 #define ANGLE_GL_PROGRAM(name, vertex, fragment) \
     GLProgram name;                              \
     name.makeRaster(vertex, fragment);           \
+    ASSERT_TRUE(name.valid())
+
+#define ANGLE_GL_PROGRAM_NO_DETACH(name, vertex, fragment) \
+    GLProgram name;                                        \
+    name.makeRasterNoDetach(vertex, fragment);             \
     ASSERT_TRUE(name.valid())
 
 #define ANGLE_GL_PROGRAM_WITH_GS(name, vertex, geometry, fragment) \
