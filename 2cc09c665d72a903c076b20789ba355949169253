@@ -252,6 +252,30 @@
       },
       "revId": "2cc09c665d72a903c076b20789ba355949169253",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "39f4cd85_039eb5be",
+        "filename": "src/libANGLE/renderer/vulkan/SurfaceVk.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 1070,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-04-07T19:49:30Z",
+      "side": 1,
+      "message": "Ok, that seems better, but still doesn\u0027t fix this scenario (we are way in the weeds here 😄):\n\n- Start in !SINGLE\n- setSwapInterval(1) -\u003e switch to FIFO\n- setRenderBuffer(SINGLE) -\u003e switch to SHARED\n- setSwapInterval(0) (app wants MAILBOX, ignored)\n- setRenderBuffer(!SIGNEL)\n\nThe last call currently unconditionally switches to FIFO, despite what the app asked for.",
+      "parentUuid": "d0c97afe_51d6094e",
+      "range": {
+        "startLine": 1065,
+        "startChar": 0,
+        "endLine": 1070,
+        "endChar": 5
+      },
+      "revId": "2cc09c665d72a903c076b20789ba355949169253",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
