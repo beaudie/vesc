@@ -78,7 +78,6 @@ void main()
 })";
 
     ANGLE_GL_PROGRAM(programRed, kVS, essl1_shaders::fs::Red());
-    glLinkProgram(programRed);
     glUseProgram(programRed);
     ASSERT_GL_NO_ERROR();
 
@@ -176,7 +175,6 @@ void main()
 })";
 
     ANGLE_GL_PROGRAM(programRed, kVS, essl1_shaders::fs::Red());
-    glLinkProgram(programRed);
     glUseProgram(programRed);
     ASSERT_GL_NO_ERROR();
 
@@ -316,7 +314,6 @@ void main()
 })";
 
     ANGLE_GL_PROGRAM(programRed, kVS, essl1_shaders::fs::Red());
-    glLinkProgram(programRed);
     glUseProgram(programRed);
     ASSERT_GL_NO_ERROR();
 
@@ -519,7 +516,6 @@ void main()
 })";
 
     ANGLE_GL_PROGRAM(programRed, kVS, essl3_shaders::fs::Red());
-    glLinkProgram(programRed);
     glUseProgram(programRed);
     ASSERT_GL_NO_ERROR();
 
@@ -607,7 +603,6 @@ void main()
 })";
 
     ANGLE_GL_PROGRAM(programRed, kVS, essl3_shaders::fs::Red());
-    glLinkProgram(programRed);
     glUseProgram(programRed);
     ASSERT_GL_NO_ERROR();
 
@@ -757,7 +752,6 @@ void main()
 })";
 
     ANGLE_GL_PROGRAM(programRed, kVS, essl3_shaders::fs::Red());
-    glLinkProgram(programRed);
     glUseProgram(programRed);
     ASSERT_GL_NO_ERROR();
 
@@ -842,7 +836,6 @@ void main()
 })";
 
     ANGLE_GL_PROGRAM(programRed, kVS, essl3_shaders::fs::Red());
-    glLinkProgram(programRed);
     glUseProgram(programRed);
     ASSERT_GL_NO_ERROR();
 
@@ -1029,7 +1022,6 @@ void main()
 })";
 
     ANGLE_GL_PROGRAM(programRed, kVS, essl3_shaders::fs::Red());
-    glLinkProgram(programRed);
     glUseProgram(programRed);
     ASSERT_GL_NO_ERROR();
 

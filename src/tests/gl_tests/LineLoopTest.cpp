@@ -360,7 +360,6 @@ void main()
     ANGLE_GL_PROGRAM(program, kVS, kFS);
     glBindAttribLocation(program, 0, "a_position");
     glBindAttribLocation(program, 1, "a_transform");
-    glLinkProgram(program);
     glUseProgram(program);
     ASSERT_GL_NO_ERROR();
 
