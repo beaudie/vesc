@@ -32,7 +32,8 @@ GLuint CompileProgramInternal(const char *vsSource,
                               const char *tesSource,
                               const char *gsSource,
                               const char *fsSource,
-                              const std::function<void(GLuint)> &preLinkCallback)
+                              const std::function<void(GLuint)> &preLinkCallback,
+                              bool detachShaders)
 {
     GLuint vs = CompileShader(GL_VERTEX_SHADER, vsSource);
     GLuint fs = CompileShader(GL_FRAGMENT_SHADER, fsSource);
@@ -47,10 +48,8 @@ GLuint CompileProgramInternal(const char *vsSource,
     GLuint program = glCreateProgram();
 
     glAttachShader(program, vs);
-    glDeleteShader(vs);
 
     glAttachShader(program, fs);
-    glDeleteShader(fs);
 
     GLuint tcs = 0;
     GLuint tes = 0;
@@ -68,7 +67,6 @@ GLuint CompileProgramInternal(const char *vsSource,
         }
 
         glAttachShader(program, tcs);
-        glDeleteShader(tcs);
     }
 
     if (strlen(tesSource) > 0)
@@ -84,7 +82,6 @@ GLuint CompileProgramInternal(const char *vsSource,
         }
 
         glAttachShader(program, tes);
-        glDeleteShader(tes);
     }
 
     if (strlen(gsSource) > 0)
@@ -101,7 +98,6 @@ GLuint CompileProgramInternal(const char *vsSource,
         }
 
         glAttachShader(program, gs);
-        glDeleteShader(gs);
     }
 
     if (preLinkCallback)
@@ -110,6 +106,37 @@ GLuint CompileProgramInternal(const char *vsSource,
     }
 
     glLinkProgram(program);
+    if (detachShaders)
+    {
+        glDetachShader(program, vs);
+        glDetachShader(program, fs);
+    }
+    glDeleteShader(vs);
+    glDeleteShader(fs);
+    if (tcs != 0)
+    {
+        if (detachShaders)
+        {
+            glDetachShader(program, tcs);
+        }
+        glDeleteShader(tcs);
+    }
+    if (tes != 0)
+    {
+        if (detachShaders)
+        {
+            glDetachShader(program, tes);
+        }
+        glDeleteShader(tes);
+    }
+    if (gs != 0)
+    {
+        if (detachShaders)
+        {
+            glDetachShader(program, gs);
+        }
+        glDeleteShader(gs);
+    }
 
     return CheckLinkStatusAndReturnProgram(program, true);
 }
@@ -287,24 +314,36 @@ GLuint CompileProgramWithTransformFeedback(
         }
     };
 
-    return CompileProgramInternal(vsSource, "", "", "", fsSource, preLink);
+    return CompileProgramInternal(vsSource, "", "", "", fsSource, preLink, true);
 }
 
 GLuint CompileProgram(const char *vsSource, const char *fsSource)
 {
-    return CompileProgramInternal(vsSource, "", "", "", fsSource, nullptr);
+    return CompileProgramInternal(vsSource, "", "", "", fsSource, nullptr, true);
+}
+
+GLuint CompileProgramNoDetach(const char *vsSource, const char *fsSource)
+{
+    return CompileProgramInternal(vsSource, "", "", "", fsSource, nullptr, false);
 }
 
 GLuint CompileProgram(const char *vsSource,
                       const char *fsSource,
                       const std::function<void(GLuint)> &preLinkCallback)
 {
-    return CompileProgramInternal(vsSource, "", "", "", fsSource, preLinkCallback);
+    return CompileProgramInternal(vsSource, "", "", "", fsSource, preLinkCallback, true);
+}
+
+GLuint CompileProgramNoDetach(const char *vsSource,
+                              const char *fsSource,
+                              const std::function<void(GLuint)> &preLinkCallback)
+{
+    return CompileProgramInternal(vsSource, "", "", "", fsSource, preLinkCallback, false);
 }
 
 GLuint CompileProgramWithGS(const char *vsSource, const char *gsSource, const char *fsSource)
 {
-    return CompileProgramInternal(vsSource, "", "", gsSource, fsSource, nullptr);
+    return CompileProgramInternal(vsSource, "", "", gsSource, fsSource, nullptr, true);
 }
 
 GLuint CompileProgramWithTESS(const char *vsSource,
@@ -312,7 +351,7 @@ GLuint CompileProgramWithTESS(const char *vsSource,
                               const char *tesSource,
                               const char *fsSource)
 {
-    return CompileProgramInternal(vsSource, tcsSource, tesSource, "", fsSource, nullptr);
+    return CompileProgramInternal(vsSource, tcsSource, tesSource, "", fsSource, nullptr, true);
 }
 
 GLuint CompileProgramFromFiles(const std::string &vsPath, const std::string &fsPath)
