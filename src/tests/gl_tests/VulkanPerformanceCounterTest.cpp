@@ -4037,7 +4037,7 @@ void main()
 
     GLsizei offset = 0;
 
-    uint32_t expectedShaderBufferCacheMisses = 0;
+    uint32_t expectedShaderResourceCacheMisses = 0;
 
     for (int iteration = 0; iteration < kIterations; ++iteration)
     {
@@ -4057,13 +4057,13 @@ void main()
         // Capture the allocations counter after the first run.
         if (iteration == 0)
         {
-            expectedShaderBufferCacheMisses =
-                getPerfCounters().shaderBuffersDescriptorSetCacheMisses;
+            expectedShaderResourceCacheMisses =
+                getPerfCounters().shaderResourcesDescriptorSetCacheMisses;
         }
     }
 
     ASSERT_GL_NO_ERROR();
-    EXPECT_GT(expectedShaderBufferCacheMisses, 0u);
+    EXPECT_GT(expectedShaderResourceCacheMisses, 0u);
 
     // Verify correctness first.
     std::vector<GLColor> expectedData(kIterations * 2, GLColor::green);
@@ -4078,9 +4078,9 @@ void main()
     EXPECT_EQ(expectedData, actualData);
 
     // Check for unnecessary descriptor set allocations.
-    uint32_t actualShaderBufferCacheMisses =
-        getPerfCounters().shaderBuffersDescriptorSetCacheMisses;
-    EXPECT_EQ(expectedShaderBufferCacheMisses, actualShaderBufferCacheMisses);
+    uint32_t actualShaderResourceCacheMisses =
+        getPerfCounters().shaderResourcesDescriptorSetCacheMisses;
+    EXPECT_EQ(expectedShaderResourceCacheMisses, actualShaderResourceCacheMisses);
 }
 
 // Test that mapping a buffer that the GPU is using as read-only ghosts the buffer, rather than
@@ -4948,6 +4948,65 @@ TEST_P(VulkanPerformanceCounterTest, TextureDescriptorsAreShared)
     ASSERT_GL_NO_ERROR();
 
     GLuint actualCacheMisses = getPerfCounters().textureDescriptorSetCacheMisses;
+    EXPECT_EQ(expectedCacheMisses, actualCacheMisses);
+}
+
+// Verifies that we share Uniform Buffer descriptor sets between programs.
+TEST_P(VulkanPerformanceCounterTest, UniformBufferDescriptorsAreShared)
+{
+    ANGLE_SKIP_TEST_IF(!IsGLExtensionEnabled(kPerfMonitorExtensionName));
+
+    constexpr char kFS[] = R"(#version 300 es
+precision mediump float;
+out vec4 color;
+uniform block {
+   vec4 uniColor;
+};
+
+void main() {
+    color = uniColor;
+})";
+
+    ANGLE_GL_PROGRAM(testProgram1, essl3_shaders::vs::Simple(), kFS);
+    ANGLE_GL_PROGRAM(testProgram2, essl3_shaders::vs::Simple(), kFS);
+
+    Vector4 red(1, 0, 0, 1);
+    Vector4 green(0, 1, 0, 1);
+
+    GLBuffer ubo1;
+    glBindBuffer(GL_UNIFORM_BUFFER, ubo1);
+    glBufferData(GL_UNIFORM_BUFFER, sizeof(Vector4), red.data(), GL_STATIC_DRAW);
+
+    GLBuffer ubo2;
+    glBindBuffer(GL_UNIFORM_BUFFER, ubo2);
+    glBufferData(GL_UNIFORM_BUFFER, sizeof(Vector4), green.data(), GL_STATIC_DRAW);
+
+    setupQuadVertexBuffer(0.5f, 1.0f);
+
+    glUseProgram(testProgram1);
+
+    ASSERT_GL_NO_ERROR();
+
+    glBindBufferBase(GL_UNIFORM_BUFFER, 0, ubo1);
+    glDrawArrays(GL_TRIANGLES, 0, 6);
+    glBindBufferBase(GL_UNIFORM_BUFFER, 0, ubo2);
+    glDrawArrays(GL_TRIANGLES, 0, 6);
+
+    ASSERT_GL_NO_ERROR();
+
+    GLuint expectedCacheMisses = getPerfCounters().shaderResourcesDescriptorSetCacheMisses;
+    EXPECT_GT(expectedCacheMisses, 0u);
+
+    glUseProgram(testProgram2);
+
+    glBindBufferBase(GL_UNIFORM_BUFFER, 0, ubo1);
+    glDrawArrays(GL_TRIANGLES, 0, 6);
+    glBindBufferBase(GL_UNIFORM_BUFFER, 0, ubo2);
+    glDrawArrays(GL_TRIANGLES, 0, 6);
+
+    ASSERT_GL_NO_ERROR();
+
+    GLuint actualCacheMisses = getPerfCounters().shaderResourcesDescriptorSetCacheMisses;
     EXPECT_EQ(expectedCacheMisses, actualCacheMisses);
 }
 
