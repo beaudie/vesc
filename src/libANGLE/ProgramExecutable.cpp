@@ -1485,7 +1485,7 @@ bool ProgramExecutable::linkUniforms(
 
     linkSamplerAndImageBindings(combinedImageUniformsCountOut);
 
-    if (!linkAtomicCounterBuffers())
+    if (!linkAtomicCounterBuffers(context, infoLog))
     {
         return false;
     }
@@ -1589,7 +1589,7 @@ void ProgramExecutable::linkSamplerAndImageBindings(GLuint *combinedImageUniform
     mDefaultUniformRange = RangeUI(0, low);
 }
 
-bool ProgramExecutable::linkAtomicCounterBuffers()
+bool ProgramExecutable::linkAtomicCounterBuffers(const Context *context, InfoLog &infoLog)
 {
     for (unsigned int index : mAtomicCounterUniformRange)
     {
@@ -1626,6 +1626,63 @@ bool ProgramExecutable::linkAtomicCounterBuffers()
 
     // TODO(jie.a.chen@intel.com): Count each atomic counter buffer to validate against
     // gl_Max[Vertex|Fragment|Compute|Geometry|Combined]AtomicCounterBuffers.
+    GLint vertexShaderACBCount   = 0;
+    GLint fragmentShaderACBCount = 0;
+    GLint computeShaderACBCount  = 0;
+    GLint geometryShaderACBCount = 0;
+    GLint combinedShaderACBCount = 0;
+    for (unsigned int bufferIndex = 0; bufferIndex < getActiveAtomicCounterBufferCount();
+         ++bufferIndex)
+    {
+        AtomicCounterBuffer &acb = mAtomicCounterBuffers[bufferIndex];
+        if (acb.isActive((ShaderType::Vertex)))
+        {
+            ++vertexShaderACBCount;
+        }
+        if (acb.isActive(ShaderType::Fragment))
+        {
+            ++fragmentShaderACBCount;
+        }
+        if (acb.isActive((ShaderType::Compute)))
+        {
+            ++computeShaderACBCount;
+        }
+        if (acb.isActive(ShaderType::Geometry))
+        {
+            ++geometryShaderACBCount;
+        }
+        ++combinedShaderACBCount;
+    }
+    const Caps &caps = context->getCaps();
+    if (vertexShaderACBCount > caps.maxShaderAtomicCounterBuffers[ShaderType::Vertex])
+    {
+        infoLog << GetShaderTypeString(ShaderType::Vertex)
+                << "shader AtomicCounterBuffers count exceeds limit";
+        return false;
+    }
+    if (fragmentShaderACBCount > caps.maxShaderAtomicCounterBuffers[ShaderType::Fragment])
+    {
+        infoLog << GetShaderTypeString(ShaderType::Fragment)
+                << "shader AtomicCounterBuffers count exceeds limit";
+        return false;
+    }
+    if (computeShaderACBCount > caps.maxShaderAtomicCounterBuffers[ShaderType::Compute])
+    {
+        infoLog << GetShaderTypeString(ShaderType::Compute)
+                << "shader AtomicCounterBuffers count exceeds limit";
+        return false;
+    }
+    if (geometryShaderACBCount > caps.maxShaderAtomicCounterBuffers[ShaderType::Geometry])
+    {
+        infoLog << GetShaderTypeString(ShaderType::Geometry)
+                << " shader AtomicCounterBuffers count exceeds limit";
+        return false;
+    }
+    if (combinedShaderACBCount > caps.maxCombinedAtomicCounterBuffers)
+    {
+        infoLog << "combined AtomicCounterBuffers count exceeds limit";
+        return false;
+    }
 
     return true;
 }
