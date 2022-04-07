@@ -599,27 +599,29 @@ void ProgramExecutableVk::addImageDescriptorSetDesc(const gl::ProgramExecutable 
 
     for (uint32_t imageIndex = 0; imageIndex < imageBindings.size(); ++imageIndex)
     {
-        const gl::ImageBinding &imageBinding = imageBindings[imageIndex];
-        uint32_t uniformIndex                = executable.getUniformIndexFromImageIndex(imageIndex);
+        uint32_t uniformIndex = executable.getUniformIndexFromImageIndex(imageIndex);
         const gl::LinkedUniform &imageUniform = uniforms[uniformIndex];
-
-        std::string imageName = GlslangGetMappedSamplerName(imageUniform.name);
-
-        // The front-end always binds array image units sequentially.
-        uint32_t arraySize = static_cast<uint32_t>(imageBinding.boundImageUnits.size());
 
         // 2D arrays are split into multiple 1D arrays when generating LinkedUniforms. Since they
         // are flattened into one array, ignore the nonzero elements and expand the array to the
         // total array size.
-        if (gl::SamplerNameContainsNonZeroArrayElement(imageUniform.name))
+        if (imageUniform.outerArrayOffset > 0)
         {
+            ASSERT(gl::SamplerNameContainsNonZeroArrayElement(imageUniform.name));
             continue;
         }
 
+        ASSERT(!gl::SamplerNameContainsNonZeroArrayElement(imageUniform.name));
+
+        // The front-end always binds array image units sequentially.
+        const gl::ImageBinding &imageBinding = imageBindings[imageIndex];
+        uint32_t arraySize = static_cast<uint32_t>(imageBinding.boundImageUnits.size());
         for (unsigned int outerArraySize : imageUniform.outerArraySizes)
         {
             arraySize *= outerArraySize;
         }
+
+        std::string imageName = GlslangGetMappedSamplerName(imageUniform.name);
 
         for (gl::ShaderType shaderType : executable.getLinkedShaderStages())
         {
@@ -628,7 +630,6 @@ void ProgramExecutableVk::addImageDescriptorSetDesc(const gl::ProgramExecutable 
                 continue;
             }
 
-            GetImageNameWithoutIndices(&imageName);
             const ShaderInterfaceVariableInfo &info = mVariableInfoMap.get(shaderType, imageName);
             if (info.isDuplicate)
             {
@@ -693,24 +694,23 @@ angle::Result ProgramExecutableVk::addTextureDescriptorSetDesc(
 
     for (uint32_t textureIndex = 0; textureIndex < samplerBindings.size(); ++textureIndex)
     {
-        const gl::SamplerBinding &samplerBinding = samplerBindings[textureIndex];
-
         uint32_t uniformIndex = executable.getUniformIndexFromSamplerIndex(textureIndex);
         const gl::LinkedUniform &samplerUniform = uniforms[uniformIndex];
-
-        const std::string samplerName = GlslangGetMappedSamplerName(samplerUniform.name);
-
-        // The front-end always binds array sampler units sequentially.
-        uint32_t arraySize = static_cast<uint32_t>(samplerBinding.boundTextureUnits.size());
 
         // 2D arrays are split into multiple 1D arrays when generating LinkedUniforms. Since they
         // are flattened into one array, ignore the nonzero elements and expand the array to the
         // total array size.
-        if (gl::SamplerNameContainsNonZeroArrayElement(samplerUniform.name))
+        if (samplerUniform.outerArrayOffset > 0)
         {
+            ASSERT(gl::SamplerNameContainsNonZeroArrayElement(samplerUniform.name));
             continue;
         }
 
+        ASSERT(!gl::SamplerNameContainsNonZeroArrayElement(samplerUniform.name));
+
+        // The front-end always binds array sampler units sequentially.
+        const gl::SamplerBinding &samplerBinding = samplerBindings[textureIndex];
+        uint32_t arraySize = static_cast<uint32_t>(samplerBinding.boundTextureUnits.size());
         for (unsigned int outerArraySize : samplerUniform.outerArraySizes)
         {
             arraySize *= outerArraySize;
@@ -723,7 +723,8 @@ angle::Result ProgramExecutableVk::addTextureDescriptorSetDesc(
                 continue;
             }
 
-            const ShaderInterfaceVariableInfo &info = mVariableInfoMap.get(shaderType, samplerName);
+            const ShaderInterfaceVariableInfo &info =
+                mVariableInfoMap.getTextureInfo(executable, shaderType, textureIndex);
             if (info.isDuplicate)
             {
                 continue;
@@ -1462,8 +1463,6 @@ angle::Result ProgramExecutableVk::updateImagesDescriptorSet(
 
         std::string mappedImageName = GlslangGetMappedSamplerName(imageUniform.name);
 
-        GetImageNameWithoutIndices(&mappedImageName);
-
         uint32_t arrayOffset = 0;
         uint32_t arraySize   = static_cast<uint32_t>(imageBinding.boundImageUnits.size());
 
@@ -1799,16 +1798,14 @@ angle::Result ProgramExecutableVk::updateTexturesDescriptorSet(
             const gl::SamplerBinding &samplerBinding = samplerBindings[textureIndex];
             uint32_t uniformIndex = executable.getUniformIndexFromSamplerIndex(textureIndex);
             const gl::LinkedUniform &samplerUniform = executable.getUniforms()[uniformIndex];
-            std::string mappedSamplerName = GlslangGetMappedSamplerName(samplerUniform.name);
 
             if (!samplerUniform.isActive(shaderType))
             {
                 continue;
             }
 
-            const std::string samplerName = GlslangGetMappedSamplerName(samplerUniform.name);
-
-            const ShaderInterfaceVariableInfo &info = mVariableInfoMap.get(shaderType, samplerName);
+            const ShaderInterfaceVariableInfo &info =
+                mVariableInfoMap.getTextureInfo(executable, shaderType, textureIndex);
             if (info.isDuplicate)
             {
                 continue;
@@ -1835,13 +1832,8 @@ angle::Result ProgramExecutableVk::updateTexturesDescriptorSet(
             }
             ASSERT(descriptorSet != VK_NULL_HANDLE);
 
-            uint32_t arrayOffset = 0;
+            uint32_t arrayOffset = samplerUniform.outerArrayOffset;
             uint32_t arraySize   = static_cast<uint32_t>(samplerBinding.boundTextureUnits.size());
-
-            arrayOffset = mappedSamplerNameToArrayOffset[mappedSamplerName];
-            // Front-end generates array elements in order, so we can just increment the offset each
-            // time we process a nested array.
-            mappedSamplerNameToArrayOffset[mappedSamplerName] += arraySize;
 
             VkWriteDescriptorSet *writeInfos = updateBuilder->allocWriteDescriptorSets(arraySize);
 
