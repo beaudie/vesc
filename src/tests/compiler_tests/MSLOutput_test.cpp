@@ -627,3 +627,46 @@ TEST_F(MSLOutputTest, AnonymousStruct)
     // When WebKit build is able to run the tests, this should be changed to something else.
     //    ASSERT_TRUE(foundInCode(SH_MSL_METAL_OUTPUT, "__unnamed"));
 }
+
+TEST_F(MSLOutputTest, MonomorphizeForAndContinue)
+{
+    // Source:
+    // https://gkjohnson.github.io/three-gpu-pathtracer/example/bundle/materialBall.html#transmission
+    // Issue: A while loop's expression, and a branch condition with eOpContinue were being deep
+    // copied as part of
+    // monomorphize functions, causing a crash, as they were not null-checked.
+    const std::string &shaderString =
+        R"(#version 300 es
+        
+        precision mediump float;
+        out vec4 fragOut;
+        struct aParam
+        {
+            sampler2D sampler;
+        };
+        uniform aParam theParam;
+
+        float monomorphizedFunction(aParam a)
+        {
+            int i = 0;
+            vec4 j = vec4(0);
+            for(;;)
+            {
+                if(i++ < 10)
+                {
+                    j += texture(a.sampler, vec2(0.0f,0.0f));
+                    continue;
+                }
+                break;
+            }
+            return j.a;
+        }
+        void main()
+        {
+            fragOut.a = monomorphizedFunction(theParam);
+        }
+
+        
+)";
+    compile(shaderString, SH_VARIABLES);
+}
