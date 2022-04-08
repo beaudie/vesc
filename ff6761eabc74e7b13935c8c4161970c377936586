@@ -1,0 +1,182 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "7f5c548f_94f65e0f",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2022-04-08T18:09:08Z",
+      "side": 1,
+      "message": "The change is still a bit scary to me. My preference is still further break into two CLs, tackle obvious ones first and more complicated ones in another CL. That way easier to review and easier to roll back in case of emergency. ",
+      "revId": "ff6761eabc74e7b13935c8c4161970c377936586",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "173eeb44_4157d2ff",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 1226,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2022-04-08T18:09:08Z",
+      "side": 1,
+      "message": "I think at this time, mRenderPassCommands might still invalid. I think the RP wont be start until some dirty bit gets processed bellow at line 1259 to 1264 bellow. I am not exactly sure if that will be a problem (especially when async submission is enabled where we may get different mRenderPassCommands), just feeling a bit uneasy here.",
+      "range": {
+        "startLine": 1226,
+        "startChar": 0,
+        "endLine": 1226,
+        "endChar": 89
+      },
+      "revId": "ff6761eabc74e7b13935c8c4161970c377936586",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "5e1efe1d_99adf83c",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 1984,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2022-04-08T18:09:08Z",
+      "side": 1,
+      "message": "I think you can just uses commandBufferHelper-\u003egetResourceUseList() instead of pass in the list.",
+      "range": {
+        "startLine": 1984,
+        "startChar": 25,
+        "endLine": 1984,
+        "endChar": 40
+      },
+      "revId": "ff6761eabc74e7b13935c8c4161970c377936586",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "bb9b461e_0dfd7833",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 2133,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2022-04-08T18:09:08Z",
+      "side": 1,
+      "message": "Same thing. Instead of pass in you can just get list from commandBufferHelper.",
+      "range": {
+        "startLine": 2133,
+        "startChar": 77,
+        "endLine": 2133,
+        "endChar": 92
+      },
+      "revId": "ff6761eabc74e7b13935c8c4161970c377936586",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "d8712234_31bffd10",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 5761,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2022-04-08T18:09:08Z",
+      "side": 1,
+      "message": "I guess the reason you pass in the list here is because this function can be called by compute or graphics, and they use different command buffers. Instead of pass the list around, you can check pipelineType and add to different list based on pipelineType, and reduce the amount of diff quit a bit.",
+      "range": {
+        "startLine": 5761,
+        "startChar": 80,
+        "endLine": 5761,
+        "endChar": 95
+      },
+      "revId": "ff6761eabc74e7b13935c8c4161970c377936586",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "fd1d5f1e_7039b544",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 6113,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2022-04-08T18:09:08Z",
+      "side": 1,
+      "message": "This really doesn\u0027t matter which list to add into since they are going to be submitted and all tagged with same queueSerial. My suggestion is you dont need to pass resourceUseList into releaseInFlightBuffersToResourceUseList, but in the releaseInFlightBuffersToResourceUseList, you directly add into shareGroup\u0027s resource list.",
+      "range": {
+        "startLine": 6113,
+        "startChar": 0,
+        "endLine": 6113,
+        "endChar": 92
+      },
+      "revId": "ff6761eabc74e7b13935c8c4161970c377936586",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "16f95df4_60cc3c51",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 6968,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2022-04-08T18:09:08Z",
+      "side": 1,
+      "message": "I am not sure why this is added (and all other semaphire related changes)?",
+      "range": {
+        "startLine": 6960,
+        "startChar": 5,
+        "endLine": 6968,
+        "endChar": 5
+      },
+      "revId": "ff6761eabc74e7b13935c8c4161970c377936586",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "5da17b64_cc2fee2e",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 2635,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2022-04-08T18:09:08Z",
+      "side": 1,
+      "message": "I think you can just directly add into one of the shareGroup\u0027s list.",
+      "range": {
+        "startLine": 2635,
+        "startChar": 38,
+        "endLine": 2635,
+        "endChar": 53
+      },
+      "revId": "ff6761eabc74e7b13935c8c4161970c377936586",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
