@@ -300,6 +300,30 @@
       },
       "revId": "2cc09c665d72a903c076b20789ba355949169253",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "db73174b_7f8cb135",
+        "filename": "src/libANGLE/renderer/vulkan/SurfaceVk.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 1070,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-04-08T18:44:28Z",
+      "side": 1,
+      "message": "Is there at all any difference with the behavior of EGL_SINGLE_BUFFER between eglCreateWindowsSurface and EGL_KGR_mutable_render_buffer? Without having studied the spec, my guess is that it\u0027s the same thing, so VK_PRESENT_MODE_SHARED_DEMAND_REFRESH_KHR for both cases sounds right.",
+      "parentUuid": "1274f320_941bd816",
+      "range": {
+        "startLine": 1065,
+        "startChar": 0,
+        "endLine": 1070,
+        "endChar": 5
+      },
+      "revId": "2cc09c665d72a903c076b20789ba355949169253",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
