@@ -1,0 +1,151 @@
+{
+    "description": [
+        "Copyright 2022 The ANGLE Project Authors. All rights reserved.",
+        "Use of this source code is governed by a BSD-style license that can be",
+        "found in the LICENSE file.",
+        "",
+        "frontend_features.json: Features/workarounds for driver bugs and other behaviors seen",
+        "on all platforms."
+    ],
+    "features": [
+        {
+            "comment": [
+                "Force the context to be lost (via KHR_robustness) if a GL_OUT_OF_MEMORY error occurs. The",
+                "driver may be in an inconsistent state if this happens, and some users of ANGLE rely on this",
+                "notification to prevent further execution."
+            ],
+            "name": "loseContextOnOutOfMemory",
+            "display_name": "lose_context_on_out_of_memory",
+            "category": "FrontendWorkarounds",
+            "description": [
+                "Some users rely on a lost context notification if a GL_OUT_OF_MEMORY error occurs"
+            ],
+            "bug": "None"
+        },
+
+        {
+            "comment": [
+                "Program binaries don't contain transform feedback varyings on Qualcomm GPUs.",
+                "Work around this by disabling the program cache for programs with transform feedback."
+            ],
+            "name": "disableProgramCachingForTransformFeedback",
+            "display_name": "disable_program_caching_for_transform_feedback",
+            "category": "FrontendWorkarounds",
+            "description": [
+                "On some GPUs, program binaries don't contain transform feedback varyings"
+            ],
+            "bug": "None"
+        },
+
+        {
+            "name": "scalarizeVecAndMatConstructorArgs",
+            "display_name": "scalarize_vec_and_mat_constructor_args",
+            "category": "FrontendWorkarounds",
+            "description": [
+                "Always rewrite vec/mat constructors to be consistent"
+            ],
+            "bug": "http://crbug.com/1165751"
+        },
+
+        {
+            "comment": [
+                "Disable support for GL_OES_get_program_binary"
+            ],
+            "name": "disableProgramBinary",
+            "display_name": "disable_program_binary",
+            "category": "FrontendFeatures",
+            "description": [
+                "Disable support for GL_OES_get_program_binary"
+            ],
+            "bug": "http://anglebug.com/5007"
+        },
+
+        {
+            "comment": [
+                "Allow disabling of GL_EXT_texture_filter_anisotropic through a runtime feature for",
+                "performance comparisons."
+            ],
+            "name": "disableAnisotropicFiltering",
+            "display_name": "disable_anisotropic_filtering",
+            "category": "FrontendWorkarounds",
+            "description": [
+                "Disable support for anisotropic filtering"
+            ],
+            "bug": "None"
+        },
+
+        {
+            "comment": [
+                "We can use this feature to override compressed format support for portability."
+            ],
+            "name": "allowCompressedFormats",
+            "display_name": "allow_compressed_formats",
+            "category": "FrontendWorkarounds",
+            "description": [
+                "Allow compressed formats"
+            ],
+            "bug": "None"
+        },
+
+        {
+            "name": "captureLimits",
+            "display_name": "enable_capture_limits",
+            "category": "FrontendFeatures",
+            "description": [
+                "Set the context limits like frame capturing was enabled"
+            ],
+            "bug": "http://anglebug.com/5750"
+        },
+
+        {
+            "comment": [
+                "Whether we should compress pipeline cache in thread pool before it's stored in blob cache.",
+                "http://anglebug.com/4722"
+            ],
+            "name": "enableCompressingPipelineCacheInThreadPool",
+            "display_name": "enableCompressingPipelineCacheInThreadPool",
+            "category": "FrontendWorkarounds",
+            "description": [
+                "Enable compressing pipeline cache in thread pool."
+            ],
+            "bug": "http://anglebug.com/4722"
+        },
+
+        {
+            "comment": [
+                "Forces on robust resource init. Useful for some tests to avoid undefined values."
+            ],
+            "name": "forceRobustResourceInit",
+            "display_name": "forceRobustResourceInit",
+            "category": "FrontendFeatures",
+            "description": [
+                "Force-enable robust resource init"
+            ],
+            "bug": "http://anglebug.com/6041"
+        },
+
+        {
+            "comment": [
+                "Forces on shader variable init to avoid undefined values in tests. This feature is enabled",
+                "for WebGL and frame capture, which both require deterministic results."
+            ],
+            "name": "forceInitShaderVariables",
+            "display_name": "forceInitShaderVariables",
+            "category": "FrontendFeatures",
+            "description": [
+                "Force-enable shader variable initialization"
+            ],
+            "bug": "None"
+        },
+
+        {
+            "name": "enableProgramBinaryForCapture",
+            "display_name": "enableProgramBinaryForCapture",
+            "category": "FrontendFeatures",
+            "description": [
+                "Even if FrameCapture is enabled, enable GL_OES_get_program_binary"
+            ],
+            "bug": "http://anglebug.com/5658"
+        }
+    ]
+}

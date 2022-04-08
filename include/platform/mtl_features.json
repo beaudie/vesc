@@ -1,0 +1,303 @@
+{
+    "description": [
+        "Copyright 2022 The ANGLE Project Authors. All rights reserved.",
+        "Use of this source code is governed by a BSD-style license that can be",
+        "found in the LICENSE file.",
+        "",
+        "mtl_features.json: Optional features for the Metal renderer."
+    ],
+    "features": [
+        {
+            "comment": [
+                "BaseVertex/Instanced draw support:"
+            ],
+            "name": "hasBaseVertexInstancedDraw",
+            "display_name": "has_base_vertex_instanced_draw",
+            "category": "MetalFeatures",
+            "description": [
+                "The renderer supports base vertex instanced draw"
+            ],
+            "bug": "None"
+        },
+
+        {
+            "comment": [
+                "Support explicit memory barrier"
+            ],
+            "name": "hasExplicitMemBarrier",
+            "display_name": "has_explicit_mem_barrier_mtl",
+            "category": "MetalFeatures",
+            "description": [
+                "The renderer supports explicit memory barrier"
+            ],
+            "bug": "None"
+        },
+
+        {
+            "comment": [
+                "Some renderer can break render pass cheaply, i.e. desktop class GPUs."
+            ],
+            "name": "hasCheapRenderPass",
+            "display_name": "has_cheap_render_pass_mtl",
+            "category": "MetalFeatures",
+            "description": [
+                "The renderer can cheaply break a render pass."
+            ],
+            "bug": "None"
+        },
+
+        {
+            "comment": [
+                "Non-uniform compute shader dispatch support, i.e. Group size is not necessarily to be fixed:"
+            ],
+            "name": "hasNonUniformDispatch",
+            "display_name": "has_non_uniform_dispatch",
+            "category": "MetalFeatures",
+            "description": [
+                "The renderer supports non uniform compute shader dispatch's group size"
+            ],
+            "bug": "None"
+        },
+
+        {
+            "comment": [
+                "fragment stencil output support"
+            ],
+            "name": "hasStencilOutput",
+            "display_name": "has_shader_stencil_output",
+            "category": "MetalFeatures",
+            "description": [
+                "The renderer supports stencil output from fragment shader"
+            ],
+            "bug": "None"
+        },
+
+        {
+            "comment": [
+                "Texture swizzle support:"
+            ],
+            "name": "hasTextureSwizzle",
+            "display_name": "has_texture_swizzle",
+            "category": "MetalFeatures",
+            "description": [
+                "The renderer supports texture swizzle"
+            ],
+            "bug": "None"
+        },
+
+        {
+            "name": "hasDepthAutoResolve",
+            "display_name": "has_msaa_depth_auto_resolve",
+            "category": "MetalFeatures",
+            "description": [
+                "The renderer supports MSAA depth auto resolve at the end of render pass"
+            ],
+            "bug": "None"
+        },
+
+        {
+            "name": "hasStencilAutoResolve",
+            "display_name": "has_msaa_stencil_auto_resolve",
+            "category": "MetalFeatures",
+            "description": [
+                "The renderer supports MSAA stencil auto resolve at the end of render pass"
+            ],
+            "bug": "None"
+        },
+
+        {
+            "name": "hasEvents",
+            "display_name": "has_mtl_events",
+            "category": "MetalFeatures",
+            "description": [
+                "The renderer supports MTL(Shared)Event"
+            ],
+            "bug": "None"
+        },
+
+        {
+            "name": "allowInlineConstVertexData",
+            "display_name": "allow_inline_const_vertex_data",
+            "category": "MetalFeatures",
+            "description": [
+                "The renderer supports using inline constant data for small client vertex data"
+            ],
+            "bug": "None"
+        },
+
+        {
+            "comment": [
+                "On macos, separate depth & stencil buffers are not supproted. However, on iOS devices,",
+                "they are supproted:"
+            ],
+            "name": "allowSeparatedDepthStencilBuffers",
+            "display_name": "allow_separate_depth_stencil_buffers",
+            "category": "MetalFeatures",
+            "description": [
+                "Some Apple platforms such as iOS allows separate depth and stencil buffers, ",
+                "whereas others such as macOS don't"
+            ],
+            "bug": "None"
+        },
+
+        {
+            "name": "allowRuntimeSamplerCompareMode",
+            "display_name": "allow_runtime_sampler_compare_mode",
+            "category": "MetalFeatures",
+            "description": [
+                "The renderer supports changing sampler's compare mode outside shaders"
+            ],
+            "bug": "None"
+        },
+
+        {
+            "name": "allowSamplerCompareGradient",
+            "display_name": "allow_sampler_compare_gradient",
+            "category": "MetalFeatures",
+            "description": [
+                "The renderer supports sample_compare with gradients"
+            ],
+            "bug": "None"
+        },
+
+        {
+            "name": "allowSamplerCompareLod",
+            "display_name": "allow_sampler_compare_lod",
+            "category": "MetalFeatures",
+            "description": [
+                "The renderer supports sample_compare with lod"
+            ],
+            "bug": "None"
+        },
+
+        {
+            "name": "allowBufferReadWrite",
+            "display_name": "allow_buffer_read_write",
+            "category": "MetalFeatures",
+            "description": [
+                "The renderer supports buffer read and write in the same shader"
+            ],
+            "bug": "None"
+        },
+
+        {
+            "name": "allowMultisampleStoreAndResolve",
+            "display_name": "allow_msaa_store_and_resolve",
+            "category": "MetalFeatures",
+            "description": [
+                "The renderer supports MSAA store and resolve in the same pass"
+            ],
+            "bug": "None"
+        },
+
+        {
+            "name": "allowGenMultipleMipsPerPass",
+            "display_name": "gen_multiple_mips_per_pass",
+            "category": "MetalFeatures",
+            "description": [
+                "The renderer supports generating multiple mipmaps per pass"
+            ],
+            "bug": "None"
+        },
+
+        {
+            "name": "forceD24S8AsUnsupported",
+            "display_name": "force_d24s8_as_unsupported",
+            "category": "MetalFeatures",
+            "description": [
+                "Force Depth24Stencil8 format as unsupported."
+            ],
+            "bug": "None"
+        },
+
+        {
+            "name": "forceBufferGPUStorage",
+            "display_name": "force_buffer_gpu_storage",
+            "category": "MetalFeatures",
+            "description": [
+                "On systems that support both buffer' memory allocation on GPU and shared memory (such as ",
+                    "macOS), force using GPU memory allocation for buffers everytime or not."
+            ],
+            "bug": "None"
+        },
+
+        {
+            "comment": [
+                "Generate Metal directly instead of generating SPIR-V and then using SPIR-V Cross.  Transitory",
+                "feature until the work is complete."
+            ],
+            "name": "directMetalGeneration",
+            "display_name": "directMetalGeneration",
+            "category": "MetalFeatures",
+            "description": [
+                "Direct translation to Metal."
+            ],
+            "bug": "http://anglebug.com/5505"
+        },
+
+        {
+            "name": "forceNonCSBaseMipmapGeneration",
+            "display_name": "force_non_cs_mipmap_gen",
+            "category": "MetalFeatures",
+            "description": [
+                "Turn this feature on to disallow Compute Shader based mipmap generation. Compute Shader ",
+                "based mipmap generation might cause GPU hang on some older iOS devices."
+            ],
+            "bug": "None"
+        },
+
+        {
+            "name": "emulateTransformFeedback",
+            "display_name": "emulate_transform_feedback",
+            "category": "MetalFeatures",
+            "description": [
+                "Turn this on to allow transform feedback in Metal using a 2-pass VS for GLES3."
+            ],
+            "bug": "None"
+        },
+
+        {
+            "comment": [
+                "Rewrite row-major matrices as column-major"
+            ],
+            "name": "rewriteRowMajorMatrices",
+            "display_name": "rewrite_row_major_matrices",
+            "category": "MetalFeatures",
+            "description": [
+                "Rewrite row major matrices in shaders as column major."
+            ],
+            "bug": "None"
+        },
+
+        {
+            "name": "intelExplicitBoolCastWorkaround",
+            "display_name": "intel_explicit_bool_cast_workaround",
+            "category": "MetalWorkarounds",
+            "description": [
+                "Insert explicit casts for float/double/unsigned/signed int on macOS 10.15 with Intel ",
+                "driver"
+            ],
+            "bug": "None"
+        },
+
+        {
+            "name": "intelDisableFastMath",
+            "display_name": "intel_disable_fast_math",
+            "category": "MetalWorkarounds",
+            "description": [
+                "Disable fast math in atan and invariance cases when running below macOS 12.0"
+            ],
+            "bug": "None"
+        },
+
+        {
+            "name": "multisampleColorFormatShaderReadWorkaround",
+            "display_name": "multisample_color_format_shader_read_workaround",
+            "category": "MetalWorkarounds",
+            "description": [
+                "Add shaderRead usage to some multisampled texture formats"
+            ],
+            "bug": "http://anglebug.com/7049"
+        }
+    ]
+}
