@@ -178,7 +178,7 @@ ShaderInterfaceVariableInfo *SetXfbInfo(ShaderInterfaceVariableInfoMap *infoMap,
                                         uint32_t arrayIndex,
                                         GLenum componentType)
 {
-    ShaderInterfaceVariableInfo &info   = infoMap->get(shaderType, varName);
+    ShaderInterfaceVariableInfo &info   = infoMap->getVaryingMutable(shaderType, varName);
     ShaderInterfaceVariableXfbInfo *xfb = &info.xfb;
 
     if (fieldIndex >= 0)
@@ -734,9 +734,9 @@ void AddAndUpdateResourceMaps(const gl::ShaderType shaderType,
             variableInfoMapOut->markAsDuplicate(shaderType, name);
         }
     }
-    ShaderInterfaceVariableInfo &info =
-        variableInfoMapOut->get(uniformBindingInfo.frontShaderType, name);
-    info.activeStages = uniformBindingInfo.shaderBitSet;
+
+    variableInfoMapOut->setActiveStages(uniformBindingInfo.frontShaderType, name,
+                                        uniformBindingInfo.shaderBitSet);
 }
 
 void AssignInputAttachmentBindings(const GlslangSourceOptions &options,

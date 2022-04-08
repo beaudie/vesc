@@ -41,11 +41,21 @@ const ShaderInterfaceVariableInfo &ShaderInterfaceVariableInfoMap::get(
     return it->second;
 }
 
-ShaderInterfaceVariableInfo &ShaderInterfaceVariableInfoMap::get(gl::ShaderType shaderType,
-                                                                 const std::string &variableName)
+void ShaderInterfaceVariableInfoMap::setActiveStages(gl::ShaderType shaderType,
+                                                     const std::string &variableName,
+                                                     gl::ShaderBitSet activeStages)
 {
     auto it = mData[shaderType].find(variableName);
     ASSERT(it != mData[shaderType].end());
+    it->second.activeStages = activeStages;
+}
+
+ShaderInterfaceVariableInfo &ShaderInterfaceVariableInfoMap::getVaryingMutable(
+    gl::ShaderType frontShaderType,
+    const std::string &varyingName)
+{
+    auto it = mData[frontShaderType].find(varyingName);
+    ASSERT(it != mData[frontShaderType].end());
     return it->second;
 }
 
