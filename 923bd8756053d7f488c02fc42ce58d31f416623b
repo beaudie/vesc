@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "d15783a6_280c2175",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1115588
+      },
+      "writtenOn": "2022-04-08T18:56:49Z",
+      "side": 1,
+      "message": "I wasn\u0027t sure whether to replace the old optimization with this one or have both. This one is not as flexible (can\u0027t copy in multiple directions). I actually tried writing a flexible one (src +\u003d xWidthPitch, dst +\u003d pixelBytes) but it was 3ms slower on a release build",
+      "revId": "923bd8756053d7f488c02fc42ce58d31f416623b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
