@@ -382,6 +382,24 @@ void PackPixels(const PackPixelsParams &params,
         return;
     }
 
+    if (params.rotation == SurfaceRotation::Identity)
+    {
+        RowCopyFunction rowCopyFunc =
+            sourceFormat.fastCopyFunctions.getRowCopyFunction(params.destFormat->id);
+
+        if (rowCopyFunc)
+        {
+            for (int y = 0; y < destHeight; ++y)
+            {
+                uint8_t *dest      = destWithOffset + y * params.outputPitch;
+                const uint8_t *src = source + y * yAxisPitch;
+
+                rowCopyFunc(src, dest, destWidth);
+            }
+            return;
+        }
+    }
+
     PixelCopyFunction fastCopyFunc = sourceFormat.fastCopyFunctions.get(params.destFormat->id);
 
     if (fastCopyFunc)
@@ -435,17 +453,38 @@ bool FastCopyFunctionMap::has(angle::FormatID formatID) const
     return (get(formatID) != nullptr);
 }
 
-PixelCopyFunction FastCopyFunctionMap::get(angle::FormatID formatID) const
+namespace
 {
-    for (size_t index = 0; index < mSize; ++index)
+
+const FastCopyFunctionMap::Entry *getEntry(const FastCopyFunctionMap::Entry *entry,
+                                           size_t numEntries,
+                                           angle::FormatID formatID)
+{
+    const FastCopyFunctionMap::Entry *end = entry + numEntries;
+    while (entry != end)
     {
-        if (mData[index].formatID == formatID)
+        if (entry->formatID == formatID)
         {
-            return mData[index].func;
+            return entry;
         }
+        ++entry;
     }
 
     return nullptr;
+}
+
+}  // namespace
+
+PixelCopyFunction FastCopyFunctionMap::get(angle::FormatID formatID) const
+{
+    const FastCopyFunctionMap::Entry *entry = getEntry(mData, mSize, formatID);
+    return entry ? entry->func : nullptr;
+}
+
+RowCopyFunction FastCopyFunctionMap::getRowCopyFunction(angle::FormatID formatID) const
+{
+    const FastCopyFunctionMap::Entry *entry = getEntry(mData, mSize, formatID);
+    return entry ? entry->rowFunc : nullptr;
 }
 
 bool ShouldUseDebugLayers(const egl::AttributeMap &attribs)

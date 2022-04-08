@@ -31,6 +31,7 @@ template <typename DestType>
 void WriteDepthStencil(const uint8_t *source, uint8_t *dest);
 
 void CopyBGRA8ToRGBA8(const uint8_t *source, uint8_t *dest);
+void CopyRowBGRA8ToRGBA8(const uint8_t *source, uint8_t *dest, int destWidth);
 
 }  // namespace angle
 
