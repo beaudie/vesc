@@ -186,7 +186,8 @@ std::string DynamicHLSL::generateVertexShaderForInputLayout(
     const std::string &sourceShader,
     const InputLayout &inputLayout,
     const std::vector<sh::ShaderVariable> &shaderAttributes,
-    const std::vector<D3DShaderStorageBlock> &shaderStorageBlocks) const
+    const std::vector<D3DShaderStorageBlock> &shaderStorageBlocks,
+    size_t baseUAVRegister) const
 {
     std::ostringstream structStream;
     std::ostringstream initStream;
@@ -311,7 +312,7 @@ std::string DynamicHLSL::generateVertexShaderForInputLayout(
         angle::ReplaceSubstring(&vertexHLSL, VERTEX_ATTRIBUTE_STUB_STRING, structStream.str());
     ASSERT(success);
 
-    success = ReplaceShaderStorageDeclaration(shaderStorageBlocks, &vertexHLSL, inputLayout.size(),
+    success = ReplaceShaderStorageDeclaration(shaderStorageBlocks, &vertexHLSL, baseUAVRegister,
                                               gl::ShaderType::Vertex);
     ASSERT(success);
 

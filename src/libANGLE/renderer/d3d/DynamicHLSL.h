@@ -150,7 +150,8 @@ class DynamicHLSL : angle::NonCopyable
         const std::string &sourceShader,
         const gl::InputLayout &inputLayout,
         const std::vector<sh::ShaderVariable> &shaderAttributes,
-        const std::vector<rx::D3DShaderStorageBlock> &shaderStorageBlocks) const;
+        const std::vector<rx::D3DShaderStorageBlock> &shaderStorageBlocks,
+        size_t baseUAVRegister) const;
     std::string generatePixelShaderForOutputSignature(
         const std::string &sourceShader,
         const std::vector<PixelShaderOutputVariable> &outputVariables,
