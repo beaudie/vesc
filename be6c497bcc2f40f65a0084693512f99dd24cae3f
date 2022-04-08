@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "3c78b97e_a4c4f5b3",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-04-08T01:31:39Z",
+      "side": 1,
+      "message": "Please separate the title from the body of the message with a blank line. Make the title descriptive of the issue, like:\n\n\u003e Translator: Fix crashes with monomorphizing loop/branch\n\nAnd wrap the description to 72 characters.\n\nCommon git conventions: https://cbea.ms/git-commit/#seven-rules",
+      "revId": "be6c497bcc2f40f65a0084693512f99dd24cae3f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "4d255905_c355ec52",
+        "filename": "src/tests/compiler_tests/MSLOutput_test.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 637,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-04-08T01:31:39Z",
+      "side": 1,
+      "message": "Please minimize this test. You can take any test where a function is monomorphized,  then add a `break;` or `for (;;;)` in it, it would be a much simpler test.\n\nYou can also add one test for each situation (one for branch, one for `for` expressions, one for empty loop body etc) in GLSLTests.cpp so it gets checked on every backend.",
+      "revId": "be6c497bcc2f40f65a0084693512f99dd24cae3f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
