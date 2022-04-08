@@ -382,7 +382,11 @@ class ProgramD3D : public ProgramImpl
             SIGNED_INT,
         };
 
-        typedef std::vector<HLSLAttribType> Signature;
+        struct Signature
+        {
+            std::vector<HLSLAttribType> inputTypes;
+            size_t numPixelShaderOutputs;  // only valid if vert has SSBOs, otherwise zero
+        };
 
         VertexExecutable(const gl::InputLayout &inputLayout,
                          const Signature &signature,
@@ -392,6 +396,7 @@ class ProgramD3D : public ProgramImpl
         bool matchesSignature(const Signature &signature) const;
         static void getSignature(RendererD3D *renderer,
                                  const gl::InputLayout &inputLayout,
+                                 size_t numPixelShaderOutputs,
                                  Signature *signatureOut);
 
         const gl::InputLayout &inputs() const { return mInputs; }

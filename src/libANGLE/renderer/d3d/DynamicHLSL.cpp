@@ -308,7 +308,7 @@ std::string DynamicHLSL::generateVertexShaderForInputLayout(
         angle::ReplaceSubstring(&vertexHLSL, VERTEX_ATTRIBUTE_STUB_STRING, structStream.str());
     ASSERT(success);
 
-    success = ReplaceShaderStorageDeclaration(shaderStorageBlocks, &vertexHLSL, inputLayout.size(),
+    success = ReplaceShaderStorageDeclaration(shaderStorageBlocks, &vertexHLSL, baseUAVRegister,
                                               gl::ShaderType::Vertex);
     ASSERT(success);
 

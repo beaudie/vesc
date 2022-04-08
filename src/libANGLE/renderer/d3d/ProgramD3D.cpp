@@ -622,9 +622,10 @@ ProgramD3D::VertexExecutable::HLSLAttribType ProgramD3D::VertexExecutable::GetAt
 // static
 void ProgramD3D::VertexExecutable::getSignature(RendererD3D *renderer,
                                                 const gl::InputLayout &inputLayout,
+                                                size_t numPixelShaderOutputs,
                                                 Signature *signatureOut)
 {
-    signatureOut->assign(inputLayout.size(), HLSLAttribType::FLOAT);
+    signatureOut->inputTypes.assign(inputLayout.size(), HLSLAttribType::FLOAT);
 
     for (size_t index = 0; index < inputLayout.size(); ++index)
     {
@@ -636,23 +637,30 @@ void ProgramD3D::VertexExecutable::getSignature(RendererD3D *renderer,
         if ((conversionType & VERTEX_CONVERT_GPU) == 0)
             continue;
 
-        GLenum componentType   = renderer->getVertexComponentType(vertexFormatID);
-        (*signatureOut)[index] = GetAttribType(componentType);
+        GLenum componentType            = renderer->getVertexComponentType(vertexFormatID);
+        signatureOut->inputTypes[index] = GetAttribType(componentType);
     }
+    bool hasSSBOs                       = true;  // FIXME
+    signatureOut->numPixelShaderOutputs = hasSSBOs ? numPixelShaderOutputs : 0;
 }
 
 bool ProgramD3D::VertexExecutable::matchesSignature(const Signature &signature) const
 {
-    size_t limit = std::max(mSignature.size(), signature.size());
+    if (mSignature.numPixelShaderOutputs != signature.numPixelShaderOutputs)
+    {
+        return false;
+    }
+    size_t limit = std::max(mSignature.inputTypes.size(), signature.inputTypes.size());
     for (size_t index = 0; index < limit; ++index)
     {
         // treat undefined indexes as FLOAT
-        auto a = index < signature.size() ? signature[index] : HLSLAttribType::FLOAT;
-        auto b = index < mSignature.size() ? mSignature[index] : HLSLAttribType::FLOAT;
+        auto a = index < signature.inputTypes.size() ? signature.inputTypes[index]
+                                                     : HLSLAttribType::FLOAT;
+        auto b = index < mSignature.inputTypes.size() ? mSignature.inputTypes[index]
+                                                      : HLSLAttribType::FLOAT;
         if (a != b)
             return false;
     }
-
     return true;
 }
 
@@ -1185,7 +1193,8 @@ angle::Result ProgramD3D::loadBinaryShaderExecutables(d3d::Context *contextD3D,
 
         // generated converted input layout
         VertexExecutable::Signature signature;
-        VertexExecutable::getSignature(mRenderer, inputLayout, &signature);
+        VertexExecutable::getSignature(mRenderer, inputLayout, getNumPixelShaderOutputs(),
+                                       &signature);
 
         // add new binary
         mVertexExecutables.push_back(std::unique_ptr<VertexExecutable>(
@@ -1701,7 +1710,8 @@ void ProgramD3D::updateCachedInputLayoutFromShader()
 {
     GetDefaultInputLayoutFromShader(mState.getAttachedShader(gl::ShaderType::Vertex),
                                     &mCachedInputLayout);
-    VertexExecutable::getSignature(mRenderer, mCachedInputLayout, &mCachedVertexSignature);
+    VertexExecutable::getSignature(mRenderer, mCachedInputLayout, getNumPixelShaderOutputs(),
+                                   &mCachedVertexSignature);
     updateCachedVertexExecutableIndex();
 }
 
@@ -3156,7 +3166,8 @@ void ProgramD3D::updateCachedInputLayout(Serial associatedSerial, const gl::Stat
         }
     }
 
-    VertexExecutable::getSignature(mRenderer, mCachedInputLayout, &mCachedVertexSignature);
+    VertexExecutable::getSignature(mRenderer, mCachedInputLayout, getNumPixelShaderOutputs(),
+                                   &mCachedVertexSignature);
 
     updateCachedVertexExecutableIndex();
 }
