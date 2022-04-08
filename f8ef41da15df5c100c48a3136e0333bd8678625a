@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "82330946_5cbdd8dc",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 2931,
+      "author": {
+        "id": 1520902
+      },
+      "writtenOn": "2022-04-08T22:08:13Z",
+      "side": 1,
+      "message": "did you intend to write !block-\u003eisEmpty() here?",
+      "revId": "f8ef41da15df5c100c48a3136e0333bd8678625a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
