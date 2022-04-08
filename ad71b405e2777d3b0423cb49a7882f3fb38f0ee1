@@ -67,6 +67,23 @@
       "message": "@Shahbaz, See my latest comment. Help pick which modes to use.",
       "revId": "ad71b405e2777d3b0423cb49a7882f3fb38f0ee1",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "a40406c9_ed9ef832",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 7
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1359249
+      },
+      "writtenOn": "2022-04-08T22:22:42Z",
+      "side": 1,
+      "message": "What I see is that to get to VK_PRESENT_MODE_IMMEDIATE_KHR, is only via setSwapInterval to 0. So I really can\u0027t tell if that works.\n\nI\u0027m trying to upload the next patch - delayed.",
+      "revId": "ad71b405e2777d3b0423cb49a7882f3fb38f0ee1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
