@@ -41,11 +41,12 @@ const ShaderInterfaceVariableInfo &ShaderInterfaceVariableInfoMap::get(
     return it->second;
 }
 
-ShaderInterfaceVariableInfo &ShaderInterfaceVariableInfoMap::get(gl::ShaderType shaderType,
-                                                                 const std::string &variableName)
+ShaderInterfaceVariableInfo &ShaderInterfaceVariableInfoMap::getVaryingMutable(
+    gl::ShaderType frontShaderType,
+    const std::string &varyingName)
 {
-    auto it = mData[shaderType].find(variableName);
-    ASSERT(it != mData[shaderType].end());
+    auto it = mData[frontShaderType].find(varyingName);
+    ASSERT(it != mData[frontShaderType].end());
     return it->second;
 }
 
