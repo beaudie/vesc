@@ -324,6 +324,30 @@
       },
       "revId": "2cc09c665d72a903c076b20789ba355949169253",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "68f5abab_6a6cdc16",
+        "filename": "src/libANGLE/renderer/vulkan/SurfaceVk.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 1070,
+      "author": {
+        "id": 1359249
+      },
+      "writtenOn": "2022-04-08T20:39:36Z",
+      "side": 1,
+      "message": "KHR_mutable_render_buffer text:\n\n    \"This extension does not guarantee when rendering results appear on-screen.\n    To avoid incorrect results, applications will need to use mechanisms not\n    included in this extension to synchronize rendering with the display.\"\n\nSo we found that an application was using a glFlush or glFinish to cause the screen to update - so We added a swapBuffers() to trigger the queueBuffer(). So we used VK_PRESENT_MODE_SHARED_DEMAND_REFRESH_KHR. Triggered by glFlush.\n\n\neglCreateWindowSurface with EGL_SINGLE_BUFFER, spec says very little. Other than it expects display and GLES to be sharing the same buffer - old school. Which sounds like Vulkan VkPresentMode: VK_PRESENT_MODE_IMMEDIATE_KHR or VK_PRESENT_MODE_SHARED_CONTINUOUS_REFRESH_KHR. The second I don\u0027t think is well supported, and the first, I\u0027m not sure if its fully implemented in ANGLE - that is, if we use that mode, is it updating every screen scan? Do you know?\n\nIf IMMEDIATE mode is fully implemented in ANGLE, then I think I should use that.\nSorry I didn\u0027t catch this earlier.",
+      "parentUuid": "db73174b_7f8cb135",
+      "range": {
+        "startLine": 1065,
+        "startChar": 0,
+        "endLine": 1070,
+        "endChar": 5
+      },
+      "revId": "2cc09c665d72a903c076b20789ba355949169253",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
