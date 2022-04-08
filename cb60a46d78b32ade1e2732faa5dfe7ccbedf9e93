@@ -110,6 +110,30 @@
       },
       "revId": "cb60a46d78b32ade1e2732faa5dfe7ccbedf9e93",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "ed5656e9_c2625be5",
+        "filename": "src/libANGLE/renderer/d3d/ProgramD3D.cpp",
+        "patchSetId": 26
+      },
+      "lineNbr": 1545,
+      "author": {
+        "id": 1116015
+      },
+      "writtenOn": "2022-04-08T16:23:37Z",
+      "side": 1,
+      "message": "OK, rewritten to stash the interface block name and array size in the (new) D3DStoageBufferBlock, and added a test that detaches the shaders and changes the PS output size with a call to glDrawBuffers().",
+      "parentUuid": "ce35ffe7_d3f3ef3a",
+      "range": {
+        "startLine": 1545,
+        "startChar": 32,
+        "endLine": 1545,
+        "endChar": 49
+      },
+      "revId": "cb60a46d78b32ade1e2732faa5dfe7ccbedf9e93",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
