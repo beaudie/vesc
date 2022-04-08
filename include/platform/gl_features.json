@@ -1,0 +1,1086 @@
+{
+    "description": [
+        "Copyright 2022 The ANGLE Project Authors. All rights reserved.",
+        "Use of this source code is governed by a BSD-style license that can be",
+        "found in the LICENSE file.",
+        "",
+        "gl_features.json: angle::Features and workarounds for GL driver bugs and other issues."
+    ],
+    "features": [
+        {
+            "comment": [
+                "When writing a float to a normalized integer framebuffer, desktop OpenGL is",
+                "allowed to write one of the two closest normalized integer representations",
+                "(although round to nearest is preferred) (see section 2.3.5.2 of the GL 4.5 core",
+                "specification). OpenGL ES requires that round-to-nearest is used (see",
+                "'Conversion from Floating-Point to Framebuffer Fixed-Point' in section 2.1.2",
+                "of the OpenGL ES 2.0.25 spec).  This issue only shows up on AMD drivers on",
+                "framebuffer formats that have 1-bit alpha, work around this by using higher",
+                "precision formats instead."
+            ],
+            "name": "avoid1BitAlphaTextureFormats",
+            "display_name": "avoid_1_bit_alpha_texture_formats",
+            "category": "OpenGLWorkarounds",
+            "description": [
+                "Issue with 1-bit alpha framebuffer formats"
+            ]
+        },
+
+        {
+            "comment": [
+                "On some older Intel drivers, GL_RGBA4 is not color renderable,",
+                "glCheckFramebufferStatus returns GL_FRAMEBUFFER_UNSUPPORTED. Work around this by",
+                "using a known color-renderable format."
+            ],
+            "name": "rgba4IsNotSupportedForColorRendering",
+            "display_name": "rgba4_is_not_supported_for_color_rendering",
+            "category": "OpenGLWorkarounds",
+            "description": [
+                "GL_RGBA4 is not color renderable"
+            ]
+        },
+
+        {
+            "comment": [
+                "Newer Intel GPUs natively support ETC2/EAC compressed texture formats."
+            ],
+            "name": "allowEtcFormats",
+            "display_name": "allow_etc_formats",
+            "category": "OpenGLWorkarounds",
+            "description": [
+                "Enable ETC2/EAC on desktop OpenGL"
+            ]
+        },
+
+        {
+            "comment": [
+                "When clearing a framebuffer on Intel or AMD drivers, when GL_FRAMEBUFFER_SRGB is",
+                "enabled, the driver clears to the linearized clear color despite the framebuffer",
+                "not supporting SRGB blending.  It only seems to do this when the framebuffer has",
+                "only linear attachments, mixed attachments appear to get the correct clear color."
+            ],
+            "name": "doesSRGBClearsOnLinearFramebufferAttachments",
+            "display_name": "does_srgb_clears_on_linear_framebuffer_attachments",
+            "category": "OpenGLWorkarounds",
+            "description": [
+                "Issue clearing framebuffers with linear attachments when GL_FRAMEBUFFER_SRGB is enabled"
+            ]
+        },
+
+        {
+            "comment": [
+                "On Mac some GLSL constructs involving do-while loops cause GPU hangs, such as the",
+                "following:",
+                " int i = 1;",
+                " do {",
+                "     i --;",
+                "     continue;",
+                " } while (i > 0)",
+                "Work around this by rewriting the do-while to use another GLSL construct (block +",
+                "while)"
+            ],
+            "name": "doWhileGLSLCausesGPUHang",
+            "display_name": "do_while_glsl_causes_gpu_hang",
+            "category": "OpenGLWorkarounds",
+            "description": [
+                "Some GLSL constructs involving do-while loops cause GPU hangs"
+            ],
+            "issue": "http://crbug.com/644669"
+        },
+
+        {
+            "comment": [
+                "On Mac AMD GPU gl_VertexID in GLSL vertex shader doesn't include base vertex",
+                "value, Work aronud this by replace gl_VertexID with (gl_VertexID -",
+                "angle_BaseVertex) when angle_BaseVertex is present."
+            ],
+            "name": "addBaseVertexToVertexID",
+            "display_name": "vertex_id_does_not_include_base_vertex",
+            "category": "OpenGLWorkarounds",
+            "description": [
+                "gl_VertexID in GLSL vertex shader doesn't include base vertex value"
+            ]
+        },
+
+        {
+            "comment": [
+                "Calling glFinish doesn't cause all queries to report that the result is available",
+                "on some (NVIDIA) drivers.  It was found that enabling GL_DEBUG_OUTPUT_SYNCHRONOUS",
+                "before the finish causes it to fully finish."
+            ],
+            "name": "finishDoesNotCauseQueriesToBeAvailable",
+            "display_name": "finish_does_not_cause_queries_to_be_available",
+            "category": "OpenGLWorkarounds",
+            "description": [
+                "glFinish doesn't cause all queries to report available result"
+            ]
+        },
+
+        {
+            "comment": [
+                "Always call useProgram after a successful link to avoid a driver bug.  This",
+                "workaround is meant to reproduce the use_current_program_after_successful_link",
+                "workaround in Chromium (http://crbug.com/110263). It has been shown that this",
+                "workaround is not necessary for MacOSX 10.9 and higher",
+                "(http://crrev.com/39eb535b)."
+            ],
+            "name": "alwaysCallUseProgramAfterLink",
+            "display_name": "always_call_use_program_after_link",
+            "category": "OpenGLWorkarounds",
+            "description": [
+                "Always call useProgram after a successful link to avoid a driver bug"
+            ],
+            "issue": "http://crbug.com/110263"
+        },
+
+        {
+            "comment": [
+                "On NVIDIA, in the case of unpacking from a pixel unpack buffer, unpack",
+                "overlapping rows row by row."
+            ],
+            "name": "unpackOverlappingRowsSeparatelyUnpackBuffer",
+            "display_name": "unpack_overlapping_rows_separately_unpack_buffer",
+            "category": "OpenGLWorkarounds",
+            "description": [
+                "In the case of unpacking from a pixel unpack buffer, unpack overlapping rows row by row"
+            ]
+        },
+
+        {
+            "comment": [
+                "On NVIDIA, in the case of packing to a pixel pack buffer, pack overlapping rows",
+                "row by row."
+            ],
+            "name": "packOverlappingRowsSeparatelyPackBuffer",
+            "display_name": "pack_overlapping_rows_separately_pack_buffer",
+            "category": "OpenGLWorkarounds",
+            "description": [
+                "In the case of packing to a pixel pack buffer, pack overlapping rows row by row"
+            ]
+        },
+
+        {
+            "comment": [
+                "On NVIDIA, during initialization, assign the current vertex attributes to the",
+                "spec-mandated defaults."
+            ],
+            "name": "initializeCurrentVertexAttributes",
+            "display_name": "initialize_current_vertex_attributes",
+            "category": "OpenGLWorkarounds",
+            "description": [
+                "During initialization, assign the current vertex attributes to the spec-mandated defaults"
+            ]
+        },
+
+        {
+            "comment": [
+                "abs(i) where i is an integer returns unexpected result on Intel Mac.",
+                "Emulate abs(i) with i * sign(i)."
+            ],
+            "name": "emulateAbsIntFunction",
+            "display_name": "emulate_abs_int_function",
+            "category": "OpenGLWorkarounds",
+            "description": [
+                "abs(i) where i is an integer returns unexpected result"
+            ],
+            "issue": "http://crbug.com/642227"
+        },
+
+        {
+            "comment": [
+                "On Intel Mac, calculation of loop conditions in for and while loop has bug.",
+                "Add '&& true' to the end of the condition expression to work around the bug."
+            ],
+            "name": "addAndTrueToLoopCondition",
+            "display_name": "add_and_true_to_loop_condition",
+            "category": "OpenGLWorkarounds",
+            "description": [
+                "Calculation of loop conditions in for and while loop has bug"
+            ]
+        },
+
+        {
+            "comment": [
+                "When uploading textures from an unpack buffer, some drivers count an extra row",
+                "padding when checking if the pixel unpack buffer is big enough.",
+                "For example considering the pixel buffer below where in memory, each row data (D)",
+                "of the texture is followed by some unused data (the dots):",
+                "    +-------+--+",
+                "    |DDDDDDD|..|",
+                "    |DDDDDDD|..|",
+                "    |DDDDDDD|..|",
+                "    |DDDDDDD|..|",
+                "    +-------A--B",
+                "The last pixel read will be A, but the driver will think it is B, causing it to",
+                "generate an error when the pixel buffer is just big enough."
+            ],
+            "name": "unpackLastRowSeparatelyForPaddingInclusion",
+            "display_name": "unpack_last_row_separately_for_padding_inclusion",
+            "category": "OpenGLWorkarounds",
+            "description": [
+                "When uploading textures from an unpack buffer, some drivers count an extra row padding"
+            ],
+            "issue": "http://anglebug.com/1512"
+        },
+
+        {
+            "comment": [
+                "Equivalent workaround when uploading data from a pixel pack buffer."
+            ],
+            "name": "packLastRowSeparatelyForPaddingInclusion",
+            "display_name": "pack_last_row_separately_for_padding_inclusion",
+            "category": "OpenGLWorkarounds",
+            "description": [
+                "When uploading textures from an pack buffer, some drivers count an extra row padding"
+            ],
+            "issue": "http://anglebug.com/1512"
+        },
+
+        {
+            "comment": [
+                "On some Intel drivers, using isnan() on highp float will get wrong answer. To",
+                "work around this bug, we use an expression to emulate function isnan()."
+            ],
+            "name": "emulateIsnanFloat",
+            "display_name": "emulate_isnan_float",
+            "category": "OpenGLWorkarounds",
+            "description": [
+                "Using isnan() on highp float will get wrong answer"
+            ],
+            "issue": "http://crbug.com/650547"
+        },
+
+        {
+            "comment": [
+                "On Mac with OpenGL version 4.1, unused std140 or shared uniform blocks will be",
+                "treated as inactive which is not consistent with WebGL2.0 spec. Reference all",
+                "members in a unused std140 or shared uniform block at the beginning of main to",
+                "work around it.  Also used on Linux AMD."
+            ],
+            "name": "useUnusedBlocksWithStandardOrSharedLayout",
+            "display_name": "use_unused_blocks_with_standard_or_shared_layout",
+            "category": "OpenGLWorkarounds",
+            "description": [
+                "Unused std140 or shared uniform blocks will be treated as inactive"
+            ]
+        },
+
+        {
+            "comment": [
+                "This flag is used to fix spec difference between GLSL 4.1 or lower and ESSL3."
+            ],
+            "name": "removeInvariantAndCentroidForESSL3",
+            "display_name": "remove_invarient_and_centroid_for_essl3",
+            "category": "OpenGLWorkarounds",
+            "description": [
+                "Fix spec difference between GLSL 4.1 or lower and ESSL3"
+            ]
+        },
+
+        {
+            "comment": [
+                "On Intel Mac OSX 10.11 driver, using '-float' will get wrong answer. Use '0.0 -",
+                "float' to replace '-float'."
+            ],
+            "name": "rewriteFloatUnaryMinusOperator",
+            "display_name": "rewrite_float_unary_minus_operator",
+            "category": "OpenGLWorkarounds",
+            "description": [
+                "Using '-<float>' will get wrong answer"
+            ],
+            "issue": "http://crbug.com/308366"
+        },
+
+        {
+            "comment": [
+                "On NVIDIA drivers, atan(y, x) may return a wrong answer."
+            ],
+            "name": "emulateAtan2Float",
+            "display_name": "emulate_atan_2_float",
+            "category": "OpenGLWorkarounds",
+            "description": [
+                "atan(y, x) may return a wrong answer"
+            ],
+            "issue": "http://crbug.com/672380"
+        },
+
+        {
+            "comment": [
+                "Some drivers seem to forget about UBO bindings when using program binaries. Work",
+                "around this by re-applying the bindings after the program binary is loaded or",
+                "saved.  This only seems to affect AMD OpenGL drivers, and some Android devices."
+            ],
+            "name": "reapplyUBOBindingsAfterUsingBinaryProgram",
+            "display_name": "reapply_ubo_bindings_after_using_binary_program",
+            "category": "OpenGLWorkarounds",
+            "description": [
+                "Some drivers forget about UBO bindings when using program binaries"
+            ],
+            "issue": "http://anglebug.com/1637"
+        },
+
+        {
+            "comment": [
+                "Some Linux OpenGL drivers return 0 when we query MAX_VERTEX_ATTRIB_STRIDE in an",
+                "OpenGL 4.4 or higher context.",
+                "This only seems to affect AMD OpenGL drivers."
+            ],
+            "name": "emulateMaxVertexAttribStride",
+            "display_name": "emulate_max_vertex_attrib_stride",
+            "category": "OpenGLWorkarounds",
+            "description": [
+                "Some drivers return 0 when MAX_VERTEX_ATTRIB_STRIED queried"
+            ],
+            "issue": "http://anglebug.com/1936"
+        },
+
+        {
+            "comment": [
+                "Initializing uninitialized locals caused odd behavior on Android Qualcomm in a",
+                "few WebGL 2 tests."
+            ],
+            "name": "dontInitializeUninitializedLocals",
+            "display_name": "dont_initialize_uninitialized_locals",
+            "category": "OpenGLWorkarounds",
+            "description": [
+                "Initializing uninitialized locals caused odd behavior in a few WebGL 2 tests"
+            ],
+            "issue": "http://anglebug.com/2046"
+        },
+
+        {
+            "comment": [
+                "On some NVIDIA drivers the point size range reported from the API is inconsistent",
+                "with the actual behavior. Clamp the point size to the value from the API to fix",
+                "this."
+            ],
+            "name": "clampPointSize",
+            "display_name": "clamp_point_size",
+            "category": "OpenGLWorkarounds",
+            "description": [
+                "The point size range reported from the API is inconsistent with the actual behavior"
+            ]
+        },
+
+        {
+            "comment": [
+                "On some Android devices for loops used to initialize variables hit native GLSL",
+                "compiler bugs."
+            ],
+            "name": "dontUseLoopsToInitializeVariables",
+            "display_name": "dont_use_loops_to_initialize_variables",
+            "category": "OpenGLWorkarounds",
+            "description": [
+                "For loops used to initialize variables hit native GLSL compiler bugs"
+            ],
+            "issue": "http://crbug.com/809422"
+        },
+
+        {
+            "comment": [
+                "On some NVIDIA drivers gl_FragDepth is not clamped correctly when rendering to a",
+                "floating point depth buffer. Clamp it in the translated shader to fix this."
+            ],
+            "name": "clampFragDepth",
+            "display_name": "clamp_frag_depth",
+            "category": "OpenGLWorkarounds",
+            "description": [
+                "gl_FragDepth is not clamped correctly when rendering to a floating point depth buffer"
+            ]
+        },
+
+        {
+            "comment": [
+                "On some NVIDIA drivers before version 397.31 repeated assignment to swizzled",
+                "values inside a GLSL user-defined function have incorrect results. Rewrite this",
+                "type of statements to fix this."
+            ],
+            "name": "rewriteRepeatedAssignToSwizzled",
+            "display_name": "rewrite_repeated_assign_to_swizzled",
+            "category": "OpenGLWorkarounds",
+            "description": [
+                "Repeated assignment to swizzled values inside a ",
+                "GLSL user-defined function have incorrect results"
+            ]
+        },
+
+        {
+            "comment": [
+                "On some AMD and Intel GL drivers ARB_blend_func_extended does not pass the tests.",
+                "It might be possible to work around the Intel bug by rewriting *FragData to",
+                "*FragColor instead of disabling the functionality entirely. The AMD bug looked",
+                "like incorrect blending, not sure if a workaround is feasible."
+            ],
+            "name": "disableBlendFuncExtended",
+            "display_name": "disable_blend_func_extended",
+            "category": "OpenGLWorkarounds",
+            "description": [
+                "ARB_blend_func_extended does not pass the tests"
+            ],
+            "issue": "http://anglebug.com/1085"
+        },
+
+        {
+            "comment": [
+                "Qualcomm drivers returns raw sRGB values instead of linearized values when",
+                "calling glReadPixels on unsized sRGB texture formats."
+            ],
+            "name": "unsizedsRGBReadPixelsDoesntTransform",
+            "display_name": "unsized_srgb_read_pixels_doesnt_transform",
+            "category": "OpenGLWorkarounds",
+            "description": [
+                "Drivers returning raw sRGB values instead of linearized values when calling glReadPixels ",
+                "on unsized sRGB texture formats"
+            ],
+            "issue": "http://crbug.com/550292 http://crbug.com/565179"
+        },
+
+        {
+            "comment": [
+                "Older Qualcomm drivers generate errors when querying the number of bits in timer",
+                "queries, ex: GetQueryivEXT(GL_TIME_ELAPSED, GL_QUERY_COUNTER_BITS)."
+            ],
+            "name": "queryCounterBitsGeneratesErrors",
+            "display_name": "query_counter_bits_generates_errors",
+            "category": "OpenGLWorkarounds",
+            "description": [
+                "Drivers generate errors when querying the number of bits in timer queries"
+            ],
+            "issue": "http://anglebug.com/3027"
+        },
+
+        {
+            "comment": [
+                "Re-linking a program in parallel is buggy on some Intel Windows OpenGL drivers",
+                "and Android platforms."
+            ],
+            "name": "dontRelinkProgramsInParallel",
+            "display_name": "dont_relink_programs_in_parallel",
+            "category": "OpenGLWorkarounds",
+            "description": [
+                "Relinking a program in parallel is buggy"
+            ],
+            "issue": "http://anglebug.com/3045"
+        },
+
+        {
+            "comment": [
+                "Some tests have been seen to fail using worker contexts, this switch allows",
+                "worker contexts to be disabled for some platforms."
+            ],
+            "name": "disableWorkerContexts",
+            "display_name": "disable_worker_contexts",
+            "category": "OpenGLWorkarounds",
+            "description": [
+                "Some tests have been seen to fail using worker contexts"
+            ],
+            "issue": "http://crbug.com/849576"
+        },
+
+        {
+            "comment": [
+                "Most Android devices fail to allocate a texture that is larger than 4096. Limit",
+                "the caps instead of generating GL_OUT_OF_MEMORY errors. Also causes system to",
+                "hang on some older intel mesa drivers on Linux."
+            ],
+            "name": "limitMaxTextureSizeTo4096",
+            "display_name": "max_texture_size_limit_4096",
+            "category": "OpenGLWorkarounds",
+            "description": [
+                "Limit max texture size to 4096 to avoid frequent ",
+                "out-of-memory errors"
+            ],
+            "issue": "http://crbug.com/927470"
+        },
+
+        {
+            "comment": [
+                "Prevent excessive MSAA allocations on Android devices, various rendering bugs",
+                "have been observed and they tend to be high DPI anyways."
+            ],
+            "name": "limitMaxMSAASamplesTo4",
+            "display_name": "max_msaa_sample_count_4",
+            "category": "OpenGLWorkarounds",
+            "description": [
+                "Various rendering bugs have been observed when using higher MSAA counts"
+            ],
+            "issue": "http://crbug.com/797243"
+        },
+
+        {
+            "comment": [
+                "Prefer to do the robust resource init clear using a glClear. Calls to",
+                "TexSubImage2D on large textures can take hundreds of milliseconds because of slow",
+                "uploads on macOS. Do this only on macOS because clears are buggy on other",
+                "drivers.",
+                "https://crbug.com/848952 (slow uploads on macOS)",
+                "https://crbug.com/883276 (buggy clears on Android)"
+            ],
+            "name": "allowClearForRobustResourceInit",
+            "display_name": "allow_clear_for_robust_resource_init",
+            "category": "OpenGLWorkarounds",
+            "description": [
+                "Using glClear for robust resource initialization is buggy on some drivers and leads to ",
+                "texture corruption. Default to data uploads except on MacOS where it is very slow."
+            ],
+            "issue": "https://crbug.com/848952 http://crbug.com/883276"
+        },
+
+        {
+            "comment": [
+                "Some drivers automatically handle out-of-bounds uniform array access but others",
+                "need manual clamping to satisfy the WebGL requirements."
+            ],
+            "name": "clampArrayAccess",
+            "display_name": "clamp_array_access",
+            "category": "OpenGLWorkarounds",
+            "description": [
+                "Clamp uniform array access to avoid reading invalid memory."
+            ],
+            "issue": "http://anglebug.com/2978"
+        },
+
+        {
+            "comment": [
+                "Reset glTexImage2D base level to workaround pixel comparison failure above Mac OS",
+                "10.12.4 on Intel Mac."
+            ],
+            "name": "resetTexImage2DBaseLevel",
+            "display_name": "reset_teximage2d_base_level",
+            "category": "OpenGLWorkarounds",
+            "description": [
+                "Reset texture base level before calling glTexImage2D to ",
+                "work around pixel comparison failure."
+            ],
+            "issue": "https://crbug.com/705865"
+        },
+
+        {
+            "comment": [
+                "glClearColor does not always work on Intel 6xxx Mac drivers when the clear color",
+                "made up of all zeros and ones."
+            ],
+            "name": "clearToZeroOrOneBroken",
+            "display_name": "clear_to_zero_or_one_broken",
+            "category": "OpenGLWorkarounds",
+            "description": [
+                "Clears when the clear color is all zeros or ones do not work."
+            ],
+            "issue": "https://crbug.com/710443"
+        },
+
+        {
+            "comment": [
+                "Some older Linux Intel mesa drivers will hang the system when allocating large",
+                "textures. Fix this by capping the max texture size."
+            ],
+            "name": "limitMax3dArrayTextureSizeTo1024",
+            "display_name": "max_3d_array_texture_size_1024",
+            "category": "OpenGLWorkarounds",
+            "description": [
+                "Limit max 3d texture size and max array texture layers to 1024 to avoid system hang"
+            ],
+            "issue": "http://crbug.com/927470"
+        },
+
+        {
+            "comment": [
+                "BlitFramebuffer has issues on some platforms with large source/dest texture",
+                "sizes. This workaround adjusts the destination rectangle source and dest",
+                "rectangle to fit within maximum twice the size of the framebuffer."
+            ],
+            "name": "adjustSrcDstRegionBlitFramebuffer",
+            "display_name": "adjust_src_dst_region_for_blitframebuffer",
+            "category": "OpenGLWorkarounds",
+            "description": [
+                "Many platforms have issues with blitFramebuffer when the parameters are large."
+            ],
+            "issue": "http://crbug.com/830046"
+        },
+
+        {
+            "comment": [
+                "BlitFramebuffer has issues on Mac when the source bounds aren't enclosed by the",
+                "framebuffer.  This workaround clips the source region and adjust the dest region",
+                "proportionally."
+            ],
+            "name": "clipSrcRegionBlitFramebuffer",
+            "display_name": "clip_src_region_for_blitframebuffer",
+            "category": "OpenGLWorkarounds",
+            "description": [
+                "Issues with blitFramebuffer when the parameters don't match the framebuffer size."
+            ],
+            "issue": "http://crbug.com/830046"
+        },
+
+        {
+            "comment": [
+                "Mac Intel samples transparent black from GL_COMPRESSED_RGB_S3TC_DXT1_EXT"
+            ],
+            "name": "rgbDXT1TexturesSampleZeroAlpha",
+            "display_name": "rgb_dxt1_textures_sample_zero_alpha",
+            "category": "OpenGLWorkarounds",
+            "description": [
+                "Sampling BLACK texels from RGB DXT1 textures returns transparent black on Mac."
+            ],
+            "issue": "http://anglebug.com/3729"
+        },
+
+        {
+            "comment": [
+                "Mac incorrectly executes both sides of && and || expressions when they should",
+                "short-circuit."
+            ],
+            "name": "unfoldShortCircuits",
+            "display_name": "unfold_short_circuits",
+            "category": "OpenGLWorkarounds",
+            "description": [
+                "Mac incorrectly executes both sides of && and || expressions when they should ",
+                "short-circuit."
+            ],
+            "issue": "http://anglebug.com/482"
+        },
+
+        {
+            "name": "emulatePrimitiveRestartFixedIndex",
+            "display_name": "emulate_primitive_restart_fixed_index",
+            "category": "OpenGLWorkarounds",
+            "description": [
+                "When GL_PRIMITIVE_RESTART_FIXED_INDEX is not available, emulate it with ",
+                "GL_PRIMITIVE_RESTART and glPrimitiveRestartIndex."
+            ],
+            "issue": "http://anglebug.com/3997"
+        },
+
+        {
+            "name": "setPrimitiveRestartFixedIndexForDrawArrays",
+            "display_name": "set_primitive_restart_fixed_index_for_draw_arrays",
+            "category": "OpenGLWorkarounds",
+            "description": [
+                "Some drivers discard vertex data in DrawArrays calls when the fixed primitive restart ",
+                "index is within the number of primitives being drawn."
+            ],
+            "issue": "http://anglebug.com/3997"
+        },
+
+        {
+            "comment": [
+                "Dynamic indexing of swizzled l-values doesn't work correctly on various",
+                "platforms."
+            ],
+            "name": "removeDynamicIndexingOfSwizzledVector",
+            "display_name": "remove_dynamic_indexing_of_swizzled_vector",
+            "category": "OpenGLWorkarounds",
+            "description": [
+                "Dynamic indexing of swizzled l-values doesn't work correctly on various platforms."
+            ],
+            "issue": "http://crbug.com/709351"
+        },
+
+        {
+            "comment": [
+                "Intel Mac drivers does not treat texelFetchOffset() correctly."
+            ],
+            "name": "preAddTexelFetchOffsets",
+            "display_name": "pre_add_texel_fetch_offsets",
+            "category": "OpenGLWorkarounds",
+            "description": [
+                "Intel Mac drivers mistakenly consider the parameter position of nagative vaule as invalid ",
+                "even if the sum of position and offset is in range, so we need to add workarounds by ",
+                "rewriting texelFetchOffset(sampler, position, lod, offset) into texelFetch(sampler, ",
+                "position + offset, lod)."
+            ],
+            "issue": "http://crbug.com/642605"
+        },
+
+        {
+            "comment": [
+                "All Mac drivers do not handle struct scopes correctly. This workaround overwrites",
+                "a struct name with a unique prefix"
+            ],
+            "name": "regenerateStructNames",
+            "display_name": "regenerate_struct_names",
+            "category": "OpenGLWorkarounds",
+            "description": [
+                "All Mac drivers do not handle struct scopes correctly. This workaround overwrites a struct",
+                "name with a unique prefix."
+            ],
+            "issue": "http://crbug.com/403957"
+        },
+
+        {
+            "comment": [
+                "Quite some OpenGL ES drivers don't implement readPixels for RGBA/UNSIGNED_SHORT",
+                "from EXT_texture_norm16 correctly"
+            ],
+            "name": "readPixelsUsingImplementationColorReadFormatForNorm16",
+            "display_name": "read_pixels_using_implementation_color_read_format",
+            "category": "OpenGLWorkarounds",
+            "description": [
+                "Quite some OpenGL ES drivers don't implement readPixels for RGBA/UNSIGNED_SHORT from ",
+                "EXT_texture_norm16 correctly"
+            ],
+            "issue": "http://anglebug.com/4214"
+        },
+
+        {
+            "comment": [
+                "Bugs exist in some Intel drivers where dependencies are incorrectly tracked for",
+                "textures which are copy destinations (via CopyTexImage2D, for example). Flush",
+                "before DeleteTexture if these entry points have been called recently."
+            ],
+            "name": "flushBeforeDeleteTextureIfCopiedTo",
+            "display_name": "flush_before_delete_texture_if_copied_to",
+            "category": "OpenGLWorkarounds",
+            "description": [
+                "Some drivers track CopyTex{Sub}Image texture dependencies incorrectly. Flush",
+                " before glDeleteTextures in this case"
+            ],
+            "issue": "http://anglebug.com/4267"
+        },
+
+        {
+            "comment": [
+                "Rewrite row-major matrices as column-major as a driver bug workaround if",
+                "necessary."
+            ],
+            "name": "rewriteRowMajorMatrices",
+            "display_name": "rewrite_row_major_matrices",
+            "category": "OpenGLWorkarounds",
+            "description": [
+                "Rewrite row major matrices in shaders as column major as a driver bug workaround"
+            ],
+            "issue": "http://anglebug.com/2273"
+        },
+
+        {
+            "comment": [
+                "Bugs exist in OpenGL AMD drivers on Windows that produce incorrect pipeline state",
+                "for colorMaski calls."
+            ],
+            "name": "disableDrawBuffersIndexed",
+            "display_name": "disable_draw_buffers_indexed",
+            "category": "OpenGLWorkarounds",
+            "description": [
+                "Disable OES_draw_buffers_indexed extension."
+            ]
+        },
+
+        {
+            "comment": [
+                "GL_EXT_semaphore_fd doesn't work properly with Mesa 19.3.4 and earlier versions."
+            ],
+            "name": "disableSemaphoreFd",
+            "display_name": "disable_semaphore_fd",
+            "category": "OpenGLWorkarounds",
+            "description": [
+                "Disable GL_EXT_semaphore_fd extension"
+            ],
+            "issue": "https://crbug.com/1046462"
+        },
+
+        {
+            "comment": [
+                "GL_EXT_disjoint_timer_query doesn't work properly with Linux VMWare drivers."
+            ],
+            "name": "disableTimestampQueries",
+            "display_name": "disable_timestamp_queries",
+            "category": "OpenGLWorkarounds",
+            "description": [
+                "Disable GL_EXT_disjoint_timer_query extension"
+            ],
+            "issue": "https://crbug.com/811661"
+        },
+
+        {
+            "comment": [
+                "Some drivers use linear blending when generating mipmaps for sRGB textures. Work",
+                "around this by generating mipmaps in a linear texture and copying back to sRGB."
+            ],
+            "name": "encodeAndDecodeSRGBForGenerateMipmap",
+            "display_name": "decode_encode_srgb_for_generatemipmap",
+            "category": "OpenGLWorkarounds",
+            "description": [
+                "Decode and encode before generateMipmap for srgb format textures."
+            ],
+            "issue": "http://anglebug.com/4646"
+        },
+
+        {
+            "name": "emulateCopyTexImage2DFromRenderbuffers",
+            "display_name": "emulate_copyteximage2d_from_renderbuffers",
+            "category": "OpenGLWorkarounds",
+            "description": [
+                "CopyTexImage2D spuriously returns errors on iOS when copying from renderbuffers."
+            ],
+            "issue": "https://anglebug.com/4674"
+        },
+
+        {
+            "name": "disableGPUSwitchingSupport",
+            "display_name": "disable_gpu_switching_support",
+            "category": "OpenGLWorkarounds",
+            "description": [
+                "Disable GPU switching support (use only the low-power GPU) on older MacBook Pros."
+            ],
+            "issue": "https://crbug.com/1091824"
+        },
+
+        {
+            "comment": [
+                "KHR_parallel_shader_compile fails TSAN on Linux, so we avoid using it with this",
+                "workaround."
+            ],
+            "name": "disableNativeParallelCompile",
+            "display_name": "disable_native_parallel_compile",
+            "category": "OpenGLWorkarounds",
+            "description": [
+                "Do not use native KHR_parallel_shader_compile even when available."
+            ],
+            "issue": "http://crbug.com/1094869"
+        },
+
+        {
+            "name": "emulatePackSkipRowsAndPackSkipPixels",
+            "display_name": "emulate_pack_skip_rows_and_pack_skip_pixels",
+            "category": "OpenGLWorkarounds",
+            "description": [
+                "GL_PACK_SKIP_ROWS and GL_PACK_SKIP_PIXELS are ignored in Apple's OpenGL driver."
+            ],
+            "issue": "https://anglebug.com/4849"
+        },
+
+        {
+            "comment": [
+                "Some drivers return bogus/1hz values for GetMscRate, which we may want to clamp"
+            ],
+            "name": "clampMscRate",
+            "display_name": "clamp_msc_rate",
+            "category": "OpenGLWorkarounds",
+            "description": [
+                "Some drivers return bogus values for GetMscRate, so we clamp it to 30Hz"
+            ],
+            "issue": "https://crbug.com/1042393"
+        },
+
+        {
+            "comment": [
+                "Mac drivers generate GL_INVALID_VALUE when binding a transform feedback buffer",
+                "with glBindBufferRange before first binding it to some generic binding point."
+            ],
+            "name": "bindTransformFeedbackBufferBeforeBindBufferRange",
+            "display_name": "bind_transform_feedback_buffer_before_bind_buffer_range",
+            "category": "OpenGLWorkarounds",
+            "description": [
+                "Bind transform feedback buffers to the generic binding point before calling ",
+                "glBindBufferBase or glBindBufferRange."
+            ],
+            "issue": "https://anglebug.com/5140"
+        },
+
+        {
+            "comment": [
+                "Speculative fix for issues on Linux/Wayland where exposing GLX_OML_sync_control",
+                "renders Chrome unusable"
+            ],
+            "name": "disableSyncControlSupport",
+            "display_name": "disable_sync_control_support",
+            "category": "OpenGLWorkarounds",
+            "description": [
+                "Speculative fix for issues on Linux/Wayland where exposing GLX_OML_sync_control renders ",
+                "Chrome unusable"
+            ],
+            "issue": "https://crbug.com/1137851"
+        },
+
+        {
+            "comment": [
+                "Buffers need to maintain a shadow copy of data when buffer data readback is not",
+                "possible through the GL API"
+            ],
+            "name": "keepBufferShadowCopy",
+            "display_name": "keep_buffer_shadow_copy",
+            "category": "OpenGLWorkarounds",
+            "description": [
+                "Maintain a shadow copy of buffer data when the GL API does not permit reading data back."
+            ]
+        },
+
+        {
+            "comment": [
+                "glGenerateMipmap fails if the zero texture level is not set on some Mac drivers"
+            ],
+            "name": "setZeroLevelBeforeGenerateMipmap",
+            "display_name": "set_zero_level_before_generating_mipmap",
+            "category": "OpenGLWorkarounds",
+            "description": [
+                "glGenerateMipmap fails if the zero texture level is not set on some Mac drivers."
+            ]
+        },
+
+        {
+            "comment": [
+                "On macOS with AMD GPUs, packed color formats like RGB565 and RGBA4444 are buggy.",
+                "Promote them to 8 bit per channel formats."
+            ],
+            "name": "promotePackedFormatsTo8BitPerChannel",
+            "display_name": "promote_packed_formats_to_8_bit_per_channel",
+            "category": "OpenGLWorkarounds",
+            "description": [
+                "Packed color formats are buggy on Macs with AMD GPUs"
+            ],
+            "issue": "http://anglebug.com/5469"
+        },
+
+        {
+            "comment": [
+                "If gl_FragColor is not written by fragment shader, it may cause context lost with",
+                "Adreno 42x and 3xx."
+            ],
+            "name": "initFragmentOutputVariables",
+            "display_name": "init_fragment_output_variables",
+            "category": "OpenGLWorkarounds",
+            "description": [
+                "No init gl_FragColor causes context lost"
+            ],
+            "issue": "http://crbug.com/1171371"
+        },
+
+        {
+            "comment": [
+                "On macOS with Intel GPUs, instanced array with divisor > 0 is buggy when first >",
+                "0 in drawArraysInstanced. Shift the attributes with extra offset to workaround."
+            ],
+            "name": "shiftInstancedArrayDataWithExtraOffset",
+            "display_name": "shift_instanced_array_data_with_offset",
+            "category": "OpenGLWorkarounds",
+            "description": [
+                "glDrawArraysInstanced is buggy on certain new Mac Intel GPUs"
+            ],
+            "issue": "http://crbug.com/1144207"
+        },
+
+        {
+            "comment": [
+                "ANGLE needs to support devices that have no native VAOs. Sync everything to the",
+                "default VAO."
+            ],
+            "name": "syncVertexArraysToDefault",
+            "display_name": "sync_vertex_arrays_to_default",
+            "category": "OpenGLWorkarounds",
+            "description": [
+                "Only use the default VAO because of missing support or driver bugs"
+            ],
+            "issue": "http://anglebug.com/5577"
+        },
+
+        {
+            "comment": [
+                "On desktop Linux/AMD when using the amdgpu drivers, the precise kernel and DRM",
+                "version are leaked via GL_RENDERER. We workaround this to improve user privacy."
+            ],
+            "name": "sanitizeAmdGpuRendererString",
+            "display_name": "sanitize_amdgpu_renderer_string",
+            "category": "OpenGLWorkarounds",
+            "description": [
+                "Strip precise kernel and DRM version information from amdgpu renderer strings."
+            ],
+            "issue": "http://crbug.com/1181193"
+        },
+
+        {
+            "comment": [
+                "Imagination GL drivers are buggy with context switching. We need to ubind fbo to",
+                "workaround a crash in the driver."
+            ],
+            "name": "unbindFBOOnContextSwitch",
+            "display_name": "unbind_fbo_before_switching_context",
+            "category": "OpenGLWorkarounds",
+            "description": [
+                "Imagination GL drivers are buggy with context switching."
+            ],
+            "issue": "http://crbug.com/1181193"
+        },
+
+        {
+            "name": "flushOnFramebufferChange",
+            "display_name": "flush_on_framebuffer_change",
+            "category": "OpenGLWorkarounds",
+            "description": [
+                "Switching framebuffers without a flush can lead to ",
+                "crashes on Intel 9th Generation GPU Macs."
+            ],
+            "issue": "http://crbug.com/1181068"
+        },
+
+        {
+            "name": "disableMultisampledRenderToTexture",
+            "display_name": "disable_mutlisampled_render_to_texture",
+            "category": "OpenGLWorkarounds",
+            "description": [
+                "Many drivers have bugs when using GL_EXT_multisampled_render_to_texture"
+            ],
+            "issue": "http://anglebug.com/2894"
+        },
+
+        {
+            "comment": [
+                "Mac OpenGL drivers often hang when calling glTexSubImage with >120kb of data.",
+                "Instead, upload the data in <120kb chunks."
+            ],
+            "name": "uploadTextureDataInChunks",
+            "display_name": "chunked_texture_upload",
+            "category": "OpenGLWorkarounds",
+            "description": [
+                "Upload texture data in <120kb chunks to work around Mac driver hangs and crashes."
+            ],
+            "issue": "http://crbug.com/1181068"
+        },
+
+        {
+            "comment": [
+                "Qualcomm drivers may sometimes reject immutable ASTC sliced 3D texture",
+                "allocation. Instead, use non-immutable allocation internally."
+            ],
+            "name": "emulateImmutableCompressedTexture3D",
+            "display_name": "emulate_immutable_compressed_texture_3d",
+            "category": "OpenGLWorkarounds",
+            "description": [
+                "Use non-immutable texture allocation to work around a driver bug."
+            ],
+            "issue": "https://crbug.com/1060012"
+        },
+
+        {
+            "comment": [
+                "Desktop GL does not support RGB10 (without alpha) but it is required for",
+                "GL_EXT_texture_type_2_10_10_10_REV. Emulate it by setting a sampler parameter to",
+                "always sample 1 from alpha."
+            ],
+            "name": "emulateRGB10",
+            "display_name": "emulate_rgb10",
+            "category": "OpenGLWorkarounds",
+            "description": [
+                "Emulate RGB10 support using RGB10_A2."
+            ],
+            "issue": "https://crbug.com/1300575"
+        },
+
+        {
+            "comment": [
+                "On NVIDIA, binding a texture level > 0 to a framebuffer color attachment and then",
+                "binding a renderbuffer to the same attachment causes the driver to report that",
+                "the FBO has an incomplete attachment. This workaround forces a call to",
+                "framebufferTexture2D with texture_id and level set to 0 before binding a",
+                "renderbuffer to bypass the issue."
+            ],
+            "name": "alwaysUnbindFramebufferTexture2D",
+            "display_name": "always_unbind_framebuffer_texture_2d",
+            "category": "OpenGLWorkarounds",
+            "description": [
+                "Force unbind framebufferTexture2D before binding renderbuffer to work around driver bug."
+            ],
+            "issue": "https://anglebug.com/5536"
+        }
+    ]
+}
