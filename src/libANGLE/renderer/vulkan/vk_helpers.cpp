@@ -2885,6 +2885,47 @@ angle::Result BufferPool::allocateBuffer(ContextVk *contextVk,
     VkDeviceSize offset;
     VkDeviceSize alignedSize = roundUp(sizeInBytes, alignment);
 
+    if (alignedSize >= kMaxBufferSizeForSuballocation)
+    {
+        VkDeviceSize heapSize =
+            contextVk->getRenderer()->getMemoryProperties().getHeapSizeForMemoryType(
+                mMemoryTypeIndex);
+        // First ensure we are not exceeding the heapSize to avoid the validation error.
+        ANGLE_VK_CHECK(contextVk, sizeInBytes <= heapSize, VK_ERROR_OUT_OF_DEVICE_MEMORY);
+
+        // Allocate buffer
+        VkBufferCreateInfo createInfo    = {};
+        createInfo.sType                 = VK_STRUCTURE_TYPE_BUFFER_CREATE_INFO;
+        createInfo.flags                 = 0;
+        createInfo.size                  = alignedSize;
+        createInfo.usage                 = mUsage;
+        createInfo.sharingMode           = VK_SHARING_MODE_EXCLUSIVE;
+        createInfo.queueFamilyIndexCount = 0;
+        createInfo.pQueueFamilyIndices   = nullptr;
+
+        VkMemoryPropertyFlags memoryPropertyFlags;
+        const Allocator &allocator = contextVk->getRenderer()->getAllocator();
+        allocator.getMemoryTypeProperties(mMemoryTypeIndex, &memoryPropertyFlags);
+
+        DeviceScoped<Buffer> buffer(contextVk->getDevice());
+        ANGLE_VK_TRY(contextVk, buffer.get().init(contextVk->getDevice(), createInfo));
+
+        DeviceScoped<DeviceMemory> deviceMemory(contextVk->getDevice());
+        VkMemoryPropertyFlags memoryPropertyFlagsOut;
+        VkDeviceSize sizeOut;
+        ANGLE_TRY(AllocateBufferMemory(contextVk, memoryPropertyFlags, &memoryPropertyFlagsOut,
+                                       nullptr, &buffer.get(), &deviceMemory.get(), &sizeOut));
+        ASSERT(sizeOut >= alignedSize);
+
+        suballocation->initWithEntireBuffer(contextVk, buffer.get(), deviceMemory.get(),
+                                            memoryPropertyFlagsOut, alignedSize);
+        if (mHostVisible)
+        {
+            ANGLE_VK_TRY(contextVk, suballocation->map(contextVk));
+        }
+        return angle::Result::Continue;
+    }
+
     // We always allocate from reverse order so that older buffers have a chance to age out. The
     // assumption is that to allocate from new buffers first may have a better chance to leave the
     // older buffers completely empty and we may able to free it.
