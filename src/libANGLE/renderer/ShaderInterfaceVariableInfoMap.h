@@ -18,6 +18,14 @@
 namespace rx
 {
 
+enum class IndexedShaderVariableType
+{
+    Texture,
+    Image,
+    UniformBuffer,
+    ShaderStorageBuffer,
+};
+
 // TODO: http://anglebug.com/4524: Need a different hash key than a string, since that's slow to
 // calculate.
 class ShaderInterfaceVariableInfoMap final : angle::NonCopyable
@@ -36,6 +44,16 @@ class ShaderInterfaceVariableInfoMap final : angle::NonCopyable
     ShaderInterfaceVariableInfo &addOrGet(gl::ShaderType shaderType,
                                           const std::string &variableName);
     size_t variableCount(gl::ShaderType shaderType) const { return mData[shaderType].size(); }
+
+    const ShaderInterfaceVariableInfo &getIndexedVariableInfo(
+        const gl::ProgramExecutable &executable,
+        gl::ShaderType shaderType,
+        IndexedShaderVariableType variableType,
+        uint32_t variableIndex) const;
+    const ShaderInterfaceVariableInfo &getAtomicCounterInfo(gl::ShaderType shaderType) const;
+    const ShaderInterfaceVariableInfo &getFramebufferFetchInfo(
+        const gl::ProgramExecutable &executable,
+        gl::ShaderType shaderType) const;
 
     using VariableNameToInfoMap = angle::HashMap<std::string, ShaderInterfaceVariableInfo>;
 
@@ -60,5 +78,66 @@ class ShaderInterfaceVariableInfoMap final : angle::NonCopyable
     gl::ShaderMap<VariableNameToInfoMap> mData;
 };
 
+ANGLE_INLINE const ShaderInterfaceVariableInfo &
+ShaderInterfaceVariableInfoMap::getIndexedVariableInfo(const gl::ProgramExecutable &executable,
+                                                       gl::ShaderType shaderType,
+                                                       IndexedShaderVariableType variableType,
+                                                       uint32_t variableIndex) const
+{
+    switch (variableType)
+    {
+        case IndexedShaderVariableType::Image:
+        {
+            const std::vector<gl::LinkedUniform> &uniforms = executable.getUniforms();
+            uint32_t uniformIndex = executable.getUniformIndexFromImageIndex(variableIndex);
+            const gl::LinkedUniform &imageUniform = uniforms[uniformIndex];
+            const std::string samplerName         = GlslangGetMappedSamplerName(imageUniform.name);
+            return get(shaderType, samplerName);
+        }
+        case IndexedShaderVariableType::ShaderStorageBuffer:
+        {
+            const std::vector<gl::InterfaceBlock> &blocks = executable.getShaderStorageBlocks();
+            const gl::InterfaceBlock &block               = blocks[variableIndex];
+            const std::string blockName                   = block.mappedName;
+            return get(shaderType, blockName);
+        }
+        case IndexedShaderVariableType::Texture:
+        {
+            const std::vector<gl::LinkedUniform> &uniforms = executable.getUniforms();
+            uint32_t uniformIndex = executable.getUniformIndexFromSamplerIndex(variableIndex);
+            const gl::LinkedUniform &samplerUniform = uniforms[uniformIndex];
+            const std::string samplerName = GlslangGetMappedSamplerName(samplerUniform.name);
+            return get(shaderType, samplerName);
+        }
+        case IndexedShaderVariableType::UniformBuffer:
+        {
+            const std::vector<gl::InterfaceBlock> &blocks = executable.getUniformBlocks();
+            const gl::InterfaceBlock &block               = blocks[variableIndex];
+            const std::string blockName                   = block.mappedName;
+            return get(shaderType, blockName);
+        }
+    }
+
+    UNREACHABLE();
+    return mData[shaderType].begin()->second;
+}
+
+ANGLE_INLINE const ShaderInterfaceVariableInfo &
+ShaderInterfaceVariableInfoMap::getAtomicCounterInfo(gl::ShaderType shaderType) const
+{
+    std::string blockName(sh::vk::kAtomicCountersBlockName);
+    return get(shaderType, blockName);
+}
+
+ANGLE_INLINE const ShaderInterfaceVariableInfo &
+ShaderInterfaceVariableInfoMap::getFramebufferFetchInfo(const gl::ProgramExecutable &executable,
+                                                        gl::ShaderType shaderType) const
+{
+    const std::vector<gl::LinkedUniform> &uniforms = executable.getUniforms();
+    const uint32_t baseUniformIndex                = executable.getFragmentInoutRange().low();
+    const gl::LinkedUniform &baseInputAttachment   = uniforms.at(baseUniformIndex);
+    std::string baseMappedName                     = baseInputAttachment.mappedName;
+    return get(shaderType, baseMappedName);
+}
 }  // namespace rx
 #endif  // LIBANGLE_RENDERER_SHADERINTERFACEVARIABLEINFOMAP_H_
