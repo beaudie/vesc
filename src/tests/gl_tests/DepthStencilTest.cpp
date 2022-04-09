@@ -82,13 +82,6 @@ class DepthStencilTest : public ANGLETest
         mHasStencil = false;
     }
 
-    // Override a feature to force emulation of stencil-only and depth-only formats with a packed
-    // depth/stencil format
-    void overrideFeaturesVk(FeaturesVk *featuresVk) override
-    {
-        featuresVk->overrideFeatures({"force_fallback_format"}, true);
-    }
-
     void prepareSingleEmulatedWithPacked();
     void ensureColor(GLColor color);
     void ensureDepthUnaffected();
@@ -678,9 +671,15 @@ TEST_P(DepthStencilTestES3, ReadOnlyDepthStencilThenOutputDepthStencil)
     EXPECT_PIXEL_COLOR_EQ(kSize / 2, kSize / 2, GLColor::yellow);
 }
 
-ANGLE_INSTANTIATE_TEST_ES2_AND_ES3(DepthStencilTest);
+ANGLE_INSTANTIATE_TEST_ES2_AND_ES3_AND(DepthStencilTest,
+                                       WithForceFallbackFormat(ES2_VULKAN()),
+                                       WithForceFallbackFormat(ES2_VULKAN_SWIFTSHADER()),
+                                       WithForceFallbackFormat(ES3_VULKAN()),
+                                       WithForceFallbackFormat(ES3_VULKAN_SWIFTSHADER()));
 
 GTEST_ALLOW_UNINSTANTIATED_PARAMETERIZED_TEST(DepthStencilTestES3);
-ANGLE_INSTANTIATE_TEST_ES3(DepthStencilTestES3);
+ANGLE_INSTANTIATE_TEST_ES3_AND(DepthStencilTestES3,
+                               WithForceFallbackFormat(ES3_VULKAN()),
+                               WithForceFallbackFormat(ES3_VULKAN_SWIFTSHADER()));
 
 }  // anonymous namespace

@@ -298,12 +298,6 @@ class VertexAttributeTest : public ANGLETest
         glDeleteBuffers(1, &mBuffer);
     }
 
-    // Override a feature to force emulation of attribute formats.
-    void overrideFeaturesVk(FeaturesVk *featuresVk) override
-    {
-        featuresVk->overrideFeatures({"force_fallback_format"}, true);
-    }
-
     GLuint compileMultiAttribProgram(GLint attribCount)
     {
         std::stringstream shaderStream;
@@ -4136,31 +4130,43 @@ TEST_P(VertexAttributeTestES3, emptyBuffer)
 #    define EMULATED_VAO_CONFIGS
 #endif
 
-// Use this to select which configurations (e.g. which renderer, which GLES major version) these
-// tests should be run against.
-// D3D11 Feature Level 9_3 uses different D3D formats for vertex attribs compared to Feature Levels
-// 10_0+, so we should test them separately.
 ANGLE_INSTANTIATE_TEST_ES2_AND_ES3_AND(
     VertexAttributeTest,
+    WithForceFallbackFormat(ES2_VULKAN()),
+    WithForceFallbackFormat(ES2_VULKAN_SWIFTSHADER()),
+    WithForceFallbackFormat(ES3_VULKAN()),
+    WithForceFallbackFormat(ES3_VULKAN_SWIFTSHADER()),
     WithNoHasExplicitMemBarrier(WithNoHasCheapRenderPass(ES3_METAL())),
     WithNoHasExplicitMemBarrier(WithHasCheapRenderPass(ES3_METAL())),
     EMULATED_VAO_CONFIGS);
 
 ANGLE_INSTANTIATE_TEST_ES2_AND_ES3_AND(
     VertexAttributeOORTest,
+    WithForceFallbackFormat(ES2_VULKAN()),
+    WithForceFallbackFormat(ES2_VULKAN_SWIFTSHADER()),
+    WithForceFallbackFormat(ES3_VULKAN()),
+    WithForceFallbackFormat(ES3_VULKAN_SWIFTSHADER()),
     WithNoHasExplicitMemBarrier(WithNoHasCheapRenderPass(ES3_METAL())),
     WithNoHasExplicitMemBarrier(WithHasCheapRenderPass(ES3_METAL())));
 
 GTEST_ALLOW_UNINSTANTIATED_PARAMETERIZED_TEST(VertexAttributeTestES3);
 ANGLE_INSTANTIATE_TEST_ES3_AND(VertexAttributeTestES3,
+                               WithForceFallbackFormat(ES3_VULKAN()),
+                               WithForceFallbackFormat(ES3_VULKAN_SWIFTSHADER()),
                                WithNoHasExplicitMemBarrier(WithNoHasCheapRenderPass(ES3_METAL())),
                                WithNoHasExplicitMemBarrier(WithHasCheapRenderPass(ES3_METAL())));
 
 GTEST_ALLOW_UNINSTANTIATED_PARAMETERIZED_TEST(VertexAttributeTestES31);
-ANGLE_INSTANTIATE_TEST_ES31(VertexAttributeTestES31);
+ANGLE_INSTANTIATE_TEST_ES31_AND(VertexAttributeTestES31,
+                                WithForceFallbackFormat(ES31_VULKAN()),
+                                WithForceFallbackFormat(ES31_VULKAN_SWIFTSHADER()));
 
 ANGLE_INSTANTIATE_TEST_ES2_AND_ES3_AND(
     VertexAttributeCachingTest,
+    WithForceFallbackFormat(ES2_VULKAN()),
+    WithForceFallbackFormat(ES2_VULKAN_SWIFTSHADER()),
+    WithForceFallbackFormat(ES3_VULKAN()),
+    WithForceFallbackFormat(ES3_VULKAN_SWIFTSHADER()),
     WithNoHasExplicitMemBarrier(WithNoHasCheapRenderPass(ES3_METAL())),
     WithNoHasExplicitMemBarrier(WithHasCheapRenderPass(ES3_METAL())));
 

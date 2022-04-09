@@ -220,14 +220,6 @@ std::ostream &operator<<(std::ostream &os, const MultiviewImplementationParams &
 {
     const PlatformParameters &base = static_cast<const PlatformParameters &>(params);
     os << base << "_";
-    if (params.mForceUseGeometryShaderOnD3D)
-    {
-        os << "_force_geom_shader";
-    }
-    else
-    {
-        os << "_vertex_shader";
-    }
     if (params.mMultiviewExtension)
     {
         os << "_multiview";
@@ -269,12 +261,6 @@ MultiviewImplementationParams GeomShaderD3D11(GLint majorVersion,
 {
     return MultiviewImplementationParams(majorVersion, minorVersion, true, egl_platform::D3D11(),
                                          multiviewExtension);
-}
-
-void MultiviewTest::overrideWorkaroundsD3D(FeaturesD3D *features)
-{
-    features->overrideFeatures({"select_view_in_geometry_shader"},
-                               GetParam().mForceUseGeometryShaderOnD3D);
 }
 
 }  // namespace angle

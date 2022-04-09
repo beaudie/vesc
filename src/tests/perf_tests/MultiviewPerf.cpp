@@ -82,12 +82,21 @@ struct MultiviewPerfParams final : public RenderTestParams
         iterationsPerStep  = 1;
         majorVersion       = 3;
         minorVersion       = 0;
-        eglParameters      = platformParametersIn;
         windowWidth        = workloadIn.first;
         windowHeight       = workloadIn.second;
         multiviewOption    = multiviewOptionIn;
         numViews           = 2;
         multiviewExtension = multiviewExtensionIn;
+
+        PlatformParameters overriden;
+        overriden.eglParameters = platformParametersIn;
+
+        if (multiviewOption == MultiviewOption::InstancedMultiviewGeometryShader)
+        {
+            overriden = WithSelectViewInGeometryShader(overriden);
+        }
+        eglParameters = overriden.eglParameters;
+        ;
     }
 
     std::string story() const override
@@ -168,13 +177,6 @@ class MultiviewBenchmark : public ANGLERenderTest,
 
     void initializeBenchmark() override;
     void drawBenchmark() final;
-
-    void overrideWorkaroundsD3D(FeaturesD3D *features) override
-    {
-        features->overrideFeatures(
-            {"select_view_in_geometry_shader"},
-            GetParam().multiviewOption == MultiviewOption::InstancedMultiviewGeometryShader);
-    }
 
   protected:
     virtual void renderScene() = 0;
