@@ -217,23 +217,6 @@ inline void DefaultHistogramSparse(PlatformMethods *platform, const char *name, 
 using HistogramBooleanFunc = void (*)(PlatformMethods *platform, const char *name, bool sample);
 inline void DefaultHistogramBoolean(PlatformMethods *platform, const char *name, bool sample) {}
 
-// Allows us to programatically override ANGLE's default workarounds for testing purposes.
-using OverrideWorkaroundsD3DFunc = void (*)(PlatformMethods *platform,
-                                            angle::FeaturesD3D *featuresD3D);
-inline void DefaultOverrideWorkaroundsD3D(PlatformMethods *platform,
-                                          angle::FeaturesD3D *featuresD3D)
-{}
-
-using OverrideFeaturesVkFunc = void (*)(PlatformMethods *platform,
-                                        angle::FeaturesVk *featuresVulkan);
-inline void DefaultOverrideFeaturesVk(PlatformMethods *platform, angle::FeaturesVk *featuresVulkan)
-{}
-
-using OverrideFeaturesMtlFunc = void (*)(PlatformMethods *platform,
-                                         angle::FeaturesMtl *featuresMetal);
-inline void DefaultOverrideFeaturesMtl(PlatformMethods *platform, angle::FeaturesMtl *featuresMetal)
-{}
-
 // Callback on a successful program link with the program binary. Can be used to store
 // shaders to disk. Keys are a 160-bit SHA-1 hash.
 using ProgramKeyType   = std::array<uint8_t, 20>;
@@ -253,6 +236,13 @@ using PostWorkerTaskFunc                           = void (*)(PlatformMethods *p
                                     void *userData);
 constexpr PostWorkerTaskFunc DefaultPostWorkerTask = nullptr;
 
+// Placeholder values where feature override callbacks used to be.  They are deprecated in favor of
+// EGL_ANGLE_feature_control.  The placeholders are there to keep the layout of the PlatformMethods
+// constant to support drop-in replacement of ANGLE's .so files in applications built with an older
+// header.
+using PlaceholderCallbackFunc = void (*)(...);
+inline void DefaultPlaceholderCallback(...) {}
+
 // Platform methods are enumerated here once.
 #define ANGLE_PLATFORM_OP(OP)                                    \
     OP(currentTime, CurrentTime)                                 \
@@ -267,10 +257,10 @@ constexpr PostWorkerTaskFunc DefaultPostWorkerTask = nullptr;
     OP(histogramEnumeration, HistogramEnumeration)               \
     OP(histogramSparse, HistogramSparse)                         \
     OP(histogramBoolean, HistogramBoolean)                       \
-    OP(overrideWorkaroundsD3D, OverrideWorkaroundsD3D)           \
-    OP(overrideFeaturesVk, OverrideFeaturesVk)                   \
+    OP(placeholder1, PlaceholderCallback)                        \
+    OP(placeholder2, PlaceholderCallback)                        \
     OP(cacheProgram, CacheProgram)                               \
-    OP(overrideFeaturesMtl, OverrideFeaturesMtl)                 \
+    OP(placeholder3, PlaceholderCallback)                        \
     OP(postWorkerTask, PostWorkerTask)
 
 #define ANGLE_PLATFORM_METHOD_DEF(Name, CapsName) CapsName##Func Name = Default##CapsName;
@@ -286,6 +276,47 @@ struct ANGLE_PLATFORM_EXPORT PlatformMethods
 
     ANGLE_PLATFORM_OP(ANGLE_PLATFORM_METHOD_DEF)
 };
+
+// Ensure the layout of PlatformMethods is constant throughout deprecations and removal of the
+// callbacks.
+static_assert(offsetof(PlatformMethods, currentTime) == sizeof(void *),
+              "PlatformMethods incompatibly modified");
+static_assert(offsetof(PlatformMethods, monotonicallyIncreasingTime) ==
+                  sizeof(void *) + sizeof(void (*)(...)),
+              "PlatformMethods incompatibly modified");
+static_assert(offsetof(PlatformMethods, logError) == sizeof(void *) + 2 * sizeof(void (*)(...)),
+              "PlatformMethods incompatibly modified");
+static_assert(offsetof(PlatformMethods, logWarning) == sizeof(void *) + 3 * sizeof(void (*)(...)),
+              "PlatformMethods incompatibly modified");
+static_assert(offsetof(PlatformMethods, logInfo) == sizeof(void *) + 4 * sizeof(void (*)(...)),
+              "PlatformMethods incompatibly modified");
+static_assert(offsetof(PlatformMethods, getTraceCategoryEnabledFlag) ==
+                  sizeof(void *) + 5 * sizeof(void (*)(...)),
+              "PlatformMethods incompatibly modified");
+static_assert(offsetof(PlatformMethods, addTraceEvent) ==
+                  sizeof(void *) + 6 * sizeof(void (*)(...)),
+              "PlatformMethods incompatibly modified");
+static_assert(offsetof(PlatformMethods, updateTraceEventDuration) ==
+                  sizeof(void *) + 7 * sizeof(void (*)(...)),
+              "PlatformMethods incompatibly modified");
+static_assert(offsetof(PlatformMethods, histogramCustomCounts) ==
+                  sizeof(void *) + 8 * sizeof(void (*)(...)),
+              "PlatformMethods incompatibly modified");
+static_assert(offsetof(PlatformMethods, histogramEnumeration) ==
+                  sizeof(void *) + 9 * sizeof(void (*)(...)),
+              "PlatformMethods incompatibly modified");
+static_assert(offsetof(PlatformMethods, histogramSparse) ==
+                  sizeof(void *) + 10 * sizeof(void (*)(...)),
+              "PlatformMethods incompatibly modified");
+static_assert(offsetof(PlatformMethods, histogramBoolean) ==
+                  sizeof(void *) + 11 * sizeof(void (*)(...)),
+              "PlatformMethods incompatibly modified");
+static_assert(offsetof(PlatformMethods, cacheProgram) ==
+                  sizeof(void *) + 14 * sizeof(void (*)(...)),
+              "PlatformMethods incompatibly modified");
+static_assert(offsetof(PlatformMethods, postWorkerTask) ==
+                  sizeof(void *) + 16 * sizeof(void (*)(...)),
+              "PlatformMethods incompatibly modified");
 
 inline PlatformMethods::PlatformMethods() = default;
 
