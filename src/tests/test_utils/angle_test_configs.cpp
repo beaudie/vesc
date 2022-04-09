@@ -9,8 +9,24 @@
 #include "common/platform.h"
 #include "util/util_gl.h"
 
+#include <cctype>
+
 namespace angle
 {
+namespace
+{
+void AppendCapitalizedFeature(std::ostream &stream, const std::string feature)
+{
+    if (feature == "")
+    {
+        stream << "InternalError";
+        return;
+    }
+
+    const char first = feature[0];
+    stream << static_cast<char>(std::toupper(first)) << (feature.c_str() + 1);
+}
+}  // namespace
 
 PlatformParameters::PlatformParameters() : PlatformParameters(2, 0, GLESDriverType::AngleEGL) {}
 
@@ -57,11 +73,6 @@ bool PlatformParameters::isVulkan() const
 bool PlatformParameters::isANGLE() const
 {
     return driver == GLESDriverType::AngleEGL;
-}
-
-EGLint PlatformParameters::getAllocateNonZeroMemoryFeature() const
-{
-    return eglParameters.allocateNonZeroMemoryFeature;
 }
 
 void PlatformParameters::initDefaultParameters()
@@ -196,126 +207,6 @@ std::ostream &operator<<(std::ostream &stream, const PlatformParameters &pp)
         stream << "_NoFixture";
     }
 
-    if (pp.eglParameters.transformFeedbackFeature == EGL_FALSE)
-    {
-        stream << "_NoTransformFeedback";
-    }
-    else if (pp.eglParameters.transformFeedbackFeature == EGL_TRUE)
-    {
-        stream << "_TransformFeedback";
-    }
-
-    if (pp.eglParameters.allocateNonZeroMemoryFeature == EGL_FALSE)
-    {
-        stream << "_NoAllocateNonZeroMemory";
-    }
-    else if (pp.eglParameters.allocateNonZeroMemoryFeature == EGL_TRUE)
-    {
-        stream << "_AllocateNonZeroMemory";
-    }
-
-    if (pp.eglParameters.emulateCopyTexImage2DFromRenderbuffers == EGL_TRUE)
-    {
-        stream << "_EmulateCopyTexImage2DFromRenderbuffers";
-    }
-
-    if (pp.eglParameters.shaderStencilOutputFeature == EGL_FALSE)
-    {
-        stream << "_NoStencilOutput";
-    }
-
-    if (pp.eglParameters.genMultipleMipsPerPassFeature == EGL_FALSE)
-    {
-        stream << "_NoGenMultipleMipsPerPass";
-    }
-
-    switch (pp.eglParameters.emulatedPrerotation)
-    {
-        case 90:
-            stream << "_PreRotate90";
-            break;
-        case 180:
-            stream << "_PreRotate180";
-            break;
-        case 270:
-            stream << "_PreRotate270";
-            break;
-        default:
-            break;
-    }
-
-    if (pp.eglParameters.asyncCommandQueueFeatureVulkan == EGL_TRUE)
-    {
-        stream << "_AsyncQueue";
-    }
-
-    if (pp.eglParameters.hasExplicitMemBarrierFeatureMtl == EGL_FALSE)
-    {
-        stream << "_NoMetalExplicitMemoryBarrier";
-    }
-
-    if (pp.eglParameters.hasCheapRenderPassFeatureMtl == EGL_FALSE)
-    {
-        stream << "_NoMetalCheapRenderPass";
-    }
-
-    if (pp.eglParameters.forceBufferGPUStorageFeatureMtl == EGL_TRUE)
-    {
-        stream << "_ForceMetalBufferGPUStorage";
-    }
-
-    if (pp.eglParameters.supportsVulkanViewportFlip == EGL_TRUE)
-    {
-        stream << "_VulkanViewportFlip";
-    }
-    else if (pp.eglParameters.supportsVulkanViewportFlip == EGL_FALSE)
-    {
-        stream << "_NoVulkanViewportFlip";
-    }
-
-    if (pp.eglParameters.supportsVulkanMultiDrawIndirect == EGL_TRUE)
-    {
-        stream << "_VulkanMultiDrawIndirect";
-    }
-    else if (pp.eglParameters.supportsVulkanMultiDrawIndirect == EGL_FALSE)
-    {
-        stream << "_VulkanNoMultiDrawIndirect";
-    }
-
-    if (pp.eglParameters.WithVulkanPreferCPUForBufferSubData == EGL_TRUE)
-    {
-        stream << "_VulkanPreferCPUForBufferSubData";
-    }
-    else if (pp.eglParameters.WithVulkanPreferCPUForBufferSubData == EGL_FALSE)
-    {
-        stream << "_VulkanNoPreferCPUForBufferSubData";
-    }
-
-    if (pp.eglParameters.emulatedVAOs == EGL_TRUE)
-    {
-        stream << "_EmulatedVAOs";
-    }
-
-    if (pp.eglParameters.generateSPIRVThroughGlslang == EGL_TRUE)
-    {
-        stream << "_Glslang";
-    }
-
-    if (pp.eglParameters.directMetalGeneration == EGL_TRUE)
-    {
-        stream << "_DirectMetalGen";
-    }
-
-    if (pp.eglParameters.forceInitShaderVariables == EGL_TRUE)
-    {
-        stream << "_InitShaderVars";
-    }
-
-    if (pp.eglParameters.forceVulkanFallbackFormat == EGL_TRUE)
-    {
-        stream << "_FallbackFormat";
-    }
-
     if (pp.eglParameters.displayPowerPreference == EGL_LOW_POWER_ANGLE)
     {
         stream << "_LowPowerGPU";
@@ -326,17 +217,30 @@ std::ostream &operator<<(std::ostream &stream, const PlatformParameters &pp)
         stream << "_HighPowerGPU";
     }
 
-    if (pp.eglParameters.forceSubmitImmutableTextureUpdates == EGL_TRUE)
+    for (const std::string &feature : pp.eglParameters.disabledFeatureOverrides)
     {
-        stream << "_VulkanForceSubmitImmutableTextureUpdates";
+        stream << "_No";
+        AppendCapitalizedFeature(stream, feature);
     }
-
-    if (pp.eglParameters.createPipelineDuringLink == EGL_TRUE)
+    for (const std::string &feature : pp.eglParameters.enabledFeatureOverrides)
     {
-        stream << "_CreatePipelineDuringLink";
+        stream << "_";
+        AppendCapitalizedFeature(stream, feature);
     }
 
     return stream;
+}
+
+bool HasFeatureOverride(const std::vector<std::string> &overrides, const char *feature)
+{
+    for (const std::string &o : overrides)
+    {
+        if (o == feature)
+        {
+            return true;
+        }
+    }
+    return false;
 }
 
 // EGL platforms

@@ -4742,7 +4742,7 @@ TEST_P(Texture2DTestES3, CopyCompressedImageMipMaps)
     ANGLE_SKIP_TEST_IF(!IsGLExtensionEnabled("GL_EXT_copy_image"));
     // TODO(http://anglebug.com/5634): Fix calls to vkCmdCopyBufferToImage() with images smaller
     // than the compressed format block size.
-    ANGLE_SKIP_TEST_IF(isAllocateNonZeroMemoryEnabled());
+    ANGLE_SKIP_TEST_IF(IsWithAllocateNonZeroMemory(GetParam()));
 
     constexpr uint32_t kSize             = 4;
     constexpr size_t kNumLevels          = 3;
@@ -7643,8 +7643,8 @@ TEST_P(Texture2DRGTest, TextureRGUNormTest)
     ANGLE_SKIP_TEST_IF(!IsGLExtensionEnabled("GL_EXT_texture_rg"));
     // This workaround causes a GL error on Windows AMD, which is likely a driver bug.
     // The workaround is not intended to be enabled in this configuration so skip it.
-    ANGLE_SKIP_TEST_IF(GetParam().eglParameters.emulateCopyTexImage2DFromRenderbuffers &&
-                       IsWindows() && IsAMD());
+    ANGLE_SKIP_TEST_IF(IsWithEmulateCopyTexImage2DFromRenderbuffers(GetParam()) && IsWindows() &&
+                       IsAMD());
 
     GLubyte pixelValue  = 0xab;
     GLubyte imageData[] = {pixelValue, pixelValue};
@@ -9517,7 +9517,7 @@ TEST_P(Texture2DTestES3, NonZeroBaseEmulatedClear)
     // memory feature, clearing the memory to zero. However, if the format is *not* emulated and the
     // feature WithAllocateNonZeroMemory is enabled, the texture memory will contain non-zero
     // memory, which means the color is not black (causing the test to fail).
-    ANGLE_SKIP_TEST_IF(isAllocateNonZeroMemoryEnabled());
+    ANGLE_SKIP_TEST_IF(IsWithAllocateNonZeroMemory(GetParam()));
 
     setUpProgram();
 

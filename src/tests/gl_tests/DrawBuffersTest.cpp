@@ -1451,10 +1451,12 @@ TEST_P(ColorMaskForDrawBuffersTest, Blit)
     EXPECT_GL_NO_ERROR();
 }
 
-ANGLE_INSTANTIATE_TEST(DrawBuffersTest,
-                       ANGLE_ALL_TEST_PLATFORMS_ES2,
-                       ANGLE_ALL_TEST_PLATFORMS_ES3,
-                       WithNoTransformFeedback(ES2_VULKAN()));
+ANGLE_INSTANTIATE_TEST(
+    DrawBuffersTest,
+    ANGLE_ALL_TEST_PLATFORMS_ES2,
+    ANGLE_ALL_TEST_PLATFORMS_ES3,
+    WithNoSupportsTransformFeedbackExtension(
+        WithNoSupportsGeometryStreamsCapability(WithNoEmulateTransformFeedback(ES2_VULKAN()))));
 
 GTEST_ALLOW_UNINSTANTIATED_PARAMETERIZED_TEST(DrawBuffersWebGL2Test);
 ANGLE_INSTANTIATE_TEST_ES3(DrawBuffersWebGL2Test);

@@ -1334,19 +1334,15 @@ TEST_P(SimpleOperationTest, DrawElementsZeroInstanceCountIsNoOp)
 // tests should be run against.
 ANGLE_INSTANTIATE_TEST_ES2_AND_ES3_AND(
     SimpleOperationTest,
-    WithMetalForcedBufferGPUStorage(ES3_METAL()),
-    WithMetalMemoryBarrierAndCheapRenderPass(ES3_METAL(),
-                                             /* hasBarrier */ false,
-                                             /* cheapRenderPass */ false),
-    WithNoVulkanViewportFlip(ES2_VULKAN()));
+    WithForceBufferGPUStorage(ES3_METAL()),
+    WithNoHasExplicitMemBarrier(WithNoHasCheapRenderPass(ES3_METAL())),
+    WithNoSupportsNegativeViewport(ES2_VULKAN()));
 
 ANGLE_INSTANTIATE_TEST_ES2_AND_ES3_AND(
     TriangleFanDrawTest,
-    WithMetalForcedBufferGPUStorage(ES3_METAL()),
-    WithMetalMemoryBarrierAndCheapRenderPass(ES3_METAL(),
-                                             /* hasBarrier */ false,
-                                             /* cheapRenderPass */ false),
-    WithNoVulkanViewportFlip(ES2_VULKAN()));
+    WithForceBufferGPUStorage(ES3_METAL()),
+    WithNoHasExplicitMemBarrier(WithNoHasCheapRenderPass(ES3_METAL())),
+    WithNoSupportsNegativeViewport(ES2_VULKAN()));
 
 ANGLE_INSTANTIATE_TEST_ES2_AND_ES3_AND_ES31(SimpleOperationTest31);
 

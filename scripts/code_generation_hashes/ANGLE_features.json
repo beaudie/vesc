@@ -4,9 +4,9 @@
   "include/platform/FeaturesGL.h":
     "ad10b0d9bd17c6ea293a3c851f7eba7f",
   "include/platform/FeaturesMtl.h":
-    "880934b1061a0ac03a6026e3c583dd12",
+    "f45c509a1dda1b2f208c0807b421cc58",
   "include/platform/FeaturesVk.h":
-    "84cf6afdb62c11a5f5d70e388223980f",
+    "dbbdb92f8b20904c17e6f0dca39f9609",
   "include/platform/FrontendFeatures.h":
     "4488b63548d78c9027d199045e2d6161",
   "include/platform/d3d_features.json":
@@ -14,11 +14,13 @@
   "include/platform/frontend_features.json":
     "a90f0a9088297d1c95e9a1a423afb9fa",
   "include/platform/gen_features.py":
-    "15526dbff642af7b63e293cb4e466000",
+    "142050d56915abf2bd492900e666e8d4",
   "include/platform/gl_features.json":
     "d4dd26c1cee7101d1cd719e81cd48937",
   "include/platform/mtl_features.json":
-    "91279018ed91ce9f0cdf2c4fc6bd2aa1",
+    "fc1668d4d1fc18634660ef7d92cbfced",
   "include/platform/vk_features.json":
-    "7d92831b9cbf7acb5b239d379dcef395"
+    "5f545a2c5ecd3e5bafd916312ab6ef7c",
+  "src/tests/test_utils/angle_test_feature_overrides_autogen.h":
+    "b1bc9ced07b4881031a2865d6de35ee2"
 }

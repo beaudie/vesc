@@ -168,7 +168,7 @@ struct FeaturesMtl : FeatureSetBase
     };
 
     Feature emulateTransformFeedback = {
-        "emulate_transform_feedback",
+        "emulateTransformFeedback",
         FeatureCategory::MetalFeatures,
         "Turn this on to allow transform feedback in Metal using a 2-pass VS for GLES3.",
         &members,

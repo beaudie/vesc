@@ -50,7 +50,7 @@ struct FeaturesVk : FeatureSetBase
     };
 
     Feature clampPointSize = {
-        "clampPointSize", FeatureCategory::VulkanWorkarounds,
+        "clamp_point_size", FeatureCategory::VulkanWorkarounds,
         "The point size range reported from the API is inconsistent with the actual behavior",
         &members, "http://anglebug.com/2970"};
 

@@ -2062,11 +2062,16 @@ void RegisterTraceTests()
         TracePerfParams overrideParams = params;
         if (gTraceTestValidation)
         {
+            PlatformParameters platformParams = overrideParams;
+
             // Enable limits when validating traces because we usually turn off capture.
-            overrideParams.eglParameters.captureLimits = EGL_TRUE;
+            platformParams = WithCaptureLimits(platformParams);
 
             // This feature should also be enabled in capture to mirror the replay.
-            overrideParams.eglParameters.forceInitShaderVariables = EGL_TRUE;
+            platformParams = WithForceInitShaderVariables(platformParams);
+
+            overrideParams.eglParameters.enabledFeatureOverrides =
+                platformParams.eglParameters.enabledFeatureOverrides;
         }
 
         auto factory          = [overrideParams]() { return new TracePerfTest(overrideParams); };
