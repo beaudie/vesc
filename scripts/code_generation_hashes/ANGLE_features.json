@@ -1,24 +1,28 @@
 {
   "include/platform/FeaturesD3D.h":
-    "c04cc5909abf750a6a392787a2685cde",
+    "10865d6573b451da5d12c9de22e55e40",
   "include/platform/FeaturesGL.h":
-    "ad10b0d9bd17c6ea293a3c851f7eba7f",
+    "37e133a4500b978289646d8b97368e97",
   "include/platform/FeaturesMtl.h":
-    "880934b1061a0ac03a6026e3c583dd12",
+    "c0512664076f8c34d4f5b2f6615d29a3",
   "include/platform/FeaturesVk.h":
-    "84cf6afdb62c11a5f5d70e388223980f",
+    "bf299956a0844cfe35c6dcf0c33e4060",
   "include/platform/FrontendFeatures.h":
-    "4488b63548d78c9027d199045e2d6161",
+    "3af22796ad826ba84ed1539f82d8c82f",
   "include/platform/d3d_features.json":
     "7b5a756181e98784e5c5e57316521bd2",
   "include/platform/frontend_features.json":
     "a90f0a9088297d1c95e9a1a423afb9fa",
   "include/platform/gen_features.py":
-    "15526dbff642af7b63e293cb4e466000",
+    "61bb1bc152ee5f94366af5bf9f0f5a47",
   "include/platform/gl_features.json":
     "d4dd26c1cee7101d1cd719e81cd48937",
   "include/platform/mtl_features.json":
-    "91279018ed91ce9f0cdf2c4fc6bd2aa1",
+    "fc1668d4d1fc18634660ef7d92cbfced",
   "include/platform/vk_features.json":
-    "7d92831b9cbf7acb5b239d379dcef395"
+    "5f545a2c5ecd3e5bafd916312ab6ef7c",
+  "util/angle_features_autogen.cpp":
+    "6d2601d2a0e15bec38907cb15a7ff9f6",
+  "util/angle_features_autogen.h":
+    "b4fd8bcffc3de8cbd25224429f0caa7b"
 }

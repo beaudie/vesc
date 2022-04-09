@@ -73,7 +73,7 @@
                 "actual behavior. Clamp the point size to the value from the API to fix this."
             ],
             "name": "clampPointSize",
-            "display_name": "clampPointSize",
+            "display_name": "clamp_point_size",
             "category": "VulkanWorkarounds",
             "description": [
                 "The point size range reported from the API is inconsistent with the actual behavior"
