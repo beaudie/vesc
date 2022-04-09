@@ -177,20 +177,25 @@ PreRotationParams VulkanParams(PreRotation preRotation)
     params.eglParameters = egl_platform::VULKAN();
     params.preRotation   = preRotation;
 
+    PlatformParameters platformParams = params;
+
     switch (preRotation)
     {
         case PreRotation::_0:
             break;
         case PreRotation::_90:
-            params.eglParameters.emulatedPrerotation = 90;
+            platformParams = WithEmulatedPrerotation90(platformParams);
             break;
         case PreRotation::_180:
-            params.eglParameters.emulatedPrerotation = 180;
+            platformParams = WithEmulatedPrerotation180(platformParams);
             break;
         case PreRotation::_270:
-            params.eglParameters.emulatedPrerotation = 270;
+            platformParams = WithEmulatedPrerotation270(platformParams);
             break;
     }
+
+    params.eglParameters.enabledFeatureOverrides =
+        platformParams.eglParameters.enabledFeatureOverrides;
 
     return params;
 }

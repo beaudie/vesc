@@ -4127,9 +4127,11 @@ TEST_P(VertexAttributeTestES3, emptyBuffer)
 
 // VAO emulation fails on Mac but is not used on Mac in the wild. http://anglebug.com/5577
 #if !defined(__APPLE__)
-#    define EMULATED_VAO_CONFIGS                                          \
-        WithEmulatedVAOs(ES2_OPENGL()), WithEmulatedVAOs(ES2_OPENGLES()), \
-            WithEmulatedVAOs(ES3_OPENGL()), WithEmulatedVAOs(ES3_OPENGLES()),
+#    define EMULATED_VAO_CONFIGS                           \
+        WithSyncVertexArraysToDefault(ES2_OPENGL()),       \
+            WithSyncVertexArraysToDefault(ES2_OPENGLES()), \
+            WithSyncVertexArraysToDefault(ES3_OPENGL()),   \
+            WithSyncVertexArraysToDefault(ES3_OPENGLES()),
 #else
 #    define EMULATED_VAO_CONFIGS
 #endif
@@ -4140,43 +4142,26 @@ TEST_P(VertexAttributeTestES3, emptyBuffer)
 // 10_0+, so we should test them separately.
 ANGLE_INSTANTIATE_TEST_ES2_AND_ES3_AND(
     VertexAttributeTest,
-    WithMetalMemoryBarrierAndCheapRenderPass(ES3_METAL(),
-                                             /* hasBarrier */ false,
-                                             /* cheapRenderPass */ true),
-    WithMetalMemoryBarrierAndCheapRenderPass(ES3_METAL(),
-                                             /* hasBarrier */ false,
-                                             /* cheapRenderPass */ false),
+    WithNoHasExplicitMemBarrier(WithNoHasCheapRenderPass(ES3_METAL())),
+    WithNoHasExplicitMemBarrier(WithHasCheapRenderPass(ES3_METAL())),
     EMULATED_VAO_CONFIGS);
 
 ANGLE_INSTANTIATE_TEST_ES2_AND_ES3_AND(
     VertexAttributeOORTest,
-    WithMetalMemoryBarrierAndCheapRenderPass(ES3_METAL(),
-                                             /* hasBarrier */ false,
-                                             /* cheapRenderPass */ true),
-    WithMetalMemoryBarrierAndCheapRenderPass(ES3_METAL(),
-                                             /* hasBarrier */ false,
-                                             /* cheapRenderPass */ false));
+    WithNoHasExplicitMemBarrier(WithNoHasCheapRenderPass(ES3_METAL())),
+    WithNoHasExplicitMemBarrier(WithHasCheapRenderPass(ES3_METAL())));
 
 GTEST_ALLOW_UNINSTANTIATED_PARAMETERIZED_TEST(VertexAttributeTestES3);
-ANGLE_INSTANTIATE_TEST_ES3_AND(
-    VertexAttributeTestES3,
-    WithMetalMemoryBarrierAndCheapRenderPass(ES3_METAL(),
-                                             /* hasBarrier */ false,
-                                             /* cheapRenderPass */ true),
-    WithMetalMemoryBarrierAndCheapRenderPass(ES3_METAL(),
-                                             /* hasBarrier */ false,
-                                             /* cheapRenderPass */ false));
+ANGLE_INSTANTIATE_TEST_ES3_AND(VertexAttributeTestES3,
+                               WithNoHasExplicitMemBarrier(WithNoHasCheapRenderPass(ES3_METAL())),
+                               WithNoHasExplicitMemBarrier(WithHasCheapRenderPass(ES3_METAL())));
 
 GTEST_ALLOW_UNINSTANTIATED_PARAMETERIZED_TEST(VertexAttributeTestES31);
 ANGLE_INSTANTIATE_TEST_ES31(VertexAttributeTestES31);
 
 ANGLE_INSTANTIATE_TEST_ES2_AND_ES3_AND(
     VertexAttributeCachingTest,
-    WithMetalMemoryBarrierAndCheapRenderPass(ES3_METAL(),
-                                             /* hasBarrier */ false,
-                                             /* cheapRenderPass */ true),
-    WithMetalMemoryBarrierAndCheapRenderPass(ES3_METAL(),
-                                             /* hasBarrier */ false,
-                                             /* cheapRenderPass */ false));
+    WithNoHasExplicitMemBarrier(WithNoHasCheapRenderPass(ES3_METAL())),
+    WithNoHasExplicitMemBarrier(WithHasCheapRenderPass(ES3_METAL())));
 
 }  // anonymous namespace

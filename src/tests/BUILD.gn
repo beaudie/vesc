@@ -114,6 +114,7 @@ template("angle_common_test_utils") {
       "test_utils/RenderDoc.h",
       "test_utils/angle_test_configs.cpp",
       "test_utils/angle_test_configs.h",
+      "test_utils/angle_test_feature_overrides_autogen.h",
       "test_utils/angle_test_instantiate.cpp",
       "test_utils/angle_test_instantiate.h",
       "test_utils/angle_test_platform.cpp",
