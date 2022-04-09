@@ -27,6 +27,7 @@ VertexDeclarationCache::VertexDeclarationCache() : mMaxLru(0)
         mVertexDeclCache[i].lruCount          = 0;
     }
 
+    static_assert(std::size(mAppliedVBs) == gl::MAX_VERTEX_ATTRIBS, "");
     for (int i = 0; i < gl::MAX_VERTEX_ATTRIBS; i++)
     {
         mAppliedVBs[i].serial = 0;
@@ -250,6 +251,7 @@ angle::Result VertexDeclarationCache::applyDeclaration(
 
 void VertexDeclarationCache::markStateDirty()
 {
+    static_assert(std::size(mAppliedVBs) == gl::MAX_VERTEX_ATTRIBS, "");
     for (int i = 0; i < gl::MAX_VERTEX_ATTRIBS; i++)
     {
         mAppliedVBs[i].serial = 0;
