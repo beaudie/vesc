@@ -305,36 +305,34 @@ std::unique_ptr<rx::LinkEvent> ProgramExecutableVk::load(ContextVk *contextVk,
 
     for (gl::ShaderType shaderType : gl::AllShaderTypes())
     {
-        for (ShaderVariableType variableType : angle::AllEnums<ShaderVariableType>())
+        size_t variableInfoMapSize = stream->readInt<size_t>();
+
+        for (size_t i = 0; i < variableInfoMapSize; ++i)
         {
-            size_t variableInfoMapSize = stream->readInt<size_t>();
+            const std::string variableName  = stream->readString();
+            ShaderVariableType variableType = stream->readEnum<ShaderVariableType>();
+            ShaderInterfaceVariableInfo &info =
+                mVariableInfoMap.add(shaderType, variableType, variableName);
 
-            for (size_t i = 0; i < variableInfoMapSize; ++i)
+            info.descriptorSet = stream->readInt<uint32_t>();
+            info.binding       = stream->readInt<uint32_t>();
+            info.location      = stream->readInt<uint32_t>();
+            info.component     = stream->readInt<uint32_t>();
+            info.index         = stream->readInt<uint32_t>();
+            // PackedEnumBitSet uses uint8_t
+            info.activeStages = gl::ShaderBitSet(stream->readInt<uint8_t>());
+            LoadShaderInterfaceVariableXfbInfo(stream, &info.xfb);
+            info.fieldXfb.resize(stream->readInt<size_t>());
+            for (ShaderInterfaceVariableXfbInfo &xfb : info.fieldXfb)
             {
-                const std::string variableName = stream->readString();
-                ShaderInterfaceVariableInfo &info =
-                    mVariableInfoMap.add(shaderType, variableType, variableName);
-
-                info.descriptorSet = stream->readInt<uint32_t>();
-                info.binding       = stream->readInt<uint32_t>();
-                info.location      = stream->readInt<uint32_t>();
-                info.component     = stream->readInt<uint32_t>();
-                info.index         = stream->readInt<uint32_t>();
-                // PackedEnumBitSet uses uint8_t
-                info.activeStages = gl::ShaderBitSet(stream->readInt<uint8_t>());
-                LoadShaderInterfaceVariableXfbInfo(stream, &info.xfb);
-                info.fieldXfb.resize(stream->readInt<size_t>());
-                for (ShaderInterfaceVariableXfbInfo &xfb : info.fieldXfb)
-                {
-                    LoadShaderInterfaceVariableXfbInfo(stream, &xfb);
-                }
-                info.useRelaxedPrecision     = stream->readBool();
-                info.varyingIsInput          = stream->readBool();
-                info.varyingIsOutput         = stream->readBool();
-                info.attributeComponentCount = stream->readInt<uint8_t>();
-                info.attributeLocationCount  = stream->readInt<uint8_t>();
-                info.isDuplicate             = stream->readBool();
+                LoadShaderInterfaceVariableXfbInfo(stream, &xfb);
             }
+            info.useRelaxedPrecision     = stream->readBool();
+            info.varyingIsInput          = stream->readBool();
+            info.varyingIsOutput         = stream->readBool();
+            info.attributeComponentCount = stream->readInt<uint8_t>();
+            info.attributeLocationCount  = stream->readInt<uint8_t>();
+            info.isDuplicate             = stream->readBool();
         }
     }
 
@@ -375,35 +373,35 @@ void ProgramExecutableVk::save(gl::BinaryOutputStream *stream)
 {
     for (gl::ShaderType shaderType : gl::AllShaderTypes())
     {
-        for (ShaderVariableType variableType : angle::AllEnums<ShaderVariableType>())
+        stream->writeInt(mVariableInfoMap.variableCount(shaderType));
+        for (const auto &it : mVariableInfoMap.getIterator(shaderType))
         {
-            stream->writeInt(mVariableInfoMap.variableCount(shaderType, variableType));
-            for (const auto &it : mVariableInfoMap.getIterator(shaderType, variableType))
-            {
-                const std::string &name                 = it.first;
-                const ShaderInterfaceVariableInfo &info = it.second;
+            const std::string &name          = it.first;
+            const TypeAndIndex &typeAndIndex = it.second;
+            const ShaderInterfaceVariableInfo &info =
+                mVariableInfoMap.getVariableByName(shaderType, name);
 
-                stream->writeString(name);
-                stream->writeInt(info.descriptorSet);
-                stream->writeInt(info.binding);
-                stream->writeInt(info.location);
-                stream->writeInt(info.component);
-                stream->writeInt(info.index);
-                // PackedEnumBitSet uses uint8_t
-                stream->writeInt(info.activeStages.bits());
-                SaveShaderInterfaceVariableXfbInfo(info.xfb, stream);
-                stream->writeInt(info.fieldXfb.size());
-                for (const ShaderInterfaceVariableXfbInfo &xfb : info.fieldXfb)
-                {
-                    SaveShaderInterfaceVariableXfbInfo(xfb, stream);
-                }
-                stream->writeBool(info.useRelaxedPrecision);
-                stream->writeBool(info.varyingIsInput);
-                stream->writeBool(info.varyingIsOutput);
-                stream->writeInt(info.attributeComponentCount);
-                stream->writeInt(info.attributeLocationCount);
-                stream->writeBool(info.isDuplicate);
+            stream->writeString(name);
+            stream->writeEnum(typeAndIndex.variableType);
+            stream->writeInt(info.descriptorSet);
+            stream->writeInt(info.binding);
+            stream->writeInt(info.location);
+            stream->writeInt(info.component);
+            stream->writeInt(info.index);
+            // PackedEnumBitSet uses uint8_t
+            stream->writeInt(info.activeStages.bits());
+            SaveShaderInterfaceVariableXfbInfo(info.xfb, stream);
+            stream->writeInt(info.fieldXfb.size());
+            for (const ShaderInterfaceVariableXfbInfo &xfb : info.fieldXfb)
+            {
+                SaveShaderInterfaceVariableXfbInfo(xfb, stream);
             }
+            stream->writeBool(info.useRelaxedPrecision);
+            stream->writeBool(info.varyingIsInput);
+            stream->writeBool(info.varyingIsOutput);
+            stream->writeInt(info.attributeComponentCount);
+            stream->writeInt(info.attributeLocationCount);
+            stream->writeBool(info.isDuplicate);
         }
     }
 
