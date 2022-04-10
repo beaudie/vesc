@@ -4694,10 +4694,18 @@ bool HasAliasingAttributes(const ShaderInterfaceVariableInfoMap &variableInfoMap
 {
     gl::AttributesMask isLocationAssigned;
 
-    for (const auto &infoIter :
-         variableInfoMap.getIterator(gl::ShaderType::Vertex, ShaderVariableType::Attribute))
+    for (const auto &iter : variableInfoMap.getIterator(gl::ShaderType::Vertex))
     {
-        const ShaderInterfaceVariableInfo &info = infoIter.second;
+        const std::string &name          = iter.first;
+        const TypeAndIndex &typeAndIndex = iter.second;
+
+        if (typeAndIndex.variableType != ShaderVariableType::Attribute)
+        {
+            continue;
+        }
+
+        const ShaderInterfaceVariableInfo &info =
+            variableInfoMap.getVariableByName(gl::ShaderType::Vertex, name);
 
         // Ignore non attribute ids.
         if (info.attributeComponentCount == 0)
