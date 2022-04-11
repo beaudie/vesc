@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "a62ec6f3_8b814806",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 31
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1528827
+      },
+      "writtenOn": "2022-04-11T15:12:49Z",
+      "side": 1,
+      "message": "I added angle_wayland_config to the public configs of the angle_vulkan_backend target.",
+      "revId": "7e8991dfaff826d64fc4882a45691ca2f8ff2bcb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
