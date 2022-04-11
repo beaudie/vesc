@@ -1,0 +1,136 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "864675ec_8819614a",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2022-04-11T14:58:19Z",
+      "side": 1,
+      "message": "This is great Shabi, a few suggestions to make this even better.",
+      "revId": "80fd61c5fa51af165acd6c8a12df29d2b2a508c0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "0d7726c3_1963be00",
+        "filename": "include/platform/d3d_features.json",
+        "patchSetId": 2
+      },
+      "lineNbr": 19,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2022-04-11T14:58:19Z",
+      "side": 1,
+      "message": "one other nit: make this implicit from the file. No need to specify it as it\u0027s redundant.",
+      "range": {
+        "startLine": 19,
+        "startChar": 25,
+        "endLine": 19,
+        "endChar": 39
+      },
+      "revId": "80fd61c5fa51af165acd6c8a12df29d2b2a508c0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "e179729f_6be341aa",
+        "filename": "include/platform/d3d_features.json",
+        "patchSetId": 2
+      },
+      "lineNbr": 57,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2022-04-11T14:58:19Z",
+      "side": 1,
+      "message": "nit: the wrap didn\u0027t work right for some of these comments. Looks like they are about 120.",
+      "range": {
+        "startLine": 57,
+        "startChar": 71,
+        "endLine": 57,
+        "endChar": 80
+      },
+      "revId": "80fd61c5fa51af165acd6c8a12df29d2b2a508c0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "84e2fd2d_6d7e97c2",
+        "filename": "include/platform/d3d_features.json",
+        "patchSetId": 2
+      },
+      "lineNbr": 99,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2022-04-11T14:58:19Z",
+      "side": 1,
+      "message": "nit: issue is a more specific term than bug. I\u0027d suggest you also make \"None\" implicit when there is no issue defined.",
+      "range": {
+        "startLine": 99,
+        "startChar": 13,
+        "endLine": 99,
+        "endChar": 16
+      },
+      "revId": "80fd61c5fa51af165acd6c8a12df29d2b2a508c0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "1eb376db_9095d05f",
+        "filename": "include/platform/d3d_features.json",
+        "patchSetId": 2
+      },
+      "lineNbr": 128,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2022-04-11T14:58:19Z",
+      "side": 1,
+      "message": "one other suggestion: Merge comment and description. It doesn\u0027t seem that useful to have both. Because it\u0027s a bit more complex can be done as a follow-up.",
+      "range": {
+        "startLine": 125,
+        "startChar": 0,
+        "endLine": 128,
+        "endChar": 14
+      },
+      "revId": "80fd61c5fa51af165acd6c8a12df29d2b2a508c0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "845df6f1_24ab9b5f",
+        "filename": "include/platform/mtl_features.json",
+        "patchSetId": 2
+      },
+      "lineNbr": 15,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2022-04-11T14:58:19Z",
+      "side": 1,
+      "message": "This is great, Shabi. Thanks for making this change. I have one suggestion:\n\nInstead of making a separate name/display_name, display the name as the camelCaseName, and accept both under_score_name and camelCaseName when doing any string name interpretation. That way we can support the Chromium use case and have a consistent implementation, where we don\u0027t have to mentally track which back-end uses what naming scheme. With auto-gen this becomes easy to implement.\n\nYou can do this as a follow-up if you prefer.",
+      "range": {
+        "startLine": 14,
+        "startChar": 0,
+        "endLine": 15,
+        "endChar": 61
+      },
+      "revId": "80fd61c5fa51af165acd6c8a12df29d2b2a508c0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
