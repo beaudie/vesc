@@ -854,6 +854,8 @@ ContextVk::ContextVk(const gl::State &state, gl::ErrorSet *errorSet, RendererVk 
     mGraphicsDirtyBitHandlers[DIRTY_BIT_DESCRIPTOR_SETS] =
         &ContextVk::handleDirtyGraphicsDescriptorSets;
 
+    mGraphicsDirtyBitHandlers[DIRTY_BIT_UNIFORMS] = &ContextVk::handleDirtyGraphicsUniforms;
+
     mGraphicsDirtyBitHandlers[DIRTY_BIT_VIEWPORT] = &ContextVk::handleDirtyGraphicsViewport;
     mGraphicsDirtyBitHandlers[DIRTY_BIT_SCISSOR]  = &ContextVk::handleDirtyGraphicsScissor;
 
@@ -872,6 +874,7 @@ ContextVk::ContextVk(const gl::State &state, gl::ErrorSet *errorSet, RendererVk 
         &ContextVk::handleDirtyComputeShaderResources;
     mComputeDirtyBitHandlers[DIRTY_BIT_DESCRIPTOR_SETS] =
         &ContextVk::handleDirtyComputeDescriptorSets;
+    mComputeDirtyBitHandlers[DIRTY_BIT_UNIFORMS] = &ContextVk::handleDirtyComputeUniforms;
 
     mGraphicsDirtyBits = mNewGraphicsCommandBufferDirtyBits;
     mComputeDirtyBits  = mNewComputeCommandBufferDirtyBits;
@@ -1221,13 +1224,7 @@ angle::Result ContextVk::setupDraw(const gl::Context *context,
     ProgramExecutableVk *programExecutableVk = getExecutable();
     if (programExecutableVk->hasDirtyUniforms())
     {
-        TransformFeedbackVk *transformFeedbackVk =
-            vk::SafeGetImpl(mState.getCurrentTransformFeedback());
-        ANGLE_TRY(programExecutableVk->updateUniforms(
-            this, &mUpdateDescriptorSetsBuilder, &mResourceUseList, &mEmptyBuffer,
-            *mState.getProgramExecutable(), &mDefaultUniformStorage,
-            mState.isTransformFeedbackActiveUnpaused(), transformFeedbackVk));
-        mGraphicsDirtyBits.set(DIRTY_BIT_DESCRIPTOR_SETS);
+        mGraphicsDirtyBits.set(DIRTY_BIT_UNIFORMS);
     }
 
     // Update transform feedback offsets on every draw call when emulating transform feedback.  This
@@ -1484,6 +1481,7 @@ angle::Result ContextVk::setupDispatch(const gl::Context *context)
             *mState.getProgramExecutable(), &mDefaultUniformStorage,
             mState.isTransformFeedbackActiveUnpaused(), transformFeedbackVk));
         mComputeDirtyBits.set(DIRTY_BIT_DESCRIPTOR_SETS);
+        //        mComputeDirtyBits.set(DIRTY_BIT_UNIFORMS);
     }
 
     DirtyBits dirtyBits = mComputeDirtyBits;
@@ -2391,6 +2389,21 @@ angle::Result ContextVk::handleDirtyGraphicsDescriptorSets(DirtyBits::Iterator *
     return handleDirtyDescriptorSetsImpl(mRenderPassCommandBuffer, PipelineType::Graphics);
 }
 
+angle::Result ContextVk::handleDirtyGraphicsUniforms(DirtyBits::Iterator *dirtyBitsIterator,
+                                                     DirtyBits dirtyBitMask)
+{
+    dirtyBitsIterator->setLaterBit(DIRTY_BIT_DESCRIPTOR_SETS);
+    ProgramExecutableVk *programExecutableVk = getExecutable();
+    TransformFeedbackVk *transformFeedbackVk =
+        vk::SafeGetImpl(mState.getCurrentTransformFeedback());
+    ANGLE_TRY(programExecutableVk->updateUniforms(
+        this, &mUpdateDescriptorSetsBuilder, &mResourceUseList, &mEmptyBuffer,
+        *mState.getProgramExecutable(), &mDefaultUniformStorage,
+        mState.isTransformFeedbackActiveUnpaused(), transformFeedbackVk));
+
+    return angle::Result::Continue;
+}
+
 angle::Result ContextVk::handleDirtyGraphicsViewport(DirtyBits::Iterator *dirtyBitsIterator,
                                                      DirtyBits dirtyBitMask)
 {
@@ -2426,6 +2439,19 @@ angle::Result ContextVk::handleDirtyComputeDescriptorSets()
 {
     return handleDirtyDescriptorSetsImpl(&mOutsideRenderPassCommands->getCommandBuffer(),
                                          PipelineType::Compute);
+}
+
+angle::Result ContextVk::handleDirtyComputeUniforms()
+{
+    ProgramExecutableVk *programExecutableVk = getExecutable();
+    TransformFeedbackVk *transformFeedbackVk =
+        vk::SafeGetImpl(mState.getCurrentTransformFeedback());
+    ANGLE_TRY(programExecutableVk->updateUniforms(
+        this, &mUpdateDescriptorSetsBuilder, &mResourceUseList, &mEmptyBuffer,
+        *mState.getProgramExecutable(), &mDefaultUniformStorage,
+        mState.isTransformFeedbackActiveUnpaused(), transformFeedbackVk));
+
+    return angle::Result::Continue;
 }
 
 template <typename CommandBufferT>
