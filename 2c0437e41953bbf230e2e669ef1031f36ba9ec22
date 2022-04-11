@@ -139,6 +139,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "7eba3f49_ed3fba7a",
+        "filename": "src/libANGLE/renderer/metal/DisplayMtl.mm",
+        "patchSetId": 1
+      },
+      "lineNbr": 1103,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2022-04-11T23:10:41Z",
+      "side": 1,
+      "message": "That\u0027s the question - if the OpenGL runtime has activated the discrete GPU but this DisplayMtl was instantiated against the integrated GPU, we\u0027d still want isIntel() to return true.\n\nI looked at the code in DisplayMtl::isIntel() and mtl::GetDeviceVendorId() and it looks like it\u0027s working correctly.",
+      "parentUuid": "38370c84_8946f0f1",
+      "revId": "2c0437e41953bbf230e2e669ef1031f36ba9ec22",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "96b6a9e2_32bd552c",
