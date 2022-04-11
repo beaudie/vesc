@@ -9,6 +9,9 @@
         Includes data used to auto-generate ANGLE classes.
     </comment>
     <!-- SECTION: EGL command definitions. -->
+    <types>
+        <type requires="khrplatform">typedef khronos_uint64_t <name>EGLFrameTokenANGLE</name>;</type>
+    </types>
     <commands namespace="EGL">
         <command>
             <proto><ptype>EGLDeviceEXT</ptype> <name>eglCreateDeviceANGLE</name></proto>
