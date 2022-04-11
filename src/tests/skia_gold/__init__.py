@@ -7,7 +7,14 @@ import sys
 
 d = os.path.dirname
 THIS_DIR = d(os.path.abspath(__file__))
-ANGLE_SRC_DIR = d(d(d(d(THIS_DIR))))
-sys.path.insert(0, os.path.join(ANGLE_SRC_DIR, 'build'))
-CHROMIUM_SRC_DIR = d(d(ANGLE_SRC_DIR))
-sys.path.insert(0, os.path.join(CHROMIUM_SRC_DIR, 'build'))
+ANGLE_SRC_DIR = d(d(d(THIS_DIR)))
+ANGLE_BUILD_DIR = os.path.join(ANGLE_SRC_DIR, 'build')
+
+if os.path.exists(ANGLE_BUILD_DIR):
+    if ANGLE_BUILD_DIR not in sys.path:
+        sys.path.insert(0, ANGLE_BUILD_DIR)
+else:
+    CHROMIUM_SRC_DIR = d(d(ANGLE_SRC_DIR))
+    CHROMIUM_BUILD_DIR = os.path.join(CHROMIUM_SRC_DIR, 'build')
+    if CHROMIUM_BUILD_DIR not in sys.path:
+        sys.path.insert(0, CHROMIUM_BUILD_DIR)
