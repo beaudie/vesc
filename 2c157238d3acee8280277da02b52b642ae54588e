@@ -69,6 +69,23 @@
       "parentUuid": "233d8238_378727c4",
       "revId": "2c157238d3acee8280277da02b52b642ae54588e",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "54319580_50c3b9bb",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 8
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1359249
+      },
+      "writtenOn": "2022-04-11T22:10:26Z",
+      "side": 1,
+      "message": "New patch: https://chromium-review.googlesource.com/c/angle/angle/+/3582940\n",
+      "revId": "2c157238d3acee8280277da02b52b642ae54588e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
