@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "4e19ea84_a2e64a7c",
+        "filename": "src/tests/gl_tests/VertexAttributeTest.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 4148,
+      "author": {
+        "id": 1001921
+      },
+      "writtenOn": "2022-04-11T23:32:37Z",
+      "side": 1,
+      "message": "Hmm, a bit inconvenient that we need to remember to set these in the derived classes now.\nIs it possible to override PlatformParameters for VertexAttributeTest instead?\n\nProbably it makes sense to override PlatformParameters every time we want to enable/disable a feature, instead of via current ANGLE_INSTANTIATE_* method.\nWould be more robust, I think.",
+      "range": {
+        "startLine": 4145,
+        "startChar": 0,
+        "endLine": 4148,
+        "endChar": 66
+      },
+      "revId": "c7491e10fa354472ea3368439f6fd0410f4237a9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
