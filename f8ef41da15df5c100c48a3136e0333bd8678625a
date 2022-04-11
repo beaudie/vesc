@@ -1,6 +1,23 @@
 {
   "comments": [
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "ac115d04_11b2b664",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 7
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2022-04-11T15:31:49Z",
+      "side": 1,
+      "message": "Seems like a worse design. The separate pool conceptually is very easy to understand. Will there be any perf advantages to this approach?",
+      "revId": "f8ef41da15df5c100c48a3136e0333bd8678625a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "82330946_5cbdd8dc",
