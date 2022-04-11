@@ -33,6 +33,24 @@
       "message": "Could you please add a regression test? Thanks!",
       "revId": "183bc4cf240642db73ae5cf0a389a5eda5af307d",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "65719213_7bf76329",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000050
+      },
+      "writtenOn": "2022-04-11T18:30:15Z",
+      "side": 1,
+      "message": "I think on our trybots caps.maxVertexAttributes always equals to MAX_VERTEX_ATTRIBS. Not sure if we have a test environment which doesn\u0027t support 16 vertex attribs, so we can test this configuration. Any idea about how to do that?",
+      "parentUuid": "8d7b0088_a9e5387c",
+      "revId": "183bc4cf240642db73ae5cf0a389a5eda5af307d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ],
   "submitRequirementResults": [
