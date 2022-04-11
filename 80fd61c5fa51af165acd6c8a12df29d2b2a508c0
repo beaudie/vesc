@@ -20,6 +20,29 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "ecd567b8_7cd3148f",
+        "filename": "include/platform/FeaturesD3D.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 8,
+      "author": {
+        "id": 1001921
+      },
+      "writtenOn": "2022-04-11T19:58:28Z",
+      "side": 1,
+      "message": "Seems like there is 1-1 mapping between the JSONs and the headers.\nIs it possible for them to have the same name?",
+      "range": {
+        "startLine": 8,
+        "startChar": 3,
+        "endLine": 8,
+        "endChar": 20
+      },
+      "revId": "80fd61c5fa51af165acd6c8a12df29d2b2a508c0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "0d7726c3_1963be00",
         "filename": "include/platform/d3d_features.json",
         "patchSetId": 2
@@ -248,6 +271,29 @@
         "startChar": 0,
         "endLine": 15,
         "endChar": 61
+      },
+      "revId": "80fd61c5fa51af165acd6c8a12df29d2b2a508c0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ba263498_b7a71d2c",
+        "filename": "src/libANGLE/renderer/gl/TextureGL.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 41,
+      "author": {
+        "id": 1001921
+      },
+      "writtenOn": "2022-04-11T19:58:28Z",
+      "side": 1,
+      "message": "Would be nice to link this somehow with the chunked_texture_upload workaround and/or http://crbug.com/1181068 to explain why the value of this constant is 120K.",
+      "range": {
+        "startLine": 41,
+        "startChar": 0,
+        "endLine": 41,
+        "endChar": 79
       },
       "revId": "80fd61c5fa51af165acd6c8a12df29d2b2a508c0",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
