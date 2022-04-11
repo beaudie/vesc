@@ -348,6 +348,30 @@
       },
       "revId": "2cc09c665d72a903c076b20789ba355949169253",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "997d7b4a_0dd5ad41",
+        "filename": "src/libANGLE/renderer/vulkan/SurfaceVk.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 1070,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-04-11T20:00:58Z",
+      "side": 1,
+      "message": "Actually Jeff I think we should have used VK_PRESENT_MODE_SHARED_CONTINUOUS_REFRESH_KHR for KHR_mutable_render_buffer as well. I took a look and the description of DEMAND_REFRESH says that the presentation engine is only required to update on QP (vkQueuePresent), even though it may: update the screen sporadically.\n\nSo the fact that we had to call swapBuffers() on flush was not really an platform bug workaround, but an ANGLE bug workaround, it was due to the fact that we chose DEMAND_REFRESH even though the EGL spec really meant for us to use CONTINUOUS_REFRESH.\n\nBefore we move on with this extension, do you think you could try changing current ANGLE\u0027s code to use CONTINUOUS_REFRESH instead of DEMAND_REFRESH and remove the swapbuffersOnFlushOrFinishWithSingleBuffer workaround? If that works as expected, then we can build this change on top of that to use the same present mode.",
+      "parentUuid": "68f5abab_6a6cdc16",
+      "range": {
+        "startLine": 1065,
+        "startChar": 0,
+        "endLine": 1070,
+        "endChar": 5
+      },
+      "revId": "2cc09c665d72a903c076b20789ba355949169253",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
