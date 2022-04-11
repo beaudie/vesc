@@ -86,6 +86,41 @@
       "message": "New patch: https://chromium-review.googlesource.com/c/angle/angle/+/3582940\n",
       "revId": "2c157238d3acee8280277da02b52b642ae54588e",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "0725e2f1_fcd65cfa",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 8
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1359249
+      },
+      "writtenOn": "2022-04-11T22:13:26Z",
+      "side": 1,
+      "message": "Possible test case to use: below.",
+      "revId": "2c157238d3acee8280277da02b52b642ae54588e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "afe50338_1e433098",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 8
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1359249
+      },
+      "writtenOn": "2022-04-11T22:13:26Z",
+      "side": 1,
+      "message": "Yes. in this case its an automatic update to screen, so visual confirmation is needed. Readpixels just verifies the color. I added a simple test to EGLSurfaceText - EGLSingleBufferTest that should just put up a green window. If you break before the glreadPixels and you get green window, then success.",
+      "parentUuid": "dde6aeb4_465caeeb",
+      "revId": "2c157238d3acee8280277da02b52b642ae54588e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
