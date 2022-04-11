@@ -1221,12 +1221,6 @@ angle::Result ContextVk::setupDraw(const gl::Context *context,
     ProgramExecutableVk *programExecutableVk = getExecutable();
     if (programExecutableVk->hasDirtyUniforms())
     {
-        TransformFeedbackVk *transformFeedbackVk =
-            vk::SafeGetImpl(mState.getCurrentTransformFeedback());
-        ANGLE_TRY(programExecutableVk->updateUniforms(
-            this, &mUpdateDescriptorSetsBuilder, &mResourceUseList, &mEmptyBuffer,
-            *mState.getProgramExecutable(), &mDefaultUniformStorage,
-            mState.isTransformFeedbackActiveUnpaused(), transformFeedbackVk));
         mGraphicsDirtyBits.set(DIRTY_BIT_DESCRIPTOR_SETS);
     }
 
@@ -1248,6 +1242,16 @@ angle::Result ContextVk::setupDraw(const gl::Context *context,
     {
         ASSERT(mRenderPassCommandBuffer);
         return angle::Result::Continue;
+    }
+
+    if (mGraphicsDirtyBits[DIRTY_BIT_DESCRIPTOR_SETS])
+    {
+        TransformFeedbackVk *transformFeedbackVk =
+            vk::SafeGetImpl(mState.getCurrentTransformFeedback());
+        ANGLE_TRY(programExecutableVk->updateUniforms(
+            this, &mUpdateDescriptorSetsBuilder, &mResourceUseList, &mEmptyBuffer,
+            *mState.getProgramExecutable(), &mDefaultUniformStorage,
+            mState.isTransformFeedbackActiveUnpaused(), transformFeedbackVk));
     }
 
     // Flush any relevant dirty bits.
