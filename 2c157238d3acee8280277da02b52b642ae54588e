@@ -51,6 +51,24 @@
       "message": "OK. I\u0027ll create a new patch will all the mutable_render_buffer fixes, and change to CONTINUOUS mode, and remove the Swap on flush. This is difficult to test. So help would be appreciated.",
       "revId": "2c157238d3acee8280277da02b52b642ae54588e",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "dde6aeb4_465caeeb",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 8
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1509302
+      },
+      "writtenOn": "2022-04-11T21:14:05Z",
+      "side": 1,
+      "message": "I can also help test it with my Chrome OS setup with ANGLE on Venus (our virtio-gpu Vulkan implementation), since we need ANGLE to do the right thing for us to not regress low-latency stylus support, as compare to Virgl guest driver.",
+      "parentUuid": "233d8238_378727c4",
+      "revId": "2c157238d3acee8280277da02b52b642ae54588e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
