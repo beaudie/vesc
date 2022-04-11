@@ -41,6 +41,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "7fc24788_285243ab",
+        "filename": "include/platform/d3d_features.json",
+        "patchSetId": 2
+      },
+      "lineNbr": 19,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-04-11T19:33:50Z",
+      "side": 1,
+      "message": "At least in Vulkan, we have VulkanFeatures and VulkanWorkarounds. That can\u0027t be deduced.",
+      "parentUuid": "0d7726c3_1963be00",
+      "range": {
+        "startLine": 19,
+        "startChar": 25,
+        "endLine": 19,
+        "endChar": 39
+      },
+      "revId": "80fd61c5fa51af165acd6c8a12df29d2b2a508c0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "e179729f_6be341aa",
@@ -64,6 +88,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "6ea8068f_c4632d07",
+        "filename": "include/platform/d3d_features.json",
+        "patchSetId": 2
+      },
+      "lineNbr": 57,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-04-11T19:33:50Z",
+      "side": 1,
+      "message": "I realize that. This change already took like an hour or two, so I decided to forgive myself for this :D It\u0027s not wrapped to 120, it\u0027s wrapped to 100 (from the original code) then shifted right here in json after direct line-\u003eline conversions.\n\nLet me tinker and see how I can automate this.\n\n---\n\nDone",
+      "parentUuid": "e179729f_6be341aa",
+      "range": {
+        "startLine": 57,
+        "startChar": 71,
+        "endLine": 57,
+        "endChar": 80
+      },
+      "revId": "80fd61c5fa51af165acd6c8a12df29d2b2a508c0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "84e2fd2d_6d7e97c2",
@@ -77,6 +125,30 @@
       "writtenOn": "2022-04-11T14:58:19Z",
       "side": 1,
       "message": "nit: issue is a more specific term than bug. I\u0027d suggest you also make \"None\" implicit when there is no issue defined.",
+      "range": {
+        "startLine": 99,
+        "startChar": 13,
+        "endLine": 99,
+        "endChar": 16
+      },
+      "revId": "80fd61c5fa51af165acd6c8a12df29d2b2a508c0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "fc6c2522_5143c1c5",
+        "filename": "include/platform/d3d_features.json",
+        "patchSetId": 2
+      },
+      "lineNbr": 99,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-04-11T19:33:50Z",
+      "side": 1,
+      "message": "Done. I originally added it to make the vim macros more regular",
+      "parentUuid": "84e2fd2d_6d7e97c2",
       "range": {
         "startLine": 99,
         "startChar": 13,
@@ -112,6 +184,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "ce1071d2_6437be94",
+        "filename": "include/platform/d3d_features.json",
+        "patchSetId": 2
+      },
+      "lineNbr": 128,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-04-11T19:33:50Z",
+      "side": 1,
+      "message": "So, description is what\u0027s public (shows in chrome://gpu). We tend to be less verbose there, and less blame-y.\n\nThe comments sometimes do get verbose and describe where exactly we encountered issues. I left the comments in the json file and don\u0027t output them anywhere, they are informative for us, and not directed at users.\n\nI\u0027d be more inclined to delete the comments rather than put them in the description (because devs can get that info out of the bug link usually anyway), but I already did the rewrapping work, so might as well keep it. WDYT?",
+      "parentUuid": "1eb376db_9095d05f",
+      "range": {
+        "startLine": 125,
+        "startChar": 0,
+        "endLine": 128,
+        "endChar": 14
+      },
+      "revId": "80fd61c5fa51af165acd6c8a12df29d2b2a508c0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "845df6f1_24ab9b5f",
         "filename": "include/platform/mtl_features.json",
         "patchSetId": 2
@@ -123,6 +219,30 @@
       "writtenOn": "2022-04-11T14:58:19Z",
       "side": 1,
       "message": "This is great, Shabi. Thanks for making this change. I have one suggestion:\n\nInstead of making a separate name/display_name, display the name as the camelCaseName, and accept both under_score_name and camelCaseName when doing any string name interpretation. That way we can support the Chromium use case and have a consistent implementation, where we don\u0027t have to mentally track which back-end uses what naming scheme. With auto-gen this becomes easy to implement.\n\nYou can do this as a follow-up if you prefer.",
+      "range": {
+        "startLine": 14,
+        "startChar": 0,
+        "endLine": 15,
+        "endChar": 61
+      },
+      "revId": "80fd61c5fa51af165acd6c8a12df29d2b2a508c0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "7ff49c83_69303497",
+        "filename": "include/platform/mtl_features.json",
+        "patchSetId": 2
+      },
+      "lineNbr": 15,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-04-11T19:33:50Z",
+      "side": 1,
+      "message": "Yes, that\u0027s basically what I had in mind. But definitely as a follow up, it needs more changes and this is already big.",
+      "parentUuid": "845df6f1_24ab9b5f",
       "range": {
         "startLine": 14,
         "startChar": 0,
