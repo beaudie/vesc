@@ -51,6 +51,24 @@
       "parentUuid": "8d7b0088_a9e5387c",
       "revId": "183bc4cf240642db73ae5cf0a389a5eda5af307d",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "d2ddcb49_7ec0b753",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-04-11T20:05:26Z",
+      "side": 1,
+      "message": "Ack, you\u0027re right, some test is bound to fail on platforms where cap \u003c MAX, which we don\u0027t run on anyway.\n\nI have ideas, but not worth the trouble. Did you end up fixing the loops too?",
+      "parentUuid": "65719213_7bf76329",
+      "revId": "183bc4cf240642db73ae5cf0a389a5eda5af307d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ],
   "submitRequirementResults": [
