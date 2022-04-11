@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "975360e9_43551762",
+        "filename": "doc/DevSetup.md",
+        "patchSetId": 4
+      },
+      "lineNbr": 26,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2022-04-11T16:55:12Z",
+      "side": 1,
+      "message": "merge conflict warning: https://chromium-review.googlesource.com/c/angle/angle/+/3571964",
+      "range": {
+        "startLine": 26,
+        "startChar": 59,
+        "endLine": 26,
+        "endChar": 68
+      },
+      "revId": "f2e211a3d60efd0a2997fe72fb1e113e60bb4e27",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "76684b02_79bb0daf",
+        "filename": "doc/DevSetup.md",
+        "patchSetId": 4
+      },
+      "lineNbr": 27,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2022-04-11T16:55:12Z",
+      "side": 1,
+      "message": "it\u0027s the version in the code really. can you update this to remove the potentially confusing link to testing and replace with a solid perma link to the code?",
+      "range": {
+        "startLine": 27,
+        "startChar": 4,
+        "endLine": 27,
+        "endChar": 178
+      },
+      "revId": "f2e211a3d60efd0a2997fe72fb1e113e60bb4e27",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
