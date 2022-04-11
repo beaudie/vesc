@@ -16,6 +16,91 @@
       "message": "Intel goes from 26ms-27ms to 17ms-18ms but AMD goes from 24ms-27ms to 35ms-36ms ",
       "revId": "2c0437e41953bbf230e2e669ef1031f36ba9ec22",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "7df76849_60988149",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2022-04-11T20:55:31Z",
+      "side": 1,
+      "message": "Super, great work Gregg. LGTM; couple of minor questions / comments.\n",
+      "revId": "2c0437e41953bbf230e2e669ef1031f36ba9ec22",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "06d459b6_672a7f2a",
+        "filename": "src/libANGLE/renderer/metal/ContextMtl.mm",
+        "patchSetId": 1
+      },
+      "lineNbr": 2635,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2022-04-11T20:55:31Z",
+      "side": 1,
+      "message": "Would it be better to factor these equality checks into a method on mtl::Texture? That might help avoid accidents if additional parameters are exposed there that are relevant to this code path.",
+      "revId": "2c0437e41953bbf230e2e669ef1031f36ba9ec22",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "1b5fb8a2_b4c24eeb",
+        "filename": "src/libANGLE/renderer/metal/DisplayMtl.mm",
+        "patchSetId": 1
+      },
+      "lineNbr": 1103,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2022-04-11T20:55:31Z",
+      "side": 1,
+      "message": "Just double-checking that isIntel() works correctly on dual-GPU MacBook Pros? On the OpenGL backend this was always ambiguous.",
+      "revId": "2c0437e41953bbf230e2e669ef1031f36ba9ec22",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "96b6a9e2_32bd552c",
+        "filename": "src/libANGLE/renderer/metal/FrameBufferMtl.mm",
+        "patchSetId": 1
+      },
+      "lineNbr": 1492,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2022-04-11T20:55:31Z",
+      "side": 1,
+      "message": "Could you put the \"optimization enabled\" check first in this if-statement? I think it will make it easier to read.",
+      "revId": "2c0437e41953bbf230e2e669ef1031f36ba9ec22",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "dbd47087_c059e77b",
+        "filename": "src/libANGLE/renderer/metal/FrameBufferMtl.mm",
+        "patchSetId": 1
+      },
+      "lineNbr": 1497,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2022-04-11T20:55:31Z",
+      "side": 1,
+      "message": "Grammar nit: \"surface, whereas...\"",
+      "revId": "2c0437e41953bbf230e2e669ef1031f36ba9ec22",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
