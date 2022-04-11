@@ -69,6 +69,24 @@
       "parentUuid": "65719213_7bf76329",
       "revId": "183bc4cf240642db73ae5cf0a389a5eda5af307d",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "ee417e53_abebbb54",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000050
+      },
+      "writtenOn": "2022-04-11T20:25:25Z",
+      "side": 1,
+      "message": "I am not sure if I fixed all issues related to MAX_VERTEX_ATTRIBS. I am thinking of removing all code uses MAX_VERTEX_ATTRIBS* in .cc file. and always use the real size of the vector or array to avoid unexpected problems, WDYT?",
+      "parentUuid": "d2ddcb49_7ec0b753",
+      "revId": "183bc4cf240642db73ae5cf0a389a5eda5af307d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ],
   "submitRequirementResults": [
