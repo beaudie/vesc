@@ -20,6 +20,24 @@
     {
       "unresolved": false,
       "key": {
+        "uuid": "a058f82e_8e372a03",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 12,
+      "author": {
+        "id": 1115588
+      },
+      "writtenOn": "2022-04-11T23:23:15Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "59adde6f_6536e77b",
+      "revId": "2c0437e41953bbf230e2e669ef1031f36ba9ec22",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
         "uuid": "21acf97a_f451c6c2",
         "filename": "/PATCHSET_LEVEL",
         "patchSetId": 1
@@ -104,6 +122,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "0b3f3b62_6bb219be",
+        "filename": "src/libANGLE/renderer/metal/ContextMtl.mm",
+        "patchSetId": 1
+      },
+      "lineNbr": 2635,
+      "author": {
+        "id": 1115588
+      },
+      "writtenOn": "2022-04-11T23:23:15Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "ba39b29f_f4b66bdf",
+      "revId": "2c0437e41953bbf230e2e669ef1031f36ba9ec22",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "1b5fb8a2_b4c24eeb",
@@ -157,6 +193,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "59f01209_11b1496f",
+        "filename": "src/libANGLE/renderer/metal/DisplayMtl.mm",
+        "patchSetId": 1
+      },
+      "lineNbr": 1103,
+      "author": {
+        "id": 1115588
+      },
+      "writtenOn": "2022-04-11T23:23:15Z",
+      "side": 1,
+      "message": "This looks correct following the code for isIntel",
+      "parentUuid": "38370c84_8946f0f1",
+      "revId": "2c0437e41953bbf230e2e669ef1031f36ba9ec22",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "96b6a9e2_32bd552c",
@@ -174,6 +228,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "be1006d4_5bd224e1",
+        "filename": "src/libANGLE/renderer/metal/FrameBufferMtl.mm",
+        "patchSetId": 1
+      },
+      "lineNbr": 1492,
+      "author": {
+        "id": 1115588
+      },
+      "writtenOn": "2022-04-11T23:23:15Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "96b6a9e2_32bd552c",
+      "revId": "2c0437e41953bbf230e2e669ef1031f36ba9ec22",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "dbd47087_c059e77b",
@@ -187,6 +259,24 @@
       "writtenOn": "2022-04-11T20:55:31Z",
       "side": 1,
       "message": "Grammar nit: \"surface, whereas...\"",
+      "revId": "2c0437e41953bbf230e2e669ef1031f36ba9ec22",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "0021e26a_ef323741",
+        "filename": "src/libANGLE/renderer/metal/FrameBufferMtl.mm",
+        "patchSetId": 1
+      },
+      "lineNbr": 1497,
+      "author": {
+        "id": 1115588
+      },
+      "writtenOn": "2022-04-11T23:23:15Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "dbd47087_c059e77b",
       "revId": "2c0437e41953bbf230e2e669ef1031f36ba9ec22",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
