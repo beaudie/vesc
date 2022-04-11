@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "e1009cfb_80277266",
+        "filename": "src/libANGLE/renderer/gl/cgl/IOSurfaceSurfaceCGL.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 257,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2022-04-11T19:39:40Z",
+      "side": 0,
+      "message": "nit: could this be a `WARN() \u003c\u003c` instead? Keeping your new comment is good though.",
+      "range": {
+        "startLine": 257,
+        "startChar": 8,
+        "endLine": 257,
+        "endChar": 21
+      },
+      "revId": "2cb264b5adfc7188b51cddfe39dad7bd1593b635",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
