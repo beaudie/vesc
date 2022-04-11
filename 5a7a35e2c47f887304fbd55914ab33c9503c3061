@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "17d5762a_5b518be3",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1518892
+      },
+      "writtenOn": "2022-04-11T21:36:11Z",
+      "side": 1,
+      "message": "Another fix for OpenGL/EGL loaders using these XML files.",
+      "revId": "5a7a35e2c47f887304fbd55914ab33c9503c3061",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
