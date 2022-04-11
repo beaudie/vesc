@@ -1218,18 +1218,6 @@ angle::Result ContextVk::setupDraw(const gl::Context *context,
         mGraphicsDirtyBits.set(DIRTY_BIT_VERTEX_BUFFERS);
     }
 
-    ProgramExecutableVk *programExecutableVk = getExecutable();
-    if (programExecutableVk->hasDirtyUniforms())
-    {
-        TransformFeedbackVk *transformFeedbackVk =
-            vk::SafeGetImpl(mState.getCurrentTransformFeedback());
-        ANGLE_TRY(programExecutableVk->updateUniforms(
-            this, &mUpdateDescriptorSetsBuilder, &mResourceUseList, &mEmptyBuffer,
-            *mState.getProgramExecutable(), &mDefaultUniformStorage,
-            mState.isTransformFeedbackActiveUnpaused(), transformFeedbackVk));
-        mGraphicsDirtyBits.set(DIRTY_BIT_DESCRIPTOR_SETS);
-    }
-
     // Update transform feedback offsets on every draw call when emulating transform feedback.  This
     // relies on the fact that no geometry/tessellation, indirect or indexed calls are supported in
     // ES3.1 (and emulation is not done for ES3.2).
@@ -1248,6 +1236,19 @@ angle::Result ContextVk::setupDraw(const gl::Context *context,
     {
         ASSERT(mRenderPassCommandBuffer);
         return angle::Result::Continue;
+    }
+
+    ProgramExecutableVk *programExecutableVk = getExecutable();
+    if (programExecutableVk->hasDirtyUniforms())
+    {
+        TransformFeedbackVk *transformFeedbackVk =
+            vk::SafeGetImpl(mState.getCurrentTransformFeedback());
+        ANGLE_TRY(programExecutableVk->updateUniforms(
+            this, &mUpdateDescriptorSetsBuilder, &mResourceUseList, &mEmptyBuffer,
+            *mState.getProgramExecutable(), &mDefaultUniformStorage,
+            mState.isTransformFeedbackActiveUnpaused(), transformFeedbackVk));
+        DirtyBits::Iterator dirtyBitIter = dirtyBits.begin();
+        dirtyBitIter.setLaterBit(DIRTY_BIT_DESCRIPTOR_SETS);
     }
 
     // Flush any relevant dirty bits.
