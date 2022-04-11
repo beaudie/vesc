@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "c541ff82_93c43199",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 30
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1528827
+      },
+      "writtenOn": "2022-04-11T09:25:15Z",
+      "side": 1,
+      "message": "Last build failure was due to another missing include directory: `wayland/src/egl`.\nThis was not required by chromium vulkan-wayland targets, though it is required by ANGLE wayland backend.\n\nThis fix effectively overwrites ANGLE wayland dir with Chromium\u0027s, if defined.",
+      "revId": "09b03380200bbedd59b33a4922e7361900c5c4ba",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
