@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "f2b7091c_eb412de6",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1518892
+      },
+      "writtenOn": "2022-04-11T17:31:01Z",
+      "side": 1,
+      "message": "Looks like it failed CQ because of a known flake:\n\nhttps://bugs.chromium.org/p/angleproject/issues/detail?id\u003d7191",
+      "revId": "425600b9b3d315eb634ad7bc3f805052fceadfa4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
