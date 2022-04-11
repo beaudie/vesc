@@ -16,6 +16,23 @@
       "message": "Looks like it failed CQ because of a known flake:\n\nhttps://bugs.chromium.org/p/angleproject/issues/detail?id\u003d7191",
       "revId": "425600b9b3d315eb634ad7bc3f805052fceadfa4",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "1fd074b6_0454ccde",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2022-04-11T19:17:34Z",
+      "side": 1,
+      "message": "LGTM too, going to try landing again.",
+      "revId": "425600b9b3d315eb634ad7bc3f805052fceadfa4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
