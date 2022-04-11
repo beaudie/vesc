@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "185ef5b2_5e1be7d6",
+        "filename": "src/libANGLE/Context.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 9273,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2022-04-11T19:55:06Z",
+      "side": 1,
+      "message": "unique_ptr is not enough for most of our types which need to call onDestroy before the destructor to fully release their resources.\n\nWe have a wrapper type for this though: `UniqueObjectPointer`. It would look something like `using UniqueFramebufferPointer \u003d angle::UniqueObjectPointer\u003cFramebuffer, Context\u003e;`. That typedef could go in Framebuffer.h.",
+      "range": {
+        "startLine": 9273,
+        "startChar": 4,
+        "endLine": 9273,
+        "endChar": 19
+      },
+      "revId": "66b96400de493692ce4cba129a9789bb9ed4543d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
