@@ -16,6 +16,23 @@
       "message": "PTAL. Diff with PS#1 shows what\u0027s changed in the reland.\n\nI believe the problem with the blockman_go was that the new code was respecifying the image twice instead of once in getAttachment (a problem we currently have with TextureVk::syncState), and for some reason that made the trace flaky.",
       "revId": "39ba3587764eaa0ff73fb292072b24c23a7109a9",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "6955866d_f09e4377",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 14
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-04-11T20:03:18Z",
+      "side": 1,
+      "message": "Swapping reviewers as Charlie is out",
+      "revId": "39ba3587764eaa0ff73fb292072b24c23a7109a9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
