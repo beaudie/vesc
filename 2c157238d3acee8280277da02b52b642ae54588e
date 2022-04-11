@@ -16,6 +16,24 @@
       "message": "Ultimately, I think we need to use VkPresentMode: VK_PRESENT_MODE_SHARED_CONTINUOUS_REFRESH_KHR for this feature of EGL to work.\nANGLE does not support, and probably not Android.\n\nVK_PRESENT_MODE_IMMEDIATE_KHR - still requires a vkQueuePresent.\nas does VK_PRESENT_MODE_SHARED_DEMAND_REFRESH_KHR - and a queueBuffer.\n\n VK_PRESENT_MODE_SHARED_CONTINUOUS_REFRESH_KHR should not require a queueBuffer(), but may require some form of flush to process draw commands?\n \n So I am thinking we can not support eglCreateWindowSurface with EGL_RENDER_BUFFER \u003d\u003d EGL_SINGLE_BUFFER. There is no error, so we can fail silently and be in FIFO mode. The app must query EGL_RENDER_BUFFER to see if it actually worked. So we can keep that part. But basically a silent fail for ANGLE.\n \n Does that seem right to everyone?",
       "revId": "2c157238d3acee8280277da02b52b642ae54588e",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "71e60943_b40697ad",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 8
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1509302
+      },
+      "writtenOn": "2022-04-11T17:56:37Z",
+      "side": 1,
+      "message": "Hi Jeff, `VK_PRESENT_MODE_SHARED_CONTINUOUS_REFRESH_KHR` is supported by Android. As long as the Vulkan driver exposes shared presentable image support via the private `VK_ANDROID_native_buffer` extension (in v7), the Android Vulkan loader will advertise `VK_KHR_shared_presentable_image`, and the supported swapchain image usages are the same with the default bits exposed.\n\nBut I\u0027m not sure if ANGLE is connecting the dots here properly. What did you see problematic here?",
+      "parentUuid": "0defc021_765efa62",
+      "revId": "2c157238d3acee8280277da02b52b642ae54588e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
