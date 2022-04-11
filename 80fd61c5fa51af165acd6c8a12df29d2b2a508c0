@@ -41,6 +41,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "5b1f5b79_0a06e73f",
+        "filename": "include/platform/FeaturesD3D.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 8,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-04-11T20:21:40Z",
+      "side": 1,
+      "message": "I could make this output FeaturesD3D.h instead of d3d_features.json, didn\u0027t think it mattered much. The 1-1 mapping is because the .h is generated from the .json 😊\n\n---\n\nDone.",
+      "parentUuid": "ecd567b8_7cd3148f",
+      "range": {
+        "startLine": 8,
+        "startChar": 3,
+        "endLine": 8,
+        "endChar": 20
+      },
+      "revId": "80fd61c5fa51af165acd6c8a12df29d2b2a508c0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "0d7726c3_1963be00",
@@ -289,6 +313,30 @@
       "writtenOn": "2022-04-11T19:58:28Z",
       "side": 1,
       "message": "Would be nice to link this somehow with the chunked_texture_upload workaround and/or http://crbug.com/1181068 to explain why the value of this constant is 120K.",
+      "range": {
+        "startLine": 41,
+        "startChar": 0,
+        "endLine": 41,
+        "endChar": 79
+      },
+      "revId": "80fd61c5fa51af165acd6c8a12df29d2b2a508c0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "07ae21fe_116beb62",
+        "filename": "src/libANGLE/renderer/gl/TextureGL.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 41,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-04-11T20:21:40Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "ba263498_b7a71d2c",
       "range": {
         "startLine": 41,
         "startChar": 0,

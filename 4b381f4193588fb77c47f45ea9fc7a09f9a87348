@@ -24,6 +24,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "fc98aa35_bfaee6a2",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 3260,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-04-11T20:21:40Z",
+      "side": 0,
+      "message": "Yes.",
+      "parentUuid": "d238a004_5d4e60e5",
+      "range": {
+        "startLine": 3251,
+        "startChar": 0,
+        "endLine": 3260,
+        "endChar": 0
+      },
+      "revId": "4b381f4193588fb77c47f45ea9fc7a09f9a87348",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "2cae45d3_dc5424b1",
@@ -37,6 +61,30 @@
       "writtenOn": "2022-04-11T19:58:28Z",
       "side": 0,
       "message": "Was this assert not useful?",
+      "range": {
+        "startLine": 3444,
+        "startChar": 0,
+        "endLine": 3445,
+        "endChar": 40
+      },
+      "revId": "4b381f4193588fb77c47f45ea9fc7a09f9a87348",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "972e8359_f2dd863a",
+        "filename": "src/libANGLE/renderer/vulkan/vk_cache_utils.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 3445,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-04-11T20:21:40Z",
+      "side": 0,
+      "message": "The features were experimental and not used. The ASSERT would catch an abuse where multiple of these features are set. The new code takes the first of those features that are set. This is really a don\u0027t care situation, I might have as well just deleted this unused feature.",
+      "parentUuid": "2cae45d3_dc5424b1",
       "range": {
         "startLine": 3444,
         "startChar": 0,
