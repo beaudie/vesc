@@ -16,6 +16,24 @@
       "message": "Some additional updates might be needed here per `EGL_KHR_mutable_render_buffer` spec:\n```\n    If surface is a single-buffered window, pixmap, or pbuffer surface for which\n    there is a pending change to the EGL_RENDER_BUFFER attribute, eglSwapBuffers\n    performs an implicit flush operation on the context and effects the\n    attribute change. If surface is a single-buffered window, pixmap, or pbuffer\n    surface for which there is no pending change to the EGL_RENDER_BUFFER\n    attribute, eglSwapBuffers has no effect.\n```\nI can see now `glFlush` is doing the right thing. Can we update `eglSwapBuffers` to follow the spec as well? I see some apps doing redundant `eglSwapBuffers` but ANGLE is still doing the `WindowSurfaceVk::present` there (hurts performance). That is better to be avoided I think.",
       "revId": "b5abe09b194eab4d37d34934afbdc25ce41bd93c",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "e6dff10c_3a61bd0a",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1509302
+      },
+      "writtenOn": "2022-04-11T23:47:06Z",
+      "side": 1,
+      "message": "I mean `WindowSurfaceVk::present` better to be switched with a hook to `ContextVk::flushImpl` with autorefresh mode.",
+      "parentUuid": "0d24b295_0f502393",
+      "revId": "b5abe09b194eab4d37d34934afbdc25ce41bd93c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
