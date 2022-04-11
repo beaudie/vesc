@@ -114,6 +114,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "74fcf3c5_f77635e2",
+        "filename": "include/platform/d3d_features.json",
+        "patchSetId": 2
+      },
+      "lineNbr": 19,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2022-04-11T21:17:52Z",
+      "side": 1,
+      "message": "OK, in that case I would classify these as Workarounds and Features, and deduce the second part of the category from the filename.",
+      "parentUuid": "7fc24788_285243ab",
+      "range": {
+        "startLine": 19,
+        "startChar": 25,
+        "endLine": 19,
+        "endChar": 39
+      },
+      "revId": "80fd61c5fa51af165acd6c8a12df29d2b2a508c0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "e179729f_6be341aa",
         "filename": "include/platform/d3d_features.json",
         "patchSetId": 2
@@ -243,6 +267,30 @@
       "side": 1,
       "message": "So, description is what\u0027s public (shows in chrome://gpu). We tend to be less verbose there, and less blame-y.\n\nThe comments sometimes do get verbose and describe where exactly we encountered issues. I left the comments in the json file and don\u0027t output them anywhere, they are informative for us, and not directed at users.\n\nI\u0027d be more inclined to delete the comments rather than put them in the description (because devs can get that info out of the bug link usually anyway), but I already did the rewrapping work, so might as well keep it. WDYT?",
       "parentUuid": "1eb376db_9095d05f",
+      "range": {
+        "startLine": 125,
+        "startChar": 0,
+        "endLine": 128,
+        "endChar": 14
+      },
+      "revId": "80fd61c5fa51af165acd6c8a12df29d2b2a508c0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "7cc12cfa_4b2bd123",
+        "filename": "include/platform/d3d_features.json",
+        "patchSetId": 2
+      },
+      "lineNbr": 128,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2022-04-11T21:17:52Z",
+      "side": 1,
+      "message": "Just delete the comments, keep the description. Thinking of better maintenance going forward instead of preserving detail we don\u0027t need.",
+      "parentUuid": "ce1071d2_6437be94",
       "range": {
         "startLine": 125,
         "startChar": 0,
