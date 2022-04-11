@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "f80146fb_c6255dde",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 34
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1116015
+      },
+      "writtenOn": "2022-04-11T16:45:26Z",
+      "side": 1,
+      "message": "OK, rewritten to use a subclass of D3DInterfaceBlock, as requested.\n\nNote that there is now some redundancy, in that mShaderStorageBlocks is a ShaderMap, as is the mShaderRegisterIndexes.\n\nI could combine everything into a single vector for all shaders, but then I\u0027d have to extract them out again in DynamicHLSL\u0027s ReplaceShaderStorageDeclaration(). LMK.",
+      "revId": "94f54511101d2e35a78fc1878d7a8316bd217d8c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
