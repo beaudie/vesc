@@ -1221,13 +1221,25 @@ angle::Result ContextVk::setupDraw(const gl::Context *context,
     ProgramExecutableVk *programExecutableVk = getExecutable();
     if (programExecutableVk->hasDirtyUniforms())
     {
+        mGraphicsDirtyBits.set(DIRTY_BIT_DESCRIPTOR_SETS);
+    }
+
+    DirtyBits dirtyBits = mGraphicsDirtyBits & dirtyBitMask;
+
+    if (dirtyBits.none())
+    {
+        ASSERT(mRenderPassCommandBuffer);
+        return angle::Result::Continue;
+    }
+
+    if (mGraphicsDirtyBits[DIRTY_BIT_DESCRIPTOR_SETS])
+    {
         TransformFeedbackVk *transformFeedbackVk =
             vk::SafeGetImpl(mState.getCurrentTransformFeedback());
         ANGLE_TRY(programExecutableVk->updateUniforms(
             this, &mUpdateDescriptorSetsBuilder, &mResourceUseList, &mEmptyBuffer,
             *mState.getProgramExecutable(), &mDefaultUniformStorage,
             mState.isTransformFeedbackActiveUnpaused(), transformFeedbackVk));
-        mGraphicsDirtyBits.set(DIRTY_BIT_DESCRIPTOR_SETS);
     }
 
     // Update transform feedback offsets on every draw call when emulating transform feedback.  This
@@ -1240,14 +1252,6 @@ angle::Result ContextVk::setupDraw(const gl::Context *context,
         mXfbBaseVertex             = firstVertexOrInvalid;
         mXfbVertexCountPerInstance = vertexOrIndexCount;
         invalidateGraphicsDriverUniforms();
-    }
-
-    DirtyBits dirtyBits = mGraphicsDirtyBits & dirtyBitMask;
-
-    if (dirtyBits.none())
-    {
-        ASSERT(mRenderPassCommandBuffer);
-        return angle::Result::Continue;
     }
 
     // Flush any relevant dirty bits.
