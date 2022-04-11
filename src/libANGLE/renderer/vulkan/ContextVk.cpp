@@ -796,6 +796,7 @@ ContextVk::ContextVk(const gl::State &state, gl::ErrorSet *errorSet, RendererVk 
                                                    DIRTY_BIT_VERTEX_BUFFERS,
                                                    DIRTY_BIT_INDEX_BUFFER,
                                                    DIRTY_BIT_SHADER_RESOURCES,
+                                                   DIRTY_BIT_UNIFORMS,
                                                    DIRTY_BIT_DESCRIPTOR_SETS,
                                                    DIRTY_BIT_DRIVER_UNIFORMS_BINDING,
                                                    DIRTY_BIT_VIEWPORT,
@@ -853,6 +854,8 @@ ContextVk::ContextVk(const gl::State &state, gl::ErrorSet *errorSet, RendererVk 
 
     mGraphicsDirtyBitHandlers[DIRTY_BIT_DESCRIPTOR_SETS] =
         &ContextVk::handleDirtyGraphicsDescriptorSets;
+
+    mGraphicsDirtyBitHandlers[DIRTY_BIT_UNIFORMS] = &ContextVk::handleDirtyGraphicsUniforms;
 
     mGraphicsDirtyBitHandlers[DIRTY_BIT_VIEWPORT] = &ContextVk::handleDirtyGraphicsViewport;
     mGraphicsDirtyBitHandlers[DIRTY_BIT_SCISSOR]  = &ContextVk::handleDirtyGraphicsScissor;
@@ -1221,25 +1224,8 @@ angle::Result ContextVk::setupDraw(const gl::Context *context,
     ProgramExecutableVk *programExecutableVk = getExecutable();
     if (programExecutableVk->hasDirtyUniforms())
     {
-        TransformFeedbackVk *transformFeedbackVk =
-            vk::SafeGetImpl(mState.getCurrentTransformFeedback());
-        ANGLE_TRY(programExecutableVk->updateUniforms(
-            this, &mUpdateDescriptorSetsBuilder, &mResourceUseList, &mEmptyBuffer,
-            *mState.getProgramExecutable(), &mDefaultUniformStorage,
-            mState.isTransformFeedbackActiveUnpaused(), transformFeedbackVk));
+        mGraphicsDirtyBits.set(DIRTY_BIT_UNIFORMS);
         mGraphicsDirtyBits.set(DIRTY_BIT_DESCRIPTOR_SETS);
-    }
-
-    // Update transform feedback offsets on every draw call when emulating transform feedback.  This
-    // relies on the fact that no geometry/tessellation, indirect or indexed calls are supported in
-    // ES3.1 (and emulation is not done for ES3.2).
-    if (getFeatures().emulateTransformFeedback.enabled &&
-        mState.isTransformFeedbackActiveUnpaused())
-    {
-        ASSERT(firstVertexOrInvalid != -1);
-        mXfbBaseVertex             = firstVertexOrInvalid;
-        mXfbVertexCountPerInstance = vertexOrIndexCount;
-        invalidateGraphicsDriverUniforms();
     }
 
     DirtyBits dirtyBits = mGraphicsDirtyBits & dirtyBitMask;
@@ -1256,6 +1242,18 @@ angle::Result ContextVk::setupDraw(const gl::Context *context,
     {
         ASSERT(mGraphicsDirtyBitHandlers[*dirtyBitIter]);
         ANGLE_TRY((this->*mGraphicsDirtyBitHandlers[*dirtyBitIter])(&dirtyBitIter, dirtyBitMask));
+    }
+
+    // Update transform feedback offsets on every draw call when emulating transform feedback.  This
+    // relies on the fact that no geometry/tessellation, indirect or indexed calls are supported in
+    // ES3.1 (and emulation is not done for ES3.2).
+    if (getFeatures().emulateTransformFeedback.enabled &&
+        mState.isTransformFeedbackActiveUnpaused())
+    {
+        ASSERT(firstVertexOrInvalid != -1);
+        mXfbBaseVertex             = firstVertexOrInvalid;
+        mXfbVertexCountPerInstance = vertexOrIndexCount;
+        invalidateGraphicsDriverUniforms();
     }
 
     mGraphicsDirtyBits &= ~dirtyBitMask;
@@ -2389,6 +2387,20 @@ angle::Result ContextVk::handleDirtyGraphicsDescriptorSets(DirtyBits::Iterator *
                                                            DirtyBits dirtyBitMask)
 {
     return handleDirtyDescriptorSetsImpl(mRenderPassCommandBuffer, PipelineType::Graphics);
+}
+
+angle::Result ContextVk::handleDirtyGraphicsUniforms(DirtyBits::Iterator *dirtyBitsIterator,
+                                                     DirtyBits dirtyBitMask)
+{
+    ProgramExecutableVk *programExecutableVk = getExecutable();
+    TransformFeedbackVk *transformFeedbackVk =
+        vk::SafeGetImpl(mState.getCurrentTransformFeedback());
+    ANGLE_TRY(programExecutableVk->updateUniforms(
+        this, &mUpdateDescriptorSetsBuilder, &mResourceUseList, &mEmptyBuffer,
+        *mState.getProgramExecutable(), &mDefaultUniformStorage,
+        mState.isTransformFeedbackActiveUnpaused(), transformFeedbackVk));
+
+    return angle::Result::Continue;
 }
 
 angle::Result ContextVk::handleDirtyGraphicsViewport(DirtyBits::Iterator *dirtyBitsIterator,
