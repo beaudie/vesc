@@ -46,6 +46,30 @@
       },
       "revId": "e4ffd4165d2ebc338217f4ecb31794a4ceab693d",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "63cf754b_19df468a",
+        "filename": "src/libANGLE/renderer/vulkan/TextureVk.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 32,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-04-12T18:52:54Z",
+      "side": 1,
+      "message": "Actually we shouldn\u0027t be including those headers here. And there are currently three other enums using None without a problem.\n\nIf that\u0027s your only concern, it seems to have not been a problem so far.",
+      "parentUuid": "f648879d_eeaa4ac6",
+      "range": {
+        "startLine": 32,
+        "startChar": 4,
+        "endLine": 32,
+        "endChar": 8
+      },
+      "revId": "e4ffd4165d2ebc338217f4ecb31794a4ceab693d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
