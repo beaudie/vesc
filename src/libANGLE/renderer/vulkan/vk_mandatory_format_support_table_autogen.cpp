@@ -119,6 +119,7 @@ constexpr FormatMap<VkFormatProperties> kFormatProperties = {
     {FormatID::ETC2_R8G8B8A8_UNORM_BLOCK, {0, 0, 0}},
     {FormatID::ETC2_R8G8B8_SRGB_BLOCK, {0, 0, 0}},
     {FormatID::ETC2_R8G8B8_UNORM_BLOCK, {0, 0, 0}},
+    {FormatID::EXTERNAL, {0, 0, 0}},
     {FormatID::G8_B8R8_2PLANE_420_UNORM, {0, 0, 0}},
     {FormatID::G8_B8_R8_3PLANE_420_UNORM, {0, 0, 0}},
     {FormatID::NONE, {0, 0, 0}},
