@@ -118,6 +118,30 @@
       },
       "revId": "c7491e10fa354472ea3368439f6fd0410f4237a9",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "6f4c38ae_a44235fe",
+        "filename": "src/tests/gl_tests/VertexAttributeTest.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 4148,
+      "author": {
+        "id": 1001921
+      },
+      "writtenOn": "2022-04-12T16:23:04Z",
+      "side": 1,
+      "message": "You just need to inherit from PlatformParameters, enable the feature there, and use the child class instead of PlatformParameters.\nYou\u0027ve added 16 lines of code in this file, I think a new parameter class would be less.\n\nBut, I don\u0027t have a strong opinion on this, since now I realize the inheritance approach also requires remembering to use the new parameters class in ANGLE_INSTANTIATE_*, so also not robust.",
+      "parentUuid": "2ba071d3_f2e5daa4",
+      "range": {
+        "startLine": 4145,
+        "startChar": 0,
+        "endLine": 4148,
+        "endChar": 66
+      },
+      "revId": "c7491e10fa354472ea3368439f6fd0410f4237a9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }

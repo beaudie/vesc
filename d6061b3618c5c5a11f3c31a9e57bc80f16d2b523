@@ -142,6 +142,30 @@
       },
       "revId": "d6061b3618c5c5a11f3c31a9e57bc80f16d2b523",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b123f13a_4df86581",
+        "filename": "include/platform/PlatformMethods.h",
+        "patchSetId": 5
+      },
+      "lineNbr": 271,
+      "author": {
+        "id": 1001921
+      },
+      "writtenOn": "2022-04-12T16:23:04Z",
+      "side": 0,
+      "message": "I\u0027m not sure that Chrome actually uses the headers from there.\nI also don\u0027t see it in https://android.googlesource.com/platform/ndk.git/, so looks like it\u0027s safe?",
+      "parentUuid": "5bc658c7_a57447c2",
+      "range": {
+        "startLine": 271,
+        "startChar": 7,
+        "endLine": 271,
+        "endChar": 25
+      },
+      "revId": "d6061b3618c5c5a11f3c31a9e57bc80f16d2b523",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
