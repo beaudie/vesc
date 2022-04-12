@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "71dd910b_850bd267",
+        "filename": "src/libANGLE/renderer/vulkan/vk_utils.h",
+        "patchSetId": 7
+      },
+      "lineNbr": 472,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-04-12T19:17:12Z",
+      "side": 0,
+      "message": "Splitting all the refactoring into a separate change would make the real change here more understandable IMO",
+      "revId": "4b381f4193588fb77c47f45ea9fc7a09f9a87348",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
