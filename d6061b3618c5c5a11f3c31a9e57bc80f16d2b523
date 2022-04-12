@@ -46,6 +46,30 @@
       },
       "revId": "d6061b3618c5c5a11f3c31a9e57bc80f16d2b523",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "0abeb060_867b0b37",
+        "filename": "include/platform/PlatformMethods.h",
+        "patchSetId": 5
+      },
+      "lineNbr": 271,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2022-04-12T13:56:47Z",
+      "side": 0,
+      "message": "This looks more like a bug for how code search copies some dirs around. Is it there in your local linux checkout? I don\u0027t think even know where this dir comes from.",
+      "parentUuid": "5399f69a_45900682",
+      "range": {
+        "startLine": 271,
+        "startChar": 7,
+        "endLine": 271,
+        "endChar": 25
+      },
+      "revId": "d6061b3618c5c5a11f3c31a9e57bc80f16d2b523",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
