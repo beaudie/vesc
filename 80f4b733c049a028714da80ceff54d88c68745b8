@@ -1,0 +1,44 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "9eaa323c_702e4204",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-04-12T14:31:40Z",
+      "side": 1,
+      "message": "Much better thanks! Feel free to adjust the comment in whatever CL you are working on next if Ian doesn\u0027t request any changes to save the bots some time.\n\nFYI, when you +2, the bots are not rerun if they had a green run less than 24 hours ago, so a minor comment change in that window is hardly worth the waste IMO",
+      "revId": "80f4b733c049a028714da80ceff54d88c68745b8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b7e91838_f786777e",
+        "filename": "src/libANGLE/ProgramExecutable.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 1630,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-04-12T14:31:40Z",
+      "side": 1,
+      "message": "nit: you can just call it: `per-stage and combined gl_Max*AtomicCounterBuffers`, no need to enumerate all stages.",
+      "range": {
+        "startLine": 1630,
+        "startChar": 7,
+        "endLine": 1630,
+        "endChar": 104
+      },
+      "revId": "80f4b733c049a028714da80ceff54d88c68745b8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
