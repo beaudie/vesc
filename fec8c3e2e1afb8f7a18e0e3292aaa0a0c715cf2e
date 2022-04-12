@@ -16,6 +16,46 @@
       "message": "Hi Shahbaz, This CL uses real data size instead of the MAX_VERTEX_ATTRIBS. I know some changes are not necessary, since the data size is equal to MAX_VERTEX_ATTRIBS. However the code should be less confusing, if ANGLE always checks with real data size.",
       "revId": "fec8c3e2e1afb8f7a18e0e3292aaa0a0c715cf2e",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "cb9624c9_33248561",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-04-12T14:59:38Z",
+      "side": 1,
+      "message": "Thanks",
+      "revId": "fec8c3e2e1afb8f7a18e0e3292aaa0a0c715cf2e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "448af6a3_c97bafbb",
+        "filename": "src/libANGLE/renderer/d3d/d3d9/VertexDeclarationCache.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 30,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-04-12T14:59:38Z",
+      "side": 1,
+      "message": "Please use the explicit type. We use auto only for overly complex types (like iterators inside containers)",
+      "range": {
+        "startLine": 30,
+        "startChar": 9,
+        "endLine": 30,
+        "endChar": 13
+      },
+      "revId": "fec8c3e2e1afb8f7a18e0e3292aaa0a0c715cf2e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
