@@ -163,6 +163,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "5eef1bd2_a4e5b73d",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1509302
+      },
+      "writtenOn": "2022-04-12T18:34:01Z",
+      "side": 1,
+      "message": "docs in this commit might be more intuitive: https://source.chromium.org/chromiumos/_/chromium/chromiumos/third_party/mesa/+/bbe2d50b589e0d7b7b63d63814a5271b680164ce\n\nThe spec gap between EGL and Vulkan would be `EGL_ANDROID_front_buffer_auto_refresh` allows changing refresh modes at runtime after window surface gets created. So even after ANGLE creates a Vulkan swapchain with continuous refresh, the GL app itself can still use `EGL_FRONT_BUFFER_AUTO_REFRESH_ANDROID` to disable the auto_refresh mode previously set on the native window. So that\u0027s why I was suggesting ANGLE just creates with demand_refresh, and has to live with the fact that the app can switch refresh mode later (that is fine since anyway the swap has to be hooked up in glFlush/glFinish as well).\n\nlet me know if there\u0027s still confusion.",
+      "parentUuid": "64da786e_158941a4",
+      "revId": "b5abe09b194eab4d37d34934afbdc25ce41bd93c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "564c4a84_74a2749c",
         "filename": "src/libANGLE/renderer/vulkan/SurfaceVk.cpp",
         "patchSetId": 1
