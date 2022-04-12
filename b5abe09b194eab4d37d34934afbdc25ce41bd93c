@@ -127,6 +127,42 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "64da786e_158941a4",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1509302
+      },
+      "writtenOn": "2022-04-12T17:54:54Z",
+      "side": 1,
+      "message": "\u003e The default behavior of what?\nThe default mode to create the swapchain with\n\n\u003e What\u0027s auto_refresh and how does that relate here?\nThat same thing. For swapchain mode, it\u0027s continunous_refresh. For EGL extension, it\u0027s `EGL_FRONT_BUFFER_AUTO_REFRESH_ANDROID`. Also auto_refresh is the ANativeWindow perform op corresponding to swapcahin continunous_refresh.\n\n\u003e The EGL spec seems to be clear that eglSwapBuffers is not required for the normal operation of single-buffer rendering.\nThat\u0027s where the driver (angle) is required to do the swap at glFlush instead.\n\nfunctional wise: without hooking up the swap at glFlush, an app creating a surface with single_buffer as well as setting surface to auto_refresh initially will end up not presenting to the correct buffer because the buffer was never queued to ANativeWindow. Here\u0027s a nice doc in mesa for implementing mutable render buffer: https://source.chromium.org/chromiumos/chromiumos/codesearch/+/main:src/third_party/mesa-freedreno/include/GL/internal/dri_interface.h;l\u003d2108\n\nperformance wise: defaulting to continuous_refresh for single_buffer is going to introduce power regressions for some app usecases where they actively switch the refresh mode with `EGL_ANDROID_front_buffer_auto_refresh` when detecing no/active user movements.",
+      "parentUuid": "e141b0fb_138a4cdf",
+      "revId": "b5abe09b194eab4d37d34934afbdc25ce41bd93c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "c76e8980_be920f4a",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1509302
+      },
+      "writtenOn": "2022-04-12T17:54:54Z",
+      "side": 1,
+      "message": "You are right. That makes sense to me.",
+      "parentUuid": "15b337c0_dbfecc85",
+      "revId": "b5abe09b194eab4d37d34934afbdc25ce41bd93c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "564c4a84_74a2749c",
         "filename": "src/libANGLE/renderer/vulkan/SurfaceVk.cpp",
         "patchSetId": 1
