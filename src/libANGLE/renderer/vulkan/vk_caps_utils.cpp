@@ -1129,6 +1129,9 @@ void RendererVk::ensureCapsInitialized() const
 
     // GL_KHR_parallel_shader_compile
     mNativeExtensions.parallelShaderCompileKHR = false;
+
+    // GL_EXT_YUV_target
+    mNativeExtensions.YUVTargetEXT = true;
 }
 
 namespace vk
