@@ -110,11 +110,14 @@ inline bool FramebufferImpl::shouldSyncStateBeforeCheckStatus() const
 }
 
 // Default implementation returns the format specified in the attachment.
-inline const gl::InternalFormat &FramebufferImpl::getImplementationColorReadFormat(
+inline const gl::InternalFormat FramebufferImpl::getImplementationColorReadFormat(
     const gl::Context *context) const
 {
-    const gl::FramebufferAttachment *readAttachment = mState.getReadAttachment();
-    return *readAttachment->getFormat().info;
+    if (const gl::FramebufferAttachment *readAttachment = mState.getReadAttachment())
+    {
+        return *readAttachment->getFormat().info;
+    }
+    return {};
 }
 }  // namespace rx
 
