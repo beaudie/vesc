@@ -29,7 +29,7 @@ class BoxedUint32
     {
         return T{mValue};
     }
-    BoxedUint32(const BoxedUint32 &other) = default;
+    BoxedUint32(const BoxedUint32 &other)            = default;
     BoxedUint32 &operator=(const BoxedUint32 &other) = default;
     operator uint32_t() const { return mValue.value; }
     bool operator==(const BoxedUint32 &other) const { return mValue.value == other.mValue.value; }
@@ -125,6 +125,13 @@ enum HeaderIndex
 // Returns whether SPIR-V is valid.  Useful for ASSERTs.  Automatically generates a warning if
 // SPIR-V is not valid.
 bool Validate(const Blob &blob);
+
+// For writing extended SPIRV decoration enums that are not yet merged in
+// the grammar json
+void WriteDecorateUint32(Blob *blob,
+                         IdRef target,
+                         uint32_t decoration,
+                         const LiteralIntegerList &valuesList);
 
 }  // namespace spirv
 }  // namespace angle

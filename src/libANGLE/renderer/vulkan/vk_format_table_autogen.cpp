@@ -958,6 +958,16 @@ void Format::initialize(RendererVk *renderer, const angle::Format &angleFormat)
             mVertexLoadRequiresConversion = false;
             break;
 
+        case angle::FormatID::EXTERNAL:
+            mIntendedGLFormat              = GL_NONE;
+            mActualSampleOnlyImageFormatID = angle::FormatID::EXTERNAL;
+            mImageInitializerFunction      = nullptr;
+            mActualBufferFormatID          = angle::FormatID::EXTERNAL;
+            mVkBufferFormatIsPacked        = false;
+            mVertexLoadFunction            = nullptr;
+            mVertexLoadRequiresConversion  = false;
+            break;
+
         case angle::FormatID::G8_B8R8_2PLANE_420_UNORM:
             mIntendedGLFormat              = GL_G8_B8R8_2PLANE_420_UNORM_ANGLE;
             mActualSampleOnlyImageFormatID = angle::FormatID::G8_B8R8_2PLANE_420_UNORM;
@@ -2470,6 +2480,7 @@ VkFormat GetVkFormatFromFormatID(angle::FormatID formatID)
         {angle::FormatID::ETC2_R8G8B8A8_UNORM_BLOCK, VK_FORMAT_ETC2_R8G8B8A8_UNORM_BLOCK},
         {angle::FormatID::ETC2_R8G8B8_SRGB_BLOCK, VK_FORMAT_ETC2_R8G8B8_SRGB_BLOCK},
         {angle::FormatID::ETC2_R8G8B8_UNORM_BLOCK, VK_FORMAT_ETC2_R8G8B8_UNORM_BLOCK},
+        {angle::FormatID::EXTERNAL, VK_FORMAT_UNDEFINED},
         {angle::FormatID::G8_B8R8_2PLANE_420_UNORM, VK_FORMAT_G8_B8R8_2PLANE_420_UNORM},
         {angle::FormatID::G8_B8_R8_3PLANE_420_UNORM, VK_FORMAT_G8_B8_R8_3PLANE_420_UNORM},
         {angle::FormatID::NONE, VK_FORMAT_UNDEFINED},

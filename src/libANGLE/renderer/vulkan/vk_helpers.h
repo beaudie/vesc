@@ -1331,6 +1331,7 @@ class RenderPassCommandBufferHelper final : public CommandBufferHelperCommon
                                   const PackedAttachmentCount colorAttachmentCount,
                                   const PackedAttachmentIndex depthStencilAttachmentIndex,
                                   const PackedClearValuesArray &clearValues,
+                                  uint64_t color0ExternalFormat,
                                   RenderPassCommandBuffer **commandBufferOut);
 
     angle::Result endRenderPass(ContextVk *contextVk);
@@ -1418,6 +1419,8 @@ class RenderPassCommandBufferHelper final : public CommandBufferHelperCommon
     }
     void addCommandDiagnostics(ContextVk *contextVk);
 
+    uint64_t getRenderPassColor0ExternalFormat() const { return mRenderPassColor0ExternalFormat; }
+
   private:
     angle::Result initializeCommandBuffer(Context *context);
     angle::Result beginRenderPassCommandBuffer(ContextVk *contextVk);
@@ -1463,6 +1466,9 @@ class RenderPassCommandBufferHelper final : public CommandBufferHelperCommon
     Framebuffer mFramebuffer;
     gl::Rectangle mRenderArea;
     PackedClearValuesArray mClearValues;
+    // From EXT_YUV_target spec: "If textarget is TEXTURE_EXTERNAL_OES and attachment is other than
+    // COLOR_ATTACHMENT0, an INVALID_OPERATION error is generated."
+    uint64_t mRenderPassColor0ExternalFormat;
     bool mRenderPassStarted;
 
     // Transform feedback state
@@ -2910,13 +2916,16 @@ class ShaderProgramHelper : angle::NonCopyable
         const gl::AttributesMask &activeAttribLocationsMask,
         const gl::ComponentTypeMask &programAttribsTypeMask,
         const gl::DrawBufferMask &missingOutputsMask,
+        uint64_t color0ExternalFormat,
         const GraphicsPipelineDesc **descPtrOut,
         PipelineHelper **pipelineOut)
     {
         // Pull in a compatible RenderPass.
         RenderPass *compatibleRenderPass = nullptr;
-        ANGLE_TRY(renderPassCache->getCompatibleRenderPass(
-            contextVk, pipelineDesc.getRenderPassDesc(), &compatibleRenderPass));
+        ANGLE_LOG(ERR) << __func__ << " getCompatibleRenderPass";
+        ANGLE_TRY(
+            renderPassCache->getCompatibleRenderPass(contextVk, pipelineDesc.getRenderPassDesc(),
+                                                     color0ExternalFormat, &compatibleRenderPass));
 
         return mGraphicsPipelines.getPipeline(
             contextVk, pipelineCache, *compatibleRenderPass, pipelineLayout,
