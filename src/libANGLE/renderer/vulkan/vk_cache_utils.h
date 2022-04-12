@@ -890,7 +890,6 @@ class YcbcrConversionDesc final
 
     angle::Result init(Context *context, SamplerYcbcrConversion *conversionOut) const;
 
-  private:
     // If the sampler needs to convert the image content (e.g. from YUV to RGB) then
     // mExternalOrVkFormat will be non-zero. The value is either the external format
     // as returned by vkGetAndroidHardwareBufferPropertiesANDROID or a YUV VkFormat.
@@ -1856,8 +1855,31 @@ class RenderPassCache final : angle::NonCopyable
 
     ANGLE_INLINE angle::Result getCompatibleRenderPass(ContextVk *contextVk,
                                                        const vk::RenderPassDesc &desc,
+                                                       uint64_t color0ExternalFormat,
                                                        vk::RenderPass **renderPassOut)
     {
+        if (color0ExternalFormat != 0)
+        {
+            auto outerIt = mPayloadExternalFormat.find(desc);
+            if (outerIt != mPayloadExternalFormat.end())
+            {
+                MidExternalFormatCache &midCache = outerIt->second;
+
+                auto midIt = midCache.find(color0ExternalFormat);
+
+                if (midIt != midCache.end())
+                {
+                    InnerExternalFormatCache &innerCache = midIt->second;
+                    // Find the first element and return it.
+                    *renderPassOut = &innerCache.begin()->second.getRenderPass();
+                    mCompatibleRenderPassCacheStats.hit();
+                    return angle::Result::Continue;
+                }
+            }
+            mCompatibleRenderPassCacheStats.miss();
+            return addRenderPass(contextVk, desc, color0ExternalFormat, renderPassOut);
+        }
+
         auto outerIt = mPayload.find(desc);
         if (outerIt != mPayload.end())
         {
@@ -1871,12 +1893,13 @@ class RenderPassCache final : angle::NonCopyable
         }
 
         mCompatibleRenderPassCacheStats.missAndIncrementSize();
-        return addRenderPass(contextVk, desc, renderPassOut);
+        return addRenderPass(contextVk, desc, 0 /* no external format ID */, renderPassOut);
     }
 
     angle::Result getRenderPassWithOps(ContextVk *contextVk,
                                        const vk::RenderPassDesc &desc,
                                        const vk::AttachmentOpsArray &attachmentOps,
+                                       uint64_t color0ExternalFormat,
                                        vk::RenderPass **renderPassOut);
 
   private:
@@ -1884,10 +1907,12 @@ class RenderPassCache final : angle::NonCopyable
                                            const vk::RenderPassDesc &desc,
                                            const vk::AttachmentOpsArray &attachmentOps,
                                            bool updatePerfCounters,
+                                           uint64_t color0ExternalFormat,
                                            vk::RenderPass **renderPassOut);
 
     angle::Result addRenderPass(ContextVk *contextVk,
                                 const vk::RenderPassDesc &desc,
+                                uint64_t color0ExternalFormat,
                                 vk::RenderPass **renderPassOut);
 
     // Use a two-layer caching scheme. The top level matches the "compatible" RenderPass elements.
@@ -1899,6 +1924,16 @@ class RenderPassCache final : angle::NonCopyable
     OuterCache mPayload;
     CacheStats mCompatibleRenderPassCacheStats;
     CacheStats mRenderPassWithOpsCacheStats;
+
+    // uint64_t: the color 0 externalFormat
+    // outer + mid are used to come up with a compatible RP for FB's,
+    // and inner is used in the actual RP later
+    using InnerExternalFormatCache =
+        std::unordered_map<vk::AttachmentOpsArray, vk::RenderPassHelper>;
+    using MidExternalFormatCache   = std::unordered_map<uint64_t, InnerExternalFormatCache>;
+    using OuterExternalFormatCache = std::unordered_map<vk::RenderPassDesc, MidExternalFormatCache>;
+
+    OuterExternalFormatCache mPayloadExternalFormat;
 };
 
 // A class that encapsulates the vk::PipelineCache and associated mutex.  The mutex may be nullptr

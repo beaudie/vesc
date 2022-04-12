@@ -14,7 +14,7 @@ static char gDefaultMetallibSrc[] = R"(
 # 1 "temp_master_source.metal"
 # 1 "<built-in>" 1
 # 1 "<built-in>" 3
-# 451 "<built-in>" 3
+# 403 "<built-in>" 3
 # 1 "<command line>" 1
 # 1 "<built-in>" 2
 # 1 "temp_master_source.metal" 2
@@ -1493,7 +1493,7 @@ namespace FormatID
 {
 enum
 {
-    NONE,
+    NONE, EXTERNAL,
     D16_UNORM,
     D24_UNORM_S8_UINT,
     D24_UNORM_X8_UINT,
