@@ -71,6 +71,7 @@ static constexpr rx::FastCopyFunctionMap NoCopyFunctions;
 const Format gFormatInfoTable[] = {{
     // clang-format off
     {{ FormatID::NONE, GL_NONE, GL_NONE, nullptr, NoCopyFunctions, nullptr, nullptr, GL_NONE, 0, 0, 0, 0, 0, 0, 0, 0, 0, false, false, false, false, false, gl::VertexAttribType::InvalidEnum }},
+    {{ FormatID::EXTERNAL, GL_NONE, GL_NONE, nullptr, NoCopyFunctions, nullptr, nullptr, GL_NONE, 0, 0, 0, 0, 0, 0, 0, 0, 0, false, false, false, false, false, gl::VertexAttribType::InvalidEnum }},
 {angle_format_info_cases}    // clang-format on
 }};
 
@@ -358,6 +359,8 @@ def sorted_ds_first(all_angle):
     for format_id in sorted(all_angle):
         if format_id == 'NONE':
             continue
+        if format_id == 'EXTERNAL':
+            continue
         if format_id[0] == 'D' or format_id[0] == 'S':
             ds_sorted.append(format_id)
         else:
@@ -370,6 +373,7 @@ def parse_angle_format_table(all_angle, json_data, angle_to_gl):
     table_data = ''
     for format_id in sorted_ds_first(all_angle):
         assert (format_id != 'NONE')
+        assert (format_id != 'EXTERNAL')
         format_info = json_data[format_id] if format_id in json_data else {}
         table_data += json_to_table_data(format_id, format_info, angle_to_gl)
 
@@ -377,9 +381,10 @@ def parse_angle_format_table(all_angle, json_data, angle_to_gl):
 
 
 def gen_enum_string(all_angle):
-    enum_data = '    NONE'
+    enum_data = '    NONE, EXTERNAL'
     for format_id in sorted_ds_first(all_angle):
         assert (format_id != 'NONE')
+        assert (format_id != 'EXTERNAL')
         enum_data += ',\n    ' + format_id
     return enum_data
 

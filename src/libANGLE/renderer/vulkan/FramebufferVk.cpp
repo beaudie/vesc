@@ -1998,8 +1998,9 @@ void FramebufferVk::updateRenderPassDesc(ContextVk *contextVk)
         {
             RenderTargetVk *colorRenderTarget = colorRenderTargets[colorIndexGL];
             ASSERT(colorRenderTarget);
-            mRenderPassDesc.packColorAttachment(
-                colorIndexGL, colorRenderTarget->getImageForRenderPass().getActualFormatID());
+            const vk::ImageHelper &imageForRenderPass = colorRenderTarget->getImageForRenderPass();
+            mRenderPassDesc.packColorAttachment(colorIndexGL,
+                                                imageForRenderPass.getActualFormatID());
 
             // Add the resolve attachment, if any.
             if (colorRenderTarget->hasResolveAttachment())
@@ -2544,11 +2545,16 @@ angle::Result FramebufferVk::startNewRenderPass(ContextVk *contextVk,
     // Color attachments.
     const auto &colorRenderTargets = mRenderTargetCache.getColors();
     vk::PackedAttachmentIndex colorIndexVk(0);
+    uint64_t color0ExternalFormat = 0;
     for (size_t colorIndexGL : mState.getColorAttachmentsMask())
     {
         RenderTargetVk *colorRenderTarget = colorRenderTargets[colorIndexGL];
         ASSERT(colorRenderTarget);
 
+        if (colorIndexGL == 0)
+        {
+            color0ExternalFormat = colorRenderTarget->getImageForRenderPass().getExternalFormat();
+        }
         // Color render targets are never entirely transient.  Only depth/stencil
         // multisampled-render-to-texture textures can be so.
         ASSERT(!colorRenderTarget->isEntirelyTransient());
@@ -2764,7 +2770,7 @@ angle::Result FramebufferVk::startNewRenderPass(ContextVk *contextVk,
 
     ANGLE_TRY(contextVk->beginNewRenderPass(
         *framebuffer, renderArea, mRenderPassDesc, renderPassAttachmentOps, colorIndexVk,
-        depthStencilAttachmentIndex, packedClearValues, commandBufferOut));
+        depthStencilAttachmentIndex, packedClearValues, color0ExternalFormat, commandBufferOut));
 
     // Add the images to the renderpass tracking list (through onColorDraw).
     vk::PackedAttachmentIndex colorAttachmentIndex(0);
