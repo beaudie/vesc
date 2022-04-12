@@ -52,5 +52,34 @@ bool Validate(const Blob &blob)
 }
 #endif  // ANGLE_ENABLE_ASSERTS
 
+namespace
+{
+
+uint32_t MakeLengthOp(size_t length, uint32_t op)
+{
+    ASSERT(length <= 0xFFFFu);
+    ASSERT(op <= 0xFFFFu);
+
+    return static_cast<uint32_t>(length) << 16 | op;
+}
+
+}  // namespace
+void WriteDecorateUint32(Blob *blob,
+                         IdRef target,
+                         uint32_t decoration,
+                         const LiteralIntegerList &valuesList)
+{
+    const size_t startSize = blob->size();
+    blob->push_back(0);
+    blob->push_back(target);
+    blob->push_back(decoration);
+    for (const auto &operand : valuesList)
+    {
+        blob->push_back(operand);
+    }
+    const uint32_t kOpDecorate = 71;
+    (*blob)[startSize]         = MakeLengthOp(blob->size() - startSize, kOpDecorate);
+}
+
 }  // namespace spirv
 }  // namespace angle
