@@ -35,6 +35,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "27ba7bba_5a1abe6f",
+        "filename": "src/libANGLE/ProgramExecutable.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 1628,
+      "author": {
+        "id": 1520902
+      },
+      "writtenOn": "2022-04-12T00:29:14Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "a87164c0_b5ec9298",
+      "revId": "cd009c4744345cacb72761deabd4538ae0c7d80c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "23c9c865_c0070f97",
@@ -48,6 +66,24 @@
       "writtenOn": "2022-04-11T18:37:19Z",
       "side": 1,
       "message": "You can use a gl::ShaderMap, and loop over the shader types below instead of `if` for every one.",
+      "revId": "cd009c4744345cacb72761deabd4538ae0c7d80c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "ac962d63_b0a57de7",
+        "filename": "src/libANGLE/ProgramExecutable.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 1633,
+      "author": {
+        "id": 1520902
+      },
+      "writtenOn": "2022-04-12T00:29:14Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "23c9c865_c0070f97",
       "revId": "cd009c4744345cacb72761deabd4538ae0c7d80c",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
@@ -69,6 +105,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "9a0f77b7_6471795b",
+        "filename": "src/libANGLE/ProgramExecutable.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 1649,
+      "author": {
+        "id": 1520902
+      },
+      "writtenOn": "2022-04-12T00:29:14Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "2872f3b0_3e5bb605",
+      "revId": "cd009c4744345cacb72761deabd4538ae0c7d80c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "f89a887a_8b928438",
@@ -82,6 +136,30 @@
       "writtenOn": "2022-04-08T01:45:39Z",
       "side": 1,
       "message": "nit: Space needed after \"?",
+      "range": {
+        "startLine": 1660,
+        "startChar": 19,
+        "endLine": 1660,
+        "endChar": 20
+      },
+      "revId": "cd009c4744345cacb72761deabd4538ae0c7d80c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "9a014acb_c7e7983b",
+        "filename": "src/libANGLE/ProgramExecutable.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 1660,
+      "author": {
+        "id": 1520902
+      },
+      "writtenOn": "2022-04-12T00:29:14Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "f89a887a_8b928438",
       "range": {
         "startLine": 1660,
         "startChar": 19,
