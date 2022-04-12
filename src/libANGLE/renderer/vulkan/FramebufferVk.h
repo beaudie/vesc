@@ -125,6 +125,7 @@ class FramebufferVk : public FramebufferImpl
     GLint getSamples() const;
 
     const vk::RenderPassDesc &getRenderPassDesc() const { return mRenderPassDesc; }
+    uint64_t getRenderPassColor0ExternalFormat() const { return mRenderPassColor0ExternalFormat; }
 
     void updateColorResolveAttachment(
         uint32_t colorIndexGL,
@@ -231,6 +232,7 @@ class FramebufferVk : public FramebufferImpl
     WindowSurfaceVk *mBackbuffer;
 
     vk::RenderPassDesc mRenderPassDesc;
+    uint64_t mRenderPassColor0ExternalFormat;
     RenderTargetCache<RenderTargetVk> mRenderTargetCache;
 
     // This variable is used to quickly compute if we need to do a masked clear. If a color

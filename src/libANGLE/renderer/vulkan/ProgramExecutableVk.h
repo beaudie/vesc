@@ -139,6 +139,7 @@ class ProgramExecutableVk
                                       PipelineSource source,
                                       const vk::GraphicsPipelineDesc &desc,
                                       const gl::ProgramExecutable &glExecutable,
+                                      uint64_t color0ExternalFormat,
                                       const vk::GraphicsPipelineDesc **descPtrOut,
                                       vk::PipelineHelper **pipelineOut);
 
@@ -313,6 +314,7 @@ class ProgramExecutableVk
                                           PipelineSource source,
                                           const vk::GraphicsPipelineDesc &desc,
                                           const gl::ProgramExecutable &glExecutable,
+                                          uint64_t color0ExternalFormat,
                                           const vk::GraphicsPipelineDesc **descPtrOut,
                                           vk::PipelineHelper **pipelineOut);
 
