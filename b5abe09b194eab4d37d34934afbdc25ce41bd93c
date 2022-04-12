@@ -36,6 +36,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "802cc3ad_ad233bb7",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1509302
+      },
+      "writtenOn": "2022-04-12T03:18:24Z",
+      "side": 1,
+      "message": "The default behavior is demond_refresh, which is a more power efficient mode because SurfaceFlinger don’t need to wake itself up for each vsync.\n\neglSwapBuffers has to do both queueBuffer and dequeueBuffer for the shared buffer.\n\nauto_refresh is enabled by the platform with EGL_ANDROID_front_buffer_auto_refresh extension used. That’t an extension implemented in the platform EGL wrapper, and it shortcuts the EGL_FRONT_BUFFER_AUTO_REFRESH_ANDROID surface attribute…With that enabled, the queue and dequeue buffer calls will no longer be binder IPC calls but will both immediately return.\n\nFor angle, it’s tricky since the swapchain creation will reset the native window status. That should be fine since after window surface creation, the app can call eglSurfaceAttrib to set the auto_refresh mode on the surface. For Vulkan swapchain creation, angle just needs to create with demond_refresh.\n\nAnother way is to let platform pass through that attribute to angle, however, which requires platform changes…one more alternative is to always use auto_refresh for front rendering, but at the cost of more power consuming.",
+      "tag": "mailMessageId\u003d\u003cCAKT\u003ddDkr9tcQRPoZZYMqL6ngpnFBWQHRdJHjZy6dr6JxL0smxw@mail.gmail.com\u003e",
+      "revId": "b5abe09b194eab4d37d34934afbdc25ce41bd93c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "564c4a84_74a2749c",
