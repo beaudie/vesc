@@ -67,6 +67,24 @@
       "message": "LGTM, thank you.",
       "revId": "39ba3587764eaa0ff73fb292072b24c23a7109a9",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "5dc3a463_94a77647",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 14
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-04-12T02:54:34Z",
+      "side": 1,
+      "message": "Ack, I will follow up. There\u0027s precedent I\u0027d need to clean up too: https://chromium-review.googlesource.com/c/angle/angle/+/3270971/4/src/libANGLE/renderer/vulkan/TextureVk.cpp#2614\n\nAlso open to naming suggestion, `TextureParameterChangeResult::ImageUnaffected/ImageRespecified` sounds good?",
+      "parentUuid": "420d38b2_756ccbb3",
+      "revId": "39ba3587764eaa0ff73fb292072b24c23a7109a9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
