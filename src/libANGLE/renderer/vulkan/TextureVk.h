@@ -27,6 +27,12 @@ enum class ImageMipLevels
     InvalidEnum = 2,
 };
 
+enum class TextureParameterChangeResult
+{
+    ImageUnaffected,
+    ImageRespecified,
+};
+
 class TextureVk : public TextureImpl, public angle::ObserverInterface
 {
   public:
@@ -267,7 +273,8 @@ class TextureVk : public TextureImpl, public angle::ObserverInterface
     }
 
     angle::Result ensureMutable(ContextVk *contextVk);
-    angle::Result ensureRenderable(ContextVk *contextVk, bool *didRespecifyOut);
+    angle::Result ensureRenderable(ContextVk *contextVk,
+                                   TextureParameterChangeResult *paramChangeResultOut);
 
     bool getAndResetImmutableSamplerDirtyState()
     {
@@ -468,7 +475,8 @@ class TextureVk : public TextureImpl, public angle::ObserverInterface
     angle::Result respecifyImageStorage(ContextVk *contextVk);
 
     // Update base and max levels, and re-create image if needed.
-    angle::Result maybeUpdateBaseMaxLevels(ContextVk *contextVk, bool *didRespecifyOut);
+    angle::Result maybeUpdateBaseMaxLevels(ContextVk *contextVk,
+                                           TextureParameterChangeResult *changeResultOut);
 
     bool isFastUnpackPossible(const vk::Format &vkFormat, size_t offset) const;
 
