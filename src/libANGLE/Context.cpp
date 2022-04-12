@@ -4590,7 +4590,15 @@ void Context::readPixels(GLint x,
     Rectangle area(x, y, width, height);
     PixelPackState packState = mState.getPackState();
     Buffer *packBuffer       = mState.getTargetBuffer(gl::BufferBinding::PixelPack);
+
+    ANGLE_LOG(ERR) << "Context::readPixels run";
     ANGLE_CONTEXT_TRY(readFBO->readPixels(this, area, format, type, packState, packBuffer, pixels));
+    ANGLE_LOG(ERR) << "Context::readPixels after run";
+    if (pixels)
+    {
+        uint32_t firstPixel = *(uint32_t *)pixels;
+        ANGLE_LOG(ERR) << "Context::readPixels first pixel: " << std::hex << firstPixel;
+    }
 }
 
 void Context::readPixelsRobust(GLint x,

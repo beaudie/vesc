@@ -274,6 +274,12 @@ class UtilsVk : angle::NonCopyable
                             const FramebufferVk *framebuffer,
                             const UnresolveParameters &params);
 
+    // Converts the yuv image (as texture) to rgba via compute shader.
+    // The yuv image is assumed to hold ycbcr conversion info.
+    angle::Result yuvRgbaConversion(ContextVk *contextVk,
+                                    vk::ImageHelper *yuvSrc,
+                                    vk::ImageHelper *rgbaDst);
+
     // Overlay utilities.
     angle::Result drawOverlay(ContextVk *contextVk,
                               vk::BufferHelper *textWidgetsBuffer,
@@ -422,6 +428,11 @@ class UtilsVk : angle::NonCopyable
         uint32_t levelCount   = 0;
     };
 
+    struct YuvRgbaConversionShaderParams
+    {
+        uint32_t extent[2] = {};
+    };
+
     ANGLE_DISABLE_STRUCT_PADDING_WARNINGS
 
     // Functions implemented by the class:
@@ -454,9 +465,10 @@ class UtilsVk : angle::NonCopyable
         ConvertIndexIndirectLineLoopBuffer = 18,
         ConvertIndirectLineLoopBuffer      = 19,
         GenerateMipmap                     = 20,
+        YuvRgbaConversion                  = 21,
 
-        InvalidEnum = 21,
-        EnumCount   = 21,
+        InvalidEnum = 22,
+        EnumCount   = 22,
     };
 
     // Common functions that create the pipeline for the specified function, binds it and prepares
@@ -507,6 +519,7 @@ class UtilsVk : angle::NonCopyable
     angle::Result ensureUnresolveResourcesInitialized(ContextVk *contextVk,
                                                       Function function,
                                                       uint32_t attachmentIndex);
+    angle::Result ensureYuvRgbaConversionResourcesInitialized(ContextVk *context);
 
     angle::Result ensureSamplersInitialized(ContextVk *context);
 
@@ -560,6 +573,7 @@ class UtilsVk : angle::NonCopyable
     vk::ShaderProgramHelper mOverlayDrawProgram;
     vk::ShaderProgramHelper
         mGenerateMipmapPrograms[vk::InternalShader::GenerateMipmap_comp::kArrayLen];
+    vk::ShaderProgramHelper mYuvRgbaConversionProgram;
 
     // Unresolve shaders are special as they are generated on the fly due to the large number of
     // combinations.

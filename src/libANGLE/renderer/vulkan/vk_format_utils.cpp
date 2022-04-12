@@ -322,8 +322,7 @@ size_t GetImageCopyBufferAlignment(angle::FormatID actualFormatID)
     //
     const angle::Format &actualFormat = angle::Format::Get(actualFormatID);
 
-    ASSERT(actualFormat.pixelBytes != 0);
-    const size_t texelSize  = actualFormat.pixelBytes;
+    const size_t texelSize  = actualFormat.pixelBytes ? actualFormat.pixelBytes : 4;
     const size_t multiplier = texelSize % 2 != 0 ? 4 : texelSize % 4 != 0 ? 2 : 1;
     const size_t alignment  = multiplier * texelSize;
 
