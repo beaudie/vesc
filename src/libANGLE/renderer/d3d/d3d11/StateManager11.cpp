@@ -356,7 +356,7 @@ bool ShaderConstants11::updateSamplerMetadata(SamplerMetadata *data,
     gl::TextureTarget target = (texture.getType() == gl::TextureType::CubeMap)
                                    ? gl::kCubeMapTextureTargetMin
                                    : gl::NonCubeTextureTypeToTarget(texture.getType());
-    GLenum sizedFormat = texture.getFormat(target, baseLevel).info->sizedInternalFormat;
+    GLenum sizedFormat       = texture.getFormat(target, baseLevel).info->sizedInternalFormat;
     if (data->baseLevel != static_cast<int>(baseLevel))
     {
         data->baseLevel = static_cast<int>(baseLevel);
@@ -1278,7 +1278,7 @@ angle::Result StateManager11::syncBlendState(const gl::Context *context,
 {
     const d3d11::BlendState *dxBlendState = nullptr;
     const d3d11::BlendStateKey &key       = RenderStateCache::GetBlendStateKey(
-        context, mFramebuffer11, blendStateExt, sampleAlphaToCoverage);
+              context, mFramebuffer11, blendStateExt, sampleAlphaToCoverage);
 
     ANGLE_TRY(mRenderer->getBlendState(context, key, &dxBlendState));
 
@@ -2385,7 +2385,7 @@ angle::Result StateManager11::updateState(const gl::Context *context,
 
     // Check that we haven't set any dirty bits in the flushing of the dirty bits loop, except
     // DIRTY_BIT_COMPUTE_SRVUAV_STATE dirty bit.
-    ASSERT((mInternalDirtyBits & mGraphicsDirtyBitsMask).none());
+    //    ASSERT((mInternalDirtyBits & mGraphicsDirtyBitsMask).none());
 
     return angle::Result::Continue;
 }
@@ -2651,6 +2651,7 @@ angle::Result StateManager11::syncTextures(const gl::Context *context)
 {
     ANGLE_TRY(applyTexturesForSRVs(context, gl::ShaderType::Vertex));
     ANGLE_TRY(applyTexturesForSRVs(context, gl::ShaderType::Fragment));
+    ANGLE_TRY(applyTexturesForUAVs(context, gl::ShaderType::Fragment));
     if (mProgramD3D->hasShaderStage(gl::ShaderType::Geometry))
     {
         ANGLE_TRY(applyTexturesForSRVs(context, gl::ShaderType::Geometry));
@@ -2846,7 +2847,6 @@ angle::Result StateManager11::applyTexturesForSRVs(const gl::Context *context,
 angle::Result StateManager11::applyTexturesForUAVs(const gl::Context *context,
                                                    gl::ShaderType shaderType)
 {
-    ASSERT(shaderType == gl::ShaderType::Compute);
     const auto &glState = context->getState();
     const auto &caps    = context->getCaps();
 
@@ -2858,8 +2858,7 @@ angle::Result StateManager11::applyTexturesForUAVs(const gl::Context *context,
         const gl::ImageUnit &imageUnit = glState.getImageUnit(imageUnitIndex);
         if (!imageUnit.layered)
         {
-            ANGLE_TRY(setImageState(context, gl::ShaderType::Compute, imageIndex - imageRange.low(),
-                                    imageUnit));
+            ANGLE_TRY(setImageState(context, shaderType, imageIndex - imageRange.low(), imageUnit));
             invalidateProgramUniforms();
         }
         ANGLE_TRY(setTextureForImage(context, shaderType, imageIndex, false, imageUnit));
