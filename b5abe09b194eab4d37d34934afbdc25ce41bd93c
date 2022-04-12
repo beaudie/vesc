@@ -90,6 +90,41 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "d4bd831a_b912b04a",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1359249
+      },
+      "writtenOn": "2022-04-12T16:12:34Z",
+      "side": 1,
+      "message": "Replies.",
+      "revId": "b5abe09b194eab4d37d34934afbdc25ce41bd93c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "e141b0fb_138a4cdf",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1359249
+      },
+      "writtenOn": "2022-04-12T16:12:34Z",
+      "side": 1,
+      "message": "No action for Yiwei\u0027s comments? \nI pretty sure form testing we verified that SwapBuffers was used to transition into and from SINGLE_BUFFER mode. Its in dEQP-EGL.functional.mutable_render_buffer.basic",
+      "parentUuid": "62a054be_d0d2fea5",
+      "revId": "b5abe09b194eab4d37d34934afbdc25ce41bd93c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "564c4a84_74a2749c",
@@ -109,6 +144,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "2042880e_7e74d086",
+        "filename": "src/libANGLE/renderer/vulkan/SurfaceVk.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 104,
+      "author": {
+        "id": 1359249
+      },
+      "writtenOn": "2022-04-12T16:12:34Z",
+      "side": 1,
+      "message": "Not sure what you see.\nFirst thing: (unchanged)\n    if (interval \u003e 0)\n    {\n        return VK_PRESENT_MODE_FIFO_KHR;\n    }\n\nAfter that it depends what presentModes are provided. I assume use interval 0 gets you to one of the other modes.",
+      "parentUuid": "564c4a84_74a2749c",
+      "revId": "b5abe09b194eab4d37d34934afbdc25ce41bd93c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "62e83ff8_4e08a82b",
         "filename": "src/libANGLE/renderer/vulkan/SurfaceVk.cpp",
         "patchSetId": 1
@@ -120,6 +173,30 @@
       "writtenOn": "2022-04-12T02:39:54Z",
       "side": 1,
       "message": "I think you can remove DEMAND_REFRESH. The current logic is not correct for it (IIUC, DEMAND_REFRESH is really more like the normal ones (like FIFO/IMMEDIATE/etc) in ANI/QP behavior. It\u0027s only CONTINUOUS_REFRESH that\u0027s special in that regard.\n\nI don\u0027t know if we ever need DEMAND_REFRESH, unless you know an EGL extension that maps to it?",
+      "range": {
+        "startLine": 1945,
+        "startChar": 35,
+        "endLine": 1945,
+        "endChar": 76
+      },
+      "revId": "b5abe09b194eab4d37d34934afbdc25ce41bd93c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "488635ee_8a3baaf5",
+        "filename": "src/libANGLE/renderer/vulkan/SurfaceVk.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 1945,
+      "author": {
+        "id": 1359249
+      },
+      "writtenOn": "2022-04-12T16:12:34Z",
+      "side": 1,
+      "message": "I was just being complete, if somehow we ended up needing. Removed.",
+      "parentUuid": "62e83ff8_4e08a82b",
       "range": {
         "startLine": 1945,
         "startChar": 35,
