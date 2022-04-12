@@ -491,6 +491,7 @@ class SecondaryCommandBuffer final : angle::NonCopyable
         ContextVk *contextVk,
         const Framebuffer &framebuffer,
         const RenderPassDesc &renderPassDesc,
+        uint64_t color0ExternalFormat,
         VkCommandBufferInheritanceInfo *inheritanceInfoOut)
     {
         return angle::Result::Continue;

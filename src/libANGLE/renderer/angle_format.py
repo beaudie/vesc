@@ -41,6 +41,7 @@ def load_forward_table(path):
 def load_inverse_table(path):
     pairs = load_json(path)
     reject_duplicate_keys(pairs)
+    pairs.append(("GL_NONE", "EXTERNAL"))
     return {angle: gl for gl, angle in pairs}
 
 
@@ -81,7 +82,7 @@ def get_component_type(format_id):
         return "uint"
     elif "SSCALED" in format_id:
         return "int"
-    elif format_id == "NONE":
+    elif format_id in ["NONE", "EXTERNAL"]:
         return "none"
     elif "SRGB" in format_id:
         return "unorm"
@@ -244,7 +245,7 @@ def get_format_gl_type(format):
 
 
 def get_vertex_copy_function(src_format, dst_format):
-    if dst_format == "NONE":
+    if dst_format in ["NONE", "EXTERNAL"]:
         return "nullptr"
 
     src_num_channel = len(get_channel_tokens(src_format))

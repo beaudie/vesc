@@ -147,6 +147,7 @@ class ProgramExecutableVk
                                       const vk::GraphicsPipelineDesc &desc,
                                       const gl::ProgramExecutable &glExecutable,
                                       const vk::GraphicsPipelineDesc **descPtrOut,
+                                      uint64_t color0ExternalFormat,
                                       vk::PipelineHelper **pipelineOut);
 
     angle::Result getComputePipeline(ContextVk *contextVk, vk::PipelineHelper **pipelineOut);

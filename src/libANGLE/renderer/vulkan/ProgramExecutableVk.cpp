@@ -860,6 +860,7 @@ angle::Result ProgramExecutableVk::getGraphicsPipeline(ContextVk *contextVk,
                                                        const vk::GraphicsPipelineDesc &desc,
                                                        const gl::ProgramExecutable &glExecutable,
                                                        const vk::GraphicsPipelineDesc **descPtrOut,
+                                                       uint64_t color0ExternalFormat,
                                                        vk::PipelineHelper **pipelineOut)
 {
     const gl::State &glState         = contextVk->getState();
@@ -919,7 +920,7 @@ angle::Result ProgramExecutableVk::getGraphicsPipeline(ContextVk *contextVk,
     return shaderProgram->getGraphicsPipeline(
         contextVk, &contextVk->getRenderPassCache(), *pipelineCache, getPipelineLayout(), desc,
         activeAttribLocations, glExecutable.getAttributesTypeMask(), missingOutputsMask, descPtrOut,
-        pipelineOut);
+        color0ExternalFormat, pipelineOut);
 }
 
 angle::Result ProgramExecutableVk::getComputePipeline(ContextVk *contextVk,

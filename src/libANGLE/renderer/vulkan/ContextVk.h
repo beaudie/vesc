@@ -504,9 +504,11 @@ class ContextVk : public ContextImpl, public vk::Context, public MultisampleText
     angle::Result finishToSerial(Serial serial);
 
     angle::Result getCompatibleRenderPass(const vk::RenderPassDesc &desc,
+                                          uint64_t color0ExternalFormat,
                                           vk::RenderPass **renderPassOut);
     angle::Result getRenderPassWithOps(const vk::RenderPassDesc &desc,
                                        const vk::AttachmentOpsArray &ops,
+                                       uint64_t color0ExternalFormat,
                                        vk::RenderPass **renderPassOut);
 
     vk::ShaderLibrary &getShaderLibrary() { return mShaderLibrary; }
@@ -616,6 +618,7 @@ class ContextVk : public ContextImpl, public vk::Context, public MultisampleText
                                      const vk::PackedAttachmentCount colorAttachmentCount,
                                      const vk::PackedAttachmentIndex depthStencilAttachmentIndex,
                                      const vk::PackedClearValuesArray &clearValues,
+                                     uint64_t color0ExternalFormat,
                                      vk::RenderPassCommandBuffer **commandBufferOut);
 
     // Only returns true if we have a started RP and we've run setupDraw.

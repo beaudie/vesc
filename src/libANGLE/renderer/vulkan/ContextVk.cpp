@@ -1749,9 +1749,9 @@ angle::Result ContextVk::handleDirtyGraphicsPipelineDesc(DirtyBits::Iterator *di
         updateGraphicsPipelineDescWithSpecConstUsageBits(usageBits);
 
         // Draw call shader patching, shader compilation, and pipeline cache query.
-        ANGLE_TRY(executableVk->getGraphicsPipeline(this, mCurrentDrawMode, *mGraphicsPipelineDesc,
-                                                    glExecutable, &descPtr,
-                                                    &mCurrentGraphicsPipeline));
+        ANGLE_TRY(executableVk->getGraphicsPipeline(
+            this, mCurrentDrawMode, *mGraphicsPipelineDesc, glExecutable, &descPtr,
+            mRenderPassCommands->getRenderPassColor0ExternalFormat(), &mCurrentGraphicsPipeline));
         mGraphicsPipelineTransition.reset();
     }
     else if (mGraphicsPipelineTransition.any())
@@ -1763,9 +1763,10 @@ angle::Result ContextVk::handleDirtyGraphicsPipelineDesc(DirtyBits::Iterator *di
             vk::PipelineHelper *oldPipeline = mCurrentGraphicsPipeline;
             const vk::GraphicsPipelineDesc *descPtr;
 
-            ANGLE_TRY(executableVk->getGraphicsPipeline(this, mCurrentDrawMode,
-                                                        *mGraphicsPipelineDesc, glExecutable,
-                                                        &descPtr, &mCurrentGraphicsPipeline));
+            ANGLE_TRY(executableVk->getGraphicsPipeline(
+                this, mCurrentDrawMode, *mGraphicsPipelineDesc, glExecutable, &descPtr,
+                mRenderPassCommands->getRenderPassColor0ExternalFormat(),
+                &mCurrentGraphicsPipeline));
 
             oldPipeline->addTransition(mGraphicsPipelineTransition, descPtr,
                                        mCurrentGraphicsPipeline);
@@ -6170,18 +6171,22 @@ angle::Result ContextVk::finishToSerial(Serial serial)
 }
 
 angle::Result ContextVk::getCompatibleRenderPass(const vk::RenderPassDesc &desc,
+                                                 uint64_t color0ExternalFormat,
                                                  vk::RenderPass **renderPassOut)
 {
     // Note: Each context has it's own RenderPassCache so no locking needed.
-    return mRenderPassCache.getCompatibleRenderPass(this, desc, renderPassOut);
+    return mRenderPassCache.getCompatibleRenderPass(this, desc, color0ExternalFormat,
+                                                    renderPassOut);
 }
 
 angle::Result ContextVk::getRenderPassWithOps(const vk::RenderPassDesc &desc,
                                               const vk::AttachmentOpsArray &ops,
+                                              uint64_t renderPassColor0ExternalFormat,
                                               vk::RenderPass **renderPassOut)
 {
     // Note: Each context has it's own RenderPassCache so no locking needed.
-    return mRenderPassCache.getRenderPassWithOps(this, desc, ops, renderPassOut);
+    return mRenderPassCache.getRenderPassWithOps(this, desc, ops, renderPassColor0ExternalFormat,
+                                                 renderPassOut);
 }
 
 angle::Result ContextVk::getTimestamp(uint64_t *timestampOut)
@@ -6328,6 +6333,7 @@ angle::Result ContextVk::beginNewRenderPass(
     const vk::PackedAttachmentCount colorAttachmentCount,
     const vk::PackedAttachmentIndex depthStencilAttachmentIndex,
     const vk::PackedClearValuesArray &clearValues,
+    uint64_t color0ExternalFormat,
     vk::RenderPassCommandBuffer **commandBufferOut)
 {
     // Next end any currently outstanding render pass.  The render pass is normally closed before
@@ -6335,9 +6341,10 @@ angle::Result ContextVk::beginNewRenderPass(
     ANGLE_TRY(flushCommandsAndEndRenderPass(RenderPassClosureReason::NewRenderPass));
 
     mPerfCounters.renderPasses++;
-    return mRenderPassCommands->beginRenderPass(
-        this, framebuffer, renderArea, renderPassDesc, renderPassAttachmentOps,
-        colorAttachmentCount, depthStencilAttachmentIndex, clearValues, commandBufferOut);
+    return mRenderPassCommands->beginRenderPass(this, framebuffer, renderArea, renderPassDesc,
+                                                renderPassAttachmentOps, colorAttachmentCount,
+                                                depthStencilAttachmentIndex, clearValues,
+                                                color0ExternalFormat, commandBufferOut);
 }
 
 angle::Result ContextVk::startRenderPass(gl::Rectangle renderArea,
@@ -6461,8 +6468,9 @@ angle::Result ContextVk::flushCommandsAndEndRenderPassImpl(QueueSubmitType queue
     }
 
     vk::RenderPass *renderPass = nullptr;
-    ANGLE_TRY(getRenderPassWithOps(mRenderPassCommands->getRenderPassDesc(),
-                                   mRenderPassCommands->getAttachmentOps(), &renderPass));
+    ANGLE_TRY(getRenderPassWithOps(
+        mRenderPassCommands->getRenderPassDesc(), mRenderPassCommands->getAttachmentOps(),
+        mRenderPassCommands->getRenderPassColor0ExternalFormat(), &renderPass));
 
     flushDescriptorSetUpdates();
 

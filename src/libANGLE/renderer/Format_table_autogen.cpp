@@ -25,6 +25,7 @@ static constexpr rx::FastCopyFunctionMap NoCopyFunctions;
 const Format gFormatInfoTable[] = {
     // clang-format off
     { FormatID::NONE, GL_NONE, GL_NONE, nullptr, NoCopyFunctions, nullptr, nullptr, GL_NONE, 0, 0, 0, 0, 0, 0, 0, 0, 0, false, false, false, false, false, gl::VertexAttribType::InvalidEnum },
+    { FormatID::EXTERNAL, GL_NONE, GL_NONE, nullptr, NoCopyFunctions, nullptr, nullptr, GL_NONE, 0, 0, 0, 0, 0, 0, 0, 0, 0, false, false, false, false, false, gl::VertexAttribType::InvalidEnum },
     { FormatID::D16_UNORM, GL_DEPTH_COMPONENT16, GL_DEPTH_COMPONENT16, nullptr, NoCopyFunctions, ReadDepthStencil<D16>, WriteDepthStencil<D16>, GL_UNSIGNED_NORMALIZED, 0, 0, 0, 0, 0, 16, 0, 2, std::numeric_limits<GLuint>::max(), false, false, false, false, false, gl::VertexAttribType::InvalidEnum },
     { FormatID::D24_UNORM_S8_UINT, GL_DEPTH24_STENCIL8, GL_DEPTH24_STENCIL8, nullptr, NoCopyFunctions, ReadDepthStencil<D24S8>, WriteDepthStencil<D24S8>, GL_UNSIGNED_NORMALIZED, 0, 0, 0, 0, 0, 24, 8, 4, std::numeric_limits<GLuint>::max(), false, false, false, false, false, gl::VertexAttribType::InvalidEnum },
     { FormatID::D24_UNORM_X8_UINT, GL_DEPTH_COMPONENT24, GL_DEPTH_COMPONENT24, nullptr, NoCopyFunctions, ReadDepthStencil<D24X8>, WriteDepthStencil<D24X8>, GL_UNSIGNED_NORMALIZED, 0, 0, 0, 0, 0, 24, 0, 4, std::numeric_limits<GLuint>::max(), false, false, false, false, false, gl::VertexAttribType::InvalidEnum },

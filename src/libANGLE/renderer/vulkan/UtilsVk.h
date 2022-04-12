@@ -490,7 +490,8 @@ class UtilsVk : angle::NonCopyable
                                        const VkDescriptorSet descriptorSet,
                                        const void *pushConstants,
                                        size_t pushConstantsSize,
-                                       vk::RenderPassCommandBuffer *commandBuffer);
+                                       vk::RenderPassCommandBuffer *commandBuffer,
+                                       uint64_t color0ExternalFormat = 0);
 
     // Initializes descriptor set layout, pipeline layout and descriptor pool corresponding to given
     // function, if not already initialized.  Uses setSizes to create the layout.  For example, if
