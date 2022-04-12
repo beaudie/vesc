@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "684e2269_730f3a97",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 5
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1128437
+      },
+      "writtenOn": "2022-04-12T18:59:16Z",
+      "side": 1,
+      "message": "Thanks!\n\nPost-review: Added missing semaphore synchronization in the test which was causing it to fail on real GPU, and removed accidentally added code in VulkanHelper.",
+      "revId": "32aef90dd6421ff6cb7e1437196c1832c21a7fd5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
