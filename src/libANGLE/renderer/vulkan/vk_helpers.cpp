@@ -2021,6 +2021,7 @@ angle::Result RenderPassCommandBufferHelper::beginRenderPass(
     const PackedAttachmentCount colorAttachmentCount,
     const PackedAttachmentIndex depthStencilAttachmentIndex,
     const PackedClearValuesArray &clearValues,
+    uint64_t color0ExternalFormat,
     RenderPassCommandBuffer **commandBufferOut)
 {
     ASSERT(!mRenderPassStarted);
@@ -2030,9 +2031,10 @@ angle::Result RenderPassCommandBufferHelper::beginRenderPass(
     mDepthStencilAttachmentIndex = depthStencilAttachmentIndex;
     mColorAttachmentsCount       = colorAttachmentCount;
     mFramebuffer.setHandle(framebuffer.getHandle());
-    mRenderArea       = renderArea;
-    mClearValues      = clearValues;
-    *commandBufferOut = &getCommandBuffer();
+    mRenderArea                     = renderArea;
+    mClearValues                    = clearValues;
+    mRenderPassColor0ExternalFormat = color0ExternalFormat;
+    *commandBufferOut               = &getCommandBuffer();
 
     mRenderPassStarted = true;
     mCounter++;
@@ -2044,7 +2046,8 @@ angle::Result RenderPassCommandBufferHelper::beginRenderPassCommandBuffer(Contex
 {
     VkCommandBufferInheritanceInfo inheritanceInfo = {};
     ANGLE_TRY(RenderPassCommandBuffer::InitializeRenderPassInheritanceInfo(
-        contextVk, mFramebuffer, mRenderPassDesc, &inheritanceInfo));
+        contextVk, mFramebuffer, mRenderPassDesc, mRenderPassColor0ExternalFormat,
+        &inheritanceInfo));
     inheritanceInfo.subpass = mCurrentSubpass;
 
     return getCommandBuffer().begin(contextVk, inheritanceInfo);
@@ -8414,7 +8417,7 @@ angle::Result ImageHelper::readPixels(ContextVk *contextVk,
     // If the source image is external or undefiend format with ycbcr conversion,
     // assume this is a situation where we have to do a compute dispatch sampling the YUV image and
     // converting to RGBA.
-    bool isAndroidExternalImage = angle::FormatID::NONE == mActualFormatID;
+    bool isAndroidExternalImage = angle::FormatID::EXTERNAL == mActualFormatID;
     if (isAndroidExternalImage)
     {
         ANGLE_LOG(ERR) << "ImageHelper::readPixels flush end render pass";
@@ -8484,9 +8487,8 @@ angle::Result ImageHelper::readPixels(ContextVk *contextVk,
     const angle::Format *actualFormat = &getActualFormat();
     const angle::Format *rgbaFormat   = &angle::Format::Get(angle::FormatID::R8G8B8A8_UNORM);
 
-    const angle::Format *readFormat =
-        (angle::FormatID::NONE == actualFormat->id) ? rgbaFormat : actualFormat;
-    const vk::Format &vkFormat = contextVk->getRenderer()->getFormat(readFormat->id);
+    const angle::Format *readFormat = isAndroidExternalImage ? rgbaFormat : actualFormat;
+    const vk::Format &vkFormat      = contextVk->getRenderer()->getFormat(readFormat->id);
     const gl::InternalFormat &storageFormatInfo =
         vkFormat.getInternalFormatInfo(readFormat->componentType);
 

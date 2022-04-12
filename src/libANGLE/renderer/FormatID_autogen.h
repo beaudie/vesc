@@ -18,6 +18,7 @@ namespace angle
 enum class FormatID
 {
     NONE,
+    EXTERNAL,
     D16_UNORM,
     D24_UNORM_S8_UINT,
     D24_UNORM_X8_UINT,
@@ -247,7 +248,7 @@ enum class FormatID
     X2R10G10B10_USCALED_VERTEX
 };
 
-constexpr uint32_t kNumANGLEFormats = 228;
+constexpr uint32_t kNumANGLEFormats = 229;
 
 }  // namespace angle
 
