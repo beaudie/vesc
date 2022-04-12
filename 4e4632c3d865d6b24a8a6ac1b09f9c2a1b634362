@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "d4a52ae9_c2d54707",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 1242,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-04-12T05:27:06Z",
+      "side": 1,
+      "message": "This doesn\u0027t work because we early out at line 1235. Keeping this as an if can get very ugly, please try turning it into a dirty bit (so the if remains where it was, but sets the dirty bit instead, which is then handled in the for loop below together with the rest of the dirty bits).",
+      "revId": "4e4632c3d865d6b24a8a6ac1b09f9c2a1b634362",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
