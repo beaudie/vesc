@@ -104,6 +104,24 @@
       "message": "Yes. it did and sometimes does.\n\nI recall that Jamie, I think, set us up. And that we needed these gmail accounts for chat, google meet and email or communication between us. I think that was what I was told. If I change gerrit settings, will that break things? CLs in progress?",
       "revId": "d59eb42f5fc4082fbc035803777114fa18fb1feb",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "e1157c2e_da26dd87",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-04-12T18:38:41Z",
+      "side": 1,
+      "message": "No idea. I added you to the dry runners list, so in a few hours you should have access to use your gmail account for CQ+1.",
+      "parentUuid": "23ddddf2_9b5aff5f",
+      "revId": "d59eb42f5fc4082fbc035803777114fa18fb1feb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
