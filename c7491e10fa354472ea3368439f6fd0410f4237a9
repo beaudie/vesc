@@ -94,6 +94,30 @@
       },
       "revId": "c7491e10fa354472ea3368439f6fd0410f4237a9",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "2ba071d3_f2e5daa4",
+        "filename": "src/tests/gl_tests/VertexAttributeTest.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 4148,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-04-12T15:53:56Z",
+      "side": 1,
+      "message": "We have PlatformParameters, which are enough for most tests. Some tests want more parameters, so they make custom ones, and we can set the override directly in the custom code that makes the parameters. That\u0027s the case for MultiviewTest.\n\nFor most tests where PlatformParameters are sufficient, it\u0027ll be a lot of boilerplate code to set the feature on the EGLPlatformParameter that\u0027s embedded, instead of setting it on the PlatformParameters instance directly. In that case, every test that overrides features has to define a custom parameter class/helper for that, which is exactly what this series of changes was removing (i.e. the WithX functions).\n\nAll this work was actually simplifying things so we _don\u0027t_ need to add boilerplate to override a feature.",
+      "parentUuid": "73b5c14c_467a6ae9",
+      "range": {
+        "startLine": 4145,
+        "startChar": 0,
+        "endLine": 4148,
+        "endChar": 66
+      },
+      "revId": "c7491e10fa354472ea3368439f6fd0410f4237a9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
