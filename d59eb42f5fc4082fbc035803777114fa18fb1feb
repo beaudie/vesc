@@ -16,6 +16,41 @@
       "message": "Anyone know how to fix this? Its uploading as jvigilsamsung@gmail.com. Instead of j.vigil@samsung.com. I also get the email notifications to the gmail account. But author is j.vigil@samsung.com. Which is what I use in my git settings. Not sure what to fix here, where gerrit is getting the gmail address.",
       "revId": "d59eb42f5fc4082fbc035803777114fa18fb1feb",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "e261eee9_718ec3ca",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1359249
+      },
+      "writtenOn": "2022-04-12T17:19:54Z",
+      "side": 1,
+      "message": "I see it in my gerrit settings. Will I break anything If I change it?",
+      "parentUuid": "e1eec57b_ebfadd7d",
+      "revId": "d59eb42f5fc4082fbc035803777114fa18fb1feb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "7c90d05c_15beabcf",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1359249
+      },
+      "writtenOn": "2022-04-12T17:19:54Z",
+      "side": 1,
+      "message": "Its in gerrit settings. Will I break anything if I change?",
+      "revId": "d59eb42f5fc4082fbc035803777114fa18fb1feb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
