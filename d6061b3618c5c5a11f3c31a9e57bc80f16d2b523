@@ -94,6 +94,30 @@
       },
       "revId": "d6061b3618c5c5a11f3c31a9e57bc80f16d2b523",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "94cf6532_7767f9db",
+        "filename": "include/platform/PlatformMethods.h",
+        "patchSetId": 5
+      },
+      "lineNbr": 271,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2022-04-12T15:50:46Z",
+      "side": 0,
+      "message": "This seems like some chromium-specific way of building the sysroot. I doubt it exists in the official Android NDK.",
+      "parentUuid": "128c04c7_7ab76d06",
+      "range": {
+        "startLine": 271,
+        "startChar": 7,
+        "endLine": 271,
+        "endChar": 25
+      },
+      "revId": "d6061b3618c5c5a11f3c31a9e57bc80f16d2b523",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
