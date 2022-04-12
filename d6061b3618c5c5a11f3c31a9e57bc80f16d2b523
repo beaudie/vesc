@@ -166,6 +166,30 @@
       },
       "revId": "d6061b3618c5c5a11f3c31a9e57bc80f16d2b523",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "8857de9e_4c5c2c33",
+        "filename": "include/platform/PlatformMethods.h",
+        "patchSetId": 5
+      },
+      "lineNbr": 271,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2022-04-12T16:25:04Z",
+      "side": 0,
+      "message": "It breaks the dropped-dlls / copied-shared-objects workflow.",
+      "parentUuid": "b123f13a_4df86581",
+      "range": {
+        "startLine": 271,
+        "startChar": 7,
+        "endLine": 271,
+        "endChar": 25
+      },
+      "revId": "d6061b3618c5c5a11f3c31a9e57bc80f16d2b523",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
