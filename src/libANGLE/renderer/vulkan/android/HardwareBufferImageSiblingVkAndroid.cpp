@@ -261,7 +261,7 @@ angle::Result HardwareBufferImageSiblingVkAndroid::initImpl(DisplayVk *displayVk
     externalFormat.externalFormat          = 0;
 
     const vk::Format &vkFormat         = renderer->getFormat(internalFormat);
-    const vk::Format &externalVkFormat = renderer->getFormat(angle::FormatID::NONE);
+    const vk::Format &externalVkFormat = renderer->getFormat(angle::FormatID::EXTERNAL);
     const angle::Format &imageFormat   = vkFormat.getActualRenderableImageFormat();
     bool isDepthOrStencilFormat        = imageFormat.hasDepthOrStencilBits();
 
@@ -366,7 +366,7 @@ angle::Result HardwareBufferImageSiblingVkAndroid::initImpl(DisplayVk *displayVk
             bufferFormatProperties.suggestedYcbcrModel, bufferFormatProperties.suggestedYcbcrRange,
             bufferFormatProperties.suggestedXChromaOffset,
             bufferFormatProperties.suggestedYChromaOffset, VK_FILTER_NEAREST,
-            bufferFormatProperties.samplerYcbcrConversionComponents, angle::FormatID::NONE);
+            bufferFormatProperties.samplerYcbcrConversionComponents, angle::FormatID::EXTERNAL);
         mYUV = true;
     }
 

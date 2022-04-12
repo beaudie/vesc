@@ -2021,6 +2021,7 @@ angle::Result RenderPassCommandBufferHelper::beginRenderPass(
     const PackedAttachmentCount colorAttachmentCount,
     const PackedAttachmentIndex depthStencilAttachmentIndex,
     const PackedClearValuesArray &clearValues,
+    uint64_t color0ExternalFormat,
     RenderPassCommandBuffer **commandBufferOut)
 {
     ASSERT(!mRenderPassStarted);
@@ -2030,9 +2031,10 @@ angle::Result RenderPassCommandBufferHelper::beginRenderPass(
     mDepthStencilAttachmentIndex = depthStencilAttachmentIndex;
     mColorAttachmentsCount       = colorAttachmentCount;
     mFramebuffer.setHandle(framebuffer.getHandle());
-    mRenderArea       = renderArea;
-    mClearValues      = clearValues;
-    *commandBufferOut = &getCommandBuffer();
+    mRenderArea                     = renderArea;
+    mClearValues                    = clearValues;
+    mRenderPassColor0ExternalFormat = color0ExternalFormat;
+    *commandBufferOut               = &getCommandBuffer();
 
     mRenderPassStarted = true;
     mCounter++;
