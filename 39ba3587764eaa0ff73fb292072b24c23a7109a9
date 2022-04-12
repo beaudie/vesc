@@ -50,6 +50,23 @@
       "message": "LGTM. Usual request to use a typed enum parameter instead of bool.",
       "revId": "39ba3587764eaa0ff73fb292072b24c23a7109a9",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "ac17ff8b_e070b1f8",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 14
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1520902
+      },
+      "writtenOn": "2022-04-12T00:54:27Z",
+      "side": 1,
+      "message": "LGTM, thank you.",
+      "revId": "39ba3587764eaa0ff73fb292072b24c23a7109a9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
