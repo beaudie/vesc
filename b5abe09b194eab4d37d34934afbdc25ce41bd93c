@@ -56,6 +56,42 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "62a054be_d0d2fea5",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-04-12T14:57:14Z",
+      "side": 1,
+      "message": "I\u0027m not quite sure what you intend here. The default behavior of what? What\u0027s auto_refresh and how does that relate here?\n\n---\n\nThe EGL spec seems to be clear that eglSwapBuffers is not required for the normal operation of single-buffer rendering. In Vulkan, DEMAND_REFRESH does require ANI/QP while CONTINUOUS_REFRESH doesn\u0027t. It sounds to me like the EGL\u0027s single buffer is really CONTINUOUS_REFRESH.\n\nNo argument about which of DEMAND_REFRESH or CONTINUOUS_REFRESH is more optimal :)",
+      "parentUuid": "802cc3ad_ad233bb7",
+      "revId": "b5abe09b194eab4d37d34934afbdc25ce41bd93c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "15b337c0_dbfecc85",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-04-12T14:57:14Z",
+      "side": 1,
+      "message": "That quote is talking about when there\u0027s a switch to and from single-buffer. In that case, the spec says there should be a flush followed by the render buffer change. I believe that\u0027s correctly done.\n\nOtherwise the spec says eglSwapBuffers doesn\u0027t need to flush (even though ANGLE _does_ do that currently if I\u0027m reading the code right):\n\n```\n 9) Should an implicit flush occur when eglSwapBuffers is called on a\n    single-buffered surface?\n\n    RESOLVED: Only when there is a pending EGL_RENDER_BUFFER change which will\n    be affected by this eglSwapBuffers call. Contexts must be flushed when\n    changing render targets.\n```",
+      "parentUuid": "e6dff10c_3a61bd0a",
+      "revId": "b5abe09b194eab4d37d34934afbdc25ce41bd93c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "564c4a84_74a2749c",
         "filename": "src/libANGLE/renderer/vulkan/SurfaceVk.cpp",
         "patchSetId": 1
