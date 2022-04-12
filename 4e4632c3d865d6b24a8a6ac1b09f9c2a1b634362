@@ -26,6 +26,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "6db31953_a1483b0b",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 10,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-04-12T15:38:53Z",
+      "side": 1,
+      "message": "This: https://chromium-review.googlesource.com/c/angle/angle/+/3573581/3/src/libANGLE/renderer/vulkan/ContextVk.cpp#1226\n\nTo make that job complete, you\u0027d need to know the render pass you are going to render to, which you don\u0027t get until dirty bits are processed.",
+      "parentUuid": "53db9e15_a39b618b",
+      "range": {
+        "startLine": 8,
+        "startChar": 0,
+        "endLine": 10,
+        "endChar": 65
+      },
+      "revId": "4e4632c3d865d6b24a8a6ac1b09f9c2a1b634362",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "d4a52ae9_c2d54707",
         "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
         "patchSetId": 1
