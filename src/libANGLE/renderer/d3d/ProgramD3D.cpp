@@ -1032,7 +1032,7 @@ std::unique_ptr<rx::LinkEvent> ProgramD3D::load(const gl::Context *context,
         mD3DShaderStorageBlocks.push_back(shaderStorageBlock);
     }
 
-    for (gl::ShaderType shaderType : {gl::ShaderType::Compute})
+    for (gl::ShaderType shaderType : {gl::ShaderType::Compute, gl::ShaderType::Fragment})
     {
         size_t image2DUniformCount = stream->readInt<size_t>();
         if (stream->error())
@@ -1365,7 +1365,7 @@ void ProgramD3D::save(const gl::Context *context, gl::BinaryOutputStream *stream
         }
     }
 
-    for (gl::ShaderType shaderType : {gl::ShaderType::Compute})
+    for (gl::ShaderType shaderType : {gl::ShaderType::Compute, gl::ShaderType::Fragment})
     {
         stream->writeInt(mImage2DUniforms[shaderType].size());
         for (const sh::ShaderVariable &image2DUniform : mImage2DUniforms[shaderType])
@@ -1542,10 +1542,16 @@ angle::Result ProgramD3D::getPixelExecutableForCachedOutputLayout(
         return angle::Result::Continue;
     }
 
-    std::string finalPixelHLSL = mDynamicHLSL->generatePixelShaderForOutputSignature(
+    std::string pixelHLSL = mDynamicHLSL->generatePixelShaderForOutputSignature(
         mShaderHLSL[gl::ShaderType::Fragment], mPixelShaderKey, mUsesFragDepth,
         mPixelShaderOutputLayoutCache, mShaderStorageBlocks[gl::ShaderType::Fragment],
         mPixelShaderKey.size());
+
+    std::string finalPixelHLSL = mDynamicHLSL->generateShaderForImage2DBindSignature(
+        context, *this, mState, gl::ShaderType::Fragment, pixelHLSL,
+        mImage2DUniforms[gl::ShaderType::Fragment],
+        mImage2DBindLayoutCache[gl::ShaderType::Fragment],
+        static_cast<unsigned int>(mPixelShaderKey.size()));
 
     // Generate new pixel executable
     ShaderExecutableD3D *pixelExecutable = nullptr;
@@ -1656,9 +1662,9 @@ angle::Result ProgramD3D::getGeometryExecutableForPrimitiveType(d3d::Context *co
 
     ShaderExecutableD3D *geometryExecutable = nullptr;
     angle::Result result                    = mRenderer->compileToExecutable(
-        context, *currentInfoLog, geometryHLSL, gl::ShaderType::Geometry, mStreamOutVaryings,
-        (mState.getTransformFeedbackBufferMode() == GL_SEPARATE_ATTRIBS), CompilerWorkaroundsD3D(),
-        &geometryExecutable);
+                           context, *currentInfoLog, geometryHLSL, gl::ShaderType::Geometry, mStreamOutVaryings,
+                           (mState.getTransformFeedbackBufferMode() == GL_SEPARATE_ATTRIBS), CompilerWorkaroundsD3D(),
+                           &geometryExecutable);
 
     if (!infoLog && result == angle::Result::Stop)
     {
@@ -1719,6 +1725,7 @@ class ProgramD3D::GetPixelExecutableTask : public ProgramD3D::GetExecutableTask
         }
 
         mProgram->updateCachedOutputLayoutFromShader();
+        mProgram->updateCachedImage2DBindLayoutFromShader(gl::ShaderType::Fragment);
         ANGLE_TRY(mProgram->getPixelExecutableForCachedOutputLayout(this, &mExecutable, &mInfoLog));
 
         return angle::Result::Continue;
@@ -2010,9 +2017,13 @@ angle::Result ProgramD3D::getComputeExecutableForImage2DBindLayout(
         return angle::Result::Continue;
     }
 
+    std::string computeHLSL =
+        mState.getAttachedShader(gl::ShaderType::Compute)->getTranslatedSource();
+
     std::string finalComputeHLSL = mDynamicHLSL->generateShaderForImage2DBindSignature(
-        context, *this, mState, gl::ShaderType::Compute, mImage2DUniforms[gl::ShaderType::Compute],
-        mImage2DBindLayoutCache[gl::ShaderType::Compute]);
+        context, *this, mState, gl::ShaderType::Compute, computeHLSL,
+        mImage2DUniforms[gl::ShaderType::Compute], mImage2DBindLayoutCache[gl::ShaderType::Compute],
+        0u);
 
     // Generate new compute executable
     ShaderExecutableD3D *computeExecutable = nullptr;
@@ -2086,6 +2097,8 @@ std::unique_ptr<LinkEvent> ProgramD3D::link(const gl::Context *context,
 
                 mShaderSamplers[shaderType].resize(
                     data.getCaps().maxShaderTextureImageUnits[shaderType]);
+                mImages[shaderType].resize(data.getCaps().maxImageUnits);
+                mReadonlyImages[shaderType].resize(data.getCaps().maxImageUnits);
 
                 shadersD3D[shaderType]->generateWorkarounds(&mShaderWorkarounds[shaderType]);
 
@@ -3176,8 +3189,8 @@ void ProgramD3D::updateCachedOutputLayout(const gl::Context *context,
 
         if (colorbuffer)
         {
-            auto binding = colorbuffer->getBinding() == GL_BACK ? GL_COLOR_ATTACHMENT0
-                                                                : colorbuffer->getBinding();
+            auto binding    = colorbuffer->getBinding() == GL_BACK ? GL_COLOR_ATTACHMENT0
+                                                                   : colorbuffer->getBinding();
             size_t maxIndex = binding != GL_NONE ? GetMaxOutputIndex(mPixelShaderKey,
                                                                      binding - GL_COLOR_ATTACHMENT0)
                                                  : 0;
