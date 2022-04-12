@@ -237,13 +237,16 @@ angle::Result HardwareBufferImageSiblingVkAndroid::initImpl(DisplayVk *displayVk
     angle::android::GetANativeWindowBufferProperties(windowBuffer, &mSize.width, &mSize.height,
                                                      &mSize.depth, &pixelFormat, &mUsage);
 
-    // BUG: b/223456677 Android sometimes uses an uninitialized value for layerCount of the
-    // ANativeWindowBuffer. Force depth <= 256 here. If we see a bigger value,
-    // force to 1.
-    mSize.depth = mSize.depth > 256 ? 1 : mSize.depth;
+    ANGLE_LOG(ERR) << "Ahb pixel format: " << pixelFormat;
+    // BUG: b/223456677 Android sometimes uses an uninitialized value for layerCount
+    mSize.depth = 1;
 
     struct AHardwareBuffer *hardwareBuffer =
         angle::android::ANativeWindowBufferToAHardwareBuffer(windowBuffer);
+    AHardwareBuffer_Desc ahbDescription;
+    functions.describe(hardwareBuffer, &ahbDescription);
+    ANGLE_LOG(ERR) << "Ahb with w/h " << mSize.width << " " << mSize.height << " and stride "
+                   << ahbDescription.stride << " format " << ahbDescription.format;
 
     functions.acquire(hardwareBuffer);
     VkAndroidHardwareBufferFormatPropertiesANDROID bufferFormatProperties;
@@ -270,14 +273,14 @@ angle::Result HardwareBufferImageSiblingVkAndroid::initImpl(DisplayVk *displayVk
         pixelFormat == AHARDWAREBUFFER_FORMAT_R8G8B8X8_UNORM
             ? renderer->getFormat(GL_RGBX8_ANGLE)
             : renderer->getFormat(vk::GetFormatIDFromVkFormat(bufferFormatProperties.format));
-    const vk::Format &externalVkFormat = renderer->getFormat(angle::FormatID::NONE);
-    const angle::Format &imageFormat   = vkFormat.getActualRenderableImageFormat();
-    bool isDepthOrStencilFormat        = imageFormat.hasDepthOrStencilBits();
-    mFormat                            = gl::Format(vkFormat.getIntendedGLFormat());
-    bool isExternal                    = bufferFormatProperties.format == VK_FORMAT_UNDEFINED;
+    ANGLE_LOG(ERR) << "vk format suggested: " << bufferFormatProperties.format;
+    const angle::Format &imageFormat = vkFormat.getActualRenderableImageFormat();
+    bool isDepthOrStencilFormat      = imageFormat.hasDepthOrStencilBits();
+    bool isExternal                  = bufferFormatProperties.format == VK_FORMAT_UNDEFINED;
+    mFormat = isExternal ? gl::Format(GL_RGB8) : gl::Format(vkFormat.getIntendedGLFormat());
 
     // TODO (b/223456677): VK_EXT_ycbcr_attachment Extension query
-    bool externalRenderTargetSupported = false;
+    bool externalRenderTargetSupported = true;
 
     // Can assume based on us getting here already. The supportsYUVSamplerConversion
     // check below should serve as a backup otherwise.
@@ -286,8 +289,6 @@ angle::Result HardwareBufferImageSiblingVkAndroid::initImpl(DisplayVk *displayVk
     // Query AHB description and do the following -
     // 1. Derive VkImageTiling mode based on AHB usage flags
     // 2. Map AHB usage flags to VkImageUsageFlags
-    AHardwareBuffer_Desc ahbDescription;
-    functions.describe(hardwareBuffer, &ahbDescription);
     VkImageTiling imageTilingMode = AhbDescUsageToVkImageTiling(ahbDescription);
     VkImageUsageFlags usage = AhbDescUsageToVkImageUsage(ahbDescription, isDepthOrStencilFormat);
 
@@ -336,20 +337,31 @@ angle::Result HardwareBufferImageSiblingVkAndroid::initImpl(DisplayVk *displayVk
     mImage->setTilingMode(imageTilingMode);
     VkImageCreateFlags imageCreateFlags = AhbDescUsageToVkImageCreateFlags(ahbDescription);
 
-    const vk::Format &format          = isExternal ? externalVkFormat : vkFormat;
+    if (isExternal)
+    {
+        ANGLE_LOG(ERR) << "Is external format";
+    }
+    else
+    {
+        ANGLE_LOG(ERR) << "Not external format";
+    }
+
+    angle::FormatID intendedFormatID =
+        isExternal ? angle::FormatID::EXTERNAL : vkFormat.getIntendedFormatID();
+    angle::FormatID actualRenderableImageFormatID =
+        isExternal ? angle::FormatID::EXTERNAL : vkFormat.getActualRenderableImageFormatID();
     const gl::TextureType textureType = AhbDescUsageToTextureType(ahbDescription, layerCount);
 
     VkImageFormatListCreateInfoKHR imageFormatListInfoStorage;
     vk::ImageHelper::ImageListFormats imageListFormatsStorage;
     const void *imageCreateInfoPNext = vk::ImageHelper::DeriveCreateInfoPNext(
-        displayVk, format.getActualRenderableImageFormatID(), &externalMemoryImageCreateInfo,
+        displayVk, actualRenderableImageFormatID, &externalMemoryImageCreateInfo,
         &imageFormatListInfoStorage, &imageListFormatsStorage, &imageCreateFlags);
 
-    ANGLE_TRY(mImage->initExternal(displayVk, textureType, vkExtents, format.getIntendedFormatID(),
-                                   format.getActualRenderableImageFormatID(), 1, usage,
-                                   imageCreateFlags, vk::ImageLayout::ExternalPreInitialized,
-                                   imageCreateInfoPNext, gl::LevelIndex(0), mLevelCount, layerCount,
-                                   robustInitEnabled, hasProtectedContent()));
+    ANGLE_TRY(mImage->initExternal(
+        displayVk, textureType, vkExtents, intendedFormatID, actualRenderableImageFormatID, 1,
+        usage, imageCreateFlags, vk::ImageLayout::ExternalPreInitialized, imageCreateInfoPNext,
+        gl::LevelIndex(0), mLevelCount, layerCount, robustInitEnabled, hasProtectedContent()));
 
     VkImportAndroidHardwareBufferInfoANDROID importHardwareBufferInfo = {};
     importHardwareBufferInfo.sType  = VK_STRUCTURE_TYPE_IMPORT_ANDROID_HARDWARE_BUFFER_INFO_ANDROID;
@@ -386,7 +398,7 @@ angle::Result HardwareBufferImageSiblingVkAndroid::initImpl(DisplayVk *displayVk
             bufferFormatProperties.suggestedYcbcrModel, bufferFormatProperties.suggestedYcbcrRange,
             bufferFormatProperties.suggestedXChromaOffset,
             bufferFormatProperties.suggestedYChromaOffset, vk::kDefaultYCbCrChromaFilter,
-            bufferFormatProperties.samplerYcbcrConversionComponents, angle::FormatID::NONE);
+            bufferFormatProperties.samplerYcbcrConversionComponents, angle::FormatID::EXTERNAL);
         // This may not actually mean the format is YUV. But the rest of ANGLE makes this
         // assumption and needs this member variable.
         mYUV = true;

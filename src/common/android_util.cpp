@@ -224,7 +224,11 @@ T1 *offsetPointer(T2 *ptr, int bytes)
 
 GLenum getPixelFormatInfo(int pixelFormat, bool *isYUV)
 {
-    *isYUV = false;
+    const int k_AHARDWAREBUFFER_FORMAT_R8_UNORM           = 0x38;
+    const int k_AHARDWAREBUFFER_FORMAT_R8_UNORM_OTHER     = 0x303;
+    const int k_AHARDWAREBUFFER_FORMAT_R8G8_UNORM_OTHER   = 0x304;
+    const int k_AHARDWAREBUFFER_FORMAT_YCbCr_420_SP_OTHER = 0x200;
+    *isYUV                                                = false;
     switch (pixelFormat)
     {
         case AHARDWAREBUFFER_FORMAT_R8G8B8A8_UNORM:
@@ -260,11 +264,20 @@ GLenum getPixelFormatInfo(int pixelFormat, bool *isYUV)
         case AHARDWAREBUFFER_FORMAT_S8_UINT:
             return GL_STENCIL_INDEX8;
         case AHARDWAREBUFFER_FORMAT_Y8Cb8Cr8_420:
+        case k_AHARDWAREBUFFER_FORMAT_YCbCr_420_SP_OTHER:
         case AHARDWAREBUFFER_FORMAT_YV12:
         case AHARDWAREBUFFER_FORMAT_IMPLEMENTATION_DEFINED:
             *isYUV = true;
             return GL_RGB8;
+        case k_AHARDWAREBUFFER_FORMAT_R8_UNORM:
+        case k_AHARDWAREBUFFER_FORMAT_R8_UNORM_OTHER:
+            ANGLE_LOG(ERR) << "is R8 format";
+            return GL_R8;
+        case k_AHARDWAREBUFFER_FORMAT_R8G8_UNORM_OTHER:
+            ANGLE_LOG(ERR) << "is RG8 format";
+            return GL_RG8;
         default:
+            ANGLE_LOG(ERR) << "Unrecognized pixel format: " << pixelFormat << " , assuming RGB8";
             // Treat unknown formats as RGB. They are vendor-specific YUV formats that would sample
             // as RGB.
             *isYUV = true;

@@ -1898,6 +1898,7 @@ angle::Result TextureVk::copyBufferDataToImage(ContextVk *contextVk,
 
 angle::Result TextureVk::generateMipmapsWithCompute(ContextVk *contextVk)
 {
+    ANGLE_LOG(ERR) << "generateMipmapLevelsWithCompute";
     RendererVk *renderer = contextVk->getRenderer();
 
     // Requires that the image:
@@ -2001,6 +2002,7 @@ angle::Result TextureVk::generateMipmapsWithCompute(ContextVk *contextVk)
 
 angle::Result TextureVk::generateMipmapsWithCPU(const gl::Context *context)
 {
+    ANGLE_LOG(ERR) << "generateMipmapsWithCPU";
     ContextVk *contextVk = vk::GetImpl(context);
 
     gl::LevelIndex baseLevelGL(mState.getEffectiveBaseLevel());
@@ -2042,6 +2044,7 @@ angle::Result TextureVk::generateMipmapsWithCPU(const gl::Context *context)
 
 angle::Result TextureVk::generateMipmap(const gl::Context *context)
 {
+    ANGLE_LOG(ERR) << "generateMipmap";
     ContextVk *contextVk = vk::GetImpl(context);
     RendererVk *renderer = contextVk->getRenderer();
 
@@ -3149,12 +3152,14 @@ angle::Result TextureVk::initImage(ContextVk *contextVk,
         firstLevelDesc = &mState.getLevelZeroDesc();
         firstLevel     = 0;
         levelCount     = mState.getImmutableLevels();
+        ANGLE_LOG(ERR) << "Immutable format. levelCount" << levelCount;
     }
     else
     {
         firstLevelDesc = &mState.getBaseLevelDesc();
         firstLevel     = mState.getEffectiveBaseLevel();
         levelCount     = getMipLevelCount(mipLevels);
+        ANGLE_LOG(ERR) << "Mutable format. levelCount" << levelCount;
     }
     const gl::Extents &firstLevelExtents = firstLevelDesc->size;
 
@@ -3344,6 +3349,7 @@ angle::Result TextureVk::generateMipmapLevelsWithCPU(ContextVk *contextVk,
                                                      const size_t sourceDepthPitch,
                                                      uint8_t *sourceData)
 {
+    ANGLE_LOG(ERR) << "generateMipmapLevelsWithCPU";
     size_t previousLevelWidth      = sourceWidth;
     size_t previousLevelHeight     = sourceHeight;
     size_t previousLevelDepth      = sourceDepth;

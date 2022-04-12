@@ -1139,6 +1139,9 @@ void RendererVk::ensureCapsInitialized() const
     mNativeExtensions.shaderPixelLocalStorageANGLE = true;
     mNativeExtensions.shaderPixelLocalStorageCoherentANGLE =
         getFeatures().supportsFragmentShaderPixelInterlock.enabled;
+
+    // GL_EXT_YUV_target
+    mNativeExtensions.YUVTargetEXT = true;
 }
 
 namespace vk
