@@ -5423,13 +5423,13 @@ angle::Result ImageHelper::initializeNonZeroMemory(Context *context,
     const angle::Format &angleFormat = getActualFormat();
     bool isCompressedFormat          = angleFormat.isBlock;
 
-    if (angleFormat.isYUV)
-    {
-        // VUID-vkCmdClearColorImage-image-01545
-        // vkCmdClearColorImage(): format must not be one of the formats requiring sampler YCBCR
-        // conversion for VK_IMAGE_ASPECT_COLOR_BIT image views
-        return angle::Result::Continue;
-    }
+    // if (angleFormat.isYUV)
+    // {
+    // VUID-vkCmdClearColorImage-image-01545
+    // vkCmdClearColorImage(): format must not be one of the formats requiring sampler YCBCR
+    // conversion for VK_IMAGE_ASPECT_COLOR_BIT image views
+    // return angle::Result::Continue;
+    // }
 
     RendererVk *renderer = context->getRenderer();
 
@@ -5651,6 +5651,7 @@ angle::Result ImageHelper::initLayerImageViewImpl(Context *context,
                                                   VkImageUsageFlags usageFlags,
                                                   bool samplerExternal2DY2YEXT) const
 {
+    ANGLE_LOG(ERR) << __func__ << " extent " << mExtents.width << " " << mExtents.height;
     VkImageViewCreateInfo viewInfo = {};
     viewInfo.sType                 = VK_STRUCTURE_TYPE_IMAGE_VIEW_CREATE_INFO;
     viewInfo.flags                 = 0;
@@ -5660,6 +5661,7 @@ angle::Result ImageHelper::initLayerImageViewImpl(Context *context,
 
     if (swizzleMap.swizzleRequired() && !mYcbcrConversionDesc.valid())
     {
+        ANGLE_LOG(ERR) << __func__ << "View swizzle: required and no ycbcr conversion found";
         viewInfo.components.r = gl_vk::GetSwizzle(swizzleMap.swizzleRed);
         viewInfo.components.g = gl_vk::GetSwizzle(swizzleMap.swizzleGreen);
         viewInfo.components.b = gl_vk::GetSwizzle(swizzleMap.swizzleBlue);
@@ -5667,6 +5669,8 @@ angle::Result ImageHelper::initLayerImageViewImpl(Context *context,
     }
     else
     {
+        ANGLE_LOG(ERR) << __func__
+                       << "View swizzle: either not required or ycbcr conversion exists";
         viewInfo.components.r = VK_COMPONENT_SWIZZLE_IDENTITY;
         viewInfo.components.g = VK_COMPONENT_SWIZZLE_IDENTITY;
         viewInfo.components.b = VK_COMPONENT_SWIZZLE_IDENTITY;
@@ -5694,6 +5698,7 @@ angle::Result ImageHelper::initLayerImageViewImpl(Context *context,
 
     if (conversionDesc.valid())
     {
+        ANGLE_LOG(ERR) << __func__ << " has ycbcr conversion";
         ASSERT((context->getRenderer()->getFeatures().supportsYUVSamplerConversion.enabled));
         yuvConversionInfo.sType = VK_STRUCTURE_TYPE_SAMPLER_YCBCR_CONVERSION_INFO;
         yuvConversionInfo.pNext = nullptr;
@@ -5705,8 +5710,10 @@ angle::Result ImageHelper::initLayerImageViewImpl(Context *context,
         // If image has an external format, format must be VK_FORMAT_UNDEFINED
         if (conversionDesc.getExternalFormat() != 0)
         {
+            ANGLE_LOG(ERR) << __func__ << " has external format, set format undefiend";
             viewInfo.format = VK_FORMAT_UNDEFINED;
         }
+        ANGLE_LOG(ERR) << __func__ << " viewInfo pNext ? " << (viewInfo.pNext != nullptr);
     }
     ANGLE_VK_TRY(context, imageViewOut->init(context->getDevice(), viewInfo));
     return angle::Result::Continue;
