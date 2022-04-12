@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "b8cdde2d_52f4417f",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-04-12T05:24:47Z",
+      "side": 1,
+      "message": "LGTM! Could you please add basic regression tests for these two enums to make sure we don\u0027t crash elsewhere when answering these queries?",
+      "revId": "16b50a70dd22b039644c43af52304b64c0765910",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
