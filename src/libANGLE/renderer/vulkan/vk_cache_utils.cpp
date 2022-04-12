@@ -704,11 +704,22 @@ angle::Result CreateRenderPass2(Context *context,
                                 uint64_t color0ExternalFormat,
                                 RenderPass *renderPass)
 {
+    ANGLE_LOG(ERR) << "CreateRenderPass2 start";
     // Convert the attachments to VkAttachmentDescription2.
     FramebufferAttachmentArray<VkAttachmentDescription2KHR> attachmentDescs;
+
+    VkExternalFormatANDROID extFormat = {};
+    extFormat.sType                   = VK_STRUCTURE_TYPE_EXTERNAL_FORMAT_ANDROID;
     for (uint32_t index = 0; index < createInfo.attachmentCount; ++index)
     {
         ToAttachmentDesciption2(createInfo.pAttachments[index], &attachmentDescs[index]);
+        if (index == 0 && color0ExternalFormat != 0)
+        {
+            extFormat.externalFormat = color0ExternalFormat;
+            (void)extFormat;
+            attachmentDescs[index].pNext = &extFormat;
+            ANGLE_LOG(ERR) << "External format for color0 detected";
+        }
     }
 
     // Convert subpass attachments to VkAttachmentReference2 and the subpass description to
