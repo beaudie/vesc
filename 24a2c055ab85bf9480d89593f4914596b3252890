@@ -121,6 +121,24 @@
       "parentUuid": "a129e0fc_cda15557",
       "revId": "24a2c055ab85bf9480d89593f4914596b3252890",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "413de03c_20e4f1c2",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 7
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000050
+      },
+      "writtenOn": "2022-04-12T18:45:24Z",
+      "side": 1,
+      "message": "Based on spec, it could be GL_COLOR_ATTACHMENTi, right?\n\n[1] https://www.khronos.org/registry/OpenGL-Refpages/es3.0/html/glReadBuffer.xhtml\n\nAnd getReadAttachment() checks `framebufferAttachment.isAttached()` and returns nullptr. Is it legit use case? What does a non-attached color attachment means?\n```\nconst FramebufferAttachment *FramebufferState::getReadAttachment() const\n{\n    if (mReadBufferState \u003d\u003d GL_NONE)\n    {\n        return nullptr;\n    }\n\n    uint32_t readIndex \u003d getReadIndex();\n    const gl::FramebufferAttachment \u0026framebufferAttachment \u003d\n        isDefault() ? mDefaultFramebufferReadAttachment : mColorAttachments[readIndex];\n\n    return framebufferAttachment.isAttached() ? \u0026framebufferAttachment : nullptr;\n}\n```",
+      "parentUuid": "1883316c_7218f3a8",
+      "revId": "24a2c055ab85bf9480d89593f4914596b3252890",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
