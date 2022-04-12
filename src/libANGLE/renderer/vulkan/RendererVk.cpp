@@ -42,16 +42,12 @@ namespace
 {
 constexpr VkFormatFeatureFlags kInvalidFormatFeatureFlags = static_cast<VkFormatFeatureFlags>(-1);
 
-#if defined(ANGLE_EXPOSE_NON_CONFORMANT_EXTENSIONS_AND_VERSIONS)
 constexpr bool kExposeNonConformantExtensionsAndVersions = true;
-#else
-constexpr bool kExposeNonConformantExtensionsAndVersions = false;
-#endif
 
 #if defined(ANGLE_USE_SPIRV_GENERATION_THROUGH_GLSLANG)
 constexpr bool kUseSpirvGenThroughGlslang = true;
 #else
-constexpr bool kUseSpirvGenThroughGlslang                = false;
+constexpr bool kUseSpirvGenThroughGlslang = false;
 #endif
 }  // anonymous namespace
 

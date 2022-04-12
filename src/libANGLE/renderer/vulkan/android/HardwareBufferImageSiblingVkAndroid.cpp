@@ -281,7 +281,8 @@ angle::Result HardwareBufferImageSiblingVkAndroid::initImpl(DisplayVk *displayVk
         // VkImageCreateInfo struct: If the pNext chain includes a VkExternalFormatANDROID structure
         // whose externalFormat member is not 0, usage must not include any usages except
         // VK_IMAGE_USAGE_SAMPLED_BIT
-        usage = VK_IMAGE_USAGE_SAMPLED_BIT;
+        ANGLE_LOG(ERR) << "HardwareBufferImageSiblingVkAndroid::initImpl dont filter usage :)";
+        // usage = VK_IMAGE_USAGE_SAMPLED_BIT;
 
         // If the pNext chain includes a VkExternalFormatANDROID structure whose externalFormat
         // member is not 0, tiling must be VK_IMAGE_TILING_OPTIMAL
@@ -379,6 +380,19 @@ angle::Result HardwareBufferImageSiblingVkAndroid::initImpl(DisplayVk *displayVk
                                                       kColorRenderableRequiredBits) ||
                   renderer->hasImageFormatFeatureBits(vkFormat.getActualRenderableImageFormatID(),
                                                       kDepthStencilRenderableRequiredBits);
+    if (mYUV)
+    {
+        ANGLE_LOG(ERR) << "HardwareBufferImageSiblingVkAndroid::initImpl is yuv. actual fmt id: "
+                       << vkFormat.getActualRenderableImageVkFormat() << " renderable? "
+                       << mRenderable;
+        mRenderable = true;
+    }
+    else
+    {
+        ANGLE_LOG(ERR)
+            << "HardwareBufferImageSiblingVkAndroid::initImpl not is yuv. actual fmt id: "
+            << vkFormat.getActualRenderableImageVkFormat() << " renderable? " << mRenderable;
+    }
 
     constexpr uint32_t kTextureableRequiredBits =
         VK_FORMAT_FEATURE_SAMPLED_IMAGE_BIT | VK_FORMAT_FEATURE_SAMPLED_IMAGE_FILTER_LINEAR_BIT;
