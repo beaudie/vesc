@@ -1141,6 +1141,9 @@ void RendererVk::ensureCapsInitialized() const
 
     // GL_QCOM_shading_rate
     mNativeExtensions.shadingRateQCOM = mFeatures.supportsFragmentShadingRate.enabled;
+
+    // GL_EXT_YUV_target
+    mNativeExtensions.YUVTargetEXT = true;
 }
 
 namespace vk
