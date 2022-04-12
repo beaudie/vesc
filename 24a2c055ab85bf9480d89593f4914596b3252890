@@ -51,6 +51,41 @@
       "parentUuid": "9f4f86f6_96ef1a55",
       "revId": "24a2c055ab85bf9480d89593f4914596b3252890",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "9f80235e_0d094b6c",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 7
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-04-12T16:38:17Z",
+      "side": 1,
+      "message": "Adding Jamie who should be more familiar with this stuff than me.",
+      "revId": "24a2c055ab85bf9480d89593f4914596b3252890",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "88ccc7a4_6bde82eb",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 7
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-04-12T16:38:17Z",
+      "side": 1,
+      "message": "From what I gather, calling that function should lead to this validation: https://source.chromium.org/chromium/chromium/src/+/main:third_party/angle/src/libANGLE/validationES.cpp;l\u003d2981\n\nAs far as I can tell, looking at Framebuffer::getReadColorAttachment and FramebufferState::getReadAttachment, the validation should have covered every case that could lead to the read attachment pointer being nullptr. So, no, I don\u0027t know what could lead to this.\n\nThat said, if the validation is not bullet-proof, that\u0027s what should be fixed instead of this.",
+      "parentUuid": "29420c9d_65b30cc8",
+      "revId": "24a2c055ab85bf9480d89593f4914596b3252890",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
