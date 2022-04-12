@@ -16,6 +16,47 @@
       "message": "Let me know what you think",
       "revId": "eedb48d111c4d43f00bdca8fe9ed3bd5eccc3e9d",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "4b618aa4_8e43291c",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 8
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1001921
+      },
+      "writtenOn": "2022-04-12T17:15:45Z",
+      "side": 1,
+      "message": "LGTM",
+      "parentUuid": "4a6e9a4a_b8178ef4",
+      "revId": "eedb48d111c4d43f00bdca8fe9ed3bd5eccc3e9d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "9f6bd95c_61cc2599",
+        "filename": "include/platform/PlatformMethods.h",
+        "patchSetId": 8
+      },
+      "lineNbr": 318,
+      "author": {
+        "id": 1001921
+      },
+      "writtenOn": "2022-04-12T17:15:45Z",
+      "side": 1,
+      "message": "Maybe also compare with g_NumPlatformMethods, to ensure this is the last method.\nThis way if someone adds a new method they\u0027ll be alerted to add a new assert.",
+      "range": {
+        "startLine": 318,
+        "startChar": 35,
+        "endLine": 318,
+        "endChar": 38
+      },
+      "revId": "eedb48d111c4d43f00bdca8fe9ed3bd5eccc3e9d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
