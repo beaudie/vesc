@@ -136,6 +136,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "571d277d_307076a0",
+        "filename": "include/platform/d3d_features.json",
+        "patchSetId": 2
+      },
+      "lineNbr": 19,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-04-12T02:26:34Z",
+      "side": 1,
+      "message": "Done, looks better!",
+      "parentUuid": "74fcf3c5_f77635e2",
+      "range": {
+        "startLine": 19,
+        "startChar": 25,
+        "endLine": 19,
+        "endChar": 39
+      },
+      "revId": "80fd61c5fa51af165acd6c8a12df29d2b2a508c0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "e179729f_6be341aa",
@@ -291,6 +315,30 @@
       "side": 1,
       "message": "Just delete the comments, keep the description. Thinking of better maintenance going forward instead of preserving detail we don\u0027t need.",
       "parentUuid": "ce1071d2_6437be94",
+      "range": {
+        "startLine": 125,
+        "startChar": 0,
+        "endLine": 128,
+        "endChar": 14
+      },
+      "revId": "80fd61c5fa51af165acd6c8a12df29d2b2a508c0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "b2f42bf4_933a1709",
+        "filename": "include/platform/d3d_features.json",
+        "patchSetId": 2
+      },
+      "lineNbr": 128,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-04-12T02:26:34Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "7cc12cfa_4b2bd123",
       "range": {
         "startLine": 125,
         "startChar": 0,
