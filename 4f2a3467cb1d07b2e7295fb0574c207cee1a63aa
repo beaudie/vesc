@@ -39,6 +39,30 @@
       },
       "revId": "4f2a3467cb1d07b2e7295fb0574c207cee1a63aa",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "f54201d5_6d2fe224",
+        "filename": "src/libANGLE/renderer/vulkan/TextureVk.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 34,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-04-12T17:55:38Z",
+      "side": 1,
+      "message": "Lol\n\nI shortened it a bit, but with something less generic than \"WasRespecified\" (_what_ was respecified, is not .. specified)",
+      "parentUuid": "3956c230_e983aae4",
+      "range": {
+        "startLine": 29,
+        "startChar": 0,
+        "endLine": 34,
+        "endChar": 2
+      },
+      "revId": "4f2a3467cb1d07b2e7295fb0574c207cee1a63aa",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
