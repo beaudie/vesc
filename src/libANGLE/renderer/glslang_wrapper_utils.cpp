@@ -122,6 +122,23 @@ ShaderInterfaceVariableInfo *AddResourceInfo(ShaderInterfaceVariableInfoMap *inf
     return &info;
 }
 
+ShaderInterfaceVariableInfo *AddResourceInfoWithIndex(ShaderInterfaceVariableInfoMap *infoMap,
+                                                      gl::ShaderBitSet stages,
+                                                      gl::ShaderType shaderType,
+                                                      ShaderVariableType variableType,
+                                                      const std::string &varName,
+                                                      uint32_t descriptorSet,
+                                                      uint32_t resourceIndex,
+                                                      uint32_t binding)
+{
+    ShaderInterfaceVariableInfo &info =
+        infoMap->addWithIndex(shaderType, variableType, varName, resourceIndex);
+    info.descriptorSet = descriptorSet;
+    info.binding       = binding;
+    info.activeStages  = stages;
+    return &info;
+}
+
 // Add location information for an in/out variable.
 ShaderInterfaceVariableInfo *AddLocationInfo(ShaderInterfaceVariableInfoMap *infoMap,
                                              gl::ShaderType shaderType,
@@ -719,6 +736,30 @@ bool InsertIfAbsent(UniformBindingIndexMap *uniformBindingIndexMapOut,
     return false;
 }
 
+void UpdateResourceMap(const gl::ShaderType shaderType,
+                       ShaderVariableType variableType,
+                       const std::string &name,
+                       bool isUniqueName,
+                       bool updateFrontShaderType,
+                       UniformBindingInfo &uniformBindingInfo,
+                       ShaderInterfaceVariableInfoMap *variableInfoMapOut)
+{
+    if (!isUniqueName)
+    {
+        if (updateFrontShaderType)
+        {
+            uniformBindingInfo.frontShaderType = shaderType;
+        }
+        else
+        {
+            variableInfoMapOut->markAsDuplicate(shaderType, variableType, name);
+        }
+    }
+
+    variableInfoMapOut->setActiveStages(uniformBindingInfo.frontShaderType, variableType, name,
+                                        uniformBindingInfo.shaderBitSet);
+}
+
 void AddAndUpdateResourceMaps(const gl::ShaderType shaderType,
                               ShaderVariableType variableType,
                               std::string name,
@@ -739,20 +780,34 @@ void AddAndUpdateResourceMaps(const gl::ShaderType shaderType,
     uniformBindingInfo.shaderBitSet.set(shaderType);
     AddResourceInfo(variableInfoMapOut, uniformBindingInfo.shaderBitSet, shaderType, variableType,
                     name, descriptorSetIndex, uniformBindingInfo.bindingIndex);
-    if (!isUniqueName)
-    {
-        if (updateFrontShaderType)
-        {
-            uniformBindingInfo.frontShaderType = shaderType;
-        }
-        else
-        {
-            variableInfoMapOut->markAsDuplicate(shaderType, variableType, name);
-        }
-    }
+    UpdateResourceMap(shaderType, variableType, name, isUniqueName, updateFrontShaderType,
+                      uniformBindingInfo, variableInfoMapOut);
+}
 
-    variableInfoMapOut->setActiveStages(uniformBindingInfo.frontShaderType, variableType, name,
-                                        uniformBindingInfo.shaderBitSet);
+void AddWithIndexAndUpdateResourceMaps(const gl::ShaderType shaderType,
+                                       ShaderVariableType variableType,
+                                       std::string name,
+                                       uint32_t *binding,
+                                       bool updateBinding,
+                                       bool updateFrontShaderType,
+                                       uint32_t descriptorSetIndex,
+                                       uint32_t resourceIndex,
+                                       UniformBindingIndexMap *uniformBindingIndexMapOut,
+                                       ShaderInterfaceVariableInfoMap *variableInfoMapOut)
+{
+    ASSERT(binding);
+    bool isUniqueName = InsertIfAbsent(uniformBindingIndexMapOut, name, *binding, shaderType);
+    if (updateBinding && isUniqueName)
+    {
+        ++(*binding);
+    }
+    UniformBindingInfo &uniformBindingInfo = (*uniformBindingIndexMapOut)[name];
+    uniformBindingInfo.shaderBitSet.set(shaderType);
+    AddResourceInfoWithIndex(variableInfoMapOut, uniformBindingInfo.shaderBitSet, shaderType,
+                             variableType, name, descriptorSetIndex, resourceIndex,
+                             uniformBindingInfo.bindingIndex);
+    UpdateResourceMap(shaderType, variableType, name, isUniqueName, updateFrontShaderType,
+                      uniformBindingInfo, variableInfoMapOut);
 }
 
 void AssignInputAttachmentBindings(const GlslangSourceOptions &options,
@@ -945,10 +1000,14 @@ void AssignTextureBindings(const GlslangSourceOptions &options,
             if (programExecutable.hasLinkedShaderStage(shaderType) &&
                 samplerUniform.isActive(shaderType))
             {
-                AddAndUpdateResourceMaps(shaderType, ShaderVariableType::Texture, samplerName,
-                                         &(programInterfaceInfo->currentTextureBindingIndex), true,
-                                         false, programInterfaceInfo->textureDescriptorSetIndex,
-                                         uniformBindingIndexMapOut, variableInfoMapOut);
+                uint32_t textureIndex =
+                    uniformIndex - programExecutable.getSamplerUniformRange().low();
+
+                AddWithIndexAndUpdateResourceMaps(
+                    shaderType, ShaderVariableType::Texture, samplerName,
+                    &(programInterfaceInfo->currentTextureBindingIndex), true, false,
+                    programInterfaceInfo->textureDescriptorSetIndex, textureIndex,
+                    uniformBindingIndexMapOut, variableInfoMapOut);
             }
         }
     }
@@ -4694,10 +4753,18 @@ bool HasAliasingAttributes(const ShaderInterfaceVariableInfoMap &variableInfoMap
 {
     gl::AttributesMask isLocationAssigned;
 
-    for (const auto &infoIter :
-         variableInfoMap.getIterator(gl::ShaderType::Vertex, ShaderVariableType::Attribute))
+    for (const auto &iter : variableInfoMap.getIterator(gl::ShaderType::Vertex))
     {
-        const ShaderInterfaceVariableInfo &info = infoIter.second;
+        const std::string &name          = iter.first;
+        const TypeAndIndex &typeAndIndex = iter.second;
+
+        if (typeAndIndex.variableType != ShaderVariableType::Attribute)
+        {
+            continue;
+        }
+
+        const ShaderInterfaceVariableInfo &info =
+            variableInfoMap.getVariableByName(gl::ShaderType::Vertex, name);
 
         // Ignore non attribute ids.
         if (info.attributeComponentCount == 0)
