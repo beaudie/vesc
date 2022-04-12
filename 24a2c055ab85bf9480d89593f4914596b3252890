@@ -103,6 +103,24 @@
       "message": "This looks like a Skia bug where we\u0027re missing a GLES error because they skip validation. We validate already that the read buffer is set correctly in ValidateStateQuery:\n\n            if (readFramebuffer-\u003egetReadBufferState() \u003d\u003d GL_NONE)\n            {\n                context-\u003evalidationError(entryPoint, GL_INVALID_OPERATION, kReadBufferNone);\n                return false;\n            }\n\nPeng can you figure this out with Skia somehow?\n\nA couple areas where ANGLE could be deficient:\n\n- the spec says the default value of the read buffer is GL_BACK or GL_NONE. Looks like we default the read buffer to COLOR_ATTACHMENT0 which is incorrect.\n- some APIs (e.g. BlitFramebuffer) may be missing validation.",
       "revId": "24a2c055ab85bf9480d89593f4914596b3252890",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "1883316c_7218f3a8",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 7
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2022-04-12T17:31:32Z",
+      "side": 1,
+      "message": "I should mention we also validate the attachment is non-null:\n\n            const FramebufferAttachment *attachment \u003d readFramebuffer-\u003egetReadColorAttachment();\n            if (!attachment)\n            {\n                context-\u003evalidationError(entryPoint, GL_INVALID_OPERATION, kReadBufferNotAttached);\n                return false;\n            }",
+      "parentUuid": "a129e0fc_cda15557",
+      "revId": "24a2c055ab85bf9480d89593f4914596b3252890",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
