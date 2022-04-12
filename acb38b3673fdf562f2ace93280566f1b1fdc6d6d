@@ -24,6 +24,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "f5debd2f_b7c50276",
+        "filename": "src/tests/gl_tests/TransformFeedbackTest.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 2248,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-04-12T02:32:23Z",
+      "side": 1,
+      "message": "If you don\u0027t mind, I\u0027d rather not get bogged down on expectations clean up in this unrelated change. I created a bug for this task: anglebug.com/7195\n\n(maybe not so obvious, but the rename in the comment comes from scripts, I didn\u0027t go over these by hand)",
+      "parentUuid": "970311ee_e673069d",
+      "range": {
+        "startLine": 2246,
+        "startChar": 0,
+        "endLine": 2248,
+        "endChar": 0
+      },
+      "revId": "acb38b3673fdf562f2ace93280566f1b1fdc6d6d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "fc988d76_98328e87",
@@ -37,6 +61,30 @@
       "writtenOn": "2022-04-11T21:30:11Z",
       "side": 1,
       "message": "Seems redundant.",
+      "range": {
+        "startLine": 2065,
+        "startChar": 0,
+        "endLine": 2065,
+        "endChar": 63
+      },
+      "revId": "acb38b3673fdf562f2ace93280566f1b1fdc6d6d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "28fcc5b0_79757fea",
+        "filename": "src/tests/perf_tests/TracePerfTest.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 2065,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-04-12T02:32:23Z",
+      "side": 1,
+      "message": "Done (leftover code from previous iteration; you\u0027d think it would complain about unused var, but thank you C++ features)",
+      "parentUuid": "fc988d76_98328e87",
       "range": {
         "startLine": 2065,
         "startChar": 0,
