@@ -70,6 +70,30 @@
       },
       "revId": "d6061b3618c5c5a11f3c31a9e57bc80f16d2b523",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "128c04c7_7ab76d06",
+        "filename": "include/platform/PlatformMethods.h",
+        "patchSetId": 5
+      },
+      "lineNbr": 271,
+      "author": {
+        "id": 1001921
+      },
+      "writtenOn": "2022-04-12T15:36:58Z",
+      "side": 0,
+      "message": "Yes, I have it in my Chromium tree.\nI think it comes from\nhttps://chromium.googlesource.com/android_ndk.git/+/refs/heads/main/toolchains/llvm/prebuilt/linux-x86_64/sysroot/usr/include/EGL/Platform.h",
+      "parentUuid": "0abeb060_867b0b37",
+      "range": {
+        "startLine": 271,
+        "startChar": 7,
+        "endLine": 271,
+        "endChar": 25
+      },
+      "revId": "d6061b3618c5c5a11f3c31a9e57bc80f16d2b523",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
