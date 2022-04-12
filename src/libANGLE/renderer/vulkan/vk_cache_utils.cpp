@@ -173,8 +173,15 @@ void UnpackAttachmentDesc(VkAttachmentDescription *desc,
                           uint8_t samples,
                           const PackedAttachmentOpsDesc &ops)
 {
-    desc->flags   = 0;
-    desc->format  = GetVkFormatFromFormatID(formatID);
+    desc->flags = 0;
+    if (formatID == angle::FormatID::NONE)
+    {
+        desc->format = VK_FORMAT_G8_B8R8_2PLANE_420_UNORM;
+    }
+    else
+    {
+        desc->format = GetVkFormatFromFormatID(formatID);
+    }
     desc->samples = gl_vk::GetSamples(samples);
     desc->loadOp  = ConvertRenderPassLoadOpToVkLoadOp(static_cast<RenderPassLoadOp>(ops.loadOp));
     desc->storeOp =
@@ -999,7 +1006,7 @@ angle::Result InitializeRenderPassFromDesc(ContextVk *contextVk,
                                            RenderPassHelper *renderPassHelper)
 {
     constexpr VkAttachmentReference kUnusedAttachment   = {VK_ATTACHMENT_UNUSED,
-                                                           VK_IMAGE_LAYOUT_UNDEFINED};
+                                                         VK_IMAGE_LAYOUT_UNDEFINED};
     constexpr VkAttachmentReference2 kUnusedAttachment2 = {
         VK_STRUCTURE_TYPE_ATTACHMENT_REFERENCE_2_KHR, nullptr, VK_ATTACHMENT_UNUSED,
         VK_IMAGE_LAYOUT_UNDEFINED, 0};
@@ -1054,14 +1061,14 @@ angle::Result InitializeRenderPassFromDesc(ContextVk *contextVk,
         }
 
         angle::FormatID attachmentFormatID = desc[colorIndexGL];
-        ASSERT(attachmentFormatID != angle::FormatID::NONE);
+        // ASSERT(attachmentFormatID != angle::FormatID::NONE);
 
         VkAttachmentReference colorRef;
         colorRef.attachment = attachmentCount.get();
         colorRef.layout     = needInputAttachments
-                                  ? VK_IMAGE_LAYOUT_GENERAL
-                                  : ConvertImageLayoutToVkImageLayout(
-                                        static_cast<ImageLayout>(ops[attachmentCount].initialLayout));
+                              ? VK_IMAGE_LAYOUT_GENERAL
+                              : ConvertImageLayoutToVkImageLayout(
+                                    static_cast<ImageLayout>(ops[attachmentCount].initialLayout));
         colorAttachmentRefs.push_back(colorRef);
 
         UnpackAttachmentDesc(&attachmentDescs[attachmentCount.get()], attachmentFormatID,
@@ -1078,8 +1085,17 @@ angle::Result InitializeRenderPassFromDesc(ContextVk *contextVk,
                 attachmentFormatID = linearFormat;
             }
         }
-        attachmentDescs[attachmentCount.get()].format = GetVkFormatFromFormatID(attachmentFormatID);
-        ASSERT(attachmentDescs[attachmentCount.get()].format != VK_FORMAT_UNDEFINED);
+        if (attachmentFormatID == angle::FormatID::NONE)
+        {
+            attachmentDescs[attachmentCount.get()].format = VK_FORMAT_G8_B8R8_2PLANE_420_UNORM;
+        }
+        else
+        {
+            attachmentDescs[attachmentCount.get()].format =
+                GetVkFormatFromFormatID(attachmentFormatID);
+        }
+        // ASSERT(attachmentDescs[attachmentCount.get()].format != VK_FORMAT_UNDEFINED);
+        // ASSERT(attachmentDescs[attachmentCount.get()].format != VK_FORMAT_UNDEFINED);
 
         isColorInvalidated.set(colorIndexGL, ops[attachmentCount].isInvalidated);
 
@@ -1096,7 +1112,7 @@ angle::Result InitializeRenderPassFromDesc(ContextVk *contextVk,
 
         depthStencilAttachmentRef.attachment = attachmentCount.get();
         depthStencilAttachmentRef.layout     = ConvertImageLayoutToVkImageLayout(
-                static_cast<ImageLayout>(ops[attachmentCount].initialLayout));
+            static_cast<ImageLayout>(ops[attachmentCount].initialLayout));
 
         UnpackAttachmentDesc(&attachmentDescs[attachmentCount.get()], attachmentFormatID,
                              attachmentSamples, ops[attachmentCount]);
@@ -1219,8 +1235,8 @@ angle::Result InitializeRenderPassFromDesc(ContextVk *contextVk,
     applicationSubpass->colorAttachmentCount = static_cast<uint32_t>(colorAttachmentRefs.size());
     applicationSubpass->pColorAttachments    = colorAttachmentRefs.data();
     applicationSubpass->pResolveAttachments  = attachmentCount.get() > nonResolveAttachmentCount
-                                                   ? colorResolveAttachmentRefs.data()
-                                                   : nullptr;
+                                                  ? colorResolveAttachmentRefs.data()
+                                                  : nullptr;
     applicationSubpass->pDepthStencilAttachment =
         (depthStencilAttachmentRef.attachment != VK_ATTACHMENT_UNUSED ? &depthStencilAttachmentRef
                                                                       : nullptr);
@@ -1589,7 +1605,7 @@ void RenderPassDesc::packColorAttachment(size_t colorIndexGL, angle::FormatID fo
     // Force the user to pack the depth/stencil attachment last.
     ASSERT(!hasDepthStencilAttachment());
     // This function should only be called for enabled GL color attachments.
-    ASSERT(formatID != angle::FormatID::NONE);
+    // or, the color attachment is external image with "none" format
 
     uint8_t &packedFormat = mAttachmentFormats[colorIndexGL];
     SetBitField(packedFormat, formatID);
@@ -1688,7 +1704,9 @@ size_t RenderPassDesc::hash() const
 bool RenderPassDesc::isColorAttachmentEnabled(size_t colorIndexGL) const
 {
     angle::FormatID formatID = operator[](colorIndexGL);
-    return formatID != angle::FormatID::NONE;
+    (void)formatID;
+    // yikes, for external format
+    return true;
 }
 
 bool RenderPassDesc::hasDepthStencilAttachment() const
@@ -3093,8 +3111,8 @@ FramebufferDesc::FramebufferDesc()
     reset();
 }
 
-FramebufferDesc::~FramebufferDesc()                                       = default;
-FramebufferDesc::FramebufferDesc(const FramebufferDesc &other)            = default;
+FramebufferDesc::~FramebufferDesc()                            = default;
+FramebufferDesc::FramebufferDesc(const FramebufferDesc &other) = default;
 FramebufferDesc &FramebufferDesc::operator=(const FramebufferDesc &other) = default;
 
 void FramebufferDesc::update(uint32_t index, ImageOrBufferViewSubresourceSerial serial)
@@ -3287,8 +3305,8 @@ angle::Result YcbcrConversionDesc::init(Context *context,
     samplerYcbcrConversionInfo.ycbcrRange   = static_cast<VkSamplerYcbcrRange>(mColorRange);
     samplerYcbcrConversionInfo.chromaFilter = static_cast<VkFilter>(mChromaFilter);
     samplerYcbcrConversionInfo.components   = {
-          static_cast<VkComponentSwizzle>(mRSwizzle), static_cast<VkComponentSwizzle>(mGSwizzle),
-          static_cast<VkComponentSwizzle>(mBSwizzle), static_cast<VkComponentSwizzle>(mASwizzle)};
+        static_cast<VkComponentSwizzle>(mRSwizzle), static_cast<VkComponentSwizzle>(mGSwizzle),
+        static_cast<VkComponentSwizzle>(mBSwizzle), static_cast<VkComponentSwizzle>(mASwizzle)};
 
 #ifdef VK_USE_PLATFORM_ANDROID_KHR
     VkExternalFormatANDROID externalFormat = {};

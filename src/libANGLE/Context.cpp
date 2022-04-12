@@ -4631,6 +4631,7 @@ void Context::readPixels(GLint x,
     Rectangle area(x, y, width, height);
     PixelPackState packState = mState.getPackState();
     Buffer *packBuffer       = mState.getTargetBuffer(gl::BufferBinding::PixelPack);
+
     ANGLE_CONTEXT_TRY(readFBO->readPixels(this, area, format, type, packState, packBuffer, pixels));
 }
 
