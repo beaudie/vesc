@@ -1747,6 +1747,8 @@ void SPIRVBuilder::writeInterfaceVariableDecorations(const TType &type, spirv::I
     const bool needsBlendIndex =
         type.getQualifier() == EvqFragmentOut && layoutQualifier.index >= 0;
 
+    const bool yuvOutput = (type.getQualifier() == EvqFragmentOut) && layoutQualifier.yuv;
+
     // If the resource declaration requires set & binding, add the DescriptorSet and Binding
     // decorations.
     if (needsSetBinding)
@@ -1780,6 +1782,14 @@ void SPIRVBuilder::writeInterfaceVariableDecorations(const TType &type, spirv::I
     {
         spirv::WriteDecorate(&mSpirvDecorations, variableId, spv::DecorationIndex,
                              {spirv::LiteralInteger(layoutQualifier.index)});
+    }
+
+    if (yuvOutput)
+    {
+        ANGLE_LOG(ERR) << "this shader has layout(yuv)";
+        // WIP in spec
+        const uint32_t kSpvDecorationYUV = 6088;
+        spirv::WriteDecorateUint32(&mSpirvDecorations, variableId, kSpvDecorationYUV, {});
     }
 
     // Handle interpolation and auxiliary decorations on varyings

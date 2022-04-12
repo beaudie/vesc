@@ -744,7 +744,8 @@ angle::Result ProgramExecutableVk::warmUpPipelineCache(ContextVk *contextVk,
 
         ANGLE_TRY(getGraphicsPipelineImpl(contextVk, transformOptions, mode, shaderOutMask,
                                           &pipelineCache, PipelineSource::WarmUp,
-                                          graphicsPipelineDesc, glExecutable, &descPtr, &pipeline));
+                                          graphicsPipelineDesc, glExecutable,
+                                          0 /* no color0 external format */, &descPtr, &pipeline));
     }
 
     // Merge the cache with RendererVk's
@@ -1016,6 +1017,7 @@ angle::Result ProgramExecutableVk::getGraphicsPipelineImpl(
     PipelineSource source,
     const vk::GraphicsPipelineDesc &desc,
     const gl::ProgramExecutable &glExecutable,
+    uint64_t color0ExternalFormat,
     const vk::GraphicsPipelineDesc **descPtrOut,
     vk::PipelineHelper **pipelineOut)
 {
@@ -1056,7 +1058,7 @@ angle::Result ProgramExecutableVk::getGraphicsPipelineImpl(
     return shaderProgram->getGraphicsPipeline(
         contextVk, &contextVk->getRenderPassCache(), pipelineCache, getPipelineLayout(), source,
         desc, activeAttribLocations, glExecutable.getAttributesTypeMask(), missingOutputsMask,
-        descPtrOut, pipelineOut);
+        color0ExternalFormat, descPtrOut, pipelineOut);
 }
 
 angle::Result ProgramExecutableVk::getGraphicsPipeline(ContextVk *contextVk,
@@ -1065,6 +1067,7 @@ angle::Result ProgramExecutableVk::getGraphicsPipeline(ContextVk *contextVk,
                                                        PipelineSource source,
                                                        const vk::GraphicsPipelineDesc &desc,
                                                        const gl::ProgramExecutable &glExecutable,
+                                                       uint64_t color0ExternalFormat,
                                                        const vk::GraphicsPipelineDesc **descPtrOut,
                                                        vk::PipelineHelper **pipelineOut)
 {
@@ -1085,8 +1088,8 @@ angle::Result ProgramExecutableVk::getGraphicsPipeline(ContextVk *contextVk,
     const gl::DrawBufferMask framebufferMask = glState.getDrawFramebuffer()->getDrawBufferMask();
 
     return getGraphicsPipelineImpl(contextVk, transformOptions, mode, framebufferMask,
-                                   pipelineCache, source, desc, glExecutable, descPtrOut,
-                                   pipelineOut);
+                                   pipelineCache, source, desc, glExecutable, color0ExternalFormat,
+                                   descPtrOut, pipelineOut);
 }
 
 angle::Result ProgramExecutableVk::getComputePipeline(ContextVk *contextVk,
