@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "afb41ea5_af20ce83",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1001921
+      },
+      "writtenOn": "2022-04-12T14:06:19Z",
+      "side": 1,
+      "message": "You\u0027ll need to rebase if https://chromium-review.googlesource.com/c/angle/angle/+/3573391 lands first. Sorry about that.",
+      "revId": "65e42cf4ff92a747297120ad6dbb7c8e4e0c46a9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
