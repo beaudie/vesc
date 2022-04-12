@@ -22,6 +22,30 @@
       },
       "revId": "c7491e10fa354472ea3368439f6fd0410f4237a9",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "1470b253_fc014682",
+        "filename": "src/tests/gl_tests/VertexAttributeTest.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 4148,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-04-12T02:46:54Z",
+      "side": 1,
+      "message": "This (or rather equivalently, `WithBlahBlah(ES3_VULKAN())` is how we have been doing this for a while already. This is not a new design. The reason we see this added here is that this change is actually enabling more tests here; with or without this feature (while previously it was only tested with the feature (which, actually was misnamed, so it was only run without the feature by accident)).\n\n\u003e Probably it makes sense to override PlatformParameters every time we want to enable/disable a feature, instead of via current ANGLE_INSTANTIATE_* method.\n\nI\u0027m not sure I understand what you have in mind. If you have a different design that can make the code cleaner/more robust. I\u0027m all ears (but it would be a follow up nevertheless)",
+      "parentUuid": "4e19ea84_a2e64a7c",
+      "range": {
+        "startLine": 4145,
+        "startChar": 0,
+        "endLine": 4148,
+        "endChar": 66
+      },
+      "revId": "c7491e10fa354472ea3368439f6fd0410f4237a9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
