@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "5fd8258a_811fd02b",
+        "filename": "doc/DevSetup.md",
+        "patchSetId": 6
+      },
+      "lineNbr": 27,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2022-04-12T14:00:30Z",
+      "side": 1,
+      "message": "nit: The currently",
+      "range": {
+        "startLine": 27,
+        "startChar": 5,
+        "endLine": 27,
+        "endChar": 14
+      },
+      "revId": "45d6ece9abc027c388e24ee3b1b743fc89a1a1c4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
