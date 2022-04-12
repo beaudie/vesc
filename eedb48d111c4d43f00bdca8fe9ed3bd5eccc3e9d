@@ -81,6 +81,30 @@
       },
       "revId": "eedb48d111c4d43f00bdca8fe9ed3bd5eccc3e9d",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "910c181e_7bfffb86",
+        "filename": "include/platform/PlatformMethods.h",
+        "patchSetId": 8
+      },
+      "lineNbr": 318,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-04-12T17:35:51Z",
+      "side": 1,
+      "message": "Done (with a warning that people shouldn\u0027t be adding new methods here!)",
+      "parentUuid": "9f6bd95c_61cc2599",
+      "range": {
+        "startLine": 318,
+        "startChar": 35,
+        "endLine": 318,
+        "endChar": 38
+      },
+      "revId": "eedb48d111c4d43f00bdca8fe9ed3bd5eccc3e9d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
