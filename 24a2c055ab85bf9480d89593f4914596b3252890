@@ -33,6 +33,24 @@
       "message": "When can this happen? Could you please add a regression test?",
       "revId": "24a2c055ab85bf9480d89593f4914596b3252890",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "29420c9d_65b30cc8",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 7
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000050
+      },
+      "writtenOn": "2022-04-12T16:13:56Z",
+      "side": 1,
+      "message": "This CL is related to crash report [1]. Seems client is calling glGetInteger(GL_IMPLEMENTATION_COLOR_READ_FORMAT) but the color read attachment is nullptr. Do you why it can reach here?\n\n[1]https://crash.corp.google.com/browse?q\u003dproduct_name%3D%27Chrome_Android%27+AND+ComparableVersion%28product.version%29+%3E%3D+ComparableVersion%28%27102.0.4997.0%27%29+AND+expanded_custom_data.ChromeCrashProto.channel%3D%27canary%27+AND+expanded_custom_data.ChromeCrashProto.magic_signature_1.name%3D%27gl%3A%3AFramebufferAttachment%3A%3AgetFormat%27\u0026stbtiq\u003d\u0026reportid\u003dfe88757fdfebe673\u0026index\u003d0",
+      "parentUuid": "9f4f86f6_96ef1a55",
+      "revId": "24a2c055ab85bf9480d89593f4914596b3252890",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
