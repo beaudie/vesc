@@ -1622,6 +1622,7 @@ class RenderPassCache final : angle::NonCopyable
     angle::Result getRenderPassWithOps(ContextVk *contextVk,
                                        const vk::RenderPassDesc &desc,
                                        const vk::AttachmentOpsArray &attachmentOps,
+                                       uint64_t color0ExternalFormat,
                                        vk::RenderPass **renderPassOut);
 
   private:
@@ -1629,6 +1630,7 @@ class RenderPassCache final : angle::NonCopyable
                                            const vk::RenderPassDesc &desc,
                                            const vk::AttachmentOpsArray &attachmentOps,
                                            bool updatePerfCounters,
+                                           uint64_t color0ExternalFormat,
                                            vk::RenderPass **renderPassOut);
 
     angle::Result addRenderPass(ContextVk *contextVk,

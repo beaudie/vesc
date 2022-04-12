@@ -18,6 +18,7 @@ namespace angle
 enum class FormatID
 {
     NONE,
+    EXTERNAL,
     D16_UNORM,
     D24_UNORM_S8_UINT,
     D24_UNORM_X8_UINT,
