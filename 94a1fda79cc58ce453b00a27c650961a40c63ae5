@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "7b722c0b_6a0d62f3",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2022-04-12T01:53:07Z",
+      "side": 1,
+      "message": "lgtm\n",
+      "revId": "94a1fda79cc58ce453b00a27c650961a40c63ae5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "6f8bb3c2_e9c932f3",
+        "filename": "src/libANGLE/validationEGL.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 6273,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2022-04-12T01:53:07Z",
+      "side": 1,
+      "message": "It\u0027s probably just me but I have a hard time thinking through this or-of-multiple-negations. If at this point you can think of a clearer way to write this, that would be appreciated. Maybe:\n\n// The only situation where EGL_NO_DISPLAY is allowed is when querying\n// EGL_EXTENSIONS or EGL_VERSION.\nif (!(dpyPacked \u003d\u003d nullptr \u0026\u0026 (name \u003d\u003d EGL_VERSION || name \u003d\u003d EGL_EXTENSIONS))) ...\n\n?",
+      "revId": "94a1fda79cc58ce453b00a27c650961a40c63ae5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
