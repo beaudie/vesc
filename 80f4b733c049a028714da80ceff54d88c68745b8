@@ -35,6 +35,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "7fcb36fd_6ee4d215",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1520902
+      },
+      "writtenOn": "2022-04-12T22:32:40Z",
+      "side": 1,
+      "message": "Oh I see, sorry that I didn\u0027t fully understand it until I uploaded the change. I will use the tips in the future.",
+      "parentUuid": "9eaa323c_702e4204",
+      "revId": "80f4b733c049a028714da80ceff54d88c68745b8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "b7e91838_f786777e",
@@ -48,6 +66,30 @@
       "writtenOn": "2022-04-12T14:31:40Z",
       "side": 1,
       "message": "nit: you can just call it: `per-stage and combined gl_Max*AtomicCounterBuffers`, no need to enumerate all stages.",
+      "range": {
+        "startLine": 1630,
+        "startChar": 7,
+        "endLine": 1630,
+        "endChar": 104
+      },
+      "revId": "80f4b733c049a028714da80ceff54d88c68745b8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "56498f06_13e5d4f3",
+        "filename": "src/libANGLE/ProgramExecutable.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 1630,
+      "author": {
+        "id": 1520902
+      },
+      "writtenOn": "2022-04-12T22:32:40Z",
+      "side": 1,
+      "message": "got it, thanks!",
+      "parentUuid": "b7e91838_f786777e",
       "range": {
         "startLine": 1630,
         "startChar": 7,
