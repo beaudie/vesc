@@ -87,6 +87,24 @@
       "parentUuid": "d2ddcb49_7ec0b753",
       "revId": "183bc4cf240642db73ae5cf0a389a5eda5af307d",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "f779fe72_b483c893",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-04-12T02:58:20Z",
+      "side": 1,
+      "message": "A lot of them don\u0027t really need to be changed TBH, and turning the constant into variable would disable some compiler optimizations there. Like a loop up to MAX_VERTEX_ATTRIBS that clears a bitset doesn\u0027t really need to be changed.\n\nYou could certainly make a survey of them and see what needs changing, that\u0027d be great.",
+      "parentUuid": "ee417e53_abebbb54",
+      "revId": "183bc4cf240642db73ae5cf0a389a5eda5af307d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ],
   "submitRequirementResults": [
