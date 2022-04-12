@@ -139,6 +139,41 @@
       "parentUuid": "afe50338_1e433098",
       "revId": "2c157238d3acee8280277da02b52b642ae54588e",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "7deb7d4a_e3edb17b",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 8
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1359249
+      },
+      "writtenOn": "2022-04-12T22:40:28Z",
+      "side": 1,
+      "message": "See EGLSurfaceTest.cpp - oOnSetSurfaceAttrib. I do a glClear of green, and then a glFlush, which should update the screen. I just realized, we need a eglSwapBuffers first so we transition into SINGLE_BUFFER mode.\n\nBut you should set a break point after glFlush and before EXPECT_PIXEL_COLOR - and see a green window.\nLet me fix the test.",
+      "parentUuid": "3bd1737f_781c29ff",
+      "revId": "2c157238d3acee8280277da02b52b642ae54588e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "55a7c15f_f9267800",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 8
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1359249
+      },
+      "writtenOn": "2022-04-12T22:40:28Z",
+      "side": 1,
+      "message": "Needs fix and then Green screen. OK moving back to this as fix for EGL_KHR_mutable_render_buffer.\nThen there will be another small patch for EGL_SINGLE_BUFFER with eglCreateWindowSurface - later.",
+      "revId": "2c157238d3acee8280277da02b52b642ae54588e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
