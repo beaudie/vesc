@@ -34,6 +34,24 @@
       "parentUuid": "cf215a70_5abae127",
       "revId": "49defe5663867296090707d809f093feda04fdf4",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "125a2788_0f787eee",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 10
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-04-13T04:23:11Z",
+      "side": 1,
+      "message": "It\u0027s not defensive programming. This is the last usage of the context resource use list that cannot be removed until the recording of the uniform buffer usage is correctly done in the render pass the commands are actually going to be recorded.\n\nActually now that I think about it, this is an existing bug regardless of where the resource use list lives. We are currently recording the buffer\u0027s use before processing the dirty bits. Dirty bit handling may close the render pass, which can cause a vkQueueSubmit. So the buffer containing the uniforms is no longer retained even though the subsequent draw call (now in a new render pass) is using it.\n\nI realize this can (could) be measured in a microbenchmark, but it\u0027s unknown if it realistically affects apps. Let\u0027s wait and see.",
+      "parentUuid": "9949d27e_1352cb0e",
+      "revId": "49defe5663867296090707d809f093feda04fdf4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
