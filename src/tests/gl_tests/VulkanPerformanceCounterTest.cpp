@@ -73,8 +73,7 @@ class VulkanPerformanceCounterTest : public ANGLETest
             ASSERT_NE(featureName, nullptr);
             ASSERT_NE(featureStatus, nullptr);
 
-            const bool isStoreOpNoneQCOM =
-                strcmp(featureName, "supportsRenderPassStoreOpNoneQCOM") == 0;
+            const bool isStoreOpNone = strcmp(featureName, "supportsRenderPassStoreOpNone") == 0;
             const bool isLoadStoreOpNoneEXT =
                 strcmp(featureName, "supportsRenderPassLoadStoreOpNone") == 0;
             const bool isEnabled  = strcmp(featureStatus, angle::kFeatureStatusEnabled) == 0;
@@ -88,7 +87,7 @@ class VulkanPerformanceCounterTest : public ANGLETest
                 mLoadOpNoneSupport = isSupported;
             }
 
-            if (isStoreOpNoneQCOM || isLoadStoreOpNoneEXT)
+            if (isStoreOpNone || isLoadStoreOpNoneEXT)
             {
                 if (mStoreOpNoneSupport == ANGLEFeature::Unknown ||
                     mStoreOpNoneSupport == ANGLEFeature::Unsupported)
