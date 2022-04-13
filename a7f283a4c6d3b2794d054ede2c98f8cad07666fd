@@ -105,6 +105,24 @@
       "message": "Comment. On eglSwapbuffers.\nI added eglSwapbuffers to test just after eglSurfaceAttrib - to cause mode change.. After that, glFlush should cause swapbuffer-on-flush and update the display.",
       "revId": "a7f283a4c6d3b2794d054ede2c98f8cad07666fd",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "d68ab700_5fad01a6",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 9
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1509302
+      },
+      "writtenOn": "2022-04-13T19:31:58Z",
+      "side": 1,
+      "message": "Indeed that\u0027s the extension\u0027s expected behavior, and much easier to follow for the native gl drivers. But angle has to workaround, and it already does to some extent.\n\nConsidering this flow (with KHR_mutable_render_buffer):\n1. app picks back_buffer and normally do swaps\n2. app sets single buffer\n3. app sets auto refresh\n4. app draws on wsi image\n5. app calls swap\n\nFor native driver, the mode switch happens at swap. For the current swap in (5), app still renders to the back buffer and the swap will queueBuffer for the back buffer to replace what\u0027s on the display.\n\nFor angle\u0027s currently behavior, it already recreates the swapchain at (4). So what the app renders for the current frame has already been redirected to the shared buffer. Upon swap, the shared buffer will be queued to display for presentation. So the behavior is correct mostly. (except that the out-fence on the shared buffer will be ignored by the display and is possbile to get latched for vsync before rendering is done)\n\nFor what I\u0027m proposing, moving swapchain recreation to (1) won\u0027t make any difference of above, but will fix the bug I mentioned.",
+      "parentUuid": "558674ea_3147dc22",
+      "revId": "a7f283a4c6d3b2794d054ede2c98f8cad07666fd",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
