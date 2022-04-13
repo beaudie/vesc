@@ -355,9 +355,9 @@ BlendStateExt::BlendStateExt(const size_t drawBuffers)
       mMaxEquationMask(EquationStorage::GetMask(drawBuffers)),
       mEquationColor(EquationStorage::GetReplicatedValue(BlendEquationType::Add, mMaxEquationMask)),
       mEquationAlpha(EquationStorage::GetReplicatedValue(BlendEquationType::Add, mMaxEquationMask)),
-      mMaxColorMask(ColorMaskStorage::GetMask(drawBuffers)),
-      mColorMask(ColorMaskStorage::GetReplicatedValue(PackColorMask(true, true, true, true),
-                                                      mMaxColorMask)),
+      mAllColorMask(ColorMaskStorage::GetReplicatedValue(PackColorMask(true, true, true, true),
+                                                         ColorMaskStorage::GetMask(drawBuffers))),
+      mColorMask(mAllColorMask),
       mMaxEnabledMask(0xFF >> (8 - drawBuffers)),
       mMaxDrawBuffers(drawBuffers)
 {}
@@ -383,14 +383,14 @@ BlendStateExt::ColorMaskStorage::Type BlendStateExt::expandColorMaskValue(const 
                                                                           const bool alpha) const
 {
     return BlendStateExt::ColorMaskStorage::GetReplicatedValue(
-        PackColorMask(red, green, blue, alpha), mMaxColorMask);
+        PackColorMask(red, green, blue, alpha), mAllColorMask);
 }
 
 BlendStateExt::ColorMaskStorage::Type BlendStateExt::expandColorMaskIndexed(
     const size_t index) const
 {
     return ColorMaskStorage::GetReplicatedValue(
-        ColorMaskStorage::GetValueIndexed(index, mColorMask), mMaxColorMask);
+        ColorMaskStorage::GetValueIndexed(index, mColorMask), mAllColorMask);
 }
 
 void BlendStateExt::setColorMask(const bool red,

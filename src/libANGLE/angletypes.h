@@ -716,7 +716,7 @@ class BlendStateExt final
     EquationStorage::Type mEquationColor;
     EquationStorage::Type mEquationAlpha;
 
-    ColorMaskStorage::Type mMaxColorMask;
+    ColorMaskStorage::Type mAllColorMask;
     ColorMaskStorage::Type mColorMask;
 
     DrawBufferMask mMaxEnabledMask;
