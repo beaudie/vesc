@@ -190,7 +190,7 @@ class State : angle::NonCopyable
     bool isBlendEnabled() const { return mBlendStateExt.mEnabledMask.test(0); }
     bool isBlendEnabledIndexed(GLuint index) const
     {
-        ASSERT(static_cast<size_t>(index) < mBlendStateExt.mMaxDrawBuffers);
+        ASSERT(static_cast<size_t>(index) < mBlendStateExt.getDrawBufferCount());
         return mBlendStateExt.mEnabledMask.test(index);
     }
     DrawBufferMask getBlendEnabledDrawBufferMask() const { return mBlendStateExt.mEnabledMask; }

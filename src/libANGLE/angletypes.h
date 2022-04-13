@@ -611,6 +611,9 @@ class BlendStateExt final
     using FactorStorage    = StorageType<BlendFactorType, angle::EnumSize<BlendFactorType>()>;
     using EquationStorage  = StorageType<BlendEquationType, angle::EnumSize<BlendEquationType>()>;
     using ColorMaskStorage = StorageType<uint8_t, 16>;
+    static_assert(std::is_same<FactorStorage::Type, uint64_t>::value &&
+                      std::is_same<EquationStorage::Type, uint64_t>::value,
+                  "Factor and Equation storage must be 64-bit.");
 
     BlendStateExt(const size_t drawBuffers = 1);
 
@@ -666,6 +669,7 @@ class BlendStateExt final
 
     ///////// Blend Equation /////////
 
+    EquationStorage::Type expandEquationValue(const GLenum mode) const;
     EquationStorage::Type expandEquationValue(const gl::BlendEquationType equation) const;
     EquationStorage::Type expandEquationColorIndexed(const size_t index) const;
     EquationStorage::Type expandEquationAlphaIndexed(const size_t index) const;
@@ -678,6 +682,10 @@ class BlendStateExt final
     GLenum getEquationAlphaIndexed(size_t index) const;
     DrawBufferMask compareEquations(const EquationStorage::Type color,
                                     const EquationStorage::Type alpha) const;
+    DrawBufferMask compareEquations(const BlendStateExt &other) const
+    {
+        return compareEquations(other.mEquationColor, other.mEquationAlpha);
+    }
 
     ///////// Blend Factors /////////
 
@@ -704,29 +712,57 @@ class BlendStateExt final
                                   const FactorStorage::Type dstColor,
                                   const FactorStorage::Type srcAlpha,
                                   const FactorStorage::Type dstAlpha) const;
+    DrawBufferMask compareFactors(const BlendStateExt &other) const
+    {
+        return compareFactors(other.mSrcColor, other.mDstColor, other.mSrcAlpha, other.mDstAlpha);
+    }
+
+    constexpr ColorMaskStorage::Type getAllColorMask() const { return mAllColorMask; }
+
+    constexpr DrawBufferMask getAllEnabledMask() const { return mAllEnabledMask; }
+
+    constexpr uint8_t getDrawBufferCount() const { return mDrawBufferCount; }
 
     ///////// Data Members /////////
+  private:
+    uint64_t mParameterMask;
 
-    FactorStorage::Type mMaxFactorMask;
+  public:
     FactorStorage::Type mSrcColor;
     FactorStorage::Type mDstColor;
     FactorStorage::Type mSrcAlpha;
     FactorStorage::Type mDstAlpha;
 
-    EquationStorage::Type mMaxEquationMask;
     EquationStorage::Type mEquationColor;
     EquationStorage::Type mEquationAlpha;
 
-    ColorMaskStorage::Type mMaxColorMask;
+  private:
+    ColorMaskStorage::Type mAllColorMask;
+
+  public:
     ColorMaskStorage::Type mColorMask;
 
-    DrawBufferMask mMaxEnabledMask;
+  private:
+    DrawBufferMask mAllEnabledMask;
+
+  public:
     DrawBufferMask mEnabledMask;
+
     // Cache of whether the blend equation for each index is from KHR_blend_equation_advanced.
     DrawBufferMask mUsesAdvancedBlendEquationMask;
 
-    size_t mMaxDrawBuffers;
+  private:
+    uint8_t mDrawBufferCount;
+
+    ANGLE_MAYBE_UNUSED uint32_t kUnused = 0;
 };
+
+static_assert(sizeof(BlendStateExt) ==
+                  sizeof(uint64_t) + sizeof(BlendStateExt::FactorStorage::Type) * 4 +
+                      sizeof(BlendStateExt::EquationStorage::Type) * 2 +
+                      sizeof(BlendStateExt::ColorMaskStorage::Type) * 2 +
+                      sizeof(DrawBufferMask) * 3 + sizeof(uint8_t) + sizeof(uint32_t),
+              "The BlendStateExt class must not contain gaps.");
 
 // Used in StateCache
 using StorageBuffersMask = angle::BitSet<IMPLEMENTATION_MAX_SHADER_STORAGE_BUFFER_BINDINGS>;

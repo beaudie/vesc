@@ -52,12 +52,12 @@ d3d11::BlendStateKey RenderStateCache::GetBlendStateKey(const gl::Context *conte
     // All fields of the BlendStateExt inside the key should be initialized for the caching to
     // work correctly. Due to mrt_perf_workaround, the actual indices of active draw buffers may be
     // different, so both arrays should be tracked.
-    key.blendStateExt                      = gl::BlendStateExt(blendStateExt.mMaxDrawBuffers);
+    key.blendStateExt                      = gl::BlendStateExt(blendStateExt.getDrawBufferCount());
     const gl::AttachmentList &colorbuffers = framebuffer11->getColorAttachmentsForRender(context);
     const gl::DrawBufferMask colorAttachmentsForRenderMask =
         framebuffer11->getLastColorAttachmentsForRenderMask();
 
-    ASSERT(blendStateExt.mMaxDrawBuffers <= colorAttachmentsForRenderMask.size());
+    ASSERT(blendStateExt.getDrawBufferCount() <= colorAttachmentsForRenderMask.size());
     ASSERT(colorbuffers.size() == colorAttachmentsForRenderMask.count());
 
     size_t keyBlendIndex = 0;
@@ -127,7 +127,7 @@ angle::Result RenderStateCache::getBlendState(const gl::Context *context,
     // feature level. Given that we do not expose GL entrypoints that set per-buffer blend states on
     // systems lower than FL10_1, this array will be always valid.
 
-    for (size_t i = 0; i < blendStateExt.mMaxDrawBuffers; i++)
+    for (size_t i = 0; i < blendStateExt.getDrawBufferCount(); i++)
     {
         D3D11_RENDER_TARGET_BLEND_DESC &rtDesc = blendDesc.RenderTarget[i];
 
