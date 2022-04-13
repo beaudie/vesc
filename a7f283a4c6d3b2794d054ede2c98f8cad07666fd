@@ -16,6 +16,24 @@
       "message": "I   39.643s run_tests_on_device(localhost:2222)  [\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d] Running 2 tests from 1 test suite.\nI   39.643s run_tests_on_device(localhost:2222)  [----------] Global test environment set-up.\nI   39.643s run_tests_on_device(localhost:2222)  [----------] 2 tests from EGLSingleBufferTest\nI   39.644s run_tests_on_device(localhost:2222)  [ RUN      ] EGLSingleBufferTest.OnSetSurfaceAttrib/ES2_Vulkan_NoFixture\nI   39.644s run_tests_on_device(localhost:2222)  ../../src/tests/egl_tests/EGLSurfaceTest.cpp:1658: Failure\nI   39.644s run_tests_on_device(localhost:2222)  Expected equality of these values:\nI   39.644s run_tests_on_device(localhost:2222)    GLColor::green\nI   39.644s run_tests_on_device(localhost:2222)      Which is: Green\nI   39.644s run_tests_on_device(localhost:2222)    angle::ReadColor(1, 1)\nI   39.644s run_tests_on_device(localhost:2222)      Which is: Black\nI   39.644s run_tests_on_device(localhost:2222)  [  FAILED  ] EGLSingleBufferTest.OnSetSurfaceAttrib/ES2_Vulkan_NoFixture, where GetParam() \u003d ES2_Vulkan_NoFixture (993 ms)\nI   39.644s run_tests_on_device(localhost:2222)  [ RUN      ] EGLSingleBufferTest.OnSetSurfaceAttrib/ES3_Vulkan_NoFixture\nI   39.644s run_tests_on_device(localhost:2222)  ../../src/tests/egl_tests/EGLSurfaceTest.cpp:1658: Failure\nI   39.644s run_tests_on_device(localhost:2222)  Expected equality of these values:\nI   39.644s run_tests_on_device(localhost:2222)    GLColor::green\nI   39.644s run_tests_on_device(localhost:2222)      Which is: Green\nI   39.644s run_tests_on_device(localhost:2222)    angle::ReadColor(1, 1)\nI   39.644s run_tests_on_device(localhost:2222)      Which is: Black\nI   39.644s run_tests_on_device(localhost:2222)  [  FAILED  ] EGLSingleBufferTest.OnSetSurfaceAttrib/ES3_Vulkan_NoFixture, where GetParam() \u003d ES3_Vulkan_NoFixture (899 ms)\nI   39.644s run_tests_on_device(localhost:2222)  [----------] 2 tests from EGLSingleBufferTest (1900 ms total)\nI   39.644s run_tests_on_device(localhost:2222)\nI   39.644s run_tests_on_device(localhost:2222)  [----------] Global test environment tear-down\nI   39.644s run_tests_on_device(localhost:2222)  [\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d] 2 tests from 1 test suite ran. (1909 ms total)\nI   39.644s run_tests_on_device(localhost:2222)  [  PASSED  ] 0 tests.\nI   39.644s run_tests_on_device(localhost:2222)  [  FAILED  ] 2 tests, listed below:\nI   39.644s run_tests_on_device(localhost:2222)  [  FAILED  ] EGLSingleBufferTest.OnSetSurfaceAttrib/ES2_Vulkan_NoFixture, where GetParam() \u003d ES2_Vulkan_NoFixture\nI   39.644s run_tests_on_device(localhost:2222)  [  FAILED  ] EGLSingleBufferTest.OnSetSurfaceAttrib/ES3_Vulkan_NoFixture, where GetParam() \u003d ES3_Vulkan_NoFixture\nI   39.644s run_tests_on_device(localhost:2222)\nI   39.644s run_tests_on_device(localhost:2222)   2 FAILED TESTS",
       "revId": "a7f283a4c6d3b2794d054ede2c98f8cad07666fd",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "8fce8a8a_0941711f",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 9
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1509302
+      },
+      "writtenOn": "2022-04-13T00:30:46Z",
+      "side": 1,
+      "message": "Real apps working with Virgl driver also shows complete black screen under Angle (there\u0027re only flashed tile updates for the lines drawn while actively drawing, but will be swapped with a black buffer immediately after).\n\nHowever, the lines drawn were still there on the real buffer. I kinda feel ANGLE is presenting the wrong buffer to the display after presenting the correct one. Systrace also shows a redundant swap.",
+      "parentUuid": "8e025eb9_ad4a0d75",
+      "revId": "a7f283a4c6d3b2794d054ede2c98f8cad07666fd",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
