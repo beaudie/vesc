@@ -16,6 +16,24 @@
       "message": "Code LGTM, but we need to make sure this doesn\u0027t regress performance. Could you do a before/after of the CPU time of traces (with minimized GPU work, or however you do that) to see if there is any perceptible effect?",
       "revId": "49defe5663867296090707d809f093feda04fdf4",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "9949d27e_1352cb0e",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 10
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2022-04-13T04:12:20Z",
+      "side": 1,
+      "message": "It will have a slight detrimental effect because it adds instructions to the uniform update path. I still don\u0027t quite follow the motivation - is this for defensive programming? Unless there\u0027s a provable bug, maybe we should forgo the change?",
+      "parentUuid": "cf215a70_5abae127",
+      "revId": "49defe5663867296090707d809f093feda04fdf4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
