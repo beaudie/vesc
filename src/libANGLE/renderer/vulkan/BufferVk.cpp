@@ -559,7 +559,12 @@ angle::Result BufferVk::ghostMappedBuffer(ContextVk *contextVk,
     vk::BufferHelper src = std::move(mBuffer);
 
     // Retain it to prevent acquireBufferHelper from actually releasing it.
-    src.retainReadOnly(&contextVk->getResourceUseList());
+    //    src.retainReadOnly(&contextVk->getResourceUseList());  // Replace with read/write?
+    //    vk::CommandBufferAccess commandBufferAccess;
+    //    commandBufferAccess.onBufferExternalAcquireRelease(&src);
+    //    vk::OutsideRenderPassCommandBuffer *commandBuffer;
+    //    ANGLE_TRY(contextVk->getOutsideRenderPassCommandBuffer(commandBufferAccess,
+    //    &commandBuffer));
 
     ANGLE_TRY(acquireBufferHelper(contextVk, static_cast<size_t>(mState.getSize()),
                                   BufferUpdateType::ContentsUpdate));
@@ -865,7 +870,12 @@ angle::Result BufferVk::acquireAndUpdate(ContextVk *contextVk,
         // before copyFromBuffer() has a chance to retain it, so retain it now. This may end up
         // double-retaining the buffer, which is a necessary side-effect to prevent a
         // use-after-free.
-        src.retainReadOnly(&contextVk->getResourceUseList());
+        //        src.retainReadOnly(&contextVk->getResourceUseList());  // Replace with read/write?
+        //        vk::CommandBufferAccess commandBufferAccess;
+        //        commandBufferAccess.onBufferExternalAcquireRelease(&src);
+        //        vk::OutsideRenderPassCommandBuffer *commandBuffer;
+        //        ANGLE_TRY(contextVk->getOutsideRenderPassCommandBuffer(commandBufferAccess,
+        //        &commandBuffer));
 
         // The total bytes that we need to copy from old buffer to new buffer
         size_t copySize = bufferSize - updateSize;
