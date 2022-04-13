@@ -28,14 +28,14 @@ struct FeaturesMtl : FeatureSetBase
     };
 
     FeatureInfo hasExplicitMemBarrier = {
-        "has_explicit_mem_barrier_mtl",
+        "has_explicit_mem_barrier",
         FeatureCategory::MetalFeatures,
         "The renderer supports explicit memory barrier",
         &members,
     };
 
     FeatureInfo hasCheapRenderPass = {
-        "has_cheap_render_pass_mtl",
+        "has_cheap_render_pass",
         FeatureCategory::MetalFeatures,
         "The renderer can cheaply break a render pass.",
         &members,
@@ -48,7 +48,7 @@ struct FeaturesMtl : FeatureSetBase
         &members,
     };
 
-    FeatureInfo hasStencilOutput = {
+    FeatureInfo hasShaderStencilOutput = {
         "has_shader_stencil_output",
         FeatureCategory::MetalFeatures,
         "The renderer supports stencil output from fragment shader",
@@ -63,21 +63,21 @@ struct FeaturesMtl : FeatureSetBase
     };
 
     FeatureInfo hasDepthAutoResolve = {
-        "has_msaa_depth_auto_resolve",
+        "has_depth_auto_resolve",
         FeatureCategory::MetalFeatures,
         "The renderer supports MSAA depth auto resolve at the end of render pass",
         &members,
     };
 
     FeatureInfo hasStencilAutoResolve = {
-        "has_msaa_stencil_auto_resolve",
+        "has_stencil_auto_resolve",
         FeatureCategory::MetalFeatures,
         "The renderer supports MSAA stencil auto resolve at the end of render pass",
         &members,
     };
 
     FeatureInfo hasEvents = {
-        "has_mtl_events",
+        "has_events",
         FeatureCategory::MetalFeatures,
         "The renderer supports MTL(Shared)Event",
         &members,
@@ -90,7 +90,7 @@ struct FeaturesMtl : FeatureSetBase
         &members,
     };
 
-    FeatureInfo allowSeparatedDepthStencilBuffers = {
+    FeatureInfo allowSeparateDepthStencilBuffers = {
         "allow_separate_depth_stencil_buffers",
         FeatureCategory::MetalFeatures,
         "Some Apple platforms such as iOS allows separate depth and stencil buffers, "
@@ -127,40 +127,40 @@ struct FeaturesMtl : FeatureSetBase
     };
 
     FeatureInfo allowMultisampleStoreAndResolve = {
-        "allow_msaa_store_and_resolve",
+        "allow_multisample_store_and_resolve",
         FeatureCategory::MetalFeatures,
         "The renderer supports MSAA store and resolve in the same pass",
         &members,
     };
 
     FeatureInfo allowGenMultipleMipsPerPass = {
-        "gen_multiple_mips_per_pass",
+        "allow_gen_multiple_mips_per_pass",
         FeatureCategory::MetalFeatures,
         "The renderer supports generating multiple mipmaps per pass",
         &members,
     };
 
     FeatureInfo forceD24S8AsUnsupported = {
-        "force_d24s8_as_unsupported",
+        "force_D24S8_as_unsupported",
         FeatureCategory::MetalFeatures,
         "Force Depth24Stencil8 format as unsupported.",
         &members,
     };
 
     FeatureInfo forceBufferGPUStorage = {
-        "force_buffer_gpu_storage",
+        "force_buffer_GPU_storage",
         FeatureCategory::MetalFeatures,
         "On systems that support both buffer' memory allocation on GPU and shared memory (such as "
         "macOS), force using GPU memory allocation for buffers everytime or not.",
         &members,
     };
 
-    FeatureInfo directMetalGeneration = {"directMetalGeneration", FeatureCategory::MetalFeatures,
+    FeatureInfo directMetalGeneration = {"direct_metal_generation", FeatureCategory::MetalFeatures,
                                          "Direct translation to Metal.", &members,
                                          "http://anglebug.com/5505"};
 
     FeatureInfo forceNonCSBaseMipmapGeneration = {
-        "force_non_cs_mipmap_gen",
+        "force_non_CS_base_mipmap_generation",
         FeatureCategory::MetalFeatures,
         "Turn this feature on to disallow Compute Shader based mipmap generation. Compute Shader "
         "based mipmap generation might cause GPU hang on some older iOS devices.",
@@ -168,7 +168,7 @@ struct FeaturesMtl : FeatureSetBase
     };
 
     FeatureInfo emulateTransformFeedback = {
-        "emulateTransformFeedback",
+        "emulate_transform_feedback",
         FeatureCategory::MetalFeatures,
         "Turn this on to allow transform feedback in Metal using a 2-pass VS for GLES3.",
         &members,
