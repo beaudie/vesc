@@ -141,6 +141,23 @@
       "parentUuid": "84fbd215_036a28b0",
       "revId": "a7f283a4c6d3b2794d054ede2c98f8cad07666fd",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "be1f8d05_f4c3b0b2",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 9
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1359249
+      },
+      "writtenOn": "2022-04-13T22:58:26Z",
+      "side": 1,
+      "message": "@yiwei, We(Samsung) have bi-weekly calls with Google about ANGLE. We want to discuss this topic tomorrow. You insights will be helpful if you can attend. Please check with Jamie for Google Meet link.",
+      "revId": "a7f283a4c6d3b2794d054ede2c98f8cad07666fd",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
