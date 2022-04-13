@@ -1356,6 +1356,8 @@ angle::Result Program::linkImpl(const Context *context)
         }
     }
 
+    mState.mExecutable->saveLinkedStateInfo(mState);
+
     mLinkingState                    = std::move(linkingState);
     mLinkingState->linkingFromBinary = false;
     mLinkingState->programHash       = programHash;
@@ -1365,11 +1367,8 @@ angle::Result Program::linkImpl(const Context *context)
     mState.updateProgramInterfaceInputs();
     mState.updateProgramInterfaceOutputs();
 
-    // Linking has succeeded, so we need to save some information that may get overwritten by a
-    // later linkProgram() that could fail.
     if (mState.mSeparable)
     {
-        mState.mExecutable->saveLinkedStateInfo(mState);
         mLinkingState->linkedExecutable = mState.mExecutable;
     }
 
