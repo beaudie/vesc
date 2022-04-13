@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "bcb5866e_2a3e4399",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 24
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1528827
+      },
+      "writtenOn": "2022-04-13T09:36:28Z",
+      "side": 1,
+      "message": "I do not know why this failed.\nhttps://luci-milo.appspot.com/ui/inv/build-8817009385908066929/test-results?q\u003dVulkanImageTest.PreInitializedOnGLImport%2FES3_Vulkan_SwiftShader_AsyncCommandQueue",
+      "revId": "de3887f6d58bedf69108b2506e053f37ef27521a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
