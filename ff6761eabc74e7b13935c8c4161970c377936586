@@ -18,6 +18,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "46377d7d_93bafe08",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1525982
+      },
+      "writtenOn": "2022-04-13T18:32:54Z",
+      "side": 1,
+      "message": "We can move some of the trickier changes to the next CL in the chain if they need more work.",
+      "parentUuid": "7f5c548f_94f65e0f",
+      "revId": "ff6761eabc74e7b13935c8c4161970c377936586",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "173eeb44_4157d2ff",
@@ -31,6 +49,30 @@
       "writtenOn": "2022-04-08T18:09:08Z",
       "side": 1,
       "message": "I think at this time, mRenderPassCommands might still invalid. I think the RP wont be start until some dirty bit gets processed bellow at line 1259 to 1264 bellow. I am not exactly sure if that will be a problem (especially when async submission is enabled where we may get different mRenderPassCommands), just feeling a bit uneasy here.",
+      "range": {
+        "startLine": 1226,
+        "startChar": 0,
+        "endLine": 1226,
+        "endChar": 89
+      },
+      "revId": "ff6761eabc74e7b13935c8c4161970c377936586",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "87ac4be3_5736cc14",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 1226,
+      "author": {
+        "id": 1525982
+      },
+      "writtenOn": "2022-04-13T18:32:54Z",
+      "side": 1,
+      "message": "Separate CL created to move the `updateUniforms()` below to where the render pass is valid: https://chromium-review.googlesource.com/c/angle/angle/+/3582979",
+      "parentUuid": "173eeb44_4157d2ff",
       "range": {
         "startLine": 1226,
         "startChar": 0,
@@ -64,6 +106,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "471abbc5_085c4050",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 1984,
+      "author": {
+        "id": 1525982
+      },
+      "writtenOn": "2022-04-13T18:32:54Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "5e1efe1d_99adf83c",
+      "range": {
+        "startLine": 1984,
+        "startChar": 25,
+        "endLine": 1984,
+        "endChar": 40
+      },
+      "revId": "ff6761eabc74e7b13935c8c4161970c377936586",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "bb9b461e_0dfd7833",
@@ -77,6 +143,30 @@
       "writtenOn": "2022-04-08T18:09:08Z",
       "side": 1,
       "message": "Same thing. Instead of pass in you can just get list from commandBufferHelper.",
+      "range": {
+        "startLine": 2133,
+        "startChar": 77,
+        "endLine": 2133,
+        "endChar": 92
+      },
+      "revId": "ff6761eabc74e7b13935c8c4161970c377936586",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "7ac2f4cf_0bbfd68c",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 2133,
+      "author": {
+        "id": 1525982
+      },
+      "writtenOn": "2022-04-13T18:32:54Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "bb9b461e_0dfd7833",
       "range": {
         "startLine": 2133,
         "startChar": 77,
@@ -110,6 +200,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "8b64c151_79e46eb1",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 5761,
+      "author": {
+        "id": 1525982
+      },
+      "writtenOn": "2022-04-13T18:32:54Z",
+      "side": 1,
+      "message": "Thanks! Updated.",
+      "parentUuid": "d8712234_31bffd10",
+      "range": {
+        "startLine": 5761,
+        "startChar": 80,
+        "endLine": 5761,
+        "endChar": 95
+      },
+      "revId": "ff6761eabc74e7b13935c8c4161970c377936586",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "fd1d5f1e_7039b544",
@@ -123,6 +237,30 @@
       "writtenOn": "2022-04-08T18:09:08Z",
       "side": 1,
       "message": "This really doesn\u0027t matter which list to add into since they are going to be submitted and all tagged with same queueSerial. My suggestion is you dont need to pass resourceUseList into releaseInFlightBuffersToResourceUseList, but in the releaseInFlightBuffersToResourceUseList, you directly add into shareGroup\u0027s resource list.",
+      "range": {
+        "startLine": 6113,
+        "startChar": 0,
+        "endLine": 6113,
+        "endChar": 92
+      },
+      "revId": "ff6761eabc74e7b13935c8c4161970c377936586",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "30b9f47e_77737f9b",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 6113,
+      "author": {
+        "id": 1525982
+      },
+      "writtenOn": "2022-04-13T18:32:54Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "fd1d5f1e_7039b544",
       "range": {
         "startLine": 6113,
         "startChar": 0,
@@ -158,6 +296,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "a04792ba_0e89a8a7",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 6968,
+      "author": {
+        "id": 1525982
+      },
+      "writtenOn": "2022-04-13T18:32:54Z",
+      "side": 1,
+      "message": "There were added to be used for `wait()` and `signal()` in `SemaphoreVk`. The retain would then occur in the outside render pass command buffer (moved from `acquireFromExternal()` and `releaseToExternal()`. (Renamed in the new draft)",
+      "parentUuid": "16f95df4_60cc3c51",
+      "range": {
+        "startLine": 6960,
+        "startChar": 5,
+        "endLine": 6968,
+        "endChar": 5
+      },
+      "revId": "ff6761eabc74e7b13935c8c4161970c377936586",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "5da17b64_cc2fee2e",
         "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
         "patchSetId": 3
@@ -169,6 +331,30 @@
       "writtenOn": "2022-04-08T18:09:08Z",
       "side": 1,
       "message": "I think you can just directly add into one of the shareGroup\u0027s list.",
+      "range": {
+        "startLine": 2635,
+        "startChar": 38,
+        "endLine": 2635,
+        "endChar": 53
+      },
+      "revId": "ff6761eabc74e7b13935c8c4161970c377936586",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "7fa3e559_6a413189",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 2635,
+      "author": {
+        "id": 1525982
+      },
+      "writtenOn": "2022-04-13T18:32:54Z",
+      "side": 1,
+      "message": "Removed and replaced with `acquireResourceUseList()` in `flushAndGetSerial()`.",
+      "parentUuid": "5da17b64_cc2fee2e",
       "range": {
         "startLine": 2635,
         "startChar": 38,
