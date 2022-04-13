@@ -965,8 +965,6 @@ void ContextVk::onDestroy(const gl::Context *context)
     mRenderer->recycleOutsideRenderPassCommandBufferHelper(device, &mOutsideRenderPassCommands);
     mRenderer->recycleRenderPassCommandBufferHelper(device, &mRenderPassCommands);
 
-    mRenderer->releaseSharedResources(&mResourceUseList);
-
     mUtils.destroy(mRenderer);
 
     mRenderPassCache.destroy(mRenderer);
@@ -976,7 +974,6 @@ void ContextVk::onDestroy(const gl::Context *context)
     mCommandPools.renderPassPool.destroy(device);
 
     ASSERT(mCurrentGarbage.empty());
-    ASSERT(mResourceUseList.empty());
 }
 
 VertexArrayVk *ContextVk::getVertexArray() const
@@ -1777,7 +1774,7 @@ angle::Result ContextVk::handleDirtyGraphicsPipelineDesc(DirtyBits::Iterator *di
     // Update the queue serial for the pipeline object.
     ASSERT(mCurrentGraphicsPipeline && mCurrentGraphicsPipeline->valid());
 
-    mCurrentGraphicsPipeline->retain(&mResourceUseList);
+    mCurrentGraphicsPipeline->retain(&mRenderPassCommands->getResourceUseList());
 
     const VkPipeline newPipeline = mCurrentGraphicsPipeline->getPipeline().getHandle();
 
@@ -1968,7 +1965,7 @@ angle::Result ContextVk::handleDirtyComputePipelineBinding()
 
     mOutsideRenderPassCommands->getCommandBuffer().bindComputePipeline(
         mCurrentComputePipeline->getPipeline());
-    mCurrentComputePipeline->retain(&mResourceUseList);
+    mCurrentComputePipeline->retain(&mOutsideRenderPassCommands->getResourceUseList());
 
     return angle::Result::Continue;
 }
@@ -1996,7 +1993,7 @@ ANGLE_INLINE angle::Result ContextVk::handleDirtyTexturesImpl(
 
             OnTextureBufferRead(this, bufferVk, stages, commandBufferHelper);
 
-            textureVk->retainBufferViews(&mResourceUseList);
+            textureVk->retainBufferViews(&commandBufferHelper->getResourceUseList());
             continue;
         }
 
@@ -2342,7 +2339,7 @@ angle::Result ContextVk::handleDirtyGraphicsTransformFeedbackBuffersExtension(
                                      vk::AliasingMode::Disallowed, &counterBuffers[0]);
     for (size_t bufferIndex = 1; bufferIndex < bufferCount; ++bufferIndex)
     {
-        counterBuffers[bufferIndex].retainReadWrite(&getResourceUseList());
+        counterBuffers[bufferIndex].retainReadWrite(&mRenderPassCommands->getResourceUseList());
     }
 
     const gl::TransformFeedbackBuffersArray<VkBuffer> &bufferHandles =
@@ -2443,8 +2440,14 @@ angle::Result ContextVk::handleDirtyDescriptorSetsImpl(CommandBufferT *commandBu
         flushDescriptorSetUpdates();
     }
 
+    // Determine the resource use list to use
+    ASSERT(pipelineType == PipelineType::Graphics || pipelineType == PipelineType::Compute);
+    vk::ResourceUseList &resourceUseList = (pipelineType == PipelineType::Graphics)
+                                               ? mRenderPassCommands->getResourceUseList()
+                                               : mOutsideRenderPassCommands->getResourceUseList();
+
     ProgramExecutableVk *executableVk = getExecutable();
-    return executableVk->updateDescriptorSets(this, &mResourceUseList, commandBuffer, pipelineType);
+    return executableVk->updateDescriptorSets(this, &resourceUseList, commandBuffer, pipelineType);
 }
 
 void ContextVk::syncObjectPerfCounters()
@@ -2623,7 +2626,6 @@ angle::Result ContextVk::submitFrame(const vk::Semaphore *signalSemaphore, Seria
 {
     getShareGroupVk()->acquireResourceUseList(
         std::move(mOutsideRenderPassCommands->getResourceUseList()));
-    getShareGroupVk()->acquireResourceUseList(std::move(mResourceUseList));
     getShareGroupVk()->acquireResourceUseList(std::move(mRenderPassCommands->getResourceUseList()));
 
     ANGLE_TRY(submitCommands(signalSemaphore, submitSerialOut));
@@ -5706,8 +5708,8 @@ angle::Result ContextVk::handleDirtyComputeDriverUniforms()
                                              PipelineType::Compute);
 }
 
-template <typename CommandBufferT>
-void ContextVk::handleDirtyDriverUniformsBindingImpl(CommandBufferT *commandBuffer,
+template <typename CommandBufferHelperT>
+void ContextVk::handleDirtyDriverUniformsBindingImpl(CommandBufferHelperT *commandBufferHelper,
                                                      VkPipelineBindPoint bindPoint,
                                                      DriverUniformsDescriptorSet *driverUniforms)
 {
@@ -5717,15 +5719,16 @@ void ContextVk::handleDirtyDriverUniformsBindingImpl(CommandBufferT *commandBuff
     // updated correctly.
     if (!driverUniforms->descriptorPoolBinding.get().usedInRecordedCommands())
     {
-        driverUniforms->descriptorPoolBinding.get().retain(&mResourceUseList);
+        driverUniforms->descriptorPoolBinding.get().retain(
+            &commandBufferHelper->getResourceUseList());
     }
 
     ProgramExecutableVk *executableVk = getExecutable();
     const uint32_t dynamicOffset =
         static_cast<uint32_t>(driverUniforms->currentBuffer->getOffset());
-    commandBuffer->bindDescriptorSets(executableVk->getPipelineLayout(), bindPoint,
-                                      DescriptorSetIndex::Internal, 1,
-                                      &driverUniforms->descriptorSet, 1, &dynamicOffset);
+    commandBufferHelper->getCommandBuffer().bindDescriptorSets(
+        executableVk->getPipelineLayout(), bindPoint, DescriptorSetIndex::Internal, 1,
+        &driverUniforms->descriptorSet, 1, &dynamicOffset);
 }
 
 angle::Result ContextVk::handleDirtyGraphicsDriverUniformsBinding(
@@ -5733,7 +5736,7 @@ angle::Result ContextVk::handleDirtyGraphicsDriverUniformsBinding(
     DirtyBits dirtyBitMask)
 {
     // Bind the driver descriptor set.
-    handleDirtyDriverUniformsBindingImpl(mRenderPassCommandBuffer, VK_PIPELINE_BIND_POINT_GRAPHICS,
+    handleDirtyDriverUniformsBindingImpl(mRenderPassCommands, VK_PIPELINE_BIND_POINT_GRAPHICS,
                                          &mDriverUniforms[PipelineType::Graphics]);
     return angle::Result::Continue;
 }
@@ -5741,8 +5744,7 @@ angle::Result ContextVk::handleDirtyGraphicsDriverUniformsBinding(
 angle::Result ContextVk::handleDirtyComputeDriverUniformsBinding()
 {
     // Bind the driver descriptor set.
-    handleDirtyDriverUniformsBindingImpl(&mOutsideRenderPassCommands->getCommandBuffer(),
-                                         VK_PIPELINE_BIND_POINT_COMPUTE,
+    handleDirtyDriverUniformsBindingImpl(mOutsideRenderPassCommands, VK_PIPELINE_BIND_POINT_COMPUTE,
                                          &mDriverUniforms[PipelineType::Compute]);
     return angle::Result::Continue;
 }
@@ -6039,7 +6041,7 @@ angle::Result ContextVk::updateActiveImages(CommandBufferHelperT *commandBufferH
 
             OnImageBufferWrite(this, bufferVk, shaderStages, commandBufferHelper);
 
-            textureVk->retainBufferViews(&mResourceUseList);
+            textureVk->retainBufferViews(&commandBufferHelper->getResourceUseList());
             continue;
         }
 

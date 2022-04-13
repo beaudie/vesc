@@ -539,7 +539,6 @@ class ContextVk : public ContextImpl, public vk::Context, public MultisampleText
     const gl::Debug &getDebug() const { return mState.getDebug(); }
     const gl::OverlayType *getOverlay() const { return mState.getOverlay(); }
 
-    vk::ResourceUseList &getResourceUseList() { return mResourceUseList; }
     vk::ResourceUseList &getResourceUseListForQueryType(VkQueryType queryType);
 
     angle::Result onBufferReleaseToExternal(const vk::BufferHelper &buffer);
@@ -1069,8 +1068,8 @@ class ContextVk : public ContextImpl, public vk::Context, public MultisampleText
     angle::Result handleDirtyShaderResourcesImpl(CommandBufferHelperT *commandBufferHelper,
                                                  PipelineType pipelineType);
     void handleDirtyShaderBufferResourcesImpl(vk::CommandBufferHelperCommon *commandBufferHelper);
-    template <typename CommandBufferT>
-    void handleDirtyDriverUniformsBindingImpl(CommandBufferT *commandBuffer,
+    template <typename CommandBufferHelperT>
+    void handleDirtyDriverUniformsBindingImpl(CommandBufferHelperT *commandBufferHelper,
                                               VkPipelineBindPoint bindPoint,
                                               DriverUniformsDescriptorSet *driverUniforms);
     template <typename CommandBufferT>
@@ -1359,9 +1358,6 @@ class ContextVk : public ContextImpl, public vk::Context, public MultisampleText
     angle::PerfMonitorCounterGroups mPerfMonitorCounters;
 
     gl::State::DirtyBits mPipelineDirtyBitsMask;
-
-    // List of all resources currently being used by this ContextVk's recorded commands.
-    vk::ResourceUseList mResourceUseList;
 
     egl::ContextPriority mContextPriority;
 
