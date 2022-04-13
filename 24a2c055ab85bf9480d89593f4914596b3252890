@@ -157,6 +157,24 @@
       "parentUuid": "413de03c_20e4f1c2",
       "revId": "24a2c055ab85bf9480d89593f4914596b3252890",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "e66ae0a3_795f5d21",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 7
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000050
+      },
+      "writtenOn": "2022-04-13T14:56:09Z",
+      "side": 1,
+      "message": "We checked skia code, there are not obvious problem in skia. So there is nothing we can do in skia. \n\nBTW, for disabling the validation, I think it means to avoid the extra validation and passthrough gl calls to native gl driver. But we don\u0027t expect crashes in ANGLE source code, we still expect the native gl will return us some gl errors for client to handle. So I feel it is better to land this CL.",
+      "parentUuid": "b9dfaed0_2e67d168",
+      "revId": "24a2c055ab85bf9480d89593f4914596b3252890",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
