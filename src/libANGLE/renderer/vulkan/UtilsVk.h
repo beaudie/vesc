@@ -518,12 +518,13 @@ class UtilsVk : angle::NonCopyable
                                   vk::RenderPassCommandBuffer **commandBufferOut);
 
     // Set up descriptor set and call dispatch.
-    angle::Result convertVertexBufferImpl(ContextVk *contextVk,
-                                          vk::BufferHelper *dst,
-                                          vk::BufferHelper *src,
-                                          uint32_t flags,
-                                          vk::OutsideRenderPassCommandBuffer *commandBuffer,
-                                          const ConvertVertexShaderParams &shaderParams);
+    angle::Result convertVertexBufferImpl(
+        ContextVk *contextVk,
+        vk::BufferHelper *dst,
+        vk::BufferHelper *src,
+        uint32_t flags,
+        vk::OutsideRenderPassCommandBufferHelper *commandBufferHelper,
+        const ConvertVertexShaderParams &shaderParams);
 
     // Blits or resolves either color or depth/stencil, based on which view is given.
     angle::Result blitResolveImpl(ContextVk *contextVk,
@@ -536,6 +537,7 @@ class UtilsVk : angle::NonCopyable
 
     // Allocates a single descriptor set.
     angle::Result allocateDescriptorSet(ContextVk *contextVk,
+                                        vk::ResourceUseList *resourceUseList,
                                         Function function,
                                         vk::RefCountedDescriptorPoolBinding *bindingOut,
                                         VkDescriptorSet *descriptorSetOut);
