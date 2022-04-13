@@ -4132,6 +4132,9 @@ angle::Result BufferHelper::allocateForCopyBuffer(ContextVk *contextVk,
     RendererVk *renderer     = contextVk->getRenderer();
     uint32_t memoryTypeIndex = renderer->getStagingBufferMemoryTypeIndex(coherency);
     size_t alignment         = renderer->getStagingBufferAlignment();
+    printf("qqqqqq allocateForCopyBuffer alignment=0x%zx\n", alignment);
+    if (rand() >= 0)
+        __builtin_trap();
     return initSuballocation(contextVk, memoryTypeIndex, size, alignment);
 }
 
