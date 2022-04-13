@@ -52,6 +52,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "9fe455a2_6ed51ae6",
+        "filename": "src/compiler/translator/tree_ops/vulkan/EmulateAdvancedBlendEquations.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 291,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-04-13T17:29:32Z",
+      "side": 1,
+      "message": "No, the comments are depicting what GLSL code the below code is generating.",
+      "parentUuid": "143e6521_a80ffe8f",
+      "revId": "7cabcbd9c50a5b70672be95f1d200450192d99a6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "6a6c54db_ae457b56",
@@ -69,6 +87,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "fa29dc6d_80a7fcd8",
+        "filename": "src/compiler/translator/tree_ops/vulkan/EmulateAdvancedBlendEquations.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 507,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-04-13T17:29:32Z",
+      "side": 1,
+      "message": "Same answer",
+      "parentUuid": "6a6c54db_ae457b56",
+      "revId": "7cabcbd9c50a5b70672be95f1d200450192d99a6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "7957f36b_f6a42c9a",
@@ -82,6 +118,24 @@
       "writtenOn": "2022-04-13T00:13:20Z",
       "side": 1,
       "message": "Does it mean if the texture does not have depth stencil bits, we will assume that the framebuffer fetch and advanced blend emulation is enabled?",
+      "revId": "7cabcbd9c50a5b70672be95f1d200450192d99a6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "6e28cdda_142fd01f",
+        "filename": "src/libANGLE/renderer/vulkan/RenderbufferVk.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 105,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-04-13T17:29:32Z",
+      "side": 1,
+      "message": "Sort of.\n\nIn Vulkan, we need to be upfront with how we use an image. In OpenGL, that\u0027s not the case, and the app may decide to do anything with the renderbuffer (backed by a Vulkan image).\n\nWe don\u0027t want to specify the minimal set of usages here, because if the app does use advanced blend / framebuffer fetch, we would need to recreate the Vulkan image and copy its contents over, which is slow.\n\nWe _do_ do that when specifying a flag is known to be detrimental to performance, but USAGE_INPUT_ATTACHMENT is not one of those flags (it\u0027s harmless actually).",
+      "parentUuid": "7957f36b_f6a42c9a",
       "revId": "7cabcbd9c50a5b70672be95f1d200450192d99a6",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
@@ -109,6 +163,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "42e3f133_2830abd9",
+        "filename": "src/libANGLE/renderer/vulkan/SurfaceVk.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 1283,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-04-13T17:29:32Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "927133bf_1cfabc56",
+      "range": {
+        "startLine": 1281,
+        "startChar": 0,
+        "endLine": 1283,
+        "endChar": 70
+      },
+      "revId": "7cabcbd9c50a5b70672be95f1d200450192d99a6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "1f6cd3a5_ee5f2bb1",
@@ -126,6 +204,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "707ec0ca_14b08a4f",
+        "filename": "src/libANGLE/renderer/vulkan/vk_cache_utils.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 2292,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-04-13T17:29:32Z",
+      "side": 1,
+      "message": "I clarified the comment.\n\nThe comment was correct though, `supportsBlendOperationAdvanced` is when advanced blend uses the Vulkan extension. When **emulating** it is when we should disable fixed-function blend, and the `if` is doing exactly that.",
+      "parentUuid": "1f6cd3a5_ee5f2bb1",
+      "revId": "7cabcbd9c50a5b70672be95f1d200450192d99a6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "919145a2_984ef32e",
@@ -139,6 +235,24 @@
       "writtenOn": "2022-04-13T00:13:20Z",
       "side": 1,
       "message": "Do you intend to pass Emulation::Enabled here? Since the bool expectation passed is true.",
+      "revId": "7cabcbd9c50a5b70672be95f1d200450192d99a6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "dd025631_81b6ac4e",
+        "filename": "src/tests/compiler_tests/KHR_blend_equation_advanced_test.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 349,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-04-13T17:29:32Z",
+      "side": 1,
+      "message": "The expectation is whether compile should succeed or not. Whether we emulate advanced blend or use the Vulkan extension, we should be able to succeed in compiling the shader (if the source is not erroneous).\n\nThis file tests advanced blend compilation both with and without emulation. The tests that use emulation have `WithEmulation` in the name.",
+      "parentUuid": "919145a2_984ef32e",
       "revId": "7cabcbd9c50a5b70672be95f1d200450192d99a6",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
