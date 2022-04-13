@@ -93,7 +93,12 @@ angle::Result SyncHelper::initialize(ContextVk *contextVk, bool isEglSyncObject)
     //   will also be aware that it's finished (based on the serial) and won't incur a further wait
     //   (for example when a buffer is mapped).
     //
-    retain(&contextVk->getResourceUseList());
+
+    CommandBufferAccess access;
+    access.onSyncAccess(this);
+    vk::OutsideRenderPassCommandBuffer *commandBuffer;
+    ANGLE_TRY(contextVk->getOutsideRenderPassCommandBuffer(access, &commandBuffer));
+
     return contextVk->flushImpl(nullptr, RenderPassClosureReason::SyncObjectInit);
 }
 
@@ -226,7 +231,10 @@ angle::Result SyncHelperNativeFence::initializeWithFd(ContextVk *contextVk, int 
     // Flush first because the fence comes after current pending set of commands.
     ANGLE_TRY(contextVk->flushImpl(nullptr, RenderPassClosureReason::SyncObjectWithFdInit));
 
-    retain(&contextVk->getResourceUseList());
+    CommandBufferAccess access;
+    access.onSyncAccess(this);
+    vk::OutsideRenderPassCommandBuffer *commandBuffer;
+    ANGLE_TRY(contextVk->getOutsideRenderPassCommandBuffer(access, &commandBuffer));
 
     Serial serialOut;
     // exportFd is exporting VK_EXTERNAL_FENCE_HANDLE_TYPE_SYNC_FD_BIT_KHR type handle which
