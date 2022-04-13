@@ -967,8 +967,6 @@ void ContextVk::onDestroy(const gl::Context *context)
     mRenderer->recycleOutsideRenderPassCommandBufferHelper(device, &mOutsideRenderPassCommands);
     mRenderer->recycleRenderPassCommandBufferHelper(device, &mRenderPassCommands);
 
-    mRenderer->releaseSharedResources(&mResourceUseList);
-
     mUtils.destroy(mRenderer);
 
     mRenderPassCache.destroy(mRenderer);
@@ -978,7 +976,6 @@ void ContextVk::onDestroy(const gl::Context *context)
     mCommandPools.renderPassPool.destroy(device);
 
     ASSERT(mCurrentGarbage.empty());
-    ASSERT(mResourceUseList.empty());
 }
 
 VertexArrayVk *ContextVk::getVertexArray() const
@@ -2644,7 +2641,6 @@ angle::Result ContextVk::submitFrame(const vk::Semaphore *signalSemaphore, Seria
 {
     getShareGroupVk()->acquireResourceUseList(
         std::move(mOutsideRenderPassCommands->getResourceUseList()));
-    getShareGroupVk()->acquireResourceUseList(std::move(mResourceUseList));
     getShareGroupVk()->acquireResourceUseList(std::move(mRenderPassCommands->getResourceUseList()));
 
     ANGLE_TRY(submitCommands(signalSemaphore, submitSerialOut));
@@ -5727,8 +5723,8 @@ angle::Result ContextVk::handleDirtyComputeDriverUniforms()
                                              PipelineType::Compute);
 }
 
-template <typename CommandBufferT>
-void ContextVk::handleDirtyDriverUniformsBindingImpl(CommandBufferT *commandBuffer,
+template <typename CommandBufferHelperT>
+void ContextVk::handleDirtyDriverUniformsBindingImpl(CommandBufferHelperT *commandBufferHelper,
                                                      VkPipelineBindPoint bindPoint,
                                                      DriverUniformsDescriptorSet *driverUniforms)
 {
@@ -5738,15 +5734,16 @@ void ContextVk::handleDirtyDriverUniformsBindingImpl(CommandBufferT *commandBuff
     // updated correctly.
     if (!driverUniforms->descriptorPoolBinding.get().usedInRecordedCommands())
     {
-        driverUniforms->descriptorPoolBinding.get().retain(&mResourceUseList);
+        driverUniforms->descriptorPoolBinding.get().retain(
+            &commandBufferHelper->getResourceUseList());
     }
 
     ProgramExecutableVk *executableVk = getExecutable();
     const uint32_t dynamicOffset =
         static_cast<uint32_t>(driverUniforms->currentBuffer->getOffset());
-    commandBuffer->bindDescriptorSets(executableVk->getPipelineLayout(), bindPoint,
-                                      DescriptorSetIndex::Internal, 1,
-                                      &driverUniforms->descriptorSet, 1, &dynamicOffset);
+    commandBufferHelper->getCommandBuffer().bindDescriptorSets(
+        executableVk->getPipelineLayout(), bindPoint, DescriptorSetIndex::Internal, 1,
+        &driverUniforms->descriptorSet, 1, &dynamicOffset);
 }
 
 angle::Result ContextVk::handleDirtyGraphicsDriverUniformsBinding(
@@ -5754,7 +5751,7 @@ angle::Result ContextVk::handleDirtyGraphicsDriverUniformsBinding(
     DirtyBits dirtyBitMask)
 {
     // Bind the driver descriptor set.
-    handleDirtyDriverUniformsBindingImpl(mRenderPassCommandBuffer, VK_PIPELINE_BIND_POINT_GRAPHICS,
+    handleDirtyDriverUniformsBindingImpl(mRenderPassCommands, VK_PIPELINE_BIND_POINT_GRAPHICS,
                                          &mDriverUniforms[PipelineType::Graphics]);
     return angle::Result::Continue;
 }
@@ -5762,8 +5759,7 @@ angle::Result ContextVk::handleDirtyGraphicsDriverUniformsBinding(
 angle::Result ContextVk::handleDirtyComputeDriverUniformsBinding()
 {
     // Bind the driver descriptor set.
-    handleDirtyDriverUniformsBindingImpl(&mOutsideRenderPassCommands->getCommandBuffer(),
-                                         VK_PIPELINE_BIND_POINT_COMPUTE,
+    handleDirtyDriverUniformsBindingImpl(mOutsideRenderPassCommands, VK_PIPELINE_BIND_POINT_COMPUTE,
                                          &mDriverUniforms[PipelineType::Compute]);
     return angle::Result::Continue;
 }
