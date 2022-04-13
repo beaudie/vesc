@@ -1428,8 +1428,9 @@ angle::Result TextureVk::setEGLImageTarget(const gl::Context *context,
         }
 
         vk::OutsideRenderPassCommandBuffer *commandBuffer;
-        ANGLE_TRY(contextVk->getOutsideRenderPassCommandBuffer({}, &commandBuffer));
-        mImage->retain(&contextVk->getResourceUseList());
+        vk::CommandBufferAccess access;
+        access.onExternalAcquireRelease(mImage);
+        ANGLE_TRY(contextVk->getOutsideRenderPassCommandBuffer(access, &commandBuffer));
         mImage->changeLayoutAndQueue(contextVk, mImage->getAspectFlags(), newLayout,
                                      rendererQueueFamilyIndex, commandBuffer);
     }
@@ -1949,7 +1950,10 @@ angle::Result TextureVk::generateMipmap(const gl::Context *context)
     {
         ASSERT((mImageUsageFlags & VK_IMAGE_USAGE_STORAGE_BIT) != 0);
 
-        mImage->retain(&contextVk->getResourceUseList());
+        //        vk::OutsideRenderPassCommandBuffer *commandBuffer;
+        //        vk::CommandBufferAccess access;
+        //        access.onImageComputeShaderWrite(mImage);
+        //        ANGLE_TRY(contextVk->getOutsideRenderPassCommandBuffer(access, &commandBuffer));
 
         return generateMipmapsWithCompute(contextVk);
     }
@@ -2267,7 +2271,10 @@ angle::Result TextureVk::respecifyImageStorage(ContextVk *contextVk)
         releaseImage(contextVk);
     }
 
-    mImage->retain(&contextVk->getResourceUseList());
+    //    vk::OutsideRenderPassCommandBuffer *commandBuffer;
+    //    vk::CommandBufferAccess access;
+    //    access.onResourceAccess(mImage);
+    //    ANGLE_TRY(contextVk->getOutsideRenderPassCommandBuffer(access, &commandBuffer));
 
     return angle::Result::Continue;
 }
