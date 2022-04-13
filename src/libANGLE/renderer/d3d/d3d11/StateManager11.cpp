@@ -978,12 +978,11 @@ void StateManager11::syncState(const gl::Context *context,
             case gl::State::DIRTY_BIT_BLEND_EQUATIONS:
             {
                 const gl::BlendStateExt &blendStateExt = state.getBlendStateExt();
-                ASSERT(mCurBlendStateExt.mMaxDrawBuffers == blendStateExt.mMaxDrawBuffers);
+                ASSERT(mCurBlendStateExt.getDrawBufferCount() ==
+                       blendStateExt.getDrawBufferCount());
                 // Compare blend equations only for buffers with blending enabled because
                 // subsequent sync stages enforce default values for buffers with blending disabled.
-                if ((blendStateExt.mEnabledMask &
-                     mCurBlendStateExt.compareEquations(blendStateExt.mEquationColor,
-                                                        blendStateExt.mEquationAlpha))
+                if ((blendStateExt.mEnabledMask & mCurBlendStateExt.compareEquations(blendStateExt))
                         .any())
                 {
                     mInternalDirtyBits.set(DIRTY_BIT_BLEND_STATE);
@@ -993,13 +992,11 @@ void StateManager11::syncState(const gl::Context *context,
             case gl::State::DIRTY_BIT_BLEND_FUNCS:
             {
                 const gl::BlendStateExt &blendStateExt = state.getBlendStateExt();
-                ASSERT(mCurBlendStateExt.mMaxDrawBuffers == blendStateExt.mMaxDrawBuffers);
+                ASSERT(mCurBlendStateExt.getDrawBufferCount() ==
+                       blendStateExt.getDrawBufferCount());
                 // Compare blend factors only for buffers with blending enabled because
                 // subsequent sync stages enforce default values for buffers with blending disabled.
-                if ((blendStateExt.mEnabledMask &
-                     mCurBlendStateExt.compareFactors(
-                         blendStateExt.mSrcColor, blendStateExt.mDstColor, blendStateExt.mSrcAlpha,
-                         blendStateExt.mDstAlpha))
+                if ((blendStateExt.mEnabledMask & mCurBlendStateExt.compareFactors(blendStateExt))
                         .any())
                 {
                     mInternalDirtyBits.set(DIRTY_BIT_BLEND_STATE);

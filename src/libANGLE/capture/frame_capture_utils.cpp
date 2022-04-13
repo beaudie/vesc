@@ -429,8 +429,8 @@ void SerializeRectangle(JsonSerializer *json,
 void SerializeBlendStateExt(JsonSerializer *json, const gl::BlendStateExt &blendStateExt)
 {
     GroupScope group(json, "BlendStateExt");
-    json->addScalar("MaxDrawBuffers", blendStateExt.mMaxDrawBuffers);
-    json->addScalar("enableMask", blendStateExt.mEnabledMask.bits());
+    json->addScalar("DrawBufferCount", blendStateExt.getDrawBufferCount());
+    json->addScalar("EnableMask", blendStateExt.mEnabledMask.bits());
     json->addScalar("DstColor", blendStateExt.mDstColor);
     json->addScalar("DstAlpha", blendStateExt.mDstAlpha);
     json->addScalar("SrcColor", blendStateExt.mSrcColor);

@@ -19,105 +19,185 @@ constexpr bool is64Bit = true;
 constexpr bool is64Bit = false;
 #endif
 
-void checkInitState(const gl::BlendStateExt &blendStateExt)
-{
-    for (size_t i = 0; i < blendStateExt.mMaxDrawBuffers; ++i)
-    {
-        ASSERT_FALSE(blendStateExt.mEnabledMask.test(i));
-
-        bool r, g, b, a;
-        blendStateExt.getColorMaskIndexed(i, &r, &g, &b, &a);
-        ASSERT_TRUE(r);
-        ASSERT_TRUE(g);
-        ASSERT_TRUE(b);
-        ASSERT_TRUE(a);
-
-        ASSERT_EQ(blendStateExt.getEquationColorIndexed(i), static_cast<GLenum>(GL_FUNC_ADD));
-        ASSERT_EQ(blendStateExt.getEquationAlphaIndexed(i), static_cast<GLenum>(GL_FUNC_ADD));
-
-        ASSERT_EQ(blendStateExt.getSrcColorIndexed(i), static_cast<GLenum>(GL_ONE));
-        ASSERT_EQ(blendStateExt.getDstColorIndexed(i), static_cast<GLenum>(GL_ZERO));
-        ASSERT_EQ(blendStateExt.getSrcAlphaIndexed(i), static_cast<GLenum>(GL_ONE));
-        ASSERT_EQ(blendStateExt.getDstAlphaIndexed(i), static_cast<GLenum>(GL_ZERO));
-    }
-}
-
 // Test the initial state of BlendStateExt
 TEST(BlendStateExt, Init)
 {
-    {
-        const gl::BlendStateExt blendStateExt = gl::BlendStateExt(1);
-        ASSERT_EQ(blendStateExt.mMaxDrawBuffers, 1u);
-        ASSERT_EQ(blendStateExt.mMaxEnabledMask.to_ulong(), 1u);
-        ASSERT_EQ(blendStateExt.mMaxColorMask, is64Bit ? 0xFFu : 0xFu);
-        ASSERT_EQ(blendStateExt.mMaxEquationMask, 0xFFu);
-        ASSERT_EQ(blendStateExt.mMaxFactorMask, 0xFFu);
-        checkInitState(blendStateExt);
-    }
+    const std::array<uint8_t, 9> allEnabledMasks = {0, 1, 3, 7, 15, 31, 63, 127, 255};
 
-    {
-        const gl::BlendStateExt blendStateExt = gl::BlendStateExt(4);
-        ASSERT_EQ(blendStateExt.mMaxDrawBuffers, 4u);
-        ASSERT_EQ(blendStateExt.mMaxEnabledMask.to_ulong(), 0xFu);
-        ASSERT_EQ(blendStateExt.mMaxColorMask, is64Bit ? 0xFFFFFFFFu : 0xFFFFu);
-        ASSERT_EQ(blendStateExt.mMaxEquationMask, 0xFFFFFFFFu);
-        ASSERT_EQ(blendStateExt.mMaxFactorMask, 0xFFFFFFFFu);
-        checkInitState(blendStateExt);
-    }
+    const std::array<uint32_t, 9> allColorMasks32 = {
+        0, 0xF, 0xFF, 0xFFF, 0xFFFF, 0xFFFFF, 0xFFFFFF, 0xFFFFFFF, 0xFFFFFFFF};
 
+    const std::array<uint64_t, 9> allColorMasks64 = {
+        0x0000000000000000, 0x000000000000000F, 0x0000000000000F0F,
+        0x00000000000F0F0F, 0x000000000F0F0F0F, 0x0000000F0F0F0F0F,
+        0x00000F0F0F0F0F0F, 0x000F0F0F0F0F0F0F, 0x0F0F0F0F0F0F0F0F};
+
+    const std::array<uint64_t, 9> sourceColorAlpha = {
+        0x0000000000000000, 0x0000000000000001, 0x0000000000000101,
+        0x0000000000010101, 0x0000000001010101, 0x0000000101010101,
+        0x0000010101010101, 0x0001010101010101, 0x0101010101010101};
+
+    for (size_t c = 1; c <= 8; ++c)
     {
-        const gl::BlendStateExt blendStateExt = gl::BlendStateExt(8);
-        ASSERT_EQ(blendStateExt.mMaxDrawBuffers, 8u);
-        ASSERT_EQ(blendStateExt.mMaxEnabledMask.to_ulong(), 0xFFu);
-        ASSERT_EQ(blendStateExt.mMaxColorMask, is64Bit ? 0xFFFFFFFFFFFFFFFFu : 0xFFFFFFFFu);
-        ASSERT_EQ(blendStateExt.mMaxEquationMask, 0xFFFFFFFFFFFFFFFFu);
-        ASSERT_EQ(blendStateExt.mMaxFactorMask, 0xFFFFFFFFFFFFFFFFu);
-        checkInitState(blendStateExt);
+        const gl::BlendStateExt blendStateExt = gl::BlendStateExt(c);
+        ASSERT_EQ(blendStateExt.getDrawBufferCount(), c);
+
+        ASSERT_EQ(blendStateExt.mEnabledMask.to_ulong(), 0u);
+        ASSERT_EQ(blendStateExt.getAllEnabledMask().to_ulong(), allEnabledMasks[c]);
+
+        ASSERT_EQ(blendStateExt.mColorMask, blendStateExt.getAllColorMask());
+        ASSERT_EQ(blendStateExt.getAllColorMask(),
+                  is64Bit ? allColorMasks64[c] : allColorMasks32[c]);
+
+        ASSERT_EQ(blendStateExt.mUsesAdvancedBlendEquationMask.to_ulong(), 0u);
+
+        ASSERT_EQ(blendStateExt.mSrcColor, sourceColorAlpha[c]);
+        ASSERT_EQ(blendStateExt.mSrcAlpha, sourceColorAlpha[c]);
+        ASSERT_EQ(blendStateExt.mDstColor, 0u);
+        ASSERT_EQ(blendStateExt.mDstAlpha, 0u);
+
+        ASSERT_EQ(blendStateExt.mEquationColor, 0u);
+        ASSERT_EQ(blendStateExt.mEquationAlpha, 0u);
+
+        for (size_t i = 0; i < c; ++i)
+        {
+            ASSERT_FALSE(blendStateExt.mEnabledMask.test(i));
+
+            bool r, g, b, a;
+            blendStateExt.getColorMaskIndexed(i, &r, &g, &b, &a);
+            ASSERT_TRUE(r);
+            ASSERT_TRUE(g);
+            ASSERT_TRUE(b);
+            ASSERT_TRUE(a);
+
+            ASSERT_EQ(blendStateExt.getEquationColorIndexed(i), static_cast<GLenum>(GL_FUNC_ADD));
+            ASSERT_EQ(blendStateExt.getEquationAlphaIndexed(i), static_cast<GLenum>(GL_FUNC_ADD));
+
+            ASSERT_EQ(blendStateExt.getSrcColorIndexed(i), static_cast<GLenum>(GL_ONE));
+            ASSERT_EQ(blendStateExt.getDstColorIndexed(i), static_cast<GLenum>(GL_ZERO));
+            ASSERT_EQ(blendStateExt.getSrcAlphaIndexed(i), static_cast<GLenum>(GL_ONE));
+            ASSERT_EQ(blendStateExt.getDstAlphaIndexed(i), static_cast<GLenum>(GL_ZERO));
+        }
     }
 }
 
 // Test blend enabled flags
 TEST(BlendStateExt, BlendEnabled)
 {
-    gl::BlendStateExt blendStateExt = gl::BlendStateExt(3);
+    const std::array<uint8_t, 9> enabled = {0, 1, 3, 7, 15, 31, 63, 127, 255};
 
-    blendStateExt.setEnabled(true);
-    ASSERT_EQ(blendStateExt.mEnabledMask.to_ulong(), 7u);
+    for (size_t c = 1; c <= 8; c++)
+    {
+        gl::BlendStateExt blendStateExt = gl::BlendStateExt(c);
 
-    blendStateExt.setEnabledIndexed(1, false);
-    ASSERT_EQ(blendStateExt.mEnabledMask.to_ulong(), 5u);
+        blendStateExt.setEnabled(true);
+        ASSERT_EQ(blendStateExt.mEnabledMask.to_ulong(), enabled[c]);
+
+        blendStateExt.setEnabled(false);
+        ASSERT_EQ(blendStateExt.mEnabledMask.to_ulong(), 0u);
+
+        blendStateExt.setEnabledIndexed(c / 2, true);
+        ASSERT_EQ(blendStateExt.mEnabledMask.to_ulong(), 1u << (c / 2));
+
+        blendStateExt.setEnabledIndexed(c / 2, false);
+        ASSERT_EQ(blendStateExt.mEnabledMask.to_ulong(), 0u);
+    }
+}
+
+void validateMaskPacking(const uint8_t packed,
+                         const bool r,
+                         const bool g,
+                         const bool b,
+                         const bool a)
+{
+    ASSERT_EQ(gl::BlendStateExt::PackColorMask(r, g, b, a), packed);
+
+    bool rOut, gOut, bOut, aOut;
+    gl::BlendStateExt::UnpackColorMask(packed, &rOut, &gOut, &bOut, &aOut);
+    ASSERT_EQ(r, rOut);
+    ASSERT_EQ(g, gOut);
+    ASSERT_EQ(b, bOut);
+    ASSERT_EQ(a, aOut);
+}
+
+// Test color write mask packing
+TEST(BlendStateExt, ColorMaskPacking)
+{
+    validateMaskPacking(0x0, false, false, false, false);
+    validateMaskPacking(0x1, true, false, false, false);
+    validateMaskPacking(0x2, false, true, false, false);
+    validateMaskPacking(0x3, true, true, false, false);
+    validateMaskPacking(0x4, false, false, true, false);
+    validateMaskPacking(0x5, true, false, true, false);
+    validateMaskPacking(0x6, false, true, true, false);
+    validateMaskPacking(0x7, true, true, true, false);
+    validateMaskPacking(0x8, false, false, false, true);
+    validateMaskPacking(0x9, true, false, false, true);
+    validateMaskPacking(0xA, false, true, false, true);
+    validateMaskPacking(0xB, true, true, false, true);
+    validateMaskPacking(0xC, false, false, true, true);
+    validateMaskPacking(0xD, true, false, true, true);
+    validateMaskPacking(0xE, false, true, true, true);
+    validateMaskPacking(0xF, true, true, true, true);
 }
 
 // Test color write mask manipulations
 TEST(BlendStateExt, ColorMask)
 {
-    gl::BlendStateExt blendStateExt = gl::BlendStateExt(5);
+    const std::array<uint32_t, 9> startSingleValue32 = {0x00000000, 0x00000005, 0x00000055,
+                                                        0x00000555, 0x00005555, 0x00055555,
+                                                        0x00555555, 0x05555555, 0x55555555};
 
-    blendStateExt.setColorMask(true, false, true, false);
-    ASSERT_EQ(blendStateExt.mColorMask, is64Bit ? 0x0505050505u : 0x55555u);
+    const std::array<uint64_t, 9> startSingleValue64 = {
+        0x0000000000000000, 0x0000000000000005, 0x0000000000000505,
+        0x0000000000050505, 0x0000000005050505, 0x0000000505050505,
+        0x0000050505050505, 0x0005050505050505, 0x0505050505050505};
 
-    blendStateExt.setColorMaskIndexed(3, false, true, false, true);
-    ASSERT_EQ(blendStateExt.mColorMask, is64Bit ? 0x050A050505u : 0x5A555u);
+    for (size_t c = 1; c <= 8; c++)
+    {
+        gl::BlendStateExt blendStateExt = gl::BlendStateExt(c);
 
-    blendStateExt.setColorMaskIndexed(3, 0xF);
-    ASSERT_EQ(blendStateExt.getColorMaskIndexed(3), 0xF);
+        blendStateExt.setColorMask(true, false, true, false);
+        ASSERT_EQ(blendStateExt.mColorMask,
+                  is64Bit ? startSingleValue64[c] : startSingleValue32[c]);
 
-    blendStateExt.setColorMaskIndexed(3, 0xA);
-    ASSERT_EQ(blendStateExt.getColorMaskIndexed(3), 0xA);
+        blendStateExt.setColorMaskIndexed(c / 2, false, true, false, true);
+        for (size_t i = 0; i < c; ++i)
+        {
+            ASSERT_EQ(blendStateExt.getColorMaskIndexed(i), i == c / 2 ? 0xAu : 0x5u);
+        }
 
-    bool r, g, b, a;
-    blendStateExt.getColorMaskIndexed(3, &r, &g, &b, &a);
-    ASSERT_FALSE(r);
-    ASSERT_TRUE(g);
-    ASSERT_FALSE(b);
-    ASSERT_TRUE(a);
+        blendStateExt.setColorMaskIndexed(0, 0xF);
+        bool r, g, b, a;
+        blendStateExt.getColorMaskIndexed(0, &r, &g, &b, &a);
+        ASSERT_TRUE(r);
+        ASSERT_TRUE(g);
+        ASSERT_TRUE(b);
+        ASSERT_TRUE(a);
 
-    gl::BlendStateExt::ColorMaskStorage::Type otherColorMask =
-        blendStateExt.expandColorMaskIndexed(3);
-    ASSERT_EQ(otherColorMask, is64Bit ? 0x0A0A0A0A0Au : 0xAAAAAu);
+        blendStateExt.setColorMaskIndexed(c - 1, true, false, true, true);
+        gl::BlendStateExt::ColorMaskStorage::Type otherColorMask =
+            blendStateExt.expandColorMaskIndexed(c - 1);
+        for (size_t i = 0; i < c; ++i)
+        {
+            ASSERT_EQ(gl::BlendStateExt::ColorMaskStorage::GetValueIndexed(i, otherColorMask), 0xD);
+        }
 
-    const gl::DrawBufferMask diff = blendStateExt.compareColorMask(otherColorMask);
-    ASSERT_EQ(diff.to_ulong(), 23u);
+        // All masks are different except the c-th
+        {
+            const gl::DrawBufferMask diff = blendStateExt.compareColorMask(otherColorMask);
+            ASSERT_EQ(diff.to_ulong(), 127u >> (8 - c));
+        }
+
+        // Test that all-enabled color mask correctly compares with the current color mask
+        {
+            blendStateExt.setColorMask(true, true, true, true);
+            blendStateExt.setColorMaskIndexed(c / 2, false, false, true, false);
+            const gl::DrawBufferMask diff =
+                blendStateExt.compareColorMask(blendStateExt.getAllColorMask());
+            ASSERT_EQ(diff.to_ulong(), 1u << (c / 2));
+        }
+    }
 }
 
 // Test blend equations manipulations
