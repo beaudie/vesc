@@ -52,6 +52,24 @@
       "parentUuid": "8fce8a8a_0941711f",
       "revId": "a7f283a4c6d3b2794d054ede2c98f8cad07666fd",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "7c850907_bcacaccc",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 9
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1509302
+      },
+      "writtenOn": "2022-04-13T01:12:22Z",
+      "side": 1,
+      "message": "After taking a closer look, the swapchain was recreated at the first `glDrawElements` which renders to the surface fbo, and that\u0027s currently in between (2) and (3).\n\nThen if angle can kick a swapchain recreation for (1), and records the render commands to the new single buffer backed swapchain image, the issue should get fixed. Otherwise, the app is left in the DEMOND_REFRESH mode if toggling to single_buffer.",
+      "parentUuid": "846480b8_5bdc57aa",
+      "revId": "a7f283a4c6d3b2794d054ede2c98f8cad07666fd",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
