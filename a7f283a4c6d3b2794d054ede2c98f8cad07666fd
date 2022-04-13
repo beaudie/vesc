@@ -34,6 +34,24 @@
       "parentUuid": "8e025eb9_ad4a0d75",
       "revId": "a7f283a4c6d3b2794d054ede2c98f8cad07666fd",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "846480b8_5bdc57aa",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 9
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1509302
+      },
+      "writtenOn": "2022-04-13T00:42:11Z",
+      "side": 1,
+      "message": "There\u0027s at least one bug with ANGLE. The app can do:\n1. eglSurfaceAttrib to set single buffer\n2. eglSurfaceAttrib to set auto refresh\n3. the next eglSwapBuffers will switch to use single buffer per requested\n\nIt seems angle (re)creates the swapchain at (3) but not (1), and the auto_refresh mode set on the native window gets lost.",
+      "parentUuid": "8fce8a8a_0941711f",
+      "revId": "a7f283a4c6d3b2794d054ede2c98f8cad07666fd",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
