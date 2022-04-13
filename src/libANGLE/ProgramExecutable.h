@@ -341,10 +341,12 @@ class ProgramExecutable final : public angle::Subject
                       std::vector<UnusedUniform> *unusedUniforms,
                       std::vector<VariableLocation> *uniformLocationsOutOrNull);
 
+    void copyInputsFromProgram(const ProgramState &programState);
     void copyShaderBuffersFromProgram(const ProgramState &programState);
     void clearSamplerBindings();
     void copySamplerBindingsFromProgram(const ProgramState &programState);
     void copyImageBindingsFromProgram(const ProgramState &programState);
+    void copyOutputsFromProgram(const ProgramState &programState);
     void copyUniformsFromProgramMap(const ShaderMap<Program *> &programs);
 
   private:

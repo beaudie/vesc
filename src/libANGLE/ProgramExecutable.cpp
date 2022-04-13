@@ -1659,6 +1659,12 @@ bool ProgramExecutable::linkAtomicCounterBuffers(const Context *context, InfoLog
     return true;
 }
 
+void ProgramExecutable::copyInputsFromProgram(const ProgramState &programState)
+{
+    const std::vector<sh::ShaderVariable> &inputs = programState.getProgramInputs();
+    mProgramInputs.insert(mProgramInputs.end(), inputs.begin(), inputs.end());
+}
+
 void ProgramExecutable::copyShaderBuffersFromProgram(const ProgramState &programState)
 {
     const std::vector<InterfaceBlock> &ubos = programState.getUniformBlocks();
@@ -1686,6 +1692,12 @@ void ProgramExecutable::copyImageBindingsFromProgram(const ProgramState &program
 {
     const std::vector<ImageBinding> &bindings = programState.getImageBindings();
     mImageBindings.insert(mImageBindings.end(), bindings.begin(), bindings.end());
+}
+
+void ProgramExecutable::copyOutputsFromProgram(const ProgramState &programState)
+{
+    const std::vector<sh::ShaderVariable> &outputs = programState.getOutputVariables();
+    mOutputVariables.insert(mOutputVariables.end(), outputs.begin(), outputs.end());
 }
 
 void ProgramExecutable::copyUniformsFromProgramMap(const ShaderMap<Program *> &programs)
