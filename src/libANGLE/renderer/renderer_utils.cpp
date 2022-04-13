@@ -1012,6 +1012,7 @@ void ApplyFeatureOverrides(angle::FeatureSetBase *features, const egl::DisplaySt
     std::vector<std::string> overridesDisabled =
         angle::GetCachedStringsFromEnvironmentVarOrAndroidProperty(
             kAngleFeatureOverridesDisabledEnvName, kAngleFeatureOverridesDisabledPropertyName, ":");
+
     features->overrideFeatures(overridesEnabled, true);
     LogFeatureStatus(*features, overridesEnabled, true);
 

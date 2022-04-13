@@ -21,7 +21,7 @@ struct FeaturesVk : FeatureSetBase
     ~FeaturesVk();
 
     FeatureInfo basicGLLineRasterization = {
-        "basicGLLineRasterization",
+        "basic_GL_line_rasterization",
         FeatureCategory::VulkanFeatures,
         "Enable the use of pixel shader patching to implement OpenGL basic line "
         "rasterization rules",
@@ -29,21 +29,21 @@ struct FeaturesVk : FeatureSetBase
     };
 
     FeatureInfo bresenhamLineRasterization = {
-        "bresenhamLineRasterization",
+        "bresenham_line_rasterization",
         FeatureCategory::VulkanFeatures,
         "Enable Bresenham line rasterization via VK_EXT_line_rasterization extension",
         &members,
     };
 
     FeatureInfo provokingVertex = {
-        "provokingVertex",
+        "provoking_vertex",
         FeatureCategory::VulkanFeatures,
         "Enable provoking vertex mode via VK_EXT_provoking_vertex extension",
         &members,
     };
 
     FeatureInfo forceFallbackFormat = {
-        "forceFallbackFormat",
+        "force_fallback_format",
         FeatureCategory::VulkanWorkarounds,
         "Force a fallback format for angle_end2end_tests",
         &members,
@@ -60,190 +60,192 @@ struct FeaturesVk : FeatureSetBase
         "http://anglebug.com/3970"};
 
     FeatureInfo supportsRenderpass2 = {
-        "supportsRenderpass2",
+        "supports_renderpass2",
         FeatureCategory::VulkanFeatures,
         "VkDevice supports the VK_KHR_create_renderpass2 extension",
         &members,
     };
 
     FeatureInfo supportsIncrementalPresent = {
-        "supportsIncrementalPresent",
+        "supports_incremental_present",
         FeatureCategory::VulkanFeatures,
         "VkDevice supports the VK_KHR_incremental_present extension",
         &members,
     };
 
     FeatureInfo supportsAndroidHardwareBuffer = {
-        "supportsAndroidHardwareBuffer",
+        "supports_android_hardware_buffer",
         FeatureCategory::VulkanFeatures,
         "VkDevice supports the VK_ANDROID_external_memory_android_hardware_buffer extension",
         &members,
     };
 
     FeatureInfo supportsGGPFrameToken = {
-        "supportsGGPFrameToken",
+        "supports_GGP_frame_token",
         FeatureCategory::VulkanFeatures,
         "VkDevice supports the VK_GGP_frame_token extension",
         &members,
     };
 
     FeatureInfo supportsExternalMemoryFd = {
-        "supportsExternalMemoryFd",
+        "supports_external_memory_fd",
         FeatureCategory::VulkanFeatures,
         "VkDevice supports the VK_KHR_external_memory_fd extension",
         &members,
     };
 
     FeatureInfo supportsExternalMemoryFuchsia = {
-        "supportsExternalMemoryFuchsia",
+        "supports_external_memory_fuchsia",
         FeatureCategory::VulkanFeatures,
         "VkDevice supports the VK_FUCHSIA_external_memory extension",
         &members,
     };
 
     FeatureInfo supportsFilteringPrecision = {
-        "supportsFilteringPrecision",
+        "supports_filtering_precision",
         FeatureCategory::VulkanFeatures,
         "VkDevice supports the VK_GOOGLE_sampler_filtering_precision extension",
         &members,
     };
 
     FeatureInfo supportsExternalFenceCapabilities = {
-        "supportsExternalFenceCapabilities",
+        "supports_external_fence_capabilities",
         FeatureCategory::VulkanFeatures,
         "VkInstance supports the VK_KHR_external_fence_capabilities extension",
         &members,
     };
 
     FeatureInfo supportsExternalSemaphoreCapabilities = {
-        "supportsExternalSemaphoreCapabilities",
+        "supports_external_semaphore_capabilities",
         FeatureCategory::VulkanFeatures,
         "VkInstance supports the VK_KHR_external_semaphore_capabilities extension",
         &members,
     };
 
     FeatureInfo supportsExternalSemaphoreFd = {
-        "supportsExternalSemaphoreFd",
+        "supports_external_semaphore_fd",
         FeatureCategory::VulkanFeatures,
         "VkDevice supports the VK_KHR_external_semaphore_fd extension",
         &members,
     };
 
     FeatureInfo supportsExternalSemaphoreFuchsia = {
-        "supportsExternalSemaphoreFuchsia",
+        "supports_external_semaphore_fuchsia",
         FeatureCategory::VulkanFeatures,
         "VkDevice supports the VK_FUCHSIA_external_semaphore extension",
         &members,
     };
 
     FeatureInfo supportsExternalFenceFd = {
-        "supportsExternalFenceFd", FeatureCategory::VulkanFeatures,
+        "supports_external_fence_fd", FeatureCategory::VulkanFeatures,
         "VkDevice supports the VK_KHR_external_fence_fd extension", &members,
         "http://anglebug.com/2517"};
 
     FeatureInfo supportsAndroidNativeFenceSync = {
-        "supportsAndroidNativeFenceSync", FeatureCategory::VulkanFeatures,
+        "supports_android_native_fence_sync", FeatureCategory::VulkanFeatures,
         "VkDevice supports the EGL_ANDROID_native_fence_sync extension", &members,
         "http://anglebug.com/2517"};
 
-    FeatureInfo supportsImageCubeArray = {"supportsImageCubeArray", FeatureCategory::VulkanFeatures,
+    FeatureInfo supportsImageCubeArray = {"supports_image_cube_array",
+                                          FeatureCategory::VulkanFeatures,
                                           "VkDevice supports the imageCubeArray feature properly",
                                           &members, "http://anglebug.com/3584"};
 
     FeatureInfo supportsPipelineStatisticsQuery = {
-        "supportsPipelineStatisticsQuery", FeatureCategory::VulkanFeatures,
+        "supports_pipeline_statistics_query", FeatureCategory::VulkanFeatures,
         "VkDevice supports the pipelineStatisticsQuery feature", &members,
         "http://anglebug.com/5430"};
 
     FeatureInfo supportsShaderStencilExport = {
-        "supportsShaderStencilExport",
+        "supports_shader_stencil_export",
         FeatureCategory::VulkanFeatures,
         "VkDevice supports the VK_EXT_shader_stencil_export extension",
         &members,
     };
 
     FeatureInfo supportsYUVSamplerConversion = {
-        "supportsYUVSamplerConversion",
+        "supports_YUV_sampler_conversion",
         FeatureCategory::VulkanFeatures,
         "VkDevice supports the VK_KHR_sampler_ycbcr_conversion extension",
         &members,
     };
 
     FeatureInfo emulateTransformFeedback = {
-        "emulateTransformFeedback", FeatureCategory::VulkanFeatures,
+        "emulate_transform_feedback", FeatureCategory::VulkanFeatures,
         "Emulate transform feedback as the VK_EXT_transform_feedback is not present.", &members,
         "http://anglebug.com/3205"};
 
     FeatureInfo supportsTransformFeedbackExtension = {
-        "supportsTransformFeedbackExtension", FeatureCategory::VulkanFeatures,
+        "supports_transform_feedback_extension", FeatureCategory::VulkanFeatures,
         "Transform feedback uses the VK_EXT_transform_feedback extension.", &members,
         "http://anglebug.com/3206"};
 
     FeatureInfo supportsGeometryStreamsCapability = {
-        "supportsGeometryStreamsCapability", FeatureCategory::VulkanFeatures,
+        "supports_geometry_streams_capability", FeatureCategory::VulkanFeatures,
         "Implementation supports the GeometryStreams SPIR-V capability.", &members,
         "http://anglebug.com/3206"};
 
-    FeatureInfo supportsIndexTypeUint8 = {"supportsIndexTypeUint8", FeatureCategory::VulkanFeatures,
+    FeatureInfo supportsIndexTypeUint8 = {"supports_index_type_uint8",
+                                          FeatureCategory::VulkanFeatures,
                                           "VkDevice supports the VK_EXT_index_type_uint8 extension",
                                           &members, "http://anglebug.com/4405"};
 
     FeatureInfo supportsCustomBorderColor = {
-        "supportsCustomBorderColor", FeatureCategory::VulkanFeatures,
+        "supports_custom_border_color", FeatureCategory::VulkanFeatures,
         "VkDevice supports the VK_EXT_custom_border_color extension", &members,
         "http://anglebug.com/3577"};
 
     FeatureInfo supportsMultiDrawIndirect = {
-        "supportsMultiDrawIndirect", FeatureCategory::VulkanFeatures,
+        "supports_multi_draw_indirect", FeatureCategory::VulkanFeatures,
         "VkDevice supports the multiDrawIndirect extension", &members, "http://anglebug.com/6439"};
 
-    FeatureInfo supportsDepthStencilResolve = {"supportsDepthStencilResolve",
+    FeatureInfo supportsDepthStencilResolve = {"supports_depth_stencil_resolve",
                                                FeatureCategory::VulkanFeatures,
                                                "VkDevice supports the VK_KHR_depth_stencil_resolve "
                                                "extension with the independentResolveNone feature",
                                                &members, "http://anglebug.com/4836"};
 
     FeatureInfo supportsMultisampledRenderToSingleSampled = {
-        "supportsMultisampledRenderToSingleSampled", FeatureCategory::VulkanFeatures,
+        "supports_multisampled_render_to_single_sampled", FeatureCategory::VulkanFeatures,
         "VkDevice supports the VK_EXT_multisampled_render_to_single_sampled extension", &members,
         "http://anglebug.com/4836"};
 
-    FeatureInfo supportsMultiview = {"supportsMultiview", FeatureCategory::VulkanFeatures,
+    FeatureInfo supportsMultiview = {"supports_multiview", FeatureCategory::VulkanFeatures,
                                      "VkDevice supports the VK_KHR_multiview extension", &members,
                                      "http://anglebug.com/6048"};
 
     FeatureInfo disableFifoPresentMode = {
-        "disableFifoPresentMode", FeatureCategory::VulkanWorkarounds,
+        "disable_fifo_present_mode", FeatureCategory::VulkanWorkarounds,
         "VK_PRESENT_MODE_FIFO_KHR causes random timeouts", &members, "http://anglebug.com/3153"};
 
     FeatureInfo bindEmptyForUnusedDescriptorSets = {
-        "bindEmptyForUnusedDescriptorSets", FeatureCategory::VulkanWorkarounds,
+        "bind_empty_for_unused_descriptor_sets", FeatureCategory::VulkanWorkarounds,
         "Gaps in bound descriptor set indices causes the post-gap sets to misbehave", &members,
         "http://anglebug.com/2727"};
 
     FeatureInfo forceD16TexFilter = {
-        "forceD16TexFilter", FeatureCategory::VulkanWorkarounds,
+        "force_D16_tex_filter", FeatureCategory::VulkanWorkarounds,
         "VK_FORMAT_D16_UNORM does not support VK_FORMAT_FEATURE_SAMPLED_IMAGE_FILTER_LINEAR_BIT, "
         "which prevents OES_depth_texture from being supported.",
         &members, "http://anglebug.com/3452"};
 
     FeatureInfo disableFlippingBlitWithCommand = {
-        "disableFlippingBlitWithCommand", FeatureCategory::VulkanWorkarounds,
+        "disable_flipping_blit_with_command", FeatureCategory::VulkanWorkarounds,
         "vkCmdBlitImage with flipped coordinates blits incorrectly.", &members,
         "http://anglebug.com/3498"};
 
     FeatureInfo perFrameWindowSizeQuery = {
-        "perFrameWindowSizeQuery", FeatureCategory::VulkanWorkarounds,
+        "per_frame_window_size_query", FeatureCategory::VulkanWorkarounds,
         "Vulkan swapchain is not returning VK_ERROR_OUT_OF_DATE when window resizing", &members,
         "http://anglebug.com/3623, http://anglebug.com/3624, http://anglebug.com/3625"};
 
     FeatureInfo disallowSeamfulCubeMapEmulation = {
-        "disallowSeamfulCubeMapEmulation", FeatureCategory::VulkanWorkarounds,
+        "disallow_seamful_cube_map_emulation", FeatureCategory::VulkanWorkarounds,
         "Seamful cube map emulation misbehaves on some drivers, so it's disallowed", &members,
         "http://anglebug.com/3243"};
 
     FeatureInfo padBuffersToMaxVertexAttribStride = {
-        "padBuffersToMaxVertexAttribStride", FeatureCategory::VulkanWorkarounds,
+        "pad_buffers_to_max_vertex_attrib_stride", FeatureCategory::VulkanWorkarounds,
         "Vulkan considers vertex attribute accesses to count up to the last multiple of the "
         "stride. This additional access supports AMD's robust buffer access implementation. "
         "AMDVLK in particular will return incorrect values when the vertex access extends into "
@@ -253,131 +255,131 @@ struct FeaturesVk : FeatureSetBase
         &members, "http://anglebug.com/4428"};
 
     FeatureInfo supportsExternalMemoryDmaBufAndModifiers = {
-        "supportsExternalMemoryDmaBufAndModifiers", FeatureCategory::VulkanFeatures,
+        "supports_external_memory_dma_buf_and_modifiers", FeatureCategory::VulkanFeatures,
         "VkDevice supports the VK_EXT_external_memory_dma_buf and VK_EXT_image_drm_format_modifier "
         "extensions",
         &members, "http://anglebug.com/6248"};
 
     FeatureInfo supportsExternalMemoryHost = {
-        "supportsExternalMemoryHost",
+        "supports_external_memory_host",
         FeatureCategory::VulkanFeatures,
         "VkDevice supports the VK_EXT_external_memory_host extension",
         &members,
     };
 
     FeatureInfo allocateNonZeroMemory = {
-        "allocateNonZeroMemory", FeatureCategory::VulkanFeatures,
+        "allocate_non_zero_memory", FeatureCategory::VulkanFeatures,
         "Fill new allocations with non-zero values to flush out errors.", &members,
         "http://anglebug.com/4384"};
 
     FeatureInfo logMemoryReportCallbacks = {
-        "logMemoryReportCallbacks",
+        "log_memory_report_callbacks",
         FeatureCategory::VulkanFeatures,
         "Log each callback from VK_EXT_device_memory_report",
         &members,
     };
 
     FeatureInfo logMemoryReportStats = {
-        "logMemoryReportStats",
+        "log_memory_report_stats",
         FeatureCategory::VulkanFeatures,
         "Log stats from VK_EXT_device_memory_report each swap",
         &members,
     };
 
     FeatureInfo shadowBuffers = {
-        "shadowBuffers", FeatureCategory::VulkanFeatures,
+        "shadow_buffers", FeatureCategory::VulkanFeatures,
         "Allocate a shadow buffer for GL buffer objects to reduce glMap* latency.", &members,
         "http://anglebug.com/4339"};
 
     FeatureInfo preferCPUForBufferSubData = {
-        "preferCPUForBufferSubData", FeatureCategory::VulkanFeatures,
+        "prefer_CPU_for_buffer_sub_data", FeatureCategory::VulkanFeatures,
         "Prefer use CPU to do bufferSubData instead of staged update.", &members,
         "http://issuetracker.google.com/200067929"};
 
     FeatureInfo persistentlyMappedBuffers = {
-        "persistentlyMappedBuffers", FeatureCategory::VulkanFeatures,
+        "persistently_mapped_buffers", FeatureCategory::VulkanFeatures,
         "Persistently map buffer memory to reduce map/unmap IOCTL overhead.", &members,
         "http://anglebug.com/2162"};
 
-    FeatureInfo enablePreRotateSurfaces = {"enablePreRotateSurfaces",
+    FeatureInfo enablePreRotateSurfaces = {"enable_pre_rotate_surfaces",
                                            FeatureCategory::VulkanFeatures,
                                            "Enable Android pre-rotation for landscape applications",
                                            &members, "http://anglebug.com/3502"};
 
     FeatureInfo enablePrecisionQualifiers = {
-        "enablePrecisionQualifiers", FeatureCategory::VulkanFeatures,
+        "enable_precision_qualifiers", FeatureCategory::VulkanFeatures,
         "Enable precision qualifiers in shaders", &members, "http://anglebug.com/3078"};
 
     FeatureInfo preferAggregateBarrierCalls = {
-        "preferAggregateBarrierCalls", FeatureCategory::VulkanWorkarounds,
+        "prefer_aggregate_barrier_calls", FeatureCategory::VulkanWorkarounds,
         "Single barrier call is preferred over multiple calls with "
         "fine grained pipeline stage dependency information",
         &members, "http://anglebug.com/4633"};
 
     FeatureInfo preferSkippingInvalidateForEmulatedFormats = {
-        "preferSkippingInvalidateForEmulatedFormats", FeatureCategory::VulkanWorkarounds,
+        "prefer_skipping_invalidate_for_emulated_formats", FeatureCategory::VulkanWorkarounds,
         "Skipping invalidate is preferred for emulated formats that have extra channels over "
         "re-clearing the image",
         &members, "http://anglebug.com/6860"};
 
-    FeatureInfo asyncCommandQueue = {"asyncCommandQueue", FeatureCategory::VulkanFeatures,
+    FeatureInfo asyncCommandQueue = {"async_command_queue", FeatureCategory::VulkanFeatures,
                                      "Use CommandQueue worker thread to dispatch work to GPU.",
                                      &members, "http://anglebug.com/4324"};
 
     FeatureInfo supportsShaderFloat16 = {
-        "supportsShaderFloat16", FeatureCategory::VulkanFeatures,
+        "supports_shader_float16", FeatureCategory::VulkanFeatures,
         "VkDevice supports the VK_KHR_shader_float16_int8 extension "
         "and has the shaderFloat16 feature",
         &members, "http://anglebug.com/4551"};
 
     FeatureInfo allowGenerateMipmapWithCompute = {
-        "allowGenerateMipmapWithCompute", FeatureCategory::VulkanFeatures,
+        "allow_GenerateMipmap_with_compute", FeatureCategory::VulkanFeatures,
         "Use the compute path to generate mipmaps on devices that meet the minimum requirements, "
         "and the performance is better.",
         &members, "http://anglebug.com/4551"};
 
-    FeatureInfo supportsRenderPassStoreOpNoneQCOM = {
-        "supportsRenderPassStoreOpNoneQCOM", FeatureCategory::VulkanFeatures,
+    FeatureInfo supportsRenderPassStoreOpNone = {
+        "supports_render_pass_store_op_none", FeatureCategory::VulkanFeatures,
         "VkDevice supports VK_QCOM_render_pass_store_ops extension.", &members,
         "http://anglebug.com/5055"};
 
     FeatureInfo supportsRenderPassLoadStoreOpNone = {
-        "supportsRenderPassLoadStoreOpNone", FeatureCategory::VulkanFeatures,
+        "supports_render_pass_load_store_op_none", FeatureCategory::VulkanFeatures,
         "VkDevice supports VK_EXT_load_store_op_none extension.", &members,
         "http://anglebug.com/5371"};
 
     FeatureInfo supportsDepthClipControl = {
-        "supportsDepthClipControl", FeatureCategory::VulkanFeatures,
+        "supports_depth_clip_control", FeatureCategory::VulkanFeatures,
         "VkDevice supports VK_EXT_depth_clip_control extension.", &members,
         "http://anglebug.com/5421"};
 
     FeatureInfo supportsBlendOperationAdvanced = {
-        "supportsBlendOperationAdvanced", FeatureCategory::VulkanFeatures,
+        "supports_blend_operation_advanced", FeatureCategory::VulkanFeatures,
         "VkDevice supports VK_EXT_blend_operation_advanced extension.", &members,
         "http://anglebug.com/3586"};
 
     FeatureInfo forceMaxUniformBufferSize16KB = {
-        "forceMaxUniformBufferSize16KB", FeatureCategory::VulkanWorkarounds,
+        "force_max_uniform_buffer_size_16KB", FeatureCategory::VulkanWorkarounds,
         "Force max uniform buffer size to 16K on some device due to bug", &members,
         "https://issuetracker.google.com/161903006"};
 
     FeatureInfo supportsImageFormatList = {
-        "supportsImageFormatList", FeatureCategory::VulkanFeatures,
+        "supports_image_format_list", FeatureCategory::VulkanFeatures,
         "Enable VK_IMAGE_CREATE_MUTABLE_FORMAT_BIT by default for ICDs "
         "that support VK_KHR_image_format_list",
         &members, "http://anglebug.com/5281"};
 
     FeatureInfo enableMultisampledRenderToTexture = {
-        "enableMultisampledRenderToTexture", FeatureCategory::VulkanWorkarounds,
+        "enable_multisampled_render_to_texture", FeatureCategory::VulkanWorkarounds,
         "Expose EXT_multisampled_render_to_texture", &members, "http://anglebug.com/4937"};
 
     FeatureInfo deferFlushUntilEndRenderPass = {
-        "deferFlushUntilEndRenderPass", FeatureCategory::VulkanWorkarounds,
+        "defer_flush_until_end_render_pass", FeatureCategory::VulkanWorkarounds,
         "Allow glFlush to be deferred until renderpass ends", &members,
         "https://issuetracker.google.com/issues/166475273"};
 
     FeatureInfo waitIdleBeforeSwapchainRecreation = {
-        "waitIdleBeforeSwapchainRecreation", FeatureCategory::VulkanWorkarounds,
+        "wait_idle_before_swapchain_recreation", FeatureCategory::VulkanWorkarounds,
         "Before passing an oldSwapchain to VkSwapchainCreateInfoKHR, wait for queue to be idle. "
         "Works around a bug on platforms which destroy oldSwapchain in vkCreateSwapchainKHR.",
         &members, "http://anglebug.com/5061"};
@@ -418,7 +420,7 @@ struct FeaturesVk : FeatureSetBase
     };
 
     FeatureInfo forceNearestMipFiltering = {
-        "forceNearestMipFiltering",
+        "force_nearest_mip_filtering",
         FeatureCategory::VulkanWorkarounds,
         "Force nearest mip filtering when sampling.",
         &members,
@@ -433,148 +435,149 @@ struct FeaturesVk : FeatureSetBase
     };
 
     FeatureInfo preferDrawClearOverVkCmdClearAttachments = {
-        "preferDrawClearOverVkCmdClearAttachments", FeatureCategory::VulkanWorkarounds,
+        "prefer_draw_clear_over_vkCmdClearAttachments", FeatureCategory::VulkanWorkarounds,
         "On some hardware, clear using a draw call instead of vkCmdClearAttachments in the middle "
         "of render pass due to bugs",
         &members, "https://issuetracker.google.com/166809097"};
 
-    FeatureInfo emulatedPrerotation90 = {"emulatedPrerotation90", FeatureCategory::VulkanFeatures,
+    FeatureInfo emulatedPrerotation90 = {"emulated_prerotation_90", FeatureCategory::VulkanFeatures,
                                          "Emulate 90-degree prerotation.", &members,
                                          "http://anglebug.com/4901"};
 
-    FeatureInfo emulatedPrerotation180 = {"emulatedPrerotation180", FeatureCategory::VulkanFeatures,
-                                          "Emulate 180-degree prerotation.", &members,
-                                          "http://anglebug.com/4901"};
+    FeatureInfo emulatedPrerotation180 = {
+        "emulated_prerotation_180", FeatureCategory::VulkanFeatures,
+        "Emulate 180-degree prerotation.", &members, "http://anglebug.com/4901"};
 
-    FeatureInfo emulatedPrerotation270 = {"emulatedPrerotation270", FeatureCategory::VulkanFeatures,
-                                          "Emulate 270-degree prerotation.", &members,
-                                          "http://anglebug.com/4901"};
+    FeatureInfo emulatedPrerotation270 = {
+        "emulated_prerotation_270", FeatureCategory::VulkanFeatures,
+        "Emulate 270-degree prerotation.", &members, "http://anglebug.com/4901"};
 
     FeatureInfo generateSPIRVThroughGlslang = {
-        "generateSPIRVThroughGlslang", FeatureCategory::VulkanFeatures,
+        "generate_SPIRV_through_glslang", FeatureCategory::VulkanFeatures,
         "Translate SPIR-V through glslang.", &members, "http://anglebug.com/4889"};
 
     FeatureInfo forceDriverUniformOverSpecConst = {
-        "forceDriverUniformOverSpecConst", FeatureCategory::VulkanWorkarounds,
+        "force_driver_uniform_over_spec_const", FeatureCategory::VulkanWorkarounds,
         "Forces using driver uniforms instead of specialization constants.", &members,
         "http://issuetracker.google.com/173636783"};
 
     FeatureInfo exposeNonConformantExtensionsAndVersions = {
-        "exposeNonConformantExtensionsAndVersions", FeatureCategory::VulkanWorkarounds,
+        "expose_non_conformant_extensions_and_versions", FeatureCategory::VulkanWorkarounds,
         "Expose GLES versions and extensions that are not conformant.", &members,
         "http://anglebug.com/5375"};
 
     FeatureInfo emulateR32fImageAtomicExchange = {
-        "emulateR32fImageAtomicExchange", FeatureCategory::VulkanWorkarounds,
+        "emulate_R32f_image_atomic_exchange", FeatureCategory::VulkanWorkarounds,
         "Emulate r32f images with r32ui to support imageAtomicExchange.", &members,
         "http://anglebug.com/5535"};
 
     FeatureInfo supportsNegativeViewport = {
-        "supportsNegativeViewport",
+        "supports_negative_viewport",
         FeatureCategory::VulkanFeatures,
         "The driver supports inverting the viewport with a negative height.",
         &members,
     };
 
     FeatureInfo forceFragmentShaderPrecisionHighpToMediump = {
-        "forceFragmentShaderPrecisionHighpToMediump", FeatureCategory::VulkanWorkarounds,
+        "force_fragment_shader_precision_highp_to_mediump", FeatureCategory::VulkanWorkarounds,
         "Forces highp precision in fragment shader to mediump.", &members,
         "https://issuetracker.google.com/184850002"};
 
     FeatureInfo preferSubmitAtFBOBoundary = {
-        "preferSubmitAtFBOBoundary", FeatureCategory::VulkanWorkarounds,
+        "prefer_submit_at_FBO_boundary", FeatureCategory::VulkanWorkarounds,
         "Submit commands to driver at each FBO boundary for performance improvements.", &members,
         "https://issuetracker.google.com/187425444"};
 
     FeatureInfo useMultipleDescriptorsForExternalFormats = {
-        "useMultipleDescriptorsForExternalFormats", FeatureCategory::VulkanWorkarounds,
+        "use_multiple_descriptors_for_external_formats", FeatureCategory::VulkanWorkarounds,
         "Return a default descriptor count for external formats.", &members,
         "http://anglebug.com/6141"};
 
     FeatureInfo supportsProtectedMemory = {
-        "supportsProtectedMemory", FeatureCategory::VulkanFeatures,
+        "supports_protected_memory", FeatureCategory::VulkanFeatures,
         "VkDevice supports protected memory", &members, "http://anglebug.com/3965"};
 
-    FeatureInfo supportsHostQueryReset = {"supportsHostQueryReset", FeatureCategory::VulkanFeatures,
+    FeatureInfo supportsHostQueryReset = {"supports_host_query_reset",
+                                          FeatureCategory::VulkanFeatures,
                                           "VkDevice supports VK_EXT_host_query_reset extension",
                                           &members, "http://anglebug.com/6692"};
 
     FeatureInfo supportsSurfaceCapabilities2Extension = {
-        "supportsSurfaceCapabilities2Extension",
+        "supports_surface_capabilities2_extension",
         FeatureCategory::VulkanFeatures,
         "VkInstance supports the VK_KHR_get_surface_capabilities2 extension",
         &members,
     };
 
     FeatureInfo supportsSurfaceProtectedCapabilitiesExtension = {
-        "supportsSurfaceProtectedCapabilitiesExtension",
+        "supports_surface_protected_capabilities_extension",
         FeatureCategory::VulkanFeatures,
         "VkInstance supports the VK_KHR_surface_protected_capabilities extension",
         &members,
     };
 
     FeatureInfo supportsSurfacelessQueryExtension = {
-        "supportsSurfacelessQueryExtension",
+        "supports_surfaceless_query_extension",
         FeatureCategory::VulkanFeatures,
         "VkInstance supports the VK_GOOGLE_surfaceless_query extension",
         &members,
     };
 
     FeatureInfo supportsSurfaceProtectedSwapchains = {
-        "supportsSurfaceProtectedSwapchains",
+        "supports_surface_protected_swapchains",
         FeatureCategory::VulkanFeatures,
         "VkSurface supportsProtected for protected swapchains",
         &members,
     };
 
-    FeatureInfo overrideSurfaceFormatRGB8toRGBA8 = {
-        "overrideSurfaceFormatRGB8toRGBA8", FeatureCategory::VulkanWorkarounds,
+    FeatureInfo overrideSurfaceFormatRGB8ToRGBA8 = {
+        "override_surface_format_RGB8_to_RGBA8", FeatureCategory::VulkanWorkarounds,
         "Override surface format GL_RGB8 to GL_RGBA8", &members, "http://anglebug.com/6651"};
 
     FeatureInfo supportsSharedPresentableImageExtension = {
-        "supportsSharedPresentableImageExtension",
+        "supports_shared_presentable_image_extension",
         FeatureCategory::VulkanFeatures,
         "VkSurface supports the VK_KHR_shared_presentable_images extension",
         &members,
     };
 
     FeatureInfo supportsShaderFramebufferFetch = {
-        "supportsShaderFramebufferFetch",
+        "supports_shader_framebuffer_fetch",
         FeatureCategory::VulkanFeatures,
         "Whether the Vulkan backend supports coherent framebuffer fetch",
         &members,
     };
 
     FeatureInfo supportsShaderFramebufferFetchNonCoherent = {
-        "supportsShaderFramebufferFetchNonCoherent",
+        "supports_shader_framebuffer_fetch_non_coherent",
         FeatureCategory::VulkanFeatures,
         "Whether the Vulkan backend supports non-coherent framebuffer fetch",
         &members,
     };
 
     FeatureInfo supportsLockSurfaceExtension = {
-        "supportsLockSurfaceExtension",
+        "supports_lock_surface_extension",
         FeatureCategory::VulkanFeatures,
         "Surface supports the EGL_KHR_lock_surface3 extension",
         &members,
     };
 
     FeatureInfo swapbuffersOnFlushOrFinishWithSingleBuffer = {
-        "swapbuffersOnFlushOrFinishWithSingleBuffer", FeatureCategory::VulkanFeatures,
+        "swapbuffers_on_flush_or_finish_with_single_buffer", FeatureCategory::VulkanFeatures,
         "Bypass deferredFlush with calling swapbuffers on flush or finish when in Shared Present "
         "mode",
         &members, "http://anglebug.com/6878"};
 
-    FeatureInfo emulateDithering = {"emulateDithering", FeatureCategory::VulkanFeatures,
+    FeatureInfo emulateDithering = {"emulate_dithering", FeatureCategory::VulkanFeatures,
                                     "Emulate OpenGL dithering", &members,
                                     "http://anglebug.com/6755"};
 
     FeatureInfo emulateAdvancedBlendEquations = {
-        "emulateAdvancedBlendEquations", FeatureCategory::VulkanFeatures,
+        "emulate_advanced_blend_equations", FeatureCategory::VulkanFeatures,
         "Emulate GL_KHR_blend_equation_advanced", &members, "http://anglebug.com/3586"};
 
     FeatureInfo bottomLeftOriginPresentRegionRectangles = {
-        "bottomLeftOriginPresentRegionRectangles",
+        "bottom_left_origin_present_region_rectangles",
         FeatureCategory::VulkanWorkarounds,
         "On some platforms present region rectangles are expected to have a bottom-left origin, "
         "instead of top-left origin as from spec",
@@ -582,15 +585,15 @@ struct FeaturesVk : FeatureSetBase
     };
 
     FeatureInfo forceSubmitImmutableTextureUpdates = {
-        "forceSubmitImmutableTextureUpdates", FeatureCategory::VulkanAppWorkarounds,
+        "force_submit_immutable_texture_updates", FeatureCategory::VulkanAppWorkarounds,
         "Force submit updates to immutable textures", &members, "http://anglebug.com/6929"};
 
-    FeatureInfo retainSpirvDebugInfo = {"retainSpirvDebugInfo", FeatureCategory::VulkanFeatures,
+    FeatureInfo retainSPIRVDebugInfo = {"retain_SPIRV_debug_info", FeatureCategory::VulkanFeatures,
                                         "Retain debug info in SPIR-V blob.", &members,
                                         "http://anglebug.com/5901"};
 
     FeatureInfo createPipelineDuringLink = {
-        "createPipelineDuringLink", FeatureCategory::VulkanFeatures,
+        "create_pipeline_during_link", FeatureCategory::VulkanFeatures,
         "Create pipeline with default state during glLinkProgram", &members,
         "http://anglebug.com/7046"};
 };
