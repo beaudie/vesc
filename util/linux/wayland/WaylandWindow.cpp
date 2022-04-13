@@ -81,6 +81,11 @@ bool WaylandWindow::initializeImpl(const std::string &name, int width, int heigh
 
     fds[0] = {wl_display_get_fd(mDisplay), POLLIN, 0};
 
+    mY      = 0;
+    mX      = 0;
+    mWidth  = width;
+    mHeight = height;
+
     return true;
 }
 
@@ -154,6 +159,10 @@ bool WaylandWindow::setPosition(int x, int y)
 bool WaylandWindow::resize(int width, int height)
 {
     wl_egl_window_resize(mWindow, width, height, 0, 0);
+
+    mWidth  = width;
+    mHeight = height;
+
     return true;
 }
 
