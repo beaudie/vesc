@@ -35,7 +35,7 @@ struct FeaturesD3D : FeatureSetBase
     };
 
     FeatureInfo zeroMaxLodWorkaround = {
-        "zero_max_lod",
+        "zero_max_lod_workaround",
         FeatureCategory::D3DWorkarounds,
         "Missing an option to disable mipmaps on a mipmapped texture",
         &members,
@@ -93,7 +93,7 @@ struct FeaturesD3D : FeatureSetBase
     };
 
     FeatureInfo disableB5G6R5Support = {
-        "disable_b5g6r5_support",
+        "disable_B5G6R5_support",
         FeatureCategory::D3DWorkarounds,
         "Textures with the format "
         "DXGI_FORMAT_B5G6R5_UNORM have incorrect data",
@@ -135,7 +135,7 @@ struct FeaturesD3D : FeatureSetBase
         &members, "http://anglebug.com/2152"};
 
     FeatureInfo skipVSConstantRegisterZero = {
-        "skip_vs_constant_register_zero",
+        "skip_VS_constant_register_zero",
         FeatureCategory::D3DWorkarounds,
         "In specific cases the driver doesn't handle constant register zero correctly",
         &members,
@@ -158,8 +158,8 @@ struct FeaturesD3D : FeatureSetBase
         "translating a uniform block with a large array member to cbuffer.",
         &members, "http://anglebug.com/3682"};
 
-    FeatureInfo allowES3OnFL10_0 = {
-        "allowES3OnFL10_0",
+    FeatureInfo allowES3OnFL100 = {
+        "allow_ES3_on_FL10_0",
         FeatureCategory::D3DWorkarounds,
         "Allow ES3 on 10.0 devices",
         &members,

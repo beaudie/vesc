@@ -429,7 +429,7 @@ Renderer11::Renderer11(egl::Display *display)
     mRenderer11DeviceCaps.supportsConstantBufferOffsets          = false;
     mRenderer11DeviceCaps.supportsVpRtIndexWriteFromVertexShader = false;
     mRenderer11DeviceCaps.supportsDXGI1_2                        = false;
-    mRenderer11DeviceCaps.allowES3OnFL10_0                       = false;
+    mRenderer11DeviceCaps.allowES3OnFL100                        = false;
     mRenderer11DeviceCaps.B5G6R5support                          = 0;
     mRenderer11DeviceCaps.B4G4R4A4support                        = 0;
     mRenderer11DeviceCaps.B5G5R5A1support                        = 0;
@@ -1085,9 +1085,9 @@ void Renderer11::populateRenderer11DeviceCaps()
                                  &mRenderer11DeviceCaps.B5G6R5maxSamples);
     }
 
-    if (getFeatures().allowES3OnFL10_0.enabled)
+    if (getFeatures().allowES3OnFL100.enabled)
     {
-        mRenderer11DeviceCaps.allowES3OnFL10_0 = true;
+        mRenderer11DeviceCaps.allowES3OnFL100 = true;
     }
 
     PopulateFormatDeviceCaps(mDevice, DXGI_FORMAT_B4G4R4A4_UNORM,

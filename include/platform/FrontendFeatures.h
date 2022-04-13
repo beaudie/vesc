@@ -58,27 +58,27 @@ struct FrontendFeatures : FeatureSetBase
         &members,
     };
 
-    FeatureInfo captureLimits = {"enable_capture_limits", FeatureCategory::FrontendFeatures,
-                                 "Set the context limits like frame capturing was enabled",
-                                 &members, "http://anglebug.com/5750"};
+    FeatureInfo enableCaptureLimits = {"enable_capture_limits", FeatureCategory::FrontendFeatures,
+                                       "Set the context limits like frame capturing was enabled",
+                                       &members, "http://anglebug.com/5750"};
 
     FeatureInfo enableCompressingPipelineCacheInThreadPool = {
-        "enableCompressingPipelineCacheInThreadPool", FeatureCategory::FrontendWorkarounds,
+        "enable_compressing_pipeline_cache_in_thread_pool", FeatureCategory::FrontendWorkarounds,
         "Enable compressing pipeline cache in thread pool.", &members, "http://anglebug.com/4722"};
 
     FeatureInfo forceRobustResourceInit = {
-        "forceRobustResourceInit", FeatureCategory::FrontendFeatures,
+        "force_robust_resource_init", FeatureCategory::FrontendFeatures,
         "Force-enable robust resource init", &members, "http://anglebug.com/6041"};
 
     FeatureInfo forceInitShaderVariables = {
-        "forceInitShaderVariables",
+        "force_init_shader_variables",
         FeatureCategory::FrontendFeatures,
         "Force-enable shader variable initialization",
         &members,
     };
 
     FeatureInfo enableProgramBinaryForCapture = {
-        "enableProgramBinaryForCapture", FeatureCategory::FrontendFeatures,
+        "enable_program_binary_for_capture", FeatureCategory::FrontendFeatures,
         "Even if FrameCapture is enabled, enable GL_OES_get_program_binary", &members,
         "http://anglebug.com/5658"};
 };

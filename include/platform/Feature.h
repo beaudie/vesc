@@ -9,6 +9,7 @@
 #ifndef ANGLE_PLATFORM_FEATURE_H_
 #define ANGLE_PLATFORM_FEATURE_H_
 
+#include <cctype>
 #include <map>
 #include <string>
 #include <vector>
@@ -175,14 +176,53 @@ struct FeatureSetBase
   protected:
     FeatureMap members = FeatureMap();
 
+    // Search for a feature by name, matching it loosely so that both snake_case and camelCase names
+    // are matched.
+    bool looseStringMatch(const std::string &a, const std::string &b)
+    {
+        size_t ai = 0;
+        size_t bi = 0;
+
+        while (ai < a.size() && bi < b.size())
+        {
+            if (a[ai] == '_')
+            {
+                ++ai;
+            }
+            if (b[bi] == '_')
+            {
+                ++bi;
+            }
+            if (std::tolower(a[ai++]) != std::tolower(b[bi++]))
+            {
+                return false;
+            }
+        }
+
+        return ai == a.size() && bi == b.size();
+    }
+
+    FeatureInfo *findFeature(const std::string &name)
+    {
+        for (auto iter : members)
+        {
+            if (looseStringMatch(iter.first, name))
+            {
+                return iter.second;
+            }
+        }
+        return nullptr;
+    }
+
   public:
     void overrideFeatures(const std::vector<std::string> &featureNames, bool enabled)
     {
         for (const std::string &name : featureNames)
         {
-            if (members.find(name) != members.end())
+            FeatureInfo *feature = findFeature(name);
+            if (feature != nullptr)
             {
-                members[name]->enabled = enabled;
+                feature->enabled = enabled;
             }
         }
     }
