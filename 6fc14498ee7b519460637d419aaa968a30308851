@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "bc7d97bf_299f371b",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1394635
+      },
+      "writtenOn": "2022-04-13T10:36:49Z",
+      "side": 1,
+      "message": "The only affected function is Framebuffer::partialClearNeedsInit. Apparently, it was returning true for color buffers all the time because of the bug.\n\nSurprisingly, macOS/Intel/GL fails in WebGL\u0027s dEQP invalidate.format.stencil_index8. I don\u0027t have any means to debug that.",
+      "revId": "6fc14498ee7b519460637d419aaa968a30308851",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
