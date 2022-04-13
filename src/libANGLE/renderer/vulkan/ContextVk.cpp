@@ -3534,7 +3534,11 @@ angle::Result ContextVk::optimizeRenderPassForPresent(VkFramebuffer framebufferH
     }
 
     // Resolve the multisample image
-    if (colorImageMS->valid())
+    vk::RenderPassCommandBufferHelper &commandBufferHelper = getStartedRenderPassCommands();
+    gl::Rectangle renderArea                               = commandBufferHelper.getRenderArea();
+    const gl::Rectangle invalidateArea(0, 0, colorImageMS->getExtents().width,
+                                       colorImageMS->getExtents().height);
+    if (colorImageMS->valid() && renderArea == invalidateArea)
     {
         vk::ImageOrBufferViewSubresourceSerial resolveImageViewSerial =
             colorImageView->getSubresourceSerial(gl::LevelIndex(0), 1, 0, vk::LayerMode::All,
@@ -3552,15 +3556,12 @@ angle::Result ContextVk::optimizeRenderPassForPresent(VkFramebuffer framebufferH
         ANGLE_TRY(drawFramebufferVk->getFramebuffer(this, &newFramebuffer, resolveImageView,
                                                     kSwapchainResolveMode));
 
-        vk::RenderPassCommandBufferHelper &commandBufferHelper = getStartedRenderPassCommands();
         commandBufferHelper.updateRenderPassForResolve(this, newFramebuffer,
                                                        drawFramebufferVk->getRenderPassDesc());
 
         onImageRenderPassWrite(gl::LevelIndex(0), 0, 1, VK_IMAGE_ASPECT_COLOR_BIT,
                                vk::ImageLayout::ColorAttachment, colorImage);
 
-        const gl::Rectangle invalidateArea(0, 0, colorImageMS->getExtents().width,
-                                           colorImageMS->getExtents().height);
         commandBufferHelper.invalidateRenderPassColorAttachment(
             mState, 0, vk::PackedAttachmentIndex(0), invalidateArea);
 
