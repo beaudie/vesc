@@ -355,9 +355,9 @@ BlendStateExt::BlendStateExt(const size_t drawBuffers)
       mMaxEquationMask(EquationStorage::GetMask(drawBuffers)),
       mEquationColor(EquationStorage::GetReplicatedValue(BlendEquationType::Add, mMaxEquationMask)),
       mEquationAlpha(EquationStorage::GetReplicatedValue(BlendEquationType::Add, mMaxEquationMask)),
-      mMaxColorMask(ColorMaskStorage::GetMask(drawBuffers)),
-      mColorMask(ColorMaskStorage::GetReplicatedValue(PackColorMask(true, true, true, true),
-                                                      mMaxColorMask)),
+      mMaxColorMask(ColorMaskStorage::GetReplicatedValue(PackColorMask(true, true, true, true),
+                                                         ColorMaskStorage::GetMask(drawBuffers))),
+      mColorMask(mMaxColorMask),
       mMaxEnabledMask(0xFF >> (8 - drawBuffers)),
       mMaxDrawBuffers(drawBuffers)
 {}
