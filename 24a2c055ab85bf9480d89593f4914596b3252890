@@ -175,6 +175,23 @@
       "parentUuid": "b9dfaed0_2e67d168",
       "revId": "24a2c055ab85bf9480d89593f4914596b3252890",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "13d3b89c_011d8efa",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 7
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2022-04-13T21:41:29Z",
+      "side": 1,
+      "message": "Geoff: what\u0027s the deal with Skia doing invalid things with validation off? Didn\u0027t we trap these errors? Any idea how we can pinpoint the invalid usage?",
+      "revId": "24a2c055ab85bf9480d89593f4914596b3252890",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
