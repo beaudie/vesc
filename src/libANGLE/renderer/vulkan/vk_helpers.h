@@ -2947,6 +2947,7 @@ class CommandBufferAccess : angle::NonCopyable
     }
     void onExternalAcquireRelease(ImageHelper *image) { onResourceAccess(image); }
     void onQueryAccess(QueryHelper *query) { onResourceAccess(query); }
+    void onPipelineAccess(PipelineHelper *pipeline) { onResourceAccess(pipeline); }
     void onSyncAccess(SyncHelper *sync) { onResourceAccess(sync); }
     void onBufferExternalAcquireRelease(BufferHelper *buffer);
 
