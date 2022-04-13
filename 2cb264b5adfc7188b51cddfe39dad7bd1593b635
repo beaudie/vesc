@@ -22,6 +22,30 @@
       },
       "revId": "2cb264b5adfc7188b51cddfe39dad7bd1593b635",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "9cf09d14_a835bc06",
+        "filename": "src/libANGLE/renderer/gl/cgl/IOSurfaceSurfaceCGL.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 257,
+      "author": {
+        "id": 1449558
+      },
+      "writtenOn": "2022-04-13T11:00:55Z",
+      "side": 0,
+      "message": "Added.\nIncidentally I noticed that Metal wasn\u0027t up to date either, even though I thought I checked specifically for that.\nAdded same workaround for Metal.",
+      "parentUuid": "e1009cfb_80277266",
+      "range": {
+        "startLine": 257,
+        "startChar": 8,
+        "endLine": 257,
+        "endChar": 21
+      },
+      "revId": "2cb264b5adfc7188b51cddfe39dad7bd1593b635",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
