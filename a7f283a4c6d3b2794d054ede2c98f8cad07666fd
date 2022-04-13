@@ -70,6 +70,41 @@
       "parentUuid": "846480b8_5bdc57aa",
       "revId": "a7f283a4c6d3b2794d054ede2c98f8cad07666fd",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "558674ea_3147dc22",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 9
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1359249
+      },
+      "writtenOn": "2022-04-13T19:13:05Z",
+      "side": 1,
+      "message": "The extension expects that the Surface/Swapchain will change buffers/images/modes when eglSwapbuffers is called. That is when present mode is checked and if different, causes re-create Swapchain.",
+      "parentUuid": "7c850907_bcacaccc",
+      "revId": "a7f283a4c6d3b2794d054ede2c98f8cad07666fd",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "84fbd215_036a28b0",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 9
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1359249
+      },
+      "writtenOn": "2022-04-13T19:13:05Z",
+      "side": 1,
+      "message": "Comment. On eglSwapbuffers.\nI added eglSwapbuffers to test just after eglSurfaceAttrib - to cause mode change.. After that, glFlush should cause swapbuffer-on-flush and update the display.",
+      "revId": "a7f283a4c6d3b2794d054ede2c98f8cad07666fd",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
