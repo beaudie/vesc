@@ -220,7 +220,6 @@ class ProgramExecutable final : public angle::Subject
     const RangeUI &getAtomicCounterUniformRange() const { return mAtomicCounterUniformRange; }
     const RangeUI &getFragmentInoutRange() const { return mFragmentInoutRange; }
     bool usesEarlyFragmentTestsOptimization() const { return mUsesEarlyFragmentTestsOptimization; }
-    BlendEquationBitSet getAdvancedBlendEquations() const { return mAdvancedBlendEquations; }
     const std::vector<TransformFeedbackVarying> &getLinkedTransformFeedbackVaryings() const
     {
         return mLinkedTransformFeedbackVaryings;
@@ -461,9 +460,6 @@ class ProgramExecutable final : public angle::Subject
 
     RangeUI mFragmentInoutRange;
     bool mUsesEarlyFragmentTestsOptimization;
-
-    // KHR_blend_equation_advanced supported equation list
-    BlendEquationBitSet mAdvancedBlendEquations;
 
     // An array of the samplers that are used by the program
     std::vector<SamplerBinding> mSamplerBindings;

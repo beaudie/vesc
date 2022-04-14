@@ -1045,6 +1045,8 @@ void SerializeProgramState(JsonSerializer *json, const gl::ProgramState &program
                                      programState.getSecondaryOutputLocations());
     json->addScalar("BinaryRetrieveableHint", programState.hasBinaryRetrieveableHint());
     json->addScalar("Separable", programState.isSeparable());
+    json->addScalar("EarlyFragmentTestsOptimization",
+                    programState.hasEarlyFragmentTestsOptimization());
     json->addScalar("NumViews", programState.getNumViews());
     json->addScalar("DrawIDLocation", programState.getDrawIDLocation());
     json->addScalar("BaseVertexLocation", programState.getBaseVertexLocation());

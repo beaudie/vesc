@@ -81,7 +81,6 @@ enum class Feature
     DontRelinkProgramsInParallel,
     DontUseLoopsToInitializeVariables,
     EmulateAbsIntFunction,
-    EmulateAdvancedBlendEquations,
     EmulateAtan2Float,
     EmulateCopyTexImage2DFromRenderbuffers,
     EmulateDithering,

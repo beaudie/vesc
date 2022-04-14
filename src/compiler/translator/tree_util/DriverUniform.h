@@ -53,7 +53,6 @@ class DriverUniform
     TIntermTyped *getDepthRangeRef() const;
     TIntermTyped *getDepthRangeReservedFieldRef() const;
     TIntermTyped *getNumSamplesRef() const;
-    TIntermTyped *getAdvancedBlendEquationRef() const;
 
     virtual TIntermTyped *getFlipXYRef() const { return nullptr; }
     virtual TIntermTyped *getNegFlipXYRef() const { return nullptr; }
