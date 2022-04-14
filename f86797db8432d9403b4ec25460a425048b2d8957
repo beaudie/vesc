@@ -1,0 +1,44 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "e7adab13_1a7c8d12",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1001921
+      },
+      "writtenOn": "2022-04-14T17:32:56Z",
+      "side": 1,
+      "message": "Thanks for taking care of this!",
+      "revId": "f86797db8432d9403b4ec25460a425048b2d8957",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "6f330a5d_efb66957",
+        "filename": "src/tests/angle_end2end_tests_expectations.txt",
+        "patchSetId": 1
+      },
+      "lineNbr": 166,
+      "author": {
+        "id": 1001921
+      },
+      "writtenOn": "2022-04-14T17:32:56Z",
+      "side": 1,
+      "message": "Looks like this is already skipped below.",
+      "range": {
+        "startLine": 166,
+        "startChar": 0,
+        "endLine": 166,
+        "endChar": 90
+      },
+      "revId": "f86797db8432d9403b4ec25460a425048b2d8957",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
