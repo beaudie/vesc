@@ -41,6 +41,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "3424db33_20e3a42d",
+        "filename": "src/libANGLE/renderer/gl/StateManagerGL.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 373,
+      "author": {
+        "id": 1000050
+      },
+      "writtenOn": "2022-04-14T17:29:13Z",
+      "side": 1,
+      "message": "Sure. Will do it in a separate CL.",
+      "parentUuid": "8e85de9a_be8d0022",
+      "range": {
+        "startLine": 373,
+        "startChar": 61,
+        "endLine": 373,
+        "endChar": 79
+      },
+      "revId": "c6e32286b301fab5a46cfced51e5754b5e312644",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "fc3b856d_50b1d527",
@@ -54,6 +78,30 @@
       "writtenOn": "2022-04-14T15:27:37Z",
       "side": 1,
       "message": "is there a way you can make it not set the higher bits instead? this will cause some small amount of cpu drag.",
+      "range": {
+        "startLine": 949,
+        "startChar": 16,
+        "endLine": 959,
+        "endChar": 17
+      },
+      "revId": "c6e32286b301fab5a46cfced51e5754b5e312644",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "07a03e0a_9df399b2",
+        "filename": "src/libANGLE/renderer/gl/VertexArrayGL.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 959,
+      "author": {
+        "id": 1000050
+      },
+      "writtenOn": "2022-04-14T17:29:13Z",
+      "side": 1,
+      "message": "Actually, I am not sure if the original code really causes problem. But I think it is good to check index it here.",
+      "parentUuid": "fc3b856d_50b1d527",
       "range": {
         "startLine": 949,
         "startChar": 16,
