@@ -4059,8 +4059,7 @@ void main()
         }
     }
 
-    // TODO(syoussefi): Validate.
-    ANGLE_UNUSED_VARIABLE(descriptorSetAllocationsBefore);
+    EXPECT_GT(descriptorSetAllocationsBefore, 0u);
 
     ASSERT_GL_NO_ERROR();
 
@@ -4078,7 +4077,7 @@ void main()
 
     // Check for unnecessary descriptor set allocations.
     uint32_t descriptorSetAllocationsAfter = getPerfCounters().descriptorSetAllocations;
-    EXPECT_EQ(descriptorSetAllocationsAfter, 0u);
+    EXPECT_EQ(descriptorSetAllocationsAfter, descriptorSetAllocationsBefore);
 }
 
 // Test that mapping a buffer that the GPU is using as read-only ghosts the buffer, rather than
