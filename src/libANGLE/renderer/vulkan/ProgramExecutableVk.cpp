@@ -1309,7 +1309,6 @@ angle::Result ProgramExecutableVk::updateBuffersDescriptorSet(
     ASSERT(descriptorSet != VK_NULL_HANDLE);
 
     // Write uniform or storage buffers.
-    uint32_t zeroBlockIndex = 0;
     for (uint32_t blockIndex = 0; blockIndex < blocks.size(); ++blockIndex)
     {
         const gl::InterfaceBlock &block                           = blocks[blockIndex];
@@ -1320,18 +1319,14 @@ angle::Result ProgramExecutableVk::updateBuffersDescriptorSet(
             continue;
         }
 
-        uint32_t arrayElement = block.isArray ? block.arrayElement : 0;
-        if (arrayElement == 0)
-        {
-            zeroBlockIndex = blockIndex;
-        }
-
         const ShaderInterfaceVariableInfo &info =
-            mVariableInfoMap.getIndexedVariableInfo(shaderType, variableType, zeroBlockIndex);
+            mVariableInfoMap.getIndexedVariableInfo(shaderType, variableType, blockIndex);
         if (info.isDuplicate)
         {
             continue;
         }
+
+        uint32_t arrayElement = block.isArray ? block.arrayElement : 0;
 
         if (bufferBinding.get() == nullptr)
         {
@@ -2040,8 +2035,9 @@ template angle::Result ProgramExecutableVk::updateDescriptorSets<vk::VulkanSecon
     vk::VulkanSecondaryCommandBuffer *commandBuffer,
     PipelineType pipelineType);
 
-ProgramExecutablePerfCounters ProgramExecutableVk::getAndResetObjectPerfCounters()
+ProgramExecutablePerfCounters ProgramExecutableVk::getDescriptorSetPerfCounters()
 {
+    mPerfCounters.descriptorSetCacheKeySizesBytes = {};
     mPerfCounters.descriptorSetCacheKeySizesBytes[DescriptorSetIndex::UniformsAndXfb] =
         static_cast<uint32_t>(mUniformsAndXfbDescriptorsCache.getTotalCacheKeySizeBytes());
     mPerfCounters.descriptorSetCacheKeySizesBytes[DescriptorSetIndex::Texture] =
@@ -2049,9 +2045,15 @@ ProgramExecutablePerfCounters ProgramExecutableVk::getAndResetObjectPerfCounters
     mPerfCounters.descriptorSetCacheKeySizesBytes[DescriptorSetIndex::ShaderResource] =
         static_cast<uint32_t>(mShaderBufferDescriptorsCache.getTotalCacheKeySizeBytes());
 
-    ProgramExecutablePerfCounters counters        = mPerfCounters;
-    mPerfCounters.descriptorSetCacheKeySizesBytes = {};
-    return counters;
+    return mPerfCounters;
+}
+
+void ProgramExecutableVk::resetDescriptorSetPerfCounters()
+{
+    for (CacheStats &cacheStats : mPerfCounters.cacheStats)
+    {
+        cacheStats.resetHitAndMissCount();
+    }
 }
 
 void ProgramExecutableVk::setAllDefaultUniformsDirty(const gl::ProgramExecutable &executable)
