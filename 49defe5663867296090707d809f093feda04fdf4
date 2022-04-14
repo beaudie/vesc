@@ -142,6 +142,24 @@
       "parentUuid": "87dc2fd3_82c0588b",
       "revId": "49defe5663867296090707d809f093feda04fdf4",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "0b270556_a584b7e3",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 10
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1525982
+      },
+      "writtenOn": "2022-04-14T23:35:29Z",
+      "side": 1,
+      "message": "Minecraft seems to have an increased CPU time (about 5-6%) after the CL. The other traces don\u0027t show any significant performance loss.",
+      "parentUuid": "eae75657_3ff3f59e",
+      "revId": "49defe5663867296090707d809f093feda04fdf4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
