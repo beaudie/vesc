@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "82af768f_91aa48be",
+        "filename": "src/libANGLE/Display.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 1373,
+      "author": {
+        "id": 1340649
+      },
+      "writtenOn": "2022-04-14T17:48:43Z",
+      "side": 1,
+      "message": "shouldnt we do this before creating the image? otherwise we are definitely going to hit the assert right?",
+      "revId": "1e08967f17da465dc42d4b8bc25c327d77fa7dfc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
