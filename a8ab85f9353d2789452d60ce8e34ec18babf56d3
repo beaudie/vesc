@@ -16,6 +16,24 @@
       "message": "LGTM, please confirm you got a green run on android-arm64-test before landing (don\u0027t see one on the current CL)",
       "revId": "a8ab85f9353d2789452d60ce8e34ec18babf56d3",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "704d1a60_26c899cf",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1001921
+      },
+      "writtenOn": "2022-04-14T18:13:43Z",
+      "side": 1,
+      "message": "You\u0027ve probably meant android-arm64-exp-test.\nI doubt it has the capacity, though.\nIf you could use scripts/trigger.py, this would be nice.\nOr we can watch the CI bot and revert if it\u0027s unhappy.",
+      "parentUuid": "8e750ca1_245456e7",
+      "revId": "a8ab85f9353d2789452d60ce8e34ec18babf56d3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
