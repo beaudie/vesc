@@ -1,6 +1,23 @@
 {
   "comments": [
     {
+      "unresolved": true,
+      "key": {
+        "uuid": "148636cf_4206c457",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 16,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2022-04-14T20:56:30Z",
+      "side": 1,
+      "message": "nit: angleproject:7204",
+      "revId": "80249fd000e5edb07e4d2051d27415daa8fba65e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": false,
       "key": {
         "uuid": "119e28d9_5d16335b",
@@ -14,6 +31,29 @@
       "writtenOn": "2022-04-14T20:50:11Z",
       "side": 1,
       "message": "PTAL",
+      "revId": "80249fd000e5edb07e4d2051d27415daa8fba65e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "7788a960_aea1e98f",
+        "filename": "src/tests/test_utils/VulkanHelper.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 174,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2022-04-14T20:56:30Z",
+      "side": 1,
+      "message": "nit: maybe just call glFinish outside the \"if\", because there\u0027s some other vk commands below that could have suprising interactions when run.",
+      "range": {
+        "startLine": 174,
+        "startChar": 8,
+        "endLine": 174,
+        "endChar": 16
+      },
       "revId": "80249fd000e5edb07e4d2051d27415daa8fba65e",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
