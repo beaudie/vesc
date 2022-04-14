@@ -370,7 +370,8 @@ class StateManagerGL final : angle::NonCopyable
     GLuint mProgram;
 
     GLuint mVAO;
-    std::vector<gl::VertexAttribCurrentValueData> mVertexAttribCurrentValues;
+    angle::FixedVector<gl::VertexAttribCurrentValueData, gl::MAX_VERTEX_ATTRIBS>
+        mVertexAttribCurrentValues;
 
     GLuint mDefaultVAO = 0;
     // The current state of the default VAO is owned by StateManagerGL. It may be shared between
