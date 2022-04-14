@@ -106,6 +106,24 @@
       "parentUuid": "637efa2f_97ac4d84",
       "revId": "49defe5663867296090707d809f093feda04fdf4",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "87dc2fd3_82c0588b",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 10
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2022-04-14T15:31:31Z",
+      "side": 1,
+      "message": "It would be nicer to find a solution that wouldn\u0027t allow restarting a renderpass in the middle of the dirty bit sync. I forget why we added this. If we could figure out up-front if we need to restart, that would be best. Anyway LGTM because this works with the current design.\n\nBTW I don\u0027t follow what you said above, but noticed the RP can restart in the middle of dirty bits in another context- I\u0027m assuming that\u0027s what the problem is.",
+      "parentUuid": "6dd0f15a_70b53b7a",
+      "revId": "49defe5663867296090707d809f093feda04fdf4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
