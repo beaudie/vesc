@@ -536,7 +536,7 @@ void RendererVk::ensureCapsInitialized() const
     // emulated where possible.
     mNativeExtensions.blendEquationAdvancedKHR = mFeatures.supportsBlendOperationAdvanced.enabled ||
                                                  mFeatures.emulateAdvancedBlendEquations.enabled;
-
+    // noop
     // Enable EXT_unpack_subimage
     mNativeExtensions.unpackSubimageEXT = true;
 
