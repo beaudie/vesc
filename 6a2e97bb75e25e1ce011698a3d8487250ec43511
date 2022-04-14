@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "5bb171f8_961eac60",
+        "filename": "src/tests/gl_tests/GLSLTest.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 15260,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-04-14T15:56:30Z",
+      "side": 1,
+      "message": "Sigh, `const` on `sampler` ... what\u0027s the point? I\u0027m fixing this right now.",
+      "revId": "6a2e97bb75e25e1ce011698a3d8487250ec43511",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
