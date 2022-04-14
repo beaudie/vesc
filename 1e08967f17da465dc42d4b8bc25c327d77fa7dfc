@@ -52,6 +52,23 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "e4bc210b_07ffb990",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 5
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1340649
+      },
+      "writtenOn": "2022-04-14T20:07:33Z",
+      "side": 1,
+      "message": "ah, nevermind. i do not have permissions to upload a patchset to your changes. anyways, this is the diff that will fix failing tests -\n\n$ git diff\ndiff --git a/src/libANGLE/Display.cpp b/src/libANGLE/Display.cpp\nindex 4715db953..8ed744770 100644\n--- a/src/libANGLE/Display.cpp\n+++ b/src/libANGLE/Display.cpp\n@@ -1357,6 +1357,13 @@ Error Display::createImage(gl::Context *context,\n     }\n     ASSERT(sibling !\u003d nullptr);\n\n+    if (context)\n+    {\n+        // If the source comes from a context, make sure it\u0027s marked as shared because its resources\n+        // can now be used by contexts outside of its share group.\n+        context-\u003esetShared();\n+    }\n+\n     angle::UniqueObjectPointer\u003cImage, Display\u003e imagePtr(\n         new Image(mImplementation, context, target, sibling, attribs), this);\n     ANGLE_TRY(imagePtr-\u003einitialize(this));\n@@ -1370,13 +1377,6 @@ Error Display::createImage(gl::Context *context,\n     image-\u003eaddRef();\n     mImageSet.insert(image);\n\n-    if (context)\n-    {\n-        // If the source comes from a context, make sure it\u0027s marked as shared because its resources\n-        // can now be used by contects outside of its share group.\n-        context-\u003esetShared();\n-    }\n-\n     return NoError();\n }\n\ndiff --git a/src/libANGLE/Image.cpp b/src/libANGLE/Image.cpp\nindex 02b44585f..83e1a8961 100644\n--- a/src/libANGLE/Image.cpp\n+++ b/src/libANGLE/Image.cpp\n@@ -291,7 +291,7 @@ Image::Image(rx::EGLImplFactory *factory,\n {\n     ASSERT(mImplementation !\u003d nullptr);\n     ASSERT(buffer !\u003d nullptr);\n-    ASSERT(context-\u003eisShared());\n+    ASSERT(context \u003d\u003d nullptr || context-\u003eisShared());\n\n     mState.source-\u003eaddImageSource(this);\n }",
+      "revId": "1e08967f17da465dc42d4b8bc25c327d77fa7dfc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "82af768f_91aa48be",
