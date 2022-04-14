@@ -927,22 +927,6 @@ angle::Result VertexArrayGL::syncDirtyBinding(
     return angle::Result::Continue;
 }
 
-#define ANGLE_DIRTY_ATTRIB_FUNC(INDEX)                                    \
-    case VertexArray::DIRTY_BIT_ATTRIB_0 + INDEX:                         \
-        ANGLE_TRY(syncDirtyAttrib(context, INDEX, (*attribBits)[INDEX])); \
-        (*attribBits)[INDEX].reset();                                     \
-        break;
-
-#define ANGLE_DIRTY_BINDING_FUNC(INDEX)                                     \
-    case VertexArray::DIRTY_BIT_BINDING_0 + INDEX:                          \
-        ANGLE_TRY(syncDirtyBinding(context, INDEX, (*bindingBits)[INDEX])); \
-        (*bindingBits)[INDEX].reset();                                      \
-        break;
-
-#define ANGLE_DIRTY_BUFFER_DATA_FUNC(INDEX)            \
-    case VertexArray::DIRTY_BIT_BUFFER_DATA_0 + INDEX: \
-        break;
-
 angle::Result VertexArrayGL::syncState(const gl::Context *context,
                                        const gl::VertexArray::DirtyBits &dirtyBits,
                                        gl::VertexArray::DirtyAttribBitsArray *attribBits,
@@ -961,11 +945,22 @@ angle::Result VertexArrayGL::syncState(const gl::Context *context,
 
             case VertexArray::DIRTY_BIT_ELEMENT_ARRAY_BUFFER_DATA:
                 break;
-
-                ANGLE_VERTEX_INDEX_CASES(ANGLE_DIRTY_ATTRIB_FUNC)
-                ANGLE_VERTEX_INDEX_CASES(ANGLE_DIRTY_BINDING_FUNC)
-                ANGLE_VERTEX_INDEX_CASES(ANGLE_DIRTY_BUFFER_DATA_FUNC)
-
+            case VertexArray::DIRTY_BIT_ATTRIB_0... VertexArray::DIRTY_BIT_ATTRIB_MAX - 1:
+            {
+                size_t index = dirtyBit - VertexArray::DIRTY_BIT_ATTRIB_0;
+                ANGLE_TRY(syncDirtyAttrib(context, index, (*attribBits)[index]));
+                (*attribBits)[index].reset();
+                break;
+            }
+            case VertexArray::DIRTY_BIT_BINDING_0... VertexArray::DIRTY_BIT_BINDING_MAX - 1:
+            {
+                size_t index = dirtyBit - VertexArray::DIRTY_BIT_BINDING_0;
+                ANGLE_TRY(syncDirtyBinding(context, index, (*bindingBits)[index]));
+                (*bindingBits)[index].reset();
+                break;
+            }
+            case VertexArray::DIRTY_BIT_BUFFER_DATA_0... VertexArray::DIRTY_BIT_BUFFER_DATA_MAX - 1:
+                break;
             default:
                 UNREACHABLE();
                 break;
