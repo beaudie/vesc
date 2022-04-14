@@ -2281,6 +2281,9 @@ angle::Result FramebufferVk::clearWithDraw(ContextVk *contextVk,
     params.colorClearValue                     = clearColorValue;
     params.depthStencilClearValue              = clearDepthStencilValue;
     params.stencilMask                         = stencilMask;
+    ANGLE_LOG(ERR) << "FramebufferVk::" << __func__ << " color " << clearColorValue.float32[0]
+                   << " " << clearColorValue.float32[1] << " " << clearColorValue.float32[2] << " "
+                   << clearColorValue.float32[3];
 
     params.clearColor   = true;
     params.clearDepth   = clearDepth;

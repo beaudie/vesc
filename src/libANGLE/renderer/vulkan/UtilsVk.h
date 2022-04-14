@@ -455,20 +455,20 @@ class UtilsVk : angle::NonCopyable
         Unresolve8Attachments  = 11,
         Unresolve9Attachments  = 12,
         Unresolve10Attachments = 13,
+        YuvRgbaConversion      = 14,
 
         // Functions implemented in compute
-        ComputeStartIndex          = 14,  // Special value to separate draw and dispatch functions.
-        ConvertIndexBuffer         = 14,
-        ConvertVertexBuffer        = 15,
-        BlitResolveStencilNoExport = 16,
-        ConvertIndexIndirectBuffer = 17,
-        ConvertIndexIndirectLineLoopBuffer = 18,
-        ConvertIndirectLineLoopBuffer      = 19,
-        GenerateMipmap                     = 20,
-        YuvRgbaConversion                  = 21,
+        ComputeStartIndex          = 15,  // Special value to separate draw and dispatch functions.
+        ConvertIndexBuffer         = 16,
+        ConvertVertexBuffer        = 17,
+        BlitResolveStencilNoExport = 18,
+        ConvertIndexIndirectBuffer = 19,
+        ConvertIndexIndirectLineLoopBuffer = 20,
+        ConvertIndirectLineLoopBuffer      = 21,
+        GenerateMipmap                     = 22,
 
-        InvalidEnum = 22,
-        EnumCount   = 22,
+        InvalidEnum = 23,
+        EnumCount   = 23,
     };
 
     // Common functions that create the pipeline for the specified function, binds it and prepares

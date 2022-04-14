@@ -1780,6 +1780,7 @@ void SPIRVBuilder::writeInterfaceVariableDecorations(const TType &type, spirv::I
 
     if (yuvOutput)
     {
+        ANGLE_LOG(ERR) << "this shader has layout(yuv)";
         // WIP in spec
         const uint32_t kSpvDecorationYUV = 6088;
         spirv::WriteDecorateUint32(&mSpirvDecorations, variableId, kSpvDecorationYUV, {});

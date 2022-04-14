@@ -152,6 +152,7 @@ namespace
 #include "libANGLE/renderer/vulkan/shaders/gen/OverlayDraw.frag.00000000.inc"
 #include "libANGLE/renderer/vulkan/shaders/gen/OverlayDraw.vert.00000000.inc"
 #include "libANGLE/renderer/vulkan/shaders/gen/YuvRgbaConversion.comp.00000000.inc"
+#include "libANGLE/renderer/vulkan/shaders/gen/YuvRgbaConversion.frag.00000000.inc"
 
 // This is compressed SPIR-V binary blob and size
 struct CompressedShaderBlob
@@ -338,6 +339,9 @@ constexpr CompressedShaderBlob kOverlayDraw_vert_shaders[] = {
 constexpr CompressedShaderBlob kYuvRgbaConversion_comp_shaders[] = {
     {kYuvRgbaConversion_comp_00000000, sizeof(kYuvRgbaConversion_comp_00000000)},
 };
+constexpr CompressedShaderBlob kYuvRgbaConversion_frag_shaders[] = {
+    {kYuvRgbaConversion_frag_00000000, sizeof(kYuvRgbaConversion_frag_00000000)},
+};
 
 angle::Result GetShader(Context *context,
                         RefCounted<ShaderAndSerial> *shaders,
@@ -433,6 +437,10 @@ void ShaderLibrary::destroy(VkDevice device)
         shader.get().destroy(device);
     }
     for (RefCounted<ShaderAndSerial> &shader : mYuvRgbaConversion_comp_shaders)
+    {
+        shader.get().destroy(device);
+    }
+    for (RefCounted<ShaderAndSerial> &shader : mYuvRgbaConversion_frag_shaders)
     {
         shader.get().destroy(device);
     }
@@ -546,6 +554,14 @@ angle::Result ShaderLibrary::getYuvRgbaConversion_comp(Context *context,
 {
     return GetShader(context, mYuvRgbaConversion_comp_shaders, kYuvRgbaConversion_comp_shaders,
                      ArraySize(kYuvRgbaConversion_comp_shaders), shaderFlags, shaderOut);
+}
+
+angle::Result ShaderLibrary::getYuvRgbaConversion_frag(Context *context,
+                                                       uint32_t shaderFlags,
+                                                       RefCounted<ShaderAndSerial> **shaderOut)
+{
+    return GetShader(context, mYuvRgbaConversion_frag_shaders, kYuvRgbaConversion_frag_shaders,
+                     ArraySize(kYuvRgbaConversion_frag_shaders), shaderFlags, shaderOut);
 }
 
 }  // namespace vk

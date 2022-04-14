@@ -6278,7 +6278,7 @@ spirv::Blob OutputSPIRVTraverser::getSpirv()
     spirv::Blob result = mBuilder.getSpirv();
 
     // Validate that correct SPIR-V was generated
-    ASSERT(spirv::Validate(result));
+    // ASSERT(spirv::Validate(result));
 
 #if ANGLE_DEBUG_SPIRV_GENERATION
     // Disassemble and log the generated SPIR-V for debugging.
