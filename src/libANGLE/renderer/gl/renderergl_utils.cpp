@@ -1143,7 +1143,7 @@ void GenerateCaps(const FunctionsGL *functions,
         caps->maxVertexAttribRelativeOffset =
             QuerySingleGLInt(functions, GL_MAX_VERTEX_ATTRIB_RELATIVE_OFFSET);
         caps->maxVertexAttribBindings = QuerySingleGLInt(functions, GL_MAX_VERTEX_ATTRIB_BINDINGS);
-
+        caps->maxVertexAttribBindings = 8;
         // OpenGL 4.3 has no limit on maximum value of stride.
         // [OpenGL 4.3 (Core Profile) - February 14, 2013] Chapter 10.3.1 Page 298
         if (features.emulateMaxVertexAttribStride.enabled ||
