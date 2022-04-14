@@ -34,6 +34,24 @@
       "parentUuid": "8e750ca1_245456e7",
       "revId": "a8ab85f9353d2789452d60ce8e34ec18babf56d3",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "03ec7549_818f7ffd",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2022-04-14T18:36:54Z",
+      "side": 1,
+      "message": "Ah, right.  I had to add \"android-arm64-exp-test\" to get all the new goldens.  I triggered it again to be sure.",
+      "parentUuid": "704d1a60_26c899cf",
+      "revId": "a8ab85f9353d2789452d60ce8e34ec18babf56d3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
