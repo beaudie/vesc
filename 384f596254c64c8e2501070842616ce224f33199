@@ -16,6 +16,24 @@
       "message": "This CL fixes the `angle_wayland` target when building with chromium.\nWhen libwayland{-client,-egl} are not available in the system, `angle_wayland` uses chromium\u0027s third-party wayland GN targets instead.",
       "revId": "384f596254c64c8e2501070842616ce224f33199",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "b9cd05d1_6cb95e4d",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1528827
+      },
+      "writtenOn": "2022-04-14T16:04:59Z",
+      "side": 1,
+      "message": "I also included this CL (https://chromium-review.googlesource.com/c/angle/angle/+/3583985) here, as it is a trivial fix.",
+      "parentUuid": "0b1092e5_737aa557",
+      "revId": "384f596254c64c8e2501070842616ce224f33199",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
