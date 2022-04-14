@@ -215,7 +215,6 @@ std::unique_ptr<LinkEvent> ProgramVk::link(const gl::Context *context,
     linkResources(resources);
 
     reset(contextVk);
-    mExecutable.clearVariableInfoMap();
 
     // Gather variable info and compiled SPIR-V binaries.
     gl::ShaderMap<const angle::spirv::Blob *> spirvBlobs;
