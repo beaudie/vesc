@@ -33,6 +33,24 @@
       "message": "You need to bind framebuffer 0 before this line. You should also call EXPECT_PIXEL_COLOR_EQ so the clear is flushed (otherwise it\u0027s deferred) and makes the render pass full-area despite the scissor.",
       "revId": "78b58cbcdfe256e8aa396d53518e721db35d5285",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "f9fd0738_8c784c14",
+        "filename": "src/tests/gl_tests/VulkanPerformanceCounterTest.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 4402,
+      "author": {
+        "id": 1525982
+      },
+      "writtenOn": "2022-04-14T03:33:59Z",
+      "side": 1,
+      "message": "Thanks! Updated.",
+      "parentUuid": "36114d30_4c18ef35",
+      "revId": "78b58cbcdfe256e8aa396d53518e721db35d5285",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
