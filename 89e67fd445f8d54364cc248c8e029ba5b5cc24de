@@ -16,6 +16,23 @@
       "message": "Hm, it looks like all the negative images are making it through on the CV.",
       "revId": "89e67fd445f8d54364cc248c8e029ba5b5cc24de",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "1339e63b_2b84735f",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2022-04-14T21:39:52Z",
+      "side": 1,
+      "message": "I think we can land this.  The bot stuff was quite weird.",
+      "revId": "89e67fd445f8d54364cc248c8e029ba5b5cc24de",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
