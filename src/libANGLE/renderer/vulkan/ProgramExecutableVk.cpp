@@ -305,35 +305,43 @@ std::unique_ptr<rx::LinkEvent> ProgramExecutableVk::load(ContextVk *contextVk,
 
     for (gl::ShaderType shaderType : gl::AllShaderTypes())
     {
+        size_t variableInfoMapSize = stream->readInt<size_t>();
+
+        for (size_t i = 0; i < variableInfoMapSize; ++i)
+        {
+            const std::string variableName  = stream->readString();
+            ShaderVariableType variableType = stream->readEnum<ShaderVariableType>();
+            ShaderInterfaceVariableInfo &info =
+                mVariableInfoMap.add(shaderType, variableType, variableName);
+
+            info.descriptorSet = stream->readInt<uint32_t>();
+            info.binding       = stream->readInt<uint32_t>();
+            info.location      = stream->readInt<uint32_t>();
+            info.component     = stream->readInt<uint32_t>();
+            info.index         = stream->readInt<uint32_t>();
+            // PackedEnumBitSet uses uint8_t
+            info.activeStages = gl::ShaderBitSet(stream->readInt<uint8_t>());
+            LoadShaderInterfaceVariableXfbInfo(stream, &info.xfb);
+            info.fieldXfb.resize(stream->readInt<size_t>());
+            for (ShaderInterfaceVariableXfbInfo &xfb : info.fieldXfb)
+            {
+                LoadShaderInterfaceVariableXfbInfo(stream, &xfb);
+            }
+            info.useRelaxedPrecision     = stream->readBool();
+            info.varyingIsInput          = stream->readBool();
+            info.varyingIsOutput         = stream->readBool();
+            info.attributeComponentCount = stream->readInt<uint8_t>();
+            info.attributeLocationCount  = stream->readInt<uint8_t>();
+            info.isDuplicate             = stream->readBool();
+        }
         for (ShaderVariableType variableType : angle::AllEnums<ShaderVariableType>())
         {
-            size_t variableInfoMapSize = stream->readInt<size_t>();
-
-            for (size_t i = 0; i < variableInfoMapSize; ++i)
+            uint32_t resourceMapSize = stream->readInt<uint32_t>();
+            for (uint32_t resourceIndex = 0; resourceIndex < resourceMapSize; ++resourceIndex)
             {
-                const std::string variableName = stream->readString();
-                ShaderInterfaceVariableInfo &info =
-                    mVariableInfoMap.add(shaderType, variableType, variableName);
-
-                info.descriptorSet = stream->readInt<uint32_t>();
-                info.binding       = stream->readInt<uint32_t>();
-                info.location      = stream->readInt<uint32_t>();
-                info.component     = stream->readInt<uint32_t>();
-                info.index         = stream->readInt<uint32_t>();
-                // PackedEnumBitSet uses uint8_t
-                info.activeStages = gl::ShaderBitSet(stream->readInt<uint8_t>());
-                LoadShaderInterfaceVariableXfbInfo(stream, &info.xfb);
-                info.fieldXfb.resize(stream->readInt<size_t>());
-                for (ShaderInterfaceVariableXfbInfo &xfb : info.fieldXfb)
-                {
-                    LoadShaderInterfaceVariableXfbInfo(stream, &xfb);
-                }
-                info.useRelaxedPrecision     = stream->readBool();
-                info.varyingIsInput          = stream->readBool();
-                info.varyingIsOutput         = stream->readBool();
-                info.attributeComponentCount = stream->readInt<uint8_t>();
-                info.attributeLocationCount  = stream->readInt<uint8_t>();
-                info.isDuplicate             = stream->readBool();
+                uint32_t variableIndex = stream->readInt<uint32_t>();
+                mVariableInfoMap.mapIndexedResource(shaderType, variableType, resourceIndex,
+                                                    variableIndex);
             }
         }
     }
@@ -373,36 +381,49 @@ std::unique_ptr<rx::LinkEvent> ProgramExecutableVk::load(ContextVk *contextVk,
 
 void ProgramExecutableVk::save(gl::BinaryOutputStream *stream)
 {
+    const gl::ShaderMap<ShaderInterfaceVariableInfoMap::VariableTypeToIndexMap>
+        &indexedResourceMap = mVariableInfoMap.getIndexedResourceMap();
     for (gl::ShaderType shaderType : gl::AllShaderTypes())
     {
+        stream->writeInt(mVariableInfoMap.variableCount(shaderType));
+        for (const auto &it : mVariableInfoMap.getIterator(shaderType))
+        {
+            const std::string &name          = it.first;
+            const TypeAndIndex &typeAndIndex = it.second;
+            const ShaderInterfaceVariableInfo &info =
+                mVariableInfoMap.getVariableByName(shaderType, name);
+
+            stream->writeString(name);
+            stream->writeEnum(typeAndIndex.variableType);
+            stream->writeInt(info.descriptorSet);
+            stream->writeInt(info.binding);
+            stream->writeInt(info.location);
+            stream->writeInt(info.component);
+            stream->writeInt(info.index);
+            // PackedEnumBitSet uses uint8_t
+            stream->writeInt(info.activeStages.bits());
+            SaveShaderInterfaceVariableXfbInfo(info.xfb, stream);
+            stream->writeInt(info.fieldXfb.size());
+            for (const ShaderInterfaceVariableXfbInfo &xfb : info.fieldXfb)
+            {
+                SaveShaderInterfaceVariableXfbInfo(xfb, stream);
+            }
+            stream->writeBool(info.useRelaxedPrecision);
+            stream->writeBool(info.varyingIsInput);
+            stream->writeBool(info.varyingIsOutput);
+            stream->writeInt(info.attributeComponentCount);
+            stream->writeInt(info.attributeLocationCount);
+            stream->writeBool(info.isDuplicate);
+        }
         for (ShaderVariableType variableType : angle::AllEnums<ShaderVariableType>())
         {
-            stream->writeInt(mVariableInfoMap.variableCount(shaderType, variableType));
-            for (const auto &it : mVariableInfoMap.getIterator(shaderType, variableType))
+            const ShaderInterfaceVariableInfoMap::ResourceIndexMap &resourceIndexMap =
+                indexedResourceMap[shaderType][variableType];
+            stream->writeInt(static_cast<uint32_t>(resourceIndexMap.size()));
+            for (uint32_t resourceIndex = 0; resourceIndex < resourceIndexMap.size();
+                 ++resourceIndex)
             {
-                const std::string &name                 = it.first;
-                const ShaderInterfaceVariableInfo &info = it.second;
-
-                stream->writeString(name);
-                stream->writeInt(info.descriptorSet);
-                stream->writeInt(info.binding);
-                stream->writeInt(info.location);
-                stream->writeInt(info.component);
-                stream->writeInt(info.index);
-                // PackedEnumBitSet uses uint8_t
-                stream->writeInt(info.activeStages.bits());
-                SaveShaderInterfaceVariableXfbInfo(info.xfb, stream);
-                stream->writeInt(info.fieldXfb.size());
-                for (const ShaderInterfaceVariableXfbInfo &xfb : info.fieldXfb)
-                {
-                    SaveShaderInterfaceVariableXfbInfo(xfb, stream);
-                }
-                stream->writeBool(info.useRelaxedPrecision);
-                stream->writeBool(info.varyingIsInput);
-                stream->writeBool(info.varyingIsOutput);
-                stream->writeInt(info.attributeComponentCount);
-                stream->writeInt(info.attributeLocationCount);
-                stream->writeBool(info.isDuplicate);
+                stream->writeInt(resourceIndexMap[resourceIndex]);
             }
         }
     }
@@ -538,7 +559,6 @@ angle::Result ProgramExecutableVk::allocateDescriptorSetAndGetInfo(
 }
 
 void ProgramExecutableVk::addInterfaceBlockDescriptorSetDesc(
-    const gl::ProgramExecutable &glExecutable,
     const std::vector<gl::InterfaceBlock> &blocks,
     gl::ShaderType shaderType,
     ShaderVariableType variableType,
@@ -556,8 +576,8 @@ void ProgramExecutableVk::addInterfaceBlockDescriptorSetDesc(
             continue;
         }
 
-        const ShaderInterfaceVariableInfo &info = mVariableInfoMap.getIndexedVariableInfo(
-            glExecutable, shaderType, variableType, bufferIndex);
+        const ShaderInterfaceVariableInfo &info =
+            mVariableInfoMap.getIndexedVariableInfo(shaderType, variableType, bufferIndex);
         if (info.isDuplicate)
         {
             continue;
@@ -630,7 +650,7 @@ void ProgramExecutableVk::addImageDescriptorSetDesc(const gl::ProgramExecutable 
             }
 
             const ShaderInterfaceVariableInfo &info = mVariableInfoMap.getIndexedVariableInfo(
-                executable, shaderType, ShaderVariableType::Image, imageIndex);
+                shaderType, ShaderVariableType::Image, imageIndex);
             if (info.isDuplicate)
             {
                 continue;
@@ -662,7 +682,7 @@ void ProgramExecutableVk::addInputAttachmentDescriptorSetDesc(
     }
 
     const ShaderInterfaceVariableInfo &baseInfo =
-        mVariableInfoMap.getFramebufferFetchInfo(executable, shaderType);
+        mVariableInfoMap.getFramebufferFetchInfo(shaderType);
     if (baseInfo.isDuplicate)
     {
         return;
@@ -722,7 +742,7 @@ angle::Result ProgramExecutableVk::addTextureDescriptorSetDesc(
             }
 
             const ShaderInterfaceVariableInfo &info = mVariableInfoMap.getIndexedVariableInfo(
-                executable, shaderType, ShaderVariableType::Texture, textureIndex);
+                shaderType, ShaderVariableType::Texture, textureIndex);
             if (info.isDuplicate)
             {
                 continue;
@@ -1070,11 +1090,11 @@ angle::Result ProgramExecutableVk::createPipelineLayout(
 
     for (gl::ShaderType shaderType : linkedShaderStages)
     {
-        addInterfaceBlockDescriptorSetDesc(glExecutable, glExecutable.getUniformBlocks(),
-                                           shaderType, ShaderVariableType::UniformBuffer,
+        addInterfaceBlockDescriptorSetDesc(glExecutable.getUniformBlocks(), shaderType,
+                                           ShaderVariableType::UniformBuffer,
                                            mUniformBufferDescriptorType, &resourcesSetDesc);
-        addInterfaceBlockDescriptorSetDesc(glExecutable, glExecutable.getShaderStorageBlocks(),
-                                           shaderType, ShaderVariableType::ShaderStorageBuffer,
+        addInterfaceBlockDescriptorSetDesc(glExecutable.getShaderStorageBlocks(), shaderType,
+                                           ShaderVariableType::ShaderStorageBuffer,
                                            kStorageBufferDescriptorType, &resourcesSetDesc);
         addAtomicCounterBufferDescriptorSetDesc(glExecutable.getAtomicCounterBuffers(), shaderType,
                                                 &resourcesSetDesc);
@@ -1247,7 +1267,6 @@ angle::Result ProgramExecutableVk::updateBuffersDescriptorSet(
     gl::ShaderType shaderType,
     const vk::DescriptorSetDesc &shaderBuffersDesc,
     const gl::BufferVector &buffers,
-    const gl::ProgramExecutable &glExecutable,
     const std::vector<gl::InterfaceBlock> &blocks,
     ShaderVariableType variableType,
     VkDescriptorType descriptorType,
@@ -1267,6 +1286,7 @@ angle::Result ProgramExecutableVk::updateBuffersDescriptorSet(
     ASSERT(descriptorSet != VK_NULL_HANDLE);
 
     // Write uniform or storage buffers.
+    uint32_t zeroBlockIndex = 0;
     for (uint32_t blockIndex = 0; blockIndex < blocks.size(); ++blockIndex)
     {
         const gl::InterfaceBlock &block                           = blocks[blockIndex];
@@ -1277,15 +1297,18 @@ angle::Result ProgramExecutableVk::updateBuffersDescriptorSet(
             continue;
         }
 
-        const ShaderInterfaceVariableInfo &info = mVariableInfoMap.getIndexedVariableInfo(
-            glExecutable, shaderType, variableType, blockIndex);
+        uint32_t arrayElement = block.isArray ? block.arrayElement : 0;
+        if (arrayElement == 0)
+        {
+            zeroBlockIndex = blockIndex;
+        }
+
+        const ShaderInterfaceVariableInfo &info =
+            mVariableInfoMap.getIndexedVariableInfo(shaderType, variableType, zeroBlockIndex);
         if (info.isDuplicate)
         {
             continue;
         }
-
-        uint32_t binding      = info.binding;
-        uint32_t arrayElement = block.isArray ? block.arrayElement : 0;
 
         if (bufferBinding.get() == nullptr)
         {
@@ -1296,7 +1319,7 @@ angle::Result ProgramExecutableVk::updateBuffersDescriptorSet(
 
                 emptyBuffer->retainReadOnly(resourceUseList);
                 WriteBufferDescriptorSetBinding(*emptyBuffer, 0, emptyBuffer->getSize(),
-                                                descriptorSet, descriptorType, binding,
+                                                descriptorSet, descriptorType, info.binding,
                                                 arrayElement, 0, &bufferInfo, &writeInfo);
             }
             if (IsDynamicDescriptor(descriptorType))
@@ -1327,8 +1350,8 @@ angle::Result ProgramExecutableVk::updateBuffersDescriptorSet(
             VkDeviceSize offset =
                 IsDynamicDescriptor(descriptorType) ? 0 : bufferBinding.getOffset();
             WriteBufferDescriptorSetBinding(bufferHelper, offset, size, descriptorSet,
-                                            descriptorType, binding, arrayElement, 0, &bufferInfo,
-                                            &writeInfo);
+                                            descriptorType, info.binding, arrayElement, 0,
+                                            &bufferInfo, &writeInfo);
         }
         if (IsDynamicDescriptor(descriptorType))
         {
@@ -1461,7 +1484,7 @@ angle::Result ProgramExecutableVk::updateImagesDescriptorSet(
         uint32_t arraySize   = static_cast<uint32_t>(imageBinding.boundImageUnits.size());
 
         const ShaderInterfaceVariableInfo &info = mVariableInfoMap.getIndexedVariableInfo(
-            executable, shaderType, ShaderVariableType::Image, imageIndex);
+            shaderType, ShaderVariableType::Image, imageIndex);
         if (info.isDuplicate)
         {
             continue;
@@ -1600,12 +1623,11 @@ angle::Result ProgramExecutableVk::updateShaderResourcesDescriptorSet(
     {
         ANGLE_TRY(updateBuffersDescriptorSet(
             contextVk, updateBuilder, emptyBuffer, resourceUseList, shaderType, shaderBuffersDesc,
-            uniformBuffers, *executable, executable->getUniformBlocks(),
-            ShaderVariableType::UniformBuffer, mUniformBufferDescriptorType,
-            limits.maxUniformBufferRange, cacheHit));
+            uniformBuffers, executable->getUniformBlocks(), ShaderVariableType::UniformBuffer,
+            mUniformBufferDescriptorType, limits.maxUniformBufferRange, cacheHit));
         ANGLE_TRY(updateBuffersDescriptorSet(
             contextVk, updateBuilder, emptyBuffer, resourceUseList, shaderType, shaderBuffersDesc,
-            storageBuffers, *executable, executable->getShaderStorageBlocks(),
+            storageBuffers, executable->getShaderStorageBlocks(),
             ShaderVariableType::ShaderStorageBuffer, kStorageBufferDescriptorType,
             limits.maxStorageBufferRange, cacheHit));
         ANGLE_TRY(updateAtomicCounterBuffersDescriptorSet(
@@ -1644,7 +1666,7 @@ angle::Result ProgramExecutableVk::updateInputAttachmentDescriptorSet(
     const gl::LinkedUniform &baseInputAttachment = uniforms.at(baseUniformIndex);
 
     const ShaderInterfaceVariableInfo &baseInfo =
-        mVariableInfoMap.getFramebufferFetchInfo(executable, shaderType);
+        mVariableInfoMap.getFramebufferFetchInfo(shaderType);
     if (baseInfo.isDuplicate)
     {
         return angle::Result::Continue;
@@ -1787,8 +1809,11 @@ angle::Result ProgramExecutableVk::updateTexturesDescriptorSet(
                 continue;
             }
 
+            uint32_t arrayOffset = samplerUniform.outerArrayOffset;
+            uint32_t arraySize   = static_cast<uint32_t>(samplerBinding.boundTextureUnits.size());
+
             const ShaderInterfaceVariableInfo &info = mVariableInfoMap.getIndexedVariableInfo(
-                executable, shaderType, ShaderVariableType::Texture, textureIndex);
+                shaderType, ShaderVariableType::Texture, textureIndex);
             if (info.isDuplicate)
             {
                 continue;
@@ -1814,9 +1839,6 @@ angle::Result ProgramExecutableVk::updateTexturesDescriptorSet(
                     &mPerfCounters.cacheStats[DescriptorSetIndex::Texture]);
             }
             ASSERT(descriptorSet != VK_NULL_HANDLE);
-
-            uint32_t arrayOffset = samplerUniform.outerArrayOffset;
-            uint32_t arraySize   = static_cast<uint32_t>(samplerBinding.boundTextureUnits.size());
 
             VkWriteDescriptorSet *writeInfos = updateBuilder->allocWriteDescriptorSets(arraySize);
 

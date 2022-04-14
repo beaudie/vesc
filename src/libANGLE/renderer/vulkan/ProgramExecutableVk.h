@@ -256,8 +256,7 @@ class ProgramExecutableVk
                                                   vk::ResourceUseList *resourceUseList,
                                                   DescriptorSetIndex descriptorSetIndex,
                                                   bool *newPoolAllocatedOut);
-    void addInterfaceBlockDescriptorSetDesc(const gl::ProgramExecutable &glExecutable,
-                                            const std::vector<gl::InterfaceBlock> &blocks,
+    void addInterfaceBlockDescriptorSetDesc(const std::vector<gl::InterfaceBlock> &blocks,
                                             gl::ShaderType shaderType,
                                             ShaderVariableType variableType,
                                             VkDescriptorType descType,
@@ -302,7 +301,6 @@ class ProgramExecutableVk
                                              gl::ShaderType shaderType,
                                              const vk::DescriptorSetDesc &shaderBuffersDesc,
                                              const gl::BufferVector &buffers,
-                                             const gl::ProgramExecutable &glExecutable,
                                              const std::vector<gl::InterfaceBlock> &blocks,
                                              ShaderVariableType variableType,
                                              VkDescriptorType descriptorType,
