@@ -256,6 +256,16 @@
                 "non-IOSurface texture"
             ],
             "issue": "http://anglebug.com/7117"
+        },
+
+        {
+            "name": "copyTextureToBufferForReadOptimization",
+            "display_name": "copy_texture_to_buffer_for_read_optimization",
+            "category": "Workarounds",
+            "description": [
+                "some GPUs are faster to read a texture by first copying the texture to a buffer"
+            ],
+            "issue": "http://anglebug.com/7117"
         }
     ]
 }
