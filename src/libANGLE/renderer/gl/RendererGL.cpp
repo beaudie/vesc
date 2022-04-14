@@ -276,6 +276,8 @@ void RendererGL::generateCaps(gl::Caps *outCaps,
     nativegl_gl::GenerateCaps(mFunctions.get(), mFeatures, outCaps, outTextureCaps, outExtensions,
                               outLimitations, &mMaxSupportedESVersion,
                               &mMultiviewImplementationType);
+    outCaps->maxVertexAttribBindings = 8;
+    outCaps->maxVertexAttributes = 8;
 }
 
 GLint RendererGL::getGPUDisjoint()
