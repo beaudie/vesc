@@ -411,6 +411,30 @@
       },
       "revId": "ff6761eabc74e7b13935c8c4161970c377936586",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "f79a5a90_12e9a190",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 2635,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-04-14T15:29:41Z",
+      "side": 1,
+      "message": "Actually I\u0027m not sure you implemented Charlie\u0027s suggestion correctly. You probably need to create a `vk::ResourceUseList` right here, fill it in with the buffer helpers\u0027 uses, then pass it on to the share group via `acquireResourceUseList`. In the previous patchsets, I see you\u0027ve been passing some ResourceUseList from the context, which is not correct.",
+      "parentUuid": "22a560a1_3d116f5b",
+      "range": {
+        "startLine": 2635,
+        "startChar": 38,
+        "endLine": 2635,
+        "endChar": 53
+      },
+      "revId": "ff6761eabc74e7b13935c8c4161970c377936586",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
