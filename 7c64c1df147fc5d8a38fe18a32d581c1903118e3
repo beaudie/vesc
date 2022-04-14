@@ -20,6 +20,29 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "9759ef6b_6ba1336a",
+        "filename": "src/libANGLE/Context.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 9296,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2022-04-14T17:03:47Z",
+      "side": 1,
+      "message": "nit: don\u0027t need auto here",
+      "range": {
+        "startLine": 9296,
+        "startChar": 4,
+        "endLine": 9296,
+        "endChar": 9
+      },
+      "revId": "7c64c1df147fc5d8a38fe18a32d581c1903118e3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "cf55a06c_ec6b7d54",
         "filename": "src/libANGLE/angletypes.h",
         "patchSetId": 2
