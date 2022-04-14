@@ -43,6 +43,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "45a47878_25be91e5",
+        "filename": "src/libANGLE/renderer/ShaderInterfaceVariableInfoMap.cpp",
+        "patchSetId": 21
+      },
+      "lineNbr": 166,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2022-04-14T18:05:08Z",
+      "side": 1,
+      "message": "No point, they\u0027re only used in binary saving.",
+      "parentUuid": "b77c73f3_5f61fe42",
+      "range": {
+        "startLine": 150,
+        "startChar": 0,
+        "endLine": 166,
+        "endChar": 1
+      },
+      "revId": "b28ca578e55d5a7ee2d2237fbf6a3040d84508c6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "0119991b_0add1ca6",
         "filename": "src/libANGLE/renderer/vulkan/ProgramExecutableVk.cpp",
         "patchSetId": 21
@@ -54,6 +78,30 @@
       "writtenOn": "2022-04-14T18:01:21Z",
       "side": 1,
       "message": "What happened here?",
+      "range": {
+        "startLine": 1323,
+        "startChar": 0,
+        "endLine": 1327,
+        "endChar": 9
+      },
+      "revId": "b28ca578e55d5a7ee2d2237fbf6a3040d84508c6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "c4d6fbfa_31e443ea",
+        "filename": "src/libANGLE/renderer/vulkan/ProgramExecutableVk.cpp",
+        "patchSetId": 21
+      },
+      "lineNbr": 1327,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2022-04-14T18:05:08Z",
+      "side": 1,
+      "message": "Will remove, it\u0027s not necessary anymore I think.",
+      "parentUuid": "0119991b_0add1ca6",
       "range": {
         "startLine": 1323,
         "startChar": 0,
