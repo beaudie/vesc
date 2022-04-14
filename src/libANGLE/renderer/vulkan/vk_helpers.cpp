@@ -5324,6 +5324,7 @@ angle::Result ImageHelper::initLayerImageViewImpl(
     const VkImageViewUsageCreateInfo *imageViewUsageCreateInfo,
     const gl::SamplerState *samplerState) const
 {
+    ANGLE_LOG(ERR) << __func__ << " extent " << mExtents.width << " " << mExtents.height;
     VkImageViewCreateInfo viewInfo = {};
     viewInfo.sType                 = VK_STRUCTURE_TYPE_IMAGE_VIEW_CREATE_INFO;
     viewInfo.flags                 = 0;
@@ -5387,6 +5388,7 @@ angle::Result ImageHelper::initLayerImageViewImpl(
             ANGLE_LOG(ERR) << __func__ << " has external format, set format undefiend";
             viewInfo.format = VK_FORMAT_UNDEFINED;
         }
+        ANGLE_LOG(ERR) << __func__ << " viewInfo pNext ? " << (viewInfo.pNext != nullptr);
     }
     ANGLE_VK_TRY(context, imageViewOut->init(context->getDevice(), viewInfo));
     return angle::Result::Continue;
@@ -8497,7 +8499,7 @@ angle::Result ImageHelper::readPixels(ContextVk *contextVk,
             gl::Extents(area.width, area.height, 1), angle::FormatID::R8G8B8A8_UNORM,
             angle::FormatID::R8G8B8A8_UNORM,
             VK_IMAGE_USAGE_TRANSFER_SRC_BIT | VK_IMAGE_USAGE_TRANSFER_DST_BIT |
-                VK_IMAGE_USAGE_STORAGE_BIT,
+                VK_IMAGE_USAGE_COLOR_ATTACHMENT_BIT,
             1));
         resolvedImage.get().retain(&contextVk->getResourceUseList());
     }
@@ -8523,8 +8525,10 @@ angle::Result ImageHelper::readPixels(ContextVk *contextVk,
 
     if (isAndroidExternalImage)
     {
-        access.onImageComputeShaderWrite(gl::LevelIndex(0), 1, 0, 1, layoutChangeAspectFlags,
-                                         &resolvedImage.get());
+        // access.onImageComputeShaderWrite(gl::LevelIndex(0), 1, 0, 1, layoutChangeAspectFlags,
+        //                                  &resolvedImage.get());
+        access.onImageTransferWrite(gl::LevelIndex(0), 1, 0, 1, layoutChangeAspectFlags,
+                                    &resolvedImage.get());
     }
 
     OutsideRenderPassCommandBuffer *commandBuffer;
