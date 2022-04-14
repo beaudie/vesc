@@ -387,6 +387,30 @@
       },
       "revId": "ff6761eabc74e7b13935c8c4161970c377936586",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "22a560a1_3d116f5b",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 2635,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-04-14T15:19:07Z",
+      "side": 1,
+      "message": "Does this happen if you rebase on this change: https://chromium-review.googlesource.com/c/angle/angle/+/3582979?\n\nIt may very well be that this is failing due to the bug I mentioned in that other change.",
+      "parentUuid": "ae9e6f4a_f7a0688a",
+      "range": {
+        "startLine": 2635,
+        "startChar": 38,
+        "endLine": 2635,
+        "endChar": 53
+      },
+      "revId": "ff6761eabc74e7b13935c8c4161970c377936586",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
