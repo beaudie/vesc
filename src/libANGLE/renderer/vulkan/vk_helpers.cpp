@@ -5286,6 +5286,7 @@ angle::Result ImageHelper::initLayerImageViewImpl(
 
     if (swizzleMap.swizzleRequired() && !mYcbcrConversionDesc.valid())
     {
+        ANGLE_LOG(ERR) << __func__ << "View swizzle: required and no ycbcr conversion found";
         viewInfo.components.r = gl_vk::GetSwizzle(swizzleMap.swizzleRed);
         viewInfo.components.g = gl_vk::GetSwizzle(swizzleMap.swizzleGreen);
         viewInfo.components.b = gl_vk::GetSwizzle(swizzleMap.swizzleBlue);
@@ -5293,6 +5294,8 @@ angle::Result ImageHelper::initLayerImageViewImpl(
     }
     else
     {
+        ANGLE_LOG(ERR) << __func__
+                       << "View swizzle: either not required or ycbcr conversion exists";
         viewInfo.components.r = VK_COMPONENT_SWIZZLE_IDENTITY;
         viewInfo.components.g = VK_COMPONENT_SWIZZLE_IDENTITY;
         viewInfo.components.b = VK_COMPONENT_SWIZZLE_IDENTITY;
@@ -5309,6 +5312,7 @@ angle::Result ImageHelper::initLayerImageViewImpl(
     VkSamplerYcbcrConversionInfo yuvConversionInfo = {};
     if (mYcbcrConversionDesc.valid())
     {
+        ANGLE_LOG(ERR) << __func__ << " has ycbcr conversion";
         // VUID-VkSamplerCreateInfo-minFilter VkCreateSampler:
         // VK_FORMAT_FEATURE_SAMPLED_IMAGE_YCBCR_CONVERSION_SEPARATE_RECONSTRUCTION_FILTER_BIT
         // specifies that the format can have different chroma, min, and mag filters. However,
@@ -5333,6 +5337,7 @@ angle::Result ImageHelper::initLayerImageViewImpl(
         // If image has an external format, format must be VK_FORMAT_UNDEFINED
         if (mYcbcrConversionDesc.mIsExternalFormat)
         {
+            ANGLE_LOG(ERR) << __func__ << " has external format, set format undefiend";
             viewInfo.format = VK_FORMAT_UNDEFINED;
         }
     }
@@ -5889,6 +5894,7 @@ void ImageHelper::clearColor(const VkClearColorValue &color,
                              uint32_t layerCount,
                              OutsideRenderPassCommandBuffer *commandBuffer)
 {
+    ANGLE_LOG(ERR) << "run clearColorImage";
     ASSERT(valid());
 
     ASSERT(mCurrentLayout == ImageLayout::TransferDst ||
