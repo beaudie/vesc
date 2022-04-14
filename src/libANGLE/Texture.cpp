@@ -195,7 +195,7 @@ GLuint TextureState::getMipmapMaxLevel() const
     if (mType == TextureType::_3D)
     {
         const int maxDim  = std::max(std::max(baseImageDesc.size.width, baseImageDesc.size.height),
-                                    baseImageDesc.size.depth);
+                                     baseImageDesc.size.depth);
         expectedMipLevels = static_cast<GLuint>(log2(maxDim));
     }
     else
@@ -1798,15 +1798,16 @@ angle::Result Texture::bindTexImageFromSurface(Context *context, egl::Surface *s
         ANGLE_TRY(releaseTexImageFromSurface(context));
     }
 
-    ANGLE_TRY(mTexture->bindTexImage(context, surface));
-    mBoundSurface = surface;
-
     // Set the image info to the size and format of the surface
+    mBoundSurface = surface;
     ASSERT(mState.mType == TextureType::_2D || mState.mType == TextureType::Rectangle);
     Extents size(surface->getWidth(), surface->getHeight(), 1);
     ImageDesc desc(size, surface->getBindTexImageFormat(), InitState::Initialized);
     mState.setImageDesc(NonCubeTextureTypeToTarget(mState.mType), 0, desc);
     mState.mHasProtectedContent = surface->hasProtectedContent();
+
+    ANGLE_TRY(mTexture->bindTexImage(context, surface));
+
     signalDirtyStorage(InitState::Initialized);
     return angle::Result::Continue;
 }
