@@ -2169,6 +2169,10 @@ angle::Result StateManagerGL::syncState(const gl::Context *context,
 
                 for (auto attribIndex : combinedMask)
                 {
+                    if (attribIndex >= mVertexAttribCurrentValues.size())
+                    {
+                        continue;
+                    }
                     setAttributeCurrentData(attribIndex,
                                             state.getVertexAttribCurrentValue(attribIndex));
                 }
