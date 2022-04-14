@@ -210,6 +210,24 @@
       "parentUuid": "e66ae0a3_795f5d21",
       "revId": "24a2c055ab85bf9480d89593f4914596b3252890",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "8f9b4f78_da956b75",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 7
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000050
+      },
+      "writtenOn": "2022-04-14T10:06:12Z",
+      "side": 1,
+      "message": "I understand it. And of cause Skia will not send random values, in most cases, skia will use gl correctly. But it may have some edge cases or unintended mistakes. And it is much easier to just handle it in ANGLE. And I don\u0027t see any downside of this fix.",
+      "parentUuid": "89255219_5ebd26df",
+      "revId": "24a2c055ab85bf9480d89593f4914596b3252890",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
