@@ -124,6 +124,24 @@
       "parentUuid": "6dd0f15a_70b53b7a",
       "revId": "49defe5663867296090707d809f093feda04fdf4",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "eae75657_3ff3f59e",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 10
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-04-14T17:51:10Z",
+      "side": 1,
+      "message": "\u003e BTW I don\u0027t follow what you said above, but noticed the RP can restart in the middle of dirty bits in another context- I\u0027m assuming that\u0027s what the problem is.\n\nYes that\u0027s the problem. I added the RP dirty bit here because we had a number of bugs before: https://chromium-review.googlesource.com/c/angle/angle/+/2678863\n\nThe bugs were in the form of:\n\n- dirty bit handler A writes to RP commands\n- dirty bit handler B breaks the RP and writes to newRP commands\n- dirty bit handler C breaks the RP and writes to newNewRP commands\n- ...\n\nwhich as you can imagine is a problem. The way it is now is like:\n\n- dirty bit handler B breaks the RP if needed\n- dirty bit handler C breaks the RP if needed\n\n- RP dirty bit handler creates RP if necessary\n\n- dirty bit handler A writes to RP commands\n- dirty bit handler B\u0027 writes to RP commands\n- dirty bit handler C\u0027 writes to RP commands\n- ...\n\n\u003e If we could figure out up-front if we need to restart, that would be best.\n\nMaybe, if possible at all.",
+      "parentUuid": "87dc2fd3_82c0588b",
+      "revId": "49defe5663867296090707d809f093feda04fdf4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
