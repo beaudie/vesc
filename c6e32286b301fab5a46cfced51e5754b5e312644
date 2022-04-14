@@ -181,6 +181,30 @@
       },
       "revId": "c6e32286b301fab5a46cfced51e5754b5e312644",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "d9e6cfa7_ea8482ac",
+        "filename": "src/libANGLE/renderer/gl/VertexArrayGL.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 959,
+      "author": {
+        "id": 1000050
+      },
+      "writtenOn": "2022-04-14T18:28:16Z",
+      "side": 1,
+      "message": "I see. Actually I use `case` in previous patch set. But I think it is hard to read.\n\nhttps://chromium-review.googlesource.com/c/angle/angle/+/3584632/1/src/libANGLE/renderer/gl/VertexArrayGL.cpp\n\nI will change it back.",
+      "parentUuid": "59c437fc_62f4d53d",
+      "range": {
+        "startLine": 949,
+        "startChar": 16,
+        "endLine": 959,
+        "endChar": 17
+      },
+      "revId": "c6e32286b301fab5a46cfced51e5754b5e312644",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
