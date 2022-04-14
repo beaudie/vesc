@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "64ebed78_03bc1554",
+        "filename": "src/libANGLE/renderer/vulkan/linux/wayland/WindowSurfaceVkWayland.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 32,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-04-14T03:14:25Z",
+      "side": 1,
+      "message": "Really? So the window resizing can be entirely controlled by Vulkan swapchain code?",
+      "range": {
+        "startLine": 31,
+        "startChar": 7,
+        "endLine": 32,
+        "endChar": 41
+      },
+      "revId": "263a752f236f7cba33fdebbb42ac5a4af2c415d1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
