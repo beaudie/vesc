@@ -15253,6 +15253,33 @@ void main() {
     ASSERT_GL_NO_ERROR();
 }
 
+// This shader reproduces a compilation bug found in Runescape.
+// The compiler hits the assertion `accessChain.storageClass != spv::StorageClassMax` in
+// `accessChainCollapse`. The original language version of the shader is 310 es or 320 es, but the
+// issue is reproduced independend of language verison. When using 310 es, both shaderc and glslang
+// are able to produce spirv. When decompiled to GLSL, spirv-cross the const qualifier is dropped.
+TEST_P(GLSLTest, ConstSamplerParameter)
+{
+    constexpr char kFS[] = R"(precision mediump float;
+
+uniform sampler2D samp;
+
+void sampleSampler(sampler2D s) {
+    texture2D(s, vec2(0));
+}
+
+void sampleConstSampler(const sampler2D s) {
+    sampleSampler(s);
+}
+
+void main() {
+    sampleConstSampler(samp);
+}
+)";
+    CompileShader(GL_FRAGMENT_SHADER, kFS);
+    ASSERT_GL_NO_ERROR();
+}
+
 }  // anonymous namespace
 
 ANGLE_INSTANTIATE_TEST_ES2_AND_ES3_AND(GLSLTest,

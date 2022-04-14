@@ -580,3 +580,6 @@
 7029 NVIDIA GLES : GLSLTest.SwizzledChainedAssignIncrement/* = SKIP
 
 7085 : VulkanPerformanceCounterTest.DepthStencilInvalidateDrawDisable/* = SKIP
+
+// Crashes shader compiler
+7205 VULKAN : GLSLTest.ConstSamplerParameter/* = SKIP
