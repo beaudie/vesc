@@ -88,6 +88,24 @@
       "parentUuid": "c413bb09_3ea693ed",
       "revId": "49defe5663867296090707d809f093feda04fdf4",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "6dd0f15a_70b53b7a",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 10
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-04-14T05:15:19Z",
+      "side": 1,
+      "message": "The bug is definitely there, but it seems impossible to trigger because of a number of band-aids currently in code. Assume the following:\n\n- Next serial is S\n- FBO has changed\n- Uniforms are dirty\n\nWhen a draw call is issued:\n\n- A uniform buffer may be allocated, retained to be tagged with S\n- A descriptor set may be allocated/retrieved from cache, retained to be tagged with S\n- Dirty bit handling closes the render pass, uniform buffer and desc set are now tagged with S. Next serial is S+1\n- Draw call is recorded in submission S+1. Uniform buffer and desc set are used in this submission without being tagged with S+1.\n\nHowever:\n\n- The uniform buffers are allocated from DynamicBuffer, and they are trimmed with `releaseInFlightBuffersToResourceUseList`. This function does a retain before releasing, which means retaining the uniform buffers above was unnecessary, or rather, this function is hacking things to workaround the bug.\n\n- The descriptor set for uniforms is cached, and not deleted until program is deleted. Note that the program can only be deleted at submission S+1 (because that\u0027s the last draw call). When that happens, the desc set is added to ContextVk\u0027s garbage list. This is later added to the garbage list to be deleted at batch S+1 in CommandQueue::submitFrame. Again, this means that the retain of the desc set was unnecessary, or rather, releasing the garbage to the current serial is working around the bug.\n\n---\n\nI was trying to trigger a bug by making these resources delete too early, which seems impossible. Not sure if there\u0027s another way to cause a symptom.\n\nI think that barring the data showing any non-negligible regression with this change, we should go ahead with this fix even if it\u0027s currently impossible to cause the original code to fail due to other hacks.",
+      "parentUuid": "637efa2f_97ac4d84",
+      "revId": "49defe5663867296090707d809f093feda04fdf4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
