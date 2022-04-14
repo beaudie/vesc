@@ -142,4 +142,5 @@ angle_vulkan_internal_shaders = [
   "shaders/gen/OverlayDraw.frag.00000000.inc",
   "shaders/gen/OverlayDraw.vert.00000000.inc",
   "shaders/gen/YuvRgbaConversion.comp.00000000.inc",
+  "shaders/gen/YuvRgbaConversion.frag.00000000.inc",
 ]
