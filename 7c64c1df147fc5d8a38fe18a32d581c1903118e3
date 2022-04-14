@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "cf55a06c_ec6b7d54",
+        "filename": "src/libANGLE/angletypes.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 1090,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2022-04-14T00:26:53Z",
+      "side": 1,
+      "message": "Will adding this default constructor lead to potential usage errors? Previously it wasn\u0027t possible to accidentally pass in a null context.\n\nWas it not possible, or undesirable, to continue to use ANGLE\u0027s UniqueObjectPointerBase class?",
+      "revId": "7c64c1df147fc5d8a38fe18a32d581c1903118e3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
