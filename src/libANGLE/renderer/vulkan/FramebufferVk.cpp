@@ -616,6 +616,8 @@ angle::Result FramebufferVk::clearImpl(const gl::Context *context,
         clearColorBuffers.reset();
     }
 
+    ANGLE_LOG(ERR) << "FramebufferVk clearWithDraw";
+
     // The most costly clear mode is when we need to mask out specific color channels or stencil
     // bits. This can only be done with a draw call.
     return clearWithDraw(contextVk, scissoredRenderArea, clearColorBuffers, clearDepthWithDraw,

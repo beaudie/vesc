@@ -520,9 +520,16 @@ class UtilsVk : angle::NonCopyable
     angle::Result ensureUnresolveResourcesInitialized(ContextVk *contextVk,
                                                       Function function,
                                                       uint32_t attachmentIndex);
-    angle::Result ensureYuvRgbaConversionResourcesInitialized(ContextVk *context);
+    angle::Result ensureYuvRgbaConversionResourcesInitialized(
+        ContextVk *contextVk,
+        const vk::YcbcrConversionDesc &ycbcrConversionDesc);
 
     angle::Result ensureSamplersInitialized(ContextVk *context);
+
+    angle::Result createSamplerWithYcbcrConversion(
+        ContextVk *context,
+        const vk::YcbcrConversionDesc &ycbcrConversionDesc,
+        vk::Sampler *outSampler);
 
     angle::Result startRenderPass(ContextVk *contextVk,
                                   vk::ImageHelper *image,
@@ -574,12 +581,22 @@ class UtilsVk : angle::NonCopyable
     vk::ShaderProgramHelper mOverlayDrawProgram;
     vk::ShaderProgramHelper
         mGenerateMipmapPrograms[vk::InternalShader::GenerateMipmap_comp::kArrayLen];
-    vk::ShaderProgramHelper mYuvRgbaConversionProgram;
 
     // Unresolve shaders are special as they are generated on the fly due to the large number of
     // combinations.
     std::unordered_map<uint32_t, vk::RefCounted<vk::ShaderAndSerial>> mUnresolveFragShaders;
     std::unordered_map<uint32_t, vk::ShaderProgramHelper> mUnresolvePrograms;
+
+    // YuvRgbaConversion shaders are specia. because the immmutble samplmer needs to be aascoaited
+    // with the ycbcr conversion object iteslf.
+    std::unordered_map<vk::YcbcrConversionDesc, vk::Sampler> mYuvRgbaConversionImmutableSamplers;
+    std::unordered_map<vk::YcbcrConversionDesc, vk::DescriptorSetLayoutPointerArray>
+        mYuvRgbaConversionDescriptorSetLayouts;
+    std::unordered_map<vk::YcbcrConversionDesc, vk::DynamicDescriptorPool>
+        mYuvRgbaConversionDescriptorPools;
+    std::unordered_map<vk::YcbcrConversionDesc, vk::BindingPointer<vk::PipelineLayout>>
+        mYuvRgbaConversionPipelineLayouts;
+    std::unordered_map<vk::YcbcrConversionDesc, vk::ShaderProgramHelper> mYuvRgbaConversionPrograms;
 
     vk::Sampler mPointSampler;
     vk::Sampler mLinearSampler;
