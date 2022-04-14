@@ -3008,6 +3008,10 @@ angle::Result TextureVk::initImage(ContextVk *contextVk,
     mCurrentBaseLevel = gl::LevelIndex(mState.getBaseLevel());
     mCurrentMaxLevel  = gl::LevelIndex(mState.getMaxLevel());
 
+    mCachedImageViewSubresourceSerialSRGBDecode = getImageViewSubresourceSerialImpl(GL_DECODE_EXT);
+    mCachedImageViewSubresourceSerialSkipDecode =
+        getImageViewSubresourceSerialImpl(GL_SKIP_DECODE_EXT);
+
     return angle::Result::Continue;
 }
 
@@ -3322,18 +3326,17 @@ void TextureVk::onSubjectStateChange(angle::SubjectIndex index, angle::SubjectMe
     onStateChange(message);
 }
 
-vk::ImageOrBufferViewSubresourceSerial TextureVk::getImageViewSubresourceSerial(
-    const gl::SamplerState &samplerState) const
+vk::ImageOrBufferViewSubresourceSerial TextureVk::getImageViewSubresourceSerialImpl(
+    GLenum srgbDecode) const
 {
     gl::LevelIndex baseLevel(mState.getEffectiveBaseLevel());
     // getMipmapMaxLevel will clamp to the max level if it is smaller than the number of mips.
     uint32_t levelCount = gl::LevelIndex(mState.getMipmapMaxLevel()) - baseLevel + 1;
 
-    const angle::Format &angleFormat = mImage->getActualFormat();
-    vk::SrgbDecodeMode srgbDecodeMode =
-        (angleFormat.isSRGB && (samplerState.getSRGBDecode() == GL_DECODE_EXT))
-            ? vk::SrgbDecodeMode::SrgbDecode
-            : vk::SrgbDecodeMode::SkipDecode;
+    const angle::Format &angleFormat  = mImage->getActualFormat();
+    vk::SrgbDecodeMode srgbDecodeMode = (angleFormat.isSRGB && (srgbDecode == GL_DECODE_EXT))
+                                            ? vk::SrgbDecodeMode::SrgbDecode
+                                            : vk::SrgbDecodeMode::SkipDecode;
     gl::SrgbOverride srgbOverrideMode =
         (!angleFormat.isSRGB && (mState.getSRGBOverride() == gl::SrgbOverride::SRGB))
             ? gl::SrgbOverride::SRGB
@@ -3502,5 +3505,4 @@ void TextureVk::stageSelfAsSubresourceUpdates(ContextVk *contextVk)
     // Make the image stage itself as updates to its levels.
     mImage->stageSelfAsSubresourceUpdates(contextVk, mImage->getLevelCount(), mRedefinedLevels);
 }
-
 }  // namespace rx
