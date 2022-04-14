@@ -1,6 +1,23 @@
 {
   "comments": [
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "a75bb26d_6a46dbe1",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-04-14T17:13:37Z",
+      "side": 1,
+      "message": "Thanks for the test. Feel free to abandon this change in favor of: https://chromium-review.googlesource.com/c/angle/angle/+/3587345",
+      "revId": "6a2e97bb75e25e1ce011698a3d8487250ec43511",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "5bb171f8_961eac60",
