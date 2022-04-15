@@ -1,0 +1,61 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "3ba32aaf_6e069646",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 3
+      },
+      "lineNbr": 9,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-04-15T02:39:31Z",
+      "side": 1,
+      "message": "Feel free to include the perf comparison results in the commit message.",
+      "revId": "552bbfefaacfcb001b75cc223ecae0afada83e98",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "163c3112_95e160b3",
+        "filename": "src/tests/perf_tests/MultisampledSwapchainResolve.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 28,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-04-15T02:39:31Z",
+      "side": 1,
+      "message": "nit: Don\u0027t set `trackGpuTime` since it\u0027s unused",
+      "revId": "552bbfefaacfcb001b75cc223ecae0afada83e98",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "54c192ea_ab3ef18a",
+        "filename": "src/tests/perf_tests/MultisampledSwapchainResolve.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 86,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-04-15T02:39:31Z",
+      "side": 1,
+      "message": "Probably can remove these. This is a simpler test than the one you copied from.",
+      "range": {
+        "startLine": 73,
+        "startChar": 0,
+        "endLine": 86,
+        "endChar": 5
+      },
+      "revId": "552bbfefaacfcb001b75cc223ecae0afada83e98",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
