@@ -112,6 +112,132 @@ class ShareGroup final : angle::NonCopyable
     ContextSet mContexts;
 };
 
+// A container that retains unreferenced EGLImages.
+class UnreferencedImageRetainer final
+{
+  public:
+    UnreferencedImageRetainer();
+    ~UnreferencedImageRetainer();
+
+    void retain(const Display *display, Image *image)
+    {
+        ASSERT(display && image);
+        if (image->isMarkedForDestroy())
+        {
+            return;
+        }
+
+        std::lock_guard<std::mutex> lock(mMutex);
+        if (!contains(image))
+        {
+            const size_t imageSize =
+                image->getWidth() * image->getHeight() * image->getFormat().info->pixelBytes;
+            evictIfNecessary(display, imageSize);
+            mTotalSize += imageSize;
+            image->addRef();
+        }
+        mCurrentSerial++;
+        mPayload[image] = mCurrentSerial;
+    }
+
+    void release(const Display *display, Image *image)
+    {
+        ASSERT(display && image);
+        std::lock_guard<std::mutex> lock(mMutex);
+        if (contains(image))
+        {
+            releaseImpl(display, image);
+        }
+    }
+
+    void clear(const Display *display)
+    {
+        ASSERT(display);
+        std::lock_guard<std::mutex> lock(mMutex);
+        for (ImageAndLastUseSerial imageAndLastUseSerial : mPayload)
+        {
+            imageAndLastUseSerial.first->release(display);
+        }
+        mPayload.clear();
+        mCurrentSerial = 0;
+        mTotalSize     = 0;
+    }
+
+  private:
+    ANGLE_INLINE bool contains(Image *image) { return mPayload.count(image) > 0; }
+
+    ANGLE_INLINE void releaseImpl(const Display *display, Image *image)
+    {
+        ASSERT(contains(image));
+        const size_t imageSize =
+            image->getWidth() * image->getHeight() * image->getFormat().info->pixelBytes;
+        mTotalSize -= imageSize;
+        image->release(display);
+        mPayload.erase(image);
+    }
+
+    ANGLE_INLINE void evictIfNecessary(const Display *display, const size_t newImageSize)
+    {
+        constexpr size_t kRetainedImageSizeThreshold = 128 * 1024 * 1024;  // 128 MB
+        if (mTotalSize + newImageSize < kRetainedImageSizeThreshold)
+        {
+            // Total size of images being tracked is within threshold.
+            return;
+        }
+
+        // Evict all images that were referenced before the median serial
+        const size_t imagesRetainedCount = mPayload.size();
+        std::vector<uint64_t> serials;
+        for (ImageAndLastUseSerial imageAndLastUseSerial : mPayload)
+        {
+            serials.push_back(imageAndLastUseSerial.second);
+        }
+
+        uint64_t medianSerial = 0;
+        size_t midPoint       = imagesRetainedCount / 2;
+        if (imagesRetainedCount % 2 != 0)
+        {
+            std::nth_element(serials.begin(), serials.begin() + midPoint, serials.end());
+            medianSerial = serials[midPoint];
+        }
+        else
+        {
+            size_t midPointMinusOne = (imagesRetainedCount - 1) / 2;
+            std::nth_element(serials.begin(), serials.begin() + midPoint, serials.end());
+            std::nth_element(serials.begin(), serials.begin() + midPointMinusOne, serials.end());
+            medianSerial = (serials[midPoint] + serials[midPointMinusOne]) / 2;
+        }
+        ASSERT(medianSerial != 0);
+
+        std::set<Image *> images;
+        for (ImageAndLastUseSerial imageAndLastUseSerial : mPayload)
+        {
+            if (imageAndLastUseSerial.second <= medianSerial)
+            {
+                images.insert(imageAndLastUseSerial.first);
+            }
+        }
+        for (Image *image : images)
+        {
+            releaseImpl(display, image);
+        }
+
+        // If all images were evicted, reset total size and serial as well.
+        if (mPayload.size() == 0)
+        {
+            mCurrentSerial = 0;
+            mTotalSize     = 0;
+        }
+    }
+
+    using ImageAndLastUseSerial = std::pair<Image *, uint64_t>;
+    std::mutex mMutex;
+    // Hash map of images and "serial" of when it was last referenced
+    angle::HashMap<Image *, uint64_t> mPayload;
+    uint64_t mCurrentSerial;
+    size_t mTotalSize;
+};
+
 // Constant coded here as a reasonable limit.
 constexpr EGLAttrib kProgramCacheSizeAbsoluteMax = 0x4000000;
 
@@ -320,6 +446,10 @@ class Display final : public LabeledObject,
                                EGLBoolean *external_only,
                                EGLint *num_modifiers);
 
+    void retainUnreferencedImage(Image *image) { mUnreferencedImageRetainer.retain(this, image); }
+    void releaseUnreferencedImage(Image *image) { mUnreferencedImageRetainer.release(this, image); }
+    void releaseAllUnreferencedImages() { mUnreferencedImageRetainer.clear(this); }
+
   private:
     Display(EGLenum platform, EGLNativeDisplayType displayId, Device *eglDevice);
 
@@ -370,6 +500,8 @@ class Display final : public LabeledObject,
     StreamSet mInvalidStreamSet;
     SurfaceSet mInvalidSurfaceSet;
     SyncSet mInvalidSyncSet;
+
+    UnreferencedImageRetainer mUnreferencedImageRetainer;
 
     bool mInitialized;
     bool mDeviceLost;

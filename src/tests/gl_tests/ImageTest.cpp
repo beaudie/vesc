@@ -1829,6 +1829,60 @@ TEST_P(ImageTest, ValidationGLEGLImageStorage)
     eglDestroyImageKHR(getEGLWindow()->getDisplay(), image2D);
 }
 
+// Test UnreferencedImageRetainer functionality
+TEST_P(ImageTest, UnreferencedImageRetainer)
+{
+    ANGLE_SKIP_TEST_IF(!hasOESExt() || !hasBaseExt() || !has2DTextureExt());
+
+    // Create the Image
+    constexpr size_t kWidth      = 3840;
+    constexpr size_t kHeight     = 2160;
+    constexpr size_t kBpp        = 4;
+    constexpr size_t kImageCount = 5;
+    EGLImageKHR image[kImageCount];
+
+    std::vector<GLubyte> data(kWidth * kHeight * kBpp, 219);
+    constexpr GLubyte kExpectedColor[] = {219, 219, 219, 219};
+    // Create an image, reference it thus unreferencing the previous one
+    {
+        for (size_t i = 0; i < kImageCount; i++)
+        {
+            // Create source texture and the EGLImage
+            GLTexture source;
+            createEGLImage2DTextureSource(kWidth, kHeight, GL_RGBA, GL_UNSIGNED_BYTE,
+                                          kDefaultAttribs, data.data(), source, &image[i]);
+            // Create the target
+            GLTexture target;
+            createEGLImageTargetTextureExternal(image[i], target);
+
+            // Expect that the target texture has the same color as the EGLImage
+            verifyResultsExternal(target, kExpectedColor);
+        }
+    }
+
+    // Go through referencing process in reverse order
+    {
+        for (int i = kImageCount - 1; i >= 0; i--)
+        {
+            // Create the target
+            GLTexture target;
+            createEGLImageTargetTextureExternal(image[i], target);
+
+            // Expect that the target texture has the same color as the EGLImage
+            verifyResultsExternal(target, kExpectedColor);
+        }
+    }
+
+    // Clean up
+    {
+        for (size_t i = 0; i < kImageCount; i++)
+        {
+            EXPECT_EGL_TRUE(eglDestroyImageKHR(getEGLWindow()->getDisplay(), image[i]));
+            ASSERT_EGL_SUCCESS();
+        }
+    }
+}
+
 TEST_P(ImageTest, Source2DTarget2D)
 {
     Source2DTarget2D_helper(kDefaultAttribs);
