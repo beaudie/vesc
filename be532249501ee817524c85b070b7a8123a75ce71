@@ -33,6 +33,23 @@
       "message": "Android test - the glClear is not flushing green to the surface.\n\nMac test - I don\u0027t know why my change would make texture color 0,0,0,0 instead of black.\n\n",
       "revId": "be532249501ee817524c85b070b7a8123a75ce71",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "548cbbf7_435e4c4b",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 11
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1359249
+      },
+      "writtenOn": "2022-04-15T17:34:57Z",
+      "side": 1,
+      "message": "I changed the OnSetSurfaceAttrib test to be just like teglMutableRenderBufferTests.cpp : MutableRenderBufferTest::iterate \n\nThat one passes. Mine only fails after glFlush still black not green. Does not pass.",
+      "revId": "be532249501ee817524c85b070b7a8123a75ce71",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
