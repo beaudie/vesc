@@ -11,6 +11,7 @@
 #include "common/debug.h"
 #include "common/utilities.h"
 #include "libANGLE/Context.h"
+#include "libANGLE/Display.h"
 #include "libANGLE/Renderbuffer.h"
 #include "libANGLE/Texture.h"
 #include "libANGLE/angletypes.h"
@@ -82,6 +83,7 @@ angle::Result ImageSibling::orphanImages(const gl::Context *context,
         ASSERT(mSourcesOf.empty());
 
         ANGLE_TRY(mTargetOf->orphanSibling(context, this));
+        context->getDisplay()->retainUnreferencedImage(mTargetOf.get());
         *outReleaseImage = mTargetOf.set(DisplayFromContext(context), nullptr);
     }
     else
@@ -287,7 +289,8 @@ Image::Image(rx::EGLImplFactory *factory,
              const AttributeMap &attribs)
     : mState(target, buffer, attribs),
       mImplementation(factory->createImage(mState, context, target, attribs)),
-      mOrphanedAndNeedsInit(false)
+      mOrphanedAndNeedsInit(false),
+      mMarkedForDestroy(false)
 {
     ASSERT(mImplementation != nullptr);
     ASSERT(buffer != nullptr);

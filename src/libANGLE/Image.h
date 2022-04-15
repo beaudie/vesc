@@ -156,6 +156,8 @@ class Image final : public RefCountObject, public LabeledObject
           ImageSibling *buffer,
           const AttributeMap &attribs);
 
+    void markForDestroy() { mMarkedForDestroy = true; }
+    bool isMarkedForDestroy() { return mMarkedForDestroy; }
     void onDestroy(const Display *display) override;
     ~Image() override;
 
@@ -202,6 +204,7 @@ class Image final : public RefCountObject, public LabeledObject
     ImageState mState;
     rx::ImageImpl *mImplementation;
     bool mOrphanedAndNeedsInit;
+    bool mMarkedForDestroy;
 };
 }  // namespace egl
 

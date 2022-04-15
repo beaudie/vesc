@@ -1829,6 +1829,55 @@ TEST_P(ImageTest, ValidationGLEGLImageStorage)
     eglDestroyImageKHR(getEGLWindow()->getDisplay(), image2D);
 }
 
+// Test UnreferencedImageRetainer functionality
+TEST_P(ImageTest, UnreferencedImageRetainer)
+{
+    ANGLE_SKIP_TEST_IF(!hasOESExt() || !hasBaseExt() || !has2DTextureExt());
+
+    // Create the Image
+    GLTexture source;
+    constexpr size_t kImageCount = 8;
+    EGLImageKHR image[kImageCount];
+
+    // Create an image and orphan the previous one
+    {
+        for (size_t i = 0; i < kImageCount; i++)
+        {
+            // Create EGLImage
+            createEGLImage2DTextureSource(1, 1, GL_RGBA, GL_UNSIGNED_BYTE, kDefaultAttribs,
+                                          kLinearColor, source, &image[i]);
+            // Create the target
+            GLTexture target;
+            createEGLImageTargetTextureExternal(image[i], target);
+
+            // Expect that the target texture has the same color as the EGLImage
+            verifyResultsExternal(target, kLinearColor);
+        }
+    }
+
+    // Go through orphaning in reverse order
+    {
+        for (int i = kImageCount - 1; i >= 0; i--)
+        {
+            // Create the target
+            GLTexture target;
+            createEGLImageTargetTextureExternal(image[i], target);
+
+            // Expect that the target texture has the same color as the EGLImage
+            verifyResultsExternal(target, kLinearColor);
+        }
+    }
+
+    // Clean up
+    {
+        for (size_t i = 0; i < kImageCount; i++)
+        {
+            EXPECT_EGL_TRUE(eglDestroyImageKHR(getEGLWindow()->getDisplay(), image[i]));
+            ASSERT_EGL_SUCCESS();
+        }
+    }
+}
+
 TEST_P(ImageTest, Source2DTarget2D)
 {
     Source2DTarget2D_helper(kDefaultAttribs);

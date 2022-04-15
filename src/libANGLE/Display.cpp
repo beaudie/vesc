@@ -640,6 +640,17 @@ void ShareGroup::release(const Display *display)
     }
 }
 
+// UnreferencedImageRetainer
+UnreferencedImageRetainer::UnreferencedImageRetainer() : mCurrentSerial(0), mTotalSize(0)
+{
+    mPayload.clear();
+}
+
+UnreferencedImageRetainer ::~UnreferencedImageRetainer()
+{
+    ASSERT(mPayload.size() == 0);
+}
+
 // DisplayState
 DisplayState::DisplayState(EGLNativeDisplayType nativeDisplayId)
     : label(nullptr), featuresAllDisabled(false), displayId(nativeDisplayId)
@@ -1158,6 +1169,9 @@ Error Display::terminate(Thread *thread, TerminateReason terminateReason)
     // Now that contexts have been destroyed, clean up any remaining invalid objects
     ANGLE_TRY(destroyInvalidEglObjects());
 
+    // Clear out mUnreferencedImageRetainer
+    mUnreferencedImageRetainer.clear(this);
+
     mConfigSet.clear();
 
     if (mDevice != nullptr && mDevice->getOwningDisplay() != nullptr)
@@ -1610,6 +1624,8 @@ void Display::destroyImageImpl(Image *image, ImageSet *images)
 {
     auto iter = images->find(image);
     ASSERT(iter != images->end());
+    (*iter)->markForDestroy();
+    releaseUnreferencedImage(*iter);
     (*iter)->release(this);
     images->erase(iter);
 }
@@ -2406,5 +2422,4 @@ Error Display::queryDmaBufModifiers(EGLint format,
                                                     num_modifiers));
     return NoError();
 }
-
 }  // namespace egl
