@@ -18,6 +18,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "9b78e7a4_80fafae1",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 3
+      },
+      "lineNbr": 9,
+      "author": {
+        "id": 1525982
+      },
+      "writtenOn": "2022-04-15T04:31:43Z",
+      "side": 1,
+      "message": "Added the wall time stats.",
+      "parentUuid": "3ba32aaf_6e069646",
+      "revId": "552bbfefaacfcb001b75cc223ecae0afada83e98",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "163c3112_95e160b3",
@@ -35,6 +53,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "1446c47a_d9cc17d4",
+        "filename": "src/tests/perf_tests/MultisampledSwapchainResolve.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 28,
+      "author": {
+        "id": 1525982
+      },
+      "writtenOn": "2022-04-15T04:31:43Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "163c3112_95e160b3",
+      "revId": "552bbfefaacfcb001b75cc223ecae0afada83e98",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "54c192ea_ab3ef18a",
@@ -48,6 +84,30 @@
       "writtenOn": "2022-04-15T02:39:31Z",
       "side": 1,
       "message": "Probably can remove these. This is a simpler test than the one you copied from.",
+      "range": {
+        "startLine": 73,
+        "startChar": 0,
+        "endLine": 86,
+        "endChar": 5
+      },
+      "revId": "552bbfefaacfcb001b75cc223ecae0afada83e98",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "ec19c47e_44317af6",
+        "filename": "src/tests/perf_tests/MultisampledSwapchainResolve.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 86,
+      "author": {
+        "id": 1525982
+      },
+      "writtenOn": "2022-04-15T04:31:43Z",
+      "side": 1,
+      "message": "Removed",
+      "parentUuid": "54c192ea_ab3ef18a",
       "range": {
         "startLine": 73,
         "startChar": 0,
