@@ -16,6 +16,23 @@
       "message": "The only affected function is Framebuffer::partialClearNeedsInit. Apparently, it was returning true for color buffers all the time because of the bug.\n\nSurprisingly, macOS/Intel/GL fails in WebGL\u0027s dEQP invalidate.format.stencil_index8. I don\u0027t have any means to debug that.",
       "revId": "6fc14498ee7b519460637d419aaa968a30308851",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "7098503a_3501d3bc",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2022-04-18T20:37:54Z",
+      "side": 1,
+      "message": "Suppressing the spurious deqp/functional/gles3/fboinvalidate/format_02.html failure in https://chromium-review.googlesource.com/c/chromium/src/+/3591632 .\n",
+      "revId": "6fc14498ee7b519460637d419aaa968a30308851",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
