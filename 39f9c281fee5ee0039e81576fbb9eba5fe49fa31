@@ -33,6 +33,24 @@
       "message": "lgtm\n\nThank you Alexey for tracking this down.\n\nProactively +2\u0027ing and CQ\u0027ing. CC\u0027ing others.\n",
       "revId": "39f9c281fee5ee0039e81576fbb9eba5fe49fa31",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "2434b152_511074b5",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1394635
+      },
+      "writtenOn": "2022-04-18T20:58:45Z",
+      "side": 1,
+      "message": "The affected run passed after the recent Chromium roll.",
+      "parentUuid": "7928aea0_b79a6ca5",
+      "revId": "39f9c281fee5ee0039e81576fbb9eba5fe49fa31",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ],
   "submitRequirementResults": [
