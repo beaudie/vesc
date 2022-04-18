@@ -16,6 +16,23 @@
       "message": "Adding Charlie as second reviewer.",
       "revId": "4fb41b933073c736bb6cab628f5d8d0d326c386b",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "e1c4a400_978465b8",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2022-04-18T20:26:29Z",
+      "side": 1,
+      "message": "Thanks for spot and fixing this. Your change is correct. These two retains was necessary before the suballocation changes. With suballocation changes, it is no longer needed.",
+      "revId": "4fb41b933073c736bb6cab628f5d8d0d326c386b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
