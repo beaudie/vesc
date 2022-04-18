@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "534d08e0_fc3d02bb",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 12
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1509302
+      },
+      "writtenOn": "2022-04-18T19:47:11Z",
+      "side": 1,
+      "message": "Something is definitely still broken, and this cl is not sufficient.\n\nMy understanding on ANGLE is limited. However, when I added mutable render buffer support for mesa gallium dri drivers, the big challenge there was to properly distinguish big GL v.s. GLES on front rendering. Because they have API level diff for front renderering, and GLES has to rely on the EGL trick to achieve front rendering. When the core GL piece is doing rendering on the front buffer, the gles part needs to seamlessly redirect things to the back buffer given that\u0027s the one used by ANGLE for front rendering.\n\nWith the current patch, I can see lines drawn on screen but flashing to all black immediately after. It seems to me one of the glFlush or eglSwapbuffers per frame are doing a clear on the shared buffer, and it\u0027s more likely the latter eglSwapbuffers based on my visual check.",
+      "revId": "cd772f2acd3b0dc36249abdc1ef518e52b87d902",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
