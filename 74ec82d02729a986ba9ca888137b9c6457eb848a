@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "26b06d57_c065643a",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2022-04-18T23:09:50Z",
+      "side": 1,
+      "message": "This one has good amount of memory savings, saves 370M for clash of clan:\nout/Release/angle_perftests --gtest_filter\u003dTracePerfTest.Run/vulkan_vsync_clash_of_clans --enable-all-trace-tests --single-process-tests --verbose --verbose-logging --local-output --num-retries 0 --fixed-test-time 30\n\nBefore: \n(As measured with adb shell dumpsys gpu --gpumem) Proc 23915 total: 1,068,449,792\nI   96.331s run_tests_on_device(1A041FQGR00253)  *RESULT TracePerf_vulkan.memory_median: vsync_clash_of_clans\u003d 1,691,744,000 sizeInBytes\nI   96.331s run_tests_on_device(1A041FQGR00253)  *RESULT TracePerf_vulkan.memory_max: vsync_clash_of_clans\u003d 1,693,788,000 sizeInBytes\n\nAfter:\n(As measured with adb shell dumpsys gpu --gpumem) Proc 23196 total: 694,640,640 (Save 374M)\nI   81.183s run_tests_on_device(1A041FQGR00253)  *RESULT TracePerf_vulkan.memory_median: vsync_clash_of_clans\u003d 1,324,716,000 sizeInBytes\t(Save 367M)\nI   81.183s run_tests_on_device(1A041FQGR00253)  *RESULT TracePerf_vulkan.memory_max: vsync_clash_of_clans\u003d 1,533,392,000 sizeInBytes\t\t(Save 160M)\n",
+      "revId": "74ec82d02729a986ba9ca888137b9c6457eb848a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
