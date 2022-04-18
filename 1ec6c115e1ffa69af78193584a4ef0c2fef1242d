@@ -1,0 +1,119 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "8a94bcad_7e6f7480",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 15
+      },
+      "lineNbr": 2465,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2022-04-18T21:46:52Z",
+      "side": 1,
+      "message": "To be consistent, you can do it like what you did for ContextVk::handleDirtyDriverUniformsBindingImpl and avoid the check here.",
+      "range": {
+        "startLine": 2463,
+        "startChar": 43,
+        "endLine": 2465,
+        "endChar": 98
+      },
+      "revId": "1ec6c115e1ffa69af78193584a4ef0c2fef1242d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "9a53385a_599fea94",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 15
+      },
+      "lineNbr": 2929,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2022-04-18T21:46:52Z",
+      "side": 1,
+      "message": "I don\u0027t think this is needed. The GPUEvent is tracked differently without going through resource list.",
+      "range": {
+        "startLine": 2929,
+        "startChar": 25,
+        "endLine": 2929,
+        "endChar": 31
+      },
+      "revId": "1ec6c115e1ffa69af78193584a4ef0c2fef1242d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "f17c6a7b_84066398",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 15
+      },
+      "lineNbr": 5803,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2022-04-18T21:46:52Z",
+      "side": 1,
+      "message": "Also to be consistent, you can do it like what you did for ContextVk::handleDirtyDriverUniformsBindingImpl and avoid the check here.",
+      "range": {
+        "startLine": 5803,
+        "startChar": 25,
+        "endLine": 5803,
+        "endChar": 40
+      },
+      "revId": "1ec6c115e1ffa69af78193584a4ef0c2fef1242d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ae2f2cc0_a224a53b",
+        "filename": "src/libANGLE/renderer/vulkan/SyncVk.cpp",
+        "patchSetId": 15
+      },
+      "lineNbr": 99,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2022-04-18T21:46:52Z",
+      "side": 1,
+      "message": "This is a bit ugly, that we call getOutsideRenderPassCommandBuffer() just to make sure it calls retain. Maybe you can just directly add it into shareGroup\u0027s resource use list instead of go through commandBufferHelper? Not sure what other\u0027s opinion on this. Same thing to the next diff in this file.",
+      "range": {
+        "startLine": 96,
+        "startChar": 4,
+        "endLine": 99,
+        "endChar": 84
+      },
+      "revId": "1ec6c115e1ffa69af78193584a4ef0c2fef1242d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "c63a486d_ce2fbc38",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 15
+      },
+      "lineNbr": 2629,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2022-04-18T21:46:52Z",
+      "side": 1,
+      "message": "Can\u0027t this just `ResourceUseList resourceUseList;` since default constrauctor is always called?",
+      "range": {
+        "startLine": 2629,
+        "startChar": 0,
+        "endLine": 2629,
+        "endChar": 56
+      },
+      "revId": "1ec6c115e1ffa69af78193584a4ef0c2fef1242d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
