@@ -33,6 +33,23 @@
       "message": "Suppressing the spurious deqp/functional/gles3/fboinvalidate/format_02.html failure in https://chromium-review.googlesource.com/c/chromium/src/+/3591632 .\n",
       "revId": "6fc14498ee7b519460637d419aaa968a30308851",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "bd04ff9e_abbf8dd5",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2022-04-18T20:40:41Z",
+      "side": 1,
+      "message": "Not sure about the flow of the suppression to ANGLE\u0027s CQ. May be necessary for Chromium to roll into ANGLE.\n",
+      "revId": "6fc14498ee7b519460637d419aaa968a30308851",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
