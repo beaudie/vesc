@@ -121,6 +121,24 @@
       "parentUuid": "858dea0b_4712a394",
       "revId": "dcb0535c54877521416004bcc88d8a0c4828984d",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "c22fed39_869d4578",
+        "filename": "src/libANGLE/renderer/metal/SurfaceMtl.mm",
+        "patchSetId": 3
+      },
+      "lineNbr": 288,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2022-04-19T17:37:37Z",
+      "side": 1,
+      "message": "I agree that we should not do a major refactor in this CL. That can come later once the test is passing.\n\nBy the way - is there a test that\u0027s passing now with this change? If so could you unsuppress it?",
+      "parentUuid": "9675cfd3_7bc13a7a",
+      "revId": "dcb0535c54877521416004bcc88d8a0c4828984d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
