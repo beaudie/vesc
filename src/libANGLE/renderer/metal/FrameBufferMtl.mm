@@ -696,13 +696,12 @@ RenderTargetMtl *FramebufferMtl::getColorReadRenderTarget(const gl::Context *con
 
     if (mBackbuffer)
     {
-        bool isNewDrawable = false;
-        if (IsError(mBackbuffer->ensureCurrentDrawableObtained(context, &isNewDrawable)))
+        if (IsError(mBackbuffer->ensureCurrentDrawableObtained(context)))
         {
             return nullptr;
         }
 
-        if (isNewDrawable && mBackbuffer->hasRobustResourceInit())
+        if (mBackbuffer->hasRobustResourceInit())
         {
             (void)mBackbuffer->initializeContents(context, gl::ImageIndex::Make2D(0));
         }
@@ -766,13 +765,12 @@ mtl::RenderCommandEncoder *FramebufferMtl::ensureRenderPassStarted(const gl::Con
         // Backbuffer might obtain new drawable, which means it might change the
         // the native texture used as the target of the render pass.
         // We need to call this before creating render encoder.
-        bool isNewDrawable;
-        if (IsError(mBackbuffer->ensureCurrentDrawableObtained(context, &isNewDrawable)))
+        if (IsError(mBackbuffer->ensureCurrentDrawableObtained(context)))
         {
             return nullptr;
         }
 
-        if (isNewDrawable && mBackbuffer->hasRobustResourceInit())
+        if (mBackbuffer->hasRobustResourceInit())
         {
             // Apply robust resource initialization on newly obtained drawable.
             (void)mBackbuffer->initializeContents(context, gl::ImageIndex::Make2D(0));
