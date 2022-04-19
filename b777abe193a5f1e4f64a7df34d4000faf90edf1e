@@ -124,6 +124,24 @@
       "parentUuid": "c415dcd8_8ca668f6",
       "revId": "b777abe193a5f1e4f64a7df34d4000faf90edf1e",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "6fb87e1c_d908dd04",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2022-04-19T15:43:32Z",
+      "side": 1,
+      "message": "Looks correct, but I am still curious if there\u0027s a way to do this without two queries.",
+      "parentUuid": "180c2a43_5e7b4038",
+      "revId": "b777abe193a5f1e4f64a7df34d4000faf90edf1e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
