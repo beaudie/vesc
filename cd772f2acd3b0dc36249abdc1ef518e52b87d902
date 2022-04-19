@@ -16,6 +16,24 @@
       "message": "Something is definitely still broken, and this cl is not sufficient.\n\nMy understanding on ANGLE is limited. However, when I added mutable render buffer support for mesa gallium dri drivers, the big challenge there was to properly distinguish big GL v.s. GLES on front rendering. Because they have API level diff for front renderering, and GLES has to rely on the EGL trick to achieve front rendering. When the core GL piece is doing rendering on the front buffer, the gles part needs to seamlessly redirect things to the back buffer given that\u0027s the one used by ANGLE for front rendering.\n\nWith the current patch, I can see lines drawn on screen but flashing to all black immediately after. It seems to me one of the glFlush or eglSwapbuffers per frame are doing a clear on the shared buffer, and it\u0027s more likely the latter eglSwapbuffers based on my visual check.",
       "revId": "cd772f2acd3b0dc36249abdc1ef518e52b87d902",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "f297d27a_1a7317bd",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 12
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1509302
+      },
+      "writtenOn": "2022-04-19T00:45:54Z",
+      "side": 1,
+      "message": "The on screen starts looking normally only if I hack below. So could you evaluate if there\u0027s false clear applied or if something should be preserved by cleared.\n```\ndiff --git a/src/libANGLE/renderer/vulkan/SurfaceVk.cpp b/src/libANGLE/renderer/vulkan/SurfaceVk.cpp\nindex d9ce1d9ed..70a84bb60 100644\n--- a/src/libANGLE/renderer/vulkan/SurfaceVk.cpp\n+++ b/src/libANGLE/renderer/vulkan/SurfaceVk.cpp\n@@ -1697,9 +1697,12 @@ angle::Result WindowSurfaceVk::present(ContextVk *contextVk,\n\n     updateOverlay(contextVk);\n\n+    if (mSwapchainPresentMode !\u003d VK_PRESENT_MODE_SHARED_DEMAND_REFRESH_KHR)\n+    {\n     // Make sure deferred clears are applied, if any.\n     ANGLE_TRY(\n         image.image.flushStagedUpdates(contextVk, gl::LevelIndex(0), gl::LevelIndex(1), 0, 1, {}));\n+    }\n\n     // We can only do present related optimization if this is the last renderpass that touches the\n     // swapchain image. MSAA resolve and overlay will insert another renderpass which disqualifies\ndiff --git a/src/libANGLE/renderer/vulkan/vk_cache_utils.cpp b/src/libANGLE/renderer/vulkan/vk_cache_utils.cpp\nindex 5a2ae47bc..63ae95f56 100644\n--- a/src/libANGLE/renderer/vulkan/vk_cache_utils.cpp\n+++ b/src/libANGLE/renderer/vulkan/vk_cache_utils.cpp\n@@ -227,7 +227,7 @@ void UnpackAttachmentDesc(VkAttachmentDescription *desc,\n     desc-\u003eflags   \u003d 0;\n     desc-\u003eformat  \u003d GetVkFormatFromFormatID(formatID);\n     desc-\u003esamples \u003d gl_vk::GetSamples(samples);\n-    desc-\u003eloadOp  \u003d ConvertRenderPassLoadOpToVkLoadOp(static_cast\u003cRenderPassLoadOp\u003e(ops.loadOp));\n+    desc-\u003eloadOp  \u003d VK_ATTACHMENT_LOAD_OP_LOAD;\n     desc-\u003estoreOp \u003d\n         ConvertRenderPassStoreOpToVkStoreOp(static_cast\u003cRenderPassStoreOp\u003e(ops.storeOp));\n     desc-\u003estencilLoadOp \u003d\n\n```",
+      "parentUuid": "534d08e0_fc3d02bb",
+      "revId": "cd772f2acd3b0dc36249abdc1ef518e52b87d902",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
