@@ -69,6 +69,24 @@
       "parentUuid": "8673794c_a54e8130",
       "revId": "36d1a0c88b9601b3d7e29350989e31de96e07d9d",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "965612be_d91455f3",
+        "filename": "src/libANGLE/renderer/vulkan/TextureVk.h",
+        "patchSetId": 5
+      },
+      "lineNbr": 245,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-04-19T23:47:48Z",
+      "side": 1,
+      "message": "The trick is that in release builds, whatever is inside `ASSERT` doesn\u0027t get compiled. So we can put whatever complicated and expensive thing we want in an `ASSERT` without repercussions. That comes in pretty handy for example to validate a data structure is consistent etc on every modification.",
+      "parentUuid": "58bce05d_2e0fe4dc",
+      "revId": "36d1a0c88b9601b3d7e29350989e31de96e07d9d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
