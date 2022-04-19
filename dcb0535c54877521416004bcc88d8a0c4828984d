@@ -20,6 +20,24 @@
     {
       "unresolved": false,
       "key": {
+        "uuid": "06ddfc48_2fa3a580",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 3
+      },
+      "lineNbr": 8,
+      "author": {
+        "id": 1115588
+      },
+      "writtenOn": "2022-04-19T17:28:06Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "9df1b053_3e55aac1",
+      "revId": "dcb0535c54877521416004bcc88d8a0c4828984d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
         "uuid": "a71723c8_74632799",
         "filename": "/PATCHSET_LEVEL",
         "patchSetId": 3
@@ -83,6 +101,24 @@
       "writtenOn": "2022-04-19T16:45:05Z",
       "side": 1,
       "message": "Are there any other situations which can cause the contents to become uninitialized without mContentInitialized being set to false? What about glInvalidateFramebuffer?",
+      "revId": "dcb0535c54877521416004bcc88d8a0c4828984d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "9675cfd3_7bc13a7a",
+        "filename": "src/libANGLE/renderer/metal/SurfaceMtl.mm",
+        "patchSetId": 3
+      },
+      "lineNbr": 288,
+      "author": {
+        "id": 1115588
+      },
+      "writtenOn": "2022-04-19T17:28:06Z",
+      "side": 1,
+      "message": "That is a good question and I don\u0027t know the answer. Checking FramebufferMtl::invalidateImpl it appears these are being treaded as separate problems. One, marking general attachments as discardable and separately, clearing Surfaces (which might happen to be an attachment). \n\nI feel like maybe this code should have a much bigger refactor from just FrameBufferMtl to FramebufferMtlBase and then FrameBufferMtl (which represents glFramebuffr) and BackbufferMtl (which represents when the framebuffer is a backbuffer). As it is there\u0027s a bunch of places where there\u0027s `if (mBackbufer)`\nto special case when the FramebufferMtl represents the backbuffer.\n\nI\u0027m not sure now is the time to refactor",
+      "parentUuid": "858dea0b_4712a394",
       "revId": "dcb0535c54877521416004bcc88d8a0c4828984d",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
