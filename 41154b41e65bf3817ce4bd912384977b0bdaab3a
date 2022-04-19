@@ -41,6 +41,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "1a92395c_cf39127f",
+        "filename": "src/libANGLE/renderer/vulkan/DisplayVk.h",
+        "patchSetId": 10
+      },
+      "lineNbr": 80,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2022-04-19T21:30:46Z",
+      "side": 1,
+      "message": "Renamed to mOrphanNonEmptyBufferBlock.",
+      "parentUuid": "4d0174b6_595ef288",
+      "range": {
+        "startLine": 80,
+        "startChar": 9,
+        "endLine": 80,
+        "endChar": 34
+      },
+      "revId": "41154b41e65bf3817ce4bd912384977b0bdaab3a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "d35199c5_2c37fd92",
@@ -54,6 +78,30 @@
       "writtenOn": "2022-04-19T19:49:16Z",
       "side": 1,
       "message": "nit: We don\u0027t usually do this in ANGLE. Just comment above it, which also avoids trying to be too succinct here.",
+      "range": {
+        "startLine": 2972,
+        "startChar": 32,
+        "endLine": 2972,
+        "endChar": 62
+      },
+      "revId": "41154b41e65bf3817ce4bd912384977b0bdaab3a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "0a0e0bc0_7532909d",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 10
+      },
+      "lineNbr": 2972,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2022-04-19T21:30:46Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "d35199c5_2c37fd92",
       "range": {
         "startLine": 2972,
         "startChar": 32,
