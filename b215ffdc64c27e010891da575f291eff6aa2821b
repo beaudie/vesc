@@ -22,6 +22,30 @@
       },
       "revId": "b215ffdc64c27e010891da575f291eff6aa2821b",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "4821232a_e24a63c0",
+        "filename": "src/libANGLE/capture/trace_fixture.cpp",
+        "patchSetId": 9
+      },
+      "lineNbr": 106,
+      "author": {
+        "id": 1491823
+      },
+      "writtenOn": "2022-04-19T16:00:07Z",
+      "side": 1,
+      "message": "The plain error message was that \n\"Index must be less than MAX_UNIFORM_BUFFER_BINDINGS.\" so I assume with my last version, where I added the array index to the name string for `index \u003e 0`, but used the plain uniform name for `index \u003d\u003d 0`, querying the uniform block index returned `GL_INVALID_INDEX` sometimes, and this value was used as binding when replaying.",
+      "parentUuid": "93da7868_95942c6a",
+      "range": {
+        "startLine": 106,
+        "startChar": 7,
+        "endLine": 106,
+        "endChar": 32
+      },
+      "revId": "b215ffdc64c27e010891da575f291eff6aa2821b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
