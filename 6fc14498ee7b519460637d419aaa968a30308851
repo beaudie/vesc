@@ -102,6 +102,24 @@
       "message": "A regression test in angle_end2end_tests would be welcome if possible.",
       "revId": "6fc14498ee7b519460637d419aaa968a30308851",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "94f3a194_eb93ba68",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1394635
+      },
+      "writtenOn": "2022-04-19T13:04:01Z",
+      "side": 1,
+      "message": "I\u0027m not aware of any client-visible behavior change with this patch. The only practical difference is that ANGLE now skips one unnecessary clear op (hence another Intel/macOS/GL bug). The new unit test covers the internal logic update.",
+      "parentUuid": "e303d2ac_87c8711e",
+      "revId": "6fc14498ee7b519460637d419aaa968a30308851",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
