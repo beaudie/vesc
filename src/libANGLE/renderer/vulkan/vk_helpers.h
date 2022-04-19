@@ -875,6 +875,7 @@ class BufferPool : angle::NonCopyable
     // will call into vulkan directly to allocate a dedicated VkDeviceMemory.
     static constexpr size_t kMaxBufferSizeForSuballocation = 4 * 1024 * 1024;
 };
+using BufferPoolPointerArray = std::array<std::unique_ptr<BufferPool>, VK_MAX_MEMORY_TYPES>;
 
 enum class BufferAccess
 {
