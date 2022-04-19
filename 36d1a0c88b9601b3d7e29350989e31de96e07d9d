@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "73d47950_1c2746dc",
+        "filename": "src/libANGLE/renderer/vulkan/TextureVk.h",
+        "patchSetId": 5
+      },
+      "lineNbr": 245,
+      "author": {
+        "id": 1520902
+      },
+      "writtenOn": "2022-04-19T18:55:08Z",
+      "side": 1,
+      "message": "I am wondering why this change makes the overhead smaller - it seems that now when the getImageViewSubresourceSerial() is called, we are still doing the serial retrieval work by calling the getImageViewSubresourceSerialImpl(), instead of directly using the cache.",
+      "revId": "36d1a0c88b9601b3d7e29350989e31de96e07d9d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
