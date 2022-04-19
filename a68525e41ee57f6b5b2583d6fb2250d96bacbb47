@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "7091349c_7fe75896",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2022-04-19T01:26:02Z",
+      "side": 1,
+      "message": "Per request, this split out the revert from https://chromium-review.googlesource.com/c/angle/angle/+/3573390 ",
+      "revId": "a68525e41ee57f6b5b2583d6fb2250d96bacbb47",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
