@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "96ecea92_a24ae64c",
+        "filename": "include/platform/Feature.h",
+        "patchSetId": 6
+      },
+      "lineNbr": 181,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2022-04-19T20:58:57Z",
+      "side": 1,
+      "message": "const? make in cpp?",
+      "range": {
+        "startLine": 181,
+        "startChar": 9,
+        "endLine": 181,
+        "endChar": 25
+      },
+      "revId": "1954b4443fc7d2b03d3886b09268c95d4ea95ba6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b3178071_06fdb24d",
+        "filename": "include/platform/Feature.h",
+        "patchSetId": 6
+      },
+      "lineNbr": 205,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2022-04-19T20:58:57Z",
+      "side": 1,
+      "message": "const? can be in cpp?",
+      "range": {
+        "startLine": 205,
+        "startChar": 17,
+        "endLine": 205,
+        "endChar": 28
+      },
+      "revId": "1954b4443fc7d2b03d3886b09268c95d4ea95ba6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
