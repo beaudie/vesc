@@ -106,6 +106,24 @@
       "parentUuid": "79e3e048_77e23117",
       "revId": "b777abe193a5f1e4f64a7df34d4000faf90edf1e",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "180c2a43_5e7b4038",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1491823
+      },
+      "writtenOn": "2022-04-19T15:38:20Z",
+      "side": 1,
+      "message": "@jmadhill I\u0027ve updated the patch, now it also passes the restricted tests.",
+      "parentUuid": "c415dcd8_8ca668f6",
+      "revId": "b777abe193a5f1e4f64a7df34d4000faf90edf1e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
