@@ -24,6 +24,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "b924a43a_4fa05a5d",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 15
+      },
+      "lineNbr": 2465,
+      "author": {
+        "id": 1525982
+      },
+      "writtenOn": "2022-04-19T00:26:15Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "8a94bcad_7e6f7480",
+      "range": {
+        "startLine": 2463,
+        "startChar": 43,
+        "endLine": 2465,
+        "endChar": 98
+      },
+      "revId": "1ec6c115e1ffa69af78193584a4ef0c2fef1242d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "9a53385a_599fea94",
@@ -47,6 +71,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "f4985d12_8c0f9dc1",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 15
+      },
+      "lineNbr": 2929,
+      "author": {
+        "id": 1525982
+      },
+      "writtenOn": "2022-04-19T00:26:15Z",
+      "side": 1,
+      "message": "Removed",
+      "parentUuid": "9a53385a_599fea94",
+      "range": {
+        "startLine": 2929,
+        "startChar": 25,
+        "endLine": 2929,
+        "endChar": 31
+      },
+      "revId": "1ec6c115e1ffa69af78193584a4ef0c2fef1242d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "f17c6a7b_84066398",
@@ -60,6 +108,30 @@
       "writtenOn": "2022-04-18T21:46:52Z",
       "side": 1,
       "message": "Also to be consistent, you can do it like what you did for ContextVk::handleDirtyDriverUniformsBindingImpl and avoid the check here.",
+      "range": {
+        "startLine": 5803,
+        "startChar": 25,
+        "endLine": 5803,
+        "endChar": 40
+      },
+      "revId": "1ec6c115e1ffa69af78193584a4ef0c2fef1242d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "ed809e69_7afbe979",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 15
+      },
+      "lineNbr": 5803,
+      "author": {
+        "id": 1525982
+      },
+      "writtenOn": "2022-04-19T00:26:15Z",
+      "side": 1,
+      "message": "Added `commandBufferHelperT` to the function arguments.",
+      "parentUuid": "f17c6a7b_84066398",
       "range": {
         "startLine": 5803,
         "startChar": 25,
@@ -95,6 +167,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "702ceb59_380da8c9",
+        "filename": "src/libANGLE/renderer/vulkan/SyncVk.cpp",
+        "patchSetId": 15
+      },
+      "lineNbr": 99,
+      "author": {
+        "id": 1525982
+      },
+      "writtenOn": "2022-04-19T00:26:15Z",
+      "side": 1,
+      "message": "SGTM since we are only using `onSyncAccess` for these two instances, and the acquired command buffer is not used. Updated.",
+      "parentUuid": "ae2f2cc0_a224a53b",
+      "range": {
+        "startLine": 96,
+        "startChar": 4,
+        "endLine": 99,
+        "endChar": 84
+      },
+      "revId": "1ec6c115e1ffa69af78193584a4ef0c2fef1242d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "c63a486d_ce2fbc38",
         "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
         "patchSetId": 15
@@ -106,6 +202,30 @@
       "writtenOn": "2022-04-18T21:46:52Z",
       "side": 1,
       "message": "Can\u0027t this just `ResourceUseList resourceUseList;` since default constrauctor is always called?",
+      "range": {
+        "startLine": 2629,
+        "startChar": 0,
+        "endLine": 2629,
+        "endChar": 56
+      },
+      "revId": "1ec6c115e1ffa69af78193584a4ef0c2fef1242d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "71647ee4_3080df2b",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 15
+      },
+      "lineNbr": 2629,
+      "author": {
+        "id": 1525982
+      },
+      "writtenOn": "2022-04-19T00:26:15Z",
+      "side": 1,
+      "message": "Thanks! It works.",
+      "parentUuid": "c63a486d_ce2fbc38",
       "range": {
         "startLine": 2629,
         "startChar": 0,
