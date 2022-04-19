@@ -160,6 +160,30 @@
       },
       "revId": "6fc14498ee7b519460637d419aaa968a30308851",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "68c1a749_314493bb",
+        "filename": "src/libANGLE/angletypes.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 719,
+      "author": {
+        "id": 1394635
+      },
+      "writtenOn": "2022-04-19T15:09:20Z",
+      "side": 1,
+      "message": "Done. The default assignment operator had to be updated. Let\u0027s see if it compiles on all platforms.",
+      "parentUuid": "89e093b0_2bd8ce37",
+      "range": {
+        "startLine": 719,
+        "startChar": 4,
+        "endLine": 719,
+        "endChar": 20
+      },
+      "revId": "6fc14498ee7b519460637d419aaa968a30308851",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
