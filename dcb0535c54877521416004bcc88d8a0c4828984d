@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "a71723c8_74632799",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2022-04-19T15:30:15Z",
+      "side": 1,
+      "message": "Replied in slack but repeating it here:\n\nANGLE initializes a surface, you need to request it by passing EGL_ROBUST_RESOURCE_INITIALIZATION_ANGLE to surface creation (not just context creation). Unless metal is uninitializing our surfaces, they should be auto-cleared with this mechanism (SurfaceMtl::initializeContents be called)\n\nWindowSurfaceMtl::getSwapBehavior returns EGL_BUFFER_DESTROYED which will trigger a re-init after each swap\n\nThe other surface types return EGL_BUFFER_PRESERVED which will only init once\n\nIs it possible that we\u0027re not doing the surface init in Safari or Chrome in some case?",
+      "revId": "dcb0535c54877521416004bcc88d8a0c4828984d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
