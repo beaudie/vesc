@@ -46,6 +46,30 @@
       },
       "revId": "b215ffdc64c27e010891da575f291eff6aa2821b",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ec23c483_d4076a45",
+        "filename": "src/libANGLE/capture/trace_fixture.cpp",
+        "patchSetId": 9
+      },
+      "lineNbr": 106,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2022-04-19T17:11:27Z",
+      "side": 1,
+      "message": "OK so this looks a bit wrong. Looking at manhattan_31:\n\n    UpdateUniformBlockIndex(gShaderProgramMap[217], \"cameraConsts\", 0);\n    UpdateUniformBlockIndex(gShaderProgramMap[217], \"meshConsts\", 1);\n    UpdateUniformBlockIndex(gShaderProgramMap[217], \"staticMeshConsts\", 2);\n    UpdateUniformBlockIndex(gShaderProgramMap[217], \"translateConsts\", 3);\n    UpdateUniformBlockIndex(gShaderProgramMap[217], \"matConsts\", 4);\n    UpdateUniformBlockIndex(gShaderProgramMap[217], \"envmapsInterpolatorConsts\", 5);\n\n\"index\" is the uniform block index, not the array index of the block element. So for complex blocks that use structs or arrays or arrays of structs or whatever is happening in the unit test, we also need to encode the array index into the trace to get a separate block entry for each array element.\n\nDoes that make sense or would you like an example based on the unit test? Please give it a look.",
+      "parentUuid": "4821232a_e24a63c0",
+      "range": {
+        "startLine": 106,
+        "startChar": 7,
+        "endLine": 106,
+        "endChar": 32
+      },
+      "revId": "b215ffdc64c27e010891da575f291eff6aa2821b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
