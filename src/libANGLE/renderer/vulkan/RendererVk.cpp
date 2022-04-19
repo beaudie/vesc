@@ -3330,6 +3330,9 @@ void RendererVk::initFeatures(DisplayVk *displayVk,
 
     ANGLE_FEATURE_CONDITION(&mFeatures, generateSPIRVThroughGlslang, kUseSpirvGenThroughGlslang);
 
+    // ARM GPU only support FIRST for GL_LAYER_PROVOKING_VERTEX_EXT
+    ANGLE_FEATURE_CONDITION(&mFeatures, layerProvokingVertexFirst, isARM);
+
     ApplyFeatureOverrides(&mFeatures, displayVk->getState());
 
     // Disable async command queue when using Vulkan secondary command buffers temporarily to avoid

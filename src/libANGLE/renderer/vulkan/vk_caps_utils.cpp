@@ -996,9 +996,17 @@ void RendererVk::ensureCapsInitialized() const
         // If the provoking vertex feature is enabled, angle specifies to use
         // the "last" convention in order to match GL behavior. Otherwise, use
         // "first" as vulkan follows this convention for provoking vertex.
-        mNativeCaps.layerProvokingVertex = (mFeatures.provokingVertex.enabled)
-                                               ? GL_LAST_VERTEX_CONVENTION_EXT
-                                               : GL_FIRST_VERTEX_CONVENTION_EXT;
+        // ARM GPU only support "first" for layerProvokingVertex.
+        if (!getFeatures().layerProvokingVertexFirst.enabled)
+        {
+            mNativeCaps.layerProvokingVertex = (mFeatures.provokingVertex.enabled)
+                                                   ? GL_LAST_VERTEX_CONVENTION_EXT
+                                                   : GL_FIRST_VERTEX_CONVENTION_EXT;
+        }
+        else
+        {
+            mNativeCaps.layerProvokingVertex = GL_FIRST_VERTEX_CONVENTION_EXT;
+        }
 
         mNativeCaps.maxGeometryInputComponents =
             LimitToInt(limitsVk.maxGeometryInputComponents) - reservedVaryingComponentCount;

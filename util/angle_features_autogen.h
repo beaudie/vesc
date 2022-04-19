@@ -143,6 +143,7 @@ enum class Feature
     IntelDisableFastMath,
     IntelExplicitBoolCastWorkaround,
     KeepBufferShadowCopy,
+    LayerProvokingVertexFirst,
     LimitMax3dArrayTextureSizeTo1024,
     LimitMaxMSAASamplesTo4,
     LimitMaxTextureSizeTo4096,

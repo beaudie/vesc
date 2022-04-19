@@ -593,6 +593,13 @@ struct FeaturesVk : FeatureSetBase
         "createPipelineDuringLink", FeatureCategory::VulkanFeatures,
         "Create pipeline with default state during glLinkProgram", &members,
         "http://anglebug.com/7046"};
+
+    FeatureInfo layerProvokingVertexFirst = {
+        "layerProvokingVertexFirst",
+        FeatureCategory::VulkanWorkarounds,
+        "Some platforms only support FIRST for GL_LAYER_PROVOKING_VERTEX_EXT",
+        &members,
+    };
 };
 
 inline FeaturesVk::FeaturesVk()  = default;

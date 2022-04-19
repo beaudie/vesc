@@ -151,6 +151,7 @@ constexpr PackedEnumMap<Feature, const char *> kFeatureNames = {{
     {Feature::IntelDisableFastMath, "intel_disable_fast_math"},
     {Feature::IntelExplicitBoolCastWorkaround, "intel_explicit_bool_cast_workaround"},
     {Feature::KeepBufferShadowCopy, "keep_buffer_shadow_copy"},
+    {Feature::LayerProvokingVertexFirst, "layerProvokingVertexFirst"},
     {Feature::LimitMax3dArrayTextureSizeTo1024, "max_3d_array_texture_size_1024"},
     {Feature::LimitMaxMSAASamplesTo4, "max_msaa_sample_count_4"},
     {Feature::LimitMaxTextureSizeTo4096, "max_texture_size_limit_4096"},

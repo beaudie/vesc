@@ -987,6 +987,16 @@
                 "Create pipeline with default state during glLinkProgram"
             ],
             "issue": "http://anglebug.com/7046"
+        },
+
+        {
+            "name": "layerProvokingVertexFirst",
+            "display_name": "layerProvokingVertexFirst",
+            "category": "Workarounds",
+            "description": [
+                "Some platforms only support FIRST for GL_LAYER_PROVOKING_VERTEX_EXT"
+            ]
         }
+
     ]
 }
