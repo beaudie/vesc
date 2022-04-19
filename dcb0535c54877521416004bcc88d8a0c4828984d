@@ -1,6 +1,23 @@
 {
   "comments": [
     {
+      "unresolved": true,
+      "key": {
+        "uuid": "9df1b053_3e55aac1",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 3
+      },
+      "lineNbr": 8,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2022-04-19T16:45:05Z",
+      "side": 1,
+      "message": "Could you add a second paragraph describing the fix in more detail? Maybe:\n\n\"\"\"\nWindowSurfaceMtl was losing initialization requests due to back-to-back calls to ensureCurrentDrawableObtained. Refactor surface preparation and track initialized state separately.\n\"\"\"",
+      "revId": "dcb0535c54877521416004bcc88d8a0c4828984d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": false,
       "key": {
         "uuid": "a71723c8_74632799",
@@ -14,6 +31,58 @@
       "writtenOn": "2022-04-19T15:30:15Z",
       "side": 1,
       "message": "Replied in slack but repeating it here:\n\nANGLE initializes a surface, you need to request it by passing EGL_ROBUST_RESOURCE_INITIALIZATION_ANGLE to surface creation (not just context creation). Unless metal is uninitializing our surfaces, they should be auto-cleared with this mechanism (SurfaceMtl::initializeContents be called)\n\nWindowSurfaceMtl::getSwapBehavior returns EGL_BUFFER_DESTROYED which will trigger a re-init after each swap\n\nThe other surface types return EGL_BUFFER_PRESERVED which will only init once\n\nIs it possible that we\u0027re not doing the surface init in Safari or Chrome in some case?",
+      "revId": "dcb0535c54877521416004bcc88d8a0c4828984d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "b4af44c5_efb840d4",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2022-04-19T16:45:05Z",
+      "side": 1,
+      "message": "This looks good to me but I don\u0027t know the code as well as Geoff, so please wait for his review. Thanks.\n",
+      "revId": "dcb0535c54877521416004bcc88d8a0c4828984d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "a05b5b79_a188f598",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2022-04-19T16:45:05Z",
+      "side": 1,
+      "message": "From discussion on Slack, the specific problem Gregg ran into and is solving with this patch was with WindowSurfaceMtl, not in the browser. There were effectively reentrant calls to ensureCurrentDrawableObtained which was losing the \"new-ness\" of the new drawable and therefore its initialization per spec.",
+      "parentUuid": "a71723c8_74632799",
+      "revId": "dcb0535c54877521416004bcc88d8a0c4828984d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "858dea0b_4712a394",
+        "filename": "src/libANGLE/renderer/metal/SurfaceMtl.mm",
+        "patchSetId": 3
+      },
+      "lineNbr": 288,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2022-04-19T16:45:05Z",
+      "side": 1,
+      "message": "Are there any other situations which can cause the contents to become uninitialized without mContentInitialized being set to false? What about glInvalidateFramebuffer?",
       "revId": "dcb0535c54877521416004bcc88d8a0c4828984d",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
