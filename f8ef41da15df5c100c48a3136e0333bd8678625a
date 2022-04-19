@@ -18,6 +18,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "935bce67_3b2b488d",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 7
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2022-04-19T01:29:09Z",
+      "side": 1,
+      "message": "One pool is easier than two pools, right? I have split out the revert part out and you can see this is much smaller diff as well. I dont think there will be any measurable perf diffs, but it did remove one if check on allocation code path.",
+      "parentUuid": "ac115d04_11b2b664",
+      "revId": "f8ef41da15df5c100c48a3136e0333bd8678625a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "82330946_5cbdd8dc",
