@@ -16,6 +16,23 @@
       "message": "PTAL - jamie, shabi",
       "revId": "509b2f49118082a38120940673ce02110b0e9bb2",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "573fed74_7c143320",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 5
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-04-19T20:23:50Z",
+      "side": 1,
+      "message": "Nice fix",
+      "revId": "509b2f49118082a38120940673ce02110b0e9bb2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
