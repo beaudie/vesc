@@ -16,6 +16,24 @@
       "message": "Before the change we are checking if mState.getShaderProgram(shaderType) returns nullptr, but after the change we do not check if the program is nullptr anymore. Is it because we now guarantee that mState.getShaderProgram() does not return nullptr?",
       "revId": "fc094a972c791e1fe7c8031b2dc04228c45e8920",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "7d50755b_17a04dba",
+        "filename": "src/libANGLE/renderer/vulkan/ProgramPipelineVk.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 88,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2022-04-19T12:46:15Z",
+      "side": 1,
+      "message": "We above are iterating the bits in \"LinkedShaderStages\". It\u0027s not possible that we could have a linked shader stage with a missing shader.",
+      "parentUuid": "d4645e94_fc930962",
+      "revId": "fc094a972c791e1fe7c8031b2dc04228c45e8920",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
