@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "1ccfad92_49270105",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 3
+      },
+      "lineNbr": 14,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2022-04-19T13:42:03Z",
+      "side": 1,
+      "message": "Hey Cody, in the future please file a separate bug when turning on a test suite on an experimental device. Neither of these issues seem specific to turning on trace tests on the P6.\n\nThese tests are now timing out on the P6 flakily. We should consider either adding more shards, or disabling them until we have the main fleet.\n\nhttps://ci.chromium.org/ui/p/angle/builders/ci/android-arm64-exp-test/492/overview",
+      "range": {
+        "startLine": 13,
+        "startChar": 0,
+        "endLine": 14,
+        "endChar": 21
+      },
+      "revId": "3636d129ee9c6c970e9b31883fcc88c539382434",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
