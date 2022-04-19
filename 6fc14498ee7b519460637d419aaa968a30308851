@@ -120,6 +120,46 @@
       "parentUuid": "e303d2ac_87c8711e",
       "revId": "6fc14498ee7b519460637d419aaa968a30308851",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "0778d5f3_1dfc64c1",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2022-04-19T14:18:41Z",
+      "side": 1,
+      "message": "LGTM",
+      "revId": "6fc14498ee7b519460637d419aaa968a30308851",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "89e093b0_2bd8ce37",
+        "filename": "src/libANGLE/angletypes.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 719,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2022-04-19T14:18:41Z",
+      "side": 1,
+      "message": "nit: can this be const? (others too?)",
+      "range": {
+        "startLine": 719,
+        "startChar": 4,
+        "endLine": 719,
+        "endChar": 20
+      },
+      "revId": "6fc14498ee7b519460637d419aaa968a30308851",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
