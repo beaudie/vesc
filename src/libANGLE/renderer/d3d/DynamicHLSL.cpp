@@ -308,7 +308,7 @@ std::string DynamicHLSL::generateVertexShaderForInputLayout(
         angle::ReplaceSubstring(&vertexHLSL, VERTEX_ATTRIBUTE_STUB_STRING, structStream.str());
     ASSERT(success);
 
-    success = ReplaceShaderStorageDeclaration(shaderStorageBlocks, &vertexHLSL, inputLayout.size(),
+    success = ReplaceShaderStorageDeclaration(shaderStorageBlocks, &vertexHLSL, baseUAVRegister,
                                               gl::ShaderType::Vertex);
     ASSERT(success);
 
@@ -320,7 +320,8 @@ std::string DynamicHLSL::generatePixelShaderForOutputSignature(
     const std::vector<PixelShaderOutputVariable> &outputVariables,
     bool usesFragDepth,
     const std::vector<GLenum> &outputLayout,
-    const std::vector<ShaderStorageBlock> &shaderStorageBlocks) const
+    const std::vector<ShaderStorageBlock> &shaderStorageBlocks,
+    size_t numActiveFragmentOutputVariables) const
 {
     const int shaderModel      = mRenderer->getMajorShaderModel();
     std::string targetSemantic = (shaderModel >= 4) ? "SV_TARGET" : "COLOR";
@@ -394,8 +395,9 @@ std::string DynamicHLSL::generatePixelShaderForOutputSignature(
         angle::ReplaceSubstring(&pixelHLSL, PIXEL_OUTPUT_STUB_STRING, declarationStream.str());
     ASSERT(success);
 
-    success = ReplaceShaderStorageDeclaration(shaderStorageBlocks, &pixelHLSL, numOutputs,
-                                              gl::ShaderType::Fragment);
+    success =
+        ReplaceShaderStorageDeclaration(shaderStorageBlocks, &pixelHLSL,
+                                        numActiveFragmentOutputVariables, gl::ShaderType::Fragment);
     ASSERT(success);
 
     return pixelHLSL;

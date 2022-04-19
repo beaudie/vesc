@@ -1544,7 +1544,8 @@ angle::Result ProgramD3D::getPixelExecutableForCachedOutputLayout(
 
     std::string finalPixelHLSL = mDynamicHLSL->generatePixelShaderForOutputSignature(
         mShaderHLSL[gl::ShaderType::Fragment], mPixelShaderKey, mUsesFragDepth,
-        mPixelShaderOutputLayoutCache, mShaderStorageBlocks[gl::ShaderType::Fragment]);
+        mPixelShaderOutputLayoutCache, mShaderStorageBlocks[gl::ShaderType::Fragment],
+        mNumActiveFragmentOutputVariables);
 
     // Generate new pixel executable
     ShaderExecutableD3D *pixelExecutable = nullptr;
@@ -1588,7 +1589,7 @@ angle::Result ProgramD3D::getVertexExecutableForCachedInputLayout(
     // Generate new dynamic layout with attribute conversions
     std::string finalVertexHLSL = mDynamicHLSL->generateVertexShaderForInputLayout(
         mShaderHLSL[gl::ShaderType::Vertex], mCachedInputLayout, mState.getProgramInputs(),
-        mShaderStorageBlocks[gl::ShaderType::Vertex], getNumPixelShaderOutputs());
+        mShaderStorageBlocks[gl::ShaderType::Vertex], mNumActiveFragmentOutputVariables);
 
     // Generate new vertex executable
     ShaderExecutableD3D *vertexExecutable = nullptr;
@@ -1959,6 +1960,7 @@ std::unique_ptr<LinkEvent> ProgramD3D::compileProgramExecutables(const gl::Conte
     const ShaderD3D *vertexShaderD3D = vertexShader ? GetImplAs<ShaderD3D>(vertexShader) : nullptr;
     const ShaderD3D *fragmentShaderD3D =
         fragmentShader ? GetImplAs<ShaderD3D>(fragmentShader) : nullptr;
+    mNumActiveFragmentOutputVariables = fragmentShader->getActiveOutputVariables().size();
 
     return std::make_unique<GraphicsProgramLinkEvent>(infoLog, context->getWorkerThreadPool(),
                                                       vertexTask, pixelTask, geometryTask, useGS,
