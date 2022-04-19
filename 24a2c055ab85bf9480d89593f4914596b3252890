@@ -300,6 +300,24 @@
       "parentUuid": "3f906805_54cebb59",
       "revId": "24a2c055ab85bf9480d89593f4914596b3252890",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "e44c9773_e534e395",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 7
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2022-04-19T19:39:38Z",
+      "side": 1,
+      "message": "I noticed the experiment for catching these crashes in the wild was disabled. I just re-enabled it last week. I\u0027ll see if any crashes with this signature have shown up yet.\n\nIn general though, we should not protect against these crashes in ANGLE. We should use them to find the bugs in Skia. We make very strong assumptions in ANGLE\u0027s code that all state is valid and optimize based on this.",
+      "parentUuid": "89c7e8c6_0d2c2cb2",
+      "revId": "24a2c055ab85bf9480d89593f4914596b3252890",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
