@@ -357,7 +357,7 @@ class ProgramD3D : public ProgramImpl
     bool hasNamedUniform(const std::string &name);
 
     bool usesVertexID() const { return mUsesVertexID; }
-    size_t getNumPixelShaderOutputs() const { return mPixelShaderOutputLayoutCache.size(); }
+    size_t getNumActiveFragmentOutputVariables() const { return mNumActiveFragmentOutputVariables; }
 
   private:
     // These forward-declared tasks are used for multi-thread shader compiles.
@@ -600,6 +600,7 @@ class ProgramD3D : public ProgramImpl
     gl::ShaderMap<std::vector<sh::ShaderVariable>> mImage2DUniforms;
     gl::ShaderMap<gl::ImageUnitTextureTypeMap> mImage2DBindLayoutCache;
     Optional<size_t> mCachedComputeExecutableIndex;
+    size_t mNumActiveFragmentOutputVariables;
 
     gl::ShaderBitSet mShaderUniformsDirty;
 
