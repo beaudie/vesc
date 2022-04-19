@@ -22,6 +22,30 @@
       },
       "revId": "3636d129ee9c6c970e9b31883fcc88c539382434",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "632a7d2f_62f6f555",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 3
+      },
+      "lineNbr": 14,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2022-04-19T16:29:51Z",
+      "side": 1,
+      "message": "crbug.com/1280418 looks like a catch all for turning on tests for Pixel 6, so it seemed appropriate to keep using it.\n\nSince they are timing out and Yuly is out, we can turn them off until the larger batch of devices is deployed.  I\u0027ll file a new bug for that.",
+      "parentUuid": "1ccfad92_49270105",
+      "range": {
+        "startLine": 13,
+        "startChar": 0,
+        "endLine": 14,
+        "endChar": 21
+      },
+      "revId": "3636d129ee9c6c970e9b31883fcc88c539382434",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
