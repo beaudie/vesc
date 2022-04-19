@@ -139,6 +139,24 @@
       "parentUuid": "9675cfd3_7bc13a7a",
       "revId": "dcb0535c54877521416004bcc88d8a0c4828984d",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "08ab98e3_6427b823",
+        "filename": "src/libANGLE/renderer/metal/SurfaceMtl.mm",
+        "patchSetId": 3
+      },
+      "lineNbr": 288,
+      "author": {
+        "id": 1115588
+      },
+      "writtenOn": "2022-04-19T17:40:24Z",
+      "side": 1,
+      "message": "There is no test because sadly whether data apperas to be cleared or not is just luck. There\u0027s nothing to supress that I know of. On the other hand, without this fix, this CL https://chromium-review.googlesource.com/c/angle/angle/+/3584423 reliably fails. So, indirectly there is a test (or will be :P)",
+      "parentUuid": "c22fed39_869d4578",
+      "revId": "dcb0535c54877521416004bcc88d8a0c4828984d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
