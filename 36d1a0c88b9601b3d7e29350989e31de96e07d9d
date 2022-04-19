@@ -1,6 +1,23 @@
 {
   "comments": [
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "88c5930b_2e926fe1",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 5
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1520902
+      },
+      "writtenOn": "2022-04-19T23:03:23Z",
+      "side": 1,
+      "message": "LGTM. The unresolved comment is more for self-learning purpose, so I am +2 on the CL to unblock the submission.",
+      "revId": "36d1a0c88b9601b3d7e29350989e31de96e07d9d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "73d47950_1c2746dc",
