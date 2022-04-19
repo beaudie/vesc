@@ -24,6 +24,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "e39da034_690a5415",
+        "filename": "include/platform/Feature.h",
+        "patchSetId": 6
+      },
+      "lineNbr": 181,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-04-19T23:42:45Z",
+      "side": 1,
+      "message": "There\u0027s no cpp for this file, but let me see if I can fit it in the front-end without causing compile errors.\n\n---\n\nDone",
+      "parentUuid": "96ecea92_a24ae64c",
+      "range": {
+        "startLine": 181,
+        "startChar": 9,
+        "endLine": 181,
+        "endChar": 25
+      },
+      "revId": "1954b4443fc7d2b03d3886b09268c95d4ea95ba6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "b3178071_06fdb24d",
@@ -37,6 +61,30 @@
       "writtenOn": "2022-04-19T20:58:57Z",
       "side": 1,
       "message": "const? can be in cpp?",
+      "range": {
+        "startLine": 205,
+        "startChar": 17,
+        "endLine": 205,
+        "endChar": 28
+      },
+      "revId": "1954b4443fc7d2b03d3886b09268c95d4ea95ba6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "487b36f7_96de3080",
+        "filename": "include/platform/Feature.h",
+        "patchSetId": 6
+      },
+      "lineNbr": 205,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-04-19T23:42:45Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "b3178071_06fdb24d",
       "range": {
         "startLine": 205,
         "startChar": 17,
