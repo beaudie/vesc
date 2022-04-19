@@ -74,6 +74,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "a69d6ca8_484d26cb",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 5
+      },
+      "lineNbr": 13,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-04-19T20:35:03Z",
+      "side": 1,
+      "message": "Ok, no objection from me as long as the json variables are snake_case. Looping in Geoff in case he has a strong preference w.r.t to how these show up in Chrome.\n\nIn the end, the feature override name matching accepts both camelCase and snake_case, so there\u0027s no harm in choosing one or the other for existing scripts.",
+      "parentUuid": "800276bd_8fbeea61",
+      "range": {
+        "startLine": 12,
+        "startChar": 0,
+        "endLine": 13,
+        "endChar": 38
+      },
+      "revId": "ec2dc3195fb63ad0b0b996f6424d173616b6b2c1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "dd306351_3dd90f9e",
         "filename": "/COMMIT_MSG",
         "patchSetId": 5
@@ -133,6 +157,30 @@
       "side": 1,
       "message": "OK point taken. I\u0027m fine if you want to leave the storage name as snake case.",
       "parentUuid": "10b9980a_83dab3b2",
+      "range": {
+        "startLine": 14,
+        "startChar": 17,
+        "endLine": 15,
+        "endChar": 45
+      },
+      "revId": "ec2dc3195fb63ad0b0b996f6424d173616b6b2c1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "5b19e559_49a67942",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 5
+      },
+      "lineNbr": 15,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-04-19T20:35:03Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "436bd233_ca27dbac",
       "range": {
         "startLine": 14,
         "startChar": 17,
