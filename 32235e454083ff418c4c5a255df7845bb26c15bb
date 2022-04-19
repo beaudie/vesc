@@ -16,6 +16,23 @@
       "message": "Is there no way to query this from Vulkan? Is there an issue filed to track closing this API gap?",
       "revId": "32235e454083ff418c4c5a255df7845bb26c15bb",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "19fce30e_cc5070e3",
+        "filename": "src/libANGLE/renderer/vulkan/vk_caps_utils.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 1000,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-04-19T20:01:24Z",
+      "side": 1,
+      "message": "Thanks, glad to have finally figured this out.\n\nPlease add a feature to `vk_features.json` as a `Workaround` and initialize it in `RendererVk.cpp` with `isARM`. Also, feel free to remove the suppression line in `deqp_khr_gles31_test_expectations.txt` to re-enable the test.",
+      "revId": "32235e454083ff418c4c5a255df7845bb26c15bb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
