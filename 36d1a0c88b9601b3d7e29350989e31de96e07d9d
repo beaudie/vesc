@@ -34,6 +34,24 @@
       "parentUuid": "73d47950_1c2746dc",
       "revId": "36d1a0c88b9601b3d7e29350989e31de96e07d9d",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "58bce05d_2e0fe4dc",
+        "filename": "src/libANGLE/renderer/vulkan/TextureVk.h",
+        "patchSetId": 5
+      },
+      "lineNbr": 245,
+      "author": {
+        "id": 1520902
+      },
+      "writtenOn": "2022-04-19T23:02:09Z",
+      "side": 1,
+      "message": "I thought the purpose of adding the cache, is that if we call getImageViewSubresourceSerial(), we don\u0027t have to do the work of retrieving the serial, instead, we can just use the cache. However, in the ASSERT statement, we are calling getImageViewSubresourceSerialImpl(), which still does the work of retrieving the serial, so it seems that cache doesn\u0027t help us save any work. Maybe my understanding of how the cache is used is off, please let me know if the explanation is clear.",
+      "parentUuid": "8673794c_a54e8130",
+      "revId": "36d1a0c88b9601b3d7e29350989e31de96e07d9d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
