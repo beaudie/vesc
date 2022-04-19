@@ -1142,8 +1142,7 @@ RendererVk::RendererVk()
       mPipelineCacheInitialized(false),
       mValidationMessageCount(0),
       mCommandProcessor(this),
-      mSupportedVulkanPipelineStageMask(0),
-      mLastPruneTime(angle::GetCurrentSystemTime())
+      mSupportedVulkanPipelineStageMask(0)
 {
     VkFormatProperties invalid = {0, 0, kInvalidFormatFeatureFlags};
     mFormatProperties.fill(invalid);
@@ -1196,19 +1195,6 @@ void RendererVk::onDestroy(vk::Context *context)
     if (isDeviceLost())
     {
         handleDeviceLost();
-    }
-
-    for (std::unique_ptr<vk::BufferPool> &pool : mDefaultBufferPools)
-    {
-        if (pool)
-        {
-            pool->destroy(this);
-        }
-    }
-
-    if (mSmallBufferPool)
-    {
-        mSmallBufferPool->destroy(this);
     }
 
     {
@@ -4237,24 +4223,6 @@ VkDeviceSize RendererVk::getPreferedBufferBlockSize(uint32_t memoryTypeIndex) co
     // Try not to exceed 1/64 of heap size to begin with.
     const VkDeviceSize heapSize = getMemoryProperties().getHeapSizeForMemoryType(memoryTypeIndex);
     return std::min(heapSize / 64, mPreferredLargeHeapBlockSize);
-}
-
-vk::BufferPool *RendererVk::getDefaultBufferPool(VkDeviceSize size, uint32_t memoryTypeIndex)
-{
-    return vk::GetDefaultBufferPool(mSmallBufferPool, mDefaultBufferPools, this, size,
-                                    memoryTypeIndex);
-}
-
-void RendererVk::pruneDefaultBufferPools()
-{
-    mLastPruneTime = angle::GetCurrentSystemTime();
-
-    vk::PruneDefaultBufferPools(this, mDefaultBufferPools, mSmallBufferPool);
-}
-
-bool RendererVk::isDueForBufferPoolPrune()
-{
-    return vk::IsDueForBufferPoolPrune(mLastPruneTime);
 }
 
 namespace vk
