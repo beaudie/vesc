@@ -50,6 +50,23 @@
       "message": "Not sure about the flow of the suppression to ANGLE\u0027s CQ. May be necessary for Chromium to roll into ANGLE.\n",
       "revId": "6fc14498ee7b519460637d419aaa968a30308851",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "65976843_24ac018e",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2022-04-19T00:03:59Z",
+      "side": 1,
+      "message": "https://chromium-review.googlesource.com/c/chromium/src/+/3591632 has landed; hope that suppression enables this CL to land.\n",
+      "revId": "6fc14498ee7b519460637d419aaa968a30308851",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
