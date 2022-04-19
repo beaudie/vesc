@@ -16,6 +16,23 @@
       "message": "Per request, this split out the revert from https://chromium-review.googlesource.com/c/angle/angle/+/3573390 ",
       "revId": "a68525e41ee57f6b5b2583d6fb2250d96bacbb47",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "f78a3643_20831067",
+        "filename": "src/tests/egl_tests/EGLContextSharingTest.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 364,
+      "author": {
+        "id": 1520902
+      },
+      "writtenOn": "2022-04-19T16:56:01Z",
+      "side": 1,
+      "message": "Can I ask why we are skipping this test if isVulkanRenderer() is true?",
+      "revId": "a68525e41ee57f6b5b2583d6fb2250d96bacbb47",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
