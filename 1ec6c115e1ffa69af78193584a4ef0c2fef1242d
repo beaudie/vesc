@@ -189,6 +189,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "72133b71_ebd16843",
+        "filename": "src/libANGLE/renderer/vulkan/SyncVk.cpp",
+        "patchSetId": 15
+      },
+      "lineNbr": 99,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2022-04-19T23:20:38Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "702ceb59_380da8c9",
+      "range": {
+        "startLine": 96,
+        "startChar": 4,
+        "endLine": 99,
+        "endChar": 84
+      },
+      "revId": "1ec6c115e1ffa69af78193584a4ef0c2fef1242d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "c63a486d_ce2fbc38",

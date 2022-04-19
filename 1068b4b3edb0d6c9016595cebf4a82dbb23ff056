@@ -16,6 +16,23 @@
       "message": "Thanks!",
       "revId": "1068b4b3edb0d6c9016595cebf4a82dbb23ff056",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "8f1748b5_471c87b9",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 16
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2022-04-19T23:20:38Z",
+      "side": 1,
+      "message": "Overall LGTM. My gut feeling is that with this, code gets a bit more ugly and complicate in some places just that we can get rid of context\u0027s list. My personal preference is to keep context\u0027s list for things that aren\u0027t obvious/straight forward. But I am also okay with what you have here. I will let others comment here.",
+      "revId": "1068b4b3edb0d6c9016595cebf4a82dbb23ff056",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
