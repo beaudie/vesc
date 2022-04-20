@@ -16,6 +16,57 @@
       "message": "With this CL, we should be able to run clients which manage their own gbm_surface, such as [kms-quads](https://gitlab.freedesktop.org/daniels/kms-quads).",
       "revId": "1bb19981da8cd8db4aa9b8aaed8c5b05f31bbcd8",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "446de7a4_52c1100c",
+        "filename": "src/libANGLE/Display.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 32,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-04-20T16:09:56Z",
+      "side": 1,
+      "message": "Can be removed",
+      "revId": "1bb19981da8cd8db4aa9b8aaed8c5b05f31bbcd8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "e859c656_d9688920",
+        "filename": "src/libANGLE/validationEGL.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 571,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-04-20T16:09:56Z",
+      "side": 1,
+      "message": "Still weird to see this particular platform taking the `EGL_PLATFORM_ANGLE_ANGLE` path, while none of the other platforms do.",
+      "revId": "1bb19981da8cd8db4aa9b8aaed8c5b05f31bbcd8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "890c647f_06235de7",
+        "filename": "src/libGLESv2/egl_stubs.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 22,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-04-20T16:09:56Z",
+      "side": 1,
+      "message": "Can be removed",
+      "revId": "1bb19981da8cd8db4aa9b8aaed8c5b05f31bbcd8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
