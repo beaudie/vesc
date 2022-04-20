@@ -18,6 +18,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "39018f39_1c3272f9",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1002379
+      },
+      "writtenOn": "2022-04-20T08:34:22Z",
+      "side": 1,
+      "message": "no query APIs from Vulkan and I also discussed this with internal team and we won\u0027t change this.\n\n The reason that our driver won\u0027t change this behavior is that, both Vulkan and GLES spec says gl_Layer should be set to ALL vertices to get expected result and thus this behavior won\u0027t have issues in practice:\nVulkan Spec:\n\"If a pre-rasterization shader stage shader entry point’s interface includes a variable decorated with Layer, it must write the same value to Layer for all output vertices of a given primitive.\"\nGLES Spec:\n\"To get defined results, all vertices of each primitive emitted should set the same value for gl_Layer\n\nAnd:\n\nThe specific vertex of a primitive that is used to select the rendering layer is implementation-dependent and thus portable applications will assign the same layer for all vertices in a primitive.\"",
+      "parentUuid": "cf2b1e43_fc7aeb47",
+      "revId": "32235e454083ff418c4c5a255df7845bb26c15bb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "19fce30e_cc5070e3",
@@ -31,6 +49,24 @@
       "writtenOn": "2022-04-19T20:01:24Z",
       "side": 1,
       "message": "Thanks, glad to have finally figured this out.\n\nPlease add a feature to `vk_features.json` as a `Workaround` and initialize it in `RendererVk.cpp` with `isARM`. Also, feel free to remove the suppression line in `deqp_khr_gles31_test_expectations.txt` to re-enable the test.",
+      "revId": "32235e454083ff418c4c5a255df7845bb26c15bb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "6fcc0fb4_9a99c29a",
+        "filename": "src/libANGLE/renderer/vulkan/vk_caps_utils.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 1000,
+      "author": {
+        "id": 1002379
+      },
+      "writtenOn": "2022-04-20T08:34:22Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "19fce30e_cc5070e3",
       "revId": "32235e454083ff418c4c5a255df7845bb26c15bb",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
