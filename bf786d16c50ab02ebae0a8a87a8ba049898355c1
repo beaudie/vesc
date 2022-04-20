@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "90652dc1_1ffb7f9e",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 13
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1359249
+      },
+      "writtenOn": "2022-04-20T22:09:23Z",
+      "side": 1,
+      "message": "Patch set 13\nSome test were failing because there was no config with matching MUTABLE_RENDER_BIT. I skip the test if no config.",
+      "revId": "bf786d16c50ab02ebae0a8a87a8ba049898355c1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
