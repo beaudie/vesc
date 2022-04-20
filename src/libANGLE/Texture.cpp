@@ -1343,6 +1343,16 @@ angle::Result Texture::copyImage(Context *context,
                                  GLenum internalFormat,
                                  Framebuffer *source)
 {
+    Rectangle validSourceArea;
+    if (!ClipRectangle(
+            sourceArea,
+            Rectangle(std::numeric_limits<GLint>::min(), std::numeric_limits<GLint>::min(),
+                      std::numeric_limits<GLint>::max(), std::numeric_limits<GLint>::max()),
+            &validSourceArea))
+    {
+        return angle::Result::Continue;
+    }
+
     ASSERT(TextureTargetToType(target) == mState.mType);
 
     // Release from previous calls to eglBindTexImage, to avoid calling the Impl after
@@ -1369,15 +1379,16 @@ angle::Result Texture::copyImage(Context *context,
         Extents fbSize                                    = sourceReadAttachment->getSize();
         // Force using copySubImage when the source area is out of bounds AND
         // we're not copying to and from the same texture
-        forceCopySubImage = ((sourceArea.x < 0) || (sourceArea.y < 0) ||
-                             ((sourceArea.x + sourceArea.width) > fbSize.width) ||
-                             ((sourceArea.y + sourceArea.height) > fbSize.height)) &&
+        forceCopySubImage = ((validSourceArea.x < 0) || (validSourceArea.y < 0) ||
+                             ((validSourceArea.x + validSourceArea.width) > fbSize.width) ||
+                             ((validSourceArea.y + validSourceArea.height) > fbSize.height)) &&
                             (sourceReadAttachment->getResource() != this);
         Rectangle clippedArea;
-        if (ClipRectangle(sourceArea, Rectangle(0, 0, fbSize.width, fbSize.height), &clippedArea))
+        if (ClipRectangle(validSourceArea, Rectangle(0, 0, fbSize.width, fbSize.height),
+                          &clippedArea))
         {
-            const Offset clippedOffset(clippedArea.x - sourceArea.x, clippedArea.y - sourceArea.y,
-                                       0);
+            const Offset clippedOffset(clippedArea.x - validSourceArea.x,
+                                       clippedArea.y - validSourceArea.y, 0);
             destBox = Box(clippedOffset.x, clippedOffset.y, clippedOffset.z, clippedArea.width,
                           clippedArea.height, 1);
         }
@@ -1388,7 +1399,7 @@ angle::Result Texture::copyImage(Context *context,
     // If we need to initialize the destination texture we split the call into a create call,
     // an initializeContents call, and then a copySubImage call. This ensures the destination
     // texture exists before we try to clear it.
-    Extents size(sourceArea.width, sourceArea.height, 1);
+    Extents size(validSourceArea.width, validSourceArea.height, 1);
     if (forceCopySubImage || doesSubImageNeedInit(context, index, destBox))
     {
         ANGLE_TRY(mTexture->setImage(context, index, internalFormat, size,
@@ -1396,11 +1407,11 @@ angle::Result Texture::copyImage(Context *context,
                                      PixelUnpackState(), nullptr, nullptr));
         mState.setImageDesc(target, level, ImageDesc(size, Format(internalFormatInfo), initState));
         ANGLE_TRY(ensureSubImageInitialized(context, index, destBox));
-        ANGLE_TRY(mTexture->copySubImage(context, index, Offset(), sourceArea, source));
+        ANGLE_TRY(mTexture->copySubImage(context, index, Offset(), validSourceArea, source));
     }
     else
     {
-        ANGLE_TRY(mTexture->copyImage(context, index, sourceArea, internalFormat, source));
+        ANGLE_TRY(mTexture->copyImage(context, index, validSourceArea, internalFormat, source));
     }
 
     mState.setImageDesc(target, level,
