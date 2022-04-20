@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "db03e0f1_f369c71e",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 3331,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-04-20T17:58:45Z",
+      "side": 1,
+      "message": "This makes sense. Would it be better though to look at available memory and compare sizes?",
+      "range": {
+        "startLine": 3331,
+        "startChar": 77,
+        "endLine": 3331,
+        "endChar": 90
+      },
+      "revId": "c6f9dc6250b3fd208c02ec3fec6f24e3fbd3f950",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
