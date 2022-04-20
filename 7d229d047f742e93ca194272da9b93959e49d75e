@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "eb248281_a2f3d831",
+        "filename": "scripts/roll_aosp.sh",
+        "patchSetId": 1
+      },
+      "lineNbr": 168,
+      "author": {
+        "id": 1290487
+      },
+      "writtenOn": "2022-04-20T20:40:28Z",
+      "side": 0,
+      "message": "I\u0027m not sure about these files.  The only OWNERS and OWNERS.android files that I\u0027ve dealt with are in the \"angle\" directory.  These files may still need to be removed.",
+      "range": {
+        "startLine": 160,
+        "startChar": 0,
+        "endLine": 168,
+        "endChar": 50
+      },
+      "revId": "7d229d047f742e93ca194272da9b93959e49d75e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
