@@ -16,6 +16,23 @@
       "message": "Just an FYI, I tested this patch with a customer having the problem described in bug 7047 and this does solve the problem for them.",
       "revId": "000cb6ae1c7c17a752af91d2d5ade5926bcef8be",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ff4a81da_2d3be894",
+        "filename": "src/libANGLE/renderer/vulkan/BufferVk.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 118,
+      "author": {
+        "id": 1520902
+      },
+      "writtenOn": "2022-04-20T22:42:04Z",
+      "side": 1,
+      "message": "is it possible that hasMapAccess is true, but preferDeviceLocalMemoryHostVisible is false? In that case we are returning kDeviceLocalHostVisibleFlags, is that the desired result?",
+      "revId": "000cb6ae1c7c17a752af91d2d5ade5926bcef8be",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
