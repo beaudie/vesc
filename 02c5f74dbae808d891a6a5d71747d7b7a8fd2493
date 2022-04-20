@@ -33,6 +33,23 @@
       "message": "I only have +1 for angle project xD",
       "revId": "02c5f74dbae808d891a6a5d71747d7b7a8fd2493",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "c6a6a5d5_902da121",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1359249
+      },
+      "writtenOn": "2022-04-20T16:21:43Z",
+      "side": 1,
+      "message": "LGTM. thx",
+      "revId": "02c5f74dbae808d891a6a5d71747d7b7a8fd2493",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
