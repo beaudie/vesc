@@ -1,0 +1,136 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "91c7b607_6d27f3a4",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 5
+      },
+      "lineNbr": 10,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2022-04-20T15:00:30Z",
+      "side": 1,
+      "message": "what do you do for json files?",
+      "range": {
+        "startLine": 10,
+        "startChar": 8,
+        "endLine": 10,
+        "endChar": 32
+      },
+      "revId": "afe54d71ac164248112dfa482afe2faea56b196a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "ab66436d_072b2328",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 5
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2022-04-20T15:00:30Z",
+      "side": 1,
+      "message": "Very nice work Roman. Some comments below.",
+      "revId": "afe54d71ac164248112dfa482afe2faea56b196a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "2564caba_150863bf",
+        "filename": "src/tests/py_utils/android_helper.py",
+        "patchSetId": 5
+      },
+      "lineNbr": 92,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2022-04-20T15:00:30Z",
+      "side": 1,
+      "message": "suggest you log the time elapsed for the total push time for this group of traces.",
+      "range": {
+        "startLine": 92,
+        "startChar": 12,
+        "endLine": 92,
+        "endChar": 15
+      },
+      "revId": "afe54d71ac164248112dfa482afe2faea56b196a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "cf6a16a5_273ab337",
+        "filename": "src/tests/py_utils/android_helper.py",
+        "patchSetId": 5
+      },
+      "lineNbr": 117,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2022-04-20T15:00:30Z",
+      "side": 1,
+      "message": "suggest we use logging.debug whenever we invoke ADB (maybe make a wrapper)",
+      "range": {
+        "startLine": 117,
+        "startChar": 8,
+        "endLine": 117,
+        "endChar": 11
+      },
+      "revId": "afe54d71ac164248112dfa482afe2faea56b196a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "75222fdb_271ec51a",
+        "filename": "src/tests/py_utils/android_helper.py",
+        "patchSetId": 5
+      },
+      "lineNbr": 117,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2022-04-20T15:00:30Z",
+      "side": 1,
+      "message": "this folder I think still has the same bad caching behaviour.. we should make a follow-up fix to use a separate folder, or do the simple fix Cody proposed and move angle_end2end_tests_expectations.txt",
+      "range": {
+        "startLine": 117,
+        "startChar": 45,
+        "endLine": 117,
+        "endChar": 64
+      },
+      "revId": "afe54d71ac164248112dfa482afe2faea56b196a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "d6969c40_be42c26a",
+        "filename": "src/tests/restricted_traces/restricted_trace_gold_tests.py",
+        "patchSetId": 5
+      },
+      "lineNbr": 150,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2022-04-20T15:00:30Z",
+      "side": 1,
+      "message": "seems like \"env\" is discarded on Android ATM. Can you double-check it\u0027s also discarded by the Chrome Android test_runner.py + wrapper script? If it\u0027s not discarded, we should emulate this behaviour as well. Fine to do as a follow-up if necessary.",
+      "range": {
+        "startLine": 150,
+        "startChar": 28,
+        "endLine": 150,
+        "endChar": 31
+      },
+      "revId": "afe54d71ac164248112dfa482afe2faea56b196a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
