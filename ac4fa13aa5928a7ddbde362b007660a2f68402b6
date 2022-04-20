@@ -33,6 +33,24 @@
       "message": "What will this do on Android?",
       "revId": "ac4fa13aa5928a7ddbde362b007660a2f68402b6",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "5880b01d_78f447ea",
+        "filename": "scripts/roll_aosp.sh",
+        "patchSetId": 1
+      },
+      "lineNbr": 114,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2022-04-20T20:55:32Z",
+      "side": 1,
+      "message": "Add the build folder to the angle project.",
+      "parentUuid": "7e761e31_8efd53f1",
+      "revId": "ac4fa13aa5928a7ddbde362b007660a2f68402b6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
