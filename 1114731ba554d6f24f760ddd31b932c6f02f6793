@@ -26,6 +26,30 @@
     {
       "unresolved": false,
       "key": {
+        "uuid": "e403e87b_1bba1c5d",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 9,
+      "author": {
+        "id": 1394635
+      },
+      "writtenOn": "2022-04-20T12:46:39Z",
+      "side": 1,
+      "message": "That issue combines a bunch of small fixes for the script and AutodetectGoma function was added there, so I didn\u0027t open a new one.\n\nI added more context to the commit message.",
+      "parentUuid": "0fda7d58_fbc3c3af",
+      "range": {
+        "startLine": 9,
+        "startChar": 0,
+        "endLine": 9,
+        "endChar": 22
+      },
+      "revId": "1114731ba554d6f24f760ddd31b932c6f02f6793",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
         "uuid": "cb777c0f_24c39955",
         "filename": "/PATCHSET_LEVEL",
         "patchSetId": 1
