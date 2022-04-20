@@ -72,6 +72,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "36602ee7_1f442c38",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-04-20T15:53:06Z",
+      "side": 1,
+      "message": "So we were talking and it looks like your GLES quote is not complete. It recommends setting gl_Layer identically, but also says you can query which one will be used:\n\n```\n    The specific vertex of a primitive that is used to select the rendering\n    layer is implementation-dependent and thus portable applications will\n    assign the same layer for all vertices in a primitive. The vertex\n    convention followed for \"gl_Layer\" may be determined by calling\n    GetIntegerv with the symbolic constant LAYER_PROVOKING_VERTEX_EXT. If\n    the value returned is FIRST_VERTEX_CONVENTION_EXT, selection is always\n    taken from the first vertex of a primitive. If the value returned is\n    LAST_VERTEX_CONVENTION_EXT, the selection is always taken from the last\n    vertex of a primitive. If the value returned is UNDEFINED_VERTEX_EXT,\n    the selection is not guaranteed to be taken from any specific vertex in\n    the primitive.\n```\n\nLuckily there\u0027s a way out for ANGLE here. Instead of choosing which provoking vertex to advertise, we can simply return `UNDEFINED_VERTEX_EXT` which then necessarily means the app would have to set `gl_Layer` identically.",
+      "parentUuid": "8c3b6342_2ef16ab2",
+      "revId": "32235e454083ff418c4c5a255df7845bb26c15bb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "19fce30e_cc5070e3",
