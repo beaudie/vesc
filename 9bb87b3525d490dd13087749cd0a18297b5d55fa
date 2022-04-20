@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "510ccbc8_66d052a6",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2022-04-20T21:37:59Z",
+      "side": 1,
+      "message": "lgtm\n\nGreat work figuring out this tricky optimization and factoring the readback code to handle the source coming either directly from the texture, or from the mapped buffer.\n\nNo significant comments - I assume conformance tests will cover all strange permutations.\n",
+      "revId": "9bb87b3525d490dd13087749cd0a18297b5d55fa",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
