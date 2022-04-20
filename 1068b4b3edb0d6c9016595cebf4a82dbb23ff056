@@ -52,6 +52,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "17f13bdc_d402df7b",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.h",
+        "patchSetId": 16
+      },
+      "lineNbr": 1058,
+      "author": {
+        "id": 1525982
+      },
+      "writtenOn": "2022-04-20T20:28:02Z",
+      "side": 1,
+      "message": "Updated for `handleDirtyUniformsImpl()` and `updateDriverUniformsDescriptorSet()`",
+      "parentUuid": "103579e6_5cc565fd",
+      "revId": "1068b4b3edb0d6c9016595cebf4a82dbb23ff056",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "f6644d79_ea6d096a",
@@ -69,6 +87,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "88b5d690_5b3dafc1",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 16
+      },
+      "lineNbr": 3323,
+      "author": {
+        "id": 1525982
+      },
+      "writtenOn": "2022-04-20T20:28:02Z",
+      "side": 1,
+      "message": "Thanks! Done.",
+      "parentUuid": "f6644d79_ea6d096a",
+      "revId": "1068b4b3edb0d6c9016595cebf4a82dbb23ff056",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "60cd06cd_b2920df2",
@@ -82,6 +118,30 @@
       "writtenOn": "2022-04-20T02:21:36Z",
       "side": 1,
       "message": "nit: Just delete this. At this point it\u0027s clear that things need to be retained. If not, at least the comment should be moved to where the retain happens.",
+      "range": {
+        "startLine": 3534,
+        "startChar": 0,
+        "endLine": 3535,
+        "endChar": 94
+      },
+      "revId": "1068b4b3edb0d6c9016595cebf4a82dbb23ff056",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "16c04b55_a8bf49f1",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 16
+      },
+      "lineNbr": 3535,
+      "author": {
+        "id": 1525982
+      },
+      "writtenOn": "2022-04-20T20:28:02Z",
+      "side": 1,
+      "message": "Removed",
+      "parentUuid": "60cd06cd_b2920df2",
       "range": {
         "startLine": 3534,
         "startChar": 0,
