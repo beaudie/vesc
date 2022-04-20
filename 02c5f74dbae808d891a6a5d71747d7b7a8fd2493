@@ -90,6 +90,30 @@
       },
       "revId": "02c5f74dbae808d891a6a5d71747d7b7a8fd2493",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "4e049f1b_db79f3f7",
+        "filename": "src/libANGLE/renderer/vulkan/SurfaceVk.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 1914,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-04-20T20:22:22Z",
+      "side": 1,
+      "message": "Will fix the typo in whatever CL I upload next",
+      "parentUuid": "2457d5aa_71a5bb78",
+      "range": {
+        "startLine": 1914,
+        "startChar": 12,
+        "endLine": 1914,
+        "endChar": 93
+      },
+      "revId": "02c5f74dbae808d891a6a5d71747d7b7a8fd2493",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
