@@ -106,13 +106,11 @@
 5197 LINUX OPENGL : dEQP-GLES31.functional.compute.indirect_dispatch.gen_in_compute.large_offset_multiple_invocations = TIMEOUT
 
 // OpenGL/D3D11 Failing Tests
-1951 D3D11 : dEQP-GLES31.functional.shaders.opaque_type_indexing.ssbo.* = SKIP
 1442 OPENGL : dEQP-GLES31.functional.shaders.opaque_type_indexing.* = FAIL
 1442 D3D11 : dEQP-GLES31.functional.shaders.opaque_type_indexing.* = FAIL
 1442 OPENGL : dEQP-GLES31.functional.separate_shader.* = SKIP
 1442 D3D11 : dEQP-GLES31.functional.separate_shader.* = SKIP
 1442 OPENGL : dEQP-GLES31.functional.state_query.program.program_separable_get_programiv = FAIL
-1442 D3D11 : dEQP-GLES31.functional.state_query.program.program_separable_get_programiv = FAIL
 1442 OPENGL : dEQP-GLES31.functional.state_query.program_pipeline.* = SKIP
 1442 D3D11 : dEQP-GLES31.functional.state_query.program_pipeline.* = SKIP
 
