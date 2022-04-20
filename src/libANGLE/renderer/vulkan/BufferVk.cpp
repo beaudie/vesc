@@ -54,10 +54,12 @@ constexpr size_t kConvertedArrayBufferInitialSize = 1024 * 8;
 // device local memory to speed up access to and from the GPU.
 // Dynamic usage patterns or that are frequently mapped
 // will now request host cached memory to speed up access from the CPU.
-ANGLE_INLINE VkMemoryPropertyFlags GetPreferredMemoryType(gl::BufferBinding target,
+ANGLE_INLINE VkMemoryPropertyFlags GetPreferredMemoryType(RendererVk *renderer,
+                                                          gl::BufferBinding target,
                                                           gl::BufferUsage usage)
 {
-    constexpr VkMemoryPropertyFlags kDeviceLocalFlags =
+    constexpr VkMemoryPropertyFlags kDeviceLocalFlags = VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT;
+    constexpr VkMemoryPropertyFlags kDeviceLocalHostVisibleFlags =
         (VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT | VK_MEMORY_PROPERTY_HOST_COHERENT_BIT |
          VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT);
     constexpr VkMemoryPropertyFlags kHostCachedFlags =
@@ -77,7 +79,9 @@ ANGLE_INLINE VkMemoryPropertyFlags GetPreferredMemoryType(gl::BufferBinding targ
         case gl::BufferUsage::StaticDraw:
         case gl::BufferUsage::StaticRead:
             // For static usage, request a device local memory
-            return kDeviceLocalFlags;
+            return renderer->getFeatures().preferDeviceLocalMemoryHostVisible.enabled
+                       ? kDeviceLocalHostVisibleFlags
+                       : kDeviceLocalFlags;
         case gl::BufferUsage::DynamicDraw:
         case gl::BufferUsage::StreamDraw:
             // For non-static usage where the CPU performs a write-only access, request
@@ -95,14 +99,24 @@ ANGLE_INLINE VkMemoryPropertyFlags GetPreferredMemoryType(gl::BufferBinding targ
     }
 }
 
-ANGLE_INLINE VkMemoryPropertyFlags GetStorageMemoryType(GLbitfield storageFlags,
+ANGLE_INLINE VkMemoryPropertyFlags GetStorageMemoryType(RendererVk *renderer,
+                                                        GLbitfield storageFlags,
                                                         bool externalBuffer)
 {
+    constexpr VkMemoryPropertyFlags kDeviceLocalFlags = VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT;
     constexpr VkMemoryPropertyFlags kDeviceLocalHostVisibleFlags =
         (VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT | VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT);
     constexpr VkMemoryPropertyFlags kDeviceLocalHostCoherentFlags =
         (VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT | VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT |
          VK_MEMORY_PROPERTY_HOST_COHERENT_BIT);
+
+    const bool hasMapAccess = (storageFlags & (GL_MAP_READ_BIT | GL_MAP_WRITE_BIT)) != 0;
+    if (!renderer->getFeatures().preferDeviceLocalMemoryHostVisible.enabled && !hasMapAccess)
+    {
+        // Don't use host visible bit if buffer is not going to be accessed via map and feature bits
+        // also don't prefer.
+        return kDeviceLocalFlags;
+    }
 
     const bool isCoherentMap   = (storageFlags & GL_MAP_COHERENT_BIT_EXT) != 0;
     const bool isPersistentMap = (storageFlags & GL_MAP_PERSISTENT_BIT_EXT) != 0;
@@ -232,6 +246,9 @@ BufferVk::BufferVk(const gl::BufferState &state)
       mMemoryPropertyFlags(0),
       mIsStagingBufferMapped(false),
       mHasValidData(false),
+      mIsMappedForWrite(false),
+      mMappedOffset(0),
+      mMappedLength(0),
       mHasBeenReferencedByGPU(false)
 {}
 
@@ -294,6 +311,7 @@ angle::Result BufferVk::setDataWithUsageFlags(const gl::Context *context,
                                               gl::BufferUsage usage,
                                               GLbitfield flags)
 {
+    ContextVk *contextVk                      = vk::GetImpl(context);
     VkMemoryPropertyFlags memoryPropertyFlags = 0;
     bool persistentMapRequired                = false;
     const bool isExternalBuffer               = clientBuffer != nullptr;
@@ -303,14 +321,15 @@ angle::Result BufferVk::setDataWithUsageFlags(const gl::Context *context,
         case gl::BufferUsage::InvalidEnum:
         {
             // glBufferStorage API call
-            memoryPropertyFlags   = GetStorageMemoryType(flags, isExternalBuffer);
+            memoryPropertyFlags =
+                GetStorageMemoryType(contextVk->getRenderer(), flags, isExternalBuffer);
             persistentMapRequired = (flags & GL_MAP_PERSISTENT_BIT_EXT) != 0;
             break;
         }
         default:
         {
             // glBufferData API call
-            memoryPropertyFlags = GetPreferredMemoryType(target, usage);
+            memoryPropertyFlags = GetPreferredMemoryType(contextVk->getRenderer(), target, usage);
             break;
         }
     }
@@ -322,8 +341,7 @@ angle::Result BufferVk::setDataWithUsageFlags(const gl::Context *context,
         {
             // If external buffer's memory does not support host visible memory property, we cannot
             // support a persistent map request.
-            ANGLE_VK_CHECK(vk::GetImpl(context), !persistentMapRequired,
-                           VK_ERROR_MEMORY_MAP_FAILED);
+            ANGLE_VK_CHECK(contextVk, !persistentMapRequired, VK_ERROR_MEMORY_MAP_FAILED);
         }
 
         mClientBuffer = clientBuffer;
@@ -340,8 +358,10 @@ angle::Result BufferVk::setData(const gl::Context *context,
                                 size_t size,
                                 gl::BufferUsage usage)
 {
+    ContextVk *contextVk = vk::GetImpl(context);
     // Assume host visible/coherent memory available.
-    VkMemoryPropertyFlags memoryPropertyFlags = GetPreferredMemoryType(target, usage);
+    VkMemoryPropertyFlags memoryPropertyFlags =
+        GetPreferredMemoryType(contextVk->getRenderer(), target, usage);
     return setDataWithMemoryType(context, target, data, size, memoryPropertyFlags, false, usage);
 }
 
@@ -606,11 +626,16 @@ angle::Result BufferVk::mapRangeImpl(ContextVk *contextVk,
                                      GLbitfield access,
                                      void **mapPtr)
 {
-    uint8_t **mapPtrBytes = reinterpret_cast<uint8_t **>(mapPtr);
-
     ASSERT(mBuffer.valid());
 
-    bool hostVisible = mBuffer.isHostVisible();
+    // Record map call parameters in case this call is from angle internal (the access/offset/length
+    // will be inconsistent from mState).
+    mIsMappedForWrite = (access & GL_MAP_WRITE_BIT) != 0;
+    mMappedOffset     = offset;
+    mMappedLength     = length;
+
+    uint8_t **mapPtrBytes = reinterpret_cast<uint8_t **>(mapPtr);
+    bool hostVisible      = mBuffer.isHostVisible();
 
     // MAP_UNSYNCHRONIZED_BIT, so immediately map.
     if ((access & GL_MAP_UNSYNCHRONIZED_BIT) != 0)
@@ -711,15 +736,13 @@ angle::Result BufferVk::unmapImpl(ContextVk *contextVk)
 {
     ASSERT(mBuffer.valid());
 
-    bool writeOperation = ((mState.getAccessFlags() & GL_MAP_WRITE_BIT) != 0);
-
     if (mIsStagingBufferMapped)
     {
         ASSERT(mStagingBuffer.valid());
         // The buffer is device local or optimization of small range map.
-        if (writeOperation)
+        if (mIsMappedForWrite)
         {
-            ANGLE_TRY(flushStagingBuffer(contextVk, mState.getMapOffset(), mState.getMapLength()));
+            ANGLE_TRY(flushStagingBuffer(contextVk, mMappedOffset, mMappedLength));
         }
 
         mIsStagingBufferMapped = false;
@@ -730,10 +753,15 @@ angle::Result BufferVk::unmapImpl(ContextVk *contextVk)
         mBuffer.unmap(contextVk->getRenderer());
     }
 
-    if (writeOperation)
+    if (mIsMappedForWrite)
     {
         dataUpdated();
     }
+
+    // Reset the mapping parameters
+    mIsMappedForWrite = false;
+    mMappedOffset     = 0;
+    mMappedLength     = 0;
 
     return angle::Result::Continue;
 }
