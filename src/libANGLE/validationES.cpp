@@ -3785,6 +3785,13 @@ bool ValidateCopyTexImageParametersBase(const Context *context,
         return false;
     }
 
+    if (std::numeric_limits<GLint>::max() - width < x ||
+        std::numeric_limits<GLint>::max() - height < y)
+    {
+        context->validationError(entryPoint, GL_INVALID_VALUE, kIntegerOverflow);
+        return false;
+    }
+
     if (border != 0)
     {
         context->validationError(entryPoint, GL_INVALID_VALUE, kInvalidBorder);

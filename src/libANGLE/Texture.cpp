@@ -1369,6 +1369,7 @@ angle::Result Texture::copyImage(Context *context,
         Extents fbSize                                    = sourceReadAttachment->getSize();
         // Force using copySubImage when the source area is out of bounds AND
         // we're not copying to and from the same texture
+
         forceCopySubImage = ((sourceArea.x < 0) || (sourceArea.y < 0) ||
                              ((sourceArea.x + sourceArea.width) > fbSize.width) ||
                              ((sourceArea.y + sourceArea.height) > fbSize.height)) &&
