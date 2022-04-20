@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "e559b4dc_f5e8eebf",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2022-04-20T16:02:12Z",
+      "side": 1,
+      "message": "CQ\u0027ing on Kimmo\u0027s request.\n",
+      "revId": "a4f489f54f5d3ba75f7d60018a2f9b00b6b4c33d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
