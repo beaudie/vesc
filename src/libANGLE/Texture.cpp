@@ -1369,17 +1369,33 @@ angle::Result Texture::copyImage(Context *context,
         Extents fbSize                                    = sourceReadAttachment->getSize();
         // Force using copySubImage when the source area is out of bounds AND
         // we're not copying to and from the same texture
-        forceCopySubImage = ((sourceArea.x < 0) || (sourceArea.y < 0) ||
-                             ((sourceArea.x + sourceArea.width) > fbSize.width) ||
-                             ((sourceArea.y + sourceArea.height) > fbSize.height)) &&
-                            (sourceReadAttachment->getResource() != this);
-        Rectangle clippedArea;
-        if (ClipRectangle(sourceArea, Rectangle(0, 0, fbSize.width, fbSize.height), &clippedArea))
+
+        // First check to make sure there is no integer overflow with
+        // sourceArea.x + sourceArea.width &
+        // sourceArea.y + sourceArea.height
+        Rectangle validGLintArea;
+        if (!ClipRectangle(sourceArea,
+                           Rectangle(0, 0, std::numeric_limits<GLint>::max(),
+                                     std::numeric_limits<GLint>::max()),
+                           &validGLintArea))
         {
-            const Offset clippedOffset(clippedArea.x - sourceArea.x, clippedArea.y - sourceArea.y,
-                                       0);
-            destBox = Box(clippedOffset.x, clippedOffset.y, clippedOffset.z, clippedArea.width,
-                          clippedArea.height, 1);
+            destBox = {};
+        }
+        else
+        {
+            forceCopySubImage = ((sourceArea.x < 0) || (sourceArea.y < 0) ||
+                                 ((sourceArea.x + sourceArea.width) > fbSize.width) ||
+                                 ((sourceArea.y + sourceArea.height) > fbSize.height)) &&
+                                (sourceReadAttachment->getResource() != this);
+            Rectangle clippedArea;
+            if (ClipRectangle(sourceArea, Rectangle(0, 0, fbSize.width, fbSize.height),
+                              &clippedArea))
+            {
+                const Offset clippedOffset(clippedArea.x - sourceArea.x,
+                                           clippedArea.y - sourceArea.y, 0);
+                destBox = Box(clippedOffset.x, clippedOffset.y, clippedOffset.z, clippedArea.width,
+                              clippedArea.height, 1);
+            }
         }
     }
 
