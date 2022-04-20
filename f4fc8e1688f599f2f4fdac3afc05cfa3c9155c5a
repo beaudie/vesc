@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "19b7bcfd_f61976b1",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2022-04-20T16:00:46Z",
+      "side": 1,
+      "message": "Is there a path forward for Alexey to diagnose the win-trace failures seen with this patch? This is fixing a real cross-platform bug.\n",
+      "revId": "f4fc8e1688f599f2f4fdac3afc05cfa3c9155c5a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
