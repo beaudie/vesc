@@ -63,6 +63,30 @@
       },
       "revId": "adb067a9c3a41a03749fb6bce9de7c8755b45e6a",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "d3861367_0d6c4956",
+        "filename": "src/common/angleutils.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 474,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2022-04-20T20:03:24Z",
+      "side": 1,
+      "message": "Also, all identifiers that contain a double underscore __ in any position and each identifier that begins with an underscore followed by an uppercase letter is always reserved and all identifiers that begin with an underscore are reserved for use as names in the global namespace. See identifiers for more details. [1]\n\n[1]: https://en.cppreference.com/w/cpp/keyword\n\nIs this in a namespace? Anyway to be safe I recommend not naming things starting with _.",
+      "parentUuid": "45a68238_022bf7b9",
+      "range": {
+        "startLine": 474,
+        "startChar": 43,
+        "endLine": 474,
+        "endChar": 79
+      },
+      "revId": "adb067a9c3a41a03749fb6bce9de7c8755b45e6a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
