@@ -41,6 +41,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "e58fb553_76181681",
+        "filename": "src/libANGLE/Context.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 9296,
+      "author": {
+        "id": 1449558
+      },
+      "writtenOn": "2022-04-20T09:37:38Z",
+      "side": 1,
+      "message": "Not sure what do you mean with \"need\".\nChanged auto * to Framebuffer *",
+      "parentUuid": "9759ef6b_6ba1336a",
+      "range": {
+        "startLine": 9296,
+        "startChar": 4,
+        "endLine": 9296,
+        "endChar": 9
+      },
+      "revId": "7c64c1df147fc5d8a38fe18a32d581c1903118e3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "cf55a06c_ec6b7d54",
@@ -72,6 +96,24 @@
       "side": 1,
       "message": "I think using a std::unique_ptr with deleter is the same behaviour and uses more c++ builtins which I always like.",
       "parentUuid": "cf55a06c_ec6b7d54",
+      "revId": "7c64c1df147fc5d8a38fe18a32d581c1903118e3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "9a98d3ce_f9a25c6d",
+        "filename": "src/libANGLE/angletypes.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 1090,
+      "author": {
+        "id": 1449558
+      },
+      "writtenOn": "2022-04-20T09:37:38Z",
+      "side": 1,
+      "message": "\u003e Was it not possible, or undesirable, to continue to use ANGLE\u0027s UniqueObjectPointerBase class?\n\nSo the commit message explains that these are needed. \n\nUniqueObjectPointerBase was practically unused class. It could be used in practice in non-trivial cases, as it couldn\u0027t default construct. Default construct is needed is needed in this patch. Once the listed features are added (default construct, move, bool), the UniqueObjectPointerBase would be just a poor version of unique_ptr.\n\nUsing UniqueObjectPointer more should lead to less errors, not more. Adding the default construct to DestroyThenDelete should be a progression from error perspective.",
+      "parentUuid": "72b2477b_36a1bb22",
       "revId": "7c64c1df147fc5d8a38fe18a32d581c1903118e3",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
