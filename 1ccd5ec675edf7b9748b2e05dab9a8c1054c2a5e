@@ -1,0 +1,44 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "c3dfb1f5_88f62862",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-04-20T14:03:39Z",
+      "side": 1,
+      "message": "LGTM, thanks",
+      "revId": "1ccd5ec675edf7b9748b2e05dab9a8c1054c2a5e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "c772811b_f84bf3c0",
+        "filename": "include/platform/vk_features.json",
+        "patchSetId": 2
+      },
+      "lineNbr": 994,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-04-20T14:03:39Z",
+      "side": 1,
+      "message": "nit: Merge conflict here",
+      "range": {
+        "startLine": 993,
+        "startChar": 0,
+        "endLine": 994,
+        "endChar": 56
+      },
+      "revId": "1ccd5ec675edf7b9748b2e05dab9a8c1054c2a5e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
