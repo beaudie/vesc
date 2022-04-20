@@ -136,6 +136,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "141a2016_eec50a2c",
+        "filename": "src/tests/py_utils/android_helper.py",
+        "patchSetId": 5
+      },
+      "lineNbr": 92,
+      "author": {
+        "id": 1531247
+      },
+      "writtenOn": "2022-04-20T18:15:21Z",
+      "side": 1,
+      "message": "Done, thanks! Example from a local run:\n`Pushed 2 trace files (56.4MB) in 1.6s`",
+      "parentUuid": "be5e0149_ee14ff1b",
+      "range": {
+        "startLine": 92,
+        "startChar": 12,
+        "endLine": 92,
+        "endChar": 15
+      },
+      "revId": "afe54d71ac164248112dfa482afe2faea56b196a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "cf6a16a5_273ab337",
