@@ -22,6 +22,30 @@
       },
       "revId": "263a752f236f7cba33fdebbb42ac5a4af2c415d1",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "113b9a26_5cc26037",
+        "filename": "src/libANGLE/renderer/vulkan/linux/wayland/WindowSurfaceVkWayland.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 32,
+      "author": {
+        "id": 1125810
+      },
+      "writtenOn": "2022-04-20T10:06:46Z",
+      "side": 1,
+      "message": "Yes, that\u0027s right. Wayland surfaces have no \u0027native\u0027 or inherent dimensions to them. The surface\u0027s size is the size of the currently-attached buffer (i.e. last thing posted by vkQueuePresentKHR), plus any client-supplied transformations for e.g. rotation or scale.",
+      "parentUuid": "64ebed78_03bc1554",
+      "range": {
+        "startLine": 31,
+        "startChar": 7,
+        "endLine": 32,
+        "endChar": 41
+      },
+      "revId": "263a752f236f7cba33fdebbb42ac5a4af2c415d1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
