@@ -105,6 +105,24 @@
       "parentUuid": "965612be_d91455f3",
       "revId": "36d1a0c88b9601b3d7e29350989e31de96e07d9d",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "50e00a2a_d126cb44",
+        "filename": "src/libANGLE/renderer/vulkan/TextureVk.h",
+        "patchSetId": 5
+      },
+      "lineNbr": 245,
+      "author": {
+        "id": 1520902
+      },
+      "writtenOn": "2022-04-20T16:38:02Z",
+      "side": 1,
+      "message": "I see! That perfectly answers my question. Thank you :)",
+      "parentUuid": "6caada59_2410029e",
+      "revId": "36d1a0c88b9601b3d7e29350989e31de96e07d9d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
