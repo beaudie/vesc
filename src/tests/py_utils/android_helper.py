@@ -201,10 +201,16 @@ def _PullDir(adb, device_dir, local_dir):
             adb.Run(['pull', posixpath.join(device_dir, f), posixpath.join(local_dir, f)])
 
 
-def RunTests(adb, test_suite, args, stdoutfile, output_dir):
-    with _TempDeviceDir(adb) as temp_dir:
-        output = _RunInstrumentation(adb, args + ['--render-test-output-dir=' + temp_dir])
+def RunTests(adb, test_suite, args, stdoutfile=None, output_dir=None):
+    if output_dir:
+        with _TempDeviceDir(adb) as temp_dir:
+            output = _RunInstrumentation(adb, args + ['--render-test-output-dir=' + temp_dir])
+            _PullDir(adb, temp_dir, output_dir)
+    else:
+        output = _RunInstrumentation(adb, args)
+
+    logging.info(output.decode())
+
+    if stdoutfile:
         with open(stdoutfile, 'wb') as f:
             f.write(output)
-            logging.info(output.decode())
-        _PullDir(adb, temp_dir, output_dir)
