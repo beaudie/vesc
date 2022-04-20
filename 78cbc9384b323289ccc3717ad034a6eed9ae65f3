@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "bba5071a_7bb084e9",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1002869
+      },
+      "writtenOn": "2022-04-20T15:24:38Z",
+      "side": 1,
+      "message": "Hi Jamie,\n\nWould you mind +2\u0027ing this build target redirection?\n\nThanks,\nPeter",
+      "revId": "78cbc9384b323289ccc3717ad034a6eed9ae65f3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
