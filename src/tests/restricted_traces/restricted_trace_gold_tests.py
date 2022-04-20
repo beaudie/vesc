@@ -33,6 +33,7 @@ _AddToPathIfNeeded(os.path.abspath(os.path.join(os.path.dirname(__file__), '..',
 import angle_path_util
 from skia_gold import angle_skia_gold_properties
 from skia_gold import angle_skia_gold_session_manager
+import android_helper
 
 angle_path_util.AddDepsDirToPath('testing/scripts')
 import common
@@ -119,11 +120,54 @@ def add_skia_gold_args(parser):
         'pre-authenticated. Meant for testing locally instead of on the bots.')
 
 
-def run_wrapper(args, cmd, env, stdoutfile=None):
+def _adb_if_android(args):
+    if android_helper.ApkFileExists(args.test_suite):
+        return android_helper.Adb()
+
+    return None
+
+
+def run_wrapper(test_suite, cmd_args, args, env, stdoutfile, output_dir):
+    cmd = [get_binary_name(test_suite)] + cmd_args
+    if output_dir:
+        cmd += ['--render-test-output-dir=%s' % output_dir]
+
     if args.xvfb:
         return xvfb.run_executable(cmd, env, stdoutfile=stdoutfile)
     else:
-        return test_env.run_command_with_output(cmd, env=env, stdoutfile=stdoutfile)
+        adb = _adb_if_android(args)
+        if adb:
+            try:
+                android_helper.RunTests(adb, test_suite, cmd_args, stdoutfile, output_dir)
+                return 0
+            except Exception as e:
+                logging.exception(e)
+                return 1
+        else:
+            return test_env.run_command_with_output(cmd, env=env, stdoutfile=stdoutfile)
+
+
+def angle_system_info(args):
+    with temporary_dir() as temp_dir:
+        sysinfo_args = ['--vulkan', '-v']
+        if args.swiftshader:
+            sysinfo_args.append('--swiftshader')
+        tempfile_path = os.path.join(temp_dir, 'stdout')
+
+        suite = 'angle_system_info_test'
+
+        adb = _adb_if_android(args)
+        if adb:
+            json_data = android_helper.AngleSystemInfo(adb, sysinfo_args, temp_dir)
+        else:
+            sysinfo_args += ['--render-test-output-dir=' + temp_dir]
+            if run_wrapper(suite, sysinfo_args, args, env, tempfile_path):
+                raise Exception('Error getting system info.')
+
+            with open(os.path.join(temp_dir, 'angle_system_info.json')) as f:
+                json_data = json.load(f)
+
+    return json_data
 
 
 def to_hex(num):
@@ -158,17 +202,7 @@ def get_skia_gold_keys(args, env):
         logging.exception('get_skia_gold_keys may only be called once')
     get_skia_gold_keys.called = True
 
-    with temporary_dir() as temp_dir:
-        binary = get_binary_name('angle_system_info_test')
-        sysinfo_args = [binary, '--vulkan', '-v', '--render-test-output-dir=' + temp_dir]
-        if args.swiftshader:
-            sysinfo_args.append('--swiftshader')
-        tempfile_path = os.path.join(temp_dir, 'stdout')
-        if run_wrapper(args, sysinfo_args, env, tempfile_path):
-            raise Exception('Error getting system info.')
-
-        with open(os.path.join(temp_dir, 'angle_system_info.json')) as f:
-            json_data = json.load(f)
+    json_data = angle_system_info(args)
 
     if len(json_data.get('gpus', [])) == 0 or not 'activeGPUIndex' in json_data:
         raise Exception('Error getting system info.')
@@ -290,6 +324,10 @@ def _get_gtest_filter_for_batch(args, batch):
 def _run_tests(args, tests, extra_flags, env, screenshot_dir, results, test_results):
     keys = get_skia_gold_keys(args, env)
 
+    adb = _adb_if_android(args)
+    if adb:
+        android_helper.PrepareTestSuite(adb, args.test_suite)
+
     with temporary_dir('angle_skia_gold_') as skia_gold_temp_dir:
         gold_properties = angle_skia_gold_properties.ANGLESkiaGoldProperties(args)
         gold_session_manager = angle_skia_gold_session_manager.ANGLESkiaGoldSessionManager(
@@ -313,6 +351,10 @@ def _run_tests(args, tests, extra_flags, env, screenshot_dir, results, test_resu
         batches = _get_batches(traces, args.batch_size)
 
         for batch in batches:
+            if adb:
+                for trace in batch:
+                    android_helper.PrepareRestrictedTrace(adb, trace)
+
             for iteration in range(0, args.flaky_retries + 1):
                 with common.temporary_file() as tempfile_path:
                     # This is how we signal early exit
@@ -323,16 +365,19 @@ def _run_tests(args, tests, extra_flags, env, screenshot_dir, results, test_resu
                         logging.info('Test run failed, running retry #%d...' % iteration)
 
                     gtest_filter = _get_gtest_filter_for_batch(args, batch)
-                    cmd = [
-                        get_binary_name(args.test_suite),
+                    cmd_args = [
                         gtest_filter,
-                        '--render-test-output-dir=%s' % screenshot_dir,
                         '--one-frame-only',
                         '--verbose-logging',
                         '--enable-all-trace-tests',
                     ] + extra_flags
-                    batch_result = PASS if run_wrapper(args, cmd, env,
-                                                       tempfile_path) == 0 else FAIL
+                    batch_result = PASS if run_wrapper(
+                        args.test_suite,
+                        cmd_args,
+                        args,
+                        env,
+                        tempfile_path,
+                        output_dir=screenshot_dir) == 0 else FAIL
 
                     with open(tempfile_path) as f:
                         test_output = f.read() + '\n'
