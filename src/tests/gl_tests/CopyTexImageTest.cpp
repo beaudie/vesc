@@ -21,6 +21,7 @@ class CopyTexImageTest : public ANGLETest
         setConfigGreenBits(8);
         setConfigBlueBits(8);
         setConfigAlphaBits(8);
+        setRobustResourceInit(true);
     }
 
     void testSetUp() override
@@ -419,6 +420,41 @@ TEST_P(CopyTexImageTest, DefaultFramebuffer)
     glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, w, h, 0, GL_RGBA, GL_UNSIGNED_BYTE, nullptr);
     glCopyTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, 0, 0, w, h, 0);
     EXPECT_GL_NO_ERROR();
+}
+
+// Adapted from the fuzz test with invalid input
+TEST_P(CopyTexImageTest, InvalidInputParam)
+{
+    glClear(GL_COLOR_BUFFER_BIT);
+
+    const GLint w = getWindowWidth(), h = getWindowHeight();
+    GLTexture tex;
+    glBindTexture(GL_TEXTURE_2D, tex);
+    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, w, h, 0, GL_RGBA, GL_UNSIGNED_BYTE, nullptr);
+
+    // pass y that is greater than max2DTextureSize
+    GLenum target         = GL_TEXTURE_2D;
+    GLint level           = 0;
+    GLenum internalFormat = GL_LUMINANCE_ALPHA;
+    GLint x               = 0;
+    GLint y               = 13434880;
+    GLsizei width         = 0;
+    GLsizei height        = 65830;
+    GLint border          = 0;
+    glCopyTexImage2D(target, level, internalFormat, x, y, width, height, border);
+    EXPECT_GL_ERROR(GL_INVALID_VALUE);
+
+    // pass x and width that will result in integer overflow when we apply x+width
+    target         = GL_TEXTURE_2D;
+    level          = 0;
+    internalFormat = GL_LUMINANCE_ALPHA;
+    x              = std::numeric_limits<GLint>::max();
+    y              = 0;
+    width          = 253;
+    height         = 1;
+    border         = 0;
+    glCopyTexImage2D(target, level, internalFormat, x, y, width, height, border);
+    EXPECT_GL_ERROR(GL_INVALID_VALUE);
 }
 
 // Read default framebuffer with glCopyTexSubImage2D().
