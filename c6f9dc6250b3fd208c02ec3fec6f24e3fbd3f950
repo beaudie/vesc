@@ -22,6 +22,30 @@
       },
       "revId": "c6f9dc6250b3fd208c02ec3fec6f24e3fbd3f950",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "e48d5105_68e137ee",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 3331,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2022-04-20T18:21:57Z",
+      "side": 1,
+      "message": "I think this simple check should be good enough. If not, we will see if we need more complicated method to make decision.\n\nPersonally I think this should set to true on all platforms, but I am a bit worried that it may trigger regression for some partners. So for now I am keeping the same behavior for the rest but fix discrete GPUs.",
+      "parentUuid": "db03e0f1_f369c71e",
+      "range": {
+        "startLine": 3331,
+        "startChar": 77,
+        "endLine": 3331,
+        "endChar": 90
+      },
+      "revId": "c6f9dc6250b3fd208c02ec3fec6f24e3fbd3f950",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
