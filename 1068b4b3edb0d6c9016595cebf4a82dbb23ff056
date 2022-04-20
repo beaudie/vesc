@@ -33,6 +33,63 @@
       "message": "Overall LGTM. My gut feeling is that with this, code gets a bit more ugly and complicate in some places just that we can get rid of context\u0027s list. My personal preference is to keep context\u0027s list for things that aren\u0027t obvious/straight forward. But I am also okay with what you have here. I will let others comment here.",
       "revId": "1068b4b3edb0d6c9016595cebf4a82dbb23ff056",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "103579e6_5cc565fd",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.h",
+        "patchSetId": 16
+      },
+      "lineNbr": 1058,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-04-20T02:21:36Z",
+      "side": 1,
+      "message": "Why not pass the resource use list instead of the command buffer helper? Then you won\u0027t need to template the function.",
+      "revId": "1068b4b3edb0d6c9016595cebf4a82dbb23ff056",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "f6644d79_ea6d096a",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 16
+      },
+      "lineNbr": 3323,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-04-20T02:21:36Z",
+      "side": 1,
+      "message": "Charlie\u0027s suggestion probably applies here too, can we directly release this to the share group\u0027s resource use list? Then we don\u0027t need `getResourceUseListForQueryType`",
+      "revId": "1068b4b3edb0d6c9016595cebf4a82dbb23ff056",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "60cd06cd_b2920df2",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 16
+      },
+      "lineNbr": 3535,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-04-20T02:21:36Z",
+      "side": 1,
+      "message": "nit: Just delete this. At this point it\u0027s clear that things need to be retained. If not, at least the comment should be moved to where the retain happens.",
+      "range": {
+        "startLine": 3534,
+        "startChar": 0,
+        "endLine": 3535,
+        "endChar": 94
+      },
+      "revId": "1068b4b3edb0d6c9016595cebf4a82dbb23ff056",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
