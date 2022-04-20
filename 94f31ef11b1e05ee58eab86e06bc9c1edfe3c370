@@ -16,6 +16,23 @@
       "message": "LGTM.  Thanks again for the quick fix!",
       "revId": "94f31ef11b1e05ee58eab86e06bc9c1edfe3c370",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "30947b31_3cf2f136",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2022-04-20T15:27:30Z",
+      "side": 1,
+      "message": "LGTM, would like to deprecate this API.",
+      "revId": "94f31ef11b1e05ee58eab86e06bc9c1edfe3c370",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
