@@ -50,6 +50,46 @@
       "message": "LGTM. thx",
       "revId": "02c5f74dbae808d891a6a5d71747d7b7a8fd2493",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "7951794d_f0aedf8b",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1525982
+      },
+      "writtenOn": "2022-04-20T20:01:34Z",
+      "side": 1,
+      "message": "Thanks!",
+      "revId": "02c5f74dbae808d891a6a5d71747d7b7a8fd2493",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "2457d5aa_71a5bb78",
+        "filename": "src/libANGLE/renderer/vulkan/SurfaceVk.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 1914,
+      "author": {
+        "id": 1525982
+      },
+      "writtenOn": "2022-04-20T20:01:34Z",
+      "side": 1,
+      "message": "nit: Minor revision?",
+      "range": {
+        "startLine": 1914,
+        "startChar": 12,
+        "endLine": 1914,
+        "endChar": 93
+      },
+      "revId": "02c5f74dbae808d891a6a5d71747d7b7a8fd2493",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
