@@ -33,6 +33,24 @@
       "message": "is it possible that hasMapAccess is true, but preferDeviceLocalMemoryHostVisible is false? In that case we are returning kDeviceLocalHostVisibleFlags, is that the desired result?",
       "revId": "000cb6ae1c7c17a752af91d2d5ade5926bcef8be",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "7bf3a1a6_f2b0a35d",
+        "filename": "src/libANGLE/renderer/vulkan/BufferVk.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 118,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2022-04-20T23:23:09Z",
+      "side": 1,
+      "message": "Good point. right, that is possible.\n\nIn this case I think we should just pick kHostCachedFlags/kHostUnCachedFlags, similar to GetPreferredMemoryType(). But given lack of any data or bug report, my preference for this CL is to leave it unchanged for now. We can change it with follow up CL if such usage cases come up and not work well on a certain (NV/AMD) devices.",
+      "parentUuid": "ff4a81da_2d3be894",
+      "revId": "000cb6ae1c7c17a752af91d2d5ade5926bcef8be",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
