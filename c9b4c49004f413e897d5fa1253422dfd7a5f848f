@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "4043d063_7eaf36c4",
+        "filename": "src/libANGLE/renderer/vulkan/UtilsVk.cpp",
+        "patchSetId": 14
+      },
+      "lineNbr": 1470,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-04-20T02:25:57Z",
+      "side": 1,
+      "message": "It seems to me that the caller already has a command buffer helper, so you can retain in that instead of the share group.",
+      "revId": "c9b4c49004f413e897d5fa1253422dfd7a5f848f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
