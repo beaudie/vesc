@@ -26,6 +26,30 @@
     {
       "unresolved": false,
       "key": {
+        "uuid": "ffed4c9c_e9bf1597",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 5
+      },
+      "lineNbr": 10,
+      "author": {
+        "id": 1531247
+      },
+      "writtenOn": "2022-04-20T16:35:13Z",
+      "side": 1,
+      "message": "Updated description.",
+      "parentUuid": "91c7b607_6d27f3a4",
+      "range": {
+        "startLine": 10,
+        "startChar": 8,
+        "endLine": 10,
+        "endChar": 32
+      },
+      "revId": "afe54d71ac164248112dfa482afe2faea56b196a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
         "uuid": "ab66436d_072b2328",
         "filename": "/PATCHSET_LEVEL",
         "patchSetId": 5
@@ -54,6 +78,30 @@
       "writtenOn": "2022-04-20T15:00:30Z",
       "side": 1,
       "message": "suggest you log the time elapsed for the total push time for this group of traces.",
+      "range": {
+        "startLine": 92,
+        "startChar": 12,
+        "endLine": 92,
+        "endChar": 15
+      },
+      "revId": "afe54d71ac164248112dfa482afe2faea56b196a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "999c76f2_446c3233",
+        "filename": "src/tests/py_utils/android_helper.py",
+        "patchSetId": 5
+      },
+      "lineNbr": 92,
+      "author": {
+        "id": 1531247
+      },
+      "writtenOn": "2022-04-20T16:35:13Z",
+      "side": 1,
+      "message": "These are only the json files so this is very fast. Do you mean add push time of .gz file batch? (this is done separately by PrepareRestrictedTrace calls later in the gold script)",
+      "parentUuid": "2564caba_150863bf",
       "range": {
         "startLine": 92,
         "startChar": 12,
@@ -110,6 +158,54 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "d09477bc_4b3d357d",
+        "filename": "src/tests/py_utils/android_helper.py",
+        "patchSetId": 5
+      },
+      "lineNbr": 117,
+      "author": {
+        "id": 1531247
+      },
+      "writtenOn": "2022-04-20T16:35:13Z",
+      "side": 1,
+      "message": "Yup, that\u0027s the plan. I\u0027m keeping that as a separate change, trying to just make this work first.",
+      "parentUuid": "75222fdb_271ec51a",
+      "range": {
+        "startLine": 117,
+        "startChar": 45,
+        "endLine": 117,
+        "endChar": 64
+      },
+      "revId": "afe54d71ac164248112dfa482afe2faea56b196a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "51e0382a_da3c1adb",
+        "filename": "src/tests/py_utils/android_helper.py",
+        "patchSetId": 5
+      },
+      "lineNbr": 117,
+      "author": {
+        "id": 1531247
+      },
+      "writtenOn": "2022-04-20T16:35:13Z",
+      "side": 1,
+      "message": "Done.",
+      "parentUuid": "cf6a16a5_273ab337",
+      "range": {
+        "startLine": 117,
+        "startChar": 8,
+        "endLine": 117,
+        "endChar": 11
+      },
+      "revId": "afe54d71ac164248112dfa482afe2faea56b196a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "d6969c40_be42c26a",
@@ -123,6 +219,30 @@
       "writtenOn": "2022-04-20T15:00:30Z",
       "side": 1,
       "message": "seems like \"env\" is discarded on Android ATM. Can you double-check it\u0027s also discarded by the Chrome Android test_runner.py + wrapper script? If it\u0027s not discarded, we should emulate this behaviour as well. Fine to do as a follow-up if necessary.",
+      "range": {
+        "startLine": 150,
+        "startChar": 28,
+        "endLine": 150,
+        "endChar": 31
+      },
+      "revId": "afe54d71ac164248112dfa482afe2faea56b196a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "f0abd19c_96382d21",
+        "filename": "src/tests/restricted_traces/restricted_trace_gold_tests.py",
+        "patchSetId": 5
+      },
+      "lineNbr": 150,
+      "author": {
+        "id": 1531247
+      },
+      "writtenOn": "2022-04-20T16:35:13Z",
+      "side": 1,
+      "message": "Seems to be discarded and looking at NativeTest / NativeTestInstrumentationTestRunner implementation I can\u0027t find a way how env vars would be passed as everything is passed via Intent.putExtra and there is only a small set of things in there, nothing about env vars.\n\nI rearranged the code a little to make it more clear that the env is not passed to the helper.",
+      "parentUuid": "d6969c40_be42c26a",
       "range": {
         "startLine": 150,
         "startChar": 28,
