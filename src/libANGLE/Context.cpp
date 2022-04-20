@@ -4635,6 +4635,19 @@ void Context::copyTexImage2D(TextureTarget target,
     ANGLE_CONTEXT_TRY(prepareForCopyImage());
 
     Rectangle sourceArea(x, y, width, height);
+    angle::CheckedNumeric<int> sourceY(sourceArea.y);
+    sourceY += sourceArea.height;
+    if (!sourceY.IsValid())
+    {
+        sourceArea.height = std::numeric_limits<GLint>::max() - y;
+    }
+
+    angle::CheckedNumeric<int> sourceX(sourceArea.x);
+    sourceX += sourceArea.width;
+    if (!sourceX.IsValid())
+    {
+        sourceArea.width = std::numeric_limits<GLint>::max() - x;
+    }
 
     Framebuffer *framebuffer = mState.getReadFramebuffer();
     Texture *texture         = getTextureByTarget(target);
