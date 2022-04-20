@@ -1369,10 +1369,18 @@ angle::Result Texture::copyImage(Context *context,
         Extents fbSize                                    = sourceReadAttachment->getSize();
         // Force using copySubImage when the source area is out of bounds AND
         // we're not copying to and from the same texture
-        forceCopySubImage = ((sourceArea.x < 0) || (sourceArea.y < 0) ||
-                             ((sourceArea.x + sourceArea.width) > fbSize.width) ||
-                             ((sourceArea.y + sourceArea.height) > fbSize.height)) &&
-                            (sourceReadAttachment->getResource() != this);
+        angle::CheckedNumeric<int> sourceY(sourceArea.y);
+        sourceY += sourceArea.height;
+        angle::CheckedNumeric<int> sourceX(sourceArea.x);
+        sourceX += sourceArea.width;
+        if (sourceY.IsValid() && sourceX.IsValid())
+        {
+            forceCopySubImage = ((sourceArea.x < 0) || (sourceArea.y < 0) ||
+                                 ((sourceArea.x + sourceArea.width) > fbSize.width) ||
+                                 ((sourceArea.y + sourceArea.height) > fbSize.height)) &&
+                                (sourceReadAttachment->getResource() != this);
+        }
+
         Rectangle clippedArea;
         if (ClipRectangle(sourceArea, Rectangle(0, 0, fbSize.width, fbSize.height), &clippedArea))
         {
