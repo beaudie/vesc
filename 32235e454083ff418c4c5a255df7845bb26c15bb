@@ -36,6 +36,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "a09771a8_bd270a3e",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2022-04-20T15:25:30Z",
+      "side": 1,
+      "message": "OK, let me chat with Shabi and maybe he can help me understand.\n\nSo you can understand what my objection is here: no Vulkan app or layer should have to do a check like \"if (implementation id \u003d\u003d magic number)\" which is what the isARM check is here. So if we need to change the Vulkan spec to allow ANGLE to query some bit from the driver, that\u0027s the right solution for ANGLE.",
+      "parentUuid": "39018f39_1c3272f9",
+      "revId": "32235e454083ff418c4c5a255df7845bb26c15bb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "19fce30e_cc5070e3",
