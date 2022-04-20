@@ -70,6 +70,30 @@
       },
       "revId": "b215ffdc64c27e010891da575f291eff6aa2821b",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "3ebeed93_45a88272",
+        "filename": "src/libANGLE/capture/trace_fixture.cpp",
+        "patchSetId": 9
+      },
+      "lineNbr": 106,
+      "author": {
+        "id": 1491823
+      },
+      "writtenOn": "2022-04-20T08:30:24Z",
+      "side": 1,
+      "message": "I was suspecting something like this, and I\u0027ve changed the patch to handle arrays better when capturing.",
+      "parentUuid": "ec23c483_d4076a45",
+      "range": {
+        "startLine": 106,
+        "startChar": 7,
+        "endLine": 106,
+        "endChar": 32
+      },
+      "revId": "b215ffdc64c27e010891da575f291eff6aa2821b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
