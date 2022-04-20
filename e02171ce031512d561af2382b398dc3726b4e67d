@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "9d820a60_cd19454e",
+        "filename": "src/tests/perf_tests/ANGLEPerfTest.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 677,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2022-04-20T18:58:47Z",
+      "side": 1,
+      "message": "nit: how about if (multsample) \n{ strstr \u003c\u003c \"_\" \u003c\u003c samples \u003c\u003c \"_samples\"; }",
+      "range": {
+        "startLine": 677,
+        "startChar": 19,
+        "endLine": 677,
+        "endChar": 45
+      },
+      "revId": "e02171ce031512d561af2382b398dc3726b4e67d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
