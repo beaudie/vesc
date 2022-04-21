@@ -16,6 +16,41 @@
       "message": "This seems to have fixed most the issues:\nhttps://chromium-review.googlesource.com/c/angle/angle/+/3594801\n\nI thin the extension is enabled in windows and linux, but the config bit is not, that is what I suspect for no matching configs. I\u0027ll look into that this morning.\n\nThe fail on swiftshader - I have no idea. Maybe unrelated?",
       "revId": "0b492974cd8c28032e5c49a31d579c2a30f50196",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "0106af53_6205ef9c",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 14
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1359249
+      },
+      "writtenOn": "2022-04-21T15:34:51Z",
+      "side": 1,
+      "message": "DisplayVk.cpp (extension enabled if SharedPresent supported)\n    outExtensions-\u003emutableRenderBufferKHR \u003d\n        getRenderer()-\u003egetFeatures().supportsSharedPresentableImageExtension.enabled;\n\nvk_caps_utils.cpp (if extension supported, all configs set with MUTABLE_BIT)\n    if (display-\u003egetExtensions().mutableRenderBufferKHR)\n    {\n        config.surfaceType |\u003d EGL_MUTABLE_RENDER_BUFFER_BIT_KHR;\n    }\n\nSeems right to me.",
+      "parentUuid": "25f9d7c5_631dd443",
+      "revId": "0b492974cd8c28032e5c49a31d579c2a30f50196",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "eba4c3a7_a2164dbd",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 14
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1359249
+      },
+      "writtenOn": "2022-04-21T15:34:51Z",
+      "side": 1,
+      "message": "Comments. Can we resolve everything except the ANDROID auto refresh attribute?",
+      "revId": "0b492974cd8c28032e5c49a31d579c2a30f50196",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }

@@ -210,6 +210,24 @@
       "message": "I looked at test results. My new end to end test for mutable_render_buffer fails because it expects green and gets black.\nHowever, I do NOT see failure from the dEQP-EGL test for mutable_render_buffer.basic. that calls glFlush through a number of colors. \nSo, something could be wrong with my test. But implementation is working.\n",
       "revId": "a7f283a4c6d3b2794d054ede2c98f8cad07666fd",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "b10e21a9_bc3f13aa",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 9
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1359249
+      },
+      "writtenOn": "2022-04-21T15:34:51Z",
+      "side": 1,
+      "message": "Should be good with both patches",
+      "parentUuid": "7920fa9f_af839f87",
+      "revId": "a7f283a4c6d3b2794d054ede2c98f8cad07666fd",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }

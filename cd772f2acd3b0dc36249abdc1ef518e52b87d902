@@ -34,6 +34,24 @@
       "parentUuid": "534d08e0_fc3d02bb",
       "revId": "cd772f2acd3b0dc36249abdc1ef518e52b87d902",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "11fe6e01_3f076d1b",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 12
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1359249
+      },
+      "writtenOn": "2022-04-21T15:34:51Z",
+      "side": 1,
+      "message": "Seems resolved with the bypass on invalidating buffers",
+      "parentUuid": "f297d27a_1a7317bd",
+      "revId": "cd772f2acd3b0dc36249abdc1ef518e52b87d902",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
