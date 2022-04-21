@@ -16,6 +16,24 @@
       "message": "I can\u0027t reproduce the windows test failure CopyTextureTest.CopyOutsideMipmap/ES2_OpenGL locally. I tried running with the batch filter that bot used, too, and I couldn\u0027t see the same issue locally, either. I also checked that this test doesn\u0027t go through the function Texture::copyImage(), so I would think that this CL shouldn\u0027t affect the failed test. I disabled the test on Windows platform, instead of just windows7. Please let me know if this is not preferred. Thank you!",
       "revId": "32f7963e2ef8b824756a6bf2e145d76974332e60",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "d86f060d_2b377fd0",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 6
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1520902
+      },
+      "writtenOn": "2022-04-21T23:17:02Z",
+      "side": 1,
+      "message": "Please ignore my previous message. I was able to repro it locally running with batch filter. I didn\u0027t run the test with NVIDIA card and that\u0027s why I couldn\u0027t see it earlier. Looking into the failure now.",
+      "parentUuid": "3df4e2a5_23d29e4f",
+      "revId": "32f7963e2ef8b824756a6bf2e145d76974332e60",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
