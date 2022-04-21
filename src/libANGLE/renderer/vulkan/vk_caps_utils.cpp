@@ -994,10 +994,10 @@ void RendererVk::ensureCapsInitialized() const
         mNativeCaps.maxFramebufferLayers    = LimitToInt(limitsVk.maxFramebufferLayers);
 
         // If the provoking vertex feature is enabled, angle specifies to use
-        // the "last" convention in order to match GL behavior. Otherwise, use
+        // the "undefined" convention in order to match GL behavior. Otherwise, use
         // "first" as vulkan follows this convention for provoking vertex.
         mNativeCaps.layerProvokingVertex = (mFeatures.provokingVertex.enabled)
-                                               ? GL_LAST_VERTEX_CONVENTION_EXT
+                                               ? GL_UNDEFINED_VERTEX
                                                : GL_FIRST_VERTEX_CONVENTION_EXT;
 
         mNativeCaps.maxGeometryInputComponents =
