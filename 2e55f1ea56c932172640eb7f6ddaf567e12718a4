@@ -16,6 +16,24 @@
       "message": "I am curious if there is a reference on the math part.\n\nGiven the math equation we have now:\nx \u003d 0, xCoeff \u003d 0\nx \u003d 1, xCoeff \u003d 1/16\nx \u003d 2, xCoeff \u003d 3/16\nx \u003d 3, xCoeff \u003d 6/16\nx \u003d 4, xCoeff \u003d 10/16\nx \u003d 5, xCoeff \u003d 13/16\nx \u003d 6, xCoeff \u003d 15/16\nx \u003d 7, xCoeff \u003d 1\n\nWhy we don\u0027t space xCoeff out equally\nx \u003d 0, xCoeff \u003d 0\nx \u003d 1, xCoeff \u003d 1/7\nx \u003d 2, xCoeff \u003d 2/7\nx \u003d 3, xCoeff \u003d 3/7\nx \u003d 4, xCoeff \u003d 4/7\nx \u003d 5, xCoeff \u003d 5/7\nx \u003d 6, xCoeff \u003d 6/7\nx \u003d 7, xCoeff \u003d 1",
       "revId": "2e55f1ea56c932172640eb7f6ddaf567e12718a4",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "12bb23c6_ca2e529e",
+        "filename": "src/tests/gl_tests/MipmapTest.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 2335,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-04-21T03:42:08Z",
+      "side": 1,
+      "message": "Because I originally did the latter and was proven wrong 😄\n\nBut in retrospect, this is doing a sort of Pascal Triangle thing because the upscale is done one mip at a time.\n\nSo for the 2x2 -\u003e 4x4 we have: 0/4, 1/4, 3/4, 4/4. Now for 4x4 -\u003e 8x8 we have the same pattern, on the left and right (scaled by 1/4): 0/16, 1/16, 3/16 (4/16 doesn\u0027t apply, because the next pixel is not border). For the middle part, we also have the same pattern (scaled by 1/2 because that\u0027s the range from 1/4-\u003e3/4): (1/4+0/8 and 1/4+8/8 don\u0027t apply because they are not borders) 1/4+1/8 (\u003d6/16) 1/4+3/8 (\u003d10/16)\n\nThe fact that the numerator looks like sigma(n) (mirrored for the upper half) is probably legit, but I haven\u0027t verified for higher mips. The denominator I\u0027m not very sure is correct, it might just be coincidentally correct for the two mips that are being upscaled. It probably has to have a 4^upscaleCount element somewhere and not dimension^2, but no big deal as long as it works for the test ;)",
+      "parentUuid": "f1aa7f13_3cf7423c",
+      "revId": "2e55f1ea56c932172640eb7f6ddaf567e12718a4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
