@@ -39,6 +39,30 @@
       },
       "revId": "1ccd5ec675edf7b9748b2e05dab9a8c1054c2a5e",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "76d3849b_8a94111f",
+        "filename": "include/platform/vk_features.json",
+        "patchSetId": 2
+      },
+      "lineNbr": 994,
+      "author": {
+        "id": 1002379
+      },
+      "writtenOn": "2022-04-21T04:09:23Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "c772811b_f84bf3c0",
+      "range": {
+        "startLine": 993,
+        "startChar": 0,
+        "endLine": 994,
+        "endChar": 56
+      },
+      "revId": "1ccd5ec675edf7b9748b2e05dab9a8c1054c2a5e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
