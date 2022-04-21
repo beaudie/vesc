@@ -593,6 +593,11 @@ struct FeaturesVk : FeatureSetBase
         "createPipelineDuringLink", FeatureCategory::VulkanFeatures,
         "Create pipeline with default state during glLinkProgram", &members,
         "http://anglebug.com/7046"};
+
+    FeatureInfo supportsFragmentShadingRate = {
+        "supportsFragmentShadingRate", FeatureCategory::VulkanFeatures,
+        "VkDevice supports VK_KHR_fragment_shading_rate extension", &members,
+        "http://anglebug.com/7172"};
 };
 
 inline FeaturesVk::FeaturesVk()  = default;

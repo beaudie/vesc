@@ -203,6 +203,7 @@ enum class Feature
     SupportsExternalSemaphoreFd,
     SupportsExternalSemaphoreFuchsia,
     SupportsFilteringPrecision,
+    SupportsFragmentShadingRate,
     SupportsGeometryStreamsCapability,
     SupportsGGPFrameToken,
     SupportsHostQueryReset,
