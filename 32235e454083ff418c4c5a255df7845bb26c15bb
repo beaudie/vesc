@@ -90,6 +90,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "21d6e56b_27fd1ade",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1002379
+      },
+      "writtenOn": "2022-04-21T03:01:53Z",
+      "side": 1,
+      "message": "yes, seems this is a better way of resolving the issue.\nI have updated the patch to use UNDEFINED.",
+      "parentUuid": "36602ee7_1f442c38",
+      "revId": "32235e454083ff418c4c5a255df7845bb26c15bb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "19fce30e_cc5070e3",
