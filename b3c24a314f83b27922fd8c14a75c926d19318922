@@ -1,0 +1,44 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "879854f5_bcb09cc2",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-04-21T03:24:32Z",
+      "side": 1,
+      "message": "Awesome",
+      "revId": "b3c24a314f83b27922fd8c14a75c926d19318922",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "60618ec6_46d42c00",
+        "filename": "src/libANGLE/renderer/vulkan/vk_caps_utils.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 1001,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-04-21T03:24:32Z",
+      "side": 1,
+      "message": "I suggest to just unconditionally set `mNativeCaps.layerProvokingVertex \u003d GL_UNDEFINED_VERTEX_EXT`. The provoking vertex extension has no bearing on this.\n\nPlease also remove the suppression for the failing test so we can be sure this is working as intended on the bots.",
+      "range": {
+        "startLine": 996,
+        "startChar": 0,
+        "endLine": 1001,
+        "endChar": 80
+      },
+      "revId": "b3c24a314f83b27922fd8c14a75c926d19318922",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
