@@ -51,6 +51,24 @@
       "parentUuid": "ff4a81da_2d3be894",
       "revId": "000cb6ae1c7c17a752af91d2d5ade5926bcef8be",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "08d6614d_bdb11cd4",
+        "filename": "src/libANGLE/renderer/vulkan/BufferVk.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 118,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2022-04-21T17:52:26Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "7bf3a1a6_f2b0a35d",
+      "revId": "000cb6ae1c7c17a752af91d2d5ade5926bcef8be",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
