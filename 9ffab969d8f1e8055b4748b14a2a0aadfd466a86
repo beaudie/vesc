@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "c1630e39_6f7d5901",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 6
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2022-04-21T20:49:28Z",
+      "side": 1,
+      "message": "PTAL.. I am actually not sure how to make a test for this. I could add state queries that return if a depth or color surface buffer is initialized or not, but I\u0027d have to add two enums and updates the EGL robust resource init spec, which seems like a lot.",
+      "revId": "9ffab969d8f1e8055b4748b14a2a0aadfd466a86",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
