@@ -18,6 +18,23 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "2e463264_62ce1b22",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2022-04-21T13:31:56Z",
+      "side": 1,
+      "message": "Geoff: PTAL",
+      "revId": "ac4fa13aa5928a7ddbde362b007660a2f68402b6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "7e761e31_8efd53f1",
@@ -67,6 +84,24 @@
       "side": 1,
       "message": "Sorry, I\u0027m not sure what adding the build folder will do on Android.  I\u0027ll defer to you though.",
       "parentUuid": "5880b01d_78f447ea",
+      "revId": "ac4fa13aa5928a7ddbde362b007660a2f68402b6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "8c9d5d90_a56da83a",
+        "filename": "scripts/roll_aosp.sh",
+        "patchSetId": 1
+      },
+      "lineNbr": 114,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2022-04-21T13:31:56Z",
+      "side": 1,
+      "message": "Right, the context is that we need the \"skia gold\" scripts to show up in the Android-side. To keep things simple we\u0027re exporting the whole //build folder. We might other bits from it anyway depending on how we implement the angle tests build.",
+      "parentUuid": "4a4371ed_8b3dc5c0",
       "revId": "ac4fa13aa5928a7ddbde362b007660a2f68402b6",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
