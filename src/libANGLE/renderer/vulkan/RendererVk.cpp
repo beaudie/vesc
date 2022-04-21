@@ -3069,7 +3069,7 @@ void RendererVk::initFeatures(DisplayVk *displayVk,
                             mTransformFeedbackFeatures.geometryStreams == VK_TRUE);
 
     ANGLE_FEATURE_CONDITION(&mFeatures, supportsIndexTypeUint8,
-                            mIndexTypeUint8Features.indexTypeUint8 == VK_TRUE);
+                            /*mIndexTypeUint8Features.indexTypeUint8 == VK_TRUE*/ false);
 
     ANGLE_FEATURE_CONDITION(&mFeatures, supportsDepthStencilResolve,
                             mFeatures.supportsRenderpass2.enabled &&
