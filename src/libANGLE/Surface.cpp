@@ -148,6 +148,8 @@ Surface::Surface(EGLint surfaceType,
 
     mTextureOffset.x = static_cast<int>(mState.attributes.get(EGL_TEXTURE_OFFSET_X_ANGLE, 0));
     mTextureOffset.y = static_cast<int>(mState.attributes.get(EGL_TEXTURE_OFFSET_Y_ANGLE, 0));
+
+    mRenderBuffer = mState.attributes.getAsInt(EGL_RENDER_BUFFER, EGL_BACK_BUFFER);
 }
 
 Surface::~Surface() {}
