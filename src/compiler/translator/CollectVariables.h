@@ -17,6 +17,7 @@ namespace sh
 
 class TIntermBlock;
 class TSymbolTable;
+class CallDAG;
 
 void CollectVariables(TIntermBlock *root,
                       std::vector<ShaderVariable> *attributes,
@@ -32,7 +33,8 @@ void CollectVariables(TIntermBlock *root,
                       GLenum shaderType,
                       const TExtensionBehavior &extensionBehavior,
                       const ShBuiltInResources &resources,
-                      int tessControlShaderOutputVertices);
+                      int tessControlShaderOutputVertices,
+                      const CallDAG &callDag);
 }  // namespace sh
 
 #endif  // COMPILER_TRANSLATOR_COLLECTVARIABLES_H_

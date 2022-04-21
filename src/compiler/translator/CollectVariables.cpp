@@ -9,6 +9,7 @@
 
 #include "angle_gl.h"
 #include "common/utilities.h"
+#include "compiler/translator/CallDAG.h"
 #include "compiler/translator/HashNames.h"
 #include "compiler/translator/SymbolTable.h"
 #include "compiler/translator/tree_util/IntermTraverse.h"
@@ -126,13 +127,16 @@ class CollectVariablesTraverser : public TIntermTraverser
                               GLenum shaderType,
                               const TExtensionBehavior &extensionBehavior,
                               const ShBuiltInResources &resources,
-                              int tessControlShaderOutputVertices);
+                              int tessControlShaderOutputVertices,
+                              const CallDAG &callDag);
 
     bool visitGlobalQualifierDeclaration(Visit visit,
                                          TIntermGlobalQualifierDeclaration *node) override;
     void visitSymbol(TIntermSymbol *symbol) override;
     bool visitDeclaration(Visit, TIntermDeclaration *node) override;
     bool visitBinary(Visit visit, TIntermBinary *binaryNode) override;
+    bool visitAggregate(Visit, TIntermAggregate *aggregateNode) override;
+    bool visitFunctionDefinition(Visit, TIntermFunctionDefinition *node) override;
 
   private:
     std::string getMappedName(const TSymbol *symbol) const;
@@ -247,6 +251,16 @@ class CollectVariablesTraverser : public TIntermTraverser
     GLenum mShaderType;
     const TExtensionBehavior &mExtensionBehavior;
     const ShBuiltInResources &mResources;
+
+    bool mInsideFunctionCallParameters;
+    bool mInsideFunctionDefinition;
+    const CallDAG &mCallDag;
+
+    std::string mFunctionName;
+    size_t mParamIndex;
+
+    std::map<std::string, size_t> mParamNameToIndex;
+    std::map<std::string, std::map<size_t, bool>> mParamLivenessMap;
 };
 
 CollectVariablesTraverser::CollectVariablesTraverser(
@@ -263,7 +277,8 @@ CollectVariablesTraverser::CollectVariablesTraverser(
     GLenum shaderType,
     const TExtensionBehavior &extensionBehavior,
     const ShBuiltInResources &resources,
-    int tessControlShaderOutputVertices)
+    int tessControlShaderOutputVertices,
+    const CallDAG &callDag)
     : TIntermTraverser(true, false, false, symbolTable),
       mAttribs(attribs),
       mOutputVariables(outputVariables),
@@ -317,7 +332,8 @@ CollectVariablesTraverser::CollectVariablesTraverser(
       mHashFunction(hashFunction),
       mShaderType(shaderType),
       mExtensionBehavior(extensionBehavior),
-      mResources(resources)
+      mResources(resources),
+      mCallDag(callDag)
 {}
 
 std::string CollectVariablesTraverser::getMappedName(const TSymbol *symbol) const
@@ -412,6 +428,13 @@ void CollectVariablesTraverser::visitSymbol(TIntermSymbol *symbol)
     ShaderVariable *var = nullptr;
 
     const ImmutableString &symbolName = symbol->getName();
+
+    if (mInsideFunctionDefinition && !mInsideFunctionCallParameters)
+    {
+        // We want to know all live (non-param) symbols inside a function, to eliminate dead
+        // parameters
+        mParamLivenessMap[mFunctionName][mParamNameToIndex[symbolName.data()]] = true;
+    }
 
     // Check the qualifier from the variable, not from the symbol node. The node may have a
     // different qualifier if it's the result of a folded ternary node.
@@ -717,7 +740,18 @@ void CollectVariablesTraverser::visitSymbol(TIntermSymbol *symbol)
     }
     if (var)
     {
-        MarkActive(var);
+        if (mInsideFunctionCallParameters)
+        {
+            // Look up index liveness based on what we know about parameter use inside the function
+            if (mParamLivenessMap[mFunctionName][mParamNameToIndex[var->name]])
+            {
+                MarkActive(var);
+            }
+        }
+        else
+        {
+            MarkActive(var);
+        }
     }
 }
 
@@ -1174,6 +1208,70 @@ InterfaceBlock *CollectVariablesTraverser::findNamedInterfaceBlock(
     return namedBlock;
 }
 
+bool CollectVariablesTraverser::visitFunctionDefinition(Visit visit,
+                                                        TIntermFunctionDefinition *node)
+{
+    // When we get here, do a one time pass of all the function definitions tracked in the DAG.
+    // We do this because there may be functions defined after main in program order
+    for (size_t i = 0; i < mCallDag.size(); i++)
+    {
+        const CallDAG::Record &record = mCallDag.getRecordFromIndex(i);
+        const TFunction *function     = record.node->getFunction();
+
+        mFunctionName = function->name().data();
+
+        // We need to map function to parameter liveness, for use later
+
+        size_t paramCount = function->getParamCount();
+        for (size_t j = 0; j < paramCount; ++j)
+        {
+            const TVariable *paramVariable = function->getParam(j);
+
+            // Map parameter name to index, for use when traversing function calls
+            mParamNameToIndex[paramVariable->name().data()] = j;
+        }
+
+        mInsideFunctionDefinition = true;
+
+        // Traverse the definition
+        record.node->getBody()->traverse(this);
+
+        mInsideFunctionDefinition = false;
+    }
+
+    return false;
+}
+
+bool CollectVariablesTraverser::visitAggregate(Visit, TIntermAggregate *node)
+{
+    if (node->getOp() == EOpCallFunctionInAST)
+    {
+        // While visiting the parameters, determine active state by using known liveness of
+        // parameter indices per function.
+        mInsideFunctionCallParameters = true;
+
+        mFunctionName = node->getFunction()->name().data();
+
+        size_t paramIndex = 0;
+
+        TIntermSequence *arguments = node->getSequence();
+        for (auto &arg : *arguments)
+        {
+            // Track the index of the parameter we are visiting
+            mParamIndex = paramIndex++;
+
+            arg->traverse(this);
+        }
+
+        // Treat remaining variables the same
+        mInsideFunctionCallParameters = false;
+
+        return false;
+    }
+
+    return true;
+}
+
 bool CollectVariablesTraverser::visitBinary(Visit, TIntermBinary *binaryNode)
 {
     if (binaryNode->getOp() == EOpIndexDirectInterfaceBlock)
@@ -1275,12 +1373,13 @@ void CollectVariables(TIntermBlock *root,
                       GLenum shaderType,
                       const TExtensionBehavior &extensionBehavior,
                       const ShBuiltInResources &resources,
-                      int tessControlShaderOutputVertices)
+                      int tessControlShaderOutputVertices,
+                      const CallDAG &callDag)
 {
     CollectVariablesTraverser collect(
         attributes, outputVariables, uniforms, inputVaryings, outputVaryings, sharedVariables,
         uniformBlocks, shaderStorageBlocks, hashFunction, symbolTable, shaderType,
-        extensionBehavior, resources, tessControlShaderOutputVertices);
+        extensionBehavior, resources, tessControlShaderOutputVertices, callDag);
     root->traverse(&collect);
 }
 
