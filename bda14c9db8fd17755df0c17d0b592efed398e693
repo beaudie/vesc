@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "64c13403_8f37e328",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1528827
+      },
+      "writtenOn": "2022-04-21T17:57:34Z",
+      "side": 1,
+      "message": "It seems that the \"packaging\" stage is failing.\nI filed a bug in chromium FYI: https://bugs.chromium.org/p/chromium/issues/detail?id\u003d1318551",
+      "revId": "bda14c9db8fd17755df0c17d0b592efed398e693",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
