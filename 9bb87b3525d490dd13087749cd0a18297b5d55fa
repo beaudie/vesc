@@ -50,6 +50,24 @@
       "message": "MapReadOnly will synchronize bufferData, no need to flush explicitly.",
       "revId": "9bb87b3525d490dd13087749cd0a18297b5d55fa",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "2bd3686e_7417c531",
+        "filename": "src/libANGLE/renderer/metal/FrameBufferMtl.mm",
+        "patchSetId": 4
+      },
+      "lineNbr": 1542,
+      "author": {
+        "id": 1115588
+      },
+      "writtenOn": "2022-04-21T18:42:56Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "289b8a00_d8e01e32",
+      "revId": "9bb87b3525d490dd13087749cd0a18297b5d55fa",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
