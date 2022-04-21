@@ -22,6 +22,30 @@
       },
       "revId": "72eaf3da40a821289545e5e209fd81f94b082be1",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "1ff70a69_a5cd9b78",
+        "filename": "include/platform/vk_features.json",
+        "patchSetId": 3
+      },
+      "lineNbr": 893,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2022-04-21T13:30:36Z",
+      "side": 1,
+      "message": "Maybe to enforce this use a python assert in the script?",
+      "parentUuid": "a431b78e_28926c23",
+      "range": {
+        "startLine": 893,
+        "startChar": 21,
+        "endLine": 893,
+        "endChar": 55
+      },
+      "revId": "72eaf3da40a821289545e5e209fd81f94b082be1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
