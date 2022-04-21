@@ -289,7 +289,8 @@ bool FramebufferAttachment::operator!=(const FramebufferAttachment &other) const
 
 InitState FramebufferAttachment::initState() const
 {
-    return mResource ? mResource->initState(mTarget.textureIndex()) : InitState::Initialized;
+    return mResource ? mResource->initState(mTarget.binding(), mTarget.textureIndex())
+                     : InitState::Initialized;
 }
 
 angle::Result FramebufferAttachment::initializeContents(const Context *context)
@@ -303,7 +304,7 @@ angle::Result FramebufferAttachment::initializeContents(const Context *context)
 void FramebufferAttachment::setInitState(InitState initState) const
 {
     ASSERT(mResource);
-    mResource->setInitState(mTarget.textureIndex(), initState);
+    mResource->setInitState(mTarget.binding(), mTarget.textureIndex(), initState);
 }
 
 ////// FramebufferAttachmentObject Implementation //////
