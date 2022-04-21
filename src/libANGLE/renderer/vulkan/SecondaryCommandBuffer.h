@@ -83,6 +83,7 @@ enum class CommandID : uint16_t
     SetViewport,
     WaitEvents,
     WriteTimestamp,
+    SetShadingRate,
 };
 
 #define VERIFY_4_BYTE_ALIGNMENT(StructName) \
@@ -448,6 +449,12 @@ struct WriteTimestampParams
 };
 VERIFY_4_BYTE_ALIGNMENT(WriteTimestampParams)
 
+struct SetShadingRateParams
+{
+    uint8_t fragmentWidth;
+    uint8_t fragmentHeight;
+};
+
 // Header for every cmd in custom cmd buffer
 struct CommandHeader
 {
@@ -690,6 +697,8 @@ class SecondaryCommandBuffer final : angle::NonCopyable
     void writeTimestamp(VkPipelineStageFlagBits pipelineStage,
                         const QueryPool &queryPool,
                         uint32_t query);
+
+    void setShadingRate(const VkExtent2D *fragmentSize, VkFragmentShadingRateCombinerOpKHR ops[2]);
 
     // No-op for compatibility
     VkResult end() { return VK_SUCCESS; }
@@ -1513,6 +1522,25 @@ ANGLE_INLINE void SecondaryCommandBuffer::writeTimestamp(VkPipelineStageFlagBits
     paramStruct->pipelineStage = pipelineStage;
     paramStruct->queryPool     = queryPool.getHandle();
     paramStruct->query         = query;
+}
+
+ANGLE_INLINE void SecondaryCommandBuffer::setShadingRate(const VkExtent2D *fragmentSize,
+                                                         VkFragmentShadingRateCombinerOpKHR ops[2])
+{
+    ASSERT(fragmentSize != nullptr);
+
+    // Supported parameter values -
+    // 1. CombinerOp needs to be VK_FRAGMENT_SHADING_RATE_COMBINER_OP_KEEP_KHR
+    // 2. The largest fragment size supported is 4x4
+    ASSERT(ops[0] == VK_FRAGMENT_SHADING_RATE_COMBINER_OP_KEEP_KHR);
+    ASSERT(ops[1] == VK_FRAGMENT_SHADING_RATE_COMBINER_OP_KEEP_KHR);
+    ASSERT(fragmentSize->width <= 4);
+    ASSERT(fragmentSize->height <= 4);
+
+    SetShadingRateParams *paramStruct =
+        initCommand<SetShadingRateParams>(CommandID::SetShadingRate);
+    paramStruct->fragmentWidth  = static_cast<uint8_t>(fragmentSize->width);
+    paramStruct->fragmentHeight = static_cast<uint8_t>(fragmentSize->height);
 }
 }  // namespace priv
 }  // namespace vk
