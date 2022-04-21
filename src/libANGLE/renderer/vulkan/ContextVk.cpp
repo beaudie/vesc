@@ -1317,8 +1317,8 @@ angle::Result ContextVk::setupIndexedDraw(const gl::Context *context,
                                   "Potential inefficiency emulating uint8 vertex attributes due to "
                                   "lack of hardware support");
 
-            BufferVk *bufferVk             = vk::GetImpl(elementArrayBuffer);
-            vk::BufferHelper &bufferHelper = bufferVk->getBuffer();
+            BufferVk *bufferVk = vk::GetImpl(elementArrayBuffer);
+            /*vk::BufferHelper &bufferHelper = bufferVk->getBuffer();
 
             if (bufferHelper.isHostVisible() &&
                 !bufferHelper.isCurrentlyInUse(getLastCompletedQueueSerial()))
@@ -1335,7 +1335,7 @@ angle::Result ContextVk::setupIndexedDraw(const gl::Context *context,
                                                                &bindingDirty));
                 ANGLE_TRY(bufferVk->unmapImpl(this));
             }
-            else
+            else*/
             {
                 ANGLE_TRY(vertexArrayVk->convertIndexBufferGPU(this, bufferVk, indices));
             }
