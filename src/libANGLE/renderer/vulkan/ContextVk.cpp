@@ -858,6 +858,12 @@ ContextVk::ContextVk(const gl::State &state, gl::ErrorSet *errorSet, RendererVk 
     mGraphicsDirtyBitHandlers[DIRTY_BIT_VIEWPORT] = &ContextVk::handleDirtyGraphicsViewport;
     mGraphicsDirtyBitHandlers[DIRTY_BIT_SCISSOR]  = &ContextVk::handleDirtyGraphicsScissor;
 
+    if (getFeatures().supportsFragmentShadingRate.enabled)
+    {
+        mGraphicsDirtyBitHandlers[DIRTY_BIT_SHADING_RATE] =
+            &ContextVk::handleDirtyGraphicsShadingRate;
+    }
+
     mComputeDirtyBitHandlers[DIRTY_BIT_MEMORY_BARRIER] =
         &ContextVk::handleDirtyComputeMemoryBarrier;
     mComputeDirtyBitHandlers[DIRTY_BIT_EVENT_LOG]     = &ContextVk::handleDirtyComputeEventLog;
@@ -2421,6 +2427,75 @@ angle::Result ContextVk::handleDirtyGraphicsScissor(DirtyBits::Iterator *dirtyBi
                                                     DirtyBits dirtyBitMask)
 {
     handleDirtyGraphicsScissorImpl(mState.isQueryActive(gl::QueryType::PrimitivesGenerated));
+    return angle::Result::Continue;
+}
+
+angle::Result ContextVk::handleDirtyGraphicsShadingRate(DirtyBits::Iterator *dirtyBitsIterator,
+                                                        DirtyBits dirtyBitMask)
+{
+    gl::ShadingRate shadingRate     = getState().getShadingRate();
+    const bool shadingRateSupported = mRenderer->isShadingRateSupported(shadingRate);
+    VkExtent2D fragmentSize         = {};
+    VkFragmentShadingRateCombinerOpKHR shadingRateCombinerOp[2] = {
+        VK_FRAGMENT_SHADING_RATE_COMBINER_OP_KEEP_KHR,
+        VK_FRAGMENT_SHADING_RATE_COMBINER_OP_KEEP_KHR};
+
+    switch (shadingRate)
+    {
+        case gl::ShadingRate::_1x1:
+            ASSERT(shadingRateSupported);
+            fragmentSize.width  = 1;
+            fragmentSize.height = 1;
+            break;
+        case gl::ShadingRate::_1x2:
+            ASSERT(shadingRateSupported);
+            fragmentSize.width  = 1;
+            fragmentSize.height = 2;
+            break;
+        case gl::ShadingRate::_2x1:
+            ASSERT(shadingRateSupported);
+            fragmentSize.width  = 2;
+            fragmentSize.height = 1;
+            break;
+        case gl::ShadingRate::_2x2:
+            ASSERT(shadingRateSupported);
+            fragmentSize.width  = 2;
+            fragmentSize.height = 2;
+            break;
+        case gl::ShadingRate::_4x2:
+            if (shadingRateSupported)
+            {
+                fragmentSize.width  = 4;
+                fragmentSize.height = 2;
+            }
+            else
+            {
+                // Fallback to shading rate that preserves aspect ratio
+                fragmentSize.width  = 2;
+                fragmentSize.height = 1;
+            }
+            break;
+        case gl::ShadingRate::_4x4:
+            if (shadingRateSupported)
+            {
+                fragmentSize.width  = 4;
+                fragmentSize.height = 4;
+            }
+            else
+            {
+                // Fallback to shading rate that preserves aspect ratio
+                fragmentSize.width  = 2;
+                fragmentSize.height = 2;
+            }
+            break;
+        default:
+            UNREACHABLE();
+            return angle::Result::Stop;
+    }
+
+    ASSERT(hasStartedRenderPass());
+    mRenderPassCommandBuffer->setShadingRate(&fragmentSize, shadingRateCombinerOp);
+
     return angle::Result::Continue;
 }
 
@@ -4618,6 +4693,9 @@ angle::Result ContextVk::syncState(const gl::Context *context,
                             break;
                         case gl::State::ExtendedDirtyBitType::
                             EXTENDED_DIRTY_BIT_SHADER_DERIVATIVE_HINT:
+                            break;
+                        case gl::State::ExtendedDirtyBitType::EXTENDED_DIRTY_BIT_SHADING_RATE:
+                            mGraphicsDirtyBits.set(DIRTY_BIT_SHADING_RATE);
                             break;
                         default:
                             UNREACHABLE();
