@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "b085e635_217a37a0",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1290487
+      },
+      "writtenOn": "2022-04-21T22:02:14Z",
+      "side": 1,
+      "message": "Reverting a CL that breaks the ANGLE-into-Chromium AutoRoller",
+      "revId": "cd32631ad4f89a552082cc094d85815c92f962c1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
