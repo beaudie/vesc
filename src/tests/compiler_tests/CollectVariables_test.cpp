@@ -123,10 +123,11 @@ class CollectVariablesTest : public testing::Test
     void compile(const std::string &shaderString, ShCompileOptions compileOptions)
     {
         const char *shaderStrings[] = {shaderString.c_str()};
-        ASSERT_TRUE(mTranslator->compile(shaderStrings, 1, SH_VARIABLES | compileOptions));
+        ASSERT_TRUE(mTranslator->compile(shaderStrings, 1, SH_VARIABLES | compileOptions))
+            << mTranslator->getInfoSink().info.str();
     }
 
-    void compile(const std::string &shaderString) { compile(shaderString, 0u); }
+    void compile(const std::string &shaderString) { compile(shaderString, SH_INTERMEDIATE_TREE); }
 
     void checkUniformStaticallyUsedButNotActive(const char *name)
     {
@@ -2147,4 +2148,307 @@ void main()
     EXPECT_TRUE(output.staticUse);
     EXPECT_TRUE(output.active);
     EXPECT_EQ(1, output.index);
+}
+
+TEST_F(CollectVertexVariablesTest, DeadAttribute)
+{
+    const std::string &shaderString =
+        R"(#version 300 es
+layout(location=1) in vec4 foo;
+layout(location=2) in vec4 bar;
+
+vec4 getPos(vec4 param)
+{
+    // Note that param is unused
+    return vec4(0.0);
+}
+
+void main() {
+    gl_Position = foo + getPos(bar);
+})";
+
+    compile(shaderString);
+
+    const std::vector<ShaderVariable> &attributes = mTranslator->getAttributes();
+    ASSERT_EQ(2u, attributes.size());
+
+    const ShaderVariable &foo = attributes[0];
+    EXPECT_EQ("foo", foo.name);
+    EXPECT_TRUE(foo.staticUse);
+    EXPECT_TRUE(foo.active);
+
+    // "bar" was only passed as a parameter, and was never used in the function.  This means it was
+    // statically used, but not active.
+    const ShaderVariable &bar = attributes[1];
+    EXPECT_EQ("bar", bar.name);
+    EXPECT_TRUE(bar.staticUse);
+    EXPECT_FALSE(bar.active);
+}
+
+TEST_F(CollectVertexVariablesTest, LiveAttribute)
+{
+    const std::string &shaderString =
+        R"(#version 300 es
+layout(location=1) in vec4 foo;
+layout(location=2) in vec4 bar;
+
+vec4 getPos(vec4 param)
+{
+    return param + vec4(0.1);
+}
+
+void main() {
+    gl_Position = foo + getPos(bar);
+})";
+
+    compile(shaderString);
+
+    const std::vector<ShaderVariable> &attributes = mTranslator->getAttributes();
+    ASSERT_EQ(2u, attributes.size());
+
+    const ShaderVariable &foo = attributes[0];
+    EXPECT_EQ("foo", foo.name);
+    EXPECT_TRUE(foo.staticUse);
+    EXPECT_TRUE(foo.active);
+
+    // "bar" was passed as a parameter and used in the function.  This means it was
+    // statically used and active.
+    const ShaderVariable &bar = attributes[1];
+    EXPECT_EQ("bar", bar.name);
+    EXPECT_TRUE(bar.staticUse);
+    EXPECT_TRUE(bar.active);
+}
+
+TEST_F(CollectVertexVariablesTest, LiveAttributeWithAccessChain)
+{
+    const std::string &shaderString =
+        R"(#version 300 es
+layout(location=1) in vec4 foo;
+layout(location=2) in vec4 bar;
+layout(location=3) in int blee;
+
+vec4 getPos(vec4 param)
+{
+    // Note that param is unused
+    return vec4(0.0);
+}
+
+void main() {
+    gl_Position = foo + getPos(vec4(bar[blee]).yzwx);
+})";
+
+    compile(shaderString);
+
+    const std::vector<ShaderVariable> &attributes = mTranslator->getAttributes();
+    ASSERT_EQ(3u, attributes.size());
+
+    const ShaderVariable &foo = attributes[0];
+    EXPECT_EQ("foo", foo.name);
+    EXPECT_TRUE(foo.staticUse);
+    EXPECT_TRUE(foo.active);
+
+    // "bar" was indexed before being passed, so with our minimal liveness checking, it is
+    // considered live.
+    const ShaderVariable &bar = attributes[1];
+    EXPECT_EQ("bar", bar.name);
+    EXPECT_TRUE(bar.staticUse);
+    EXPECT_TRUE(bar.active);
+
+    const ShaderVariable &blee = attributes[2];
+    EXPECT_EQ("blee", blee.name);
+    EXPECT_TRUE(blee.staticUse);
+    EXPECT_TRUE(blee.active);
+}
+
+TEST_F(CollectVertexVariablesTest, DeadAttributeForwardDeclare)
+{
+    const std::string &shaderString =
+        R"(#version 300 es
+layout(location=1) in vec4 foo;
+layout(location=2) in vec4 bar;
+
+// Forward declare this function, see if deadness holds
+vec4 getPos(vec4 param);
+
+void main() {
+    gl_Position = foo + getPos(bar);
+}
+
+vec4 getPos(vec4 param)
+{
+    // Note that param is unused
+    return vec4(0.0);
+}
+)";
+
+    compile(shaderString);
+
+    const std::vector<ShaderVariable> &attributes = mTranslator->getAttributes();
+    ASSERT_EQ(2u, attributes.size());
+
+    const ShaderVariable &foo = attributes[0];
+    EXPECT_EQ("foo", foo.name);
+    EXPECT_TRUE(foo.staticUse);
+    EXPECT_TRUE(foo.active);
+
+    // "bar" was only passed as a parameter, and was never used in the function.  This means it was
+    // statically used, but not active.
+    const ShaderVariable &bar = attributes[1];
+    EXPECT_EQ("bar", bar.name);
+    EXPECT_TRUE(bar.staticUse);
+    EXPECT_FALSE(bar.active);
+}
+
+TEST_F(CollectVertexVariablesTest, LiveAttributeForwardDeclare)
+{
+    const std::string &shaderString =
+        R"(#version 300 es
+layout(location=1) in vec4 foo;
+layout(location=2) in vec4 bar;
+
+// Forward declare this function, see if liveness holds
+vec4 getPos(vec4 param);
+
+void main() {
+    gl_Position = foo + getPos(bar);
+}
+
+vec4 getPos(vec4 param)
+{
+    return param + vec4(0.1);
+})";
+
+    compile(shaderString);
+
+    const std::vector<ShaderVariable> &attributes = mTranslator->getAttributes();
+    ASSERT_EQ(2u, attributes.size());
+
+    const ShaderVariable &foo = attributes[0];
+    EXPECT_EQ("foo", foo.name);
+    EXPECT_TRUE(foo.staticUse);
+    EXPECT_TRUE(foo.active);
+
+    // "bar" was passed as a parameter and used in the function.  This means it was
+    // statically used and active.
+    const ShaderVariable &bar = attributes[1];
+    EXPECT_EQ("bar", bar.name);
+    EXPECT_TRUE(bar.staticUse);
+    EXPECT_TRUE(bar.active);
+}
+
+TEST_F(CollectFragmentVariablesTest, LiveAttributeNestedParameter)
+{
+    // This is copied from NestedStructsWithSamplersAsFunctionArg
+    // The key here is chaining function calls together.  Rename the function.
+    const std::string &shaderString =
+        R"(precision mediump float;
+struct S
+{
+    sampler2D samplerMember;
+};
+struct T
+{
+    S nest;
+};
+uniform T uStruct;
+uniform vec2 uTexCoord;
+vec4 foo2(S structVar)
+{
+    return texture2D(structVar.samplerMember, uTexCoord);
+}
+vec4 foo(T structVar)
+{
+    return foo2(structVar.nest);
+}
+void main()
+{
+    gl_FragColor = foo(uStruct);
+})";
+
+    compile(shaderString);
+
+    const std::vector<ShaderVariable> &uniforms = mTranslator->getUniforms();
+    ASSERT_EQ(2u, uniforms.size());
+
+    const ShaderVariable &uStruct = uniforms[0];
+    EXPECT_EQ("uStruct", uStruct.name);
+    EXPECT_TRUE(uStruct.staticUse);
+    EXPECT_TRUE(uStruct.active);
+
+    // "bar" was passed as a parameter and used in the function.  This means it was
+    // statically used and active.
+    const ShaderVariable &uTexCoord = uniforms[1];
+    EXPECT_EQ("uTexCoord", uTexCoord.name);
+    EXPECT_TRUE(uTexCoord.staticUse);
+    EXPECT_TRUE(uTexCoord.active);
+}
+
+TEST_F(CollectFragmentVariablesTest, LiveAttributeFunctionChain)
+{
+    // This is copied from ConstSamplerParameterAsArgument
+    // The key here is one function does nothing but use the parameter to call another function.
+    const std::string &shaderString =
+        R"(precision mediump float;
+
+uniform sampler2D samp;
+
+vec4 sampleSampler(sampler2D s) {
+    return texture2D(s, vec2(0));
+}
+
+vec4 sampleConstSampler(sampler2D s) {
+    return sampleSampler(s);
+}
+
+void main() {
+    gl_FragColor = sampleConstSampler(samp);
+}
+)";
+
+    compile(shaderString);
+
+    const std::vector<ShaderVariable> &uniforms = mTranslator->getUniforms();
+    ASSERT_EQ(1u, uniforms.size());
+
+    const ShaderVariable &samp = uniforms[0];
+    EXPECT_EQ("samp", samp.name);
+    EXPECT_TRUE(samp.staticUse);
+    EXPECT_TRUE(samp.active);
+}
+
+TEST_F(CollectFragmentVariablesES31Test, LiveAttributeArray)
+{
+    // This is copied from BasicTypeArrayAndArrayOfSampler
+    // The key here is an output variable being declared before main, may as well rename the test.
+    const std::string &shaderString =
+        R"(#version 310 es
+precision mediump sampler2D;
+precision mediump float;
+uniform sampler2D sampler_array[2][2];
+uniform int array[3][2];
+vec4 func1(int param[2],
+           int param2[3]) {
+    return vec4(0.0, 1.0, 0.0, 0.0);
+}
+out vec4 my_FragColor;
+void main() {
+    my_FragColor = texture(sampler_array[0][0], vec2(0.0));
+    my_FragColor += func1(array[1], int[](1, 2, 3));
+}
+)";
+
+    compile(shaderString);
+
+    const std::vector<ShaderVariable> &uniforms = mTranslator->getUniforms();
+    ASSERT_EQ(2u, uniforms.size());
+
+    const ShaderVariable &sampler_array = uniforms[0];
+    EXPECT_EQ("sampler_array", sampler_array.name);
+    EXPECT_TRUE(sampler_array.staticUse);
+    EXPECT_TRUE(sampler_array.active);
+
+    const ShaderVariable &array2 = uniforms[1];
+    EXPECT_EQ("array", array2.name);
+    EXPECT_TRUE(array2.staticUse);
+    EXPECT_TRUE(array2.active);
 }

@@ -79,6 +79,12 @@ class CallDAG::CallDAGCreator : public TIntermTraverser
                 record.callees.push_back(static_cast<int>(callee->index));
             }
 
+            record.callers.reserve(data.callers.size());
+            for (auto &caller : data.callers)
+            {
+                record.callers.push_back(static_cast<int>(caller->index));
+            }
+
             (*idToIndex)[it.first] = static_cast<int>(data.index);
         }
     }
@@ -91,6 +97,7 @@ class CallDAG::CallDAGCreator : public TIntermTraverser
         {}
 
         std::set<CreatorFunctionData *> callees;
+        std::set<CreatorFunctionData *> callers;
         TIntermFunctionDefinition *definitionNode;
         ImmutableString name;
         size_t index;
@@ -138,6 +145,9 @@ class CallDAG::CallDAGCreator : public TIntermTraverser
             if (mCurrentFunction)
             {
                 mCurrentFunction->callees.insert(&it->second);
+
+                // Also track who has called this function
+                it->second.callers.insert(mCurrentFunction);
             }
         }
         return true;
