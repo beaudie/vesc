@@ -2018,6 +2018,7 @@ angle::Result TextureMtl::checkForEmulatedChannels(const gl::Context *context,
 }
 
 angle::Result TextureMtl::initializeContents(const gl::Context *context,
+                                             GLenum binding,
                                              const gl::ImageIndex &index)
 {
     if (index.isLayered())
