@@ -43,6 +43,7 @@ class CallDAG : angle::NonCopyable
     {
         TIntermFunctionDefinition *node;  // Guaranteed to be non-null.
         std::vector<int> callees;
+        std::vector<int> callers;
     };
 
     enum InitResult
