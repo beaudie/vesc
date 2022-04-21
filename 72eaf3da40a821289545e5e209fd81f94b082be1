@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "a431b78e_28926c23",
+        "filename": "include/platform/vk_features.json",
+        "patchSetId": 3
+      },
+      "lineNbr": 893,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-04-21T01:10:28Z",
+      "side": 1,
+      "message": "Please use snake_case for feature names here. They automatically translate to camelCase for code variables.",
+      "range": {
+        "startLine": 893,
+        "startChar": 21,
+        "endLine": 893,
+        "endChar": 55
+      },
+      "revId": "72eaf3da40a821289545e5e209fd81f94b082be1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
