@@ -74,6 +74,7 @@ class SurfaceMtl : public SurfaceImpl
     EGLint getSwapBehavior() const override;
 
     angle::Result initializeContents(const gl::Context *context,
+                                     GLenum binding,
                                      const gl::ImageIndex &imageIndex) override;
 
     const mtl::TextureRef &getColorTexture() { return mColorTexture; }
@@ -142,6 +143,7 @@ class WindowSurfaceMtl : public SurfaceMtl
     EGLint getSwapBehavior() const override;
 
     angle::Result initializeContents(const gl::Context *context,
+                                     GLenum binding,
                                      const gl::ImageIndex &imageIndex) override;
 
     // width and height can change with client window resizing
