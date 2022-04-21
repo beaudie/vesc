@@ -12,6 +12,7 @@
 #include <TargetConditionals.h>
 
 #include <algorithm>
+#include <cstdint>
 
 #include "common/debug.h"
 #include "libANGLE/renderer/metal/ContextMtl.h"
