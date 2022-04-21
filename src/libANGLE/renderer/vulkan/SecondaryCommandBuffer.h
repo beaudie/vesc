@@ -83,6 +83,7 @@ enum class CommandID : uint16_t
     SetViewport,
     WaitEvents,
     WriteTimestamp,
+    SetShadingRate,
 };
 
 #define VERIFY_4_BYTE_ALIGNMENT(StructName) \
@@ -448,6 +449,13 @@ struct WriteTimestampParams
 };
 VERIFY_4_BYTE_ALIGNMENT(WriteTimestampParams)
 
+struct SetShadingRateParams
+{
+    VkExtent2D fragmentSize;
+    VkFragmentShadingRateCombinerOpKHR ops[2];
+};
+VERIFY_4_BYTE_ALIGNMENT(SetShadingRateParams)
+
 // Header for every cmd in custom cmd buffer
 struct CommandHeader
 {
@@ -690,6 +698,8 @@ class SecondaryCommandBuffer final : angle::NonCopyable
     void writeTimestamp(VkPipelineStageFlagBits pipelineStage,
                         const QueryPool &queryPool,
                         uint32_t query);
+
+    void setShadingRate(const VkExtent2D *fragmentSize, VkFragmentShadingRateCombinerOpKHR ops[2]);
 
     // No-op for compatibility
     VkResult end() { return VK_SUCCESS; }
@@ -1513,6 +1523,17 @@ ANGLE_INLINE void SecondaryCommandBuffer::writeTimestamp(VkPipelineStageFlagBits
     paramStruct->pipelineStage = pipelineStage;
     paramStruct->queryPool     = queryPool.getHandle();
     paramStruct->query         = query;
+}
+
+ANGLE_INLINE void SecondaryCommandBuffer::setShadingRate(const VkExtent2D *fragmentSize,
+                                                         VkFragmentShadingRateCombinerOpKHR ops[2])
+{
+    ASSERT(fragmentSize != nullptr);
+    SetShadingRateParams *paramStruct =
+        initCommand<SetShadingRateParams>(CommandID::SetShadingRate);
+    paramStruct->fragmentSize = *fragmentSize;
+    paramStruct->ops[0]       = ops[0];
+    paramStruct->ops[0]       = ops[1];
 }
 }  // namespace priv
 }  // namespace vk
