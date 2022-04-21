@@ -51,6 +51,23 @@
       "message": "Comments. Can we resolve everything except the ANDROID auto refresh attribute?",
       "revId": "0b492974cd8c28032e5c49a31d579c2a30f50196",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "22ddbc37_82d98f73",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 14
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1509302
+      },
+      "writtenOn": "2022-04-21T21:17:03Z",
+      "side": 1,
+      "message": "Tested passing with extension advertised, and pass as skipped with extension disabled. Cool!",
+      "revId": "0b492974cd8c28032e5c49a31d579c2a30f50196",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
