@@ -1108,6 +1108,32 @@ angle::Result GetAndDecompressPipelineCacheVk(VkPhysicalDeviceProperties physica
 // Environment variable (and associated Android property) to enable Vulkan debug-utils markers
 constexpr char kEnableDebugMarkersVarName[]      = "ANGLE_ENABLE_DEBUG_MARKERS";
 constexpr char kEnableDebugMarkersPropertyName[] = "debug.angle.markers";
+
+ANGLE_INLINE gl::ShadingRate GetShadingRateFromVkExtent(const VkExtent2D &extent)
+{
+    if (extent.width == 1 && extent.height == 2)
+    {
+        return gl::ShadingRate::_1x2;
+    }
+    else if (extent.width == 2 && extent.height == 1)
+    {
+        return gl::ShadingRate::_2x1;
+    }
+    else if (extent.width == 2 && extent.height == 2)
+    {
+        return gl::ShadingRate::_2x2;
+    }
+    else if (extent.width == 4 && extent.height == 2)
+    {
+        return gl::ShadingRate::_4x2;
+    }
+    else if (extent.width == 4 && extent.height == 4)
+    {
+        return gl::ShadingRate::_4x4;
+    }
+
+    return gl::ShadingRate::_1x1;
+}
 }  // namespace
 
 // RendererVk implementation.
@@ -1866,6 +1892,10 @@ void RendererVk::queryDeviceExtensionFeatures(const vk::ExtensionNameList &devic
     mBlendOperationAdvancedFeatures.sType =
         VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_BLEND_OPERATION_ADVANCED_FEATURES_EXT;
 
+    mFragmentShadingRateFeatures = {};
+    mFragmentShadingRateFeatures.sType =
+        VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_FRAGMENT_SHADING_RATE_FEATURES_KHR;
+
     if (!vkGetPhysicalDeviceProperties2KHR || !vkGetPhysicalDeviceFeatures2KHR)
     {
         return;
@@ -1998,6 +2028,11 @@ void RendererVk::queryDeviceExtensionFeatures(const vk::ExtensionNameList &devic
         vk::AddToPNextChain(&deviceFeatures, &mBlendOperationAdvancedFeatures);
     }
 
+    if (ExtensionFound(VK_KHR_FRAGMENT_SHADING_RATE_EXTENSION_NAME, deviceExtensionNames))
+    {
+        vk::AddToPNextChain(&deviceFeatures, &mFragmentShadingRateFeatures);
+    }
+
     vkGetPhysicalDeviceFeatures2KHR(mPhysicalDevice, &deviceFeatures);
     vkGetPhysicalDeviceProperties2KHR(mPhysicalDevice, &deviceProperties);
 
@@ -2025,6 +2060,7 @@ void RendererVk::queryDeviceExtensionFeatures(const vk::ExtensionNameList &devic
     mHostQueryResetFeatures.pNext                    = nullptr;
     mDepthClipControlFeatures.pNext                  = nullptr;
     mBlendOperationAdvancedFeatures.pNext            = nullptr;
+    mFragmentShadingRateFeatures.pNext               = nullptr;
 }
 
 angle::Result RendererVk::initializeDevice(DisplayVk *displayVk, uint32_t queueFamilyIndex)
@@ -2476,6 +2512,12 @@ angle::Result RendererVk::initializeDevice(DisplayVk *displayVk, uint32_t queueF
         vk::AddToPNextChain(&mEnabledFeatures, &mBlendOperationAdvancedFeatures);
     }
 
+    if (getFeatures().supportsFragmentShadingRate.enabled)
+    {
+        mEnabledDeviceExtensions.push_back(VK_KHR_FRAGMENT_SHADING_RATE_EXTENSION_NAME);
+        vk::AddToPNextChain(&mEnabledFeatures, &mFragmentShadingRateFeatures);
+    }
+
     mCurrentQueueFamilyIndex = queueFamilyIndex;
 
     vk::QueueFamily queueFamily;
@@ -2848,6 +2890,61 @@ gl::Version RendererVk::getMaxConformantESVersion() const
     }
 
     return maxSupportedESVersion;
+}
+
+bool RendererVk::canSupportFragmentShadingRate(const vk::ExtensionNameList &deviceExtensionNames)
+{
+    bool canSupportFragmentShadingRate = false;
+
+    // Device needs to support VK_KHR_fragment_shading_rate and specifically
+    // pipeline fragment shading rate.
+    if (ExtensionFound(VK_KHR_FRAGMENT_SHADING_RATE_EXTENSION_NAME, deviceExtensionNames) &&
+        mFragmentShadingRateFeatures.pipelineFragmentShadingRate == VK_TRUE)
+    {
+        // Query supported shading rates
+        constexpr uint32_t kShadingRatesCount                                               = 6;
+        uint32_t shadingRatesCount                                                          = 6;
+        std::array<VkPhysicalDeviceFragmentShadingRateKHR, kShadingRatesCount> shadingRates = {
+            {{VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_FRAGMENT_SHADING_RATE_KHR, nullptr, 0, {1, 1}},
+             {VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_FRAGMENT_SHADING_RATE_KHR, nullptr, 0, {1, 2}},
+             {VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_FRAGMENT_SHADING_RATE_KHR, nullptr, 0, {2, 1}},
+             {VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_FRAGMENT_SHADING_RATE_KHR, nullptr, 0, {2, 2}},
+             {VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_FRAGMENT_SHADING_RATE_KHR, nullptr, 0, {4, 2}},
+             {VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_FRAGMENT_SHADING_RATE_KHR, nullptr, 0, {4, 4}}}};
+
+        VkResult result = vkGetPhysicalDeviceFragmentShadingRatesKHR(
+            mPhysicalDevice, &shadingRatesCount, shadingRates.data());
+        ASSERT(result == VK_SUCCESS || result == VK_INCOMPLETE);
+        ASSERT(shadingRatesCount > 0 && shadingRatesCount <= kShadingRatesCount);
+
+        // Cache supported fragment shading rates
+        mSupportedFragmentShadingRates.fill(false);
+        for (const VkPhysicalDeviceFragmentShadingRateKHR &shadingRate : shadingRates)
+        {
+            if (shadingRate.sampleCounts == 0)
+            {
+                continue;
+            }
+            mSupportedFragmentShadingRates[GetShadingRateFromVkExtent(shadingRate.fragmentSize)] =
+                true;
+        }
+
+        // To implement GL_QCOM_shading_rate extension the ICD needs to at least support the
+        // following shading rates -
+        //     {1, 1}
+        //     {1, 2}
+        //     {2, 1}
+        //     {2, 2}
+        if (mSupportedFragmentShadingRates[gl::ShadingRate::_1x1] &&
+            mSupportedFragmentShadingRates[gl::ShadingRate::_1x2] &&
+            mSupportedFragmentShadingRates[gl::ShadingRate::_2x1] &&
+            mSupportedFragmentShadingRates[gl::ShadingRate::_2x2])
+        {
+            canSupportFragmentShadingRate = true;
+        }
+    }
+
+    return canSupportFragmentShadingRate;
 }
 
 void RendererVk::initFeatures(DisplayVk *displayVk,
@@ -3335,6 +3432,9 @@ void RendererVk::initFeatures(DisplayVk *displayVk,
     ANGLE_FEATURE_CONDITION(&mFeatures, retainSPIRVDebugInfo, getEnableValidationLayers());
 
     ANGLE_FEATURE_CONDITION(&mFeatures, generateSPIRVThroughGlslang, kUseSpirvGenThroughGlslang);
+
+    ANGLE_FEATURE_CONDITION(&mFeatures, supportsFragmentShadingRate,
+                            canSupportFragmentShadingRate(deviceExtensionNames));
 
     ApplyFeatureOverrides(&mFeatures, displayVk->getState());
 

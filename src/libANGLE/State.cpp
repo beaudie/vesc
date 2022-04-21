@@ -418,7 +418,8 @@ State::State(const State *shareContextState,
       mBoundingBoxMaxX(1.0f),
       mBoundingBoxMaxY(1.0f),
       mBoundingBoxMaxZ(1.0f),
-      mBoundingBoxMaxW(1.0f)
+      mBoundingBoxMaxW(1.0f),
+      mShadingRatePreserveAspectRatio(false)
 {}
 
 State::~State() {}
@@ -567,6 +568,9 @@ void State::initialize(Context *context)
     {
         mGLES1State.initialize(context, this);
     }
+
+    // QCOM_shading_rate
+    mShadingRate = ShadingRate::_1x1;
 }
 
 void State::reset(const Context *context)
@@ -1334,8 +1338,11 @@ void State::setEnableFeature(GLenum feature, bool enabled)
             if (mClientVersion.major >= 2)
             {
                 setClipDistanceEnable(feature - GL_CLIP_DISTANCE0_EXT, enabled);
-                return;
             }
+            return;
+        case GL_SHADING_RATE_PRESERVE_ASPECT_RATIO_QCOM:
+            mShadingRatePreserveAspectRatio = enabled;
+            return;
     }
 
     ASSERT(mClientVersion.major == 1);
@@ -1481,6 +1488,8 @@ bool State::getEnableFeature(GLenum feature) const
                 return mClipDistancesEnabled.test(feature - GL_CLIP_DISTANCE0_EXT);
             }
             break;
+        case GL_SHADING_RATE_PRESERVE_ASPECT_RATIO_QCOM:
+            return mShadingRatePreserveAspectRatio;
     }
 
     ASSERT(mClientVersion.major == 1);
@@ -2364,6 +2373,13 @@ void State::setPatchVertices(GLuint value)
         mPatchVertices = value;
         mDirtyBits.set(DIRTY_BIT_PATCH_VERTICES);
     }
+}
+
+void State::setShadingRate(GLenum rate)
+{
+    mShadingRate = FromGLenum<ShadingRate>(rate);
+    mDirtyBits.set(DIRTY_BIT_EXTENDED);
+    mExtendedDirtyBits.set(EXTENDED_DIRTY_BIT_SHADING_RATE);
 }
 
 void State::getBooleanv(GLenum pname, GLboolean *params) const
