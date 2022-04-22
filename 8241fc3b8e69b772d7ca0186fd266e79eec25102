@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "0cd019a7_2a1a16f7",
+        "filename": "src/tests/py_utils/android_helper.py",
+        "patchSetId": 1
+      },
+      "lineNbr": 49,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2022-04-22T15:27:19Z",
+      "side": 1,
+      "message": "nothing needed for .exe on windows?",
+      "range": {
+        "startLine": 49,
+        "startChar": 18,
+        "endLine": 49,
+        "endChar": 33
+      },
+      "revId": "8241fc3b8e69b772d7ca0186fd266e79eec25102",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
