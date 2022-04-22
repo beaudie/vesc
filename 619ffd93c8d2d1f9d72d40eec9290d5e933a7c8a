@@ -16,6 +16,52 @@
       "message": "Example: https://screenshot.googleplex.com/5awTcdmq4EVFvFT",
       "revId": "619ffd93c8d2d1f9d72d40eec9290d5e933a7c8a",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "1bf49128_de33c789",
+        "filename": "src/libANGLE/Overlay_autogen.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 44,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2022-04-22T19:06:08Z",
+      "side": 1,
+      "message": "Could we get more precise names? like queueSubmitCalls / submitFrameCalls ?",
+      "range": {
+        "startLine": 44,
+        "startChar": 4,
+        "endLine": 44,
+        "endChar": 30
+      },
+      "revId": "619ffd93c8d2d1f9d72d40eec9290d5e933a7c8a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "214c45c0_2da682ce",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 1384,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2022-04-22T19:06:08Z",
+      "side": 1,
+      "message": "these belong in the perf counters\n\nthe existing pattern is to reset them when we reset per-frame counters. that would mean setting up a reset function down to the renderer. I suggest you do this to make sure we have a consistent pattern - and if we need to better support incremental counts vs total counts we can do it more easily if all the counters work the same way.",
+      "range": {
+        "startLine": 1381,
+        "startChar": 0,
+        "endLine": 1384,
+        "endChar": 32
+      },
+      "revId": "619ffd93c8d2d1f9d72d40eec9290d5e933a7c8a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
