@@ -11,6 +11,7 @@ import os
 import pathlib
 import posixpath
 import random
+import re
 import subprocess
 import tarfile
 import tempfile
@@ -215,10 +216,66 @@ def _PullDir(device_dir, local_dir):
             _AdbRun(['pull', posixpath.join(device_dir, f), posixpath.join(local_dir, f)])
 
 
-def RunTests(test_suite, args, stdoutfile, output_dir):
-    with _TempDeviceDir() as temp_dir:
-        output = _RunInstrumentation(args + ['--render-test-output-dir=' + temp_dir])
-        with open(stdoutfile, 'wb') as f:
-            f.write(output)
+def RunTests(test_suite,
+             args,
+             stdoutfile=None,
+             output_dir=None,
+             log_output=True,
+             perf_output_path=None):
+    args = args[:]
+
+    if any('--isolated-script-test-output' in a for a in args):
+        raise NotImplementedError('Unexpected --isolated-script-test-output in args')
+
+    result = 0
+    output = b''
+    try:
+        with contextlib.ExitStack() as stack:
+            device_test_output_path = stack.enter_context(_TempDeviceFile())
+            args += ['--isolated-script-test-output=%s' % device_test_output_path]
+
+            if perf_output_path:
+                device_file_path = stack.enter_context(_TempDeviceFile())
+                args += ['--isolated-script-test-perf-output=%s' % device_file_path]
+
+            if output_dir:
+                temp_dir = stack.enter_context(_TempDeviceDir())
+                args += ['--render-test-output-dir=' + temp_dir]
+
+            output = _RunInstrumentation(args)
+
+            output_json = json.loads(_ReadDeviceFile(device_test_output_path))
+            num_failures = output_json.get('num_failures_by_type', {}).get('FAIL', 0)
+            interrupted = output_json.get('interrupted', True)  # Normally set to False
+            if num_failures != 0 or interrupted or output_json.get('is_unexpected', False):
+                logging.error('Tests failed')
+                result = 1
+
+            if output_dir:
+                _PullDir(temp_dir, output_dir)
+
+            if perf_output_path:
+                _AdbRun(['pull', device_file_path, perf_output_path])
+
+        if log_output:
             logging.info(output.decode())
-        _PullDir(temp_dir, output_dir)
+
+        if stdoutfile:
+            with open(stdoutfile, 'wb') as f:
+                f.write(output)
+    except Exception as e:
+        logging.exception(e)
+        result = 1
+
+    return result, output
+
+
+def GetTraceFromTestName(test_name):
+    m = re.search(r'TracePerfTest.Run/(native|vulkan)_(.*)', test_name)
+    if m:
+        return m.group(2)
+
+    if test_name.startswith('TracePerfTest.Run/'):
+        raise Exception('Unexpected test: %s' % test_name)
+
+    return None
