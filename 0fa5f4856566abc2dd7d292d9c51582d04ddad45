@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "0ff68a47_399e2650",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-04-22T14:25:08Z",
+      "side": 1,
+      "message": "I ran a few traces with logs, and in some cases, for example angry_birds_2_launch I see about 50% reduction in vkQueueSubmit calls. In traces with few flush calls, the glFinish calls issued by the trace fixture itself is optimized out. In the case of angry_birds_2_launch, there are thousands of flush calls from the app itself, half of which are optimized out. I took a look at a few of those, and some are from loading where the app does `texture upload; upload; flush; upload; upload; flush`. Some of them are from glFenceSync calls in the beginning of the frame (something filament also noticed).\n\nRunning angry_birds_2_launch, I see ~3% CPU perf improvement, but that could also just be noise. I didn\u0027t run the full list of traces.\n\nI\u0027m considering following up with an overlay widget that logs vkQueueSubmit calls per frame.",
+      "revId": "0fa5f4856566abc2dd7d292d9c51582d04ddad45",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
