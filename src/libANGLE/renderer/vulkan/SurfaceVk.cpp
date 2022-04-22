@@ -1283,6 +1283,8 @@ angle::Result WindowSurfaceVk::resizeSwapchainImages(vk::Context *context, uint3
         }
     }
 
+    mNeedToAcquireNextSwapchainImage = true;
+
     return angle::Result::Continue;
 }
 
