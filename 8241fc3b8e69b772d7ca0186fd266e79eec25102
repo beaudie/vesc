@@ -22,6 +22,30 @@
       },
       "revId": "8241fc3b8e69b772d7ca0186fd266e79eec25102",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "d77c8eb5_cbb08dc4",
+        "filename": "src/tests/py_utils/android_helper.py",
+        "patchSetId": 1
+      },
+      "lineNbr": 49,
+      "author": {
+        "id": 1531247
+      },
+      "writtenOn": "2022-04-22T15:33:46Z",
+      "side": 1,
+      "message": "Nope, seems to be working fine:\n\n\u003e\u003e\u003e adb \u003d str(pathlib.Path(r\u0027C:\\Users\\romanl\\AppData\\Local\\Android\\sdk\\platform-tools\u0027) / \u0027adb\u0027)\n\u003e\u003e\u003e adb\n\u0027C:\\\\Users\\\\romanl\\\\AppData\\\\Local\\\\Android\\\\sdk\\\\platform-tools\\\\adb\u0027\n\n\u003e\u003e\u003esubprocess.check_call([adb, \u0027--version\u0027])\nAndroid Debug Bridge version 1.0.41\nVersion 32.0.0-8006631\nInstalled as C:\\Users\\romanl\\AppData\\Local\\Android\\sdk\\platform-tools\\adb.exe",
+      "parentUuid": "0cd019a7_2a1a16f7",
+      "range": {
+        "startLine": 49,
+        "startChar": 18,
+        "endLine": 49,
+        "endChar": 33
+      },
+      "revId": "8241fc3b8e69b772d7ca0186fd266e79eec25102",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
