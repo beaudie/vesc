@@ -16,6 +16,40 @@
       "message": "PTAL.. I am actually not sure how to make a test for this. I could add state queries that return if a depth or color surface buffer is initialized or not, but I\u0027d have to add two enums and updates the EGL robust resource init spec, which seems like a lot.",
       "revId": "9ffab969d8f1e8055b4748b14a2a0aadfd466a86",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "719393ff_5c4d0147",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 6
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-04-22T02:30:00Z",
+      "side": 1,
+      "message": "The commit message needs some love. The confusion is when robust init is enabled and the app clears surface color or depth, but leaves the other uninitialized, right?",
+      "revId": "9ffab969d8f1e8055b4748b14a2a0aadfd466a86",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "bcd03355_6f0d7bf8",
+        "filename": "src/libANGLE/Texture.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 2265,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-04-22T02:30:00Z",
+      "side": 1,
+      "message": "`ASSERT(binding \u003d\u003d GL_NONE)`? Then you can drop the Note comment added below.",
+      "revId": "9ffab969d8f1e8055b4748b14a2a0aadfd466a86",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
