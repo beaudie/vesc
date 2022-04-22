@@ -16,6 +16,23 @@
       "message": "Another VVL error to suppress so we can land vulkan-deps",
       "revId": "9e29fa2b8fa4deed3d011ea41fb2a8d6eca361d6",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "d5b7d241_ca0193bb",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2022-04-22T18:57:53Z",
+      "side": 1,
+      "message": "The test is bugged here, see https://chromium-review.googlesource.com/c/angle/angle/+/3599596\n\nWe should always skip this test and ask Sunny to fix it.",
+      "revId": "9e29fa2b8fa4deed3d011ea41fb2a8d6eca361d6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
