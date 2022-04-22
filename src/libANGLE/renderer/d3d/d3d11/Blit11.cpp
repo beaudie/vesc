@@ -1193,22 +1193,7 @@ angle::Result Blit11::copyDepthStencilImpl(const gl::Context *context,
         copySize = 1;
     }
 
-    if (srcDXGIFormat != destDXGIFormat)
-    {
-        if (srcDXGIFormat == DXGI_FORMAT_R24G8_TYPELESS)
-        {
-            ASSERT(sourceArea == destArea && sourceSize == destSize && scissor == nullptr);
-            return copyAndConvert(context, source, sourceSubresource, sourceArea, sourceSize, dest,
-                                  destSubresource, destArea, destSize, scissor, copyOffset,
-                                  copyOffset, copySize, srcPixelSize, destPixelSize,
-                                  BlitD24S8ToD32F);
-        }
-        ASSERT(srcDXGIFormat == DXGI_FORMAT_R32G8X24_TYPELESS);
-        return copyAndConvert(context, source, sourceSubresource, sourceArea, sourceSize, dest,
-                              destSubresource, destArea, destSize, scissor, copyOffset, copyOffset,
-                              copySize, srcPixelSize, destPixelSize, BlitD32FS8ToD32F);
-    }
-
+    ASSERT(srcDXGIFormat == destDXGIFormat);
     return copyAndConvert(context, source, sourceSubresource, sourceArea, sourceSize, dest,
                           destSubresource, destArea, destSize, scissor, copyOffset, copyOffset,
                           copySize, srcPixelSize, destPixelSize, StretchedBlitNearest);
