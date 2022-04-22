@@ -568,7 +568,7 @@ TEST_P(VulkanPerformanceCounterTest, SubmittingOutsideCommandBufferDoesNotBreakR
     size_t kMaxBufferToImageCopySize     = 1 << 28;
     uint32_t kNumSubmits                 = 2;
     uint32_t expectedRenderPassCount     = getPerfCounters().renderPasses + 1;
-    uint32_t expectedSubmitCommandsCount = getPerfCounters().submittedCommands + kNumSubmits;
+    uint32_t expectedSubmitCommandsCount = getPerfCounters().vkQueueSubmitCalls + kNumSubmits;
 
     // Step 1: Set up a simple 2D texture.
     GLTexture texture;
@@ -622,7 +622,7 @@ TEST_P(VulkanPerformanceCounterTest, SubmittingOutsideCommandBufferDoesNotBreakR
 
     // Verify render pass and submitted frame counts.
     EXPECT_EQ(getPerfCounters().renderPasses, expectedRenderPassCount);
-    EXPECT_EQ(getPerfCounters().submittedCommands, expectedSubmitCommandsCount);
+    EXPECT_EQ(getPerfCounters().vkQueueSubmitCalls, expectedSubmitCommandsCount);
 }
 
 // Tests that RGB texture should not break renderpass.
@@ -4909,7 +4909,7 @@ TEST_P(VulkanPerformanceCounterTest, UnnecessaryFlushDoesntCauseSubmission)
     initANGLEFeatures();
 
     swapBuffers();
-    uint32_t expectedSubmittedCommands = getPerfCounters().submittedCommands;
+    uint32_t expectedVkQueueSubmitCalls = getPerfCounters().vkQueueSubmitCalls;
 
     glFlush();
     glFlush();
@@ -4917,17 +4917,17 @@ TEST_P(VulkanPerformanceCounterTest, UnnecessaryFlushDoesntCauseSubmission)
 
     // Nothing was recorded, so there shouldn't be anything to flush.
     glFinish();
-    EXPECT_EQ(getPerfCounters().submittedCommands, expectedSubmittedCommands);
+    EXPECT_EQ(getPerfCounters().vkQueueSubmitCalls, expectedVkQueueSubmitCalls);
 
     glClearColor(1, 0, 0, 1);
     glClear(GL_COLOR_BUFFER_BIT);
     EXPECT_PIXEL_COLOR_EQ(0, 0, GLColor::red);
 
     // One submission for the above readback
-    ++expectedSubmittedCommands;
+    ++expectedVkQueueSubmitCalls;
 
     glFinish();
-    EXPECT_EQ(getPerfCounters().submittedCommands, expectedSubmittedCommands);
+    EXPECT_EQ(getPerfCounters().vkQueueSubmitCalls, expectedVkQueueSubmitCalls);
 
     glFlush();
     glFlush();
@@ -4935,7 +4935,7 @@ TEST_P(VulkanPerformanceCounterTest, UnnecessaryFlushDoesntCauseSubmission)
 
     // No addional submissions since last one
     glFinish();
-    EXPECT_EQ(getPerfCounters().submittedCommands, expectedSubmittedCommands);
+    EXPECT_EQ(getPerfCounters().vkQueueSubmitCalls, expectedVkQueueSubmitCalls);
 }
 
 // Ensure that glFenceSync doesn't lead to vkQueueSubmit if there's nothing to submit.
@@ -4945,13 +4945,13 @@ TEST_P(VulkanPerformanceCounterTest, SyncWihtoutCommandsDoesntCauseSubmission)
     initANGLEFeatures();
 
     swapBuffers();
-    uint32_t expectedSubmittedCommands = getPerfCounters().submittedCommands;
+    uint32_t expectedVkQueueSubmitCalls = getPerfCounters().vkQueueSubmitCalls;
 
     glFenceSync(GL_SYNC_GPU_COMMANDS_COMPLETE, 0);
 
     // Nothing was recorded, so there shouldn't be anything to flush.
     glFinish();
-    EXPECT_EQ(getPerfCounters().submittedCommands, expectedSubmittedCommands);
+    EXPECT_EQ(getPerfCounters().vkQueueSubmitCalls, expectedVkQueueSubmitCalls);
 }
 
 ANGLE_INSTANTIATE_TEST(VulkanPerformanceCounterTest, ES3_VULKAN(), ES3_VULKAN_SWIFTSHADER());
