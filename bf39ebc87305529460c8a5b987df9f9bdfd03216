@@ -22,6 +22,30 @@
       },
       "revId": "bf39ebc87305529460c8a5b987df9f9bdfd03216",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "f5d123e2_37f147dc",
+        "filename": "src/libANGLE/Texture.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 1383,
+      "author": {
+        "id": 1520902
+      },
+      "writtenOn": "2022-04-22T16:51:53Z",
+      "side": 1,
+      "message": "Yes that was my first patch. After the discussion during the scrum meeting, I think we would prefer to not throw errors more than what OpenGL spec states: https://www.khronos.org/registry/OpenGL-Refpages/gl2.1/xhtml/glCopyTexImage2D.xml. But it seems that the kOffsetOverflow error above is also not in the spec. If we are already throwing errors more than what spec states, then I agree that adding the checking in validate call is a better solution.",
+      "parentUuid": "7bf50884_3aee1abe",
+      "range": {
+        "startLine": 1372,
+        "startChar": 8,
+        "endLine": 1383,
+        "endChar": 0
+      },
+      "revId": "bf39ebc87305529460c8a5b987df9f9bdfd03216",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
