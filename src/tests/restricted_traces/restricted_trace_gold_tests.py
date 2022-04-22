@@ -134,12 +134,7 @@ def run_wrapper(test_suite, cmd_args, args, env, stdoutfile, output_dir=None):
         return xvfb.run_executable(cmd, env, stdoutfile=stdoutfile)
     else:
         if _use_adb(args.test_suite):
-            try:
-                android_helper.RunTests(test_suite, cmd_args, stdoutfile, output_dir)
-                return 0
-            except Exception as e:
-                logging.exception(e)
-                return 1
+            return android_helper.RunTests(test_suite, cmd_args, stdoutfile, output_dir)[0]
         else:
             return test_env.run_command_with_output(cmd, env=env, stdoutfile=stdoutfile)
 
