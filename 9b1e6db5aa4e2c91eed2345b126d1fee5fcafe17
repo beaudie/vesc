@@ -50,6 +50,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "9f1fa695_dadc559c",
+        "filename": "src/compiler/translator/CollectVariables.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 262,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-04-22T19:30:38Z",
+      "side": 1,
+      "message": "`visitSymbol` has access to the symbol, which you can get the `TVariable *` out of. That is `\u0026symbol-\u003evariable()`",
+      "parentUuid": "d027f441_4c89e6c3",
+      "range": {
+        "startLine": 262,
+        "startChar": 13,
+        "endLine": 262,
+        "endChar": 24
+      },
+      "revId": "9b1e6db5aa4e2c91eed2345b126d1fee5fcafe17",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "812cd5a2_8c22b1f6",
         "filename": "src/compiler/translator/CollectVariables.cpp",
         "patchSetId": 1
@@ -173,6 +197,24 @@
       "side": 1,
       "message": "Wouldn\u0027t I have already traversed all the function definitions by iterating through the DAG entries?",
       "parentUuid": "4657775e_9bd5b988",
+      "revId": "9b1e6db5aa4e2c91eed2345b126d1fee5fcafe17",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ed88d6ad_88e67a02",
+        "filename": "src/compiler/translator/CollectVariables.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 1242,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-04-22T19:30:38Z",
+      "side": 1,
+      "message": "Ah I missed that you are traversing the functions at the same time. I think right now you are reprocessing the dag over and over on each function. You could potentially make `visitFunctionDefinition` unconditionally `return false`, then after traversal call `traverseDAG` which does the traversal of functions.",
+      "parentUuid": "f72d4426_eea6b07d",
       "revId": "9b1e6db5aa4e2c91eed2345b126d1fee5fcafe17",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
