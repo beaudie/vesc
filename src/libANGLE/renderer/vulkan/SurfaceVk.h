@@ -295,6 +295,7 @@ class WindowSurfaceVk : public SurfaceVk
                            const EGLint *rects,
                            EGLint n_rects,
                            const void *pNextChain);
+    angle::Result recreateSwapchain(ContextVk *contextVk, const gl::Extents &extents);
 
     EGLNativeWindowType mNativeWindowType;
     VkSurfaceKHR mSurface;
@@ -306,7 +307,6 @@ class WindowSurfaceVk : public SurfaceVk
     virtual angle::Result getCurrentWindowSize(vk::Context *context, gl::Extents *extentsOut) = 0;
 
     angle::Result initializeImpl(DisplayVk *displayVk);
-    angle::Result recreateSwapchain(ContextVk *contextVk, const gl::Extents &extents);
     angle::Result createSwapChain(vk::Context *context,
                                   const gl::Extents &extents,
                                   VkSwapchainKHR oldSwapchain);
