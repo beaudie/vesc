@@ -46,6 +46,30 @@
       },
       "revId": "bf39ebc87305529460c8a5b987df9f9bdfd03216",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "c2eed26f_a8576f22",
+        "filename": "src/libANGLE/Texture.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 1383,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2022-04-22T17:29:53Z",
+      "side": 1,
+      "message": "You can try it on native GLES driver to see what their behavior is. We should have consistent behavior to existing drivers regarding error.\n\nI thought this whole logic can be as simple as this:\n\n...\nif(ClipRectangle(...))\n{\n   ...\n}\nelse\n{\n    // Source area is out of bounds. Force using copySubImage when we\u0027re not \n    // copying to and from the same texture\n    forceCopySubImage \u003d (sourceReadAttachment-\u003egetResource() !\u003d this);\n}\n\nI thought clipRectangle is already doing the out of bounds check? (maybe I am wrong, so please do verify)",
+      "parentUuid": "f5d123e2_37f147dc",
+      "range": {
+        "startLine": 1372,
+        "startChar": 8,
+        "endLine": 1383,
+        "endChar": 0
+      },
+      "revId": "bf39ebc87305529460c8a5b987df9f9bdfd03216",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
