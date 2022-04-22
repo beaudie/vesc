@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "7bf50884_3aee1abe",
+        "filename": "src/libANGLE/Texture.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 1383,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2022-04-22T14:08:27Z",
+      "side": 1,
+      "message": "I was expecting a fix to ValidateCopyTexImageParametersBase or something similar to that. We have this code:\n\n    if (std::numeric_limits\u003cGLsizei\u003e::max() - xoffset \u003c width ||\n        std::numeric_limits\u003cGLsizei\u003e::max() - yoffset \u003c height)\n    {\n        context-\u003evalidationError(entryPoint, GL_INVALID_VALUE, kOffsetOverflow);\n        return false;\n    }\n    \nMaybe we need a similar check for x/y?",
+      "range": {
+        "startLine": 1372,
+        "startChar": 8,
+        "endLine": 1383,
+        "endChar": 0
+      },
+      "revId": "bf39ebc87305529460c8a5b987df9f9bdfd03216",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
