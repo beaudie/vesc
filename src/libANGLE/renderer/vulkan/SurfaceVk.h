@@ -295,6 +295,9 @@ class WindowSurfaceVk : public SurfaceVk
                            const EGLint *rects,
                            EGLint n_rects,
                            const void *pNextChain);
+    // Called when a swapchain image whose acquisition was deferred must be acquired.  This method
+    // will recreate the swapchain (if needed) and call the acquireNextSwapchainImage() method.
+    angle::Result doDeferredAcquireNextImage(const gl::Context *context, bool presentOutOfDate);
 
     EGLNativeWindowType mNativeWindowType;
     VkSurfaceKHR mSurface;
@@ -323,9 +326,7 @@ class WindowSurfaceVk : public SurfaceVk
     // This method is called when a swapchain image is presented.  It schedules
     // acquireNextSwapchainImage() to be called later.
     void deferAcquireNextImage(const gl::Context *context);
-    // Called when a swapchain image whose acquisition was deferred must be acquired.  This method
-    // will recreate the swapchain (if needed) and call the acquireNextSwapchainImage() method.
-    angle::Result doDeferredAcquireNextImage(const gl::Context *context, bool presentOutOfDate);
+
     angle::Result computePresentOutOfDate(vk::Context *context,
                                           VkResult result,
                                           bool *presentOutOfDate);
