@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "daec6301_c88db837",
+        "filename": "src/libGLESv2/egl_ext_stubs.cpp",
+        "patchSetId": 36
+      },
+      "lineNbr": 205,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2022-04-22T14:13:32Z",
+      "side": 1,
+      "message": "nit: please use the same ordering in GetDisplayFromNativeDisplay as in GetPlatformDisplayEXT:\n\nplatform, native display, attrib map",
+      "range": {
+        "startLine": 205,
+        "startChar": 24,
+        "endLine": 205,
+        "endChar": 44
+      },
+      "revId": "1bab17c9b885ded3b54cd17f5a4f2539461dcb9b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
