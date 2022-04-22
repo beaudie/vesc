@@ -168,6 +168,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "2f28b39c_8969cbdb",
+        "filename": "src/compiler/translator/CollectVariables.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 432,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2022-04-22T20:08:03Z",
+      "side": 1,
+      "message": "The parameters could be all sort of expressions, like `a ? b[X] : c[Y++][Z].struct[2].x`.  We want something that captures the base of the access chain to determine liveness.  In this case, the parameter index would be used to determine liveness for `b` and `c` (based on internal use), and everything else used to index them would be live.",
+      "parentUuid": "636d9b49_fe98c325",
+      "range": {
+        "startLine": 432,
+        "startChar": 38,
+        "endLine": 432,
+        "endChar": 67
+      },
+      "revId": "9b1e6db5aa4e2c91eed2345b126d1fee5fcafe17",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "4657775e_9bd5b988",
         "filename": "src/compiler/translator/CollectVariables.cpp",
         "patchSetId": 1
@@ -215,6 +239,24 @@
       "side": 1,
       "message": "Ah I missed that you are traversing the functions at the same time. I think right now you are reprocessing the dag over and over on each function. You could potentially make `visitFunctionDefinition` unconditionally `return false`, then after traversal call `traverseDAG` which does the traversal of functions.",
       "parentUuid": "f72d4426_eea6b07d",
+      "revId": "9b1e6db5aa4e2c91eed2345b126d1fee5fcafe17",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "dfee1206_f166f7f6",
+        "filename": "src/compiler/translator/CollectVariables.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 1242,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2022-04-22T20:08:03Z",
+      "side": 1,
+      "message": "Heh, I meant for it to be done only once, but I removed a check I had (mTraversedDAG) while cleaning up for upload.  One way or the other, only want the DAG traversed once, and only want each function traversed once.",
+      "parentUuid": "ed88d6ad_88e67a02",
       "revId": "9b1e6db5aa4e2c91eed2345b126d1fee5fcafe17",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
