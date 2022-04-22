@@ -1,0 +1,44 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "372a106a_26673f68",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 15
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2022-04-22T16:47:43Z",
+      "side": 1,
+      "message": "LGTM. Will +2 once bots are green.",
+      "revId": "168083ee665c6e54182fff76f601cea4bd3615d1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "0dab4a3c_3c6b43b4",
+        "filename": "src/libANGLE/renderer/vulkan/UtilsVk.cpp",
+        "patchSetId": 15
+      },
+      "lineNbr": 3013,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2022-04-22T16:47:43Z",
+      "side": 1,
+      "message": "A comment (that srcBuffer is the transfer destination of copyImageToBuffer) will be helpful here . Otherwise it is a bit confusing that you are calling onBufferTransferWrite on a srcBuffer.",
+      "range": {
+        "startLine": 3013,
+        "startChar": 11,
+        "endLine": 3013,
+        "endChar": 32
+      },
+      "revId": "168083ee665c6e54182fff76f601cea4bd3615d1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
