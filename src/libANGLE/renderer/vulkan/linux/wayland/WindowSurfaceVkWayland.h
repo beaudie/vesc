@@ -21,6 +21,8 @@ namespace rx
 class WindowSurfaceVkWayland : public WindowSurfaceVk
 {
   public:
+    // Requests of new sizes from client go through this callback, but actual resize will happen
+    // after a buffer swap
     static void ResizeCallback(wl_egl_window *window, void *payload);
 
     WindowSurfaceVkWayland(const egl::SurfaceState &surfaceState,
@@ -33,12 +35,21 @@ class WindowSurfaceVkWayland : public WindowSurfaceVk
     egl::Error getUserWidth(const egl::Display *display, EGLint *value) const override;
     egl::Error getUserHeight(const egl::Display *display, EGLint *value) const override;
 
+    egl::Error swap(const gl::Context *context) override;
+    egl::Error swapWithDamage(const gl::Context *context,
+                              const EGLint *rects,
+                              EGLint n_rects) override;
+
   private:
     angle::Result createSurfaceVk(vk::Context *context, gl::Extents *extentsOut) override;
     angle::Result getCurrentWindowSize(vk::Context *context, gl::Extents *extentsOut) override;
 
+    // Checks whether the client required a new size and recreates the swapchain
+    egl::Error maybeResize(const gl::Context *context);
+
     wl_display *mWaylandDisplay;
     gl::Extents mExtents;
+    bool mResized;
 };
 
 }  // namespace rx

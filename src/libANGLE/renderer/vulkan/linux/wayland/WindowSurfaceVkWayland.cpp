@@ -9,6 +9,10 @@
 
 #include "libANGLE/renderer/vulkan/linux/wayland/WindowSurfaceVkWayland.h"
 
+#include "libANGLE/Context.h"
+#include "libANGLE/Display.h"
+#include "libANGLE/renderer/vulkan/ContextVk.h"
+#include "libANGLE/renderer/vulkan/DisplayVk.h"
 #include "libANGLE/renderer/vulkan/RendererVk.h"
 
 #include <wayland-egl-backend.h>
@@ -20,8 +24,15 @@ void WindowSurfaceVkWayland::ResizeCallback(wl_egl_window *eglWindow, void *payl
 {
     WindowSurfaceVkWayland *windowSurface = reinterpret_cast<WindowSurfaceVkWayland *>(payload);
 
-    windowSurface->mExtents.width  = eglWindow->width;
-    windowSurface->mExtents.height = eglWindow->height;
+    if (windowSurface->mExtents.width != eglWindow->width ||
+        windowSurface->mExtents.height != eglWindow->height)
+    {
+        windowSurface->mExtents.width  = eglWindow->width;
+        windowSurface->mExtents.height = eglWindow->height;
+
+        // Trigger swapchain resize
+        windowSurface->mResized = true;
+    }
 }
 
 WindowSurfaceVkWayland::WindowSurfaceVkWayland(const egl::SurfaceState &surfaceState,
@@ -74,6 +85,44 @@ egl::Error WindowSurfaceVkWayland::getUserHeight(const egl::Display *display, EG
 {
     *value = getHeight();
     return egl::NoError();
+}
+
+egl::Error WindowSurfaceVkWayland::maybeResize(const gl::Context *context)
+{
+    if (!mResized)
+    {
+        return egl::NoError();
+    }
+
+    mResized             = false;
+    ContextVk *contextVk = vk::GetImpl(context);
+    angle::Result result = recreateSwapchain(contextVk, mExtents);
+    DisplayVk *displayVk = vk::GetImpl(context->getDisplay());
+    return angle::ToEGL(result, displayVk, EGL_BAD_SURFACE);
+}
+
+egl::Error WindowSurfaceVkWayland::swap(const gl::Context *context)
+{
+    egl::Error ret = WindowSurfaceVk::swap(context);
+    if (ret.isError())
+    {
+        return ret;
+    }
+
+    return maybeResize(context);
+}
+
+egl::Error WindowSurfaceVkWayland::swapWithDamage(const gl::Context *context,
+                                                  const EGLint *rects,
+                                                  EGLint n_rects)
+{
+    egl::Error ret = WindowSurfaceVk::swapWithDamage(context, rects, n_rects);
+    if (ret.isError())
+    {
+        return ret;
+    }
+
+    return maybeResize(context);
 }
 
 }  // namespace rx
