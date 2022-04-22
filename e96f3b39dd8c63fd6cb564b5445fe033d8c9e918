@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b297e529_4b85e459",
+        "filename": "src/libANGLE/renderer/vulkan/vk_cache_utils.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 2322,
+      "author": {
+        "id": 1340649
+      },
+      "writtenOn": "2022-04-22T23:20:39Z",
+      "side": 1,
+      "message": "`s/contextVk-\u003egetRenderer()-\u003egetFeatures()/contextVk-\u003egetFeatures()/g`",
+      "range": {
+        "startLine": 2322,
+        "startChar": 8,
+        "endLine": 2322,
+        "endChar": 47
+      },
+      "revId": "e96f3b39dd8c63fd6cb564b5445fe033d8c9e918",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
