@@ -51,6 +51,24 @@
       "parentUuid": "d5b7d241_ca0193bb",
       "revId": "9e29fa2b8fa4deed3d011ea41fb2a8d6eca361d6",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "351f1f2e_352615c5",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1290487
+      },
+      "writtenOn": "2022-04-22T19:06:44Z",
+      "side": 1,
+      "message": "Okay, uploaded a CL to do that: crrev/c/3602945",
+      "parentUuid": "5ead9d2f_e98ab315",
+      "revId": "9e29fa2b8fa4deed3d011ea41fb2a8d6eca361d6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
