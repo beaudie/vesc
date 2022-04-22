@@ -1107,6 +1107,8 @@ angle::Result CommandQueue::submitFrame(
     RendererVk *renderer = context->getRenderer();
     VkDevice device      = renderer->getDevice();
 
+    ++mPerfCounters.submitCommandsAttempted;
+
     DeviceScoped<CommandBatch> scopedBatch(device);
     CommandBatch &batch = scopedBatch.get();
 

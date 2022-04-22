@@ -765,7 +765,9 @@ ContextVk::ContextVk(const gl::State &state, gl::ErrorSet *errorSet, RendererVk 
       mGpuClockSync{std::numeric_limits<double>::max(), std::numeric_limits<double>::max()},
       mGpuEventTimestampOrigin(0),
       mContextPriority(renderer->getDriverPriority(GetContextPriority(state))),
-      mShareGroupVk(vk::GetImpl(state.getShareGroup()))
+      mShareGroupVk(vk::GetImpl(state.getShareGroup())),
+      mLastAttemptedSubmits(0),
+      mLastActualSubmits(0)
 {
     ANGLE_TRACE_EVENT0("gpu.angle", "ContextVk::ContextVk");
     memset(&mClearColorValue, 0, sizeof(mClearColorValue));
@@ -1190,7 +1192,7 @@ angle::Result ContextVk::finish(const gl::Context *context)
         ANGLE_TRY(finishImpl(RenderPassClosureReason::GLFinish));
     }
 
-    syncObjectPerfCounters();
+    syncObjectPerfCounters(mRenderer->getCommandQueuePerfCounters());
     return angle::Result::Continue;
 }
 
@@ -2462,7 +2464,7 @@ angle::Result ContextVk::handleDirtyDescriptorSetsImpl(CommandBufferT *commandBu
     return executableVk->updateDescriptorSets(this, &mResourceUseList, commandBuffer, pipelineType);
 }
 
-void ContextVk::syncObjectPerfCounters()
+void ContextVk::syncObjectPerfCounters(const angle::VulkanPerfCounters &commandQueuePerfCounters)
 {
     mPerfCounters.descriptorSetCacheTotalSize                = 0;
     mPerfCounters.descriptorSetCacheKeySizeBytes             = 0;
@@ -2529,7 +2531,8 @@ void ContextVk::syncObjectPerfCounters()
     }
 
     // Update perf counters from the renderer as well
-    mPerfCounters.submittedCommands = mRenderer->getCommandQueuePerfCounters().submittedCommands;
+    mPerfCounters.submitCommandsAttempted = commandQueuePerfCounters.submitCommandsAttempted;
+    mPerfCounters.submittedCommands       = commandQueuePerfCounters.submittedCommands;
 }
 
 void ContextVk::updateOverlayOnPresent()
@@ -2537,7 +2540,8 @@ void ContextVk::updateOverlayOnPresent()
     const gl::OverlayType *overlay = mState.getOverlay();
     ASSERT(overlay->isEnabled());
 
-    syncObjectPerfCounters();
+    angle::VulkanPerfCounters commandQueuePerfCounters = mRenderer->getCommandQueuePerfCounters();
+    syncObjectPerfCounters(commandQueuePerfCounters);
 
     // Update overlay if active.
     {
@@ -2594,6 +2598,28 @@ void ContextVk::updateOverlayOnPresent()
         gl::RunningGraphWidget *dynamicBufferAllocations =
             overlay->getRunningGraphWidget(gl::WidgetId::VulkanDynamicBufferAllocations);
         dynamicBufferAllocations->add(mPerfCounters.dynamicBufferAllocations);
+    }
+
+    {
+        // Take the diff of submission statistics to get the statistics for this frame.  These perf
+        // counters come from the renderer, and the old values are stored for use in the next frame.
+        const uint32_t thisFrameSubmitsAttempted =
+            commandQueuePerfCounters.submitCommandsAttempted - mLastAttemptedSubmits;
+        const uint32_t thisFrameSubmitsDone =
+            commandQueuePerfCounters.submittedCommands - mLastActualSubmits;
+
+        mLastAttemptedSubmits = commandQueuePerfCounters.submitCommandsAttempted;
+        mLastActualSubmits    = commandQueuePerfCounters.submittedCommands;
+
+        gl::RunningGraphWidget *attemptedSubmissionsWidget =
+            overlay->getRunningGraphWidget(gl::WidgetId::VulkanAttemptedSubmissions);
+        attemptedSubmissionsWidget->add(thisFrameSubmitsAttempted);
+        attemptedSubmissionsWidget->next();
+
+        gl::RunningGraphWidget *actualSubmissionsWidget =
+            overlay->getRunningGraphWidget(gl::WidgetId::VulkanActualSubmissions);
+        actualSubmissionsWidget->add(thisFrameSubmitsDone);
+        actualSubmissionsWidget->next();
     }
 }
 
@@ -7125,7 +7151,7 @@ ProgramExecutableVk *ContextVk::getExecutable() const
 
 const angle::PerfMonitorCounterGroups &ContextVk::getPerfMonitorCounters()
 {
-    syncObjectPerfCounters();
+    syncObjectPerfCounters(mRenderer->getCommandQueuePerfCounters());
 
     angle::PerfMonitorCounters &counters =
         angle::GetPerfMonitorCounterGroup(mPerfMonitorCounters, "vulkan").counters;
