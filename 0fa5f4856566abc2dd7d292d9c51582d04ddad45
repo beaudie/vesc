@@ -41,6 +41,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "a02b8c47_de6edb33",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 1323,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-04-22T19:31:40Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "9a26b095_c70e365d",
+      "range": {
+        "startLine": 1323,
+        "startChar": 13,
+        "endLine": 1323,
+        "endChar": 29
+      },
+      "revId": "0fa5f4856566abc2dd7d292d9c51582d04ddad45",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "11cb1292_db5637a1",
@@ -54,6 +78,30 @@
       "writtenOn": "2022-04-22T14:37:30Z",
       "side": 1,
       "message": "nit: getCommandQueuePerfCounters\n\nmy eventual goal is (was?) to rename CommandProcessor to AsyncCommandQueue.",
+      "range": {
+        "startLine": 396,
+        "startChar": 30,
+        "endLine": 396,
+        "endChar": 52
+      },
+      "revId": "0fa5f4856566abc2dd7d292d9c51582d04ddad45",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "bbbf42d9_3d8b97a6",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 396,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-04-22T19:31:40Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "11cb1292_db5637a1",
       "range": {
         "startLine": 396,
         "startChar": 30,
