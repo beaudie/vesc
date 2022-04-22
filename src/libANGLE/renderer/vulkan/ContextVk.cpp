@@ -2273,7 +2273,7 @@ angle::Result ContextVk::handleDirtyGraphicsTransformFeedbackBuffersEmulation(
         }
     }
 
-    // TODO(http://anglebug.com/3570): Need to update to handle Program Pipelines
+    // TODO(http://anglebug.com/7232): Need to update to handle Program Pipelines
     vk::BufferHelper *uniformBuffer     = mDefaultUniformStorage.getCurrentBuffer();
     vk::DescriptorSetDesc xfbBufferDesc = transformFeedbackVk->getTransformFeedbackDesc();
     xfbBufferDesc.updateDefaultUniformBuffer(uniformBuffer ? uniformBuffer->getBufferSerial()
