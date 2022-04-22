@@ -11,6 +11,7 @@ import os
 import pathlib
 import posixpath
 import random
+import re
 import subprocess
 import tarfile
 import tempfile
@@ -164,6 +165,16 @@ def _TempDeviceFile():
 
 
 @contextlib.contextmanager
+def PulledTempDeviceFile(local_path):
+    if local_path:
+        with _TempDeviceFile() as device_file_path:
+            yield device_file_path
+            _AdbRun(['pull', device_file_path, local_path])
+    else:
+        yield None
+
+
+@contextlib.contextmanager
 def _TempLocalFile():
     fd, path = tempfile.mkstemp()
     os.close(fd)
@@ -215,10 +226,30 @@ def _PullDir(device_dir, local_dir):
             _AdbRun(['pull', posixpath.join(device_dir, f), posixpath.join(local_dir, f)])
 
 
-def RunTests(test_suite, args, stdoutfile, output_dir):
-    with _TempDeviceDir() as temp_dir:
-        output = _RunInstrumentation(args + ['--render-test-output-dir=' + temp_dir])
+def RunTests(test_suite, args, stdoutfile=None, output_dir=None, log_output=True):
+    if output_dir:
+        with _TempDeviceDir() as temp_dir:
+            output = _RunInstrumentation(args + ['--render-test-output-dir=' + temp_dir])
+            _PullDir(temp_dir, output_dir)
+    else:
+        output = _RunInstrumentation(args)
+
+    if log_output:
+        logging.info(output.decode())
+
+    if stdoutfile:
         with open(stdoutfile, 'wb') as f:
             f.write(output)
-            logging.info(output.decode())
-        _PullDir(temp_dir, output_dir)
+
+    return output
+
+
+def GetTraceFromTestName(test_name):
+    m = re.search(r'TracePerfTest.Run/(native|vulkan)_(.*)', test_name)
+    if m:
+        return m.group(2)
+
+    if test_name.startswith('TracePerfTest.Run/'):
+        raise Exception('Unexpected test: %s' % test_name)
+
+    return None
