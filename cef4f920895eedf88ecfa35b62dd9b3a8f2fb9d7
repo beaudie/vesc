@@ -1,0 +1,44 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "58f3b4fa_c5270ab4",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 17
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-04-22T05:24:39Z",
+      "side": 1,
+      "message": "LGTM!",
+      "revId": "cef4f920895eedf88ecfa35b62dd9b3a8f2fb9d7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "a3f66a2b_c9b6628f",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 17
+      },
+      "lineNbr": 3425,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-04-22T05:24:39Z",
+      "side": 1,
+      "message": "You can delete this comment now",
+      "range": {
+        "startLine": 3424,
+        "startChar": 0,
+        "endLine": 3425,
+        "endChar": 87
+      },
+      "revId": "cef4f920895eedf88ecfa35b62dd9b3a8f2fb9d7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
