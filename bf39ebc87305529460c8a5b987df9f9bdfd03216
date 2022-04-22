@@ -94,6 +94,30 @@
       },
       "revId": "bf39ebc87305529460c8a5b987df9f9bdfd03216",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "8fb93d58_e0d8227e",
+        "filename": "src/libANGLE/Texture.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 1383,
+      "author": {
+        "id": 1520902
+      },
+      "writtenOn": "2022-04-22T21:17:15Z",
+      "side": 1,
+      "message": "I tried running the test with configuration ES2_OpenGLES on Pixel6, and the overflow x+width does not trigger any GL errors on native driver. \n\nThe ClipRectangle() should work. I saw that we call ClipRectangle() in both mTexture-\u003ecopySubImage() and mTexture-\u003ecopyImage() below, that\u0027s why I was hesitant to call ClipRectangle() one more time to just verify integer overflow.\n\nNow that I saw we use these equations x+width and y+height in more than one place: \nTextureGL::copyImage(): https://source.chromium.org/chromium/chromium/src/+/main:third_party/angle/src/libANGLE/renderer/gl/TextureGL.cpp;l\u003d691\n\nTextureD3D::copyImage():\nhttps://source.chromium.org/chromium/chromium/src/+/main:third_party/angle/src/libANGLE/renderer/d3d/TextureD3D.cpp;l\u003d1074\nShould we consider adding the check in validation function, so that we can prevent these functions being called at all?",
+      "parentUuid": "cab65fd0_339658c4",
+      "range": {
+        "startLine": 1372,
+        "startChar": 8,
+        "endLine": 1383,
+        "endChar": 0
+      },
+      "revId": "bf39ebc87305529460c8a5b987df9f9bdfd03216",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
