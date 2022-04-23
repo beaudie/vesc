@@ -16,6 +16,46 @@
       "message": "This is to follow up with Yuxin\u0027s comment in previous CL.",
       "revId": "e4e8b293980f22fb9df9785920aa3d4a4db9112f",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b066199a_3bbc8695",
+        "filename": "src/libANGLE/renderer/vulkan/BufferVk.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 126,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-04-23T01:58:53Z",
+      "side": 1,
+      "message": "nit: `if` has `return` so can remove `else`",
+      "revId": "e4e8b293980f22fb9df9785920aa3d4a4db9112f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "cc5d462a_9a94dc77",
+        "filename": "src/libANGLE/renderer/vulkan/BufferVk.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 128,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-04-23T01:58:53Z",
+      "side": 1,
+      "message": "Not `DeviceLocalHostX`?",
+      "range": {
+        "startLine": 128,
+        "startChar": 30,
+        "endLine": 128,
+        "endChar": 46
+      },
+      "revId": "e4e8b293980f22fb9df9785920aa3d4a4db9112f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
