@@ -13,6 +13,7 @@
 #include "common/system_utils.h"
 #include "libANGLE/Context.h"
 #include "libANGLE/Display.h"
+#include "libANGLE/renderer/driver_utils.h"
 #include "libANGLE/renderer/vulkan/BufferVk.h"
 #include "libANGLE/renderer/vulkan/ContextVk.h"
 #include "libANGLE/renderer/vulkan/DeviceVk.h"
@@ -339,8 +340,10 @@ void DisplayVk::generateExtensions(egl::DisplayExtensions *outExtensions) const
 
     outExtensions->createSurfaceSwapIntervalANGLE = true;
 
+    // Note: this extension is exposed on Android as required by the CDD even if the backend doesn't
+    // really support it.  In such a case, the backend ignores changes to the render buffer.
     outExtensions->mutableRenderBufferKHR =
-        getRenderer()->getFeatures().supportsSharedPresentableImageExtension.enabled;
+        getRenderer()->getFeatures().supportsSharedPresentableImageExtension.enabled || IsAndroid();
 
     outExtensions->vulkanImageANGLE = true;
 
