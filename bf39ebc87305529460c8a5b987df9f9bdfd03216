@@ -118,6 +118,30 @@
       },
       "revId": "bf39ebc87305529460c8a5b987df9f9bdfd03216",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "c2546d7d_b837eba9",
+        "filename": "src/libANGLE/Texture.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 1383,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-04-23T02:10:30Z",
+      "side": 1,
+      "message": "Integer overflow really just comes from tests and fuzzers. Even if not strictly per spec, I believe it\u0027s helpful to app developers to actively throw an error in such an obviously erroneous case.\n\nSo +1 for doing it in validation for me.",
+      "parentUuid": "8fb93d58_e0d8227e",
+      "range": {
+        "startLine": 1372,
+        "startChar": 8,
+        "endLine": 1383,
+        "endChar": 0
+      },
+      "revId": "bf39ebc87305529460c8a5b987df9f9bdfd03216",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
