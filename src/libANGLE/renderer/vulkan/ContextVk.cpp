@@ -1154,6 +1154,12 @@ angle::Result ContextVk::initialize()
 
 angle::Result ContextVk::flush(const gl::Context *context)
 {
+    // Skip the flush if there's nothing recorded.
+    if (!mHasAnyCommandsPendingSubmission)
+    {
+        return angle::Result::Continue;
+    }
+
     const bool isSingleBuffer =
         (mCurrentWindowSurface != nullptr) && mCurrentWindowSurface->isSharedPresentMode();
 
@@ -2661,6 +2667,8 @@ angle::Result ContextVk::submitFrame(const vk::Semaphore *signalSemaphore, Seria
     getShareGroupVk()->acquireResourceUseList(std::move(mRenderPassCommands->getResourceUseList()));
 
     ANGLE_TRY(submitCommands(signalSemaphore, submitSerialOut));
+
+    mHasAnyCommandsPendingSubmission = false;
 
     onRenderPassFinished(RenderPassClosureReason::AlreadySpecifiedElsewhere);
     return angle::Result::Continue;
@@ -6560,6 +6568,8 @@ angle::Result ContextVk::flushCommandsAndEndRenderPassImpl(QueueSubmitType queue
         ANGLE_TRY(flushOutsideRenderPassCommands());
     }
 
+    mHasAnyCommandsPendingSubmission = true;
+
     if (mHasDeferredFlush && queueSubmit == QueueSubmitType::PerformQueueSubmit)
     {
         // If we have deferred glFlush call in the middle of renderpass, flush them now.
@@ -6712,6 +6722,8 @@ angle::Result ContextVk::flushOutsideRenderPassCommands()
     // Make sure appropriate dirty bits are set, in case another thread makes a submission before
     // the next dispatch call.
     mComputeDirtyBits |= mNewComputeCommandBufferDirtyBits;
+
+    mHasAnyCommandsPendingSubmission = true;
 
     mPerfCounters.flushedOutsideRenderPassCommandBuffers++;
     return angle::Result::Continue;
