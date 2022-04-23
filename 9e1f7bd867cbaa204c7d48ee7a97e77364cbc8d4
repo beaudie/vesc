@@ -16,6 +16,24 @@
       "message": "LGTM. Please wrap the git commit message appropriately (see presubmit failure)",
       "revId": "9e1f7bd867cbaa204c7d48ee7a97e77364cbc8d4",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "04e251d8_bbdf05da",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1401232
+      },
+      "writtenOn": "2022-04-23T04:28:33Z",
+      "side": 1,
+      "message": "done",
+      "parentUuid": "9f709666_34cec8fb",
+      "revId": "9e1f7bd867cbaa204c7d48ee7a97e77364cbc8d4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
