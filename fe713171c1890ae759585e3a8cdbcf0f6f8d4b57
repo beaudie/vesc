@@ -35,6 +35,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "be07c4c6_eacd143f",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 805,
+      "author": {
+        "id": 1340649
+      },
+      "writtenOn": "2022-04-23T23:58:31Z",
+      "side": 1,
+      "message": "Done. good catch, thanks",
+      "parentUuid": "983a4961_b7aa69a2",
+      "revId": "fe713171c1890ae759585e3a8cdbcf0f6f8d4b57",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "32520487_0c006878",
@@ -48,6 +66,24 @@
       "writtenOn": "2022-04-23T04:51:31Z",
       "side": 1,
       "message": "nit: no need for extension check here, you could just set the handler.",
+      "revId": "fe713171c1890ae759585e3a8cdbcf0f6f8d4b57",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "6eae0775_f500b6d9",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 860,
+      "author": {
+        "id": 1340649
+      },
+      "writtenOn": "2022-04-23T23:58:31Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "32520487_0c006878",
       "revId": "fe713171c1890ae759585e3a8cdbcf0f6f8d4b57",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
@@ -69,6 +105,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "4c8d6627_0f8d6e25",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 2903,
+      "author": {
+        "id": 1340649
+      },
+      "writtenOn": "2022-04-23T23:58:31Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "42062c7c_4db74a72",
+      "revId": "fe713171c1890ae759585e3a8cdbcf0f6f8d4b57",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "5ab38485_6d551141",
@@ -82,6 +136,30 @@
       "writtenOn": "2022-04-23T04:51:31Z",
       "side": 1,
       "message": "super nit: You\u0027d want a PackedEnumBitSet here",
+      "range": {
+        "startLine": 638,
+        "startChar": 4,
+        "endLine": 638,
+        "endChar": 47
+      },
+      "revId": "fe713171c1890ae759585e3a8cdbcf0f6f8d4b57",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "52416536_2f0ff35f",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.h",
+        "patchSetId": 7
+      },
+      "lineNbr": 638,
+      "author": {
+        "id": 1340649
+      },
+      "writtenOn": "2022-04-23T23:58:31Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "5ab38485_6d551141",
       "range": {
         "startLine": 638,
         "startChar": 4,
@@ -115,6 +193,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "d4b672fc_2b7e6ead",
+        "filename": "src/libANGLE/renderer/vulkan/SecondaryCommandBuffer.h",
+        "patchSetId": 7
+      },
+      "lineNbr": 455,
+      "author": {
+        "id": 1340649
+      },
+      "writtenOn": "2022-04-23T23:58:31Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "2a1491fe_d62b17f9",
+      "range": {
+        "startLine": 455,
+        "startChar": 0,
+        "endLine": 455,
+        "endChar": 46
+      },
+      "revId": "fe713171c1890ae759585e3a8cdbcf0f6f8d4b57",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "400feaef_61a779c6",
@@ -128,6 +230,24 @@
       "writtenOn": "2022-04-23T04:51:31Z",
       "side": 1,
       "message": "Should glEnable, glDisable and glIsEnabled verify that if GL_SHADING_RATE_PRESERVE_ASPECT_RATIO_QCOM is passed, that the extension is enabled?",
+      "revId": "fe713171c1890ae759585e3a8cdbcf0f6f8d4b57",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "0747f4f2_41aca2a6",
+        "filename": "src/libANGLE/validationESEXT.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 3036,
+      "author": {
+        "id": 1340649
+      },
+      "writtenOn": "2022-04-23T23:58:31Z",
+      "side": 1,
+      "message": "Done. good catch, thanks",
+      "parentUuid": "400feaef_61a779c6",
       "revId": "fe713171c1890ae759585e3a8cdbcf0f6f8d4b57",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
