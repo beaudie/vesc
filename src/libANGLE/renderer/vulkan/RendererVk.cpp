@@ -192,8 +192,6 @@ constexpr const char *kSkippedMessages[] = {
     // http://anglebug.com/7105
     "VUID-vkCmdDraw-None-06538",
     "VUID-vkCmdDrawIndexed-None-06538",
-    // http://anglebug.com/7231
-    "UNASSIGNED-BestPractices-SemaphoreCount",
 };
 
 struct SkippedSyncvalMessage
@@ -959,7 +957,7 @@ bool CompressAndStorePipelineCacheVk(VkPhysicalDeviceProperties physicalDevicePr
     const size_t numChunks = UnsignedCeilDivide(static_cast<unsigned int>(compressedData.size()),
                                                 kMaxBlobCacheSize - kBlobHeaderSize);
     size_t chunkSize       = UnsignedCeilDivide(static_cast<unsigned int>(compressedData.size()),
-                                          static_cast<unsigned int>(numChunks));
+                                                static_cast<unsigned int>(numChunks));
 
     for (size_t chunkIndex = 0; chunkIndex < numChunks; ++chunkIndex)
     {
@@ -2590,27 +2588,27 @@ angle::Result RendererVk::initializeDevice(DisplayVk *displayVk, uint32_t queueF
 #else
     if (getFeatures().supportsHostQueryReset.enabled)
     {
-        InitHostQueryResetFunctions(mInstance);
+                       InitHostQueryResetFunctions(mInstance);
     }
     if (hasGetMemoryRequirements2KHR)
     {
-        InitGetMemoryRequirements2KHRFunctions(mDevice);
+                       InitGetMemoryRequirements2KHRFunctions(mDevice);
     }
     if (hasBindMemory2KHR)
     {
-        InitBindMemory2KHRFunctions(mDevice);
+                       InitBindMemory2KHRFunctions(mDevice);
     }
     if (getFeatures().supportsTransformFeedbackExtension.enabled)
     {
-        InitTransformFeedbackEXTFunctions(mDevice);
+                       InitTransformFeedbackEXTFunctions(mDevice);
     }
     if (getFeatures().supportsYUVSamplerConversion.enabled)
     {
-        InitSamplerYcbcrKHRFunctions(mDevice);
+                       InitSamplerYcbcrKHRFunctions(mDevice);
     }
     if (getFeatures().supportsRenderpass2.enabled)
     {
-        InitRenderPass2KHRFunctions(mDevice);
+                       InitRenderPass2KHRFunctions(mDevice);
     }
 #endif  // !defined(ANGLE_SHARED_LIBVULKAN)
 
@@ -3644,7 +3642,7 @@ angle::Result RendererVk::syncPipelineCacheVk(DisplayVk *displayVk, const gl::Co
         // kMaxTotalSize to 64k.
         constexpr size_t kMaxTotalSize = 64 * 1024;
         bool compressResult            = CompressAndStorePipelineCacheVk(
-            mPhysicalDeviceProperties, displayVk, contextVk, pipelineCacheData, kMaxTotalSize);
+                       mPhysicalDeviceProperties, displayVk, contextVk, pipelineCacheData, kMaxTotalSize);
 
         if (compressResult)
         {
