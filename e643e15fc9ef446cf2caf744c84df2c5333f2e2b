@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "8b750828_2a0a1b39",
+        "filename": "src/libANGLE/renderer/vulkan/SurfaceVk.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 1635,
+      "author": {
+        "id": 1509302
+      },
+      "writtenOn": "2022-04-23T22:12:04Z",
+      "side": 1,
+      "message": "Looks like the issue is even initial `queueBuffer/dequeueBuffer` combo at the swap gets skipped.\n\nThe desired behavior would be just skipping the implicit flush, but still preserve the `queueBuffer/dequeueBuffer` part at `WindowSurfaceVk::swap` for shared present mode.",
+      "revId": "e643e15fc9ef446cf2caf744c84df2c5333f2e2b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
