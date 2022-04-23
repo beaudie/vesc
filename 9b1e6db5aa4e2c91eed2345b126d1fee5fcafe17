@@ -240,6 +240,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "ec526954_abe2a740",
+        "filename": "src/compiler/translator/CollectVariables.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 432,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-04-23T02:15:03Z",
+      "side": 1,
+      "message": "I\u0027ve done something like that in the past, where you walk the parent chain up while the nodes are TIntermBinary with op EOpIndexDirect or EOpIndexIndirect to find the fully indexed expression from the symbol.\n\nAt that point, you could perhaps simply check if the parent is a function call, and if so which function it is and whether the parameter is live, and derive the symbol\u0027s liveness from that.",
+      "parentUuid": "62aff8df_c17f35ca",
+      "range": {
+        "startLine": 432,
+        "startChar": 38,
+        "endLine": 432,
+        "endChar": 67
+      },
+      "revId": "9b1e6db5aa4e2c91eed2345b126d1fee5fcafe17",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "4657775e_9bd5b988",
         "filename": "src/compiler/translator/CollectVariables.cpp",
         "patchSetId": 1
