@@ -1,0 +1,135 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "a0eedb88_12ac43dc",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 7
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-04-23T04:51:31Z",
+      "side": 1,
+      "message": "Very nice! I would love to be surprised to learn that numerous apps take advantage of this.",
+      "revId": "fe713171c1890ae759585e3a8cdbcf0f6f8d4b57",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "983a4961_b7aa69a2",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 805,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-04-23T04:51:31Z",
+      "side": 1,
+      "message": "DIRTY_BIT_SHADING_RATE be set here if the extension is present.\n\nOtherwise if we start a new render pass and the shading rate hasn\u0027t changed, the dirty bit is not set and the command buffer is started without having set the dynamic state.\n\nYou should be able to reproduce this bug with something like:\n\n- Enable fragment shading rate\n- Draw\n- glFinish() \u003c-- to make sure primary command buffer is submitted\n- Draw again \u003c-- this command buffer won\u0027t have set the dynamic state",
+      "revId": "fe713171c1890ae759585e3a8cdbcf0f6f8d4b57",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "32520487_0c006878",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 860,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-04-23T04:51:31Z",
+      "side": 1,
+      "message": "nit: no need for extension check here, you could just set the handler.",
+      "revId": "fe713171c1890ae759585e3a8cdbcf0f6f8d4b57",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "42062c7c_4db74a72",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 2903,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-04-23T04:51:31Z",
+      "side": 1,
+      "message": "nit: please invert the `if` and return early here. Avoids indenting practically the whole function inside the `if`",
+      "revId": "fe713171c1890ae759585e3a8cdbcf0f6f8d4b57",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "5ab38485_6d551141",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.h",
+        "patchSetId": 7
+      },
+      "lineNbr": 638,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-04-23T04:51:31Z",
+      "side": 1,
+      "message": "super nit: You\u0027d want a PackedEnumBitSet here",
+      "range": {
+        "startLine": 638,
+        "startChar": 4,
+        "endLine": 638,
+        "endChar": 47
+      },
+      "revId": "fe713171c1890ae759585e3a8cdbcf0f6f8d4b57",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "2a1491fe_d62b17f9",
+        "filename": "src/libANGLE/renderer/vulkan/SecondaryCommandBuffer.h",
+        "patchSetId": 7
+      },
+      "lineNbr": 455,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-04-23T04:51:31Z",
+      "side": 1,
+      "message": "Minor comment, but for the sake of more dynamic state support in the future:\n\nTo keep the secondary command buffer implementation optimal, we avoid storing unnecessary things. I see that ops is always `KEEP`, so you can `ASSERT` this in `setShadingRate` instead of storing it. Also, `fragmentSize` has small values, so you can store width and height as `uint16_t`.\n\nThen this struct takes one word instead of four.",
+      "range": {
+        "startLine": 455,
+        "startChar": 0,
+        "endLine": 455,
+        "endChar": 46
+      },
+      "revId": "fe713171c1890ae759585e3a8cdbcf0f6f8d4b57",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "400feaef_61a779c6",
+        "filename": "src/libANGLE/validationESEXT.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 3036,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-04-23T04:51:31Z",
+      "side": 1,
+      "message": "Should glEnable, glDisable and glIsEnabled verify that if GL_SHADING_RATE_PRESERVE_ASPECT_RATIO_QCOM is passed, that the extension is enabled?",
+      "revId": "fe713171c1890ae759585e3a8cdbcf0f6f8d4b57",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
