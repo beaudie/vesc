@@ -259,6 +259,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "3629e4e3_bff66a26",
+        "filename": "src/libANGLE/renderer/vulkan/SecondaryCommandBuffer.h",
+        "patchSetId": 7
+      },
+      "lineNbr": 455,
+      "author": {
+        "id": 1340649
+      },
+      "writtenOn": "2022-04-24T13:12:17Z",
+      "side": 1,
+      "message": "ah, \"this struct takes one word instead of four\" made me think the alignment is a nice to have instead of a requirement. anyways, fixed",
+      "parentUuid": "26bc8b8c_3ab7d13c",
+      "range": {
+        "startLine": 455,
+        "startChar": 0,
+        "endLine": 455,
+        "endChar": 46
+      },
+      "revId": "fe713171c1890ae759585e3a8cdbcf0f6f8d4b57",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "400feaef_61a779c6",
