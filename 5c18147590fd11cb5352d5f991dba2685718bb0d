@@ -16,6 +16,46 @@
       "message": "also added implementations for GetIntegerv, GetInterger64v and GetFloatv\n",
       "revId": "5c18147590fd11cb5352d5f991dba2685718bb0d",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "8938233e_2a1c1026",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 10
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-04-24T00:33:20Z",
+      "side": 1,
+      "message": "Re-LGTM! Happy to see support for the extension was so straightforward!",
+      "revId": "5c18147590fd11cb5352d5f991dba2685718bb0d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "9a338416_bf92ce42",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.cpp",
+        "patchSetId": 10
+      },
+      "lineNbr": 2900,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-04-24T00:33:20Z",
+      "side": 1,
+      "message": "nit: you can drop this check. `mFragmentShadingRateFeatures` is initialized to `{}`, so if the ext is not there, `pipelineFragmentShadingRate` would be `VK_FALSE` automatically.\n\nIt\u0027s a pretty common pattern for a feature checks.",
+      "range": {
+        "startLine": 2900,
+        "startChar": 8,
+        "endLine": 2900,
+        "endChar": 90
+      },
+      "revId": "5c18147590fd11cb5352d5f991dba2685718bb0d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }

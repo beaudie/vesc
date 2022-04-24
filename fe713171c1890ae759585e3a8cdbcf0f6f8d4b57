@@ -53,6 +53,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "a5a29098_f313ed23",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 805,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-04-24T00:33:20Z",
+      "side": 1,
+      "message": "Thanks for the fix. A regression test would be welcome.",
+      "parentUuid": "be07c4c6_eacd143f",
+      "revId": "fe713171c1890ae759585e3a8cdbcf0f6f8d4b57",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "32520487_0c006878",
@@ -207,6 +225,30 @@
       "side": 1,
       "message": "Done",
       "parentUuid": "2a1491fe_d62b17f9",
+      "range": {
+        "startLine": 455,
+        "startChar": 0,
+        "endLine": 455,
+        "endChar": 46
+      },
+      "revId": "fe713171c1890ae759585e3a8cdbcf0f6f8d4b57",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "26bc8b8c_3ab7d13c",
+        "filename": "src/libANGLE/renderer/vulkan/SecondaryCommandBuffer.h",
+        "patchSetId": 7
+      },
+      "lineNbr": 455,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-04-24T00:33:20Z",
+      "side": 1,
+      "message": "Sorry the 4-byte alignment requirement is very important. Please put it back; you can make the width/height 16-bit values.",
+      "parentUuid": "d4b672fc_2b7e6ead",
       "range": {
         "startLine": 455,
         "startChar": 0,
