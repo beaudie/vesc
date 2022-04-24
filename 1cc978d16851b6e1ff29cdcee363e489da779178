@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "de72f053_2e5eb362",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-04-24T00:27:47Z",
+      "side": 1,
+      "message": "Same nit (`M101: ` prefix)",
+      "revId": "1cc978d16851b6e1ff29cdcee363e489da779178",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
