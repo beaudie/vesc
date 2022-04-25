@@ -70,6 +70,30 @@
       },
       "revId": "6c439c26187a28e032ec4b70fd8ed00b453eed2d",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b749ca3b_93184bb7",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 3
+      },
+      "lineNbr": 15,
+      "author": {
+        "id": 1190898
+      },
+      "writtenOn": "2022-04-25T16:41:33Z",
+      "side": 1,
+      "message": "That define is not used anywhere. I suspect what should happen is this script sets ANGLE_PROGRAM_BINARY_LOAD to ANGLE_DISABLED. I\u0027m not sure how to do that properly, it should be set via -D, so it\u0027s guaranteed to be defined in features.h",
+      "parentUuid": "b5c77744_a3be3c1e",
+      "range": {
+        "startLine": 14,
+        "startChar": 0,
+        "endLine": 15,
+        "endChar": 66
+      },
+      "revId": "6c439c26187a28e032ec4b70fd8ed00b453eed2d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
