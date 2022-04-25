@@ -89,6 +89,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "a3785afb_9b690361",
+        "filename": "src/libANGLE/angletypes.h",
+        "patchSetId": 4
+      },
+      "lineNbr": 737,
+      "author": {
+        "id": 1394635
+      },
+      "writtenOn": "2022-04-25T15:45:28Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "a5665563_dc6c0983",
+      "range": {
+        "startLine": 730,
+        "startChar": 0,
+        "endLine": 737,
+        "endChar": 41
+      },
+      "revId": "07952e5e5488db7855c620b65b920ab919d7915d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "f4d12a42_fffed266",
@@ -102,6 +126,30 @@
       "writtenOn": "2022-04-25T12:42:52Z",
       "side": 1,
       "message": "nit: recommend using more ()",
+      "range": {
+        "startLine": 761,
+        "startChar": 20,
+        "endLine": 764,
+        "endChar": 65
+      },
+      "revId": "07952e5e5488db7855c620b65b920ab919d7915d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "f569603e_1ae1bda0",
+        "filename": "src/libANGLE/angletypes.h",
+        "patchSetId": 4
+      },
+      "lineNbr": 764,
+      "author": {
+        "id": 1394635
+      },
+      "writtenOn": "2022-04-25T15:45:28Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "f4d12a42_fffed266",
       "range": {
         "startLine": 761,
         "startChar": 20,
