@@ -33,6 +33,24 @@
       "message": "LGTM - just need a suppression to clear the bots.",
       "revId": "972bfa9fa279fd5ae2d1075e26cd7fa1833674ca",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "9f53a59d_3597b604",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-04-25T20:17:39Z",
+      "side": 1,
+      "message": "Yes I\u0027ve been keeping the failure as ~a sign of shame~ proof that this does reproduce the issue on Nvidia",
+      "parentUuid": "f8cd25fd_80709e17",
+      "revId": "972bfa9fa279fd5ae2d1075e26cd7fa1833674ca",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
