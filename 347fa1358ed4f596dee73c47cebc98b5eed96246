@@ -18,6 +18,23 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "b4413fea_d3e768fd",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 15
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1359249
+      },
+      "writtenOn": "2022-04-25T17:46:19Z",
+      "side": 1,
+      "message": "I fixed the querying of the current render buffer mode.\nSo setting renderbuffer is passing, but then querying shows its not changed presentation mode. So something is failing in changing modes - it seems.",
+      "revId": "347fa1358ed4f596dee73c47cebc98b5eed96246",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "22507b7a_13f767d2",
