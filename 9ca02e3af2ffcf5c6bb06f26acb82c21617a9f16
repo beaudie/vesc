@@ -33,6 +33,40 @@
       "message": "Response to Yiwei.",
       "revId": "9ca02e3af2ffcf5c6bb06f26acb82c21617a9f16",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "626d1226_4d65d88d",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 18
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1359249
+      },
+      "writtenOn": "2022-04-25T22:28:20Z",
+      "side": 1,
+      "message": "Do not merge.\nStill need fix for getRenderBuffer",
+      "revId": "9ca02e3af2ffcf5c6bb06f26acb82c21617a9f16",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "6586d94e_b8fab6da",
+        "filename": "src/libANGLE/Surface.cpp",
+        "patchSetId": 18
+      },
+      "lineNbr": 440,
+      "author": {
+        "id": 1359249
+      },
+      "writtenOn": "2022-04-25T22:28:20Z",
+      "side": 1,
+      "message": "OK this is the issue. getRenderBuffer should update with current mode.",
+      "revId": "9ca02e3af2ffcf5c6bb06f26acb82c21617a9f16",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
