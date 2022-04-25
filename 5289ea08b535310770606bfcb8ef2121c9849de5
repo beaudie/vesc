@@ -86,6 +86,24 @@
       "message": "I\u0027ll investigate.",
       "revId": "5289ea08b535310770606bfcb8ef2121c9849de5",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "09ac7f47_1456d9b5",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 17
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1509302
+      },
+      "writtenOn": "2022-04-25T21:07:13Z",
+      "side": 1,
+      "message": "Per spec, the query must return the “requested” value, and won’t have to wait until the next swap for toggling. See below spec:",
+      "tag": "mailMessageId\u003d\u003cCAKT\u003ddDk5qtbTEEXz_313CtLqR+\u003dT4GE8t5\u003dWZhC5zscEkChyOA@mail.gmail.com\u003e",
+      "revId": "5289ea08b535310770606bfcb8ef2121c9849de5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
