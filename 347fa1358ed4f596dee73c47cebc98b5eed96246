@@ -35,6 +35,23 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "c7ee72b5_0bc383a7",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 15
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1531247
+      },
+      "writtenOn": "2022-04-25T17:55:53Z",
+      "side": 1,
+      "message": "FYI this is caused by my https://crrev.com/c/3602834\n\nTraceback (most recent call last):\n  File \"../../src/tests/run_perf_tests.py\", line 535, in \u003cmodule\u003e\n    sys.exit(main())\n  File \"../../src/tests/run_perf_tests.py\", line 352, in main\n    tests \u003d android_helper.ListTests()\n  File \"/b/swarming/w/ir/src/tests/py_utils/android_helper.py\", line 204, in ListTests\n    out_lines \u003d _RunInstrumentation([\"--list-tests\"]).decode(\u0027ascii\u0027).split(\u0027\\n\u0027)\n  File \"/b/swarming/w/ir/src/tests/py_utils/android_helper.py\", line 191, in _RunInstrumentation\n    return _ReadDeviceFile(temp_device_file)\n  File \"/b/swarming/w/ir/src/tests/py_utils/android_helper.py\", line 86, in _ReadDeviceFile\n    assert len(out) \u003d\u003d expected_size, \u0027exec-out mismatch\u0027\nAssertionError: exec-out mismatch",
+      "revId": "347fa1358ed4f596dee73c47cebc98b5eed96246",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "22507b7a_13f767d2",
