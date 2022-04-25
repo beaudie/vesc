@@ -104,6 +104,24 @@
       "tag": "mailMessageId\u003d\u003cCAKT\u003ddDk5qtbTEEXz_313CtLqR+\u003dT4GE8t5\u003dWZhC5zscEkChyOA@mail.gmail.com\u003e",
       "revId": "5289ea08b535310770606bfcb8ef2121c9849de5",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "73f3aff9_d3b80327",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 17
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1509302
+      },
+      "writtenOn": "2022-04-25T21:11:40Z",
+      "side": 1,
+      "message": "\u003e Querying EGL_RENDER_BUFFER returns the buffer which client API rendering is requested to use. For a window surface, this is the attribute value specified when the surface was created or last set via eglSurfaceAttrib.",
+      "tag": "mailMessageId\u003d\u003cCAKT\u003ddDnSQ0zQHLMp1g\u003dKMh5SNjdkQOmf0rmtVbc3LbnjmBiOYA@mail.gmail.com\u003e",
+      "revId": "5289ea08b535310770606bfcb8ef2121c9849de5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
