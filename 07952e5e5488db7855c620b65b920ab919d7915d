@@ -43,6 +43,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "aecaeb54_4f314901",
+        "filename": "src/libANGLE/angletypes.h",
+        "patchSetId": 4
+      },
+      "lineNbr": 737,
+      "author": {
+        "id": 1394635
+      },
+      "writtenOn": "2022-04-25T13:25:24Z",
+      "side": 1,
+      "message": "These should be defined after the mParameterMask to keep the initialization order the same as the declaration order (alternatively, mParameterMask init expression would be copied 6 times). Also some of the subsequent public fields are of smaller size so moving them up would create new gaps.\n\nThe style guide suggests making all non-const data members private. While that solves the switching issue, we\u0027d have 16 more accessor functions.\n\nWDYT?",
+      "parentUuid": "8e4afc71_f7b554d2",
+      "range": {
+        "startLine": 730,
+        "startChar": 0,
+        "endLine": 737,
+        "endChar": 41
+      },
+      "revId": "07952e5e5488db7855c620b65b920ab919d7915d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "f4d12a42_fffed266",
         "filename": "src/libANGLE/angletypes.h",
         "patchSetId": 4
