@@ -16,6 +16,46 @@
       "message": "PTAL",
       "revId": "78be7716c6e40ef4ec1e639f402a4efa3cf65d91",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "477c0acc_37377ef5",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 14
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-04-25T18:17:50Z",
+      "side": 1,
+      "message": "Re-LGTM, thanks for the test",
+      "revId": "78be7716c6e40ef4ec1e639f402a4efa3cf65d91",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "abd5017c_3c018c0d",
+        "filename": "src/tests/gl_tests/ShadingRateQcomTest.cpp",
+        "patchSetId": 14
+      },
+      "lineNbr": 40,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-04-25T18:17:50Z",
+      "side": 1,
+      "message": "Please at least use the UniformColor program so you can change the rendering color for each draw call.",
+      "range": {
+        "startLine": 40,
+        "startChar": 83,
+        "endLine": 40,
+        "endChar": 88
+      },
+      "revId": "78be7716c6e40ef4ec1e639f402a4efa3cf65d91",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
