@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "0668233a_9d2c7f0f",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 7
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-04-25T17:03:11Z",
+      "side": 1,
+      "message": "Bots will be green after this change lands: https://chromium-review.googlesource.com/c/angle/angle/+/3556088",
+      "revId": "e1732efd1cd49408ca42bce4a725757b26883a54",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
