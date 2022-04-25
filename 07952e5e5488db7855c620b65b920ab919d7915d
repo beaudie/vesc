@@ -1,0 +1,67 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "6d2b0010_35a0ea1f",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2022-04-25T12:42:52Z",
+      "side": 1,
+      "message": "LGTM with a couple nits",
+      "revId": "07952e5e5488db7855c620b65b920ab919d7915d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "8e4afc71_f7b554d2",
+        "filename": "src/libANGLE/angletypes.h",
+        "patchSetId": 4
+      },
+      "lineNbr": 737,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2022-04-25T12:42:52Z",
+      "side": 1,
+      "message": "nit: please define these above so you don\u0027t need to switch public/private\n\nsee the google c++ style guide for reference of class member ordering",
+      "range": {
+        "startLine": 730,
+        "startChar": 0,
+        "endLine": 737,
+        "endChar": 41
+      },
+      "revId": "07952e5e5488db7855c620b65b920ab919d7915d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "f4d12a42_fffed266",
+        "filename": "src/libANGLE/angletypes.h",
+        "patchSetId": 4
+      },
+      "lineNbr": 764,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2022-04-25T12:42:52Z",
+      "side": 1,
+      "message": "nit: recommend using more ()",
+      "range": {
+        "startLine": 761,
+        "startChar": 20,
+        "endLine": 764,
+        "endChar": 65
+      },
+      "revId": "07952e5e5488db7855c620b65b920ab919d7915d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
