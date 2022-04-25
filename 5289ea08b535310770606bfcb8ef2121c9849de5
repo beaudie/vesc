@@ -33,6 +33,24 @@
       "message": "@Shahbaz. I modified my test to check render buffer mode after glReadPixels, then the test passes.\n\nSo eglSwapbuffers is not causing re-create Swapchain, neither does glFlush. We need eglSwapbuffers to cause the change BACK_BUFFER to/from SINGLE_BUFFER. So this must trigger recreate Swapchain.\n\nSuggestions what to add to swapImpl to cause a recreatSwapchain? Maybe when desiredPresentMode not equal currentSwapchainPresentMode.",
       "revId": "5289ea08b535310770606bfcb8ef2121c9849de5",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "3f7f2231_9ce942dd",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 17
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-04-25T20:25:35Z",
+      "side": 1,
+      "message": "eglSwapBuffers() should actually change the mode. I was recently making changes here (like https://chromium-review.googlesource.com/c/angle/angle/+/3603841) and based on a test I wrote (https://chromium-review.googlesource.com/c/angle/angle/+/3603841/7/src/tests/gl_tests/VulkanPerformanceCounterTest.cpp) it _does_ look like the swapchain is correctly recreated.\n\nI might be wrong of course, you can always add logs and verify what happens in a local run. Maybe it\u0027s just the query that\u0027s incorrect?",
+      "parentUuid": "eed59ade_7105f725",
+      "revId": "5289ea08b535310770606bfcb8ef2121c9849de5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
