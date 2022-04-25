@@ -122,6 +122,24 @@
       "tag": "mailMessageId\u003d\u003cCAKT\u003ddDnSQ0zQHLMp1g\u003dKMh5SNjdkQOmf0rmtVbc3LbnjmBiOYA@mail.gmail.com\u003e",
       "revId": "5289ea08b535310770606bfcb8ef2121c9849de5",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "98a96790_2cb41c68",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 17
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1359249
+      },
+      "writtenOn": "2022-04-25T21:44:25Z",
+      "side": 1,
+      "message": "I was following this from spec, to get \"actual\" render buffer:\n\n\"To determine the actual buffer being rendered to by a context, call eglQueryContext (see section 3.7.4).\" 3.7.4 is Query Contexts.",
+      "parentUuid": "73f3aff9_d3b80327",
+      "revId": "5289ea08b535310770606bfcb8ef2121c9849de5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
