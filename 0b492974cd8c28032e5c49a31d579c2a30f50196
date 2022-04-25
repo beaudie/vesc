@@ -250,6 +250,30 @@
       },
       "revId": "0b492974cd8c28032e5c49a31d579c2a30f50196",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b7d23e37_a52dd070",
+        "filename": "src/libANGLE/renderer/SurfaceImpl.h",
+        "patchSetId": 14
+      },
+      "lineNbr": 125,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-04-25T15:45:17Z",
+      "side": 1,
+      "message": "I don\u0027t see where?\n\nAnyway, no worries if you want to keep it. I\u0027d just use `return` instead of the through-parameter return. (and for the latter we use pointers like `EGLint *renderBufferOut` to be explicit)",
+      "parentUuid": "71ab2484_103789e3",
+      "range": {
+        "startLine": 125,
+        "startChar": 17,
+        "endLine": 125,
+        "endChar": 32
+      },
+      "revId": "0b492974cd8c28032e5c49a31d579c2a30f50196",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
