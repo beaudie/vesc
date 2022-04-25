@@ -140,6 +140,23 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "e0781488_6dda8a2a",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 14
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1359249
+      },
+      "writtenOn": "2022-04-25T15:36:36Z",
+      "side": 1,
+      "message": "Reply.",
+      "revId": "0b492974cd8c28032e5c49a31d579c2a30f50196",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "ba24fad6_602f524a",
@@ -201,6 +218,30 @@
       "side": 1,
       "message": "Ok you could move this function itself to the other change, but keep the rest of the code in this CL separate if they are good standalone.",
       "parentUuid": "e3f81e2f_4319be97",
+      "range": {
+        "startLine": 125,
+        "startChar": 17,
+        "endLine": 125,
+        "endChar": 32
+      },
+      "revId": "0b492974cd8c28032e5c49a31d579c2a30f50196",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "71ab2484_103789e3",
+        "filename": "src/libANGLE/renderer/SurfaceImpl.h",
+        "patchSetId": 14
+      },
+      "lineNbr": 125,
+      "author": {
+        "id": 1359249
+      },
+      "writtenOn": "2022-04-25T15:36:36Z",
+      "side": 1,
+      "message": "I use it in the test case to verify that the mode is changed. Otherwise I skip the test, because it may fail if the presentation mode is not supported.\nThis is where the 2 patches overlap on needed functionality.",
+      "parentUuid": "9fb135ca_a578a2be",
       "range": {
         "startLine": 125,
         "startChar": 17,
