@@ -105,6 +105,41 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "9bc209a1_21ded83b",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 14
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1359249
+      },
+      "writtenOn": "2022-04-25T15:23:20Z",
+      "side": 1,
+      "message": "Reply",
+      "revId": "0b492974cd8c28032e5c49a31d579c2a30f50196",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "e9f1a437_e690d58d",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 14
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1359249
+      },
+      "writtenOn": "2022-04-25T15:23:20Z",
+      "side": 1,
+      "message": "It was to include EGL_SINGLE_BUFFER at eglCreateWindowSurface - but that is now separate.\n1. Add query for current render buffer\n2. Ignore setSwapInterval in SHARED_DEMENAD_REFRESH mode, otherwise it changes mode.\n3. Validation of VG_COLORSPACE - unrelated but needed fixed.\n4. Fix validation error on EGL_SINGLE_BUFFER\n5. Add test so we could verify",
+      "parentUuid": "310b3b8b_4e5570f0",
+      "revId": "0b492974cd8c28032e5c49a31d579c2a30f50196",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "ba24fad6_602f524a",
@@ -118,6 +153,30 @@
       "writtenOn": "2022-04-25T14:52:08Z",
       "side": 1,
       "message": "This is unused?",
+      "range": {
+        "startLine": 125,
+        "startChar": 17,
+        "endLine": 125,
+        "endChar": 32
+      },
+      "revId": "0b492974cd8c28032e5c49a31d579c2a30f50196",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "e3f81e2f_4319be97",
+        "filename": "src/libANGLE/renderer/SurfaceImpl.h",
+        "patchSetId": 14
+      },
+      "lineNbr": 125,
+      "author": {
+        "id": 1359249
+      },
+      "writtenOn": "2022-04-25T15:23:20Z",
+      "side": 1,
+      "message": "Its a core feature to query the current render buffer setting.\nShould be part of this:\nhttps://bugs.chromium.org/p/angleproject/issues/detail?id\u003d7224 - which I have ready for upload.\nHowever, this patch is first and function is needed to check if the render buffer mode is set. I use with tests.\nI could combine the two changes again - fix for mutable render buffer, and add SINGLE_BUFFER to eglCreateWindowSurface.",
+      "parentUuid": "ba24fad6_602f524a",
       "range": {
         "startLine": 125,
         "startChar": 17,
