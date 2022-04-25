@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "776e771c_b6866ee7",
+        "filename": "src/common/angleutils.h",
+        "patchSetId": 4
+      },
+      "lineNbr": 137,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2022-04-25T12:28:59Z",
+      "side": 1,
+      "message": "because most if not all the other counters are per-frame, my suggestion is to make these per-frame only (without the special naming), and let the harness do the tracking of the cumulative counts.\n\nultimately what we\u0027ll probably do is follow the perf counters ext spec and reset them between a begin/end window.",
+      "range": {
+        "startLine": 134,
+        "startChar": 0,
+        "endLine": 137,
+        "endChar": 52
+      },
+      "revId": "567d76f6bb5f369489c5ccca1fccbdd327ea9289",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
