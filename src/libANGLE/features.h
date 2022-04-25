@@ -7,6 +7,7 @@
 #ifndef LIBANGLE_FEATURES_H_
 #define LIBANGLE_FEATURES_H_
 
+#include "angle_commit.h"
 #include "common/platform.h"
 
 #define ANGLE_DISABLED 0
