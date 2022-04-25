@@ -94,6 +94,53 @@
       },
       "revId": "6c439c26187a28e032ec4b70fd8ed00b453eed2d",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "02ad6f2f_752f9ca1",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 3
+      },
+      "lineNbr": 15,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2022-04-25T16:52:42Z",
+      "side": 1,
+      "message": "Looks like this was silently broken here:\n\nhttps://chromium-review.googlesource.com/c/angle/angle/+/226304/3/src/libGLESv2/ProgramBinary.cpp\n\nDoug can you help us fix that along with this CL, and use that mechanism?",
+      "parentUuid": "b749ca3b_93184bb7",
+      "range": {
+        "startLine": 14,
+        "startChar": 0,
+        "endLine": 15,
+        "endChar": 66
+      },
+      "revId": "6c439c26187a28e032ec4b70fd8ed00b453eed2d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "86a64389_5445592b",
+        "filename": "src/commit_id.py",
+        "patchSetId": 3
+      },
+      "lineNbr": 118,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2022-04-25T16:52:42Z",
+      "side": 1,
+      "message": "please keep the script silent by default. you can use logging.info() and use a default log level \u003e info, with a command line option to increase the logging level. (or logging.debug)",
+      "range": {
+        "startLine": 117,
+        "startChar": 0,
+        "endLine": 118,
+        "endChar": 41
+      },
+      "revId": "6c439c26187a28e032ec4b70fd8ed00b453eed2d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
