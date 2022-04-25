@@ -16,6 +16,23 @@
       "message": "OK. this last test run tells me we are not changing render_buffer mode/presentation mode until glReadPixels. We need to be sure that eglSwapBuffers results in a transition (re create Swapchain) when one is pending.",
       "revId": "5289ea08b535310770606bfcb8ef2121c9849de5",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "eed59ade_7105f725",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 17
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1359249
+      },
+      "writtenOn": "2022-04-25T20:16:37Z",
+      "side": 1,
+      "message": "@Shahbaz. I modified my test to check render buffer mode after glReadPixels, then the test passes.\n\nSo eglSwapbuffers is not causing re-create Swapchain, neither does glFlush. We need eglSwapbuffers to cause the change BACK_BUFFER to/from SINGLE_BUFFER. So this must trigger recreate Swapchain.\n\nSuggestions what to add to swapImpl to cause a recreatSwapchain? Maybe when desiredPresentMode not equal currentSwapchainPresentMode.",
+      "revId": "5289ea08b535310770606bfcb8ef2121c9849de5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
