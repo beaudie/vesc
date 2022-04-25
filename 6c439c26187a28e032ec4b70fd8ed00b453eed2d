@@ -22,6 +22,30 @@
       },
       "revId": "6c439c26187a28e032ec4b70fd8ed00b453eed2d",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "58305e1b_b5f75807",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 3
+      },
+      "lineNbr": 15,
+      "author": {
+        "id": 1190898
+      },
+      "writtenOn": "2022-04-25T16:27:32Z",
+      "side": 1,
+      "message": "Alright, let me revert that aspect, I wasn\u0027t aware of the tarball builds. In that case, though, I think the cache should throw out any entries with unknown hash.",
+      "parentUuid": "660efb0a_58320eca",
+      "range": {
+        "startLine": 14,
+        "startChar": 0,
+        "endLine": 15,
+        "endChar": 66
+      },
+      "revId": "6c439c26187a28e032ec4b70fd8ed00b453eed2d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
