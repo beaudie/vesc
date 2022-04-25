@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "eddc4ac2_83dba311",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1401232
+      },
+      "writtenOn": "2022-04-25T17:04:47Z",
+      "side": 1,
+      "message": "could you commit-queue +2 again? I don\u0027t have those permissions",
+      "revId": "23b8fe7d454613c6c4e573bcf574ea76d9009d8d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
