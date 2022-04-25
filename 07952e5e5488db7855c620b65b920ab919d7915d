@@ -67,6 +67,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "a5665563_dc6c0983",
+        "filename": "src/libANGLE/angletypes.h",
+        "patchSetId": 4
+      },
+      "lineNbr": 737,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2022-04-25T13:28:42Z",
+      "side": 1,
+      "message": "My bad, I misread these declarations and thought they were type declarations. I see these are public members now, not types.\n\nNow that you\u0027ve added accessors for some of the members, please go ahead and make accessors for the rest of the members so we can be consistent.",
+      "parentUuid": "aecaeb54_4f314901",
+      "range": {
+        "startLine": 730,
+        "startChar": 0,
+        "endLine": 737,
+        "endChar": 41
+      },
+      "revId": "07952e5e5488db7855c620b65b920ab919d7915d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "f4d12a42_fffed266",
         "filename": "src/libANGLE/angletypes.h",
         "patchSetId": 4
