@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "6fb9aa54_8d63a355",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 15
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1359249
+      },
+      "writtenOn": "2022-04-25T16:49:17Z",
+      "side": 1,
+      "message": "Comment about change.",
+      "revId": "347fa1358ed4f596dee73c47cebc98b5eed96246",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "22507b7a_13f767d2",
+        "filename": "src/libANGLE/Surface.cpp",
+        "patchSetId": 15
+      },
+      "lineNbr": 439,
+      "author": {
+        "id": 1359249
+      },
+      "writtenOn": "2022-04-25T16:49:17Z",
+      "side": 1,
+      "message": "I tried to just remove the \"const\" but that ended up changing too many places in context and so forth. So this is less impact.",
+      "revId": "347fa1358ed4f596dee73c47cebc98b5eed96246",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
