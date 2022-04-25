@@ -144,6 +144,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "f249c410_41cacc7d",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 3
+      },
+      "lineNbr": 15,
+      "author": {
+        "id": 1190898
+      },
+      "writtenOn": "2022-04-25T22:01:27Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "9858189b_567b5980",
+      "range": {
+        "startLine": 14,
+        "startChar": 0,
+        "endLine": 15,
+        "endChar": 66
+      },
+      "revId": "6c439c26187a28e032ec4b70fd8ed00b453eed2d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "86a64389_5445592b",
@@ -157,6 +181,30 @@
       "writtenOn": "2022-04-25T16:52:42Z",
       "side": 1,
       "message": "please keep the script silent by default. you can use logging.info() and use a default log level \u003e info, with a command line option to increase the logging level. (or logging.debug)",
+      "range": {
+        "startLine": 117,
+        "startChar": 0,
+        "endLine": 118,
+        "endChar": 41
+      },
+      "revId": "6c439c26187a28e032ec4b70fd8ed00b453eed2d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "53426c02_4a356b15",
+        "filename": "src/commit_id.py",
+        "patchSetId": 3
+      },
+      "lineNbr": 118,
+      "author": {
+        "id": 1190898
+      },
+      "writtenOn": "2022-04-25T22:01:27Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "86a64389_5445592b",
       "range": {
         "startLine": 117,
         "startChar": 0,
