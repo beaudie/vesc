@@ -16,6 +16,23 @@
       "message": "As you might have guessed, this turned out to be a driver bug. Feel free to land your trace with a suppression for Nvidia.\n\nReally weird bug though, and made me learn tessellation \u003e:(",
       "revId": "972bfa9fa279fd5ae2d1075e26cd7fa1833674ca",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "f8cd25fd_80709e17",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2022-04-25T20:07:48Z",
+      "side": 1,
+      "message": "LGTM - just need a suppression to clear the bots.",
+      "revId": "972bfa9fa279fd5ae2d1075e26cd7fa1833674ca",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
