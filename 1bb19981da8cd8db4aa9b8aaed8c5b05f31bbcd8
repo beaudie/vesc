@@ -35,6 +35,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "360ec042_c892a45c",
+        "filename": "src/libANGLE/Display.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 32,
+      "author": {
+        "id": 1528827
+      },
+      "writtenOn": "2022-04-26T10:01:10Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "446de7a4_52c1100c",
+      "revId": "1bb19981da8cd8db4aa9b8aaed8c5b05f31bbcd8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "e859c656_d9688920",
@@ -54,6 +72,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "061c06e8_c6446550",
+        "filename": "src/libANGLE/validationEGL.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 571,
+      "author": {
+        "id": 1528827
+      },
+      "writtenOn": "2022-04-26T10:01:10Z",
+      "side": 1,
+      "message": "FWIW `EGL_PLATFORM_WAYLAND_EXT` is going to take this path as well: https://chromium-review.googlesource.com/c/angle/angle/+/3528758",
+      "parentUuid": "e859c656_d9688920",
+      "revId": "1bb19981da8cd8db4aa9b8aaed8c5b05f31bbcd8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "890c647f_06235de7",
         "filename": "src/libGLESv2/egl_stubs.cpp",
         "patchSetId": 2
@@ -65,6 +101,24 @@
       "writtenOn": "2022-04-20T16:09:56Z",
       "side": 1,
       "message": "Can be removed",
+      "revId": "1bb19981da8cd8db4aa9b8aaed8c5b05f31bbcd8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "41c88edb_34f1e2a4",
+        "filename": "src/libGLESv2/egl_stubs.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 22,
+      "author": {
+        "id": 1528827
+      },
+      "writtenOn": "2022-04-26T10:01:10Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "890c647f_06235de7",
       "revId": "1bb19981da8cd8db4aa9b8aaed8c5b05f31bbcd8",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
