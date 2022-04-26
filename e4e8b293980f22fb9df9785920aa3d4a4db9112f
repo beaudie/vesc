@@ -52,6 +52,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "3f96890b_61257b69",
+        "filename": "src/libANGLE/renderer/vulkan/BufferVk.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 126,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2022-04-26T17:45:42Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "b066199a_3bbc8695",
+      "revId": "e4e8b293980f22fb9df9785920aa3d4a4db9112f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "cc5d462a_9a94dc77",
@@ -65,6 +83,30 @@
       "writtenOn": "2022-04-23T01:58:53Z",
       "side": 1,
       "message": "Not `DeviceLocalHostX`?",
+      "range": {
+        "startLine": 128,
+        "startChar": 30,
+        "endLine": 128,
+        "endChar": 46
+      },
+      "revId": "e4e8b293980f22fb9df9785920aa3d4a4db9112f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "ae9895fc_f94885bf",
+        "filename": "src/libANGLE/renderer/vulkan/BufferVk.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 128,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2022-04-26T17:45:42Z",
+      "side": 1,
+      "message": "Right, this is exactly the reason I made this CL to follow up the previous CL. This is the case for discrete GPU. If it has map access, we should just uses host memory instead of host visible VRAM (which is very limited and reserved for frame buffers and easily run into OOM).",
+      "parentUuid": "cc5d462a_9a94dc77",
       "range": {
         "startLine": 128,
         "startChar": 30,
