@@ -198,8 +198,8 @@ void ApplySampleCoverage(const gl::State &glState,
 
     uint32_t maskBitOffset = maskNumber * 32;
     uint32_t coverageMask  = coverageSampleCount >= (maskBitOffset + 32)
-                                ? std::numeric_limits<uint32_t>::max()
-                                : (1u << (coverageSampleCount - maskBitOffset)) - 1;
+                                 ? std::numeric_limits<uint32_t>::max()
+                                 : (1u << (coverageSampleCount - maskBitOffset)) - 1;
 
     if (glState.getSampleCoverageInvert())
     {
@@ -301,7 +301,7 @@ vk::ResourceAccess GetColorAccess(const gl::State &state,
 
     const gl::BlendStateExt &blendStateExt = state.getBlendStateExt();
     uint8_t colorMask                      = gl::BlendStateExt::ColorMaskStorage::GetValueIndexed(
-        colorIndexGL, blendStateExt.getColorMaskBits());
+                             colorIndexGL, blendStateExt.getColorMaskBits());
     if (emulatedAlphaMask[colorIndexGL])
     {
         colorMask &= ~VK_COLOR_COMPONENT_A_BIT;
@@ -762,6 +762,7 @@ ContextVk::ContextVk(const gl::State &state, gl::ErrorSet *errorSet, RendererVk 
       mGpuEventsEnabled(false),
       mPrimaryBufferEventCounter(0),
       mHasDeferredFlush(false),
+      mTotalBufferToImageCopySize(0),
       mGpuClockSync{std::numeric_limits<double>::max(), std::numeric_limits<double>::max()},
       mGpuEventTimestampOrigin(0),
       mContextPriority(renderer->getDriverPriority(GetContextPriority(state))),
@@ -2786,18 +2787,18 @@ angle::Result ContextVk::submitCommands(const vk::Semaphore *signalSemaphore,
         ANGLE_TRY(checkCompletedGpuEvents());
     }
 
-    resetTotalBufferToImageCopySize();
+    mTotalBufferToImageCopySize = 0;
 
     return angle::Result::Continue;
 }
 
 angle::Result ContextVk::onCopyUpdate(VkDeviceSize size)
 {
-    mTotalBufferToImageCopySize += size;
     ANGLE_TRACE_EVENT0("gpu.angle", "ContextVk::onCopyUpdate");
+
+    mTotalBufferToImageCopySize += size;
     // If the copy size exceeds the specified threshold, submit the outside command buffer.
-    VkDeviceSize copySize = getTotalBufferToImageCopySize();
-    if (copySize >= kMaxBufferToImageCopySize)
+    if (mTotalBufferToImageCopySize >= kMaxBufferToImageCopySize)
     {
         ANGLE_TRY(submitOutsideRenderPassCommandsImpl());
     }
