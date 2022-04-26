@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "4ae313b5_aec9dec4",
+        "filename": "src/libANGLE/renderer/vulkan/linux/DmaBufImageSiblingVkLinux.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 582,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2022-04-26T15:08:27Z",
+      "side": 1,
+      "message": "looks like a non-standard use of angle::Result. It\u0027s meant to be used on unexpected errors only. Maybe return a bool or enum result code instead.",
+      "range": {
+        "startLine": 577,
+        "startChar": 0,
+        "endLine": 582,
+        "endChar": 9
+      },
+      "revId": "33636a2d8e600ba7f75d50c2a5d0ed20fd5e0fcc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
