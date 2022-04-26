@@ -52,6 +52,24 @@
       "parentUuid": "d86f060d_2b377fd0",
       "revId": "32f7963e2ef8b824756a6bf2e145d76974332e60",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "816a5a7b_f06b624c",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 6
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1520902
+      },
+      "writtenOn": "2022-04-26T23:36:43Z",
+      "side": 1,
+      "message": "As Shabi suggested this might be caused by \"test filter batch\" being rearranged with the new test case added and triggered a bug. Skip the test on NVIDIA GL backend for now.",
+      "parentUuid": "d0aa4ce3_4a26630f",
+      "revId": "32f7963e2ef8b824756a6bf2e145d76974332e60",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }

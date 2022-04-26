@@ -142,6 +142,30 @@
       },
       "revId": "bf39ebc87305529460c8a5b987df9f9bdfd03216",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "60dd8c39_ea776507",
+        "filename": "src/libANGLE/Texture.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 1383,
+      "author": {
+        "id": 1520902
+      },
+      "writtenOn": "2022-04-26T23:36:43Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "c2546d7d_b837eba9",
+      "range": {
+        "startLine": 1372,
+        "startChar": 8,
+        "endLine": 1383,
+        "endChar": 0
+      },
+      "revId": "bf39ebc87305529460c8a5b987df9f9bdfd03216",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
