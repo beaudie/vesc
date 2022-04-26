@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "3526473e_9ff1c4c4",
+        "filename": "src/libANGLE/renderer/vulkan/linux/wayland/WindowSurfaceVkWayland.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 112,
+      "author": {
+        "id": 1125810
+      },
+      "writtenOn": "2022-04-26T11:05:03Z",
+      "side": 1,
+      "message": "This is the wrong point. If a user calls eglSwapBuffers() followed by wl_egl_window_resize() without any intervening (E)GL calls, the resize should take effect on the next operation which provokes a backbuffer to be pulled, e.g. for eglSwapBuffers; wl_egl_window_resize(1, 1); glClear(); wl_egl_window_window_resize(2, 2); glDrawElements(); eglSwapBuffers(); the surface should be sized (1,1) at the second swap.",
+      "revId": "7fca81efa3b3775b9d5c7be7504a1a7add1d5b5d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
