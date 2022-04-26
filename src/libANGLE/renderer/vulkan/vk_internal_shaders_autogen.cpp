@@ -151,6 +151,7 @@ namespace
 #include "libANGLE/renderer/vulkan/shaders/gen/ImageCopy.frag.0000002A.inc"
 #include "libANGLE/renderer/vulkan/shaders/gen/OverlayDraw.frag.00000000.inc"
 #include "libANGLE/renderer/vulkan/shaders/gen/OverlayDraw.vert.00000000.inc"
+#include "libANGLE/renderer/vulkan/shaders/gen/YuvRgbaConversion.comp.00000000.inc"
 
 // This is compressed SPIR-V binary blob and size
 struct CompressedShaderBlob
@@ -334,6 +335,9 @@ constexpr CompressedShaderBlob kOverlayDraw_frag_shaders[] = {
 constexpr CompressedShaderBlob kOverlayDraw_vert_shaders[] = {
     {kOverlayDraw_vert_00000000, sizeof(kOverlayDraw_vert_00000000)},
 };
+constexpr CompressedShaderBlob kYuvRgbaConversion_comp_shaders[] = {
+    {kYuvRgbaConversion_comp_00000000, sizeof(kYuvRgbaConversion_comp_00000000)},
+};
 
 angle::Result GetShader(Context *context,
                         RefCounted<ShaderAndSerial> *shaders,
@@ -425,6 +429,10 @@ void ShaderLibrary::destroy(VkDevice device)
         shader.get().destroy(device);
     }
     for (RefCounted<ShaderAndSerial> &shader : mOverlayDraw_vert_shaders)
+    {
+        shader.get().destroy(device);
+    }
+    for (RefCounted<ShaderAndSerial> &shader : mYuvRgbaConversion_comp_shaders)
     {
         shader.get().destroy(device);
     }
@@ -530,6 +538,14 @@ angle::Result ShaderLibrary::getOverlayDraw_vert(Context *context,
 {
     return GetShader(context, mOverlayDraw_vert_shaders, kOverlayDraw_vert_shaders,
                      ArraySize(kOverlayDraw_vert_shaders), shaderFlags, shaderOut);
+}
+
+angle::Result ShaderLibrary::getYuvRgbaConversion_comp(Context *context,
+                                                       uint32_t shaderFlags,
+                                                       RefCounted<ShaderAndSerial> **shaderOut)
+{
+    return GetShader(context, mYuvRgbaConversion_comp_shaders, kYuvRgbaConversion_comp_shaders,
+                     ArraySize(kYuvRgbaConversion_comp_shaders), shaderFlags, shaderOut);
 }
 
 }  // namespace vk
