@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "942078d6_dbefd206",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2022-04-26T20:48:55Z",
+      "side": 1,
+      "message": "Thank you Brian for adding this flag! CC\u0027ing some other colleagues who are working on ANGLE\u0027s Metal backend right now.\n\nThis basically lgtm, but one question.\n",
+      "revId": "0fcb0392afeffbcc50b145133274f71d9209e49d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "af745488_85c9750a",
+        "filename": "gni/angle.gni",
+        "patchSetId": 4
+      },
+      "lineNbr": 106,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2022-04-26T20:48:55Z",
+      "side": 1,
+      "message": "Can the default here be set to true for the moment? If I\u0027m reading this correctly, that would preserve the current behavior the best. Then can Skia\u0027s build files override it to false?",
+      "revId": "0fcb0392afeffbcc50b145133274f71d9209e49d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
