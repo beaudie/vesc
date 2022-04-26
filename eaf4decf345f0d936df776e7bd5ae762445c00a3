@@ -70,6 +70,30 @@
       },
       "revId": "eaf4decf345f0d936df776e7bd5ae762445c00a3",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "db015b10_e0bde4eb",
+        "filename": "src/libANGLE/features.h",
+        "patchSetId": 6
+      },
+      "lineNbr": 10,
+      "author": {
+        "id": 1190898
+      },
+      "writtenOn": "2022-04-26T18:53:39Z",
+      "side": 1,
+      "message": "This is a build define, are you recommending we remove the define and make the check a runtime check?",
+      "parentUuid": "7a2433e7_ce376032",
+      "range": {
+        "startLine": 10,
+        "startChar": 0,
+        "endLine": 10,
+        "endChar": 25
+      },
+      "revId": "eaf4decf345f0d936df776e7bd5ae762445c00a3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
