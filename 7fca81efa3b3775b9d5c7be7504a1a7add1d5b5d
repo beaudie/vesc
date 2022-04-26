@@ -34,6 +34,24 @@
       "parentUuid": "3526473e_9ff1c4c4",
       "revId": "7fca81efa3b3775b9d5c7be7504a1a7add1d5b5d",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "8dcb5ce4_4defe098",
+        "filename": "src/libANGLE/renderer/vulkan/linux/wayland/WindowSurfaceVkWayland.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 112,
+      "author": {
+        "id": 1125810
+      },
+      "writtenOn": "2022-04-26T13:00:43Z",
+      "side": 1,
+      "message": "Yeah, it sounds like it; basically wherever you\u0027d latch a VkImage to use for that swap cycle.",
+      "parentUuid": "8db1cb53_3f4b15b8",
+      "revId": "7fca81efa3b3775b9d5c7be7504a1a7add1d5b5d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
