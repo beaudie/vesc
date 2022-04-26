@@ -19,10 +19,14 @@ void RegisterTraceTests();
 
 int main(int argc, char **argv)
 {
+    std::cout << "qqqwe angle_perftests_main" << std::endl;
     ANGLEProcessPerfTestArgs(&argc, argv);
 #if defined(ANGLE_TRACE_PERF_TESTS)
     RegisterTraceTests();
 #endif  // defined(ANGLE_TRACE_PERF_TESTS)
     angle::TestSuite testSuite(&argc, argv);
-    return testSuite.run();
+    std::cout << "qqqwe angle_perftests_main testSuite.run START" << std::endl;
+    int result = testSuite.run();
+    std::cout << "qqqwe angle_perftests_main testSuite.run DONE" << std::endl;
+    return result;
 }

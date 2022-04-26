@@ -177,15 +177,30 @@ def _TempLocalFile():
 def _DumpLogcat(since_time):
     output = _AdbRun(['logcat', '-t', since_time]).decode()
     logging.info('logcat:\n%s', output)
+    return output
 
 
 @contextlib.contextmanager
-def _DumpLogcatIfNotDoneAfter(seconds):
+def _DumpLogcatIfNotDoneAfter(seconds, stdout):
     initial_time = _AdbShell('date +"%F %T.%3N"').decode().strip()
 
     def stuck():
         logging.warning('%d seconds elapsed, dumping logcat', seconds)
-        _DumpLogcat(since_time=initial_time)
+        logcat_output = _DumpLogcat(since_time=initial_time)
+
+        try:
+            test_output = _ReadDeviceFile(stdout)
+            logging.warning('partial test output:\n%s', test_output.decode())
+        except Exception:
+            logging.warning('partial test ouput read failed')
+
+        pid_lines = [
+            ln for ln in logcat_output.split('\n')
+            if 'org.chromium.native_test.NativeTest.StdoutFile' in ln
+        ]
+        if pid_lines:
+            debuggerd_output = _AdbShell('debuggerd %s' % pid_lines[-1].split(' ')[2]).decode()
+            logging.warning('debuggerd output:\n%s', debuggerd_output)
 
     t = threading.Timer(seconds, stuck)
     t.start()
@@ -270,7 +285,7 @@ def RunTests(test_suite, args, stdoutfile=None, output_dir=None, log_output=True
                 device_output_dir = stack.enter_context(_TempDeviceDir())
                 args.append('--render-test-output-dir=' + device_output_dir)
 
-            with _DumpLogcatIfNotDoneAfter(seconds=10 * 60):
+            with _DumpLogcatIfNotDoneAfter(seconds=10, stdout=device_test_output_path):
                 output = _RunInstrumentation(args)
 
             test_output = _ReadDeviceFile(device_test_output_path)
