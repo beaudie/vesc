@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "6d86c06d_678b633c",
+        "filename": "src/libANGLE/features.h",
+        "patchSetId": 6
+      },
+      "lineNbr": 10,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2022-04-26T18:43:52Z",
+      "side": 1,
+      "message": "this isn\u0027t visible here in fact.. you have to import angle_version_info.h and define a wrapper function in there.\n\nWe isolate angle_comimt.h to limit the effect that changing the .git/HEAD can have on incremental builds.",
+      "range": {
+        "startLine": 10,
+        "startChar": 0,
+        "endLine": 10,
+        "endChar": 25
+      },
+      "revId": "eaf4decf345f0d936df776e7bd5ae762445c00a3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
