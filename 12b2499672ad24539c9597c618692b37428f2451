@@ -1,0 +1,44 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "cef4a6af_39fa86e0",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 8
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2022-04-26T21:13:16Z",
+      "side": 1,
+      "message": "LGTM, it would be cool if we could mock this somehow with a test, but is sufficiently tricky that I wouldn\u0027t recommend trying.",
+      "revId": "12b2499672ad24539c9597c618692b37428f2451",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "7f47cac8_fb61a30e",
+        "filename": "src/libANGLE/Program.cpp",
+        "patchSetId": 8
+      },
+      "lineNbr": 3676,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2022-04-26T21:13:16Z",
+      "side": 1,
+      "message": "nit: might mention this specifically is the situation where program binary loading is disabled.",
+      "range": {
+        "startLine": 3676,
+        "startChar": 20,
+        "endLine": 3676,
+        "endChar": 50
+      },
+      "revId": "12b2499672ad24539c9597c618692b37428f2451",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
