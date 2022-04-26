@@ -58,6 +58,13 @@ struct FrontendFeatures : FeatureSetBase
         &members,
     };
 
+    FeatureInfo forceDepthAttachmentInitOnClear = {
+        "forceDepthAttachmentInitOnClear",
+        FeatureCategory::FrontendWorkarounds,
+        "Force depth attachment initialization on clear ops",
+        &members,
+    };
+
     FeatureInfo enableCaptureLimits = {"enableCaptureLimits", FeatureCategory::FrontendFeatures,
                                        "Set the context limits like frame capturing was enabled",
                                        &members, "http://anglebug.com/5750"};
