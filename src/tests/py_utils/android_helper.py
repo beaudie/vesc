@@ -180,12 +180,15 @@ def _DumpLogcat(since_time):
 
 
 @contextlib.contextmanager
-def _DumpLogcatIfNotDoneAfter(seconds):
+def _DumpLogcatIfNotDoneAfter(seconds, stdout):
     initial_time = _AdbShell('date +"%F %T.%3N"').decode().strip()
 
     def stuck():
         logging.warning('%d seconds elapsed, dumping logcat', seconds)
         _DumpLogcat(since_time=initial_time)
+
+        test_output = _ReadDeviceFile(stdout)
+        logging.warning('partial test output:\n%s', test_output.decode())
 
     t = threading.Timer(seconds, stuck)
     t.start()
@@ -270,7 +273,7 @@ def RunTests(test_suite, args, stdoutfile=None, output_dir=None, log_output=True
                 device_output_dir = stack.enter_context(_TempDeviceDir())
                 args.append('--render-test-output-dir=' + device_output_dir)
 
-            with _DumpLogcatIfNotDoneAfter(seconds=10 * 60):
+            with _DumpLogcatIfNotDoneAfter(seconds=10 * 60, stdout=device_test_output_path):
                 output = _RunInstrumentation(args)
 
             test_output = _ReadDeviceFile(device_test_output_path)
