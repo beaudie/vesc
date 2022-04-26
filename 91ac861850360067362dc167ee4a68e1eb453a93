@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "9d7fc203_5fe18ce1",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 20
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1359249
+      },
+      "writtenOn": "2022-04-26T23:04:07Z",
+      "side": 1,
+      "message": "In this version I removed getRenderBUffer() from backend. Because there seemed to be a timing delay, if you request this just after setting it. Note that setting render buffer, caches it in the mRenderBuffer member variable in Surface. So it can be queried from there.",
+      "revId": "91ac861850360067362dc167ee4a68e1eb453a93",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
