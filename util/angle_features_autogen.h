@@ -110,6 +110,7 @@ enum class Feature
     FlushBeforeDeleteTextureIfCopiedTo,
     FlushOnFramebufferChange,
     ForceAtomicValueResolution,
+    ForceAttachmentInit,
     ForceBufferGPUStorage,
     ForceD16TexFilter,
     ForceD24S8AsUnsupported,

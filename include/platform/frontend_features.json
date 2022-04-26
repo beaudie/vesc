@@ -59,6 +59,14 @@
         },
 
         {
+            "name": "force_attachment_init",
+            "category": "Workarounds",
+            "description": [
+                "Force attachment initialization on clear ops"
+            ]
+        },
+
+        {
             "name": "enable_capture_limits",
             "category": "Features",
             "description": [
