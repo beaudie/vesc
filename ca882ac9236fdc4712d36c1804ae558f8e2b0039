@@ -16,6 +16,24 @@
       "message": "Its not obvious to me how the errors should be handled.",
       "revId": "ca882ac9236fdc4712d36c1804ae558f8e2b0039",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "46ee3ef8_b3ce6dc8",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-04-26T01:07:29Z",
+      "side": 1,
+      "message": "From android_sdk\u0027s BUILD.gn:\n\n```\n  android_library(\"android_support_chromium_java\") {\n    testonly \u003d true\n    sources \u003d [ \"//third_party/android_sdk/public/extras/chromium/support/src/org/chromium/android/support/PackageManagerWrapper.java\" ]\n  }\n```\n\nYou need to roll android_sdk at the same time; I see a new commit that removes the above rule.",
+      "parentUuid": "3ee50697_d540bf53",
+      "revId": "ca882ac9236fdc4712d36c1804ae558f8e2b0039",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
