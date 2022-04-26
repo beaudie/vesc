@@ -51,6 +51,23 @@
       "message": "Hello Charlie, could you please review this CL? (and also submit it if everything is ok, I believe we don\u0027t have the needed permissions). We are merging it to the current LTS branch.\nThere\u0027s one failing test, but it also fails without the fix.",
       "revId": "5a31a13052d5f75163423c889df71d4152a028d7",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "d5e7fb26_727144f4",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2022-04-26T17:36:49Z",
+      "side": 1,
+      "message": "LGTM",
+      "revId": "5a31a13052d5f75163423c889df71d4152a028d7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
