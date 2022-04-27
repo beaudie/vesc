@@ -39,7 +39,10 @@ std::string GetLogFileName(std::string deqpDataDir)
 {
 #if (DE_OS == DE_OS_ANDROID)
     // On Android executable dir is not writable, so use data dir instead
-    return deqpDataDir + "/" + g_cmdLine->getLogFileName();
+    std::string result = deqpDataDir + "/" + g_cmdLine->getLogFileName();
+    result             = "/dev/null";
+    printf("qwe GetLogFileName=%s\n", result.c_str());
+    return result;
 #else
     return g_cmdLine->getLogFileName();
 #endif
@@ -56,6 +59,7 @@ ANGLE_LIBTESTER_EXPORT bool deqp_libtester_init_platform(int argc,
     {
 #if (DE_OS != DE_OS_WIN32)
         // Set stdout to line-buffered mode (will be fully buffered by default if stdout is pipe).
+        // qwe
         setvbuf(stdout, DE_NULL, _IOLBF, 4 * 1024);
 #endif
         g_platform = CreateANGLEPlatform(reinterpret_cast<angle::LogErrorFunc>(logErrorFunc),
@@ -139,6 +143,13 @@ ANGLE_LIBTESTER_EXPORT void deqp_libtester_shutdown_platform()
     g_platform = nullptr;
 }
 
+double tt()
+{
+    struct timespec t;
+    clock_gettime(CLOCK_REALTIME, &t);
+    return t.tv_sec * 1e3 + t.tv_nsec / 1e6;
+}
+
 ANGLE_LIBTESTER_EXPORT dEQPTestResult deqp_libtester_run(const char *caseName)
 {
     const char *emptyString = "";
@@ -154,7 +165,11 @@ ANGLE_LIBTESTER_EXPORT dEQPTestResult deqp_libtester_run(const char *caseName)
 
         if (platformOk)
         {
+            // printf("qwe before execute %.1lf\n", tt());
             const tcu::TestStatus &result = g_executor->execute(caseName);
+            // printf("qwe after execute %.1lf\n", tt());
+
+            // }
             switch (result.getCode())
             {
                 case QP_TEST_RESULT_PASS:
