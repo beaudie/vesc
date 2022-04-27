@@ -39,6 +39,30 @@
       },
       "revId": "08906d4bad32c4e725682fa2072eda823b1ffe57",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "1db7e060_cce52cbb",
+        "filename": "src/libANGLE/renderer/metal/DisplayMtl.mm",
+        "patchSetId": 2
+      },
+      "lineNbr": 1114,
+      "author": {
+        "id": 1185214
+      },
+      "writtenOn": "2022-04-27T15:37:01Z",
+      "side": 1,
+      "message": "Done. (Note that the more complex version is fully thread safe, and this version might trigger TSAN warnings? Unlikely unless this code is ever run from multiple threads, though, so probably not an issue?)",
+      "parentUuid": "0e2d1be4_ff7f84df",
+      "range": {
+        "startLine": 1111,
+        "startChar": 0,
+        "endLine": 1114,
+        "endChar": 47
+      },
+      "revId": "08906d4bad32c4e725682fa2072eda823b1ffe57",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
