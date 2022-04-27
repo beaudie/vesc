@@ -63,6 +63,30 @@
       },
       "revId": "08906d4bad32c4e725682fa2072eda823b1ffe57",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "4d10a784_71025a54",
+        "filename": "src/libANGLE/renderer/metal/DisplayMtl.mm",
+        "patchSetId": 2
+      },
+      "lineNbr": 1114,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-04-27T17:37:56Z",
+      "side": 1,
+      "message": "Yeah, should be fine. The Display you make only once normally",
+      "parentUuid": "1db7e060_cce52cbb",
+      "range": {
+        "startLine": 1111,
+        "startChar": 0,
+        "endLine": 1114,
+        "endChar": 47
+      },
+      "revId": "08906d4bad32c4e725682fa2072eda823b1ffe57",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
