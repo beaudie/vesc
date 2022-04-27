@@ -171,6 +171,9 @@ Java_com_android_angle_test_AngleNativeTest_nativeRunTests(JNIEnv *env,
 
     dup2(STDOUT_FILENO, STDERR_FILENO);
 
+    char buf[BUFSIZ];
+    setbuf(stdout, buf);
+
     std::vector<char *> argv;
     size_t argc = ArgsToArgv(args, &argv);
 
