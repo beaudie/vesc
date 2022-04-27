@@ -16,6 +16,75 @@
       "message": "One test to add is this:\n\n- Bind texture1\n- glTexImage2D\n- Delete texture1\n- Bind texture2\n- glTexImage2D\n\nAt the last step, we should try to reference the deleted texture1",
       "revId": "52479d5781d88967d2bc1e4f00938327da7d8669",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ec284320_d59902c4",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 2816,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2022-04-27T21:19:02Z",
+      "side": 1,
+      "message": "This is doing the opposite of what comment said.\n\nMy suggestion is change it to assert. You should never store a immutable texture here. They should (and are) always immediately flushed.",
+      "range": {
+        "startLine": 2812,
+        "startChar": 4,
+        "endLine": 2816,
+        "endChar": 5
+      },
+      "revId": "52479d5781d88967d2bc1e4f00938327da7d8669",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "e948a9e4_daaa96d5",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 2828,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2022-04-27T21:19:02Z",
+      "side": 1,
+      "message": "I think you should create a API TextureVk::isTextureConsistentlySpecified() (or whatever other name that reflects what it is doing) and move all these logic bellow there.",
+      "range": {
+        "startLine": 2824,
+        "startChar": 4,
+        "endLine": 2828,
+        "endChar": 5
+      },
+      "revId": "52479d5781d88967d2bc1e4f00938327da7d8669",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "e0538d7b_b061a694",
+        "filename": "src/libANGLE/renderer/vulkan/TextureVk.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 502,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2022-04-27T21:19:02Z",
+      "side": 1,
+      "message": "My suggestion is move this to the end of function and do:\n\nif(!texture_has_staged_update)\n{\n    contextVk-\u003eonTextureUpload(this);\n}",
+      "range": {
+        "startLine": 495,
+        "startChar": 4,
+        "endLine": 502,
+        "endChar": 5
+      },
+      "revId": "52479d5781d88967d2bc1e4f00938327da7d8669",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
