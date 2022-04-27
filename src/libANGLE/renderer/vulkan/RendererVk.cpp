@@ -196,12 +196,22 @@ constexpr const char *kSkippedMessages[] = {
     "UNASSIGNED-BestPractices-SemaphoreCount",
 };
 
+// Whether any of the syncval errors are resolved in the presence of the NONE load or store render
+// pass ops.  If so, ANGLE makes no further attempt to resolve these errors and expects vendor
+// support for the extensions instead.
+enum class ResolvedWithRenderPassOpNone
+{
+    No,
+    Store,
+    LoadStore,
+};
+
 struct SkippedSyncvalMessage
 {
     const char *messageId;
     const char *messageContents1;
     const char *messageContents2                      = "";
-    bool resolvedWithStoreOpNone                      = false;
+    ResolvedWithRenderPassOpNone resolvedWithOpNone   = ResolvedWithRenderPassOpNone::No;
     bool isDueToNonConformantCoherentFramebufferFetch = false;
 };
 constexpr SkippedSyncvalMessage kSkippedSyncvalMessages[] = {
@@ -214,6 +224,8 @@ constexpr SkippedSyncvalMessage kSkippedSyncvalMessages[] = {
         "Access info (usage: SYNC_IMAGE_LAYOUT_TRANSITION, prior_usage: "
         "SYNC_LATE_FRAGMENT_TESTS_DEPTH_STENCIL_ATTACHMENT_WRITE, write_barriers: 0, command: "
         "vkCmdEndRenderPass",
+        "",
+        ResolvedWithRenderPassOpNone::LoadStore,
     },
     // http://anglebug.com/6411
     {
@@ -223,6 +235,8 @@ constexpr SkippedSyncvalMessage kSkippedSyncvalMessages[] = {
         "SYNC_IMAGE_LAYOUT_TRANSITION, write_barriers: "
         "SYNC_EARLY_FRAGMENT_TESTS_DEPTH_STENCIL_ATTACHMENT_READ|SYNC_LATE_FRAGMENT_TESTS_DEPTH_"
         "STENCIL_ATTACHMENT_READ, command: vkCmdPipelineBarrier",
+        "",
+        ResolvedWithRenderPassOpNone::LoadStore,
     },
     {
         "SYNC-HAZARD-WRITE_AFTER_WRITE",
@@ -232,8 +246,10 @@ constexpr SkippedSyncvalMessage kSkippedSyncvalMessages[] = {
         "SYNC_IMAGE_LAYOUT_TRANSITION, write_barriers: "
         "SYNC_EARLY_FRAGMENT_TESTS_DEPTH_STENCIL_ATTACHMENT_READ|SYNC_LATE_FRAGMENT_TESTS_DEPTH_"
         "STENCIL_ATTACHMENT_READ, command: vkCmdPipelineBarrier",
+        "",
+        ResolvedWithRenderPassOpNone::LoadStore,
     },
-    // http://angkebug.com/6584
+    // http://anglebug.com/6584
     {
         "SYNC-HAZARD-WRITE_AFTER_WRITE",
         "aspect depth during load with loadOp VK_ATTACHMENT_LOAD_OP_DONT_CARE. Access info (usage: "
@@ -242,6 +258,8 @@ constexpr SkippedSyncvalMessage kSkippedSyncvalMessages[] = {
         "SYNC_EARLY_FRAGMENT_TESTS_DEPTH_STENCIL_ATTACHMENT_READ|SYNC_LATE_FRAGMENT_TESTS_DEPTH_"
         "STENCIL_ATTACHMENT_READ|SYNC_COLOR_ATTACHMENT_OUTPUT_COLOR_ATTACHMENT_READ|SYNC_COLOR_"
         "ATTACHMENT_OUTPUT_COLOR_ATTACHMENT_WRITE, command: vkCmdPipelineBarrier",
+        "",
+        ResolvedWithRenderPassOpNone::LoadStore,
     },
     // http://anglebug.com/6416
     // http://anglebug.com/6421
@@ -267,7 +285,7 @@ constexpr SkippedSyncvalMessage kSkippedSyncvalMessages[] = {
      "SYNC_LATE_FRAGMENT_TESTS_DEPTH_STENCIL_ATTACHMENT_WRITE, prior_usage: "
      "SYNC_FRAGMENT_SHADER_SHADER_STORAGE_READ, read_barriers: VK_PIPELINE_STAGE_2_NONE, "
      "command: vkCmdDraw",
-     "", true},
+     "", ResolvedWithRenderPassOpNone::Store},
     {"SYNC-HAZARD-READ_AFTER_WRITE",
      "type: VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER, imageLayout: "
      "VK_IMAGE_LAYOUT_DEPTH_STENCIL_READ_ONLY_OPTIMAL, binding ",
@@ -275,7 +293,7 @@ constexpr SkippedSyncvalMessage kSkippedSyncvalMessages[] = {
      "SYNC_FRAGMENT_SHADER_SHADER_STORAGE_READ, prior_usage: "
      "SYNC_LATE_FRAGMENT_TESTS_DEPTH_STENCIL_ATTACHMENT_WRITE, write_barriers: 0, command: "
      "vkCmdEndRenderPass",
-     true},
+     ResolvedWithRenderPassOpNone::Store},
     {"SYNC-HAZARD-READ_AFTER_WRITE",
      "type: VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER, imageLayout: "
      "VK_IMAGE_LAYOUT_DEPTH_STENCIL_READ_ONLY_OPTIMAL, binding ",
@@ -286,7 +304,7 @@ constexpr SkippedSyncvalMessage kSkippedSyncvalMessages[] = {
      "STENCIL_ATTACHMENT_WRITE|SYNC_LATE_FRAGMENT_TESTS_DEPTH_STENCIL_ATTACHMENT_READ|SYNC_LATE_"
      "FRAGMENT_TESTS_DEPTH_STENCIL_ATTACHMENT_WRITE, command: "
      "vkCmdEndRenderPass",
-     true},
+     ResolvedWithRenderPassOpNone::Store},
     {
         "SYNC-HAZARD-WRITE_AFTER_WRITE",
         "aspect stencil during load with loadOp VK_ATTACHMENT_LOAD_OP_DONT_CARE. Access info "
@@ -297,6 +315,8 @@ constexpr SkippedSyncvalMessage kSkippedSyncvalMessages[] = {
         "SAMPLED_"
         "READ|SYNC_FRAGMENT_SHADER_SHADER_STORAGE_READ|SYNC_FRAGMENT_SHADER_UNIFORM_READ|SYNC_LATE_"
         "FRAGMENT_TESTS_DEPTH_STENCIL_ATTACHMENT_READ, command: vkCmdPipelineBarrier",
+        "",
+        ResolvedWithRenderPassOpNone::LoadStore,
     },
     {
         "SYNC-HAZARD-WRITE_AFTER_WRITE",
@@ -307,6 +327,8 @@ constexpr SkippedSyncvalMessage kSkippedSyncvalMessages[] = {
         "SYNC_EARLY_FRAGMENT_TESTS_DEPTH_STENCIL_ATTACHMENT_READ|SYNC_LATE_FRAGMENT_TESTS_DEPTH_"
         "STENCIL_ATTACHMENT_READ|SYNC_COLOR_ATTACHMENT_OUTPUT_COLOR_ATTACHMENT_READ|SYNC_COLOR_"
         "ATTACHMENT_OUTPUT_COLOR_ATTACHMENT_WRITE, command: vkCmdPipelineBarrier",
+        "",
+        ResolvedWithRenderPassOpNone::LoadStore,
     },
     // http://anglebug.com/6422
     {
@@ -443,7 +465,7 @@ constexpr SkippedSyncvalMessage kSkippedSyncvalMessages[] = {
         "SYNC_IMAGE_LAYOUT_TRANSITION",
     },
     // From various tests. The validation layer does not calculate the exact vertexCounts that's
-    // been accessed. http://anglebug.com/6725
+    // being accessed. http://anglebug.com/6725
     {
         "SYNC-HAZARD-READ_AFTER_WRITE",
         "vkCmdDrawIndexed: Hazard READ_AFTER_WRITE for vertex",
@@ -528,13 +550,13 @@ constexpr SkippedSyncvalMessage kSkippedSyncvalMessages[] = {
      "aspect color during load with loadOp VK_ATTACHMENT_LOAD_OP_LOAD. Access info (usage: "
      "SYNC_COLOR_ATTACHMENT_OUTPUT_COLOR_ATTACHMENT_READ, prior_usage: "
      "SYNC_IMAGE_LAYOUT_TRANSITION, write_barriers: 0, command: vkCmdEndRenderPass",
-     false, true},
+     ResolvedWithRenderPassOpNone::No, true},
     {"SYNC-HAZARD-WRITE_AFTER_WRITE",
      "vkCmdBeginRenderPass: Hazard WRITE_AFTER_WRITE in subpass 0 for attachment ",
      "image layout transition (old_layout: VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL, new_layout: "
      "VK_IMAGE_LAYOUT_GENERAL). Access info (usage: SYNC_IMAGE_LAYOUT_TRANSITION, prior_usage: "
      "SYNC_COLOR_ATTACHMENT_OUTPUT_COLOR_ATTACHMENT_WRITE, write_barriers:",
-     false, true},
+     ResolvedWithRenderPassOpNone::No, true},
     // http://anglebug.com/7070
     {
         "SYNC-HAZARD-READ_AFTER_WRITE",
@@ -583,10 +605,12 @@ DebugMessageReport ShouldReportDebugMessage(RendererVk *renderer,
     }
 
     // Then check with syncval messages:
+    const bool isLoadStoreOpNoneSupported =
+        renderer->getFeatures().supportsRenderPassLoadStoreOpNone.enabled;
     const bool isStoreOpNoneSupported =
-        renderer->getFeatures().supportsRenderPassLoadStoreOpNone.enabled ||
-        renderer->getFeatures().supportsRenderPassStoreOpNone.enabled;
+        isLoadStoreOpNoneSupported || renderer->getFeatures().supportsRenderPassStoreOpNone.enabled;
     const bool isFramebufferFetchUsed = renderer->isFramebufferFetchUsed();
+
     for (const SkippedSyncvalMessage &msg : kSkippedSyncvalMessages)
     {
         if (strstr(messageId, msg.messageId) == nullptr ||
@@ -598,9 +622,22 @@ DebugMessageReport ShouldReportDebugMessage(RendererVk *renderer,
 
         // If storeOp=NONE is supported, we expected the error to be resolved by it, and yet we
         // still get this error, report it.
-        if (msg.resolvedWithStoreOpNone && isStoreOpNoneSupported)
+        switch (msg.resolvedWithOpNone)
         {
-            return DebugMessageReport::Print;
+            case ResolvedWithRenderPassOpNone::Store:
+                if (isStoreOpNoneSupported)
+                {
+                    return DebugMessageReport::Print;
+                }
+                break;
+            case ResolvedWithRenderPassOpNone::LoadStore:
+                if (isLoadStoreOpNoneSupported)
+                {
+                    return DebugMessageReport::Print;
+                }
+                break;
+            default:
+                break;
         }
 
         // If the error is due to exposing coherent framebuffer fetch, but framebuffer fetch has not
@@ -959,7 +996,7 @@ bool CompressAndStorePipelineCacheVk(VkPhysicalDeviceProperties physicalDevicePr
     const size_t numChunks = UnsignedCeilDivide(static_cast<unsigned int>(compressedData.size()),
                                                 kMaxBlobCacheSize - kBlobHeaderSize);
     size_t chunkSize       = UnsignedCeilDivide(static_cast<unsigned int>(compressedData.size()),
-                                          static_cast<unsigned int>(numChunks));
+                                                static_cast<unsigned int>(numChunks));
 
     for (size_t chunkIndex = 0; chunkIndex < numChunks; ++chunkIndex)
     {
@@ -2590,27 +2627,27 @@ angle::Result RendererVk::initializeDevice(DisplayVk *displayVk, uint32_t queueF
 #else
     if (getFeatures().supportsHostQueryReset.enabled)
     {
-        InitHostQueryResetFunctions(mInstance);
+                       InitHostQueryResetFunctions(mInstance);
     }
     if (hasGetMemoryRequirements2KHR)
     {
-        InitGetMemoryRequirements2KHRFunctions(mDevice);
+                       InitGetMemoryRequirements2KHRFunctions(mDevice);
     }
     if (hasBindMemory2KHR)
     {
-        InitBindMemory2KHRFunctions(mDevice);
+                       InitBindMemory2KHRFunctions(mDevice);
     }
     if (getFeatures().supportsTransformFeedbackExtension.enabled)
     {
-        InitTransformFeedbackEXTFunctions(mDevice);
+                       InitTransformFeedbackEXTFunctions(mDevice);
     }
     if (getFeatures().supportsYUVSamplerConversion.enabled)
     {
-        InitSamplerYcbcrKHRFunctions(mDevice);
+                       InitSamplerYcbcrKHRFunctions(mDevice);
     }
     if (getFeatures().supportsRenderpass2.enabled)
     {
-        InitRenderPass2KHRFunctions(mDevice);
+                       InitRenderPass2KHRFunctions(mDevice);
     }
 #endif  // !defined(ANGLE_SHARED_LIBVULKAN)
 
@@ -3644,7 +3681,7 @@ angle::Result RendererVk::syncPipelineCacheVk(DisplayVk *displayVk, const gl::Co
         // kMaxTotalSize to 64k.
         constexpr size_t kMaxTotalSize = 64 * 1024;
         bool compressResult            = CompressAndStorePipelineCacheVk(
-            mPhysicalDeviceProperties, displayVk, contextVk, pipelineCacheData, kMaxTotalSize);
+                       mPhysicalDeviceProperties, displayVk, contextVk, pipelineCacheData, kMaxTotalSize);
 
         if (compressResult)
         {
