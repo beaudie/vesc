@@ -16,6 +16,29 @@
       "message": "Skia\u0027s testing (where we make a new context for each test) was getting flooded with this. Is it okay to reduce it to a per-process message like this? (And is ANGLE cool with this style of code for running something once?)",
       "revId": "08906d4bad32c4e725682fa2072eda823b1ffe57",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "0e2d1be4_ff7f84df",
+        "filename": "src/libANGLE/renderer/metal/DisplayMtl.mm",
+        "patchSetId": 2
+      },
+      "lineNbr": 1114,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-04-27T15:13:47Z",
+      "side": 1,
+      "message": "It\u0027s debug code so I don\u0027t particularly mind. You could keep it simple and just do\n\n```\nstatic bool once \u003d true;\nif (once) { ... once \u003d false; }\n```",
+      "range": {
+        "startLine": 1111,
+        "startChar": 0,
+        "endLine": 1114,
+        "endChar": 47
+      },
+      "revId": "08906d4bad32c4e725682fa2072eda823b1ffe57",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
