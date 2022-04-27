@@ -108,6 +108,28 @@ def _AddRestrictedTracesJson():
     _AdbShell('r=/sdcard/chromium_tests_root; tar -xf $r/t.tar -C $r/ && rm $r/t.tar')
 
 
+def _AddDeqpFiles():
+    _AdbShell('mkdir -p /sdcard/chromium_tests_root/')
+
+    def add(tar, fn):
+        assert (fn.startswith('../../'))
+        tar.add(fn, arcname=fn.replace('../../', ''))
+
+    with _TempLocalFile() as tempfile_path:
+        with tarfile.open(tempfile_path, 'w', format=tarfile.GNU_FORMAT, dereference=True) as tar:
+            for f in glob.glob('../../src/tests/deqp_support/*.txt', recursive=False):
+                add(tar, f)
+
+            tar.add('gen/vk_gl_cts_data')
+            add(
+                tar,
+                '../../third_party/VK-GL-CTS/src/external/openglcts/data/mustpass/gles/aosp_mustpass/main/gles3-master.txt'
+            )
+        _AdbRun(['push', tempfile_path, '/sdcard/chromium_tests_root/t.tar'])
+
+    _AdbShell('r=/sdcard/chromium_tests_root; tar -xf $r/t.tar -C $r/ && rm $r/t.tar')
+
+
 def PrepareTestSuite(suite_name):
     _GetAdbRoot()
 
@@ -127,6 +149,9 @@ def PrepareTestSuite(suite_name):
     if suite_name == 'angle_perftests':
         _AddRestrictedTracesJson()
 
+    if 'deqp' in suite_name:
+        _AddDeqpFiles()
+
 
 def PrepareRestrictedTraces(traces):
     start = time.time()
@@ -139,6 +164,32 @@ def PrepareRestrictedTraces(traces):
 
     logging.info('Pushed %d trace files (%.1fMB) in %.1fs', len(traces), total_size / 1e6,
                  time.time() - start)
+
+
+def DumpFrequncies():
+    try:
+        freqs = _AdbShell('cat /sys/devices/system/cpu/cpu*/cpufreq/scaling_cur_freq')
+        logging.info('cpu frequencies:\n%s', freqs.decode())
+    except Exception:
+        logging.info('cpu frequencies failed')
+
+    try:
+        freqs = _AdbShell('cat /sys/devices/platform/1c500000.mali/clock_info')
+        logging.info('gpu frequencies:\n%s', freqs.decode())
+    except Exception:
+        logging.info('gpu frequencies failed')
+
+    try:
+        top = _AdbShell('top -m 10 -bn 1')
+        logging.info('top cpu:\n%s', top.decode())
+    except Exception:
+        logging.info('top failed')
+
+    try:
+        top = _AdbShell('top -m 10 -bn 1 -s 10')
+        logging.info('top memory:\n%s', top.decode())
+    except Exception:
+        logging.info('top failed')
 
 
 def _RandomHex():
