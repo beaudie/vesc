@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "acb172f3_0b6b635a",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-04-27T02:14:38Z",
+      "side": 1,
+      "message": "Drive-by LGTM. Was this that noticeable? Some quick calculations arrive at ~30KB needed for the Vulkan queries over 30s @60fps",
+      "revId": "4bd25c590939b4759dc0a2d38abae66bfa5f9181",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
