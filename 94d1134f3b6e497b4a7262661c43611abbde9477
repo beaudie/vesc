@@ -1,0 +1,44 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "4eeccec7_a282f638",
+        "filename": "gni/angle.gni",
+        "patchSetId": 1
+      },
+      "lineNbr": 122,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-04-27T01:59:23Z",
+      "side": 1,
+      "message": "Please default this to angle_enable_vulkan_validation_layers (you\u0027d need to move it down to after that variable is defined) so we don\u0027t have to specify it in our usual dev builds.\n\nAlso, the name should start with `angle`. I suggest `angle_enable_renderdoc_capture` or just `angle_enable_renderdoc`",
+      "range": {
+        "startLine": 122,
+        "startChar": 33,
+        "endLine": 122,
+        "endChar": 38
+      },
+      "revId": "94d1134f3b6e497b4a7262661c43611abbde9477",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b5ef772c_c5272eae",
+        "filename": "gni/angle.gni",
+        "patchSetId": 1
+      },
+      "lineNbr": 261,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-04-27T01:59:23Z",
+      "side": 1,
+      "message": "Suggest adding this only to src/tests/BUILD.gn, that\u0027s where this flag is needed",
+      "revId": "94d1134f3b6e497b4a7262661c43611abbde9477",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
