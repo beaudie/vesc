@@ -109,7 +109,8 @@ public class AngleNativeTest
             appendCommandLineFlags("--gtest_filter=" + gtestFilter);
         }
 
-        mStdoutFilePath = intent.getStringExtra(NativeTestIntent.EXTRA_STDOUT_FILE);
+        // mStdoutFilePath = intent.getStringExtra(NativeTestIntent.EXTRA_STDOUT_FILE);
+        mStdoutFilePath = activity.getApplicationInfo().dataDir.toString() + "/stdout";
     }
 
     private void appendCommandLineFlags(String flags)
