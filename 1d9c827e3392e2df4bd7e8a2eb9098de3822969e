@@ -34,6 +34,24 @@
       "parentUuid": "ca7567f9_fa0a6165",
       "revId": "1d9c827e3392e2df4bd7e8a2eb9098de3822969e",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "3fee8e8d_86e5b3e2",
+        "filename": "src/tests/deqp_support/tcuANGLENativeDisplayFactory.cpp",
+        "patchSetId": 31
+      },
+      "lineNbr": 435,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-04-27T17:41:58Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "bb1767fb_a97d6719",
+      "revId": "1d9c827e3392e2df4bd7e8a2eb9098de3822969e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
