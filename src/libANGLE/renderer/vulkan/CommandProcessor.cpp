@@ -648,12 +648,6 @@ void CommandProcessor::destroy(Context *context)
     }
 }
 
-Serial CommandProcessor::getLastCompletedQueueSerial() const
-{
-    std::lock_guard<std::mutex> lock(mQueueSerialMutex);
-    return mCommandQueue.getLastCompletedQueueSerial();
-}
-
 bool CommandProcessor::isBusy() const
 {
     std::lock_guard<std::mutex> serialLock(mQueueSerialMutex);
@@ -1345,11 +1339,6 @@ VkResult CommandQueue::queuePresent(egl::ContextPriority contextPriority,
 {
     VkQueue queue = getQueue(contextPriority);
     return vkQueuePresentKHR(queue, &presentInfo);
-}
-
-Serial CommandQueue::getLastCompletedQueueSerial() const
-{
-    return mLastCompletedQueueSerial;
 }
 
 bool CommandQueue::isBusy() const

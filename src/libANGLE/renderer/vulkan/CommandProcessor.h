@@ -344,8 +344,7 @@ class CommandQueueInterface : angle::NonCopyable
     // semaphore, we need to ensure that there are no pending submissions.
     virtual angle::Result ensureNoPendingWork(Context *context) = 0;
 
-    virtual Serial getLastCompletedQueueSerial() const = 0;
-    virtual bool isBusy() const                        = 0;
+    virtual bool isBusy() const = 0;
 };
 
 class CommandQueue final : public CommandQueueInterface
@@ -408,7 +407,8 @@ class CommandQueue final : public CommandQueueInterface
 
     angle::Result ensureNoPendingWork(Context *context) override { return angle::Result::Continue; }
 
-    Serial getLastCompletedQueueSerial() const override;
+    Serial getLastCompletedQueueSerial() const { return mLastCompletedQueueSerial; }
+
     bool isBusy() const override;
 
     angle::Result queueSubmit(Context *context,
@@ -563,7 +563,11 @@ class CommandProcessor final : public Context, public CommandQueueInterface
 
     angle::Result ensureNoPendingWork(Context *context) override;
 
-    Serial getLastCompletedQueueSerial() const override;
+    Serial getLastCompletedQueueSerial() const
+    {
+        return mCommandQueue.getLastCompletedQueueSerial();
+    }
+
     bool isBusy() const override;
 
     egl::ContextPriority getDriverPriority(egl::ContextPriority priority)
