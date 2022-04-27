@@ -22,6 +22,53 @@
       },
       "revId": "8fdd573f6f6cd8c9a3d3257f63f4c4cc3729ae0c",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "1927fe16_6f8cb10b",
+        "filename": "gni/angle.gni",
+        "patchSetId": 8
+      },
+      "lineNbr": 124,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-04-27T14:23:19Z",
+      "side": 1,
+      "message": "A benefit of checking at usage is that if someone sets this on a windows build for example, it would still be no op.\n\nThat said, it\u0027s not like we are bullet proof with this sort of thing (like I can enable d3d on Linux and fail building), so this LGTM.",
+      "parentUuid": "a701241b_137eae35",
+      "range": {
+        "startLine": 124,
+        "startChar": 35,
+        "endLine": 124,
+        "endChar": 42
+      },
+      "revId": "8fdd573f6f6cd8c9a3d3257f63f4c4cc3729ae0c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "68954ce3_167b1fd3",
+        "filename": "gni/angle.gni",
+        "patchSetId": 8
+      },
+      "lineNbr": 151,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-04-27T14:23:19Z",
+      "side": 1,
+      "message": "Don\u0027t need this anymore then",
+      "range": {
+        "startLine": 151,
+        "startChar": 8,
+        "endLine": 151,
+        "endChar": 14
+      },
+      "revId": "8fdd573f6f6cd8c9a3d3257f63f4c4cc3729ae0c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
