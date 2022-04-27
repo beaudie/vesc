@@ -24,6 +24,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "0fa82931_937b1159",
+        "filename": "gni/angle.gni",
+        "patchSetId": 1
+      },
+      "lineNbr": 122,
+      "author": {
+        "id": 1520902
+      },
+      "writtenOn": "2022-04-27T17:10:15Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "4eeccec7_a282f638",
+      "range": {
+        "startLine": 122,
+        "startChar": 33,
+        "endLine": 122,
+        "endChar": 38
+      },
+      "revId": "94d1134f3b6e497b4a7262661c43611abbde9477",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "b5ef772c_c5272eae",
@@ -37,6 +61,24 @@
       "writtenOn": "2022-04-27T01:59:23Z",
       "side": 1,
       "message": "Suggest adding this only to src/tests/BUILD.gn, that\u0027s where this flag is needed",
+      "revId": "94d1134f3b6e497b4a7262661c43611abbde9477",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "a13e4f44_f5b621bd",
+        "filename": "gni/angle.gni",
+        "patchSetId": 1
+      },
+      "lineNbr": 261,
+      "author": {
+        "id": 1520902
+      },
+      "writtenOn": "2022-04-27T17:10:15Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "b5ef772c_c5272eae",
       "revId": "94d1134f3b6e497b4a7262661c43611abbde9477",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
