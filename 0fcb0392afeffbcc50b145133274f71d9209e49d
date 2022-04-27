@@ -51,6 +51,24 @@
       "parentUuid": "af745488_85c9750a",
       "revId": "0fcb0392afeffbcc50b145133274f71d9209e49d",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "48ec981b_26d544c0",
+        "filename": "gni/angle.gni",
+        "patchSetId": 4
+      },
+      "lineNbr": 106,
+      "author": {
+        "id": 1185214
+      },
+      "writtenOn": "2022-04-27T12:54:08Z",
+      "side": 1,
+      "message": "Yes, I can do that. (It took me a while to remember how to change args of embedded projects in a universal and safe way).\n\nThere are now have two unrelated mechanisms for configuring embedded GN projects. Most things are being done with build_overrides, but that only works for free-floating global variables, not for args. I forgot about default_args (in Skia\u0027s .gn), which appear to solve this particular problem.",
+      "parentUuid": "e9a0a5b7_c5e836df",
+      "revId": "0fcb0392afeffbcc50b145133274f71d9209e49d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
