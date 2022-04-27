@@ -1375,8 +1375,18 @@ void Context::bindImageTexture(GLuint unit,
     mImageObserverBindings[unit].bind(tex);
 }
 
+double tt()
+{
+    struct timespec t;
+    clock_gettime(CLOCK_REALTIME, &t);
+    return t.tv_sec * 1e3 + t.tv_nsec / 1e6;
+}
+
+double lastUseProgram = 0;
+GLuint lastProgram    = 0;
 void Context::useProgram(ShaderProgramID program)
 {
+    // printf("qwe dt useProgram(%u): %.1lf\n", program.value, tt());
     ANGLE_CONTEXT_TRY(mState.setProgram(this, getProgramResolveLink(program)));
     mStateCache.onProgramExecutableChange(this);
 }
@@ -5657,6 +5667,7 @@ void Context::blendFuncSeparatei(GLuint buf,
 
 void Context::clearColor(GLfloat red, GLfloat green, GLfloat blue, GLfloat alpha)
 {
+    // printf("qwe dt clearColor: %.1lf\n", tt());
     mState.setColorClearValue(red, green, blue, alpha);
 }
 
