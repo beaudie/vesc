@@ -209,6 +209,10 @@ tcu::TestStatus RandomOrderExecutor::executeInner(TestCase *testCase, const std:
     catch (const std::bad_alloc &)
     {
         m_testCtx.setTerminateAfter(true);
+        if ((deGetMicroseconds() - testStartTime) / 1e3 > 50)
+        {
+            printf("qwe2 a %.1lf ms\n", (deGetMicroseconds() - testStartTime) / 1e3);
+        }
         return TestStatus(QP_TEST_RESULT_RESOURCE_ERROR,
                           "Failed to allocate memory in test case init");
     }
@@ -217,13 +221,23 @@ tcu::TestStatus RandomOrderExecutor::executeInner(TestCase *testCase, const std:
         DE_ASSERT(e.getTestResult() != QP_TEST_RESULT_LAST);
         m_testCtx.setTerminateAfter(e.isFatal());
         log << e;
+        if ((deGetMicroseconds() - testStartTime) / 1e3 > 50)
+        {
+            printf("qwe2 b %.1lf ms\n", (deGetMicroseconds() - testStartTime) / 1e3);
+        }
         return TestStatus(e.getTestResult(), e.getMessage());
     }
     catch (const Exception &e)
     {
         log << e;
+        if ((deGetMicroseconds() - testStartTime) / 1e3 > 50)
+        {
+            printf("qwe2 c %.1lf ms\n", (deGetMicroseconds() - testStartTime) / 1e3);
+        }
         return TestStatus(QP_TEST_RESULT_FAIL, e.getMessage());
     }
+
+    const deUint64 t1 = deGetMicroseconds();
 
     bool isFirstFrameBeingCaptured = true;
 
@@ -269,6 +283,8 @@ tcu::TestStatus RandomOrderExecutor::executeInner(TestCase *testCase, const std:
             break;
     }
 
+    const deUint64 t2 = deGetMicroseconds();
+
     DE_ASSERT(m_testCtx.getTestResult() != QP_TEST_RESULT_LAST);
 
     if (m_testCtx.getTestResult() == QP_TEST_RESULT_RESOURCE_ERROR)
@@ -289,6 +305,8 @@ tcu::TestStatus RandomOrderExecutor::executeInner(TestCase *testCase, const std:
         m_testCtx.setTerminateAfter(true);
     }
 
+    const deUint64 t3 = deGetMicroseconds();
+
     if (m_testCtx.getWatchDog())
         qpWatchDog_reset(m_testCtx.getWatchDog());
 
@@ -296,6 +314,12 @@ tcu::TestStatus RandomOrderExecutor::executeInner(TestCase *testCase, const std:
         const TestStatus result =
             TestStatus(m_testCtx.getTestResult(), m_testCtx.getTestResultDesc());
         m_testCtx.setTestResult(QP_TEST_RESULT_LAST, "");
+        if ((deGetMicroseconds() - testStartTime) / 1e3 > 50)
+        {
+            printf("qwe2 d %.1lf t1=%.1lf t2=%.1lf t3=%.1lf \n",
+                   (deGetMicroseconds() - testStartTime) / 1e3, (t1 - testStartTime) / 1e3,
+                   (t2 - testStartTime) / 1e3, (t3 - testStartTime) / 1e3);
+        }
         return result;
     }
 }

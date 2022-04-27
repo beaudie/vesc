@@ -1375,8 +1375,26 @@ void Context::bindImageTexture(GLuint unit,
     mImageObserverBindings[unit].bind(tex);
 }
 
+double tt()
+{
+    struct timespec t;
+    clock_gettime(CLOCK_REALTIME, &t);
+    return t.tv_sec * 1e3 + t.tv_nsec / 1e6;
+}
+
+double lastUseProgram = 0;
+GLuint lastProgram    = 0;
 void Context::useProgram(ShaderProgramID program)
 {
+    if (program.value != 0)
+    {
+        lastUseProgram = tt();
+        lastProgram    = program.value;
+    }
+    else
+    {
+        printf("qwe dt useProgram(%u): %.1lf\n", lastProgram, tt() - lastUseProgram);
+    }
     ANGLE_CONTEXT_TRY(mState.setProgram(this, getProgramResolveLink(program)));
     mStateCache.onProgramExecutableChange(this);
 }

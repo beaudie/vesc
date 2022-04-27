@@ -154,7 +154,21 @@ ANGLE_LIBTESTER_EXPORT dEQPTestResult deqp_libtester_run(const char *caseName)
 
         if (platformOk)
         {
+            struct timespec t;
+            clock_gettime(CLOCK_REALTIME, &t);
+            double td                     = t.tv_sec * 1e3 + t.tv_nsec / 1e6;
             const tcu::TestStatus &result = g_executor->execute(caseName);
+            clock_gettime(CLOCK_REALTIME, &t);
+            double td2 = t.tv_sec * 1e3 + t.tv_nsec / 1e6;
+            // if (strcmp(caseName,
+            //            "dEQP-GLES3.functional.shaders.operator.binary_operator.right_shift_assign_"
+            //            "effect.lowp_uvec4_uint_vertex") == 0)
+            // {
+            if (td2 - td > 100)
+            {
+                printf("qwe dt=%.1lf ms (%s)\n", td2 - td, caseName);
+            }
+            // }
             switch (result.getCode())
             {
                 case QP_TEST_RESULT_PASS:
