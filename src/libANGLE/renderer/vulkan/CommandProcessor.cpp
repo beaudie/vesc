@@ -648,12 +648,6 @@ void CommandProcessor::destroy(Context *context)
     }
 }
 
-Serial CommandProcessor::getLastCompletedQueueSerial() const
-{
-    std::lock_guard<std::mutex> lock(mQueueSerialMutex);
-    return mCommandQueue.getLastCompletedQueueSerial();
-}
-
 bool CommandProcessor::isBusy() const
 {
     std::lock_guard<std::mutex> serialLock(mQueueSerialMutex);
@@ -963,10 +957,11 @@ angle::Result CommandQueue::retireFinishedCommands(Context *context, size_t fini
         mInFlightCommands.erase(beginIter, beginIter + finishedCount);
     }
 
+    Serial lastCompletedQueueSerial = getLastCompletedQueueSerial();
     while (!mGarbageQueue.empty())
     {
         GarbageAndSerial &garbageList = mGarbageQueue.front();
-        if (garbageList.getSerial() < mLastCompletedQueueSerial)
+        if (garbageList.getSerial() < lastCompletedQueueSerial)
         {
             for (GarbageObject &garbage : garbageList.get())
             {
@@ -1331,7 +1326,7 @@ angle::Result CommandQueue::queueSubmit(Context *context,
     ++mPerfCounters.vkQueueSubmitCallsPerFrame;
 
     // Now that we've submitted work, clean up RendererVk garbage
-    return renderer->cleanupGarbage(mLastCompletedQueueSerial);
+    return renderer->cleanupGarbage(getLastCompletedQueueSerial());
 }
 
 void CommandQueue::resetPerFramePerfCounters()
@@ -1347,14 +1342,9 @@ VkResult CommandQueue::queuePresent(egl::ContextPriority contextPriority,
     return vkQueuePresentKHR(queue, &presentInfo);
 }
 
-Serial CommandQueue::getLastCompletedQueueSerial() const
-{
-    return mLastCompletedQueueSerial;
-}
-
 bool CommandQueue::isBusy() const
 {
-    return mLastSubmittedQueueSerial > mLastCompletedQueueSerial;
+    return mLastSubmittedQueueSerial > getLastCompletedQueueSerial();
 }
 
 // QueuePriorities:
