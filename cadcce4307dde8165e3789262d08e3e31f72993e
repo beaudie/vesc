@@ -16,6 +16,23 @@
       "message": "Limited the workaround to depth attachments and renamed accordingly.",
       "revId": "cadcce4307dde8165e3789262d08e3e31f72993e",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "0abda0f2_130811bd",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2022-04-27T15:13:11Z",
+      "side": 1,
+      "message": "CL looks sound. Does this fix the issue?",
+      "revId": "cadcce4307dde8165e3789262d08e3e31f72993e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
