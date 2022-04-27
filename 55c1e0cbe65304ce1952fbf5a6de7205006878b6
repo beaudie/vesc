@@ -16,6 +16,24 @@
       "message": "I took a look at the GBM surface change. There is some duplication of logic between the GBM surface and KHR_swapchain surface implementations, which we should remove.\n\nI think what you\u0027d really want is to abstract at the level of the init/acquire/present API, rather than the whole of WindowSurfaceVk. So you could have WindowSurfaceVk for example have a few virtual calls for just making the Vulkan API calls, with a default implementation of using functions from KHR_swapchain. Then have SurfaceVkGbm override only those functions and call `gbm_*` instead.\n\nThen SurfaceVkGbm will continue to inherit logic and fixes from WindowSurfaceVk.",
       "revId": "55c1e0cbe65304ce1952fbf5a6de7205006878b6",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "d986cda2_0a7d485c",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1528827
+      },
+      "writtenOn": "2022-04-27T16:38:08Z",
+      "side": 1,
+      "message": "I am looking into this. Do you think it would make sense to use SwapchainImage directly instead of GbmImage?\n\nThe idea is to populate mSwapchainImages with image imported from GBM, instead of retrieving them from VkSwapchainKHR.\n\nThis should allow use to reuse most of the code from WindowSurfaceVk, maybe at the cost of begin less straightforward.",
+      "parentUuid": "976502d9_72875530",
+      "revId": "55c1e0cbe65304ce1952fbf5a6de7205006878b6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
