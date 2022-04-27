@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "ee4b2603_bb63f3e7",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1359249
+      },
+      "writtenOn": "2022-04-27T19:21:20Z",
+      "side": 1,
+      "message": "Comment on getting current getRenderBuffer().",
+      "revId": "b95e60926f01a6b3fc3408f515ab313d34b47399",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "014e9c9d_b07e98c7",
+        "filename": "src/libANGLE/Surface.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 122,
+      "author": {
+        "id": 1359249
+      },
+      "writtenOn": "2022-04-27T19:21:20Z",
+      "side": 1,
+      "message": "This assumes support and success in SurfaceVk WindowSurfaceVk::initializeImpl.\n\nWhen I added getRenderBuffer to get the current mSwapchainPresentMode it seemed to be timing issue where renderBuffer was not updated immediately. So to avoid timing issue. remove getRenderBuffer and go by latest success case.",
+      "revId": "b95e60926f01a6b3fc3408f515ab313d34b47399",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
