@@ -214,6 +214,8 @@ constexpr SkippedSyncvalMessage kSkippedSyncvalMessages[] = {
         "Access info (usage: SYNC_IMAGE_LAYOUT_TRANSITION, prior_usage: "
         "SYNC_LATE_FRAGMENT_TESTS_DEPTH_STENCIL_ATTACHMENT_WRITE, write_barriers: 0, command: "
         "vkCmdEndRenderPass",
+        "",
+        true,
     },
     // http://anglebug.com/6411
     {
@@ -223,6 +225,8 @@ constexpr SkippedSyncvalMessage kSkippedSyncvalMessages[] = {
         "SYNC_IMAGE_LAYOUT_TRANSITION, write_barriers: "
         "SYNC_EARLY_FRAGMENT_TESTS_DEPTH_STENCIL_ATTACHMENT_READ|SYNC_LATE_FRAGMENT_TESTS_DEPTH_"
         "STENCIL_ATTACHMENT_READ, command: vkCmdPipelineBarrier",
+        "",
+        true,
     },
     {
         "SYNC-HAZARD-WRITE_AFTER_WRITE",
@@ -232,8 +236,10 @@ constexpr SkippedSyncvalMessage kSkippedSyncvalMessages[] = {
         "SYNC_IMAGE_LAYOUT_TRANSITION, write_barriers: "
         "SYNC_EARLY_FRAGMENT_TESTS_DEPTH_STENCIL_ATTACHMENT_READ|SYNC_LATE_FRAGMENT_TESTS_DEPTH_"
         "STENCIL_ATTACHMENT_READ, command: vkCmdPipelineBarrier",
+        "",
+        true,
     },
-    // http://angkebug.com/6584
+    // http://anglebug.com/6584
     {
         "SYNC-HAZARD-WRITE_AFTER_WRITE",
         "aspect depth during load with loadOp VK_ATTACHMENT_LOAD_OP_DONT_CARE. Access info (usage: "
@@ -242,6 +248,8 @@ constexpr SkippedSyncvalMessage kSkippedSyncvalMessages[] = {
         "SYNC_EARLY_FRAGMENT_TESTS_DEPTH_STENCIL_ATTACHMENT_READ|SYNC_LATE_FRAGMENT_TESTS_DEPTH_"
         "STENCIL_ATTACHMENT_READ|SYNC_COLOR_ATTACHMENT_OUTPUT_COLOR_ATTACHMENT_READ|SYNC_COLOR_"
         "ATTACHMENT_OUTPUT_COLOR_ATTACHMENT_WRITE, command: vkCmdPipelineBarrier",
+        "",
+        true,
     },
     // http://anglebug.com/6416
     // http://anglebug.com/6421
@@ -297,6 +305,8 @@ constexpr SkippedSyncvalMessage kSkippedSyncvalMessages[] = {
         "SAMPLED_"
         "READ|SYNC_FRAGMENT_SHADER_SHADER_STORAGE_READ|SYNC_FRAGMENT_SHADER_UNIFORM_READ|SYNC_LATE_"
         "FRAGMENT_TESTS_DEPTH_STENCIL_ATTACHMENT_READ, command: vkCmdPipelineBarrier",
+        "",
+        true,
     },
     {
         "SYNC-HAZARD-WRITE_AFTER_WRITE",
@@ -307,6 +317,8 @@ constexpr SkippedSyncvalMessage kSkippedSyncvalMessages[] = {
         "SYNC_EARLY_FRAGMENT_TESTS_DEPTH_STENCIL_ATTACHMENT_READ|SYNC_LATE_FRAGMENT_TESTS_DEPTH_"
         "STENCIL_ATTACHMENT_READ|SYNC_COLOR_ATTACHMENT_OUTPUT_COLOR_ATTACHMENT_READ|SYNC_COLOR_"
         "ATTACHMENT_OUTPUT_COLOR_ATTACHMENT_WRITE, command: vkCmdPipelineBarrier",
+        "",
+        true,
     },
     // http://anglebug.com/6422
     {
@@ -443,7 +455,7 @@ constexpr SkippedSyncvalMessage kSkippedSyncvalMessages[] = {
         "SYNC_IMAGE_LAYOUT_TRANSITION",
     },
     // From various tests. The validation layer does not calculate the exact vertexCounts that's
-    // been accessed. http://anglebug.com/6725
+    // being accessed. http://anglebug.com/6725
     {
         "SYNC-HAZARD-READ_AFTER_WRITE",
         "vkCmdDrawIndexed: Hazard READ_AFTER_WRITE for vertex",
@@ -959,7 +971,7 @@ bool CompressAndStorePipelineCacheVk(VkPhysicalDeviceProperties physicalDevicePr
     const size_t numChunks = UnsignedCeilDivide(static_cast<unsigned int>(compressedData.size()),
                                                 kMaxBlobCacheSize - kBlobHeaderSize);
     size_t chunkSize       = UnsignedCeilDivide(static_cast<unsigned int>(compressedData.size()),
-                                          static_cast<unsigned int>(numChunks));
+                                                static_cast<unsigned int>(numChunks));
 
     for (size_t chunkIndex = 0; chunkIndex < numChunks; ++chunkIndex)
     {
@@ -2590,27 +2602,27 @@ angle::Result RendererVk::initializeDevice(DisplayVk *displayVk, uint32_t queueF
 #else
     if (getFeatures().supportsHostQueryReset.enabled)
     {
-        InitHostQueryResetFunctions(mInstance);
+                       InitHostQueryResetFunctions(mInstance);
     }
     if (hasGetMemoryRequirements2KHR)
     {
-        InitGetMemoryRequirements2KHRFunctions(mDevice);
+                       InitGetMemoryRequirements2KHRFunctions(mDevice);
     }
     if (hasBindMemory2KHR)
     {
-        InitBindMemory2KHRFunctions(mDevice);
+                       InitBindMemory2KHRFunctions(mDevice);
     }
     if (getFeatures().supportsTransformFeedbackExtension.enabled)
     {
-        InitTransformFeedbackEXTFunctions(mDevice);
+                       InitTransformFeedbackEXTFunctions(mDevice);
     }
     if (getFeatures().supportsYUVSamplerConversion.enabled)
     {
-        InitSamplerYcbcrKHRFunctions(mDevice);
+                       InitSamplerYcbcrKHRFunctions(mDevice);
     }
     if (getFeatures().supportsRenderpass2.enabled)
     {
-        InitRenderPass2KHRFunctions(mDevice);
+                       InitRenderPass2KHRFunctions(mDevice);
     }
 #endif  // !defined(ANGLE_SHARED_LIBVULKAN)
 
@@ -3644,7 +3656,7 @@ angle::Result RendererVk::syncPipelineCacheVk(DisplayVk *displayVk, const gl::Co
         // kMaxTotalSize to 64k.
         constexpr size_t kMaxTotalSize = 64 * 1024;
         bool compressResult            = CompressAndStorePipelineCacheVk(
-            mPhysicalDeviceProperties, displayVk, contextVk, pipelineCacheData, kMaxTotalSize);
+                       mPhysicalDeviceProperties, displayVk, contextVk, pipelineCacheData, kMaxTotalSize);
 
         if (compressResult)
         {

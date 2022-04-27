@@ -1143,8 +1143,17 @@ void RenderPassAttachment::finalizeLoadStore(Context *context,
         {
             // If we are loading or clearing the attachment, but the attachment has not been used,
             // and the data has also not been stored back into attachment, then just skip the
-            // load/clear op.
-            *loadOp = RenderPassLoadOp::DontCare;
+            // load/clear op.  If loadOp/storeOp=None is supported, prefer that to reduce the amount
+            // of synchronization; DontCare is a write operation, while None is not.
+            if (supportsLoadStoreOpNone)
+            {
+                *loadOp  = RenderPassLoadOp::None;
+                *storeOp = RenderPassStoreOp::None;
+            }
+            else
+            {
+                *loadOp = RenderPassLoadOp::DontCare;
+            }
         }
         else
         {
@@ -4875,18 +4884,18 @@ angle::Result ImageHelper::initExternal(Context *context,
         VkFormatFeatureFlags supportedChromaSubSampleFeatureBits =
             rendererVk->getImageFormatFeatureBits(mActualFormatID, kChromaSubSampleFeatureBits);
 
-        VkChromaLocation supportedLocation = ((supportedChromaSubSampleFeatureBits &
+        VkChromaLocation supportedLocation            = ((supportedChromaSubSampleFeatureBits &
                                                VK_FORMAT_FEATURE_COSITED_CHROMA_SAMPLES_BIT) != 0)
-                                                 ? VK_CHROMA_LOCATION_COSITED_EVEN
-                                                 : VK_CHROMA_LOCATION_MIDPOINT;
+                                                            ? VK_CHROMA_LOCATION_COSITED_EVEN
+                                                            : VK_CHROMA_LOCATION_MIDPOINT;
         VkSamplerYcbcrModelConversion conversionModel = VK_SAMPLER_YCBCR_MODEL_CONVERSION_YCBCR_601;
         VkSamplerYcbcrRange colorRange                = VK_SAMPLER_YCBCR_RANGE_ITU_NARROW;
         VkFilter chromaFilter                         = VK_FILTER_NEAREST;
         VkComponentMapping components                 = {
-            VK_COMPONENT_SWIZZLE_IDENTITY,
-            VK_COMPONENT_SWIZZLE_IDENTITY,
-            VK_COMPONENT_SWIZZLE_IDENTITY,
-            VK_COMPONENT_SWIZZLE_IDENTITY,
+                            VK_COMPONENT_SWIZZLE_IDENTITY,
+                            VK_COMPONENT_SWIZZLE_IDENTITY,
+                            VK_COMPONENT_SWIZZLE_IDENTITY,
+                            VK_COMPONENT_SWIZZLE_IDENTITY,
         };
 
         // Create the VkSamplerYcbcrConversion to associate with image views and samplers
