@@ -334,6 +334,12 @@ config("angle_asserts_config") {
   }
 }
 
+config("angle_enable_renderdoc") {
+  if (build_angle_enable_renderdoc) {
+    defines = [ "ANGLE_TEST_ENABLE_RENDERDOC_CAPTURE" ]
+  }
+}
+
 config("angle_common_config") {
   include_dirs = [ "src/common/third_party/base" ]
   if (is_android) {
@@ -969,11 +975,6 @@ angle_source_set("libANGLE_base") {
 
   if (is_debug) {
     defines += [ "ANGLE_GENERATE_SHADER_DEBUG_INFO" ]
-  }
-
-  # If VVL are enabled, enable RenderDoc capture as well.
-  if (angle_enable_vulkan_validation_layers) {
-    defines += [ "ANGLE_TEST_ENABLE_RENDERDOC_CAPTURE" ]
   }
 
   configs += [ ":debug_annotations_config" ]

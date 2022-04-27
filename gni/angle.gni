@@ -118,6 +118,8 @@ declare_args() {
 
   # Frame capture code is enabled by default if rapidjson is available.
   angle_has_frame_capture = angle_has_rapidjson
+
+  build_angle_enable_renderdoc = false
 }
 
 declare_args() {
@@ -256,6 +258,7 @@ angle_common_configs = [
   angle_root + ":extra_warnings",
   angle_root + ":internal_config",
   angle_root + ":angle_uwp_env",
+  angle_root + ":angle_enable_renderdoc",
 ]
 
 angle_remove_configs = []
