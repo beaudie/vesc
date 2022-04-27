@@ -153,6 +153,7 @@ constexpr const char *kSkippedMessages[] = {
     "UNASSIGNED-BestPractices-vkCreateGraphicsPipelines-too-many-instanced-vertex-buffers",
     "UNASSIGNED-BestPractices-DrawState-ClearCmdBeforeDraw",
     "UNASSIGNED-BestPractices-vkCmdClearAttachments-clear-after-load",
+    "UNASSIGNED-BestPractices-TransitionUndefinedToReadOnly",
     // http://anglebug.com/4928
     "VUID-vkMapMemory-memory-00683",
     // http://anglebug.com/5027
@@ -319,19 +320,6 @@ constexpr SkippedSyncvalMessage kSkippedSyncvalMessages[] = {
         "ATTACHMENT_OUTPUT_COLOR_ATTACHMENT_WRITE, command: vkCmdPipelineBarrier",
         "",
         true,
-    },
-    // http://anglebug.com/6422
-    {
-        "VUID-vkCmdWaitEvents-srcStageMask-01158",
-        "vkCmdWaitEvents: srcStageMask 0x2000 contains stages not present in pEvents stageMask. "
-        "Extra "
-        "stages are VK_PIPELINE_STAGE_BOTTOM_OF_PIPE_BIT.",
-    },
-    // http://anglebug.com/6424
-    {
-        "SYNC-HAZARD-READ_AFTER_WRITE",
-        "Access info (usage: SYNC_VERTEX_ATTRIBUTE_INPUT_VERTEX_ATTRIBUTE_READ, prior_usage: "
-        "SYNC_COMPUTE_SHADER_SHADER_STORAGE_WRITE, write_barriers: 0, command: vkCmdDispatch",
     },
     // These errors are caused by a feedback loop tests that don't produce correct Vulkan to begin
     // with.  The message to check is made more specific (by checking the exact set/binding and part
