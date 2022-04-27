@@ -1,0 +1,61 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "ac346645_6d087899",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-04-27T02:46:12Z",
+      "side": 1,
+      "message": "Drive-by",
+      "revId": "98e91f95ee096eaf5d0cc8aca3309481a338544a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "c7939914_1e3de441",
+        "filename": "include/platform/frontend_features.json",
+        "patchSetId": 1
+      },
+      "lineNbr": 62,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-04-27T02:46:12Z",
+      "side": 1,
+      "message": "Maybe `force_attachment_init_on_clear`? It doesn\u0027t seem to affect non-clear inits",
+      "range": {
+        "startLine": 62,
+        "startChar": 21,
+        "endLine": 62,
+        "endChar": 42
+      },
+      "revId": "98e91f95ee096eaf5d0cc8aca3309481a338544a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b642558b_def43f46",
+        "filename": "src/libANGLE/Framebuffer.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 1568,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-04-27T02:46:12Z",
+      "side": 1,
+      "message": "Given commit description, should it `\u0026\u0026 depth`? Or `\u0026\u0026 (depth || stencil)`?",
+      "revId": "98e91f95ee096eaf5d0cc8aca3309481a338544a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
