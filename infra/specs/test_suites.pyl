@@ -367,6 +367,7 @@
         'android_args': [
           '-v',
           '--shard-timeout=500',
+          '--render-test-output-dir=${ISOLATED_OUTDIR}',
         ],
         'android_swarming': {
           'shards': 12,
@@ -410,6 +411,7 @@
         'android_args': [
           '-v',
           '--shard-timeout=500',
+          '--render-test-output-dir=${ISOLATED_OUTDIR}',
         ],
         'android_swarming': {
           'shards': 12,
