@@ -69,6 +69,30 @@
       },
       "revId": "8fdd573f6f6cd8c9a3d3257f63f4c4cc3729ae0c",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "8f0242b9_dcfa50ae",
+        "filename": "gni/angle.gni",
+        "patchSetId": 8
+      },
+      "lineNbr": 151,
+      "author": {
+        "id": 1185214
+      },
+      "writtenOn": "2022-04-27T14:31:25Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "68954ce3_167b1fd3",
+      "range": {
+        "startLine": 151,
+        "startChar": 8,
+        "endLine": 151,
+        "endChar": 14
+      },
+      "revId": "8fdd573f6f6cd8c9a3d3257f63f4c4cc3729ae0c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
