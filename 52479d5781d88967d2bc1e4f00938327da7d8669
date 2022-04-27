@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "b40d56db_0ebc16cb",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-04-27T02:49:54Z",
+      "side": 1,
+      "message": "One test to add is this:\n\n- Bind texture1\n- glTexImage2D\n- Delete texture1\n- Bind texture2\n- glTexImage2D\n\nAt the last step, we should try to reference the deleted texture1",
+      "revId": "52479d5781d88967d2bc1e4f00938327da7d8669",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
