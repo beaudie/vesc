@@ -177,38 +177,60 @@ static qpTestCaseType nodeTypeToTestCaseType(TestNodeType nodeType)
     }
 }
 
+double tt()
+{
+    struct timespec t;
+    clock_gettime(CLOCK_REALTIME, &t);
+    return t.tv_sec * 1e3 + t.tv_nsec / 1e6;
+}
+
 TestStatus RandomOrderExecutor::execute(const std::string &casePath)
 {
-    TestCase *const testCase      = seekToCase(casePath);
+    printf("qwe execute 0 %.1lf\n", tt());
+    TestCase *const testCase = seekToCase(casePath);
+    printf("qwe execute 1 %.1lf\n", tt());
     TestLog &log                  = m_testCtx.getLog();
     const qpTestCaseType caseType = nodeTypeToTestCaseType(testCase->getNodeType());
 
     m_testCtx.setTerminateAfter(false);
     log.startCase(casePath.c_str(), caseType);
 
+    printf("qwe execute 2 %.1lf\n", tt());
+
     {
         const TestStatus result = executeInner(testCase, casePath);
+        printf("qwe execute 3 %.1lf\n", tt());
         log.endCase(result.getCode(), result.getDescription().c_str());
+        printf("qwe execute 4 %.1lf\n", tt());
         return result;
     }
 }
 
 tcu::TestStatus RandomOrderExecutor::executeInner(TestCase *testCase, const std::string &casePath)
 {
+    printf("qwe executeInner 0 %.1lf\n", tt());
     TestLog &log                 = m_testCtx.getLog();
     const deUint64 testStartTime = deGetMicroseconds();
 
     m_testCtx.setTestResult(QP_TEST_RESULT_LAST, "");
 
+    printf("qwe executeInner 1 %.1lf\n", tt());
+
     // Initialize, will return immediately if fails
     try
     {
         mRenderDoc.startFrame();
+        printf("qwe executeInner 2 %.1lf\n", tt());
         m_caseExecutor->init(testCase, casePath);
+        printf("qwe executeInner 3 %.1lf\n", tt());
     }
     catch (const std::bad_alloc &)
     {
         m_testCtx.setTerminateAfter(true);
+        if ((deGetMicroseconds() - testStartTime) / 1e3 > 50)
+        {
+            printf("qwe2 a %.1lf ms\n", (deGetMicroseconds() - testStartTime) / 1e3);
+        }
         return TestStatus(QP_TEST_RESULT_RESOURCE_ERROR,
                           "Failed to allocate memory in test case init");
     }
@@ -217,13 +239,23 @@ tcu::TestStatus RandomOrderExecutor::executeInner(TestCase *testCase, const std:
         DE_ASSERT(e.getTestResult() != QP_TEST_RESULT_LAST);
         m_testCtx.setTerminateAfter(e.isFatal());
         log << e;
+        if ((deGetMicroseconds() - testStartTime) / 1e3 > 50)
+        {
+            printf("qwe2 b %.1lf ms\n", (deGetMicroseconds() - testStartTime) / 1e3);
+        }
         return TestStatus(e.getTestResult(), e.getMessage());
     }
     catch (const Exception &e)
     {
         log << e;
+        if ((deGetMicroseconds() - testStartTime) / 1e3 > 50)
+        {
+            printf("qwe2 c %.1lf ms\n", (deGetMicroseconds() - testStartTime) / 1e3);
+        }
         return TestStatus(QP_TEST_RESULT_FAIL, e.getMessage());
     }
+
+    const deUint64 t1 = deGetMicroseconds();
 
     bool isFirstFrameBeingCaptured = true;
 
@@ -269,6 +301,8 @@ tcu::TestStatus RandomOrderExecutor::executeInner(TestCase *testCase, const std:
             break;
     }
 
+    const deUint64 t2 = deGetMicroseconds();
+
     DE_ASSERT(m_testCtx.getTestResult() != QP_TEST_RESULT_LAST);
 
     if (m_testCtx.getTestResult() == QP_TEST_RESULT_RESOURCE_ERROR)
@@ -289,6 +323,8 @@ tcu::TestStatus RandomOrderExecutor::executeInner(TestCase *testCase, const std:
         m_testCtx.setTerminateAfter(true);
     }
 
+    const deUint64 t3 = deGetMicroseconds();
+
     if (m_testCtx.getWatchDog())
         qpWatchDog_reset(m_testCtx.getWatchDog());
 
@@ -296,6 +332,12 @@ tcu::TestStatus RandomOrderExecutor::executeInner(TestCase *testCase, const std:
         const TestStatus result =
             TestStatus(m_testCtx.getTestResult(), m_testCtx.getTestResultDesc());
         m_testCtx.setTestResult(QP_TEST_RESULT_LAST, "");
+        if ((deGetMicroseconds() - testStartTime) / 1e3 > 50)
+        {
+            printf("qwe2 d %.1lf t1=%.1lf t2=%.1lf t3=%.1lf \n",
+                   (deGetMicroseconds() - testStartTime) / 1e3, (t1 - testStartTime) / 1e3,
+                   (t2 - testStartTime) / 1e3, (t3 - testStartTime) / 1e3);
+        }
         return result;
     }
 }
