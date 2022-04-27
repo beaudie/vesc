@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "b3560037_b9758bf7",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 10
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1185214
+      },
+      "writtenOn": "2022-04-27T20:47:23Z",
+      "side": 1,
+      "message": "FYI: This (plus a bunch of fixes on the Skia end) has succeeded in getting ANGLE working on Mac. Let me know if the default for the new arg should change, or can we land this?",
+      "revId": "5b8c29e5e0f065c924b8226e7125349be4b3a888",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
