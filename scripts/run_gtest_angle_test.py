@@ -25,6 +25,7 @@ run_performance_test.py.
 
 import argparse
 import json
+import logging
 import os
 import pathlib
 import shutil
@@ -36,7 +37,9 @@ import traceback
 PY_UTILS = str(pathlib.Path(__file__).resolve().parents[1] / 'src' / 'tests' / 'py_utils')
 if PY_UTILS not in sys.path:
     os.stat(PY_UTILS) and sys.path.insert(0, PY_UTILS)
+import android_helper
 import angle_path_util
+import angle_test_util
 
 angle_path_util.AddDepsDirToPath('testing/scripts')
 import common
@@ -53,13 +56,13 @@ CHROME_SANDBOX_PATH = '/opt/chromium/chrome_sandbox'
 def IsWindows():
     return sys.platform == 'cygwin' or sys.platform.startswith('win')
 
-
 def main():
     parser = argparse.ArgumentParser()
     parser.add_argument('executable', help='Test executable.')
     parser.add_argument('--isolated-script-test-output', type=str)
     parser.add_argument('--isolated-script-test-filter', type=str)
     parser.add_argument('--xvfb', help='Start xvfb.', action='store_true')
+    parser.add_argument('--render-test-output-dir', help='Output dir')
 
     # Kept for compatiblity.
     # TODO(jmadill): Remove when removed from the recipes. http://crbug.com/954415
@@ -68,6 +71,11 @@ def main():
     args, extra_flags = parser.parse_known_args()
 
     env = os.environ.copy()
+
+    if android_helper.StucknessTest(args, 10):
+        return 1
+
+    return 0
 
     if 'GTEST_TOTAL_SHARDS' in env:
         extra_flags += ['--shard-count=' + env['GTEST_TOTAL_SHARDS']]
