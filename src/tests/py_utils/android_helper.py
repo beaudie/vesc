@@ -19,6 +19,7 @@ import threading
 import time
 
 import angle_path_util
+import angle_test_util
 
 
 def _ApkPath(suite_name):
@@ -108,6 +109,28 @@ def _AddRestrictedTracesJson():
     _AdbShell('r=/sdcard/chromium_tests_root; tar -xf $r/t.tar -C $r/ && rm $r/t.tar')
 
 
+def _AddDeqpFiles():
+    _AdbShell('mkdir -p /sdcard/chromium_tests_root/')
+
+    def add(tar, fn):
+        assert (fn.startswith('../../'))
+        tar.add(fn, arcname=fn.replace('../../', ''))
+
+    with _TempLocalFile() as tempfile_path:
+        with tarfile.open(tempfile_path, 'w', format=tarfile.GNU_FORMAT, dereference=True) as tar:
+            for f in glob.glob('../../src/tests/deqp_support/*.txt', recursive=False):
+                add(tar, f)
+
+            tar.add('gen/vk_gl_cts_data')
+            add(
+                tar,
+                '../../third_party/VK-GL-CTS/src/external/openglcts/data/mustpass/gles/aosp_mustpass/main/gles3-master.txt'
+            )
+        _AdbRun(['push', tempfile_path, '/sdcard/chromium_tests_root/t.tar'])
+
+    _AdbShell('r=/sdcard/chromium_tests_root; tar -xf $r/t.tar -C $r/ && rm $r/t.tar')
+
+
 def PrepareTestSuite(suite_name):
     _GetAdbRoot()
 
@@ -127,6 +150,11 @@ def PrepareTestSuite(suite_name):
     if suite_name == 'angle_perftests':
         _AddRestrictedTracesJson()
 
+    if 'deqp' in suite_name:
+        _AddDeqpFiles()
+
+    _RemoveDeviceFile('/data/data/com.android.angle.test/TestResults.qpa')
+
 
 def PrepareRestrictedTraces(traces):
     start = time.time()
@@ -139,6 +167,32 @@ def PrepareRestrictedTraces(traces):
 
     logging.info('Pushed %d trace files (%.1fMB) in %.1fs', len(traces), total_size / 1e6,
                  time.time() - start)
+
+
+def DumpFrequncies():
+    try:
+        freqs = _AdbShell('cat /sys/devices/system/cpu/cpu*/cpufreq/scaling_cur_freq')
+        logging.info('cpu frequencies:\n%s', freqs.decode())
+    except Exception:
+        logging.info('cpu frequencies failed')
+
+    try:
+        freqs = _AdbShell('cat /sys/devices/platform/1c500000.mali/clock_info')
+        logging.info('gpu frequencies:\n%s', freqs.decode())
+    except Exception:
+        logging.info('gpu frequencies failed')
+
+    try:
+        top = _AdbShell('top -m 10 -bn 1')
+        logging.info('top cpu:\n%s', top.decode())
+    except Exception:
+        logging.info('top failed')
+
+    try:
+        top = _AdbShell('top -m 10 -bn 1 -s 10')
+        logging.info('top memory:\n%s', top.decode())
+    except Exception:
+        logging.info('top failed')
 
 
 def _RandomHex():
@@ -165,6 +219,15 @@ def _TempDeviceFile():
 
 
 @contextlib.contextmanager
+def _TempDeviceFileDataDir():
+    path = '/data/data/com.android.angle.test/temp_file-%s' % _RandomHex()
+    try:
+        yield path
+    finally:
+        _AdbShell('rm -f ' + path)
+
+
+@contextlib.contextmanager
 def _TempLocalFile():
     fd, path = tempfile.mkstemp()
     os.close(fd)
@@ -175,7 +238,7 @@ def _TempLocalFile():
 
 
 def _RunInstrumentation(flags):
-    with _TempDeviceFile() as temp_device_file:
+    with _TempDeviceFileDataDir() as temp_device_file:
         cmd = ' '.join([
             'p=com.android.angle.test;',
             'ntr=org.chromium.native_test.NativeTestInstrumentationTestRunner;',
@@ -200,8 +263,19 @@ def _DumpDebugInfo(since_time):
         if 'org.chromium.native_test.NativeTest.StdoutFile' in ln
     ]
     if pid_lines:
-        debuggerd_output = _AdbShell('debuggerd %s' % pid_lines[-1].split(' ')[2]).decode()
+        debuggerd_output = _AdbShell('debuggerd -b %s' % pid_lines[-1].split()[2]).decode()
         logging.warning('debuggerd output:\n%s', debuggerd_output)
+
+
+GLO = {}
+
+
+def _AwkBenchmark():
+    start = time.time()
+    result = _AdbShell(
+        'echo | awk \'BEGIN{ num=1000000; n=0; }END{ for (i=1; i<=num; i++) { n += sin(i); } print n,"\\n"; }\''
+    ).decode().strip()
+    return '%.3f' % (time.time() - start), result
 
 
 def _RunInstrumentationWithTimeout(flags, timeout):
@@ -209,12 +283,67 @@ def _RunInstrumentationWithTimeout(flags, timeout):
 
     results = []
 
+    logging.info('_AwkBenchmark before: %s', _AwkBenchmark())
+
     def run():
         results.append(_RunInstrumentation(flags))
 
     t = threading.Thread(target=run)
     t.daemon = True
     t.start()
+
+    logcat_output = None
+
+    start = time.time()
+    last_niceness = None
+    while True:
+        time.sleep(1)
+        if time.time() - start > 70:
+            raise Exception('more than 70s')
+        elif time.time() - start > 20:
+            if not logcat_output:
+                logcat_output = _AdbRun(['logcat', '-t', initial_time]).decode()
+                pid_lines = [
+                    ln for ln in logcat_output.split('\n')
+                    if 'org.chromium.native_test.NativeTest.StdoutFile' in ln
+                ]
+                test_pid = pid_lines[-1].split()[2]
+
+            #logging.info('_AwkBenchmark during: %s', _AwkBenchmark())
+            try:
+                out_status = _AdbShell('cat /proc/%s/status' % test_pid).decode()
+                logging.info('process_status:\n%s', out_status)
+
+                # debuggerd_output = _AdbShell('debuggerd -b %s' % test_pid).decode()
+                # logging.warning('debuggerd output:\n%s', debuggerd_output)
+                try:
+                    out_iotop = _AdbShell('iotop -d 2 -n 1 -s total | head -n 10').decode()
+                    logging.info('iotop:\n%s', out_iotop)
+                except Exception:
+                    pass
+
+                try:
+                    out_strace = _AdbShell(
+                        'timeout 3 strace -e trace=open,read,write -T -tt -fp %s || true' %
+                        test_pid).decode()
+                    logging.info('strace:\n%s', out_strace)
+                except Exception:
+                    pass
+
+            except Exception:
+                pass
+
+            # with _TempDeviceFile() as png_device_path:
+            #     output_dir = GLO['render_test_output_dir']
+            #     png = _AdbShell('screencap -p %s' % png_device_path)
+            #     fn = 'screen%d.png' % int(time.time())
+            #     _AdbRun(['pull', png_device_path, os.path.join(output_dir, fn)])
+            #     logging.info('saved %s' % fn)
+            #time.sleep(1)
+
+        if not t.is_alive():
+            break
+
     t.join(timeout=timeout)
 
     if t.is_alive():  # join timed out
@@ -354,3 +483,53 @@ def GetTraceFromTestName(test_name):
         raise Exception('Unexpected test: %s' % test_name)
 
     return None
+
+
+def _shard_tests(tests, shard_count, shard_index):
+    return [tests[index] for index in range(shard_index, len(tests), shard_count)]
+
+
+def StucknessTest(args, runs):
+    suite = 'angle_deqp_gles3_tests'
+    if not ApkFileExists(suite):
+        return False
+
+    GLO['render_test_output_dir'] = args.render_test_output_dir
+
+    angle_test_util.setupLogging('INFO')
+
+    PrepareTestSuite(suite)
+
+    df_output = _Adbshell(
+        ['df -h /data/data/com.android.angle.test/ /sdcard/chromium_tests_root/']).decode()
+    logging.info('df:\n%s', df_output)
+
+    tests = ListTests()
+    shard_count = int(os.environ['GTEST_TOTAL_SHARDS'])
+    shard_index = int(os.environ['GTEST_SHARD_INDEX'])
+    tests = _shard_tests(tests, shard_count, shard_index)
+
+    n = 0
+    while True:
+        if n >= len(tests):
+            break
+        st = tests[n:n + 256]
+        n += 256
+
+        # already off
+        #'--deqp-log-images=disable',
+        deqp_flags = [
+            #'--deqp-log-shader-sources=disable',
+            #'--deqp-log-flush=disable',
+        ]
+        exit_code, output = RunTests(
+            suite, ['--use-angle=vulkan', '-v', '--gtest_filter=' + ':'.join(st)] + deqp_flags,
+            log_output=False)
+        for ln in output.decode().split('\n'):
+            if 'tests from dEQP (' in ln or 'qwe' in ln:
+                logging.info(ln)
+
+        # if exit_code:
+        #     break
+
+    return True
