@@ -19,6 +19,7 @@ import threading
 import time
 
 import angle_path_util
+import angle_test_util
 
 
 def _ApkPath(suite_name):
@@ -108,6 +109,28 @@ def _AddRestrictedTracesJson():
     _AdbShell('r=/sdcard/chromium_tests_root; tar -xf $r/t.tar -C $r/ && rm $r/t.tar')
 
 
+def _AddDeqpFiles():
+    _AdbShell('mkdir -p /sdcard/chromium_tests_root/')
+
+    def add(tar, fn):
+        assert (fn.startswith('../../'))
+        tar.add(fn, arcname=fn.replace('../../', ''))
+
+    with _TempLocalFile() as tempfile_path:
+        with tarfile.open(tempfile_path, 'w', format=tarfile.GNU_FORMAT, dereference=True) as tar:
+            for f in glob.glob('../../src/tests/deqp_support/*.txt', recursive=False):
+                add(tar, f)
+
+            tar.add('gen/vk_gl_cts_data')
+            add(
+                tar,
+                '../../third_party/VK-GL-CTS/src/external/openglcts/data/mustpass/gles/aosp_mustpass/main/gles3-master.txt'
+            )
+        _AdbRun(['push', tempfile_path, '/sdcard/chromium_tests_root/t.tar'])
+
+    _AdbShell('r=/sdcard/chromium_tests_root; tar -xf $r/t.tar -C $r/ && rm $r/t.tar')
+
+
 def PrepareTestSuite(suite_name):
     _GetAdbRoot()
 
@@ -127,6 +150,9 @@ def PrepareTestSuite(suite_name):
     if suite_name == 'angle_perftests':
         _AddRestrictedTracesJson()
 
+    if 'deqp' in suite_name:
+        _AddDeqpFiles()
+
 
 def PrepareRestrictedTraces(traces):
     start = time.time()
@@ -139,6 +165,32 @@ def PrepareRestrictedTraces(traces):
 
     logging.info('Pushed %d trace files (%.1fMB) in %.1fs', len(traces), total_size / 1e6,
                  time.time() - start)
+
+
+def DumpFrequncies():
+    try:
+        freqs = _AdbShell('cat /sys/devices/system/cpu/cpu*/cpufreq/scaling_cur_freq')
+        logging.info('cpu frequencies:\n%s', freqs.decode())
+    except Exception:
+        logging.info('cpu frequencies failed')
+
+    try:
+        freqs = _AdbShell('cat /sys/devices/platform/1c500000.mali/clock_info')
+        logging.info('gpu frequencies:\n%s', freqs.decode())
+    except Exception:
+        logging.info('gpu frequencies failed')
+
+    try:
+        top = _AdbShell('top -m 10 -bn 1')
+        logging.info('top cpu:\n%s', top.decode())
+    except Exception:
+        logging.info('top failed')
+
+    try:
+        top = _AdbShell('top -m 10 -bn 1 -s 10')
+        logging.info('top memory:\n%s', top.decode())
+    except Exception:
+        logging.info('top failed')
 
 
 def _RandomHex():
@@ -200,8 +252,19 @@ def _DumpDebugInfo(since_time):
         if 'org.chromium.native_test.NativeTest.StdoutFile' in ln
     ]
     if pid_lines:
-        debuggerd_output = _AdbShell('debuggerd %s' % pid_lines[-1].split(' ')[2]).decode()
+        debuggerd_output = _AdbShell('debuggerd -b %s' % pid_lines[-1].split()[2]).decode()
         logging.warning('debuggerd output:\n%s', debuggerd_output)
+
+
+GLO = {}
+
+
+def _AwkBenchmark():
+    start = time.time()
+    result = _AdbShell(
+        'echo | awk \'BEGIN{ num=1000000; n=0; }END{ for (i=1; i<=num; i++) { n += sin(i); } print n,"\\n"; }\''
+    ).decode().strip()
+    return '%.3f' % (time.time() - start), result
 
 
 def _RunInstrumentationWithTimeout(flags, timeout):
@@ -209,12 +272,61 @@ def _RunInstrumentationWithTimeout(flags, timeout):
 
     results = []
 
+    logging.info('_AwkBenchmark before: %s', _AwkBenchmark())
+
     def run():
         results.append(_RunInstrumentation(flags))
 
     t = threading.Thread(target=run)
     t.daemon = True
     t.start()
+
+    logcat_output = None
+
+    start = time.time()
+    last_niceness = None
+    while True:
+        time.sleep(1)
+        if time.time() - start > 70:
+            raise Exception('more than 70s')
+        elif time.time() - start > 20:
+            if not logcat_output:
+                logcat_output = _AdbRun(['logcat', '-t', initial_time]).decode()
+                pid_lines = [
+                    ln for ln in logcat_output.split('\n')
+                    if 'org.chromium.native_test.NativeTest.StdoutFile' in ln
+                ]
+                test_pid = pid_lines[-1].split()[2]
+
+            #logging.info('_AwkBenchmark during: %s', _AwkBenchmark())
+            try:
+                out_status = _AdbShell('cat /proc/%s/status' % test_pid).decode()
+                logging.info('process_status:\n%s', out_status)
+
+                try:
+                    out_strace = _AdbShell('timeout 1 strace -tt -fp %s || true' %
+                                           test_pid).decode()
+                    logging.info('strace:\n%s', out_strace)
+                except Exception:
+                    pass
+
+                debuggerd_output = _AdbShell('debuggerd -b %s' % test_pid).decode()
+                logging.warning('debuggerd output:\n%s', debuggerd_output)
+
+            except Exception:
+                pass
+
+            # with _TempDeviceFile() as png_device_path:
+            #     output_dir = GLO['render_test_output_dir']
+            #     png = _AdbShell('screencap -p %s' % png_device_path)
+            #     fn = 'screen%d.png' % int(time.time())
+            #     _AdbRun(['pull', png_device_path, os.path.join(output_dir, fn)])
+            #     logging.info('saved %s' % fn)
+            #time.sleep(1)
+
+        if not t.is_alive():
+            break
+
     t.join(timeout=timeout)
 
     if t.is_alive():  # join timed out
@@ -354,3 +466,35 @@ def GetTraceFromTestName(test_name):
         raise Exception('Unexpected test: %s' % test_name)
 
     return None
+
+
+def StucknessTest(args, runs):
+    suite = 'angle_deqp_gles3_tests'
+    if not ApkFileExists(suite):
+        return False
+
+    GLO['render_test_output_dir'] = args.render_test_output_dir
+
+    angle_test_util.setupLogging('INFO')
+
+    PrepareTestSuite(suite)
+
+    tt2 = 'dEQP.GLES3/functional_shaders_matrix_post_decrement_highp_mat2x3_float_vertex:dEQP.GLES3/functional_clipping_triangle_vertex_clip_two_clip_neg_x_and_neg_y:dEQP.GLES3/functional_ubo_single_basic_type_packed_mediump_mat3x4_fragment:dEQP.GLES3/functional_shaders_conversions_vector_to_vector_ivec2_to_bvec2_fragment:dEQP.GLES3/functional_fbo_completeness_renderable_renderbuffer_depth_red_float:dEQP.GLES3/functional_shaders_matrix_add_dynamic_highp_mat2x4_mat2x4_vertex:dEQP.GLES3/functional_ubo_single_basic_array_std140_column_major_mat4x3_fragment:dEQP.GLES3/functional_shaders_operator_binary_operator_left_shift_assign_result_mediump_uvec4_vertex:dEQP.GLES3/functional_shaders_preprocessor_operator_precedence_mul_vs_not_vertex:dEQP.GLES3/functional_shaders_matrix_add_dynamic_highp_mat3_mat3_vertex:dEQP.GLES3/functional_shaders_matrix_mul_const_mediump_mat2x3_mat4x2_vertex:dEQP.GLES3/functional_uniform_api_value_assigned_by_value_render_struct_in_array_uint_uvec4_vertex:dEQP.GLES3/functional_shaders_builtin_functions_precision_inversesqrt_highp_vertex_vec4:dEQP.GLES3/functional_shaders_indexing_matrix_subscript_mat3x2_dynamic_write_dynamic_loop_read_fragment:dEQP.GLES3/functional_shaders_declarations_invalid_declarations_in_in_fragment_main:dEQP.GLES3/functional_uniform_api_value_assigned_unused_uniforms_uint_uvec4_vertex:dEQP.GLES3/functional_buffer_map_read_usage_hints_copy_read_static_read:dEQP.GLES3/functional_shaders_derivate_fwidth_texture_float_fastest_vec3_mediump:dEQP.GLES3/functional_texture_wrap_astc_10x6_repeat_repeat_linear_not_divisible:dEQP.GLES3/functional_shaders_operator_binary_operator_mul_lowp_uint_uvec4_vertex:dEQP.GLES3/functional_fbo_completeness_renderable_texture_color0_depth24_stencil8:dEQP.GLES3/functional_shaders_struct_uniform_struct_array_vertex:dEQP.GLES3/functional_transform_feedback_basic_types_separate_lines_mediump_vec3:dEQP.GLES3/functional_shaders_conversions_scalar_to_matrix_uint_to_mat4x3_fragment:dEQP.GLES3/functional_shaders_indexing_matrix_subscript_mat2x3_static_write_dynamic_loop_read_fragment:dEQP.GLES3/functional_texture_format_sized_cube_rgb32i_npot:dEQP.GLES3/functional_vertex_arrays_single_attribute_usages_stream_draw_stride4_short_quads1:dEQP.GLES3/functional_texture_filtering_2d_array_sizes_3x7x5_linear:dEQP.GLES3/functional_uniform_api_value_assigned_by_value_render_basic_bvec3_vertex:dEQP.GLES3/functional_shaders_indexing_tmp_array_float_dynamic_write_dynamic_read_fragment:dEQP.GLES3/functional_uniform_api_value_initial_render_basic_mat4x3_vertex:dEQP.GLES3/functional_texture_filtering_3d_formats_rgba8_snorm_linear:dEQP.GLES3/functional_draw_draw_elements_instanced_indices_unaligned_user_ptr_index_int:dEQP.GLES3/functional_shaders_random_trigonometric_vertex_38:dEQP.GLES3/functional_shaders_operator_binary_operator_add_mediump_vec2_float_vertex:dEQP.GLES3/functional_draw_draw_range_elements_triangles_multiple_attributes:dEQP.GLES3/functional_shaders_matrix_div_dynamic_highp_mat2x3_mat2x3_vertex:dEQP.GLES3/functional_shaders_random_texture_fragment_135:dEQP.GLES3/functional_shaders_operator_common_functions_clamp_mediump_vec3_float_vertex:dEQP.GLES3/functional_uniform_api_value_assigned_by_pointer_get_uniform_nested_structs_arrays_uint_uvec4_vertex:dEQP.GLES3/functional_uniform_api_value_initial_render_basic_uvec3_vertex:dEQP.GLES3/functional_shaders_matrix_post_increment_highp_mat4x2_float_vertex:dEQP.GLES3/functional_shaders_swizzle_math_operations_vector_multiply_mediump_vec4_www_www_vertex:dEQP.GLES3/functional_shaders_random_scalar_conversion_combined_36:dEQP.GLES3/functional_texture_shadow_cube_nearest_mipmap_linear_less_or_equal_depth24_stencil8:dEQP.GLES3/functional_texture_filtering_2d_formats_etc1_rgb8_linear_mipmap_nearest:dEQP.GLES3/functional_shaders_matrix_pre_increment_highp_mat4_float_vertex:dEQP.GLES3/functional_texture_compressed_astc_weight_ise_5x5:dEQP.GLES3/functional_shaders_swizzles_vector_swizzles_mediump_bvec4_abgr_vertex:dEQP.GLES3/functional_shaders_random_exponential_vertex_49:dEQP.GLES3/functional_texture_wrap_eac_signed_rg11_clamp_repeat_linear_pot:dEQP.GLES3/functional_texture_swizzle_multi_channel_luminance_one_one_red_green:dEQP.GLES3/functional_fbo_render_recreate_color_rbo_rg8i_depth_stencil_rbo_depth24_stencil8:dEQP.GLES3/functional_shaders_operator_binary_operator_div_assign_result_lowp_uvec3_vertex:dEQP.GLES3/functional_texture_compressed_astc_block_size_remainder_8x6:dEQP.GLES3/functional_shaders_operator_binary_operator_div_assign_effect_lowp_uvec3_vertex:dEQP.GLES3/functional_shaders_matrix_mul_const_highp_mat2x4_mat4x2_vertex:dEQP.GLES3/functional_attribute_location_mixed_hole_uvec4:dEQP.GLES3/functional_shaders_operator_binary_operator_bitwise_or_assign_effect_mediump_uvec4_vertex:dEQP.GLES3/functional_shaders_random_scalar_conversion_vertex_92:dEQP.GLES3/functional_shaders_matrix_add_uniform_highp_mat3_mat3_vertex:dEQP.GLES3/functional_ubo_instance_array_basic_type_shared_column_major_mat2x3_fragment:dEQP.GLES3/functional_shaders_swizzles_vector_swizzles_mediump_ivec4_www_vertex:dEQP.GLES3/functional_texture_specification_basic_texsubimage2d_r8_cube:dEQP.GLES3/functional_shaders_texture_functions_textureoffset_usampler3d_vertex:dEQP.GLES3/functional_shaders_builtin_functions_precision_roundeven_lowp_fragment_vec4:dEQP.GLES3/functional_shaders_matrix_mul_dynamic_mediump_mat2x4_mat4x2_vertex:dEQP.GLES3/functional_shaders_operator_binary_operator_right_shift_assign_effect_lowp_uvec4_uint_vertex'
+
+    for i in range(runs):
+        deqp_flags = [
+            #'--deqp-log-images=disable',
+            #'--deqp-log-shader-sources=disable',
+            '--deqp-log-flush=disable',
+        ]
+        exit_code, output = RunTests(
+            suite, ['--use-angle=vulkan', '-v', '--gtest_filter=' + tt2] + deqp_flags,
+            log_output=False)
+        for ln in output.decode().split('\n'):
+            if '8 tests from dEQP (' in ln or 'functional_shaders_operator_binary_operator_right_shift_assign_effect_lowp_uvec4_uint_vertex (' in ln or 'qwe' in ln:
+                logging.info(ln)
+
+        if exit_code:
+            break
+
+    return True

@@ -12,6 +12,7 @@
 #include <errno.h>
 #include <signal.h>
 #include <string.h>
+#include <sys/stat.h>
 #include <unistd.h>
 
 #include "common/angleutils.h"
@@ -170,6 +171,8 @@ Java_com_android_angle_test_AngleNativeTest_nativeRunTests(JNIEnv *env,
     }
 
     dup2(STDOUT_FILENO, STDERR_FILENO);
+
+    setvbuf(stdout, NULL, _IOFBF, 100 * 1024);
 
     std::vector<char *> argv;
     size_t argc = ArgsToArgv(args, &argv);
