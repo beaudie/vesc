@@ -22,6 +22,30 @@
       },
       "revId": "33636a2d8e600ba7f75d50c2a5d0ed20fd5e0fcc",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "979a14e4_456a2141",
+        "filename": "src/libANGLE/renderer/vulkan/linux/DmaBufImageSiblingVkLinux.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 582,
+      "author": {
+        "id": 1528827
+      },
+      "writtenOn": "2022-04-27T11:03:21Z",
+      "side": 1,
+      "message": "I see. Within initWithFormat() there are other functions which use angle::Result, and some of these should STOP in case of failure, e.g. failure to duplicate dmabuf FD, hence I believe we can keep using angle::Result here.\n\nOther functions can safely fail, meaning we should try another format. Do you think in those cases we can return angle::Result::Incomplete?",
+      "parentUuid": "4ae313b5_aec9dec4",
+      "range": {
+        "startLine": 577,
+        "startChar": 0,
+        "endLine": 582,
+        "endChar": 9
+      },
+      "revId": "33636a2d8e600ba7f75d50c2a5d0ed20fd5e0fcc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
