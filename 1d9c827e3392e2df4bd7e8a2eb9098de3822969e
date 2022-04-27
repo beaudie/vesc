@@ -16,6 +16,24 @@
       "message": "Should this be done first? If both X11 and Wayland support is built in, wouldn\u0027t the above end up using XWayland?",
       "revId": "1d9c827e3392e2df4bd7e8a2eb9098de3822969e",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "bb1767fb_a97d6719",
+        "filename": "src/tests/deqp_support/tcuANGLENativeDisplayFactory.cpp",
+        "patchSetId": 31
+      },
+      "lineNbr": 435,
+      "author": {
+        "id": 1528827
+      },
+      "writtenOn": "2022-04-27T16:43:40Z",
+      "side": 1,
+      "message": "Unfortunately this is going to fail CI while running dEQP with `--use-angle\u003dswiftshader`.\n\nTo make it work, I guess we should add support for Wayland in SwiftShader `BUILD.gn`.\n\nHence, for the moment, I opted to keep the X11 window as a default choice here.",
+      "parentUuid": "ca7567f9_fa0a6165",
+      "revId": "1d9c827e3392e2df4bd7e8a2eb9098de3822969e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
