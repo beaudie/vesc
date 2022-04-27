@@ -1107,8 +1107,10 @@ void DisplayMtl::initializeFeatures()
 
     ApplyFeatureOverrides(&mFeatures, getState());
 #ifdef ANGLE_ENABLE_ASSERTS
-    fprintf(stderr, "Shader compiler output: %s\n",
-            mFeatures.directMetalGeneration.enabled ? "Metal" : "SPIR-V");
+    [[maybe_unused]] static bool once = [](bool direct) {
+        fprintf(stderr, "Shader compiler output: %s\n", direct ? "Metal" : "SPIR-V");
+        return true;
+    }(mFeatures.directMetalGeneration.enabled);
 #endif
 }
 
