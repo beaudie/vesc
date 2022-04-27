@@ -108,6 +108,28 @@ def _AddRestrictedTracesJson():
     _AdbShell('r=/sdcard/chromium_tests_root; tar -xf $r/t.tar -C $r/ && rm $r/t.tar')
 
 
+def _AddDeqpFiles():
+    _AdbShell('mkdir -p /sdcard/chromium_tests_root/')
+
+    def add(tar, fn):
+        assert (fn.startswith('../../'))
+        tar.add(fn, arcname=fn.replace('../../', ''))
+
+    with _TempLocalFile() as tempfile_path:
+        with tarfile.open(tempfile_path, 'w', format=tarfile.GNU_FORMAT, dereference=True) as tar:
+            for f in glob.glob('../../src/tests/deqp_support/*.txt', recursive=False):
+                add(tar, f)
+
+            tar.add('gen/vk_gl_cts_data')
+            add(
+                tar,
+                '../../third_party/VK-GL-CTS/src/external/openglcts/data/mustpass/gles/aosp_mustpass/main/gles3-master.txt'
+            )
+        _AdbRun(['push', tempfile_path, '/sdcard/chromium_tests_root/t.tar'])
+
+    _AdbShell('r=/sdcard/chromium_tests_root; tar -xf $r/t.tar -C $r/ && rm $r/t.tar')
+
+
 def PrepareTestSuite(suite_name):
     _GetAdbRoot()
 
@@ -127,6 +149,9 @@ def PrepareTestSuite(suite_name):
     if suite_name == 'angle_perftests':
         _AddRestrictedTracesJson()
 
+    if 'deqp' in suite_name:
+        _AddDeqpFiles()
+
 
 def PrepareRestrictedTraces(traces):
     start = time.time()
@@ -139,6 +164,32 @@ def PrepareRestrictedTraces(traces):
 
     logging.info('Pushed %d trace files (%.1fMB) in %.1fs', len(traces), total_size / 1e6,
                  time.time() - start)
+
+
+def DumpFrequncies():
+    try:
+        freqs = _AdbShell('cat /sys/devices/system/cpu/cpu*/cpufreq/scaling_cur_freq')
+        logging.info('cpu frequencies:\n%s', freqs.decode())
+    except Exception:
+        logging.info('cpu frequencies failed')
+
+    try:
+        freqs = _AdbShell('cat /sys/devices/platform/1c500000.mali/clock_info')
+        logging.info('gpu frequencies:\n%s', freqs.decode())
+    except Exception:
+        logging.info('gpu frequencies failed')
+
+    try:
+        top = _AdbShell('top -m 10 -bn 1')
+        logging.info('top cpu:\n%s', top.decode())
+    except Exception:
+        logging.info('top failed')
+
+    try:
+        top = _AdbShell('top -m 10 -bn 1 -s 10')
+        logging.info('top memory:\n%s', top.decode())
+    except Exception:
+        logging.info('top failed')
 
 
 def _RandomHex():
@@ -200,7 +251,7 @@ def _DumpDebugInfo(since_time):
         if 'org.chromium.native_test.NativeTest.StdoutFile' in ln
     ]
     if pid_lines:
-        debuggerd_output = _AdbShell('debuggerd %s' % pid_lines[-1].split(' ')[2]).decode()
+        debuggerd_output = _AdbShell('debuggerd -b %s' % pid_lines[-1].split()[2]).decode()
         logging.warning('debuggerd output:\n%s', debuggerd_output)
 
 
@@ -215,6 +266,42 @@ def _RunInstrumentationWithTimeout(flags, timeout):
     t = threading.Thread(target=run)
     t.daemon = True
     t.start()
+
+    logcat_output = None
+
+    start = time.time()
+    while True:
+        time.sleep(1)
+        if time.time() - start > 70:
+            raise Exception('more than 70s')
+        elif time.time() - start > 20:
+            if not logcat_output:
+                logcat_output = _AdbRun(['logcat', '-t', initial_time]).decode()
+                pid_lines = [
+                    ln for ln in logcat_output.split('\n')
+                    if 'org.chromium.native_test.NativeTest.StdoutFile' in ln
+                ]
+            try:
+                #logcat_output = _AdbRun(['logcat', '-t', '10']).decode()
+                #top = _AdbShell('top -m 5 -bn 1')
+                #logging.info('top output:\n%s', top.decode())
+
+                debuggerd_output = _AdbShell("debuggerd -b %s" %  #grep -C 3 'libangle.*.so'" %
+                                             pid_lines[-1].split()[2]).decode()
+                logging.warning('debuggerd output:\n%s', debuggerd_output)
+            except Exception:
+                pass
+
+        if not t.is_alive():
+            break
+
+    # time.sleep(1)
+    # if t.is_alive():
+    #     top = _AdbShell('top -m 10 -bn 1')
+    #     logging.info('top cpu while running:\n%s', top.decode())
+    #     freqs = _AdbShell('cat /sys/devices/system/cpu/cpu*/cpufreq/scaling_cur_freq')
+    #     logging.info('cpu frequencies while running:\n%s', freqs.decode())
+
     t.join(timeout=timeout)
 
     if t.is_alive():  # join timed out
