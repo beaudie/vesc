@@ -3833,11 +3833,6 @@ angle::Result RendererVk::cleanupGarbage(Serial lastCompletedQueueSerial)
 {
     std::lock_guard<std::mutex> lock(mGarbageMutex);
 
-    if (!mOrphanedBufferBlocks.empty())
-    {
-        pruneOrphanedBufferBlocks();
-    }
-
     // Clean up general garbages
     while (!mSharedGarbage.empty())
     {
@@ -3858,6 +3853,13 @@ angle::Result RendererVk::cleanupGarbage(Serial lastCompletedQueueSerial)
             break;
         }
         mSuballocationGarbage.pop();
+    }
+
+    // Note: do this after clean up mSuballocationGarbage so that we will have more chances to find
+    // orphaned blocks being empty.
+    if (!mOrphanedBufferBlocks.empty())
+    {
+        pruneOrphanedBufferBlocks();
     }
 
     return angle::Result::Continue;
