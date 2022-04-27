@@ -193,7 +193,8 @@
           "angle_deqp_gles3_tests",
           "--use-angle=gles",
           "-v",
-          "--shard-timeout=500"
+          "--shard-timeout=500",
+          "--render-test-output-dir=${ISOLATED_OUTDIR}"
         ],
         "merge": {
           "script": "//scripts/angle_deqp_test_merge.py"
@@ -230,7 +231,8 @@
           "angle_deqp_gles3_tests",
           "--use-angle=vulkan",
           "-v",
-          "--shard-timeout=500"
+          "--shard-timeout=500",
+          "--render-test-output-dir=${ISOLATED_OUTDIR}"
         ],
         "merge": {
           "script": "//scripts/angle_deqp_test_merge.py"
@@ -723,7 +725,8 @@
           "angle_deqp_gles3_tests",
           "--use-angle=vulkan",
           "-v",
-          "--shard-timeout=500"
+          "--shard-timeout=500",
+          "--render-test-output-dir=${ISOLATED_OUTDIR}"
         ],
         "merge": {
           "script": "//scripts/angle_deqp_test_merge.py"
