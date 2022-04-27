@@ -1,6 +1,23 @@
 {
   "comments": [
     {
+      "unresolved": true,
+      "key": {
+        "uuid": "04c5974b_a36b11be",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 10
+      },
+      "lineNbr": 8,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2022-04-27T20:51:15Z",
+      "side": 1,
+      "message": "Would you consider adding a second paragraph describing the motivation for the change a bit more? Even just saying that this gets Skia\u0027s standalone build working with ANGLE\u0027s Metal backend would be helpful. Thanks in advance. (I like to be able to scan git logs and see rationale for changes without going back to the linked bugs.)",
+      "revId": "5b8c29e5e0f065c924b8226e7125349be4b3a888",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": false,
       "key": {
         "uuid": "b3560037_b9758bf7",
@@ -14,6 +31,23 @@
       "writtenOn": "2022-04-27T20:47:23Z",
       "side": 1,
       "message": "FYI: This (plus a bunch of fixes on the Skia end) has succeeded in getting ANGLE working on Mac. Let me know if the default for the new arg should change, or can we land this?",
+      "revId": "5b8c29e5e0f065c924b8226e7125349be4b3a888",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "92f30740_1eed3c8a",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 10
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2022-04-27T20:51:15Z",
+      "side": 1,
+      "message": "Thanks for thinking about the configurations - it\u0027s fine to enable these code paths only for developer builds.\n\nlgtm - one small request regarding the commit message.\n",
       "revId": "5b8c29e5e0f065c924b8226e7125349be4b3a888",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
