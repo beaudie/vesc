@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "91f3cf98_c0cda9f0",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1531247
+      },
+      "writtenOn": "2022-04-27T15:15:45Z",
+      "side": 1,
+      "message": "Results now reported correctly on CI perf runs, consistent with try runs:\n  \"num_failures_by_type\": {\n    \"FAIL\": 0, \n    \"PASS\": 430, \n    \"SKIP\": 100\n  },\n  \n result_fail doesn\u0027t seem to be happening",
+      "revId": "cdcf1715304582b8fc92f7a073a8aa56014e64e0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
