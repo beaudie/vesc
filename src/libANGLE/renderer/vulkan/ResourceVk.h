@@ -141,7 +141,21 @@ class SharedBufferSuballocationGarbage
     BufferSuballocation mSuballocation;
     Buffer mBuffer;
 };
-using SharedBufferSuballocationGarbageList = std::queue<SharedBufferSuballocationGarbage>;
+
+class SharedBufferSuballocationGarbageList
+{
+  public:
+    bool empty() { return mQueue.empty(); }
+    void emplace(SharedResourceUse &&use, BufferSuballocation &&suballocation, Buffer &&buffer)
+    {
+        mQueue.emplace(std::move(use), std::move(suballocation), std::move(buffer));
+    }
+    void cleanup(RendererVk *rendererVk, Serial lastCompletedQueueSerial);
+    void moveSubmittedGarbageToList(SharedBufferSuballocationGarbageList &other);
+
+  private:
+    std::queue<SharedBufferSuballocationGarbage> mQueue;
+};
 
 class SharedGarbage
 {

@@ -3850,15 +3850,7 @@ angle::Result RendererVk::cleanupGarbage(Serial lastCompletedQueueSerial)
     }
 
     // Clean up suballocation garbages
-    while (!mSuballocationGarbage.empty())
-    {
-        vk::SharedBufferSuballocationGarbage &garbage = mSuballocationGarbage.front();
-        if (!garbage.destroyIfComplete(this, lastCompletedQueueSerial))
-        {
-            break;
-        }
-        mSuballocationGarbage.pop();
-    }
+    mSuballocationGarbage.cleanup(this, lastCompletedQueueSerial);
 
     return angle::Result::Continue;
 }
@@ -3892,25 +3884,7 @@ void RendererVk::cleanupPendingSubmissionGarbage()
         mPendingSubmissionGarbage = std::move(pendingGarbage);
     }
 
-    vk::SharedBufferSuballocationGarbageList pendingSuballocationGarbage;
-    while (!mPendingSubmissionSuballocationGarbage.empty())
-    {
-        vk::SharedBufferSuballocationGarbage &suballocationGarbage =
-            mPendingSubmissionSuballocationGarbage.front();
-        if (!suballocationGarbage.usedInRecordedCommands())
-        {
-            mSuballocationGarbage.push(std::move(suballocationGarbage));
-        }
-        else
-        {
-            pendingSuballocationGarbage.push(std::move(suballocationGarbage));
-        }
-        mPendingSubmissionSuballocationGarbage.pop();
-    }
-    if (!pendingSuballocationGarbage.empty())
-    {
-        mPendingSubmissionSuballocationGarbage = std::move(pendingSuballocationGarbage);
-    }
+    mPendingSubmissionSuballocationGarbage.moveSubmittedGarbageToList(mSuballocationGarbage);
 }
 
 void RendererVk::onNewValidationMessage(const std::string &message)

@@ -145,6 +145,44 @@ bool SharedBufferSuballocationGarbage::destroyIfComplete(RendererVk *renderer,
     return true;
 }
 
+// SharedBufferSuballocationGarbageList implementation
+void SharedBufferSuballocationGarbageList::cleanup(RendererVk *rendererVk,
+                                                   Serial lastCompletedQueueSerial)
+{
+    while (!empty())
+    {
+        vk::SharedBufferSuballocationGarbage &garbage = mQueue.front();
+        if (!garbage.destroyIfComplete(rendererVk, lastCompletedQueueSerial))
+        {
+            break;
+        }
+        mQueue.pop();
+    }
+}
+
+void SharedBufferSuballocationGarbageList::moveSubmittedGarbageToList(
+    SharedBufferSuballocationGarbageList &other)
+{
+    std::queue<SharedBufferSuballocationGarbage> pendingSuballocationGarbage;
+    while (!mQueue.empty())
+    {
+        vk::SharedBufferSuballocationGarbage &suballocationGarbage = mQueue.front();
+        if (!suballocationGarbage.usedInRecordedCommands())
+        {
+            other.mQueue.push(std::move(suballocationGarbage));
+        }
+        else
+        {
+            pendingSuballocationGarbage.push(std::move(suballocationGarbage));
+        }
+        mQueue.pop();
+    }
+    if (!pendingSuballocationGarbage.empty())
+    {
+        mQueue = std::move(pendingSuballocationGarbage);
+    }
+}
+
 // SharedGarbage implementation.
 SharedGarbage::SharedGarbage() = default;
 
