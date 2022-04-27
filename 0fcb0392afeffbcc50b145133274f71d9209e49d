@@ -33,6 +33,24 @@
       "message": "Can the default here be set to true for the moment? If I\u0027m reading this correctly, that would preserve the current behavior the best. Then can Skia\u0027s build files override it to false?",
       "revId": "0fcb0392afeffbcc50b145133274f71d9209e49d",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "e9a0a5b7_c5e836df",
+        "filename": "gni/angle.gni",
+        "patchSetId": 4
+      },
+      "lineNbr": 106,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-04-27T02:10:36Z",
+      "side": 1,
+      "message": "FYI, what we\u0027ve usually been doing (at least recently) is to default this to true in developer builds for the convenience of it, and exclude it from the release build.\n\nIn other words, you can initialize it with `angle_debug_layers_enabled`. Unless, you need it to ship to users?",
+      "parentUuid": "af745488_85c9750a",
+      "revId": "0fcb0392afeffbcc50b145133274f71d9209e49d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
