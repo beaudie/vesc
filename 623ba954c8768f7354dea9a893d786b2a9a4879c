@@ -52,6 +52,24 @@
       "parentUuid": "62bb15cb_d4092dce",
       "revId": "623ba954c8768f7354dea9a893d786b2a9a4879c",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "dfecb585_b70b8d36",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1185214
+      },
+      "writtenOn": "2022-04-28T21:12:35Z",
+      "side": 1,
+      "message": "Yes, I think so, although that one probably can\u0027t trigger for the in-memory cache (because the data isn\u0027t on disk and subject to interference). But specifically, this CL causes us to meet the conditions to take this early return:\n\nhttps://source.chromium.org/chromium/chromium/src/+/main:third_party/angle/src/libANGLE/Program.cpp;l\u003d1235;drc\u003df9729598a6a0c6119d2373b6890aaf454b80d87b\n\nThat means we never proceed to do the actual linking after the memory cache fails.",
+      "parentUuid": "f878c935_ec026a1f",
+      "revId": "623ba954c8768f7354dea9a893d786b2a9a4879c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
