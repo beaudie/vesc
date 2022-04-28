@@ -71,6 +71,12 @@ void ImageFunctionHLSL::OutputImageFunctionArgumentList(
             case EbtUImage2DArray:
                 out << ", int3 p";
                 break;
+            case EbtUImageBuffer:
+            case EbtIImageBuffer:
+            case EbtImageBuffer:
+                out << ", int p";
+                break;
+
             default:
                 UNREACHABLE();
         }
@@ -83,18 +89,21 @@ void ImageFunctionHLSL::OutputImageFunctionArgumentList(
                 case EbtImage3D:
                 case EbtImageCube:
                 case EbtImage2DArray:
+                case EbtImageBuffer:
                     out << ", float4 data";
                     break;
                 case EbtIImage2D:
                 case EbtIImage3D:
                 case EbtIImageCube:
                 case EbtIImage2DArray:
+                case EbtIImageBuffer:
                     out << ", int4 data";
                     break;
                 case EbtUImage2D:
                 case EbtUImage3D:
                 case EbtUImageCube:
                 case EbtUImage2DArray:
+                case EbtUImageBuffer:
                     out << ", uint4 data";
                     break;
                 default:
@@ -150,6 +159,10 @@ void ImageFunctionHLSL::OutputImageLoadFunctionBody(
     {
         out << "    return " << imageReference << "[uint2(p.x, p.y)];\n";
     }
+    else if (IsImageBuffer(imageFunction.image))
+    {
+        out << "    return " << imageReference << "[uint(p.x)];\n";
+    }
     else
         UNREACHABLE();
 }
@@ -161,7 +174,8 @@ void ImageFunctionHLSL::OutputImageStoreFunctionBody(
     const ImmutableString &imageReference)
 {
     if (IsImage3D(imageFunction.image) || IsImage2DArray(imageFunction.image) ||
-        IsImage2D(imageFunction.image) || IsImageCube(imageFunction.image))
+        IsImage2D(imageFunction.image) || IsImageCube(imageFunction.image) ||
+        IsImageBuffer(imageFunction.image))
     {
         out << "    " << imageReference << "[p] = data;\n";
     }
