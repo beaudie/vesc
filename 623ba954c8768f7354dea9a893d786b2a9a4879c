@@ -34,6 +34,24 @@
       "parentUuid": "62bb15cb_d4092dce",
       "revId": "623ba954c8768f7354dea9a893d786b2a9a4879c",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "f878c935_ec026a1f",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1190898
+      },
+      "writtenOn": "2022-04-28T21:11:16Z",
+      "side": 1,
+      "message": "Hmm, where do you see the continue being treated that way? I\u0027m just curious -- is the check on the following line also broken?\n\n```\n    if (binaryFormat !\u003d GL_PROGRAM_BINARY_ANGLE)\n    {\n        infoLog \u003c\u003c \"Invalid program binary format.\";\n        return angle::Result::Continue;\n    }\n```",
+      "parentUuid": "62bb15cb_d4092dce",
+      "revId": "623ba954c8768f7354dea9a893d786b2a9a4879c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
