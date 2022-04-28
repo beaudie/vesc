@@ -106,6 +106,24 @@
       "parentUuid": "7de279c3_1239ece0",
       "revId": "1835e5d895f7f75435c2eddf3f87a88ef534c237",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "d4b96a25_7887f758",
+        "filename": "src/libANGLE/Program.cpp",
+        "patchSetId": 10
+      },
+      "lineNbr": 3676,
+      "author": {
+        "id": 1185214
+      },
+      "writtenOn": "2022-04-28T16:15:36Z",
+      "side": 1,
+      "message": "It actually fails even if we don\u0027t use glProgramBinary at all. The problem is that internally, Program::linkImpl tries to use the in-memory cache, and the Result::Stop bubbles up and causes linking to fail as soon as you try to re-link a Program that\u0027s already present. Based on the comments at that location, it looks like this should be returning Incomplete? (Or the code in linkImpl should be more forgiving of this particular error situation?)",
+      "parentUuid": "7238f996_1696bb4e",
+      "revId": "1835e5d895f7f75435c2eddf3f87a88ef534c237",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
