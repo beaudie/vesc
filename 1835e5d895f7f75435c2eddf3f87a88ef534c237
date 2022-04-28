@@ -178,6 +178,24 @@
       "parentUuid": "9fe19305_110f21a2",
       "revId": "1835e5d895f7f75435c2eddf3f87a88ef534c237",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "e11952eb_2e6067fd",
+        "filename": "src/libANGLE/Program.cpp",
+        "patchSetId": 10
+      },
+      "lineNbr": 3676,
+      "author": {
+        "id": 1190898
+      },
+      "writtenOn": "2022-04-28T16:48:34Z",
+      "side": 1,
+      "message": "My initial thought is we should just go back to having commit_id.py define some DISABLE_BINARY_LOADING, and then have loadBinary check and return Continue...",
+      "parentUuid": "77b51707_4886725b",
+      "revId": "1835e5d895f7f75435c2eddf3f87a88ef534c237",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
