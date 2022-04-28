@@ -121,7 +121,7 @@ class CaptureReplayTests
                          << ANGLE_CAPTURE_REPLAY_TEST_DATA_DIR;
 
         mTraceLibrary->setBinaryDataDir(binaryPathStream.str().c_str());
-
+        mTraceLibrary->setEGLDisplay(mEGLWindow->getDisplay());
         mTraceLibrary->setupReplay();
         return true;
     }
