@@ -461,7 +461,7 @@ void PrintStackBacktrace()
     // Child process executes addr2line
     constexpr size_t kAddr2LineFixedParametersCount = 6;
     Addr2LineCommandLine commandLineArgs            = {
-                   "addr2line", "-s", "-p", "-f", "-C", "-e",
+                   "llvm-addr2line", "-s", "-p", "-f", "-C", "-e",
     };
     const char *currentModule = "";
     std::string resolvedModule;
