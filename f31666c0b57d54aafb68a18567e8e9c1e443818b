@@ -201,6 +201,30 @@
       },
       "revId": "f31666c0b57d54aafb68a18567e8e9c1e443818b",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "143eedf1_85fc1aa6",
+        "filename": "src/libANGLE/renderer/vulkan/CommandProcessor.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 939,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2022-04-28T21:19:39Z",
+      "side": 1,
+      "message": "It is cached as well. CPU read/write always one whole dwords, so it already guaranteed atomic anyway, unless the data is not well aligned. But in this case, compiler will ensure data placed aligned, so it essentially just a load/store operation. LOCK will be used for inc/dec, but we are not doing any read_modify_write anway.",
+      "parentUuid": "f576f6e4_69d5a26e",
+      "range": {
+        "startLine": 939,
+        "startChar": 8,
+        "endLine": 939,
+        "endChar": 33
+      },
+      "revId": "f31666c0b57d54aafb68a18567e8e9c1e443818b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
