@@ -4540,6 +4540,145 @@ TEST_P(FramebufferTest_ES3, InvalidateClearDraw)
     EXPECT_PIXEL_COLOR_EQ(0, 0, GLColor::magenta);
 }
 
+// Produces VUID-VkImageMemoryBarrier-oldLayout-01197 VVL error with a "Render pass closed due to
+// framebuffer change" command buffer label. As seen in Black Desert Mobile.
+// The application draws 2 passes to produce the issue. First pass draws to a depth only frame
+// buffer, the second one to a different color+depth frame buffer. The second pass samples the first
+// passes frame buffer in two draw calls. First draw call samples it in the fragment stage, second
+// in the the vertex stage.
+TEST_P(FramebufferTest_ES3, FramebufferChangeTest)
+{
+    // Init depth frame buffer
+    GLFramebuffer depthFramebuffer;
+    glBindFramebuffer(GL_FRAMEBUFFER, depthFramebuffer);
+
+    GLTexture depthAttachment;
+    glBindTexture(GL_TEXTURE_2D, depthAttachment);
+    // When using a color attachment instead, the issue does not occur.
+    // The issue seems to occur for all GL_DEPTH_COMPONENT formats.
+    glTexImage2D(GL_TEXTURE_2D, 0, GL_DEPTH_COMPONENT16, kWidth, kHeight, 0, GL_DEPTH_COMPONENT,
+                 GL_UNSIGNED_INT, nullptr);
+
+    // If filtering the depth attachment to GL_NEAREST is not set, the issue does not occur.
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+
+    glFramebufferTexture2D(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_TEXTURE_2D, depthAttachment, 0);
+
+    EXPECT_GLENUM_EQ(GL_FRAMEBUFFER_COMPLETE, glCheckFramebufferStatus(GL_FRAMEBUFFER));
+    ASSERT_GL_NO_ERROR();
+
+    // Depth only pass
+    {
+        ANGLE_GL_PROGRAM(program, essl3_shaders::vs::Simple(), essl3_shaders::fs::Red());
+        glUseProgram(program);
+
+        glViewport(0, 0, kWidth, kHeight);
+        glClear(GL_DEPTH_BUFFER_BIT);
+
+        glDrawArrays(GL_TRIANGLES, 0, 6);
+        ASSERT_GL_NO_ERROR();
+    }
+
+    // Init color + depth frame buffer
+    GLFramebuffer colorFramebuffer;
+    glBindFramebuffer(GL_FRAMEBUFFER, colorFramebuffer);
+
+    GLTexture colorAttachment;
+    glBindTexture(GL_TEXTURE_2D, colorAttachment);
+    glTexImage2D(GL_TEXTURE_2D, 0, GL_R11F_G11F_B10F, kWidth, kHeight, 0, GL_RGB,
+                 GL_UNSIGNED_INT_10F_11F_11F_REV, nullptr);
+
+    glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, colorAttachment, 0);
+
+    GLTexture depthAttachment2;
+    glBindTexture(GL_TEXTURE_2D, depthAttachment2);
+    glTexImage2D(GL_TEXTURE_2D, 0, GL_DEPTH_COMPONENT16, kWidth, kHeight, 0, GL_DEPTH_COMPONENT,
+                 GL_UNSIGNED_INT, nullptr);
+
+    glFramebufferTexture2D(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_TEXTURE_2D, depthAttachment2, 0);
+
+    EXPECT_GLENUM_EQ(GL_FRAMEBUFFER_COMPLETE, glCheckFramebufferStatus(GL_FRAMEBUFFER));
+    ASSERT_GL_NO_ERROR();
+
+    // Color + depth pass
+    // The depth texture from the first pass is sampled from in both draw calls.
+    // Skipping any of the two depth texture binds makes the issue not occur.
+    // Changing the order of the draw calls makes the issue not occur.
+
+    glViewport(0, 0, kWidth, kHeight);
+    glClear(GL_DEPTH_BUFFER_BIT | GL_COLOR_BUFFER_BIT);
+
+    // Color + depth draw 1
+    // The depth texture from the first pass is sampled from in the frament stage.
+    {
+        constexpr char kFS[] = {
+            R"(#version 300 es
+precision mediump float;
+
+uniform mediump sampler2D samp;
+
+layout(location = 0) out highp vec4 color;
+
+void main()
+{
+    color = texture(samp, vec2(0));
+})",
+        };
+        ANGLE_GL_PROGRAM(program, essl3_shaders::vs::Simple(), kFS);
+        glUseProgram(program);
+
+        glBindAttribLocation(program, 0, "pos");
+
+        GLint textureLoc = glGetUniformLocation(program, "samp");
+        glUniform1i(textureLoc, 0);
+
+        glDepthMask(GL_TRUE);
+
+        // Skipping this bind makes the issue not occur
+        glActiveTexture(GL_TEXTURE0);
+        glBindTexture(GL_TEXTURE_2D, depthAttachment);
+
+        glDrawArrays(GL_TRIANGLES, 0, 6);
+        ASSERT_GL_NO_ERROR();
+    }
+
+    // Color + depth draw 2. Here the depth attachment from the first pass is used in the vertex
+    // stage. The VVL error occurs in this draw.
+    // The sampler has to be attached to the vertex stage, otherwise the issue does not occur.
+    {
+        constexpr char kVS[] = {
+            R"(#version 300 es
+
+uniform mediump sampler2D samp;
+
+layout(location = 0) in mediump vec4 pos;
+
+void main()
+{
+    gl_Position = pos + texture(samp, vec2(0));
+})",
+        };
+
+        ANGLE_GL_PROGRAM(program, kVS, essl3_shaders::fs::Red());
+        glUseProgram(program);
+
+        glBindAttribLocation(program, 0, "pos");
+
+        GLint textureLoc = glGetUniformLocation(program, "samp");
+        glUniform1i(textureLoc, 0);
+
+        // Skipping this bind makes the issue not occur
+        glActiveTexture(GL_TEXTURE0);
+        glBindTexture(GL_TEXTURE_2D, depthAttachment);
+
+        glDepthMask(GL_TRUE);
+
+        glDrawArrays(GL_TRIANGLES, 0, 6);
+        ASSERT_GL_NO_ERROR();
+    }
+}
+
 ANGLE_INSTANTIATE_TEST_ES2_AND(AddMockTextureNoRenderTargetTest,
                                ES2_D3D9().enable(Feature::AddMockTextureNoRenderTarget),
                                ES2_D3D11().enable(Feature::AddMockTextureNoRenderTarget));
