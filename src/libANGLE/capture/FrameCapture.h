@@ -846,6 +846,16 @@ void CaptureVertexPointerGLES1(const gl::State &glState,
                                const void *pointer,
                                ParamCapture *paramCapture);
 
+void CaptureCreateNativeClientBufferANDROID(gl::Context *context,
+                                            const egl::AttributeMap &attribMap,
+                                            EGLClientBuffer eglClientBuffer);
+void CaptureEGLCreateImage(gl::Context *context,
+                           EGLenum target,
+                           EGLClientBuffer buffer,
+                           const egl::AttributeMap &attributes,
+                           egl::Image *image);
+void CaptureEGLDestroyImage(gl::Context *context, egl::Display *display, egl::Image *image);
+
 gl::Program *GetProgramForCapture(const gl::State &glState, gl::ShaderProgramID handle);
 
 // For GetIntegerv, GetFloatv, etc.
@@ -1061,6 +1071,10 @@ template <>
 void WriteParamValueReplay<ParamType::TEGLSetBlobFuncANDROID>(std::ostream &os,
                                                               const CallCapture &call,
                                                               EGLSetBlobFuncANDROID value);
+template <>
+void WriteParamValueReplay<ParamType::TEGLClientBuffer>(std::ostream &os,
+                                                        const CallCapture &call,
+                                                        EGLClientBuffer value);
 
 // General fallback for any unspecific type.
 template <ParamType ParamT, typename T>
