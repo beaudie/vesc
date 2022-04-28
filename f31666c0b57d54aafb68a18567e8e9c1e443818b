@@ -129,6 +129,30 @@
       },
       "revId": "f31666c0b57d54aafb68a18567e8e9c1e443818b",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "8f8dc67f_3e828308",
+        "filename": "src/libANGLE/renderer/vulkan/CommandProcessor.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 939,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-04-28T20:13:03Z",
+      "side": 1,
+      "message": "Checking the obvious, was that with an optimized build?\n\nI\u0027m less concerned about the instruction count and more about the LOCK added to the instruction and memory barriers implied by atomic access.",
+      "parentUuid": "0b9f3fda_0ff7933d",
+      "range": {
+        "startLine": 939,
+        "startChar": 8,
+        "endLine": 939,
+        "endChar": 33
+      },
+      "revId": "f31666c0b57d54aafb68a18567e8e9c1e443818b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
