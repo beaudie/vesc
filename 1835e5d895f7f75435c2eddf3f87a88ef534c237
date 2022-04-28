@@ -196,6 +196,24 @@
       "parentUuid": "77b51707_4886725b",
       "revId": "1835e5d895f7f75435c2eddf3f87a88ef534c237",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "8b8a7343_ef3b84f8",
+        "filename": "src/libANGLE/Program.cpp",
+        "patchSetId": 10
+      },
+      "lineNbr": 3676,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2022-04-28T17:02:34Z",
+      "side": 1,
+      "message": "+1, I think that\u0027s safe. Just need to expose a function that converts the #define in an encapsulated way, like you did by exposing the invalid string.",
+      "parentUuid": "e11952eb_2e6067fd",
+      "revId": "1835e5d895f7f75435c2eddf3f87a88ef534c237",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
