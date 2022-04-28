@@ -14,6 +14,9 @@
 #include "libANGLE/EGLSync.h"
 #include "libANGLE/Surface.h"
 #include "libANGLE/Thread.h"
+#include "libANGLE/capture/FrameCapture.h"
+#include "libANGLE/capture/frame_capture_utils_autogen.h"
+#include "libANGLE/capture/gl_enum_utils_autogen.h"
 #include "libANGLE/queryutils.h"
 #include "libANGLE/validationEGL.h"
 #include "libGLESv2/global_state.h"
@@ -155,6 +158,9 @@ EGLImage CreateImage(Thread *thread,
     }
 
     thread->setSuccess();
+
+    angle::CaptureCreateImage(context, target, buffer, attributes, image);
+
     return static_cast<EGLImage>(image);
 }
 
@@ -292,6 +298,8 @@ EGLBoolean DestroyImage(Thread *thread, Display *display, Image *img)
     ANGLE_EGL_TRY_RETURN(thread, display->prepareForCall(), "eglDestroyImage",
                          GetDisplayIfValid(display), EGL_FALSE);
     display->destroyImage(img);
+
+    angle::CaptureDestroyImage(thread->getContext(), display, img);
 
     thread->setSuccess();
     return EGL_TRUE;
