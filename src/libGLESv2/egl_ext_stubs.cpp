@@ -13,6 +13,8 @@
 #include "libANGLE/EGLSync.h"
 #include "libANGLE/Surface.h"
 #include "libANGLE/Thread.h"
+#include "libANGLE/capture/FrameCapture.h"
+#include "libANGLE/capture/frame_capture_utils_autogen.h"
 #include "libANGLE/entry_points_utils.h"
 #include "libANGLE/queryutils.h"
 #include "libANGLE/renderer/DisplayImpl.h"
@@ -54,6 +56,8 @@ EGLImageKHR CreateImageKHR(Thread *thread,
                          "", GetDisplayIfValid(display), EGL_NO_IMAGE);
 
     thread->setSuccess();
+    angle::CaptureCreateImage(context, target, buffer, attributes, image);
+
     return static_cast<EGLImage>(image);
 }
 
@@ -65,6 +69,9 @@ EGLClientBuffer CreateNativeClientBufferANDROID(Thread *thread, const AttributeM
                          "eglCreateNativeClientBufferANDROID", nullptr, nullptr);
 
     thread->setSuccess();
+
+    angle::CaptureCreateNativeClientBufferANDROID(thread->getContext(), attribMap, eglClientBuffer);
+
     return eglClientBuffer;
 }
 
@@ -150,6 +157,8 @@ EGLBoolean DestroyImageKHR(Thread *thread, Display *display, Image *img)
     ANGLE_EGL_TRY_RETURN(thread, display->prepareForCall(), "eglDestroyImageKHR",
                          GetDisplayIfValid(display), EGL_FALSE);
     display->destroyImage(img);
+
+    angle::CaptureDestroyImage(thread->getContext(), display, img);
 
     thread->setSuccess();
     return EGL_TRUE;
