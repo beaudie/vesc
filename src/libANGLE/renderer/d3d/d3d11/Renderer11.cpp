@@ -3410,6 +3410,14 @@ TextureStorage *Renderer11::createTextureStorage2DMultisample(GLenum internalfor
                                               fixedSampleLocations, label);
 }
 
+TextureStorage *Renderer11::createTextureStorageBuffer(
+    const gl::OffsetBindingPointer<gl::Buffer> &buffer,
+    GLenum internalFormat,
+    const std::string &label)
+{
+    return new TextureStorage11_Buffer(this, buffer, internalFormat, label);
+}
+
 TextureStorage *Renderer11::createTextureStorage2DMultisampleArray(GLenum internalformat,
                                                                    GLsizei width,
                                                                    GLsizei height,
@@ -4091,7 +4099,7 @@ angle::Result Renderer11::dispatchCompute(const gl::Context *context,
     {
         ANGLE_TRY(markRawBufferUsage(context));
     }
-
+    ANGLE_TRY(markTypedBufferUsage(context));
     ANGLE_TRY(mStateManager.updateStateForCompute(context, numGroupsX, numGroupsY, numGroupsZ));
     mDeviceContext->Dispatch(numGroupsX, numGroupsY, numGroupsZ);
 
@@ -4300,6 +4308,26 @@ angle::Result Renderer11::mapResource(const gl::Context *context,
 {
     HRESULT hr = mDeviceContext->Map(resource, subResource, mapType, mapFlags, mappedResource);
     ANGLE_TRY_HR(GetImplAs<Context11>(context), hr, "Failed to map D3D11 resource.");
+    return angle::Result::Continue;
+}
+
+angle::Result Renderer11::markTypedBufferUsage(const gl::Context *context)
+{
+    const gl::State &glState = context->getState();
+    ProgramD3D *programD3D   = GetImplAs<ProgramD3D>(glState.getProgram());
+    gl::RangeUI imageRange   = programD3D->getUsedImageRange(gl::ShaderType::Compute, false);
+    for (unsigned int imageIndex = imageRange.low(); imageIndex < imageRange.high(); imageIndex++)
+    {
+        GLint imageUnitIndex = programD3D->getImageMapping(gl::ShaderType::Compute, imageIndex,
+                                                           false, context->getCaps());
+        ASSERT(imageUnitIndex != -1);
+        const gl::ImageUnit &imageUnit = glState.getImageUnit(imageUnitIndex);
+        if (imageUnit.texture.get()->getType() == gl::TextureType::Buffer)
+        {
+            Buffer11 *buffer11 = GetImplAs<Buffer11>(imageUnit.texture.get()->getBuffer().get());
+            ANGLE_TRY(buffer11->markTypedBufferUsage(context));
+        }
+    }
     return angle::Result::Continue;
 }
 
