@@ -276,6 +276,10 @@ class Renderer11 : public RendererD3D
                                                       int samples,
                                                       bool fixedSampleLocations,
                                                       const std::string &label) override;
+
+    TextureStorage *createTextureStorageBuffer(const gl::OffsetBindingPointer<gl::Buffer> &buffer,
+                                               GLenum internalFormat,
+                                               const std::string &label) override;
     TextureStorage *createTextureStorage2DMultisampleArray(GLenum internalformat,
                                                            GLsizei width,
                                                            GLsizei height,
@@ -550,6 +554,7 @@ class Renderer11 : public RendererD3D
 
     // Make sure that the raw buffer is the latest buffer.
     angle::Result markRawBufferUsage(const gl::Context *context);
+    angle::Result markTypedBufferUsage(const gl::Context *context);
     angle::Result markTransformFeedbackUsage(const gl::Context *context);
     angle::Result drawWithGeometryShaderAndTransformFeedback(Context11 *context11,
                                                              gl::PrimitiveMode mode,
