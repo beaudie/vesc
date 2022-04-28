@@ -624,6 +624,19 @@ void WriteCppReplayForCall(const CallCapture &call,
         callOut << "gSyncMap[" << SyncIndexValue(sync) << "] = ";
     }
 
+    if (call.entryPoint == EntryPoint::EGLCreateImage ||
+        call.entryPoint == EntryPoint::EGLCreateImageKHR)
+    {
+        GLeglImageOES image = call.params.getReturnValue().value.voidPointerVal;
+        callOut << "gEGLImageMap[" << reinterpret_cast<uintptr_t>(image) << "ul] = ";
+    }
+
+    if (call.entryPoint == EntryPoint::EGLCreateNativeClientBufferANDROID)
+    {
+        EGLClientBuffer buffer = call.params.getReturnValue().value.EGLClientBufferVal;
+        callOut << "gClientBufferMap[" << reinterpret_cast<EGLClientBuffer>(buffer) << "] = ";
+    }
+
     // Depending on how a buffer is mapped, we may need to track its location for readback
     bool trackBufferPointer = false;
 
@@ -3377,6 +3390,21 @@ void CaptureShareGroupMidExecutionSetup(const gl::Context *context,
     }
 }
 
+static ParamCapture CaptureAttributeMap(const egl::AttributeMap &attribMap)
+{
+    std::vector<EGLAttrib> attribs;
+    for (const auto &[key, value] : attribMap)
+    {
+        attribs.push_back(key);
+        attribs.push_back(value);
+    }
+    attribs.push_back(EGL_NONE);
+
+    angle::ParamCapture paramCapture("attrib_list", ParamType::TGLint64Pointer);
+    angle::CaptureMemory(attribs.data(), attribs.size() * sizeof(EGLAttrib), &paramCapture);
+    return paramCapture;
+}
+
 void CaptureMidExecutionSetup(const gl::Context *context,
                               std::vector<CallCapture> *setupCalls,
                               std::vector<CallCapture> *shareGroupSetupCalls,
@@ -5272,21 +5300,6 @@ void FrameCaptureShared::maybeOverrideEntryPoint(const gl::Context *context,
 {
     switch (inCall.entryPoint)
     {
-        case EntryPoint::GLEGLImageTargetTexture2DOES:
-        {
-            // We don't support reading EGLImages. Instead, just pull from a tiny null texture.
-            // TODO (anglebug.com/4964): Read back the image data and populate the texture.
-            std::vector<uint8_t> pixelData = {0, 0, 0, 0};
-            outCalls.emplace_back(
-                CaptureTexSubImage2D(context->getState(), true, gl::TextureTarget::_2D, 0, 0, 0, 1,
-                                     1, GL_RGBA, GL_UNSIGNED_BYTE, pixelData.data()));
-            break;
-        }
-        case EntryPoint::GLEGLImageTargetRenderbufferStorageOES:
-        {
-            UNIMPLEMENTED();
-            break;
-        }
         case EntryPoint::GLCopyImageSubData:
         case EntryPoint::GLCopyImageSubDataEXT:
         case EntryPoint::GLCopyImageSubDataOES:
@@ -6842,6 +6855,30 @@ void FrameCaptureShared::writeCppReplayIndexFiles(const gl::Context *context,
     }
 
     {
+        std::string proto = "void SetEGLDisplay(void *display)";
+
+        std::stringstream source;
+        source << proto << "\n";
+        source << "{\n";
+        source << "   gEGLDisplay = display;\n";
+        source << "}\n";
+
+        mReplayWriter.addPublicFunction(proto, std::stringstream(), source);
+    }
+
+    {
+        std::string proto = "EGLDisplay GetEGLDisplay()";
+
+        std::stringstream source;
+        source << proto << "\n";
+        source << "{\n";
+        source << "   return gEGLDisplay;\n";
+        source << "}\n";
+
+        mReplayWriter.addPrivateFunction(proto, std::stringstream(), source);
+    }
+
+    {
         std::string proto = "void ReplayFrame(uint32_t frameIndex)";
 
         std::stringstream source;
@@ -7585,7 +7622,7 @@ void WriteParamValueReplay<ParamType::TGLeglImageOES>(std::ostream &os,
                                                       GLeglImageOES value)
 {
     uint64_t pointerValue = reinterpret_cast<uint64_t>(value);
-    os << "reinterpret_cast<EGLImageKHR>(" << pointerValue << "ul)";
+    os << "gEGLImageMap[reinterpret_cast<uintptr_t>(" << pointerValue << "ul)]";
 }
 
 template <>
@@ -7602,7 +7639,12 @@ void WriteParamValueReplay<ParamType::TEGLContext>(std::ostream &os,
                                                    const CallCapture &call,
                                                    EGLContext value)
 {
-    os << "gContextMap[" << reinterpret_cast<size_t>(value) << "]";
+    // We actually capture the context ID
+    uint64_t contextID = reinterpret_cast<uint64_t>(value);
+
+    // The context map uses uint32_t as key type
+    ASSERT(contextID <= 0xffffffffull);
+    os << "static_cast<EGLContext>(gContextMap[" << contextID << "])";
 }
 
 template <>
@@ -7616,8 +7658,7 @@ void WriteParamValueReplay<ParamType::TEGLDisplay>(std::ostream &os,
         return;
     }
 
-    // We don't support capturing real EGL calls.
-    UNREACHABLE();
+    os << "GetEGLDisplay()";
 }
 
 template <>
@@ -7666,6 +7707,16 @@ void WriteParamValueReplay<ParamType::TEGLSetBlobFuncANDROID>(std::ostream &os,
     // error: implicit conversion between pointer-to-function and pointer-to-object is a Microsoft
     // extension [-Werror,-Wmicrosoft-cast]
     os << reinterpret_cast<void *>(value);
+}
+
+template <>
+void WriteParamValueReplay<ParamType::TEGLClientBuffer>(std::ostream &os,
+                                                        const CallCapture &call,
+                                                        EGLClientBuffer value)
+{
+    const auto &targetParam = call.params.getParam("target", ParamType::TEGLenum, 2);
+    os << "GetClientBuffer(" << targetParam.value.EGLenumVal << ", "
+       << " reinterpret_cast<EGLClientBuffer>(" << value << "))";
 }
 
 // ReplayWriter implementation.
@@ -7954,4 +8005,95 @@ std::vector<std::string> ReplayWriter::getAndResetWrittenFiles()
     ASSERT(mWrittenFiles.empty());
     return results;
 }
+
+void CaptureCreateNativeClientBufferANDROID(gl::Context *context,
+                                            const egl::AttributeMap &attribMap,
+                                            EGLClientBuffer eglClientBuffer)
+{
+    angle::FrameCaptureShared *frameCaptureShared =
+        context->getShareGroup()->getFrameCaptureShared();
+    if (frameCaptureShared->isCapturing())
+    {
+        angle::ParamBuffer paramBuffer;
+        paramBuffer.addParam(angle::CaptureAttributeMap(attribMap));
+
+        angle::ParamCapture retval;
+        angle::SetParamVal<angle::ParamType::TEGLClientBuffer, EGLClientBuffer>(eglClientBuffer,
+                                                                                &retval.value);
+        paramBuffer.addReturnValue(std::move(retval));
+
+        angle::CallCapture call(angle::EntryPoint::EGLCreateNativeClientBufferANDROID,
+                                std::move(paramBuffer));
+        frameCaptureShared->captureCall(context, std::move(call), true);
+    }
+}
+
+void CaptureEGLCreateImage(gl::Context *context,
+                           EGLenum target,
+                           EGLClientBuffer buffer,
+                           const egl::AttributeMap &attributes,
+                           egl::Image *image)
+{
+    angle::FrameCaptureShared *frameCaptureShared =
+        context->getShareGroup()->getFrameCaptureShared();
+    if (frameCaptureShared->isCapturing())
+    {
+        angle::ParamBuffer paramBuffer;
+
+        // The EGL display will be queried directly in the emitted code
+        // so this is actually just a place holder
+        angle::ParamCapture paramsDisplay("display", angle::ParamType::TEGLDisplay);
+        angle::SetParamVal<angle::ParamType::TEGLDisplay>(
+            static_cast<EGLDisplay>(context->getDisplay()), &paramsDisplay.value);
+        paramBuffer.addParam(std::move(paramsDisplay));
+
+        // In CaptureMidExecutionSetup and FrameCaptureShared::captureCall
+        // we capture the actual context ID (via CaptureMakeCurrent),
+        // so we have to do the same here.
+        uint64_t contextID    = context->id().value;
+        EGLContext eglContext = reinterpret_cast<EGLContext>(contextID);
+        paramBuffer.addValueParam("context", ParamType::TEGLContext, eglContext);
+
+        paramBuffer.addEnumParam("target", gl::GLenumGroup::DefaultGroup,
+                                 angle::ParamType::TEGLenum, target);
+
+        angle::ParamCapture paramsClientBuffer("buffer", angle::ParamType::TEGLClientBuffer);
+        angle::SetParamVal<angle::ParamType::TEGLClientBuffer>(buffer, &paramsClientBuffer.value);
+        paramBuffer.addParam(std::move(paramsClientBuffer));
+
+        angle::ParamCapture paramsAttr = CaptureAttributeMap(attributes);
+        paramBuffer.addParam(std::move(paramsAttr));
+
+        angle::ParamCapture retval;
+        angle::SetParamVal<angle::ParamType::TGLeglImageOES, GLeglImageOES>(image, &retval.value);
+        paramBuffer.addReturnValue(std::move(retval));
+
+        angle::CallCapture call(angle::EntryPoint::EGLCreateImage, std::move(paramBuffer));
+        frameCaptureShared->captureCall(context, std::move(call), true);
+    }
+}
+
+void CaptureEGLDestroyImage(gl::Context *context, egl::Display *display, egl::Image *image)
+{
+    angle::FrameCaptureShared *frameCaptureShared =
+        context->getShareGroup()->getFrameCaptureShared();
+    if (frameCaptureShared->isCapturing())
+    {
+        angle::ParamBuffer paramBuffer;
+
+        angle::ParamCapture paramsDisplay("display", angle::ParamType::TEGLDisplay);
+        angle::SetParamVal<angle::ParamType::TEGLDisplay>(
+            static_cast<EGLDisplay>(context->getDisplay()), &paramsDisplay.value);
+        paramBuffer.addParam(std::move(paramsDisplay));
+
+        angle::ParamCapture paramImage("image", angle::ParamType::TGLeglImageOES);
+        angle::SetParamVal<angle::ParamType::TGLeglImageOES, GLeglImageOES>(image,
+                                                                            &paramImage.value);
+        paramBuffer.addParam(std::move(paramImage));
+
+        angle::CallCapture call(angle::EntryPoint::EGLDestroyImage, std::move(paramBuffer));
+        frameCaptureShared->captureCall(context, std::move(call), true);
+    }
+}
+
 }  // namespace angle

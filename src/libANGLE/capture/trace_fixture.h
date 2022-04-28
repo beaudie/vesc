@@ -44,6 +44,7 @@ ANGLE_REPLAY_EXPORT void SetupReplay();
 ANGLE_REPLAY_EXPORT void ReplayFrame(uint32_t frameIndex);
 ANGLE_REPLAY_EXPORT void ResetReplay();
 ANGLE_REPLAY_EXPORT void FinishReplay();
+ANGLE_REPLAY_EXPORT void SetEGLDisplay(void *display);
 ANGLE_REPLAY_EXPORT void SetValidateSerializedStateCallback(
     ValidateSerializedStateCallback callback);
 
@@ -100,6 +101,11 @@ extern GLuint *gTextureMap;
 extern GLuint *gTransformFeedbackMap;
 extern GLuint *gVertexArrayMap;
 
+using ClientBufferMap = std::unordered_map<EGLClientBuffer, EGLClientBuffer>;
+extern ClientBufferMap gClientBufferMap;
+using EGLImageMap = std::unordered_map<uintptr_t, GLeglImageOES>;
+extern EGLImageMap gEGLImageMap;
+
 // TODO(http://www.anglebug.com/5878): avoid std::unordered_map, it's slow
 using SyncResourceMap = std::unordered_map<uintptr_t, GLsync>;
 extern SyncResourceMap gSyncMap;
@@ -129,10 +135,15 @@ void UpdateTransformFeedbackID(GLuint id, GLsizei readBufferOffset);
 void UpdateVertexArrayID(GLuint id, GLsizei readBufferOffset);
 void UpdateBufferID2(GLuint id, GLsizei readBufferOffset);
 
+void UpdateClientBuffer(EGLClientBuffer key, EGLClientBuffer data);
+EGLClientBuffer GetClientBuffer(EGLenum target, EGLClientBuffer key);
+
 void SetFramebufferID(GLuint id);
 void SetBufferID(GLuint id);
 void SetRenderbufferID(GLuint id);
 void SetTextureID(GLuint id);
+
+extern EGLDisplay gEGLDisplay;
 
 void ValidateSerializedState(const char *serializedState, const char *fileName, uint32_t line);
 #define VALIDATE_CHECKPOINT(STATE) ValidateSerializedState(STATE, __FILE__, __LINE__)

@@ -50,4 +50,17 @@ void FrameCaptureShared::setProgramSources(gl::ShaderProgramID id, ProgramSource
 
 CoherentBufferTracker::CoherentBufferTracker() {}
 CoherentBufferTracker::~CoherentBufferTracker() {}
+
+void CaptureCreateNativeClientBufferANDROID(gl::Context *context,
+                                            const egl::AttributeMap &attribMap,
+                                            EGLClientBuffer eglClientBuffer)
+{}
+void CaptureEGLCreateImage(gl::Context *context,
+                           EGLenum target,
+                           EGLClientBuffer buffer,
+                           const egl::AttributeMap &attributes,
+                           egl::Image *image)
+{}
+void CaptureEGLDestroyImage(gl::Context *context, egl::Display *display, egl::Image *image) {}
+
 }  // namespace angle

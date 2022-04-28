@@ -62,6 +62,7 @@ using ResetReplayFunc                        = void (*)();
 using FinishReplayFunc                       = void (*)();
 using GetSerializedContextStateFunc          = const char *(*)(uint32_t);
 using SetValidateSerializedStateCallbackFunc = void (*)(ValidateSerializedStateCallback);
+using SetEGLDisplayFunc                      = void (*)(void *);
 
 class TraceLibrary
 {
@@ -98,6 +99,8 @@ class TraceLibrary
     }
 
     void replayFrame(uint32_t frameIndex) { callFunc<ReplayFrameFunc>("ReplayFrame", frameIndex); }
+
+    void setEGLDisplay(void *display) { callFunc<SetEGLDisplayFunc>("SetEGLDisplay", display); }
 
     void setupReplay() { callFunc<SetupReplayFunc>("SetupReplay"); }
 
