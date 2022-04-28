@@ -186,6 +186,12 @@ class Buffer11::NativeStorage : public Buffer11::BufferStorage
                             unsigned int size,
                             d3d11::UnorderedAccessView **uavOut);
 
+    angle::Result getTypedUAV(const gl::Context *context,
+                              unsigned int offset,
+                              unsigned int size,
+                              DXGI_FORMAT uavFormat,
+                              d3d11::UnorderedAccessView **uavOut);
+
   protected:
     d3d11::Buffer mBuffer;
     const angle::Subject *mOnStorageChanged;
@@ -197,9 +203,12 @@ class Buffer11::NativeStorage : public Buffer11::BufferStorage
                                unsigned int bufferSize);
     void clearSRVs();
     void clearUAVs();
+    void clearTypedUAVs();
 
     std::map<DXGI_FORMAT, d3d11::ShaderResourceView> mBufferResourceViews;
     std::map<std::pair<unsigned int, unsigned int>, d3d11::UnorderedAccessView> mBufferRawUAVs;
+    std::map<std::tuple<unsigned int, unsigned int, DXGI_FORMAT>, d3d11::UnorderedAccessView>
+        mBufferTypedUAVs;
 };
 
 class Buffer11::StructuredBufferStorage : public Buffer11::NativeStorage
@@ -750,6 +759,12 @@ angle::Result Buffer11::markRawBufferUsage(const gl::Context *context)
     return angle::Result::Continue;
 }
 
+angle::Result Buffer11::markTypedBufferUsage(const gl::Context *context)
+{
+    ANGLE_TRY(markBufferUsage(context, BUFFER_USAGE_TYPED_UAV));
+    return angle::Result::Continue;
+}
+
 angle::Result Buffer11::getRawUAVRange(const gl::Context *context,
                                        GLintptr offset,
                                        GLsizeiptr size,
@@ -760,6 +775,19 @@ angle::Result Buffer11::getRawUAVRange(const gl::Context *context,
 
     return nativeStorage->getRawUAV(context, static_cast<unsigned int>(offset),
                                     static_cast<unsigned int>(size), uavOut);
+}
+
+angle::Result Buffer11::getTypedUAVRange(const gl::Context *context,
+                                         GLintptr offset,
+                                         GLsizeiptr size,
+                                         DXGI_FORMAT format,
+                                         d3d11::UnorderedAccessView **uavOut)
+{
+    NativeStorage *nativeStorage = nullptr;
+    ANGLE_TRY(getBufferStorage(context, BUFFER_USAGE_TYPED_UAV, &nativeStorage));
+
+    return nativeStorage->getTypedUAV(context, static_cast<unsigned int>(offset),
+                                      static_cast<unsigned int>(size), format, uavOut);
 }
 
 angle::Result Buffer11::getSRV(const gl::Context *context,
@@ -1135,6 +1163,7 @@ Buffer11::NativeStorage::~NativeStorage()
 {
     clearSRVs();
     clearUAVs();
+    clearTypedUAVs();
 }
 
 bool Buffer11::NativeStorage::isCPUAccessible(GLbitfield access) const
@@ -1266,6 +1295,9 @@ angle::Result Buffer11::NativeStorage::resize(const gl::Context *context,
     // Free the UAVs.
     clearUAVs();
 
+    // Free Typed UAVs
+    clearTypedUAVs();
+
     // Notify that the storage has changed.
     if (mOnStorageChanged)
     {
@@ -1348,6 +1380,12 @@ void Buffer11::NativeStorage::FillBufferDesc(D3D11_BUFFER_DESC *bufferDesc,
             bufferDesc->BindFlags      = D3D11_BIND_UNORDERED_ACCESS;
             bufferDesc->Usage          = D3D11_USAGE_DEFAULT;
             bufferDesc->CPUAccessFlags = 0;
+            break;
+        case BUFFER_USAGE_TYPED_UAV:
+            bufferDesc->BindFlags      = D3D11_BIND_UNORDERED_ACCESS | D3D11_BIND_SHADER_RESOURCE;
+            bufferDesc->Usage          = D3D11_USAGE_DEFAULT;
+            bufferDesc->CPUAccessFlags = 0;
+            bufferDesc->MiscFlags      = 0;
             break;
 
         default:
@@ -1439,6 +1477,39 @@ angle::Result Buffer11::NativeStorage::getRawUAV(const gl::Context *context,
     return angle::Result::Continue;
 }
 
+angle::Result Buffer11::NativeStorage::getTypedUAV(const gl::Context *context,
+                                                   unsigned int offset,
+                                                   unsigned int size,
+                                                   DXGI_FORMAT uavFormat,
+                                                   d3d11::UnorderedAccessView **uavOut)
+{
+    ASSERT(offset + size <= mBufferSize);
+
+    auto bufferTypedUAV = mBufferTypedUAVs.find({offset, size, uavFormat});
+    if (bufferTypedUAV != mBufferTypedUAVs.end())
+    {
+        *uavOut = &bufferTypedUAV->second;
+        return angle::Result::Continue;
+    }
+
+    D3D11_UNORDERED_ACCESS_VIEW_DESC bufferUAVDesc;
+
+    int bytesPerElement = d3d11::GetDXGIFormatSizeInfo(uavFormat).pixelBytes;
+    // [TODO] opengl offset and size are more flexible, while d3d need to be element bytes alignment
+    ASSERT(offset % bytesPerElement == 0 && size % bytesPerElement == 0);
+    bufferUAVDesc.Buffer.FirstElement = offset / bytesPerElement;
+    bufferUAVDesc.Buffer.NumElements  = size / bytesPerElement;
+    bufferUAVDesc.Buffer.Flags        = 0;
+    bufferUAVDesc.Format              = uavFormat;
+    bufferUAVDesc.ViewDimension       = D3D11_UAV_DIMENSION_BUFFER;
+
+    ANGLE_TRY(mRenderer->allocateResource(GetImplAs<Context11>(context), bufferUAVDesc,
+                                          mBuffer.get(),
+                                          &mBufferTypedUAVs[{offset, size, uavFormat}]));
+    *uavOut = &mBufferTypedUAVs[{offset, size, uavFormat}];
+    return angle::Result::Continue;
+}
+
 void Buffer11::NativeStorage::clearSRVs()
 {
     mBufferResourceViews.clear();
@@ -1447,6 +1518,11 @@ void Buffer11::NativeStorage::clearSRVs()
 void Buffer11::NativeStorage::clearUAVs()
 {
     mBufferRawUAVs.clear();
+}
+
+void Buffer11::NativeStorage::clearTypedUAVs()
+{
+    mBufferTypedUAVs.clear();
 }
 
 Buffer11::StructuredBufferStorage::StructuredBufferStorage(Renderer11 *renderer,

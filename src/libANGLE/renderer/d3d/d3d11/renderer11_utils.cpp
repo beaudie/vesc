@@ -1706,6 +1706,12 @@ void GenerateCaps(ID3D11Device *device,
     // D3D11 does not support compressed textures where the base mip level is not a multiple of 4
     limitations->compressedBaseMipLevelMultipleOfFour = true;
 
+    if (extensions->textureBufferAny())
+    {
+        caps->maxTextureBufferSize         = 1 << D3D11_REQ_BUFFER_RESOURCE_TEXEL_COUNT_2_TO_EXP;
+        caps->textureBufferOffsetAlignment = 16;
+    }
+
 #ifdef ANGLE_ENABLE_WINDOWS_UWP
     // Setting a non-zero divisor on attribute zero doesn't work on certain Windows Phone 8-era
     // devices. We should prevent developers from doing this on ALL Windows Store devices. This will
@@ -2553,6 +2559,11 @@ void TextureHelper11::getDesc(D3D11_TEXTURE3D_DESC *desc) const
     static_cast<ID3D11Texture3D *>(mData->object)->GetDesc(desc);
 }
 
+void TextureHelper11::getDesc(D3D11_BUFFER_DESC *desc) const
+{
+    static_cast<ID3D11Buffer *>(mData->object)->GetDesc(desc);
+}
+
 void TextureHelper11::initDesc(const D3D11_TEXTURE2D_DESC &desc2D)
 {
     mData->resourceType = ResourceType::Texture2D;
@@ -2568,6 +2579,15 @@ void TextureHelper11::initDesc(const D3D11_TEXTURE3D_DESC &desc3D)
     mExtents.width      = static_cast<int>(desc3D.Width);
     mExtents.height     = static_cast<int>(desc3D.Height);
     mExtents.depth      = static_cast<int>(desc3D.Depth);
+    mSampleCount        = 1;
+}
+
+void TextureHelper11::initDesc(const D3D11_BUFFER_DESC &descBuffer)
+{
+    mData->resourceType = ResourceType::Buffer;
+    mExtents.width      = static_cast<int>(descBuffer.ByteWidth);
+    mExtents.height     = 1;
+    mExtents.depth      = 1;
     mSampleCount        = 1;
 }
 
