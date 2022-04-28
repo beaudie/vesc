@@ -1,0 +1,44 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "9d19a457_abffc11a",
+        "filename": "src/tests/compiler_tests/MSLOutput_test.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 635,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-04-28T14:35:21Z",
+      "side": 1,
+      "message": "nits:\n\n- EOpContinue (capital E)\n- wrapping is weird\n- Links will rot, no need to specify the source",
+      "range": {
+        "startLine": 635,
+        "startChar": 69,
+        "endLine": 635,
+        "endChar": 70
+      },
+      "revId": "d2a85da1e7600b6c59a8976b45495c30d7265662",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ecde7c7f_04247155",
+        "filename": "src/tests/compiler_tests/MSLOutput_test.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 640,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-04-28T14:35:21Z",
+      "side": 1,
+      "message": "nit: whitespace at EOL",
+      "revId": "d2a85da1e7600b6c59a8976b45495c30d7265662",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
