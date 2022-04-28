@@ -179,6 +179,12 @@ def DumpFrequncies():
     except Exception:
         logging.info('gpu frequencies failed')
 
+    try:
+        top = _AdbShell('top -m 10 -bn 1')
+        logging.info('top:\n%s', top.decode())
+    except Exception:
+        logging.info('top failed')
+
 
 def _RandomHex():
     return hex(random.randint(0, 2**64))[2:]
