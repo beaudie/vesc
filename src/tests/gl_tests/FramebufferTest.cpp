@@ -793,6 +793,34 @@ TEST_P(FramebufferTest_ES3, AttachmentWith3DLayers)
     EXPECT_GL_NO_ERROR();
 }
 
+// Check that glFramebufferTextureLayer generates GL_INVALID_OPERATION error if texture is non-zero
+// but not a valid 3D texture or 2D array texture.
+TEST_P(FramebufferTest_ES3, TextureLayerNegativeTest)
+{
+    GLuint texture = static_cast<uint32_t>(-1);
+    glBindTexture(GL_TEXTURE_2D, texture);
+    EXPECT_GL_NO_ERROR();
+    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA8, 4, 4, 0, GL_RGBA, GL_UNSIGNED_BYTE, nullptr);
+    EXPECT_GL_NO_ERROR();
+    glDeleteTextures(1, &texture);
+    EXPECT_GL_NO_ERROR();
+
+    GLTexture texture3D;
+    glBindTexture(GL_TEXTURE_3D, texture3D);
+    EXPECT_GL_NO_ERROR();
+    glTexImage3D(GL_TEXTURE_3D, 0, GL_RGBA, 4, 4, 4, 0, GL_RGBA, GL_UNSIGNED_BYTE, NULL);
+    EXPECT_GL_NO_ERROR();
+
+    GLFramebuffer framebuffer;
+    glBindFramebuffer(GL_FRAMEBUFFER, framebuffer);
+    glFramebufferTextureLayer(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, -1, 0, 0);
+    EXPECT_GL_ERROR(GL_INVALID_OPERATION);
+    glFramebufferTextureLayer(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, texture, 0, 0);
+    EXPECT_GL_ERROR(GL_INVALID_OPERATION);
+    glFramebufferTextureLayer(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, texture3D, 0, 0);
+    EXPECT_GL_NO_ERROR();
+}
+
 // Check that invalid layer is detected in framebuffer completeness check.
 TEST_P(FramebufferTest_ES3, 3DAttachmentInvalidLayer)
 {

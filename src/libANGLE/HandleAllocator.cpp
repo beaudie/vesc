@@ -24,7 +24,8 @@ struct HandleAllocator::HandleRangeComparator
 
 HandleAllocator::HandleAllocator() : mBaseValue(1), mNextValue(1), mLoggingEnabled(false)
 {
-    mUnallocatedList.push_back(HandleRange(1, std::numeric_limits<GLuint>::max()));
+    // Handle values 0 and std::numeric_limits<GLuint>::max() are reserved values.
+    mUnallocatedList.push_back(HandleRange(1, std::numeric_limits<GLuint>::max() - 1));
 }
 
 HandleAllocator::HandleAllocator(GLuint maximumHandleValue)
@@ -91,6 +92,12 @@ void HandleAllocator::release(GLuint handle)
         WARN() << "HandleAllocator::release releasing " << handle << std::endl;
     }
 
+    if (handle == kUnallocatableHandle)
+    {
+        // Don't push kUnallocatableHandle to mReleasedList.
+        return;
+    }
+
     // Add to released list, logarithmic time for push_heap.
     mReleasedList.push_back(handle);
     std::push_heap(mReleasedList.begin(), mReleasedList.end(), std::greater<GLuint>());
@@ -101,6 +108,12 @@ void HandleAllocator::reserve(GLuint handle)
     if (mLoggingEnabled)
     {
         WARN() << "HandleAllocator::reserve reserving " << handle << std::endl;
+    }
+
+    if (handle == kUnallocatableHandle)
+    {
+        // kUnallocatableHandle cannot be allocated but can be reserved.
+        return;
     }
 
     // Clear from released list -- might be a slow operation.
