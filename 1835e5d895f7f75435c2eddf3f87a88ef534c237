@@ -70,6 +70,24 @@
       "parentUuid": "495708a1_e6ef2ace",
       "revId": "1835e5d895f7f75435c2eddf3f87a88ef534c237",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "7de279c3_1239ece0",
+        "filename": "src/libANGLE/Program.cpp",
+        "patchSetId": 10
+      },
+      "lineNbr": 3676,
+      "author": {
+        "id": 1190898
+      },
+      "writtenOn": "2022-04-28T16:02:24Z",
+      "side": 1,
+      "message": "Hmm, okay, that workaround seems fine. But the intention here wasn\u0027t to prevent all shader compilation, just to prevent loading from the cache if the cache entries aren\u0027t versioned.",
+      "parentUuid": "27aa774b_1e5b8624",
+      "revId": "1835e5d895f7f75435c2eddf3f87a88ef534c237",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
