@@ -16,6 +16,23 @@
       "message": "It seem that the issue is related to depth, as it does not occur when the first pass has only a color attachment.\nFurthermore it does not occur if the order of the 2nd pass\u0027 draw calls change and requires the depth texture to be bound to different shader stages. Updated the comments in the test.",
       "revId": "f1686167e8ee2016e7a8f060ca7a962e7931c367",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "5fdd235b_de51cb66",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 9
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2022-04-28T16:11:41Z",
+      "side": 1,
+      "message": "Before landing, I still wonder if we can simplify the test further.",
+      "revId": "f1686167e8ee2016e7a8f060ca7a962e7931c367",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
