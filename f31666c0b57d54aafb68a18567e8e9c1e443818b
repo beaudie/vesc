@@ -105,6 +105,30 @@
       },
       "revId": "f31666c0b57d54aafb68a18567e8e9c1e443818b",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "0b9f3fda_0ff7933d",
+        "filename": "src/libANGLE/renderer/vulkan/CommandProcessor.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 939,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2022-04-28T18:19:41Z",
+      "side": 1,
+      "message": "Looking at assembly on x86, this local variable will not help. It end up writing to a stack variable in the loop and then load from stack variable and write to mLastCompletedQueueSerial. So there end up with one extra memory load/store. \n\n// Inside the loop:\n   0x00007ffff6d57eea \u003c+314\u003e:\tmov    0x8(%r14,%r12,1),%rax\n   0x00007ffff6d57eef \u003c+319\u003e:\tmov    %rax,-0x160(%rbp)\n   \n// Finally update mLastCompletedQueueSerial\n   0x00007ffff6d581ef \u003c+1087\u003e:\tmov    -0x160(%rbp),%rax\n\u003d\u003e 0x00007ffff6d581f6 \u003c+1094\u003e:\tmov    %rax,0xb8(%r12)\n\nBut anyway, I think it is small enough issue, I will just stick with what I have here now.",
+      "parentUuid": "6f06cd7c_4bd169bb",
+      "range": {
+        "startLine": 939,
+        "startChar": 8,
+        "endLine": 939,
+        "endChar": 33
+      },
+      "revId": "f31666c0b57d54aafb68a18567e8e9c1e443818b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
