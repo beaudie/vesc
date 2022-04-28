@@ -3,6 +3,40 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "4215f1a7_984eead4",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 2
+      },
+      "lineNbr": 10,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2022-04-28T16:33:06Z",
+      "side": 1,
+      "message": "Could you please wrap this to 72 characters as mentioned above? It will make it more readable in the logs - thanks.",
+      "revId": "d2a85da1e7600b6c59a8976b45495c30d7265662",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "3a5e0b83_6acede13",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2022-04-28T16:33:06Z",
+      "side": 1,
+      "message": "lgtm also - thanks Kyle for reducing this test. Two small comments about comments.\n",
+      "revId": "d2a85da1e7600b6c59a8976b45495c30d7265662",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "9d19a457_abffc11a",
         "filename": "src/tests/compiler_tests/MSLOutput_test.cpp",
         "patchSetId": 2
@@ -37,6 +71,23 @@
       "writtenOn": "2022-04-28T14:35:21Z",
       "side": 1,
       "message": "nit: whitespace at EOL",
+      "revId": "d2a85da1e7600b6c59a8976b45495c30d7265662",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "c872d577_d1131617",
+        "filename": "src/tests/compiler_tests/MSLOutput_test.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 669,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2022-04-28T16:33:06Z",
+      "side": 1,
+      "message": "Same whitespace here.",
       "revId": "d2a85da1e7600b6c59a8976b45495c30d7265662",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
