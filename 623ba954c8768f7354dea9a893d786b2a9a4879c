@@ -142,6 +142,24 @@
       "parentUuid": "e9970f63_0ffe5147",
       "revId": "623ba954c8768f7354dea9a893d786b2a9a4879c",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "8333e606_3f34149a",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1190898
+      },
+      "writtenOn": "2022-04-28T21:31:37Z",
+      "side": 1,
+      "message": "That makes sense, I\u0027m worried about what happens in glProgramBinary(..) though, which I think calls loadBinary directly.",
+      "parentUuid": "d2d922ad_d5714f10",
+      "revId": "623ba954c8768f7354dea9a893d786b2a9a4879c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
