@@ -214,6 +214,24 @@
       "parentUuid": "afb0c7e8_b16a0b93",
       "revId": "623ba954c8768f7354dea9a893d786b2a9a4879c",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "d0f59175_77ac60df",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1190898
+      },
+      "writtenOn": "2022-04-28T23:57:13Z",
+      "side": 1,
+      "message": "I take it back -- glProgramBinary should not \"always\" work, because apps may be caching the old serialization format also. so I think just returning ::Incomplete in loadBinary seems right.",
+      "parentUuid": "09c3aef3_035885a9",
+      "revId": "623ba954c8768f7354dea9a893d786b2a9a4879c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
