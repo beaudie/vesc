@@ -595,6 +595,7 @@ bool IsImage2DType(GLenum type)
         case GL_IMAGE_CUBE:
         case GL_INT_IMAGE_CUBE:
         case GL_UNSIGNED_INT_IMAGE_CUBE:
+        case GL_IMAGE_BUFFER:
             return false;
         default:
             UNREACHABLE();
