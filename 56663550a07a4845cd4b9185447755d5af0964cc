@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "026b91b7_8dc104e0",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 32
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1524687
+      },
+      "writtenOn": "2022-04-28T09:04:50Z",
+      "side": 1,
+      "message": "Hi,\nContinued to aforementioned discussion, I\u0027ve updated some changes as below lists. Please help to check if these own a correct behavior. \n1, To track the image layout transition, use the \u0027mRenderPassImagesWithLayoutTransition\u0027, which record the *read image needed layout transition* and all of the write image. This make a distinguish with the exist *mRenderPassUsedImages*, which makes a confuse close renderpass for the read GL_texture without layout transition.\n\n2, based on the item1, use new interface *endRenderPassIfComputeAccessAfterGraphicsTextureImageAccess* to unify the GL_Texture read or write by framebuffer attachment write, and all the GL_image write/read, and replace the interface *endRenderPassIfComputeReadAfterAttachmentWrite*.",
+      "revId": "56663550a07a4845cd4b9185447755d5af0964cc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
