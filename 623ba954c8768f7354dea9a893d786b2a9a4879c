@@ -124,6 +124,24 @@
       "parentUuid": "1ae01552_03f7c28e",
       "revId": "623ba954c8768f7354dea9a893d786b2a9a4879c",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "d2d922ad_d5714f10",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1185214
+      },
+      "writtenOn": "2022-04-28T21:16:38Z",
+      "side": 1,
+      "message": "No problem. And note that MemoryProgramCache actually returns Incomplete in similar situations. In fact, it *only* returns Continue or Incomplete, never Stop.",
+      "parentUuid": "e9970f63_0ffe5147",
+      "revId": "623ba954c8768f7354dea9a893d786b2a9a4879c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
