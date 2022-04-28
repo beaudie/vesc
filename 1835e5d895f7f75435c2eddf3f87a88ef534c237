@@ -52,6 +52,24 @@
       "parentUuid": "cc6ddb82_f84363e5",
       "revId": "1835e5d895f7f75435c2eddf3f87a88ef534c237",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "27aa774b_1e5b8624",
+        "filename": "src/libANGLE/Program.cpp",
+        "patchSetId": 10
+      },
+      "lineNbr": 3676,
+      "author": {
+        "id": 1185214
+      },
+      "writtenOn": "2022-04-28T15:57:34Z",
+      "side": 1,
+      "message": "FWIW - If I set the cache_enabled attribute on the display, it does solve our issue, so I may do that for now whenever we\u0027re testing ANGLE.",
+      "parentUuid": "495708a1_e6ef2ace",
+      "revId": "1835e5d895f7f75435c2eddf3f87a88ef534c237",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
