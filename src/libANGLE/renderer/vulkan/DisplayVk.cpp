@@ -527,4 +527,22 @@ bool ShareGroupVk::isDueForBufferPoolPrune()
     double timeElapsed = angle::GetCurrentSystemTime() - mLastPruneTime;
     return timeElapsed > kTimeElapsedForPruneDefaultBufferPool;
 }
+
+size_t ShareGroupVk::getTotalBufferBlockCount() const
+{
+    size_t count = 0;
+    for (const std::unique_ptr<vk::BufferPool> &pool : mDefaultBufferPools)
+    {
+        if (pool)
+        {
+            count += pool->getBufferBlockCount();
+        }
+    }
+    if (mSmallBufferPool)
+    {
+        count += mSmallBufferPool->getBufferBlockCount();
+    }
+    return count;
+}
+
 }  // namespace rx

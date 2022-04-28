@@ -19,6 +19,9 @@ namespace
 {
 constexpr size_t kInFlightCommandsLimit = 50u;
 constexpr bool kOutputVmaStatsString    = false;
+// When suballocation garbages is more than this, we may wait for GPU to finish and free up some
+// memory for allocation.
+constexpr VkDeviceSize kMaxBufferSuballocationGarbageSize = 64 * 1024 * 1024;
 
 void InitializeSubmitInfo(VkSubmitInfo *submitInfo,
                           const vk::PrimaryCommandBuffer &commandBuffer,
@@ -980,6 +983,8 @@ angle::Result CommandQueue::retireFinishedCommands(Context *context, size_t fini
         }
     }
 
+    ANGLE_TRY(renderer->cleanupGarbage(mLastCompletedQueueSerial));
+
     return angle::Result::Continue;
 }
 
@@ -1178,6 +1183,23 @@ angle::Result CommandQueue::submitFrame(
         size_t numCommandsToFinish = mInFlightCommands.size() - kInFlightCommandsLimit;
         Serial finishSerial        = mInFlightCommands[numCommandsToFinish].serial;
         ANGLE_TRY(finishToSerial(context, finishSerial, renderer->getMaxFenceWaitTimeNs()));
+    }
+
+    // CPU should be throttled to avoid accumulating too much memory garbage waiting to be
+    // destroyed. This is important to keep peak memory usage at check when game launched and a lot
+    // of staging buffers used for textures upload and then gets released. But if there is only one
+    // command buffer in flight, we do not wait here to ensure we keep GPU busy.
+    VkDeviceSize suballocationGarbageSize = renderer->getSuballocationGarbageSize();
+    while (suballocationGarbageSize > kMaxBufferSuballocationGarbageSize &&
+           mInFlightCommands.size() > 1)
+    {
+        // Wait for 1ms before check again
+        usleep(1000);
+        ANGLE_TRY(checkCompletedCommands(context));
+        /*WARN() << "sleep 100 microseconds and freed "
+               << suballocationGarbageSize - renderer->getSuballocationGarbageSize() << " bytes"
+               << "suballocationGarbageSize: " << renderer->getSuballocationGarbageSize();*/
+        suballocationGarbageSize = renderer->getSuballocationGarbageSize();
     }
 
     return angle::Result::Continue;

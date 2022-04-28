@@ -6282,8 +6282,10 @@ angle::Result ContextVk::flushAndGetSerial(const vk::Semaphore *signalSemaphore,
     if ((renderPassClosureReason == RenderPassClosureReason::GLFlush ||
          renderPassClosureReason == RenderPassClosureReason::GLFinish ||
          renderPassClosureReason == RenderPassClosureReason::EGLSwapBuffers) &&
-        mShareGroupVk->isDueForBufferPoolPrune())
+        (mShareGroupVk->isDueForBufferPoolPrune() ||
+         mRenderer->getSuballocationDestroyedSize() >= 1 * 1024 * 1024))
     {
+        WARN() << " bufferBlockCount:" << mShareGroupVk->getTotalBufferBlockCount();
         mShareGroupVk->pruneDefaultBufferPools(mRenderer);
     }
 

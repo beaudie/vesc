@@ -47,6 +47,7 @@ class ShareGroupVk : public ShareGroupImpl
                                          uint32_t memoryTypeIndex);
     void pruneDefaultBufferPools(RendererVk *renderer);
     bool isDueForBufferPoolPrune();
+    size_t getTotalBufferBlockCount() const;
 
     void addContext(ContextVk *contextVk);
     void removeContext(ContextVk *contextVk);
