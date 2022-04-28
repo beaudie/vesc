@@ -7364,7 +7364,7 @@ class Texture2DNorm16TestES3 : public Texture2DTestES3
         GLushort pixelValue  = 0x6A35;
         GLushort imageData[] = {pixelValue, pixelValue, pixelValue, pixelValue};
         GLColor16UI color    = SliceFormatColor16UI(
-            format, GLColor16UI(pixelValue, pixelValue, pixelValue, pixelValue));
+               format, GLColor16UI(pixelValue, pixelValue, pixelValue, pixelValue));
         // Size of drawing viewport
         constexpr GLint width = 8, height = 8;
 
@@ -9543,7 +9543,7 @@ TEST_P(Texture2DTestES3, UseAsUBOThenUpdateThenAsPBO)
     const std::array<GLColor, 4> kInitialData = {GLColor::red, GLColor::red, GLColor::red,
                                                  GLColor::red};
     const std::array<GLColor, 4> kUpdateData  = {GLColor::blue, GLColor::blue, GLColor::blue,
-                                                GLColor::blue};
+                                                 GLColor::blue};
 
     GLBuffer buffer;
     glBindBuffer(GL_UNIFORM_BUFFER, buffer);
@@ -10174,7 +10174,7 @@ TEST_P(TextureBufferTestES31, UseAsUBOThenUpdateThenAsTextureBuffer)
     const std::array<GLColor, 4> kInitialData = {GLColor::red, GLColor::red, GLColor::red,
                                                  GLColor::red};
     const std::array<GLColor, 4> kUpdateData  = {GLColor::blue, GLColor::blue, GLColor::blue,
-                                                GLColor::blue};
+                                                 GLColor::blue};
 
     GLBuffer buffer;
     glBindBuffer(GL_UNIFORM_BUFFER, buffer);
@@ -10247,7 +10247,7 @@ TEST_P(TextureBufferTestES31, MapTextureBufferInvalidateThenWrite)
     const std::array<GLColor, 4> kInitialData = {GLColor::red, GLColor::red, GLColor::red,
                                                  GLColor::red};
     const std::array<GLColor, 4> kUpdateData  = {GLColor::blue, GLColor::blue, GLColor::blue,
-                                                GLColor::blue};
+                                                 GLColor::blue};
 
     GLBuffer buffer;
     glBindBuffer(GL_TEXTURE_BUFFER, buffer);
@@ -10281,6 +10281,8 @@ void main()
     void *mappedBuffer = glMapBufferRange(GL_TEXTURE_BUFFER, 0, sizeof(kInitialData),
                                           GL_MAP_WRITE_BIT | GL_MAP_INVALIDATE_BUFFER_BIT);
     memcpy(mappedBuffer, kUpdateData.data(), sizeof(kInitialData));
+
+    glUnmapBuffer(GL_TEXTURE_BUFFER);
 
     // Draw with the updated buffer data.
     ANGLE_GL_PROGRAM(updateSamplerBuffer, essl31_shaders::vs::Simple(), kSamplerBuffer);
