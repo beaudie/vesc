@@ -178,6 +178,24 @@
       "parentUuid": "8333e606_3f34149a",
       "revId": "623ba954c8768f7354dea9a893d786b2a9a4879c",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "afb0c7e8_b16a0b93",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1190898
+      },
+      "writtenOn": "2022-04-28T21:53:50Z",
+      "side": 1,
+      "message": "I want to just have Program have a loadCachedBinary() that does the check, and then defers to loadBinary() if things are fine, and have MemoryProgramCache call into loadCachedBinary. WDYT?",
+      "parentUuid": "6b3f258b_16d3dbc8",
+      "revId": "623ba954c8768f7354dea9a893d786b2a9a4879c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
