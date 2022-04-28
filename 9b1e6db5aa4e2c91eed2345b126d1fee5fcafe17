@@ -72,6 +72,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "703216cd_056501ad",
+        "filename": "src/compiler/translator/CollectVariables.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 262,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2022-04-28T05:58:08Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "9f1fa695_dadc559c",
+      "range": {
+        "startLine": 262,
+        "startChar": 13,
+        "endLine": 262,
+        "endChar": 24
+      },
+      "revId": "9b1e6db5aa4e2c91eed2345b126d1fee5fcafe17",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "812cd5a2_8c22b1f6",
@@ -264,6 +288,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "d79a5b10_ea198617",
+        "filename": "src/compiler/translator/CollectVariables.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 432,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2022-04-28T05:58:08Z",
+      "side": 1,
+      "message": "I short circuited this by checking the AST depth before deciding whether to track liveness.  If greater than one (indicating an access chain) just consider it live.",
+      "parentUuid": "ec526954_abe2a740",
+      "range": {
+        "startLine": 432,
+        "startChar": 38,
+        "endLine": 432,
+        "endChar": 67
+      },
+      "revId": "9b1e6db5aa4e2c91eed2345b126d1fee5fcafe17",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "4657775e_9bd5b988",
         "filename": "src/compiler/translator/CollectVariables.cpp",
         "patchSetId": 1
@@ -329,6 +377,24 @@
       "side": 1,
       "message": "Heh, I meant for it to be done only once, but I removed a check I had (mTraversedDAG) while cleaning up for upload.  One way or the other, only want the DAG traversed once, and only want each function traversed once.",
       "parentUuid": "ed88d6ad_88e67a02",
+      "revId": "9b1e6db5aa4e2c91eed2345b126d1fee5fcafe17",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "8d851668_ea24451b",
+        "filename": "src/compiler/translator/CollectVariables.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 1242,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2022-04-28T05:58:08Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "dfee1206_f166f7f6",
       "revId": "9b1e6db5aa4e2c91eed2345b126d1fee5fcafe17",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
