@@ -16,6 +16,24 @@
       "message": "I tested this locally, and I think it fails in a slightly different way now. Continue is interpreted as \"the cache worked, we have a linked result\". Except we don\u0027t. So again, normal program linking always fails (the glLinkProgram call succeeds, but then getting GL_LINK_STATUS reports 0).",
       "revId": "623ba954c8768f7354dea9a893d786b2a9a4879c",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "534e4766_c1edae48",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1185214
+      },
+      "writtenOn": "2022-04-28T21:03:24Z",
+      "side": 1,
+      "message": "I should note that I tried this with the GL backend, and it didn\u0027t fail in the same way (does that not have the in-memory cache?). I could only get it to break with the D3D backend (I was specifically testing ES3 on D3D11).",
+      "parentUuid": "62bb15cb_d4092dce",
+      "revId": "623ba954c8768f7354dea9a893d786b2a9a4879c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
