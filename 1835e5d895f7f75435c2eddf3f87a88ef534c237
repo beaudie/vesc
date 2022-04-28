@@ -160,6 +160,24 @@
       "parentUuid": "d4b96a25_7887f758",
       "revId": "1835e5d895f7f75435c2eddf3f87a88ef534c237",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "77b51707_4886725b",
+        "filename": "src/libANGLE/Program.cpp",
+        "patchSetId": 10
+      },
+      "lineNbr": 3676,
+      "author": {
+        "id": 1185214
+      },
+      "writtenOn": "2022-04-28T16:40:33Z",
+      "side": 1,
+      "message": "Thanks, yeah - I noticed that some of the calls along the chain (particularly in ProgramMemoryCache return Incomplete for certain error conditions), but it does seem like there\u0027s a distinction between the two cases (trying to use in-memory cache, where we can fail and fallback to doing the work vs. someone calling glProgramBinary).",
+      "parentUuid": "9fe19305_110f21a2",
+      "revId": "1835e5d895f7f75435c2eddf3f87a88ef534c237",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
