@@ -16,6 +16,24 @@
       "message": "FYI: This is VERY heavy-handed. It\u0027s currently blocked Skia rolls, and I\u0027m struggling to work around it. Our bots don\u0027t have .git directories for third party DEPS, so their angle_commit.h ends up with the \"unknown hash\".\n\nEven if Skia doesn\u0027t use the program binary API at all, this code gets his internally when we call LinkProgram, so the bots just crash instantly.",
       "revId": "1835e5d895f7f75435c2eddf3f87a88ef534c237",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "cc6ddb82_f84363e5",
+        "filename": "src/libANGLE/Program.cpp",
+        "patchSetId": 10
+      },
+      "lineNbr": 3676,
+      "author": {
+        "id": 1190898
+      },
+      "writtenOn": "2022-04-28T15:45:33Z",
+      "side": 1,
+      "message": "Thanks Brian -- what is precisely causing the bots to crash?",
+      "parentUuid": "3f2467c2_e1b4365a",
+      "revId": "1835e5d895f7f75435c2eddf3f87a88ef534c237",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
