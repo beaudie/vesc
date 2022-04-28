@@ -46,6 +46,7 @@ from psutil import process_iter
 DEFAULT_TEST_DIR = '.'
 DEFAULT_TEST_JSON = 'restricted_traces.json'
 DEFAULT_LOG_LEVEL = 'info'
+SELECTED_DEVICE = ''
 
 Result = namedtuple('Result', ['process', 'time'])
 
@@ -93,7 +94,8 @@ def run_async_command(args):
 
 
 def cleanup():
-    run_command('adb shell rm -f /sdcard/Download/out.txt /sdcard/Download/gpumem.txt')
+    run_command('adb {} shell rm -f /sdcard/Download/out.txt /sdcard/Download/gpumem.txt'.format(
+        SELECTED_DEVICE))
 
 
 def get_mode(args):
@@ -123,11 +125,11 @@ def run_trace(trace, renderer, args):
 
     # Kick off a subprocess that collects peak gpu memory periodically
     # Note the 0.25 below is the delay (in seconds) between memory checks
-    run_command('adb push gpumem.sh /data/local/tmp')
-    memory_command = 'adb shell sh /data/local/tmp/gpumem.sh 0.25'
+    run_command('adb {} push gpumem.sh /data/local/tmp'.format(SELECTED_DEVICE))
+    memory_command = 'adb {} shell sh /data/local/tmp/gpumem.sh 0.25'.format(SELECTED_DEVICE)
     memory_process = run_async_command(memory_command)
 
-    adb_command = 'adb shell am instrument -w '
+    adb_command = 'adb {} shell am instrument -w '.format(SELECTED_DEVICE)
     adb_command += '-e org.chromium.native_test.NativeTestInstrumentationTestRunner.StdoutFile /sdcard/Download/out.txt '
     adb_command += '-e org.chromium.native_test.NativeTest.CommandLineFlags "--gtest_filter=TracePerfTest.Run/' + renderer + mode + '_' + trace + '\ '
     if args.maxsteps != '':
@@ -154,7 +156,9 @@ def run_trace(trace, renderer, args):
 
 def get_test_time(renderer, time):
     # Pull the results from the device and parse
-    result = run_command('adb shell cat /sdcard/Download/out.txt | grep -v Error | grep -v Frame')
+    result = run_command(
+        'adb {} shell cat /sdcard/Download/out.txt | grep -v Error | grep -v Frame'.format(
+            SELECTED_DEVICE))
 
     measured_time = ''
 
@@ -182,7 +186,8 @@ def get_test_time(renderer, time):
 
 def get_gpu_memory(trace_duration):
     # Pull the results from the device and parse
-    result = run_command('adb shell cat /sdcard/Download/gpumem.txt | awk "NF"')
+    result = run_command(
+        'adb {} shell cat /sdcard/Download/gpumem.txt | awk "NF"'.format(SELECTED_DEVICE))
 
     # The gpumem script grabs snapshots of memory per process
     # Output looks like this, repeated once per sleep_duration of the test:
@@ -253,7 +258,7 @@ def get_gpu_memory(trace_duration):
 
 def get_gpu_time():
     # Pull the results from the device and parse
-    result = run_command('adb shell cat /sdcard/Download/out.txt')
+    result = run_command('adb {} shell cat /sdcard/Download/out.txt'.format(SELECTED_DEVICE))
     gpu_time = ''
 
     while True:
@@ -272,7 +277,7 @@ def get_gpu_time():
 
 def get_cpu_time():
     # Pull the results from the device and parse
-    result = run_command('adb shell cat /sdcard/Download/out.txt')
+    result = run_command('adb {} shell cat /sdcard/Download/out.txt'.format(SELECTED_DEVICE))
     cpu_time = ''
 
     while True:
@@ -291,7 +296,9 @@ def get_cpu_time():
 
 def get_frame_count():
     # Pull the results from the device and parse
-    result = run_command('adb shell cat /sdcard/Download/out.txt | grep -v Error | grep -v Frame')
+    result = run_command(
+        'adb {} shell cat /sdcard/Download/out.txt | grep -v Error | grep -v Frame'.format(
+            SELECTED_DEVICE))
 
     frame_count = 0
 
@@ -319,7 +326,7 @@ class GPUPowerStats():
         self.little_cpu_power = 0
 
     def get_power_data(self):
-        gpu_power_command = 'adb shell "'
+        gpu_power_command = 'adb {} shell "'.format(SELECTED_DEVICE)
         gpu_power_command += 'cat /sys/bus/iio/devices/iio:device1/energy_value'
         gpu_power_command += '"'
 
@@ -352,7 +359,7 @@ class GPUPowerStats():
         logging.debug("self.gpu_power %s" % self.gpu_power)
 
         # Also grab the sum of CPU powers
-        cpu_power_command = 'adb shell "'
+        cpu_power_command = 'adb {} shell "'.format(SELECTED_DEVICE)
         cpu_power_command += 'cat /sys/bus/iio/devices/iio:device0/energy_value'
         cpu_power_command += '"'
 
@@ -462,6 +469,8 @@ def main():
     parser.add_argument('--output-tag', help='Tag for output files.', required=True)
     parser.add_argument(
         '--loop-count', help='How many times to loop through the traces', default=5)
+    parser.add_argument(
+        '--device', help='Which device to run the tests on (use serial)', default='')
 
     group = parser.add_mutually_exclusive_group()
     group.add_argument(
@@ -492,6 +501,31 @@ def main():
     mode = get_mode(args)
     trace_width = get_trace_width(mode)
 
+    # Select the target device
+    # The output from 'adb devices' always includes a header and a new line at the end
+    global SELECTED_DEVICE
+    result_dev = run_command('adb devices')
+    result_dev_out = result_dev.process.stdout.read().strip()
+    result_header_end = result_dev_out.find('\n')
+    result_dev_out = '' if result_header_end == -1 else result_dev_out[result_header_end:]
+    result_dev_out = result_dev_out.split()[0::2]
+    num_connected_devices = len(result_dev_out)
+
+    if num_connected_devices == 0:
+        print('Device Error: No devices detected. Please connect your device and try again.')
+        return 1
+    elif num_connected_devices > 1 and args.device == '':
+        print(
+            'Device Error: More than one device detected. Please specify your target device using the --device option and try again.'
+        )
+        return 2
+    elif num_connected_devices == 1 and args.device not in result_dev_out:
+        print('Device Error: Invalid device serial.')
+        return 3
+    else:
+        print('Selected device serial: {}'.format(args.device))
+        SELECTED_DEVICE = '-s {}'.format(args.device)
+
     # Add an underscore to the mode for use in loop below
     if mode != '':
         mode = mode + '_'
@@ -515,7 +549,7 @@ def main():
         print('%-*s %-*s %-*s' %
               (trace_width, 'trace', 30, 'wall_time_per_frame(ms)', 30, 'gpu_time_per_frame'))
 
-    run_command('adb root')
+    run_command('adb {} root'.format(SELECTED_DEVICE))
 
     if args.power:
         starting_power = GPUPowerStats()
@@ -647,7 +681,8 @@ def main():
     summary_file = open("summary." + args.output_tag + ".csv", 'w', newline='')
     summary_writer = csv.writer(summary_file)
 
-    android_result = run_command('adb shell getprop ro.build.fingerprint')
+    android_result = run_command(
+        'adb {} shell getprop ro.build.fingerprint'.format(SELECTED_DEVICE))
     android_version = android_result.process.stdout.read().strip()
 
     angle_result = run_command('git rev-parse HEAD')
