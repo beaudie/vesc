@@ -896,6 +896,9 @@ void Extensions::setTextureExtensionSupport(const TextureCapsMap &textureCaps)
     textureCompressionPvrtcIMG          = DeterminePVRTCTextureSupport(textureCaps);
     pvrtcSRGBEXT                        = DeterminePVRTCsRGBTextureSupport(textureCaps);
     textureStencil8OES                  = DetermineStencilIndex8Support(textureCaps);
+    // [TO DO ] add function to detect texture buffer support
+    textureBufferEXT = true;
+    textureBufferOES = true;
 }
 
 TypePrecision::TypePrecision() = default;
@@ -940,9 +943,9 @@ void TypePrecision::get(GLint *returnRange, GLint *returnPrecision) const
     *returnPrecision = precision;
 }
 
-Caps::Caps()                  = default;
-Caps::Caps(const Caps &other) = default;
-Caps::~Caps()                 = default;
+Caps::Caps()                             = default;
+Caps::Caps(const Caps &other)            = default;
+Caps::~Caps()                            = default;
 Caps &Caps::operator=(const Caps &other) = default;
 
 Caps GenerateMinimumCaps(const Version &clientVersion, const Extensions &extensions)
