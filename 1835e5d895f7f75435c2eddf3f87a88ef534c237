@@ -34,6 +34,24 @@
       "parentUuid": "3f2467c2_e1b4365a",
       "revId": "1835e5d895f7f75435c2eddf3f87a88ef534c237",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "495708a1_e6ef2ace",
+        "filename": "src/libANGLE/Program.cpp",
+        "patchSetId": 10
+      },
+      "lineNbr": 3676,
+      "author": {
+        "id": 1185214
+      },
+      "writtenOn": "2022-04-28T15:55:13Z",
+      "side": 1,
+      "message": "Ah, we consider shader compilation failure to be a fatal error when running our tests. As soon as we try to link a program, ANGLE hits this and produces this error. eg: https://logs.chromium.org/logs/skia/5a89864fb0267211/+/steps/dm/0/stdout\n\nI just tried fixing this more thoroughly by specifying (EGL_CONTEXT_PROGRAM_BINARY_CACHE_ENABLED_ANGLE, EGL_FALSE) when I create our ANGLE EGL context, but I think I\u0027ve figured out that the code for that is incorrect:\n\nhttps://source.chromium.org/chromium/chromium/src/+/main:third_party/angle/src/libANGLE/Display.cpp;l\u003d1457;drc\u003d95c1ff52b1109efeed99688ec26253f96e201073\n\nThat line is checking the Display attributes, *not* the Context attributes.",
+      "parentUuid": "cc6ddb82_f84363e5",
+      "revId": "1835e5d895f7f75435c2eddf3f87a88ef534c237",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
