@@ -196,6 +196,24 @@
       "parentUuid": "6b3f258b_16d3dbc8",
       "revId": "623ba954c8768f7354dea9a893d786b2a9a4879c",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "09c3aef3_035885a9",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1190898
+      },
+      "writtenOn": "2022-04-28T22:15:23Z",
+      "side": 1,
+      "message": "To expand: loadBinary() should always (right?) allow glProgramBinary calls to succeed (well, assuming no other errors). It\u0027s really the case where the cache has an invalid/old binary. We\u0027ve been trying to hack loadBinary() to handle both cases, but it seems like the safest thing would be to have a slightly separate codepath for the cached case. I mean, alternately, I guess we could just check the feature define in MemoryProgramCache...",
+      "parentUuid": "afb0c7e8_b16a0b93",
+      "revId": "623ba954c8768f7354dea9a893d786b2a9a4879c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
