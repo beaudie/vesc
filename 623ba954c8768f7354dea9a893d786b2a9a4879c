@@ -88,6 +88,24 @@
       "parentUuid": "f878c935_ec026a1f",
       "revId": "623ba954c8768f7354dea9a893d786b2a9a4879c",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "360476df_e899a1c9",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1185214
+      },
+      "writtenOn": "2022-04-28T21:14:49Z",
+      "side": 1,
+      "message": "Right, the Continue here bubbles back up to that area of Program::linkImpl I highlighted. And then we interpret that as success, rather than \"no, we need to actually link the program\". (Which, according to the comment, is indicated by Incomplete)",
+      "parentUuid": "1ae01552_03f7c28e",
+      "revId": "623ba954c8768f7354dea9a893d786b2a9a4879c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
