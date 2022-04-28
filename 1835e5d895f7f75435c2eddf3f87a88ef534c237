@@ -142,6 +142,24 @@
       "parentUuid": "d4b96a25_7887f758",
       "revId": "1835e5d895f7f75435c2eddf3f87a88ef534c237",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "9fe19305_110f21a2",
+        "filename": "src/libANGLE/Program.cpp",
+        "patchSetId": 10
+      },
+      "lineNbr": 3676,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2022-04-28T16:36:25Z",
+      "side": 1,
+      "message": "Hm, thanks for pointing that out. I don\u0027t know if incomplete is the right change to make. In any case now I\u0027m worried this might affect other integrations, so let\u0027s revert this and try to solve it with the re-land.",
+      "parentUuid": "d4b96a25_7887f758",
+      "revId": "1835e5d895f7f75435c2eddf3f87a88ef534c237",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
