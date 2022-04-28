@@ -88,6 +88,24 @@
       "parentUuid": "27aa774b_1e5b8624",
       "revId": "1835e5d895f7f75435c2eddf3f87a88ef534c237",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "7238f996_1696bb4e",
+        "filename": "src/libANGLE/Program.cpp",
+        "patchSetId": 10
+      },
+      "lineNbr": 3676,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2022-04-28T16:10:49Z",
+      "side": 1,
+      "message": "It\u0027s certainly valid GLES to do what we\u0027re doing. Brian, would it be easier on Skia\u0027s testing if we didn\u0027t expose any binary formats when the cache versioning doesn\u0027t work?",
+      "parentUuid": "7de279c3_1239ece0",
+      "revId": "1835e5d895f7f75435c2eddf3f87a88ef534c237",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
