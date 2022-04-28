@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "62bb15cb_d4092dce",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1185214
+      },
+      "writtenOn": "2022-04-28T21:01:34Z",
+      "side": 1,
+      "message": "I tested this locally, and I think it fails in a slightly different way now. Continue is interpreted as \"the cache worked, we have a linked result\". Except we don\u0027t. So again, normal program linking always fails (the glLinkProgram call succeeds, but then getting GL_LINK_STATUS reports 0).",
+      "revId": "623ba954c8768f7354dea9a893d786b2a9a4879c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
