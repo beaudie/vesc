@@ -445,7 +445,7 @@ angle::Result ProgramPipeline::link(const Context *context)
     ProgramVaryingPacking varyingPacking;
     LinkingVariables linkingVariables(mState);
 
-    mState.mExecutable->reset();
+    mState.mExecutable->reset(true);
 
     InfoLog &infoLog = mState.mExecutable->getInfoLog();
     infoLog.reset();

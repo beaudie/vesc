@@ -208,7 +208,7 @@ ProgramExecutable::ProgramExecutable()
       mTessGenVertexOrder(GL_NONE),
       mTessGenPointMode(GL_NONE)
 {
-    reset();
+    reset(true);
 }
 
 ProgramExecutable::ProgramExecutable(const ProgramExecutable &other)
@@ -247,14 +247,17 @@ ProgramExecutable::ProgramExecutable(const ProgramExecutable &other)
       mUsesEarlyFragmentTestsOptimization(other.mUsesEarlyFragmentTestsOptimization),
       mAdvancedBlendEquations(other.mAdvancedBlendEquations)
 {
-    reset();
+    reset(true);
 }
 
 ProgramExecutable::~ProgramExecutable() = default;
 
-void ProgramExecutable::reset()
+void ProgramExecutable::reset(bool clearInfoLog)
 {
-    resetInfoLog();
+    if (clearInfoLog)
+    {
+        resetInfoLog();
+    }
     mActiveAttribLocationsMask.reset();
     mAttributesTypeMask.reset();
     mAttributesMask.reset();
