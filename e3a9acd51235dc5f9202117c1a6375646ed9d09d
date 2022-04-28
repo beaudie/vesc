@@ -22,6 +22,30 @@
       },
       "revId": "e3a9acd51235dc5f9202117c1a6375646ed9d09d",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "d3e32082_165ac2e5",
+        "filename": "src/libANGLE/renderer/vulkan/CommandProcessor.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 937,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2022-04-28T22:18:05Z",
+      "side": 1,
+      "message": "There is assert above that ensures finishedCount is not 0 (because caller does the check). This init and the if (finishedCount\u003d\u003d0) check is now removed.",
+      "parentUuid": "daf7947b_36389666",
+      "range": {
+        "startLine": 937,
+        "startChar": 38,
+        "endLine": 937,
+        "endChar": 68
+      },
+      "revId": "e3a9acd51235dc5f9202117c1a6375646ed9d09d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
