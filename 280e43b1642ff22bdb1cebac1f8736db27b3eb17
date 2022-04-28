@@ -16,6 +16,46 @@
       "message": "This fixes a class of syncval errors we have right now. Depends on load/store op NONE",
       "revId": "280e43b1642ff22bdb1cebac1f8736db27b3eb17",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "f1a3363b_b7f4906c",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2022-04-28T14:15:58Z",
+      "side": 1,
+      "message": "Nice fix.",
+      "revId": "280e43b1642ff22bdb1cebac1f8736db27b3eb17",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "7de41502_434085c8",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 208,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2022-04-28T14:15:58Z",
+      "side": 1,
+      "message": "This is a bit of a messy way to maintain this list. Suggest that we switch this to a dynamic list, initialized when we set up the caps/features, and set up the suppressions conditionally at that time.",
+      "range": {
+        "startLine": 199,
+        "startChar": 0,
+        "endLine": 208,
+        "endChar": 0
+      },
+      "revId": "280e43b1642ff22bdb1cebac1f8736db27b3eb17",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
