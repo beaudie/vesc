@@ -142,8 +142,8 @@ constexpr bool kEnableRenderDocCapture = false;
 
 const APIInfo *gInitAPI = nullptr;
 dEQPOptions gOptions    = {
-    kDefaultPreRotation,      // preRotation
-    kEnableRenderDocCapture,  // enableRenderDocCapture
+       kDefaultPreRotation,      // preRotation
+       kEnableRenderDocCapture,  // enableRenderDocCapture
 };
 
 constexpr const char gdEQPEGLConfigNameString[] = "--deqp-gl-config-name=";
@@ -593,6 +593,14 @@ void dEQPTest<TestModuleIndex>::SetUpTestCase()
         argv.push_back("--deqp-log-flush=disable");
     }
 
+#if defined(ANGLE_PLATFORM_ANDROID)
+    if (!kIsDebug)
+    {
+        argv.push_back("--deqp-log-shader-sources=disable");
+        argv.push_back("--deqp-log-flush=disable");
+    }
+#endif
+
     // Add any additional flags specified from command line to be forwarded to dEQP.
     argv.insert(argv.end(), gdEQPForwardFlags.begin(), gdEQPForwardFlags.end());
 
@@ -616,7 +624,10 @@ void dEQPTest<TestModuleIndex>::TearDownTestCase()
 #define ANGLE_INSTANTIATE_DEQP_TEST_CASE(API, N)                              \
     class dEQP : public dEQPTest<N>                                           \
     {};                                                                       \
-    TEST_P(dEQP, API) { runTest(); }                                          \
+    TEST_P(dEQP, API)                                                         \
+    {                                                                         \
+        runTest();                                                            \
+    }                                                                         \
                                                                               \
     INSTANTIATE_TEST_SUITE_P(, dEQP, dEQP::GetTestingRange(),                 \
                              [](const testing::TestParamInfo<size_t> &info) { \
