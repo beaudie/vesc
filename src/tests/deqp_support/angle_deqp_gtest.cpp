@@ -593,6 +593,13 @@ void dEQPTest<TestModuleIndex>::SetUpTestCase()
         argv.push_back("--deqp-log-flush=disable");
     }
 
+#if defined(ANGLE_PLATFORM_ANDROID)
+    if (!kIsDebug)
+    {
+        argv.push_back("--deqp-log-flush=disable");
+    }
+#endif
+
     // Add any additional flags specified from command line to be forwarded to dEQP.
     argv.insert(argv.end(), gdEQPForwardFlags.begin(), gdEQPForwardFlags.end());
 
