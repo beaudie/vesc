@@ -1,0 +1,73 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "9c5665ad_00be09c3",
+        "filename": "src/libANGLE/capture/FrameCapture.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 7643,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2022-04-29T19:31:53Z",
+      "side": 1,
+      "message": "This is crashing for me with local Android app testing.  I instrumented the function like so:\n\n```\nINFO() \u003c\u003c \"WriteParamValueReplay\u003cParamType::TEGLContext\u003e value\u003d\" \u003c\u003c value;\ngl::Context *context \u003d static_cast\u003cgl::Context *\u003e(value);\nINFO() \u003c\u003c \"WriteParamValueReplay\u003cParamType::TEGLContext\u003e context\u003d\" \u003c\u003c context;\nINFO() \u003c\u003c \"WriteParamValueReplay\u003cParamType::TEGLContext\u003e id\u003d\" \u003c\u003c context-\u003eid();\nINFO() \u003c\u003c \"WriteParamValueReplay\u003cParamType::TEGLContext\u003e id.value\u003d\" \u003c\u003c context-\u003eid().value;\nos \u003c\u003c \"static_cast\u003cEGLContext\u003e(gContextMap[\" \u003c\u003c context-\u003eid().value \u003c\u003c \"])\";\n```\n    \nand here\u0027s what I\u0027m seeing in logcat:\n\n```\nINFO: WriteParamValueReplay\u003cParamType::TEGLContext\u003e value\u003d0x1\nINFO: WriteParamValueReplay\u003cParamType::TEGLContext\u003e context\u003d0x1\n--------- beginning of crash\n04-29 12:58:32.018 12004 12004 F libc    : Fatal signal 11 (SIGSEGV), code 1 (SEGV_MAPERR), fault addr 0x11 in tid 12004 (h.), pid 12004 (h.)\n```\n\nSo I think this should instead be:\n\n```\nsize_t context \u003d reinterpret_cast\u003csize_t\u003e(value);\nos \u003c\u003c \"static_cast\u003cEGLContext\u003e(gContextMap[\" \u003c\u003c context \u003c\u003c \"])\";\n```\n\nI was able to capture and replay an app locally with the above fix.",
+      "range": {
+        "startLine": 7642,
+        "startChar": 0,
+        "endLine": 7643,
+        "endChar": 80
+      },
+      "revId": "a8bf12ba8c9caa66a8d979818eb74d28db58c69e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "de391dbf_89b6c834",
+        "filename": "src/libANGLE/capture/FrameCapture.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 8039,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2022-04-29T19:31:53Z",
+      "side": 1,
+      "message": "nit: the (and C++ style comments)",
+      "range": {
+        "startLine": 8039,
+        "startChar": 57,
+        "endLine": 8039,
+        "endChar": 59
+      },
+      "revId": "a8bf12ba8c9caa66a8d979818eb74d28db58c69e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "a39edda4_f069ab7f",
+        "filename": "src/libGLESv2/egl_ext_stubs.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 163,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2022-04-29T19:31:53Z",
+      "side": 1,
+      "message": "For consistency, you setSuccess before capture in the other functions.",
+      "range": {
+        "startLine": 163,
+        "startChar": 0,
+        "endLine": 163,
+        "endChar": 25
+      },
+      "revId": "a8bf12ba8c9caa66a8d979818eb74d28db58c69e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
