@@ -1550,14 +1550,16 @@ angle::Result Program::loadBinary(const Context *context,
     unlink();
     InfoLog &infoLog = mState.mExecutable->getInfoLog();
 
-#if ANGLE_PROGRAM_BINARY_LOAD != ANGLE_ENABLED
-    return angle::Result::Continue;
-#else
+    if (!angle::GetANGLEVersionHasBinaryLoading())
+    {
+        return angle::Result::Incomplete;
+    }
+
     ASSERT(binaryFormat == GL_PROGRAM_BINARY_ANGLE);
     if (binaryFormat != GL_PROGRAM_BINARY_ANGLE)
     {
         infoLog << "Invalid program binary format.";
-        return angle::Result::Continue;
+        return angle::Result::Incomplete;
     }
 
     BinaryInputStream stream(binary, length);
@@ -1604,7 +1606,6 @@ angle::Result Program::loadBinary(const Context *context,
     mLinkingState = std::move(linkingState);
 
     return result;
-#endif  // #if ANGLE_PROGRAM_BINARY_LOAD == ANGLE_ENABLED
 }
 
 angle::Result Program::saveBinary(Context *context,
@@ -3675,6 +3676,7 @@ angle::Result Program::deserialize(const Context *context,
 {
     std::vector<uint8_t> commitString(angle::GetANGLECommitHashSize(), 0);
     stream.readBytes(commitString.data(), commitString.size());
+
     if (memcmp(commitString.data(), angle::GetANGLECommitHash(), commitString.size()) != 0)
     {
         infoLog << "Invalid program binary version.";
