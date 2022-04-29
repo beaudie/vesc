@@ -18,6 +18,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": true,
+      "key": {
+        "uuid": "b471cc7c_bfcafac3",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 17,
+      "author": {
+        "id": 1359667
+      },
+      "writtenOn": "2022-04-29T01:46:18Z",
+      "side": 1,
+      "message": "Yes it fails for us.\n`mNativeCaps.max3DTextureSize \u003d LimitToInt(limitsVk.maxImageDimension3D);`\n1. This limit is determined by the vk driver that might happen to be correct/match the `maxArrayTextureLayers` value\n2. There are more negative checks (like validating Cubemap arrays) within the test if running with an ES 3.2 context.",
+      "parentUuid": "11ffd7fd_d5e85bbf",
+      "revId": "49336ade88d91d5278db62b58b60ec9681272be3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": false,
       "key": {
         "uuid": "d0b3085e_16f1c914",
