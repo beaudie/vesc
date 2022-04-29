@@ -232,6 +232,24 @@
       "parentUuid": "09c3aef3_035885a9",
       "revId": "623ba954c8768f7354dea9a893d786b2a9a4879c",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "f293dcb8_a807b6b3",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1185214
+      },
+      "writtenOn": "2022-04-29T14:37:40Z",
+      "side": 1,
+      "message": "Yes, I think that\u0027s valid. I tested this version to be sure, and it works fine on our end.",
+      "parentUuid": "d0f59175_77ac60df",
+      "revId": "623ba954c8768f7354dea9a893d786b2a9a4879c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
