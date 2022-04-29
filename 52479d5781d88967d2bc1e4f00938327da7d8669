@@ -41,6 +41,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "ffdab1d4_5dda4dfb",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 2816,
+      "author": {
+        "id": 1525982
+      },
+      "writtenOn": "2022-04-29T02:16:55Z",
+      "side": 1,
+      "message": "Thanks! Done",
+      "parentUuid": "ec284320_d59902c4",
+      "range": {
+        "startLine": 2812,
+        "startChar": 4,
+        "endLine": 2816,
+        "endChar": 5
+      },
+      "revId": "52479d5781d88967d2bc1e4f00938327da7d8669",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "e948a9e4_daaa96d5",
@@ -64,6 +88,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "708915a9_b4415c7f",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 2828,
+      "author": {
+        "id": 1525982
+      },
+      "writtenOn": "2022-04-29T02:16:55Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "e948a9e4_daaa96d5",
+      "range": {
+        "startLine": 2824,
+        "startChar": 4,
+        "endLine": 2828,
+        "endChar": 5
+      },
+      "revId": "52479d5781d88967d2bc1e4f00938327da7d8669",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "e0538d7b_b061a694",
@@ -77,6 +125,30 @@
       "writtenOn": "2022-04-27T21:19:02Z",
       "side": 1,
       "message": "My suggestion is move this to the end of function and do:\n\nif(!texture_has_staged_update)\n{\n    contextVk-\u003eonTextureUpload(this);\n}",
+      "range": {
+        "startLine": 495,
+        "startChar": 4,
+        "endLine": 502,
+        "endChar": 5
+      },
+      "revId": "52479d5781d88967d2bc1e4f00938327da7d8669",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "3169e6f0_ea677e20",
+        "filename": "src/libANGLE/renderer/vulkan/TextureVk.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 502,
+      "author": {
+        "id": 1525982
+      },
+      "writtenOn": "2022-04-29T02:16:55Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "e0538d7b_b061a694",
       "range": {
         "startLine": 495,
         "startChar": 4,
