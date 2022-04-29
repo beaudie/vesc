@@ -156,6 +156,15 @@ def _TempDeviceDir():
 
 
 @contextlib.contextmanager
+def _TempDeviceFileDataDir():
+    path = '/data/data/com.android.angle.test/temp_file-%s' % _RandomHex()
+    try:
+        yield path
+    finally:
+        _AdbShell('rm -f ' + path)
+
+
+@contextlib.contextmanager
 def _TempDeviceFile():
     path = '/sdcard/Download/temp_file-%s' % _RandomHex()
     try:
@@ -175,7 +184,7 @@ def _TempLocalFile():
 
 
 def _RunInstrumentation(flags):
-    with _TempDeviceFile() as temp_device_file:
+    with _TempDeviceFileDataDir() as temp_device_file:
         cmd = ' '.join([
             'p=com.android.angle.test;',
             'ntr=org.chromium.native_test.NativeTestInstrumentationTestRunner;',
