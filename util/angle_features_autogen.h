@@ -104,6 +104,7 @@ enum class Feature
     EnablePreRotateSurfaces,
     EnableProgramBinaryForCapture,
     ExpandIntegerPowExpressions,
+    ExplicitlyEnablePerSampleShading,
     ExposeNonConformantExtensionsAndVersions,
     FinishDoesNotCauseQueriesToBeAvailable,
     FlushAfterEndingTransformFeedback,
