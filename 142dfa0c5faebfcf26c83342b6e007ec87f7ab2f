@@ -58,6 +58,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "aef17689_af31df71",
+        "filename": "src/libANGLE/renderer/vulkan/VertexArrayVk.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 912,
+      "author": {
+        "id": 1340649
+      },
+      "writtenOn": "2022-04-30T20:51:22Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "ba514f70_ef03ea35",
+      "range": {
+        "startLine": 912,
+        "startChar": 53,
+        "endLine": 912,
+        "endChar": 60
+      },
+      "revId": "142dfa0c5faebfcf26c83342b6e007ec87f7ab2f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "42e1f99b_0c628013",
@@ -71,6 +95,24 @@
       "writtenOn": "2022-04-30T02:28:08Z",
       "side": 1,
       "message": "Is this just because the test is crashing on other backends? Please open a bug about that and suppress this in `angle_end2end_tests_expectations.txt` (you\u0027d have multiple lines, one per backend)",
+      "revId": "142dfa0c5faebfcf26c83342b6e007ec87f7ab2f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "f6e12e45_1760bf6e",
+        "filename": "src/tests/gl_tests/VertexAttributeTest.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 934,
+      "author": {
+        "id": 1340649
+      },
+      "writtenOn": "2022-04-30T20:51:22Z",
+      "side": 1,
+      "message": "\u003e Is this just because the test is crashing on other backends?\n\nyes\n\n\u003e Please open a bug about that\n\nanglebug.com/7257\n\n\u003e suppress this in angle_end2end_tests_expectations.txt\n\nDone.",
+      "parentUuid": "42e1f99b_0c628013",
       "revId": "142dfa0c5faebfcf26c83342b6e007ec87f7ab2f",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
