@@ -16,6 +16,23 @@
       "message": "PTAL",
       "revId": "ba2273b61a77d99207c1966a35252325baa01543",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "2f87e121_c5abd209",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-04-30T02:09:18Z",
+      "side": 1,
+      "message": "Can\u0027t say I understand what makes -1 special (and why would -2 work for example but not -1, or maybe that\u0027s just not tested). It would help reason about what the problem really is if there were a standalone end2end test that reproduces the issue.\n\nFYI, I see that this also reproduces the issue (so the middle test can be dropped):\n\n```\n--gtest_filter\u003ddEQP.GLES3/functional_samplers_single_cubemap_diff_wrap_t:dEQP.GLES3/functional_negative_api_buffer_framebuffer_texture_layer\n```",
+      "revId": "ba2273b61a77d99207c1966a35252325baa01543",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
