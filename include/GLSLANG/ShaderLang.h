@@ -726,6 +726,9 @@ sh::WorkGroupSize GetComputeShaderLocalGroupSize(const ShHandle handle);
 int GetVertexShaderNumViews(const ShHandle handle);
 // Returns true if compiler has injected instructions for early fragment tests as an optimization
 bool HasEarlyFragmentTestsOptimization(const ShHandle handle);
+// Returns true if the shader has specified the |sample| qualifier, implying that per-sample shading
+// should be enabled
+bool EnablesPerSampleShading(const ShHandle handle);
 
 // Returns specialization constant usage bits
 uint32_t GetShaderSpecConstUsageBits(const ShHandle handle);
