@@ -520,11 +520,57 @@ void ShareGroupVk::pruneDefaultBufferPools(RendererVk *renderer)
     {
         mSmallBufferPool->pruneEmptyBuffers(renderer);
     }
+
+    // logBufferPools();
 }
 
 bool ShareGroupVk::isDueForBufferPoolPrune()
 {
     double timeElapsed = angle::GetCurrentSystemTime() - mLastPruneTime;
     return timeElapsed > kTimeElapsedForPruneDefaultBufferPool;
+}
+
+void ShareGroupVk::calculateTotalBufferCount(size_t *bufferCount, VkDeviceSize *totalSize) const
+{
+    *bufferCount = 0;
+    *totalSize   = 0;
+    for (const std::unique_ptr<vk::BufferPool> &pool : mDefaultBufferPools)
+    {
+        if (pool)
+        {
+            *bufferCount += pool->getBufferCount();
+            *totalSize += pool->getMemorySize();
+        }
+    }
+    if (mSmallBufferPool)
+    {
+        *bufferCount += mSmallBufferPool->getBufferCount();
+        *totalSize += mSmallBufferPool->getMemorySize();
+    }
+}
+
+void ShareGroupVk::logBufferPools() const
+{
+    size_t totalBufferCount;
+    VkDeviceSize totalMemorySize;
+    calculateTotalBufferCount(&totalBufferCount, &totalMemorySize);
+
+    INFO() << "BufferBlocks count:" << totalBufferCount << " memorySize:" << totalMemorySize
+           << " unUsedBytes/memorySize (KBs):";
+    for (const std::unique_ptr<vk::BufferPool> &pool : mDefaultBufferPools)
+    {
+        if (pool && pool->getBufferCount() > 0)
+        {
+            std::ostringstream log;
+            pool->addStats(&log);
+            INFO() << "\t" << log.str();
+        }
+    }
+    if (mSmallBufferPool && mSmallBufferPool->getBufferCount() > 0)
+    {
+        std::ostringstream log;
+        mSmallBufferPool->addStats(&log);
+        INFO() << "\t" << log.str();
+    }
 }
 }  // namespace rx
