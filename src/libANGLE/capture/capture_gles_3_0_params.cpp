@@ -611,7 +611,10 @@ void CaptureGetVertexAttribIiv_params(const State &glState,
                                       GLint *params,
                                       ParamCapture *paramCapture)
 {
-    UNIMPLEMENTED();
+    int nParams = 1;
+    if (pname == GL_CURRENT_VERTEX_ATTRIB)
+        nParams = 4;
+    paramCapture->readBufferSizeBytes = nParams * sizeof(GLint);
 }
 
 void CaptureGetVertexAttribIuiv_params(const State &glState,
@@ -621,7 +624,10 @@ void CaptureGetVertexAttribIuiv_params(const State &glState,
                                        GLuint *params,
                                        ParamCapture *paramCapture)
 {
-    UNIMPLEMENTED();
+    int nParams = 1;
+    if (pname == GL_CURRENT_VERTEX_ATTRIB)
+        nParams = 4;
+    paramCapture->readBufferSizeBytes = nParams * sizeof(GLuint);
 }
 
 void CaptureInvalidateFramebuffer_attachments(const State &glState,
