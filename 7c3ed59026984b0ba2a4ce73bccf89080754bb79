@@ -338,6 +338,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "29c12ded_792411b2",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 2660,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2022-05-02T13:41:03Z",
+      "side": 1,
+      "message": "Sorry for the very slow response. The patch looks different from what I was expecting. My suggestion would be to basically move the check you have right here into a function in Context.cpp, where it would make the most sense. If you can try that approach and it doesn\u0027t work, I can try to help debug.",
+      "parentUuid": "4bf0e2df_cedf8ea8",
+      "range": {
+        "startLine": 2658,
+        "startChar": 0,
+        "endLine": 2660,
+        "endChar": 27
+      },
+      "revId": "7c3ed59026984b0ba2a4ce73bccf89080754bb79",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "a3fcd47e_44acddf7",
         "filename": "src/libANGLE/renderer/vulkan/RendererVk.cpp",
         "patchSetId": 1
@@ -349,6 +373,30 @@
       "writtenOn": "2022-03-08T01:18:28Z",
       "side": 1,
       "message": "hdr profiles for astc texture compression is not a requirement for 3.2",
+      "range": {
+        "startLine": 2679,
+        "startChar": 31,
+        "endLine": 2679,
+        "endChar": 60
+      },
+      "revId": "7c3ed59026984b0ba2a4ce73bccf89080754bb79",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ddbc71f8_1d7fea4d",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 2679,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2022-05-02T13:41:03Z",
+      "side": 1,
+      "message": "+1",
+      "parentUuid": "a3fcd47e_44acddf7",
       "range": {
         "startLine": 2679,
         "startChar": 31,
