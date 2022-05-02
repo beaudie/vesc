@@ -105,6 +105,24 @@
       "parentUuid": "87923f99_c7aa3d80",
       "revId": "ba2273b61a77d99207c1966a35252325baa01543",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "1da83596_93c38cd3",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1340649
+      },
+      "writtenOn": "2022-05-02T18:17:11Z",
+      "side": 1,
+      "message": "when i have some bandwidth, want to implement a SparseBitsetArray and convert all this into constant time \u0026 3 line methods",
+      "parentUuid": "9452e01f_cd481b1d",
+      "revId": "ba2273b61a77d99207c1966a35252325baa01543",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
