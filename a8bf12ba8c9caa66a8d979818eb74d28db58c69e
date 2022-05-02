@@ -26,6 +26,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "a4ab5bad_33b1e10f",
+        "filename": "src/libANGLE/capture/FrameCapture.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 7643,
+      "author": {
+        "id": 1491823
+      },
+      "writtenOn": "2022-05-02T06:54:30Z",
+      "side": 1,
+      "message": "This needed more changes, i.e. CaptureMidExecutionSetup and FrameCaptureShared::captureCall pass in the context ID, but in CaptureEGLCreateImage I was passing in the context pointer. Changed now so that I\u0027m passing in the ID there too. \n\nI wonder whether it would be better to always pass in the pointer to the context and do the conversion to the ID here.",
+      "parentUuid": "9c5665ad_00be09c3",
+      "range": {
+        "startLine": 7642,
+        "startChar": 0,
+        "endLine": 7643,
+        "endChar": 80
+      },
+      "revId": "a8bf12ba8c9caa66a8d979818eb74d28db58c69e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "de391dbf_89b6c834",
         "filename": "src/libANGLE/capture/FrameCapture.cpp",
         "patchSetId": 7
@@ -37,6 +61,30 @@
       "writtenOn": "2022-04-29T19:31:53Z",
       "side": 1,
       "message": "nit: the (and C++ style comments)",
+      "range": {
+        "startLine": 8039,
+        "startChar": 57,
+        "endLine": 8039,
+        "endChar": 59
+      },
+      "revId": "a8bf12ba8c9caa66a8d979818eb74d28db58c69e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "961d6349_6590b3a8",
+        "filename": "src/libANGLE/capture/FrameCapture.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 8039,
+      "author": {
+        "id": 1491823
+      },
+      "writtenOn": "2022-05-02T06:54:30Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "de391dbf_89b6c834",
       "range": {
         "startLine": 8039,
         "startChar": 57,
@@ -60,6 +108,30 @@
       "writtenOn": "2022-04-29T19:31:53Z",
       "side": 1,
       "message": "For consistency, you setSuccess before capture in the other functions.",
+      "range": {
+        "startLine": 163,
+        "startChar": 0,
+        "endLine": 163,
+        "endChar": 25
+      },
+      "revId": "a8bf12ba8c9caa66a8d979818eb74d28db58c69e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "5e16ecc7_238c5b92",
+        "filename": "src/libGLESv2/egl_ext_stubs.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 163,
+      "author": {
+        "id": 1491823
+      },
+      "writtenOn": "2022-05-02T06:54:30Z",
+      "side": 1,
+      "message": "I\u0027ve changed it to always call setSuccess right before the return statement, it\u0027s more consistent with all the other functions.",
+      "parentUuid": "a39edda4_f069ab7f",
       "range": {
         "startLine": 163,
         "startChar": 0,
