@@ -16,6 +16,29 @@
       "message": "+2 is needed to land",
       "revId": "d02a1a26141c2ccbeb0142b19662ea0a50d7dc58",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "3ad37252_d398fa64",
+        "filename": "src/libANGLE/renderer/vulkan/DisplayVk.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 31,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-05-02T19:55:26Z",
+      "side": 1,
+      "message": "super minor nit: 0 (easier to change to 1)",
+      "range": {
+        "startLine": 31,
+        "startChar": 41,
+        "endLine": 31,
+        "endChar": 46
+      },
+      "revId": "d02a1a26141c2ccbeb0142b19662ea0a50d7dc58",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
