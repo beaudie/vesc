@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "36371adf_af98a2a8",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 8
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2022-05-02T13:03:35Z",
+      "side": 1,
+      "message": "Nice analysis and fix! Please monitor the bots to confirm the improved results. Also can you determine if this is related to crbug.com/1217662 ?",
+      "revId": "d600baf8128a457d37be9928697aee3b7b559a8a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
