@@ -1,0 +1,130 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "71e9600d_a94076e8",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2022-05-02T13:07:38Z",
+      "side": 1,
+      "message": "LGTM, some testing style nits.",
+      "revId": "83139e3297b5252dd588df39cb6757eafbf41e28",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "11200708_d9aad5d7",
+        "filename": "src/tests/gl_tests/KTXCompressedTextureTest.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2022-05-02T13:07:38Z",
+      "side": 1,
+      "message": "nit: please add a file-level comment, see other tests for examples.",
+      "revId": "83139e3297b5252dd588df39cb6757eafbf41e28",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "76cf2cfa_0cb3fc7a",
+        "filename": "src/tests/gl_tests/KTXCompressedTextureTest.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 44,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2022-05-02T13:07:38Z",
+      "side": 1,
+      "message": "nit: I think you can use shaders from the shader library, see other tests for examples.",
+      "range": {
+        "startLine": 26,
+        "startChar": 5,
+        "endLine": 44,
+        "endChar": 44
+      },
+      "revId": "83139e3297b5252dd588df39cb6757eafbf41e28",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "69dd84d3_e40012a0",
+        "filename": "src/tests/gl_tests/KTXCompressedTextureTest.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 51,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2022-05-02T13:07:38Z",
+      "side": 1,
+      "message": "nit: I don\u0027t believe this will stop test execution. Instead, you can replace all this setup code with a single ANGLE_GL_PROGRAM line in each individual test. You would also need to replicate the glGetUniformLocation call as well unfortunately.",
+      "range": {
+        "startLine": 48,
+        "startChar": 0,
+        "endLine": 51,
+        "endChar": 9
+      },
+      "revId": "83139e3297b5252dd588df39cb6757eafbf41e28",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "875c219e_46f74637",
+        "filename": "src/tests/gl_tests/KTXCompressedTextureTest.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 64,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2022-05-02T13:07:38Z",
+      "side": 1,
+      "message": "nit: please leave a one-line comment before each new test",
+      "range": {
+        "startLine": 64,
+        "startChar": 0,
+        "endLine": 64,
+        "endChar": 6
+      },
+      "revId": "83139e3297b5252dd588df39cb6757eafbf41e28",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "f5f65da0_7af5a2de",
+        "filename": "src/tests/gl_tests/KTXCompressedTextureTest.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 67,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2022-05-02T13:07:38Z",
+      "side": 1,
+      "message": "nit: please use RAII types (GLTexture)",
+      "range": {
+        "startLine": 67,
+        "startChar": 4,
+        "endLine": 67,
+        "endChar": 11
+      },
+      "revId": "83139e3297b5252dd588df39cb6757eafbf41e28",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
