@@ -16,6 +16,40 @@
       "message": "This reland fixes the angle_unittests failure that happened with the first CL. PS1 -\u003e PS2 shows the diff, which is simply adjusting the default condition for enabling the SPIRV translator. That makes it align with the original behavior (where the SPIRV translator has always been compiled in).",
       "revId": "cb0d2e4a2bfc3c98585e38ace972b7acb222fec0",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "650b152a_d1083d0d",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2022-05-02T19:31:02Z",
+      "side": 1,
+      "message": "lgtm too for what it\u0027s worth. Will be happy to work with you to understand why the Chrome-side tests were failing with the original change.\n",
+      "revId": "cb0d2e4a2bfc3c98585e38ace972b7acb222fec0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "216e7196_8dc3783a",
+        "filename": "src/compiler/translator/tree_ops/vulkan/EarlyFragmentTestsOptimization.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 14,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2022-05-02T19:31:02Z",
+      "side": 1,
+      "message": "Was this change intentional?",
+      "revId": "cb0d2e4a2bfc3c98585e38ace972b7acb222fec0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
