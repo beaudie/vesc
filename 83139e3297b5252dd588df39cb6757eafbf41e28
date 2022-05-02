@@ -37,6 +37,40 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "9f43b9fb_8bea4417",
+        "filename": "src/tests/gl_tests/KTXCompressedTextureTest.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 19,
+      "author": {
+        "id": 1298072
+      },
+      "writtenOn": "2022-05-02T21:08:42Z",
+      "side": 1,
+      "message": "Image is 768x512 but window is smaller. If you ever verify the rendering result then you may want to match these?",
+      "revId": "83139e3297b5252dd588df39cb6757eafbf41e28",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ddb2e4fb_fad4290f",
+        "filename": "src/tests/gl_tests/KTXCompressedTextureTest.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 22,
+      "author": {
+        "id": 1298072
+      },
+      "writtenOn": "2022-05-02T21:08:42Z",
+      "side": 1,
+      "message": "Missing blue?",
+      "revId": "83139e3297b5252dd588df39cb6757eafbf41e28",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "76cf2cfa_0cb3fc7a",
         "filename": "src/tests/gl_tests/KTXCompressedTextureTest.cpp",
         "patchSetId": 4
@@ -123,6 +157,23 @@
         "endLine": 67,
         "endChar": 11
       },
+      "revId": "83139e3297b5252dd588df39cb6757eafbf41e28",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "1ce92f9a_1cccf28c",
+        "filename": "src/tests/gl_tests/KTXCompressedTextureTest.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 82,
+      "author": {
+        "id": 1298072
+      },
+      "writtenOn": "2022-05-02T21:08:42Z",
+      "side": 1,
+      "message": "I note there is no verification that the upload \u0026 sampling ops actually work properly. Are those covered adequately by some other tests?",
       "revId": "83139e3297b5252dd588df39cb6757eafbf41e28",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
