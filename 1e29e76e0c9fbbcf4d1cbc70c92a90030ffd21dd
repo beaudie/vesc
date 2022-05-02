@@ -1,0 +1,176 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "22815e11_87820976",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 8
+      },
+      "lineNbr": 8,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2022-05-02T12:56:52Z",
+      "side": 1,
+      "message": "please include some documentation about how the change works",
+      "revId": "1e29e76e0c9fbbcf4d1cbc70c92a90030ffd21dd",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "f1db07c4_82f5ff4f",
+        "filename": "src/libANGLE/capture/FrameCapture.cpp",
+        "patchSetId": 8
+      },
+      "lineNbr": 638,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2022-05-02T12:56:52Z",
+      "side": 1,
+      "message": "I wonder if we can generate this type and use it instead of using specializations here. Can you look into that in the autogen?",
+      "range": {
+        "startLine": 627,
+        "startChar": 0,
+        "endLine": 638,
+        "endChar": 5
+      },
+      "revId": "1e29e76e0c9fbbcf4d1cbc70c92a90030ffd21dd",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "2bd15277_3e2d6390",
+        "filename": "src/libANGLE/capture/FrameCapture.cpp",
+        "patchSetId": 8
+      },
+      "lineNbr": 3396,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2022-05-02T12:56:52Z",
+      "side": 1,
+      "message": "note: appropriate use of a structured binding definition.\n\nhttps://google.github.io/styleguide/cppguide.html#Type_deduction",
+      "range": {
+        "startLine": 3396,
+        "startChar": 0,
+        "endLine": 3396,
+        "endChar": 46
+      },
+      "revId": "1e29e76e0c9fbbcf4d1cbc70c92a90030ffd21dd",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "92464b0d_1b05243f",
+        "filename": "src/libANGLE/capture/FrameCapture.cpp",
+        "patchSetId": 8
+      },
+      "lineNbr": 3405,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2022-05-02T12:56:52Z",
+      "side": 1,
+      "message": "this is a novel solution for an attrib map, although I wonder if we should treat it as a separate type instead of a magical use of TGLint64Pointer . will think about this.",
+      "range": {
+        "startLine": 3403,
+        "startChar": 0,
+        "endLine": 3405,
+        "endChar": 24
+      },
+      "revId": "1e29e76e0c9fbbcf4d1cbc70c92a90030ffd21dd",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ed04e23b_6cd5a06d",
+        "filename": "src/libANGLE/capture/FrameCapture.cpp",
+        "patchSetId": 8
+      },
+      "lineNbr": 6879,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2022-05-02T12:56:52Z",
+      "side": 1,
+      "message": "Adding this comment here though it applies to several places.\n\nWhen we originally laid out EGL functionality in the tracer, instead of passing down EGL types from the test harness (notably TracePerfTest) to the replay code, we decided to callback to the harness. That way we could subtitute in the necessary info from the harness. That way for platforms that don\u0027t use EGL (e.g. WGL on Windows) we can transform the calls to something equivalent. We also don\u0027t need these kind of callbacks. I see now that this functionality doesn\u0027t exist in the CaptureReplayTests harness.\n\nI suspect for multi-context capture this is also a necessary problem to solve. So my suggestion is we look into how to solve EGL capture in CaptureReplayTests in a way that\u0027s compatible with the current TracePerfTest harness design. Likely we\u0027ll need to use a callback scheme as well.\n\nThe end result would be something like capturing the call with placeholder values for the display and other resource handle values, then in the callback function filling them in.\n\nOne way we could tackle this is to fix the multi-context capture first, then rework this change. In FrameCapture.cpp if you look for eglCreateContext, you\u0027ll see some very manual code. Whereas you chose to do this \"properly\" and make capture functions, originally we hard-coded the multi-context capture functions. We could first clean up this code into real capture functions, then investigate/fix multi-context capture in capture_replay_expectations.txt, then return to this CL.\n\nCody/Gert LMKWYT",
+      "range": {
+        "startLine": 6856,
+        "startChar": 0,
+        "endLine": 6879,
+        "endChar": 5
+      },
+      "revId": "1e29e76e0c9fbbcf4d1cbc70c92a90030ffd21dd",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "94e3082f_7757ca56",
+        "filename": "src/libANGLE/capture/FrameCapture.cpp",
+        "patchSetId": 8
+      },
+      "lineNbr": 8029,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2022-05-02T12:56:52Z",
+      "side": 1,
+      "message": "please place these in a new file src/libANGLE/capture/capture_egl.cpp",
+      "range": {
+        "startLine": 8008,
+        "startChar": 0,
+        "endLine": 8029,
+        "endChar": 1
+      },
+      "revId": "1e29e76e0c9fbbcf4d1cbc70c92a90030ffd21dd",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "2c2d9e08_9fc70026",
+        "filename": "src/libGLESv2/egl_stubs.cpp",
+        "patchSetId": 8
+      },
+      "lineNbr": 160,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2022-05-02T12:56:52Z",
+      "side": 1,
+      "message": "please use a capture macro like ANGLE_CAPTURE.\n\nHow about we rename ANGLE_CAPTURE to ANGLE_GL_CAPTURE/ANGLE_CAPTURE_GL and make a similar one for EGL? The rename should probably be a split CL because of the boilerplate change.",
+      "range": {
+        "startLine": 160,
+        "startChar": 11,
+        "endLine": 160,
+        "endChar": 32
+      },
+      "revId": "1e29e76e0c9fbbcf4d1cbc70c92a90030ffd21dd",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "74451a22_6c0bfc14",
+        "filename": "src/tests/capture_replay_tests/capture_replay_expectations.txt",
+        "patchSetId": 8
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2022-05-02T12:56:52Z",
+      "side": 1,
+      "message": "Impressive!",
+      "revId": "1e29e76e0c9fbbcf4d1cbc70c92a90030ffd21dd",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
