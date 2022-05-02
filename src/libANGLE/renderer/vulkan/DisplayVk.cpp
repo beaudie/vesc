@@ -28,7 +28,7 @@ namespace rx
 // Time interval in seconds that we should try to prune default buffer pools.
 constexpr double kTimeElapsedForPruneDefaultBufferPool = 0.25;
 // Set to true will log bufferpool stats into INFO stream
-#define ANGLE_ENABLE_BUFFER_POOL_STATS_LOGGING 0
+#define ANGLE_ENABLE_BUFFER_POOL_STATS_LOGGING 1
 
 DisplayVk::DisplayVk(const egl::DisplayState &state)
     : DisplayImpl(state),
