@@ -87,6 +87,24 @@
       "parentUuid": "0297d257_e3239d51",
       "revId": "a729aa01c4b0bbccc33f651b72fb2e39c28aa941",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "fc363e17_a98e23bf",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 7
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1340649
+      },
+      "writtenOn": "2022-05-02T21:07:24Z",
+      "side": 1,
+      "message": "\u003e it\u0027s more than undefined results if ANGLE tries to read from an invalid pointer\n\nthat is implementation issue and not spec related, right?\n\n\u003e this can lead to any result including program termination.\n\nIt is undefined behavior but spec **doesn\u0027t** explicitly call out \"up to and including program termination\". So i think it would be incorrect to terminate the program and it would be invalid, according to spec, to generate an error during drawarrays.",
+      "parentUuid": "eec2715b_497c649e",
+      "revId": "a729aa01c4b0bbccc33f651b72fb2e39c28aa941",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
