@@ -1,0 +1,78 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "cef73df0_bbe7a051",
+        "filename": "src/libANGLE/renderer/vulkan/linux/gbm/SurfaceVkGbm.cpp",
+        "patchSetId": 8
+      },
+      "lineNbr": 110,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-05-02T18:52:14Z",
+      "side": 1,
+      "message": "Please refactor to a helper in SurfaceVk.cpp. Then you can keep the constants in the cpp as well.",
+      "range": {
+        "startLine": 101,
+        "startChar": 0,
+        "endLine": 110,
+        "endChar": 0
+      },
+      "revId": "c849f0e445adf771b551387fbd43a414205d20e0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "a20b974a_4db113a5",
+        "filename": "src/libANGLE/renderer/vulkan/linux/gbm/SurfaceVkGbm.cpp",
+        "patchSetId": 8
+      },
+      "lineNbr": 274,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-05-02T18:52:14Z",
+      "side": 1,
+      "message": "This is a little dubious. How does gbm synchronize with the submission then?",
+      "revId": "c849f0e445adf771b551387fbd43a414205d20e0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "0bebdbb7_aed350f8",
+        "filename": "src/libANGLE/renderer/vulkan/linux/gbm/SurfaceVkGbm.cpp",
+        "patchSetId": 8
+      },
+      "lineNbr": 309,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-05-02T18:52:14Z",
+      "side": 1,
+      "message": "There are a number of optimizations happening at swap time. Sounds like you are only interested in disabling the layout change optimization (to PRESENT_SRC). If so, you can pipe down the flag (which by the way, please turn into an `enum class`) to the optim function and disable only that part.",
+      "revId": "c849f0e445adf771b551387fbd43a414205d20e0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "d454b93d_38c19752",
+        "filename": "src/libANGLE/renderer/vulkan/linux/gbm/SurfaceVkGbm.h",
+        "patchSetId": 8
+      },
+      "lineNbr": 61,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-05-02T18:52:14Z",
+      "side": 1,
+      "message": "Unused.\n\nIt looks like ANI is not overriden. Doesn\u0027t `SurfaceVk::prepareSwap()` cause trouble with this? Or is it just that `mNeedToAcquireNextSwapchainImage` is never set? If that latter, please `ASSERT(!mNeedToAcquireNextSwapchainImage)` in `presentImpl()`.",
+      "revId": "c849f0e445adf771b551387fbd43a414205d20e0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
