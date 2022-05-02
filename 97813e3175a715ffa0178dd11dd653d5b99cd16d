@@ -1,0 +1,96 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "e38fef2c_eac7fa02",
+        "filename": "src/libANGLE/renderer/vulkan/TextureVk.cpp",
+        "patchSetId": 12
+      },
+      "lineNbr": 641,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-05-02T20:02:44Z",
+      "side": 1,
+      "message": "Suggest moving this logic to `ContextVk::onTextureUpload()`, call it `onMutableTextureUpload()` and only add the condition for `!Immutable`.",
+      "range": {
+        "startLine": 625,
+        "startChar": 0,
+        "endLine": 641,
+        "endChar": 5
+      },
+      "revId": "97813e3175a715ffa0178dd11dd653d5b99cd16d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b632c3c2_3317a08e",
+        "filename": "src/libANGLE/renderer/vulkan/TextureVk.cpp",
+        "patchSetId": 12
+      },
+      "lineNbr": 1567,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-05-02T20:02:44Z",
+      "side": 1,
+      "message": "nit: you can add a `resetPrevTexture` to make it more readable.",
+      "range": {
+        "startLine": 1567,
+        "startChar": 19,
+        "endLine": 1567,
+        "endChar": 33
+      },
+      "revId": "97813e3175a715ffa0178dd11dd653d5b99cd16d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "d2c215ce_f9a2c101",
+        "filename": "src/libANGLE/renderer/vulkan/TextureVk.h",
+        "patchSetId": 12
+      },
+      "lineNbr": 25,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-05-02T20:02:44Z",
+      "side": 1,
+      "message": "nit: `FullMipChainForGenerateMipmap`",
+      "range": {
+        "startLine": 25,
+        "startChar": 4,
+        "endLine": 25,
+        "endChar": 30
+      },
+      "revId": "97813e3175a715ffa0178dd11dd653d5b99cd16d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "82507b4e_736fd98b",
+        "filename": "src/tests/gl_tests/TextureTest.cpp",
+        "patchSetId": 12
+      },
+      "lineNbr": 3319,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-05-02T20:02:44Z",
+      "side": 1,
+      "message": "nit: please use RAII types; `GLTexture texture1;`\n\nTo delete it, you can do `texture1.reset()`.",
+      "range": {
+        "startLine": 3318,
+        "startChar": 0,
+        "endLine": 3319,
+        "endChar": 32
+      },
+      "revId": "97813e3175a715ffa0178dd11dd653d5b99cd16d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
