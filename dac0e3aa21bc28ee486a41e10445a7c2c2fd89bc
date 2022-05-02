@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "46b982b4_9531fb4a",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1531247
+      },
+      "writtenOn": "2022-05-02T15:57:49Z",
+      "side": 1,
+      "message": "D\u0027oh... was missing gclient sync but now can\u0027t update due to new presubmit requirements added in https://crrev.com/c/3611486\n\nRunning Python 2 presubmit upload checks ...\n** Presubmit ERRORS **\nmb_validate\nvpython /home/romanl/angle/tools/mb/mb.py validate -f /home/romanl/angle/infra/specs/angle_mb_config.pyl (0.19s) failed\nTraceback (most recent call last):\n  File \"/home/romanl/angle/tools/mb/mb.py\", line 127, in Main\n    ret \u003d self.args.func()\n  File \"/home/romanl/angle/tools/mb/mb.py\", line 887, in CmdValidate\n    raise MBErr(\u0027mb config file not sorted:\\n\u0027 + \u0027\\n\u0027.join(errs))\nMBErr: mb config file not sorted:\n\nThe builders in group \"angle\" are not sorted:\n...",
+      "revId": "dac0e3aa21bc28ee486a41e10445a7c2c2fd89bc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
