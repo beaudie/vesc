@@ -127,6 +127,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "949e1b14_654c510d",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2022-05-02T13:58:10Z",
+      "side": 1,
+      "message": "Geoff: can you test if the watchdog will kill the \"hanged\" process automatically? I\u0027d be fine with bumping up the timeout if that fixes the issue. Thanks for the suggestion Shabi.",
+      "parentUuid": "9a9d0182_a63d9c49",
+      "revId": "7ff72b61010d4e9581d919e1630de9566659d98a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "01131a16_cbb241b0",
         "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
         "patchSetId": 1
