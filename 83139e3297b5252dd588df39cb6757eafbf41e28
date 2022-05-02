@@ -35,6 +35,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "a9c9eeb9_c0800311",
+        "filename": "src/tests/gl_tests/KTXCompressedTextureTest.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1520902
+      },
+      "writtenOn": "2022-05-02T23:33:08Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "11200708_d9aad5d7",
+      "revId": "83139e3297b5252dd588df39cb6757eafbf41e28",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "9f43b9fb_8bea4417",
@@ -48,6 +66,24 @@
       "writtenOn": "2022-05-02T21:08:42Z",
       "side": 1,
       "message": "Image is 768x512 but window is smaller. If you ever verify the rendering result then you may want to match these?",
+      "revId": "83139e3297b5252dd588df39cb6757eafbf41e28",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "20b49b0c_223747eb",
+        "filename": "src/tests/gl_tests/KTXCompressedTextureTest.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 19,
+      "author": {
+        "id": 1520902
+      },
+      "writtenOn": "2022-05-02T23:33:08Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "9f43b9fb_8bea4417",
       "revId": "83139e3297b5252dd588df39cb6757eafbf41e28",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
@@ -69,6 +105,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "ee3978bf_bf8d8b9c",
+        "filename": "src/tests/gl_tests/KTXCompressedTextureTest.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 22,
+      "author": {
+        "id": 1520902
+      },
+      "writtenOn": "2022-05-02T23:33:08Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "ddb2e4fb_fad4290f",
+      "revId": "83139e3297b5252dd588df39cb6757eafbf41e28",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "76cf2cfa_0cb3fc7a",
@@ -82,6 +136,30 @@
       "writtenOn": "2022-05-02T13:07:38Z",
       "side": 1,
       "message": "nit: I think you can use shaders from the shader library, see other tests for examples.",
+      "range": {
+        "startLine": 26,
+        "startChar": 5,
+        "endLine": 44,
+        "endChar": 44
+      },
+      "revId": "83139e3297b5252dd588df39cb6757eafbf41e28",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "8d51a6dc_fe208ac7",
+        "filename": "src/tests/gl_tests/KTXCompressedTextureTest.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 44,
+      "author": {
+        "id": 1520902
+      },
+      "writtenOn": "2022-05-02T23:33:08Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "76cf2cfa_0cb3fc7a",
       "range": {
         "startLine": 26,
         "startChar": 5,
@@ -115,6 +193,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "8f7037f3_8f4cf928",
+        "filename": "src/tests/gl_tests/KTXCompressedTextureTest.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 51,
+      "author": {
+        "id": 1520902
+      },
+      "writtenOn": "2022-05-02T23:33:08Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "69dd84d3_e40012a0",
+      "range": {
+        "startLine": 48,
+        "startChar": 0,
+        "endLine": 51,
+        "endChar": 9
+      },
+      "revId": "83139e3297b5252dd588df39cb6757eafbf41e28",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "875c219e_46f74637",
@@ -138,6 +240,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "d13b07c1_2b237ced",
+        "filename": "src/tests/gl_tests/KTXCompressedTextureTest.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 64,
+      "author": {
+        "id": 1520902
+      },
+      "writtenOn": "2022-05-02T23:33:08Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "875c219e_46f74637",
+      "range": {
+        "startLine": 64,
+        "startChar": 0,
+        "endLine": 64,
+        "endChar": 6
+      },
+      "revId": "83139e3297b5252dd588df39cb6757eafbf41e28",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "f5f65da0_7af5a2de",
@@ -151,6 +277,30 @@
       "writtenOn": "2022-05-02T13:07:38Z",
       "side": 1,
       "message": "nit: please use RAII types (GLTexture)",
+      "range": {
+        "startLine": 67,
+        "startChar": 4,
+        "endLine": 67,
+        "endChar": 11
+      },
+      "revId": "83139e3297b5252dd588df39cb6757eafbf41e28",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "a78ca4ae_84eb929d",
+        "filename": "src/tests/gl_tests/KTXCompressedTextureTest.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 67,
+      "author": {
+        "id": 1520902
+      },
+      "writtenOn": "2022-05-02T23:33:08Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "f5f65da0_7af5a2de",
       "range": {
         "startLine": 67,
         "startChar": 4,
