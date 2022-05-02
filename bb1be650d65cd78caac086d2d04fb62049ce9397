@@ -22,6 +22,30 @@
       },
       "revId": "bb1be650d65cd78caac086d2d04fb62049ce9397",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "498ff31c_75ed4c04",
+        "filename": "src/libANGLE/renderer/vulkan/DisplayVk.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 31,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2022-05-02T20:03:11Z",
+      "side": 1,
+      "message": "Done. Added ANGLE_ prefix but kept as #define for simplicity and zero runtime impact.",
+      "parentUuid": "359f2562_f183f324",
+      "range": {
+        "startLine": 31,
+        "startChar": 8,
+        "endLine": 31,
+        "endChar": 41
+      },
+      "revId": "bb1be650d65cd78caac086d2d04fb62049ce9397",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
