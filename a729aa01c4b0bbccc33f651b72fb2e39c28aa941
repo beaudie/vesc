@@ -16,6 +16,23 @@
       "message": "Thanks, re-LGTM",
       "revId": "a729aa01c4b0bbccc33f651b72fb2e39c28aa941",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "cc865339_4fe2dd03",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 7
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2022-05-02T11:25:55Z",
+      "side": 1,
+      "message": "Hey Mohan, thanks for contributing the test. I have a recommendation for an alternate fix.\n\nWe have tracking for null arrays already in VertexArray.cpp. It looks like the bug is that we don\u0027t set cache variable up initially entirely flagged on for every vertex attribute. Can you initialize mNullPointerClientMemoryAttribsMask in VertexArrayState::VertexArrayState by calling .set() (near mClientMemoryAttribsMask.set()) and seeing if that also passes the test and CQ?",
+      "revId": "a729aa01c4b0bbccc33f651b72fb2e39c28aa941",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
