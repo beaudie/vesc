@@ -68,6 +68,24 @@
       "parentUuid": "45f17ba9_a2beef64",
       "revId": "e3e66e1ed770c394032c5780ded996cd61ce9939",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "0bfd90da_fe1f36cf",
+        "filename": "src/libANGLE/renderer/vulkan/DisplayVk.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 524,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2022-05-02T19:44:48Z",
+      "side": 1,
+      "message": "Done. Added ENABLE_BUFFER_POOL_STATS_LOGGING",
+      "parentUuid": "c8756927_3d4ef973",
+      "revId": "e3e66e1ed770c394032c5780ded996cd61ce9939",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
