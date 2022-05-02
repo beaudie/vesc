@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "a31e17a4_87890536",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1394635
+      },
+      "writtenOn": "2022-05-02T15:21:07Z",
+      "side": 1,
+      "message": "This is needed for the linked follow-up CL.\n\nWhile Gemini Lake and Coffee Lake are also Gen9, adding them to the corresponding helper breaks one test on macOS (see the failure on PS1).",
+      "revId": "6c66ded0b152adb5db73fa30439b5d714d3e3e0f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
