@@ -16,6 +16,29 @@
       "message": "No functional changes expected, but this is very useful for debugging.",
       "revId": "0492723462928b79d06f100d02388cef3c0211e7",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "7f8611d7_80203992",
+        "filename": "src/libANGLE/renderer/vulkan/DisplayVk.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 559,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2022-05-02T17:39:16Z",
+      "side": 1,
+      "message": "nit: UnusedBytes or unusedBytes",
+      "range": {
+        "startLine": 559,
+        "startChar": 16,
+        "endLine": 559,
+        "endChar": 27
+      },
+      "revId": "0492723462928b79d06f100d02388cef3c0211e7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
