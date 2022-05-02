@@ -3,6 +3,69 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "b436f99e_9f67f3b2",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 27
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2022-05-02T13:54:16Z",
+      "side": 1,
+      "message": "nit: I would call this \"Implement image ghosting for full image updates.\"",
+      "range": {
+        "startLine": 7,
+        "startChar": 8,
+        "endLine": 7,
+        "endChar": 52
+      },
+      "revId": "b377bc4f054f24248e036dec41d9c8e75e4cd8e8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "e44d79f4_70d12fff",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 27
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2022-05-02T13:54:16Z",
+      "side": 1,
+      "message": "LGTM, Shabi can you take another look?",
+      "revId": "b377bc4f054f24248e036dec41d9c8e75e4cd8e8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "76ee7e19_0129657d",
+        "filename": "src/libANGLE/renderer/vulkan/TextureVk.cpp",
+        "patchSetId": 27
+      },
+      "lineNbr": 489,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2022-05-02T13:54:16Z",
+      "side": 1,
+      "message": "nit: overwritesAllDefinedLevels",
+      "range": {
+        "startLine": 489,
+        "startChar": 9,
+        "endLine": 489,
+        "endChar": 38
+      },
+      "revId": "b377bc4f054f24248e036dec41d9c8e75e4cd8e8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "3ce932ad_47ef4702",
         "filename": "src/libANGLE/renderer/vulkan/TextureVk.cpp",
         "patchSetId": 27
@@ -26,6 +89,52 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "041a678b_292a90f9",
+        "filename": "src/libANGLE/renderer/vulkan/TextureVk.cpp",
+        "patchSetId": 27
+      },
+      "lineNbr": 2677,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2022-05-02T13:54:16Z",
+      "side": 1,
+      "message": "suggestion: \"Additionally, if we\u0027re doing a full image update on the base level, we can ghost the image to do the update immediately and avoid any barriers.\"",
+      "range": {
+        "startLine": 2676,
+        "startChar": 47,
+        "endLine": 2677,
+        "endChar": 95
+      },
+      "revId": "b377bc4f054f24248e036dec41d9c8e75e4cd8e8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "07793cd1_c3c8866f",
+        "filename": "src/libANGLE/renderer/vulkan/TextureVk.cpp",
+        "patchSetId": 27
+      },
+      "lineNbr": 2681,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2022-05-02T13:54:16Z",
+      "side": 1,
+      "message": "if yes, ghost the image.",
+      "range": {
+        "startLine": 2681,
+        "startChar": 67,
+        "endLine": 2681,
+        "endChar": 99
+      },
+      "revId": "b377bc4f054f24248e036dec41d9c8e75e4cd8e8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "45ec7d00_48a7763d",
         "filename": "src/libANGLE/renderer/vulkan/TextureVk.cpp",
         "patchSetId": 27
@@ -42,6 +151,121 @@
         "startChar": 13,
         "endLine": 2712,
         "endChar": 83
+      },
+      "revId": "b377bc4f054f24248e036dec41d9c8e75e4cd8e8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "535de37e_0ec92489",
+        "filename": "src/libANGLE/renderer/vulkan/TextureVk.cpp",
+        "patchSetId": 27
+      },
+      "lineNbr": 3499,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2022-05-02T13:54:16Z",
+      "side": 1,
+      "message": "nit: cache",
+      "range": {
+        "startLine": 3499,
+        "startChar": 30,
+        "endLine": 3499,
+        "endChar": 69
+      },
+      "revId": "b377bc4f054f24248e036dec41d9c8e75e4cd8e8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "173b4d09_7b240228",
+        "filename": "src/libANGLE/renderer/vulkan/TextureVk.cpp",
+        "patchSetId": 27
+      },
+      "lineNbr": 3506,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2022-05-02T13:54:16Z",
+      "side": 1,
+      "message": "nit: omit",
+      "range": {
+        "startLine": 3506,
+        "startChar": 16,
+        "endLine": 3506,
+        "endChar": 24
+      },
+      "revId": "b377bc4f054f24248e036dec41d9c8e75e4cd8e8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "e4ff7ed0_6fbce992",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 27
+      },
+      "lineNbr": 8478,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2022-05-02T13:54:16Z",
+      "side": 1,
+      "message": "nit: const?",
+      "range": {
+        "startLine": 8478,
+        "startChar": 18,
+        "endLine": 8478,
+        "endChar": 53
+      },
+      "revId": "b377bc4f054f24248e036dec41d9c8e75e4cd8e8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ddbc3c46_14af93e6",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 27
+      },
+      "lineNbr": 8483,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2022-05-02T13:54:16Z",
+      "side": 1,
+      "message": "nit: const?",
+      "range": {
+        "startLine": 8483,
+        "startChar": 13,
+        "endLine": 8483,
+        "endChar": 31
+      },
+      "revId": "b377bc4f054f24248e036dec41d9c8e75e4cd8e8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b98cb371_ab1d3984",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 27
+      },
+      "lineNbr": 8511,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2022-05-02T13:54:16Z",
+      "side": 1,
+      "message": "nit: omit",
+      "range": {
+        "startLine": 8511,
+        "startChar": 12,
+        "endLine": 8511,
+        "endChar": 20
       },
       "revId": "b377bc4f054f24248e036dec41d9c8e75e4cd8e8",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
