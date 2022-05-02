@@ -68,6 +68,24 @@
       "parentUuid": "216e7196_8dc3783a",
       "revId": "cb0d2e4a2bfc3c98585e38ace972b7acb222fec0",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "a5f31ab0_da3c86e7",
+        "filename": "src/compiler/translator/tree_ops/vulkan/EarlyFragmentTestsOptimization.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 14,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2022-05-02T21:28:19Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "2d544483_f97c37a7",
+      "revId": "cb0d2e4a2bfc3c98585e38ace972b7acb222fec0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
