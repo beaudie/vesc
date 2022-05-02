@@ -16,6 +16,29 @@
       "message": "I\u0027m not at all convinced that this is the right fix, so I put it up for further discussion ",
       "revId": "cf72e3d8d4bacff654adc6ae8a09f40f8551bba2",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "8690335b_6564dd94",
+        "filename": "src/libANGLE/Framebuffer.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 1549,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2022-05-02T14:01:35Z",
+      "side": 1,
+      "message": "what we need to do here is resolve this TODO.\n\nIn particular, for WebGL we should probably no-op these invalidates, and for robust init without WebGL, we should do the invalidate and mark the resource as MayNeedInit. That will give us the most correct and consistent behaviour. LMK if you need any help here on how to implement this.",
+      "range": {
+        "startLine": 1549,
+        "startChar": 4,
+        "endLine": 1549,
+        "endChar": 88
+      },
+      "revId": "cf72e3d8d4bacff654adc6ae8a09f40f8551bba2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
