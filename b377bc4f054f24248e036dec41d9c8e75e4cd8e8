@@ -43,6 +43,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "f5b14db1_532173b1",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 27
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-05-02T16:08:10Z",
+      "side": 1,
+      "message": "In the last meeting, my understanding was that this change didn\u0027t work out as well as it was hoped so it isn\u0027t being pursued.\n\n@Cheryl, are you still expecting to land this change?",
+      "parentUuid": "e44d79f4_70d12fff",
+      "revId": "b377bc4f054f24248e036dec41d9c8e75e4cd8e8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "76ee7e19_0129657d",
         "filename": "src/libANGLE/renderer/vulkan/TextureVk.cpp",
         "patchSetId": 27
