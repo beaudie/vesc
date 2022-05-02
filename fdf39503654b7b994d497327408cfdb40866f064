@@ -16,6 +16,24 @@
       "message": "Suggest a helper like `get_adb()` that returns \u0027adb \u0027 + SELECTED_DEVICE + \u0027 \u0027 (or equivalent with `{} and format()`)\n\nThen you can change all these to be `get_adb() + \u0027shell ...\u0027` to reduce some of the repetition.",
       "revId": "fdf39503654b7b994d497327408cfdb40866f064",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "ee61ae64_340e2933",
+        "filename": "src/tests/restricted_traces/restricted_trace_perf.py",
+        "patchSetId": 1
+      },
+      "lineNbr": 98,
+      "author": {
+        "id": 1525982
+      },
+      "writtenOn": "2022-05-02T21:01:43Z",
+      "side": 1,
+      "message": "Thanks. Added `get_adb_dev()` to be used instead of the current format.",
+      "parentUuid": "7837b796_1fa46790",
+      "revId": "fdf39503654b7b994d497327408cfdb40866f064",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
