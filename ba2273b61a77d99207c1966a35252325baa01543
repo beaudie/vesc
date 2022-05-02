@@ -87,6 +87,24 @@
       "parentUuid": "729a7252_e5f3182a",
       "revId": "ba2273b61a77d99207c1966a35252325baa01543",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "9452e01f_cd481b1d",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1340649
+      },
+      "writtenOn": "2022-05-02T18:15:13Z",
+      "side": 1,
+      "message": "\u003e Can you try an alternate workaround\n\nDone.\n\n\u003e I can file the CTS bug if you need help.\n\nYes please!",
+      "parentUuid": "87923f99_c7aa3d80",
+      "revId": "ba2273b61a77d99207c1966a35252325baa01543",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
