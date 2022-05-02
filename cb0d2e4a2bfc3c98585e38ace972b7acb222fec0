@@ -50,6 +50,24 @@
       "message": "Was this change intentional?",
       "revId": "cb0d2e4a2bfc3c98585e38ace972b7acb222fec0",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "2d544483_f97c37a7",
+        "filename": "src/compiler/translator/tree_ops/vulkan/EarlyFragmentTestsOptimization.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 14,
+      "author": {
+        "id": 1185214
+      },
+      "writtenOn": "2022-05-02T19:41:43Z",
+      "side": 1,
+      "message": "I added that at an intermediate state, and decided to keep it, as it seemed correct to do so. (Note that if ANGLE_ENABLE_VULKAN isn\u0027t defined, this file ends up using UNREACHABLE, even though debug.h - where it\u0027s defined - hasn\u0027t necessarily been included).",
+      "parentUuid": "216e7196_8dc3783a",
+      "revId": "cb0d2e4a2bfc3c98585e38ace972b7acb222fec0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
