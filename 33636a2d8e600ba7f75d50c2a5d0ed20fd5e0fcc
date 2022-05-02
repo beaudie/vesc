@@ -46,6 +46,30 @@
       },
       "revId": "33636a2d8e600ba7f75d50c2a5d0ed20fd5e0fcc",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "658c0186_88ad1304",
+        "filename": "src/libANGLE/renderer/vulkan/linux/DmaBufImageSiblingVkLinux.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 582,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2022-05-02T12:59:56Z",
+      "side": 1,
+      "message": "Don\u0027t use Incomplete. I\u0027d like to remove it.\n\nIf you want a safe fail, don\u0027t use angle::Result, use an out variable enum or similar.\n\nIf you have a fatal error, use ANGLE result and generate a EGL or GLES error that can be handled by the application.",
+      "parentUuid": "979a14e4_456a2141",
+      "range": {
+        "startLine": 577,
+        "startChar": 0,
+        "endLine": 582,
+        "endChar": 9
+      },
+      "revId": "33636a2d8e600ba7f75d50c2a5d0ed20fd5e0fcc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
