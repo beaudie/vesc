@@ -3,6 +3,23 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "49c6810d_656f5973",
+        "filename": "src/libANGLE/renderer/vulkan/SurfaceVk.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 1798,
+      "author": {
+        "id": 1533513
+      },
+      "writtenOn": "2022-05-02T20:18:04Z",
+      "side": 1,
+      "message": "One thing that feels wrong to me is that it\u0027s not immediately clear what bits of WindowSurfaceVk SurfaceGbmVk implements and what others it depends on, I think it would be better if the VkSurface and VkSwapchain -specific bits were moved into their own class, to sort of be on same level as GbmSurfaceVk.",
+      "revId": "0258e53bf346adb47163b9c8d0ebe0f0bc3f905f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "93d8d3ca_f8383568",
         "filename": "src/libANGLE/renderer/vulkan/linux/gbm/DisplayVkGbm.cpp",
         "patchSetId": 5
