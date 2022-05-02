@@ -1,0 +1,90 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "f35f2637_1318dc69",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2022-05-02T21:27:25Z",
+      "side": 1,
+      "message": "Amir, thanks for pushing updates to the script!",
+      "revId": "4b78f5439b86fb7c53cb0d029ca19dfb8e8cec8f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "d1c443fa_cf38c2ec",
+        "filename": "src/tests/restricted_traces/restricted_trace_perf.py",
+        "patchSetId": 2
+      },
+      "lineNbr": 19,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2022-05-02T21:27:25Z",
+      "side": 1,
+      "message": "I think the error message you added is sufficient, we don\u0027t need to add this comment to the header here.",
+      "range": {
+        "startLine": 19,
+        "startChar": 0,
+        "endLine": 19,
+        "endChar": 136
+      },
+      "revId": "4b78f5439b86fb7c53cb0d029ca19dfb8e8cec8f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "8bf2729f_e095840b",
+        "filename": "src/tests/restricted_traces/restricted_trace_perf.py",
+        "patchSetId": 2
+      },
+      "lineNbr": 102,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2022-05-02T21:27:25Z",
+      "side": 1,
+      "message": "Instead of calling this in every `run_command`, can you create `run_adb_command` that automatically includes this lookup?",
+      "range": {
+        "startLine": 102,
+        "startChar": 16,
+        "endLine": 102,
+        "endChar": 27
+      },
+      "revId": "4b78f5439b86fb7c53cb0d029ca19dfb8e8cec8f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "4606451a_3d26d352",
+        "filename": "src/tests/restricted_traces/restricted_trace_perf.py",
+        "patchSetId": 2
+      },
+      "lineNbr": 505,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2022-05-02T21:27:25Z",
+      "side": 1,
+      "message": "Can you update this to support $ANDROID_SERIAL, which is how I currently target devices?  Specifically, I do the following before running the script:\n\n```\nexport ANDROID_SERIAL\u003d123ABCDEFGHIJK\n```\nand then all commands are routed appropriately.",
+      "range": {
+        "startLine": 505,
+        "startChar": 0,
+        "endLine": 505,
+        "endChar": 30
+      },
+      "revId": "4b78f5439b86fb7c53cb0d029ca19dfb8e8cec8f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
