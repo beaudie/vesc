@@ -16,6 +16,69 @@
       "message": "Hi,\nContinued to aforementioned discussion, I\u0027ve updated some changes as below lists. Please help to check if these own a correct behavior. \n1, To track the image layout transition, use the \u0027mRenderPassImagesWithLayoutTransition\u0027, which record the *read image needed layout transition* and all of the write image. This make a distinguish with the exist *mRenderPassUsedImages*, which makes a confuse close renderpass for the read GL_texture without layout transition.\n\n2, based on the item1, use new interface *endRenderPassIfComputeAccessAfterGraphicsTextureImageAccess* to unify the GL_Texture read or write by framebuffer attachment write, and all the GL_image write/read, and replace the interface *endRenderPassIfComputeReadAfterAttachmentWrite*.",
       "revId": "56663550a07a4845cd4b9185447755d5af0964cc",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "e5ce6964_c3fddfdb",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 32
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2022-05-02T13:44:06Z",
+      "side": 1,
+      "message": "Defer to Shabi and Charlie for the main review.",
+      "revId": "56663550a07a4845cd4b9185447755d5af0964cc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "dfdc04f7_4b139c45",
+        "filename": "src/tests/gl_tests/ComputeShaderTest.cpp",
+        "patchSetId": 32
+      },
+      "lineNbr": 4866,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2022-05-02T13:44:06Z",
+      "side": 1,
+      "message": "minor nit: please add a comment before each new test.",
+      "range": {
+        "startLine": 4866,
+        "startChar": 0,
+        "endLine": 4866,
+        "endChar": 6
+      },
+      "revId": "56663550a07a4845cd4b9185447755d5af0964cc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "303d7ddd_68429750",
+        "filename": "src/tests/gl_tests/VulkanPerformanceCounterTest.cpp",
+        "patchSetId": 32
+      },
+      "lineNbr": 4458,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2022-05-02T13:44:06Z",
+      "side": 1,
+      "message": "small nit: missing space between } and TEST, also please add a one-line comment before each new test",
+      "range": {
+        "startLine": 4458,
+        "startChar": 0,
+        "endLine": 4458,
+        "endChar": 6
+      },
+      "revId": "56663550a07a4845cd4b9185447755d5af0964cc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
