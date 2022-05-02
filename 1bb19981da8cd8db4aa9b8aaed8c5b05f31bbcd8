@@ -90,6 +90,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "a37f2772_ee7bbf59",
+        "filename": "src/libANGLE/validationEGL.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 571,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2022-05-02T12:21:32Z",
+      "side": 1,
+      "message": "I wonder if the check would be better expressed as !\u003d PLATFORM_DEVICE_EXT instead.",
+      "parentUuid": "061c06e8_c6446550",
+      "revId": "1bb19981da8cd8db4aa9b8aaed8c5b05f31bbcd8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "890c647f_06235de7",
         "filename": "src/libGLESv2/egl_stubs.cpp",
         "patchSetId": 2
