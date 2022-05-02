@@ -16,6 +16,24 @@
       "message": "Nice analysis and fix! Please monitor the bots to confirm the improved results. Also can you determine if this is related to crbug.com/1217662 ?",
       "revId": "d600baf8128a457d37be9928697aee3b7b559a8a",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "4334974e_fcf9e588",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 8
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1531247
+      },
+      "writtenOn": "2022-05-02T13:13:20Z",
+      "side": 1,
+      "message": "Thanks! Yes, I think this is the likely root cause for that bug but I had a separate reliable special-case repro here so I\u0027m leaning towards keeping my bug separate for posterity.",
+      "parentUuid": "36371adf_af98a2a8",
+      "revId": "d600baf8128a457d37be9928697aee3b7b559a8a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
