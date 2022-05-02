@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "e06406e3_a5adb1b9",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1185214
+      },
+      "writtenOn": "2022-05-02T14:37:35Z",
+      "side": 1,
+      "message": "This reland fixes the angle_unittests failure that happened with the first CL. PS1 -\u003e PS2 shows the diff, which is simply adjusting the default condition for enabling the SPIRV translator. That makes it align with the original behavior (where the SPIRV translator has always been compiled in).",
+      "revId": "cb0d2e4a2bfc3c98585e38ace972b7acb222fec0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
