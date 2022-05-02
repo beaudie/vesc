@@ -51,6 +51,24 @@
       "parentUuid": "2f87e121_c5abd209",
       "revId": "ba2273b61a77d99207c1966a35252325baa01543",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "729a7252_e5f3182a",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2022-05-02T11:17:08Z",
+      "side": 1,
+      "message": "I recommend filing this test bug upstream in dEQP. dEQP should not be using -1 for both a guaranteed invalid handle value and a valid one.\n\nCan you try an alternate workaround: walk mUnallocatedList in release() and if mUnallocatedList[index].end \u003d\u003d releaseHandle - 1 then increment mUnallocatedList[index].end instead of adding the handle to the released list. That fix could have some small benefit in coalescing handle ranges in other test cases.",
+      "parentUuid": "591e8bc9_3965feb7",
+      "revId": "ba2273b61a77d99207c1966a35252325baa01543",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
