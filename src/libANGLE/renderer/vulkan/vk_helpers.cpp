@@ -2745,7 +2745,8 @@ BufferPool::BufferPool()
       mUsage(0),
       mHostVisible(false),
       mSize(0),
-      mMemoryTypeIndex(0)
+      mMemoryTypeIndex(0),
+      mNumberOfNewBuffersNeededSinceLastPrune(0)
 {}
 
 BufferPool::BufferPool(BufferPool &&other)
@@ -2782,42 +2783,43 @@ void BufferPool::initWithFlags(RendererVk *renderer,
 BufferPool::~BufferPool()
 {
     ASSERT(mBufferBlocks.empty());
+    ASSERT(mEmptyBufferBlocks.empty());
 }
 
 void BufferPool::pruneEmptyBuffers(RendererVk *renderer)
 {
-    int emptyBufferCount = 0;
-    int freedBufferCount = 0;
+    // First walk through mBufferBlocks to see if there is any null pointers. If yes we will compact
+    // it.
+    bool needsCompact = false;
     for (auto iter = mBufferBlocks.rbegin(); iter != mBufferBlocks.rend();)
     {
-        if (!(*iter)->isEmpty())
+        if (!(*iter))
         {
-            ++iter;
-            continue;
+            needsCompact = true;
         }
 
-        // Record how many times this buffer block has found to be empty  seqentially.
-        int32_t countRemainsEmpty = (*iter)->getAndIncrementEmptyCounter();
-
-        // We will always free empty buffers that has smaller size. Or if the empty buffer has been
-        // found empty for long enough time, or we accumulated too many empty buffers, we also free
-        // it.
-        if ((*iter)->getMemorySize() < mSize || countRemainsEmpty >= kMaxCountRemainsEmpty ||
-            emptyBufferCount >= kMaxEmptyBufferCount)
+        if ((*iter)->isEmpty())
         {
-            (*iter)->destroy(renderer);
-            (*iter).reset();
-            ++freedBufferCount;
-        }
-        else
-        {
-            ++emptyBufferCount;
+            // We will always free empty buffers that has smaller size. Or if the empty buffer has
+            // been found empty for long enough time, or we accumulated too many empty buffers, we
+            // also free it.
+            if ((*iter)->getMemorySize() < mSize)
+            {
+                (*iter)->destroy(renderer);
+                (*iter).reset();
+            }
+            else
+            {
+                mEmptyBufferBlocks.push_back(std::move(*iter));
+            }
+            ASSERT(!(*iter));
+            needsCompact = true;
         }
         ++iter;
     }
 
-    // Remove the null pointers all at once, if any.
-    if (freedBufferCount)
+    // Now remove the null pointers all at once, if any.
+    if (needsCompact)
     {
         BufferBlockPointerVector compactedBlocks;
         for (auto iter = mBufferBlocks.begin(); iter != mBufferBlocks.end(); ++iter)
@@ -2827,8 +2829,25 @@ void BufferPool::pruneEmptyBuffers(RendererVk *renderer)
                 compactedBlocks.push_back(std::move(*iter));
             }
         }
+        mBufferBlocks.clear();
         mBufferBlocks = std::move(compactedBlocks);
     }
+
+    // Decide how many empty buffers to keep around and trim down the excessive empty buffers. We
+    // keep track of how many buffers are needed since last prune. Assume we are in stable state,
+    // which means we may still need that many empty buffers in next prune cycle. To avoid have to
+    // call into vulkan driver to allocate new buffers, we keep that many empty buffers around. If
+    // we overestimate, next cycle they used fewer buffers, we will trim excessive empty buffers at
+    // next prune call. Or if we underestimate, we will end up have to call into vulkan driver
+    // allocate new buffers, but next cycle we should correct ourselves to keep enough number of
+    // empty buffers around.
+    while (mEmptyBufferBlocks.size() > mNumberOfNewBuffersNeededSinceLastPrune)
+    {
+        std::unique_ptr<BufferBlock> &block = mEmptyBufferBlocks.back();
+        block->destroy(renderer);
+        mEmptyBufferBlocks.pop_back();
+    }
+    mNumberOfNewBuffersNeededSinceLastPrune = 0;
 }
 
 angle::Result BufferPool::allocateNewBuffer(Context *context, VkDeviceSize sizeInBytes)
@@ -2941,18 +2960,30 @@ angle::Result BufferPool::allocateBuffer(Context *context,
         return angle::Result::Continue;
     }
 
-    // We always allocate from reverse order so that older buffers have a chance to age out. The
+    // We always allocate from reverse order so that older buffers have a chance to be empty. The
     // assumption is that to allocate from new buffers first may have a better chance to leave the
     // older buffers completely empty and we may able to free it.
     for (auto iter = mBufferBlocks.rbegin(); iter != mBufferBlocks.rend();)
     {
         std::unique_ptr<BufferBlock> &block = *iter;
-        if (block->isEmpty() && block->getMemorySize() < mSize)
+        if (!block)
         {
-            // Don't try to allocate from an empty buffer that has smaller size. It will get
-            // released when pruneEmptyBuffers get called later on.
             ++iter;
             continue;
+        }
+
+        if (block->isEmpty())
+        {
+            // Either destroy it now or move to the empty list.
+            if (block->getMemorySize() < mSize)
+            {
+                block->destroy(context->getRenderer());
+                block.reset();
+            }
+            else
+            {
+                mEmptyBufferBlocks.push_back(std::move(block));
+            }
         }
 
         if (block->allocate(alignedSize, alignment, &offset) == VK_SUCCESS)
@@ -2963,6 +2994,27 @@ angle::Result BufferPool::allocateBuffer(Context *context,
         ++iter;
     }
 
+    // Try to allocate from empty buffers
+    while (!mEmptyBufferBlocks.empty())
+    {
+        std::unique_ptr<BufferBlock> &block = mEmptyBufferBlocks.back();
+        if (block->getMemorySize() < mSize)
+        {
+            block->destroy(context->getRenderer());
+            mEmptyBufferBlocks.pop_back();
+        }
+        else
+        {
+            ANGLE_VK_TRY(context, block->allocate(alignedSize, alignment, &offset));
+            suballocation->init(context->getDevice(), block.get(), offset, alignedSize);
+            mBufferBlocks.push_back(std::move(block));
+            mEmptyBufferBlocks.pop_back();
+            mNumberOfNewBuffersNeededSinceLastPrune++;
+            return angle::Result::Continue;
+        }
+    }
+
+    // Failed to allocate from empty buffer. Now try to allocate a new buffer.
     ANGLE_TRY(allocateNewBuffer(context, alignedSize));
 
     // Sub-allocate from the bufferBlock.
@@ -2970,6 +3022,7 @@ angle::Result BufferPool::allocateBuffer(Context *context,
     ANGLE_VK_CHECK(context, block->allocate(alignedSize, alignment, &offset) == VK_SUCCESS,
                    VK_ERROR_OUT_OF_DEVICE_MEMORY);
     suballocation->init(context->getDevice(), block.get(), offset, alignedSize);
+    mNumberOfNewBuffersNeededSinceLastPrune++;
 
     return angle::Result::Continue;
 }
@@ -2990,6 +3043,12 @@ void BufferPool::destroy(RendererVk *renderer, bool orphanNonEmptyBufferBlock)
         }
     }
     mBufferBlocks.clear();
+
+    for (std::unique_ptr<BufferBlock> &block : mEmptyBufferBlocks)
+    {
+        block->destroy(renderer);
+    }
+    mEmptyBufferBlocks.clear();
 }
 
 // DescriptorPoolHelper implementation.
