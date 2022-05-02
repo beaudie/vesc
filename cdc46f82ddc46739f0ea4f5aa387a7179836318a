@@ -34,6 +34,24 @@
       "parentUuid": "e2dc901d_bce6ddce",
       "revId": "cdc46f82ddc46739f0ea4f5aa387a7179836318a",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "40d04273_853368e2",
+        "filename": "src/common/angle_version_info.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 17,
+      "author": {
+        "id": 1190898
+      },
+      "writtenOn": "2022-05-02T17:41:45Z",
+      "side": 1,
+      "message": "I don\u0027t think any bugs, it just doesn\u0027t feel super clean.",
+      "parentUuid": "1ab49ecf_adeceff3",
+      "revId": "cdc46f82ddc46739f0ea4f5aa387a7179836318a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
