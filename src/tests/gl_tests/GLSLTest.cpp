@@ -10147,45 +10147,45 @@ void main() {
 
     constexpr size_t kMatrixCount = 6;
     mat4 data[]                   = {
-        {
-            {0, 1, 2, 3},      //
-            {4, 5, 6, 7},      //
-            {8, 9, 10, 11},    //
-            {12, 13, 14, 15},  //
+                          {
+                              {0, 1, 2, 3},      //
+                              {4, 5, 6, 7},      //
+                              {8, 9, 10, 11},    //
+                              {12, 13, 14, 15},  //
         },
-        {
-            //     +-- we should be looking up this column
+                          {
+                              //     +-- we should be looking up this column
             //     V
             {0, 4, 8, 12},   //
             {1, 5, 9, 13},   //
             {2, 6, 10, 14},  //
             {3, 7, 11, 15},  //
         },
-        {
-            {0, 2, 4, 6},      //
-            {8, 10, 12, 14},   //
-            {16, 18, 20, 22},  //
-            {24, 26, 28, 30},  //
+                          {
+                              {0, 2, 4, 6},      //
+                              {8, 10, 12, 14},   //
+                              {16, 18, 20, 22},  //
+                              {24, 26, 28, 30},  //
         },
-        {
-            {0, 0, 0, 0},  //
-            {0, 0, 0, 0},  //
-            {0, 0, 0, 0},  //
-            {0, 0, 0, 0},  //
+                          {
+                              {0, 0, 0, 0},  //
+                              {0, 0, 0, 0},  //
+                              {0, 0, 0, 0},  //
+                              {0, 0, 0, 0},  //
         },
-        {
-            {0, 0, 0, 0},  //
-            {0, 0, 0, 2},  //
-            {0, 0, 0, 0},  //
-            {0, 1, 0, 0},
-            //  ^
-            //  +-- we should be using this element
+                          {
+                              {0, 0, 0, 0},  //
+                              {0, 0, 0, 2},  //
+                              {0, 0, 0, 0},  //
+                              {0, 1, 0, 0},
+                              //  ^
+                              //  +-- we should be using this element
         },
-        {
-            {0, 0, 0, 0},  //
-            {0, 0, 0, 0},  //
-            {0, 0, 0, 0},  //
-            {0, 0, 0, 0},  //
+                          {
+                              {0, 0, 0, 0},  //
+                              {0, 0, 0, 0},  //
+                              {0, 0, 0, 0},  //
+                              {0, 0, 0, 0},  //
         },
     };
 
@@ -15460,6 +15460,38 @@ void main()
     drawPatches(program.get(), essl31_shaders::PositionAttrib(), 0.5f, 1.0f, GL_FALSE);
     EXPECT_PIXEL_COLOR_EQ(0, 0, GLColor::white);
     ASSERT_GL_NO_ERROR();
+}
+
+// Tests the generation of HLSL functions with uint/int parameters that may be ambiguous.
+TEST_P(GLSLTest_ES3, AmbiguousHLSLIntegerFunctionParameters)
+{
+    const char kVS[] = R"(#version 300 es
+precision highp float;
+void main()
+{
+    gl_Position = vec4(0, 0, 0, 0);
+})";
+
+    const char kFS[] = R"(#version 300 es
+precision highp float;
+out vec4 color;
+void main()
+{
+    // Ensure that both uint and int to float constructors are generated before the ambiguous usage.
+    int i = int(gl_FragCoord.x);
+    float f1 = float(i);
+    color.r = f1;
+
+    uint ui = uint(gl_FragCoord.x);
+    float f2 = float(i);
+    color.g = f2;
+
+    // Ambiguous call
+    float f3 = float(1u << (2u * ui));
+    color.b = f3;
+})";
+
+    ANGLE_GL_PROGRAM(testProgram, kVS, kFS);
 }
 }  // anonymous namespace
 
