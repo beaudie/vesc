@@ -2679,6 +2679,63 @@ TEST_P(Texture2DTest, TexImageWithRGBA5551PBO)
     EXPECT_PIXEL_EQ(width / 2 - 1, height / 2 - 1, 0, 255, 0, 255);
 }
 
+// Test that glTexSubImage2D from a PBO respects GL_UNPACK_ROW_LENGTH.
+TEST_P(Texture2DTest, TexImageUnpackRowLengthPBO)
+{
+    ANGLE_SKIP_TEST_IF(IsMetal());
+
+    if (getClientMajorVersion() < 3)
+    {
+        ANGLE_SKIP_TEST_IF(!IsGLExtensionEnabled("GL_EXT_texture_storage"));
+        ANGLE_SKIP_TEST_IF(!IsGLExtensionEnabled("GL_NV_pixel_buffer_object"));
+    }
+
+    const int width      = getWindowWidth() / 2;
+    const int height     = getWindowHeight();
+    const int rowLength  = getWindowWidth();
+    const int bufferSize = rowLength * height;
+
+    GLuint tex2D;
+    glGenTextures(1, &tex2D);
+    glActiveTexture(GL_TEXTURE0);
+    glBindTexture(GL_TEXTURE_2D, tex2D);
+
+    std::vector<GLColor> pixels(bufferSize);
+    for (int y = 0; y < rowLength; ++y)
+    {
+        for (int x = 0; x < width; ++x)
+        {
+            pixels[y * rowLength + x] =
+                x < width ? (y < height / 2 ? GLColor::green : GLColor::blue) : GLColor::red;
+        }
+    }
+
+    GLuint pbo;
+    glGenBuffers(1, &pbo);
+    glBindBuffer(GL_PIXEL_UNPACK_BUFFER, pbo);
+    glBufferData(GL_PIXEL_UNPACK_BUFFER, bufferSize * sizeof(GLColor), pixels.data(),
+                 GL_STATIC_DRAW);
+
+    glTexStorage2DEXT(GL_TEXTURE_2D, 1, GL_RGBA8, width, height);
+
+    // Initializes the texture from width x height of the PBO.
+    glPixelStorei(GL_UNPACK_ROW_LENGTH, rowLength);
+    glTexSubImage2D(GL_TEXTURE_2D, 0, 0, 0, width, height, GL_RGBA, GL_UNSIGNED_BYTE, nullptr);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+
+    setUpProgram();
+
+    glUseProgram(mProgram);
+    glUniform1i(mTexture2DUniformLocation, 0);
+    drawQuad(mProgram, "position", 0.5f);
+    glDeleteTextures(1, &tex2D);
+    glDeleteBuffers(1, &pbo);
+    EXPECT_GL_NO_ERROR();
+    EXPECT_PIXEL_COLOR_EQ(0, 0, GLColor::green);
+    EXPECT_PIXEL_COLOR_EQ(0, height - 1, GLColor::blue);
+}
+
 // Test if the KHR debug label is set and passed to D3D correctly using glCopyTexImage2D.
 TEST_P(Texture2DTest, TextureKHRDebugLabelWithCopyTexImage2D)
 {
