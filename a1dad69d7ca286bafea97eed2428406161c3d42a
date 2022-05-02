@@ -1,6 +1,29 @@
 {
   "comments": [
     {
+      "unresolved": true,
+      "key": {
+        "uuid": "896af497_185c3987",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 6
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2022-05-02T13:56:17Z",
+      "side": 1,
+      "message": "there doesn\u0027t seem to be a trace in this CL - can we update the title?",
+      "range": {
+        "startLine": 7,
+        "startChar": 0,
+        "endLine": 7,
+        "endChar": 42
+      },
+      "revId": "a1dad69d7ca286bafea97eed2428406161c3d42a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": false,
       "key": {
         "uuid": "7bad807b_c32082d5",
@@ -14,6 +37,92 @@
       "writtenOn": "2022-03-01T21:46:42Z",
       "side": 1,
       "message": "Thanks!\n\n+Amirali, you can move on with optimizing the swapchain resolve based on this benchmark!",
+      "revId": "a1dad69d7ca286bafea97eed2428406161c3d42a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "4527d311_ae860720",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 6
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2022-05-02T13:56:17Z",
+      "side": 1,
+      "message": "LGTM - needs a major rebase. Cody PTAL",
+      "revId": "a1dad69d7ca286bafea97eed2428406161c3d42a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "69e41134_a2cdc921",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 2242,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2022-05-02T13:56:17Z",
+      "side": 1,
+      "message": "nit: you can omit the comment.",
+      "range": {
+        "startLine": 2241,
+        "startChar": 0,
+        "endLine": 2242,
+        "endChar": 38
+      },
+      "revId": "a1dad69d7ca286bafea97eed2428406161c3d42a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "f2f2a6af_aab9dd75",
+        "filename": "src/libANGLE/renderer/vulkan/SurfaceVk.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 1710,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2022-05-02T13:56:17Z",
+      "side": 1,
+      "message": "nit: can place in resetPerFramePerfCounters",
+      "range": {
+        "startLine": 1710,
+        "startChar": 0,
+        "endLine": 1710,
+        "endChar": 67
+      },
+      "revId": "a1dad69d7ca286bafea97eed2428406161c3d42a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "85863c92_23937c55",
+        "filename": "src/tests/gl_tests/VulkanPerformanceCounterTest.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 3266,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2022-05-02T13:56:17Z",
+      "side": 1,
+      "message": "please use the angle_end2end_test expectations file",
+      "range": {
+        "startLine": 3266,
+        "startChar": 0,
+        "endLine": 3266,
+        "endChar": 35
+      },
       "revId": "a1dad69d7ca286bafea97eed2428406161c3d42a",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
