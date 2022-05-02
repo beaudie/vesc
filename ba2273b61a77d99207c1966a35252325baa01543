@@ -69,6 +69,24 @@
       "parentUuid": "591e8bc9_3965feb7",
       "revId": "ba2273b61a77d99207c1966a35252325baa01543",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "87923f99_c7aa3d80",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2022-05-02T11:17:33Z",
+      "side": 1,
+      "message": "nb: I can file the CTS bug if you need help.",
+      "parentUuid": "729a7252_e5f3182a",
+      "revId": "ba2273b61a77d99207c1966a35252325baa01543",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
