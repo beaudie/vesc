@@ -16,6 +16,115 @@
       "message": "Okay, still a WIP.  I\u0027ve got one failure left to dig into (MaxVaryingWithFeedbackAndGLline) and one hack I\u0027m not sure about yet regarding function chaining (just search for hack in the diff).  Wanted to upload progress though.",
       "revId": "bc3167b8493e675fa3ce3c256b2b3f3ef847226b",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "9f76af4f_14470d23",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-05-02T20:40:34Z",
+      "side": 1,
+      "message": "I suggest adding some of the more complex tests to GLSLTest.cpp. You\u0027ll discover some issues only after linking / SPIR-V transformation.\n\nFor example, that if `sampler s` is passed to a function that doesn\u0027t use it, the SPIR-V transformer would remove its declaration, but there\u0027s still a reference to it in SPIR-V (in the function call). As we discussed previously, you can use `MonomorphizeUnsupportedFunctions` to remove inactive parameters from functions.",
+      "revId": "bc3167b8493e675fa3ce3c256b2b3f3ef847226b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "2ad410de_cd881608",
+        "filename": "src/compiler/translator/CollectVariables.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 271,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-05-02T20:40:34Z",
+      "side": 1,
+      "message": "I suggest moving these stuff out to a separate class defined above, so the logic is contained there with a limited interface.\n\nAlso, some of these should definitely turn into another struct for which you have a stack of. Like `mCallParameterDepth` is sure to blow up in a situation like this: `f(a, b, g(c, h(d, e), f)));",
+      "range": {
+        "startLine": 259,
+        "startChar": 0,
+        "endLine": 271,
+        "endChar": 74
+      },
+      "revId": "bc3167b8493e675fa3ce3c256b2b3f3ef847226b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "f38e779a_3db2c46e",
+        "filename": "src/compiler/translator/CollectVariables.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 440,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-05-02T20:40:34Z",
+      "side": 1,
+      "message": "Aren\u0027t you traversing based on DAG? That should be impossible?",
+      "range": {
+        "startLine": 440,
+        "startChar": 32,
+        "endLine": 440,
+        "endChar": 84
+      },
+      "revId": "bc3167b8493e675fa3ce3c256b2b3f3ef847226b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "afe6acab_6c6f2ae0",
+        "filename": "src/compiler/translator/CollectVariables.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 467,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-05-02T20:40:34Z",
+      "side": 1,
+      "message": "nit: you can drop this. `mCurrentFunctionDefinition` should already be in the map, and worst-case indexing the map would add an empty one.",
+      "range": {
+        "startLine": 467,
+        "startChar": 13,
+        "endLine": 467,
+        "endChar": 90
+      },
+      "revId": "bc3167b8493e675fa3ce3c256b2b3f3ef847226b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "73868f2a_96f7f7ba",
+        "filename": "src/compiler/translator/CollectVariables.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 1455,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-05-02T20:40:34Z",
+      "side": 1,
+      "message": "Suggest adding a `visitDeclarationImpl` that you call here, then making `visitDeclaration` return early unconditionally. Setting state like this makes the code harder to read.\n\n---\n\nSame with `mTraversedDAG`. Instead of `root-\u003etraverse()`, just call `collect.traverseDAG(root, callDag)`. You\u0027ve already traversed declaration nodes, so only functions are left. You can also remove `visitGlobalQualifierDeclaration` and move its comment to somewhere here.",
+      "range": {
+        "startLine": 1453,
+        "startChar": 0,
+        "endLine": 1455,
+        "endChar": 45
+      },
+      "revId": "bc3167b8493e675fa3ce3c256b2b3f3ef847226b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
