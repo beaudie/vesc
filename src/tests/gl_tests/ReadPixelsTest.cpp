@@ -7,9 +7,14 @@
 //   Tests calls related to glReadPixels.
 //
 
+#include "GLES2/gl2.h"
 #include "test_utils/ANGLETest.h"
 
 #include <array>
+#include <chrono>
+#include <cstdint>
+#include <queue>
+#include <unordered_map>
 
 #include "test_utils/gl_raii.h"
 #include "util/random_utils.h"
@@ -60,6 +65,107 @@ TEST_P(ReadPixelsTest, OutOfBounds)
             EXPECT_EQ(GLColor::red, pixels[y * (pixelsWidth + offset) + x]);
         }
     }
+}
+
+class ReadPixelsES3Test : public ANGLETest
+{
+  protected:
+    ReadPixelsES3Test()
+    {
+        setWindowWidth(32);
+        setWindowHeight(32);
+        setConfigRedBits(8);
+        setConfigGreenBits(8);
+        setConfigBlueBits(8);
+        setConfigAlphaBits(8);
+    }
+};
+
+// Delete me, just using this for timing
+TEST_P(ReadPixelsES3Test, Speed)
+{
+    constexpr GLsizei size = 2048;
+
+    GLTexture tex;
+    glBindTexture(GL_TEXTURE_2D, tex);
+    glTexStorage2D(GL_TEXTURE_2D, 1, GL_RGBA8, size, size);
+
+    GLFramebuffer fb;
+    glBindFramebuffer(GL_FRAMEBUFFER, fb);
+    glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, tex, 0);
+    EXPECT_GL_FRAMEBUFFER_COMPLETE(GL_FRAMEBUFFER);
+
+    constexpr int times = 100;
+    uint64_t totalNS    = 0;
+
+    glClearColor(0.5, 0.6, 0.7, 0.8);
+
+    std::vector<uint8_t> data(size * size * 4, 0);
+
+    for (int i = 0; i < times; ++i)
+    {
+        glClear(GL_COLOR_BUFFER_BIT);
+        auto begin = std::chrono::steady_clock::now();
+        glReadPixels(0, 0, size, size, GL_RGBA, GL_UNSIGNED_BYTE, data.data());
+        EXPECT_GL_NO_ERROR();
+        auto end = std::chrono::steady_clock::now();
+        totalNS += std::chrono::duration_cast<std::chrono::nanoseconds>(end - begin).count();
+    }
+
+    EXPECT_EQ(data[0], 128);
+    EXPECT_EQ(data[1], 153);
+    EXPECT_EQ(data[2], 178);
+    EXPECT_EQ(data[3], 204);
+
+    constexpr GLsizei endOffset = size * size * 4 - 4;
+    EXPECT_EQ(data[endOffset + 0], 128);
+    EXPECT_EQ(data[endOffset + 1], 153);
+    EXPECT_EQ(data[endOffset + 2], 178);
+    EXPECT_EQ(data[endOffset + 3], 204);
+
+    std::cout << glGetString(GL_VENDOR) << std::endl;
+    std::cout << glGetString(GL_RENDERER) << std::endl;
+    std::cout << "Time difference = " << totalNS / times / 1000 / 1000 << "[ms]" << std::endl;
+}
+
+TEST_P(ReadPixelsES3Test, SpeedMultisample)
+{
+    constexpr GLsizei size = 2048;
+
+    GLTexture tex;
+    glBindTexture(GL_TEXTURE_2D, tex);
+    glTexStorage2D(GL_TEXTURE_2D, 1, GL_RGBA8, size, size);
+
+    GLFramebuffer fb;
+    glBindFramebuffer(GL_FRAMEBUFFER, fb);
+    glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, tex, 0);
+    EXPECT_GL_FRAMEBUFFER_COMPLETE(GL_FRAMEBUFFER);
+
+    glClearColor(0.5, 0.6, 0.7, 0.8);
+    glClear(GL_COLOR_BUFFER_BIT);
+    glFinish();
+
+    auto begin = std::chrono::steady_clock::now();
+
+    std::vector<uint8_t> data(size * size * 4, 0);
+    glReadPixels(0, 0, size, size, GL_RGBA, GL_UNSIGNED_BYTE, data.data());
+    EXPECT_GL_NO_ERROR();
+
+    EXPECT_EQ(data[0], 128);
+    EXPECT_EQ(data[1], 153);
+    EXPECT_EQ(data[2], 178);
+    EXPECT_EQ(data[3], 204);
+
+    constexpr GLsizei endOffset = size * size * 4 - 4;
+    EXPECT_EQ(data[endOffset + 0], 128);
+    EXPECT_EQ(data[endOffset + 1], 153);
+    EXPECT_EQ(data[endOffset + 2], 178);
+    EXPECT_EQ(data[endOffset + 3], 204);
+
+    auto end = std::chrono::steady_clock::now();
+    std::cout << "Time difference = "
+              << std::chrono::duration_cast<std::chrono::milliseconds>(end - begin).count()
+              << "[ms]" << std::endl;
 }
 
 class ReadPixelsPBONVTest : public ReadPixelsTest
@@ -504,7 +610,7 @@ TEST_P(ReadPixelsPBOTest, UseAsUBOThenUpdateThenReadFromFBO)
     const std::array<GLColor, 4> kInitialData = {GLColor::red, GLColor::red, GLColor::red,
                                                  GLColor::red};
     const std::array<GLColor, 4> kUpdateData  = {GLColor::white, GLColor::white, GLColor::white,
-                                                GLColor::white};
+                                                 GLColor::white};
 
     GLBuffer buffer;
     glBindBuffer(GL_UNIFORM_BUFFER, buffer);
@@ -1108,6 +1214,7 @@ TEST_P(ReadPixelsWebGLErrorTest, FormatIsDepthComponent)
 // tests should be run against.
 ANGLE_INSTANTIATE_TEST_ES2(ReadPixelsTest);
 ANGLE_INSTANTIATE_TEST_ES2(ReadPixelsPBONVTest);
+ANGLE_INSTANTIATE_TEST_ES3(ReadPixelsES3Test);
 
 GTEST_ALLOW_UNINSTANTIATED_PARAMETERIZED_TEST(ReadPixelsPBOTest);
 ANGLE_INSTANTIATE_TEST_ES3(ReadPixelsPBOTest);

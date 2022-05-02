@@ -6,11 +6,14 @@
 //    EGLIOSurfaceClientBufferTest.cpp: tests for the EGL_ANGLE_iosurface_client_buffer extension.
 //
 
+#include "GLES/gl.h"
+#include "GLES2/gl2.h"
 #include "test_utils/ANGLETest.h"
 
 #include "common/mathutil.h"
 #include "test_utils/gl_raii.h"
 #include "util/EGLWindow.h"
+#include "util/gles_loader_autogen.h"
 
 #include <CoreFoundation/CoreFoundation.h>
 #include <IOSurface/IOSurface.h>
@@ -286,6 +289,111 @@ class IOSurfaceClientBufferTest : public ANGLETest
         EXPECT_EGL_SUCCESS();
     }
 
+    void doSpeedTest(const ScopedIOSurfaceRef &ioSurface,
+                     EGLint width,
+                     EGLint height,
+                     EGLint plane,
+                     GLenum internalFormat,
+                     GLenum type,
+                     const GLColor &data)
+    {
+        std::array<uint8_t, 4> dataArray{data.R, data.G, data.B, data.A};
+        doSpeedTest(ioSurface, width, height, plane, internalFormat, type, dataArray);
+    }
+
+    template <typename T, size_t dataSize>
+    void doSpeedTest(const ScopedIOSurfaceRef &ioSurface,
+                     EGLint width,
+                     EGLint height,
+                     EGLint plane,
+                     GLenum internalFormat,
+                     GLenum type,
+                     const std::array<T, dataSize> &data)
+    {
+        // Bind the IOSurface to a texture and clear it.
+        EGLSurface pbuffer;
+        GLTexture texture;
+        bindIOSurfaceToTexture(ioSurface, width, height, plane, internalFormat, type, &pbuffer,
+                               &texture);
+
+        GLFramebuffer fbo;
+        glBindFramebuffer(GL_FRAMEBUFFER, fbo);
+        EXPECT_GL_NO_ERROR();
+        glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, getGLTextureTarget(), texture,
+                               0);
+        EXPECT_GL_NO_ERROR();
+        ASSERT_GL_FRAMEBUFFER_COMPLETE(GL_FRAMEBUFFER);
+        EXPECT_GL_NO_ERROR();
+
+        std::vector<uint8_t> pixels(width * height * 4, 0);
+
+        constexpr int times = 100;
+        uint64_t totalNS    = 0;
+
+        for (int i = 0; i < times; ++i)
+        {
+            glClearColor(1.0f / 255.0f, 2.0f / 255.0f, 3.0f / 255.0f, 4.0f / 255.0f);
+            EXPECT_GL_NO_ERROR();
+            glClear(GL_COLOR_BUFFER_BIT);
+            EXPECT_GL_NO_ERROR();
+
+            auto begin = std::chrono::steady_clock::now();
+
+            glReadPixels(0, 0, width, height, GL_RGBA, GL_UNSIGNED_BYTE, pixels.data());
+            EXPECT_GL_NO_ERROR();
+            auto end = std::chrono::steady_clock::now();
+
+            totalNS += std::chrono::duration_cast<std::chrono::nanoseconds>(end - begin).count();
+        }
+
+        EXPECT_EQ(pixels[0], 1);
+        EXPECT_EQ(pixels[1], 2);
+        EXPECT_EQ(pixels[2], 3);
+        EXPECT_EQ(pixels[3], 4);
+
+        GLsizei endOffset = width * height * 4 - 4;
+        EXPECT_EQ(pixels[endOffset + 0], 1);
+        EXPECT_EQ(pixels[endOffset + 1], 2);
+        EXPECT_EQ(pixels[endOffset + 2], 3);
+        EXPECT_EQ(pixels[endOffset + 3], 4);
+
+        std::cout << glGetString(GL_VENDOR) << std::endl;
+        std::cout << glGetString(GL_RENDERER) << std::endl;
+        std::cout << "Time difference = " << totalNS / times / 1000 / 1000 << "[ms]" << std::endl;
+
+        // Unbind pbuffer and check content.
+        EGLBoolean result = eglReleaseTexImage(mDisplay, pbuffer, EGL_BACK_BUFFER);
+        EXPECT_EGL_TRUE(result);
+        EXPECT_EGL_SUCCESS();
+
+        // IOSurface client buffer's rendering doesn't automatically finish after
+        // eglReleaseTexImage(). Need to explicitly call glFinish().
+        glFinish();
+
+        IOSurfaceLock(ioSurface.get(), kIOSurfaceLockReadOnly, nullptr);
+        std::array<T, dataSize> iosurfaceData;
+        memcpy(iosurfaceData.data(), IOSurfaceGetBaseAddressOfPlane(ioSurface.get(), plane),
+               sizeof(T) * data.size());
+        IOSurfaceUnlock(ioSurface.get(), kIOSurfaceLockReadOnly, nullptr);
+
+        if (internalFormat == GL_RGB && IsOSX() && IsOpenGL())
+        {
+            // Ignore alpha component for BGRX, the alpha value is undefined
+            for (int i = 0; i < 3; i++)
+            {
+                ASSERT_EQ(data[i], iosurfaceData[i]);
+            }
+        }
+        else
+        {
+            ASSERT_EQ(data, iosurfaceData);
+        }
+
+        result = eglDestroySurface(mDisplay, pbuffer);
+        EXPECT_EGL_TRUE(result);
+        EXPECT_EGL_SUCCESS();
+    }
+
     enum ColorMask
     {
         R = 1,
@@ -440,6 +548,114 @@ class IOSurfaceClientBufferTest : public ANGLETest
         EXPECT_EGL_SUCCESS();
     }
 
+    void doReadAfterResizeTest()
+    {
+        constexpr char kVS[] = R"(
+            attribute vec2 aPosition;
+            void main()
+            {
+                gl_Position  = vec4(aPosition, 0.0, 1.0);
+            }
+        )";
+
+        constexpr char kFS[] = R"(
+            precision mediump float;
+            void main()
+            {
+                gl_FragColor = vec4(0, 1, 0, 1);
+            }
+        )";
+        GLuint program       = CompileProgram(kVS, kFS);
+        ASSERT_NE(0u, program);
+        glUseProgram(program);
+
+        GLuint position = glGetAttribLocation(program, "aPosition");
+
+        GLBuffer buffer;
+        glBindBuffer(GL_ARRAY_BUFFER, buffer);
+        constexpr float vertices[] = {
+            -1, -1, 1, -1, -1, 1, -1, 1, 1, -1, 1, 1,
+        };
+        glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW);
+
+        glEnableVertexAttribArray(position);
+        glVertexAttribPointer(position, 2, GL_FLOAT, false, 0, nullptr);
+
+        // Create IOSurface and bind it to a texture.
+        {
+            constexpr GLint width  = 4;
+            constexpr GLint height = 4;
+
+            ScopedIOSurfaceRef ioSurface = CreateSinglePlaneIOSurface(width, height, 'BGRA', 4);
+            EGLSurface pbuffer;
+            GLTexture texture;
+            bindIOSurfaceToTexture(ioSurface, width, height, 0, GL_BGRA_EXT, GL_UNSIGNED_BYTE,
+                                   &pbuffer, &texture);
+
+            GLFramebuffer iosurfaceFbo;
+            glBindFramebuffer(GL_FRAMEBUFFER, iosurfaceFbo);
+            EXPECT_GL_NO_ERROR();
+            glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, getGLTextureTarget(),
+                                   texture, 0);
+            EXPECT_GL_NO_ERROR();
+            ASSERT_GL_FRAMEBUFFER_COMPLETE(GL_FRAMEBUFFER);
+            EXPECT_GL_NO_ERROR();
+
+            // Clear to known color.
+            glBindFramebuffer(GL_FRAMEBUFFER, iosurfaceFbo);
+            glClearColor(0.0f, 0.0f, 1.0f, 1.0f);
+            EXPECT_GL_NO_ERROR();
+            glClear(GL_COLOR_BUFFER_BIT);
+            EXPECT_GL_NO_ERROR();
+
+            glViewport(0, 0, width, height);
+            glDrawArrays(GL_TRIANGLES, 0, 6);
+
+            EXPECT_PIXEL_RECT_EQ(0, 0, width, height, GLColor::green);
+            EXPECT_GL_NO_ERROR();
+
+            // ioSurface should be destroyed here
+        }
+
+        {
+            constexpr GLint width  = 8;
+            constexpr GLint height = 8;
+
+            ScopedIOSurfaceRef ioSurface = CreateSinglePlaneIOSurface(width, height, 'BGRA', 4);
+            EGLSurface pbuffer;
+            GLTexture texture;
+            bindIOSurfaceToTexture(ioSurface, width, height, 0, GL_BGRA_EXT, GL_UNSIGNED_BYTE,
+                                   &pbuffer, &texture);
+
+            GLFramebuffer iosurfaceFbo;
+            glBindFramebuffer(GL_FRAMEBUFFER, iosurfaceFbo);
+            EXPECT_GL_NO_ERROR();
+            glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, getGLTextureTarget(),
+                                   texture, 0);
+            EXPECT_GL_NO_ERROR();
+            ASSERT_GL_FRAMEBUFFER_COMPLETE(GL_FRAMEBUFFER);
+            EXPECT_GL_NO_ERROR();
+
+            // Clear to known color.
+            glBindFramebuffer(GL_FRAMEBUFFER, iosurfaceFbo);
+            glClearColor(0.0f, 0.0f, 1.0f, 1.0f);
+            EXPECT_GL_NO_ERROR();
+            glClear(GL_COLOR_BUFFER_BIT);
+            EXPECT_GL_NO_ERROR();
+
+            // we didn't set viewport so it should still be 4x4
+            glDrawArrays(GL_TRIANGLES, 0, 6);
+
+            EXPECT_PIXEL_RECT_EQ(0, 0, 4, 4, GLColor::green);
+            EXPECT_PIXEL_RECT_EQ(4, 0, 4, 4, GLColor::blue);
+            EXPECT_PIXEL_RECT_EQ(0, 4, 4, 4, GLColor::blue);
+            EXPECT_PIXEL_RECT_EQ(4, 4, 4, 4, GLColor::blue);
+            EXPECT_GL_NO_ERROR();
+
+            // ioSurface should be destroyed here
+        }
+    }
+
     bool hasIOSurfaceExt() const { return IsEGLDisplayExtensionEnabled(mDisplay, kIOSurfaceExt); }
     bool hasBlitExt() const
     {
@@ -450,6 +666,13 @@ class IOSurfaceClientBufferTest : public ANGLETest
     EGLDisplay mDisplay;
 };
 
+TEST_P(IOSurfaceClientBufferTest, ReadAfterResize)
+{
+    ANGLE_SKIP_TEST_IF(!hasIOSurfaceExt());
+
+    doReadAfterResizeTest();
+}
+
 // Test using BGRA8888 IOSurfaces for rendering
 TEST_P(IOSurfaceClientBufferTest, RenderToBGRA8888IOSurface)
 {
@@ -459,6 +682,28 @@ TEST_P(IOSurfaceClientBufferTest, RenderToBGRA8888IOSurface)
 
     GLColor color(3, 2, 1, 4);
     doClearTest(ioSurface, 1, 1, 0, GL_BGRA_EXT, GL_UNSIGNED_BYTE, color);
+}
+
+TEST_P(IOSurfaceClientBufferTest, Speed)
+{
+    ANGLE_SKIP_TEST_IF(!hasIOSurfaceExt());
+
+    constexpr int size           = 2048;
+    ScopedIOSurfaceRef ioSurface = CreateSinglePlaneIOSurface(size, size, 'RGBA', 4);
+
+    GLColor color(3, 2, 1, 4);
+    doSpeedTest(ioSurface, size, size, 0, GL_RGBA, GL_UNSIGNED_BYTE, color);
+}
+
+TEST_P(IOSurfaceClientBufferTest, SpeedBGRA)
+{
+    ANGLE_SKIP_TEST_IF(!hasIOSurfaceExt());
+
+    constexpr int size           = 2048;
+    ScopedIOSurfaceRef ioSurface = CreateSinglePlaneIOSurface(size, size, 'BGRA', 4);
+
+    GLColor color(3, 2, 1, 4);
+    doSpeedTest(ioSurface, size, size, 0, GL_BGRA_EXT, GL_UNSIGNED_BYTE, color);
 }
 
 // Test reading from BGRA8888 IOSurfaces
