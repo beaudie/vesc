@@ -16,6 +16,40 @@
       "message": "lgtm",
       "revId": "e3e66e1ed770c394032c5780ded996cd61ce9939",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "7f6729f5_0a389513",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-05-02T19:21:43Z",
+      "side": 1,
+      "message": "Drive-by LGTM",
+      "revId": "e3e66e1ed770c394032c5780ded996cd61ce9939",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "45f17ba9_a2beef64",
+        "filename": "src/libANGLE/renderer/vulkan/DisplayVk.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 524,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-05-02T19:21:43Z",
+      "side": 1,
+      "message": "nit: typically we add a `#define BLAH 0` at the top of the file, then have this based on that define (instead of comment)",
+      "revId": "e3e66e1ed770c394032c5780ded996cd61ce9939",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
