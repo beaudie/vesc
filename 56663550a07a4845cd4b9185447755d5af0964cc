@@ -35,6 +35,92 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "1970b29a_e17a86b8",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 32
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-05-02T15:50:07Z",
+      "side": 1,
+      "message": "Thanks and sorry for the huge delay here. This change is coming together nicely",
+      "revId": "56663550a07a4845cd4b9185447755d5af0964cc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "44c68afe_fdb76c8f",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 32
+      },
+      "lineNbr": 7220,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-05-02T15:50:07Z",
+      "side": 1,
+      "message": "Comment is not very clear. Some fixes to the first part:\n\n\u003e When textures/images bound/used by current compute program and have `been` accessed\n\u003e as `sampled texture` in `the` current renderpass\n\nBut I don\u0027t really understand the second part. Could you try rephrasing it?",
+      "range": {
+        "startLine": 7218,
+        "startChar": 0,
+        "endLine": 7220,
+        "endChar": 19
+      },
+      "revId": "56663550a07a4845cd4b9185447755d5af0964cc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "fd5a34dc_eb084891",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 32
+      },
+      "lineNbr": 7241,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-05-02T15:50:07Z",
+      "side": 1,
+      "message": "This feels like it can break the render pass unnecessarily. What happens in this scenario?\n\n- FS sample from texture A\n- CS load from image A\n- FS something else (that doesn\u0027t access A)\n\nI\u0027d expect the CS call to be reordered before the first FS call, and there would be only one render pass. Could you please write a test in `VulkenPerformanceCounterTest.cpp` and verify that only one render pass is issued in that case?\n\nShould this at least check `IsRenderPassStartedAndTransitionsImageLayout` instead? The above test may still not pass (because first usage of `A` incurs a layout transition). Not sure the best way to handle it, but adding an `FS sample from texture A; glReadPixels` before the test could ensure there is no layout transition for the interesting part of the test at least.\n\nPlease add both variants of the test (i.e. one as outline above, and one with an initial FS-sample+glReadPixels that primes the test). If the former is not optimized, at least we have a test exposing it, and we could potentially defer it to another time.",
+      "range": {
+        "startLine": 7241,
+        "startChar": 16,
+        "endLine": 7241,
+        "endChar": 47
+      },
+      "revId": "56663550a07a4845cd4b9185447755d5af0964cc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b265da3c_dc78dba7",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.h",
+        "patchSetId": 32
+      },
+      "lineNbr": 2427,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-05-02T15:50:07Z",
+      "side": 1,
+      "message": "naming nit: `isImageWith...`",
+      "range": {
+        "startLine": 2427,
+        "startChar": 49,
+        "endLine": 2427,
+        "endChar": 50
+      },
+      "revId": "56663550a07a4845cd4b9185447755d5af0964cc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "dfdc04f7_4b139c45",
@@ -54,6 +140,23 @@
         "endLine": 4866,
         "endChar": 6
       },
+      "revId": "56663550a07a4845cd4b9185447755d5af0964cc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "56859daf_e9527ff4",
+        "filename": "src/tests/gl_tests/ComputeShaderTest.cpp",
+        "patchSetId": 32
+      },
+      "lineNbr": 4895,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-05-02T15:50:07Z",
+      "side": 1,
+      "message": "This can be optimized out (not done yet, but in my plans), leading to the image also being optimized away, making the CS look like it\u0027s not using the image.\n\nPlease store the result of this load in an SSBO, which you can then use to verify the CS executed correctly.",
       "revId": "56663550a07a4845cd4b9185447755d5af0964cc",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },

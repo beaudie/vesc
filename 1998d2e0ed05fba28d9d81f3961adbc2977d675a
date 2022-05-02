@@ -162,6 +162,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "3ecb104b_eba03abc",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 25
+      },
+      "lineNbr": 6840,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-05-02T15:50:07Z",
+      "side": 1,
+      "message": "Thanks. One naming nit: `endRenderPassIfComputeAccessAfterGraphicsImageAccess`",
+      "parentUuid": "122b0cf1_e18bc5d4",
+      "revId": "1998d2e0ed05fba28d9d81f3961adbc2977d675a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "ea7cc8e7_a16f6881",
         "filename": "src/tests/gl_tests/ComputeShaderTest.cpp",
         "patchSetId": 25
