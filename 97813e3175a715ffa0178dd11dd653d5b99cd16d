@@ -72,6 +72,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "51a071b0_eabb15ba",
+        "filename": "src/libANGLE/renderer/vulkan/TextureVk.cpp",
+        "patchSetId": 12
+      },
+      "lineNbr": 641,
+      "author": {
+        "id": 1525982
+      },
+      "writtenOn": "2022-05-03T19:18:38Z",
+      "side": 1,
+      "message": "Sorry. Now it\u0027s done.",
+      "parentUuid": "8257b4cc_4c8d1d36",
+      "range": {
+        "startLine": 625,
+        "startChar": 0,
+        "endLine": 641,
+        "endChar": 5
+      },
+      "revId": "97813e3175a715ffa0178dd11dd653d5b99cd16d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "b632c3c2_3317a08e",

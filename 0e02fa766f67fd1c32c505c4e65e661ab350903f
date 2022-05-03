@@ -38,6 +38,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "08f07901_2c7df4ef",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 13
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1525982
+      },
+      "writtenOn": "2022-05-03T19:18:38Z",
+      "side": 1,
+      "message": "The texture pointer would be initialized by context 1 and reset by context 2, but then its old value would be used by context 1 later.",
+      "parentUuid": "c1120aa9_abb209bd",
+      "revId": "0e02fa766f67fd1c32c505c4e65e661ab350903f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "5885ad0b_e4e43318",
         "filename": "src/libANGLE/renderer/vulkan/TextureVk.cpp",
         "patchSetId": 13
@@ -49,6 +67,30 @@
       "writtenOn": "2022-05-03T14:10:26Z",
       "side": 1,
       "message": "This shouldn\u0027t be based on the previous texture, but the current texture.",
+      "range": {
+        "startLine": 633,
+        "startChar": 13,
+        "endLine": 633,
+        "endChar": 32
+      },
+      "revId": "0e02fa766f67fd1c32c505c4e65e661ab350903f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "e8160951_3f1a5f49",
+        "filename": "src/libANGLE/renderer/vulkan/TextureVk.cpp",
+        "patchSetId": 13
+      },
+      "lineNbr": 633,
+      "author": {
+        "id": 1525982
+      },
+      "writtenOn": "2022-05-03T19:18:38Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "5885ad0b_e4e43318",
       "range": {
         "startLine": 633,
         "startChar": 13,
