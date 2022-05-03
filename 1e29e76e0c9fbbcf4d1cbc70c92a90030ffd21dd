@@ -112,6 +112,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "95a63779_cc3e1432",
+        "filename": "src/libANGLE/capture/FrameCapture.cpp",
+        "patchSetId": 8
+      },
+      "lineNbr": 6879,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2022-05-03T03:00:26Z",
+      "side": 1,
+      "message": "Yeah, if we can migrate CaptureReplayTests to use the same methods that TracePerfTests is using, that\u0027s cleaner.\n\nGert, if you look at `trace_angle::LoadEGL(TraceLoadProc);` in TracePerfTest.cpp and follow its definition, you\u0027ll see that it selectively reroutes calls to an internal implementation.  Calls not intercepted are just routed to the driver.  So we could create an onEGLGetDisplay similar to onEglMakeCurrent.  This probably requires migrating trace_egl_loader_autogen.cpp to CaptureReplayTests.",
+      "parentUuid": "ed04e23b_6cd5a06d",
+      "range": {
+        "startLine": 6856,
+        "startChar": 0,
+        "endLine": 6879,
+        "endChar": 5
+      },
+      "revId": "1e29e76e0c9fbbcf4d1cbc70c92a90030ffd21dd",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "94e3082f_7757ca56",
         "filename": "src/libANGLE/capture/FrameCapture.cpp",
         "patchSetId": 8
@@ -123,6 +147,30 @@
       "writtenOn": "2022-05-02T12:56:52Z",
       "side": 1,
       "message": "please place these in a new file src/libANGLE/capture/capture_egl.cpp",
+      "range": {
+        "startLine": 8008,
+        "startChar": 0,
+        "endLine": 8029,
+        "endChar": 1
+      },
+      "revId": "1e29e76e0c9fbbcf4d1cbc70c92a90030ffd21dd",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "bc1d2672_2930a2aa",
+        "filename": "src/libANGLE/capture/FrameCapture.cpp",
+        "patchSetId": 8
+      },
+      "lineNbr": 8029,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2022-05-03T03:00:26Z",
+      "side": 1,
+      "message": "+1, makes sense to split the EGL stuff out.",
+      "parentUuid": "94e3082f_7757ca56",
       "range": {
         "startLine": 8008,
         "startChar": 0,
