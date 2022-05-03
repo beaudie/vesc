@@ -346,6 +346,7 @@ class RendererVk : angle::NonCopyable
             }
             else
             {
+                mSuballocationGarbageSizeInBytes += suballocation.getSize();
                 mSuballocationGarbage.emplace(std::move(use), std::move(suballocation),
                                               std::move(buffer));
             }
@@ -603,6 +604,7 @@ class RendererVk : angle::NonCopyable
         return mSupportedFragmentShadingRates.test(shadingRate);
     }
 
+    VkDeviceSize getSuballocationGarbageSize() const { return mSuballocationGarbageSizeInBytes; }
     VkDeviceSize getSuballocationDestroyedSize() const
     {
         return mSuballocationGarbageDestroyed.load(std::memory_order_relaxed);
@@ -712,6 +714,8 @@ class RendererVk : angle::NonCopyable
     vk::SharedGarbageList mPendingSubmissionGarbage;
     vk::SharedBufferSuballocationGarbageList mSuballocationGarbage;
     vk::SharedBufferSuballocationGarbageList mPendingSubmissionSuballocationGarbage;
+    // Total suballocation garbage size in bytes.
+    VkDeviceSize mSuballocationGarbageSizeInBytes;
     // Total bytes of suballocation that been destroyed since last prune call.
     std::atomic<VkDeviceSize> mSuballocationGarbageDestroyed;
 
