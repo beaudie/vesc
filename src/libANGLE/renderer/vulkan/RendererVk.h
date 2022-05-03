@@ -346,6 +346,7 @@ class RendererVk : angle::NonCopyable
             }
             else
             {
+                mSuballocationGarbageSizeInBytes += suballocation.getSize();
                 mSuballocationGarbage.emplace(std::move(use), std::move(suballocation),
                                               std::move(buffer));
             }
@@ -603,6 +604,10 @@ class RendererVk : angle::NonCopyable
         return mSupportedFragmentShadingRates.test(shadingRate);
     }
 
+    VkDeviceSize getSuballocationGarbageSize() const
+    {
+        return mSuballocationGarbageSizeInBytesCachedAtomic.load(std::memory_order_consume);
+    }
     VkDeviceSize getSuballocationDestroyedSize() const { return mSuballocationGarbageDestroyed; }
     void onBufferPoolPrune() { mSuballocationGarbageDestroyed = 0; }
 
@@ -709,8 +714,15 @@ class RendererVk : angle::NonCopyable
     vk::SharedGarbageList mPendingSubmissionGarbage;
     vk::SharedBufferSuballocationGarbageList mSuballocationGarbage;
     vk::SharedBufferSuballocationGarbageList mPendingSubmissionSuballocationGarbage;
+    // Total suballocation garbage size in bytes.
+    VkDeviceSize mSuballocationGarbageSizeInBytes;
     // Total bytes of suballocation that been destroyed since last prune call.
     VkDeviceSize mSuballocationGarbageDestroyed;
+
+    // This is the cached value of mSuballocationGarbageSizeInBytes but is accessed with atomic
+    // operation. This can be accessed from different threads without mGarbageMutex, so that thread
+    // sanitizer won't complain.
+    std::atomic<VkDeviceSize> mSuballocationGarbageSizeInBytesCachedAtomic;
 
     vk::FormatTable mFormatTable;
     // A cache of VkFormatProperties as queried from the device over time.
