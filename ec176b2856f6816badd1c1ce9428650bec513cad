@@ -54,6 +54,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "5f9445ee_9790de5e",
+        "filename": "src/tests/gl_tests/TextureTest.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 172,
+      "author": {
+        "id": 1116015
+      },
+      "writtenOn": "2022-05-03T17:28:47Z",
+      "side": 1,
+      "message": "GLWrapper is derived from angle::Noncopyable, so it should never call the copy constructor AFAIK. It does have a move constructor which successfully transfers ownership of the handle, so either that or copy elision should work, I think?",
+      "parentUuid": "cb396cf0_8972b9da",
+      "revId": "ec176b2856f6816badd1c1ce9428650bec513cad",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "357a800b_3497e0c0",
         "filename": "src/tests/gl_tests/TextureTest.cpp",
         "patchSetId": 1
