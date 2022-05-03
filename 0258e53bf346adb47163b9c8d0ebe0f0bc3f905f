@@ -41,6 +41,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "e12d2cc1_09248f8e",
+        "filename": "src/libANGLE/renderer/vulkan/linux/gbm/DisplayVkGbm.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 72,
+      "author": {
+        "id": 1528827
+      },
+      "writtenOn": "2022-05-03T15:47:20Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "93d8d3ca_f8383568",
+      "range": {
+        "startLine": 72,
+        "startChar": 9,
+        "endLine": 72,
+        "endChar": 14
+      },
+      "revId": "0258e53bf346adb47163b9c8d0ebe0f0bc3f905f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "caa5d1a6_6b69d40c",
@@ -64,6 +88,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "3de14a22_e79f7f5a",
+        "filename": "src/libANGLE/renderer/vulkan/linux/gbm/SurfaceVkGbm.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 48,
+      "author": {
+        "id": 1528827
+      },
+      "writtenOn": "2022-05-03T15:47:20Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "caa5d1a6_6b69d40c",
+      "range": {
+        "startLine": 48,
+        "startChar": 3,
+        "endLine": 48,
+        "endChar": 21
+      },
+      "revId": "0258e53bf346adb47163b9c8d0ebe0f0bc3f905f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "9fe7751f_4ce95710",
@@ -77,6 +125,30 @@
       "writtenOn": "2022-05-02T12:23:32Z",
       "side": 1,
       "message": "nit: use c++ cast style when possible\n\nsame for all other code points in cpp files",
+      "range": {
+        "startLine": 257,
+        "startChar": 38,
+        "endLine": 257,
+        "endChar": 46
+      },
+      "revId": "0258e53bf346adb47163b9c8d0ebe0f0bc3f905f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "16228d20_73d19f0f",
+        "filename": "src/libANGLE/renderer/vulkan/linux/gbm/SurfaceVkGbm.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 257,
+      "author": {
+        "id": 1528827
+      },
+      "writtenOn": "2022-05-03T15:47:20Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "9fe7751f_4ce95710",
       "range": {
         "startLine": 257,
         "startChar": 38,

@@ -22,6 +22,30 @@
       },
       "revId": "fc3ebaec9aa304bc710be48a9d5491490f23903a",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "01647536_4db23a32",
+        "filename": "src/common/linux/dma_buf_utils.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 39,
+      "author": {
+        "id": 1528827
+      },
+      "writtenOn": "2022-05-03T15:47:20Z",
+      "side": 1,
+      "message": "I am not sure we should use `GL_RGBX8_ANGLE` for `DRM_FORMAT_XRGB8888` (by reading the DRM channels backward), but I noticed `GL_BGRX8_ANGLEX`, which would probably be a better match.",
+      "parentUuid": "c460f56c_c743fc5d",
+      "range": {
+        "startLine": 39,
+        "startChar": 13,
+        "endLine": 39,
+        "endChar": 32
+      },
+      "revId": "fc3ebaec9aa304bc710be48a9d5491490f23903a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }

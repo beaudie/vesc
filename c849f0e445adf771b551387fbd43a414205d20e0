@@ -24,6 +24,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "1326781b_783e91e8",
+        "filename": "src/libANGLE/renderer/vulkan/linux/gbm/SurfaceVkGbm.cpp",
+        "patchSetId": 8
+      },
+      "lineNbr": 110,
+      "author": {
+        "id": 1528827
+      },
+      "writtenOn": "2022-05-03T15:47:20Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "cef73df0_bbe7a051",
+      "range": {
+        "startLine": 101,
+        "startChar": 0,
+        "endLine": 110,
+        "endChar": 0
+      },
+      "revId": "c849f0e445adf771b551387fbd43a414205d20e0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "a20b974a_4db113a5",
@@ -77,6 +101,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "131ba3b2_8710d017",
+        "filename": "src/libANGLE/renderer/vulkan/linux/gbm/SurfaceVkGbm.cpp",
+        "patchSetId": 8
+      },
+      "lineNbr": 274,
+      "author": {
+        "id": 1528827
+      },
+      "writtenOn": "2022-05-03T15:47:20Z",
+      "side": 1,
+      "message": "Thanks Daniel, I have just copied your answer as a comment in the code.",
+      "parentUuid": "f39d9758_46d237be",
+      "revId": "c849f0e445adf771b551387fbd43a414205d20e0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "0bebdbb7_aed350f8",
@@ -107,6 +149,24 @@
       "writtenOn": "2022-05-02T18:52:14Z",
       "side": 1,
       "message": "Unused.\n\nIt looks like ANI is not overriden. Doesn\u0027t `SurfaceVk::prepareSwap()` cause trouble with this? Or is it just that `mNeedToAcquireNextSwapchainImage` is never set? If that latter, please `ASSERT(!mNeedToAcquireNextSwapchainImage)` in `presentImpl()`.",
+      "revId": "c849f0e445adf771b551387fbd43a414205d20e0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "cfc41060_2bc34bc4",
+        "filename": "src/libANGLE/renderer/vulkan/linux/gbm/SurfaceVkGbm.h",
+        "patchSetId": 8
+      },
+      "lineNbr": 61,
+      "author": {
+        "id": 1528827
+      },
+      "writtenOn": "2022-05-03T15:47:20Z",
+      "side": 1,
+      "message": "\u003e mNeedToAcquireNextSwapchainImage  is never set\n\nExactly. I added the assert.",
+      "parentUuid": "d454b93d_38c19752",
       "revId": "c849f0e445adf771b551387fbd43a414205d20e0",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
