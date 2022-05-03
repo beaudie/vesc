@@ -35,6 +35,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "1fc9f836_3e5a3456",
+        "filename": "src/tests/restricted_traces/restricted_trace_perf.py",
+        "patchSetId": 3
+      },
+      "lineNbr": 525,
+      "author": {
+        "id": 1525982
+      },
+      "writtenOn": "2022-05-03T17:40:01Z",
+      "side": 1,
+      "message": "Done. Also added a function to print the list of available devices.",
+      "parentUuid": "d389c001_abc04537",
+      "revId": "fa105dbf9ebff22e4e8e0b4d332e0cf61ceab929",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "b965eb9e_4b5b7cb2",
@@ -48,6 +66,24 @@
       "writtenOn": "2022-05-03T14:18:05Z",
       "side": 1,
       "message": "Suggest breaking the `elif` chain here (since all the previous cases `return` anyway), and doing this:\n\n```\nif args.device \u003d\u003d \u0027\u0027 and android_serial_env is not None:\n    args.device \u003d android_serial_env\n\nif args.device !\u003d \u0027\u0027:\n    print(\u0027Device with serial {} selected.\u0027.format(args.device))\n    SELECTED_DEVICE \u003d \u0027-s {}\u0027.format(args.device)\nelse:\n    print(\u0027Default device ({}) selected.\u0027.format(result_dev_out[0]))\n```",
+      "revId": "fa105dbf9ebff22e4e8e0b4d332e0cf61ceab929",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "e66d41a4_2af1619e",
+        "filename": "src/tests/restricted_traces/restricted_trace_perf.py",
+        "patchSetId": 3
+      },
+      "lineNbr": 540,
+      "author": {
+        "id": 1525982
+      },
+      "writtenOn": "2022-05-03T17:40:01Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "b965eb9e_4b5b7cb2",
       "revId": "fa105dbf9ebff22e4e8e0b4d332e0cf61ceab929",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
