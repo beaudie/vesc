@@ -104,6 +104,30 @@
       },
       "revId": "3a0da076020f57fae5f38d6273367d047adc6b03",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "1c367766_cab5e478",
+        "filename": "src/tests/restricted_traces/restricted_trace_perf.py",
+        "patchSetId": 5
+      },
+      "lineNbr": 143,
+      "author": {
+        "id": 1525982
+      },
+      "writtenOn": "2022-05-03T19:17:12Z",
+      "side": 1,
+      "message": "Replaced the error messages with `logging.error` and `.info`.",
+      "parentUuid": "82bb3830_aa719eaa",
+      "range": {
+        "startLine": 143,
+        "startChar": 63,
+        "endLine": 143,
+        "endChar": 64
+      },
+      "revId": "3a0da076020f57fae5f38d6273367d047adc6b03",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
