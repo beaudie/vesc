@@ -1127,6 +1127,7 @@ RendererVk::RendererVk()
       mDefaultUniformBufferSize(kPreferredDefaultUniformBufferSize),
       mDevice(VK_NULL_HANDLE),
       mDeviceLost(false),
+      mSuballocationGarbageSizeInBytes(0),
       mSuballocationGarbageDestroyed(0),
       mCoherentStagingBufferMemoryTypeIndex(kInvalidMemoryTypeIndex),
       mNonCoherentStagingBufferMemoryTypeIndex(kInvalidMemoryTypeIndex),
@@ -3853,6 +3854,7 @@ void RendererVk::cleanupGarbage(Serial lastCompletedQueueSerial)
         suballocationBytesDestroyed += garbageSize;
     }
     mSuballocationGarbageDestroyed += suballocationBytesDestroyed;
+    mSuballocationGarbageSizeInBytes -= suballocationBytesDestroyed;
 
     // Note: do this after clean up mSuballocationGarbage so that we will have more chances to find
     // orphaned blocks being empty.
@@ -3898,6 +3900,7 @@ void RendererVk::cleanupPendingSubmissionGarbage()
             mPendingSubmissionSuballocationGarbage.front();
         if (!suballocationGarbage.usedInRecordedCommands())
         {
+            mSuballocationGarbageSizeInBytes += suballocationGarbage.getSize();
             mSuballocationGarbage.push(std::move(suballocationGarbage));
         }
         else
