@@ -929,6 +929,22 @@ TEST_P(VertexAttributeTest, UnsignedPacked1010102ExtensionNormalized)
     };
 }
 
+// Test corner case where vertex attribute is enabled without a call to VertexAttribPointer
+TEST_P(VertexAttributeTest, EnabledAttribWithoutAttribPointer)
+{
+    ANGLE_GL_PROGRAM(program, essl1_shaders::vs::Simple(), essl1_shaders::fs::Green());
+    ASSERT_NE(0u, program);
+    GLint positionAttribLocation = glGetAttribLocation(program, essl1_shaders::PositionAttrib());
+    ASSERT_NE(-1, positionAttribLocation);
+    glUseProgram(program);
+
+    glEnableVertexAttribArray(positionAttribLocation);
+    // Do not call glVertexAttribPointer(...);
+
+    glDrawArrays(GL_TRIANGLES, 0, 6);
+    ASSERT_GL_ERROR(GL_INVALID_OPERATION);
+}
+
 class VertexAttributeTestES3 : public VertexAttributeTest
 {
   protected:
