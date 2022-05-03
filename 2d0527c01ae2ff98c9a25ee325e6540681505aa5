@@ -16,6 +16,23 @@
       "message": "This re-land keeps the XCB display availability check as it is.",
       "revId": "2d0527c01ae2ff98c9a25ee325e6540681505aa5",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "3186a908_e82171db",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2022-05-03T13:00:00Z",
+      "side": 1,
+      "message": "Hey Antonio, please verify this change in Chrome before landing. You can make a Chrome CL with the DEPS for ANGLE set to this Gerrit ref. I\u0027d like to do some additional safety checks so it doesn\u0027t get reverted yet again.",
+      "revId": "2d0527c01ae2ff98c9a25ee325e6540681505aa5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
