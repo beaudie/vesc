@@ -61,6 +61,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "f39d9758_46d237be",
+        "filename": "src/libANGLE/renderer/vulkan/linux/gbm/SurfaceVkGbm.cpp",
+        "patchSetId": 8
+      },
+      "lineNbr": 274,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-05-03T14:20:07Z",
+      "side": 1,
+      "message": "Thanks for the explanation. Some of this could be useful in the comment",
+      "parentUuid": "f5f25603_81fee932",
+      "revId": "c849f0e445adf771b551387fbd43a414205d20e0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "0bebdbb7_aed350f8",
         "filename": "src/libANGLE/renderer/vulkan/linux/gbm/SurfaceVkGbm.cpp",
         "patchSetId": 8
