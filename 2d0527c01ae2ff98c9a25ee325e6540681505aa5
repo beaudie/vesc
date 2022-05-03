@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "2cf66036_2fd36eb7",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1528827
+      },
+      "writtenOn": "2022-05-03T10:18:35Z",
+      "side": 1,
+      "message": "This re-land keeps the XCB display availability check as it is.",
+      "revId": "2d0527c01ae2ff98c9a25ee325e6540681505aa5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
