@@ -18,6 +18,40 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "6be17d86_267d1468",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-05-03T17:18:17Z",
+      "side": 1,
+      "message": "Drive by!",
+      "revId": "ec176b2856f6816badd1c1ce9428650bec513cad",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "cb396cf0_8972b9da",
+        "filename": "src/tests/gl_tests/TextureTest.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 172,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-05-03T17:18:17Z",
+      "side": 1,
+      "message": "Not quite sure this works. Copy elision makes it work, but some compilers (you know which) isn\u0027t always able to do that.\n\nUsual practice is to declare the GLTexture outside and pass it in the function either as `GLuint` (which it autocasts to) or `GLTexture*`",
+      "revId": "ec176b2856f6816badd1c1ce9428650bec513cad",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "357a800b_3497e0c0",
@@ -66,6 +100,30 @@
       "writtenOn": "2022-05-03T17:16:13Z",
       "side": 1,
       "message": "ah, this won\u0027t work properly. people make this mistake a lot, sadly. if you do this, the class destructor will run after we shut down GL, and we\u0027ll call glDeleteTextures after all the GLES stuff is shut down. Either define these always in the test body (which I always do) or in the testTearDown explicitly reset them.",
+      "range": {
+        "startLine": 909,
+        "startChar": 0,
+        "endLine": 910,
+        "endChar": 27
+      },
+      "revId": "ec176b2856f6816badd1c1ce9428650bec513cad",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "e53f440c_f56cb1b5",
+        "filename": "src/tests/gl_tests/TextureTest.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 910,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-05-03T17:18:17Z",
+      "side": 1,
+      "message": "This keeps getting brought up, but I\u0027ve never actually seen a failure as a result of this. Any examples you have to share Jamie?",
+      "parentUuid": "a04ef4f7_c3e19cd0",
       "range": {
         "startLine": 909,
         "startChar": 0,
