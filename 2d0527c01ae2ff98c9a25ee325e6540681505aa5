@@ -69,6 +69,24 @@
       "parentUuid": "202ce313_48e12f1b",
       "revId": "2d0527c01ae2ff98c9a25ee325e6540681505aa5",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "440293fc_905b6e47",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1528827
+      },
+      "writtenOn": "2022-05-03T15:33:54Z",
+      "side": 1,
+      "message": "Dry run passed \\o/",
+      "parentUuid": "ca1c7fbf_1b84d835",
+      "revId": "2d0527c01ae2ff98c9a25ee325e6540681505aa5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
