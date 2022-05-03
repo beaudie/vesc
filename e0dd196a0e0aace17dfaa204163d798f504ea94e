@@ -22,6 +22,30 @@
       },
       "revId": "e0dd196a0e0aace17dfaa204163d798f504ea94e",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "f5940d93_2dde9581",
+        "filename": "src/libANGLE/renderer/vulkan/linux/xcb/DisplayVkXcb.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 156,
+      "author": {
+        "id": 1001921
+      },
+      "writtenOn": "2022-05-03T12:43:07Z",
+      "side": 1,
+      "message": "Example failure: https://ci.chromium.org/ui/p/chromium/builders/try/linux-rel/1000930/overview",
+      "parentUuid": "95de9055_a060a27a",
+      "range": {
+        "startLine": 150,
+        "startChar": 0,
+        "endLine": 156,
+        "endChar": 0
+      },
+      "revId": "e0dd196a0e0aace17dfaa204163d798f504ea94e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
