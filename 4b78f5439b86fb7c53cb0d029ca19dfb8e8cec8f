@@ -41,6 +41,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "4b378f3a_33efa476",
+        "filename": "src/tests/restricted_traces/restricted_trace_perf.py",
+        "patchSetId": 2
+      },
+      "lineNbr": 19,
+      "author": {
+        "id": 1525982
+      },
+      "writtenOn": "2022-05-03T04:24:03Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "d1c443fa_cf38c2ec",
+      "range": {
+        "startLine": 19,
+        "startChar": 0,
+        "endLine": 19,
+        "endChar": 136
+      },
+      "revId": "4b78f5439b86fb7c53cb0d029ca19dfb8e8cec8f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "8bf2729f_e095840b",
@@ -64,6 +88,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "04a44171_27a10893",
+        "filename": "src/tests/restricted_traces/restricted_trace_perf.py",
+        "patchSetId": 2
+      },
+      "lineNbr": 102,
+      "author": {
+        "id": 1525982
+      },
+      "writtenOn": "2022-05-03T04:24:03Z",
+      "side": 1,
+      "message": "Added `run_adb_command()`. `get_adb_dev()` is still used in one case of `run_async_command()`.",
+      "parentUuid": "8bf2729f_e095840b",
+      "range": {
+        "startLine": 102,
+        "startChar": 16,
+        "endLine": 102,
+        "endChar": 27
+      },
+      "revId": "4b78f5439b86fb7c53cb0d029ca19dfb8e8cec8f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "4606451a_3d26d352",
@@ -77,6 +125,30 @@
       "writtenOn": "2022-05-02T21:27:25Z",
       "side": 1,
       "message": "Can you update this to support $ANDROID_SERIAL, which is how I currently target devices?  Specifically, I do the following before running the script:\n\n```\nexport ANDROID_SERIAL\u003d123ABCDEFGHIJK\n```\nand then all commands are routed appropriately.",
+      "range": {
+        "startLine": 505,
+        "startChar": 0,
+        "endLine": 505,
+        "endChar": 30
+      },
+      "revId": "4b78f5439b86fb7c53cb0d029ca19dfb8e8cec8f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "9d4c0d32_905179b8",
+        "filename": "src/tests/restricted_traces/restricted_trace_perf.py",
+        "patchSetId": 2
+      },
+      "lineNbr": 505,
+      "author": {
+        "id": 1525982
+      },
+      "writtenOn": "2022-05-03T04:24:03Z",
+      "side": 1,
+      "message": "Sure. Added the option to use `$ANDROID_SERIAL` if `--device` is not used in the command line.",
+      "parentUuid": "4606451a_3d26d352",
       "range": {
         "startLine": 505,
         "startChar": 0,
