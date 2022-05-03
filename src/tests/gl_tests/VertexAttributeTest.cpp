@@ -929,6 +929,41 @@ TEST_P(VertexAttributeTest, UnsignedPacked1010102ExtensionNormalized)
     };
 }
 
+// Test corner case where vertex attribute is enabled without a call to VertexAttribPointer
+TEST_P(VertexAttributeTest, EnabledAttribWithoutAttribPointer)
+{
+    constexpr char kVS[] =
+        R"(attribute mediump vec4 position;
+            attribute highp vec4 test;
+            varying mediump vec4 varColor;
+            void main()
+            {
+                gl_Position = position;
+                varColor = test;
+            })";
+
+    constexpr char kFS[] =
+        R"(varying mediump vec4 varColor;
+            void main()
+            {
+                gl_FragColor = varColor;
+            })";
+
+    ANGLE_GL_PROGRAM(program, kVS, kFS);
+    ASSERT_NE(0u, program);
+    GLint testAttribLocation = glGetAttribLocation(program, "test");
+    ASSERT_NE(-1, testAttribLocation);
+    glUseProgram(program);
+
+    glEnableVertexAttribArray(testAttribLocation);
+    // Do not call glVertexAttribPointer(...);
+
+    drawQuad(program, "position", 0.5f);
+    ASSERT_GL_ERROR(GL_INVALID_OPERATION);
+
+    glDisableVertexAttribArray(testAttribLocation);
+}
+
 class VertexAttributeTestES3 : public VertexAttributeTest
 {
   protected:

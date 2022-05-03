@@ -41,6 +41,7 @@ VertexArrayState::VertexArrayState(VertexArray *vertexArray,
 
     // Initially all attributes start as "client" with no buffer bound.
     mClientMemoryAttribsMask.set();
+    mNullPointerClientMemoryAttribsMask.set();
 }
 
 VertexArrayState::~VertexArrayState() {}
