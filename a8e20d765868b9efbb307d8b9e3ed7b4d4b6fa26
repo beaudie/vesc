@@ -16,6 +16,52 @@
       "message": "Jamie: PTAL. Thanks!",
       "revId": "a8e20d765868b9efbb307d8b9e3ed7b4d4b6fa26",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "0e9fc3fc_0876e72b",
+        "filename": "src/tests/gl_tests/TextureTest.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 2697,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2022-05-03T16:29:04Z",
+      "side": 1,
+      "message": "test nit: use GLTexture / RAII types",
+      "range": {
+        "startLine": 2697,
+        "startChar": 4,
+        "endLine": 2697,
+        "endChar": 11
+      },
+      "revId": "a8e20d765868b9efbb307d8b9e3ed7b4d4b6fa26",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "30223482_dd287eaa",
+        "filename": "src/tests/gl_tests/TextureTest.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 2712,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2022-05-03T16:29:04Z",
+      "side": 1,
+      "message": "nit: same",
+      "range": {
+        "startLine": 2712,
+        "startChar": 4,
+        "endLine": 2712,
+        "endChar": 11
+      },
+      "revId": "a8e20d765868b9efbb307d8b9e3ed7b4d4b6fa26",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
