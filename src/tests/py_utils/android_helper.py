@@ -147,7 +147,7 @@ def _RandomHex():
 
 @contextlib.contextmanager
 def _TempDeviceDir():
-    path = '/sdcard/Download/temp_dir-%s' % _RandomHex()
+    path = '/data/data/com.android.angle.test/temp_dir-%s' % _RandomHex()
     _AdbShell('mkdir -p ' + path)
     try:
         yield path
@@ -157,7 +157,7 @@ def _TempDeviceDir():
 
 @contextlib.contextmanager
 def _TempDeviceFile():
-    path = '/sdcard/Download/temp_file-%s' % _RandomHex()
+    path = '/data/data/com.android.angle.test/temp_file-%s' % _RandomHex()
     try:
         yield path
     finally:
