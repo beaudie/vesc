@@ -33,6 +33,24 @@
       "message": "Before landing, I still wonder if we can simplify the test further.",
       "revId": "f1686167e8ee2016e7a8f060ca7a962e7931c367",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "10df1e92_64592303",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 9
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1491687
+      },
+      "writtenOn": "2022-05-03T14:32:15Z",
+      "side": 1,
+      "message": "I was able to simplify the test further by not binding a frame buffer for the second pass and not setting `glDepthMask(GL_TRUE)` in the second pass, and still reproducing the issue.\n\nHowever the first pass needs to be drawn into a depth frame buffer to reproduce the issue. Also the second pass needs to have 2 draws, one with the sampler bound to the fragment stage and the other with the sampler bound to the vertex stage to reproduce. Changing the order or reusing the shader did not reproduce.",
+      "parentUuid": "5fdd235b_de51cb66",
+      "revId": "f1686167e8ee2016e7a8f060ca7a962e7931c367",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
