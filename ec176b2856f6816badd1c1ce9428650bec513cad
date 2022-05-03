@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "1bf2bde0_fb9739a9",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1116015
+      },
+      "writtenOn": "2022-05-03T17:11:54Z",
+      "side": 1,
+      "message": "Jamie: PTAL. Thanks!",
+      "revId": "ec176b2856f6816badd1c1ce9428650bec513cad",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "357a800b_3497e0c0",
+        "filename": "src/tests/gl_tests/TextureTest.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 220,
+      "author": {
+        "id": 1116015
+      },
+      "writtenOn": "2022-05-03T17:11:54Z",
+      "side": 1,
+      "message": "BTW, I think these can now be removed. LMK what you prefer.",
+      "revId": "ec176b2856f6816badd1c1ce9428650bec513cad",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
