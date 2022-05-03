@@ -208,6 +208,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "e00adb91_1f8aa844",
+        "filename": "src/libANGLE/capture/FrameCapture.cpp",
+        "patchSetId": 8
+      },
+      "lineNbr": 6879,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2022-05-03T13:05:15Z",
+      "side": 1,
+      "message": "Hey Gert, stepping back a sec-\n\nI think there\u0027s some misunderstanding here. And code review is a bad place to this out. Can you chat offline with Cody to work out a consensus? Happy to contribute to the discussion offline. I think it\u0027s an important discussion for this work.",
+      "parentUuid": "0c24fdc4_ed49a3aa",
+      "range": {
+        "startLine": 6856,
+        "startChar": 0,
+        "endLine": 6879,
+        "endChar": 5
+      },
+      "revId": "1e29e76e0c9fbbcf4d1cbc70c92a90030ffd21dd",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "94e3082f_7757ca56",
         "filename": "src/libANGLE/capture/FrameCapture.cpp",
         "patchSetId": 8
