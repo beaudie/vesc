@@ -543,13 +543,20 @@ void Format::initialize(RendererVk *renderer, const angle::Format &angleFormat)
             break;
 
         case angle::FormatID::B8G8R8X8_UNORM:
-            mIntendedGLFormat              = GL_BGRX8_ANGLEX;
-            mActualSampleOnlyImageFormatID = angle::FormatID::B8G8R8A8_UNORM;
-            mImageInitializerFunction      = nullptr;
-            mActualBufferFormatID          = angle::FormatID::NONE;
-            mVkBufferFormatIsPacked        = false;
-            mVertexLoadFunction            = nullptr;
-            mVertexLoadRequiresConversion  = true;
+            mIntendedGLFormat = GL_BGRX8_ANGLEX;
+            {
+                static constexpr ImageFormatInitInfo kInfo[] = {
+                    {angle::FormatID::B8G8R8X8_UNORM, nullptr},
+                    {angle::FormatID::B8G8R8A8_UNORM, nullptr}};
+                initImageFallback(renderer, kInfo, ArraySize(kInfo));
+            }
+            {
+                static constexpr BufferFormatInitInfo kInfo[] = {
+                    {angle::FormatID::B8G8R8X8_UNORM, false, CopyNativeVertexData<GLubyte, 4, 4, 0>,
+                     false},
+                    {angle::FormatID::NONE, false, nullptr, true}};
+                initBufferFallback(renderer, kInfo, ArraySize(kInfo), 2);
+            }
             break;
 
         case angle::FormatID::BC1_RGBA_UNORM_BLOCK:
@@ -2012,13 +2019,20 @@ void Format::initialize(RendererVk *renderer, const angle::Format &angleFormat)
             break;
 
         case angle::FormatID::R8G8B8X8_UNORM:
-            mIntendedGLFormat              = GL_RGBX8_ANGLE;
-            mActualSampleOnlyImageFormatID = angle::FormatID::R8G8B8A8_UNORM;
-            mImageInitializerFunction      = nullptr;
-            mActualBufferFormatID          = angle::FormatID::NONE;
-            mVkBufferFormatIsPacked        = false;
-            mVertexLoadFunction            = nullptr;
-            mVertexLoadRequiresConversion  = true;
+            mIntendedGLFormat = GL_RGBX8_ANGLE;
+            {
+                static constexpr ImageFormatInitInfo kInfo[] = {
+                    {angle::FormatID::R8G8B8X8_UNORM, nullptr},
+                    {angle::FormatID::R8G8B8A8_UNORM, nullptr}};
+                initImageFallback(renderer, kInfo, ArraySize(kInfo));
+            }
+            {
+                static constexpr BufferFormatInitInfo kInfo[] = {
+                    {angle::FormatID::R8G8B8X8_UNORM, false, CopyNativeVertexData<GLubyte, 4, 4, 0>,
+                     false},
+                    {angle::FormatID::NONE, false, nullptr, true}};
+                initBufferFallback(renderer, kInfo, ArraySize(kInfo), 2);
+            }
             break;
 
         case angle::FormatID::R8G8B8_SINT:
@@ -2439,6 +2453,7 @@ VkFormat GetVkFormatFromFormatID(angle::FormatID formatID)
         {angle::FormatID::B5G6R5_UNORM, VK_FORMAT_B5G6R5_UNORM_PACK16},
         {angle::FormatID::B8G8R8A8_UNORM, VK_FORMAT_B8G8R8A8_UNORM},
         {angle::FormatID::B8G8R8A8_UNORM_SRGB, VK_FORMAT_B8G8R8A8_SRGB},
+        {angle::FormatID::B8G8R8X8_UNORM, VK_FORMAT_B8G8R8A8_UNORM},
         {angle::FormatID::BC1_RGBA_UNORM_BLOCK, VK_FORMAT_BC1_RGBA_UNORM_BLOCK},
         {angle::FormatID::BC1_RGBA_UNORM_SRGB_BLOCK, VK_FORMAT_BC1_RGBA_SRGB_BLOCK},
         {angle::FormatID::BC1_RGB_UNORM_BLOCK, VK_FORMAT_BC1_RGB_UNORM_BLOCK},
@@ -2530,6 +2545,7 @@ VkFormat GetVkFormatFromFormatID(angle::FormatID formatID)
         {angle::FormatID::R8G8B8A8_UNORM, VK_FORMAT_R8G8B8A8_UNORM},
         {angle::FormatID::R8G8B8A8_UNORM_SRGB, VK_FORMAT_R8G8B8A8_SRGB},
         {angle::FormatID::R8G8B8A8_USCALED, VK_FORMAT_R8G8B8A8_USCALED},
+        {angle::FormatID::R8G8B8X8_UNORM, VK_FORMAT_R8G8B8A8_UNORM},
         {angle::FormatID::R8G8B8_SINT, VK_FORMAT_R8G8B8_SINT},
         {angle::FormatID::R8G8B8_SNORM, VK_FORMAT_R8G8B8_SNORM},
         {angle::FormatID::R8G8B8_SSCALED, VK_FORMAT_R8G8B8_SSCALED},
@@ -2563,6 +2579,20 @@ angle::FormatID GetFormatIDFromVkFormat(VkFormat vkFormat)
     {
         case VK_FORMAT_A1R5G5B5_UNORM_PACK16:
             return angle::FormatID::A1R5G5B5_UNORM;
+        case VK_FORMAT_A2B10G10R10_SINT_PACK32:
+            return angle::FormatID::R10G10B10A2_SINT;
+        case VK_FORMAT_A2B10G10R10_SNORM_PACK32:
+            return angle::FormatID::R10G10B10A2_SNORM;
+        case VK_FORMAT_A2B10G10R10_SSCALED_PACK32:
+            return angle::FormatID::R10G10B10A2_SSCALED;
+        case VK_FORMAT_A2B10G10R10_UINT_PACK32:
+            return angle::FormatID::R10G10B10A2_UINT;
+        case VK_FORMAT_A2B10G10R10_UNORM_PACK32:
+            return angle::FormatID::R10G10B10A2_UNORM;
+        case VK_FORMAT_A2B10G10R10_USCALED_PACK32:
+            return angle::FormatID::R10G10B10A2_USCALED;
+        case VK_FORMAT_A2R10G10B10_UNORM_PACK32:
+            return angle::FormatID::B10G10R10A2_UNORM;
         case VK_FORMAT_ASTC_10x10_SRGB_BLOCK:
             return angle::FormatID::ASTC_10x10_SRGB_BLOCK;
         case VK_FORMAT_ASTC_10x10_UNORM_BLOCK:
@@ -2619,34 +2649,34 @@ angle::FormatID GetFormatIDFromVkFormat(VkFormat vkFormat)
             return angle::FormatID::ASTC_8x8_SRGB_BLOCK;
         case VK_FORMAT_ASTC_8x8_UNORM_BLOCK:
             return angle::FormatID::ASTC_8x8_UNORM_BLOCK;
-        case VK_FORMAT_A2R10G10B10_UNORM_PACK32:
-            return angle::FormatID::B10G10R10A2_UNORM;
+        case VK_FORMAT_B10G11R11_UFLOAT_PACK32:
+            return angle::FormatID::R11G11B10_FLOAT;
         case VK_FORMAT_B4G4R4A4_UNORM_PACK16:
             return angle::FormatID::B4G4R4A4_UNORM;
         case VK_FORMAT_B5G5R5A1_UNORM_PACK16:
             return angle::FormatID::B5G5R5A1_UNORM;
         case VK_FORMAT_B5G6R5_UNORM_PACK16:
             return angle::FormatID::B5G6R5_UNORM;
-        case VK_FORMAT_B8G8R8A8_UNORM:
-            return angle::FormatID::B8G8R8A8_UNORM;
         case VK_FORMAT_B8G8R8A8_SRGB:
             return angle::FormatID::B8G8R8A8_UNORM_SRGB;
-        case VK_FORMAT_BC1_RGBA_UNORM_BLOCK:
-            return angle::FormatID::BC1_RGBA_UNORM_BLOCK;
+        case VK_FORMAT_B8G8R8A8_UNORM:
+            return angle::FormatID::B8G8R8A8_UNORM;
         case VK_FORMAT_BC1_RGBA_SRGB_BLOCK:
             return angle::FormatID::BC1_RGBA_UNORM_SRGB_BLOCK;
-        case VK_FORMAT_BC1_RGB_UNORM_BLOCK:
-            return angle::FormatID::BC1_RGB_UNORM_BLOCK;
+        case VK_FORMAT_BC1_RGBA_UNORM_BLOCK:
+            return angle::FormatID::BC1_RGBA_UNORM_BLOCK;
         case VK_FORMAT_BC1_RGB_SRGB_BLOCK:
             return angle::FormatID::BC1_RGB_UNORM_SRGB_BLOCK;
-        case VK_FORMAT_BC2_UNORM_BLOCK:
-            return angle::FormatID::BC2_RGBA_UNORM_BLOCK;
+        case VK_FORMAT_BC1_RGB_UNORM_BLOCK:
+            return angle::FormatID::BC1_RGB_UNORM_BLOCK;
         case VK_FORMAT_BC2_SRGB_BLOCK:
             return angle::FormatID::BC2_RGBA_UNORM_SRGB_BLOCK;
-        case VK_FORMAT_BC3_UNORM_BLOCK:
-            return angle::FormatID::BC3_RGBA_UNORM_BLOCK;
+        case VK_FORMAT_BC2_UNORM_BLOCK:
+            return angle::FormatID::BC2_RGBA_UNORM_BLOCK;
         case VK_FORMAT_BC3_SRGB_BLOCK:
             return angle::FormatID::BC3_RGBA_UNORM_SRGB_BLOCK;
+        case VK_FORMAT_BC3_UNORM_BLOCK:
+            return angle::FormatID::BC3_RGBA_UNORM_BLOCK;
         case VK_FORMAT_BC4_SNORM_BLOCK:
             return angle::FormatID::BC4_RED_SNORM_BLOCK;
         case VK_FORMAT_BC4_UNORM_BLOCK:
@@ -2659,20 +2689,20 @@ angle::FormatID GetFormatIDFromVkFormat(VkFormat vkFormat)
             return angle::FormatID::BC6H_RGB_SFLOAT_BLOCK;
         case VK_FORMAT_BC6H_UFLOAT_BLOCK:
             return angle::FormatID::BC6H_RGB_UFLOAT_BLOCK;
-        case VK_FORMAT_BC7_UNORM_BLOCK:
-            return angle::FormatID::BC7_RGBA_UNORM_BLOCK;
         case VK_FORMAT_BC7_SRGB_BLOCK:
             return angle::FormatID::BC7_RGBA_UNORM_SRGB_BLOCK;
+        case VK_FORMAT_BC7_UNORM_BLOCK:
+            return angle::FormatID::BC7_RGBA_UNORM_BLOCK;
         case VK_FORMAT_D16_UNORM:
             return angle::FormatID::D16_UNORM;
         case VK_FORMAT_D24_UNORM_S8_UINT:
             return angle::FormatID::D24_UNORM_S8_UINT;
-        case VK_FORMAT_X8_D24_UNORM_PACK32:
-            return angle::FormatID::D24_UNORM_X8_UINT;
         case VK_FORMAT_D32_SFLOAT:
             return angle::FormatID::D32_FLOAT;
         case VK_FORMAT_D32_SFLOAT_S8_UINT:
             return angle::FormatID::D32_FLOAT_S8X24_UINT;
+        case VK_FORMAT_E5B9G9R9_UFLOAT_PACK32:
+            return angle::FormatID::R9G9B9E5_SHAREDEXP;
         case VK_FORMAT_EAC_R11G11_SNORM_BLOCK:
             return angle::FormatID::EAC_R11G11_SNORM_BLOCK;
         case VK_FORMAT_EAC_R11G11_UNORM_BLOCK:
@@ -2697,22 +2727,6 @@ angle::FormatID GetFormatIDFromVkFormat(VkFormat vkFormat)
             return angle::FormatID::G8_B8R8_2PLANE_420_UNORM;
         case VK_FORMAT_G8_B8_R8_3PLANE_420_UNORM:
             return angle::FormatID::G8_B8_R8_3PLANE_420_UNORM;
-        case VK_FORMAT_UNDEFINED:
-            return angle::FormatID::NONE;
-        case VK_FORMAT_A2B10G10R10_SINT_PACK32:
-            return angle::FormatID::R10G10B10A2_SINT;
-        case VK_FORMAT_A2B10G10R10_SNORM_PACK32:
-            return angle::FormatID::R10G10B10A2_SNORM;
-        case VK_FORMAT_A2B10G10R10_SSCALED_PACK32:
-            return angle::FormatID::R10G10B10A2_SSCALED;
-        case VK_FORMAT_A2B10G10R10_UINT_PACK32:
-            return angle::FormatID::R10G10B10A2_UINT;
-        case VK_FORMAT_A2B10G10R10_UNORM_PACK32:
-            return angle::FormatID::R10G10B10A2_UNORM;
-        case VK_FORMAT_A2B10G10R10_USCALED_PACK32:
-            return angle::FormatID::R10G10B10A2_USCALED;
-        case VK_FORMAT_B10G11R11_UFLOAT_PACK32:
-            return angle::FormatID::R11G11B10_FLOAT;
         case VK_FORMAT_R16G16B16A16_SFLOAT:
             return angle::FormatID::R16G16B16A16_FLOAT;
         case VK_FORMAT_R16G16B16A16_SINT:
@@ -2803,62 +2817,64 @@ angle::FormatID GetFormatIDFromVkFormat(VkFormat vkFormat)
             return angle::FormatID::R8G8B8A8_SINT;
         case VK_FORMAT_R8G8B8A8_SNORM:
             return angle::FormatID::R8G8B8A8_SNORM;
+        case VK_FORMAT_R8G8B8A8_SRGB:
+            return angle::FormatID::R8G8B8A8_UNORM_SRGB;
         case VK_FORMAT_R8G8B8A8_SSCALED:
             return angle::FormatID::R8G8B8A8_SSCALED;
         case VK_FORMAT_R8G8B8A8_UINT:
             return angle::FormatID::R8G8B8A8_UINT;
         case VK_FORMAT_R8G8B8A8_UNORM:
             return angle::FormatID::R8G8B8A8_UNORM;
-        case VK_FORMAT_R8G8B8A8_SRGB:
-            return angle::FormatID::R8G8B8A8_UNORM_SRGB;
         case VK_FORMAT_R8G8B8A8_USCALED:
             return angle::FormatID::R8G8B8A8_USCALED;
         case VK_FORMAT_R8G8B8_SINT:
             return angle::FormatID::R8G8B8_SINT;
         case VK_FORMAT_R8G8B8_SNORM:
             return angle::FormatID::R8G8B8_SNORM;
+        case VK_FORMAT_R8G8B8_SRGB:
+            return angle::FormatID::R8G8B8_UNORM_SRGB;
         case VK_FORMAT_R8G8B8_SSCALED:
             return angle::FormatID::R8G8B8_SSCALED;
         case VK_FORMAT_R8G8B8_UINT:
             return angle::FormatID::R8G8B8_UINT;
         case VK_FORMAT_R8G8B8_UNORM:
             return angle::FormatID::R8G8B8_UNORM;
-        case VK_FORMAT_R8G8B8_SRGB:
-            return angle::FormatID::R8G8B8_UNORM_SRGB;
         case VK_FORMAT_R8G8B8_USCALED:
             return angle::FormatID::R8G8B8_USCALED;
         case VK_FORMAT_R8G8_SINT:
             return angle::FormatID::R8G8_SINT;
         case VK_FORMAT_R8G8_SNORM:
             return angle::FormatID::R8G8_SNORM;
+        case VK_FORMAT_R8G8_SRGB:
+            return angle::FormatID::R8G8_UNORM_SRGB;
         case VK_FORMAT_R8G8_SSCALED:
             return angle::FormatID::R8G8_SSCALED;
         case VK_FORMAT_R8G8_UINT:
             return angle::FormatID::R8G8_UINT;
         case VK_FORMAT_R8G8_UNORM:
             return angle::FormatID::R8G8_UNORM;
-        case VK_FORMAT_R8G8_SRGB:
-            return angle::FormatID::R8G8_UNORM_SRGB;
         case VK_FORMAT_R8G8_USCALED:
             return angle::FormatID::R8G8_USCALED;
         case VK_FORMAT_R8_SINT:
             return angle::FormatID::R8_SINT;
         case VK_FORMAT_R8_SNORM:
             return angle::FormatID::R8_SNORM;
+        case VK_FORMAT_R8_SRGB:
+            return angle::FormatID::R8_UNORM_SRGB;
         case VK_FORMAT_R8_SSCALED:
             return angle::FormatID::R8_SSCALED;
         case VK_FORMAT_R8_UINT:
             return angle::FormatID::R8_UINT;
         case VK_FORMAT_R8_UNORM:
             return angle::FormatID::R8_UNORM;
-        case VK_FORMAT_R8_SRGB:
-            return angle::FormatID::R8_UNORM_SRGB;
         case VK_FORMAT_R8_USCALED:
             return angle::FormatID::R8_USCALED;
-        case VK_FORMAT_E5B9G9R9_UFLOAT_PACK32:
-            return angle::FormatID::R9G9B9E5_SHAREDEXP;
         case VK_FORMAT_S8_UINT:
             return angle::FormatID::S8_UINT;
+        case VK_FORMAT_UNDEFINED:
+            return angle::FormatID::NONE;
+        case VK_FORMAT_X8_D24_UNORM_PACK32:
+            return angle::FormatID::D24_UNORM_X8_UINT;
 
         default:
             UNREACHABLE();
