@@ -27,6 +27,9 @@ namespace rx
 {
 // Time interval in seconds that we should try to prune default buffer pools.
 constexpr double kTimeElapsedForPruneDefaultBufferPool = 0.25;
+// When more than this number of bytes of suballocations have been destroyed, we immediately prune.
+constexpr VkDeviceSize kMinimumSuballocationBytesDestroyedToForcePrune = 4 * 1024 * 1024;
+
 // Set to true will log bufferpool stats into INFO stream
 #define ANGLE_ENABLE_BUFFER_POOL_STATS_LOGGING 0
 
@@ -523,15 +526,31 @@ void ShareGroupVk::pruneDefaultBufferPools(RendererVk *renderer)
         mSmallBufferPool->pruneEmptyBuffers(renderer);
     }
 
+    renderer->onBufferPoolPrune();
+
 #if ANGLE_ENABLE_BUFFER_POOL_STATS_LOGGING
     logBufferPools();
 #endif
 }
 
-bool ShareGroupVk::isDueForBufferPoolPrune()
+bool ShareGroupVk::isDueForBufferPoolPrune(RendererVk *renderer)
 {
+    // Ensure we periodically prune to maintain the heuristic information
     double timeElapsed = angle::GetCurrentSystemTime() - mLastPruneTime;
-    return timeElapsed > kTimeElapsedForPruneDefaultBufferPool;
+    if (timeElapsed > kTimeElapsedForPruneDefaultBufferPool)
+    {
+        return true;
+    }
+
+    // If we have destroyed a lot of memory, also prune to ensure memory gets freed as soon as
+    // possible
+    if (renderer->getSuballocationDestroyedSize() >=
+        kMinimumSuballocationBytesDestroyedToForcePrune)
+    {
+        return true;
+    }
+
+    return false;
 }
 
 void ShareGroupVk::calculateTotalBufferCount(size_t *bufferCount, VkDeviceSize *totalSize) const
