@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "eeabea85_8585b835",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1528827
+      },
+      "writtenOn": "2022-05-03T15:45:34Z",
+      "side": 1,
+      "message": "Unfortunately I can not use GL formats with X as they have no mapping with any Vk format.",
+      "revId": "ff2dc8699387ff73c23982b995a5e5e63a960b00",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
