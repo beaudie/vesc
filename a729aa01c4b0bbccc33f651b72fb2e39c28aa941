@@ -123,6 +123,24 @@
       "parentUuid": "fc363e17_a98e23bf",
       "revId": "a729aa01c4b0bbccc33f651b72fb2e39c28aa941",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "bec52ffc_00e5c269",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 7
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1340649
+      },
+      "writtenOn": "2022-05-03T18:36:52Z",
+      "side": 1,
+      "message": "\u003e My suggestion to you is that there\u0027s no difference from the OpenGL ES spec\u0027s perspective between 0x0 and 0x1, or any other invalid pointer\n\nok, do not have confirmation if the app we saw crash can handle error in draw arrays but will land this for now since it wont crash the app.\n\n\u003e Happy to bring it up for clarification at the WG if you file the issue, as I attend the meetings.\n\nyes please",
+      "parentUuid": "a2c1dac9_76763ad1",
+      "revId": "a729aa01c4b0bbccc33f651b72fb2e39c28aa941",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
