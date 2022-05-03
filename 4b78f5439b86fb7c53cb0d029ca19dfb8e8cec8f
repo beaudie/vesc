@@ -136,6 +136,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "968c93c5_bcaf4e29",
+        "filename": "src/tests/restricted_traces/restricted_trace_perf.py",
+        "patchSetId": 2
+      },
+      "lineNbr": 102,
+      "author": {
+        "id": 1525982
+      },
+      "writtenOn": "2022-05-03T18:41:04Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "5ee2f75b_3aae702a",
+      "range": {
+        "startLine": 102,
+        "startChar": 16,
+        "endLine": 102,
+        "endChar": 27
+      },
+      "revId": "4b78f5439b86fb7c53cb0d029ca19dfb8e8cec8f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "4606451a_3d26d352",

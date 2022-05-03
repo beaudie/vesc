@@ -104,6 +104,24 @@
       "parentUuid": "e66d41a4_2af1619e",
       "revId": "fa105dbf9ebff22e4e8e0b4d332e0cf61ceab929",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "573bf0ae_fe123678",
+        "filename": "src/tests/restricted_traces/restricted_trace_perf.py",
+        "patchSetId": 3
+      },
+      "lineNbr": 540,
+      "author": {
+        "id": 1525982
+      },
+      "writtenOn": "2022-05-03T18:41:04Z",
+      "side": 1,
+      "message": "Added `device_serial` to avoid the duplicated code.",
+      "parentUuid": "e6292221_86782255",
+      "revId": "fa105dbf9ebff22e4e8e0b4d332e0cf61ceab929",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }

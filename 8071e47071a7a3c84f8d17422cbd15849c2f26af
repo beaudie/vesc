@@ -35,6 +35,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "d3e6a98b_0e8a0ebf",
+        "filename": "src/tests/restricted_traces/restricted_trace_perf.py",
+        "patchSetId": 4
+      },
+      "lineNbr": 506,
+      "author": {
+        "id": 1525982
+      },
+      "writtenOn": "2022-05-03T18:41:04Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "e2cf580d_390aa249",
+      "revId": "8071e47071a7a3c84f8d17422cbd15849c2f26af",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "d5628c7c_1b916c2c",
@@ -48,6 +66,30 @@
       "writtenOn": "2022-05-03T17:48:16Z",
       "side": 1,
       "message": "`\\n` needed at the end, otherwise it just concats.\n\nThat is, the source is good, but the output is still not wrapped.",
+      "range": {
+        "startLine": 528,
+        "startChar": 90,
+        "endLine": 528,
+        "endChar": 91
+      },
+      "revId": "8071e47071a7a3c84f8d17422cbd15849c2f26af",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "c245cd2e_6c9f743b",
+        "filename": "src/tests/restricted_traces/restricted_trace_perf.py",
+        "patchSetId": 4
+      },
+      "lineNbr": 528,
+      "author": {
+        "id": 1525982
+      },
+      "writtenOn": "2022-05-03T18:41:04Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "d5628c7c_1b916c2c",
       "range": {
         "startLine": 528,
         "startChar": 90,
