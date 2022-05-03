@@ -16,6 +16,24 @@
       "message": "Unfortunately I can not use GL formats with X as they have no mapping with any Vk format.",
       "revId": "ff2dc8699387ff73c23982b995a5e5e63a960b00",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "280c6597_6326fb73",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-05-03T16:01:00Z",
+      "side": 1,
+      "message": "So RGBA for RGBX won\u0027t really work. ANGLE (Vulkan) goes to great lengths to make sure the A channel always return 1.0, and is never clobbered. Replacing it with RGBA can cause havoc, including making the DRM image look transparent, or with blending etc.\n\nWe added ANGLE_rgbx_internal_format.txt to make GL_RGBX8_ANGLE an official format. I think it\u0027s only supported by the Vulkan backend, was the problem GL? We can also add another extension for GL_BGRX8_ANGLEX if necessary.\n\nFYI, we used RGB8 before because on Vulkan it implicitly always became RGBX8 under the hood (but that\u0027s no longer true on ARM).",
+      "parentUuid": "eeabea85_8585b835",
+      "revId": "ff2dc8699387ff73c23982b995a5e5e63a960b00",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
