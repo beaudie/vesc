@@ -212,7 +212,6 @@ void main()
     void testSetUp() override
     {
         TexCoordDrawTest::testSetUp();
-        mTexture2D = create2DTexture();
 
         ASSERT_GL_NO_ERROR();
     }
@@ -373,7 +372,6 @@ void main()
 
     void testUploadThenUseInDifferentStages(const std::vector<UploadThenUseStageParam> &uses);
 
-    GLTexture mTexture2D;
     GLint mTexture2DUniformLocation;
 };
 
@@ -894,8 +892,6 @@ class TextureCubeTest : public TexCoordDrawTest
         }
         EXPECT_GL_NO_ERROR();
 
-        mTexture2D = create2DTexture();
-
         setUpProgram();
 
         mTexture2DUniformLocation = glGetUniformLocation(mProgram, "tex2D");
@@ -906,7 +902,6 @@ class TextureCubeTest : public TexCoordDrawTest
 
     void testTearDown() override { TexCoordDrawTest::testTearDown(); }
 
-    GLTexture mTexture2D;
     GLTexture mTextureCube;
     GLint mTexture2DUniformLocation;
     GLint mTextureCubeUniformLocation;
@@ -949,8 +944,6 @@ class SamplerArrayTest : public TexCoordDrawTest
         mTexture1UniformLocation = glGetUniformLocation(mProgram, "tex2DArray[1]");
         ASSERT_NE(-1, mTexture1UniformLocation);
 
-        mTexture2DA = create2DTexture();
-        mTexture2DB = create2DTexture();
         ASSERT_GL_NO_ERROR();
     }
 
@@ -965,12 +958,14 @@ class SamplerArrayTest : public TexCoordDrawTest
         texData[3] = 255;
 
         glActiveTexture(GL_TEXTURE0);
-        glBindTexture(GL_TEXTURE_2D, mTexture2DA);
+        GLTexture texture2DA;
+        glBindTexture(GL_TEXTURE_2D, texture2DA);
         glTexSubImage2D(GL_TEXTURE_2D, 0, 0, 0, 1, 1, GL_RGBA, GL_UNSIGNED_BYTE, texData);
 
         texData[1] = 120;
         glActiveTexture(GL_TEXTURE1);
-        glBindTexture(GL_TEXTURE_2D, mTexture2DB);
+        GLTexture texture2DB = create2DTexture();
+        glBindTexture(GL_TEXTURE_2D, texture2DB);
         glTexSubImage2D(GL_TEXTURE_2D, 0, 0, 0, 1, 1, GL_RGBA, GL_UNSIGNED_BYTE, texData);
         EXPECT_GL_ERROR(GL_NO_ERROR);
 
@@ -983,8 +978,6 @@ class SamplerArrayTest : public TexCoordDrawTest
         EXPECT_PIXEL_NEAR(0, 0, 0, 180, 0, 255, 2);
     }
 
-    GLTexture mTexture2DA;
-    GLTexture mTexture2DB;
     GLint mTexture0UniformLocation;
     GLint mTexture1UniformLocation;
 };
@@ -1101,15 +1094,11 @@ class TextureSizeTextureArrayTest : public TexCoordDrawTest
         mTexture1Location = glGetUniformLocation(mProgram, "tex2DArray[1]");
         ASSERT_NE(-1, mTexture1Location);
 
-        mTexture2DA = create2DTexture();
-        mTexture2DB = create2DTexture();
         ASSERT_GL_NO_ERROR();
     }
 
     void testTearDown() override { TexCoordDrawTest::testTearDown(); }
 
-    GLTexture mTexture2DA;
-    GLTexture mTexture2DB;
     GLint mTexture0Location;
     GLint mTexture1Location;
 };
@@ -1356,7 +1345,6 @@ class SamplerTypeMixTestES3 : public TexCoordDrawTest
 
     void testTearDown() override { TexCoordDrawTest::testTearDown(); }
 
-    GLTexture mTexture2D;
     GLTexture mTextureCube;
     GLTexture mTexture2DShadow;
     GLTexture mTextureCubeShadow;
@@ -1395,7 +1383,8 @@ class SamplerInStructTest : public Texture2DTest
         setUpProgram();
 
         glActiveTexture(GL_TEXTURE0);
-        glBindTexture(GL_TEXTURE_2D, mTexture2D);
+        GLTexture texture2D;
+        glBindTexture(GL_TEXTURE_2D, texture2D);
         glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, 1, 1, 0, GL_RGBA, GL_UNSIGNED_BYTE,
                      &GLColor::green);
         drawQuad(mProgram, "position", 0.5f);
@@ -1723,8 +1712,6 @@ class PBOCompressedTextureTest : public Texture2DTest
     void testSetUp() override
     {
         TexCoordDrawTest::testSetUp();
-        glBindTexture(GL_TEXTURE_2D, mTexture2D);
-        EXPECT_GL_NO_ERROR();
 
         setUpProgram();
 
@@ -1750,8 +1737,6 @@ class ETC1CompressedTextureTest : public Texture2DTest
     void testSetUp() override
     {
         TexCoordDrawTest::testSetUp();
-        glBindTexture(GL_TEXTURE_2D, mTexture2D);
-        EXPECT_GL_NO_ERROR();
 
         setUpProgram();
     }
@@ -1761,7 +1746,8 @@ class ETC1CompressedTextureTest : public Texture2DTest
 
 TEST_P(Texture2DTest, NegativeAPISubImage)
 {
-    glBindTexture(GL_TEXTURE_2D, mTexture2D);
+    GLTexture texture2D;
+    glBindTexture(GL_TEXTURE_2D, texture2D);
     EXPECT_GL_ERROR(GL_NO_ERROR);
 
     setUpProgram();
@@ -1807,7 +1793,8 @@ TEST_P(Texture2DTest, QueryBinding)
 
 TEST_P(Texture2DTest, ZeroSizedUploads)
 {
-    glBindTexture(GL_TEXTURE_2D, mTexture2D);
+    GLTexture texture2D;
+    glBindTexture(GL_TEXTURE_2D, texture2D);
     EXPECT_GL_ERROR(GL_NO_ERROR);
 
     setUpProgram();
@@ -1840,7 +1827,8 @@ TEST_P(Texture2DTest, DefineMultipleLevelsWithoutMipmapping)
     std::fill(kMipColors[1].begin(), kMipColors[1].end(), GLColor::green);
 
     glActiveTexture(GL_TEXTURE0);
-    glBindTexture(GL_TEXTURE_2D, mTexture2D);
+    GLTexture texture2D;
+    glBindTexture(GL_TEXTURE_2D, texture2D);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
 
@@ -1867,7 +1855,8 @@ TEST_P(Texture2DTest, DefineMultipleLevelsWithoutMipmapping)
 TEST_P(TextureCubeTest, CubeMapBug)
 {
     glActiveTexture(GL_TEXTURE0);
-    glBindTexture(GL_TEXTURE_2D, mTexture2D);
+    GLTexture texture2D;
+    glBindTexture(GL_TEXTURE_2D, texture2D);
     glActiveTexture(GL_TEXTURE1);
     glBindTexture(GL_TEXTURE_CUBE_MAP, mTextureCube);
     EXPECT_GL_ERROR(GL_NO_ERROR);
@@ -1890,7 +1879,8 @@ TEST_P(TextureCubeTest, CubeMapDraw)
     texData[3] = 255;
 
     glActiveTexture(GL_TEXTURE0);
-    glBindTexture(GL_TEXTURE_2D, mTexture2D);
+    GLTexture texture2D;
+    glBindTexture(GL_TEXTURE_2D, texture2D);
     glTexSubImage2D(GL_TEXTURE_2D, 0, 0, 0, 1, 1, GL_RGBA, GL_UNSIGNED_BYTE, texData);
 
     glActiveTexture(GL_TEXTURE1);
@@ -1914,7 +1904,8 @@ TEST_P(TextureCubeTest, CubeMapDraw)
 TEST_P(Sampler2DAsFunctionParameterTest, Sampler2DAsFunctionParameter)
 {
     glActiveTexture(GL_TEXTURE0);
-    glBindTexture(GL_TEXTURE_2D, mTexture2D);
+    GLTexture texture2D;
+    glBindTexture(GL_TEXTURE_2D, texture2D);
     GLubyte texData[4];
     texData[0] = 0;
     texData[1] = 128;
@@ -1952,7 +1943,8 @@ TEST_P(Texture2DTestWithDrawScale, MipmapsTwice)
     int py = getWindowHeight() / 2;
 
     glActiveTexture(GL_TEXTURE0);
-    glBindTexture(GL_TEXTURE_2D, mTexture2D);
+    GLTexture texture2D;
+    glBindTexture(GL_TEXTURE_2D, texture2D);
 
     std::vector<GLColor> pixelsRed(16u * 16u, GLColor::red);
 
@@ -2236,7 +2228,8 @@ TEST_P(Texture2DTest, PBOWithMultipleDraws)
     ASSERT_GL_NO_ERROR();
 
     // Setup primary Texture
-    glBindTexture(GL_TEXTURE_2D, mTexture2D);
+    GLTexture texture2D;
+    glBindTexture(GL_TEXTURE_2D, texture2D);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
     glTexStorage2DEXT(GL_TEXTURE_2D, 1, GL_RGBA8, width, height);
@@ -2296,7 +2289,7 @@ TEST_P(Texture2DTest, PBOWithMultipleDraws)
     // Draw using PBO updated texture
     glUseProgram(mProgram);
     glUniform1i(mTexture2DUniformLocation, 0);
-    glBindTexture(GL_TEXTURE_2D, mTexture2D);
+    glBindTexture(GL_TEXTURE_2D, texture2D);
     drawQuad(mProgram, "position", 0.5f);
     ASSERT_GL_NO_ERROR();
 
@@ -3231,7 +3224,8 @@ TEST_P(Texture2DTest, TextureNPOT_GL_ALPHA_UBYTE)
 TEST_P(Texture2DTest, NPOTSubImageParameters)
 {
     glActiveTexture(GL_TEXTURE0);
-    glBindTexture(GL_TEXTURE_2D, mTexture2D);
+    GLTexture texture2D;
+    glBindTexture(GL_TEXTURE_2D, texture2D);
 
     // Create an 8x8 (i.e. power-of-two) texture.
     glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, 8, 8, 0, GL_RGBA, GL_UNSIGNED_BYTE, nullptr);
@@ -3251,7 +3245,8 @@ TEST_P(Texture2DTest, NPOTSubImageParameters)
 TEST_P(Texture2DTest, SubImageValidationOverflow)
 {
     glActiveTexture(GL_TEXTURE0);
-    glBindTexture(GL_TEXTURE_2D, mTexture2D);
+    GLTexture texture2D;
+    glBindTexture(GL_TEXTURE_2D, texture2D);
 
     glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, 8, 8, 0, GL_RGBA, GL_UNSIGNED_BYTE, nullptr);
     EXPECT_GL_NO_ERROR();
@@ -3628,7 +3623,8 @@ TEST_P(Texture2DTestES3, ChangeTexSizeWithTexStorage)
     constexpr uint32_t kSizeSmall = 64;
 
     glActiveTexture(GL_TEXTURE0);
-    glBindTexture(GL_TEXTURE_2D, mTexture2D);
+    GLTexture texture2D;
+    glBindTexture(GL_TEXTURE_2D, texture2D);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
 
@@ -3639,7 +3635,7 @@ TEST_P(Texture2DTestES3, ChangeTexSizeWithTexStorage)
 
     GLFramebuffer destFbo;
     glBindFramebuffer(GL_FRAMEBUFFER, destFbo);
-    glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, mTexture2D, 0);
+    glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, texture2D, 0);
     ASSERT_GL_FRAMEBUFFER_COMPLETE(GL_FRAMEBUFFER);
 
     // Draw with the new texture so it's created in the back end
@@ -3678,7 +3674,7 @@ TEST_P(Texture2DTestES3, ChangeTexSizeWithTexStorage)
 
     // Render to the default framebuffer sampling from the blited texture and verify it's green
     glBindFramebuffer(GL_FRAMEBUFFER, 0);
-    glBindTexture(GL_TEXTURE_2D, mTexture2D);
+    glBindTexture(GL_TEXTURE_2D, texture2D);
     ANGLE_GL_PROGRAM(texProgram, essl1_shaders::vs::Texture2D(), essl1_shaders::fs::Texture2D());
     glUseProgram(texProgram);
     drawQuad(texProgram.get(), std::string(essl1_shaders::PositionAttrib()), 0.0f);
@@ -4623,7 +4619,8 @@ TEST_P(Texture2DBaseMaxTestES3, Fuzz545ImmutableTexRenderFeedback)
 TEST_P(Texture2DTestES3, DrawWithBaseLevel1)
 {
     glActiveTexture(GL_TEXTURE0);
-    glBindTexture(GL_TEXTURE_2D, mTexture2D);
+    GLTexture texture2D;
+    glBindTexture(GL_TEXTURE_2D, texture2D);
 
     std::vector<GLColor> texDataRed(4u * 4u, GLColor::red);
     glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, 4, 4, 0, GL_RGBA, GL_UNSIGNED_BYTE, texDataRed.data());
@@ -4898,7 +4895,8 @@ TEST_P(Texture2DTestES3, DrawWithLevelsOutsideRangeUndefined)
     ANGLE_SKIP_TEST_IF(IsAMD() && IsOpenGL());
 
     glActiveTexture(GL_TEXTURE0);
-    glBindTexture(GL_TEXTURE_2D, mTexture2D);
+    GLTexture texture2D;
+    glBindTexture(GL_TEXTURE_2D, texture2D);
     std::vector<GLColor> texDataGreen(2u * 2u, GLColor::green);
     glTexImage2D(GL_TEXTURE_2D, 1, GL_RGBA8, 2, 2, 0, GL_RGBA, GL_UNSIGNED_BYTE,
                  texDataGreen.data());
@@ -4921,7 +4919,8 @@ TEST_P(Texture2DTestES3, DrawWithLevelZeroUndefined)
     ANGLE_SKIP_TEST_IF(IsAMD() && IsOpenGL());
 
     glActiveTexture(GL_TEXTURE0);
-    glBindTexture(GL_TEXTURE_2D, mTexture2D);
+    GLTexture texture2D;
+    glBindTexture(GL_TEXTURE_2D, texture2D);
     std::vector<GLColor> texDataGreen(2u * 2u, GLColor::green);
     glTexImage2D(GL_TEXTURE_2D, 1, GL_RGBA8, 2, 2, 0, GL_RGBA, GL_UNSIGNED_BYTE,
                  texDataGreen.data());
@@ -4950,7 +4949,8 @@ TEST_P(Texture2DTestES3, DrawWithLevelZeroUndefined)
 TEST_P(Texture2DTestES3, DrawWithLevelsOutsideRangeWithInconsistentDimensions)
 {
     glActiveTexture(GL_TEXTURE0);
-    glBindTexture(GL_TEXTURE_2D, mTexture2D);
+    GLTexture texture2D;
+    glBindTexture(GL_TEXTURE_2D, texture2D);
     std::vector<GLColor> texDataRed(8u * 8u, GLColor::red);
     std::vector<GLColor> texDataGreen(2u * 2u, GLColor::green);
     std::vector<GLColor> texDataCyan(2u * 2u, GLColor::cyan);
@@ -5222,7 +5222,8 @@ TEST_P(Texture2DArrayTestES3, TextureArrayUseThenRedefineThenUse)
 TEST_P(Texture2DTestES3, TextureCompletenessChangesWithMaxLevel)
 {
     glActiveTexture(GL_TEXTURE0);
-    glBindTexture(GL_TEXTURE_2D, mTexture2D);
+    GLTexture texture2D;
+    glBindTexture(GL_TEXTURE_2D, texture2D);
     std::vector<GLColor> texDataGreen(8u * 8u, GLColor::green);
 
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
@@ -5337,7 +5338,8 @@ TEST_P(Texture3DTestES3, Texture3DCompletenessChangesWithMaxLevel)
 TEST_P(Texture2DTestES3, TextureCompletenessChangesWithBaseLevel)
 {
     glActiveTexture(GL_TEXTURE0);
-    glBindTexture(GL_TEXTURE_2D, mTexture2D);
+    GLTexture texture2D;
+    glBindTexture(GL_TEXTURE_2D, texture2D);
     std::vector<GLColor> texDataGreen(8u * 8u, GLColor::green);
 
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
@@ -5378,7 +5380,8 @@ TEST_P(Texture2DTestES3, TextureCompletenessChangesWithBaseLevel)
 TEST_P(Texture2DTestES3, TextureBaseLevelGreaterThanMaxLevel)
 {
     glActiveTexture(GL_TEXTURE0);
-    glBindTexture(GL_TEXTURE_2D, mTexture2D);
+    GLTexture texture2D;
+    glBindTexture(GL_TEXTURE_2D, texture2D);
 
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
@@ -5401,7 +5404,8 @@ TEST_P(Texture2DTestES3, TextureBaseLevelGreaterThanMaxLevel)
 TEST_P(Texture2DTestES3, ImmutableTextureBaseLevelOutOfRange)
 {
     glActiveTexture(GL_TEXTURE0);
-    glBindTexture(GL_TEXTURE_2D, mTexture2D);
+    GLTexture texture2D;
+    glBindTexture(GL_TEXTURE_2D, texture2D);
 
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
@@ -5437,7 +5441,8 @@ TEST_P(Texture2DTestES3, TextureFormatChangesWithBaseLevel)
     ANGLE_SKIP_TEST_IF(IsAMD() && IsDesktopOpenGL());
 
     glActiveTexture(GL_TEXTURE0);
-    glBindTexture(GL_TEXTURE_2D, mTexture2D);
+    GLTexture texture2D;
+    glBindTexture(GL_TEXTURE_2D, texture2D);
     std::vector<GLColor> texDataCyan(4u * 4u, GLColor::cyan);
     std::vector<GLColor> texDataGreen(4u * 4u, GLColor::green);
 
@@ -5477,7 +5482,8 @@ TEST_P(Texture2DTestES3, TextureFormatChangesWithBaseLevel)
 TEST_P(Texture2DTestES3, SetImageWhenBaseLevelOutOfRange)
 {
     glActiveTexture(GL_TEXTURE0);
-    glBindTexture(GL_TEXTURE_2D, mTexture2D);
+    GLTexture texture2D;
+    glBindTexture(GL_TEXTURE_2D, texture2D);
 
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
@@ -5585,7 +5591,8 @@ TEST_P(ShadowSamplerPlusSampler3DTestES3, ShadowSamplerPlusSampler3DDraw)
 TEST_P(SamplerTypeMixTestES3, SamplerTypeMixDraw)
 {
     glActiveTexture(GL_TEXTURE0);
-    glBindTexture(GL_TEXTURE_2D, mTexture2D);
+    GLTexture texture2D;
+    glBindTexture(GL_TEXTURE_2D, texture2D);
     GLubyte texData[4];
     texData[0] = 0;
     texData[1] = 0;
@@ -5650,7 +5657,8 @@ TEST_P(TextureSizeTextureArrayTest, BaseLevelVariesInTextureArray)
     ANGLE_SKIP_TEST_IF(IsNVIDIA() && IsWindows() && IsD3D11());
 
     glActiveTexture(GL_TEXTURE0);
-    glBindTexture(GL_TEXTURE_2D, mTexture2DA);
+    GLTexture texture2DA = create2DTexture();
+    glBindTexture(GL_TEXTURE_2D, texture2DA);
     GLsizei size = 64;
     for (GLint level = 0; level < 7; ++level)
     {
@@ -5663,7 +5671,8 @@ TEST_P(TextureSizeTextureArrayTest, BaseLevelVariesInTextureArray)
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_BASE_LEVEL, 1);
 
     glActiveTexture(GL_TEXTURE1);
-    glBindTexture(GL_TEXTURE_2D, mTexture2DB);
+    GLTexture texture2DB;
+    glBindTexture(GL_TEXTURE_2D, texture2DB);
     size = 128;
     for (GLint level = 0; level < 8; ++level)
     {
@@ -5692,7 +5701,8 @@ TEST_P(TextureSizeTextureArrayTest, BaseLevelVariesInTextureArray)
 TEST_P(Texture2DTestES3, TextureRGBImplicitAlpha1)
 {
     glActiveTexture(GL_TEXTURE0);
-    glBindTexture(GL_TEXTURE_2D, mTexture2D);
+    GLTexture texture2D;
+    glBindTexture(GL_TEXTURE_2D, texture2D);
     glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB8, 1, 1, 0, GL_RGB, GL_UNSIGNED_BYTE, nullptr);
     EXPECT_GL_NO_ERROR();
 
@@ -5725,7 +5735,8 @@ TEST_P(Texture2DTest, TextureLuminanceImplicitAlpha1)
     setUpProgram();
 
     glActiveTexture(GL_TEXTURE0);
-    glBindTexture(GL_TEXTURE_2D, mTexture2D);
+    GLTexture texture2D;
+    glBindTexture(GL_TEXTURE_2D, texture2D);
     glTexImage2D(GL_TEXTURE_2D, 0, GL_LUMINANCE, 1, 1, 0, GL_LUMINANCE, GL_UNSIGNED_BYTE, nullptr);
     EXPECT_GL_NO_ERROR();
 
@@ -5741,7 +5752,8 @@ TEST_P(Texture2DTest, TextureLuminanceRGBSame)
     setUpProgram();
 
     glActiveTexture(GL_TEXTURE0);
-    glBindTexture(GL_TEXTURE_2D, mTexture2D);
+    GLTexture texture2D;
+    glBindTexture(GL_TEXTURE_2D, texture2D);
     uint8_t pixel = 50;
     glTexImage2D(GL_TEXTURE_2D, 0, GL_LUMINANCE, 1, 1, 0, GL_LUMINANCE, GL_UNSIGNED_BYTE, &pixel);
     EXPECT_GL_NO_ERROR();
@@ -5758,7 +5770,8 @@ TEST_P(Texture2DTest, TextureLuminanceAlphaRGBSame)
     setUpProgram();
 
     glActiveTexture(GL_TEXTURE0);
-    glBindTexture(GL_TEXTURE_2D, mTexture2D);
+    GLTexture texture2D;
+    glBindTexture(GL_TEXTURE_2D, texture2D);
     uint8_t pixel[] = {50, 25};
     glTexImage2D(GL_TEXTURE_2D, 0, GL_LUMINANCE_ALPHA, 1, 1, 0, GL_LUMINANCE_ALPHA,
                  GL_UNSIGNED_BYTE, pixel);
@@ -5780,7 +5793,8 @@ TEST_P(Texture2DTest, TextureLuminance32ImplicitAlpha1)
     setUpProgram();
 
     glActiveTexture(GL_TEXTURE0);
-    glBindTexture(GL_TEXTURE_2D, mTexture2D);
+    GLTexture texture2D;
+    glBindTexture(GL_TEXTURE_2D, texture2D);
     glTexImage2D(GL_TEXTURE_2D, 0, GL_LUMINANCE, 1, 1, 0, GL_LUMINANCE, GL_FLOAT, nullptr);
     EXPECT_GL_NO_ERROR();
 
@@ -5802,7 +5816,8 @@ TEST_P(Texture2DTest, TextureLuminance16ImplicitAlpha1)
     setUpProgram();
 
     glActiveTexture(GL_TEXTURE0);
-    glBindTexture(GL_TEXTURE_2D, mTexture2D);
+    GLTexture texture2D;
+    glBindTexture(GL_TEXTURE_2D, texture2D);
     glTexImage2D(GL_TEXTURE_2D, 0, GL_LUMINANCE, 1, 1, 0, GL_LUMINANCE, GL_HALF_FLOAT_OES, nullptr);
     EXPECT_GL_NO_ERROR();
 
@@ -5817,7 +5832,8 @@ TEST_P(Texture2DTest, CopyAfterCompressed)
 {
     ANGLE_SKIP_TEST_IF(!IsGLExtensionEnabled("GL_EXT_texture_compression_dxt1"));
 
-    glBindTexture(GL_TEXTURE_2D, mTexture2D);
+    GLTexture texture2D;
+    glBindTexture(GL_TEXTURE_2D, texture2D);
     glCompressedTexImage2D(GL_TEXTURE_2D, 0, GL_COMPRESSED_RGBA_S3TC_DXT1_EXT, 4, 4, 0, 8, nullptr);
     EXPECT_GL_NO_ERROR();
 
@@ -5832,7 +5848,8 @@ TEST_P(Texture2DUnsignedIntegerAlpha1TestES3, TextureRGB8UIImplicitAlpha1)
     ANGLE_SKIP_TEST_IF(IsIntel() && IsOSX());
 
     glActiveTexture(GL_TEXTURE0);
-    glBindTexture(GL_TEXTURE_2D, mTexture2D);
+    GLTexture texture2D;
+    glBindTexture(GL_TEXTURE_2D, texture2D);
     glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB8UI, 1, 1, 0, GL_RGB_INTEGER, GL_UNSIGNED_BYTE, nullptr);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
@@ -5850,7 +5867,8 @@ TEST_P(Texture2DIntegerAlpha1TestES3, TextureRGB8IImplicitAlpha1)
     ANGLE_SKIP_TEST_IF(IsIntel() && IsOSX());
 
     glActiveTexture(GL_TEXTURE0);
-    glBindTexture(GL_TEXTURE_2D, mTexture2D);
+    GLTexture texture2D;
+    glBindTexture(GL_TEXTURE_2D, texture2D);
 
     glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB8I, 1, 1, 0, GL_RGB_INTEGER, GL_BYTE, nullptr);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
@@ -5869,7 +5887,8 @@ TEST_P(Texture2DUnsignedIntegerAlpha1TestES3, TextureRGB16UIImplicitAlpha1)
     ANGLE_SKIP_TEST_IF(IsIntel() && IsOSX());
 
     glActiveTexture(GL_TEXTURE0);
-    glBindTexture(GL_TEXTURE_2D, mTexture2D);
+    GLTexture texture2D;
+    glBindTexture(GL_TEXTURE_2D, texture2D);
     glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB16UI, 1, 1, 0, GL_RGB_INTEGER, GL_UNSIGNED_SHORT, nullptr);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
@@ -5887,7 +5906,8 @@ TEST_P(Texture2DIntegerAlpha1TestES3, TextureRGB16IImplicitAlpha1)
     ANGLE_SKIP_TEST_IF(IsIntel() && IsOSX());
 
     glActiveTexture(GL_TEXTURE0);
-    glBindTexture(GL_TEXTURE_2D, mTexture2D);
+    GLTexture texture2D;
+    glBindTexture(GL_TEXTURE_2D, texture2D);
     glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB16I, 1, 1, 0, GL_RGB_INTEGER, GL_SHORT, nullptr);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
@@ -5905,7 +5925,8 @@ TEST_P(Texture2DUnsignedIntegerAlpha1TestES3, TextureRGB32UIImplicitAlpha1)
     ANGLE_SKIP_TEST_IF(IsIntel() && IsOSX());
 
     glActiveTexture(GL_TEXTURE0);
-    glBindTexture(GL_TEXTURE_2D, mTexture2D);
+    GLTexture texture2D;
+    glBindTexture(GL_TEXTURE_2D, texture2D);
     glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB32UI, 1, 1, 0, GL_RGB_INTEGER, GL_UNSIGNED_INT, nullptr);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
@@ -5923,7 +5944,8 @@ TEST_P(Texture2DIntegerAlpha1TestES3, TextureRGB32IImplicitAlpha1)
     ANGLE_SKIP_TEST_IF(IsIntel() && IsOSX());
 
     glActiveTexture(GL_TEXTURE0);
-    glBindTexture(GL_TEXTURE_2D, mTexture2D);
+    GLTexture texture2D;
+    glBindTexture(GL_TEXTURE_2D, texture2D);
     glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB32I, 1, 1, 0, GL_RGB_INTEGER, GL_INT, nullptr);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
@@ -5939,7 +5961,8 @@ TEST_P(Texture2DIntegerAlpha1TestES3, TextureRGB32IImplicitAlpha1)
 TEST_P(Texture2DTestES3, TextureRGBSNORMImplicitAlpha1)
 {
     glActiveTexture(GL_TEXTURE0);
-    glBindTexture(GL_TEXTURE_2D, mTexture2D);
+    GLTexture texture2D;
+    glBindTexture(GL_TEXTURE_2D, texture2D);
     glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB8_SNORM, 1, 1, 0, GL_RGB, GL_BYTE, nullptr);
     EXPECT_GL_NO_ERROR();
 
@@ -5953,7 +5976,8 @@ TEST_P(Texture2DTestES3, TextureRGBSNORMImplicitAlpha1)
 TEST_P(Texture2DTestES3, TextureRGB9E5ImplicitAlpha1)
 {
     glActiveTexture(GL_TEXTURE0);
-    glBindTexture(GL_TEXTURE_2D, mTexture2D);
+    GLTexture texture2D;
+    glBindTexture(GL_TEXTURE_2D, texture2D);
     glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB9_E5, 1, 1, 0, GL_RGB, GL_UNSIGNED_INT_5_9_9_9_REV,
                  nullptr);
     EXPECT_GL_NO_ERROR();
@@ -5971,7 +5995,8 @@ TEST_P(Texture2DTestES3, TextureCOMPRESSEDRGB8ETC2ImplicitAlpha1)
     ANGLE_SKIP_TEST_IF(IsOSX() && IsDesktopOpenGL());
 
     glActiveTexture(GL_TEXTURE0);
-    glBindTexture(GL_TEXTURE_2D, mTexture2D);
+    GLTexture texture2D;
+    glBindTexture(GL_TEXTURE_2D, texture2D);
     glCompressedTexImage2D(GL_TEXTURE_2D, 0, GL_COMPRESSED_RGB8_ETC2, 1, 1, 0, 8, nullptr);
     EXPECT_GL_NO_ERROR();
 
@@ -5988,7 +6013,8 @@ TEST_P(Texture2DTestES3, TextureCOMPRESSEDSRGB8ETC2ImplicitAlpha1)
     ANGLE_SKIP_TEST_IF(IsOSX() && IsDesktopOpenGL());
 
     glActiveTexture(GL_TEXTURE0);
-    glBindTexture(GL_TEXTURE_2D, mTexture2D);
+    GLTexture texture2D;
+    glBindTexture(GL_TEXTURE_2D, texture2D);
     glCompressedTexImage2D(GL_TEXTURE_2D, 0, GL_COMPRESSED_SRGB8_ETC2, 1, 1, 0, 8, nullptr);
     EXPECT_GL_NO_ERROR();
 
@@ -6002,7 +6028,8 @@ TEST_P(Texture2DTestES3, TextureCOMPRESSEDSRGB8ETC2ImplicitAlpha1)
 TEST_P(Texture2DTestES3RobustInit, TextureCOMPRESSEDRGB8A1ETC2)
 {
     glActiveTexture(GL_TEXTURE0);
-    glBindTexture(GL_TEXTURE_2D, mTexture2D);
+    GLTexture texture2D;
+    glBindTexture(GL_TEXTURE_2D, texture2D);
     glCompressedTexImage2D(GL_TEXTURE_2D, 0, GL_COMPRESSED_RGB8_PUNCHTHROUGH_ALPHA1_ETC2, 1, 1, 0,
                            8, nullptr);
     EXPECT_GL_NO_ERROR();
@@ -6017,7 +6044,8 @@ TEST_P(Texture2DTestES3RobustInit, TextureCOMPRESSEDRGB8A1ETC2)
 TEST_P(Texture2DTestES3RobustInit, TextureCOMPRESSEDSRGB8A1ETC2)
 {
     glActiveTexture(GL_TEXTURE0);
-    glBindTexture(GL_TEXTURE_2D, mTexture2D);
+    GLTexture texture2D;
+    glBindTexture(GL_TEXTURE_2D, texture2D);
     glCompressedTexImage2D(GL_TEXTURE_2D, 0, GL_COMPRESSED_SRGB8_PUNCHTHROUGH_ALPHA1_ETC2, 1, 1, 0,
                            8, nullptr);
     EXPECT_GL_NO_ERROR();
@@ -6035,7 +6063,8 @@ TEST_P(Texture2DTestES3, PixelUnpackStateTexImage)
                        !IsGLExtensionEnabled("GL_ANGLE_texture_compression_dxt3"));
 
     glPixelStorei(GL_UNPACK_ROW_LENGTH, 9);
-    glBindTexture(GL_TEXTURE_2D, mTexture2D);
+    GLTexture texture2D;
+    glBindTexture(GL_TEXTURE_2D, texture2D);
 
     uint8_t data[64] = {0};
     glCompressedTexImage2D(GL_TEXTURE_2D, 0, GL_COMPRESSED_RGBA_S3TC_DXT3_EXT, 8, 8, 0, 64, data);
@@ -6049,7 +6078,8 @@ TEST_P(Texture2DTestES3, PixelUnpackStateTexSubImage)
     ANGLE_SKIP_TEST_IF(!IsGLExtensionEnabled("GL_EXT_texture_compression_s3tc") &&
                        !IsGLExtensionEnabled("GL_ANGLE_texture_compression_dxt3"));
 
-    glBindTexture(GL_TEXTURE_2D, mTexture2D);
+    GLTexture texture2D;
+    glBindTexture(GL_TEXTURE_2D, texture2D);
 
     uint8_t data[64] = {0};
     glCompressedTexImage2D(GL_TEXTURE_2D, 0, GL_COMPRESSED_RGBA_S3TC_DXT3_EXT, 8, 8, 0, 64, data);
@@ -6345,10 +6375,10 @@ TEST_P(SamplerInStructAndOtherVariableTest, SamplerInStructAndOtherVariable)
 class TextureAnisotropyTest : public Texture2DTest
 {
   protected:
-    void uploadTexture()
+    void uploadTexture(GLuint texture)
     {
         glActiveTexture(GL_TEXTURE0);
-        glBindTexture(GL_TEXTURE_2D, mTexture2D);
+        glBindTexture(GL_TEXTURE_2D, texture);
         GLColor texDataRed[1] = {GLColor::red};
         glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, 1, 1, 0, GL_RGBA, GL_UNSIGNED_BYTE, texDataRed);
         EXPECT_GL_NO_ERROR();
@@ -6362,7 +6392,8 @@ TEST_P(TextureAnisotropyTest, AnisotropyFunctional)
 
     setUpProgram();
 
-    uploadTexture();
+    GLTexture texture2D;
+    uploadTexture(texture2D);
 
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
@@ -6397,10 +6428,10 @@ class TextureBorderClampTest : public Texture2DTest
             })";
     }
 
-    void uploadTexture()
+    void uploadTexture(GLuint texture)
     {
         glActiveTexture(GL_TEXTURE0);
-        glBindTexture(GL_TEXTURE_2D, mTexture2D);
+        glBindTexture(GL_TEXTURE_2D, texture);
         std::vector<GLColor> texDataRed(1, GLColor::red);
         glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, 1, 1, 0, GL_RGBA, GL_UNSIGNED_BYTE,
                      texDataRed.data());
@@ -6416,7 +6447,8 @@ TEST_P(TextureBorderClampTest, TextureBorderClampFunctional)
 
     setUpProgram();
 
-    uploadTexture();
+    GLTexture texture2D;
+    uploadTexture(texture2D);
 
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_BORDER);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_BORDER);
@@ -6438,7 +6470,8 @@ TEST_P(TextureBorderClampTest, TextureBorderClampFunctional2)
     ANGLE_SKIP_TEST_IF(!IsGLExtensionEnabled("GL_OES_texture_border_clamp"));
 
     glActiveTexture(GL_TEXTURE0);
-    glBindTexture(GL_TEXTURE_2D, mTexture2D);
+    GLTexture texture2D;
+    glBindTexture(GL_TEXTURE_2D, texture2D);
 
     glTexParameterfv(GL_TEXTURE_2D, GL_TEXTURE_BORDER_COLOR, &kFloatGreen.R);
 
@@ -6469,7 +6502,8 @@ TEST_P(TextureBorderClampTest, TextureBorderClampValidation)
     ANGLE_SKIP_TEST_IF(!IsGLExtensionEnabled("GL_OES_texture_border_clamp"));
 
     glActiveTexture(GL_TEXTURE0);
-    glBindTexture(GL_TEXTURE_2D, mTexture2D);
+    GLTexture texture2D;
+    glBindTexture(GL_TEXTURE_2D, texture2D);
 
     glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_BORDER_COLOR, 1.0f);
     EXPECT_GL_ERROR(GL_INVALID_ENUM);
@@ -6524,7 +6558,8 @@ TEST_P(TextureBorderClampTestES3, TextureBorderClampES3Functional)
 
     setUpProgram();
 
-    uploadTexture();
+    GLTexture texture2D;
+    uploadTexture(texture2D);
 
     GLSampler sampler;
     glBindSampler(0, sampler);
@@ -6592,7 +6627,8 @@ TEST_P(TextureBorderClampTestES3, TextureBorderClampES3Functional2)
     EXPECT_EQ(colorUInt[2], colorSomewhatRedUInt[2]);
     EXPECT_EQ(colorUInt[3], colorSomewhatRedUInt[3]);
 
-    glBindTexture(GL_TEXTURE_2D, mTexture2D);
+    GLTexture texture2D;
+    glBindTexture(GL_TEXTURE_2D, texture2D);
 
     constexpr GLint colorSomewhatGreenInt[4] = {0, 500000, 0, std::numeric_limits<GLint>::max()};
     glTexParameterIivOES(GL_TEXTURE_2D, GL_TEXTURE_BORDER_COLOR, colorSomewhatGreenInt);
@@ -6684,10 +6720,10 @@ class TextureBorderClampIntegerTestES3 : public Texture2DTest
         }
     }
 
-    void uploadTexture()
+    void uploadTexture(GLuint texture)
     {
         glActiveTexture(GL_TEXTURE0);
-        glBindTexture(GL_TEXTURE_2D, mTexture2D);
+        glBindTexture(GL_TEXTURE_2D, texture);
         if (isUnsignedIntTest)
         {
             std::vector<GLubyte> texData(4, 100);
@@ -6717,7 +6753,8 @@ TEST_P(TextureBorderClampIntegerTestES3, TextureBorderClampInteger)
 
     setUpProgram();
 
-    uploadTexture();
+    GLTexture texture;
+    uploadTexture(texture);
 
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_BORDER);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_BORDER);
@@ -6747,7 +6784,8 @@ TEST_P(TextureBorderClampIntegerTestES3, TextureBorderClampInteger2)
 
     setUpProgram();
 
-    uploadTexture();
+    GLTexture texture2D;
+    uploadTexture(texture2D);
 
     GLSampler sampler;
     glBindSampler(0, sampler);
@@ -6778,7 +6816,8 @@ TEST_P(TextureBorderClampIntegerTestES3, TextureBorderClampIntegerUnsigned)
 
     setUpProgram();
 
-    uploadTexture();
+    GLTexture texture2D;
+    uploadTexture(texture2D);
 
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_BORDER);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_BORDER);
@@ -6808,7 +6847,8 @@ TEST_P(TextureBorderClampIntegerTestES3, TextureBorderClampIntegerUnsigned2)
 
     setUpProgram();
 
-    uploadTexture();
+    GLTexture texture2D;
+    uploadTexture(texture2D);
 
     GLSampler sampler;
     glBindSampler(0, sampler);
@@ -8097,7 +8137,8 @@ TEST_P(Texture2DTestES3, UnpackSkipImages2D)
     // Crashes on Nexus 5X due to a driver bug. http://anglebug.com/1429
     ANGLE_SKIP_TEST_IF(IsNexus5X() && IsOpenGLES());
 
-    glBindTexture(GL_TEXTURE_2D, mTexture2D);
+    GLTexture texture2D;
+    glBindTexture(GL_TEXTURE_2D, texture2D);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
     ASSERT_GL_NO_ERROR();
@@ -8127,7 +8168,8 @@ TEST_P(Texture2DTestES3, UnpackSkipImages2D)
 // unpacking source extends outside unpack buffer bounds.
 TEST_P(Texture2DTestES3, UnpackSkipPixelsOutOfBounds)
 {
-    glBindTexture(GL_TEXTURE_2D, mTexture2D);
+    GLTexture texture2D;
+    glBindTexture(GL_TEXTURE_2D, texture2D);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
     ASSERT_GL_NO_ERROR();
@@ -8172,7 +8214,8 @@ TEST_P(Texture2DTestES3, UnpackOverlappingRowsFromUnpackBuffer)
     setWindowWidth(width);
     setWindowHeight(height);
 
-    glBindTexture(GL_TEXTURE_2D, mTexture2D);
+    GLTexture texture2D;
+    glBindTexture(GL_TEXTURE_2D, texture2D);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
     ASSERT_GL_NO_ERROR();
@@ -8236,7 +8279,8 @@ TEST_P(Texture2DTestES3, DepthTexturesWithMipmaps)
     int levels = gl::log2(size);
 
     glActiveTexture(GL_TEXTURE0);
-    glBindTexture(GL_TEXTURE_2D, mTexture2D);
+    GLTexture texture2D;
+    glBindTexture(GL_TEXTURE_2D, texture2D);
     glTexStorage2D(GL_TEXTURE_2D, levels, GL_DEPTH_COMPONENT24, size, size);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST_MIPMAP_NEAREST);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
@@ -8450,7 +8494,8 @@ TEST_P(Texture2DDepthTest, DepthTextureES3Compatibility)
 TEST_P(Texture2DTestES3, UnsizedAlphaUnpackBuffer)
 {
     // Initialize the texure.
-    glBindTexture(GL_TEXTURE_2D, mTexture2D);
+    GLTexture texture2D;
+    glBindTexture(GL_TEXTURE_2D, texture2D);
     glTexImage2D(GL_TEXTURE_2D, 0, GL_ALPHA, getWindowWidth(), getWindowHeight(), 0, GL_ALPHA,
                  GL_UNSIGNED_BYTE, nullptr);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
@@ -8493,7 +8538,8 @@ TEST_P(Texture2DTestES3, StaleUnpackData)
     glBufferData(GL_PIXEL_UNPACK_BUFFER, bufferSize, pixels.data(), GL_STATIC_DRAW);
 
     // Create from unpack buffer.
-    glBindTexture(GL_TEXTURE_2D, mTexture2D);
+    GLTexture texture2D;
+    glBindTexture(GL_TEXTURE_2D, texture2D);
     glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA8, getWindowWidth() / 2, getWindowHeight() / 2, 0,
                  GL_RGBA, GL_UNSIGNED_BYTE, nullptr);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
@@ -8938,7 +8984,8 @@ TEST_P(Texture2DTestES3, NegativeTextureBaseLevelAndMaxLevel)
 TEST_P(Texture2DTestES3, GenerateMipmapAndBaseLevelLUMA)
 {
     glActiveTexture(GL_TEXTURE0);
-    glBindTexture(GL_TEXTURE_2D, mTexture2D);
+    GLTexture texture2D;
+    glBindTexture(GL_TEXTURE_2D, texture2D);
 
     constexpr const GLsizei kWidth  = 8;
     constexpr const GLsizei kHeight = 8;
@@ -8967,7 +9014,8 @@ TEST_P(Texture2DTestES3, IncompatibleMipsButNoMipmapFiltering)
     ANGLE_SKIP_TEST_IF(IsOpenGLES() && IsNVIDIAShield());
 
     glActiveTexture(GL_TEXTURE0);
-    glBindTexture(GL_TEXTURE_2D, mTexture2D);
+    GLTexture texture2D;
+    glBindTexture(GL_TEXTURE_2D, texture2D);
 
     constexpr const GLsizei kSize = 8;
     const std::vector<GLColor> kLevel0Data(kSize * kSize, GLColor::blue);
@@ -9003,7 +9051,8 @@ TEST_P(Texture2DTestES3, IncompatibleMipsButNoMipmapFiltering)
 TEST_P(Texture2DTestES3, NoMipmapDrawThenMipmapDraw)
 {
     glActiveTexture(GL_TEXTURE0);
-    glBindTexture(GL_TEXTURE_2D, mTexture2D);
+    GLTexture texture2D;
+    glBindTexture(GL_TEXTURE_2D, texture2D);
 
     constexpr const GLsizei kSize = 8;
     const std::vector<GLColor> kLevel0Data(kSize * kSize, GLColor::blue);
@@ -9049,7 +9098,8 @@ TEST_P(Texture2DTestES3, NoMipmapDrawThenMipmapDraw)
 TEST_P(Texture2DTestES3, MipmapDrawThenNoMipmapDraw)
 {
     glActiveTexture(GL_TEXTURE0);
-    glBindTexture(GL_TEXTURE_2D, mTexture2D);
+    GLTexture texture2D;
+    glBindTexture(GL_TEXTURE_2D, texture2D);
 
     constexpr const GLsizei kSize = 8;
     const std::vector<GLColor> kLevel0Data(kSize * kSize, GLColor::blue);
@@ -9099,7 +9149,8 @@ TEST_P(Texture2DTestES3, MipmapDrawThenNoMipmapDraw)
 TEST_P(Texture2DTestES3, RespecifyWithMoreMips)
 {
     glActiveTexture(GL_TEXTURE0);
-    glBindTexture(GL_TEXTURE_2D, mTexture2D);
+    GLTexture texture2D;
+    glBindTexture(GL_TEXTURE_2D, texture2D);
 
     constexpr const GLsizei kSize = 8;
     const std::vector<GLColor> kLevelEvenData(kSize * kSize, GLColor::blue);
@@ -9193,7 +9244,8 @@ TEST_P(Texture2DTestES3, MinificationWithSamplerNoMipmapping)
     glSamplerParameteri(sampler, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
 
     glActiveTexture(GL_TEXTURE0);
-    glBindTexture(GL_TEXTURE_2D, mTexture2D);
+    GLTexture texture2D;
+    glBindTexture(GL_TEXTURE_2D, texture2D);
 
     const GLsizei texWidth  = getWindowWidth();
     const GLsizei texHeight = getWindowHeight();
@@ -9450,7 +9502,8 @@ TEST_P(Texture2DTestES3, NonZeroBaseEmulatedClear)
     setUpProgram();
 
     glActiveTexture(GL_TEXTURE0);
-    glBindTexture(GL_TEXTURE_2D, mTexture2D);
+    GLTexture texture2D;
+    glBindTexture(GL_TEXTURE_2D, texture2D);
     glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, 16, 16, 0, GL_RGB, GL_UNSIGNED_BYTE, nullptr);
     glTexImage2D(GL_TEXTURE_2D, 1, GL_RGB, 8, 8, 0, GL_RGB, GL_UNSIGNED_BYTE, nullptr);
     glTexImage2D(GL_TEXTURE_2D, 2, GL_RGB, 4, 4, 0, GL_RGB, GL_UNSIGNED_BYTE, nullptr);
@@ -9552,7 +9605,8 @@ TEST_P(Texture2DIntegerTestES3, IntegerTextureNonZeroBaseLevel)
     ANGLE_SKIP_TEST_IF(IsWindows() && IsAMD() && IsDesktopOpenGL());
 
     glActiveTexture(GL_TEXTURE0);
-    glBindTexture(GL_TEXTURE_2D, mTexture2D);
+    GLTexture texture2D;
+    glBindTexture(GL_TEXTURE_2D, texture2D);
     int width     = getWindowWidth();
     int height    = getWindowHeight();
     GLColor color = GLColor::green;
@@ -9658,7 +9712,8 @@ TEST_P(Texture2DIntegerProjectiveOffsetTestES3, NonZeroBaseLevel)
     ANGLE_SKIP_TEST_IF(IsAMD() && IsWindows() && IsOpenGL());
 
     glActiveTexture(GL_TEXTURE0);
-    glBindTexture(GL_TEXTURE_2D, mTexture2D);
+    GLTexture texture2D;
+    glBindTexture(GL_TEXTURE_2D, texture2D);
     int width     = getWindowWidth();
     int height    = getWindowHeight();
     GLColor color = GLColor::green;
@@ -9755,7 +9810,8 @@ void PBOCompressedTextureTest::runCompressedSubImage()
     setWindowHeight(height);
 
     // Setup primary Texture
-    glBindTexture(GL_TEXTURE_2D, mTexture2D);
+    GLTexture texture2D;
+    glBindTexture(GL_TEXTURE_2D, texture2D);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
 
@@ -9783,7 +9839,7 @@ void PBOCompressedTextureTest::runCompressedSubImage()
     // Draw using PBO updated texture
     glUseProgram(mProgram);
     glUniform1i(mTexture2DUniformLocation, 0);
-    glBindTexture(GL_TEXTURE_2D, mTexture2D);
+    glBindTexture(GL_TEXTURE_2D, texture2D);
     drawQuad(mProgram, "position", 0.5f);
     ASSERT_GL_NO_ERROR();
 
@@ -9950,7 +10006,8 @@ TEST_P(ETC1CompressedTextureTest, ETC1CompressedImageDraws)
     glCompressedTexImage2D(GL_TEXTURE_2D, 1, GL_ETC1_RGB8_OES, 192, 192, 0, 18432, data);
     ASSERT_GL_NO_ERROR();
 
-    glBindTexture(GL_TEXTURE_2D, mTexture2D);
+    GLTexture texture2D;
+    glBindTexture(GL_TEXTURE_2D, texture2D);
 
     glUseProgram(mProgram);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_BASE_LEVEL, 0);
@@ -9978,7 +10035,7 @@ TEST_P(ETC1CompressedTextureTest, ETC1CompressedImageDraws)
     ASSERT_GL_NO_ERROR();
     swapBuffers();
 
-    glBindTexture(GL_TEXTURE_2D, mTexture2D);
+    glBindTexture(GL_TEXTURE_2D, texture2D);
 
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_BASE_LEVEL, 0);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAX_LEVEL, 0);
