@@ -20,6 +20,23 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "e2cf580d_390aa249",
+        "filename": "src/tests/restricted_traces/restricted_trace_perf.py",
+        "patchSetId": 4
+      },
+      "lineNbr": 506,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2022-05-03T17:48:43Z",
+      "side": 1,
+      "message": "Should have mentioned this in the first review, but can you move all of this to a helper called here?",
+      "revId": "8071e47071a7a3c84f8d17422cbd15849c2f26af",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "d5628c7c_1b916c2c",
         "filename": "src/tests/restricted_traces/restricted_trace_perf.py",
         "patchSetId": 4
