@@ -332,20 +332,30 @@ class RendererVk : angle::NonCopyable
         }
     }
 
-    void collectSuballocationGarbage(vk::SharedResourceUse &&use,
+    void collectSuballocationGarbage(vk::SharedResourceUse &use,
                                      vk::BufferSuballocation &&suballocation,
                                      vk::Buffer &&buffer)
     {
         std::lock_guard<std::mutex> lock(mGarbageMutex);
-        if (use.usedInRecordedCommands())
+        if (use.isCurrentlyInUse(getLastCompletedQueueSerial()))
         {
-            mPendingSubmissionSuballocationGarbage.emplace(std::move(use), std::move(suballocation),
-                                                           std::move(buffer));
+            if (use.usedInRecordedCommands())
+            {
+                mPendingSubmissionSuballocationGarbage.emplace(
+                    std::move(use), std::move(suballocation), std::move(buffer));
+            }
+            else
+            {
+                mSuballocationGarbageSizeInBytes += suballocation.getSize();
+                mSuballocationGarbage.emplace(std::move(use), std::move(suballocation),
+                                              std::move(buffer));
+            }
+            use.init();
         }
         else
         {
-            mSuballocationGarbage.emplace(std::move(use), std::move(suballocation),
-                                          std::move(buffer));
+            buffer.destroy(mDevice);
+            suballocation.destroy(this);
         }
     }
 
@@ -457,7 +467,7 @@ class RendererVk : angle::NonCopyable
 
     bool haveSameFormatFeatureBits(angle::FormatID formatID1, angle::FormatID formatID2) const;
 
-    angle::Result cleanupGarbage(Serial lastCompletedQueueSerial);
+    void cleanupGarbage(Serial lastCompletedQueueSerial);
     void cleanupCompletedCommandsGarbage();
     void cleanupPendingSubmissionGarbage();
 
@@ -593,6 +603,12 @@ class RendererVk : angle::NonCopyable
         return mSupportedFragmentShadingRates.test(shadingRate);
     }
 
+    VkDeviceSize getSuballocationGarbageSize() const { return mSuballocationGarbageSizeInBytes; }
+    VkDeviceSize getSuballocationDestroyedSize() const
+    {
+        return mSuballocationGarbageSizeCleanedup.load(std::memory_order_relaxed);
+    }
+
   private:
     angle::Result initializeDevice(DisplayVk *displayVk, uint32_t queueFamilyIndex);
     void ensureCapsInitialized() const;
@@ -696,6 +712,12 @@ class RendererVk : angle::NonCopyable
     vk::SharedGarbageList mPendingSubmissionGarbage;
     vk::SharedBufferSuballocationGarbageList mSuballocationGarbage;
     vk::SharedBufferSuballocationGarbageList mPendingSubmissionSuballocationGarbage;
+    // Total bytes of suballocations that are in the mSuballocationGarbage list.
+    VkDeviceSize mSuballocationGarbageSizeInBytes;
+    // Total bytes of suballocations that been destroyed in cleanupGarbage call. This needs to be
+    // atomic to avoid tsan check failure. But since we only used load/store, there should be no
+    // extra cost.
+    std::atomic<VkDeviceSize> mSuballocationGarbageSizeCleanedup;
 
     vk::FormatTable mFormatTable;
     // A cache of VkFormatProperties as queried from the device over time.
