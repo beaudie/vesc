@@ -1127,6 +1127,7 @@ RendererVk::RendererVk()
       mDefaultUniformBufferSize(kPreferredDefaultUniformBufferSize),
       mDevice(VK_NULL_HANDLE),
       mDeviceLost(false),
+      mSuballocationGarbageSizeInBytes(0),
       mSuballocationGarbageDestroyed(0),
       mCoherentStagingBufferMemoryTypeIndex(kInvalidMemoryTypeIndex),
       mNonCoherentStagingBufferMemoryTypeIndex(kInvalidMemoryTypeIndex),
@@ -3843,16 +3844,21 @@ void RendererVk::cleanupGarbage(Serial lastCompletedQueueSerial)
     while (!mSuballocationGarbage.empty())
     {
         vk::SharedBufferSuballocationGarbage &garbage = mSuballocationGarbage.front();
-        // We only count garbage that are suballocated, since prune only deal with suballocated
-        // buffers.
-        VkDeviceSize garbageSizeInBytes = garbage.isSuballocated() ? garbage.getSize() : 0;
+        VkDeviceSize garbageSize                      = garbage.getSize();
+        bool isSuballocated                           = garbage.isSuballocated();
         if (!garbage.destroyIfComplete(this, lastCompletedQueueSerial))
         {
             break;
         }
         // Actually destroyed.
         mSuballocationGarbage.pop();
-        suballocationBytesDestroyed += garbageSizeInBytes;
+        mSuballocationGarbageSizeInBytes -= garbageSize;
+        // We only count garbage that are suballocated, since prune only deal with suballocated
+        // buffers.
+        if (isSuballocated)
+        {
+            suballocationBytesDestroyed += garbageSize;
+        }
     }
     mSuballocationGarbageDestroyed += suballocationBytesDestroyed;
 
@@ -3900,6 +3906,7 @@ void RendererVk::cleanupPendingSubmissionGarbage()
             mPendingSubmissionSuballocationGarbage.front();
         if (!suballocationGarbage.usedInRecordedCommands())
         {
+            mSuballocationGarbageSizeInBytes += suballocationGarbage.getSize();
             mSuballocationGarbage.push(std::move(suballocationGarbage));
         }
         else
