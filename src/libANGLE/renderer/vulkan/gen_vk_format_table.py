@@ -230,6 +230,14 @@ def get_vk_format_case(format_id, vk_format):
 """ % (vk_format, format_id)
 
 
+def unique_vk_formats(format_map):
+    vk_format_to_id = {}
+    for format_id, vk_format in format_map.items():
+        if vk_format not in vk_format_to_id:
+            vk_format_to_id[vk_format] = format_id
+    return vk_format_to_id
+
+
 def main():
 
     input_file_name = 'vk_format_map.json'
@@ -262,7 +270,7 @@ def main():
 
     vk_format_cases = [
         get_vk_format_case(format_id, vk_format)
-        for format_id, vk_format in sorted(vk_json_data["map"].items())
+        for vk_format, format_id in sorted(unique_vk_formats(vk_json_data["map"]).items())
     ]
 
     vk_cases = [
