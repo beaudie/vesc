@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "fa32460c_2bfd300a",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 13
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1525982
+      },
+      "writtenOn": "2022-05-03T03:17:31Z",
+      "side": 1,
+      "message": "Thanks!\nI have moved the texture pointer from ContextVk to ShareGroupVk in order to pass the previously failing multithreaded tests.",
+      "revId": "0e02fa766f67fd1c32c505c4e65e661ab350903f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
