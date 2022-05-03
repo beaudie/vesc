@@ -43,6 +43,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "f5f25603_81fee932",
+        "filename": "src/libANGLE/renderer/vulkan/linux/gbm/SurfaceVkGbm.cpp",
+        "patchSetId": 8
+      },
+      "lineNbr": 274,
+      "author": {
+        "id": 1125810
+      },
+      "writtenOn": "2022-05-03T12:35:06Z",
+      "side": 1,
+      "message": "GBM itself doesn\u0027t synchronise with anything. All it does is give the caller a handle to the current front buffer, with the user performing presentation itself (e.g. the GBM user obtains the current front buffer from GBM and then generates a KMS request including the handle to that buffer).\n\nUsers such as Weston use EGL_KHR_fence_sync and EGL_ANDROID_native_fence_sync to mark the bottom-of-pipe synchronisation point, transform that into a dma-fence, and synchronise against it in the kernel. Users who do not do this need to run on a system implementing the old implicit synchronisation workflow, or see incoherent output. There is no third option as GBM does not participate in the actual presentation.",
+      "parentUuid": "a20b974a_4db113a5",
+      "revId": "c849f0e445adf771b551387fbd43a414205d20e0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "0bebdbb7_aed350f8",
         "filename": "src/libANGLE/renderer/vulkan/linux/gbm/SurfaceVkGbm.cpp",
         "patchSetId": 8
