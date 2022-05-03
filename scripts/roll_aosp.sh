@@ -121,6 +121,11 @@ third_party_deps=(
     "third_party/zlib"
 )
 
+root_add_deps=(
+  "build"
+  "third_party"
+)
+
 # Only add the parts of NDK and vulkan-deps that are required by ANGLE. The entire dep is too large.
 delete_only_deps=(
     "third_party/vulkan-deps"
@@ -160,6 +165,7 @@ done
 extra_removal_files=(
    # Remove Android.mk files to prevent automated CLs:
    #   "[LSC] Add LOCAL_LICENSE_KINDS to external/angle"
+   "build/linux"
    "Android.mk"
    "third_party/vulkan-deps/glslang/src/Android.mk"
    "third_party/vulkan-deps/glslang/src/ndk_test/Android.mk"
@@ -168,11 +174,13 @@ extra_removal_files=(
 )
 
 for removal_file in "${extra_removal_files[@]}"; do
-   rm -f "$removal_file"
+   rm -rf "$removal_file"
 done
 
 # Add all changes to third_party/ so we delete everything not explicitly allowed.
-git add -f "third_party/*"
+for root_add_dep in "${root_add_deps[@]}"; do
+git add -f "$root_add_dep/*"
+done
 
 # Done with depot_tools
 rm -rf $DEPOT_TOOLS_DIR
