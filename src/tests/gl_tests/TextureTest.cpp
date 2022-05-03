@@ -100,7 +100,7 @@ GLColor32F SliceFormatColor32F(GLenum format, GLColor32F full)
 class TexCoordDrawTest : public ANGLETest
 {
   protected:
-    TexCoordDrawTest() : ANGLETest(), mProgram(0), mFramebuffer(0), mFramebufferColorTexture(0)
+    TexCoordDrawTest() : ANGLETest(), mProgram(0), mFramebuffer(0)
     {
         setWindowWidth(128);
         setWindowHeight(128);
@@ -141,7 +141,6 @@ void main()
     {
         glBindFramebuffer(GL_FRAMEBUFFER, 0);
         glDeleteFramebuffers(1, &mFramebuffer);
-        glDeleteTextures(1, &mFramebufferColorTexture);
         glDeleteProgram(mProgram);
     }
 
@@ -157,7 +156,6 @@ void main()
         glGenFramebuffers(1, &mFramebuffer);
         glBindFramebuffer(GL_FRAMEBUFFER, mFramebuffer);
 
-        glGenTextures(1, &mFramebufferColorTexture);
         glBindTexture(GL_TEXTURE_2D, mFramebufferColorTexture);
         glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, getWindowWidth(), getWindowHeight(), 0, GL_RGBA,
                      GL_UNSIGNED_BYTE, nullptr);
@@ -169,10 +167,9 @@ void main()
     }
 
     // Returns the created texture ID.
-    GLuint create2DTexture()
+    GLTexture create2DTexture()
     {
-        GLuint texture2D;
-        glGenTextures(1, &texture2D);
+        GLTexture texture2D;
         glBindTexture(GL_TEXTURE_2D, texture2D);
         glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, 1, 1, 0, GL_RGBA, GL_UNSIGNED_BYTE, nullptr);
         EXPECT_GL_NO_ERROR();
@@ -183,13 +180,13 @@ void main()
     GLuint mFramebuffer;
 
   private:
-    GLuint mFramebufferColorTexture;
+    GLTexture mFramebufferColorTexture;
 };
 
 class Texture2DTest : public TexCoordDrawTest
 {
   protected:
-    Texture2DTest() : TexCoordDrawTest(), mTexture2D(0), mTexture2DUniformLocation(-1) {}
+    Texture2DTest() : TexCoordDrawTest(), mTexture2DUniformLocation(-1) {}
 
     const char *getFragmentShaderSource() override
     {
@@ -220,11 +217,7 @@ void main()
         ASSERT_GL_NO_ERROR();
     }
 
-    void testTearDown() override
-    {
-        glDeleteTextures(1, &mTexture2D);
-        TexCoordDrawTest::testTearDown();
-    }
+    void testTearDown() override { TexCoordDrawTest::testTearDown(); }
 
     // Tests CopyTexSubImage with floating point textures of various formats.
     void testFloatCopySubImage(int sourceImageChannels, int destImageChannels)
@@ -299,9 +292,7 @@ void main()
             GL_RGBA,
         };
 
-        GLuint textures[2];
-
-        glGenTextures(2, textures);
+        GLTexture textures[2];
 
         GLfloat *imageData         = sourceImageData[sourceImageChannels - 1];
         GLenum sourceImageFormat   = imageFormats[sourceImageChannels - 1];
@@ -368,7 +359,6 @@ void main()
         }
 
         glDeleteFramebuffers(1, &fbo);
-        glDeleteTextures(2, textures);
 
         ASSERT_GL_NO_ERROR();
     }
@@ -383,7 +373,7 @@ void main()
 
     void testUploadThenUseInDifferentStages(const std::vector<UploadThenUseStageParam> &uses);
 
-    GLuint mTexture2D;
+    GLTexture mTexture2D;
     GLint mTexture2DUniformLocation;
 };
 
@@ -874,11 +864,7 @@ class TextureCubeTest : public TexCoordDrawTest
 {
   protected:
     TextureCubeTest()
-        : TexCoordDrawTest(),
-          mTexture2D(0),
-          mTextureCube(0),
-          mTexture2DUniformLocation(-1),
-          mTextureCubeUniformLocation(-1)
+        : TexCoordDrawTest(), mTexture2DUniformLocation(-1), mTextureCubeUniformLocation(-1)
     {}
 
     const char *getFragmentShaderSource() override
@@ -900,7 +886,6 @@ class TextureCubeTest : public TexCoordDrawTest
     {
         TexCoordDrawTest::testSetUp();
 
-        glGenTextures(1, &mTextureCube);
         glBindTexture(GL_TEXTURE_CUBE_MAP, mTextureCube);
         for (GLenum face = 0; face < 6; face++)
         {
@@ -919,14 +904,10 @@ class TextureCubeTest : public TexCoordDrawTest
         ASSERT_NE(-1, mTextureCubeUniformLocation);
     }
 
-    void testTearDown() override
-    {
-        glDeleteTextures(1, &mTextureCube);
-        TexCoordDrawTest::testTearDown();
-    }
+    void testTearDown() override { TexCoordDrawTest::testTearDown(); }
 
-    GLuint mTexture2D;
-    GLuint mTextureCube;
+    GLTexture mTexture2D;
+    GLTexture mTextureCube;
     GLint mTexture2DUniformLocation;
     GLint mTextureCubeUniformLocation;
 };
@@ -941,11 +922,7 @@ class SamplerArrayTest : public TexCoordDrawTest
 {
   protected:
     SamplerArrayTest()
-        : TexCoordDrawTest(),
-          mTexture2DA(0),
-          mTexture2DB(0),
-          mTexture0UniformLocation(-1),
-          mTexture1UniformLocation(-1)
+        : TexCoordDrawTest(), mTexture0UniformLocation(-1), mTexture1UniformLocation(-1)
     {}
 
     const char *getFragmentShaderSource() override
@@ -977,12 +954,7 @@ class SamplerArrayTest : public TexCoordDrawTest
         ASSERT_GL_NO_ERROR();
     }
 
-    void testTearDown() override
-    {
-        glDeleteTextures(1, &mTexture2DA);
-        glDeleteTextures(1, &mTexture2DB);
-        TexCoordDrawTest::testTearDown();
-    }
+    void testTearDown() override { TexCoordDrawTest::testTearDown(); }
 
     void testSamplerArrayDraw()
     {
@@ -1011,8 +983,8 @@ class SamplerArrayTest : public TexCoordDrawTest
         EXPECT_PIXEL_NEAR(0, 0, 0, 180, 0, 255, 2);
     }
 
-    GLuint mTexture2DA;
-    GLuint mTexture2DB;
+    GLTexture mTexture2DA;
+    GLTexture mTexture2DB;
     GLint mTexture0UniformLocation;
     GLint mTexture1UniformLocation;
 };
@@ -1045,10 +1017,7 @@ class Texture2DArrayTestES3 : public TexCoordDrawTest
 {
   protected:
     Texture2DArrayTestES3()
-        : TexCoordDrawTest(),
-          m2DArrayTexture(0),
-          mTextureArrayLocation(-1),
-          mTextureArraySliceUniformLocation(-1)
+        : TexCoordDrawTest(), mTextureArrayLocation(-1), mTextureArraySliceUniformLocation(-1)
     {}
 
     const char *getVertexShaderSource() override
@@ -1089,17 +1058,12 @@ void main()
         mTextureArraySliceUniformLocation = glGetUniformLocation(mProgram, "slice");
         ASSERT_NE(-1, mTextureArraySliceUniformLocation);
 
-        glGenTextures(1, &m2DArrayTexture);
         ASSERT_GL_NO_ERROR();
     }
 
-    void testTearDown() override
-    {
-        glDeleteTextures(1, &m2DArrayTexture);
-        TexCoordDrawTest::testTearDown();
-    }
+    void testTearDown() override { TexCoordDrawTest::testTearDown(); }
 
-    GLuint m2DArrayTexture;
+    GLTexture m2DArrayTexture;
     GLint mTextureArrayLocation;
     GLint mTextureArraySliceUniformLocation;
 };
@@ -1107,12 +1071,7 @@ void main()
 class TextureSizeTextureArrayTest : public TexCoordDrawTest
 {
   protected:
-    TextureSizeTextureArrayTest()
-        : TexCoordDrawTest(),
-          mTexture2DA(0),
-          mTexture2DB(0),
-          mTexture0Location(-1),
-          mTexture1Location(-1)
+    TextureSizeTextureArrayTest() : TexCoordDrawTest(), mTexture0Location(-1), mTexture1Location(-1)
     {}
 
     const char *getVertexShaderSource() override { return essl3_shaders::vs::Simple(); }
@@ -1147,15 +1106,10 @@ class TextureSizeTextureArrayTest : public TexCoordDrawTest
         ASSERT_GL_NO_ERROR();
     }
 
-    void testTearDown() override
-    {
-        glDeleteTextures(1, &mTexture2DA);
-        glDeleteTextures(1, &mTexture2DB);
-        TexCoordDrawTest::testTearDown();
-    }
+    void testTearDown() override { TexCoordDrawTest::testTearDown(); }
 
-    GLuint mTexture2DA;
-    GLuint mTexture2DB;
+    GLTexture mTexture2DA;
+    GLTexture mTexture2DB;
     GLint mTexture0Location;
     GLint mTexture1Location;
 };
@@ -1164,7 +1118,7 @@ class TextureSizeTextureArrayTest : public TexCoordDrawTest
 class Texture3DTestES2 : public TexCoordDrawTest
 {
   protected:
-    Texture3DTestES2() : TexCoordDrawTest(), mTexture3D(0), mTexture3DUniformLocation(-1) {}
+    Texture3DTestES2() : TexCoordDrawTest(), mTexture3DUniformLocation(-1) {}
 
     const char *getVertexShaderSource() override
     {
@@ -1209,8 +1163,6 @@ class Texture3DTestES2 : public TexCoordDrawTest
 
         TexCoordDrawTest::testSetUp();
 
-        glGenTextures(1, &mTexture3D);
-
         setUpProgram();
 
         mTexture3DUniformLocation = glGetUniformLocation(mProgram, "tex3D");
@@ -1220,11 +1172,7 @@ class Texture3DTestES2 : public TexCoordDrawTest
         }
     }
 
-    void testTearDown() override
-    {
-        glDeleteTextures(1, &mTexture3D);
-        TexCoordDrawTest::testTearDown();
-    }
+    void testTearDown() override { TexCoordDrawTest::testTearDown(); }
 
     bool hasTexture3DExt() const
     {
@@ -1236,7 +1184,7 @@ class Texture3DTestES2 : public TexCoordDrawTest
         return IsGLExtensionEnabled("GL_OES_texture_3D");
     }
 
-    GLuint mTexture3D;
+    GLTexture mTexture3D;
     GLint mTexture3DUniformLocation;
 };
 
@@ -1276,8 +1224,6 @@ class ShadowSamplerPlusSampler3DTestES3 : public TexCoordDrawTest
   protected:
     ShadowSamplerPlusSampler3DTestES3()
         : TexCoordDrawTest(),
-          mTextureShadow(0),
-          mTexture3D(0),
           mTextureShadowUniformLocation(-1),
           mTexture3DUniformLocation(-1),
           mDepthRefUniformLocation(-1)
@@ -1315,9 +1261,6 @@ class ShadowSamplerPlusSampler3DTestES3 : public TexCoordDrawTest
     {
         TexCoordDrawTest::testSetUp();
 
-        glGenTextures(1, &mTexture3D);
-
-        glGenTextures(1, &mTextureShadow);
         glBindTexture(GL_TEXTURE_2D, mTextureShadow);
         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_COMPARE_MODE, GL_COMPARE_REF_TO_TEXTURE);
 
@@ -1331,15 +1274,10 @@ class ShadowSamplerPlusSampler3DTestES3 : public TexCoordDrawTest
         ASSERT_NE(-1, mDepthRefUniformLocation);
     }
 
-    void testTearDown() override
-    {
-        glDeleteTextures(1, &mTextureShadow);
-        glDeleteTextures(1, &mTexture3D);
-        TexCoordDrawTest::testTearDown();
-    }
+    void testTearDown() override { TexCoordDrawTest::testTearDown(); }
 
-    GLuint mTextureShadow;
-    GLuint mTexture3D;
+    GLTexture mTextureShadow;
+    GLTexture mTexture3D;
     GLint mTextureShadowUniformLocation;
     GLint mTexture3DUniformLocation;
     GLint mDepthRefUniformLocation;
@@ -1350,10 +1288,6 @@ class SamplerTypeMixTestES3 : public TexCoordDrawTest
   protected:
     SamplerTypeMixTestES3()
         : TexCoordDrawTest(),
-          mTexture2D(0),
-          mTextureCube(0),
-          mTexture2DShadow(0),
-          mTextureCubeShadow(0),
           mTexture2DUniformLocation(-1),
           mTextureCubeUniformLocation(-1),
           mTexture2DShadowUniformLocation(-1),
@@ -1398,14 +1332,9 @@ class SamplerTypeMixTestES3 : public TexCoordDrawTest
     {
         TexCoordDrawTest::testSetUp();
 
-        glGenTextures(1, &mTexture2D);
-        glGenTextures(1, &mTextureCube);
-
-        glGenTextures(1, &mTexture2DShadow);
         glBindTexture(GL_TEXTURE_2D, mTexture2DShadow);
         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_COMPARE_MODE, GL_COMPARE_REF_TO_TEXTURE);
 
-        glGenTextures(1, &mTextureCubeShadow);
         glBindTexture(GL_TEXTURE_CUBE_MAP, mTextureCubeShadow);
         glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_COMPARE_MODE, GL_COMPARE_REF_TO_TEXTURE);
 
@@ -1425,19 +1354,12 @@ class SamplerTypeMixTestES3 : public TexCoordDrawTest
         ASSERT_GL_NO_ERROR();
     }
 
-    void testTearDown() override
-    {
-        glDeleteTextures(1, &mTexture2D);
-        glDeleteTextures(1, &mTextureCube);
-        glDeleteTextures(1, &mTexture2DShadow);
-        glDeleteTextures(1, &mTextureCubeShadow);
-        TexCoordDrawTest::testTearDown();
-    }
+    void testTearDown() override { TexCoordDrawTest::testTearDown(); }
 
-    GLuint mTexture2D;
-    GLuint mTextureCube;
-    GLuint mTexture2DShadow;
-    GLuint mTextureCubeShadow;
+    GLTexture mTexture2D;
+    GLTexture mTextureCube;
+    GLTexture mTexture2DShadow;
+    GLTexture mTextureCubeShadow;
     GLint mTexture2DUniformLocation;
     GLint mTextureCubeUniformLocation;
     GLint mTexture2DShadowUniformLocation;
@@ -1622,9 +1544,7 @@ class Texture2DIntegerTestES3 : public Texture2DTest
 class TextureCubeIntegerTestES3 : public TexCoordDrawTest
 {
   protected:
-    TextureCubeIntegerTestES3()
-        : TexCoordDrawTest(), mTextureCube(0), mTextureCubeUniformLocation(-1)
-    {}
+    TextureCubeIntegerTestES3() : TexCoordDrawTest(), mTextureCubeUniformLocation(-1) {}
 
     const char *getVertexShaderSource() override
     {
@@ -1655,20 +1575,15 @@ class TextureCubeIntegerTestES3 : public TexCoordDrawTest
     void testSetUp() override
     {
         TexCoordDrawTest::testSetUp();
-        glGenTextures(1, &mTextureCube);
         setUpProgram();
 
         mTextureCubeUniformLocation = glGetUniformLocation(mProgram, "texCube");
         ASSERT_NE(-1, mTextureCubeUniformLocation);
     }
 
-    void testTearDown() override
-    {
-        glDeleteTextures(1, &mTextureCube);
-        TexCoordDrawTest::testTearDown();
-    }
+    void testTearDown() override { TexCoordDrawTest::testTearDown(); }
 
-    GLuint mTextureCube;
+    GLTexture mTextureCube;
     GLint mTextureCubeUniformLocation;
 };
 
@@ -1808,7 +1723,6 @@ class PBOCompressedTextureTest : public Texture2DTest
     void testSetUp() override
     {
         TexCoordDrawTest::testSetUp();
-        glGenTextures(1, &mTexture2D);
         glBindTexture(GL_TEXTURE_2D, mTexture2D);
         EXPECT_GL_NO_ERROR();
 
@@ -1836,7 +1750,6 @@ class ETC1CompressedTextureTest : public Texture2DTest
     void testSetUp() override
     {
         TexCoordDrawTest::testSetUp();
-        glGenTextures(1, &mTexture2D);
         glBindTexture(GL_TEXTURE_2D, mTexture2D);
         EXPECT_GL_NO_ERROR();
 
@@ -2168,8 +2081,7 @@ TEST_P(Texture2DTest, TexStorage)
     int width  = getWindowWidth();
     int height = getWindowHeight();
 
-    GLuint tex2D;
-    glGenTextures(1, &tex2D);
+    GLTexture tex2D;
     glActiveTexture(GL_TEXTURE0);
     glBindTexture(GL_TEXTURE_2D, tex2D);
 
@@ -2205,7 +2117,6 @@ TEST_P(Texture2DTest, TexStorage)
     glUseProgram(mProgram);
     glUniform1i(mTexture2DUniformLocation, 0);
     drawQuad(mProgram, "position", 0.5f);
-    glDeleteTextures(1, &tex2D);
     EXPECT_GL_NO_ERROR();
     EXPECT_PIXEL_EQ(width / 4, height / 4, 255, 0, 0, 255);
 
@@ -2241,8 +2152,7 @@ TEST_P(Texture2DTest, TexStorageWithPBO)
     const size_t pixelCount  = width * height;
     const int componentCount = 3;
 
-    GLuint tex2D;
-    glGenTextures(1, &tex2D);
+    GLTexture tex2D;
     glActiveTexture(GL_TEXTURE0);
     glBindTexture(GL_TEXTURE_2D, tex2D);
 
@@ -2279,7 +2189,6 @@ TEST_P(Texture2DTest, TexStorageWithPBO)
     glUseProgram(mProgram);
     glUniform1i(mTexture2DUniformLocation, 0);
     drawQuad(mProgram, "position", 0.5f);
-    glDeleteTextures(1, &tex2D);
     glDeleteBuffers(1, &pbo);
     EXPECT_GL_NO_ERROR();
     EXPECT_PIXEL_EQ(3 * width / 4, 3 * height / 4, 0, 0, 0, 255);
@@ -2409,8 +2318,7 @@ TEST_P(Texture2DTest, TexStorageWithPBOMiddlePixelDifferent)
     int width  = getWindowWidth();
     int height = getWindowHeight();
 
-    GLuint tex2D;
-    glGenTextures(1, &tex2D);
+    GLTexture tex2D;
     glActiveTexture(GL_TEXTURE0);
     glBindTexture(GL_TEXTURE_2D, tex2D);
 
@@ -2453,7 +2361,6 @@ TEST_P(Texture2DTest, TexStorageWithPBOMiddlePixelDifferent)
     glUseProgram(mProgram);
     glUniform1i(mTexture2DUniformLocation, 0);
     drawQuad(mProgram, "position", 0.5f);
-    glDeleteTextures(1, &tex2D);
     glDeleteBuffers(1, &pbo);
     EXPECT_GL_NO_ERROR();
     EXPECT_PIXEL_EQ(3 * width / 4, 3 * height / 4, 0, 0, 0, 255);
@@ -2470,8 +2377,7 @@ TEST_P(Texture2DTest, TexImageWithLuminancePBO)
     int width  = getWindowWidth();
     int height = getWindowHeight();
 
-    GLuint tex2D;
-    glGenTextures(1, &tex2D);
+    GLTexture tex2D;
     glActiveTexture(GL_TEXTURE0);
     glBindTexture(GL_TEXTURE_2D, tex2D);
 
@@ -2508,7 +2414,6 @@ TEST_P(Texture2DTest, TexImageWithLuminancePBO)
     glUseProgram(mProgram);
     glUniform1i(mTexture2DUniformLocation, 0);
     drawQuad(mProgram, "position", 0.5f);
-    glDeleteTextures(1, &tex2D);
     glDeleteBuffers(1, &pbo);
     EXPECT_GL_NO_ERROR();
     EXPECT_PIXEL_EQ(width / 4, height / 4, 255, 255, 255, 255);
@@ -2525,8 +2430,7 @@ TEST_P(Texture2DTest, TexImageWithRGB565PBO)
     int width  = getWindowWidth();
     int height = getWindowHeight();
 
-    GLuint tex2D;
-    glGenTextures(1, &tex2D);
+    GLTexture tex2D;
     glActiveTexture(GL_TEXTURE0);
     glBindTexture(GL_TEXTURE_2D, tex2D);
 
@@ -2563,7 +2467,6 @@ TEST_P(Texture2DTest, TexImageWithRGB565PBO)
     glUseProgram(mProgram);
     glUniform1i(mTexture2DUniformLocation, 0);
     drawQuad(mProgram, "position", 0.5f);
-    glDeleteTextures(1, &tex2D);
     glDeleteBuffers(1, &pbo);
     EXPECT_GL_NO_ERROR();
     EXPECT_PIXEL_EQ(width / 4, height / 4, 255, 0, 0, 255);
@@ -2580,8 +2483,7 @@ TEST_P(Texture2DTest, TexImageWithRGBA4444PBO)
     int width  = getWindowWidth();
     int height = getWindowHeight();
 
-    GLuint tex2D;
-    glGenTextures(1, &tex2D);
+    GLTexture tex2D;
     glActiveTexture(GL_TEXTURE0);
     glBindTexture(GL_TEXTURE_2D, tex2D);
 
@@ -2618,7 +2520,6 @@ TEST_P(Texture2DTest, TexImageWithRGBA4444PBO)
     glUseProgram(mProgram);
     glUniform1i(mTexture2DUniformLocation, 0);
     drawQuad(mProgram, "position", 0.5f);
-    glDeleteTextures(1, &tex2D);
     glDeleteBuffers(1, &pbo);
     EXPECT_GL_NO_ERROR();
     EXPECT_PIXEL_EQ(width / 4, height / 4, 255, 0, 0, 255);
@@ -2635,8 +2536,7 @@ TEST_P(Texture2DTest, TexImageWithRGBA5551PBO)
     int width  = getWindowWidth();
     int height = getWindowHeight();
 
-    GLuint tex2D;
-    glGenTextures(1, &tex2D);
+    GLTexture tex2D;
     glActiveTexture(GL_TEXTURE0);
     glBindTexture(GL_TEXTURE_2D, tex2D);
 
@@ -2672,7 +2572,6 @@ TEST_P(Texture2DTest, TexImageWithRGBA5551PBO)
     glUseProgram(mProgram);
     glUniform1i(mTexture2DUniformLocation, 0);
     drawQuad(mProgram, "position", 0.5f);
-    glDeleteTextures(1, &tex2D);
     glDeleteBuffers(1, &pbo);
     EXPECT_GL_NO_ERROR();
     EXPECT_PIXEL_EQ(width / 4, height / 4, 255, 0, 0, 255);
@@ -2694,8 +2593,7 @@ TEST_P(Texture2DTest, TexImageUnpackRowLengthPBO)
     const int rowLength  = getWindowWidth();
     const int bufferSize = rowLength * height;
 
-    GLuint tex2D;
-    glGenTextures(1, &tex2D);
+    GLTexture tex2D;
     glActiveTexture(GL_TEXTURE0);
     glBindTexture(GL_TEXTURE_2D, tex2D);
 
@@ -2728,7 +2626,6 @@ TEST_P(Texture2DTest, TexImageUnpackRowLengthPBO)
     glUseProgram(mProgram);
     glUniform1i(mTexture2DUniformLocation, 0);
     drawQuad(mProgram, "position", 0.5f);
-    glDeleteTextures(1, &tex2D);
     glDeleteBuffers(1, &pbo);
     EXPECT_GL_NO_ERROR();
     EXPECT_PIXEL_COLOR_EQ(0, 0, GLColor::green);
@@ -3249,7 +3146,7 @@ TEST_P(Texture2DTest, TextureNPOT_GL_ALPHA_UBYTE)
 {
     const int npotTexSize = 5;
     const int potTexSize  = 4;  // Should be less than npotTexSize
-    GLuint tex2D;
+    GLTexture tex2D;
 
     if (IsGLExtensionEnabled("GL_OES_texture_npot"))
     {
@@ -3265,7 +3162,6 @@ TEST_P(Texture2DTest, TextureNPOT_GL_ALPHA_UBYTE)
     glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
 
     glActiveTexture(GL_TEXTURE0);
-    glGenTextures(1, &tex2D);
     glBindTexture(GL_TEXTURE_2D, tex2D);
 
     const std::vector<GLubyte> pixels(1 * npotTexSize * npotTexSize, 64);
@@ -5811,8 +5707,7 @@ TEST_P(Texture2DTestES3, TextureRGBXImplicitAlpha1)
 {
     ANGLE_SKIP_TEST_IF(!IsGLExtensionEnabled("GL_ANGLE_rgbx_internal_format"));
 
-    GLuint texture2D;
-    glGenTextures(1, &texture2D);
+    GLTexture texture2D;
     glBindTexture(GL_TEXTURE_2D, texture2D);
     glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBX8_ANGLE, 1, 1, 0, GL_RGB, GL_UNSIGNED_BYTE, nullptr);
     glActiveTexture(GL_TEXTURE0);
@@ -6215,8 +6110,7 @@ TEST_P(Texture2DTestES31PPO, TexStorage)
     int width  = getWindowWidth();
     int height = getWindowHeight();
 
-    GLuint tex2D;
-    glGenTextures(1, &tex2D);
+    GLTexture tex2D;
     glActiveTexture(GL_TEXTURE0);
     glBindTexture(GL_TEXTURE_2D, tex2D);
 
@@ -6246,7 +6140,6 @@ TEST_P(Texture2DTestES31PPO, TexStorage)
     std::array<Vector3, 6> quadVertices = ANGLETestBase::GetQuadVertices();
     ppoDrawQuad(quadVertices, "position", 0.5f, 1.0f);
 
-    glDeleteTextures(1, &tex2D);
     EXPECT_GL_NO_ERROR();
     EXPECT_PIXEL_EQ(width / 4, height / 4, 255, 0, 0, 255);
 
@@ -6972,11 +6865,6 @@ class TextureLimitsTest : public ANGLETest
         {
             glDeleteProgram(mProgram);
             mProgram = 0;
-
-            if (!mTextures.empty())
-            {
-                glDeleteTextures(static_cast<GLsizei>(mTextures.size()), &mTextures[0]);
-            }
         }
     }
 
@@ -7046,8 +6934,7 @@ class TextureLimitsTest : public ANGLETest
     void initTextures(GLint tex2DCount, GLint texCubeCount)
     {
         GLint totalCount = tex2DCount + texCubeCount;
-        mTextures.assign(totalCount, 0);
-        glGenTextures(totalCount, &mTextures[0]);
+        mTextures.resize(totalCount);
         ASSERT_GL_NO_ERROR();
 
         std::vector<RGBA8> texData(16 * 16);
@@ -7140,7 +7027,7 @@ class TextureLimitsTest : public ANGLETest
     }
 
     GLuint mProgram;
-    std::vector<GLuint> mTextures;
+    std::vector<GLTexture> mTextures;
     GLint mMaxVertexTextures;
     GLint mMaxFragmentTextures;
     GLint mMaxCombinedTextures;
@@ -7264,14 +7151,13 @@ TEST_P(TextureLimitsTest, TextureTypeConflict)
 class Texture2DNorm16TestES3 : public Texture2DTestES3
 {
   protected:
-    Texture2DNorm16TestES3() : Texture2DTestES3(), mTextures{0, 0, 0}, mFBO(0), mRenderbuffer(0) {}
+    Texture2DNorm16TestES3() : Texture2DTestES3(), mFBO(0), mRenderbuffer(0) {}
 
     void testSetUp() override
     {
         Texture2DTestES3::testSetUp();
 
         glActiveTexture(GL_TEXTURE0);
-        glGenTextures(3, mTextures);
         glGenFramebuffers(1, &mFBO);
         glGenRenderbuffers(1, &mRenderbuffer);
 
@@ -7289,7 +7175,6 @@ class Texture2DNorm16TestES3 : public Texture2DTestES3
 
     void testTearDown() override
     {
-        glDeleteTextures(3, mTextures);
         glDeleteFramebuffers(1, &mFBO);
         glDeleteRenderbuffers(1, &mRenderbuffer);
 
@@ -7528,7 +7413,7 @@ class Texture2DNorm16TestES3 : public Texture2DTestES3
         glBindFramebuffer(GL_FRAMEBUFFER, 0);
     }
 
-    GLuint mTextures[3];
+    GLTexture mTextures[3];
     GLuint mFBO;
     GLuint mRenderbuffer;
 };
@@ -7606,17 +7491,13 @@ TEST_P(Texture2DNorm16TestES3, TextureNorm16RGBA16RenderTest)
 class Texture2DRGTest : public Texture2DTest
 {
   protected:
-    Texture2DRGTest()
-        : Texture2DTest(), mRenderableTexture(0), mTestTexture(0), mFBO(0), mRenderbuffer(0)
-    {}
+    Texture2DRGTest() : Texture2DTest(), mFBO(0), mRenderbuffer(0) {}
 
     void testSetUp() override
     {
         Texture2DTest::testSetUp();
 
         glActiveTexture(GL_TEXTURE0);
-        glGenTextures(1, &mRenderableTexture);
-        glGenTextures(1, &mTestTexture);
         glGenFramebuffers(1, &mFBO);
         glGenRenderbuffers(1, &mRenderbuffer);
 
@@ -7638,8 +7519,6 @@ class Texture2DRGTest : public Texture2DTest
 
     void testTearDown() override
     {
-        glDeleteTextures(1, &mRenderableTexture);
-        glDeleteTextures(1, &mTestTexture);
         glDeleteFramebuffers(1, &mFBO);
         glDeleteRenderbuffers(1, &mRenderbuffer);
 
@@ -7687,8 +7566,8 @@ class Texture2DRGTest : public Texture2DTest
         EXPECT_PIXEL_COLOR_EQ(0, 0, SliceFormatColor(format, GLColor(255u, 255u, 255u, 255u)));
     }
 
-    GLuint mRenderableTexture;
-    GLuint mTestTexture;
+    GLTexture mRenderableTexture;
+    GLTexture mTestTexture;
     GLuint mFBO;
     GLuint mRenderbuffer;
 };
@@ -7758,17 +7637,13 @@ TEST_P(Texture2DRGTest, TextureRGHalfFloatTest)
 class Texture2DFloatTest : public Texture2DTest
 {
   protected:
-    Texture2DFloatTest()
-        : Texture2DTest(), mRenderableTexture(0), mTestTexture(0), mFBO(0), mRenderbuffer(0)
-    {}
+    Texture2DFloatTest() : Texture2DTest(), mFBO(0), mRenderbuffer(0) {}
 
     void testSetUp() override
     {
         Texture2DTest::testSetUp();
 
         glActiveTexture(GL_TEXTURE0);
-        glGenTextures(1, &mRenderableTexture);
-        glGenTextures(1, &mTestTexture);
         glGenFramebuffers(1, &mFBO);
         glGenRenderbuffers(1, &mRenderbuffer);
 
@@ -7788,8 +7663,6 @@ class Texture2DFloatTest : public Texture2DTest
 
     void testTearDown() override
     {
-        glDeleteTextures(1, &mRenderableTexture);
-        glDeleteTextures(1, &mTestTexture);
         glDeleteFramebuffers(1, &mFBO);
         glDeleteRenderbuffers(1, &mRenderbuffer);
 
@@ -7942,8 +7815,8 @@ class Texture2DFloatTest : public Texture2DTest
         return true;
     }
 
-    GLuint mRenderableTexture;
-    GLuint mTestTexture;
+    GLTexture mRenderableTexture;
+    GLTexture mTestTexture;
     GLuint mFBO;
     GLuint mRenderbuffer;
 };
@@ -8477,8 +8350,7 @@ class Texture2DDepthTest : public Texture2DTest
         ASSERT_GL_NO_ERROR();
 
         // try adding a color buffer.
-        GLuint colorTex = 0;
-        glGenTextures(1, &colorTex);
+        GLTexture colorTex;
         glBindTexture(GL_TEXTURE_2D, colorTex);
         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
@@ -9050,7 +8922,7 @@ TEST_P(TextureCubeTestES3, CubeMapPixelUnpackBuffer)
 // Verify that using negative texture base level and max level generates GL_INVALID_VALUE.
 TEST_P(Texture2DTestES3, NegativeTextureBaseLevelAndMaxLevel)
 {
-    GLuint texture = create2DTexture();
+    GLTexture texture = create2DTexture();
 
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_BASE_LEVEL, -1);
     EXPECT_GL_ERROR(GL_INVALID_VALUE);
@@ -9058,7 +8930,6 @@ TEST_P(Texture2DTestES3, NegativeTextureBaseLevelAndMaxLevel)
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAX_LEVEL, -1);
     EXPECT_GL_ERROR(GL_INVALID_VALUE);
 
-    glDeleteTextures(1, &texture);
     EXPECT_GL_NO_ERROR();
 }
 
@@ -10460,19 +10331,14 @@ class TextureChangeStorageUploadTest : public ANGLETest
         glEnable(GL_BLEND);
         glDisable(GL_DEPTH_TEST);
 
-        glGenTextures(1, &mTexture);
         ASSERT_GL_NO_ERROR();
     }
 
-    void testTearDown() override
-    {
-        glDeleteTextures(1, &mTexture);
-        glDeleteProgram(mProgram);
-    }
+    void testTearDown() override { glDeleteProgram(mProgram); }
 
     GLuint mProgram;
     GLint mColorLocation;
-    GLuint mTexture;
+    GLTexture mTexture;
 };
 
 // Verify that respecifying storage and re-uploading doesn't crash.
