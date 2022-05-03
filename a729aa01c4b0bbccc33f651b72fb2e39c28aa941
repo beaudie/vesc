@@ -105,6 +105,24 @@
       "parentUuid": "eec2715b_497c649e",
       "revId": "a729aa01c4b0bbccc33f651b72fb2e39c28aa941",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "a2c1dac9_76763ad1",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 7
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2022-05-03T12:53:17Z",
+      "side": 1,
+      "message": "Program termination here is totally a valid outcome. Imagine if I passed in a raw value of 0x1 to glVertexAttribPointer, enabled the array with no buffer bound, and call glDrawArrays. ANGLE tries to read from this address, and crashes. My suggestion to you is that there\u0027s no difference from the OpenGL ES spec\u0027s perspective between 0x0 and 0x1, or any other invalid pointer. Because 0x0 is a common programming error, ANGLE does a special case for 0x0 and we return an error. This is valid, because UB.\n\nI couldn\u0027t find a specific wording in the spec for invalid pointers. If you like a clarification I recommend you or I file a spec issue here:\n\nhttps://gitlab.khronos.org/opengl/API/-/issues\n\nHappy to bring it up for clarification at the WG if you file the issue, as I attend the meetings.",
+      "parentUuid": "fc363e17_a98e23bf",
+      "revId": "a729aa01c4b0bbccc33f651b72fb2e39c28aa941",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
