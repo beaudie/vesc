@@ -41,6 +41,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": true,
+      "key": {
+        "uuid": "33fb932e_b16f5260",
+        "filename": "src/libANGLE/capture/FrameCapture.cpp",
+        "patchSetId": 8
+      },
+      "lineNbr": 638,
+      "author": {
+        "id": 1491823
+      },
+      "writtenOn": "2022-05-03T12:39:02Z",
+      "side": 1,
+      "message": "Do you mean replace the whole if series here to create some auto-generated call?",
+      "parentUuid": "f1db07c4_82f5ff4f",
+      "range": {
+        "startLine": 627,
+        "startChar": 0,
+        "endLine": 638,
+        "endChar": 5
+      },
+      "revId": "1e29e76e0c9fbbcf4d1cbc70c92a90030ffd21dd",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": false,
       "key": {
         "uuid": "2bd15277_3e2d6390",
@@ -89,6 +113,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "c9db6ea8_f5ba430b",
+        "filename": "src/libANGLE/capture/FrameCapture.cpp",
+        "patchSetId": 8
+      },
+      "lineNbr": 3405,
+      "author": {
+        "id": 1491823
+      },
+      "writtenOn": "2022-05-03T12:39:02Z",
+      "side": 1,
+      "message": "The parameter we pass into `eglCreateImage` is a pointer to `EGLAttrib` values, so so we would need an `EGLAttrPointer`, and since `EGLAttrib` is a typedef of `intptr_t` `TGLintptrConstPointer` would probably be a better choice than `TGLint64Pointer`, but it still relies on the typedef of `EGLAttrib`.",
+      "parentUuid": "92464b0d_1b05243f",
+      "range": {
+        "startLine": 3403,
+        "startChar": 0,
+        "endLine": 3405,
+        "endChar": 24
+      },
+      "revId": "1e29e76e0c9fbbcf4d1cbc70c92a90030ffd21dd",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "ed04e23b_6cd5a06d",
         "filename": "src/libANGLE/capture/FrameCapture.cpp",
         "patchSetId": 8
@@ -123,6 +171,30 @@
       "writtenOn": "2022-05-03T03:00:26Z",
       "side": 1,
       "message": "Yeah, if we can migrate CaptureReplayTests to use the same methods that TracePerfTests is using, that\u0027s cleaner.\n\nGert, if you look at `trace_angle::LoadEGL(TraceLoadProc);` in TracePerfTest.cpp and follow its definition, you\u0027ll see that it selectively reroutes calls to an internal implementation.  Calls not intercepted are just routed to the driver.  So we could create an onEGLGetDisplay similar to onEglMakeCurrent.  This probably requires migrating trace_egl_loader_autogen.cpp to CaptureReplayTests.",
+      "parentUuid": "ed04e23b_6cd5a06d",
+      "range": {
+        "startLine": 6856,
+        "startChar": 0,
+        "endLine": 6879,
+        "endChar": 5
+      },
+      "revId": "1e29e76e0c9fbbcf4d1cbc70c92a90030ffd21dd",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "0c24fdc4_ed49a3aa",
+        "filename": "src/libANGLE/capture/FrameCapture.cpp",
+        "patchSetId": 8
+      },
+      "lineNbr": 6879,
+      "author": {
+        "id": 1491823
+      },
+      "writtenOn": "2022-05-03T12:39:02Z",
+      "side": 1,
+      "message": "TBH, I don\u0027t see that multi-context is relevant here. The display exists independent of the contexts, at most we would have to care about the possibility that a multi-context application creates contexts with different displays, but I don\u0027t see that the CaptureReplayTests harness actually supports this, and I wonder whether it is actually relevant for the applications that we consider. \n\nRegarding the possibility to replay this on, e.g. WGL, does the test harness actually support this right now? As far as I can see it hard-codes `angle::GLESDriverType::AngleEGL`.\n\nWhen using, e.g., WGL we would also have to use calls into the test harness to handle eglCreateImage/eglDestroyImage, but a quick search didn\u0027t reveal anything that might be used to emulate this.",
       "parentUuid": "ed04e23b_6cd5a06d",
       "range": {
         "startLine": 6856,
