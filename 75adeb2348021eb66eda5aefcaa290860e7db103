@@ -87,6 +87,30 @@
       },
       "revId": "75adeb2348021eb66eda5aefcaa290860e7db103",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "3bd2cc32_10a9af7b",
+        "filename": "src/tests/gl_tests/FramebufferTest.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 822,
+      "author": {
+        "id": 1340649
+      },
+      "writtenOn": "2022-05-03T18:16:20Z",
+      "side": 1,
+      "message": "\u003e We could even start allocating texures -1, -2, -3 from the start if we wanted\n\nAck.\n\n\u003e So I recommend turning this into a handle allocator unit test, where we can validate the specific behaviour of the handle allocator.\n\nDone.",
+      "parentUuid": "2a9571ca_5a0c2431",
+      "range": {
+        "startLine": 796,
+        "startChar": 0,
+        "endLine": 822,
+        "endChar": 1
+      },
+      "revId": "75adeb2348021eb66eda5aefcaa290860e7db103",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
