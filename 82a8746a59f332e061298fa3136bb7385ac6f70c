@@ -87,6 +87,24 @@
       "parentUuid": "f29e1f1c_23dac52e",
       "revId": "82a8746a59f332e061298fa3136bb7385ac6f70c",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "7f8e4eea_ac72656a",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 59,
+      "author": {
+        "id": 1525982
+      },
+      "writtenOn": "2022-05-04T21:54:50Z",
+      "side": 1,
+      "message": "Data regarding the correlation between the loading time and the threshold (for asphalt_9): https://docs.google.com/spreadsheets/d/1WMspylLWCdDwvVVtHtwAg7mZjSqBa8jyil1WON9qdck\n\n(Please note the 4x coefficient for the threshold column. Some thresholds have more than one entry.)",
+      "parentUuid": "373e0316_3bb39432",
+      "revId": "82a8746a59f332e061298fa3136bb7385ac6f70c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
