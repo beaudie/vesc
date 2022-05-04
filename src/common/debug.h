@@ -32,6 +32,9 @@ typedef _Return_type_success_(return >= 0) long HRESULT;
 #if !defined(TRACE_OUTPUT_FILE)
 #    define TRACE_OUTPUT_FILE "angle_debug.txt"
 #endif
+#include <android/log.h>
+#define LOG_TAG "LAO"
+#define ALOG(...) __android_log_print(ANDROID_LOG_INFO, LOG_TAG, __VA_ARGS__)
 
 namespace gl
 {
