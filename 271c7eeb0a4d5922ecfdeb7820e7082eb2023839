@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "0c48e7c8_dedb0caa",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2022-05-04T14:12:15Z",
+      "side": 1,
+      "message": "LGTM, thanks Antonio M. Antonio C, FYI.",
+      "revId": "271c7eeb0a4d5922ecfdeb7820e7082eb2023839",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
