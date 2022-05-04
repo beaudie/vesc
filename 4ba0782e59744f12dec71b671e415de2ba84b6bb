@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "a7125667_b2735247",
+        "filename": "src/libANGLE/renderer/vulkan/linux/DmaBufImageSiblingVkLinux.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 589,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2022-05-04T15:22:04Z",
+      "side": 1,
+      "message": "nit: you can use ANGLE_VK_UNREACAHABLE",
+      "range": {
+        "startLine": 589,
+        "startChar": 4,
+        "endLine": 589,
+        "endChar": 61
+      },
+      "revId": "4ba0782e59744f12dec71b671e415de2ba84b6bb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
