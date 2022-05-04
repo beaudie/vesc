@@ -18,57 +18,16 @@ The following shorthand notations are used throughout this document:
 
 ## Introduction
 
-Vulkan requires the application (ANGLE in this case) to acquire swapchain images and queue them for
-presentation, synchronizing GPU submissions with semaphores.  A single frame looks like the
-following:
+Please review required background in [the frame pacing documentation][FramePacing].
 
-    CPU: ANI  ... QS   ... QP
-         S:S1     W:S1     W:S2
-                  S:S2
-    GPU:          <------------ R ----------->
-     PE:                                      <-------- P ------>
+As mentioned in the above documentation, ANGLE's frame pacing leads to the following behavior:
 
-That is, the GPU starts rendering after submission, and the presentation is started when rendering is
-finished.  Note that Vulkan tries to abstract a large variety of PE architectures, some of which do
-not behave in a straight-forward manner.  As such, ANGLE cannot know what the PE is exactly doing
-with the images or when the images are visible on the screen.  The only signal out of the PE is
-received through the semaphore that's used in ANI.
-
-With multiple frames, the pipeline looks different based on present mode.  Let's focus on
-FIFO (the arguments in this document translate to all modes) with 3 images:
-
-    CPU: QS QP QS QP QS QP QS QP
-         I1 I1 I2 I2 I3 I3 I1 I1
-    GPU: <---- R I1 ----><---- R I2 ----><---- R I3 ----><---- R I1 ---->
-     PE:                 <----- P I1 -----><----- P I2 -----><----- P I3 -----><----- P I1 ----->
-
-First, an issue is evident here.  The CPU is submitting jobs and queuing images for presentation
-faster than the GPU can render them or the PE can view them.  This can cause the length of the
-submit queue to grow indefinitely, resulting in larger and larger input lag.  In FIFO mode, the PE
-present queue also grows indefinitely.
-
-To address this issue, ANGLE paces the CPU such that the length of the submit queue is kept at a
-maximum of 1 image (i.e. submission with one image is being processed, and another one is in queue):
-
-    CPU: QS   QS          W:F1 QS         W:F2 QS
-         I1   I2               I3              I1
-         S:F1 S:F2             S:F3            S:F4
-    GPU: <---- R I1 ----><---- R I2 ----><---- R I3 ----><---- R I1 ---->
-
-> Note: Ideally, the length of the PE present queue should also be kept at a maximum of 1 (i.e. one
-> image being presented, and another in queue).  However, the Vulkan WSI extension doesn't provide
-> enough control to achieve this.  In heavy application, the length of the PE present queue is
-> probably 1 anyway (as the rendering time is almost as long as the frame (i.e. present time), in
-> which case pacing the submissions similarly paces the presentation).  In theory, in FIFO mode, the
-> length of the PE present queue is below n+2 where n is the number of swapchain images.
->
-> To understand why, imagine a FIFO swapchain with 1000 images and submissions that are
-> infinitesimally short.  In this case, the CPU pacing is effectively a no-op (as the GPU instantly
-> finishes jobs) for the first 1002 submissions.  The 1003rd submission waits for F1001 (which uses
-> I1).  However, the 1001st submission will not start until the PE switches to presenting I2 (at the
-> next V-Sync).  The CPU then waits for V-Sync before the 1003rd submission.  The CPU waits for one
-> V-Sync for every subsequent submission, keeping the length of the queue 1002.
-> [`VK_GOOGLE_display_timing`][DisplayTimingGOOGLE] is likely a solution to this problem.
+```
+CPU: ANI QS ANI QS       W:F1 ANI QS     W:F2 ANI QS
+     I1  I1 I2  I2            I3  I3          I1  I1
+         S:F1   S:F2              S:F3            S:F4
+GPU:     <---- R I1 ----><---- R I2 ----><---- R I3 ----><---- R I1 ---->
+```
 
 Associated with each QP operation is a semaphore signaled by the preceding QS and waited on by the
 PE before the image can be presented.  Currently, there's no feedback from Vulkan (See [internal
@@ -79,37 +38,43 @@ reuse) semaphores when they are provably unused.
 
 This document describes an approach for destroying semaphores that should work with all valid PE
 architectures, but will be described in terms of more common PE architectures (e.g. where the PE
-only backs each VkImage and VkSemaphore handle with one actual memory object, and where the PE
+only backs each `VkImage` and `VkSemaphore` handle with one actual memory object, and where the PE
 cycles between the swapchain images in a straight-forward manner).
 
 The interested reader may follow the discussion in this abandoned [gerrit CL][CL1757018] for more
 background and ideas.
 
-[DisplayTimingGOOGLE]: https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VK_GOOGLE_display_timing.html
+[FramePacing]: FramePacing.md
 [VulkanIssue1060]: https://gitlab.khronos.org/vulkan/vulkan/issues/1060
 [CL1757018]: https://chromium-review.googlesource.com/c/angle/angle/+/1757018
 
 ## Determining When a QP Semaphore is Waited On
 
-Let's combine the above diagrams with all the details:
+Let's combine the diagrams in [the frame pacing documentation][FramePacing] with all the details:
 
-    CPU: ANI   | QS    | QP    | ANI   | QS    | QP    | ANI   | W:F1 | QS    | QP    | ANI   | W:F2 | QS    | QP
-         I1    | I1    | I1    | I2    | I2    | I2    | I3    |      | I3    | I3    | I1    |      | I1    | I1
-         S:SA1 | W:SA1 |       | S:SA2 | W:SA2 |       | S:SA3 |      | W:SA3 |       | S:SA4 |      | W:SA4 |
-               | S:SP1 | W:SP1 |       | S:SP2 | W:SP2 |       |      | S:SP3 | W:SP3 |       |      | S:SP4 | W:SP4
-               | S:F1  |       |       | S:F2  |       |       |      | S:F3  |       |       |      | S:F4  |
+    CPU: ANI   | QS    | QP    | ANI   | QS    | QP    | W:F1 | ANI   | QS    | QP    | W:F2 | ANI   | QS    | QP    | W:F3
+         I1    | I1    | I1    | I2    | I2    | I2    |      | I3    | I3    | I3    |      | I1    | I1    | I1    |
+         S:SA1 | W:SA1 |       | S:SA2 | W:SA2 |       |      | S:SA3 | W:SA3 |       |      | S:SA4 | W:SA4 |       |
+               | S:SP1 | W:SP1 |       | S:SP2 | W:SP2 |      |       | S:SP3 | W:SP3 |      |       | S:SP4 | W:SP4 |
+               | S:F1  |       |       | S:F2  |       |      |       | S:F3  |       |      |       | S:F4  |       |
+         \_________ ___________/\______________ ______________/\______________ ______________/\______________ ____________/
+                   V                           V                              V                              V
+                Frame 1                     Frame 2                        Frame 3                        Frame 4
 
 Let's focus only on sequences that return the same image:
 
-    CPU: ANI   | W:F(X-2) | QS    | QP    | ... | ANI   | W:F(Y-2) | QS    | QP
-         I1    |          | I1    | I1    |     | I1    |          | I1    | I1
-         S:SAX |          | W:SAX |       |     | S:SAY |          | W:SAY |
-               |          | S:SPX | W:SPX |     |       |          | S:SPY | W:SPY
-               |          | S:FX  |       |     |       |          | S:FY  |
+    CPU: ANI   | QS    | QP    | W:F(X-1) | ... | ANI   | QS    | QP    | W:F(Y-1) | ANI | QS | QP | W:FY
+         I1    | I1    | I1    |          |     | I1    | I1    | I1    |          | I?  | I? | I? |
+         S:SAX | W:SAX |       |          |     | S:SAY | W:SAY |       |          |     |    |    |
+               | S:SPX | W:SPX |          |     |       | S:SPY | W:SPY |          |     |    |    |
+               | S:FX  |       |          |     |       | S:FY  |       |          |     |    |    |
+         \_______________ ________________/     \__________________ _______________/\_________ _________/
+                         V                                         V                          V
+                      Frame X                                   Frame Y                   Frame Y+1
 
 Note that X and Y are arbitrarily distanced (including possibly being sequential).
 
-Say we are at frame Y+2.  There's therefore a wait on FY.  The following holds:
+Say we are at frame Y+1.  There's therefore a wait on FY.  The following holds:
 
     FY is signaled
     => SAY is signaled
@@ -117,20 +82,22 @@ Say we are at frame Y+2.  There's therefore a wait on FY.  The following holds:
     => The PE has already processed the *previous* QP of I1
     => SPX is waited on
 
-At this point, we can destroy SPX.  In other words, in frame Y+2, we can destroy SPX (note that 2 is
+At this point, we can destroy SPX.  In other words, in frame Y+1, we can destroy SPX (note that 1 is
 the number of frames the CPU pacing code uses).  If frame Y+1 is not using I1, this means the
-history of present semaphores for I1 would be `{SPX, SPY}` and we can destroy the oldest semaphore
-in this list.  If frame Y+1 is also using I1, we should still destroy SPX in frame Y+2, but the
-history of the present semaphores for I1 would be `{SPX, SPY, SP(Y+1)}`.
+history of present semaphores for I1 would be `{SPX, SPY}` and we can destroy the oldest
+semaphore in this list.  If frame Y+1 is also using I1, we should still destroy SPX, but the history
+of the present semaphores for I1 would be `{SPX, SPY, SP(Y+1)}`.
 
-In the Vulkan backend, we simplify destruction of semaphores by always keeping a history of 3
-present semaphores for each image (again, 3 is H+1 where H is the swap history size used in CPU
-pacing) and always reuse (instead of destroy) the oldest semaphore of the image that is about to be
-presented.
+We simplify destruction of semaphores by always keeping a history of 3 present semaphores for each
+image (3 is H+2 where H is the swap history size used in CPU pacing) and always reuse (instead of
+destroy) the oldest semaphore of the image that is about to be presented.
 
 To summarize, we use the completion of a submission using an image to prove when the semaphore used
 for the *previous* presentation of that image is no longer in use (and can be safely destroyed or
 reused).
+
+> Note: ANI is also able to signal a fence.  It may be possible to take advantage of this fence as
+> well.  This avenue has not yet been explored.
 
 ## Swapchain recreation
 
@@ -149,12 +116,12 @@ as there won't be any more submissions using images from the old swapchain.
 ANGLE resolves this issue by deferring the destruction of the old swapchain and its remaining
 present semaphores to the time when the semaphore corresponding to the first present of the new
 swapchain can be destroyed.  In the example in the previous section, if SPX is the present semaphore
-of the first QP performed on the new swapchain, at frame Y+2, when we know SPX can be destroyed, we
+of the first QP performed on the new swapchain, at frame Y+1, when we know SPX can be destroyed, we
 know that the first image of the new swapchain has already been presented.  This proves that all
 previous QPs of the old swapchain have been processed.
 
 > Note: the swapchain can potentially be destroyed much earlier, but with no feedback from the
-> presentation engine, we cannot know that.  This delays means that the swapchain could be recreated
+> presentation engine, we cannot know that.  This delay means that the swapchain could be recreated
 > while there are pending old swapchains to be destroyed.  The destruction of both old swapchains
 > must now be deferred to when the first QP of the new swapchain has been processed.  If an
 > application resizes the window constantly and at a high rate, ANGLE would keep accumulating old

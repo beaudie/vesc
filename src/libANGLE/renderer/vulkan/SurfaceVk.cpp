@@ -1140,10 +1140,12 @@ angle::Result WindowSurfaceVk::recreateSwapchain(ContextVk *contextVk, const gl:
         {
             for (ImagePresentHistory &presentHistory : swapchainImage.presentHistory)
             {
-                ASSERT(presentHistory.semaphore.valid());
                 ASSERT(presentHistory.oldSwapchains.empty());
 
-                mPresentSemaphoreRecycler.recycle(std::move(presentHistory.semaphore));
+                if (presentHistory.semaphore.valid())
+                {
+                    mPresentSemaphoreRecycler.recycle(std::move(presentHistory.semaphore));
+                }
             }
         }
     }
@@ -1159,8 +1161,10 @@ angle::Result WindowSurfaceVk::recreateSwapchain(ContextVk *contextVk, const gl:
         {
             for (ImagePresentHistory &presentHistory : swapchainImage.presentHistory)
             {
-                ASSERT(presentHistory.semaphore.valid());
-                cleanupData.semaphores.emplace_back(std::move(presentHistory.semaphore));
+                if (presentHistory.semaphore.valid())
+                {
+                    cleanupData.semaphores.emplace_back(std::move(presentHistory.semaphore));
+                }
 
                 // Accumulate any previous swapchains that are pending destruction too.
                 for (SwapchainCleanupData &oldSwapchain : presentHistory.oldSwapchains)
@@ -1264,7 +1268,6 @@ angle::Result WindowSurfaceVk::resizeSwapchainImages(vk::Context *context, uint3
         for (ImagePresentHistory &presentHistory : swapchainImage.presentHistory)
         {
             ASSERT(!presentHistory.semaphore.valid());
-            ANGLE_TRY(newPresentSemaphore(context, &presentHistory.semaphore));
         }
     }
 
@@ -1586,9 +1589,11 @@ void WindowSurfaceVk::destroySwapChainImages(DisplayVk *displayVk)
 
         for (ImagePresentHistory &presentHistory : swapchainImage.presentHistory)
         {
-            ASSERT(presentHistory.semaphore.valid());
+            if (presentHistory.semaphore.valid())
+            {
+                mPresentSemaphoreRecycler.recycle(std::move(presentHistory.semaphore));
+            }
 
-            mPresentSemaphoreRecycler.recycle(std::move(presentHistory.semaphore));
             for (SwapchainCleanupData &oldSwapchain : presentHistory.oldSwapchains)
             {
                 oldSwapchain.destroy(device, &mPresentSemaphoreRecycler);
@@ -1712,15 +1717,6 @@ angle::Result WindowSurfaceVk::present(ContextVk *contextVk,
     ANGLE_TRACE_EVENT0("gpu.angle", "WindowSurfaceVk::present");
     RendererVk *renderer = contextVk->getRenderer();
 
-    // Throttle the submissions to avoid getting too far ahead of the GPU.
-    Serial *swapSerial = &mSwapHistory.front();
-    mSwapHistory.next();
-
-    {
-        ANGLE_TRACE_EVENT0("gpu.angle", "WindowSurfaceVk::present: Throttle CPU");
-        ANGLE_TRY(renderer->finishToSerial(contextVk, *swapSerial));
-    }
-
     SwapchainImage &image               = mSwapchainImages[mCurrentSwapchainImageIndex];
     vk::Framebuffer &currentFramebuffer = chooseFramebuffer(SwapchainResolveMode::Disabled);
 
@@ -1776,39 +1772,22 @@ angle::Result WindowSurfaceVk::present(ContextVk *contextVk,
     image.image.recordReadBarrier(contextVk, VK_IMAGE_ASPECT_COLOR_BIT, vk::ImageLayout::Present,
                                   commandBuffer);
 
-    // Knowing that the kSwapHistorySize'th submission ago has finished, we can know that the
-    // (kSwapHistorySize+1)'th present ago of this image is definitely finished and so its wait
-    // semaphore can be reused.  See doc/PresentSemaphores.md for details.
-    //
-    // This also means the swapchain(s) scheduled to be deleted at the same time can be deleted.
-    ImagePresentHistory &presentHistory = image.presentHistory.front();
-    image.presentHistory.next();
-
-    vk::Semaphore *presentSemaphore = &presentHistory.semaphore;
-    ASSERT(presentSemaphore->valid());
-
-    for (SwapchainCleanupData &oldSwapchain : presentHistory.oldSwapchains)
-    {
-        oldSwapchain.destroy(contextVk->getDevice(), &mPresentSemaphoreRecycler);
-    }
-    presentHistory.oldSwapchains.clear();
-
-    // Schedule pending old swapchains to be destroyed at the same time the semaphore for this
-    // present can be destroyed.
-    presentHistory.oldSwapchains = std::move(mOldSwapchains);
-
     // The overlay is drawn after this.  This ensures that drawing the overlay does not interfere
     // with other functionality, especially counters used to validate said functionality.
     const bool shouldDrawOverlay = overlayHasEnabledWidget(contextVk);
 
-    ANGLE_TRY(contextVk->flushAndGetSerial(shouldDrawOverlay ? nullptr : presentSemaphore,
-                                           swapSerial, RenderPassClosureReason::EGLSwapBuffers));
+    vk::Semaphore presentSemaphore;
+    ANGLE_TRY(newPresentSemaphore(contextVk, &presentSemaphore));
+
+    Serial swapSerial;
+    ANGLE_TRY(contextVk->flushAndGetSerial(shouldDrawOverlay ? nullptr : &presentSemaphore,
+                                           &swapSerial, RenderPassClosureReason::EGLSwapBuffers));
 
     if (shouldDrawOverlay)
     {
         updateOverlay(contextVk);
         ANGLE_TRY(drawOverlay(contextVk, &image));
-        ANGLE_TRY(contextVk->flushAndGetSerial(presentSemaphore, swapSerial,
+        ANGLE_TRY(contextVk->flushAndGetSerial(&presentSemaphore, &swapSerial,
                                                RenderPassClosureReason::AlreadySpecifiedElsewhere));
     }
 
@@ -1816,7 +1795,7 @@ angle::Result WindowSurfaceVk::present(ContextVk *contextVk,
     presentInfo.sType              = VK_STRUCTURE_TYPE_PRESENT_INFO_KHR;
     presentInfo.pNext              = pNextChain;
     presentInfo.waitSemaphoreCount = 1;
-    presentInfo.pWaitSemaphores    = presentSemaphore->ptr();
+    presentInfo.pWaitSemaphores    = presentSemaphore.ptr();
     presentInfo.swapchainCount     = 1;
     presentInfo.pSwapchains        = &mSwapchain;
     presentInfo.pImageIndices      = &mCurrentSwapchainImageIndex;
@@ -1854,11 +1833,65 @@ angle::Result WindowSurfaceVk::present(ContextVk *contextVk,
     VkResult result = renderer->queuePresent(contextVk, contextVk->getPriority(), presentInfo);
 
     // Set FrameNumber for the presented image.
-    mSwapchainImages[mCurrentSwapchainImageIndex].mFrameNumber = mFrameCount++;
+    image.mFrameNumber = mFrameCount++;
 
     ANGLE_TRY(computePresentOutOfDate(contextVk, result, presentOutOfDate));
 
+    // Throttle the submissions to avoid getting too far ahead of the GPU.
+    ANGLE_TRY(throttleCPU(contextVk, swapSerial, std::move(presentSemaphore)));
+
     contextVk->resetPerFramePerfCounters();
+
+    // Make sure that mCurrentSwapchainImageIndex hasn't changed.  Various helper functions called
+    // in this function assume this.
+    ASSERT(&image == &mSwapchainImages[mCurrentSwapchainImageIndex]);
+
+    return angle::Result::Continue;
+}
+
+angle::Result WindowSurfaceVk::throttleCPU(ContextVk *contextVk,
+                                           Serial currentSubmitSerial,
+                                           vk::Semaphore &&currentPresentSemaphore)
+{
+    RendererVk *renderer = contextVk->getRenderer();
+
+    // Wait on the oldest serial and replace it with the newest as the circular buffer moves
+    // forward.
+    Serial previousSubmitSerial = mSwapHistory.front();
+    mSwapHistory.front()        = currentSubmitSerial;
+    mSwapHistory.next();
+
+    {
+        ANGLE_TRACE_EVENT0("gpu.angle", "WindowSurfaceVk::throttleCPU");
+        ANGLE_TRY(renderer->finishToSerial(contextVk, previousSubmitSerial));
+    }
+
+    // Knowing that the kSwapHistorySize'th submission ago has finished, we can know that the
+    // (kSwapHistorySize+2)'th present ago of this image is definitely finished and so its wait
+    // semaphore can be reused.  See doc/PresentSemaphores.md for details.
+    //
+    // This also means the swapchain(s) scheduled to be deleted at the same time can be deleted.
+    SwapchainImage &image               = mSwapchainImages[mCurrentSwapchainImageIndex];
+    ImagePresentHistory &presentHistory = image.presentHistory.front();
+    image.presentHistory.next();
+
+    // Recycle the oldest present semaphore and replace it with the newest as the circular buffer
+    // moves forward.
+    if (presentHistory.semaphore.valid())
+    {
+        mPresentSemaphoreRecycler.recycle(std::move(presentHistory.semaphore));
+    }
+    presentHistory.semaphore = std::move(currentPresentSemaphore);
+
+    for (SwapchainCleanupData &oldSwapchain : presentHistory.oldSwapchains)
+    {
+        oldSwapchain.destroy(contextVk->getDevice(), &mPresentSemaphoreRecycler);
+    }
+    presentHistory.oldSwapchains.clear();
+
+    // Schedule pending old swapchains to be destroyed at the same time the semaphore for this
+    // present can be destroyed.
+    presentHistory.oldSwapchains = std::move(mOldSwapchains);
 
     return angle::Result::Continue;
 }
