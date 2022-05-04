@@ -22,6 +22,30 @@
       },
       "revId": "0296ccf44d3bf051441684597726ffb2801f2606",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "0e538b5f_8a6e6517",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.h",
+        "patchSetId": 11
+      },
+      "lineNbr": 335,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2022-05-04T23:20:00Z",
+      "side": 1,
+      "message": "You mean implementation move to cpp file? I guess it was here so that it can inline for performance reason. I don\u0027t have strong oppinion on this, but prefer not change it with my CL.",
+      "parentUuid": "f6a64772_64c00b55",
+      "range": {
+        "startLine": 335,
+        "startChar": 9,
+        "endLine": 335,
+        "endChar": 36
+      },
+      "revId": "0296ccf44d3bf051441684597726ffb2801f2606",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
