@@ -69,6 +69,24 @@
       "parentUuid": "b387c66f_31da01d9",
       "revId": "82a8746a59f332e061298fa3136bb7385ac6f70c",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "373e0316_3bb39432",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 59,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2022-05-04T20:29:47Z",
+      "side": 1,
+      "message": "We can add a CPU time measurement for the very first frame and run all traces to see what is the delta.",
+      "parentUuid": "f29e1f1c_23dac52e",
+      "revId": "82a8746a59f332e061298fa3136bb7385ac6f70c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
