@@ -51,6 +51,24 @@
       "parentUuid": "35352462_90b8c4e9",
       "revId": "82a8746a59f332e061298fa3136bb7385ac6f70c",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "f29e1f1c_23dac52e",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 59,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-05-04T18:34:36Z",
+      "side": 1,
+      "message": "Ok, the point was really just the increased loading time due to increased submissions. I realize there\u0027s a trade-off here. Lowering memory usage is great, but if the device has a lot of memory, would the user prefer lower memory, or a short high peak memory but faster load time?\n\nThe `isLowMemoryDevice` feature bit would allow us to choose one or the other, including the user overriding it in the dashboard.\n\n@Amirali, do you still have data on the correlation between loading time and this value? Can you share it please?\n\n@Mohan, FYI regarding this change.",
+      "parentUuid": "b387c66f_31da01d9",
+      "revId": "82a8746a59f332e061298fa3136bb7385ac6f70c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
