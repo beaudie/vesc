@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "841b9fe2_777b1b65",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-05-04T02:23:32Z",
+      "side": 1,
+      "message": "🚗",
+      "revId": "82a8746a59f332e061298fa3136bb7385ac6f70c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "35352462_90b8c4e9",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 59,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-05-04T02:23:32Z",
+      "side": 1,
+      "message": "This value was not totally arbitrary. Amirali found 256MB to be the best for P6 where the GPU would finish just as the CPU was ready to submit another batch. Coincidentally, Mohan\u0027s team also settled on 300MB independently.\n\nI think what we really need here is a configurable value, that could at least initially be controlled by a feature such as `isLowMemoryDevice` (initialized by a basic query of the available memory). Then you can keep the optimal-for-speed value for higher end devices and use a more conservative value for the low end.",
+      "revId": "82a8746a59f332e061298fa3136bb7385ac6f70c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
