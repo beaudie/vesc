@@ -123,7 +123,7 @@ class OffscreenSurfaceVk : public SurfaceVk
 // Data structures used in WindowSurfaceVk
 namespace impl
 {
-static constexpr size_t kSwapHistorySize = 2;
+static constexpr size_t kSwapHistorySize = 1;
 
 // Old swapchain and associated present semaphores that need to be scheduled for destruction when
 // appropriate.
@@ -174,7 +174,7 @@ struct SwapchainImage : angle::NonCopyable
     vk::Framebuffer framebufferResolveMS;
 
     // A circular array of semaphores used for presenting this image.
-    static constexpr size_t kPresentHistorySize = kSwapHistorySize + 1;
+    static constexpr size_t kPresentHistorySize = kSwapHistorySize + 2;
     angle::CircularBuffer<ImagePresentHistory, kPresentHistorySize> presentHistory;
     uint64_t mFrameNumber = 0;
 };
@@ -335,6 +335,13 @@ class WindowSurfaceVk : public SurfaceVk
                           const void *pNextChain,
                           bool *presentOutOfDate);
 
+    // Throttle the CPU such that application's logic and command buffer recording doesn't get more
+    // than one frame ahead of the frame being rendered (and two frames ahead of the one being
+    // presented).
+    angle::Result throttleCPU(ContextVk *contextVk,
+                              Serial currentSubmitSerial,
+                              vk::Semaphore &&currentPresentSemaphore);
+
     void updateOverlay(ContextVk *contextVk) const;
     bool overlayHasEnabledWidget(ContextVk *contextVk) const;
     angle::Result drawOverlay(ContextVk *contextVk, impl::SwapchainImage *image) const;
@@ -377,21 +384,20 @@ class WindowSurfaceVk : public SurfaceVk
     // number of semaphores that are used to acquire swapchain images, and that is
     // kSwapHistorySize+1:
     //
-    //                    Unrelated submission in      Submission as part of
-    //                      the middle of frame            buffer swap
-    //                               |                          |
-    //                               V                          V
-    //     Frame i:     ... ANI ... QS (fence Fa) ... Wait(..) QS (Fence Fb) QP
-    //     Frame i+1:   ... ANI ... QS (fence Fc) ... Wait(..) QS (Fence Fd) QP
-    //     Frame i+2:   ... ANI ... QS (fence Fe) ... Wait(Fb) QS (Fence Ff) QP
-    //                                                 ^
-    //                                                 |
-    //                                          CPU throttling
+    //             Unrelated submission in     Submission as part of
+    //               the middle of frame          buffer swap
+    //                              |                 |
+    //                              V                 V
+    //     Frame i:     ... ANI ... QS (fence Fa) ... QS (Fence Fb) QP Wait(..)
+    //     Frame i+1:   ... ANI ... QS (fence Fe) ... QS (Fence Ff) QP Wait(Fb)
+    //                                                                  ^
+    //                                                                  |
+    //                                                            CPU throttling
     //
-    // In frame i+2 (2 is kSwapHistorySize), ANGLE waits on fence Fb which means that the semaphore
+    // In frame i+1 (1 is kSwapHistorySize), ANGLE waits on fence Fb which means that the semaphore
     // used for Frame i's ANI can be reused (because Fb-is-signalled implies Fa-is-signalled).
-    // Before this wait, there were three acquire semaphores in use corresponding to frames i, i+1
-    // and i+2.  Frame i+3 can reuse the semaphore of frame i.
+    // Before this wait, there were two acquire semaphores in use corresponding to frames i and i+1.
+    // Frame i+2 can reuse the semaphore of frame i.
     angle::CircularBuffer<vk::Semaphore, impl::kSwapHistorySize + 1> mAcquireImageSemaphores;
     // A pointer to mAcquireImageSemaphores.  This is set when an image is acquired and is waited on
     // by the next submission (which uses this image), at which point it is reset so future
