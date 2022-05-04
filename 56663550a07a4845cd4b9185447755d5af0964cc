@@ -75,6 +75,54 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "44929029_fec6cebf",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 32
+      },
+      "lineNbr": 7220,
+      "author": {
+        "id": 1524687
+      },
+      "writtenOn": "2022-05-04T08:15:24Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "44c68afe_fdb76c8f",
+      "range": {
+        "startLine": 7218,
+        "startChar": 0,
+        "endLine": 7220,
+        "endChar": 19
+      },
+      "revId": "56663550a07a4845cd4b9185447755d5af0964cc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "4ef7dada_4fa4d63d",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 32
+      },
+      "lineNbr": 7220,
+      "author": {
+        "id": 1524687
+      },
+      "writtenOn": "2022-05-04T08:15:24Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "44c68afe_fdb76c8f",
+      "range": {
+        "startLine": 7218,
+        "startChar": 0,
+        "endLine": 7220,
+        "endChar": 19
+      },
+      "revId": "56663550a07a4845cd4b9185447755d5af0964cc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "fd5a34dc_eb084891",
@@ -88,6 +136,30 @@
       "writtenOn": "2022-05-02T15:50:07Z",
       "side": 1,
       "message": "This feels like it can break the render pass unnecessarily. What happens in this scenario?\n\n- FS sample from texture A\n- CS load from image A\n- FS something else (that doesn\u0027t access A)\n\nI\u0027d expect the CS call to be reordered before the first FS call, and there would be only one render pass. Could you please write a test in `VulkenPerformanceCounterTest.cpp` and verify that only one render pass is issued in that case?\n\nShould this at least check `IsRenderPassStartedAndTransitionsImageLayout` instead? The above test may still not pass (because first usage of `A` incurs a layout transition). Not sure the best way to handle it, but adding an `FS sample from texture A; glReadPixels` before the test could ensure there is no layout transition for the interesting part of the test at least.\n\nPlease add both variants of the test (i.e. one as outline above, and one with an initial FS-sample+glReadPixels that primes the test). If the former is not optimized, at least we have a test exposing it, and we could potentially defer it to another time.",
+      "range": {
+        "startLine": 7241,
+        "startChar": 16,
+        "endLine": 7241,
+        "endChar": 47
+      },
+      "revId": "56663550a07a4845cd4b9185447755d5af0964cc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "f7d6058a_1d62fddb",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 32
+      },
+      "lineNbr": 7241,
+      "author": {
+        "id": 1524687
+      },
+      "writtenOn": "2022-05-04T08:15:24Z",
+      "side": 1,
+      "message": "Thanks for the further discussion.\nYes, it is better to use IsRenderPassStartedAndTransitionsImageLayout to check the image load case here.\n\nI\u0027ve added two extra tests to verify the FS sample + CS load scenario with or without glReadPixels before do the test:\n1, The former case named as DrawDispatchImageReadDrawWithEndRP, the renderpass will be closed before dispatch. We can change the expected renderpass count if the optimized finished.\n2, The other named as DrawDispatchImageReadDrawWithoutEndRP, the following FS sample + CS image load + FS something else shares one renderpass after readpixels.",
+      "parentUuid": "fd5a34dc_eb084891",
       "range": {
         "startLine": 7241,
         "startChar": 16,
@@ -121,6 +193,54 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "b819d525_1da7ce06",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.h",
+        "patchSetId": 32
+      },
+      "lineNbr": 2427,
+      "author": {
+        "id": 1524687
+      },
+      "writtenOn": "2022-05-04T08:15:24Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "b265da3c_dc78dba7",
+      "range": {
+        "startLine": 2427,
+        "startChar": 49,
+        "endLine": 2427,
+        "endChar": 50
+      },
+      "revId": "56663550a07a4845cd4b9185447755d5af0964cc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "3d56b0da_421e13e0",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.h",
+        "patchSetId": 32
+      },
+      "lineNbr": 2427,
+      "author": {
+        "id": 1524687
+      },
+      "writtenOn": "2022-05-04T08:15:24Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "b265da3c_dc78dba7",
+      "range": {
+        "startLine": 2427,
+        "startChar": 49,
+        "endLine": 2427,
+        "endChar": 50
+      },
+      "revId": "56663550a07a4845cd4b9185447755d5af0964cc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "dfdc04f7_4b139c45",
@@ -134,6 +254,54 @@
       "writtenOn": "2022-05-02T13:44:06Z",
       "side": 1,
       "message": "minor nit: please add a comment before each new test.",
+      "range": {
+        "startLine": 4866,
+        "startChar": 0,
+        "endLine": 4866,
+        "endChar": 6
+      },
+      "revId": "56663550a07a4845cd4b9185447755d5af0964cc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "ad2cee22_67025fbd",
+        "filename": "src/tests/gl_tests/ComputeShaderTest.cpp",
+        "patchSetId": 32
+      },
+      "lineNbr": 4866,
+      "author": {
+        "id": 1524687
+      },
+      "writtenOn": "2022-05-04T08:15:24Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "dfdc04f7_4b139c45",
+      "range": {
+        "startLine": 4866,
+        "startChar": 0,
+        "endLine": 4866,
+        "endChar": 6
+      },
+      "revId": "56663550a07a4845cd4b9185447755d5af0964cc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "465b3f6c_4ecdb801",
+        "filename": "src/tests/gl_tests/ComputeShaderTest.cpp",
+        "patchSetId": 32
+      },
+      "lineNbr": 4866,
+      "author": {
+        "id": 1524687
+      },
+      "writtenOn": "2022-05-04T08:15:24Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "dfdc04f7_4b139c45",
       "range": {
         "startLine": 4866,
         "startChar": 0,
@@ -161,6 +329,42 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "f3c6e6e3_c6ac24aa",
+        "filename": "src/tests/gl_tests/ComputeShaderTest.cpp",
+        "patchSetId": 32
+      },
+      "lineNbr": 4895,
+      "author": {
+        "id": 1524687
+      },
+      "writtenOn": "2022-05-04T08:15:24Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "56859daf_e9527ff4",
+      "revId": "56663550a07a4845cd4b9185447755d5af0964cc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "ea6b9d8b_995cf24d",
+        "filename": "src/tests/gl_tests/ComputeShaderTest.cpp",
+        "patchSetId": 32
+      },
+      "lineNbr": 4895,
+      "author": {
+        "id": 1524687
+      },
+      "writtenOn": "2022-05-04T08:15:24Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "56859daf_e9527ff4",
+      "revId": "56663550a07a4845cd4b9185447755d5af0964cc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "303d7ddd_68429750",
@@ -174,6 +378,54 @@
       "writtenOn": "2022-05-02T13:44:06Z",
       "side": 1,
       "message": "small nit: missing space between } and TEST, also please add a one-line comment before each new test",
+      "range": {
+        "startLine": 4458,
+        "startChar": 0,
+        "endLine": 4458,
+        "endChar": 6
+      },
+      "revId": "56663550a07a4845cd4b9185447755d5af0964cc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "df162845_0f5e1f00",
+        "filename": "src/tests/gl_tests/VulkanPerformanceCounterTest.cpp",
+        "patchSetId": 32
+      },
+      "lineNbr": 4458,
+      "author": {
+        "id": 1524687
+      },
+      "writtenOn": "2022-05-04T08:15:24Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "303d7ddd_68429750",
+      "range": {
+        "startLine": 4458,
+        "startChar": 0,
+        "endLine": 4458,
+        "endChar": 6
+      },
+      "revId": "56663550a07a4845cd4b9185447755d5af0964cc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "a3920baf_fddd17f8",
+        "filename": "src/tests/gl_tests/VulkanPerformanceCounterTest.cpp",
+        "patchSetId": 32
+      },
+      "lineNbr": 4458,
+      "author": {
+        "id": 1524687
+      },
+      "writtenOn": "2022-05-04T08:15:24Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "303d7ddd_68429750",
       "range": {
         "startLine": 4458,
         "startChar": 0,
