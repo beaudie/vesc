@@ -1099,6 +1099,10 @@ void ANGLERenderTest::step()
         uint64_t processMemoryUsageKB = GetProcessMemoryUsageKB();
         if (processMemoryUsageKB)
         {
+            if (mProcessMemoryUsageKBSamples.size() < 16)
+            {
+                ALOG("\t processMemoryUsed: %lu", processMemoryUsageKB);
+            }
             mProcessMemoryUsageKBSamples.push_back(processMemoryUsageKB);
         }
     }
