@@ -1188,6 +1188,9 @@ angle::Result CommandQueue::submitFrame(
     while (suballocationGarbageSize > kMaxBufferSuballocationGarbageSize &&
            mInFlightCommands.size() > 1)
     {
+        // Wait for 1ms before check again
+        ALOG("sleeping for garbage to be destroyed. garbage:%llu, commandBuffer:%u",
+             (unsigned long long)suballocationGarbageSize, (uint32_t)mInFlightCommands.size());
         Serial finishSerial = mInFlightCommands.back().serial;
         ANGLE_TRY(finishToSerial(context, finishSerial, renderer->getMaxFenceWaitTimeNs()));
         suballocationGarbageSize = renderer->getSuballocationGarbageSize();
