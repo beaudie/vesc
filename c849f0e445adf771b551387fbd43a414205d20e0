@@ -138,6 +138,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "7c340d7f_ab2d0f53",
+        "filename": "src/libANGLE/renderer/vulkan/linux/gbm/SurfaceVkGbm.cpp",
+        "patchSetId": 8
+      },
+      "lineNbr": 309,
+      "author": {
+        "id": 1528827
+      },
+      "writtenOn": "2022-05-04T13:03:09Z",
+      "side": 1,
+      "message": "I am not 100% sure how the MS image is resolved in `ContextVk::optimizeRenderPassForPresent()`, but I only manage to get it working by resolving the MS image with the transfer at the end of `WindowSurfaceVk::present()`.",
+      "parentUuid": "0bebdbb7_aed350f8",
+      "revId": "c849f0e445adf771b551387fbd43a414205d20e0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "d454b93d_38c19752",
         "filename": "src/libANGLE/renderer/vulkan/linux/gbm/SurfaceVkGbm.h",
         "patchSetId": 8
