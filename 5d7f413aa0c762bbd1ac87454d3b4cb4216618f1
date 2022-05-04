@@ -105,6 +105,24 @@
       "parentUuid": "994bf5d7_c3402668",
       "revId": "5d7f413aa0c762bbd1ac87454d3b4cb4216618f1",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "f803afde_8e62c414",
+        "filename": "src/tests/capture_replay_tests/capture_replay_expectations.txt",
+        "patchSetId": 6
+      },
+      "lineNbr": 59,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2022-05-04T15:36:26Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "beee5fbf_54ad59a1",
+      "revId": "5d7f413aa0c762bbd1ac87454d3b4cb4216618f1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
