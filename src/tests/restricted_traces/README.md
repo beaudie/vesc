@@ -263,6 +263,10 @@ someone listed in the `OWNERS` file.
 ./sync_restricted_traces_to_cipd.py
 ```
 
+Please kindly go over the trace content with ANGLE code owners before uploading
+it to the CIPD. We cannot delete trace files once they are up on the CIPD.
+Doing an additional round of content check can help us save CIPD resources.
+
 ## Upload your CL
 
 Ensure your current working directory is up-to-date, and upload:
