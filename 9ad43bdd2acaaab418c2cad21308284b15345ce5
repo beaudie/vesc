@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "cea97fc0_c1a3ae73",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1116015
+      },
+      "writtenOn": "2022-05-04T14:09:37Z",
+      "side": 1,
+      "message": "I suspect this change broke the ANGLE roll into Dawn:\n\n../../third_party/angle/src/libANGLE/renderer/vulkan/linux/wayland/DisplayVkWayland.cpp:85:12: error: use of undeclared identifier \u0027VK_KHR_WAYLAND_SURFACE_EXTENSION_NAME\u0027\n    return VK_KHR_WAYLAND_SURFACE_EXTENSION_NAME;\n           ^\n1 error generated.\n\nhttps://logs.chromium.org/logs/dawn/buildbucket/cr-buildbucket/8815089081731145505/+/u/compile_with_ninja/stdout",
+      "revId": "9ad43bdd2acaaab418c2cad21308284b15345ce5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
