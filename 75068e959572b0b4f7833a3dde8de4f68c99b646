@@ -16,6 +16,24 @@
       "message": "you can drop the sleep now that there\u0027s a `finishToSerial`.",
       "revId": "75068e959572b0b4f7833a3dde8de4f68c99b646",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "c373fb02_b6aedd5d",
+        "filename": "src/libANGLE/renderer/vulkan/CommandProcessor.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 1192,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2022-05-04T20:23:30Z",
+      "side": 1,
+      "message": "Thanks for remind. I almost forgot the finishToSerial is already waiting in the driver. Done.",
+      "parentUuid": "7ea195f6_a0ea121b",
+      "revId": "75068e959572b0b4f7833a3dde8de4f68c99b646",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
