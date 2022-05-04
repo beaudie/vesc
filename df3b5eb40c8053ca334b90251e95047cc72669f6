@@ -16,6 +16,23 @@
       "message": "I consider my sins cleansed",
       "revId": "df3b5eb40c8053ca334b90251e95047cc72669f6",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "1c3f4a8a_d344d7b9",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2022-05-04T12:45:50Z",
+      "side": 1,
+      "message": "tyvm!",
+      "revId": "df3b5eb40c8053ca334b90251e95047cc72669f6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
