@@ -1352,7 +1352,7 @@ angle::Result TextureVk::setStorageExternalMemory(const gl::Context *context,
     }
 
     gl::Format glFormat(internalFormat);
-    ANGLE_TRY(initImageViews(contextVk, glFormat.info->sized, static_cast<uint32_t>(levels),
+    ANGLE_TRY(initImageViews(contextVk, glFormat.info->sized, getImageViewLevelCount(),
                              getImageViewLayerCount()));
 
     return angle::Result::Continue;
@@ -2284,7 +2284,8 @@ angle::Result TextureVk::bindTexImage(const gl::Context *context, egl::Surface *
                    gl::TextureType::InvalidEnum, format, 0, 0, false);
 
     ASSERT(mImage->getLayerCount() == 1);
-    return initImageViews(contextVk, glInternalFormat.sized, 1, 1);
+    return initImageViews(contextVk, glInternalFormat.sized, getImageViewLevelCount(),
+                          getImageViewLayerCount());
 }
 
 angle::Result TextureVk::releaseTexImage(const gl::Context *context)
@@ -3000,7 +3001,7 @@ angle::Result TextureVk::initImage(ContextVk *contextVk,
 
     const uint32_t viewLevelCount =
         mState.getImmutableFormat() ? getMipLevelCount(ImageMipLevels::EnabledLevels) : levelCount;
-    ANGLE_TRY(initImageViews(contextVk, sized, viewLevelCount, layerCount));
+    ANGLE_TRY(initImageViews(contextVk, sized, viewLevelCount, getImageViewLayerCount()));
 
     mCurrentBaseLevel = gl::LevelIndex(mState.getBaseLevel());
     mCurrentMaxLevel  = gl::LevelIndex(mState.getMaxLevel());
