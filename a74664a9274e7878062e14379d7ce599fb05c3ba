@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "71f9ea81_a9d99c0a",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1531247
+      },
+      "writtenOn": "2022-05-04T00:49:36Z",
+      "side": 1,
+      "message": "Hey Cody, so I figured we can easily avoid getting traces nuked from the device by end2end tests in local tests with something like this. Could you give it a try? How much more do you think we would need to add to make this usable instead of running ./angle_end2end_tests? One thing I can think of right away is batching when there is lots of tests to run - catapult runs tests in batches of 256. Otherwise, most other flags are actually for the test binary on the apk and I\u0027m just passing them through here. RunTests supports --render-test-output-dir and --isolated-script-test-output (temp paths on device, then pull) though I didn\u0027t test this for the end2end case.",
+      "revId": "a74664a9274e7878062e14379d7ce599fb05c3ba",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
