@@ -39,6 +39,9 @@ class Event;
 #    define ASSERT_GLENUM_EQ(expected, actual) \
         ASSERT_EQ(static_cast<GLenum>(expected), static_cast<GLenum>(actual))
 #endif  // !defined(ASSERT_GLENUM_EQ)
+#include <android/log.h>
+#define LOG_TAG "LAO"
+#define ALOG(...) __android_log_print(ANDROID_LOG_INFO, LOG_TAG, __VA_ARGS__)
 
 // These are trace events according to Google's "Trace Event Format".
 // See https://docs.google.com/document/d/1CvAClvFfyA5R-PhYUmn5OOQtYMH4h6I0nSsKchNAySU
