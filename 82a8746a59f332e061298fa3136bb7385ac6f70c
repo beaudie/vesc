@@ -33,6 +33,24 @@
       "message": "This value was not totally arbitrary. Amirali found 256MB to be the best for P6 where the GPU would finish just as the CPU was ready to submit another batch. Coincidentally, Mohan\u0027s team also settled on 300MB independently.\n\nI think what we really need here is a configurable value, that could at least initially be controlled by a feature such as `isLowMemoryDevice` (initialized by a basic query of the available memory). Then you can keep the optimal-for-speed value for higher end devices and use a more conservative value for the low end.",
       "revId": "82a8746a59f332e061298fa3136bb7385ac6f70c",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b387c66f_31da01d9",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 59,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2022-05-04T17:55:23Z",
+      "side": 1,
+      "message": "\u003e to be the best for P6 where the GPU would finish just as the CPU was ready to submit another batch\n\nI think that is the wrong goal though. What is the benefit of timing next submisison to GPU just finished? There is not hurt for CPU to keep submitting while GPU is still busy. Yes there is a little bit exra overhead of associated with each submission, but most of submisison overhead is due to secondary command buffer which more frequent submisison should nit make any difference. The extra overhead comes with submisison are mostly vulkan driver side that they ahve to do various clean up and check and kernel trap etc. But here we are only (or mostly) dealing with scene loading time. I am not expecting we run into this while stable game play. That little bit extra overhead should not be real problem.\n\nThe main reaosn I need this is because the memory saving comes from cutting scene loading into multiple submisisons so that staging buffer memory can be reused across different submisisons. If you set to 256M and two submisison is 512M (GPU is working on submission c1 and we just submitted c2), while we working on c3, we will still have to allocate new memory. That pushes up the peak memory usage. And a lot of apps does not uses that much of textures that would get much benefit by setting limit to 256M as well.\n\nI was thinking adding my own tracking of staging buffer used, since that is what I really cared about here. But I think this existing tracking is almost the same as staging buffer. I am trying not to duplicate tracking. But if you think we want to track data copy bytes separate from staging buffer usage, then I can add another trakcing for this puropose.",
+      "parentUuid": "35352462_90b8c4e9",
+      "revId": "82a8746a59f332e061298fa3136bb7385ac6f70c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
