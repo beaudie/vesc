@@ -26,6 +26,30 @@
     {
       "unresolved": false,
       "key": {
+        "uuid": "053aa335_1fd57363",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 13,
+      "author": {
+        "id": 1190898
+      },
+      "writtenOn": "2022-05-04T18:48:16Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "41c8cb39_37c72b58",
+      "range": {
+        "startLine": 13,
+        "startChar": 5,
+        "endLine": 13,
+        "endChar": 14
+      },
+      "revId": "0bccd958743508e322ea5d3ec96462e71de79309",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
         "uuid": "cc5b1bb4_c0ca74b7",
         "filename": "/PATCHSET_LEVEL",
         "patchSetId": 1
@@ -81,6 +105,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "a6cccb06_53ab3d22",
+        "filename": "scripts/roll_aosp.sh",
+        "patchSetId": 1
+      },
+      "lineNbr": 166,
+      "author": {
+        "id": 1190898
+      },
+      "writtenOn": "2022-05-04T18:48:16Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "c1a30d06_73633df4",
+      "range": {
+        "startLine": 166,
+        "startChar": 0,
+        "endLine": 166,
+        "endChar": 54
+      },
+      "revId": "0bccd958743508e322ea5d3ec96462e71de79309",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "c1cc7856_701bdb55",
@@ -94,6 +142,30 @@
       "writtenOn": "2022-05-04T14:55:31Z",
       "side": 1,
       "message": "This could probably be narrowed further, but `linux` accounts for ~854 of 862 MB in this dir, turning this roll into an additional 8.2MB.  Resulting files look okay to me.",
+      "range": {
+        "startLine": 168,
+        "startChar": 0,
+        "endLine": 168,
+        "endChar": 16
+      },
+      "revId": "0bccd958743508e322ea5d3ec96462e71de79309",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "90171410_1f68ae16",
+        "filename": "scripts/roll_aosp.sh",
+        "patchSetId": 1
+      },
+      "lineNbr": 168,
+      "author": {
+        "id": 1190898
+      },
+      "writtenOn": "2022-05-04T18:48:16Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "c1cc7856_701bdb55",
       "range": {
         "startLine": 168,
         "startChar": 0,
