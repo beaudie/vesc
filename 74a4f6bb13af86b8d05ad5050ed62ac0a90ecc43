@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "e1a70042_35ea1dc6",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 34
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1528827
+      },
+      "writtenOn": "2022-05-04T15:19:54Z",
+      "side": 1,
+      "message": "If no more issues arise from preceding CL, we can continue with this.",
+      "revId": "74a4f6bb13af86b8d05ad5050ed62ac0a90ecc43",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
