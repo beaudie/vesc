@@ -1,0 +1,44 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "30e21cb5_0b47aeb3",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 5
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-05-04T02:17:15Z",
+      "side": 1,
+      "message": "Drive by! Could be nice to have a before after comparison of some trace CPU times (upload-heavy ones e.g.), just to make sure the wait doesn\u0027t impact speed too much.",
+      "revId": "31e59a044c0bfc573f5799ef54f1343538771594",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "4055e1bd_48536635",
+        "filename": "src/libANGLE/renderer/vulkan/CommandProcessor.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 1194,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-05-04T02:17:15Z",
+      "side": 1,
+      "message": "How about calling `finishToSerial(first_serial_in_queue)` to wait for one submission to finish?",
+      "range": {
+        "startLine": 1191,
+        "startChar": 0,
+        "endLine": 1194,
+        "endChar": 75
+      },
+      "revId": "31e59a044c0bfc573f5799ef54f1343538771594",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
