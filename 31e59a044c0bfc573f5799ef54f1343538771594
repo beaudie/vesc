@@ -18,6 +18,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "e8d685a8_6e54ec45",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 5
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2022-05-04T17:37:29Z",
+      "side": 1,
+      "message": "So far I am not seeing we hit the wait while playing ashalht_9 and run afew app traces as well. This mostly putting a safety cap on mmeory usage when app launches. I will run all app traces with a deliberate crash to see if any app trace will hit this. But note that app traces may not very representative regarding peak memory usage though, since our trace only capture textures that are used when we do the capture (I think).",
+      "parentUuid": "30e21cb5_0b47aeb3",
+      "revId": "31e59a044c0bfc573f5799ef54f1343538771594",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "4055e1bd_48536635",
