@@ -1,0 +1,44 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "cc5b1bb4_c0ca74b7",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2022-05-04T12:50:27Z",
+      "side": 1,
+      "message": "ty doug for finding this",
+      "revId": "0bccd958743508e322ea5d3ec96462e71de79309",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "c1a30d06_73633df4",
+        "filename": "scripts/roll_aosp.sh",
+        "patchSetId": 1
+      },
+      "lineNbr": 166,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2022-05-04T12:50:27Z",
+      "side": 1,
+      "message": "nit: use a different comment for /linux?",
+      "range": {
+        "startLine": 166,
+        "startChar": 0,
+        "endLine": 166,
+        "endChar": 54
+      },
+      "revId": "0bccd958743508e322ea5d3ec96462e71de79309",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
