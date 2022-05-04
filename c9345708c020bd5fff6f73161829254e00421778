@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "de00ec5d_87eef84e",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 6
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-05-04T16:17:05Z",
+      "side": 1,
+      "message": "LGTM. Looping in Charlie",
+      "revId": "c9345708c020bd5fff6f73161829254e00421778",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}

@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "a6de9739_5100093b",
+        "filename": "src/libANGLE/renderer/vulkan/TextureVk.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 1355,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-05-04T16:17:05Z",
+      "side": 0,
+      "message": "Is it that when the access changes, `ImageHelper::mActualFormatID` is updated? If so, LGTM.",
+      "range": {
+        "startLine": 1355,
+        "startChar": 68,
+        "endLine": 1355,
+        "endChar": 90
+      },
+      "revId": "45ba62b41b83a5c8de03e5911c7f07d5e5958b57",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
