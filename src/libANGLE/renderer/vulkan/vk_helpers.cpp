@@ -2835,6 +2835,11 @@ void BufferPool::pruneEmptyBuffers(RendererVk *renderer)
     // next prune call. Or if we underestimate, we will end up have to call into vulkan driver
     // allocate new buffers, but next cycle we should correct ourselves to keep enough number of
     // empty buffers around.
+    if (mEmptyBufferBlocks.size() > mNumberOfNewBuffersNeededSinceLastPrune)
+    {
+        ALOG("\t freeing %u excessive empty buffers",
+             (uint32_t)(mEmptyBufferBlocks.size() - mNumberOfNewBuffersNeededSinceLastPrune));
+    }
     while (mEmptyBufferBlocks.size() > mNumberOfNewBuffersNeededSinceLastPrune)
     {
         std::unique_ptr<BufferBlock> &block = mEmptyBufferBlocks.back();
@@ -2902,6 +2907,7 @@ angle::Result BufferPool::allocateNewBuffer(Context *context, VkDeviceSize sizeI
     // Append the bufferBlock into the pool
     mBufferBlocks.push_back(std::move(block));
     context->getPerfCounters().allocateNewBufferBlockCalls++;
+    ALOG("\t allocating a new buffer");
 
     return angle::Result::Continue;
 }

@@ -31,7 +31,7 @@ constexpr double kTimeElapsedForPruneDefaultBufferPool = 0.25;
 constexpr VkDeviceSize kMinimumSuballocationBytesDestroyedToForcePrune = 4 * 1024 * 1024;
 
 // Set to true will log bufferpool stats into INFO stream
-#define ANGLE_ENABLE_BUFFER_POOL_STATS_LOGGING 0
+#define ANGLE_ENABLE_BUFFER_POOL_STATS_LOGGING 1
 
 DisplayVk::DisplayVk(const egl::DisplayState &state)
     : DisplayImpl(state),
@@ -584,22 +584,24 @@ void ShareGroupVk::logBufferPools() const
     VkDeviceSize totalMemorySize;
     calculateTotalBufferCount(&totalBufferCount, &totalMemorySize);
 
-    INFO() << "BufferBlocks count:" << totalBufferCount << " memorySize:" << totalMemorySize / 1024
-           << " UnusedBytes/memorySize (KBs):";
+    ALOG(
+        "pruneDefaultBufferPools: BufferBlocks count:%u memorySize:%u (KB) UnusedBytes/memorySize "
+        "(KBs):",
+        (uint32_t)totalBufferCount, (uint32_t)(totalMemorySize / 1024));
     for (const std::unique_ptr<vk::BufferPool> &pool : mDefaultBufferPools)
     {
         if (pool && pool->getBufferCount() > 0)
         {
             std::ostringstream log;
             pool->addStats(&log);
-            INFO() << "\t" << log.str();
+            ALOG("\t%s", log.str().c_str());
         }
     }
     if (mSmallBufferPool && mSmallBufferPool->getBufferCount() > 0)
     {
         std::ostringstream log;
         mSmallBufferPool->addStats(&log);
-        INFO() << "\t" << log.str();
+        ALOG("\t%s", log.str().c_str());
     }
 }
 }  // namespace rx
