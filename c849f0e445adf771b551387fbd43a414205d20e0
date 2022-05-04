@@ -156,6 +156,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "dbaa3776_b6779277",
+        "filename": "src/libANGLE/renderer/vulkan/linux/gbm/SurfaceVkGbm.cpp",
+        "patchSetId": 8
+      },
+      "lineNbr": 309,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-05-04T15:50:35Z",
+      "side": 1,
+      "message": "It\u0027s done only if the last render pass was to the swapchain, in which case it will use a subpass resolve operation. It\u0027s ok if you are not able to resolve this right now, but would you please open a new bug so it\u0027s tracked?",
+      "parentUuid": "7c340d7f_ab2d0f53",
+      "revId": "c849f0e445adf771b551387fbd43a414205d20e0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "d454b93d_38c19752",
         "filename": "src/libANGLE/renderer/vulkan/linux/gbm/SurfaceVkGbm.h",
         "patchSetId": 8
