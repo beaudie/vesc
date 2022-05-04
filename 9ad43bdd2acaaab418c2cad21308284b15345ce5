@@ -34,6 +34,24 @@
       "parentUuid": "cea97fc0_c1a3ae73",
       "revId": "9ad43bdd2acaaab418c2cad21308284b15345ce5",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "ed3e2e96_fdc2ffd1",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1115763
+      },
+      "writtenOn": "2022-05-04T15:58:57Z",
+      "side": 1,
+      "message": "Yes, there\u0027s an autoroller for it, but it looks like that one is also currently broken:\n\nhttps://autoroll.skia.org/r/vulkan-deps-dawn-autoroll\n\n../../third_party/swiftshader/third_party/SPIRV-Tools/source/val/validate_builtins.cpp:4010:11: error: enumeration value \u0027SpvBuiltInCullMaskKHR\u0027 not handled in switch [-Werror,-Wswitch]\n  switch (label) {\n          ^~~~~",
+      "parentUuid": "3e37ee9d_e26f4628",
+      "revId": "9ad43bdd2acaaab418c2cad21308284b15345ce5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
