@@ -1,6 +1,29 @@
 {
   "comments": [
     {
+      "unresolved": true,
+      "key": {
+        "uuid": "41c8cb39_37c72b58",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 13,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2022-05-04T14:55:31Z",
+      "side": 1,
+      "message": "Have to preface this with a b:  b/231365398",
+      "range": {
+        "startLine": 13,
+        "startChar": 5,
+        "endLine": 13,
+        "endChar": 14
+      },
+      "revId": "0bccd958743508e322ea5d3ec96462e71de79309",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": false,
       "key": {
         "uuid": "cc5b1bb4_c0ca74b7",
@@ -14,6 +37,23 @@
       "writtenOn": "2022-05-04T12:50:27Z",
       "side": 1,
       "message": "ty doug for finding this",
+      "revId": "0bccd958743508e322ea5d3ec96462e71de79309",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "5ae72316_6e9dade8",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2022-05-04T14:55:31Z",
+      "side": 1,
+      "message": "+Geoff to give a +2 here.",
       "revId": "0bccd958743508e322ea5d3ec96462e71de79309",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
@@ -36,6 +76,29 @@
         "startChar": 0,
         "endLine": 166,
         "endChar": 54
+      },
+      "revId": "0bccd958743508e322ea5d3ec96462e71de79309",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "c1cc7856_701bdb55",
+        "filename": "scripts/roll_aosp.sh",
+        "patchSetId": 1
+      },
+      "lineNbr": 168,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2022-05-04T14:55:31Z",
+      "side": 1,
+      "message": "This could probably be narrowed further, but `linux` accounts for ~854 of 862 MB in this dir, turning this roll into an additional 8.2MB.  Resulting files look okay to me.",
+      "range": {
+        "startLine": 168,
+        "startChar": 0,
+        "endLine": 168,
+        "endChar": 16
       },
       "revId": "0bccd958743508e322ea5d3ec96462e71de79309",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
