@@ -2,6 +2,7 @@
 # Use of this source code is governed by a BSD-style license that can be
 # found in the LICENSE file.
 
+import argparse
 import contextlib
 import functools
 import glob
@@ -13,6 +14,7 @@ import posixpath
 import random
 import re
 import subprocess
+import sys
 import tarfile
 import tempfile
 import threading
@@ -123,9 +125,17 @@ def PrepareTestSuite(suite_name):
     ]
     _AdbShell('p=com.android.angle.test;'
               'for q in %s;do pm grant "$p" "$q";done;' % ' '.join(permissions))
+    _AdbShell('appops set com.android.angle.test MANAGE_EXTERNAL_STORAGE allow')
 
     if suite_name == 'angle_perftests':
         _AddRestrictedTracesJson()
+
+    if suite_name == 'angle_end2end_tests':
+        _AdbShell('mkdir -p /sdcard/chromium_tests_root/')
+        _AdbRun([
+            'push', '../../src/tests/angle_end2end_tests_expectations.txt',
+            '/sdcard/chromium_tests_root/src/tests/angle_end2end_tests_expectations.txt'
+        ])
 
 
 def PrepareRestrictedTraces(traces):
@@ -354,3 +364,15 @@ def GetTraceFromTestName(test_name):
         raise Exception('Unexpected test: %s' % test_name)
 
     return None
+
+
+if __name__ == '__main__':
+    parser = argparse.ArgumentParser()
+    parser.add_argument('--suite', help='Suite to run')
+    args, extra_flags = parser.parse_known_args()
+
+    PrepareTestSuite(args.suite)
+    result, output = RunTests(args.suite, extra_flags)
+    print(output.decode())
+
+    sys.exit(result)
