@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "6592bfd8_29832133",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1175714
+      },
+      "writtenOn": "2022-05-04T15:29:05Z",
+      "side": 1,
+      "message": "Trevor, heads up on incoming upstream change that impacts EXT_YUV_target",
+      "revId": "45ba62b41b83a5c8de03e5911c7f07d5e5958b57",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
