@@ -2813,6 +2813,7 @@ angle::Result ContextVk::onCopyUpdate(VkDeviceSize size)
     // If the copy size exceeds the specified threshold, submit the outside command buffer.
     if (mTotalBufferToImageCopySize >= kMaxBufferToImageCopySize)
     {
+        ALOG("submitting outside command buffer");
         ANGLE_TRY(submitOutsideRenderPassCommandsImpl());
     }
     return angle::Result::Continue;
