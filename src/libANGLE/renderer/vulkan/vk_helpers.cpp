@@ -2837,6 +2837,11 @@ void BufferPool::pruneEmptyBuffers(RendererVk *renderer)
     // ourselves to keep enough number of empty buffers around.
     size_t buffersToKeep = std::min<size_t>(mNumberOfNewBuffersNeededSinceLastPrune,
                                             kMaxTotalEmptyBufferBytes / mSize);
+    if (mEmptyBufferBlocks.size() > buffersToKeep)
+    {
+        ALOG("\t freeing %u excessive empty buffers",
+             (uint32_t)(mEmptyBufferBlocks.size() - buffersToKeep));
+    }
     while (mEmptyBufferBlocks.size() > buffersToKeep)
     {
         std::unique_ptr<BufferBlock> &block = mEmptyBufferBlocks.back();
@@ -2904,6 +2909,7 @@ angle::Result BufferPool::allocateNewBuffer(Context *context, VkDeviceSize sizeI
     // Append the bufferBlock into the pool
     mBufferBlocks.push_back(std::move(block));
     context->getPerfCounters().allocateNewBufferBlockCalls++;
+    ALOG("\t allocating a new buffer");
 
     return angle::Result::Continue;
 }
