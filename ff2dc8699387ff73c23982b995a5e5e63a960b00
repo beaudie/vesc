@@ -124,6 +124,24 @@
       "parentUuid": "2f4f3ab6_30334c8a",
       "revId": "ff2dc8699387ff73c23982b995a5e5e63a960b00",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "9d679b0f_44a129d2",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1528827
+      },
+      "writtenOn": "2022-05-05T16:31:10Z",
+      "side": 1,
+      "message": "A-ha! There you go, I was not using any `vk::Format` in `SurfaceVkGbm`..\nFixed and update both CLs.\nThanks Shahbaz.",
+      "parentUuid": "efc48472_b7675fe9",
+      "revId": "ff2dc8699387ff73c23982b995a5e5e63a960b00",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
