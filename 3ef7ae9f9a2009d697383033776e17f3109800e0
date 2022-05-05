@@ -106,6 +106,24 @@
       "parentUuid": "df97cf47_81d1a5b9",
       "revId": "3ef7ae9f9a2009d697383033776e17f3109800e0",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "8f52aa1e_ca71991f",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1185214
+      },
+      "writtenOn": "2022-05-05T16:17:22Z",
+      "side": 1,
+      "message": "Aha. Playing with this at https://shader-playground.timjones.io/de4043b67f30973986b53164dcd43d74, it looks like it started being supported at 2.3 (setting the version to anything lower produces some variant of the errors we saw on our bots).",
+      "parentUuid": "df97cf47_81d1a5b9",
+      "revId": "3ef7ae9f9a2009d697383033776e17f3109800e0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
