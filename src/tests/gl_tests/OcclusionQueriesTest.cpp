@@ -403,6 +403,100 @@ TEST_P(OcclusionQueriesTest, FramebufferBindingChange)
     EXPECT_GL_TRUE(result);
 }
 
+// Reproduces a bug in the Metal mackend where occlusion queries
+// that span RenderEncoders which only change if the framebuffer changes
+// were sometimes the query results were incorrect.
+//
+// To repo required drawing where sometimes no pixels get drawn.
+// Here that is accomplished with the scissor test but it can also be
+// done by drawing offscreen triangles etc...
+//
+// http://anglebug.com/7157
+TEST_P(OcclusionQueriesTest, FramebufferBindingChangeWithScissor)
+{
+    ANGLE_SKIP_TEST_IF(getClientMajorVersion() < 3 &&
+                       !IsGLExtensionEnabled("GL_EXT_occlusion_query_boolean"));
+
+    constexpr GLsizei kSize          = 4;
+    constexpr int kNumFramebuffers   = 4;
+    constexpr const GLColor colors[] = {
+        GLColor(0, 0, 0, 255),
+        GLColor(255, 0, 0, 255),
+        GLColor(0, 255, 0, 255),
+        GLColor(255, 255, 0, 255),
+    };
+
+    // Create two framebuffers, and make sure they are synced.
+    GLFramebuffer fbo[kNumFramebuffers];
+    GLTexture color[kNumFramebuffers];
+
+    for (size_t index = 0; index < kNumFramebuffers; ++index)
+    {
+        glBindTexture(GL_TEXTURE_2D, color[index]);
+        glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, kSize, kSize, 0, GL_RGBA, GL_UNSIGNED_BYTE,
+                     nullptr);
+
+        glBindFramebuffer(GL_FRAMEBUFFER, fbo[index]);
+        glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, color[index],
+                               0);
+
+        glClearColor(index & 1, (index >> 1) & 1, (index >> 2) & 1, 1);
+        glClear(GL_COLOR_BUFFER_BIT);
+
+        EXPECT_PIXEL_COLOR_EQ(0, 0, colors[index]);
+    }
+    EXPECT_GL_NO_ERROR();
+
+    glViewport(0, 0, kSize, kSize);
+
+    // Start an occlusion query and issue a draw call to each framebuffer.
+    GLQueryEXT query;
+
+    for (size_t i = 0; i < 256; ++i)
+    {
+        glBeginQueryEXT(GL_ANY_SAMPLES_PASSED_EXT, query);
+        bool drawn = false;
+
+        for (size_t index = 0; index < kNumFramebuffers; ++index)
+        {
+            glBindFramebuffer(GL_FRAMEBUFFER, fbo[index]);
+            const bool scissor = (i >> 4 >> index) & 1;
+            if (i & (1 << index))
+            {
+                if (scissor)
+                {
+                    glEnable(GL_SCISSOR_TEST);
+                    glScissor(0, 0, 0, 0);
+                }
+                drawQuad(mProgram, essl1_shaders::PositionAttrib(), 0.5f);
+                drawn |= !scissor;
+                if (scissor)
+                {
+                    glDisable(GL_SCISSOR_TEST);
+                    glScissor(0, 0, 10, 10);
+                }
+            }
+        }
+
+        glEndQueryEXT(GL_ANY_SAMPLES_PASSED_EXT);
+        glFinish();
+        EXPECT_GL_NO_ERROR();
+
+        GLuint result = GL_FALSE;
+        glGetQueryObjectuivEXT(query, GL_QUERY_RESULT_EXT, &result);
+        EXPECT_GL_NO_ERROR();
+
+        bool success  = (result != GL_FALSE) == drawn;
+        const float c = success ? 1.0f : 0.0f;
+        glClearColor(c, 0.5f, c, 1.0f);
+        glClear(GL_COLOR_BUFFER_BIT);
+        const int c8 = success ? 255 : 0;
+        EXPECT_PIXEL_COLOR_EQ(0, 0, GLColor(c8, 128, c8, 255));
+
+        EXPECT_EQ(result, GLuint(drawn ? GL_TRUE : GL_FALSE)) << "for i = " << i;
+    }
+}
+
 // Test multiple occlusion queries.
 TEST_P(OcclusionQueriesTest, MultiQueries)
 {

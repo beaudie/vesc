@@ -50,6 +50,7 @@ class CommandQueue final : public WrappedObject<id<MTLCommandQueue>>, angle::Non
   public:
     void reset();
     void set(id<MTLCommandQueue> metalQueue);
+    void setEvent(const EventRef &metalEvent);
 
     void finishAllCommands();
 
@@ -61,7 +62,7 @@ class CommandQueue final : public WrappedObject<id<MTLCommandQueue>>, angle::Non
     void ensureResourceReadyForCPU(Resource *resource);
 
     // Check whether the resource is being used by any command buffer still running on GPU.
-    // This must be called before attempting to read the content of resource on CPU side.
+    // This must be calle d before attempting to read the content of resource on CPU side.
     bool isResourceBeingUsedByGPU(const ResourceRef &resource) const
     {
         return isResourceBeingUsedByGPU(resource.get());
@@ -80,6 +81,10 @@ class CommandQueue final : public WrappedObject<id<MTLCommandQueue>>, angle::Non
     AutoObjCPtr<id<MTLCommandBuffer>> makeMetalCommandBuffer(uint64_t *queueSerialOut);
     void onCommandBufferCommitted(id<MTLCommandBuffer> buf, uint64_t serial);
 
+    uint64_t getCurrentEventId() const { return mEventId; }
+    uint64_t getNextEventId();
+    const EventRef &getEvent() { return mEvent; }
+
   private:
     void onCommandBufferCompleted(id<MTLCommandBuffer> buf, uint64_t serial);
     using ParentClass = WrappedObject<id<MTLCommandQueue>>;
@@ -97,6 +102,9 @@ class CommandQueue final : public WrappedObject<id<MTLCommandQueue>>, angle::Non
     std::atomic<uint64_t> mCompletedBufferSerial{0};
 
     mutable std::mutex mLock;
+
+    uint64_t mEventId = 0;
+    EventRef mEvent;
 };
 
 class CommandBuffer final : public WrappedObject<id<MTLCommandBuffer>>, angle::NonCopyable
@@ -121,6 +129,9 @@ class CommandBuffer final : public WrappedObject<id<MTLCommandBuffer>>, angle::N
 
     void queueEventSignal(const mtl::SharedEventRef &event, uint64_t value);
     void serverWaitEvent(const mtl::SharedEventRef &event, uint64_t value);
+
+    void signalNextEvent();
+    void waitCurrentEvent();
 
     void insertDebugSign(const std::string &marker);
     void pushDebugGroup(const std::string &marker);

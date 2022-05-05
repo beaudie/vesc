@@ -118,6 +118,8 @@ void OcclusionQueryPool::resolveVisibilityResults(ContextMtl *contextMtl)
         return;
     }
 
+    contextMtl->insertFenceForOcclusionQueryWorkaround();
+
     RenderUtils &utils              = contextMtl->getDisplay()->getUtils();
     BlitCommandEncoder *blitEncoder = nullptr;
     // Combine the values stored in the offsets allocated for first query
@@ -144,6 +146,8 @@ void OcclusionQueryPool::resolveVisibilityResults(ContextMtl *contextMtl)
         }
     }
 
+    contextMtl->insertFenceForOcclusionQueryWorkaround();
+
     // Combine the values stored in the offsets allocated for each of the remaining queries
     for (size_t i = 1; i < mAllocatedQueries.size(); ++i)
     {
@@ -159,6 +163,8 @@ void OcclusionQueryPool::resolveVisibilityResults(ContextMtl *contextMtl)
         utils.combineVisibilityResult(contextMtl, false, allocatedOffsets, mRenderPassResultsPool,
                                       dstBuf);
     }
+
+    contextMtl->insertFenceForOcclusionQueryWorkaround();
 
     // Request synchronization and cleanup
     blitEncoder = contextMtl->getBlitCommandEncoder();
@@ -180,5 +186,5 @@ void OcclusionQueryPool::resolveVisibilityResults(ContextMtl *contextMtl)
     mAllocatedQueries.clear();
 }
 
-}
-}
+}  // namespace mtl
+}  // namespace rx

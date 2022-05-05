@@ -416,9 +416,11 @@ inline AutoObjCObj<U> adoptObjCObj(U *NS_RELEASES_ARGUMENT src)
 #if defined(__IPHONE_12_0) || defined(__MAC_10_14)
 #    define ANGLE_MTL_EVENT_AVAILABLE 1
 using SharedEventRef = AutoObjCPtr<id<MTLSharedEvent>>;
+using EventRef       = AutoObjCPtr<id<MTLEvent>>;
 #else
 #    define ANGLE_MTL_EVENT_AVAILABLE 0
 using SharedEventRef = AutoObjCObj<NSObject>;
+using EventRef       = AutoObjCObj<NSObject>;
 #endif
 
 // The native image index used by Metal back-end,  the image index uses native mipmap level instead

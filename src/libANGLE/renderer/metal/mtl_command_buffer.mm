@@ -424,7 +424,7 @@ NSString *cppLabelToObjC(const std::string &marker)
     }
     return label;
 }
-}
+}  // namespace
 
 // CommandQueue implementation
 void CommandQueue::reset()
@@ -438,6 +438,11 @@ void CommandQueue::set(id<MTLCommandQueue> metalQueue)
     finishAllCommands();
 
     ParentClass::set(metalQueue);
+}
+
+void CommandQueue::setEvent(const EventRef &event)
+{
+    mEvent = event;
 }
 
 void CommandQueue::finishAllCommands()
@@ -572,6 +577,11 @@ void CommandQueue::onCommandBufferCompleted(id<MTLCommandBuffer> buf, uint64_t s
     mCompletedBufferSerial.store(
         std::max(mCompletedBufferSerial.load(std::memory_order_relaxed), serial),
         std::memory_order_relaxed);
+}
+
+uint64_t CommandQueue::getNextEventId()
+{
+    return ++mEventId;
 }
 
 // CommandBuffer implementation
@@ -774,6 +784,22 @@ void CommandBuffer::serverWaitEvent(const mtl::SharedEventRef &event, uint64_t v
     ASSERT(readyImpl());
 
     waitEventImpl(event, value);
+}
+
+void CommandBuffer::waitCurrentEvent()
+{
+    ASSERT(readyImpl());
+#if ANGLE_MTL_EVENT_AVAILABLE
+    [get() encodeWaitForEvent:mCmdQueue.getEvent() value:mCmdQueue.getCurrentEventId()];
+#endif
+}
+
+void CommandBuffer::signalNextEvent()
+{
+    ASSERT(readyImpl());
+#if ANGLE_MTL_EVENT_AVAILABLE
+    [get() encodeSignalEvent:mCmdQueue.getEvent() value:mCmdQueue.getNextEventId()];
+#endif
 }
 
 /** private use only */
@@ -2337,5 +2363,5 @@ ComputeCommandEncoder &ComputeCommandEncoder::dispatchNonUniform(const MTLSize &
 #endif
     return *this;
 }
-}
-}
+}  // namespace mtl
+}  // namespace rx

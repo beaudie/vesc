@@ -386,6 +386,8 @@ class ContextMtl : public ContextImpl, public mtl::Context
                                                     uint32_t layerIndex);
     const mtl::BufferRef &getWorkBuffer() const { return mWorkBuffer; }
 
+    void insertFenceForOcclusionQueryWorkaround();
+
   private:
     void ensureCommandBufferReady();
     angle::Result ensureIncompleteTexturesCreated(const gl::Context *context);

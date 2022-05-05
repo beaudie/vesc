@@ -211,6 +211,12 @@ struct FeaturesMtl : FeatureSetBase
         "copyTextureToBufferForReadOptimization", FeatureCategory::MetalWorkarounds,
         "some GPUs are faster to read a texture by first copying the texture to a buffer", &members,
         "http://anglebug.com/7117"};
+
+    FeatureInfo useEventsToSynchronizeOcclusionQueriesWorkaround = {
+        "useEventsToSynchronizeOcclusionQueriesWorkaround", FeatureCategory::MetalWorkarounds,
+        "M1 drivers have a bug where query results are written late and so require manual "
+        "synchronization",
+        &members, "http://anglebug.com/7157"};
 };
 
 inline FeaturesMtl::FeaturesMtl()  = default;

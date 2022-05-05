@@ -2672,4 +2672,17 @@ angle::Result ContextMtl::copyTextureSliceLevelToWorkBuffer(
     return angle::Result::Continue;
 }
 
+void ContextMtl::insertFenceForOcclusionQueryWorkaround()
+{
+    bool useEventsToSynchronizeOcclusionQueriesWorkaround =
+        getDisplay()->getFeatures().useEventsToSynchronizeOcclusionQueriesWorkaround.enabled;
+    if (useEventsToSynchronizeOcclusionQueriesWorkaround)
+    {
+        endEncoding(true);
+        ensureCommandBufferReady();
+        mCmdBuffer.signalNextEvent();
+        mCmdBuffer.waitCurrentEvent();
+    }
+}
+
 }  // namespace rx
