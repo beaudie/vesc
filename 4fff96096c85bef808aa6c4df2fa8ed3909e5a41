@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "85c5e283_d25981c1",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 13
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1359249
+      },
+      "writtenOn": "2022-05-05T22:47:21Z",
+      "side": 1,
+      "message": "Comment",
+      "revId": "4fff96096c85bef808aa6c4df2fa8ed3909e5a41",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "f63716b8_5223a3ce",
+        "filename": "src/libANGLE/renderer/vulkan/linux/gbm/SurfaceVkGbm.cpp",
+        "patchSetId": 13
+      },
+      "lineNbr": 80,
+      "author": {
+        "id": 1359249
+      },
+      "writtenOn": "2022-05-05T22:47:21Z",
+      "side": 1,
+      "message": "Can you assume support for this mode? Utility in SurfaceVk::supportsPresentMode(mode). But, SurfaceVk::initializeImpl must be ran first to get present modes.",
+      "revId": "4fff96096c85bef808aa6c4df2fa8ed3909e5a41",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
