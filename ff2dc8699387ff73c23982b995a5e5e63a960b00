@@ -106,6 +106,24 @@
       "parentUuid": "318e2838_d216b59e",
       "revId": "ff2dc8699387ff73c23982b995a5e5e63a960b00",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "efc48472_b7675fe9",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-05-05T15:45:28Z",
+      "side": 1,
+      "message": "Ok that\u0027s weird, I think we are not support to ever call that function with `R8G8B8X8_UNORM`, because well there\u0027s no Vulkan equivalent for it.\n\nWhere does that value come from? Because the way it\u0027s intended, is to have the vk::Format equivalent of `R8G8B8X8_UNORM` return `R8G8B8A8_UNORM` as the image format.\n\nActually I think I know what the issue might be. Somewhere in the stack trace, some code is calling `vk::Format::getIntendedFormat()` instead of `vk::Format::getActualImageFormat()`",
+      "parentUuid": "2f4f3ab6_30334c8a",
+      "revId": "ff2dc8699387ff73c23982b995a5e5e63a960b00",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
