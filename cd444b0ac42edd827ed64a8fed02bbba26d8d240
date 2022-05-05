@@ -34,6 +34,24 @@
       "parentUuid": "3f0bcc3a_3ad60dcb",
       "revId": "cd444b0ac42edd827ed64a8fed02bbba26d8d240",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "c3ffdd5b_bc8914d6",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2022-05-05T15:55:28Z",
+      "side": 1,
+      "message": "Let\u0027s wait for the CV fix, shouldn\u0027t be long.",
+      "parentUuid": "b8fe0821_134f9301",
+      "revId": "cd444b0ac42edd827ed64a8fed02bbba26d8d240",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
