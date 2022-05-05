@@ -70,6 +70,24 @@
       "parentUuid": "fefecea0_e283c2f2",
       "revId": "ff2dc8699387ff73c23982b995a5e5e63a960b00",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "318e2838_d216b59e",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-05-05T15:28:21Z",
+      "side": 1,
+      "message": "`DRM_FORMAT_XBGR8888` should definitely not be `VK_FORMAT_R8G8B8_UNORM`, it should be `VK_FORMAT_R8G8B8A8_UNORM` under the hood, as long as ANGLE knows that the A channel is \"emulated\".\n\nSo what I don\u0027t understand why you even needed to add anything to the format map. Those formats are already there (under the `\"fallbacks\"` entry, because they are not directly mapped to a Vulkan format).\n\nIn fact, if you look at `vk_format_table_autogen.cpp`, you\u0027d see that the two formats were already there with the correct fallback:\n\n```\ncase angle::FormatID::R8G8B8X8_UNORM:\n    mIntendedGLFormat              \u003d GL_RGBX8_ANGLE;\n    mActualSampleOnlyImageFormatID \u003d angle::FormatID::R8G8B8A8_UNORM;\n\ncase angle::FormatID::B8G8R8X8_UNORM:\n    mIntendedGLFormat              \u003d GL_BGRX8_ANGLEX;\n    mActualSampleOnlyImageFormatID \u003d angle::FormatID::B8G8R8A8_UNORM;\n```\n\nI see that your change adds `angle::FormatID::B8G8R8X8_UNORM` as a possibly valid format for `angle::FormatID::B8G8R8X8_UNORM` for example. My feeling is that that format would (or should) be rejected in `initImageFallback` and the format we already have (`angle::FormatID::R8G8B8A8_UNORM`) is (or should be) selected anyway.\n\nWhat exactly went wrong when you didn\u0027t make the `vk_format_map.json` change?",
+      "parentUuid": "001b478a_03d298e1",
+      "revId": "ff2dc8699387ff73c23982b995a5e5e63a960b00",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
