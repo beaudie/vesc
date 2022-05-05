@@ -52,6 +52,24 @@
       "parentUuid": "aef2a1ed_110e9d06",
       "revId": "3ef7ae9f9a2009d697383033776e17f3109800e0",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "eb802668_56f8af33",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-05-05T16:04:38Z",
+      "side": 1,
+      "message": "So dEQP has a _lot_ of tests. Ideally, that would have covered _every_ combination of operators and types, but it might have missed one here or there. That\u0027s why a specific test for this combination is ok, because it\u0027s filling in a specific gap. Porting all of Skia\u0027s tests would probably overlap a lot with dEQP, so not a very good use of time.\n\nThe goal is just to make sure we don\u0027t find a regression with this on the roll to Skia, but rather in our own CQ. Also allows us to be sure it works on other backends too that Skia may not be currently testing.\n\nThat said, maybe this _is_ covered by dEQP, and we are simply not running dEQP for metal? @gman @kbr",
+      "parentUuid": "0ecd0902_06d19628",
+      "revId": "3ef7ae9f9a2009d697383033776e17f3109800e0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
