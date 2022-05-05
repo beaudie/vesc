@@ -105,6 +105,24 @@
       "parentUuid": "373e0316_3bb39432",
       "revId": "82a8746a59f332e061298fa3136bb7385ac6f70c",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "be10afa9_fffac322",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 59,
+      "author": {
+        "id": 1340649
+      },
+      "writtenOn": "2022-05-05T15:40:37Z",
+      "side": 1,
+      "message": "thanks for heads up shabi.\n\n@Amirali, just sent an access request for the doc",
+      "parentUuid": "7f8e4eea_ac72656a",
+      "revId": "82a8746a59f332e061298fa3136bb7385ac6f70c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
