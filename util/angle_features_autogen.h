@@ -246,6 +246,7 @@ enum class Feature
     UnpackOverlappingRowsSeparatelyUnpackBuffer,
     UnsizedSRGBReadPixelsDoesntTransform,
     UploadTextureDataInChunks,
+    UseEventsToSynchronizeOcclusionQueriesWorkaround,
     UseInstancedPointSpriteEmulation,
     UseMultipleDescriptorsForExternalFormats,
     UseSystemMemoryForConstantBuffers,

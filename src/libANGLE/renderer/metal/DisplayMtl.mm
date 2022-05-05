@@ -148,6 +148,10 @@ angle::Result DisplayMtl::initializeImpl(egl::Display *display)
 
         mCmdQueue.set([[mMetalDevice newCommandQueue] ANGLE_MTL_AUTORELEASE]);
 
+#if ANGLE_MTL_EVENT_AVAILABLE
+        mCmdQueue.setEvent([[mMetalDevice newEvent] ANGLE_MTL_AUTORELEASE]);
+#endif
+
         mCapsInitialized = false;
 #if ANGLE_ENABLE_METAL_SPIRV
         ANGLE_TRACE_EVENT0("gpu.angle,startup", "GlslangWarmup");
@@ -1099,6 +1103,7 @@ void DisplayMtl::initializeFeatures()
     ANGLE_FEATURE_CONDITION((&mFeatures), copyIOSurfaceToNonIOSurfaceForReadOptimization,
                             isIntel());
     ANGLE_FEATURE_CONDITION((&mFeatures), copyTextureToBufferForReadOptimization, isAMD());
+    ANGLE_FEATURE_CONDITION((&mFeatures), useEventsToSynchronizeOcclusionQueriesWorkaround, isARM);
 
     ANGLE_FEATURE_CONDITION((&mFeatures), forceNonCSBaseMipmapGeneration, isIntel());
 

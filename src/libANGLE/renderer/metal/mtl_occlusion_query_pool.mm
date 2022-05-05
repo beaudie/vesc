@@ -144,6 +144,17 @@ void OcclusionQueryPool::resolveVisibilityResults(ContextMtl *contextMtl)
         }
     }
 
+    bool useEventsToSynchronizeOcclusionQueriesWorkaround =
+        contextMtl->getDisplay()
+            ->getFeatures()
+            .useEventsToSynchronizeOcclusionQueriesWorkaround.enabled;
+    if (useEventsToSynchronizeOcclusionQueriesWorkaround)
+    {
+        contextMtl->endEncoding(true);
+        contextMtl->signalNextEvent();
+        contextMtl->waitCurrentEvent();
+    }
+
     // Combine the values stored in the offsets allocated for each of the remaining queries
     for (size_t i = 1; i < mAllocatedQueries.size(); ++i)
     {
@@ -158,6 +169,11 @@ void OcclusionQueryPool::resolveVisibilityResults(ContextMtl *contextMtl)
             mAllocatedQueries[i]->getAllocatedVisibilityOffsets();
         utils.combineVisibilityResult(contextMtl, false, allocatedOffsets, mRenderPassResultsPool,
                                       dstBuf);
+    }
+
+    if (useEventsToSynchronizeOcclusionQueriesWorkaround)
+    {
+        contextMtl->signalNextEvent();
     }
 
     // Request synchronization and cleanup
@@ -180,5 +196,5 @@ void OcclusionQueryPool::resolveVisibilityResults(ContextMtl *contextMtl)
     mAllocatedQueries.clear();
 }
 
-}
-}
+}  // namespace mtl
+}  // namespace rx

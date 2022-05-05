@@ -2139,6 +2139,11 @@ angle::Result ContextMtl::startOcclusionQueryInRenderPass(QueryMtl *query, bool 
     // result before the render pass ends.
     mCmdBuffer.setWriteDependency(query->getVisibilityResultBuffer());
 
+    if (getDisplay()->getFeatures().useEventsToSynchronizeOcclusionQueriesWorkaround.enabled)
+    {
+        waitCurrentEvent();
+    }
+
     return angle::Result::Continue;
 }
 
@@ -2670,6 +2675,18 @@ angle::Result ContextMtl::copyTextureSliceLevelToWorkBuffer(
                                                     mWorkBuffer));
 
     return angle::Result::Continue;
+}
+
+void ContextMtl::waitCurrentEvent()
+{
+    ensureCommandBufferReady();
+    mCmdBuffer.waitCurrentEvent();
+}
+
+void ContextMtl::signalNextEvent()
+{
+    ensureCommandBufferReady();
+    mCmdBuffer.signalNextEvent();
 }
 
 }  // namespace rx

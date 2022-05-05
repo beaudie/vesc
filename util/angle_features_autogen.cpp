@@ -264,6 +264,8 @@ constexpr PackedEnumMap<Feature, const char *> kFeatureNames = {{
      "unpackOverlappingRowsSeparatelyUnpackBuffer"},
     {Feature::UnsizedSRGBReadPixelsDoesntTransform, "unsizedSRGBReadPixelsDoesntTransform"},
     {Feature::UploadTextureDataInChunks, "uploadTextureDataInChunks"},
+    {Feature::UseEventsToSynchronizeOcclusionQueriesWorkaround,
+     "useEventsToSynchronizeOcclusionQueriesWorkaround"},
     {Feature::UseInstancedPointSpriteEmulation, "useInstancedPointSpriteEmulation"},
     {Feature::UseMultipleDescriptorsForExternalFormats, "useMultipleDescriptorsForExternalFormats"},
     {Feature::UseSystemMemoryForConstantBuffers, "useSystemMemoryForConstantBuffers"},

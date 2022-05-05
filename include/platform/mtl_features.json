@@ -211,6 +211,14 @@
                 "some GPUs are faster to read a texture by first copying the texture to a buffer"
             ],
             "issue": "http://anglebug.com/7117"
+        },
+        {
+            "name": "use_events_to_synchronize_occlusion_queries_workaround",
+            "category": "Workarounds",
+            "description": [
+                "M1 drivers have a bug where query results are written late and so require manual synchronization"
+            ],
+            "issue": "http://anglebug.com/7157"
         }
     ]
 }
