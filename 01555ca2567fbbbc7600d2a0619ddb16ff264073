@@ -16,6 +16,142 @@
       "message": "Expected side effect of this is snappier apps. I ran the Manhattan trace and observed no regression. I also ran Black Desert on my phone with it, and it\u0027s smooth.\n\nFeel free to give it a spin to make sure there are no surprises.",
       "revId": "01555ca2567fbbbc7600d2a0619ddb16ff264073",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "c6f7d664_0a3442d9",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1290487
+      },
+      "writtenOn": "2022-05-05T16:47:33Z",
+      "side": 1,
+      "message": "I read the first file and gave a few comments before our meeting",
+      "revId": "01555ca2567fbbbc7600d2a0619ddb16ff264073",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "a2e414dc_c89f2139",
+        "filename": "src/libANGLE/renderer/vulkan/doc/FramePacing.md",
+        "patchSetId": 3
+      },
+      "lineNbr": 27,
+      "author": {
+        "id": 1290487
+      },
+      "writtenOn": "2022-05-05T16:47:33Z",
+      "side": 1,
+      "message": "I\u0027m not sure I\u0027m following S:Sn vs W:Sn",
+      "revId": "01555ca2567fbbbc7600d2a0619ddb16ff264073",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "c666bcb6_bfdb80af",
+        "filename": "src/libANGLE/renderer/vulkan/doc/FramePacing.md",
+        "patchSetId": 3
+      },
+      "lineNbr": 30,
+      "author": {
+        "id": 1290487
+      },
+      "writtenOn": "2022-05-05T16:47:33Z",
+      "side": 1,
+      "message": "Nit: this is the best case scenario (i.e. image being presented immediately after rendering is complete).  It\u0027s likely that the image is queued by the PE until the next vsync.\n\nThis queue/vsync can also affect when ANI will returns and/or signals its semaphore (i.e. frequently just after a vsync).",
+      "revId": "01555ca2567fbbbc7600d2a0619ddb16ff264073",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "8685a91e_aaf3a754",
+        "filename": "src/libANGLE/renderer/vulkan/doc/FramePacing.md",
+        "patchSetId": 3
+      },
+      "lineNbr": 38,
+      "author": {
+        "id": 1290487
+      },
+      "writtenOn": "2022-05-05T16:47:33Z",
+      "side": 1,
+      "message": "I prefer: The presentation is started sometime after rendering is finished.",
+      "revId": "01555ca2567fbbbc7600d2a0619ddb16ff264073",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b961c2ee_37a01b66",
+        "filename": "src/libANGLE/renderer/vulkan/doc/FramePacing.md",
+        "patchSetId": 3
+      },
+      "lineNbr": 53,
+      "author": {
+        "id": 1290487
+      },
+      "writtenOn": "2022-05-05T16:47:33Z",
+      "side": 1,
+      "message": "Seems like we lost the ANI here, and the opportunity to wait on the fence that it returns",
+      "revId": "01555ca2567fbbbc7600d2a0619ddb16ff264073",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "d45ce607_0fa28c94",
+        "filename": "src/libANGLE/renderer/vulkan/doc/FramePacing.md",
+        "patchSetId": 3
+      },
+      "lineNbr": 58,
+      "author": {
+        "id": 1290487
+      },
+      "writtenOn": "2022-05-05T16:47:33Z",
+      "side": 1,
+      "message": "Different PEs behave differently.  We theorized that, and I have seen at least one instance of a PE that did let the queue grow until the system ran out of memory.  I helped that person fix their implementation:-).\n\nFor Android (and I believe for some/all of the desktop devices), the PE will block at some point.  As you know, the Vulkan WSI folks did not want Vulkan developers (e.g. ANGLE) to rely on this for pacing their apps.  However, the end result of Vulkan 1.0 was that we failed to make this easy.",
+      "revId": "01555ca2567fbbbc7600d2a0619ddb16ff264073",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "c746bfaf_f26457d8",
+        "filename": "src/libANGLE/renderer/vulkan/doc/FramePacing.md",
+        "patchSetId": 3
+      },
+      "lineNbr": 75,
+      "author": {
+        "id": 1290487
+      },
+      "writtenOn": "2022-05-05T16:47:33Z",
+      "side": 1,
+      "message": "Seems like you\u0027re mixing the PE queue with the combined effective-queue of rendering/present QP commands.  Once the PE is presenting/displaying an image, the app can only QP n-1 other images.\n\nIf the app/ANGLE does QS beyond that, it can do so without ANI.  Or, for some PEs, it can QS with an ANI that returns a semaphore/fence that can be waited on.  Those PEs run into the potential for an infinite queue.",
+      "revId": "01555ca2567fbbbc7600d2a0619ddb16ff264073",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "56ef8cb0_99999850",
+        "filename": "src/libANGLE/renderer/vulkan/doc/FramePacing.md",
+        "patchSetId": 3
+      },
+      "lineNbr": 85,
+      "author": {
+        "id": 1290487
+      },
+      "writtenOn": "2022-05-05T16:47:33Z",
+      "side": 1,
+      "message": "This extension helps with smoothness on the display side, but doesn\u0027t help with pacing the CPU side.  On Android, Swappy (both the GLES and Vulkan versions) was created to do both (display and CPU), but only for apps that fit in with the Android render-thread model.  It might be interesting to try a GLES app that uses Swappy, and look at the system trace.\n\nIt also could be possible to do some threading within ANGLE that used the underlying Android mechanism (Choreographer) to pace things, but that would be a large effort and totally Android specific.  Thus, I\u0027d rather we keep going down this path.",
+      "revId": "01555ca2567fbbbc7600d2a0619ddb16ff264073",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
