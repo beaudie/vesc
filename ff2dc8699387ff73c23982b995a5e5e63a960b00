@@ -34,6 +34,24 @@
       "parentUuid": "eeabea85_8585b835",
       "revId": "ff2dc8699387ff73c23982b995a5e5e63a960b00",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "fefecea0_e283c2f2",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1528827
+      },
+      "writtenOn": "2022-05-05T13:30:18Z",
+      "side": 1,
+      "message": "Thanks for the explanation. The issue I encounter is that I can\u0027t import a DRM_FORMAT_XBGR8888 using a VK_FORMAT_R8G8B8_UNORM.\n\nI can add a mapping in `vk_format_map.json` such as:\n\n```\n  \"R8G8B8X8_UNORM\": \"VK_FORMAT_R8G8B8A8_UNORM\",\n  \"B8G8R8X8_UNORM\": \"VK_FORMAT_B8G8R8A8_UNORM\",\n```\n\nHaving care to only include this in `GetVkFormatFromFormatID(..)` while excluding it from `GetFormatIDFromVkFormat()` or we would end up with duplicate case value here.\n\n```\n  case VK_FORMAT_R8G8B8A8_UNORM:\n   return angle::FormatID::R8G8B8A8_UNORM;\n  case VK_FORMAT_R8G8B8A8_UNORM:\n   return angle::FormatID::R8G8B8X8_UNORM;\n```",
+      "parentUuid": "280c6597_6326fb73",
+      "revId": "ff2dc8699387ff73c23982b995a5e5e63a960b00",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
