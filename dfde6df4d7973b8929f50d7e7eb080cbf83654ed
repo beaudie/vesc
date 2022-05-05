@@ -22,6 +22,30 @@
       },
       "revId": "dfde6df4d7973b8929f50d7e7eb080cbf83654ed",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "ff840b59_aee43c51",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 3
+      },
+      "lineNbr": 9,
+      "author": {
+        "id": 1364448
+      },
+      "writtenOn": "2022-05-05T18:27:19Z",
+      "side": 1,
+      "message": "oh Sorry I just edited the message directly on gerrit.",
+      "parentUuid": "4f9e3c6c_416cfc4b",
+      "range": {
+        "startLine": 9,
+        "startChar": 0,
+        "endLine": 9,
+        "endChar": 11
+      },
+      "revId": "dfde6df4d7973b8929f50d7e7eb080cbf83654ed",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
