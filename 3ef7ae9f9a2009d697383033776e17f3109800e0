@@ -16,6 +16,24 @@
       "message": "Switching reviewers to Gregg (metal/ developer).\n\nAlso, please add a regression test in GLSLTest.cpp",
       "revId": "3ef7ae9f9a2009d697383033776e17f3109800e0",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "aef2a1ed_110e9d06",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1185214
+      },
+      "writtenOn": "2022-05-05T15:49:51Z",
+      "side": 1,
+      "message": "I can do that, but I have to ask: why? I\u0027m not against unit tests - I like them. But adding a one-off test for this specific issue feels reactive, and doesn\u0027t solve much? ProgramPrelude.cpp is 4k lines long, and includes about 1k lines of analogous logic for every other combination of operator and types. There are no tests for any of that. Even the three other cases immediately surrounding this change are un-tested in GLSLTest, as far as I can tell.\n\nIf this were a tricky piece of code that were somehow likely to break in the future by a refactor, adding a one-off test would make sense. But this is just incomplete coverage of the operator/type feature matrix - I can\u0027t justify adding a test for this without testing everything else in that matrix, too.",
+      "parentUuid": "c2c1c46c_87f5beac",
+      "revId": "3ef7ae9f9a2009d697383033776e17f3109800e0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
