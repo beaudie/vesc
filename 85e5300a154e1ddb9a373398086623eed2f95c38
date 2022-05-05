@@ -70,6 +70,30 @@
       },
       "revId": "85e5300a154e1ddb9a373398086623eed2f95c38",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "e5071898_9d65fd17",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 7
+      },
+      "lineNbr": 13,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2022-05-05T18:33:57Z",
+      "side": 1,
+      "message": "Done. Moved the comment to description.",
+      "parentUuid": "9651593e_285c557d",
+      "range": {
+        "startLine": 13,
+        "startChar": 22,
+        "endLine": 13,
+        "endChar": 27
+      },
+      "revId": "85e5300a154e1ddb9a373398086623eed2f95c38",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
