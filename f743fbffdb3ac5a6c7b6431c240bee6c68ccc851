@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "9b2b2a6a_d3e9aacf",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 2
+      },
+      "lineNbr": 8,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2022-05-05T15:42:02Z",
+      "side": 1,
+      "message": "please include a Bug: tag or presubmit will fail.",
+      "revId": "f743fbffdb3ac5a6c7b6431c240bee6c68ccc851",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "e7ac477e_0ffe4bad",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2022-05-05T15:42:02Z",
+      "side": 1,
+      "message": "Thanks for the CL. Please also update .gitignore.",
+      "revId": "f743fbffdb3ac5a6c7b6431c240bee6c68ccc851",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
