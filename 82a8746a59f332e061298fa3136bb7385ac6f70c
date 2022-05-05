@@ -141,6 +141,24 @@
       "parentUuid": "be10afa9_fffac322",
       "revId": "82a8746a59f332e061298fa3136bb7385ac6f70c",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "0156463a_de6dca44",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 59,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2022-05-05T22:27:57Z",
+      "side": 1,
+      "message": "Thanks all for comment. We can always keep tuning this in future when issues pop up.",
+      "parentUuid": "ab8f298a_8abbca01",
+      "revId": "82a8746a59f332e061298fa3136bb7385ac6f70c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
