@@ -18,6 +18,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "4bc58775_c67d51c0",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 2
+      },
+      "lineNbr": 8,
+      "author": {
+        "id": 1364448
+      },
+      "writtenOn": "2022-05-05T17:04:51Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "9b2b2a6a_d3e9aacf",
+      "revId": "f743fbffdb3ac5a6c7b6431c240bee6c68ccc851",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "e7ac477e_0ffe4bad",
@@ -31,6 +49,24 @@
       "writtenOn": "2022-05-05T15:42:02Z",
       "side": 1,
       "message": "Thanks for the CL. Please also update .gitignore.",
+      "revId": "f743fbffdb3ac5a6c7b6431c240bee6c68ccc851",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "e7392686_c2625126",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1364448
+      },
+      "writtenOn": "2022-05-05T17:04:51Z",
+      "side": 1,
+      "message": "The folder the SDK gets downloaded to is still the same, so I think there\u0027s no need to update.",
+      "parentUuid": "e7ac477e_0ffe4bad",
       "revId": "f743fbffdb3ac5a6c7b6431c240bee6c68ccc851",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
