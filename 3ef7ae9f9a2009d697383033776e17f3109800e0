@@ -70,6 +70,24 @@
       "parentUuid": "0ecd0902_06d19628",
       "revId": "3ef7ae9f9a2009d697383033776e17f3109800e0",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "df97cf47_81d1a5b9",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1185214
+      },
+      "writtenOn": "2022-05-05T16:09:12Z",
+      "side": 1,
+      "message": "Right, makes sense. There\u0027s also the fact that I\u0027m not sure I can (easily) prove the unit test catches the issue. Skia\u0027s test that triggers this only fails on one of the three devices where we test (the one running 10.15), which doesn\u0027t make much sense to me. I see no affordance for this operator combo in MSL, so even our newer devices running OS12 should be failing ... but aren\u0027t.",
+      "parentUuid": "eb802668_56f8af33",
+      "revId": "3ef7ae9f9a2009d697383033776e17f3109800e0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
