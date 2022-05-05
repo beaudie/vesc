@@ -88,6 +88,24 @@
       "parentUuid": "001b478a_03d298e1",
       "revId": "ff2dc8699387ff73c23982b995a5e5e63a960b00",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "2f4f3ab6_30334c8a",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1528827
+      },
+      "writtenOn": "2022-05-05T15:38:28Z",
+      "side": 1,
+      "message": "\u003e What exactly went wrong when you didn\u0027t make the vk_format_map.json change?\n\nI hit a failure in `ImageHelper::initExternal()` when it calls `GetVkFormatFromFormatID(angle::FormatID::R8G8B8X8_UNORM)` as there is no entry with such a key.",
+      "parentUuid": "318e2838_d216b59e",
+      "revId": "ff2dc8699387ff73c23982b995a5e5e63a960b00",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
