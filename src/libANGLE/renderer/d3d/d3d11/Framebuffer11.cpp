@@ -294,12 +294,15 @@ angle::Result Framebuffer11::blitImpl(const gl::Context *context,
 
         const auto &colorAttachments = mState.getColorAttachments();
         const auto &drawBufferStates = mState.getDrawBufferStates();
+        UINT readLayer               = readBuffer->type() == GL_TEXTURE &&
+                                 readBuffer->getTexture()->getType() == gl::TextureType::_3D
+                                           ? readBuffer->layer()
+                                           : 0;
 
         for (size_t colorAttachment = 0; colorAttachment < colorAttachments.size();
              colorAttachment++)
         {
             const gl::FramebufferAttachment &drawBuffer = colorAttachments[colorAttachment];
-
             if (drawBuffer.isAttached() && drawBufferStates[colorAttachment] != GL_NONE)
             {
                 RenderTargetD3D *drawRenderTarget = nullptr;
@@ -318,6 +321,10 @@ angle::Result Framebuffer11::blitImpl(const gl::Context *context,
 
                 const bool invertColorDest   = UsePresentPathFast(mRenderer, &drawBuffer);
                 gl::Rectangle actualDestArea = destArea;
+                UINT drawLayer               = drawBuffer.type() == GL_TEXTURE &&
+                                         drawBuffer.getTexture()->getType() == gl::TextureType::_3D
+                                                   ? drawBuffer.layer()
+                                                   : 0;
 
                 const auto &surfaceTextureOffset = mState.getSurfaceTextureOffset();
                 actualDestArea.x                 = actualDestArea.x + surfaceTextureOffset.x;
@@ -330,9 +337,10 @@ angle::Result Framebuffer11::blitImpl(const gl::Context *context,
                     actualDestArea.height = -destArea.height;
                 }
 
-                ANGLE_TRY(mRenderer->blitRenderbufferRect(
-                    context, actualSourceArea, actualDestArea, readRenderTarget, drawRenderTarget,
-                    filter, scissor, blitRenderTarget, false, false));
+                ANGLE_TRY(mRenderer->blitRenderbufferRect(context, actualSourceArea, actualDestArea,
+                                                          readLayer, drawLayer, readRenderTarget,
+                                                          drawRenderTarget, filter, scissor,
+                                                          blitRenderTarget, false, false));
             }
         }
     }
@@ -371,7 +379,7 @@ angle::Result Framebuffer11::blitImpl(const gl::Context *context,
             actualDestArea.height              = -destArea.height;
         }
 
-        ANGLE_TRY(mRenderer->blitRenderbufferRect(context, actualSourceArea, actualDestArea,
+        ANGLE_TRY(mRenderer->blitRenderbufferRect(context, actualSourceArea, actualDestArea, 0, 0,
                                                   readRenderTarget, drawRenderTarget, filter,
                                                   scissor, false, blitDepth, blitStencil));
     }
