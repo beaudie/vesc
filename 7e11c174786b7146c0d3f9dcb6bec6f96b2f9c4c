@@ -16,6 +16,23 @@
       "message": "Jamie or Amirali, PTAL.\nThis blocks Chromium rolls.",
       "revId": "7e11c174786b7146c0d3f9dcb6bec6f96b2f9c4c",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "d59db723_667941ff",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1001921
+      },
+      "writtenOn": "2022-05-06T18:07:34Z",
+      "side": 1,
+      "message": "BTW, I was wondering how tonight\u0027s roll passed, if the Chromium-side change was made 2 days ago.\nTurns out Chromium-\u003eANGLE roll is broken at the moment due to https://chromium-review.googlesource.com/c/angle/angle/+/3627125 which landed today and got ANGLE\u0027s DEPS out of sync with Chromium\u0027s DEPS.",
+      "revId": "7e11c174786b7146c0d3f9dcb6bec6f96b2f9c4c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
