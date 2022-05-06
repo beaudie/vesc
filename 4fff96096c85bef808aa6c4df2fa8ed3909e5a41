@@ -18,6 +18,23 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "34d2ae8f_b96de453",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 13
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1359249
+      },
+      "writtenOn": "2022-05-06T14:30:52Z",
+      "side": 1,
+      "message": "OK",
+      "revId": "4fff96096c85bef808aa6c4df2fa8ed3909e5a41",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "f63716b8_5223a3ce",
@@ -67,6 +84,24 @@
       "side": 1,
       "message": "I believe first case would need a proper comment explaining the \"flag usage\". Second case will need some refactoring. Would you like me to create a CL for that preceding this one?",
       "parentUuid": "67e6da54_60920bce",
+      "revId": "4fff96096c85bef808aa6c4df2fa8ed3909e5a41",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "e5e70ed4_87b77569",
+        "filename": "src/libANGLE/renderer/vulkan/linux/gbm/SurfaceVkGbm.cpp",
+        "patchSetId": 13
+      },
+      "lineNbr": 80,
+      "author": {
+        "id": 1359249
+      },
+      "writtenOn": "2022-05-06T14:30:52Z",
+      "side": 1,
+      "message": "OK. Just didn\u0027t want it to be an issue. If you reuse this mode, then maybe add a note that it doesn\u0027t really need support from Window System.",
+      "parentUuid": "f8fa732c_b28efaa2",
       "revId": "4fff96096c85bef808aa6c4df2fa8ed3909e5a41",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
