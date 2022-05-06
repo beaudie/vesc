@@ -33,6 +33,24 @@
       "message": "Can you assume support for this mode? Utility in SurfaceVk::supportsPresentMode(mode). But, SurfaceVk::initializeImpl must be ran first to get present modes.",
       "revId": "4fff96096c85bef808aa6c4df2fa8ed3909e5a41",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "67e6da54_60920bce",
+        "filename": "src/libANGLE/renderer/vulkan/linux/gbm/SurfaceVkGbm.cpp",
+        "patchSetId": 13
+      },
+      "lineNbr": 80,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-05-06T01:47:48Z",
+      "side": 1,
+      "message": "We can always add our own \"mode\" that does something similar. The GBM surface doesn\u0027t actually call ANI and QP, so this usage is really just a flag, and isn\u0027t otherwise used anywhere.\n\nIt\u0027s fine with me to use this, but if you want to be thorough, you can introduce a \"packed enum\" (similar to `enum class RenderPassLoadOp` e.g), and have `mSwapchainPresentMode` be a value of that type. Then when the VK value is needed, a lookup table would be used. Elsewhere, the enum values are used. Then you can add a non-Vulkan entry to that enum that\u0027d behave identically to DEMAND_REFRESH.",
+      "parentUuid": "f63716b8_5223a3ce",
+      "revId": "4fff96096c85bef808aa6c4df2fa8ed3909e5a41",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
