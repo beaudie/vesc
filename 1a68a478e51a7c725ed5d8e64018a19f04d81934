@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "2d18e3c1_a7beca91",
+        "filename": "src/tests/restricted_traces/README.md",
+        "patchSetId": 10
+      },
+      "lineNbr": 268,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2022-05-06T19:26:30Z",
+      "side": 1,
+      "message": "This should go above the command which actually does the sync (sync_restricted_traces_to_cipd).  You can also mention that sharing over Google Drive is a good way to iterate on the trace contents.",
+      "range": {
+        "startLine": 266,
+        "startChar": 0,
+        "endLine": 268,
+        "endChar": 75
+      },
+      "revId": "1a68a478e51a7c725ed5d8e64018a19f04d81934",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
