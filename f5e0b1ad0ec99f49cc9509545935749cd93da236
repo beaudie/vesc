@@ -1,0 +1,159 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "47728a15_1ffe471c",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 34
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2022-05-06T19:00:17Z",
+      "side": 1,
+      "message": "Sorry for late comment. Now that I understand the motivation of the CL, I think this is a good fix. Thanks a lot for working on this.",
+      "revId": "f5e0b1ad0ec99f49cc9509545935749cd93da236",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b8444151_58302cca",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 34
+      },
+      "lineNbr": 218,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2022-05-06T19:00:17Z",
+      "side": 1,
+      "message": "Do we really need this helper function instead of just call renderPassCommands.isImageWithLayoutTransition(image)? the renderpass not started case is that real usage case that we need to worry about? Even if yes, you can easily add that check in isImageWithLayoutTransition.",
+      "range": {
+        "startLine": 218,
+        "startChar": 5,
+        "endLine": 218,
+        "endChar": 49
+      },
+      "revId": "f5e0b1ad0ec99f49cc9509545935749cd93da236",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "e25f61dd_3080f2f5",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 34
+      },
+      "lineNbr": 432,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2022-05-06T19:00:17Z",
+      "side": 1,
+      "message": "Since this is the main reason you have this CL, could you add some comment here explain the motivation?",
+      "range": {
+        "startLine": 432,
+        "startChar": 40,
+        "endLine": 432,
+        "endChar": 66
+      },
+      "revId": "f5e0b1ad0ec99f49cc9509545935749cd93da236",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "4f0e793f_258c643d",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 34
+      },
+      "lineNbr": 7210,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2022-05-06T19:00:17Z",
+      "side": 1,
+      "message": "This comment is about this entire function, better move to above this function at line 7205",
+      "range": {
+        "startLine": 7208,
+        "startChar": 3,
+        "endLine": 7210,
+        "endChar": 62
+      },
+      "revId": "f5e0b1ad0ec99f49cc9509545935749cd93da236",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "cfcf8590_f912de41",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 34
+      },
+      "lineNbr": 7231,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2022-05-06T19:00:17Z",
+      "side": 1,
+      "message": "What if there is no layout transition in the renderpass, why we don\u0027t need to end enderpass here? If you could add a comment here or at line 7214 \"// This is to handle .... \" explaining what this is try to handle (just like what you did at line 7256), it will be very useful.",
+      "range": {
+        "startLine": 7231,
+        "startChar": 16,
+        "endLine": 7231,
+        "endChar": 60
+      },
+      "revId": "f5e0b1ad0ec99f49cc9509545935749cd93da236",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "46387ed3_dd84fc23",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 34
+      },
+      "lineNbr": 1583,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2022-05-06T19:00:17Z",
+      "side": 1,
+      "message": "Why we only tracking images that have a layout transition?",
+      "range": {
+        "startLine": 1583,
+        "startChar": 8,
+        "endLine": 1583,
+        "endChar": 28
+      },
+      "revId": "f5e0b1ad0ec99f49cc9509545935749cd93da236",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "d17bdbfa_1fd3b04b",
+        "filename": "src/tests/gl_tests/ComputeShaderTest.cpp",
+        "patchSetId": 34
+      },
+      "lineNbr": 4868,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2022-05-06T19:00:17Z",
+      "side": 1,
+      "message": "This test appears exposing an existing bug along with VVL error skip that you added in RendererVk.cpp line 556. It is better to split this into a separate CL with this test and VVL error skip and use http://anglebug.com/7031 as the tracking bug.",
+      "range": {
+        "startLine": 4868,
+        "startChar": 26,
+        "endLine": 4868,
+        "endChar": 51
+      },
+      "revId": "f5e0b1ad0ec99f49cc9509545935749cd93da236",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
