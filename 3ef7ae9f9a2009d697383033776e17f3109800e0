@@ -142,6 +142,24 @@
       "parentUuid": "8f52aa1e_ca71991f",
       "revId": "3ef7ae9f9a2009d697383033776e17f3109800e0",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "2c6947ab_438be771",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1185214
+      },
+      "writtenOn": "2022-05-06T12:56:14Z",
+      "side": 1,
+      "message": "Just to be clear: I think that adding a unit test for this specific case would be redundant with existing CTS coverage. I *think* that we just haven\u0027t found this via CTS because we haven\u0027t run on a device with MSL \u003c 2.3. (I don\u0027t have one available to confirm locally, though).",
+      "parentUuid": "067773af_99f04c4b",
+      "revId": "3ef7ae9f9a2009d697383033776e17f3109800e0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
