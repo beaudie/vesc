@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "6b157492_5ac0bec9",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 588,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-05-06T04:21:57Z",
+      "side": 0,
+      "message": "I recall this used to be important for TBRs, how is it unused now?",
+      "revId": "d075dfe25fe71b3221b3832dcd9a0955acdeecf3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "899329b6_15a0fb0b",
+        "filename": "src/tests/angle_end2end_tests_expectations.txt",
+        "patchSetId": 3
+      },
+      "lineNbr": 625,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-05-06T04:21:57Z",
+      "side": 0,
+      "message": "Need to remove from capture_replay_expectations.txt too",
+      "revId": "d075dfe25fe71b3221b3832dcd9a0955acdeecf3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
