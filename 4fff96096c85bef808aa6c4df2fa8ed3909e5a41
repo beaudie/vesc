@@ -51,6 +51,24 @@
       "parentUuid": "f63716b8_5223a3ce",
       "revId": "4fff96096c85bef808aa6c4df2fa8ed3909e5a41",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "f8fa732c_b28efaa2",
+        "filename": "src/libANGLE/renderer/vulkan/linux/gbm/SurfaceVkGbm.cpp",
+        "patchSetId": 13
+      },
+      "lineNbr": 80,
+      "author": {
+        "id": 1528827
+      },
+      "writtenOn": "2022-05-06T13:15:24Z",
+      "side": 1,
+      "message": "I believe first case would need a proper comment explaining the \"flag usage\". Second case will need some refactoring. Would you like me to create a CL for that preceding this one?",
+      "parentUuid": "67e6da54_60920bce",
+      "revId": "4fff96096c85bef808aa6c4df2fa8ed3909e5a41",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
