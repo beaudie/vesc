@@ -7,6 +7,7 @@
 // KTXCompressedTextureTest.cpp: Tests of reading compressed texture stored in
 // .ktx formats
 
+#include "image_util/loadimage.h"
 #include "test_utils/ANGLETest.h"
 #include "test_utils/gl_raii.h"
 
@@ -53,6 +54,25 @@ TEST_P(KTXCompressedTextureTest, CompressedTexImageETC1)
     glUniform1i(textureUniformLocation, 0);
     drawQuad(textureProgram.get(), essl1_shaders::PositionAttrib(), 0.5f);
 
+    const size_t decompressedPixelCount    = ktx_etc1_width * ktx_etc1_height;
+    const size_t decompressedBytesPerPixel = 4;
+
+    uint8_t decompressedTextureData[decompressedPixelCount * decompressedBytesPerPixel] = {0};
+    LoadETC1RGB8ToRGBA8(ktx_etc1_width, ktx_etc1_height, 1, ktx_etc1_data,
+                        ktx_etc1_size / ktx_etc1_height, 0, decompressedTextureData,
+                        decompressedBytesPerPixel * ktx_etc1_width, 1);
+
+    const size_t comparePixelX = ktx_etc1_width / 2;
+    const size_t comparePixelY = ktx_etc1_height / 2;
+    const size_t decompressedPixelIndex =
+        ktx_etc1_width * decompressedBytesPerPixel * (ktx_etc1_height - comparePixelY - 1) +
+        comparePixelX * decompressedBytesPerPixel;
+    const GLColor expect(decompressedTextureData[decompressedPixelIndex],
+                         decompressedTextureData[decompressedPixelIndex + 1],
+                         decompressedTextureData[decompressedPixelIndex + 2],
+                         decompressedTextureData[decompressedPixelIndex + 3]);
+
+    EXPECT_PIXEL_COLOR_EQ(comparePixelX, comparePixelY, expect);
     EXPECT_GL_NO_ERROR();
 }
 
