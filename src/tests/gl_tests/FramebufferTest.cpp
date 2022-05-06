@@ -400,6 +400,84 @@ class FramebufferTest_ES3 : public ANGLETest
         setConfigStencilBits(8);
     }
 
+    // Test blitting between 3D textures and 2D array textures
+    void test3DBlit(GLenum sourceTarget, GLenum destTarget)
+    {
+
+        constexpr int kTexWidth  = 2;
+        constexpr int kTexHeight = 2;
+        constexpr int kTexDepth  = 2;
+        glViewport(0, 0, kTexWidth, kTexHeight);
+
+        std::vector<GLColor> sourceData(kTexWidth * kTexHeight * kTexDepth);
+        for (int z = 0; z < kTexDepth; ++z)
+        {
+            for (int y = 0; y < kTexHeight; ++y)
+            {
+                for (int x = 0; x < kTexWidth; ++x)
+                {
+                    int index         = x + kTexWidth * (y + z * kTexDepth);
+                    sourceData[index] = index;
+                }
+            }
+        }
+
+        // Create a source 3D texture and FBO.
+        GLTexture sourceTexture;
+        glBindTexture(sourceTarget, sourceTexture);
+        glTexImage3D(sourceTarget, 0, GL_RGBA8, kTexWidth, kTexHeight, kTexDepth, 0, GL_RGBA,
+                     GL_UNSIGNED_BYTE, sourceData.data());
+
+        std::vector<GLColor> destData(kTexWidth * kTexHeight * kTexDepth);
+        for (size_t i = 0; i < destData.size(); ++i)
+        {
+            destData[i] = destData.size() - i;
+        }
+
+        // Create a dest texture and FBO.
+        GLTexture destTexture;
+        glBindTexture(destTarget, destTexture);
+        glTexImage3D(destTarget, 0, GL_RGBA8, kTexWidth, kTexHeight, kTexDepth, 0, GL_RGBA,
+                     GL_UNSIGNED_BYTE, destData.data());
+
+        for (int z = 0; z < kTexDepth; ++z)
+        {
+            ASSERT_GL_NO_ERROR();
+            GLFramebuffer sourceFBO;
+            glBindFramebuffer(GL_READ_FRAMEBUFFER, sourceFBO);
+            glFramebufferTextureLayer(GL_READ_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, sourceTexture, 0,
+                                      z);
+            ASSERT_GL_NO_ERROR();
+
+            GLFramebuffer destFBO;
+            glBindFramebuffer(GL_DRAW_FRAMEBUFFER, destFBO);
+            glFramebufferTextureLayer(GL_DRAW_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, destTexture, 0, z);
+            ASSERT_GL_NO_ERROR();
+
+            glBlitFramebuffer(0, 0, kTexWidth, kTexHeight, 0, 0, kTexWidth, kTexHeight,
+                              GL_COLOR_BUFFER_BIT, GL_NEAREST);
+        }
+
+        ASSERT_GL_NO_ERROR();
+
+        for (int z = 0; z < kTexDepth; ++z)
+        {
+            GLFramebuffer readFBO;
+            glBindFramebuffer(GL_READ_FRAMEBUFFER, readFBO);
+            glFramebufferTextureLayer(GL_READ_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, destTexture, 0, z);
+            ASSERT_GL_NO_ERROR();
+
+            for (int y = 0; y < kTexHeight; ++y)
+            {
+                for (int x = 0; x < kTexWidth; ++x)
+                {
+                    int index = x + kTexWidth * (y + z * kTexDepth);
+                    EXPECT_PIXEL_COLOR_EQ(x, y, index);
+                }
+            }
+        }
+    }
+
     static constexpr GLsizei kWidth  = 64;
     static constexpr GLsizei kHeight = 256;
 };
@@ -1946,6 +2024,36 @@ TEST_P(FramebufferTest_ES31, BasicDrawToYFlippedFBO)
     EXPECT_PIXEL_NEAR(0, kSize - 1, kHalfPixelGradient, kHalfPixelGradient, 0, 255, 1.0);
     EXPECT_PIXEL_NEAR(kSize - 1, kSize - 1, 255 - kHalfPixelGradient, kHalfPixelGradient, 0, 255,
                       1.0);
+}
+
+// Test blitting a 3D texture to a 3D texture
+TEST_P(FramebufferTest_ES3, Blit3D)
+{
+    ANGLE_SKIP_TEST_IF(IsVulkan());
+
+    test3DBlit(GL_TEXTURE_3D, GL_TEXTURE_3D);
+}
+
+// Test blitting a 2D array texture to a 2D array texture
+TEST_P(FramebufferTest_ES3, Blit2DArray)
+{
+    test3DBlit(GL_TEXTURE_2D_ARRAY, GL_TEXTURE_2D_ARRAY);
+}
+
+// Test blitting a 3D texture to a 2D array texture
+TEST_P(FramebufferTest_ES3, Blit3DTo2DArray)
+{
+    ANGLE_SKIP_TEST_IF(IsVulkan());
+
+    test3DBlit(GL_TEXTURE_3D, GL_TEXTURE_2D_ARRAY);
+}
+
+// Test blitting a 2D array texture to a 3D texture
+TEST_P(FramebufferTest_ES3, Blit2DArrayTo3D)
+{
+    ANGLE_SKIP_TEST_IF(IsVulkan());
+
+    test3DBlit(GL_TEXTURE_2D_ARRAY, GL_TEXTURE_3D);
 }
 
 // Test resolving a multisampled texture with blit
