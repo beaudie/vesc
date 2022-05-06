@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "72f0d2dc_760a6f4a",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 6
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2022-05-06T03:13:55Z",
+      "side": 1,
+      "message": "Looks like the trace is using GL_EXT_texture_buffer:\n\n```\n[ RUN      ] TracePerfTest.Run/vulkan_mortal_kombat\nAPI, Error, High: Extension is not enabled.\n../../src/tests/perf_tests/ANGLEPerfTest.h(125): error: Failed\nFailing test because of unexpected error:\nExtension is not enabled.\n\nAPI, Error, High: Texture buffer extension not available.\n```\n\nYuxin, you\u0027ll need to add a new check for it in TracePerfTest.cpp.",
+      "revId": "65a23d39a6a9b370c5e4b80705b2da362d431856",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
