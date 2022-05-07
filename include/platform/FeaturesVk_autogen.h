@@ -608,6 +608,11 @@ struct FeaturesVk : FeatureSetBase
         "supportsFragmentShadingRate", FeatureCategory::VulkanFeatures,
         "VkDevice supports VK_KHR_fragment_shading_rate extension", &members,
         "http://anglebug.com/7172"};
+
+    FeatureInfo forceContinuousRefreshOnSharedPresent = {
+        "forceContinuousRefreshOnSharedPresent", FeatureCategory::VulkanFeatures,
+        "Force to create vulkan swapchain with continuous refresh on shared present", &members,
+        "https://issuetracker.google.com/229267970"};
 };
 
 inline FeaturesVk::FeaturesVk()  = default;

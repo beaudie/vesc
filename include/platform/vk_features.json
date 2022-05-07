@@ -914,6 +914,15 @@
                 "VkDevice supports VK_KHR_fragment_shading_rate extension"
             ],
             "issue": "http://anglebug.com/7172"
+        },
+
+        {
+            "name": "force_continuous_refresh_on_shared_present",
+            "category": "Features",
+            "description": [
+                "Force to create vulkan swapchain with continuous refresh on shared present"
+            ],
+            "issue": "https://issuetracker.google.com/229267970"
         }
     ]
 }
