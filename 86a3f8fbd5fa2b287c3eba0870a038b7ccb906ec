@@ -95,6 +95,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "f9d6ac63_75f81e5b",
+        "filename": "src/libANGLE/renderer/vulkan/TextureVk.cpp",
+        "patchSetId": 17
+      },
+      "lineNbr": 460,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-05-07T02:25:55Z",
+      "side": 1,
+      "message": "Yes. Let\u0027s go with optimizing the safer case first (image has at least 2 levels), then follow up with optimizing for single-level images. I\u0027m worried that may need more extensive testing to make sure no app is degraded by the eager image allocation.",
+      "parentUuid": "0b6c54b0_738631ad",
+      "range": {
+        "startLine": 456,
+        "startChar": 4,
+        "endLine": 460,
+        "endChar": 5
+      },
+      "revId": "86a3f8fbd5fa2b287c3eba0870a038b7ccb906ec",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "27742191_a4d8d963",
         "filename": "src/libANGLE/renderer/vulkan/TextureVk.cpp",
         "patchSetId": 17
