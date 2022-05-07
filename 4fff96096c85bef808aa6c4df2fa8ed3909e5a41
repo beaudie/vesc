@@ -104,6 +104,24 @@
       "parentUuid": "f8fa732c_b28efaa2",
       "revId": "4fff96096c85bef808aa6c4df2fa8ed3909e5a41",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "ad06724c_03376a62",
+        "filename": "src/libANGLE/renderer/vulkan/linux/gbm/SurfaceVkGbm.cpp",
+        "patchSetId": 13
+      },
+      "lineNbr": 80,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-05-07T02:06:13Z",
+      "side": 1,
+      "message": "\u003e Second case will need some refactoring. Would you like me to create a CL for that preceding this one\n\nIf you have the time, yes that would be a nice clean up (even as a follow up)",
+      "parentUuid": "e5e70ed4_87b77569",
+      "revId": "4fff96096c85bef808aa6c4df2fa8ed3909e5a41",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
