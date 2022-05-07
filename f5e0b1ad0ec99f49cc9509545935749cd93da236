@@ -41,6 +41,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "88521aff_fc118794",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 34
+      },
+      "lineNbr": 218,
+      "author": {
+        "id": 1524687
+      },
+      "writtenOn": "2022-05-07T13:52:19Z",
+      "side": 1,
+      "message": "Hi Charlie, this change is suited for the current renderpass which include implicit image transition layout not be flushed when switch to outside commandbuffer, so here seems we need to confirm the renderpass is already started?\nAnd the form of *IsRenderPassStartedAndTransitionsImageLayout* is considered to similar with *IsRenderPassStartedAndUsesImage*, because both of the two interfaces seems share the similar usage occasion.",
+      "parentUuid": "b8444151_58302cca",
+      "range": {
+        "startLine": 218,
+        "startChar": 5,
+        "endLine": 218,
+        "endChar": 49
+      },
+      "revId": "f5e0b1ad0ec99f49cc9509545935749cd93da236",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "e25f61dd_3080f2f5",
@@ -54,6 +78,30 @@
       "writtenOn": "2022-05-06T19:00:17Z",
       "side": 1,
       "message": "Since this is the main reason you have this CL, could you add some comment here explain the motivation?",
+      "range": {
+        "startLine": 432,
+        "startChar": 40,
+        "endLine": 432,
+        "endChar": 66
+      },
+      "revId": "f5e0b1ad0ec99f49cc9509545935749cd93da236",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "558ac2f4_2464bb97",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 34
+      },
+      "lineNbr": 432,
+      "author": {
+        "id": 1524687
+      },
+      "writtenOn": "2022-05-07T13:52:19Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "e25f61dd_3080f2f5",
       "range": {
         "startLine": 432,
         "startChar": 40,
@@ -87,6 +135,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "3ce20bac_0b200a5f",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 34
+      },
+      "lineNbr": 7210,
+      "author": {
+        "id": 1524687
+      },
+      "writtenOn": "2022-05-07T13:52:19Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "4f0e793f_258c643d",
+      "range": {
+        "startLine": 7208,
+        "startChar": 3,
+        "endLine": 7210,
+        "endChar": 62
+      },
+      "revId": "f5e0b1ad0ec99f49cc9509545935749cd93da236",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "cfcf8590_f912de41",
@@ -100,6 +172,30 @@
       "writtenOn": "2022-05-06T19:00:17Z",
       "side": 1,
       "message": "What if there is no layout transition in the renderpass, why we don\u0027t need to end enderpass here? If you could add a comment here or at line 7214 \"// This is to handle .... \" explaining what this is try to handle (just like what you did at line 7256), it will be very useful.",
+      "range": {
+        "startLine": 7231,
+        "startChar": 16,
+        "endLine": 7231,
+        "endChar": 60
+      },
+      "revId": "f5e0b1ad0ec99f49cc9509545935749cd93da236",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "4340aacc_b4b17269",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 34
+      },
+      "lineNbr": 7231,
+      "author": {
+        "id": 1524687
+      },
+      "writtenOn": "2022-05-07T13:52:19Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "cfcf8590_f912de41",
       "range": {
         "startLine": 7231,
         "startChar": 16,
@@ -133,6 +229,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "905ee2a7_dd2252aa",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 34
+      },
+      "lineNbr": 1583,
+      "author": {
+        "id": 1524687
+      },
+      "writtenOn": "2022-05-07T13:52:19Z",
+      "side": 1,
+      "message": "This tracking is mainly used for image read operations. Seems not all of the read operations need to do implicit sync, except a layout transition happens.",
+      "parentUuid": "46387ed3_dd84fc23",
+      "range": {
+        "startLine": 1583,
+        "startChar": 8,
+        "endLine": 1583,
+        "endChar": 28
+      },
+      "revId": "f5e0b1ad0ec99f49cc9509545935749cd93da236",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "d17bdbfa_1fd3b04b",
@@ -146,6 +266,30 @@
       "writtenOn": "2022-05-06T19:00:17Z",
       "side": 1,
       "message": "This test appears exposing an existing bug along with VVL error skip that you added in RendererVk.cpp line 556. It is better to split this into a separate CL with this test and VVL error skip and use http://anglebug.com/7031 as the tracking bug.",
+      "range": {
+        "startLine": 4868,
+        "startChar": 26,
+        "endLine": 4868,
+        "endChar": 51
+      },
+      "revId": "f5e0b1ad0ec99f49cc9509545935749cd93da236",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "6161449a_ba02a86f",
+        "filename": "src/tests/gl_tests/ComputeShaderTest.cpp",
+        "patchSetId": 34
+      },
+      "lineNbr": 4868,
+      "author": {
+        "id": 1524687
+      },
+      "writtenOn": "2022-05-07T13:52:19Z",
+      "side": 1,
+      "message": "Ack. I remove the code (this test and related VVL error skip) for temporary, and will setup a new CL for it after current change be merged.",
+      "parentUuid": "d17bdbfa_1fd3b04b",
       "range": {
         "startLine": 4868,
         "startChar": 26,
