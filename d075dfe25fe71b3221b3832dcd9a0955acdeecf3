@@ -36,6 +36,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "452a70d9_cfc04538",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 588,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-05-07T02:16:11Z",
+      "side": 0,
+      "message": "Ack, looks like it was a hack",
+      "parentUuid": "2fc613c5_2ae84d15",
+      "revId": "d075dfe25fe71b3221b3832dcd9a0955acdeecf3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "899329b6_15a0fb0b",
