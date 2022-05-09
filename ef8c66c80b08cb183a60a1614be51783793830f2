@@ -144,6 +144,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "60719bf2_eca5e065",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 8
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1340649
+      },
+      "writtenOn": "2022-05-09T18:12:51Z",
+      "side": 1,
+      "message": "\u003e let\u0027s just take out this null pointer extra validation stuff ... Does that seem good?\n\nnot sure. If we remove the validation error then drawarrays will continue and we will end up with a nullptr dereference in `StreamVertexData`\n\nif you mean -\n remove validation check + silent return in `StreamVertexData` if `(srcBase \u003d\u003d nullptr)`\n \nim perfectly fine with that",
+      "parentUuid": "618f41e4_371107da",
+      "revId": "ef8c66c80b08cb183a60a1614be51783793830f2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "71aa9fa6_91a293a7",
         "filename": "src/tests/gl_tests/VertexAttributeTest.cpp",
         "patchSetId": 8
