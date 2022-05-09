@@ -83,7 +83,7 @@ enum class CommandID : uint16_t
     SetViewport,
     WaitEvents,
     WriteTimestamp,
-    SetShadingRate,
+    SetFragmentShadingRate,
 };
 
 #define VERIFY_4_BYTE_ALIGNMENT(StructName) \
@@ -449,12 +449,12 @@ struct WriteTimestampParams
 };
 VERIFY_4_BYTE_ALIGNMENT(WriteTimestampParams)
 
-struct SetShadingRateParams
+struct SetFragmentShadingRateParams
 {
     uint16_t fragmentWidth;
     uint16_t fragmentHeight;
 };
-VERIFY_4_BYTE_ALIGNMENT(SetShadingRateParams)
+VERIFY_4_BYTE_ALIGNMENT(SetFragmentShadingRateParams)
 
 // Header for every cmd in custom cmd buffer
 struct CommandHeader
@@ -699,7 +699,8 @@ class SecondaryCommandBuffer final : angle::NonCopyable
                         const QueryPool &queryPool,
                         uint32_t query);
 
-    void setShadingRate(const VkExtent2D *fragmentSize, VkFragmentShadingRateCombinerOpKHR ops[2]);
+    void setFragmentShadingRate(const VkExtent2D *fragmentSize,
+                                VkFragmentShadingRateCombinerOpKHR ops[2]);
 
     // No-op for compatibility
     VkResult end() { return VK_SUCCESS; }
@@ -1525,8 +1526,9 @@ ANGLE_INLINE void SecondaryCommandBuffer::writeTimestamp(VkPipelineStageFlagBits
     paramStruct->query         = query;
 }
 
-ANGLE_INLINE void SecondaryCommandBuffer::setShadingRate(const VkExtent2D *fragmentSize,
-                                                         VkFragmentShadingRateCombinerOpKHR ops[2])
+ANGLE_INLINE void SecondaryCommandBuffer::setFragmentShadingRate(
+    const VkExtent2D *fragmentSize,
+    VkFragmentShadingRateCombinerOpKHR ops[2])
 {
     ASSERT(fragmentSize != nullptr);
 
@@ -1538,8 +1540,8 @@ ANGLE_INLINE void SecondaryCommandBuffer::setShadingRate(const VkExtent2D *fragm
     ASSERT(fragmentSize->width <= 4);
     ASSERT(fragmentSize->height <= 4);
 
-    SetShadingRateParams *paramStruct =
-        initCommand<SetShadingRateParams>(CommandID::SetShadingRate);
+    SetFragmentShadingRateParams *paramStruct =
+        initCommand<SetFragmentShadingRateParams>(CommandID::SetFragmentShadingRate);
     paramStruct->fragmentWidth  = static_cast<uint16_t>(fragmentSize->width);
     paramStruct->fragmentHeight = static_cast<uint16_t>(fragmentSize->height);
 }

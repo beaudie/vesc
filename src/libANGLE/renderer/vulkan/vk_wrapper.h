@@ -344,7 +344,8 @@ class CommandBuffer : public WrappedObject<CommandBuffer, VkCommandBuffer>
     void writeTimestamp(VkPipelineStageFlagBits pipelineStage,
                         const QueryPool &queryPool,
                         uint32_t query);
-    void setShadingRate(const VkExtent2D *fragmentSize, VkFragmentShadingRateCombinerOpKHR ops[2]);
+    void setFragmentShadingRate(const VkExtent2D *fragmentSize,
+                                VkFragmentShadingRateCombinerOpKHR ops[2]);
 
     // VK_EXT_transform_feedback
     void beginTransformFeedback(uint32_t firstCounterBuffer,
@@ -1036,8 +1037,8 @@ ANGLE_INLINE void CommandBuffer::writeTimestamp(VkPipelineStageFlagBits pipeline
     vkCmdWriteTimestamp(mHandle, pipelineStage, queryPool.getHandle(), query);
 }
 
-ANGLE_INLINE void CommandBuffer::setShadingRate(const VkExtent2D *fragmentSize,
-                                                VkFragmentShadingRateCombinerOpKHR ops[2])
+ANGLE_INLINE void CommandBuffer::setFragmentShadingRate(const VkExtent2D *fragmentSize,
+                                                        VkFragmentShadingRateCombinerOpKHR ops[2])
 {
     ASSERT(valid() && fragmentSize != nullptr);
     vkCmdSetFragmentShadingRateKHR(mHandle, fragmentSize, ops);
