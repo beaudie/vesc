@@ -37,6 +37,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "4b76796a_c117d790",
+        "filename": "extensions/ANGLE_read_only_depth_stencil_feedback_loops.txt",
+        "patchSetId": 2
+      },
+      "lineNbr": 59,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2022-05-09T17:00:11Z",
+      "side": 1,
+      "message": "It only applies to depth writes, so let\u0027s leave it like that. Can you find the place in the spec which implicitly disables writes when the test is disabled?\n\nANGLE doesn\u0027t handle the stencil currently so I left it like so despite the ext name.",
+      "parentUuid": "29588737_94a8376d",
+      "revId": "fac2bf5bc85a26ae67513aca8229f032ec2f23e7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "7eb19ac3_4aa68d00",
         "filename": "extensions/ANGLE_read_only_depth_stencil_feedback_loops.txt",
         "patchSetId": 2
