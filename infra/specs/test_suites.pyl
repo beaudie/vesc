@@ -688,8 +688,8 @@
       'angle_perftests': {
         'args': [
           '--log=debug',
-          '--smoke-test-mode',
           '--show-test-stdout',
+          '--filter=*vulkan_pubg_mobile_skydive*',
         ],
         'merge': {
           'script': '//scripts/process_angle_perf_results.py',
@@ -699,7 +699,7 @@
           ],
         },
         'swarming': {
-          'shards': 2,
+          'shards': 1,
         },
         'android_swarming': {
           'shards': 6,

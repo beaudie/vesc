@@ -482,8 +482,8 @@
       {
         "args": [
           "--log=debug",
-          "--smoke-test-mode",
-          "--show-test-stdout"
+          "--show-test-stdout",
+          "--filter=*vulkan_pubg_mobile_skydive*"
         ],
         "isolate_name": "angle_perftests",
         "merge": {
@@ -1089,8 +1089,8 @@
       {
         "args": [
           "--log=debug",
-          "--smoke-test-mode",
-          "--show-test-stdout"
+          "--show-test-stdout",
+          "--filter=*vulkan_pubg_mobile_skydive*"
         ],
         "isolate_name": "angle_perftests",
         "merge": {
@@ -1110,8 +1110,7 @@
               "pool": "chromium.tests.gpu"
             }
           ],
-          "service_account": "chromium-tester@chops-service-accounts.iam.gserviceaccount.com",
-          "shards": 2
+          "service_account": "chromium-tester@chops-service-accounts.iam.gserviceaccount.com"
         },
         "test_id_prefix": "ninja://src/tests:angle_perftests/"
       },
@@ -1739,8 +1738,8 @@
       {
         "args": [
           "--log=debug",
-          "--smoke-test-mode",
-          "--show-test-stdout"
+          "--show-test-stdout",
+          "--filter=*vulkan_pubg_mobile_skydive*"
         ],
         "isolate_name": "angle_perftests",
         "merge": {
@@ -1760,8 +1759,7 @@
               "pool": "chromium.tests.gpu"
             }
           ],
-          "service_account": "chromium-tester@chops-service-accounts.iam.gserviceaccount.com",
-          "shards": 2
+          "service_account": "chromium-tester@chops-service-accounts.iam.gserviceaccount.com"
         },
         "test_id_prefix": "ninja://src/tests:angle_perftests/"
       },
@@ -4385,8 +4383,8 @@
       {
         "args": [
           "--log=debug",
-          "--smoke-test-mode",
-          "--show-test-stdout"
+          "--show-test-stdout",
+          "--filter=*vulkan_pubg_mobile_skydive*"
         ],
         "isolate_name": "angle_perftests",
         "merge": {
@@ -4406,8 +4404,7 @@
               "pool": "chromium.tests.gpu"
             }
           ],
-          "service_account": "chromium-tester@chops-service-accounts.iam.gserviceaccount.com",
-          "shards": 2
+          "service_account": "chromium-tester@chops-service-accounts.iam.gserviceaccount.com"
         },
         "test_id_prefix": "ninja://src/tests:angle_perftests/"
       },
@@ -5138,8 +5135,8 @@
       {
         "args": [
           "--log=debug",
-          "--smoke-test-mode",
-          "--show-test-stdout"
+          "--show-test-stdout",
+          "--filter=*vulkan_pubg_mobile_skydive*"
         ],
         "isolate_name": "angle_perftests",
         "merge": {
@@ -5159,8 +5156,7 @@
               "pool": "chromium.tests.gpu"
             }
           ],
-          "service_account": "chromium-tester@chops-service-accounts.iam.gserviceaccount.com",
-          "shards": 2
+          "service_account": "chromium-tester@chops-service-accounts.iam.gserviceaccount.com"
         },
         "test_id_prefix": "ninja://src/tests:angle_perftests/"
       },
