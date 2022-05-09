@@ -180,6 +180,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "a6a4924a_78a90cfa",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 8
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1340649
+      },
+      "writtenOn": "2022-05-09T20:53:26Z",
+      "side": 1,
+      "message": "\u003e the way a \"real\" GL driver does it\n\nthe app from which the trace was collected (and the app which showed the issue on our side) both work on pixel devices (qualcomm i believe). I dont think the fact that the attribute is referenced in the shader should matter since it could be that the attribute is referenced but the value never gets used in any meaningful way in the case where client did not set a valid pointer to that attribute. For compatibility with larger apps and to match other commercial GLES drivers ANGLE should just be a bit more accommodative (as has been done for many other cases). I am fine if you want me to featurize this workaround.",
+      "parentUuid": "580e6d76_c5e4c5e4",
+      "revId": "ef8c66c80b08cb183a60a1614be51783793830f2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "71aa9fa6_91a293a7",
         "filename": "src/tests/gl_tests/VertexAttributeTest.cpp",
         "patchSetId": 8
