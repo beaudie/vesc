@@ -16,6 +16,24 @@
       "message": "This has been a source of confusion for me as well in the past. I wish we\u0027d make this an explicit design that front-end state should be up-to-date before the backend is called.",
       "revId": "6c1598a9330730cd4667cb50ff8ff3a577d7774a",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "e91f66ea_1606aba4",
+        "filename": "src/libANGLE/Texture.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 1716,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2022-05-09T16:37:19Z",
+      "side": 1,
+      "message": "It was an attempt to make a robust failure system where we\u0027d handle back-end failures. It was never tested and is pretty hard to test anyway.",
+      "parentUuid": "6e949f8e_92fa19c0",
+      "revId": "6c1598a9330730cd4667cb50ff8ff3a577d7774a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
