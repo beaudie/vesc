@@ -346,6 +346,7 @@ def RunTests(test_suite, args, stdoutfile=None, output_dir=None, log_output=True
 
 
 def GetTraceFromTestName(test_name):
+    # test
     m = re.search(r'TracePerfTest.Run/(native|vulkan)_(.*)', test_name)
     if m:
         return m.group(2)
