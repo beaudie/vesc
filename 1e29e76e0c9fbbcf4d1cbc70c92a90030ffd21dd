@@ -256,6 +256,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "d602a50b_158fc76e",
+        "filename": "src/libANGLE/capture/FrameCapture.cpp",
+        "patchSetId": 8
+      },
+      "lineNbr": 6879,
+      "author": {
+        "id": 1491823
+      },
+      "writtenOn": "2022-05-09T11:31:14Z",
+      "side": 1,
+      "message": "I\u0027ve changed the code to oevrride the calls to eglCreateImage and eglDestroyImage. It is a bit different from how it is implemented in TracePerfTests, because there resolving the function pointers is different in the sense that apparently it doesn\u0027t use the system_tools provided Library function. \n\nSo I added the possibility to override the function pointer when loading the EGL library, so that the display variable can be overridden in the test harness.",
+      "parentUuid": "98e6f137_bbc46cea",
+      "range": {
+        "startLine": 6856,
+        "startChar": 0,
+        "endLine": 6879,
+        "endChar": 5
+      },
+      "revId": "1e29e76e0c9fbbcf4d1cbc70c92a90030ffd21dd",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "94e3082f_7757ca56",
         "filename": "src/libANGLE/capture/FrameCapture.cpp",
         "patchSetId": 8
@@ -301,6 +325,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "e2a21984_54420d7e",
+        "filename": "src/libANGLE/capture/FrameCapture.cpp",
+        "patchSetId": 8
+      },
+      "lineNbr": 8029,
+      "author": {
+        "id": 1491823
+      },
+      "writtenOn": "2022-05-09T11:31:14Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "bc1d2672_2930a2aa",
+      "range": {
+        "startLine": 8008,
+        "startChar": 0,
+        "endLine": 8029,
+        "endChar": 1
+      },
+      "revId": "1e29e76e0c9fbbcf4d1cbc70c92a90030ffd21dd",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "2c2d9e08_9fc70026",
@@ -314,6 +362,30 @@
       "writtenOn": "2022-05-02T12:56:52Z",
       "side": 1,
       "message": "please use a capture macro like ANGLE_CAPTURE.\n\nHow about we rename ANGLE_CAPTURE to ANGLE_GL_CAPTURE/ANGLE_CAPTURE_GL and make a similar one for EGL? The rename should probably be a split CL because of the boilerplate change.",
+      "range": {
+        "startLine": 160,
+        "startChar": 11,
+        "endLine": 160,
+        "endChar": 32
+      },
+      "revId": "1e29e76e0c9fbbcf4d1cbc70c92a90030ffd21dd",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "c18974ef_fbd9425a",
+        "filename": "src/libGLESv2/egl_stubs.cpp",
+        "patchSetId": 8
+      },
+      "lineNbr": 160,
+      "author": {
+        "id": 1491823
+      },
+      "writtenOn": "2022-05-09T11:31:14Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "2c2d9e08_9fc70026",
       "range": {
         "startLine": 160,
         "startChar": 11,

@@ -48,6 +48,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "8de43d7c_9a72d9cd",
+        "filename": "src/libANGLE/capture/FrameCapture.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 7643,
+      "author": {
+        "id": 1491823
+      },
+      "writtenOn": "2022-05-09T11:31:14Z",
+      "side": 1,
+      "message": "Fixed.",
+      "parentUuid": "a4ab5bad_33b1e10f",
+      "range": {
+        "startLine": 7642,
+        "startChar": 0,
+        "endLine": 7643,
+        "endChar": 80
+      },
+      "revId": "a8bf12ba8c9caa66a8d979818eb74d28db58c69e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "de391dbf_89b6c834",
