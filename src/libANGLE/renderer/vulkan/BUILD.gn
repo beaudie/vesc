@@ -113,6 +113,8 @@ _vulkan_backend_sources = [
   "vk_internal_shaders_autogen.cpp",
   "vk_internal_shaders_autogen.h",
   "vk_mandatory_format_support_table_autogen.cpp",
+  "vk_surface_utils.cpp",
+  "vk_surface_utils.h",
   "vk_utils.cpp",
   "vk_utils.h",
   "vk_wrapper.h",

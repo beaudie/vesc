@@ -12,6 +12,7 @@
 #include "common/MemoryBuffer.h"
 #include "libANGLE/renderer/vulkan/vk_cache_utils.h"
 #include "libANGLE/renderer/vulkan/vk_format_utils.h"
+#include "libANGLE/renderer/vulkan/vk_surface_utils.h"
 
 #include <functional>
 
