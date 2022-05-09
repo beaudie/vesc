@@ -1,6 +1,23 @@
 {
   "comments": [
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "c6a15c43_8936727a",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2022-05-09T15:24:39Z",
+      "side": 1,
+      "message": "PTAL.\n\nSorry there\u0027s no test for this one. The \"HLSL: Disambiguate functions that have int/uint parameters.\" patch reproduces this issue but we don\u0027t have an easy way to force the backend to fail compilation right now.",
+      "revId": "4f9263afe241dbff6bd8b8fcad3c9c192c26c793",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "a3afe422_21d86e76",
@@ -14,6 +31,24 @@
       "writtenOn": "2022-05-07T01:54:09Z",
       "side": 1,
       "message": "Should we add a default arg so existing callsites a) don\u0027t have to change and b) documents more easily?",
+      "revId": "4f9263afe241dbff6bd8b8fcad3c9c192c26c793",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "671f9e12_3772d693",
+        "filename": "src/libANGLE/ProgramExecutable.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 116,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2022-05-09T15:24:39Z",
+      "side": 1,
+      "message": "I prefer not to use default args because it\u0027s often too easy to miss that the arg exists and adding new parameters later can sometimes make old call sites use unintended arguments.",
+      "parentUuid": "a3afe422_21d86e76",
       "revId": "4f9263afe241dbff6bd8b8fcad3c9c192c26c793",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
