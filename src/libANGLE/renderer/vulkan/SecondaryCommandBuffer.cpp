@@ -122,8 +122,8 @@ const char *GetCommandString(CommandID id)
             return "WaitEvents";
         case CommandID::WriteTimestamp:
             return "WriteTimestamp";
-        case CommandID::SetShadingRate:
-            return "SetShadingRate";
+        case CommandID::SetFragmentShadingRate:
+            return "SetFragmentShadingRate";
         default:
             // Need this to work around MSVC warning 4715.
             UNREACHABLE();
@@ -577,10 +577,10 @@ void SecondaryCommandBuffer::executeCommands(PrimaryCommandBuffer *primary)
                                         params->query);
                     break;
                 }
-                case CommandID::SetShadingRate:
+                case CommandID::SetFragmentShadingRate:
                 {
-                    const SetShadingRateParams *params =
-                        getParamPtr<SetShadingRateParams>(currentCommand);
+                    const SetFragmentShadingRateParams *params =
+                        getParamPtr<SetFragmentShadingRateParams>(currentCommand);
                     const VkExtent2D fragmentSize = {params->fragmentWidth, params->fragmentHeight};
                     const VkFragmentShadingRateCombinerOpKHR ops[2] = {
                         VK_FRAGMENT_SHADING_RATE_COMBINER_OP_KEEP_KHR,
