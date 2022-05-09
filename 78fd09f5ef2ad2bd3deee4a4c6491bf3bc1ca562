@@ -33,6 +33,24 @@
       "message": "Oh, wow, I didn\u0027t know this bot was causing so many troubles.\nThanks for cleaning this up!",
       "revId": "78fd09f5ef2ad2bd3deee4a4c6491bf3bc1ca562",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "f9145a78_9532652d",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-05-09T20:48:01Z",
+      "side": 1,
+      "message": "No you understand why I was so annoyed with it :)\n\nThis clean up is definitely not exhaustive. I mainly care about the internal shader optimizations that were disabled.",
+      "parentUuid": "778083a7_80f56d81",
+      "revId": "78fd09f5ef2ad2bd3deee4a4c6491bf3bc1ca562",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
