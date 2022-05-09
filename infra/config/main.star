@@ -297,7 +297,7 @@ def angle_builder(name, cpu):
     )
 
     # Do not include perf tests in "try".
-    if not is_perf:
+    if True:
         luci.list_view_entry(
             list_view = "try",
             builder = "try/" + name,
