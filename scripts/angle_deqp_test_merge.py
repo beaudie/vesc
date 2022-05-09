@@ -1,14 +1,16 @@
-#!/usr/bin/env python
-#
 # Copyright 2021 The ANGLE Project Authors. All rights reserved.
 # Use of this source code is governed by a BSD-style license that can be
 # found in the LICENSE file.
 """ Merges dEQP sharded test results in the ANGLE testing infrastucture."""
 
 import os
-import pathlib
 import sys
+if sys.version_info.major != 3 and __name__ == '__main__':
+    import subprocess
+    sys.exit(subprocess.call(['vpython3', os.path.realpath(__file__)] + sys.argv[1:]))
 
+# python3 now
+import pathlib
 
 PY_UTILS = str(pathlib.Path(__file__).resolve().parents[1] / 'src' / 'tests' / 'py_utils')
 if PY_UTILS not in sys.path:
