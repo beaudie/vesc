@@ -688,7 +688,6 @@
       'angle_perftests': {
         'args': [
           '--log=debug',
-          '--smoke-test-mode',
           '--show-test-stdout',
         ],
         'merge': {
@@ -699,7 +698,7 @@
           ],
         },
         'swarming': {
-          'shards': 2,
+          'shards': 20,
         },
         'android_swarming': {
           'shards': 6,
