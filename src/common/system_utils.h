@@ -89,7 +89,7 @@ class Library : angle::NonCopyable
   public:
     Library() {}
     Library(void *libraryHandle) : mLibraryHandle(libraryHandle) {}
-    ~Library() { close(); }
+    virtual ~Library();
 
     ANGLE_NO_DISCARD bool open(const char *libraryName, SearchType searchType)
     {
@@ -133,7 +133,13 @@ class Library : angle::NonCopyable
         }
     }
 
-    void *getSymbol(const char *symbolName) { return GetLibrarySymbol(mLibraryHandle, symbolName); }
+    void *getSymbol(const char *symbolName)
+    {
+        void *symbol = GetLibrarySymbol(mLibraryHandle, symbolName);
+        return getSymbolOverride(symbolName, symbol);
+    }
+
+    virtual void *getSymbolOverride(const char *symbolName, void *symbol);
 
     void *getNative() const { return mLibraryHandle; }
 
@@ -148,6 +154,13 @@ class Library : angle::NonCopyable
   private:
     void *mLibraryHandle = nullptr;
 };
+
+template <typename LibraryWithOverride>
+Library *OpenSharedLibraryWithOverride(const char *libraryName, SearchType searchType)
+{
+    void *libraryHandle = OpenSystemLibraryAndGetError(libraryName, searchType, nullptr);
+    return new LibraryWithOverride(libraryHandle);
+}
 
 Library *OpenSharedLibrary(const char *libraryName, SearchType searchType);
 Library *OpenSharedLibraryWithExtension(const char *libraryName, SearchType searchType);

@@ -206,4 +206,15 @@ void *OpenSystemLibraryAndGetError(const char *libraryName,
     return OpenSystemLibraryWithExtensionAndGetError(libraryWithExtension.c_str(), searchType,
                                                      errorOut);
 }
+
+Library::~Library()
+{
+    close();
+}
+
+void *Library::getSymbolOverride(const char *symbolName, void *symbol)
+{
+    return symbol;
+}
+
 }  // namespace angle
