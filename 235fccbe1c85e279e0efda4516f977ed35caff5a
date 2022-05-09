@@ -1,0 +1,123 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "945a4091_c78f85cf",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 7
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2022-05-09T21:14:23Z",
+      "side": 1,
+      "message": "Thanks so much Geoff for giving this careful thought. A few questions.\n",
+      "revId": "235fccbe1c85e279e0efda4516f977ed35caff5a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "39f14391_8d49dab7",
+        "filename": "src/libANGLE/renderer/d3d/TextureD3D.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 745,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2022-05-09T21:14:23Z",
+      "side": 1,
+      "message": "Do any tests cover this readback path after the texture\u0027s been rendered to? If not then it would be ideal to add at least one.",
+      "revId": "235fccbe1c85e279e0efda4516f977ed35caff5a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "5a1b9457_cf74fdbf",
+        "filename": "src/libANGLE/renderer/d3d/TextureD3D.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 1444,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2022-05-09T21:14:23Z",
+      "side": 1,
+      "message": "typo: We\u0027re -\u003e We",
+      "revId": "235fccbe1c85e279e0efda4516f977ed35caff5a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "d7f65692_6132a591",
+        "filename": "src/libANGLE/renderer/d3d/TextureD3D.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 1680,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2022-05-09T21:14:23Z",
+      "side": 1,
+      "message": "I noticed that this stanza was moved below the \"if (mTexStorage)\" branch in TextureD3D_2D but not in TextureD3D_Cube. Is there any correctness issue in the divergence?",
+      "revId": "235fccbe1c85e279e0efda4516f977ed35caff5a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "5b144783_908734d3",
+        "filename": "src/libANGLE/renderer/d3d/TextureD3D.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 2393,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2022-05-09T21:14:23Z",
+      "side": 1,
+      "message": "These few lines were moved below the \"if (mTexStorage)\" block in TextureD3D_2D. Is there a specific reason for the divergence in behavior?",
+      "revId": "235fccbe1c85e279e0efda4516f977ed35caff5a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "892ab37a_d915b28e",
+        "filename": "src/libANGLE/renderer/d3d/TextureD3D.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 3078,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2022-05-09T21:14:23Z",
+      "side": 1,
+      "message": "Same question here.",
+      "revId": "235fccbe1c85e279e0efda4516f977ed35caff5a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "943d175c_8f0e9a96",
+        "filename": "src/libANGLE/renderer/d3d/TextureD3D.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 3873,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2022-05-09T21:14:23Z",
+      "side": 1,
+      "message": "Similar question about these redefinition and mDirtyImages updates, which changed location in the 2D texture subclass.",
+      "revId": "235fccbe1c85e279e0efda4516f977ed35caff5a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
