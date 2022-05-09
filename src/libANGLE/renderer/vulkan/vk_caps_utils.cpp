@@ -104,24 +104,24 @@ bool GetTextureSRGBOverrideSupport(const RendererVk *rendererVk,
     // format. If the given linear format is NOT supported, we don't care about its corresponding
     // nonlinear format.
     std::vector<GLenum> optionalLinearFormats     = {GL_RGB8,
-                                                 GL_RGBA8,
-                                                 GL_COMPRESSED_RGB8_ETC2,
-                                                 GL_COMPRESSED_RGBA8_ETC2_EAC,
-                                                 GL_COMPRESSED_RGB8_PUNCHTHROUGH_ALPHA1_ETC2,
-                                                 GL_COMPRESSED_RGBA_ASTC_4x4,
-                                                 GL_COMPRESSED_RGBA_ASTC_5x4,
-                                                 GL_COMPRESSED_RGBA_ASTC_5x5,
-                                                 GL_COMPRESSED_RGBA_ASTC_6x5,
-                                                 GL_COMPRESSED_RGBA_ASTC_6x6,
-                                                 GL_COMPRESSED_RGBA_ASTC_8x5,
-                                                 GL_COMPRESSED_RGBA_ASTC_8x6,
-                                                 GL_COMPRESSED_RGBA_ASTC_8x8,
-                                                 GL_COMPRESSED_RGBA_ASTC_10x5,
-                                                 GL_COMPRESSED_RGBA_ASTC_10x6,
-                                                 GL_COMPRESSED_RGBA_ASTC_10x8,
-                                                 GL_COMPRESSED_RGBA_ASTC_10x10,
-                                                 GL_COMPRESSED_RGBA_ASTC_12x10,
-                                                 GL_COMPRESSED_RGBA_ASTC_12x12};
+                                                     GL_RGBA8,
+                                                     GL_COMPRESSED_RGB8_ETC2,
+                                                     GL_COMPRESSED_RGBA8_ETC2_EAC,
+                                                     GL_COMPRESSED_RGB8_PUNCHTHROUGH_ALPHA1_ETC2,
+                                                     GL_COMPRESSED_RGBA_ASTC_4x4,
+                                                     GL_COMPRESSED_RGBA_ASTC_5x4,
+                                                     GL_COMPRESSED_RGBA_ASTC_5x5,
+                                                     GL_COMPRESSED_RGBA_ASTC_6x5,
+                                                     GL_COMPRESSED_RGBA_ASTC_6x6,
+                                                     GL_COMPRESSED_RGBA_ASTC_8x5,
+                                                     GL_COMPRESSED_RGBA_ASTC_8x6,
+                                                     GL_COMPRESSED_RGBA_ASTC_8x8,
+                                                     GL_COMPRESSED_RGBA_ASTC_10x5,
+                                                     GL_COMPRESSED_RGBA_ASTC_10x6,
+                                                     GL_COMPRESSED_RGBA_ASTC_10x8,
+                                                     GL_COMPRESSED_RGBA_ASTC_10x10,
+                                                     GL_COMPRESSED_RGBA_ASTC_12x10,
+                                                     GL_COMPRESSED_RGBA_ASTC_12x12};
     std::vector<GLenum> optionalS3TCLinearFormats = {
         GL_COMPRESSED_RGB_S3TC_DXT1_EXT, GL_COMPRESSED_RGBA_S3TC_DXT1_EXT,
         GL_COMPRESSED_RGBA_S3TC_DXT3_EXT, GL_COMPRESSED_RGBA_S3TC_DXT5_EXT};
@@ -955,6 +955,9 @@ void RendererVk::ensureCapsInitialized() const
 
     // GL_EXT_clip_control
     mNativeExtensions.clipControlEXT = true;
+
+    // GL_ANGLE_read_only_depth_stencil_feedback_loops
+    mNativeExtensions.readOnlyDepthStencilFeedbackLoopsANGLE = true;
 
     // Enable GL_EXT_texture_buffer and OES variant.  Nearly all formats required for this extension
     // are also required to have the UNIFORM_TEXEL_BUFFER feature bit in Vulkan, except for
