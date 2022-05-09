@@ -1,0 +1,55 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "33cc8452_54243eda",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-05-09T16:51:16Z",
+      "side": 1,
+      "message": "LGTM, just minor nits",
+      "revId": "fac2bf5bc85a26ae67513aca8229f032ec2f23e7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "29588737_94a8376d",
+        "filename": "extensions/ANGLE_read_only_depth_stencil_feedback_loops.txt",
+        "patchSetId": 2
+      },
+      "lineNbr": 59,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-05-09T16:51:16Z",
+      "side": 1,
+      "message": "It\u0027s a bit more involved than just glDepthMask(false). For one, that doesn\u0027t cover read-only stencil. Also, glDisable(GL_DEPTH_TEST) and glDisable(GL_STENCIL_TEST) are also good for establishing read-only depth/stencil feedback loop.\n\nNot sure if you want to go through lengths defining all that, maybe just saying \"or depth/stencil output is enabled and not masked\"?",
+      "revId": "fac2bf5bc85a26ae67513aca8229f032ec2f23e7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "7eb19ac3_4aa68d00",
+        "filename": "extensions/ANGLE_read_only_depth_stencil_feedback_loops.txt",
+        "patchSetId": 2
+      },
+      "lineNbr": 67,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-05-09T16:51:16Z",
+      "side": 1,
+      "message": "Not to nitpick this too much, but removing this also removes the note for color. Should we keep the note and make it color-only? And then add the depth/stencil note separately?",
+      "revId": "fac2bf5bc85a26ae67513aca8229f032ec2f23e7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
