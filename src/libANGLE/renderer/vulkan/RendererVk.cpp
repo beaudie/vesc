@@ -1671,7 +1671,7 @@ angle::Result RendererVk::initialize(DisplayVk *displayVk,
     }
 
     // Initialize the format table.
-    mFormatTable.initialize(this, &mNativeTextureCaps, &mNativeCaps.compressedTextureFormats);
+    mFormatTable.initialize(this, &mNativeTextureCaps);
 
     setGlobalDebugAnnotator();
 
