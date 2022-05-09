@@ -68,6 +68,24 @@
       "message": "Not to nitpick this too much, but removing this also removes the note for color. Should we keep the note and make it color-only? And then add the depth/stencil note separately?",
       "revId": "fac2bf5bc85a26ae67513aca8229f032ec2f23e7",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "761932d4_2d57723f",
+        "filename": "extensions/ANGLE_read_only_depth_stencil_feedback_loops.txt",
+        "patchSetId": 2
+      },
+      "lineNbr": 67,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2022-05-09T17:01:23Z",
+      "side": 1,
+      "message": "This was intentional. ANGLE doesn\u0027t handle it, so no, we shouldn\u0027t note color or stencil below. If we do we can update this draft before we upstream it. If we ever upstream any of these.",
+      "parentUuid": "7eb19ac3_4aa68d00",
+      "revId": "fac2bf5bc85a26ae67513aca8229f032ec2f23e7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
