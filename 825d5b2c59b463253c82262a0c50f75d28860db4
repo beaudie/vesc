@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "aa7e406d_3238788c",
+        "filename": "gni/angle.gni",
+        "patchSetId": 13
+      },
+      "lineNbr": 43,
+      "author": {
+        "id": 1531247
+      },
+      "writtenOn": "2022-05-09T20:07:49Z",
+      "side": 1,
+      "message": "No `!is_chromeos` here - so is this meant to be enabled on ChromeOS? Roll into Chromium seems to be breaking linux-chromeos-rel:\nhttps://ci.chromium.org/ui/p/chromium/builders/try/linux-chromeos-rel/1189185/overview\n\n```\nFAILED: libGLESv2.so libGLESv2.so.TOC \nld.lld: error: undefined symbol: rx::CreateVulkanGbmDisplay(egl::DisplayState const\u0026)\n```",
+      "range": {
+        "startLine": 43,
+        "startChar": 20,
+        "endLine": 43,
+        "endChar": 79
+      },
+      "revId": "825d5b2c59b463253c82262a0c50f75d28860db4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
