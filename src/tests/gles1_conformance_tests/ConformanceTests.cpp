@@ -254,7 +254,7 @@ TEST_P(GLES1ConformanceTest, FogLin)
 
 TEST_P(GLES1ConformanceTest, LineAntiAlias)
 {
-    ANGLE_SKIP_TEST_IF(true);
+    // ANGLE_SKIP_TEST_IF(true);
     ASSERT_NE(CONFORMANCE_TEST_ERROR, LineAntiAliasExec());
 }
 
@@ -272,7 +272,7 @@ TEST_P(GLES1ConformanceTest, LineRaster)
 
 TEST_P(GLES1ConformanceTest, LogicOp)
 {
-    ANGLE_SKIP_TEST_IF(true);
+    // ANGLE_SKIP_TEST_IF(true);
     ASSERT_NE(CONFORMANCE_TEST_ERROR, LogicOpExec());
 }
 
@@ -283,7 +283,7 @@ TEST_P(GLES1ConformanceTest, Mip)
 
 TEST_P(GLES1ConformanceTest, MipLevels)
 {
-    ANGLE_SKIP_TEST_IF(true);
+    // ANGLE_SKIP_TEST_IF(true);
     ASSERT_NE(CONFORMANCE_TEST_ERROR, MipLevelsExec());
 }
 
@@ -314,7 +314,7 @@ TEST_P(GLES1ConformanceTest, MultiTex)
 
 TEST_P(GLES1ConformanceTest, MustPass)
 {
-    ANGLE_SKIP_TEST_IF(true);
+    // ANGLE_SKIP_TEST_IF(true);
     ASSERT_NE(CONFORMANCE_TEST_ERROR, MustPassExec());
 }
 
@@ -325,7 +325,7 @@ TEST_P(GLES1ConformanceTest, PackedPixels)
 
 TEST_P(GLES1ConformanceTest, PointAntiAlias)
 {
-    ANGLE_SKIP_TEST_IF(true);
+    // ANGLE_SKIP_TEST_IF(true);
     ASSERT_NE(CONFORMANCE_TEST_ERROR, PointAntiAliasExec());
 }
 
@@ -346,7 +346,7 @@ TEST_P(GLES1ConformanceTest, ReadFormat)
 
 TEST_P(GLES1ConformanceTest, RescaleNormal)
 {
-    ANGLE_SKIP_TEST_IF(true);
+    // ANGLE_SKIP_TEST_IF(true);
     ASSERT_NE(CONFORMANCE_TEST_ERROR, RescaleNormalExec());
 }
 
@@ -426,7 +426,7 @@ TEST_P(GLES1ConformanceTest, TexDecal)
 
 TEST_P(GLES1ConformanceTest, TexPalet)
 {
-    ANGLE_SKIP_TEST_IF(true);
+    // ANGLE_SKIP_TEST_IF(true);
     ASSERT_NE(CONFORMANCE_TEST_ERROR, TexPaletExec());
 }
 
@@ -541,7 +541,7 @@ TEST_P(GLES1ConformanceTest, UserClip)
     // they are hit again, or to pass through to a hardware clip plane
     // implementation (available in desktop GL or Vulkan)
 
-    ANGLE_SKIP_TEST_IF(true);
+    // ANGLE_SKIP_TEST_IF(true);
     ASSERT_NE(CONFORMANCE_TEST_ERROR, UserClipExec());
 }
 
