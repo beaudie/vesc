@@ -1,11 +1,15 @@
-#!/usr/bin/env python
-#
 # Copyright 2021 The ANGLE Project Authors. All rights reserved.
 # Use of this source code is governed by a BSD-style license that can be
 # found in the LICENSE file.
 """ Merges dEQP sharded test results in the ANGLE testing infrastucture."""
 
 import os
+
+import subprocess
+
+out = subprocess.check_output(['vpython3', '-c', "print('test')"])
+print('vpython3 output: %s' % out)
+
 import pathlib
 import sys
 
