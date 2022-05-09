@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "5ed0e3c5_4a3ea5c9",
+        "filename": "src/tests/angle_end2end_tests_expectations.txt",
+        "patchSetId": 1
+      },
+      "lineNbr": 512,
+      "author": {
+        "id": 1001921
+      },
+      "writtenOn": "2022-05-09T20:38:12Z",
+      "side": 0,
+      "message": "nit: this too",
+      "range": {
+        "startLine": 512,
+        "startChar": 0,
+        "endLine": 512,
+        "endChar": 124
+      },
+      "revId": "0db4c39b5bf26686913580875fd0e7847f066341",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}

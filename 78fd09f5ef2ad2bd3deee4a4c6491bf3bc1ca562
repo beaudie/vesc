@@ -16,6 +16,23 @@
       "message": "Haven\u0027t waited to see if the bots are green yet. In case there are still a few tests failing, I\u0027ll add back suppressions for those before landing.",
       "revId": "78fd09f5ef2ad2bd3deee4a4c6491bf3bc1ca562",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "778083a7_80f56d81",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1001921
+      },
+      "writtenOn": "2022-05-09T20:38:12Z",
+      "side": 1,
+      "message": "Oh, wow, I didn\u0027t know this bot was causing so many troubles.\nThanks for cleaning this up!",
+      "revId": "78fd09f5ef2ad2bd3deee4a4c6491bf3bc1ca562",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
