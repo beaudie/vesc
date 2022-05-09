@@ -162,6 +162,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "580e6d76_c5e4c5e4",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 8
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2022-05-09T18:36:56Z",
+      "side": 1,
+      "message": "Hm, maybe we then need to filter out attributes that aren\u0027t used in the shader to handle this the way a \"real\" GL driver does it.",
+      "parentUuid": "60719bf2_eca5e065",
+      "revId": "ef8c66c80b08cb183a60a1614be51783793830f2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "71aa9fa6_91a293a7",
         "filename": "src/tests/gl_tests/VertexAttributeTest.cpp",
         "patchSetId": 8
