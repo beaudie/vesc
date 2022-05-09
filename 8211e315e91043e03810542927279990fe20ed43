@@ -20,6 +20,23 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "3ccf8f51_291a9c2f",
+        "filename": "src/libANGLE/renderer/vulkan/vk_surface_utils.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 31,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-05-09T17:16:33Z",
+      "side": 1,
+      "message": "Also, you could move these to `vk_helpers.h`, and do away with `vk_surface_utils.*`",
+      "revId": "8211e315e91043e03810542927279990fe20ed43",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "f833b79e_ae6160c5",
         "filename": "src/libANGLE/renderer/vulkan/vk_surface_utils.h",
         "patchSetId": 1
