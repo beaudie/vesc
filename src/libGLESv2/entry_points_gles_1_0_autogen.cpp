@@ -84,7 +84,7 @@ void GL_APIENTRY GL_ClearColorx(GLfixed red, GLfixed green, GLfixed blue, GLfixe
         std::unique_lock<angle::GlobalMutex> shareContextLock = GetContextLock(context);
         bool isCallValid                                      = (context->skipValidation() ||
                             ValidateClearColorx(context, angle::EntryPoint::GLClearColorx, red,
-                                                green, blue, alpha));
+                                                                                     green, blue, alpha));
         if (isCallValid)
         {
             context->clearColorx(red, green, blue, alpha);
@@ -130,7 +130,7 @@ void GL_APIENTRY GL_ClientActiveTexture(GLenum texture)
         std::unique_lock<angle::GlobalMutex> shareContextLock = GetContextLock(context);
         bool isCallValid                                      = (context->skipValidation() ||
                             ValidateClientActiveTexture(
-                                context, angle::EntryPoint::GLClientActiveTexture, texture));
+                                                                     context, angle::EntryPoint::GLClientActiveTexture, texture));
         if (isCallValid)
         {
             context->clientActiveTexture(texture);
@@ -276,7 +276,7 @@ void GL_APIENTRY GL_ColorPointer(GLint size, GLenum type, GLsizei stride, const 
         std::unique_lock<angle::GlobalMutex> shareContextLock = GetContextLock(context);
         bool isCallValid                                      = (context->skipValidation() ||
                             ValidateColorPointer(context, angle::EntryPoint::GLColorPointer, size,
-                                                 typePacked, stride, pointer));
+                                                                                      typePacked, stride, pointer));
         if (isCallValid)
         {
             context->colorPointer(size, typePacked, stride, pointer);
@@ -323,7 +323,7 @@ void GL_APIENTRY GL_DisableClientState(GLenum array)
         std::unique_lock<angle::GlobalMutex> shareContextLock = GetContextLock(context);
         bool isCallValid                                      = (context->skipValidation() ||
                             ValidateDisableClientState(
-                                context, angle::EntryPoint::GLDisableClientState, arrayPacked));
+                                                                     context, angle::EntryPoint::GLDisableClientState, arrayPacked));
         if (isCallValid)
         {
             context->disableClientState(arrayPacked);
@@ -348,7 +348,7 @@ void GL_APIENTRY GL_EnableClientState(GLenum array)
         std::unique_lock<angle::GlobalMutex> shareContextLock = GetContextLock(context);
         bool isCallValid                                      = (context->skipValidation() ||
                             ValidateEnableClientState(
-                                context, angle::EntryPoint::GLEnableClientState, arrayPacked));
+                                                                     context, angle::EntryPoint::GLEnableClientState, arrayPacked));
         if (isCallValid)
         {
             context->enableClientState(arrayPacked);
@@ -587,7 +587,7 @@ void GL_APIENTRY GL_GetLightfv(GLenum light, GLenum pname, GLfloat *params)
         std::unique_lock<angle::GlobalMutex> shareContextLock = GetContextLock(context);
         bool isCallValid                                      = (context->skipValidation() ||
                             ValidateGetLightfv(context, angle::EntryPoint::GLGetLightfv, light,
-                                               pnamePacked, params));
+                                                                                    pnamePacked, params));
         if (isCallValid)
         {
             context->getLightfv(light, pnamePacked, params);
@@ -613,7 +613,7 @@ void GL_APIENTRY GL_GetLightxv(GLenum light, GLenum pname, GLfixed *params)
         std::unique_lock<angle::GlobalMutex> shareContextLock = GetContextLock(context);
         bool isCallValid                                      = (context->skipValidation() ||
                             ValidateGetLightxv(context, angle::EntryPoint::GLGetLightxv, light,
-                                               pnamePacked, params));
+                                                                                    pnamePacked, params));
         if (isCallValid)
         {
             context->getLightxv(light, pnamePacked, params);
@@ -640,7 +640,7 @@ void GL_APIENTRY GL_GetMaterialfv(GLenum face, GLenum pname, GLfloat *params)
         std::unique_lock<angle::GlobalMutex> shareContextLock = GetContextLock(context);
         bool isCallValid                                      = (context->skipValidation() ||
                             ValidateGetMaterialfv(context, angle::EntryPoint::GLGetMaterialfv, face,
-                                                  pnamePacked, params));
+                                                                                       pnamePacked, params));
         if (isCallValid)
         {
             context->getMaterialfv(face, pnamePacked, params);
@@ -667,7 +667,7 @@ void GL_APIENTRY GL_GetMaterialxv(GLenum face, GLenum pname, GLfixed *params)
         std::unique_lock<angle::GlobalMutex> shareContextLock = GetContextLock(context);
         bool isCallValid                                      = (context->skipValidation() ||
                             ValidateGetMaterialxv(context, angle::EntryPoint::GLGetMaterialxv, face,
-                                                  pnamePacked, params));
+                                                                                       pnamePacked, params));
         if (isCallValid)
         {
             context->getMaterialxv(face, pnamePacked, params);
@@ -695,7 +695,7 @@ void GL_APIENTRY GL_GetTexEnvfv(GLenum target, GLenum pname, GLfloat *params)
         std::unique_lock<angle::GlobalMutex> shareContextLock = GetContextLock(context);
         bool isCallValid                                      = (context->skipValidation() ||
                             ValidateGetTexEnvfv(context, angle::EntryPoint::GLGetTexEnvfv,
-                                                targetPacked, pnamePacked, params));
+                                                                                     targetPacked, pnamePacked, params));
         if (isCallValid)
         {
             context->getTexEnvfv(targetPacked, pnamePacked, params);
@@ -723,7 +723,7 @@ void GL_APIENTRY GL_GetTexEnviv(GLenum target, GLenum pname, GLint *params)
         std::unique_lock<angle::GlobalMutex> shareContextLock = GetContextLock(context);
         bool isCallValid                                      = (context->skipValidation() ||
                             ValidateGetTexEnviv(context, angle::EntryPoint::GLGetTexEnviv,
-                                                targetPacked, pnamePacked, params));
+                                                                                     targetPacked, pnamePacked, params));
         if (isCallValid)
         {
             context->getTexEnviv(targetPacked, pnamePacked, params);
@@ -751,7 +751,7 @@ void GL_APIENTRY GL_GetTexEnvxv(GLenum target, GLenum pname, GLfixed *params)
         std::unique_lock<angle::GlobalMutex> shareContextLock = GetContextLock(context);
         bool isCallValid                                      = (context->skipValidation() ||
                             ValidateGetTexEnvxv(context, angle::EntryPoint::GLGetTexEnvxv,
-                                                targetPacked, pnamePacked, params));
+                                                                                     targetPacked, pnamePacked, params));
         if (isCallValid)
         {
             context->getTexEnvxv(targetPacked, pnamePacked, params);
@@ -1145,7 +1145,7 @@ void GL_APIENTRY GL_Materialfv(GLenum face, GLenum pname, const GLfloat *params)
         std::unique_lock<angle::GlobalMutex> shareContextLock = GetContextLock(context);
         bool isCallValid                                      = (context->skipValidation() ||
                             ValidateMaterialfv(context, angle::EntryPoint::GLMaterialfv, face,
-                                               pnamePacked, params));
+                                                                                    pnamePacked, params));
         if (isCallValid)
         {
             context->materialfv(face, pnamePacked, params);
@@ -1197,7 +1197,7 @@ void GL_APIENTRY GL_Materialxv(GLenum face, GLenum pname, const GLfixed *param)
         std::unique_lock<angle::GlobalMutex> shareContextLock = GetContextLock(context);
         bool isCallValid                                      = (context->skipValidation() ||
                             ValidateMaterialxv(context, angle::EntryPoint::GLMaterialxv, face,
-                                               pnamePacked, param));
+                                                                                    pnamePacked, param));
         if (isCallValid)
         {
             context->materialxv(face, pnamePacked, param);
@@ -1292,7 +1292,7 @@ void GL_APIENTRY GL_MultiTexCoord4f(GLenum target, GLfloat s, GLfloat t, GLfloat
         std::unique_lock<angle::GlobalMutex> shareContextLock = GetContextLock(context);
         bool isCallValid                                      = (context->skipValidation() ||
                             ValidateMultiTexCoord4f(context, angle::EntryPoint::GLMultiTexCoord4f,
-                                                    target, s, t, r, q));
+                                                                                         target, s, t, r, q));
         if (isCallValid)
         {
             context->multiTexCoord4f(target, s, t, r, q);
@@ -1317,7 +1317,7 @@ void GL_APIENTRY GL_MultiTexCoord4x(GLenum texture, GLfixed s, GLfixed t, GLfixe
         std::unique_lock<angle::GlobalMutex> shareContextLock = GetContextLock(context);
         bool isCallValid                                      = (context->skipValidation() ||
                             ValidateMultiTexCoord4x(context, angle::EntryPoint::GLMultiTexCoord4x,
-                                                    texture, s, t, r, q));
+                                                                                         texture, s, t, r, q));
         if (isCallValid)
         {
             context->multiTexCoord4x(texture, s, t, r, q);
@@ -1388,7 +1388,7 @@ void GL_APIENTRY GL_NormalPointer(GLenum type, GLsizei stride, const void *point
         std::unique_lock<angle::GlobalMutex> shareContextLock = GetContextLock(context);
         bool isCallValid                                      = (context->skipValidation() ||
                             ValidateNormalPointer(context, angle::EntryPoint::GLNormalPointer,
-                                                  typePacked, stride, pointer));
+                                                                                       typePacked, stride, pointer));
         if (isCallValid)
         {
             context->normalPointer(typePacked, stride, pointer);
@@ -1460,7 +1460,7 @@ void GL_APIENTRY GL_PointParameterf(GLenum pname, GLfloat param)
         std::unique_lock<angle::GlobalMutex> shareContextLock = GetContextLock(context);
         bool isCallValid                                      = (context->skipValidation() ||
                             ValidatePointParameterf(context, angle::EntryPoint::GLPointParameterf,
-                                                    pnamePacked, param));
+                                                                                         pnamePacked, param));
         if (isCallValid)
         {
             context->pointParameterf(pnamePacked, param);
@@ -1485,7 +1485,7 @@ void GL_APIENTRY GL_PointParameterfv(GLenum pname, const GLfloat *params)
         std::unique_lock<angle::GlobalMutex> shareContextLock = GetContextLock(context);
         bool isCallValid                                      = (context->skipValidation() ||
                             ValidatePointParameterfv(context, angle::EntryPoint::GLPointParameterfv,
-                                                     pnamePacked, params));
+                                                                                          pnamePacked, params));
         if (isCallValid)
         {
             context->pointParameterfv(pnamePacked, params);
@@ -1510,7 +1510,7 @@ void GL_APIENTRY GL_PointParameterx(GLenum pname, GLfixed param)
         std::unique_lock<angle::GlobalMutex> shareContextLock = GetContextLock(context);
         bool isCallValid                                      = (context->skipValidation() ||
                             ValidatePointParameterx(context, angle::EntryPoint::GLPointParameterx,
-                                                    pnamePacked, param));
+                                                                                         pnamePacked, param));
         if (isCallValid)
         {
             context->pointParameterx(pnamePacked, param);
@@ -1535,7 +1535,7 @@ void GL_APIENTRY GL_PointParameterxv(GLenum pname, const GLfixed *params)
         std::unique_lock<angle::GlobalMutex> shareContextLock = GetContextLock(context);
         bool isCallValid                                      = (context->skipValidation() ||
                             ValidatePointParameterxv(context, angle::EntryPoint::GLPointParameterxv,
-                                                     pnamePacked, params));
+                                                                                          pnamePacked, params));
         if (isCallValid)
         {
             context->pointParameterxv(pnamePacked, params);
@@ -1813,7 +1813,7 @@ void GL_APIENTRY GL_TexCoordPointer(GLint size, GLenum type, GLsizei stride, con
         std::unique_lock<angle::GlobalMutex> shareContextLock = GetContextLock(context);
         bool isCallValid                                      = (context->skipValidation() ||
                             ValidateTexCoordPointer(context, angle::EntryPoint::GLTexCoordPointer,
-                                                    size, typePacked, stride, pointer));
+                                                                                         size, typePacked, stride, pointer));
         if (isCallValid)
         {
             context->texCoordPointer(size, typePacked, stride, pointer);
@@ -2001,7 +2001,7 @@ void GL_APIENTRY GL_TexParameterx(GLenum target, GLenum pname, GLfixed param)
         std::unique_lock<angle::GlobalMutex> shareContextLock = GetContextLock(context);
         bool isCallValid                                      = (context->skipValidation() ||
                             ValidateTexParameterx(context, angle::EntryPoint::GLTexParameterx,
-                                                  targetPacked, pname, param));
+                                                                                       targetPacked, pname, param));
         if (isCallValid)
         {
             context->texParameterx(targetPacked, pname, param);
@@ -2028,7 +2028,7 @@ void GL_APIENTRY GL_TexParameterxv(GLenum target, GLenum pname, const GLfixed *p
         std::unique_lock<angle::GlobalMutex> shareContextLock = GetContextLock(context);
         bool isCallValid                                      = (context->skipValidation() ||
                             ValidateTexParameterxv(context, angle::EntryPoint::GLTexParameterxv,
-                                                   targetPacked, pname, params));
+                                                                                        targetPacked, pname, params));
         if (isCallValid)
         {
             context->texParameterxv(targetPacked, pname, params);
@@ -2100,7 +2100,7 @@ void GL_APIENTRY GL_VertexPointer(GLint size, GLenum type, GLsizei stride, const
         std::unique_lock<angle::GlobalMutex> shareContextLock = GetContextLock(context);
         bool isCallValid                                      = (context->skipValidation() ||
                             ValidateVertexPointer(context, angle::EntryPoint::GLVertexPointer, size,
-                                                  typePacked, stride, pointer));
+                                                                                       typePacked, stride, pointer));
         if (isCallValid)
         {
             context->vertexPointer(size, typePacked, stride, pointer);
