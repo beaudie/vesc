@@ -1048,8 +1048,14 @@ void ResetDynamicState(ContextVk *contextVk, vk::RenderPassCommandBuffer *comman
     // functions, so those are skipped.  Ideally, dynamic state that will be set by any UtilsVk
     // functions wouldn't be reset here.  However, until such time as extensive transition tests are
     // written, this approach is less bug-prone.
-    commandBuffer->setLineWidth(1.0);
-    commandBuffer->setDepthBias(0, 0, 0);
+
+    // Notes: the following dynamic state don't apply to UtilsVk functions:
+    //
+    // - line width: UtilsVk doesn't use line primitives
+    // - depth bias: UtilsVk doesn't enable depth bias
+    // - blend constants: UtilsVk doesn't enable blending
+
+    // Reset all other dynamic state, since it can affect UtilsVk functions:
     if (contextVk->getFeatures().supportsFragmentShadingRate.enabled)
     {
         VkExtent2D fragmentSize                                     = {1, 1};
