@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "2bad910b_5e6ab0d0",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 10
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2022-05-10T12:30:59Z",
+      "side": 1,
+      "message": "Thanks for fixing Roman. Would it be better if this failure caused a broken build?",
+      "revId": "a0d641fe9d5fd340199658d192c36179fa018737",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
