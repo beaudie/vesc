@@ -166,6 +166,8 @@ angle::Result Image9::CopyImage(const gl::Context *context,
     IDirect3DSurface9 *sourceSurface = nullptr;
     ANGLE_TRY(source->getSurface(context9, &sourceSurface));
 
+    source->markClean();
+
     IDirect3DSurface9 *destSurface = nullptr;
     ANGLE_TRY(dest->getSurface(context9, &destSurface));
 
