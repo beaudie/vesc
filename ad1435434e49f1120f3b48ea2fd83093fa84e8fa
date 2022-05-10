@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "315cf6ca_a997823b",
+        "filename": "src/libANGLE/capture/capture_egl.h",
+        "patchSetId": 10
+      },
+      "lineNbr": 2,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2022-05-10T04:03:48Z",
+      "side": 1,
+      "message": "2022 in the new files",
+      "range": {
+        "startLine": 2,
+        "startChar": 13,
+        "endLine": 2,
+        "endChar": 18
+      },
+      "revId": "ad1435434e49f1120f3b48ea2fd83093fa84e8fa",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "daea1c41_f40570b6",
+        "filename": "src/libANGLE/capture/capture_egl.h",
+        "patchSetId": 10
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2022-05-10T04:03:48Z",
+      "side": 1,
+      "message": "These also need to be updated",
+      "range": {
+        "startLine": 6,
+        "startChar": 0,
+        "endLine": 7,
+        "endChar": 35
+      },
+      "revId": "ad1435434e49f1120f3b48ea2fd83093fa84e8fa",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
