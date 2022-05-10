@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "01d67074_bc79721b",
+        "filename": "util/windows/WGLWindow.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 359,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2022-05-10T12:39:33Z",
+      "side": 1,
+      "message": "nit: we avoid assert() because we run all our testing in release and assert doesn\u0027t work in release. Instead you can use std::cerr like we do in the rest of the file. it won\u0027t be quite as interruptive but that\u0027s okay.",
+      "range": {
+        "startLine": 359,
+        "startChar": 4,
+        "endLine": 359,
+        "endChar": 10
+      },
+      "revId": "3cb2348cc62050a55ef477ecb287053cda6fde9b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
