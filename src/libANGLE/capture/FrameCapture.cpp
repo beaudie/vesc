@@ -1130,6 +1130,8 @@ void MaybeResetResources(ResourceIDType resourceIDType,
 
             // TODO (http://anglebug.com/5968): Handle programs that need regen
             // This would only happen if a starting program was deleted during the run
+            // Note - this would also require an update to default uniform handling.  A program
+            // deleted or recreated wouldn't need partial uniform updates.
             ASSERT(resourceTracker->getTrackedResource(ResourceIDType::ShaderProgram)
                        .getResourcesToRegen()
                        .empty());
@@ -1255,13 +1257,79 @@ void MaybeResetFenceSyncObjects(std::stringstream &out,
     }
 }
 
+void Capture(std::vector<CallCapture> *setupCalls, CallCapture &&call)
+{
+    setupCalls->emplace_back(std::move(call));
+}
+
+void CaptureUpdateCurrentProgram(const CallCapture &call,
+                                 int programParamPos,
+                                 std::vector<CallCapture> *callsOut)
+{
+    const ParamCapture &param =
+        call.params.getParam("programPacked", ParamType::TShaderProgramID, programParamPos);
+    gl::ShaderProgramID programID = param.value.ShaderProgramIDVal;
+
+    ParamBuffer paramBuffer;
+    paramBuffer.addValueParam("program", ParamType::TGLuint, programID.value);
+
+    callsOut->emplace_back("UpdateCurrentProgram", std::move(paramBuffer));
+}
+
+void MaybeResetDefaultUniforms(std::stringstream &out,
+                               ReplayWriter &replayWriter,
+                               std::stringstream &header,
+                               ResourceTracker *resourceTracker,
+                               const gl::State &replayState,
+                               std::vector<uint8_t> *binaryData)
+{
+    // Walk through a list of uniforms that have been change, perhaps by name
+    DefaultUniformCalls &defaultUniformResetCalls = resourceTracker->getDefaultUniformResetCalls();
+
+    DefaultUniformSet &defaultUniformsToReset = resourceTracker->getDefaultUniformsToReset();
+
+    GLuint previousProgram = 0;
+
+    for (const DefaultUniformID &id : defaultUniformsToReset)
+    {
+        GLuint programID = id.first;
+        // If we've switched programs, emit the bind for Reset
+
+        if (previousProgram != programID)
+        {
+            std::vector<CallCapture> outCalls;
+            Capture(&outCalls, CaptureUseProgram(replayState, true, {programID}));
+            CaptureUpdateCurrentProgram((&outCalls)->back(), 0, &outCalls);
+
+            for (CallCapture &call : outCalls)
+            {
+                out << "    ";
+                WriteCppReplayForCall(call, replayWriter, out, header, binaryData);
+                out << ";\n";
+            }
+        }
+
+        previousProgram = programID;
+
+        for (CallCapture &call : defaultUniformResetCalls[id])
+        {
+            out << "    ";
+            WriteCppReplayForCall(call, replayWriter, out, header, binaryData);
+            out << ";\n";
+        }
+    }
+}
+
 void MaybeResetOpaqueTypeObjects(ReplayWriter &replayWriter,
                                  std::stringstream &out,
                                  std::stringstream &header,
                                  ResourceTracker *resourceTracker,
+                                 const gl::State &replayState,
                                  std::vector<uint8_t> *binaryData)
 {
     MaybeResetFenceSyncObjects(out, replayWriter, header, resourceTracker, binaryData);
+
+    MaybeResetDefaultUniforms(out, replayWriter, header, resourceTracker, replayState, binaryData);
 }
 
 bool FindShaderProgramIDsInCall(const CallCapture &call, std::vector<gl::ShaderProgramID> &idsOut)
@@ -1744,20 +1812,6 @@ void MaybeCaptureUpdateResourceIDs(ResourceTracker *resourceTracker,
     }
 }
 
-void CaptureUpdateCurrentProgram(const CallCapture &call,
-                                 int programParamPos,
-                                 std::vector<CallCapture> *callsOut)
-{
-    const ParamCapture &param =
-        call.params.getParam("programPacked", ParamType::TShaderProgramID, programParamPos);
-    gl::ShaderProgramID programID = param.value.ShaderProgramIDVal;
-
-    ParamBuffer paramBuffer;
-    paramBuffer.addValueParam("program", ParamType::TGLuint, programID.value);
-
-    callsOut->emplace_back("UpdateCurrentProgram", std::move(paramBuffer));
-}
-
 bool IsDefaultCurrentValue(const gl::VertexAttribCurrentValueData &currentValue)
 {
     if (currentValue.Type != gl::VertexAttribType::Float)
@@ -1841,9 +1895,158 @@ bool IsTextureUpdate(CallCapture &call)
     }
 }
 
-void Capture(std::vector<CallCapture> *setupCalls, CallCapture &&call)
+enum class DefaultUniformType
 {
-    setupCalls->emplace_back(std::move(call));
+    None,
+    CurrentProgram,
+    SpecifiedProgram,
+};
+
+DefaultUniformType GetDefaultUniformType(const CallCapture &call)
+{
+    switch (call.entryPoint)
+    {
+        case EntryPoint::GLProgramUniform1d:
+        case EntryPoint::GLProgramUniform1dv:
+        case EntryPoint::GLProgramUniform1f:
+        case EntryPoint::GLProgramUniform1fEXT:
+        case EntryPoint::GLProgramUniform1fv:
+        case EntryPoint::GLProgramUniform1fvEXT:
+        case EntryPoint::GLProgramUniform1i:
+        case EntryPoint::GLProgramUniform1iEXT:
+        case EntryPoint::GLProgramUniform1iv:
+        case EntryPoint::GLProgramUniform1ivEXT:
+        case EntryPoint::GLProgramUniform1ui:
+        case EntryPoint::GLProgramUniform1uiEXT:
+        case EntryPoint::GLProgramUniform1uiv:
+        case EntryPoint::GLProgramUniform1uivEXT:
+        case EntryPoint::GLProgramUniform2d:
+        case EntryPoint::GLProgramUniform2dv:
+        case EntryPoint::GLProgramUniform2f:
+        case EntryPoint::GLProgramUniform2fEXT:
+        case EntryPoint::GLProgramUniform2fv:
+        case EntryPoint::GLProgramUniform2fvEXT:
+        case EntryPoint::GLProgramUniform2i:
+        case EntryPoint::GLProgramUniform2iEXT:
+        case EntryPoint::GLProgramUniform2iv:
+        case EntryPoint::GLProgramUniform2ivEXT:
+        case EntryPoint::GLProgramUniform2ui:
+        case EntryPoint::GLProgramUniform2uiEXT:
+        case EntryPoint::GLProgramUniform2uiv:
+        case EntryPoint::GLProgramUniform2uivEXT:
+        case EntryPoint::GLProgramUniform3d:
+        case EntryPoint::GLProgramUniform3dv:
+        case EntryPoint::GLProgramUniform3f:
+        case EntryPoint::GLProgramUniform3fEXT:
+        case EntryPoint::GLProgramUniform3fv:
+        case EntryPoint::GLProgramUniform3fvEXT:
+        case EntryPoint::GLProgramUniform3i:
+        case EntryPoint::GLProgramUniform3iEXT:
+        case EntryPoint::GLProgramUniform3iv:
+        case EntryPoint::GLProgramUniform3ivEXT:
+        case EntryPoint::GLProgramUniform3ui:
+        case EntryPoint::GLProgramUniform3uiEXT:
+        case EntryPoint::GLProgramUniform3uiv:
+        case EntryPoint::GLProgramUniform3uivEXT:
+        case EntryPoint::GLProgramUniform4d:
+        case EntryPoint::GLProgramUniform4dv:
+        case EntryPoint::GLProgramUniform4f:
+        case EntryPoint::GLProgramUniform4fEXT:
+        case EntryPoint::GLProgramUniform4fv:
+        case EntryPoint::GLProgramUniform4fvEXT:
+        case EntryPoint::GLProgramUniform4i:
+        case EntryPoint::GLProgramUniform4iEXT:
+        case EntryPoint::GLProgramUniform4iv:
+        case EntryPoint::GLProgramUniform4ivEXT:
+        case EntryPoint::GLProgramUniform4ui:
+        case EntryPoint::GLProgramUniform4uiEXT:
+        case EntryPoint::GLProgramUniform4uiv:
+        case EntryPoint::GLProgramUniform4uivEXT:
+        case EntryPoint::GLProgramUniformMatrix2dv:
+        case EntryPoint::GLProgramUniformMatrix2fv:
+        case EntryPoint::GLProgramUniformMatrix2fvEXT:
+        case EntryPoint::GLProgramUniformMatrix2x3dv:
+        case EntryPoint::GLProgramUniformMatrix2x3fv:
+        case EntryPoint::GLProgramUniformMatrix2x3fvEXT:
+        case EntryPoint::GLProgramUniformMatrix2x4dv:
+        case EntryPoint::GLProgramUniformMatrix2x4fv:
+        case EntryPoint::GLProgramUniformMatrix2x4fvEXT:
+        case EntryPoint::GLProgramUniformMatrix3dv:
+        case EntryPoint::GLProgramUniformMatrix3fv:
+        case EntryPoint::GLProgramUniformMatrix3fvEXT:
+        case EntryPoint::GLProgramUniformMatrix3x2dv:
+        case EntryPoint::GLProgramUniformMatrix3x2fv:
+        case EntryPoint::GLProgramUniformMatrix3x2fvEXT:
+        case EntryPoint::GLProgramUniformMatrix3x4dv:
+        case EntryPoint::GLProgramUniformMatrix3x4fv:
+        case EntryPoint::GLProgramUniformMatrix3x4fvEXT:
+        case EntryPoint::GLProgramUniformMatrix4dv:
+        case EntryPoint::GLProgramUniformMatrix4fv:
+        case EntryPoint::GLProgramUniformMatrix4fvEXT:
+        case EntryPoint::GLProgramUniformMatrix4x2dv:
+        case EntryPoint::GLProgramUniformMatrix4x2fv:
+        case EntryPoint::GLProgramUniformMatrix4x2fvEXT:
+        case EntryPoint::GLProgramUniformMatrix4x3dv:
+        case EntryPoint::GLProgramUniformMatrix4x3fv:
+        case EntryPoint::GLProgramUniformMatrix4x3fvEXT:
+            return DefaultUniformType::SpecifiedProgram;
+
+        case EntryPoint::GLUniform1d:
+        case EntryPoint::GLUniform1dv:
+        case EntryPoint::GLUniform1f:
+        case EntryPoint::GLUniform1fv:
+        case EntryPoint::GLUniform1i:
+        case EntryPoint::GLUniform1iv:
+        case EntryPoint::GLUniform1ui:
+        case EntryPoint::GLUniform1uiv:
+        case EntryPoint::GLUniform2d:
+        case EntryPoint::GLUniform2dv:
+        case EntryPoint::GLUniform2f:
+        case EntryPoint::GLUniform2fv:
+        case EntryPoint::GLUniform2i:
+        case EntryPoint::GLUniform2iv:
+        case EntryPoint::GLUniform2ui:
+        case EntryPoint::GLUniform2uiv:
+        case EntryPoint::GLUniform3d:
+        case EntryPoint::GLUniform3dv:
+        case EntryPoint::GLUniform3f:
+        case EntryPoint::GLUniform3fv:
+        case EntryPoint::GLUniform3i:
+        case EntryPoint::GLUniform3iv:
+        case EntryPoint::GLUniform3ui:
+        case EntryPoint::GLUniform3uiv:
+        case EntryPoint::GLUniform4d:
+        case EntryPoint::GLUniform4dv:
+        case EntryPoint::GLUniform4f:
+        case EntryPoint::GLUniform4fv:
+        case EntryPoint::GLUniform4i:
+        case EntryPoint::GLUniform4iv:
+        case EntryPoint::GLUniform4ui:
+        case EntryPoint::GLUniform4uiv:
+        case EntryPoint::GLUniformMatrix2dv:
+        case EntryPoint::GLUniformMatrix2fv:
+        case EntryPoint::GLUniformMatrix2x3dv:
+        case EntryPoint::GLUniformMatrix2x3fv:
+        case EntryPoint::GLUniformMatrix2x4dv:
+        case EntryPoint::GLUniformMatrix2x4fv:
+        case EntryPoint::GLUniformMatrix3dv:
+        case EntryPoint::GLUniformMatrix3fv:
+        case EntryPoint::GLUniformMatrix3x2dv:
+        case EntryPoint::GLUniformMatrix3x2fv:
+        case EntryPoint::GLUniformMatrix3x4dv:
+        case EntryPoint::GLUniformMatrix3x4fv:
+        case EntryPoint::GLUniformMatrix4dv:
+        case EntryPoint::GLUniformMatrix4fv:
+        case EntryPoint::GLUniformMatrix4x2dv:
+        case EntryPoint::GLUniformMatrix4x2fv:
+        case EntryPoint::GLUniformMatrix4x3dv:
+        case EntryPoint::GLUniformMatrix4x3fv:
+        case EntryPoint::GLUniformSubroutinesuiv:
+            return DefaultUniformType::CurrentProgram;
+
+        default:
+            return DefaultUniformType::None;
+    }
 }
 
 void CaptureFramebufferAttachment(std::vector<CallCapture> *setupCalls,
@@ -1882,6 +2085,7 @@ void CaptureFramebufferAttachment(std::vector<CallCapture> *setupCalls,
 void CaptureUpdateUniformValues(const gl::State &replayState,
                                 const gl::Context *context,
                                 gl::Program *program,
+                                ResourceTracker *resourceTracker,
                                 std::vector<CallCapture> *callsOut)
 {
     if (!program->isLinked())
@@ -1893,6 +2097,7 @@ void CaptureUpdateUniformValues(const gl::State &replayState,
     // We need to bind the program and update its uniforms
     if (!replayState.getProgram() || replayState.getProgram()->id() != program->id())
     {
+        // We only do this for MEC since Reset will do its own binding
         Capture(callsOut, CaptureUseProgram(replayState, true, program->id()));
         CaptureUpdateCurrentProgram(callsOut->back(), 0, callsOut);
     }
@@ -1936,6 +2141,11 @@ void CaptureUpdateUniformValues(const gl::State &replayState,
             continue;
         }
 
+        // Create two lists of calls for uniform setup
+        DefaultUniformCalls &resetCalls = resourceTracker->getDefaultUniformResetCalls();
+        DefaultUniformID id             = {program->id().value, uniformLoc.value};
+        CallVector defaultUniformCalls({callsOut, &resetCalls[id]});
+
         // Samplers should be populated with GL_INT, regardless of return type
         if (typeInfo->isSampler)
         {
@@ -1946,8 +2156,11 @@ void CaptureUpdateUniformValues(const gl::State &replayState,
                                       uniformBuffer.data() + index * componentCount);
             }
 
-            Capture(callsOut, CaptureUniform1iv(replayState, true, uniformLoc, uniformCount,
-                                                uniformBuffer.data()));
+            for (std::vector<CallCapture> *calls : defaultUniformCalls)
+            {
+                Capture(calls, CaptureUniform1iv(replayState, true, uniformLoc, uniformCount,
+                                                 uniformBuffer.data()));
+            }
 
             continue;
         }
@@ -1966,65 +2179,104 @@ void CaptureUpdateUniformValues(const gl::State &replayState,
                 {
                     // Note: All matrix uniforms are populated without transpose
                     case GL_FLOAT_MAT4x3:
-                        Capture(callsOut, CaptureUniformMatrix4x3fv(replayState, true, uniformLoc,
-                                                                    uniformCount, false,
-                                                                    uniformBuffer.data()));
+                        for (std::vector<CallCapture> *calls : defaultUniformCalls)
+                        {
+                            Capture(calls, CaptureUniformMatrix4x3fv(replayState, true, uniformLoc,
+                                                                     uniformCount, false,
+                                                                     uniformBuffer.data()));
+                        }
                         break;
                     case GL_FLOAT_MAT4x2:
-                        Capture(callsOut, CaptureUniformMatrix4x2fv(replayState, true, uniformLoc,
-                                                                    uniformCount, false,
-                                                                    uniformBuffer.data()));
+                        for (std::vector<CallCapture> *calls : defaultUniformCalls)
+                        {
+                            Capture(calls, CaptureUniformMatrix4x2fv(replayState, true, uniformLoc,
+                                                                     uniformCount, false,
+                                                                     uniformBuffer.data()));
+                        }
                         break;
                     case GL_FLOAT_MAT4:
-                        Capture(callsOut,
-                                CaptureUniformMatrix4fv(replayState, true, uniformLoc, uniformCount,
-                                                        false, uniformBuffer.data()));
+                        for (std::vector<CallCapture> *calls : defaultUniformCalls)
+                        {
+                            Capture(calls, CaptureUniformMatrix4fv(replayState, true, uniformLoc,
+                                                                   uniformCount, false,
+                                                                   uniformBuffer.data()));
+                        }
                         break;
                     case GL_FLOAT_MAT3x4:
-                        Capture(callsOut, CaptureUniformMatrix3x4fv(replayState, true, uniformLoc,
-                                                                    uniformCount, false,
-                                                                    uniformBuffer.data()));
+                        for (std::vector<CallCapture> *calls : defaultUniformCalls)
+                        {
+                            Capture(calls, CaptureUniformMatrix3x4fv(replayState, true, uniformLoc,
+                                                                     uniformCount, false,
+                                                                     uniformBuffer.data()));
+                        }
                         break;
                     case GL_FLOAT_MAT3x2:
-                        Capture(callsOut, CaptureUniformMatrix3x2fv(replayState, true, uniformLoc,
-                                                                    uniformCount, false,
-                                                                    uniformBuffer.data()));
+                        for (std::vector<CallCapture> *calls : defaultUniformCalls)
+                        {
+                            Capture(calls, CaptureUniformMatrix3x2fv(replayState, true, uniformLoc,
+                                                                     uniformCount, false,
+                                                                     uniformBuffer.data()));
+                        }
                         break;
                     case GL_FLOAT_MAT3:
-                        Capture(callsOut,
-                                CaptureUniformMatrix3fv(replayState, true, uniformLoc, uniformCount,
-                                                        false, uniformBuffer.data()));
+                        for (std::vector<CallCapture> *calls : defaultUniformCalls)
+                        {
+                            Capture(calls, CaptureUniformMatrix3fv(replayState, true, uniformLoc,
+                                                                   uniformCount, false,
+                                                                   uniformBuffer.data()));
+                        }
                         break;
                     case GL_FLOAT_MAT2x4:
-                        Capture(callsOut, CaptureUniformMatrix2x4fv(replayState, true, uniformLoc,
-                                                                    uniformCount, false,
-                                                                    uniformBuffer.data()));
+                        for (std::vector<CallCapture> *calls : defaultUniformCalls)
+                        {
+                            Capture(calls, CaptureUniformMatrix2x4fv(replayState, true, uniformLoc,
+                                                                     uniformCount, false,
+                                                                     uniformBuffer.data()));
+                        }
                         break;
                     case GL_FLOAT_MAT2x3:
-                        Capture(callsOut, CaptureUniformMatrix2x3fv(replayState, true, uniformLoc,
-                                                                    uniformCount, false,
-                                                                    uniformBuffer.data()));
+                        for (std::vector<CallCapture> *calls : defaultUniformCalls)
+                        {
+                            Capture(calls, CaptureUniformMatrix2x3fv(replayState, true, uniformLoc,
+                                                                     uniformCount, false,
+                                                                     uniformBuffer.data()));
+                        }
                         break;
                     case GL_FLOAT_MAT2:
-                        Capture(callsOut,
-                                CaptureUniformMatrix2fv(replayState, true, uniformLoc, uniformCount,
-                                                        false, uniformBuffer.data()));
+                        for (std::vector<CallCapture> *calls : defaultUniformCalls)
+                        {
+                            Capture(calls, CaptureUniformMatrix2fv(replayState, true, uniformLoc,
+                                                                   uniformCount, false,
+                                                                   uniformBuffer.data()));
+                        }
                         break;
                     case GL_FLOAT_VEC4:
-                        Capture(callsOut, CaptureUniform4fv(replayState, true, uniformLoc,
-                                                            uniformCount, uniformBuffer.data()));
+                        for (std::vector<CallCapture> *calls : defaultUniformCalls)
+                        {
+                            Capture(calls, CaptureUniform4fv(replayState, true, uniformLoc,
+                                                             uniformCount, uniformBuffer.data()));
+                        }
                         break;
                     case GL_FLOAT_VEC3:
-                        Capture(callsOut, CaptureUniform3fv(replayState, true, uniformLoc,
-                                                            uniformCount, uniformBuffer.data()));
+                        for (std::vector<CallCapture> *calls : defaultUniformCalls)
+                        {
+                            Capture(calls, CaptureUniform3fv(replayState, true, uniformLoc,
+                                                             uniformCount, uniformBuffer.data()));
+                        }
                         break;
                     case GL_FLOAT_VEC2:
-                        Capture(callsOut, CaptureUniform2fv(replayState, true, uniformLoc,
-                                                            uniformCount, uniformBuffer.data()));
+                        for (std::vector<CallCapture> *calls : defaultUniformCalls)
+                        {
+                            Capture(calls, CaptureUniform2fv(replayState, true, uniformLoc,
+                                                             uniformCount, uniformBuffer.data()));
+                        }
                         break;
                     case GL_FLOAT:
-                        Capture(callsOut, CaptureUniform1fv(replayState, true, uniformLoc,
-                                                            uniformCount, uniformBuffer.data()));
+                        for (std::vector<CallCapture> *calls : defaultUniformCalls)
+                        {
+                            Capture(calls, CaptureUniform1fv(replayState, true, uniformLoc,
+                                                             uniformCount, uniformBuffer.data()));
+                        }
                         break;
                     default:
                         UNIMPLEMENTED();
@@ -2043,20 +2295,32 @@ void CaptureUpdateUniformValues(const gl::State &replayState,
                 switch (componentCount)
                 {
                     case 4:
-                        Capture(callsOut, CaptureUniform4iv(replayState, true, uniformLoc,
-                                                            uniformCount, uniformBuffer.data()));
+                        for (std::vector<CallCapture> *calls : defaultUniformCalls)
+                        {
+                            Capture(calls, CaptureUniform4iv(replayState, true, uniformLoc,
+                                                             uniformCount, uniformBuffer.data()));
+                        }
                         break;
                     case 3:
-                        Capture(callsOut, CaptureUniform3iv(replayState, true, uniformLoc,
-                                                            uniformCount, uniformBuffer.data()));
+                        for (std::vector<CallCapture> *calls : defaultUniformCalls)
+                        {
+                            Capture(calls, CaptureUniform3iv(replayState, true, uniformLoc,
+                                                             uniformCount, uniformBuffer.data()));
+                        }
                         break;
                     case 2:
-                        Capture(callsOut, CaptureUniform2iv(replayState, true, uniformLoc,
-                                                            uniformCount, uniformBuffer.data()));
+                        for (std::vector<CallCapture> *calls : defaultUniformCalls)
+                        {
+                            Capture(calls, CaptureUniform2iv(replayState, true, uniformLoc,
+                                                             uniformCount, uniformBuffer.data()));
+                        }
                         break;
                     case 1:
-                        Capture(callsOut, CaptureUniform1iv(replayState, true, uniformLoc,
-                                                            uniformCount, uniformBuffer.data()));
+                        for (std::vector<CallCapture> *calls : defaultUniformCalls)
+                        {
+                            Capture(calls, CaptureUniform1iv(replayState, true, uniformLoc,
+                                                             uniformCount, uniformBuffer.data()));
+                        }
                         break;
                     default:
                         UNIMPLEMENTED();
@@ -2076,20 +2340,33 @@ void CaptureUpdateUniformValues(const gl::State &replayState,
                 switch (componentCount)
                 {
                     case 4:
-                        Capture(callsOut, CaptureUniform4uiv(replayState, true, uniformLoc,
-                                                             uniformCount, uniformBuffer.data()));
+                        for (std::vector<CallCapture> *calls : defaultUniformCalls)
+                        {
+                            Capture(calls, CaptureUniform4uiv(replayState, true, uniformLoc,
+                                                              uniformCount, uniformBuffer.data()));
+                        }
                         break;
                     case 3:
-                        Capture(callsOut, CaptureUniform3uiv(replayState, true, uniformLoc,
-                                                             uniformCount, uniformBuffer.data()));
+                        for (std::vector<CallCapture> *calls : defaultUniformCalls)
+                        {
+                            Capture(calls, CaptureUniform3uiv(replayState, true, uniformLoc,
+                                                              uniformCount, uniformBuffer.data()));
+                        }
                         break;
                     case 2:
-                        Capture(callsOut, CaptureUniform2uiv(replayState, true, uniformLoc,
-                                                             uniformCount, uniformBuffer.data()));
+                        for (std::vector<CallCapture> *calls : defaultUniformCalls)
+                        {
+                            Capture(calls, CaptureUniform2uiv(replayState, true, uniformLoc,
+                                                              uniformCount, uniformBuffer.data()));
+                        }
+
                         break;
                     case 1:
-                        Capture(callsOut, CaptureUniform1uiv(replayState, true, uniformLoc,
-                                                             uniformCount, uniformBuffer.data()));
+                        for (std::vector<CallCapture> *calls : defaultUniformCalls)
+                        {
+                            Capture(calls, CaptureUniform1uiv(replayState, true, uniformLoc,
+                                                              uniformCount, uniformBuffer.data()));
+                        }
                         break;
                     default:
                         UNIMPLEMENTED();
@@ -2571,7 +2848,7 @@ void GenerateLinkedProgram(const gl::Context *context,
 
     Capture(setupCalls, CaptureLinkProgram(replayState, true, id));
     CaptureUpdateUniformLocations(program, setupCalls);
-    CaptureUpdateUniformValues(replayState, context, program, setupCalls);
+    CaptureUpdateUniformValues(replayState, context, program, resourceTracker, setupCalls);
     CaptureUpdateUniformBlockIndexes(program, setupCalls);
 
     // Capture uniform block bindings for each program
@@ -5146,6 +5423,45 @@ void FrameCaptureShared::trackTextureUpdate(const gl::Context *context, const Ca
     mResourceTracker.getTrackedResource(ResourceIDType::Texture).setModifiedResource(id);
 }
 
+void FrameCaptureShared::trackDefaultUniformUpdate(const gl::Context *context,
+                                                   const CallCapture &call)
+{
+    DefaultUniformType defaultUniformType = GetDefaultUniformType(call);
+
+    GLuint programID = 0;
+    int location     = 0;
+
+    if (defaultUniformType == DefaultUniformType::CurrentProgram)
+    {
+        programID = context->getState().getProgram()->id().value;
+
+        location = call.params.getParam("locationPacked", ParamType::TUniformLocation, 0)
+                       .value.UniformLocationVal.value;
+    }
+    else
+    {
+        ASSERT(defaultUniformType == DefaultUniformType::SpecifiedProgram);
+
+        programID = call.params.getParam("programPacked", ParamType::TShaderProgramID, 0)
+                        .value.ShaderProgramIDVal.value;
+
+        location = call.params.getParam("locationPacked", ParamType::TUniformLocation, 1)
+                       .value.UniformLocationVal.value;
+    }
+
+    // If this program wasn't in our starting set, ignore the uniform update
+    const TrackedResource &trackedShaderProgram =
+        mResourceTracker.getTrackedResource(ResourceIDType::ShaderProgram);
+    const ResourceSet &startingPrograms = trackedShaderProgram.getStartingResources();
+    const ResourceSet &programsToRegen  = trackedShaderProgram.getResourcesToRegen();
+    if (startingPrograms.find(programID) != startingPrograms.end() &&
+        programsToRegen.find(programID) == programsToRegen.end())
+    {
+        // Track that we need to set this default uniform value again
+        mResourceTracker.setModifiedDefaultUniform(DefaultUniformID(programID, location));
+    }
+}
+
 void FrameCaptureShared::updateCopyImageSubData(CallCapture &call)
 {
     // This call modifies srcName and dstName to no longer be object IDs (GLuint), but actual
@@ -5861,6 +6177,11 @@ void FrameCaptureShared::maybeCapturePreCallUpdates(
         trackTextureUpdate(context, call);
     }
 
+    if (isCaptureActive() && GetDefaultUniformType(call) != DefaultUniformType::None)
+    {
+        trackDefaultUniformUpdate(context, call);
+    }
+
     updateReadBufferSize(call.params.getReadBufferSize());
 
     std::vector<gl::ShaderProgramID> shaderProgramIDs;
@@ -6566,6 +6887,11 @@ void ResourceTracker::setDeletedFenceSync(GLsync sync)
     mFenceSyncsToRegen.insert(sync);
 }
 
+void ResourceTracker::setModifiedDefaultUniform(DefaultUniformID id)
+{
+    mDefaultUniformsToReset.insert(id);
+}
+
 void TrackedResource::setGennedResource(GLuint id)
 {
     if (mStartingResources.find(id) == mStartingResources.end())
@@ -7049,7 +7375,7 @@ void FrameCaptureShared::writeMainContextCppReplay(const gl::Context *context,
 
         // Reset opaque type objects that don't have IDs, so are not ResourceIDTypes.
         MaybeResetOpaqueTypeObjects(mReplayWriter, bodyStream, headerStream, &mResourceTracker,
-                                    &mBinaryData);
+                                    context->getState(), &mBinaryData);
 
         bodyStream << "}\n";
 
