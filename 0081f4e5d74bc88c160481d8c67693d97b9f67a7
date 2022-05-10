@@ -1,0 +1,44 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "7eee0729_475056bd",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 36
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-05-10T02:40:55Z",
+      "side": 1,
+      "message": "One nit and we can land it!",
+      "revId": "0081f4e5d74bc88c160481d8c67693d97b9f67a7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "2a53d30e_a5d35fb4",
+        "filename": "src/tests/gl_tests/VulkanPerformanceCounterTest.cpp",
+        "patchSetId": 36
+      },
+      "lineNbr": 4652,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-05-10T02:40:55Z",
+      "side": 1,
+      "message": "I just actually paid attention to this, sorry. Please use `float` for `ptr` and `EXPECT_EQ(1.0, ...)` here. There\u0027s no reason to match the bit pattern for 1.0 instead of 1.0 itself.",
+      "range": {
+        "startLine": 4652,
+        "startChar": 18,
+        "endLine": 4652,
+        "endChar": 36
+      },
+      "revId": "0081f4e5d74bc88c160481d8c67693d97b9f67a7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
