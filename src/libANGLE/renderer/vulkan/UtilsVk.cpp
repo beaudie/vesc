@@ -1049,6 +1049,7 @@ void ResetDynamicState(ContextVk *contextVk, vk::RenderPassCommandBuffer *comman
     // functions wouldn't be reset here.  However, until such time as extensive transition tests are
     // written, this approach is less bug-prone.
     commandBuffer->setLineWidth(1.0);
+    commandBuffer->setDepthBias(0, 0, 0);
     if (contextVk->getFeatures().supportsFragmentShadingRate.enabled)
     {
         VkExtent2D fragmentSize                                     = {1, 1};
