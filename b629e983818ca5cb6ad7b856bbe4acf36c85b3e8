@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b8026873_e5f453f0",
+        "filename": "src/tests/gl_tests/KTXCompressedTextureTest.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 56,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-05-10T02:36:30Z",
+      "side": 1,
+      "message": "nit: common convention in ANGLE is:\n\n```\nconstexpr type kConstantName \u003d ...\n```",
+      "range": {
+        "startLine": 56,
+        "startChar": 4,
+        "endLine": 56,
+        "endChar": 39
+      },
+      "revId": "b629e983818ca5cb6ad7b856bbe4acf36c85b3e8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
