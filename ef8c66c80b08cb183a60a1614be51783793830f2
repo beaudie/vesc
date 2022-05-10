@@ -198,6 +198,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "4e7429e7_2d78a343",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 8
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2022-05-10T12:32:59Z",
+      "side": 1,
+      "message": "Can you communicate which app / trace caused the issue on your side? I need to verify it\u0027s really pulling active vertex data from a null pointer.\n\nFWIW ANGLE should have the ability to eliminate not statically used variables. Most drivers do as well. I\u0027m not sure if being used in one place but never consumed by a varying would have an impact on our elimination.",
+      "parentUuid": "a6a4924a_78a90cfa",
+      "revId": "ef8c66c80b08cb183a60a1614be51783793830f2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "71aa9fa6_91a293a7",
         "filename": "src/tests/gl_tests/VertexAttributeTest.cpp",
         "patchSetId": 8
