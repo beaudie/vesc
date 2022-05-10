@@ -50,4 +50,5 @@ void FrameCaptureShared::setProgramSources(gl::ShaderProgramID id, ProgramSource
 
 CoherentBufferTracker::CoherentBufferTracker() {}
 CoherentBufferTracker::~CoherentBufferTracker() {}
+
 }  // namespace angle

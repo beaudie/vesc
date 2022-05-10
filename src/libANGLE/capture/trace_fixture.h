@@ -37,6 +37,13 @@
 using DecompressCallback              = uint8_t *(*)(const std::vector<uint8_t> &);
 using ValidateSerializedStateCallback = void (*)(const char *, const char *, uint32_t);
 
+#ifndef CAPTURE_REPLAY_HARNESS
+#    undef eglCreateImage
+#    define eglCreateImage t_eglCreateImage
+#    undef eglDestroyImage
+#    define eglDestroyImage t_eglDestroyImage
+#endif
+
 extern "C" {
 ANGLE_REPLAY_EXPORT void SetBinaryDataDecompressCallback(DecompressCallback callback);
 ANGLE_REPLAY_EXPORT void SetBinaryDataDir(const char *dataDir);
@@ -46,6 +53,9 @@ ANGLE_REPLAY_EXPORT void ResetReplay();
 ANGLE_REPLAY_EXPORT void FinishReplay();
 ANGLE_REPLAY_EXPORT void SetValidateSerializedStateCallback(
     ValidateSerializedStateCallback callback);
+
+ANGLE_REPLAY_EXPORT extern PFNEGLCREATEIMAGEPROC r_eglCreateImage;
+ANGLE_REPLAY_EXPORT extern PFNEGLDESTROYIMAGEPROC r_eglDestroyImage;
 
 // Only defined if serialization is enabled.
 ANGLE_REPLAY_EXPORT const char *GetSerializedContextState(uint32_t frameIndex);
@@ -100,6 +110,11 @@ extern GLuint *gTextureMap;
 extern GLuint *gTransformFeedbackMap;
 extern GLuint *gVertexArrayMap;
 
+using ClientBufferMap = std::unordered_map<EGLClientBuffer, EGLClientBuffer>;
+extern ClientBufferMap gClientBufferMap;
+using EGLImageMap = std::unordered_map<uintptr_t, GLeglImageOES>;
+extern EGLImageMap gEGLImageMap;
+
 // TODO(http://www.anglebug.com/5878): avoid std::unordered_map, it's slow
 using SyncResourceMap = std::unordered_map<uintptr_t, GLsync>;
 extern SyncResourceMap gSyncMap;
@@ -128,6 +143,9 @@ void UpdateTextureID(GLuint id, GLsizei readBufferOffset);
 void UpdateTransformFeedbackID(GLuint id, GLsizei readBufferOffset);
 void UpdateVertexArrayID(GLuint id, GLsizei readBufferOffset);
 void UpdateBufferID2(GLuint id, GLsizei readBufferOffset);
+
+void UpdateClientBuffer(EGLClientBuffer key, EGLClientBuffer data);
+EGLClientBuffer GetClientBuffer(EGLenum target, EGLClientBuffer key);
 
 void SetFramebufferID(GLuint id);
 void SetBufferID(GLuint id);
