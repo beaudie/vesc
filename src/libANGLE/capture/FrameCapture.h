@@ -281,6 +281,11 @@ using BufferMapStatusMap = std::map<GLuint, bool>;
 using FenceSyncSet   = std::set<GLsync>;
 using FenceSyncCalls = std::map<GLsync, std::vector<CallCapture>>;
 
+// Identify default uniforms by their program (GLuint) and uniform location (int)
+using DefaultUniformID    = std::pair<GLuint, int>;
+using DefaultUniformSet   = std::set<DefaultUniformID>;
+using DefaultUniformCalls = std::map<DefaultUniformID, std::vector<CallCapture>>;
+
 using ResourceSet   = std::set<GLuint>;
 using ResourceCalls = std::map<GLuint, std::vector<CallCapture>>;
 
@@ -362,6 +367,10 @@ class ResourceTracker final : angle::NonCopyable
     FenceSyncSet &getFenceSyncsToRegen() { return mFenceSyncsToRegen; }
     void setDeletedFenceSync(GLsync sync);
 
+    DefaultUniformSet &getDefaultUniformsToReset() { return mDefaultUniformsToReset; }
+    DefaultUniformCalls &getDefaultUniformResetCalls() { return mDefaultUniformResetCalls; }
+    void setModifiedDefaultUniform(DefaultUniformID id);
+
     TrackedResource &getTrackedResource(ResourceIDType type)
     {
         return mTrackedResources[static_cast<uint32_t>(type)];
@@ -391,6 +400,9 @@ class ResourceTracker final : angle::NonCopyable
     // Fence syncs to regen are a list of starting fence sync objects that were deleted and need to
     // be regen'ed.
     FenceSyncSet mFenceSyncsToRegen;
+
+    DefaultUniformSet mDefaultUniformsToReset;
+    DefaultUniformCalls mDefaultUniformResetCalls;
 
     TrackedResourceArray mTrackedResources;
 };
@@ -606,6 +618,7 @@ class FrameCaptureShared final : angle::NonCopyable
                             bool coherent);
 
     void trackTextureUpdate(const gl::Context *context, const CallCapture &call);
+    void trackDefaultUniformUpdate(const gl::Context *context, const CallCapture &call);
 
     const std::string &getShaderSource(gl::ShaderProgramID id) const;
     void setShaderSource(gl::ShaderProgramID id, std::string sources);
