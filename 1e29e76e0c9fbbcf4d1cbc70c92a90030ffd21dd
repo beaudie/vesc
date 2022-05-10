@@ -304,6 +304,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "05fcb870_c9d823b9",
+        "filename": "src/libANGLE/capture/FrameCapture.cpp",
+        "patchSetId": 8
+      },
+      "lineNbr": 6879,
+      "author": {
+        "id": 1491823
+      },
+      "writtenOn": "2022-05-10T11:30:17Z",
+      "side": 1,
+      "message": "I\u0027ve uploaded an alternative approach: https://chromium-review.googlesource.com/c/angle/angle/+/3636062/6. \n\nImplementing the replay in TracePerfTest.cpp lead me to the conclusion, that the calls should be handled by using the interface of GLWindowBase.",
+      "parentUuid": "1840fb71_9fbd0fb9",
+      "range": {
+        "startLine": 6856,
+        "startChar": 0,
+        "endLine": 6879,
+        "endChar": 5
+      },
+      "revId": "1e29e76e0c9fbbcf4d1cbc70c92a90030ffd21dd",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "94e3082f_7757ca56",
         "filename": "src/libANGLE/capture/FrameCapture.cpp",
         "patchSetId": 8
