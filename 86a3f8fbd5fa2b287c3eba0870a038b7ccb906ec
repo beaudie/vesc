@@ -24,6 +24,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "a7fac6d3_5b0c89c8",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 17
+      },
+      "lineNbr": 2818,
+      "author": {
+        "id": 1525982
+      },
+      "writtenOn": "2022-05-10T19:26:40Z",
+      "side": 1,
+      "message": "Function moved to `ShareGroupVk`.",
+      "parentUuid": "107ed079_4458069e",
+      "range": {
+        "startLine": 2818,
+        "startChar": 14,
+        "endLine": 2818,
+        "endChar": 48
+      },
+      "revId": "86a3f8fbd5fa2b287c3eba0870a038b7ccb906ec",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "edfcd679_815f4e99",
@@ -47,6 +71,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "c3b6ba18_506a67fb",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 17
+      },
+      "lineNbr": 2828,
+      "author": {
+        "id": 1525982
+      },
+      "writtenOn": "2022-05-10T19:26:40Z",
+      "side": 1,
+      "message": "Removed from assert, since the previous line handles the null pointer case.",
+      "parentUuid": "edfcd679_815f4e99",
+      "range": {
+        "startLine": 2828,
+        "startChar": 11,
+        "endLine": 2828,
+        "endChar": 30
+      },
+      "revId": "86a3f8fbd5fa2b287c3eba0870a038b7ccb906ec",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "df980cec_4c3faf88",
@@ -60,6 +108,30 @@
       "writtenOn": "2022-05-06T23:00:50Z",
       "side": 1,
       "message": "Have both get and set APIs defeats encapsulation. You basically are making it public variable. My suggestion is move onMutableTextureUpload to ShareGroup, and then you likely don\u0027t need any of these APIs.",
+      "range": {
+        "startLine": 57,
+        "startChar": 4,
+        "endLine": 59,
+        "endChar": 55
+      },
+      "revId": "86a3f8fbd5fa2b287c3eba0870a038b7ccb906ec",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "1927d494_e9124f00",
+        "filename": "src/libANGLE/renderer/vulkan/DisplayVk.h",
+        "patchSetId": 17
+      },
+      "lineNbr": 59,
+      "author": {
+        "id": 1525982
+      },
+      "writtenOn": "2022-05-10T19:26:40Z",
+      "side": 1,
+      "message": "Removed the get and set functions after moving to `ShareGroupVk`. Made the reset function private.",
+      "parentUuid": "df980cec_4c3faf88",
       "range": {
         "startLine": 57,
         "startChar": 4,
@@ -164,6 +236,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "e68e1ae7_d7a1ffdb",
+        "filename": "src/libANGLE/renderer/vulkan/TextureVk.cpp",
+        "patchSetId": 17
+      },
+      "lineNbr": 467,
+      "author": {
+        "id": 1525982
+      },
+      "writtenOn": "2022-05-10T19:26:40Z",
+      "side": 1,
+      "message": "Thanks. Done.",
+      "parentUuid": "27742191_a4d8d963",
+      "range": {
+        "startLine": 463,
+        "startChar": 4,
+        "endLine": 467,
+        "endChar": 88
+      },
+      "revId": "86a3f8fbd5fa2b287c3eba0870a038b7ccb906ec",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "9bbacd07_93df4a61",
@@ -211,6 +307,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "97a41962_a30d92a0",
+        "filename": "src/libANGLE/renderer/vulkan/TextureVk.cpp",
+        "patchSetId": 17
+      },
+      "lineNbr": 471,
+      "author": {
+        "id": 1525982
+      },
+      "writtenOn": "2022-05-10T19:26:40Z",
+      "side": 1,
+      "message": "Updated the code to include the checks for `levels \u003e 1`. Tests added to ensure the images are uploaded/no uploaded in different settings.",
+      "parentUuid": "82c0698d_2445f2a8",
+      "range": {
+        "startLine": 470,
+        "startChar": 4,
+        "endLine": 471,
+        "endChar": 69
+      },
+      "revId": "86a3f8fbd5fa2b287c3eba0870a038b7ccb906ec",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "e603a014_04a8c8e9",
@@ -236,6 +356,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "7bb059a9_b703f9cb",
+        "filename": "src/libANGLE/renderer/vulkan/TextureVk.cpp",
+        "patchSetId": 17
+      },
+      "lineNbr": 3510,
+      "author": {
+        "id": 1525982
+      },
+      "writtenOn": "2022-05-10T19:26:40Z",
+      "side": 1,
+      "message": "This is the old `ImageMipLevels::FullMipChain` which has been renamed to `FullMipChainForGenerateMipmap` in this CL.",
+      "parentUuid": "e603a014_04a8c8e9",
+      "range": {
+        "startLine": 3510,
+        "startChar": 43,
+        "endLine": 3510,
+        "endChar": 72
+      },
+      "revId": "86a3f8fbd5fa2b287c3eba0870a038b7ccb906ec",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "1c725f0b_9e225806",
         "filename": "src/libANGLE/renderer/vulkan/TextureVk.h",
         "patchSetId": 17
@@ -247,6 +391,30 @@
       "writtenOn": "2022-05-06T23:00:50Z",
       "side": 1,
       "message": "This is only used in the assertion that it is immutable. Maybe change it to \nbool isImmutable() { return mState.getImmutableFormat(); }",
+      "range": {
+        "startLine": 206,
+        "startChar": 4,
+        "endLine": 206,
+        "endChar": 57
+      },
+      "revId": "86a3f8fbd5fa2b287c3eba0870a038b7ccb906ec",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "c593cf14_6ba41bc0",
+        "filename": "src/libANGLE/renderer/vulkan/TextureVk.h",
+        "patchSetId": 17
+      },
+      "lineNbr": 206,
+      "author": {
+        "id": 1525982
+      },
+      "writtenOn": "2022-05-10T19:26:40Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "1c725f0b_9e225806",
       "range": {
         "startLine": 206,
         "startChar": 4,
