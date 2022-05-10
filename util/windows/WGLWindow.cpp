@@ -350,6 +350,36 @@ bool WGLWindow::makeCurrent(HGLRC context)
     return true;
 }
 
+WGLWindow::Image WGLWindow::createImage(GLWindowContext context,
+                                        Enum target,
+                                        ClientBuffer buffer,
+                                        const Attrib *attrib_list)
+{
+    std::cerr << "WGLWindow::createImage not implemented.\n";
+    return nullptr;
+}
+
+WGLWindow::Image WGLWindow::createImageKHR(GLWindowContext context,
+                                           Enum target,
+                                           ClientBuffer buffer,
+                                           const AttribKHR *attrib_list)
+{
+    std::cerr << "WGLWindow::createImageKHR not implemented.\n";
+    return nullptr;
+}
+
+EGLBoolean WGLWindow::destroyImage(Image image)
+{
+    std::cerr << "WGLWindow::destroyImage not implemented.\n";
+    return false;
+}
+
+EGLBoolean WGLWindow::destroyImageKHR(Image image)
+{
+    std::cerr << "WGLWindow::destroyImageKHR not implemented.\n";
+    return false;
+}
+
 bool WGLWindow::setSwapInterval(EGLint swapInterval)
 {
     if (!_wglSwapIntervalEXT || _wglSwapIntervalEXT(swapInterval) == FALSE)
