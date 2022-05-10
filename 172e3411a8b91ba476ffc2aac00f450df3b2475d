@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "7b278465_61ee769c",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1002725
+      },
+      "writtenOn": "2022-05-10T14:53:27Z",
+      "side": 1,
+      "message": "ptal\n\nNo new code change from last time this landed. Just submitted crrev.com/c/3629611 on the chromium side. I\u0027ve added the android gpu bot that was failing to cq and it\u0027s passing now.",
+      "revId": "172e3411a8b91ba476ffc2aac00f450df3b2475d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
