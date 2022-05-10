@@ -29,14 +29,49 @@
 constexpr char kResultTag[] = "*RESULT";
 constexpr char kTracePath[] = ANGLE_CAPTURE_REPLAY_TEST_NAMES_PATH;
 
+class EntryPointsLibraryWithOverride : public angle::Library
+{
+  public:
+    using angle::Library::Library;
+
+    static void setEGLWindow(EGLWindow *window);
+
+  private:
+    using eglGetProcAddressFunc = void *(*)(const char *procname);
+
+    void *getSymbolOverride(const char *symbolName, void *symbol) override;
+
+    static void *EGLGetProcAddress(const char *procname);
+
+    static EGLImage EGLCreateImage(EGLDisplay display,
+                                   EGLContext context,
+                                   EGLenum target,
+                                   EGLClientBuffer buffer,
+                                   const EGLAttrib *attrib_list);
+
+    static EGLImageKHR EGLCreateImageKHR(EGLDisplay display,
+                                         EGLContext context,
+                                         EGLenum target,
+                                         EGLClientBuffer buffer,
+                                         const EGLint *attrib_list);
+
+    static EGLBoolean EGLDestroyImage(EGLDisplay display, EGLImage image);
+
+    static eglGetProcAddressFunc mEGLGetProcAddress;
+    static EGLWindow *mEGLWindow;
+    static PFNEGLCREATEIMAGEPROC mEGLCreateImage;
+    static PFNEGLCREATEIMAGEKHRPROC mEGLCreateImageKHR;
+    static PFNEGLDESTROYIMAGEPROC mEGLDestroyImage;
+};
+
 class CaptureReplayTests
 {
   public:
     CaptureReplayTests()
     {
         // Load EGL library so we can initialize the display.
-        mEntryPointsLib.reset(
-            angle::OpenSharedLibrary(ANGLE_EGL_LIBRARY_NAME, angle::SearchType::ModuleDir));
+        mEntryPointsLib.reset(angle::OpenSharedLibraryWithOverride<EntryPointsLibraryWithOverride>(
+            ANGLE_EGL_LIBRARY_NAME, angle::SearchType::ModuleDir));
 
         mOSWindow = OSWindow::New();
         mOSWindow->disableErrorMessageDialog();
@@ -71,6 +106,8 @@ class CaptureReplayTests
             mEGLWindow = EGLWindow::New(traceInfo.contextClientMajorVersion,
                                         traceInfo.contextClientMinorVersion);
         }
+
+        EntryPointsLibraryWithOverride::setEGLWindow(mEGLWindow);
 
         ConfigParameters configParams;
         configParams.redBits     = traceInfo.configRedBits;
@@ -121,7 +158,6 @@ class CaptureReplayTests
                          << ANGLE_CAPTURE_REPLAY_TEST_DATA_DIR;
 
         mTraceLibrary->setBinaryDataDir(binaryPathStream.str().c_str());
-
         mTraceLibrary->setupReplay();
         return true;
     }
@@ -239,6 +275,74 @@ class CaptureReplayTests
     std::unique_ptr<angle::Library> mEntryPointsLib;
     std::unique_ptr<angle::TraceLibrary> mTraceLibrary;
 };
+
+void *EntryPointsLibraryWithOverride::getSymbolOverride(const char *symbolName, void *symbol)
+{
+    if (!strcmp(symbolName, "eglGetProcAddress"))
+    {
+        mEGLGetProcAddress = reinterpret_cast<eglGetProcAddressFunc>(symbol);
+        return reinterpret_cast<void *>(EGLGetProcAddress);
+    }
+    return symbol;
+}
+
+void *EntryPointsLibraryWithOverride::EGLGetProcAddress(const char *procname)
+{
+    if (!strcmp(procname, "eglCreateImage"))
+    {
+        mEGLCreateImage = reinterpret_cast<PFNEGLCREATEIMAGEPROC>(mEGLGetProcAddress(procname));
+        return reinterpret_cast<void *>(EGLCreateImage);
+    }
+
+    if (!strcmp(procname, "eglCreateImageKHR"))
+    {
+        mEGLCreateImageKHR =
+            reinterpret_cast<PFNEGLCREATEIMAGEKHRPROC>(mEGLGetProcAddress(procname));
+        return reinterpret_cast<void *>(EGLCreateImageKHR);
+    }
+
+    if (!strcmp(procname, "eglDestroyImage"))
+    {
+        mEGLDestroyImage = reinterpret_cast<PFNEGLDESTROYIMAGEPROC>(mEGLGetProcAddress(procname));
+        return reinterpret_cast<void *>(EGLDestroyImage);
+    }
+
+    return mEGLGetProcAddress(procname);
+}
+void EntryPointsLibraryWithOverride::setEGLWindow(EGLWindow *window)
+{
+    mEGLWindow = window;
+}
+
+EGLImage EntryPointsLibraryWithOverride::EGLCreateImage(EGLDisplay display,
+                                                        EGLContext context,
+                                                        EGLenum target,
+                                                        EGLClientBuffer buffer,
+                                                        const EGLAttrib *attrib_list)
+{
+    return mEGLCreateImage(mEGLWindow->getDisplay(), context, target, buffer, attrib_list);
+}
+
+EGLImageKHR EntryPointsLibraryWithOverride::EGLCreateImageKHR(EGLDisplay display,
+                                                              EGLContext context,
+                                                              EGLenum target,
+                                                              EGLClientBuffer buffer,
+                                                              const EGLint *attrib_list)
+{
+    return mEGLCreateImageKHR(mEGLWindow->getDisplay(), context, target, buffer, attrib_list);
+}
+
+EGLBoolean EntryPointsLibraryWithOverride::EGLDestroyImage(EGLDisplay display, EGLImage image)
+{
+    return mEGLDestroyImage(mEGLWindow->getDisplay(), image);
+}
+
+EntryPointsLibraryWithOverride::eglGetProcAddressFunc
+    EntryPointsLibraryWithOverride::mEGLGetProcAddress                      = nullptr;
+EGLWindow *EntryPointsLibraryWithOverride::mEGLWindow                       = nullptr;
+PFNEGLCREATEIMAGEPROC EntryPointsLibraryWithOverride::mEGLCreateImage       = nullptr;
+PFNEGLCREATEIMAGEKHRPROC EntryPointsLibraryWithOverride::mEGLCreateImageKHR = nullptr;
+PFNEGLDESTROYIMAGEPROC EntryPointsLibraryWithOverride::mEGLDestroyImage     = nullptr;
 
 int main(int argc, char **argv)
 {

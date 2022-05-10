@@ -148,7 +148,6 @@ bool EGLWindow::initializeDisplay(OSWindow *osWindow,
         fprintf(stderr, "Cannot load eglGetProcAddress\n");
         return false;
     }
-
     // Likely we will need to use a fallback to Library::getAs on non-ANGLE platforms.
     angle::LoadEGL(getProcAddress);
 #endif  // defined(ANGLE_USE_UTIL_LOADER)
