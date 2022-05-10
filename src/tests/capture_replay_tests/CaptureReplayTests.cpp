@@ -26,8 +26,54 @@
 
 #include "util/capture/frame_capture_test_utils.h"
 
+#define CAPTURE_REPLAY_HARNESS
+#include "libANGLE/capture/trace_fixture.h"
+
 constexpr char kResultTag[] = "*RESULT";
 constexpr char kTracePath[] = ANGLE_CAPTURE_REPLAY_TEST_NAMES_PATH;
+
+static EGLWindow *gEGLWindow = nullptr;
+
+static EGLImage ANGLE_REPLAY_EXPORT EGLCreateImage(EGLDisplay display,
+                                                   EGLContext context,
+                                                   EGLenum target,
+                                                   EGLClientBuffer buffer,
+                                                   const EGLAttrib *attrib_list)
+{
+
+    GLWindowContext ctx = reinterpret_cast<GLWindowContext>(context);
+    return gEGLWindow->createImage(ctx, target, buffer, attrib_list);
+}
+
+static EGLImage ANGLE_REPLAY_EXPORT EGLCreateImageKHR(EGLDisplay display,
+                                                      EGLContext context,
+                                                      EGLenum target,
+                                                      EGLClientBuffer buffer,
+                                                      const EGLint *attrib_list)
+{
+
+    GLWindowContext ctx = reinterpret_cast<GLWindowContext>(context);
+    return gEGLWindow->createImageKHR(ctx, target, buffer, attrib_list);
+}
+
+EGLBoolean ANGLE_REPLAY_EXPORT EGLDestroyImage(EGLDisplay display, EGLImage image)
+{
+    return gEGLWindow->destroyImage(image);
+}
+
+EGLBoolean ANGLE_REPLAY_EXPORT EGLDestroyImageKHR(EGLDisplay display, EGLImage image)
+{
+    return gEGLWindow->destroyImageKHR(image);
+}
+
+static void LoadEGLOverrides(EGLWindow *window)
+{
+    r_eglCreateImage     = EGLCreateImage;
+    r_eglCreateImageKHR  = EGLCreateImageKHR;
+    r_eglDestroyImage    = EGLDestroyImage;
+    r_eglDestroyImageKHR = EGLDestroyImageKHR;
+    gEGLWindow           = window;
+}
 
 class CaptureReplayTests
 {
@@ -71,6 +117,7 @@ class CaptureReplayTests
             mEGLWindow = EGLWindow::New(traceInfo.contextClientMajorVersion,
                                         traceInfo.contextClientMinorVersion);
         }
+        LoadEGLOverrides(mEGLWindow);
 
         ConfigParameters configParams;
         configParams.redBits     = traceInfo.configRedBits;
