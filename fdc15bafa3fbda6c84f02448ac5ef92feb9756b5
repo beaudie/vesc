@@ -51,6 +51,24 @@
       "message": "Please use this process for re-lands:\n\nhttps://chromium.googlesource.com/angle/angle/+/main/doc/ContributingCode.md#relanding-a-reverted-cl",
       "revId": "fdc15bafa3fbda6c84f02448ac5ef92feb9756b5",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "fbaef10c_807a0ed6",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1528827
+      },
+      "writtenOn": "2022-05-10T14:52:38Z",
+      "side": 1,
+      "message": "Whops, sorry, I missed that.\nWould you like me to create a new CL abandoning this one?",
+      "parentUuid": "2f258fd5_7dcd659d",
+      "revId": "fdc15bafa3fbda6c84f02448ac5ef92feb9756b5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
