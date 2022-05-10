@@ -16,6 +16,24 @@
       "message": "Thanks for fixing Roman. Would it be better if this failure caused a broken build?",
       "revId": "a0d641fe9d5fd340199658d192c36179fa018737",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "5ec4398d_b28ac0f1",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 10
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1531247
+      },
+      "writtenOn": "2022-05-10T13:41:07Z",
+      "side": 1,
+      "message": "Yes, I think that would be better because I would\u0027ve noticed the breakage on the offending CL. Not sure why it does not result in a broken build, in fact I feel like there is a severe lack of documentation of all this stuff (or I just consistently fail to find it)",
+      "parentUuid": "2bad910b_5e6ab0d0",
+      "revId": "a0d641fe9d5fd340199658d192c36179fa018737",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ],
   "submitRequirementResults": [
