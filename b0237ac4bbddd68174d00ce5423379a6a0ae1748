@@ -24,6 +24,23 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "eccb276d_a0b6c188",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2022-05-10T03:03:16Z",
+      "side": 1,
+      "message": "LGTM with Jamie\u0027s feedback handled",
+      "revId": "b0237ac4bbddd68174d00ce5423379a6a0ae1748",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "d901554b_b3070d9a",
