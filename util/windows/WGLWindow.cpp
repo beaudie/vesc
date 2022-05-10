@@ -13,6 +13,7 @@
 #include "common/system_utils.h"
 #include "util/OSWindow.h"
 
+#include <cassert>
 #include <iostream>
 
 namespace
@@ -348,6 +349,36 @@ bool WGLWindow::makeCurrent(HGLRC context)
     }
 
     return true;
+}
+
+WGLWindow::Image WGLWindow::createImage(GLWindowContext context,
+                                        Enum target,
+                                        ClientBuffer buffer,
+                                        const Attrib *attrib_list)
+{
+    assert(0 && "WGLWindow::createImage not implemented");
+    return nullptr;
+}
+
+WGLWindow::Image WGLWindow::createImageKHR(GLWindowContext context,
+                                           Enum target,
+                                           ClientBuffer buffer,
+                                           const AttribKHR *attrib_list)
+{
+    assert(0 && "WGLWindow::createImageKHR not implemented");
+    return nullptr;
+}
+
+EGLBoolean WGLWindow::destroyImage(Image image)
+{
+    assert(0 && "WGLWindow::destroyImage not implemented");
+    return false;
+}
+
+EGLBoolean WGLWindow::destroyImageKHR(Image image)
+{
+    assert(0 && "WGLWindow::destroyImage not implemented");
+    return false;
 }
 
 bool WGLWindow::setSwapInterval(EGLint swapInterval)

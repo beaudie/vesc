@@ -148,7 +148,6 @@ bool EGLWindow::initializeDisplay(OSWindow *osWindow,
         fprintf(stderr, "Cannot load eglGetProcAddress\n");
         return false;
     }
-
     // Likely we will need to use a fallback to Library::getAs on non-ANGLE platforms.
     angle::LoadEGL(getProcAddress);
 #endif  // defined(ANGLE_USE_UTIL_LOADER)
@@ -715,6 +714,32 @@ bool EGLWindow::makeCurrentGeneric(GLWindowContext context)
 bool EGLWindow::makeCurrent()
 {
     return makeCurrent(mContext);
+}
+
+EGLWindow::Image EGLWindow::createImage(GLWindowContext context,
+                                        Enum target,
+                                        ClientBuffer buffer,
+                                        const Attrib *attrib_list)
+{
+    return eglCreateImage(getDisplay(), context, target, buffer, attrib_list);
+}
+
+EGLWindow::Image EGLWindow::createImageKHR(GLWindowContext context,
+                                           Enum target,
+                                           ClientBuffer buffer,
+                                           const AttribKHR *attrib_list)
+{
+    return eglCreateImageKHR(getDisplay(), context, target, buffer, attrib_list);
+}
+
+EGLBoolean EGLWindow::destroyImage(Image image)
+{
+    return eglDestroyImage(getDisplay(), image);
+}
+
+EGLBoolean EGLWindow::destroyImageKHR(Image image)
+{
+    return eglDestroyImageKHR(getDisplay(), image);
 }
 
 bool EGLWindow::makeCurrent(EGLContext context)
