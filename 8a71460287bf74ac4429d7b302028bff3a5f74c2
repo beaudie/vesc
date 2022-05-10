@@ -16,6 +16,23 @@
       "message": "Not sure if we need this design. Will have to see what necessitated in later patches.",
       "revId": "8a71460287bf74ac4429d7b302028bff3a5f74c2",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "7aa76889_6d09311b",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2022-05-10T03:27:54Z",
+      "side": 1,
+      "message": "I think it would be okay to merge this with the next CL that uses it.",
+      "revId": "8a71460287bf74ac4429d7b302028bff3a5f74c2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
