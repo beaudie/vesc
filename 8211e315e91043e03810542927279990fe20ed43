@@ -35,6 +35,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "3c3cba11_03b97688",
+        "filename": "src/libANGLE/renderer/vulkan/vk_surface_utils.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 31,
+      "author": {
+        "id": 1528827
+      },
+      "writtenOn": "2022-05-10T16:32:42Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "3ccf8f51_291a9c2f",
+      "revId": "8211e315e91043e03810542927279990fe20ed43",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "f833b79e_ae6160c5",
@@ -48,6 +66,24 @@
       "writtenOn": "2022-05-09T17:15:31Z",
       "side": 1,
       "message": "Will these be used anywhere outside SurfaceVk.cpp? If not, feel free to move it to SurfaceVk under the anonymous namespace so they\u0027d be inlined away.",
+      "revId": "8211e315e91043e03810542927279990fe20ed43",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "f3aea006_c97cdecb",
+        "filename": "src/libANGLE/renderer/vulkan/vk_surface_utils.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 34,
+      "author": {
+        "id": 1528827
+      },
+      "writtenOn": "2022-05-10T16:32:42Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "f833b79e_ae6160c5",
       "revId": "8211e315e91043e03810542927279990fe20ed43",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
