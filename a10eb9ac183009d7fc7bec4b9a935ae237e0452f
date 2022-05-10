@@ -16,6 +16,24 @@
       "message": "Weird to call the getter for its side effect.\n\nDeferring review to Jamie who should be more familiar with this area of code.",
       "revId": "a10eb9ac183009d7fc7bec4b9a935ae237e0452f",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "bf83590b_0be1cbdd",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1408173
+      },
+      "writtenOn": "2022-05-10T15:39:39Z",
+      "side": 1,
+      "message": "Unfortunately AllocateCurrentThread isn\u0027t safe to call twice (but maybe it should be?)",
+      "parentUuid": "4244ab83_58307e6d",
+      "revId": "a10eb9ac183009d7fc7bec4b9a935ae237e0452f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
