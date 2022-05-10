@@ -2019,7 +2019,6 @@ TEST_P(FramebufferTest_ES31, BasicDrawToYFlippedFBO)
 // Test blitting a 3D texture to a 3D texture
 TEST_P(FramebufferTest_ES3, Blit3D)
 {
-    ANGLE_SKIP_TEST_IF(IsVulkan());
     ANGLE_SKIP_TEST_IF(IsPixel4() && IsOpenGLES());
 
     test3DBlit(GL_TEXTURE_3D, GL_TEXTURE_3D);
@@ -2036,7 +2035,6 @@ TEST_P(FramebufferTest_ES3, Blit2DArray)
 // Test blitting a 3D texture to a 2D array texture
 TEST_P(FramebufferTest_ES3, Blit3DTo2DArray)
 {
-    ANGLE_SKIP_TEST_IF(IsVulkan());
     ANGLE_SKIP_TEST_IF(IsIntel() && IsD3D11());
     ANGLE_SKIP_TEST_IF(IsPixel4() && IsOpenGLES());
 
@@ -2046,7 +2044,6 @@ TEST_P(FramebufferTest_ES3, Blit3DTo2DArray)
 // Test blitting a 2D array texture to a 3D texture
 TEST_P(FramebufferTest_ES3, Blit2DArrayTo3D)
 {
-    ANGLE_SKIP_TEST_IF(IsVulkan());
     ANGLE_SKIP_TEST_IF(IsPixel4() && IsOpenGLES());
 
     test3DBlit(GL_TEXTURE_2D_ARRAY, GL_TEXTURE_3D);
