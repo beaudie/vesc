@@ -20,6 +20,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "8721b2b2_86f0b619",
+        "filename": "src/libANGLE/renderer/vulkan/SurfaceVk.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 1798,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-05-10T02:29:39Z",
+      "side": 1,
+      "message": "+1",
+      "parentUuid": "49c6810d_656f5973",
+      "revId": "0258e53bf346adb47163b9c8d0ebe0f0bc3f905f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "93d8d3ca_f8383568",
         "filename": "src/libANGLE/renderer/vulkan/linux/gbm/DisplayVkGbm.cpp",
         "patchSetId": 5
