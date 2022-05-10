@@ -33,6 +33,24 @@
       "message": "Hey I\u0027m catching up on this, sorry for the slow response. I have a couple questions and I want to make sure we get this right.\n\nIs there a reason this can\u0027t live in ANGLE, if we could configure the max texture size to something else? Putting workarounds like this in the passthrough command decoder is not ideal because it duplicates validation and bugs often arise from differences in ANGLE\u0027s state and what\u0027s exposed to the GPU process clients.\n\nI think the current emulation of this in the command decoder isn\u0027t enough, a bunch of validation relies on the max texture size (see references to max2DtextureSize in https://source.chromium.org/chromium/chromium/src/+/main:third_party/angle/src/libANGLE/Caps.h).",
       "revId": "172e3411a8b91ba476ffc2aac00f450df3b2475d",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "242f23c5_7e40ee63",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1002725
+      },
+      "writtenOn": "2022-05-10T21:48:57Z",
+      "side": 1,
+      "message": "Hey np.\n\nSo the problem is on android on some \"edge case\" devices, the frame buffer itself can be larger than 4096, which is causing problems due to this workaround. So the idea for the fix is apply the workaround to command buffer clients only which covers canvas/webgl, cc tile raster etc. In particular, shared image allocation and viz display are not command buffer clients, so the workaround would be removed for those and hopefully that covers all frame buffers usage. But you are right that it does mean doing a bunch of validation in the passthrough cb.\n\nMaybe we can discuss other options though.\n\nThe original bug the workaround was added for was that allocating a screen width x max texture size height (for cc tile) failed on one popular android device, but it was deemed easier at the time to apply the whole workaround to all of android in case the problem comes up again. So unfortunately it\u0027s not clear how safe it is to just remove the workaround entirely for android. Then linux was added for something else that I didn\u0027t chase down.\n\nAnother idea was just to arbitrarily double the size of the workaround, but that does feel a bit like pushing the problem down the road",
+      "parentUuid": "1578fad5_42943c0e",
+      "revId": "172e3411a8b91ba476ffc2aac00f450df3b2475d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
