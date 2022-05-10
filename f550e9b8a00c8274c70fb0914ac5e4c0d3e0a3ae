@@ -39,6 +39,30 @@
       },
       "revId": "f550e9b8a00c8274c70fb0914ac5e4c0d3e0a3ae",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "be339d0a_22c0230f",
+        "filename": "util/windows/WGLWindow.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 380,
+      "author": {
+        "id": 1491823
+      },
+      "writtenOn": "2022-05-10T14:39:03Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "e337847a_c2cd4dca",
+      "range": {
+        "startLine": 380,
+        "startChar": 11,
+        "endLine": 380,
+        "endChar": 16
+      },
+      "revId": "f550e9b8a00c8274c70fb0914ac5e4c0d3e0a3ae",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
