@@ -34,6 +34,23 @@
       "parentUuid": "e149fc72_ee34dc33",
       "revId": "51b4fa9fd84b4b8c7b3dbf1e66f4a833b48d202c",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "8f588d23_6b7cadb2",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1290487
+      },
+      "writtenOn": "2022-05-10T23:32:36Z",
+      "side": 1,
+      "message": "LGTM\n\nIs there a test(s) that we can create for this?  I\u0027m wondering about the performance counter class that Jamie created, and something that can simulate the effects of apps whose rendering is faster/slower-than vsync.  I remember there being some multi-thread test(s) that had a way of synchronizing the normally-unsynchronized world of threads.  Doesn\u0027t have to be done for this CL, but I wanted to plant that seed in case you can do it.",
+      "revId": "51b4fa9fd84b4b8c7b3dbf1e66f4a833b48d202c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
