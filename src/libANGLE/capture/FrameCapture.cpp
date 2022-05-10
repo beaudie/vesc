@@ -624,6 +624,19 @@ void WriteCppReplayForCall(const CallCapture &call,
         callOut << "gSyncMap[" << SyncIndexValue(sync) << "] = ";
     }
 
+    if (call.entryPoint == EntryPoint::EGLCreateImage ||
+        call.entryPoint == EntryPoint::EGLCreateImageKHR)
+    {
+        GLeglImageOES image = call.params.getReturnValue().value.voidPointerVal;
+        callOut << "gEGLImageMap[" << reinterpret_cast<uintptr_t>(image) << "ul] = ";
+    }
+
+    if (call.entryPoint == EntryPoint::EGLCreateNativeClientBufferANDROID)
+    {
+        EGLClientBuffer buffer = call.params.getReturnValue().value.EGLClientBufferVal;
+        callOut << "gClientBufferMap[" << reinterpret_cast<EGLClientBuffer>(buffer) << "] = ";
+    }
+
     // Depending on how a buffer is mapped, we may need to track its location for readback
     bool trackBufferPointer = false;
 
@@ -5273,21 +5286,6 @@ void FrameCaptureShared::maybeOverrideEntryPoint(const gl::Context *context,
 {
     switch (inCall.entryPoint)
     {
-        case EntryPoint::GLEGLImageTargetTexture2DOES:
-        {
-            // We don't support reading EGLImages. Instead, just pull from a tiny null texture.
-            // TODO (anglebug.com/4964): Read back the image data and populate the texture.
-            std::vector<uint8_t> pixelData = {0, 0, 0, 0};
-            outCalls.emplace_back(
-                CaptureTexSubImage2D(context->getState(), true, gl::TextureTarget::_2D, 0, 0, 0, 1,
-                                     1, GL_RGBA, GL_UNSIGNED_BYTE, pixelData.data()));
-            break;
-        }
-        case EntryPoint::GLEGLImageTargetRenderbufferStorageOES:
-        {
-            UNIMPLEMENTED();
-            break;
-        }
         case EntryPoint::GLCopyImageSubData:
         case EntryPoint::GLCopyImageSubDataEXT:
         case EntryPoint::GLCopyImageSubDataOES:
@@ -6821,8 +6819,10 @@ void FrameCaptureShared::writeCppReplayIndexFiles(const gl::Context *context,
         std::stringstream source;
 
         source << "#include \"" << FmtCapturePrefix(contextId, mCaptureLabel) << ".h\"\n";
-        source << "#include \"trace_fixture.h\"\n";
+        // The ordering of these includes is important, because in trace_fixture.h the defines
+        // for some EGL calls are re-defined to let the replay handle them in a specific way
         source << "#include \"angle_trace_gl.h\"\n";
+        source << "#include \"trace_fixture.h\"\n";
 
         std::string sourcePrologue = source.str();
         mReplayWriter.setSourcePrologue(sourcePrologue);
@@ -7586,7 +7586,7 @@ void WriteParamValueReplay<ParamType::TGLeglImageOES>(std::ostream &os,
                                                       GLeglImageOES value)
 {
     uint64_t pointerValue = reinterpret_cast<uint64_t>(value);
-    os << "reinterpret_cast<EGLImageKHR>(" << pointerValue << "ul)";
+    os << "gEGLImageMap[reinterpret_cast<uintptr_t>(" << pointerValue << "ul)]";
 }
 
 template <>
@@ -7596,44 +7596,6 @@ void WriteParamValueReplay<ParamType::TGLubyte>(std::ostream &os,
 {
     const int v = value;
     os << v;
-}
-
-template <>
-void WriteParamValueReplay<ParamType::TEGLContext>(std::ostream &os,
-                                                   const CallCapture &call,
-                                                   EGLContext value)
-{
-    os << "gContextMap[" << reinterpret_cast<size_t>(value) << "]";
-}
-
-template <>
-void WriteParamValueReplay<ParamType::TEGLDisplay>(std::ostream &os,
-                                                   const CallCapture &call,
-                                                   EGLDisplay value)
-{
-    if (value == EGL_NO_DISPLAY)
-    {
-        os << "EGL_NO_DISPLAY";
-        return;
-    }
-
-    // We don't support capturing real EGL calls.
-    UNREACHABLE();
-}
-
-template <>
-void WriteParamValueReplay<ParamType::TEGLSurface>(std::ostream &os,
-                                                   const CallCapture &call,
-                                                   EGLSurface value)
-{
-    if (value == EGL_NO_SURFACE)
-    {
-        os << "EGL_NO_SURFACE";
-        return;
-    }
-
-    // We don't support capturing real EGL calls.
-    UNREACHABLE();
 }
 
 template <>
@@ -7955,4 +7917,5 @@ std::vector<std::string> ReplayWriter::getAndResetWrittenFiles()
     ASSERT(mWrittenFiles.empty());
     return results;
 }
+
 }  // namespace angle
