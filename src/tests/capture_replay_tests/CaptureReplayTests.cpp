@@ -26,8 +26,36 @@
 
 #include "util/capture/frame_capture_test_utils.h"
 
+#define CAPTURE_REPLAY_HARNESS
+#include "libANGLE/capture/trace_fixture.h"
+
 constexpr char kResultTag[] = "*RESULT";
 constexpr char kTracePath[] = ANGLE_CAPTURE_REPLAY_TEST_NAMES_PATH;
+
+static EGLWindow *gEGLWindow = nullptr;
+
+static EGLImage EGLCreateImage(EGLDisplay display,
+                               EGLContext context,
+                               EGLenum target,
+                               EGLClientBuffer buffer,
+                               const EGLAttrib *attrib_list)
+{
+
+    GLWindowContext ctx = reinterpret_cast<GLWindowContext>(context);
+    return gEGLWindow->createImage(ctx, target, buffer, attrib_list);
+}
+
+EGLBoolean EGLDestroyImage(EGLDisplay display, EGLImage image)
+{
+    return gEGLWindow->destroyImage(image);
+}
+
+static void LoadEGLOverrides(EGLWindow *window)
+{
+    t_eglCreateImage  = EGLCreateImage;
+    t_eglDestroyImage = EGLDestroyImage;
+    gEGLWindow        = window;
+}
 
 class CaptureReplayTests
 {
@@ -37,7 +65,6 @@ class CaptureReplayTests
         // Load EGL library so we can initialize the display.
         mEntryPointsLib.reset(
             angle::OpenSharedLibrary(ANGLE_EGL_LIBRARY_NAME, angle::SearchType::ModuleDir));
-
         mOSWindow = OSWindow::New();
         mOSWindow->disableErrorMessageDialog();
     }
@@ -71,6 +98,7 @@ class CaptureReplayTests
             mEGLWindow = EGLWindow::New(traceInfo.contextClientMajorVersion,
                                         traceInfo.contextClientMinorVersion);
         }
+        LoadEGLOverrides(mEGLWindow);
 
         ConfigParameters configParams;
         configParams.redBits     = traceInfo.configRedBits;
@@ -121,7 +149,6 @@ class CaptureReplayTests
                          << ANGLE_CAPTURE_REPLAY_TEST_DATA_DIR;
 
         mTraceLibrary->setBinaryDataDir(binaryPathStream.str().c_str());
-
         mTraceLibrary->setupReplay();
         return true;
     }
