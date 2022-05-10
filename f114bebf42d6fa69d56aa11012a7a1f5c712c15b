@@ -34,6 +34,24 @@
       "parentUuid": "d68be547_b9368635",
       "revId": "f114bebf42d6fa69d56aa11012a7a1f5c712c15b",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "11197961_317fe110",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 37
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-05-10T03:47:37Z",
+      "side": 1,
+      "message": "Done. There was already access given to:\n\n```\nMin.Zhang@arm.com\nMin.Zhang@armchina.com\n```\n\nI added `min.zhang@arm.com` just in case it\u0027s case sensitive. Note that it may take up to an hour for permissions to propagate.",
+      "parentUuid": "cf9afa6e_eb2d1bfe",
+      "revId": "f114bebf42d6fa69d56aa11012a7a1f5c712c15b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
