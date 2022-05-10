@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "d038044f_09168fe3",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1394635
+      },
+      "writtenOn": "2022-05-10T17:01:34Z",
+      "side": 1,
+      "message": "This update prevents the D3D9 renderer from overwriting the render target with potentially outdated image surface data.\n\nFixes the last two D3D9-specific texture-related WebGL 1.0 CTS failures.",
+      "revId": "b9ed18dc66d02ffeecc811338755d5592b3067aa",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
