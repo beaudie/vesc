@@ -123,6 +123,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "a9a130fc_a6a5abed",
+        "filename": "src/tests/gl_tests/TextureTest.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 220,
+      "author": {
+        "id": 1116015
+      },
+      "writtenOn": "2022-05-11T16:03:47Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "cc980973_08aca6d0",
+      "revId": "ec176b2856f6816badd1c1ce9428650bec513cad",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "a04ef4f7_c3e19cd0",
@@ -160,6 +178,30 @@
       "side": 1,
       "message": "This keeps getting brought up, but I\u0027ve never actually seen a failure as a result of this. Any examples you have to share Jamie?",
       "parentUuid": "a04ef4f7_c3e19cd0",
+      "range": {
+        "startLine": 909,
+        "startChar": 0,
+        "endLine": 910,
+        "endChar": 27
+      },
+      "revId": "ec176b2856f6816badd1c1ce9428650bec513cad",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "a8b3a36a_f91bdd83",
+        "filename": "src/tests/gl_tests/TextureTest.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 910,
+      "author": {
+        "id": 1116015
+      },
+      "writtenOn": "2022-05-11T16:03:47Z",
+      "side": 1,
+      "message": "OK, for now I\u0027ve reverted all the changes involving member functions that would move the glDeleteTextures() call into the destructor.",
+      "parentUuid": "e53f440c_f56cb1b5",
       "range": {
         "startLine": 909,
         "startChar": 0,
