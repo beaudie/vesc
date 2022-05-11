@@ -91,6 +91,7 @@ enum class CommandID : uint16_t
     SetFrontFace,
     SetLineWidth,
     SetPrimitiveRestartEnable,
+    SetPrimitiveTopology,
     SetRasterizerDiscardEnable,
     SetScissor,
     SetStencilCompareMask,
@@ -505,6 +506,12 @@ struct SetPrimitiveRestartEnableParams
 };
 VERIFY_4_BYTE_ALIGNMENT(SetPrimitiveRestartEnableParams)
 
+struct SetPrimitiveTopologyParams
+{
+    VkPrimitiveTopology primitiveTopology;
+};
+VERIFY_4_BYTE_ALIGNMENT(SetPrimitiveTopologyParams)
+
 struct SetRasterizerDiscardEnableParams
 {
     VkBool32 rasterizerDiscardEnable;
@@ -823,6 +830,7 @@ class SecondaryCommandBuffer final : angle::NonCopyable
     void setFrontFace(VkFrontFace frontFace);
     void setLineWidth(float lineWidth);
     void setPrimitiveRestartEnable(VkBool32 primitiveRestartEnable);
+    void setPrimitiveTopology(VkPrimitiveTopology primitiveTopology);
     void setRasterizerDiscardEnable(VkBool32 rasterizerDiscardEnable);
     void setScissor(uint32_t firstScissor, uint32_t scissorCount, const VkRect2D *scissors);
     void setStencilCompareMask(uint32_t compareFrontMask, uint32_t compareBackMask);
@@ -1722,6 +1730,14 @@ ANGLE_INLINE void SecondaryCommandBuffer::setPrimitiveRestartEnable(VkBool32 pri
     SetPrimitiveRestartEnableParams *paramStruct =
         initCommand<SetPrimitiveRestartEnableParams>(CommandID::SetPrimitiveRestartEnable);
     paramStruct->primitiveRestartEnable = primitiveRestartEnable;
+}
+
+ANGLE_INLINE void SecondaryCommandBuffer::setPrimitiveTopology(
+    VkPrimitiveTopology primitiveTopology)
+{
+    SetPrimitiveTopologyParams *paramStruct =
+        initCommand<SetPrimitiveTopologyParams>(CommandID::SetPrimitiveTopology);
+    paramStruct->primitiveTopology = primitiveTopology;
 }
 
 ANGLE_INLINE void SecondaryCommandBuffer::setRasterizerDiscardEnable(
