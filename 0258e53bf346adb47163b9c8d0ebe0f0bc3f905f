@@ -92,6 +92,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "a75056ea_b1e5085f",
+        "filename": "src/libANGLE/renderer/vulkan/SurfaceVk.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 1798,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-05-11T15:44:04Z",
+      "side": 1,
+      "message": "You already have some virtual functions default-implemented in `WindowSurfaceVk`, and overriden in `SurfaceVkGbm`. Just making those virtual functions `\u003d 0` and pulling the implementation out in a different class would do. Anything that\u0027s currently used by both classes can stay in `WindowSurfaceVk`.\n\nI\u0027m not too worried about `SwapchainImage` causing a confusion; the gbm surface is sort of pretending to be a swapchain, and besides, hardly anyone is going to be looking at it ;)",
+      "parentUuid": "2aa1eb17_f49ee58d",
+      "revId": "0258e53bf346adb47163b9c8d0ebe0f0bc3f905f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "93d8d3ca_f8383568",
         "filename": "src/libANGLE/renderer/vulkan/linux/gbm/DisplayVkGbm.cpp",
         "patchSetId": 5
