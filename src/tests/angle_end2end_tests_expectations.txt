@@ -626,3 +626,6 @@
 // imageLoad isn't fully implemented for fragment shaders on D3D11.
 7355 INTEL OPENGL : GLSLTest_ES31.ImageLoadAfterClear/* = SKIP
 7355 D3D11 : GLSLTest_ES31.ImageLoadAfterClear/* = SKIP
+
+// imageLoad after imageStore with barrier is not coherent on Pixel 4.
+7388 ANDROID GLES : PixelLocalStorageTest.* = SKIP
