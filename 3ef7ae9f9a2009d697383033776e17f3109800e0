@@ -211,6 +211,24 @@
       "message": "Can we move this workaround forward?\n\nWould it be possible to limit the Metal and/or OS version that this workaround applies to?\n",
       "revId": "3ef7ae9f9a2009d697383033776e17f3109800e0",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "b34f79eb_d730415a",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1185214
+      },
+      "writtenOn": "2022-05-11T23:59:10Z",
+      "side": 1,
+      "message": "Regarding version-limiting: Apple\u0027s documentation seems at odds with any (principled) way of doing that.\n\n1) There is no way to get old versions of the language documentation - they only appear to host the most recent version.\n2) Even if you look at the most recent version of the specification, there is NO reason to believe this workaround is optional. Clearly, they added their own polyfill to the standard library, but I don\u0027t see that documented anywhere. The section on operators and matrices is still very explicit about what\u0027s supported, and that doesn\u0027t include the operations that this (and the other polyfills in ProgramPrelude) are responsible for.",
+      "parentUuid": "fa06990c_89da9b6e",
+      "revId": "3ef7ae9f9a2009d697383033776e17f3109800e0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
