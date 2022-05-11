@@ -90,6 +90,7 @@ ANGLE_INLINE angle::Result Context::syncDirtyBits(Command command)
     const State::DirtyBits &dirtyBits = mState.getDirtyBits();
     ANGLE_TRY(mImplementation->syncState(this, dirtyBits, mAllDirtyBits, command));
     mState.clearDirtyBits();
+    memoryBarrier(-1);
     return angle::Result::Continue;
 }
 
