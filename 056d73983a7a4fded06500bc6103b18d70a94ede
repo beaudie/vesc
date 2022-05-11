@@ -1,0 +1,44 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "a370fcfe_4065aae7",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 11
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2022-05-11T18:12:44Z",
+      "side": 1,
+      "message": "The code looks good to me, honestly less translation than I expected because we don\u0027t need to render into the buffers.\n\nJust looks like a couple test failures to work out.",
+      "revId": "056d73983a7a4fded06500bc6103b18d70a94ede",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "92fa2d66_d7ea7cf6",
+        "filename": "src/libANGLE/renderer/d3d/d3d11/TextureStorage11.cpp",
+        "patchSetId": 11
+      },
+      "lineNbr": 4204,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2022-05-11T18:12:44Z",
+      "side": 1,
+      "message": "nit: remove this comment.",
+      "range": {
+        "startLine": 4203,
+        "startChar": 0,
+        "endLine": 4204,
+        "endChar": 40
+      },
+      "revId": "056d73983a7a4fded06500bc6103b18d70a94ede",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
