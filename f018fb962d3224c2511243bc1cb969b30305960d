@@ -63,6 +63,30 @@
       },
       "revId": "f018fb962d3224c2511243bc1cb969b30305960d",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b29edfa2_09a2ec1f",
+        "filename": "src/libANGLE/capture/trace_fixture.h",
+        "patchSetId": 11
+      },
+      "lineNbr": 50,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2022-05-11T11:44:49Z",
+      "side": 1,
+      "message": "What happens if you remove this code, Gert? That would help me figure out what the solution is.",
+      "parentUuid": "de9d0c91_fcdeec2a",
+      "range": {
+        "startLine": 41,
+        "startChar": 0,
+        "endLine": 50,
+        "endChar": 6
+      },
+      "revId": "f018fb962d3224c2511243bc1cb969b30305960d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
