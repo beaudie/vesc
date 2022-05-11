@@ -1865,6 +1865,10 @@ void RendererVk::queryDeviceExtensionFeatures(const vk::ExtensionNameList &devic
     mBlendOperationAdvancedFeatures.sType =
         VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_BLEND_OPERATION_ADVANCED_FEATURES_EXT;
 
+    mExtendedDynamicStateFeatures = {};
+    mExtendedDynamicStateFeatures.sType =
+        VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_EXTENDED_DYNAMIC_STATE_FEATURES_EXT;
+
     mFragmentShadingRateFeatures = {};
     mFragmentShadingRateFeatures.sType =
         VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_FRAGMENT_SHADING_RATE_FEATURES_KHR;
@@ -2001,6 +2005,11 @@ void RendererVk::queryDeviceExtensionFeatures(const vk::ExtensionNameList &devic
         vk::AddToPNextChain(&deviceFeatures, &mBlendOperationAdvancedFeatures);
     }
 
+    if (ExtensionFound(VK_EXT_EXTENDED_DYNAMIC_STATE_EXTENSION_NAME, deviceExtensionNames))
+    {
+        vk::AddToPNextChain(&deviceFeatures, &mExtendedDynamicStateFeatures);
+    }
+
     if (ExtensionFound(VK_KHR_FRAGMENT_SHADING_RATE_EXTENSION_NAME, deviceExtensionNames))
     {
         vk::AddToPNextChain(&deviceFeatures, &mFragmentShadingRateFeatures);
@@ -2033,6 +2042,7 @@ void RendererVk::queryDeviceExtensionFeatures(const vk::ExtensionNameList &devic
     mHostQueryResetFeatures.pNext                    = nullptr;
     mDepthClipControlFeatures.pNext                  = nullptr;
     mBlendOperationAdvancedFeatures.pNext            = nullptr;
+    mExtendedDynamicStateFeatures.pNext              = nullptr;
     mFragmentShadingRateFeatures.pNext               = nullptr;
 }
 
@@ -2485,6 +2495,12 @@ angle::Result RendererVk::initializeDevice(DisplayVk *displayVk, uint32_t queueF
         vk::AddToPNextChain(&mEnabledFeatures, &mBlendOperationAdvancedFeatures);
     }
 
+    if (getFeatures().supportsExtendedDynamicState.enabled)
+    {
+        mEnabledDeviceExtensions.push_back(VK_EXT_EXTENDED_DYNAMIC_STATE_EXTENSION_NAME);
+        vk::AddToPNextChain(&mEnabledFeatures, &mExtendedDynamicStateFeatures);
+    }
+
     if (getFeatures().supportsFragmentShadingRate.enabled)
     {
         mEnabledDeviceExtensions.push_back(VK_KHR_FRAGMENT_SHADING_RATE_EXTENSION_NAME);
@@ -2583,6 +2599,10 @@ angle::Result RendererVk::initializeDevice(DisplayVk *displayVk, uint32_t queueF
     if (getFeatures().supportsRenderpass2.enabled)
     {
                        InitRenderPass2KHRFunctions(mDevice);
+    }
+    if (getFeatures().supportsExtendedDynamicState.enabled)
+    {
+                       InitExtendedDynamicStateEXTFunctions(mDevice);
     }
 #endif  // !defined(ANGLE_SHARED_LIBVULKAN)
 
@@ -3432,6 +3452,9 @@ void RendererVk::initFeatures(DisplayVk *displayVk,
     // For discrete GPUs, most of device local memory is host invisible. We should not force the
     // host visible flag for them and result in allocation failure.
     ANGLE_FEATURE_CONDITION(&mFeatures, preferDeviceLocalMemoryHostVisible, !isDiscreteGPU);
+
+    ANGLE_FEATURE_CONDITION(&mFeatures, supportsExtendedDynamicState,
+                            mExtendedDynamicStateFeatures.extendedDynamicState == VK_TRUE);
 
     // Support GL_QCOM_shading_rate extension
     ANGLE_FEATURE_CONDITION(&mFeatures, supportsFragmentShadingRate,
