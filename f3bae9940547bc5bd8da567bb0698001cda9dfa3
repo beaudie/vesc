@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "a22fd49b_04d3f1f7",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2022-05-11T11:42:02Z",
+      "side": 1,
+      "message": "I\u0027d prefer to find a solution that doesn\u0027t require preprocessor checks. There\u0027s probably something simple we can do in the other CL.",
+      "revId": "f3bae9940547bc5bd8da567bb0698001cda9dfa3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
