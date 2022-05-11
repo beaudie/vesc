@@ -1,0 +1,44 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "a08cbbd5_64b567bf",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 11
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2022-05-11T01:29:51Z",
+      "side": 1,
+      "message": "I tri",
+      "revId": "f018fb962d3224c2511243bc1cb969b30305960d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b7096ffa_ae15f515",
+        "filename": "src/libANGLE/capture/trace_fixture.h",
+        "patchSetId": 11
+      },
+      "lineNbr": 50,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2022-05-11T01:29:51Z",
+      "side": 1,
+      "message": "I pulled down the series to ensure MEC still works.\n\nThis causes the traces to not compile:\n\n```\nIn file included from ../../src/tests/restricted_traces/angry_birds_2_launch/angry_birds_2_launch_context2.cpp:3:\nIn file included from ../../src/tests/restricted_traces/angle_trace_gl.h:11:\n../../src/tests/restricted_traces/trace_egl_loader_autogen.h:57:9: error: \u0027eglCreateImage\u0027 macro redefined [-Werror,-Wmacro-redefined]\n#define eglCreateImage t_eglCreateImage\n        ^\n../../src/libANGLE/capture/trace_fixture.h:46:13: note: previous definition is here\n#    define eglCreateImage r_eglCreateImage\n            ^\n```",
+      "range": {
+        "startLine": 41,
+        "startChar": 0,
+        "endLine": 50,
+        "endChar": 6
+      },
+      "revId": "f018fb962d3224c2511243bc1cb969b30305960d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
