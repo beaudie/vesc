@@ -75,6 +75,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "b2830272_5467b225",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 9
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2022-05-11T11:39:02Z",
+      "side": 1,
+      "message": "If you\u0027re having trouble because of a missing commit-id, you can amend the commit message to include this commit-id (see the description).",
+      "parentUuid": "e73dd6df_4bc3952a",
+      "revId": "c27f0e8896eeebfd69e30a260eda194fab7a0315",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "dfff968f_e1e3b2e2",
