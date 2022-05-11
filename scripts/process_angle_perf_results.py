@@ -725,4 +725,6 @@ def main():
 
 
 if __name__ == '__main__':
+    import six
+    raise Exception('six version: %s' % six.__version__)
     sys.exit(main())
