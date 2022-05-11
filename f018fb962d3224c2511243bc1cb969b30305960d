@@ -39,6 +39,30 @@
       },
       "revId": "f018fb962d3224c2511243bc1cb969b30305960d",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "de9d0c91_fcdeec2a",
+        "filename": "src/libANGLE/capture/trace_fixture.h",
+        "patchSetId": 11
+      },
+      "lineNbr": 50,
+      "author": {
+        "id": 1491823
+      },
+      "writtenOn": "2022-05-11T08:25:47Z",
+      "side": 1,
+      "message": "I\u0027ve changed the way the override is done by protecting all defined of this type by `#ifndef` with the previous commit. This has the advantage that the order of the includes doesn\u0027t have to be changed, and the overrides use the more logical approach that the define can be set first, and for all functions that don\u0027t have overrides the default kicks in.",
+      "parentUuid": "b7096ffa_ae15f515",
+      "range": {
+        "startLine": 41,
+        "startChar": 0,
+        "endLine": 50,
+        "endChar": 6
+      },
+      "revId": "f018fb962d3224c2511243bc1cb969b30305960d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
