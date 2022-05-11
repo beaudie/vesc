@@ -1818,7 +1818,7 @@ void GraphicsPipelineDesc::initDefaults(const ContextVk *contextVk)
         contextVk->getFeatures().depthClamping.enabled ? VK_TRUE : VK_FALSE;
     mRasterizationAndMultisampleStateInfo.bits.rasterizationDiscardEnable = 0;
     SetBitField(mRasterizationAndMultisampleStateInfo.bits.polygonMode, VK_POLYGON_MODE_FILL);
-    SetBitField(mRasterizationAndMultisampleStateInfo.bits.cullMode, VK_CULL_MODE_BACK_BIT);
+    SetBitField(mRasterizationAndMultisampleStateInfo.bits.cullMode, VK_CULL_MODE_NONE);
     SetBitField(mRasterizationAndMultisampleStateInfo.bits.frontFace,
                 VK_FRONT_FACE_COUNTER_CLOCKWISE);
     mRasterizationAndMultisampleStateInfo.bits.depthBiasEnable = 0;
@@ -2291,7 +2291,7 @@ angle::Result GraphicsPipelineDesc::initializePipeline(
     }
 
     // Dynamic state
-    angle::FixedVector<VkDynamicState, 9> dynamicStateList;
+    angle::FixedVector<VkDynamicState, 10> dynamicStateList;
     dynamicStateList.push_back(VK_DYNAMIC_STATE_VIEWPORT);
     dynamicStateList.push_back(VK_DYNAMIC_STATE_SCISSOR);
     dynamicStateList.push_back(VK_DYNAMIC_STATE_LINE_WIDTH);
@@ -2300,6 +2300,10 @@ angle::Result GraphicsPipelineDesc::initializePipeline(
     dynamicStateList.push_back(VK_DYNAMIC_STATE_STENCIL_COMPARE_MASK);
     dynamicStateList.push_back(VK_DYNAMIC_STATE_STENCIL_WRITE_MASK);
     dynamicStateList.push_back(VK_DYNAMIC_STATE_STENCIL_REFERENCE);
+    if (contextVk->getFeatures().supportsExtendedDynamicState.enabled)
+    {
+        dynamicStateList.push_back(VK_DYNAMIC_STATE_CULL_MODE_EXT);
+    }
     if (contextVk->getFeatures().supportsFragmentShadingRate.enabled)
     {
         dynamicStateList.push_back(VK_DYNAMIC_STATE_FRAGMENT_SHADING_RATE_KHR);
@@ -2408,15 +2412,11 @@ void GraphicsPipelineDesc::updatePrimitiveRestartEnabled(GraphicsPipelineTransit
     transition->set(ANGLE_GET_TRANSITION_BIT(mInputAssemblyAndColorBlendStateInfo, primitive));
 }
 
-void GraphicsPipelineDesc::setCullMode(VkCullModeFlagBits cullMode)
-{
-    SetBitField(mRasterizationAndMultisampleStateInfo.bits.cullMode, cullMode);
-}
-
 void GraphicsPipelineDesc::updateCullMode(GraphicsPipelineTransitionBits *transition,
                                           const gl::RasterizerState &rasterState)
 {
-    setCullMode(gl_vk::GetCullMode(rasterState));
+    SetBitField(mRasterizationAndMultisampleStateInfo.bits.cullMode,
+                (gl_vk::GetCullMode(rasterState)));
     transition->set(ANGLE_GET_TRANSITION_BIT(mRasterizationAndMultisampleStateInfo, bits));
 }
 
