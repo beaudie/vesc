@@ -89,6 +89,7 @@ enum class CommandID : uint16_t
     SetFragmentShadingRate,
     SetFrontFace,
     SetLineWidth,
+    SetPrimitiveTopology,
     SetScissor,
     SetStencilCompareMask,
     SetStencilOp,
@@ -484,6 +485,12 @@ struct SetLineWidthParams
 };
 VERIFY_4_BYTE_ALIGNMENT(SetLineWidthParams)
 
+struct SetPrimitiveTopologyParams
+{
+    VkPrimitiveTopology primitiveTopology;
+};
+VERIFY_4_BYTE_ALIGNMENT(SetPrimitiveTopologyParams)
+
 struct SetFrontFaceParams
 {
     VkFrontFace frontFace;
@@ -800,6 +807,7 @@ class SecondaryCommandBuffer final : angle::NonCopyable
                                 VkFragmentShadingRateCombinerOpKHR ops[2]);
     void setFrontFace(VkFrontFace frontFace);
     void setLineWidth(float lineWidth);
+    void setPrimitiveTopology(VkPrimitiveTopology primitiveTopology);
     void setScissor(uint32_t firstScissor, uint32_t scissorCount, const VkRect2D *scissors);
     void setStencilCompareMask(uint32_t compareFrontMask, uint32_t compareBackMask);
     void setStencilOp(VkStencilFaceFlags faceMask,
@@ -1684,6 +1692,14 @@ ANGLE_INLINE void SecondaryCommandBuffer::setLineWidth(float lineWidth)
 {
     SetLineWidthParams *paramStruct = initCommand<SetLineWidthParams>(CommandID::SetLineWidth);
     paramStruct->lineWidth          = lineWidth;
+}
+
+ANGLE_INLINE void SecondaryCommandBuffer::setPrimitiveTopology(
+    VkPrimitiveTopology primitiveTopology)
+{
+    SetPrimitiveTopologyParams *paramStruct =
+        initCommand<SetPrimitiveTopologyParams>(CommandID::SetPrimitiveTopology);
+    paramStruct->primitiveTopology = primitiveTopology;
 }
 
 ANGLE_INLINE void SecondaryCommandBuffer::setScissor(uint32_t firstScissor,
