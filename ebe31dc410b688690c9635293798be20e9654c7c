@@ -1,0 +1,67 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "ad16fa2d_87f97306",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 20
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2022-05-11T16:32:59Z",
+      "side": 1,
+      "message": "Thanks, overall looks much cleaner now.",
+      "revId": "ebe31dc410b688690c9635293798be20e9654c7c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "17f2254a_c9b84695",
+        "filename": "src/libANGLE/renderer/vulkan/DisplayVk.cpp",
+        "patchSetId": 20
+      },
+      "lineNbr": 505,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2022-05-11T16:32:59Z",
+      "side": 1,
+      "message": "I think the convention here for this type of API is onTextureRelease(TextureVk *textureVk).",
+      "range": {
+        "startLine": 505,
+        "startChar": 19,
+        "endLine": 505,
+        "endChar": 37
+      },
+      "revId": "ebe31dc410b688690c9635293798be20e9654c7c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "53d96d14_c3efb76e",
+        "filename": "src/libANGLE/renderer/vulkan/TextureVk.cpp",
+        "patchSetId": 20
+      },
+      "lineNbr": 657,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2022-05-11T16:32:59Z",
+      "side": 1,
+      "message": "I think this can be \"else if\". If shouldFlush is true, it should already created VkImage and flushed out, there is no need to have ShareGroup-\u003emPrevTexture point to this.",
+      "range": {
+        "startLine": 657,
+        "startChar": 4,
+        "endLine": 657,
+        "endChar": 6
+      },
+      "revId": "ebe31dc410b688690c9635293798be20e9654c7c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
