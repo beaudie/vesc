@@ -139,6 +139,20 @@ constexpr gl::ShaderMap<vk::ImageLayout> kShaderWriteImageLayouts = {
     {gl::ShaderType::Fragment, vk::ImageLayout::FragmentShaderWrite},
     {gl::ShaderType::Compute, vk::ImageLayout::ComputeShaderWrite}};
 
+constexpr angle::PackedEnumMap<gl::PrimitiveMode, gl::PrimitiveMode> kPrimitiveModeClass = {{
+    {gl::PrimitiveMode::Points, gl::PrimitiveMode::Points},
+    {gl::PrimitiveMode::Lines, gl::PrimitiveMode::Lines},
+    {gl::PrimitiveMode::LineLoop, gl::PrimitiveMode::Lines},
+    {gl::PrimitiveMode::LineStrip, gl::PrimitiveMode::Lines},
+    {gl::PrimitiveMode::Triangles, gl::PrimitiveMode::Triangles},
+    {gl::PrimitiveMode::TriangleStrip, gl::PrimitiveMode::Triangles},
+    {gl::PrimitiveMode::TriangleFan, gl::PrimitiveMode::Triangles},
+    {gl::PrimitiveMode::LinesAdjacency, gl::PrimitiveMode::Lines},
+    {gl::PrimitiveMode::LineStripAdjacency, gl::PrimitiveMode::Lines},
+    {gl::PrimitiveMode::TrianglesAdjacency, gl::PrimitiveMode::Triangles},
+    {gl::PrimitiveMode::TriangleStripAdjacency, gl::PrimitiveMode::Triangles},
+}};
+
 constexpr VkBufferUsageFlags kVertexBufferUsage   = VK_BUFFER_USAGE_VERTEX_BUFFER_BIT;
 constexpr size_t kDynamicVertexDataSize           = 16 * 1024;
 constexpr size_t kDriverUniformsAllocatorPageSize = 4 * 1024;
@@ -673,6 +687,15 @@ VkDependencyFlags GetLocalDependencyFlags(ContextVk *contextVk)
     }
     return dependencyFlags;
 }
+
+gl::PrimitiveMode GetPipelineDrawMode(ContextVk *contextVk, gl::PrimitiveMode drawMode)
+{
+    // When VK_EXT_extended_dynamic_state is enabled, only the topology class is baked in the
+    // pipeline.
+    return contextVk->getFeatures().supportsExtendedDynamicState.enabled
+               ? kPrimitiveModeClass[drawMode]
+               : drawMode;
+}
 }  // anonymous namespace
 
 // Not necessary once upgraded to C++17.
@@ -825,6 +848,7 @@ ContextVk::ContextVk(const gl::State &state, gl::ErrorSet *errorSet, RendererVk 
         mDynamicStateDirtyBits |= DirtyBits{
             DIRTY_BIT_DYNAMIC_CULL_MODE,
             DIRTY_BIT_DYNAMIC_FRONT_FACE,
+            DIRTY_BIT_DYNAMIC_PRIMITIVE_TOPOLOGY,
         };
     }
     if (getFeatures().supportsFragmentShadingRate.enabled)
@@ -900,6 +924,8 @@ ContextVk::ContextVk(const gl::State &state, gl::ErrorSet *errorSet, RendererVk 
         &ContextVk::handleDirtyGraphicsDynamicCullMode;
     mGraphicsDirtyBitHandlers[DIRTY_BIT_DYNAMIC_FRONT_FACE] =
         &ContextVk::handleDirtyGraphicsDynamicFrontFace;
+    mGraphicsDirtyBitHandlers[DIRTY_BIT_DYNAMIC_PRIMITIVE_TOPOLOGY] =
+        &ContextVk::handleDirtyGraphicsDynamicPrimitiveTopology;
     mGraphicsDirtyBitHandlers[DIRTY_BIT_DYNAMIC_FRAGMENT_SHADING_RATE] =
         &ContextVk::handleDirtyGraphicsDynamicFragmentShadingRate;
 
@@ -1253,12 +1279,7 @@ angle::Result ContextVk::setupDraw(const gl::Context *context,
                                    DirtyBits dirtyBitMask)
 {
     // Set any dirty bits that depend on draw call parameters or other objects.
-    if (mode != mCurrentDrawMode)
-    {
-        invalidateCurrentGraphicsPipeline();
-        mCurrentDrawMode = mode;
-        mGraphicsPipelineDesc->updateTopology(&mGraphicsPipelineTransition, mCurrentDrawMode);
-    }
+    updateTopology(mode);
 
     // Must be called before the command buffer is started. Can call finish.
     VertexArrayVk *vertexArrayVk = getVertexArray();
@@ -1792,9 +1813,9 @@ angle::Result ContextVk::handleDirtyGraphicsPipelineDesc(DirtyBits::Iterator *di
         updateGraphicsPipelineDescWithSpecConstUsageBits(usageBits);
 
         // Draw call shader patching, shader compilation, and pipeline cache query.
-        ANGLE_TRY(executableVk->getGraphicsPipeline(this, mCurrentDrawMode, *mGraphicsPipelineDesc,
-                                                    glExecutable, &descPtr,
-                                                    &mCurrentGraphicsPipeline));
+        ANGLE_TRY(executableVk->getGraphicsPipeline(
+            this, GetPipelineDrawMode(this, mCurrentDrawMode), *mGraphicsPipelineDesc, glExecutable,
+            &descPtr, &mCurrentGraphicsPipeline));
         mGraphicsPipelineTransition.reset();
     }
     else if (mGraphicsPipelineTransition.any())
@@ -1806,9 +1827,9 @@ angle::Result ContextVk::handleDirtyGraphicsPipelineDesc(DirtyBits::Iterator *di
             vk::PipelineHelper *oldPipeline = mCurrentGraphicsPipeline;
             const vk::GraphicsPipelineDesc *descPtr;
 
-            ANGLE_TRY(executableVk->getGraphicsPipeline(this, mCurrentDrawMode,
-                                                        *mGraphicsPipelineDesc, glExecutable,
-                                                        &descPtr, &mCurrentGraphicsPipeline));
+            ANGLE_TRY(executableVk->getGraphicsPipeline(
+                this, GetPipelineDrawMode(this, mCurrentDrawMode), *mGraphicsPipelineDesc,
+                glExecutable, &descPtr, &mCurrentGraphicsPipeline));
 
             oldPipeline->addTransition(mGraphicsPipelineTransition, descPtr,
                                        mCurrentGraphicsPipeline);
@@ -2554,6 +2575,14 @@ angle::Result ContextVk::handleDirtyGraphicsDynamicFrontFace(DirtyBits::Iterator
     const gl::RasterizerState &rasterState = mState.getRasterizerState();
     mRenderPassCommandBuffer->setFrontFace(
         gl_vk::GetFrontFace(rasterState.frontFace, isYFlipEnabledForDrawFBO()));
+    return angle::Result::Continue;
+}
+
+angle::Result ContextVk::handleDirtyGraphicsDynamicPrimitiveTopology(
+    DirtyBits::Iterator *dirtyBitsIterator,
+    DirtyBits dirtyBitMask)
+{
+    mRenderPassCommandBuffer->setPrimitiveTopology(gl_vk::GetPrimitiveTopology(mCurrentDrawMode));
     return angle::Result::Continue;
 }
 
@@ -4191,6 +4220,37 @@ void ContextVk::updateFrontFace()
     {
         mGraphicsPipelineDesc->updateFrontFace(
             &mGraphicsPipelineTransition, mState.getRasterizerState(), isYFlipEnabledForDrawFBO());
+    }
+}
+
+ANGLE_INLINE void ContextVk::updateTopology(gl::PrimitiveMode mode)
+{
+    bool isModeChanged = mode != mCurrentDrawMode;
+
+    if (isModeChanged)
+    {
+        gl::PrimitiveMode pipelineMode = mode;
+
+        // When VK_EXT_extended_dynamic_state is enabled, all that's needed in the graphics pipeline
+        // desc is the topology "class", and the exact topology is specified dynamically.
+        if (getFeatures().supportsExtendedDynamicState.enabled)
+        {
+            // Update the exact mode dynamically
+            mGraphicsDirtyBits.set(DIRTY_BIT_DYNAMIC_PRIMITIVE_TOPOLOGY);
+
+            // Only update the pipeline desc if the primitive class has changed
+            pipelineMode  = kPrimitiveModeClass[mode];
+            isModeChanged = mCurrentDrawMode == gl::PrimitiveMode::InvalidEnum ||
+                            pipelineMode != kPrimitiveModeClass[mCurrentDrawMode];
+        }
+
+        if (isModeChanged)
+        {
+            invalidateCurrentGraphicsPipeline();
+            mGraphicsPipelineDesc->updateTopology(&mGraphicsPipelineTransition, pipelineMode);
+        }
+
+        mCurrentDrawMode = mode;
     }
 }
 
