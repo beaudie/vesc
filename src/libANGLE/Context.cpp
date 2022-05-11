@@ -6642,6 +6642,7 @@ void Context::texStorage3D(TextureType target,
 
 void Context::memoryBarrier(GLbitfield barriers)
 {
+    ANGLE_CONTEXT_TRY(prepareForDraw(PrimitiveMode::Triangles));
     ANGLE_CONTEXT_TRY(mImplementation->memoryBarrier(this, barriers));
 }
 
