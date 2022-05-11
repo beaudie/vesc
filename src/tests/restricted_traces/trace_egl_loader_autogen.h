@@ -16,114 +16,331 @@
 
 #include "restricted_traces_export.h"
 
-#define eglChooseConfig t_eglChooseConfig
-#define eglCopyBuffers t_eglCopyBuffers
-#define eglCreateContext t_eglCreateContext
-#define eglCreatePbufferSurface t_eglCreatePbufferSurface
-#define eglCreatePixmapSurface t_eglCreatePixmapSurface
-#define eglCreateWindowSurface t_eglCreateWindowSurface
-#define eglDestroyContext t_eglDestroyContext
-#define eglDestroySurface t_eglDestroySurface
-#define eglGetConfigAttrib t_eglGetConfigAttrib
-#define eglGetConfigs t_eglGetConfigs
-#define eglGetCurrentDisplay t_eglGetCurrentDisplay
-#define eglGetCurrentSurface t_eglGetCurrentSurface
-#define eglGetDisplay t_eglGetDisplay
-#define eglGetError t_eglGetError
-#define eglGetProcAddress t_eglGetProcAddress
-#define eglInitialize t_eglInitialize
-#define eglMakeCurrent t_eglMakeCurrent
-#define eglQueryContext t_eglQueryContext
-#define eglQueryString t_eglQueryString
-#define eglQuerySurface t_eglQuerySurface
-#define eglSwapBuffers t_eglSwapBuffers
-#define eglTerminate t_eglTerminate
-#define eglWaitGL t_eglWaitGL
-#define eglWaitNative t_eglWaitNative
-#define eglBindTexImage t_eglBindTexImage
-#define eglReleaseTexImage t_eglReleaseTexImage
-#define eglSurfaceAttrib t_eglSurfaceAttrib
-#define eglSwapInterval t_eglSwapInterval
-#define eglBindAPI t_eglBindAPI
-#define eglQueryAPI t_eglQueryAPI
-#define eglCreatePbufferFromClientBuffer t_eglCreatePbufferFromClientBuffer
-#define eglReleaseThread t_eglReleaseThread
-#define eglWaitClient t_eglWaitClient
-#define eglGetCurrentContext t_eglGetCurrentContext
-#define eglCreateSync t_eglCreateSync
-#define eglDestroySync t_eglDestroySync
-#define eglClientWaitSync t_eglClientWaitSync
-#define eglGetSyncAttrib t_eglGetSyncAttrib
-#define eglCreateImage t_eglCreateImage
-#define eglDestroyImage t_eglDestroyImage
-#define eglGetPlatformDisplay t_eglGetPlatformDisplay
-#define eglCreatePlatformWindowSurface t_eglCreatePlatformWindowSurface
-#define eglCreatePlatformPixmapSurface t_eglCreatePlatformPixmapSurface
-#define eglWaitSync t_eglWaitSync
-#define eglSetBlobCacheFuncsANDROID t_eglSetBlobCacheFuncsANDROID
-#define eglCreateNativeClientBufferANDROID t_eglCreateNativeClientBufferANDROID
-#define eglGetCompositorTimingANDROID t_eglGetCompositorTimingANDROID
-#define eglGetCompositorTimingSupportedANDROID t_eglGetCompositorTimingSupportedANDROID
-#define eglGetFrameTimestampSupportedANDROID t_eglGetFrameTimestampSupportedANDROID
-#define eglGetFrameTimestampsANDROID t_eglGetFrameTimestampsANDROID
-#define eglGetNextFrameIdANDROID t_eglGetNextFrameIdANDROID
-#define eglGetNativeClientBufferANDROID t_eglGetNativeClientBufferANDROID
-#define eglDupNativeFenceFDANDROID t_eglDupNativeFenceFDANDROID
-#define eglPresentationTimeANDROID t_eglPresentationTimeANDROID
-#define eglCreateDeviceANGLE t_eglCreateDeviceANGLE
-#define eglReleaseDeviceANGLE t_eglReleaseDeviceANGLE
-#define eglQueryDisplayAttribANGLE t_eglQueryDisplayAttribANGLE
-#define eglQueryStringiANGLE t_eglQueryStringiANGLE
-#define eglForceGPUSwitchANGLE t_eglForceGPUSwitchANGLE
-#define eglHandleGPUSwitchANGLE t_eglHandleGPUSwitchANGLE
-#define eglReacquireHighPowerGPUANGLE t_eglReacquireHighPowerGPUANGLE
-#define eglReleaseHighPowerGPUANGLE t_eglReleaseHighPowerGPUANGLE
-#define eglPrepareSwapBuffersANGLE t_eglPrepareSwapBuffersANGLE
-#define eglProgramCacheGetAttribANGLE t_eglProgramCacheGetAttribANGLE
-#define eglProgramCachePopulateANGLE t_eglProgramCachePopulateANGLE
-#define eglProgramCacheQueryANGLE t_eglProgramCacheQueryANGLE
-#define eglProgramCacheResizeANGLE t_eglProgramCacheResizeANGLE
-#define eglQuerySurfacePointerANGLE t_eglQuerySurfacePointerANGLE
-#define eglCreateStreamProducerD3DTextureANGLE t_eglCreateStreamProducerD3DTextureANGLE
-#define eglStreamPostD3DTextureANGLE t_eglStreamPostD3DTextureANGLE
-#define eglSwapBuffersWithFrameTokenANGLE t_eglSwapBuffersWithFrameTokenANGLE
-#define eglGetMscRateANGLE t_eglGetMscRateANGLE
-#define eglExportVkImageANGLE t_eglExportVkImageANGLE
-#define eglGetSyncValuesCHROMIUM t_eglGetSyncValuesCHROMIUM
-#define eglQueryDeviceAttribEXT t_eglQueryDeviceAttribEXT
-#define eglQueryDeviceStringEXT t_eglQueryDeviceStringEXT
-#define eglQueryDisplayAttribEXT t_eglQueryDisplayAttribEXT
-#define eglQueryDmaBufFormatsEXT t_eglQueryDmaBufFormatsEXT
-#define eglQueryDmaBufModifiersEXT t_eglQueryDmaBufModifiersEXT
-#define eglCreatePlatformPixmapSurfaceEXT t_eglCreatePlatformPixmapSurfaceEXT
-#define eglCreatePlatformWindowSurfaceEXT t_eglCreatePlatformWindowSurfaceEXT
-#define eglGetPlatformDisplayEXT t_eglGetPlatformDisplayEXT
-#define eglDebugMessageControlKHR t_eglDebugMessageControlKHR
-#define eglLabelObjectKHR t_eglLabelObjectKHR
-#define eglQueryDebugKHR t_eglQueryDebugKHR
-#define eglClientWaitSyncKHR t_eglClientWaitSyncKHR
-#define eglCreateSyncKHR t_eglCreateSyncKHR
-#define eglDestroySyncKHR t_eglDestroySyncKHR
-#define eglGetSyncAttribKHR t_eglGetSyncAttribKHR
-#define eglCreateImageKHR t_eglCreateImageKHR
-#define eglDestroyImageKHR t_eglDestroyImageKHR
-#define eglLockSurfaceKHR t_eglLockSurfaceKHR
-#define eglQuerySurface64KHR t_eglQuerySurface64KHR
-#define eglUnlockSurfaceKHR t_eglUnlockSurfaceKHR
-#define eglSetDamageRegionKHR t_eglSetDamageRegionKHR
-#define eglSignalSyncKHR t_eglSignalSyncKHR
-#define eglCreateStreamKHR t_eglCreateStreamKHR
-#define eglDestroyStreamKHR t_eglDestroyStreamKHR
-#define eglQueryStreamKHR t_eglQueryStreamKHR
-#define eglQueryStreamu64KHR t_eglQueryStreamu64KHR
-#define eglStreamAttribKHR t_eglStreamAttribKHR
-#define eglStreamConsumerAcquireKHR t_eglStreamConsumerAcquireKHR
-#define eglStreamConsumerGLTextureExternalKHR t_eglStreamConsumerGLTextureExternalKHR
-#define eglStreamConsumerReleaseKHR t_eglStreamConsumerReleaseKHR
-#define eglSwapBuffersWithDamageKHR t_eglSwapBuffersWithDamageKHR
-#define eglWaitSyncKHR t_eglWaitSyncKHR
-#define eglPostSubBufferNV t_eglPostSubBufferNV
-#define eglStreamConsumerGLTextureExternalAttribsNV t_eglStreamConsumerGLTextureExternalAttribsNV
+#ifndef eglChooseConfig
+#    define eglChooseConfig t_eglChooseConfig
+#endif
+#ifndef eglCopyBuffers
+#    define eglCopyBuffers t_eglCopyBuffers
+#endif
+#ifndef eglCreateContext
+#    define eglCreateContext t_eglCreateContext
+#endif
+#ifndef eglCreatePbufferSurface
+#    define eglCreatePbufferSurface t_eglCreatePbufferSurface
+#endif
+#ifndef eglCreatePixmapSurface
+#    define eglCreatePixmapSurface t_eglCreatePixmapSurface
+#endif
+#ifndef eglCreateWindowSurface
+#    define eglCreateWindowSurface t_eglCreateWindowSurface
+#endif
+#ifndef eglDestroyContext
+#    define eglDestroyContext t_eglDestroyContext
+#endif
+#ifndef eglDestroySurface
+#    define eglDestroySurface t_eglDestroySurface
+#endif
+#ifndef eglGetConfigAttrib
+#    define eglGetConfigAttrib t_eglGetConfigAttrib
+#endif
+#ifndef eglGetConfigs
+#    define eglGetConfigs t_eglGetConfigs
+#endif
+#ifndef eglGetCurrentDisplay
+#    define eglGetCurrentDisplay t_eglGetCurrentDisplay
+#endif
+#ifndef eglGetCurrentSurface
+#    define eglGetCurrentSurface t_eglGetCurrentSurface
+#endif
+#ifndef eglGetDisplay
+#    define eglGetDisplay t_eglGetDisplay
+#endif
+#ifndef eglGetError
+#    define eglGetError t_eglGetError
+#endif
+#ifndef eglGetProcAddress
+#    define eglGetProcAddress t_eglGetProcAddress
+#endif
+#ifndef eglInitialize
+#    define eglInitialize t_eglInitialize
+#endif
+#ifndef eglMakeCurrent
+#    define eglMakeCurrent t_eglMakeCurrent
+#endif
+#ifndef eglQueryContext
+#    define eglQueryContext t_eglQueryContext
+#endif
+#ifndef eglQueryString
+#    define eglQueryString t_eglQueryString
+#endif
+#ifndef eglQuerySurface
+#    define eglQuerySurface t_eglQuerySurface
+#endif
+#ifndef eglSwapBuffers
+#    define eglSwapBuffers t_eglSwapBuffers
+#endif
+#ifndef eglTerminate
+#    define eglTerminate t_eglTerminate
+#endif
+#ifndef eglWaitGL
+#    define eglWaitGL t_eglWaitGL
+#endif
+#ifndef eglWaitNative
+#    define eglWaitNative t_eglWaitNative
+#endif
+#ifndef eglBindTexImage
+#    define eglBindTexImage t_eglBindTexImage
+#endif
+#ifndef eglReleaseTexImage
+#    define eglReleaseTexImage t_eglReleaseTexImage
+#endif
+#ifndef eglSurfaceAttrib
+#    define eglSurfaceAttrib t_eglSurfaceAttrib
+#endif
+#ifndef eglSwapInterval
+#    define eglSwapInterval t_eglSwapInterval
+#endif
+#ifndef eglBindAPI
+#    define eglBindAPI t_eglBindAPI
+#endif
+#ifndef eglQueryAPI
+#    define eglQueryAPI t_eglQueryAPI
+#endif
+#ifndef eglCreatePbufferFromClientBuffer
+#    define eglCreatePbufferFromClientBuffer t_eglCreatePbufferFromClientBuffer
+#endif
+#ifndef eglReleaseThread
+#    define eglReleaseThread t_eglReleaseThread
+#endif
+#ifndef eglWaitClient
+#    define eglWaitClient t_eglWaitClient
+#endif
+#ifndef eglGetCurrentContext
+#    define eglGetCurrentContext t_eglGetCurrentContext
+#endif
+#ifndef eglCreateSync
+#    define eglCreateSync t_eglCreateSync
+#endif
+#ifndef eglDestroySync
+#    define eglDestroySync t_eglDestroySync
+#endif
+#ifndef eglClientWaitSync
+#    define eglClientWaitSync t_eglClientWaitSync
+#endif
+#ifndef eglGetSyncAttrib
+#    define eglGetSyncAttrib t_eglGetSyncAttrib
+#endif
+#ifndef eglCreateImage
+#    define eglCreateImage t_eglCreateImage
+#endif
+#ifndef eglDestroyImage
+#    define eglDestroyImage t_eglDestroyImage
+#endif
+#ifndef eglGetPlatformDisplay
+#    define eglGetPlatformDisplay t_eglGetPlatformDisplay
+#endif
+#ifndef eglCreatePlatformWindowSurface
+#    define eglCreatePlatformWindowSurface t_eglCreatePlatformWindowSurface
+#endif
+#ifndef eglCreatePlatformPixmapSurface
+#    define eglCreatePlatformPixmapSurface t_eglCreatePlatformPixmapSurface
+#endif
+#ifndef eglWaitSync
+#    define eglWaitSync t_eglWaitSync
+#endif
+#ifndef eglSetBlobCacheFuncsANDROID
+#    define eglSetBlobCacheFuncsANDROID t_eglSetBlobCacheFuncsANDROID
+#endif
+#ifndef eglCreateNativeClientBufferANDROID
+#    define eglCreateNativeClientBufferANDROID t_eglCreateNativeClientBufferANDROID
+#endif
+#ifndef eglGetCompositorTimingANDROID
+#    define eglGetCompositorTimingANDROID t_eglGetCompositorTimingANDROID
+#endif
+#ifndef eglGetCompositorTimingSupportedANDROID
+#    define eglGetCompositorTimingSupportedANDROID t_eglGetCompositorTimingSupportedANDROID
+#endif
+#ifndef eglGetFrameTimestampSupportedANDROID
+#    define eglGetFrameTimestampSupportedANDROID t_eglGetFrameTimestampSupportedANDROID
+#endif
+#ifndef eglGetFrameTimestampsANDROID
+#    define eglGetFrameTimestampsANDROID t_eglGetFrameTimestampsANDROID
+#endif
+#ifndef eglGetNextFrameIdANDROID
+#    define eglGetNextFrameIdANDROID t_eglGetNextFrameIdANDROID
+#endif
+#ifndef eglGetNativeClientBufferANDROID
+#    define eglGetNativeClientBufferANDROID t_eglGetNativeClientBufferANDROID
+#endif
+#ifndef eglDupNativeFenceFDANDROID
+#    define eglDupNativeFenceFDANDROID t_eglDupNativeFenceFDANDROID
+#endif
+#ifndef eglPresentationTimeANDROID
+#    define eglPresentationTimeANDROID t_eglPresentationTimeANDROID
+#endif
+#ifndef eglCreateDeviceANGLE
+#    define eglCreateDeviceANGLE t_eglCreateDeviceANGLE
+#endif
+#ifndef eglReleaseDeviceANGLE
+#    define eglReleaseDeviceANGLE t_eglReleaseDeviceANGLE
+#endif
+#ifndef eglQueryDisplayAttribANGLE
+#    define eglQueryDisplayAttribANGLE t_eglQueryDisplayAttribANGLE
+#endif
+#ifndef eglQueryStringiANGLE
+#    define eglQueryStringiANGLE t_eglQueryStringiANGLE
+#endif
+#ifndef eglForceGPUSwitchANGLE
+#    define eglForceGPUSwitchANGLE t_eglForceGPUSwitchANGLE
+#endif
+#ifndef eglHandleGPUSwitchANGLE
+#    define eglHandleGPUSwitchANGLE t_eglHandleGPUSwitchANGLE
+#endif
+#ifndef eglReacquireHighPowerGPUANGLE
+#    define eglReacquireHighPowerGPUANGLE t_eglReacquireHighPowerGPUANGLE
+#endif
+#ifndef eglReleaseHighPowerGPUANGLE
+#    define eglReleaseHighPowerGPUANGLE t_eglReleaseHighPowerGPUANGLE
+#endif
+#ifndef eglPrepareSwapBuffersANGLE
+#    define eglPrepareSwapBuffersANGLE t_eglPrepareSwapBuffersANGLE
+#endif
+#ifndef eglProgramCacheGetAttribANGLE
+#    define eglProgramCacheGetAttribANGLE t_eglProgramCacheGetAttribANGLE
+#endif
+#ifndef eglProgramCachePopulateANGLE
+#    define eglProgramCachePopulateANGLE t_eglProgramCachePopulateANGLE
+#endif
+#ifndef eglProgramCacheQueryANGLE
+#    define eglProgramCacheQueryANGLE t_eglProgramCacheQueryANGLE
+#endif
+#ifndef eglProgramCacheResizeANGLE
+#    define eglProgramCacheResizeANGLE t_eglProgramCacheResizeANGLE
+#endif
+#ifndef eglQuerySurfacePointerANGLE
+#    define eglQuerySurfacePointerANGLE t_eglQuerySurfacePointerANGLE
+#endif
+#ifndef eglCreateStreamProducerD3DTextureANGLE
+#    define eglCreateStreamProducerD3DTextureANGLE t_eglCreateStreamProducerD3DTextureANGLE
+#endif
+#ifndef eglStreamPostD3DTextureANGLE
+#    define eglStreamPostD3DTextureANGLE t_eglStreamPostD3DTextureANGLE
+#endif
+#ifndef eglSwapBuffersWithFrameTokenANGLE
+#    define eglSwapBuffersWithFrameTokenANGLE t_eglSwapBuffersWithFrameTokenANGLE
+#endif
+#ifndef eglGetMscRateANGLE
+#    define eglGetMscRateANGLE t_eglGetMscRateANGLE
+#endif
+#ifndef eglExportVkImageANGLE
+#    define eglExportVkImageANGLE t_eglExportVkImageANGLE
+#endif
+#ifndef eglGetSyncValuesCHROMIUM
+#    define eglGetSyncValuesCHROMIUM t_eglGetSyncValuesCHROMIUM
+#endif
+#ifndef eglQueryDeviceAttribEXT
+#    define eglQueryDeviceAttribEXT t_eglQueryDeviceAttribEXT
+#endif
+#ifndef eglQueryDeviceStringEXT
+#    define eglQueryDeviceStringEXT t_eglQueryDeviceStringEXT
+#endif
+#ifndef eglQueryDisplayAttribEXT
+#    define eglQueryDisplayAttribEXT t_eglQueryDisplayAttribEXT
+#endif
+#ifndef eglQueryDmaBufFormatsEXT
+#    define eglQueryDmaBufFormatsEXT t_eglQueryDmaBufFormatsEXT
+#endif
+#ifndef eglQueryDmaBufModifiersEXT
+#    define eglQueryDmaBufModifiersEXT t_eglQueryDmaBufModifiersEXT
+#endif
+#ifndef eglCreatePlatformPixmapSurfaceEXT
+#    define eglCreatePlatformPixmapSurfaceEXT t_eglCreatePlatformPixmapSurfaceEXT
+#endif
+#ifndef eglCreatePlatformWindowSurfaceEXT
+#    define eglCreatePlatformWindowSurfaceEXT t_eglCreatePlatformWindowSurfaceEXT
+#endif
+#ifndef eglGetPlatformDisplayEXT
+#    define eglGetPlatformDisplayEXT t_eglGetPlatformDisplayEXT
+#endif
+#ifndef eglDebugMessageControlKHR
+#    define eglDebugMessageControlKHR t_eglDebugMessageControlKHR
+#endif
+#ifndef eglLabelObjectKHR
+#    define eglLabelObjectKHR t_eglLabelObjectKHR
+#endif
+#ifndef eglQueryDebugKHR
+#    define eglQueryDebugKHR t_eglQueryDebugKHR
+#endif
+#ifndef eglClientWaitSyncKHR
+#    define eglClientWaitSyncKHR t_eglClientWaitSyncKHR
+#endif
+#ifndef eglCreateSyncKHR
+#    define eglCreateSyncKHR t_eglCreateSyncKHR
+#endif
+#ifndef eglDestroySyncKHR
+#    define eglDestroySyncKHR t_eglDestroySyncKHR
+#endif
+#ifndef eglGetSyncAttribKHR
+#    define eglGetSyncAttribKHR t_eglGetSyncAttribKHR
+#endif
+#ifndef eglCreateImageKHR
+#    define eglCreateImageKHR t_eglCreateImageKHR
+#endif
+#ifndef eglDestroyImageKHR
+#    define eglDestroyImageKHR t_eglDestroyImageKHR
+#endif
+#ifndef eglLockSurfaceKHR
+#    define eglLockSurfaceKHR t_eglLockSurfaceKHR
+#endif
+#ifndef eglQuerySurface64KHR
+#    define eglQuerySurface64KHR t_eglQuerySurface64KHR
+#endif
+#ifndef eglUnlockSurfaceKHR
+#    define eglUnlockSurfaceKHR t_eglUnlockSurfaceKHR
+#endif
+#ifndef eglSetDamageRegionKHR
+#    define eglSetDamageRegionKHR t_eglSetDamageRegionKHR
+#endif
+#ifndef eglSignalSyncKHR
+#    define eglSignalSyncKHR t_eglSignalSyncKHR
+#endif
+#ifndef eglCreateStreamKHR
+#    define eglCreateStreamKHR t_eglCreateStreamKHR
+#endif
+#ifndef eglDestroyStreamKHR
+#    define eglDestroyStreamKHR t_eglDestroyStreamKHR
+#endif
+#ifndef eglQueryStreamKHR
+#    define eglQueryStreamKHR t_eglQueryStreamKHR
+#endif
+#ifndef eglQueryStreamu64KHR
+#    define eglQueryStreamu64KHR t_eglQueryStreamu64KHR
+#endif
+#ifndef eglStreamAttribKHR
+#    define eglStreamAttribKHR t_eglStreamAttribKHR
+#endif
+#ifndef eglStreamConsumerAcquireKHR
+#    define eglStreamConsumerAcquireKHR t_eglStreamConsumerAcquireKHR
+#endif
+#ifndef eglStreamConsumerGLTextureExternalKHR
+#    define eglStreamConsumerGLTextureExternalKHR t_eglStreamConsumerGLTextureExternalKHR
+#endif
+#ifndef eglStreamConsumerReleaseKHR
+#    define eglStreamConsumerReleaseKHR t_eglStreamConsumerReleaseKHR
+#endif
+#ifndef eglSwapBuffersWithDamageKHR
+#    define eglSwapBuffersWithDamageKHR t_eglSwapBuffersWithDamageKHR
+#endif
+#ifndef eglWaitSyncKHR
+#    define eglWaitSyncKHR t_eglWaitSyncKHR
+#endif
+#ifndef eglPostSubBufferNV
+#    define eglPostSubBufferNV t_eglPostSubBufferNV
+#endif
+#ifndef eglStreamConsumerGLTextureExternalAttribsNV
+#    define eglStreamConsumerGLTextureExternalAttribsNV \
+        t_eglStreamConsumerGLTextureExternalAttribsNV
+#endif
 ANGLE_TRACE_LOADER_EXPORT extern PFNEGLCHOOSECONFIGPROC t_eglChooseConfig;
 ANGLE_TRACE_LOADER_EXPORT extern PFNEGLCOPYBUFFERSPROC t_eglCopyBuffers;
 ANGLE_TRACE_LOADER_EXPORT extern PFNEGLCREATECONTEXTPROC t_eglCreateContext;

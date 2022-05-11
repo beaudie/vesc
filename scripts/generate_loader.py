@@ -36,8 +36,8 @@ def write_header(data_source_name,
 
     with open(header_path, "w") as out:
         defines = [
-            "#define %s%s %s%s%s" % (ns, pre(cmd), internal_prefix, ns, pre(cmd))
-            for cmd in all_cmds
+            "#ifndef %s%s\n#define %s%s %s%s%s\n#endif" %
+            (ns, pre(cmd), ns, pre(cmd), internal_prefix, ns, pre(cmd)) for cmd in all_cmds
         ]
         var_protos = [
             "%sextern PFN%sPROC %s%s%s;" % (export, cmd.upper(), internal_prefix, ns, pre(cmd))

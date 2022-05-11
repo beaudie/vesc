@@ -18,39 +18,105 @@
 // and "SwapBuffers" don't conflict with our function pointers. We can't use a namespace because
 // some functions conflict with preprocessor definitions.
 
-#define _ChoosePixelFormat l__ChoosePixelFormat
-#define _DescribePixelFormat l__DescribePixelFormat
-#define _GetEnhMetaFilePixelFormat l__GetEnhMetaFilePixelFormat
-#define _GetPixelFormat l__GetPixelFormat
-#define _SetPixelFormat l__SetPixelFormat
-#define _SwapBuffers l__SwapBuffers
-#define _wglCopyContext l__wglCopyContext
-#define _wglCreateContext l__wglCreateContext
-#define _wglCreateLayerContext l__wglCreateLayerContext
-#define _wglDeleteContext l__wglDeleteContext
-#define _wglDescribeLayerPlane l__wglDescribeLayerPlane
-#define _wglGetCurrentContext l__wglGetCurrentContext
-#define _wglGetCurrentDC l__wglGetCurrentDC
-#define _wglGetLayerPaletteEntries l__wglGetLayerPaletteEntries
-#define _wglGetProcAddress l__wglGetProcAddress
-#define _wglMakeCurrent l__wglMakeCurrent
-#define _wglRealizeLayerPalette l__wglRealizeLayerPalette
-#define _wglSetLayerPaletteEntries l__wglSetLayerPaletteEntries
-#define _wglShareLists l__wglShareLists
-#define _wglSwapLayerBuffers l__wglSwapLayerBuffers
-#define _wglUseFontBitmaps l__wglUseFontBitmaps
-#define _wglUseFontBitmapsA l__wglUseFontBitmapsA
-#define _wglUseFontBitmapsW l__wglUseFontBitmapsW
-#define _wglUseFontOutlines l__wglUseFontOutlines
-#define _wglUseFontOutlinesA l__wglUseFontOutlinesA
-#define _wglUseFontOutlinesW l__wglUseFontOutlinesW
-#define _wglCreateContextAttribsARB l__wglCreateContextAttribsARB
-#define _wglGetExtensionsStringARB l__wglGetExtensionsStringARB
-#define _wglChoosePixelFormatARB l__wglChoosePixelFormatARB
-#define _wglGetPixelFormatAttribfvARB l__wglGetPixelFormatAttribfvARB
-#define _wglGetPixelFormatAttribivARB l__wglGetPixelFormatAttribivARB
-#define _wglGetSwapIntervalEXT l__wglGetSwapIntervalEXT
-#define _wglSwapIntervalEXT l__wglSwapIntervalEXT
+#ifndef _ChoosePixelFormat
+#    define _ChoosePixelFormat l__ChoosePixelFormat
+#endif
+#ifndef _DescribePixelFormat
+#    define _DescribePixelFormat l__DescribePixelFormat
+#endif
+#ifndef _GetEnhMetaFilePixelFormat
+#    define _GetEnhMetaFilePixelFormat l__GetEnhMetaFilePixelFormat
+#endif
+#ifndef _GetPixelFormat
+#    define _GetPixelFormat l__GetPixelFormat
+#endif
+#ifndef _SetPixelFormat
+#    define _SetPixelFormat l__SetPixelFormat
+#endif
+#ifndef _SwapBuffers
+#    define _SwapBuffers l__SwapBuffers
+#endif
+#ifndef _wglCopyContext
+#    define _wglCopyContext l__wglCopyContext
+#endif
+#ifndef _wglCreateContext
+#    define _wglCreateContext l__wglCreateContext
+#endif
+#ifndef _wglCreateLayerContext
+#    define _wglCreateLayerContext l__wglCreateLayerContext
+#endif
+#ifndef _wglDeleteContext
+#    define _wglDeleteContext l__wglDeleteContext
+#endif
+#ifndef _wglDescribeLayerPlane
+#    define _wglDescribeLayerPlane l__wglDescribeLayerPlane
+#endif
+#ifndef _wglGetCurrentContext
+#    define _wglGetCurrentContext l__wglGetCurrentContext
+#endif
+#ifndef _wglGetCurrentDC
+#    define _wglGetCurrentDC l__wglGetCurrentDC
+#endif
+#ifndef _wglGetLayerPaletteEntries
+#    define _wglGetLayerPaletteEntries l__wglGetLayerPaletteEntries
+#endif
+#ifndef _wglGetProcAddress
+#    define _wglGetProcAddress l__wglGetProcAddress
+#endif
+#ifndef _wglMakeCurrent
+#    define _wglMakeCurrent l__wglMakeCurrent
+#endif
+#ifndef _wglRealizeLayerPalette
+#    define _wglRealizeLayerPalette l__wglRealizeLayerPalette
+#endif
+#ifndef _wglSetLayerPaletteEntries
+#    define _wglSetLayerPaletteEntries l__wglSetLayerPaletteEntries
+#endif
+#ifndef _wglShareLists
+#    define _wglShareLists l__wglShareLists
+#endif
+#ifndef _wglSwapLayerBuffers
+#    define _wglSwapLayerBuffers l__wglSwapLayerBuffers
+#endif
+#ifndef _wglUseFontBitmaps
+#    define _wglUseFontBitmaps l__wglUseFontBitmaps
+#endif
+#ifndef _wglUseFontBitmapsA
+#    define _wglUseFontBitmapsA l__wglUseFontBitmapsA
+#endif
+#ifndef _wglUseFontBitmapsW
+#    define _wglUseFontBitmapsW l__wglUseFontBitmapsW
+#endif
+#ifndef _wglUseFontOutlines
+#    define _wglUseFontOutlines l__wglUseFontOutlines
+#endif
+#ifndef _wglUseFontOutlinesA
+#    define _wglUseFontOutlinesA l__wglUseFontOutlinesA
+#endif
+#ifndef _wglUseFontOutlinesW
+#    define _wglUseFontOutlinesW l__wglUseFontOutlinesW
+#endif
+#ifndef _wglCreateContextAttribsARB
+#    define _wglCreateContextAttribsARB l__wglCreateContextAttribsARB
+#endif
+#ifndef _wglGetExtensionsStringARB
+#    define _wglGetExtensionsStringARB l__wglGetExtensionsStringARB
+#endif
+#ifndef _wglChoosePixelFormatARB
+#    define _wglChoosePixelFormatARB l__wglChoosePixelFormatARB
+#endif
+#ifndef _wglGetPixelFormatAttribfvARB
+#    define _wglGetPixelFormatAttribfvARB l__wglGetPixelFormatAttribfvARB
+#endif
+#ifndef _wglGetPixelFormatAttribivARB
+#    define _wglGetPixelFormatAttribivARB l__wglGetPixelFormatAttribivARB
+#endif
+#ifndef _wglGetSwapIntervalEXT
+#    define _wglGetSwapIntervalEXT l__wglGetSwapIntervalEXT
+#endif
+#ifndef _wglSwapIntervalEXT
+#    define _wglSwapIntervalEXT l__wglSwapIntervalEXT
+#endif
 extern PFNCHOOSEPIXELFORMATPROC l__ChoosePixelFormat;
 extern PFNDESCRIBEPIXELFORMATPROC l__DescribePixelFormat;
 extern PFNGETENHMETAFILEPIXELFORMATPROC l__GetEnhMetaFilePixelFormat;
