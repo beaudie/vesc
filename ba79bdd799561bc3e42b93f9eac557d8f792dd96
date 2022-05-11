@@ -16,6 +16,29 @@
       "message": "Test was effectively disabled on Linux. From BUILD.gn, it looks like it should have been running on windows, but obviously it wasn\u0027t given that it was broken.",
       "revId": "ba79bdd799561bc3e42b93f9eac557d8f792dd96",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "14efedcd_2442b15b",
+        "filename": "src/tests/perf_tests/VulkanPipelineCachePerf.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 48,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2022-05-11T14:00:19Z",
+      "side": 1,
+      "message": "this is a bit weird... just to avoid doing this maybe add a clear() or reset() call to the cache so the destructor ASSERT can pass and we don\u0027t need to call accum.",
+      "range": {
+        "startLine": 48,
+        "startChar": 4,
+        "endLine": 48,
+        "endChar": 15
+      },
+      "revId": "ba79bdd799561bc3e42b93f9eac557d8f792dd96",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
