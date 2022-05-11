@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "f7affb85_7e9f2381",
+        "filename": "src/libANGLE/capture/FrameCapture.cpp",
+        "patchSetId": 12
+      },
+      "lineNbr": 7607,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2022-05-11T13:18:18Z",
+      "side": 0,
+      "message": "what happened here? can you leave this in? I think removing it is causing long unnecessary casts.",
+      "range": {
+        "startLine": 7599,
+        "startChar": 0,
+        "endLine": 7607,
+        "endChar": 1
+      },
+      "revId": "f3bae9940547bc5bd8da567bb0698001cda9dfa3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}

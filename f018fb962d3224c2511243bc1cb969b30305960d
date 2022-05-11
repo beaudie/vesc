@@ -87,6 +87,30 @@
       },
       "revId": "f018fb962d3224c2511243bc1cb969b30305960d",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "4c962232_84ab3878",
+        "filename": "src/libANGLE/capture/trace_fixture.h",
+        "patchSetId": 11
+      },
+      "lineNbr": 50,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2022-05-11T13:18:18Z",
+      "side": 1,
+      "message": "OK - so take a look at restricted_trace_*gl_loader_autogen.h/cpp. I suggest we move this file into common place (util/capture) and use that file in both the restricted_traces and in the capture_replay_tests. In the angle_capture_replay_tests_fixture in the capture_replay_tests/BUILD.gn we can use the trace loader and remove dependencies on libEGL and angle_util. See also https://chromium-review.googlesource.com/c/angle/angle/+/3641924",
+      "parentUuid": "b29edfa2_09a2ec1f",
+      "range": {
+        "startLine": 41,
+        "startChar": 0,
+        "endLine": 50,
+        "endChar": 6
+      },
+      "revId": "f018fb962d3224c2511243bc1cb969b30305960d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }

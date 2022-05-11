@@ -1,0 +1,73 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "5a354387_deaf22de",
+        "filename": "src/libANGLE/capture/capture_egl.cpp",
+        "patchSetId": 12
+      },
+      "lineNbr": 124,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2022-05-11T13:18:18Z",
+      "side": 1,
+      "message": "use EGL_NO_DISPLAY to avoid issues here - this is a placeholder value.",
+      "range": {
+        "startLine": 123,
+        "startChar": 4,
+        "endLine": 124,
+        "endChar": 54
+      },
+      "revId": "cb57ac956d04ce1a60f4e749305be41b027db211",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "59d6d7f1_072b8d69",
+        "filename": "src/libANGLE/capture/capture_egl.cpp",
+        "patchSetId": 12
+      },
+      "lineNbr": 159,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2022-05-11T13:18:18Z",
+      "side": 1,
+      "message": "use EGL_NO_DISPLAY to avoid issues here - this is a placeholder value.",
+      "range": {
+        "startLine": 159,
+        "startChar": 8,
+        "endLine": 159,
+        "endChar": 54
+      },
+      "revId": "cb57ac956d04ce1a60f4e749305be41b027db211",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b2cb7aac_19b59028",
+        "filename": "src/libANGLE/capture/trace_fixture.h",
+        "patchSetId": 12
+      },
+      "lineNbr": 159,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2022-05-11T13:18:18Z",
+      "side": 1,
+      "message": "nit: use GLuint or uint32_t here, this will avoid the need for a long reinterpret_cast.",
+      "range": {
+        "startLine": 159,
+        "startChar": 48,
+        "endLine": 159,
+        "endChar": 67
+      },
+      "revId": "cb57ac956d04ce1a60f4e749305be41b027db211",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
