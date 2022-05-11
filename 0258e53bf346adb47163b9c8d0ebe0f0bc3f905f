@@ -74,6 +74,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "2aa1eb17_f49ee58d",
+        "filename": "src/libANGLE/renderer/vulkan/SurfaceVk.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 1798,
+      "author": {
+        "id": 1528827
+      },
+      "writtenOn": "2022-05-11T15:40:56Z",
+      "side": 1,
+      "message": "Mmh, do you mean to actually making `WindowSurfaceVk` more abstract and use it as a superclass for `WindowSurfaceVkGbm` and `WindowSurfaceVkSwapchain`?\n\nIs then OK to continue using `struct SwapchainImage` in this new `WindowSurfaceVk`, or would it be confusing to use it both in `WindowSurfaceVkGbm` and `WindowSurfaceVkSwapchain`?",
+      "parentUuid": "4cf579a8_1f211188",
+      "revId": "0258e53bf346adb47163b9c8d0ebe0f0bc3f905f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "93d8d3ca_f8383568",
         "filename": "src/libANGLE/renderer/vulkan/linux/gbm/DisplayVkGbm.cpp",
         "patchSetId": 5
