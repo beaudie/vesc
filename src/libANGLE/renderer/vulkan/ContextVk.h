@@ -797,6 +797,7 @@ class ContextVk : public ContextImpl, public vk::Context, public MultisampleText
         DIRTY_BIT_DYNAMIC_STENCIL_REFERENCE,
         // - In VK_EXT_extended_dynamic_state
         DIRTY_BIT_DYNAMIC_CULL_MODE,
+        DIRTY_BIT_DYNAMIC_FRONT_FACE,
         // - In VK_KHR_fragment_shading_rate
         DIRTY_BIT_DYNAMIC_FRAGMENT_SHADING_RATE,
 
@@ -869,6 +870,8 @@ class ContextVk : public ContextImpl, public vk::Context, public MultisampleText
     static_assert(DIRTY_BIT_DYNAMIC_STENCIL_REFERENCE > DIRTY_BIT_RENDER_PASS,
                   "Render pass using dirty bit must be handled after the render pass dirty bit");
     static_assert(DIRTY_BIT_DYNAMIC_CULL_MODE > DIRTY_BIT_RENDER_PASS,
+                  "Render pass using dirty bit must be handled after the render pass dirty bit");
+    static_assert(DIRTY_BIT_DYNAMIC_FRONT_FACE > DIRTY_BIT_RENDER_PASS,
                   "Render pass using dirty bit must be handled after the render pass dirty bit");
     static_assert(DIRTY_BIT_DYNAMIC_FRAGMENT_SHADING_RATE > DIRTY_BIT_RENDER_PASS,
                   "Render pass using dirty bit must be handled after the render pass dirty bit");
@@ -981,6 +984,7 @@ class ContextVk : public ContextImpl, public vk::Context, public MultisampleText
                         const gl::Rectangle &viewport,
                         float nearPlane,
                         float farPlane);
+    void updateFrontFace();
     void updateDepthRange(float nearPlane, float farPlane);
     void updateFlipViewportDrawFramebuffer(const gl::State &glState);
     void updateFlipViewportReadFramebuffer(const gl::State &glState);
@@ -1081,6 +1085,8 @@ class ContextVk : public ContextImpl, public vk::Context, public MultisampleText
                                                              DirtyBits dirtyBitMask);
     angle::Result handleDirtyGraphicsDynamicCullMode(DirtyBits::Iterator *dirtyBitsIterator,
                                                      DirtyBits dirtyBitMask);
+    angle::Result handleDirtyGraphicsDynamicFrontFace(DirtyBits::Iterator *dirtyBitsIterator,
+                                                      DirtyBits dirtyBitMask);
     angle::Result handleDirtyGraphicsFragmentShadingRate(DirtyBits::Iterator *dirtyBitsIterator,
                                                          DirtyBits dirtyBitMask);
 
