@@ -22,6 +22,30 @@
       },
       "revId": "b2038cb81fae5a5fb5e8b020cec777926a8364f3",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "248ad26b_2620e0e3",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.h",
+        "patchSetId": 6
+      },
+      "lineNbr": 792,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-05-11T15:58:45Z",
+      "side": 1,
+      "message": "Yes I was thinking the same. If you don\u0027t mind, I\u0027ll do that as a follow up and avoid annoying merge conflicts in rebase",
+      "parentUuid": "a6a8c74b_4fa60f5c",
+      "range": {
+        "startLine": 790,
+        "startChar": 0,
+        "endLine": 792,
+        "endChar": 29
+      },
+      "revId": "b2038cb81fae5a5fb5e8b020cec777926a8364f3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
