@@ -16,6 +16,103 @@
       "message": "PTAL",
       "revId": "ef2c4bb4dc0c171a61e99db084af30e7a77a5c77",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "4500d422_0849dee7",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 75
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-05-11T16:42:08Z",
+      "side": 1,
+      "message": "This is complex enough to warrant an entry under `vulkan/doc/` IMO",
+      "revId": "ef2c4bb4dc0c171a61e99db084af30e7a77a5c77",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "8f441344_4cabbe33",
+        "filename": "src/libANGLE/renderer/ShaderInterfaceVariableInfoMap.h",
+        "patchSetId": 75
+      },
+      "lineNbr": 179,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-05-11T16:42:08Z",
+      "side": 1,
+      "message": "Could you please add a comment here that this is only used for xfb emulation, and that only supports VS?",
+      "range": {
+        "startLine": 179,
+        "startChar": 52,
+        "endLine": 179,
+        "endChar": 58
+      },
+      "revId": "ef2c4bb4dc0c171a61e99db084af30e7a77a5c77",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "e69c4ea7_d473365a",
+        "filename": "src/libANGLE/renderer/vulkan/TextureVk.cpp",
+        "patchSetId": 75
+      },
+      "lineNbr": 3358,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-05-11T16:42:08Z",
+      "side": 1,
+      "message": "Are there doubts here? Otherwise, `constexpr` at least",
+      "range": {
+        "startLine": 3357,
+        "startChar": 0,
+        "endLine": 3358,
+        "endChar": 66
+      },
+      "revId": "ef2c4bb4dc0c171a61e99db084af30e7a77a5c77",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "0f71c47b_d23d203c",
+        "filename": "src/libANGLE/renderer/vulkan/TransformFeedbackVk.cpp",
+        "patchSetId": 75
+      },
+      "lineNbr": 277,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-05-11T16:42:08Z",
+      "side": 1,
+      "message": "!",
+      "revId": "ef2c4bb4dc0c171a61e99db084af30e7a77a5c77",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "7df8a948_d8b36f38",
+        "filename": "src/libANGLE/renderer/vulkan/vk_cache_utils.cpp",
+        "patchSetId": 75
+      },
+      "lineNbr": 3979,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-05-11T16:42:08Z",
+      "side": 1,
+      "message": "Maybe move the original comment here. The fact that the offset has changed has implications later on.",
+      "revId": "ef2c4bb4dc0c171a61e99db084af30e7a77a5c77",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
