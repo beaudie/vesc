@@ -8,6 +8,14 @@
 #   Perf result merging and upload. Adapted from the Chromium script:
 #   https://chromium.googlesource.com/chromium/src/+/main/tools/perf/process_perf_results.py
 
+import os
+import sys
+if sys.version_info.major != 3 and __name__ == '__main__':
+    # Swarming prepends sys.executable so we get python2 regardless of shebang.
+    # Spawn itself with vpython3 instead.
+    import subprocess
+    sys.exit(subprocess.call(['vpython3', os.path.realpath(__file__)] + sys.argv[1:]))
+
 from __future__ import print_function
 
 import argparse
@@ -15,9 +23,7 @@ import collections
 import json
 import logging
 import multiprocessing
-import os
 import shutil
-import sys
 import tempfile
 import time
 import uuid
@@ -725,4 +731,5 @@ def main():
 
 
 if __name__ == '__main__':
+    print('qwe six version: %s' % six.__version__)
     sys.exit(main())
