@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "177cf38f_71ab9a0e",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-05-11T19:05:35Z",
+      "side": 1,
+      "message": "Similar to the other changes, except this one has some plumbing for the extension.\n\nI\u0027ll defer the reordering of the graphics pipeline desc stuff after covering the whole extension.",
+      "revId": "2682f8e6933b6878bd76c6d2da5e3d136eb57082",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
