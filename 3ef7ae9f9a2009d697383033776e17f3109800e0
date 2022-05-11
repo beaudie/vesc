@@ -194,6 +194,23 @@
       "message": "From analyzing recent crash reports of Chrome\u0027s finching of the Metal backend, this could very well be the cause of a significant increase in Skia shaders failing to compile on macOS 10.13 and 10.14.\n",
       "revId": "3ef7ae9f9a2009d697383033776e17f3109800e0",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "fa06990c_89da9b6e",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2022-05-11T21:50:36Z",
+      "side": 1,
+      "message": "Can we move this workaround forward?\n\nWould it be possible to limit the Metal and/or OS version that this workaround applies to?\n",
+      "revId": "3ef7ae9f9a2009d697383033776e17f3109800e0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
