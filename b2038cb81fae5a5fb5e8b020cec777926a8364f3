@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "a6a8c74b_4fa60f5c",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.h",
+        "patchSetId": 6
+      },
+      "lineNbr": 792,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2022-05-11T15:17:17Z",
+      "side": 1,
+      "message": "maybe we should start a naming pattern like\n\nDIRTY_BIT_DYNAMIC_VIEWPORT,\nDIRTY_BIT_DYNAMIC_SCISSOR,\nDIRTY_BIT_DYNAMIC_LINE_WIDTH,\n\nto keep it clear how these work? Anyway just a thought.",
+      "range": {
+        "startLine": 790,
+        "startChar": 0,
+        "endLine": 792,
+        "endChar": 29
+      },
+      "revId": "b2038cb81fae5a5fb5e8b020cec777926a8364f3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
