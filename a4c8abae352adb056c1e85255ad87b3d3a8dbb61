@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "f381573a_197b5be6",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 42
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1524687
+      },
+      "writtenOn": "2022-05-11T07:58:58Z",
+      "side": 1,
+      "message": "Hi Shahbaz,\nI\u0027ve updated code and fixed some cases which make the dry run failed.\nThe latest failure *CopyTexImageTest.RGBAToL/ES2_OpenGL_EmulateCopyTexImage2DFromRenderbuffers* seems no related with this CL, can you help to confirm it? thanks.",
+      "revId": "a4c8abae352adb056c1e85255ad87b3d3a8dbb61",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
