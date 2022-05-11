@@ -231,7 +231,7 @@ std::unique_ptr<LinkEvent> ProgramVk::link(const gl::Context *context,
     // Compile the shaders.
     const gl::ProgramExecutable &programExecutable = mState.getExecutable();
     angle::Result status                           = mExecutable.mOriginalShaderInfo.initShaders(
-        programExecutable.getLinkedShaderStages(), spirvBlobs, mExecutable.mVariableInfoMap);
+                                  programExecutable.getLinkedShaderStages(), spirvBlobs, mExecutable.mVariableInfoMap);
     if (status != angle::Result::Continue)
     {
         return std::make_unique<LinkEventDone>(status);
@@ -284,7 +284,7 @@ angle::Result ProgramVk::createGraphicsPipelineWithDefaultState(const gl::Contex
     gl::PrimitiveMode mode = (glExecutable.hasLinkedShaderStage(gl::ShaderType::TessControl) ||
                               glExecutable.hasLinkedShaderStage(gl::ShaderType::TessEvaluation))
                                  ? gl::PrimitiveMode::Patches
-                                 : gl::PrimitiveMode::TriangleStrip;
+                                 : gl::PrimitiveMode::Triangles;
     SetupDefaultPipelineState(contextVk, glExecutable.getOutputVariables().size(), mode,
                               &graphicsPipelineDesc);
     return mExecutable.getGraphicsPipeline(contextVk, mode, graphicsPipelineDesc, glExecutable,
