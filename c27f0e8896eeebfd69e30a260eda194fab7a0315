@@ -1,6 +1,29 @@
 {
   "comments": [
     {
+      "unresolved": true,
+      "key": {
+        "uuid": "5b679da0_0566797f",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 9
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2022-05-11T11:37:59Z",
+      "side": 1,
+      "message": "nit: typically we\u0027d phrase this as:\n\nD3D11: Add GL_EXT_texture_buffer support\n\nsame for the other CLs",
+      "range": {
+        "startLine": 7,
+        "startChar": 0,
+        "endLine": 7,
+        "endChar": 42
+      },
+      "revId": "c27f0e8896eeebfd69e30a260eda194fab7a0315",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": false,
       "key": {
         "uuid": "2047e642_690a5d9f",
@@ -48,6 +71,29 @@
       "writtenOn": "2022-05-10T20:52:22Z",
       "side": 1,
       "message": "git can not update this cl any more. create a new cl. abandon this one.",
+      "revId": "c27f0e8896eeebfd69e30a260eda194fab7a0315",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "dfff968f_e1e3b2e2",
+        "filename": "src/libANGLE/renderer/d3d/d3d11/Buffer11.cpp",
+        "patchSetId": 9
+      },
+      "lineNbr": 1500,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2022-05-11T11:37:59Z",
+      "side": 1,
+      "message": "please either remove this todo, or associate it with a bug tag to ensure it\u0027s a tracked piece of work.\n\nCan you alternately express this as an ASSERT?",
+      "range": {
+        "startLine": 1498,
+        "startChar": 0,
+        "endLine": 1500,
+        "endChar": 13
+      },
       "revId": "c27f0e8896eeebfd69e30a260eda194fab7a0315",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
