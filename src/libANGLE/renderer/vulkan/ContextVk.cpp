@@ -793,18 +793,18 @@ ContextVk::ContextVk(const gl::State &state, gl::ErrorSet *errorSet, RendererVk 
     // Note that currently these dirty bits are set every time a new render pass command buffer is
     // begun.  However, using ANGLE's SecondaryCommandBuffer, the Vulkan command buffer (which is
     // the primary command buffer) is not ended, so technically we don't need to rebind these.
-    mNewGraphicsCommandBufferDirtyBits = DirtyBits{DIRTY_BIT_RENDER_PASS,
-                                                   DIRTY_BIT_COLOR_ACCESS,
-                                                   DIRTY_BIT_DEPTH_STENCIL_ACCESS,
-                                                   DIRTY_BIT_PIPELINE_BINDING,
-                                                   DIRTY_BIT_TEXTURES,
-                                                   DIRTY_BIT_VERTEX_BUFFERS,
-                                                   DIRTY_BIT_INDEX_BUFFER,
-                                                   DIRTY_BIT_SHADER_RESOURCES,
-                                                   DIRTY_BIT_DESCRIPTOR_SETS,
-                                                   DIRTY_BIT_DRIVER_UNIFORMS_BINDING,
-                                                   DIRTY_BIT_VIEWPORT,
-                                                   DIRTY_BIT_SCISSOR};
+    mNewGraphicsCommandBufferDirtyBits = DirtyBits{
+        DIRTY_BIT_RENDER_PASS,
+        DIRTY_BIT_COLOR_ACCESS,
+        DIRTY_BIT_DEPTH_STENCIL_ACCESS,
+        DIRTY_BIT_PIPELINE_BINDING,
+        DIRTY_BIT_TEXTURES,
+        DIRTY_BIT_VERTEX_BUFFERS,
+        DIRTY_BIT_INDEX_BUFFER,
+        DIRTY_BIT_SHADER_RESOURCES,
+        DIRTY_BIT_DESCRIPTOR_SETS,
+        DIRTY_BIT_DRIVER_UNIFORMS_BINDING,
+    };
     if (getFeatures().supportsTransformFeedbackExtension.enabled)
     {
         mNewGraphicsCommandBufferDirtyBits.set(DIRTY_BIT_TRANSFORM_FEEDBACK_BUFFERS);
@@ -815,13 +815,14 @@ ContextVk::ContextVk(const gl::State &state, gl::ErrorSet *errorSet, RendererVk 
                   DIRTY_BIT_DESCRIPTOR_SETS, DIRTY_BIT_DRIVER_UNIFORMS_BINDING};
 
     mDynamicStateDirtyBits = DirtyBits{
-        DIRTY_BIT_VIEWPORT,           DIRTY_BIT_SCISSOR,           DIRTY_BIT_LINE_WIDTH,
-        DIRTY_BIT_DEPTH_BIAS,         DIRTY_BIT_BLEND_CONSTANTS,   DIRTY_BIT_STENCIL_COMPARE_MASK,
-        DIRTY_BIT_STENCIL_WRITE_MASK, DIRTY_BIT_STENCIL_REFERENCE,
+        DIRTY_BIT_DYNAMIC_VIEWPORT,           DIRTY_BIT_DYNAMIC_SCISSOR,
+        DIRTY_BIT_DYNAMIC_LINE_WIDTH,         DIRTY_BIT_DYNAMIC_DEPTH_BIAS,
+        DIRTY_BIT_DYNAMIC_BLEND_CONSTANTS,    DIRTY_BIT_DYNAMIC_STENCIL_COMPARE_MASK,
+        DIRTY_BIT_DYNAMIC_STENCIL_WRITE_MASK, DIRTY_BIT_DYNAMIC_STENCIL_REFERENCE,
     };
     if (getFeatures().supportsFragmentShadingRate.enabled)
     {
-        mDynamicStateDirtyBits.set(DIRTY_BIT_FRAGMENT_SHADING_RATE);
+        mDynamicStateDirtyBits.set(DIRTY_BIT_DYNAMIC_FRAGMENT_SHADING_RATE);
     }
 
     mNewGraphicsCommandBufferDirtyBits |= mDynamicStateDirtyBits;
@@ -872,20 +873,24 @@ ContextVk::ContextVk(const gl::State &state, gl::ErrorSet *errorSet, RendererVk 
     mGraphicsDirtyBitHandlers[DIRTY_BIT_DESCRIPTOR_SETS] =
         &ContextVk::handleDirtyGraphicsDescriptorSets;
 
-    mGraphicsDirtyBitHandlers[DIRTY_BIT_VIEWPORT]   = &ContextVk::handleDirtyGraphicsViewport;
-    mGraphicsDirtyBitHandlers[DIRTY_BIT_SCISSOR]    = &ContextVk::handleDirtyGraphicsScissor;
-    mGraphicsDirtyBitHandlers[DIRTY_BIT_LINE_WIDTH] = &ContextVk::handleDirtyGraphicsLineWidth;
-    mGraphicsDirtyBitHandlers[DIRTY_BIT_DEPTH_BIAS] = &ContextVk::handleDirtyGraphicsDepthBias;
-    mGraphicsDirtyBitHandlers[DIRTY_BIT_BLEND_CONSTANTS] =
-        &ContextVk::handleDirtyGraphicsBlendConstants;
-    mGraphicsDirtyBitHandlers[DIRTY_BIT_STENCIL_COMPARE_MASK] =
-        &ContextVk::handleDirtyGraphicsStencilCompareMask;
-    mGraphicsDirtyBitHandlers[DIRTY_BIT_STENCIL_WRITE_MASK] =
-        &ContextVk::handleDirtyGraphicsStencilWriteMask;
-    mGraphicsDirtyBitHandlers[DIRTY_BIT_STENCIL_REFERENCE] =
-        &ContextVk::handleDirtyGraphicsStencilReference;
-    mGraphicsDirtyBitHandlers[DIRTY_BIT_FRAGMENT_SHADING_RATE] =
-        &ContextVk::handleDirtyGraphicsFragmentShadingRate;
+    mGraphicsDirtyBitHandlers[DIRTY_BIT_DYNAMIC_VIEWPORT] =
+        &ContextVk::handleDirtyGraphicsDynamicViewport;
+    mGraphicsDirtyBitHandlers[DIRTY_BIT_DYNAMIC_SCISSOR] =
+        &ContextVk::handleDirtyGraphicsDynamicScissor;
+    mGraphicsDirtyBitHandlers[DIRTY_BIT_DYNAMIC_LINE_WIDTH] =
+        &ContextVk::handleDirtyGraphicsDynamicLineWidth;
+    mGraphicsDirtyBitHandlers[DIRTY_BIT_DYNAMIC_DEPTH_BIAS] =
+        &ContextVk::handleDirtyGraphicsDynamicDepthBias;
+    mGraphicsDirtyBitHandlers[DIRTY_BIT_DYNAMIC_BLEND_CONSTANTS] =
+        &ContextVk::handleDirtyGraphicsDynamicBlendConstants;
+    mGraphicsDirtyBitHandlers[DIRTY_BIT_DYNAMIC_STENCIL_COMPARE_MASK] =
+        &ContextVk::handleDirtyGraphicsDynamicStencilCompareMask;
+    mGraphicsDirtyBitHandlers[DIRTY_BIT_DYNAMIC_STENCIL_WRITE_MASK] =
+        &ContextVk::handleDirtyGraphicsDynamicStencilWriteMask;
+    mGraphicsDirtyBitHandlers[DIRTY_BIT_DYNAMIC_STENCIL_REFERENCE] =
+        &ContextVk::handleDirtyGraphicsDynamicStencilReference;
+    mGraphicsDirtyBitHandlers[DIRTY_BIT_DYNAMIC_FRAGMENT_SHADING_RATE] =
+        &ContextVk::handleDirtyGraphicsDynamicFragmentShadingRate;
 
     mComputeDirtyBitHandlers[DIRTY_BIT_MEMORY_BARRIER] =
         &ContextVk::handleDirtyComputeMemoryBarrier;
@@ -2446,29 +2451,29 @@ angle::Result ContextVk::handleDirtyUniformsImpl(vk::ResourceUseList *resourceUs
     return angle::Result::Continue;
 }
 
-angle::Result ContextVk::handleDirtyGraphicsViewport(DirtyBits::Iterator *dirtyBitsIterator,
-                                                     DirtyBits dirtyBitMask)
+angle::Result ContextVk::handleDirtyGraphicsDynamicViewport(DirtyBits::Iterator *dirtyBitsIterator,
+                                                            DirtyBits dirtyBitMask)
 {
     mRenderPassCommandBuffer->setViewport(0, 1, &mViewport);
     return angle::Result::Continue;
 }
 
-angle::Result ContextVk::handleDirtyGraphicsScissor(DirtyBits::Iterator *dirtyBitsIterator,
-                                                    DirtyBits dirtyBitMask)
+angle::Result ContextVk::handleDirtyGraphicsDynamicScissor(DirtyBits::Iterator *dirtyBitsIterator,
+                                                           DirtyBits dirtyBitMask)
 {
-    handleDirtyGraphicsScissorImpl(mState.isQueryActive(gl::QueryType::PrimitivesGenerated));
+    handleDirtyGraphicsDynamicScissorImpl(mState.isQueryActive(gl::QueryType::PrimitivesGenerated));
     return angle::Result::Continue;
 }
 
-angle::Result ContextVk::handleDirtyGraphicsLineWidth(DirtyBits::Iterator *dirtyBitsIterator,
-                                                      DirtyBits dirtyBitMask)
+angle::Result ContextVk::handleDirtyGraphicsDynamicLineWidth(DirtyBits::Iterator *dirtyBitsIterator,
+                                                             DirtyBits dirtyBitMask)
 {
     mRenderPassCommandBuffer->setLineWidth(mState.getLineWidth());
     return angle::Result::Continue;
 }
 
-angle::Result ContextVk::handleDirtyGraphicsDepthBias(DirtyBits::Iterator *dirtyBitsIterator,
-                                                      DirtyBits dirtyBitMask)
+angle::Result ContextVk::handleDirtyGraphicsDynamicDepthBias(DirtyBits::Iterator *dirtyBitsIterator,
+                                                             DirtyBits dirtyBitMask)
 {
     const gl::RasterizerState &rasterState = mState.getRasterizerState();
     // Note: depth bias clamp is only exposed in EXT_polygon_offset_clamp.
@@ -2477,15 +2482,16 @@ angle::Result ContextVk::handleDirtyGraphicsDepthBias(DirtyBits::Iterator *dirty
     return angle::Result::Continue;
 }
 
-angle::Result ContextVk::handleDirtyGraphicsBlendConstants(DirtyBits::Iterator *dirtyBitsIterator,
-                                                           DirtyBits dirtyBitMask)
+angle::Result ContextVk::handleDirtyGraphicsDynamicBlendConstants(
+    DirtyBits::Iterator *dirtyBitsIterator,
+    DirtyBits dirtyBitMask)
 {
     const gl::ColorF &color = mState.getBlendColor();
     mRenderPassCommandBuffer->setBlendConstants(color.data());
     return angle::Result::Continue;
 }
 
-angle::Result ContextVk::handleDirtyGraphicsStencilCompareMask(
+angle::Result ContextVk::handleDirtyGraphicsDynamicStencilCompareMask(
     DirtyBits::Iterator *dirtyBitsIterator,
     DirtyBits dirtyBitMask)
 {
@@ -2495,8 +2501,9 @@ angle::Result ContextVk::handleDirtyGraphicsStencilCompareMask(
     return angle::Result::Continue;
 }
 
-angle::Result ContextVk::handleDirtyGraphicsStencilWriteMask(DirtyBits::Iterator *dirtyBitsIterator,
-                                                             DirtyBits dirtyBitMask)
+angle::Result ContextVk::handleDirtyGraphicsDynamicStencilWriteMask(
+    DirtyBits::Iterator *dirtyBitsIterator,
+    DirtyBits dirtyBitMask)
 {
     const gl::DepthStencilState &depthStencilState = mState.getDepthStencilState();
     const gl::Framebuffer *drawFramebuffer         = mState.getDrawFramebuffer();
@@ -2513,15 +2520,16 @@ angle::Result ContextVk::handleDirtyGraphicsStencilWriteMask(DirtyBits::Iterator
     return angle::Result::Continue;
 }
 
-angle::Result ContextVk::handleDirtyGraphicsStencilReference(DirtyBits::Iterator *dirtyBitsIterator,
-                                                             DirtyBits dirtyBitMask)
+angle::Result ContextVk::handleDirtyGraphicsDynamicStencilReference(
+    DirtyBits::Iterator *dirtyBitsIterator,
+    DirtyBits dirtyBitMask)
 {
     mRenderPassCommandBuffer->setStencilReference(mState.getStencilRef(),
                                                   mState.getStencilBackRef());
     return angle::Result::Continue;
 }
 
-angle::Result ContextVk::handleDirtyGraphicsFragmentShadingRate(
+angle::Result ContextVk::handleDirtyGraphicsDynamicFragmentShadingRate(
     DirtyBits::Iterator *dirtyBitsIterator,
     DirtyBits dirtyBitMask)
 {
@@ -2591,7 +2599,7 @@ angle::Result ContextVk::handleDirtyGraphicsFragmentShadingRate(
     return angle::Result::Continue;
 }
 
-void ContextVk::handleDirtyGraphicsScissorImpl(bool isPrimitivesGeneratedQueryActive)
+void ContextVk::handleDirtyGraphicsDynamicScissorImpl(bool isPrimitivesGeneratedQueryActive)
 {
     // If primitives generated query and rasterizer discard are both active, but the Vulkan
     // implementation of the query does not support rasterizer discard, use an empty scissor to
@@ -4142,7 +4150,7 @@ void ContextVk::updateViewport(FramebufferVk *framebufferVk,
     vk::ClampViewport(&mViewport);
 
     invalidateGraphicsDriverUniforms();
-    mGraphicsDirtyBits.set(DIRTY_BIT_VIEWPORT);
+    mGraphicsDirtyBits.set(DIRTY_BIT_DYNAMIC_VIEWPORT);
 }
 
 void ContextVk::updateDepthRange(float nearPlane, float farPlane)
@@ -4155,7 +4163,7 @@ void ContextVk::updateDepthRange(float nearPlane, float farPlane)
     mViewport.maxDepth = farPlane;
 
     invalidateGraphicsDriverUniforms();
-    mGraphicsDirtyBits.set(DIRTY_BIT_VIEWPORT);
+    mGraphicsDirtyBits.set(DIRTY_BIT_DYNAMIC_VIEWPORT);
 }
 
 void ContextVk::updateScissor(const gl::State &glState)
@@ -4176,7 +4184,7 @@ void ContextVk::updateScissor(const gl::State &glState)
     RotateRectangle(getRotationDrawFramebuffer(), isViewportFlipEnabledForDrawFBO(),
                     renderArea.width, renderArea.height, scissoredArea, &rotatedScissoredArea);
     mScissor = gl_vk::GetRect(rotatedScissoredArea);
-    mGraphicsDirtyBits.set(DIRTY_BIT_SCISSOR);
+    mGraphicsDirtyBits.set(DIRTY_BIT_DYNAMIC_SCISSOR);
 
     // If the scissor has grown beyond the previous scissoredRenderArea, grow the render pass render
     // area.  The only undesirable effect this may have is that if the render area does not cover a
@@ -4200,7 +4208,7 @@ void ContextVk::updateDepthStencil(const gl::State &glState)
                                                    drawFramebuffer);
     mGraphicsPipelineDesc->updateStencilTestEnabled(&mGraphicsPipelineTransition, depthStencilState,
                                                     drawFramebuffer);
-    mGraphicsDirtyBits.set(DIRTY_BIT_STENCIL_WRITE_MASK);
+    mGraphicsDirtyBits.set(DIRTY_BIT_DYNAMIC_STENCIL_WRITE_MASK);
 }
 
 // If the target is a single-sampled target, sampleShading should be disabled, to use Bresenham line
@@ -4264,10 +4272,10 @@ void ContextVk::updateRasterizerDiscardEnabled(bool isPrimitivesGeneratedQueryAc
     }
 
     // If we are emulating rasterizer discard, update the scissor if in render pass.  If not in
-    // render pass, DIRTY_BIT_SCISSOR will be set when the render pass next starts.
+    // render pass, DIRTY_BIT_DYNAMIC_SCISSOR will be set when the render pass next starts.
     if (hasStartedRenderPass())
     {
-        handleDirtyGraphicsScissorImpl(isPrimitivesGeneratedQueryActive);
+        handleDirtyGraphicsDynamicScissorImpl(isPrimitivesGeneratedQueryActive);
     }
 }
 
@@ -4467,7 +4475,7 @@ angle::Result ContextVk::syncState(const gl::Context *context,
                 updateDither();
                 break;
             case gl::State::DIRTY_BIT_BLEND_COLOR:
-                mGraphicsDirtyBits.set(DIRTY_BIT_BLEND_CONSTANTS);
+                mGraphicsDirtyBits.set(DIRTY_BIT_DYNAMIC_BLEND_CONSTANTS);
                 break;
             case gl::State::DIRTY_BIT_BLEND_FUNCS:
                 mGraphicsPipelineDesc->updateBlendFuncs(
@@ -4534,15 +4542,15 @@ angle::Result ContextVk::syncState(const gl::Context *context,
             case gl::State::DIRTY_BIT_STENCIL_FUNCS_FRONT:
                 mGraphicsPipelineDesc->updateStencilFrontFuncs(&mGraphicsPipelineTransition,
                                                                glState.getDepthStencilState());
-                mGraphicsDirtyBits.set(DIRTY_BIT_STENCIL_COMPARE_MASK);
-                mGraphicsDirtyBits.set(DIRTY_BIT_STENCIL_REFERENCE);
+                mGraphicsDirtyBits.set(DIRTY_BIT_DYNAMIC_STENCIL_COMPARE_MASK);
+                mGraphicsDirtyBits.set(DIRTY_BIT_DYNAMIC_STENCIL_REFERENCE);
                 onDepthStencilAccessChange();
                 break;
             case gl::State::DIRTY_BIT_STENCIL_FUNCS_BACK:
                 mGraphicsPipelineDesc->updateStencilBackFuncs(&mGraphicsPipelineTransition,
                                                               glState.getDepthStencilState());
-                mGraphicsDirtyBits.set(DIRTY_BIT_STENCIL_COMPARE_MASK);
-                mGraphicsDirtyBits.set(DIRTY_BIT_STENCIL_REFERENCE);
+                mGraphicsDirtyBits.set(DIRTY_BIT_DYNAMIC_STENCIL_COMPARE_MASK);
+                mGraphicsDirtyBits.set(DIRTY_BIT_DYNAMIC_STENCIL_REFERENCE);
                 onDepthStencilAccessChange();
                 break;
             case gl::State::DIRTY_BIT_STENCIL_OPS_FRONT:
@@ -4557,7 +4565,7 @@ angle::Result ContextVk::syncState(const gl::Context *context,
                 break;
             case gl::State::DIRTY_BIT_STENCIL_WRITEMASK_FRONT:
             case gl::State::DIRTY_BIT_STENCIL_WRITEMASK_BACK:
-                mGraphicsDirtyBits.set(DIRTY_BIT_STENCIL_WRITE_MASK);
+                mGraphicsDirtyBits.set(DIRTY_BIT_DYNAMIC_STENCIL_WRITE_MASK);
                 onDepthStencilAccessChange();
                 break;
             case gl::State::DIRTY_BIT_CULL_FACE_ENABLED:
@@ -4575,7 +4583,7 @@ angle::Result ContextVk::syncState(const gl::Context *context,
                     &mGraphicsPipelineTransition, glState.isPolygonOffsetFillEnabled());
                 break;
             case gl::State::DIRTY_BIT_POLYGON_OFFSET:
-                mGraphicsDirtyBits.set(DIRTY_BIT_DEPTH_BIAS);
+                mGraphicsDirtyBits.set(DIRTY_BIT_DYNAMIC_DEPTH_BIAS);
                 break;
             case gl::State::DIRTY_BIT_RASTERIZER_DISCARD_ENABLED:
                 updateRasterizerDiscardEnabled(
@@ -4583,7 +4591,7 @@ angle::Result ContextVk::syncState(const gl::Context *context,
                 onColorAccessChange();
                 break;
             case gl::State::DIRTY_BIT_LINE_WIDTH:
-                mGraphicsDirtyBits.set(DIRTY_BIT_LINE_WIDTH);
+                mGraphicsDirtyBits.set(DIRTY_BIT_DYNAMIC_LINE_WIDTH);
                 break;
             case gl::State::DIRTY_BIT_PRIMITIVE_RESTART_ENABLED:
                 mGraphicsPipelineDesc->updatePrimitiveRestartEnabled(
@@ -4821,7 +4829,7 @@ angle::Result ContextVk::syncState(const gl::Context *context,
                             EXTENDED_DIRTY_BIT_SHADER_DERIVATIVE_HINT:
                             break;
                         case gl::State::ExtendedDirtyBitType::EXTENDED_DIRTY_BIT_SHADING_RATE:
-                            mGraphicsDirtyBits.set(DIRTY_BIT_FRAGMENT_SHADING_RATE);
+                            mGraphicsDirtyBits.set(DIRTY_BIT_DYNAMIC_FRAGMENT_SHADING_RATE);
                             break;
                         default:
                             UNREACHABLE();
