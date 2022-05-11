@@ -1065,11 +1065,13 @@ void ResetDynamicState(ContextVk *contextVk, vk::RenderPassCommandBuffer *comman
     // - stencil func: UtilsVk sets this when enabling stencil test
     // - stencil ops: UtilsVk sets this when enabling stencil test
 
-    // Reset all other dynamic state, since it can affect UtilsVk functions:
+    // Reset all other dynamic state, since it can affect UtilsVk functions.  Values reflect common
+    // UtilsVk setting.
     if (contextVk->getFeatures().supportsExtendedDynamicState.enabled)
     {
         commandBuffer->setCullMode(VK_CULL_MODE_NONE);
         commandBuffer->setFrontFace(VK_FRONT_FACE_COUNTER_CLOCKWISE);
+        commandBuffer->setPrimitiveTopology(VK_PRIMITIVE_TOPOLOGY_TRIANGLE_STRIP);
         commandBuffer->setDepthTestEnable(VK_FALSE);
         commandBuffer->setStencilTestEnable(VK_FALSE);
     }
