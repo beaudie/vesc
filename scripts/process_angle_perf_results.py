@@ -10,14 +10,21 @@
 
 from __future__ import print_function
 
+import os
+import sys
+if sys.version_info < (2, 7) and __name__ == '__main__':
+    # Swarming prepends sys.executable so we get some old modules from swarming.
+    # Spawn itself with vpython instead.
+    print('spawning vpython due to python version: %s' % sys.version_info)
+    import subprocess
+    sys.exit(subprocess.call(['vpython', os.path.realpath(__file__)] + sys.argv[1:]))
+
 import argparse
 import collections
 import json
 import logging
 import multiprocessing
-import os
 import shutil
-import sys
 import tempfile
 import time
 import uuid
@@ -725,4 +732,6 @@ def main():
 
 
 if __name__ == '__main__':
+    import six
+    print('qwe six version: %s' % six.__version__)
     sys.exit(main())
