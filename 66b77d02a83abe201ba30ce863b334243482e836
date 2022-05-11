@@ -16,6 +16,63 @@
       "message": "PTAL",
       "revId": "66b77d02a83abe201ba30ce863b334243482e836",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "9a2f629b_359930a6",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 91
+      },
+      "lineNbr": 908,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-05-11T16:09:49Z",
+      "side": 1,
+      "message": "I added this workaround 3 years ago, presumably for Nexus 5 (not sure we even did P2 then). Maybe you can just remove it.",
+      "revId": "66b77d02a83abe201ba30ce863b334243482e836",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "aecbf1e2_217824c6",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 91
+      },
+      "lineNbr": 3229,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-05-11T16:09:49Z",
+      "side": 1,
+      "message": "Redundant if/else",
+      "revId": "66b77d02a83abe201ba30ce863b334243482e836",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "666e952f_8a7f7290",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.h",
+        "patchSetId": 91
+      },
+      "lineNbr": 284,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-05-11T16:09:49Z",
+      "side": 1,
+      "message": "What\u0027s a meta pool? Some comments that clarify what this is for would be great",
+      "range": {
+        "startLine": 284,
+        "startChar": 6,
+        "endLine": 284,
+        "endChar": 24
+      },
+      "revId": "66b77d02a83abe201ba30ce863b334243482e836",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
