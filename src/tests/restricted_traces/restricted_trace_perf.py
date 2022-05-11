@@ -313,6 +313,44 @@ def get_gpu_memory(trace_duration):
     return gpu_mem_average, gpu_mem_max
 
 
+def get_peak_memory():
+    # Pull the results from the device and parse
+    result = run_adb_command('shell cat /sdcard/Download/out.txt')
+    peak_memory = ''
+
+    while True:
+        # Look for "gpu_time" in the line and grab the second to last entry:
+        line = result.process.stdout.readline()
+        logging.debug('Checking line: %s' % line)
+        if not line:
+            break
+
+        if "memory_max" in line:
+            peak_memory = line.split()[-2]
+            break
+
+    return peak_memory
+
+
+def get_mediam_memory():
+    # Pull the results from the device and parse
+    result = run_adb_command('shell cat /sdcard/Download/out.txt')
+    mediam_memory = ''
+
+    while True:
+        # Look for "gpu_time" in the line and grab the second to last entry:
+        line = result.process.stdout.readline()
+        logging.debug('Checking line: %s' % line)
+        if not line:
+            break
+
+        if "memory_median" in line:
+            mediam_memory = line.split()[-2]
+            break
+
+    return mediam_memory
+
+
 def get_gpu_time():
     # Pull the results from the device and parse
     result = run_adb_command('shell cat /sdcard/Download/out.txt')
@@ -571,16 +609,18 @@ def main():
     if args.walltimeonly:
         print('%-*s' % (trace_width, 'wall_time_per_frame'))
     elif args.power:
-        print('%-*s %-*s %-*s %-*s %-*s %-*s %-*s %-*s' %
+        print('%-*s %-*s %-*s %-*s %-*s %-*s %-*s %-*s %-*s %-*s' %
               (trace_width, 'trace', 30, 'wall_time', 30, 'gpu_time', 20, 'cpu_time', 20,
-               'gpu_power', 20, 'cpu_power', 20, 'gpu_mem_sustained', 20, 'gpu_mem_peak'))
+               'gpu_power', 20, 'cpu_power', 20, 'gpu_mem_sustained', 20, 'gpu_mem_peak', 20,
+               'memory_mediam', 20, 'memory_peak'))
         output_writer.writerow([
             'trace', 'wall_time(ms)', 'gpu_time(ms)', 'cpu_time(ms)', 'gpu_power(uWs)',
-            'cpu_power(uWs)', 'gpu_mem_sustained', 'gpu_mem_peak'
+            'cpu_power(uWs)', 'gpu_mem_sustained', 'gpu_mem_peak', 'memory_mediam', 'memory_peak'
         ])
     else:
-        print('%-*s %-*s %-*s' %
-              (trace_width, 'trace', 30, 'wall_time_per_frame(ms)', 30, 'gpu_time_per_frame'))
+        print('%-*s %-*s %-*s %-*s %-*s' %
+              (trace_width, 'trace', 30, 'wall_time_per_frame(ms)', 30, 'gpu_time_per_frame', 30,
+               'memory_median', 30, 'memory_peak'))
 
     run_adb_command('root')
 
@@ -601,6 +641,8 @@ def main():
     cpu_power_per_frames = defaultdict(dict)
     gpu_mem_sustaineds = defaultdict(dict)
     gpu_mem_peaks = defaultdict(dict)
+    memory_peak = defaultdict(dict)
+    memory_mediam = defaultdict(dict)
 
     for renderer in renderers:
         for i in range(int(args.loop_count)):
@@ -636,6 +678,9 @@ def main():
                 gpu_time = get_gpu_time() if args.vsync else '0'
 
                 cpu_time = get_cpu_time()
+
+                memory_peak = get_peak_memory()
+                memory_mediam = get_mediam_memory()
 
                 gpu_power_per_frame = 0
                 cpu_power_per_frame = 0
@@ -694,17 +739,19 @@ def main():
                 if args.walltimeonly:
                     print('%-*s' % (trace_width, wall_time))
                 elif args.power:
-                    print('%-*s %-*s %-*s %-*s %-*i %-*i %-*i %-*i' %
+                    print('%-*s %-*s %-*s %-*s %-*i %-*i %-*i %-*i %-*s %-*s ' %
                           (trace_width, trace_name, 30, wall_time, 30, gpu_time, 20, cpu_time, 20,
                            gpu_power_per_frame, 20, cpu_power_per_frame, 20, gpu_mem_sustained, 20,
-                           gpu_mem_peak))
+                           gpu_mem_peak, 20, memory_mediam, 20, memory_peak))
                     output_writer.writerow([
                         mode + renderer + '_' + test, wall_time, gpu_time, cpu_time,
-                        gpu_power_per_frame, cpu_power_per_frame, gpu_mem_sustained, gpu_mem_peak
+                        gpu_power_per_frame, cpu_power_per_frame, gpu_mem_sustained, gpu_mem_peak,
+                        memory_mediam, memory_peak
                     ])
                 else:
-                    print('%-*s %-*s %-*s' %
-                          (trace_width, trace_name, 30, wall_time, 30, gpu_time))
+                    print('%-*s %-*s %-*s %-*s %-*s ' %
+                          (trace_width, trace_name, 30, wall_time, 30, gpu_time, 30, memory_mediam,
+                           30, memory_peak))
 
                 # Early exit for testing
                 #exit()
