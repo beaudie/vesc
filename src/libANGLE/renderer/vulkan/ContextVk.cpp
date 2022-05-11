@@ -820,6 +820,12 @@ ContextVk::ContextVk(const gl::State &state, gl::ErrorSet *errorSet, RendererVk 
         DIRTY_BIT_DYNAMIC_BLEND_CONSTANTS,    DIRTY_BIT_DYNAMIC_STENCIL_COMPARE_MASK,
         DIRTY_BIT_DYNAMIC_STENCIL_WRITE_MASK, DIRTY_BIT_DYNAMIC_STENCIL_REFERENCE,
     };
+    if (getFeatures().supportsExtendedDynamicState.enabled)
+    {
+        mDynamicStateDirtyBits |= DirtyBits{
+            DIRTY_BIT_DYNAMIC_CULL_MODE,
+        };
+    }
     if (getFeatures().supportsFragmentShadingRate.enabled)
     {
         mDynamicStateDirtyBits.set(DIRTY_BIT_DYNAMIC_FRAGMENT_SHADING_RATE);
@@ -889,6 +895,8 @@ ContextVk::ContextVk(const gl::State &state, gl::ErrorSet *errorSet, RendererVk 
         &ContextVk::handleDirtyGraphicsDynamicStencilWriteMask;
     mGraphicsDirtyBitHandlers[DIRTY_BIT_DYNAMIC_STENCIL_REFERENCE] =
         &ContextVk::handleDirtyGraphicsDynamicStencilReference;
+    mGraphicsDirtyBitHandlers[DIRTY_BIT_DYNAMIC_CULL_MODE] =
+        &ContextVk::handleDirtyGraphicsDynamicCullMode;
     mGraphicsDirtyBitHandlers[DIRTY_BIT_DYNAMIC_FRAGMENT_SHADING_RATE] =
         &ContextVk::handleDirtyGraphicsDynamicFragmentShadingRate;
 
@@ -2526,6 +2534,14 @@ angle::Result ContextVk::handleDirtyGraphicsDynamicStencilReference(
 {
     mRenderPassCommandBuffer->setStencilReference(mState.getStencilRef(),
                                                   mState.getStencilBackRef());
+    return angle::Result::Continue;
+}
+
+angle::Result ContextVk::handleDirtyGraphicsDynamicCullMode(DirtyBits::Iterator *dirtyBitsIterator,
+                                                            DirtyBits dirtyBitMask)
+{
+    const gl::RasterizerState &rasterState = mState.getRasterizerState();
+    mRenderPassCommandBuffer->setCullMode(gl_vk::GetCullMode(rasterState));
     return angle::Result::Continue;
 }
 
@@ -4570,8 +4586,15 @@ angle::Result ContextVk::syncState(const gl::Context *context,
                 break;
             case gl::State::DIRTY_BIT_CULL_FACE_ENABLED:
             case gl::State::DIRTY_BIT_CULL_FACE:
-                mGraphicsPipelineDesc->updateCullMode(&mGraphicsPipelineTransition,
-                                                      glState.getRasterizerState());
+                if (getFeatures().supportsExtendedDynamicState.enabled)
+                {
+                    mGraphicsDirtyBits.set(DIRTY_BIT_DYNAMIC_CULL_MODE);
+                }
+                else
+                {
+                    mGraphicsPipelineDesc->updateCullMode(&mGraphicsPipelineTransition,
+                                                          glState.getRasterizerState());
+                }
                 break;
             case gl::State::DIRTY_BIT_FRONT_FACE:
                 mGraphicsPipelineDesc->updateFrontFace(&mGraphicsPipelineTransition,
