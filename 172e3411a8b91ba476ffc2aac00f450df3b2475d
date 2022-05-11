@@ -51,6 +51,24 @@
       "parentUuid": "1578fad5_42943c0e",
       "revId": "172e3411a8b91ba476ffc2aac00f450df3b2475d",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "cc2ee760_e768c616",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2022-05-11T17:57:08Z",
+      "side": 1,
+      "message": "Ok cool. There are a couple things we can do in ANGLE that may address this:\n\n- We can make this workaround apply only to WebGL contexts. This doesn\u0027t cover canvas but I suspect canvas has their own limits (and with OOP-C, canvases mostly don\u0027t go through the command decoder).\n- ANGLE could potentially query the screen size and dynamically adjust the limit.\n- We can add multiple workarounds for different sizes (4096, 8192, etc) and let chrome decide which one ANGLE should use.\n- If it needs to be fully configurable, we can pass an int to context creation so Chrome can supply the limit directly.\n\nI think what makes the most sense to me is having multiple workarounds (disabled by default) in ANGLE and let chrome choose which one to use. It lets us contain all the validation logic in ANGLE and still let Chrome make the decision.",
+      "parentUuid": "242f23c5_7e40ee63",
+      "revId": "172e3411a8b91ba476ffc2aac00f450df3b2475d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
