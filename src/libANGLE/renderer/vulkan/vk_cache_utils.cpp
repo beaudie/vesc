@@ -2256,6 +2256,7 @@ angle::Result GraphicsPipelineDesc::initializePipeline(
     {
         dynamicStateList.push_back(VK_DYNAMIC_STATE_CULL_MODE_EXT);
         dynamicStateList.push_back(VK_DYNAMIC_STATE_FRONT_FACE_EXT);
+        dynamicStateList.push_back(VK_DYNAMIC_STATE_PRIMITIVE_TOPOLOGY_EXT);
         if (vertexAttribCount > 0)
         {
             dynamicStateList.push_back(VK_DYNAMIC_STATE_VERTEX_INPUT_BINDING_STRIDE);

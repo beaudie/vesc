@@ -134,6 +134,8 @@ const char *GetCommandString(CommandID id)
             return "SetFrontFace";
         case CommandID::SetLineWidth:
             return "SetLineWidth";
+        case CommandID::SetPrimitiveTopology:
+            return "SetPrimitiveTopology";
         case CommandID::SetScissor:
             return "SetScissor";
         case CommandID::SetStencilCompareMask:
@@ -645,6 +647,13 @@ void SecondaryCommandBuffer::executeCommands(PrimaryCommandBuffer *primary)
                     const SetLineWidthParams *params =
                         getParamPtr<SetLineWidthParams>(currentCommand);
                     vkCmdSetLineWidth(cmdBuffer, params->lineWidth);
+                    break;
+                }
+                case CommandID::SetPrimitiveTopology:
+                {
+                    const SetPrimitiveTopologyParams *params =
+                        getParamPtr<SetPrimitiveTopologyParams>(currentCommand);
+                    vkCmdSetPrimitiveTopologyEXT(cmdBuffer, params->primitiveTopology);
                     break;
                 }
                 case CommandID::SetScissor:
