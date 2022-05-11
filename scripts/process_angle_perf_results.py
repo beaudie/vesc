@@ -725,4 +725,5 @@ def main():
 
 
 if __name__ == '__main__':
+    print('qwe six version: %s' % six.__version__)
     sys.exit(main())
