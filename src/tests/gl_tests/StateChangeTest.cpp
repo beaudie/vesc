@@ -8873,6 +8873,154 @@ void main()
 
     ASSERT_GL_NO_ERROR();
 }
+
+// Tests state change for vertex attribute stride
+TEST_P(StateChangeTestES3, VertexStride)
+{
+    constexpr char kVS[] =
+        R"(#version 300 es
+precision mediump float;
+in vec4 position;
+layout(location = 1) in vec4 test;
+layout(location = 5) in vec4 expected;
+out vec4 result;
+void main(void)
+{
+    gl_Position = position;
+    if (any(equal(test, vec4(0))) || any(equal(expected, vec4(0))))
+    {
+        result = vec4(0);
+    }
+    else
+    {
+        vec4 threshold = max(abs(expected) * 0.01, 1.0 / 64.0);
+        result = vec4(lessThanEqual(abs(test - expected), threshold));
+    }
+})";
+
+    constexpr char kFS[] =
+        R"(#version 300 es
+precision mediump float;
+in vec4 result;
+out vec4 colorOut;
+void main()
+{
+    colorOut = vec4(greaterThanEqual(result, vec4(0.999)));
+})";
+
+    ANGLE_GL_PROGRAM(program, kVS, kFS);
+    glUseProgram(program);
+
+    // Every draw call consists of 4 vertices.  The vertex attributes are laid out as follows:
+    //
+    // Position: No gaps
+    // test: 4 unorm vertices with stride 20, simultaneously 4 vertices with stride 16
+    // expected: 4 float vertices with stride 80, simultaneously 4 vertices with stride 48
+
+    const std::array<GLubyte, 7 * 4> kData = {{1,   2,   3,   4,   5,   6,   7,  8,  125, 126,
+                                               127, 128, 129, 250, 251, 252, 78, 79, 80,  81,
+                                               155, 156, 157, 158, 20,  21,  22, 23}};
+
+    constexpr size_t kTestStride1     = 20;
+    constexpr size_t kTestStride2     = 16;
+    constexpr size_t kExpectedStride1 = 20;
+    constexpr size_t kExpectedStride2 = 12;
+
+    std::array<GLubyte, kTestStride1 * 3 + 4> testInitData         = {};
+    std::array<GLfloat, kExpectedStride1 * 3 + 4> expectedInitData = {};
+
+    for (uint32_t vertex = 0; vertex < 7; ++vertex)
+    {
+        size_t testOffset     = vertex * kTestStride1;
+        size_t expectedOffset = vertex * kExpectedStride1;
+        if (vertex >= 4)
+        {
+            testOffset     = (vertex - 3) * kTestStride2;
+            expectedOffset = (vertex - 3) * kExpectedStride2;
+        }
+
+        for (uint32_t channel = 0; channel < 4; ++channel)
+        {
+            // The strides are chosen such that the two streams don't collide
+            ASSERT_EQ(testInitData[testOffset + channel], 0);
+            ASSERT_EQ(expectedInitData[expectedOffset + channel], 0);
+
+            GLubyte data                               = kData[vertex * 4 + channel];
+            testInitData[testOffset + channel]         = data;
+            expectedInitData[expectedOffset + channel] = data;
+        }
+
+        // For the first 4 vertices, expect perfect match (i.e. get white).  For the last 3
+        // vertices, expect the green channel test to fail (i.e. get magenta).
+        if (vertex >= 4)
+        {
+            expectedInitData[expectedOffset + 1] += 2;
+        }
+    }
+
+    std::array<GLfloat, 3 * 4> positionData = {
+        -1, -1, 0, 1, -1, 0, -1, 1, 0, 1, 1, 0,
+    };
+
+    GLBuffer posBuffer;
+    glBindBuffer(GL_ARRAY_BUFFER, posBuffer);
+    glBufferData(GL_ARRAY_BUFFER, sizeof(positionData), positionData.data(), GL_STATIC_DRAW);
+
+    GLBuffer testBuffer;
+    glBindBuffer(GL_ARRAY_BUFFER, testBuffer);
+    glBufferData(GL_ARRAY_BUFFER, sizeof(testInitData), testInitData.data(), GL_STATIC_DRAW);
+
+    GLBuffer expectedBuffer;
+    glBindBuffer(GL_ARRAY_BUFFER, expectedBuffer);
+    glBufferData(GL_ARRAY_BUFFER, sizeof(expectedInitData), expectedInitData.data(),
+                 GL_STATIC_DRAW);
+
+    GLint posAttrib = glGetAttribLocation(program, "position");
+    ASSERT_EQ(0, posAttrib);
+    GLint testAttrib = glGetAttribLocation(program, "test");
+    ASSERT_EQ(1, testAttrib);
+    GLint expectedAttrib = glGetAttribLocation(program, "expected");
+    ASSERT_EQ(5, expectedAttrib);
+
+    const int w = getWindowWidth();
+    const int h = getWindowHeight();
+
+    glClearColor(0, 0, 0, 1);
+    glClear(GL_COLOR_BUFFER_BIT);
+
+    glEnableVertexAttribArray(posAttrib);
+    glEnableVertexAttribArray(testAttrib);
+    glEnableVertexAttribArray(expectedAttrib);
+
+    glBindBuffer(GL_ARRAY_BUFFER, posBuffer);
+    glVertexAttribPointer(posAttrib, 3, GL_FLOAT, GL_FALSE, 0, nullptr);
+    glBindBuffer(GL_ARRAY_BUFFER, testBuffer);
+    glVertexAttribPointer(testAttrib, 4, GL_UNSIGNED_BYTE, GL_FALSE, kTestStride1 * sizeof(GLubyte),
+                          nullptr);
+    glBindBuffer(GL_ARRAY_BUFFER, expectedBuffer);
+    glVertexAttribPointer(expectedAttrib, 4, GL_FLOAT, GL_FALSE, kExpectedStride1 * sizeof(GLfloat),
+                          nullptr);
+
+    glEnable(GL_SCISSOR_TEST);
+    glScissor(0, 0, w / 2, h);
+    glDrawArrays(GL_TRIANGLE_STRIP, 0, 4);
+
+    glBindBuffer(GL_ARRAY_BUFFER, testBuffer);
+    glVertexAttribPointer(testAttrib, 4, GL_UNSIGNED_BYTE, GL_FALSE, kTestStride2 * sizeof(GLubyte),
+                          nullptr);
+    glBindBuffer(GL_ARRAY_BUFFER, expectedBuffer);
+    glVertexAttribPointer(expectedAttrib, 4, GL_FLOAT, GL_FALSE, kExpectedStride2 * sizeof(GLfloat),
+                          nullptr);
+
+    glScissor(w / 2, 0, w / 2, h);
+    glDrawArrays(GL_TRIANGLE_STRIP, 0, 4);
+
+    // Verify results
+    EXPECT_PIXEL_RECT_EQ(0, 0, w / 2, h, GLColor::white);
+    EXPECT_PIXEL_RECT_EQ(w / 2, 0, w / 2, h, GLColor::magenta);
+
+    ASSERT_GL_NO_ERROR();
+}
 }  // anonymous namespace
 
 ANGLE_INSTANTIATE_TEST_ES2(StateChangeTest);
