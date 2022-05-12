@@ -69,6 +69,24 @@
       "parentUuid": "242f23c5_7e40ee63",
       "revId": "172e3411a8b91ba476ffc2aac00f450df3b2475d",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "d78e6146_65311ecc",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1357502
+      },
+      "writtenOn": "2022-05-12T15:21:54Z",
+      "side": 1,
+      "message": "I think we still need update caps in decoder for canvas: https://source.chromium.org/chromium/chromium/src/+/main:third_party/blink/renderer/platform/graphics/canvas_resource_provider.cc;drc\u003d1d3aebb90c0e8a3b791fa309633de1308d0cc48f;l\u003d957\n\nBut besides that limiting only to webgl contexts sounds good to me.\n\nHaving multiple workaronds seems like a weird approach and adding limit to context seems like an overkill if we still will use it only for webgl contexts eventually.",
+      "parentUuid": "cc2ee760_e768c616",
+      "revId": "172e3411a8b91ba476ffc2aac00f450df3b2475d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
