@@ -300,6 +300,8 @@ class TextureVk : public TextureImpl, public angle::ObserverInterface
         return isDirty;
     }
 
+    void onLabelUpdate(const gl::Context *context) override;
+
   private:
     // Transform an image index from the frontend into one that can be used on the backing
     // ImageHelper, taking into account mipmap or cube face offsets

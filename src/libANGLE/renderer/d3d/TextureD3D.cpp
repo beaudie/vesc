@@ -697,7 +697,7 @@ angle::Result TextureD3D::setBaseLevel(const gl::Context *context, GLuint baseLe
     return angle::Result::Continue;
 }
 
-void TextureD3D::onLabelUpdate()
+void TextureD3D::onLabelUpdate(const gl::Context *context)
 {
     if (mTexStorage)
     {
