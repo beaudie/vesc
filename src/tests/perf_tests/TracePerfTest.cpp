@@ -1067,6 +1067,11 @@ TracePerfTest::TracePerfTest(const TracePerfParams &params)
         {
             skipTest("TODO: http://anglebug.com/6240 Internal errors on Windows/Intel and NVIDIA");
         }
+
+        if (traceNameIs("pubg_mobile_skydive") && IsNVIDIA() && mParams.isVulkan())
+        {
+            skipTest("TODO: http://anglebug.com/7283 Crashing in UpdateClientBufferData");
+        }
     }
 
     if (traceNameIs("sakura_school_simulator"))
