@@ -9,6 +9,7 @@
 
 #include "common/debug.h"
 #include "common/system_utils.h"
+#include "traces_export.h"
 #include "util/EGLPlatformParameters.h"
 #include "util/EGLWindow.h"
 #include "util/OSWindow.h"
@@ -28,6 +29,65 @@
 
 constexpr char kResultTag[] = "*RESULT";
 constexpr char kTracePath[] = ANGLE_CAPTURE_REPLAY_TEST_NAMES_PATH;
+
+static EGLWindow *gEGLWindow = nullptr;
+
+extern "C" {
+static EGLImage KHRONOS_APIENTRY EGLCreateImage(EGLDisplay display,
+                                                EGLContext context,
+                                                EGLenum target,
+                                                EGLClientBuffer buffer,
+                                                const EGLAttrib *attrib_list)
+{
+
+    GLWindowContext ctx = reinterpret_cast<GLWindowContext>(context);
+    return gEGLWindow->createImage(ctx, target, buffer, attrib_list);
+}
+
+static EGLImage KHRONOS_APIENTRY EGLCreateImageKHR(EGLDisplay display,
+                                                   EGLContext context,
+                                                   EGLenum target,
+                                                   EGLClientBuffer buffer,
+                                                   const EGLint *attrib_list)
+{
+
+    GLWindowContext ctx = reinterpret_cast<GLWindowContext>(context);
+    return gEGLWindow->createImageKHR(ctx, target, buffer, attrib_list);
+}
+
+static EGLBoolean KHRONOS_APIENTRY EGLDestroyImage(EGLDisplay display, EGLImage image)
+{
+    return gEGLWindow->destroyImage(image);
+}
+
+static EGLBoolean KHRONOS_APIENTRY EGLDestroyImageKHR(EGLDisplay display, EGLImage image)
+{
+    return gEGLWindow->destroyImageKHR(image);
+}
+}
+
+angle::GenericProc KHRONOS_APIENTRY TraceLoadProc(const char *procName)
+{
+    // EGL
+    if (strcmp(procName, "eglCreateImage") == 0)
+    {
+        return reinterpret_cast<angle::GenericProc>(EGLCreateImage);
+    }
+    if (strcmp(procName, "eglCreateImageKHR") == 0)
+    {
+        return reinterpret_cast<angle::GenericProc>(EGLCreateImageKHR);
+    }
+    if (strcmp(procName, "eglDestroyImage") == 0)
+    {
+        return reinterpret_cast<angle::GenericProc>(EGLDestroyImage);
+    }
+    if (strcmp(procName, "eglDestroyImageKHR") == 0)
+    {
+        return reinterpret_cast<angle::GenericProc>(EGLDestroyImageKHR);
+    }
+    assert(gEGLWindow);
+    return gEGLWindow->getProcAddress(procName);
+}
 
 class CaptureReplayTests
 {
@@ -96,6 +156,11 @@ class CaptureReplayTests
             mOSWindow->destroy();
             return false;
         }
+
+        gEGLWindow = mEGLWindow;
+        trace_angle::LoadEGL(TraceLoadProc);
+        trace_angle::LoadGLES(TraceLoadProc);
+
         // Disable vsync
         if (!mEGLWindow->setSwapInterval(0))
         {
