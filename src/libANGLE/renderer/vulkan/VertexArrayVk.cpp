@@ -322,9 +322,9 @@ angle::Result VertexArrayVk::convertIndexBufferCPU(ContextVk *contextVk,
             if (memcmp(sourcePointer, ptr, amount) == 0)
             {
                 // Found a matching cached buffer, use the cached internal index buffer.
-                *bindingDirty = mCurrentElementArrayBuffer == buffer.get()
-                                    ? BufferBindingDirty::No
-                                    : BufferBindingDirty::Yes;
+                *bindingDirty              = mCurrentElementArrayBuffer == buffer.get()
+                                                 ? BufferBindingDirty::No
+                                                 : BufferBindingDirty::Yes;
                 mCurrentElementArrayBuffer = buffer.get();
                 return angle::Result::Continue;
             }
@@ -590,15 +590,16 @@ angle::Result VertexArrayVk::syncState(const gl::Context *context,
 #undef ANGLE_VERTEX_DIRTY_BUFFER_DATA_FUNC
 
 ANGLE_INLINE angle::Result VertexArrayVk::setDefaultPackedInput(ContextVk *contextVk,
-                                                                size_t attribIndex)
+                                                                size_t attribIndex,
+                                                                angle::FormatID *formatOut)
 {
     const gl::State &glState = contextVk->getState();
     const gl::VertexAttribCurrentValueData &defaultValue =
         glState.getVertexAttribCurrentValues()[attribIndex];
 
-    angle::FormatID format = GetCurrentValueFormatID(defaultValue.Type);
+    *formatOut = GetCurrentValueFormatID(defaultValue.Type);
 
-    return contextVk->onVertexAttributeChange(attribIndex, 0, 0, format, false, 0, nullptr);
+    return contextVk->onVertexAttributeChange(attribIndex, 0, 0, *formatOut, false, 0, nullptr);
 }
 
 angle::Result VertexArrayVk::updateActiveAttribInfo(ContextVk *contextVk)
@@ -611,11 +612,14 @@ angle::Result VertexArrayVk::updateActiveAttribInfo(ContextVk *contextVk)
     {
         const gl::VertexAttribute &attrib = attribs[attribIndex];
         const gl::VertexBinding &binding  = bindings[attribs[attribIndex].bindingIndex];
+        const angle::FormatID format      = attrib.format->id;
 
         ANGLE_TRY(contextVk->onVertexAttributeChange(
-            attribIndex, mCurrentArrayBufferStrides[attribIndex], binding.getDivisor(),
-            attrib.format->id, mCurrentArrayBufferCompressed.test(attribIndex),
+            attribIndex, mCurrentArrayBufferStrides[attribIndex], binding.getDivisor(), format,
+            mCurrentArrayBufferCompressed.test(attribIndex),
             mCurrentArrayBufferRelativeOffsets[attribIndex], mCurrentArrayBuffers[attribIndex]));
+
+        mCurrentArrayBufferFormats[attribIndex] = format;
     }
 
     return angle::Result::Continue;
@@ -652,7 +656,7 @@ angle::Result VertexArrayVk::syncDirtyAttrib(ContextVk *contextVk,
             BufferVk *bufferVk                  = vk::GetImpl(bufferGL);
             const angle::Format &intendedFormat = vertexFormat.getIntendedFormat();
             bool bindingIsAligned               = BindingIsAligned(
-                binding, intendedFormat, intendedFormat.channelCount, attrib.relativeOffset);
+                              binding, intendedFormat, intendedFormat.channelCount, attrib.relativeOffset);
 
             if (renderer->getFeatures().compressVertexData.enabled &&
                 gl::IsStaticBufferUsage(bufferGL->getUsage()) &&
@@ -769,12 +773,15 @@ angle::Result VertexArrayVk::syncDirtyAttrib(ContextVk *contextVk,
         }
         else
         {
+            const angle::FormatID format = attrib.format->id;
             ANGLE_TRY(contextVk->onVertexAttributeChange(
-                attribIndex, stride, binding.getDivisor(), attrib.format->id, compressed,
+                attribIndex, stride, binding.getDivisor(), format, compressed,
                 mCurrentArrayBufferRelativeOffsets[attribIndex],
                 mCurrentArrayBuffers[attribIndex]));
+
             // Cache the stride of the attribute
             mCurrentArrayBufferStrides[attribIndex]    = stride;
+            mCurrentArrayBufferFormats[attribIndex]    = format;
             mCurrentArrayBufferCompressed[attribIndex] = compressed;
         }
     }
@@ -791,7 +798,8 @@ angle::Result VertexArrayVk::syncDirtyAttrib(ContextVk *contextVk,
         mCurrentArrayBufferCompressed[attribIndex]      = false;
         mCurrentArrayBufferRelativeOffsets[attribIndex] = 0;
 
-        ANGLE_TRY(setDefaultPackedInput(contextVk, attribIndex));
+        ANGLE_TRY(setDefaultPackedInput(contextVk, attribIndex,
+                                        &mCurrentArrayBufferFormats[attribIndex]));
     }
 
     return angle::Result::Continue;
@@ -1023,7 +1031,8 @@ angle::Result VertexArrayVk::updateDefaultAttrib(ContextVk *contextVk, size_t at
         mCurrentArrayBufferOffsets[attribIndex] = bufferOffset;
         mCurrentArrayBuffers[attribIndex]       = bufferHelper;
 
-        ANGLE_TRY(setDefaultPackedInput(contextVk, attribIndex));
+        ANGLE_TRY(setDefaultPackedInput(contextVk, attribIndex,
+                                        &mCurrentArrayBufferFormats[attribIndex]));
     }
 
     return angle::Result::Continue;
