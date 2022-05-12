@@ -6,6 +6,9 @@
 
 // Texture.cpp: Implements the gl::Texture class. [OpenGL ES 2.0.24] section 3.7 page 63.
 
+// TODO: Remove the following line with follow-up labeledObject changes (b/229105865)
+#include "libANGLE/Context.inl.h"
+
 #include "libANGLE/Texture.h"
 
 #include "common/mathutil.h"
@@ -813,10 +816,10 @@ void Texture::setLabel(const Context *context, const std::string &label)
 {
     mState.mLabel = label;
 
-    if (mTexture)
-    {
-        mTexture->onLabelUpdate();
-    }
+    // if (mTexture)
+    //{
+    //     ANGLE_CONTEXT_TRY(mTexture->onLabelUpdate(context));
+    // }
 }
 
 const std::string &Texture::getLabel() const
