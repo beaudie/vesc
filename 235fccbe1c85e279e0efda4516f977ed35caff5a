@@ -52,6 +52,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "b885f2c6_78ca89a5",
+        "filename": "src/libANGLE/renderer/d3d/TextureD3D.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 745,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2022-05-12T17:35:55Z",
+      "side": 1,
+      "message": "Yup, lots of tests broke when I was modifying these paths :)",
+      "parentUuid": "39f14391_8d49dab7",
+      "revId": "235fccbe1c85e279e0efda4516f977ed35caff5a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "5a1b9457_cf74fdbf",
@@ -65,6 +83,24 @@
       "writtenOn": "2022-05-09T21:14:23Z",
       "side": 1,
       "message": "typo: We\u0027re -\u003e We",
+      "revId": "235fccbe1c85e279e0efda4516f977ed35caff5a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "fb7297d7_65fd5bb7",
+        "filename": "src/libANGLE/renderer/d3d/TextureD3D.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 1444,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2022-05-12T17:35:55Z",
+      "side": 1,
+      "message": "Derp. Fixed.",
+      "parentUuid": "5a1b9457_cf74fdbf",
       "revId": "235fccbe1c85e279e0efda4516f977ed35caff5a",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
@@ -86,6 +122,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "4c15dda8_17fe0665",
+        "filename": "src/libANGLE/renderer/d3d/TextureD3D.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 1680,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2022-05-12T17:35:55Z",
+      "side": 1,
+      "message": "You\u0027re right. It\u0027s correct to move it below. I fixed it. We have lots of test coverage of the edge cases of GL texture mutability but they don\u0027t all have cube/3d/2darray versions and it was missed due to that.",
+      "parentUuid": "d7f65692_6132a591",
+      "revId": "235fccbe1c85e279e0efda4516f977ed35caff5a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "5b144783_908734d3",
@@ -99,6 +153,24 @@
       "writtenOn": "2022-05-09T21:14:23Z",
       "side": 1,
       "message": "These few lines were moved below the \"if (mTexStorage)\" block in TextureD3D_2D. Is there a specific reason for the divergence in behavior?",
+      "revId": "235fccbe1c85e279e0efda4516f977ed35caff5a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "21e2b6b3_8d9fed5b",
+        "filename": "src/libANGLE/renderer/d3d/TextureD3D.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 2393,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2022-05-12T17:35:55Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "5b144783_908734d3",
       "revId": "235fccbe1c85e279e0efda4516f977ed35caff5a",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
@@ -120,6 +192,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "c0a0f9d1_d9ad3d20",
+        "filename": "src/libANGLE/renderer/d3d/TextureD3D.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 3078,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2022-05-12T17:35:55Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "892ab37a_d915b28e",
+      "revId": "235fccbe1c85e279e0efda4516f977ed35caff5a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "943d175c_8f0e9a96",
@@ -133,6 +223,24 @@
       "writtenOn": "2022-05-09T21:14:23Z",
       "side": 1,
       "message": "Similar question about these redefinition and mDirtyImages updates, which changed location in the 2D texture subclass.",
+      "revId": "235fccbe1c85e279e0efda4516f977ed35caff5a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "44dc5b44_3111ce5f",
+        "filename": "src/libANGLE/renderer/d3d/TextureD3D.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 3873,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2022-05-12T17:35:55Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "943d175c_8f0e9a96",
       "revId": "235fccbe1c85e279e0efda4516f977ed35caff5a",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
