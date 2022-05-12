@@ -307,6 +307,8 @@ class TextureVk : public TextureImpl, public angle::ObserverInterface
     bool isMutableTextureConsistentlySpecifiedForFlush();
     bool isMipImageDescDefined(gl::TextureTarget textureTarget, size_t level);
 
+    void onLabelUpdate(const gl::Context *context) override;
+
   private:
     // Transform an image index from the frontend into one that can be used on the backing
     // ImageHelper, taking into account mipmap or cube face offsets
@@ -616,6 +618,8 @@ class TextureVk : public TextureImpl, public angle::ObserverInterface
     // Cached subresource indexes.
     vk::ImageOrBufferViewSubresourceSerial mCachedImageViewSubresourceSerialSRGBDecode;
     vk::ImageOrBufferViewSubresourceSerial mCachedImageViewSubresourceSerialSkipDecode;
+
+    const std::string mTextureLabel;
 };
 
 }  // namespace rx

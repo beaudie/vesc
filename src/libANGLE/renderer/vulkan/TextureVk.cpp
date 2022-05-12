@@ -2757,6 +2757,15 @@ angle::Result TextureVk::respecifyImageStorageIfNecessary(ContextVk *contextVk, 
     return angle::Result::Continue;
 }
 
+void TextureVk::onLabelUpdate(const gl::Context *context)
+{
+    ContextVk *contextVk = vk::GetImpl(context);
+    RendererVk *renderer = contextVk->getRenderer();
+
+    vk::SetDebugUtilsObjectName(
+        renderer, reinterpret_cast<uint64_t>(getImage().getImage().getHandle()), mState.getLabel());
+}
+
 angle::Result TextureVk::syncState(const gl::Context *context,
                                    const gl::Texture::DirtyBits &dirtyBits,
                                    gl::Command source)

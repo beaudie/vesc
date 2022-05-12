@@ -814,7 +814,7 @@ void Texture::setLabel(const Context *context, const std::string &label)
 
     if (mTexture)
     {
-        mTexture->onLabelUpdate();
+        mTexture->onLabelUpdate(context);
     }
 }
 
