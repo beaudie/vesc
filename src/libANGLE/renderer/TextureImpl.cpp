@@ -192,4 +192,10 @@ GLint TextureImpl::getRequiredExternalTextureImageUnits(const gl::Context *conte
     return 0;
 }
 
+angle::Result TextureImpl::onLabelUpdate(const gl::Context *context)
+{
+    UNREACHABLE();
+    return angle::Result::Continue;
+}
+
 }  // namespace rx
