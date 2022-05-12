@@ -16,6 +16,24 @@
       "message": "shabi, a bit unrelated but i do not see checks for `VK_EXT_extended_dynamic_state` in many of your dynamic state changes (like here -\u003e https://chromium-review.googlesource.com/c/angle/angle/+/3638989).\n\nI might have missed some context but it looked like we are changing many states into dynamic states without checking for extension or feature bits, what am i missing?",
       "revId": "fa8dfaa000c4dcfc071c237defe30840edf985f9",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "bc156f87_c8330946",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-05-12T05:05:40Z",
+      "side": 1,
+      "message": "Up to this change, all the dynamic state that\u0027s implemented is core in Vulkan 1.0. The next change in this chain (cull mode) starts with `VK_EXT_extended_dynamic_state` and the check is added there",
+      "parentUuid": "3c2e10d8_7fd00b3c",
+      "revId": "fa8dfaa000c4dcfc071c237defe30840edf985f9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
