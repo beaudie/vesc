@@ -89,6 +89,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "edc4622c_960d574a",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 42
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1524687
+      },
+      "writtenOn": "2022-05-12T03:00:18Z",
+      "side": 1,
+      "message": "Ack. I\u0027ll update both of these. And for VulkanPerformanceCounterTest_ES31/DrawDispatchImageReadDrawWithoutEndRP, add extra comment before the last part of it.",
+      "parentUuid": "9b3f5543_68cc00dd",
+      "revId": "a4c8abae352adb056c1e85255ad87b3d3a8dbb61",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "1333bfe5_670a6421",
@@ -138,6 +156,24 @@
       "side": 1,
       "message": "If it\u0027s the same failure, you can reuse the same bug id. Otherwise, yeah please file a new bug. You don\u0027t need to spend time figuring things out though, just a bug that says `D3D: Test XYZ fails` is sufficient.",
       "parentUuid": "38860987_d432f902",
+      "revId": "a4c8abae352adb056c1e85255ad87b3d3a8dbb61",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "66a1b4f9_1ffab063",
+        "filename": "src/tests/gl_tests/ComputeShaderTest.cpp",
+        "patchSetId": 42
+      },
+      "lineNbr": 4871,
+      "author": {
+        "id": 1524687
+      },
+      "writtenOn": "2022-05-12T03:00:18Z",
+      "side": 1,
+      "message": "Get it. This test seems shared the same failure with Issue4404, both caused by no use the image in Computer shader. I\u0027ll reuse the bug id.",
+      "parentUuid": "0963f405_4fca6626",
       "revId": "a4c8abae352adb056c1e85255ad87b3d3a8dbb61",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
