@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "b9318328_25835404",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1115588
+      },
+      "writtenOn": "2022-05-12T19:38:49Z",
+      "side": 1,
+      "message": "There\u0027s also an alternate fix here\n\nhttps://chromium-review.googlesource.com/c/angle/angle/+/3645991",
+      "revId": "69e1172cadae2eb0b0972b72179511b87f3d93c3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
