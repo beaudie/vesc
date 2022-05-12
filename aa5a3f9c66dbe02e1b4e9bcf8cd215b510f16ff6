@@ -70,6 +70,24 @@
       "parentUuid": "a94edd4b_100b22d6",
       "revId": "aa5a3f9c66dbe02e1b4e9bcf8cd215b510f16ff6",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "8229e9f4_4ca53b5f",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 13
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1531247
+      },
+      "writtenOn": "2022-05-12T16:57:39Z",
+      "side": 1,
+      "message": "We have httplib2 in here:\nhttps://source.chromium.org/chromium/chromium/src/+/main:third_party/angle/.vpython;l\u003d166\n\nCan this just be copy-pasted into .vpython3 or something?",
+      "parentUuid": "c82bb1f0_5b4d6f9b",
+      "revId": "aa5a3f9c66dbe02e1b4e9bcf8cd215b510f16ff6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
