@@ -105,6 +105,24 @@
       "parentUuid": "d78e6146_65311ecc",
       "revId": "172e3411a8b91ba476ffc2aac00f450df3b2475d",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "54793486_0d8ca5fb",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1357502
+      },
+      "writtenOn": "2022-05-12T16:26:33Z",
+      "side": 1,
+      "message": "Applying workaround globally affects the display compositor which we\u0027re trying to avoid. \n\nNote, for canvas I don\u0027t propose to affect any GL commands, only gpu::Capabilities that the decoder sends to the client. All gl commands are still passed through to angle, so the canvas won\u0027t have an extra texture limit from gl perspective, but won\u0027t allow \u003ccanvas\u003e tags larger than 4096.",
+      "parentUuid": "ecbe1740_18930f13",
+      "revId": "172e3411a8b91ba476ffc2aac00f450df3b2475d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
