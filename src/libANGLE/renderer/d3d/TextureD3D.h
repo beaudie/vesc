@@ -119,7 +119,7 @@ class TextureD3D : public TextureImpl, public angle::ObserverInterface
 
     GLsizei getRenderToTextureSamples();
 
-    void onLabelUpdate() override;
+    angle::Result onLabelUpdate() override;
 
     // ObserverInterface implementation.
     void onSubjectStateChange(angle::SubjectIndex index, angle::SubjectMessage message) override;
