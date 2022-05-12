@@ -799,6 +799,17 @@ void MakeDebugUtilsLabel(GLenum source, const char *marker, VkDebugUtilsLabelEXT
     kLabelColors[colorIndex].writeData(label->color);
 }
 
+void SetDebugUtilsObjectName(RendererVk *renderer, uint64_t handle, std::string label)
+{
+    VkDebugUtilsObjectNameInfoEXT objectNameInfo = {};
+    objectNameInfo.sType        = VK_STRUCTURE_TYPE_DEBUG_UTILS_OBJECT_NAME_INFO_EXT;
+    objectNameInfo.objectType   = VK_OBJECT_TYPE_IMAGE;
+    objectNameInfo.objectHandle = handle;
+    objectNameInfo.pObjectName  = label.c_str();
+
+    vkSetDebugUtilsObjectNameEXT(renderer->getDevice(), &objectNameInfo);
+}
+
 // ClearValuesArray implementation.
 ClearValuesArray::ClearValuesArray() : mValues{}, mEnabled{} {}
 
@@ -887,6 +898,7 @@ PFN_vkDestroyDebugUtilsMessengerEXT vkDestroyDebugUtilsMessengerEXT = nullptr;
 PFN_vkCmdBeginDebugUtilsLabelEXT vkCmdBeginDebugUtilsLabelEXT       = nullptr;
 PFN_vkCmdEndDebugUtilsLabelEXT vkCmdEndDebugUtilsLabelEXT           = nullptr;
 PFN_vkCmdInsertDebugUtilsLabelEXT vkCmdInsertDebugUtilsLabelEXT     = nullptr;
+PFN_vkSetDebugUtilsObjectNameEXT vkSetDebugUtilsObjectNameEXT       = nullptr;
 
 // VK_EXT_debug_report
 PFN_vkCreateDebugReportCallbackEXT vkCreateDebugReportCallbackEXT   = nullptr;
@@ -984,6 +996,7 @@ void InitDebugUtilsEXTFunctions(VkInstance instance)
     GET_INSTANCE_FUNC(vkCmdBeginDebugUtilsLabelEXT);
     GET_INSTANCE_FUNC(vkCmdEndDebugUtilsLabelEXT);
     GET_INSTANCE_FUNC(vkCmdInsertDebugUtilsLabelEXT);
+    GET_INSTANCE_FUNC(vkSetDebugUtilsObjectNameEXT);
 }
 
 void InitDebugReportEXTFunctions(VkInstance instance)
