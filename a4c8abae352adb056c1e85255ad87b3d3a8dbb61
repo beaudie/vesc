@@ -53,6 +53,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "cd84c92a_855623f9",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 42
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1524687
+      },
+      "writtenOn": "2022-05-12T01:03:45Z",
+      "side": 1,
+      "message": "Sorry for forget comment these modified tests.\n1, remove *VulkanPerformanceCounterTest_ES31/TextureSampleByDrawDispatchDraw*:\nthis case will be update at new CL by VVL error with bug: http://anglebug.com/7031\n2, remove *ComputeShaderTest/DrawDispatchImageReadDraw*:\nit is the same with *VulkanPerformanceCounterTest_ES31/DrawDispatchImageReadDrawWithEndRP*, for the latter it also can verify the renderpass counter. so keep the latter and remove the former.\n3, modify *VulkanPerformanceCounterTest_ES31/DrawDispatchImageReadDrawWithoutEndRP*:\nThe origin api sequence for this test is FS sample + CS image load + FS something else after glReadPixels. From the test, the \"FS sample + CS image load\" is one renderpass which is as expected. But when handling the last \"FS something\", a new renderpass starts caused by the *DIRTY_BIT_RENDER_PASS* setting by previous. Seems it is affect by other factors. But the result of \"FS sample + CS image load\" in this test already verify this patch\u0027s motivation.",
+      "parentUuid": "9a93c2ad_3bdb5094",
+      "revId": "a4c8abae352adb056c1e85255ad87b3d3a8dbb61",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "1333bfe5_670a6421",
@@ -66,6 +84,24 @@
       "writtenOn": "2022-05-11T13:36:49Z",
       "side": 1,
       "message": "Please use angle_end2end_tests_expectations.txt for new suppressions.",
+      "revId": "a4c8abae352adb056c1e85255ad87b3d3a8dbb61",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "38860987_d432f902",
+        "filename": "src/tests/gl_tests/ComputeShaderTest.cpp",
+        "patchSetId": 42
+      },
+      "lineNbr": 4871,
+      "author": {
+        "id": 1524687
+      },
+      "writtenOn": "2022-05-12T01:03:45Z",
+      "side": 1,
+      "message": "Ok. Seems the control format in angle_end2end_tests_expectations needs a BUGID, should create a new bug for this test or just append this test to the exist one: http://anglebug.com/4404?",
+      "parentUuid": "1333bfe5_670a6421",
       "revId": "a4c8abae352adb056c1e85255ad87b3d3a8dbb61",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
