@@ -85,16 +85,9 @@ class TIntermRebuild : angle::NonCopyable
   private:
     struct NodeStackGuard;
 
-    template <typename T>
-    struct ConsList
-    {
-        T value;
-        ConsList<T> *tail;
-    };
-
     class BaseResult
     {
-        BaseResult(const BaseResult &) = delete;
+        BaseResult(const BaseResult &)            = delete;
         BaseResult &operator=(const BaseResult &) = delete;
 
       public:
@@ -318,7 +311,7 @@ class TIntermRebuild : angle::NonCopyable
     GetNodeType getNodeType;
 
   private:
-    ConsList<TIntermNode *> mNodeStack{nullptr, nullptr};
+    std::vector<TIntermNode *> mNodeStack;
     bool mPreVisit;
     bool mPostVisit;
 };
