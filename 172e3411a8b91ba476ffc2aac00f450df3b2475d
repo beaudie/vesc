@@ -87,6 +87,24 @@
       "parentUuid": "cc2ee760_e768c616",
       "revId": "172e3411a8b91ba476ffc2aac00f450df3b2475d",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "ecbe1740_18930f13",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2022-05-12T16:19:44Z",
+      "side": 1,
+      "message": "Thanks for pointing out the canavas limit. Makes sense that we should apply this globally in ANGLE instead of WebGL-only.\n\nThe multiple workarounds is an artifact of ANGLE\u0027s workarounds being bools instead of integers, we need more than one to represent multiple caps. If the alternative to this is doing the workarounds in the command decoder level, I would prefer to just add a new limit_max_texture_size_to_8192 to handle these devices.",
+      "parentUuid": "d78e6146_65311ecc",
+      "revId": "172e3411a8b91ba476ffc2aac00f450df3b2475d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
