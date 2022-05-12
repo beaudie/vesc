@@ -71,6 +71,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "9b3f5543_68cc00dd",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 42
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-05-12T02:05:08Z",
+      "side": 1,
+      "message": "Thanks for the explanation. Could you please put `ComputeShaderTest/DrawDispatchImageReadDraw` back? I realize its redundant with the perf counter test, but instead it runs on other backends as well (while the perf tests only run on Vulkan).\n\nFor `VulkanPerformanceCounterTest_ES31/DrawDispatchImageReadDrawWithoutEndRP`, IIRC, we realized it\u0027s a limitation of the current design that the render pass breaks, so it\u0027s good to have the test there, with a comment that it needs optimization (otherwise it can be easily forgotten), so would you please add that last bit of it back?",
+      "parentUuid": "cd84c92a_855623f9",
+      "revId": "a4c8abae352adb056c1e85255ad87b3d3a8dbb61",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "1333bfe5_670a6421",
@@ -102,6 +120,24 @@
       "side": 1,
       "message": "Ok. Seems the control format in angle_end2end_tests_expectations needs a BUGID, should create a new bug for this test or just append this test to the exist one: http://anglebug.com/4404?",
       "parentUuid": "1333bfe5_670a6421",
+      "revId": "a4c8abae352adb056c1e85255ad87b3d3a8dbb61",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "0963f405_4fca6626",
+        "filename": "src/tests/gl_tests/ComputeShaderTest.cpp",
+        "patchSetId": 42
+      },
+      "lineNbr": 4871,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-05-12T02:05:08Z",
+      "side": 1,
+      "message": "If it\u0027s the same failure, you can reuse the same bug id. Otherwise, yeah please file a new bug. You don\u0027t need to spend time figuring things out though, just a bug that says `D3D: Test XYZ fails` is sufficient.",
+      "parentUuid": "38860987_d432f902",
       "revId": "a4c8abae352adb056c1e85255ad87b3d3a8dbb61",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
