@@ -8,6 +8,9 @@
 #ifndef ANGLE_TRACES_EXPORT_H_
 #define ANGLE_TRACES_EXPORT_H_
 
+// for KHRONOS_APIENTRY
+#include <KHR/khrplatform.h>
+
 // See util/util_export.h for details on import/export labels.
 #if !defined(ANGLE_TRACE_EXPORT)
 #    if defined(_WIN32)
