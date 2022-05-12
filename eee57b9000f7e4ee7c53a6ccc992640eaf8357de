@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "dbb4815b_2cb997e8",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 46
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1524687
+      },
+      "writtenOn": "2022-05-12T08:05:10Z",
+      "side": 1,
+      "message": "Hi Shahbaz,\nI\u0027ve updated the tests, and unfortunately find *ComputeShaderTest.DrawDispatchImageReadDraw* run failed on linux/intel/opengl and android/pixel4/opengles. I currently just add the skip for this test on angle_end2end_tests_expectations.txt, which also include *FSReadImageThenCSSample* and *CopyTexImageTest.RGBAToRGB*.\nAdditionally, file two new bugs to follow related failure: \nhttp://anglebug.com/7300\nhttp://anglebug.com/7301\nAfter these, the dry run can pass now.\n\n",
+      "revId": "eee57b9000f7e4ee7c53a6ccc992640eaf8357de",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
