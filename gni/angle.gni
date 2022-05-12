@@ -552,7 +552,7 @@ template("angle_trace_fixture") {
     sources = [
       "$angle_root/src/libANGLE/capture/trace_fixture.cpp",
       "$angle_root/src/libANGLE/capture/trace_fixture.h",
-      invoker.gl_header,
+      "$angle_root/src/tests/test_utils/angle_trace_gl.h",
     ]
     public_deps = [ "$angle_root:includes" ]
     if (defined(invoker.public_deps)) {

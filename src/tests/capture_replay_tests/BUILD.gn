@@ -15,7 +15,6 @@ declare_args() {
 }
 
 angle_trace_fixture("angle_capture_replay_tests_fixture") {
-  gl_header = "angle_trace_gl.h"
   public_deps = [
     "$angle_root:libEGL",
     "$angle_root/src/tests:angle_trace_loader",
