@@ -2682,6 +2682,36 @@ angle::Result TextureVk::respecifyImageStorageIfNecessary(ContextVk *contextVk, 
     return angle::Result::Continue;
 }
 
+angle::Result TextureVk::onLabelUpdate(const gl::Context *context)
+{
+    ContextVk *contextVk = vk::GetImpl(context);
+    RendererVk *renderer = contextVk->getRenderer();
+
+    if (!renderer->enableDebugUtils() && !renderer->angleDebuggerMode() && imageValid())
+    {
+        // getImage checks mImagne and validity
+        rx::vk::ImageHelper &rxVkImageHelper = getImage();
+
+        const rx::vk::Image &rxVkImage = rxVkImageHelper.getImage();
+        ASSERT(&rxVkImage == nullptr);
+
+        VkImage imageHandle = rxVkImage.getHandle();
+        ASSERT(imageHandle == nullptr);
+
+        uint64_t intHandle = (uint64_t)imageHandle;
+        ASSERT(intHandle == 0);
+
+        ASSERT(&mState == nullptr);
+        const std::string textureLabel = mState.getLabel();
+        ASSERT(textureLabel.length() == 0);
+
+        // return vk::SetDebugUtilsObjectName(contextVk,
+        //     (uint64_t)(getImage().getImage().getHandle()),
+        //                                mState.getLabel());
+    }
+    return angle::Result::Continue;
+}
+
 angle::Result TextureVk::syncState(const gl::Context *context,
                                    const gl::Texture::DirtyBits &dirtyBits,
                                    gl::Command source)
