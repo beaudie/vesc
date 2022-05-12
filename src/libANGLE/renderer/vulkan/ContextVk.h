@@ -1476,6 +1476,10 @@ ANGLE_INLINE angle::Result ContextVk::onVertexAttributeChange(size_t attribIndex
                                                               const vk::BufferHelper *vertexBuffer)
 {
     invalidateCurrentGraphicsPipeline();
+    if (getFeatures().supportsExtendedDynamicState.enabled)
+    {
+        stride = 0;
+    }
     // Set divisor to 1 for attribs with emulated divisor
     mGraphicsPipelineDesc->updateVertexInput(
         &mGraphicsPipelineTransition, static_cast<uint32_t>(attribIndex), stride,
