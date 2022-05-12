@@ -18,6 +18,7 @@ angle_trace_fixture("angle_capture_replay_tests_fixture") {
   gl_header = "angle_trace_gl.h"
   public_deps = [
     "$angle_root:libEGL",
+    "$angle_root/src/tests:angle_trace_loader",
     "$angle_root/util:angle_util",
   ]
 }
@@ -43,6 +44,7 @@ angle_executable("capture_replay_tests") {
     ":angle_capture_replay_tests_fixture",
     "$angle_root:angle_common",
     "$angle_root:angle_compression",
+    "$angle_root/src/tests:angle_trace_loader",
     "$angle_root/util:angle_frame_capture_test_utils",
   ]
 
