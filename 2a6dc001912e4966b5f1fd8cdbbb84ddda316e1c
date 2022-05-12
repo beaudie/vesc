@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "ce46dd02_622ad102",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1511618
+      },
+      "writtenOn": "2022-05-12T23:11:28Z",
+      "side": 1,
+      "message": "Ian had asked for a design document for this, but by the time I was done reverse-engineering it just worked. I am concerned about adding the renderer to the texturevk object, and some of the data accesses/locations of the helper routines, but please consider this an experimental approach.  AGI captures will show the texture name in the Textures tab as well as when selecting a DescriptorSet View on the pipeline-\u003eFS page.",
+      "revId": "2a6dc001912e4966b5f1fd8cdbbb84ddda316e1c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
