@@ -16,6 +16,24 @@
       "message": "Neat that you found a fix. I\u0027m wondering - what\u0027s causing the six error? Can we switch to Py3?",
       "revId": "aa5a3f9c66dbe02e1b4e9bcf8cd215b510f16ff6",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "79ee658e_818c2660",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 13
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1531247
+      },
+      "writtenOn": "2022-05-12T16:08:36Z",
+      "side": 1,
+      "message": "What do you mean by the six error?\nThe six module loaded when this script is run is of version 1.10. Swarming executes merge scripts as `[sys.executable, script] + args` so we get whatever modules were used by sys.executable.\n\nI\u0027m actually not sure if this is swarming\u0027s fault or caused by some of our scripts. I noticed six 1.10 here:\nhttps://crsrc.org/c/third_party/angle/scripts/generate_stats.py;l\u003d21\nbut not sure if that has anything to do with this.\n\n\nRe:py3: I did try vpython3 but it choked on a httplib2 import somewhere in tools/perf, so likely out of scope here.",
+      "parentUuid": "5c098ff0_35c5d6fd",
+      "revId": "aa5a3f9c66dbe02e1b4e9bcf8cd215b510f16ff6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
