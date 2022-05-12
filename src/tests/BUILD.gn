@@ -506,6 +506,23 @@ if (build_angle_perftests) {
   }
 }
 
+config("angle_trace_loader_config") {
+  include_dirs = [ "trace_utils" ]
+  defines = [ "ANGLE_TRACE_LOADER_IMPLEMENTATION" ]
+}
+
+angle_shared_library("angle_trace_loader") {
+  sources = [
+    "trace_utils/angle_trace_gl.h",
+    "trace_utils/trace_egl_loader_autogen.cpp",
+    "trace_utils/trace_egl_loader_autogen.h",
+    "trace_utils/trace_gles_loader_autogen.cpp",
+    "trace_utils/trace_gles_loader_autogen.h",
+    "trace_utils/traces_export.h",
+  ]
+  public_configs += [ ":angle_trace_loader_config" ]
+}
+
 ###-----------------------------------------------------
 ### ES 1 conformance tests
 ###-----------------------------------------------------
