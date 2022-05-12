@@ -174,6 +174,8 @@ class TextureMtl : public TextureImpl
     const mtl::Format &getFormat() const { return mFormat; }
     const mtl::TextureRef &getNativeTexture() const { return mNativeTexture; }
 
+    angle::Result onLabelUpdate(const gl::Context *context) override;
+
   private:
     void releaseTexture(bool releaseImages);
     void releaseTexture(bool releaseImages, bool releaseTextureObjectsOnly);
