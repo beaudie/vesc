@@ -52,6 +52,24 @@
       "parentUuid": "79ee658e_818c2660",
       "revId": "aa5a3f9c66dbe02e1b4e9bcf8cd215b510f16ff6",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "c82bb1f0_5b4d6f9b",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 13
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1531247
+      },
+      "writtenOn": "2022-05-12T16:55:43Z",
+      "side": 1,
+      "message": "I think it\u0027s stuff like https://crsrc.org/b/recipes/recipe_modules/chromium_swarming/resources/collect_task.py\nthat seems to be used by our tooling but I have no idea how all of this is glued together and where six version\u003d1.10 is coming from.\n\n\nThe error:\n\n% vpython3 scripts/process_angle_perf_results.py\nTraceback (most recent call last):\n  File \"scripts/process_angle_perf_results.py\", line 45, in \u003cmodule\u003e\n    from core import upload_results_to_perf_dashboard\n  File \"/home/romanl/angle/tools/perf/core/upload_results_to_perf_dashboard.py\", line 22, in \u003cmodule\u003e\n    from core import results_dashboard\n  File \"/home/romanl/angle/tools/perf/core/results_dashboard.py\", line 35, in \u003cmodule\u003e\n    import httplib2  # pylint: disable\u003dimport-error\nModuleNotFoundError: No module named \u0027httplib2\u0027",
+      "parentUuid": "a94edd4b_100b22d6",
+      "revId": "aa5a3f9c66dbe02e1b4e9bcf8cd215b510f16ff6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
