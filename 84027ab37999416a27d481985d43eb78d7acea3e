@@ -75,6 +75,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "5644192a_32824826",
+        "filename": "src/libANGLE/renderer/vulkan/DisplayVk.cpp",
+        "patchSetId": 21
+      },
+      "lineNbr": 493,
+      "author": {
+        "id": 1525982
+      },
+      "writtenOn": "2022-05-12T03:52:47Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "fcb9e887_268fff97",
+      "range": {
+        "startLine": 493,
+        "startChar": 22,
+        "endLine": 493,
+        "endChar": 60
+      },
+      "revId": "84027ab37999416a27d481985d43eb78d7acea3e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "ba51c2f7_4fff307f",
@@ -88,6 +112,30 @@
       "writtenOn": "2022-05-12T01:56:14Z",
       "side": 1,
       "message": "nit: I\u0027d call it `mPrevUploadedMutableTexture`",
+      "range": {
+        "startLine": 90,
+        "startChar": 15,
+        "endLine": 90,
+        "endChar": 27
+      },
+      "revId": "84027ab37999416a27d481985d43eb78d7acea3e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "22f48b4e_fa711b6c",
+        "filename": "src/libANGLE/renderer/vulkan/DisplayVk.h",
+        "patchSetId": 21
+      },
+      "lineNbr": 90,
+      "author": {
+        "id": 1525982
+      },
+      "writtenOn": "2022-05-12T03:52:47Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "ba51c2f7_4fff307f",
       "range": {
         "startLine": 90,
         "startChar": 15,
@@ -121,6 +169,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "1901ab74_d6415b6d",
+        "filename": "src/libANGLE/renderer/vulkan/TextureVk.cpp",
+        "patchSetId": 21
+      },
+      "lineNbr": 444,
+      "author": {
+        "id": 1525982
+      },
+      "writtenOn": "2022-05-12T03:52:47Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "98505f8c_fbdd2f19",
+      "range": {
+        "startLine": 444,
+        "startChar": 30,
+        "endLine": 444,
+        "endChar": 41
+      },
+      "revId": "84027ab37999416a27d481985d43eb78d7acea3e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "3257aa66_b880f59a",
@@ -134,6 +206,24 @@
       "writtenOn": "2022-05-12T01:56:14Z",
       "side": 1,
       "message": "nit regarding comments: Instead of `Check ...` (which describes what the code is doing), please say something like `Disable optimization if ...` (i.e. describe what the logic is). You can add a bit of extra information too, like `... for simplicity`, or `..., we\u0027ll have to wait until the cubemap is complete` etc.",
+      "revId": "84027ab37999416a27d481985d43eb78d7acea3e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "46eaecb5_bb50a53f",
+        "filename": "src/libANGLE/renderer/vulkan/TextureVk.cpp",
+        "patchSetId": 21
+      },
+      "lineNbr": 454,
+      "author": {
+        "id": 1525982
+      },
+      "writtenOn": "2022-05-12T03:52:47Z",
+      "side": 1,
+      "message": "Thanks! Updated the comments.",
+      "parentUuid": "3257aa66_b880f59a",
       "revId": "84027ab37999416a27d481985d43eb78d7acea3e",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
@@ -155,6 +245,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "d3b5b818_af421fd9",
+        "filename": "src/libANGLE/renderer/vulkan/TextureVk.cpp",
+        "patchSetId": 21
+      },
+      "lineNbr": 461,
+      "author": {
+        "id": 1525982
+      },
+      "writtenOn": "2022-05-12T03:52:47Z",
+      "side": 1,
+      "message": "Added tests for cubemap arrays. If we use `glTexImage3D()` for a cubemap array target, the validation phase already ensures that depth is a multiple of 6. The depth represents the number of layer-faces, reflected in the layer count of the image index. The number of layer-faces does not change for mipmaps: https://www.khronos.org/opengl/wiki/Cubemap_Texture#Cubemap_array_textures",
+      "parentUuid": "cfe71dcb_976cbaed",
+      "revId": "84027ab37999416a27d481985d43eb78d7acea3e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "6672effc_6ff5e558",
@@ -168,6 +276,30 @@
       "writtenOn": "2022-05-12T01:56:14Z",
       "side": 1,
       "message": "nit: The details of implementation change over time, so the test name and comment won\u0027t make sense anymore. You could continue to describe the detail in the comment if you wish (especially adding `in the Vulkan backend`), but the name could be made more descriptive of the test itself, like `MutableUploadThenDeleteThenMutableUpload`)",
+      "range": {
+        "startLine": 3372,
+        "startChar": 22,
+        "endLine": 3372,
+        "endChar": 53
+      },
+      "revId": "84027ab37999416a27d481985d43eb78d7acea3e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "444e7164_dd55e418",
+        "filename": "src/tests/gl_tests/TextureTest.cpp",
+        "patchSetId": 21
+      },
+      "lineNbr": 3372,
+      "author": {
+        "id": 1525982
+      },
+      "writtenOn": "2022-05-12T03:52:47Z",
+      "side": 1,
+      "message": "Updated the name and comment for the test.",
+      "parentUuid": "6672effc_6ff5e558",
       "range": {
         "startLine": 3372,
         "startChar": 22,
