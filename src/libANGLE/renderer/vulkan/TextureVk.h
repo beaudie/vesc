@@ -283,6 +283,8 @@ class TextureVk : public TextureImpl, public angle::ObserverInterface
         return isDirty;
     }
 
+    void onLabelUpdate() override;
+
   private:
     // Transform an image index from the frontend into one that can be used on the backing
     // ImageHelper, taking into account mipmap or cube face offsets
@@ -585,6 +587,8 @@ class TextureVk : public TextureImpl, public angle::ObserverInterface
     // Saved between updates.
     gl::LevelIndex mCurrentBaseLevel;
     gl::LevelIndex mCurrentMaxLevel;
+    const std::string mTextureLabel;
+    RendererVk *mRenderer;
 };
 
 }  // namespace rx

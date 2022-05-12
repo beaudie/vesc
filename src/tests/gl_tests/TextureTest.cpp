@@ -2302,6 +2302,8 @@ TEST_P(Texture2DTest, PBOWithMultipleDraws)
         ANGLE_SKIP_TEST_IF(!IsGLExtensionEnabled("GL_NV_pixel_buffer_object"));
     }
 
+    ANGLE_SKIP_TEST_IF(!IsGLExtensionEnabled("GL_EXT_debug_label"));
+
     const GLuint width            = getWindowWidth();
     const GLuint height           = getWindowHeight();
     const GLuint windowPixelCount = width * height;
@@ -2321,6 +2323,7 @@ TEST_P(Texture2DTest, PBOWithMultipleDraws)
     GLTexture otherTexture;
     glActiveTexture(GL_TEXTURE0);
     glBindTexture(GL_TEXTURE_2D, otherTexture);
+
     glTexStorage2DEXT(GL_TEXTURE_2D, 1, GL_RGBA8, width, height);
     glTexSubImage2D(GL_TEXTURE_2D, 0, 0, 0, width, height, GL_RGBA, GL_UNSIGNED_BYTE,
                     pixelsRed.data());
@@ -2352,28 +2355,36 @@ TEST_P(Texture2DTest, PBOWithMultipleDraws)
     glUseProgram(otherProgram);
     glUniform1i(uniformLoc, 0);
     glBindTexture(GL_TEXTURE_2D, otherTexture);
+    glLabelObjectEXT(GL_TEXTURE, otherTexture, 0, "Ferdinand1");
     drawQuad(otherProgram, "position", 0.5f);
+    swapBuffers();  // LUGMAL
     glBindTexture(GL_TEXTURE_2D, 0);
     glUseProgram(0);
 
     glUseProgram(otherProgram);
     glUniform1i(uniformLoc, 0);
     glBindTexture(GL_TEXTURE_2D, otherTexture);
+    glLabelObjectEXT(GL_TEXTURE, otherTexture, 0, "Ferdinand2");
     drawQuad(otherProgram, "position", 0.5f);
+    swapBuffers();  // LUGMAL
     glBindTexture(GL_TEXTURE_2D, 0);
     glUseProgram(0);
 
     glUseProgram(otherProgram);
     glUniform1i(uniformLoc, 0);
     glBindTexture(GL_TEXTURE_2D, otherTexture);
+    glLabelObjectEXT(GL_TEXTURE, otherTexture, 0, "Ferdinand3");
     drawQuad(otherProgram, "position", 0.5f);
+    swapBuffers();  // LUGMAL
     glBindTexture(GL_TEXTURE_2D, 0);
     glUseProgram(0);
 
     glUseProgram(otherProgram);
     glUniform1i(uniformLoc, 0);
     glBindTexture(GL_TEXTURE_2D, otherTexture);
+    glLabelObjectEXT(GL_TEXTURE, otherTexture, 0, "Ferdinand4");
     drawQuad(otherProgram, "position", 0.5f);
+    swapBuffers();  // LUGMAL
     glBindTexture(GL_TEXTURE_2D, 0);
     glUseProgram(0);
     ASSERT_GL_NO_ERROR();
@@ -2389,6 +2400,7 @@ TEST_P(Texture2DTest, PBOWithMultipleDraws)
     glUniform1i(mTexture2DUniformLocation, 0);
     glBindTexture(GL_TEXTURE_2D, mTexture2D);
     drawQuad(mProgram, "position", 0.5f);
+    swapBuffers();  // LUGMAL
     ASSERT_GL_NO_ERROR();
 
     std::vector<GLColor> actual(windowPixelCount, GLColor::black);
@@ -7364,7 +7376,7 @@ class Texture2DNorm16TestES3 : public Texture2DTestES3
         GLushort pixelValue  = 0x6A35;
         GLushort imageData[] = {pixelValue, pixelValue, pixelValue, pixelValue};
         GLColor16UI color    = SliceFormatColor16UI(
-            format, GLColor16UI(pixelValue, pixelValue, pixelValue, pixelValue));
+               format, GLColor16UI(pixelValue, pixelValue, pixelValue, pixelValue));
         // Size of drawing viewport
         constexpr GLint width = 8, height = 8;
 
@@ -9543,7 +9555,7 @@ TEST_P(Texture2DTestES3, UseAsUBOThenUpdateThenAsPBO)
     const std::array<GLColor, 4> kInitialData = {GLColor::red, GLColor::red, GLColor::red,
                                                  GLColor::red};
     const std::array<GLColor, 4> kUpdateData  = {GLColor::blue, GLColor::blue, GLColor::blue,
-                                                GLColor::blue};
+                                                 GLColor::blue};
 
     GLBuffer buffer;
     glBindBuffer(GL_UNIFORM_BUFFER, buffer);
@@ -10174,7 +10186,7 @@ TEST_P(TextureBufferTestES31, UseAsUBOThenUpdateThenAsTextureBuffer)
     const std::array<GLColor, 4> kInitialData = {GLColor::red, GLColor::red, GLColor::red,
                                                  GLColor::red};
     const std::array<GLColor, 4> kUpdateData  = {GLColor::blue, GLColor::blue, GLColor::blue,
-                                                GLColor::blue};
+                                                 GLColor::blue};
 
     GLBuffer buffer;
     glBindBuffer(GL_UNIFORM_BUFFER, buffer);
@@ -10247,7 +10259,7 @@ TEST_P(TextureBufferTestES31, MapTextureBufferInvalidateThenWrite)
     const std::array<GLColor, 4> kInitialData = {GLColor::red, GLColor::red, GLColor::red,
                                                  GLColor::red};
     const std::array<GLColor, 4> kUpdateData  = {GLColor::blue, GLColor::blue, GLColor::blue,
-                                                GLColor::blue};
+                                                 GLColor::blue};
 
     GLBuffer buffer;
     glBindBuffer(GL_TEXTURE_BUFFER, buffer);

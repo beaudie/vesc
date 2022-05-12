@@ -303,7 +303,8 @@ TextureVk::TextureVk(const gl::TextureState &state, RendererVk *renderer)
       mImageCreateFlags(0),
       mImageObserverBinding(this, kTextureImageSubjectIndex),
       mCurrentBaseLevel(state.getBaseLevel()),
-      mCurrentMaxLevel(state.getMaxLevel())
+      mCurrentMaxLevel(state.getMaxLevel()),
+      mRenderer(renderer)
 {}
 
 TextureVk::~TextureVk() = default;
@@ -2672,6 +2673,16 @@ angle::Result TextureVk::respecifyImageStorageIfNecessary(ContextVk *contextVk, 
     }
 
     return angle::Result::Continue;
+}
+
+void TextureVk::onLabelUpdate()
+{
+    //  Not sure which of these is more clear -- getImage().getImage() gives me the shivers
+    //    auto &imageHelper = getImage();
+    //    auto &image = imageHelper.getImage();
+    auto &image = getImage().getImage();
+    vk::SetDebugUtilsObjectName(mRenderer, reinterpret_cast<uint64_t>(image.getHandle()),
+                                mState.getLabel());
 }
 
 angle::Result TextureVk::syncState(const gl::Context *context,

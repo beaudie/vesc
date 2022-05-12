@@ -1275,6 +1275,8 @@ using LevelIndex = gl::LevelIndexWrapper<uint32_t>;
 // Ensure viewport is within Vulkan requirements
 void ClampViewport(VkViewport *viewport);
 
+void SetDebugUtilsObjectName(RendererVk *renderer, uint64_t handle, std::string label);
+
 }  // namespace vk
 
 #if !defined(ANGLE_SHARED_LIBVULKAN)
