@@ -2025,12 +2025,12 @@ angle::Result GraphicsPipelineDesc::initializePipeline(
         const angle::Format &intendedFormat = format.getIntendedFormat();
         VkFormat vkFormat = format.getActualBufferVkFormat(packedAttrib.compressed);
 
-        gl::ComponentType attribType = GetVertexAttributeComponentType(
+        const gl::ComponentType attribType = GetVertexAttributeComponentType(
             intendedFormat.isPureInt(), intendedFormat.vertexAttribType);
-        gl::ComponentType programAttribType =
+        const gl::ComponentType programAttribType =
             gl::GetComponentTypeMask(programAttribsTypeMask, attribIndex);
 
-        // This forces stride to 0 when glVertexAttribute specifies a different type from the
+        // This forces stride to 0 when glVertexAttribPointer specifies a different type from the
         // program's attribute type except when the type mismatch is a mismatched integer sign.
         if (attribType != programAttribType)
         {
@@ -2059,6 +2059,12 @@ angle::Result GraphicsPipelineDesc::initializePipeline(
             }
 
             ASSERT(contextVk->getNativeExtensions().relaxedVertexAttributeTypeANGLE);
+            // If using dynamic state for stride, the value for stride is unconditionally 0 here.
+            // |ContextVk::handleDirtyGraphicsVertexBuffers| implements the same fix when setting
+            // stride dynamically.
+            ASSERT(!contextVk->getFeatures().supportsExtendedDynamicState.enabled ||
+                   bindingDesc.stride == 0);
+
             if (programAttribType == gl::ComponentType::Float ||
                 attribType == gl::ComponentType::Float)
             {
@@ -2066,7 +2072,6 @@ angle::Result GraphicsPipelineDesc::initializePipeline(
             }
         }
 
-        // The binding index could become more dynamic in ES 3.1.
         attribDesc.binding  = attribIndex;
         attribDesc.format   = vkFormat;
         attribDesc.location = static_cast<uint32_t>(attribIndex);
@@ -2291,7 +2296,7 @@ angle::Result GraphicsPipelineDesc::initializePipeline(
     }
 
     // Dynamic state
-    angle::FixedVector<VkDynamicState, 12> dynamicStateList;
+    angle::FixedVector<VkDynamicState, 13> dynamicStateList;
     dynamicStateList.push_back(VK_DYNAMIC_STATE_VIEWPORT);
     dynamicStateList.push_back(VK_DYNAMIC_STATE_SCISSOR);
     dynamicStateList.push_back(VK_DYNAMIC_STATE_LINE_WIDTH);
@@ -2305,6 +2310,10 @@ angle::Result GraphicsPipelineDesc::initializePipeline(
         dynamicStateList.push_back(VK_DYNAMIC_STATE_CULL_MODE_EXT);
         dynamicStateList.push_back(VK_DYNAMIC_STATE_FRONT_FACE_EXT);
         dynamicStateList.push_back(VK_DYNAMIC_STATE_PRIMITIVE_TOPOLOGY_EXT);
+        if (vertexAttribCount > 0)
+        {
+            dynamicStateList.push_back(VK_DYNAMIC_STATE_VERTEX_INPUT_BINDING_STRIDE);
+        }
     }
     if (contextVk->getFeatures().supportsFragmentShadingRate.enabled)
     {
