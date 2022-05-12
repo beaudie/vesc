@@ -68,7 +68,7 @@ struct ImageDesc final
               const bool fixedSampleLocations,
               const InitState initState);
 
-    ImageDesc(const ImageDesc &other) = default;
+    ImageDesc(const ImageDesc &other)            = default;
     ImageDesc &operator=(const ImageDesc &other) = default;
 
     GLint getMemorySize() const;
@@ -86,7 +86,7 @@ struct SwizzleState final
 {
     SwizzleState();
     SwizzleState(GLenum red, GLenum green, GLenum blue, GLenum alpha);
-    SwizzleState(const SwizzleState &other) = default;
+    SwizzleState(const SwizzleState &other)            = default;
     SwizzleState &operator=(const SwizzleState &other) = default;
 
     bool swizzleRequired() const;
@@ -267,6 +267,7 @@ class Texture final : public RefCountObject<TextureID>,
     void onDestroy(const Context *context) override;
 
     void setLabel(const Context *context, const std::string &label) override;
+
     const std::string &getLabel() const override;
 
     TextureType getType() const { return mState.mType; }
