@@ -742,6 +742,8 @@ egl::Error Context::onDestroy(const egl::Display *display)
     // that still have it current.
     ASSERT(mIsDestroyed == true && mRefCount == 0);
 
+    mState.mShaderProgramManager->resolveProgramLink();
+
     // Dump frame capture if enabled.
     getShareGroup()->getFrameCaptureShared()->onDestroyContext(this);
 
@@ -9299,7 +9301,7 @@ angle::Result Context::onProgramLink(Program *programObject)
     //      ProgramD3D.
     if (programObject->isInUse())
     {
-        programObject->resolveLink(this);
+        programObject->resolveLink();
         if (programObject->isLinked())
         {
             ANGLE_TRY(mState.onProgramExecutableChange(this, programObject));

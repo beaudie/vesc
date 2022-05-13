@@ -188,6 +188,14 @@ void ShaderProgramManager::deleteProgram(const gl::Context *context, ShaderProgr
     deleteObject(context, &mPrograms, program);
 }
 
+void ShaderProgramManager::resolveProgramLink()
+{
+    for (auto pair : mPrograms)
+    {
+        pair.second->resolveLink();
+    }
+}
+
 template <typename ObjectType, typename IDType>
 void ShaderProgramManager::deleteObject(const Context *context,
                                         ResourceMap<ObjectType, IDType> *objectMap,
