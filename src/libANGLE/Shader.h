@@ -33,6 +33,7 @@ class GLImplFactory;
 class ShaderImpl;
 class ShaderSh;
 class WaitableCompileEvent;
+class LinkEvent;
 }  // namespace rx
 
 namespace angle
@@ -197,8 +198,8 @@ class Shader final : angle::NonCopyable, public LabeledObject
     bool isCompiled();
     bool isCompleted();
 
-    void addRef();
-    void release(const Context *context);
+    void addRef(Program *program);
+    void release(const Context *context, Program *program);
     unsigned int getRefCount() const;
     bool isFlaggedForDeletion() const;
     void flagForDeletion();
@@ -262,19 +263,22 @@ class Shader final : angle::NonCopyable, public LabeledObject
                               GLsizei bufSize,
                               GLsizei *length,
                               char *buffer);
+    void waitProgramLink();
 
     ShaderState mState;
     std::unique_ptr<rx::ShaderImpl> mImplementation;
     const gl::Limitations mRendererLimitations;
     const ShaderProgramID mHandle;
     const ShaderType mType;
-    unsigned int mRefCount;  // Number of program objects this shader is attached to
+    // Programs this shader is attached to
+    std::vector<Program *> mPrograms;
     bool mDeleteStatus;  // Flag to indicate that the shader can be deleted when no longer in use
     std::string mInfoLog;
 
     // We keep a reference to the translator in order to defer compiles while preserving settings.
     BindingPointer<Compiler> mBoundCompiler;
     std::unique_ptr<CompilingState> mCompilingState;
+    std::map<rx::LinkEvent *, const Context *> mPendingLinkEvents;
     std::string mCompilerResourcesString;
 
     ShaderProgramManager *mResourceManager;

@@ -381,7 +381,7 @@ class State : angle::NonCopyable
     {
         if (mProgram)
         {
-            mProgram->resolveLink(context);
+            mProgram->resolveLink();
         }
         return mProgram;
     }

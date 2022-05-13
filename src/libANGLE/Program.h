@@ -763,11 +763,11 @@ class Program final : public LabeledObject, public angle::Subject
     angle::Result syncState(const Context *context);
 
     // Try to resolve linking. Inlined to make sure its overhead is as low as possible.
-    void resolveLink(const Context *context)
+    void resolveLink()
     {
         if (mLinkingState)
         {
-            resolveLinkImpl(context);
+            resolveLinkImpl();
         }
     }
 
@@ -847,7 +847,7 @@ class Program final : public LabeledObject, public angle::Subject
     GLuint getImageUniformBinding(const VariableLocation &uniformLocation) const;
 
     // Block until linking is finished and resolve it.
-    void resolveLinkImpl(const gl::Context *context);
+    void resolveLinkImpl();
 
     void postResolveLink(const gl::Context *context);
 
