@@ -43,6 +43,7 @@ class ColorMaskTest : public ANGLETest
 // incorrect results. Test to make sure this bug is not exposed.
 TEST_P(ColorMaskTest, AMDZeroColorMaskBug)
 {
+    assert(false);
     int x = getWindowWidth() / 2;
     int y = getWindowHeight() / 2;
 
