@@ -35,6 +35,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "f2934810_fb3934e9",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 8
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-05-13T17:54:07Z",
+      "side": 1,
+      "message": "What is your argument here? I\u0027m not so sure myself to be honest, but given its limitations and that it still made it to the first dynamic state extension (VK_EXT_extended_dynamic_state), I\u0027m guessing it must have some significance.\n\nAt least one thing I could think of is using the program to record transform feedback (with TRIANGLE_STRIP), then use the same program on transform feedback results (TRIANGLES). Maybe?\n\n---\n\nMoved to last either way",
+      "parentUuid": "1e4a729d_01360680",
+      "revId": "8763bb56f0a39be8c5ea82841deac7f2a0fe6665",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "325c89f9_dc326832",
@@ -52,6 +70,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "e2881231_87cb7dcf",
+        "filename": "src/common/bitset_utils.h",
+        "patchSetId": 8
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-05-13T17:54:07Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "325c89f9_dc326832",
+      "revId": "8763bb56f0a39be8c5ea82841deac7f2a0fe6665",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "ca37da1d_9676c9f1",
@@ -65,6 +101,30 @@
       "writtenOn": "2022-05-13T14:36:58Z",
       "side": 1,
       "message": "probably should add TEST and TYPED_TEST to your presubmit",
+      "range": {
+        "startLine": 103,
+        "startChar": 0,
+        "endLine": 103,
+        "endChar": 10
+      },
+      "revId": "8763bb56f0a39be8c5ea82841deac7f2a0fe6665",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "3a91f7c3_733a1fd7",
+        "filename": "src/common/bitset_utils_unittest.cpp",
+        "patchSetId": 8
+      },
+      "lineNbr": 103,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-05-13T17:54:07Z",
+      "side": 1,
+      "message": "Done (split CL)",
+      "parentUuid": "ca37da1d_9676c9f1",
       "range": {
         "startLine": 103,
         "startChar": 0,
@@ -98,6 +158,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "248570c5_eef7b1b2",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 8
+      },
+      "lineNbr": 1311,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-05-13T17:54:07Z",
+      "side": 1,
+      "message": "Already so.",
+      "parentUuid": "95c16b13_a6af872c",
+      "range": {
+        "startLine": 1311,
+        "startChar": 4,
+        "endLine": 1311,
+        "endChar": 18
+      },
+      "revId": "8763bb56f0a39be8c5ea82841deac7f2a0fe6665",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "6bad4b05_241cf294",
@@ -111,6 +195,30 @@
       "writtenOn": "2022-05-13T14:36:58Z",
       "side": 1,
       "message": "this function could incur overhead.. any way to slim it down?",
+      "range": {
+        "startLine": 4270,
+        "startChar": 6,
+        "endLine": 4281,
+        "endChar": 0
+      },
+      "revId": "8763bb56f0a39be8c5ea82841deac7f2a0fe6665",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "9928c821_81323782",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 8
+      },
+      "lineNbr": 4281,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-05-13T17:54:07Z",
+      "side": 1,
+      "message": "The overhead is only when mode changes, which is not that often? I moved the mode check before the function call nevertheless + some other tweaks",
+      "parentUuid": "6bad4b05_241cf294",
       "range": {
         "startLine": 4270,
         "startChar": 6,
