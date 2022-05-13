@@ -82,6 +82,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "873464a3_5f8c16de",
+        "filename": "src/libANGLE/renderer/vulkan/TextureVk.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 2678,
+      "author": {
+        "id": 1290487
+      },
+      "writtenOn": "2022-05-13T21:51:54Z",
+      "side": 1,
+      "message": "Sorry I wasn\u0027t clear!  I think I was talking about ASSERT vs checking the mRenderer-\u003eangleDebuggerMode()\n\nThis is different, and is a pattern that that ANGLE code needs to follow.  That is, this method should return `angle::Result`.  For the D3D method (which isn\u0027t returning anything now), please have it: `return angle::Result::Continue;`  Same for other places where we return without an error.  I\u0027ll try to point them out.",
+      "parentUuid": "c64d65e0_aff099ec",
+      "range": {
+        "startLine": 2678,
+        "startChar": 0,
+        "endLine": 2678,
+        "endChar": 31
+      },
+      "revId": "2a6dc001912e4966b5f1fd8cdbbb84ddda316e1c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "27c2dcfd_a9519cc0",

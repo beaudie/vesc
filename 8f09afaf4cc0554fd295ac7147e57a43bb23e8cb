@@ -1,0 +1,222 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "39316ab1_e3c466f2",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1290487
+      },
+      "writtenOn": "2022-05-13T21:51:54Z",
+      "side": 1,
+      "message": "Sorry that I wasn\u0027t clear about handling errors!  There were 2 topics that I think got conflated.",
+      "revId": "8f09afaf4cc0554fd295ac7147e57a43bb23e8cb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "967de494_5ef36448",
+        "filename": "src/libANGLE/renderer/TextureImpl.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 213,
+      "author": {
+        "id": 1290487
+      },
+      "writtenOn": "2022-05-13T21:51:54Z",
+      "side": 1,
+      "message": "This should be `angle::Result`",
+      "range": {
+        "startLine": 213,
+        "startChar": 12,
+        "endLine": 213,
+        "endChar": 16
+      },
+      "revId": "8f09afaf4cc0554fd295ac7147e57a43bb23e8cb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "f76c720a_96bb26dd",
+        "filename": "src/libANGLE/renderer/d3d/TextureD3D.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 700,
+      "author": {
+        "id": 1290487
+      },
+      "writtenOn": "2022-05-13T21:51:54Z",
+      "side": 1,
+      "message": "Sorry, this should be `angle::Result`",
+      "range": {
+        "startLine": 700,
+        "startChar": 0,
+        "endLine": 700,
+        "endChar": 4
+      },
+      "revId": "8f09afaf4cc0554fd295ac7147e57a43bb23e8cb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "f501065d_13e4e64f",
+        "filename": "src/libANGLE/renderer/d3d/TextureD3D.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 706,
+      "author": {
+        "id": 1290487
+      },
+      "writtenOn": "2022-05-13T21:51:54Z",
+      "side": 1,
+      "message": "This method should: `return angle::Result::Continue;`",
+      "revId": "8f09afaf4cc0554fd295ac7147e57a43bb23e8cb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "6b9f7713_4b1bd9bd",
+        "filename": "src/libANGLE/renderer/vulkan/TextureVk.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 2671,
+      "author": {
+        "id": 1290487
+      },
+      "writtenOn": "2022-05-13T21:51:54Z",
+      "side": 1,
+      "message": "This should be `angle::Result`",
+      "range": {
+        "startLine": 2671,
+        "startChar": 0,
+        "endLine": 2671,
+        "endChar": 4
+      },
+      "revId": "8f09afaf4cc0554fd295ac7147e57a43bb23e8cb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "af103ad4_f2b43444",
+        "filename": "src/libANGLE/renderer/vulkan/TextureVk.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 2682,
+      "author": {
+        "id": 1290487
+      },
+      "writtenOn": "2022-05-13T21:51:54Z",
+      "side": 1,
+      "message": "Better to change this to put the call within the curly braces.  Then, you can just return the result of that function.",
+      "range": {
+        "startLine": 2676,
+        "startChar": 0,
+        "endLine": 2682,
+        "endChar": 100
+      },
+      "revId": "8f09afaf4cc0554fd295ac7147e57a43bb23e8cb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "add87691_9c2cae5b",
+        "filename": "src/libANGLE/renderer/vulkan/TextureVk.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 303,
+      "author": {
+        "id": 1290487
+      },
+      "writtenOn": "2022-05-13T21:51:54Z",
+      "side": 1,
+      "message": "This should be `angle::Result`",
+      "range": {
+        "startLine": 303,
+        "startChar": 4,
+        "endLine": 303,
+        "endChar": 8
+      },
+      "revId": "8f09afaf4cc0554fd295ac7147e57a43bb23e8cb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "f9de3f3d_8ec32d63",
+        "filename": "src/libANGLE/renderer/vulkan/vk_utils.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 802,
+      "author": {
+        "id": 1290487
+      },
+      "writtenOn": "2022-05-13T21:51:54Z",
+      "side": 1,
+      "message": "This should be `angle::Result`",
+      "range": {
+        "startLine": 802,
+        "startChar": 0,
+        "endLine": 802,
+        "endChar": 4
+      },
+      "revId": "8f09afaf4cc0554fd295ac7147e57a43bb23e8cb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "dec92683_a370cab9",
+        "filename": "src/libANGLE/renderer/vulkan/vk_utils.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 810,
+      "author": {
+        "id": 1290487
+      },
+      "writtenOn": "2022-05-13T21:51:54Z",
+      "side": 1,
+      "message": "This should be inside of a call to ANGLE_VK_TRY().  That means you\u0027ll need to pass down the context from above.",
+      "range": {
+        "startLine": 810,
+        "startChar": 4,
+        "endLine": 810,
+        "endChar": 73
+      },
+      "revId": "8f09afaf4cc0554fd295ac7147e57a43bb23e8cb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "926a34f3_c4b52ab5",
+        "filename": "src/libANGLE/renderer/vulkan/vk_utils.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 1291,
+      "author": {
+        "id": 1290487
+      },
+      "writtenOn": "2022-05-13T21:51:54Z",
+      "side": 1,
+      "message": "This should be `angle::Result`",
+      "range": {
+        "startLine": 1291,
+        "startChar": 0,
+        "endLine": 1291,
+        "endChar": 4
+      },
+      "revId": "8f09afaf4cc0554fd295ac7147e57a43bb23e8cb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
