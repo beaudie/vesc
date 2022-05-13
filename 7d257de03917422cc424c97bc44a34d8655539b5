@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "a9217290_f1cce039",
+        "filename": "util/posix/crash_handler_posix.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 550,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-05-13T16:39:43Z",
+      "side": 0,
+      "message": "Note that this was called even for absolute paths, but `realpath` is only called on relative paths. So `realpath` is not a complete replacement for this.",
+      "revId": "7d257de03917422cc424c97bc44a34d8655539b5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
