@@ -140,8 +140,12 @@ const char *GetCommandString(CommandID id)
             return "SetScissor";
         case CommandID::SetStencilCompareMask:
             return "SetStencilCompareMask";
+        case CommandID::SetStencilOp:
+            return "SetStencilOp";
         case CommandID::SetStencilReference:
             return "SetStencilReference";
+        case CommandID::SetStencilTestEnable:
+            return "SetStencilTestEnable";
         case CommandID::SetStencilWriteMask:
             return "SetStencilWriteMask";
         case CommandID::SetViewport:
@@ -668,6 +672,18 @@ void SecondaryCommandBuffer::executeCommands(PrimaryCommandBuffer *primary)
                                                params->compareBackMask);
                     break;
                 }
+                case CommandID::SetStencilOp:
+                {
+                    const SetStencilOpParams *params =
+                        getParamPtr<SetStencilOpParams>(currentCommand);
+                    vkCmdSetStencilOpEXT(cmdBuffer,
+                                         static_cast<VkStencilFaceFlags>(params->faceMask),
+                                         static_cast<VkStencilOp>(params->failOp),
+                                         static_cast<VkStencilOp>(params->passOp),
+                                         static_cast<VkStencilOp>(params->depthFailOp),
+                                         static_cast<VkCompareOp>(params->compareOp));
+                    break;
+                }
                 case CommandID::SetStencilReference:
                 {
                     const SetStencilReferenceParams *params =
@@ -676,6 +692,13 @@ void SecondaryCommandBuffer::executeCommands(PrimaryCommandBuffer *primary)
                                              params->frontReference);
                     vkCmdSetStencilReference(cmdBuffer, VK_STENCIL_FACE_BACK_BIT,
                                              params->backReference);
+                    break;
+                }
+                case CommandID::SetStencilTestEnable:
+                {
+                    const SetStencilTestEnableParams *params =
+                        getParamPtr<SetStencilTestEnableParams>(currentCommand);
+                    vkCmdSetStencilTestEnableEXT(cmdBuffer, params->stencilTestEnable);
                     break;
                 }
                 case CommandID::SetStencilWriteMask:
