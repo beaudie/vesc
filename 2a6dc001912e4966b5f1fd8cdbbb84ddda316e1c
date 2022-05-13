@@ -129,6 +129,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "7555b22c_c4119c14",
+        "filename": "src/libANGLE/renderer/vulkan/TextureVk.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 591,
+      "author": {
+        "id": 1511618
+      },
+      "writtenOn": "2022-05-13T17:26:18Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "4ae0106d_721770c6",
+      "revId": "2a6dc001912e4966b5f1fd8cdbbb84ddda316e1c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "70d2da0e_50bb128a",
@@ -160,6 +178,24 @@
       "side": 1,
       "message": "I included the test changes just as a way for y\u0027all to verify correct operation if necessary.  I\u0027m not sure an actual test would be useful in this case since the label would need to be checked on the Vulkan side.  TLDR, there is no intent to commit the test changes.",
       "parentUuid": "70d2da0e_50bb128a",
+      "revId": "2a6dc001912e4966b5f1fd8cdbbb84ddda316e1c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "31e28a06_2eb4206c",
+        "filename": "src/tests/gl_tests/TextureTest.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 2305,
+      "author": {
+        "id": 1511618
+      },
+      "writtenOn": "2022-05-13T17:26:18Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "2a3fecc2_64e47b41",
       "revId": "2a6dc001912e4966b5f1fd8cdbbb84ddda316e1c",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
