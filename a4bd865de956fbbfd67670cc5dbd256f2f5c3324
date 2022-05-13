@@ -34,6 +34,24 @@
       "parentUuid": "7586d480_d84e7d6d",
       "revId": "a4bd865de956fbbfd67670cc5dbd256f2f5c3324",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "98287d32_bf63acab",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1531247
+      },
+      "writtenOn": "2022-05-13T16:48:34Z",
+      "side": 1,
+      "message": "ty, mentioned here: https://bugs.chromium.org/p/chromium/issues/detail?id\u003d1324611#c17",
+      "parentUuid": "e020fc14_527653c9",
+      "revId": "a4bd865de956fbbfd67670cc5dbd256f2f5c3324",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
