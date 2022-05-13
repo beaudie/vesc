@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "b8869fd1_7e76df4f",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1525982
+      },
+      "writtenOn": "2022-05-13T21:59:12Z",
+      "side": 1,
+      "message": "Based on https://ci.chromium.org/ui/p/chromium/builders/try/linux-rel/1012030/overview, it seems that in those tests, the texture pointed to by `mPrevTexture` becomes immutable, which causes the triggering of the assert.\n\nIn this reland, there is a new test that simulated the condition of the assert. Also, in the new code, instead of the assert, we check if the previous texture is still mutable when we want to flush the updates. If the texture has become immutable, we replace it with the new texture and return.",
+      "revId": "e7e5f1d3c3f81d2507c88cfba0f67e452c589bc8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
