@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "6125e58c_53ce48df",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 8
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-05-13T14:32:43Z",
+      "side": 1,
+      "message": "Had some Metal/GL/D3D failures before with the new test. Nothing more to do here other than potential suppressions. PTAL.",
+      "revId": "8763bb56f0a39be8c5ea82841deac7f2a0fe6665",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
