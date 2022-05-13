@@ -21,6 +21,7 @@
 #include "libANGLE/Context.h"
 #include "libANGLE/ResourceManager.h"
 #include "libANGLE/renderer/GLImplFactory.h"
+#include "libANGLE/renderer/ProgramImpl.h"
 #include "libANGLE/renderer/ShaderImpl.h"
 #include "platform/FrontendFeatures_autogen.h"
 
@@ -313,6 +314,9 @@ void Shader::getTranslatedSourceWithDebugInfo(GLsizei bufSize, GLsizei *length, 
 
 void Shader::compile(const Context *context)
 {
+    // Only start a new compile until all Program linkings of the previous one are done.
+    waitLinkEvents();
+
     resolveCompile();
 
     mState.mTranslatedSource.clear();
@@ -823,6 +827,28 @@ GLenum Shader::getTessGenPointMode()
 const std::string &Shader::getCompilerResourcesString() const
 {
     return mCompilerResourcesString;
+}
+
+void Shader::addLinkEvent(rx::LinkEvent *linkEvent, const Context *context)
+{
+    mPendingLinkEvents[linkEvent] = context;
+}
+
+void Shader::removeLinkEvent(rx::LinkEvent *linkEvent)
+{
+    mPendingLinkEvents.erase(linkEvent);
+}
+
+void Shader::waitLinkEvents()
+{
+    for (auto &[linkEvent, context] : mPendingLinkEvents)
+    {
+        ASSERT(linkEvent);
+        if (IsError(linkEvent->wait(context)))
+        {
+            // Simply ignore the link result here.
+        }
+    }
 }
 
 }  // namespace gl

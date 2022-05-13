@@ -33,6 +33,7 @@ class GLImplFactory;
 class ShaderImpl;
 class ShaderSh;
 class WaitableCompileEvent;
+class LinkEvent;
 }  // namespace rx
 
 namespace angle
@@ -254,6 +255,9 @@ class Shader final : angle::NonCopyable, public LabeledObject
 
     void resolveCompile();
 
+    void addLinkEvent(rx::LinkEvent *linkEvent, const Context *context);
+    void removeLinkEvent(rx::LinkEvent *linkEvent);
+
   private:
     struct CompilingState;
 
@@ -262,6 +266,7 @@ class Shader final : angle::NonCopyable, public LabeledObject
                               GLsizei bufSize,
                               GLsizei *length,
                               char *buffer);
+    void waitLinkEvents();
 
     ShaderState mState;
     std::unique_ptr<rx::ShaderImpl> mImplementation;
@@ -275,6 +280,7 @@ class Shader final : angle::NonCopyable, public LabeledObject
     // We keep a reference to the translator in order to defer compiles while preserving settings.
     BindingPointer<Compiler> mBoundCompiler;
     std::unique_ptr<CompilingState> mCompilingState;
+    std::map<rx::LinkEvent *, const Context *> mPendingLinkEvents;
     std::string mCompilerResourcesString;
 
     ShaderProgramManager *mResourceManager;
