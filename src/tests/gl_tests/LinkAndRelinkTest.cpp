@@ -195,6 +195,48 @@ void main()
     EXPECT_PIXEL_COLOR_EQ(0, 0, GLColor::green);
 }
 
+// Tests no crash in case that the Shader starts another compile while the Program being attached
+// to is still linking.
+// crbug.com/1317673
+TEST_P(LinkAndRelinkTest, StartAnotherShaderCompileWhileLinking)
+{
+    constexpr char kVS[]      = R"(
+void main()
+{
+})";
+    constexpr char kFSGreen[] = R"(precision mediump float;
+void main()
+{
+    gl_FragColor = vec4(0, 1, 0, 1);
+})";
+    constexpr char kFSRed[]   = R"(precision mediump float;
+void main()
+{
+    gl_FragColor = vec4(1, 0, 0, 1);
+})";
+
+    GLuint program = glCreateProgram();
+
+    GLuint vs = CompileShader(GL_VERTEX_SHADER, kVS);
+    glAttachShader(program, vs);
+
+    GLuint fs                  = glCreateShader(GL_FRAGMENT_SHADER);
+    const char *sourceArray[1] = {kFSGreen};
+    glShaderSource(fs, 1, sourceArray, nullptr);
+    glCompileShader(fs);
+    glAttachShader(program, fs);
+    glLinkProgram(program);
+
+    sourceArray[0] = kFSRed;
+    glShaderSource(fs, 1, sourceArray, nullptr);
+    glCompileShader(fs);
+
+    glDeleteShader(vs);
+    glDeleteShader(fs);
+    glDeleteProgram(program);
+    ASSERT_GL_NO_ERROR();
+}
+
 // When program link fails and no valid compute program is installed in the GL
 // state before the link, it should report an error for UseProgram and
 // DispatchCompute.

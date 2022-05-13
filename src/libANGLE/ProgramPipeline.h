@@ -112,7 +112,7 @@ class ProgramPipeline final : public RefCountObject<ProgramPipelineID>,
         Program *program = mState.getActiveShaderProgram();
         if (program)
         {
-            program->resolveLink(context);
+            program->resolveLink();
         }
         return program;
     }
