@@ -41,6 +41,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "a3b14bd0_ec8d1c1f",
+        "filename": "src/libANGLE/renderer/vulkan/TextureVk.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 2680,
+      "author": {
+        "id": 1511618
+      },
+      "writtenOn": "2022-05-13T17:24:04Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "27c2dcfd_a9519cc0",
+      "range": {
+        "startLine": 2680,
+        "startChar": 71,
+        "endLine": 2680,
+        "endChar": 91
+      },
+      "revId": "2a6dc001912e4966b5f1fd8cdbbb84ddda316e1c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "2e388018_f52da631",
@@ -54,6 +78,30 @@
       "writtenOn": "2022-05-13T02:12:11Z",
       "side": 1,
       "message": "We don\u0027t use `auto` except for very complex templated types.",
+      "range": {
+        "startLine": 2683,
+        "startChar": 4,
+        "endLine": 2683,
+        "endChar": 8
+      },
+      "revId": "2a6dc001912e4966b5f1fd8cdbbb84ddda316e1c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "077949bb_52b1e4ed",
+        "filename": "src/libANGLE/renderer/vulkan/TextureVk.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 2683,
+      "author": {
+        "id": 1511618
+      },
+      "writtenOn": "2022-05-13T17:24:04Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "2e388018_f52da631",
       "range": {
         "startLine": 2683,
         "startChar": 4,
@@ -94,6 +142,24 @@
       "writtenOn": "2022-05-13T02:12:11Z",
       "side": 1,
       "message": "Please don\u0027t disable a useful text for this. You can duplicate the test + modify as needed.",
+      "revId": "2a6dc001912e4966b5f1fd8cdbbb84ddda316e1c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "2a3fecc2_64e47b41",
+        "filename": "src/tests/gl_tests/TextureTest.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 2305,
+      "author": {
+        "id": 1511618
+      },
+      "writtenOn": "2022-05-13T17:24:04Z",
+      "side": 1,
+      "message": "I included the test changes just as a way for y\u0027all to verify correct operation if necessary.  I\u0027m not sure an actual test would be useful in this case since the label would need to be checked on the Vulkan side.  TLDR, there is no intent to commit the test changes.",
+      "parentUuid": "70d2da0e_50bb128a",
       "revId": "2a6dc001912e4966b5f1fd8cdbbb84ddda316e1c",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
