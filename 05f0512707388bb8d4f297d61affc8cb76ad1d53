@@ -16,6 +16,40 @@
       "message": "Also, you\u0027ll need to pull new source and rebase your changes in order to address the \"Merge Conflict\".  Do that when/before you\u0027re ready to do your next upload.",
       "revId": "05f0512707388bb8d4f297d61affc8cb76ad1d53",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "a9c16d74_8113264d",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-05-13T17:46:18Z",
+      "side": 1,
+      "message": "LGTM with Ian\u0027s comment addressed",
+      "revId": "05f0512707388bb8d4f297d61affc8cb76ad1d53",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "9548c801_d1d9dbb7",
+        "filename": "src/libANGLE/renderer/vulkan/TextureVk.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 622,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-05-13T17:46:18Z",
+      "side": 1,
+      "message": "nit: unused",
+      "revId": "05f0512707388bb8d4f297d61affc8cb76ad1d53",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
