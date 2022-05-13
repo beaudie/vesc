@@ -1,0 +1,67 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "fa06bd69_cb6bfd27",
+        "filename": "src/tests/BUILD.gn",
+        "patchSetId": 5
+      },
+      "lineNbr": 511,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2022-05-13T13:47:31Z",
+      "side": 1,
+      "message": "move this into the angle_shared_library target. it\u0027s messing up the import/export definitions on Windows.",
+      "range": {
+        "startLine": 511,
+        "startChar": 2,
+        "endLine": 511,
+        "endChar": 51
+      },
+      "revId": "f94bff4b21e34a73a0482632dcd3d35a372bab0b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "fd18a6d2_74fee3c3",
+        "filename": "src/tests/BUILD.gn",
+        "patchSetId": 5
+      },
+      "lineNbr": 525,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2022-05-13T13:47:31Z",
+      "side": 1,
+      "message": "this belongs in util/capture.",
+      "range": {
+        "startLine": 508,
+        "startChar": 0,
+        "endLine": 525,
+        "endChar": 1
+      },
+      "revId": "f94bff4b21e34a73a0482632dcd3d35a372bab0b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "87b2715d_90ea7824",
+        "filename": "src/tests/trace_utils/angle_trace_gl.h",
+        "patchSetId": 5
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2022-05-13T13:47:31Z",
+      "side": 1,
+      "message": "These all belong in util/capture.",
+      "revId": "f94bff4b21e34a73a0482632dcd3d35a372bab0b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
