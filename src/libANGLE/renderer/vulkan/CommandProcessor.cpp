@@ -17,7 +17,7 @@ namespace vk
 {
 namespace
 {
-constexpr size_t kInFlightCommandsLimit = 50u;
+constexpr size_t kInFlightCommandsLimit = 0u;
 constexpr bool kOutputVmaStatsString    = false;
 // When suballocation garbages is more than this, we may wait for GPU to finish and free up some
 // memory for allocation.
@@ -1176,7 +1176,7 @@ angle::Result CommandQueue::submitFrame(
     if (mInFlightCommands.size() > kInFlightCommandsLimit)
     {
         size_t numCommandsToFinish = mInFlightCommands.size() - kInFlightCommandsLimit;
-        Serial finishSerial        = mInFlightCommands[numCommandsToFinish].serial;
+        Serial finishSerial        = mInFlightCommands[numCommandsToFinish - 1].serial;
         ANGLE_TRY(finishToSerial(context, finishSerial, renderer->getMaxFenceWaitTimeNs()));
     }
 
@@ -1192,6 +1192,9 @@ angle::Result CommandQueue::submitFrame(
         ANGLE_TRY(finishToSerial(context, finishSerial, renderer->getMaxFenceWaitTimeNs()));
         suballocationGarbageSize = renderer->getSuballocationGarbageSize();
     }
+
+    ASSERT(mInFlightCommands.empty());
+    ASSERT(renderer->getSuballocationGarbageSize() == 0);
 
     return angle::Result::Continue;
 }
