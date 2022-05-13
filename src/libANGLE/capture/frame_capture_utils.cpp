@@ -1082,7 +1082,7 @@ void SerializeProgram(JsonSerializer *json,
                       gl::Program *program)
 {
     // Ensure deterministic link.
-    program->resolveLink(context);
+    program->resolveLink();
 
     GroupScope group(json, "Program", id);
     SerializeProgramState(json, program->getState());

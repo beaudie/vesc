@@ -525,6 +525,7 @@ void LoadShInterfaceBlock(BinaryInputStream *stream, sh::InterfaceBlock *block)
 // Saves the linking context for later use in resolveLink().
 struct Program::LinkingState
 {
+    const Context *context = nullptr;
     std::shared_ptr<ProgramExecutable> linkedExecutable;
     ProgramLinkedResources resources;
     egl::BlobCache::Key programHash;
@@ -1079,12 +1080,12 @@ Program::~Program()
 
 void Program::onDestroy(const Context *context)
 {
-    resolveLink(context);
+    resolveLink();
     for (ShaderType shaderType : AllShaderTypes())
     {
         if (mState.mAttachedShaders[shaderType])
         {
-            mState.mAttachedShaders[shaderType]->release(context);
+            mState.mAttachedShaders[shaderType]->release(context, this);
             mState.mAttachedShaders[shaderType] = nullptr;
         }
     }
@@ -1120,17 +1121,17 @@ void Program::attachShader(Shader *shader)
     ASSERT(shaderType != ShaderType::InvalidEnum);
 
     mState.mAttachedShaders[shaderType] = shader;
-    mState.mAttachedShaders[shaderType]->addRef();
+    mState.mAttachedShaders[shaderType]->addRef(this);
 }
 
 void Program::detachShader(const Context *context, Shader *shader)
 {
-    resolveLink(context);
+    resolveLink();
     ShaderType shaderType = shader->getType();
     ASSERT(shaderType != ShaderType::InvalidEnum);
 
     ASSERT(mState.mAttachedShaders[shaderType] == shader);
-    shader->release(context);
+    shader->release(context, this);
     mState.mAttachedShaders[shaderType] = nullptr;
 }
 
@@ -1196,6 +1197,8 @@ angle::Result Program::link(const Context *context)
 // The code gets compiled into binaries.
 angle::Result Program::linkImpl(const Context *context)
 {
+    // Resolve the current link.
+    resolveLink();
     ASSERT(!mLinkingState);
     // Don't make any local variables pointing to anything within the ProgramExecutable, since
     // unlink() could make a new ProgramExecutable making any references/pointers invalid.
@@ -1362,6 +1365,7 @@ angle::Result Program::linkImpl(const Context *context)
     mState.mExecutable->saveLinkedStateInfo(mState);
 
     mLinkingState                    = std::move(linkingState);
+    mLinkingState->context           = context;
     mLinkingState->linkingFromBinary = false;
     mLinkingState->programHash       = programHash;
     mLinkingState->linkEvent         = mProgram->link(context, resources, infoLog, mergedVaryings);
@@ -1384,9 +1388,10 @@ bool Program::isLinking() const
             mLinkingState->linkEvent->isLinking());
 }
 
-void Program::resolveLinkImpl(const Context *context)
+void Program::resolveLinkImpl()
 {
     ASSERT(mLinkingState.get());
+    const Context *context = mLinkingState->context;
 
     angle::Result result = mLinkingState->linkEvent->wait(context);
 
