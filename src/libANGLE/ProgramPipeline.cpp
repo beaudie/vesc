@@ -623,7 +623,7 @@ void ProgramPipeline::validate(const gl::Context *context)
         Program *shaderProgram = mState.mPrograms[shaderType];
         if (shaderProgram)
         {
-            shaderProgram->resolveLink(context);
+            shaderProgram->resolveLink();
             shaderProgram->validate(caps);
             std::string shaderInfoString = shaderProgram->getExecutable().getInfoLogString();
             if (shaderInfoString.length())

@@ -1787,7 +1787,7 @@ bool ValidateUseProgramStagesBase(const Context *context,
     // with its GL_PROGRAM_SEPARABLE status set.
     // resolveLink() may not have been called if glCreateShaderProgramv() was not used and
     // glDetachShader() was not called.
-    program->resolveLink(context);
+    program->resolveLink();
     if (!program->isSeparable())
     {
         context->validationError(entryPoint, GL_INVALID_OPERATION, kProgramNotSeparable);

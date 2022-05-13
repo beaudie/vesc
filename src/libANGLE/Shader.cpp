@@ -21,6 +21,7 @@
 #include "libANGLE/Context.h"
 #include "libANGLE/ResourceManager.h"
 #include "libANGLE/renderer/GLImplFactory.h"
+#include "libANGLE/renderer/ProgramImpl.h"
 #include "libANGLE/renderer/ShaderImpl.h"
 #include "platform/FrontendFeatures_autogen.h"
 
@@ -118,6 +119,11 @@ struct Shader::CompilingState
 {
     std::shared_ptr<rx::WaitableCompileEvent> compileEvent;
     ShCompilerInstance shCompilerInstance;
+
+    // resolveCompile() may also run in worker thread from the linking tasks of its attached
+    // programs. Use mutex for such concurrent access protection.
+    std::mutex mutex;
+    bool resolved = false;
 };
 
 ShaderState::ShaderState(ShaderType shaderType)
@@ -143,7 +149,6 @@ Shader::Shader(ShaderProgramManager *manager,
       mRendererLimitations(rendererLimitations),
       mHandle(handle),
       mType(type),
-      mRefCount(0),
       mDeleteStatus(false),
       mResourceManager(manager),
       mCurrentMaxComputeWorkGroupInvocations(0u)
@@ -313,6 +318,9 @@ void Shader::getTranslatedSourceWithDebugInfo(GLsizei bufSize, GLsizei *length, 
 
 void Shader::compile(const Context *context)
 {
+    // Only start a new compile once all Program linkings of the previous one are done.
+    waitProgramLink();
+
     resolveCompile();
 
     mState.mTranslatedSource.clear();
@@ -409,221 +417,246 @@ void Shader::resolveCompile()
     ASSERT(mCompilingState.get());
 
     mCompilingState->compileEvent->wait();
-
-    mInfoLog += mCompilingState->compileEvent->getInfoLog();
-
     ScopedExit exit([this]() {
         mBoundCompiler->putInstance(std::move(mCompilingState->shCompilerInstance));
         mCompilingState->compileEvent.reset();
         mCompilingState.reset();
     });
 
-    ShHandle compilerHandle = mCompilingState->shCompilerInstance.getHandle();
-    if (!mCompilingState->compileEvent->getResult())
     {
-        mInfoLog += sh::GetInfoLog(compilerHandle);
-        INFO() << std::endl << mInfoLog;
-        mState.mCompileStatus = CompileStatus::NOT_COMPILED;
-        return;
-    }
+        std::lock_guard<std::mutex> lock(mCompilingState->mutex);
+        if (mCompilingState->resolved)
+        {
+            return;
+        }
+        mCompilingState->resolved = true;
 
-    const ShShaderOutput outputType = mCompilingState->shCompilerInstance.getShaderOutputType();
-    const bool isBinaryOutput =
-        outputType == SH_SPIRV_VULKAN_OUTPUT || outputType == SH_SPIRV_METAL_OUTPUT;
+        mInfoLog += mCompilingState->compileEvent->getInfoLog();
 
-    if (isBinaryOutput)
-    {
-        mState.mCompiledBinary = sh::GetObjectBinaryBlob(compilerHandle);
-    }
-    else
-    {
-        mState.mTranslatedSource = sh::GetObjectCode(compilerHandle);
+        ShHandle compilerHandle = mCompilingState->shCompilerInstance.getHandle();
+        if (!mCompilingState->compileEvent->getResult())
+        {
+            mInfoLog += sh::GetInfoLog(compilerHandle);
+            INFO() << std::endl << mInfoLog;
+            mState.mCompileStatus = CompileStatus::NOT_COMPILED;
+            return;
+        }
+
+        const ShShaderOutput outputType = mCompilingState->shCompilerInstance.getShaderOutputType();
+        const bool isBinaryOutput =
+            outputType == SH_SPIRV_VULKAN_OUTPUT || outputType == SH_SPIRV_METAL_OUTPUT;
+
+        if (isBinaryOutput)
+        {
+            mState.mCompiledBinary = sh::GetObjectBinaryBlob(compilerHandle);
+        }
+        else
+        {
+            mState.mTranslatedSource = sh::GetObjectCode(compilerHandle);
 
 #if !defined(NDEBUG)
-        // Prefix translated shader with commented out un-translated shader.
-        // Useful in diagnostics tools which capture the shader source.
-        std::ostringstream shaderStream;
-        shaderStream << "// GLSL\n";
-        shaderStream << "//\n";
+            // Prefix translated shader with commented out un-translated shader.
+            // Useful in diagnostics tools which capture the shader source.
+            std::ostringstream shaderStream;
+            shaderStream << "// GLSL\n";
+            shaderStream << "//\n";
 
-        std::istringstream inputSourceStream(mState.mSource);
-        std::string line;
-        while (std::getline(inputSourceStream, line))
-        {
-            // Remove null characters from the source line
-            line.erase(std::remove(line.begin(), line.end(), '\0'), line.end());
-
-            shaderStream << "// " << line;
-
-            // glslang complains if a comment ends with backslash
-            if (!line.empty() && line.back() == '\\')
+            std::istringstream inputSourceStream(mState.mSource);
+            std::string line;
+            while (std::getline(inputSourceStream, line))
             {
-                shaderStream << "\\";
-            }
+                // Remove null characters from the source line
+                line.erase(std::remove(line.begin(), line.end(), '\0'), line.end());
 
-            shaderStream << std::endl;
-        }
-        shaderStream << "\n\n";
-        shaderStream << mState.mTranslatedSource;
-        mState.mTranslatedSource = shaderStream.str();
+                shaderStream << "// " << line;
+
+                // glslang complains if a comment ends with backslash
+                if (!line.empty() && line.back() == '\\')
+                {
+                    shaderStream << "\\";
+                }
+
+                shaderStream << std::endl;
+            }
+            shaderStream << "\n\n";
+            shaderStream << mState.mTranslatedSource;
+            mState.mTranslatedSource = shaderStream.str();
 #endif  // !defined(NDEBUG)
-    }
+        }
 
-    // Gather the shader information
-    mState.mShaderVersion = sh::GetShaderVersion(compilerHandle);
+        // Gather the shader information
+        mState.mShaderVersion = sh::GetShaderVersion(compilerHandle);
 
-    mState.mUniforms            = GetShaderVariables(sh::GetUniforms(compilerHandle));
-    mState.mUniformBlocks       = GetShaderVariables(sh::GetUniformBlocks(compilerHandle));
-    mState.mShaderStorageBlocks = GetShaderVariables(sh::GetShaderStorageBlocks(compilerHandle));
-    mState.mSpecConstUsageBits =
-        rx::SpecConstUsageBits(sh::GetShaderSpecConstUsageBits(compilerHandle));
+        mState.mUniforms      = GetShaderVariables(sh::GetUniforms(compilerHandle));
+        mState.mUniformBlocks = GetShaderVariables(sh::GetUniformBlocks(compilerHandle));
+        mState.mShaderStorageBlocks =
+            GetShaderVariables(sh::GetShaderStorageBlocks(compilerHandle));
+        mState.mSpecConstUsageBits =
+            rx::SpecConstUsageBits(sh::GetShaderSpecConstUsageBits(compilerHandle));
 
-    switch (mState.mShaderType)
-    {
-        case ShaderType::Compute:
+        switch (mState.mShaderType)
         {
-            mState.mAllAttributes    = GetShaderVariables(sh::GetAttributes(compilerHandle));
-            mState.mActiveAttributes = GetActiveShaderVariables(&mState.mAllAttributes);
-            mState.mLocalSize        = sh::GetComputeShaderLocalGroupSize(compilerHandle);
-            if (mState.mLocalSize.isDeclared())
+            case ShaderType::Compute:
             {
-                angle::CheckedNumeric<uint32_t> checked_local_size_product(mState.mLocalSize[0]);
-                checked_local_size_product *= mState.mLocalSize[1];
-                checked_local_size_product *= mState.mLocalSize[2];
-
-                if (!checked_local_size_product.IsValid())
+                mState.mAllAttributes    = GetShaderVariables(sh::GetAttributes(compilerHandle));
+                mState.mActiveAttributes = GetActiveShaderVariables(&mState.mAllAttributes);
+                mState.mLocalSize        = sh::GetComputeShaderLocalGroupSize(compilerHandle);
+                if (mState.mLocalSize.isDeclared())
                 {
-                    WARN() << std::endl
-                           << "Integer overflow when computing the product of local_size_x, "
-                           << "local_size_y and local_size_z.";
+                    angle::CheckedNumeric<uint32_t> checked_local_size_product(
+                        mState.mLocalSize[0]);
+                    checked_local_size_product *= mState.mLocalSize[1];
+                    checked_local_size_product *= mState.mLocalSize[2];
+
+                    if (!checked_local_size_product.IsValid())
+                    {
+                        WARN() << std::endl
+                               << "Integer overflow when computing the product of local_size_x, "
+                               << "local_size_y and local_size_z.";
+                        mState.mCompileStatus = CompileStatus::NOT_COMPILED;
+                        return;
+                    }
+                    if (checked_local_size_product.ValueOrDie() >
+                        mCurrentMaxComputeWorkGroupInvocations)
+                    {
+                        WARN() << std::endl
+                               << "The total number of invocations within a work group exceeds "
+                               << "MAX_COMPUTE_WORK_GROUP_INVOCATIONS.";
+                        mState.mCompileStatus = CompileStatus::NOT_COMPILED;
+                        return;
+                    }
+                }
+
+                unsigned int sharedMemSize = sh::GetShaderSharedMemorySize(compilerHandle);
+                if (sharedMemSize > mMaxComputeSharedMemory)
+                {
+                    WARN() << std::endl << "Exceeded maximum shared memory size";
                     mState.mCompileStatus = CompileStatus::NOT_COMPILED;
                     return;
                 }
-                if (checked_local_size_product.ValueOrDie() >
-                    mCurrentMaxComputeWorkGroupInvocations)
+                break;
+            }
+            case ShaderType::Vertex:
+            {
+                mState.mOutputVaryings = GetShaderVariables(sh::GetOutputVaryings(compilerHandle));
+                mState.mAllAttributes  = GetShaderVariables(sh::GetAttributes(compilerHandle));
+                mState.mActiveAttributes = GetActiveShaderVariables(&mState.mAllAttributes);
+                mState.mNumViews         = sh::GetVertexShaderNumViews(compilerHandle);
+                break;
+            }
+            case ShaderType::Fragment:
+            {
+                mState.mAllAttributes    = GetShaderVariables(sh::GetAttributes(compilerHandle));
+                mState.mActiveAttributes = GetActiveShaderVariables(&mState.mAllAttributes);
+                mState.mInputVaryings    = GetShaderVariables(sh::GetInputVaryings(compilerHandle));
+                // TODO(jmadill): Figure out why we only sort in the FS, and if we need to.
+                std::sort(mState.mInputVaryings.begin(), mState.mInputVaryings.end(),
+                          CompareShaderVar);
+                mState.mActiveOutputVariables =
+                    GetActiveShaderVariables(sh::GetOutputVariables(compilerHandle));
+                mState.mEarlyFragmentTestsOptimization =
+                    sh::HasEarlyFragmentTestsOptimization(compilerHandle);
+                mState.mEnablesPerSampleShading = sh::EnablesPerSampleShading(compilerHandle);
+                mState.mAdvancedBlendEquations =
+                    BlendEquationBitSet(sh::GetAdvancedBlendEquations(compilerHandle));
+                break;
+            }
+            case ShaderType::Geometry:
+            {
+                mState.mInputVaryings  = GetShaderVariables(sh::GetInputVaryings(compilerHandle));
+                mState.mOutputVaryings = GetShaderVariables(sh::GetOutputVaryings(compilerHandle));
+
+                if (sh::HasValidGeometryShaderInputPrimitiveType(compilerHandle))
                 {
-                    WARN() << std::endl
-                           << "The total number of invocations within a work group exceeds "
-                           << "MAX_COMPUTE_WORK_GROUP_INVOCATIONS.";
-                    mState.mCompileStatus = CompileStatus::NOT_COMPILED;
-                    return;
+                    mState.mGeometryShaderInputPrimitiveType = FromGLenum<PrimitiveMode>(
+                        sh::GetGeometryShaderInputPrimitiveType(compilerHandle));
                 }
+                if (sh::HasValidGeometryShaderOutputPrimitiveType(compilerHandle))
+                {
+                    mState.mGeometryShaderOutputPrimitiveType = FromGLenum<PrimitiveMode>(
+                        sh::GetGeometryShaderOutputPrimitiveType(compilerHandle));
+                }
+                if (sh::HasValidGeometryShaderMaxVertices(compilerHandle))
+                {
+                    mState.mGeometryShaderMaxVertices =
+                        sh::GetGeometryShaderMaxVertices(compilerHandle);
+                }
+                mState.mGeometryShaderInvocations =
+                    sh::GetGeometryShaderInvocations(compilerHandle);
+                break;
+            }
+            case ShaderType::TessControl:
+            {
+                mState.mInputVaryings  = GetShaderVariables(sh::GetInputVaryings(compilerHandle));
+                mState.mOutputVaryings = GetShaderVariables(sh::GetOutputVaryings(compilerHandle));
+                mState.mTessControlShaderVertices =
+                    sh::GetTessControlShaderVertices(compilerHandle);
+                break;
+            }
+            case ShaderType::TessEvaluation:
+            {
+                mState.mInputVaryings  = GetShaderVariables(sh::GetInputVaryings(compilerHandle));
+                mState.mOutputVaryings = GetShaderVariables(sh::GetOutputVaryings(compilerHandle));
+                if (sh::HasValidTessGenMode(compilerHandle))
+                {
+                    mState.mTessGenMode = sh::GetTessGenMode(compilerHandle);
+                }
+                if (sh::HasValidTessGenSpacing(compilerHandle))
+                {
+                    mState.mTessGenSpacing = sh::GetTessGenSpacing(compilerHandle);
+                }
+                if (sh::HasValidTessGenVertexOrder(compilerHandle))
+                {
+                    mState.mTessGenVertexOrder = sh::GetTessGenVertexOrder(compilerHandle);
+                }
+                if (sh::HasValidTessGenPointMode(compilerHandle))
+                {
+                    mState.mTessGenPointMode = sh::GetTessGenPointMode(compilerHandle);
+                }
+                break;
             }
 
-            unsigned int sharedMemSize = sh::GetShaderSharedMemorySize(compilerHandle);
-            if (sharedMemSize > mMaxComputeSharedMemory)
-            {
-                WARN() << std::endl << "Exceeded maximum shared memory size";
-                mState.mCompileStatus = CompileStatus::NOT_COMPILED;
-                return;
-            }
-            break;
-        }
-        case ShaderType::Vertex:
-        {
-            mState.mOutputVaryings   = GetShaderVariables(sh::GetOutputVaryings(compilerHandle));
-            mState.mAllAttributes    = GetShaderVariables(sh::GetAttributes(compilerHandle));
-            mState.mActiveAttributes = GetActiveShaderVariables(&mState.mAllAttributes);
-            mState.mNumViews         = sh::GetVertexShaderNumViews(compilerHandle);
-            break;
-        }
-        case ShaderType::Fragment:
-        {
-            mState.mAllAttributes    = GetShaderVariables(sh::GetAttributes(compilerHandle));
-            mState.mActiveAttributes = GetActiveShaderVariables(&mState.mAllAttributes);
-            mState.mInputVaryings    = GetShaderVariables(sh::GetInputVaryings(compilerHandle));
-            // TODO(jmadill): Figure out why we only sort in the FS, and if we need to.
-            std::sort(mState.mInputVaryings.begin(), mState.mInputVaryings.end(), CompareShaderVar);
-            mState.mActiveOutputVariables =
-                GetActiveShaderVariables(sh::GetOutputVariables(compilerHandle));
-            mState.mEarlyFragmentTestsOptimization =
-                sh::HasEarlyFragmentTestsOptimization(compilerHandle);
-            mState.mEnablesPerSampleShading = sh::EnablesPerSampleShading(compilerHandle);
-            mState.mAdvancedBlendEquations =
-                BlendEquationBitSet(sh::GetAdvancedBlendEquations(compilerHandle));
-            break;
-        }
-        case ShaderType::Geometry:
-        {
-            mState.mInputVaryings  = GetShaderVariables(sh::GetInputVaryings(compilerHandle));
-            mState.mOutputVaryings = GetShaderVariables(sh::GetOutputVaryings(compilerHandle));
-
-            if (sh::HasValidGeometryShaderInputPrimitiveType(compilerHandle))
-            {
-                mState.mGeometryShaderInputPrimitiveType = FromGLenum<PrimitiveMode>(
-                    sh::GetGeometryShaderInputPrimitiveType(compilerHandle));
-            }
-            if (sh::HasValidGeometryShaderOutputPrimitiveType(compilerHandle))
-            {
-                mState.mGeometryShaderOutputPrimitiveType = FromGLenum<PrimitiveMode>(
-                    sh::GetGeometryShaderOutputPrimitiveType(compilerHandle));
-            }
-            if (sh::HasValidGeometryShaderMaxVertices(compilerHandle))
-            {
-                mState.mGeometryShaderMaxVertices =
-                    sh::GetGeometryShaderMaxVertices(compilerHandle);
-            }
-            mState.mGeometryShaderInvocations = sh::GetGeometryShaderInvocations(compilerHandle);
-            break;
-        }
-        case ShaderType::TessControl:
-        {
-            mState.mInputVaryings  = GetShaderVariables(sh::GetInputVaryings(compilerHandle));
-            mState.mOutputVaryings = GetShaderVariables(sh::GetOutputVaryings(compilerHandle));
-            mState.mTessControlShaderVertices = sh::GetTessControlShaderVertices(compilerHandle);
-            break;
-        }
-        case ShaderType::TessEvaluation:
-        {
-            mState.mInputVaryings  = GetShaderVariables(sh::GetInputVaryings(compilerHandle));
-            mState.mOutputVaryings = GetShaderVariables(sh::GetOutputVaryings(compilerHandle));
-            if (sh::HasValidTessGenMode(compilerHandle))
-            {
-                mState.mTessGenMode = sh::GetTessGenMode(compilerHandle);
-            }
-            if (sh::HasValidTessGenSpacing(compilerHandle))
-            {
-                mState.mTessGenSpacing = sh::GetTessGenSpacing(compilerHandle);
-            }
-            if (sh::HasValidTessGenVertexOrder(compilerHandle))
-            {
-                mState.mTessGenVertexOrder = sh::GetTessGenVertexOrder(compilerHandle);
-            }
-            if (sh::HasValidTessGenPointMode(compilerHandle))
-            {
-                mState.mTessGenPointMode = sh::GetTessGenPointMode(compilerHandle);
-            }
-            break;
+            default:
+                UNREACHABLE();
         }
 
-        default:
-            UNREACHABLE();
+        ASSERT(!mState.mTranslatedSource.empty() || !mState.mCompiledBinary.empty());
+
+        bool success          = mCompilingState->compileEvent->postTranslate(&mInfoLog);
+        mState.mCompileStatus = success ? CompileStatus::COMPILED : CompileStatus::NOT_COMPILED;
     }
-
-    ASSERT(!mState.mTranslatedSource.empty() || !mState.mCompiledBinary.empty());
-
-    bool success          = mCompilingState->compileEvent->postTranslate(&mInfoLog);
-    mState.mCompileStatus = success ? CompileStatus::COMPILED : CompileStatus::NOT_COMPILED;
 }
 
-void Shader::addRef()
+void Shader::addRef(Program *program)
 {
-    mRefCount++;
+    mPrograms.push_back(program);
 }
 
-void Shader::release(const Context *context)
+void Shader::release(const Context *context, Program *program)
 {
-    mRefCount--;
+    auto it = std::find(mPrograms.begin(), mPrograms.end(), program);
+    ASSERT(it != mPrograms.end());
+    mPrograms.erase(it);
 
-    if (mRefCount == 0 && mDeleteStatus)
+    if (mPrograms.size() == 0 && mDeleteStatus)
     {
+        resolveCompile();
         mResourceManager->deleteShader(context, mHandle);
+    }
+}
+
+void Shader::waitProgramLink()
+{
+    for (Program *program : mPrograms)
+    {
+        ASSERT(program);
+        program->resolveLink();
     }
 }
 
 unsigned int Shader::getRefCount() const
 {
-    return mRefCount;
+    return static_cast<unsigned int>(mPrograms.size());
 }
 
 bool Shader::isFlaggedForDeletion() const
