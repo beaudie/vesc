@@ -10332,8 +10332,6 @@ void main()
 TEST_P(TextureBufferTestES31, TextureBufferThenBufferData)
 {
     ANGLE_SKIP_TEST_IF(!IsGLExtensionEnabled("GL_OES_texture_buffer"));
-    // angleproject:7283
-    ANGLE_SKIP_TEST_IF(IsVulkan());
     // Qualcomm OpenGLES native driver claims support GL_OES_texture_buffer but can't compile the
     // shader with GL_OES_texture_buffer string in it.
     ANGLE_SKIP_TEST_IF(IsOpenGLES() && IsQualcomm());
