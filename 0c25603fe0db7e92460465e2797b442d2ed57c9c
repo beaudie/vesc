@@ -33,6 +33,57 @@
       "message": "Jie: thank you for the CL! Any possibility of converting the repro case into a test?",
       "revId": "0c25603fe0db7e92460465e2797b442d2ed57c9c",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "337ac3fb_04d2be8b",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2022-05-13T19:26:18Z",
+      "side": 1,
+      "message": "Thank you Jie for working on this!\n\nPlease do incorporate the currently WebGL-based test case as an angle_end2end_test - thanks.\n\nOne question.\n",
+      "revId": "0c25603fe0db7e92460465e2797b442d2ed57c9c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "bfc90ee1_7993c17b",
+        "filename": "src/libANGLE/Shader.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 317,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2022-05-13T19:26:18Z",
+      "side": 1,
+      "message": "until -\u003e once",
+      "revId": "0c25603fe0db7e92460465e2797b442d2ed57c9c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "7762654d_a8613bdd",
+        "filename": "src/libANGLE/Shader.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 834,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2022-05-13T19:26:18Z",
+      "side": 1,
+      "message": "The LinkEvent is owned by Program::mLinkingState. If two relinks of the program are triggered without Shader::removeLinkEvent being called, this map will contain a deleted LinkEvent.\n\nI have a feeling this could happen in this situation:\n\n- Link a program with two attached shaders\n- Detach one shader\n- Attach a different shader to that program\n- Link the program\n- Attempt to recompile the detached shader\n\nCould you please consider this and see if this is a potential problem?\n\nIs there any other way to make these references to the LinkEvents less dangerous? Thinking upward references from Shaders to the Programs they\u0027re attached to, but not sure that\u0027s a good idea, either.",
+      "revId": "0c25603fe0db7e92460465e2797b442d2ed57c9c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
