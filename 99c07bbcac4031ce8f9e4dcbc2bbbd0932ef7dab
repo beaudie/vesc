@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "2a515908_1dd340fb",
+        "filename": "src/tests/gl_tests/StateChangeTest.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 8876,
+      "author": {
+        "id": 1520902
+      },
+      "writtenOn": "2022-05-13T23:44:25Z",
+      "side": 1,
+      "message": "Do we want to enable the Feature::SupportsExtendedDynamicState for StateChangeTestES3, so that the dynamic state code you added can be covered with the test?",
+      "revId": "99c07bbcac4031ce8f9e4dcbc2bbbd0932ef7dab",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
