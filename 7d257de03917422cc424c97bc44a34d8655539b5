@@ -16,6 +16,24 @@
       "message": "What happens if we get a crash on the bots? Do we have llvm-addr2line ?",
       "revId": "7d257de03917422cc424c97bc44a34d8655539b5",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "f467ee3a_4b595619",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1491687
+      },
+      "writtenOn": "2022-05-13T15:50:32Z",
+      "side": 1,
+      "message": "The bots probably won\u0027t have it installed. On Ubuntu 18.04 following steps are required to get it:\n\n# Install llvm (not installed by the scripts)\nsudo apt install llvm-10\n\n# Add it to the PATH manually\nexport PATH\u003d$PATH:/usr/lib/llvm-10/bin/",
+      "parentUuid": "8533944e_f59fff72",
+      "revId": "7d257de03917422cc424c97bc44a34d8655539b5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
