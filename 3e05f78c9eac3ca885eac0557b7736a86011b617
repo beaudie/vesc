@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "e5e462a8_9e651b99",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1524687
+      },
+      "writtenOn": "2022-05-13T03:12:52Z",
+      "side": 1,
+      "message": "Add VulkanPerformanceCounterTest_ES31, TextureSampleByDrawDispatchDraw, to verify the implicit synchronization for one texture sample by FS/CS/FS sequentially.",
+      "revId": "3e05f78c9eac3ca885eac0557b7736a86011b617",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
