@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "b3b792da_c0a88ea4",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1290487
+      },
+      "writtenOn": "2022-05-13T17:41:58Z",
+      "side": 1,
+      "message": "Also, you\u0027ll need to pull new source and rebase your changes in order to address the \"Merge Conflict\".  Do that when/before you\u0027re ready to do your next upload.",
+      "revId": "05f0512707388bb8d4f297d61affc8cb76ad1d53",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
