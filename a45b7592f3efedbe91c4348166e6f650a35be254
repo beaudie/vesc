@@ -1,0 +1,72 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "e38a8af3_147555bd",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 8
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2022-05-13T22:55:21Z",
+      "side": 1,
+      "message": "Thanks Geoff for the answers and updates. lgtm\n",
+      "revId": "a45b7592f3efedbe91c4348166e6f650a35be254",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b30d3644_0230c0d1",
+        "filename": "src/libANGLE/renderer/d3d/TextureD3D.cpp",
+        "patchSetId": 8
+      },
+      "lineNbr": 2174,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2022-05-13T22:55:21Z",
+      "side": 1,
+      "message": "We\u0027re -\u003e We",
+      "revId": "a45b7592f3efedbe91c4348166e6f650a35be254",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ac2c2a38_810e0ab9",
+        "filename": "src/libANGLE/renderer/d3d/TextureD3D.cpp",
+        "patchSetId": 8
+      },
+      "lineNbr": 2873,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2022-05-13T22:55:21Z",
+      "side": 1,
+      "message": "We\u0027re -\u003e We",
+      "revId": "a45b7592f3efedbe91c4348166e6f650a35be254",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "298684ca_ac74e707",
+        "filename": "src/libANGLE/renderer/d3d/TextureD3D.cpp",
+        "patchSetId": 8
+      },
+      "lineNbr": 3624,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2022-05-13T22:55:21Z",
+      "side": 1,
+      "message": "We\u0027re -\u003e We",
+      "revId": "a45b7592f3efedbe91c4348166e6f650a35be254",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
