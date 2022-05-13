@@ -21,6 +21,7 @@
 #include "libANGLE/Context.h"
 #include "libANGLE/ResourceManager.h"
 #include "libANGLE/renderer/GLImplFactory.h"
+#include "libANGLE/renderer/ProgramImpl.h"
 #include "libANGLE/renderer/ShaderImpl.h"
 #include "platform/FrontendFeatures_autogen.h"
 
@@ -118,6 +119,11 @@ struct Shader::CompilingState
 {
     std::shared_ptr<rx::WaitableCompileEvent> compileEvent;
     ShCompilerInstance shCompilerInstance;
+
+    // resolveCompile() may also run in worker thread from the linking tasks of its attached
+    // programs. Use mutex for such concurrent access protection.
+    std::mutex mutex;
+    bool resolved = false;
 };
 
 ShaderState::ShaderState(ShaderType shaderType)
@@ -143,7 +149,6 @@ Shader::Shader(ShaderProgramManager *manager,
       mRendererLimitations(rendererLimitations),
       mHandle(handle),
       mType(type),
-      mRefCount(0),
       mDeleteStatus(false),
       mResourceManager(manager),
       mCurrentMaxComputeWorkGroupInvocations(0u)
@@ -313,6 +318,9 @@ void Shader::getTranslatedSourceWithDebugInfo(GLsizei bufSize, GLsizei *length, 
 
 void Shader::compile(const Context *context)
 {
+    // Only start a new compile once all Program linkings of the previous one are done.
+    waitProgramLink();
+
     resolveCompile();
 
     mState.mTranslatedSource.clear();
@@ -409,6 +417,13 @@ void Shader::resolveCompile()
     ASSERT(mCompilingState.get());
 
     mCompilingState->compileEvent->wait();
+
+    std::lock_guard<std::mutex> lock(mCompilingState->mutex);
+    if (mCompilingState->resolved)
+    {
+        return;
+    }
+    mCompilingState->resolved = true;
 
     mInfoLog += mCompilingState->compileEvent->getInfoLog();
 
@@ -606,24 +621,35 @@ void Shader::resolveCompile()
     mState.mCompileStatus = success ? CompileStatus::COMPILED : CompileStatus::NOT_COMPILED;
 }
 
-void Shader::addRef()
+void Shader::addRef(Program *program)
 {
-    mRefCount++;
+    mPrograms.push_back(program);
 }
 
-void Shader::release(const Context *context)
+void Shader::release(const Context *context, Program *program)
 {
-    mRefCount--;
+    auto it = std::find(mPrograms.begin(), mPrograms.end(), program);
+    ASSERT(it != mPrograms.end());
+    mPrograms.erase(it);
 
-    if (mRefCount == 0 && mDeleteStatus)
+    if (mPrograms.size() == 0 && mDeleteStatus)
     {
         mResourceManager->deleteShader(context, mHandle);
     }
 }
 
+void Shader::waitProgramLink()
+{
+    for (Program *program : mPrograms)
+    {
+        ASSERT(program);
+        program->resolveLink();
+    }
+}
+
 unsigned int Shader::getRefCount() const
 {
-    return mRefCount;
+    return static_cast<unsigned int>(mPrograms.size());
 }
 
 bool Shader::isFlaggedForDeletion() const
