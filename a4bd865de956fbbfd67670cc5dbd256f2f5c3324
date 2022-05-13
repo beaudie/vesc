@@ -16,6 +16,24 @@
       "message": "Shabi, what is this CL aimed to resolve?",
       "revId": "a4bd865de956fbbfd67670cc5dbd256f2f5c3324",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "e020fc14_527653c9",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-05-13T16:44:46Z",
+      "side": 1,
+      "message": "RenderDoc. Also, tried running a perf test on my Linux/Intel laptop and got a crash because of this too. The reverted change is causing other shenanigans too: https://github.com/KhronosGroup/Vulkan-Loader/issues/928\n\nThis change picks up the revert while the autoroller is blocked on some VVL issue",
+      "parentUuid": "7586d480_d84e7d6d",
+      "revId": "a4bd865de956fbbfd67670cc5dbd256f2f5c3324",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
