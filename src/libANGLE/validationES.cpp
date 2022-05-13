@@ -1360,7 +1360,7 @@ Program *GetValidProgram(const Context *context, angle::EntryPoint entryPoint, S
     Program *program = GetValidProgramNoResolve(context, entryPoint, id);
     if (program)
     {
-        program->resolveLink(context);
+        program->resolveLink();
     }
     return program;
 }

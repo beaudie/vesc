@@ -546,7 +546,7 @@ class Context final : public egl::LabeledObject, angle::NonCopyable, public angl
         Program *program = mState.mShaderProgramManager->getProgram(handle);
         if (program)
         {
-            program->resolveLink(this);
+            program->resolveLink();
         }
         return program;
     }
