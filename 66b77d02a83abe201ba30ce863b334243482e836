@@ -35,6 +35,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "a71ba48f_5bcf8989",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 91
+      },
+      "lineNbr": 908,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2022-05-13T13:56:34Z",
+      "side": 1,
+      "message": "Could be - better left as a separate CL though. As it stands it\u0027s not hurting anything ATM.",
+      "parentUuid": "9a2f629b_359930a6",
+      "revId": "66b77d02a83abe201ba30ce863b334243482e836",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "aecbf1e2_217824c6",
@@ -48,6 +66,24 @@
       "writtenOn": "2022-05-11T16:09:49Z",
       "side": 1,
       "message": "Redundant if/else",
+      "revId": "66b77d02a83abe201ba30ce863b334243482e836",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "0dad2ec2_89a84026",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 91
+      },
+      "lineNbr": 3229,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2022-05-13T13:56:34Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "aecbf1e2_217824c6",
       "revId": "66b77d02a83abe201ba30ce863b334243482e836",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
@@ -75,6 +111,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "c85bbc03_aeaf9893",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.h",
+        "patchSetId": 91
+      },
+      "lineNbr": 284,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2022-05-13T13:56:34Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "666e952f_8a7f7290",
+      "range": {
+        "startLine": 284,
+        "startChar": 6,
+        "endLine": 284,
+        "endChar": 24
+      },
+      "revId": "66b77d02a83abe201ba30ce863b334243482e836",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "00bfde8c_e019b554",
@@ -88,6 +148,24 @@
       "writtenOn": "2022-05-12T20:48:37Z",
       "side": 1,
       "message": "should it be glBindTexture(GL_TEXTURE_2D, texture2);?",
+      "revId": "66b77d02a83abe201ba30ce863b334243482e836",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "f0ba1dd0_424788ba",
+        "filename": "src/tests/gl_tests/VulkanPerformanceCounterTest.cpp",
+        "patchSetId": 91
+      },
+      "lineNbr": 5135,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2022-05-13T13:56:34Z",
+      "side": 1,
+      "message": "Ah yes, thanks for noticing.",
+      "parentUuid": "00bfde8c_e019b554",
       "revId": "66b77d02a83abe201ba30ce863b334243482e836",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
