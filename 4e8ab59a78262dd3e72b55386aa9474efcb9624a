@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "26f482bd_b726e6ca",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 5
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-05-13T20:36:05Z",
+      "side": 1,
+      "message": "Thanks, always good to see a negative line count!",
+      "revId": "4e8ab59a78262dd3e72b55386aa9474efcb9624a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
