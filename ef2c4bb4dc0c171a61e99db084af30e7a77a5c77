@@ -35,6 +35,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "8c9aeb5f_e2f9903d",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 75
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2022-05-13T13:56:45Z",
+      "side": 1,
+      "message": "Yeah, I wrote the ddoc internally with the mind that we could export it to the wiki.",
+      "parentUuid": "4500d422_0849dee7",
+      "revId": "ef2c4bb4dc0c171a61e99db084af30e7a77a5c77",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "8f441344_4cabbe33",
@@ -48,6 +66,30 @@
       "writtenOn": "2022-05-11T16:42:08Z",
       "side": 1,
       "message": "Could you please add a comment here that this is only used for xfb emulation, and that only supports VS?",
+      "range": {
+        "startLine": 179,
+        "startChar": 52,
+        "endLine": 179,
+        "endChar": 58
+      },
+      "revId": "ef2c4bb4dc0c171a61e99db084af30e7a77a5c77",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "317bbf39_204c33cb",
+        "filename": "src/libANGLE/renderer/ShaderInterfaceVariableInfoMap.h",
+        "patchSetId": 75
+      },
+      "lineNbr": 179,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2022-05-13T13:56:45Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "8f441344_4cabbe33",
       "range": {
         "startLine": 179,
         "startChar": 52,
@@ -81,6 +123,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "38d99918_1e442cfe",
+        "filename": "src/libANGLE/renderer/vulkan/TextureVk.cpp",
+        "patchSetId": 75
+      },
+      "lineNbr": 3358,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2022-05-13T13:56:45Z",
+      "side": 1,
+      "message": "Did it for readability. Anyway, remove this.",
+      "parentUuid": "e69c4ea7_d473365a",
+      "range": {
+        "startLine": 3357,
+        "startChar": 0,
+        "endLine": 3358,
+        "endChar": 66
+      },
+      "revId": "ef2c4bb4dc0c171a61e99db084af30e7a77a5c77",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "0f71c47b_d23d203c",
@@ -98,6 +164,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "b5d61252_e244e1e0",
+        "filename": "src/libANGLE/renderer/vulkan/TransformFeedbackVk.cpp",
+        "patchSetId": 75
+      },
+      "lineNbr": 277,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2022-05-13T13:56:45Z",
+      "side": 1,
+      "message": "Whoops, thanks for catching.",
+      "parentUuid": "0f71c47b_d23d203c",
+      "revId": "ef2c4bb4dc0c171a61e99db084af30e7a77a5c77",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "7df8a948_d8b36f38",
@@ -111,6 +195,24 @@
       "writtenOn": "2022-05-11T16:42:08Z",
       "side": 1,
       "message": "Maybe move the original comment here. The fact that the offset has changed has implications later on.",
+      "revId": "ef2c4bb4dc0c171a61e99db084af30e7a77a5c77",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "4e97ca9c_debc9039",
+        "filename": "src/libANGLE/renderer/vulkan/vk_cache_utils.cpp",
+        "patchSetId": 75
+      },
+      "lineNbr": 3979,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2022-05-13T13:56:45Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "7df8a948_d8b36f38",
       "revId": "ef2c4bb4dc0c171a61e99db084af30e7a77a5c77",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
