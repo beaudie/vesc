@@ -88,6 +88,24 @@
       "parentUuid": "c82bb1f0_5b4d6f9b",
       "revId": "aa5a3f9c66dbe02e1b4e9bcf8cd215b510f16ff6",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "8d6ea0ff_052f0b64",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 13
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2022-05-13T13:18:46Z",
+      "side": 1,
+      "message": "Yeah the collect task stuff is just downloading some metadata and isn\u0027t directly calling into our scripts. It\u0027s actually an RPC from a different machine. The central swarming task is calling the triggered tasks to force them to finish and gather results.\n\nThe httplib2 error can be resolved by updating ANGLE\u0027s copy of .vpython3 to automatically set up the wheel to support the httplib2 module. See [1] for more details on vpython and wheels. See [2] for where to get the wheel for httplib2.\n\n[1]: https://chromium.googlesource.com/infra/infra/+/main/doc/users/vpython.md\n[2]: https://source.chromium.org/chromium/chromium/src/+/main:.vpython3;l\u003d150?q\u003d.vpython3\u0026ss\u003dchromium\n\nANGLE\u0027s version doesn\u0027t automatically sync with Chrome\u0027s, so sometimes we need to manually update it.",
+      "parentUuid": "8229e9f4_4ca53b5f",
+      "revId": "aa5a3f9c66dbe02e1b4e9bcf8cd215b510f16ff6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
