@@ -16,6 +16,46 @@
       "message": "Add VulkanPerformanceCounterTest_ES31, TextureSampleByDrawDispatchDraw, to verify the implicit synchronization for one texture sample by FS/CS/FS sequentially.",
       "revId": "3e05f78c9eac3ca885eac0557b7736a86011b617",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "099f25be_a8504478",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-05-13T03:44:09Z",
+      "side": 1,
+      "message": "LGTM",
+      "revId": "3e05f78c9eac3ca885eac0557b7736a86011b617",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "1ac063e8_326ace18",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 439,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-05-13T03:44:09Z",
+      "side": 1,
+      "message": "nit: You can simply say `On SwiftShader`. It\u0027s not a GPU, and the platform it runs on doesn\u0027t matter.",
+      "range": {
+        "startLine": 439,
+        "startChar": 4,
+        "endLine": 439,
+        "endChar": 41
+      },
+      "revId": "3e05f78c9eac3ca885eac0557b7736a86011b617",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
