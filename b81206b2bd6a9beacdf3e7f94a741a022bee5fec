@@ -143,6 +143,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "a17b94e5_b1f52efd",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2022-05-13T14:11:50Z",
+      "side": 1,
+      "message": "Yes, the trace binary data (gz) lives outside the APK and can be pushed/preserved however we want it.  I think Roman\u0027s new scripts actually push only the traces asked for in the gtest_filter, so we might have part of the solution already.",
+      "parentUuid": "75d239b6_ce2bc9d7",
+      "revId": "b81206b2bd6a9beacdf3e7f94a741a022bee5fec",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "5e2bc079_c257634c",
