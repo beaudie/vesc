@@ -16,6 +16,23 @@
       "message": "Hope for the best",
       "revId": "c9e4c57d56ce592f37fd3c44e4a886b30cb87acf",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "35441f5b_ce649fbc",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2022-05-13T17:22:00Z",
+      "side": 1,
+      "message": "lgtm\n\nLooks more obviously correct.\n",
+      "revId": "c9e4c57d56ce592f37fd3c44e4a886b30cb87acf",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
