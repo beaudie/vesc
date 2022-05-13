@@ -58,6 +58,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "c64d65e0_aff099ec",
+        "filename": "src/libANGLE/renderer/vulkan/TextureVk.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 2678,
+      "author": {
+        "id": 1511618
+      },
+      "writtenOn": "2022-05-13T21:23:18Z",
+      "side": 1,
+      "message": "Discussed with Ian, decided to follow D3D return code pattern.",
+      "parentUuid": "1fee4b31_371c6cdb",
+      "range": {
+        "startLine": 2678,
+        "startChar": 0,
+        "endLine": 2678,
+        "endChar": 31
+      },
+      "revId": "2a6dc001912e4966b5f1fd8cdbbb84ddda316e1c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "27c2dcfd_a9519cc0",
@@ -119,6 +143,30 @@
       "side": 1,
       "message": "Oh, and update the comment too:-)",
       "parentUuid": "27c2dcfd_a9519cc0",
+      "range": {
+        "startLine": 2680,
+        "startChar": 71,
+        "endLine": 2680,
+        "endChar": 91
+      },
+      "revId": "2a6dc001912e4966b5f1fd8cdbbb84ddda316e1c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "1c456a1c_217ecc9e",
+        "filename": "src/libANGLE/renderer/vulkan/TextureVk.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 2680,
+      "author": {
+        "id": 1511618
+      },
+      "writtenOn": "2022-05-13T21:23:18Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "b8d03c54_ed20ceee",
       "range": {
         "startLine": 2680,
         "startChar": 71,
@@ -199,6 +247,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "e29bf044_cad3892e",
+        "filename": "src/libANGLE/renderer/vulkan/TextureVk.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 2684,
+      "author": {
+        "id": 1511618
+      },
+      "writtenOn": "2022-05-13T21:23:18Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "da25af32_2cbcdceb",
+      "range": {
+        "startLine": 2684,
+        "startChar": 8,
+        "endLine": 2684,
+        "endChar": 31
+      },
+      "revId": "2a6dc001912e4966b5f1fd8cdbbb84ddda316e1c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "4ae0106d_721770c6",
@@ -247,6 +319,30 @@
       "writtenOn": "2022-05-13T17:40:10Z",
       "side": 1,
       "message": "Since `vkSetDebugUtilsObjectNameEXT` returns a VkResult, I believe this function must return `angle::Result`, and the call to `vkSetDebugUtilsObjectNameEXT` should be within `ANGLE_VK_TRY(context, ... )`",
+      "range": {
+        "startLine": 802,
+        "startChar": 0,
+        "endLine": 802,
+        "endChar": 4
+      },
+      "revId": "2a6dc001912e4966b5f1fd8cdbbb84ddda316e1c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "9baee81f_d98f9d74",
+        "filename": "src/libANGLE/renderer/vulkan/vk_utils.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 802,
+      "author": {
+        "id": 1511618
+      },
+      "writtenOn": "2022-05-13T21:23:18Z",
+      "side": 1,
+      "message": "Following D3D backend pattern here.",
+      "parentUuid": "3f24e15e_02adc0b6",
       "range": {
         "startLine": 802,
         "startChar": 0,

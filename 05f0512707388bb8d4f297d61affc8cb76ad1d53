@@ -50,6 +50,24 @@
       "message": "nit: unused",
       "revId": "05f0512707388bb8d4f297d61affc8cb76ad1d53",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "80b60d0a_f93cea9b",
+        "filename": "src/libANGLE/renderer/vulkan/TextureVk.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 622,
+      "author": {
+        "id": 1511618
+      },
+      "writtenOn": "2022-05-13T21:23:18Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "9548c801_d1d9dbb7",
+      "revId": "05f0512707388bb8d4f297d61affc8cb76ad1d53",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
