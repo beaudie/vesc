@@ -7,7 +7,6 @@
 import("../../../gni/angle.gni")
 
 angle_trace_fixture("angle_restricted_trace_fixture") {
-  gl_header = "$angle_root/src/tests/trace_utils/angle_trace_gl.h"
   public_deps = [ "$angle_root/src/tests:angle_trace_loader" ]
   public_configs = [ "$angle_root:no_gl_prototypes" ]
 }
