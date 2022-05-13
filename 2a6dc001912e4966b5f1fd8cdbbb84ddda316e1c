@@ -16,6 +16,86 @@
       "message": "Ian had asked for a design document for this, but by the time I was done reverse-engineering it just worked. I am concerned about adding the renderer to the texturevk object, and some of the data accesses/locations of the helper routines, but please consider this an experimental approach.  AGI captures will show the texture name in the Textures tab as well as when selecting a DescriptorSet View on the pipeline-\u003eFS page.",
       "revId": "2a6dc001912e4966b5f1fd8cdbbb84ddda316e1c",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "27c2dcfd_a9519cc0",
+        "filename": "src/libANGLE/renderer/vulkan/TextureVk.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 2680,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-05-13T02:12:11Z",
+      "side": 1,
+      "message": "You\u0027ll get used to it. Just do `getImage().getImage().getHandle()` if you want to be succinct.",
+      "range": {
+        "startLine": 2680,
+        "startChar": 71,
+        "endLine": 2680,
+        "endChar": 91
+      },
+      "revId": "2a6dc001912e4966b5f1fd8cdbbb84ddda316e1c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "2e388018_f52da631",
+        "filename": "src/libANGLE/renderer/vulkan/TextureVk.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 2683,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-05-13T02:12:11Z",
+      "side": 1,
+      "message": "We don\u0027t use `auto` except for very complex templated types.",
+      "range": {
+        "startLine": 2683,
+        "startChar": 4,
+        "endLine": 2683,
+        "endChar": 8
+      },
+      "revId": "2a6dc001912e4966b5f1fd8cdbbb84ddda316e1c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "4ae0106d_721770c6",
+        "filename": "src/libANGLE/renderer/vulkan/TextureVk.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 591,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-05-13T02:12:11Z",
+      "side": 1,
+      "message": "Big no to `mRenderer`. Please pass the `context` to `onLabelUpdate` from the front-end instead (yes, we are allowed to modify the back-end interface 😊)",
+      "revId": "2a6dc001912e4966b5f1fd8cdbbb84ddda316e1c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "70d2da0e_50bb128a",
+        "filename": "src/tests/gl_tests/TextureTest.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 2305,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-05-13T02:12:11Z",
+      "side": 1,
+      "message": "Please don\u0027t disable a useful text for this. You can duplicate the test + modify as needed.",
+      "revId": "2a6dc001912e4966b5f1fd8cdbbb84ddda316e1c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
