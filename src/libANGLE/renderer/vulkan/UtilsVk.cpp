@@ -383,17 +383,23 @@ void CalculateResolveOffset(const UtilsVk::BlitResolveParameters &params, int32_
     offset[1] = params.dstOffset[1] - params.srcOffset[1] * srcOffsetFactorY;
 }
 
-// Sets the appropriate settings in the pipeline for the shader to output stencil.  Requires the
-// shader stencil export extension.
-void SetStencilForShaderExport(ContextVk *contextVk, vk::GraphicsPipelineDesc *desc)
+// Sets the appropriate settings in the pipeline for either the shader to output stencil, regardless
+// of whether its done through the reference value or the shader stencil export extension.
+void SetStencilStateForWrite(vk::GraphicsPipelineDesc *desc)
 {
-    ASSERT(contextVk->getRenderer()->getFeatures().supportsShaderStencilExport.enabled);
-
     desc->setStencilTestEnabled(true);
     desc->setStencilFrontFuncs(VK_COMPARE_OP_ALWAYS);
     desc->setStencilBackFuncs(VK_COMPARE_OP_ALWAYS);
     desc->setStencilFrontOps(VK_STENCIL_OP_REPLACE, VK_STENCIL_OP_REPLACE, VK_STENCIL_OP_REPLACE);
     desc->setStencilBackOps(VK_STENCIL_OP_REPLACE, VK_STENCIL_OP_REPLACE, VK_STENCIL_OP_REPLACE);
+}
+void SetStencilDynamicStateForWrite(vk::RenderPassCommandBuffer *commandBuffer)
+{
+    commandBuffer->setStencilTestEnable(true);
+    commandBuffer->setStencilOp(VK_STENCIL_FACE_FRONT_BIT, VK_STENCIL_OP_REPLACE,
+                                VK_STENCIL_OP_REPLACE, VK_STENCIL_OP_REPLACE, VK_COMPARE_OP_ALWAYS);
+    commandBuffer->setStencilOp(VK_STENCIL_FACE_BACK_BIT, VK_STENCIL_OP_REPLACE,
+                                VK_STENCIL_OP_REPLACE, VK_STENCIL_OP_REPLACE, VK_COMPARE_OP_ALWAYS);
 }
 
 namespace unresolve
@@ -1056,6 +1062,8 @@ void ResetDynamicState(ContextVk *contextVk, vk::RenderPassCommandBuffer *comman
     // - stencil compare mask: UtilsVk sets this when enabling stencil test
     // - stencil write mask: UtilsVk sets this when enabling stencil test
     // - stencil reference: UtilsVk sets this when enabling stencil test
+    // - stencil func: UtilsVk sets this when enabling stencil test
+    // - stencil ops: UtilsVk sets this when enabling stencil test
 
     // Reset all other dynamic state, since it can affect UtilsVk functions.  Values reflect common
     // UtilsVk setting.
@@ -1065,6 +1073,7 @@ void ResetDynamicState(ContextVk *contextVk, vk::RenderPassCommandBuffer *comman
         commandBuffer->setFrontFace(VK_FRONT_FACE_COUNTER_CLOCKWISE);
         commandBuffer->setPrimitiveTopology(VK_PRIMITIVE_TOPOLOGY_TRIANGLE_STRIP);
         commandBuffer->setDepthTestEnable(VK_FALSE);
+        commandBuffer->setStencilTestEnable(VK_FALSE);
     }
     if (contextVk->getFeatures().supportsFragmentShadingRate.enabled)
     {
@@ -2119,15 +2128,9 @@ angle::Result UtilsVk::clearFramebuffer(ContextVk *contextVk,
     }
 
     // Clear stencil by enabling stencil write with the right mask.
-    if (params.clearStencil)
+    if (params.clearStencil && !contextVk->getFeatures().supportsExtendedDynamicState.enabled)
     {
-        pipelineDesc.setStencilTestEnabled(true);
-        pipelineDesc.setStencilFrontFuncs(VK_COMPARE_OP_ALWAYS);
-        pipelineDesc.setStencilBackFuncs(VK_COMPARE_OP_ALWAYS);
-        pipelineDesc.setStencilFrontOps(VK_STENCIL_OP_REPLACE, VK_STENCIL_OP_REPLACE,
-                                        VK_STENCIL_OP_REPLACE);
-        pipelineDesc.setStencilBackOps(VK_STENCIL_OP_REPLACE, VK_STENCIL_OP_REPLACE,
-                                       VK_STENCIL_OP_REPLACE);
+        SetStencilStateForWrite(&pipelineDesc);
     }
 
     vk::ShaderLibrary &shaderLibrary                    = contextVk->getShaderLibrary();
@@ -2187,6 +2190,11 @@ angle::Result UtilsVk::clearFramebuffer(ContextVk *contextVk,
         commandBuffer->setStencilCompareMask(compareMask, compareMask);
         commandBuffer->setStencilWriteMask(params.stencilMask, params.stencilMask);
         commandBuffer->setStencilReference(clearStencilValue, clearStencilValue);
+
+        if (contextVk->getFeatures().supportsExtendedDynamicState.enabled)
+        {
+            SetStencilDynamicStateForWrite(commandBuffer);
+        }
     }
 
     // Make sure this draw call doesn't count towards occlusion query results.
@@ -2482,9 +2490,9 @@ angle::Result UtilsVk::blitResolveImpl(ContextVk *contextVk,
         pipelineDesc.setDepthFunc(VK_COMPARE_OP_ALWAYS);
     }
 
-    if (blitStencil)
+    if (blitStencil && !contextVk->getFeatures().supportsExtendedDynamicState.enabled)
     {
-        SetStencilForShaderExport(contextVk, &pipelineDesc);
+        SetStencilStateForWrite(&pipelineDesc);
     }
 
     vk::RenderPassCommandBuffer *commandBuffer;
@@ -2590,6 +2598,11 @@ angle::Result UtilsVk::blitResolveImpl(ContextVk *contextVk,
         commandBuffer->setStencilCompareMask(completeMask, completeMask);
         commandBuffer->setStencilWriteMask(completeMask, completeMask);
         commandBuffer->setStencilReference(unusedReference, unusedReference);
+
+        if (contextVk->getFeatures().supportsExtendedDynamicState.enabled)
+        {
+            SetStencilDynamicStateForWrite(commandBuffer);
+        }
     }
 
     // Note: this utility starts the render pass directly, thus bypassing
@@ -3396,9 +3409,9 @@ angle::Result UtilsVk::unresolve(ContextVk *contextVk,
         pipelineDesc.setDepthFunc(VK_COMPARE_OP_ALWAYS);
     }
 
-    if (params.unresolveStencil)
+    if (params.unresolveStencil && !contextVk->getFeatures().supportsExtendedDynamicState.enabled)
     {
-        SetStencilForShaderExport(contextVk, &pipelineDesc);
+        SetStencilStateForWrite(&pipelineDesc);
     }
 
     vk::RenderPassCommandBuffer *commandBuffer =
@@ -3485,6 +3498,11 @@ angle::Result UtilsVk::unresolve(ContextVk *contextVk,
         commandBuffer->setStencilCompareMask(completeMask, completeMask);
         commandBuffer->setStencilWriteMask(completeMask, completeMask);
         commandBuffer->setStencilReference(unusedReference, unusedReference);
+
+        if (contextVk->getFeatures().supportsExtendedDynamicState.enabled)
+        {
+            SetStencilDynamicStateForWrite(commandBuffer);
+        }
     }
 
     // This draw call is made before ContextVk gets a chance to start the occlusion query.  As such,
