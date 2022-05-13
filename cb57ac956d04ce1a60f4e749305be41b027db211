@@ -164,6 +164,30 @@
       },
       "revId": "cb57ac956d04ce1a60f4e749305be41b027db211",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "609ff13f_99323b56",
+        "filename": "src/libANGLE/capture/trace_fixture.h",
+        "patchSetId": 12
+      },
+      "lineNbr": 159,
+      "author": {
+        "id": 1491823
+      },
+      "writtenOn": "2022-05-13T15:36:31Z",
+      "side": 1,
+      "message": "Well, EGLClientBuffer is defined as a pointer. On desktop GL it is a renderbuffer or texture ID, but on Android it can be something different, i.e. whatever is returned by eglCreateNativeClientBufferANDROID which seems to be a pointer to some opaque structure.",
+      "parentUuid": "44979dee_7a5aefea",
+      "range": {
+        "startLine": 159,
+        "startChar": 48,
+        "endLine": 159,
+        "endChar": 67
+      },
+      "revId": "cb57ac956d04ce1a60f4e749305be41b027db211",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
