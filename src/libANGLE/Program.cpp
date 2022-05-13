@@ -1375,6 +1375,21 @@ angle::Result Program::linkImpl(const Context *context)
         mLinkingState->linkedExecutable = mState.mExecutable;
     }
 
+    if (mState.mAttachedShaders[ShaderType::Compute])
+    {
+        mState.mAttachedShaders[ShaderType::Compute]->addLinkEvent(mLinkingState->linkEvent.get(),
+                                                                   context);
+    }
+    else
+    {
+        gl::Shader *shader = mState.mAttachedShaders[ShaderType::Vertex];
+        ASSERT(shader);
+        shader->addLinkEvent(mLinkingState->linkEvent.get(), context);
+        shader = mState.mAttachedShaders[ShaderType::Fragment];
+        ASSERT(shader);
+        shader->addLinkEvent(mLinkingState->linkEvent.get(), context);
+    }
+
     return angle::Result::Continue;
 }
 
@@ -1389,6 +1404,21 @@ void Program::resolveLinkImpl(const Context *context)
     ASSERT(mLinkingState.get());
 
     angle::Result result = mLinkingState->linkEvent->wait(context);
+
+    if (mState.mAttachedShaders[ShaderType::Compute])
+    {
+        mState.mAttachedShaders[ShaderType::Compute]->removeLinkEvent(
+            mLinkingState->linkEvent.get());
+    }
+    else
+    {
+        gl::Shader *shader = mState.mAttachedShaders[ShaderType::Vertex];
+        ASSERT(shader);
+        shader->removeLinkEvent(mLinkingState->linkEvent.get());
+        shader = mState.mAttachedShaders[ShaderType::Fragment];
+        ASSERT(shader);
+        shader->removeLinkEvent(mLinkingState->linkEvent.get());
+    }
 
     mLinked                                    = result == angle::Result::Continue;
     std::unique_ptr<LinkingState> linkingState = std::move(mLinkingState);
