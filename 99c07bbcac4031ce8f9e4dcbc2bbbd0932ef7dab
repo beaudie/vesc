@@ -16,6 +16,24 @@
       "message": "Do we want to enable the Feature::SupportsExtendedDynamicState for StateChangeTestES3, so that the dynamic state code you added can be covered with the test?",
       "revId": "99c07bbcac4031ce8f9e4dcbc2bbbd0932ef7dab",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "f747f424_78525776",
+        "filename": "src/tests/gl_tests/StateChangeTest.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 8876,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-05-14T01:52:03Z",
+      "side": 1,
+      "message": "We can\u0027t do that. If you force enable the feature, but the Vulkan driver doesn\u0027t support it, all hell will break loose.",
+      "parentUuid": "2a515908_1dd340fb",
+      "revId": "99c07bbcac4031ce8f9e4dcbc2bbbd0932ef7dab",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
