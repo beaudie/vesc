@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "0583b94d_864a6e03",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-05-14T01:41:12Z",
+      "side": 1,
+      "message": "While this fixes the failures, it probably doesn\u0027t address the flakiness (assuming flakiness is gone after revert?).\n\nYou could try the flaky traces with asan and see if it catches anything.",
+      "revId": "38969f79a7df3dd37261e5d7d9b2e16e6a3fb85b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "24a33a92_4005dd9b",
+        "filename": "src/libANGLE/renderer/vulkan/DisplayVk.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 491,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-05-14T01:41:12Z",
+      "side": 1,
+      "message": "Comment needs update. Also feel free to `||` this condition with the previous to reduce the duplication.",
+      "revId": "38969f79a7df3dd37261e5d7d9b2e16e6a3fb85b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
