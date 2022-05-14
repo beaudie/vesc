@@ -1427,4 +1427,47 @@ TEST_P(PixelLocalStorageTest, ForgetBarrier)
     ASSERT_GL_NO_ERROR();
 }
 
+// Check that stores and loads in a single shader invocation are coherent.
+TEST_P(PixelLocalStorageTest, CoherentStoreLoad)
+{
+    ANGLE_SKIP_TEST_IF(!supportsPixelLocalStorage());
+
+    PixelLocalStoragePrototype pls;
+
+    useProgram(R"(
+    PIXEL_LOCAL_DECL(fibonacci, binding=0, rgba16f);
+    void main()
+    {
+        pixelLocalStore(fibonacci, vec4(1, 0, 0, 0));  // fib(1, 0, 0, 0)
+        for (int i = 0; i < 3; ++i)
+        {
+            vec4 fib0 = pixelLocalLoad(fibonacci);
+            vec4 fib1;
+            fib1.w = fib0.x + fib0.y;
+            fib1.z = fib1.w + fib0.x;
+            fib1.y = fib1.z + fib1.w;
+            fib1.x = fib1.y + fib1.z;  // fib(i*4 + (5, 4, 3, 2))
+            pixelLocalStore(fibonacci, fib1);
+        }
+        // fib is at indices (13, 12, 11, 10)
+    })");
+
+    PLSTestTexture tex(GL_RGBA16F);
+
+    GLFramebuffer fbo;
+    glBindFramebuffer(GL_FRAMEBUFFER, fbo);
+    glFramebufferPixelLocalStorageANGLE(0, tex, 0, 0, W, H, GL_RGBA16F);
+    glViewport(0, 0, W, H);
+    glDrawBuffers(0, nullptr);
+
+    glBeginPixelLocalStorageANGLE(1, GLenumArray({GL_ZERO}));
+    drawBoxes(pls, {{FULLSCREEN}});
+    glEndPixelLocalStorageANGLE();
+
+    attachTextureToScratchFBO(tex);
+    EXPECT_PIXEL_RECT32F_EQ(0, 0, W, H, GLColor32F(233, 144, 89, 55));  // fib(13, 12, 11, 10)
+
+    ASSERT_GL_NO_ERROR();
+}
+
 ANGLE_INSTANTIATE_TEST_ES31(PixelLocalStorageTest);
