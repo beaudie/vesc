@@ -52,6 +52,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "6444d4c6_fc43a12e",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1109831
+      },
+      "writtenOn": "2022-05-14T13:32:32Z",
+      "side": 1,
+      "message": "I added a simple angle_end2end_test case. Let me know if you\u0027d like a more literal one.",
+      "parentUuid": "337ac3fb_04d2be8b",
+      "revId": "0c25603fe0db7e92460465e2797b442d2ed57c9c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "bfc90ee1_7993c17b",
@@ -69,6 +87,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "0de6bcdd_c0ef7b20",
+        "filename": "src/libANGLE/Shader.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 317,
+      "author": {
+        "id": 1109831
+      },
+      "writtenOn": "2022-05-14T13:32:32Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "bfc90ee1_7993c17b",
+      "revId": "0c25603fe0db7e92460465e2797b442d2ed57c9c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "7762654d_a8613bdd",
@@ -82,6 +118,24 @@
       "writtenOn": "2022-05-13T19:26:18Z",
       "side": 1,
       "message": "The LinkEvent is owned by Program::mLinkingState. If two relinks of the program are triggered without Shader::removeLinkEvent being called, this map will contain a deleted LinkEvent.\n\nI have a feeling this could happen in this situation:\n\n- Link a program with two attached shaders\n- Detach one shader\n- Attach a different shader to that program\n- Link the program\n- Attempt to recompile the detached shader\n\nCould you please consider this and see if this is a potential problem?\n\nIs there any other way to make these references to the LinkEvents less dangerous? Thinking upward references from Shaders to the Programs they\u0027re attached to, but not sure that\u0027s a good idea, either.",
+      "revId": "0c25603fe0db7e92460465e2797b442d2ed57c9c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "4de04661_7eae2187",
+        "filename": "src/libANGLE/Shader.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 834,
+      "author": {
+        "id": 1109831
+      },
+      "writtenOn": "2022-05-14T13:32:32Z",
+      "side": 1,
+      "message": "The step 2 -- Detach one shader, should resolve the program link in the step 1. Refer to https://source.chromium.org/chromium/chromium/src/+/main:third_party/angle/src/libANGLE/Program.cpp;drc\u003d778cb5c5966d8fa4c7c555e775a31ad7dc184d06;l\u003d1128, so the situation should be no problem.\n\nThe current PS is more comprehensive having got rid of the dangerous LinkEvent references.",
+      "parentUuid": "7762654d_a8613bdd",
       "revId": "0c25603fe0db7e92460465e2797b442d2ed57c9c",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
