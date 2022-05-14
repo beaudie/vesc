@@ -66,10 +66,51 @@ class PixelLocalStoragePrototype
     void endPixelLocalStorage();
 
   private:
-    struct LocalStoragePlane
+    class LocalStoragePlane
     {
-        GLenum internalformat;
-        GLuint tex;
+      public:
+        LocalStoragePlane()                                     = default;
+        LocalStoragePlane(const LocalStoragePlane &)            = delete;
+        LocalStoragePlane &operator=(const LocalStoragePlane &) = delete;
+
+        void reset(GLuint internalformat, GLsizei width, GLsizei height, GLuint tex)
+        {
+            if (mTex && mMemoryless)
+            {
+                glDeleteTextures(1, &mTex);
+            }
+            mInternalformat = internalformat;
+            mMemoryless     = !tex;
+            if (mMemoryless)
+            {
+                GLint textureBinding2D;
+                glGetIntegerv(GL_TEXTURE_BINDING_2D, &textureBinding2D);
+                glGenTextures(1, &mTex);
+                glBindTexture(GL_TEXTURE_2D, mTex);
+                glTexStorage2D(GL_TEXTURE_2D, 1, internalformat, width, height);
+                glBindTexture(GL_TEXTURE_2D, textureBinding2D);
+            }
+            else
+            {
+                mTex = tex;
+            }
+        }
+
+        ~LocalStoragePlane()
+        {
+            if (mTex && mMemoryless)
+            {
+                glDeleteTextures(1, &mTex);
+            }
+        }
+
+        GLenum internalformat() const { return mInternalformat; }
+        GLuint tex() const { return mTex; }
+
+      private:
+        GLenum mInternalformat;
+        GLuint mTex = 0;
+        bool mMemoryless;
     };
     std::array<LocalStoragePlane, MAX_LOCAL_STORAGE_PLANES> &boundLocalStoragePlanes()
     {
@@ -97,11 +138,10 @@ void PixelLocalStoragePrototype::framebufferPixelLocalStorage(GLuint unit,
                                                               GLenum internalformat)
 {
     assert(0 <= unit && unit < MAX_LOCAL_STORAGE_PLANES);  // GL_INVALID_VALUE!
-    assert(backingtexture != 0);                           // NOT IMPLEMENTED!
     assert(level == 0);                                    // NOT IMPLEMENTED!
     assert(layer == 0);                                    // NOT IMPLEMENTED!
     assert(width > 0 && height > 0);                       // NOT IMPLEMENTED!
-    boundLocalStoragePlanes()[unit] = {internalformat, backingtexture};
+    boundLocalStoragePlanes()[unit].reset(internalformat, width, height, backingtexture);
 }
 
 // This RAII class saves and restores the necessary GL state for us to clear local storage backing
@@ -189,8 +229,8 @@ void PixelLocalStoragePrototype::beginPixelLocalStorage(GLsizei n, const GLenum 
         GLuint tex            = 0;
         if (loadOps[i] != GL_DISABLED_ANGLE)
         {
-            internalformat = localStoragePlanes[i].internalformat;
-            tex            = localStoragePlanes[i].tex;
+            internalformat = localStoragePlanes[i].internalformat();
+            tex            = localStoragePlanes[i].tex();
             assert(tex);  // GL_INVALID_FRAMMEBUFFER_OPERATION!
         }
         // Attach all local storage backing textures to the framebuffer, which we will disable via
@@ -855,6 +895,70 @@ TEST_P(PixelLocalStorageTest, CoherentStoreLoad)
 
     attachTextureToScratchFBO(tex);
     ExpectFramebufferPixels<uint32_t>({233, 144, 89, 55});  // fib(13, 12, 11, 10)
+
+    ASSERT_GL_NO_ERROR();
+}
+
+// Check loading and storing from memoryless local storage planes.
+TEST_P(PixelLocalStorageTest, MemorylessStorage)
+{
+    if (!supportsPixelLocalStorage())
+    {
+        return;
+    }
+
+    PixelLocalStoragePrototype pls;
+
+    // Bind the texture, but don't call glTexStorage until after creating the memoryless plane.
+    GLTexture tex;
+    glBindTexture(GL_TEXTURE_2D, tex);
+
+    GLFramebuffer fbo;
+    glBindFramebuffer(GL_FRAMEBUFFER, fbo);
+    // Create a memoryless plane.
+    glFramebufferPixelLocalStorageANGLE(1, 0, 0, 0, W, H, GL_RGBA8);
+    // Define the persistent texture now, after attaching the memoryless pixel local storage. This
+    // verifies that the GL_TEXTURE_2D binding doesn't get disturbed by local storage.
+    glTexStorage2D(GL_TEXTURE_2D, 1, GL_RGBA8, W, H);
+    glFramebufferPixelLocalStorageANGLE(0, tex, 0, 0, W, H, GL_RGBA8);
+    glViewport(0, 0, W, H);
+    glDrawBuffers(0, nullptr);
+
+    glBeginPixelLocalStorageANGLE(2, std::vector<GLenum>{GL_ZERO, GL_ZERO}.data());
+
+    // Draw into memoryless storage.
+    useProgram(R"(
+    DECLARE_LOCAL_STORAGE(rgba8, 2, memoryless_R, 3, memoryless_W);
+    void main() {
+        pixelLocalStore(memoryless_W, color + pixelLocalLoad(memoryless_R));
+    })");
+
+    drawBoxes(pls, {{{0, 20, W, H}, {1, 0, 0, 0}},
+                    {{0, 40, W, H}, {0, 1, 0, 0}},
+                    {{0, 60, W, H}, {0, 0, 1, 0}}});
+
+    // Transfer to a texture.
+    useProgram(R"(
+    DECLARE_LOCAL_STORAGE(rgba8, 0, framebuffer_R, 1, framebuffer_W);
+    DECLARE_LOCAL_STORAGE(rgba8, 2, memoryless_R, 3, memoryless_W);
+    void main() {
+        pixelLocalStore(framebuffer_W, vec4(1) - pixelLocalLoad(memoryless_R));
+    })");
+
+    drawBoxes(pls, {{FULLSCREEN}});
+
+    glEndPixelLocalStorageANGLE();
+
+    attachTextureToScratchFBO(tex);
+    ExpectFramebufferPixels<uint8_t>(0, 60, W, H, {0, 0, 0, 255});
+    ExpectFramebufferPixels<uint8_t>(0, 40, W, 60, {0, 0, 255, 255});
+    ExpectFramebufferPixels<uint8_t>(0, 20, W, 40, {0, 255, 255, 255});
+    ExpectFramebufferPixels<uint8_t>(0, 0, W, 20, {255, 255, 255, 255});
+
+    // Ensure the GL_TEXTURE_2D binding still hasn't been disturbed by local storage.
+    GLint textureBinding2D;
+    glGetIntegerv(GL_TEXTURE_BINDING_2D, &textureBinding2D);
+    ASSERT_EQ((GLuint)textureBinding2D, tex);
 
     ASSERT_GL_NO_ERROR();
 }
