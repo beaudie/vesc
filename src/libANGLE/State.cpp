@@ -3703,6 +3703,13 @@ void State::onImageStateChange(const Context *context, size_t unit)
         if (!image.texture.get())
             return;
 
+        // Using individual layers of a 3d image as 2d may require that the image be respecified in
+        // a compatible layout
+        if (!image.layered && image.texture->getType() == TextureType::_3D)
+        {
+            image.texture->ensure2dCompatibility();
+        }
+
         if (image.texture->hasAnyDirtyBit())
         {
             mDirtyImages.set(unit);

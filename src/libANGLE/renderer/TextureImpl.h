@@ -243,6 +243,8 @@ class TextureImpl : public FramebufferAttachmentObjectImpl
 
     virtual GLint getRequiredExternalTextureImageUnits(const gl::Context *context);
 
+    virtual void ensure2dCompatibility();
+
     const gl::TextureState &getState() const { return mState; }
 
   protected:
