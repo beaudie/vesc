@@ -346,9 +346,14 @@ egl::Error SurfaceVkGbm::unlockSurface(const egl::Display *display, bool preserv
     return egl::NoError();
 }
 
-angle::Result SurfaceVkGbm::getCurrentWindowSize(vk::Context *context, gl::Extents *extentsOut)
+const vk::Semaphore *SurfaceVkGbm::getAndResetAcquireImageSemaphore()
 {
-    return angle::Result::Continue;
+    return nullptr;
 }
+
+// angle::Result SurfaceVkGbm::getCurrentWindowSize(vk::Context *context, gl::Extents *extentsOut)
+//{
+//     return angle::Result::Continue;
+// }
 
 }  // namespace rx

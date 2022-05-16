@@ -169,6 +169,9 @@ struct SwapchainImage : angle::NonCopyable
     SwapchainImage(SwapchainImage &&other);
     ~SwapchainImage();
 
+    void destroy(DisplayVk *displayVk, vk::Recycler<vk::Semaphore> *presentSemaphoreRecycler);
+
+    bool weakReference = false;
     vk::ImageHelper image;
     vk::ImageViewHelper imageViews;
     vk::Framebuffer framebuffer;
@@ -205,7 +208,6 @@ class WindowSurfaceVk : public SurfaceVk
     egl::Error initialize(const egl::Display *display) override;
     FramebufferImpl *createDefaultFramebuffer(const gl::Context *context,
                                               const gl::FramebufferState &state) override;
-    egl::Error prepareSwap(const gl::Context *context) override;
     egl::Error swap(const gl::Context *context) override;
     egl::Error swapWithDamage(const gl::Context *context,
                               const EGLint *rects,
@@ -228,24 +230,9 @@ class WindowSurfaceVk : public SurfaceVk
     EGLint getHeight() const override;
     EGLint getRotatedWidth() const;
     EGLint getRotatedHeight() const;
-    // Note: windows cannot be resized on Android.  The approach requires
-    // calling vkGetPhysicalDeviceSurfaceCapabilitiesKHR.  However, that is
-    // expensive; and there are troublesome timing issues for other parts of
-    // ANGLE (which cause test failures and crashes).  Therefore, a
-    // special-Android-only path is created just for the querying of EGL_WIDTH
-    // and EGL_HEIGHT.
-    // https://issuetracker.google.com/issues/153329980
-    egl::Error getUserWidth(const egl::Display *display, EGLint *value) const override;
-    egl::Error getUserHeight(const egl::Display *display, EGLint *value) const override;
-    angle::Result getUserExtentsImpl(DisplayVk *displayVk,
-                                     VkSurfaceCapabilitiesKHR *surfaceCaps) const;
 
     EGLint isPostSubBufferSupported() const override;
     EGLint getSwapBehavior() const override;
-
-    angle::Result initializeContents(const gl::Context *context,
-                                     GLenum binding,
-                                     const gl::ImageIndex &imageIndex) override;
 
     vk::Framebuffer &chooseFramebuffer(const SwapchainResolveMode swapchainResolveMode);
 
@@ -255,7 +242,7 @@ class WindowSurfaceVk : public SurfaceVk
                                         const SwapchainResolveMode swapchainResolveMode,
                                         vk::Framebuffer **framebufferOut);
 
-    const vk::Semaphore *getAndResetAcquireImageSemaphore();
+    virtual const vk::Semaphore *getAndResetAcquireImageSemaphore() = 0;
 
     VkSurfaceTransformFlagBitsKHR getPreTransform() const
     {
@@ -265,8 +252,6 @@ class WindowSurfaceVk : public SurfaceVk
         }
         return mPreTransform;
     }
-
-    egl::Error getBufferAge(const gl::Context *context, EGLint *age) override;
 
     egl::Error setRenderBuffer(EGLint renderBuffer) override;
 
@@ -285,12 +270,6 @@ class WindowSurfaceVk : public SurfaceVk
                             const vk::Format &format);
     angle::Result initDepthStencil(vk::Context *context, const VkExtent3D &vkExtents);
 
-    angle::Result prepareSwapImpl(const gl::Context *context);
-    virtual angle::Result swapImpl(const gl::Context *context,
-                                   const EGLint *rects,
-                                   EGLint n_rects,
-                                   const void *pNextChain);
-
     angle::Result present(ContextVk *contextVk,
                           const EGLint *rects,
                           EGLint n_rects,
@@ -302,14 +281,16 @@ class WindowSurfaceVk : public SurfaceVk
                                       const EGLint *rects,
                                       EGLint n_rects,
                                       const void *pNextChain,
-                                      bool *presentOutOfDate);
+                                      bool *presentOutOfDate) = 0;
 
     bool isMultiSampled() const;
 
+    void releaseSwapchainImages(ContextVk *contextVk);
+
+    bool supportsPresentMode(vk::PresentMode presentMode) const;
+
     EGLNativeWindowType mNativeWindowType;
-    VkSurfaceKHR mSurface;
-    VkSurfaceCapabilitiesKHR mSurfaceCaps;
-    VkBool32 mSupportsProtectedSwapchain;
+
     std::vector<impl::SwapchainImage> mSwapchainImages;
     uint32_t mCurrentSwapchainImageIndex;
     vk::PresentMode mSwapchainPresentMode;  // Current swapchain mode
@@ -320,9 +301,113 @@ class WindowSurfaceVk : public SurfaceVk
     // EGL_EXT_buffer_age: Track frame count.
     uint64_t mFrameCount;
 
- // private:
-    virtual angle::Result getCurrentWindowSize(vk::Context *context, gl::Extents *extentsOut) = 0;
+    std::vector<vk::PresentMode> mPresentModes;
+
+    // Cached information used to recreate swapchains.
+    vk::PresentMode mDesiredSwapchainPresentMode;  // Desired mode set through setSwapInterval()
+
+    VkSurfaceTransformFlagBitsKHR mPreTransform;
+    VkSurfaceTransformFlagBitsKHR mEmulatedPreTransform;
+    VkCompositeAlphaFlagBitsKHR mCompositeAlpha;
+
+    std::vector<angle::ObserverBinding> mSwapchainImageBindings;
+
+    // There is no direct signal from Vulkan regarding when a Present semaphore can be be reused.
+    // During window resizing when swapchains are recreated every frame, the number of in-flight
+    // present semaphores can grow indefinitely.  See doc/PresentSemaphores.md.
+    vk::Recycler<vk::Semaphore> mPresentSemaphoreRecycler;
+
+    // Depth/stencil image.  Possibly multisampled.
+    vk::ImageHelper mDepthStencilImage;
+    vk::ImageViewHelper mDepthStencilImageViews;
+    angle::ObserverBinding mDepthStencilImageBinding;
+
+    // Multisample color image, view and framebuffer, if multisampling enabled.
+    vk::ImageHelper mColorImageMS;
+    vk::ImageViewHelper mColorImageMSViews;
+    angle::ObserverBinding mColorImageMSBinding;
+    vk::Framebuffer mFramebufferMS;
+
+    // EGL_KHR_partial_update
+    uint64_t mBufferAgeQueryFrameNumber;
+
+  private:
     virtual angle::Result initializeImpl(DisplayVk *displayVk) = 0;
+
+    virtual angle::Result swapImpl(const gl::Context *context,
+                                   const EGLint *rects,
+                                   EGLint n_rects,
+                                   const void *pNextChain) = 0;
+
+    void destroySwapChainImages(DisplayVk *displayVk);
+
+    // A circular buffer that stores the serial of the submission fence of the context on every
+    // swap. The CPU is throttled by waiting for the 2nd previous serial to finish.
+    angle::CircularBuffer<Serial, impl::kSwapHistorySize> mSwapHistory;
+
+    // GL_EXT_shader_framebuffer_fetch
+    FramebufferFetchMode mFramebufferFetchMode = FramebufferFetchMode::Disabled;
+};
+
+class WindowSurfaceVkSwapchain : public WindowSurfaceVk
+{
+  public:
+    WindowSurfaceVkSwapchain(const egl::SurfaceState &surfaceState, EGLNativeWindowType window);
+    ~WindowSurfaceVkSwapchain() override;
+
+    void destroy(const egl::Display *display) override;
+
+    angle::Result getAttachmentRenderTarget(const gl::Context *context,
+                                            GLenum binding,
+                                            const gl::ImageIndex &imageIndex,
+                                            GLsizei samples,
+                                            FramebufferAttachmentRenderTarget **rtOut) override;
+    egl::Error prepareSwap(const gl::Context *context) override;
+    void setSwapInterval(EGLint interval) override;
+
+    // Note: windows cannot be resized on Android.  The approach requires
+    // calling vkGetPhysicalDeviceSurfaceCapabilitiesKHR.  However, that is
+    // expensive; and there are troublesome timing issues for other parts of
+    // ANGLE (which cause test failures and crashes).  Therefore, a
+    // special-Android-only path is created just for the querying of EGL_WIDTH
+    // and EGL_HEIGHT.
+    // https://issuetracker.google.com/issues/153329980
+    egl::Error getUserWidth(const egl::Display *display, EGLint *value) const override;
+    egl::Error getUserHeight(const egl::Display *display, EGLint *value) const override;
+    angle::Result getUserExtentsImpl(DisplayVk *displayVk,
+                                     VkSurfaceCapabilitiesKHR *surfaceCaps) const;
+
+    angle::Result initializeContents(const gl::Context *context,
+                                     GLenum binding,
+                                     const gl::ImageIndex &imageIndex) override;
+
+    const vk::Semaphore *getAndResetAcquireImageSemaphore() override;
+
+    egl::Error getBufferAge(const gl::Context *context, EGLint *age) override;
+
+    egl::Error lockSurface(const egl::Display *display,
+                           EGLint usageHint,
+                           bool preservePixels,
+                           uint8_t **bufferPtrOut,
+                           EGLint *bufferPitchOut) override;
+    egl::Error unlockSurface(const egl::Display *display, bool preservePixels) override;
+
+  protected:
+    angle::Result prepareSwapImpl(const gl::Context *context);
+    angle::Result swapImpl(const gl::Context *context,
+                           const EGLint *rects,
+                           EGLint n_rects,
+                           const void *pNextChain) override;
+
+    VkSurfaceKHR mSurface;
+    VkSurfaceCapabilitiesKHR mSurfaceCaps;
+    VkBool32 mSupportsProtectedSwapchain;
+
+  private:
+    virtual angle::Result createSurfaceVk(vk::Context *context, gl::Extents *extentsOut)      = 0;
+    virtual angle::Result getCurrentWindowSize(vk::Context *context, gl::Extents *extentsOut) = 0;
+
+    angle::Result initializeImpl(DisplayVk *displayVk) override;
     angle::Result recreateSwapchain(ContextVk *contextVk, const gl::Extents &extents);
     angle::Result createSwapChain(vk::Context *context,
                                   const gl::Extents &extents,
@@ -331,8 +416,6 @@ class WindowSurfaceVk : public SurfaceVk
                                             VkSurfaceCapabilitiesKHR *surfaceCaps);
     angle::Result checkForOutOfDateSwapchain(ContextVk *contextVk, bool presentOutOfDate);
     angle::Result resizeSwapchainImages(vk::Context *context, uint32_t imageCount);
-    void releaseSwapchainImages(ContextVk *contextVk);
-    void destroySwapChainImages(DisplayVk *displayVk);
     // This method calls vkAcquireNextImageKHR() to acquire the next swapchain image.  It is called
     // when the swapchain is initially created and when present() finds the swapchain out of date.
     // Otherwise, it is scheduled to be called later by deferAcquireNextImage().
@@ -353,21 +436,16 @@ class WindowSurfaceVk : public SurfaceVk
 
     angle::Result newPresentSemaphore(vk::Context *context, vk::Semaphore *semaphoreOut);
 
-    bool supportsPresentMode(vk::PresentMode presentMode) const;
-
-    std::vector<vk::PresentMode> mPresentModes;
+    angle::Result presentImpl(ContextVk *contextVk,
+                              vk::OutsideRenderPassCommandBuffer *commandBuffer,
+                              Serial *swapSerial,
+                              const EGLint *rects,
+                              EGLint n_rects,
+                              const void *pNextChain,
+                              bool *presentOutOfDate) override;
 
     VkSwapchainKHR mSwapchain;
-    // Cached information used to recreate swapchains.
-    vk::PresentMode mDesiredSwapchainPresentMode;  // Desired mode set through setSwapInterval()
     uint32_t mMinImageCount;
-    VkSurfaceTransformFlagBitsKHR mPreTransform;
-    VkSurfaceTransformFlagBitsKHR mEmulatedPreTransform;
-    VkCompositeAlphaFlagBitsKHR mCompositeAlpha;
-
-    // A circular buffer that stores the serial of the submission fence of the context on every
-    // swap. The CPU is throttled by waiting for the 2nd previous serial to finish.
-    angle::CircularBuffer<Serial, impl::kSwapHistorySize> mSwapHistory;
 
     // The previous swapchain which needs to be scheduled for destruction when appropriate.  This
     // will be done when the first image of the current swapchain is presented.  If there were
@@ -377,8 +455,6 @@ class WindowSurfaceVk : public SurfaceVk
     // Note that if the user resizes the window such that the swapchain is recreated every frame,
     // this array can go grow indefinitely.
     std::vector<impl::SwapchainCleanupData> mOldSwapchains;
-
-    std::vector<angle::ObserverBinding> mSwapchainImageBindings;
 
     // Given that the CPU is throttled after a number of swaps, there is an upper bound to the
     // number of semaphores that are used to acquire swapchain images, and that is
@@ -405,57 +481,8 @@ class WindowSurfaceVk : public SurfaceVk
     // submissions don't wait on it until the next acquire.
     const vk::Semaphore *mAcquireImageSemaphore;
 
-    // There is no direct signal from Vulkan regarding when a Present semaphore can be be reused.
-    // During window resizing when swapchains are recreated every frame, the number of in-flight
-    // present semaphores can grow indefinitely.  See doc/PresentSemaphores.md.
-    vk::Recycler<vk::Semaphore> mPresentSemaphoreRecycler;
-
-    // Depth/stencil image.  Possibly multisampled.
-    vk::ImageHelper mDepthStencilImage;
-    vk::ImageViewHelper mDepthStencilImageViews;
-    angle::ObserverBinding mDepthStencilImageBinding;
-
-    // Multisample color image, view and framebuffer, if multisampling enabled.
-    vk::ImageHelper mColorImageMS;
-    vk::ImageViewHelper mColorImageMSViews;
-    angle::ObserverBinding mColorImageMSBinding;
-    vk::Framebuffer mFramebufferMS;
-
     // EGL_KHR_lock_surface3
     vk::BufferHelper mLockBufferHelper;
-
-    // EGL_KHR_partial_update
-    uint64_t mBufferAgeQueryFrameNumber;
-
-    // GL_EXT_shader_framebuffer_fetch
-    FramebufferFetchMode mFramebufferFetchMode = FramebufferFetchMode::Disabled;
-};
-
-class WindowSurfaceVkSwapchain : public WindowSurfaceVk
-{
-  public:
-    WindowSurfaceVkSwapchain(const egl::SurfaceState &surfaceState, EGLNativeWindowType window);
-    ~WindowSurfaceVkSwapchain() override;
-
-    angle::Result getAttachmentRenderTarget(const gl::Context *context,
-                                            GLenum binding,
-                                            const gl::ImageIndex &imageIndex,
-                                            GLsizei samples,
-                                            FramebufferAttachmentRenderTarget **rtOut) override;
-
-    void setSwapInterval(EGLint interval) override;
-
-    egl::Error lockSurface(const egl::Display *display,
-                           EGLint usageHint,
-                           bool preservePixels,
-                           uint8_t **bufferPtrOut,
-                           EGLint *bufferPitchOut) override;
-    egl::Error unlockSurface(const egl::Display *display, bool preservePixels) override;
-
-  private:
-    virtual angle::Result createSurfaceVk(vk::Context *context, gl::Extents *extentsOut) = 0;
-    angle::Result initializeImpl(DisplayVk *displayVk) override;
-
 };
 
 }  // namespace rx
