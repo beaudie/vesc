@@ -939,3 +939,53 @@ GLsizeiptr GetBoundBufferAvailableSize(const OffsetBindingPointer<Buffer> &bindi
 }
 
 }  // namespace gl
+
+namespace angle
+{
+ThreadTrackingMutex::ThreadTrackingMutex() {}
+
+ThreadTrackingMutex::~ThreadTrackingMutex() {}
+
+void ThreadTrackingMutex::lock()
+{
+    mMutex.lock();
+    ASSERT(!mLockingThreadId.has_value());
+    mLockingThreadId = std::this_thread::get_id();
+}
+
+bool ThreadTrackingMutex::try_lock()
+{
+    if (!mMutex.try_lock())
+    {
+        return false;
+    }
+
+    ASSERT(!mLockingThreadId.has_value());
+    mLockingThreadId = std::this_thread::get_id();
+    return true;
+}
+
+void ThreadTrackingMutex::unlock()
+{
+    mLockingThreadId.reset();
+    mMutex.unlock();
+}
+
+bool ThreadTrackingMutex::is_locked_by_current_thread() const
+{
+    return mLockingThreadId == std::this_thread::get_id();
+}
+
+ScopedUnlock<ThreadTrackingMutex> ScopedUnlockIfLockedByCurrentThread(ThreadTrackingMutex &mutex)
+{
+    if (mutex.is_locked_by_current_thread())
+    {
+        return ScopedUnlock<ThreadTrackingMutex>(mutex);
+    }
+    else
+    {
+        return ScopedUnlock<ThreadTrackingMutex>();
+    }
+}
+
+}  // namespace angle

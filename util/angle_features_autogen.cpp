@@ -260,6 +260,7 @@ constexpr PackedEnumMap<Feature, const char *> kFeatureNames = {{
     {Feature::SyncVertexArraysToDefault, "syncVertexArraysToDefault"},
     {Feature::UnbindFBOBeforeSwitchingContext, "unbindFBOBeforeSwitchingContext"},
     {Feature::UnfoldShortCircuits, "unfoldShortCircuits"},
+    {Feature::UnlockGlobalMutexOnAquireNextImage, "unlockGlobalMutexOnAquireNextImage"},
     {Feature::UnpackLastRowSeparatelyForPaddingInclusion,
      "unpackLastRowSeparatelyForPaddingInclusion"},
     {Feature::UnpackOverlappingRowsSeparatelyUnpackBuffer,

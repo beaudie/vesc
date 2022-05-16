@@ -3500,6 +3500,9 @@ void RendererVk::initFeatures(DisplayVk *displayVk,
     // Only enable it on integrations without EGL_FRONT_BUFFER_AUTO_REFRESH_ANDROID passthrough.
     ANGLE_FEATURE_CONDITION(&mFeatures, forceContinuousRefreshOnSharedPresent, false);
 
+    // Only Android has potential reentrancy when calling vkAcquireNextImageKHR.
+    ANGLE_FEATURE_CONDITION(&mFeatures, unlockGlobalMutexOnAquireNextImage, IsAndroid());
+
     ApplyFeatureOverrides(&mFeatures, displayVk->getState());
 
     // Disable async command queue when using Vulkan secondary command buffers temporarily to avoid

@@ -183,6 +183,8 @@ class DisplayVk : public DisplayImpl, public vk::Context
 
     ShareGroupImpl *createShareGroup() override;
 
+    angle::GlobalMutex &getMutex() const;
+
   protected:
     void generateExtensions(egl::DisplayExtensions *outExtensions) const override;
 
