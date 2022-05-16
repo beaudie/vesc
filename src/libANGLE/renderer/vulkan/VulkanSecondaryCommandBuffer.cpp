@@ -38,10 +38,14 @@ angle::Result VulkanSecondaryCommandBuffer::InitializeRenderPassInheritanceInfo(
     ContextVk *contextVk,
     const Framebuffer &framebuffer,
     const RenderPassDesc &renderPassDesc,
+    uint64_t color0ExternalFormat,
     VkCommandBufferInheritanceInfo *inheritanceInfoOut)
 {
     vk::RenderPass *compatibleRenderPass = nullptr;
-    ANGLE_TRY(contextVk->getCompatibleRenderPass(renderPassDesc, &compatibleRenderPass));
+    ANGLE_LOG(ERR) << __func__ << " getCompatibleRenderPass color ext format "
+                   << color0ExternalFormat;
+    ANGLE_TRY(contextVk->getCompatibleRenderPass(renderPassDesc, color0ExternalFormat,
+                                                 &compatibleRenderPass));
 
     inheritanceInfoOut->sType       = VK_STRUCTURE_TYPE_COMMAND_BUFFER_INHERITANCE_INFO;
     inheritanceInfoOut->renderPass  = compatibleRenderPass->getHandle();
