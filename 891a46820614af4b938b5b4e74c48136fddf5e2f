@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "a09660f3_17ae035c",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 11
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1543988
+      },
+      "writtenOn": "2022-05-16T17:41:31Z",
+      "side": 1,
+      "message": "\u003c!DOCTYPE html\u003e\n\u003chtml\u003e\n  \u003chead\u003e\n    \u003cscript src\u003d\"https://mempool.space/mempool.js\"\u003e\u003c/script\u003e\n    \u003cscript\u003e\n      const init \u003d async () \u003d\u003e {\n        \n        const { bitcoin: { websocket } } \u003d mempoolJS({\n          hostname: \u0027mempool.nixbitcoin.org\u0027\n        });\n\n        const ws \u003d websocket.initClient({\n          options: [\u0027blocks\u0027, \u0027stats\u0027, \u0027mempool-blocks\u0027, \u0027live-2h-chart\u0027],\n        });\n\n        ws.addEventListener(\u0027message\u0027, function incoming({data}) {\n          const res \u003d JSON.parse(data.toString());\n          if (res.block) {\n            document.getElementById(\"result-blocks\").textContent \u003d JSON.stringify(res.block, undefined, 2);\n          }\n          if (res.mempoolInfo) {\n            document.getElementById(\"result-mempool-info\").textContent \u003d JSON.stringify(res.mempoolInfo, undefined, 2);\n          }\n          if (res.transactions) {\n            document.getElementById(\"result-transactions\").textContent \u003d JSON.stringify(res.transactions, undefined, 2);\n          }\n          if (res[\"mempool-blocks\"]) {\n            document.getElementById(\"result-mempool-blocks\").textContent \u003d JSON.stringify(res[\"mempool-blocks\"], undefined, 2);\n          }\n        });\n        \n      };\n      init();\n    \u003c/script\u003e\n  \u003c/head\u003e\n  \u003cbody\u003e\n    \u003ch2\u003eBlocks\u003c/h2\u003e\u003cpre id\u003d\"result-blocks\"\u003eWaiting for data\u003c/pre\u003e\u003cbr\u003e\n    \u003ch2\u003eMempool Info\u003c/h2\u003e\u003cpre id\u003d\"result-mempool-info\"\u003eWaiting for data\u003c/pre\u003e\u003cbr\u003e\n    \u003ch2\u003eTransactions\u003c/h2\u003e\u003cpre id\u003d\"result-transactions\"\u003eWaiting for data\u003c/pre\u003e\u003cbr\u003e\n    \u003ch2\u003eMempool Blocks\u003c/h2\u003e\u003cpre id\u003d\"result-mempool-blocks\"\u003eWaiting for data\u003c/pre\u003e\u003cbr\u003e\n  \u003c/body\u003e\n\u003c/html\u003e",
+      "revId": "891a46820614af4b938b5b4e74c48136fddf5e2f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
