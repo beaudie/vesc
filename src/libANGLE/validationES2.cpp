@@ -1510,6 +1510,19 @@ bool ValidateES2TexImageParametersBase(const Context *context,
                 return false;
             }
         }
+
+        // Compressed formats are not valid internal formats for glTexImage*D
+        // except formats listed in CompressedFormatAcceptedByTexImage
+        if (!isSubImage)
+        {
+            const InternalFormat &internalFormatInfo = GetSizedInternalFormatInfo(internalformat);
+            if (internalFormatInfo.compressed &&
+                !CompressedTextureFormatAcceptedByTexImage(internalformat))
+            {
+                context->validationError(entryPoint, GL_INVALID_VALUE, kInvalidInternalFormat);
+                return false;
+            }
+        }
     }
 
     if (isSubImage)
