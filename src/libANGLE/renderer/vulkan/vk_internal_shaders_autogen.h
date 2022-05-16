@@ -172,6 +172,16 @@ namespace OverlayDraw_vert
 constexpr size_t kArrayLen = 0x00000001;
 }  // namespace OverlayDraw_vert
 
+namespace YuvRgbaConversion_comp
+{
+constexpr size_t kArrayLen = 0x00000001;
+}  // namespace YuvRgbaConversion_comp
+
+namespace YuvRgbaConversion_frag
+{
+constexpr size_t kArrayLen = 0x00000001;
+}  // namespace YuvRgbaConversion_frag
+
 }  // namespace InternalShader
 
 class ShaderLibrary final : angle::NonCopyable
@@ -218,6 +228,12 @@ class ShaderLibrary final : angle::NonCopyable
     angle::Result getOverlayDraw_vert(Context *context,
                                       uint32_t shaderFlags,
                                       RefCounted<ShaderAndSerial> **shaderOut);
+    angle::Result getYuvRgbaConversion_comp(Context *context,
+                                            uint32_t shaderFlags,
+                                            RefCounted<ShaderAndSerial> **shaderOut);
+    angle::Result getYuvRgbaConversion_frag(Context *context,
+                                            uint32_t shaderFlags,
+                                            RefCounted<ShaderAndSerial> **shaderOut);
 
   private:
     RefCounted<ShaderAndSerial>
@@ -243,6 +259,10 @@ class ShaderLibrary final : angle::NonCopyable
         mOverlayDraw_frag_shaders[InternalShader::OverlayDraw_frag::kArrayLen];
     RefCounted<ShaderAndSerial>
         mOverlayDraw_vert_shaders[InternalShader::OverlayDraw_vert::kArrayLen];
+    RefCounted<ShaderAndSerial>
+        mYuvRgbaConversion_comp_shaders[InternalShader::YuvRgbaConversion_comp::kArrayLen];
+    RefCounted<ShaderAndSerial>
+        mYuvRgbaConversion_frag_shaders[InternalShader::YuvRgbaConversion_frag::kArrayLen];
 };
 }  // namespace vk
 }  // namespace rx
