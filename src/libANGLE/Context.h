@@ -352,10 +352,12 @@ class Context final : public egl::LabeledObject, angle::NonCopyable, public angl
             const EGLenum clientType,
             const egl::AttributeMap &attribs,
             const egl::DisplayExtensions &displayExtensions,
-            const egl::ClientExtensions &clientExtensions);
+            const egl::ClientExtensions &clientExtensions,
+            angle::GlobalMutex &mutex);
 
     // Use for debugging.
     ContextID id() const { return mState.getContextID(); }
+    angle::GlobalMutex &getMutex() const { return *mMutex; }
 
     egl::Error initialize();
 
@@ -830,6 +832,8 @@ class Context final : public egl::LabeledObject, angle::NonCopyable, public angl
     const bool mSaveAndRestoreState;
 
     bool mIsDestroyed;
+
+    angle::GlobalMutex *mMutex;
 };
 
 class ANGLE_NO_DISCARD ScopedContextRef

@@ -628,6 +628,12 @@ struct FeaturesVk : FeatureSetBase
     FeatureInfo supportsImage2dViewOf3d = {
         "supportsImage2dViewOf3d", FeatureCategory::VulkanFeatures,
         "VkDevice supports VK_EXT_image_2d_view_of_3d", &members, "https://anglebug.com/7320"};
+
+    FeatureInfo unlockGlobalMutexOnAquireNextImage = {
+        "unlockGlobalMutexOnAquireNextImage", FeatureCategory::VulkanWorkarounds,
+        "When ANGLE is the Android system driver, vkAcquireNextImageKHR can be "
+        "reentrant and cause deadlocks",
+        &members, "http://anglebug.com/6851"};
 };
 
 inline FeaturesVk::FeaturesVk()  = default;
