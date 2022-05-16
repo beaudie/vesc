@@ -396,7 +396,7 @@ class RendererVk : angle::NonCopyable
 
     ANGLE_INLINE bool isCommandQueueBusy()
     {
-        vk::ScopedCommandQueueLock lock(this, mCommandQueueMutex);
+        std::lock_guard<std::mutex> lock(mCommandQueueMutex);
         if (isAsyncCommandQueueEnabled())
         {
             return mCommandProcessor.isBusy();
@@ -421,7 +421,7 @@ class RendererVk : angle::NonCopyable
 
     angle::VulkanPerfCounters getCommandQueuePerfCounters()
     {
-        vk::ScopedCommandQueueLock lock(this, mCommandQueueMutex);
+        std::lock_guard<std::mutex> lock(mCommandQueueMutex);
         if (isAsyncCommandQueueEnabled())
         {
             return mCommandProcessor.getPerfCounters();
@@ -433,7 +433,7 @@ class RendererVk : angle::NonCopyable
     }
     void resetCommandQueuePerFrameCounters()
     {
-        vk::ScopedCommandQueueLock lock(this, mCommandQueueMutex);
+        std::lock_guard<std::mutex> lock(mCommandQueueMutex);
         if (isAsyncCommandQueueEnabled())
         {
             mCommandProcessor.resetPerFramePerfCounters();
@@ -484,15 +484,7 @@ class RendererVk : angle::NonCopyable
                               vk::SecondaryCommandPools *commandPools,
                               Serial *submitSerialOut);
 
-    // When the device is lost, the commands queue is cleaned up.  This shouldn't be done
-    // immediately if the device loss is generated from the command queue itself (due to mutual
-    // exclusion requirements).
-    //
-    // - handleDeviceLost() defers device loss handling if the mutex is already taken
-    // - ScopedCommandQueueLock handles device loss at the end of the scope (i.e. when the command
-    //   queue operation is finished) by calling handleDeviceLostNoLock() before releasing the lock.
     void handleDeviceLost();
-    void handleDeviceLostNoLock();
     angle::Result finishToSerial(vk::Context *context, Serial serial);
     angle::Result waitForSerialWithUserTimeout(vk::Context *context,
                                                Serial serial,
