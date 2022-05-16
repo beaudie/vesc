@@ -293,6 +293,7 @@ TextureVk::TextureVk(const gl::TextureState &state, RendererVk *renderer)
     : TextureImpl(state),
       mOwnsImage(false),
       mRequiresMutableStorage(false),
+      mRequires2dCompatibility(false),
       mRequiredImageAccess(vk::ImageAccess::SampleOnly),
       mImmutableSamplerDirty(false),
       mEGLImageNativeType(gl::TextureType::InvalidEnum),
@@ -1489,9 +1490,10 @@ void TextureVk::releaseAndDeleteImageAndViews(ContextVk *contextVk)
         releaseStagedUpdates(contextVk);
         releaseImage(contextVk);
         mImageObserverBinding.bind(nullptr);
-        mRequiresMutableStorage = false;
-        mRequiredImageAccess    = vk::ImageAccess::SampleOnly;
-        mImageCreateFlags       = 0;
+        mRequires2dCompatibility = false;
+        mRequiresMutableStorage  = false;
+        mRequiredImageAccess     = vk::ImageAccess::SampleOnly;
+        mImageCreateFlags        = 0;
         SafeDelete(mImage);
     }
     mBufferViews.release(contextVk);
@@ -2575,6 +2577,20 @@ angle::Result TextureVk::respecifyImageStorageIfNecessary(ContextVk *contextVk, 
         mImageCreateFlags |= VK_IMAGE_CREATE_MUTABLE_FORMAT_BIT;
     }
 
+    if (mRequires2dCompatibility)
+    {
+        if (contextVk->getRenderer()->getFeatures().supportsImage2dViewOf3d.enabled)
+        {
+            mImageCreateFlags |= VK_IMAGE_CREATE_2D_VIEW_COMPATIBLE_BIT_EXT;
+        }
+        else
+        {
+            // This image may be used with 2d imageviews, despite being a 3d image
+            // The Vulkan core specification does not permit this behavior
+            UNIMPLEMENTED();
+        }
+    }
+
     // Create a new image if used as attachment for the first time. This must be called before
     // prepareForGenerateMipmap since this changes the format which prepareForGenerateMipmap relies
     // on.
@@ -3409,6 +3425,11 @@ angle::Result TextureVk::ensureMutable(ContextVk *contextVk)
     ANGLE_TRY(ensureImageInitialized(contextVk, ImageMipLevels::EnabledLevels));
 
     return refreshImageViews(contextVk);
+}
+
+void TextureVk::ensure2dCompatibility()
+{
+    mRequires2dCompatibility = true;
 }
 
 angle::Result TextureVk::ensureRenderable(ContextVk *contextVk,

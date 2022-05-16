@@ -68,7 +68,7 @@ struct ImageDesc final
               const bool fixedSampleLocations,
               const InitState initState);
 
-    ImageDesc(const ImageDesc &other) = default;
+    ImageDesc(const ImageDesc &other)            = default;
     ImageDesc &operator=(const ImageDesc &other) = default;
 
     GLint getMemorySize() const;
@@ -86,7 +86,7 @@ struct SwizzleState final
 {
     SwizzleState();
     SwizzleState(GLenum red, GLenum green, GLenum blue, GLenum alpha);
-    SwizzleState(const SwizzleState &other) = default;
+    SwizzleState(const SwizzleState &other)            = default;
     SwizzleState &operator=(const SwizzleState &other) = default;
 
     bool swizzleRequired() const;
@@ -641,6 +641,9 @@ class Texture final : public RefCountObject<TextureID>,
 
     // ObserverInterface implementation.
     void onSubjectStateChange(angle::SubjectIndex index, angle::SubjectMessage message) override;
+
+    // Ensure that a 2D slice of the texture can be bound to an image unit
+    void ensure2dCompatibility();
 
   private:
     rx::FramebufferAttachmentObjectImpl *getAttachmentImpl() const override;

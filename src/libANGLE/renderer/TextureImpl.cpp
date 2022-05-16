@@ -192,4 +192,6 @@ GLint TextureImpl::getRequiredExternalTextureImageUnits(const gl::Context *conte
     return 0;
 }
 
+void TextureImpl::ensure2dCompatibility() {}
+
 }  // namespace rx

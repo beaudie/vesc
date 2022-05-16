@@ -2477,4 +2477,10 @@ void Texture::onBindAsImageTexture()
     }
 }
 
+void Texture::ensure2dCompatibility()
+{
+    ASSERT(getType() == TextureType::_3D);
+    mTexture->ensure2dCompatibility();
+}
+
 }  // namespace gl

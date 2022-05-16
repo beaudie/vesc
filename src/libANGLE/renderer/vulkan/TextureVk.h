@@ -300,6 +300,8 @@ class TextureVk : public TextureImpl, public angle::ObserverInterface
         return isDirty;
     }
 
+    void ensure2dCompatibility() override;
+
   private:
     // Transform an image index from the frontend into one that can be used on the backing
     // ImageHelper, taking into account mipmap or cube face offsets
@@ -525,6 +527,7 @@ class TextureVk : public TextureImpl, public angle::ObserverInterface
 
     bool mOwnsImage;
     bool mRequiresMutableStorage;
+    bool mRequires2dCompatibility;
     vk::ImageAccess mRequiredImageAccess;
     bool mImmutableSamplerDirty;
 
