@@ -9,9 +9,10 @@
 
 #include "trace_fixture.h"
 
-#include "angle_trace_gl.h"
+#include "util/capture/angle_trace_gl.h"
 
 #include <string>
+#include <unordered_map>
 
 namespace
 {
