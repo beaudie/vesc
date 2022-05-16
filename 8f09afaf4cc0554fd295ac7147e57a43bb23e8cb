@@ -18,6 +18,23 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "51928f8c_459f1a0c",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1290487
+      },
+      "writtenOn": "2022-05-16T21:11:31Z",
+      "side": 1,
+      "message": "Shabi, Mark looked at plumbing up the angle::Result, but wasn\u0027t sure what to do at that point.  I suggested looking at other front-end code.  As we dialogued, I looked more.  I\u0027m not sure what to suggest.\n\nI can see that some front-end code will call a macro that will generate a GL error (e.g. ANGLE_CHECK_GL_ALLOC will generate GL_OUT_OF_MEMORY).\n\nThe vkSetDebugUtilsObjectNameEXT function has two VkResult error codes that it generates, both OOM (VK_ERROR_OUT_OF_HOST_MEMORY and VK_ERROR_OUT_OF_DEVICE_MEMORY).   Both of those errors are pretty unlikely.  Also, the glLabelObjectEXT function is only allowed to generate:\n\n- GL_INVALID_OPERATION\n- GL_INVALID_ENUM\n- GL_INVALID_VALUE\n\nNo OOM errors allowed.  This seems like a lot of plumbing for a round-peg-square-hole case that\u0027s unlikely to ever happen.  \n\nThe alteratives I see are:\n\n1. Pick a GL error (e.g. GL_INVALID_OPERATION) and return that\n2. Eat the unlikely Vulkan error and forget plumbing an unlikely OOM error up\n\nYour thoughts?",
+      "revId": "8f09afaf4cc0554fd295ac7147e57a43bb23e8cb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "967de494_5ef36448",
