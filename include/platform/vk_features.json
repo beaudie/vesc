@@ -845,6 +845,15 @@
                 "VkDevice supports VK_EXT_image_2d_view_of_3d"
             ],
             "issue": "https://anglebug.com/7320"
+        },
+        {
+            "name": "unlock_global_mutex_on_aquire_next_image",
+            "category": "Workarounds",
+            "description": [
+                "When ANGLE is the Android system driver, vkAcquireNextImageKHR can be ",
+                "reentrant and cause deadlocks"
+            ],
+            "issue": "http://anglebug.com/6851"
         }
     ]
 }
