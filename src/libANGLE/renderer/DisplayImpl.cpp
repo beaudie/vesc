@@ -24,14 +24,9 @@ class MockDevice : public DeviceImpl
     egl::Error initialize() override { return egl::NoError(); }
     egl::Error getAttribute(const egl::Display *display, EGLint attribute, void **outValue) override
     {
-        UNREACHABLE();
         return egl::EglBadAttribute();
     }
-    EGLint getType() override
-    {
-        UNREACHABLE();
-        return EGL_NONE;
-    }
+    EGLint getType() override { return EGL_NONE; }
     void generateExtensions(egl::DeviceExtensions *outExtensions) const override
     {
         *outExtensions = egl::DeviceExtensions();
