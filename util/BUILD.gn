@@ -170,8 +170,14 @@ if (angle_has_frame_capture) {
   angle_source_set("angle_frame_capture_test_utils") {
     testonly = true
     sources = [
+      "capture/angle_trace_gl.h",
       "capture/frame_capture_test_utils.cpp",
       "capture/frame_capture_test_utils.h",
+      "capture/trace_egl_loader_autogen.cpp",
+      "capture/trace_egl_loader_autogen.h",
+      "capture/trace_gles_loader_autogen.cpp",
+      "capture/trace_gles_loader_autogen.h",
+      "capture/traces_export.h",
     ]
     deps = [
       "$angle_root:angle_common",
