@@ -8374,6 +8374,49 @@ void main()
     ASSERT_GL_NO_ERROR();
 }
 
+// Tests state change for out-of-range value for glLineWidth.
+TEST_P(StateChangeTestES3, LineWidthOutOfRange)
+{
+    GLfloat range[2] = {1};
+    glGetFloatv(GL_ALIASED_LINE_WIDTH_RANGE, range);
+    EXPECT_GL_NO_ERROR();
+
+    constexpr char kVS[] = R"(#version 300 es
+precision highp float;
+uniform float height;
+void main()
+{
+    gl_Position = vec4(gl_VertexID == 0 ? -1 : 1, height * 2. - 1., 0, 1);
+})";
+
+    constexpr char kFS[] = R"(#version 300 es
+precision highp float;
+void main()
+{
+    colorOut = vec4(1.0);
+})";
+
+    ANGLE_GL_PROGRAM(program, kVS, kFS);
+    glUseProgram(program);
+
+    GLint heightLoc = glGetUniformLocation(program, "height");
+    ASSERT_NE(-1, heightLoc);
+
+    glClearColor(0, 0, 0, 1);
+    glClear(GL_COLOR_BUFFER_BIT);
+
+    const int h                 = getWindowHeight();
+    const float halfPixelHeight = 0.5 / h;
+
+    glUniform1f(heightLoc, 0.25f + halfPixelHeight);
+    glLineWidth(range[1] + 1.0f);
+    glDrawArrays(GL_LINES, 0, 2);
+
+    glFinish();
+
+    ASSERT_GL_NO_ERROR();
+}
+
 // Tests state change for glPolygonOffset.
 TEST_P(StateChangeTestES3, PolygonOffset)
 {

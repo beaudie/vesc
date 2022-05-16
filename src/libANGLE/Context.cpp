@@ -5780,6 +5780,8 @@ void Context::hint(GLenum target, GLenum mode)
 
 void Context::lineWidth(GLfloat width)
 {
+    // Clamp to valid range per capabilities
+    width = gl::clamp(width, mState.mCaps.minAliasedLineWidth, mState.mCaps.maxAliasedLineWidth);
     mState.setLineWidth(width);
 }
 
