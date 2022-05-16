@@ -243,6 +243,7 @@ enum class Feature
     SyncVertexArraysToDefault,
     UnbindFBOBeforeSwitchingContext,
     UnfoldShortCircuits,
+    UnlockGlobalMutexOnAquireNextImage,
     UnpackLastRowSeparatelyForPaddingInclusion,
     UnpackOverlappingRowsSeparatelyUnpackBuffer,
     UnsizedSRGBReadPixelsDoesntTransform,

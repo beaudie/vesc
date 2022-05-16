@@ -657,8 +657,8 @@ void ShareGroup::release(const Display *display)
 }
 
 // DisplayState
-DisplayState::DisplayState(EGLNativeDisplayType nativeDisplayId)
-    : label(nullptr), featuresAllDisabled(false), displayId(nativeDisplayId)
+DisplayState::DisplayState(EGLNativeDisplayType nativeDisplayId, angle::GlobalMutex &mutexIn)
+    : label(nullptr), featuresAllDisabled(false), displayId(nativeDisplayId), mutex(&mutexIn)
 {}
 
 DisplayState::~DisplayState() {}
@@ -700,7 +700,8 @@ DisplayState::~DisplayState() {}
 // static
 Display *Display::GetDisplayFromNativeDisplay(EGLenum platform,
                                               EGLNativeDisplayType nativeDisplay,
-                                              const AttributeMap &attribMap)
+                                              const AttributeMap &attribMap,
+                                              angle::GlobalMutex &mutex)
 {
     Display *display = nullptr;
 
@@ -730,7 +731,7 @@ Display *Display::GetDisplayFromNativeDisplay(EGLenum platform,
             return nullptr;
         }
 
-        display = new Display(platform, nativeDisplay, nullptr);
+        display = new Display(platform, nativeDisplay, nullptr, mutex);
         displays->insert(std::make_pair(displayKey, display));
     }
     // Apply new attributes if the display is not initialized yet.
@@ -780,7 +781,9 @@ Display *Display::GetExistingDisplayFromNativeDisplay(EGLNativeDisplayType nativ
 }
 
 // static
-Display *Display::GetDisplayFromDevice(Device *device, const AttributeMap &attribMap)
+Display *Display::GetDisplayFromDevice(Device *device,
+                                       const AttributeMap &attribMap,
+                                       angle::GlobalMutex &mutex)
 {
     Display *display = nullptr;
 
@@ -812,7 +815,7 @@ Display *Display::GetDisplayFromDevice(Device *device, const AttributeMap &attri
     if (display == nullptr)
     {
         // Otherwise create a new Display
-        display = new Display(EGL_PLATFORM_DEVICE_EXT, 0, device);
+        display = new Display(EGL_PLATFORM_DEVICE_EXT, 0, device, mutex);
         devicePlatformDisplays->insert(std::make_pair(device, display));
     }
 
@@ -848,8 +851,11 @@ Display::EglDisplaySet Display::GetEglDisplaySet()
     return displays;
 }
 
-Display::Display(EGLenum platform, EGLNativeDisplayType displayId, Device *eglDevice)
-    : mState(displayId),
+Display::Display(EGLenum platform,
+                 EGLNativeDisplayType displayId,
+                 Device *eglDevice,
+                 angle::GlobalMutex &mutex)
+    : mState(displayId, mutex),
       mImplementation(nullptr),
       mGPUSwitchedBinding(this, kGPUSwitchedSubjectIndex),
       mAttributeMap(),
@@ -1484,10 +1490,10 @@ Error Display::createContext(const Config *configuration,
         }
     }
 
-    gl::Context *context = new gl::Context(this, configuration, shareContext, shareTextures,
-                                           shareSemaphores, cachePointer, clientType, attribs,
-                                           mDisplayExtensions, GetClientExtensions());
-    Error error          = context->initialize();
+    gl::Context *context = new gl::Context(
+        this, configuration, shareContext, shareTextures, shareSemaphores, cachePointer, clientType,
+        attribs, mDisplayExtensions, GetClientExtensions(), *mState.mutex);
+    Error error = context->initialize();
     if (error.isError())
     {
         delete context;
