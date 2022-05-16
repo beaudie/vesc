@@ -194,6 +194,8 @@ class TextureVk : public TextureImpl, public angle::ObserverInterface
                                               GLenum binding,
                                               const gl::ImageIndex &imageIndex);
 
+    GLint getRequiredExternalTextureImageUnits(const gl::Context *context) override;
+
     const vk::ImageHelper &getImage() const
     {
         ASSERT(mImage && mImage->valid());

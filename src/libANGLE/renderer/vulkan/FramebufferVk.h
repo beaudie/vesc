@@ -145,6 +145,7 @@ class FramebufferVk : public FramebufferImpl
     GLint getSamples() const;
 
     const vk::RenderPassDesc &getRenderPassDesc() const { return mRenderPassDesc; }
+    uint64_t getRenderPassColor0ExternalFormat() const { return mRenderPassColor0ExternalFormat; }
 
     void updateColorResolveAttachment(
         uint32_t colorIndexGL,
@@ -247,6 +248,7 @@ class FramebufferVk : public FramebufferImpl
     WindowSurfaceVk *mBackbuffer;
 
     vk::RenderPassDesc mRenderPassDesc;
+    uint64_t mRenderPassColor0ExternalFormat;
     vk::FramebufferHelper *mFramebuffer;
     RenderTargetCache<RenderTargetVk> mRenderTargetCache;
 
