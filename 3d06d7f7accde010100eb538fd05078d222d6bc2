@@ -16,6 +16,23 @@
       "message": "Hi Shahbaz, PTAL. Thanks",
       "revId": "3d06d7f7accde010100eb538fd05078d222d6bc2",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "84bb1b3b_d1c14a40",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 5
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-05-16T16:07:20Z",
+      "side": 1,
+      "message": "Nice, thanks for cleaning up. Looks like the `if` I eventually added to RendererVk\u0027s destruction had made the whole change moot.",
+      "revId": "3d06d7f7accde010100eb538fd05078d222d6bc2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
