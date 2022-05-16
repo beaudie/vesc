@@ -552,7 +552,7 @@ template("angle_trace_fixture") {
     sources = [
       "$angle_root/src/libANGLE/capture/trace_fixture.cpp",
       "$angle_root/src/libANGLE/capture/trace_fixture.h",
-      invoker.gl_header,
+      "$angle_root/util/capture/angle_trace_gl.h",
     ]
     public_deps = [ "$angle_root:includes" ]
     if (defined(invoker.public_deps)) {
@@ -615,6 +615,14 @@ set_defaults("angle_trace_library") {
 }
 
 template("angle_trace_library") {
+  _fixture_target = target_name + "_fixture"
+  angle_trace_fixture(_fixture_target) {
+    public_deps = [
+      "$angle_root/util:angle_frame_capture_test_utils",
+      "$angle_root/util:angle_trace_loader",
+    ]
+  }
+
   _trace_json = read_file(invoker.json_path, "json")
   _trace_targets = []
 
@@ -648,7 +656,7 @@ template("angle_trace_library") {
         "$_trace_dir/$_trace.json",
         "$_trace_dir/$_trace.angledata.gz",
       ]
-      fixture = invoker.trace_fixture
+      fixture = ":$_fixture_target"
 
       if (invoker.short_names) {
         output_name = _trace
@@ -658,9 +666,17 @@ template("angle_trace_library") {
     _trace_targets += [ ":$_target" ]
   }
 
-  group(target_name) {
+  _trace_group = target_name + "_traces"
+  group(_trace_group) {
     testonly = true
     data = [ invoker.json_path ]
     data_deps = _trace_targets
+  }
+
+  angle_shared_library(target_name) {
+    testonly = true
+    data_deps = [ ":$_trace_group" ]
+    deps = [ "$angle_root:angle_common" ]
+    public_deps = [ "$angle_root/util:angle_trace_loader" ]
   }
 }
