@@ -135,6 +135,30 @@
       },
       "revId": "0ca781ed5c123d6a4c285e2819568d36c53a5297",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "4a10ead9_a1ef8e66",
+        "filename": "src/libANGLE/Texture.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 2413,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2022-05-16T19:21:32Z",
+      "side": 1,
+      "message": "BufferVkStorageChanged removed in the latest patchset.",
+      "parentUuid": "5ed5c2e3_2cff1252",
+      "range": {
+        "startLine": 2413,
+        "startChar": 36,
+        "endLine": 2413,
+        "endChar": 58
+      },
+      "revId": "0ca781ed5c123d6a4c285e2819568d36c53a5297",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
