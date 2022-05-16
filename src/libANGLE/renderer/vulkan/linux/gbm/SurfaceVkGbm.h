@@ -38,8 +38,10 @@ class SurfaceVkGbm : public WindowSurfaceVk
                            EGLint *bufferPitchOut) override;
     egl::Error unlockSurface(const egl::Display *display, bool preservePixels) override;
 
+    const vk::Semaphore *getAndResetAcquireImageSemaphore() override;
+
   private:
-    angle::Result getCurrentWindowSize(vk::Context *context, gl::Extents *extentsOut) override;
+    // angle::Result getCurrentWindowSize(vk::Context *context, gl::Extents *extentsOut) override;
 
     angle::Result initializeImpl(DisplayVk *displayVk) override;
     angle::Result createSwapChain(vk::Context *context);
