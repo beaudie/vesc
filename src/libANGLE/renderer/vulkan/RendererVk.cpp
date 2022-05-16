@@ -42,16 +42,12 @@ namespace
 {
 constexpr VkFormatFeatureFlags kInvalidFormatFeatureFlags = static_cast<VkFormatFeatureFlags>(-1);
 
-#if defined(ANGLE_EXPOSE_NON_CONFORMANT_EXTENSIONS_AND_VERSIONS)
 constexpr bool kExposeNonConformantExtensionsAndVersions = true;
-#else
-constexpr bool kExposeNonConformantExtensionsAndVersions = false;
-#endif
 
 #if defined(ANGLE_USE_SPIRV_GENERATION_THROUGH_GLSLANG)
 constexpr bool kUseSpirvGenThroughGlslang = true;
 #else
-constexpr bool kUseSpirvGenThroughGlslang                = false;
+constexpr bool kUseSpirvGenThroughGlslang = false;
 #endif
 }  // anonymous namespace
 
@@ -963,7 +959,7 @@ void CompressAndStorePipelineCacheVk(VkPhysicalDeviceProperties physicalDevicePr
     const size_t numChunks = UnsignedCeilDivide(static_cast<unsigned int>(compressedData.size()),
                                                 kMaxBlobCacheSize - kBlobHeaderSize);
     size_t chunkSize       = UnsignedCeilDivide(static_cast<unsigned int>(compressedData.size()),
-                                                static_cast<unsigned int>(numChunks));
+                                          static_cast<unsigned int>(numChunks));
 
     for (size_t chunkIndex = 0; chunkIndex < numChunks; ++chunkIndex)
     {
@@ -2624,35 +2620,35 @@ angle::Result RendererVk::initializeDevice(DisplayVk *displayVk, uint32_t queueF
 #else
     if (getFeatures().supportsHostQueryReset.enabled)
     {
-                       InitHostQueryResetFunctions(mInstance);
+        InitHostQueryResetFunctions(mInstance);
     }
     if (hasGetMemoryRequirements2KHR)
     {
-                       InitGetMemoryRequirements2KHRFunctions(mDevice);
+        InitGetMemoryRequirements2KHRFunctions(mDevice);
     }
     if (hasBindMemory2KHR)
     {
-                       InitBindMemory2KHRFunctions(mDevice);
+        InitBindMemory2KHRFunctions(mDevice);
     }
     if (getFeatures().supportsTransformFeedbackExtension.enabled)
     {
-                       InitTransformFeedbackEXTFunctions(mDevice);
+        InitTransformFeedbackEXTFunctions(mDevice);
     }
     if (getFeatures().supportsYUVSamplerConversion.enabled)
     {
-                       InitSamplerYcbcrKHRFunctions(mDevice);
+        InitSamplerYcbcrKHRFunctions(mDevice);
     }
     if (getFeatures().supportsRenderpass2.enabled)
     {
-                       InitRenderPass2KHRFunctions(mDevice);
+        InitRenderPass2KHRFunctions(mDevice);
     }
     if (getFeatures().supportsExtendedDynamicState.enabled)
     {
-                       InitExtendedDynamicStateEXTFunctions(mDevice);
+        InitExtendedDynamicStateEXTFunctions(mDevice);
     }
     if (getFeatures().supportsExtendedDynamicState2.enabled)
     {
-                       InitExtendedDynamicState2EXTFunctions(mDevice);
+        InitExtendedDynamicState2EXTFunctions(mDevice);
     }
 #endif  // !defined(ANGLE_SHARED_LIBVULKAN)
 

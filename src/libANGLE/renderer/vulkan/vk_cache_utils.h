@@ -1555,14 +1555,11 @@ struct hash<rx::vk::SamplerDesc>
 };
 
 // See Resource Serial types defined in vk_utils.h.
-#define ANGLE_HASH_VK_SERIAL(Type)                               \
-    template <>                                                  \
-    struct hash<rx::vk::Type##Serial>                            \
-    {                                                            \
-        size_t operator()(const rx::vk::Type##Serial &key) const \
-        {                                                        \
-            return key.getValue();                               \
-        }                                                        \
+#define ANGLE_HASH_VK_SERIAL(Type)                                                          \
+    template <>                                                                             \
+    struct hash<rx::vk::Type##Serial>                                                       \
+    {                                                                                       \
+        size_t operator()(const rx::vk::Type##Serial &key) const { return key.getValue(); } \
     };
 
 ANGLE_VK_SERIAL_OP(ANGLE_HASH_VK_SERIAL)
@@ -1699,8 +1696,31 @@ class RenderPassCache final : angle::NonCopyable
 
     ANGLE_INLINE angle::Result getCompatibleRenderPass(ContextVk *contextVk,
                                                        const vk::RenderPassDesc &desc,
+                                                       uint64_t color0ExternalFormat,
                                                        vk::RenderPass **renderPassOut)
     {
+        if (color0ExternalFormat != 0)
+        {
+            auto outerIt = mPayloadExternalFormat.find(desc);
+            if (outerIt != mPayloadExternalFormat.end())
+            {
+                MidExternalFormatCache &midCache = outerIt->second;
+
+                auto midIt = midCache.find(color0ExternalFormat);
+
+                if (midIt != midCache.end())
+                {
+                    InnerExternalFormatCache &innerCache = midIt->second;
+                    // Find the first element and return it.
+                    *renderPassOut = &innerCache.begin()->second.getRenderPass();
+                    mCompatibleRenderPassCacheStats.hit();
+                    return angle::Result::Continue;
+                }
+            }
+            mCompatibleRenderPassCacheStats.miss();
+            return addRenderPass(contextVk, desc, color0ExternalFormat, renderPassOut);
+        }
+
         auto outerIt = mPayload.find(desc);
         if (outerIt != mPayload.end())
         {
@@ -1714,12 +1734,13 @@ class RenderPassCache final : angle::NonCopyable
         }
 
         mCompatibleRenderPassCacheStats.missAndIncrementSize();
-        return addRenderPass(contextVk, desc, renderPassOut);
+        return addRenderPass(contextVk, desc, 0, renderPassOut);
     }
 
     angle::Result getRenderPassWithOps(ContextVk *contextVk,
                                        const vk::RenderPassDesc &desc,
                                        const vk::AttachmentOpsArray &attachmentOps,
+                                       uint64_t color0ExternalFormat,
                                        vk::RenderPass **renderPassOut);
 
   private:
@@ -1727,10 +1748,12 @@ class RenderPassCache final : angle::NonCopyable
                                            const vk::RenderPassDesc &desc,
                                            const vk::AttachmentOpsArray &attachmentOps,
                                            bool updatePerfCounters,
+                                           uint64_t color0ExternalFormat,
                                            vk::RenderPass **renderPassOut);
 
     angle::Result addRenderPass(ContextVk *contextVk,
                                 const vk::RenderPassDesc &desc,
+                                uint64_t color0ExternalFormat,
                                 vk::RenderPass **renderPassOut);
 
     // Use a two-layer caching scheme. The top level matches the "compatible" RenderPass elements.
@@ -1742,6 +1765,16 @@ class RenderPassCache final : angle::NonCopyable
     OuterCache mPayload;
     CacheStats mCompatibleRenderPassCacheStats;
     CacheStats mRenderPassWithOpsCacheStats;
+
+    // uint64_t: the color 0 externalFormat
+    // outer + mid are used to come up with a compatible RP for FB's,
+    // and inner is used in the actual RP later
+    using InnerExternalFormatCache =
+        std::unordered_map<vk::AttachmentOpsArray, vk::RenderPassHelper>;
+    using MidExternalFormatCache   = std::unordered_map<uint64_t, InnerExternalFormatCache>;
+    using OuterExternalFormatCache = std::unordered_map<vk::RenderPassDesc, MidExternalFormatCache>;
+
+    OuterExternalFormatCache mPayloadExternalFormat;
 };
 
 // TODO(jmadill): Add cache trimming/eviction.

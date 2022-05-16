@@ -315,6 +315,7 @@ class Framebuffer final : public angle::ObserverInterface,
         ASSERT(!isDefault() || mCachedStatus.valid());
         if (isDefault() || (!hasAnyDirtyBit() && mCachedStatus.valid()))
         {
+            mCachedStatus = FramebufferStatus::Complete();
             return mCachedStatus.value();
         }
 

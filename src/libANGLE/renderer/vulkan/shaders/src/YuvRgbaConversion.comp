@@ -1,0 +1,30 @@
+//
+// Copyright 2022 The ANGLE Project Authors. All rights reserved.
+// Use of this source code is governed by a BSD-style license that can be
+// found in the LICENSE file.
+//
+// YuvRgbaConversion.comp: Convert YUV to RGBA. Assumes sampler conversion object is available.
+
+#version 450 core
+layout (local_size_x_id = 1, local_size_y_id = 2, local_size_z_id = 3) in;
+
+layout (push_constant) uniform PushConstants
+{
+    uint imageWidth;
+    uint imageHeight;
+};
+
+// We use yuvImage with a sampler conversion object, so it's implicitly rgba
+// once imageStore happens.
+layout (set = 0, binding = 0) uniform sampler2D yuvImage;
+layout (set = 0, binding = 1, rgba8) uniform writeonly image2D imgOut;
+
+void main() {
+    uint x = gl_GlobalInvocationID.x;
+    uint y = gl_GlobalInvocationID.y;
+
+    if (x >= imageWidth) return;
+    if (y >= imageHeight) return;
+
+    imageStore(imgOut, ivec2(x, y), vec4(texelFetch(yuvImage, ivec2(x, y), 0).rgb, 1.0));
+}
