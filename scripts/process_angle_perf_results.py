@@ -1,4 +1,4 @@
-#!/usr/bin/env vpython
+#!/usr/bin/env vpython3
 #
 # Copyright 2021 The ANGLE Project Authors. All rights reserved.
 # Use of this source code is governed by a BSD-style license that can be
@@ -9,6 +9,12 @@
 #   https://chromium.googlesource.com/chromium/src/+/main/tools/perf/process_perf_results.py
 
 from __future__ import print_function
+
+import os
+import sys
+import six
+print('sys.version_info.major:', sys.version_info.major)
+print('six version:', six.__version__)
 
 import argparse
 import collections
