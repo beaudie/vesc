@@ -376,9 +376,7 @@ void ProgramPipeline::updateUsesEarlyFragmentTestsOptimization()
         return;
     }
 
-    const ProgramExecutable &fragmentExecutable = fragmentProgram->getExecutable();
-    mState.mExecutable->mUsesEarlyFragmentTestsOptimization =
-        fragmentExecutable.mUsesEarlyFragmentTestsOptimization;
+    const ProgramExecutable &fragmentExecutable  = fragmentProgram->getExecutable();
     mState.mExecutable->mEnablesPerSampleShading = fragmentExecutable.mEnablesPerSampleShading;
 }
 

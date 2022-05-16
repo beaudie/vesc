@@ -3726,12 +3726,6 @@ TransformationState SpirvTransformer::transformExecutionMode(const uint32_t *ins
     spv::ExecutionMode mode;
     spirv::ParseExecutionMode(instruction, &entryPoint, &mode, nullptr);
 
-    if (mode == spv::ExecutionModeEarlyFragmentTests &&
-        mOptions.removeEarlyFragmentTestsOptimization)
-    {
-        // Drop the instruction.
-        return TransformationState::Transformed;
-    }
     return TransformationState::Unchanged;
 }
 
