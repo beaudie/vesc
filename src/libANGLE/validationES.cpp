@@ -2049,7 +2049,7 @@ bool ValidateGenerateMipmapBase(const Context *context,
     TextureTarget baseTarget = (target == TextureType::CubeMap)
                                    ? TextureTarget::CubeMapPositiveX
                                    : NonCubeTextureTypeToTarget(target);
-    const auto &format       = *(texture->getFormat(baseTarget, effectiveBaseLevel).info);
+    const auto &format = *(texture->getFormat(baseTarget, effectiveBaseLevel).info);
     if (format.sizedInternalFormat == GL_NONE || format.compressed || format.depthBits > 0 ||
         format.stencilBits > 0)
     {
@@ -3609,8 +3609,8 @@ bool ValidateCopyFormatCompatible(const InternalFormat &srcFormatInfo,
     {
         GLenum uncompressedFormat = (!srcFormatInfo.compressed) ? srcFormatInfo.internalFormat
                                                                 : dstFormatInfo.internalFormat;
-        GLenum compressedFormat   = (srcFormatInfo.compressed) ? srcFormatInfo.internalFormat
-                                                               : dstFormatInfo.internalFormat;
+        GLenum compressedFormat = (srcFormatInfo.compressed) ? srcFormatInfo.internalFormat
+                                                             : dstFormatInfo.internalFormat;
 
         return ValidateCopyMixedFormatCompatible(uncompressedFormat, compressedFormat);
     }
@@ -7075,6 +7075,14 @@ bool ValidateGetTexParameterBase(const Context *context,
             {
                 context->validationError(entryPoint, GL_INVALID_ENUM,
                                          kRobustResourceInitializationExtensionRequired);
+                return false;
+            }
+            break;
+
+        case GL_REQUIRED_TEXTURE_IMAGE_UNITS_OES:
+            if (!context->getExtensions().EGLImageExternalOES)
+            {
+                context->validationError(entryPoint, GL_INVALID_ENUM, kEnumNotSupported);
                 return false;
             }
             break;

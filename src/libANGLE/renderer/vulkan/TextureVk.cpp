@@ -229,6 +229,7 @@ void GetRenderTargetLayerCountAndIndex(vk::ImageHelper *image,
     {
         case gl::TextureType::_2D:
         case gl::TextureType::_2DMultisample:
+        case gl::TextureType::External:
             ASSERT(*layerIndex == 0 &&
                    (*layerCount == 1 ||
                     *layerCount == static_cast<GLuint>(gl::ImageIndex::kEntireLevel)));
@@ -3552,4 +3553,10 @@ void TextureVk::updateCachedImageViewSerials()
     mCachedImageViewSubresourceSerialSkipDecode =
         getImageViewSubresourceSerialImpl(GL_SKIP_DECODE_EXT);
 }
+
+GLint TextureVk::getRequiredExternalTextureImageUnits(const gl::Context *context)
+{
+    return 1;
+}
+
 }  // namespace rx
