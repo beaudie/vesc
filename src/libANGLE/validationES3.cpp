@@ -732,6 +732,13 @@ bool ValidateES3TexImageParametersBase(const Context *context,
     }
     else
     {
+        // Compressed formats are not valid internal formats for glTexImage*D
+        if (!isSubImage && actualFormatInfo.compressed)
+        {
+            context->validationError(entryPoint, GL_INVALID_VALUE, kInvalidInternalFormat);
+            return false;
+        }
+
         if (!ValidateTexImageFormatCombination(context, entryPoint, texType, actualInternalFormat,
                                                format, type))
         {
