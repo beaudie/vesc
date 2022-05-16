@@ -16,6 +16,29 @@
       "message": "Thanks to Cody that bisect the CLs down to the root cause. This fixes pubg_mobile_skydive rendering corruption issue (hopefully also fix the crash issue too).",
       "revId": "0ca781ed5c123d6a4c285e2819568d36c53a5297",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "7d2881e8_815655cd",
+        "filename": "src/libANGLE/Texture.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 2413,
+      "author": {
+        "id": 1340649
+      },
+      "writtenOn": "2022-05-16T17:26:42Z",
+      "side": 1,
+      "message": "weird to see BufferVk related messages being handled in texture observers but i guess its just a naming thing instead of a design issue",
+      "range": {
+        "startLine": 2413,
+        "startChar": 36,
+        "endLine": 2413,
+        "endChar": 58
+      },
+      "revId": "0ca781ed5c123d6a4c285e2819568d36c53a5297",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
