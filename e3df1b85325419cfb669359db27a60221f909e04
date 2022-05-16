@@ -1,0 +1,73 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "e777c2e8_3533a36b",
+        "filename": "samples/capture_replay/BUILD.gn",
+        "patchSetId": 12
+      },
+      "lineNbr": 13,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2022-05-16T15:32:42Z",
+      "side": 1,
+      "message": "remove libEGL/angle_util and add angle_trace_loader. no longer needed",
+      "range": {
+        "startLine": 10,
+        "startChar": 0,
+        "endLine": 13,
+        "endChar": 3
+      },
+      "revId": "e3df1b85325419cfb669359db27a60221f909e04",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "59d2e18f_f45c259e",
+        "filename": "util/BUILD.gn",
+        "patchSetId": 12
+      },
+      "lineNbr": 191,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2022-05-16T15:32:42Z",
+      "side": 1,
+      "message": "First necessary change: place this define in angle_trace_loader. Think of this define as a \"private\" define, and this config is a public (inherited) config.",
+      "range": {
+        "startLine": 191,
+        "startChar": 15,
+        "endLine": 191,
+        "endChar": 48
+      },
+      "revId": "e3df1b85325419cfb669359db27a60221f909e04",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "9acd7bf1_33d60100",
+        "filename": "util/BUILD.gn",
+        "patchSetId": 12
+      },
+      "lineNbr": 195,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2022-05-16T15:32:42Z",
+      "side": 1,
+      "message": "Second necessary change: make this an angle_shared_library to mirror the prior design. This worked in my local testing.\n\nalso naming nit: angle_trace_loader",
+      "range": {
+        "startLine": 195,
+        "startChar": 18,
+        "endLine": 195,
+        "endChar": 35
+      },
+      "revId": "e3df1b85325419cfb669359db27a60221f909e04",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
