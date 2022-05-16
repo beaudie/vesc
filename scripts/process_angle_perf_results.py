@@ -10,6 +10,12 @@
 
 from __future__ import print_function
 
+import os
+import sys
+import six
+print('sys.version_info.major:', sys.version_info.major)
+print('six version:', six.__version__)
+
 import argparse
 import collections
 import json
