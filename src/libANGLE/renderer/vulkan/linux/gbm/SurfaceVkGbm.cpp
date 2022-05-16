@@ -346,11 +346,6 @@ egl::Error SurfaceVkGbm::unlockSurface(const egl::Display *display, bool preserv
     return egl::NoError();
 }
 
-angle::Result SurfaceVkGbm::createSurfaceVk(vk::Context *context, gl::Extents *extentsOut)
-{
-    return angle::Result::Continue;
-}
-
 angle::Result SurfaceVkGbm::getCurrentWindowSize(vk::Context *context, gl::Extents *extentsOut)
 {
     return angle::Result::Continue;

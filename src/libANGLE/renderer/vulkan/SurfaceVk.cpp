@@ -869,7 +869,7 @@ egl::Error WindowSurfaceVk::initialize(const egl::Display *display)
     }
 }
 
-angle::Result WindowSurfaceVk::initializeImpl(DisplayVk *displayVk)
+angle::Result WindowSurfaceVkSwapchain::initializeImpl(DisplayVk *displayVk)
 {
     RendererVk *renderer = displayVk->getRenderer();
 
@@ -1124,11 +1124,12 @@ angle::Result WindowSurfaceVk::initializeImpl(DisplayVk *displayVk)
     return angle::Result::Continue;
 }
 
-angle::Result WindowSurfaceVk::getAttachmentRenderTarget(const gl::Context *context,
-                                                         GLenum binding,
-                                                         const gl::ImageIndex &imageIndex,
-                                                         GLsizei samples,
-                                                         FramebufferAttachmentRenderTarget **rtOut)
+angle::Result WindowSurfaceVkSwapchain::getAttachmentRenderTarget(
+    const gl::Context *context,
+    GLenum binding,
+    const gl::ImageIndex &imageIndex,
+    GLsizei samples,
+    FramebufferAttachmentRenderTarget **rtOut)
 {
     if (mNeedToAcquireNextSwapchainImage)
     {
@@ -2180,7 +2181,7 @@ egl::Error WindowSurfaceVk::getMscRate(EGLint * /*numerator*/, EGLint * /*denomi
     return egl::EglBadAccess();
 }
 
-void WindowSurfaceVk::setSwapInterval(EGLint interval)
+void WindowSurfaceVkSwapchain::setSwapInterval(EGLint interval)
 {
     // Don't let setSwapInterval change presentation mode if using SHARED present.
     if (mSwapchainPresentMode == vk::PresentMode::SharedDemandRefreshKHR)
@@ -2576,11 +2577,11 @@ egl::Error WindowSurfaceVk::setRenderBuffer(EGLint renderBuffer)
     return egl::NoError();
 }
 
-egl::Error WindowSurfaceVk::lockSurface(const egl::Display *display,
-                                        EGLint usageHint,
-                                        bool preservePixels,
-                                        uint8_t **bufferPtrOut,
-                                        EGLint *bufferPitchOut)
+egl::Error WindowSurfaceVkSwapchain::lockSurface(const egl::Display *display,
+                                                 EGLint usageHint,
+                                                 bool preservePixels,
+                                                 uint8_t **bufferPtrOut,
+                                                 EGLint *bufferPitchOut)
 {
     ANGLE_TRACE_EVENT0("gpu.angle", "WindowSurfaceVk::lockSurface");
 
@@ -2601,7 +2602,7 @@ egl::Error WindowSurfaceVk::lockSurface(const egl::Display *display,
     return angle::ToEGL(result, vk::GetImpl(display), EGL_BAD_ACCESS);
 }
 
-egl::Error WindowSurfaceVk::unlockSurface(const egl::Display *display, bool preservePixels)
+egl::Error WindowSurfaceVkSwapchain::unlockSurface(const egl::Display *display, bool preservePixels)
 {
     vk::ImageHelper *image = &mSwapchainImages[mCurrentSwapchainImageIndex].image;
     ASSERT(image->valid());
@@ -2616,5 +2617,12 @@ EGLint WindowSurfaceVk::origin() const
 {
     return EGL_UPPER_LEFT_KHR;
 }
+
+WindowSurfaceVkSwapchain::WindowSurfaceVkSwapchain(const egl::SurfaceState &surfaceState,
+                                                   EGLNativeWindowType window)
+    : WindowSurfaceVk(surfaceState, window)
+{}
+
+WindowSurfaceVkSwapchain::~WindowSurfaceVkSwapchain() {}
 
 }  // namespace rx

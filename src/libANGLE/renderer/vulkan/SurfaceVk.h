@@ -203,11 +203,6 @@ class WindowSurfaceVk : public SurfaceVk
     void destroy(const egl::Display *display) override;
 
     egl::Error initialize(const egl::Display *display) override;
-    angle::Result getAttachmentRenderTarget(const gl::Context *context,
-                                            GLenum binding,
-                                            const gl::ImageIndex &imageIndex,
-                                            GLsizei samples,
-                                            FramebufferAttachmentRenderTarget **rtOut) override;
     FramebufferImpl *createDefaultFramebuffer(const gl::Context *context,
                                               const gl::FramebufferState &state) override;
     egl::Error prepareSwap(const gl::Context *context) override;
@@ -227,7 +222,6 @@ class WindowSurfaceVk : public SurfaceVk
     egl::Error releaseTexImage(const gl::Context *context, EGLint buffer) override;
     egl::Error getSyncValues(EGLuint64KHR *ust, EGLuint64KHR *msc, EGLuint64KHR *sbc) override;
     egl::Error getMscRate(EGLint *numerator, EGLint *denominator) override;
-    void setSwapInterval(EGLint interval) override;
 
     // width and height can change with client window resizing
     EGLint getWidth() const override;
@@ -281,12 +275,6 @@ class WindowSurfaceVk : public SurfaceVk
         return (mSwapchainPresentMode == vk::PresentMode::SharedDemandRefreshKHR);
     }
 
-    egl::Error lockSurface(const egl::Display *display,
-                           EGLint usageHint,
-                           bool preservePixels,
-                           uint8_t **bufferPtrOut,
-                           EGLint *bufferPitchOut) override;
-    egl::Error unlockSurface(const egl::Display *display, bool preservePixels) override;
     EGLint origin() const override;
 
     angle::Result onSharedPresentContextFlush(const gl::Context *context);
@@ -332,11 +320,9 @@ class WindowSurfaceVk : public SurfaceVk
     // EGL_EXT_buffer_age: Track frame count.
     uint64_t mFrameCount;
 
-  private:
-    virtual angle::Result createSurfaceVk(vk::Context *context, gl::Extents *extentsOut)      = 0;
+ // private:
     virtual angle::Result getCurrentWindowSize(vk::Context *context, gl::Extents *extentsOut) = 0;
-
-    virtual angle::Result initializeImpl(DisplayVk *displayVk);
+    virtual angle::Result initializeImpl(DisplayVk *displayVk) = 0;
     angle::Result recreateSwapchain(ContextVk *contextVk, const gl::Extents &extents);
     angle::Result createSwapChain(vk::Context *context,
                                   const gl::Extents &extents,
@@ -443,6 +429,33 @@ class WindowSurfaceVk : public SurfaceVk
 
     // GL_EXT_shader_framebuffer_fetch
     FramebufferFetchMode mFramebufferFetchMode = FramebufferFetchMode::Disabled;
+};
+
+class WindowSurfaceVkSwapchain : public WindowSurfaceVk
+{
+  public:
+    WindowSurfaceVkSwapchain(const egl::SurfaceState &surfaceState, EGLNativeWindowType window);
+    ~WindowSurfaceVkSwapchain() override;
+
+    angle::Result getAttachmentRenderTarget(const gl::Context *context,
+                                            GLenum binding,
+                                            const gl::ImageIndex &imageIndex,
+                                            GLsizei samples,
+                                            FramebufferAttachmentRenderTarget **rtOut) override;
+
+    void setSwapInterval(EGLint interval) override;
+
+    egl::Error lockSurface(const egl::Display *display,
+                           EGLint usageHint,
+                           bool preservePixels,
+                           uint8_t **bufferPtrOut,
+                           EGLint *bufferPitchOut) override;
+    egl::Error unlockSurface(const egl::Display *display, bool preservePixels) override;
+
+  private:
+    virtual angle::Result createSurfaceVk(vk::Context *context, gl::Extents *extentsOut) = 0;
+    angle::Result initializeImpl(DisplayVk *displayVk) override;
+
 };
 
 }  // namespace rx

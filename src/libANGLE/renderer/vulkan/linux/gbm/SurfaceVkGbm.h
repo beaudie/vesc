@@ -39,7 +39,6 @@ class SurfaceVkGbm : public WindowSurfaceVk
     egl::Error unlockSurface(const egl::Display *display, bool preservePixels) override;
 
   private:
-    angle::Result createSurfaceVk(vk::Context *context, gl::Extents *extentsOut) override;
     angle::Result getCurrentWindowSize(vk::Context *context, gl::Extents *extentsOut) override;
 
     angle::Result initializeImpl(DisplayVk *displayVk) override;
