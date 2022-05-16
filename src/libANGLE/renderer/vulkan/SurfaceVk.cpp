@@ -393,6 +393,18 @@ VkRectLayerKHR ToVkRectLayer(const EGLint *eglRect,
     return rect;
 }
 
+angle::ScopedUnlock<angle::ThreadTrackingMutex> ScopedUnlockGlobalLockForAcquireNextImage(
+    angle::ThreadTrackingMutex &mutex,
+    const angle::FeaturesVk &features)
+{
+    if (!features.unlockGlobalMutexOnAquireNextImage.enabled)
+    {
+        return angle::ScopedUnlock<angle::ThreadTrackingMutex>();
+    }
+
+    return angle::ScopedUnlockIfLockedByCurrentThread(mutex);
+}
+
 }  // namespace
 
 SurfaceVk::SurfaceVk(const egl::SurfaceState &surfaceState) : SurfaceImpl(surfaceState) {}
@@ -1093,7 +1105,7 @@ angle::Result WindowSurfaceVk::initializeImpl(DisplayVk *displayVk)
         ANGLE_VK_TRY(displayVk, semaphore.init(displayVk->getDevice()));
     }
 
-    VkResult vkResult = acquireNextSwapchainImage(displayVk);
+    VkResult vkResult = acquireNextSwapchainImage(displayVk, displayVk->getMutex());
     ASSERT(vkResult != VK_SUBOPTIMAL_KHR);
     ANGLE_VK_TRY(displayVk, vkResult);
 
@@ -1944,7 +1956,7 @@ angle::Result WindowSurfaceVk::doDeferredAcquireNextImage(const gl::Context *con
         ANGLE_TRACE_EVENT0("gpu.angle", "acquireNextSwapchainImage");
         // Get the next available swapchain image.
 
-        VkResult result = acquireNextSwapchainImage(contextVk);
+        VkResult result = acquireNextSwapchainImage(contextVk, context->getMutex());
 
         ASSERT(result != VK_SUBOPTIMAL_KHR);
         // If OUT_OF_DATE is returned, it's ok, we just need to recreate the swapchain before
@@ -1953,7 +1965,7 @@ angle::Result WindowSurfaceVk::doDeferredAcquireNextImage(const gl::Context *con
         {
             ANGLE_TRY(checkForOutOfDateSwapchain(contextVk, true));
             // Try one more time and bail if we fail
-            result = acquireNextSwapchainImage(contextVk);
+            result = acquireNextSwapchainImage(contextVk, context->getMutex());
         }
         ANGLE_VK_TRY(contextVk, result);
     }
@@ -1993,7 +2005,8 @@ angle::Result WindowSurfaceVk::doDeferredAcquireNextImage(const gl::Context *con
 
 // This method will either return VK_SUCCESS or VK_ERROR_*.  Thus, it is appropriate to ASSERT that
 // the return value won't be VK_SUBOPTIMAL_KHR.
-VkResult WindowSurfaceVk::acquireNextSwapchainImage(vk::Context *context)
+VkResult WindowSurfaceVk::acquireNextSwapchainImage(vk::Context *context,
+                                                    angle::GlobalMutex &unlockMutex)
 {
     VkDevice device = context->getDevice();
 
@@ -2012,9 +2025,14 @@ VkResult WindowSurfaceVk::acquireNextSwapchainImage(vk::Context *context)
 
     const vk::Semaphore *acquireImageSemaphore = &mAcquireImageSemaphores.front();
 
-    VkResult result =
-        vkAcquireNextImageKHR(device, mSwapchain, UINT64_MAX, acquireImageSemaphore->getHandle(),
-                              VK_NULL_HANDLE, &mCurrentSwapchainImageIndex);
+    VkResult result = VK_SUCCESS;
+    {
+        auto scopedUnlock = ScopedUnlockGlobalLockForAcquireNextImage(
+            unlockMutex, context->getRenderer()->getFeatures());
+        result = vkAcquireNextImageKHR(device, mSwapchain, UINT64_MAX,
+                                       acquireImageSemaphore->getHandle(), VK_NULL_HANDLE,
+                                       &mCurrentSwapchainImageIndex);
+    }
 
     // VK_SUBOPTIMAL_KHR is ok since we still have an Image that can be presented successfully
     if (ANGLE_UNLIKELY(result != VK_SUCCESS && result != VK_SUBOPTIMAL_KHR))
@@ -2527,7 +2545,8 @@ egl::Error WindowSurfaceVk::lockSurface(const egl::Display *display,
     vk::ImageHelper *image = &mSwapchainImages[mCurrentSwapchainImageIndex].image;
     if (!image->valid())
     {
-        if (acquireNextSwapchainImage(vk::GetImpl(display)) != VK_SUCCESS)
+        DisplayVk *displayVk = vk::GetImpl(display);
+        if (acquireNextSwapchainImage(displayVk, displayVk->getMutex()) != VK_SUCCESS)
         {
             return egl::EglBadAccess();
         }

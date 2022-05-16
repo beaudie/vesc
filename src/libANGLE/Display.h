@@ -61,7 +61,7 @@ using SurfaceSet = std::set<Surface *>;
 
 struct DisplayState final : private angle::NonCopyable
 {
-    DisplayState(EGLNativeDisplayType nativeDisplayId);
+    DisplayState(EGLNativeDisplayType nativeDisplayId, angle::GlobalMutex &mutexIn);
     ~DisplayState();
 
     EGLLabelKHR label;
@@ -70,6 +70,7 @@ struct DisplayState final : private angle::NonCopyable
     std::vector<std::string> featureOverridesDisabled;
     bool featuresAllDisabled;
     EGLNativeDisplayType displayId;
+    angle::GlobalMutex *mutex;
 };
 
 using ContextSet = std::set<gl::Context *>;
@@ -149,10 +150,13 @@ class Display final : public LabeledObject,
     // this function.
     Error releaseThread();
 
-    static Display *GetDisplayFromDevice(Device *device, const AttributeMap &attribMap);
+    static Display *GetDisplayFromDevice(Device *device,
+                                         const AttributeMap &attribMap,
+                                         angle::GlobalMutex &mutex);
     static Display *GetDisplayFromNativeDisplay(EGLenum platform,
                                                 EGLNativeDisplayType nativeDisplay,
-                                                const AttributeMap &attribMap);
+                                                const AttributeMap &attribMap,
+                                                angle::GlobalMutex &mutex);
     static Display *GetExistingDisplayFromNativeDisplay(EGLNativeDisplayType nativeDisplay);
 
     using EglDisplaySet = std::set<Display *>;
@@ -322,7 +326,10 @@ class Display final : public LabeledObject,
                                EGLint *num_modifiers);
 
   private:
-    Display(EGLenum platform, EGLNativeDisplayType displayId, Device *eglDevice);
+    Display(EGLenum platform,
+            EGLNativeDisplayType displayId,
+            Device *eglDevice,
+            angle::GlobalMutex &mutex);
 
     void setAttributes(const AttributeMap &attribMap) { mAttributeMap = attribMap; }
 

@@ -24,6 +24,8 @@
 #include <bitset>
 #include <map>
 #include <memory>
+#include <optional>
+#include <thread>
 #include <unordered_map>
 
 namespace gl
@@ -1170,6 +1172,52 @@ class DestroyThenDelete
 
 template <typename ObjT, typename ContextT>
 using UniqueObjectPointer = std::unique_ptr<ObjT, DestroyThenDelete<ObjT, ContextT>>;
+
+// Mutex class that implements the stl Mutex requirements:
+// https://en.cppreference.com/w/cpp/named_req/Mutex
+class ThreadTrackingMutex : public NonCopyable
+{
+  public:
+    ThreadTrackingMutex();
+    ~ThreadTrackingMutex();
+
+    void lock();
+    bool try_lock();
+    void unlock();
+
+    bool is_locked_by_current_thread() const;
+
+  private:
+    std::optional<std::thread::id> mLockingThreadId;
+
+    // note: if changed to a std::recursive_mutex, more complicated tracking of the locking thread
+    // is needed since unlocking does not neccessarily reset the locking thread id.
+    std::mutex mMutex;
+};
+
+template <typename MutexType>
+class ScopedUnlock : public NonCopyable
+{
+  public:
+    ScopedUnlock() : mMutex(nullptr) {}
+
+    ScopedUnlock(MutexType &mutex) : mMutex(&mutex) { mMutex->unlock(); }
+
+    ~ScopedUnlock()
+    {
+        if (mMutex)
+        {
+            mMutex->lock();
+        }
+    }
+
+  private:
+    MutexType *mMutex;
+};
+
+ScopedUnlock<ThreadTrackingMutex> ScopedUnlockIfLockedByCurrentThread(ThreadTrackingMutex &mutex);
+
+using GlobalMutex = ThreadTrackingMutex;
 
 }  // namespace angle
 
