@@ -1389,7 +1389,7 @@ void WriteAuxiliaryContextCppSetupReplay(ReplayWriter &replayWriter,
         include << "#include \""
                 << FmtCapturePrefix(frameCaptureShared.getWindowSurfaceContextID(), captureLabel)
                 << ".h\"\n";
-        include << "#include \"angle_trace_gl.h\"\n";
+        include << "#include \"util/capture/angle_trace_gl.h\"\n";
 
         std::string frameIncludes = include.str();
         replayWriter.setSourcePrologue(frameIncludes);
@@ -1428,7 +1428,7 @@ void WriteShareGroupCppSetupReplay(ReplayWriter &replayWriter,
     {
         std::stringstream include;
 
-        include << "#include \"angle_trace_gl.h\"\n";
+        include << "#include \"util/capture/angle_trace_gl.h\"\n";
         include << "#include \"" << FmtCapturePrefix(windowSurfaceContextID, captureLabel)
                 << ".h\"\n";
 
@@ -6822,7 +6822,7 @@ void FrameCaptureShared::writeCppReplayIndexFiles(const gl::Context *context,
 
         source << "#include \"" << FmtCapturePrefix(contextId, mCaptureLabel) << ".h\"\n";
         source << "#include \"trace_fixture.h\"\n";
-        source << "#include \"angle_trace_gl.h\"\n";
+        source << "#include \"util/capture/angle_trace_gl.h\"\n";
 
         std::string sourcePrologue = source.str();
         mReplayWriter.setSourcePrologue(sourcePrologue);
@@ -6926,7 +6926,7 @@ void FrameCaptureShared::writeMainContextCppReplay(const gl::Context *context,
         std::stringstream header;
 
         header << "#include \"" << FmtCapturePrefix(context->id(), mCaptureLabel) << ".h\"\n";
-        header << "#include \"angle_trace_gl.h\"\n";
+        header << "#include \"util/capture/angle_trace_gl.h\"\n";
 
         std::string headerString = header.str();
         mReplayWriter.setSourcePrologue(headerString);
