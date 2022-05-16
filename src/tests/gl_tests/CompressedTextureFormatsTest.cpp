@@ -20,6 +20,36 @@ namespace
 using FormatDesc                  = std::pair<GLenum, GLsizei>;
 using CompressedTextureTestParams = std::tuple<angle::PlatformParameters, FormatDesc>;
 
+bool CompressedTextureFormatAcceptedByTexImage(GLenum internalFormat)
+{
+    // List of compressed formats from the EXT_texture_compression_bptc,
+    // EXT_texture_compression_rgtc,
+    // EXT_texture_compression_s3tc and EXT_texture_compression_s3tc_srgb
+    switch (internalFormat)
+    {
+        case GL_COMPRESSED_SRGB_S3TC_DXT1_EXT:
+        case GL_COMPRESSED_SRGB_ALPHA_S3TC_DXT1_EXT:
+        case GL_COMPRESSED_SRGB_ALPHA_S3TC_DXT3_EXT:
+        case GL_COMPRESSED_SRGB_ALPHA_S3TC_DXT5_EXT:
+        case GL_COMPRESSED_RGB_S3TC_DXT1_EXT:
+        case GL_COMPRESSED_RGBA_S3TC_DXT1_EXT:
+        case GL_COMPRESSED_RGBA_S3TC_DXT3_EXT:
+        case GL_COMPRESSED_RGBA_S3TC_DXT5_EXT:
+        case GL_COMPRESSED_RED_RGTC1_EXT:
+        case GL_COMPRESSED_SIGNED_RED_RGTC1_EXT:
+        case GL_COMPRESSED_RED_GREEN_RGTC2_EXT:
+        case GL_COMPRESSED_SIGNED_RED_GREEN_RGTC2_EXT:
+        case GL_COMPRESSED_RGBA_BPTC_UNORM_EXT:
+        case GL_COMPRESSED_SRGB_ALPHA_BPTC_UNORM_EXT:
+        case GL_COMPRESSED_RGB_BPTC_SIGNED_FLOAT_EXT:
+        case GL_COMPRESSED_RGB_BPTC_UNSIGNED_FLOAT_EXT:
+            return true;
+
+        default:
+            return false;
+    }
+}
+
 class CompressedTextureFormatsTest : public ANGLETestWithParam<CompressedTextureTestParams>
 {
   public:
@@ -104,7 +134,20 @@ class CompressedTextureFormatsTest : public ANGLETestWithParam<CompressedTexture
             // The semantic of this call is to take uncompressed data and compress it on-the-fly.
             // This operation is not supported in OpenGL ES.
             glTexImage2D(GL_TEXTURE_2D, 0, format, 4, 4, 0, GL_RGB, GL_UNSIGNED_BYTE, nullptr);
-            EXPECT_GL_ERROR(getClientMajorVersion() >= 3 ? GL_INVALID_OPERATION : GL_INVALID_VALUE);
+
+            // From the OpenGL ES 3.2 spec: GL_INVALID_VALUE error is generated
+            // if internalformat is not one of the valid formats in tables 8.2 or 8.3.
+            // Except formats from EXT_texture_compression_bptc,
+            // EXT_texture_compression_rgtc,
+            // EXT_texture_compression_s3tc and EXT_texture_compression_s3tc_srgb specification
+            if (CompressedTextureFormatAcceptedByTexImage(format))
+            {
+                EXPECT_GL_ERROR(GL_INVALID_OPERATION);
+            }
+            else
+            {
+                EXPECT_GL_ERROR(GL_INVALID_VALUE);
+            }
 
             // Try compressed enum as format. Compressed texture extensions never allow this.
             glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, 4, 4, 0, format, GL_UNSIGNED_BYTE, nullptr);
@@ -179,7 +222,20 @@ class CompressedTextureFormatsTest : public ANGLETestWithParam<CompressedTexture
             // uncompressed data and compress it on-the-fly. This operation is not supported in
             // OpenGL ES.
             glTexImage3D(target, 0, format, 4, 4, 1, 0, GL_RGB, GL_UNSIGNED_BYTE, nullptr);
-            EXPECT_GL_ERROR(GL_INVALID_OPERATION);
+
+            // From the OpenGL ES 3.2 spec: GL_INVALID_VALUE error is generated
+            // if internalformat is not one of the valid formats in tables 8.2 or 8.3
+            // Except formats from EXT_texture_compression_bptc,
+            // EXT_texture_compression_rgtc,
+            // EXT_texture_compression_s3tc and EXT_texture_compression_s3tc_srgb specification
+            if (CompressedTextureFormatAcceptedByTexImage(format))
+            {
+                EXPECT_GL_ERROR(GL_INVALID_OPERATION);
+            }
+            else
+            {
+                EXPECT_GL_ERROR(GL_INVALID_VALUE);
+            }
 
             // Try compressed enum as format. Compressed texture extensions never allow this.
             glTexImage3D(target, 0, GL_RGB, 4, 4, 1, 0, format, GL_UNSIGNED_BYTE, nullptr);
