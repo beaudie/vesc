@@ -63,6 +63,30 @@
       },
       "revId": "0ca781ed5c123d6a4c285e2819568d36c53a5297",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "755370cf_a17478f8",
+        "filename": "src/libANGLE/Texture.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 2413,
+      "author": {
+        "id": 1340649
+      },
+      "writtenOn": "2022-05-16T17:34:57Z",
+      "side": 1,
+      "message": "this is not related to texture buffers, also confused why we simply dont squash `InternalMemoryAllocationChanged` and `BufferVkStorageChanged` at this point. `InternalMemoryAllocationChanged` is a much more appropriate name anyway",
+      "parentUuid": "7d9edd5c_9df95f27",
+      "range": {
+        "startLine": 2413,
+        "startChar": 36,
+        "endLine": 2413,
+        "endChar": 58
+      },
+      "revId": "0ca781ed5c123d6a4c285e2819568d36c53a5297",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
