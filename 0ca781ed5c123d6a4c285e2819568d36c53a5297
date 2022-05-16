@@ -87,6 +87,30 @@
       },
       "revId": "0ca781ed5c123d6a4c285e2819568d36c53a5297",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "fa41bb01_c98fdd5a",
+        "filename": "src/libANGLE/Texture.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 2413,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2022-05-16T17:36:18Z",
+      "side": 1,
+      "message": "I had exact question as well. I saw the only difference is the transform feedback is handling it differently, which might be just a bug some where. Does anyone know the background here?",
+      "parentUuid": "7d9edd5c_9df95f27",
+      "range": {
+        "startLine": 2413,
+        "startChar": 36,
+        "endLine": 2413,
+        "endChar": 58
+      },
+      "revId": "0ca781ed5c123d6a4c285e2819568d36c53a5297",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
