@@ -111,6 +111,30 @@
       },
       "revId": "0ca781ed5c123d6a4c285e2819568d36c53a5297",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "5ed5c2e3_2cff1252",
+        "filename": "src/libANGLE/Texture.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 2413,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-05-16T17:44:34Z",
+      "side": 1,
+      "message": "\u003e this is not related to texture buffers\n\nPretty sure is. At least according to the commit message (and the fact that there is a buffer message in texture code)\n\n\u003e I had exact question as well. I saw the only difference is the transform feedback is handling it differently, which might be just a bug some where. Does anyone know the background here?\n\nContext: https://chromium-review.googlesource.com/c/angle/angle/+/3321789/comments/6de252e6_69090bc3",
+      "parentUuid": "fa41bb01_c98fdd5a",
+      "range": {
+        "startLine": 2413,
+        "startChar": 36,
+        "endLine": 2413,
+        "endChar": 58
+      },
+      "revId": "0ca781ed5c123d6a4c285e2819568d36c53a5297",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
