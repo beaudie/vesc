@@ -3,6 +3,23 @@
     {
       "unresolved": false,
       "key": {
+        "uuid": "326ef519_e6c6075d",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 11,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-05-17T01:00:44Z",
+      "side": 1,
+      "message": "It looked like this is from the spec, but actually it isn\u0027t. For future reference, the quote from the spec is:\n\n\u003e If internalformat is a compressed texture format, then references to TexImage* should be replaced by CompressedTexImage*",
+      "revId": "9f1d9dbda303e4c9208c864e860909cc2d8bb708",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
         "uuid": "ba052f89_c17a7c1d",
         "filename": "/PATCHSET_LEVEL",
         "patchSetId": 1
@@ -14,6 +31,23 @@
       "writtenOn": "2022-05-16T23:15:48Z",
       "side": 1,
       "message": "PTAL",
+      "revId": "9f1d9dbda303e4c9208c864e860909cc2d8bb708",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "8cd4a740_7975a2ce",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-05-17T01:00:44Z",
+      "side": 1,
+      "message": "LGTM, once the change is fixed to pass the tests",
       "revId": "9f1d9dbda303e4c9208c864e860909cc2d8bb708",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
