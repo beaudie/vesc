@@ -134,6 +134,8 @@ const char *GetCommandString(CommandID id)
             return "SetFrontFace";
         case CommandID::SetLineWidth:
             return "SetLineWidth";
+        case CommandID::SetPrimitiveRestartEnable:
+            return "SetPrimitiveRestartEnable";
         case CommandID::SetRasterizerDiscardEnable:
             return "SetRasterizerDiscardEnable";
         case CommandID::SetScissor:
@@ -640,6 +642,13 @@ void SecondaryCommandBuffer::executeCommands(PrimaryCommandBuffer *primary)
                     const SetLineWidthParams *params =
                         getParamPtr<SetLineWidthParams>(currentCommand);
                     vkCmdSetLineWidth(cmdBuffer, params->lineWidth);
+                    break;
+                }
+                case CommandID::SetPrimitiveRestartEnable:
+                {
+                    const SetPrimitiveRestartEnableParams *params =
+                        getParamPtr<SetPrimitiveRestartEnableParams>(currentCommand);
+                    vkCmdSetPrimitiveRestartEnableEXT(cmdBuffer, params->primitiveRestartEnable);
                     break;
                 }
                 case CommandID::SetRasterizerDiscardEnable:
