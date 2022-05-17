@@ -1129,6 +1129,16 @@ void InitExtendedDynamicStateEXTFunctions(VkDevice device)
     GET_DEVICE_FUNC(vkCmdSetViewportWithCountEXT);
 }
 
+// VK_EXT_extended_dynamic_state2
+void InitExtendedDynamicState2EXTFunctions(VkDevice device)
+{
+    GET_DEVICE_FUNC(vkCmdSetDepthBiasEnableEXT);
+    GET_DEVICE_FUNC(vkCmdSetLogicOpEXT);
+    GET_DEVICE_FUNC(vkCmdSetPatchControlPointsEXT);
+    GET_DEVICE_FUNC(vkCmdSetPrimitiveRestartEnableEXT);
+    GET_DEVICE_FUNC(vkCmdSetRasterizerDiscardEnableEXT);
+}
+
 // VK_KHR_fragment_shading_rate
 void InitFragmentShadingRateKHRFunctions(VkDevice device)
 {
