@@ -35,6 +35,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "1318b1f6_e97a42c2",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-05-17T00:52:54Z",
+      "side": 1,
+      "message": "#1\n\nThe reasoning is that if this generates an error for any reason, we don\u0027t want to see that error coming from the next command, which will only confuse us and make debugging difficult.",
+      "parentUuid": "51928f8c_459f1a0c",
+      "revId": "8f09afaf4cc0554fd295ac7147e57a43bb23e8cb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "967de494_5ef36448",
