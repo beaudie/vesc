@@ -42,6 +42,12 @@ constexpr VkImageCreateFlags kVkImageCreateFlagsNone = 0;
 
 using StagingBufferOffsetArray = std::array<VkDeviceSize, 2>;
 
+enum InitClearValue
+{
+    UseTransparentBlack = 0,
+    UseOpaqueBlack      = 1
+};
+
 // A dynamic buffer is conceptually an infinitely long buffer. Each time you write to the buffer,
 // you will always write to a previously unused portion. After a series of writes, you must flush
 // the buffer data to the device. Buffer lifetime currently assumes that each new allocation will
@@ -1966,8 +1972,15 @@ class ImageHelper final : public Resource, public angle::Subject
                                                      const gl::ImageIndex &index,
                                                      const gl::Extents &glExtents,
                                                      const angle::Format &intendedFormat,
-                                                     const angle::Format &actualFormat);
+                                                     const angle::Format &imageFormat);
     void stageRobustResourceClear(const gl::ImageIndex &index);
+
+    angle::Result stageResourceClearWithFormatImpl(ContextVk *contextVk,
+                                                   const gl::ImageIndex &index,
+                                                   const gl::Extents &glExtents,
+                                                   const angle::Format &intendedFormat,
+                                                   const angle::Format &imageFormat,
+                                                   const VkClearValue &clearValue);
 
     // Stage the currently allocated image as updates to base level and on, making this !valid().
     // This is used for:
