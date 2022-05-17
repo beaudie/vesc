@@ -16,6 +16,23 @@
       "message": "Jamie: PTAL. Thanks!",
       "revId": "1d14c11511102d6ee9d1480fe9e96deb8edcc876",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "7eb00353_0182e656",
+        "filename": "src/libANGLE/renderer/d3d/d3d11/StateManager11.cpp",
+        "patchSetId": 28
+      },
+      "lineNbr": 2388,
+      "author": {
+        "id": 1116015
+      },
+      "writtenOn": "2022-05-17T16:49:38Z",
+      "side": 1,
+      "message": "Obviously, this change is wrong. It could need the same type of exception as DIRTY_BIT_COMPUTE_SRVUAV_STATE has, but that change seems gross too.\n\nPerhaps applyTexturesForUAVs needs to be called from a different place.",
+      "revId": "1d14c11511102d6ee9d1480fe9e96deb8edcc876",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
