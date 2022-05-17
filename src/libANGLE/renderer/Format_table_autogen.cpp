@@ -282,6 +282,8 @@ FormatID Format::InternalFormatToID(GLenum internalFormat)
             return FormatID::B5G6R5_UNORM;
         case GL_BGR5_A1_ANGLEX:
             return FormatID::B5G5R5A1_UNORM;
+        case GL_BGRA_EXT:
+            return FormatID::B8G8R8A8_UNORM;
         case GL_BGRA4_ANGLEX:
             return FormatID::B4G4R4A4_UNORM;
         case GL_BGRA8_EXT:
@@ -538,6 +540,10 @@ FormatID Format::InternalFormatToID(GLenum internalFormat)
             return FormatID::R8_SSCALED;
         case GL_R8_USCALED_ANGLEX:
             return FormatID::R8_USCALED;
+        case GL_RED:
+            return FormatID::R8_UNORM;
+        case GL_RG:
+            return FormatID::R8G8_UNORM;
         case GL_RG16F:
             return FormatID::R16G16_FLOAT;
         case GL_RG16I:
