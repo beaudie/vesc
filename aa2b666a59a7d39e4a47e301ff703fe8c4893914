@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "1457f014_90cf2ba5",
+        "filename": "src/libANGLE/renderer/vulkan/TextureVk.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 2580,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-05-17T00:50:58Z",
+      "side": 1,
+      "message": "Might be cleaner if this was done more similarly to `mState.hasBeenBoundAsImage()`, as in the front-end caches the usage (2D view of 3D) and the backend reads it from there.\n\nNo strong opinions though.",
+      "range": {
+        "startLine": 2580,
+        "startChar": 8,
+        "endLine": 2580,
+        "endChar": 32
+      },
+      "revId": "aa2b666a59a7d39e4a47e301ff703fe8c4893914",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
