@@ -39,6 +39,23 @@
       "message": "Regression test possible?",
       "revId": "71c91e195385c663cfa66373d6353b63642eb202",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "8278a653_a4b31a89",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2022-05-17T14:51:42Z",
+      "side": 1,
+      "message": "Nice fix Charlie! Please do include a regression test. Does this revert the optimization that we put in place to stop triggering so many state updates on buffer changes? LGTM, defer review to the other reviewers.",
+      "revId": "71c91e195385c663cfa66373d6353b63642eb202",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
