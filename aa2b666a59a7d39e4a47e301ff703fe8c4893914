@@ -1,6 +1,46 @@
 {
   "comments": [
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "181b809b_e72c59ea",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2022-05-17T14:54:40Z",
+      "side": 1,
+      "message": "Nice Mohan! One request.",
+      "revId": "aa2b666a59a7d39e4a47e301ff703fe8c4893914",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "deab6820_a9e754b7",
+        "filename": "src/libANGLE/State.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 3711,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2022-05-17T14:54:40Z",
+      "side": 1,
+      "message": "Please do follow Shabi\u0027s suggestion and isolate this from the front-end. Is there any way for the back-end to miss the event?",
+      "range": {
+        "startLine": 3706,
+        "startChar": 0,
+        "endLine": 3711,
+        "endChar": 9
+      },
+      "revId": "aa2b666a59a7d39e4a47e301ff703fe8c4893914",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "1457f014_90cf2ba5",
@@ -14,6 +54,30 @@
       "writtenOn": "2022-05-17T00:50:58Z",
       "side": 1,
       "message": "Might be cleaner if this was done more similarly to `mState.hasBeenBoundAsImage()`, as in the front-end caches the usage (2D view of 3D) and the backend reads it from there.\n\nNo strong opinions though.",
+      "range": {
+        "startLine": 2580,
+        "startChar": 8,
+        "endLine": 2580,
+        "endChar": 32
+      },
+      "revId": "aa2b666a59a7d39e4a47e301ff703fe8c4893914",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b4cefe34_fa48e19c",
+        "filename": "src/libANGLE/renderer/vulkan/TextureVk.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 2580,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2022-05-17T14:54:40Z",
+      "side": 1,
+      "message": "+1",
+      "parentUuid": "1457f014_90cf2ba5",
       "range": {
         "startLine": 2580,
         "startChar": 8,
