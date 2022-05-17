@@ -43,6 +43,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "19efe925_7631ee62",
+        "filename": "src/libANGLE/State.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 3711,
+      "author": {
+        "id": 1340649
+      },
+      "writtenOn": "2022-05-17T16:58:36Z",
+      "side": 1,
+      "message": "\u003e Please do follow Shabi\u0027s suggestion and isolate this from the front-end\n\nshabi said - `the front-end caches the usage (2D view of 3D) and the backend reads it from there`\n\ndid you mean to say \"... isolate this to the front-end ...\"?\n\n\u003e Is there any way for the back-end to miss the event?\n\nthe event will be handled in syncState in the backend, so we will have all the information we need by then (we wont need to do any weird juggling like we had to for srgb decode)\n\nbefore i go ahead with the refactor i want to make sure i understand the ask -\n\n1. mirror  how `hasBeenBoundAsImage()` is handled\n2. front end state caches the \"need-2D-compatibility\" state (essentially a bool) and backend reads from frontend state during syncState\n\nright?",
+      "parentUuid": "deab6820_a9e754b7",
+      "range": {
+        "startLine": 3706,
+        "startChar": 0,
+        "endLine": 3711,
+        "endChar": 9
+      },
+      "revId": "aa2b666a59a7d39e4a47e301ff703fe8c4893914",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "1457f014_90cf2ba5",
         "filename": "src/libANGLE/renderer/vulkan/TextureVk.cpp",
         "patchSetId": 2
