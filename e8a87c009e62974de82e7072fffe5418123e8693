@@ -213,6 +213,24 @@
       "parentUuid": "59d8fd98_ad3e5675",
       "revId": "e8a87c009e62974de82e7072fffe5418123e8693",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "62d53469_967be31f",
+        "filename": "src/libANGLE/renderer/d3d/DynamicImage2DHLSL.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 914,
+      "author": {
+        "id": 1116015
+      },
+      "writtenOn": "2022-05-17T20:08:45Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "96a19538_06a7a6b3",
+      "revId": "e8a87c009e62974de82e7072fffe5418123e8693",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
