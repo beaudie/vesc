@@ -18,6 +18,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "4e7775e4_18fd619c",
+        "filename": "src/libANGLE/renderer/vulkan/linux/gbm/SurfaceVkGbm.cpp",
+        "patchSetId": 21
+      },
+      "lineNbr": 357,
+      "author": {
+        "id": 1528827
+      },
+      "writtenOn": "2022-05-17T16:05:10Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "135bbf89_612d2377",
+      "revId": "dfcf2f4d2ee88cadaf5db9adb397313acab1ffab",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "5a7378f6_a15be5bc",
@@ -31,6 +49,24 @@
       "writtenOn": "2022-05-17T15:49:39Z",
       "side": 1,
       "message": "nit: clean up comments",
+      "revId": "dfcf2f4d2ee88cadaf5db9adb397313acab1ffab",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "b528b54d_7ef48f21",
+        "filename": "src/libANGLE/renderer/vulkan/linux/gbm/SurfaceVkGbm.h",
+        "patchSetId": 21
+      },
+      "lineNbr": 44,
+      "author": {
+        "id": 1528827
+      },
+      "writtenOn": "2022-05-17T16:05:10Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "5a7378f6_a15be5bc",
       "revId": "dfcf2f4d2ee88cadaf5db9adb397313acab1ffab",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
