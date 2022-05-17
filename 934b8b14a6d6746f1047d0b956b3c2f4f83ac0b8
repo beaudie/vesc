@@ -24,6 +24,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "7050d6f6_2b321134",
+        "filename": "src/tests/gl_tests/TextureTest.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 10331,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2022-05-17T22:24:06Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "501503f1_334ee0da",
+      "range": {
+        "startLine": 10331,
+        "startChar": 1,
+        "endLine": 10331,
+        "endChar": 77
+      },
+      "revId": "934b8b14a6d6746f1047d0b956b3c2f4f83ac0b8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "e6c8ab73_4f0cc4d1",
@@ -47,6 +71,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "1ef897b6_e9d951f7",
+        "filename": "src/tests/gl_tests/TextureTest.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 10336,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2022-05-17T22:24:06Z",
+      "side": 1,
+      "message": "That is right. I rebased the fix after this CL. The main reason that I made test standalone CL is to see that the test fail before the fix. In the CL that fix the bug, this skip check is removed.",
+      "parentUuid": "e6c8ab73_4f0cc4d1",
+      "range": {
+        "startLine": 10335,
+        "startChar": 4,
+        "endLine": 10336,
+        "endChar": 35
+      },
+      "revId": "934b8b14a6d6746f1047d0b956b3c2f4f83ac0b8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "5f8e3ac2_a3a65ea4",
@@ -60,6 +108,30 @@
       "writtenOn": "2022-05-17T20:46:53Z",
       "side": 1,
       "message": "i believe end2end tests now has an expectations file for such things",
+      "range": {
+        "startLine": 10337,
+        "startChar": 4,
+        "endLine": 10339,
+        "endChar": 53
+      },
+      "revId": "934b8b14a6d6746f1047d0b956b3c2f4f83ac0b8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "8d542b2b_9b12ad25",
+        "filename": "src/tests/gl_tests/TextureTest.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 10339,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2022-05-17T22:24:06Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "5f8e3ac2_a3a65ea4",
       "range": {
         "startLine": 10337,
         "startChar": 4,
