@@ -50,6 +50,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "4aef8804_7f5f654f",
+        "filename": "samples/capture_replay/BUILD.gn",
+        "patchSetId": 12
+      },
+      "lineNbr": 13,
+      "author": {
+        "id": 1491823
+      },
+      "writtenOn": "2022-05-17T08:09:00Z",
+      "side": 1,
+      "message": "After another try I can remove `libEGL`, but when I remove `angle_util` I get #    `error \"Don\u0027t define GL prototypes if you want to use a loader!\"` in `trace_gles_loader_autogen.h` and a missing include `util/EGLPlatformParameters.h`.",
+      "parentUuid": "6eba6cb0_f2e90b38",
+      "range": {
+        "startLine": 10,
+        "startChar": 0,
+        "endLine": 13,
+        "endChar": 3
+      },
+      "revId": "e3df1b85325419cfb669359db27a60221f909e04",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "59d2e18f_f45c259e",
         "filename": "util/BUILD.gn",
         "patchSetId": 12
