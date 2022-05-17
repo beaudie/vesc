@@ -80,6 +80,30 @@
       },
       "revId": "4effe8abf77a202569019714ce81ad70b34c437f",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "23c30329_bbad280d",
+        "filename": "src/libANGLE/validationES31.cpp",
+        "patchSetId": 13
+      },
+      "lineNbr": 1521,
+      "author": {
+        "id": 1517514
+      },
+      "writtenOn": "2022-05-17T21:53:50Z",
+      "side": 1,
+      "message": "from the https://www.khronos.org/registry/OpenGL/extensions/EXT/EXT_texture_buffer.txt\nthe comments are more clear\n\"An INVALID_OPERATION error is generated if \u003ctexture\u003e is neither the\n    name of a buffer texture, nor the name of an immutable texture object.\"",
+      "parentUuid": "2e7dde87_1e8cea02",
+      "range": {
+        "startLine": 1521,
+        "startChar": 39,
+        "endLine": 1521,
+        "endChar": 83
+      },
+      "revId": "4effe8abf77a202569019714ce81ad70b34c437f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
