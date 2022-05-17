@@ -118,6 +118,8 @@ const char *GetCommandString(CommandID id)
             return "SetCullMode";
         case CommandID::SetDepthBias:
             return "SetDepthBias";
+        case CommandID::SetDepthBiasEnable:
+            return "SetDepthBiasEnable";
         case CommandID::SetDepthCompareOp:
             return "SetDepthCompareOp";
         case CommandID::SetDepthTestEnable:
@@ -579,6 +581,13 @@ void SecondaryCommandBuffer::executeCommands(PrimaryCommandBuffer *primary)
                         getParamPtr<SetDepthBiasParams>(currentCommand);
                     vkCmdSetDepthBias(cmdBuffer, params->depthBiasConstantFactor,
                                       params->depthBiasClamp, params->depthBiasSlopeFactor);
+                    break;
+                }
+                case CommandID::SetDepthBiasEnable:
+                {
+                    const SetDepthBiasEnableParams *params =
+                        getParamPtr<SetDepthBiasEnableParams>(currentCommand);
+                    vkCmdSetDepthBiasEnableEXT(cmdBuffer, params->depthBiasEnable);
                     break;
                 }
                 case CommandID::SetDepthCompareOp:

@@ -784,6 +784,7 @@ ContextVk::ContextVk(const gl::State &state, gl::ErrorSet *errorSet, RendererVk 
     {
         mDynamicStateDirtyBits |= DirtyBits{
             DIRTY_BIT_DYNAMIC_RASTERIZER_DISCARD_ENABLE,
+            DIRTY_BIT_DYNAMIC_DEPTH_BIAS_ENABLE,
         };
     }
     if (getFeatures().supportsFragmentShadingRate.enabled)
@@ -871,6 +872,8 @@ ContextVk::ContextVk(const gl::State &state, gl::ErrorSet *errorSet, RendererVk 
         &ContextVk::handleDirtyGraphicsDynamicStencilOp;
     mGraphicsDirtyBitHandlers[DIRTY_BIT_DYNAMIC_RASTERIZER_DISCARD_ENABLE] =
         &ContextVk::handleDirtyGraphicsDynamicRasterizerDiscardEnable;
+    mGraphicsDirtyBitHandlers[DIRTY_BIT_DYNAMIC_DEPTH_BIAS_ENABLE] =
+        &ContextVk::handleDirtyGraphicsDynamicDepthBiasEnable;
     mGraphicsDirtyBitHandlers[DIRTY_BIT_DYNAMIC_FRAGMENT_SHADING_RATE] =
         &ContextVk::handleDirtyGraphicsDynamicFragmentShadingRate;
 
@@ -954,6 +957,7 @@ ContextVk::ContextVk(const gl::State &state, gl::ErrorSet *errorSet, RendererVk 
     if (getFeatures().supportsExtendedDynamicState2.enabled)
     {
         mPipelineDirtyBitsMask.reset(gl::State::DIRTY_BIT_RASTERIZER_DISCARD_ENABLED);
+        mPipelineDirtyBitsMask.reset(gl::State::DIRTY_BIT_POLYGON_OFFSET_FILL_ENABLED);
     }
 
     angle::PerfMonitorCounterGroup vulkanGroup;
@@ -2638,6 +2642,14 @@ angle::Result ContextVk::handleDirtyGraphicsDynamicRasterizerDiscardEnable(
 
     mRenderPassCommandBuffer->setRasterizerDiscardEnable(isRasterizerDiscardEnabled &&
                                                          !isEmulatingRasterizerDiscard);
+    return angle::Result::Continue;
+}
+
+angle::Result ContextVk::handleDirtyGraphicsDynamicDepthBiasEnable(
+    DirtyBits::Iterator *dirtyBitsIterator,
+    DirtyBits dirtyBitMask)
+{
+    mRenderPassCommandBuffer->setDepthBiasEnable(mState.isPolygonOffsetFillEnabled());
     return angle::Result::Continue;
 }
 
@@ -4778,8 +4790,15 @@ angle::Result ContextVk::syncState(const gl::Context *context,
                 updateFrontFace();
                 break;
             case gl::State::DIRTY_BIT_POLYGON_OFFSET_FILL_ENABLED:
-                mGraphicsPipelineDesc->updatePolygonOffsetFillEnabled(
-                    &mGraphicsPipelineTransition, glState.isPolygonOffsetFillEnabled());
+                if (getFeatures().supportsExtendedDynamicState2.enabled)
+                {
+                    mGraphicsDirtyBits.set(DIRTY_BIT_DYNAMIC_DEPTH_BIAS_ENABLE);
+                }
+                else
+                {
+                    mGraphicsPipelineDesc->updatePolygonOffsetFillEnabled(
+                        &mGraphicsPipelineTransition, glState.isPolygonOffsetFillEnabled());
+                }
                 break;
             case gl::State::DIRTY_BIT_POLYGON_OFFSET:
                 mGraphicsDirtyBits.set(DIRTY_BIT_DYNAMIC_DEPTH_BIAS);
