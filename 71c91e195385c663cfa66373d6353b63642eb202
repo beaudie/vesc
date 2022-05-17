@@ -26,6 +26,30 @@
     {
       "unresolved": false,
       "key": {
+        "uuid": "f864fbcc_4161415d",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 3
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2022-05-17T20:32:50Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "72c1d86a_e9e4b4fc",
+      "range": {
+        "startLine": 7,
+        "startChar": 34,
+        "endLine": 7,
+        "endChar": 57
+      },
+      "revId": "71c91e195385c663cfa66373d6353b63642eb202",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
         "uuid": "124d5163_e7721cac",
         "filename": "/PATCHSET_LEVEL",
         "patchSetId": 3
@@ -54,6 +78,24 @@
       "writtenOn": "2022-05-17T14:51:42Z",
       "side": 1,
       "message": "Nice fix Charlie! Please do include a regression test. Does this revert the optimization that we put in place to stop triggering so many state updates on buffer changes? LGTM, defer review to the other reviewers.",
+      "revId": "71c91e195385c663cfa66373d6353b63642eb202",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "f1c7557b_3adbef61",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2022-05-17T20:32:50Z",
+      "side": 1,
+      "message": "Test added in a separate CL https://chromium-review.googlesource.com/c/angle/angle/+/3652244\n\nIt should not revert optimization you mentioned based on the code reading. But I am not sure about the specific optimizations you are referring to here. So feel free double check if you know the specific about the optimization you are referring to.",
+      "parentUuid": "8278a653_a4b31a89",
       "revId": "71c91e195385c663cfa66373d6353b63642eb202",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
