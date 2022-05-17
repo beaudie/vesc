@@ -707,7 +707,8 @@ const angle::Format &GetDepthStencilImageToBufferFormat(const angle::Format &ima
 }
 
 VkClearValue GetRobustResourceClearValue(const angle::Format &intendedFormat,
-                                         const angle::Format &actualFormat)
+                                         const angle::Format &actualFormat,
+                                         const InitClearValue &initClearValue)
 {
     VkClearValue clearValue = {};
     if (intendedFormat.hasDepthOrStencilBits())
@@ -716,7 +717,8 @@ VkClearValue GetRobustResourceClearValue(const angle::Format &intendedFormat,
     }
     else
     {
-        clearValue.color = HasEmulatedImageChannels(intendedFormat, actualFormat)
+        clearValue.color = (initClearValue == InitClearValue::UseOpaqueBlack ||
+                            HasEmulatedImageChannels(intendedFormat, actualFormat))
                                ? kEmulatedInitColorValue
                                : kRobustInitColorValue;
     }
@@ -7415,7 +7417,8 @@ void ImageHelper::stageRobustResourceClear(const gl::ImageIndex &index)
     const VkImageAspectFlags aspectFlags = getAspectFlags();
 
     ASSERT(mActualFormatID != angle::FormatID::NONE);
-    VkClearValue clearValue = GetRobustResourceClearValue(getIntendedFormat(), getActualFormat());
+    VkClearValue clearValue = GetRobustResourceClearValue(getIntendedFormat(), getActualFormat(),
+                                                          InitClearValue::UseTransparentBlack);
 
     gl::LevelIndex updateLevelGL(index.getLevelIndex());
     appendSubresourceUpdate(updateLevelGL, SubresourceUpdate(aspectFlags, clearValue, index));
@@ -7425,7 +7428,8 @@ angle::Result ImageHelper::stageRobustResourceClearWithFormat(ContextVk *context
                                                               const gl::ImageIndex &index,
                                                               const gl::Extents &glExtents,
                                                               const angle::Format &intendedFormat,
-                                                              const angle::Format &imageFormat)
+                                                              const angle::Format &imageFormat,
+                                                              const InitClearValue &initClearValue)
 {
     const VkImageAspectFlags aspectFlags = GetFormatAspectFlags(imageFormat);
 
@@ -7433,7 +7437,8 @@ angle::Result ImageHelper::stageRobustResourceClearWithFormat(ContextVk *context
     ASSERT(!hasStagedUpdatesForSubresource(gl::LevelIndex(index.getLevelIndex()),
                                            index.getLayerIndex(), index.getLayerCount()));
 
-    VkClearValue clearValue = GetRobustResourceClearValue(intendedFormat, imageFormat);
+    VkClearValue clearValue =
+        GetRobustResourceClearValue(intendedFormat, imageFormat, initClearValue);
 
     gl::LevelIndex updateLevelGL(index.getLevelIndex());
 

@@ -2752,6 +2752,22 @@ angle::Result TextureVk::initializeContents(const gl::Context *context,
                                             GLenum binding,
                                             const gl::ImageIndex &imageIndex)
 {
+    return initializeContentsImpl(context, binding, imageIndex,
+                                  vk::InitClearValue::UseTransparentBlack);
+}
+
+angle::Result TextureVk::initializeContentsWithBlack(const gl::Context *context,
+                                                     GLenum binding,
+                                                     const gl::ImageIndex &imageIndex)
+{
+    return initializeContentsImpl(context, binding, imageIndex, vk::InitClearValue::UseOpaqueBlack);
+}
+
+angle::Result TextureVk::initializeContentsImpl(const gl::Context *context,
+                                                GLenum binding,
+                                                const gl::ImageIndex &imageIndex,
+                                                const vk::InitClearValue &initClearValue)
+{
     ContextVk *contextVk      = vk::GetImpl(context);
     const gl::ImageDesc &desc = mState.getImageDesc(imageIndex);
     const vk::Format &format =
@@ -2762,7 +2778,7 @@ angle::Result TextureVk::initializeContents(const gl::Context *context,
     // on a non-complete cube map.
     return mImage->stageRobustResourceClearWithFormat(
         contextVk, imageIndex, desc.size, format.getIntendedFormat(),
-        format.getActualImageFormat(getRequiredImageAccess()));
+        format.getActualImageFormat(getRequiredImageAccess()), initClearValue);
 }
 
 void TextureVk::releaseOwnershipOfImage(const gl::Context *context)
