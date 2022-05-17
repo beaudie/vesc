@@ -56,6 +56,30 @@
       },
       "revId": "4effe8abf77a202569019714ce81ad70b34c437f",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "2e7dde87_1e8cea02",
+        "filename": "src/libANGLE/validationES31.cpp",
+        "patchSetId": 13
+      },
+      "lineNbr": 1521,
+      "author": {
+        "id": 1517514
+      },
+      "writtenOn": "2022-05-17T20:43:26Z",
+      "side": 1,
+      "message": "from the glBindImageTexture, the spec have the following statements\n\"GL_INVALID_OPERATION is generated if texture is not the name of an immutable texture object or a buffer texture.\"\nso it is legal for immutable texture or a texture buffer. \nseems error message not accrete .",
+      "parentUuid": "48e56d65_ad04ba17",
+      "range": {
+        "startLine": 1521,
+        "startChar": 39,
+        "endLine": 1521,
+        "endChar": 83
+      },
+      "revId": "4effe8abf77a202569019714ce81ad70b34c437f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
