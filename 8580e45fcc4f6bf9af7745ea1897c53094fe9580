@@ -16,6 +16,24 @@
       "message": "You can use Rubber Stamper for expectation changes.",
       "revId": "8580e45fcc4f6bf9af7745ea1897c53094fe9580",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "b2e6ea0e_165c67e6",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1520902
+      },
+      "writtenOn": "2022-05-17T18:17:27Z",
+      "side": 1,
+      "message": "Oh I see, thank you for this info!",
+      "parentUuid": "f2c50302_c7101c68",
+      "revId": "8580e45fcc4f6bf9af7745ea1897c53094fe9580",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
