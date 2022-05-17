@@ -51,6 +51,24 @@
       "parentUuid": "7eb00353_0182e656",
       "revId": "1d14c11511102d6ee9d1480fe9e96deb8edcc876",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "c585d9ef_0d089c92",
+        "filename": "src/libANGLE/renderer/d3d/d3d11/StateManager11.cpp",
+        "patchSetId": 28
+      },
+      "lineNbr": 2388,
+      "author": {
+        "id": 1116015
+      },
+      "writtenOn": "2022-05-17T23:16:05Z",
+      "side": 1,
+      "message": "OK, I\u0027ve implemented a more plausible solution. I\u0027ve made it so that invalidateProgramUniforms() only fires if the image metadata has changed (in onImageChange()).",
+      "parentUuid": "b27b37e9_e6f8508d",
+      "revId": "1d14c11511102d6ee9d1480fe9e96deb8edcc876",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
