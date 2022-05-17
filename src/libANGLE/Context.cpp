@@ -3980,6 +3980,11 @@ void Context::initCaps()
     ANGLE_LIMIT_CAP(mState.mCaps.maxFramebufferLayers, IMPLEMENTATION_MAX_FRAMEBUFFER_LAYERS);
 
     ANGLE_LIMIT_CAP(mState.mCaps.maxSampleMaskWords, MAX_SAMPLE_MASK_WORDS);
+    ANGLE_LIMIT_CAP(mState.mCaps.maxSamples, MAX_SAMPLES);
+    ANGLE_LIMIT_CAP(mState.mCaps.maxFramebufferSamples, MAX_SAMPLES);
+    mState.mCaps.maxColorTextureSamples &= MAX_SAMPLES_MASK;
+    mState.mCaps.maxDepthTextureSamples &= MAX_SAMPLES_MASK;
+    mState.mCaps.maxIntegerSamples &= MAX_SAMPLES_MASK;
 
     ANGLE_LIMIT_CAP(mState.mCaps.maxViews, IMPLEMENTATION_ANGLE_MULTIVIEW_MAX_VIEWS);
 

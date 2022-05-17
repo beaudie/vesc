@@ -415,7 +415,7 @@ struct PackedRasterizationAndMultisampleStateInfo final
 
 constexpr size_t kPackedRasterizationAndMultisampleStateSize =
     sizeof(PackedRasterizationAndMultisampleStateInfo);
-static_assert(kPackedRasterizationAndMultisampleStateSize == 12, "Size check failed");
+static_assert(kPackedRasterizationAndMultisampleStateSize == 8, "Size check failed");
 
 struct StencilOps final
 {
