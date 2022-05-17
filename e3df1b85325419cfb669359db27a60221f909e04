@@ -26,6 +26,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "6eba6cb0_f2e90b38",
+        "filename": "samples/capture_replay/BUILD.gn",
+        "patchSetId": 12
+      },
+      "lineNbr": 13,
+      "author": {
+        "id": 1491823
+      },
+      "writtenOn": "2022-05-17T07:47:11Z",
+      "side": 1,
+      "message": "Removing `angle_util` didn\u0027t work out for me. Maybe it should be a dependency of `angle_trace_loader` \n\nAs for libEGL: I tried to remove it and load it purely dynamically, but I got into trouble with resolving the path when loading the library in `CaptureReplayTests`. It is not in the ModuleDir location and I din\u0027t find a way to pass the location directly. \n\nConsidering that we replace the egl calls by using function pointers t_egl* it is actually not important whether one links to the library or loads it dynamically, as long as one then queries ans assigns the right pointers.",
+      "parentUuid": "e777c2e8_3533a36b",
+      "range": {
+        "startLine": 10,
+        "startChar": 0,
+        "endLine": 13,
+        "endChar": 3
+      },
+      "revId": "e3df1b85325419cfb669359db27a60221f909e04",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "59d2e18f_f45c259e",
         "filename": "util/BUILD.gn",
         "patchSetId": 12
@@ -37,6 +61,30 @@
       "writtenOn": "2022-05-16T15:32:42Z",
       "side": 1,
       "message": "First necessary change: place this define in angle_trace_loader. Think of this define as a \"private\" define, and this config is a public (inherited) config.",
+      "range": {
+        "startLine": 191,
+        "startChar": 15,
+        "endLine": 191,
+        "endChar": 48
+      },
+      "revId": "e3df1b85325419cfb669359db27a60221f909e04",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "3202c71a_2f352052",
+        "filename": "util/BUILD.gn",
+        "patchSetId": 12
+      },
+      "lineNbr": 191,
+      "author": {
+        "id": 1491823
+      },
+      "writtenOn": "2022-05-17T07:47:11Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "59d2e18f_f45c259e",
       "range": {
         "startLine": 191,
         "startChar": 15,
@@ -60,6 +108,30 @@
       "writtenOn": "2022-05-16T15:32:42Z",
       "side": 1,
       "message": "Second necessary change: make this an angle_shared_library to mirror the prior design. This worked in my local testing.\n\nalso naming nit: angle_trace_loader",
+      "range": {
+        "startLine": 195,
+        "startChar": 18,
+        "endLine": 195,
+        "endChar": 35
+      },
+      "revId": "e3df1b85325419cfb669359db27a60221f909e04",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "efb37e03_8d6ba793",
+        "filename": "util/BUILD.gn",
+        "patchSetId": 12
+      },
+      "lineNbr": 195,
+      "author": {
+        "id": 1491823
+      },
+      "writtenOn": "2022-05-17T07:47:11Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "9acd7bf1_33d60100",
       "range": {
         "startLine": 195,
         "startChar": 18,
