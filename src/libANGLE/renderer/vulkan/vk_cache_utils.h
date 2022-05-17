@@ -382,7 +382,7 @@ struct RasterizationStateBits final
     // repurposed.
     uint16_t subpass : 3;
     uint16_t depthClampEnable : 1;
-    uint16_t rasterizationDiscardEnable : 1;
+    uint16_t rasterizerDiscardEnable : 1;
     uint16_t depthBiasEnable : 1;
     uint16_t sampleShadingEnable : 1;
     uint16_t alphaToCoverageEnable : 1;
