@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "c216f927_b23d5286",
+        "filename": "BUILD.gn",
+        "patchSetId": 16
+      },
+      "lineNbr": 1231,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2022-05-17T14:57:24Z",
+      "side": 1,
+      "message": "this definitely does not belong here.",
+      "range": {
+        "startLine": 1231,
+        "startChar": 7,
+        "endLine": 1231,
+        "endChar": 40
+      },
+      "revId": "d18b47599eae7c6c3d7f6ad2c8c697bfac598cee",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
