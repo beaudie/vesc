@@ -128,6 +128,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "b5f9cb52_dfb2be18",
+        "filename": "src/libANGLE/renderer/vulkan/SurfaceVk.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 1798,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-05-17T15:49:39Z",
+      "side": 1,
+      "message": "LGTM, I didn\u0027t notice much more than code shuffling around (which is good)",
+      "parentUuid": "edafe32c_5c2f8990",
+      "revId": "0258e53bf346adb47163b9c8d0ebe0f0bc3f905f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "93d8d3ca_f8383568",
         "filename": "src/libANGLE/renderer/vulkan/linux/gbm/DisplayVkGbm.cpp",
         "patchSetId": 5

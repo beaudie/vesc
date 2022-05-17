@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "135bbf89_612d2377",
+        "filename": "src/libANGLE/renderer/vulkan/linux/gbm/SurfaceVkGbm.cpp",
+        "patchSetId": 21
+      },
+      "lineNbr": 357,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-05-17T15:49:39Z",
+      "side": 1,
+      "message": "Same nit",
+      "revId": "dfcf2f4d2ee88cadaf5db9adb397313acab1ffab",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "5a7378f6_a15be5bc",
+        "filename": "src/libANGLE/renderer/vulkan/linux/gbm/SurfaceVkGbm.h",
+        "patchSetId": 21
+      },
+      "lineNbr": 44,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-05-17T15:49:39Z",
+      "side": 1,
+      "message": "nit: clean up comments",
+      "revId": "dfcf2f4d2ee88cadaf5db9adb397313acab1ffab",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
