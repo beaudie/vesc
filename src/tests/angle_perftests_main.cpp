@@ -19,6 +19,7 @@ void RegisterTraceTests();
 
 int main(int argc, char **argv)
 {
+    // test
     ANGLEProcessPerfTestArgs(&argc, argv);
 #if defined(ANGLE_TRACE_PERF_TESTS)
     RegisterTraceTests();

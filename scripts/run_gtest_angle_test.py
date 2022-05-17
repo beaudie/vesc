@@ -23,6 +23,12 @@ followed by a subsequent non-python executable. For a similar script see
 run_performance_test.py.
 """
 
+import sys
+import six
+print('run_gtest_angle_test')
+print('sys.version_info.major:', sys.version_info.major)
+print('six version:', six.__version__)
+
 import argparse
 import json
 import os
