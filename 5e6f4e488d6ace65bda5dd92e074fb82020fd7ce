@@ -16,6 +16,24 @@
       "message": "What does this mean?",
       "revId": "5e6f4e488d6ace65bda5dd92e074fb82020fd7ce",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "c2a597d1_ce7327c8",
+        "filename": "src/libANGLE/renderer/vulkan/android/HardwareBufferImageSiblingVkAndroid.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 285,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-05-17T16:11:02Z",
+      "side": 1,
+      "message": "It means the image can be used as a sampler (texture, to sample from).",
+      "parentUuid": "90a44b84_830ab767",
+      "revId": "5e6f4e488d6ace65bda5dd92e074fb82020fd7ce",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
