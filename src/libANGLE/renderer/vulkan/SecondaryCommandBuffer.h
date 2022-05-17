@@ -81,6 +81,7 @@ enum class CommandID : uint16_t
     SetBlendConstants,
     SetCullMode,
     SetDepthBias,
+    SetDepthBiasEnable,
     SetDepthCompareOp,
     SetDepthTestEnable,
     SetDepthWriteEnable,
@@ -445,6 +446,12 @@ struct SetDepthBiasParams
 };
 VERIFY_4_BYTE_ALIGNMENT(SetDepthBiasParams)
 
+struct SetDepthBiasEnableParams
+{
+    VkBool32 depthBiasEnable;
+};
+VERIFY_4_BYTE_ALIGNMENT(SetDepthBiasEnableParams)
+
 struct SetDepthCompareOpParams
 {
     VkCompareOp depthCompareOp;
@@ -790,6 +797,7 @@ class SecondaryCommandBuffer final : angle::NonCopyable
     void setDepthBias(float depthBiasConstantFactor,
                       float depthBiasClamp,
                       float depthBiasSlopeFactor);
+    void setDepthBiasEnable(VkBool32 depthBiasEnable);
     void setDepthCompareOp(VkCompareOp depthCompareOp);
     void setDepthTestEnable(VkBool32 depthTestEnable);
     void setDepthWriteEnable(VkBool32 depthWriteEnable);
@@ -1601,6 +1609,13 @@ ANGLE_INLINE void SecondaryCommandBuffer::setDepthBias(float depthBiasConstantFa
     paramStruct->depthBiasConstantFactor = depthBiasConstantFactor;
     paramStruct->depthBiasClamp          = depthBiasClamp;
     paramStruct->depthBiasSlopeFactor    = depthBiasSlopeFactor;
+}
+
+ANGLE_INLINE void SecondaryCommandBuffer::setDepthBiasEnable(VkBool32 depthBiasEnable)
+{
+    SetDepthBiasEnableParams *paramStruct =
+        initCommand<SetDepthBiasEnableParams>(CommandID::SetDepthBiasEnable);
+    paramStruct->depthBiasEnable = depthBiasEnable;
 }
 
 ANGLE_INLINE void SecondaryCommandBuffer::setDepthCompareOp(VkCompareOp depthCompareOp)
