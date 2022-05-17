@@ -263,7 +263,7 @@ def _RemoveFlag(args, f):
 
 
 def RunSmokeTest():
-    test_name = 'TracePerfTest.Run/vulkan_words_with_friends_2'
+    test_name = 'TracePerfTest.Run/native_limbo'
     run_instrumentation_timeout = 60
 
     logging.info('Running smoke test (%s)', test_name)
@@ -272,7 +272,7 @@ def RunSmokeTest():
 
     with _TempDeviceFile() as device_test_output_path:
         flags = [
-            '--gtest_filter=' + test_name, '--no-warmup', '--steps-per-trial', '1', '--trials',
+            '--gtest_filter=' + test_name, '--no-warmup', '--steps-per-trial', '1000', '--trials',
             '1', '--isolated-script-test-output=' + device_test_output_path
         ]
         try:
@@ -354,3 +354,12 @@ def GetTraceFromTestName(test_name):
         raise Exception('Unexpected test: %s' % test_name)
 
     return None
+
+
+if __name__ == '__main__':
+    logging.basicConfig(level=logging.INFO)
+    # PrepareTestSuite('angle_perftests')
+    # for l in ListTests():
+    #     if 'limbo' in l:
+    #         print(l)
+    RunSmokeTest()
