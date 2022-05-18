@@ -24,6 +24,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "5f66c686_edfa77f2",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 4
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1528827
+      },
+      "writtenOn": "2022-05-18T14:43:36Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "651366de_6fe72ee6",
+      "range": {
+        "startLine": 7,
+        "startChar": 24,
+        "endLine": 7,
+        "endChar": 28
+      },
+      "revId": "d0d6fd437631eb99dcdf5ce15ecbe666ee510901",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "2f66a9f1_147e361c",
@@ -37,6 +61,30 @@
       "writtenOn": "2022-05-18T13:41:46Z",
       "side": 1,
       "message": "nit: I don\u0027t think you need this namespace {} block.",
+      "range": {
+        "startLine": 10068,
+        "startChar": 0,
+        "endLine": 10068,
+        "endChar": 9
+      },
+      "revId": "d0d6fd437631eb99dcdf5ce15ecbe666ee510901",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "b6632d66_2d3d4886",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 10068,
+      "author": {
+        "id": 1528827
+      },
+      "writtenOn": "2022-05-18T14:43:36Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "2f66a9f1_147e361c",
       "range": {
         "startLine": 10068,
         "startChar": 0,
