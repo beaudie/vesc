@@ -74,7 +74,7 @@ class FastVector final
     void push_back(value_type &&value);
 
     template <typename... Args>
-    void emplace_back(Args &&... args);
+    void emplace_back(Args &&...args);
 
     void pop_back();
 
@@ -306,7 +306,7 @@ ANGLE_INLINE void FastVector<T, N, Storage>::push_back(value_type &&value)
 
 template <class T, size_t N, class Storage>
 template <typename... Args>
-ANGLE_INLINE void FastVector<T, N, Storage>::emplace_back(Args &&... args)
+ANGLE_INLINE void FastVector<T, N, Storage>::emplace_back(Args &&...args)
 {
     if (mSize == mReservedSize)
         ensure_capacity(mSize + 1);
@@ -548,6 +548,12 @@ class FlatUnorderedSet final
     {
         ASSERT(!contains(value));
         mData.push_back(value);
+    }
+
+    void remove(T value)
+    {
+        ASSERT(contains(value));
+        mData.remove_and_permute(value);
     }
 
     bool contains(T needle) const
