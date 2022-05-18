@@ -152,6 +152,30 @@
       },
       "revId": "1ddf023ac34df535fd02b2b66b5a51d519da2bae",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "4004eaac_d4c6a2bb",
+        "filename": "src/libANGLE/Context.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 3612,
+      "author": {
+        "id": 1128437
+      },
+      "writtenOn": "2022-05-18T21:00:42Z",
+      "side": 1,
+      "message": "The issue is that the test doesn\u0027t work if EXT_texture_norm16 is enabled for any reason since the test assumes that RGBA/UNSIGNED_SHORT is an invalid format/type combination which is not the case with EXT_texture_norm16. I was able to reproduce the test failure locally and both 1) changing the test to use LUMINANCE/UNSIGNED_SHORT or 2) restricting this change to non-WebGL contexts fixes the issue.\n\nThe previous test failures seem to be WebGL1 unless I\u0027m missing something:\nhttps://ci.chromium.org/ui/p/chromium/builders/try/win-angle-chromium-x64-try/b8813977588818815777/overview\n\nAnother issue is that I\u0027d like to merge this CL to M103 branch ASAP since it\u0027s for a ReleaseBlock-Stable bug so I\u0027ll restrict this to non-WebGL contexts for now and merge the CL. After we decide what to do with WebGL contexts and making the necessary conformance test fixes, we can remove the WebGL restriction here, but that will take a while - getting the conformance PR merged, rolled into Chromium, land ANGLE CL, wait for ANGLE roll, etc.",
+      "parentUuid": "89d930da_d8d2765d",
+      "range": {
+        "startLine": 3606,
+        "startChar": 0,
+        "endLine": 3612,
+        "endChar": 9
+      },
+      "revId": "1ddf023ac34df535fd02b2b66b5a51d519da2bae",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
