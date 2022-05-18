@@ -16,6 +16,24 @@
       "message": "You can `ASSERT(presentMode !\u003d PresentMode::GbmANGLE);` instead, and let this just return the cast value.",
       "revId": "c0e980cac72eacb411f427a7bd652ae938f68a73",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "e5ee57aa_8cbe950c",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 22
+      },
+      "lineNbr": 10090,
+      "author": {
+        "id": 1528827
+      },
+      "writtenOn": "2022-05-18T09:51:05Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "073e1a7b_2f62844c",
+      "revId": "c0e980cac72eacb411f427a7bd652ae938f68a73",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
