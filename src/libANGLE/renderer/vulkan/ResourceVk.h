@@ -18,6 +18,15 @@ namespace rx
 {
 namespace vk
 {
+static constexpr uint32_t kMaxActiveCommandBuffers = 64;
+using ActiveCommandBufferBitSet                    = angle::BitSet<kMaxActiveCommandBuffers>;
+
+// Used to identify a command buffer.
+struct ActiveCommandBufferID
+{
+    uint32_t value;
+};
+
 // Tracks how a resource is used by ANGLE and by a VkQueue. The reference count indicates the number
 // of times a resource is retained by ANGLE. The serial indicates the most recent use of a resource
 // in the VkQueue. The reference count and serial together can determine if a resource is currently
@@ -27,7 +36,11 @@ struct ResourceUse
     ResourceUse() = default;
 
     // The number of times a resource is retained by ANGLE.
+    // TODO(anglebug.com/5664): Remove after transition to command buffer bit set.
     uint32_t counter = 0;
+
+    // Bit set of open command buffers using this resource.
+    ActiveCommandBufferBitSet commandBuffers;
 
     // The most recent time of use in a VkQueue.
     Serial serial;
@@ -111,6 +124,21 @@ class SharedResourceUse final : angle::NonCopyable
         return mUse->serial;
     }
 
+    ANGLE_INLINE void setCommandBuffer(ActiveCommandBufferID commandBufferID)
+    {
+        mUse->commandBuffers.set(commandBufferID.value);
+    }
+
+    ANGLE_INLINE void clearCommandBuffer(ActiveCommandBufferID commandBufferID)
+    {
+        mUse->commandBuffers.reset(commandBufferID.value);
+    }
+
+    ANGLE_INLINE bool usedByCommandBuffer(ActiveCommandBufferID commandBufferID) const
+    {
+        return mUse->commandBuffers.test(commandBufferID.value);
+    }
+
   private:
     ResourceUse *mUse;
 };
@@ -178,6 +206,8 @@ class ResourceUseList final : angle::NonCopyable
     void releaseResourceUses();
     void releaseResourceUsesAndUpdateSerials(Serial serial);
 
+    void clearCommandBuffer(ActiveCommandBufferID commandBufferID);
+
     bool empty() { return mResourceUses.empty(); }
 
   private:
@@ -222,7 +252,10 @@ class Resource : angle::NonCopyable
                               RenderPassClosureReason reason);
 
     // Adds the resource to a resource use list.
-    void retain(ResourceUseList *resourceUseList) const;
+    void retain(ResourceUseList *resourceUseList);
+
+    // Adds the resource to the list and also records command buffer use.
+    void retainCommands(ActiveCommandBufferID commandBufferID, ResourceUseList *resourceUseList);
 
   protected:
     Resource();
@@ -233,8 +266,17 @@ class Resource : angle::NonCopyable
     SharedResourceUse mUse;
 };
 
-ANGLE_INLINE void Resource::retain(ResourceUseList *resourceUseList) const
+ANGLE_INLINE void Resource::retain(ResourceUseList *resourceUseList)
 {
+    // Store reference in resource list.
+    resourceUseList->add(mUse);
+}
+
+ANGLE_INLINE void Resource::retainCommands(ActiveCommandBufferID commandBufferID,
+                                           ResourceUseList *resourceUseList)
+{
+    mUse.setCommandBuffer(commandBufferID);
+
     // Store reference in resource list.
     resourceUseList->add(mUse);
 }
@@ -277,8 +319,19 @@ class ReadWriteResource : public angle::NonCopyable
                               RenderPassClosureReason reason);
 
     // Adds the resource to a resource use list.
-    void retainReadOnly(ResourceUseList *resourceUseList) const;
-    void retainReadWrite(ResourceUseList *resourceUseList) const;
+    void retainReadOnly(ActiveCommandBufferID commandBufferID, ResourceUseList *resourceUseList);
+    void retainReadWrite(ActiveCommandBufferID commandBufferID, ResourceUseList *resourceUseList);
+
+    // Check if this resource is used by a command buffer.
+    bool usedByCommandBuffer(ActiveCommandBufferID commandBufferID) const
+    {
+        return mReadOnlyUse.usedByCommandBuffer(commandBufferID);
+    }
+
+    bool writtenByCommandBuffer(ActiveCommandBufferID commandBufferID) const
+    {
+        return mReadWriteUse.usedByCommandBuffer(commandBufferID);
+    }
 
   protected:
     ReadWriteResource();
@@ -291,17 +344,22 @@ class ReadWriteResource : public angle::NonCopyable
     SharedResourceUse mReadWriteUse;
 };
 
-ANGLE_INLINE void ReadWriteResource::retainReadOnly(ResourceUseList *resourceUseList) const
+ANGLE_INLINE void ReadWriteResource::retainReadOnly(ActiveCommandBufferID commandBufferID,
+                                                    ResourceUseList *resourceUseList)
 {
     // Store reference in resource list.
     resourceUseList->add(mReadOnlyUse);
+    mReadOnlyUse.setCommandBuffer(commandBufferID);
 }
 
-ANGLE_INLINE void ReadWriteResource::retainReadWrite(ResourceUseList *resourceUseList) const
+ANGLE_INLINE void ReadWriteResource::retainReadWrite(ActiveCommandBufferID commandBufferID,
+                                                     ResourceUseList *resourceUseList)
 {
     // Store reference in resource list.
     resourceUseList->add(mReadOnlyUse);
     resourceUseList->add(mReadWriteUse);
+    mReadOnlyUse.setCommandBuffer(commandBufferID);
+    mReadWriteUse.setCommandBuffer(commandBufferID);
 }
 
 }  // namespace vk
