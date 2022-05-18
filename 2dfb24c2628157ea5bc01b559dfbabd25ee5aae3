@@ -16,6 +16,47 @@
       "message": "@Jamie, could you take a look?\nThe changes in the CL are mostly some enhancements. I think it should be safe to land. I also made a pre-check CL https://chromium-review.googlesource.com/c/chromium/src/+/3651636 against Chromium CQ. It worked as well.",
       "revId": "2dfb24c2628157ea5bc01b559dfbabd25ee5aae3",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "acc10b0c_2d7032a7",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 8
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2022-05-18T13:53:01Z",
+      "side": 1,
+      "message": "Storing a list of programs in each shader is a bit surprising to me. I was wondering if there\u0027s any simpler alternative? Maybe Geoff has some ideas. Sorry for the slow response, I have been OOO.",
+      "parentUuid": "7a6d159d_6dd20a3f",
+      "revId": "2dfb24c2628157ea5bc01b559dfbabd25ee5aae3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "98389309_c07b4b22",
+        "filename": "src/libANGLE/Context.cpp",
+        "patchSetId": 8
+      },
+      "lineNbr": 745,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2022-05-18T13:53:01Z",
+      "side": 1,
+      "message": "nit: resolveAllLinkingPrograms()",
+      "range": {
+        "startLine": 745,
+        "startChar": 34,
+        "endLine": 745,
+        "endChar": 52
+      },
+      "revId": "2dfb24c2628157ea5bc01b559dfbabd25ee5aae3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
