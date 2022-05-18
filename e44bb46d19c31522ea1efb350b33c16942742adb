@@ -1,0 +1,44 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "0e4a7689_0a8c539f",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 15,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2022-05-18T13:54:07Z",
+      "side": 1,
+      "message": "nit: you should probably close this bug and start opening separate issues for the things you\u0027re fixing.",
+      "range": {
+        "startLine": 15,
+        "startChar": 18,
+        "endLine": 15,
+        "endChar": 22
+      },
+      "revId": "e44bb46d19c31522ea1efb350b33c16942742adb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "914dd3a5_ef84c17a",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2022-05-18T13:54:07Z",
+      "side": 1,
+      "message": "LGTM!",
+      "revId": "e44bb46d19c31522ea1efb350b33c16942742adb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
