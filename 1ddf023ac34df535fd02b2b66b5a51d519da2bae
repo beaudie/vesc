@@ -18,6 +18,23 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "c8555656_7c64c6d5",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1128437
+      },
+      "writtenOn": "2022-05-18T17:18:01Z",
+      "side": 1,
+      "message": "kbr: PTAL at the discussion in comments about enabling EXT_texture_norm16 by default for WebGL",
+      "revId": "1ddf023ac34df535fd02b2b66b5a51d519da2bae",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "f8f0cfb0_2823df7d",
@@ -31,6 +48,30 @@
       "writtenOn": "2022-05-18T17:09:30Z",
       "side": 1,
       "message": "No need to make it webgl/D3D11-only. I\u0027d remove this part.",
+      "range": {
+        "startLine": 3606,
+        "startChar": 0,
+        "endLine": 3612,
+        "endChar": 9
+      },
+      "revId": "1ddf023ac34df535fd02b2b66b5a51d519da2bae",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "5b64c219_70a0cce0",
+        "filename": "src/libANGLE/Context.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 3612,
+      "author": {
+        "id": 1128437
+      },
+      "writtenOn": "2022-05-18T17:18:01Z",
+      "side": 1,
+      "message": "The code disables EXT_texture_norm16 on ES2 if the context is WebGL or if it\u0027s not D3D11 i.e. we only enable EXT_texture_norm16 for non-WebGL D3D11 ES2 contexts.\n\nEXT_texture_norm16 is a requestable extension in WebGL2 so it cannot be enabled by default on WebGL contexts. At least that\u0027s my understanding per the discussion on https://github.com/KhronosGroup/WebGL/pull/3409#issuecomment-1128377499\n\nI\u0027ll remove the D3D11 only restriction if you prefer, and I\u0027ve added kbr@ to clarify the WebGL behavior.",
+      "parentUuid": "f8f0cfb0_2823df7d",
       "range": {
         "startLine": 3606,
         "startChar": 0,
