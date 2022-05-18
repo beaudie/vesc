@@ -18,6 +18,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "6cd50747_fda260fe",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 1971,
+      "author": {
+        "id": 1525982
+      },
+      "writtenOn": "2022-05-18T03:04:36Z",
+      "side": 1,
+      "message": "Added `stageResourceClearWithFormatImpl()`, which would take the initial clear value as input. The robust function is updated to use it.",
+      "parentUuid": "71738687_11899555",
+      "revId": "172b8f2216d607a7ebb1d28a103ddb7f210785a2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "7d7c2d16_4bb7b664",
@@ -31,6 +49,30 @@
       "writtenOn": "2022-05-18T01:46:00Z",
       "side": 1,
       "message": "nit: no need to pass as `const \u0026`",
+      "range": {
+        "startLine": 1976,
+        "startChar": 53,
+        "endLine": 1976,
+        "endChar": 75
+      },
+      "revId": "172b8f2216d607a7ebb1d28a103ddb7f210785a2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "f5f82cec_473d0a10",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 1976,
+      "author": {
+        "id": 1525982
+      },
+      "writtenOn": "2022-05-18T03:04:36Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "7d7c2d16_4bb7b664",
       "range": {
         "startLine": 1976,
         "startChar": 53,
