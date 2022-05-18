@@ -104,6 +104,30 @@
       },
       "revId": "1ddf023ac34df535fd02b2b66b5a51d519da2bae",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "6511e7ac_7a196077",
+        "filename": "src/libANGLE/Context.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 3612,
+      "author": {
+        "id": 1128437
+      },
+      "writtenOn": "2022-05-18T18:59:57Z",
+      "side": 1,
+      "message": "I got a WebGL1 conformance failure which is what I tried to fix in the github PR above. Maybe we only disable the extension on WebGL2 and not WebGL1?",
+      "parentUuid": "9d29edfa_fa364d6e",
+      "range": {
+        "startLine": 3606,
+        "startChar": 0,
+        "endLine": 3612,
+        "endChar": 9
+      },
+      "revId": "1ddf023ac34df535fd02b2b66b5a51d519da2bae",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
