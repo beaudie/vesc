@@ -478,7 +478,8 @@ Error Image::initialize(const Display *display)
         mState.hasProtectedContent = externalSibling->hasProtectedContent();
         mState.levelCount          = externalSibling->getLevelCount();
         mState.cubeMap             = externalSibling->isCubeMap();
-        // Only external siblings can be YUV
+
+        // External siblings can be YUV
         mState.yuv = externalSibling->isYUV();
     }
 
@@ -493,6 +494,12 @@ Error Image::initialize(const Display *display)
             return egl::EglBadMatch();
         }
         mState.format = gl::Format(nonLinearFormat);
+    }
+
+    if (!IsExternalImageTarget(mState.sourceType))
+    {
+        // GL_ANGLE_yuv_internal_format extension added support for YUV textures.
+        mState.yuv = gl::IsYuvFormat(mState.format.info->sizedInternalFormat);
     }
 
     mState.size    = mState.source->getAttachmentSize(mState.imageIndex);
