@@ -4307,8 +4307,12 @@ angle::Result RendererVk::getOutsideRenderPassCommandBufferHelper(
 {
     ANGLE_TRACE_EVENT0("gpu.angle", "RendererVk::getOutsideRenderPassCommandBufferHelper");
     std::unique_lock<std::mutex> lock(mCommandBufferRecyclerMutex);
-    return mOutsideRenderPassCommandBufferRecycler.getCommandBufferHelper(context, commandPool,
-                                                                          commandBufferHelperOut);
+
+    // TODO(anglebug.com/5664): Handle ID overflow.
+    ASSERT(mFreeCommandBufferIDs.any());
+
+    return mOutsideRenderPassCommandBufferRecycler.getCommandBufferHelper(
+        context, commandPool, &mFreeCommandBufferIDs, commandBufferHelperOut);
 }
 
 angle::Result RendererVk::getRenderPassCommandBufferHelper(
@@ -4318,8 +4322,12 @@ angle::Result RendererVk::getRenderPassCommandBufferHelper(
 {
     ANGLE_TRACE_EVENT0("gpu.angle", "RendererVk::getRenderPassCommandBufferHelper");
     std::unique_lock<std::mutex> lock(mCommandBufferRecyclerMutex);
-    return mRenderPassCommandBufferRecycler.getCommandBufferHelper(context, commandPool,
-                                                                   commandBufferHelperOut);
+
+    // TODO(anglebug.com/5664): Handle ID overflow.
+    ASSERT(mFreeCommandBufferIDs.any());
+
+    return mRenderPassCommandBufferRecycler.getCommandBufferHelper(
+        context, commandPool, &mFreeCommandBufferIDs, commandBufferHelperOut);
 }
 
 void RendererVk::recycleOutsideRenderPassCommandBufferHelper(
@@ -4328,7 +4336,8 @@ void RendererVk::recycleOutsideRenderPassCommandBufferHelper(
 {
     ANGLE_TRACE_EVENT0("gpu.angle", "RendererVk::recycleOutsideRenderPassCommandBufferHelper");
     std::unique_lock<std::mutex> lock(mCommandBufferRecyclerMutex);
-    mOutsideRenderPassCommandBufferRecycler.recycleCommandBufferHelper(device, commandBuffer);
+    mOutsideRenderPassCommandBufferRecycler.recycleCommandBufferHelper(
+        device, &mFreeCommandBufferIDs, commandBuffer);
 }
 
 void RendererVk::recycleRenderPassCommandBufferHelper(
@@ -4337,7 +4346,8 @@ void RendererVk::recycleRenderPassCommandBufferHelper(
 {
     ANGLE_TRACE_EVENT0("gpu.angle", "RendererVk::recycleRenderPassCommandBufferHelper");
     std::unique_lock<std::mutex> lock(mCommandBufferRecyclerMutex);
-    mRenderPassCommandBufferRecycler.recycleCommandBufferHelper(device, commandBuffer);
+    mRenderPassCommandBufferRecycler.recycleCommandBufferHelper(device, &mFreeCommandBufferIDs,
+                                                                commandBuffer);
 }
 
 void RendererVk::logCacheStats() const
