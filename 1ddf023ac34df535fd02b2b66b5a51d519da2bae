@@ -128,6 +128,30 @@
       },
       "revId": "1ddf023ac34df535fd02b2b66b5a51d519da2bae",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "89d930da_d8d2765d",
+        "filename": "src/libANGLE/Context.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 3612,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2022-05-18T20:46:09Z",
+      "side": 1,
+      "message": "I\u0027m not really sure why Sunny ran into the conformance failure which was discussed in https://github.com/KhronosGroup/WebGL/pull/3409 . That test should be being run without the WebGL layer enabling GL_EXT_texture_norm16 - on both WebGL 1.0 and 2.0 contexts. (The test, conformance/textures/misc/texture-with-flip-y-and-premultiply-alpha.html , is run against both 1.0 and 2.0 contexts.)\n\nIn WebGL 1.0 though (ES 2.0) we shouldn\u0027t expose this even as an enable-able extension. The WebGL wrapper of EXT_texture_norm16 is defined only against WebGL 2. Possible to leave in at least that restriction?\n\nCan you reproduce the conformance failure locally and confirm that that would address it?",
+      "parentUuid": "6511e7ac_7a196077",
+      "range": {
+        "startLine": 3606,
+        "startChar": 0,
+        "endLine": 3612,
+        "endChar": 9
+      },
+      "revId": "1ddf023ac34df535fd02b2b66b5a51d519da2bae",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
