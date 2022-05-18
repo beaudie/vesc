@@ -121,6 +121,30 @@
       },
       "revId": "cdfb6f6c719430dc1218a9b557a7059ef3aed3c5",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "de233b3d_5cd36d7f",
+        "filename": "src/libANGLE/renderer/vulkan/TextureVk.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 2588,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-05-18T15:49:44Z",
+      "side": 1,
+      "message": "It\u0027s not a performance warning?\n\n\u003e Or is this tracked already by a VVL suppression?\n\nActually no, we suppress the tests (under bug #3886), but we did pass conformance with SwiftShader with it. We should really turn those test suppressions into a VVL suppression.",
+      "parentUuid": "00e08078_a7568d1c",
+      "range": {
+        "startLine": 2588,
+        "startChar": 12,
+        "endLine": 2588,
+        "endChar": 25
+      },
+      "revId": "cdfb6f6c719430dc1218a9b557a7059ef3aed3c5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
