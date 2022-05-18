@@ -35,6 +35,23 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "4fb993fc_2aa5862a",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1542132
+      },
+      "writtenOn": "2022-05-18T06:47:11Z",
+      "side": 1,
+      "message": "looks great, thanks for working on this.",
+      "revId": "af6c2379f7d83f2378e0f7a4731b144328fd0c21",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "d8336399_23375090",
@@ -65,6 +82,24 @@
       "writtenOn": "2022-05-18T00:38:05Z",
       "side": 1,
       "message": "Looking more deeply, this check doesn\u0027t exist in WebKit\u0027s copy of ANGLE:\nhttps://github.com/WebKit/WebKit/blob/main/Source/ThirdParty/ANGLE/src/libANGLE/renderer/gl/eagl/IOSurfaceSurfaceEAGL.mm#L322\n\nNot sure how important it is to add this, but removing both this check and undoing the change to kIOSurfaceFormats in this file would de-risk this upstreaming.",
+      "revId": "af6c2379f7d83f2378e0f7a4731b144328fd0c21",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "a67ed38d_7752b71a",
+        "filename": "src/libANGLE/renderer/gl/eagl/IOSurfaceSurfaceEAGL.mm",
+        "patchSetId": 2
+      },
+      "lineNbr": 330,
+      "author": {
+        "id": 1542132
+      },
+      "writtenOn": "2022-05-18T06:47:11Z",
+      "side": 1,
+      "message": "There was a review blocker for removing said hunk from the other file.\nSo I think it\u0027s consistent to then block on not having the hunk here.",
+      "parentUuid": "e48a23bc_effdae33",
       "revId": "af6c2379f7d83f2378e0f7a4731b144328fd0c21",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
