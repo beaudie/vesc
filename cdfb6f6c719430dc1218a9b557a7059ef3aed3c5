@@ -33,6 +33,46 @@
       "message": "Re-LGTM, thanks",
       "revId": "cdfb6f6c719430dc1218a9b557a7059ef3aed3c5",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "cb9f9b0c_2c530422",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2022-05-18T13:48:59Z",
+      "side": 1,
+      "message": "LGTM but we have the age old problem of not having a device to test on and not enough resources to implement in SwiftShader before landing.",
+      "revId": "cdfb6f6c719430dc1218a9b557a7059ef3aed3c5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "bb22b321_261d6d38",
+        "filename": "src/libANGLE/renderer/vulkan/TextureVk.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 2588,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2022-05-18T13:48:59Z",
+      "side": 1,
+      "message": "nit: ASSERT(contextVk-\u003egetRenderer()... ) etc. no need to handle this in an expected way.",
+      "range": {
+        "startLine": 2588,
+        "startChar": 12,
+        "endLine": 2588,
+        "endChar": 25
+      },
+      "revId": "cdfb6f6c719430dc1218a9b557a7059ef3aed3c5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
