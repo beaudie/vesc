@@ -1508,7 +1508,7 @@ angle::Result UtilsVk::setupComputeProgram(
     vk::PipelineHelper *pipeline;
     program->setShader(gl::ShaderType::Compute, csShader);
     ANGLE_TRY(program->getComputePipeline(contextVk, pipelineLayout.get(), &pipeline));
-    pipeline->retain(&commandBufferHelper->getResourceUseList());
+    commandBufferHelper->retainResource(pipeline);
 
     vk::OutsideRenderPassCommandBuffer *commandBuffer = &commandBufferHelper->getCommandBuffer();
     commandBuffer->bindComputePipeline(pipeline->getPipeline());
@@ -1564,7 +1564,7 @@ angle::Result UtilsVk::setupGraphicsProgram(ContextVk *contextVk,
                                            *pipelineCache, pipelineLayout.get(), *pipelineDesc,
                                            gl::AttributesMask(), gl::ComponentTypeMask(),
                                            gl::DrawBufferMask(), &descPtr, &helper));
-    helper->retain(&contextVk->getStartedRenderPassCommands().getResourceUseList());
+    contextVk->getStartedRenderPassCommands().retainResource(helper);
     commandBuffer->bindGraphicsPipeline(helper->getPipeline());
 
     contextVk->invalidateGraphicsPipelineBinding();
@@ -1606,9 +1606,8 @@ angle::Result UtilsVk::convertIndexBuffer(ContextVk *contextVk,
 
     VkDescriptorSet descriptorSet;
     vk::RefCountedDescriptorPoolBinding descriptorPoolBinding;
-    ANGLE_TRY(allocateDescriptorSet(contextVk, &commandBufferHelper->getResourceUseList(),
-                                    Function::ConvertIndexBuffer, &descriptorPoolBinding,
-                                    &descriptorSet));
+    ANGLE_TRY(allocateDescriptorSet(contextVk, commandBufferHelper, Function::ConvertIndexBuffer,
+                                    &descriptorPoolBinding, &descriptorSet));
 
     std::array<VkDescriptorBufferInfo, 2> buffers = {{
         {dst->getBuffer().getHandle(), dst->getOffset(), dst->getSize()},
@@ -1675,7 +1674,7 @@ angle::Result UtilsVk::convertIndexIndirectBuffer(ContextVk *contextVk,
 
     VkDescriptorSet descriptorSet;
     vk::RefCountedDescriptorPoolBinding descriptorPoolBinding;
-    ANGLE_TRY(allocateDescriptorSet(contextVk, &commandBufferHelper->getResourceUseList(),
+    ANGLE_TRY(allocateDescriptorSet(contextVk, commandBufferHelper,
                                     Function::ConvertIndexIndirectBuffer, &descriptorPoolBinding,
                                     &descriptorSet));
 
@@ -1750,7 +1749,7 @@ angle::Result UtilsVk::convertLineLoopIndexIndirectBuffer(
 
     VkDescriptorSet descriptorSet;
     vk::RefCountedDescriptorPoolBinding descriptorPoolBinding;
-    ANGLE_TRY(allocateDescriptorSet(contextVk, &commandBufferHelper->getResourceUseList(),
+    ANGLE_TRY(allocateDescriptorSet(contextVk, commandBufferHelper,
                                     Function::ConvertIndexIndirectLineLoopBuffer,
                                     &descriptorPoolBinding, &descriptorSet));
 
@@ -1819,7 +1818,7 @@ angle::Result UtilsVk::convertLineLoopArrayIndirectBuffer(
 
     VkDescriptorSet descriptorSet;
     vk::RefCountedDescriptorPoolBinding descriptorPoolBinding;
-    ANGLE_TRY(allocateDescriptorSet(contextVk, &commandBufferHelper->getResourceUseList(),
+    ANGLE_TRY(allocateDescriptorSet(contextVk, commandBufferHelper,
                                     Function::ConvertIndirectLineLoopBuffer, &descriptorPoolBinding,
                                     &descriptorSet));
 
@@ -1989,9 +1988,8 @@ angle::Result UtilsVk::convertVertexBufferImpl(
 
     VkDescriptorSet descriptorSet;
     vk::RefCountedDescriptorPoolBinding descriptorPoolBinding;
-    ANGLE_TRY(allocateDescriptorSet(contextVk, &commandBufferHelper->getResourceUseList(),
-                                    Function::ConvertVertexBuffer, &descriptorPoolBinding,
-                                    &descriptorSet));
+    ANGLE_TRY(allocateDescriptorSet(contextVk, commandBufferHelper, Function::ConvertVertexBuffer,
+                                    &descriptorPoolBinding, &descriptorSet));
 
     VkWriteDescriptorSet writeInfo    = {};
     VkDescriptorBufferInfo buffers[2] = {
@@ -2498,8 +2496,7 @@ angle::Result UtilsVk::blitResolveImpl(ContextVk *contextVk,
 
     VkDescriptorSet descriptorSet;
     vk::RefCountedDescriptorPoolBinding descriptorPoolBinding;
-    ANGLE_TRY(allocateDescriptorSet(contextVk,
-                                    &contextVk->getStartedRenderPassCommands().getResourceUseList(),
+    ANGLE_TRY(allocateDescriptorSet(contextVk, &contextVk->getStartedRenderPassCommands(),
                                     Function::BlitResolve, &descriptorPoolBinding, &descriptorSet));
 
     contextVk->onImageRenderPassRead(src->getAspectFlags(), vk::ImageLayout::FragmentShaderReadOnly,
@@ -2734,7 +2731,7 @@ angle::Result UtilsVk::stencilBlitResolveNoShaderExport(ContextVk *contextVk,
     vk::OutsideRenderPassCommandBuffer *commandBuffer;
     ANGLE_TRY(contextVk->getOutsideRenderPassCommandBufferHelper(access, &commandBufferHelper));
     commandBuffer = &commandBufferHelper->getCommandBuffer();
-    ANGLE_TRY(allocateDescriptorSet(contextVk, &commandBufferHelper->getResourceUseList(),
+    ANGLE_TRY(allocateDescriptorSet(contextVk, commandBufferHelper,
                                     Function::BlitResolveStencilNoExport, &descriptorPoolBinding,
                                     &descriptorSet));
 
@@ -2952,8 +2949,7 @@ angle::Result UtilsVk::copyImage(ContextVk *contextVk,
 
     VkDescriptorSet descriptorSet;
     vk::RefCountedDescriptorPoolBinding descriptorPoolBinding;
-    ANGLE_TRY(allocateDescriptorSet(contextVk,
-                                    &contextVk->getStartedRenderPassCommands().getResourceUseList(),
+    ANGLE_TRY(allocateDescriptorSet(contextVk, &contextVk->getStartedRenderPassCommands(),
                                     Function::ImageCopy, &descriptorPoolBinding, &descriptorSet));
 
     UpdateColorAccess(contextVk, MakeColorBufferMask(0), MakeColorBufferMask(0));
@@ -3266,9 +3262,8 @@ angle::Result UtilsVk::generateMipmap(ContextVk *contextVk,
 
     VkDescriptorSet descriptorSet;
     vk::RefCountedDescriptorPoolBinding descriptorPoolBinding;
-    ANGLE_TRY(allocateDescriptorSet(contextVk, &commandBufferHelper->getResourceUseList(),
-                                    Function::GenerateMipmap, &descriptorPoolBinding,
-                                    &descriptorSet));
+    ANGLE_TRY(allocateDescriptorSet(contextVk, commandBufferHelper, Function::GenerateMipmap,
+                                    &descriptorPoolBinding, &descriptorSet));
 
     VkDescriptorImageInfo destImageInfos[kGenerateMipmapMaxLevels] = {};
     for (uint32_t level = 0; level < kGenerateMipmapMaxLevels; ++level)
@@ -3417,9 +3412,8 @@ angle::Result UtilsVk::unresolve(ContextVk *contextVk,
 
     VkDescriptorSet descriptorSet;
     vk::RefCountedDescriptorPoolBinding descriptorPoolBinding;
-    ANGLE_TRY(allocateDescriptorSet(contextVk,
-                                    &contextVk->getStartedRenderPassCommands().getResourceUseList(),
-                                    function, &descriptorPoolBinding, &descriptorSet));
+    ANGLE_TRY(allocateDescriptorSet(contextVk, &contextVk->getStartedRenderPassCommands(), function,
+                                    &descriptorPoolBinding, &descriptorSet));
 
     vk::FramebufferAttachmentArray<VkDescriptorImageInfo> inputImageInfo = {};
     for (uint32_t attachmentIndex = 0; attachmentIndex < colorAttachmentCount; ++attachmentIndex)
@@ -3564,18 +3558,18 @@ angle::Result UtilsVk::drawOverlay(ContextVk *contextVk,
     ANGLE_TRY(
         startRenderPass(contextVk, dst, destView, renderPassDesc, renderArea, &commandBuffer));
 
+    vk::RenderPassCommandBufferHelper *commandBufferHelper =
+        &contextVk->getStartedRenderPassCommands();
+
     VkDescriptorSet descriptorSet;
     vk::RefCountedDescriptorPoolBinding descriptorPoolBinding;
-    ANGLE_TRY(allocateDescriptorSet(contextVk,
-                                    &contextVk->getStartedRenderPassCommands().getResourceUseList(),
-                                    Function::OverlayDraw, &descriptorPoolBinding, &descriptorSet));
+    ANGLE_TRY(allocateDescriptorSet(contextVk, commandBufferHelper, Function::OverlayDraw,
+                                    &descriptorPoolBinding, &descriptorSet));
 
     UpdateColorAccess(contextVk, MakeColorBufferMask(0), MakeColorBufferMask(0));
 
-    textWidgetsBuffer->retainReadOnly(
-        &contextVk->getStartedRenderPassCommands().getResourceUseList());
-    graphWidgetsBuffer->retainReadOnly(
-        &contextVk->getStartedRenderPassCommands().getResourceUseList());
+    commandBufferHelper->retainReadOnly(textWidgetsBuffer);
+    commandBufferHelper->retainReadOnly(graphWidgetsBuffer);
     contextVk->onImageRenderPassRead(VK_IMAGE_ASPECT_COLOR_BIT,
                                      vk::ImageLayout::FragmentShaderReadOnly, font);
     contextVk->onImageRenderPassWrite(gl::LevelIndex(0), 0, 1, VK_IMAGE_ASPECT_COLOR_BIT,
@@ -3666,13 +3660,13 @@ angle::Result UtilsVk::drawOverlay(ContextVk *contextVk,
 }
 
 angle::Result UtilsVk::allocateDescriptorSet(ContextVk *contextVk,
-                                             vk::ResourceUseList *resourceUseList,
+                                             vk::CommandBufferHelperCommon *commandBufferHelper,
                                              Function function,
                                              vk::RefCountedDescriptorPoolBinding *bindingOut,
                                              VkDescriptorSet *descriptorSetOut)
 {
     ANGLE_TRY(mDescriptorPools[function].allocateDescriptorSets(
-        contextVk, resourceUseList,
+        contextVk, commandBufferHelper,
         mDescriptorSetLayouts[function][DescriptorSetIndex::Internal].get(), 1, bindingOut,
         descriptorSetOut));
 
