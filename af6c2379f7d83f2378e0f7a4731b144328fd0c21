@@ -1,0 +1,72 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "3ad3e788_5731fae9",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 2
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2022-05-18T00:38:05Z",
+      "side": 1,
+      "message": "Just to keep the formatting grammatically correct: double-quote before \"CGL\".",
+      "revId": "af6c2379f7d83f2378e0f7a4731b144328fd0c21",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "17979fdf_51974be3",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2022-05-18T00:38:05Z",
+      "side": 1,
+      "message": "Thanks for working on re-upstreaming this. One comment before approving.\n\nWish there were some way we could test this.\n",
+      "revId": "af6c2379f7d83f2378e0f7a4731b144328fd0c21",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "d8336399_23375090",
+        "filename": "src/libANGLE/renderer/gl/eagl/IOSurfaceSurfaceEAGL.mm",
+        "patchSetId": 2
+      },
+      "lineNbr": 51,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2022-05-18T00:38:05Z",
+      "side": 1,
+      "message": "99% sure this should be 1 byte per component.",
+      "revId": "af6c2379f7d83f2378e0f7a4731b144328fd0c21",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "e48a23bc_effdae33",
+        "filename": "src/libANGLE/renderer/gl/eagl/IOSurfaceSurfaceEAGL.mm",
+        "patchSetId": 2
+      },
+      "lineNbr": 330,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2022-05-18T00:38:05Z",
+      "side": 1,
+      "message": "Looking more deeply, this check doesn\u0027t exist in WebKit\u0027s copy of ANGLE:\nhttps://github.com/WebKit/WebKit/blob/main/Source/ThirdParty/ANGLE/src/libANGLE/renderer/gl/eagl/IOSurfaceSurfaceEAGL.mm#L322\n\nNot sure how important it is to add this, but removing both this check and undoing the change to kIOSurfaceFormats in this file would de-risk this upstreaming.",
+      "revId": "af6c2379f7d83f2378e0f7a4731b144328fd0c21",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
