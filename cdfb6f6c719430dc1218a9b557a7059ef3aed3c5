@@ -73,6 +73,30 @@
       },
       "revId": "cdfb6f6c719430dc1218a9b557a7059ef3aed3c5",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "8116f7aa_46e04aa0",
+        "filename": "src/libANGLE/renderer/vulkan/TextureVk.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 2588,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-05-18T15:17:35Z",
+      "side": 1,
+      "message": "We probably can\u0027t ASSERT this. We currently create 2D view of 3D (not the EGL extension, but for GLES3.1), and live with the validation error.\n\nYou might just drop this `UNIMPLEMENTED()`.",
+      "parentUuid": "bb22b321_261d6d38",
+      "range": {
+        "startLine": 2588,
+        "startChar": 12,
+        "endLine": 2588,
+        "endChar": 25
+      },
+      "revId": "cdfb6f6c719430dc1218a9b557a7059ef3aed3c5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
