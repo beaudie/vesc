@@ -24,6 +24,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "5e7551d2_c8f0ddbf",
+        "filename": "src/libANGLE/ErrorStrings.h",
+        "patchSetId": 15
+      },
+      "lineNbr": 531,
+      "author": {
+        "id": 1517514
+      },
+      "writtenOn": "2022-05-18T17:16:31Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "c9648631_61b355d4",
+      "range": {
+        "startLine": 531,
+        "startChar": 50,
+        "endLine": 531,
+        "endChar": 58
+      },
+      "revId": "8dd1474a3612c2804af74c6c231cbc44a1e44683",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "10853e3c_ecb52324",
@@ -37,6 +61,30 @@
       "writtenOn": "2022-05-18T13:44:20Z",
       "side": 1,
       "message": "nit: just use kTextureIsNeitherImmutableNorTextureBuffer, no need to be super precise in older gles versions.",
+      "range": {
+        "startLine": 1523,
+        "startChar": 12,
+        "endLine": 1528,
+        "endChar": 57
+      },
+      "revId": "8dd1474a3612c2804af74c6c231cbc44a1e44683",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "d3499ac6_4ba37847",
+        "filename": "src/libANGLE/validationES31.cpp",
+        "patchSetId": 15
+      },
+      "lineNbr": 1528,
+      "author": {
+        "id": 1517514
+      },
+      "writtenOn": "2022-05-18T17:16:31Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "10853e3c_ecb52324",
       "range": {
         "startLine": 1523,
         "startChar": 12,
