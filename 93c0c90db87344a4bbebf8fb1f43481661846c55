@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b1b9544f_4543b8d8",
+        "filename": "src/libANGLE/renderer/gl/eagl/IOSurfaceSurfaceEAGL.mm",
+        "patchSetId": 3
+      },
+      "lineNbr": 322,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2022-05-18T17:10:53Z",
+      "side": 0,
+      "message": "This comment\u0027s still in downstream WebKit:\nhttps://github.com/WebKit/WebKit/blob/main/Source/ThirdParty/ANGLE/src/libANGLE/renderer/gl/eagl/IOSurfaceSurfaceEAGL.mm#L322\n\nI think we should keep it.",
+      "revId": "93c0c90db87344a4bbebf8fb1f43481661846c55",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
