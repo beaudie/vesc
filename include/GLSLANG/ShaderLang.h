@@ -724,8 +724,6 @@ sh::WorkGroupSize GetComputeShaderLocalGroupSize(const ShHandle handle);
 // Returns the number of views specified through the num_views layout qualifier. If num_views is
 // not set, the function returns -1.
 int GetVertexShaderNumViews(const ShHandle handle);
-// Returns true if compiler has injected instructions for early fragment tests as an optimization
-bool HasEarlyFragmentTestsOptimization(const ShHandle handle);
 // Returns true if the shader has specified the |sample| qualifier, implying that per-sample shading
 // should be enabled
 bool EnablesPerSampleShading(const ShHandle handle);

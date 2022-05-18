@@ -536,8 +536,6 @@ void Shader::resolveCompile()
             std::sort(mState.mInputVaryings.begin(), mState.mInputVaryings.end(), CompareShaderVar);
             mState.mActiveOutputVariables =
                 GetActiveShaderVariables(sh::GetOutputVariables(compilerHandle));
-            mState.mEarlyFragmentTestsOptimization =
-                sh::HasEarlyFragmentTestsOptimization(compilerHandle);
             mState.mEnablesPerSampleShading = sh::EnablesPerSampleShading(compilerHandle);
             mState.mAdvancedBlendEquations =
                 BlendEquationBitSet(sh::GetAdvancedBlendEquations(compilerHandle));
