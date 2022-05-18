@@ -1,0 +1,67 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "45d0d86c_38ca76af",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 11
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2022-05-18T16:04:06Z",
+      "side": 1,
+      "message": "LGTM but this one might not actually be a perf win.",
+      "revId": "e21f53a5629381532940822ff05bd9d2799aa2eb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "c96c5061_d7bb4b2c",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 11
+      },
+      "lineNbr": 2113,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2022-05-18T16:04:06Z",
+      "side": 1,
+      "message": "nit: you should be able to quickly compute a mismatch mask and iterate the mismatching vars isntead of checking them all.",
+      "range": {
+        "startLine": 2107,
+        "startChar": 0,
+        "endLine": 2113,
+        "endChar": 40
+      },
+      "revId": "e21f53a5629381532940822ff05bd9d2799aa2eb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "d7cfc66f_aa98084e",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.h",
+        "patchSetId": 11
+      },
+      "lineNbr": 1524,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2022-05-18T16:04:06Z",
+      "side": 1,
+      "message": "nit: I\u0027ve found assigning to function inputs to be an error prone pattern. please use an explicit override variable.",
+      "range": {
+        "startLine": 1521,
+        "startChar": 0,
+        "endLine": 1524,
+        "endChar": 5
+      },
+      "revId": "e21f53a5629381532940822ff05bd9d2799aa2eb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
