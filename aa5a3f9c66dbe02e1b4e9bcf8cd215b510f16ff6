@@ -124,6 +124,23 @@
       "parentUuid": "8d6ea0ff_052f0b64",
       "revId": "aa5a3f9c66dbe02e1b4e9bcf8cd215b510f16ff6",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "7e5fa17f_00ad9b7c",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 13
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2022-05-18T20:00:14Z",
+      "side": 1,
+      "message": "Tracking bug: http://crbug.com/1326517 . Let\u0027s proceed with this workaround so we can get uploads working on Windows again. Thanks Roman for this tricky workaround.",
+      "revId": "aa5a3f9c66dbe02e1b4e9bcf8cd215b510f16ff6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
