@@ -141,6 +141,24 @@
       "parentUuid": "54793486_0d8ca5fb",
       "revId": "172e3411a8b91ba476ffc2aac00f450df3b2475d",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "ee8a99a9_634a837e",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1002725
+      },
+      "writtenOn": "2022-05-18T20:53:00Z",
+      "side": 1,
+      "message": "(Coming back to this, 30min before I go on vacation for a week..)\n\n\u003e We can make this workaround apply only to WebGL contexts.\n\nThe original problem on android that motivated this workaround was not webgl. It was renderer cc picking tile sizes based on viewport (limited by max texture size), and webview having unreasonably large viewport so max texture actually applied. So limiting only webgl (and canvas) could make the original problem on android come back. But of course now that we\u0027ve had this workaround apply universally on android for so long, who knows what other issues it\u0027s hiding :(\n\n\u003e If it needs to be fully configurable, we can pass an int to context creation so Chrome can supply the limit directly.\n\nThinking out loud if we do this and use different limits for different angle context. Do we have clean split for different angle context for different use cases (cc, webgl, canvas, display compositor, raster, and whatever else I\u0027m forgetting)? I guess chromium side doesn\u0027t need to use virtual context with angle so I guess yes?\n\nBut how would something like shared image that specifically spans multiple context pick its limits? Highest one among all the different angle contexts? I hope we don\u0027t ever share textures created in display context to cc or webgl context that has lower limits? (Actually isn\u0027t this also a problem with the approach in this CL to limit only command buffer clients?)\n\n\u003e Note, for canvas I don\u0027t propose to affect any GL commands, only gpu::Capabilities that the decoder sends to the client.\n\nDoes that mean gpu::Capabilities exposes a limit that\u0027s different from GL_MAX_TEXTURE_SIZE? Feels like that way lies madness from all the confusion it would cause..",
+      "parentUuid": "7c2cc082_97b9d059",
+      "revId": "172e3411a8b91ba476ffc2aac00f450df3b2475d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
