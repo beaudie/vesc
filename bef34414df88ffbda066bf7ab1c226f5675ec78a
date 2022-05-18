@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "8a59c6e4_897422b0",
+        "filename": "src/libANGLE/Constants.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 27,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2022-05-18T13:49:44Z",
+      "side": 1,
+      "message": "for the new ones, please use IMPLEMENTATION_MAX ,etc.",
+      "range": {
+        "startLine": 27,
+        "startChar": 4,
+        "endLine": 27,
+        "endChar": 26
+      },
+      "revId": "bef34414df88ffbda066bf7ab1c226f5675ec78a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
