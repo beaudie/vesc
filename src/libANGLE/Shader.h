@@ -202,10 +202,6 @@ class Shader final : angle::NonCopyable, public LabeledObject
     unsigned int getRefCount() const;
     bool isFlaggedForDeletion() const;
     void flagForDeletion();
-    bool hasEarlyFragmentTestsOptimization() const
-    {
-        return mState.mEarlyFragmentTestsOptimization;
-    }
     bool enablesPerSampleShading() const { return mState.mEnablesPerSampleShading; }
     BlendEquationBitSet getAdvancedBlendEquations() const { return mState.mAdvancedBlendEquations; }
     rx::SpecConstUsageBits getSpecConstUsageBits() const { return mState.mSpecConstUsageBits; }
