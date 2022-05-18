@@ -67,6 +67,23 @@
       "message": "Geoff: can you act as a second set of eyes on this? Looks like a long-standing assumption in ANGLE might not be true.",
       "revId": "9f1d9dbda303e4c9208c864e860909cc2d8bb708",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "37c6b239_1d484c08",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2022-05-18T17:24:20Z",
+      "side": 1,
+      "message": "My guess is this case used to fail with GL_INVALID_ENUM here: https://source.chromium.org/chromium/chromium/src/+/main:third_party/angle/src/libANGLE/validationES3.cpp;l\u003d314;drc\u003d242da5037807dde3daf097ba74f875db83b8b613;bpv\u003d1;bpt\u003d1\n\nStill, looks like the correct change. Looks like there is a test to triage, probably expecting the wrong error.",
+      "revId": "9f1d9dbda303e4c9208c864e860909cc2d8bb708",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
