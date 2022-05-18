@@ -1,0 +1,44 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "31936cf5_64a01eda",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-05-18T03:09:44Z",
+      "side": 1,
+      "message": "LGTM",
+      "revId": "582caf59ecfab521e928bf0fae0a19d2486e2111",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "7d633d48_9022d7d3",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 1972,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-05-18T03:09:44Z",
+      "side": 1,
+      "message": "nit: as a matter of style, please remove `Impl`. `Impl` functions are normally private. `stageResourceClearWithFormat` is perfectly fine here.",
+      "range": {
+        "startLine": 1972,
+        "startChar": 46,
+        "endLine": 1972,
+        "endChar": 50
+      },
+      "revId": "582caf59ecfab521e928bf0fae0a19d2486e2111",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
