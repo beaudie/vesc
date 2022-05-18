@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "69be4be9_93624878",
+        "filename": "src/libANGLE/renderer/vulkan/UtilsVk.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 1055,
+      "author": {
+        "id": 1520902
+      },
+      "writtenOn": "2022-05-18T23:29:44Z",
+      "side": 1,
+      "message": "should we update the comment here, too?",
+      "revId": "c29f5aa074b22ed772c00e65a8b46e283ed27b06",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
