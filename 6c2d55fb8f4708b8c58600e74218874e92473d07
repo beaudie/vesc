@@ -50,6 +50,23 @@
       "message": "Going to go ahead and self review for the +2 since this was the suggested change from the Apple engineers in Slack.",
       "revId": "6c2d55fb8f4708b8c58600e74218874e92473d07",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "448888a6_ed8d63f6",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2022-05-18T16:31:30Z",
+      "side": 1,
+      "message": "Ahh looks like the self review still isn\u0027t allowed even when there is another reviewer.",
+      "revId": "6c2d55fb8f4708b8c58600e74218874e92473d07",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
