@@ -18,6 +18,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "d930bdf9_0b70c8ec",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 11
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-05-18T16:19:27Z",
+      "side": 1,
+      "message": "Yes, it\u0027s unfortunate that all our vertex state is tied together. But this *can* be a win by moving 32 bytes of stride info out of the pipeline desc hash.",
+      "parentUuid": "45d0d86c_38ca76af",
+      "revId": "e21f53a5629381532940822ff05bd9d2799aa2eb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "c96c5061_d7bb4b2c",
@@ -43,6 +61,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "d765c549_bd6c2a0e",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 11
+      },
+      "lineNbr": 2113,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-05-18T16:19:27Z",
+      "side": 1,
+      "message": "Still need to make a copy into another array FYI (so there\u0027s _some_ looping over all attributes)\n\nNot sure what algorithm you have in mind for calculating the mask that wouldn\u0027t involve looping. That said, this is the same algorithm in vk_cache_utils.cpp, so this change is not inventing anything here; just shifting the current code here.\n\n---\n\nThat did remind me to add a condition to disable the (otherwise no-op) code in vk_cache_utils.cpp",
+      "parentUuid": "c96c5061_d7bb4b2c",
+      "range": {
+        "startLine": 2107,
+        "startChar": 0,
+        "endLine": 2113,
+        "endChar": 40
+      },
+      "revId": "e21f53a5629381532940822ff05bd9d2799aa2eb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "d7cfc66f_aa98084e",
         "filename": "src/libANGLE/renderer/vulkan/ContextVk.h",
         "patchSetId": 11
@@ -54,6 +96,30 @@
       "writtenOn": "2022-05-18T16:04:06Z",
       "side": 1,
       "message": "nit: I\u0027ve found assigning to function inputs to be an error prone pattern. please use an explicit override variable.",
+      "range": {
+        "startLine": 1521,
+        "startChar": 0,
+        "endLine": 1524,
+        "endChar": 5
+      },
+      "revId": "e21f53a5629381532940822ff05bd9d2799aa2eb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "d6f2ad8d_1c8eec68",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.h",
+        "patchSetId": 11
+      },
+      "lineNbr": 1524,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-05-18T16:19:27Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "d7cfc66f_aa98084e",
       "range": {
         "startLine": 1521,
         "startChar": 0,
