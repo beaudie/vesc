@@ -532,6 +532,8 @@ void StateManagerGL::bindImageTexture(size_t unit,
         binding.layer   = layer;
         binding.access  = access;
         binding.format  = format;
+        printf("@@@@@@@@@@@@@> <realGLBindImageTexture(%zu, %i, %i, %i, %i, %i, 0x%x)>\n", unit,
+               texture, level, layered, layer, access, format);
         mFunctions->bindImageTexture(angle::base::checked_cast<GLuint>(unit), texture, level,
                                      layered, layer, access, format);
     }
@@ -1045,9 +1047,13 @@ void StateManagerGL::updateProgramImageBindings(const gl::Context *context)
         const TextureGL *textureGL     = SafeGetImplAs<TextureGL>(imageUnit.texture.get());
         if (textureGL)
         {
+            printf("@@@@@@@@@@> <bindImageTexture(%zu, %i, %i, %i, %i, %i, 0x%x)>\n",
+                   imageUnitIndex, textureGL->getTextureID(), imageUnit.level, imageUnit.layered,
+                   imageUnit.layer, imageUnit.access, imageUnit.format);
             bindImageTexture(imageUnitIndex, textureGL->getTextureID(), imageUnit.level,
                              imageUnit.layered, imageUnit.layer, imageUnit.access,
                              imageUnit.format);
+            printf("@@@@@@@@@@> </bindImageTexture>\n");
         }
         else
         {
@@ -2078,6 +2084,7 @@ angle::Result StateManagerGL::syncState(const gl::Context *context,
 
                     if (executable->getActiveImagesMask().any())
                     {
+                        printf("@@@@@@@> iter.setLaterBit(gl::State::DIRTY_BIT_IMAGE_BINDINGS);\n");
                         iter.setLaterBit(gl::State::DIRTY_BIT_IMAGE_BINDINGS);
                     }
 
@@ -2118,7 +2125,9 @@ angle::Result StateManagerGL::syncState(const gl::Context *context,
                 syncSamplersState(context);
                 break;
             case gl::State::DIRTY_BIT_IMAGE_BINDINGS:
+                printf("@@@@@@@> <updateProgramImageBindings>\n");
                 updateProgramImageBindings(context);
+                printf("@@@@@@@> </updateProgramImageBindings>\n");
                 break;
             case gl::State::DIRTY_BIT_TRANSFORM_FEEDBACK_BINDING:
                 syncTransformFeedbackState(context);
