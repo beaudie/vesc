@@ -16,6 +16,24 @@
       "message": "nit: can be `else` of first `if`?",
       "revId": "eb913ddb6f149f0f39e8f4308a7d502a9d0eea02",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "e7f1a0e4_f05fa44a",
+        "filename": "src/libANGLE/Image.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 499,
+      "author": {
+        "id": 1340649
+      },
+      "writtenOn": "2022-05-19T19:07:05Z",
+      "side": 1,
+      "message": "need `mState.format` to be set before i call `gl::IsYuvFormat`",
+      "parentUuid": "82a8117d_209e7fbb",
+      "revId": "eb913ddb6f149f0f39e8f4308a7d502a9d0eea02",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
