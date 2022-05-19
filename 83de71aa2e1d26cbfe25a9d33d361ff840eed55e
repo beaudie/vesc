@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "4628f678_201c69c1",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 4455,
+      "author": {
+        "id": 1520902
+      },
+      "writtenOn": "2022-05-19T00:30:15Z",
+      "side": 1,
+      "message": "The comment is a bit hard to understand, there might be some grammar error?",
+      "revId": "83de71aa2e1d26cbfe25a9d33d361ff840eed55e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "77a55a24_2bd69ae4",
+        "filename": "src/tests/gl_tests/StateChangeTest.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 9098,
+      "author": {
+        "id": 1520902
+      },
+      "writtenOn": "2022-05-19T00:30:15Z",
+      "side": 1,
+      "message": "If we run the tests with SupportsExtendedDynamicState and SupportsExtendedDynamicState2 disabled, does the test run through your dynamic state code change? For example: https://chromium-review.googlesource.com/c/angle/angle/+/3651582/3/src/libANGLE/renderer/vulkan/ContextVk.cpp#785, the dynamic state dirty bit is only set when SupportsExtendedDynamicState2 is enabled.",
+      "revId": "83de71aa2e1d26cbfe25a9d33d361ff840eed55e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
