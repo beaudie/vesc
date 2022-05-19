@@ -34,6 +34,24 @@
       "parentUuid": "82a8117d_209e7fbb",
       "revId": "eb913ddb6f149f0f39e8f4308a7d502a9d0eea02",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "319dd62c_ab386799",
+        "filename": "src/libANGLE/Image.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 499,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-05-19T19:35:51Z",
+      "side": 1,
+      "message": "Ack, could also move `mState.format \u003d ` above that `if`",
+      "parentUuid": "e7f1a0e4_f05fa44a",
+      "revId": "eb913ddb6f149f0f39e8f4308a7d502a9d0eea02",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
