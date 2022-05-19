@@ -176,6 +176,30 @@
       },
       "revId": "1ddf023ac34df535fd02b2b66b5a51d519da2bae",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "f4a31e38_064909c2",
+        "filename": "src/libANGLE/Context.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 3612,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2022-05-19T00:50:22Z",
+      "side": 1,
+      "message": "I think the problem is that the texture formats in src/libANGLE/formatutils.cpp are considered valid if EXT_texture_norm16 is advertised, regardless of whether the extension\u0027s been enabled, and that\u0027s why the WebGL conformance test was failing. It\u0027s been many months since I touched the associated code so don\u0027t remember all of the gates ANGLE puts in place.\n\nAgree with only exposing this extension on non-WebGL contexts for the time being, merging that back, and refining it later.",
+      "parentUuid": "4004eaac_d4c6a2bb",
+      "range": {
+        "startLine": 3606,
+        "startChar": 0,
+        "endLine": 3612,
+        "endChar": 9
+      },
+      "revId": "1ddf023ac34df535fd02b2b66b5a51d519da2bae",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
