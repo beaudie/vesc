@@ -1,0 +1,44 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "b54b2f9c_318c5917",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 5
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2022-05-19T13:16:21Z",
+      "side": 1,
+      "message": "very small nit, not necessary to fix.",
+      "revId": "6ae0c3214c4152d8154366315d63ba5e4310d4de",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "1b8af58c_4226ce79",
+        "filename": "src/tests/gl_tests/StateChangeTest.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 8410,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2022-05-19T13:16:21Z",
+      "side": 1,
+      "message": "nit: ideally this could be a color verification check with readpixels. that will ensure the draw is flushed and verify the rendering worked correctly.",
+      "range": {
+        "startLine": 8410,
+        "startChar": 4,
+        "endLine": 8410,
+        "endChar": 12
+      },
+      "revId": "6ae0c3214c4152d8154366315d63ba5e4310d4de",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
