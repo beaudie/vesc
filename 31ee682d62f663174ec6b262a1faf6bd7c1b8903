@@ -195,6 +195,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "f27cabf9_8d342eab",
+        "filename": "src/compiler/translator/tree_ops/AggregateAssignArraysInSSBOs.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 61,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-05-19T20:24:12Z",
+      "side": 1,
+      "message": "That sounds good. You can also generate a function that\u0027s specific to assigning to the particular SSBO in question, if that\u0027s static enough, then no need for parameter passing",
+      "parentUuid": "774aa7e5_98142a3f",
+      "revId": "31ee682d62f663174ec6b262a1faf6bd7c1b8903",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "03764e20_95056874",
         "filename": "src/compiler/translator/tree_ops/AggregateAssignArraysInSSBOs.h",
         "patchSetId": 1
