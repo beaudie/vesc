@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "6e9d4987_eb2e22bc",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1001921
+      },
+      "writtenOn": "2022-05-19T15:21:27Z",
+      "side": 1,
+      "message": "Yuxin, angle_restricted_trace_gold_tests on SwiftShader GPU on Linux are quite flaky\nhttps://ci.chromium.org/p/angle/builders/ci/linux-test?limit\u003d200\nI\u0027ve triaged 3 negative images.\nCould you please investigate?\nMaybe SwiftShader bug?",
+      "revId": "1e1a3d7ee4d987e79af2ed98aec29ab733f63e77",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
