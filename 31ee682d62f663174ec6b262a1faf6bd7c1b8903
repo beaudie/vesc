@@ -123,6 +123,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "fca4a7f3_aa03c110",
+        "filename": "src/compiler/translator/tree_ops/AggregateAssignArraysInSSBOs.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 61,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-05-19T18:30:34Z",
+      "side": 1,
+      "message": "Assign to temporary is a good idea. For all the above, you generally want to be in a situation where you can `insertStatementsInParentBlock`. For example for short-circuit, it\u0027s enough to run your transformation after `UnfoldShortCircuitToIf` in TranslatorHLSL (that\u0027s assuming it works as the name suggests). For the `if` case, `insertStatementsInParentBlock` should be enough. For the `f()` case, I think that\u0027s enough too, considering `UnfoldShortCircuitToIf` is run and assuming that takes care of short-circuit inside `if` too.\n\nThe best way in the end to make sure you have it all covered is to write all these in tests 😊\n\nSince you asked for example, I can think of `RewriteRowMajorMatrices` where I had to pay a lot of attention to these details, but beware that transformation is quite big.",
+      "parentUuid": "85e6eda0_f380f3d4",
+      "revId": "31ee682d62f663174ec6b262a1faf6bd7c1b8903",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "03764e20_95056874",
         "filename": "src/compiler/translator/tree_ops/AggregateAssignArraysInSSBOs.h",
         "patchSetId": 1
