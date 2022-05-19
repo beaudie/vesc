@@ -36,6 +36,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "acf7234c_e30cb8ad",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 8
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1109831
+      },
+      "writtenOn": "2022-05-19T01:30:35Z",
+      "side": 1,
+      "message": "When Shader starts a new compile(), it will clear current state which might be still being used by the programs it\u0027s being attached to. To prevent this, Shader should check all its attached programs. That\u0027s why we need to have the Shader to keep a list of programs in this CL. I think this would not hurt performance significantly as in reality developers mostly have their Shader only attached a single Program.\n\n@Geoff, how does this sound to you?",
+      "parentUuid": "acc10b0c_2d7032a7",
+      "revId": "2dfb24c2628157ea5bc01b559dfbabd25ee5aae3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "98389309_c07b4b22",
@@ -49,6 +67,30 @@
       "writtenOn": "2022-05-18T13:53:01Z",
       "side": 1,
       "message": "nit: resolveAllLinkingPrograms()",
+      "range": {
+        "startLine": 745,
+        "startChar": 34,
+        "endLine": 745,
+        "endChar": 52
+      },
+      "revId": "2dfb24c2628157ea5bc01b559dfbabd25ee5aae3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "ac865ec4_ae7635d1",
+        "filename": "src/libANGLE/Context.cpp",
+        "patchSetId": 8
+      },
+      "lineNbr": 745,
+      "author": {
+        "id": 1109831
+      },
+      "writtenOn": "2022-05-19T01:30:35Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "98389309_c07b4b22",
       "range": {
         "startLine": 745,
         "startChar": 34,
