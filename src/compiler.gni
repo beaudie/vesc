@@ -125,6 +125,8 @@ angle_translator_sources = [
   "src/compiler/translator/glslang_tab_autogen.h",
   "src/compiler/translator/glslang_wrapper.h",
   "src/compiler/translator/length_limits.h",
+  "src/compiler/translator/tree_ops/AggregateAssignArraysInSSBOs.cpp",
+  "src/compiler/translator/tree_ops/AggregateAssignArraysInSSBOs.h",
   "src/compiler/translator/tree_ops/ClampIndirectIndices.cpp",
   "src/compiler/translator/tree_ops/ClampIndirectIndices.h",
   "src/compiler/translator/tree_ops/ClampPointSize.cpp",

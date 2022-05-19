@@ -7,6 +7,7 @@
 #include "compiler/translator/TranslatorHLSL.h"
 
 #include "compiler/translator/OutputHLSL.h"
+#include "compiler/translator/tree_ops/AggregateAssignArraysInSSBOs.h"
 #include "compiler/translator/tree_ops/RemoveDynamicIndexing.h"
 #include "compiler/translator/tree_ops/RewriteTexelFetchOffset.h"
 #include "compiler/translator/tree_ops/SimplifyLoopConditions.h"
@@ -96,6 +97,17 @@ bool TranslatorHLSL::translate(TIntermBlock *root,
     if (!SeparateArrayConstructorStatements(this, root))
     {
         return false;
+    }
+
+    if (getShaderVersion() >= 310)
+    {
+        // Do element-by-element assignments of arrays in SSBOs. This allows the D3D backend to use
+        // RWByteAddressBuffer.Load() and .Store(), which only operate on values up to 16 bytes in
+        // size. Note that this must be done before SeparateExpressionsReturningArrays.
+        if (!sh::AggregateAssignArraysInSSBOs(this, root, &getSymbolTable()))
+        {
+            return false;
+        }
     }
 
     if (!SeparateExpressionsReturningArrays(this, root, &getSymbolTable()))
