@@ -69,6 +69,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "cedeefd5_70e7c883",
+        "filename": "include/GLSLANG/ShaderLang.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 29,
+      "author": {
+        "id": 1116015
+      },
+      "writtenOn": "2022-05-19T20:02:08Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "51a62a1d_f04b4933",
+      "revId": "31ee682d62f663174ec6b262a1faf6bd7c1b8903",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "e5409c8e_73e88bdc",
@@ -82,6 +100,24 @@
       "writtenOn": "2022-05-19T18:10:17Z",
       "side": 1,
       "message": "Instead of adding a flag, I suggest doing the transformation in TranslatorHLSL (and place the transformation under `d3d/` so it doesn\u0027t get built everywhere\n\n(then you wouldn\u0027t need to increment the version above)",
+      "revId": "31ee682d62f663174ec6b262a1faf6bd7c1b8903",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "da8fd970_5bd386a8",
+        "filename": "include/GLSLANG/ShaderLang.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 361,
+      "author": {
+        "id": 1116015
+      },
+      "writtenOn": "2022-05-19T20:02:08Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "e5409c8e_73e88bdc",
       "revId": "31ee682d62f663174ec6b262a1faf6bd7c1b8903",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
