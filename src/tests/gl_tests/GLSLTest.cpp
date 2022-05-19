@@ -5093,6 +5093,86 @@ TEST_P(GLSLTest_ES31, ImageLoadAfterClear)
     ASSERT_GL_NO_ERROR();
 }
 
+// Check that the volatile keyword combined with memoryBarrierImage() allow load/store from
+// different aliases of the same image -- anglebug.com/7343
+//
+// ES 3.1 requires most image formats to be either readonly or writeonly. (It appears that this
+// limitation exists due to atomics, since we still have the volatile keyword and the built-in
+// memoryBarrierImage(), which ought to allow us to load and store different aliases of the same
+// image.) To test this, we create two aliases of the same image -- one for reading and one for
+// writing.
+TEST_P(GLSLTest_ES31, AliasedLoadStore)
+{
+    GLTexture tex;
+    glBindTexture(GL_TEXTURE_2D, tex);
+    glTexStorage2D(GL_TEXTURE_2D, 1, GL_RGBA8, getWindowWidth(), getWindowHeight());
+
+    GLFramebuffer fbo;
+    glBindFramebuffer(GL_FRAMEBUFFER, fbo);
+    glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, tex, 0);
+    glClearColor(1, 0, 0, 1);
+    glClear(GL_COLOR_BUFFER_BIT);
+    glMemoryBarrier(GL_FRAMEBUFFER_BARRIER_BIT | GL_SHADER_IMAGE_ACCESS_BARRIER_BIT);
+
+    ANGLE_GL_PROGRAM(program,
+
+                     R"(#version 310 es
+                     precision highp float;
+                     void main() {
+                         gl_Position.x = ((gl_VertexID & 1) == 0 ? -1.0 : 1.0);
+                         gl_Position.y = ((gl_VertexID & 2) == 0 ? -1.0 : 1.0);
+                         gl_Position.zw = vec2(0, 1);
+                     })",
+
+                     R"(#version 310 es
+                     precision highp float;
+                     layout(binding=0, rgba8) volatile coherent readonly highp uniform image2D img_r;
+                     layout(binding=1, rgba8) volatile coherent writeonly highp uniform image2D img_w;
+                     uniform vec4 drawColor;
+                     void main() {
+                         ivec2 coord = ivec2(floor(gl_FragCoord.xy));
+                         vec4 oldval = imageLoad(img_r, coord);
+                         memoryBarrierImage();
+                         imageStore(img_w, coord, oldval + drawColor);
+                     })");
+
+    ASSERT_TRUE(program.valid());
+    glUseProgram(program.get());
+    GLint drawColorLocation = glGetUniformLocation(program, "drawColor");
+
+    // Tell the driver both aliases are GL_READ_WRITE, since that's how we will actually be using
+    // the underlying memory.
+    glBindImageTexture(0, tex, 0, GL_FALSE, 0, GL_READ_WRITE, GL_RGBA8);
+    glBindImageTexture(1, tex, 0, GL_FALSE, 0, GL_READ_WRITE, GL_RGBA8);
+
+    glBindFramebuffer(GL_FRAMEBUFFER, 0);
+    glUniform4f(drawColorLocation, 0, 1, 0, 0);
+    glDrawArrays(GL_TRIANGLE_STRIP, 0, 4);
+    glMemoryBarrier(GL_SHADER_IMAGE_ACCESS_BARRIER_BIT);
+
+    // Ensure the cleared color was loaded before we stored.
+    glBindFramebuffer(GL_FRAMEBUFFER, fbo);
+    EXPECT_PIXEL_RECT_EQ(0, 0, getWindowWidth(), getWindowHeight(), GLColor::yellow);
+
+    ASSERT_GL_NO_ERROR();
+
+    // Now make two draws to ensure the imageStore is coherent.
+    glClear(GL_COLOR_BUFFER_BIT);
+    glBindFramebuffer(GL_FRAMEBUFFER, 0);
+    glUniform4f(drawColorLocation, 0, 1, 0, 0);
+    glDrawArrays(GL_TRIANGLE_STRIP, 0, 4);
+    glMemoryBarrier(GL_SHADER_IMAGE_ACCESS_BARRIER_BIT);
+    glUniform4f(drawColorLocation, 0, 0, 1, 0);
+    glDrawArrays(GL_TRIANGLE_STRIP, 0, 4);
+    glMemoryBarrier(GL_SHADER_IMAGE_ACCESS_BARRIER_BIT);
+
+    // Ensure the first imageStore was loaded by the second imageLoad.
+    glBindFramebuffer(GL_FRAMEBUFFER, fbo);
+    EXPECT_PIXEL_RECT_EQ(0, 0, getWindowWidth(), getWindowHeight(), GLColor::white);
+
+    ASSERT_GL_NO_ERROR();
+}
+
 // Test that structs containing arrays of samplers work as expected.
 TEST_P(GLSLTest_ES31, StructArraySampler)
 {
