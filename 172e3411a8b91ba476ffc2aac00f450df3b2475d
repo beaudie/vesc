@@ -159,6 +159,24 @@
       "parentUuid": "7c2cc082_97b9d059",
       "revId": "172e3411a8b91ba476ffc2aac00f450df3b2475d",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "b998f84f_4f5a5729",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1357502
+      },
+      "writtenOn": "2022-05-19T16:59:50Z",
+      "side": 1,
+      "message": "\u003e (Coming back to this, 30min before I go on vacation for a week..)\n\u003e \n\u003e \u003e We can make this workaround apply only to WebGL contexts.\n\u003e \n\u003e The original problem on android that motivated this workaround was not webgl. It was renderer cc picking tile sizes based on viewport (limited by max texture size), and webview having unreasonably large viewport so max texture actually applied. So limiting only webgl (and canvas) could make the original problem on android come back. But of course now that we\u0027ve had this workaround apply universally on android for so long, who knows what other issues it\u0027s hiding :(\n\u003e \n\ncc should rely on RasterDecoder caps anyway, I think discussion here is more about do we want this workaround for webgl and if so, it\u0027s preferable to keep in in Angle because validation is complicated and reimplementing it in decoder is not what we want. \n\nSo the suggestion was that the angle workaround will be used only for webgl contexts because the client will issue arbitrary gl commands and require that validation. \n\nIt\u0027s not a problem for cc/canvas, so we just communicate the \"soft\" limit to them via caps. They still can allocate larger things, but normally they shouldn\u0027t and that\u0027s all we care about.\n\n\n\u003e \u003e If it needs to be fully configurable, we can pass an int to context creation so Chrome can supply the limit directly.\n\u003e \n\u003e Thinking out loud if we do this and use different limits for different angle context. Do we have clean split for different angle context for different use cases (cc, webgl, canvas, display compositor, raster, and whatever else I\u0027m forgetting)? I guess chromium side doesn\u0027t need to use virtual context with angle so I guess yes?\n\u003e \n\u003e But how would something like shared image that specifically spans multiple context pick its limits? Highest one among all the different angle contexts? I hope we don\u0027t ever share textures created in display context to cc or webgl context that has lower limits? (Actually isn\u0027t this also a problem with the approach in this CL to limit only command buffer clients?)\n\u003e \n\nThat\u0027s kinda tricky. Display compositor can create textures for CopyOutputRequests and ship to the client, I believe only CrOS uses it this way (and it\u0027s to the browser, but browser will use gles2 command decoder to work with it). That should have the same limits though.\n\nWhat makes it interesting is that there is stuff that can be imported to canvas/webgl. One of things canvas2d can be imported to webgl. But as long as we tell the canvas the right caps it should be within limits. The other thing is the video, but I guess it\u0027s a separate problem of how import large video in 4096 limited context.\n\n\n\u003e \u003e Note, for canvas I don\u0027t propose to affect any GL commands, only gpu::Capabilities that the decoder sends to the client.\n\u003e \n\u003e Does that mean gpu::Capabilities exposes a limit that\u0027s different from GL_MAX_TEXTURE_SIZE? Feels like that way lies madness from all the confusion it would cause..\n\nFor canvas2d, yeah. But canvas shouldn\u0027t rely on GL_MAX_TEXTURE_SIZE and with OOP-C this isn\u0027t a problem at all (it will go to the raster decoder). For WebGL they will match.",
+      "parentUuid": "ee8a99a9_634a837e",
+      "revId": "172e3411a8b91ba476ffc2aac00f450df3b2475d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
