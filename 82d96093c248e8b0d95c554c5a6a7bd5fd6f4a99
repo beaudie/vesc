@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "ab5035c3_33453392",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 5
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-05-19T17:16:12Z",
+      "side": 1,
+      "message": "Re-LGTM",
+      "revId": "82d96093c248e8b0d95c554c5a6a7bd5fd6f4a99",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "776986a8_b9d68169",
+        "filename": "src/tests/gl_tests/GLSLTest.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 15495,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-05-19T17:16:12Z",
+      "side": 1,
+      "message": "nit: some whitespace to clean up. `%s/\\s\\+$//` if in `vim`, or equivalent with `sed` should do the trick",
+      "revId": "82d96093c248e8b0d95c554c5a6a7bd5fd6f4a99",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
