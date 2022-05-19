@@ -35,6 +35,23 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "00a0d38c_c8b5106b",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1116015
+      },
+      "writtenOn": "2022-05-19T18:24:45Z",
+      "side": 1,
+      "message": "Thanks for your reviews!",
+      "revId": "31ee682d62f663174ec6b262a1faf6bd7c1b8903",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "51a62a1d_f04b4933",
@@ -82,6 +99,24 @@
       "writtenOn": "2022-05-19T18:10:17Z",
       "side": 1,
       "message": "Be ware of tricky situations (assume `a \u003d b` is what you are transforming here):\n\n```\na \u003d b \u003d c;\nif (a \u003d b, flag) { ... }\nx \u003d y \u0026\u0026 (a \u003d b, z)\nf(a \u003d b)\n```\n\nYou\u0027d wish AST transformations would be this easy ;)",
+      "revId": "31ee682d62f663174ec6b262a1faf6bd7c1b8903",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "85e6eda0_f380f3d4",
+        "filename": "src/compiler/translator/tree_ops/AggregateAssignArraysInSSBOs.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 61,
+      "author": {
+        "id": 1116015
+      },
+      "writtenOn": "2022-05-19T18:24:45Z",
+      "side": 1,
+      "message": "Yeah, I think this will probably also fail for;\n\nbuffer.a \u003d func();\n\nwhere func() has side effects.\n\nDo you think assigning the RHS to a temporary will be enough for at least this and your #1 above?\n\nFor the others, are there any good example transforms? E.g., the assignment in #2 probably be pulled out into its own statement? In #3, the \u0026\u0026 gets turned into an if-statement, then the assignment is pulled out of the comma into its own statement?",
+      "parentUuid": "1cb3a952_d91c10bf",
       "revId": "31ee682d62f663174ec6b262a1faf6bd7c1b8903",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
