@@ -18,6 +18,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "7ab1c348_56f90282",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1518892
+      },
+      "writtenOn": "2022-05-19T02:10:53Z",
+      "side": 1,
+      "message": "Thanks for the code review!",
+      "parentUuid": "ce19d300_5298708f",
+      "revId": "6bbc63cf49035b8a6d28f1aaadbc895e640cac53",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "0ee5725f_c9d21a93",
@@ -35,6 +53,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "6cdab561_2cb10bcc",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 2473,
+      "author": {
+        "id": 1518892
+      },
+      "writtenOn": "2022-05-19T02:10:53Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "0ee5725f_c9d21a93",
+      "revId": "6bbc63cf49035b8a6d28f1aaadbc895e640cac53",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "244910c4_d505f6d7",
@@ -48,6 +84,30 @@
       "writtenOn": "2022-05-19T02:04:51Z",
       "side": 1,
       "message": "naming nit: `LineWidthOutOfRangeDoesntCrash`",
+      "range": {
+        "startLine": 8380,
+        "startChar": 27,
+        "endLine": 8380,
+        "endChar": 46
+      },
+      "revId": "6bbc63cf49035b8a6d28f1aaadbc895e640cac53",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "49a82738_63a3f0f0",
+        "filename": "src/tests/gl_tests/StateChangeTest.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 8380,
+      "author": {
+        "id": 1518892
+      },
+      "writtenOn": "2022-05-19T02:10:53Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "244910c4_d505f6d7",
       "range": {
         "startLine": 8380,
         "startChar": 27,
@@ -81,6 +141,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "e2ab2e76_0e0b0f38",
+        "filename": "src/tests/gl_tests/StateChangeTest.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 8391,
+      "author": {
+        "id": 1518892
+      },
+      "writtenOn": "2022-05-19T02:10:53Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "c34d0a8f_675000ae",
+      "range": {
+        "startLine": 8391,
+        "startChar": 50,
+        "endLine": 8391,
+        "endChar": 66
+      },
+      "revId": "6bbc63cf49035b8a6d28f1aaadbc895e640cac53",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "671a971d_9b6af130",
@@ -94,6 +178,30 @@
       "writtenOn": "2022-05-19T02:04:51Z",
       "side": 1,
       "message": "Can be removed entirely",
+      "range": {
+        "startLine": 8405,
+        "startChar": 0,
+        "endLine": 8414,
+        "endChar": 52
+      },
+      "revId": "6bbc63cf49035b8a6d28f1aaadbc895e640cac53",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "560e85fe_20287d33",
+        "filename": "src/tests/gl_tests/StateChangeTest.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 8414,
+      "author": {
+        "id": 1518892
+      },
+      "writtenOn": "2022-05-19T02:10:53Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "671a971d_9b6af130",
       "range": {
         "startLine": 8405,
         "startChar": 0,
