@@ -56,6 +56,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "f9b1fd07_c4444664",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 8
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2022-05-19T14:03:58Z",
+      "side": 1,
+      "message": "What about using a per-shader mutex to protect the compiled state of the shader?\n\nWhen linking, we take the mutex for each attached shader.\n\nWe also take the mutex when compiling each shader.\n\nWould this be sufficient protection?",
+      "parentUuid": "acf7234c_e30cb8ad",
+      "revId": "2dfb24c2628157ea5bc01b559dfbabd25ee5aae3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "98389309_c07b4b22",
         "filename": "src/libANGLE/Context.cpp",
         "patchSetId": 8
