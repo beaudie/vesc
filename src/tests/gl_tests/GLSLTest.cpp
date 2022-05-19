@@ -5093,6 +5093,64 @@ TEST_P(GLSLTest_ES31, ImageLoadAfterClear)
     ASSERT_GL_NO_ERROR();
 }
 
+// Check that the volatile keyword combined with memoryBarrierImage() allow load/store from
+// different aliases of the same image -- anglebug.com/7343
+//
+// ES 3.1 requires most image formats to be either readonly or writeonly. (It appears that this
+// limitation exists due to atomics, since we still have the volatile keyword and the built-in
+// memoryBarrierImage(), which ought to allow us to load and store different aliases of the same
+// image.) To test this, we create two aliases of the same image -- one for reading and one for
+// writing.
+TEST_P(GLSLTest_ES31, AliasedLoadStore)
+{
+    GLTexture tex;
+    glBindTexture(GL_TEXTURE_2D, tex);
+    glTexStorage2D(GL_TEXTURE_2D, 1, GL_RGBA8, getWindowWidth(), getWindowHeight());
+
+    GLFramebuffer fbo;
+    glBindFramebuffer(GL_FRAMEBUFFER, fbo);
+    glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, tex, 0);
+    glClearColor(0, 1, 0, 0);
+    glClear(GL_COLOR_BUFFER_BIT);
+    glMemoryBarrier(GL_FRAMEBUFFER_BARRIER_BIT | GL_SHADER_IMAGE_ACCESS_BARRIER_BIT);
+
+    ANGLE_GL_PROGRAM(program,
+
+                     R"(#version 310 es
+                     precision highp float;
+                     void main() {
+                         gl_Position.x = ((gl_VertexID & 1) == 0 ? -1.0 : 1.0);
+                         gl_Position.y = ((gl_VertexID & 2) == 0 ? -1.0 : 1.0);
+                         gl_Position.zw = vec2(0, 1);
+                     })",
+
+                     R"(#version 310 es
+                     precision highp float;
+                     layout(binding=0, rgba8) volatile readonly highp uniform image2D img_r;
+                     layout(binding=0, rgba8) volatile writeonly highp uniform image2D img_w;
+                     void main() {
+                         ivec2 coord = ivec2(floor(gl_FragCoord.xy));
+                         vec4 oldval = imageLoad(img_r, coord);
+                         memoryBarrierImage();
+                         imageStore(img_w, coord, oldval + vec4(1, 0, 0, 1));
+                     })");
+
+    ASSERT_TRUE(program.valid());
+    glUseProgram(program.get());
+
+    // Tell the driver the binding is GL_READ_WRITE, since one alias will be readonly and the other
+    // will be writeonly.
+    glBindImageTexture(0, tex, 0, GL_FALSE, 0, GL_READ_WRITE, GL_RGBA8);
+    glBindFramebuffer(GL_FRAMEBUFFER, 0);
+    glDrawArrays(GL_TRIANGLE_STRIP, 0, 4);
+    glMemoryBarrier(GL_SHADER_IMAGE_ACCESS_BARRIER_BIT);
+
+    glBindFramebuffer(GL_FRAMEBUFFER, fbo);
+    EXPECT_PIXEL_RECT_EQ(0, 0, getWindowWidth(), getWindowHeight(), GLColor::yellow);
+
+    ASSERT_GL_NO_ERROR();
+}
+
 // Test that structs containing arrays of samplers work as expected.
 TEST_P(GLSLTest_ES31, StructArraySampler)
 {

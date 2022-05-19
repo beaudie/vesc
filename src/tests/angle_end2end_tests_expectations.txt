@@ -626,3 +626,8 @@
 // imageLoad isn't fully implemented for fragment shaders on D3D11.
 7355 INTEL OPENGL : GLSLTest_ES31.ImageLoadAfterClear/* = SKIP
 7355 D3D11 : GLSLTest_ES31.ImageLoadAfterClear/* = SKIP
+
+// UAVs don't allow aliasing.
+// Intel Mesa 19.0.2 appears to have a driver bug.
+//3032 D3D11 : GLSLTest_ES31.AliasedLoadStore/* = SKIP
+//7355 INTEL OPENGL : GLSLTest_ES31.AliasedLoadStore/* = SKIP
