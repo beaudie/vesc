@@ -84,6 +84,29 @@
       "message": "Be ware of tricky situations (assume `a \u003d b` is what you are transforming here):\n\n```\na \u003d b \u003d c;\nif (a \u003d b, flag) { ... }\nx \u003d y \u0026\u0026 (a \u003d b, z)\nf(a \u003d b)\n```\n\nYou\u0027d wish AST transformations would be this easy ;)",
       "revId": "31ee682d62f663174ec6b262a1faf6bd7c1b8903",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "03764e20_95056874",
+        "filename": "src/compiler/translator/tree_ops/AggregateAssignArraysInSSBOs.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 2,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2022-05-19T18:10:28Z",
+      "side": 1,
+      "message": "nit: 2022",
+      "range": {
+        "startLine": 2,
+        "startChar": 13,
+        "endLine": 2,
+        "endChar": 18
+      },
+      "revId": "31ee682d62f663174ec6b262a1faf6bd7c1b8903",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
