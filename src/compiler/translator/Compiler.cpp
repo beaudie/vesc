@@ -24,6 +24,7 @@
 #include "compiler/translator/ValidateTypeSizeLimitations.h"
 #include "compiler/translator/ValidateVaryingLocations.h"
 #include "compiler/translator/VariablePacker.h"
+#include "compiler/translator/tree_ops/AggregateAssignArraysInSSBOs.h"
 #include "compiler/translator/tree_ops/ClampIndirectIndices.h"
 #include "compiler/translator/tree_ops/ClampPointSize.h"
 #include "compiler/translator/tree_ops/DeclareAndInitBuiltinsForInstancedMultiview.h"
@@ -889,6 +890,14 @@ bool TCompiler::checkAndSimplifyAST(TIntermBlock *root,
     {
         if (!EmulateGLFragColorBroadcast(this, root, mResources.MaxDrawBuffers, &mOutputVariables,
                                          &mSymbolTable, mShaderVersion))
+        {
+            return false;
+        }
+    }
+
+    if ((compileOptions & SH_AGGREGATE_ASSIGN_ARRAYS_IN_SSBOS) != 0)
+    {
+        if (!AggregateAssignArraysInSSBOs(this, root, &mSymbolTable))
         {
             return false;
         }

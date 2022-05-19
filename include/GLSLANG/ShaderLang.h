@@ -355,6 +355,11 @@ const ShCompileOptions SH_ADD_EXPLICIT_BOOL_CASTS = UINT64_C(1) << 59;
 // ceil()ed instead.
 const ShCompileOptions SH_ROUND_OUTPUT_AFTER_DITHERING = UINT64_C(1) << 60;
 
+// Do element-by-element assignments of arrays in SSBOs. This allows the D3D backend to use
+// RWByteAddressBuffer.Load() and .Store(), which only operate on values up to 16 bytes in size.
+
+const ShCompileOptions SH_AGGREGATE_ASSIGN_ARRAYS_IN_SSBOS = UINT64_C(1) << 61;
+
 // The 64 bits hash function. The first parameter is the input string; the
 // second parameter is the string length.
 using ShHashFunction64 = khronos_uint64_t (*)(const char *, size_t);

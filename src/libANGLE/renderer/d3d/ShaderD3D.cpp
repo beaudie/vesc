@@ -286,6 +286,8 @@ std::shared_ptr<WaitableCompileEvent> ShaderD3D::compile(const gl::Context *cont
     }
 #endif
 
+    additionalOptions |= SH_AGGREGATE_ASSIGN_ARRAYS_IN_SSBOS;
+
     additionalOptions |= mAdditionalOptions;
 
     options |= additionalOptions;
