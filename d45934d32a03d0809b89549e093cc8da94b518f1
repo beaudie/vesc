@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "de73cacf_0cba3152",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1001921
+      },
+      "writtenOn": "2022-05-19T09:18:59Z",
+      "side": 1,
+      "message": "Jamie, you wake up the earliest, PTAL.\nYuxin, FYI, this is to fix \"The Chromium into ANGLE AutoRoller failed to create a CL\" errors.",
+      "revId": "d45934d32a03d0809b89549e093cc8da94b518f1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
