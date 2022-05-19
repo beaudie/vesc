@@ -621,3 +621,6 @@
 
 // Produces VVL errors
 7357 VULKAN : FramebufferTest_ES3.FramebufferConditionalFeedbackLoop/* = SKIP
+
+// UAVs don't allow aliasing.
+3032 D3D11 : GLSLTest_ES31.AliasedLoadStore/* = SKIP
