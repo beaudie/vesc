@@ -5046,6 +5046,121 @@ void main(void)
     glUnmapBuffer(GL_SHADER_STORAGE_BUFFER);
 }
 
+// Check an image loads properly after clear anglebug.com/7343
+TEST_P(GLSLTest_ES31, LoadAfterClear)
+{
+    GLTexture tex;
+    glBindTexture(GL_TEXTURE_2D, tex);
+    glTexStorage2D(GL_TEXTURE_2D, 1, GL_RGBA8, getWindowWidth(), getWindowHeight());
+
+    GLFramebuffer fbo;
+    glBindFramebuffer(GL_FRAMEBUFFER, fbo);
+    glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, tex, 0);
+    glClearColor(0, 1, 0, 0);
+    glClear(GL_COLOR_BUFFER_BIT);
+
+    ANGLE_GL_PROGRAM(program,
+                     R"(#version 310 es
+                     precision highp float;
+                     void main() {
+                         gl_Position.x = ((gl_VertexID & 1) == 0 ? -1.0 : 1.0);
+                         gl_Position.y = ((gl_VertexID & 2) == 0 ? -1.0 : 1.0);
+                         gl_Position.zw = vec2(0, 1);
+                     })",
+                     R"(#version 310 es
+                     precision highp float;
+                     layout(binding=0, rgba8) volatile readonly highp uniform image2D img_r;
+                     layout(binding=1, rgba8) volatile writeonly highp uniform image2D img_w;
+                     out vec4 fragColor;
+                     void main() {
+                         ivec2 coord = ivec2(floor(gl_FragCoord.xy));
+                         vec4 oldval = imageLoad(img_r, coord);
+                         memoryBarrierImage();
+                         vec4 color = oldval + vec4(1, 0, 0, 1);
+                         imageStore(img_w, coord, color);
+                         fragColor = color;
+                     })");
+
+    ASSERT_TRUE(program.valid());
+    glUseProgram(program.get());
+
+    // Tell the driver both bindings are GL_READ_WRITE. This seems more descriptive of our intent,
+    // even though one will be used exclusively for reading and the other for writing. (e.g., if the
+    // texture gets bound separately as GL_READ_ONLY and GL_WRITE_ONLY, does that mean _can't_ read
+    // _or_ write?)
+    glBindImageTexture(0, tex, 0, GL_FALSE, 0, GL_READ_WRITE, GL_RGBA8);
+    glBindImageTexture(1, tex, 0, GL_FALSE, 0, GL_READ_WRITE, GL_RGBA8);
+
+    glBindFramebuffer(GL_FRAMEBUFFER, 0);
+    glMemoryBarrier(GL_ALL_BARRIER_BITS);
+    glDrawArrays(GL_TRIANGLE_STRIP, 0, 4);
+    glMemoryBarrier(GL_ALL_BARRIER_BITS);
+
+    // glBindFramebuffer(GL_FRAMEBUFFER, fbo);
+    EXPECT_PIXEL_RECT_EQ(0, 0, getWindowWidth(), getWindowHeight(), GLColor::yellow);
+
+    ASSERT_GL_NO_ERROR();
+}
+
+// Check that the volatile keyword allows load/store from different aliases of the same image:
+// anglebug.com/7343
+//
+// ES 3.1 requires most image formats to be either readonly or writeonly. (It appears that this
+// limitation exists due to atomics; a read-modify-write operation should still be supported as long
+// as the appropriate barriers and "volatile" qualifiers and are in place.) To test this, we create
+// two aliases of the same image -- one for reading and one for writing.
+TEST_P(GLSLTest_ES31, AliasedLoadStore)
+{
+    GLTexture tex;
+    glBindTexture(GL_TEXTURE_2D, tex);
+    glTexStorage2D(GL_TEXTURE_2D, 1, GL_RGBA8, getWindowWidth(), getWindowHeight());
+
+    GLFramebuffer fbo;
+    glBindFramebuffer(GL_FRAMEBUFFER, fbo);
+    glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, tex, 0);
+    glClearColor(0, 1, 0, 0);
+    glClear(GL_COLOR_BUFFER_BIT);
+
+    ANGLE_GL_PROGRAM(program,
+                     R"(#version 310 es
+                     precision highp float;
+                     void main() {
+                         gl_Position.x = ((gl_VertexID & 1) == 0 ? -1.0 : 1.0);
+                         gl_Position.y = ((gl_VertexID & 2) == 0 ? -1.0 : 1.0);
+                         gl_Position.zw = vec2(0, 1);
+                     })",
+                     R"(#version 310 es
+                     precision highp float;
+                     layout(binding=0, rgba8) volatile readonly highp uniform image2D img_r;
+                     layout(binding=1, rgba8) volatile writeonly highp uniform image2D img_w;
+                     void main() {
+                         ivec2 coord = ivec2(floor(gl_FragCoord.xy));
+                         vec4 oldval = imageLoad(img_r, coord);
+                         memoryBarrierImage();
+                         imageStore(img_w, coord, oldval + vec4(1, 0, 0, 1));
+                     })");
+
+    ASSERT_TRUE(program.valid());
+    glUseProgram(program.get());
+
+    // Tell the driver both bindings are GL_READ_WRITE. This seems more descriptive of our intent,
+    // even though one will be used exclusively for reading and the other for writing. (e.g., if the
+    // texture gets bound separately as GL_READ_ONLY and GL_WRITE_ONLY, does that mean _can't_ read
+    // _or_ write?)
+    glBindImageTexture(0, tex, 0, GL_FALSE, 0, GL_READ_WRITE, GL_RGBA8);
+    glBindImageTexture(1, tex, 0, GL_FALSE, 0, GL_READ_WRITE, GL_RGBA8);
+
+    glBindFramebuffer(GL_FRAMEBUFFER, 0);
+    glMemoryBarrier(GL_ALL_BARRIER_BITS);
+    glDrawArrays(GL_TRIANGLE_STRIP, 0, 4);
+    glMemoryBarrier(GL_ALL_BARRIER_BITS);
+
+    glBindFramebuffer(GL_FRAMEBUFFER, fbo);
+    EXPECT_PIXEL_RECT_EQ(0, 0, getWindowWidth(), getWindowHeight(), GLColor::yellow);
+
+    ASSERT_GL_NO_ERROR();
+}
+
 // Test that structs containing arrays of samplers work as expected.
 TEST_P(GLSLTest_ES31, StructArraySampler)
 {
