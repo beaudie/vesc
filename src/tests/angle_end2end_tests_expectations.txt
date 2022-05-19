@@ -621,3 +621,8 @@
 
 // Produces VVL errors
 7357 VULKAN : FramebufferTest_ES3.FramebufferConditionalFeedbackLoop/* = SKIP
+
+// UAVs don't allow aliasing.
+// Intel Mesa 19.0.2 appears to have a driver bug.
+3032 D3D11 : GLSLTest_ES31.AliasedLoadStore/* = SKIP
+7355 INTEL OPENGL : GLSLTest_ES31.AliasedLoadStore/* = SKIP
