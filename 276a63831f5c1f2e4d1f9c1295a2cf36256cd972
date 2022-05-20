@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ea02826d_068bf90d",
+        "filename": "src/libANGLE/capture/trace_fixture.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 15,
+      "author": {
+        "id": 1491823
+      },
+      "writtenOn": "2022-05-20T14:50:08Z",
+      "side": 1,
+      "message": "That should not be part of this patch.",
+      "revId": "276a63831f5c1f2e4d1f9c1295a2cf36256cd972",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
