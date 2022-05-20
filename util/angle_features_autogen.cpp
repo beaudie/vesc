@@ -173,6 +173,7 @@ constexpr PackedEnumMap<Feature, const char *> kFeatureNames = {{
     {Feature::PreferCPUForBufferSubData, "preferCPUForBufferSubData"},
     {Feature::PreferDeviceLocalMemoryHostVisible, "preferDeviceLocalMemoryHostVisible"},
     {Feature::PreferDrawClearOverVkCmdClearAttachments, "preferDrawClearOverVkCmdClearAttachments"},
+    {Feature::PreferLinearFilterForYUV, "preferLinearFilterForYUV"},
     {Feature::PreferSkippingInvalidateForEmulatedFormats,
      "preferSkippingInvalidateForEmulatedFormats"},
     {Feature::PreferSubmitAtFBOBoundary, "preferSubmitAtFBOBoundary"},

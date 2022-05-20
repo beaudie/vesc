@@ -359,12 +359,16 @@ angle::Result HardwareBufferImageSiblingVkAndroid::initImpl(DisplayVk *displayVk
                        VK_ERROR_FEATURE_NOT_PRESENT);
         ASSERT(externalFormat.pNext == nullptr);
 
+        const VkFilter filter = (renderer->getFeatures().preferLinearFilterForYUV.enabled)
+                                    ? VK_FILTER_LINEAR
+                                    : VK_FILTER_NEAREST;
+
         // Update the SamplerYcbcrConversionCache key
         mImage->updateYcbcrConversionDesc(
             renderer, bufferFormatProperties.externalFormat,
             bufferFormatProperties.suggestedYcbcrModel, bufferFormatProperties.suggestedYcbcrRange,
             bufferFormatProperties.suggestedXChromaOffset,
-            bufferFormatProperties.suggestedYChromaOffset, VK_FILTER_NEAREST,
+            bufferFormatProperties.suggestedYChromaOffset, filter,
             bufferFormatProperties.samplerYcbcrConversionComponents, angle::FormatID::NONE);
         mYUV = true;
     }

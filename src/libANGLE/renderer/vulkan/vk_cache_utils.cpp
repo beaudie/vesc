@@ -3544,12 +3544,19 @@ angle::Result SamplerDesc::init(ContextVk *contextVk, Sampler *sampler) const
             contextVk, mYcbcrConversionDesc, &samplerYcbcrConversionInfo.conversion));
         AddToPNextChain(&createInfo, &samplerYcbcrConversionInfo);
 
+        const VkFilter filter =
+            (contextVk->getRenderer()->getFeatures().preferLinearFilterForYUV.enabled)
+                ? VK_FILTER_LINEAR
+                : VK_FILTER_NEAREST;
+
         // Vulkan spec requires these settings:
         createInfo.addressModeU            = VK_SAMPLER_ADDRESS_MODE_CLAMP_TO_EDGE;
         createInfo.addressModeV            = VK_SAMPLER_ADDRESS_MODE_CLAMP_TO_EDGE;
         createInfo.addressModeW            = VK_SAMPLER_ADDRESS_MODE_CLAMP_TO_EDGE;
         createInfo.anisotropyEnable        = VK_FALSE;
         createInfo.unnormalizedCoordinates = VK_FALSE;
+        createInfo.magFilter               = filter;
+        createInfo.minFilter               = filter;
     }
 
     VkSamplerCustomBorderColorCreateInfoEXT customBorderColorInfo = {};
