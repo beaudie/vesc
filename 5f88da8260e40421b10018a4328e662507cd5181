@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "98f21099_940fa668",
+        "filename": "src/tests/BUILD.gn",
+        "patchSetId": 1
+      },
+      "lineNbr": 1223,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2022-05-20T13:57:38Z",
+      "side": 1,
+      "message": "small nit: preferred syntax is anglebug.com/7349",
+      "range": {
+        "startLine": 1223,
+        "startChar": 9,
+        "endLine": 1223,
+        "endChar": 21
+      },
+      "revId": "5f88da8260e40421b10018a4328e662507cd5181",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
