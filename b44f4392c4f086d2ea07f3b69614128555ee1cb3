@@ -18,6 +18,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "8dc9133a_179955e4",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 2
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2022-05-20T02:44:45Z",
+      "side": 1,
+      "message": "I didn\u0027t mean to trigger autosubmit. Never mind.",
+      "parentUuid": "a9cfed01_d6736931",
+      "revId": "b44f4392c4f086d2ea07f3b69614128555ee1cb3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "e1869b8f_93ab0b8b",
@@ -31,6 +49,24 @@
       "writtenOn": "2022-05-20T02:28:55Z",
       "side": 1,
       "message": "Please be specific in the commit message so we can skim the commit logs. Something like:\n\nSkip:\ndEQP-GLES31.functional.\n  image_load_store.2d_array.qualifiers.volatile_r32f \n  image_load_store.2d_array.qualifiers.coherent_r32f\non Win/NVIDIA/D3D11.\n\nThanks.",
+      "revId": "b44f4392c4f086d2ea07f3b69614128555ee1cb3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "71783d38_171f31a2",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 2
+      },
+      "lineNbr": 9,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2022-05-20T02:44:45Z",
+      "side": 1,
+      "message": "I didn\u0027t mean to trigger autosubmit. Never mind.",
+      "parentUuid": "e1869b8f_93ab0b8b",
       "revId": "b44f4392c4f086d2ea07f3b69614128555ee1cb3",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
