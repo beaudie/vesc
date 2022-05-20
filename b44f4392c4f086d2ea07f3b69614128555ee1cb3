@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "e1869b8f_93ab0b8b",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 2
+      },
+      "lineNbr": 9,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2022-05-20T02:28:55Z",
+      "side": 1,
+      "message": "Please be specific in the commit message so we can skim the commit logs. Something like:\n\nSkip:\ndEQP-GLES31.functional.\n  image_load_store.2d_array.qualifiers.volatile_r32f \n  image_load_store.2d_array.qualifiers.coherent_r32f\non Win/NVIDIA/D3D11.\n\nThanks.",
+      "revId": "b44f4392c4f086d2ea07f3b69614128555ee1cb3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "f708f801_ae67ef2c",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2022-05-20T02:28:55Z",
+      "side": 1,
+      "message": "lgtm with the commit message updated.",
+      "revId": "b44f4392c4f086d2ea07f3b69614128555ee1cb3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
