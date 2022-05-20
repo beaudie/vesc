@@ -46,6 +46,30 @@
       },
       "revId": "8c11a2f76341ca3abe8fd5f5b88bff3d81446314",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "7480f459_5bbc8103",
+        "filename": "src/libANGLE/renderer/vulkan/TextureVk.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 2681,
+      "author": {
+        "id": 1511618
+      },
+      "writtenOn": "2022-05-20T18:27:16Z",
+      "side": 1,
+      "message": "That is done in `vk::SetDebugUtilsObjectName()` in `vk_utils.cpp`. I suppose it can go in either place but we end up in the same place eventually.",
+      "parentUuid": "4fca58fa_92e5245f",
+      "range": {
+        "startLine": 2681,
+        "startChar": 8,
+        "endLine": 2681,
+        "endChar": 21
+      },
+      "revId": "8c11a2f76341ca3abe8fd5f5b88bff3d81446314",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
