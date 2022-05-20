@@ -229,6 +229,23 @@
       "parentUuid": "fa06990c_89da9b6e",
       "revId": "3ef7ae9f9a2009d697383033776e17f3109800e0",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "4bf36109_e4f8e201",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2022-05-20T02:42:23Z",
+      "side": 1,
+      "message": "OK, thanks. I\u0027m making an executive decision and lgtm+2\u0027ing this. Thanks for working around it.\n",
+      "revId": "3ef7ae9f9a2009d697383033776e17f3109800e0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
