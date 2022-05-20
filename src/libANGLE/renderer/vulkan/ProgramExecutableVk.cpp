@@ -70,10 +70,10 @@ bool ValidateTransformedSpirV(const gl::ShaderBitSet &linkedShaderStages,
     {
         GlslangSpirvOptions options;
         options.shaderType                         = shaderType;
-        options.preRotation                        = SurfaceRotation::FlippedRotated90Degrees;
         options.negativeViewportSupported          = false;
         options.transformPositionToVulkanClipSpace = true;
         options.removeDebugInfo                    = true;
+        options.isLastPreFragmentStage             = shaderType == lastPreFragmentStage;
         options.isTransformFeedbackStage           = shaderType == lastPreFragmentStage;
 
         angle::spirv::Blob transformed;
@@ -186,6 +186,7 @@ angle::Result ProgramInfo::initProgram(ContextVk *contextVk,
     options.removeEarlyFragmentTestsOptimization =
         shaderType == gl::ShaderType::Fragment && optionBits.removeEarlyFragmentTestsOptimization;
     options.removeDebugInfo          = !contextVk->getFeatures().retainSPIRVDebugInfo.enabled;
+    options.isLastPreFragmentStage   = isLastPreFragmentStage;
     options.isTransformFeedbackStage = isLastPreFragmentStage && isTransformFeedbackProgram &&
                                        !optionBits.removeTransformFeedbackEmulation;
     options.isTransformFeedbackEmulated = contextVk->getFeatures().emulateTransformFeedback.enabled;
@@ -193,7 +194,6 @@ angle::Result ProgramInfo::initProgram(ContextVk *contextVk,
 
     if (isLastPreFragmentStage)
     {
-        options.preRotation = static_cast<SurfaceRotation>(optionBits.surfaceRotation);
         options.transformPositionToVulkanClipSpace =
             optionBits.enableDepthCorrection &&
             !contextVk->getFeatures().supportsDepthClipControl.enabled;
@@ -767,7 +767,7 @@ angle::Result ProgramExecutableVk::getGraphicsPipeline(ContextVk *contextVk,
     ASSERT(glExecutable.hasLinkedShaderStage(gl::ShaderType::Vertex));
 
     mTransformOptions.enableLineRasterEmulation = contextVk->isBresenhamEmulationEnabled(mode);
-    mTransformOptions.surfaceRotation           = ToUnderlying(desc.getSurfaceRotation());
+    mTransformOptions.surfaceRotation           = desc.getSurfaceRotation();
     mTransformOptions.enableDepthCorrection     = !glState.isClipControlDepthZeroToOne();
     mTransformOptions.removeTransformFeedbackEmulation =
         contextVk->getFeatures().emulateTransformFeedback.enabled &&
