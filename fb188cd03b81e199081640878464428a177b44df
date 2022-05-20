@@ -128,6 +128,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "62e53936_d8bbbee0",
+        "filename": "src/libANGLE/renderer/vulkan/vk_utils.h",
+        "patchSetId": 6
+      },
+      "lineNbr": 1291,
+      "author": {
+        "id": 1511618
+      },
+      "writtenOn": "2022-05-20T20:35:58Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "3a1dc54d_7d91bfd4",
+      "range": {
+        "startLine": 1291,
+        "startChar": 48,
+        "endLine": 1291,
+        "endChar": 56
+      },
+      "revId": "fb188cd03b81e199081640878464428a177b44df",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "b22b3363_0b6bc5c6",
@@ -141,6 +165,30 @@
       "writtenOn": "2022-05-20T20:17:37Z",
       "side": 1,
       "message": "nit: const \u0026 so it doesn\u0027t trigger a copy.",
+      "range": {
+        "startLine": 1293,
+        "startChar": 43,
+        "endLine": 1293,
+        "endChar": 50
+      },
+      "revId": "fb188cd03b81e199081640878464428a177b44df",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "b832cae5_aa35810d",
+        "filename": "src/libANGLE/renderer/vulkan/vk_utils.h",
+        "patchSetId": 6
+      },
+      "lineNbr": 1293,
+      "author": {
+        "id": 1511618
+      },
+      "writtenOn": "2022-05-20T20:35:58Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "b22b3363_0b6bc5c6",
       "range": {
         "startLine": 1293,
         "startChar": 43,
