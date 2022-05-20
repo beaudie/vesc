@@ -16,6 +16,23 @@
       "message": "anglebug.com/7342 covers the blocking win-trace failure.\n",
       "revId": "6f6aeee9fc9990e70cbaec7931437e87bc3a6508",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "1fcbd86b_af251845",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 5
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2022-05-20T22:33:37Z",
+      "side": 1,
+      "message": "Please tell chrome-gpu-infra@ about the Linux Intel overloading, but you may need to wait until off-hours for demand on these bots to die down.\n",
+      "revId": "6f6aeee9fc9990e70cbaec7931437e87bc3a6508",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
