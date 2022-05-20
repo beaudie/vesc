@@ -16,6 +16,24 @@
       "message": "lgtm\n\nIn the spirit of keeping individual tests targeted and easier to debug if something goes wrong, please consider splitting CompressedTexSubImageValidationSubBlockLevels into 2 tests, the second of which passes the full data for each mip level. Thanks.\n",
       "revId": "c14e8bb6bcb5a640d43386d4386ce4d644143485",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "07de4045_aac85bf9",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1394635
+      },
+      "writtenOn": "2022-05-20T21:45:43Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "e4a896a0_71b61065",
+      "revId": "c14e8bb6bcb5a640d43386d4386ce4d644143485",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
