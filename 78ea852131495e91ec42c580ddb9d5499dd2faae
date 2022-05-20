@@ -52,6 +52,24 @@
       "parentUuid": "dae150b2_938ae25c",
       "revId": "78ea852131495e91ec42c580ddb9d5499dd2faae",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "af4212ee_46c20d79",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-05-20T13:49:04Z",
+      "side": 1,
+      "message": "No, it\u0027s part of the git history now. Revert and reland will only make it worse.",
+      "parentUuid": "c4ff0497_f70ac97e",
+      "revId": "78ea852131495e91ec42c580ddb9d5499dd2faae",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
