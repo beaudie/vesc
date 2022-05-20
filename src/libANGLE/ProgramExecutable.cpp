@@ -223,6 +223,7 @@ ProgramExecutable::ProgramExecutable(const ProgramExecutable &other)
       mActiveSamplerYUV(other.mActiveSamplerYUV),
       mActiveSamplerFormats(other.mActiveSamplerFormats),
       mActiveSamplerShaderBits(other.mActiveSamplerShaderBits),
+      mActiveTextureUnitToSamplerIndexSetMap(other.mActiveTextureUnitToSamplerIndexSetMap),
       mActiveImagesMask(other.mActiveImagesMask),
       mActiveImageShaderBits(other.mActiveImageShaderBits),
       mCanDrawWith(other.mCanDrawWith),
@@ -268,6 +269,10 @@ void ProgramExecutable::reset(bool clearInfoLog)
     mActiveSamplerTypes.fill(TextureType::InvalidEnum);
     mActiveSamplerYUV.reset();
     mActiveSamplerFormats.fill(SamplerFormat::InvalidEnum);
+    for (SamplerIndexSet &set : mActiveTextureUnitToSamplerIndexSetMap)
+    {
+        set.clear();
+    }
 
     mActiveImagesMask.reset();
 
@@ -822,6 +827,7 @@ void ProgramExecutable::updateActiveSamplers(const ProgramState &programState)
                 mActiveSamplerYUV[textureUnit]     = IsSamplerYUVType(samplerBinding.samplerType);
                 mActiveSamplerFormats[textureUnit] = samplerBinding.format;
                 mActiveSamplerShaderBits[textureUnit] = samplerUniform.activeShaders();
+                mActiveTextureUnitToSamplerIndexSetMap[textureUnit].insert(samplerIndex);
             }
             else
             {
@@ -874,9 +880,12 @@ void ProgramExecutable::setSamplerUniformTextureTypeAndFormat(
     TextureType foundType     = TextureType::InvalidEnum;
     bool foundYUV             = false;
     SamplerFormat foundFormat = SamplerFormat::InvalidEnum;
+    size_t foundSamplerIndex  = std::numeric_limits<size_t>::max();
 
-    for (const SamplerBinding &binding : samplerBindings)
+    for (uint32_t samplerIndex = 0; samplerIndex < samplerBindings.size(); ++samplerIndex)
     {
+        const SamplerBinding &binding = samplerBindings[samplerIndex];
+
         // A conflict exists if samplers of different types are sourced by the same texture unit.
         // We need to check all bound textures to detect this error case.
         for (GLuint textureUnit : binding.boundTextureUnits)
@@ -885,10 +894,11 @@ void ProgramExecutable::setSamplerUniformTextureTypeAndFormat(
             {
                 if (!foundBinding)
                 {
-                    foundBinding = true;
-                    foundType    = binding.textureType;
-                    foundYUV     = IsSamplerYUVType(binding.samplerType);
-                    foundFormat  = binding.format;
+                    foundBinding      = true;
+                    foundType         = binding.textureType;
+                    foundYUV          = IsSamplerYUVType(binding.samplerType);
+                    foundFormat       = binding.format;
+                    foundSamplerIndex = samplerIndex;
                 }
                 else
                 {
@@ -912,6 +922,8 @@ void ProgramExecutable::setSamplerUniformTextureTypeAndFormat(
     mActiveSamplerTypes[textureUnitIndex]   = foundType;
     mActiveSamplerYUV[textureUnitIndex]     = foundYUV;
     mActiveSamplerFormats[textureUnitIndex] = foundFormat;
+    ASSERT(foundSamplerIndex != std::numeric_limits<size_t>::max());
+    mActiveTextureUnitToSamplerIndexSetMap[textureUnitIndex].insert(foundSamplerIndex);
 }
 
 void ProgramExecutable::updateCanDrawWith()

@@ -3384,6 +3384,12 @@ void Program::updateSamplerUniform(Context *context,
         GLint oldTextureUnit = boundTextureUnits[arrayIndex + locationInfo.arrayIndex];
         GLint newTextureUnit = v[arrayIndex];
 
+        // Update texture unit <-> sampler index map
+        mState.mExecutable->mActiveTextureUnitToSamplerIndexSetMap[oldTextureUnit].erase(
+            samplerIndex);
+        mState.mExecutable->mActiveTextureUnitToSamplerIndexSetMap[newTextureUnit].insert(
+            samplerIndex);
+
         if (oldTextureUnit == newTextureUnit)
         {
             continue;
@@ -3432,6 +3438,7 @@ void Program::updateSamplerUniform(Context *context,
             oldSamplerType   = TextureType::InvalidEnum;
             oldSamplerFormat = SamplerFormat::InvalidEnum;
             mState.mExecutable->mActiveSamplersMask.reset(oldTextureUnit);
+            mState.mExecutable->mActiveTextureUnitToSamplerIndexSetMap[oldTextureUnit].clear();
         }
         else
         {
