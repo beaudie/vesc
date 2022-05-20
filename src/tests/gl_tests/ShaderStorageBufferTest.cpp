@@ -3000,6 +3000,60 @@ void main() {
     EXPECT_GL_NO_ERROR();
 }
 
+// Tests whole-array assignment to an SSBO inside a comma expression.
+TEST_P(ShaderStorageBufferTest31, AggregateArrayAssignmentAsExpressionSSBO)
+{
+    constexpr char kCS[] = R"(#version 310 es
+
+layout(std430, binding = 0) buffer block {
+    int a[4];
+    bool b;
+} instance;
+
+layout(local_size_x = 1, local_size_y = 1, local_size_z = 1) in;
+void main() {
+    if (instance.a = int[4](0, 1, 2, 3), instance.b) {
+        instance.b = false;
+    }
+})";
+
+    ANGLE_GL_COMPUTE_PROGRAM(program, kCS);
+
+    glUseProgram(program);
+
+    constexpr unsigned int kBytesPerComponent = sizeof(GLuint);
+    constexpr unsigned int kElementCount      = 4;
+
+    // Create shader storage buffer
+    GLBuffer shaderStorageBuffer;
+
+    glBindBuffer(GL_SHADER_STORAGE_BUFFER, shaderStorageBuffer);
+    glBufferData(GL_SHADER_STORAGE_BUFFER, kElementCount * kBytesPerComponent + sizeof(GLboolean),
+                 nullptr, GL_STATIC_DRAW);
+
+    // Bind shader storage buffer
+    glBindBufferBase(GL_SHADER_STORAGE_BUFFER, 0, shaderStorageBuffer);
+
+    glDispatchCompute(1, 1, 1);
+
+    glMemoryBarrier(GL_BUFFER_UPDATE_BARRIER_BIT | GL_SHADER_STORAGE_BARRIER_BIT);
+
+    glBindBuffer(GL_SHADER_STORAGE_BUFFER, shaderStorageBuffer);
+    const void *bufferData = glMapBufferRange(GL_SHADER_STORAGE_BUFFER, 0,
+                                              kElementCount * kBytesPerComponent, GL_MAP_READ_BIT);
+
+    for (unsigned int idx = 0; idx < kElementCount; idx++)
+    {
+        EXPECT_EQ(static_cast<const GLuint *>(bufferData)[idx], idx);
+    }
+    EXPECT_EQ(*reinterpret_cast<const GLboolean *>(static_cast<const char *>(bufferData) +
+                                                   kElementCount * kBytesPerComponent),
+              false);
+    glUnmapBuffer(GL_SHADER_STORAGE_BUFFER);
+
+    EXPECT_GL_NO_ERROR();
+}
+
 // Tests whole-struct assignment to an SSBO.
 TEST_P(ShaderStorageBufferTest31, AggregateStructAssignmentSSBO)
 {
