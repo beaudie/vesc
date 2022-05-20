@@ -6336,6 +6336,16 @@ angle::Result ContextVk::updateActiveTextures(const gl::Context *context, gl::Co
 
     mActiveTextures.fill(nullptr);
 
+    ASSERT(activeTextures.size() == gl::IMPLEMENTATION_MAX_ACTIVE_TEXTURES);
+    size_t textureUnitSamplerIndexMap[gl::IMPLEMENTATION_MAX_ACTIVE_TEXTURES] = {0u};
+    const std::vector<gl::SamplerBinding> &samplerBindings = executable->getSamplerBindings();
+    for (size_t samplerIndex = 0; samplerIndex < samplerBindings.size(); ++samplerIndex)
+    {
+        // This assumes samplerBindings are tightly packed.
+        textureUnitSamplerIndexMap[samplerBindings[samplerIndex].boundTextureUnits[0]] =
+            samplerIndex;
+    }
+
     bool recreatePipelineLayout                       = false;
     ImmutableSamplerIndexMap immutableSamplerIndexMap = {};
     for (size_t textureUnit : activeTextures)
@@ -6419,7 +6429,7 @@ angle::Result ContextVk::updateActiveTextures(const gl::Context *context, gl::Co
         if (image.hasImmutableSampler())
         {
             immutableSamplerIndexMap[image.getYcbcrConversionDesc()] =
-                static_cast<uint32_t>(textureUnit);
+                static_cast<uint32_t>(textureUnitSamplerIndexMap[textureUnit]);
         }
 
         if (textureVk->getAndResetImmutableSamplerDirtyState())
