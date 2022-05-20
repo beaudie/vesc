@@ -26,7 +26,7 @@
 
 // Version number for shader translation API.
 // It is incremented every time the API changes.
-#define ANGLE_SH_VERSION 273
+#define ANGLE_SH_VERSION 276
 
 enum ShShaderSpec
 {
@@ -324,8 +324,7 @@ const ShCompileOptions SH_IGNORE_PRECISION_QUALIFIERS = UINT64_C(1) << 50;
 // Allow compiler to do early fragment tests as an optimization.
 const ShCompileOptions SH_EARLY_FRAGMENT_TESTS_OPTIMIZATION = UINT64_C(1) << 51;
 
-// Allow compiler to insert Android pre-rotation code.
-const ShCompileOptions SH_ADD_PRE_ROTATION = UINT64_C(1) << 52;
+// Note: bit 52 is unused
 
 const ShCompileOptions SH_FORCE_SHADER_PRECISION_HIGHP_TO_MEDIUMP = UINT64_C(1) << 53;
 
@@ -845,25 +844,9 @@ enum class SpecializationConstantId : uint32_t
     EnumCount   = InvalidEnum,
 };
 
-enum class SurfaceRotation : uint32_t
-{
-    Identity,
-    Rotated90Degrees,
-    Rotated180Degrees,
-    Rotated270Degrees,
-    FlippedIdentity,
-    FlippedRotated90Degrees,
-    FlippedRotated180Degrees,
-    FlippedRotated270Degrees,
-
-    InvalidEnum,
-    EnumCount = InvalidEnum,
-};
-
 enum class SpecConstUsage : uint32_t
 {
     LineRasterEmulation = 0,
-    YFlip               = 1,
     Rotation            = 2,
     DrawableSize        = 3,
     Dither              = 4,
@@ -908,6 +891,9 @@ extern const char kXfbEmulationBufferFieldName[];
 
 // Transform feedback extension support
 extern const char kXfbExtensionPositionOutName[];
+
+// Pre-rotation support
+extern const char kPreRotationRotatePositionFunctionName[];
 
 // EXT_shader_framebuffer_fetch and EXT_shader_framebuffer_fetch_non_coherent
 extern const char kInputAttachmentName[];
