@@ -183,6 +183,13 @@ class ProgramExecutable final : public angle::Subject
         return mActiveSamplerTypes;
     }
 
+    size_t getSamplerIndexForTextureUnit(size_t textureUnit) const
+    {
+        ASSERT(mActiveTextureUnitToSamplerIndexMap[textureUnit] !=
+               std::numeric_limits<size_t>::max());
+        return mActiveTextureUnitToSamplerIndexMap[textureUnit];
+    }
+
     void updateActiveSamplers(const ProgramState &programState);
 
     bool hasDefaultUniforms() const;
@@ -419,6 +426,7 @@ class ProgramExecutable final : public angle::Subject
     ActiveTextureMask mActiveSamplerYUV;
     ActiveTextureArray<SamplerFormat> mActiveSamplerFormats;
     ActiveTextureArray<ShaderBitSet> mActiveSamplerShaderBits;
+    ActiveTextureArray<size_t> mActiveTextureUnitToSamplerIndexMap;
 
     // Cached mask of active images.
     ActiveTextureMask mActiveImagesMask;

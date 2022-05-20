@@ -6460,7 +6460,7 @@ angle::Result ContextVk::updateActiveTextures(const gl::Context *context, gl::Co
         if (image.hasImmutableSampler())
         {
             immutableSamplerIndexMap[image.getYcbcrConversionDesc()] =
-                static_cast<uint32_t>(textureUnit);
+                static_cast<uint32_t>(executable->getSamplerIndexForTextureUnit(textureUnit));
         }
 
         if (textureVk->getAndResetImmutableSamplerDirtyState())
