@@ -22,6 +22,30 @@
       },
       "revId": "8c11a2f76341ca3abe8fd5f5b88bff3d81446314",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "4fca58fa_92e5245f",
+        "filename": "src/libANGLE/renderer/vulkan/TextureVk.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 2681,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-05-20T18:20:55Z",
+      "side": 1,
+      "message": "Our preferred method is to make the function return `angle::Result`, and then use `ANGLE_VK_TRY`.",
+      "parentUuid": "b52ac25c_58ddac20",
+      "range": {
+        "startLine": 2681,
+        "startChar": 8,
+        "endLine": 2681,
+        "endChar": 21
+      },
+      "revId": "8c11a2f76341ca3abe8fd5f5b88bff3d81446314",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
