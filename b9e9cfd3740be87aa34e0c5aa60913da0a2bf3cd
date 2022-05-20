@@ -35,6 +35,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "bf851400_79438d45",
+        "filename": "src/libANGLE/validationES.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 1167,
+      "author": {
+        "id": 1394635
+      },
+      "writtenOn": "2022-05-20T20:47:43Z",
+      "side": 1,
+      "message": "It should be okay to update more than one slice at once.",
+      "parentUuid": "16a9d512_bc789c2c",
+      "revId": "b9e9cfd3740be87aa34e0c5aa60913da0a2bf3cd",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "212c3f7e_7293c66a",
@@ -48,6 +66,24 @@
       "writtenOn": "2022-05-20T18:29:38Z",
       "side": 1,
       "message": "Should we also test uploading to zoffset\u003d1 of this array?\n\nShould we add a separate negative test (CompressedTexSubImageInvalidSubBlockLevels) of any crucial if-conditions in the validation code above?",
+      "revId": "b9e9cfd3740be87aa34e0c5aa60913da0a2bf3cd",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "3b5d49d4_1ead5aa2",
+        "filename": "src/tests/gl_tests/DXT1CompressedTextureTest.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 495,
+      "author": {
+        "id": 1394635
+      },
+      "writtenOn": "2022-05-20T20:47:43Z",
+      "side": 1,
+      "message": "The test now covers uploading slices both separately and independently. Not sure about identifying crucial negative conditions since many of them are filtered before this function is called so some code here may be redundant.",
+      "parentUuid": "212c3f7e_7293c66a",
       "revId": "b9e9cfd3740be87aa34e0c5aa60913da0a2bf3cd",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
