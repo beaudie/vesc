@@ -56,6 +56,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "d9dc4004_46f22cf6",
+        "filename": "src/libANGLE/Texture.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 817,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-05-20T19:01:43Z",
+      "side": 1,
+      "message": "Limiting the scope + follow up SGTM",
+      "parentUuid": "6f91f8b2_26f9a9ab",
+      "revId": "8c11a2f76341ca3abe8fd5f5b88bff3d81446314",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "b52ac25c_58ddac20",
         "filename": "src/libANGLE/renderer/vulkan/TextureVk.cpp",
         "patchSetId": 4
