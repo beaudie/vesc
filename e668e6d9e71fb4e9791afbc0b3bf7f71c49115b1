@@ -16,6 +16,24 @@
       "message": "Can we also get performance data with this? The early fragment test was only enabled for OpenGLES version\u003c3 (since 3.0 allows app to explicitly specify it). So you may want to find ES2.0 games or traces to try. ",
       "revId": "e668e6d9e71fb4e9791afbc0b3bf7f71c49115b1",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "e749c444_3ef4c667",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-05-20T16:36:49Z",
+      "side": 1,
+      "message": "Yes please, I believe T-Rex showed the largest boost (IIRC 6%) on P4.\n\nFWIW, what I gathered from the WG was that this optimization should be done by the driver when possible, and that early_fragment_tests is to force it _despite_ the usual rules disallowing it. On some hardware, it was mentioned that it\u0027s worse to specify this than to let the driver decide it.",
+      "parentUuid": "e5a97a45_8af4269f",
+      "revId": "e668e6d9e71fb4e9791afbc0b3bf7f71c49115b1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
