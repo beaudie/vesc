@@ -128,10 +128,13 @@ bool TranslatorMetal::translate(TIntermBlock *root,
 
     if (getShaderType() == GL_VERTEX_SHADER)
     {
-        TIntermTyped *negFlipY = driverUniforms.getNegFlipYRef();
+        TIntermTyped *flipNegY =
+            driverUniforms.getFlipXYRef(&getSymbolTable(), DriverUniformFlip::PreFragment);
+        flipNegY = (new TIntermSwizzle(flipNegY, {1}))->fold(nullptr);
+        flipNegY = new TIntermUnary(EOpNegative, flipNegY, nullptr);
 
         // Append gl_Position.y correction to main
-        if (!AppendVertexShaderPositionYCorrectionToMain(this, root, &getSymbolTable(), negFlipY))
+        if (!AppendVertexShaderPositionYCorrectionToMain(this, root, &getSymbolTable(), flipNegY))
         {
             return false;
         }
