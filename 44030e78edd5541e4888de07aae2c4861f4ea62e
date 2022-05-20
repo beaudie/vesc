@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "f490f07f_a1a3f75e",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 6
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2022-05-20T01:07:15Z",
+      "side": 1,
+      "message": "Filed:\n\nanglebug.com/7342 about the win_trace failures\nanglebug.com/7344 about the linux-test failure\nanglebug.com/7345 about the win-test failure\n\nThe win_trace failure is consistent, and needs to be addressed before this will pass the CQ. The others are flaky failures.\n",
+      "revId": "44030e78edd5541e4888de07aae2c4861f4ea62e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
