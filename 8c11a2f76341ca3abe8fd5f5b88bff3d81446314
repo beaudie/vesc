@@ -38,6 +38,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "6f91f8b2_26f9a9ab",
+        "filename": "src/libANGLE/Texture.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 817,
+      "author": {
+        "id": 1290487
+      },
+      "writtenOn": "2022-05-20T18:55:35Z",
+      "side": 1,
+      "message": "Yes, it\u0027s just temporary.  Since this CL started out just dealing with textures, I wanted it to work for textures, with the angle::Result flowing up to the front-end, and get it all working.  When I spoke with Mark Wednesday, he pointed out that this `Texture::setLabel` method is part of `LabeledObject`, and therefore the scope of this effort is much larger than what I thought Pascal\u0027s original request was for.\n\nThus, get things figured out with textures, and then expand to all of the classes that inherit from `LabeledObject`.\n\nQuestion for you Shabi.  Is it okay to land this CL that just does textures, and then (immediately) do another CL to handle `LabeledObject`?  Or, do you prefer that this CL expand (quite a bit) to handle all of the `LabeledObject` sub-classes?",
+      "parentUuid": "af78fa28_3a679350",
+      "revId": "8c11a2f76341ca3abe8fd5f5b88bff3d81446314",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "b52ac25c_58ddac20",
         "filename": "src/libANGLE/renderer/vulkan/TextureVk.cpp",
         "patchSetId": 4
