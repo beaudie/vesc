@@ -16,6 +16,24 @@
       "message": "I don\u0027t *think* these trace test failures could be mine, since this change is D3D-only. I\u0027m going to see if it\u0027ll land.",
       "revId": "800cd90b0ce570ec8321dcbea5327b8125e3667a",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "8f1f01b9_b10f04cb",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-05-20T01:14:09Z",
+      "side": 1,
+      "message": "No, win-trace is a problem for everyone right now",
+      "parentUuid": "ded94d9c_f4f9869d",
+      "revId": "800cd90b0ce570ec8321dcbea5327b8125e3667a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }

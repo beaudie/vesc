@@ -229,6 +229,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "6a0dc8cc_7d2470fb",
+        "filename": "src/compiler/translator/tree_ops/AggregateAssignArraysInSSBOs.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 61,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-05-20T01:14:09Z",
+      "side": 1,
+      "message": "It\u0027s `d3d/`, I have no objections to anything you want to do with it ;)",
+      "parentUuid": "ea47b042_0aabc4ed",
+      "revId": "31ee682d62f663174ec6b262a1faf6bd7c1b8903",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "03764e20_95056874",
