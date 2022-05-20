@@ -70,6 +70,24 @@
       "parentUuid": "c4ff0497_f70ac97e",
       "revId": "78ea852131495e91ec42c580ddb9d5499dd2faae",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "6a3e3b96_1f6893e3",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1520902
+      },
+      "writtenOn": "2022-05-20T16:58:49Z",
+      "side": 1,
+      "message": "I see. Sorry about that. I will make sure to not enable auto-submit until at least the first round of review is done. Thank you.",
+      "parentUuid": "af4212ee_46c20d79",
+      "revId": "78ea852131495e91ec42c580ddb9d5499dd2faae",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
