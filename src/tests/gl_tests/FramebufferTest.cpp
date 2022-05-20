@@ -4133,6 +4133,73 @@ void main()
     }
 }
 
+// Regression test for a bug in the Vulkan backend where the application produces a conditional
+// framebuffer feedback loop which results in VUID-VkDescriptorImageInfo-imageLayout-00344 and
+// VUID-vkCmdDraw-None-02699 (or VUID-vkCmdDrawIndexed-None-02699 when a different draw call is
+// used). The application samples from the frame buffer it renders to depending on a uniform
+// condition.
+TEST_P(FramebufferTest_ES3, FramebufferConditionalFeedbackLoop)
+{
+    // To reproduce the issue the texture must be a GL_TEXTURE_2D_ARRAY, it does not reproduce when
+    // using GL_TEXTURE_2D.
+    GLTexture colorAttachment;
+    glBindTexture(GL_TEXTURE_2D_ARRAY, colorAttachment);
+
+    // Init the texture array with dummy data.
+    std::vector<GLuint> pixels(kWidth * kHeight, 0);
+    glTexStorage3D(GL_TEXTURE_2D_ARRAY, 1, GL_RGBA8, kWidth, kHeight, 1);
+    glTexSubImage3D(GL_TEXTURE_2D_ARRAY, 0, 0, 0, 0, kWidth, kHeight, 1, GL_RGBA, GL_UNSIGNED_BYTE,
+                    pixels.data());
+
+    glActiveTexture(GL_TEXTURE13);
+    glBindTexture(GL_TEXTURE_2D_ARRAY, colorAttachment);
+
+    ASSERT_GL_NO_ERROR();
+
+    GLFramebuffer framebuffer;
+    glBindFramebuffer(GL_FRAMEBUFFER, framebuffer);
+    glFramebufferTextureLayer(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, colorAttachment, 0, 0);
+
+    ASSERT_GL_FRAMEBUFFER_COMPLETE(GL_FRAMEBUFFER);
+
+    glBindFramebuffer(GL_FRAMEBUFFER, 0);
+
+    constexpr char kFS[] = {
+        R"(#version 300 es
+precision mediump float;
+
+uniform mediump sampler2DArray samp;
+uniform vec4 sampleCondition;
+out vec4 color;
+
+void main()
+{
+    if (sampleCondition.x > 0.0)
+    {
+        color = texture(samp, vec3(0.0));
+    }
+})",
+    };
+
+    ANGLE_GL_PROGRAM(program, essl3_shaders::vs::Simple(), kFS);
+    glUseProgram(program);
+
+    GLint textureLoc = glGetUniformLocation(program, "samp");
+    glUniform1i(textureLoc, 13);
+
+    // This draw is required for the issue to occur. The application does multiple draws to
+    // different framebuffers at this point, but drawing without a framebuffer bound also does
+    // reproduce it.
+    glDrawArrays(GL_TRIANGLES, 0, 6);
+    ASSERT_GL_NO_ERROR();
+
+    glBindFramebuffer(GL_FRAMEBUFFER, framebuffer);
+
+    // This draw triggers the issue.
+    glDrawArrays(GL_TRIANGLES, 0, 6);
+    ASSERT_GL_NO_ERROR();
+}
+
 ANGLE_INSTANTIATE_TEST_ES2_AND(AddMockTextureNoRenderTargetTest,
                                ES2_D3D9().enable(Feature::AddMockTextureNoRenderTarget),
                                ES2_D3D11().enable(Feature::AddMockTextureNoRenderTarget));
