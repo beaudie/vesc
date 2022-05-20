@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "573408e3_3ac548d5",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 5
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2022-05-20T01:56:49Z",
+      "side": 1,
+      "message": "anglebug.com/7342 covers the blocking win-trace failure.\n",
+      "revId": "6f6aeee9fc9990e70cbaec7931437e87bc3a6508",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
