@@ -83,6 +83,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "954eb13c_e9d0250c",
+        "filename": "src/libANGLE/Texture.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 820,
+      "author": {
+        "id": 1290487
+      },
+      "writtenOn": "2022-05-20T20:24:31Z",
+      "side": 1,
+      "message": "This is temporary (Shabi, Mark, and I discussed) until the next CL that Mark has already started on.  I can explain when I come back online in ~30 minutes.",
+      "parentUuid": "8898e54c_548dc803",
+      "range": {
+        "startLine": 820,
+        "startChar": 8,
+        "endLine": 820,
+        "endChar": 25
+      },
+      "revId": "fb188cd03b81e199081640878464428a177b44df",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "3a1dc54d_7d91bfd4",
         "filename": "src/libANGLE/renderer/vulkan/vk_utils.h",
         "patchSetId": 6
