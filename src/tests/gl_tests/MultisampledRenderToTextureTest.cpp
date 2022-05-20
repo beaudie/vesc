@@ -3444,6 +3444,70 @@ TEST_P(MultisampledRenderToTextureTest, DrawNonMultisampledThenMultisampled)
     ASSERT_GL_NO_ERROR();
 }
 
+// Draw to singlesampled fbo, then blend new color to multisampled fbo.
+// This tests the same texture being bound differently to two FBOs.
+TEST_P(MultisampledRenderToTextureTest, Preserve_msaa_content)
+{
+    ANGLE_SKIP_TEST_IF(!EnsureGLExtensionEnabled("GL_EXT_multisampled_render_to_texture"));
+    constexpr GLsizei kSize = 64;
+
+    GLTexture color;
+    glBindTexture(GL_TEXTURE_2D, color);
+    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, kSize, kSize, 0, GL_RGBA, GL_UNSIGNED_BYTE, nullptr);
+
+    // Create singlesampled framebuffer.
+    GLFramebuffer fboSS;
+    glBindFramebuffer(GL_FRAMEBUFFER, fboSS);
+    glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, color, 0);
+    ASSERT_GL_NO_ERROR();
+
+    // Create multisampled framebuffer.
+    GLFramebuffer fboMS;
+    glBindFramebuffer(GL_FRAMEBUFFER, fboMS);
+    glFramebufferTexture2DMultisampleEXT(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, color,
+                                         0, 4);
+    ASSERT_GL_NO_ERROR();
+
+    // Draw half-transparent yellow into the singlesampled color buffer
+    glBindFramebuffer(GL_FRAMEBUFFER, fboSS);
+    glClearColor(0.5f, 0.5f, 0.0f, 0.5f);
+    glClear(GL_COLOR_BUFFER_BIT);
+    ASSERT_GL_NO_ERROR();
+
+    // Blend half-transparent green into the multisampled color buffer.
+    glBindFramebuffer(GL_FRAMEBUFFER, fboMS);
+    ANGLE_GL_PROGRAM(drawColor, essl1_shaders::vs::Simple(), essl1_shaders::fs::UniformColor());
+    glUseProgram(drawColor);
+    GLint colorUniformLocation =
+        glGetUniformLocation(drawColor, angle::essl1_shaders::ColorUniform());
+    ASSERT_NE(colorUniformLocation, -1);
+
+    glUniform4f(colorUniformLocation, 0.0f, 0.5f, 0.5f, 0.5f);
+    glEnable(GL_BLEND);
+    glBlendFunc(GL_ONE, GL_ONE_MINUS_SRC_ALPHA);  // GL_ONE, GL_ONE_MINUS_SRC_ALPHA
+    drawQuad(drawColor, essl1_shaders::PositionAttrib(), 0.5f);
+    ASSERT_GL_NO_ERROR();
+
+    glBindFramebuffer(GL_READ_FRAMEBUFFER, fboSS);
+
+    // Verify the texture
+    // dst is transYellow (0.5f, 0.5f, 0.0f, 0.5f)
+    // src is transCyan (0.0f, 0.5f, 0.5f, 0.5f)
+    // blend mode is src_over, that is glBlendFunc(GL_ONE, GL_ONE_MINUS_SRC_ALPHA);
+    // result color should be (0.25, 0.75, 0.5, 0.75)
+    // const GLColor kExpected(64, 191, 128, 191);
+    const GLColor kExpected(64, 191, 128, 191);
+    for (int i = 0; i < kSize; ++i)
+    {
+        for (int j = 0; j < kSize; ++j)
+        {
+            EXPECT_PIXEL_COLOR_NEAR(i, j, kExpected, 1);
+        }
+    }
+
+    ASSERT_GL_NO_ERROR();
+}
+
 // Draw multisampled, draw multisampled with another sample count, repeat.  This tests the same
 // texture being bound as multisampled-render-to-texture with different sample counts to two FBOs.
 TEST_P(MultisampledRenderToTextureTest, DrawMultisampledDifferentSamples)
