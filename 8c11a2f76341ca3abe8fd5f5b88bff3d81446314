@@ -72,6 +72,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "46e8fbb6_f7bfbb96",
+        "filename": "src/libANGLE/Texture.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 817,
+      "author": {
+        "id": 1290487
+      },
+      "writtenOn": "2022-05-20T19:43:23Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "d9dc4004_46f22cf6",
+      "revId": "8c11a2f76341ca3abe8fd5f5b88bff3d81446314",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "b52ac25c_58ddac20",
@@ -157,6 +175,30 @@
       "side": 1,
       "message": "Right, you can `return vk::SetDebugUtilsObjectName` here.",
       "parentUuid": "7480f459_5bbc8103",
+      "range": {
+        "startLine": 2681,
+        "startChar": 8,
+        "endLine": 2681,
+        "endChar": 21
+      },
+      "revId": "8c11a2f76341ca3abe8fd5f5b88bff3d81446314",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "d9f349f3_5e2a82a5",
+        "filename": "src/libANGLE/renderer/vulkan/TextureVk.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 2681,
+      "author": {
+        "id": 1290487
+      },
+      "writtenOn": "2022-05-20T19:43:23Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "cd99b02d_0c5b23d5",
       "range": {
         "startLine": 2681,
         "startChar": 8,

@@ -1,0 +1,44 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "ba3ec495_7edd42fd",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 5
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1290487
+      },
+      "writtenOn": "2022-05-20T19:43:23Z",
+      "side": 1,
+      "message": "LGTM with one small change requested.",
+      "revId": "a9f7764936af1c091227ea33080c2d459458eb4d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "8c9fbf3c_ca8e8a80",
+        "filename": "src/libANGLE/Texture.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 9,
+      "author": {
+        "id": 1290487
+      },
+      "writtenOn": "2022-05-20T19:43:23Z",
+      "side": 1,
+      "message": "Per normal ANGLE process, please put the bug number on this (i.e. b/229105865).  Perhaps change it to:\n\n// TODO: Remove the following line with follow-up labeledObject changes (b/229105865)",
+      "range": {
+        "startLine": 9,
+        "startChar": 3,
+        "endLine": 9,
+        "endChar": 93
+      },
+      "revId": "a9f7764936af1c091227ea33080c2d459458eb4d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
