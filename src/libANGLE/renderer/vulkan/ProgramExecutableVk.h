@@ -103,8 +103,8 @@ struct DefaultUniformBlock final : private angle::NonCopyable
 };
 
 // Performance and resource counters.
-using DescriptorSetCountList   = angle::PackedEnumMap<DescriptorSetIndex, uint32_t>;
-using ImmutableSamplerIndexMap = angle::HashMap<vk::YcbcrConversionDesc, uint32_t>;
+using DescriptorSetCountList      = angle::PackedEnumMap<DescriptorSetIndex, uint32_t>;
+using ImmutableSamplerIndexSetMap = angle::HashMap<vk::YcbcrConversionDesc, std::set<size_t>>;
 
 using DefaultUniformBlockMap = gl::ShaderMap<std::shared_ptr<DefaultUniformBlock>>;
 
@@ -188,9 +188,9 @@ class ProgramExecutableVk
     bool usesDynamicAtomicCounterBufferDescriptors() const { return false; }
 
     bool areImmutableSamplersCompatible(
-        const ImmutableSamplerIndexMap &immutableSamplerIndexMap) const
+        const ImmutableSamplerIndexSetMap &immutableSamplerIndexSetMap) const
     {
-        return (mImmutableSamplerIndexMap == immutableSamplerIndexMap);
+        return (mImmutableSamplerIndexSetMap == immutableSamplerIndexSetMap);
     }
 
     size_t getDefaultUniformAlignedSize(vk::Context *context, gl::ShaderType shaderType) const
@@ -318,7 +318,7 @@ class ProgramExecutableVk
     // We keep a reference to the pipeline and descriptor set layouts. This ensures they don't get
     // deleted while this program is in use.
     uint32_t mImmutableSamplersMaxDescriptorCount;
-    ImmutableSamplerIndexMap mImmutableSamplerIndexMap;
+    ImmutableSamplerIndexSetMap mImmutableSamplerIndexSetMap;
     vk::BindingPointer<vk::PipelineLayout> mPipelineLayout;
     vk::DescriptorSetLayoutPointerArray mDescriptorSetLayouts;
 
