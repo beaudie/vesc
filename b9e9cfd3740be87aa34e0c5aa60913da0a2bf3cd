@@ -1,0 +1,55 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "40b25d4d_42aedc5b",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2022-05-20T18:29:38Z",
+      "side": 1,
+      "message": "Thanks Alexey for fixing this. Couple of questions.\n",
+      "revId": "b9e9cfd3740be87aa34e0c5aa60913da0a2bf3cd",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "16a9d512_bc789c2c",
+        "filename": "src/libANGLE/validationES.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 1167,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2022-05-20T18:29:38Z",
+      "side": 1,
+      "message": "Should we reject depth\u003e1 as a validation error in this case? Concerned about the case where we pass depth through to the driver and a buggy driver reads too much data from the source pointer.",
+      "revId": "b9e9cfd3740be87aa34e0c5aa60913da0a2bf3cd",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "212c3f7e_7293c66a",
+        "filename": "src/tests/gl_tests/DXT1CompressedTextureTest.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 495,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2022-05-20T18:29:38Z",
+      "side": 1,
+      "message": "Should we also test uploading to zoffset\u003d1 of this array?\n\nShould we add a separate negative test (CompressedTexSubImageInvalidSubBlockLevels) of any crucial if-conditions in the validation code above?",
+      "revId": "b9e9cfd3740be87aa34e0c5aa60913da0a2bf3cd",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
