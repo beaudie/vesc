@@ -292,6 +292,24 @@
       "parentUuid": "cfffdd25_833461fc",
       "revId": "d885044b40fd1b99cc8c7229a7cd9d0fb58ade44",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "f08d1524_0f8855f7",
+        "filename": "src/libANGLE/renderer/vulkan/vk_caps_utils.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 220,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-05-21T02:39:01Z",
+      "side": 1,
+      "message": "Sorry I don\u0027t understand.\n\n1. GL requires texture buffer support for RGB32.\n2. Vulkan *doesn\u0027t* require `UNIFORM_TEXTURE_BUFFER` for these formats.\n\nWhich of the above is not correct?",
+      "parentUuid": "8db9adfc_321d7706",
+      "revId": "d885044b40fd1b99cc8c7229a7cd9d0fb58ade44",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
