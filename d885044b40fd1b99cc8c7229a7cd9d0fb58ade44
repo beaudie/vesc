@@ -346,6 +346,24 @@
       "parentUuid": "ffb62b3c_f15cb0f2",
       "revId": "d885044b40fd1b99cc8c7229a7cd9d0fb58ade44",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "f7bd005b_6ac13306",
+        "filename": "src/libANGLE/renderer/vulkan/vk_caps_utils.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 220,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-05-21T02:43:07Z",
+      "side": 1,
+      "message": "Ah, that table is misleading. The column that corresponds to an entry starts on its right, not bottom. You can tell by counting from right. Vulkan requires `VERTEX_BUFFER` support for RGB32, not `UNIFORM_TEXTURE_BUFFER`, so you\u0027d still need to check that.",
+      "parentUuid": "ffb62b3c_f15cb0f2",
+      "revId": "d885044b40fd1b99cc8c7229a7cd9d0fb58ade44",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
