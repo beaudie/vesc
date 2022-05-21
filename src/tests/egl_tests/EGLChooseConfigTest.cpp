@@ -10,7 +10,9 @@
 
 #include "test_utils/ANGLETest.h"
 #include "test_utils/angle_test_configs.h"
+#include "test_utils/gl_raii.h"
 #include "util/EGLWindow.h"
+#include "util/OSWindow.h"
 
 using namespace angle;
 
@@ -78,6 +80,21 @@ TEST_P(EGLChooseConfigTest, Defaults)
     // and all that don't aren't:
     for (EGLConfig config : allConfigs)
     {
+        // Some debug code
+        EGLint redBits, greenBits, blueBits, alphaBits, depthBits, stencilBits, numSamples = 0;
+        eglGetConfigAttrib(display, config, EGL_RED_SIZE, &redBits);
+        eglGetConfigAttrib(display, config, EGL_GREEN_SIZE, &greenBits);
+        eglGetConfigAttrib(display, config, EGL_BLUE_SIZE, &blueBits);
+        eglGetConfigAttrib(display, config, EGL_ALPHA_SIZE, &alphaBits);
+        eglGetConfigAttrib(display, config, EGL_DEPTH_SIZE, &depthBits);
+        eglGetConfigAttrib(display, config, EGL_STENCIL_SIZE, &stencilBits);
+        eglGetConfigAttrib(display, config, EGL_SAMPLES, &numSamples);
+
+        std::printf(
+            "redBits: %d; greenBits: %d; blueBits: %d; alphaBits: %d; "
+            "depthBits: %d; stencilBits: %d; numSamples: %d\n",
+            redBits, greenBits, blueBits, alphaBits, depthBits, stencilBits, numSamples);
+
         EGLint colorBufferType, level, renderableType, surfaceType, transparentType;
         EGLint colorComponentType = EGL_COLOR_COMPONENT_TYPE_FIXED_EXT;
 
