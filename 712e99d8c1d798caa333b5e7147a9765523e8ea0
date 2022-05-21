@@ -16,6 +16,23 @@
       "message": "PTAL",
       "revId": "712e99d8c1d798caa333b5e7147a9765523e8ea0",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "837364a4_c812b5de",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 2696,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-05-21T01:53:47Z",
+      "side": 1,
+      "message": "Is there no way to go from NxM back to Undefined? Because if there is, the state is not being reset to 1x1",
+      "revId": "712e99d8c1d798caa333b5e7147a9765523e8ea0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
