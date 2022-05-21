@@ -33,6 +33,24 @@
       "message": "Looks great. The fix is quite simple. But the assumption is that we must not access Shader from the link tasks. We will have to be very careful about that going forward. Probably we should add some assert checks for that to only allow these Shader methods run in the main thread.",
       "revId": "ddb2c5e23caa4dd0cac310046f8846c115c9e64b",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "a88846d3_a60edb5d",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1109831
+      },
+      "writtenOn": "2022-05-21T01:28:06Z",
+      "side": 1,
+      "message": "Maybe we can store the main thread id from Shader:compile(), and at least check it here: https://source.chromium.org/chromium/chromium/src/+/main:third_party/angle/src/libANGLE/Shader.cpp;drc\u003d5113ae8ef06a068d75b067583e877539c7b55a86;l\u003d408",
+      "parentUuid": "1966d581_8708fc2d",
+      "revId": "ddb2c5e23caa4dd0cac310046f8846c115c9e64b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
