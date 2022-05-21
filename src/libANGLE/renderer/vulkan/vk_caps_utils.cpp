@@ -184,83 +184,48 @@ bool HasTexelBufferSupport(const RendererVk *rendererVk, GLenum formatGL)
 
 bool HasTextureBufferSupport(const RendererVk *rendererVk)
 {
-    // The following formats don't have mandatory UNIFORM_TEXEL_BUFFER support in Vulkan.
+    //  required image and texture access for texture buffer formats are
+    //  https://www.khronos.org/registry/OpenGL-Refpages/es3/html/glTexBuffer.xhtml
+    //  https://www.khronos.org/registry/OpenGL-Refpages/es3/html/glBindImageTexture.xhtml
+    //  https://www.khronos.org/registry/vulkan/specs/1.0-extensions/html/vkspec.html#features-required-format-support
+    //                             texture access                image access
+    //    8-bit components, all required by vulkan
+    //    GL_R8                        Y                           N
+    //    GL_R8I                       Y                           N
+    //    GL_R8UI                      Y                           N
+    //    GL_RG8                       Y                           N
+    //    GL_RG8I                      Y                           N
+    //    GL_RG8UI                     Y                           N
+    //    GL_RGBA8                     Y                           Y
+    //    GL_RGBA8I                    Y                           N
+    //    GL_RGBA8UI                   Y                           N
+    //    GL_RGBA8_SNORM               N                           Y
     //
-    //     VK_FORMAT_R32G32B32_UINT
-    //     VK_FORMAT_R32G32B32_SINT
-    //     VK_FORMAT_R32G32B32_SFLOAT
+    //    16-bit components, except R16_UNORM(only require UNIFORM_TEXEL_BUFFER), all others are
+    //    required by vulkan GL_R16                       Y                           N(N) GL_R16F
+    //    Y                           N GL_R16I                      Y                           N
+    //    GL_R16UI                     Y                           N
+    //    GL_RG16                      Y                           N
+    //    GL_RG16F                     Y                           N
+    //    GL_RG16I                     Y                           N
+    //    GL_RG16UI                    Y                           N
+    //    GL_RGBA16                    Y                           N
+    //    GL_RGBA16F                   Y                           Y
+    //    GL_RGBA16I                   Y                           Y
+    //    GL_RGBA16UI                  Y                           Y
     //
-    // Additionally, the following formats don't have mandatory STORAGE_TEXEL_BUFFER support:
-    //
-    //     VK_FORMAT_R8_UINT
-    //     VK_FORMAT_R8_SINT
-    //     VK_FORMAT_R8_UNORM
-    //     VK_FORMAT_R8G8_UINT
-    //     VK_FORMAT_R8G8_SINT
-    //     VK_FORMAT_R8G8_UNORM
-    //     VK_FORMAT_R16_UINT
-    //     VK_FORMAT_R16_SINT
-    //     VK_FORMAT_R16_SFLOAT
-    //     VK_FORMAT_R16G16_UINT
-    //     VK_FORMAT_R16G16_SINT
-    //     VK_FORMAT_R16G16_SFLOAT
-    //     VK_FORMAT_R32G32B32_UINT
-    //     VK_FORMAT_R32G32B32_SINT
-    //     VK_FORMAT_R32G32B32_SFLOAT
-    //
-    // The formats that have mandatory support for both features (and don't need to be checked) are:
-    //
-    //     VK_FORMAT_R8G8B8A8_UINT
-    //     VK_FORMAT_R8G8B8A8_SINT
-    //     VK_FORMAT_R8G8B8A8_UNORM
-    //     VK_FORMAT_R16G16B16A16_UINT
-    //     VK_FORMAT_R16G16B16A16_SINT
-    //     VK_FORMAT_R16G16B16A16_SFLOAT
-    //     VK_FORMAT_R32_UINT
-    //     VK_FORMAT_R32_SINT
-    //     VK_FORMAT_R32_SFLOAT
-    //     VK_FORMAT_R32G32_UINT
-    //     VK_FORMAT_R32G32_SINT
-    //     VK_FORMAT_R32G32_SFLOAT
-    //     VK_FORMAT_R32G32B32A32_UINT
-    //     VK_FORMAT_R32G32B32A32_SINT
-    //     VK_FORMAT_R32G32B32A32_SFLOAT
-    //
-
-    const std::array<GLenum, 12> &optionalFormats = {
-        GL_R8,   GL_R8I,  GL_R8UI,  GL_RG8,   GL_RG8I,  GL_RG8UI,
-        GL_R16F, GL_R16I, GL_R16UI, GL_RG16F, GL_RG16I, GL_RG16UI,
-    };
-
-    for (GLenum formatGL : optionalFormats)
-    {
-        if (!HasTexelBufferSupport(rendererVk, formatGL))
-        {
-            return false;
-        }
-    }
-
-    // TODO: RGB32 formats currently don't have STORAGE_TEXEL_BUFFER support on any known platform.
-    // Despite this limitation, we expose EXT_texture_buffer.  http://anglebug.com/3573
-    if (rendererVk->getFeatures().exposeNonConformantExtensionsAndVersions.enabled)
-    {
-        return true;
-    }
-
-    const std::array<GLenum, 3> &optionalFormats2 = {
-        GL_RGB32F,
-        GL_RGB32I,
-        GL_RGB32UI,
-    };
-
-    for (GLenum formatGL : optionalFormats2)
-    {
-        if (!HasTexelBufferSupport(rendererVk, formatGL))
-        {
-            return false;
-        }
-    }
-
+    //    32-bit components, except RGB32 (only require UNIFORM_TEXEL_BUFFER), all others are
+    //    required by vulkan GL_R32F                      Y                           Y GL_R32I Y Y
+    //    GL_R32UI                     Y                           N
+    //    GL_RG32F                     Y                           Y
+    //    GL_RG32I                     Y                           Y
+    //    GL_RG32UI                    Y                           Y
+    //    GL_RGB32F                    Y                           N
+    //    GL_RGB32I                    Y                           N
+    //    GL_RGB32UI                   Y                           N
+    //    GL_RGBA32F                   Y                           Y
+    //    GL_RGBA32I                   Y                           Y
+    //    GL_RGBA32UI                  Y                           Y
     return true;
 }
 
