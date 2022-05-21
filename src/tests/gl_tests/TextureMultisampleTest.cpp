@@ -386,6 +386,61 @@ TEST_P(TextureMultisampleTest, MaxDepthTextureSamples)
     EXPECT_NE(std::numeric_limits<GLint>::max(), maxDepthTextureSamples);
 }
 
+// Tests the maximum value of MAX_INTEGER_SAMPLES is supported and not too large for the
+// sample mask that is internally used
+TEST_P(TextureMultisampleTest, MaxIntegerSamplesValid)
+{
+    ANGLE_SKIP_TEST_IF(lessThanES31MultisampleExtNotSupported());
+
+    // Fixed in recent mesa.  http://crbug.com/1071142
+    ANGLE_SKIP_TEST_IF(IsVulkan() && IsLinux() && (IsIntel() || IsAMD()));
+
+    GLint maxIntegerSamples;
+    glGetIntegerv(GL_MAX_INTEGER_SAMPLES, &maxIntegerSamples);
+
+    // The SampleMaskArray used in Angle only supports 32 bits
+    ASSERT_LE(maxIntegerSamples, 32);
+
+    glBindTexture(GL_TEXTURE_2D_MULTISAMPLE, mTexture);
+
+    texStorageMultisample(GL_TEXTURE_2D_MULTISAMPLE, maxIntegerSamples, GL_RGBA8I, 1, 1, GL_FALSE);
+    ASSERT_GL_NO_ERROR();
+}
+
+// Tests the maximum value of MAX_COLOR_TEXTURE_SAMPLES is supported and not too large for the
+// sample mask that is internally used
+TEST_P(TextureMultisampleTest, MaxColorTextureSamplesValid)
+{
+    ANGLE_SKIP_TEST_IF(lessThanES31MultisampleExtNotSupported());
+    GLint maxColorTextureSamples;
+    glGetIntegerv(GL_MAX_COLOR_TEXTURE_SAMPLES, &maxColorTextureSamples);
+
+    // The SampleMaskArray used in Angle only supports 32 bits
+    ASSERT_LE(maxColorTextureSamples, 32);
+
+    glBindTexture(GL_TEXTURE_2D_MULTISAMPLE, mTexture);
+    texStorageMultisample(GL_TEXTURE_2D_MULTISAMPLE, maxColorTextureSamples, GL_RGBA8, 1, 1,
+                          GL_FALSE);
+    ASSERT_GL_NO_ERROR();
+}
+
+// Tests the maximum value of MAX_DEPTH_TEXTURE_SAMPLES is supported and not too large for the
+// sample mask that is internally used
+TEST_P(TextureMultisampleTest, MaxDepthTextureSamplesValid)
+{
+    ANGLE_SKIP_TEST_IF(lessThanES31MultisampleExtNotSupported());
+    GLint maxDepthTextureSamples;
+    glGetIntegerv(GL_MAX_DEPTH_TEXTURE_SAMPLES, &maxDepthTextureSamples);
+
+    // The SampleMaskArray used in Angle only supports 32 bits
+    ASSERT_LE(maxDepthTextureSamples, 32);
+
+    glBindTexture(GL_TEXTURE_2D_MULTISAMPLE, mTexture);
+    texStorageMultisample(GL_TEXTURE_2D_MULTISAMPLE, maxDepthTextureSamples, GL_DEPTH_COMPONENT16,
+                          1, 1, GL_FALSE);
+    ASSERT_GL_NO_ERROR();
+}
+
 // Tests that getTexLevelParameter is supported by ES 3.1 or ES 3.0 and ANGLE_texture_multisample
 TEST_P(TextureMultisampleTest, GetTexLevelParameter)
 {
