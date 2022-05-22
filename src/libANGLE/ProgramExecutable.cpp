@@ -830,19 +830,15 @@ void ProgramExecutable::updateActiveSamplers(const ProgramState &programState)
             }
             else
             {
-                if (mActiveSamplerTypes[textureUnit] != samplerBinding.textureType)
+                if (mActiveSamplerTypes[textureUnit] != samplerBinding.textureType ||
+                    mActiveSamplerFormats[textureUnit] != samplerBinding.format ||
+                    mActiveSamplerYUV.test(textureUnit) !=
+                        IsSamplerYUVType(samplerBinding.samplerType))
                 {
                     // Conflicts are marked with InvalidEnum
-                    mActiveSamplerTypes[textureUnit] = TextureType::InvalidEnum;
-                }
-                if (mActiveSamplerYUV.test(textureUnit) !=
-                    IsSamplerYUVType(samplerBinding.samplerType))
-                {
-                    mActiveSamplerYUV[textureUnit] = false;
-                }
-                if (mActiveSamplerFormats[textureUnit] != samplerBinding.format)
-                {
+                    mActiveSamplerTypes[textureUnit]   = TextureType::InvalidEnum;
                     mActiveSamplerFormats[textureUnit] = SamplerFormat::InvalidEnum;
+                    mActiveSamplerYUV[textureUnit]     = false;
                 }
             }
             mActiveSamplersMask.set(textureUnit);
