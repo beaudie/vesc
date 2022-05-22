@@ -22,6 +22,8 @@ ResourceTracker::ResourceTracker() {}
 ResourceTracker::~ResourceTracker() {}
 TrackedResource::TrackedResource() {}
 TrackedResource::~TrackedResource() {}
+ResetHelper::ResetHelper() {}
+ResetHelper::~ResetHelper() {}
 DataTracker::DataTracker() {}
 DataTracker::~DataTracker() {}
 DataCounters::DataCounters() {}

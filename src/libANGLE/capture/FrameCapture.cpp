@@ -1264,6 +1264,28 @@ void MaybeResetOpaqueTypeObjects(ReplayWriter &replayWriter,
     MaybeResetFenceSyncObjects(out, replayWriter, header, resourceTracker, binaryData);
 }
 
+void MaybeResetContextState(ReplayWriter &replayWriter,
+                            std::stringstream &out,
+                            std::stringstream &header,
+                            ResourceTracker *resourceTracker,
+                            const gl::State &replayState,
+                            std::vector<uint8_t> *binaryData,
+                            const ResetHelper &resetHelper)
+{
+    // Check dirty states
+    for (const EntryPoint &entryPoint : resetHelper.mDirty)
+    {
+        ASSERT(resetHelper.mResetCalls.find(entryPoint) != resetHelper.mResetCalls.end());
+
+        for (const auto &call : resetHelper.mResetCalls.at(entryPoint))
+        {
+            out << "    ";
+            WriteCppReplayForCall(call, replayWriter, out, header, binaryData);
+            out << ";\n";
+        }
+    }
+}
+
 bool FindShaderProgramIDsInCall(const CallCapture &call, std::vector<gl::ShaderProgramID> &idsOut)
 {
     for (const ParamCapture &param : call.params.getParamCaptures())
@@ -3380,6 +3402,7 @@ void CaptureShareGroupMidExecutionSetup(const gl::Context *context,
 
 void CaptureMidExecutionSetup(const gl::Context *context,
                               std::vector<CallCapture> *setupCalls,
+                              CallResetMap &resetCalls,
                               std::vector<CallCapture> *shareGroupSetupCalls,
                               ResourceIDToSetupCallsMap *resourceIDToSetupCalls,
                               ResourceTracker *resourceTracker,
@@ -3727,6 +3750,7 @@ void CaptureMidExecutionSetup(const gl::Context *context,
         // If we have a program bound in the API, or if there is no program bound to the API at
         // time of capture and we bound a program for uniform updates during MEC, we must add
         // a set program call to replay the correct states.
+        GLuint currentProgram = 0;
         if (apiState.getProgram())
         {
             cap(CaptureUseProgram(replayState, true, apiState.getProgram()->id()));
@@ -3736,6 +3760,8 @@ void CaptureMidExecutionSetup(const gl::Context *context,
             // Set this program as active so it will be generated in Setup
             MarkResourceIDActive(ResourceIDType::ShaderProgram, apiState.getProgram()->id().value,
                                  shareGroupSetupCalls, resourceIDToSetupCalls);
+
+            currentProgram = apiState.getProgram()->id().value;
         }
         else if (replayState.getProgram())
         {
@@ -3743,6 +3769,11 @@ void CaptureMidExecutionSetup(const gl::Context *context,
             CaptureUpdateCurrentProgram(setupCalls->back(), 0, setupCalls);
             (void)replayState.setProgram(context, nullptr);
         }
+
+        Capture(&resetCalls[angle::EntryPoint::GLUseProgram],
+                CaptureUseProgram(replayState, true, {currentProgram}));
+        CaptureUpdateCurrentProgram((&resetCalls[angle::EntryPoint::GLUseProgram])->back(), 0,
+                                    &resetCalls[angle::EntryPoint::GLUseProgram]);
 
         // Same for program pipelines as for programs, see comment above.
         if (apiState.getProgramPipeline())
@@ -5851,6 +5882,14 @@ void FrameCaptureShared::maybeCapturePreCallUpdates(
             }
             break;
         }
+        case EntryPoint::GLUseProgram:
+        {
+            if (isCaptureActive())
+            {
+                context->getFrameCapture()->setResetDirty(EntryPoint::GLUseProgram);
+            }
+            break;
+        }
         default:
             break;
     }
@@ -6360,9 +6399,9 @@ void FrameCaptureShared::runMidExecutionCapture(const gl::Context *mainContext)
         if (shareContext->id() == mainContext->id())
         {
             CaptureMidExecutionSetup(shareContext, &frameCapture->getSetupCalls(),
-                                     &mShareGroupSetupCalls, &mResourceIDToSetupCalls,
-                                     &mResourceTracker, mainContextReplayState,
-                                     mValidateSerializedState);
+                                     frameCapture->getResetCalls(), &mShareGroupSetupCalls,
+                                     &mResourceIDToSetupCalls, &mResourceTracker,
+                                     mainContextReplayState, mValidateSerializedState);
             scanSetupCalls(mainContext, frameCapture->getSetupCalls());
         }
         else
@@ -6374,9 +6413,9 @@ void FrameCaptureShared::runMidExecutionCapture(const gl::Context *mainContext)
             auxContextReplayState.initializeForCapture(shareContext);
 
             CaptureMidExecutionSetup(shareContext, &frameCapture->getSetupCalls(),
-                                     &mShareGroupSetupCalls, &mResourceIDToSetupCalls,
-                                     &mResourceTracker, auxContextReplayState,
-                                     mValidateSerializedState);
+                                     frameCapture->getResetCalls(), &mShareGroupSetupCalls,
+                                     &mResourceIDToSetupCalls, &mResourceTracker,
+                                     auxContextReplayState, mValidateSerializedState);
 
             scanSetupCalls(mainContext, frameCapture->getSetupCalls());
 
@@ -6455,7 +6494,8 @@ void FrameCaptureShared::onEndFrame(const gl::Context *context)
         CaptureValidateSerializedState(context, &mFrameCalls);
     }
 
-    writeMainContextCppReplay(context, frameCapture->getSetupCalls());
+    writeMainContextCppReplay(context, frameCapture->getSetupCalls(),
+                              frameCapture->getResetHelper());
 
     if (mFrameIndex == mCaptureEndFrame)
     {
@@ -6552,6 +6592,9 @@ TrackedResource::~TrackedResource() = default;
 ResourceTracker::ResourceTracker() = default;
 
 ResourceTracker::~ResourceTracker() = default;
+
+ResetHelper::ResetHelper()  = default;
+ResetHelper::~ResetHelper() = default;
 
 void ResourceTracker::setDeletedFenceSync(GLsync sync)
 {
@@ -6918,7 +6961,8 @@ void FrameCaptureShared::writeCppReplayIndexFiles(const gl::Context *context,
 }
 
 void FrameCaptureShared::writeMainContextCppReplay(const gl::Context *context,
-                                                   const std::vector<CallCapture> &setupCalls)
+                                                   const std::vector<CallCapture> &setupCalls,
+                                                   const ResetHelper &resetHelper)
 {
     ASSERT(mWindowSurfaceContextID == context->id());
 
@@ -7050,6 +7094,10 @@ void FrameCaptureShared::writeMainContextCppReplay(const gl::Context *context,
         // Reset opaque type objects that don't have IDs, so are not ResourceIDTypes.
         MaybeResetOpaqueTypeObjects(mReplayWriter, bodyStream, headerStream, &mResourceTracker,
                                     &mBinaryData);
+
+        // Reset any general state
+        MaybeResetContextState(mReplayWriter, bodyStream, headerStream, &mResourceTracker,
+                               context->getState(), &mBinaryData, resetHelper);
 
         bodyStream << "}\n";
 
