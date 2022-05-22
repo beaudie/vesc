@@ -439,6 +439,22 @@ using SurfaceParamsMap = std::map<gl::ContextID, SurfaceParams>;
 
 using CallVector = std::vector<std::vector<CallCapture> *>;
 
+// A map from API entry point to calls
+using CallResetMap = std::map<angle::EntryPoint, std::vector<CallCapture>>;
+
+class ResetHelper final : angle::NonCopyable
+{
+  public:
+    ResetHelper();
+    ~ResetHelper();
+
+    // Dirty state per entry point
+    std::set<angle::EntryPoint> mDirty;
+
+    // Reset calls per API entry point
+    CallResetMap mResetCalls;
+};
+
 class FrameCapture final : angle::NonCopyable
 {
   public:
@@ -448,10 +464,17 @@ class FrameCapture final : angle::NonCopyable
     std::vector<CallCapture> &getSetupCalls() { return mSetupCalls; }
     void clearSetupCalls() { mSetupCalls.clear(); }
 
+    ResetHelper &getResetHelper() { return mResetHelper; }
+    CallResetMap &getResetCalls() { return mResetHelper.mResetCalls; }
+
+    void setResetDirty(EntryPoint call) { mResetHelper.mDirty.insert(call); }
+
     void reset();
 
   private:
     std::vector<CallCapture> mSetupCalls;
+
+    ResetHelper mResetHelper;
 };
 
 // Page range inside a coherent buffer
@@ -705,7 +728,8 @@ class FrameCaptureShared final : angle::NonCopyable
     void writeJSON(const gl::Context *context);
     void writeCppReplayIndexFiles(const gl::Context *context, bool writeResetContextCall);
     void writeMainContextCppReplay(const gl::Context *context,
-                                   const std::vector<CallCapture> &setupCalls);
+                                   const std::vector<CallCapture> &setupCalls,
+                                   const ResetHelper &resetHelper);
 
     void captureClientArraySnapshot(const gl::Context *context,
                                     size_t vertexCount,
