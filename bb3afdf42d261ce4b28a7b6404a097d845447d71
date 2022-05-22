@@ -16,6 +16,24 @@
       "message": "This doesn\u0027t seem to make much sense: `max*Samples` is the number of samples, so\nif the original number is 64 (\u003d0x40) then this masking with 0x3f would result in zero samples.\nIMHO ANGLE_LIMIT_CAP should be used for all three values. (In updateCaps std::min is also used to limit this cap).",
       "revId": "bb3afdf42d261ce4b28a7b6404a097d845447d71",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "87241585_4381a60b",
+        "filename": "src/libANGLE/Context.cpp",
+        "patchSetId": 9
+      },
+      "lineNbr": 3994,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-05-22T01:01:10Z",
+      "side": 1,
+      "message": "The GL names are quite misleading, but no this should be correct. `maxColorTextureSamples`, `maxDepthTextureSamples` and `maxIntegerSamples` are actually masks, not counts.\n\nFor further confirmation, see for example how they are initialized in the Vulkan backend:\n\n```\n    mNativeCaps.maxColorTextureSamples \u003d\n        limitsVk.sampledImageColorSampleCounts \u0026 vk_gl::kSupportedSampleCounts;\n    mNativeCaps.maxDepthTextureSamples \u003d\n        limitsVk.sampledImageDepthSampleCounts \u0026 vk_gl::kSupportedSampleCounts;\n    mNativeCaps.maxIntegerSamples \u003d\n        limitsVk.sampledImageIntegerSampleCounts \u0026 vk_gl::kSupportedSampleCounts;\n```",
+      "parentUuid": "75dafb21_f9db3e63",
+      "revId": "bb3afdf42d261ce4b28a7b6404a097d845447d71",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
