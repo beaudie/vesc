@@ -185,6 +185,13 @@ class ProgramExecutable final : public angle::Subject
         return mActiveSamplerTypes;
     }
 
+    void setActive(size_t textureUnit,
+                   const SamplerBinding &samplerBinding,
+                   const gl::LinkedUniform &samplerUniform);
+    void setInactive(size_t textureUnit);
+    void hasSamplerTypeConflict(size_t textureUnit);
+    void hasSamplerFormatConflict(size_t textureUnit);
+
     void updateActiveSamplers(const ProgramState &programState);
     SamplerIndexSet getSamplerIndexSetForTextureUnit(size_t textureUnit) const;
 
