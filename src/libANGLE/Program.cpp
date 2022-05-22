@@ -3392,6 +3392,7 @@ void Program::updateSamplerUniform(Context *context,
             continue;
         }
 
+        // Update sampler's bound textureUnit
         boundTextureUnits[arrayIndex + locationInfo.arrayIndex] = newTextureUnit;
 
         // Update the reference counts.
@@ -3407,36 +3408,31 @@ void Program::updateSamplerUniform(Context *context,
         TextureType &oldSamplerType     = mState.mExecutable->mActiveSamplerTypes[oldTextureUnit];
         SamplerFormat &newSamplerFormat = mState.mExecutable->mActiveSamplerFormats[newTextureUnit];
         SamplerFormat &oldSamplerFormat = mState.mExecutable->mActiveSamplerFormats[oldTextureUnit];
+        bool newSamplerYUV = mState.mExecutable->mActiveSamplerYUV.test(newTextureUnit);
 
         if (newRefCount == 1)
         {
-            newSamplerType   = samplerBinding.textureType;
-            newSamplerFormat = samplerBinding.format;
-            mState.mExecutable->mActiveSamplersMask.set(newTextureUnit);
-            mState.mExecutable->mActiveSamplerShaderBits[newTextureUnit] =
-                mState.mExecutable->getUniforms()[locationInfo.index].activeShaders();
+            mState.mExecutable->setActive(newTextureUnit, samplerBinding, samplerIndex,
+                                          mState.mExecutable->getUniforms()[locationInfo.index]);
         }
         else
         {
-            if (newSamplerType != samplerBinding.textureType)
+            if (newSamplerType != samplerBinding.textureType ||
+                newSamplerYUV != IsSamplerYUVType(samplerBinding.samplerType))
             {
-                // Conflict detected. Ensure we reset it properly.
-                newSamplerType = TextureType::InvalidEnum;
+                mState.mExecutable->hasSamplerTypeConflict(newTextureUnit);
             }
+
             if (newSamplerFormat != samplerBinding.format)
             {
-                newSamplerFormat = SamplerFormat::InvalidEnum;
+                mState.mExecutable->hasSamplerFormatConflict(newTextureUnit);
             }
         }
 
         // Unset previously active sampler.
         if (oldRefCount == 0)
         {
-            oldSamplerType   = TextureType::InvalidEnum;
-            oldSamplerFormat = SamplerFormat::InvalidEnum;
-            mState.mExecutable->mActiveSamplersMask.reset(oldTextureUnit);
-            mState.mExecutable->mActiveTextureUnitToSamplerIndexMap[oldTextureUnit] =
-                std::numeric_limits<size_t>::max();
+            mState.mExecutable->setInactive(oldTextureUnit);
         }
         else
         {
