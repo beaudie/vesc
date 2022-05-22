@@ -34,6 +34,24 @@
       "parentUuid": "75dafb21_f9db3e63",
       "revId": "bb3afdf42d261ce4b28a7b6404a097d845447d71",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "8051e320_8dabee01",
+        "filename": "src/libANGLE/Context.cpp",
+        "patchSetId": 9
+      },
+      "lineNbr": 3994,
+      "author": {
+        "id": 1491823
+      },
+      "writtenOn": "2022-05-22T10:14:02Z",
+      "side": 1,
+      "message": "In `Context::getIntegervImpl`, e.g. the value `mState.mCaps.maxColorTextureSamples` is  returned when querying `GL_MAX_COLOR_TEXTURE_SAMPLES`, which is supposed to be the the maximum number of samples in a color multisample texture (see, e.g. https://www.khronos.org/registry/OpenGL-Refpages/gl4/html/glGet.xhtml). \n\nand in rendergl_utils.cpp we have \n```\n        caps-\u003emaxColorTextureSamples \u003d\n            std::min(QuerySingleGLInt(functions, GL_MAX_COLOR_TEXTURE_SAMPLES), sampleCountLimit);\n```\nwhich is what one would expect, since `sampleCountLimit` is by default only limited to the max int, `maxColorTextureSamples` could be initialized to 64 and the masking would remove that value. \n\nIn fact, I think that the way, how the max samples are initialized from Vulkan is also not correct, one should filter out the highest bit, and set the caps value based on this.",
+      "parentUuid": "87241585_4381a60b",
+      "revId": "bb3afdf42d261ce4b28a7b6404a097d845447d71",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
