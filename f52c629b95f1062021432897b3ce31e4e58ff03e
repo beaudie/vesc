@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "4507945b_57e6ddbe",
+        "filename": "src/libANGLE/Context.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 3992,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-05-22T17:57:17Z",
+      "side": 0,
+      "message": "Can remove this then.",
+      "range": {
+        "startLine": 3992,
+        "startChar": 43,
+        "endLine": 3992,
+        "endChar": 74
+      },
+      "revId": "f52c629b95f1062021432897b3ce31e4e58ff03e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
