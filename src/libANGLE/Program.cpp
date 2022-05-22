@@ -3414,6 +3414,8 @@ void Program::updateSamplerUniform(Context *context,
             mState.mExecutable->mActiveSamplersMask.set(newTextureUnit);
             mState.mExecutable->mActiveSamplerShaderBits[newTextureUnit] =
                 mState.mExecutable->getUniforms()[locationInfo.index].activeShaders();
+            mState.mExecutable->mActiveSamplerYUV[newTextureUnit] =
+                IsSamplerYUVType(samplerBinding.samplerType);
         }
         else
         {
@@ -3434,6 +3436,7 @@ void Program::updateSamplerUniform(Context *context,
             oldSamplerType   = TextureType::InvalidEnum;
             oldSamplerFormat = SamplerFormat::InvalidEnum;
             mState.mExecutable->mActiveSamplersMask.reset(oldTextureUnit);
+            mState.mExecutable->mActiveSamplerYUV.reset(oldTextureUnit);
         }
         else
         {
