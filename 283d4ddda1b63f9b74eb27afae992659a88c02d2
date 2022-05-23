@@ -16,6 +16,24 @@
       "message": "Could you please add a regression test?",
       "revId": "283d4ddda1b63f9b74eb27afae992659a88c02d2",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "16f2378b_de9a27a7",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1491823
+      },
+      "writtenOn": "2022-05-23T09:13:02Z",
+      "side": 1,
+      "message": "I\u0027ve added a test that checks whether the reported maximum sample counts are actually supported.",
+      "parentUuid": "17f3dbf5_6d6acd7d",
+      "revId": "283d4ddda1b63f9b74eb27afae992659a88c02d2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
