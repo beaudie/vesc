@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "496418d0_761c03da",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 24
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1359249
+      },
+      "writtenOn": "2022-05-23T20:04:56Z",
+      "side": 1,
+      "message": "Add check for extension feature support before using extension functions.",
+      "revId": "afc9af685ae5fe5c508b1e291ef6a9b9650d6994",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "caa86568_0b98434b",
+        "filename": "src/libANGLE/renderer/vulkan/linux/gbm/SurfaceVkGbm.cpp",
+        "patchSetId": 24
+      },
+      "lineNbr": 126,
+      "author": {
+        "id": 1359249
+      },
+      "writtenOn": "2022-05-23T20:04:56Z",
+      "side": 1,
+      "message": "Note that the DrmFormatModifiers functions are dependent on the extension being supported.\nLook in RendererVk.cpp\n\n    if (getFeatures().supportsExternalMemoryDmaBufAndModifiers.enabled)\n    {\n        mEnabledDeviceExtensions.push_back(VK_EXT_EXTERNAL_MEMORY_DMA_BUF_EXTENSION_NAME);\n        mEnabledDeviceExtensions.push_back(VK_EXT_IMAGE_DRM_FORMAT_MODIFIER_EXTENSION_NAME);\n    }\n\n\n    ANGLE_FEATURE_CONDITION(\n        \u0026mFeatures, supportsExternalMemoryDmaBufAndModifiers,\n        ExtensionFound(VK_EXT_EXTERNAL_MEMORY_DMA_BUF_EXTENSION_NAME, deviceExtensionNames) \u0026\u0026\n            ExtensionFound(VK_EXT_IMAGE_DRM_FORMAT_MODIFIER_EXTENSION_NAME, deviceExtensionNames));\n\nUse of the functions from this extension should first check that feature is true:",
+      "revId": "afc9af685ae5fe5c508b1e291ef6a9b9650d6994",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
