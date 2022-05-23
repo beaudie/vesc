@@ -66,6 +66,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "f582efc9_17a23364",
+        "filename": "src/tests/gl_tests/GLSLTest.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 5088,
+      "author": {
+        "id": 1543967
+      },
+      "writtenOn": "2022-05-23T17:29:58Z",
+      "side": 1,
+      "message": "Thank you for the suggestion Shahbaz.\n\nYes, I agree that the test will be better without the readback! I\u0027ll take it out before trying to land.\n\nBUT for now, the test fails as-is, so I thought I could leave all the extraneous flushes, finishes, extra barriers, and readbacks in order to help guide the debugging process.",
+      "parentUuid": "3752d6b9_062441a1",
+      "range": {
+        "startLine": 5086,
+        "startChar": 0,
+        "endLine": 5088,
+        "endChar": 84
+      },
+      "revId": "0b5137afea751d6251d10aa0267a4903f06d3580",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "8948ef71_079d1a83",
         "filename": "src/tests/gl_tests/GLSLTest.cpp",
         "patchSetId": 1
@@ -77,6 +101,24 @@
       "writtenOn": "2022-05-23T05:01:51Z",
       "side": 1,
       "message": "Barrier is unnecessary here, the image was only read.",
+      "revId": "0b5137afea751d6251d10aa0267a4903f06d3580",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "86f0ac21_b3a3d8c6",
+        "filename": "src/tests/gl_tests/GLSLTest.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 5096,
+      "author": {
+        "id": 1543967
+      },
+      "writtenOn": "2022-05-23T17:29:58Z",
+      "side": 1,
+      "message": "Ack. I\u0027ll take this out before trying to land",
+      "parentUuid": "8948ef71_079d1a83",
       "revId": "0b5137afea751d6251d10aa0267a4903f06d3580",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }

@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "516a8870_84e8f30f",
+        "filename": "src/tests/gl_tests/GLSLTest.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 5102,
+      "author": {
+        "id": 1543967
+      },
+      "writtenOn": "2022-05-23T17:29:58Z",
+      "side": 1,
+      "message": "The fact that the texture fetch pixels work, but the imageLoad ones do not, makes me strongly suspect that this image binding might not be taking proper effect.",
+      "revId": "8c75085ab3f2da66c51f24937534f0c43b32e9af",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
