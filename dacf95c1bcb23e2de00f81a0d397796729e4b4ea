@@ -20,6 +20,23 @@
     {
       "unresolved": false,
       "key": {
+        "uuid": "a4c60831_0dc15dd5",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 5
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1517514
+      },
+      "writtenOn": "2022-05-23T19:33:03Z",
+      "side": 1,
+      "message": "look at the failure test case. it have \n    glBindTexture(GL_TEXTURE_BUFFER, gTextureMap[1013]);\n    glUniform4fv(gUniformLocations[gCurrentProgram][0], 1, reinterpret_cast\u003cconst GLfloat *\u003e(\u0026gBinaryData[4163424]));\n    glUniform4fv(gUniformLocations[gCurrentProgram][1], 8, reinterpret_cast\u003cconst GLfloat *\u003e(\u0026gBinaryData[4163440]));\n    glUniform4fv(gUniformLocations[gCurrentProgram][9], 8, reinterpret_cast\u003cconst GLfloat *\u003e(\u0026gBinaryData[4163568]));\n    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, gBufferMap[2276]);\n    glBindBuffer(GL_ARRAY_BUFFER, gBufferMap[2277]);\n    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 24, reinterpret_cast\u003cconst void *\u003e(8));\n   it have TEXTURE_BUFFER used. even if we don\u0027t export GL_EXT_texture_buffer,\n   so we need to update the gold image.  or maybe regenerate the new trace.",
+      "revId": "dacf95c1bcb23e2de00f81a0d397796729e4b4ea",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
         "uuid": "58c4bfed_f90bd781",
         "filename": "src/libANGLE/renderer/vulkan/vk_caps_utils.cpp",
         "patchSetId": 5
