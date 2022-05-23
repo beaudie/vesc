@@ -24,6 +24,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "36ce4b73_fd7443e4",
+        "filename": "src/libANGLE/Program.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 1344,
+      "author": {
+        "id": 1525982
+      },
+      "writtenOn": "2022-05-23T16:43:42Z",
+      "side": 0,
+      "message": "Done",
+      "parentUuid": "d08149cb_b14f1477",
+      "range": {
+        "startLine": 1344,
+        "startChar": 32,
+        "endLine": 1344,
+        "endChar": 67
+      },
+      "revId": "d3eb61d4a054ad060a27480219450e3d1caed1fc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "d42cbe7e_5fee9e19",
@@ -47,6 +71,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "dfb53b63_15f272bd",
+        "filename": "src/libANGLE/Shader.h",
+        "patchSetId": 4
+      },
+      "lineNbr": 207,
+      "author": {
+        "id": 1525982
+      },
+      "writtenOn": "2022-05-23T16:43:42Z",
+      "side": 0,
+      "message": "Done",
+      "parentUuid": "d42cbe7e_5fee9e19",
+      "range": {
+        "startLine": 207,
+        "startChar": 22,
+        "endLine": 207,
+        "endChar": 53
+      },
+      "revId": "d3eb61d4a054ad060a27480219450e3d1caed1fc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "3790f97c_af0fc075",
@@ -60,6 +108,30 @@
       "writtenOn": "2022-05-20T13:47:49Z",
       "side": 0,
       "message": "Please delete this function as well",
+      "range": {
+        "startLine": 747,
+        "startChar": 17,
+        "endLine": 747,
+        "endChar": 56
+      },
+      "revId": "d3eb61d4a054ad060a27480219450e3d1caed1fc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "64e67e1e_ffd97e0b",
+        "filename": "src/libANGLE/renderer/vulkan/ProgramExecutableVk.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 747,
+      "author": {
+        "id": 1525982
+      },
+      "writtenOn": "2022-05-23T16:43:42Z",
+      "side": 0,
+      "message": "Done",
+      "parentUuid": "3790f97c_af0fc075",
       "range": {
         "startLine": 747,
         "startChar": 17,
