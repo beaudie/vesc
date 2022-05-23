@@ -1,0 +1,84 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "06779269_e55fdcc5",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-05-23T05:01:51Z",
+      "side": 1,
+      "message": "Drive by!",
+      "revId": "0b5137afea751d6251d10aa0267a4903f06d3580",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "6c74b298_9227356e",
+        "filename": "src/tests/gl_tests/GLSLTest.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 5085,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-05-23T05:01:51Z",
+      "side": 1,
+      "message": "`GL_SHADER_IMAGE_ACCESS_BARRIER_BIT` should be sufficient",
+      "range": {
+        "startLine": 5085,
+        "startChar": 20,
+        "endLine": 5085,
+        "endChar": 39
+      },
+      "revId": "0b5137afea751d6251d10aa0267a4903f06d3580",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "3752d6b9_062441a1",
+        "filename": "src/tests/gl_tests/GLSLTest.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 5088,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-05-23T05:01:51Z",
+      "side": 1,
+      "message": "nits: flush and finish are unnecessary here (and implied by `EXPECT_PIXEL_RECT_EQ`).\n\nBut may I suggest not reading back the framebuffer here? That will make the test better by also testing that imageLoad immediately after clear works.",
+      "range": {
+        "startLine": 5086,
+        "startChar": 0,
+        "endLine": 5088,
+        "endChar": 84
+      },
+      "revId": "0b5137afea751d6251d10aa0267a4903f06d3580",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "8948ef71_079d1a83",
+        "filename": "src/tests/gl_tests/GLSLTest.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 5096,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-05-23T05:01:51Z",
+      "side": 1,
+      "message": "Barrier is unnecessary here, the image was only read.",
+      "revId": "0b5137afea751d6251d10aa0267a4903f06d3580",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
