@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "1b5b32be_079ebfa4",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 7
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1119849
+      },
+      "writtenOn": "2022-05-23T07:39:44Z",
+      "side": 1,
+      "message": "+CC Ben as WebGPU gardener for the week.\n\nThis CL makes the roll of ANGLE into Dawn fail because the addition to BUILD.gn makes util/BUILD.gn discovered in Dawn\u0027s `gn gen` step. Is there a way to make util/ not referenced if only using ANGLE\u0027s main targets? (libGLESv2 etc) Otherwise we\u0027ll need to add additional dependencies to Dawn just to make gn gen pass (libpng at least)",
+      "revId": "3da24b5cd38e0f4bb99b277733a270bd13cfcd21",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
