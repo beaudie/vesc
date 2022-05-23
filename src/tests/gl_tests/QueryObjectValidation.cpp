@@ -31,6 +31,19 @@ std::string PrintToStringParamName(const ::testing::TestParamInfo<QueryObjectTes
     return ss.str();
 }
 
+void getQueryResult(GLuint queryObjectName, GLuint64 *result)
+{
+    GLuint queryResult = GL_FALSE;
+    while (queryResult != GL_TRUE)
+    {
+        glGetQueryObjectuiv(queryObjectName, GL_QUERY_RESULT_AVAILABLE, &queryResult);
+        ASSERT_GL_NO_ERROR();
+        angle::Sleep(50);
+    }
+    glGetQueryObjectui64vEXT(queryObjectName, GL_QUERY_RESULT_EXT, result);
+}
+
+#define TIMESTAMP_QUERY_SIZE 2
 class QueryObjectTest : public ANGLETestWithParam<QueryObjectTestParams>
 {
   protected:
@@ -42,6 +55,7 @@ class QueryObjectTest : public ANGLETestWithParam<QueryObjectTestParams>
     void createQuery()
     {
         glGenQueries(1, &mQueryObjectName);
+        glGenQueries(TIMESTAMP_QUERY_SIZE, mQueryObjectNameArray);
         ASSERT_NE(mQueryObjectName, (GLuint)0u);
         ASSERT_GL_NO_ERROR();
     }
@@ -54,10 +68,13 @@ class QueryObjectTest : public ANGLETestWithParam<QueryObjectTestParams>
         {
             glDeleteQueries(1, &mQueryObjectName);
         }
+        glDeleteQueries(TIMESTAMP_QUERY_SIZE, mQueryObjectNameArray);
     }
 
     GLuint mQueryObjectName = 0;
-    GLuint mQueryResult     = 0;
+    // Query objects for timestamp
+    GLuint mQueryObjectNameArray[TIMESTAMP_QUERY_SIZE];
+    GLuint mQueryResult = 0;
 };
 
 class QueryObjectTestES32 : public QueryObjectTest
@@ -113,6 +130,25 @@ TEST_P(QueryObjectTest, QueryObjectResultAfterEnd)
     ASSERT_GL_NO_ERROR();
 
     glGetQueryObjectuiv(mQueryObjectName, GL_QUERY_RESULT_AVAILABLE, &mQueryResult);
+}
+
+// Test glQueryCounterEXT
+TEST_P(QueryObjectTest, QueryObjectTimestamp)
+{
+    ANGLE_SKIP_TEST_IF(!IsD3D11());
+    glQueryCounterEXT(mQueryObjectNameArray[0], GL_TIMESTAMP_EXT);
+    ASSERT_GL_NO_ERROR();
+    angle::Sleep(100);
+
+    glQueryCounterEXT(mQueryObjectNameArray[1], GL_TIMESTAMP_EXT);
+    ASSERT_GL_NO_ERROR();
+
+    GLuint64 result = 0;
+    getQueryResult(mQueryObjectNameArray[0], &result);
+
+    GLuint64 result2 = 0;
+    getQueryResult(mQueryObjectNameArray[1], &result2);
+    ASSERT_TRUE(result != 0 && result2 > result);
 }
 
 // Test glGetQueryObjectuiv after glEndQuery with GL_PRIMITIVES_GENERATED

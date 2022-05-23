@@ -15,6 +15,7 @@
 #include "libANGLE/renderer/d3d/d3d11/Context11.h"
 #include "libANGLE/renderer/d3d/d3d11/Renderer11.h"
 #include "libANGLE/renderer/d3d/d3d11/renderer11_utils.h"
+#include "libANGLE/trace.h"
 
 namespace
 {
@@ -79,12 +80,36 @@ angle::Result Query11::end(const gl::Context *context)
     return pause(GetImplAs<Context11>(context));
 }
 
-angle::Result Query11::queryCounter(const gl::Context *context)
+angle::Result Query11::queryCounter(const gl::Context *glContext)
 {
-    // This doesn't do anything for D3D11 as we don't support timestamps
     ASSERT(getType() == gl::QueryType::Timestamp);
     mResultSum = 0;
-    mPendingQueries.push_back(std::unique_ptr<QueryState>(new QueryState()));
+
+    if (!mActiveQuery->query.valid())
+    {
+        Context11 *context11 = GetImplAs<Context11>(glContext);
+
+        gl::QueryType type = getType();
+        D3D11_QUERY_DESC queryDesc;
+        queryDesc.Query     = gl_d3d11::ConvertQueryType(type);
+        queryDesc.MiscFlags = 0;
+
+        ANGLE_TRY(mRenderer->allocateResource(context11, queryDesc, &mActiveQuery->query));
+
+        queryDesc.Query = D3D11_QUERY_TIMESTAMP;
+
+        ANGLE_TRY(mRenderer->allocateResource(context11, queryDesc, &mActiveQuery->beginTimestamp));
+
+        ID3D11DeviceContext *context = mRenderer->getDeviceContext();
+        context->Begin(mActiveQuery->query.get());
+        context->End(mActiveQuery->beginTimestamp.get());
+        context->End(mActiveQuery->query.get());
+
+        mPendingQueries.push_back(std::move(mActiveQuery));
+        mActiveQuery = std::unique_ptr<QueryState>(new QueryState());
+        return flush(context11, false);
+    }
+
     return angle::Result::Continue;
 }
 
@@ -309,12 +334,55 @@ angle::Result Query11::testQuery(Context11 *context11, QueryState *queryState)
 
             case gl::QueryType::Timestamp:
             {
-                // D3D11 doesn't support GL timestamp queries as D3D timestamps are not guaranteed
-                // to have any sort of continuity outside of a disjoint timestamp query block, which
-                // GL depends on
-                ASSERT(!queryState->query.valid());
-                mResult              = 0;
-                queryState->finished = true;
+                ASSERT(queryState->query.valid());
+                ASSERT(queryState->beginTimestamp.valid());
+
+                D3D11_QUERY_DATA_TIMESTAMP_DISJOINT timeStats = {};
+                HRESULT result =
+                    context->GetData(queryState->query.get(), &timeStats, sizeof(timeStats), 0);
+                ANGLE_TRY_HR(context11, result, "Failed to get the data of an internal query");
+
+                if (result == S_OK)
+                {
+                    UINT64 timestamp     = 0;
+                    HRESULT timestampRes = context->GetData(queryState->beginTimestamp.get(),
+                                                            &timestamp, sizeof(UINT64), 0);
+                    ANGLE_TRY_HR(context11, timestampRes,
+                                 "Failed to get the data of an internal query");
+
+                    if (timestampRes == S_OK)
+                    {
+                        queryState->finished = true;
+
+                        if (timeStats.Disjoint)
+                        {
+                            mRenderer->setGPUDisjoint();
+                        }
+
+                        static_assert(sizeof(UINT64) == sizeof(unsigned long long),
+                                      "D3D UINT64 isn't 64 bits");
+
+                        angle::CheckedNumeric<UINT64> checkedTime(timestamp);
+                        checkedTime *= 1000000ull;
+                        checkedTime /= timeStats.Frequency;
+                        if (checkedTime.IsValid())
+                        {
+                            mResult = checkedTime.ValueOrDie();
+                            std::stringstream timestampTraceStr;
+                            timestampTraceStr << "GPU Timestamp: " << timestamp
+                                              << ", GPU Tick Frequency: " << timeStats.Frequency;
+                            ANGLE_TRACE_EVENT1("gpu.angle", "Query11::testQuery", "d3d11timestamp",
+                                               timestampTraceStr.str());
+                        }
+                        else
+                        {
+                            mResult = std::numeric_limits<GLuint64>::max() / timeStats.Frequency;
+                            // If an overflow does somehow occur, there is no way the elapsed time
+                            // is accurate, so we generate a disjoint event
+                            mRenderer->setGPUDisjoint();
+                        }
+                    }
+                }
             }
             break;
 

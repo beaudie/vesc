@@ -2096,6 +2096,9 @@ D3D11_QUERY ConvertQueryType(gl::QueryType type)
         case gl::QueryType::TimeElapsed:
             // Two internal queries are also created for begin/end timestamps
             return D3D11_QUERY_TIMESTAMP_DISJOINT;
+        case gl::QueryType::Timestamp:
+            // A disjoint query is also created for timestamp
+            return D3D11_QUERY_TIMESTAMP_DISJOINT;
         case gl::QueryType::CommandsCompleted:
             return D3D11_QUERY_EVENT;
         default:
