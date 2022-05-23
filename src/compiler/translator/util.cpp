@@ -383,7 +383,6 @@ GLenum GLVariableType(const TType &type)
         default:
             UNREACHABLE();
     }
-
     return GL_NONE;
 }
 
@@ -592,9 +591,7 @@ InterpolationType GetInterpolationType(TQualifier qualifier)
             return INTERPOLATION_SAMPLE;
         default:
             UNREACHABLE();
-#if !UNREACHABLE_IS_NORETURN
             return INTERPOLATION_SMOOTH;
-#endif
     }
 }
 
@@ -672,9 +669,7 @@ TType GetShaderVariableBasicType(const sh::ShaderVariable &var)
             return TType(EbtUInt, 4);
         default:
             UNREACHABLE();
-#if !UNREACHABLE_IS_NORETURN
             return TType();
-#endif
     }
 }
 
