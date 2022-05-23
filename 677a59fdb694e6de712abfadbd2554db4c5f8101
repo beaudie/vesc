@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "620b44fb_6ba2c9ce",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 10,
+      "author": {
+        "id": 1520902
+      },
+      "writtenOn": "2022-05-23T21:28:13Z",
+      "side": 1,
+      "message": "I think it would be better if you can change it to:\n\"Since UNREADHABLE_IS_NORETURN is only used in #if directives and it is always false\",",
+      "revId": "677a59fdb694e6de712abfadbd2554db4c5f8101",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
