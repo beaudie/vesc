@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "905d724c_bf7fd932",
+        "filename": "src/tests/gl_tests/GLSLTest.cpp",
+        "patchSetId": 21
+      },
+      "lineNbr": 5094,
+      "author": {
+        "id": 1543967
+      },
+      "writtenOn": "2022-05-23T04:20:51Z",
+      "side": 1,
+      "message": "Since we verified above that the texture is green, all I can come up with is that this somehow might not bind the right texture for the shader?",
+      "revId": "66d1c2642ce1ce7f7c9497fd9451f48e39695255",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
