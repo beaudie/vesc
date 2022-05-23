@@ -1,0 +1,44 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "3259ea08_d5c44e04",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 5
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2022-05-23T16:49:30Z",
+      "side": 1,
+      "message": "Looks like no complain from deqp tests. Nice work!",
+      "revId": "dacf95c1bcb23e2de00f81a0d397796729e4b4ea",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "58c4bfed_f90bd781",
+        "filename": "src/libANGLE/renderer/vulkan/vk_caps_utils.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 222,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2022-05-23T16:49:30Z",
+      "side": 1,
+      "message": "A bit redundant to list table here given you already have the link above.",
+      "range": {
+        "startLine": 185,
+        "startChar": 4,
+        "endLine": 222,
+        "endChar": 68
+      },
+      "revId": "dacf95c1bcb23e2de00f81a0d397796729e4b4ea",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
