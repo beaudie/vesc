@@ -16,6 +16,24 @@
       "message": "I\u0027ll +2 to unblock the rollers, but I think if you intruduce something like angle_build_tests, then you need to make ALL the tests conditional on it.\nOtherwise it\u0027ll lead to problems like dependency can\u0027t be found because it\u0027s inside if().",
       "revId": "24f43af4e271e216c7a9e245f70e3b759b3cf833",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "fa3eda5c_29ad2e78",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2022-05-24T14:43:33Z",
+      "side": 1,
+      "message": "Thanks Yuly. I don\u0027t quite understand the concern, if you like you can ping me offline to explain.",
+      "parentUuid": "9c3cc944_8a18c553",
+      "revId": "24f43af4e271e216c7a9e245f70e3b759b3cf833",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
