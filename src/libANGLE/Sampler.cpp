@@ -36,9 +36,10 @@ void Sampler::onDestroy(const Context *context)
     }
 }
 
-void Sampler::setLabel(const Context *context, const std::string &label)
+GLenum Sampler::setLabel(const Context *context, const std::string &label)
 {
     mLabel = label;
+    return GL_NO_ERROR;
 }
 
 const std::string &Sampler::getLabel() const

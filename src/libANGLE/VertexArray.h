@@ -202,7 +202,7 @@ class VertexArray final : public angle::ObserverInterface,
 
     VertexArrayID id() const { return mId; }
 
-    void setLabel(const Context *context, const std::string &label) override;
+    GLenum setLabel(const Context *context, const std::string &label) override;
     const std::string &getLabel() const override;
 
     const VertexBinding &getVertexBinding(size_t bindingIndex) const;

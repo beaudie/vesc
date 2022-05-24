@@ -174,9 +174,10 @@ VertexArray::~VertexArray()
     ASSERT(!mVertexArray);
 }
 
-void VertexArray::setLabel(const Context *context, const std::string &label)
+GLenum VertexArray::setLabel(const Context *context, const std::string &label)
 {
     mState.mLabel = label;
+    return GL_NO_ERROR;
 }
 
 const std::string &VertexArray::getLabel() const

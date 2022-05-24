@@ -1102,10 +1102,11 @@ ShaderProgramID Program::id() const
     return mHandle;
 }
 
-void Program::setLabel(const Context *context, const std::string &label)
+GLenum Program::setLabel(const Context *context, const std::string &label)
 {
     ASSERT(!mLinkingState);
     mState.mLabel = label;
+    return GL_NO_ERROR;
 }
 
 const std::string &Program::getLabel() const

@@ -82,9 +82,10 @@ Sync::~Sync()
     SafeDelete(mFence);
 }
 
-void Sync::setLabel(const Context *context, const std::string &label)
+GLenum Sync::setLabel(const Context *context, const std::string &label)
 {
     mLabel = label;
+    return GL_NO_ERROR;
 }
 
 const std::string &Sync::getLabel() const

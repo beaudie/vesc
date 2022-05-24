@@ -62,9 +62,10 @@ void Buffer::onDestroy(const Context *context)
         mImpl->destroy(context);
 }
 
-void Buffer::setLabel(const Context *context, const std::string &label)
+GLenum Buffer::setLabel(const Context *context, const std::string &label)
 {
     mState.mLabel = label;
+    return GL_NO_ERROR;
 }
 
 const std::string &Buffer::getLabel() const

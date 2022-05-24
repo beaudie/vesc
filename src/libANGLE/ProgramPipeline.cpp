@@ -178,9 +178,10 @@ void ProgramPipeline::onDestroy(const Context *context)
     getImplementation()->destroy(context);
 }
 
-void ProgramPipeline::setLabel(const Context *context, const std::string &label)
+GLenum ProgramPipeline::setLabel(const Context *context, const std::string &label)
 {
     mState.mLabel = label;
+    return GL_NO_ERROR;
 }
 
 const std::string &ProgramPipeline::getLabel() const

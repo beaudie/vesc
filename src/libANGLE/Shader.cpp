@@ -165,9 +165,10 @@ Shader::~Shader()
     ASSERT(!mImplementation);
 }
 
-void Shader::setLabel(const Context *context, const std::string &label)
+GLenum Shader::setLabel(const Context *context, const std::string &label)
 {
     mState.mLabel = label;
+    return GL_NO_ERROR;
 }
 
 const std::string &Shader::getLabel() const

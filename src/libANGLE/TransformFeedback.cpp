@@ -120,9 +120,10 @@ TransformFeedback::~TransformFeedback()
     SafeDelete(mImplementation);
 }
 
-void TransformFeedback::setLabel(const Context *context, const std::string &label)
+GLenum TransformFeedback::setLabel(const Context *context, const std::string &label)
 {
     mState.mLabel = label;
+    return GL_NO_ERROR;
 }
 
 const std::string &TransformFeedback::getLabel() const
