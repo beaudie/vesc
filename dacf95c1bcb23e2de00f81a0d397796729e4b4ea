@@ -90,6 +90,24 @@
       "message": "nit: please add `http://anglebug.com/3573` (or create a new bug). We don\u0027t leave bug-less `TODO`s in the code.",
       "revId": "dacf95c1bcb23e2de00f81a0d397796729e4b4ea",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "6b1b9681_cfa4cd98",
+        "filename": "src/libANGLE/renderer/vulkan/vk_caps_utils.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 225,
+      "author": {
+        "id": 1517514
+      },
+      "writtenOn": "2022-05-24T03:04:24Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "6ce977b6_ffd4d192",
+      "revId": "dacf95c1bcb23e2de00f81a0d397796729e4b4ea",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
