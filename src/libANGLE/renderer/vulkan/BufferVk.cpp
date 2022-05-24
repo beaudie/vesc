@@ -986,6 +986,25 @@ angle::Result BufferVk::setDataImpl(ContextVk *contextVk,
     return angle::Result::Continue;
 }
 
+angle::Result BufferVk::onLabelUpdate(const gl::Context *context)
+{
+    ContextVk *contextVk = vk::GetImpl(context);
+    return updateBufferLabel(contextVk);
+}
+
+angle::Result BufferVk::updateBufferLabel(ContextVk *contextVk)
+{
+    RendererVk *renderer = contextVk->getRenderer();
+    std::string label    = mState.getLabel();
+    if (!label.empty() && renderer->enableDebugUtils() && isBufferValid())
+    {
+        return vk::SetDebugUtilsObjectName(contextVk, VK_OBJECT_TYPE_BUFFER,
+                                           (uint64_t)(getBuffer().getBuffer().getHandle()),
+                                           mState.getLabel());
+    }
+    return angle::Result::Continue;
+}
+
 ConversionBuffer *BufferVk::getVertexConversionBuffer(RendererVk *renderer,
                                                       angle::FormatID formatID,
                                                       GLuint stride,
@@ -1047,5 +1066,4 @@ bool BufferVk::isCurrentlyInUse(ContextVk *contextVk) const
 {
     return mBuffer.isCurrentlyInUse(contextVk->getLastCompletedQueueSerial());
 }
-
 }  // namespace rx

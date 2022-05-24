@@ -131,6 +131,8 @@ class BufferVk : public BufferImpl
                                                 size_t offset,
                                                 bool hostVisible);
 
+    angle::Result onLabelUpdate(const gl::Context *context) override;
+
   private:
     angle::Result updateBuffer(ContextVk *contextVk,
                                const uint8_t *data,
@@ -176,6 +178,8 @@ class BufferVk : public BufferImpl
     angle::Result acquireBufferHelper(ContextVk *contextVk, size_t sizeInBytes);
 
     bool isExternalBuffer() const { return mClientBuffer != nullptr; }
+
+    angle::Result updateBufferLabel(ContextVk *contextVk);
 
     struct VertexConversionBuffer : public ConversionBuffer
     {
