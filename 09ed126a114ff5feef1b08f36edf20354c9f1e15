@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "edb16e41_66c2d632",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 23
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1116015
+      },
+      "writtenOn": "2022-05-24T16:59:45Z",
+      "side": 1,
+      "message": "I\u0027m not spec-savvy enough to know if this is correct, but it seems worth landing regardless.\n\nI\u0027d suggest to add a D3D11 suppression to src\\tests\\angle_end2end_tests_expectations.txt along with the test.",
+      "revId": "09ed126a114ff5feef1b08f36edf20354c9f1e15",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
