@@ -174,9 +174,10 @@ VertexArray::~VertexArray()
     ASSERT(!mVertexArray);
 }
 
-void VertexArray::setLabel(const Context *context, const std::string &label)
+angle::Result VertexArray::setLabel(const Context *context, const std::string &label)
 {
     mState.mLabel = label;
+    return angle::Result::Continue;
 }
 
 const std::string &VertexArray::getLabel() const

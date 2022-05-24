@@ -120,9 +120,10 @@ TransformFeedback::~TransformFeedback()
     SafeDelete(mImplementation);
 }
 
-void TransformFeedback::setLabel(const Context *context, const std::string &label)
+angle::Result TransformFeedback::setLabel(const Context *context, const std::string &label)
 {
     mState.mLabel = label;
+    return angle::Result::Continue;
 }
 
 const std::string &TransformFeedback::getLabel() const

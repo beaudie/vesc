@@ -121,9 +121,10 @@ void Renderbuffer::onDestroy(const Context *context)
 
 Renderbuffer::~Renderbuffer() {}
 
-void Renderbuffer::setLabel(const Context *context, const std::string &label)
+angle::Result Renderbuffer::setLabel(const Context *context, const std::string &label)
 {
     mLabel = label;
+    return angle::Result::Continue;
 }
 
 const std::string &Renderbuffer::getLabel() const
