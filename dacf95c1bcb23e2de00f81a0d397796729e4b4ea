@@ -37,6 +37,23 @@
     {
       "unresolved": false,
       "key": {
+        "uuid": "9cd5354d_4ad3973b",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 5
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-05-24T01:58:14Z",
+      "side": 1,
+      "message": "Excellent, thanks. We presumed support was missing for numerous formats, and have been stressing over it for a long time, so this change is definitely a relief! 😄",
+      "revId": "dacf95c1bcb23e2de00f81a0d397796729e4b4ea",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
         "uuid": "58c4bfed_f90bd781",
         "filename": "src/libANGLE/renderer/vulkan/vk_caps_utils.cpp",
         "patchSetId": 5
@@ -54,6 +71,23 @@
         "endLine": 222,
         "endChar": 68
       },
+      "revId": "dacf95c1bcb23e2de00f81a0d397796729e4b4ea",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "6ce977b6_ffd4d192",
+        "filename": "src/libANGLE/renderer/vulkan/vk_caps_utils.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 225,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-05-24T01:58:14Z",
+      "side": 1,
+      "message": "nit: please add `http://anglebug.com/3573` (or create a new bug). We don\u0027t leave bug-less `TODO`s in the code.",
       "revId": "dacf95c1bcb23e2de00f81a0d397796729e4b4ea",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
