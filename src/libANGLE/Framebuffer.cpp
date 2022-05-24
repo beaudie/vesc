@@ -903,9 +903,10 @@ void Framebuffer::setReadSurface(const Context *context, egl::Surface *readSurfa
     mDirtyBits.set(DIRTY_BIT_READ_BUFFER);
 }
 
-void Framebuffer::setLabel(const Context *context, const std::string &label)
+angle::Result Framebuffer::setLabel(const Context *context, const std::string &label)
 {
     mState.mLabel = label;
+    return angle::Result::Continue;
 }
 
 const std::string &Framebuffer::getLabel() const

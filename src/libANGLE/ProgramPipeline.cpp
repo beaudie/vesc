@@ -178,9 +178,10 @@ void ProgramPipeline::onDestroy(const Context *context)
     getImplementation()->destroy(context);
 }
 
-void ProgramPipeline::setLabel(const Context *context, const std::string &label)
+angle::Result ProgramPipeline::setLabel(const Context *context, const std::string &label)
 {
     mState.mLabel = label;
+    return angle::Result::Continue;
 }
 
 const std::string &ProgramPipeline::getLabel() const
