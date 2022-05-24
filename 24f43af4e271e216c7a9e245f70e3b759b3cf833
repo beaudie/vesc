@@ -34,6 +34,29 @@
       "parentUuid": "9c3cc944_8a18c553",
       "revId": "24f43af4e271e216c7a9e245f70e3b759b3cf833",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "f684bbc1_49662abd",
+        "filename": "BUILD.gn",
+        "patchSetId": 2
+      },
+      "lineNbr": 1150,
+      "author": {
+        "id": 1001921
+      },
+      "writtenOn": "2022-05-24T15:01:15Z",
+      "side": 1,
+      "message": "WDYT about using (build_angle_trace_perf_tests || angle_build_capture_replay_tests) instead?\n\nangle_build_tests seems to global to me.\nI\u0027d expect it would be used like:\n  if (angle_build_tests) {\n    angle_test(\"angle_end2end_tests\") {",
+      "range": {
+        "startLine": 1150,
+        "startChar": 4,
+        "endLine": 1150,
+        "endChar": 21
+      },
+      "revId": "24f43af4e271e216c7a9e245f70e3b759b3cf833",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
