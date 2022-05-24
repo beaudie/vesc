@@ -111,6 +111,30 @@
       },
       "revId": "8520b90273b0126ba2afce6735f4bee43ff957f4",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "6f64ebc2_fecfa145",
+        "filename": "src/tests/gl_tests/TextureMultisampleTest.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 389,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-05-24T14:43:02Z",
+      "side": 1,
+      "message": "Ok that\u0027s fine, then simply remove the `and ...` from the comment, as well as this:\n\n```\n// The SampleMaskArray used in Angle only supports 32 bits\nASSERT_LE(maxIntegerSamples, 32);\n```\n\nAgain, we shouldn\u0027t write the tests to validate ANGLE\u0027s internals.",
+      "parentUuid": "f9e14030_49bdaf32",
+      "range": {
+        "startLine": 389,
+        "startChar": 62,
+        "endLine": 389,
+        "endChar": 88
+      },
+      "revId": "8520b90273b0126ba2afce6735f4bee43ff957f4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
