@@ -1,0 +1,44 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "15be5cd7_ac1c77fc",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 19
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2022-05-24T14:05:18Z",
+      "side": 1,
+      "message": "LGTM",
+      "revId": "e5df6319437647b465820f4c10b2489594367325",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "5508412a_a1a29055",
+        "filename": "src/tests/capture_replay_tests/CaptureReplayTests.cpp",
+        "patchSetId": 19
+      },
+      "lineNbr": 37,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2022-05-24T14:05:18Z",
+      "side": 1,
+      "message": "nit: extern \"C\" and \"static\" are working at cross purposes here. As a stylistic rule prefer using the namespace {} block as that\u0027s what we do in most other parts of ANGLE (notwithstanding some inconsistency). You can omit the extern \"C\".",
+      "range": {
+        "startLine": 37,
+        "startChar": 0,
+        "endLine": 37,
+        "endChar": 12
+      },
+      "revId": "e5df6319437647b465820f4c10b2489594367325",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
