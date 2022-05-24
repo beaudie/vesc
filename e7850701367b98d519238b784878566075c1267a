@@ -62,6 +62,30 @@
       },
       "revId": "e7850701367b98d519238b784878566075c1267a",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "3fde1fa5_0165d310",
+        "filename": "src/libANGLE/renderer/vulkan/ProgramExecutableVk.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 645,
+      "author": {
+        "id": 1340649
+      },
+      "writtenOn": "2022-05-24T18:00:47Z",
+      "side": 1,
+      "message": "this is what threw me off during debug, `textureUnit` or `samplerIndex` mean something, `textureIndex` not so much. This renaming is to reinforce the association between an immutable sampler and the `samplerIndex`",
+      "parentUuid": "ca0c22a2_01c20919",
+      "range": {
+        "startLine": 645,
+        "startChar": 77,
+        "endLine": 645,
+        "endChar": 89
+      },
+      "revId": "e7850701367b98d519238b784878566075c1267a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
