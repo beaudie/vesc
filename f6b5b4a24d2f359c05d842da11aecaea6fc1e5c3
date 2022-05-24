@@ -87,6 +87,24 @@
       "message": "Pretty cool. The resulting graph is a bit illegible - can we add some kind of dictionary that maps from a bit to a keyword of the type of state?",
       "revId": "f6b5b4a24d2f359c05d842da11aecaea6fc1e5c3",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "9b3919c6_fbb6441d",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-05-24T14:21:34Z",
+      "side": 1,
+      "message": "Yes, I intend to make this readable, but like I said above, I wanted this particular version to be portable to before dynamic state changes, and the state has shuffled a lot in between. I\u0027ll follow up.",
+      "parentUuid": "18b43ab7_219ed0d3",
+      "revId": "f6b5b4a24d2f359c05d842da11aecaea6fc1e5c3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
