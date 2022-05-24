@@ -34,6 +34,24 @@
       "parentUuid": "90257475_19e7bda9",
       "revId": "f6b5b4a24d2f359c05d842da11aecaea6fc1e5c3",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "b66fed96_1237f4d5",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-05-24T05:02:35Z",
+      "side": 1,
+      "message": "The edges show the transition bits.\n\nThe graphs intentionally don\u0027t include the pipeline state in this CL. That\u0027s because I wanted it to be easily backported to the commit before the dynamic state changes for comparison (and didn\u0027t want to deal with the shuffling of state). I\u0027ll follow up with a change where the nodes contain readable state.",
+      "parentUuid": "877c3876_778d1418",
+      "revId": "f6b5b4a24d2f359c05d842da11aecaea6fc1e5c3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
