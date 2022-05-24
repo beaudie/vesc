@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "8b83ddaa_46d7dc4f",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1394635
+      },
+      "writtenOn": "2022-05-24T08:30:09Z",
+      "side": 1,
+      "message": "While ES 3 is explicit about disallowing online compression, ES extensions ported from desktop GL (S3TC, RGTC, and BPTC) do allow it.\n\nWe should resolve https://gitlab.khronos.org/opengl/API/-/issues/151 first with a spec-defined error code for that case.",
+      "revId": "a0df3c63b16bb6410d5fcf09147f9f95d57631c1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
