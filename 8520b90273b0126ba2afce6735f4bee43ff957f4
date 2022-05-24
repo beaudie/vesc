@@ -39,6 +39,30 @@
       },
       "revId": "8520b90273b0126ba2afce6735f4bee43ff957f4",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "20cb1427_0b090c0b",
+        "filename": "src/tests/gl_tests/TextureMultisampleTest.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 389,
+      "author": {
+        "id": 1491823
+      },
+      "writtenOn": "2022-05-24T09:24:35Z",
+      "side": 1,
+      "message": "Right I have to fix the comment. Since the problem fixed in this CL was that the reported maximum number might be larger than what the backend actually supports, I wanted to make a test that would fail if the reported maxSamples is not supported in the backend.  However, in `Context::updateCaps()` the value is updated again, and set to the sample count that is supported by all renderformats, and there the sample count is set correctly, so that we would always end up with a hardware-supported sample count. However, since the sample mask is limited to 32 bit now, I\u0027ve added a check to the test that the supported sample count doesn\u0027t result in a sample mask that doesn\u0027t fit these 32 bit.",
+      "parentUuid": "5d2f29d8_54ef1b01",
+      "range": {
+        "startLine": 389,
+        "startChar": 62,
+        "endLine": 389,
+        "endChar": 88
+      },
+      "revId": "8520b90273b0126ba2afce6735f4bee43ff957f4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
