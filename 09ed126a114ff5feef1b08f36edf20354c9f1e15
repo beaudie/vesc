@@ -16,6 +16,23 @@
       "message": "I\u0027m not spec-savvy enough to know if this is correct, but it seems worth landing regardless.\n\nI\u0027d suggest to add a D3D11 suppression to src\\tests\\angle_end2end_tests_expectations.txt along with the test.",
       "revId": "09ed126a114ff5feef1b08f36edf20354c9f1e15",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "c613cac9_a05593a6",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 23
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1116015
+      },
+      "writtenOn": "2022-05-24T17:02:19Z",
+      "side": 1,
+      "message": "Note that since SSBOs and image load/store both use UAVs, it\u0027s possible that this is the same D3D11 limitation as in this bug: https://bugs.chromium.org/p/angleproject/issues/detail?id\u003d3032\nin which case it may be tricky to fix.",
+      "revId": "09ed126a114ff5feef1b08f36edf20354c9f1e15",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
