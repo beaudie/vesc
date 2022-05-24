@@ -1,0 +1,44 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "d56bfe4b_8d06e556",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-05-24T01:22:56Z",
+      "side": 1,
+      "message": "Thanks again for catching this bug",
+      "revId": "8520b90273b0126ba2afce6735f4bee43ff957f4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "5d2f29d8_54ef1b01",
+        "filename": "src/tests/gl_tests/TextureMultisampleTest.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 389,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-05-24T01:22:56Z",
+      "side": 1,
+      "message": "The tests don\u0027t test this despite the comment?",
+      "range": {
+        "startLine": 389,
+        "startChar": 62,
+        "endLine": 389,
+        "endChar": 88
+      },
+      "revId": "8520b90273b0126ba2afce6735f4bee43ff957f4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
