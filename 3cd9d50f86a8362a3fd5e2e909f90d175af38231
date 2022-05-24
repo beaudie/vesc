@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "4d3a5c02_53fb097b",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2022-05-24T14:00:06Z",
+      "side": 1,
+      "message": "Cody PTAL. Corentin/Tyler FYI.",
+      "revId": "3cd9d50f86a8362a3fd5e2e909f90d175af38231",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
