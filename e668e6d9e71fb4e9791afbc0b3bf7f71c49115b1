@@ -75,6 +75,30 @@
       },
       "revId": "e668e6d9e71fb4e9791afbc0b3bf7f71c49115b1",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "01d3b921_611d7b91",
+        "filename": "src/libANGLE/ProgramPipeline.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 370,
+      "author": {
+        "id": 1525982
+      },
+      "writtenOn": "2022-05-24T03:18:57Z",
+      "side": 1,
+      "message": "Function merged into `updateFragmentInoutRange()` (now `updateFragmentInoutRangeAndEnablesPerSampleShading()`)",
+      "parentUuid": "59dee70b_d5823082",
+      "range": {
+        "startLine": 370,
+        "startChar": 22,
+        "endLine": 370,
+        "endChar": 62
+      },
+      "revId": "e668e6d9e71fb4e9791afbc0b3bf7f71c49115b1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
