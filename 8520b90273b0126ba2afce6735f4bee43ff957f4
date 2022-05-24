@@ -87,6 +87,30 @@
       },
       "revId": "8520b90273b0126ba2afce6735f4bee43ff957f4",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "f9e14030_49bdaf32",
+        "filename": "src/tests/gl_tests/TextureMultisampleTest.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 389,
+      "author": {
+        "id": 1491823
+      },
+      "writtenOn": "2022-05-24T14:37:10Z",
+      "side": 1,
+      "message": "`ValidateTextureStorageMultisampleParameters` already tests that \n`maxColorSamples + 1` fails. The problem was that the actual `max*Samples` might not be supported by the implementation, not sure where this should be tested.",
+      "parentUuid": "9162d6c0_f56a97d2",
+      "range": {
+        "startLine": 389,
+        "startChar": 62,
+        "endLine": 389,
+        "endChar": 88
+      },
+      "revId": "8520b90273b0126ba2afce6735f4bee43ff957f4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
