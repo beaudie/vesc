@@ -36,6 +36,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "e42fe861_31e49af1",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 10,
+      "author": {
+        "id": 1544099
+      },
+      "writtenOn": "2022-05-24T00:31:28Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "e344bc8b_e97884fc",
+      "revId": "677a59fdb694e6de712abfadbd2554db4c5f8101",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "3a919f19_06ca77c4",
@@ -49,6 +67,30 @@
       "writtenOn": "2022-05-23T21:40:48Z",
       "side": 1,
       "message": "nit: Keep the new line above",
+      "range": {
+        "startLine": 386,
+        "startChar": 0,
+        "endLine": 386,
+        "endChar": 1
+      },
+      "revId": "677a59fdb694e6de712abfadbd2554db4c5f8101",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "da56ba15_0acde2fc",
+        "filename": "src/compiler/translator/util.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 386,
+      "author": {
+        "id": 1544099
+      },
+      "writtenOn": "2022-05-24T00:31:28Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "3a919f19_06ca77c4",
       "range": {
         "startLine": 386,
         "startChar": 0,
