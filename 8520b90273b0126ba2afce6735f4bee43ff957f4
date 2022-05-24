@@ -63,6 +63,30 @@
       },
       "revId": "8520b90273b0126ba2afce6735f4bee43ff957f4",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "9162d6c0_f56a97d2",
+        "filename": "src/tests/gl_tests/TextureMultisampleTest.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 389,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-05-24T13:37:34Z",
+      "side": 1,
+      "message": "Ok, but we shouldn\u0027t actually test that. The end2end tests are OpenGL tests, and shouldn\u0027t need to know or care about ANGLE internals.\n\nI would have thought you could test `a larger value is not` by using `maxIntegerSamples+1` (or `maxIntegerSamples*2`) and expect a failure.",
+      "parentUuid": "20cb1427_0b090c0b",
+      "range": {
+        "startLine": 389,
+        "startChar": 62,
+        "endLine": 389,
+        "endChar": 88
+      },
+      "revId": "8520b90273b0126ba2afce6735f4bee43ff957f4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
