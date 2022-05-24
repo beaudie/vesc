@@ -1,0 +1,67 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "e278d2b6_80dab8d3",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2022-05-24T13:49:10Z",
+      "side": 1,
+      "message": "Thanks for the fix Mohan - one question.",
+      "revId": "e7850701367b98d519238b784878566075c1267a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "bc3f9988_521dd402",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 6388,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2022-05-24T13:49:10Z",
+      "side": 1,
+      "message": "this is going to add overhead to texture state changes to handle what I assume is an edge case with immutable textures. What kinds of redesign could we do here to avoid a loop or any overhead if possible?",
+      "range": {
+        "startLine": 6380,
+        "startChar": 0,
+        "endLine": 6388,
+        "endChar": 5
+      },
+      "revId": "e7850701367b98d519238b784878566075c1267a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ca0c22a2_01c20919",
+        "filename": "src/libANGLE/renderer/vulkan/ProgramExecutableVk.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 645,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2022-05-24T13:49:10Z",
+      "side": 1,
+      "message": "nit: this seems like an unrelated refactor change",
+      "range": {
+        "startLine": 645,
+        "startChar": 77,
+        "endLine": 645,
+        "endChar": 89
+      },
+      "revId": "e7850701367b98d519238b784878566075c1267a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
