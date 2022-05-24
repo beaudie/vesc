@@ -52,6 +52,24 @@
       "parentUuid": "877c3876_778d1418",
       "revId": "f6b5b4a24d2f359c05d842da11aecaea6fc1e5c3",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "66456b78_f48968c1",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1340649
+      },
+      "writtenOn": "2022-05-24T13:20:31Z",
+      "side": 1,
+      "message": "thanks shabi, i have attached before / after SVG to the bug for convenience / conversational reference. I am looking at it and trying to understand how to interpret it. quite different that the dot graphs i am used to",
+      "parentUuid": "b66fed96_1237f4d5",
+      "revId": "f6b5b4a24d2f359c05d842da11aecaea6fc1e5c3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
