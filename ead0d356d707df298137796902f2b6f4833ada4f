@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "c27cc5dd_5bd39d11",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 12
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1290487
+      },
+      "writtenOn": "2022-05-24T17:42:36Z",
+      "side": 1,
+      "message": "Let\u0027s land this and start on the next CL that adds labels to lots of objects",
+      "revId": "ead0d356d707df298137796902f2b6f4833ada4f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
