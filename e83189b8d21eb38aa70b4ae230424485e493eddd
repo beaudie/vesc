@@ -46,6 +46,30 @@
       },
       "revId": "e83189b8d21eb38aa70b4ae230424485e493eddd",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "c9bb638b_82386f10",
+        "filename": "src/tests/capture_replay_tests/BUILD.gn",
+        "patchSetId": 2
+      },
+      "lineNbr": 44,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2022-05-24T13:44:35Z",
+      "side": 1,
+      "message": "You could just use $angle_root:angle and that would include GLES 1.0. It is actually required for the tests as they do run GLES 1.x.\n\nUsing the angle_test template seems reasonable, I\u0027m not sure if there\u0027s some reason we\u0027re not using here.",
+      "parentUuid": "8274dc93_7ca727ea",
+      "range": {
+        "startLine": 40,
+        "startChar": 0,
+        "endLine": 44,
+        "endChar": 0
+      },
+      "revId": "e83189b8d21eb38aa70b4ae230424485e493eddd",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ],
   "submitRequirementResults": [
