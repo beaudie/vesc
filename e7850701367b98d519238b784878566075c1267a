@@ -43,6 +43,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "3b2fce21_00ff2d30",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 6388,
+      "author": {
+        "id": 1340649
+      },
+      "writtenOn": "2022-05-24T18:04:31Z",
+      "side": 1,
+      "message": "we loop through `samplerBindings.size()` so wouldn\u0027t go through `IMPLEMENTATION_MAX_ACTIVE_TEXTURES`.\n\nhaving said that, it makes sense to cache this in `ProgramExecutable` with the rest of the `mActive...` members while leveraging the looping we already do there",
+      "parentUuid": "bc3f9988_521dd402",
+      "range": {
+        "startLine": 6380,
+        "startChar": 0,
+        "endLine": 6388,
+        "endChar": 5
+      },
+      "revId": "e7850701367b98d519238b784878566075c1267a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "ca0c22a2_01c20919",
         "filename": "src/libANGLE/renderer/vulkan/ProgramExecutableVk.cpp",
         "patchSetId": 2
