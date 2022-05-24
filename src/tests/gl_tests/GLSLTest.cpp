@@ -520,6 +520,9 @@ class GLSLTest_ES31 : public GLSLTest
 class GLSLTest_ES31_InitShaderVariables : public GLSLTest
 {};
 
+class DesktopGLSLTest : public GLSLTest
+{};
+
 std::string BuildBigInitialStackShader(int length)
 {
     std::string result;
@@ -15489,6 +15492,30 @@ void main()
 
     ANGLE_GL_PROGRAM(testProgram, kVS, kFS);
 }
+
+// Simple test case of compiling a desktop OpenGL shader to verify that the shader compiler
+// initializes.
+TEST_P(DesktopGLSLTest, BasicCompilation)
+{
+    const char kVS[] = R"(#version 150
+in vec4 position;
+
+void main (void)
+{
+    gl_Position = position;
+})";
+
+    const char kFS[] = R"(#version 150
+out vec4 fragColor;
+
+void main(void)
+{
+    fragColor = vec4(1.0, 1.0, 1.0, 1.0);
+})";
+
+    ANGLE_GL_PROGRAM(testProgram, kVS, kFS);
+}
+
 }  // anonymous namespace
 
 ANGLE_INSTANTIATE_TEST_ES2_AND_ES3_AND(GLSLTest,
@@ -15518,3 +15545,5 @@ ANGLE_INSTANTIATE_TEST_ES31_AND(GLSLTest_ES31,
 GTEST_ALLOW_UNINSTANTIATED_PARAMETERIZED_TEST(GLSLTest_ES31_InitShaderVariables);
 ANGLE_INSTANTIATE_TEST(GLSLTest_ES31_InitShaderVariables,
                        ES31_VULKAN().enable(Feature::ForceInitShaderVariables));
+
+ANGLE_INSTANTIATE_TEST_GL32_CORE(DesktopGLSLTest);
