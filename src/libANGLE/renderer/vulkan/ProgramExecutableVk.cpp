@@ -205,8 +205,6 @@ angle::Result ProgramInfo::initProgram(ContextVk *contextVk,
 
     mProgramHelper.setShader(shaderType, &mShaders[shaderType]);
 
-    mProgramHelper.setSpecializationConstant(sh::vk::SpecializationConstantId::LineRasterEmulation,
-                                             optionBits.enableLineRasterEmulation);
     mProgramHelper.setSpecializationConstant(sh::vk::SpecializationConstantId::SurfaceRotation,
                                              optionBits.surfaceRotation);
 
@@ -748,9 +746,8 @@ angle::Result ProgramExecutableVk::getGraphicsPipeline(ContextVk *contextVk,
 
     ASSERT(glExecutable.hasLinkedShaderStage(gl::ShaderType::Vertex));
 
-    mTransformOptions.enableLineRasterEmulation = contextVk->isBresenhamEmulationEnabled(mode);
-    mTransformOptions.surfaceRotation           = desc.getSurfaceRotation();
-    mTransformOptions.enableDepthCorrection     = !glState.isClipControlDepthZeroToOne();
+    mTransformOptions.surfaceRotation       = desc.getSurfaceRotation();
+    mTransformOptions.enableDepthCorrection = !glState.isClipControlDepthZeroToOne();
     mTransformOptions.removeTransformFeedbackEmulation =
         contextVk->getFeatures().emulateTransformFeedback.enabled &&
         !glState.isTransformFeedbackActiveUnpaused();
