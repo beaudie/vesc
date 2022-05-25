@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "ccf7df9e_661a0e6b",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1340649
+      },
+      "writtenOn": "2022-05-25T18:48:31Z",
+      "side": 1,
+      "message": "PTAL - i now cache it instead of looping through `samplerBindings` every draw",
+      "revId": "2d1eb29c3beaae96287040aca6f5d728c1642ca1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
