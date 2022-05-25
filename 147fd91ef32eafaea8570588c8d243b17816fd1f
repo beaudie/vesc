@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "f74a3c2c_cb48de1b",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2022-05-25T13:27:21Z",
+      "side": 1,
+      "message": "Thanks for the test Lubosz. Charlie, Shabi, FYI, a problematic edge case we will likely need to support.",
+      "revId": "147fd91ef32eafaea8570588c8d243b17816fd1f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
