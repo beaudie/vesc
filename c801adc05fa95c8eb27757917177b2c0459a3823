@@ -24,6 +24,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": true,
+      "key": {
+        "uuid": "6c741336_2376f757",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 8
+      },
+      "lineNbr": 18,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-05-25T23:16:08Z",
+      "side": 1,
+      "message": "Spec const is still used for pre-rotation on those platforms, which as the comment says never changes and as you said indeed does not increase pipeline counts.\n\nY-flip uses uniform because it does change.",
+      "parentUuid": "42388c1c_9fc28789",
+      "range": {
+        "startLine": 16,
+        "startChar": 17,
+        "endLine": 18,
+        "endChar": 13
+      },
+      "revId": "c801adc05fa95c8eb27757917177b2c0459a3823",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": false,
       "key": {
         "uuid": "e76c0be9_c235c3e5",
