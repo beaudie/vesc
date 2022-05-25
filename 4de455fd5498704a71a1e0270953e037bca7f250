@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "1d362dd7_00c05d6a",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 7
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-05-25T15:22:38Z",
+      "side": 1,
+      "message": "FYI, I\u0027ll be following up with a change that compresses the driver uniforms. Right now we use upwards of 5 vec4s, but we should be able to compress it to 2 vec4s.\n\nThe reason I used unpackSnorm4x8 in this change is towards the same effort.",
+      "revId": "4de455fd5498704a71a1e0270953e037bca7f250",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
