@@ -91,6 +91,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "1e749505_88ad954d",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 6388,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2022-05-25T13:24:22Z",
+      "side": 1,
+      "message": "Well, it doesn\u0027t always work. It will work for this test, not for some edge cases.",
+      "parentUuid": "29ba6a12_12a6395c",
+      "range": {
+        "startLine": 6380,
+        "startChar": 0,
+        "endLine": 6388,
+        "endChar": 5
+      },
+      "revId": "e7850701367b98d519238b784878566075c1267a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "ca0c22a2_01c20919",
         "filename": "src/libANGLE/renderer/vulkan/ProgramExecutableVk.cpp",
         "patchSetId": 2
