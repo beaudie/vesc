@@ -16,6 +16,81 @@
       "message": "Thanks for the test Lubosz. Charlie, Shabi, FYI, a problematic edge case we will likely need to support.",
       "revId": "147fd91ef32eafaea8570588c8d243b17816fd1f",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "547f3619_93006b91",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-05-25T15:52:48Z",
+      "side": 1,
+      "message": "What are we expected to do here, analyze the paths and unbind the sampler based on uniform values? What if it was conditional to a uniform from a UBO?\n\nOr is it just a matter of ignore VVL + make sure layout is fine and hope for the best?",
+      "parentUuid": "f74a3c2c_cb48de1b",
+      "revId": "147fd91ef32eafaea8570588c8d243b17816fd1f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "17afc5e2_ce18a039",
+        "filename": "src/tests/gl_tests/FramebufferTest.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 4140,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-05-25T15:52:48Z",
+      "side": 1,
+      "message": "Nit: No need to be specific about which application, and please mind that the Vulkan backend is not the only one that runs these tests (so you could start the comment with \"Regression test for a bug in the Vulkan backend where ...\")",
+      "revId": "147fd91ef32eafaea8570588c8d243b17816fd1f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "a73e9938_4eef7750",
+        "filename": "src/tests/gl_tests/FramebufferTest.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 4147,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-05-25T15:52:48Z",
+      "side": 1,
+      "message": "nit: placeholder\n\nBut why not init with 0? So as to avoid *SAN bots complaining about uninitialized data at least.",
+      "range": {
+        "startLine": 4147,
+        "startChar": 35,
+        "endLine": 4147,
+        "endChar": 40
+      },
+      "revId": "147fd91ef32eafaea8570588c8d243b17816fd1f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "49234688_a1201511",
+        "filename": "src/tests/gl_tests/FramebufferTest.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 4151,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-05-25T15:52:48Z",
+      "side": 1,
+      "message": "IIUC, this could have also been a simple 2D texture, right?",
+      "revId": "147fd91ef32eafaea8570588c8d243b17816fd1f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
