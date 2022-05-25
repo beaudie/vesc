@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "63e8d033_0b11f50e",
+        "filename": "src/libANGLE/capture/FrameCapture.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 454,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2022-05-25T04:44:14Z",
+      "side": 1,
+      "message": "This could be tightened up, but wanted to get feedback on the general approach before investing more time in it.",
+      "revId": "e8535488f8b61e81dab10dc7e76ec7d49dadf9fe",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
