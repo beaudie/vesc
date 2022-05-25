@@ -115,6 +115,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "3cbbd55e_f29070b3",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 6388,
+      "author": {
+        "id": 1340649
+      },
+      "writtenOn": "2022-05-25T16:06:13Z",
+      "side": 1,
+      "message": "\u003e you can have two samplers reading from texture unit 0.\n\nas long as sampler type and texture type matches, which it should if we have not errored out from draw, this is functionally correct since we will always choose the \"last\" samplerIndex for a texture unit.\n\n\u003e Can you help me understand the error you have in your reproduction test here?\n\n`textureUnit \u003d\u003d 0` is sampled from `samplerIndex \u003d\u003d 0` and `textureUnit \u003d\u003d 1` is sampled from `samplerIndex \u003d\u003d 1`.\n\nIf we switch the sampler uniform values then `textureUnit \u003d\u003d 0` is sampled from `samplerIndex \u003d\u003d 1` and `textureUnit \u003d\u003d 1` is sampled from `samplerIndex \u003d\u003d 0`\n\nthis could result in incompatibility with current pipeline layout and hence needs to be recreated.\n\n\u003e not for some edge cases\n\ncould you elaborate?",
+      "parentUuid": "1e749505_88ad954d",
+      "range": {
+        "startLine": 6380,
+        "startChar": 0,
+        "endLine": 6388,
+        "endChar": 5
+      },
+      "revId": "e7850701367b98d519238b784878566075c1267a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "ca0c22a2_01c20919",
         "filename": "src/libANGLE/renderer/vulkan/ProgramExecutableVk.cpp",
         "patchSetId": 2
