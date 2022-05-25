@@ -187,6 +187,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "e6074f2c_0183f3eb",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 6388,
+      "author": {
+        "id": 1340649
+      },
+      "writtenOn": "2022-05-25T22:54:53Z",
+      "side": 1,
+      "message": "had a sync internally and realized the trouble was because of the fact that the mapping between `textureUnit` and `samplerIndex` is not one-to-one.\n\nHowever, the `pair\u003ctextureUnit, samplerIndex\u003e` must be unique. Given both `textureUnit` and `samplerIndex` will have values \u003c\u003d `IMPLEMENTATION_MAX_ACTIVE_TEXTURES` i will update this map to store (`textureUnit | samplerIndex`) so we have a unique value for each active texture unit",
+      "parentUuid": "04108a7b_b4dbac74",
+      "range": {
+        "startLine": 6380,
+        "startChar": 0,
+        "endLine": 6388,
+        "endChar": 5
+      },
+      "revId": "e7850701367b98d519238b784878566075c1267a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "ca0c22a2_01c20919",
         "filename": "src/libANGLE/renderer/vulkan/ProgramExecutableVk.cpp",
         "patchSetId": 2
