@@ -33,6 +33,24 @@
       "message": "Note that since SSBOs and image load/store both use UAVs, it\u0027s possible that this is the same D3D11 limitation as in this bug: https://bugs.chromium.org/p/angleproject/issues/detail?id\u003d3032\nin which case it may be tricky to fix.",
       "revId": "09ed126a114ff5feef1b08f36edf20354c9f1e15",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "b64def91_1f3a0ce3",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 23
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1543967
+      },
+      "writtenOn": "2022-05-25T06:25:03Z",
+      "side": 1,
+      "message": "Thanks for the info, that\u0027s good to know.\n\nThe only reason I think this is interesting for GLES is because GLES doesn\u0027t allow most image formats to be readwrite, so you need two aliases -- one readonly and one writeonly. Since UAVs CAN be readwrite, you could just use a single UAV.\n\nContext: I\u0027m interested in helping implement a pixel-local-storage extension, which in D3D11 would use UAVs, or, ideally, coherent ROVs:\n\nhttps://bugs.chromium.org/p/angleproject/issues/detail?id\u003d7279\n\nMaybe the D3D solution would just need custom backend code without trying to go through ES 3.1 shader images.",
+      "parentUuid": "c613cac9_a05593a6",
+      "revId": "09ed126a114ff5feef1b08f36edf20354c9f1e15",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
