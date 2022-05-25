@@ -139,6 +139,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "a4077f35_1b3ec90f",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 6388,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2022-05-25T19:26:05Z",
+      "side": 1,
+      "message": "OK, I get the error condition although I don\u0027t quite know how the pipeline gets incompatible. Where does the mixup of IDs impact the incompatibility?\n\nSo the issue is the way the sampler uniform bindings work with the active textures.\n\nIf you have active textures 1 and 2 as in your example, say your program has 4 samplers in the shader. Using sampler uniforms, you could bind uniform \"1\" to active texture \"1\", uniform \"2\" to active texture \"1\", uniform \"3\" to active texture \"2\", uniform \"4\" to active texture \"2\" and so on. The mapping structure you have here won\u0027t hold up under these conditions.\n\nSo I am trying to understand better how immutable samplers work so maybe we can figure out a better solution.",
+      "parentUuid": "3cbbd55e_f29070b3",
+      "range": {
+        "startLine": 6380,
+        "startChar": 0,
+        "endLine": 6388,
+        "endChar": 5
+      },
+      "revId": "e7850701367b98d519238b784878566075c1267a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "ca0c22a2_01c20919",
         "filename": "src/libANGLE/renderer/vulkan/ProgramExecutableVk.cpp",
         "patchSetId": 2
