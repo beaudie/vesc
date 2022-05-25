@@ -22,6 +22,30 @@
       },
       "revId": "1afb80587e302e2ce9a901a69fd66e5ef98a73b6",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "39e2aa59_b12c9424",
+        "filename": "src/libANGLE/renderer/vulkan/TextureVk.h",
+        "patchSetId": 13
+      },
+      "lineNbr": 216,
+      "author": {
+        "id": 1511618
+      },
+      "writtenOn": "2022-05-25T14:57:15Z",
+      "side": 1,
+      "message": "Thank you very much -- I will incorporate this into the follow-on CL.",
+      "parentUuid": "488074e6_ecffcb8c",
+      "range": {
+        "startLine": 209,
+        "startChar": 0,
+        "endLine": 216,
+        "endChar": 5
+      },
+      "revId": "1afb80587e302e2ce9a901a69fd66e5ef98a73b6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
