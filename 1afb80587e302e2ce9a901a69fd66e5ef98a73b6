@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "488074e6_ecffcb8c",
+        "filename": "src/libANGLE/renderer/vulkan/TextureVk.h",
+        "patchSetId": 13
+      },
+      "lineNbr": 216,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2022-05-25T14:29:47Z",
+      "side": 1,
+      "message": "nit: one other very minor cleanup request - you can just return the result of the boolean comparison directly instead of \"if (true) return true; else return false;\"\n\nalso this method can be const, and private, since it\u0027s only used in once place in TextureVk.cpp.",
+      "range": {
+        "startLine": 209,
+        "startChar": 0,
+        "endLine": 216,
+        "endChar": 5
+      },
+      "revId": "1afb80587e302e2ce9a901a69fd66e5ef98a73b6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
