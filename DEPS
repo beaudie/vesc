@@ -37,7 +37,7 @@ vars = {
   'checkout_android_native_support': 'checkout_android or checkout_chromeos',
 
   # Version of Chromium our Chromium-based DEPS are mirrored from.
-  'chromium_revision': 'd624307d6d25b3fc82fff226393754188d6676f2',
+  'chromium_revision': 'b84f0faf229e5b577bd65f367abf2071459f4fa0',
   # We never want to checkout chromium,
   # but need a dummy DEPS entry for the autoroller
   'dummy_checkout_chromium': False,
@@ -82,11 +82,11 @@ vars = {
   # Three lines of non-changing comments so that
   # the commit queue can handle CLs rolling catapult
   # and whatever else without interference from each other.
-  'catapult_revision': '31caa70cfcb274182dc2e3c38086596655f9b08a',
+  'catapult_revision': 'c9c60146a29c50806a892e17093b121cba0d1977',
 
   # the commit queue can handle CLs rolling Fuchsia sdk
   # and whatever else without interference from each other.
-  'fuchsia_version': 'version:8.20220523.2.1',
+  'fuchsia_version': 'version:8.20220524.1.1',
 
   # Three lines of non-changing comments so that
   # the commit queue can handle CLs rolling luci-go
@@ -126,7 +126,7 @@ vars = {
 deps = {
 
   'build': {
-    'url': '{chromium_git}/chromium/src/build.git@41d56d6f21123d950063e326d6e35e089b1afd98',
+    'url': '{chromium_git}/chromium/src/build.git@f7b18d8fd72697a7e4c77615d976d41b53e60f64',
     'condition': 'not build_with_chromium',
   },
 
@@ -189,7 +189,7 @@ deps = {
   },
 
   'testing': {
-    'url': '{chromium_git}/chromium/src/testing@9a280acff40fadde6cf36d1a7b82d0236d6bb119',
+    'url': '{chromium_git}/chromium/src/testing@297e0b238865204238b22276643d0e4351a45626',
     'condition': 'not build_with_chromium',
   },
 
@@ -335,7 +335,7 @@ deps = {
   },
 
   'third_party/depot_tools': {
-    'url': '{chromium_git}/chromium/tools/depot_tools.git@26a1d24c04f7a911bebef82ba392a1fc8d6544f3',
+    'url': '{chromium_git}/chromium/tools/depot_tools.git@8d2d507a4974d20d4cac8a8486e31a27aca8b562',
     'condition': 'not build_with_chromium',
   },
 
@@ -596,7 +596,7 @@ deps = {
   },
 
   'tools/perf': {
-    'url': '{chromium_git}/chromium/src/tools/perf@a00b8203b94935abe21c750f90f1e0913038799c',
+    'url': '{chromium_git}/chromium/src/tools/perf@0f0da1aba309b2cbd2fabfbb8ed14f311b44b612',
     'condition': 'not build_with_chromium',
   },
 
