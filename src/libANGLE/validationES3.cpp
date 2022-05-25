@@ -732,6 +732,13 @@ bool ValidateES3TexImageParametersBase(const Context *context,
     }
     else
     {
+        // Compressed formats are not valid internal formats for glTexImage*D
+        if (!isSubImage && actualFormatInfo.compressed)
+        {
+            context->validationError(entryPoint, GL_INVALID_VALUE, kInvalidInternalFormat);
+            return false;
+        }
+
         if (!ValidateTexImageFormatCombination(context, entryPoint, texType, actualInternalFormat,
                                                format, type))
         {
@@ -2861,11 +2868,6 @@ bool ValidateCompressedTexSubImage3D(const Context *context,
     }
 
     const InternalFormat &formatInfo = GetSizedInternalFormatInfo(format);
-    if (!formatInfo.compressed)
-    {
-        context->validationError(entryPoint, GL_INVALID_ENUM, kInvalidCompressedFormat);
-        return false;
-    }
 
     GLuint blockSize = 0;
     if (!formatInfo.computeCompressedImageSize(Extents(width, height, depth), &blockSize))
@@ -2884,6 +2886,12 @@ bool ValidateCompressedTexSubImage3D(const Context *context,
                                          xoffset, yoffset, zoffset, width, height, depth, 0, format,
                                          GL_NONE, -1, data))
     {
+        return false;
+    }
+
+    if (!formatInfo.compressed)
+    {
+        context->validationError(entryPoint, GL_INVALID_ENUM, kInvalidCompressedFormat);
         return false;
     }
 
