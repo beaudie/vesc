@@ -565,7 +565,8 @@ class GraphicsPipelineDesc final
     }
 
     angle::Result initializePipeline(ContextVk *contextVk,
-                                     const PipelineCache &pipelineCacheVk,
+                                     const PipelineCache &pipelineCache,
+                                     std::mutex *pipelineCacheMutex,
                                      const RenderPass &compatibleRenderPass,
                                      const PipelineLayout &pipelineLayout,
                                      const gl::AttributesMask &activeAttribLocationsMask,
@@ -623,6 +624,7 @@ class GraphicsPipelineDesc final
     void updateRenderPassDesc(GraphicsPipelineTransitionBits *transition,
                               const RenderPassDesc &renderPassDesc);
     void setRenderPassSampleCount(GLint samples);
+    void setRenderPassFramebufferFetchMode(bool hasFramebufferFetch);
     void setRenderPassColorAttachmentFormat(size_t colorIndexGL, angle::FormatID formatID);
 
     // Blend states
@@ -1757,7 +1759,8 @@ class GraphicsPipelineCache final : public HasCacheStats<VulkanCacheType::Graphi
     void populate(const vk::GraphicsPipelineDesc &desc, vk::Pipeline &&pipeline);
 
     ANGLE_INLINE angle::Result getPipeline(ContextVk *contextVk,
-                                           const vk::PipelineCache &pipelineCacheVk,
+                                           const vk::PipelineCache &pipelineCache,
+                                           std::mutex *pipelineCacheMutex,
                                            const vk::RenderPass &compatibleRenderPass,
                                            const vk::PipelineLayout &pipelineLayout,
                                            const gl::AttributesMask &activeAttribLocationsMask,
@@ -1779,9 +1782,10 @@ class GraphicsPipelineCache final : public HasCacheStats<VulkanCacheType::Graphi
         }
 
         mCacheStats.missAndIncrementSize();
-        return insertPipeline(contextVk, pipelineCacheVk, compatibleRenderPass, pipelineLayout,
-                              activeAttribLocationsMask, programAttribsTypeMask, missingOutputsMask,
-                              shaders, specConsts, desc, descPtrOut, pipelineOut);
+        return insertPipeline(contextVk, pipelineCache, pipelineCacheMutex, compatibleRenderPass,
+                              pipelineLayout, activeAttribLocationsMask, programAttribsTypeMask,
+                              missingOutputsMask, shaders, specConsts, desc, descPtrOut,
+                              pipelineOut);
     }
 
     // Helper for VulkanPipelineCachePerf that resets the object without destroying any object.
@@ -1789,7 +1793,8 @@ class GraphicsPipelineCache final : public HasCacheStats<VulkanCacheType::Graphi
 
   private:
     angle::Result insertPipeline(ContextVk *contextVk,
-                                 const vk::PipelineCache &pipelineCacheVk,
+                                 const vk::PipelineCache &pipelineCache,
+                                 std::mutex *pipelineCacheMutex,
                                  const vk::RenderPass &compatibleRenderPass,
                                  const vk::PipelineLayout &pipelineLayout,
                                  const gl::AttributesMask &activeAttribLocationsMask,

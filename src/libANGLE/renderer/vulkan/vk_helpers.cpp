@@ -9936,6 +9936,8 @@ void ShaderProgramHelper::setSpecializationConstant(sh::vk::SpecializationConsta
 }
 
 angle::Result ShaderProgramHelper::getComputePipeline(ContextVk *contextVk,
+                                                      const PipelineCache &pipelineCache,
+                                                      std::mutex *pipelineCacheMutex,
                                                       const PipelineLayout &pipelineLayout,
                                                       PipelineHelper **pipelineOut)
 {
@@ -9944,8 +9946,6 @@ angle::Result ShaderProgramHelper::getComputePipeline(ContextVk *contextVk,
         *pipelineOut = &mComputePipeline;
         return angle::Result::Continue;
     }
-
-    RendererVk *renderer = contextVk->getRenderer();
 
     VkPipelineShaderStageCreateInfo shaderStage = {};
     VkComputePipelineCreateInfo createInfo      = {};
@@ -9980,10 +9980,18 @@ angle::Result ShaderProgramHelper::getComputePipeline(ContextVk *contextVk,
         createInfo.pNext = &feedbackInfo;
     }
 
-    PipelineCache *pipelineCache = nullptr;
-    ANGLE_TRY(renderer->getPipelineCache(&pipelineCache));
-    ANGLE_VK_TRY(contextVk, mComputePipeline.getPipeline().initCompute(contextVk->getDevice(),
-                                                                       createInfo, *pipelineCache));
+    {
+        std::unique_lock<std::mutex> lock;
+
+        if (pipelineCacheMutex != nullptr)
+        {
+            std::unique_lock<std::mutex> lockWithMutex(*pipelineCacheMutex);
+            lock = std::move(lockWithMutex);
+        }
+
+        ANGLE_VK_TRY(contextVk, mComputePipeline.getPipeline().initCompute(
+                                    contextVk->getDevice(), createInfo, pipelineCache));
+    }
 
     if (supportsFeedback)
     {
