@@ -53,6 +53,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "eac2b7a8_d8dba887",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 8
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-05-26T03:44:52Z",
+      "side": 1,
+      "message": "I looked at Manhattan 10, slingshot test1 and test2, and genshin, none of which show any difference in the pipeline graph with this change.\n\nIt does make `SetupDefaultPipelineState` a bit less state-dependent, but likely not actually affecting anything.\n\nOnly benefit might be in that the hardware is not continuously reconfigured to the same topology on every pipeline bind, but that\u0027s probably nothing measurable.\n\nI\u0027ve split the test in this CL to land it. I\u0027ll put this CL to WIP for now.",
+      "parentUuid": "f2934810_fb3934e9",
+      "revId": "8763bb56f0a39be8c5ea82841deac7f2a0fe6665",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "325c89f9_dc326832",
