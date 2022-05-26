@@ -223,7 +223,7 @@ struct RenderPipelineOutputDesc
     uint16_t depthAttachmentPixelFormat : 16;
     uint16_t stencilAttachmentPixelFormat : 16;
 
-    static_assert(kMaxRenderTargets <= 4, "kMaxRenderTargets must be <= 4");
+    static_assert(kMaxRenderTargets <= 8, "kMaxRenderTargets must be <= 8");
     uint8_t numColorAttachments : 3;
     uint8_t sampleCount : 5;
 };
