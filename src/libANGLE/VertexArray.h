@@ -364,6 +364,9 @@ class VertexArray final : public angle::ObserverInterface,
                               GLintptr offset,
                               GLsizei stride);
 
+    void onMakeCurrent(const Context *context);
+    void onUnMakeCurrent(const Context *context);
+
     VertexArrayID mId;
 
     VertexArrayState mState;
