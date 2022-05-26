@@ -3,6 +3,29 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "c65ec963_ea30f178",
+        "filename": "src/libANGLE/capture/FrameCapture.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 433,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2022-05-26T15:54:14Z",
+      "side": 1,
+      "message": "nit: I might call this a StateResetHelper\n\nalso probably should note it only handles state resets for one dimension, e.g. context bindings or context states.",
+      "range": {
+        "startLine": 433,
+        "startChar": 6,
+        "endLine": 433,
+        "endChar": 18
+      },
+      "revId": "e8535488f8b61e81dab10dc7e76ec7d49dadf9fe",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "63e8d033_0b11f50e",
         "filename": "src/libANGLE/capture/FrameCapture.h",
         "patchSetId": 2
