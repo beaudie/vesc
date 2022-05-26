@@ -2891,6 +2891,7 @@ class ShaderProgramHelper : angle::NonCopyable
     }
 
     angle::Result getComputePipeline(Context *context,
+                                     const PipelineCache &pipelineCache,
                                      const PipelineLayout &pipelineLayout,
                                      PipelineHelper **pipelineOut);
 
