@@ -53,6 +53,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "db5d0495_f36425a4",
+        "filename": "src/tests/gl_tests/FramebufferTest.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 4140,
+      "author": {
+        "id": 1491687
+      },
+      "writtenOn": "2022-05-26T14:27:34Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "17afc5e2_ce18a039",
+      "revId": "147fd91ef32eafaea8570588c8d243b17816fd1f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "a73e9938_4eef7750",
@@ -76,6 +94,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "b241436d_aa8128c7",
+        "filename": "src/tests/gl_tests/FramebufferTest.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 4147,
+      "author": {
+        "id": 1491687
+      },
+      "writtenOn": "2022-05-26T14:27:34Z",
+      "side": 1,
+      "message": "Fixed.",
+      "parentUuid": "a73e9938_4eef7750",
+      "range": {
+        "startLine": 4147,
+        "startChar": 35,
+        "endLine": 4147,
+        "endChar": 40
+      },
+      "revId": "147fd91ef32eafaea8570588c8d243b17816fd1f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "49234688_a1201511",
@@ -89,6 +131,24 @@
       "writtenOn": "2022-05-25T15:52:48Z",
       "side": 1,
       "message": "IIUC, this could have also been a simple 2D texture, right?",
+      "revId": "147fd91ef32eafaea8570588c8d243b17816fd1f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "a0ff631e_801fd0ba",
+        "filename": "src/tests/gl_tests/FramebufferTest.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 4151,
+      "author": {
+        "id": 1491687
+      },
+      "writtenOn": "2022-05-26T14:27:34Z",
+      "side": 1,
+      "message": "I tried that, it did not trigger the VVL errors anymore. It seems to actually be related to `GL_TEXTURE_2D_ARRAY`. Made the comment about that more clear.",
+      "parentUuid": "49234688_a1201511",
       "revId": "147fd91ef32eafaea8570588c8d243b17816fd1f",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
