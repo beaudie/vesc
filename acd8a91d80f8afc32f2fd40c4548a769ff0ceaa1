@@ -50,6 +50,24 @@
       "message": "Please move to the anonymous namespace above. Not used outside this file.",
       "revId": "acd8a91d80f8afc32f2fd40c4548a769ff0ceaa1",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "4dc603ab_17792536",
+        "filename": "util/posix/crash_handler_posix.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 450,
+      "author": {
+        "id": 1491687
+      },
+      "writtenOn": "2022-05-26T15:17:20Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "7e487604_0f83540a",
+      "revId": "acd8a91d80f8afc32f2fd40c4548a769ff0ceaa1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
