@@ -1,6 +1,23 @@
 {
   "comments": [
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "737cc122_ca1437d5",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2022-05-26T20:34:34Z",
+      "side": 1,
+      "message": "Thanks Jamie.  Per our discussion offline, this is a simple approach to resetting some state.  We\u0027d like to get to something more robust that can compare serialized states between Setup and Reset and automatically emit the calls to get back.",
+      "revId": "e8535488f8b61e81dab10dc7e76ec7d49dadf9fe",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "c65ec963_ea30f178",
@@ -24,6 +41,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "675d9ed7_c075c347",
+        "filename": "src/libANGLE/capture/FrameCapture.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 433,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2022-05-26T20:34:34Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "c65ec963_ea30f178",
+      "range": {
+        "startLine": 433,
+        "startChar": 6,
+        "endLine": 433,
+        "endChar": 18
+      },
+      "revId": "e8535488f8b61e81dab10dc7e76ec7d49dadf9fe",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "63e8d033_0b11f50e",
@@ -37,6 +78,24 @@
       "writtenOn": "2022-05-25T04:44:14Z",
       "side": 1,
       "message": "This could be tightened up, but wanted to get feedback on the general approach before investing more time in it.",
+      "revId": "e8535488f8b61e81dab10dc7e76ec7d49dadf9fe",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "aed14e7d_b05e983d",
+        "filename": "src/libANGLE/capture/FrameCapture.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 454,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2022-05-26T20:34:34Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "63e8d033_0b11f50e",
       "revId": "e8535488f8b61e81dab10dc7e76ec7d49dadf9fe",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
