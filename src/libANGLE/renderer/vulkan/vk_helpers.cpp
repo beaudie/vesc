@@ -2040,6 +2040,42 @@ void RenderPassCommandBufferHelper::finalizeDepthStencilLoadStore(Context *conte
                                          mRenderPassDesc.hasStencilUnresolveAttachment(),
                                          &stencilLoadOp, &stencilStoreOp, &isStencilInvalidated);
 
+    // Bug: angleproject:7370
+    bool isARM = IsARM(context->getRenderer()->getPhysicalDeviceProperties().vendorID);
+    if (isARM)
+    {
+        if (depthLoadOp == RenderPassLoadOp::None && stencilLoadOp != RenderPassLoadOp::None)
+        {
+            depthLoadOp = static_cast<RenderPassLoadOp>(dsOps.loadOp);
+        }
+        if (depthLoadOp != RenderPassLoadOp::None && stencilLoadOp == RenderPassLoadOp::None)
+        {
+            stencilLoadOp = static_cast<RenderPassLoadOp>(dsOps.stencilLoadOp);
+        }
+        if (depthStoreOp == RenderPassStoreOp::None && stencilStoreOp != RenderPassStoreOp::None)
+        {
+            if (isDepthInvalidated)
+            {
+                depthStoreOp = RenderPassStoreOp::DontCare;
+            }
+            else
+            {
+                depthStoreOp = static_cast<RenderPassStoreOp>(dsOps.storeOp);
+            }
+        }
+        if (depthStoreOp != RenderPassStoreOp::None && stencilStoreOp == RenderPassStoreOp::None)
+        {
+            if (isStencilInvalidated)
+            {
+                stencilStoreOp = RenderPassStoreOp::DontCare;
+            }
+            else
+            {
+                stencilStoreOp = static_cast<RenderPassStoreOp>(dsOps.stencilStoreOp);
+            }
+        }
+    }
+
     if (isDepthInvalidated)
     {
         dsOps.isInvalidated = true;
