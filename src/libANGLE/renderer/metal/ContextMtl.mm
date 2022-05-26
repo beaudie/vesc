@@ -1397,7 +1397,7 @@ ProgramImpl *ContextMtl::createProgram(const gl::ProgramState &state)
 // Framebuffer creation
 FramebufferImpl *ContextMtl::createFramebuffer(const gl::FramebufferState &state)
 {
-    return new FramebufferMtl(state, false, nullptr);
+    return new FramebufferMtl(state, this, false, nullptr);
 }
 
 // Texture creation
@@ -1761,7 +1761,7 @@ mtl::RenderCommandEncoder *ContextMtl::getRenderPassCommandEncoder(const mtl::Re
         ANGLE_MTL_OBJC_SCOPE
         {
             MTLRenderPassDescriptor *objCDesc = [MTLRenderPassDescriptor renderPassDescriptor];
-            desc.convertToMetalDesc(objCDesc);
+            desc.convertToMetalDesc(objCDesc, getNativeCaps().maxColorAttachments);
             NSUInteger maxSize = mtl::GetMaxRenderTargetSizeForDeviceInBytes(metalDevice);
             NSUInteger renderTargetSize =
                 ComputeTotalSizeUsedForMTLRenderPassDescriptor(objCDesc, this, metalDevice);
@@ -1776,7 +1776,7 @@ mtl::RenderCommandEncoder *ContextMtl::getRenderPassCommandEncoder(const mtl::Re
             }
         }
     }
-    return &mRenderEncoder.restart(desc);
+    return &mRenderEncoder.restart(desc, getNativeCaps().maxColorAttachments);
 }
 
 // Utilities to quickly create render command encoder to a specific texture:

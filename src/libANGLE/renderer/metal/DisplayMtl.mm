@@ -727,10 +727,19 @@ void DisplayMtl::ensureCapsInitialized() const
     mNativeCaps.minAliasedLineWidth = 1.0f;
     mNativeCaps.maxAliasedLineWidth = 1.0f;
 
-    mNativeCaps.maxDrawBuffers       = mtl::kMaxRenderTargets;
+    if (supportsEitherGPUFamily(2, 1))
+    {
+        mNativeCaps.maxDrawBuffers      = mtl::kMaxRenderTargets;
+        mNativeCaps.maxColorAttachments = mtl::kMaxGLSamplerBindings;
+    }
+    else
+    {
+        mNativeCaps.maxDrawBuffers      = mtl::kMaxRenderTargetsOlderGPUFamilies;
+        mNativeCaps.maxColorAttachments = mtl::kMaxRenderTargetsOlderGPUFamilies;
+    }
+
     mNativeCaps.maxFramebufferWidth  = mNativeCaps.max2DTextureSize;
     mNativeCaps.maxFramebufferHeight = mNativeCaps.max2DTextureSize;
-    mNativeCaps.maxColorAttachments  = mtl::kMaxRenderTargets;
     mNativeCaps.maxViewportWidth     = mNativeCaps.max2DTextureSize;
     mNativeCaps.maxViewportHeight    = mNativeCaps.max2DTextureSize;
 
