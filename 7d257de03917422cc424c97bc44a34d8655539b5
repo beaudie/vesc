@@ -16,6 +16,24 @@
       "message": "Note that this was called even for absolute paths, but `realpath` is only called on relative paths. So `realpath` is not a complete replacement for this.",
       "revId": "7d257de03917422cc424c97bc44a34d8655539b5",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "8b3568c7_777db227",
+        "filename": "util/posix/crash_handler_posix.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 550,
+      "author": {
+        "id": 1491687
+      },
+      "writtenOn": "2022-05-26T14:06:47Z",
+      "side": 0,
+      "message": "Good catch! `realpath` is now also called for absolute paths. This expands symlinks in absolute paths and also makes valid relative paths absolute. The relative path workarounds are now only applied if the first realtpath call fails and the path is relative.",
+      "parentUuid": "a9217290_f1cce039",
+      "revId": "7d257de03917422cc424c97bc44a34d8655539b5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
