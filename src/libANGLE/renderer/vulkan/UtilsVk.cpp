@@ -1511,9 +1511,13 @@ angle::Result UtilsVk::setupComputeProgram(
 
     const vk::BindingPointer<vk::PipelineLayout> &pipelineLayout = mPipelineLayouts[function];
 
-    vk::PipelineHelper *pipeline;
     program->setShader(gl::ShaderType::Compute, csShader);
-    ANGLE_TRY(program->getComputePipeline(contextVk, pipelineLayout.get(), &pipeline));
+
+    vk::PipelineHelper *pipeline;
+    vk::PipelineCache *pipelineCache = nullptr;
+    ANGLE_TRY(contextVk->getRenderer()->getPipelineCache(&pipelineCache));
+    ANGLE_TRY(
+        program->getComputePipeline(contextVk, *pipelineCache, pipelineLayout.get(), &pipeline));
     pipeline->retain(&commandBufferHelper->getResourceUseList());
 
     vk::OutsideRenderPassCommandBuffer *commandBuffer = &commandBufferHelper->getCommandBuffer();

@@ -363,6 +363,7 @@ class RendererVk : angle::NonCopyable
     }
 
     angle::Result getPipelineCache(vk::PipelineCache **pipelineCache);
+    angle::Result mergeIntoPipelineCache(const vk::PipelineCache &pipelineCache);
     void onNewGraphicsPipeline()
     {
         std::unique_lock<std::mutex> lock(mPipelineCacheMutex);
