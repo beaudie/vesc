@@ -105,6 +105,8 @@ struct TransformFeedbackVarying : public sh::ShaderVariable
 
 class ProgramState;
 class ProgramPipelineState;
+constexpr size_t kMaxFixedSamplerCount = 4;
+using SamplerIndexSet                  = angle::FlatUnorderedSet<size_t, kMaxFixedSamplerCount>;
 
 class ProgramExecutable final : public angle::Subject
 {
@@ -184,6 +186,7 @@ class ProgramExecutable final : public angle::Subject
     }
 
     void updateActiveSamplers(const ProgramState &programState);
+    SamplerIndexSet getSamplerIndexSetForTextureUnit(size_t textureUnit) const;
 
     bool hasDefaultUniforms() const;
     bool hasTextures() const;
