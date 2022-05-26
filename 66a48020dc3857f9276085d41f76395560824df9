@@ -58,6 +58,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "43ccb93c_188e59c5",
+        "filename": "src/libANGLE/Buffer.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 145,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2022-05-26T20:32:22Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "da72473b_98761588",
+      "range": {
+        "startLine": 145,
+        "startChar": 4,
+        "endLine": 145,
+        "endChar": 50
+      },
+      "revId": "66a48020dc3857f9276085d41f76395560824df9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "c1a5488a_0244378a",
@@ -71,6 +95,30 @@
       "writtenOn": "2021-08-30T13:41:26Z",
       "side": 1,
       "message": "instead of making the const_cast in handleError, you should be able to use \"contextGL\" here. Can you try that so we don\u0027t need the const_cast?",
+      "range": {
+        "startLine": 321,
+        "startChar": 8,
+        "endLine": 321,
+        "endChar": 28
+      },
+      "revId": "66a48020dc3857f9276085d41f76395560824df9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "9c5c2488_2f64e4f2",
+        "filename": "src/libANGLE/renderer/gl/BufferGL.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 321,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2022-05-26T20:32:22Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "c1a5488a_0244378a",
       "range": {
         "startLine": 321,
         "startChar": 8,
@@ -104,6 +152,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "11ddf7b2_6483a5ec",
+        "filename": "src/libANGLE/renderer/metal/BufferMtl.mm",
+        "patchSetId": 5
+      },
+      "lineNbr": 266,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2022-05-26T20:32:22Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "609a3f8f_2869c1fe",
+      "range": {
+        "startLine": 266,
+        "startChar": 4,
+        "endLine": 266,
+        "endChar": 24
+      },
+      "revId": "66a48020dc3857f9276085d41f76395560824df9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "73df3902_97896a49",
@@ -117,6 +189,30 @@
       "writtenOn": "2021-08-30T13:41:26Z",
       "side": 1,
       "message": "this would have to change to ANGLE_VK_CHECK_ALLOC, but I think that\u0027s OK.",
+      "range": {
+        "startLine": 752,
+        "startChar": 4,
+        "endLine": 752,
+        "endChar": 24
+      },
+      "revId": "66a48020dc3857f9276085d41f76395560824df9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "7b934ed6_eafe9d38",
+        "filename": "src/libANGLE/renderer/vulkan/BufferVk.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 752,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2022-05-26T20:32:22Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "73df3902_97896a49",
       "range": {
         "startLine": 752,
         "startChar": 4,
