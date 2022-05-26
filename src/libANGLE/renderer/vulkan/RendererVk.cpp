@@ -1170,7 +1170,7 @@ RendererVk::RendererVk()
       mDeviceLocalVertexConversionBufferMemoryTypeIndex(kInvalidMemoryTypeIndex),
       mVertexConversionBufferAlignment(1),
       mPipelineCacheVkUpdateTimeout(kPipelineCacheVkUpdatePeriod),
-      mPipelineCacheDirty(false),
+      mPipelineCacheSizeAtLastSync(0),
       mPipelineCacheInitialized(false),
       mValidationMessageCount(0),
       mCommandProcessor(this),
@@ -3638,16 +3638,17 @@ angle::Result RendererVk::syncPipelineCacheVk(DisplayVk *displayVk, const gl::Co
     {
         return angle::Result::Continue;
     }
-    if (!mPipelineCacheDirty)
-    {
-        mPipelineCacheVkUpdateTimeout = kPipelineCacheVkUpdatePeriod;
-        return angle::Result::Continue;
-    }
 
     mPipelineCacheVkUpdateTimeout = kPipelineCacheVkUpdatePeriod;
 
     size_t pipelineCacheSize = 0;
     ANGLE_TRY(getPipelineCacheSize(displayVk, &pipelineCacheSize));
+    if (pipelineCacheSize <= mPipelineCacheSizeAtLastSync)
+    {
+        return angle::Result::Continue;
+    }
+    mPipelineCacheSizeAtLastSync = pipelineCacheSize;
+
     // Make sure we will receive enough data to hold the pipeline cache header
     // Table 7. Layout for pipeline cache header version VK_PIPELINE_CACHE_HEADER_VERSION_ONE
     const size_t kPipelineCacheHeaderSize = 16 + VK_UUID_SIZE;
@@ -3719,20 +3720,14 @@ angle::Result RendererVk::syncPipelineCacheVk(DisplayVk *displayVk, const gl::Co
             angle::WorkerThreadPool::PostWorkerTask(context->getWorkerThreadPool(),
                                                     compressAndStorePipelineCacheTask),
             compressAndStorePipelineCacheTask);
-        mPipelineCacheDirty = false;
     }
     else
     {
         // If enableCompressingPipelineCacheInThreadPool is diabled, to avoid the risk, set
         // kMaxTotalSize to 64k.
         constexpr size_t kMaxTotalSize = 64 * 1024;
-        bool compressResult            = CompressAndStorePipelineCacheVk(
-                       mPhysicalDeviceProperties, displayVk, contextVk, pipelineCacheData, kMaxTotalSize);
-
-        if (compressResult)
-        {
-            mPipelineCacheDirty = false;
-        }
+        CompressAndStorePipelineCacheVk(mPhysicalDeviceProperties, displayVk, contextVk,
+                                        pipelineCacheData, kMaxTotalSize);
     }
 
     return angle::Result::Continue;
