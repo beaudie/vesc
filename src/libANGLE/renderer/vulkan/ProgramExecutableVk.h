@@ -15,6 +15,7 @@
 #include "common/utilities.h"
 #include "libANGLE/Context.h"
 #include "libANGLE/InfoLog.h"
+#include "libANGLE/ProgramExecutable.h"
 #include "libANGLE/renderer/ShaderInterfaceVariableInfoMap.h"
 #include "libANGLE/renderer/glslang_wrapper_utils.h"
 #include "libANGLE/renderer/vulkan/ContextVk.h"
@@ -101,10 +102,10 @@ struct DefaultUniformBlock final : private angle::NonCopyable
 };
 
 // Performance and resource counters.
-using DescriptorSetCountList   = angle::PackedEnumMap<DescriptorSetIndex, uint32_t>;
-using ImmutableSamplerIndexMap = angle::HashMap<vk::YcbcrConversionDesc, uint32_t>;
+using DescriptorSetCountList = angle::PackedEnumMap<DescriptorSetIndex, uint32_t>;
 
-using DefaultUniformBlockMap = gl::ShaderMap<std::shared_ptr<DefaultUniformBlock>>;
+using ImmutableSamplerIndexSetMap = angle::HashMap<vk::YcbcrConversionDesc, gl::SamplerIndexSet>;
+using DefaultUniformBlockMap      = gl::ShaderMap<std::shared_ptr<DefaultUniformBlock>>;
 
 class ProgramExecutableVk
 {
@@ -192,9 +193,9 @@ class ProgramExecutableVk
     bool usesDynamicAtomicCounterBufferDescriptors() const { return false; }
 
     bool areImmutableSamplersCompatible(
-        const ImmutableSamplerIndexMap &immutableSamplerIndexMap) const
+        const ImmutableSamplerIndexSetMap &immutableSamplerIndexSetMap) const
     {
-        return (mImmutableSamplerIndexMap == immutableSamplerIndexMap);
+        return (mImmutableSamplerIndexSetMap == immutableSamplerIndexSetMap);
     }
 
     size_t getDefaultUniformAlignedSize(vk::Context *context, gl::ShaderType shaderType) const
@@ -322,7 +323,7 @@ class ProgramExecutableVk
     // We keep a reference to the pipeline and descriptor set layouts. This ensures they don't get
     // deleted while this program is in use.
     uint32_t mImmutableSamplersMaxDescriptorCount;
-    ImmutableSamplerIndexMap mImmutableSamplerIndexMap;
+    ImmutableSamplerIndexSetMap mImmutableSamplerIndexSetMap;
     vk::BindingPointer<vk::PipelineLayout> mPipelineLayout;
     vk::DescriptorSetLayoutPointerArray mDescriptorSetLayouts;
 

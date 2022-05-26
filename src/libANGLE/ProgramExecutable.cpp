@@ -874,6 +874,26 @@ void ProgramExecutable::updateActiveSamplers(const ProgramState &programState)
     resetCachedValidateSamplersResult();
 }
 
+SamplerIndexSet ProgramExecutable::getSamplerIndexSetForTextureUnit(size_t textureUnit) const
+{
+    // Go through all sampler bindings and return a set of sampler indices that are bound to
+    // textureUnit
+    SamplerIndexSet samplerIndices = {};
+    for (size_t samplerIndex = 0; samplerIndex < mSamplerBindings.size(); ++samplerIndex)
+    {
+        const SamplerBinding &samplerBinding = mSamplerBindings[samplerIndex];
+        for (size_t boundTextureUnit : samplerBinding.boundTextureUnits)
+        {
+            if (boundTextureUnit == textureUnit)
+            {
+                samplerIndices.insert(samplerIndex);
+            }
+        }
+    }
+    ASSERT(!samplerIndices.empty());
+    return samplerIndices;
+}
+
 void ProgramExecutable::updateActiveImages(const ProgramExecutable &executable)
 {
     const std::vector<ImageBinding> &imageBindings = executable.getImageBindings();
