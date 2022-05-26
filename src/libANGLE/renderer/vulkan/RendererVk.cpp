@@ -3599,13 +3599,25 @@ angle::Result RendererVk::getPipelineCache(vk::PipelineCache **pipelineCache)
     if (success)
     {
         // Merge the newly created pipeline cache into the existing one.
-        mPipelineCache.merge(mDevice, mPipelineCache.getHandle(), 1, pCache.ptr());
+        mPipelineCache.merge(mDevice, 1, pCache.ptr());
     }
     mPipelineCacheInitialized = true;
     pCache.destroy(mDevice);
 
     *pipelineCache = &mPipelineCache;
     return getPipelineCacheSize(displayVk, &mPipelineCacheSizeAtLastSync);
+}
+
+angle::Result RendererVk::mergeIntoPipelineCache(const vk::PipelineCache &pipelineCache)
+{
+    vk::PipelineCache *globalCache = nullptr;
+    ANGLE_TRY(getPipelineCache(&globalCache));
+
+    std::unique_lock<std::mutex> lock(mPipelineCacheMutex);
+
+    globalCache->merge(mDevice, 1, pipelineCache.ptr());
+
+    return angle::Result::Continue;
 }
 
 const gl::Caps &RendererVk::getNativeCaps() const

@@ -57,7 +57,6 @@ constexpr PackedEnumMap<Feature, const char *> kFeatureNames = {{
     {Feature::CopyIOSurfaceToNonIOSurfaceForReadOptimization,
      "copyIOSurfaceToNonIOSurfaceForReadOptimization"},
     {Feature::CopyTextureToBufferForReadOptimization, "copyTextureToBufferForReadOptimization"},
-    {Feature::CreatePipelineDuringLink, "createPipelineDuringLink"},
     {Feature::DecodeEncodeSRGBForGenerateMipmap, "decodeEncodeSRGBForGenerateMipmap"},
     {Feature::DeferFlushUntilEndRenderPass, "deferFlushUntilEndRenderPass"},
     {Feature::DepthClamping, "depthClamping"},
