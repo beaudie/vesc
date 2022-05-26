@@ -102,7 +102,9 @@ angle::Result ProgramPipelineVk::link(const gl::Context *glContext,
         mExecutable.resolvePrecisionMismatch(mergedVaryings);
     }
 
-    return mExecutable.createPipelineLayout(contextVk, mState.getExecutable(), nullptr);
+    ANGLE_TRY(mExecutable.createPipelineLayout(contextVk, mState.getExecutable(), nullptr));
+
+    return mExecutable.warmUpPipelineCache(contextVk, mState.getExecutable());
 }  // namespace rx
 
 void ProgramPipelineVk::onProgramUniformUpdate(gl::ShaderType shaderType)

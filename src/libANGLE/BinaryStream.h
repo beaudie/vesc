@@ -227,13 +227,19 @@ class BinaryOutputStream : angle::NonCopyable
     }
 
     template <class IntT>
-    void writeIntVector(const std::vector<IntT> &param)
+    void writeIntArray(size_t size, const IntT *param)
     {
-        writeInt(param.size());
-        for (IntT element : param)
+        writeInt(size);
+        for (size_t element = 0; element < size; ++element)
         {
             writeIntOrNegOne(element);
         }
+    }
+
+    template <class IntT>
+    void writeIntVector(const std::vector<IntT> &param)
+    {
+        writeIntArray(param.size(), param.data());
     }
 
     template <class EnumT>
