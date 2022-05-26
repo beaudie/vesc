@@ -3633,12 +3633,14 @@ angle::Result StateManager11::syncUniformBuffersForShader(const gl::Context *con
 
             case gl::ShaderType::Fragment:
             {
+#if 0
                 if (mCurrentConstantBufferPS[bufferIndex] == constantBuffer->getSerial() &&
                     mCurrentConstantBufferPSOffset[bufferIndex] == uniformBufferOffset &&
                     mCurrentConstantBufferPSSize[bufferIndex] == uniformBufferSize)
                 {
                     continue;
                 }
+#endif
 
                 if (firstConstant != 0 && uniformBufferSize != 0)
                 {
