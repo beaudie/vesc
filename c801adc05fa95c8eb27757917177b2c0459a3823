@@ -86,6 +86,30 @@
       },
       "revId": "c801adc05fa95c8eb27757917177b2c0459a3823",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "d2ccb0db_5a793476",
+        "filename": "src/compiler/translator/tree_ops/RewriteDfdy.h",
+        "patchSetId": 8
+      },
+      "lineNbr": 9,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-05-26T14:35:45Z",
+      "side": 1,
+      "message": "Oops, that was a note for myself to remember to follow up.\n\nDone.",
+      "parentUuid": "77917e1a_96ce7d7d",
+      "range": {
+        "startLine": 8,
+        "startChar": 0,
+        "endLine": 9,
+        "endChar": 34
+      },
+      "revId": "c801adc05fa95c8eb27757917177b2c0459a3823",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
