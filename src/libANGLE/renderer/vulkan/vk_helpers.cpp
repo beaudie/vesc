@@ -2040,6 +2040,7 @@ void RenderPassCommandBufferHelper::finalizeDepthStencilLoadStore(Context *conte
                                          mRenderPassDesc.hasStencilUnresolveAttachment(),
                                          &stencilLoadOp, &stencilStoreOp, &isStencilInvalidated);
 
+    // Bug: angleproject:7370
     if (isDepthInvalidated)
     {
         dsOps.isInvalidated = true;
