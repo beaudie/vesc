@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "53c21a51_7fb1aa24",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1115588
+      },
+      "writtenOn": "2022-05-26T20:26:11Z",
+      "side": 1,
+      "message": "Note: if this works it\u0027s better to land it now I think. But, I am curious, what would it take to make this less um, wonky? Is this related to Provoking Vertex support?\n\nI\u0027ve run into several issues where the fact that the provoking vertex support is pre-creating a command buffer, whether or not it\u0027s actually used, has caused some issues. I\u0027m wondering if we should refactor that so the provoking vertex code creates its command buffer separate from the rest of the other command buffer code and can therefore insert its work state-free.",
+      "revId": "7ad8740c187ddce13d10e59f42b39d1ff72be322",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
