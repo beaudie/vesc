@@ -441,6 +441,14 @@
             "issue": "http://anglebug.com/5371"
         },
         {
+            "name": "disallow_mixed_depth_stencil_load_op_none_and_load",
+            "category": "Features",
+            "description": [
+                "VkDevice disables enabling load_op_none on either depth or stencil on ARM"
+            ],
+            "issue": "http://anglebug.com/7370"
+        },
+        {
             "name": "supports_depth_clip_control",
             "category": "Features",
             "description": [

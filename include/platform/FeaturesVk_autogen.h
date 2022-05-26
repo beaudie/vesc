@@ -341,6 +341,11 @@ struct FeaturesVk : FeatureSetBase
         "VkDevice supports VK_EXT_load_store_op_none extension.", &members,
         "http://anglebug.com/5371"};
 
+    FeatureInfo disallowMixedDepthStencilLoadOpNoneAndLoad = {
+        "disallowMixedDepthStencilLoadOpNoneAndLoad", FeatureCategory::VulkanFeatures,
+        "VkDevice disables enabling load_op_none on either depth or stencil on ARM", &members,
+        "http://anglebug.com/7370"};
+
     FeatureInfo supportsDepthClipControl = {
         "supportsDepthClipControl", FeatureCategory::VulkanFeatures,
         "VkDevice supports VK_EXT_depth_clip_control extension.", &members,

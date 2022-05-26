@@ -2040,6 +2040,21 @@ void RenderPassCommandBufferHelper::finalizeDepthStencilLoadStore(Context *conte
                                          mRenderPassDesc.hasStencilUnresolveAttachment(),
                                          &stencilLoadOp, &stencilStoreOp, &isStencilInvalidated);
 
+    const bool disableMixedDepthStencilLoadStoreNoneAndLoad =
+        context->getRenderer()->getFeatures().disallowMixedDepthStencilLoadOpNoneAndLoad.enabled;
+
+    if (disableMixedDepthStencilLoadStoreNoneAndLoad)
+    {
+        if (depthLoadOp == RenderPassLoadOp::None && stencilLoadOp != RenderPassLoadOp::None)
+        {
+            depthLoadOp = static_cast<RenderPassLoadOp>(dsOps.loadOp);
+        }
+        if (depthLoadOp != RenderPassLoadOp::None && stencilLoadOp == RenderPassLoadOp::None)
+        {
+            stencilLoadOp = static_cast<RenderPassLoadOp>(dsOps.stencilLoadOp);
+        }
+    }
+
     if (isDepthInvalidated)
     {
         dsOps.isInvalidated = true;
