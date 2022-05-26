@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "9eb6f9cd_515e7bd0",
+        "filename": "src/libANGLE/ProgramExecutable.cpp",
+        "patchSetId": 15
+      },
+      "lineNbr": 950,
+      "author": {
+        "id": 1340649
+      },
+      "writtenOn": "2022-05-26T04:11:02Z",
+      "side": 1,
+      "message": "need to do this here as well -\n```\n// Irrespective of conflicts mark add samplerIndex to map\nmActiveTextureUnitToSamplerIndexSetMap[textureUnit].insert(samplerIndex);\n```",
+      "revId": "47fe3bdfa8e2e25d84c10d62399aec50f992b99c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
