@@ -2540,44 +2540,12 @@ angle::Result MipmapUtils::generateMipmapCS(ContextMtl *contextMtl,
                                             bool sRGBMipmap,
                                             NativeTexLevelArray *mipmapOutputViews)
 {
-    // Only support 3D texture for now.
-    ASSERT(srcTexture->textureType() == MTLTextureType3D);
-
     MTLSize threadGroupSize;
     uint32_t slices                             = 1;
     id<MTLComputePipelineState> computePipeline = nil;
-
-    ensure3DMipGeneratorPipelineInitialized(contextMtl);
-    computePipeline = m3DMipGeneratorPipeline;
-    threadGroupSize =
-        MTLSizeMake(kGenerateMipThreadGroupSizePerDim, kGenerateMipThreadGroupSizePerDim,
-                    kGenerateMipThreadGroupSizePerDim);
-
     // The compute shader supports up to 4 mipmaps generated per pass.
     // See shaders/gen_mipmap.metal
     uint32_t maxMipsPerBatch = 4;
-
-    if (threadGroupSize.width * threadGroupSize.height * threadGroupSize.depth >
-            computePipeline.maxTotalThreadsPerThreadgroup ||
-        ANGLE_UNLIKELY(
-            !contextMtl->getDisplay()->getFeatures().allowGenMultipleMipsPerPass.enabled))
-    {
-        // Multiple mipmaps generation is not supported due to hardware's thread group size limits.
-        // Fallback to generate one mip per pass and reduce thread group size.
-        if (ANGLE_UNLIKELY(threadGroupSize.width * threadGroupSize.height >
-                           computePipeline.maxTotalThreadsPerThreadgroup))
-        {
-            // Even with reduced thread group size, we cannot proceed.
-            // HACK: use blit command encoder to generate mipmaps if it is not possible
-            // to use compute shader due to hardware limits.
-            BlitCommandEncoder *blitEncoder = contextMtl->getBlitCommandEncoder();
-            blitEncoder->generateMipmapsForTexture(srcTexture);
-            return angle::Result::Continue;
-        }
-
-        threadGroupSize.depth = 1;
-        maxMipsPerBatch       = 1;
-    }
 
     ComputeCommandEncoder *cmdEncoder = contextMtl->getComputeCommandEncoder();
     ASSERT(cmdEncoder);
@@ -2615,8 +2583,29 @@ angle::Result MipmapUtils::generateMipmapCS(ContextMtl *contextMtl,
             UNREACHABLE();
     }
 
-    Generate3DMipmapUniform options;
+    if (threadGroupSize.width * threadGroupSize.height * threadGroupSize.depth >
+            computePipeline.maxTotalThreadsPerThreadgroup ||
+        ANGLE_UNLIKELY(
+            !contextMtl->getDisplay()->getFeatures().allowGenMultipleMipsPerPass.enabled))
+    {
+        // Multiple mipmaps generation is not supported due to hardware's thread group size limits.
+        // Fallback to generate one mip per pass and reduce thread group size.
+        if (ANGLE_UNLIKELY(threadGroupSize.width * threadGroupSize.height >
+                           computePipeline.maxTotalThreadsPerThreadgroup))
+        {
+            // Even with reduced thread group size, we cannot proceed.
+            // HACK: use blit command encoder to generate mipmaps if it is not possible
+            // to use compute shader due to hardware limits.
+            BlitCommandEncoder *blitEncoder = contextMtl->getBlitCommandEncoder();
+            blitEncoder->generateMipmapsForTexture(srcTexture);
+            return angle::Result::Continue;
+        }
 
+        threadGroupSize.depth = 1;
+        maxMipsPerBatch       = 1;
+    }
+
+    Generate3DMipmapUniform options;
     uint32_t remainMips             = srcTexture->mipmapLevels() - 1;
     MipmapNativeLevel batchSrcLevel = kZeroNativeMipLevel;
     options.srcLevel                = batchSrcLevel.get();
