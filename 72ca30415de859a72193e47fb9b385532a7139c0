@@ -73,6 +73,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "ec340c06_0ca407c5",
+        "filename": "src/libANGLE/ProgramExecutable.h",
+        "patchSetId": 8
+      },
+      "lineNbr": 191,
+      "author": {
+        "id": 1340649
+      },
+      "writtenOn": "2022-05-26T14:52:52Z",
+      "side": 1,
+      "message": "if computing this map dynamically is the approach then we will need to do it twice, once in `ContextVk::updateActiveTextures` and another in `ProgramExecutableVk::addTextureDescriptorSetDesc`\n\nim fine either way, just want confirmation so i can fix it and move on to other issues",
+      "parentUuid": "e252fdbc_4396b1a5",
+      "range": {
+        "startLine": 187,
+        "startChar": 0,
+        "endLine": 191,
+        "endChar": 5
+      },
+      "revId": "72ca30415de859a72193e47fb9b385532a7139c0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "9c3875a8_ffbc92cf",
         "filename": "src/libANGLE/renderer/vulkan/ProgramExecutableVk.h",
         "patchSetId": 8
