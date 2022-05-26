@@ -49,6 +49,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "e252fdbc_4396b1a5",
+        "filename": "src/libANGLE/ProgramExecutable.h",
+        "patchSetId": 8
+      },
+      "lineNbr": 191,
+      "author": {
+        "id": 1340649
+      },
+      "writtenOn": "2022-05-26T14:50:29Z",
+      "side": 1,
+      "message": "\u003e I\u0027d suggest for now we don\u0027t cache this and compute it dynamically\n\nthis is what was done in PS1 but i think caching it was a response to a rethink / redesign suggestion",
+      "parentUuid": "c0c867f2_5ed39b16",
+      "range": {
+        "startLine": 187,
+        "startChar": 0,
+        "endLine": 191,
+        "endChar": 5
+      },
+      "revId": "72ca30415de859a72193e47fb9b385532a7139c0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "9c3875a8_ffbc92cf",
         "filename": "src/libANGLE/renderer/vulkan/ProgramExecutableVk.h",
         "patchSetId": 8
@@ -60,6 +84,30 @@
       "writtenOn": "2022-05-26T14:12:37Z",
       "side": 1,
       "message": "this structure is particularly obtuse. I think we can either use a map from \u003cTexture Unit Index\u003e to the set structure, or from \u003cSampler Serial\u003e. We should be using an flat array with pairs instead of a HashMap, or at least FlatUnorderedMap. Please also give the set structure a name.",
+      "range": {
+        "startLine": 107,
+        "startChar": 55,
+        "endLine": 107,
+        "endChar": 74
+      },
+      "revId": "72ca30415de859a72193e47fb9b385532a7139c0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b84a69af_0061afe9",
+        "filename": "src/libANGLE/renderer/vulkan/ProgramExecutableVk.h",
+        "patchSetId": 8
+      },
+      "lineNbr": 107,
+      "author": {
+        "id": 1340649
+      },
+      "writtenOn": "2022-05-26T14:50:29Z",
+      "side": 1,
+      "message": "`vk::YcbcrConversionDesc` needs to be the key to the hashmap since it fully qualifies the immutable sampler. if the texture attached to a textureUnit is updated then pipeline layout needs to be recreated",
+      "parentUuid": "9c3875a8_ffbc92cf",
       "range": {
         "startLine": 107,
         "startChar": 55,
