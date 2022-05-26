@@ -97,6 +97,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "6a83895a_bfc3d41e",
+        "filename": "src/libANGLE/ProgramExecutable.h",
+        "patchSetId": 8
+      },
+      "lineNbr": 191,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2022-05-26T16:05:27Z",
+      "side": 1,
+      "message": "Hey Mohan,\n\nIn patch set #1 you introduced a loop outside of the existing look in `ContextVk::updateActiveTextures`. Looks like in this patch set you no longer have that loop.\n\nMy suggestion is to leave `ContextVk::updateActiveTextures` and `ProgramExecutableVk::addTexturesDescriptorSetDesc` as they are now in this patch set, and modify `ProgramExecutable` to remove the cache. Instead compute the `SamplerIndexSet` in `ProgramExecutable::`getsamplerIndexSetForTextureUnit`. Then we don\u0027t add any overhead to potential texture state changes. And we can always add the cache back in later if we need it, using this patch set as a reference.",
+      "parentUuid": "ec340c06_0ca407c5",
+      "range": {
+        "startLine": 187,
+        "startChar": 0,
+        "endLine": 191,
+        "endChar": 5
+      },
+      "revId": "72ca30415de859a72193e47fb9b385532a7139c0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "9c3875a8_ffbc92cf",
         "filename": "src/libANGLE/renderer/vulkan/ProgramExecutableVk.h",
         "patchSetId": 8
@@ -132,6 +156,30 @@
       "side": 1,
       "message": "`vk::YcbcrConversionDesc` needs to be the key to the hashmap since it fully qualifies the immutable sampler. if the texture attached to a textureUnit is updated then pipeline layout needs to be recreated",
       "parentUuid": "9c3875a8_ffbc92cf",
+      "range": {
+        "startLine": 107,
+        "startChar": 55,
+        "endLine": 107,
+        "endChar": 74
+      },
+      "revId": "72ca30415de859a72193e47fb9b385532a7139c0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "5362b1a6_5559aadd",
+        "filename": "src/libANGLE/renderer/vulkan/ProgramExecutableVk.h",
+        "patchSetId": 8
+      },
+      "lineNbr": 107,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2022-05-26T16:05:27Z",
+      "side": 1,
+      "message": "Doesn\u0027t the `SamplerSerial` also fully identify the immutable sampler? Can you have two immutable samplers with the same serial?",
+      "parentUuid": "b84a69af_0061afe9",
       "range": {
         "startLine": 107,
         "startChar": 55,
