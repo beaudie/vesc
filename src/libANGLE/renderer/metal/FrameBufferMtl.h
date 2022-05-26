@@ -29,6 +29,7 @@ class FramebufferMtl : public FramebufferImpl
 {
   public:
     explicit FramebufferMtl(const gl::FramebufferState &state,
+                            ContextMtl *context,
                             bool flipY,
                             WindowSurfaceMtl *backbuffer);
     ~FramebufferMtl() override;
@@ -211,7 +212,7 @@ class FramebufferMtl : public FramebufferImpl
     // NOTE: we cannot use RenderTargetCache here because it doesn't support separate
     // depth & stencil attachments as of now. Separate depth & stencil could be useful to
     // save spaces on iOS devices. See doc/PackedDepthStencilSupport.md.
-    std::array<RenderTargetMtl *, mtl::kMaxRenderTargets> mColorRenderTargets;
+    std::vector<RenderTargetMtl *> mColorRenderTargets;
     RenderTargetMtl *mDepthRenderTarget   = nullptr;
     RenderTargetMtl *mStencilRenderTarget = nullptr;
     mtl::RenderPassDesc mRenderPassDesc;

@@ -223,9 +223,8 @@ struct RenderPipelineOutputDesc
     uint16_t depthAttachmentPixelFormat : 16;
     uint16_t stencilAttachmentPixelFormat : 16;
 
-    static_assert(kMaxRenderTargets <= 4, "kMaxRenderTargets must be <= 4");
-    uint8_t numColorAttachments : 3;
-    uint8_t sampleCount : 5;
+    uint8_t numColorAttachments;
+    uint8_t sampleCount;
 };
 
 // Some SDK levels don't declare MTLPrimitiveTopologyClass. Needs to do compile time check here:
