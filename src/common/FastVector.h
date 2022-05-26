@@ -74,7 +74,7 @@ class FastVector final
     void push_back(value_type &&value);
 
     template <typename... Args>
-    void emplace_back(Args &&... args);
+    void emplace_back(Args &&...args);
 
     void pop_back();
 
@@ -306,7 +306,7 @@ ANGLE_INLINE void FastVector<T, N, Storage>::push_back(value_type &&value)
 
 template <class T, size_t N, class Storage>
 template <typename... Args>
-ANGLE_INLINE void FastVector<T, N, Storage>::emplace_back(Args &&... args)
+ANGLE_INLINE void FastVector<T, N, Storage>::emplace_back(Args &&...args)
 {
     if (mSize == mReservedSize)
         ensure_capacity(mSize + 1);
@@ -539,6 +539,10 @@ template <class T, size_t N>
 class FlatUnorderedSet final
 {
   public:
+    using size_type      = typename FastVector<T, N>::size_type;
+    using iterator       = typename FastVector<T, N>::iterator;
+    using const_iterator = typename FastVector<T, N>::const_iterator;
+
     FlatUnorderedSet() {}
     ~FlatUnorderedSet() {}
 
@@ -562,9 +566,47 @@ class FlatUnorderedSet final
 
     void clear() { mData.clear(); }
 
+    size_type size() const { return mData.size(); }
+
+    iterator begin();
+    const_iterator begin() const;
+
+    iterator end();
+    const_iterator end() const;
+
   private:
     FastVector<T, N> mData;
 };
+
+template <class T, size_t N, size_t M>
+bool operator==(const FlatUnorderedSet<T, N> &a, const FlatUnorderedSet<T, M> &b)
+{
+    return a.size() == b.size() && std::equal(a.begin(), a.end(), b.begin());
+}
+
+template <class T, size_t N>
+ANGLE_INLINE typename FlatUnorderedSet<T, N>::iterator FlatUnorderedSet<T, N>::begin()
+{
+    return mData.begin();
+}
+
+template <class T, size_t N>
+ANGLE_INLINE typename FlatUnorderedSet<T, N>::const_iterator FlatUnorderedSet<T, N>::begin() const
+{
+    return mData.begin();
+}
+
+template <class T, size_t N>
+ANGLE_INLINE typename FlatUnorderedSet<T, N>::iterator FlatUnorderedSet<T, N>::end()
+{
+    return mData.end();
+}
+
+template <class T, size_t N>
+ANGLE_INLINE typename FlatUnorderedSet<T, N>::const_iterator FlatUnorderedSet<T, N>::end() const
+{
+    return mData.end();
+}
 
 class FastIntegerSet final
 {
