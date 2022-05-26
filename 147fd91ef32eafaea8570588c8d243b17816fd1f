@@ -151,6 +151,24 @@
       "parentUuid": "49234688_a1201511",
       "revId": "147fd91ef32eafaea8570588c8d243b17816fd1f",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "b4ad795e_cd7fbfeb",
+        "filename": "src/tests/gl_tests/FramebufferTest.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 4151,
+      "author": {
+        "id": 1491687
+      },
+      "writtenOn": "2022-05-26T15:07:53Z",
+      "side": 1,
+      "message": "Turns out I was wrong. I was able to reproduce with GL_TEXTURE_2D  by using glTexStorage2D (which I have not used before).",
+      "parentUuid": "a0ff631e_801fd0ba",
+      "revId": "147fd91ef32eafaea8570588c8d243b17816fd1f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
