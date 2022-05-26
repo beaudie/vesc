@@ -85,4 +85,26 @@ TEST(BinaryStream, IntVector)
         ASSERT_EQ(writeData[i], readData[i]);
     }
 }
+
+// Test writeIntArray can be used instead of writeIntVector.
+TEST(BinaryStream, IntArray)
+{
+    std::array<unsigned int, 6> writeData = {
+        0x12345678, 0x9ABCDEF0, 0x13579BDF, 0x24680ACE, 0xFEEDC0DE, 0xBAADF00D,
+    };
+    std::vector<unsigned int> readData;
+
+    gl::BinaryOutputStream out;
+    out.writeIntArray(writeData.size(), writeData.data());
+
+    gl::BinaryInputStream in(out.data(), out.length());
+    in.readIntVector<unsigned int>(&readData);
+
+    ASSERT_EQ(writeData.size(), readData.size());
+
+    for (size_t i = 0; i < writeData.size(); ++i)
+    {
+        ASSERT_EQ(writeData[i], readData[i]);
+    }
+}
 }  // namespace angle

@@ -9921,6 +9921,7 @@ void ShaderProgramHelper::setSpecializationConstant(sh::vk::SpecializationConsta
 }
 
 angle::Result ShaderProgramHelper::getComputePipeline(Context *context,
+                                                      const PipelineCache &pipelineCache,
                                                       const PipelineLayout &pipelineLayout,
                                                       PipelineHelper **pipelineOut)
 {
@@ -9929,8 +9930,6 @@ angle::Result ShaderProgramHelper::getComputePipeline(Context *context,
         *pipelineOut = &mComputePipeline;
         return angle::Result::Continue;
     }
-
-    RendererVk *renderer = context->getRenderer();
 
     VkPipelineShaderStageCreateInfo shaderStage = {};
     VkComputePipelineCreateInfo createInfo      = {};
@@ -9949,10 +9948,8 @@ angle::Result ShaderProgramHelper::getComputePipeline(Context *context,
     createInfo.basePipelineHandle = VK_NULL_HANDLE;
     createInfo.basePipelineIndex  = 0;
 
-    PipelineCache *pipelineCache = nullptr;
-    ANGLE_TRY(renderer->getPipelineCache(&pipelineCache));
     ANGLE_VK_TRY(context, mComputePipeline.getPipeline().initCompute(context->getDevice(),
-                                                                     createInfo, *pipelineCache));
+                                                                     createInfo, pipelineCache));
 
     *pipelineOut = &mComputePipeline;
     return angle::Result::Continue;
