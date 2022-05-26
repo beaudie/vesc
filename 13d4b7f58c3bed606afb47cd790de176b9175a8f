@@ -22,6 +22,30 @@
       },
       "revId": "13d4b7f58c3bed606afb47cd790de176b9175a8f",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "a01131d0_9cc73ca8",
+        "filename": "src/libANGLE/capture/FrameCapture.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 405,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2022-05-26T20:35:57Z",
+      "side": 1,
+      "message": "I haven\u0027t been able to address this yet.  I did add some comments that explain what the variable types are and what members track.",
+      "parentUuid": "745e08f0_b1b5f61e",
+      "range": {
+        "startLine": 404,
+        "startChar": 0,
+        "endLine": 405,
+        "endChar": 50
+      },
+      "revId": "13d4b7f58c3bed606afb47cd790de176b9175a8f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
