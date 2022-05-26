@@ -1,0 +1,67 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "5c10f0ea_f8423b41",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2022-05-26T14:15:28Z",
+      "side": 1,
+      "message": "Very nice Shabi. We need to follow up with partners to determine if this improves performance in their testing configurations. Can you let them know?",
+      "revId": "226e2b9dd44dc108a346599ab2e5ace960272f87",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "803d63c2_d8c2486e",
+        "filename": "src/libANGLE/renderer/metal/ContextMtl.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 547,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2022-05-26T14:15:28Z",
+      "side": 1,
+      "message": "nit: probably add a comment detailing the \"Extended\" aspect",
+      "range": {
+        "startLine": 547,
+        "startChar": 14,
+        "endLine": 547,
+        "endChar": 22
+      },
+      "revId": "226e2b9dd44dc108a346599ab2e5ace960272f87",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "de39354c_03c86f93",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 86,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2022-05-26T14:15:28Z",
+      "side": 1,
+      "message": "can you not use bit fields for these?",
+      "range": {
+        "startLine": 83,
+        "startChar": 7,
+        "endLine": 86,
+        "endChar": 28
+      },
+      "revId": "226e2b9dd44dc108a346599ab2e5ace960272f87",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
