@@ -79,6 +79,8 @@ constexpr PackedEnumMap<Feature, const char *> kFeatureNames = {{
     {Feature::DisableSyncControlSupport, "disableSyncControlSupport"},
     {Feature::DisableTimestampQueries, "disableTimestampQueries"},
     {Feature::DisableWorkerContexts, "disableWorkerContexts"},
+    {Feature::DisallowMixedDepthStencilLoadOpNoneAndLoad,
+     "disallowMixedDepthStencilLoadOpNoneAndLoad"},
     {Feature::DoesSRGBClearsOnLinearFramebufferAttachments,
      "doesSRGBClearsOnLinearFramebufferAttachments"},
     {Feature::DontInitializeUninitializedLocals, "dontInitializeUninitializedLocals"},
