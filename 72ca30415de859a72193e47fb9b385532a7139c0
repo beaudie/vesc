@@ -1,0 +1,73 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "63d085b1_4af049aa",
+        "filename": "src/libANGLE/ProgramExecutable.h",
+        "patchSetId": 8
+      },
+      "lineNbr": 186,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2022-05-26T14:12:37Z",
+      "side": 1,
+      "message": "nit: You can use FlatUnorderedSet here with a reasonable limit (e.g. 4, defined in a named constant).",
+      "range": {
+        "startLine": 186,
+        "startChar": 33,
+        "endLine": 186,
+        "endChar": 36
+      },
+      "revId": "72ca30415de859a72193e47fb9b385532a7139c0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "c0c867f2_5ed39b16",
+        "filename": "src/libANGLE/ProgramExecutable.h",
+        "patchSetId": 8
+      },
+      "lineNbr": 191,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2022-05-26T14:12:37Z",
+      "side": 1,
+      "message": "Because this is only used for immutable textures, and the code is behind if (immutableSampler), I\u0027d suggest for now we don\u0027t cache this and compute it dynamically, in the cpp (not inline). If we ever need it in other instances we could consider caching it.",
+      "range": {
+        "startLine": 187,
+        "startChar": 0,
+        "endLine": 191,
+        "endChar": 5
+      },
+      "revId": "72ca30415de859a72193e47fb9b385532a7139c0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "9c3875a8_ffbc92cf",
+        "filename": "src/libANGLE/renderer/vulkan/ProgramExecutableVk.h",
+        "patchSetId": 8
+      },
+      "lineNbr": 107,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2022-05-26T14:12:37Z",
+      "side": 1,
+      "message": "this structure is particularly obtuse. I think we can either use a map from \u003cTexture Unit Index\u003e to the set structure, or from \u003cSampler Serial\u003e. We should be using an flat array with pairs instead of a HashMap, or at least FlatUnorderedMap. Please also give the set structure a name.",
+      "range": {
+        "startLine": 107,
+        "startChar": 55,
+        "endLine": 107,
+        "endChar": 74
+      },
+      "revId": "72ca30415de859a72193e47fb9b385532a7139c0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
