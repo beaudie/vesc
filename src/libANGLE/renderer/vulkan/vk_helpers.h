@@ -2898,7 +2898,7 @@ class ShaderProgramHelper : angle::NonCopyable
             mSpecializationConstants, pipelineDesc, descPtrOut, pipelineOut);
     }
 
-    angle::Result getComputePipeline(Context *context,
+    angle::Result getComputePipeline(ContextVk *contextVk,
                                      const PipelineLayout &pipelineLayout,
                                      PipelineHelper **pipelineOut);
 

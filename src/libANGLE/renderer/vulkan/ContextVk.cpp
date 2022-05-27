@@ -721,7 +721,9 @@ ContextVk::ContextVk(const gl::State &state, gl::ErrorSet *errorSet, RendererVk 
       mGpuClockSync{std::numeric_limits<double>::max(), std::numeric_limits<double>::max()},
       mGpuEventTimestampOrigin(0),
       mContextPriority(renderer->getDriverPriority(GetContextPriority(state))),
-      mShareGroupVk(vk::GetImpl(state.getShareGroup()))
+      mShareGroupVk(vk::GetImpl(state.getShareGroup())),
+      mPipelineCreationTotalCacheHitsDurationNs(0),
+      mPipelineCreationTotalCacheMissesDurationNs(0)
 {
     ANGLE_TRACE_EVENT0("gpu.angle", "ContextVk::ContextVk");
     memset(&mClearColorValue, 0, sizeof(mClearColorValue));
@@ -2892,6 +2894,11 @@ void ContextVk::syncObjectPerfCounters(const angle::VulkanPerfCounters &commandQ
     {
         mPerfCounters.descriptorSetCacheKeySizeBytes += pool.getTotalCacheKeySizeBytes();
     }
+
+    mPerfCounters.pipelineCreationTotalCacheHitsDurationUs =
+        static_cast<uint32_t>(mPipelineCreationTotalCacheHitsDurationNs / 1000);
+    mPerfCounters.pipelineCreationTotalCacheMissesDurationUs =
+        static_cast<uint32_t>(mPipelineCreationTotalCacheMissesDurationNs / 1000);
 
     // Update perf counters from the renderer as well
     mPerfCounters.commandQueueSubmitCallsTotal =
@@ -7766,6 +7773,23 @@ uint32_t UpdateDescriptorSetsBuilder::flushDescriptorSetUpdates(VkDevice device)
     mBufferViews.clear();
 
     return retVal;
+}
+
+void ContextVk::onPipelineCreationFeedback(const VkPipelineCreationFeedback &feedback)
+{
+    const bool cacheHit =
+        (feedback.flags & VK_PIPELINE_CREATION_FEEDBACK_APPLICATION_PIPELINE_CACHE_HIT_BIT) != 0;
+
+    if (cacheHit)
+    {
+        ++mPerfCounters.pipelineCreationCacheHits;
+        mPipelineCreationTotalCacheHitsDurationNs += feedback.duration;
+    }
+    else
+    {
+        ++mPerfCounters.pipelineCreationCacheMisses;
+        mPipelineCreationTotalCacheMissesDurationNs += feedback.duration;
+    }
 }
 
 void ContextVk::resetPerFramePerfCounters()

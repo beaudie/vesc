@@ -9935,7 +9935,7 @@ void ShaderProgramHelper::setSpecializationConstant(sh::vk::SpecializationConsta
     }
 }
 
-angle::Result ShaderProgramHelper::getComputePipeline(Context *context,
+angle::Result ShaderProgramHelper::getComputePipeline(ContextVk *contextVk,
                                                       const PipelineLayout &pipelineLayout,
                                                       PipelineHelper **pipelineOut)
 {
@@ -9945,7 +9945,7 @@ angle::Result ShaderProgramHelper::getComputePipeline(Context *context,
         return angle::Result::Continue;
     }
 
-    RendererVk *renderer = context->getRenderer();
+    RendererVk *renderer = contextVk->getRenderer();
 
     VkPipelineShaderStageCreateInfo shaderStage = {};
     VkComputePipelineCreateInfo createInfo      = {};
@@ -9964,10 +9964,31 @@ angle::Result ShaderProgramHelper::getComputePipeline(Context *context,
     createInfo.basePipelineHandle = VK_NULL_HANDLE;
     createInfo.basePipelineIndex  = 0;
 
+    VkPipelineCreationFeedback feedback               = {};
+    VkPipelineCreationFeedback perStageFeedback       = {};
+    VkPipelineCreationFeedbackCreateInfo feedbackInfo = {};
+    feedbackInfo.sType = VK_STRUCTURE_TYPE_PIPELINE_CREATION_FEEDBACK_CREATE_INFO;
+    feedbackInfo.pPipelineCreationFeedback = &feedback;
+    // Note: see comment in GraphicsPipelineDesc::initializePipeline about why per-stage feedback is
+    // specified even though unused.
+    feedbackInfo.pipelineStageCreationFeedbackCount = 1;
+    feedbackInfo.pPipelineStageCreationFeedbacks    = &perStageFeedback;
+
+    const bool supportsFeedback = contextVk->getFeatures().supportsPipelineCreationFeedback.enabled;
+    if (supportsFeedback)
+    {
+        createInfo.pNext = &feedbackInfo;
+    }
+
     PipelineCache *pipelineCache = nullptr;
     ANGLE_TRY(renderer->getPipelineCache(&pipelineCache));
-    ANGLE_VK_TRY(context, mComputePipeline.getPipeline().initCompute(context->getDevice(),
-                                                                     createInfo, *pipelineCache));
+    ANGLE_VK_TRY(contextVk, mComputePipeline.getPipeline().initCompute(contextVk->getDevice(),
+                                                                       createInfo, *pipelineCache));
+
+    if (supportsFeedback)
+    {
+        contextVk->onPipelineCreationFeedback(feedback);
+    }
 
     *pipelineOut = &mComputePipeline;
     return angle::Result::Continue;
