@@ -2707,4 +2707,20 @@ IndexStorageType ClassifyIndexStorage(const gl::State &glState,
     // Static buffer not available, fall back to streaming.
     return IndexStorageType::Dynamic;
 }
+
+bool SwizzleRequired(const gl::TextureState &textureState)
+{
+    return textureState.swizzleRequired() || textureState.isStencilMode();
+}
+
+gl::SwizzleState GetEffectiveSwizzle(const gl::TextureState &textureState)
+{
+    gl::SwizzleState swizzleState = textureState.getSwizzleState();
+    if (textureState.isStencilMode())
+    {
+        std::swap(swizzleState.swizzleRed, swizzleState.swizzleGreen);
+    }
+    return swizzleState;
+}
+
 }  // namespace rx

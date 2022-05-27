@@ -82,7 +82,7 @@ class TextureStorage11 : public TextureStorage
                                GLint maxLevel,
                                const d3d11::SharedSRV **outSRV);
     angle::Result generateSwizzles(const gl::Context *context,
-                                   const gl::SwizzleState &swizzleTarget);
+                                   const gl::TextureState &textureState);
     void markLevelDirty(int mipLevel);
     void markDirty();
 
@@ -161,10 +161,21 @@ class TextureStorage11 : public TextureStorage
     virtual angle::Result getSwizzleRenderTarget(const gl::Context *context,
                                                  int mipLevel,
                                                  const d3d11::RenderTargetView **outRTV) = 0;
+
+    angle::Result getSRVLevel(const gl::Context *context,
+                              int mipLevel,
+                              gl::TexLevelArray<d3d11::SharedSRV> &levelSRVs,
+                              DXGI_FORMAT format,
+                              gl::TexLevelArray<d3d11::SharedSRV> &src1LevelSRVs,
+                              DXGI_FORMAT src1Format,
+                              gl::TexLevelArray<d3d11::SharedSRV> &src2LevelSRVs,
+                              DXGI_FORMAT src2Format,
+                              const d3d11::SharedSRV **outSRV);
     enum class SRVType
     {
         SAMPLE,
-        BLIT
+        BLIT,
+        STENCIL
     };
     angle::Result getSRVLevel(const gl::Context *context,
                               int mipLevel,
@@ -238,7 +249,7 @@ class TextureStorage11 : public TextureStorage
     struct SamplerKey
     {
         SamplerKey();
-        SamplerKey(int baseLevel, int mipLevels, bool swizzle, bool dropStencil);
+        SamplerKey(int baseLevel, int mipLevels, bool swizzle, bool dropStencil, bool stencilOnly);
 
         bool operator<(const SamplerKey &rhs) const;
 
@@ -246,6 +257,7 @@ class TextureStorage11 : public TextureStorage
         int mipLevels;
         bool swizzle;
         bool dropStencil;
+        bool stencilOnly;
     };
 
     angle::Result getCachedOrCreateSRVForSampler(const gl::Context *context,
@@ -281,6 +293,7 @@ class TextureStorage11 : public TextureStorage
 
     gl::TexLevelArray<d3d11::SharedSRV> mLevelSRVs;
     gl::TexLevelArray<d3d11::SharedSRV> mLevelBlitSRVs;
+    gl::TexLevelArray<d3d11::SharedSRV> mLevelStencilSRVs;
 };
 
 class TextureStorage11_2D : public TextureStorage11
