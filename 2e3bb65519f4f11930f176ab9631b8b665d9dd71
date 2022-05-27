@@ -35,6 +35,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "aacdcfa5_913a35c7",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 6
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1115588
+      },
+      "writtenOn": "2022-05-27T23:27:12Z",
+      "side": 1,
+      "message": "There are tests that what is adverized is usable. \n\nI\u0027m going to have to add a bunch of stuff through because Metal is unique limits. It\u0027s not just 4 or 8 color attachments, there\u0027s also a bit limit, 256, 512, no-limit. Which means you can have 8 max color attachments but you can\u0027t put any 8 types of attachments. For example 8 RGBA32UI would be 1024bits (not RGBA32UI is not an optional format unlike RGBA32F)\n\nI\u0027d prefer to do that in another CL so this one doesn\u0027t get too large?",
+      "parentUuid": "f5bd6683_6f30395c",
+      "revId": "2e3bb65519f4f11930f176ab9631b8b665d9dd71",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "0ff6d37f_5563227d",
@@ -48,6 +66,24 @@
       "writtenOn": "2022-05-27T17:38:44Z",
       "side": 1,
       "message": "I highly suggest adding a feature in `mtl_features.json` that\u0027s initialized with this sort of condition, then make the `if` condition based on that. That has a number of benefits:\n\n- The feature shows up in chrome://gpu\n- It can be overriden with an envvar, so you can test pretend-old GPUs on new GPUs\n- end2end tests can add a configuration like `ES3_METAL().disable(Feature::YourFeatureName)` so you could get coverage of pretend-old GPUs without having one available on the bots.",
+      "revId": "2e3bb65519f4f11930f176ab9631b8b665d9dd71",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "dbae3fe4_c679bc3f",
+        "filename": "src/libANGLE/renderer/metal/DisplayMtl.mm",
+        "patchSetId": 6
+      },
+      "lineNbr": 730,
+      "author": {
+        "id": 1115588
+      },
+      "writtenOn": "2022-05-27T23:27:12Z",
+      "side": 1,
+      "message": "I can do that but maxDrawingBuffers doesn\u0027t feel like a feature, it feels like a limit, to me at least. Same as maxVertexAttributes, maxTextureSize, etc and it doesn\u0027t appear limits are set by features?  I get that Metal only has 2 sizes ATM but maybe tomorrow they\u0027ll have 16.\n\nIt also doesn\u0027t seem like it would actually cover old GPUs without actually testing on those GPUs because the thing that needs to be tested is that filling out an actual MTLRenderPassDescriptor works on a max 4 machine.",
+      "parentUuid": "0ff6d37f_5563227d",
       "revId": "2e3bb65519f4f11930f176ab9631b8b665d9dd71",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
@@ -69,6 +105,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "e1198e40_05c6a164",
+        "filename": "src/libANGLE/renderer/metal/DisplayMtl.mm",
+        "patchSetId": 6
+      },
+      "lineNbr": 732,
+      "author": {
+        "id": 1115588
+      },
+      "writtenOn": "2022-05-27T23:27:12Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "641c8237_5773b87f",
+      "revId": "2e3bb65519f4f11930f176ab9631b8b665d9dd71",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "e80f38bd_630968b7",
@@ -86,6 +140,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "7d88656a_13764abe",
+        "filename": "src/libANGLE/renderer/metal/DisplayMtl.mm",
+        "patchSetId": 6
+      },
+      "lineNbr": 737,
+      "author": {
+        "id": 1115588
+      },
+      "writtenOn": "2022-05-27T23:27:12Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "e80f38bd_630968b7",
+      "revId": "2e3bb65519f4f11930f176ab9631b8b665d9dd71",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "517775a9_19e6838f",
@@ -99,6 +171,24 @@
       "writtenOn": "2022-05-27T17:32:29Z",
       "side": 1,
       "message": "Per above - please consider defining a new constant like kMaxRenderTargetsOlderGPUFamilies too, and documenting it here.",
+      "revId": "2e3bb65519f4f11930f176ab9631b8b665d9dd71",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "438f7070_48d2ac19",
+        "filename": "src/libANGLE/renderer/metal/mtl_common.h",
+        "patchSetId": 6
+      },
+      "lineNbr": 127,
+      "author": {
+        "id": 1115588
+      },
+      "writtenOn": "2022-05-27T23:27:12Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "517775a9_19e6838f",
       "revId": "2e3bb65519f4f11930f176ab9631b8b665d9dd71",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
