@@ -16,6 +16,24 @@
       "message": "Also LGTM. Moving Mohan to reviewer to ensure no regression on their hardware.",
       "revId": "1d3a2fff028784130fef4f72fc3d20107a710c68",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "5a43abe4_b10cf54d",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 9
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-05-27T17:14:08Z",
+      "side": 1,
+      "message": "Let us know Mohan how this fares on your hardware. The impact on GPU perf is likely to be minimal, but we\u0027ll probably have to take the hit if any to support program binaries realistically.",
+      "parentUuid": "7f735d3b_c2389b0a",
+      "revId": "1d3a2fff028784130fef4f72fc3d20107a710c68",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
