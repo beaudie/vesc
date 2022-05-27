@@ -1,0 +1,72 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "f5bd6683_6f30395c",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 6
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2022-05-27T17:32:29Z",
+      "side": 1,
+      "message": "lgtm - great work Gregg. A couple of small comments.\n\nBTW are there any tests on the waterfall which will prevent regression of this? If not could we add an angle_end2end_test? We can make assumptions about the hardware configurations on which we test and assert that the max draw buffers advertised is 8.",
+      "revId": "2e3bb65519f4f11930f176ab9631b8b665d9dd71",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "641c8237_5773b87f",
+        "filename": "src/libANGLE/renderer/metal/DisplayMtl.mm",
+        "patchSetId": 6
+      },
+      "lineNbr": 732,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2022-05-27T17:32:29Z",
+      "side": 1,
+      "message": "Consider continuing to refer to mtl::kMaxRenderTargets here? That would more clearly link this code to the header where that limit\u0027s defined.",
+      "revId": "2e3bb65519f4f11930f176ab9631b8b665d9dd71",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "e80f38bd_630968b7",
+        "filename": "src/libANGLE/renderer/metal/DisplayMtl.mm",
+        "patchSetId": 6
+      },
+      "lineNbr": 737,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2022-05-27T17:32:29Z",
+      "side": 1,
+      "message": "Consider defining a new mtl::kMaxRenderTargetsOlderGPUFamilies (not sure what would be a good name) next to kMaxRenderTargets, documenting it and referring to it here?",
+      "revId": "2e3bb65519f4f11930f176ab9631b8b665d9dd71",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "517775a9_19e6838f",
+        "filename": "src/libANGLE/renderer/metal/mtl_common.h",
+        "patchSetId": 6
+      },
+      "lineNbr": 127,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2022-05-27T17:32:29Z",
+      "side": 1,
+      "message": "Per above - please consider defining a new constant like kMaxRenderTargetsOlderGPUFamilies too, and documenting it here.",
+      "revId": "2e3bb65519f4f11930f176ab9631b8b665d9dd71",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
