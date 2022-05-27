@@ -16,6 +16,23 @@
       "message": "decoupling from https://chromium-review.googlesource.com/c/angle/angle/+/3657480\n\nhoping to land this and deal with the other one when i have some bandwidth",
       "revId": "aef070a8ec2a7c4320f9d2cfc7910738f69de836",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "11306f66_ed12d74e",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 19
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1340649
+      },
+      "writtenOn": "2022-05-27T17:59:43Z",
+      "side": 1,
+      "message": "thanks, landing this",
+      "revId": "aef070a8ec2a7c4320f9d2cfc7910738f69de836",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
