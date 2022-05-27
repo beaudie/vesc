@@ -225,7 +225,7 @@ angle::Result TextureStorage11::getSRVForSampler(const gl::Context *context,
     ANGLE_TRY(resolveTexture(context));
     // Make sure to add the level offset for our tiny compressed texture workaround
     const GLuint effectiveBaseLevel = textureState.getEffectiveBaseLevel();
-    const bool swizzleRequired      = textureState.swizzleRequired();
+    const bool swizzleRequired      = SwizzleRequired(textureState);
     const bool mipmapping           = gl::IsMipmapFiltered(sampler.getMinFilter());
     unsigned int mipLevels =
         mipmapping ? (textureState.getEffectiveMaxLevel() - effectiveBaseLevel + 1) : 1;
@@ -248,7 +248,7 @@ angle::Result TextureStorage11::getSRVForSampler(const gl::Context *context,
 
     if (swizzleRequired)
     {
-        verifySwizzleExists(textureState.getSwizzleState());
+        GetEffectiveSwizzle(textureState);
     }
 
     // We drop the stencil when sampling from the SRV if three conditions hold:
@@ -330,36 +330,65 @@ angle::Result TextureStorage11::getCachedOrCreateSRVForSampler(const gl::Context
 
 angle::Result TextureStorage11::getSRVLevel(const gl::Context *context,
                                             int mipLevel,
-                                            SRVType srvType,
+                                            gl::TexLevelArray<d3d11::SharedSRV> &levelSRVs,
+                                            DXGI_FORMAT format,
+                                            gl::TexLevelArray<d3d11::SharedSRV> &src1LevelSRVs,
+                                            DXGI_FORMAT src1Format,
+                                            gl::TexLevelArray<d3d11::SharedSRV> &src2LevelSRVs,
+                                            DXGI_FORMAT src2Format,
                                             const d3d11::SharedSRV **outSRV)
 {
-    ASSERT(mipLevel >= 0 && mipLevel < getLevelCount());
-
-    ANGLE_TRY(resolveTexture(context));
-    auto &levelSRVs      = srvType == SRVType::Blit ? mLevelBlitSRVs : mLevelSRVs;
-    auto &otherLevelSRVs = srvType == SRVType::Blit ? mLevelSRVs : mLevelBlitSRVs;
-
     if (!levelSRVs[mipLevel].valid())
     {
-        // Only create a different SRV for blit if blit format is different from regular srv format
-        if (otherLevelSRVs[mipLevel].valid() && mFormatInfo.srvFormat == mFormatInfo.blitSRVFormat)
+        // Only create a different SRV for blit if our format is different from regular srv format
+        if (src1LevelSRVs[mipLevel].valid() && format == src1Format)
         {
-            levelSRVs[mipLevel] = otherLevelSRVs[mipLevel].makeCopy();
+            levelSRVs[mipLevel] = src1LevelSRVs[mipLevel].makeCopy();
+        }
+        else if (src2LevelSRVs[mipLevel].valid() && format == src2Format)
+        {
+            levelSRVs[mipLevel] = src2LevelSRVs[mipLevel].makeCopy();
         }
         else
         {
             const TextureHelper11 *resource = nullptr;
             ANGLE_TRY(getResource(context, &resource));
 
-            DXGI_FORMAT resourceFormat =
-                srvType == SRVType::Blit ? mFormatInfo.blitSRVFormat : mFormatInfo.srvFormat;
-            ANGLE_TRY(createSRVForSampler(context, mipLevel, 1, resourceFormat, *resource,
-                                          &levelSRVs[mipLevel]));
+            ANGLE_TRY(
+                createSRVForSampler(context, mipLevel, 1, format, *resource, &levelSRVs[mipLevel]));
         }
     }
-
     *outSRV = &levelSRVs[mipLevel];
     return angle::Result::Continue;
+}
+
+angle::Result TextureStorage11::getSRVLevel(const gl::Context *context,
+                                            int mipLevel,
+                                            SRVType srvType,
+                                            const d3d11::SharedSRV **outSRV)
+{
+    ASSERT(mipLevel >= 0 && mipLevel < getLevelCount());
+
+    ANGLE_TRY(resolveTexture(context));
+
+    switch (srvType)
+    {
+        case SRVType::Sample:
+            return getSRVLevel(context, mipLevel, mLevelSRVs, mFormatInfo.srvFormat, mLevelBlitSRVs,
+                               mFormatInfo.blitSRVFormat, mLevelStencilSRVs,
+                               mFormatInfo.stencilSRVFormat, outSRV);
+        case SRVType::Blit:
+            return getSRVLevel(context, mipLevel, mLevelBlitSRVs, mFormatInfo.blitSRVFormat,
+                               mLevelStencilSRVs, mFormatInfo.stencilSRVFormat, mLevelSRVs,
+                               mFormatInfo.srvFormat, outSRV);
+        case SRVType::Stencil:
+            return getSRVLevel(context, mipLevel, mLevelStencilSRVs, mFormatInfo.stencilSRVFormat,
+                               mLevelSRVs, mFormatInfo.srvFormat, mLevelBlitSRVs,
+                               mFormatInfo.blitSRVFormat, outSRV);
+        default:
+            UNREACHABLE();
+            return angle::Result::Continue;
+    }
 }
 
 angle::Result TextureStorage11::getSRVLevels(const gl::Context *context,
@@ -466,9 +495,10 @@ const d3d11::Format &TextureStorage11::getFormatSet() const
 }
 
 angle::Result TextureStorage11::generateSwizzles(const gl::Context *context,
-                                                 const gl::SwizzleState &swizzleTarget)
+                                                 const gl::TextureState &textureState)
 {
     ANGLE_TRY(resolveTexture(context));
+    gl::SwizzleState swizzleTarget = GetEffectiveSwizzle(textureState);
     for (int level = 0; level < getLevelCount(); level++)
     {
         // Check if the swizzle for this level is out of date
@@ -476,7 +506,9 @@ angle::Result TextureStorage11::generateSwizzles(const gl::Context *context,
         {
             // Need to re-render the swizzle for this level
             const d3d11::SharedSRV *sourceSRV = nullptr;
-            ANGLE_TRY(getSRVLevel(context, level, SRVType::Blit, &sourceSRV));
+            ANGLE_TRY(getSRVLevel(context, level,
+                                  textureState.isStencilMode() ? SRVType::Stencil : SRVType::Blit,
+                                  &sourceSRV));
 
             const d3d11::RenderTargetView *destRTV;
             ANGLE_TRY(getSwizzleRenderTarget(context, level, &destRTV));
