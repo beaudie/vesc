@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "db2fa175_c76a3364",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1394635
+      },
+      "writtenOn": "2022-05-27T22:19:09Z",
+      "side": 1,
+      "message": "Discovered by the dedicated WebGL test.",
+      "revId": "197dbc1dbd4dddc96a03a8cb92fe7eeae6255d65",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
