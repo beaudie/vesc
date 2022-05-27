@@ -1843,6 +1843,12 @@ class ETC1CompressedTextureTest : public Texture2DTest
     void testTearDown() override { Texture2DTest::testTearDown(); }
 };
 
+class Texture2DTestES31 : public Texture2DTest
+{
+  protected:
+    Texture2DTestES31() : Texture2DTest() {}
+};
+
 TEST_P(Texture2DTest, NegativeAPISubImage)
 {
     glBindTexture(GL_TEXTURE_2D, mTexture2D);
@@ -2853,6 +2859,80 @@ TEST_P(Texture2DTestES3, TexImageWithDepthPBO)
     ASSERT_GL_NO_ERROR();
 
     EXPECT_PIXEL_RECT_EQ(0, 0, kSize, kSize, GLColor::red);
+}
+
+// Test that a depth & stencil texture bound as both sampler2D and usampler2D works.
+TEST_P(Texture2DTestES31, TexSampleStencilFromDepthStencil)
+{
+    constexpr GLsizei kSize = 4;
+
+    // Set up the framebuffer.
+    GLTexture colorTexture;
+    glBindTexture(GL_TEXTURE_2D, colorTexture);
+    glTexStorage2D(GL_TEXTURE_2D, 1, GL_RGBA8, kSize, kSize);
+    ASSERT_GL_NO_ERROR();
+
+    GLTexture depthStencilTexture;
+    glBindTexture(GL_TEXTURE_2D, depthStencilTexture);
+    glTexStorage2D(GL_TEXTURE_2D, 1, GL_DEPTH24_STENCIL8, kSize, kSize);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+    glTexParameteri(GL_TEXTURE_2D, GL_DEPTH_STENCIL_TEXTURE_MODE, GL_STENCIL_INDEX);
+    ASSERT_GL_NO_ERROR();
+
+    constexpr char kFS[] =
+        R"(#version 300 es
+precision mediump float;
+uniform highp usampler2D stencilTex;
+out vec4 color;
+void main()
+{
+    ivec2 pos = ivec2(0, 0);
+    color = vec4(texelFetch(stencilTex, pos, 0)) / 255.0f;
+})";
+
+    GLFramebuffer fbo;
+    glBindFramebuffer(GL_FRAMEBUFFER, fbo);
+    glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, colorTexture, 0);
+    glFramebufferTexture2D(GL_FRAMEBUFFER, GL_DEPTH_STENCIL_ATTACHMENT, GL_TEXTURE_2D,
+                           depthStencilTexture, 0);
+    ASSERT_GL_FRAMEBUFFER_COMPLETE(GL_FRAMEBUFFER);
+    ASSERT_GL_NO_ERROR();
+
+    // Clear depth to 0.25f and stencil to 5.
+    glDisable(GL_SCISSOR_TEST);
+    glClearDepthf(0.25f);
+    glClearStencil(5);
+    glClearColor(1.0f, 0.75f, 0.5f, 0.25f);
+    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);
+
+    GLFramebuffer stencilReadFBO;
+    GLFramebuffer stencilDrawFBO;
+    glBindFramebuffer(GL_READ_FRAMEBUFFER, stencilReadFBO);
+    glBindFramebuffer(GL_DRAW_FRAMEBUFFER, stencilDrawFBO);
+
+    glActiveTexture(GL_TEXTURE0);
+    glBindTexture(GL_TEXTURE_2D, depthStencilTexture);
+    EXPECT_GL_ERROR(GL_NO_ERROR);
+
+    ANGLE_GL_PROGRAM(program, essl3_shaders::vs::Simple(), kFS);
+    GLint stencilTexLocation = glGetUniformLocation(program, "stencilTex");
+    ASSERT_NE(-1, stencilTexLocation);
+    ASSERT_GL_NO_ERROR();
+
+    glUseProgram(program);
+    glUniform1i(stencilTexLocation, 0);
+
+    GLFramebuffer fbo2;
+    glBindFramebuffer(GL_FRAMEBUFFER, fbo2);
+    glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, colorTexture, 0);
+    ASSERT_GL_FRAMEBUFFER_COMPLETE(GL_FRAMEBUFFER);
+    ASSERT_GL_NO_ERROR();
+
+    drawQuad(program, essl3_shaders::PositionAttrib(), 0.95f);
+    ASSERT_GL_NO_ERROR();
+
+    EXPECT_PIXEL_RECT_EQ(0, 0, kSize, kSize, GLColor(5, 0, 0, 1));
 }
 
 // Test that glTexSubImage2D combined with a PBO works properly when glTexStorage2D has
@@ -10685,5 +10765,7 @@ ANGLE_INSTANTIATE_TEST_ES31(CopyImageTestES31);
 ANGLE_INSTANTIATE_TEST_ES3(TextureChangeStorageUploadTest);
 
 ANGLE_INSTANTIATE_TEST_ES3(ExtraSamplerCubeShadowUseTest);
+
+ANGLE_INSTANTIATE_TEST_ES31(Texture2DTestES31);
 
 }  // anonymous namespace
