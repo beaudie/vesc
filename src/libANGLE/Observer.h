@@ -117,6 +117,9 @@ class Subject : NonCopyable
     {
         ASSERT(!IsInContainer(mObservers, observer));
         mObservers.push_back(observer);
+        // Ensure we do not have excessive observers. If yes, we should investigate why and look to
+        // improve.
+        ASSERT(mObservers.size() < 10);
     }
 
     ANGLE_INLINE void removeObserver(ObserverBindingBase *observer)
