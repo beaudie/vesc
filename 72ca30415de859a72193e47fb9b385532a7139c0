@@ -284,6 +284,30 @@
       },
       "revId": "72ca30415de859a72193e47fb9b385532a7139c0",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "1af740ce_b8192176",
+        "filename": "src/libANGLE/renderer/vulkan/ProgramExecutableVk.h",
+        "patchSetId": 8
+      },
+      "lineNbr": 107,
+      "author": {
+        "id": 1340649
+      },
+      "writtenOn": "2022-05-27T15:43:43Z",
+      "side": 1,
+      "message": "a layered extension ontop of gl_angle_yuv_internal_format\n\nmoreover, not all samplerSerial changes need pipeline layout recreation. it is only the immutable sampler state that causes the incompatibility",
+      "parentUuid": "43f874b9_ae770d47",
+      "range": {
+        "startLine": 107,
+        "startChar": 55,
+        "endLine": 107,
+        "endChar": 74
+      },
+      "revId": "72ca30415de859a72193e47fb9b385532a7139c0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
