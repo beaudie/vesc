@@ -619,9 +619,6 @@
 3886 VULKAN : ComputeShaderTest.BindImageTexture3D/* = SKIP
 3886 D3D11 : ComputeShaderTest.BindImageTexture3D/* = SKIP
 
-// Produces VVL errors
-7357 VULKAN : FramebufferTest_ES3.FramebufferConditionalFeedbackLoop/* = SKIP
-
 // Intel Mesa 19.0.2 appears to have a driver bug.
 // imageLoad isn't fully implemented for fragment shaders on D3D11.
 7355 INTEL OPENGL : GLSLTest_ES31.ImageLoadAfterClear/* = SKIP
