@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b5224b89_9dfe3a88",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 3647,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2022-05-27T16:51:02Z",
+      "side": 1,
+      "message": "Shouldn\u0027t mPipelineCacheSizeAtLastSync also initialized to the actual cache size when cache is initialized from blobCache?",
+      "range": {
+        "startLine": 3647,
+        "startChar": 4,
+        "endLine": 3647,
+        "endChar": 32
+      },
+      "revId": "5ee128114f509318a37fe03692e14529e3eaa9a0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
