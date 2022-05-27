@@ -3229,7 +3229,7 @@ angle::Result ContextVk::synchronizeCpuGpuTime()
         ANGLE_TRY(mRenderer->queueSubmitOneOff(
             this, std::move(commandBuffer), hasProtectedContent(), mContextPriority, nullptr, 0,
             nullptr, vk::SubmitPolicy::EnsureSubmitted, &submitSerial));
-        scratchResourceUseList.releaseResourceUsesAndUpdateSerials(submitSerial);
+        scratchResourceUseList.updateSerials(submitSerial);
 
         // Wait for GPU to be ready.  This is a short busy wait.
         VkResult result = VK_EVENT_RESET;
@@ -6800,7 +6800,7 @@ angle::Result ContextVk::getTimestamp(uint64_t *timestampOut)
     // Wait for the submission to finish.  Given no semaphores, there is hope that it would execute
     // in parallel with what's already running on the GPU.
     ANGLE_VK_TRY(this, fence.get().wait(device, mRenderer->getMaxFenceWaitTimeNs()));
-    scratchResourceUseList.releaseResourceUsesAndUpdateSerials(throwAwaySerial);
+    scratchResourceUseList.updateSerials(throwAwaySerial);
 
     // Get the query results
     vk::QueryResult result(1);

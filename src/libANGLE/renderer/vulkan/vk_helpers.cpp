@@ -3709,7 +3709,7 @@ void QueryHelper::deinit()
     mQueryPoolIndex   = 0;
     mQuery            = 0;
     mQueryCount       = 0;
-    mUse.release();
+    mUse.destroy();
     mUse.init();
     mStatus = QueryStatus::Inactive;
 }
@@ -4639,12 +4639,6 @@ void BufferHelper::release(RendererVk *renderer)
     {
         renderer->collectSuballocationGarbage(mReadOnlyUse, std::move(mSuballocation),
                                               std::move(mBufferForVertexArray));
-
-        if (mReadWriteUse.isCurrentlyInUse(renderer->getLastCompletedQueueSerial()))
-        {
-            mReadWriteUse.release();
-            mReadWriteUse.init();
-        }
     }
     ASSERT(!mBufferForVertexArray.valid());
 }
@@ -5316,7 +5310,7 @@ void ImageHelper::releaseImageAndViewGarbage(RendererVk *renderer)
     }
     else
     {
-        mUse.release();
+        mUse.destroy();
     }
     mUse.init();
     mImageSerial = kInvalidImageSerial;
