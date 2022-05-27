@@ -45,6 +45,29 @@
       },
       "revId": "3b343cf8cca413a7df7731532b8fd65569229cd8",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "93890dbe_dedf715e",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 15
+      },
+      "lineNbr": 2546,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2022-05-27T21:19:45Z",
+      "side": 1,
+      "message": "I think you can call releaseID() as soon as commandBufferHelper gets processed, instead of recycled. i.e, at OutsideRenderPassCommandBufferHelper::reset() you can call releaseID(). \n\nOtherwise, for synchronous submission, command buffers never gets recycled until context destroy, which means you will be using same commandID for entire context life time. I am wondering that might causing bots failure?",
+      "range": {
+        "startLine": 2546,
+        "startChar": 38,
+        "endLine": 2546,
+        "endChar": 47
+      },
+      "revId": "3b343cf8cca413a7df7731532b8fd65569229cd8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
