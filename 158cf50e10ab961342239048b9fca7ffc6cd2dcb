@@ -68,6 +68,42 @@
       "message": "if we remove `Drawable[Width/Height]` spec consts does that mean no one was using it?\n\ni assumed there would be a driver uniform added to handle them but do not see that either, clearly i am missing some context",
       "revId": "158cf50e10ab961342239048b9fca7ffc6cd2dcb",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "bfcbbdca_31eef7e5",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 6
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-05-27T17:26:35Z",
+      "side": 1,
+      "message": "I tried this before; on P6, removing all spec consts (not just this) and using driver uniforms shows no difference in performance in the traces.",
+      "parentUuid": "8e023f2b_5b1e3e8d",
+      "revId": "158cf50e10ab961342239048b9fca7ffc6cd2dcb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "594c8f0b_0d78c052",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 6
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-05-27T17:26:35Z",
+      "side": 1,
+      "message": "See Ref!\n\nWe already have driver uniforms as back up for spec consts. Previously, that was used only on Pixel4 through the `forceDriverUniformOverSpecConst` workaround.",
+      "parentUuid": "0d89b4fc_83817c8a",
+      "revId": "158cf50e10ab961342239048b9fca7ffc6cd2dcb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
