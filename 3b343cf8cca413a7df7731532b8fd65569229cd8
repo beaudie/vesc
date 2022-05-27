@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "6f4deec9_d15a5e85",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.h",
+        "patchSetId": 15
+      },
+      "lineNbr": 800,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2022-05-27T21:11:13Z",
+      "side": 1,
+      "message": "The name is a bit confusing to me. Could you call it mCommandBufferIDAllocator? This really is allocating a ID for a in-use command buffer, not free command buffer.",
+      "range": {
+        "startLine": 800,
+        "startChar": 37,
+        "endLine": 800,
+        "endChar": 56
+      },
+      "revId": "3b343cf8cca413a7df7731532b8fd65569229cd8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "1e0c279c_15687c2a",
+        "filename": "src/libANGLE/renderer/vulkan/ResourceVk.h",
+        "patchSetId": 15
+      },
+      "lineNbr": 39,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2022-05-27T21:11:13Z",
+      "side": 1,
+      "message": "What I was thinking is this is basically \"std::vector\u003cbitfield\u003cuint64_t\u003e\u003e mResourceUse\" and it always starts with one element with value of 0. Then with a incoming commandID, you do this:\n\nif(commandID \u003c 64)\n{\n    // Fast path\n    mResourceUse[0][commandID] tells you in use or not.\n    set: just set the bit without any test\n    clear: remove bit without any test.\n}\nelse\n{\n    // Slow path\n    ensure mResourceUse.size is big enoug\n    \n    elementIndex \u003d commandID \u003e\u003e 6;\n    bit \u003d commandID \u0026 0x3F;\n    if(mResourceUse[elementIndex].bit)\n    {\n       // in use\n    }\n    else\n    {\n       // not use.\n    }\n}",
+      "range": {
+        "startLine": 39,
+        "startChar": 0,
+        "endLine": 39,
+        "endChar": 96
+      },
+      "revId": "3b343cf8cca413a7df7731532b8fd65569229cd8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
