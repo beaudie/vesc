@@ -16,6 +16,24 @@
       "message": "Thanks for this test Chris. Could you revise it per Shabi\u0027s comments (getting rid fo the unnecessary barrier) before we lgtm it? Also, it\u0027s not clear to me whether a driver upgrade on the Linux/Intel bot would address the failure there. I recall an email conversation but it\u0027s not reflected on the associated bug.\n",
       "revId": "61a41e87c19c8c50881e5a4229d1f7e6624573c6",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "2a4100cf_eddf1b0d",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 26
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1543967
+      },
+      "writtenOn": "2022-05-27T21:49:14Z",
+      "side": 1,
+      "message": "Of course! I\u0027ll definitely revise this test and get it ready to land soon. I\u0027ve just been trying to understand the bug first.\n\n\u003e\u003e Also, it\u0027s not clear to me whether a driver upgrade on the Linux/Intel bot would address the failure there.\n\nBased on the behavior on https://chromium-review.googlesource.com/c/angle/angle/+/3645786/6..7/src/tests/gl_tests/PixelLocalStorageTest.cpp, and the fact that it fixes the same bug on various OSes and backends, I\u0027m quite convinced that there is a bug related to binding an image for just reading. I\u0027m investigating locally now.",
+      "parentUuid": "3b39937b_d589b3ff",
+      "revId": "61a41e87c19c8c50881e5a4229d1f7e6624573c6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
