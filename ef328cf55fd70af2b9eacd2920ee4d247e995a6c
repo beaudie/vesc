@@ -1,0 +1,44 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "02a0c371_4b4133c5",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 5
+      },
+      "lineNbr": 14,
+      "author": {
+        "id": 1394635
+      },
+      "writtenOn": "2022-05-27T13:38:34Z",
+      "side": 1,
+      "message": "Please also add angleproject:5730 here.",
+      "revId": "ef328cf55fd70af2b9eacd2920ee4d247e995a6c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "5c6ca2c7_7fb45e53",
+        "filename": "src/libANGLE/renderer/metal/DisplayMtl.mm",
+        "patchSetId": 5
+      },
+      "lineNbr": 730,
+      "author": {
+        "id": 1394635
+      },
+      "writtenOn": "2022-05-27T13:38:34Z",
+      "side": 1,
+      "message": "According to Metal-Feature-Set-Tables, this should likely be (2, 1).",
+      "range": {
+        "startLine": 730,
+        "startChar": 31,
+        "endLine": 730,
+        "endChar": 37
+      },
+      "revId": "ef328cf55fd70af2b9eacd2920ee4d247e995a6c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
