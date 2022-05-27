@@ -36,6 +36,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "d2128ff6_45db3c2c",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-05-27T03:58:45Z",
+      "side": 1,
+      "message": "Some measurements on P6: https://docs.google.com/spreadsheets/d/1KCNd8lRZgvtaV7bLSlO1zbylQDCkYYy8YZUtxHTN_c0\n\nGPU time is unaffected (kind of expected due to the spec const vs uniform test showing no GPU time difference), but CPU time is improved by ~2-7% on most traces.",
+      "parentUuid": "123a7f24_9de26e4c",
+      "revId": "226e2b9dd44dc108a346599ab2e5ace960272f87",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "803d63c2_d8c2486e",
