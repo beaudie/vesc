@@ -16,6 +16,24 @@
       "message": "It looks like this is accidentally fixing a bug too, though I can\u0027t say how. Look at the egypt_1500 trace, where some parts have become smoother as a result of this change.",
       "revId": "158cf50e10ab961342239048b9fca7ffc6cd2dcb",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "91053d9c_d983e2e1",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 6
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-05-27T16:00:16Z",
+      "side": 1,
+      "message": "It\u0027s the same with T-Rex. This looks like a bug with intel windows driver with handling of the size specialization constants. From the blockiness of the spec-const (old) image, I\u0027m guessing they multiplied the integer size by 0.5 before casting it to float instead of after.",
+      "parentUuid": "598d1eac_38c85c50",
+      "revId": "158cf50e10ab961342239048b9fca7ffc6cd2dcb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
