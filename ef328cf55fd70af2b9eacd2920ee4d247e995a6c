@@ -77,6 +77,24 @@
     {
       "unresolved": false,
       "key": {
+        "uuid": "579889e0_f4894f88",
+        "filename": "src/libANGLE/renderer/metal/FrameBufferMtl.h",
+        "patchSetId": 5
+      },
+      "lineNbr": 215,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-05-27T15:07:27Z",
+      "side": 1,
+      "message": "Note: If the reason for the change was to get a `size()` that reflects the actual number instead of max number (as `std::array::size()` does), we have `angle::FixedVector` which is basically `std::array + size_t size`.",
+      "parentUuid": "bb1fabb4_5479cee2",
+      "revId": "ef328cf55fd70af2b9eacd2920ee4d247e995a6c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
         "uuid": "5eecc0e1_f9800c53",
         "filename": "src/libANGLE/renderer/metal/mtl_command_buffer.h",
         "patchSetId": 5
