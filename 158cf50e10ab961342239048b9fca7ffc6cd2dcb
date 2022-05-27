@@ -51,6 +51,23 @@
       "message": "Could you make sure that glFragCoord usage in fragment shader does not regress?",
       "revId": "158cf50e10ab961342239048b9fca7ffc6cd2dcb",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "0d89b4fc_83817c8a",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 6
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1340649
+      },
+      "writtenOn": "2022-05-27T17:00:40Z",
+      "side": 1,
+      "message": "if we remove `Drawable[Width/Height]` spec consts does that mean no one was using it?\n\ni assumed there would be a driver uniform added to handle them but do not see that either, clearly i am missing some context",
+      "revId": "158cf50e10ab961342239048b9fca7ffc6cd2dcb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
