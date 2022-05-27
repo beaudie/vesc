@@ -308,6 +308,30 @@
       },
       "revId": "72ca30415de859a72193e47fb9b385532a7139c0",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "c2e85810_52780041",
+        "filename": "src/libANGLE/renderer/vulkan/ProgramExecutableVk.h",
+        "patchSetId": 8
+      },
+      "lineNbr": 107,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2022-05-27T16:05:21Z",
+      "side": 1,
+      "message": "Are you sure? When I look at the pipeline layout creation I see:\n\n                const TextureVk *textureVk          \u003d (*activeTextures)[textureUnit];\n                const vk::Sampler \u0026immutableSampler \u003d textureVk-\u003egetSampler().get();\n                descOut-\u003eupdate(info.binding, VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER, arraySize,\n                                activeStages, \u0026immutableSampler);\n\nCombined with the code in `DescriptorSetLayoutDesc::unpackBindings` it really only seems to reference a SamplerVk.",
+      "parentUuid": "1af740ce_b8192176",
+      "range": {
+        "startLine": 107,
+        "startChar": 55,
+        "endLine": 107,
+        "endChar": 74
+      },
+      "revId": "72ca30415de859a72193e47fb9b385532a7139c0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
