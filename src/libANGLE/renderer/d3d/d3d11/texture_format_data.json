@@ -315,7 +315,8 @@
   "D24_UNORM_S8_UINT": {
     "FL10Plus": {
       "texFormat": "DXGI_FORMAT_R24G8_TYPELESS",
-      "srvFormat": "DXGI_FORMAT_R24_UNORM_X8_TYPELESS"
+      "srvFormat": "DXGI_FORMAT_R24_UNORM_X8_TYPELESS",
+      "srvFormatStencil": "DXGI_FORMAT_X24_TYPELESS_G8_UINT"
     },
     "FL9_3": {
       "texFormat": "DXGI_FORMAT_D24_UNORM_S8_UINT"
