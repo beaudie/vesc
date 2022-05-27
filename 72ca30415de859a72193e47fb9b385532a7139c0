@@ -332,6 +332,30 @@
       },
       "revId": "72ca30415de859a72193e47fb9b385532a7139c0",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "a2a20788_6c1a14ef",
+        "filename": "src/libANGLE/renderer/vulkan/ProgramExecutableVk.h",
+        "patchSetId": 8
+      },
+      "lineNbr": 107,
+      "author": {
+        "id": 1340649
+      },
+      "writtenOn": "2022-05-27T16:22:22Z",
+      "side": 1,
+      "message": "\u003e  it really only seems to reference a SamplerVk\n\nthe same samplerVk can embed a different ycbcrsampler based on ycbcrconversiondesc",
+      "parentUuid": "c2e85810_52780041",
+      "range": {
+        "startLine": 107,
+        "startChar": 55,
+        "endLine": 107,
+        "endChar": 74
+      },
+      "revId": "72ca30415de859a72193e47fb9b385532a7139c0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
