@@ -69,10 +69,7 @@ Resource &Resource::operator=(Resource &&rhs)
     return *this;
 }
 
-Resource::~Resource()
-{
-    mUse.release();
-}
+Resource::~Resource() = default;
 
 angle::Result Resource::finishRunningCommands(ContextVk *contextVk)
 {
@@ -98,11 +95,7 @@ ReadWriteResource::ReadWriteResource(ReadWriteResource &&other) : ReadWriteResou
     *this = std::move(other);
 }
 
-ReadWriteResource::~ReadWriteResource()
-{
-    mReadOnlyUse.release();
-    mReadWriteUse.release();
-}
+ReadWriteResource::~ReadWriteResource() = default;
 
 ReadWriteResource &ReadWriteResource::operator=(ReadWriteResource &&other)
 {
@@ -141,7 +134,7 @@ bool SharedBufferSuballocationGarbage::destroyIfComplete(RendererVk *renderer,
 
     mBuffer.destroy(renderer->getDevice());
     mSuballocation.destroy(renderer);
-    mLifetime.release();
+    mLifetime.destroy();
     return true;
 }
 
@@ -178,7 +171,7 @@ bool SharedGarbage::destroyIfComplete(RendererVk *renderer, Serial completedSeri
         object.destroy(renderer);
     }
 
-    mLifetime.release();
+    mLifetime.destroy();
 
     return true;
 }
@@ -206,21 +199,11 @@ ResourceUseList &ResourceUseList::operator=(ResourceUseList &&rhs)
     return *this;
 }
 
-void ResourceUseList::releaseResourceUses()
+void ResourceUseList::updateSerials(Serial serial)
 {
     for (SharedResourceUse &use : mResourceUses)
     {
-        use.release();
-    }
-
-    mResourceUses.clear();
-}
-
-void ResourceUseList::releaseResourceUsesAndUpdateSerials(Serial serial)
-{
-    for (SharedResourceUse &use : mResourceUses)
-    {
-        use.releaseAndUpdateSerial(serial);
+        use.updateSerial(serial);
     }
 
     mResourceUses.clear();

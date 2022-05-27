@@ -46,10 +46,6 @@ struct ResourceUse
 {
     ResourceUse() = default;
 
-    // The number of times a resource is retained by ANGLE.
-    // TODO(anglebug.com/5664): Remove after transition to command buffer bit set.
-    uint32_t counter = 0;
-
     // Open command buffers using this resource.
     ResourceCommandBuffers commandBuffers;
 
@@ -75,39 +71,29 @@ class SharedResourceUse final : angle::NonCopyable
     {
         ASSERT(!mUse);
         mUse = new ResourceUse;
-        mUse->counter++;
     }
 
     // Specifically for use with command buffers that are used as one-offs.
     void updateSerialOneOff(Serial serial) { mUse->serial = serial; }
 
-    ANGLE_INLINE void release()
+    ANGLE_INLINE void destroy()
     {
         ASSERT(valid());
-        ASSERT(mUse->counter > 0);
-        if (--mUse->counter == 0)
-        {
-            delete mUse;
-        }
-        mUse = nullptr;
+        SafeDelete(mUse);
     }
 
-    ANGLE_INLINE void releaseAndUpdateSerial(Serial serial)
+    ANGLE_INLINE void updateSerial(Serial serial)
     {
         ASSERT(valid());
-        ASSERT(mUse->counter > 0);
         ASSERT(mUse->serial <= serial);
         mUse->serial = serial;
-        release();
     }
 
     ANGLE_INLINE void set(const SharedResourceUse &rhs)
     {
         ASSERT(rhs.valid());
         ASSERT(!valid());
-        ASSERT(rhs.mUse->counter < std::numeric_limits<uint32_t>::max());
         mUse = rhs.mUse;
-        mUse->counter++;
     }
 
     // The base counter value for a live resource is "1". Any value greater than one indicates
@@ -115,7 +101,7 @@ class SharedResourceUse final : angle::NonCopyable
     ANGLE_INLINE bool usedInRecordedCommands() const
     {
         ASSERT(valid());
-        return mUse->counter > 1;
+        return !mUse->commandBuffers.empty();
     }
 
     ANGLE_INLINE bool usedInRunningCommands(Serial lastCompletedSerial) const
@@ -219,10 +205,7 @@ class ResourceUseList final : angle::NonCopyable
     ResourceUseList &operator=(ResourceUseList &&rhs);
 
     void add(const SharedResourceUse &resourceUse);
-
-    void releaseResourceUses();
-    void releaseResourceUsesAndUpdateSerials(Serial serial);
-
+    void updateSerials(Serial serial);
     void clearCommandBuffer(CommandBufferID commandBufferID);
 
     bool empty() { return mResourceUses.empty(); }

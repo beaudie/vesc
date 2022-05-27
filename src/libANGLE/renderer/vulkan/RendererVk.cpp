@@ -1204,14 +1204,6 @@ bool RendererVk::hasSharedGarbage()
            !mSuballocationGarbage.empty() || !mPendingSubmissionSuballocationGarbage.empty();
 }
 
-void RendererVk::releaseSharedResources(vk::ResourceUseList *resourceList)
-{
-    // resource list may access same resources referenced by garbage collection so need to protect
-    // that access with a lock.
-    std::unique_lock<std::mutex> lock(mGarbageMutex);
-    resourceList->releaseResourceUses();
-}
-
 void RendererVk::onDestroy(vk::Context *context)
 {
     if (isDeviceLost())
