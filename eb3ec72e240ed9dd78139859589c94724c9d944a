@@ -1,0 +1,67 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "79161778_8b4ea45c",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 6
+      },
+      "lineNbr": 9,
+      "author": {
+        "id": 1290487
+      },
+      "writtenOn": "2022-05-27T23:12:06Z",
+      "side": 1,
+      "message": "I\u0027m thinking we should genericize this:\n\ns/Pixel6/at least one Arm device/",
+      "range": {
+        "startLine": 9,
+        "startChar": 18,
+        "endLine": 9,
+        "endChar": 25
+      },
+      "revId": "eb3ec72e240ed9dd78139859589c94724c9d944a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "5608065e_b0004e96",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 6
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1290487
+      },
+      "writtenOn": "2022-05-27T23:12:06Z",
+      "side": 1,
+      "message": "Couple of comments, but otherwise LGTM.  Thanks!",
+      "revId": "eb3ec72e240ed9dd78139859589c94724c9d944a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ae4cfd70_127b2bfd",
+        "filename": "src/tests/gl_tests/DepthStencilTest.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 357,
+      "author": {
+        "id": 1290487
+      },
+      "writtenOn": "2022-05-27T23:12:06Z",
+      "side": 1,
+      "message": "I think this is no longer valid with the simplified test",
+      "range": {
+        "startLine": 356,
+        "startChar": 53,
+        "endLine": 357,
+        "endChar": 37
+      },
+      "revId": "eb3ec72e240ed9dd78139859589c94724c9d944a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
