@@ -7769,6 +7769,23 @@ uint32_t UpdateDescriptorSetsBuilder::flushDescriptorSetUpdates(VkDevice device)
     return retVal;
 }
 
+void ContextVk::onPipelineCreationFeedback(const VkPipelineCreationFeedback &feedback)
+{
+    const bool cacheHit =
+        (feedback.flags & VK_PIPELINE_CREATION_FEEDBACK_APPLICATION_PIPELINE_CACHE_HIT_BIT) != 0;
+
+    if (cacheHit)
+    {
+        ++mPerfCounters.pipelineCreationCacheHits;
+        mPerfCounters.pipelineCreationTotalCacheHitsDurationNs += feedback.duration;
+    }
+    else
+    {
+        ++mPerfCounters.pipelineCreationCacheMisses;
+        mPerfCounters.pipelineCreationTotalCacheMissesDurationNs += feedback.duration;
+    }
+}
+
 void ContextVk::resetPerFramePerfCounters()
 {
     mPerfCounters.renderPasses                           = 0;
