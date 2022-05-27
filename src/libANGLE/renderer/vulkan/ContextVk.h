@@ -735,6 +735,7 @@ class ContextVk : public ContextImpl, public vk::Context, public MultisampleText
 
     const angle::PerfMonitorCounterGroups &getPerfMonitorCounters() override;
 
+    void onPipelineCreationFeedback(const VkPipelineCreationFeedback &feedback);
     void resetPerFramePerfCounters();
 
     angle::Result bindCachedDescriptorPool(
