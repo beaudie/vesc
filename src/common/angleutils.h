@@ -166,6 +166,10 @@ struct PerfMonitorTriplet
     FN(depthAttachmentResolves)                    \
     FN(stencilAttachmentResolves)                  \
     FN(readOnlyDepthStencilRenderPasses)           \
+    FN(pipelineCreationCacheHits)                  \
+    FN(pipelineCreationCacheMisses)                \
+    FN(pipelineCreationTotalCacheHitsDurationUs)   \
+    FN(pipelineCreationTotalCacheMissesDurationUs) \
     FN(descriptorSetAllocations)                   \
     FN(descriptorSetCacheTotalSize)                \
     FN(descriptorSetCacheKeySizeBytes)             \

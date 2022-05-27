@@ -735,6 +735,7 @@ class ContextVk : public ContextImpl, public vk::Context, public MultisampleText
 
     const angle::PerfMonitorCounterGroups &getPerfMonitorCounters() override;
 
+    void onPipelineCreationFeedback(const VkPipelineCreationFeedback &feedback);
     void resetPerFramePerfCounters();
 
     angle::Result bindCachedDescriptorPool(
@@ -1503,6 +1504,12 @@ class ContextVk : public ContextImpl, public vk::Context, public MultisampleText
     VkRect2D mScissor;
 
     VulkanCacheStats mVulkanCacheStats;
+
+    // Helpers for pipelineCreationTotalCache*DurationUs counters.  These counters are 32-bit and
+    // count the number of microseconds.  Feedback from Vulkan is nanoseconds and is accumulated
+    // in these variables.
+    uint64_t mPipelineCreationTotalCacheHitsDurationNs;
+    uint64_t mPipelineCreationTotalCacheMissesDurationNs;
 
     // A graph built from pipeline descs and their transitions.
     std::ostringstream mPipelineCacheGraph;
