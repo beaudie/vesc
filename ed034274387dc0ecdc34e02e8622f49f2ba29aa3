@@ -16,6 +16,29 @@
       "message": "PTAL",
       "revId": "ed034274387dc0ecdc34e02e8622f49f2ba29aa3",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "1a300001_bd2ed028",
+        "filename": "src/common/FastVector.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 584,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-05-27T01:15:05Z",
+      "side": 1,
+      "message": "nit: Fast vector already has an `operator \u003d\u003d`, so if you make this a member function, you can just do `return mData \u003d\u003d other.mData`",
+      "range": {
+        "startLine": 584,
+        "startChar": 11,
+        "endLine": 584,
+        "endChar": 76
+      },
+      "revId": "ed034274387dc0ecdc34e02e8622f49f2ba29aa3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
