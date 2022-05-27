@@ -233,7 +233,7 @@ class TextureStorage11 : public TextureStorage
     struct SamplerKey
     {
         SamplerKey();
-        SamplerKey(int baseLevel, int mipLevels, bool swizzle, bool dropStencil);
+        SamplerKey(int baseLevel, int mipLevels, bool swizzle, bool dropStencil, bool stencilOnly);
 
         bool operator<(const SamplerKey &rhs) const;
 
@@ -241,6 +241,7 @@ class TextureStorage11 : public TextureStorage
         int mipLevels;
         bool swizzle;
         bool dropStencil;
+        bool stencilOnly;
     };
 
     angle::Result getCachedOrCreateSRVForSampler(const gl::Context *context,

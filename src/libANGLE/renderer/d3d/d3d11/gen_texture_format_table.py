@@ -145,6 +145,11 @@ def get_blit_srv_format(angle_format):
         return 'DXGI_FORMAT_UNKNOWN'
     if 'r' in angle_format['channels'] and angle_format['componentType'] in ['int', 'uint']:
         return angle_format['rtvFormat']
+    if 'd' in angle_format['channels'] and 's' in angle_format['channels']:
+        if 'bits' in angle_format:
+            bits = angle_format['bits']
+            if bits['depth'] == 24 and bits['stencil'] == 8:
+                return 'DXGI_FORMAT_X24_TYPELESS_G8_UINT'
 
     return angle_format["srvFormat"] if "srvFormat" in angle_format else "DXGI_FORMAT_UNKNOWN"
 

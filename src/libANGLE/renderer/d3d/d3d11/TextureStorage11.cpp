@@ -34,14 +34,19 @@
 namespace rx
 {
 TextureStorage11::SamplerKey::SamplerKey()
-    : baseLevel(0), mipLevels(0), swizzle(false), dropStencil(false)
+    : baseLevel(0), mipLevels(0), swizzle(false), dropStencil(false), stencilOnly(false)
 {}
 
 TextureStorage11::SamplerKey::SamplerKey(int baseLevel,
                                          int mipLevels,
                                          bool swizzle,
-                                         bool dropStencil)
-    : baseLevel(baseLevel), mipLevels(mipLevels), swizzle(swizzle), dropStencil(dropStencil)
+                                         bool dropStencil,
+                                         bool stencilOnly)
+    : baseLevel(baseLevel),
+      mipLevels(mipLevels),
+      swizzle(swizzle),
+      dropStencil(dropStencil),
+      stencilOnly(stencilOnly)
 {}
 
 bool TextureStorage11::SamplerKey::operator<(const SamplerKey &rhs) const
@@ -225,7 +230,7 @@ angle::Result TextureStorage11::getSRVForSampler(const gl::Context *context,
     ANGLE_TRY(resolveTexture(context));
     // Make sure to add the level offset for our tiny compressed texture workaround
     const GLuint effectiveBaseLevel = textureState.getEffectiveBaseLevel();
-    const bool swizzleRequired      = textureState.swizzleRequired();
+    const bool swizzleRequired      = SwizzleRequired(textureState);
     const bool mipmapping           = gl::IsMipmapFiltered(sampler.getMinFilter());
     unsigned int mipLevels =
         mipmapping ? (textureState.getEffectiveMaxLevel() - effectiveBaseLevel + 1) : 1;
@@ -248,7 +253,7 @@ angle::Result TextureStorage11::getSRVForSampler(const gl::Context *context,
 
     if (swizzleRequired)
     {
-        verifySwizzleExists(textureState.getSwizzleState());
+        GetEffectiveSwizzle(textureState);
     }
 
     // We drop the stencil when sampling from the SRV if three conditions hold:
@@ -263,7 +268,9 @@ angle::Result TextureStorage11::getSRVForSampler(const gl::Context *context,
         (getLevelWidth(effectiveTopLevel) <= 2 || getLevelHeight(effectiveTopLevel) <= 2);
 
     const bool useDropStencil = (emulateTinyStencilTextures && hasStencil && hasSmallMips);
-    const SamplerKey key(effectiveBaseLevel, mipLevels, swizzleRequired, useDropStencil);
+    const bool stencilOnly    = textureState.isStencilMode();
+    const SamplerKey key(effectiveBaseLevel, mipLevels, swizzleRequired, useDropStencil,
+                         stencilOnly);
     if (useDropStencil)
     {
         // Ensure drop texture gets created.
@@ -315,7 +322,7 @@ angle::Result TextureStorage11::getCachedOrCreateSRVForSampler(const gl::Context
     else
     {
         ANGLE_TRY(getResource(context, &texture));
-        format = mFormatInfo.srvFormat;
+        format = key.stencilOnly ? DXGI_FORMAT_X24_TYPELESS_G8_UINT : mFormatInfo.srvFormat;
     }
 
     d3d11::SharedSRV srv;
@@ -387,7 +394,7 @@ angle::Result TextureStorage11::getSRVLevels(const gl::Context *context,
 
     // TODO(jmadill): Assert we don't need to drop stencil.
 
-    SamplerKey key(baseLevel, mipLevels, false, false);
+    SamplerKey key(baseLevel, mipLevels, false, false, false);
     ANGLE_TRY(getCachedOrCreateSRVForSampler(context, key, outSRV));
 
     return angle::Result::Continue;

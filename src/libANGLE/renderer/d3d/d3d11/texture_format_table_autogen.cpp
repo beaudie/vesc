@@ -1439,7 +1439,7 @@ const Format &Format::Get(GLenum internalFormat, const Renderer11DeviceCaps &dev
                                              DXGI_FORMAT_UNKNOWN,
                                              DXGI_FORMAT_UNKNOWN,
                                              DXGI_FORMAT_D24_UNORM_S8_UINT,
-                                             DXGI_FORMAT_R24_UNORM_X8_TYPELESS,
+                                             DXGI_FORMAT_X24_TYPELESS_G8_UINT,
                                              GL_RGBA32F,
                                              nullptr);
                 return info;
@@ -1453,7 +1453,7 @@ const Format &Format::Get(GLenum internalFormat, const Renderer11DeviceCaps &dev
                                              DXGI_FORMAT_UNKNOWN,
                                              DXGI_FORMAT_UNKNOWN,
                                              DXGI_FORMAT_D24_UNORM_S8_UINT,
-                                             DXGI_FORMAT_UNKNOWN,
+                                             DXGI_FORMAT_X24_TYPELESS_G8_UINT,
                                              GL_RGBA32F,
                                              nullptr);
                 return info;
@@ -1515,7 +1515,7 @@ const Format &Format::Get(GLenum internalFormat, const Renderer11DeviceCaps &dev
                                              DXGI_FORMAT_UNKNOWN,
                                              DXGI_FORMAT_UNKNOWN,
                                              DXGI_FORMAT_D24_UNORM_S8_UINT,
-                                             DXGI_FORMAT_R24_UNORM_X8_TYPELESS,
+                                             DXGI_FORMAT_X24_TYPELESS_G8_UINT,
                                              GL_RGBA32F,
                                              nullptr);
                 return info;
@@ -1529,7 +1529,7 @@ const Format &Format::Get(GLenum internalFormat, const Renderer11DeviceCaps &dev
                                              DXGI_FORMAT_UNKNOWN,
                                              DXGI_FORMAT_UNKNOWN,
                                              DXGI_FORMAT_D24_UNORM_S8_UINT,
-                                             DXGI_FORMAT_UNKNOWN,
+                                             DXGI_FORMAT_X24_TYPELESS_G8_UINT,
                                              GL_RGBA32F,
                                              nullptr);
                 return info;
@@ -1560,7 +1560,7 @@ const Format &Format::Get(GLenum internalFormat, const Renderer11DeviceCaps &dev
                                              DXGI_FORMAT_UNKNOWN,
                                              DXGI_FORMAT_UNKNOWN,
                                              DXGI_FORMAT_D24_UNORM_S8_UINT,
-                                             DXGI_FORMAT_R24_UNORM_X8_TYPELESS,
+                                             DXGI_FORMAT_X24_TYPELESS_G8_UINT,
                                              GL_RGBA32F,
                                              nullptr);
                 return info;
@@ -1574,7 +1574,7 @@ const Format &Format::Get(GLenum internalFormat, const Renderer11DeviceCaps &dev
                                              DXGI_FORMAT_UNKNOWN,
                                              DXGI_FORMAT_UNKNOWN,
                                              DXGI_FORMAT_D24_UNORM_S8_UINT,
-                                             DXGI_FORMAT_UNKNOWN,
+                                             DXGI_FORMAT_X24_TYPELESS_G8_UINT,
                                              GL_RGBA32F,
                                              nullptr);
                 return info;
@@ -2695,7 +2695,7 @@ const Format &Format::Get(GLenum internalFormat, const Renderer11DeviceCaps &dev
                                              DXGI_FORMAT_UNKNOWN,
                                              DXGI_FORMAT_UNKNOWN,
                                              DXGI_FORMAT_D24_UNORM_S8_UINT,
-                                             DXGI_FORMAT_R24_UNORM_X8_TYPELESS,
+                                             DXGI_FORMAT_X24_TYPELESS_G8_UINT,
                                              GL_RGBA32F,
                                              nullptr);
                 return info;
@@ -2709,7 +2709,7 @@ const Format &Format::Get(GLenum internalFormat, const Renderer11DeviceCaps &dev
                                              DXGI_FORMAT_UNKNOWN,
                                              DXGI_FORMAT_UNKNOWN,
                                              DXGI_FORMAT_D24_UNORM_S8_UINT,
-                                             DXGI_FORMAT_UNKNOWN,
+                                             DXGI_FORMAT_X24_TYPELESS_G8_UINT,
                                              GL_RGBA32F,
                                              nullptr);
                 return info;
