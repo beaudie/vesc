@@ -237,6 +237,7 @@ constexpr PackedEnumMap<Feature, const char *> kFeatureNames = {{
      "supportsMultisampledRenderToSingleSampled"},
     {Feature::SupportsMultiview, "supportsMultiview"},
     {Feature::SupportsNegativeViewport, "supportsNegativeViewport"},
+    {Feature::SupportsPipelineCreationFeedback, "supportsPipelineCreationFeedback"},
     {Feature::SupportsPipelineStatisticsQuery, "supportsPipelineStatisticsQuery"},
     {Feature::SupportsProtectedMemory, "supportsProtectedMemory"},
     {Feature::SupportsRenderpass2, "supportsRenderpass2"},
