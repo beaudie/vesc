@@ -469,7 +469,7 @@ void ShareGroupVk::releaseResourceUseLists(const Serial &submitSerial)
     {
         for (vk::ResourceUseList &it : mResourceUseLists)
         {
-            it.releaseResourceUsesAndUpdateSerials(submitSerial);
+            it.updateSerials(submitSerial);
         }
         mResourceUseLists.clear();
     }

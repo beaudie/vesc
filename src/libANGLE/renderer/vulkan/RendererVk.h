@@ -145,7 +145,6 @@ class RendererVk : angle::NonCopyable
     void notifyDeviceLost();
     bool isDeviceLost() const;
     bool hasSharedGarbage();
-    void releaseSharedResources(vk::ResourceUseList *resourceList);
 
     std::string getVendorString() const;
     std::string getRendererDescription() const;
@@ -307,8 +306,8 @@ class RendererVk : angle::NonCopyable
         }
         else
         {
-            // Force releasing "use" even if no garbage was created.
-            use->release();
+            // Even if we have no garbage, we free "use" to ensure we have a clean state.
+            use->destroy();
         }
         // Keep "use" valid.
         use->init();
