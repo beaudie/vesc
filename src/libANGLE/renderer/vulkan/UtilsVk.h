@@ -459,6 +459,9 @@ class UtilsVk : angle::NonCopyable
         EnumCount   = 21,
     };
 
+    template <typename T>
+    using FunctionMap = angle::PackedEnumMap<Function, T>;
+
     // Common functions that create the pipeline for the specified function, binds it and prepares
     // the draw/dispatch call.
     angle::Result setupComputeProgram(
@@ -540,12 +543,12 @@ class UtilsVk : angle::NonCopyable
     angle::Result allocateDescriptorSet(ContextVk *contextVk,
                                         vk::CommandBufferHelperCommon *commandBufferHelper,
                                         Function function,
-                                        vk::RefCountedDescriptorPoolBinding *bindingOut,
                                         VkDescriptorSet *descriptorSetOut);
 
-    angle::PackedEnumMap<Function, vk::DescriptorSetLayoutPointerArray> mDescriptorSetLayouts;
-    angle::PackedEnumMap<Function, vk::BindingPointer<vk::PipelineLayout>> mPipelineLayouts;
-    angle::PackedEnumMap<Function, vk::DynamicDescriptorPool> mDescriptorPools;
+    FunctionMap<vk::DescriptorSetLayoutPointerArray> mDescriptorSetLayouts;
+    FunctionMap<vk::BindingPointer<vk::PipelineLayout>> mPipelineLayouts;
+    FunctionMap<vk::DynamicDescriptorPool> mDescriptorPools;
+    FunctionMap<vk::RefCountedDescriptorPoolBinding> mDescriptorPoolBindings;
 
     vk::ShaderProgramHelper mConvertIndexPrograms[vk::InternalShader::ConvertIndex_comp::kArrayLen];
     vk::ShaderProgramHelper mConvertIndexIndirectLineLoopPrograms
