@@ -4164,10 +4164,10 @@ void main()
 
     ANGLE_GL_PROGRAM(program, kVS, kFS);
 
-    constexpr GLuint kWidth1 = 99;
-    constexpr GLuint kHeight1 = 142;
-    constexpr GLuint kWidth2 = 75;
-    constexpr GLuint kHeight2 = 167;
+    constexpr GLuint kWidth1       = 99;
+    constexpr GLuint kHeight1      = 142;
+    constexpr GLuint kWidth2       = 75;
+    constexpr GLuint kHeight2      = 167;
     constexpr GLuint kRenderSplitX = 10;
     constexpr GLuint kRenderSplitY = 25;
 
@@ -4192,7 +4192,8 @@ void main()
     EXPECT_PIXEL_RECT_EQ(0, 0, kRenderSplitX, kRenderSplitY, GLColor::yellow);
     EXPECT_PIXEL_RECT_EQ(0, kRenderSplitY, kRenderSplitX, kHeight1 - kRenderSplitY, GLColor::red);
     EXPECT_PIXEL_RECT_EQ(kRenderSplitX, 0, kWidth1 - kRenderSplitX, kRenderSplitY, GLColor::green);
-    EXPECT_PIXEL_RECT_EQ(kRenderSplitX, kRenderSplitY, kWidth1 - kRenderSplitX, kHeight1 - kRenderSplitY, GLColor::black);
+    EXPECT_PIXEL_RECT_EQ(kRenderSplitX, kRenderSplitY, kWidth1 - kRenderSplitX,
+                         kHeight1 - kRenderSplitY, GLColor::black);
 
     glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, tex2, 0);
     ASSERT_GL_FRAMEBUFFER_COMPLETE(GL_FRAMEBUFFER);
@@ -4203,7 +4204,8 @@ void main()
     EXPECT_PIXEL_RECT_EQ(0, 0, kRenderSplitX, kRenderSplitY, GLColor::yellow);
     EXPECT_PIXEL_RECT_EQ(0, kRenderSplitY, kRenderSplitX, kHeight2 - kRenderSplitY, GLColor::red);
     EXPECT_PIXEL_RECT_EQ(kRenderSplitX, 0, kWidth2 - kRenderSplitX, kRenderSplitY, GLColor::green);
-    EXPECT_PIXEL_RECT_EQ(kRenderSplitX, kRenderSplitY, kWidth2 - kRenderSplitX, kHeight2 - kRenderSplitY, GLColor::black);
+    EXPECT_PIXEL_RECT_EQ(kRenderSplitX, kRenderSplitY, kWidth2 - kRenderSplitX,
+                         kHeight2 - kRenderSplitY, GLColor::black);
 
     ASSERT_GL_NO_ERROR();
 }
@@ -4238,20 +4240,19 @@ void main()
 
     ANGLE_GL_PROGRAM(program, kVS, kFS);
 
-    constexpr GLuint kWidth1 = 99;
-    constexpr GLuint kHeight1 = 142;
-    constexpr GLuint kWidth2 = 75;
-    constexpr GLuint kHeight2 = 167;
+    constexpr GLuint kWidth1       = 99;
+    constexpr GLuint kHeight1      = 142;
+    constexpr GLuint kWidth2       = 75;
+    constexpr GLuint kHeight2      = 167;
     constexpr GLuint kRenderSplitX = 10;
     constexpr GLuint kRenderSplitY = 25;
 
     glViewport(0, 0, std::max(kWidth1, kWidth2), std::max(kHeight1, kHeight2));
 
-    const bool isSwappedDimensions =
-        GetParam().isEnabled(Feature::EmulatedPrerotation90) ||
-        GetParam().isEnabled(Feature::EmulatedPrerotation270);
+    const bool isSwappedDimensions = GetParam().isEnabled(Feature::EmulatedPrerotation90) ||
+                                     GetParam().isEnabled(Feature::EmulatedPrerotation270);
 
-    auto resizeWindow = [this, isSwappedDimensions](GLuint width, GLuint height){
+    auto resizeWindow = [this, isSwappedDimensions](GLuint width, GLuint height) {
         if (isSwappedDimensions)
         {
             getOSWindow()->resize(height, width);
@@ -4271,7 +4272,8 @@ void main()
     EXPECT_PIXEL_RECT_EQ(0, 0, kRenderSplitX, kRenderSplitY, GLColor::yellow);
     EXPECT_PIXEL_RECT_EQ(0, kRenderSplitY, kRenderSplitX, kHeight1 - kRenderSplitY, GLColor::red);
     EXPECT_PIXEL_RECT_EQ(kRenderSplitX, 0, kWidth1 - kRenderSplitX, kRenderSplitY, GLColor::green);
-    EXPECT_PIXEL_RECT_EQ(kRenderSplitX, kRenderSplitY, kWidth1 - kRenderSplitX, kHeight1 - kRenderSplitY, GLColor::black);
+    EXPECT_PIXEL_RECT_EQ(kRenderSplitX, kRenderSplitY, kWidth1 - kRenderSplitX,
+                         kHeight1 - kRenderSplitY, GLColor::black);
 
     resizeWindow(kWidth2, kHeight2);
     glDrawArrays(GL_TRIANGLE_STRIP, 0, 4);
@@ -4280,14 +4282,14 @@ void main()
     EXPECT_PIXEL_RECT_EQ(0, 0, kRenderSplitX, kRenderSplitY, GLColor::yellow);
     EXPECT_PIXEL_RECT_EQ(0, kRenderSplitY, kRenderSplitX, kHeight2 - kRenderSplitY, GLColor::red);
     EXPECT_PIXEL_RECT_EQ(kRenderSplitX, 0, kWidth2 - kRenderSplitX, kRenderSplitY, GLColor::green);
-    EXPECT_PIXEL_RECT_EQ(kRenderSplitX, kRenderSplitY, kWidth2 - kRenderSplitX, kHeight2 - kRenderSplitY, GLColor::black);
+    EXPECT_PIXEL_RECT_EQ(kRenderSplitX, kRenderSplitY, kWidth2 - kRenderSplitX,
+                         kHeight2 - kRenderSplitY, GLColor::black);
 
     // Reset window to original dimensions
     resizeWindow(kWidth, kHeight);
 
     ASSERT_GL_NO_ERROR();
 }
-
 
 ANGLE_INSTANTIATE_TEST_ES2_AND(AddMockTextureNoRenderTargetTest,
                                ES2_D3D9().enable(Feature::AddMockTextureNoRenderTarget),
