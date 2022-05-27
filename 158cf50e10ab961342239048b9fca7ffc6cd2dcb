@@ -104,6 +104,24 @@
       "parentUuid": "0d89b4fc_83817c8a",
       "revId": "158cf50e10ab961342239048b9fca7ffc6cd2dcb",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "f4de572d_61e80551",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 6
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-05-27T19:11:50Z",
+      "side": 1,
+      "message": "Let me know when you have taken a look at the GOLD failures, so I can accept the new images.",
+      "parentUuid": "91053d9c_d983e2e1",
+      "revId": "158cf50e10ab961342239048b9fca7ffc6cd2dcb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
