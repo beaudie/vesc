@@ -33,6 +33,29 @@
       "message": "Whoah, this is a blast from the past. LGTM.",
       "revId": "c53725d18cf7cbd314a75d7a65f466295725631a",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "20acad8e_c7c2c2ab",
+        "filename": "src/libANGLE/renderer/d3d/d3d11/Buffer11.cpp",
+        "patchSetId": 9
+      },
+      "lineNbr": 615,
+      "author": {
+        "id": 1000050
+      },
+      "writtenOn": "2022-05-27T17:35:47Z",
+      "side": 1,
+      "message": "A suggestion: could be the default implementation in BufferImpl?",
+      "range": {
+        "startLine": 611,
+        "startChar": 0,
+        "endLine": 615,
+        "endChar": 78
+      },
+      "revId": "c53725d18cf7cbd314a75d7a65f466295725631a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
