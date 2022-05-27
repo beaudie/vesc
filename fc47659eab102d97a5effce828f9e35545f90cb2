@@ -24,6 +24,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "aaa8aaed_4255e99e",
+        "filename": "src/libANGLE/capture/capture_egl.cpp",
+        "patchSetId": 26
+      },
+      "lineNbr": 47,
+      "author": {
+        "id": 1491823
+      },
+      "writtenOn": "2022-05-27T13:01:18Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "a43dfc4a_f8b11509",
+      "range": {
+        "startLine": 42,
+        "startChar": 0,
+        "endLine": 47,
+        "endChar": 0
+      },
+      "revId": "fc47659eab102d97a5effce828f9e35545f90cb2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "fddfb3f9_5749e37c",
@@ -37,6 +61,30 @@
       "writtenOn": "2022-05-26T14:22:44Z",
       "side": 1,
       "message": "I don\u0027t believe you need this file - the #define should cover it. If npt, we should be able to tweak the define so this file isn\u0027t needed.",
+      "range": {
+        "startLine": 19,
+        "startChar": 0,
+        "endLine": 33,
+        "endChar": 2
+      },
+      "revId": "fc47659eab102d97a5effce828f9e35545f90cb2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "f110774c_4c7c066e",
+        "filename": "src/libANGLE/capture/capture_egl_mock.cpp",
+        "patchSetId": 26
+      },
+      "lineNbr": 33,
+      "author": {
+        "id": 1491823
+      },
+      "writtenOn": "2022-05-27T13:01:18Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "fddfb3f9_5749e37c",
       "range": {
         "startLine": 19,
         "startChar": 0,
