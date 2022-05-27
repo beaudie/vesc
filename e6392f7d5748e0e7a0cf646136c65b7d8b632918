@@ -26,6 +26,30 @@
     {
       "unresolved": false,
       "key": {
+        "uuid": "f638417d_e5190bc6",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 4
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1520902
+      },
+      "writtenOn": "2022-05-27T22:45:12Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "f20c7b15_e8082f13",
+      "range": {
+        "startLine": 7,
+        "startChar": 8,
+        "endLine": 7,
+        "endChar": 9
+      },
+      "revId": "e6392f7d5748e0e7a0cf646136c65b7d8b632918",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
         "uuid": "6cbd043d_da9b695e",
         "filename": "/PATCHSET_LEVEL",
         "patchSetId": 4
@@ -58,6 +82,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "d14b8702_8753c84e",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1520902
+      },
+      "writtenOn": "2022-05-27T22:45:12Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "a0934d99_b6f45104",
+      "revId": "e6392f7d5748e0e7a0cf646136c65b7d8b632918",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "73fac239_a08d54b3",
@@ -81,6 +123,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "82a9cffb_97d42005",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 2044,
+      "author": {
+        "id": 1520902
+      },
+      "writtenOn": "2022-05-27T22:45:12Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "73fac239_a08d54b3",
+      "range": {
+        "startLine": 2044,
+        "startChar": 23,
+        "endLine": 2044,
+        "endChar": 30
+      },
+      "revId": "e6392f7d5748e0e7a0cf646136c65b7d8b632918",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "b4799661_548a3c23",
@@ -94,6 +160,30 @@
       "writtenOn": "2022-05-27T17:34:25Z",
       "side": 1,
       "message": "Is modifying the store Op necessary? Please try to see if the issue is fixed simply by modifying the loadOp, but keeping storeOp\u003dNONE.",
+      "range": {
+        "startLine": 2055,
+        "startChar": 0,
+        "endLine": 2076,
+        "endChar": 9
+      },
+      "revId": "e6392f7d5748e0e7a0cf646136c65b7d8b632918",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "7369564d_7820c524",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 2076,
+      "author": {
+        "id": 1520902
+      },
+      "writtenOn": "2022-05-27T22:45:12Z",
+      "side": 1,
+      "message": "keeping storeOp\u003dNONE worked. But since I moved the isArm check to RendererVk, the entire extension is disabled when the driver is ARM. Would you please let me know if a new feature called \"disableLoadOpNone\" is preferred? Id yes, I can add that feature to only disable loadOp none, instead of disabling the entire extension.",
+      "parentUuid": "b4799661_548a3c23",
       "range": {
         "startLine": 2055,
         "startChar": 0,
